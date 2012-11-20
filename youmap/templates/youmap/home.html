@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% load chickpea_tags %}
+
+{% block extra_head %}
+    {% chickpea_css %}
+    {% chickpea_js %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="twelve columns">
+
+    <!-- Navigation -->
+
+      <nav class="top-bar contain-to-grid">
+        <ul>
+          <li class="name"><h1><a href="#">YouMap <em>alpha</em></a></h1></li>
+          <li class="toggle-topbar"><a href="#"></a></li>
+        </ul>
+
+        <section>
+          <ul class="left">
+              <li><a href="#">My maps</a></li>
+              <li><a href="#">Log in</a></li>
+          </ul>
+
+          <ul class="right">
+          <li class="search">
+              <form>
+                <input type="search">
+              </form>
+          </li>
+
+            <li class="has-button">
+            <a class="small button" href="#">Search</a>
+          </li>
+          </ul>
+        </section>
+    </nav>
+
+    <!-- End Navigation -->
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="twelve columns">
+      <div class="row">
+
+    <!-- Content -->
+
+        <div class="eight columns">
+          <div class="panel radius">
+
+          <div class="row">
+          <div class="six mobile-two columns">
+            <h4>YouMap <em>alpha</em></h4><hr/>
+            <h5 class="subheader">YouMap let you create map with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!
+            </h5>
+          </div>
+          <div class="six mobile-two columns">
+            <h5>What you can do?</h5>
+            <ol>
+              <li>Choose the layers of your map</li>
+              <li>Add POIs: markers, lines, polygons...</li>
+              <li>Manage POIs colours and icons</li>
+              <li>Batch import geostructured data (GEOJson...)</li>
+              <li>Choose your licence</li>
+              <li>Embed and share your map</li>
+            </ol>
+        </div>
+
+        </div>
+        </div>
+        </div>
+
+        <div class="four columns hide-for-small">
+
+          <h4>Action!</h4><hr/>
+
+          <a href="{% url map_add %}" class="reveal">
+          <div class="panel radius callout" align="center">
+            <strong>Test me</strong>
+          </div>
+          </a>
+
+          <a href="https://bitbucket.org/yohanboniface/youmap_project">
+          <div class="panel radius callout" align="center">
+            <strong>Fork me</strong>
+          </div>
+          </a>
+
+        </div>
+
+    <!-- End Content -->
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <hr />
+      <h2>Browse maps</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <div class="row map_list">
+        {% for map_inst in maps %}
+        <div class="twelve mobile-six columns">
+            {% map_fragment map_inst %}
+            <div class="panel"><strong>{{ map_inst.name }}</strong> — {{ map_inst.description }} <a href="{{ map_inst.get_absolute_url }}">See this map!</a></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Footer -->
+
+  <footer class="row">
+    <div class="twelve columns"><hr />
+      <div class="row">
+
+        <div class="six columns">
+          <p>&copy; Copyright no one at all. Go to town.</p>
+        </div>
+
+        <div class="six columns">
+          <ul class="link-list right">
+            <li><a href="#TODO">About</a></li>
+            <li><a href="https://bitbucket.org/yohanboniface/youmap_project">Fork me</a></li>
+            <li><a href="#">Link 3</a></li>
+            <li><a href="#">Link 4</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+    <!-- End Footer -->
+  <!-- Included JS Files -->
+{% endblock content %}
+
+
+{% block bottom_js %}
+    {{ block.super }}
+  <script type="text/javascript">
+    $(window).load(function() {
+      $('#featured').orbit({
+        fluid: '2x1',
+        timer: false
+      });
+    });
+  </script>
+{% endblock bottom_js %}

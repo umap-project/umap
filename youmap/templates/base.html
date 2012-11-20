@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block head_title %}YouMap{% endblock %}</title>
+    <meta charset="utf-8">
+    <!-- Included CSS Files (Compressed) -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}foundation/stylesheets/foundation.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}youmap/youmap.css">
+
+    <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
+
+    <!-- IE Fix for HTML5 Tags -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    {% block extra_head %}
+    {% endblock extra_head %}
+
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+<div>
+    {% block content %}
+    {% endblock %}
+</div>
+
+    <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.mediaQueryToggle.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.reveal.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.orbit.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.navigation.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.buttons.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.tabs.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.forms.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.tooltips.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.accordion.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.placeholder.js"></script>
+    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.alerts.js"></script>
+    {% block bottom_js %}
+    <script type="text/javascript">
+        $(document).foundationAlerts();
+        L.Util.chickpea_modal = function (content, context) {
+            var $div = $('#reveal-container');
+            // reset class
+            $div.attr("class", "");
+            $div.addClass("reveal-modal");
+            if (context && context.class) {
+                $div.addClass(context.class);
+            }
+            return $div.empty().html(content).append('<a class="close-reveal-modal">&#215;</a>').reveal();
+        };
+        L.Util.chickpea_alert = function (content, level, context) {
+            console.log("alert", content);
+            $div = $('<div>').addClass('alert-box success global').html(content);
+            $div.append('<a href="#" class="close">&times;</a>');
+            $("body").prepend($div);
+        };
+        $('a.reveal').click(function(e) {
+          e.preventDefault();
+          var $this = $(this);
+          $.get($this.attr('href'), function(data) {
+            return L.Util.chickpea_modal(data.html);
+          }, 'json');
+        });
+    </script>
+    {% endblock %}
+    <div id="reveal-container" class="reveal-modal"></div>
+</body>
+</html>

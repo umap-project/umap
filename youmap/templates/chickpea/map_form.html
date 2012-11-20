@@ -1,0 +1,31 @@
+<h3>Create your map now!</h3>
+<form action="{{ action_url }}" method="post" id="map_edit">
+    {{ form.non_field_errors }}
+    {% csrf_token %}
+    {{ form.name }}
+    {% for error in form.name.errors %}
+        <small class="error">{{ error|escape }}</small>
+    {% endfor %}
+    {{ form.description }}
+    {{ form.description.errors }}
+    {{ form.zoom }}
+    {{ form.center }}
+    <input type="submit" class="button" />
+</form>
+
+<script type="text/javascript">
+    $("#map_edit").on("submit", function (e) {
+        e.preventDefault();
+        L.Util.Xhr.submit_form("map_edit", {
+            'callback': function (data) {
+                if (data.redirect) {
+                    window.location = data.redirect;
+                }
+                else {
+                    $("#map_edit").parent().empty().append(data.html);
+                }                
+            },
+            'dataType': 'json'
+        });
+    });
+</script>

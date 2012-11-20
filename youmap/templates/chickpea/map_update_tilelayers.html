@@ -1,0 +1,41 @@
+{% load chickpea_tags %}
+<h3>Choose your tilelayers</h3>
+<form action="{% url map_update_tilelayers map.pk %}" method="post" id="map_edit">
+    {% csrf_token %}
+    <ul class="block-grid four-up mobile">
+    {% for tilelayer in tilelayers %}
+        <li>
+            <label for="tilelayer_{{ forloop.counter }}">
+              {% tilelayer_preview tilelayer %}<div class="panel">
+                <input type="checkbox" id="tilelayer_{{ forloop.counter }}" name="tilelayer_{{ forloop.counter }}" value="{{ tilelayer.pk }}" {% if tilelayer in map.tilelayers.all %}checked{% endif %} />
+                {{ tilelayer.name }}
+              </div>
+            </label>
+        </li>
+    {% endfor %}
+    <div class="row twelve columns">
+        <input type="submit" class="button" />
+    </div>
+</form>
+
+<script type="text/javascript">
+    $("#map_edit").on("submit", function (e) {
+        e.preventDefault();
+        L.Util.Xhr.submit_form("map_edit", {
+            'callback': function (data) {
+                if (data.redirect) {
+                    window.location = data.redirect;
+                }
+                else if (data.info) {
+                    $div = $('<div>').addClass('alert-box success').html(data.info);
+                    $div.append('<a href="#" class="close">&times;</a>');
+                    $("#map").prepend($div);
+                }
+                else {
+                    $("#map_edit").parent().empty().append(data.html);
+                }
+            },
+            'dataType': 'json'
+        });
+    });
+</script>

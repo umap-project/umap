@@ -1,0 +1,10 @@
+# This file collects all required third-party applications that are needed
+# to run this project. Later you can install all these apps in a row
+# using pip. Example::
+#
+#     pip install -r requirements.pip
+
+django==1.4.2
+#south==0.7.6
+git+git://github.com/petry/django-foundation.git
+git+git://github.com/yohanboniface/django-chickpea.git

@@ -1,0 +1,32 @@
+/*
+    Foundation use a position:relative; on body, which break the 100% rule
+    on #map
+*/
+body.map_detail {
+    width: 100%;
+    height: 100%;
+    position: inherit;
+}
+
+/* HOME */
+.map_fragment {
+    width: 100%;
+}
+.map_list .map_fragment {
+    height: 200px;
+}
+
+/* Modals */
+.reveal-modal.update-tilelayers {
+    width: 75%;
+    max-height: 500px; /* TODO Make it dynamic */
+    overflow: auto;
+    margin-left: -35%;
+}
+
+/* Global alert */
+.alert-box.global {
+    z-index: 1001;
+    margin-right: auto;
+    margin-left: auto;
+}

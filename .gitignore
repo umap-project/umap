@@ -1,0 +1,5 @@
+*.pyc
+*.egg-info
+youmap/settings/local.py
+youmap/settings/local/*
+docs/_build
