@@ -28,7 +28,7 @@
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.mediaQueryToggle.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.reveal.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.orbit.js"></script>
+    <!--script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.orbit.js"></script-->
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.navigation.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.buttons.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.tabs.js"></script>
@@ -40,22 +40,24 @@
     {% block bottom_js %}
     <script type="text/javascript">
         $(document).foundationAlerts();
-        L.Util.chickpea_modal = function (content, context) {
+        L.Chickpea.on('modal_ready', function (e) {
             var $div = $('#reveal-container');
             // reset class
             $div.attr("class", "");
             $div.addClass("reveal-modal");
-            if (context && context.class) {
-                $div.addClass(context.class);
+            if (e.cssClass) {
+                $div.addClass(e.cssClass);
             }
-            return $div.empty().html(content).append('<a class="close-reveal-modal">&#215;</a>').reveal();
-        };
-        L.Util.chickpea_alert = function (content, level, context) {
-            console.log("alert", content);
-            $div = $('<div>').addClass('alert-box success global').html(content);
+            return $div.empty().html(e.data.html).append('<a class="close-reveal-modal">&#215;</a>').reveal();
+        });
+        L.Chickpea.on('modal_close', function (e) {
+            var $div = $('#reveal-container').trigger('reveal:close');
+        });
+        L.Chickpea.on('alert', function (e) {
+            $div = $('<div>').addClass('alert-box success global').html(e.content);
             $div.append('<a href="#" class="close">&times;</a>');
             $("body").prepend($div);
-        };
+        });
         $('a.reveal').click(function(e) {
           e.preventDefault();
           var $this = $(this);

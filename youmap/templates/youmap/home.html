@@ -145,16 +145,3 @@
     <!-- End Footer -->
   <!-- Included JS Files -->
 {% endblock content %}
-
-
-{% block bottom_js %}
-    {{ block.super }}
-  <script type="text/javascript">
-    $(window).load(function() {
-      $('#featured').orbit({
-        fluid: '2x1',
-        timer: false
-      });
-    });
-  </script>
-{% endblock bottom_js %}
