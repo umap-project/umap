@@ -4,7 +4,7 @@ YouMap project
 About
 -----
 YouMap let you create map with OpenStreetMap layers in a minute and embed them in your site.
-*Be cause we think that the more OSM will be used, the more OSM will be **cured**.*
+*Be cause we think that the more OSM will be used, the more OSM will be ''cured''.*
 It uses django-chickpea, built on top of Django and Leaflet
 
 
