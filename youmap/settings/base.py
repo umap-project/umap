@@ -88,6 +88,8 @@ STATIC_ROOT = os.path.join(VAR_ROOT, 'static')
 MEDIA_ROOT = os.path.join(VAR_ROOT, 'uploads')
 
 STATICFILES_DIRS = (
+    # Fabric will collect leaflet and draw in this dir
+    os.path.join(PROJECT_DIR, 'remote_static'),
     os.path.join(PROJECT_DIR, 'static'),
 )
 
@@ -97,11 +99,6 @@ STATICFILES_DIRS = (
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
-)
-
-STATICFILES_DIRS = (
-    # Fabric will collect leaflet and draw in this dir
-    os.path.join(PROJECT_DIR, 'remote_static'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
