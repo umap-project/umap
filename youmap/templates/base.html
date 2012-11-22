@@ -62,7 +62,7 @@
           e.preventDefault();
           var $this = $(this);
           $.get($this.attr('href'), function(data) {
-            return L.Util.chickpea_modal(data.html);
+            return L.Chickpea.fire('modal_ready', {'data': data});
           }, 'json');
         });
     </script>
