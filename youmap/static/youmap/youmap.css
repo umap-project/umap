@@ -30,3 +30,12 @@ body.map_detail {
     margin-right: auto;
     margin-left: auto;
 }
+
+/* Search form */
+input::-webkit-input-placeholder, ::-webkit-input-placeholder {
+   color: #a5a5a5;
+}
+
+input:-moz-placeholder, :-moz-placeholder {
+   color: #a5a5a5;
+}
