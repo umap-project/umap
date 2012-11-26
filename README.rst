@@ -11,12 +11,35 @@ It uses `django-chickpea <https://github.com/yohanboniface/django-chickpea>`_, b
 Quickstart
 ----------
 
-To bootstrap the project::
+Create a geo aware database. See `Geodjango doc <https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/>`_ for backend installation.
 
-    virtualenv youmap
-    source youmap/bin/activate
+Create a virtualenv::
+
+    mkvirtualenv youmap
+
+Install dependencies and project::
+
     cd path/to/youmap/repository
     pip install -r requirements.pip
     pip install -e .
+
+Create a default local settings file::
+
     touch youmap/settings/local.py
-    manage.py syncdb
+
+Add database connexion informations in `local.py`, for example::
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'youmap',
+        }
+    }
+
+Create the tables::
+
+    python manage.py syncdb
+
+Start the server::
+
+    python manage.py runserver 0.0.0.0:8000
