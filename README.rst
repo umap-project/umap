@@ -18,5 +18,5 @@ To bootstrap the project::
     cd path/to/youmap/repository
     pip install -r requirements.pip
     pip install -e .
-    cp youmap/settings/local.py.example youmap/settings/local.py
-    manage.py syncdb --migrate
+    touch youmap/settings/local.py
+    manage.py syncdb
