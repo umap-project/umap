@@ -54,7 +54,8 @@
             var $div = $('#reveal-container').trigger('reveal:close');
         });
         L.Chickpea.on('alert', function (e) {
-            $div = $('<div>').addClass('alert-box success global').html(e.content);
+            var level_class = e.level && e.level == "info"? "success": "alert";
+            $div = $('<div>').addClass('alert-box global').addClass(level_class).html(e.content);
             $div.append('<a href="#" class="close">&times;</a>');
             $("body").prepend($div);
         });

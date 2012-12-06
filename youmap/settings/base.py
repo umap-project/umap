@@ -109,6 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 #==============================================================================
 
 MIDDLEWARE_CLASSES += (
+    # 'django.middleware.transaction.TransactionMiddleware',
 )
 
 #==============================================================================
