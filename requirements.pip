@@ -8,3 +8,4 @@ django==1.4.2
 #south==0.7.6
 git+git://github.com/petry/django-foundation.git
 git+git://github.com/yohanboniface/django-chickpea.git
+git+git://github.com/frankban/django-endless-pagination.git

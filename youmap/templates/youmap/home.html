@@ -108,12 +108,7 @@
   <div class="row">
     <div class="twelve columns">
       <div class="row map_list">
-        {% for map_inst in maps %}
-        <div class="twelve mobile-six columns">
-            {% map_fragment map_inst %}
-            <div class="panel"><strong>{{ map_inst.name }}</strong> — {{ map_inst.description }} <a href="{{ map_inst.get_absolute_url }}">See this map!</a></div>
-        </div>
-        {% endfor %}
+        {% include "chickpea/map_list.html" %}
       </div>
     </div>
   </div>
@@ -145,3 +140,8 @@
     <!-- End Footer -->
   <!-- Included JS Files -->
 {% endblock content %}
+
+{% block bottom_js %}
+  {{ block.super }}
+  <script>$.endlessPaginate({paginateOnScroll: true});</script>
+{% endblock bottom_js %}

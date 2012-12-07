@@ -28,6 +28,7 @@ INSTALLED_APPS = (
     # 'youmap.apps.',
     'chickpea',
     'foundation',
+    'endless_pagination',
 
     #'south',
 
@@ -102,6 +103,7 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
+    'django.core.context_processors.request',
 )
 
 #==============================================================================
