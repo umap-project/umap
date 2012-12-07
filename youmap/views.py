@@ -8,7 +8,7 @@ class Home(TemplateView):
     list_template_name = "chickpea/map_list.html"
 
     def get_context_data(self, **kwargs):
-        maps = Map.objects.all()[:20]
+        maps = Map.objects.all()[:100]
         return {
             "maps": maps
         }
