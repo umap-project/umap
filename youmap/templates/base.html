@@ -49,10 +49,15 @@
             if (e.cssClass) {
                 $div.addClass(e.cssClass);
             }
+            // in case a modal is already opened with same id, unbind
+            $div.unbind('.reveal');
             return $div.empty().html(e.data.html).append('<a class="close-reveal-modal">&#215;</a>').reveal();
         });
         L.Chickpea.on('modal_close', function (e) {
-            var $div = $('#reveal-container').trigger('reveal:close');
+            var $div = $('#reveal-container')
+            if ($div) {
+                $div.trigger('reveal:close');
+            }
         });
         L.Chickpea.on('alert', function (e) {
             var level_class = e.level && e.level == "info"? "success": "alert";
@@ -67,6 +72,6 @@
         });
     </script>
     {% endblock %}
-    <div id="reveal-container" class="reveal-modal"></div>
+    <div id="reveal-container"></div>
 </body>
 </html>
