@@ -1,0 +1,29 @@
+<nav class="top-bar contain-to-grid">
+  <ul>
+    <li class="name"><h1><a href="/">u{Map} <em>alpha</em></a></h1></li>
+    <li class="toggle-topbar"><a href="#"></a></li>
+  </ul>
+
+  <section>
+    <ul class="left">
+      {% if user.is_authenticated %}
+        <li><a href="{% url user_maps user.username %}">My maps</a></li>
+        <li><a href="#">Log out</a></li>
+      {% else %}
+        <li><a href="#">Log in</a></li>
+      {% endif %}
+    </ul>
+
+    <ul class="right">
+    <li class="search">
+        <form>
+          <input type="search">
+        </form>
+    </li>
+
+      <li class="has-button">
+      <a class="small button" href="#">Search</a>
+    </li>
+    </ul>
+  </section>
+</nav>

@@ -5,7 +5,7 @@
 {% for map_inst in maps %}
 <div class="twelve mobile-six columns">
     {% map_fragment map_inst %}
-    <div class="panel"><strong>{{ map_inst.name }}</strong> — {{ map_inst.description }} <a href="{{ map_inst.get_absolute_url }}">See this map!</a></div>
+    <div class="panel"><strong>{{ map_inst.name }}</strong> — «{{ map_inst.description }}» <em>Cured by <a href="{% url user_maps user.username %}">{{ map_inst.owner }}</a></em> — <a href="{{ map_inst.get_absolute_url }}">See this map!</a></div>
 </div>
 {% endfor %}
 

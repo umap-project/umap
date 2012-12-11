@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     url(r'^$', views.home, name="home"),
+    url(r'^user/(?P<username>[-_\w]+)/$', views.user_maps, name='user_maps'),
     (r'', include('chickpea.urls')),
 )
 
