@@ -41,7 +41,7 @@
     {% block bottom_js %}
     <script type="text/javascript">
         $(document).foundationAlerts();
-        L.Chickpea.on('modal_ready', function (e) {
+        L.Storage.on('modal_ready', function (e) {
             var $div = $('#reveal-container');
             // reset class
             $div.attr("class", "");
@@ -53,13 +53,13 @@
             $div.unbind('.reveal');
             return $div.empty().html(e.data.html).append('<a class="close-reveal-modal">&#215;</a>').reveal();
         });
-        L.Chickpea.on('modal_close', function (e) {
+        L.Storage.on('modal_close', function (e) {
             var $div = $('#reveal-container')
             if ($div) {
                 $div.trigger('reveal:close');
             }
         });
-        L.Chickpea.on('alert', function (e) {
+        L.Storage.on('alert', function (e) {
             var level_class = e.level && e.level == "info"? "success": "alert";
             $div = $('<div>').addClass('alert-box global').addClass(level_class).html(e.content);
             $div.append('<a href="#" class="close">&times;</a>');
@@ -68,7 +68,7 @@
         $('a.reveal').click(function(e) {
           e.preventDefault();
           var $this = $(this);
-          L.Util.Xhr.get($this.attr('href'));
+          L.Storage.Xhr.get($this.attr('href'));
         });
     </script>
     {% endblock %}
