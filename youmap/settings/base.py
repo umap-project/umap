@@ -25,7 +25,6 @@ LANGUAGES = (
 SECRET_KEY = 'j6fly6aomgo6!3_$v#9kvhw-%wgs1@1l6x+4nr73tmn40=&amp;_@&amp;'
 
 INSTALLED_APPS = (
-    # 'youmap.apps.',
     'chickpea',
     'foundation',
     'endless_pagination',

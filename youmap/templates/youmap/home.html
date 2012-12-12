@@ -53,8 +53,6 @@
 
         <div class="four columns hide-for-small">
 
-          <h4>Action!</h4><hr/>
-
           <a href="{% url map_add %}" class="reveal">
           <div class="panel radius callout" align="center">
             <strong>Test it and create a map</strong>
@@ -66,6 +64,11 @@
             <strong>Fork it</strong>
           </div>
           </a>
+          <div class="panel">
+            <p>
+              Users to play with (password: <span class="label">123123</span>): {% for u in users %}<a href="{% url user_maps u.username %}">{{ u }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+            </p>
+          </div>
 
         </div>
 
@@ -118,5 +121,21 @@
 
 {% block bottom_js %}
   {{ block.super }}
-  <script>$.endlessPaginate({paginateOnScroll: true});</script>
+  <script type="text/javascript">
+    $.endlessPaginate({paginateOnScroll: true});
+    $(document).ready(function(e){
+      $('a.login_button').click(function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        L.Util.Xhr.login({"login_required": $this.attr('href')});
+      });
+    });
+    $(document).ready(function(e){
+      $('a.logout_button').click(function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        L.Util.Xhr.logout($this.attr('href'));
+      });
+    });
+  </script>
 {% endblock bottom_js %}

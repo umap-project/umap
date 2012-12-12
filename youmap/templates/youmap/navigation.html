@@ -7,10 +7,10 @@
   <section>
     <ul class="left">
       {% if user.is_authenticated %}
-        <li><a href="{% url user_maps user.username %}">My maps</a></li>
-        <li><a href="#">Log out</a></li>
+        <li><a href="{% url user_maps user.username %}">My maps ({{ user }})</a></li>
+        <li><a href="{% url logout %}" class="logout_button">Log out</a></li>
       {% else %}
-        <li><a href="#">Log in</a></li>
+        <li><a href="{% url login %}" class="login_button">Log in</a></li>
       {% endif %}
     </ul>
 

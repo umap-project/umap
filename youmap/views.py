@@ -11,8 +11,10 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         maps = Map.objects.order_by('-modified_at')[:100]
+        users = User.objects.filter(is_staff=False)[:10]
         return {
-            "maps": maps
+            "maps": maps,
+            "users": users
         }
 
     def get_template_names(self):
