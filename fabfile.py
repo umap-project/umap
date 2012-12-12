@@ -254,7 +254,7 @@ def collect_remote_statics():
         'leaflet': "git://github.com/CloudMade/Leaflet.git",
         'draw': "git://github.com/jacobtoye/Leaflet.draw.git",
         'hash': "git://github.com/mlevans/leaflet-hash.git",
-        'storage': 'git://github.com/yohanboniface/leaflet-storage.git',
+        'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git',
     }
     with cd(remote_static_dir):
         for subdir, repository in remote_repositories.iteritems():
