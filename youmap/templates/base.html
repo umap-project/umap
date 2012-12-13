@@ -37,40 +37,9 @@
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.accordion.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.placeholder.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.alerts.js"></script>
+    <script src="{{ STATIC_URL }}storage/contrib/js/storage.foundation.js"></script>
     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
     {% block bottom_js %}
-    <script type="text/javascript">
-        $(document).foundationAlerts();
-        L.Storage.on('modal_ready', function (e) {
-            var $div = $('#reveal-container');
-            // reset class
-            $div.attr("class", "");
-            $div.addClass("reveal-modal");
-            if (e.cssClass) {
-                $div.addClass(e.cssClass);
-            }
-            // in case a modal is already opened with same id, unbind
-            $div.unbind('.reveal');
-            return $div.empty().html(e.data.html).append('<a class="close-reveal-modal">&#215;</a>').reveal();
-        });
-        L.Storage.on('modal_close', function (e) {
-            var $div = $('#reveal-container')
-            if ($div) {
-                $div.trigger('reveal:close');
-            }
-        });
-        L.Storage.on('alert', function (e) {
-            var level_class = e.level && e.level == "info"? "success": "alert";
-            $div = $('<div>').addClass('alert-box global').addClass(level_class).html(e.content);
-            $div.append('<a href="#" class="close">&times;</a>');
-            $("body").prepend($div);
-        });
-        $('a.reveal').click(function(e) {
-          e.preventDefault();
-          var $this = $(this);
-          L.Storage.Xhr.get($this.attr('href'));
-        });
-    </script>
     {% endblock %}
     <div id="reveal-container"></div>
 </body>

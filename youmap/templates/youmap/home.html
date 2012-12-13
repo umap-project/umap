@@ -123,19 +123,5 @@
   {{ block.super }}
   <script type="text/javascript">
     $.endlessPaginate({paginateOnScroll: true});
-    $(document).ready(function(e){
-      $('a.login_button').click(function (e) {
-        e.preventDefault();
-        var $this = $(this);
-        L.Storage.Xhr.login({"login_required": $this.attr('href')});
-      });
-    });
-    $(document).ready(function(e){
-      $('a.logout_button').click(function (e) {
-        e.preventDefault();
-        var $this = $(this);
-        L.Storage.Xhr.logout($this.attr('href'));
-      });
-    });
   </script>
 {% endblock bottom_js %}
