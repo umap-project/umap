@@ -39,3 +39,31 @@ input::-webkit-input-placeholder, ::-webkit-input-placeholder {
 input:-moz-placeholder, :-moz-placeholder {
    color: #a5a5a5;
 }
+
+/* Forms */
+
+.help-text small, small.help-text {
+    display: block;
+    padding: 6px 4px;
+    margin-top: -13px;
+    margin-bottom: 12px;
+    background: #a5a5a5;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    -moz-border-radius-bottomleft: 2px;
+    -webkit-border-bottom-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    -moz-border-radius-bottomright: 2px;
+    -webkit-border-bottom-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+.formbox {
+    border: 1px #a5a5a5 solid;
+    min-height: 32px;
+    line-height: 32px;
+    padding-left: 10px;
+}
+#reveal-container textarea {
+    height: 100px;
+}

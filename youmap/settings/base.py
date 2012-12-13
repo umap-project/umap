@@ -28,6 +28,7 @@ INSTALLED_APPS = (
     'chickpea',
     'foundation',
     'endless_pagination',
+    'youmap',
 
     #'south',
 

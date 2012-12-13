@@ -1,0 +1,25 @@
+{% load youmap_tags %}
+<form action="{{ action_url }}" method="post" id="category_edit">
+    {% csrf_token %}
+    {% for error in form.errors %}
+        <small class="error">{{ error }}</small>
+    {% endfor %}
+    {% foundation_field form.name %}
+    {% foundation_field form.description %}
+    {% foundation_field form.color %}
+    <div class="row formbox">
+        <div class="six columns">
+            {% foundation_field form.icon_class %}
+        </div>
+        <div class="six columns">
+            {% foundation_field form.pictogram %}
+        </div>
+    </div>
+    {% foundation_field form.rank %}
+    <div class="row formbox">
+        <span>{{ form.preset.label }}</span>{{ form.preset }}
+    </div>
+    <small class="help-text">{{ form.preset.help_text }}</small>
+    {{ form.map }}
+    <input type="submit" class="button" />
+</form>
