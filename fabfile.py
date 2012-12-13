@@ -251,7 +251,7 @@ def collect_remote_statics():
     remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
     run('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
-        'leaflet': "git://github.com/CloudMade/Leaflet.git",
+        'leaflet': "git://github.com/CloudMade/Leaflet.git@stable",
         'draw': "git://github.com/jacobtoye/Leaflet.draw.git",
         'hash': "git://github.com/mlevans/leaflet-hash.git",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git',
