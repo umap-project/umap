@@ -1,0 +1,16 @@
+{% load youmap_tags %}
+<form method="post" action="{{ action }}" id="feature_form" onsubmit="return false;" class="custom">
+    {% csrf_token %}
+    {{ form.no_field_errors }}
+    {% foundation_field form.name %}
+    {% foundation_field form.description %}
+    {% foundation_field form.color %}
+    <p>
+    {% foundation_field form.category %}
+    </p>
+    {{ form.latlng }}
+    <input type="submit" class="button" />
+    {% if delete_url %}
+        <a href="{{ delete_url }}" id="delete_feature_button" >Delete</a>
+    {% endif %}
+</form>
