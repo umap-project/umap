@@ -1,6 +1,8 @@
 <h3>Create your map now!</h3>
 <form action="{{ action_url }}" method="post" id="map_edit">
-    {{ form.non_field_errors }}
+    {% for error in form.non_field_errors %}
+        <small class="error">{{ error }}</small>
+    {% endfor %}
     {% csrf_token %}
     {{ form.name }}
     {% for error in form.name.errors %}
