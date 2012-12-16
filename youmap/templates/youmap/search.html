@@ -1,0 +1,33 @@
+{% extends "youmap/home.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="twelve columns">
+
+    <!-- Navigation -->
+
+    {% include 'youmap/navigation.html' %}
+    <!-- End Navigation -->
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="twelve columns">
+      <h4>Search for maps containing «{{ q }}»</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <div class="row map_list">
+        {% if maps %}
+          {% include "chickpea/map_list.html" %}
+        {% else %}
+          <div class="twelve mobile-six columns">
+            Not map found.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}

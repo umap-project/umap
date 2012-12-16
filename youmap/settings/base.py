@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'foundation',
     'endless_pagination',
     'youmap',
+    'sesql',
 
     #'south',
 

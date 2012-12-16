@@ -15,15 +15,11 @@
     </ul>
 
     <ul class="right">
-    <li class="search">
-        <form>
-          <input type="search">
+      <li class="search">
+        <form action="{% url search %}" method="GET">
+          <input name="q" type="search" placeholder="Search maps" value="{{ q|default:"" }}" />
         </form>
-    </li>
-
-      <li class="has-button">
-      <a class="small button" href="#">Search</a>
-    </li>
+      </li>
     </ul>
   </section>
 </nav>
