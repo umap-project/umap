@@ -1,20 +1,13 @@
+{% load youmap_tags %}
 <h3>Create your map now!</h3>
 <form action="{{ action_url }}" method="post" id="map_edit">
     {% for error in form.non_field_errors %}
         <small class="error">{{ error }}</small>
     {% endfor %}
     {% csrf_token %}
-    {{ form.name }}
-    {% for error in form.name.errors %}
-        <small class="error">{{ error|escape }}</small>
-    {% endfor %}
-    {{ form.description }}
-    {{ form.description.errors }}
-    <label>{{ form.licence.help_text }}</label>
-    {{ form.licence }}
-    {% for error in form.licence.errors %}
-        <small class="error">{{ error|escape }}</small>
-    {% endfor %}
+    {% foundation_field form.name %}
+    {% foundation_field form.description %}
+    {% foundation_field form.licence %}
     {{ form.zoom }}
     {{ form.center }}
     <input type="submit" class="button" />

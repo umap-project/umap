@@ -67,3 +67,6 @@ input:-moz-placeholder, :-moz-placeholder {
 #reveal-container textarea {
     height: 100px;
 }
+#reveal-container select {
+    margin-bottom: 10px;
+}
