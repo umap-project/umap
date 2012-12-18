@@ -2,7 +2,7 @@
 <h3>Choose your tilelayers</h3>
 <form action="{% url map_update_tilelayers map.pk %}" method="post" id="map_edit">
     {% csrf_token %}
-    <ul class="block-grid four-up mobile">
+    <ul class="block-grid two-up mobile">
     {% for tilelayer in tilelayers %}
         <li>
             <label for="tilelayer_{{ forloop.counter }}">

@@ -64,9 +64,9 @@ input:-moz-placeholder, :-moz-placeholder {
     line-height: 32px;
     padding-left: 10px;
 }
-#reveal-container textarea {
+#storage-ui-container textarea {
     height: 100px;
 }
-#reveal-container select {
+#storage-ui-container select {
     margin-bottom: 10px;
 }
