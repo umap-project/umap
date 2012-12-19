@@ -120,7 +120,7 @@
 {% endblock content %}
 
 {% block bottom_js %}
-  {{ block.super }}
+  <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.foundation.js"></script>
   <script type="text/javascript">
     $.endlessPaginate({paginateOnScroll: true});
   </script>

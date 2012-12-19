@@ -6,7 +6,6 @@
     <!-- Included CSS Files (Compressed) -->
     <link rel="stylesheet" href="{{ STATIC_URL }}foundation/stylesheets/foundation.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}youmap/youmap.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.example.css">
 
     <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
 
@@ -15,6 +14,7 @@
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block extra_head %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.example.css">
     {% endblock extra_head %}
 
 </head>
@@ -38,9 +38,9 @@
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.accordion.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.placeholder.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.alerts.js"></script>
-    <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.example.js"></script>
     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
     {% block bottom_js %}
+        <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.example.js"></script>
     {% endblock %}
     <div id="storage-ui-container"></div>
     <div id="storage-alert-container"></div>
