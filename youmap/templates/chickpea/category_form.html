@@ -7,7 +7,7 @@
     {% foundation_field form.name %}
     {% foundation_field form.description %}
     {% foundation_field form.color %}
-    <div class="row formbox">
+    <div class="formbox columns twelve">
         <div class="six columns">
             {% foundation_field form.icon_class %}
         </div>
@@ -16,7 +16,7 @@
         </div>
     </div>
     {% foundation_field form.rank %}
-    <div class="row formbox">
+    <div class="formbox">
         <span>{{ form.preset.label }}</span>{{ form.preset }}
     </div>
     <small class="help-text">{{ form.preset.help_text }}</small>

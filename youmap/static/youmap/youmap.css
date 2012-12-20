@@ -63,6 +63,7 @@ input:-moz-placeholder, :-moz-placeholder {
     min-height: 32px;
     line-height: 32px;
     padding-left: 10px;
+    margin-bottom: 10px;
 }
 #storage-ui-container textarea {
     height: 100px;
