@@ -22,4 +22,7 @@
     <small class="help-text">{{ form.preset.help_text }}</small>
     {{ form.map }}
     <input type="submit" class="button" />
+    {% if delete_url %}
+        <a href="{{ delete_url }}" id="delete_category_button" >Delete</a>
+    {% endif %}
 </form>
