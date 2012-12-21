@@ -1,5 +1,5 @@
 {% load chickpea_tags %}
-<h3>Choose your tilelayers</h3>
+<h3>Choose your tilelayer</h3>
 <form action="{% url map_update_tilelayers map.pk %}" method="post" id="map_edit">
     {% csrf_token %}
     <ul class="block-grid two-up mobile">
@@ -7,7 +7,7 @@
         <li>
             <label for="tilelayer_{{ forloop.counter }}">
               {% tilelayer_preview tilelayer %}<div class="panel">
-                <input type="checkbox" id="tilelayer_{{ forloop.counter }}" name="tilelayer_{{ forloop.counter }}" value="{{ tilelayer.pk }}" {% if tilelayer in map.tilelayers.all %}checked{% endif %} />
+                <input type="radio" id="tilelayer_{{ forloop.counter }}" name="tilelayer" value="{{ tilelayer.pk }}" {% if tilelayer in map.tilelayers.all %}checked{% endif %} />
                 {{ tilelayer.name }}
               </div>
             </label>
