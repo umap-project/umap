@@ -5,12 +5,12 @@ from django.db.models import Q
 
 from sesql.shortquery import shortquery
 
-from chickpea.models import Map
+from leaflet_storage.models import Map
 
 
 class Home(TemplateView):
     template_name = "youmap/home.html"
-    list_template_name = "chickpea/map_list.html"
+    list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
         maps = Map.objects.order_by('-modified_at')[:100]
@@ -36,7 +36,7 @@ class UserMaps(DetailView):
     model = User
     slug_url_kwarg = 'username'
     slug_field = 'username'
-    list_template_name = "chickpea/map_list.html"
+    list_template_name = "leaflet_storage/map_list.html"
     context_object_name = "current_user"
 
     def get_context_data(self, **kwargs):
@@ -60,7 +60,7 @@ user_maps = UserMaps.as_view()
 
 class Search(TemplateView):
     template_name = "youmap/search.html"
-    list_template_name = "chickpea/map_list.html"
+    list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
         q = self.request.GET['q']

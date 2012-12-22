@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^$', views.home, name="home"),
     url(r'^search/$', views.search, name="search"),
     url(r'^user/(?P<username>[-_\w]+)/$', views.user_maps, name='user_maps'),
-    (r'', include('chickpea.urls')),
+    (r'', include('leaflet_storage.urls')),
 )
 
 if settings.DEBUG and settings.MEDIA_ROOT:

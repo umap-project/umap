@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% load chickpea_tags compress %}
+{% load leaflet_storage_tags compress %}
 
 {% block extra_head %}
     {% compress css %}
-      {% chickpea_css %}
+      {% leaflet_storage_css %}
     {% endcompress css %}
     {% compress js %}
-      {% chickpea_js %}
+      {% leaflet_storage_js %}
     {% endcompress js %}
 {% endblock %}
 
@@ -90,7 +90,7 @@
   <div class="row">
     <div class="twelve columns">
       <div class="row map_list">
-        {% include "chickpea/map_list.html" %}
+        {% include "leaflet_storage/map_list.html" %}
       </div>
     </div>
   </div>

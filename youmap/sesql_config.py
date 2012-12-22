@@ -34,7 +34,7 @@ CHARSET = "utf-8"
 from sesql.fields import *
 from sesql.sources import *
 from django.db.models import Q
-from chickpea import models
+from leaflet_storage import models
 
 #
 # Select the ORM to use

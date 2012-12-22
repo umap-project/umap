@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-{% load chickpea_tags compress %}
+{% load leaflet_storage_tags compress %}
 {% block title %}{{ map.name }}{% endblock %}
 {% block body_class %}map_detail{% endblock %}
 
 {% block extra_head %}
     {% compress css %}
-        {% chickpea_css %}
+        {% leaflet_storage_css %}
         <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
     {% endcompress %}
     {% compress js %}
-        {% chickpea_js %}
+        {% leaflet_storage_js %}
     {% endcompress %}
 {% endblock %}
 
 {% block content %}
     {% block map_init %}
-        {% include "chickpea/map_init.html" %}
+        {% include "leaflet_storage/map_init.html" %}
     {% endblock %}
 {% endblock %}

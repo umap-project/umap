@@ -1,4 +1,4 @@
-{% load chickpea_tags %}
+{% load leaflet_storage_tags %}
 <h3>Choose your tilelayer</h3>
 <form action="{% url map_update_tilelayers map.pk %}" method="post" id="map_edit">
     {% csrf_token %}
