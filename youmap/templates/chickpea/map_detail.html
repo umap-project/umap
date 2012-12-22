@@ -5,11 +5,11 @@
 {% block extra_head %}
     {% compress css %}
         {% chickpea_css %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
     {% endcompress %}
     {% compress js %}
         {% chickpea_js %}
     {% endcompress %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 {% endblock %}
 
 {% block content %}
