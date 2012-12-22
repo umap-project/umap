@@ -163,7 +163,7 @@ def collectstatic():
     """
     collect_remote_statics()
     dj('collectstatic --link --noinput')
-    # dj('compress')
+    dj('compress')
     # with cd('{virtualenv_dir}/var/static'.format(**env)):
     #     fix_permissions()
 

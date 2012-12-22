@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     'endless_pagination',
     'youmap',
     'sesql',
+    'compressor',
 
     #'south',
 
@@ -95,6 +96,10 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
 )
 
+STATICFILES_FINDERS += (
+    'compressor.finders.CompressorFinder',
+)
+
 #==============================================================================
 # Templates
 #==============================================================================
@@ -129,3 +134,5 @@ AUTHENTICATION_BACKENDS += (
 #==============================================================================
 # Third party app settings
 #==============================================================================
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True

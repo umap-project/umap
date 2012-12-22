@@ -1,20 +1,21 @@
+{% load compress %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% block head_title %}u{Map}{% endblock %}</title>
     <meta charset="utf-8">
+    {% compress css %}
     <!-- Included CSS Files (Compressed) -->
     <link rel="stylesheet" href="{{ STATIC_URL }}foundation/stylesheets/foundation.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}youmap/youmap.css">
 
     <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
-
+    {% endcompress css %}
     <!-- IE Fix for HTML5 Tags -->
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block extra_head %}
-        <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
     {% endblock extra_head %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
@@ -24,7 +25,7 @@
     {% block content %}
     {% endblock %}
 </div>
-
+    {% compress js %}
     <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.mediaQueryToggle.js"></script>
@@ -39,6 +40,7 @@
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.placeholder.js"></script>
     <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.alerts.js"></script>
     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    {% endcompress js %}
     {% block bottom_js %}
         <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
     {% endblock %}

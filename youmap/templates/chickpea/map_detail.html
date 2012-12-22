@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load chickpea_tags compress %}
+{% block title %}{{ map.name }}{% endblock %}
+
+{% block extra_head %}
+    {% compress css %}
+        {% chickpea_css %}
+    {% endcompress %}
+    {% compress js %}
+        {% chickpea_js %}
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+{% endblock %}
+
+{% block content %}
+    {% block map_init %}
+        {% include "chickpea/map_init.html" %}
+    {% endblock %}
+{% endblock %}
