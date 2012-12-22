@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
-{% load chickpea_tags %}
+{% load chickpea_tags compress %}
 
 {% block extra_head %}
-    {% chickpea_css %}
-    {% chickpea_js %}
+    {% compress css %}
+      {% chickpea_css %}
+    {% endcompress css %}
+    {% compress js %}
+      {% chickpea_js %}
+    {% endcompress js %}
 {% endblock %}
 
 {% block content %}
