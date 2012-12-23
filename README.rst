@@ -5,7 +5,7 @@ About
 -----
 YouMap let you create map with OpenStreetMap layers in a minute and embed them in your site.
 *Be cause we think that the more OSM will be used, the more OSM will be ''cured''.*
-It uses `django-leaflet-storage <https://github.com/yohanboniface/django-leaflet-storage>`_, built on top of Django and Leaflet.
+It uses `django-leaflet-storage <https://github.com/yohanboniface/django-leaflet-storage>`_ and `Leaflet.Storage <https://github.com/yohanboniface/Leaflet.Storage>`_,  built on top of Django and Leaflet.
 
 
 Quickstart
