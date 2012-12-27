@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
 from django.conf.global_settings import *   # pylint: disable=W0614,W0401
@@ -19,6 +21,7 @@ USE_L10N = True
 LANGUAGE_CODE = 'en'
 LANGUAGES = (
     ('en', 'English'),
+    ('fr', u'Francais'),
 )
 
 # Make this unique, and don't share it with anybody.
@@ -117,7 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 #==============================================================================
 
 MIDDLEWARE_CLASSES += (
-    # 'django.middleware.transaction.TransactionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 #==============================================================================
