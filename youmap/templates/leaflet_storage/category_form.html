@@ -17,9 +17,9 @@
     </div>
     {% foundation_field form.rank %}
     <div class="formbox">
-        <span>{{ form.preset.label }}</span>{{ form.preset }}
+        <span>{{ form.display_on_load.label }}</span>{{ form.display_on_load }}
     </div>
-    <small class="help-text">{{ form.preset.help_text }}</small>
+    <small class="help-text">{{ form.display_on_load.help_text }}</small>
     {{ form.map }}
     <input type="submit" class="button" />
     {% if delete_url %}
