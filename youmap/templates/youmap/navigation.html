@@ -1,3 +1,4 @@
+{% load i18n %}
 <nav class="top-bar contain-to-grid">
   <ul>
     <li class="name"><h1><a href="/">u{Map} <em>alpha</em></a></h1></li>
@@ -7,17 +8,17 @@
   <section>
     <ul class="left">
       {% if user.is_authenticated %}
-        <li><a href="{% url user_maps user.username %}">My maps ({{ user }})</a></li>
-        <li><a href="{% url logout %}" class="logout_button">Log out</a></li>
+        <li><a href="{% url user_maps user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
+        <li><a href="{% url logout %}" class="logout_button">{% trans "Log out" %}</a></li>
       {% else %}
-        <li><a href="{% url login %}" class="login_button">Log in</a></li>
+        <li><a href="{% url login %}" class="login_button">{% trans "Log in" %}</a></li>
       {% endif %}
     </ul>
 
     <ul class="right">
       <li class="search">
         <form action="{% url search %}" method="GET">
-          <input name="q" type="search" placeholder="Search maps" value="{{ q|default:"" }}" />
+          <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
         </form>
       </li>
     </ul>

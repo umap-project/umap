@@ -1,5 +1,7 @@
 {% extends "youmap/home.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="row">
   <div class="twelve columns">
@@ -14,7 +16,7 @@
 
   <div class="row">
     <div class="twelve columns">
-      <h4>Search for maps containing «{{ q }}»</h4>
+      <h4>{% blocktrans %}Search for maps containing «{{ q }}» {% endblocktrans %}</h4>
     </div>
   </div>
   <div class="row">
@@ -24,7 +26,7 @@
           {% include "leaflet_storage/map_list.html" %}
         {% else %}
           <div class="twelve mobile-six columns">
-            Not map found.
+            {% trans "Not map found." %}
           </div>
         {% endif %}
       </div>

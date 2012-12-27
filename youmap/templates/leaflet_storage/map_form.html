@@ -1,6 +1,6 @@
-{% load youmap_tags %}
+{% load youmap_tags i18n %}
 {% if not map %}
-    <h3>Create your map now!</h3>
+    <h3>{% trans "Create your map now!" %}</h3>
 {% endif %}
 <form action="{{ action_url }}" method="post" id="map_edit">
     {% for error in form.non_field_errors %}
@@ -14,6 +14,6 @@
     {{ form.center }}
     <input type="submit" class="button" />
     {% if delete_url and map and user == map.owner %}
-        <a href="{{ delete_url }}" id="delete_map_button" >Delete</a>
+        <a href="{{ delete_url }}" id="delete_map_button" >{% trans "Delete" %}</a>
     {% endif %}
 </form>

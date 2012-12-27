@@ -1,4 +1,4 @@
-{% load youmap_tags %}
+{% load youmap_tags i18n %}
 <form method="post" action="{{ action }}" id="feature_form" onsubmit="return false;" class="custom">
     {% csrf_token %}
     {{ form.no_field_errors }}
@@ -11,6 +11,6 @@
     {{ form.latlng }}
     <input type="submit" class="button" />
     {% if delete_url %}
-        <a href="{{ delete_url }}" id="delete_feature_button" >Delete</a>
+        <a href="{{ delete_url }}" id="delete_feature_button" >{% trans "Delete" %}</a>
     {% endif %}
 </form>

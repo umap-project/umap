@@ -1,0 +1,121 @@
+# YOUMAP.
+# Copyleft (C) 2012
+# This file is distributed under the same license as the YOUMAP package.
+# YOHAN BONIFACE <yb@enix.org>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.0.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-27 14:08+0100\n"
+"PO-Revision-Date: 2012-12-27 11:09+0100\n"
+"Last-Translator: YOHAN BONIFACE <yb@enix.org>\n"
+"Language-Team: FR <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: templates/leaflet_storage/category_form.html:26
+#: templates/leaflet_storage/feature_form.html:14
+#: templates/leaflet_storage/map_form.html:17
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/leaflet_storage/map_form.html:3
+msgid "Create your map now!"
+msgstr "Créer une carte"
+
+#: templates/leaflet_storage/map_list.html:8
+msgid "Cured by"
+msgstr "Maintenu par"
+
+#: templates/leaflet_storage/map_list.html:8
+msgid "See this map!"
+msgstr "Voir cette carte!"
+
+#: templates/leaflet_storage/map_update_tilelayers.html:2
+msgid "Choose your tilelayer"
+msgstr "Choisir un fond de carte"
+
+#: templates/youmap/home.html:39
+msgid ""
+"u{Map} let you create maps with OpenStreetMap layers in a minute and embed "
+"them in your site.<br /> This is a demo instance, you can host your own, "
+"it's <strong>open source</strong>!"
+msgstr ""
+"u{Map} permet de créer des cartes personnalisées sur des fonds OpenStreetMap "
+"en un instant et les afficher dans votre site <br /> Ceci est une instance "
+"de démonstration, vous pouvez héberger la vôtre, c'est <strong>open source</"
+"strong>!"
+
+#: templates/youmap/home.html:43
+msgid "What you can do?"
+msgstr "Que pouvez-vous faire?"
+
+#: templates/youmap/home.html:45
+msgid "Choose the layers of your map"
+msgstr "Choisir les fonds de carte"
+
+#: templates/youmap/home.html:46
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Ajouter des POI: markes, lignes, polygones..."
+
+#: templates/youmap/home.html:47
+msgid "Manage POIs colours and icons"
+msgstr "Choisir la couleur et les icônes"
+
+#: templates/youmap/home.html:48
+msgid "Batch import geostructured data (GEOJson...)"
+msgstr "Import des données géographiques en masse (GeoJSON...)"
+
+#: templates/youmap/home.html:49
+msgid "Choose the licence for your data"
+msgstr "Choisir la licence de vos données"
+
+#: templates/youmap/home.html:50
+msgid "Embed and share your map"
+msgstr "Exporter et partager votre carte"
+
+#: templates/youmap/home.html:62
+msgid "Test it and create a map"
+msgstr "Tester et créer une carte"
+
+#: templates/youmap/home.html:68
+msgid "Fork it"
+msgstr "Forker"
+
+#: templates/youmap/home.html:73
+msgid "Users to play with"
+msgstr "Utilisateurs pour tester"
+
+#: templates/youmap/home.html:87
+msgid "Browse maps"
+msgstr "Voir des cartes"
+
+#: templates/youmap/navigation.html:11
+msgid "My maps"
+msgstr "Mes cartes"
+
+#: templates/youmap/navigation.html:12
+msgid "Log out"
+msgstr "Déconnexion"
+
+#: templates/youmap/navigation.html:14
+msgid "Log in"
+msgstr "Connexion"
+
+#: templates/youmap/navigation.html:21
+msgid "Search maps"
+msgstr "Chercher des cartes"
+
+#: templates/youmap/search.html:19
+#, python-format
+msgid "Search for maps containing «%(q)s» "
+msgstr "Chercher des cartes contenant «%(q)s»"
+
+#: templates/youmap/search.html:29
+msgid "Not map found."
+msgstr "Aucune carte trouvée."

@@ -1,4 +1,4 @@
-{% load youmap_tags %}
+{% load youmap_tags i18n %}
 <form action="{{ action_url }}" method="post" id="category_edit">
     {% csrf_token %}
     {% for error in form.errors %}
@@ -23,6 +23,6 @@
     {{ form.map }}
     <input type="submit" class="button" />
     {% if delete_url %}
-        <a href="{{ delete_url }}" id="delete_category_button" >Delete</a>
+        <a href="{{ delete_url }}" id="delete_category_button" >{% trans "Delete" %}</a>
     {% endif %}
 </form>

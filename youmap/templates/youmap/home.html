@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load leaflet_storage_tags compress %}
+{% load leaflet_storage_tags compress i18n %}
 
 {% block extra_head %}
     {% compress css %}
@@ -36,18 +36,18 @@
           <div class="row">
           <div class="six mobile-two columns">
             <h4>u{Map} <em>alpha</em></h4><hr/>
-            <h5 class="subheader">u{Map} let you create maps with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!
+            <h5 class="subheader">{% blocktrans %}u{Map} let you create maps with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!{% endblocktrans %}
             </h5>
           </div>
           <div class="six mobile-two columns">
-            <h5>What you can do?</h5>
+            <h5>{% trans "What you can do?" %}</h5>
             <ol>
-              <li>Choose the layers of your map</li>
-              <li>Add POIs: markers, lines, polygons...</li>
-              <li>Manage POIs colours and icons</li>
-              <li>Batch import geostructured data (GEOJson...)</li>
-              <li>Choose your licence</li>
-              <li>Embed and share your map</li>
+              <li>{% trans "Choose the layers of your map" %}</li>
+              <li>{% trans "Add POIs: markers, lines, polygons..." %}</li>
+              <li>{% trans "Manage POIs colours and icons" %}</li>
+              <li>{% trans "Batch import geostructured data (GEOJson...)" %}</li>
+              <li>{% trans "Choose the licence for your data" %}</li>
+              <li>{% trans "Embed and share your map" %}</li>
             </ol>
         </div>
 
@@ -59,18 +59,18 @@
 
           <a href="{% url map_add %}" data-listen-form="map_edit" class="reveal">
           <div class="panel radius callout" align="center">
-            <strong>Test it and create a map</strong>
+            <strong>{% trans "Test it and create a map" %}</strong>
           </div>
           </a>
 
           <a href="https://bitbucket.org/yohanboniface/youmap_project">
           <div class="panel radius callout" align="center">
-            <strong>Fork it</strong>
+            <strong>{% trans "Fork it" %}</strong>
           </div>
           </a>
           <div class="panel">
             <p>
-              Users to play with (password: <span class="label">123123</span>): {% for u in users %}<a href="{% url user_maps u.username %}">{{ u }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+              {% trans "Users to play with" %} (password: <span class="label">123123</span>): {% for u in users %}<a href="{% url user_maps u.username %}">{{ u }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
             </p>
           </div>
 
@@ -84,7 +84,7 @@
   <div class="row">
     <div class="twelve columns">
       <hr />
-      <h2>Browse maps</h2>
+      <h2>{% trans "Browse maps" %}</h2>
     </div>
   </div>
   <div class="row">
