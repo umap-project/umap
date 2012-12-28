@@ -71,3 +71,11 @@ input:-moz-placeholder, :-moz-placeholder {
 #storage-ui-container select {
     margin-bottom: 10px;
 }
+
+#storage-ui-container.warning .button {
+    background-color: #c60f13;
+    border: 1px solid #7f0a0c;
+}
+#storage-ui-container.warning .button:hover {
+    background-color: #970b0e;
+}
