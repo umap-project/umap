@@ -79,3 +79,12 @@ input:-moz-placeholder, :-moz-placeholder {
 #storage-ui-container.warning .button:hover {
     background-color: #970b0e;
 }
+
+/* Map infos */
+.category_color {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    border: 1px solid #000;
+}
