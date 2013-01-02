@@ -31,7 +31,7 @@ INSTALLED_APPS = (
     'leaflet_storage',
     'foundation',
     'endless_pagination',
-    'youmap',
+    'umap',
     'sesql',
     'compressor',
 
@@ -54,7 +54,7 @@ INSTALLED_APPS = (
 
 import os
 import sys
-import youmap as project_module
+import umap as project_module
 
 PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))
 
@@ -81,7 +81,7 @@ if not os.path.exists(VAR_ROOT):
 # Project URLS and media settings
 #==============================================================================
 
-ROOT_URLCONF = 'youmap.urls'
+ROOT_URLCONF = 'umap.urls'
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'

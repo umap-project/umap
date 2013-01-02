@@ -1,5 +1,5 @@
 *.pyc
 *.egg-info
-youmap/settings/local.py
-youmap/settings/local/*
+umap/settings/local.py
+umap/settings/local/*
 docs/_build

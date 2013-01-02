@@ -1,4 +1,4 @@
-{% load youmap_tags i18n %}
+{% load umap_tags i18n %}
 <form action="{{ action_url }}" method="post" id="category_edit">
     {% csrf_token %}
     {% for error in form.errors %}

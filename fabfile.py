@@ -3,8 +3,8 @@ from fabric.api import task, env, run, local, roles, cd, execute, hide, puts,\
 import posixpath
 
 
-env.project_name = 'youmap'
-env.repository = 'https://yohanboniface@bitbucket.org/yohanboniface/youmap_project.git'
+env.project_name = 'umap'
+env.repository = 'https://yohanboniface@bitbucket.org/yohanboniface/umap.git'
 env.local_branch = 'master'
 env.remote_ref = 'origin/master'
 env.requirements_file = 'requirements.pip'
@@ -20,7 +20,7 @@ def live():
     """
     Use the live deployment environment.
     """
-    server = 'youmap.org'
+    server = 'umap.org'
     env.roledefs = {
         'web': [server],
         'db': [server],

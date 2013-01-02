@@ -5,19 +5,19 @@ import codecs
 
 from setuptools import setup, find_packages
 
-import youmap
+import umap
 
 long_description = codecs.open('README.rst', "r", "utf-8").read()
 
 setup(
-    name="youmap",
-    version=youmap.__version__,
-    author=youmap.__author__,
-    author_email=youmap.__contact__,
-    description=youmap.__doc__,
+    name="umap",
+    version=umap.__version__,
+    author=umap.__author__,
+    author_email=umap.__contact__,
+    description=umap.__doc__,
     keywords="django leaflet geodjango openstreetmap",
-    url=youmap.__homepage__,
-    download_url="https://bitbucket.org/yohanboniface/youmap_project/downloads",
+    url=umap.__homepage__,
+    download_url="https://bitbucket.org/yohanboniface/umap/downloads",
     packages=find_packages(),
     include_package_data=True,
     platforms=["any"],

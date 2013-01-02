@@ -9,7 +9,7 @@ from leaflet_storage.models import Map
 
 
 class Home(TemplateView):
-    template_name = "youmap/home.html"
+    template_name = "umap/home.html"
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
@@ -59,7 +59,7 @@ user_maps = UserMaps.as_view()
 
 
 class Search(TemplateView):
-    template_name = "youmap/search.html"
+    template_name = "umap/search.html"
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
