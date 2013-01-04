@@ -6,21 +6,13 @@
     {% endfor %}
     {% foundation_field form.name %}
     {% foundation_field form.description %}
-    {% foundation_field form.color %}
-    <div class="formbox columns twelve">
-        <div class="six columns">
-            {% foundation_field form.icon_class %}
-        </div>
-        <div class="six columns">
-            {% foundation_field form.pictogram %}
-        </div>
-    </div>
     {% foundation_field form.rank %}
     <div class="formbox">
         <span>{{ form.display_on_load.label }}</span>{{ form.display_on_load }}
     </div>
     <small class="help-text">{{ form.display_on_load.help_text }}</small>
     {{ form.map }}
+    {% include "umap/styles_fieldset.html" %}
     <input type="submit" class="button" />
     {% if delete_url %}
         <a href="{{ delete_url }}" id="delete_category_button" >{% trans "Delete" %}</a>

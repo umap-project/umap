@@ -1,0 +1,15 @@
+{% load umap_tags i18n %}
+<fieldset>
+    <legend>{% trans "Styles" %}</legend>
+    {% foundation_field form.color %}
+    {% if form.icon_class and form.pictogram %}
+    <div class="formbox columns twelve">
+        <div class="six columns">
+            {% foundation_field form.icon_class %}
+        </div>
+        <div class="six columns">
+            {% foundation_field form.pictogram %}
+        </div>
+    </div>
+    {% endif %}
+</fieldset>

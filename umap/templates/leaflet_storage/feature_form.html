@@ -4,10 +4,8 @@
     {{ form.no_field_errors }}
     {% foundation_field form.name %}
     {% foundation_field form.description %}
-    {% foundation_field form.color %}
-    <p>
     {% foundation_field form.category %}
-    </p>
+    {% include "umap/styles_fieldset.html" %}
     {{ form.latlng }}
     <input type="submit" class="button" />
     {% if delete_url %}
