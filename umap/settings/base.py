@@ -35,7 +35,7 @@ INSTALLED_APPS = (
     'sesql',
     'compressor',
 
-    #'south',
+    'south',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',

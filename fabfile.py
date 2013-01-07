@@ -174,7 +174,7 @@ def syncdb(sync=True, migrate=True):
     """
     Synchronize the database.
     """
-    dj('syncdb --noinput')
+    dj('syncdb --migrate --noinput')
 
 
 @task
