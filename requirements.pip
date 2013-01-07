@@ -4,7 +4,7 @@
 #
 #     pip install -r requirements.pip
 
-django=>1.4
+django>=1.4
 south
 git+git://github.com/petry/django-foundation.git
 git+git://github.com/yohanboniface/django-leaflet-storage.git
