@@ -27,6 +27,10 @@ Create a default local settings file::
 
     touch umap/settings/local.py
 
+Import base settings::
+
+    from umap.settings.base import *
+
 Add database connexion informations in `local.py`, for example::
 
     DATABASES = {
@@ -38,8 +42,18 @@ Add database connexion informations in `local.py`, for example::
 
 Create the tables::
 
-    python manage.py syncdb
+    python manage.py syncdb --migrate
+
+Compress the statics::
+
+    python manage.py compress
 
 Start the server::
 
     python manage.py runserver 0.0.0.0:8000
+
+Go to the admin (http://localhost:8000/admin/) and add:
+
+- almost one licence
+- almost one tilelayer
+- maybe some users to play with
