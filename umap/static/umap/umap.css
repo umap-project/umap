@@ -88,3 +88,31 @@ input:-moz-placeholder, :-moz-placeholder {
     margin-right: 10px;
     border: 1px solid #000;
 }
+
+/* **************** */
+/*    Login icons   */
+/* **************** */
+/*.login-grid li {
+}
+*/
+.login-grid a {
+    border: 1px solid #e5e5e5;
+    padding: 5px;
+    color: #000;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: 92px 92px;
+    height: 92px;
+    width: 92px;
+    display: inline-block;
+    margin-right: 10px;
+}
+.login-grid .login-github {
+    background-image: url("./github.png");
+}
+.login-grid .login-bitbucket {
+    background-image: url("./bitbucket.png");
+}
+.login-grid .login-twitter {
+    background-image: url("./twitter.png");
+}

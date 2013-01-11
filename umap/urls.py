@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^$', views.home, name="home"),
     url(r'^search/$', views.search, name="search"),
     url(r'^user/(?P<username>[-_\w]+)/$', views.user_maps, name='user_maps'),
+    url(r'', include('social_auth.urls')),
     (r'', include('leaflet_storage.urls')),
 )
 

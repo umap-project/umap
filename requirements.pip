@@ -9,6 +9,7 @@ south
 django-leaflet-storage
 django_compressor
 django-foundation
+django-social-auth
 git+git://github.com/yohanboniface/vectorformats.git@leafletstorage
 git+git://github.com/frankban/django-endless-pagination.git
 hg+https://bitbucket.org/liberation/sesql

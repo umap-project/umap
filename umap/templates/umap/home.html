@@ -68,11 +68,14 @@
             <strong>{% trans "Fork it" %}</strong>
           </div>
           </a>
-          <div class="panel">
-            <p>
-              {% trans "Users to play with" %} (password: <span class="label">123123</span>): {% for u in users %}<a href="{% url user_maps u.username %}">{{ u }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
-            </p>
+
+          {% if not user.is_authenticated %}
+          <a href="{% url login %}" class="login_button">
+          <div class="panel radius callout" align="center">
+            <strong>{% trans "Log in" %} / {% trans "Sign in" %}</strong>
           </div>
+          </a>
+          {% endif %}
 
         </div>
 

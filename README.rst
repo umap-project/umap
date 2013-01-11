@@ -40,6 +40,23 @@ Add database connexion informations in `local.py`, for example::
         }
     }
 
+uMap uses `django-social-auth <http://django-social-auth.readthedocs.org/>`_ for user authentication. So you will need to configure it according to your
+needs. For example::
+
+    AUTHENTICATION_BACKENDS = (
+        'social_auth.backends.contrib.github.GithubBackend',
+        'social_auth.backends.contrib.bitbucket.BitbucketBackend',
+        'social_auth.backends.twitter.TwitterBackend',
+        'django.contrib.auth.backends.ModelBackend',
+    )
+    GITHUB_APP_ID = 'xxx'
+    GITHUB_API_SECRET = 'zzz'
+    BITBUCKET_CONSUMER_KEY = 'xxx'
+    BITBUCKET_CONSUMER_SECRET = 'zzz'
+    TWITTER_CONSUMER_KEY = "xxx"
+    TWITTER_CONSUMER_SECRET = "yyy"
+
+
 Create the tables::
 
     python manage.py syncdb --migrate
@@ -56,4 +73,3 @@ Go to the admin (http://localhost:8000/admin/) and add:
 
 - almost one licence
 - almost one tilelayer
-- maybe some users to play with

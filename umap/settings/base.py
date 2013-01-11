@@ -3,6 +3,7 @@
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
 from django.conf.global_settings import *   # pylint: disable=W0614,W0401
+from django.template.defaultfilters import slugify
 
 #==============================================================================
 # Generic Django project settings
@@ -34,6 +35,7 @@ INSTALLED_APPS = (
     'umap',
     'sesql',
     'compressor',
+    'social_auth',
 
     'south',
 
@@ -113,6 +115,7 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
+    'social_auth.context_processors.social_auth_backends',
 )
 
 #==============================================================================
@@ -139,3 +142,19 @@ AUTHENTICATION_BACKENDS += (
 #==============================================================================
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
+
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = "associate_complete"
+SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)
+SOCIAL_AUTH_EXTRA_DATA = False
+SOCIAL_AUTH_ASSOCIATE_BY_EMAIL = True
+LOGIN_URL = "login"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details'
+)
