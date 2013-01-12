@@ -116,3 +116,6 @@ input:-moz-placeholder, :-moz-placeholder {
 .login-grid .login-twitter {
     background-image: url("./twitter.png");
 }
+.login-grid .login-openstreetmap {
+    background-image: url("./openstreetmap.png");
+}
