@@ -1,0 +1,12 @@
+{% load umap_tags i18n %}
+<h3>{% trans "Map settings" %}</h3>
+<form action="{% url map_update_settings map.pk %}" method="post" id="map_edit">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="formbox">
+            {{ field }}
+        </div>
+        <small class="help-text">{{ field.help_text }}</small>
+    {% endfor %}
+    <input type="submit" class="button"/>
+</form>
