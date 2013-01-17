@@ -252,7 +252,7 @@ def collect_remote_statics():
     run('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
         'leaflet': "git://github.com/Leaflet/Leaflet.git@master",
-        'draw': "git://github.com/jacobtoye/Leaflet.draw.git@master",
+        'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
     }
