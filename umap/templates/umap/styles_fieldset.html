@@ -1,7 +1,8 @@
 {% load umap_tags i18n %}
-<fieldset>
-    <legend>{% trans "Styles" %}</legend>
-    {% foundation_field form.color %}
+<fieldset id="style_options">
+    <legend id="style_options_toggle">{% trans "Styles options" %}</legend>
+    <label class="more_style_options"></label>
+    {% foundation_field form.options_color %}
     {% if form.icon_class and form.pictogram %}
     <div class="formbox columns twelve">
         <div class="six columns">
@@ -12,4 +13,22 @@
         </div>
     </div>
     {% endif %}
+    {% foundation_field form.options_weight %}
+    {% if form.options_stroke %}
+    <div class="formbox">
+        <span>{{ form.options_stroke.label }}</span>{{ form.options_stroke }}
+    </div>
+    <small class="help-text">{{ form.options_stroke.help_text }}</small>
+    {% endif %}
+    {% foundation_field form.options_smoothFactor %}
+    {% foundation_field form.options_opacity %}
+    {% if form.options_fill %}
+    <div class="formbox">
+        <span>{{ form.options_fill.label }}</span>{{ form.options_fill }}
+    </div>
+    <small class="help-text">{{ form.options_fill.help_text }}</small>
+    {% endif %}
+    {% foundation_field form.options_fillOpacity %}
+    {% foundation_field form.options_fillColor %}
+    {% foundation_field form.options_dashArray %}
 </fieldset>

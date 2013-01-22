@@ -45,6 +45,19 @@
     {% endcompress js %}
     {% block bottom_js %}
         <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
+        <script type="text/javascript">
+            function fn (e) {
+                var styleDiv = L.DomUtil.get("style_options");
+                if (L.DomUtil.hasClass(styleDiv, "on")) {
+                    L.DomUtil.removeClass(styleDiv, "on");
+                }
+                else {
+                    L.DomUtil.addClass(styleDiv, "on");
+                }
+            }
+            $(document).on('click', '#style_options_toggle', fn);
+            $(document).on('click', '.more_style_options', fn);
+        </script>
     {% endblock %}
     <div id="storage-ui-container"></div>
     <div id="storage-alert-container"></div>

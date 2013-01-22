@@ -80,6 +80,32 @@ input:-moz-placeholder, :-moz-placeholder {
     background-color: #970b0e;
 }
 
+#style_options > * {
+    display: none;
+}
+
+#style_options .more_style_options,
+#style_options legend {
+    display: block;
+    cursor: pointer;
+}
+#style_options .more_style_options:before {
+    content: "…";
+}
+#style_options legend:before {
+    content: "▶";
+    padding-right: 5px;
+}
+#style_options.on legend:before {
+    content: "▼";
+}
+#style_options.on > * {
+    display: block;
+}
+#style_options.on .more_style_options {
+    display: none;
+}
+
 /* Map infos */
 .category_color {
     display: inline-block;
