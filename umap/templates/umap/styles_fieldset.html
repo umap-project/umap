@@ -7,10 +7,9 @@
     <div class="formbox">
         {{ form.icon_class }}
         {{ form.pictogram }}
-        <div id="storage-demo-marker"></div>
-        <div id="storage-demo-pictogram"></div>
+        <div id="storage-form-iconfield"></div>
     </div>
-    <small class="help-text">{{ form.icon_class.help_text }}</small>
+    <small class="help-text">{% trans "Change marker shape and symbol." %}</small>
     {% endif %}
     {% foundation_field form.options_weight %}
     {% if form.options_stroke %}
