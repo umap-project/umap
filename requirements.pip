@@ -4,8 +4,8 @@
 #
 #     pip install -r requirements.pip
 
-django>=1.4
-south
+Django>=1.4
+South
 django-leaflet-storage
 django_compressor
 django-foundation
