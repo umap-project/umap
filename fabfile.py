@@ -255,6 +255,8 @@ def collect_remote_statics():
         'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
+        'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
+        'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():
