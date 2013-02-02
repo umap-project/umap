@@ -2,10 +2,12 @@ from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from django.views.generic import DetailView
 from django.db.models import Q
+from django.contrib.gis.measure import D
 
 from sesql.shortquery import shortquery
 
 from leaflet_storage.models import Map
+from leaflet_storage.forms import DEFAULT_CENTER
 
 
 class Home(TemplateView):
@@ -13,11 +15,9 @@ class Home(TemplateView):
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
-        maps = Map.objects.order_by('-modified_at')[:100]
-        users = User.objects.filter(is_staff=False)[:10]
+        maps = Map.objects.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:50]
         return {
             "maps": maps,
-            "users": users
         }
 
     def get_template_names(self):
