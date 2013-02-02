@@ -1,0 +1,36 @@
+{% load i18n umap_tags %}
+<h3>{% trans "Upload features" %}</h3>
+<form action="{{ action_url }}" method="post" enctype="multipart/form-data" id="upload_data">
+    {% csrf_token %}
+    {% for field in form %}
+        {% foundation_field field %}
+    {% endfor %}
+    <input type="submit" class="button" />
+</form>
+<h5>{% trans "Details on formats" %}</h5>
+<ul class="accordion">
+    <li class="active">
+        <div class="title">
+            <h5>{% trans "GeoJSON" %}</h5>
+        </div>
+        <div class="content">
+            {% trans "Properties used: name or title, description, color" %}
+        </div>
+    </li>
+    <li class="active">
+        <div class="title">
+            <h5>{% trans "KML" %}</h5>
+        </div>
+        <div class="content">
+            {% trans "Properties used: name, description" %}
+        </div>
+    </li>
+    <li class="active">
+        <div class="title">
+            <h5>{% trans "GPX" %}</h5>
+        </div>
+        <div class="content">
+            {% trans "Properties used: name, desc" %}
+        </div>
+    </li>
+</ul>
