@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-27 14:08+0100\n"
+"POT-Creation-Date: 2013-02-12 18:43+0100\n"
 "PO-Revision-Date: 2012-12-27 11:09+0100\n"
 "Last-Translator: YOHAN BONIFACE <yb@enix.org>\n"
 "Language-Team: FR <LL@li.org>\n"
@@ -18,8 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: templates/leaflet_storage/category_form.html:26
-#: templates/leaflet_storage/feature_form.html:14
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Consulter les cartes de %(current_user)s"
+
+#: templates/leaflet_storage/category_form.html:18
+#: templates/leaflet_storage/feature_form.html:12
 #: templates/leaflet_storage/map_form.html:17
 msgid "Delete"
 msgstr "Supprimer"
@@ -28,94 +33,174 @@ msgstr "Supprimer"
 msgid "Create your map now!"
 msgstr "Créer une carte"
 
-#: templates/leaflet_storage/map_list.html:8
+#: templates/leaflet_storage/map_list.html:6
 msgid "Cured by"
 msgstr "Maintenu par"
 
-#: templates/leaflet_storage/map_list.html:8
+#: templates/leaflet_storage/map_list.html:6
 msgid "See this map!"
 msgstr "Voir cette carte!"
+
+#: templates/leaflet_storage/map_list.html:10
+msgid "More"
+msgstr "Plus"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "Paramètres"
 
 #: templates/leaflet_storage/map_update_tilelayers.html:2
 msgid "Choose your tilelayer"
 msgstr "Choisir un fond de carte"
 
-#: templates/youmap/home.html:39
-msgid ""
-"u{Map} let you create maps with OpenStreetMap layers in a minute and embed "
-"them in your site.<br /> This is a demo instance, you can host your own, "
-"it's <strong>open source</strong>!"
-msgstr ""
-"u{Map} permet de créer des cartes personnalisées sur des fonds OpenStreetMap "
-"en un instant et les afficher dans votre site <br /> Ceci est une instance "
-"de démonstration, vous pouvez héberger la vôtre, c'est <strong>open source</"
-"strong>!"
+#: templates/leaflet_storage/upload_form.html:2
+msgid "Upload features"
+msgstr "Importer des données"
 
-#: templates/youmap/home.html:43
-msgid "What you can do?"
+#: templates/leaflet_storage/upload_form.html:11
+msgid "Details on formats"
+msgstr "Détails sur les formats"
+
+#: templates/leaflet_storage/upload_form.html:13
+msgid "GeoJSON"
+msgstr "GeoJSON"
+
+#: templates/leaflet_storage/upload_form.html:15
+msgid "Properties used: name or title, description, color"
+msgstr "Propriétés prises en compte: name ou title, description, color"
+
+#: templates/leaflet_storage/upload_form.html:20
+msgid "KML"
+msgstr "KML"
+
+#: templates/leaflet_storage/upload_form.html:22
+msgid "Properties used: name, description"
+msgstr "Propriétés prises en compte: name, description"
+
+#: templates/leaflet_storage/upload_form.html:27
+msgid "GPX"
+msgstr "GPX"
+
+#: templates/leaflet_storage/upload_form.html:29
+msgid "Properties used: name, desc"
+msgstr "Propriétés prises en compte: name, desc"
+
+#: templates/registration/login.html:4
+msgid "Please choose a provider"
+msgstr "Merci de choisir un fournisseur"
+
+#: templates/umap/about_summary.html:4
+msgid "What is u{Map}"
+msgstr "u{Map}, c'est quoi"
+
+#: templates/umap/about_summary.html:5
+#, python-format
+msgid ""
+"u{Map} let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site.<br /> This is a demo "
+"instance, you can host your own, it's <a href=\"%(repo_url)s\">open source</"
+"a>!"
+msgstr ""
+"u{Map} permet de créer des cartes personnalisées sur des fonds <a href="
+"\"%(osm_url)s\" />OpenStreetMap</a> en un instant et les afficher dans votre "
+"site <br /> Ceci est une instance de démonstration, vous pouvez héberger la "
+"vôtre, c'est <a href=\"%(repo_url)s\">open source</a>"
+
+#: templates/umap/about_summary.html:9
+msgid "What can you do?"
 msgstr "Que pouvez-vous faire?"
 
-#: templates/youmap/home.html:45
+#: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
 msgstr "Choisir les fonds de carte"
 
-#: templates/youmap/home.html:46
+#: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Ajouter des POI: markes, lignes, polygones..."
 
-#: templates/youmap/home.html:47
+#: templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
 msgstr "Choisir la couleur et les icônes"
 
-#: templates/youmap/home.html:48
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr ""
+"Gérer les options de la carte: afficher une minicarte, géolocaliser "
+"l'utilisateur..."
+
+#: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (GEOJson...)"
 msgstr "Import des données géographiques en masse (GeoJSON...)"
 
-#: templates/youmap/home.html:49
+#: templates/umap/about_summary.html:16
 msgid "Choose the licence for your data"
 msgstr "Choisir la licence de vos données"
 
-#: templates/youmap/home.html:50
+#: templates/umap/about_summary.html:17
 msgid "Embed and share your map"
 msgstr "Exporter et partager votre carte"
 
-#: templates/youmap/home.html:62
-msgid "Test it and create a map"
-msgstr "Tester et créer une carte"
+#: templates/umap/about_summary.html:23
+msgid "Play with the demo"
+msgstr "Tester la démo"
 
-#: templates/youmap/home.html:68
-msgid "Fork it"
-msgstr "Forker"
-
-#: templates/youmap/home.html:73
-msgid "Users to play with"
-msgstr "Utilisateurs pour tester"
-
-#: templates/youmap/home.html:87
-msgid "Browse maps"
-msgstr "Voir des cartes"
-
-#: templates/youmap/navigation.html:11
-msgid "My maps"
-msgstr "Mes cartes"
-
-#: templates/youmap/navigation.html:12
-msgid "Log out"
-msgstr "Déconnexion"
-
-#: templates/youmap/navigation.html:14
-msgid "Log in"
-msgstr "Connexion"
-
-#: templates/youmap/navigation.html:21
+#: templates/umap/content.html:26 templates/umap/search_bar.html:6
 msgid "Search maps"
 msgstr "Chercher des cartes"
 
-#: templates/youmap/search.html:19
+#: templates/umap/content.html:35
+msgid "Last maps"
+msgstr "Dernières cartes"
+
+#: templates/umap/home.html:12
+msgid "Get inspired, browse maps"
+msgstr "Naviguer dans les cartes"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Mes cartes"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Connexion"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Créer un compte"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "À propos"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Feedback"
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Déconnexion"
+
+#: templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Créer une carte"
+
+#: templates/umap/search.html:9
 #, python-format
 msgid "Search for maps containing «%(q)s» "
 msgstr "Chercher des cartes contenant «%(q)s»"
 
-#: templates/youmap/search.html:29
+#: templates/umap/search.html:17
 msgid "Not map found."
 msgstr "Aucune carte trouvée."
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Chercher"
+
+#: templates/umap/styles_fieldset.html:3
+msgid "Styles options"
+msgstr "Options de mise en forme"
+
+#: templates/umap/styles_fieldset.html:11
+msgid "Change marker shape and symbol."
+msgstr "Changer la forme du marqueur et le picto"

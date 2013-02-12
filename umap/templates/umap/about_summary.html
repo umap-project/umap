@@ -2,7 +2,7 @@
 <div class="col _35">
   <div class="col _11 c20_20 tintbox">
     <h5>{% trans "What is u{Map}" %}</h5>
-    <p>{% blocktrans %}u{Map} let you create maps with <a href="http://osm.org" />OpenStreetMap</a> layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <a href="https://bitbucket.org/yohanboniface/umap">open source</a>!{% endblocktrans %}
+    <p>{% blocktrans with osm_url="http://osm.org" repo_url="https://bitbucket.org/yohanboniface/umap" %}u{Map} let you create maps with <a href="{{ osm_url }}" />OpenStreetMap</a> layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
     </p>
   </div>
   <div class="col umap-features-list _11 c20_20 c30_18 c25_13">
@@ -20,7 +20,7 @@
   {% if demo_map %}
   <div class="col _11 demo_map c30_wide">
     {% map_fragment demo_map %}
-    <a href="{{ demo_map.get_absolute_url }}" class="button">Play with the demo</a>
+    <a href="{{ demo_map.get_absolute_url }}" class="button">{% trans "Play with the demo" %}</a>
   </div>
   {% endif %}
 </div>
