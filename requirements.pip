@@ -9,6 +9,5 @@ South
 django-leaflet-storage
 django_compressor
 django-social-auth
-GDAL
 git+git://github.com/yohanboniface/vectorformats.git@leafletstorage
 hg+https://bitbucket.org/liberation/sesql
