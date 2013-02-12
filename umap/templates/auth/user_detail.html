@@ -1,33 +1,18 @@
-{% extends "umap/home.html" %}
+{% extends "umap/content.html" %}
+
+{% load i18n %}
 
 {% block content %}
-<div class="row">
-  <div class="twelve columns">
-
-    <!-- Navigation -->
-
-    {% include 'umap/navigation.html' %}
-    <!-- End Navigation -->
-
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="twelve columns">
-      <h2>Browse {{ current_user }}'s maps</h2>
-    </div>
-  </div>
-  <div class="row">
-    <div class="twelve columns">
-      <div class="row map_list">
-        {% if maps %}
-          {% include "leaflet_storage/map_list.html" %}
-        {% else %}
-          <div class="twelve mobile-six columns">
+<div class="col _35">
+  <h4>{% blocktrans %}Browse {{ current_user }}'s maps{% endblocktrans %}</h4>
+</div>
+<div class="col _35 map_list">
+  {% if maps %}
+    {% include "leaflet_storage/map_list.html" %}
+  {% else %}
+    <div>
             {{ current_user }} has not map yet.
-          </div>
-        {% endif %}
-      </div>
     </div>
-  </div>
+  {% endif %}
+</div>
 {% endblock content %}

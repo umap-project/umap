@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.views.generic import DetailView
 from django.db.models import Q
 from django.contrib.gis.measure import D
+from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from sesql.shortquery import shortquery
 
@@ -10,14 +12,43 @@ from leaflet_storage.models import Map
 from leaflet_storage.forms import DEFAULT_CENTER
 
 
-class Home(TemplateView):
+class PaginatorMixin(object):
+    per_page = 5
+
+    def paginate(self, qs):
+        paginator = Paginator(qs, self.per_page)
+        page = self.request.GET.get('p')
+        try:
+            qs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            qs = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            qs = paginator.page(paginator.num_pages)
+        return qs
+
+
+class Home(TemplateView, PaginatorMixin):
     template_name = "umap/home.html"
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
-        maps = Map.objects.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:50]
+        qs = Map.objects.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
+        demo_map = None
+        if hasattr(settings, "UMAP_DEMO_PK"):
+            try:
+                demo_map = Map.objects.get(pk=settings.UMAP_DEMO_PK)
+            except Map.DoesNotExist:
+                pass
+            else:
+                qs = qs.exclude(id=demo_map.pk)
+        maps = qs.order_by('-modified_at')[:50]
+        maps = self.paginate(maps)
+
         return {
             "maps": maps,
+            "demo_map": demo_map
         }
 
     def get_template_names(self):
@@ -32,7 +63,14 @@ class Home(TemplateView):
 home = Home.as_view()
 
 
-class UserMaps(DetailView):
+class About(Home):
+
+    template_name = "umap/about.html"
+
+about = About.as_view()
+
+
+class UserMaps(DetailView, PaginatorMixin):
     model = User
     slug_url_kwarg = 'username'
     slug_field = 'username'
@@ -40,7 +78,8 @@ class UserMaps(DetailView):
     context_object_name = "current_user"
 
     def get_context_data(self, **kwargs):
-        maps = Map.objects.filter(owner=self.object).order_by('-modified_at')[:30]
+        maps = Map.objects.filter(Q(owner=self.object) | Q(editors=self.object)).order_by('-modified_at')[:30]
+        maps = self.paginate(maps)
         kwargs.update({
             "maps": maps
         })
@@ -58,13 +97,16 @@ class UserMaps(DetailView):
 user_maps = UserMaps.as_view()
 
 
-class Search(TemplateView):
+class Search(TemplateView, PaginatorMixin):
     template_name = "umap/search.html"
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
-        q = self.request.GET['q']
-        maps = shortquery(Q(fulltext__containswords=q))
+        q = self.request.GET.get('q')
+        maps = []
+        if q:
+            maps = shortquery(Q(fulltext__containswords=q))
+            maps = self.paginate(maps)
         kwargs.update({
             'maps': maps,
             'q': q

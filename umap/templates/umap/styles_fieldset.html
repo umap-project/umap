@@ -1,7 +1,6 @@
 {% load umap_tags i18n %}
-<fieldset id="style_options">
-    <legend id="style_options_toggle">{% trans "Styles options" %}</legend>
-    <label class="more_style_options"></label>
+<fieldset class="toggle">
+    <legend class="style_options_toggle">{% trans "Styles options" %}</legend>
     {% foundation_field form.color %}
     {% if form.icon_class and form.pictogram %}
     <div class="formbox">

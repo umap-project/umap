@@ -1,109 +1,16 @@
-{% extends "base.html" %}
+{% extends "umap/content.html" %}
 
 {% load leaflet_storage_tags compress i18n %}
 
-{% block extra_head %}
-    {% compress css %}
-      {% leaflet_storage_css %}
-    {% endcompress css %}
-    {% compress js %}
-      {% leaflet_storage_js %}
-    {% endcompress js %}
-{% endblock %}
-
 {% block content %}
-<div class="row">
-  <div class="twelve columns">
+{% if not user.is_authenticated %}
+  {% include "umap/about_summary.html" %}
+<hr />
+{% endif %}
+{% include "umap/search_bar.html" %}
+<div class="col _35 map_list">
+  <h2>{% trans "Get inspired, browse maps" %}</h2>
+  {% include "leaflet_storage/map_list.html" %}
+</div>
 
-    <!-- Navigation -->
-
-    {% include 'umap/navigation.html' %}
-    <!-- End Navigation -->
-
-    </div>
-  </div>
-
-
-  <div class="row">
-    <div class="twelve columns">
-      <div class="row">
-
-    <!-- Content -->
-
-        <div class="eight columns">
-          <div class="panel radius">
-
-          <div class="row">
-          <div class="six mobile-two columns">
-            <h4>u{Map} <em>alpha</em></h4><hr/>
-            <h5 class="subheader">{% blocktrans %}u{Map} let you create maps with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!{% endblocktrans %}
-            </h5>
-          </div>
-          <div class="six mobile-two columns">
-            <h5>{% trans "What you can do?" %}</h5>
-            <ol>
-              <li>{% trans "Choose the layers of your map" %}</li>
-              <li>{% trans "Add POIs: markers, lines, polygons..." %}</li>
-              <li>{% trans "Manage POIs colours and icons" %}</li>
-              <li>{% trans "Batch import geostructured data (GEOJson...)" %}</li>
-              <li>{% trans "Choose the licence for your data" %}</li>
-              <li>{% trans "Embed and share your map" %}</li>
-            </ol>
-        </div>
-
-        </div>
-        </div>
-        </div>
-
-        <div class="four columns hide-for-small">
-
-          <a href="{% url map_add %}" data-listen-form="map_edit" class="reveal">
-          <div class="panel radius callout" align="center">
-            <strong>{% trans "Test it and create a map" %}</strong>
-          </div>
-          </a>
-
-          <a href="https://bitbucket.org/yohanboniface/umap">
-          <div class="panel radius callout" align="center">
-            <strong>{% trans "Fork it" %}</strong>
-          </div>
-          </a>
-
-          {% if not user.is_authenticated %}
-          <a href="{% url login %}" class="login_button">
-          <div class="panel radius callout" align="center">
-            <strong>{% trans "Log in" %} / {% trans "Sign in" %}</strong>
-          </div>
-          </a>
-          {% endif %}
-
-        </div>
-
-    <!-- End Content -->
-
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="twelve columns">
-      <hr />
-      <h2>{% trans "Browse maps" %}</h2>
-    </div>
-  </div>
-  <div class="row">
-    <div class="twelve columns">
-      <div class="row map_list">
-        {% include "leaflet_storage/map_list.html" %}
-      </div>
-    </div>
-  </div>
-
-<!-- Included JS Files -->
 {% endblock content %}
-
-{% block bottom_js %}
-  <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.foundation.js"></script>
-  <script type="text/javascript">
-    $.endlessPaginate({paginateOnScroll: true});
-  </script>
-{% endblock bottom_js %}

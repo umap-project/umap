@@ -251,12 +251,13 @@ def collect_remote_statics():
     remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
     run('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
-        'leaflet': "git://github.com/Leaflet/Leaflet.git@master",
+        'leaflet': "git://github.com/Leaflet/Leaflet.git@stable",
         'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
         'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
         'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
+        'darline': 'git://github.com/yohanboniface/Darline.git@master',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():

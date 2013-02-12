@@ -1,25 +1,32 @@
 {% load i18n %}
-<nav class="top-bar contain-to-grid">
-  <ul>
-    <li class="name"><h1><a href="/">u{Map} <em>alpha</em></a></h1></li>
-    <li class="toggle-topbar"><a href="#"></a></li>
-  </ul>
+<nav>
+  <section class="part _5 c30_wide branding">
+    <ul>
+      <li class="name"><h1><a href="/">u{Map} <em>alpha</em></a></h1></li>
+    </ul>
+  </section>
 
-  <section>
-    <ul class="left">
+  <section class="part _20 c25_16">
+    <ul>
       {% if user.is_authenticated %}
         <li><a href="{% url user_maps user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
-        <li><a href="{% url logout %}" class="logout_button">{% trans "Log out" %}</a></li>
       {% else %}
-        <li><a href="{% url login %}" class="login_button">{% trans "Log in" %}</a></li>
+        <li><a href="{% url login %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
+      {% endif %}
+      <li><a href="{% url about %}">{% trans "About" %}</a></li>
+      <li class="c25_hide"><a href="mailto:yb@fluv.io">{% trans "Feedback" %}</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url logout %}" class="logout">{% trans "Log out" %}</a></li>
       {% endif %}
     </ul>
+  </section>
 
-    <ul class="right">
-      <li class="search">
-        <form action="{% url search %}" method="GET">
-          <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
-        </form>
+  <section class="right">
+    <ul>
+      <li class="has-button _5 c20_wide">
+        <a href="{% url map_add %}" data-listen-form="map_edit" class="button create-map">
+          {% trans "Create a map" %}
+        </a>
       </li>
     </ul>
   </section>

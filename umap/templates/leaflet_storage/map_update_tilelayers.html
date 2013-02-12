@@ -2,18 +2,16 @@
 <h3>{% trans "Choose your tilelayer" %}</h3>
 <form action="{% url map_update_tilelayers map.pk %}" method="post" id="map_edit">
     {% csrf_token %}
-    <ul class="block-grid two-up mobile">
     {% for tilelayer in tilelayers %}
-        <li>
+        <div class="col _6 pile">
             <label for="tilelayer_{{ forloop.counter }}">
-              {% tilelayer_preview tilelayer %}<div class="panel">
+              {% tilelayer_preview tilelayer %}<div class="textbox">
                 <input type="radio" id="tilelayer_{{ forloop.counter }}" name="tilelayer" value="{{ tilelayer.pk }}" {% if tilelayer in map.tilelayers.all %}checked{% endif %} />
                 {{ tilelayer.name }}
               </div>
             </label>
-        </li>
+        </div>
     {% endfor %}
-    <div class="row twelve columns">
-        <input type="submit" class="button" />
-    </div>
+    <hr />
+    <input type="submit" class="button" />
 </form>

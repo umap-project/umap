@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<div class="col _35">
+  <form action="{% url search %}" method="GET">
+  <div class="part _29 c30_24 c25_19 c20_14">
+    <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
+  </div>
+  <div class="part _5">
+    <input type="submit" value="Search" />
+  </div>
+  </form>
+</div>
+<hr />

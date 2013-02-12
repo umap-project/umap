@@ -1,3 +1,5 @@
+from copy import copy
+
 from django import template
 
 register = template.Library()
@@ -8,3 +10,10 @@ def foundation_field(field):
     return {
         'field': field,
     }
+
+
+@register.simple_tag(takes_context=True)
+def paginate_querystring(context, page):
+    qs = copy(context["request"].GET)
+    qs["p"] = page
+    return qs.urlencode()

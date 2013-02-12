@@ -1,12 +1,11 @@
-{% load leaflet_storage_tags endless i18n %}
-
-{% paginate 5 maps %}
+{% load leaflet_storage_tags umap_tags i18n %}
 
 {% for map_inst in maps %}
-<div class="twelve mobile-six columns">
+<div class="col _35">
     {% map_fragment map_inst %}
-    <div class="panel"><strong>{{ map_inst.name }}</strong> — «{{ map_inst.description }}» <em>{% trans "Cured by" %} <a href="{% url user_maps map_inst.owner.username %}">{{ map_inst.owner }}</a></em> — <a href="{{ map_inst.get_absolute_url }}">{% trans "See this map!" %}</a></div>
+    <div class="tintbox"><strong>{{ map_inst.name }}</strong> — {% if map_inst.description %}«{{ map_inst.description }}» {% endif %}<em>{% trans "Cured by" %} <a href="{% url user_maps map_inst.owner.username %}">{{ map_inst.owner }}</a></em> — <a href="{{ map_inst.get_absolute_url }}">{% trans "See this map!" %}</a></div>
 </div>
 {% endfor %}
-
-{% show_more %}
+{% if maps.has_next %}
+    <div class="col _35"><a href="?{% paginate_querystring maps.next_page_number %}" class="button more_button">{% trans "More" %}</a></div>
+{% endif %}

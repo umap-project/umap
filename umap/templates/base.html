@@ -6,10 +6,15 @@
     <meta charset="utf-8">
     {% compress css %}
     <!-- Included CSS Files (Compressed) -->
-    <link rel="stylesheet" href="{{ STATIC_URL }}foundation/stylesheets/foundation.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/core.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/grid.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/form.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/color/seagreen.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/debug.css">
+    <script src="{{ STATIC_URL }}darline/src/js/core.js"></script>
+    <script src="{{ STATIC_URL }}darline/src/js/debug.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}umap/umap.css">
-
-    <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
     {% endcompress css %}
     <!-- IE Fix for HTML5 Tags -->
     <!--[if lt IE 9]>
@@ -23,40 +28,36 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
-<div>
+    {% block header %}
+    {% endblock %}
+
     {% block content %}
     {% endblock %}
-</div>
-    {% compress js %}
-    <script src="{{ STATIC_URL }}foundation/javascripts/modernizr.foundation.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.mediaQueryToggle.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.reveal.js"></script>
-    <!--script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.orbit.js"></script-->
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.navigation.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.buttons.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.tabs.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.forms.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.tooltips.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.accordion.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.placeholder.js"></script>
-    <script src="{{ STATIC_URL }}foundation/javascripts/jquery.foundation.alerts.js"></script>
-    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
-    {% endcompress js %}
+
     {% block bottom_js %}
         <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
         <script type="text/javascript">
-            function fn (e) {
-                var styleDiv = L.DomUtil.get("style_options");
-                if (L.DomUtil.hasClass(styleDiv, "on")) {
-                    L.DomUtil.removeClass(styleDiv, "on");
+            L.Storage.on('ui:ready', function () {
+                function fn (e) {
+                    D.DOM.toggleClass(this.parentNode, "on");
                 }
-                else {
-                    L.DomUtil.addClass(styleDiv, "on");
-                }
+                D.Event.on('fieldset.toggle legend', 'click', fn);
+            });
+            var getMore = function (e) {
+                D.Event.stop(e);
+                D.Xhr.get(this.href, {
+                    callback: function (data) {
+                        var container = this.parentNode;
+                        container.innerHTML = data;
+                        D.DOM.forEach(D.DOM.get('script', container), function (item) {
+                            eval(item.firstChild.textContent);
+                        });
+                        D.Event.on('.more_button', 'click', getMore);
+                    },
+                    thisobj: this
+                });
             }
-            $(document).on('click', '#style_options_toggle', fn);
-            $(document).on('click', '.more_style_options', fn);
+            D.Event.on('.more_button', 'click', getMore);
         </script>
     {% endblock %}
     <div id="storage-ui-container"></div>
