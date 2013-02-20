@@ -1,13 +1,7 @@
-# This file collects all required third-party applications that are needed
-# to run this project. Later you can install all these apps in a row
-# using pip. Example::
-#
-#     pip install -r requirements.pip
-
-Django>=1.4
-South
-django-leaflet-storage
-django_compressor
-django-social-auth
+Django==1.4.4
+South==0.7.6
+django-leaflet-storage==0.1.0
+django_compressor==1.2
+django-social-auth==0.7.20
 git+git://github.com/yohanboniface/vectorformats.git@leafletstorage
 hg+https://bitbucket.org/liberation/sesql
