@@ -1,6 +1,6 @@
 Django==1.4.4
 South==0.7.6
-django-leaflet-storage==0.1.0
+django-leaflet-storage==0.2.0
 django_compressor==1.2
 django-social-auth==0.7.20
 git+git://github.com/yohanboniface/vectorformats.git@leafletstorage
