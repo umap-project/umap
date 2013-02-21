@@ -252,7 +252,7 @@ def collect_remote_statics():
     run('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
         'leaflet': "git://github.com/Leaflet/Leaflet.git@stable",
-        'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
+        'draw': "git://github.com/Leaflet/Leaflet.draw.git@master#v0.1.7",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
         'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
@@ -262,12 +262,16 @@ def collect_remote_statics():
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():
             repository, branch = path.split('@')
+            if "#" in branch:
+                branch, ref = branch.split('#')
+            else:
+                ref = branch
             with hide("running", "stdout"):
                 exists = run('if [ -d "{0}" ]; then echo 1; fi'.format(subdir))
             if exists:
                 with cd(subdir):
-                    run('git pull')
+                    run('git pull origin {0}'.format(branch))
             else:
                 run('git clone {0} {1}'.format(repository, subdir))
             with cd(subdir):
-                run('git checkout {0}'.format(branch))
+                run('git checkout {0}'.format(ref))
