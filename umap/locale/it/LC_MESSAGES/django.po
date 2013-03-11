@@ -40,8 +40,8 @@ msgid "Choose your tilelayer"
 msgstr "Scegli un livello di sfondo"
 
 #: templates/youmap/home.html:39
-msgid "u{Map} let you create maps with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!"
-msgstr "u{Map} ti permette di creare mappe con i livelli OpenStreetMap in un minuto e di integrarle nel tuo sito. <br/> Questa è una istanza di prova, puoi hostare la tua copia, è <strong>open source</strong>!"
+msgid "uMap let you create maps with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!"
+msgstr "uMap ti permette di creare mappe con i livelli OpenStreetMap in un minuto e di integrarle nel tuo sito. <br/> Questa è una istanza di prova, puoi hostare la tua copia, è <strong>open source</strong>!"
 
 #: templates/youmap/home.html:43
 msgid "What you can do?"

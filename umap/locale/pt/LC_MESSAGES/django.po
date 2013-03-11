@@ -90,18 +90,18 @@ msgid "Please choose a provider"
 msgstr "Por favor escolha um provedor"
 
 #: templates/umap/about_summary.html:4
-msgid "What is u{Map}"
-msgstr "O que é u{Map}"
+msgid "What is uMap"
+msgstr "O que é uMap"
 
 #: templates/umap/about_summary.html:5
 #, python-format
 msgid ""
-"u{Map} let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site.<br /> This is a demo "
 "instance, you can host your own, it's <a href=\"%(repo_url)s\">open source</"
 "a>!"
 msgstr ""
-"u{Map} permita criar num instante mapas personalizados com "
+"uMap permita criar num instante mapas personalizados com "
 "<a href=\"%(osm_url)s\" />OpenStreetMap</a> e mostrar-los no seu site."
 "<br /> Aqui é uma demonstração, podes instalar este software no teu "
 "próprio site, é <a href=\"%(repo_url)s\">software livre</a>!"
