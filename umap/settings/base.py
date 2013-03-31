@@ -26,7 +26,7 @@ LANGUAGES = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'j6fly6aomgo6!3_$v#9kvhw-%wgs1@1l6x+4nr73tmn40=&amp;_@&amp;'
+SECRET_KEY = ''
 
 INSTALLED_APPS = (
     'leaflet_storage',
@@ -134,6 +134,8 @@ AUTHENTICATION_BACKENDS += (
 #==============================================================================
 # Miscellaneous project settings
 #==============================================================================
+LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
+SITE_URL = "http://umap.org"
 
 #==============================================================================
 # Third party app settings
