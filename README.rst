@@ -40,6 +40,10 @@ Add database connexion informations in `local.py`, for example::
         }
     }
 
+Add a `SECRET_KEY` in `local.py` with a long random secret key:
+
+    SECRET_KEY = "a long and random secret key that must not be shared"
+
 uMap uses `django-social-auth <http://django-social-auth.readthedocs.org/>`_ for user authentication. So you will need to configure it according to your
 needs. For example::
 
