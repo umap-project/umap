@@ -40,7 +40,7 @@ Add database connexion informations in `local.py`, for example::
         }
     }
 
-Add a `SECRET_KEY` in `local.py` with a long random secret key:
+Add a `SECRET_KEY` in `local.py` with a long random secret key::
 
     SECRET_KEY = "a long and random secret key that must not be shared"
 
