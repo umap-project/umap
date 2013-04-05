@@ -65,8 +65,9 @@ Create the tables::
 
     python manage.py syncdb --migrate
 
-Compress the statics::
+Collect and compress the statics::
 
+    python manage.py collectstatic
     python manage.py compress
 
 Start the server::
