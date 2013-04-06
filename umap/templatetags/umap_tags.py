@@ -17,3 +17,10 @@ def paginate_querystring(context, page):
     qs = copy(context["request"].GET)
     qs["p"] = page
     return qs.urlencode()
+
+
+@register.filter
+def ipdb(what):
+    import ipdb
+    ipdb.set_trace()
+    return ''

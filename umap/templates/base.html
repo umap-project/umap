@@ -1,4 +1,4 @@
-{% load compress %}
+{% load compress umap_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,11 +24,15 @@
     <![endif]-->
     {% block extra_head %}
     {% endblock extra_head %}
+    <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
     <script src="{{ STATIC_URL }}storage/src/locale/fr.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    <div id="storage-ui-container"></div>
+    <div id="storage-alert-container"></div>
+    <div id="storage-tooltip-container"></div>
 
     {% block header %}
     {% endblock %}
@@ -37,7 +41,6 @@
     {% endblock %}
 
     {% block bottom_js %}
-        <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
         <script type="text/javascript">
             L.Storage.on('ui:ready', function () {
                 function fn (e) {
@@ -62,8 +65,5 @@
             D.Event.on('.more_button', 'click', getMore);
         </script>
     {% endblock %}
-    <div id="storage-ui-container"></div>
-    <div id="storage-alert-container"></div>
-    <div id="storage-tooltip-container"></div>
 </body>
 </html>
