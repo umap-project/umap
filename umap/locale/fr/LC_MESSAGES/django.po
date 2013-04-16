@@ -116,7 +116,7 @@ msgstr "Choisir les fonds de carte"
 
 #: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Ajouter des POI: markes, lignes, polygones..."
+msgstr "Ajouter des POI: marqueurs, lignes, polygones..."
 
 #: templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
