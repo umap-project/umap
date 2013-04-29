@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-12 18:43+0100\n"
+"POT-Creation-Date: 2013-04-27 20:44-0400\n"
 "PO-Revision-Date: 2012-12-27 11:09+0100\n"
 "Last-Translator: YOHAN BONIFACE <yb@enix.org>\n"
 "Language-Team: FR <LL@li.org>\n"
@@ -25,13 +25,27 @@ msgstr "Consulter les cartes de %(current_user)s"
 
 #: templates/leaflet_storage/category_form.html:18
 #: templates/leaflet_storage/feature_form.html:12
-#: templates/leaflet_storage/map_form.html:17
+#: templates/leaflet_storage/map_form.html:20
 msgid "Delete"
 msgstr "Supprimer"
 
 #: templates/leaflet_storage/map_form.html:3
 msgid "Create your map now!"
 msgstr "Créer une carte"
+
+#: templates/leaflet_storage/map_form.html:17
+msgid ""
+"You are creating a map without being authenticated. A cookie will be set on "
+"this browser to make possible for you to edit the map in the future. If you "
+"want to edit the map from another computer, use the \"edit url\" displayed "
+"in the \"permissions\" window. If you log in and load the map, it will be "
+"attached to your account."
+msgstr ""
+"Vous créez une carte sans être authentifier. Un cookie sera enregistré sur "
+"ce navigateur, vous permettant d'éditer la map plus tard. Si vous voulez éditer "
+"la carte depuis un autre ordinateur, utilisez l'url d'édition, visible dans la "
+"fenêtre de gestion des permissions. Si vous vous identifiez par la suite et chargez "
+"la carte, celle-ci sera automatiquement associée à votre compte."
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "Cured by"

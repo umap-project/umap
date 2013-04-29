@@ -13,6 +13,9 @@
     {{ form.zoom }}
     {{ form.center }}
     <input type="submit" class="button" />
+    {% if not map and not user.is_authenticated %}
+    <small class="helptext">{% trans 'You are creating a map without being authenticated. A cookie will be set on this browser to make possible for you to edit the map in the future. If you want to edit the map from another computer, use the "edit url" displayed in the "permissions" window. If you log in and load the map, it will be attached to your account.' %}</small>
+    {% endif %}
     {% if delete_url and map and user == map.owner %}
         <a href="{{ delete_url }}" id="delete_map_button" >{% trans "Delete" %}</a>
     {% endif %}
