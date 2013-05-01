@@ -110,7 +110,7 @@ class Search(TemplateView, PaginatorMixin):
         kwargs.update({
             'maps': maps,
             'q': q
-            })
+        })
         return kwargs
 
     def get_template_names(self):
