@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-27 20:44-0400\n"
+"POT-Creation-Date: 2013-05-01 18:49-0400\n"
 "PO-Revision-Date: 2012-12-27 11:09+0100\n"
 "Last-Translator: YOHAN BONIFACE <yb@enix.org>\n"
 "Language-Team: FR <LL@li.org>\n"
@@ -41,11 +41,11 @@ msgid ""
 "in the \"permissions\" window. If you log in and load the map, it will be "
 "attached to your account."
 msgstr ""
-"Vous créez une carte sans être authentifié. Un cookie sera enregistré sur "
-"ce navigateur, vous permettant d'éditer la map plus tard. Si vous voulez éditer "
-"la carte depuis un autre ordinateur, utilisez l'url d'édition, visible dans la "
-"fenêtre de gestion des permissions. Si vous vous identifiez par la suite et chargez "
-"la carte, celle-ci sera automatiquement associée à votre compte."
+"Vous créez une carte sans être authentifié. Un cookie sera enregistré sur ce "
+"navigateur, vous permettant d'éditer la map plus tard. Si vous voulez éditer "
+"la carte depuis un autre ordinateur, utilisez l'url d'édition, visible dans "
+"la fenêtre de gestion des permissions. Si vous vous identifiez par la suite "
+"et chargez la carte, celle-ci sera automatiquement associée à votre compte."
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "Cured by"
@@ -111,50 +111,61 @@ msgstr "uMap, c'est quoi"
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
-"layers in a minute and embed them in your site.<br /> This is a demo "
-"instance, you can host your own, it's <a href=\"%(repo_url)s\">open source</"
-"a>!"
+"layers in a minute and embed them in your site."
 msgstr ""
 "uMap permet de créer des cartes personnalisées sur des fonds <a href="
 "\"%(osm_url)s\" />OpenStreetMap</a> en un instant et les afficher dans votre "
-"site <br /> Ceci est une instance de démonstration, vous pouvez héberger la "
+"site."
+
+#: templates/umap/about_summary.html:7
+#, python-format
+msgid ""
+"This is a demo instance, you can host your own, it's <a href=\"%(repo_url)s"
+"\">open source</a>!"
+msgstr ""
+"Ceci est une instance de démonstration, vous pouvez héberger la "
 "vôtre, c'est <a href=\"%(repo_url)s\">open source</a>"
 
 #: templates/umap/about_summary.html:9
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Et c'est <a href=\"%(repo_url)s\">open source</a>!"
+
+#: templates/umap/about_summary.html:14
 msgid "What can you do?"
 msgstr "Que pouvez-vous faire?"
 
-#: templates/umap/about_summary.html:11
+#: templates/umap/about_summary.html:16
 msgid "Choose the layers of your map"
 msgstr "Choisir les fonds de carte"
 
-#: templates/umap/about_summary.html:12
+#: templates/umap/about_summary.html:17
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Ajouter des POI: marqueurs, lignes, polygones..."
 
-#: templates/umap/about_summary.html:13
+#: templates/umap/about_summary.html:18
 msgid "Manage POIs colours and icons"
 msgstr "Choisir la couleur et les icônes"
 
-#: templates/umap/about_summary.html:14
+#: templates/umap/about_summary.html:19
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr ""
 "Gérer les options de la carte: afficher une minicarte, géolocaliser "
 "l'utilisateur..."
 
-#: templates/umap/about_summary.html:15
+#: templates/umap/about_summary.html:20
 msgid "Batch import geostructured data (GEOJson...)"
 msgstr "Import des données géographiques en masse (GeoJSON...)"
 
-#: templates/umap/about_summary.html:16
+#: templates/umap/about_summary.html:21
 msgid "Choose the licence for your data"
 msgstr "Choisir la licence de vos données"
 
-#: templates/umap/about_summary.html:17
+#: templates/umap/about_summary.html:22
 msgid "Embed and share your map"
 msgstr "Exporter et partager votre carte"
 
-#: templates/umap/about_summary.html:23
+#: templates/umap/about_summary.html:28
 msgid "Play with the demo"
 msgstr "Tester la démo"
 

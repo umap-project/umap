@@ -136,6 +136,7 @@ AUTHENTICATION_BACKENDS += (
 #==============================================================================
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
 SITE_URL = "http://umap.org"
+UMAP_DEMO_SITE = False
 
 #==============================================================================
 # Third party app settings

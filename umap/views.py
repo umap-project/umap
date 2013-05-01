@@ -48,7 +48,8 @@ class Home(TemplateView, PaginatorMixin):
 
         return {
             "maps": maps,
-            "demo_map": demo_map
+            "demo_map": demo_map,
+            "DEMO_SITE": settings.UMAP_DEMO_SITE
         }
 
     def get_template_names(self):
