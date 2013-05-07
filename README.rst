@@ -93,12 +93,11 @@ create the needed files.**
 
 For this repository and django-leaflet-storage, here are the steps:
 
-1. got the root of the python module (for example `umap/umap` in this case)
-1. run `django-admin.py makemessages -l fr` using your language code instead of `fr`
-1. translate what's needed in the ad hoc file in the `locale` repository (for example
-   `umap/umap/locale/fr/LC_MESSAGES/django.po`)
-1. from the root of the python module, run `django-admin.py compilemessages`
-1. commit, push, PR :)
+- go to the root of the python module (for example `umap/umap` in this case)
+- run `django-admin.py makemessages -l fr` using your language code instead of `fr`
+- translate what's needed in the ad hoc file in the `locale` repository (for example `umap/umap/locale/fr/LC_MESSAGES/django.po`)
+- from the root of the python module, run `django-admin.py compilemessages`
+- commit, push, PR :)
 
 For Leaflet.Storage, here are the steps:
 
