@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -10,13 +11,14 @@ from . import views
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
+    url(r'', include('social_auth.urls')),
+)
+urlpatterns += i18n_patterns('',
     url(r'^$', views.home, name="home"),
     url(r'^search/$', views.search, name="search"),
     url(r'^about/$', views.about, name="about"),
     url(r'^user/(?P<username>[-_\w]+)/$', views.user_maps, name='user_maps'),
-    url(r'', include('social_auth.urls')),
     (r'', include('leaflet_storage.urls')),
 )
 
