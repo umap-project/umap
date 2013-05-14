@@ -21,7 +21,7 @@
 
 {% block content %}
 <div class="col _35">
-  <form action="{% url search %}" method="GET">
+  <form action="{% url 'search' %}" method="GET">
   <div class="part _29">
     <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
   </div>

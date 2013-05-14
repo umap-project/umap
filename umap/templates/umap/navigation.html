@@ -9,14 +9,14 @@
   <section class="part _20 c25_16">
     <ul>
       {% if user.is_authenticated %}
-        <li><a href="{% url user_maps user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
+        <li><a href="{% url 'user_maps' user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
       {% else %}
-        <li><a href="{% url login %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
+        <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
       {% endif %}
-      <li><a href="{% url about %}">{% trans "About" %}</a></li>
+      <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
       <li class="c25_hide"><a href="mailto:yb@fluv.io">{% trans "Feedback" %}</a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url logout %}" class="logout">{% trans "Log out" %}</a></li>
+        <li><a href="{% url 'logout' %}" class="logout">{% trans "Log out" %}</a></li>
       {% endif %}
     </ul>
   </section>
@@ -24,7 +24,7 @@
   <section class="right">
     <ul>
       <li class="has-button _5 c20_wide">
-        <a href="{% url map_add %}" data-listen-form="map_edit" class="button create-map">
+        <a href="{% url 'map_add' %}" data-listen-form="map_edit" class="button create-map">
           {% trans "Create a map" %}
         </a>
       </li>
