@@ -1,0 +1,63 @@
+# -*- coding:utf-8 -*-
+
+"""
+Example settings for local development
+
+Use this file as a base for your local development settings and copy
+it to umap/settings/local.py. It should not be checked into
+your code repository.
+
+"""
+from umap.settings.base import *   # pylint: disable=W0614,W0401
+
+SECRET_KEY = 'your secret key here'
+
+DEBUG = True  # False in production
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    ('You', 'your@email'),
+)
+MANAGERS = ADMINS
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'umap',
+    }
+}
+
+WSGI_APPLICATION = 'umap.wsgi.application'
+
+COMPRESS_ENABLED = False  # True in production
+COMPRESS_OFFLINE = True
+
+LANGUAGE_CODE = 'en'
+LANGUAGES = (
+    ('en', 'English'),
+    ('fr', u'Francais'),
+    ('it', u'Italiano'),
+    ('pt', u'Portuguese'),
+    ('nl', u'Dutch'),
+)
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.contrib.bitbucket.BitbucketBackend',
+    'social_auth.backends.twitter.TwitterBackend',
+    'umap.osm_backend.OSMBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+GITHUB_APP_ID = 'xxx'
+GITHUB_API_SECRET = 'xxx'
+BITBUCKET_CONSUMER_KEY = 'xxx'
+BITBUCKET_CONSUMER_SECRET = 'xxx'
+# We need email to associate with other Oauth providers
+GITHUB_AUTH_EXTRA_ARGUMENTS = {"scope": "user:email"}
+TWITTER_CONSUMER_KEY = "xxx"
+TWITTER_CONSUMER_SECRET = "xxx"
+OSM_CONSUMER_KEY = 'xxx'
+OSM_CONSUMER_SECRET = 'xxx'
+UMAP_DEMO_PK = 34  # Pk of a Map instance
+LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
+UMAP_DEMO_SITE = False

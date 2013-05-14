@@ -25,11 +25,7 @@ Install dependencies and project::
 
 Create a default local settings file::
 
-    touch umap/settings/local.py
-
-Import base settings::
-
-    from umap.settings.base import *
+    cp umap/settings/local.py.sample umap/settings/local.py
 
 Add database connexion informations in `local.py`, for example::
 
