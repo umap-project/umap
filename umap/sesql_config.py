@@ -77,7 +77,7 @@ CROSS_INDEXES = ()
 from htmlentitydefs import name2codepoint
 from xml.sax import saxutils
 
-html_entities = dict([('&%s;' % k, unichr(v).encode(config.CHARSET)) for k,v in name2codepoint.items() ])
+html_entities = dict([('&%s;' % k, unichr(v).encode(CHARSET)) for k,v in name2codepoint.items() ])
 ADDITIONAL_CLEANUP_FUNCTION = lambda value: saxutils.unescape(value, html_entities)
 
 #
