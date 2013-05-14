@@ -97,6 +97,7 @@ fieldset.toggle.on .more_style_options {
     height: 16px;
     margin-right: 10px;
     border: 1px solid #000;
+    background-color: DarkBlue;
 }
 
 /* **************** */
