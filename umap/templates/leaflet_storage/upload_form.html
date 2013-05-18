@@ -12,21 +12,28 @@
     <div>
         <h5>{% trans "GeoJSON" %}</h5>
         <div>
-            {% trans "Properties used: name or title, description, color" %}
+            {% trans "Properties used" %}: name / title, description, color
         </div>
     </div>
     <hr />
     <div>
         <h5>{% trans "KML" %}</h5>
         <div>
-            {% trans "Properties used: name, description" %}
+            {% trans "Properties used" %}: name, description
         </div>
     </div>
     <hr />
     <div>
         <h5>{% trans "GPX" %}</h5>
         <div>
-            {% trans "Properties used: name, desc" %}
+            {% trans "Properties used" %}: name, desc
+        </div>
+    </div>
+    <hr />
+    <div>
+        <h5>{% trans "CSV" %}</h5>
+        <div>
+            {% trans "Comma-separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat», «latitude», «lng», «long», «longitude» (at the end or the begining of the header, case insensitive). Also, column «title» or «name», «description» and «color» will be taken into account." %}
         </div>
     </div>
 </fieldset>
