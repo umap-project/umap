@@ -2,6 +2,9 @@
 <h3>{% trans "Upload features" %}</h3>
 <form action="{{ action_url }}" method="post" enctype="multipart/form-data" id="upload_data">
     {% csrf_token %}
+    {% if form.non_field_errors %}
+        <div class="error">{{ form.non_field_errors }}</div>
+    {% endif %}
     {% for field in form %}
         {% foundation_field field %}
     {% endfor %}
