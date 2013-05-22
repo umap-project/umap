@@ -56,6 +56,9 @@ needs. For example::
     TWITTER_CONSUMER_KEY = "xxx"
     TWITTER_CONSUMER_SECRET = "yyy"
 
+Example of callback URL to use for settings up OAuth apps::
+
+ http://umap.foo.bar/complete/github/
 
 Create the tables::
 
