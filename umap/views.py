@@ -79,7 +79,7 @@ class UserMaps(DetailView, PaginatorMixin):
     context_object_name = "current_user"
 
     def get_context_data(self, **kwargs):
-        maps = Map.objects.filter(Q(owner=self.object) | Q(editors=self.object)).order_by('-modified_at')[:30]
+        maps = Map.objects.filter(Q(owner=self.object) | Q(editors=self.object)).distinct().order_by('-modified_at')[:30]
         maps = self.paginate(maps)
         kwargs.update({
             "maps": maps

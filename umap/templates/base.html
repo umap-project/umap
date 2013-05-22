@@ -11,12 +11,14 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/form.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/color/seagreen.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/debug.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/autocomplete.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}umap/umap.css">
     {% endcompress css %}
     {% compress js %}
     <script src="{{ STATIC_URL }}darline/src/js/core.js"></script>
     <script src="{{ STATIC_URL }}darline/src/js/debug.js"></script>
+    <script src="{{ STATIC_URL }}darline/src/js/autocomplete.js"></script>
     {% endcompress js %}
     <!-- IE Fix for HTML5 Tags -->
     <!--[if lt IE 9]>
@@ -47,6 +49,9 @@
                     D.DOM.toggleClass(this.parentNode, "on");
                 }
                 D.Event.on('fieldset.toggle legend', 'click', fn);
+                D.autoComplete('#id_editors', {
+                    placeholder: "Type editors nick to add..."
+                }).multiselect();
             });
             var getMore = function (e) {
                 D.Event.stop(e);

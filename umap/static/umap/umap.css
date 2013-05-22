@@ -201,6 +201,9 @@ body.content #storage-ui-container {
     right: 0;
     left: 0;
     bottom: inherit;
-    height: 30%;
-*/    background-color: #fff;
+    height: 30%;*/
+    background-color: #fff;
+}
+#id_editors + br + span.helptext {
+    display: none;
 }
