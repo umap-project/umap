@@ -44,9 +44,9 @@ def dev():
     }
     env.system_users = {server: 'www-data'}
     env.virtualenv_dir = '/home/ybon/.virtualenvs/{project_name}'.format(**env)
-    env.project_dir = '/home/ybon/dev/{project_name}'.format(**env)
+    env.project_dir = '/home/ybon/src/{project_name}'.format(**env)
     env.project_conf = '{project_name}.settings.local'.format(**env)
-    env.restart_command = '{virtualenv_dir}/bin/circusctl restart {project_name}'.format(**env)
+    env.restart_command = '/home/ybon/.virtualenvs/circus/bin/circusctl restart {project_name}'.format(**env)
 
 
 # Set the default environment.
