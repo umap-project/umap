@@ -23,6 +23,12 @@ Install dependencies and project::
     pip install -r requirements.pip
     pip install -e .
 
+Configure stopwords for SeSQL in running this `script <https://bitbucket.org/liberation/sesql/raw/d13763736f3db098127089bce2e66b1be122007a/scripts/generate_stop.sh`>_:
+
+    wget https://bitbucket.org/liberation/sesql/raw/d13763736f3db098127089bce2e66b1be122007a/scripts/generate_stop.sh
+    chmod +x generate_stop.sh
+    sudo generate_stop.sh
+
 Create a default local settings file::
 
     cp umap/settings/local.py.sample umap/settings/local.py
