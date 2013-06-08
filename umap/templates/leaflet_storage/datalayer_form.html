@@ -1,5 +1,5 @@
 {% load umap_tags i18n %}
-<form action="{{ action_url }}" method="post" id="category_edit">
+<form action="{{ action_url }}" method="post" id="datalayer_edit">
     {% csrf_token %}
     {% for error in form.errors %}
         <small class="error">{{ error }}</small>
@@ -15,6 +15,6 @@
     {% include "umap/styles_fieldset.html" %}
     <input type="submit" class="button" />
     {% if delete_url %}
-        <a href="{{ delete_url }}" id="delete_category_button" >{% trans "Delete" %}</a>
+        <a href="{{ delete_url }}" id="delete_datalayer_button" >{% trans "Delete" %}</a>
     {% endif %}
 </form>
