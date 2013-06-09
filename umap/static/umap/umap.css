@@ -207,6 +207,7 @@ body.content #storage-ui-container {
 #id_editors + br + span.helptext {
     display: none;
 }
+.leaflet-popup-content .storage-popup-footer,
 .leaflet-control-browse .storage-browse-actions a.add-datalayer,
 .leaflet-control-browse .storage-browse-actions a.storage-browse-link {
     background-color: SeaGreen;
