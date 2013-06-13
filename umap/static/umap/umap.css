@@ -173,6 +173,7 @@ nav h1 a {
     background-repeat: no-repeat;
     background-image: url("./umap.png");
     color: transparent;
+    font-size: 0px;
 }
 
 nav a.logout {
