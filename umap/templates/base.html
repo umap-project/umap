@@ -26,8 +26,10 @@
     <![endif]-->
     {% block extra_head %}
     {% endblock extra_head %}
+    {% compress js %}
     <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
     <script src="{{ STATIC_URL }}storage/src/locale/fr.js"></script>
+    {% endcompress js %}
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
