@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-15 15:14+0200\n"
+"POT-Creation-Date: 2013-06-16 17:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr "Mapas de %(current_user)s"
 
-#: templates/leaflet_storage/category_form.html:18
+#: templates/leaflet_storage/datalayer_form.html:18
 #: templates/leaflet_storage/feature_form.html:12
 #: templates/leaflet_storage/map_form.html:20
 msgid "Delete"
@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 
 #: templates/leaflet_storage/map_list.html:6
-msgid "Cured by"
+msgid "Cooked up by"
 msgstr "Iniciado por"
 
 #: templates/leaflet_storage/map_list.html:6
@@ -58,40 +58,43 @@ msgstr "Más"
 msgid "Map settings"
 msgstr ""
 
-#: templates/leaflet_storage/map_update_tilelayers.html:2
-msgid "Choose your tilelayer"
-msgstr ""
-
 #: templates/leaflet_storage/upload_form.html:2
 msgid "Upload features"
 msgstr ""
 
-#: templates/leaflet_storage/upload_form.html:11
+#: templates/leaflet_storage/upload_form.html:14
 msgid "Details on formats"
 msgstr ""
 
-#: templates/leaflet_storage/upload_form.html:13
+#: templates/leaflet_storage/upload_form.html:16
 msgid "GeoJSON"
 msgstr ""
 
-#: templates/leaflet_storage/upload_form.html:15
-msgid "Properties used: name or title, description, color"
+#: templates/leaflet_storage/upload_form.html:18
+#: templates/leaflet_storage/upload_form.html:25
+#: templates/leaflet_storage/upload_form.html:32
+msgid "Properties used"
 msgstr ""
 
-#: templates/leaflet_storage/upload_form.html:20
+#: templates/leaflet_storage/upload_form.html:23
 msgid "KML"
 msgstr ""
 
-#: templates/leaflet_storage/upload_form.html:22
-msgid "Properties used: name, description"
-msgstr ""
-
-#: templates/leaflet_storage/upload_form.html:27
+#: templates/leaflet_storage/upload_form.html:30
 msgid "GPX"
 msgstr ""
 
-#: templates/leaflet_storage/upload_form.html:29
-msgid "Properties used: name, desc"
+#: templates/leaflet_storage/upload_form.html:37
+msgid "CSV"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:39
+msgid ""
+"Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point "
+"geometries are imported. The import will look at the column headers for any "
+"mention of «lat», «latitude», «lng», «lon», «longitude» (at the end or the "
+"begining of the header, case insensitive). Also, column «title» or «name», "
+"«description» and «color» will be taken into account."
 msgstr ""
 
 #: templates/registration/login.html:3

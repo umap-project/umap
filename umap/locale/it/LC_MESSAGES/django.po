@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-27 14:08+0100\n"
+"POT-Creation-Date: 2013-06-16 17:32+0200\n"
 "PO-Revision-Date: 2013-01-04 12:19+0100\n"
 "Last-Translator: Stefano\n"
 "Language-Team: FR <LL@li.org>\n"
@@ -17,9 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: templates/leaflet_storage/category_form.html:26
-#: templates/leaflet_storage/feature_form.html:14
-#: templates/leaflet_storage/map_form.html:17
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr ""
+
+#: templates/leaflet_storage/datalayer_form.html:18
+#: templates/leaflet_storage/feature_form.html:12
+#: templates/leaflet_storage/map_form.html:20
 msgid "Delete"
 msgstr "Cancella"
 
@@ -27,88 +32,197 @@ msgstr "Cancella"
 msgid "Create your map now!"
 msgstr "Crea la tua mappa!"
 
-#: templates/leaflet_storage/map_list.html:8
-msgid "Cured by"
+#: templates/leaflet_storage/map_form.html:17
+msgid ""
+"You are creating a map without being authenticated. A cookie will be set on "
+"this browser to make possible for you to edit the map in the future. If you "
+"want to edit the map from another computer, use the \"edit url\" displayed "
+"in the \"permissions\" window. If you log in and load the map, it will be "
+"attached to your account."
+msgstr ""
+
+#: templates/leaflet_storage/map_list.html:6
+msgid "Cooked up by"
 msgstr "Curato da"
 
-#: templates/leaflet_storage/map_list.html:8
+#: templates/leaflet_storage/map_list.html:6
 msgid "See this map!"
 msgstr "Guarda la mappa!"
 
-#: templates/leaflet_storage/map_update_tilelayers.html:2
-msgid "Choose your tilelayer"
-msgstr "Scegli un livello di sfondo"
+#: templates/leaflet_storage/map_list.html:10
+msgid "More"
+msgstr ""
 
-#: templates/youmap/home.html:39
-msgid "uMap let you create maps with OpenStreetMap layers in a minute and embed them in your site.<br /> This is a demo instance, you can host your own, it's <strong>open source</strong>!"
-msgstr "uMap ti permette di creare mappe con i livelli OpenStreetMap in un minuto e di integrarle nel tuo sito. <br/> Questa è una istanza di prova, puoi hostare la tua copia, è <strong>open source</strong>!"
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr ""
 
-#: templates/youmap/home.html:43
-msgid "What you can do?"
+#: templates/leaflet_storage/upload_form.html:2
+msgid "Upload features"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:14
+msgid "Details on formats"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:16
+msgid "GeoJSON"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:18
+#: templates/leaflet_storage/upload_form.html:25
+#: templates/leaflet_storage/upload_form.html:32
+msgid "Properties used"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:23
+msgid "KML"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:30
+msgid "GPX"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:37
+msgid "CSV"
+msgstr ""
+
+#: templates/leaflet_storage/upload_form.html:39
+msgid ""
+"Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point "
+"geometries are imported. The import will look at the column headers for any "
+"mention of «lat», «latitude», «lng», «lon», «longitude» (at the end or the "
+"begining of the header, case insensitive). Also, column «title» or «name», "
+"«description» and «color» will be taken into account."
+msgstr ""
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr ""
+
+#: templates/umap/about_summary.html:4
+msgid "What is uMap"
+msgstr ""
+
+#: templates/umap/about_summary.html:5
+#, fuzzy, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr ""
+"uMap ti permette di creare mappe con i livelli OpenStreetMap in un minuto e "
+"di integrarle nel tuo sito. <br/> Questa è una istanza di prova, puoi "
+"hostare la tua copia, è <strong>open source</strong>!"
+
+#: templates/umap/about_summary.html:7
+#, python-format
+msgid ""
+"This is a demo instance, you can host your own, it's <a href=\"%(repo_url)s"
+"\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:9
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:14
+#, fuzzy
+msgid "What can you do?"
 msgstr "Cosa puoi fare?"
 
-#: templates/youmap/home.html:45
+#: templates/umap/about_summary.html:16
 msgid "Choose the layers of your map"
 msgstr "Scegli i livelli della tua mappa"
 
-#: templates/youmap/home.html:46
+#: templates/umap/about_summary.html:17
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Aggiungi POI: marker, linee, poligoni.."
 
-#: templates/youmap/home.html:47
+#: templates/umap/about_summary.html:18
 msgid "Manage POIs colours and icons"
 msgstr "Scegli i colori e le icone dei POI"
 
-#: templates/youmap/home.html:48
+#: templates/umap/about_summary.html:19
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr ""
+
+#: templates/umap/about_summary.html:20
 msgid "Batch import geostructured data (GEOJson...)"
 msgstr "Importa dati geostrutturati (GEOJson...)"
 
-#: templates/youmap/home.html:49
+#: templates/umap/about_summary.html:21
 msgid "Choose the licence for your data"
 msgstr "Scegli la licenza dei tuoi dati"
 
-#: templates/youmap/home.html:50
+#: templates/umap/about_summary.html:22
 msgid "Embed and share your map"
 msgstr "Integra e condividi la tua mappa"
 
-#: templates/youmap/home.html:62
-msgid "Test it and create a map"
-msgstr "Testa e crea una mappa"
+#: templates/umap/about_summary.html:28
+msgid "Play with the demo"
+msgstr ""
 
-#: templates/youmap/home.html:68
-msgid "Fork it"
-msgstr "Forkalo"
-
-#: templates/youmap/home.html:73
-msgid "Users to play with"
-msgstr "Utenti di prova"
-
-#: templates/youmap/home.html:87
-msgid "Browse maps"
-msgstr "Naviga le carte"
-
-#: templates/youmap/navigation.html:11
-msgid "My maps"
-msgstr "Le mie carte"
-
-#: templates/youmap/navigation.html:12
-msgid "Log out"
-msgstr "Logout"
-
-#: templates/youmap/navigation.html:14
-msgid "Log in"
-msgstr "Login"
-
-#: templates/youmap/navigation.html:21
+#: templates/umap/content.html:26 templates/umap/search_bar.html:6
 msgid "Search maps"
 msgstr "Cerca mappe"
 
-#: templates/youmap/search.html:19
+#: templates/umap/content.html:35
+#, fuzzy
+msgid "Last maps"
+msgstr "Le mie carte"
+
+#: templates/umap/home.html:12
+msgid "Get inspired, browse maps"
+msgstr ""
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Le mie carte"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Login"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr ""
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr ""
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr ""
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Logout"
+
+#: templates/umap/navigation.html:28
+#, fuzzy
+msgid "Create a map"
+msgstr "Crea la tua mappa!"
+
+#: templates/umap/search.html:9
 #, python-format
 msgid "Search for maps containing «%(q)s» "
 msgstr "Cerca mappe che contengono «%(q)s»"
 
-#: templates/youmap/search.html:29
+#: templates/umap/search.html:17
 msgid "Not map found."
 msgstr "Nessuna mappa trovata."
 
+#: templates/umap/search_bar.html:9
+#, fuzzy
+msgid "Search"
+msgstr "Cerca mappe"
+
+#: templates/umap/styles_fieldset.html:3
+msgid "Styles options"
+msgstr ""
+
+#: templates/umap/styles_fieldset.html:11
+msgid "Change marker shape and symbol."
+msgstr ""
