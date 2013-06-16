@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     url(r'', include('social_auth.urls')),
     # We don't want it to be localized
-    url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='map_short_url'),
+    url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
 )
 urlpatterns += i18n_patterns('',
     url(r'^$', views.home, name="home"),

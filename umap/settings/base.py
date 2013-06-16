@@ -137,6 +137,7 @@ AUTHENTICATION_BACKENDS += (
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
 SITE_URL = "http://umap.org"
 UMAP_DEMO_SITE = False
+MAP_SHORT_URL_NAME = "umap_short_url"
 
 #==============================================================================
 # Third party app settings
