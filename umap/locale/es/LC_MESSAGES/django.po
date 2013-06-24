@@ -1,22 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Igor Támara <igor@tamarapatino.org>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-16 17:32+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-06-23 22:17-0500\n"
+"Last-Translator: Igor Támara <igor@tamarapatino.org>\n"
+"Language-Team: Traducción de umap al español\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -27,11 +26,11 @@ msgstr "Mapas de %(current_user)s"
 #: templates/leaflet_storage/feature_form.html:12
 #: templates/leaflet_storage/map_form.html:20
 msgid "Delete"
-msgstr ""
+msgstr "Borrar"
 
 #: templates/leaflet_storage/map_form.html:3
 msgid "Create your map now!"
-msgstr "Creá un mapa!"
+msgstr "!Crea tu propio mapa!"
 
 #: templates/leaflet_storage/map_form.html:17
 msgid ""
@@ -41,6 +40,10 @@ msgid ""
 "in the \"permissions\" window. If you log in and load the map, it will be "
 "attached to your account."
 msgstr ""
+"Estás creando un mapa sin estar autenticado. Establecemos una cookie en tu "
+"navegador para que puedas editarlo en el futuro. Si quieres editar el mapa "
+"desde otro computador, usa la opción \"url de edición\" que está en la ventana "
+"de \"permisos\". Si ingresas y cargas el mapa, se adjuntará a tu cuenta."
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "Cooked up by"
@@ -48,7 +51,7 @@ msgstr "Iniciado por"
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "See this map!"
-msgstr "Ver mapa!"
+msgstr "!Ver este mapa!"
 
 #: templates/leaflet_storage/map_list.html:10
 msgid "More"
@@ -56,37 +59,37 @@ msgstr "Más"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
-msgstr ""
+msgstr "Opciones de mapa"
 
 #: templates/leaflet_storage/upload_form.html:2
 msgid "Upload features"
-msgstr ""
+msgstr "Subir características"
 
 #: templates/leaflet_storage/upload_form.html:14
 msgid "Details on formats"
-msgstr ""
+msgstr "Detalles de formatos"
 
 #: templates/leaflet_storage/upload_form.html:16
 msgid "GeoJSON"
-msgstr ""
+msgstr "GeoJSON"
 
 #: templates/leaflet_storage/upload_form.html:18
 #: templates/leaflet_storage/upload_form.html:25
 #: templates/leaflet_storage/upload_form.html:32
 msgid "Properties used"
-msgstr ""
+msgstr "Propiedades usadas"
 
 #: templates/leaflet_storage/upload_form.html:23
 msgid "KML"
-msgstr ""
+msgstr "KML"
 
 #: templates/leaflet_storage/upload_form.html:30
 msgid "GPX"
-msgstr ""
+msgstr "GPX"
 
 #: templates/leaflet_storage/upload_form.html:37
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: templates/leaflet_storage/upload_form.html:39
 msgid ""
@@ -96,14 +99,20 @@ msgid ""
 "begining of the header, case insensitive). Also, column «title» or «name», "
 "«description» and «color» will be taken into account."
 msgstr ""
+"valores separados por coma, tabuladores o punto y coma. Se asume SRS WGS84. "
+"Solamente se importan geometrías de puntos. El importador buscará los "
+"encabezados buscando menciones de «lat», «latitude», «lng», «lon», "
+"«longitude» (al final o al principio del encabezado sin distinguir "
+"capitalización). También se tendrá en cuenta ls columnas «title» o «name», "
+"«description» y «color»."
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
-msgstr ""
+msgstr "Por favor elija un proveedor"
 
 #: templates/umap/about_summary.html:4
 msgid "What is uMap"
-msgstr ""
+msgstr "Qué es uMap"
 
 #: templates/umap/about_summary.html:5
 #, python-format
@@ -111,6 +120,8 @@ msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr ""
+"uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" "
+"/>OpenStreetMap</a> en un minuto y embeberlas en tu sitio."
 
 #: templates/umap/about_summary.html:7
 #, python-format
@@ -118,47 +129,51 @@ msgid ""
 "This is a demo instance, you can host your own, it's <a href=\"%(repo_url)s"
 "\">open source</a>!"
 msgstr ""
+"Esta es una instancia de demostración, puedes alojar la tuya, !es de <a "
+"href=\"%(repo_url)s\">fuentes abiertas</a>!"
 
 #: templates/umap/about_summary.html:9
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "Y es de !<a href=\"%(repo_url)s\">fuentes abiertas</a>!"
 
 #: templates/umap/about_summary.html:14
 msgid "What can you do?"
-msgstr ""
+msgstr "¿Qué puedes hacer?"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the layers of your map"
-msgstr ""
+msgstr "Elige las capas de tu mapa"
 
 #: templates/umap/about_summary.html:17
 msgid "Add POIs: markers, lines, polygons..."
-msgstr ""
+msgstr "Añade PDIs: Marcadores, líneas, polígonos..."
 
 #: templates/umap/about_summary.html:18
 msgid "Manage POIs colours and icons"
-msgstr ""
+msgstr "Elige los colores y los íconos de tus PDIs"
 
 #: templates/umap/about_summary.html:19
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr ""
+"Administra las opciones de tu mapa: muestra un minimapa, localiza al usuario "
+"al cargar..."
 
 #: templates/umap/about_summary.html:20
 msgid "Batch import geostructured data (GEOJson...)"
-msgstr ""
+msgstr "Importa en lotes datos geoestructurados (GEOJson...)"
 
 #: templates/umap/about_summary.html:21
 msgid "Choose the licence for your data"
-msgstr ""
+msgstr "Elige la licencia de tus datos"
 
 #: templates/umap/about_summary.html:22
 msgid "Embed and share your map"
-msgstr ""
+msgstr "Incrusta y comparte tu mapa"
 
 #: templates/umap/about_summary.html:28
 msgid "Play with the demo"
-msgstr ""
+msgstr "Juega con el demo"
 
 #: templates/umap/content.html:26 templates/umap/search_bar.html:6
 msgid "Search maps"
@@ -170,7 +185,7 @@ msgstr "Mapas recientes"
 
 #: templates/umap/home.html:12
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "Inspírate, mira otros mapas"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -178,7 +193,7 @@ msgstr "Mis Mapas"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
-msgstr "Acceder"
+msgstr "Ingresar"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
@@ -198,16 +213,16 @@ msgstr "Salir"
 
 #: templates/umap/navigation.html:28
 msgid "Create a map"
-msgstr "Crear un mapa"
+msgstr "Crea un mapa"
 
 #: templates/umap/search.html:9
 #, python-format
 msgid "Search for maps containing «%(q)s» "
-msgstr "Buscar mapas que contengan «%(q)s»"
+msgstr "Busca mapas que contengan «%(q)s»"
 
 #: templates/umap/search.html:17
 msgid "Not map found."
-msgstr "No encontré nada."
+msgstr "No se encontraron mapas."
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
@@ -215,8 +230,8 @@ msgstr "Buscar"
 
 #: templates/umap/styles_fieldset.html:3
 msgid "Styles options"
-msgstr ""
+msgstr "Opciones de estilo"
 
 #: templates/umap/styles_fieldset.html:11
 msgid "Change marker shape and symbol."
-msgstr ""
+msgstr "Cambiar forma y símbolo del marcador."
