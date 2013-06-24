@@ -106,7 +106,7 @@ class Search(TemplateView, PaginatorMixin):
         q = self.request.GET.get('q')
         maps = []
         if q:
-            maps = shortquery(Q(fulltext__containswords=q))
+            maps = shortquery(Q(classname='Map') & Q(fulltext__containswords=q))
             maps = self.paginate(maps)
         kwargs.update({
             'maps': maps,
