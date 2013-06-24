@@ -167,7 +167,7 @@ msgid "Batch import geostructured data (GEOJson...)"
 msgstr "Import des données géographiques en masse (GeoJSON...)"
 
 #: templates/umap/about_summary.html:21
-msgid "Choose the licence for your data"
+msgid "Choose the license for your data"
 msgstr "Choisir la licence de vos données"
 
 #: templates/umap/about_summary.html:22
