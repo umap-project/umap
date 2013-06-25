@@ -108,7 +108,7 @@ For this repository and django-leaflet-storage, here are the steps:
 
 For Leaflet.Storage, here are the steps:
 
-- add your language in `bin/i18n.js`
-- run `node bin/i18n.js`
+- add your language in the Makefile
+- run `make i18n`
 - update the dedicated file in the `src/locale` repository
 - commit, push, PR :)
