@@ -256,7 +256,7 @@ def collect_remote_statics():
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
         'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
-        'minimap': 'git://github.com/yohanboniface/Leaflet-MiniMap.git@listen_baselayer_change',
+        'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
         'darline': 'git://github.com/yohanboniface/Darline.git@master',
         'i18n': 'git://github.com/yohanboniface/Leaflet.i18n.git@master',
     }
