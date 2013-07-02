@@ -55,21 +55,6 @@
                     placeholder: "Type editors nick to add..."
                 }).multiselect();
             });
-            var getMore = function (e) {
-                D.Event.stop(e);
-                D.Xhr.get(this.href, {
-                    callback: function (data) {
-                        var container = this.parentNode;
-                        container.innerHTML = data;
-                        D.DOM.forEach(D.DOM.get('script', container), function (item) {
-                            eval(item.firstChild.textContent);
-                        });
-                        D.Event.on('.more_button', 'click', getMore);
-                    },
-                    thisobj: this
-                });
-            }
-            D.Event.on('.more_button', 'click', getMore);
         </script>
     {% endblock %}
     {% block footer %}
