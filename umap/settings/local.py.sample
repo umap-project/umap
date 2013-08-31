@@ -20,6 +20,14 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
+# ALLOWED_HOST required by Django >= 1.5
+# Should be set to your domain name, see:
+# https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS
+# Don't use "*" in production!
+ALLOWED_HOSTS = [
+    '*',
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
