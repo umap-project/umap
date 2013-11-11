@@ -236,14 +236,19 @@ def collect_remote_statics():
     remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
     run_as_umap('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
-        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.6.2",
-        'draw': "git://github.com/Leaflet/Leaflet.draw.git@master#v0.2.1",
+        'leaflet': "git://github.com/Leaflet/Leaflet.git@master",
+        'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
         'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
         'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
         'darline': 'git://github.com/yohanboniface/Darline.git@master',
         'i18n': 'git://github.com/yohanboniface/Leaflet.i18n.git@master',
+        'csv2geojson': 'git://github.com/mapbox/csv2geojson.git@gh-pages',
+        'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages',
+        'osmtogeojson': 'git://github.com/aaronlidman/osm-and-geojson.git@master',
+        'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master',
+        'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():
@@ -261,3 +266,5 @@ def collect_remote_statics():
                 run_as_umap('git clone {0} {1}'.format(repository, subdir))
             with cd(subdir):
                 run_as_umap('git checkout {0}'.format(ref))
+                if subdir == "leaflet":
+                    run_as_umap('jake build')
