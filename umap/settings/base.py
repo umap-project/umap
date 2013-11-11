@@ -45,8 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'django.contrib.gis',
-    'django.contrib.markup',
+    'django.contrib.gis'
 )
 
 #==============================================================================

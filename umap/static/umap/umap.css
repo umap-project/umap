@@ -165,7 +165,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: SeaGreen;
+    background-color: #79c1c0;
 }
 
 nav h1 a {
@@ -195,6 +195,44 @@ nav .branding {
 }
 
 /* **************************** */
+/*            colors            */
+/* **************************** */
+a {
+    color: #689191;
+}
+.button, input[type="submit"] {
+    background-color: #79c1c0;
+}
+.button:hover, input[type="submit"]:hover {
+    background-color: #689191;
+}
+.warning {
+    color: #cc0000;
+}
+.tintbox {
+    background-color: #28353D;
+}
+.tintbox,
+.tintbox p,
+.tintbox a {
+    color: #f8f8f8;
+    font-family: sans-serif;
+}
+.tintbox a {
+    text-decoration: underline;
+}
+.tintbox.warning {
+    background-color: #cc0000;
+    color: #fff;
+}
+.tintbox .note, .tintbox .note a {
+    line-height: 1.2em;
+    font-size: 11px;
+    font-style: italic;
+}
+
+
+/* **************************** */
 /*   Override Leaflet.Storage   */
 /* **************************** */
 body.content #storage-ui-container {
@@ -209,8 +247,9 @@ body.content #storage-ui-container {
 #id_editors + br + span.helptext {
     display: none;
 }
+.storage-loader,
 .leaflet-popup-content .storage-popup-footer,
 .leaflet-control-browse .storage-browse-actions a.add-datalayer,
 .leaflet-control-browse .storage-browse-actions a.storage-browse-link {
-    background-color: SeaGreen;
+    background-color: #79c1c0 !important;
 }
