@@ -249,6 +249,7 @@ def collect_remote_statics():
         'osmtogeojson': 'git://github.com/aaronlidman/osm-and-geojson.git@master',
         'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master',
         'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
+        'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():
