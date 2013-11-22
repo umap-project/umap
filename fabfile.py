@@ -172,6 +172,7 @@ def collectstatic():
     """
     collect_remote_statics()
     dj('collectstatic --link --noinput')
+    dj('storagei18n')
     dj('compress')
 
 
@@ -250,6 +251,7 @@ def collect_remote_statics():
         'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master',
         'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
         'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master',
+        'measure': 'git://github.com/makinacorpus/Leaflet.MeasureControl.git@gh-pages',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():

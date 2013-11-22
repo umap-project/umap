@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-16 17:32+0200\n"
+"POT-Creation-Date: 2013-11-22 15:13+0100\n"
 "PO-Revision-Date: 2013-03-10 20:00+0100\n"
 "Last-Translator: Francisco DOS SANTOS <f.dos.santos@free.fr>\n"
 "Language-Team: PT <LL@li.org>\n"
@@ -22,25 +22,6 @@ msgstr ""
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Consulta os mapas de %(current_user)s"
-
-#: templates/leaflet_storage/datalayer_form.html:18
-#: templates/leaflet_storage/feature_form.html:12
-#: templates/leaflet_storage/map_form.html:20
-msgid "Delete"
-msgstr "Apagar"
-
-#: templates/leaflet_storage/map_form.html:3
-msgid "Create your map now!"
-msgstr "Cria o seu mapa já!"
-
-#: templates/leaflet_storage/map_form.html:17
-msgid ""
-"You are creating a map without being authenticated. A cookie will be set on "
-"this browser to make possible for you to edit the map in the future. If you "
-"want to edit the map from another computer, use the \"edit url\" displayed "
-"in the \"permissions\" window. If you log in and load the map, it will be "
-"attached to your account."
-msgstr ""
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "Cooked up by"
@@ -57,46 +38,6 @@ msgstr "Mais"
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
 msgstr "Parâmetros"
-
-#: templates/leaflet_storage/upload_form.html:2
-msgid "Upload features"
-msgstr "Carregar objetos"
-
-#: templates/leaflet_storage/upload_form.html:14
-msgid "Details on formats"
-msgstr "Detalhes nos formatos"
-
-#: templates/leaflet_storage/upload_form.html:16
-msgid "GeoJSON"
-msgstr "GeoJSON"
-
-#: templates/leaflet_storage/upload_form.html:18
-#: templates/leaflet_storage/upload_form.html:25
-#: templates/leaflet_storage/upload_form.html:32
-#, fuzzy
-msgid "Properties used"
-msgstr "Uso propriedade: name, desc"
-
-#: templates/leaflet_storage/upload_form.html:23
-msgid "KML"
-msgstr "KML"
-
-#: templates/leaflet_storage/upload_form.html:30
-msgid "GPX"
-msgstr "GPX"
-
-#: templates/leaflet_storage/upload_form.html:37
-msgid "CSV"
-msgstr ""
-
-#: templates/leaflet_storage/upload_form.html:39
-msgid ""
-"Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point "
-"geometries are imported. The import will look at the column headers for any "
-"mention of «lat», «latitude», «lng», «lon», «longitude» (at the end or the "
-"begining of the header, case insensitive). Also, column «title» or «name», "
-"«description» and «color» will be taken into account."
-msgstr ""
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
@@ -117,51 +58,53 @@ msgstr ""
 "uma demonstração, podes instalar este software no teu próprio site, é <a "
 "href=\"%(repo_url)s\">software livre</a>!"
 
-#: templates/umap/about_summary.html:7
+#: templates/umap/about_summary.html:8
 #, python-format
 msgid ""
-"This is a demo instance, you can host your own, it's <a href=\"%(repo_url)s"
-"\">open source</a>!"
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a href=\"%(stable_url)s\">"
+"%(stable_url)s</a>. You can also host your own instance, it's <a href="
+"\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: templates/umap/about_summary.html:9
+#: templates/umap/about_summary.html:10
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: templates/umap/about_summary.html:14
+#: templates/umap/about_summary.html:15
 msgid "What can you do?"
 msgstr "O que podes fazer"
 
-#: templates/umap/about_summary.html:16
+#: templates/umap/about_summary.html:17
 msgid "Choose the layers of your map"
 msgstr "Escolher o mapa de fundo"
 
-#: templates/umap/about_summary.html:17
+#: templates/umap/about_summary.html:18
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Adicionar objetos: marcos, linhas, polígonos..."
 
-#: templates/umap/about_summary.html:18
+#: templates/umap/about_summary.html:19
 msgid "Manage POIs colours and icons"
 msgstr "Modificar cor e ícone dos objetos"
 
-#: templates/umap/about_summary.html:19
+#: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr "Gerir diversas opções: mostrar um minimapa, localizar o usuário..."
 
-#: templates/umap/about_summary.html:20
+#: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
 msgstr "Carregar ficheiros georeferenciados (GEOJson...)"
 
-#: templates/umap/about_summary.html:21
+#: templates/umap/about_summary.html:22
 msgid "Choose the license for your data"
 msgstr "Escolher uma licença para os seus dados"
 
-#: templates/umap/about_summary.html:22
+#: templates/umap/about_summary.html:23
 msgid "Embed and share your map"
 msgstr "Exportar e partilhar seu mapa"
 
-#: templates/umap/about_summary.html:28
+#: templates/umap/about_summary.html:29
 msgid "Play with the demo"
 msgstr "Testar a demo"
 
@@ -225,3 +168,28 @@ msgstr "Opções de estilo"
 #: templates/umap/styles_fieldset.html:11
 msgid "Change marker shape and symbol."
 msgstr "Mudar forma e pictograma do marco."
+
+#~ msgid "Delete"
+#~ msgstr "Apagar"
+
+#~ msgid "Create your map now!"
+#~ msgstr "Cria o seu mapa já!"
+
+#~ msgid "Upload features"
+#~ msgstr "Carregar objetos"
+
+#~ msgid "Details on formats"
+#~ msgstr "Detalhes nos formatos"
+
+#~ msgid "GeoJSON"
+#~ msgstr "GeoJSON"
+
+#, fuzzy
+#~ msgid "Properties used"
+#~ msgstr "Uso propriedade: name, desc"
+
+#~ msgid "KML"
+#~ msgstr "KML"
+
+#~ msgid "GPX"
+#~ msgstr "GPX"

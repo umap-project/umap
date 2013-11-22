@@ -10,6 +10,9 @@
     {% compress js %}
         {% leaflet_storage_js %}
     {% endcompress %}
+    {% if locale %}
+        <script src="{{ STATIC_URL }}storage/src/locale/{{ locale }}.js"></script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
