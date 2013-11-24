@@ -226,8 +226,9 @@ def dj(command):
     """
     Run a Django manage.py command on the server.
     """
-    run_as_umap('{virtualenv_dir}/bin/python {project_dir}/manage.py {dj_command} '
-        '--settings {project_conf}'.format(dj_command=command, **env))
+    with cd(env.project_dir):
+        run_as_umap('{virtualenv_dir}/bin/python {project_dir}/manage.py {dj_command} '
+            '--settings {project_conf}'.format(dj_command=command, **env))
 
 
 def collect_remote_statics():
@@ -270,4 +271,5 @@ def collect_remote_statics():
             with cd(subdir):
                 run_as_umap('git checkout {0}'.format(ref))
                 if subdir == "leaflet":
+                    run_as_umap('npm install')
                     run_as_umap('jake build')
