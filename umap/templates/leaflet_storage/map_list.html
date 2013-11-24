@@ -3,7 +3,7 @@
 {% for map_inst in maps %}
 <div class="col _35">
     {% map_fragment map_inst %}
-    <div class="tintbox"><strong>{{ map_inst.name }}</strong>{% if map_inst.description %} — «{{ map_inst.description }}» {% endif %}{% if map_inst.owner %} <em>{% trans "Cooked up by" %} <a href="{% url 'user_maps' map_inst.owner.username %}">{{ map_inst.owner }}</a></em>{% endif %} — <a href="{{ map_inst.get_absolute_url }}">{% trans "See this map!" %}</a></div>
+    <div class="tintbox"><strong>{{ map_inst.name }}</strong>{% if map_inst.owner %} <em>{% trans "Cooked up by" %} <a href="{% url 'user_maps' map_inst.owner.username %}">{{ map_inst.owner }}</a></em>{% endif %} — <a href="{{ map_inst.get_absolute_url }}">{% trans "See this map!" %}</a></div>
 </div>
 {% endfor %}
 {% if maps.has_next %}
