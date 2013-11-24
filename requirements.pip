@@ -1,8 +1,7 @@
-Django==1.5.1
+Django==1.5.5
 South==0.7.6
 django-leaflet-storage==0.4.0
 django_compressor==1.2
 django-social-auth==0.7.20
-git+git://github.com/yohanboniface/vectorformats.git@leafletstorage
 hg+https://bitbucket.org/liberation/sesql
 Markdown==2.3.1
