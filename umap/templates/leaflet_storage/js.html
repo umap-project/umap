@@ -1,0 +1,30 @@
+{% load compress %}
+{% compress js %}
+    <script src="{{ STATIC_URL }}leaflet/dist/leaflet-src.js"></script>
+    <script src="{{ STATIC_URL }}draw/dist/leaflet.draw-src.js"></script>
+    <script src="{{ STATIC_URL }}hash/leaflet-hash.js"></script>
+    <script src="{{ STATIC_URL }}i18n/Leaflet.i18n.js"></script>
+    <script src="{{ STATIC_URL }}edit_in_osm/Leaflet.EditInOSM.js"></script>
+    <script src="{{ STATIC_URL }}minimap/src/Control.MiniMap.js"></script>
+    <script src="{{ STATIC_URL }}csv2geojson/csv2geojson.js"></script>
+    <script src="{{ STATIC_URL }}togeojson/togeojson.js"></script>
+    <script src="{{ STATIC_URL }}osmtogeojson/osm_geojson.js"></script>
+    <script src="{{ STATIC_URL }}loading/src/Control.Loading.js"></script>
+    <script src="{{ STATIC_URL }}markercluster/dist/leaflet.markercluster-src.js"></script>
+    <script src="{{ STATIC_URL }}measure/leaflet.measurecontrol.js"></script>
+    <script src="{{ STATIC_URL }}contextmenu/dist/leaflet.contextmenu-src.js"></script>
+{% endcompress %}
+{% if locale %}
+    <script src="{{ STATIC_URL }}storage/src/locale/{{ locale }}.js"></script>
+{% endif %}
+{% compress js %}
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.core.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.xhr.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.forms.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.icon.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.features.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.layer.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.controls.js"></script>
+    <script src="{{ STATIC_URL }}storage/src/js/leaflet.storage.js"></script>
+    <script src="{{ STATIC_URL }}storage/contrib/js/storage.ui.default.js"></script>
+{% endcompress %}
