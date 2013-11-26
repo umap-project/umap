@@ -42,10 +42,6 @@
     {% block bottom_js %}
         <script type="text/javascript">
             L.Storage.on('ui:ready', function () {
-                function fn (e) {
-                    D.DOM.toggleClass(this.parentNode, "on");
-                }
-                D.Event.on('fieldset.toggle legend', 'click', fn);
                 D.autoComplete('#id_editors', {
                     placeholder: "Type editors nick to add..."
                 }).multiselect();
