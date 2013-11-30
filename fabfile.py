@@ -238,7 +238,7 @@ def collect_remote_statics():
     remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
     run_as_umap('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
-        'leaflet': "git://github.com/Leaflet/Leaflet.git@master",
+        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7",
         'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
@@ -265,7 +265,7 @@ def collect_remote_statics():
                 exists = run_as_umap('if [ -d "{0}" ]; then echo 1; fi'.format(subdir))
             if exists:
                 with cd(subdir):
-                    run_as_umap('git pull origin {0}'.format(branch))
+                    run_as_umap('git pull origin {0} --tags'.format(branch))
             else:
                 run_as_umap('git clone {0} {1}'.format(repository, subdir))
             with cd(subdir):
