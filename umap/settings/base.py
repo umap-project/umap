@@ -23,6 +23,12 @@ LANGUAGE_CODE = 'en'
 LANGUAGES = (
     ('en', 'English'),
     ('fr', u'Francais'),
+    ('it', u'Italiano'),
+    ('pt', u'Portuguese'),
+    ('nl', u'Dutch'),
+    ('es', u'Español'),
+    ('fi', u'Finnish'),
+    ('de', u'Deutsch'),
 )
 
 # Make this unique, and don't share it with anybody.
