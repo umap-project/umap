@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Igor Támara <igor@tamarapatino.org>, 2013.
+# 
+# Translators:
+# Igor Támara <igor@tamarapatino.org>, 2013
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-22 15:13+0100\n"
-"PO-Revision-Date: 2013-06-23 22:17-0500\n"
-"Last-Translator: Igor Támara <igor@tamarapatino.org>\n"
-"Language-Team: Traducción de umap al español\n"
-"Language: es\n"
+"POT-Creation-Date: 2013-11-22 15:14+0100\n"
+"PO-Revision-Date: 2013-11-22 14:17+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -51,17 +52,15 @@ msgstr "Qué es uMap"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
-"uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" /"
-">OpenStreetMap</a> en un minuto y embeberlas en tu sitio."
+msgstr "uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" />OpenStreetMap</a> en un minuto y embeberlas en tu sitio."
 
 #: templates/umap/about_summary.html:8
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
 #: templates/umap/about_summary.html:10
@@ -87,9 +86,7 @@ msgstr "Elige los colores y los íconos de tus PDIs"
 
 #: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
-"Administra las opciones de tu mapa: muestra un minimapa, localiza al usuario "
-"al cargar..."
+msgstr "Administra las opciones de tu mapa: muestra un minimapa, localiza al usuario al cargar..."
 
 #: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
@@ -167,64 +164,3 @@ msgstr "Opciones de estilo"
 #: templates/umap/styles_fieldset.html:11
 msgid "Change marker shape and symbol."
 msgstr "Cambiar forma y símbolo del marcador."
-
-#~ msgid "Delete"
-#~ msgstr "Borrar"
-
-#~ msgid "Create your map now!"
-#~ msgstr "!Crea tu propio mapa!"
-
-#~ msgid ""
-#~ "You are creating a map without being authenticated. A cookie will be set "
-#~ "on this browser to make possible for you to edit the map in the future. "
-#~ "If you want to edit the map from another computer, use the \"edit url\" "
-#~ "displayed in the \"permissions\" window. If you log in and load the map, "
-#~ "it will be attached to your account."
-#~ msgstr ""
-#~ "Estás creando un mapa sin estar autenticado. Establecemos una cookie en "
-#~ "tu navegador para que puedas editarlo en el futuro. Si quieres editar el "
-#~ "mapa desde otro computador, usa la opción \"url de edición\" que está en "
-#~ "la ventana de \"permisos\". Si ingresas y cargas el mapa, se adjuntará a "
-#~ "tu cuenta."
-
-#~ msgid "Upload features"
-#~ msgstr "Subir características"
-
-#~ msgid "Details on formats"
-#~ msgstr "Detalles de formatos"
-
-#~ msgid "GeoJSON"
-#~ msgstr "GeoJSON"
-
-#~ msgid "Properties used"
-#~ msgstr "Propiedades usadas"
-
-#~ msgid "KML"
-#~ msgstr "KML"
-
-#~ msgid "GPX"
-#~ msgstr "GPX"
-
-#~ msgid "CSV"
-#~ msgstr "CSV"
-
-#~ msgid ""
-#~ "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only "
-#~ "Point geometries are imported. The import will look at the column headers "
-#~ "for any mention of «lat», «latitude», «lng», «lon», «longitude» (at the "
-#~ "end or the begining of the header, case insensitive). Also, column "
-#~ "«title» or «name», «description» and «color» will be taken into account."
-#~ msgstr ""
-#~ "valores separados por coma, tabuladores o punto y coma. Se asume SRS "
-#~ "WGS84. Solamente se importan geometrías de puntos. El importador buscará "
-#~ "los encabezados buscando menciones de «lat», «latitude», «lng», «lon», "
-#~ "«longitude» (al final o al principio del encabezado sin distinguir "
-#~ "capitalización). También se tendrá en cuenta ls columnas «title» o "
-#~ "«name», «description» y «color»."
-
-#~ msgid ""
-#~ "This is a demo instance, you can host your own, it's <a href=\"%(repo_url)"
-#~ "s\">open source</a>!"
-#~ msgstr ""
-#~ "Esta es una instancia de demostración, puedes alojar la tuya, !es de <a "
-#~ "href=\"%(repo_url)s\">fuentes abiertas</a>!"

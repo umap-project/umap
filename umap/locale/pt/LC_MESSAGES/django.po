@@ -1,22 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.2.0\n"
+"Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-22 15:13+0100\n"
-"PO-Revision-Date: 2013-03-10 20:00+0100\n"
-"Last-Translator: Francisco DOS SANTOS <f.dos.santos@free.fr>\n"
-"Language-Team: PT <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-11-22 15:14+0100\n"
+"PO-Revision-Date: 2013-11-22 14:17+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/umap/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -48,23 +47,19 @@ msgid "What is uMap"
 msgstr "O que é uMap"
 
 #: templates/umap/about_summary.html:5
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr ""
-"uMap permita criar num instante mapas personalizados com <a href="
-"\"%(osm_url)s\" />OpenStreetMap</a> e mostrar-los no seu site.<br /> Aqui é "
-"uma demonstração, podes instalar este software no teu próprio site, é <a "
-"href=\"%(repo_url)s\">software livre</a>!"
 
 #: templates/umap/about_summary.html:8
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
 #: templates/umap/about_summary.html:10
@@ -168,28 +163,3 @@ msgstr "Opções de estilo"
 #: templates/umap/styles_fieldset.html:11
 msgid "Change marker shape and symbol."
 msgstr "Mudar forma e pictograma do marco."
-
-#~ msgid "Delete"
-#~ msgstr "Apagar"
-
-#~ msgid "Create your map now!"
-#~ msgstr "Cria o seu mapa já!"
-
-#~ msgid "Upload features"
-#~ msgstr "Carregar objetos"
-
-#~ msgid "Details on formats"
-#~ msgstr "Detalhes nos formatos"
-
-#~ msgid "GeoJSON"
-#~ msgstr "GeoJSON"
-
-#, fuzzy
-#~ msgid "Properties used"
-#~ msgstr "Uso propriedade: name, desc"
-
-#~ msgid "KML"
-#~ msgstr "KML"
-
-#~ msgid "GPX"
-#~ msgstr "GPX"

@@ -1,22 +1,23 @@
-# YOUMAP.
-# Copyleft (C) 2012
-# This file is distributed under the same license as the YOUMAP package.
-# YOHAN BONIFACE <yb@enix.org>, 2012.
-#
-#, fuzzy
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Buggi <buggi@filzmail.com>, 2013
+# YOHAN BONIFACE <yb@enix.org>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.0.8\n"
+"Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-22 15:13+0100\n"
-"PO-Revision-Date: 2012-12-27 11:09+0100\n"
-"Last-Translator: YOHAN BONIFACE <yb@enix.org>\n"
-"Language-Team: FR <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-11-22 15:14+0100\n"
+"PO-Revision-Date: 2013-12-04 20:59+0000\n"
+"Last-Translator: Buggi <buggi@filzmail.com>\n"
+"Language-Team: French (http://www.transifex.com/projects/p/umap/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -52,19 +53,16 @@ msgstr "uMap, c'est quoi"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
-"uMap permet de créer des cartes personnalisées sur des fonds <a href="
-"\"%(osm_url)s\" />OpenStreetMap</a> en un instant et les afficher dans votre "
-"site."
+msgstr "uMap permet de créer des cartes personnalisées sur des fonds <a href=\"%(osm_url)s\" />OpenStreetMap</a> en un instant et les afficher dans votre site."
 
 #: templates/umap/about_summary.html:8
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
-msgstr ""
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Il s'agit d'un exemple de démonstration, utilisé pour les tests et validation avant diffusion. Si vous avez besoin d'une instance stable, s'il vous plaît utiliser <a href=\"%(stable_url)s\">%(stable_url)s</a>. Vous pouvez aussi organiser votre propre exemple, il est  <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:10
 #, python-format
@@ -89,9 +87,7 @@ msgstr "Choisir la couleur et les icônes"
 
 #: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
-"Gérer les options de la carte: afficher une minicarte, géolocaliser "
-"l'utilisateur..."
+msgstr "Gérer les options de la carte: afficher une minicarte, géolocaliser l'utilisateur..."
 
 #: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
