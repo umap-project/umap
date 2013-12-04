@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-22 15:14+0100\n"
+"POT-Creation-Date: 2013-12-04 23:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,11 +103,11 @@ msgstr ""
 msgid "Play with the demo"
 msgstr ""
 
-#: templates/umap/content.html:26 templates/umap/search_bar.html:6
+#: templates/umap/content.html:24 templates/umap/search_bar.html:6
 msgid "Search maps"
 msgstr ""
 
-#: templates/umap/content.html:35
+#: templates/umap/content.html:33
 msgid "Last maps"
 msgstr ""
 
