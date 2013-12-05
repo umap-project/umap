@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-04 23:35+0100\n"
+"POT-Creation-Date: 2013-12-05 22:57+0100\n"
 "PO-Revision-Date: 2013-12-04 20:59+0000\n"
 "Last-Translator: Buggi <buggi@filzmail.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/umap/language/"
@@ -169,10 +169,8 @@ msgstr "Aucune carte trouvée."
 msgid "Search"
 msgstr "Chercher"
 
-#: templates/umap/styles_fieldset.html:3
-msgid "Styles options"
-msgstr "Options de mise en forme"
+#~ msgid "Styles options"
+#~ msgstr "Options de mise en forme"
 
-#: templates/umap/styles_fieldset.html:11
-msgid "Change marker shape and symbol."
-msgstr "Changer la forme du marqueur et le picto"
+#~ msgid "Change marker shape and symbol."
+#~ msgstr "Changer la forme du marqueur et le picto"

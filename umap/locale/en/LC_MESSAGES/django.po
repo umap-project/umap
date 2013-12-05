@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-04 23:35+0100\n"
+"POT-Creation-Date: 2013-12-05 22:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,12 +154,4 @@ msgstr ""
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
-msgstr ""
-
-#: templates/umap/styles_fieldset.html:3
-msgid "Styles options"
-msgstr ""
-
-#: templates/umap/styles_fieldset.html:11
-msgid "Change marker shape and symbol."
 msgstr ""

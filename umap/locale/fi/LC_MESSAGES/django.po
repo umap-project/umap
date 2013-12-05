@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # jaakkoh <jaakko@helleranta.com>, 2013
 # jaakkoh <jaakko@helleranta.com>, 2013
@@ -9,14 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-22 15:14+0100\n"
+"POT-Creation-Date: 2013-12-05 22:57+0100\n"
 "PO-Revision-Date: 2013-12-05 06:27+0000\n"
 "Last-Translator: jaakkoh <jaakko@helleranta.com>\n"
-"Language-Team: Finnish (http://www.transifex.com/projects/p/umap/language/fi/)\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/umap/language/"
+"fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: templates/auth/user_detail.html:7
@@ -53,16 +54,23 @@ msgstr "Mikä uMap on?"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap mahdollistaa <a href=\"%(osm_url)s\" />OpenStreetMap</a>-pohjaisten räätälöityjen karttojen luomisen ja liittämisen verkkosivuusi muutamassa minuutissa."
+msgstr ""
+"uMap mahdollistaa <a href=\"%(osm_url)s\" />OpenStreetMap</a>-pohjaisten "
+"räätälöityjen karttojen luomisen ja liittämisen verkkosivuusi muutamassa "
+"minuutissa."
 
 #: templates/umap/about_summary.html:8
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a "
-"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
-"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Tämä on uMapin demo-instanssi, jota käytetään testaamiseen ja väliversioille. Jos tarvitset vakaan version, niin käytäthän <a href=\"%(stable_url)s\">%(stable_url)s</a> :a. Voit myös tarjota oman instanssin - <a href=\"%(repo_url)s\">avoin lähdekoodi</a> rulettaa!"
+"need a stable instance, please use <a href=\"%(stable_url)s\">"
+"%(stable_url)s</a>. You can also host your own instance, it's <a href="
+"\"%(repo_url)s\">open source</a>!"
+msgstr ""
+"Tämä on uMapin demo-instanssi, jota käytetään testaamiseen ja "
+"väliversioille. Jos tarvitset vakaan version, niin käytäthän <a href="
+"\"%(stable_url)s\">%(stable_url)s</a> :a. Voit myös tarjota oman instanssin "
+"- <a href=\"%(repo_url)s\">avoin lähdekoodi</a> rulettaa!"
 
 #: templates/umap/about_summary.html:10
 #, python-format
@@ -87,7 +95,9 @@ msgstr "Valitse ja hallinnoi POI-merkintöjen värit ja karttakuvakkeet"
 
 #: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Hallitse kartta-optiot: näytä mini-kartta, paikanna käyttäjä sivun latauksessa, ..."
+msgstr ""
+"Hallitse kartta-optiot: näytä mini-kartta, paikanna käyttäjä sivun "
+"latauksessa, ..."
 
 #: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
@@ -105,11 +115,11 @@ msgstr "Jaa karttasi muille ja/tai liitä se muihin sivustoihin"
 msgid "Play with the demo"
 msgstr "Tongi demoa sielusi kyllyydestä!"
 
-#: templates/umap/content.html:26 templates/umap/search_bar.html:6
+#: templates/umap/content.html:24 templates/umap/search_bar.html:6
 msgid "Search maps"
 msgstr "Etsi karttoja"
 
-#: templates/umap/content.html:35
+#: templates/umap/content.html:33
 msgid "Last maps"
 msgstr "Viimeisimmät kartat"
 
@@ -158,10 +168,8 @@ msgstr "Karttaa ei löytynyt."
 msgid "Search"
 msgstr "Etsi"
 
-#: templates/umap/styles_fieldset.html:3
-msgid "Styles options"
-msgstr "Tyylivaihtoehdot"
+#~ msgid "Styles options"
+#~ msgstr "Tyylivaihtoehdot"
 
-#: templates/umap/styles_fieldset.html:11
-msgid "Change marker shape and symbol."
-msgstr "Muuta karttamerkin tyyliä ja symbolia"
+#~ msgid "Change marker shape and symbol."
+#~ msgstr "Muuta karttamerkin tyyliä ja symbolia"

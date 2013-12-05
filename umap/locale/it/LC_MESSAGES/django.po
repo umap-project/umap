@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-04 23:35+0100\n"
+"POT-Creation-Date: 2013-12-05 22:57+0100\n"
 "PO-Revision-Date: 2013-11-22 14:17+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/umap/language/"
@@ -156,12 +156,4 @@ msgstr "Nessuna mappa trovata."
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
-msgstr ""
-
-#: templates/umap/styles_fieldset.html:3
-msgid "Styles options"
-msgstr ""
-
-#: templates/umap/styles_fieldset.html:11
-msgid "Change marker shape and symbol."
 msgstr ""
