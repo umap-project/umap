@@ -238,7 +238,7 @@ def collect_remote_statics():
     remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
     run_as_umap('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
-        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7",
+        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7.1",
         'draw': "git://github.com/Leaflet/Leaflet.draw.git@master",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
