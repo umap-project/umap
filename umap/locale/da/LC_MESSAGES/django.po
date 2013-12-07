@@ -3,56 +3,56 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Klumbumbus <simson.gertrud@gmail.com>, 2013
+# Neogeografen <soren.johannessen@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-06 16:09+0000\n"
-"Last-Translator: Klumbumbus <simson.gertrud@gmail.com>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/umap/language/de/)\n"
+"PO-Revision-Date: 2013-12-07 10:12+0000\n"
+"Last-Translator: Neogeografen <soren.johannessen@gmail.com>\n"
+"Language-Team: Danish (http://www.transifex.com/projects/p/umap/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "Schaue dir %(current_user)s's Karten an"
+msgstr "Browse  %(current_user)s's kort"
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "Cooked up by"
-msgstr "Zusammengestellt von"
+msgstr "Lavet af"
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "See this map!"
-msgstr "Schau dir diese Karte an!"
+msgstr "Se dette kort!"
 
 #: templates/leaflet_storage/map_list.html:10
 msgid "More"
-msgstr "Mehr"
+msgstr "Mere"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
-msgstr "Karteneinstellungen"
+msgstr "Kortindstillinger"
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
-msgstr "Bitte wähle einen Anbieter"
+msgstr "Vælg en udbyder"
 
 #: templates/umap/about_summary.html:4
 msgid "What is uMap"
-msgstr "Was ist uMap"
+msgstr "Hvad er uMap"
 
 #: templates/umap/about_summary.html:5
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Mit uMap kannst du in einer Minute Karten mit <a href=\"%(osm_url)s\" />OpenStreetMap</a>-Ebenen erstellen und sie in deine eigene Internetseite einbinden."
+msgstr "Med uMap kan du lave kort med <a href=\"%(osm_url)s\" />OpenStreetMap</a> lag og på et minuts arbejde kan du indlejre disse på dit eget websted."
 
 #: templates/umap/about_summary.html:8
 #, python-format
@@ -61,76 +61,76 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Dies ist eine Demo-Instanz und wird benutzt für Tests und Vorveröffentlichungen. Wenn du eine stabile Instanz benötigst, benutze bitte <a href=\"%(stable_url)s\">%(stable_url)s</a>. Du kannst auch deine eigene Instanz hosten, es ist <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Dette er en demo som bruges til test og forhåndstesting. Hvis du har brug for en stabil testdemo, så brug <a href=\"%(stable_url)s\">%(stable_url)s</a>.  Du kan webhoste din egen testdemo. det er <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:10
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Und es ist <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Og det er <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:15
 msgid "What can you do?"
-msgstr "Was kannst du tun?"
+msgstr "Hvad kan du?"
 
 #: templates/umap/about_summary.html:17
 msgid "Choose the layers of your map"
-msgstr "Wähle die Ebenen deiner Karte"
+msgstr "Vælg lag for dit kort"
 
 #: templates/umap/about_summary.html:18
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Füge POIs hinzu: Marker, Linien, Flächen,..."
+msgstr "Tilføj POIs: markører, linjer, polygoner..."
 
 #: templates/umap/about_summary.html:19
 msgid "Manage POIs colours and icons"
-msgstr "Verwalte Farben und Icons der POIs"
+msgstr "Håndterer POIs farver og ikoner"
 
 #: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Verwalte Karteneinstellungen: eine Übersichtskarte anzeigen, den Nutzer beim Seitenaufruf lokalisieren,..."
+msgstr "Håndterer kortindstillinger: vis et miniaturekort, lokaliser brugeren ved indlæsning..."
 
 #: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
-msgstr "Stapelverarbeitung beim Importieren von geotechnischen Daten (GEOJson,...)"
+msgstr "Batch import af struktureret geodata (GeoSJON...)"
 
 #: templates/umap/about_summary.html:22
 msgid "Choose the license for your data"
-msgstr "Wähle die Lizenz deiner Daten."
+msgstr "Vælg en licens for dine data"
 
 #: templates/umap/about_summary.html:23
 msgid "Embed and share your map"
-msgstr "Teile und binde deine Karte ein"
+msgstr "Indlejre og dele dit kort"
 
 #: templates/umap/about_summary.html:29
 msgid "Play with the demo"
-msgstr "Spiele mit der Demo"
+msgstr "Leg med demoen"
 
 #: templates/umap/content.html:24 templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr "Karten suchen"
+msgstr "Søg i kortene"
 
 #: templates/umap/content.html:33
 msgid "Last maps"
-msgstr "Neueste Karten"
+msgstr "Sidste kort"
 
 #: templates/umap/home.html:12
 msgid "Get inspired, browse maps"
-msgstr "Lass dich inspirieren, schau dir diese Karten an."
+msgstr "Få inspiration, browse i kort"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
-msgstr "Meine Karten"
+msgstr "Mine kort"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
-msgstr "Einloggen"
+msgstr "Login"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
-msgstr "Einloggen"
+msgstr "Opret konto"
 
 #: templates/umap/navigation.html:16
 msgid "About"
-msgstr "Über"
+msgstr "Om"
 
 #: templates/umap/navigation.html:17
 msgid "Feedback"
@@ -138,21 +138,21 @@ msgstr "Feedback"
 
 #: templates/umap/navigation.html:19
 msgid "Log out"
-msgstr "Ausloggen"
+msgstr "Log ud"
 
 #: templates/umap/navigation.html:28
 msgid "Create a map"
-msgstr "Erstelle eine Karte"
+msgstr "Lav et kort"
 
 #: templates/umap/search.html:9
 #, python-format
 msgid "Search for maps containing «%(q)s» "
-msgstr "Suche nach Karten, welche «%(q)s» enthalten"
+msgstr "Søg efter kort der indeholder «%(q)s»"
 
 #: templates/umap/search.html:17
 msgid "Not map found."
-msgstr "Keine Karte gefunden."
+msgstr "Ingen kort fundet."
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
-msgstr "Suchen"
+msgstr "Søg"
