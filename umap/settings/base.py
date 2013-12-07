@@ -29,6 +29,7 @@ LANGUAGES = (
     ('es', u'Español'),
     ('fi', u'Finnish'),
     ('de', u'Deutsch'),
+    ('da', u'Danish'),
 )
 
 # Make this unique, and don't share it with anybody.
