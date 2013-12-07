@@ -265,6 +265,7 @@ def collect_remote_statics():
                 exists = run_as_umap('if [ -d "{0}" ]; then echo 1; fi'.format(subdir))
             if exists:
                 with cd(subdir):
+                    run_as_umap('git checkout {0}'.format(branch))
                     run_as_umap('git pull origin {0} --tags'.format(branch))
             else:
                 run_as_umap('git clone {0} {1}'.format(repository, subdir))
