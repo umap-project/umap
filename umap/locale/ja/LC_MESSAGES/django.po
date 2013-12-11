@@ -3,56 +3,56 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Neogeografen <soren.johannessen@gmail.com>, 2013
+# nyampire <nyampire@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-08 12:25+0000\n"
-"Last-Translator: Neogeografen <soren.johannessen@gmail.com>\n"
-"Language-Team: Danish (http://www.transifex.com/projects/p/umap/language/da/)\n"
+"PO-Revision-Date: 2013-12-10 09:17+0000\n"
+"Last-Translator: nyampire <nyampire@gmail.com>\n"
+"Language-Team: Japanese (http://www.transifex.com/projects/p/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "Browse  %(current_user)s's kort"
+msgstr "%(current_user)sのマップを閲覧"
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "Cooked up by"
-msgstr "Lavet af"
+msgstr "製作者"
 
 #: templates/leaflet_storage/map_list.html:6
 msgid "See this map!"
-msgstr "Se dette kort!"
+msgstr "マップを表示！"
 
 #: templates/leaflet_storage/map_list.html:10
 msgid "More"
-msgstr "Mere"
+msgstr "次"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
-msgstr "Kortindstillinger"
+msgstr "マップ設定"
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
-msgstr "Vælg en udbyder"
+msgstr "連携アカウント選択"
 
 #: templates/umap/about_summary.html:4
 msgid "What is uMap"
-msgstr "Hvad er uMap"
+msgstr "uMapとは"
 
 #: templates/umap/about_summary.html:5
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Med uMap kan du lave kort med <a href=\"%(osm_url)s\" />OpenStreetMap</a> lag og på et minuts arbejde kan du indlejre disse på dit eget websted."
+msgstr ""
 
 #: templates/umap/about_summary.html:8
 #, python-format
@@ -61,98 +61,98 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Dette er en demo som bruges til test og forhåndstesting. Hvis du har brug for en stabil testdemo, så brug <a href=\"%(stable_url)s\">%(stable_url)s</a>.  Du kan webhoste din egen testdemo. det er <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
 
 #: templates/umap/about_summary.html:10
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Og det er <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
 
 #: templates/umap/about_summary.html:15
 msgid "What can you do?"
-msgstr "Hvad kan du?"
+msgstr "uMapでできること"
 
 #: templates/umap/about_summary.html:17
 msgid "Choose the layers of your map"
-msgstr "Vælg lag for dit kort"
+msgstr "あなたのマップのレイヤを選択します"
 
 #: templates/umap/about_summary.html:18
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Tilføj POIs: markører, linjer, polygoner..."
+msgstr "POI: マーカーやライン、ポリゴンなどを追加します"
 
 #: templates/umap/about_summary.html:19
 msgid "Manage POIs colours and icons"
-msgstr "Håndterer POIs farver og ikoner"
+msgstr "POIのアイコンと色を調整します"
 
 #: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Håndterer kortindstillinger: vis et miniaturekort, lokaliser brugeren ved indlæsning..."
+msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置を表示、等々"
 
 #: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
-msgstr "Batch import af struktureret geodata (GeoJSON...)"
+msgstr "地理情報データ(GEOJsonなど)を一括インポート"
 
 #: templates/umap/about_summary.html:22
 msgid "Choose the license for your data"
-msgstr "Vælg en licens for dine data"
+msgstr "あなたが作成したデータのライセンスを選択"
 
 #: templates/umap/about_summary.html:23
 msgid "Embed and share your map"
-msgstr "Indlejre og dele dit kort"
+msgstr "サイトへのマップ表示と共有"
 
 #: templates/umap/about_summary.html:29
 msgid "Play with the demo"
-msgstr "Leg med demoen"
+msgstr "デモを表示"
 
 #: templates/umap/content.html:24 templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr "Søg i kortene"
+msgstr "地図を検索"
 
 #: templates/umap/content.html:33
 msgid "Last maps"
-msgstr "Sidste kort"
+msgstr ""
 
 #: templates/umap/home.html:12
 msgid "Get inspired, browse maps"
-msgstr "Få inspiration, browse i kort"
+msgstr ""
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
-msgstr "Mine kort"
+msgstr "制作した地図"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
-msgstr "Login"
+msgstr "ログイン"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
-msgstr "Opret konto"
+msgstr "サインイン"
 
 #: templates/umap/navigation.html:16
 msgid "About"
-msgstr "Om"
+msgstr "概要"
 
 #: templates/umap/navigation.html:17
 msgid "Feedback"
-msgstr "Feedback"
+msgstr "フィードバック"
 
 #: templates/umap/navigation.html:19
 msgid "Log out"
-msgstr "Log ud"
+msgstr "ログアウト"
 
 #: templates/umap/navigation.html:28
 msgid "Create a map"
-msgstr "Lav et kort"
+msgstr "地図を作成"
 
 #: templates/umap/search.html:9
 #, python-format
 msgid "Search for maps containing «%(q)s» "
-msgstr "Søg efter kort der indeholder «%(q)s»"
+msgstr "«%(q)s» を含んでいるマップを検索"
 
 #: templates/umap/search.html:17
 msgid "Not map found."
-msgstr "Ingen kort fundet."
+msgstr "検索結果がありません"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
-msgstr "Søg"
+msgstr "検索"
