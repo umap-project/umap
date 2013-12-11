@@ -30,6 +30,7 @@ LANGUAGES = (
     ('fi', u'Finnish'),
     ('de', u'Deutsch'),
     ('da', u'Danish'),
+    ('ja', u'Japanese'),
 )
 
 # Make this unique, and don't share it with anybody.
