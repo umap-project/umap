@@ -130,6 +130,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 
 MIDDLEWARE_CLASSES += (
     'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
 )
 
 #==============================================================================
