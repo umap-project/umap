@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-10 09:17+0000\n"
+"PO-Revision-Date: 2013-12-16 12:09+0000\n"
 "Last-Translator: nyampire <nyampire@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "uMapとは"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMapでは <a href=\"%(osm_url)s\" />OpenStreetMap</a> のレイヤを使って、あっという間にサイト埋め込み用の地図を作成することができます。"
 
 #: templates/umap/about_summary.html:8
 #, python-format
@@ -61,12 +61,12 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href=\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href=\"%(repo_url)s\">open source</a>ですので、自分でサーバを作ることも可能です！"
 
 #: templates/umap/about_summary.html:10
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "<a href=\"%(repo_url)s\">open source</a>です！"
 
 #: templates/umap/about_summary.html:15
 msgid "What can you do?"
