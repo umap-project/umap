@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-25 09:58+0000\n"
+"PO-Revision-Date: 2013-12-25 17:47+0000\n"
 "Last-Translator: Maurizio Napolitano <maurizio.napolitano@okfn.org>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/umap/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr "Visualizza la mappa!"
 
 #: templates/leaflet_storage/map_list.html:10
 msgid "More"
-msgstr "Più"
+msgstr "Altre mappe"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
@@ -128,7 +128,7 @@ msgstr "Accedi"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
-msgstr "Registrarsi"
+msgstr "Registrati"
 
 #: templates/umap/navigation.html:16
 msgid "About"
