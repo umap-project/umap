@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-24 23:03+0000\n"
+"PO-Revision-Date: 2013-12-25 09:58+0000\n"
 "Last-Translator: Maurizio Napolitano <maurizio.napolitano@okfn.org>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/umap/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -84,11 +84,11 @@ msgstr "Aggiungere POI: marcatori, linee, poligoni..."
 
 #: templates/umap/about_summary.html:19
 msgid "Manage POIs colours and icons"
-msgstr "Selezione colori ed icone dei POI"
+msgstr "Selezionare colori ed icone dei POI"
 
 #: templates/umap/about_summary.html:20
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Aggiungere delle opzioni alla mappa: visualizzazione mappa di orientamento, individuare la posizione di un utente al caricamento..."
+msgstr "Aggiungere opzioni alla mappa: visualizzazione mappa di orientamento, individuare la posizione di un utente al caricamento..."
 
 #: templates/umap/about_summary.html:21
 msgid "Batch import geostructured data (GEOJson...)"
@@ -100,7 +100,7 @@ msgstr "Selezionare la licenza per i propri dati"
 
 #: templates/umap/about_summary.html:23
 msgid "Embed and share your map"
-msgstr "Integrare e condividere la mappa creata"
+msgstr "Integrare e condividire la mappa creata"
 
 #: templates/umap/about_summary.html:29
 msgid "Play with the demo"
@@ -116,7 +116,7 @@ msgstr "Ultime mappe"
 
 #: templates/umap/home.html:12
 msgid "Get inspired, browse maps"
-msgstr "Prendere ispirazione, visualizza mappe"
+msgstr "Prendi ispirazione, guarda altre mappe"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -124,11 +124,11 @@ msgstr "Le mie mappe"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
-msgstr "Login"
+msgstr "Accedi"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
-msgstr "Accedere"
+msgstr "Registrarsi"
 
 #: templates/umap/navigation.html:16
 msgid "About"
@@ -140,7 +140,7 @@ msgstr "Feedback"
 
 #: templates/umap/navigation.html:19
 msgid "Log out"
-msgstr "Logout"
+msgstr "Esci"
 
 #: templates/umap/navigation.html:28
 msgid "Create a map"
