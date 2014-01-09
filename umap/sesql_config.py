@@ -83,8 +83,10 @@ ADDITIONAL_CLEANUP_FUNCTION = lambda value: saxutils.unescape(value, html_entiti
 # Query configuration
 #
 
+
 # General condition to skip indexing content
-SKIP_CONDITION = None
+def SKIP_CONDITION(m):
+    return m.share_status != models.Map.PUBLIC
 
 # Default sort order for queries
 DEFAULT_ORDER = ('-modified_at',)

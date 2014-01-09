@@ -34,11 +34,11 @@ class Home(TemplateView, PaginatorMixin):
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
-        qs = Map.objects.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
+        qs = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
             try:
-                demo_map = Map.objects.get(pk=settings.UMAP_DEMO_PK)
+                demo_map = Map.public.get(pk=settings.UMAP_DEMO_PK)
             except Map.DoesNotExist:
                 pass
             else:
@@ -79,7 +79,8 @@ class UserMaps(DetailView, PaginatorMixin):
     context_object_name = "current_user"
 
     def get_context_data(self, **kwargs):
-        maps = Map.objects.filter(Q(owner=self.object) | Q(editors=self.object)).distinct().order_by('-modified_at')[:30]
+        manager = Map.objects if self.request.user == self.object else Map.public
+        maps = manager.filter(Q(owner=self.object) | Q(editors=self.object)).distinct().order_by('-modified_at')[:30]
         maps = self.paginate(maps)
         kwargs.update({
             "maps": maps
