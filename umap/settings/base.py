@@ -145,7 +145,7 @@ AUTHENTICATION_BACKENDS += (
 #==============================================================================
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
 LEAFLET_STORAGE_EXTRA_URLS = {
-    'routing': 'http://map.project-osrm.org/?loc={lat},{lng}'
+    'routing': 'http://map.project-osrm.org/?loc={lat},{lng}&hl={locale}'
 }
 SITE_URL = "http://umap.org"
 UMAP_DEMO_SITE = False
