@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# ramunasd <ieskok@ramuno.lt>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-12-05 22:57+0100\n"
+"PO-Revision-Date: 2014-01-22 20:27+0000\n"
+"Last-Translator: ramunasd <ieskok@ramuno.lt>\n"
+"Language-Team: Lithuanian (http://www.transifex.com/projects/p/umap/language/lt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: lt\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Peržiūrėti %(current_user)s žemėlapius"
+
+#: templates/leaflet_storage/map_list.html:6
+msgid "Cooked up by"
+msgstr "Pagamino"
+
+#: templates/leaflet_storage/map_list.html:6
+msgid "See this map!"
+msgstr "Žiūrėti šį žemėlapį!"
+
+#: templates/leaflet_storage/map_list.html:10
+msgid "More"
+msgstr "Daugiau"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "Žemėlapio nustatymai"
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr "Pasirinkite teikėją"
+
+#: templates/umap/about_summary.html:4
+msgid "What is uMap"
+msgstr "Kas yra uMap"
+
+#: templates/umap/about_summary.html:5
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap leidžia susikurti savo žemėlapį naudojant <a href=\"%(osm_url)s\" />OpenStreetMap</a> sluoksnius vos per minutę ir įterpti jį į savo puslapį."
+
+#: templates/umap/about_summary.html:8
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Tai demonstracinė versija, naudojama testavimui ir naujų versijų demonstravimui. Jei Jums reikia stabilios versijos, tada geriau naudokitės <a href=\"%(stable_url)s\">%(stable_url)s</a>. Jūs taip pat gali pasileisti savo puslapį, juk tai <a href=\"%(repo_url)s\">atviras kodas</a>!"
+
+#: templates/umap/about_summary.html:10
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Juk tai <a href=\"%(repo_url)s\">atviras kodas</a>!"
+
+#: templates/umap/about_summary.html:15
+msgid "What can you do?"
+msgstr "Ką galima padaryti?"
+
+#: templates/umap/about_summary.html:17
+msgid "Choose the layers of your map"
+msgstr "Pasirinkti žemėlapio sluoksnius"
+
+#: templates/umap/about_summary.html:18
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Pridėti POI: žymės, linijos, poligonai.."
+
+#: templates/umap/about_summary.html:19
+msgid "Manage POIs colours and icons"
+msgstr "Valdyti POI spalvas ir ikonėles"
+
+#: templates/umap/about_summary.html:20
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Valdyti žemėlapio nustatymus: rodyti mini žemėlapį, automatiškai nustatyti padėtį.."
+
+#: templates/umap/about_summary.html:21
+msgid "Batch import geostructured data (GEOJson...)"
+msgstr "Masiškai importuoti geo duomenis (GEOJson...)"
+
+#: templates/umap/about_summary.html:22
+msgid "Choose the license for your data"
+msgstr "Nustatyti duomenų licenziją"
+
+#: templates/umap/about_summary.html:23
+msgid "Embed and share your map"
+msgstr "Įterpti ir dalintis savo žemėlapiu"
+
+#: templates/umap/about_summary.html:29
+msgid "Play with the demo"
+msgstr "Išbandyti demo"
+
+#: templates/umap/content.html:24 templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Ieškoti žemėlapių"
+
+#: templates/umap/content.html:33
+msgid "Last maps"
+msgstr "Naujausi žemėlapiai"
+
+#: templates/umap/home.html:12
+msgid "Get inspired, browse maps"
+msgstr "Raskite įkvėpimą benaršydami"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Mano žemėlapiai"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Prisijungti"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Užsiregistruoti"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Apie"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Atsiliepimai"
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Atsijungti"
+
+#: templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Kurti žemėlapį"
+
+#: templates/umap/search.html:9
+#, python-format
+msgid "Search for maps containing «%(q)s» "
+msgstr "Rasti žemėlapių pagal «%(q)s»"
+
+#: templates/umap/search.html:17
+msgid "Not map found."
+msgstr "Nerasta."
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Ieškoti"
