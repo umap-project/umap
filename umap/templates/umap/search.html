@@ -5,18 +5,14 @@
 {% block content %}
 {% include "umap/search_bar.html" %}
 {% if q %}
-  <div class="col _35">
-    <h4>{% blocktrans %}Search for maps containing «{{ q }}» {% endblocktrans %}</h4>
-  </div>
-
-  <div class="col _35 map_list">
+  <div class="wrapper">
+    <div class="map_list row">
     {% if maps %}
       {% include "leaflet_storage/map_list.html" %}
     {% else %}
-      <div>
         {% trans "Not map found." %}
-      </div>
     {% endif %}
+    </div>
   </div>
 {% endif %}
 {% endblock content %}

@@ -1,12 +1,12 @@
 {% load i18n %}
 <nav>
-  <section class="part _5 c30_wide branding">
+  <section class="col quarter branding twide">
     <ul>
-      <li class="name"><h1><a href="/">uMap <em>alpha</em></a></h1></li>
+      <li class="name"><h1><a href="/">umap</a></h1></li>
     </ul>
   </section>
 
-  <section class="part _20 c25_16">
+  <section class="col half menu ttwo-third mwide">
     <ul>
       {% if user.is_authenticated %}
         <li><a href="{% url 'user_maps' user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
@@ -14,16 +14,16 @@
         <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
       {% endif %}
       <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-      <li class="c25_hide"><a href="mailto:yb@fluv.io">{% trans "Feedback" %}</a></li>
+      <li class="mhide"><a href="mailto:yb@fluv.io">{% trans "Feedback" %}</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}" class="logout">{% trans "Log out" %}</a></li>
       {% endif %}
     </ul>
   </section>
 
-  <section class="right">
+  <section class="right thide">
     <ul>
-      <li class="has-button _5 c20_wide">
+      <li class="has-button wide">
         <a href="{% url 'map_new' %}" class="button">
           {% trans "Create a map" %}
         </a>

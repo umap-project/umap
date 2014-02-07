@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="opensource.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.3320313"
+     inkscape:cx="56.411626"
+     inkscape:cy="76.958729"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-page="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36218)">
+    <g
+       style="stroke:none;display:block"
+       id="layer4"
+       transform="matrix(0.08798405,0,0,0.08595212,-111.80137,1023.2879)"
+       inkscape:export-filename="/home/ybon/Work/osmtouch64.png"
+       inkscape:export-xdpi="28.799999"
+       inkscape:export-ydpi="28.799999" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#323e56;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path2987"
+       sodipodi:cx="60"
+       sodipodi:cy="58"
+       sodipodi:rx="40"
+       sodipodi:ry="40"
+       d="m 100,58 a 40,40 0 1 1 -80,0 40,40 0 1 1 80,0 z"
+       transform="matrix(1.6,0,0,1.6,-32,895.56218)" />
+    <g
+       id="g4593"
+       transform="matrix(1.0144451,0,0,1.0144451,-4.2606775,-9.0363354)">
+      <circle
+         transform="matrix(0.07958063,0,0,0.07958063,28.294177,944.20164)"
+         id="circle4"
+         r="440"
+         cy="490"
+         cx="490"
+         sodipodi:cx="490"
+         sodipodi:cy="490"
+         sodipodi:rx="440"
+         sodipodi:ry="440"
+         style="fill:none;stroke:#79c1c0;stroke-width:100;stroke-opacity:1"
+         d="M 930,490 C 930,733.00529 733.00529,930 490,930 246.99471,930 50,733.00529 50,490 50,246.99471 246.99471,50 490,50 733.00529,50 930,246.99471 930,490 z" />
+      <path
+         style="fill:#ffffff;fill-opacity:1"
+         id="path6"
+         d="m 66.970367,961.31146 c -10.345484,0 -19.019774,7.24184 -21.248031,16.95066 l 10.425062,0 c 1.909936,-4.13819 6.04813,-7.00307 10.822969,-7.00307 6.605191,0 11.937092,5.33187 11.937092,11.93709 0,6.60511 -5.331901,11.93701 -11.937092,11.93701 -4.774839,0 -8.913033,-2.86472 -10.822969,-6.92341 l -10.425062,0 c 2.228257,9.62927 10.902547,16.87106 21.248031,16.87106 12.096254,0 21.884676,-9.78839 21.884676,-21.88466 0,-12.09626 -9.788422,-21.88468 -21.884676,-21.88468 z"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>

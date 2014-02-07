@@ -12,29 +12,12 @@
 {% endblock %}
 
 {% block header %}
-  <div class="col _35">
+  <header class="wrapper">
     {% include 'umap/navigation.html' %}
-  </div>
+  </header>
 {% endblock %}
 
 {% block content %}
-<div class="col _35">
-  <form action="{% url 'search' %}" method="GET">
-  <div class="part _29">
-    <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
-  </div>
-  <div class="part _5">
-    <input type="submit" value="Search" />
-  </div>
-  </form>
-</div>
-<hr />
-<div class="col _35 map_list">
-  <h2>{% trans "Last maps" %}</h2>
-  {% include "leaflet_storage/map_list.html" %}
-</div>
-
-<!-- Included JS Files -->
 {% endblock content %}
 
 {% block bottom_js %}
@@ -74,3 +57,10 @@
     D.Event.on('.more_button', 'click', getMore);
   </script>
 {% endblock bottom_js %}
+
+{% block footer %}
+  {{ block.super }}
+  <footer>
+    <a href="/">umap</a> an OpenStreetMap project
+  </footer>
+{% endblock footer %}

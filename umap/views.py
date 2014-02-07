@@ -1,10 +1,13 @@
+import simplejson
+
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View
 from django.db.models import Q
 from django.contrib.gis.measure import D
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 
 from sesql.shortquery import shortquery
 
@@ -43,12 +46,21 @@ class Home(TemplateView, PaginatorMixin):
                 pass
             else:
                 qs = qs.exclude(id=demo_map.pk)
+        showcase_map = None
+        if hasattr(settings, "UMAP_SHOWCASE_PK"):
+            try:
+                showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
+            except Map.DoesNotExist:
+                pass
+            else:
+                qs = qs.exclude(id=showcase_map.pk)
         maps = qs.order_by('-modified_at')[:50]
         maps = self.paginate(maps)
 
         return {
             "maps": maps,
             "demo_map": demo_map,
+            "showcase_map": showcase_map,
             "DEMO_SITE": settings.UMAP_DEMO_SITE
         }
 
@@ -125,3 +137,29 @@ class Search(TemplateView, PaginatorMixin):
             return super(Search, self).get_template_names()
 
 search = Search.as_view()
+
+
+class MapsShowCase(View):
+
+    def get(*args, **kargs):
+        maps = Map.public.order_by('-modified_at')[:2000]
+
+        def make(m):
+            description = u"{}\n\n[[{}|{}]]".format(m.description or "", m.get_absolute_url(), "View the map")
+            geometry = m.settings['geometry'] if "geometry" in m.settings else simplejson.loads(m.center.geojson)
+            return {
+                "type": "Feature",
+                "geometry": geometry,
+                "properties": {
+                    "name": m.name,
+                    "description": description
+                }
+            }
+
+        geojson = {
+            "type": "FeatureCollection",
+            "features": [make(m) for m in maps]
+        }
+        return HttpResponse(simplejson.dumps(geojson))
+
+showcase = MapsShowCase.as_view()

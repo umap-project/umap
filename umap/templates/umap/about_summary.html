@@ -1,32 +1,43 @@
 {% load leaflet_storage_tags i18n %}
-<div class="col _35">
-  <div class="col _11 c20_20 tintbox">
-    <h5>{% trans "What is uMap" %}</h5>
-    <p>{% blocktrans with osm_url="http://osm.org" %}uMap let you create maps with <a href="{{ osm_url }}" />OpenStreetMap</a> layers in a minute and embed them in your site.{% endblocktrans %}</p>
-    <p class="note">
-    {% if DEMO_SITE %}
-      {% blocktrans with repo_url="https://bitbucket.org/yohanboniface/umap" stable_url="http://umap.openstreetmap.fr" %}This is a demo instance, used for tests and pre-rolling releases. If you need a stable instance, please use <a href="{{ stable_url }}">{{ stable_url }}</a>. You can also host your own instance, it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
-    {% else %}
-      {% blocktrans with repo_url="https://bitbucket.org/yohanboniface/umap" %}And it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
-    {% endif %}
-    </p>
+<div class="wrapper about_summary  highlights">
+  <div class="row">
+    <div class="col quarter mwide">
+      <img class="colophon" src="{{ STATIC_URL }}umap/img/osm.svg" />
+      <p>{% blocktrans with osm_url="http://osm.org" %}uMap let you create maps with <a href="{{ osm_url }}" />OpenStreetMap</a> layers in a minute and embed them in your site.{% endblocktrans %}</p>
+    </div>
+    <div class="col umap-features-list half mwide">
+      <img class="colophon" src="{{ STATIC_URL }}umap/img/edit.svg" />
+      <ul>
+        <li><img src="{{ STATIC_URL }}storage/src/img/tilelayers-24.png" />{% trans "Choose the layers of your map" %}</li>
+        <li><img src="{{ STATIC_URL }}storage/src/img/draw_polygon.png" />{% trans "Add POIs: markers, lines, polygons..." %}</li>
+        <li><img src="{{ STATIC_URL }}storage/src/img/draw_marker.png" />{% trans "Manage POIs colours and icons" %}</li>
+        <li><img src="{{ STATIC_URL }}storage/src/img/settings.png" />{% trans "Manage map options: display a minimap, locate user on load…" %}</li>
+        <li><img src="{{ STATIC_URL }}storage/src/img/upload.png" />{% trans "Batch import geostructured data (geojson, gpx, kml, osm...)" %}</li>
+        <li><img src="{{ STATIC_URL }}storage/src/img/copyleft.png" />{% trans "Choose the license for your data" %}</li>
+        <li><img src="{{ STATIC_URL }}storage/src/img/embed.png" />{% trans "Embed and share your map" %}</li>
+      </ul>
+    </div>
+    <div class="col quarter mwide">
+      <img class="colophon" src="{{ STATIC_URL }}umap/img/opensource.svg" />
+      <p class="note">
+      {% if DEMO_SITE %}
+        {% blocktrans with repo_url="https://bitbucket.org/yohanboniface/umap" stable_url="http://umap.openstreetmap.fr" %}This is a demo instance, used for tests and pre-rolling releases. If you need a stable instance, please use <a href="{{ stable_url }}">{{ stable_url }}</a>. You can also host your own instance, it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
+      {% else %}
+        {% blocktrans with repo_url="https://bitbucket.org/yohanboniface/umap" %}And it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
+      {% endif %}
+      </p>
+    </div>
   </div>
-  <div class="col umap-features-list _11 c20_20 c30_18 c25_13">
-    <h5>{% trans "What can you do?" %}</h5>
-    <ul>
-    <li><img src="{{ STATIC_URL }}storage/src/img/layers.png" />{% trans "Choose the layers of your map" %}</li>
-    <li><img src="{{ STATIC_URL }}storage/src/img/draw_polygon.png" />{% trans "Add POIs: markers, lines, polygons..." %}</li>
-    <li><img src="{{ STATIC_URL }}storage/src/img/draw_marker.png" />{% trans "Manage POIs colours and icons" %}</li>
-    <li><img src="{{ STATIC_URL }}storage/src/img/settings.png" />{% trans "Manage map options: display a minimap, locate user on load…" %}</li>
-    <li><img src="{{ STATIC_URL }}storage/src/img/upload.png" />{% trans "Batch import geostructured data (GEOJson...)" %}</li>
-    <li><img src="{{ STATIC_URL }}storage/src/img/copyleft.png" />{% trans "Choose the license for your data" %}</li>
-    <li><img src="{{ STATIC_URL }}storage/src/img/embed.png" />{% trans "Embed and share your map" %}</li>
-    </ul>
+</div>
+<div class="wrapper dark button-bar">
+  <div class="row">
+    <div class="col half center mwide">
+    {% spaceless %}
+      <a href="{% url 'map_new' %}" class="button half">{% trans "Create a map" %}</a>
+      {% if demo_map %}
+        <a href="{{ demo_map.get_absolute_url }}" class="button half neutral">{% trans "Play with the demo" %}</a>
+      {% endif %}
+    {% endspaceless %}
+    </div>
   </div>
-  {% if demo_map %}
-  <div class="col _11 demo_map c30_wide">
-    {% map_fragment demo_map %}
-    <a href="{{ demo_map.get_absolute_url }}" class="button">{% trans "Play with the demo" %}</a>
-  </div>
-  {% endif %}
 </div>

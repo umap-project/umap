@@ -4,6 +4,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import patterns, url, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
+from django.views.decorators.cache import cache_page
 
 from leaflet_storage.views import MapShortUrl
 
@@ -16,6 +17,7 @@ urlpatterns = patterns('',
     url(r'', include('social_auth.urls')),
     # We don't want it to be localized
     url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
+    url(r'^showcase/$', cache_page(24 * 60 * 60)(views.showcase), name='maps_showcase'),
 )
 urlpatterns += i18n_patterns('',
     url(r'^$', views.home, name="home"),

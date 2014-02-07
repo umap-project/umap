@@ -3,16 +3,18 @@
 {% load i18n %}
 
 {% block content %}
-<div class="col _35">
-  <h4>{% blocktrans %}Browse {{ current_user }}'s maps{% endblocktrans %}</h4>
+<div class="col wide">
+  <h2 class="section">{% blocktrans %}Browse {{ current_user }}'s maps{% endblocktrans %}</h2>
 </div>
-<div class="col _35 map_list">
+<div class="wrapper">
+<div class="map_list row">
   {% if maps %}
     {% include "leaflet_storage/map_list.html" %}
   {% else %}
     <div>
-            {{ current_user }} has not map yet.
+      {{ current_user }} has not map yet.
     </div>
   {% endif %}
+</div>
 </div>
 {% endblock content %}
