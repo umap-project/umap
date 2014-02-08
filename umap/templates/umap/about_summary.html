@@ -20,11 +20,7 @@
     <div class="col quarter mwide">
       <img class="colophon" src="{{ STATIC_URL }}umap/img/opensource.svg" />
       <p class="note">
-      {% if DEMO_SITE %}
-        {% blocktrans with repo_url="https://bitbucket.org/yohanboniface/umap" stable_url="http://umap.openstreetmap.fr" %}This is a demo instance, used for tests and pre-rolling releases. If you need a stable instance, please use <a href="{{ stable_url }}">{{ stable_url }}</a>. You can also host your own instance, it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
-      {% else %}
         {% blocktrans with repo_url="https://bitbucket.org/yohanboniface/umap" %}And it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
-      {% endif %}
       </p>
     </div>
   </div>

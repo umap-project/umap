@@ -483,6 +483,19 @@ h2.section {
 .button-bar .button.half {
     width: calc(50% - 7px);
 }
+.demo-instance-warning {
+    background-color: #c0392b;
+    color: #efefef;
+    margin-top: 0;
+    padding: 14px 0;
+}
+.demo-instance-warning .row {
+    margin-top: 0;
+}
+.demo-instance-warning a {
+    color: #efefef;
+    text-decoration: underline;
+}
 
 
 /* **************************** */

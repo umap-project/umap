@@ -249,7 +249,7 @@ def collect_remote_statics():
         'csv2geojson': 'git://github.com/mapbox/csv2geojson.git@gh-pages',
         'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages',
         'osmtogeojson': 'git://github.com/aaronlidman/osm-and-geojson.git@master',
-        'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master',
+        'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master#v0.1.6',
         'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
         'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master',
         'measure': 'git://github.com/makinacorpus/Leaflet.MeasureControl.git@gh-pages',
