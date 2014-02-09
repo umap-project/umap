@@ -553,6 +553,41 @@ a {
 
 
 /* **************************** */
+/*         Autocomplete         */
+/* **************************** */
+ul.umap-autocomplete {
+    position: absolute;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0 4px 9px #999999;
+}
+.umap-autocomplete li {
+    height: 56px;
+    line-height: 28px;
+    padding: 14px;
+}
+.umap-autocomplete li.on {
+    background-color: SeaGreen;
+    cursor: pointer;
+}
+.umap-multiresult li {
+    width: 100%;
+    background-color: #e5e5e5;
+    border-radius: 2px;
+    padding: 7px;
+    color: #464646;
+}
+.umap-multiresult li + li {
+    margin-top: 7px;
+}
+.umap-multiresult li .close {
+    float: right;
+    cursor: pointer;
+}
+
+
+
+/* **************************** */
 /*   Override Leaflet.Storage   */
 /* **************************** */
 body.content #storage-ui-container {

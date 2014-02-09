@@ -244,7 +244,6 @@ def collect_remote_statics():
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
         'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
         'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
-        'darline': 'git://github.com/yohanboniface/Darline.git@master',
         'i18n': 'git://github.com/yohanboniface/Leaflet.i18n.git@master',
         'csv2geojson': 'git://github.com/mapbox/csv2geojson.git@gh-pages',
         'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages',

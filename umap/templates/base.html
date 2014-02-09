@@ -6,21 +6,18 @@
     <meta charset="utf-8">
     {% compress css %}
     <!-- Included CSS Files (Compressed) -->
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}darline/src/css/autocomplete.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}umap/umap.css">
     {% endcompress css %}
-    {% compress js %}
-    <script src="{{ STATIC_URL }}darline/src/js/core.js"></script>
-    <script src="{{ STATIC_URL }}darline/src/js/debug.js"></script>
-    <script src="{{ STATIC_URL }}darline/src/js/autocomplete.js"></script>
-    {% endcompress js %}
     <!-- IE Fix for HTML5 Tags -->
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block extra_head %}
     {% endblock extra_head %}
+    {% compress js %}
+    <script src="{{ STATIC_URL }}umap/js/autocomplete.js"></script>
+    {% endcompress js %}
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
@@ -37,8 +34,8 @@
 
     {% block bottom_js %}
         <script type="text/javascript">
-            L.Storage.on('ui:ready', function () {
-                D.autoComplete('#id_editors', {
+            L.S.on('ui:ready', function () {
+                L.S.autoComplete('id_editors', {
                     placeholder: "Type editors nick to add..."
                 }).multiselect();
             });
