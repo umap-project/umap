@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# nyampire <nyampire@gmail.com>, 2013
+# nyampire <nyampire@gmail.com>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-16 12:09+0000\n"
-"Last-Translator: nyampire <nyampire@gmail.com>\n"
+"POT-Creation-Date: 2014-02-10 14:50+0100\n"
+"PO-Revision-Date: 2014-02-10 13:50+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,15 +23,11 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr "%(current_user)sのマップを閲覧"
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "Cooked up by"
-msgstr "製作者"
+#: templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ""
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "See this map!"
-msgstr "マップを表示！"
-
-#: templates/leaflet_storage/map_list.html:10
+#: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "次"
 
@@ -43,18 +39,55 @@ msgstr "マップ設定"
 msgid "Please choose a provider"
 msgstr "連携アカウント選択"
 
-#: templates/umap/about_summary.html:4
-msgid "What is uMap"
-msgstr "uMapとは"
-
-#: templates/umap/about_summary.html:5
+#: templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr "uMapでは <a href=\"%(osm_url)s\" />OpenStreetMap</a> のレイヤを使って、あっという間にサイト埋め込み用の地図を作成することができます。"
 
-#: templates/umap/about_summary.html:8
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "あなたのマップのレイヤを選択します"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "POI: マーカーやライン、ポリゴンなどを追加します"
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "POIのアイコンと色を調整します"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置を表示、等々"
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "あなたが作成したデータのライセンスを選択"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "サイトへのマップ表示と共有"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "<a href=\"%(repo_url)s\">open source</a>です！"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "地図を作成"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "デモを表示"
+
+#: templates/umap/home.html:10
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -63,56 +96,11 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href=\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href=\"%(repo_url)s\">open source</a>ですので、自分でサーバを作ることも可能です！"
 
-#: templates/umap/about_summary.html:10
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "<a href=\"%(repo_url)s\">open source</a>です！"
-
-#: templates/umap/about_summary.html:15
-msgid "What can you do?"
-msgstr "uMapでできること"
-
-#: templates/umap/about_summary.html:17
-msgid "Choose the layers of your map"
-msgstr "あなたのマップのレイヤを選択します"
-
-#: templates/umap/about_summary.html:18
-msgid "Add POIs: markers, lines, polygons..."
-msgstr "POI: マーカーやライン、ポリゴンなどを追加します"
-
-#: templates/umap/about_summary.html:19
-msgid "Manage POIs colours and icons"
-msgstr "POIのアイコンと色を調整します"
-
-#: templates/umap/about_summary.html:20
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置を表示、等々"
-
-#: templates/umap/about_summary.html:21
-msgid "Batch import geostructured data (GEOJson...)"
-msgstr "地理情報データ(GEOJsonなど)を一括インポート"
-
-#: templates/umap/about_summary.html:22
-msgid "Choose the license for your data"
-msgstr "あなたが作成したデータのライセンスを選択"
-
-#: templates/umap/about_summary.html:23
-msgid "Embed and share your map"
-msgstr "サイトへのマップ表示と共有"
-
-#: templates/umap/about_summary.html:29
-msgid "Play with the demo"
-msgstr "デモを表示"
-
-#: templates/umap/content.html:24 templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "地図を検索"
-
-#: templates/umap/content.html:33
-msgid "Last maps"
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
 msgstr ""
 
-#: templates/umap/home.html:12
+#: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr ""
 
@@ -140,18 +128,13 @@ msgstr "フィードバック"
 msgid "Log out"
 msgstr "ログアウト"
 
-#: templates/umap/navigation.html:28
-msgid "Create a map"
-msgstr "地図を作成"
-
-#: templates/umap/search.html:9
-#, python-format
-msgid "Search for maps containing «%(q)s» "
-msgstr "«%(q)s» を含んでいるマップを検索"
-
-#: templates/umap/search.html:17
+#: templates/umap/search.html:13
 msgid "Not map found."
 msgstr "検索結果がありません"
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "地図を検索"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"

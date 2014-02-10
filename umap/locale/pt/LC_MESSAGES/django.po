@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-05 21:58+0000\n"
+"POT-Creation-Date: 2014-02-10 14:50+0100\n"
+"PO-Revision-Date: 2014-02-10 13:50+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/umap/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -22,15 +22,11 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr "Consulta os mapas de %(current_user)s"
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "Cooked up by"
-msgstr "Mantido por"
+#: templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ""
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "See this map!"
-msgstr "Ver este mapa!"
-
-#: templates/leaflet_storage/map_list.html:10
+#: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "Mais"
 
@@ -42,18 +38,55 @@ msgstr "Parâmetros"
 msgid "Please choose a provider"
 msgstr "Por favor escolha um provedor"
 
-#: templates/umap/about_summary.html:4
-msgid "What is uMap"
-msgstr "O que é uMap"
-
-#: templates/umap/about_summary.html:5
+#: templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr ""
 
-#: templates/umap/about_summary.html:8
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Escolher o mapa de fundo"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Adicionar objetos: marcos, linhas, polígonos..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Modificar cor e ícone dos objetos"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Gerir diversas opções: mostrar um minimapa, localizar o usuário..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Escolher uma licença para os seus dados"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Exportar e partilhar seu mapa"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Criar um mapa"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Testar a demo"
+
+#: templates/umap/home.html:10
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -62,58 +95,13 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: templates/umap/about_summary.html:10
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
 msgstr ""
 
-#: templates/umap/about_summary.html:15
-msgid "What can you do?"
-msgstr "O que podes fazer"
-
-#: templates/umap/about_summary.html:17
-msgid "Choose the layers of your map"
-msgstr "Escolher o mapa de fundo"
-
-#: templates/umap/about_summary.html:18
-msgid "Add POIs: markers, lines, polygons..."
-msgstr "Adicionar objetos: marcos, linhas, polígonos..."
-
-#: templates/umap/about_summary.html:19
-msgid "Manage POIs colours and icons"
-msgstr "Modificar cor e ícone dos objetos"
-
-#: templates/umap/about_summary.html:20
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Gerir diversas opções: mostrar um minimapa, localizar o usuário..."
-
-#: templates/umap/about_summary.html:21
-msgid "Batch import geostructured data (GEOJson...)"
-msgstr "Carregar ficheiros georeferenciados (GEOJson...)"
-
-#: templates/umap/about_summary.html:22
-msgid "Choose the license for your data"
-msgstr "Escolher uma licença para os seus dados"
-
-#: templates/umap/about_summary.html:23
-msgid "Embed and share your map"
-msgstr "Exportar e partilhar seu mapa"
-
-#: templates/umap/about_summary.html:29
-msgid "Play with the demo"
-msgstr "Testar a demo"
-
-#: templates/umap/content.html:24 templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "Procurar mapas"
-
-#: templates/umap/content.html:33
-msgid "Last maps"
-msgstr "Últimos mapas"
-
-#: templates/umap/home.html:12
+#: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Navega nos mapas existente"
+msgstr ""
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -139,18 +127,13 @@ msgstr "Contactar"
 msgid "Log out"
 msgstr "Sair"
 
-#: templates/umap/navigation.html:28
-msgid "Create a map"
-msgstr "Criar um mapa"
-
-#: templates/umap/search.html:9
-#, python-format
-msgid "Search for maps containing «%(q)s» "
-msgstr "Procurar mapas que incluam «%(q)s» "
-
-#: templates/umap/search.html:17
+#: templates/umap/search.html:13
 msgid "Not map found."
 msgstr "Nenhum mapa encontrado."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Procurar mapas"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"

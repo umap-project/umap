@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-05 22:57+0100\n"
+"POT-Creation-Date: 2014-02-10 14:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,15 +22,11 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr ""
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "Cooked up by"
+#: templates/leaflet_storage/map_list.html:7
+msgid "by"
 msgstr ""
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "See this map!"
-msgstr ""
-
-#: templates/leaflet_storage/map_list.html:10
+#: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr ""
 
@@ -42,18 +38,55 @@ msgstr ""
 msgid "Please choose a provider"
 msgstr ""
 
-#: templates/umap/about_summary.html:4
-msgid "What is uMap"
-msgstr ""
-
-#: templates/umap/about_summary.html:5
+#: templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr ""
 
-#: templates/umap/about_summary.html:8
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr ""
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr ""
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr ""
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr ""
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr ""
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr ""
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr ""
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr ""
+
+#: templates/umap/home.html:10
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -62,56 +95,11 @@ msgid ""
 "\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: templates/umap/about_summary.html:10
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
 msgstr ""
 
-#: templates/umap/about_summary.html:15
-msgid "What can you do?"
-msgstr ""
-
-#: templates/umap/about_summary.html:17
-msgid "Choose the layers of your map"
-msgstr ""
-
-#: templates/umap/about_summary.html:18
-msgid "Add POIs: markers, lines, polygons..."
-msgstr ""
-
-#: templates/umap/about_summary.html:19
-msgid "Manage POIs colours and icons"
-msgstr ""
-
-#: templates/umap/about_summary.html:20
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
-
-#: templates/umap/about_summary.html:21
-msgid "Batch import geostructured data (GEOJson...)"
-msgstr ""
-
-#: templates/umap/about_summary.html:22
-msgid "Choose the license for your data"
-msgstr ""
-
-#: templates/umap/about_summary.html:23
-msgid "Embed and share your map"
-msgstr ""
-
-#: templates/umap/about_summary.html:29
-msgid "Play with the demo"
-msgstr ""
-
-#: templates/umap/content.html:24 templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr ""
-
-#: templates/umap/content.html:33
-msgid "Last maps"
-msgstr ""
-
-#: templates/umap/home.html:12
+#: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr ""
 
@@ -139,17 +127,12 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: templates/umap/navigation.html:28
-msgid "Create a map"
-msgstr ""
-
-#: templates/umap/search.html:9
-#, python-format
-msgid "Search for maps containing «%(q)s» "
-msgstr ""
-
-#: templates/umap/search.html:17
+#: templates/umap/search.html:13
 msgid "Not map found."
+msgstr ""
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
 msgstr ""
 
 #: templates/umap/search_bar.html:9

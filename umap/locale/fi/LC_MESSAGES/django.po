@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-05 22:57+0100\n"
-"PO-Revision-Date: 2013-12-05 21:58+0000\n"
+"POT-Creation-Date: 2014-02-10 14:50+0100\n"
+"PO-Revision-Date: 2014-02-10 13:50+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/umap/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -24,15 +24,11 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr "Selaa %(current_user)s:n karttoja"
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "Cooked up by"
-msgstr "Tämän sopan keitti"
+#: templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ""
 
-#: templates/leaflet_storage/map_list.html:6
-msgid "See this map!"
-msgstr "Katso tätä karttaa!"
-
-#: templates/leaflet_storage/map_list.html:10
+#: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "Lisää"
 
@@ -44,18 +40,55 @@ msgstr "Kartan asetukset"
 msgid "Please choose a provider"
 msgstr "Valitse mieleisesi palveluntarjoaja"
 
-#: templates/umap/about_summary.html:4
-msgid "What is uMap"
-msgstr "Mikä uMap on?"
-
-#: templates/umap/about_summary.html:5
+#: templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr "uMap mahdollistaa <a href=\"%(osm_url)s\" />OpenStreetMap</a>-pohjaisten räätälöityjen karttojen luomisen ja liittämisen verkkosivuusi muutamassa minuutissa."
 
-#: templates/umap/about_summary.html:8
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Valitse karttaasi sopivat taustakartat ja data-kerrokset"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Lisää tarvittavat POIt: karttamerkkejä, viivoja, monikulmioita..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Valitse ja hallinnoi POI-merkintöjen värit ja karttakuvakkeet"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Hallitse kartta-optiot: näytä mini-kartta, paikanna käyttäjä sivun latauksessa, ..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Valitse tiedoillesi lisenssi"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Jaa karttasi muille ja/tai liitä se muihin sivustoihin"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "<a href=\"%(repo_url)s\">Avoin lähdekoodi</a> rulettaa!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Luo uusi kartta"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Tongi demoa sielusi kyllyydestä!"
+
+#: templates/umap/home.html:10
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -64,58 +97,13 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Tämä on uMapin demo-instanssi, jota käytetään testaamiseen ja väliversioille. Jos tarvitset vakaan version, niin käytäthän <a href=\"%(stable_url)s\">%(stable_url)s</a> :a. Voit myös tarjota oman instanssin - <a href=\"%(repo_url)s\">avoin lähdekoodi</a> rulettaa!"
 
-#: templates/umap/about_summary.html:10
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "<a href=\"%(repo_url)s\">Avoin lähdekoodi</a> rulettaa!"
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr ""
 
-#: templates/umap/about_summary.html:15
-msgid "What can you do?"
-msgstr "Mitä kaikkea uMapillä voi tehdä?"
-
-#: templates/umap/about_summary.html:17
-msgid "Choose the layers of your map"
-msgstr "Valitse karttaasi sopivat taustakartat ja data-kerrokset"
-
-#: templates/umap/about_summary.html:18
-msgid "Add POIs: markers, lines, polygons..."
-msgstr "Lisää tarvittavat POIt: karttamerkkejä, viivoja, monikulmioita..."
-
-#: templates/umap/about_summary.html:19
-msgid "Manage POIs colours and icons"
-msgstr "Valitse ja hallinnoi POI-merkintöjen värit ja karttakuvakkeet"
-
-#: templates/umap/about_summary.html:20
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Hallitse kartta-optiot: näytä mini-kartta, paikanna käyttäjä sivun latauksessa, ..."
-
-#: templates/umap/about_summary.html:21
-msgid "Batch import geostructured data (GEOJson...)"
-msgstr "Tuo joukko strukturoitua paikkatietoa (GEOJson...)"
-
-#: templates/umap/about_summary.html:22
-msgid "Choose the license for your data"
-msgstr "Valitse tiedoillesi lisenssi"
-
-#: templates/umap/about_summary.html:23
-msgid "Embed and share your map"
-msgstr "Jaa karttasi muille ja/tai liitä se muihin sivustoihin"
-
-#: templates/umap/about_summary.html:29
-msgid "Play with the demo"
-msgstr "Tongi demoa sielusi kyllyydestä!"
-
-#: templates/umap/content.html:24 templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "Etsi karttoja"
-
-#: templates/umap/content.html:33
-msgid "Last maps"
-msgstr "Viimeisimmät kartat"
-
-#: templates/umap/home.html:12
+#: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Inspiraatiota! Selaa karttoja"
+msgstr ""
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -141,18 +129,13 @@ msgstr "Palaute"
 msgid "Log out"
 msgstr "Kirjaudu ulos palvelusta"
 
-#: templates/umap/navigation.html:28
-msgid "Create a map"
-msgstr "Luo uusi kartta"
-
-#: templates/umap/search.html:9
-#, python-format
-msgid "Search for maps containing «%(q)s» "
-msgstr "Etsi hakusanan/-t «%(q)s» sisältävät kartat"
-
-#: templates/umap/search.html:17
+#: templates/umap/search.html:13
 msgid "Not map found."
 msgstr "Karttaa ei löytynyt."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Etsi karttoja"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"

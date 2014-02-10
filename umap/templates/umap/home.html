@@ -14,14 +14,14 @@
 {% include "umap/about_summary.html" %}
 {% if showcase_map %}
   <div class="wrapper showcase-map">
-    <h2 class="section">Map of the maps</h2>
+    <h2 class="section">{% blocktrans %}Map of the uMaps{% endblocktrans %}</h2>
     <div class="row">
       {% map_fragment showcase_map zoomControl=1 %}
     </div>
   </div>
 {% endif %}
 <div class="wrapper">
-  <h2 class="section">Be inspired, browse maps</h2>
+  <h2 class="section">{% blocktrans %}Get inspired, browse maps{% endblocktrans %}</h2>
   <div class="map_list row">
     {% include "leaflet_storage/map_list.html" %}
   </div>
