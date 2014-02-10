@@ -142,7 +142,7 @@ search = Search.as_view()
 class MapsShowCase(View):
 
     def get(*args, **kargs):
-        maps = Map.public.order_by('-modified_at')[:2000]
+        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:2000]
 
         def make(m):
             description = u"{}\n\n[[{}|{}]]".format(m.description or "", m.get_absolute_url(), "View the map")
