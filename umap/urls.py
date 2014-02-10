@@ -17,10 +17,10 @@ urlpatterns = patterns('',
     url(r'', include('social_auth.urls')),
     # We don't want it to be localized
     url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
-    url(r'^showcase/$', cache_page(24 * 60 * 60)(views.showcase), name='maps_showcase'),
 )
 urlpatterns += i18n_patterns('',
     url(r'^$', views.home, name="home"),
+    url(r'^showcase/$', cache_page(24 * 60 * 60)(views.showcase), name='maps_showcase'),
     url(r'^search/$', views.search, name="search"),
     url(r'^about/$', views.about, name="about"),
     url(r'^user/(?P<username>[-_\w]+)/$', views.user_maps, name='user_maps'),
