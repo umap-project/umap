@@ -23,38 +23,46 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
-    D.Event.on('a.login', 'click', function (e) {
-        D.Event.stop(e);
+    var login = document.querySelector('a.login');
+    if (login) {
+      L.DomEvent.on(login, 'click', function (e) {
+        L.DomEvent.stop(e);
         L.Storage.Xhr.login({
             "login_required": this.getAttribute('href'),
             "redirect": "/"
         });
-    });
-    D.Event.on('a.logout', 'click', function (e) {
-      D.Event.stop(e);
-      L.Storage.Xhr.logout(this.getAttribute('href'));
-    });
-    D.Event.on('a.create-map', 'click', function (e) {
-      D.Event.stop(e);
-      L.Storage.Xhr.get(this.getAttribute('href'), {
-        listen_form: {id: "map_edit"}
       });
-    });
-    var getMore = function (e) {
-        D.Event.stop(e);
-        D.Xhr.get(this.href, {
-            callback: function (data) {
-                var container = this.parentNode;
-                container.innerHTML = data;
-                D.DOM.forEach(D.DOM.get('script', container), function (item) {
-                    eval(item.firstChild.textContent);
-                });
-                D.Event.on('.more_button', 'click', getMore);
-            },
-            thisobj: this
-        });
     }
-    D.Event.on('.more_button', 'click', getMore);
+    var logout = document.querySelector('a.logout');
+    if (logout) {
+      L.DomEvent.on(logout, 'click', function (e) {
+        L.DomEvent.stop(e);
+        L.Storage.Xhr.logout(this.getAttribute('href'));
+      });
+    }
+    var getMore = function (e) {
+      L.DomEvent.stop(e);
+      L.S.Xhr._ajax({
+        uri: this.href,
+        verb: 'GET',
+        callback: function (data) {
+            var container = this.parentNode;
+            container.innerHTML = data;
+            Array.prototype.forEach.call(container.querySelectorAll('script'), function (item) {
+                eval(item.firstChild.textContent);
+            });
+            var more = document.querySelector('.more_button');
+            if (more) {
+              L.DomEvent.on(more, 'click', getMore, more);
+            }
+        },
+        context: this
+      });
+    };
+    var more = document.querySelector('.more_button');
+    if (more) {
+      L.DomEvent.on(more, 'click', getMore, more);
+    }
   </script>
 {% endblock bottom_js %}
 
