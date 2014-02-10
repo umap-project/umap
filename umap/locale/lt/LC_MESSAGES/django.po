@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 14:50+0100\n"
-"PO-Revision-Date: 2014-02-10 13:50+0000\n"
+"POT-Creation-Date: 2014-02-10 21:29+0100\n"
+"PO-Revision-Date: 2014-02-10 20:29+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/projects/p/umap/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -18,14 +18,18 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ""
+
+#: views.py:158
+msgid "View the map"
+msgstr ""
+
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Peržiūrėti %(current_user)s žemėlapius"
-
-#: templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr ""
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"

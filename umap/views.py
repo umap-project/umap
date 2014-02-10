@@ -8,6 +8,8 @@ from django.contrib.gis.measure import D
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
 from sesql.shortquery import shortquery
 
@@ -145,7 +147,15 @@ class MapsShowCase(View):
         maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:2000]
 
         def make(m):
-            description = u"{}\n\n[[{}|{}]]".format(m.description or "", m.get_absolute_url(), "View the map")
+            description = m.description or ""
+            if m.owner:
+                description = u"{description}\n{by} [[{url}|{name}]]".format(
+                    description=description,
+                    by=_("by"),
+                    url=reverse('user_maps', kwargs={"username": m.owner.username}),
+                    name=m.owner,
+                )
+            description = u"{}\n[[{}|{}]]".format(description, m.get_absolute_url(), _("View the map"))
             geometry = m.settings['geometry'] if "geometry" in m.settings else simplejson.loads(m.center.geojson)
             return {
                 "type": "Feature",

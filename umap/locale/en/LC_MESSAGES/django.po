@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 14:50+0100\n"
+"POT-Creation-Date: 2014-02-10 21:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ""
+
+#: views.py:158
+msgid "View the map"
+msgstr ""
+
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr ""
-
-#: templates/leaflet_storage/map_list.html:7
-msgid "by"
 msgstr ""
 
 #: templates/leaflet_storage/map_list.html:11

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 14:50+0100\n"
-"PO-Revision-Date: 2014-02-10 13:53+0000\n"
+"POT-Creation-Date: 2014-02-10 21:29+0100\n"
+"PO-Revision-Date: 2014-02-10 20:36+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/umap/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,18 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr "par"
+
+#: views.py:158
+msgid "View the map"
+msgstr "Voir la carte"
+
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Consulter les cartes de %(current_user)s"
-
-#: templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr "par"
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
