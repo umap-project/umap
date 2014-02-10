@@ -31,6 +31,7 @@ LANGUAGES = (
     ('de', u'Deutsch'),
     ('da', u'Danish'),
     ('ja', u'Japanese'),
+    ('lt', u'Lithuanian'),
 )
 
 # Make this unique, and don't share it with anybody.

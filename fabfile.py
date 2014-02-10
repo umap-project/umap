@@ -238,7 +238,7 @@ def collect_remote_statics():
     remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
     run_as_umap('mkdir -p {0}'.format(remote_static_dir))
     remote_repositories = {
-        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7.1",
+        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7.2",
         'draw': "git://github.com/Leaflet/Leaflet.draw.git@master#0.2.3",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
@@ -246,11 +246,11 @@ def collect_remote_statics():
         'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
         'i18n': 'git://github.com/yohanboniface/Leaflet.i18n.git@master',
         'csv2geojson': 'git://github.com/mapbox/csv2geojson.git@gh-pages',
-        'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages',
+        'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages#v0.4.2',
         'osmtogeojson': 'git://github.com/aaronlidman/osm-and-geojson.git@master',
         'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master#v0.1.6',
         'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
-        'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master',
+        'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master#0.4',
         'measure': 'git://github.com/makinacorpus/Leaflet.MeasureControl.git@gh-pages',
     }
     with cd(remote_static_dir):

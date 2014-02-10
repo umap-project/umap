@@ -1,6 +1,6 @@
 Django==1.5.5
 South==0.7.6
-django-leaflet-storage==0.4.0
+django-leaflet-storage==0.5.0
 django_compressor==1.2
 django-social-auth==0.7.20
 hg+https://bitbucket.org/liberation/sesql
