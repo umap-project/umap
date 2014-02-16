@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-10 21:29+0100\n"
-"PO-Revision-Date: 2014-02-10 20:29+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"PO-Revision-Date: 2014-02-14 06:48+0000\n"
+"Last-Translator: nyampire <nyampire@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #: views.py:154 templates/leaflet_storage/map_list.html:7
 msgid "by"
-msgstr ""
+msgstr "by"
 
 #: views.py:158
 msgid "View the map"
-msgstr ""
+msgstr "マップ表示"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -33,7 +33,7 @@ msgstr "%(current_user)sのマップを閲覧"
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
-msgstr "次"
+msgstr "さらに表示"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
@@ -48,31 +48,31 @@ msgstr "連携アカウント選択"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMapでは <a href=\"%(osm_url)s\" />OpenStreetMap</a> のレイヤを使って、あっという間にサイト埋め込み用の地図を作成することができます。"
+msgstr "uMapは <a href=\"%(osm_url)s\" />OpenStreetMap</a> のレイヤを使い、サイト埋め込み用の地図を即座に作成することが可能なサービスです"
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "あなたのマップのレイヤを選択します"
+msgstr "マップに表示させるレイヤを選択"
 
 #: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "POI: マーカーやライン、ポリゴンなどを追加します"
+msgstr "POI: マーカーやライン、ポリゴンなどを追加"
 
 #: templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr "POIのアイコンと色を調整します"
+msgstr "POIのアイコンと色を調整"
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置を表示、等々"
+msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置へ移動、等々"
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "地理データの一括インポート (geojson, gpx, kml, osmなど)"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "あなたが作成したデータのライセンスを選択"
+msgstr "作成したデータのライセンスを選択"
 
 #: templates/umap/about_summary.html:17
 msgid "Embed and share your map"
@@ -81,11 +81,11 @@ msgstr "サイトへのマップ表示と共有"
 #: templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "<a href=\"%(repo_url)s\">open source</a>です！"
+msgstr "uMapは <a href=\"%(repo_url)s\">Open Source</a>です！"
 
 #: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
 msgid "Create a map"
-msgstr "地図を作成"
+msgstr "マップを作成"
 
 #: templates/umap/about_summary.html:34
 msgid "Play with the demo"
@@ -98,19 +98,19 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href=\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href=\"%(repo_url)s\">open source</a>ですので、自分でサーバを作ることも可能です！"
+msgstr "これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href=\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href=\"%(repo_url)s\">Open Source</a>ですので、自分でサーバを作ることも可能です！"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "Map of the uMaps"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "Get inspired, browse maps"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
-msgstr "制作した地図"
+msgstr "自分のマップ"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
@@ -122,7 +122,7 @@ msgstr "サインイン"
 
 #: templates/umap/navigation.html:16
 msgid "About"
-msgstr "概要"
+msgstr "uMapについて"
 
 #: templates/umap/navigation.html:17
 msgid "Feedback"
