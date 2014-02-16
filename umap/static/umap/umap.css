@@ -226,31 +226,6 @@ input:-moz-placeholder, :-moz-placeholder {
     background-color: #970b0e;
 }
 
-fieldset.toggle > * {
-    display: none;
-}
-
-fieldset.toggle .more_style_options,
-fieldset.toggle legend {
-    display: block;
-    cursor: pointer;
-}
-fieldset.toggle .more_style_options:before {
-    content: "…";
-}
-fieldset.toggle legend:before {
-    content: "▶";
-    padding-right: 5px;
-}
-fieldset.toggle.on legend:before {
-    content: "▼";
-}
-fieldset.toggle.on > * {
-    display: block;
-}
-fieldset.toggle.on .more_style_options {
-    display: none;
-}
 
 /* Map infos */
 .datalayer_color {
