@@ -227,16 +227,6 @@ input:-moz-placeholder, :-moz-placeholder {
 }
 
 
-/* Map infos */
-.datalayer_color {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 10px;
-    border: 1px solid #000;
-    background-color: DarkBlue;
-}
-
 /* **************** */
 /*    Login icons   */
 /* **************** */
