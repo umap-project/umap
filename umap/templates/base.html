@@ -1,4 +1,4 @@
-{% load compress umap_tags %}
+{% load compress umap_tags trans %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +36,7 @@
         <script type="text/javascript">
             L.S.on('ui:ready', function () {
                 L.S.autoComplete('id_editors', {
-                    placeholder: "Type editors nick to add..."
+                    placeholder: "{% trans 'Type editors nick to add…' %}"
                 }).multiselect();
             });
         </script>

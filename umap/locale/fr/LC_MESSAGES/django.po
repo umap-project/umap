@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 21:29+0100\n"
-"PO-Revision-Date: 2014-02-10 20:36+0000\n"
+"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"PO-Revision-Date: 2014-03-01 00:32+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/umap/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -28,6 +28,10 @@ msgstr "par"
 #: views.py:158
 msgid "View the map"
 msgstr "Voir la carte"
+
+#: templates/base.html:39
+msgid "Type editors nick to add…"
+msgstr "Taper le nom d'un éditeur…"
 
 #: templates/auth/user_detail.html:7
 #, python-format
