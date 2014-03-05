@@ -89,26 +89,4 @@ Go to the admin (http://localhost:8000/admin/) and add:
 Translating
 -----------
 
-For translating uMap in a new language, three repositories must be taken into account:
-
-- this current one
-- `Leaflet.Storage <https://github.com/yohanboniface/Leaflet.Storage>`_
-- `django-leaflet-storage <https://github.com/yohanboniface/django-leaflet-storage>`_
-
-**If you are not comfortable with python and/or git, you can fill an issue for me to
-create the needed files.**
-
-For this repository and django-leaflet-storage, here are the steps:
-
-- go to the root of the python module (for example `umap/umap` in this case)
-- run `django-admin.py makemessages -l fr` using your language code instead of `fr`
-- translate what's needed in the ad hoc file in the `locale` repository (for example `umap/umap/locale/fr/LC_MESSAGES/django.po`)
-- from the root of the python module, run `django-admin.py compilemessages`
-- commit, push, PR :)
-
-For Leaflet.Storage, here are the steps:
-
-- add your language in the Makefile
-- run `make i18n`
-- update the dedicated file in the `src/locale` repository
-- commit, push, PR :)
+Everything is managed through Transifex: https://www.transifex.com/projects/p/umap/
