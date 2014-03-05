@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# acastren, 2014
 # jaakkoh <jaakko@helleranta.com>, 2013
 # jaakkoh <jaakko@helleranta.com>, 2013
 msgid ""
@@ -10,8 +11,8 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-03-01 00:29+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"PO-Revision-Date: 2014-03-04 21:50+0000\n"
+"Last-Translator: acastren\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/umap/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,15 +22,15 @@ msgstr ""
 
 #: views.py:154 templates/leaflet_storage/map_list.html:7
 msgid "by"
-msgstr ""
+msgstr "taholta"
 
 #: views.py:158
 msgid "View the map"
-msgstr ""
+msgstr "Katso karttaa"
 
 #: templates/base.html:39
 msgid "Type editors nick to add…"
-msgstr ""
+msgstr "Kirjoita muokkaajan nimi lisätäksesi..."
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -73,7 +74,7 @@ msgstr "Hallitse kartta-optiot: näytä mini-kartta, paikanna käyttäjä sivun 
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "Geostrukturoidun datan (geojson, gpx, kml, osm...) tuonti eräajona "
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -107,11 +108,11 @@ msgstr "Tämä on uMapin demo-instanssi, jota käytetään testaamiseen ja väli
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "Kartta uMapeista"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "Inspiroidu selaamalla karttoja"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
