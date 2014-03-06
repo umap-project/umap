@@ -8,25 +8,20 @@ it to umap/settings/local.py. It should not be checked into
 your code repository.
 
 """
+
 from umap.settings.base import *   # pylint: disable=W0614,W0401
 
-SECRET_KEY = 'your secret key here'
+SECRET_KEY = ''
+INTERNAL_IPS = ('127.0.0.1', )
+ALLOWED_HOSTS = ['*', ]
 
-DEBUG = True  # False in production
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('You', 'your@email'),
 )
 MANAGERS = ADMINS
-
-# ALLOWED_HOST required by Django >= 1.5
-# Should be set to your domain name, see:
-# https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS
-# Don't use "*" in production!
-ALLOWED_HOSTS = [
-    '*',
-]
 
 DATABASES = {
     'default': {
@@ -37,36 +32,48 @@ DATABASES = {
 
 WSGI_APPLICATION = 'umap.wsgi.application'
 
-COMPRESS_ENABLED = False  # True in production
+COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = True
 
 LANGUAGE_CODE = 'en'
-LANGUAGES = (
-    ('en', 'English'),
-    ('fr', u'Francais'),
-    ('it', u'Italiano'),
-    ('pt', u'Portuguese'),
-    ('nl', u'Dutch'),
-)
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.contrib.github.GithubBackend',
-    'social_auth.backends.contrib.bitbucket.BitbucketBackend',
-    'social_auth.backends.twitter.TwitterBackend',
-    'umap.osm_backend.OSMBackend',
+    'social.backends.github.GithubOAuth2',
+    'social.backends.bitbucket.BitbucketOAuth',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.openstreetmap.OpenStreetMapOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
-GITHUB_APP_ID = 'xxx'
-GITHUB_API_SECRET = 'xxx'
-BITBUCKET_CONSUMER_KEY = 'xxx'
-BITBUCKET_CONSUMER_SECRET = 'xxx'
+SOCIAL_AUTH_GITHUB_KEY = 'xxx'
+SOCIAL_AUTH_GITHUB_SECRET = 'xxx'
+SOCIAL_AUTH_BITBUCKET_KEY = 'xxx'
+SOCIAL_AUTH_BITBUCKET_SECRET = 'xxx'
 # We need email to associate with other Oauth providers
-GITHUB_AUTH_EXTRA_ARGUMENTS = {"scope": "user:email"}
-TWITTER_CONSUMER_KEY = "xxx"
-TWITTER_CONSUMER_SECRET = "xxx"
-OSM_CONSUMER_KEY = 'xxx'
-OSM_CONSUMER_SECRET = 'xxx'
-UMAP_DEMO_PK = 34  # Pk of a Map instance
+SOCIAL_AUTH_GITHUB_SCOPE = ["user:email", ]
+SOCIAL_AUTH_TWITTER_KEY = "xxx"
+SOCIAL_AUTH_TWITTER_SECRET = "xxx"
+SOCIAL_AUTH_OPENSTREETMAP_KEY = 'xxx'
+SOCIAL_AUTH_OPENSTREETMAP_SECRET = 'xxx'
+MIDDLEWARE_CLASSES += (
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+)
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
+
+# UMAP_DEMO_PK = 204
+# UMAP_SHOWCASE_PK = 1156
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
-UMAP_DEMO_SITE = False
+UMAP_DEMO_SITE = True
+SITE_URL = "http://localhost:8019"
+SHORT_SITE_URL = "http://s.hort"
 SESQL_CONFIG_PATH = "umap.sesql_config"
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/var/tmp/django_cache',
+#     }
+# }
+
+# POSTGIS_VERSION = (2, 1, 0)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

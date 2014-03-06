@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'umap',
     'sesql',
     'compressor',
-    'social_auth',
+    'social.apps.django_app.default',
 
     'south',
 
@@ -122,7 +122,8 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
-    'social_auth.context_processors.social_auth_backends',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 #==============================================================================
@@ -158,18 +159,19 @@ MAP_SHORT_URL_NAME = "umap_short_url"
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
-SOCIAL_AUTH_ASSOCIATE_URL_NAME = "associate_complete"
 SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)
-SOCIAL_AUTH_EXTRA_DATA = False
 SOCIAL_AUTH_ASSOCIATE_BY_EMAIL = True
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 SOCIAL_AUTH_PIPELINE = (
-    'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email',
-    'social_auth.backends.pipeline.user.get_username',
-    'social_auth.backends.pipeline.user.create_user',
-    'social_auth.backends.pipeline.social.associate_user',
-    'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details'
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
 )

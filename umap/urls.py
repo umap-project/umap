@@ -12,13 +12,14 @@ from . import views
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     (r'^admin/', include(admin.site.urls)),
-    url(r'', include('social_auth.urls')),
-    # We don't want it to be localized
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
 )
-urlpatterns += i18n_patterns('',
+urlpatterns += i18n_patterns(
+    '',
     url(r'^$', views.home, name="home"),
     url(r'^showcase/$', cache_page(24 * 60 * 60)(views.showcase), name='maps_showcase'),
     url(r'^search/$', views.search, name="search"),
@@ -28,6 +29,5 @@ urlpatterns += i18n_patterns('',
 )
 
 if settings.DEBUG and settings.MEDIA_ROOT:
-    urlpatterns += static(settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()

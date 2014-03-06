@@ -7,7 +7,7 @@ env.project_name = 'umap'
 env.repository = 'https://yohanboniface@bitbucket.org/yohanboniface/umap.git'
 env.local_branch = 'master'
 env.remote_ref = 'origin/master'
-env.requirements_file = 'requirements.pip'
+env.requirements_file = 'requirements.txt'
 env.restart_sudo = False
 
 

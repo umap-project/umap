@@ -1,0 +1,14 @@
+flake8
+pip-tools
+ipdb
+coverage
+factory-boy
+django-debug-toolbar
+ipython
+pep8
+mock
+unittest2
+transifex-client
+django-discover-runner
+mccabe
+pyflakes
