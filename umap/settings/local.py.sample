@@ -69,3 +69,4 @@ OSM_CONSUMER_SECRET = 'xxx'
 UMAP_DEMO_PK = 34  # Pk of a Map instance
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
 UMAP_DEMO_SITE = False
+SESQL_CONFIG_PATH = "umap.sesql_config"
