@@ -24,7 +24,7 @@ urlpatterns += i18n_patterns(
     url(r'^showcase/$', cache_page(24 * 60 * 60)(views.showcase), name='maps_showcase'),
     url(r'^search/$', views.search, name="search"),
     url(r'^about/$', views.about, name="about"),
-    url(r'^user/(?P<username>[-_\w]+)/$', views.user_maps, name='user_maps'),
+    url(r'^user/(?P<username>[-_\w@]+)/$', views.user_maps, name='user_maps'),
     (r'', include('leaflet_storage.urls')),
 )
 
