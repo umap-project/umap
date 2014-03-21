@@ -73,16 +73,14 @@ def bootstrap(action=''):
     Bootstrap the environment.
     """
     with hide('running', 'stdout'):
-        exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'\
-            .format(**env))
+        exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'.format(**env))
     if exists and not action == 'force':
         puts('Assuming {host} has already been bootstrapped since '
-            '{virtualenv_dir} exists.'.format(**env))
+             '{virtualenv_dir} exists.'.format(**env))
         return
     # run('mkvirtualenv {project_name}'.format(**env))
     with hide('running', 'stdout'):
-        project_git_exists = run('if [ -d "{project_dir}" ]; then echo 1; fi'\
-            .format(**env))
+        project_git_exists = run('if [ -d "{project_dir}" ]; then echo 1; fi'.format(**env))
     if not project_git_exists:
         run('mkdir -p {0}'.format(posixpath.dirname(env.virtualenv_dir)))
         run('git clone {repository} {project_dir}'.format(**env))
@@ -91,8 +89,7 @@ def bootstrap(action=''):
     #     sudo('chown -R {user} .'.format(**env))
     #     fix_permissions()
     requirements()
-    puts('Bootstrapped {host} - database creation needs to be done manually.'\
-        .format(**env))
+    puts('Bootstrapped {host} - database creation needs to be done manually.'.format(**env))
 
 
 @task
@@ -142,11 +139,10 @@ def update(action='check'):
     """
     with cd(env.project_dir):
         remote, dest_branch = env.remote_ref.split('/', 1)
-        run_as_umap('git fetch {remote}'.format(remote=remote,
-            dest_branch=dest_branch, **env))
+        run_as_umap('git fetch {remote}'.format(remote=remote))
         with hide('running', 'stdout'):
             changed_files = run('git diff-index --cached --name-only '
-                '{remote_ref}'.format(**env)).splitlines()
+                                '{remote_ref}'.format(**env)).splitlines()
         if not changed_files and action != 'force':
             # No changes, we can exit now.
             return
@@ -170,7 +166,7 @@ def collectstatic():
     """
     Collect static files from apps and other locations in a single location.
     """
-    collect_remote_statics()
+    collect_remote_statics("storage")
     dj('collectstatic --link --noinput')
     dj('storagei18n')
     dj('compress')
@@ -209,8 +205,7 @@ def requirements(name=None, upgrade=False):
             "project_dir": env.project_dir,
             "requirements_file": env.requirements_file,
         }
-        run_as_umap('{base_command} -r {project_dir}/{requirements_file}'\
-        .format(**kwargs))
+        run_as_umap('{base_command} -r {project_dir}/{requirements_file}'.format(**kwargs))
     else:
         run_as_umap('{base_command} {name}'.format(
             base_command=base_command,
@@ -218,20 +213,9 @@ def requirements(name=None, upgrade=False):
         ))
 
 
-#==============================================================================
-# Helper functions
-#==============================================================================
-
-def dj(command):
-    """
-    Run a Django manage.py command on the server.
-    """
-    with cd(env.project_dir):
-        run_as_umap('{virtualenv_dir}/bin/python {project_dir}/manage.py {dj_command} '
-            '--settings {project_conf}'.format(dj_command=command, **env))
-
-
-def collect_remote_statics():
+@task
+@roles('web')
+def collect_remote_statics(name=None):
     """
     Add leaflet and leaflet.draw in a repository watched by collectstatic.
     """
@@ -252,9 +236,12 @@ def collect_remote_statics():
         'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
         'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master#0.4',
         'measure': 'git://github.com/makinacorpus/Leaflet.MeasureControl.git@gh-pages',
+        'label': 'git://github.com/Leaflet/Leaflet.label.git@master',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():
+            if name and name != subdir:
+                continue
             repository, branch = path.split('@')
             if "#" in branch:
                 branch, ref = branch.split('#')
@@ -273,3 +260,16 @@ def collect_remote_statics():
                 if subdir == "leaflet":
                     run_as_umap('npm install')
                     run_as_umap('jake build')
+
+
+#==============================================================================
+# Helper functions
+#==============================================================================
+
+def dj(command):
+    """
+    Run a Django manage.py command on the server.
+    """
+    with cd(env.project_dir):
+        run_as_umap('{virtualenv_dir}/bin/python {project_dir}/manage.py {dj_command} '
+                    '--settings {project_conf}'.format(dj_command=command, **env))
