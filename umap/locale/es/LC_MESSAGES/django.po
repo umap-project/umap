@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Igor Támara <igor@tamarapatino.org>, 2013
+# ravila <ravilacoya@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-03-01 00:29+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"PO-Revision-Date: 2014-03-23 14:16+0000\n"
+"Last-Translator: ravila <ravilacoya@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,15 +21,15 @@ msgstr ""
 
 #: views.py:154 templates/leaflet_storage/map_list.html:7
 msgid "by"
-msgstr ""
+msgstr "por"
 
 #: views.py:158
 msgid "View the map"
-msgstr ""
+msgstr "Ver el mapa"
 
 #: templates/base.html:39
 msgid "Type editors nick to add…"
-msgstr ""
+msgstr "Teclea el apodo del editor para añadir..."
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -72,7 +73,7 @@ msgstr "Administra las opciones de tu mapa: muestra un minimapa, localiza al usu
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "Importar por lotes datos geoestructurados (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -102,15 +103,15 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "Esta es una instancia de demostración, usada para tests y versiones de prueba. Si necesitas una instancia estable, usa <a href=\"%(stable_url)s\">%(stable_url)s</a>. También puedes instalar tu propia instancia en tu servidor; ¡es <a href=\"%(repo_url)s\">software libre</a>!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "Mapa de uMaps"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "Inspírate: navega por los mapas"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
