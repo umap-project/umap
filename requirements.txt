@@ -6,7 +6,7 @@ oauth2==1.5.211
 oauthlib==0.6.1
 Pillow==2.3.0
 psycopg2==2.5.2
-python-social-auth==0.1.22
+python-social-auth==0.1.23
 requests-oauthlib==0.4.0
 requests==2.2.1
 simplejson==3.0.7
