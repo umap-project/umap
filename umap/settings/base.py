@@ -32,7 +32,7 @@ LANGUAGES = (
     ('da', u'Danish'),
     ('ja', u'Japanese'),
     ('lt', u'Lithuanian'),
-    ('cs_CZ', u'Czech'),
+    ('cs-cz', u'Czech'),
 )
 
 # Make this unique, and don't share it with anybody.
