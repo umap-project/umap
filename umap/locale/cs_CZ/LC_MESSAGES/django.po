@@ -1,0 +1,149 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# gorn, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"PO-Revision-Date: 2014-04-13 23:08+0000\n"
+"Last-Translator: gorn\n"
+"Language-Team: Czech (Czech Republic) (http://www.transifex.com/projects/p/umap/language/cs_CZ/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ", autor:"
+
+#: views.py:158
+msgid "View the map"
+msgstr "Prohlídnout si tuto mapu"
+
+#: templates/base.html:39
+msgid "Type editors nick to add…"
+msgstr "Vložte přezdívku přispěvovatele k přidání"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Prohlížej si mapy uživatele %(current_user)s'"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Více"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "Nastavení mapy"
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr "Vyberte poskytovatele mapy"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "Vytvářejte a sdílejte vlastní <a href=\"%(osm_url)s\" />OpenStreet</a> mapy a během pár minut je použijte na svém webu."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Vyberte si vrstvy své mapy."
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Přidejte značky, čáry, trasy, oblasti."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Vyberte si barvy a grafické styly"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Nastavte další možnosti - minimapu, lokalizaci uživatele, ..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Import existujících geodat v mnoha formátech (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Vyberte si licenci pro svá data"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Sdílejte a vložte svou mapu do jiných webů"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "A je to celé <a href=\"%(repo_url)s\">open source</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Vytvořit mapu"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Vyzkoušejte si to hned"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Toto je ukázková verze, používaná na testování nových vydání uMap. Pokud potřebujete stabilní verzi, použijte <a href=\"%(stable_url)s\">%(stable_url)s</a>. Můžete si taky stáhnout celý projekt a nainstalovat na svém serveru, je to <a href=\"%(repo_url)s\">open source</a>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Mapa všch uMap"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Inspirujte se, koukněte na mapy jiných"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Moje mapy"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Přihlásit se"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Registrovat"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "O uMap"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Napište nám"
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Odhlásit se"
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Mapa nenalezena"
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Prohledávejte mapy"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Hledej"
