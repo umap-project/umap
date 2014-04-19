@@ -201,8 +201,10 @@ def validate_url(request):
     assert referer.hostname == local.hostname
     assert toproxy.hostname != "localhost"
     assert toproxy.netloc != local.netloc
-    assert not socket.gethostbyname(toproxy.hostname).startswith('127.')
-    assert not socket.gethostbyname(toproxy.hostname).startswith('192.168.')
+    # clean this when in python 3.4
+    ipaddress = socket.gethostbyname(toproxy.hostname)
+    assert not ipaddress.startswith('127.')
+    assert not ipaddress.startswith('192.168.')
     return url
 
 
@@ -214,13 +216,18 @@ class AjaxProxy(View):
             url = validate_url(self.request)
         except AssertionError:
             return HttpResponseBadRequest()
+        headers = {
+            'User-Agent': 'uMapProxy +http://wiki.openstreetmap.org/wiki/UMap'
+        }
+        request = urllib2.Request(url, headers=headers)
+        opener = urllib2.build_opener()
         try:
-            proxied_request = urllib2.urlopen(url)
-            status_code = proxied_request.code
-            mimetype = proxied_request.headers.typeheader or mimetypes.guess_type(url)
-            content = proxied_request.read()
+            proxied_request = opener.open(request)
         except urllib2.HTTPError as e:
             return HttpResponse(e.msg, status=e.code, mimetype='text/plain')
         else:
+            status_code = proxied_request.code
+            mimetype = proxied_request.headers.typeheader or mimetypes.guess_type(url)
+            content = proxied_request.read()
             return HttpResponse(content, status=status_code, mimetype=mimetype)
 ajax_proxy = AjaxProxy.as_view()
