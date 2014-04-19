@@ -127,6 +127,10 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'social.apps.django_app.context_processors.login_redirect',
 )
 
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', TEMPLATE_LOADERS),
+)
+
 #==============================================================================
 # Middleware
 #==============================================================================
