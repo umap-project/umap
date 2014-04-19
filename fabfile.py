@@ -231,7 +231,7 @@ def collect_remote_statics(name=None):
         'i18n': 'git://github.com/yohanboniface/Leaflet.i18n.git@master',
         'csv2geojson': 'git://github.com/mapbox/csv2geojson.git@gh-pages',
         'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages#v0.4.2',
-        'osmtogeojson': 'git://github.com/aaronlidman/osm-and-geojson.git@gh-pages',
+        'osmtogeojson': 'git://github.com/tyrasd/osmtogeojson.git@gh-pages#2.0.5',
         'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master#v0.1.6',
         'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
         'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master#0.4',
