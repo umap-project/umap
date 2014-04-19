@@ -1,4 +1,6 @@
 import simplejson
+import mimetypes
+import urllib2
 
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
@@ -143,7 +145,7 @@ search = Search.as_view()
 
 class MapsShowCase(View):
 
-    def get(*args, **kargs):
+    def get(self, *args, **kwargs):
         maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:2000]
 
         def make(m):
@@ -173,3 +175,21 @@ class MapsShowCase(View):
         return HttpResponse(simplejson.dumps(geojson))
 
 showcase = MapsShowCase.as_view()
+
+
+class AjaxProxy(View):
+
+    def get(self, *args, **kwargs):
+        # You should not use this in production (use Nginx or so)
+        url = kwargs['url']
+        try:
+            proxied_request = urllib2.urlopen(url)
+            status_code = proxied_request.code
+            mimetype = proxied_request.headers.typeheader or mimetypes.guess_type(url)
+            content = proxied_request.read()
+        except urllib2.HTTPError as e:
+            return HttpResponse(e.msg, status=e.code, mimetype='text/plain')
+        else:
+            return HttpResponse(content, status=status_code, mimetype=mimetype)
+
+ajax_proxy = AjaxProxy.as_view()

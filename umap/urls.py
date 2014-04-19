@@ -17,6 +17,7 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
+    url(r'^ajax-proxy/(?P<url>.+)$', cache_page(60)(views.ajax_proxy), name='ajax-proxy'),
 )
 urlpatterns += i18n_patterns(
     '',

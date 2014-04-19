@@ -237,6 +237,7 @@ def collect_remote_statics(name=None):
         'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master#0.4',
         'measure': 'git://github.com/makinacorpus/Leaflet.MeasureControl.git@gh-pages',
         'label': 'git://github.com/Leaflet/Leaflet.label.git@master',
+        'georsstogeojson': 'git://github.com/yohanboniface/GeoRSSToGeoJSON.git@master',
     }
     with cd(remote_static_dir):
         for subdir, path in remote_repositories.iteritems():
