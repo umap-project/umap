@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.contrib.gis.measure import D
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 
@@ -181,7 +181,9 @@ class AjaxProxy(View):
 
     def get(self, *args, **kwargs):
         # You should not use this in production (use Nginx or so)
-        url = kwargs['url']
+        url = self.request.GET.get('url')
+        if not url:
+            return HttpResponseBadRequest('Missing URL')
         try:
             proxied_request = urllib2.urlopen(url)
             status_code = proxied_request.code
