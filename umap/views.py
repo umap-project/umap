@@ -1,6 +1,9 @@
 import simplejson
 import mimetypes
 import urllib2
+import socket
+
+from urlparse import urlparse
 
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
@@ -12,6 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from django.views.decorators.http import require_GET
 
 from sesql.shortquery import shortquery
 
@@ -177,13 +181,39 @@ class MapsShowCase(View):
 showcase = MapsShowCase.as_view()
 
 
+from django.core.validators import URLValidator, ValidationError
+
+
+def validate_url(request):
+    assert request.method == "GET"
+    assert request.is_ajax()
+    url = request.GET.get('url')
+    assert url
+    try:
+        URLValidator(url)
+    except ValidationError:
+        raise AssertionError()
+    assert 'HTTP_REFERER' in request.META
+    referer = urlparse(request.META.get('HTTP_REFERER'))
+    toproxy = urlparse(url)
+    local = urlparse(settings.SITE_URL)
+    assert toproxy.hostname
+    assert referer.hostname == local.hostname
+    assert toproxy.hostname != "localhost"
+    assert toproxy.netloc != local.netloc
+    assert not socket.gethostbyname(toproxy.hostname).startswith('127.')
+    assert not socket.gethostbyname(toproxy.hostname).startswith('192.168.')
+    return url
+
+
 class AjaxProxy(View):
 
     def get(self, *args, **kwargs):
         # You should not use this in production (use Nginx or so)
-        url = self.request.GET.get('url')
-        if not url:
-            return HttpResponseBadRequest('Missing URL')
+        try:
+            url = validate_url(self.request)
+        except AssertionError:
+            return HttpResponseBadRequest()
         try:
             proxied_request = urllib2.urlopen(url)
             status_code = proxied_request.code
@@ -193,5 +223,4 @@ class AjaxProxy(View):
             return HttpResponse(e.msg, status=e.code, mimetype='text/plain')
         else:
             return HttpResponse(content, status=status_code, mimetype=mimetype)
-
 ajax_proxy = AjaxProxy.as_view()
