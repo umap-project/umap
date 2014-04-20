@@ -229,5 +229,7 @@ class AjaxProxy(View):
             status_code = proxied_request.code
             mimetype = proxied_request.headers.typeheader or mimetypes.guess_type(url)
             content = proxied_request.read()
+            # Quick hack to prevent Django from adding a Vary: Cookie header
+            self.request.session.accessed = False
             return HttpResponse(content, status=status_code, mimetype=mimetype)
 ajax_proxy = AjaxProxy.as_view()

@@ -68,3 +68,4 @@ class TestsProxy(TestCase):
         response = self.client.get(url, params, **headers)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Example Domain', response.content)
+        self.assertNotIn("Cookie", response['Vary'])
