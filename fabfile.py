@@ -224,6 +224,7 @@ def collect_remote_statics(name=None):
     remote_repositories = {
         'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7.2",
         'draw': "git://github.com/Leaflet/Leaflet.draw.git@master#0.2.3",
+        'heat': "git://github.com/Leaflet/Leaflet.heat.git@gh-pages",
         'hash': "git://github.com/mlevans/leaflet-hash.git@master",
         'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
         'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
