@@ -540,6 +540,9 @@ a {
     font-size: 4em;
     margin-top: 0;
 }
+.content404 img {
+    width: 32%;
+}
 
 
 /* **************************** */
