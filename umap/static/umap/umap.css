@@ -518,6 +518,31 @@ a {
 
 
 /* **************************** */
+/*             404              */
+/* **************************** */
+.content404 {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    text-align: center;
+}
+.content404 a {
+    color: #3A4259;
+}
+.content404 h1 {
+    font-size: 10em;
+    margin-bottom: 0;
+    line-height: 0.5em;
+    margin-top: 40px;
+}
+.content404 h2 {
+    font-size: 4em;
+    margin-top: 0;
+}
+
+
+/* **************************** */
 /*         Autocomplete         */
 /* **************************** */
 ul.umap-autocomplete {
