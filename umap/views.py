@@ -15,7 +15,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-from django.views.decorators.http import require_GET
 
 from sesql.shortquery import shortquery
 
@@ -150,7 +149,7 @@ search = Search.as_view()
 class MapsShowCase(View):
 
     def get(self, *args, **kwargs):
-        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:2000]
+        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:2500]
 
         def make(m):
             description = m.description or ""
