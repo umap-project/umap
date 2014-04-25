@@ -33,6 +33,7 @@ LANGUAGES = (
     ('ja', u'Japanese'),
     ('lt', u'Lithuanian'),
     ('cs-cz', u'Czech'),
+    ('ca', u'Catalan'),
 )
 
 # Make this unique, and don't share it with anybody.
