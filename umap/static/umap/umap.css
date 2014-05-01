@@ -388,16 +388,16 @@ footer a {
 .map_list .wide + hr {
     display: block;
 }
-.umap-features-list li img {
-    width: 14px;
-    vertical-align: middle;
-    padding-right: 14px;
-}
 .umap-features-list ul {
     margin-top: 14px;
 }
 .umap-features-list li {
     line-height: 21px;
+}
+.umap-features-list li:before {
+    content: "✔";
+    color: #323E56;
+    padding-right: 5px;
 }
 .summary {
     background-color: #eee;
