@@ -42,7 +42,7 @@ SECRET_KEY = ''
 INSTALLED_APPS = (
     'leaflet_storage',
     'umap',
-    'sesql',
+    'pgindex',
     'compressor',
     'social.apps.django_app.default',
 
@@ -164,6 +164,7 @@ LEAFLET_STORAGE_EXTRA_URLS = {
 SITE_URL = "http://umap.org"
 UMAP_DEMO_SITE = False
 MAP_SHORT_URL_NAME = "umap_short_url"
+UMAP_USE_UNACCENT = False
 
 #==============================================================================
 # Third party app settings

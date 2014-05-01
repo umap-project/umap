@@ -15,8 +15,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-
-from sesql.shortquery import shortquery
+from django.db.models.sql.where import ExtraWhere, OR
+from pgindex import search as pg_search
 
 from leaflet_storage.models import Map
 from leaflet_storage.forms import DEFAULT_CENTER
@@ -124,12 +124,17 @@ class Search(TemplateView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         q = self.request.GET.get('q')
-        maps = []
+        results = []
         if q:
-            maps = shortquery(Q(classname='Map') & Q(fulltext__containswords=q))
-            maps = self.paginate(maps)
+            results = pg_search(q)
+            if getattr(settings, 'UMAP_USE_UNACCENT', False):
+                # Add unaccent support
+                results.query.where.add(ExtraWhere(("ts @@ plainto_tsquery('simple', unaccent(%s))", ), [q, ]), OR)
+            results = results.order_by('-rank', '-start_publish')
+            results = self.paginate(results)
+            results.object_list = [Map.objects.get(pk=i.obj_pk) for i in results]
         kwargs.update({
-            'maps': maps,
+            'maps': results,
             'q': q
         })
         return kwargs
