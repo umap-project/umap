@@ -20,7 +20,7 @@ Create a virtualenv::
 Install dependencies and project::
 
     cd path/to/umap/repository
-    git checkout 0.3.x
+    git checkout 0.5.0
     git submodule init
     pip install -r requirements.pip
     pip install -e .
