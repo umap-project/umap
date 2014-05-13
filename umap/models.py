@@ -25,6 +25,9 @@ class MapIndex(IndexBase):
     def get_start_publish(self):
         return self.obj.modified_at
 
+    def get_publish(self):
+        return self.obj.share_status == Map.PUBLIC
+
     def get_vectors(self):
         vectors = []
         if self.obj.name:
