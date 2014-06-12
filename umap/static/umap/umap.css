@@ -4,12 +4,11 @@
 
 
 @font-face {
-    font-family: 'pt_sansbold_italic';
-    src: url('./font/pts76f-webfont.eot');
-    src: url('./font/pts76f-webfont.eot?#iefix') format('embedded-opentype'),
-         url('./font/pts76f-webfont.woff') format('woff'),
-         url('./font/pts76f-webfont.ttf') format('truetype'),
-         url('./font/pts76f-webfont.svg#pt_sansbold_italic') format('svg');
+    font-family: 'fira_sansbold';
+    src: url('./font/FiraSans-Bold.eot');
+    src: url('./font/FiraSans-Bold.eot?#iefix') format('embedded-opentype'),
+         url('./font/FiraSans-Bold.woff') format('woff'),
+         url('./font/FiraSans-Bold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 
@@ -17,40 +16,23 @@
 
 
 @font-face {
-    font-family: 'pt_sansbold';
-    src: url('./font/pts75f-webfont.eot');
-    src: url('./font/pts75f-webfont.eot?#iefix') format('embedded-opentype'),
-         url('./font/pts75f-webfont.woff') format('woff'),
-         url('./font/pts75f-webfont.ttf') format('truetype'),
-         url('./font/pts75f-webfont.svg#pt_sansbold') format('svg');
+    font-family: 'fira_sansregular';
+    src: url('./font/FiraSans-Regular.eot');
+    src: url('./font/FiraSans-Regular.eot?#iefix') format('embedded-opentype'),
+         url('./font/FiraSans-Regular.woff') format('woff'),
+         url('./font/FiraSans-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-
-}
-
-
-@font-face {
-    font-family: 'pt_sansitalic';
-    src: url('./font/pts56f-webfont.eot');
-    src: url('./font/pts56f-webfont.eot?#iefix') format('embedded-opentype'),
-         url('./font/pts56f-webfont.woff') format('woff'),
-         url('./font/pts56f-webfont.ttf') format('truetype'),
-         url('./font/pts56f-webfont.svg#pt_sansitalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
 }
 
 @font-face {
-    font-family: 'pt_sansregular';
-    src: url('./font/pts55f-webfont.eot');
-    src: url('./font/pts55f-webfont.eot?#iefix') format('embedded-opentype'),
-         url('./font/pts55f-webfont.woff') format('woff'),
-         url('./font/pts55f-webfont.ttf') format('truetype'),
-         url('./font/pts55f-webfont.svg#pt_sansregular') format('svg');
+    font-family: 'fira_sanslight';
+    src: url('./font/FiraSans-Light.eot');
+    src: url('./font/FiraSans-Light.eot?#iefix') format('embedded-opentype'),
+         url('./font/FiraSans-Light.woff') format('woff'),
+         url('./font/FiraSans-Light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-
 }
 
 
@@ -65,7 +47,7 @@ hr, input, textarea {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'pt_sansregular', sans-serif;
+    font-family: 'fira_sanslight', sans-serif;
 }
 a {
     text-decoration: none;
@@ -87,7 +69,7 @@ hr {
     border-width: 1px 0 0;
 }
 h1, h2, h3, h4, h5 {
-    font-family: 'pt_sansbold', sans-serif;
+    font-family: 'fira_sansbold', sans-serif;
     font-weight: normal;
 }
 h1, h2 {
@@ -100,6 +82,10 @@ p {
     line-height: 21px;
     margin-top: 14px;
     margin-bottom: 14px;
+}
+strong {
+    font-family: 'fira_sansbold';
+    font-weight: normal;
 }
 
 /*
@@ -305,7 +291,7 @@ nav h1 a {
     background-position: left center;
     background-repeat: no-repeat;
     background-size: 60px auto;
-    font-family: 'pt_sansbold';
+    font-family: 'fira_sansbold';
     font-size: 30px;
     font-weight: normal;
     height: 70px;
@@ -344,7 +330,7 @@ footer a {
     background-position: left center;
     background-repeat: no-repeat;
     background-size: 60px auto;
-    font-family: 'pt_sansbold';
+    font-family: 'fira_sansbold';
     font-size: 30px;
     font-weight: normal;
     height: 140px;
@@ -372,14 +358,14 @@ footer a {
 }
 .map_list .legend a {
     color: #222;
-    font-family: "pt_sansbold";
+    font-family: "fira_sansbold";
     font-style: normal;
     font-weight: normal;
 }
 .map_list .legend em,
 .map_list .legend em a {
     color: #444;
-    font-family: "pt_sansregular";
+    font-family: "fira_sanslight";
     font-style: normal;
 }
 .map_list hr {
