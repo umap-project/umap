@@ -81,3 +81,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # python manage.py dbshell
 # CREATE EXTENSION unaccent;
 UMAP_USE_UNACCENT = False
+
+# For static deployment
+STATIC_ROOT = '/home/umap/.virtualenvs/umap/var/static'
+
+# For users' statics (geojson mainly)
+MEDIA_ROOT = '/home/umap/.virtualenvs/umap/var/uploads'

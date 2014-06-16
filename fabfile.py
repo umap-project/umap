@@ -166,7 +166,6 @@ def collectstatic():
     """
     Collect static files from apps and other locations in a single location.
     """
-    collect_remote_statics("storage")
     dj('collectstatic --link --noinput')
     dj('storagei18n')
     dj('compress')
@@ -211,57 +210,6 @@ def requirements(name=None, upgrade=False):
             base_command=base_command,
             name=name
         ))
-
-
-@task
-@roles('web')
-def collect_remote_statics(name=None):
-    """
-    Add leaflet and leaflet.draw in a repository watched by collectstatic.
-    """
-    remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
-    run_as_umap('mkdir -p {0}'.format(remote_static_dir))
-    remote_repositories = {
-        'leaflet': "git://github.com/Leaflet/Leaflet.git@master#v0.7.2",
-        'draw': "git://github.com/Leaflet/Leaflet.draw.git@master#0.2.3",
-        'heat': "git://github.com/Leaflet/Leaflet.heat.git@gh-pages",
-        'hash': "git://github.com/mlevans/leaflet-hash.git@master",
-        'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
-        'edit_in_osm': 'git://github.com/yohanboniface/Leaflet.EditInOSM.git@master',
-        'minimap': 'git://github.com/Norkart/Leaflet-MiniMap.git@master',
-        'i18n': 'git://github.com/yohanboniface/Leaflet.i18n.git@master',
-        'csv2geojson': 'git://github.com/mapbox/csv2geojson.git@gh-pages',
-        'togeojson': 'git://github.com/mapbox/togeojson.git@gh-pages#v0.4.2',
-        'osmtogeojson': 'git://github.com/tyrasd/osmtogeojson.git@gh-pages#2.0.5',
-        'loading': 'git://github.com/ebrelsford/Leaflet.loading.git@master#v0.1.6',
-        'contextmenu': 'git://github.com/aratcliffe/Leaflet.contextmenu.git@master',
-        'markercluster': 'git://github.com/Leaflet/Leaflet.markercluster.git@master#0.4',
-        'measure': 'git://github.com/makinacorpus/Leaflet.MeasureControl.git@gh-pages',
-        'label': 'git://github.com/Leaflet/Leaflet.label.git@master',
-        'georsstogeojson': 'git://github.com/yohanboniface/GeoRSSToGeoJSON.git@master',
-    }
-    with cd(remote_static_dir):
-        for subdir, path in remote_repositories.iteritems():
-            if name and name != subdir:
-                continue
-            repository, branch = path.split('@')
-            if "#" in branch:
-                branch, ref = branch.split('#')
-            else:
-                ref = branch
-            with hide("running", "stdout"):
-                exists = run_as_umap('if [ -d "{0}" ]; then echo 1; fi'.format(subdir))
-            if exists:
-                with cd(subdir):
-                    run_as_umap('git checkout {0}'.format(branch))
-                    run_as_umap('git pull origin {0} --tags'.format(branch))
-            else:
-                run_as_umap('git clone {0} {1}'.format(repository, subdir))
-            with cd(subdir):
-                run_as_umap('git checkout {0}'.format(ref))
-                if subdir == "leaflet":
-                    run_as_umap('npm install')
-                    run_as_umap('jake build')
 
 
 #==============================================================================
