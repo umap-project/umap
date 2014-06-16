@@ -61,6 +61,8 @@ Example of callback URL to use for settings up OAuth apps::
 
  http://umap.foo.bar/complete/github/
 
+Adapt the `STATIC_ROOT` and `MEDIA_ROOT` to your local environment.
+
 Create the tables::
 
     python manage.py syncdb --migrate
