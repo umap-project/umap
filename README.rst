@@ -21,8 +21,7 @@ Install dependencies and project::
 
     cd path/to/umap/repository
     git checkout 0.5.0
-    git submodule init
-    pip install -r requirements.pip
+    pip install -r requirements.txt
     pip install -e .
 
 Create a default local settings file::

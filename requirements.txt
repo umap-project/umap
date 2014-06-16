@@ -10,5 +10,5 @@ requests-oauthlib==0.4.0
 requests==2.2.1
 simplejson
 South==0.7.6
-django-leaflet-storage==0.6.2
+django-leaflet-storage==0.6.3
 django-pgindex==0.8.2

@@ -1,5 +1,5 @@
 "Create maps with OpenStreetMap layers in a minute and embed them in your site."
-VERSION = (0, 6, 2)
+VERSION = (0, 6, 3)
 
 __author__ = 'Yohan Boniface'
 __contact__ = "yb@enix.org"
