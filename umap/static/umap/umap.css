@@ -581,10 +581,7 @@ body.content #storage-ui-container {
 #id_editors + br + span.helptext {
     display: none;
 }
-.storage-loader,
-.leaflet-popup-content .storage-popup-footer,
-.leaflet-control-browse .storage-browse-actions a.add-datalayer,
-.leaflet-control-browse .storage-browse-actions a.storage-browse-link {
+.storage-loader {
     background-color: #79c1c0 !important;
 }
 
