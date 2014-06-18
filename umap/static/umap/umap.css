@@ -549,6 +549,10 @@ ul.umap-autocomplete {
     background-color: SeaGreen;
     cursor: pointer;
 }
+.umap-singleresult {
+    margin-bottom: 10px;
+}
+.umap-singleresult div,
 .umap-multiresult li {
     width: 100%;
     background-color: #e5e5e5;
@@ -559,6 +563,7 @@ ul.umap-autocomplete {
 .umap-multiresult li + li {
     margin-top: 7px;
 }
+.umap-singleresult div .close,
 .umap-multiresult li .close {
     float: right;
     cursor: pointer;
