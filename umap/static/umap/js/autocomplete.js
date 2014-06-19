@@ -345,7 +345,7 @@ L.S.AutoComplete.Select = L.S.AutoComplete.BaseSelect.extend({
     initSelectedContainer: function () {
         this.selected_container = L.DomUtil.after(this.input, L.DomUtil.element('div', {className: 'umap-singleresult'}));
         var self = this;
-        if (this.el.selectedIndex !== -1) {
+        if (this.el.selectedIndex !== -1 && this.el[this.el.selectedIndex].value !== '') {
             self.displaySelected(self.optionToResult(this.el[this.el.selectedIndex]));
         }
     },
