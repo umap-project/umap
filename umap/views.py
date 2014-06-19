@@ -6,7 +6,7 @@ import socket
 from urlparse import urlparse
 
 from django.views.generic import TemplateView
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.views.generic import DetailView, View
 from django.db.models import Q
 from django.contrib.gis.measure import D
@@ -20,6 +20,8 @@ from pgindex import search as pg_search
 
 from leaflet_storage.models import Map
 from leaflet_storage.forms import DEFAULT_CENTER
+
+User = get_user_model()
 
 
 class PaginatorMixin(object):
