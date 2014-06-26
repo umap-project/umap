@@ -1,0 +1,149 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# sun wei <sunwei.r@gmail.com>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"PO-Revision-Date: 2014-06-23 01:07+0000\n"
+"Last-Translator: sun wei <sunwei.r@gmail.com>\n"
+"Language-Team: Chinese (http://www.transifex.com/projects/p/umap/language/zh/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr "由"
+
+#: views.py:158
+msgid "View the map"
+msgstr "浏览地图"
+
+#: templates/base.html:39
+msgid "Type editors nick to add…"
+msgstr ""
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "浏览%(current_user)s的所有地图"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "更多"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "地图设置"
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr "选择提供者"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr ""
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "选择地图的图层"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "添加兴趣点:点，线，面..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "管理兴趣点颜色与图标"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "地图选项：显示鹰眼图，加载时用户定位"
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "选择数据的许可"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "嵌入与分享地图"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "创建地图"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "试用示例"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "uMaps的地图"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "浏览地图得灵感"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "我的地图"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "登录"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "签到"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "关于"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr ""
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "退出"
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "没有搜索到地图"
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "搜索地图"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "搜索"
