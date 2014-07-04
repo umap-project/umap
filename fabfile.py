@@ -166,6 +166,7 @@ def collectstatic():
     """
     Collect static files from apps and other locations in a single location.
     """
+    collect_remote_statics()
     dj('collectstatic --link --noinput')
     dj('storagei18n')
     dj('compress')
@@ -211,6 +212,40 @@ def requirements(name=None, upgrade=False):
             name=name
         ))
 
+
+@task
+@roles('web')
+def collect_remote_statics(name=None):
+    """
+    Add leaflet and leaflet.draw in a repository watched by collectstatic.
+    """
+    remote_static_dir = '{project_dir}/{project_name}/remote_static'.format(**env)
+    run_as_umap('mkdir -p {0}'.format(remote_static_dir))
+    remote_repositories = {
+        'storage': 'git://github.com/yohanboniface/Leaflet.Storage.git@master',
+    }
+    with cd(remote_static_dir):
+        for subdir, path in remote_repositories.iteritems():
+            if name and name != subdir:
+                continue
+            repository, branch = path.split('@')
+            if "#" in branch:
+                branch, ref = branch.split('#')
+            else:
+                ref = branch
+            with hide("running", "stdout"):
+                exists = run_as_umap('if [ -d "{0}" ]; then echo 1; fi'.format(subdir))
+            if exists:
+                with cd(subdir):
+                    run_as_umap('git checkout {0}'.format(branch))
+                    run_as_umap('git pull origin {0} --tags'.format(branch))
+            else:
+                run_as_umap('git clone {0} {1}'.format(repository, subdir))
+            with cd(subdir):
+                run_as_umap('git checkout {0}'.format(ref))
+                if subdir == "leaflet":
+                    run_as_umap('npm install')
+                    run_as_umap('jake build')
 
 #==============================================================================
 # Helper functions
