@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-07-10 10:47+0000\n"
+"PO-Revision-Date: 2014-07-11 02:10+0000\n"
 "Last-Translator: ilis_krou <ilis@inbox.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/umap/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -52,11 +52,11 @@ msgstr "Выберите поставщика карт"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap даёт вам возможность создавать карты, основанные на данных <a href=\"%(osm_url)s\" />OpenStreetMap</a> в считанные минуты, и публиковать их на своём сайте."
+msgstr "uMap даёт вам возможность создать карты, основанную на данных <a href=\"%(osm_url)s\" />OpenStreetMap</a>, в считанные минуты, и опубликовать её своём сайте."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Выберите слой для вашей карты"
+msgstr "Выбирайте слои для вашей карты"
 
 #: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
@@ -68,11 +68,11 @@ msgstr "Выбирайте нужные цвета и изображения д�
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Меняйте свойства карты: отображение миникарты, геолокация при загрузке карты..."
+msgstr "Меняйте свойства карты: отображение миникарты и других элементов управления..."
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Пакетный импорт геоданных (geojson, gpx, kml, osm...)"
+msgstr "Импортируйте свои геоданные (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -85,7 +85,7 @@ msgstr "Встраивайте вашу карту и делитесь ей"
 #: templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "И это <a href=\"%(repo_url)s\">Открытое ПО</a>!"
+msgstr "И это <a href=\"%(repo_url)s\">открытое ПО</a>!"
 
 #: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
 msgid "Create a map"
@@ -93,7 +93,7 @@ msgstr "Создать карту"
 
 #: templates/umap/about_summary.html:34
 msgid "Play with the demo"
-msgstr "Попробуйте режим демонстрации"
+msgstr "Попробовать в режиме демонстрации"
 
 #: templates/umap/home.html:10
 #, python-format
@@ -102,7 +102,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Это демонстрационный сайт, использующийся для тестов и подготовки стабильных выпусков. Если вам нужна стабильная версия, перейдите на  <a href=\"%(stable_url)s\">%(stable_url)s</a>. Вы можете создать свою версию, потому что это <a href=\"%(repo_url)s\">Открытое ПО</a>!"
+msgstr "Это демонстрационный сайт, использующийся для тестов и подготовки стабильных выпусков. Если вам нужна стабильная версия, перейдите на  <a href=\"%(stable_url)s\">%(stable_url)s</a>. Вы можете создать свою версию, потому что это <a href=\"%(repo_url)s\">открытое ПО</a>!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -110,7 +110,7 @@ msgstr "Карты uMap"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Смотрите карты, вдохновляйтесь"
+msgstr "Смотрите чужие карты и вдохновляйтесь"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -146,4 +146,4 @@ msgstr "Поиск карт"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
-msgstr "Поиск"
+msgstr "Найти"
