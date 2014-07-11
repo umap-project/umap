@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-07-11 02:10+0000\n"
+"PO-Revision-Date: 2014-07-11 10:53+0000\n"
 "Last-Translator: ilis_krou <ilis@inbox.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/umap/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "Выберите поставщика карт"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap даёт вам возможность создать карты, основанную на данных <a href=\"%(osm_url)s\" />OpenStreetMap</a>, в считанные минуты, и опубликовать её своём сайте."
+msgstr "uMap даёт вам возможность создавать карты, основанные на данных <a href=\"%(osm_url)s\" />OpenStreetMap</a>, в считанные минуты, и публиковать их на своём сайте."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -93,7 +93,7 @@ msgstr "Создать карту"
 
 #: templates/umap/about_summary.html:34
 msgid "Play with the demo"
-msgstr "Попробовать в режиме демонстрации"
+msgstr "Пробная карта"
 
 #: templates/umap/home.html:10
 #, python-format
