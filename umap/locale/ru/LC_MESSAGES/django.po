@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-07-11 10:53+0000\n"
+"PO-Revision-Date: 2014-07-15 05:24+0000\n"
 "Last-Translator: ilis_krou <ilis@inbox.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/umap/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Настройки карты"
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
-msgstr "Выберите поставщика карт"
+msgstr "Выберите провайдера аутентификации"
 
 #: templates/umap/about_summary.html:6
 #, python-format
