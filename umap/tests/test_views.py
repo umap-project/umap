@@ -55,6 +55,11 @@ class TestsValidateProxyURL(TestCase):
         with self.assertRaises(AssertionError):
             validate_url(request)
 
+    def test_unkown_domain_raises(self):
+        request = self.buildRequest("http://xlkjdkjsdlkjfd.com")
+        with self.assertRaises(AssertionError):
+            validate_url(request)
+
 
 class TestsProxy(TestCase):
 

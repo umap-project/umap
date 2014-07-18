@@ -207,8 +207,11 @@ def validate_url(request):
     assert referer.hostname == local.hostname
     assert toproxy.hostname != "localhost"
     assert toproxy.netloc != local.netloc
-    # clean this when in python 3.4
-    ipaddress = socket.gethostbyname(toproxy.hostname)
+    try:
+        # clean this when in python 3.4
+        ipaddress = socket.gethostbyname(toproxy.hostname)
+    except:
+        raise AssertionError()
     assert not ipaddress.startswith('127.')
     assert not ipaddress.startswith('192.168.')
     return url
