@@ -36,6 +36,7 @@ LANGUAGES = (
     ('ca', u'Catalan'),
     ('zh', u'Chinese'),
     ('ru', u'Russian'),
+    ('bg', u'Bulgarian'),
 )
 
 # Make this unique, and don't share it with anybody.

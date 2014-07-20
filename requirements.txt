@@ -5,5 +5,5 @@ psycopg2==2.5.2
 python-social-auth==0.1.23
 simplejson
 South==0.7.6
-django-leaflet-storage==0.6.12
+django-leaflet-storage==0.6.13
 django-pgindex==0.8.2
