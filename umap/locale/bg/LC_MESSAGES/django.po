@@ -1,0 +1,150 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# lillyvip <lillyvalpi@gmail.com>, 2013-2014
+# yohanboniface <yohanboniface@free.fr>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"PO-Revision-Date: 2014-07-20 14:03+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Bulgarian (http://www.transifex.com/projects/p/umap/language/bg/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: bg\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr "от"
+
+#: views.py:158
+msgid "View the map"
+msgstr "Виж картата"
+
+#: templates/base.html:39
+msgid "Type editors nick to add…"
+msgstr ""
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Разгледай картите на %(current_user)s"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Още"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "Настройки на картата"
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr "Моля изберете провайдер"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap ви позволява да създавате карти базирани върху слоевете на <a href=\"%(osm_url)s\" /> OpenStreetMap </ A> само за минути и да ги вградите в сайта си."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Изберете слоевете на своята карта"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Добави POIs: маркери, линии, полигони ..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Промени POIs цветове и икони"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Играй с опциите на картата: покажи миникарта, локализирай потребителя при зареждане ..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Внасяне на географски данни (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Избери лиценз за своите данни"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Вгради и сподели картата"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "И това е <a href=\"%(repo_url)s\">отворен код</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Създай карта"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Играй си с демото"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Това е само демо пример, използван за тестове и предварителни издания. Ако имате нужда от стабилна версия, моля използвайте <a href=\"%(stable_url)s\">%(stable_url)s</ A>. Можете също така да бъде хост на вашата собствена версия, това е <a href=\"%(repo_url)s\"> отворен код </ A>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Карта от картите на uMaps"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Вдъхнови се, разгледай други карти "
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Мойте карти"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Влизане"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Регистрация"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Относно"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Мнения"
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Излизане"
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Няма такава карта."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Търсене на карти"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Търсене"
