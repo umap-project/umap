@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Igor Támara <igor@tamarapatino.org>, 2013
-# ravila <ravilacoya@gmail.com>, 2014
+# Marco Antonio Frias Butrón <marcoantoniofrias@gmail.com>, 2014
+# Rafael Ávila Coya <ravilacoya@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-03-23 14:16+0000\n"
-"Last-Translator: ravila <ravilacoya@gmail.com>\n"
+"PO-Revision-Date: 2014-08-06 21:28+0000\n"
+"Last-Translator: Marco Antonio Frias Butrón <marcoantoniofrias@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,7 +35,7 @@ msgstr "Teclea el apodo del editor para añadir..."
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "Mapas de %(current_user)s"
+msgstr "Navegar los mapas de %(current_user)s"
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
@@ -42,18 +43,18 @@ msgstr "Más"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
-msgstr "Opciones de mapa"
+msgstr "Ajustes del mapa"
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
-msgstr "Por favor elija un proveedor"
+msgstr "Elige un proveedor"
 
 #: templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" />OpenStreetMap</a> en un minuto y embeberlas en tu sitio."
+msgstr "uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" />OpenStreetMap</a> en un minuto e insertarlas en tu sitio."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -61,15 +62,15 @@ msgstr "Elige las capas de tu mapa"
 
 #: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Añade PDIs: Marcadores, líneas, polígonos..."
+msgstr "Añadir PDIs: marcadores, líneas, polígonos..."
 
 #: templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr "Elige los colores y los íconos de tus PDIs"
+msgstr "Elige los colores y los iconos de los PDIs"
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Administra las opciones de tu mapa: muestra un minimapa, localiza al usuario al cargar..."
+msgstr "Elige las opciones del mapa: mostrar un minimapa, localizar al usuario al cargar..."
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
@@ -81,7 +82,7 @@ msgstr "Elige la licencia de tus datos"
 
 #: templates/umap/about_summary.html:17
 msgid "Embed and share your map"
-msgstr "Incrusta y comparte tu mapa"
+msgstr "Inserta y comparte tu mapa"
 
 #: templates/umap/about_summary.html:23
 #, python-format
@@ -103,19 +104,19 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Esta es una instancia de demostración, usada para tests y versiones de prueba. Si necesitas una instancia estable, usa <a href=\"%(stable_url)s\">%(stable_url)s</a>. También puedes instalar tu propia instancia en tu servidor; ¡es <a href=\"%(repo_url)s\">software libre</a>!"
+msgstr "Esta es una instancia de demostración, usada para pruebas y lanzamientos previos. Si necesitas una instancia estable, usa <a href=\"%(stable_url)s\">%(stable_url)s</a>. También puedes instalar tu propia instancia en tu servidor; ¡es <a href=\"%(repo_url)s\">código abierto</a>!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr "Mapa de uMaps"
+msgstr "Mapa de los uMaps"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Inspírate: navega por los mapas"
+msgstr "Inspírate, navega por los mapas"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
-msgstr "Mis Mapas"
+msgstr "Mis mapas"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
@@ -123,11 +124,11 @@ msgstr "Ingresar"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
-msgstr "Registrarse"
+msgstr "Regístrarse"
 
 #: templates/umap/navigation.html:16
 msgid "About"
-msgstr "Acerca de..."
+msgstr "Acerca de"
 
 #: templates/umap/navigation.html:17
 msgid "Feedback"
@@ -143,7 +144,7 @@ msgstr "No se encontraron mapas."
 
 #: templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr "Buscar Mapas"
+msgstr "Buscar mapas"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
