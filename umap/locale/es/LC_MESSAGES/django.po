@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-08-06 21:28+0000\n"
+"PO-Revision-Date: 2014-08-09 04:08+0000\n"
 "Last-Translator: Marco Antonio Frias Butrón <marcoantoniofrias@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgstr "Elige un proveedor"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" />OpenStreetMap</a> en un minuto e insertarlas en tu sitio."
+msgstr "uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" />OpenStreetMap</a> en un minuto y embeber en tu sitio."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -62,7 +62,7 @@ msgstr "Elige las capas de tu mapa"
 
 #: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Añadir PDIs: marcadores, líneas, polígonos..."
+msgstr "Añade PDIs: marcadores, líneas, polígonos..."
 
 #: templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
@@ -70,11 +70,11 @@ msgstr "Elige los colores y los iconos de los PDIs"
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Elige las opciones del mapa: mostrar un minimapa, localizar al usuario al cargar..."
+msgstr "Gestiona opciones del mapa: mostrar un minimapa, localizar al usuario al cargar..."
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Importar por lotes datos geoestructurados (geojson, gpx, kml, osm...)"
+msgstr "Importa por lotes datos geoestructurados (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -82,12 +82,12 @@ msgstr "Elige la licencia de tus datos"
 
 #: templates/umap/about_summary.html:17
 msgid "Embed and share your map"
-msgstr "Inserta y comparte tu mapa"
+msgstr "Embebe y comparte tu mapa"
 
 #: templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Y es de !<a href=\"%(repo_url)s\">fuentes abiertas</a>!"
+msgstr "Y es de <a href=\"%(repo_url)s\">código abierto</a>!"
 
 #: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
 msgid "Create a map"
