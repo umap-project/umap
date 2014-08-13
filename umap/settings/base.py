@@ -37,6 +37,7 @@ LANGUAGES = (
     ('zh', u'Chinese'),
     ('ru', u'Russian'),
     ('bg', u'Bulgarian'),
+    ('vi', u'Vietnamese'),
 )
 
 # Make this unique, and don't share it with anybody.

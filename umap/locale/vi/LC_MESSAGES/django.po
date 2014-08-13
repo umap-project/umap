@@ -1,0 +1,149 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Thanh Le Viet <lethanhx2k@gmail.com>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"PO-Revision-Date: 2014-08-11 00:35+0000\n"
+"Last-Translator: Thanh Le Viet <lethanhx2k@gmail.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/umap/language/vi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr ""
+
+#: views.py:158
+msgid "View the map"
+msgstr "Xem bản đồ"
+
+#: templates/base.html:39
+msgid "Type editors nick to add…"
+msgstr "Nhập nick thành viên để thêm vào..."
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Xem bản đồ của %(current_user)s"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Thêm"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "Thiết lập bản đồ"
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr "Hãy chọn một nhà cung cấp"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap cho phép bạn tạo bản đồ với các layer của <a href=\"%(osm_url)s\" />OpenStreetMap</a> trong vài phút và chèn nó vào trong website của bạn"
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Chọn layer của bản đồ"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Thêm POI: điểm, đường, vùng..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Quản lý màu và biểu tượng POI"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Quản lý thiết lập bản đồ: hiển thị bản đồ con, xác định vị trí người dùng khi tải bản đồ..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Import hàng loạt dữ liệu địa lý (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Chọn bản quyền cho dữ liệu của bạn"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Chèn và chia sẻ bản đồ"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Và nó là  <a href=\"%(repo_url)s\">mã nguồn mở <a>! "
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Tạo bản đồ"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Xem thử demo"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Đây là một bản demo được dùng để kiểm tra và xuất bản thử. Nếu bạn cần  một bản ổ định, hãy sử dụng  <a href=\"%(stable_url)s\">%(stable_url)s</a>. Bạn cũng có thể chạy nó trên máy tính của mình vì nó là phần mềm <a href=\"%(repo_url)s\">nguồn mở</a>"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Bản đồ của uMaps"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Tham khảo các bản đồ"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Bản đồ của tôi"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Đăng nhập"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Đăng nhập"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Về"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Đóng góp"
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Thoát"
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Không tìm thấy bản đồ"
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Tìm bản đồ"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Tìm"
