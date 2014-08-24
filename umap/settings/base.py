@@ -35,6 +35,7 @@ LANGUAGES = (
     ('cs-cz', u'Czech'),
     ('ca', u'Catalan'),
     ('zh', u'Chinese'),
+    ('zh-tw', u'Chinese'),
     ('ru', u'Russian'),
     ('bg', u'Bulgarian'),
     ('vi', u'Vietnamese'),
