@@ -109,7 +109,8 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
-    'umap.context_processors.feedback_link'
+    'umap.context_processors.feedback_link',
+    'umap.context_processors.version',
 )
 
 TEMPLATE_LOADERS = (
