@@ -109,6 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
+    'umap.context_processors.feedback_link'
 )
 
 TEMPLATE_LOADERS = (
@@ -148,6 +149,7 @@ SITE_URL = "http://umap.org"
 UMAP_DEMO_SITE = False
 MAP_SHORT_URL_NAME = "umap_short_url"
 UMAP_USE_UNACCENT = False
+UMAP_FEEDBACK_LINK = "http://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
 
 #==============================================================================
 # Third party app settings

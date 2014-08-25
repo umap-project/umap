@@ -14,7 +14,7 @@
         <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
       {% endif %}
       <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-      <li class="mhide"><a href="mailto:yb@fluv.io">{% trans "Feedback" %}</a></li>
+      <li class="mhide"><a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Feedback" %}</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}" class="logout">{% trans "Log out" %}</a></li>
       {% endif %}
