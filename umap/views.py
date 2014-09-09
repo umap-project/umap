@@ -46,7 +46,10 @@ class Home(TemplateView, PaginatorMixin):
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
-        qs = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
+        qs = Map.public
+        if settings.DATABASES['default']['ENGINE'] != 'django.db.backends.sqlite3':
+            # Unsupported query type for sqlite.
+            qs = qs.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
             try:
