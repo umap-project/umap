@@ -47,7 +47,7 @@ class Home(TemplateView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         qs = Map.public
-        if settings.DATABASES['default']['ENGINE'] != 'django.db.backends.sqlite3':
+        if not 'spatialite' in settings.DATABASES['default']['ENGINE']:
             # Unsupported query type for sqlite.
             qs = qs.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         demo_map = None
