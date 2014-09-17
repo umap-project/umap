@@ -1,0 +1,149 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Сергій Дубик <dubyk@ukr.net>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"PO-Revision-Date: 2014-09-15 16:05+0000\n"
+"Last-Translator: Сергій Дубик <dubyk@ukr.net>\n"
+"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/projects/p/umap/language/uk_UA/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk_UA\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: views.py:154 templates/leaflet_storage/map_list.html:7
+msgid "by"
+msgstr " від "
+
+#: views.py:158
+msgid "View the map"
+msgstr "Переглянути мапу"
+
+#: templates/base.html:39
+msgid "Type editors nick to add…"
+msgstr "Введіть ім’я редактора, щоб додати…"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Перегляд мап користувача %(current_user)s"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Ще"
+
+#: templates/leaflet_storage/map_update_settings.html:2
+msgid "Map settings"
+msgstr "Налаштування мапи"
+
+#: templates/registration/login.html:3
+msgid "Please choose a provider"
+msgstr "Виберіть провайдера автентифікації"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap дає Вам можливість за лічені хвилини створювати мапи на основі даних <a href=\"%(osm_url)s\" />OpenStreetMap</a> та публікувати їх на своєму сайті."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Вибирайте шари для Вашої мапи"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Додавайте цікаві точки: позначки, лінії, полігони …"
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Вибирайте потрібні кольори та значки для цікавих об’єктів"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Змінюйте параметри мапи: відображення мінімапи, встановлення місця користувача при завантаженні …"
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Імпорт Ваших геоданих (GeoJSON, GPX, KML, OSM …)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Виберіть ліцензію для Вашої мапи"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Вбудовуйте Вашу мапу та діліться нею"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "І це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Створити мапу"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Погратися з демо-версією"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Це демонстраційний сайт, що використовується для тестів та підготовки стабільних випусків.  Якщо Вам потрібна стабільна версія, перейдіть на <a href=\"%(stable_url)s\">%(stable_url)s</a>. Ви також можете створити свою інсталяцію, оскільки це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Мапи на uMap"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Дивіться чужі мапи та надихайтеся"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Мої мапи"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Увійти"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Зареєструватися"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Про проект"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Зворотній зв’язок"
+
+#: templates/umap/navigation.html:19
+msgid "Log out"
+msgstr "Вийти"
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Не знайдено жодної мапи."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Пошук за мапами"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Шукати"
