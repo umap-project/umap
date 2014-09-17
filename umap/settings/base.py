@@ -39,6 +39,7 @@ LANGUAGES = (
     ('ru', u'Russian'),
     ('bg', u'Bulgarian'),
     ('vi', u'Vietnamese'),
+    ('uk-ua', u'Ukrainian'),
 )
 
 # Make this unique, and don't share it with anybody.
