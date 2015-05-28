@@ -13,14 +13,15 @@ Quickstart
 
 Create a geo aware database. See `Geodjango doc <https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/>`_ for backend installation.
 
-Create a virtualenv::
+Create a virtual environment::
 
-    mkvirtualenv umap
+    virtualenv umap
+    source umap/bin/activate
 
 Install dependencies and project::
 
-    cd path/to/umap/repository
-    git checkout 0.7.6
+    cd YOUR_SOURCE_DIR
+    git clone git clone https://bitbucket.org/yohanboniface/umap.git
     pip install -r requirements.txt
     pip install -e .
 
@@ -72,14 +73,19 @@ Collect and compress the statics::
     python manage.py collectstatic
     python manage.py compress
 
+Add a site object::
+    python manage.py shell
+    from django.contrib.sites.models import Site
+    Site.objects.create(name='example.com', domain='example.com')
+
 Start the server::
 
     python manage.py runserver 0.0.0.0:8000
 
 Go to the admin (http://localhost:8000/admin/) and add:
 
-- almost one license
-- almost one tilelayer
+- at least one license
+- at least one tile layer
 
 Translating
 -----------
