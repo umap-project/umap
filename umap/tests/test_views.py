@@ -9,7 +9,8 @@ from umap.views import validate_url
 
 class TestsValidateProxyURL(TestCase):
 
-    def buildRequest(self, target="http://osm.org/georss.xml", verb="get", **kwargs):
+    def buildRequest(self, target="http://osm.org/georss.xml", verb="get",
+                     **kwargs):
         defaults = {
             'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
             'HTTP_REFERER': '%s/path/' % settings.SITE_URL
@@ -72,5 +73,5 @@ class TestsProxy(TestCase):
         }
         response = self.client.get(url, params, **headers)
         self.assertEquals(response.status_code, 200)
-        self.assertIn('Example Domain', response.content)
+        self.assertIn('Example Domain', response.content.decode())
         self.assertNotIn("Cookie", response['Vary'])

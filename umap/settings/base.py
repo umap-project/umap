@@ -46,14 +46,6 @@ LANGUAGES = (
 SECRET_KEY = ''
 
 INSTALLED_APPS = (
-    'leaflet_storage',
-    'umap',
-    'pgindex',
-    'compressor',
-    'social.apps.django_app.default',
-
-    'south',
-
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -61,8 +53,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.admindocs',
-    'django.contrib.gis'
+    'django.contrib.gis',
+
+    'leaflet_storage',
+    'umap',
+    'compressor',
+    'social.apps.django_app.default',
 )
 
 #==============================================================================
@@ -107,7 +103,7 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request',
+    'django.template.context_processors.request',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
     'umap.context_processors.feedback_link',
@@ -139,9 +135,9 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS += (
 )
 
-#==============================================================================
+# =============================================================================
 # Miscellaneous project settings
-#==============================================================================
+# =============================================================================
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
 LEAFLET_STORAGE_EXTRA_URLS = {
     'routing': 'http://map.project-osrm.org/?loc={lat},{lng}&hl={locale}',
@@ -151,11 +147,12 @@ SITE_URL = "http://umap.org"
 UMAP_DEMO_SITE = False
 MAP_SHORT_URL_NAME = "umap_short_url"
 UMAP_USE_UNACCENT = False
-UMAP_FEEDBACK_LINK = "http://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
+UMAP_FEEDBACK_LINK = "http://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"  # noqa
+USER_MAPS_URL = 'user_maps'
 
-#==============================================================================
+# =============================================================================
 # Third party app settings
-#==============================================================================
+# =============================================================================
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 

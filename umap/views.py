@@ -1,9 +1,15 @@
-import simplejson
+import json
 import mimetypes
-import urllib2
 import socket
 
-from urlparse import urlparse
+try:
+    # python3
+    from urllib.parse import urlparse
+    from urllib.request import Request, build_opener
+    from urllib.error import HTTPError
+except ImportError:
+    from urlparse import urlparse
+    from urllib2 import Request, HTTPError, build_opener
 
 from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
@@ -15,8 +21,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-from django.db.models.sql.where import ExtraWhere, OR
-from pgindex import search as pg_search
+from django.core.validators import URLValidator, ValidationError
 
 from leaflet_storage.models import Map
 from leaflet_storage.forms import DEFAULT_CENTER
@@ -36,7 +41,8 @@ class PaginatorMixin(object):
             # If page is not an integer, deliver first page.
             qs = paginator.page(1)
         except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
+            # If page is out of range (e.g. 9999), deliver last page of
+            # results.
             qs = paginator.page(paginator.num_pages)
         return qs
 
@@ -47,7 +53,7 @@ class Home(TemplateView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         qs = Map.public
-        if not 'spatialite' in settings.DATABASES['default']['ENGINE']:
+        if 'spatialite' not in settings.DATABASES['default']['ENGINE']:
             # Unsupported query type for sqlite.
             qs = qs.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         demo_map = None
@@ -103,8 +109,10 @@ class UserMaps(DetailView, PaginatorMixin):
     context_object_name = "current_user"
 
     def get_context_data(self, **kwargs):
-        manager = Map.objects if self.request.user == self.object else Map.public
-        maps = manager.filter(Q(owner=self.object) | Q(editors=self.object)).distinct().order_by('-modified_at')[:50]
+        manager = Map.objects if self.request.user == self.object\
+                  else Map.public
+        maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
+        maps = maps.distinct().order_by('-modified_at')[:50]
         maps = self.paginate(maps)
         kwargs.update({
             "maps": maps
@@ -131,13 +139,14 @@ class Search(TemplateView, PaginatorMixin):
         q = self.request.GET.get('q')
         results = []
         if q:
-            results = pg_search(q)
+            where = "to_tsvector(name) @@ to_tsquery(%s)"
             if getattr(settings, 'UMAP_USE_UNACCENT', False):
-                # Add unaccent support
-                results.query.where.add(ExtraWhere(("ts @@ plainto_tsquery('simple', unaccent(%s))", ), [q, ]), OR)
-            results = results.order_by('-rank', '-start_publish')
+                where = "to_tsvector(unaccent(name)) @@ to_tsquery(unaccent(%s))"  # noqa
+            results = Map.objects.filter(share_status=Map.PUBLIC)
+            results = results.extra(where=[where], params=[q])
+            results = results.order_by('-modified_at')
+            print(results.query)
             results = self.paginate(results)
-            results.object_list = [Map.objects.get(pk=i.obj_pk) for i in results]
         kwargs.update({
             'maps': results,
             'q': q
@@ -159,7 +168,8 @@ search = Search.as_view()
 class MapsShowCase(View):
 
     def get(self, *args, **kwargs):
-        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1))).order_by('-modified_at')[:2500]
+        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
+        maps = maps.order_by('-modified_at')[:2500]
 
         def make(m):
             description = m.description or ""
@@ -167,11 +177,13 @@ class MapsShowCase(View):
                 description = u"{description}\n{by} [[{url}|{name}]]".format(
                     description=description,
                     by=_("by"),
-                    url=reverse('user_maps', kwargs={"username": m.owner.username}),
+                    url=reverse('user_maps',
+                                kwargs={"username": m.owner.username}),
                     name=m.owner,
                 )
-            description = u"{}\n[[{}|{}]]".format(description, m.get_absolute_url(), _("View the map"))
-            geometry = m.settings['geometry'] if "geometry" in m.settings else simplejson.loads(m.center.geojson)
+            description = u"{}\n[[{}|{}]]".format(
+                description, m.get_absolute_url(), _("View the map"))
+            geometry = m.settings.get('geometry', json.loads(m.center.geojson))
             return {
                 "type": "Feature",
                 "geometry": geometry,
@@ -185,12 +197,9 @@ class MapsShowCase(View):
             "type": "FeatureCollection",
             "features": [make(m) for m in maps]
         }
-        return HttpResponse(simplejson.dumps(geojson))
+        return HttpResponse(json.dumps(geojson))
 
 showcase = MapsShowCase.as_view()
-
-
-from django.core.validators import URLValidator, ValidationError
 
 
 def validate_url(request):
@@ -226,22 +235,24 @@ class AjaxProxy(View):
         # You should not use this in production (use Nginx or so)
         try:
             url = validate_url(self.request)
-        except AssertionError:
+        except AssertionError as e:
             return HttpResponseBadRequest()
         headers = {
             'User-Agent': 'uMapProxy +http://wiki.openstreetmap.org/wiki/UMap'
         }
-        request = urllib2.Request(url, headers=headers)
-        opener = urllib2.build_opener()
+        request = Request(url, headers=headers)
+        opener = build_opener()
         try:
             proxied_request = opener.open(request)
-        except urllib2.HTTPError as e:
-            return HttpResponse(e.msg, status=e.code, mimetype='text/plain')
+        except HTTPError as e:
+            return HttpResponse(e.msg, status=e.code,
+                                content_type='text/plain')
         else:
             status_code = proxied_request.code
-            mimetype = proxied_request.headers.typeheader or mimetypes.guess_type(url)
+            mimetype = proxied_request.headers.get('Content-Type') or mimetypes.guess_type(url)  # noqa
             content = proxied_request.read()
             # Quick hack to prevent Django from adding a Vary: Cookie header
             self.request.session.accessed = False
-            return HttpResponse(content, status=status_code, mimetype=mimetype)
+            return HttpResponse(content, status=status_code,
+                                content_type=mimetype)
 ajax_proxy = AjaxProxy.as_view()

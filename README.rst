@@ -21,7 +21,7 @@ Create a virtual environment::
 Install dependencies and project::
 
     cd YOUR_SOURCE_DIR
-    git clone git clone https://bitbucket.org/yohanboniface/umap.git
+    git clone https://bitbucket.org/yohanboniface/umap.git
     pip install -r requirements.txt
     pip install -e .
 
@@ -58,7 +58,7 @@ needs. For example::
     TWITTER_CONSUMER_KEY = "xxx"
     TWITTER_CONSUMER_SECRET = "yyy"
 
-Example of callback URL to use for settings up OAuth apps::
+Example of callback URL to use for setting up OAuth apps::
 
  http://umap.foo.bar/complete/github/
 
@@ -66,7 +66,7 @@ Adapt the `STATIC_ROOT` and `MEDIA_ROOT` to your local environment.
 
 Create the tables::
 
-    python manage.py syncdb --migrate
+    python manage.py migrate
 
 Collect and compress the statics::
 
@@ -86,6 +86,18 @@ Go to the admin (http://localhost:8000/admin/) and add:
 
 - at least one license
 - at least one tile layer
+
+Search
+------
+
+UMap uses Postgresql tsvector for searching. It case your database is big, you
+may want to add an index. For that, you sould do so:
+
+    CREATE EXTENSION unaccent;
+    CREATE EXTENSION btree_gin;
+    ALTER FUNCTION unaccent(text) IMMUTABLE;
+    ALTER FUNCTION to_tsvector(text) IMMUTABLE;
+    CREATE INDEX search_idx ON leaflet_storage_map USING gin(to_tsvector(unaccent(name)), share_status);
 
 Translating
 -----------
