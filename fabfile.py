@@ -4,7 +4,7 @@ import posixpath
 
 
 env.project_name = 'umap'
-env.repository = 'https://yohanboniface@bitbucket.org/yohanboniface/umap.git'
+env.repository = 'https://github.com/umap-project/umap.git'
 env.local_branch = 'master'
 env.remote_ref = 'origin/master'
 env.requirements_file = 'requirements.txt'

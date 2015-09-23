@@ -2,6 +2,6 @@
 VERSION = (0, 7, 6)
 
 __author__ = 'Yohan Boniface'
-__contact__ = "yb@enix.org"
-__homepage__ = "https://bitbucket.org/yohanboniface/umap"
+__contact__ = "ybon@openstreetmap.fr"
+__homepage__ = "https://github.com/umap-project/umap"
 __version__ = ".".join(map(str, VERSION))
