@@ -1,3 +1,5 @@
+[![Requirements Status](https://requires.io/github/umap-project/umap/requirements.svg?branch=master)](https://requires.io/github/umap-project/umap/requirements/?branch=master)
+
 # uMap project
 
 ## About
