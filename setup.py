@@ -7,7 +7,14 @@ from setuptools import setup, find_packages
 
 import umap
 
-long_description = codecs.open('README.rst', "r", "utf-8").read()
+long_description = codecs.open('README.md', "r", "utf-8").read()
+
+
+def is_pkg(line):
+    return line and not line.startswith(('--', 'git', '#'))
+
+with open('requirements.txt', encoding='utf-8') as reqs:
+    install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
 
 setup(
     name="umap",
@@ -17,18 +24,15 @@ setup(
     description=umap.__doc__,
     keywords="django leaflet geodjango openstreetmap",
     url=umap.__homepage__,
-    download_url="https://bitbucket.org/yohanboniface/umap/downloads",
     packages=find_packages(),
     include_package_data=True,
     platforms=["any"],
     zip_safe=True,
     long_description=long_description,
-
+    install_requires=install_requires,
     classifiers=[
         "Development Status :: 3 - Alpha",
-        #"Environment :: Web Environment",
         "Intended Audience :: Developers",
-        #"License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python",
