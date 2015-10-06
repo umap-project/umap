@@ -149,6 +149,7 @@ MAP_SHORT_URL_NAME = "umap_short_url"
 UMAP_USE_UNACCENT = False
 UMAP_FEEDBACK_LINK = "http://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"  # noqa
 USER_MAPS_URL = 'user_maps'
+MAPQUEST_KEY = 'set me'
 
 # =============================================================================
 # Third party app settings

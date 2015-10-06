@@ -87,3 +87,6 @@ STATIC_ROOT = '/home/umap/.virtualenvs/umap/var/static'
 
 # For users' statics (geojson mainly)
 MEDIA_ROOT = '/home/umap/.virtualenvs/umap/var/uploads'
+
+# MapQuest API key
+MAPQUEST_KEY = ''
