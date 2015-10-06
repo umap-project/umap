@@ -1,7 +1,7 @@
 django-compressor==1.5
-Django==1.8.4
-Pillow==2.9.0
+Django==1.8.5
+Pillow==3.0.0
 psycopg2==2.6.1
-python-social-auth==0.2.12
+python-social-auth==0.2.13
 requests==2.7.0
 git+https://github.com/umap-project/django-leaflet-storage.git
