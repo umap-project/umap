@@ -2,6 +2,8 @@
 
 # uMap project
 
+[![Join the chat at https://gitter.im/umap-project/umap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/umap-project/umap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## About
 
 uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site.
