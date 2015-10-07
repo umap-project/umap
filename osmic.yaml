@@ -1,0 +1,31 @@
+input_dirs:
+  - "accommodation"
+  - "administration"
+  - "amenity"
+  - "barrier"
+  - "eat-drink"
+  - "emergency"
+  - "energy"
+  - "health"
+  - "money"
+  - "nature"
+  - "outdoor"
+  - "religious"
+  - "shop"
+  - "sports"
+  - "tourism"
+  - "transport"
+
+output: "tmp/grey"
+empty_output: true
+format: "png"
+subdirs: false
+
+global_style:
+  padding: 4
+  fill: "#444444"
+
+  halo:
+    fill: "#ededed"
+    width: 1
+    opacity: 0.3
