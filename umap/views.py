@@ -32,8 +32,8 @@ User = get_user_model()
 class PaginatorMixin(object):
     per_page = 5
 
-    def paginate(self, qs):
-        paginator = Paginator(qs, self.per_page)
+    def paginate(self, qs, per_page=None):
+        paginator = Paginator(qs, per_page or self.per_page)
         page = self.request.GET.get('p')
         try:
             qs = paginator.page(page)
@@ -109,11 +109,12 @@ class UserMaps(DetailView, PaginatorMixin):
     context_object_name = "current_user"
 
     def get_context_data(self, **kwargs):
-        manager = Map.objects if self.request.user == self.object\
-                  else Map.public
+        owner = self.request.user == self.object
+        manager = Map.objects if owner else Map.public
         maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
         maps = maps.distinct().order_by('-modified_at')[:50]
-        maps = self.paginate(maps)
+        per_page = 10 if owner else self.per_page
+        maps = self.paginate(maps, per_page)
         kwargs.update({
             "maps": maps
         })
