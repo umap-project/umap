@@ -128,9 +128,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.http.ConditionalGetMiddleware',
 )
 
-#==============================================================================
+# =============================================================================
 # Auth / security
-#==============================================================================
+# =============================================================================
 
 AUTHENTICATION_BACKENDS += (
 )
@@ -140,7 +140,7 @@ AUTHENTICATION_BACKENDS += (
 # =============================================================================
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
 LEAFLET_STORAGE_EXTRA_URLS = {
-    'routing': 'http://map.project-osrm.org/?loc={lat},{lng}&hl={locale}',
+    'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',  # noqa
     'ajax_proxy': '/ajax-proxy/?url={url}'
 }
 SITE_URL = "http://umap.org"
