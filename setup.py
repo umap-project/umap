@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import codecs
+import io
 
 from setuptools import setup, find_packages
 
@@ -13,7 +14,7 @@ long_description = codecs.open('README.md', "r", "utf-8").read()
 def is_pkg(line):
     return line and not line.startswith(('--', 'git', '#'))
 
-with open('requirements.txt', encoding='utf-8') as reqs:
+with io.open('requirements.txt', encoding='utf-8') as reqs:
     install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
 
 setup(
