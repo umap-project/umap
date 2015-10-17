@@ -20,6 +20,7 @@ from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
+from django.utils.encoding import smart_bytes
 from django.core.urlresolvers import reverse
 from django.core.validators import URLValidator, ValidationError
 
@@ -198,7 +199,7 @@ class MapsShowCase(View):
             "type": "FeatureCollection",
             "features": [make(m) for m in maps]
         }
-        return HttpResponse(json.dumps(geojson))
+        return HttpResponse(smart_bytes(json.dumps(geojson)))
 
 showcase = MapsShowCase.as_view()
 
