@@ -8,20 +8,22 @@ env.repository = 'https://github.com/umap-project/umap.git'
 env.local_branch = 'master'
 env.remote_ref = 'origin/master'
 env.requirements_file = 'requirements.txt'
-env.restart_sudo = False
+env.restart_sudo = True
+env.sudo_user = None
 
 
 def run_as_umap(*args, **kwargs):
     if env.restart_sudo:
-        kwargs['user'] = "umap"
+        if env.sudo_user:
+            kwargs['user'] = env.sudo_user
         return sudo(*args, **kwargs)
     else:
         return run(*args, **kwargs)
 
 
-#==============================================================================
+# =============================================================================
 # Tasks which set up deployment environments
-#==============================================================================
+# =============================================================================
 
 @task
 def osmfr():
@@ -38,7 +40,6 @@ def osmfr():
     env.project_dir = '/data/project/umap/src/{project_name}'.format(**env)
     env.project_conf = '{project_name}.settings.local'.format(**env)
     env.restart_command = 'touch {project_dir}/umap/wsgi.py'.format(**env)
-    env.restart_sudo = True
 
 
 @task
@@ -55,16 +56,16 @@ def dev():
     env.virtualenv_dir = '/home/ybon/.virtualenvs/{project_name}'.format(**env)
     env.project_dir = '/home/ybon/src/{project_name}'.format(**env)
     env.project_conf = '{project_name}.settings.local'.format(**env)
-    env.restart_command = '/home/ybon/.virtualenvs/circus/bin/circusctl restart {project_name}'.format(**env)
+    env.restart_command = 'service uwsgi restart'.format(**env)
 
 
 # Set the default environment.
 dev()
 
 
-#==============================================================================
+# =============================================================================
 # Actual tasks
-#==============================================================================
+# =============================================================================
 
 @task
 @roles('web', 'db')
@@ -178,7 +179,7 @@ def syncdb(sync=True, migrate=True):
     """
     Synchronize the database.
     """
-    dj('syncdb --migrate --noinput')
+    dj('migrate --noinput')
 
 
 @task
