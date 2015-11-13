@@ -76,6 +76,7 @@ Collect and compress the statics
     python manage.py compress
 
 Add a site object
+
     python manage.py shell
     from django.contrib.sites.models import Site
     Site.objects.create(name='example.com', domain='example.com')
