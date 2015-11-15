@@ -3,99 +3,97 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Maurizio Napolitano <maurizio.napolitano@okfn.org>, 2013-2015
-# claudiamocci <moccicm@gmail.com>, 2013
-# YOHAN BONIFACE <yb@enix.org>, 2012
+# Alazar Tekle <al3may3hu@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2015-11-02 09:15+0000\n"
-"Last-Translator: Maurizio Napolitano <maurizio.napolitano@okfn.org>\n"
-"Language-Team: Italian (http://www.transifex.com/yohanboniface/umap/language/it/)\n"
+"PO-Revision-Date: 2015-11-14 17:00+0000\n"
+"Last-Translator: Alazar Tekle <al3may3hu@gmail.com>\n"
+"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/yohanboniface/umap/language/am_ET/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
+"Language: am_ET\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: views.py:154 templates/leaflet_storage/map_list.html:7
 msgid "by"
-msgstr "di"
+msgstr "በ"
 
 #: views.py:158
 msgid "View the map"
-msgstr "Visualizza la mappa"
+msgstr "ካርታውን አሳይ"
 
 #: templates/base.html:39
 msgid "Type editors nick to add…"
-msgstr "Inserire nick degli editor d'aggiungere..."
+msgstr "የአራሚዎችን ኒክ በመፃፍ ጨምር"
 
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "Vedi le %(current_user)s mappe"
+msgstr "%(current_user)s የ"
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
-msgstr "Altre mappe"
+msgstr "ተጨማሪ"
 
 #: templates/leaflet_storage/map_update_settings.html:2
 msgid "Map settings"
-msgstr "Impostazioni mappa"
+msgstr "የካርታዎች ሁኔታ"
 
 #: templates/registration/login.html:3
 msgid "Please choose a provider"
-msgstr "Seleziona un fornitore"
+msgstr "እባክዎ አቅራቢ ይምረጡ"
 
 #: templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap permette di creare mappe, che fanno uso di  <a href=\"%(osm_url)s\" />OpenStreetMap</a> come sfondo, da inserire nel proprio sito in un minuto."
+msgstr "ዩማፕ በ <a href=\"%(osm_url)s\" />ኦፕን ስትሪት ማፕ</a> ሌየሮች ካርታዎችን በደቂቃ ውስጥ ሰርተን በገፃችን ማካተት እንድንችል ያደርገናል"
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Seleziona un layer per la propria mappa"
+msgstr "የካርታዎን ሌየሮች ይምረጡ"
 
 #: templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Aggiungi POI: marcatori, linee, poligoni..."
+msgstr "ፒ.ኦ.አይ. ይጨምሩ፡ ማርከሮች፣ መስመሮች፣ ፖሊጎኖች ..."
 
 #: templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr "Scegli colori ed icone dei POI"
+msgstr "የፒ.ኦ.አይ. ከለሮችን እና ጠቋሚዎችን ያስተዳድሩ"
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Aggiungi opzioni alla mappa: mappa panoramica, geolocalizzazione di un utente al caricamento ..."
+msgstr "የካርታ አማራጮችን ያስተዳድሩ። ትንሽ ካርታ አሳይ፣ ተጠቃሚውን በመጫን ላይ አሳይ ..."
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "importa in automatico dati geostrutturati (geojson, gpx, kml, osm ...)"
+msgstr "ጂዖስትራክቸርድ የሆነ መረጃ በጅምላ አምጣ "
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Scegli la licenza per i tuoi dati"
+msgstr "ለመረጃዎ ፈቃድ ይምረጡ"
 
 #: templates/umap/about_summary.html:17
 msgid "Embed and share your map"
-msgstr "Includi nel suo sito e condividi la mappa creata"
+msgstr "ካርታዎን ያካትቱ እና ይጋሩ"
 
 #: templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Ed è  <a href=\"%(repo_url)s\">software libero</a>!"
+msgstr "እንዲሁም <a href=\"%(repo_url)s\">ነፃ እና ክፍት ነው</a> !"
 
 #: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
 msgid "Create a map"
-msgstr "Crea una mappa"
+msgstr "ካርታ ፍጠር"
 
 #: templates/umap/about_summary.html:34
 msgid "Play with the demo"
-msgstr "Gioca con la demo"
+msgstr "በማሳያው ተለማመድ"
 
 #: templates/umap/home.html:10
 #, python-format
@@ -104,48 +102,48 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Questa è una demo da utilizzare solo per test e prototipi. Qualora sia necessaria una versione stabile si deve utilizzare l'indirizzo a href=\"%(stable_url)s\">%(stable_url)s</a>. Chiunque inoltre può crearsi una propria istanza, uMap è  <a href=\"%(repo_url)s\">software libero</a>!"
+msgstr "ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋ %(repo_url)s %(stable_url)s"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr "Mappe create con uMap"
+msgstr "የዩማፖች ካርታ"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Prendi ispirazione, visualizza mappe"
+msgstr "ካርታዎችን ተመልከት፣ ስሜትህን አነቃቃ!"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
-msgstr "Le mie mappe"
+msgstr "የኔ ካርታዎች"
 
 #: templates/umap/navigation.html:14
 msgid "Log in"
-msgstr "Accedi"
+msgstr "ግባ"
 
 #: templates/umap/navigation.html:14
 msgid "Sign in"
-msgstr "Registrati"
+msgstr "ግባ"
 
 #: templates/umap/navigation.html:16
 msgid "About"
-msgstr "Informazioni"
+msgstr "ስለ"
 
 #: templates/umap/navigation.html:17
 msgid "Feedback"
-msgstr "Feedback"
+msgstr "አስተያየት"
 
 #: templates/umap/navigation.html:19
 msgid "Log out"
-msgstr "Esci"
+msgstr "ውጣ"
 
 #: templates/umap/search.html:13
 msgid "Not map found."
-msgstr "Nessuna mappa trovata."
+msgstr "ካርታው አልተገኘም"
 
 #: templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr "Cerca mappe"
+msgstr "ካርታዎች መሀከል ፈልግ"
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
-msgstr "Cerca"
+msgstr "ፈልግ"

@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# gorn, 2014
+# Jakub A. Tesinsky, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2014-04-13 23:08+0000\n"
-"Last-Translator: gorn\n"
-"Language-Team: Czech (Czech Republic) (http://www.transifex.com/projects/p/umap/language/cs_CZ/)\n"
+"PO-Revision-Date: 2015-10-16 10:19+0000\n"
+"Last-Translator: Jakub A. Tesinsky\n"
+"Language-Team: Czech (Czech Republic) (http://www.transifex.com/yohanboniface/umap/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
