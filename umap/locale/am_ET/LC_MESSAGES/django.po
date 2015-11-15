@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2015-11-14 17:00+0000\n"
+"PO-Revision-Date: 2015-11-15 14:24+0000\n"
 "Last-Translator: Alazar Tekle <al3may3hu@gmail.com>\n"
 "Language-Team: Amharic (Ethiopia) (http://www.transifex.com/yohanboniface/umap/language/am_ET/)\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "የአራሚዎችን ኒክ በመፃፍ ጨምር"
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "%(current_user)s የ"
+msgstr "የ %(current_user)s'ን ካርታ አስስ"
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
@@ -72,7 +72,7 @@ msgstr "የካርታ አማራጮችን ያስተዳድሩ። ትንሽ ካር�
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "ጂዖስትራክቸርድ የሆነ መረጃ በጅምላ አምጣ "
+msgstr "ጂዖስትራክቸርድ የሆነ መረጃ በጅምላ አምጣ (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -102,7 +102,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋ %(repo_url)s %(stable_url)s"
+msgstr "ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋሚ የሆነ ማሳያ ከፈለጉ እባክዎ <a href=\"%(stable_url)s\">%(stable_url)s</a> ይጠቀሙ። እንዲሁም የራስዎን ማስቀመጥ ይችላሉ፣ <a href=\"%(repo_url)s\">ነፃ እና ክፍት</a> ነው!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
