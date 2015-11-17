@@ -40,6 +40,7 @@ LANGUAGES = (
     ('bg', u'Bulgarian'),
     ('vi', u'Vietnamese'),
     ('uk-ua', u'Ukrainian'),
+    ('am-et', u'Amharic'),
 )
 
 # Make this unique, and don't share it with anybody.
