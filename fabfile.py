@@ -9,7 +9,7 @@ env.local_branch = 'master'
 env.remote_ref = 'origin/master'
 env.requirements_file = 'requirements.txt'
 env.restart_sudo = True
-env.sudo_user = None
+env.sudo_user = 'umap'
 
 
 def run_as_umap(*args, **kwargs):
