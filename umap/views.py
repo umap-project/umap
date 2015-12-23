@@ -141,7 +141,7 @@ class Search(TemplateView, PaginatorMixin):
         q = self.request.GET.get('q')
         results = []
         if q:
-            where = "to_tsvector(name) @@ to_tsquery(%s)"
+            where = "to_tsvector(name) @@ plainto_tsquery(%s)"
             if getattr(settings, 'UMAP_USE_UNACCENT', False):
                 where = "to_tsvector(unaccent(name)) @@ to_tsquery(unaccent(%s))"  # noqa
             results = Map.objects.filter(share_status=Map.PUBLIC)
