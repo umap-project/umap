@@ -76,6 +76,10 @@ Collect and compress the statics
     python manage.py collectstatic
     python manage.py compress
 
+Create a superuser
+
+    python manage.py createsuperuser
+
 Add a site object
 
     python manage.py shell
