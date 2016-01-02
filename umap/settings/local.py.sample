@@ -64,6 +64,11 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 # UMAP_SHOWCASE_PK = 1156
 LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
 UMAP_DEMO_SITE = True
+
+# This setting will exclude empty maps (in fact, it will exclude all maps where
+# the default center has not been updated)
+UMAP_EXCLUDE_DEFAULT_MAPS = False
+
 SITE_URL = "http://localhost:8019"
 SHORT_SITE_URL = "http://s.hort"
 

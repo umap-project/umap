@@ -54,8 +54,9 @@ class Home(TemplateView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         qs = Map.public
-        if 'spatialite' not in settings.DATABASES['default']['ENGINE']:
-            # Unsupported query type for sqlite.
+        if (settings.UMAP_EXCLUDE_DEFAULT_MAPS and
+            'spatialite' not in settings.DATABASES['default']['ENGINE']):
+                # Unsupported query type for sqlite.
             qs = qs.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
