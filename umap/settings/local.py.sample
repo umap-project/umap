@@ -69,6 +69,11 @@ UMAP_DEMO_SITE = True
 # the default center has not been updated)
 UMAP_EXCLUDE_DEFAULT_MAPS = False
 
+# How many maps should be showcased on the main page resp. on the user page
+UMAP_MAPS_PER_PAGE = 5
+# How many maps should be showcased on the user page, if owner
+UMAP_MAPS_PER_PAGE_OWNER = 10
+
 SITE_URL = "http://localhost:8019"
 SHORT_SITE_URL = "http://s.hort"
 
