@@ -90,3 +90,8 @@ MEDIA_ROOT = '/home/umap/.virtualenvs/umap/var/uploads'
 
 # MapQuest API key
 MAPQUEST_KEY = ''
+
+# Default map location for new maps
+LEAFLET_LONGITUDE = 2
+LEAFLET_LATITUDE = 51
+LEAFLET_ZOOM = 6
