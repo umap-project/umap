@@ -13,6 +13,7 @@
 </div>
 {% endif %}
 
+{% if backends.backends|length %}
 <h5>{% trans "Please choose a provider" %}</h5>
 
 <div>
@@ -24,3 +25,4 @@
         {% endfor %}
     </ul>
 </div>
+{% endif %}
