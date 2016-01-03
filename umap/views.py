@@ -54,8 +54,9 @@ class Home(TemplateView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         qs = Map.public
-        if 'spatialite' not in settings.DATABASES['default']['ENGINE']:
-            # Unsupported query type for sqlite.
+        if (settings.UMAP_EXCLUDE_DEFAULT_MAPS and
+            'spatialite' not in settings.DATABASES['default']['ENGINE']):
+                # Unsupported query type for sqlite.
             qs = qs.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
@@ -74,7 +75,7 @@ class Home(TemplateView, PaginatorMixin):
             else:
                 qs = qs.exclude(id=showcase_map.pk)
         maps = qs.order_by('-modified_at')[:50]
-        maps = self.paginate(maps)
+        maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
         return {
             "maps": maps,
@@ -114,7 +115,10 @@ class UserMaps(DetailView, PaginatorMixin):
         manager = Map.objects if owner else Map.public
         maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
         maps = maps.distinct().order_by('-modified_at')[:50]
-        per_page = 10 if owner else self.per_page
+        if owner:
+            per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
+        else:
+            per_page = settings.UMAP_MAPS_PER_PAGE
         maps = self.paginate(maps, per_page)
         kwargs.update({
             "maps": maps
