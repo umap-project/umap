@@ -1,5 +1,18 @@
 {% load i18n %}
 
+{% if True %} {# TODO: replace by check, whether local login is enabled #}
+<h5>{% trans "Please log in with your account" %}</h5>
+
+<div>
+    <form id='login_form' action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="{% trans 'Username' %}" autofocus />
+        <input type="password" name="password" placeholder="{% trans 'Password' %}" />
+        <input type="submit" value="{% trans 'Login' %}" />
+    </form>
+</div>
+{% endif %}
+
 <h5>{% trans "Please choose a provider" %}</h5>
 
 <div>
