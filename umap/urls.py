@@ -19,8 +19,8 @@ urlpatterns = patterns(
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
     url(r'^ajax-proxy/$', cache_page(180)(views.ajax_proxy), name='ajax-proxy'),  # noqa
-    url(r'^change-password/', auth_views.password_change, name='password_change'),
-    url(r'^change-password-done/', auth_views.password_change_done, name='password_change_done'),
+    url(r'^change-password/', auth_views.password_change, { 'template_name': 'umap/password_change.html' }, name='password_change'),
+    url(r'^change-password-done/', auth_views.password_change_done, { 'template_name': 'umap/password_change_done.html' }, name='password_change_done'),
 )
 urlpatterns += i18n_patterns(
     '',
