@@ -53,7 +53,7 @@ class Home(TemplateView, PaginatorMixin):
     list_template_name = "leaflet_storage/map_list.html"
 
     def get_context_data(self, **kwargs):
-        qs = Map.public
+        qs = Map.objects.visible(self.request)
         if (settings.UMAP_EXCLUDE_DEFAULT_MAPS and
             'spatialite' not in settings.DATABASES['default']['ENGINE']):
                 # Unsupported query type for sqlite.
@@ -61,7 +61,7 @@ class Home(TemplateView, PaginatorMixin):
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
             try:
-                demo_map = Map.public.get(pk=settings.UMAP_DEMO_PK)
+                demo_map = Map.objects.visible(self.request).get(pk=settings.UMAP_DEMO_PK)
             except Map.DoesNotExist:
                 pass
             else:
@@ -69,7 +69,7 @@ class Home(TemplateView, PaginatorMixin):
         showcase_map = None
         if hasattr(settings, "UMAP_SHOWCASE_PK"):
             try:
-                showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
+                showcase_map = Map.objects.visible(self.request).get(pk=settings.UMAP_SHOWCASE_PK)
             except Map.DoesNotExist:
                 pass
             else:
@@ -112,7 +112,7 @@ class UserMaps(DetailView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         owner = self.request.user == self.object
-        manager = Map.objects if owner else Map.public
+        manager = Map.objects if owner else Map.objects.visible(self.request)
         maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
         maps = maps.distinct().order_by('-modified_at')[:50]
         if owner:
@@ -148,7 +148,7 @@ class Search(TemplateView, PaginatorMixin):
             where = "to_tsvector(name) @@ plainto_tsquery(%s)"
             if getattr(settings, 'UMAP_USE_UNACCENT', False):
                 where = "to_tsvector(unaccent(name)) @@ to_tsquery(unaccent(%s))"  # noqa
-            results = Map.objects.filter(share_status=Map.PUBLIC)
+            results = Map.objects.visible(self.request)
             results = results.extra(where=[where], params=[q])
             results = results.order_by('-modified_at')
             print(results.query)
@@ -174,7 +174,7 @@ search = Search.as_view()
 class MapsShowCase(View):
 
     def get(self, *args, **kwargs):
-        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
+        maps = Map.objects.visible(self.request).filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
         maps = maps.order_by('-modified_at')[:2500]
 
         def make(m):
