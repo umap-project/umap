@@ -4,6 +4,14 @@
 <h5>{% trans "Please log in with your account" %}</h5>
 
 <div>
+    {% if form.non_field_errors %}
+        <ul class='form-errors'>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <form id='login_form' action="{% url 'login' %}" method="POST">
         {% csrf_token %}
         <input type="text" name="username" placeholder="{% trans 'Username' %}" autofocus />
