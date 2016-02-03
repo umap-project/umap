@@ -110,6 +110,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'social.apps.django_app.context_processors.login_redirect',
     'umap.context_processors.feedback_link',
     'umap.context_processors.version',
+    'umap.context_processors.authentication',
 )
 
 TEMPLATE_LOADERS = (
@@ -134,6 +135,7 @@ MIDDLEWARE_CLASSES = (
 # Auth / security
 # =============================================================================
 
+ENABLE_ACCOUNT_LOGIN = True
 AUTHENTICATION_BACKENDS += (
 )
 

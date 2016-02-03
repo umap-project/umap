@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% if True %} {# TODO: replace by check, whether local login is enabled #}
+{% if ENABLE_ACCOUNT_LOGIN %}
 <h5>{% trans "Please log in with your account" %}</h5>
 
 <div>
