@@ -1,7 +1,7 @@
 django-compressor==1.6
-Django==1.8.7
-Pillow==3.0.0
+Django==1.8.11
+Pillow==3.1.1
 psycopg2==2.6.1
-python-social-auth==0.2.13
+python-social-auth==0.2.14
 requests==2.9.1
 django-leaflet-storage==0.8.0b0
