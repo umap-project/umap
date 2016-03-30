@@ -151,7 +151,6 @@ class Search(TemplateView, PaginatorMixin):
             results = Map.objects.filter(share_status=Map.PUBLIC)
             results = results.extra(where=[where], params=[q])
             results = results.order_by('-modified_at')
-            print(results.query)
             results = self.paginate(results)
         kwargs.update({
             'maps': results,
