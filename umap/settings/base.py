@@ -91,10 +91,10 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
 )
 
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
     # 'npm.finders.NpmFinder',
-) + STATICFILES_FINDERS
+] + STATICFILES_FINDERS
 
 # =============================================================================
 # Templates
