@@ -23,11 +23,14 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
+    !(function() {
+    var ui = new L.S.UI(document.body);
+    var xhr = new L.S.Xhr(ui);
     var login = document.querySelector('a.login');
     if (login) {
       L.DomEvent.on(login, 'click', function (e) {
         L.DomEvent.stop(e);
-        L.Storage.Xhr.login({
+        xhr.login({
             "login_required": this.getAttribute('href'),
             "redirect": "/"
         });
@@ -37,12 +40,12 @@
     if (logout) {
       L.DomEvent.on(logout, 'click', function (e) {
         L.DomEvent.stop(e);
-        L.Storage.Xhr.logout(this.getAttribute('href'));
+        xhr.logout(this.getAttribute('href'));
       });
     }
     var getMore = function (e) {
       L.DomEvent.stop(e);
-      L.S.Xhr._ajax({
+      xhr._ajax({
         uri: this.href,
         verb: 'GET',
         callback: function (data) {
@@ -63,6 +66,7 @@
     if (more) {
       L.DomEvent.on(more, 'click', getMore, more);
     }
+    })(this);
   </script>
 {% endblock bottom_js %}
 
