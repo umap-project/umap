@@ -10,7 +10,6 @@ from django.template.defaultfilters import slugify
 #==============================================================================
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 1
 # Local time zone for this installation. Choices can be found here:
@@ -100,21 +99,31 @@ STATICFILES_FINDERS = [
 # Templates
 # =============================================================================
 
-TEMPLATE_DIRS = (
-    os.path.join(PROJECT_DIR, 'templates'),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': (
+            os.path.join(PROJECT_DIR, 'templates'),
+        ),
+        'OPTIONS': {
+            'context_processors': (
+                "django.contrib.auth.context_processors.auth",
+                "django.core.context_processors.debug",
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.request",
+                "django.core.context_processors.media",
+                "django.core.context_processors.static",
+                "django.core.context_processors.tz",
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
+                'umap.context_processors.feedback_link',
+                'umap.context_processors.version',
+            )
+        }
+    },
+]
 
-TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.template.context_processors.request',
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
-    'umap.context_processors.feedback_link',
-    'umap.context_processors.version',
-)
-
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', TEMPLATE_LOADERS),
-)
 
 # =============================================================================
 # Middleware
