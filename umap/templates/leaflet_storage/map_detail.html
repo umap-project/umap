@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load leaflet_storage_tags compress %}
+{% load leaflet_storage_tags compress i18n %}
 {% block head_title %}{{ map.name }} - uMap{% endblock %}
 {% block body_class %}map_detail{% endblock %}
 
@@ -18,4 +18,14 @@
         {% include "leaflet_storage/map_init.html" %}
     {% endblock %}
     {% include "leaflet_storage/map_messages.html" %}
+    <script type="text/javascript">
+        MAP.ui.on('panel:ready', function () {
+            L.S.AutoComplete.multiSelect('id_editors', {
+                placeholder: "{% trans 'Type editors nick to add…' %}"
+            });
+            L.S.AutoComplete.select('id_owner', {
+                placeholder: "{% trans 'Type new owner nick…' %}"
+            });
+        });
+    </script>
 {% endblock %}

@@ -443,6 +443,9 @@ h2.section {
 .button-bar .button.half {
     width: calc(50% - 7px);
 }
+.button-bar .button.third {
+    width: calc(100% / 3 - 10px);
+}
 .demo-instance-warning {
     background-color: #c0392b;
     color: #efefef;
@@ -461,18 +464,8 @@ h2.section {
 /* **************************** */
 /*            colors            */
 /* **************************** */
-a {
+/*a {
     color: #689191;
-}
-.button, input[type="submit"] {
-    background-color: #79c1c0;
-}
-.neutral, input[type="submit"].neutral {
-    background-color: #ddd;
-    color: #666;
-}
-.button:hover, input[type="submit"]:hover {
-    background-color: #689191;
 }
 .warning {
     color: #cc0000;
@@ -498,19 +491,33 @@ a {
     font-size: 11px;
     font-style: italic;
 }
-.darline-autocomplete li.on {
+*/
+.wrapper input[type="submit"],
+.wrapper .button {
     background-color: #79c1c0;
+    color: #eeeeec;
 }
-.dark {
+.neutral, input[type="submit"].neutral {
+    background-color: #ddd;
+    color: #666;
+}
+.wrapper input[type="submit"]:hover {
+    background-color: #689191;
+}
+.wrapper.somber {
     background-color: #2E3641;
     color: #efefef;
     padding-top: 20px;
     margin-top: 20px;
 }
-.dark .row {
+.wrapper.somber .row {
     margin-top: 0;
 }
-
+.wrapper .button,
+.wrapper input {
+    height: 56px;
+    line-height: 43px;
+}
 
 /* **************************** */
 /*             404              */
@@ -564,10 +571,11 @@ ul.umap-autocomplete {
 .umap-singleresult div,
 .umap-multiresult li {
     width: 100%;
-    background-color: #e5e5e5;
+    background-color: #2e3436;
     border-radius: 2px;
+    border: 1px solid #202425;
     padding: 7px;
-    color: #464646;
+    color: #eeeeec;
 }
 .umap-multiresult li + li {
     margin-top: 7px;

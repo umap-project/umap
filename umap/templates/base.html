@@ -29,18 +29,6 @@
     {% block content %}
     {% endblock %}
 
-    {% block bottom_js %}
-        <script type="text/javascript">
-            L.S.on('ui:ready', function () {
-                L.S.AutoComplete.multiSelect('id_editors', {
-                    placeholder: "{% trans 'Type editors nick to add…' %}"
-                });
-                L.S.AutoComplete.select('id_owner', {
-                    placeholder: "{% trans 'Type new owner nick…' %}"
-                });
-            });
-        </script>
-    {% endblock %}
     {% block footer %}
         {% include "umap/footer.html" %}
     {% endblock footer %}
