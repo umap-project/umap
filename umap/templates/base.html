@@ -24,10 +24,12 @@
 <body class="{% block body_class %}{% endblock %}">
 
     {% block header %}
-    {% endblock %}
+    {% endblock header %}
 
     {% block content %}
-    {% endblock %}
+    {% endblock content %}
+    {% block bottom_js %}
+    {% endblock bottom_js %}
 
     {% block footer %}
         {% include "umap/footer.html" %}
