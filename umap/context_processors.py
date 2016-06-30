@@ -1,11 +1,14 @@
-from django.conf import settings
+from django.conf import settings as djsettings
 
 from . import __version__
 
-def feedback_link(request):
+
+def settings(request):
     return {
-        'UMAP_FEEDBACK_LINK': settings.UMAP_FEEDBACK_LINK
+        'UMAP_FEEDBACK_LINK': djsettings.UMAP_FEEDBACK_LINK,
+        'SITE_NAME': djsettings.SITE_NAME
     }
+
 
 def version(request):
     return {

@@ -117,7 +117,7 @@ TEMPLATES = [
                 "django.core.context_processors.tz",
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
-                'umap.context_processors.feedback_link',
+                'umap.context_processors.settings',
                 'umap.context_processors.version',
             )
         }
@@ -154,6 +154,7 @@ LEAFLET_STORAGE_EXTRA_URLS = {
     'ajax_proxy': '/ajax-proxy/?url={url}'
 }
 SITE_URL = "http://umap.org"
+SITE_NAME = 'uMap'
 UMAP_DEMO_SITE = False
 UMAP_EXCLUDE_DEFAULT_MAPS = False
 UMAP_MAPS_PER_PAGE = 5
