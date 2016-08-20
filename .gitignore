@@ -6,3 +6,4 @@ docs/_build
 umap/remote_static
 .idea
 tmp/*
+.cache
