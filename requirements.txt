@@ -3,5 +3,5 @@ Django==1.9.7
 Pillow==3.2.0
 psycopg2==2.6.1
 python-social-auth==0.2.19
-requests==2.10.0
+requests==2.11.1
 git+https://github.com/umap-project/django-leaflet-storage
