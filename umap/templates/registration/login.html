@@ -14,7 +14,9 @@
 
     <form id='login_form' action="{% url 'login' %}" method="POST">
         {% csrf_token %}
+        {{ form.username.errors }}
         <input type="text" name="username" placeholder="{% trans 'Username' %}" autofocus />
+        {{ form.password.errors }}
         <input type="password" name="password" placeholder="{% trans 'Password' %}" />
         <input type="submit" value="{% trans 'Login' %}" />
     </form>
