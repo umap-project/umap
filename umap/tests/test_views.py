@@ -1,9 +1,10 @@
 import socket
 
-from django.test import TestCase, RequestFactory
-from django.conf import settings
-from django.core.urlresolvers import reverse
 import pytest
+from django.conf import settings
+from django.contrib.auth import get_user, get_user_model
+from django.core.urlresolvers import reverse
+from django.test import RequestFactory
 
 from umap.views import validate_url
 
@@ -79,3 +80,29 @@ def test_valid_proxy_request(client):
     assert response.status_code == 200
     assert 'Example Domain' in response.content.decode()
     assert 'Cookie' not in response['Vary']
+
+
+@pytest.mark.django_db
+def test_login_does_not_contain_form_if_not_enabled(client, settings):
+    settings.ENABLE_ACCOUNT_LOGIN = False
+    response = client.get(reverse('login'))
+    assert 'username' not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_login_contains_form_if_enabled(client, settings):
+    settings.ENABLE_ACCOUNT_LOGIN = True
+    response = client.get(reverse('login'))
+    assert 'username' in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_can_login_with_username_and_password_if_enabled(client, settings):
+    settings.ENABLE_ACCOUNT_LOGIN = True
+    User = get_user_model()
+    user = User.objects.create(username='test')
+    user.set_password('test')
+    user.save()
+    client.post(reverse('login'), {'username': 'test', 'password': 'test'})
+    user = get_user(client)
+    assert user.is_authenticated()
