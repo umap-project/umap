@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # lillyvip <lillyvalpi@gmail.com>, 2013-2014
 # yohanboniface <yohanboniface@free.fr>, 2014
@@ -9,26 +9,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
 "PO-Revision-Date: 2014-07-20 14:03+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Bulgarian (http://www.transifex.com/projects/p/umap/language/bg/)\n"
+"Language-Team: Bulgarian (http://www.transifex.com/projects/p/umap/language/"
+"bg/)\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: views.py:154 templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr "от"
-
-#: views.py:158
-msgid "View the map"
-msgstr "Виж картата"
-
-#: templates/base.html:39
-msgid "Type editors nick to add…"
+#: templates/404.html:7
+msgid "Take me to the home page"
 msgstr ""
 
 #: templates/auth/user_detail.html:7
@@ -36,15 +29,39 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr "Разгледай картите на %(current_user)s"
 
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr ""
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr ""
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr "от"
+
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "Още"
 
-#: templates/leaflet_storage/map_update_settings.html:2
-msgid "Map settings"
-msgstr "Настройки на картата"
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr ""
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr ""
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr ""
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr ""
+
+#: templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "Моля изберете провайдер"
 
@@ -53,7 +70,10 @@ msgstr "Моля изберете провайдер"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap ви позволява да създавате карти базирани върху слоевете на <a href=\"%(osm_url)s\" /> OpenStreetMap </ A> само за минути и да ги вградите в сайта си."
+msgstr ""
+"uMap ви позволява да създавате карти базирани върху слоевете на <a href="
+"\"%(osm_url)s\" /> OpenStreetMap </ A> само за минути и да ги вградите в "
+"сайта си."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -69,7 +89,9 @@ msgstr "Промени POIs цветове и икони"
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Играй с опциите на картата: покажи миникарта, локализирай потребителя при зареждане ..."
+msgstr ""
+"Играй с опциите на картата: покажи миникарта, локализирай потребителя при "
+"зареждане ..."
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
@@ -88,7 +110,7 @@ msgstr "Вгради и сподели картата"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "И това е <a href=\"%(repo_url)s\">отворен код</a>!"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
 msgid "Create a map"
 msgstr "Създай карта"
 
@@ -100,10 +122,14 @@ msgstr "Играй си с демото"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a "
-"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
-"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Това е само демо пример, използван за тестове и предварителни издания. Ако имате нужда от стабилна версия, моля използвайте <a href=\"%(stable_url)s\">%(stable_url)s</ A>. Можете също така да бъде хост на вашата собствена версия, това е <a href=\"%(repo_url)s\"> отворен код </ A>!"
+"need a stable instance, please use <a href=\"%(stable_url)s\">"
+"%(stable_url)s</a>. You can also host your own instance, it's <a href="
+"\"%(repo_url)s\">open source</a>!"
+msgstr ""
+"Това е само демо пример, използван за тестове и предварителни издания. Ако "
+"имате нужда от стабилна версия, моля използвайте <a href=\"%(stable_url)s\">"
+"%(stable_url)s</ A>. Можете също така да бъде хост на вашата собствена "
+"версия, това е <a href=\"%(repo_url)s\"> отворен код </ A>!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -133,9 +159,47 @@ msgstr "Относно"
 msgid "Feedback"
 msgstr "Мнения"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr ""
+
+#: templates/umap/navigation.html:22
 msgid "Log out"
 msgstr "Излизане"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr ""
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr ""
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr ""
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr ""
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr ""
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr ""
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr ""
 
 #: templates/umap/search.html:13
 msgid "Not map found."
@@ -148,3 +212,10 @@ msgstr "Търсене на карти"
 #: templates/umap/search_bar.html:9
 msgid "Search"
 msgstr "Търсене"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Виж картата"
+
+#~ msgid "Map settings"
+#~ msgstr "Настройки на картата"

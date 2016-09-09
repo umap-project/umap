@@ -3,16 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Buggi <buggi@filzmail.com>, 2013
-# Buggi <buggi@filzmail.com>, 2013
-# yohanboniface <yohanboniface@free.fr>, 2014
+# Buggi, 2013
+# Buggi, 2013
+# yohanboniface <yohanboniface@free.fr>, 2014,2016
 # YOHAN BONIFACE <yb@enix.org>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-01 01:29+0100\n"
-"PO-Revision-Date: 2015-10-29 16:05+0000\n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
+"PO-Revision-Date: 2016-09-09 19:41+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: French (http://www.transifex.com/yohanboniface/umap/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -21,32 +21,48 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: views.py:154 templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr "par"
-
-#: views.py:158
-msgid "View the map"
-msgstr "Voir la carte"
-
-#: templates/base.html:39
-msgid "Type editors nick to add…"
-msgstr "Taper le nom d'un éditeur…"
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Retour à la page d'accueil"
 
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Consulter les cartes de %(current_user)s"
 
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Taper le nom d'un éditeur…"
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr "Nouveau du nouveau propriétaire…"
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr "par"
+
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "Plus"
 
-#: templates/leaflet_storage/map_update_settings.html:2
-msgid "Map settings"
-msgstr "Paramètres"
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Identifiez-vous"
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Connexion"
+
+#: templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "Merci de choisir un fournisseur"
 
@@ -90,7 +106,7 @@ msgstr "Exporter et partager votre carte"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Et c'est <a href=\"%(repo_url)s\">open source</a>!"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
 msgid "Create a map"
 msgstr "Créer une carte"
 
@@ -135,9 +151,47 @@ msgstr "À propos"
 msgid "Feedback"
 msgstr "Feedback"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr "Changer le mot de passe"
+
+#: templates/umap/navigation.html:22
 msgid "Log out"
 msgstr "Déconnexion"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "Changer le mot de passe"
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Merci de renseigner votre mot de passe actuel, puis deux fois le nouveau."
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "Ancien mot de passe"
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "Confirmation du nouveau mot de passe"
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "Changer de mot de passe"
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Le mot de passe a été modifié"
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "Votre mot de passe a été modifié"
 
 #: templates/umap/search.html:13
 msgid "Not map found."
@@ -150,3 +204,7 @@ msgstr "Chercher des cartes"
 #: templates/umap/search_bar.html:9
 msgid "Search"
 msgstr "Chercher"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Voir la carte"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views.py:154 templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr ""
-
-#: views.py:158
-msgid "View the map"
-msgstr ""
-
-#: templates/base.html:39
-msgid "Type editors nick to add…"
+#: templates/404.html:7
+msgid "Take me to the home page"
 msgstr ""
 
 #: templates/auth/user_detail.html:7
@@ -34,15 +26,39 @@ msgstr ""
 msgid "Browse %(current_user)s's maps"
 msgstr ""
 
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr ""
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr ""
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr ""
+
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr ""
 
-#: templates/leaflet_storage/map_update_settings.html:2
-msgid "Map settings"
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
 msgstr ""
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr ""
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr ""
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr ""
+
+#: templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr ""
 
@@ -86,7 +102,7 @@ msgstr ""
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
 msgid "Create a map"
 msgstr ""
 
@@ -131,8 +147,46 @@ msgstr ""
 msgid "Feedback"
 msgstr ""
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr ""
+
+#: templates/umap/navigation.html:22
 msgid "Log out"
+msgstr ""
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr ""
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr ""
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr ""
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr ""
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr ""
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr ""
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
 msgstr ""
 
 #: templates/umap/search.html:13
@@ -145,4 +199,8 @@ msgstr ""
 
 #: templates/umap/search_bar.html:9
 msgid "Search"
+msgstr ""
+
+#: views.py:190
+msgid "View the map"
 msgstr ""

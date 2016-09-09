@@ -1,49 +1,69 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Сергій Дубик <dubyk@ukr.net>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
 "PO-Revision-Date: 2014-09-15 16:05+0000\n"
 "Last-Translator: Сергій Дубик <dubyk@ukr.net>\n"
-"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/projects/p/umap/language/uk_UA/)\n"
+"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/projects/p/umap/"
+"language/uk_UA/)\n"
+"Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: uk_UA\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: views.py:154 templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr " від "
-
-#: views.py:158
-msgid "View the map"
-msgstr "Переглянути мапу"
-
-#: templates/base.html:39
-msgid "Type editors nick to add…"
-msgstr "Введіть ім’я редактора, щоб додати…"
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr ""
 
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Перегляд мап користувача %(current_user)s"
 
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Введіть ім’я редактора, щоб додати…"
+
+#: templates/leaflet_storage/map_detail.html:27
+#, fuzzy
+#| msgid "Type editors nick to add…"
+msgid "Type new owner nick…"
+msgstr "Введіть ім’я редактора, щоб додати…"
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr " від "
+
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "Ще"
 
-#: templates/leaflet_storage/map_update_settings.html:2
-msgid "Map settings"
-msgstr "Налаштування мапи"
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr ""
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr ""
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr ""
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr ""
+
+#: templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "Виберіть провайдера автентифікації"
 
@@ -52,7 +72,9 @@ msgstr "Виберіть провайдера автентифікації"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap дає Вам можливість за лічені хвилини створювати мапи на основі даних <a href=\"%(osm_url)s\" />OpenStreetMap</a> та публікувати їх на своєму сайті."
+msgstr ""
+"uMap дає Вам можливість за лічені хвилини створювати мапи на основі даних <a "
+"href=\"%(osm_url)s\" />OpenStreetMap</a> та публікувати їх на своєму сайті."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -68,7 +90,9 @@ msgstr "Вибирайте потрібні кольори та значки д�
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Змінюйте параметри мапи: відображення мінімапи, встановлення місця користувача при завантаженні …"
+msgstr ""
+"Змінюйте параметри мапи: відображення мінімапи, встановлення місця "
+"користувача при завантаженні …"
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
@@ -87,7 +111,7 @@ msgstr "Вбудовуйте Вашу мапу та діліться нею"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "І це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
 msgid "Create a map"
 msgstr "Створити мапу"
 
@@ -99,10 +123,14 @@ msgstr "Погратися з демо-версією"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a "
-"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
-"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Це демонстраційний сайт, що використовується для тестів та підготовки стабільних випусків.  Якщо Вам потрібна стабільна версія, перейдіть на <a href=\"%(stable_url)s\">%(stable_url)s</a>. Ви також можете створити свою інсталяцію, оскільки це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
+"need a stable instance, please use <a href=\"%(stable_url)s\">"
+"%(stable_url)s</a>. You can also host your own instance, it's <a href="
+"\"%(repo_url)s\">open source</a>!"
+msgstr ""
+"Це демонстраційний сайт, що використовується для тестів та підготовки "
+"стабільних випусків.  Якщо Вам потрібна стабільна версія, перейдіть на <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. Ви також можете створити свою "
+"інсталяцію, оскільки це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -132,9 +160,47 @@ msgstr "Про проект"
 msgid "Feedback"
 msgstr "Зворотній зв’язок"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr ""
+
+#: templates/umap/navigation.html:22
 msgid "Log out"
 msgstr "Вийти"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr ""
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr ""
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr ""
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr ""
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr ""
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr ""
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr ""
 
 #: templates/umap/search.html:13
 msgid "Not map found."
@@ -147,3 +213,10 @@ msgstr "Пошук за мапами"
 #: templates/umap/search_bar.html:9
 msgid "Search"
 msgstr "Шукати"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Переглянути мапу"
+
+#~ msgid "Map settings"
+#~ msgstr "Налаштування мапи"

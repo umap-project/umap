@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Hsin-lin Cheng <lancetw@gmail.com>, 2014
 # Yuan CHAO <yuanchao@gmail.com>, 2014
@@ -9,42 +9,61 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-01 01:29+0100\n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
 "PO-Revision-Date: 2014-08-21 17:10+0000\n"
 "Last-Translator: Yuan CHAO <yuanchao@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/umap/language/zh_TW/)\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/umap/"
+"language/zh_TW/)\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: views.py:154 templates/leaflet_storage/map_list.html:7
-msgid "by"
-msgstr "由"
-
-#: views.py:158
-msgid "View the map"
-msgstr "檢視地圖"
-
-#: templates/base.html:39
-msgid "Type editors nick to add…"
-msgstr "鍵入編輯者的暱稱以加入..."
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr ""
 
 #: templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "瀏覽 %(current_user)s 的地圖"
 
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "鍵入編輯者的暱稱以加入..."
+
+#: templates/leaflet_storage/map_detail.html:27
+#, fuzzy
+#| msgid "Type editors nick to add…"
+msgid "Type new owner nick…"
+msgstr "鍵入編輯者的暱稱以加入..."
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr "由"
+
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
 msgstr "詳細"
 
-#: templates/leaflet_storage/map_update_settings.html:2
-msgid "Map settings"
-msgstr "地圖設定"
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr ""
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr ""
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr ""
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr ""
+
+#: templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "選擇服務商"
 
@@ -53,7 +72,9 @@ msgstr "選擇服務商"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap 讓您使用 <a href=\"%(osm_url)s\" />OpenStreetMap</a> 圖層來建立您的地圖﹐只需要幾分鐘就可以完成並嵌入您的網頁。"
+msgstr ""
+"uMap 讓您使用 <a href=\"%(osm_url)s\" />OpenStreetMap</a> 圖層來建立您的地"
+"圖﹐只需要幾分鐘就可以完成並嵌入您的網頁。"
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -88,7 +109,7 @@ msgstr "內嵌並分享您的地圖"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "而且 <a href=\"%(repo_url)s\">開放原始碼</a>！"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:28
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
 msgid "Create a map"
 msgstr "建立地圖"
 
@@ -100,10 +121,13 @@ msgstr "播放展示"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a "
-"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
-"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "這是一個範例服務﹐提供測試與正式版發行前驗證使用。如果您需要一個穩定的服務，請使用 <a href=\"%(stable_url)s\">%(stable_url)s</a>。您也可以自行架設服務﹐這完全是 <a href=\"%(repo_url)s\">開放原始碼</a> 的！"
+"need a stable instance, please use <a href=\"%(stable_url)s\">"
+"%(stable_url)s</a>. You can also host your own instance, it's <a href="
+"\"%(repo_url)s\">open source</a>!"
+msgstr ""
+"這是一個範例服務﹐提供測試與正式版發行前驗證使用。如果您需要一個穩定的服務，"
+"請使用 <a href=\"%(stable_url)s\">%(stable_url)s</a>。您也可以自行架設服務﹐"
+"這完全是 <a href=\"%(repo_url)s\">開放原始碼</a> 的！"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -133,9 +157,47 @@ msgstr "關於"
 msgid "Feedback"
 msgstr "回報問題"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr ""
+
+#: templates/umap/navigation.html:22
 msgid "Log out"
 msgstr "登出"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr ""
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr ""
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr ""
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr ""
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr ""
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr ""
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr ""
 
 #: templates/umap/search.html:13
 msgid "Not map found."
@@ -148,3 +210,10 @@ msgstr "搜尋地圖"
 #: templates/umap/search_bar.html:9
 msgid "Search"
 msgstr "搜尋"
+
+#: views.py:190
+msgid "View the map"
+msgstr "檢視地圖"
+
+#~ msgid "Map settings"
+#~ msgstr "地圖設定"
