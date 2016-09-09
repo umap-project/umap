@@ -282,8 +282,10 @@ L.S.AutoComplete.BaseSelect = L.S.AutoComplete.extend({
         var results = [],
             self = this,
             count = 0;
+        val = val.toLowerCase();
         this.forEach(this.el, function (item) {
-            if (item.innerHTML.toLowerCase().indexOf(val.toLowerCase()) !== -1 && !item.selected && count < self.options.maxResults) {
+            var candidate = item.innerHTML.toLowerCase();
+            if (candidate === val || (candidate.indexOf(val) !== -1 && !item.selected && count < self.options.maxResults)) {
                 results.push(self.optionToResult(item));
                 count++;
             }
