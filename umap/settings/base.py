@@ -119,7 +119,6 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.login_redirect',
                 'umap.context_processors.settings',
                 'umap.context_processors.version',
-                'umap.context_processors.authentication',
             )
         }
     },

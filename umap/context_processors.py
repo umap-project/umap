@@ -6,7 +6,8 @@ from . import __version__
 def settings(request):
     return {
         'UMAP_FEEDBACK_LINK': djsettings.UMAP_FEEDBACK_LINK,
-        'SITE_NAME': djsettings.SITE_NAME
+        'SITE_NAME': djsettings.SITE_NAME,
+        'ENABLE_ACCOUNT_LOGIN': djsettings.ENABLE_ACCOUNT_LOGIN,
     }
 
 
@@ -15,7 +16,3 @@ def version(request):
         'UMAP_VERSION': __version__
     }
 
-def authentication(request):
-    return {
-        'ENABLE_ACCOUNT_LOGIN': settings.ENABLE_ACCOUNT_LOGIN
-    }
