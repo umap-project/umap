@@ -37,6 +37,10 @@ COMPRESS_OFFLINE = True
 
 LANGUAGE_CODE = 'en'
 
+# Set to False if login into django account should not be possible. You can
+# administer accounts in the admin interface.
+ENABLE_ACCOUNT_LOGIN = True
+
 AUTHENTICATION_BACKENDS = (
     'social.backends.github.GithubOAuth2',
     'social.backends.bitbucket.BitbucketOAuth',

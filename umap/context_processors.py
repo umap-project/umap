@@ -14,3 +14,8 @@ def version(request):
     return {
         'UMAP_VERSION': __version__
     }
+
+def authentication(request):
+    return {
+        'ENABLE_ACCOUNT_LOGIN': settings.ENABLE_ACCOUNT_LOGIN
+    }
