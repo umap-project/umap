@@ -142,7 +142,7 @@ MIDDLEWARE_CLASSES = (
 # Auth / security
 # =============================================================================
 
-ENABLE_ACCOUNT_LOGIN = True
+ENABLE_ACCOUNT_LOGIN = False
 AUTHENTICATION_BACKENDS += (
 )
 
