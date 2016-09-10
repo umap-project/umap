@@ -75,6 +75,7 @@ PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))
 # =============================================================================
 
 ROOT_URLCONF = 'umap.urls'
+WSGI_APPLICATION = 'umap.wsgi.application'
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
@@ -85,6 +86,7 @@ MEDIA_URL = '/uploads/'
 
 STATIC_ROOT = os.path.join('static')
 MEDIA_ROOT = os.path.join('uploads')
+
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),

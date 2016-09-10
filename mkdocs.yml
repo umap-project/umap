@@ -3,4 +3,6 @@ pages:
 - Home: index.md
 - Installation: install.md
 - Contributing: contributing.md
+- how-tos:
+  - Ubuntu from scratch: ubuntu.md
 theme: readthedocs

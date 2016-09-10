@@ -11,7 +11,7 @@ your code repository.
 
 from umap.settings.base import *   # pylint: disable=W0614,W0401
 
-SECRET_KEY = ''
+SECRET_KEY = '!!change me!!'
 INTERNAL_IPS = ('127.0.0.1', )
 ALLOWED_HOSTS = ['*', ]
 
@@ -29,8 +29,6 @@ DATABASES = {
         'NAME': 'umap',
     }
 }
-
-WSGI_APPLICATION = 'umap.wsgi.application'
 
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = True
@@ -64,10 +62,15 @@ MIDDLEWARE_CLASSES += (
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 
+# If you want to add a playgroud map, add its primary key
 # UMAP_DEMO_PK = 204
+# If you want to add a showcase map on the home page, add its primary key
 # UMAP_SHOWCASE_PK = 1156
-LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
+# Add a baner to warn people this instance is not production ready.
 UMAP_DEMO_SITE = True
+
+# Whether to allow non authenticated people to create maps.
+LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
 
 # This setting will exclude empty maps (in fact, it will exclude all maps where
 # the default center has not been updated)
@@ -97,10 +100,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 UMAP_USE_UNACCENT = False
 
 # For static deployment
-STATIC_ROOT = '/home/umap/.virtualenvs/umap/var/static'
+STATIC_ROOT = '/home/srv/var/static'
 
 # For users' statics (geojson mainly)
-MEDIA_ROOT = '/home/umap/.virtualenvs/umap/var/uploads'
+MEDIA_ROOT = '/home/srv/umap/var/data'
 
 # Default map location for new maps
 LEAFLET_LONGITUDE = 2
