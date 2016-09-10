@@ -38,4 +38,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python",
     ],
-)
+    entry_points={
+        'console_scripts': ['umap=umap.bin:main'],
+    },
+ )
