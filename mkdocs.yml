@@ -1,0 +1,6 @@
+site_name: uMap
+pages:
+- Home: index.md
+- Installation: install.md
+- Contributing: contributing.md
+theme: readthedocs
