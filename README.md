@@ -2,7 +2,7 @@
 # uMap project
 
 [![Requirements Status](https://requires.io/github/umap-project/umap/requirements.svg?branch=master)](https://requires.io/github/umap-project/umap/requirements/?branch=master)
-[![Join the chat at https://gitter.im/umap-project/umap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/umap-project/umap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/umap-project/umap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/umap-project/umap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Documentation Status](https://readthedocs.org/projects/umap-project/badge/?version=latest)](http://umap-project.readthedocs.io/en/latest/?badge=latest)
 
 ## About
 
@@ -13,4 +13,4 @@ It uses [django-leaflet-storage](https://github.com/umap-project/django-leaflet-
 
 ## Installation and configuration
 
-See [developper documentation](https://umap.readthedocs.org/install/).
+See [developper documentation](https://umap-project.readthedocs.org/install/).
