@@ -83,6 +83,10 @@ remember to rerun this command if you open a new terminal window.*
 
     umap collectstatic
 
+## Create languages files
+
+    umap storagei18n
+
 ## Create a superuser
 
     umap createsuperuser
