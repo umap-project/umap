@@ -401,9 +401,6 @@ footer a {
     margin-top: 0;
     padding-top: 20px;
 }
-.search_wrapper {
-    background-color: #2E3641;
-}
 .search_wrapper .row {
     margin-top: 0;
     padding-top: 20px;
@@ -464,34 +461,7 @@ h2.section {
 /* **************************** */
 /*            colors            */
 /* **************************** */
-/*a {
-    color: #689191;
-}
-.warning {
-    color: #cc0000;
-}
-.tintbox {
-    background-color: #28353D;
-}
-.tintbox,
-.tintbox p,
-.tintbox a {
-    color: #f8f8f8;
-    font-family: sans-serif;
-}
-.tintbox a {
-    text-decoration: underline;
-}
-.tintbox.warning {
-    background-color: #cc0000;
-    color: #fff;
-}
-.tintbox .note, .tintbox .note a {
-    line-height: 1.2em;
-    font-size: 11px;
-    font-style: italic;
-}
-*/
+
 .wrapper input[type="submit"],
 .wrapper .button {
     background-color: #79c1c0;
