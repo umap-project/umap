@@ -467,12 +467,12 @@ h2.section {
     background-color: #79c1c0;
     color: #eeeeec;
 }
-.neutral, input[type="submit"].neutral {
-    background-color: #ddd;
-    color: #666;
-}
 .wrapper input[type="submit"]:hover {
     background-color: #689191;
+}
+.wrapper .neutral, .wrapper input[type="submit"].neutral {
+    background-color: #ddd;
+    color: #666;
 }
 .wrapper.somber {
     background-color: #2E3641;
