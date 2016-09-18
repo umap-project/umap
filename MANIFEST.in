@@ -1,3 +1,4 @@
 include README.md
 recursive-include umap/static *
 recursive-include umap/templates *
+recursive-include umap/locale *
