@@ -26,7 +26,7 @@
   {{ block.super }}
   <script type="text/javascript">
     !(function() {
-    var ui = new L.S.UI(document.body);
+    var ui = new L.S.UI(document.querySelector('header'));
     var xhr = new L.S.Xhr(ui);
     var login = document.querySelector('a.login');
     if (login) {
