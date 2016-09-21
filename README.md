@@ -13,4 +13,4 @@ It uses [django-leaflet-storage](https://github.com/umap-project/django-leaflet-
 
 ## Installation and configuration
 
-See [developper documentation](https://umap-project.readthedocs.org/install/).
+See [developper documentation](https://umap-project.readthedocs.io/en/latest/install/).
