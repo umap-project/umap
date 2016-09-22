@@ -462,8 +462,8 @@ h2.section {
 /*            colors            */
 /* **************************** */
 
-.wrapper input[type="submit"],
-.wrapper .button {
+input[type="submit"],
+.button {
     background-color: #79c1c0;
     color: #eeeeec;
 }
@@ -575,6 +575,9 @@ body.content #storage-ui-container {
 }
 .storage-loader {
     background-color: #79c1c0 !important;
+}
+.leaflet-container a.button {
+    color: #eeeeec;
 }
 
 /* ************************************************* */
