@@ -60,7 +60,7 @@ you will need to run again this last line.*
 
 ## Install umap
 
-    pip install umap
+    pip install git+https://github.com/umap-project/umap
 
 
 ## Create a local configuration file
