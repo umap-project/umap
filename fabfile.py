@@ -138,27 +138,7 @@ def update(action='check'):
     updating requirements. Anything else other than ``'check'`` will avoid
     updating requirements at all.
     """
-    with cd(env.project_dir):
-        remote, dest_branch = env.remote_ref.split('/', 1)
-        run_as_umap('git fetch {remote}'.format(remote=remote))
-        with hide('running', 'stdout'):
-            changed_files = run('git diff-index --cached --name-only '
-                                '{remote_ref}'.format(**env)).splitlines()
-        if not changed_files and action != 'force':
-            # No changes, we can exit now.
-            return
-        if action == 'check':
-            reqs_changed = env.requirements_file in changed_files
-        else:
-            reqs_changed = False
-        run_as_umap('git merge {remote_ref}'.format(**env))
-        run_as_umap('find -name "*.pyc" -delete')
-        if action == "clean":
-            run_as_umap('git clean -df')
-    if action == 'force' or reqs_changed:
-        # Not using execute() because we don't want to run multiple times for
-        # each role (since this task gets run per role).
-        requirements()
+    run_as_umap('pip install git+https://github.com/umap-project/umap')
 
 
 @task
