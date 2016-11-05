@@ -1,27 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
-# nyampire <nyampire@gmail.com>, 2013-2014
+# Satoshi IIDA <nyampire@gmail.com>, 2013-2014
+# tomoya muramoto <muramototomoya@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2014-03-20 13:12+0000\n"
-"Last-Translator: nyampire <nyampire@gmail.com>\n"
-"Language-Team: Japanese (http://www.transifex.com/projects/p/umap/language/"
-"ja/)\n"
-"Language: ja\n"
+"PO-Revision-Date: 2016-10-02 07:23+0000\n"
+"Last-Translator: tomoya muramoto <muramototomoya@gmail.com>\n"
+"Language-Team: Japanese (http://www.transifex.com/yohanboniface/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: templates/404.html:7
 msgid "Take me to the home page"
-msgstr ""
+msgstr "ホームページに移動"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -33,10 +33,8 @@ msgid "Type editors nick to add…"
 msgstr "編集者のニックネームを入力..."
 
 #: templates/leaflet_storage/map_detail.html:27
-#, fuzzy
-#| msgid "Type editors nick to add…"
 msgid "Type new owner nick…"
-msgstr "編集者のニックネームを入力..."
+msgstr "新オーナーのニックネームを入力"
 
 #: templates/leaflet_storage/map_list.html:7 views.py:184
 msgid "by"
@@ -48,19 +46,19 @@ msgstr "さらに表示"
 
 #: templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr ""
+msgstr "アカウントでログインしてください"
 
 #: templates/registration/login.html:18
 msgid "Username"
-msgstr ""
+msgstr "ユーザー名"
 
 #: templates/registration/login.html:20
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 #: templates/registration/login.html:21
 msgid "Login"
-msgstr ""
+msgstr "ログイン"
 
 #: templates/registration/login.html:27
 msgid "Please choose a provider"
@@ -71,9 +69,7 @@ msgstr "連携アカウント選択"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
-"uMapは <a href=\"%(osm_url)s\" />OpenStreetMap</a> のレイヤを使い、サイト埋め"
-"込み用の地図を即座に作成することが可能なサービスです"
+msgstr "uMapは <a href=\"%(osm_url)s\" />OpenStreetMap</a> のレイヤを使い、サイト埋め込み用の地図を即座に作成することが可能なサービスです"
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -120,13 +116,10 @@ msgstr "デモを表示"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
-msgstr ""
-"これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href="
-"\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href="
-"\"%(repo_url)s\">Open Source</a>ですので、自分でサーバを作ることも可能です！"
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href=\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href=\"%(repo_url)s\">Open Source</a>ですので、自分でサーバを作ることも可能です！"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -158,7 +151,7 @@ msgstr "フィードバック"
 
 #: templates/umap/navigation.html:20
 msgid "Change password"
-msgstr ""
+msgstr "パスワードを変更"
 
 #: templates/umap/navigation.html:22
 msgid "Log out"
@@ -166,37 +159,37 @@ msgstr "ログアウト"
 
 #: templates/umap/password_change.html:6
 msgid "Password change"
-msgstr ""
+msgstr "パスワードを変更"
 
 #: templates/umap/password_change.html:7
 msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
-msgstr ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "セキュリティ確認のため、古いパスワードを入力してください。次に、入力ミスがないように、新しいパスワードを2回入力してください。"
 
 #: templates/umap/password_change.html:12
 msgid "Old password"
-msgstr ""
+msgstr "古いパスワード"
 
 #: templates/umap/password_change.html:14
 msgid "New password"
-msgstr ""
+msgstr "新しいパスワード"
 
 #: templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr ""
+msgstr "新しいパスワードの確認"
 
 #: templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr ""
+msgstr "パスワードを変更"
 
 #: templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr ""
+msgstr "パスワード変更に成功"
 
 #: templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr ""
+msgstr "パスワードは変更されました"
 
 #: templates/umap/search.html:13
 msgid "Not map found."
@@ -213,6 +206,3 @@ msgstr "検索"
 #: views.py:190
 msgid "View the map"
 msgstr "マップ表示"
-
-#~ msgid "Map settings"
-#~ msgstr "マップ設定"
