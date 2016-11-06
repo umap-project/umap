@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Martin <martin@droid.sk>, 2016
+# Martin <martin@droid.sk>, 2016
+# Martin Ždila <m.zdila@gmail.com>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
+"PO-Revision-Date: 2016-10-09 11:19+0000\n"
+"Last-Translator: Martin <martin@droid.sk>\n"
+"Language-Team: Slovak (Slovakia) (http://www.transifex.com/yohanboniface/umap/language/sk_SK/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk_SK\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Prejsť na domovskú stránku"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Prezerať si mapy používateľa %(current_user)s"
+
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Vložte prezývku prispievateľa k pridaniu…"
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr "Zadajte novú prezývku vlastníka…"
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr ", autor:"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Viac"
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Prosím, prihláste sa pomocou vášho účtu"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Používateľské meno"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Heslo"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Prihlásiť"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Prosím vyberte poskytovateľa mapy"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "Vytvárajte a zdieľajte vlastné <a href=\"%(osm_url)s\" />OpenStreet</a> mapy a behom pár minút ich použite na svojom webe."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Zvoľte vrstvy vašej mapy"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Pridajte značky, čiary, trasy, oblasti."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Nastavte farby a ikony pre POI"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Nastavte ďalšie možnosti - minimapu, polohu používateľa pri štarte, …"
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Import existujúcich geoúdajov v mnohých formátoch (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Vyberte licenciu pre vaše údaje"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Zdieľajte a vložte mapu na inú webstránku"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "A celé je to <a href=\"%(repo_url)s\">open source</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+msgid "Create a map"
+msgstr "Vytvoriť mapu"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Hrajte sa s demom"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Toto je ukážková verzia, používaná na testovanie nových vydaní uMap. Ak potrebujete stabilnú verzu, použite <a href=\"%(stable_url)s\">%(stable_url)s</a>. Môžete si tiež stiahnúť celý projekt a nainštalovať ho na svoj server - je to <a href=\"%(repo_url)s\">open source</a>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Mapa všetkých uMap"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Inšpirujte sa prezeraním iných máp"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Moje mapy"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Prihlásiť sa"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Zaregistrovať sa"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "O uMap"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Napíšte nám"
+
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr "Zmeniť heslo"
+
+#: templates/umap/navigation.html:22
+msgid "Log out"
+msgstr "Odhlásiť sa"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "Zmena hesla"
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Prosím, z dôvodu bezpečnosti zadajte vaše staré heslo a potom zadajte nové heslo dvakrát, aby sme mohli overiť, že ste ho zadali správne."
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "Staré heslo"
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr "Nové heslo"
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "Potvrďte nové heslo"
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "Zmeniť moje heslo"
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Heslo sa úspešne zmenilo"
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "Vaše heslo sa zmenilo."
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Žiadna mapa sa nenašla."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Hľadať mapy"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Hľadať"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Prezrieť si túto mapu"
