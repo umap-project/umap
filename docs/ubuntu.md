@@ -95,15 +95,6 @@ remember to rerun this command if you open a new terminal window.*
 
     umap runserver 0.0.0.0:8000
 
-## Add at least one license
-
-Go to [http://localhost:8000/admin/leaflet_storage/licence/add/](http://localhost:8000/admin/leaflet_storage/licence/add/) and create
-a new Licence object.
-For example:
-
-- name: `ODbL`
-- URL: `http://opendatacommons.org/licenses/odbl/`
-
 You can now go to [http://localhost:8000/](http://localhost:8000/) and try to create a map for testing.
 
 When you're done with testing, quit the demo server (type Ctrl-C).
