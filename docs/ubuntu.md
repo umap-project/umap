@@ -286,3 +286,10 @@ In your local.py:
     SHORT_SITE_URL = "http://s.hort"
 
 Also adapt `ALLOWED_HOSTS` accordingly.
+
+
+## Add more tilelayers, pictograms…
+
+Go to the admin: [http://localhost:8020/admin/](http://localhost:8020/admin/),
+and create the objects you want.
+
