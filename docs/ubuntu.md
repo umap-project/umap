@@ -104,17 +104,6 @@ For example:
 - name: `ODbL`
 - URL: `http://opendatacommons.org/licenses/odbl/`
 
-## Add at least one tilelayer
-
-Go to [http://localhost:8000/admin/leaflet_storage/tilelayer/add/](http://localhost:8000/admin/leaflet_storage/tilelayer/add/) and create
-a new TileLayer object.
-
-For example:
-
-- name: `Positron`
-- URL template: `https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png`
-- attribution: `&copy; [[http://www.openstreetmap.org/copyright|OpenStreetMap]] contributors, &copy; [[https://carto.com/attributions|CARTO]]`
-
 You can now go to [http://localhost:8000/](http://localhost:8000/) and try to create a map for testing.
 
 When you're done with testing, quit the demo server (type Ctrl-C).
