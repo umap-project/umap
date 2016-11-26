@@ -73,11 +73,6 @@ Start the server
 
     umap runserver 0.0.0.0:8000
 
-Go to the admin (http://localhost:8000/admin/) and add:
-
-- at least one license
-- at least one tile layer
-
 ## Search
 
 UMap uses Postgresql tsvector for searching. It case your database is big, you
