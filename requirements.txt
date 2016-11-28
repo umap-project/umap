@@ -4,4 +4,4 @@ Pillow==3.4.2
 psycopg2==2.6.2
 python-social-auth==0.2.21
 requests==2.12.1
-django-leaflet-storage==0.8.0rc10
+django-leaflet-storage==0.8.0rc11
