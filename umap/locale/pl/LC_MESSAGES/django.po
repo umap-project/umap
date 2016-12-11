@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Daniel Koć <daniel@xn--ko-wla.pl>, 2015
+# endro, 2015
+# Teiron <mmok444@gmail.com>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
+"PO-Revision-Date: 2016-09-16 17:30+0000\n"
+"Last-Translator: Teiron <mmok444@gmail.com>\n"
+"Language-Team: Polish (http://www.transifex.com/yohanboniface/umap/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Zabierz mnie na stronę główną"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Przeglądaj mapy %(current_user)s"
+
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Wprowadź nicki edytorów do dodania..."
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr "Wpisz nick nowego właściciela..."
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr "przez"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Więcej"
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Proszę zalogować się na swoje konto"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Hasło"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Zaloguj"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Proszę wybrać serwis"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap pozwoli ci stworzyć mapy z podkładem <a href=\"%(osm_url)s\" />OpenStreetMap</a> w minutę i umieścić je na twojej stronie"
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Wybierz warstwy swojej mapy"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Dodaj POI: znaczniki, linie, obszary..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Zarządzaj kolorami oraz ikonami"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Zmieniaj ustawienia mapy: wyświetlanie mini-mapy, lokalizacja użytkownika po załadowaniu..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Importuj geostrukturalne dane (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Wybierz licencję dla swoich danych"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Umieszczaj mapy w sieci i dziel się nimi"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "I to wszystko <a href=\"%(repo_url)s\">na wolnej licencji</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+msgid "Create a map"
+msgstr "Stwórz mapę"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Wypróbuj wersję demo"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "To jest serwer demonstracyjny, używany do testów i niefinalnych wydań. Jeśli potrzebujesz stabilnego serwera, użyj <a href=\"%(stable_url)s\">%(stable_url)s</a>. Możesz także postawić swój własny, wszystko jest <a href=\"%(repo_url)s\">open source</a>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Mapa uMapek"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Zainspiruj się"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Moje mapy"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Logowanie"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Rejestracja"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Informacje"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Kontakt"
+
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr "Zmień hasło"
+
+#: templates/umap/navigation.html:22
+msgid "Log out"
+msgstr "Wyloguj"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "Zmiana hasła"
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Prosimy wpisać swoje poprzednie hasło, a następnie podać nowe dwukrotnie, by zweryfikować czy wpisało je poprawnie"
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "Stare hasło"
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr "Nowe hasło"
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "Potwierdź nowe hasło"
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "Zmień moje hasło"
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Zmiana hasła powiodła się"
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "Twoje hasło zostało zmienione."
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Nie znaleziono mapy."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Znajdź mapy"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Szukaj"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Zobacz mapę"
