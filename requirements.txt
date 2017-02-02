@@ -1,5 +1,5 @@
 Django==1.10.5
-django-compressor==2.1
+django-compressor==2.1.1
 django-leaflet-storage==0.8.0rc13
 Pillow==4.0.0
 psycopg2==2.6.2
