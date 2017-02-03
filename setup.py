@@ -18,7 +18,7 @@ with io.open('requirements.txt', encoding='utf-8') as reqs:
     install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
 
 setup(
-    name="umap",
+    name="umap-project",
     version=umap.__version__,
     author=umap.__author__,
     author_email=umap.__contact__,
