@@ -9,7 +9,7 @@ Create a virtual environment
 
 Install dependencies and project
 
-    pip install umap
+    pip install umap-project
 
 Create a default local settings file
 
