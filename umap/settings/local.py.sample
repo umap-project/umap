@@ -16,7 +16,6 @@ INTERNAL_IPS = ('127.0.0.1', )
 ALLOWED_HOSTS = ['*', ]
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('You', 'your@email'),
@@ -40,10 +39,10 @@ LANGUAGE_CODE = 'en'
 ENABLE_ACCOUNT_LOGIN = True
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.github.GithubOAuth2',
-    'social.backends.bitbucket.BitbucketOAuth',
-    'social.backends.twitter.TwitterOAuth',
-    'social.backends.openstreetmap.OpenStreetMapOAuth',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.bitbucket.BitbucketOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.openstreetmap.OpenStreetMapOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 SOCIAL_AUTH_GITHUB_KEY = 'xxx'
@@ -57,7 +56,7 @@ SOCIAL_AUTH_TWITTER_SECRET = "xxx"
 SOCIAL_AUTH_OPENSTREETMAP_KEY = 'xxx'
 SOCIAL_AUTH_OPENSTREETMAP_SECRET = 'xxx'
 MIDDLEWARE_CLASSES += (
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
