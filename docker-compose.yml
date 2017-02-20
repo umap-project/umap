@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    image: mdillon/postgis:9.6
+  redis:
+    image: redis:latest
+  app:
+    build: .
+    environment:
+      - DATABASE_URL=postgis://postgres@db/postgres
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
+      - ALLOWED_HOSTS=*
+      - SITE_URL=http://localhost:8000/
+      - LEAFLET_STORAGE_ALLOW_ANONYMOUS=True
+    volumes:
+      - $PWD:/srv/umap
+    ports:
+      - "8000:8000"
+    links:
+      - db
+      - redis

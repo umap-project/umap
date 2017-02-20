@@ -1,0 +1,21 @@
+sudo: required
+
+language: python
+
+python: 3.5
+
+services:
+  - docker
+
+install:
+  - pip install -e .[dev]
+
+script:
+  - make test
+
+after_success:
+  - export DOCKER_IMAGE_NAME=umap-project/umap
+  - docker build -t $DOCKER_IMAGE_NAME:latest .
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - if [ ! -z "$TRAVIS_TAG" ]; then docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TRAVIS_TAG; fi
+  - docker push $DOCKER_IMAGE_NAME;

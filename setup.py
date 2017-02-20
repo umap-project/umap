@@ -14,8 +14,11 @@ long_description = codecs.open('README.md', "r", "utf-8").read()
 def is_pkg(line):
     return line and not line.startswith(('--', 'git', '#'))
 
-with io.open('requirements.txt', encoding='utf-8') as reqs:
-    install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
+
+def reqs_to_list(filename):
+    with io.open('requirements.txt', encoding='utf-8') as reqs:
+        return [l for l in reqs.read().split('\n') if is_pkg(l)]
+
 
 setup(
     name="umap-project",
@@ -30,7 +33,11 @@ setup(
     platforms=["any"],
     zip_safe=True,
     long_description=long_description,
-    install_requires=install_requires,
+    install_requires=reqs_to_list('requirements.txt'),
+    extras_require={
+        'dev': reqs_to_list('requirements-dev.txt'),
+        'docker': reqs_to_list('requirements-docker.txt'),
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

@@ -5,6 +5,9 @@ docs/_build
 umap/remote_static
 .idea
 tmp/*
+/static/
+.bash_history
+.python_history
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
