@@ -4,5 +4,5 @@ django-leaflet-storage==0.8.2
 Pillow==4.1.0
 psycopg2==2.7.1
 requests==2.13.0
-social-auth-app-django==1.0.1
-social-auth-core==1.1.0
+social-auth-app-django==1.1.0
+social-auth-core==1.2.0
