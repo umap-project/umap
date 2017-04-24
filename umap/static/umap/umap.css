@@ -334,7 +334,7 @@ footer {
     line-height: 140px;
     color: #8F96A3;
 }
-footer a {
+footer a.branding {
     background-image: url("./img/logo_filigree.png");
     background-position: left center;
     background-repeat: no-repeat;

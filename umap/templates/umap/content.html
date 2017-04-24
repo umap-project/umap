@@ -74,7 +74,5 @@
 
 {% block footer %}
   {{ block.super }}
-  <footer>
-    <a href="/">umap</a> an OpenStreetMap project (version {{ UMAP_VERSION }})
-  </footer>
+  {% include "umap/content_footer.html" %}
 {% endblock footer %}
