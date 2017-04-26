@@ -1,0 +1,49 @@
+.umap-nav {
+    display: flex;
+    flex-direction: column;
+}
+.umap-nav a {
+    color: #3A4259;
+    padding: .4rem;
+}
+.umap-nav a:hover {
+    text-decoration: underline;
+}
+.umap-nav h1 {
+    margin-bottom: 0;
+}
+.umap-nav h1 a {
+    background-image: url("./img/logo.svg");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 60px auto;
+    line-height: 70px;
+    padding-left: 80px;
+    display: block;
+    font-size: 1.5rem;
+}
+.umap-nav ul {
+    text-align: center;
+}
+.umap-nav ul li {
+    line-height: 2.5rem;
+}
+.umap-nav .button,
+.umap-nav .button:hover {
+    color: #fff;
+    text-decoration: none;
+    min-width: 150px;
+}
+
+@media only screen and (min-width: 500px) {
+    .umap-nav ul li {
+        display: inline-block;
+    }
+}
+@media only screen and (min-width: 750px) {
+    .umap-nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+}

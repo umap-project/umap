@@ -121,7 +121,8 @@ ul {
     clear: both;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 40px;
+    margin-top: 0;
+    margin-bottom: 2rem;
 }
 .col {
     float: left;
@@ -259,71 +260,6 @@ input:-moz-placeholder, :-moz-placeholder {
 */
 header {
     margin: 14px 0;
-}
-header nav {
-    min-height: 70px;
-    font-size: 0;
-    padding-top: 0;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-nav section, nav h1, nav ul, nav li, nav a {
-    display: inline-block;
-    font-size: 16px;
-    letter-spacing: -1px;
-    margin-bottom: 0;
-    font-weight: normal;
-}
-
-nav ul li {
-    height: 100%;
-}
-
-nav a {
-    display: inline-block;
-    height: 100%;
-    line-height: 70px;
-    padding: 0 14px;
-    margin: 0 7px 0 0;
-    color: #000;
-    text-align: center;
-}
-
-nav .menu a:hover {
-    text-decoration: underline;
-}
-
-nav h1 a {
-    background-image: url("./img/logo.svg");
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: 60px auto;
-    font-family: 'fira_sansbold';
-    font-size: 30px;
-    font-weight: normal;
-    height: 70px;
-    padding-left: 80px;
-    text-align: left;
-    color: #3A4259;
-}
-
-nav a.logout {
-    font-style: italic;
-}
-
-nav li.has-button {
-    padding-top: 7px;
-    margin-bottom: 0;
-}
-nav li.has-button .button {
-    margin-bottom: 0;
-}
-
-nav .branding ul, nav .branding li,
-nav .branding a, nav .branding h1 {
-    width: 100%;
 }
 
 footer {
@@ -604,12 +540,6 @@ body.content #storage-ui-container {
     .thide {
         display: none;
     }
-    nav .branding h1 {
-        text-align: center;
-    }
-    nav .branding h1 a {
-        width: auto;
-    }
 }
 @media only screen and (max-width: 639px) {
     .mwide {
@@ -627,8 +557,5 @@ body.content #storage-ui-container {
     }
     .mhide {
         display: none;
-    }
-    header nav ul {
-        display: block;
     }
 }
