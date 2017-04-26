@@ -1,12 +1,10 @@
 {% load i18n %}
-<nav>
-  <section class="col quarter branding twide">
-    <ul>
-      <li class="name"><h1><a href="/">{{ SITE_NAME }}</a></h1></li>
-    </ul>
+<nav class="umap-nav">
+  <section>
+    <h1><a href="/">{{ title }}</a></h1>
   </section>
 
-  <section class="col half menu ttwo-third mwide">
+  <section>
     <ul>
       {% if user.is_authenticated %}
         <li><a href="{% url 'user_maps' user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
@@ -14,7 +12,7 @@
         <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
       {% endif %}
       <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-      <li class="mhide"><a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Feedback" %}</a></li>
+      <li><a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Feedback" %}</a></li>
       {% if user.is_authenticated %}
         {% if user.has_usable_password %}
           <li><a href="{% url 'password_change' %}" >{% trans "Change password" %}</a></li>
@@ -24,13 +22,7 @@
     </ul>
   </section>
 
-  <section class="right thide">
-    <ul>
-      <li class="has-button wide">
-        <a href="{% url 'map_new' %}" class="button">
-          {% trans "Create a map" %}
-        </a>
-      </li>
-    </ul>
+  <section>
+    <a href="{% url 'map_new' %}" class="button">{% trans "Create a map" %}</a>
   </section>
 </nav>

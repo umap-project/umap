@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block header %}
-  <header class="wrapper">
-    {% include 'umap/navigation.html' %}
+  <header class="wrapper row">
+    {% include 'umap/navigation.html' with title=SITE_NAME %}
   </header>
 {% endblock %}
 
