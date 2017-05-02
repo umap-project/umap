@@ -1,6 +1,7 @@
 ### UMap ###
 umap/settings/local.py
 umap/settings/local/*
+./*.local.py
 docs/_build
 umap/remote_static
 .idea

@@ -1,3 +1,4 @@
+from hashlib import md5
 from io import StringIO
 from pathlib import Path
 from string import Template as BaseTemplate
@@ -33,6 +34,14 @@ def as_postgres(ctx, cmd, *args, **kwargs):
     as_user(ctx, 'postgres --login', cmd)
 
 
+def sudo_put(ctx, local, remote, chown=None):
+    tmp = str(Path('/tmp') / md5(remote.encode()).hexdigest())
+    ctx.put(local, tmp)
+    ctx.run('sudo mv {} {}'.format(tmp, remote))
+    if chown:
+        ctx.run('sudo chown {} {}'.format(chown, remote))
+
+
 @task
 def umap_cmd(ctx, cmd):
     as_umap(ctx, '/srv/umap/venv/bin/umap {}'.format(cmd))
@@ -46,23 +55,24 @@ def put_dir(ctx, local, remote):
         if path.is_dir():
             as_umap(ctx, 'mkdir -p {}'.format(remote / relative_path))
         else:
-            ctx.put(path, str(remote / relative_path))
+            sudo_put(ctx, path, str(remote / relative_path))
 
 
 @task
 def system(ctx):
-    ctx.run('apt update')
-    ctx.run('apt install -y python3.5 python3.5-dev python-virtualenv wget '
-            'nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 gcc '
+    ctx.run('sudo apt update')
+    ctx.run('sudo apt install -y python3.5 python3.5-dev python-virtualenv '
+            'wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 gcc '
             'postgresql-9.5-postgis-2.2 postgresql-server-dev-9.5')
-    ctx.run('mkdir -p /srv/umap')
-    ctx.run('useradd -N umap -d /srv/umap/ || exit 0')
-    ctx.run('chown umap:users /srv/umap/')
-    ctx.run('chsh -s /bin/bash umap')
+    ctx.run('sudo mkdir -p /srv/umap')
+    ctx.run('sudo useradd -N umap -d /srv/umap/ || exit 0')
+    ctx.run('sudo chown umap:users /srv/umap/')
+    ctx.run('sudo chsh -s /bin/bash umap')
     # Allow UMAP_SETTINGS env var to be passed through ssh.
     ctx.run('grep -q -r "^AcceptEnv UMAP_SETTINGS *" /etc/ssh/sshd_config '
-            '|| echo "AcceptEnv UMAP_SETTINGS *" >> /etc/ssh/sshd_config')
-    ctx.run('systemctl restart sshd')
+            '|| echo "AcceptEnv UMAP_SETTINGS *" '
+            '| sudo tee --append /etc/ssh/sshd_config')
+    ctx.run('sudo systemctl restart sshd')
 
 
 @task
@@ -82,24 +92,24 @@ def venv(ctx):
 @task
 def customize(ctx):
     if ctx.custom.settings:
-        ctx.put(ctx.custom.settings, '/srv/umap/local.py')
+        sudo_put(ctx, ctx.custom.settings, '/srv/umap/local.py',
+                 chown='umap:users')
     if ctx.custom.static:
         put_dir(ctx, ctx.custom.static, '/srv/umap/theme/static')
     if ctx.custom.templates:
         put_dir(ctx, ctx.custom.templates, '/srv/umap/theme/templates')
-    ctx.run('chown umap:users -R /srv/umap')
+    ctx.run('sudo chown umap:users -R /srv/umap')
 
 
 @task
 def http(ctx):
-    ctx.put('fabfile/uwsgi_params', '/srv/umap/uwsgi_params')
+    sudo_put(ctx, 'fabfile/uwsgi_params', '/srv/umap/uwsgi_params')
     uwsgi_conf = render_template('fabfile/uwsgi.ini',
                                  processes=ctx.config.get('processes', 4))
-    ctx.put(uwsgi_conf, '/etc/uwsgi/apps-enabled/umap.ini')
+    sudo_put(ctx, uwsgi_conf, '/etc/uwsgi/apps-enabled/umap.ini')
     nginx_conf = render_template('fabfile/nginx.conf',
                                  domain=ctx.config.domain)
-    ctx.put(nginx_conf, '/etc/nginx/sites-enabled/umap')
-    ctx.run('rm -f /etc/nginx/sites-enabled/default')
+    sudo_put(ctx, nginx_conf, '/etc/nginx/sites-enabled/umap')
 
 
 @task
@@ -114,7 +124,7 @@ def bootstrap(ctx):
 def write_default(ctx):
     content = '\n'.join(['{}={}'.format(k, v)
                          for k, v in ctx.config.get('env', {}).items()])
-    ctx.run('echo "{}" > /etc/default/umap'.format(content))
+    ctx.run('echo "{}" | sudo tee /etc/default/umap'.format(content))
 
 
 @task
@@ -131,4 +141,4 @@ def deploy(ctx):
 
 @task
 def restart(ctx):
-    ctx.run('systemctl restart uwsgi nginx')
+    ctx.run('sudo systemctl restart uwsgi nginx')
