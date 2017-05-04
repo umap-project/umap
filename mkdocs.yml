@@ -5,4 +5,5 @@ pages:
 - Contributing: contributing.md
 - how-tos:
   - Ubuntu from scratch: ubuntu.md
+  - Backups and sync: backup.md
 theme: readthedocs
