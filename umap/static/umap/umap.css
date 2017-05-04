@@ -39,7 +39,7 @@
 /*
 * Generic
 */
-body, div, ul, li, a, section, nav,
+body, div, ul, ol, li, a, section, nav,
 h1, h2, h3, h4, h5, h6, label,
 hr, input, textarea {
     -moz-box-sizing:border-box;
@@ -48,7 +48,7 @@ hr, input, textarea {
     margin: 0;
     font-family: 'fira_sanslight', sans-serif;
 }
-body, div, ul, li, a, section, nav,
+body, div, ul, ol, li, a, section, nav,
 h1, h2, h3, h4, h5, h6, label, hr {
     padding: 0;
 }
