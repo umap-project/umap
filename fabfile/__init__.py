@@ -23,9 +23,7 @@ def as_user(ctx, user, cmd, *args, **kwargs):
 
 
 def as_umap(ctx, cmd, *args, **kwargs):
-    env = {'UMAP_SETTINGS': '/srv/umap/local.py'}
-    env.update(ctx.config.get('env', {}))
-    as_user(ctx, 'umap', cmd, env=env)
+    as_user(ctx, 'umap', cmd)
 
 
 def as_postgres(ctx, cmd, *args, **kwargs):
@@ -65,14 +63,11 @@ def system(ctx):
             'wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 gcc '
             'postgresql-9.5-postgis-2.2 postgresql-server-dev-9.5')
     ctx.run('sudo mkdir -p /srv/umap')
+    ctx.run('sudo mkdir -p /etc/umap')
     ctx.run('sudo useradd -N umap -d /srv/umap/ || exit 0')
     ctx.run('sudo chown umap:users /srv/umap/')
+    ctx.run('sudo chown umap:users /etc/umap/')
     ctx.run('sudo chsh -s /bin/bash umap')
-    # Allow UMAP_SETTINGS env var to be passed through ssh.
-    ctx.run('grep -q -r "^AcceptEnv UMAP_SETTINGS *" /etc/ssh/sshd_config '
-            '|| echo "AcceptEnv UMAP_SETTINGS *" '
-            '| sudo tee --append /etc/ssh/sshd_config')
-    ctx.run('sudo systemctl restart sshd')
 
 
 @task
@@ -92,7 +87,7 @@ def venv(ctx):
 @task
 def customize(ctx):
     if ctx.custom.settings:
-        sudo_put(ctx, ctx.custom.settings, '/srv/umap/local.py',
+        sudo_put(ctx, ctx.custom.settings, '/etc/umap/umap.conf',
                  chown='umap:users')
     if ctx.custom.static:
         put_dir(ctx, ctx.custom.static, '/srv/umap/theme/static')
