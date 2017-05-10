@@ -124,7 +124,10 @@ def write_default(ctx):
 
 @task
 def deploy(ctx):
-    as_umap(ctx, '/srv/umap/venv/bin/pip install umap-project --upgrade')
+    cmd = '/srv/umap/venv/bin/pip install {} --upgrade'
+    as_umap(ctx, cmd.format('umap-project'))
+    if ctx.config.get('extra_packages'):
+        as_umap(ctx, cmd.format(' '.join(ctx.config.extra_packages)))
     umap_cmd(ctx, 'migrate')
     umap_cmd(ctx, 'collectstatic --noinput --verbosity 0')
     umap_cmd(ctx, 'storagei18n --verbosity 0')
