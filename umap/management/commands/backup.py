@@ -14,11 +14,16 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('path', help='Location of the backups.')
 
-    def archive(self, source, destination):
+    def archive(self, source, destination, arcname):
+        def exclude(tarinfo):
+            # Avoid archiving JSON layers gziped by nginx.
+            if tarinfo.name.endswith('.gz') or tarinfo.issym():
+                return None
+            return tarinfo
         try:
             archive = tarfile.open(str(destination), mode='w:gz')
-            archive.add(str(source), arcname='./', recursive=True,
-                        exclude=os.path.islink)
+            archive.add(str(source), arcname=arcname, recursive=True,
+                        filter=exclude)
         except:  # NOQA
             raise
         finally:
@@ -33,7 +38,9 @@ class Command(BaseCommand):
         with database_tmp.open('w') as out:
             call_command('dumpdata', format='json', stdout=out)
         self.archive(database_tmp,
-                     root.joinpath('database.{}.tar.gz'.format(today)))
+                     root.joinpath('database.{}.tar.gz'.format(today)),
+                     arcname='database.json')
         self.archive(settings.MEDIA_ROOT,
-                     root.joinpath('media.{}.tar.gz'.format(today)))
+                     root.joinpath('media.{}.tar.gz'.format(today)),
+                     arcname='./')
         os.unlink(str(database_tmp))
