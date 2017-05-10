@@ -168,6 +168,12 @@ MAP_SHORT_URL_NAME = "umap_short_url"
 UMAP_USE_UNACCENT = False
 UMAP_FEEDBACK_LINK = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"  # noqa
 USER_MAPS_URL = 'user_maps'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'umap',
+    }
+}
 
 # =============================================================================
 # Third party app settings

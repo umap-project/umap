@@ -1,0 +1,25 @@
+sudo: false
+language: python
+python:
+- "2.7"
+- "3.4"
+- "3.5"
+- "3.6"
+services:
+- postgresql
+env:
+- UMAP_SETTINGS=umap/tests/settings.py
+install:
+- pip install .
+- pip install -r requirements-dev.txt
+script: make test
+notifications:
+  irc:
+    channels:
+    - "irc.freenode.net#umap"
+    on_success: change
+    on_failure: always
+  email: false
+branches:
+  only:
+  - master
