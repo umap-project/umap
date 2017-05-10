@@ -12,9 +12,10 @@ You need sudo grants on this server, and it must be connected to Internet.
 *Note: uMap also works with python 2.7 and 3.4, so adapt the package names if you work with another version.*
 
 
-## Create a deployment directory:
+## Create deployment directories:
 
     sudo mkdir -p /srv/umap
+    sudo mkdir -p /etc/umap
 
 *You can change this path, but then remember to adapt the other steps accordingly.*
 
@@ -25,6 +26,11 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 *Here we use the name `umap`, but this name is up to you. Remember to change it
 on the various commands and configuration files if you go with your own.*
+
+
+## Give umap user access to the config folder
+
+    sudo chown umap:users /etc/umap
 
 
 ## Create a postgresql user
@@ -65,15 +71,8 @@ you will need to run again this last line.*
 
 ## Create a local configuration file
 
-    wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /srv/umap/local.py
+    wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /etc/umap/umap.conf
 
-Now we need to inform umap about it.
-We'll create an environment variable for that:
-
-    export UMAP_SETTINGS=/srv/umap/local.py
-
-*Note: this variable will not be persistent if you quit your current terminal session, so
-remember to rerun this command if you open a new terminal window.*
 
 ## Create the tables
 
@@ -147,8 +146,6 @@ chdir           = /srv/umap/
 module          = umap.wsgi
 # the virtualenv (full path)
 home            = /srv/umap/venv
-# the local settings path
-env = UMAP_SETTINGS=/srv/umap/local.py
 
 # process-related settings
 # master
