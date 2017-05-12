@@ -1,5 +1,6 @@
 import json
 import mimetypes
+import re
 import socket
 
 try:
@@ -28,6 +29,13 @@ from leaflet_storage.models import Map
 from leaflet_storage.forms import DEFAULT_CENTER
 
 User = get_user_model()
+
+
+PRIVATE_IP = re.compile(r'((^127\.)|(^10\.)'
+                        r'|(^172\.1[6-9]\.)'
+                        r'|(^172\.2[0-9]\.)'
+                        r'|(^172\.3[0-1]\.)'
+                        r'|(^192\.168\.))')
 
 
 class PaginatorMixin(object):
@@ -229,8 +237,7 @@ def validate_url(request):
         ipaddress = socket.gethostbyname(toproxy.hostname)
     except:
         raise AssertionError()
-    assert not ipaddress.startswith('127.')
-    assert not ipaddress.startswith('192.168.')
+    assert not PRIVATE_IP.match(ipaddress)
     return url
 
 
