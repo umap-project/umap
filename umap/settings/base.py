@@ -29,6 +29,7 @@ LANGUAGES = (
     ('fi', u'Finnish'),
     ('de', u'Deutsch'),
     ('da', u'Danish'),
+    ('hu', u'Hungarian'),
     ('ja', u'Japanese'),
     ('lt', u'Lithuanian'),
     ('cs-cz', u'Czech'),
@@ -181,7 +182,10 @@ DATABASES = {
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
-SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)
+
+def SOCIAL_AUTH_DEFAULT_USERNAME(u): return slugify(u)
+
+
 SOCIAL_AUTH_ASSOCIATE_BY_EMAIL = True
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
