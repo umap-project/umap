@@ -12,7 +12,7 @@
     {% include "leaflet_storage/map_list.html" %}
   {% else %}
     <div>
-      {{ current_user }} has no maps.
+      {% blocktrans %}{{ current_user }} has no maps.{% endblocktrans %}
     </div>
   {% endif %}
 </div>
