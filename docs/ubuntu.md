@@ -73,6 +73,11 @@ you will need to run again this last line.*
     wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /etc/umap/umap.conf
 
 
+## Make umap use the local configuration file
+
+   export UMAP_SETTINGS=/srv/umap/local.py
+
+
 ## Create the tables
 
     umap migrate
@@ -145,6 +150,8 @@ chdir           = /srv/umap/
 module          = umap.wsgi
 # the virtualenv (full path)
 home            = /srv/umap/venv
+# set path local configuration file
+env             = UMAP_SETTINGS=/srv/umap/local.py
 
 # process-related settings
 # master
