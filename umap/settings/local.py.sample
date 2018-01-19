@@ -99,10 +99,10 @@ UMAP_READONLY = False
 
 
 # For static deployment
-STATIC_ROOT = '/home/srv/var/static'
+STATIC_ROOT = '/srv/umap/var/static'
 
 # For users' statics (geojson mainly)
-MEDIA_ROOT = '/home/srv/umap/var/data'
+MEDIA_ROOT = '/srv/umap/var/data'
 
 # Default map location for new maps
 LEAFLET_LONGITUDE = 2
