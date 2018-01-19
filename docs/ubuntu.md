@@ -12,15 +12,14 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Create deployment directories:
 
-    sudo mkdir -p /srv/umap
-    sudo mkdir -p /etc/umap
+   sudo mkdir -p /etc/umap
 
 *You can change this path, but then remember to adapt the other steps accordingly.*
 
 
 ## Create a Unix user
 
-    sudo useradd -N umap -d /srv/umap/
+    sudo useradd -N umap -m -d /srv/umap/
 
 *Here we use the name `umap`, but this name is up to you. Remember to change it
 on the various commands and configuration files if you go with your own.*
