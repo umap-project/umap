@@ -7,6 +7,12 @@ python:
 - "3.6"
 services:
 - postgresql
+addons:
+  postgresql: "9.6"
+  apt:
+    packages:
+    - libgdal-dev
+    - postgresql-9.6-postgis-2.3
 env:
 - UMAP_SETTINGS=umap/tests/settings.py
 install:
