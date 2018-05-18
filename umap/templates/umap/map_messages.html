@@ -1,0 +1,11 @@
+<script type="text/javascript">
+    {% for m in messages %}
+        "loooping"
+        {# We have just one, but we need to loop, as for messages API #}
+        L.Storage.fire('ui:alert', {
+            content: "{{ m }}",
+            level: "{{ m.tags }}",
+            duration: 100000
+        });
+    {% endfor %}
+</script>

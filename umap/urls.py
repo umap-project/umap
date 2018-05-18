@@ -14,7 +14,7 @@ from . import views
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url('', include('social_django.urls', namespace='social')),
     url(r'^m/(?P<pk>\d+)/$', MapShortUrl.as_view(), name='umap_short_url'),
     url(r'^ajax-proxy/$', cache_page(180)(views.ajax_proxy),

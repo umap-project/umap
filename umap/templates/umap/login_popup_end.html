@@ -1,0 +1,19 @@
+{% load i18n %}
+<h3>{% trans "You are logged in. Continuing..." %}</h3>
+
+<script type="text/javascript">
+
+    function proceed()
+    {
+        if (window.opener) {
+            console.log(window.opener);
+            window.opener.storage_proceed();
+        }
+    }
+
+proceed();
+
+// To handle errors, this template should be integrated into your authentication error message page
+// Note that you can call any window.opener function like window.opener.func
+
+</script>

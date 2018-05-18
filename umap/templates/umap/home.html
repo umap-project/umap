@@ -1,6 +1,6 @@
 {% extends "umap/content.html" %}
 
-{% load leaflet_storage_tags i18n %}
+{% load umap_tags i18n %}
 
 {% block maincontent %}
 {% if DEMO_SITE %}
@@ -23,7 +23,7 @@
 <div class="wrapper">
   <h2 class="section">{% blocktrans %}Get inspired, browse maps{% endblocktrans %}</h2>
   <div class="map_list row">
-    {% include "leaflet_storage/map_list.html" %}
+    {% include "umap/map_list.html" %}
   </div>
 </div>
 

@@ -22,7 +22,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_bytes
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import URLValidator, ValidationError
 
 from leaflet_storage.models import Map

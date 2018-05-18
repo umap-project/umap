@@ -8,7 +8,7 @@
   <div class="wrapper">
     <div class="map_list row">
     {% if maps %}
-      {% include "leaflet_storage/map_list.html" with prefix='search_map_' %}
+      {% include "umap/map_list.html" with prefix='search_map_' %}
     {% else %}
         {% trans "Not map found." %}
     {% endif %}
