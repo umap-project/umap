@@ -439,9 +439,7 @@ class MapView(MapDetailMixin, DetailView):
     def get_short_url(self):
         shortUrl = None
         if hasattr(settings, 'SHORT_SITE_URL'):
-            short_url_name = getattr(settings, 'MAP_SHORT_URL_NAME',
-                                     'map_short_url')
-            short_path = reverse_lazy(short_url_name,
+            short_path = reverse_lazy('map_short_url',
                                       kwargs={'pk': self.object.pk})
             shortUrl = "%s%s" % (settings.SHORT_SITE_URL, short_path)
         return shortUrl

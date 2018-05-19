@@ -21,7 +21,8 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('', include('social_django.urls', namespace='social')),
-    url(r'^m/(?P<pk>\d+)/$', views.MapShortUrl.as_view(), name='umap_short_url'),
+    url(r'^m/(?P<pk>\d+)/$', views.MapShortUrl.as_view(),
+        name='map_short_url'),
     url(r'^ajax-proxy/$', cache_page(180)(views.ajax_proxy),
         name='ajax-proxy'),
     url(r'^change-password/', auth_views.password_change,
@@ -43,8 +44,6 @@ i18n_urls = [
         views.MapOldUrl.as_view(), name='map_old_url'),
     url(r'^map/anonymous-edit/(?P<signature>.+)$',
         views.MapAnonymousEditUrl.as_view(), name='map_anonymous_edit_url'),
-    url(r'^m/(?P<pk>\d+)/$', views.MapShortUrl.as_view(),
-        name='map_short_url'),
     url(r'^pictogram/json/$', views.PictogramJSONList.as_view(),
         name='pictogram_list_json'),
 ]
