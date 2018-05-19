@@ -24,7 +24,7 @@ def post_data():
 def test_get(client, settings, datalayer):
     url = reverse('datalayer_view', args=(datalayer.pk, ))
     response = client.get(url)
-    if getattr(settings, 'LEAFLET_STORAGE_XSENDFILE_HEADER', None):
+    if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
         assert response['ETag'] is not None
     assert response['Last-Modified'] is not None
     assert response['Cache-Control'] is not None
@@ -90,7 +90,7 @@ def test_should_not_be_possible_to_delete_with_wrong_map_id_in_url(client, datal
 def test_get_gzipped(client, datalayer, settings):
     url = reverse('datalayer_view', args=(datalayer.pk, ))
     response = client.get(url, HTTP_ACCEPT_ENCODING='gzip')
-    if getattr(settings, 'LEAFLET_STORAGE_XSENDFILE_HEADER', None):
+    if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
         assert response['ETag'] is not None
     assert response['Last-Modified'] is not None
     assert response['Cache-Control'] is not None

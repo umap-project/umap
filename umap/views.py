@@ -304,7 +304,7 @@ def _urls_for_js(urls=None):
         urls = [url.name for url in urlpatterns + i18n_urls
                 if getattr(url, 'name', None)]
     urls = dict(zip(urls, [get_uri_template(url) for url in urls]))
-    urls.update(getattr(settings, 'LEAFLET_STORAGE_EXTRA_URLS', {}))
+    urls.update(getattr(settings, 'UMAP_EXTRA_URLS', {}))
     return urls
 
 
@@ -569,7 +569,7 @@ class MapDelete(DeleteView):
 class MapClone(View):
 
     def post(self, *args, **kwargs):
-        if not getattr(settings, "LEAFLET_STORAGE_ALLOW_ANONYMOUS", False) \
+        if not getattr(settings, "UMAP_ALLOW_ANONYMOUS", False) \
            and not self.request.user.is_authenticated:
             return HttpResponseForbidden('Forbidden')
         owner = self.request.user if self.request.user.is_authenticated else None
@@ -674,7 +674,7 @@ class GZipMixin(object):
         path = self._path()
         statobj = os.stat(path)
         ae = self.request.META.get('HTTP_ACCEPT_ENCODING', '')
-        if re_accepts_gzip.search(ae) and getattr(settings, 'LEAFLET_STORAGE_GZIP', True):
+        if re_accepts_gzip.search(ae) and getattr(settings, 'UMAP_GZIP', True):
             gzip_path = "{path}{ext}".format(path=path, ext=self.EXT)
             up_to_date = True
             if not os.path.exists(gzip_path):
@@ -701,10 +701,10 @@ class DataLayerView(GZipMixin, BaseDetailView):
         response = None
         path = self.path()
 
-        if getattr(settings, 'LEAFLET_STORAGE_XSENDFILE_HEADER', None):
+        if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
             response = HttpResponse()
             path = path.replace(settings.MEDIA_ROOT, '/internal')
-            response[settings.LEAFLET_STORAGE_XSENDFILE_HEADER] = path
+            response[settings.UMAP_XSENDFILE_HEADER] = path
         else:
             # TODO IMS
             statobj = os.stat(path)

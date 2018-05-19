@@ -51,7 +51,7 @@ def cookieclient(client, anonymap):
 
 @pytest.fixture
 def allow_anonymous(settings):
-    settings.LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
+    settings.UMAP_ALLOW_ANONYMOUS = True
 
 
 @pytest.fixture

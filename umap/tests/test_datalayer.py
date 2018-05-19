@@ -59,7 +59,7 @@ def test_clone_should_clone_geojson_too(datalayer):
 
 
 def test_should_remove_old_versions_on_save(datalayer, map, settings):
-    settings.LEAFLET_STORAGE_KEEP_VERSIONS = 3
+    settings.UMAP_KEEP_VERSIONS = 3
     root = datalayer.storage_root()
     before = len(datalayer.geojson.storage.listdir(root)[1])
     newer = '%s/%s_1440924889.geojson' % (root, datalayer.pk)

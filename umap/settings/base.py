@@ -152,12 +152,12 @@ AUTHENTICATION_BACKENDS += (
 # =============================================================================
 # Miscellaneous project settings
 # =============================================================================
-LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
-LEAFLET_STORAGE_EXTRA_URLS = {
+UMAP_ALLOW_ANONYMOUS = False
+UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',  # noqa
     'ajax_proxy': '/ajax-proxy/?url={url}'
 }
-LEAFLET_STORAGE_KEEP_VERSIONS = 10
+UMAP_KEEP_VERSIONS = 10
 SITE_URL = "http://umap.org"
 SITE_NAME = 'uMap'
 UMAP_DEMO_SITE = False

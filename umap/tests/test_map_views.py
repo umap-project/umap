@@ -36,7 +36,7 @@ def test_create(client, user, post_data):
 
 
 def test_map_create_permissions(client, settings):
-    settings.LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
+    settings.UMAP_ALLOW_ANONYMOUS = False
     url = reverse('map_create')
     # POST anonymous
     response = client.post(url, {})
@@ -169,7 +169,7 @@ def test_clone_map_should_create_a_new_instance(client, map):
 
 
 def test_user_not_allowed_should_not_clone_map(client, map, user, settings):
-    settings.LEAFLET_STORAGE_ALLOW_ANONYMOUS = False
+    settings.UMAP_ALLOW_ANONYMOUS = False
     assert Map.objects.count() == 1
     url = reverse('map_clone', kwargs={'map_id': map.pk})
     map.edit_status = map.OWNER

@@ -38,7 +38,7 @@ def get_default_licence():
     """
     return Licence.objects.get_or_create(
         # can't use ugettext_lazy for database storage, see #13965
-        name=getattr(settings, "LEAFLET_STORAGE_DEFAULT_LICENCE_NAME",
+        name=getattr(settings, "UMAP_DEFAULT_LICENCE_NAME",
                      'No licence set')
     )[0]
 
@@ -171,7 +171,7 @@ class Map(NamedModel):
         """
         can = False
         if request and not self.owner:
-            if (getattr(settings, "LEAFLET_STORAGE_ALLOW_ANONYMOUS", False)
+            if (getattr(settings, "UMAP_ALLOW_ANONYMOUS", False)
                     and self.is_anonymous_owner(request)):
                 can = True
                 if user and user.is_authenticated:
@@ -346,7 +346,7 @@ class DataLayer(NamedModel):
 
     def purge_old_versions(self):
         root = self.storage_root()
-        names = self.get_versions()[settings.LEAFLET_STORAGE_KEEP_VERSIONS:]
+        names = self.get_versions()[settings.UMAP_KEEP_VERSIONS:]
         for name in names:
             for ext in ['', '.gz']:
                 path = os.path.join(root, name + ext)
