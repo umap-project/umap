@@ -1,5 +1,5 @@
 test:
-	py.test
+	py.test -xv
 develop:
 	python setup.py develop
 compilemessages:
