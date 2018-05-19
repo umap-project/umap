@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Joao Ponce de Leao Paulouro <joao.ponceleao@gmail.com>, 2014
 # Rui <xymarior@yandex.com>, 2016
@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2016-12-22 10:03+0000\n"
+"PO-Revision-Date: 2017-09-19 22:04+0000\n"
 "Last-Translator: Rui <xymarior@yandex.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/yohanboniface/umap/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -206,3 +206,183 @@ msgstr "Procurar"
 #: views.py:190
 msgid "View the map"
 msgstr "Ver o mapa"
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Link secreto para edição é %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "Todos podem editar"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Unicamente editável através de link secreto"
+
+#: models.py:20
+msgid "name"
+msgstr "nome"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "Nenhuma licença definida"
+
+#: models.py:51
+msgid "details"
+msgstr "detalhes"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "Link para uma página detalhando a licença."
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "Modelo de URL no formato de telas OSM"
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "Ordem das camadas na caixa de edição"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "Só editores podem editar"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "Só o proprietário pode editar"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "todos (público)"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "qualquer um com o link"
+
+#: models.py:120
+msgid "editors only"
+msgstr "só editores"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "descrição"
+
+#: models.py:124
+msgid "center"
+msgstr "centro"
+
+#: models.py:125
+msgid "zoom"
+msgstr "zoom"
+
+#: models.py:126
+msgid "locate"
+msgstr "localizar"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "Localizar usuário no início?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "Escolha uma licença para o mapa."
+
+#: models.py:130
+msgid "licence"
+msgstr "licença"
+
+#: models.py:135
+msgid "background"
+msgstr "fundo"
+
+#: models.py:136
+msgid "owner"
+msgstr "proprietário"
+
+#: models.py:137
+msgid "editors"
+msgstr "editores"
+
+#: models.py:138
+msgid "edit status"
+msgstr "editar estado"
+
+#: models.py:139
+msgid "share status"
+msgstr "partilhar estado"
+
+#: models.py:140
+msgid "settings"
+msgstr "parâmetros"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "O seu mapa anónimo foi anexado à sua conta %s"
+
+#: models.py:211
+msgid "Clone of"
+msgstr "Clone de"
+
+#: models.py:262
+msgid "display on load"
+msgstr "mostrar no início"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "Apresentar esta camada ao carregar."
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Sucesso na identificação. Continuando..."
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "Permissões do mapa"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "Por favor entre na sua conta para continuar"
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "O nome de usuário e senha não correspondem. Tente novamente."
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "O seu mapa foi criado! Se quiser editar este mapa noutro computador, por favor utilize este link: %(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "Parabéns, o seu mapa foi criado!"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "O mapa foi atualizado!"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "Os editores do mapa foram atualizados com sucesso!"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "Só o proprietário pode eliminar o mapa."
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "O seu mapa foi clonado! Se quiser editar este mapa noutro computador, por favor utilize este link: %(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "Parabéns, o seu mapa foi clonado!"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "Camada eliminada com sucesso."

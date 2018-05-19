@@ -5,9 +5,9 @@
 from django.conf.global_settings import *   # pylint: disable=W0614,W0401
 from django.template.defaultfilters import slugify
 
-#==============================================================================
+# =============================================================================
 # Generic Django project settings
-#==============================================================================
+# =============================================================================
 
 DEBUG = True
 
@@ -56,7 +56,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
 
-    'leaflet_storage',
     'umap',
     'compressor',
     'social_django',

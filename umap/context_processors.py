@@ -15,4 +15,3 @@ def version(request):
     return {
         'UMAP_VERSION': __version__
     }
-

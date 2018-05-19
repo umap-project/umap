@@ -1,10 +1,10 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Supaplex <bejokeup@gmail.com>, 2014
-# Hsin-lin Cheng <lancetw@gmail.com>, 2014
+# Hsin-lin Cheng (lancetw) <lancetw@gmail.com>, 2014
 # Sean Young <assanges@icloud.com>, 2016
 # Yuan CHAO <yuanchao@gmail.com>, 2014
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2016-12-04 11:18+0000\n"
+"PO-Revision-Date: 2017-09-23 20:04+0000\n"
 "Last-Translator: Sean Young <assanges@icloud.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/yohanboniface/umap/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -208,3 +208,183 @@ msgstr "搜尋"
 #: views.py:190
 msgid "View the map"
 msgstr "檢視地圖"
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "不公開的私密編輯連結 %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "所有人皆可編輯"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "僅能由私密連結編輯"
+
+#: models.py:20
+msgid "name"
+msgstr "名稱"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "未指定授權條款"
+
+#: models.py:51
+msgid "details"
+msgstr "詳情"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "連結至授權條款說明網址"
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "URL 樣板，使用 OSM 地圖磚格式"
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "編輯方塊中地圖磚的圖層順序"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "僅編輯群可編輯"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "僅擁有者可編輯"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "所有人（公開）"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "任何有連結的人"
+
+#: models.py:120
+msgid "editors only"
+msgstr "只有編輯者允許"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "描述"
+
+#: models.py:124
+msgid "center"
+msgstr "中心"
+
+#: models.py:125
+msgid "zoom"
+msgstr "縮放"
+
+#: models.py:126
+msgid "locate"
+msgstr "定位"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "載入時使用定位功能？"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "選擇地圖授權"
+
+#: models.py:130
+msgid "licence"
+msgstr "授權"
+
+#: models.py:135
+msgid "background"
+msgstr "地圖背景"
+
+#: models.py:136
+msgid "owner"
+msgstr "擁有者"
+
+#: models.py:137
+msgid "editors"
+msgstr "編輯者"
+
+#: models.py:138
+msgid "edit status"
+msgstr "編輯狀態"
+
+#: models.py:139
+msgid "share status"
+msgstr "分享狀態"
+
+#: models.py:140
+msgid "settings"
+msgstr "設定"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "你的匿名地圖已經加入你的帳號 %s "
+
+#: models.py:211
+msgid "Clone of"
+msgstr "複製"
+
+#: models.py:262
+msgid "display on load"
+msgstr "載入時顯示"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "載入此圖層時顯示"
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "您已登入，繼續中..."
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "地圖權限"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "請先登入"
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "使用者代號或密碼不正確，請重新輸入。"
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "您的地圖已建立完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "恭喜您的地圖已經新增完成"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "地圖已經更新"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "地圖編輯者更新完成"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "只有擁有者可以刪除此地圖"
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "您的地圖已複製完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "恭喜，您的地圖已被複製！"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "圖層已刪除"

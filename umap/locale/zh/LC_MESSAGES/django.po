@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # sun wei <sunwei.r@gmail.com>, 2014
 msgid ""
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2014-06-23 01:07+0000\n"
-"Last-Translator: sun wei <sunwei.r@gmail.com>\n"
-"Language-Team: Chinese (http://www.transifex.com/projects/p/umap/language/"
-"zh/)\n"
-"Language: zh\n"
+"PO-Revision-Date: 2017-09-20 05:52+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Chinese (http://www.transifex.com/yohanboniface/umap/language/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: templates/404.html:7
@@ -116,9 +115,9 @@ msgstr "试用示例"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
 #: templates/umap/home.html:17
@@ -163,8 +162,8 @@ msgstr ""
 
 #: templates/umap/password_change.html:7
 msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
 msgstr ""
 
 #: templates/umap/password_change.html:12
@@ -206,6 +205,3 @@ msgstr "搜索"
 #: views.py:190
 msgid "View the map"
 msgstr "浏览地图"
-
-#~ msgid "Map settings"
-#~ msgstr "地图设置"
