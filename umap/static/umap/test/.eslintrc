@@ -1,0 +1,22 @@
+{
+    "globals": {
+        "describe": true,
+        "happen": true,
+        "assert": true,
+        "before": true,
+        "after": true,
+        "it": true,
+        "sinon": true,
+        "qs": true,
+        "enableEdit": true,
+        "disableEdit": true,
+        "changeInputValue": true,
+        "resetMap": true,
+        "initMap": true,
+        "clickCancel": true,
+        "map": true,
+        "qs": true,
+        "qsa": true,
+        "qst": true
+    }
+}
