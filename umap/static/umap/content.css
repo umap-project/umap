@@ -1,187 +1,12 @@
-/* ************************************************* */
-/* *********************** FONT ******************** */
-/* ************************************************* */
-
-
-@font-face {
-    font-family: 'fira_sans';
-    src: url('./font/FiraSans-Light.woff2') format('woff2'),
-         url('./font/FiraSans-Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'fira_sans';
-    src: url('./font/FiraSans-SemiBold.woff2') format('woff2'),
-         url('./font/FiraSans-SemiBold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'fira_sans';
-    src: url('./font/FiraSans-LightItalic.woff2') format('woff2'),
-         url('./font/FiraSans-LightItalic.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
-}
-
-
-/*
-* Generic
-*/
-body, div, ul, ol, li, a, section, nav,
-h1, h2, h3, h4, h5, h6, label,
-hr, input, textarea {
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing: border-box;
-    margin: 0;
-    font-family: "fira_sans", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-}
-body, div, ul, ol, li, a, section, nav,
-h1, h2, h3, h4, h5, h6, label, hr {
-    padding: 0;
-}
-a {
-    text-decoration: none;
-    color: SeaGreen;
-}
-hr {
-    clear: both;
-    width: 100%;
-    height: 0;
-    max-width: 980px;
-    margin: 28px auto;
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: #ddd;
-    border-image: none;
-    border-style: solid;
-    border-width: 1px 0 0;
-}
-h1, h2 {
-    margin-bottom: 28px;
-}
-h3, h4, h5 {
-    margin-bottom: 14px;
-}
-p {
-    line-height: 21px;
-    margin-top: 14px;
-    margin-bottom: 14px;
-}
-
-/*
-* List
-*/
-ul {
-    list-style-image:none;
-    list-style-position:inside;
-    list-style-type:none;
-}
-
-/* ************************************************* */
-/* *********************** GRID ******************** */
-/* ************************************************* */
-.wrapper {
-    width: 100%;
-    clear: both;
-}
-.wrapper:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
-}
-.row {
-    width: 100%;
-    max-width: 1200px;
-    clear: both;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0;
-    margin-bottom: 2rem;
-}
-.col {
-    float: left;
-}
-.right {
-    float: right;
-}
-.col + .col {
-    padding-left: 20px;
-}
-.half {
-    width: 50%;
-}
-.third {
-    width: 33.33%;
-}
-.two-third {
-    width: 66.66%
-}
-.quarter {
-    width: 25%;
-}
-.wide {
-    width: 100%;
-}
-.col + .wide {
-    padding-left: inherit;
-}
-.mshow, .tshow {
-    display: none;
-}
-.center {
-    margin-left: auto;
-    margin-right: auto;
-    float: none;
-}
-
 /*
 * Content
 */
-.tintbox, .tintbox a {
-    font-family: serif;
-}
-.tintbox {
-    background-color: #f2f2f2;
-    padding: 28px;
-}
-.tintbox p {
-    color: #6f6f6f;
-}
 body.content {
     width: 100%;
     height: 100%;
     overflow-x: hidden;
 }
 
-
-/*
-    Foundation use a position:relative; on body, which break the 100% rule
-    on #map
-*/
-body.map_detail {
-    width: 100%;
-    height: 100%;
-    position: inherit;
-}
-
-/* Global alert */
-.alert-box.global {
-    z-index: 1001;
-    margin-right: auto;
-    margin-left: auto;
-}
 
 /* Search form */
 input::-webkit-input-placeholder, ::-webkit-input-placeholder {
@@ -239,34 +64,6 @@ input:-moz-placeholder, :-moz-placeholder {
 }
 .login-grid .login-openstreetmap {
     background-image: url("./openstreetmap.png");
-}
-
-/*
-* Navigation
-*/
-header {
-    margin: 14px 0;
-}
-
-footer {
-    height: 140px;
-    margin-top: 40px;
-    background-color: #2E3641;
-    text-align: center;
-    line-height: 140px;
-    color: #8F96A3;
-}
-footer a.branding {
-    background-image: url("./img/logo_filigree.png");
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: 60px auto;
-    font-size: 30px;
-    font-weight: bold;
-    height: 140px;
-    padding-left: 70px;
-    color: #8F96A3;
-    display: inline-block;
 }
 
 
@@ -374,6 +171,9 @@ h2.section {
     color: #efefef;
     text-decoration: underline;
 }
+body.content #umap-ui-container {
+    background-color: #fff;
+}
 
 
 /* **************************** */
@@ -479,20 +279,8 @@ ul.umap-autocomplete {
 /* **************************** */
 /*   Override Leaflet.Storage   */
 /* **************************** */
-body.content #umap-ui-container {
-/*    width: 100%;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: inherit;
-    height: 30%;*/
-    background-color: #fff;
-}
 #id_editors + br + span.helptext {
     display: none;
-}
-.umap-loader {
-    background-color: #79c1c0 !important;
 }
 .leaflet-container a.button {
     color: #eeeeec;

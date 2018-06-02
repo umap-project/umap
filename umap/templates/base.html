@@ -4,17 +4,6 @@
 <head>
     <title>{% block head_title %}{{ SITE_NAME }}{% endblock %}</title>
     <meta charset="utf-8">
-    {% compress css %}
-    <!-- Included CSS Files (Compressed) -->
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/default.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/umap.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/nav.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/theme.css">
-    {% endcompress css %}
-    <!-- IE Fix for HTML5 Tags -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
     {% block extra_head %}
     {% endblock extra_head %}
 

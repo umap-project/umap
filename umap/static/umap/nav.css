@@ -1,3 +1,27 @@
+header {
+    margin: 14px 0;
+}
+
+footer {
+    height: 140px;
+    margin-top: 40px;
+    background-color: #2E3641;
+    text-align: center;
+    line-height: 140px;
+    color: #8F96A3;
+}
+footer a.branding {
+    background-image: url("./img/logo_filigree.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 60px auto;
+    font-size: 30px;
+    font-weight: bold;
+    height: 140px;
+    padding-left: 70px;
+    color: #8F96A3;
+    display: inline-block;
+}
 .umap-nav {
     display: flex;
     flex-direction: column;

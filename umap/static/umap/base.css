@@ -1,12 +1,122 @@
-div, ul, li, a, section, nav,
+/*
+* Generic
+*/
+body, div, ul, ol, li, a, section, nav,
 h1, h2, h3, h4, h5, h6, label,
 hr, input, textarea {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
     box-sizing: border-box;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    font-family: "fira_sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
+body, div, ul, ol, li, a, section, nav,
+h1, h2, h3, h4, h5, h6, label, hr {
+    padding: 0;
+}
+a {
+    text-decoration: none;
+    color: SeaGreen;
+}
+hr {
+    clear: both;
+    width: 100%;
+    height: 0;
+    max-width: 980px;
+    margin: 28px auto;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #ddd;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 0 0;
+}
+h1, h2 {
+    margin-bottom: 28px;
+}
+h3, h4, h5 {
+    margin-bottom: 14px;
+}
+p {
+    line-height: 21px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+/*
+* List
+*/
+ul {
+    list-style-image:none;
+    list-style-position:inside;
+    list-style-type:none;
+}
+
+/* ************************************************* */
+/* *********************** GRID ******************** */
+/* ************************************************* */
+.wrapper {
+    width: 100%;
+    clear: both;
+}
+.wrapper:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.row {
+    width: 100%;
+    max-width: 1200px;
+    clear: both;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+.col {
+    float: left;
+}
+.right {
+    float: right;
+}
+.col + .col {
+    padding-left: 20px;
+}
+.half {
+    width: 50%;
+}
+.third {
+    width: 33.33%;
+}
+.two-third {
+    width: 66.66%
+}
+.quarter {
+    width: 25%;
+}
+.wide {
+    width: 100%;
+}
+.col + .wide {
+    padding-left: inherit;
+}
+.mshow, .tshow {
+    display: none;
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+}
+
 
 /* *********** */
 /*    forms    */
@@ -151,7 +261,8 @@ input[type="file"] + .error {
     line-height: 30px;
     color: #fff;
     margin: 0;
-    font-family: fira_sanslight;
+    font-family: fira_sans;
+    font-weight: normal;
     font-size: 1.2em;
     padding: 0 5px;
 }
@@ -309,6 +420,123 @@ i.info {
     transition: all .7s;
 }
 
+.umap-delete:before, .umap-empty:before, .umap-to-polygon:before,
+.umap-clone:before, .umap-edit:before,
+.umap-to-polyline:before {
+    background-repeat: no-repeat;
+    text-indent: 38px;
+    height: 24px;
+    line-height: 24px;
+    display: inline-block;
+    background-image: url('./img/24.png');
+    vertical-align: bottom;
+    content: " ";
+}
+.dark .umap-delete:before, .dark .umap-empty:before,
+.dark .umap-to-polygon:before,
+.dark .umap-clone:before,
+.dark .umap-edit:before,
+.dark .umap-to-polyline:before {
+    background-image: url('./img/24-white.png');
+    vertical-align: middle;
+}
+.umap-to-polygon:before {
+    background-position: -80px -48px;
+}
+.umap-to-polyline:before {
+    background-position: -120px -48px;
+}
+.umap-clone:before {
+    background-position: -160px -88px;
+}
+.umap-delete:before {
+    background-position: -40px -8px;
+}
+.umap-edit:before {
+    background-position: -6px -6px;
+}
+.umap-empty:before {
+    background-position: -160px -126px;
+}
+.umap-edit-actions {
+    padding-top: 5px;
+    clear: both;
+}
+.umap-edit-actions li {
+    height: 36px;
+    line-height: 36px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    border: 1px solid #222;
+}
+.umap-edit-actions li i {
+    background-image: url('./img/24-white.png');
+    background-repeat: no-repeat;
+    display: table-cell;
+    width: 36px;
+    height: 36px;
+}
+.umap-edit-actions li span {
+    display: table-cell;
+    vertical-align: middle;
+}
+.umap-edit-actions li:hover {
+    background-color: #353c3e;
+}
+.umap-form-iconfield {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    line-height: 30px;
+}
+.umap-icon-list, .umap-pictogram-list {
+    clear: both;
+}
+.umap-icon-choice {
+    display: block;
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    background-image: url('./img/icon-bg.png');
+    text-align: center;
+    box-shadow: 0 0 4px 0 black inset;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+.umap-icon-choice img {
+    vertical-align: middle;
+    max-width: 24px;
+}
+.umap-icon-choice:hover,
+.umap-icon-choice.selected,
+.umap-color-picker span:hover {
+    box-shadow: 0 0 4px 0 black;
+}
+.umap-icon-choice .leaflet-marker-icon {
+    bottom: 0;
+    left: 30px;
+    position: absolute;
+}
+.umap-color-picker {
+    clear: both;
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: none;
+}
+.umap-color-picker span {
+    width: 20px;
+    height: 20px;
+    display: block;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    float: left;
+}
 
 
 /* *********** */
