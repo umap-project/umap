@@ -47,7 +47,7 @@
     height: 36px;
     width: 36px;
     line-height: 36px;
-    background-image: url("../img/24.png");
+    background-image: url('./img/24.png');
 }
 .leaflet-control.display-on-more,
 a.storage-control-less {
@@ -55,7 +55,7 @@ a.storage-control-less {
 }
 .storage-control-more,
 .storage-control-less {
-    background-image: url("../img/16-white.png");
+    background-image: url('./img/16-white.png');
     background-position: -160px -210px;
 }
 .storage-more-controls .display-on-more,
@@ -82,7 +82,7 @@ a.storage-control-less {
     display: block;
 }
 .leaflet-control-search a.loading {
-    background-image: url("../img/search.gif");
+    background-image: url('./img/search.gif');
 }
 a.storage-control-text {
     float: right;
@@ -98,7 +98,7 @@ a.storage-control-text {
     font-size: 0.8em;
 }
 .leaflet-control-edit-enable a {
-    background-image: url("../img/24-white.png");
+    background-image: url('./img/24-white.png');
     background-position: -1px -1px;
     background-color: #353c3e;
 }
@@ -171,11 +171,11 @@ ul.photon-autocomplete {
     background-color: #323737;
     border-right: 1px solid #eee;
     background-repeat: no-repeat;
-    background-image: url("../img/24.png");
+    background-image: url('./img/24.png');
     background-size: auto auto;
 }
 .leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
-    background-image: url("../img/24-white.png");
+    background-image: url('./img/24-white.png');
 }
 .leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover {
     background-color: #353c3e;
@@ -237,7 +237,7 @@ ul.photon-autocomplete {
 /* ********************************* */
 
 .leaflet-control-edit-in-osm .leaflet-control-edit-in-osm-toggle {
-    background-image: url('../img/24.png');
+    background-image: url('img/24.png');
     background-position: -121px -121px;
 }
 .leaflet-measure-control,
@@ -281,11 +281,11 @@ ul.photon-autocomplete {
     margin-left: 5px;
     background-position: -12px -12px;
     background-repeat: no-repeat;
-    background-image: url("../img/16.png");
+    background-image: url('./img/16.png');
     vertical-align: middle;
 }
 .dark .storage-help-button {
-    background-image: url("../img/16-white.png");
+    background-image: url('./img/16-white.png');
 }
 .storage-help-on .storage-help-box {
     visibility: visible;
@@ -365,10 +365,10 @@ ul.photon-autocomplete {
     background-position: -82px -82px;
 }
 .storage-click-to-edit:hover:after {
-    background-image: url("../img/16.png");
+    background-image: url('./img/16.png');
 }
 .dark .storage-click-to-edit:hover:after {
-    background-image: url("../img/16-white.png");
+    background-image: url('./img/16-white.png');
 }
 .storage-caption-bar {
     display: none;
@@ -520,7 +520,7 @@ ul.photon-autocomplete {
     margin-left: 5px;
     background-position: -209px -130px;
     background-repeat: no-repeat;
-    background-image: url("../img/16-white.png");
+    background-image: url('./img/16-white.png');
     vertical-align: middle;
     margin-right: 5px;
     border: 1px solid #202425;
@@ -534,7 +534,7 @@ ul.photon-autocomplete {
 /* ********************************* */
 
 .leaflet-control-browse .storage-browse-toggle {
-    background-image: url("../img/24.png");
+    background-image: url('./img/24.png');
     width: 36px;
     height: 36px;
     background-position: -41px -81px;
@@ -556,7 +556,7 @@ ul.photon-autocomplete {
 .storage-caption i,
 .storage-browse-datalayers i {
     background-repeat: no-repeat;
-    background-image: url("../../src/img/16.png");
+    background-image: url('./../src/img/16.png');
     display: inline;
     padding: 0 10px;
     cursor: pointer;
@@ -565,7 +565,7 @@ ul.photon-autocomplete {
     vertical-align: middle;
 }
 .dark .storage-browse-datalayers i {
-    background-image: url("../../src/img/16-white.png");
+    background-image: url('./../src/img/16-white.png');
 }
 .storage-browse-datalayers li[draggable] .drag-handle {
     float: right;
@@ -574,7 +574,7 @@ ul.photon-autocomplete {
     cursor: move;
 }
 .leaflet-inplace-toolbar a {
-    background-image: url("../../src/img/16-white.png");
+    background-image: url('./../src/img/16-white.png');
     background-color: #323737!important;
 }
 .leaflet-toolbar-tip {
@@ -682,7 +682,7 @@ ul.photon-autocomplete {
 }
 a.add-datalayer:before,
 .leaflet-control-browse a.storage-browse-link:before {
-    background-image: url("../img/16.png");
+    background-image: url('./img/16.png');
     background-repeat: no-repeat;
     background-position: -92px -168px;
     width: 24px;
@@ -749,7 +749,7 @@ a.add-datalayer:hover,
 .storage-browse-features .polygon .feature-color,
 .storage-browse-features .polyline .feature-color {
     box-shadow: 0 0 4px 0 black inset;
-    background-image: url("../img/24.png");
+    background-image: url('./img/24.png');
     background-size: 500%;
 }
 .storage-browse-features .polyline .feature-color {
@@ -855,7 +855,7 @@ a.add-datalayer:hover,
 /* ********************************* */
 .storage-icon-16 {
     background-repeat: no-repeat;
-    background-image: url("../../src/img/16.png");
+    background-image: url('./../src/img/16.png');
     display: inline;
     padding: 0 10px;
 }
@@ -964,7 +964,7 @@ a.add-datalayer:hover,
     height: 16px;
     margin-left: 5px;
     background-repeat: no-repeat;
-    background-image: url("../img/16.png");
+    background-image: url('./img/16.png');
     vertical-align: middle;
     content: " ";
 }
@@ -1074,7 +1074,7 @@ a.add-datalayer:hover,
     height: 24px;
     line-height: 24px;
     display: inline-block;
-    background-image: url("../img/24.png");
+    background-image: url('./img/24.png');
     vertical-align: bottom;
     content: " ";
 }
@@ -1083,7 +1083,7 @@ a.add-datalayer:hover,
 .dark .storage-clone:before,
 .dark .storage-edit:before,
 .dark .storage-to-polyline:before {
-    background-image: url("../img/24-white.png");
+    background-image: url('./img/24-white.png');
     vertical-align: middle;
 }
 .storage-to-polygon:before {
@@ -1117,7 +1117,7 @@ a.add-datalayer:hover,
     border: 1px solid #222;
 }
 .storage-edit-actions li i {
-    background-image: url("../img/24-white.png");
+    background-image: url('./img/24-white.png');
     background-repeat: no-repeat;
     display: table-cell;
     width: 36px;
@@ -1148,7 +1148,7 @@ a.add-datalayer:hover,
     line-height: 30px;
     position: relative;
     cursor: pointer;
-    background-image: url("../img/icon-bg.png");
+    background-image: url('./img/icon-bg.png');
     text-align: center;
     box-shadow: 0 0 4px 0 black inset;
     margin-bottom: 5px;
