@@ -38,6 +38,7 @@ LANGUAGES = (
     ('pt', 'Portuguese'),
     ('ru', 'Russian'),
     ('sk-sk', 'Slovak'),
+    ('sl', 'Slovenian'),
     ('uk-ua', 'Ukrainian'),
     ('vi', 'Vietnamese'),
     ('zh', 'Chinese'),
