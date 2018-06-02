@@ -4,8 +4,8 @@ describe('L.DataLayer', function () {
     before(function () {
         this.server = sinon.fakeServer.create();
         this.server.respondWith('GET', '/datalayer/62/', JSON.stringify(RESPONSES.datalayer62_GET));
-        this.map = initMap({storage_id: 99});
-        this.datalayer = this.map.getDataLayerByStorageId(62);
+        this.map = initMap({umap_id: 99});
+        this.datalayer = this.map.getDataLayerByUmapId(62);
         this.server.respond();
         enableEdit();
     });
@@ -44,8 +44,8 @@ describe('L.DataLayer', function () {
 
         it('should build a form on edit button click', function () {
             happen.click(editButton);
-            form = qs('form.storage-form');
-            input = qs('form.storage-form input[name="name"]');
+            form = qs('form.umap-form');
+            input = qs('form.umap-form input[name="name"]');
             assert.ok(form);
             assert.ok(input);
         });
@@ -85,15 +85,15 @@ describe('L.DataLayer', function () {
             this.server.respondWith('POST', '/map/99/update/settings/', JSON.stringify({id: 99}));
             this.server.respondWith('POST', '/map/99/datalayer/update/62/', [412, {}, '']);
             happen.click(editButton);
-            input = qs('form.storage-form input[name="name"]');
+            input = qs('form.umap-form input[name="name"]');
             input.value = 'a new name';
             happen.once(input, {type: 'input'});
             clickSave();
             this.server.respond();
             this.server.respond();
-            assert(L.DomUtil.hasClass(this.map._container, 'storage-alert'));
+            assert(L.DomUtil.hasClass(this.map._container, 'umap-alert'));
             assert.notEqual(this.map.dirty_datalayers.indexOf(this.datalayer), -1);
-            forceButton = qs('#storage-alert-container .storage-action');
+            forceButton = qs('#umap-alert-container .umap-action');
             assert.ok(forceButton);
         });
 
@@ -102,7 +102,7 @@ describe('L.DataLayer', function () {
             happen.click(forceButton);
             this.server.flush();
             this.server.respond('POST', '/map/99/datalayer/update/62/', JSON.stringify(defaultDatalayerData()));
-            assert.notOk(qs('#storage-alert-container .storage-action'));
+            assert.notOk(qs('#umap-alert-container .umap-action'));
             assert(this.map.continueSaving.calledOnce);
             this.map.continueSaving.restore();
             assert.equal(this.map.dirty_datalayers.indexOf(this.datalayer), -1);
@@ -121,14 +121,14 @@ describe('L.DataLayer', function () {
         });
 
         it('should have a new layer button', function () {
-            newLayerButton = qs('#storage-ui-container .add-datalayer');
+            newLayerButton = qs('#umap-ui-container .add-datalayer');
             assert.ok(newLayerButton);
         });
 
         it('should build a form on new layer button click', function () {
             happen.click(newLayerButton);
-            form = qs('form.storage-form');
-            input = qs('form.storage-form input[name="name"]');
+            form = qs('form.umap-form');
+            input = qs('form.umap-form input[name="name"]');
             assert.ok(form);
             assert.ok(input);
         });
@@ -153,15 +153,15 @@ describe('L.DataLayer', function () {
             assert.equal(newDatalayer.options.name, new_name);
         });
 
-        it('should set storage_id on save callback', function () {
-            assert.notOk(newDatalayer.storage_id);
+        it('should set umap_id on save callback', function () {
+            assert.notOk(newDatalayer.umap_id);
             this.server.flush();
             this.server.respondWith('POST', '/map/99/update/settings/', JSON.stringify({id: 99}));
             this.server.respondWith('POST', '/map/99/datalayer/create/', JSON.stringify(defaultDatalayerData({id: 63})));
             clickSave();
             this.server.respond();
             this.server.respond();  // First respond will then trigger another Xhr request (continueSaving)
-            assert.equal(newDatalayer.storage_id, 63);
+            assert.equal(newDatalayer.umap_id, 63);
         });
 
         it('should have unset map dirty', function () {
@@ -176,7 +176,7 @@ describe('L.DataLayer', function () {
         it('should call update if we edit again', function () {
             happen.click(editButton);
             assert.notOk(this.map.isDirty);
-            input = qs('form.storage-form input[name="name"]');
+            input = qs('form.umap-form input[name="name"]');
             input.value = 'a new name again but we don\'t care which';
             happen.once(input, {type: 'input'});
             assert.ok(this.map.isDirty);
@@ -200,8 +200,8 @@ describe('L.DataLayer', function () {
         it('should change icon class', function () {
             happen.click(qs('[data-id="' + this.datalayer._leaflet_id +'"] .layer-edit'));
             changeSelectValue(qs('form#datalayer-advanced-properties select[name=iconClass]'), 'Circle');
-            assert.notOk(qs('div.storage-div-icon'));
-            assert.ok(qs('div.storage-circle-icon'));
+            assert.notOk(qs('div.umap-div-icon'));
+            assert.ok(qs('div.umap-circle-icon'));
             clickCancel();
         });
 
@@ -210,18 +210,18 @@ describe('L.DataLayer', function () {
     describe('#show/hide', function () {
 
         it('should hide features on hide', function () {
-            assert.ok(qs('div.storage-div-icon'));
+            assert.ok(qs('div.umap-div-icon'));
             assert.ok(qs('path[fill="none"]'));
             this.datalayer.hide();
-            assert.notOk(qs('div.storage-div-icon'));
+            assert.notOk(qs('div.umap-div-icon'));
             assert.notOk(qs('path[fill="none"]'));
         });
 
         it('should show features on show', function () {
-            assert.notOk(qs('div.storage-div-icon'));
+            assert.notOk(qs('div.umap-div-icon'));
             assert.notOk(qs('path[fill="none"]'));
             this.datalayer.show();
-            assert.ok(qs('div.storage-div-icon'));
+            assert.ok(qs('div.umap-div-icon'));
             assert.ok(qs('path[fill="none"]'));
         });
 
@@ -232,7 +232,7 @@ describe('L.DataLayer', function () {
         it('should clone everything but the id and the name', function () {
             enableEdit();
             var clone = this.datalayer.clone();
-            assert.notOk(clone.storage_id);
+            assert.notOk(clone.umap_id);
             assert.notEqual(clone.options.name, this.datalayer.name);
             assert.ok(clone.options.name);
             assert.equal(clone.options.color, this.datalayer.options.color);
@@ -267,16 +267,16 @@ describe('L.DataLayer', function () {
                 },
                 'type': 'Feature',
                 'id': 1807,
-                'properties': {_storage_options: {}, name: 'new point from restore'}
+                'properties': {_umap_options: {}, name: 'new point from restore'}
             });
-            geojson._storage.color = 'Chocolate';
+            geojson._umap_options.color = 'Chocolate';
             this.server.respondWith('GET', '/datalayer/62/olderversion.geojson', JSON.stringify(geojson));
             sinon.spy(window, 'confirm');
             this.datalayer.restore('olderversion.geojson');
             this.server.respond();
             assert(window.confirm.calledOnce);
             window.confirm.restore();
-            assert.equal(this.datalayer.storage_id, 62);
+            assert.equal(this.datalayer.umap_id, 62);
             assert.ok(this.datalayer.isDirty);
             assert.equal(this.datalayer._index.length, 4);
             assert.ok(qs('path[fill="Chocolate"]'));

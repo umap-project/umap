@@ -295,13 +295,13 @@ L.U.Help = L.Class.extend({
 
     initialize: function (map) {
         this.map = map;
-        this.box = L.DomUtil.create('div', 'storage-help-box with-transition dark', document.body);
-        var closeLink = L.DomUtil.create('a', 'storage-close-link', this.box);
+        this.box = L.DomUtil.create('div', 'umap-help-box with-transition dark', document.body);
+        var closeLink = L.DomUtil.create('a', 'umap-close-link', this.box);
         closeLink.href = '#';
-        L.DomUtil.add('i', 'storage-close-icon', closeLink);
+        L.DomUtil.add('i', 'umap-close-icon', closeLink);
         var label = L.DomUtil.create('span', '', closeLink);
         label.title = label.innerHTML = L._('Close');
-        this.content = L.DomUtil.create('div', 'storage-help-content', this.box);
+        this.content = L.DomUtil.create('div', 'umap-help-content', this.box);
         L.DomEvent.on(closeLink, 'click', this.hide, this);
     },
 
@@ -317,17 +317,17 @@ L.U.Help = L.Class.extend({
         this.content.innerHTML = '';
         for (var i = 0, name; i < arguments.length; i++) {
             name = arguments[i];
-            L.DomUtil.add('div', 'storage-help-entry', this.content, this.resolve(name));
+            L.DomUtil.add('div', 'umap-help-entry', this.content, this.resolve(name));
         }
-        L.DomUtil.addClass(document.body, 'storage-help-on');
+        L.DomUtil.addClass(document.body, 'umap-help-on');
     },
 
     hide: function () {
-        L.DomUtil.removeClass(document.body, 'storage-help-on');
+        L.DomUtil.removeClass(document.body, 'umap-help-on');
     },
 
     visible: function () {
-        return L.DomUtil.hasClass(document.body, 'storage-help-on')
+        return L.DomUtil.hasClass(document.body, 'umap-help-on')
     },
 
     resolve: function (name) {
@@ -335,7 +335,7 @@ L.U.Help = L.Class.extend({
     },
 
     button: function (container, entries) {
-        var helpButton = L.DomUtil.create('a', 'storage-help-button', container);
+        var helpButton = L.DomUtil.create('a', 'umap-help-button', container);
         helpButton.href = '#';
         if (entries) {
             L.DomEvent
@@ -352,7 +352,7 @@ L.U.Help = L.Class.extend({
         var container = L.DomUtil.create('div', ''),
             self = this,
             title = L.DomUtil.create('h3', '', container),
-            actionsContainer = L.DomUtil.create('ul', 'storage-edit-actions', container);
+            actionsContainer = L.DomUtil.create('ul', 'umap-edit-actions', container);
         var addAction = function (action) {
             var actionContainer = L.DomUtil.add('li', '', actionsContainer);
             L.DomUtil.add('i', action.options.className, actionContainer),

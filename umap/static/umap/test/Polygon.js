@@ -2,7 +2,7 @@ describe('L.Utorage.Polygon', function () {
     var p2ll, map;
 
     before(function () {
-        this.map = map = initMap({storage_id: 99});
+        this.map = map = initMap({umap_id: 99});
         enableEdit();
         p2ll = function (x, y) {
             return map.containerPointToLatLng([x, y]);
@@ -175,20 +175,20 @@ describe('L.Utorage.Polygon', function () {
     describe('#addShape', function () {
 
         it('"add shape" control should not be visible by default', function () {
-            assert.notOk(qs('.storage-draw-polygon-multi'));
+            assert.notOk(qs('.umap-draw-polygon-multi'));
         });
 
         it('"add shape" control should be visible when editing a Polygon', function () {
             var layer = new L.U.Polygon(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.edit();
-            assert.ok(qs('.storage-draw-polygon-multi'));
+            assert.ok(qs('.umap-draw-polygon-multi'));
         });
 
         it('"add shape" control should extend the same multi', function () {
             var layer = new L.U.Polygon(this.map, [p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)], {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.edit();
             assert.notOk(layer.isMulti());
-            happen.click(qs('.storage-draw-polygon-multi'));
+            happen.click(qs('.umap-draw-polygon-multi'));
             happen.at('mousedown', 300, 300);
             happen.at('mouseup', 300, 300);
             happen.at('mousedown', 350, 300);

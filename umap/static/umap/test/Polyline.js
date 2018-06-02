@@ -2,7 +2,7 @@ describe('L.Utorage.Polyline', function () {
     var p2ll, map;
 
     before(function () {
-        this.map = map = initMap({storage_id: 99});
+        this.map = map = initMap({umap_id: 99});
         enableEdit();
         p2ll = function (x, y) {
             return map.containerPointToLatLng([x, y]);
@@ -191,20 +191,20 @@ describe('L.Utorage.Polyline', function () {
     describe('#addShape', function () {
 
         it('"add shape" control should not be visible by default', function () {
-            assert.notOk(qs('.storage-draw-polyline-multi'));
+            assert.notOk(qs('.umap-draw-polyline-multi'));
         });
 
         it('"add shape" control should be visible when editing a Polyline', function () {
             var layer = new L.U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.edit();
-            assert.ok(qs('.storage-draw-polyline-multi'));
+            assert.ok(qs('.umap-draw-polyline-multi'));
         });
 
         it('"add shape" control should extend the same multi', function () {
             var layer = new L.U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.edit();
             assert.notOk(layer.isMulti());
-            happen.click(qs('.storage-draw-polyline-multi'));
+            happen.click(qs('.umap-draw-polyline-multi'));
             happen.at('mousemove', 300, 300);
             happen.at('click', 300, 300);
             happen.at('mousemove', 350, 300);

@@ -6,7 +6,7 @@ L.U.Popup = L.Popup.extend({
 
     initialize: function (feature) {
         this.feature = feature;
-        this.container = L.DomUtil.create('div', 'storage-popup');
+        this.container = L.DomUtil.create('div', 'umap-popup');
         this.format();
         L.Popup.prototype.initialize.call(this, {}, feature);
         this.setContent(this.container);
@@ -52,7 +52,7 @@ L.U.Popup = L.Popup.extend({
 
     renderFooter: function () {
         if (this.hasFooter()) {
-            var footer = L.DomUtil.create('ul', 'storage-popup-footer', this.container),
+            var footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container),
                 previousLi = L.DomUtil.create('li', 'previous', footer),
                 zoomLi = L.DomUtil.create('li', 'zoom', footer),
                 nextLi = L.DomUtil.create('li', 'next', footer),
@@ -81,7 +81,7 @@ L.U.Popup = L.Popup.extend({
         var title = this.renderTitle();
         if (title) this.container.appendChild(title);
         var body = this.renderBody();
-        if (body) L.DomUtil.add('div', 'storage-popup-content', this.container, body);
+        if (body) L.DomUtil.add('div', 'umap-popup-content', this.container, body);
         this.renderFooter();
     },
 
@@ -98,7 +98,7 @@ L.U.Popup = L.Popup.extend({
 L.U.Popup.Large = L.U.Popup.extend({
     options: {
         maxWidth: 500,
-        className: 'storage-popup-large'
+        className: 'umap-popup-large'
     }
 });
 
@@ -150,7 +150,7 @@ L.U.Popup.GeoRSSImage = L.U.Popup.BaseWithTitle.extend({
     options: {
         minWidth: 300,
         maxWidth: 500,
-        className: 'storage-popup-large storage-georss-image'
+        className: 'umap-popup-large umap-georss-image'
     },
 
     renderBody: function () {
@@ -174,7 +174,7 @@ L.U.Popup.GeoRSSImage = L.U.Popup.BaseWithTitle.extend({
 L.U.Popup.GeoRSSLink = L.U.Popup.extend({
 
     options: {
-        className: 'storage-georss-link'
+        className: 'umap-georss-link'
     },
 
     renderBody: function () {
@@ -195,7 +195,7 @@ L.U.Popup.SimplePanel = L.U.Popup.extend({
 
     allButton: function () {
         var button = L.DomUtil.create('li', '');
-        L.DomUtil.create('i', 'storage-icon-16 storage-list', button);
+        L.DomUtil.create('i', 'umap-icon-16 umap-list', button);
         var label = L.DomUtil.create('span', '', button);
         label.innerHTML = label.title = L._('See all');
         L.DomEvent.on(button, 'click', this.feature.map.openBrowser, this.feature.map);

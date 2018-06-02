@@ -356,7 +356,7 @@ class MapDetailMixin(object):
             'tilelayers': self.get_tilelayers(),
             'allowEdit': self.is_edit_allowed(),
             'default_iconUrl': "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
-            'storage_id': self.get_storage_id(),
+            'umap_id': self.get_umap_id(),
             'licences': dict((l.name, l.json) for l in Licence.objects.all()),
         }
         if self.get_short_url():
@@ -388,7 +388,7 @@ class MapDetailMixin(object):
     def is_edit_allowed(self):
         return True
 
-    def get_storage_id(self):
+    def get_umap_id(self):
         return None
 
     def get_geojson(self):
@@ -433,7 +433,7 @@ class MapView(MapDetailMixin, DetailView):
     def is_edit_allowed(self):
         return self.object.can_edit(self.request.user, self.request)
 
-    def get_storage_id(self):
+    def get_umap_id(self):
         return self.object.pk
 
     def get_short_url(self):

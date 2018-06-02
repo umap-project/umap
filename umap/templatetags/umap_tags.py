@@ -42,12 +42,12 @@ def map_fragment(map_instance, **kwargs):
         'hash': False,
         'attributionControl': False,
         'scrollWheelZoom': False,
-        'storageAttributionControl': False,
+        'umapAttributionControl': False,
         'noControl': True,
-        'storage_id': map_instance.pk,
+        'umap_id': map_instance.pk,
         'onLoadPanel': "none",
         'captionBar': False,
-        'default_iconUrl': "%sstorage/src/img/marker.png" % settings.STATIC_URL,
+        'default_iconUrl': "%sumap/img/marker.png" % settings.STATIC_URL,
         'slideshow': {}
     })
     map_settings['properties'].update(kwargs)

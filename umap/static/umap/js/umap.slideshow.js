@@ -1,7 +1,7 @@
 L.U.Slideshow = L.Class.extend({
 
     statics: {
-        CLASSNAME: 'storage-slideshow-active'
+        CLASSNAME: 'umap-slideshow-active'
     },
 
     options: {
@@ -68,7 +68,7 @@ L.U.Slideshow = L.Class.extend({
         var time = parseInt(this.options.delay, 10);
         if (!time) return;
         var css = 'rotation ' + time / 1000 + 's infinite linear',
-            spinners = document.querySelectorAll('.storage-slideshow-toolbox .play .spinner');
+            spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner');
         for (var i = 0; i < spinners.length; i++) {
             spinners[i].style.animation = css;
             spinners[i].style['-webkit-animation'] = css;
@@ -79,7 +79,7 @@ L.U.Slideshow = L.Class.extend({
 
     resetSpinners: function () {
         // Make that animnation is coordinated with user actions
-        var spinners = document.querySelectorAll('.storage-slideshow-toolbox .play .spinner'),
+        var spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner'),
             el, newOne;
         for (var i = 0; i < spinners.length; i++) {
             el = spinners[i];
@@ -134,7 +134,7 @@ L.U.Slideshow = L.Class.extend({
     },
 
     renderToolbox: function (container) {
-        var box = L.DomUtil.create('ul', 'storage-slideshow-toolbox'),
+        var box = L.DomUtil.create('ul', 'umap-slideshow-toolbox'),
             play = L.DomUtil.create('li', 'play', box),
             stop = L.DomUtil.create('li', 'stop', box),
             prev = L.DomUtil.create('li', 'prev', box),

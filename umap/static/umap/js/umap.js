@@ -179,7 +179,7 @@ L.U.Map.include({
         }, this);
 
         // Creation mode
-        if (!this.options.storage_id) {
+        if (!this.options.umap_id) {
             this.isDirty = true;
             this.options.name = L._('Untitled map');
             this.options.allowEdit = true;
@@ -260,8 +260,8 @@ L.U.Map.include({
     },
 
     renderControls: function () {
-        L.DomUtil.classIf(document.body, 'storage-caption-bar-enabled', this.options.captionBar || (this.options.slideshow && this.options.slideshow.active));
-        L.DomUtil.classIf(document.body, 'storage-slideshow-enabled', this.options.slideshow && this.options.slideshow.active);
+        L.DomUtil.classIf(document.body, 'umap-caption-bar-enabled', this.options.captionBar || (this.options.slideshow && this.options.slideshow.active));
+        L.DomUtil.classIf(document.body, 'umap-slideshow-enabled', this.options.slideshow && this.options.slideshow.active);
         for (var i in this._controls) {
             this.removeControl(this._controls[i]);
         }
@@ -566,9 +566,9 @@ L.U.Map.include({
     },
 
     renderShareBox: function () {
-        var container = L.DomUtil.create('div', 'storage-share'),
+        var container = L.DomUtil.create('div', 'umap-share'),
             embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map')),
-            iframe = L.DomUtil.create('textarea', 'storage-share-iframe', container),
+            iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container),
             option;
         var UIFields = [
             ['dimensions.width', {handler: 'Input', label: L._('width')}],
@@ -599,7 +599,7 @@ L.U.Map.include({
         if (this.options.shortUrl) {
             L.DomUtil.create('hr', '', container);
             L.DomUtil.add('h4', '', container, L._('Short URL'));
-            var shortUrl = L.DomUtil.create('input', 'storage-short-url', container);
+            var shortUrl = L.DomUtil.create('input', 'umap-short-url', container);
             shortUrl.type = 'text';
             shortUrl.value = this.options.shortUrl;
         }
@@ -677,8 +677,8 @@ L.U.Map.include({
     },
 
     updatePermissions: function () {
-        if (!this.options.storage_id) return this.ui.alert({content: L._('Please save the map before'), level: 'info'});
-        var url = L.Util.template(this.options.urls.map_update_permissions, {'map_id': this.options.storage_id});
+        if (!this.options.umap_id) return this.ui.alert({content: L._('Please save the map before'), level: 'info'});
+        var url = L.Util.template(this.options.urls.map_update_permissions, {'map_id': this.options.umap_id});
         this.get(url, {
             listen_form: {'id': 'map_edit'},
             className: 'dark'
@@ -686,7 +686,7 @@ L.U.Map.include({
     },
 
     importPanel: function () {
-        var container = L.DomUtil.create('div', 'storage-upload'),
+        var container = L.DomUtil.create('div', 'umap-upload'),
             title = L.DomUtil.create('h4', '', container),
             presetBox = L.DomUtil.create('div', 'formbox', container),
             presetSelect = L.DomUtil.create('select', '', presetBox),
@@ -859,18 +859,18 @@ L.U.Map.include({
     },
 
     displayCaption: function () {
-        var container = L.DomUtil.create('div', 'storage-caption'),
+        var container = L.DomUtil.create('div', 'umap-caption'),
             title = L.DomUtil.create('h3', '', container);
         title.innerHTML = this.options.name;
         if (this.options.author && this.options.author.name && this.options.author.link) {
-            var authorContainer = L.DomUtil.add('h5', 'storage-map-author', container, L._('by') + ' '),
+            var authorContainer = L.DomUtil.add('h5', 'umap-map-author', container, L._('by') + ' '),
                 author = L.DomUtil.create('a');
             author.href = this.options.author.link;
             author.innerHTML = this.options.author.name;
             authorContainer.appendChild(author);
         }
         if (this.options.description) {
-            var description = L.DomUtil.create('div', 'storage-map-description', container);
+            var description = L.DomUtil.create('div', 'umap-map-description', container);
             description.innerHTML = L.Util.toHTML(this.options.description);
         }
         var datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container);
@@ -918,7 +918,7 @@ L.U.Map.include({
             };
         umapCredit.innerHTML = L._('Powered by <a href="{leaflet}">Leaflet</a> and <a href="{django}">Django</a>, glued by <a href="{umap}">uMap project</a>.', urls);
         var browser = L.DomUtil.create('li', '');
-        L.DomUtil.create('i', 'storage-icon-16 storage-list', browser);
+        L.DomUtil.create('i', 'umap-icon-16 umap-list', browser);
         var label = L.DomUtil.create('span', '', browser);
         label.innerHTML = label.title = L._('Browse data');
         L.DomEvent.on(browser, 'click', this.openBrowser, this);
@@ -969,7 +969,7 @@ L.U.Map.include({
     },
 
     checkDirty: function () {
-        L.DomUtil.classIf(this._container, 'storage-is-dirty', this.isDirty);
+        L.DomUtil.classIf(this._container, 'umap-is-dirty', this.isDirty);
     },
 
     addDirtyDatalayer: function (datalayer) {
@@ -1081,9 +1081,9 @@ L.U.Map.include({
             data: formData,
             callback: function (data) {
                 var duration = 3000;
-                if (!this.options.storage_id) {
+                if (!this.options.umap_id) {
                     duration = 100000; // we want a longer message at map creation (TODO UGLY)
-                    this.options.storage_id = data.id;
+                    this.options.umap_id = data.id;
                     if (history && history.pushState) history.pushState({}, this.options.name, data.url);
                     else window.location = data.url;
                 }
@@ -1101,7 +1101,7 @@ L.U.Map.include({
     },
 
     getEditUrl: function() {
-        return L.Util.template(this.options.urls.map_update, {'map_id': this.options.storage_id});
+        return L.Util.template(this.options.urls.map_update, {'map_id': this.options.umap_id});
     },
 
     getCreateUrl: function() {
@@ -1109,7 +1109,7 @@ L.U.Map.include({
     },
 
     getSaveUrl: function () {
-        return (this.options.storage_id && this.getEditUrl()) || this.getCreateUrl();
+        return (this.options.umap_id && this.getEditUrl()) || this.getCreateUrl();
     },
 
     geometry: function() {
@@ -1145,8 +1145,8 @@ L.U.Map.include({
         return this.createDataLayer();
     },
 
-    getDataLayerByStorageId: function (storage_id) {
-        return this.findDataLayer(function (d) { return d.storage_id == storage_id; });
+    getDataLayerByUmapId: function (umap_id) {
+        return this.findDataLayer(function (d) { return d.umap_id == umap_id; });
     },
 
     edit: function () {
@@ -1331,20 +1331,20 @@ L.U.Map.include({
 
         var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
         var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions);
-        var del = L.DomUtil.create('a', 'button third storage-delete', advancedButtons);
+        var del = L.DomUtil.create('a', 'button third umap-delete', advancedButtons);
         del.href = '#';
         del.innerHTML = L._('Delete');
         L.DomEvent
             .on(del, 'click', L.DomEvent.stop)
             .on(del, 'click', this.del, this);
-        var clone = L.DomUtil.create('a', 'button third storage-clone', advancedButtons);
+        var clone = L.DomUtil.create('a', 'button third umap-clone', advancedButtons);
         clone.href = '#';
         clone.innerHTML = L._('Clone');
         clone.title = L._('Clone this map');
         L.DomEvent
             .on(clone, 'click', L.DomEvent.stop)
             .on(clone, 'click', this.clone, this);
-        var empty = L.DomUtil.create('a', 'button third storage-empty', advancedButtons);
+        var empty = L.DomUtil.create('a', 'button third umap-empty', advancedButtons);
         empty.href = '#';
         empty.innerHTML = L._('Empty');
         empty.title = L._('Delete all layers');
@@ -1355,14 +1355,14 @@ L.U.Map.include({
     },
 
     enableEdit: function() {
-        L.DomUtil.addClass(document.body, 'storage-edit-enabled');
+        L.DomUtil.addClass(document.body, 'umap-edit-enabled');
         this.editEnabled = true;
         this.fire('edit:enabled');
     },
 
     disableEdit: function() {
         if (this.isDirty) return;
-        L.DomUtil.removeClass(document.body, 'storage-edit-enabled');
+        L.DomUtil.removeClass(document.body, 'umap-edit-enabled');
         this.editedFeature = null;
         this.editEnabled = false;
         this.fire('edit:disabled');
@@ -1373,20 +1373,20 @@ L.U.Map.include({
     },
 
     initCaptionBar: function () {
-        var container = L.DomUtil.create('div', 'storage-caption-bar', this._controlContainer),
+        var container = L.DomUtil.create('div', 'umap-caption-bar', this._controlContainer),
             name = L.DomUtil.create('h3', '', container);
         L.DomEvent.disableClickPropagation(container);
         if (this.options.author && this.options.author.name && this.options.author.link) {
-            var authorContainer = L.DomUtil.add('span', 'storage-map-author', container, ' ' + L._('by') + ' '),
+            var authorContainer = L.DomUtil.add('span', 'umap-map-author', container, ' ' + L._('by') + ' '),
                 author = L.DomUtil.create('a');
             author.href = this.options.author.link;
             author.innerHTML = this.options.author.name;
             authorContainer.appendChild(author);
         }
-        var about = L.DomUtil.add('a', 'storage-about-link', container, ' — ' + L._('About'));
+        var about = L.DomUtil.add('a', 'umap-about-link', container, ' — ' + L._('About'));
         about.href = '#';
         L.DomEvent.on(about, 'click', this.displayCaption, this);
-        var browser = L.DomUtil.add('a', 'storage-open-browser-link', container, ' | ' + L._('Browse data'));
+        var browser = L.DomUtil.add('a', 'umap-open-browser-link', container, ' | ' + L._('Browse data'));
         browser.href = '#';
         L.DomEvent.on(browser, 'click', L.DomEvent.stop)
                   .on(browser, 'click', this.openBrowser, this);
@@ -1401,9 +1401,9 @@ L.U.Map.include({
     },
 
     initEditBar: function () {
-        var container = L.DomUtil.create('div', 'storage-main-edit-toolbox with-transition dark', this._controlContainer),
+        var container = L.DomUtil.create('div', 'umap-main-edit-toolbox with-transition dark', this._controlContainer),
             title = L.DomUtil.add('h3', '', container, L._('Editing') + '&nbsp;'),
-            name = L.DomUtil.create('a', 'storage-click-to-edit', title),
+            name = L.DomUtil.create('a', 'umap-click-to-edit', title),
             setName = function () {
                 name.innerHTML = this.getDisplayName();
             };
@@ -1461,14 +1461,14 @@ L.U.Map.include({
 
     del: function () {
         if (confirm(L._('Are you sure you want to delete this map?'))) {
-            var url = L.Util.template(this.options.urls.map_delete, {'map_id': this.options.storage_id});
+            var url = L.Util.template(this.options.urls.map_delete, {'map_id': this.options.umap_id});
             this.post(url);
         }
     },
 
     clone: function () {
         if (confirm(L._('Are you sure you want to clone this map and all its datalayers?'))) {
-            var url = L.Util.template(this.options.urls.map_clone, {'map_id': this.options.storage_id});
+            var url = L.Util.template(this.options.urls.map_clone, {'map_id': this.options.umap_id});
             this.post(url);
         }
     },

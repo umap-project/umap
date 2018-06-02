@@ -97,7 +97,7 @@ L.U.DrawMarkerAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
-        className: 'storage-draw-marker dark',
+        className: 'umap-draw-marker dark',
         tooltip: L._('Draw a marker')
     },
 
@@ -111,7 +111,7 @@ L.U.DrawPolylineAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
-        className: 'storage-draw-polyline dark',
+        className: 'umap-draw-polyline dark',
         tooltip: L._('Draw a polyline')
     },
 
@@ -125,7 +125,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
-        className: 'storage-draw-polygon dark',
+        className: 'umap-draw-polygon dark',
         tooltip: L._('Draw a polygon')
     },
 
@@ -138,7 +138,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
 L.U.AddPolylineShapeAction = L.U.BaseAction.extend({
 
     options: {
-        className: 'storage-draw-polyline-multi dark',
+        className: 'umap-draw-polyline-multi dark',
         tooltip: L._('Add a line to the current multi')
     },
 
@@ -151,7 +151,7 @@ L.U.AddPolylineShapeAction = L.U.BaseAction.extend({
 L.U.AddPolygonShapeAction = L.U.AddPolylineShapeAction.extend({
 
     options: {
-        className: 'storage-draw-polygon-multi dark',
+        className: 'umap-draw-polygon-multi dark',
         tooltip: L._('Add a polygon to the current multi')
     }
 
@@ -184,7 +184,7 @@ L.U.CreateHoleAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-new-hole',
+            className: 'umap-new-hole',
             tooltip: L._('Start a hole here')
         }
     },
@@ -199,7 +199,7 @@ L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-toggle-edit',
+            className: 'umap-toggle-edit',
             tooltip: L._('Toggle edit mode (shift-click)')
         }
     },
@@ -215,13 +215,13 @@ L.U.DeleteFeatureAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-delete-all',
+            className: 'umap-delete-all',
             tooltip: L._('Delete this feature')
         }
     },
 
     postInit: function () {
-        if (!this.feature.isMulti()) this.options.toolbarIcon.className = 'storage-delete-one-of-one';
+        if (!this.feature.isMulti()) this.options.toolbarIcon.className = 'umap-delete-one-of-one';
     },
 
     onClick: function (e) {
@@ -234,7 +234,7 @@ L.U.DeleteShapeAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-delete-one-of-multi',
+            className: 'umap-delete-one-of-multi',
             tooltip: L._('Delete this shape')
         }
     },
@@ -249,7 +249,7 @@ L.U.ExtractShapeFromMultiAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-extract-shape-from-multi',
+            className: 'umap-extract-shape-from-multi',
             tooltip: L._('Extract shape to separate feature')
         }
     },
@@ -273,7 +273,7 @@ L.U.DeleteVertexAction = L.U.BaseVertexAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-delete-vertex',
+            className: 'umap-delete-vertex',
             tooltip: L._('Delete this vertex (Alt-click)')
         }
     },
@@ -288,7 +288,7 @@ L.U.SplitLineAction = L.U.BaseVertexAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-split-line',
+            className: 'umap-split-line',
             tooltip: L._('Split line')
         }
     },
@@ -303,7 +303,7 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 
     options: {
         toolbarIcon: {
-            className: 'storage-continue-line',
+            className: 'umap-continue-line',
             tooltip: L._('Continue line')
         }
     },
@@ -360,7 +360,7 @@ L.U.EditControl = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-control-edit-enable storage-control'),
+        var container = L.DomUtil.create('div', 'leaflet-control-edit-enable umap-control'),
             edit = L.DomUtil.create('a', '', container);
         edit.href = '#';
         edit.title = L._('Enable editing') + ' (Ctrl-E)';
@@ -381,7 +381,7 @@ L.Control.Embed = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-control-embed storage-control');
+        var container = L.DomUtil.create('div', 'leaflet-control-embed umap-control');
 
         var link = L.DomUtil.create('a', '', container);
         link.href = '#';
@@ -404,8 +404,8 @@ L.U.MoreControls = L.Control.extend({
 
     onAdd: function () {
         var container = L.DomUtil.create('div', ''),
-            more = L.DomUtil.create('a', 'storage-control-more storage-control-text', container),
-            less = L.DomUtil.create('a', 'storage-control-less storage-control-text', container);
+            more = L.DomUtil.create('a', 'umap-control-more umap-control-text', container),
+            less = L.DomUtil.create('a', 'umap-control-less umap-control-text', container);
         more.href = '#';
         more.title = L._('More controls');
 
@@ -426,7 +426,7 @@ L.U.MoreControls = L.Control.extend({
     toggle: function () {
         var pos = this.getPosition(),
             corner = this._map._controlCorners[pos],
-            className = 'storage-more-controls';
+            className = 'umap-more-controls';
         if (L.DomUtil.hasClass(corner, className)) L.DomUtil.removeClass(corner, className);
         else L.DomUtil.addClass(corner, className);
     }
@@ -452,15 +452,15 @@ L.U.DataLayersControl = L.Control.extend({
     },
 
     _initLayout: function (map) {
-        var container = this._container = L.DomUtil.create('div', 'leaflet-control-browse storage-control'),
-            actions = L.DomUtil.create('div', 'storage-browse-actions', container);
-        this._datalayers_container = L.DomUtil.create('ul', 'storage-browse-datalayers', actions);
+        var container = this._container = L.DomUtil.create('div', 'leaflet-control-browse umap-control'),
+            actions = L.DomUtil.create('div', 'umap-browse-actions', container);
+        this._datalayers_container = L.DomUtil.create('ul', 'umap-browse-datalayers', actions);
 
-        var link = L.DomUtil.create('a', 'storage-browse-link', actions);
+        var link = L.DomUtil.create('a', 'umap-browse-link', actions);
         link.href = '#';
         link.title = link.innerHTML = L._('Browse data');
 
-        var toggle = L.DomUtil.create('a', 'storage-browse-toggle', container);
+        var toggle = L.DomUtil.create('a', 'umap-browse-toggle', container);
         toggle.href = '#';
 
         L.DomEvent
@@ -539,7 +539,7 @@ L.U.DataLayersControl = L.Control.extend({
 
     openPanel: function () {
         if (!this.map.editEnabled) return;
-        var container = L.DomUtil.create('ul', 'storage-browse-datalayers');
+        var container = L.DomUtil.create('ul', 'umap-browse-datalayers');
         this.map.eachDataLayerReverse(function (datalayer) {
             this.addDataLayer(container, datalayer, true);
         }, this);
@@ -642,11 +642,11 @@ L.U.DataLayer.addInitHook(function () {
 L.U.Map.include({
 
     _openBrowser: function () {
-        var browserContainer = L.DomUtil.create('div', 'storage-browse-data'),
-            title = L.DomUtil.add('h3', 'storage-browse-title', browserContainer, this.options.name),
+        var browserContainer = L.DomUtil.create('div', 'umap-browse-data'),
+            title = L.DomUtil.add('h3', 'umap-browse-title', browserContainer, this.options.name),
             filter = L.DomUtil.create('input', '', browserContainer),
             filterValue = '',
-            featuresContainer = L.DomUtil.create('div', 'storage-browse-features', browserContainer),
+            featuresContainer = L.DomUtil.create('div', 'umap-browse-features', browserContainer),
             filterKeys = (this.options.filterKey || this.options.sortKey || 'name').split(',');
         filter.type = 'text';
         filter.placeholder = L._('Filter…');
@@ -682,7 +682,7 @@ L.U.Map.include({
         var append = function (datalayer) {
             var container = L.DomUtil.create('div', datalayer.getHidableClass(), featuresContainer),
                 headline = L.DomUtil.create('h5', '', container);
-            container.id = 'browse_data_datalayer_' + datalayer.storage_id;
+            container.id = 'browse_data_datalayer_' + datalayer.umap_id;
             datalayer.renderToolbox(headline);
             L.DomUtil.add('span', '', headline, datalayer.options.name);
             var ul = L.DomUtil.create('ul', '', container);
@@ -717,7 +717,7 @@ L.U.Map.include({
         L.bind(appendAll, this)();
         L.DomEvent.on(filter, 'input', appendAll, this);
         var link = L.DomUtil.create('li', '');
-        L.DomUtil.create('i', 'storage-icon-16 storage-caption', link);
+        L.DomUtil.create('i', 'umap-icon-16 umap-caption', link);
         var label = L.DomUtil.create('span', '', link);
         label.innerHTML = label.title = L._('About');
         L.DomEvent.on(link, 'click', this.displayCaption, this);
@@ -734,7 +734,7 @@ L.U.TileLayerControl = L.Control.extend({
     },
 
     onAdd: function () {
-        var container = L.DomUtil.create('div', 'leaflet-control-tilelayers storage-control');
+        var container = L.DomUtil.create('div', 'leaflet-control-tilelayers umap-control');
 
         var link = L.DomUtil.create('a', '', container);
         link.href = '#';
@@ -749,7 +749,7 @@ L.U.TileLayerControl = L.Control.extend({
     },
 
     openSwitcher: function (options) {
-        this._tilelayers_container = L.DomUtil.create('ul', 'storage-tilelayer-switcher-container');
+        this._tilelayers_container = L.DomUtil.create('ul', 'umap-tilelayer-switcher-container');
         this.buildList(options);
     },
 
@@ -810,7 +810,7 @@ L.U.LocateControl = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-control-locate storage-control'),
+        var container = L.DomUtil.create('div', 'leaflet-control-locate umap-control'),
             link = L.DomUtil.create('a', '', container);
         link.href = '#';
         link.title = L._('Center map on your location');
@@ -880,7 +880,7 @@ L.U.SearchControl = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-control-search storage-control'),
+        var container = L.DomUtil.create('div', 'leaflet-control-search umap-control'),
             self = this;
 
         L.DomEvent.disableClickPropagation(container);
@@ -949,18 +949,18 @@ L.Control.MiniMap.include({
 L.Control.Loading.include({
 
     onAdd: function (map) {
-        this._container = L.DomUtil.create('div', 'storage-loader', map._controlContainer);
+        this._container = L.DomUtil.create('div', 'umap-loader', map._controlContainer);
         map.on('baselayerchange', this._layerAdd, this);
         this._addMapListeners(map);
         this._map = map;
     },
 
     _showIndicator: function () {
-        L.DomUtil.addClass(this._map._container, 'storage-loading');
+        L.DomUtil.addClass(this._map._container, 'umap-loading');
     },
 
     _hideIndicator: function() {
-        L.DomUtil.removeClass(this._map._container, 'storage-loading');
+        L.DomUtil.removeClass(this._map._container, 'umap-loading');
     }
 
 });
@@ -1029,8 +1029,8 @@ L.U.IframeExporter = L.Class.extend({
         var datalayers = [];
         if (this.options.keepCurrentDatalayers) {
             this.map.eachDataLayer(function (datalayer) {
-                if (datalayer.isVisible() && datalayer.storage_id) {
-                    datalayers.push(datalayer.storage_id);
+                if (datalayer.isVisible() && datalayer.umap_id) {
+                    datalayers.push(datalayer.umap_id);
                 }
             });
             this.queryString.datalayers = datalayers.join(',');

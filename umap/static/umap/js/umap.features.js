@@ -9,7 +9,7 @@ L.U.FeatureMixin = {
         }
         // DataLayer the marker belongs to
         this.datalayer = options.datalayer || null;
-        this.properties = {_storage_options: {}};
+        this.properties = {_umap_options: {}};
         if (options.geojson) {
             this.populate(options.geojson);
         }
@@ -47,8 +47,8 @@ L.U.FeatureMixin = {
 
     view: function(e) {
         if (this.map.editEnabled) return;
-        var outlink = this.properties._storage_options.outlink,
-            target = this.properties._storage_options.outlinkTarget
+        var outlink = this.properties._umap_options.outlink,
+            target = this.properties._umap_options.outlinkTarget
         if (outlink) {
             switch (target) {
                 case 'self':
@@ -58,7 +58,7 @@ L.U.FeatureMixin = {
                     window.top.location = outlink;
                     break;
                 default:
-                    var win = window.open(this.properties._storage_options.outlink);
+                    var win = window.open(this.properties._umap_options.outlink);
             }
             return;
         }
@@ -92,7 +92,7 @@ L.U.FeatureMixin = {
         properties.unshift('properties.name');
         builder = new L.U.FormBuilder(this, properties,
             {
-                id: 'storage-feature-properties',
+                id: 'umap-feature-properties',
                 callback: this.resetTooltip
             }
         );
@@ -106,7 +106,7 @@ L.U.FeatureMixin = {
     },
 
     getAdvancedEditActions: function (container) {
-        var deleteLink = L.DomUtil.create('a', 'button storage-delete', container);
+        var deleteLink = L.DomUtil.create('a', 'button umap-delete', container);
         deleteLink.href = '#';
         deleteLink.innerHTML = L._('Delete');
         L.DomEvent.on(deleteLink, 'click', function (e) {
@@ -118,7 +118,7 @@ L.U.FeatureMixin = {
     appendEditFieldsets: function (container) {
         var optionsFields = this.getShapeOptions();
         var builder = new L.U.FormBuilder(this, optionsFields, {
-            id: 'storage-feature-shape-properties',
+            id: 'umap-feature-shape-properties',
             callback: this._redraw
         });
         var shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'));
@@ -126,7 +126,7 @@ L.U.FeatureMixin = {
 
         var advancedOptions = this.getAdvancedOptions();
         var builder = new L.U.FormBuilder(this, advancedOptions, {
-            id: 'storage-feature-advanced-properties',
+            id: 'umap-feature-advanced-properties',
             callback: this._redraw
         });
         var advancedProperties = L.DomUtil.createFieldset(container, L._('Advanced properties'));
@@ -143,11 +143,11 @@ L.U.FeatureMixin = {
 
     getInteractionOptions: function () {
         return [
-            'properties._storage_options.popupTemplate',
-            'properties._storage_options.showLabel',
-            'properties._storage_options.labelDirection',
-            'properties._storage_options.labelHover',
-            'properties._storage_options.labelInteractive'
+            'properties._umap_options.popupTemplate',
+            'properties._umap_options.showLabel',
+            'properties._umap_options.labelDirection',
+            'properties._umap_options.labelHover',
+            'properties._umap_options.labelInteractive'
         ];
     },
 
@@ -204,11 +204,11 @@ L.U.FeatureMixin = {
 
     populate: function (feature) {
         this.properties = L.extend({}, feature.properties);
-        this.properties._storage_options = L.extend({}, this.properties._storage_options);
+        this.properties._umap_options = L.extend({}, this.properties._storage_options, this.properties._umap_options);
         // Retrocompat
-        if (this.properties._storage_options.clickable === false) {
-            this.properties._storage_options.interactive = false;
-            delete this.properties._storage_options.clickable;
+        if (this.properties._umap_options.clickable === false) {
+            this.properties._umap_options.interactive = false;
+            delete this.properties._umap_options.clickable;
         }
     },
 
@@ -227,8 +227,8 @@ L.U.FeatureMixin = {
         if (typeof this.staticOptions[option] !== 'undefined') {
             value = this.staticOptions[option];
         }
-        else if (L.Util.usableOption(this.properties._storage_options, option)) {
-            value = this.properties._storage_options[option];
+        else if (L.Util.usableOption(this.properties._umap_options, option)) {
+            value = this.properties._umap_options[option];
         }
         else if (this.datalayer) {
             value = this.datalayer.getOption(option);
@@ -271,9 +271,9 @@ L.U.FeatureMixin = {
 
     cloneProperties: function () {
         var properties = L.extend({}, this.properties);
-        properties._storage_options = L.extend({}, properties._storage_options);
-        if (Object.keys && Object.keys(properties._storage_options).length === 0) {
-            delete properties._storage_options;  // It can make a difference on big data sets
+        properties._umap_options = L.extend({}, properties._umap_options);
+        if (Object.keys && Object.keys(properties._umap_options).length === 0) {
+            delete properties._umap_options;  // It can make a difference on big data sets
         }
         return properties;
     },
@@ -361,7 +361,7 @@ L.U.FeatureMixin = {
                     text: L._('Edit this feature'),
                     callback: this.edit,
                     context: this,
-                    iconCls: 'storage-edit'
+                    iconCls: 'umap-edit'
                 }
             );
         }
@@ -370,13 +370,13 @@ L.U.FeatureMixin = {
                 text: L._('Edit feature\'s layer'),
                 callback: this.datalayer.edit,
                 context: this.datalayer,
-                iconCls: 'storage-edit'
+                iconCls: 'umap-edit'
             },
             {
                 text: L._('Delete this feature'),
                 callback: this.confirmDelete,
                 context: this,
-                iconCls: 'storage-delete'
+                iconCls: 'umap-delete'
             }
         );
         return items;
@@ -515,15 +515,15 @@ L.U.Marker = L.Marker.extend({
 
     getShapeOptions: function () {
         return [
-            'properties._storage_options.color',
-            'properties._storage_options.iconClass',
-            'properties._storage_options.iconUrl'
+            'properties._umap_options.color',
+            'properties._umap_options.iconClass',
+            'properties._umap_options.iconUrl'
         ];
     },
 
     getAdvancedOptions: function () {
         return [
-            'properties._storage_options.zoomTo'
+            'properties._umap_options.zoomTo'
         ];
     },
 
@@ -609,17 +609,17 @@ L.U.PathMixin = {
 
     getShapeOptions: function () {
         return [
-            'properties._storage_options.color',
-            'properties._storage_options.opacity',
-            'properties._storage_options.weight'
+            'properties._umap_options.color',
+            'properties._umap_options.opacity',
+            'properties._umap_options.weight'
         ];
     },
 
     getAdvancedOptions: function () {
         return [
-            'properties._storage_options.smoothFactor',
-            'properties._storage_options.dashArray',
-            'properties._storage_options.zoomTo'
+            'properties._umap_options.smoothFactor',
+            'properties._umap_options.dashArray',
+            'properties._umap_options.zoomTo'
         ];
     },
 
@@ -869,7 +869,7 @@ L.U.Polyline = L.Polyline.extend({
 
     getAdvancedEditActions: function (container) {
         L.U.FeatureMixin.getAdvancedEditActions.call(this, container);
-        var toPolygon = L.DomUtil.create('a', 'button storage-to-polygon', container);
+        var toPolygon = L.DomUtil.create('a', 'button umap-to-polygon', container);
         toPolygon.href = '#';
         toPolygon.innerHTML = L._('Transform to polygon');
         L.DomEvent.on(toPolygon, 'click', this.toPolygon, this);
@@ -948,19 +948,19 @@ L.U.Polygon = L.Polygon.extend({
 
     getShapeOptions: function () {
         var options = L.U.PathMixin.getShapeOptions();
-        options.push('properties._storage_options.stroke',
-            'properties._storage_options.fill',
-            'properties._storage_options.fillColor',
-            'properties._storage_options.fillOpacity'
+        options.push('properties._umap_options.stroke',
+            'properties._umap_options.fill',
+            'properties._umap_options.fillColor',
+            'properties._umap_options.fillOpacity'
         );
         return options;
     },
 
     getInteractionOptions: function () {
         var options = [
-            ['properties._storage_options.interactive', {handler: 'Switch', label: L._('Allow interactions'), helpEntries: 'interactive', inheritable: true}],
-            ['properties._storage_options.outlink', {label: L._('Link to…'), helpEntries: 'outlink', placeholder: 'http://...', inheritable: true}],
-            ['properties._storage_options.outlinkTarget', {handler: 'OutlinkTarget', label: L._('Open link in…'), inheritable: true}]
+            ['properties._umap_options.interactive', {handler: 'Switch', label: L._('Allow interactions'), helpEntries: 'interactive', inheritable: true}],
+            ['properties._umap_options.outlink', {label: L._('Link to…'), helpEntries: 'outlink', placeholder: 'http://...', inheritable: true}],
+            ['properties._umap_options.outlinkTarget', {handler: 'OutlinkTarget', label: L._('Open link in…'), inheritable: true}]
         ];
         return options.concat(L.U.FeatureMixin.getInteractionOptions());
     },
@@ -1004,7 +1004,7 @@ L.U.Polygon = L.Polygon.extend({
 
     getAdvancedEditActions: function (container) {
         L.U.FeatureMixin.getAdvancedEditActions.call(this, container);
-        var toPolyline = L.DomUtil.create('a', 'button storage-to-polyline', container);
+        var toPolyline = L.DomUtil.create('a', 'button umap-to-polyline', container);
         toPolyline.href = '#';
         toPolyline.innerHTML = L._('Transform to lines');
         L.DomEvent.on(toPolyline, 'click', this.toPolyline, this);

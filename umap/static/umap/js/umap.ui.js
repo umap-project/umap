@@ -15,11 +15,11 @@ L.U.UI = L.Evented.extend({
         L.DomEvent.on(this.container, 'mousewheel', L.DomEvent.stopPropagation);
         L.DomEvent.on(this.container, 'MozMousePixelScroll', L.DomEvent.stopPropagation);
         this._panel = L.DomUtil.create('div', '', this.container);
-        this._panel.id = 'storage-ui-container';
+        this._panel.id = 'umap-ui-container';
         this._alert = L.DomUtil.create('div', 'with-transition', this.container);
-        this._alert.id = 'storage-alert-container';
+        this._alert.id = 'umap-alert-container';
         this._tooltip = L.DomUtil.create('div', '', this.container);
-        this._tooltip.id = 'storage-tooltip-container';
+        this._tooltip.id = 'umap-tooltip-container';
     },
 
     resetPanelClassName: function () {
@@ -36,8 +36,8 @@ L.U.UI = L.Evented.extend({
         var body = L.DomUtil.create('div', 'body', this._panel);
         if (e.data.html.nodeType && e.data.html.nodeType === 1) body.appendChild(e.data.html);
         else body.innerHTML = e.data.html;
-        var closeLink = L.DomUtil.create('li', 'storage-close-link', actionsContainer);
-        L.DomUtil.add('i', 'storage-close-icon', closeLink);
+        var closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer);
+        L.DomUtil.add('i', 'umap-close-icon', closeLink);
         var label = L.DomUtil.create('span', '', closeLink);
         label.title = label.innerHTML = L._('Close');
         if (e.actions) {
@@ -46,26 +46,26 @@ L.U.UI = L.Evented.extend({
             }
         }
         if (e.className) L.DomUtil.addClass(this._panel, e.className);
-        if (L.DomUtil.hasClass(this.parent, 'storage-ui')) {
+        if (L.DomUtil.hasClass(this.parent, 'umap-ui')) {
             // Already open.
             this.fire('panel:ready');
         } else {
             L.DomEvent.once(this._panel, 'transitionend', function (e) {
                 this.fire('panel:ready');
             }, this);
-            L.DomUtil.addClass(this.parent, 'storage-ui');
+            L.DomUtil.addClass(this.parent, 'umap-ui');
         }
         L.DomEvent.on(closeLink, 'click', this.closePanel, this);
     },
 
     closePanel: function () {
         this.resetPanelClassName();
-        L.DomUtil.removeClass(this.parent, 'storage-ui');
+        L.DomUtil.removeClass(this.parent, 'umap-ui');
         this.fire('panel:closed');
     },
 
     alert: function (e) {
-        if (L.DomUtil.hasClass(this.parent, 'storage-alert')) this.ALERTS.push(e);
+        if (L.DomUtil.hasClass(this.parent, 'umap-alert')) this.ALERTS.push(e);
         else this.popAlert(e);
     },
 
@@ -78,19 +78,19 @@ L.U.UI = L.Evented.extend({
         var timeoutID,
             level_class = e.level && e.level == 'info'? 'info': 'error';
         this._alert.innerHTML = '';
-        L.DomUtil.addClass(this.parent, 'storage-alert');
+        L.DomUtil.addClass(this.parent, 'umap-alert');
         L.DomUtil.addClass(this._alert, level_class);
         var close = function () {
             if (timeoutID !== this.ALERT_ID) { return;}  // Another alert has been forced
             this._alert.innerHTML = '';
-            L.DomUtil.removeClass(this.parent, 'storage-alert');
+            L.DomUtil.removeClass(this.parent, 'umap-alert');
             L.DomUtil.removeClass(this._alert, level_class);
             if (timeoutID) window.clearTimeout(timeoutID);
             this.popAlert();
         };
-        var closeLink = L.DomUtil.create('a', 'storage-close-link', this._alert);
+        var closeLink = L.DomUtil.create('a', 'umap-close-link', this._alert);
         closeLink.href = '#';
-        L.DomUtil.add('i', 'storage-close-icon', closeLink);
+        L.DomUtil.add('i', 'umap-close-icon', closeLink);
         var label = L.DomUtil.create('span', '', closeLink);
         label.title = label.innerHTML = L._('Close');
         L.DomEvent.on(closeLink, 'click', L.DomEvent.stop)
@@ -100,7 +100,7 @@ L.U.UI = L.Evented.extend({
             var action, el;
             for (var i = 0; i < e.actions.length; i++) {
                 action = e.actions[i];
-                el = L.DomUtil.element('a', {'className': 'storage-action'}, this._alert);
+                el = L.DomUtil.element('a', {'className': 'umap-action'}, this._alert);
                 el.href = '#';
                 el.innerHTML = action.label;
                 L.DomEvent.on(el, 'click', L.DomEvent.stop)
@@ -114,7 +114,7 @@ L.U.UI = L.Evented.extend({
     tooltip: function (e) {
         this.TOOLTIP_ID = Math.random();
         var id = this.TOOLTIP_ID;
-        L.DomUtil.addClass(this.parent, 'storage-tooltip');
+        L.DomUtil.addClass(this.parent, 'umap-tooltip');
         if (e.anchor && e.position === 'top') this.anchorTooltipTop(e.anchor);
         else if (e.anchor && e.position === 'left') this.anchorTooltipLeft(e.anchor);
         else this.anchorTooltipAbsolute();
@@ -146,7 +146,7 @@ L.U.UI = L.Evented.extend({
     closeTooltip: function (id) {
         if (id && id !== this.TOOLTIP_ID) return;
         this._tooltip.innerHTML = '';
-        L.DomUtil.removeClass(this.parent, 'storage-tooltip');
+        L.DomUtil.removeClass(this.parent, 'umap-tooltip');
     },
 
     getPosition: function (el) {

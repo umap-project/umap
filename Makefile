@@ -1,5 +1,5 @@
 test:
-	py.test -xv
+	py.test -xv umap/tests/
 develop:
 	python setup.py develop
 compilemessages:

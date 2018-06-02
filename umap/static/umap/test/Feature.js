@@ -3,8 +3,8 @@ describe('L.Utorage.FeatureMixin', function () {
     before(function () {
         this.server = sinon.fakeServer.create();
         this.server.respondWith('GET', '/datalayer/62/', JSON.stringify(RESPONSES.datalayer62_GET));
-        this.map = initMap({storage_id: 99});
-        this.datalayer = this.map.getDataLayerByStorageId(62);
+        this.map = initMap({umap_id: 99});
+        this.datalayer = this.map.getDataLayerByUmapId(62);
         this.server.respond();
     });
     after(function () {
@@ -36,24 +36,24 @@ describe('L.Utorage.FeatureMixin', function () {
             happen.click(qs('path[fill="DarkRed"]'));
             var toolbar = qs('ul.leaflet-inplace-toolbar');
             assert.ok(toolbar);
-            link = qs('a.storage-toggle-edit', toolbar);
+            link = qs('a.umap-toggle-edit', toolbar);
             assert.ok(link);
         });
 
         it('should open a form on popup toolbar toggle edit click', function () {
             happen.click(link);
-            var form = qs('form#storage-feature-properties');
-            var input = qs('form#storage-feature-properties input[name="name"]');
+            var form = qs('form#umap-feature-properties');
+            var input = qs('form#umap-feature-properties input[name="name"]');
             assert.ok(form);
             assert.ok(input);
         });
 
-        it('should not handle _storage_options has normal property', function () {
-            assert.notOk(qs('form#storage-feature-properties input[name="_storage_options"]'));
+        it('should not handle _umap_options has normal property', function () {
+            assert.notOk(qs('form#umap-feature-properties input[name="_umap_options"]'));
         });
 
         it('should give precedence to feature style over datalayer styles', function () {
-            var input = qs('#storage-ui-container form input[name="color"]');
+            var input = qs('#umap-ui-container form input[name="color"]');
             assert.ok(input);
             changeInputValue(input, 'DarkGreen');
             assert.notOk(qs('path[fill="DarkRed"]'));
@@ -64,9 +64,9 @@ describe('L.Utorage.FeatureMixin', function () {
 
         it('should remove stroke if set to no', function () {
             assert.notOk(qs('path[stroke="none"]'));
-            var defineButton = qs('#storage-feature-shape-properties .formbox:nth-child(4) .define');
+            var defineButton = qs('#umap-feature-shape-properties .formbox:nth-child(4) .define');
             happen.click(defineButton);
-            var input = qs('#storage-feature-shape-properties input[name="stroke"]');
+            var input = qs('#umap-feature-shape-properties input[name="stroke"]');
             assert.ok(input);
             input.checked = false;
             happen.once(input, {type: 'change'});
@@ -76,7 +76,7 @@ describe('L.Utorage.FeatureMixin', function () {
 
         it('should not override already set style on features', function () {
             happen.click(qs('#browse_data_toggle_' + L.stamp(this.datalayer) + ' .layer-edit'));
-            changeInputValue(qs('#storage-ui-container form input[name=color]'), 'Chocolate');
+            changeInputValue(qs('#umap-ui-container form input[name=color]'), 'Chocolate');
             assert.notOk(qs('path[fill="DarkBlue"]'));
             assert.notOk(qs('path[fill="DarkRed"]'));
             assert.notOk(qs('path[fill="Chocolate"]'));
@@ -95,7 +95,7 @@ describe('L.Utorage.FeatureMixin', function () {
             enableEdit();
             assert.notOk(this.map.editedFeature);
             happen.click(qs('path[fill="DarkBlue"]'));
-            happen.click(qs('ul.leaflet-inplace-toolbar a.storage-toggle-edit'));
+            happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'));
             assert.ok(this.map.editedFeature);
             disableEdit();
         });
@@ -104,7 +104,7 @@ describe('L.Utorage.FeatureMixin', function () {
             enableEdit();
             assert.notOk(this.map.editedFeature);
             happen.click(qs('path[fill="DarkBlue"]'));
-            happen.click(qs('ul.leaflet-inplace-toolbar a.storage-toggle-edit'));
+            happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'));
             assert.ok(this.map.editedFeature);
             this.map.displayCaption();
             window.setTimeout(function () {
@@ -136,12 +136,12 @@ describe('L.Utorage.FeatureMixin', function () {
             assert.equal(poly.getLatLngs()[0].length, 6);
         });
 
-        it('should remove empty _storage_options from exported geojson', function () {
+        it('should remove empty _umap_options from exported geojson', function () {
             setFeatures(this.datalayer);
             assert.ok(poly);
             assert.deepEqual(poly.toGeoJSON().properties, {name: 'name poly'});
             assert.ok(marker);
-            assert.deepEqual(marker.toGeoJSON().properties, {_storage_options: {color: 'OliveDrab'}, name: 'test'});
+            assert.deepEqual(marker.toGeoJSON().properties, {_umap_options: {color: 'OliveDrab'}, name: 'test'});
         });
 
     });
@@ -151,11 +151,11 @@ describe('L.Utorage.FeatureMixin', function () {
         it('should change style on datalayer select change', function () {
             enableEdit();
             happen.click(qs('.manage-datalayers'));
-            happen.click(qs('#storage-ui-container .add-datalayer'));
-            changeInputValue(qs('form.storage-form input[name="name"]'), 'New layer');
+            happen.click(qs('#umap-ui-container .add-datalayer'));
+            changeInputValue(qs('form.umap-form input[name="name"]'), 'New layer');
             changeInputValue(qs('form#datalayer-advanced-properties input[name=color]'), 'MediumAquaMarine');
             happen.click(qs('path[fill="DarkBlue"]'));
-            happen.click(qs('ul.leaflet-inplace-toolbar a.storage-toggle-edit'));
+            happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'));
             var select = qs('select[name=datalayer]');
             select.selectedIndex = 0;
             happen.once(select, {type: 'change'});

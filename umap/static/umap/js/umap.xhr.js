@@ -251,7 +251,7 @@ L.U.Xhr = L.Evented.extend({
                 }
             });
             // Auth links
-            var links = document.getElementsByClassName('storage-login-popup');
+            var links = document.getElementsByClassName('umap-login-popup');
             Object.keys(links).forEach(function (el) {
                 var link = links[el];
                 L.DomEvent
@@ -259,7 +259,7 @@ L.U.Xhr = L.Evented.extend({
                     .on(link, 'click', function () {
                         self.ui.closePanel();
                         var win = window.open(link.href);
-                        window.storage_proceed = function () {
+                        window.umap_proceed = function () {
                             proceed();
                             win.close();
                         };

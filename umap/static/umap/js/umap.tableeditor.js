@@ -18,8 +18,8 @@ L.U.TableEditor = L.Class.extend({
     renderHeader: function (property) {
         var container = L.DomUtil.create('div', 'tcell', this.header),
             title = L.DomUtil.add('span', '', container, property),
-            del = L.DomUtil.create('i', 'storage-delete', container),
-            rename = L.DomUtil.create('i', 'storage-edit', container);
+            del = L.DomUtil.create('i', 'umap-delete', container),
+            rename = L.DomUtil.create('i', 'umap-edit', container);
         del.title = L._('Delete this property on all the features');
         rename.title = L._('Rename this property on all the features');
         var doDelete = function () {
@@ -50,7 +50,7 @@ L.U.TableEditor = L.Class.extend({
     renderRow: function (feature) {
         var builder = new L.U.FormBuilder(feature, this.field_properties,
             {
-                id: 'storage-feature-properties_' + L.stamp(feature),
+                id: 'umap-feature-properties_' + L.stamp(feature),
                 className: 'trow',
                 callback: feature.resetTooltip
             }
@@ -81,7 +81,7 @@ L.U.TableEditor = L.Class.extend({
         this.body.innerHTML = '';
         this.datalayer.eachLayer(this.renderRow, this);
         var addButton = L.DomUtil.create('li', 'add-property');
-        L.DomUtil.create('i', 'storage-icon-16 storage-add', addButton);
+        L.DomUtil.create('i', 'umap-icon-16 umap-add', addButton);
         var label = L.DomUtil.create('span', '', addButton);
         label.innerHTML = label.title = L._('Add a new property');
         var addProperty = function () {
@@ -91,7 +91,7 @@ L.U.TableEditor = L.Class.extend({
             this.edit();
         };
         L.DomEvent.on(addButton, 'click', addProperty, this);
-        var className = (this.properties.length > 2) ? 'storage-table-editor fullwidth dark' : 'storage-table-editor dark';
+        var className = (this.properties.length > 2) ? 'umap-table-editor fullwidth dark' : 'umap-table-editor dark';
         this.datalayer.map.ui.openPanel({data: {html: this.table}, className: className, actions: [addButton]});
         this.datalayer.map.fire('dataload', {id: id});
     }

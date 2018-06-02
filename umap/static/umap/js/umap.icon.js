@@ -40,7 +40,7 @@ L.U.Icon.Default = L.U.Icon.extend({
         iconAnchor: new L.Point(16, 40),
         popupAnchor: new L.Point(0, -40),
         tooltipAnchor: new L.Point(16, -24),
-        className: 'storage-div-icon'
+        className: 'umap-div-icon'
     },
 
     initialize: function(map, options) {
@@ -75,7 +75,7 @@ L.U.Icon.Circle = L.U.Icon.extend({
             iconAnchor: new L.Point(6, 6),
             popupAnchor: new L.Point(0, -6),
             tooltipAnchor: new L.Point(6, 0),
-            className: 'storage-circle-icon'
+            className: 'umap-circle-icon'
         };
         options = L.Util.extend({}, default_options, options);
         L.U.Icon.prototype.initialize.call(this, map, options);
@@ -101,7 +101,7 @@ L.U.Icon.Drop = L.U.Icon.Default.extend({
             iconAnchor: new L.Point(16, 42),
             popupAnchor: new L.Point(0, -42),
             tooltipAnchor: new L.Point(16, -24),
-            className: 'storage-drop-icon'
+            className: 'umap-drop-icon'
     }
 });
 
@@ -110,7 +110,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
             iconAnchor: new L.Point(8, 30),
             popupAnchor: new L.Point(0, -28),
             tooltipAnchor: new L.Point(8, -23),
-            className: 'storage-ball-icon'
+            className: 'umap-ball-icon'
     },
 
     createIcon: function() {

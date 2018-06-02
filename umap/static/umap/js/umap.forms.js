@@ -126,7 +126,7 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
     build: function () {
         L.FormBuilder.Input.prototype.build.call(this);
         this.input.placeholder = this.options.placeholder || L._('Inherit');
-        this.container = L.DomUtil.create('div', 'storage-color-picker', this.extendedContainer);
+        this.container = L.DomUtil.create('div', 'umap-color-picker', this.extendedContainer);
         this.container.style.display = 'none';
         for (var idx in this.colors) {
             this.addColor(this.colors[idx]);
@@ -356,9 +356,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.Input.extend({
 
     build: function () {
         L.FormBuilder.Input.prototype.build.call(this);
-        this.parentContainer = L.DomUtil.create('div', 'storage-form-iconfield', this.parentNode);
+        this.parentContainer = L.DomUtil.create('div', 'umap-form-iconfield', this.parentNode);
         this.buttonsContainer = L.DomUtil.create('div', '', this.parentContainer);
-        this.pictogramsContainer = L.DomUtil.create('div', 'storage-pictogram-list', this.parentContainer);
+        this.pictogramsContainer = L.DomUtil.create('div', 'umap-pictogram-list', this.parentContainer);
         this.input.type = 'hidden';
         this.input.placeholder = L._('Url');
         this.udpatePreview();
@@ -367,7 +367,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.Input.extend({
 
     udpatePreview: function () {
         if (this.value() && this.value().indexOf('{') === -1) { // Do not try to render URL with variables
-            var img = L.DomUtil.create('img', '', L.DomUtil.create('div', 'storage-icon-choice', this.buttonsContainer));
+            var img = L.DomUtil.create('img', '', L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer));
             img.src = this.value();
             L.DomEvent.on(img, 'click', this.fetchIconList, this);
         }
@@ -380,7 +380,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.Input.extend({
     },
 
     addIconPreview: function (pictogram) {
-        var baseClass = 'storage-icon-choice',
+        var baseClass = 'umap-icon-choice',
             value = pictogram.src,
             className = value === this.value() ? baseClass + ' selected' : baseClass,
             container = L.DomUtil.create('div', className, this.pictogramsContainer),
@@ -486,7 +486,7 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
 L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
 
     default: 'null',
-    className: 'storage-multiplechoice',
+    className: 'umap-multiplechoice',
 
     clear: function () {
         var checked = this.container.querySelector('input[type="radio"]:checked');
@@ -604,7 +604,7 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
 L.U.FormBuilder = L.FormBuilder.extend({
 
     options: {
-        className: 'storage-form'
+        className: 'umap-form'
     },
 
     defaultOptions: {

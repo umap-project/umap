@@ -194,19 +194,19 @@ L.U.DataLayer = L.Class.extend({
         catch (e) {
             // Certainly IE8, which has a limited version of defineProperty
         }
-        this.setStorageId(data.id);
+        this.setUmapId(data.id);
         this.setOptions(data);
         this.backupOptions();
         this.connectToMap();
         if (this.displayedOnLoad()) this.show();
-        if (!this.storage_id) this.isDirty = true;
+        if (!this.umap_id) this.isDirty = true;
         this.onceLoaded(function () {
             this.map.on('moveend', this.fetchRemoteData, this);
         });
     },
 
     displayedOnLoad: function () {
-        return ((this.map.datalayersOnLoad && this.storage_id && this.map.datalayersOnLoad.indexOf(this.storage_id.toString()) !== -1) ||
+        return ((this.map.datalayersOnLoad && this.umap_id && this.map.datalayersOnLoad.indexOf(this.umap_id.toString()) !== -1) ||
             (!this.map.datalayersOnLoad && this.options.displayOnLoad));
     },
 
@@ -255,7 +255,7 @@ L.U.DataLayer = L.Class.extend({
     },
 
     fetchData: function () {
-        if (!this.storage_id) return;
+        if (!this.umap_id) return;
         this.map.get(this._dataUrl(), {
             callback: function (geojson, response) {
                 this._etag = response.getResponseHeader('ETag');
@@ -275,7 +275,8 @@ L.U.DataLayer = L.Class.extend({
     },
 
     fromUmapGeoJSON: function (geojson) {
-        if (geojson._storage) this.setOptions(geojson._storage);
+        if (geojson._storage) geojson._umap_options = geojson._storage;  // Retrocompat
+        if (geojson._umap_options) this.setOptions(geojson._umap_options);
         if (this.isRemoteLayer()) this.fetchRemoteData();
         else this.fromGeoJSON(geojson);
         this._loaded = true;
@@ -344,16 +345,16 @@ L.U.DataLayer = L.Class.extend({
     },
 
     isLoaded: function () {
-        return !this.storage_id || this._loaded;
+        return !this.umap_id || this._loaded;
     },
 
     hasDataLoaded: function () {
-        return !this.storage_id || this._geojson !== null;
+        return !this.umap_id || this._geojson !== null;
     },
 
-    setStorageId: function (id) {
+    setUmapId: function (id) {
         // Datalayer is null when listening creation form
-        if (!this.storage_id && id) this.storage_id = id;
+        if (!this.umap_id && id) this.umap_id = id;
     },
 
     backupOptions: function () {
@@ -385,7 +386,7 @@ L.U.DataLayer = L.Class.extend({
 
     _dataUrl: function() {
         var template = this.map.options.urls.datalayer_view;
-        return L.Util.template(template, {'pk': this.storage_id, 'map_id': this.map.options.storage_id});
+        return L.Util.template(template, {'pk': this.umap_id, 'map_id': this.map.options.umap_id});
     },
 
     isRemoteLayer: function () {
@@ -437,6 +438,7 @@ L.U.DataLayer = L.Class.extend({
             // otherwise the layer becomes uneditable.
             this.geojsonToFeatures(geojson);
         } catch (err) {
+            console.log("Error with DataLayer", this.umap_id);
             console.error(err);
         }
     },
@@ -611,15 +613,15 @@ L.U.DataLayer = L.Class.extend({
     },
 
     getEditUrl: function() {
-        return L.Util.template(this.map.options.urls.datalayer_update, {'map_id': this.map.options.storage_id, 'pk': this.storage_id});
+        return L.Util.template(this.map.options.urls.datalayer_update, {'map_id': this.map.options.umap_id, 'pk': this.umap_id});
     },
 
     getCreateUrl: function() {
-        return L.Util.template(this.map.options.urls.datalayer_create, {'map_id': this.map.options.storage_id});
+        return L.Util.template(this.map.options.urls.datalayer_create, {'map_id': this.map.options.umap_id});
     },
 
     getSaveUrl: function () {
-        return (this.storage_id && this.getEditUrl()) || this.getCreateUrl();
+        return (this.umap_id && this.getEditUrl()) || this.getCreateUrl();
     },
 
     getColor: function () {
@@ -627,16 +629,16 @@ L.U.DataLayer = L.Class.extend({
     },
 
     getDeleteUrl: function () {
-        return L.Util.template(this.map.options.urls.datalayer_delete, {'pk': this.storage_id, 'map_id': this.map.options.storage_id});
+        return L.Util.template(this.map.options.urls.datalayer_delete, {'pk': this.umap_id, 'map_id': this.map.options.umap_id});
 
     },
 
     getVersionsUrl: function () {
-        return L.Util.template(this.map.options.urls.datalayer_versions, {'pk': this.storage_id, 'map_id': this.map.options.storage_id});
+        return L.Util.template(this.map.options.urls.datalayer_versions, {'pk': this.umap_id, 'map_id': this.map.options.umap_id});
     },
 
     getVersionUrl: function (name) {
-        return L.Util.template(this.map.options.urls.datalayer_version, {'pk': this.storage_id, 'map_id': this.map.options.storage_id, name: name});
+        return L.Util.template(this.map.options.urls.datalayer_version, {'pk': this.umap_id, 'map_id': this.map.options.umap_id, name: name});
     },
 
     _delete: function () {
@@ -674,7 +676,7 @@ L.U.DataLayer = L.Class.extend({
     },
 
     reset: function () {
-        if (!this.storage_id) this.erase();
+        if (!this.umap_id) this.erase();
 
         this.resetOptions();
         this.parentPane.appendChild(this.pane);
@@ -795,7 +797,7 @@ L.U.DataLayer = L.Class.extend({
 
         var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
         var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions);
-        var deleteLink = L.DomUtil.create('a', 'button third delete_datalayer_button storage-delete', advancedButtons);
+        var deleteLink = L.DomUtil.create('a', 'button third delete_datalayer_button umap-delete', advancedButtons);
         deleteLink.innerHTML = L._('Delete');
         deleteLink.href = '#';
         L.DomEvent.on(deleteLink, 'click', L.DomEvent.stop)
@@ -804,13 +806,13 @@ L.U.DataLayer = L.Class.extend({
                     this.map.ui.closePanel();
                 }, this);
         if (!this.isRemoteLayer()) {
-            var emptyLink = L.DomUtil.create('a', 'button third storage-empty', advancedButtons);
+            var emptyLink = L.DomUtil.create('a', 'button third umap-empty', advancedButtons);
             emptyLink.innerHTML = L._('Empty');
             emptyLink.href = '#';
             L.DomEvent.on(emptyLink, 'click', L.DomEvent.stop)
                       .on(emptyLink, 'click', this.empty, this);
         }
-        var cloneLink = L.DomUtil.create('a', 'button third storage-clone', advancedButtons);
+        var cloneLink = L.DomUtil.create('a', 'button third umap-clone', advancedButtons);
         cloneLink.innerHTML = L._('Clone');
         cloneLink.href = '#';
         L.DomEvent.on(cloneLink, 'click', L.DomEvent.stop)
@@ -832,7 +834,7 @@ L.U.DataLayer = L.Class.extend({
         var appendVersion = function (data) {
             var date = new Date(parseInt(data.at, 10));
             var content = date.toLocaleFormat() + ' (' + parseInt(data.size) / 1000 + 'Kb)';
-            var el = L.DomUtil.create('div', 'storage-datalayer-version', versionsContainer);
+            var el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer);
             var a = L.DomUtil.create('a', '', el);
             L.DomUtil.add('span', '', el, content);
             a.href = '#';
@@ -860,7 +862,8 @@ L.U.DataLayer = L.Class.extend({
         if (!confirm(L._('Are you sure you want to restore this version?'))) return;
         this.map.xhr.get(this.getVersionUrl(version), {
             callback: function (geojson) {
-                if (geojson._storage) this.setOptions(geojson._storage);
+                if (geojson._storage) geojson._umap_options = geojson._storage;  // Retrocompat.
+                if (geojson._umap_options) this.setOptions(geojson._umap_options);
                 this.empty();
                 if (this.isRemoteLayer()) this.fetchRemoteData();
                 else this.addData(geojson);
@@ -951,13 +954,13 @@ L.U.DataLayer = L.Class.extend({
         return {
             type: 'FeatureCollection',
             features: this.isRemoteLayer() ? [] : this.featuresToGeoJSON(),
-            _storage: this.options
+            _umap_options: this.options
         };
     },
 
     metadata: function () {
         return {
-            id: this.storage_id,
+            id: this.umap_id,
             name: this.options.name,
             displayOnLoad: this.options.displayOnLoad
         }
@@ -983,7 +986,7 @@ L.U.DataLayer = L.Class.extend({
             callback: function (data, response) {
                 this._geojson = geojson;
                 this._etag = response.getResponseHeader('ETag');
-                this.setStorageId(data.id);
+                this.setUmapId(data.id);
                 this.updateOptions(data);
                 this.backupOptions();
                 this.connectToMap();
@@ -1002,7 +1005,7 @@ L.U.DataLayer = L.Class.extend({
             this.isDirty = false;
             this.map.continueSaving();
         }
-        if (!this.storage_id) return callback.call(this);
+        if (!this.umap_id) return callback.call(this);
         this.map.xhr.post(this.getDeleteUrl(), {
             callback: callback,
             context: this

@@ -4,8 +4,8 @@ describe('L.TableEditor', function () {
     before(function () {
         this.server = sinon.fakeServer.create();
         this.server.respondWith('GET', '/datalayer/62/', JSON.stringify(RESPONSES.datalayer62_GET));
-        this.map = initMap({storage_id: 99});
-        this.datalayer = this.map.getDataLayerByStorageId(62);
+        this.map = initMap({umap_id: 99});
+        this.datalayer = this.map.getDataLayerByUmapId(62);
         this.server.respond();
         enableEdit();
     });
@@ -25,9 +25,9 @@ describe('L.TableEditor', function () {
 
         it('should open table button click', function () {
             happen.click(button);
-            expect(qs('#storage-ui-container div.table')).to.be.ok;
-            expect(qsa('#storage-ui-container div.table form').length).to.eql(3);  // One per feature.
-            expect(qsa('#storage-ui-container div.table input').length).to.eql(3);  // One per feature and per property.
+            expect(qs('#umap-ui-container div.table')).to.be.ok;
+            expect(qsa('#umap-ui-container div.table form').length).to.eql(3);  // One per feature.
+            expect(qsa('#umap-ui-container div.table input').length).to.eql(3);  // One per feature and per property.
         });
 
     });
@@ -45,15 +45,15 @@ describe('L.TableEditor', function () {
             };
             var oldPrompt = window.prompt;
             window.prompt = newPrompt;
-            var button = qs('#storage-ui-container .add-property');
+            var button = qs('#umap-ui-container .add-property');
             expect(button).to.be.ok;
             happen.click(button);
-            expect(qsa('#storage-ui-container div.table input').length).to.eql(6);  // One per feature and per property.
+            expect(qsa('#umap-ui-container div.table input').length).to.eql(6);  // One per feature and per property.
             window.prompt = oldPrompt;
         });
 
         it('should populate feature property on fill', function () {
-            var input = qs('form#storage-feature-properties_' + L.stamp(feature) + ' input[name=newprop]');
+            var input = qs('form#umap-feature-properties_' + L.stamp(feature) + ' input[name=newprop]');
             changeInputValue(input, 'the value');
             expect(feature.properties.newprop).to.eql('the value');
         });
@@ -64,10 +64,10 @@ describe('L.TableEditor', function () {
             };
             var oldPrompt = window.prompt;
             window.prompt = newPrompt;
-            var button = qs('#storage-ui-container div.thead div.tcell:last-of-type .storage-edit');
+            var button = qs('#umap-ui-container div.thead div.tcell:last-of-type .umap-edit');
             expect(button).to.be.ok;
             happen.click(button);
-            expect(qsa('#storage-ui-container div.table input').length).to.eql(6);
+            expect(qsa('#umap-ui-container div.table input').length).to.eql(6);
             expect(feature.properties.newprop).to.be.undefined;
             expect(feature.properties.newname).to.eql('the value');
             window.prompt = oldPrompt;
@@ -80,11 +80,11 @@ describe('L.TableEditor', function () {
                 };
             oldConfirm = window.confirm;
             window.confirm = newConfirm;
-            var button = qs('#storage-ui-container div.thead div.tcell:last-of-type .storage-delete');
+            var button = qs('#umap-ui-container div.thead div.tcell:last-of-type .umap-delete');
             expect(button).to.be.ok;
             happen.click(button);
             FEATURE = feature;
-            expect(qsa('#storage-ui-container div.table input').length).to.eql(3);
+            expect(qsa('#umap-ui-container div.table input').length).to.eql(3);
             expect(feature.properties.newname).to.be.undefined;
             window.confirm = oldConfirm;
         });
