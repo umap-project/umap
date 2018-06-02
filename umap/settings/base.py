@@ -36,6 +36,7 @@ LANGUAGES = (
     ('ja', 'Japanese'),
     ('lt', 'Lithuanian'),
     ('nl', 'Dutch'),
+    ('pl', 'Polish'),
     ('pt', 'Portuguese'),
     ('ru', 'Russian'),
     ('sk-sk', 'Slovak'),
