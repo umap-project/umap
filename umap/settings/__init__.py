@@ -35,8 +35,14 @@ else:
     print('Loaded local config from', path)
     for key in dir(d):
         if key.isupper():
+            value = getattr(d, key)
             if key.startswith('LEAFLET_STORAGE'):
                 # Retrocompat pre 1.0, remove me in 1.1.
-                globals()['UMAP' + key[15:]] = getattr(d, key)
+                globals()['UMAP' + key[15:]] = value
+            elif key == 'UMAP_CUSTOM_TEMPLATES':
+                globals()['TEMPLATES'][0]['DIRS'].insert(0, value)
+            elif key == 'UMAP_CUSTOM_STATICS':
+                globals()['STATICFILES_DIRS'].insert(0, value)
+                print(globals()['STATICFILES_DIRS'])
             else:
-                globals()[key] = getattr(d, key)
+                globals()[key] = value
