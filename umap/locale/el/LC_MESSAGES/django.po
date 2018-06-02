@@ -1,0 +1,389 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Emmanuel Verigos <emverigos@teemail.gr>, 2018
+# Emmanuel Verigos <emverigos@teemail.gr>, 2017
+# prendi <prendi@openmailbox.org>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
+"PO-Revision-Date: 2018-06-02 14:14+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Greek (http://www.transifex.com/yohanboniface/umap/language/el/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Επιστροφή στην Αρχική "
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr ""
+
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Πρόσθεσε παρατσούκλι..."
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr ""
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr ""
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "περισσότερα "
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr ""
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Όνομα Χρήστη "
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Κωδικός πρόσβασης"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Σύνδεση "
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr ""
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr ""
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Διάλεξε το χαρτογραφικό επίπεδο "
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr ""
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr ""
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr ""
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Διάλεξε άδεια χρήσης των δεδομένων "
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr " Ενσωμάτωσε και μοιράσου τον χάρτη "
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+msgid "Create a map"
+msgstr ""
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr ""
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr ""
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr ""
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Οι χάρτες μου"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Σύνδεση"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Εγγραφή"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Σχετικά"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr ""
+
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr "Αλλαγή κωδικού"
+
+#: templates/umap/navigation.html:22
+msgid "Log out"
+msgstr "Αποσύνδεση"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr ""
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr ""
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr ""
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr ""
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr ""
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr ""
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr ""
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr ""
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Ψάξε χάρτες "
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Ψάξε "
+
+#: views.py:190
+msgid "View the map"
+msgstr ""
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr ""
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr ""
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr ""
+
+#: models.py:20
+msgid "name"
+msgstr "όνομα"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "Χωρίς Άδεια Χρήσης"
+
+#: models.py:51
+msgid "details"
+msgstr "Λεπτομέρειες "
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "Σύνδεσμος σελίδας Αναλυτικής Άδειας Χρήσης "
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr ""
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr ""
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr ""
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr ""
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr ""
+
+#: models.py:119
+msgid "anyone with link"
+msgstr ""
+
+#: models.py:120
+msgid "editors only"
+msgstr ""
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "περιγραφή"
+
+#: models.py:124
+msgid "center"
+msgstr ""
+
+#: models.py:125
+msgid "zoom"
+msgstr ""
+
+#: models.py:126
+msgid "locate"
+msgstr ""
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr ""
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr ""
+
+#: models.py:130
+msgid "licence"
+msgstr "άδεια"
+
+#: models.py:135
+msgid "background"
+msgstr ""
+
+#: models.py:136
+msgid "owner"
+msgstr ""
+
+#: models.py:137
+msgid "editors"
+msgstr ""
+
+#: models.py:138
+msgid "edit status"
+msgstr ""
+
+#: models.py:139
+msgid "share status"
+msgstr ""
+
+#: models.py:140
+msgid "settings"
+msgstr "ρυθμίσεις"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr ""
+
+#: models.py:211
+msgid "Clone of"
+msgstr ""
+
+#: models.py:262
+msgid "display on load"
+msgstr ""
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr ""
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr ""
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr ""
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr ""
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr ""
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr ""
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr ""
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr ""
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr ""
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr ""
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr ""
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr ""
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr ""
