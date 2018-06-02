@@ -83,20 +83,14 @@ describe('L.DataLayer', function () {
             cleanAlert();
             this.server.flush();
             this.server.respondWith('POST', '/map/99/update/settings/', JSON.stringify({id: 99}));
-            // this.server.respondWith('POST', '/map/99/datalayer/update/62/', [412, {}, '']);
-            this.server.respondWith('POST', '/map/99/datalayer/update/62/', function (request) {
-                console.log('YESYESYEYESYEYEYEYSES')
-                request.respond()
-            });
+            this.server.respondWith('POST', '/map/99/datalayer/update/62/', [412, {}, '']);
             happen.click(editButton);
             input = qs('form.storage-form input[name="name"]');
             input.value = 'a new name';
             happen.once(input, {type: 'input'});
             clickSave();
             this.server.respond();
-            console.log('between responses')
             this.server.respond();
-            console.log(this.map._container.classList)
             assert(L.DomUtil.hasClass(this.map._container, 'storage-alert'));
             assert.notEqual(this.map.dirty_datalayers.indexOf(this.datalayer), -1);
             forceButton = qs('#storage-alert-container .storage-action');

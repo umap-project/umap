@@ -30,7 +30,6 @@ var disableEdit = function () {
     happen.click(qs('a.leaflet-control-edit-disable'));
 };
 var clickSave = function () {
-    console.log(qs('a.leaflet-control-edit-save').classList)
     happen.click(qs('a.leaflet-control-edit-save'));
 };
 var clickCancel = function () {
@@ -178,7 +177,7 @@ function initMap (options) {
     };
     default_options.properties.datalayers.push(defaultDatalayerData());
     options.properties = L.extend({}, default_options.properties, options);
-    return new L.Storage.Map("map", options);
+    return new L.U.Map("map", options);
 }
 
 var RESPONSES = {

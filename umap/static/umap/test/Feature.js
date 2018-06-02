@@ -1,4 +1,4 @@
-describe('L.Storage.FeatureMixin', function () {
+describe('L.Utorage.FeatureMixin', function () {
 
     before(function () {
         this.server = sinon.fakeServer.create();
@@ -69,7 +69,6 @@ describe('L.Storage.FeatureMixin', function () {
             var input = qs('#storage-feature-shape-properties input[name="stroke"]');
             assert.ok(input);
             input.checked = false;
-            console.log(input, input.checked)
             happen.once(input, {type: 'change'});
             assert.ok(qs('path[stroke="none"]'));
             assert.ok(qs('path[fill="none"]')); // Polyline fill is unchanged
@@ -132,7 +131,6 @@ describe('L.Storage.FeatureMixin', function () {
         it('should generate a valid geojson', function () {
             setFeatures(this.datalayer);
             assert.ok(poly);
-            console.log(poly.toGeoJSON().geometry);
             assert.deepEqual(poly.toGeoJSON().geometry, {'type': 'Polygon', 'coordinates': [[[11.25, 53.585984], [10.151367, 52.975108], [12.689209, 52.167194], [14.084473, 53.199452], [12.634277, 53.618579], [11.25, 53.585984], [11.25, 53.585984]]]});
             // Ensure original latlngs has not been modified
             assert.equal(poly.getLatLngs()[0].length, 6);

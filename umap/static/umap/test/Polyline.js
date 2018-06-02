@@ -1,4 +1,4 @@
-describe('L.Storage.Polyline', function () {
+describe('L.Utorage.Polyline', function () {
     var p2ll, map;
 
     before(function () {
@@ -23,12 +23,12 @@ describe('L.Storage.Polyline', function () {
     describe('#isMulti()', function () {
 
         it('should return false for basic Polyline', function () {
-            var layer = new L.S.Polyline(this.map, [[1, 2], [3, 4], [5, 6]], {datalayer: this.datalayer});
+            var layer = new L.U.Polyline(this.map, [[1, 2], [3, 4], [5, 6]], {datalayer: this.datalayer});
             assert.notOk(layer.isMulti())
         });
 
         it('should return false for nested basic Polyline', function () {
-            var layer = new L.S.Polyline(this.map, [[[1, 2], [3, 4], [5, 6]]], {datalayer: this.datalayer});
+            var layer = new L.U.Polyline(this.map, [[[1, 2], [3, 4], [5, 6]]], {datalayer: this.datalayer});
             assert.notOk(layer.isMulti())
         });
 
@@ -41,7 +41,7 @@ describe('L.Storage.Polyline', function () {
                     [[7, 8], [9, 10], [11, 12]]
                 ]
             ];
-            var layer = new L.S.Polyline(this.map, latLngs, {datalayer: this.datalayer});
+            var layer = new L.U.Polyline(this.map, latLngs, {datalayer: this.datalayer});
             assert.ok(layer.isMulti())
         });
 
@@ -61,7 +61,7 @@ describe('L.Storage.Polyline', function () {
                         [p2ll(100, 100), p2ll(100, 200)],
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'})
                 assert.equal(qst('Remove shape from the multi'), 1);
             });
@@ -70,7 +70,7 @@ describe('L.Storage.Polyline', function () {
                 var latlngs = [
                         [p2ll(100, 100), p2ll(100, 200)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'})
                 assert.notOk(qst('Remove shape from the multi'));
             });
@@ -79,7 +79,7 @@ describe('L.Storage.Polyline', function () {
                 var latlngs = [
                         [p2ll(100, 100), p2ll(100, 200)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'})
                 assert.notOk(qst('Extract shape to separate feature'));
             });
@@ -89,7 +89,7 @@ describe('L.Storage.Polyline', function () {
                         [p2ll(100, 150), p2ll(100, 200)],
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'});
                 assert.ok(qst('Extract shape to separate feature'));
             });
@@ -99,35 +99,35 @@ describe('L.Storage.Polyline', function () {
                         [p2ll(100, 150), p2ll(100, 200)],
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'});
                 assert.notOk(qst('Transform to polygon'));
             });
 
             it('should allow to transform to polygon when not multi', function () {
                 var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'});
                 assert.equal(qst('Transform to polygon'), 1);
             });
 
             it('should not allow to transfer shape when not editedFeature', function () {
-                var layer = new L.S.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
+                var layer = new L.U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'});
                 assert.notOk(qst('Transfer shape to edited feature'));
             });
 
             it('should not allow to transfer shape when editedFeature is not a line', function () {
-                var layer = new L.S.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer),
-                    other = new L.S.Polygon(this.map, [p2ll(200, 300), p2ll(300, 200), p2ll(200, 100)], {datalayer: this.datalayer}).addTo(this.datalayer);
+                var layer = new L.U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer),
+                    other = new L.U.Polygon(this.map, [p2ll(200, 300), p2ll(300, 200), p2ll(200, 100)], {datalayer: this.datalayer}).addTo(this.datalayer);
                 other.edit();
                 happen.once(layer._path, {type: 'contextmenu'});
                 assert.notOk(qst('Transfer shape to edited feature'));
             });
 
             it('should allow to transfer shape when another line is edited', function () {
-                var layer = new L.S.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)], {datalayer: this.datalayer}).addTo(this.datalayer),
-                    other = new L.S.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
+                var layer = new L.U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)], {datalayer: this.datalayer}).addTo(this.datalayer),
+                    other = new L.U.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
                 other.edit();
                 happen.once(layer._path, {type: 'contextmenu'});
                 assert.equal(qst('Transfer shape to edited feature'), 1);
@@ -138,7 +138,7 @@ describe('L.Storage.Polyline', function () {
                         [p2ll(100, 100), p2ll(100, 200)],
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'})
                 assert.equal(qst('Merge lines'), 1);
             });
@@ -147,7 +147,7 @@ describe('L.Storage.Polyline', function () {
                 var latlngs = [
                         [p2ll(100, 100), p2ll(100, 200)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 happen.once(layer._path, {type: 'contextmenu'})
                 assert.notOk(qst('Merge lines'));
             });
@@ -156,7 +156,7 @@ describe('L.Storage.Polyline', function () {
                 var latlngs = [
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 layer.enableEdit();
                 happen.at('contextmenu', 350, 400);
                 assert.equal(qst('Split line'), 1);
@@ -166,7 +166,7 @@ describe('L.Storage.Polyline', function () {
                 var latlngs = [
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 layer.enableEdit();
                 happen.at('contextmenu', 300, 350);
                 assert.equal(qst('Delete this feature'), 1);  // Make sure we have clicked on the vertex.
@@ -177,7 +177,7 @@ describe('L.Storage.Polyline', function () {
                 var latlngs = [
                         [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]
                     ],
-                    layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                    layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
                 layer.enableEdit();
                 happen.at('contextmenu', 400, 300);
                 assert.equal(qst('Delete this feature'), 1);  // Make sure we have clicked on the vertex.
@@ -195,13 +195,13 @@ describe('L.Storage.Polyline', function () {
         });
 
         it('"add shape" control should be visible when editing a Polyline', function () {
-            var layer = new L.S.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
+            var layer = new L.U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.edit();
             assert.ok(qs('.storage-draw-polyline-multi'));
         });
 
         it('"add shape" control should extend the same multi', function () {
-            var layer = new L.S.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
+            var layer = new L.U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.edit();
             assert.notOk(layer.isMulti());
             happen.click(qs('.storage-draw-polyline-multi'));
@@ -220,8 +220,8 @@ describe('L.Storage.Polyline', function () {
 
         it('should transfer simple line shape to another line', function () {
             var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer),
-                other = new L.S.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer),
+                other = new L.U.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             assert.ok(this.map.hasLayer(layer));
             layer.transferShape(p2ll(150, 150), other);
             assert.equal(other._latlngs.length, 2);
@@ -234,8 +234,8 @@ describe('L.Storage.Polyline', function () {
                     [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
                     [p2ll(200, 300), p2ll(300, 200)]
                 ],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer),
-                other = new L.S.Polyline(this.map, [p2ll(250, 300), p2ll(350, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer),
+                other = new L.U.Polyline(this.map, [p2ll(250, 300), p2ll(350, 200)], {datalayer: this.datalayer}).addTo(this.datalayer);
             assert.ok(this.map.hasLayer(layer));
             layer.transferShape(p2ll(150, 150), other);
             assert.equal(other._latlngs.length, 2);
@@ -253,7 +253,7 @@ describe('L.Storage.Polyline', function () {
                     [[0, 0], [0, 1]],
                     [[0, 1], [0, 2]],
                 ],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.mergeShapes();
             layer.disableEdit();  // Remove vertex from latlngs to compare them.
             assert.deepEqual(layer.getLatLngs(), [L.latLng([0, 0]), L.latLng([0, 1]), L.latLng([0, 2])]);
@@ -265,7 +265,7 @@ describe('L.Storage.Polyline', function () {
                     [[0, 0], [0, 1]],
                     [[0, 2], [0, 1]],
                 ],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
             layer.mergeShapes();
             layer.disableEdit();
             assert.deepEqual(layer.getLatLngs(), [L.latLng([0, 0]), L.latLng([0, 1]), L.latLng([0, 2])]);
@@ -278,7 +278,7 @@ describe('L.Storage.Polyline', function () {
 
         it('should not allow to isolate simple line', function () {
             var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
             assert.equal(this.datalayer._index.length, 1);
             assert.ok(this.map.hasLayer(layer));
             layer.isolateShape(p2ll(150, 150));
@@ -291,7 +291,7 @@ describe('L.Storage.Polyline', function () {
                     [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
                     [[p2ll(200, 300), p2ll(300, 200)]]
                 ],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
             assert.equal(this.datalayer._index.length, 1);
             assert.ok(this.map.hasLayer(layer));
             var other = layer.isolateShape(p2ll(150, 150));
@@ -310,7 +310,7 @@ describe('L.Storage.Polyline', function () {
 
         it('should clone polyline', function () {
             var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-                layer = new L.S.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
+                layer = new L.U.Polyline(this.map, latlngs, {datalayer: this.datalayer}).addTo(this.datalayer);
             assert.equal(this.datalayer._index.length, 1);
             other = layer.clone();
             assert.ok(this.map.hasLayer(other));

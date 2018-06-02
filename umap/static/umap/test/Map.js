@@ -1,4 +1,4 @@
-describe('L.Storage.Map', function(){
+describe('L.Utorage.Map', function(){
 
     before(function () {
         this.server = sinon.fakeServer.create();
