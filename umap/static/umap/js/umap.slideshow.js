@@ -1,4 +1,4 @@
-L.S.Slideshow = L.Class.extend({
+L.U.Slideshow = L.Class.extend({
 
     statics: {
         CLASSNAME: 'storage-slideshow-active'
@@ -91,7 +91,7 @@ L.S.Slideshow = L.Class.extend({
     play: function () {
         if (this._id) return;
         if (this.map.editEnabled) return;
-        L.DomUtil.addClass(document.body, L.S.Slideshow.CLASSNAME);
+        L.DomUtil.addClass(document.body, L.U.Slideshow.CL.USNAME);
         this._id = window.setInterval(L.bind(this.loop, this), this.options.delay);
         this.resetSpinners();
         this.loop();
@@ -104,7 +104,7 @@ L.S.Slideshow = L.Class.extend({
 
     pause: function () {
         if (this._id) {
-            L.DomUtil.removeClass(document.body, L.S.Slideshow.CLASSNAME);
+            L.DomUtil.removeClass(document.body, L.U.Slideshow.CL.USNAME);
             window.clearInterval(this._id);
             this._id = null;
         }

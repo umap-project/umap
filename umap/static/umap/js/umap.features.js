@@ -1,4 +1,4 @@
-L.Storage.FeatureMixin = {
+L.U.FeatureMixin = {
 
     staticOptions: {},
 
@@ -76,7 +76,7 @@ L.Storage.FeatureMixin = {
         if(!this.map.editEnabled || this.isReadOnly()) return;
         var container = L.DomUtil.create('div');
 
-        var builder = new L.S.FormBuilder(this, ['datalayer'], {
+        var builder = new L.U.FormBuilder(this, ['datalayer'], {
             callback: function () {this.edit(e);}  // removeLayer step will close the edit panel, let's reopen it
         });
         container.appendChild(builder.build());
@@ -90,7 +90,7 @@ L.Storage.FeatureMixin = {
         // We always want name and description for now (properties management to come)
         properties.unshift('properties.description');
         properties.unshift('properties.name');
-        builder = new L.S.FormBuilder(this, properties,
+        builder = new L.U.FormBuilder(this, properties,
             {
                 id: 'storage-feature-properties',
                 callback: this.resetTooltip
@@ -117,7 +117,7 @@ L.Storage.FeatureMixin = {
 
     appendEditFieldsets: function (container) {
         var optionsFields = this.getShapeOptions();
-        var builder = new L.S.FormBuilder(this, optionsFields, {
+        var builder = new L.U.FormBuilder(this, optionsFields, {
             id: 'storage-feature-shape-properties',
             callback: this._redraw
         });
@@ -125,7 +125,7 @@ L.Storage.FeatureMixin = {
         shapeProperties.appendChild(builder.build());
 
         var advancedOptions = this.getAdvancedOptions();
-        var builder = new L.S.FormBuilder(this, advancedOptions, {
+        var builder = new L.U.FormBuilder(this, advancedOptions, {
             id: 'storage-feature-advanced-properties',
             callback: this._redraw
         });
@@ -133,7 +133,7 @@ L.Storage.FeatureMixin = {
         advancedProperties.appendChild(builder.build());
 
         var interactionOptions = this.getInteractionOptions();
-        builder = new L.S.FormBuilder(this, interactionOptions, {
+        builder = new L.U.FormBuilder(this, interactionOptions, {
             callback: this._redraw
         });
         var popupFieldset = L.DomUtil.createFieldset(container, L._('Interaction options'));
@@ -166,7 +166,7 @@ L.Storage.FeatureMixin = {
     },
 
     getPopupClass: function () {
-        return L.Storage.Popup[this.getOption('popupTemplate')] || L.Storage.Popup;
+        return L.U.Popup[this.getOption('popupTemplate')] || L.U.Popup;
     },
 
     attachPopup: function () {
@@ -327,7 +327,7 @@ L.Storage.FeatureMixin = {
     },
 
     getInplaceToolbarActions: function (e) {
-        return [L.S.ToggleEditAction, L.S.DeleteFeatureAction];
+        return [L.U.ToggleEditAction, L.U.DeleteFeatureAction];
     },
 
     _showContextMenu: function (e) {
@@ -417,7 +417,7 @@ L.Storage.FeatureMixin = {
     },
 
     getVertexActions: function () {
-        return [L.S.DeleteVertexAction];
+        return [L.U.DeleteVertexAction];
     },
 
     isMulti: function () {
@@ -426,16 +426,16 @@ L.Storage.FeatureMixin = {
 
 };
 
-L.Storage.Marker = L.Marker.extend({
+L.U.Marker = L.Marker.extend({
     parentClass: L.Marker,
-    includes: [L.Storage.FeatureMixin, L.Mixin.Events],
+    includes: [L.U.FeatureMixin, L.Mixin.Events],
 
     preInit: function () {
         this.setIcon(this.getIcon());
     },
 
     addInteractions: function () {
-        L.Storage.FeatureMixin.addInteractions.call(this);
+        L.U.FeatureMixin.addInteractions.call(this);
         this.on('dragend', function (e) {
             this.isDirty = true;
             this.edit(e);
@@ -488,7 +488,7 @@ L.Storage.Marker = L.Marker.extend({
 
     disconnectFromDataLayer: function (datalayer) {
         this.options.icon.datalayer = null;
-        L.Storage.FeatureMixin.disconnectFromDataLayer.call(this, datalayer);
+        L.U.FeatureMixin.disconnectFromDataLayer.call(this, datalayer);
     },
 
     _getIconUrl: function (name) {
@@ -501,7 +501,7 @@ L.Storage.Marker = L.Marker.extend({
     },
 
     getIcon: function () {
-        var Class = L.Storage.Icon[this.getIconClass()] || L.Storage.Icon.Default;
+        var Class = L.U.Icon[this.getIconClass()] || L.U.Icon.Default;
         return new Class(this.map, {feature: this});
     },
 
@@ -528,12 +528,12 @@ L.Storage.Marker = L.Marker.extend({
     },
 
     appendEditFieldsets: function (container) {
-        L.Storage.FeatureMixin.appendEditFieldsets.call(this, container);
+        L.U.FeatureMixin.appendEditFieldsets.call(this, container);
         var coordinatesOptions = [
             ['_latlng.lat', {handler: 'FloatInput', label: L._('Latitude')}],
             ['_latlng.lng', {handler: 'FloatInput', label: L._('Longitude')}]
         ];
-        var builder = new L.S.FormBuilder(this, coordinatesOptions, {
+        var builder = new L.U.FormBuilder(this, coordinatesOptions, {
             callback: function () {
                 this._redraw();
                 this.bringToCenter();
@@ -549,7 +549,7 @@ L.Storage.Marker = L.Marker.extend({
             // callback is mandatory for zoomToShowLayer
             this.datalayer.layer.zoomToShowLayer(this, e.callback || function (){});
         } else {
-            L.Storage.FeatureMixin.bringToCenter.call(this, e);
+            L.U.FeatureMixin.bringToCenter.call(this, e);
         }
     },
 
@@ -565,10 +565,10 @@ L.Storage.Marker = L.Marker.extend({
 });
 
 
-L.Storage.PathMixin = {
+L.U.PathMixin = {
 
     connectToDataLayer: function (datalayer) {
-        L.S.FeatureMixin.connectToDataLayer.call(this, datalayer);
+        L.U.FeatureMixin.connectToDataLayer.call(this, datalayer);
         // We keep markers on their own layer on top of the paths.
         this.options.pane = this.datalayer.pane;
     },
@@ -576,7 +576,7 @@ L.Storage.PathMixin = {
     edit: function (e) {
         if(this.map.editEnabled) {
             if (!this.editEnabled()) this.enableEdit();
-            L.Storage.FeatureMixin.edit.call(this, e);
+            L.U.FeatureMixin.edit.call(this, e);
         }
     },
 
@@ -656,7 +656,7 @@ L.Storage.PathMixin = {
         // this.map.off('showmeasure', this.showMeasureTooltip, this);
         // this.map.off('hidemeasure', this.removeTooltip, this);
         if (this.editing && this.editing.enabled()) this.editing.removeHooks();
-        L.S.FeatureMixin.onRemove.call(this, map);
+        L.U.FeatureMixin.onRemove.call(this, map);
     },
 
     getBestZoom: function () {
@@ -667,7 +667,7 @@ L.Storage.PathMixin = {
 
     endEdit: function () {
         this.disableEdit();
-        L.S.FeatureMixin.endEdit.call(this);
+        L.U.FeatureMixin.endEdit.call(this);
     },
 
     _onMouseOver: function () {
@@ -679,7 +679,7 @@ L.Storage.PathMixin = {
     },
 
     addInteractions: function () {
-        L.S.FeatureMixin.addInteractions.call(this);
+        L.U.FeatureMixin.addInteractions.call(this);
         this.on('mouseover', this._onMouseOver);
         this.on('edit', this.makeDirty);
         this.on('drag editable:drag', this._onDrag);
@@ -703,14 +703,14 @@ L.Storage.PathMixin = {
         this.disableEdit();
         if (!shape) return;
         var properties = this.cloneProperties();
-        var other = new (this instanceof L.S.Polyline ? L.S.Polyline : L.S.Polygon)(this.map, shape, {geojson: {properties: properties}});
+        var other = new (this instanceof L.U.Polyline ? L.U.Polyline : L.U.Polygon)(this.map, shape, {geojson: {properties: properties}});
         this.datalayer.addLayer(other);
         other.edit();
         return other;
     },
 
     getContextMenuItems: function (e) {
-        var items = L.S.FeatureMixin.getContextMenuItems.call(this, e);
+        var items = L.U.FeatureMixin.getContextMenuItems.call(this, e);
         items.push({
             text: L._('Display measure'),
             callback: function () {
@@ -747,7 +747,7 @@ L.Storage.PathMixin = {
     },
 
     getContextMenuEditItems: function (e) {
-        var items = L.S.FeatureMixin.getContextMenuEditItems.call(this, e);
+        var items = L.U.FeatureMixin.getContextMenuEditItems.call(this, e);
         items.push({
             text: L._('Clone this feature'),
             callback: this.clone,
@@ -775,10 +775,10 @@ L.Storage.PathMixin = {
     },
 
     getInplaceToolbarActions: function (e) {
-        var items = L.S.FeatureMixin.getInplaceToolbarActions.call(this, e);
+        var items = L.U.FeatureMixin.getInplaceToolbarActions.call(this, e);
         if (this.isMulti()) {
-            items.push(L.S.DeleteShapeAction);
-            items.push(L.S.ExtractShapeFromMultiAction);
+            items.push(L.U.DeleteShapeAction);
+            items.push(L.U.ExtractShapeFromMultiAction);
         }
         return items;
     },
@@ -797,9 +797,9 @@ L.Storage.PathMixin = {
 
 };
 
-L.Storage.Polyline = L.Polyline.extend({
+L.U.Polyline = L.Polyline.extend({
     parentClass: L.Polyline,
-    includes: [L.Storage.FeatureMixin, L.Storage.PathMixin, L.Mixin.Events],
+    includes: [L.U.FeatureMixin, L.U.PathMixin, L.Mixin.Events],
 
     staticOptions: {
         stroke: true,
@@ -807,7 +807,7 @@ L.Storage.Polyline = L.Polyline.extend({
     },
 
     isSameClass: function (other) {
-        return other instanceof L.S.Polyline;
+        return other instanceof L.U.Polyline;
     },
 
     getClassName: function () {
@@ -820,7 +820,7 @@ L.Storage.Polyline = L.Polyline.extend({
     },
 
     getContextMenuEditItems: function (e) {
-        var items = L.S.PathMixin.getContextMenuEditItems.call(this, e),
+        var items = L.U.PathMixin.getContextMenuEditItems.call(this, e),
             vertexClicked = e.vertex, index;
         if (!this.isMulti()) {
             items.push({
@@ -849,7 +849,7 @@ L.Storage.Polyline = L.Polyline.extend({
     },
 
     getContextMenuMultiItems: function (e) {
-        var items = L.S.PathMixin.getContextMenuMultiItems.call(this, e);
+        var items = L.U.PathMixin.getContextMenuMultiItems.call(this, e);
         items.push({
             text: L._('Merge lines'),
             callback: this.mergeShapes,
@@ -868,7 +868,7 @@ L.Storage.Polyline = L.Polyline.extend({
     },
 
     getAdvancedEditActions: function (container) {
-        L.Storage.FeatureMixin.getAdvancedEditActions.call(this, container);
+        L.U.FeatureMixin.getAdvancedEditActions.call(this, container);
         var toPolygon = L.DomUtil.create('a', 'button storage-to-polygon', container);
         toPolygon.href = '#';
         toPolygon.innerHTML = L._('Transform to polygon');
@@ -925,21 +925,21 @@ L.Storage.Polyline = L.Polyline.extend({
     },
 
     getVertexActions: function (e) {
-        var actions = L.S.FeatureMixin.getVertexActions.call(this, e),
+        var actions = L.U.FeatureMixin.getVertexActions.call(this, e),
             index = e.vertex.getIndex();
-        if (index === 0 || index === e.vertex.getLastIndex()) actions.push(L.S.ContinueLineAction);
-        else actions.push(L.S.SplitLineAction);
+        if (index === 0 || index === e.vertex.getLastIndex()) actions.push(L.U.ContinueLineAction);
+        else actions.push(L.U.SplitLineAction);
         return actions;
     }
 
 });
 
-L.Storage.Polygon = L.Polygon.extend({
+L.U.Polygon = L.Polygon.extend({
     parentClass: L.Polygon,
-    includes: [L.Storage.FeatureMixin, L.Storage.PathMixin, L.Mixin.Events],
+    includes: [L.U.FeatureMixin, L.U.PathMixin, L.Mixin.Events],
 
     isSameClass: function (other) {
-        return other instanceof L.S.Polygon;
+        return other instanceof L.U.Polygon;
     },
 
     getClassName: function () {
@@ -947,7 +947,7 @@ L.Storage.Polygon = L.Polygon.extend({
     },
 
     getShapeOptions: function () {
-        var options = L.Storage.PathMixin.getShapeOptions();
+        var options = L.U.PathMixin.getShapeOptions();
         options.push('properties._storage_options.stroke',
             'properties._storage_options.fill',
             'properties._storage_options.fillColor',
@@ -962,7 +962,7 @@ L.Storage.Polygon = L.Polygon.extend({
             ['properties._storage_options.outlink', {label: L._('Link to…'), helpEntries: 'outlink', placeholder: 'http://...', inheritable: true}],
             ['properties._storage_options.outlinkTarget', {handler: 'OutlinkTarget', label: L._('Open link in…'), inheritable: true}]
         ];
-        return options.concat(L.Storage.FeatureMixin.getInteractionOptions());
+        return options.concat(L.U.FeatureMixin.getInteractionOptions());
     },
 
     getMeasure: function () {
@@ -971,7 +971,7 @@ L.Storage.Polygon = L.Polygon.extend({
     },
 
     getContextMenuEditItems: function (e) {
-        var items = L.S.PathMixin.getContextMenuEditItems.call(this, e),
+        var items = L.U.PathMixin.getContextMenuEditItems.call(this, e),
             shape = this.shapeAt(e.latlng);
         // No multi and no holes.
         if (shape && !this.isMulti() && (L.LineUtil.isFlat(shape) || shape.length === 1)) {
@@ -1003,7 +1003,7 @@ L.Storage.Polygon = L.Polygon.extend({
     },
 
     getAdvancedEditActions: function (container) {
-        L.Storage.FeatureMixin.getAdvancedEditActions.call(this, container);
+        L.U.FeatureMixin.getAdvancedEditActions.call(this, container);
         var toPolyline = L.DomUtil.create('a', 'button storage-to-polyline', container);
         toPolyline.href = '#';
         toPolyline.innerHTML = L._('Transform to lines');
@@ -1016,8 +1016,8 @@ L.Storage.Polygon = L.Polygon.extend({
     },
 
     getInplaceToolbarActions: function (e) {
-        var items = L.S.PathMixin.getInplaceToolbarActions.call(this, e);
-        items.push(L.S.CreateHoleAction);
+        var items = L.U.PathMixin.getInplaceToolbarActions.call(this, e);
+        items.push(L.U.CreateHoleAction);
         return items;
     }
 

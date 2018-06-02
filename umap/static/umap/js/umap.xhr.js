@@ -1,4 +1,4 @@
-L.Storage.Xhr = L.Evented.extend({
+L.U.Xhr = L.Evented.extend({
 
     initialize: function (ui) {
         this.ui = ui;

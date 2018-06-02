@@ -1,4 +1,4 @@
-L.S.TableEditor = L.Class.extend({
+L.U.TableEditor = L.Class.extend({
 
     initialize: function (datalayer) {
         this.datalayer = datalayer;
@@ -48,7 +48,7 @@ L.S.TableEditor = L.Class.extend({
     },
 
     renderRow: function (feature) {
-        var builder = new L.S.FormBuilder(feature, this.field_properties,
+        var builder = new L.U.FormBuilder(feature, this.field_properties,
             {
                 id: 'storage-feature-properties_' + L.stamp(feature),
                 className: 'trow',

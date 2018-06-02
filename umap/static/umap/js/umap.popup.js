@@ -1,4 +1,4 @@
-L.S.Popup = L.Popup.extend({
+L.U.Popup = L.Popup.extend({
 
     options: {
         parseTemplate: true
@@ -95,14 +95,14 @@ L.S.Popup = L.Popup.extend({
 
 });
 
-L.S.Popup.Large = L.S.Popup.extend({
+L.U.Popup.Large = L.U.Popup.extend({
     options: {
         maxWidth: 500,
         className: 'storage-popup-large'
     }
 });
 
-L.S.Popup.BaseWithTitle = L.S.Popup.extend({
+L.U.Popup.BaseWithTitle = L.U.Popup.extend({
 
     renderTitle: function () {
         var title;
@@ -115,7 +115,7 @@ L.S.Popup.BaseWithTitle = L.S.Popup.extend({
 
 });
 
-L.S.Popup.Table = L.S.Popup.BaseWithTitle.extend({
+L.U.Popup.Table = L.U.Popup.BaseWithTitle.extend({
 
     formatRow: function (key, value) {
         if (value.indexOf('http') === 0) {
@@ -143,9 +143,9 @@ L.S.Popup.Table = L.S.Popup.BaseWithTitle.extend({
 
 });
 
-L.S.Popup.table = L.S.Popup.Table;  // backward compatibility
+L.U.Popup.table = L.U.Popup.Table;  // backward compatibility
 
-L.S.Popup.GeoRSSImage = L.S.Popup.BaseWithTitle.extend({
+L.U.Popup.GeoRSSImage = L.U.Popup.BaseWithTitle.extend({
 
     options: {
         minWidth: 300,
@@ -171,7 +171,7 @@ L.S.Popup.GeoRSSImage = L.S.Popup.BaseWithTitle.extend({
 
 });
 
-L.S.Popup.GeoRSSLink = L.S.Popup.extend({
+L.U.Popup.GeoRSSLink = L.U.Popup.extend({
 
     options: {
         className: 'storage-georss-link'
@@ -187,7 +187,7 @@ L.S.Popup.GeoRSSLink = L.S.Popup.extend({
     }
 });
 
-L.S.Popup.SimplePanel = L.S.Popup.extend({
+L.U.Popup.SimplePanel = L.U.Popup.extend({
 
     options: {
         zoomAnimation: false
@@ -208,7 +208,7 @@ L.S.Popup.SimplePanel = L.S.Popup.extend({
 
     onRemove: function (map) {
         map.ui.closePanel();
-        L.S.Popup.prototype.onRemove.call(this, map);
+        L.U.Popup.prototype.onRemove.call(this, map);
     },
 
     _initLayout: function () {this._container = L.DomUtil.create('span');},

@@ -1,4 +1,4 @@
-L.S.Layer = {
+L.U.Layer = {
     canBrowse: true,
 
     getFeatures: function () {
@@ -11,9 +11,9 @@ L.S.Layer = {
 
 };
 
-L.S.Layer.Default = L.FeatureGroup.extend({
+L.U.Layer.Default = L.FeatureGroup.extend({
     _type: 'Default',
-    includes: [L.S.Layer],
+    includes: [L.U.Layer],
 
     initialize: function (datalayer) {
         this.datalayer = datalayer;
@@ -23,9 +23,9 @@ L.S.Layer.Default = L.FeatureGroup.extend({
 });
 
 
-L.S.Layer.Cluster = L.MarkerClusterGroup.extend({
+L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
     _type: 'Cluster',
-    includes: [L.S.Layer],
+    includes: [L.U.Layer],
 
     initialize: function (datalayer) {
         this.datalayer = datalayer;
@@ -34,7 +34,7 @@ L.S.Layer.Cluster = L.MarkerClusterGroup.extend({
                 color: this.datalayer.getColor()
             },
             iconCreateFunction: function (cluster) {
-                return new L.Storage.Icon.Cluster(datalayer, cluster);
+                return new L.U.Icon.Cluster(datalayer, cluster);
             }
         };
         if (this.datalayer.options.cluster && this.datalayer.options.cluster.radius) {
@@ -67,9 +67,9 @@ L.S.Layer.Cluster = L.MarkerClusterGroup.extend({
 
 });
 
-L.S.Layer.Heat = L.HeatLayer.extend({
+L.U.Layer.Heat = L.HeatLayer.extend({
     _type: 'Heat',
-    includes: [L.S.Layer],
+    includes: [L.U.Layer],
     canBrowse: false,
 
     initialize: function (datalayer) {
@@ -132,7 +132,7 @@ L.S.Layer.Heat = L.HeatLayer.extend({
 
 });
 
-L.Storage.DataLayer = L.Class.extend({
+L.U.DataLayer = L.Class.extend({
 
     includes: [L.Mixin.Events],
 
@@ -229,7 +229,7 @@ L.Storage.DataLayer = L.Class.extend({
         var visible = this.isVisible();
         if (this.layer) this.layer.clearLayers();
         if (visible) this.map.removeLayer(this.layer);
-        var Class = L.S.Layer[this.options.type] || L.S.Layer.Default;
+        var Class = L.U.Layer[this.options.type] || L.U.Layer.Default;
         this.layer = new Class(this);
         this.eachLayer(function (layer) {
             this.layer.addLayer(layer);
@@ -365,7 +365,7 @@ L.Storage.DataLayer = L.Class.extend({
     },
 
     setOptions: function (options) {
-        this.options = L.Util.CopyJSON(L.Storage.DataLayer.prototype.options);  // Start from fresh.
+        this.options = L.Util.CopyJSON(L.U.DataLayer.prototype.options);  // Start from fresh.
         this.updateOptions(options);
     },
 
@@ -553,7 +553,7 @@ L.Storage.DataLayer = L.Class.extend({
     },
 
     _pointToLayer: function(geojson, latlng) {
-        return new L.Storage.Marker(
+        return new L.U.Marker(
             this.map,
             latlng,
             {'geojson': geojson, 'datalayer': this}
@@ -561,7 +561,7 @@ L.Storage.DataLayer = L.Class.extend({
     },
 
     _lineToLayer: function(geojson, latlngs) {
-        return new L.Storage.Polyline(
+        return new L.U.Polyline(
             this.map,
             latlngs,
             {'geojson': geojson, 'datalayer': this, color: null}
@@ -573,7 +573,7 @@ L.Storage.DataLayer = L.Class.extend({
         // for (var i = latlngs.length - 1; i > 0; i--) {
         //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
         // }
-        return new L.Storage.Polygon(
+        return new L.U.Polygon(
             this.map,
             latlngs,
             {'geojson': geojson, 'datalayer': this}
@@ -706,7 +706,7 @@ L.Storage.DataLayer = L.Class.extend({
                 ['options.browsable', {label: L._('Data is browsable'), handler: 'Switch', helpEntries: 'browsable'}]
             ];
         var title = L.DomUtil.add('h3', '', container, L._('Layer properties'));
-        var builder = new L.S.FormBuilder(this, metadataFields, {
+        var builder = new L.U.FormBuilder(this, metadataFields, {
             callback: function (e) {
                 this.map.updateDatalayersControl();
                 if (e.helper.field === 'options.type') {
@@ -737,7 +737,7 @@ L.Storage.DataLayer = L.Class.extend({
             this.show();
         };
 
-        builder = new L.S.FormBuilder(this, shapeOptions, {
+        builder = new L.U.FormBuilder(this, shapeOptions, {
             id: 'datalayer-advanced-properties',
             callback: redrawCallback
         });
@@ -753,7 +753,7 @@ L.Storage.DataLayer = L.Class.extend({
 
         optionsFields = optionsFields.concat(this.layer.getEditableOptions());
 
-        builder = new L.S.FormBuilder(this, optionsFields, {
+        builder = new L.U.FormBuilder(this, optionsFields, {
             id: 'datalayer-advanced-properties',
             callback: redrawCallback
         });
@@ -768,7 +768,7 @@ L.Storage.DataLayer = L.Class.extend({
             'options.labelHover',
             'options.labelInteractive',
         ];
-        builder = new L.S.FormBuilder(this, popupFields, {callback: redrawCallback});
+        builder = new L.U.FormBuilder(this, popupFields, {callback: redrawCallback});
         var popupFieldset = L.DomUtil.createFieldset(container, L._('Interaction options'));
         popupFieldset.appendChild(builder.build());
 
@@ -788,7 +788,7 @@ L.Storage.DataLayer = L.Class.extend({
         }
 
         var remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'));
-        builder = new L.S.FormBuilder(this, remoteDataFields);
+        builder = new L.U.FormBuilder(this, remoteDataFields);
         remoteDataContainer.appendChild(builder.build());
 
         if (this.map.options.urls.datalayer_versions) this.buildVersionsFieldset(container);
@@ -1019,7 +1019,7 @@ L.Storage.DataLayer = L.Class.extend({
 
     tableEdit: function () {
         if (this.isRemoteLayer() || !this.isVisible()) return;
-        var editor = new L.S.TableEditor(this);
+        var editor = new L.U.TableEditor(this);
         editor.edit();
     }
 

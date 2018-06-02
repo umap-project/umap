@@ -1,4 +1,4 @@
-L.S.AutoComplete = L.Class.extend({
+L.U.AutoComplete = L.Class.extend({
 
     options: {
         placeholder: 'Start typing...',
@@ -62,22 +62,22 @@ L.S.AutoComplete = L.Class.extend({
 
     onKeyDown: function (e) {
         switch (e.keyCode) {
-            case L.S.Keys.TAB:
+            case L.U.Keys.TAB:
                 if(this.CURRENT !== null)
                 {
                     this.setChoice();
                 }
                 L.DomEvent.stop(e);
                 break;
-            case L.S.Keys.ENTER:
+            case L.U.Keys.ENTER:
                 L.DomEvent.stop(e);
                 this.setChoice();
                 break;
-            case L.S.Keys.ESC:
+            case L.U.Keys.ESC:
                 L.DomEvent.stop(e);
                 this.hide();
                 break;
-            case L.S.Keys.DOWN:
+            case L.U.Keys.DOWN:
                 if(this.RESULTS.length > 0) {
                     if(this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) { // what if one resutl?
                         this.CURRENT++;
@@ -89,7 +89,7 @@ L.S.AutoComplete = L.Class.extend({
                     }
                 }
                 break;
-            case L.S.Keys.UP:
+            case L.U.Keys.UP:
                 if(this.CURRENT !== null) {
                     L.DomEvent.stop(e);
                 }
@@ -109,16 +109,16 @@ L.S.AutoComplete = L.Class.extend({
 
     onKeyUp: function (e) {
         var special = [
-            L.S.Keys.TAB,
-            L.S.Keys.ENTER,
-            L.S.Keys.LEFT,
-            L.S.Keys.RIGHT,
-            L.S.Keys.DOWN,
-            L.S.Keys.UP,
-            L.S.Keys.APPLE,
-            L.S.Keys.SHIFT,
-            L.S.Keys.ALT,
-            L.S.Keys.CTRL
+            L.U.Keys.TAB,
+            L.U.Keys.ENTER,
+            L.U.Keys.LEFT,
+            L.U.Keys.RIGHT,
+            L.U.Keys.DOWN,
+            L.U.Keys.UP,
+            L.U.Keys.APPLE,
+            L.U.Keys.SHIFT,
+            L.U.Keys.ALT,
+            L.U.Keys.CTRL
         ];
         if (special.indexOf(e.keyCode) === -1)
         {
@@ -260,10 +260,10 @@ L.S.AutoComplete = L.Class.extend({
 });
 
 
-L.S.AutoComplete.BaseSelect = L.S.AutoComplete.extend({
+L.U.AutoComplete.BaseSelect = L.U.AutoComplete.extend({
 
     initialize: function (el, options) {
-        L.S.AutoComplete.prototype.initialize.call(this, el, options);
+        L.U.AutoComplete.prototype.initialize.call(this, el, options);
         if (!this.el) return this;
         this.el.style.display = 'none';
         this.createInput();
@@ -311,7 +311,7 @@ L.S.AutoComplete.BaseSelect = L.S.AutoComplete.extend({
 
 });
 
-L.S.AutoComplete.MultiSelect = L.S.AutoComplete.BaseSelect.extend({
+L.U.AutoComplete.MultiSelect = L.U.AutoComplete.BaseSelect.extend({
 
     initSelectedContainer: function () {
         this.selected_container = L.DomUtil.after(this.input, L.DomUtil.element('ul', {className: 'umap-multiresult'}));
@@ -337,12 +337,12 @@ L.S.AutoComplete.MultiSelect = L.S.AutoComplete.BaseSelect.extend({
 
 });
 
-L.S.AutoComplete.multiSelect = function (el, options) {
-    return new L.S.AutoComplete.MultiSelect(el, options);
+L.U.AutoComplete.multiSelect = function (el, options) {
+    return new L.U.AutoComplete.MultiSelect(el, options);
 };
 
 
-L.S.AutoComplete.Select = L.S.AutoComplete.BaseSelect.extend({
+L.U.AutoComplete.Select = L.U.AutoComplete.BaseSelect.extend({
 
     initSelectedContainer: function () {
         this.selected_container = L.DomUtil.after(this.input, L.DomUtil.element('div', {className: 'umap-singleresult'}));
@@ -368,6 +368,6 @@ L.S.AutoComplete.Select = L.S.AutoComplete.BaseSelect.extend({
 
 });
 
-L.S.AutoComplete.select = function (el, options) {
-    return new L.S.AutoComplete.Select(el, options);
+L.U.AutoComplete.select = function (el, options) {
+    return new L.U.AutoComplete.Select(el, options);
 };

@@ -1,4 +1,4 @@
-L.Storage.BaseAction = L.ToolbarAction.extend({
+L.U.BaseAction = L.ToolbarAction.extend({
 
     initialize: function (map) {
         this.map = map;
@@ -12,7 +12,7 @@ L.Storage.BaseAction = L.ToolbarAction.extend({
 
 });
 
-L.Storage.ImportAction = L.Storage.BaseAction.extend({
+L.U.ImportAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
@@ -26,7 +26,7 @@ L.Storage.ImportAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.EditPropertiesAction = L.Storage.BaseAction.extend({
+L.U.EditPropertiesAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
@@ -40,7 +40,7 @@ L.Storage.EditPropertiesAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.ChangeTileLayerAction = L.Storage.BaseAction.extend({
+L.U.ChangeTileLayerAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
@@ -54,7 +54,7 @@ L.Storage.ChangeTileLayerAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.ManageDatalayersAction = L.Storage.BaseAction.extend({
+L.U.ManageDatalayersAction = L.U.BaseAction.extend({
 
     options: {
         className: 'dark manage-datalayers',
@@ -67,7 +67,7 @@ L.Storage.ManageDatalayersAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.UpdateExtentAction = L.Storage.BaseAction.extend({
+L.U.UpdateExtentAction = L.U.BaseAction.extend({
 
     options: {
         className: 'update-map-extent dark',
@@ -80,7 +80,7 @@ L.Storage.UpdateExtentAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.UpdatePermsAction = L.Storage.BaseAction.extend({
+L.U.UpdatePermsAction = L.U.BaseAction.extend({
 
     options: {
         className: 'update-map-permissions dark',
@@ -93,7 +93,7 @@ L.Storage.UpdatePermsAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.DrawMarkerAction = L.Storage.BaseAction.extend({
+L.U.DrawMarkerAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
@@ -107,7 +107,7 @@ L.Storage.DrawMarkerAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.DrawPolylineAction = L.Storage.BaseAction.extend({
+L.U.DrawPolylineAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
@@ -121,7 +121,7 @@ L.Storage.DrawPolylineAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.DrawPolygonAction = L.Storage.BaseAction.extend({
+L.U.DrawPolygonAction = L.U.BaseAction.extend({
 
     options: {
         helpMenu: true,
@@ -135,7 +135,7 @@ L.Storage.DrawPolygonAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.AddPolylineShapeAction = L.Storage.BaseAction.extend({
+L.U.AddPolylineShapeAction = L.U.BaseAction.extend({
 
     options: {
         className: 'storage-draw-polyline-multi dark',
@@ -148,7 +148,7 @@ L.Storage.AddPolylineShapeAction = L.Storage.BaseAction.extend({
 
 });
 
-L.Storage.AddPolygonShapeAction = L.S.AddPolylineShapeAction.extend({
+L.U.AddPolygonShapeAction = L.U.AddPolylineShapeAction.extend({
 
     options: {
         className: 'storage-draw-polygon-multi dark',
@@ -157,7 +157,7 @@ L.Storage.AddPolygonShapeAction = L.S.AddPolylineShapeAction.extend({
 
 });
 
-L.Storage.BaseFeatureAction = L.ToolbarAction.extend({
+L.U.BaseFeatureAction = L.ToolbarAction.extend({
 
     initialize: function (map, feature, latlng) {
         this.map = map;
@@ -180,7 +180,7 @@ L.Storage.BaseFeatureAction = L.ToolbarAction.extend({
 
 });
 
-L.Storage.CreateHoleAction = L.S.BaseFeatureAction.extend({
+L.U.CreateHoleAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
@@ -195,7 +195,7 @@ L.Storage.CreateHoleAction = L.S.BaseFeatureAction.extend({
 
 });
 
-L.Storage.ToggleEditAction = L.S.BaseFeatureAction.extend({
+L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
@@ -211,7 +211,7 @@ L.Storage.ToggleEditAction = L.S.BaseFeatureAction.extend({
 
 });
 
-L.Storage.DeleteFeatureAction = L.S.BaseFeatureAction.extend({
+L.U.DeleteFeatureAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
@@ -230,7 +230,7 @@ L.Storage.DeleteFeatureAction = L.S.BaseFeatureAction.extend({
 
 });
 
-L.Storage.DeleteShapeAction = L.S.BaseFeatureAction.extend({
+L.U.DeleteShapeAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
@@ -245,7 +245,7 @@ L.Storage.DeleteShapeAction = L.S.BaseFeatureAction.extend({
 
 });
 
-L.Storage.ExtractShapeFromMultiAction = L.S.BaseFeatureAction.extend({
+L.U.ExtractShapeFromMultiAction = L.U.BaseFeatureAction.extend({
 
     options: {
         toolbarIcon: {
@@ -260,16 +260,16 @@ L.Storage.ExtractShapeFromMultiAction = L.S.BaseFeatureAction.extend({
 
 });
 
-L.Storage.BaseVertexAction = L.S.BaseFeatureAction.extend({
+L.U.BaseVertexAction = L.U.BaseFeatureAction.extend({
 
     initialize: function (map, feature, latlng, vertex) {
         this.vertex = vertex;
-        L.S.BaseFeatureAction.prototype.initialize.call(this, map, feature, latlng);
+        L.U.BaseFeatureAction.prototype.initialize.call(this, map, feature, latlng);
     }
 
 });
 
-L.Storage.DeleteVertexAction = L.S.BaseVertexAction.extend({
+L.U.DeleteVertexAction = L.U.BaseVertexAction.extend({
 
     options: {
         toolbarIcon: {
@@ -284,7 +284,7 @@ L.Storage.DeleteVertexAction = L.S.BaseVertexAction.extend({
 
 });
 
-L.Storage.SplitLineAction = L.S.BaseVertexAction.extend({
+L.U.SplitLineAction = L.U.BaseVertexAction.extend({
 
     options: {
         toolbarIcon: {
@@ -299,7 +299,7 @@ L.Storage.SplitLineAction = L.S.BaseVertexAction.extend({
 
 });
 
-L.Storage.ContinueLineAction = L.S.BaseVertexAction.extend({
+L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 
     options: {
         toolbarIcon: {
@@ -315,8 +315,8 @@ L.Storage.ContinueLineAction = L.S.BaseVertexAction.extend({
 });
 
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
-L.Storage.SettingsToolbar = L.Toolbar.Control.extend({});
-L.Storage.DrawToolbar = L.Toolbar.Control.extend({
+L.U.SettingsToolbar = L.Toolbar.Control.extend({});
+L.U.DrawToolbar = L.Toolbar.Control.extend({
 
     initialize: function (options) {
         L.Toolbar.Control.prototype.initialize.call(this, options);
@@ -327,18 +327,18 @@ L.Storage.DrawToolbar = L.Toolbar.Control.extend({
     appendToContainer: function (container) {
         this.options.actions = [];
         if (this.map.options.enableMarkerDraw) {
-            this.options.actions.push(L.S.DrawMarkerAction);
+            this.options.actions.push(L.U.DrawMarkerAction);
         }
         if (this.map.options.enablePolylineDraw) {
-            this.options.actions.push(L.S.DrawPolylineAction);
-            if (this.map.editedFeature && this.map.editedFeature instanceof L.S.Polyline) {
-                this.options.actions.push(L.S.AddPolylineShapeAction);
+            this.options.actions.push(L.U.DrawPolylineAction);
+            if (this.map.editedFeature && this.map.editedFeature instanceof L.U.Polyline) {
+                this.options.actions.push(L.U.AddPolylineShapeAction);
             }
         }
         if (this.map.options.enablePolygonDraw) {
-            this.options.actions.push(L.S.DrawPolygonAction);
-            if (this.map.editedFeature && this.map.editedFeature instanceof L.S.Polygon) {
-                this.options.actions.push(L.S.AddPolygonShapeAction);
+            this.options.actions.push(L.U.DrawPolygonAction);
+            if (this.map.editedFeature && this.map.editedFeature instanceof L.U.Polygon) {
+                this.options.actions.push(L.U.AddPolygonShapeAction);
             }
         }
         L.Toolbar.Control.prototype.appendToContainer.call(this, container);
@@ -353,7 +353,7 @@ L.Storage.DrawToolbar = L.Toolbar.Control.extend({
 });
 
 
-L.Storage.EditControl = L.Control.extend({
+L.U.EditControl = L.Control.extend({
 
     options: {
         position: 'topright'
@@ -396,7 +396,7 @@ L.Control.Embed = L.Control.extend({
     }
 });
 
-L.Storage.MoreControls = L.Control.extend({
+L.U.MoreControls = L.Control.extend({
 
     options: {
         position: 'topleft'
@@ -434,7 +434,7 @@ L.Storage.MoreControls = L.Control.extend({
 });
 
 
-L.Storage.DataLayersControl = L.Control.extend({
+L.U.DataLayersControl = L.Control.extend({
 
     options: {
         position: 'topleft'
@@ -543,7 +543,7 @@ L.Storage.DataLayersControl = L.Control.extend({
         this.map.eachDataLayerReverse(function (datalayer) {
             this.addDataLayer(container, datalayer, true);
         }, this);
-        var orderable = new L.S.Orderable(container);
+        var orderable = new L.U.Orderable(container);
         orderable.on('drop', function (e) {
             var layer = this.map.datalayers[e.src.dataset.id],
                 other = this.map.datalayers[e.dst.dataset.id],
@@ -571,7 +571,7 @@ L.Storage.DataLayersControl = L.Control.extend({
 
 });
 
-L.Storage.DataLayer.include({
+L.U.DataLayer.include({
 
     renderToolbox: function (container) {
         var toggle = L.DomUtil.create('i', 'layer-toggle', container),
@@ -632,14 +632,14 @@ L.Storage.DataLayer.include({
 
 });
 
-L.Storage.DataLayer.addInitHook(function () {
+L.U.DataLayer.addInitHook(function () {
     this.on('hide', this.propagateHide);
     this.on('show', this.propagateShow);
     this.propagateShow();
 });
 
 
-L.Storage.Map.include({
+L.U.Map.include({
 
     _openBrowser: function () {
         var browserContainer = L.DomUtil.create('div', 'storage-browse-data'),
@@ -657,7 +657,7 @@ L.Storage.Map.include({
                 edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
                 color = L.DomUtil.create('i', 'feature-color', feature_li),
                 title = L.DomUtil.create('span', 'feature-title', feature_li),
-                symbol = feature._getIconUrl ? L.S.Icon.prototype.formatUrl(feature._getIconUrl(), feature): null;
+                symbol = feature._getIconUrl ? L.U.Icon.prototype.formatUrl(feature._getIconUrl(), feature): null;
             zoom_to.title = L._('Bring feature to center');
             edit.title = L._('Edit this feature');
             title.innerHTML = feature.getDisplayName() || '—';
@@ -728,7 +728,7 @@ L.Storage.Map.include({
 
 
 
-L.Storage.TileLayerControl = L.Control.extend({
+L.U.TileLayerControl = L.Control.extend({
     options: {
         position: 'topleft'
     },
@@ -777,7 +777,7 @@ L.Storage.TileLayerControl = L.Control.extend({
 
 });
 
-L.S.AttributionControl = L.Control.Attribution.extend({
+L.U.AttributionControl = L.Control.Attribution.extend({
 
     options: {
         prefix: ''
@@ -803,7 +803,7 @@ L.S.AttributionControl = L.Control.Attribution.extend({
 });
 
 
-L.Storage.LocateControl = L.Control.extend({
+L.U.LocateControl = L.Control.extend({
 
     options: {
         position: 'topleft'
@@ -831,7 +831,7 @@ L.Storage.LocateControl = L.Control.extend({
 });
 
 
-L.Storage.Search = L.PhotonSearch.extend({
+L.U.Search = L.PhotonSearch.extend({
 
     onBlur: function (e) {
         // Overrided because we don't want to hide the results on blur.
@@ -873,7 +873,7 @@ L.Storage.Search = L.PhotonSearch.extend({
 
 });
 
-L.Storage.SearchControl = L.Control.extend({
+L.U.SearchControl = L.Control.extend({
 
     options: {
         position: 'topleft',
@@ -905,7 +905,7 @@ L.Storage.SearchControl = L.Control.extend({
         title.textContent = L._('Search location');
         var input = L.DomUtil.create('input', 'photon-input', container);
         var resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container);
-        this.search = new L.S.Search(map, input, options);
+        this.search = new L.U.Search(map, input, options);
         var id = Math.random();
         this.search.on('ajax:send', function () {
             map.fire('dataloading', {id: id});
@@ -969,7 +969,7 @@ L.Control.Loading.include({
 /*
 * Make it dynamic
 */
-L.S.ContextMenu = L.Map.ContextMenu.extend({
+L.U.ContextMenu = L.Map.ContextMenu.extend({
 
     _createItems: function (e) {
         this._map.setContextMenuItems(e);
@@ -985,7 +985,7 @@ L.S.ContextMenu = L.Map.ContextMenu.extend({
 
 });
 
-L.S.IframeExporter = L.Class.extend({
+L.U.IframeExporter = L.Class.extend({
     includes: [L.Mixin.Events],
 
     options: {
@@ -1048,7 +1048,7 @@ L.S.IframeExporter = L.Class.extend({
 
 });
 
-L.S.Editable = L.Editable.extend({
+L.U.Editable = L.Editable.extend({
 
     initialize: function (map, options) {
         L.Editable.prototype.initialize.call(this, map, options);
@@ -1057,7 +1057,7 @@ L.S.Editable = L.Editable.extend({
         // Layer for items added by users
         this.on('editable:drawing:cancel', function (e) {
             if (e.layer._latlngs && e.layer._latlngs.length < e.layer.editor.MIN_VERTEX) e.layer.del();
-            if (e.layer instanceof L.S.Marker) e.layer.del();
+            if (e.layer instanceof L.U.Marker) e.layer.del();
         });
         this.on('editable:drawing:commit', function (e) {
             e.layer.isDirty = true;
@@ -1082,16 +1082,16 @@ L.S.Editable = L.Editable.extend({
     },
 
     createPolyline: function (latlngs) {
-        return new L.Storage.Polyline(this.map, latlngs);
+        return new L.U.Polyline(this.map, latlngs);
     },
 
     createPolygon: function (latlngs) {
-        var polygon = new L.Storage.Polygon(this.map, latlngs);
+        var polygon = new L.U.Polygon(this.map, latlngs);
         return polygon;
     },
 
     createMarker: function (latlng) {
-        return new L.Storage.Marker(this.map, latlng);
+        return new L.U.Marker(this.map, latlng);
     },
 
     connectCreatedToMap: function (layer) {

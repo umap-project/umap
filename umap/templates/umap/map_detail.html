@@ -20,10 +20,10 @@
     {% include "umap/map_messages.html" %}
     <script type="text/javascript">
         MAP.ui.on('panel:ready', function () {
-            L.S.AutoComplete.multiSelect('id_editors', {
+            L.U.AutoComplete.multiSelect('id_editors', {
                 placeholder: "{% trans 'Type editors nick to add…' %}"
             });
-            L.S.AutoComplete.select('id_owner', {
+            L.U.AutoComplete.select('id_owner', {
                 placeholder: "{% trans 'Type new owner nick…' %}"
             });
         });

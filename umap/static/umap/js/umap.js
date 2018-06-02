@@ -48,7 +48,7 @@ L.Map.mergeOptions({
     easing: true
 });
 
-L.Storage.Map.include({
+L.U.Map.include({
 
     HIDDABLE_CONTROLS: ['zoom', 'search', 'fullscreen', 'embed', 'locate', 'measure', 'tilelayers', 'editinosm', 'datalayers'],
 
@@ -64,8 +64,8 @@ L.Storage.Map.include({
         L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom');
         L.Map.prototype.initialize.call(this, el, geojson.properties);
 
-        this.ui = new L.S.UI(this._container);
-        this.xhr = new L.S.Xhr(this.ui);
+        this.ui = new L.U.UI(this._container);
+        this.xhr = new L.U.Xhr(this.ui);
         this.xhr.on('dataloding', function (e) {
             this.fire('dataloding', e);
         });
@@ -196,11 +196,11 @@ L.Storage.Map.include({
             }
         }
 
-        this.help = new L.Storage.Help(this);
-        this.slideshow = new L.S.Slideshow(this, this.options.slideshow);
+        this.help = new L.U.Help(this);
+        this.slideshow = new L.U.Slideshow(this, this.options.slideshow);
         this.initCaptionBar();
         if (this.options.allowEdit) {
-            this.editTools = new L.S.Editable(this);
+            this.editTools = new L.U.Editable(this);
             this.ui.on('panel:closed panel:open', function () {
                 this.editedFeature = null;
             }, this);
@@ -226,33 +226,33 @@ L.Storage.Map.include({
         this._controls = {};
 
         if (this.options.allowEdit && !this.options.noControl) {
-            new L.Storage.EditControl(this).addTo(this);
+            new L.U.EditControl(this).addTo(this);
 
-            new L.S.DrawToolbar({map: this}).addTo(this);
+            new L.U.DrawToolbar({map: this}).addTo(this);
 
             var editActions = [
-                L.S.ImportAction,
-                L.S.EditPropertiesAction,
-                L.S.ChangeTileLayerAction,
-                L.S.ManageDatalayersAction,
-                L.S.UpdateExtentAction
+                L.U.ImportAction,
+                L.U.EditPropertiesAction,
+                L.U.ChangeTileLayerAction,
+                L.U.ManageDatalayersAction,
+                L.U.UpdateExtentAction
             ];
-            if (this.options.urls.map_update_permissions) editActions.push(L.Storage.UpdatePermsAction);
-            new L.S.SettingsToolbar({actions: editActions}).addTo(this);
+            if (this.options.urls.map_update_permissions) editActions.push(L.U.UpdatePermsAction);
+            new L.U.SettingsToolbar({actions: editActions}).addTo(this);
         }
         this._controls.zoom = new L.Control.Zoom({zoomInTitle: L._('Zoom in'), zoomOutTitle: L._('Zoom out')});
-        this._controls.datalayers = new L.Storage.DataLayersControl(this);
-        this._controls.locate = new L.S.LocateControl();
+        this._controls.datalayers = new L.U.DataLayersControl(this);
+        this._controls.locate = new L.U.LocateControl();
         this._controls.fullscreen = new L.Control.Fullscreen({title: {'false': L._('View Fullscreen'), 'true': L._('Exit Fullscreen')}});
-        this._controls.search = new L.Storage.SearchControl();
+        this._controls.search = new L.U.SearchControl();
         this._controls.embed = new L.Control.Embed(this, this.options.embedOptions);
-        this._controls.tilelayers = new L.Storage.TileLayerControl();
+        this._controls.tilelayers = new L.U.TileLayerControl();
         this._controls.editinosm = new L.Control.EditInOSM({
             position: 'topleft',
             widgetOptions: {helpText: L._('Open this map extent in a map editor to provide more accurate data to OpenStreetMap')}
         });
         this._controls.measure = (new L.MeasureControl()).initHandler(this);
-        this._controls.more = new L.S.MoreControls();
+        this._controls.more = new L.U.MoreControls();
         this._controls.scale = L.control.scale();
         if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable();
         else this.scrollWheelZoom.disable();
@@ -267,7 +267,7 @@ L.Storage.Map.include({
         }
         if (this.options.noControl) return;
 
-        this._controls.attribution = (new L.S.AttributionControl()).addTo(this);
+        this._controls.attribution = (new L.U.AttributionControl()).addTo(this);
         if (this.options.miniMap && !this.options.noControl) {
             this.whenReady(function () {
                 if (this.selected_tilelayer) {
@@ -358,10 +358,10 @@ L.Storage.Map.include({
                 modifierKey = e.ctrlKey || e.metaKey;
 
             /* Generic shortcuts */
-            if (key === L.S.Keys.F && modifierKey) {
+            if (key === L.U.Keys.F && modifierKey) {
                 L.DomEvent.stop(e);
                 this.search();
-            } else if (e.keyCode === L.S.Keys.ESC) {
+            } else if (e.keyCode === L.U.Keys.ESC) {
                 if (this.help.visible()) this.help.hide();
                 else this.ui.closePanel();
             }
@@ -369,45 +369,45 @@ L.Storage.Map.include({
             if (!this.options.allowEdit) return;
 
             /* Edit mode only shortcuts */
-            if (key === L.S.Keys.E && modifierKey && !this.editEnabled) {
+            if (key === L.U.Keys.E && modifierKey && !this.editEnabled) {
                 L.DomEvent.stop(e);
                 this.enableEdit();
-            } else if (key === L.S.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
+            } else if (key === L.U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
                 L.DomEvent.stop(e);
                 this.disableEdit();
                 this.ui.closePanel();
             }
-            if (key === L.S.Keys.S && modifierKey) {
+            if (key === L.U.Keys.S && modifierKey) {
                 L.DomEvent.stop(e);
                 if (this.isDirty) {
                     this.save();
                 }
             }
-            if (key === L.S.Keys.Z && modifierKey && this.isDirty) {
+            if (key === L.U.Keys.Z && modifierKey && this.isDirty) {
                 L.DomEvent.stop(e);
                 this.askForReset();
             }
-            if (key === L.S.Keys.M && modifierKey && this.editEnabled) {
+            if (key === L.U.Keys.M && modifierKey && this.editEnabled) {
                 L.DomEvent.stop(e);
                 this.editTools.startMarker();
             }
-            if (key === L.S.Keys.P && modifierKey && this.editEnabled) {
+            if (key === L.U.Keys.P && modifierKey && this.editEnabled) {
                 L.DomEvent.stop(e);
                 this.editTools.startPolygon();
             }
-            if (key === L.S.Keys.L && modifierKey && this.editEnabled) {
+            if (key === L.U.Keys.L && modifierKey && this.editEnabled) {
                 L.DomEvent.stop(e);
                 this.editTools.startPolyline();
             }
-            if (key === L.S.Keys.I && modifierKey && this.editEnabled) {
+            if (key === L.U.Keys.I && modifierKey && this.editEnabled) {
                 L.DomEvent.stop(e);
                 this.importPanel();
             }
-            if (key === L.S.Keys.H && modifierKey && this.editEnabled) {
+            if (key === L.U.Keys.H && modifierKey && this.editEnabled) {
                 L.DomEvent.stop(e);
                 this.help.show('edit');
             }
-            if (e.keyCode === L.S.Keys.ESC) {
+            if (e.keyCode === L.U.Keys.ESC) {
                 if (this.editEnabled) this.editTools.stopDrawing();
                 if (this.measureTools.enabled()) this.measureTools.stopDrawing();
             }
@@ -533,7 +533,7 @@ L.Storage.Map.include({
 
     createDataLayer: function(datalayer) {
         datalayer = datalayer || {name: L._('Layer') + ' ' + (this.datalayers_index.length + 1)};
-        return new L.Storage.DataLayer(this, datalayer);
+        return new L.U.DataLayer(this, datalayer);
     },
 
     getDefaultOption: function (option) {
@@ -586,12 +586,12 @@ L.Storage.Map.include({
         for (var i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
             UIFields.push('queryString.' + this.HIDDABLE_CONTROLS[i] + 'Control');
         }
-        var iframeExporter = new L.S.IframeExporter(this);
+        var iframeExporter = new L.U.IframeExporter(this);
         var buildIframeCode = function () {
             iframe.innerHTML = iframeExporter.build();
         };
         buildIframeCode();
-        var builder = new L.S.FormBuilder(iframeExporter, UIFields, {
+        var builder = new L.U.FormBuilder(iframeExporter, UIFields, {
             callback: buildIframeCode
         });
         var iframeOptions = L.DomUtil.createFieldset(container, L._('Iframe export options'));
@@ -1158,7 +1158,7 @@ L.Storage.Map.include({
             ],
             title = L.DomUtil.create('h4', '', container);
         title.innerHTML = L._('Edit map properties');
-        var builder = new L.S.FormBuilder(this, metadataFields);
+        var builder = new L.U.FormBuilder(this, metadataFields);
         var form = builder.build();
         container.appendChild(form);
         var UIFields = [];
@@ -1174,7 +1174,7 @@ L.Storage.Map.include({
             'options.displayPopupFooter',
             'options.captionBar'
         ]);
-        builder = new L.S.FormBuilder(this, UIFields, {
+        builder = new L.U.FormBuilder(this, UIFields, {
             callback: this.renderControls,
             callbackContext: this
         });
@@ -1192,7 +1192,7 @@ L.Storage.Map.include({
             'options.fillOpacity'
         ];
 
-        builder = new L.S.FormBuilder(this, shapeOptions, {
+        builder = new L.U.FormBuilder(this, shapeOptions, {
             callback: function (e) {
                 this.eachDataLayer(function (datalayer) {
                     datalayer.redraw();
@@ -1212,7 +1212,7 @@ L.Storage.Map.include({
             ['options.filterKey', {handler: 'Input', helpEntries: 'filterKey', placeholder: L._('Default: name'), label: L._('Filter keys'), inheritable: true}]
         ];
 
-        builder = new L.S.FormBuilder(this, optionsFields, {
+        builder = new L.U.FormBuilder(this, optionsFields, {
             callback: function (e) {
                 this.eachDataLayer(function (datalayer) {
                     if (e.helper.field === 'options.sortKey') datalayer.reindex();
@@ -1231,7 +1231,7 @@ L.Storage.Map.include({
             'options.labelHover',
             'options.labelInteractive'
         ];
-        builder = new L.S.FormBuilder(this, popupFields, {
+        builder = new L.U.FormBuilder(this, popupFields, {
             callback: function (e) {
                 if (e.helper.field === 'options.popupTemplate' || e.helper.field === 'options.popupContentTemplate') return;
                 this.eachDataLayer(function (datalayer) {
@@ -1254,7 +1254,7 @@ L.Storage.Map.include({
             ['options.tilelayer.tms', {handler: 'Switch', label: L._('TMS format')}]
         ];
         var customTilelayer = L.DomUtil.createFieldset(container, L._('Custom background'));
-        builder = new L.S.FormBuilder(this, tilelayerFields, {
+        builder = new L.U.FormBuilder(this, tilelayerFields, {
             callback: this.initTileLayers,
             callbackContext: this
         });
@@ -1270,7 +1270,7 @@ L.Storage.Map.include({
             ['options.limitBounds.north', {handler: 'BlurFloatInput', placeholder: L._('max North')}],
             ['options.limitBounds.east', {handler: 'BlurFloatInput', placeholder: L._('max East')}]
         ];
-        var boundsBuilder = new L.S.FormBuilder(this, boundsFields, {
+        var boundsBuilder = new L.U.FormBuilder(this, boundsFields, {
             callback: this.handleLimitBounds,
             callbackContext: this
         });
@@ -1311,7 +1311,7 @@ L.Storage.Map.include({
             this.slideshow.setOptions(this.options.slideshow);
             this.renderControls();
         };
-        var slideshowBuilder = new L.S.FormBuilder(this, slideshowFields, {
+        var slideshowBuilder = new L.U.FormBuilder(this, slideshowFields, {
             callback: slideshowHandler,
             callbackContext: this
         });
@@ -1323,7 +1323,7 @@ L.Storage.Map.include({
             ['options.shortCredit', {handler: 'Input', label: L._('Short credits'), helpEntries: ['shortCredit', 'textFormatting']}],
             ['options.longCredit', {handler: 'Textarea', label: L._('Long credits'), helpEntries: ['longCredit', 'textFormatting']}]
         ];
-        var creditsBuilder = new L.S.FormBuilder(this, creditsFields, {
+        var creditsBuilder = new L.U.FormBuilder(this, creditsFields, {
             callback: function () {this._controls.attribution._update();},
             callbackContext: this
         });
@@ -1502,7 +1502,7 @@ L.Storage.Map.include({
     },
 
     initContextMenu: function () {
-        this.contextmenu = new L.S.ContextMenu(this);
+        this.contextmenu = new L.U.ContextMenu(this);
         this.contextmenu.enable();
     },
 

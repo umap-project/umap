@@ -601,7 +601,7 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
 
 });
 
-L.Storage.FormBuilder = L.FormBuilder.extend({
+L.U.FormBuilder = L.FormBuilder.extend({
 
     options: {
         className: 'storage-form'

@@ -1,9 +1,8 @@
 /* Poor man pub/sub handler, enough for now */
 
-L.StorageSingleton = L.Evented.extend({});
-L.Storage = new L.StorageSingleton();
-L.S = L.Storage;
-L.Storage.Map = L.Map.extend({});
+L.UmapSingleton = L.Evented.extend({});
+L.U = new L.UmapSingleton();
+L.U.Map = L.Map.extend({});
 
 /*
 * Utils
@@ -268,7 +267,7 @@ L.DomEvent.once = function (el, types, fn, context) {
 /*
 * Global events
 */
-L.S.Keys = {
+L.U.Keys = {
     LEFT: 37,
     UP: 38,
     RIGHT: 39,
@@ -292,7 +291,7 @@ L.S.Keys = {
 };
 
 
-L.Storage.Help = L.Class.extend({
+L.U.Help = L.Class.extend({
 
     initialize: function (map) {
         this.map = map;
@@ -432,7 +431,7 @@ L.Storage.Help = L.Class.extend({
 });
 
 
-L.Storage.Orderable = L.Evented.extend({
+L.U.Orderable = L.Evented.extend({
 
     options: {
         selector: 'li',

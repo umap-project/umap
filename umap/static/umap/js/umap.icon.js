@@ -1,4 +1,4 @@
-L.Storage.Icon = L.DivIcon.extend({
+L.U.Icon = L.DivIcon.extend({
     initialize: function(map, options) {
         this.map = map;
         var default_options = {
@@ -35,7 +35,7 @@ L.Storage.Icon = L.DivIcon.extend({
 
 });
 
-L.Storage.Icon.Default = L.Storage.Icon.extend({
+L.U.Icon.Default = L.U.Icon.extend({
     default_options: {
         iconAnchor: new L.Point(16, 40),
         popupAnchor: new L.Point(0, -40),
@@ -45,7 +45,7 @@ L.Storage.Icon.Default = L.Storage.Icon.extend({
 
     initialize: function(map, options) {
         options = L.Util.extend({}, this.default_options, options);
-        L.Storage.Icon.prototype.initialize.call(this, map, options);
+        L.U.Icon.prototype.initialize.call(this, map, options);
     },
 
     _setColor: function() {
@@ -69,7 +69,7 @@ L.Storage.Icon.Default = L.Storage.Icon.extend({
 
 });
 
-L.Storage.Icon.Circle = L.Storage.Icon.extend({
+L.U.Icon.Circle = L.U.Icon.extend({
     initialize: function(map, options) {
         var default_options = {
             iconAnchor: new L.Point(6, 6),
@@ -78,7 +78,7 @@ L.Storage.Icon.Circle = L.Storage.Icon.extend({
             className: 'storage-circle-icon'
         };
         options = L.Util.extend({}, default_options, options);
-        L.Storage.Icon.prototype.initialize.call(this, map, options);
+        L.U.Icon.prototype.initialize.call(this, map, options);
     },
 
     _setColor: function() {
@@ -96,7 +96,7 @@ L.Storage.Icon.Circle = L.Storage.Icon.extend({
 
 });
 
-L.Storage.Icon.Drop = L.Storage.Icon.Default.extend({
+L.U.Icon.Drop = L.U.Icon.Default.extend({
     default_options: {
             iconAnchor: new L.Point(16, 42),
             popupAnchor: new L.Point(0, -42),
@@ -105,7 +105,7 @@ L.Storage.Icon.Drop = L.Storage.Icon.Default.extend({
     }
 });
 
-L.Storage.Icon.Ball = L.Storage.Icon.Default.extend({
+L.U.Icon.Ball = L.U.Icon.Default.extend({
     default_options: {
             iconAnchor: new L.Point(8, 30),
             popupAnchor: new L.Point(0, -28),
@@ -141,7 +141,7 @@ L.Storage.Icon.Ball = L.Storage.Icon.Default.extend({
 });
 
 var _CACHE_COLOR = {};
-L.Storage.Icon.Cluster = L.DivIcon.extend({
+L.U.Icon.Cluster = L.DivIcon.extend({
     options: {
         iconSize: [40, 40]
     },
