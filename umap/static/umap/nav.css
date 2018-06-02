@@ -22,6 +22,12 @@ footer a.branding {
     color: #8F96A3;
     display: inline-block;
 }
+
+footer .i18n_switch {
+    display: inline-block;
+}
+
+
 .umap-nav {
     display: flex;
     flex-direction: column;

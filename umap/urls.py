@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^change-password-done/', auth_views.password_change_done,
         {'template_name': 'umap/password_change_done.html'},
         name='password_change_done'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
 
 i18n_urls = [

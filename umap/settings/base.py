@@ -2,6 +2,7 @@
 # Import global settings to make it easier to extend settings.
 from django.conf.global_settings import *   # pylint: disable=W0614,W0401
 from django.template.defaultfilters import slugify
+from django.conf.locale import LANG_INFO
 
 # =============================================================================
 # Generic Django project settings
@@ -10,6 +11,21 @@ from django.template.defaultfilters import slugify
 DEBUG = True
 
 SITE_ID = 1
+# Add languages we're missing from Django
+LANG_INFO.update({
+    'am-et': {
+        'bidi': False,
+        'name': 'Amharic',
+        'code': 'am-et',
+        'name_local': 'አማርኛ'
+    },
+    'zh': {
+        'bidi': False,
+        'code': 'zh',
+        'name': 'Chinese',
+        'name_local': '简体中文',
+    },
+})
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = 'UTC'
