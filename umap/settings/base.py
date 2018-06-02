@@ -87,14 +87,8 @@ MEDIA_URL = '/uploads/'
 STATIC_ROOT = os.path.join('static')
 MEDIA_ROOT = os.path.join('uploads')
 
-
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_DIR, 'static'),
-)
-
 STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
-    # 'npm.finders.NpmFinder',
 ] + STATICFILES_FINDERS
 
 # =============================================================================

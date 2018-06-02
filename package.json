@@ -1,6 +1,6 @@
 {
-  "name": "leaflet-storage",
-  "version": "0.8.2",
+  "name": "umap",
+  "version": "1.0.0-alpha.1",
   "description": "Manage map and features with Leaflet and expose them for backend storage through an API.",
   "directories": {
     "test": "test"

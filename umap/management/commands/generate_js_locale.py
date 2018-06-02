@@ -16,8 +16,7 @@ class Command(BaseCommand):
             code = to_locale(code)
             if self.verbosity > 0:
                 print("Processing", name)
-            path = finders.find('storage/src/locale/{code}.json'.format(
-                                                                    code=code))
+            path = finders.find('umap/locale/{code}.json'.format(code=code))
             if not path:
                 print("No file for", code, "Skipping")
             else:
@@ -27,11 +26,8 @@ class Command(BaseCommand):
                     self.render(code, f.read())
 
     def render(self, code, json):
-        path = os.path.join(
-            settings.STATIC_ROOT,
-            "storage/src/locale/",
-            "{code}.js".format(code=code)
-        )
+        path = os.path.join(settings.STATIC_ROOT,
+                            "umap/locale/{code}.js".format(code=code))
         with io.open(path, "w", encoding="utf-8") as f:
             content = render_to_string('umap/locale.js', {
                 "locale": json,
