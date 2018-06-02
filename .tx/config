@@ -1,10 +1,16 @@
 [main]
 host = https://www.transifex.com
 
-[umap.project]
+[umap.backend]
 file_filter = umap/locale/<lang>/LC_MESSAGES/django.po
 source_file = umap/locale/en/LC_MESSAGES/django.po
 source_lang = en
 type = PO
+
+[umap.frontend]
+file_filter = umap/static/umap/locale/<lang>.json
+source_file = umap/static/umap/locale/en.json
+source_lang = en
+type = KEYVALUEJSON
 
 

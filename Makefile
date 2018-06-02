@@ -2,10 +2,22 @@ test:
 	py.test -xv umap/tests/
 develop:
 	python setup.py develop
+release: test makemessages
+	python setup.py sdist bdist_wheel
+test_publish:
+	twine upload -r testpypi dist/*
+publish:
+	twine upload dist/*
+	make clean
+clean:
+	rm -f dist/*
+	rm -rf build/*
 compilemessages:
 	django-admin.py compilemessages
+	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values
 makemessages:
 	django-admin.py makemessages -a
+	umap generate_js_locale
 ui:
 	mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/** umap/static/umap/vendors/leaflet/
 	mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet-editable/src/*.js umap/static/umap/vendors/editable/
@@ -35,12 +47,9 @@ testjsfx:
 	firefox umap/static/umap/test/index.html
 testjs: node_modules
 	@./node_modules/mocha-phantomjs/bin/mocha-phantomjs --view 1024x768 umap/static/umap/test/index.html
-i18n:
-	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values
-# tx_push:
-# 	tx push -s
-# tx_pull:
-# 	tx pull
-
+tx_push:
+	tx push -s
+tx_pull:
+	tx pull
 
 .PHONY: ui
