@@ -29,7 +29,7 @@
     <ul class="login-grid block-grid">
         {% for name in backends.backends %}
             <li>
-                <a rel="nofollow" href="{% url "social:begin" name %}" class="storage-login-popup login-{{ name }}" title="{{ name|title }}"></a>
+                <a rel="nofollow" href="{% url "social:begin" name %}" class="umap-login-popup login-{{ name }}" title="{{ name|title }}"></a>
             </li>
         {% endfor %}
     </ul>
