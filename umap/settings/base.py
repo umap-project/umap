@@ -31,6 +31,7 @@ LANGUAGES = (
     ('es', 'Español'),
     ('fi', 'Finnish'),
     ('fr', 'Francais'),
+    ('hu', 'Hungarian'),
     ('it', 'Italiano'),
     ('ja', 'Japanese'),
     ('lt', 'Lithuanian'),

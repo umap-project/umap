@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Gábor Babos <gabor.babos@gmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
+"PO-Revision-Date: 2017-10-29 20:37+0000\n"
+"Last-Translator: Gábor Babos <gabor.babos@gmail.com>\n"
+"Language-Team: Hungarian (http://www.transifex.com/yohanboniface/umap/language/hu/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Vissza a kezdőlapra"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "%(current_user)s térképeinek böngészése"
+
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Add meg a szerkesztő felhasználónevét a hozzáadáshoz…"
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr "Add meg az új tulajdonos felhasználónevét…"
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr "– készítette:"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Még több"
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Kérlek, jelentkezz be"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Felhasználónév"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Jelszó"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Belépés"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Kérlek, válassz egy szolgáltatót"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "A uMap segítségével <a href=\"%(osm_url)s\" />OpenStreetMap</a>-alapú térképrétegeket hozhatsz létre percek alatt, amelyeket be is ágyazhatsz a weboldaladba."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Válaszd ki a térképed rétegeit"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Érdekes helyek hozzáadása: pontok, vonalak, sokszögek…"
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Érdekes helyek (POI-k) színeinek és ikonjainak kezelése"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Szabd testre a térkép viselkedését: áttekintő térkép használatával, a felhasználó pozíciójának lekérdezésével…"
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Geoinformatikai adatfájlok tömeges importjának támogatása (geojson, gpx, kml, osm…)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Válassz licenszet adataid számára!"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Ágyazd be és oszd meg a térképedet!"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "És mindez <a href=\"%(repo_url)s\">nyílt forráskódú</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+msgid "Create a map"
+msgstr "Készíts egy térképet!"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Próbáld ki a bemutatót!"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Ez egy tesztelési célra használt szerver. Amennyiben egy üzemszerűen használható szerverre van szükséged, kérlek használd ezt a címet: <a href=\"%(stable_url)s\">%(stable_url)s</a>. A uMap-et a saját szerveredre is feltelepítheded, hiszen <a href=\"%(repo_url)s\">nyílt forráskódú</a>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "uMap-térképek térképe"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Szerezz inspirációt, böngéssz a térképek között!"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Térképeim"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Bejelentkezés"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Regisztráció"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "Névjegy"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Segítség és hibabejelentés"
+
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr "Jelszó változtatása"
+
+#: templates/umap/navigation.html:22
+msgid "Log out"
+msgstr "Kijelentkezés"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "Jelszó változtatása"
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Kérlek, biztonsági okokból írd be a régi jelszavad, majd add meg kétszer a kívánt új jelszót!"
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "Régi jelszó"
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr "Új jelszó"
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "Új jelszó ismét"
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "Jelszó változtatása"
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "A jelszóváltoztatás sikeres volt."
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "A jelszavad megváltozott."
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Ilyen térkép nem található."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Térképek keresése"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Keresés"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Térkép megtekintése"
