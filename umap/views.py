@@ -339,7 +339,7 @@ class FormLessEditMixin(object):
         return simple_json_response(errors=form.errors,
                                     error=str(form.errors))
 
-    def get_form(self):
+    def get_form(self, form_class=None):
         kwargs = self.get_form_kwargs()
         kwargs['error_class'] = FlatErrorList
         return self.get_form_class()(**kwargs)
@@ -358,6 +358,11 @@ class MapDetailMixin(object):
             'default_iconUrl': "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             'umap_id': self.get_umap_id(),
             'licences': dict((l.name, l.json) for l in Licence.objects.all()),
+            'edit_statuses': [(i, str(label)) for i, label in Map.EDIT_STATUS],
+            'share_statuses': [(i, str(label))
+                               for i, label in Map.SHARE_STATUS],
+            'anonymous_edit_statuses': [(i, str(label)) for i, label
+                                        in AnonymousMapPermissionsForm.STATUS],
         }
         if self.get_short_url():
             properties['shortUrl'] = self.get_short_url()
@@ -448,12 +453,36 @@ class MapView(MapDetailMixin, DetailView):
         map_settings = self.object.settings
         if "properties" not in map_settings:
             map_settings['properties'] = {}
-        if self.object.owner and hasattr(settings, 'USER_MAPS_URL'):
-            map_settings['properties']['author'] = {
+        permissions = {}
+        permissions['edit_status'] = self.object.edit_status
+        permissions['share_status'] = self.object.share_status
+        if self.object.owner:
+            permissions['owner'] = {
+                'id': self.object.owner.pk,
                 'name': self.object.owner.get_username(),
-                'link': reverse(settings.USER_MAPS_URL,
-                                args=(self.object.owner.get_username(), ))
+                'url': reverse(settings.USER_MAPS_URL,
+                               args=(self.object.owner.get_username(), ))
             }
+            permissions['editors'] = [{
+                'id': editor.pk,
+                'name': editor.get_username(),
+            } for editor in self.object.editors.all()]
+        map_settings['properties']['permissions'] = permissions
+        user = self.request.user
+        if not user.is_anonymous:
+            map_settings['properties']['user'] = {
+                'id': user.pk,
+                'name': user.get_username(),
+                'url': reverse(settings.USER_MAPS_URL,
+                               args=(user.get_username(), ))
+            }
+        if (not self.object.owner
+           and self.object.is_anonymous_owner(self.request)):
+            anonymous_url = "%s%s" % (
+                settings.SITE_URL,
+                self.object.get_anonymous_edit_url()
+            )
+            map_settings['properties']['anonymous_edit_url'] = anonymous_url
         return map_settings
 
 
@@ -520,8 +549,7 @@ class MapUpdate(FormLessEditMixin, UpdateView):
         )
 
 
-class UpdateMapPermissions(UpdateView):
-    template_name = "umap/map_update_permissions.html"
+class UpdateMapPermissions(FormLessEditMixin, UpdateView):
     model = Map
     pk_url_kwarg = 'map_id'
 
@@ -532,7 +560,7 @@ class UpdateMapPermissions(UpdateView):
             return AnonymousMapPermissionsForm
 
     def get_form(self, form_class=None):
-        form = super(UpdateMapPermissions, self).get_form(form_class)
+        form = super().get_form(form_class)
         user = self.request.user
         if self.object.owner and not user == self.object.owner:
             del form.fields['edit_status']
@@ -544,10 +572,6 @@ class UpdateMapPermissions(UpdateView):
         self.object = form.save()
         return simple_json_response(
             info=_("Map editors updated with success!"))
-
-    def render_to_response(self, context, **response_kwargs):
-        context.update(response_kwargs)
-        return render_to_json(self.get_template_names(), context, self.request)
 
 
 class MapDelete(DeleteView):

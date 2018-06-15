@@ -88,7 +88,7 @@ L.U.UpdatePermsAction = L.U.BaseAction.extend({
     },
 
     addHooks: function () {
-        this.map.updatePermissions();
+        this.map.permissions.panel();
     }
 
 });

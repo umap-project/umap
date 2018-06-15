@@ -12,8 +12,10 @@ L.U.AutoComplete = L.Class.extend({
     RESULTS: [],
 
     initialize: function (el, options) {
-        this.el = L.DomUtil.get(el);
-        L.setOptions(options);
+        this.el = el;
+        var ui = new L.U.UI(document.querySelector('header'));
+        this.xhr = new L.U.Xhr(ui);
+        L.setOptions(this, options);
         var CURRENT = null;
         try {
             Object.defineProperty(this, 'CURRENT', {
@@ -37,9 +39,9 @@ L.U.AutoComplete = L.Class.extend({
         this.input = L.DomUtil.element('input', {
             type: 'text',
             placeholder: this.options.placeholder,
-            autocomplete: 'off'
-        });
-        L.DomUtil.before(this.el, this.input);
+            autocomplete: 'off',
+            className: this.options.className
+        }, this.el);
         L.DomEvent.on(this.input, 'keydown', this.onKeyDown, this);
         L.DomEvent.on(this.input, 'keyup', this.onKeyUp, this);
         L.DomEvent.on(this.input, 'blur', this.onBlur, this);
@@ -63,10 +65,7 @@ L.U.AutoComplete = L.Class.extend({
     onKeyDown: function (e) {
         switch (e.keyCode) {
             case L.U.Keys.TAB:
-                if(this.CURRENT !== null)
-                {
-                    this.setChoice();
-                }
+                if(this.CURRENT !== null) this.setChoice();
                 L.DomEvent.stop(e);
                 break;
             case L.U.Keys.ENTER:
@@ -149,8 +148,8 @@ L.U.AutoComplete = L.Class.extend({
     setChoice: function (choice) {
         choice = choice || this.RESULTS[this.CURRENT];
         if (choice) {
-            this.input.value = choice.display;
-            this.select(choice);
+            this.input.value = choice.item.label;
+            this.options.on_select(choice);
             this.displaySelected(choice);
             this.hide();
             if (this.options.callback) {
@@ -165,26 +164,18 @@ L.U.AutoComplete = L.Class.extend({
             this.clear();
             return;
         }
-        if(!val) {
-            this.clear();
-            return;
-        }
-        if( val + '' === this.CACHE + '') {
-            return;
-        }
-        else {
-            this.CACHE = val;
-        }
-        var results = this._do_search(val);
-        return this.handleResults(results);
+        if( val + '' === this.CACHE + '') return;
+        else this.CACHE = val;
+        this._do_search(val, (data) => {
+            this.handleResults(data.data);
+        });
     },
 
     createResult: function (item) {
         var el = L.DomUtil.element('li', {}, this.container);
-        el.innerHTML = item.display;
+        el.innerHTML = item.label;
         var result = {
-            value: item.value,
-            display: item.display,
+            item: item,
             el: el
         };
         L.DomEvent.on(el, 'mouseover', function () {
@@ -223,12 +214,12 @@ L.U.AutoComplete = L.Class.extend({
 
     highlight: function () {
         var self = this;
-        this.forEach(this.RESULTS, function (item, index) {
+        this.forEach(this.RESULTS, function (result, index) {
             if (index === self.CURRENT) {
-                L.DomUtil.addClass(item.el, 'on');
+                L.DomUtil.addClass(result.el, 'on');
             }
             else {
-                L.DomUtil.removeClass(item.el, 'on');
+                L.DomUtil.removeClass(result.el, 'on');
             }
         });
     },
@@ -260,114 +251,69 @@ L.U.AutoComplete = L.Class.extend({
 });
 
 
-L.U.AutoComplete.BaseSelect = L.U.AutoComplete.extend({
+L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
 
     initialize: function (el, options) {
         L.U.AutoComplete.prototype.initialize.call(this, el, options);
         if (!this.el) return this;
-        this.el.style.display = 'none';
         this.createInput();
         this.createContainer();
-        this.initSelectedContainer();
+        this.selected_container = this.initSelectedContainer();
     },
 
     optionToResult: function (option) {
         return {
             value: option.value,
-            display: option.innerHTML
+            label: option.innerHTML
         };
     },
 
-    _do_search: function (val) {
-        var results = [],
-            self = this,
-            count = 0;
-        val = val.toLowerCase();
-        this.forEach(this.el, function (item) {
-            var candidate = item.innerHTML.toLowerCase();
-            if (candidate === val || (candidate.indexOf(val) !== -1 && !item.selected && count < self.options.maxResults)) {
-                results.push(self.optionToResult(item));
-                count++;
-            }
-        });
-        return results;
-    },
-
-    select: function (option) {
-        this.forEach(this.el, function (item) {
-            if (item.value == option.value) {
-                item.selected = true;
-            }
-        });
-    },
-
-    unselect: function (option) {
-        this.forEach(this.el, function (item) {
-            if (item.value == option.value) {
-                item.selected = false;
-            }
-        });
+    _do_search: function (val, callback) {
+         val = val.toLowerCase();
+        this.xhr.get('/agnocomplete/AutocompleteUser/?q=' + encodeURIComponent(val), {callback: callback});
     }
 
 });
 
-L.U.AutoComplete.MultiSelect = L.U.AutoComplete.BaseSelect.extend({
+L.U.AutoComplete.Ajax.SelectMultiple = L.U.AutoComplete.Ajax.extend({
 
     initSelectedContainer: function () {
-        this.selected_container = L.DomUtil.after(this.input, L.DomUtil.element('ul', {className: 'umap-multiresult'}));
-        var self = this;
-        this.forEach(this.el, function (option) {
-            if (option.selected) {
-                self.displaySelected(self.optionToResult(option));
-            }
-        });
+        return L.DomUtil.after(this.input, L.DomUtil.element('ul', {className: 'umap-multiresult'}));
     },
 
     displaySelected: function (result) {
         var result_el = L.DomUtil.element('li', {}, this.selected_container);
-        result_el.innerHTML = result.display;
+        result_el.innerHTML = result.item.label;
         var close = L.DomUtil.element('span', {className: 'close'}, result_el);
         close.innerHTML = '×';
         L.DomEvent.on(close, 'click', function () {
             this.selected_container.removeChild(result_el);
-            this.unselect(result);
+            this.options.on_unselect(result);
         }, this);
         this.hide();
     }
 
 });
 
-L.U.AutoComplete.multiSelect = function (el, options) {
-    return new L.U.AutoComplete.MultiSelect(el, options);
-};
 
-
-L.U.AutoComplete.Select = L.U.AutoComplete.BaseSelect.extend({
+L.U.AutoComplete.Ajax.Select = L.U.AutoComplete.Ajax.extend({
 
     initSelectedContainer: function () {
-        this.selected_container = L.DomUtil.after(this.input, L.DomUtil.element('div', {className: 'umap-singleresult'}));
-        var self = this;
-        if (this.el.selectedIndex !== -1 && this.el[this.el.selectedIndex].value !== '') {
-            self.displaySelected(self.optionToResult(this.el[this.el.selectedIndex]));
-        }
+        return L.DomUtil.after(this.input, L.DomUtil.element('div', {className: 'umap-singleresult'}));
     },
 
     displaySelected: function (result) {
         var result_el = L.DomUtil.element('div', {}, this.selected_container);
-        result_el.innerHTML = result.display;
+        result_el.innerHTML = result.item.label;
         var close = L.DomUtil.element('span', {className: 'close'}, result_el);
         close.innerHTML = '×';
         this.input.style.display = 'none';
         L.DomEvent.on(close, 'click', function () {
             this.selected_container.innerHTML = '';
-            this.unselect(result);
+            this.options.on_unselect(result);
             this.input.style.display = 'block';
         }, this);
         this.hide();
     }
 
 });
-
-L.U.AutoComplete.select = function (el, options) {
-    return new L.U.AutoComplete.Select(el, options);
-};

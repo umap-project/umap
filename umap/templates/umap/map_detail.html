@@ -18,14 +18,4 @@
         {% include "umap/map_init.html" %}
     {% endblock %}
     {% include "umap/map_messages.html" %}
-    <script type="text/javascript">
-        MAP.ui.on('panel:ready', function () {
-            L.U.AutoComplete.multiSelect('id_editors', {
-                placeholder: "{% trans 'Type editors nick to add…' %}"
-            });
-            L.U.AutoComplete.select('id_owner', {
-                placeholder: "{% trans 'Type new owner nick…' %}"
-            });
-        });
-    </script>
 {% endblock %}

@@ -198,6 +198,7 @@ L.U.Map.include({
 
         this.help = new L.U.Help(this);
         this.slideshow = new L.U.Slideshow(this, this.options.slideshow);
+        this.permissions = new L.U.MapPermissions(this, this.options.permissions);
         this.initCaptionBar();
         if (this.options.allowEdit) {
             this.editTools = new L.U.Editable(this);
@@ -235,9 +236,9 @@ L.U.Map.include({
                 L.U.EditPropertiesAction,
                 L.U.ChangeTileLayerAction,
                 L.U.ManageDatalayersAction,
-                L.U.UpdateExtentAction
+                L.U.UpdateExtentAction,
+                L.U.UpdatePermsAction
             ];
-            if (this.options.urls.map_update_permissions) editActions.push(L.U.UpdatePermsAction);
             new L.U.SettingsToolbar({actions: editActions}).addTo(this);
         }
         this._controls.zoom = new L.Control.Zoom({zoomInTitle: L._('Zoom in'), zoomOutTitle: L._('Zoom out')});
@@ -345,11 +346,13 @@ L.U.Map.include({
         this._backupOptions = L.extend({}, this.options);
         this._backupOptions.tilelayer = L.extend({}, this.options.tilelayer);
         this._backupOptions.limitBounds = L.extend({}, this.options.limitBounds);
+        this._backupOptions.permissions = L.extend({}, this.permissions.options);
     },
 
     resetOptions: function () {
         this.options = L.extend({}, this._backupOptions);
         this.options.tilelayer = L.extend({}, this._backupOptions.tilelayer);
+        this.permissions.options = L.extend({}, this._backupOptions.permissions);
     },
 
     initShortcuts: function () {
@@ -676,15 +679,6 @@ L.U.Map.include({
         return geojson;
     },
 
-    updatePermissions: function () {
-        if (!this.options.umap_id) return this.ui.alert({content: L._('Please save the map before'), level: 'info'});
-        var url = L.Util.template(this.options.urls.map_update_permissions, {'map_id': this.options.umap_id});
-        this.get(url, {
-            listen_form: {'id': 'map_edit'},
-            className: 'dark'
-        });
-    },
-
     importPanel: function () {
         var container = L.DomUtil.create('div', 'umap-upload'),
             title = L.DomUtil.create('h4', '', container),
@@ -862,13 +856,7 @@ L.U.Map.include({
         var container = L.DomUtil.create('div', 'umap-caption'),
             title = L.DomUtil.create('h3', '', container);
         title.innerHTML = this.options.name;
-        if (this.options.author && this.options.author.name && this.options.author.link) {
-            var authorContainer = L.DomUtil.add('h5', 'umap-map-author', container, L._('by') + ' '),
-                author = L.DomUtil.create('a');
-            author.href = this.options.author.link;
-            author.innerHTML = this.options.author.name;
-            authorContainer.appendChild(author);
-        }
+        this.permissions.addOwnerLink('h5', container);
         if (this.options.description) {
             var description = L.DomUtil.create('div', 'umap-map-description', container);
             description.innerHTML = L.Util.toHTML(this.options.description);
@@ -1079,6 +1067,7 @@ L.U.Map.include({
         formData.append('settings', JSON.stringify(geojson));
         this.post(this.getSaveUrl(), {
             data: formData,
+            context: this,
             callback: function (data) {
                 var duration = 3000;
                 if (!this.options.umap_id) {
@@ -1094,9 +1083,8 @@ L.U.Map.include({
                     this.ui.alert({content: msg, level: 'info', duration: duration});
                 });
                 this.ui.closePanel();
-                this.continueSaving();
-            },
-            context: this
+                this.permissions.save();
+            }
         });
     },
 
@@ -1376,13 +1364,7 @@ L.U.Map.include({
         var container = L.DomUtil.create('div', 'umap-caption-bar', this._controlContainer),
             name = L.DomUtil.create('h3', '', container);
         L.DomEvent.disableClickPropagation(container);
-        if (this.options.author && this.options.author.name && this.options.author.link) {
-            var authorContainer = L.DomUtil.add('span', 'umap-map-author', container, ' ' + L._('by') + ' '),
-                author = L.DomUtil.create('a');
-            author.href = this.options.author.link;
-            author.innerHTML = this.options.author.name;
-            authorContainer.appendChild(author);
-        }
+        this.permissions.addOwnerLink('span', container);
         var about = L.DomUtil.add('a', 'umap-about-link', container, ' — ' + L._('About'));
         about.href = '#';
         L.DomEvent.on(about, 'click', this.displayCaption, this);

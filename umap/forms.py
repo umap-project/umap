@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django import forms
 from django.contrib.gis.geos import Point
 from django.contrib.auth import get_user_model
@@ -28,7 +26,6 @@ class FlatErrorList(ErrorList):
 
 
 class UpdateMapPermissionsForm(forms.ModelForm):
-    owner = forms.ModelChoiceField(User.objects, required=True)
 
     class Meta:
         model = Map

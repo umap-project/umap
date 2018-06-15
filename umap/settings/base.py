@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'umap',
     'compressor',
     'social_django',
+    'agnocomplete',
 )
 
 # =============================================================================
@@ -159,8 +160,6 @@ MIDDLEWARE = (
 # =============================================================================
 
 ENABLE_ACCOUNT_LOGIN = False
-AUTHENTICATION_BACKENDS += (
-)
 
 # =============================================================================
 # Miscellaneous project settings

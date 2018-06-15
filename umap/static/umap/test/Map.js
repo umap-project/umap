@@ -1,4 +1,4 @@
-describe('L.Utorage.Map', function(){
+describe('L.Umap.Map', function(){
 
     before(function () {
         this.server = sinon.fakeServer.create();

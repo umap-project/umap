@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import time
 
@@ -175,6 +173,8 @@ class Map(NamedModel):
                     and self.is_anonymous_owner(request)):
                 can = True
                 if user and user.is_authenticated:
+                    # TODO: only when using the anonymous-edit URL with an
+                    # authenticated user
                     # if user is authenticated, attach as owner
                     self.owner = user
                     self.save()

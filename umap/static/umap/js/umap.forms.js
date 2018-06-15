@@ -322,6 +322,7 @@ L.FormBuilder.LicenceChooser = L.FormBuilder.Select.extend({
 
 });
 
+
 L.FormBuilder.NullableBoolean = L.FormBuilder.Select.extend({
     selectOptions: [
         [undefined, L._('inherit')],
@@ -597,6 +598,61 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
 
     value: function () {
         return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : this.input.value;
+    }
+
+});
+
+
+L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
+
+    build: function () {
+        var options = {className: 'edit-owner'};
+        options.on_select = (choice) => {
+            this._value = {
+                'id': choice.item.value,
+                'name': choice.item.label,
+                'url': choice.item.url
+            };
+            this.set();
+        }
+        this.autocomplete = new L.U.AutoComplete.Ajax.Select(this.parentNode, options);
+        var owner = this.toHTML();
+        if (owner) this.autocomplete.displaySelected({'item': {'value': owner.id, 'label': owner.name}});
+    },
+
+    value: function () {
+        return this._value;
+    }
+
+});
+
+
+L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
+
+    build: function () {
+        var options = {className: 'edit-editors'};
+        options.on_select = (choice) => {
+            this._values.push({
+                'id': choice.item.value,
+                'name': choice.item.label,
+                'url': choice.item.url
+            });
+            this.set();
+        }
+        options.on_unselect = (choice) => {
+            var index = this._values.findIndex((item) => item.id === choice.item.value);
+            if (index !== -1) {
+                this._values.splice(index, 1);
+                this.set();
+            }
+        }
+        this.autocomplete = new L.U.AutoComplete.Ajax.SelectMultiple(this.parentNode, options);
+        this._values = this.toHTML();
+        if (this._values) for (var i = 0; i < this._values.length; i++) this.autocomplete.displaySelected({'item': {'value': this._values[i].id, 'label': this._values[i].name}});
+    },
+
+    value: function () {
+        return this._values;
     }
 
 });
