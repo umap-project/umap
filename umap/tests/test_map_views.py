@@ -144,18 +144,6 @@ def test_short_url_should_redirect_to_canonical(client, map):
     assert response['Location'] == canonical
 
 
-def test_old_url_should_redirect_to_canonical(client, map):
-    url = reverse(
-        'map_old_url',
-        kwargs={'username': map.owner.username, 'slug': map.slug}
-    )
-    canonical = reverse('map', kwargs={'pk': map.pk,
-                                       'slug': map.slug})
-    response = client.get(url)
-    assert response.status_code == 301
-    assert response['Location'] == canonical
-
-
 def test_clone_map_should_create_a_new_instance(client, map):
     assert Map.objects.count() == 1
     url = reverse('map_clone', kwargs={'map_id': map.pk})

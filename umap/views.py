@@ -635,25 +635,6 @@ class MapShortUrl(RedirectView):
         return url
 
 
-class MapOldUrl(RedirectView):
-    """
-    Handle map URLs from before anonymous allowing.
-    """
-    query_string = True
-    permanent = True
-
-    def get_redirect_url(self, **kwargs):
-        owner = get_object_or_404(User, username=self.kwargs['username'])
-        map_inst = get_object_or_404(Map, slug=self.kwargs['slug'],
-                                     owner=owner)
-        url = map_inst.get_absolute_url()
-        if self.query_string:
-            args = self.request.META.get('QUERY_STRING', '')
-            if args:
-                url = "%s?%s" % (url, args)
-        return url
-
-
 class MapAnonymousEditUrl(RedirectView):
 
     permanent = False

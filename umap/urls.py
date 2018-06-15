@@ -42,8 +42,6 @@ i18n_urls = [
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^map/(?P<pk>\d+)/geojson/$', views.MapViewGeoJSON.as_view(),
         name='map_geojson'),
-    url(r'^map/(?P<username>[-_\w]+)/(?P<slug>[-_\w]+)/$',
-        views.MapOldUrl.as_view(), name='map_old_url'),
     url(r'^map/anonymous-edit/(?P<signature>.+)$',
         views.MapAnonymousEditUrl.as_view(), name='map_anonymous_edit_url'),
     url(r'^pictogram/json/$', views.PictogramJSONList.as_view(),
