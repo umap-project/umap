@@ -31,7 +31,7 @@ L.Map.mergeOptions({
     name: '',
     description: '',
     displayPopupFooter: false,
-    demoTileInfos: {s: 'a', z: 9, x: 265, y: 181},
+    demoTileInfos: {s: 'a', z: 9, x: 265, y: 181, r: ''},
     licences: [],
     licence: '',
     enableMarkerDraw: true,
