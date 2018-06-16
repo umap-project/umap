@@ -28,6 +28,11 @@
     width: 36px;
     background-size: 36px 68px;
 }
+.leaflet-touch .leaflet-control-fullscreen a {
+    height: 36px;
+    width: 36px;
+    background-position: 0px 0px;
+}
 .leaflet-fullscreen-on .leaflet-control-fullscreen a {
     background-position: 0 -32px;
 }
@@ -1291,6 +1296,14 @@ a.add-datalayer:hover,
 }
 .leaflet-inplace-toolbar {
   z-index: 10000!important;
+}
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+    border-width: 1px;
+}
+.leaflet-touch .leaflet-bar a {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
 }
 
 /* ****** */
