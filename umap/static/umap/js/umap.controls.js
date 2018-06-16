@@ -462,6 +462,7 @@ L.U.DataLayersControl = L.Control.extend({
 
         var toggle = L.DomUtil.create('a', 'umap-browse-toggle', container);
         toggle.href = '#';
+        toggle.title = L._('See data layers')
 
         L.DomEvent
             .on(toggle, 'click', L.DomEvent.stop);
@@ -892,6 +893,7 @@ L.U.SearchControl = L.Control.extend({
         L.DomEvent.disableClickPropagation(container);
         var link = L.DomUtil.create('a', '', container);
         link.href = '#';
+        link.title = L._('Search a place name')
         L.DomEvent.on(link, 'click', function (e) {
             L.DomEvent.stop(e);
             self.openPanel(map);
