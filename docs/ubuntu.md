@@ -82,10 +82,6 @@ you will need to run again this last line.*
 
     umap collectstatic
 
-## Create languages files
-
-    umap storagei18n
-
 ## Create a superuser
 
     umap createsuperuser
