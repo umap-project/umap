@@ -13,9 +13,9 @@
    height="200"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.2 2405546, 2018-03-11"
    sodipodi:docname="24-white.svg"
-   inkscape:export-filename="/home/ybon/Code/js/Leaflet.Storage/src/img/24-white.png"
+   inkscape:export-filename="/home/ybon/Code/py/umap/umap/static/umap/img/24-white.png"
    inkscape:export-xdpi="89.996864"
    inkscape:export-ydpi="89.996864">
   <defs
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="79.721584"
-     inkscape:cy="82.838267"
+     inkscape:zoom="22.4"
+     inkscape:cx="92.77801"
+     inkscape:cy="34.445334"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -50,35 +50,43 @@
     <sodipodi:guide
        orientation="1,0"
        position="80,112"
-       id="guide3084" />
+       id="guide3084"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="0,40"
-       id="guide3086" />
+       id="guide3086"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="1,0"
        position="40,104"
-       id="guide3088" />
+       id="guide3088"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="0,80"
-       id="guide3090" />
+       id="guide3090"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="1,0"
        position="120,84"
-       id="guide3512" />
+       id="guide3512"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="1,0"
        position="160,84"
-       id="guide3872" />
+       id="guide3872"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="0,120"
-       id="guide25561" />
+       id="guide25561"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="-12,160"
-       id="guide25563" />
+       id="guide25563"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -105,15 +113,15 @@
        sodipodi:nodetypes="cccccccccccccc" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="13.786797"
        y="953.80786"
-       id="text4457"
-       sodipodi:linespacing="125%"><tspan
+       id="text4457"><tspan
          y="953.80786"
          x="13.786797"
          sodipodi:role="line"
-         id="tspan4459" /></text>
+         id="tspan4459"
+         style="font-size:40px;line-height:1.25;font-family:sans-serif"> </tspan></text>
     <path
        style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#999999;stroke-opacity:1;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 58,862.36216 0,2 c -2,0 -4,0 -5,2 l 0,1 14,0 0,-1 c -1,-2 -3,-2 -5,-2 l 0,-2 z m -5,6 3,14.00002 8,0 3,-14.00002 z"
@@ -131,29 +139,27 @@
          d="m 47.999998,965.36218 3.000002,0 0,8 2,0 0,-8 2,0 0,5 1,0 0,-5 2,0 0,5 1,0 0,-5 2,0 0,5 1,0 0,-5 2,0 0,5 1,0 0,-5 2,0 0,8 2,0 0,-8 3,0 0,11 -24,0 z"
          style="fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none" />
       <text
-         sodipodi:linespacing="125%"
          id="text4455"
          y="964.36218"
          x="49.170559"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none;font-family:Sans"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
-           style="font-size:8px;font-weight:bold;fill:#4d4d4d;fill-opacity:1;-inkscape-font-specification:Sans Bold"
+           style="font-weight:bold;font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Bold';fill:#4d4d4d;fill-opacity:1"
            y="964.36218"
            x="49.170559"
            id="tspan4457"
            sodipodi:role="line">0</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none;font-family:Sans"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none"
          x="65.048965"
          y="964.36218"
-         id="text4459"
-         sodipodi:linespacing="125%"><tspan
+         id="text4459"><tspan
            sodipodi:role="line"
            id="tspan4461"
            x="65.048965"
            y="964.36218"
-           style="font-size:8px;font-weight:bold;fill:#4d4d4d;fill-opacity:1;-inkscape-font-specification:Sans Bold">1</tspan></text>
+           style="font-weight:bold;font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Bold';fill:#4d4d4d;fill-opacity:1">1</tspan></text>
     </g>
     <g
        id="g3702"
@@ -459,5 +465,11 @@
          id="path5957"
          style="fill:#f2f2f2;fill-opacity:1;stroke:#999999;stroke-opacity:1;stroke-width:0.80268166;stroke-miterlimit:4;stroke-dasharray:none" />
     </g>
+    <path
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#999999;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 100.125,1044.2372 c 6.62742,0 12,-5.3726 12,-12 0,-6.6274 -5.37258,-12 -12,-12 -6.62742,0 -12,5.3726 -12,12 0,6.6274 5.37258,12 12,12 z m 0,-5 -7,-7 h 5 v -6 h 4 v 6 h 5 z"
+       id="path4700-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssssscccccccc" />
   </g>
 </svg>

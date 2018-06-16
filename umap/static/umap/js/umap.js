@@ -1263,8 +1263,8 @@ L.U.Map.include({
             callbackContext: this
         });
         limitBounds.appendChild(boundsBuilder.build());
-        var boundsButtons = L.DomUtil.create('div', 'button-bar', limitBounds);
-        var setCurrentButton = L.DomUtil.add('a', 'button half', boundsButtons, L._('Use current bounds'));
+        var boundsButtons = L.DomUtil.create('div', 'button-bar half', limitBounds);
+        var setCurrentButton = L.DomUtil.add('a', 'button', boundsButtons, L._('Use current bounds'));
         setCurrentButton.href = '#';
         L.DomEvent.on(setCurrentButton, 'click', function () {
             var bounds = this.getBounds();
@@ -1276,7 +1276,7 @@ L.U.Map.include({
             this.isDirty = true;
             this.handleLimitBounds();
         }, this);
-        var emptyBounds = L.DomUtil.add('a', 'button half', boundsButtons, L._('Empty'));
+        var emptyBounds = L.DomUtil.add('a', 'button', boundsButtons, L._('Empty'));
         emptyBounds.href = '#';
         L.DomEvent.on(emptyBounds, 'click', function () {
             this.options.limitBounds.south = null;
@@ -1318,27 +1318,34 @@ L.U.Map.include({
         credits.appendChild(creditsBuilder.build());
 
         var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
-        var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions);
-        var del = L.DomUtil.create('a', 'button third umap-delete', advancedButtons);
+        var advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions);
+        var del = L.DomUtil.create('a', 'button umap-delete', advancedButtons);
         del.href = '#';
         del.innerHTML = L._('Delete');
         L.DomEvent
             .on(del, 'click', L.DomEvent.stop)
             .on(del, 'click', this.del, this);
-        var clone = L.DomUtil.create('a', 'button third umap-clone', advancedButtons);
+        var clone = L.DomUtil.create('a', 'button umap-clone', advancedButtons);
         clone.href = '#';
         clone.innerHTML = L._('Clone');
         clone.title = L._('Clone this map');
         L.DomEvent
             .on(clone, 'click', L.DomEvent.stop)
             .on(clone, 'click', this.clone, this);
-        var empty = L.DomUtil.create('a', 'button third umap-empty', advancedButtons);
+        var empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons);
         empty.href = '#';
         empty.innerHTML = L._('Empty');
         empty.title = L._('Delete all layers');
         L.DomEvent
             .on(empty, 'click', L.DomEvent.stop)
             .on(empty, 'click', this.empty, this);
+        var download = L.DomUtil.create('a', 'button umap-download', advancedButtons);
+        download.href = '#';
+        download.innerHTML = L._('Download');
+        download.title = L._('Open download panel');
+        L.DomEvent
+            .on(download, 'click', L.DomEvent.stop)
+            .on(download, 'click', this.renderShareBox, this);
         this.ui.openPanel({data: {html: container}, className: 'dark'});
     },
 

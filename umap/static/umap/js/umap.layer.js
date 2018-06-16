@@ -796,8 +796,8 @@ L.U.DataLayer = L.Class.extend({
         if (this.map.options.urls.datalayer_versions) this.buildVersionsFieldset(container);
 
         var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
-        var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions);
-        var deleteLink = L.DomUtil.create('a', 'button third delete_datalayer_button umap-delete', advancedButtons);
+        var advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions);
+        var deleteLink = L.DomUtil.create('a', 'button delete_datalayer_button umap-delete', advancedButtons);
         deleteLink.innerHTML = L._('Delete');
         deleteLink.href = '#';
         L.DomEvent.on(deleteLink, 'click', L.DomEvent.stop)
@@ -806,13 +806,13 @@ L.U.DataLayer = L.Class.extend({
                     this.map.ui.closePanel();
                 }, this);
         if (!this.isRemoteLayer()) {
-            var emptyLink = L.DomUtil.create('a', 'button third umap-empty', advancedButtons);
+            var emptyLink = L.DomUtil.create('a', 'button umap-empty', advancedButtons);
             emptyLink.innerHTML = L._('Empty');
             emptyLink.href = '#';
             L.DomEvent.on(emptyLink, 'click', L.DomEvent.stop)
                       .on(emptyLink, 'click', this.empty, this);
         }
-        var cloneLink = L.DomUtil.create('a', 'button third umap-clone', advancedButtons);
+        var cloneLink = L.DomUtil.create('a', 'button umap-clone', advancedButtons);
         cloneLink.innerHTML = L._('Clone');
         cloneLink.href = '#';
         L.DomEvent.on(cloneLink, 'click', L.DomEvent.stop)
@@ -820,6 +820,10 @@ L.U.DataLayer = L.Class.extend({
                     var datalayer = this.clone();
                     datalayer.edit();
                 }, this);
+        var download = L.DomUtil.create('a', 'button umap-download', advancedButtons);
+        download.innerHTML = L._('Download');
+        download.href = this._dataUrl();
+        download.target = '_blank';
         this.map.ui.openPanel({data: {html: container}, className: 'dark'});
 
     },

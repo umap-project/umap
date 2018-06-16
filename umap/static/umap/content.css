@@ -143,21 +143,6 @@ h2.section {
     display: inline-block;
     height: 128px;
 }
-.button-bar {
-    text-align: center;
-}
-.button-bar .button {
-    display: inline-block;
-}
-.button-bar .button + .button {
-    margin-left: 14px;
-}
-.button-bar .button.half {
-    width: calc(50% - 7px);
-}
-.button-bar .button.third {
-    width: calc(100% / 3 - 10px);
-}
 .demo-instance-warning {
     background-color: #c0392b;
     color: #efefef;

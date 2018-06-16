@@ -334,6 +334,19 @@ input.switch:checked ~ label:after {
 }
 .button-bar {
     margin-top: 5px;
+    text-align: center;
+    display: grid;
+    grid-gap: 7px;
+    width: 100%
+}
+.button-bar.half {
+    grid-template-columns: 1fr 1fr;
+}
+.button-bar.third {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.button-bar .button {
+    display: inline-block;
 }
 .umap-multiplechoice input[type='radio'] {
     display: none;
@@ -421,7 +434,7 @@ i.info {
 }
 
 .umap-delete:before, .umap-empty:before, .umap-to-polygon:before,
-.umap-clone:before, .umap-edit:before,
+.umap-clone:before, .umap-edit:before, .umap-download:before,
 .umap-to-polyline:before {
     background-repeat: no-repeat;
     text-indent: 38px;
@@ -435,7 +448,7 @@ i.info {
 .dark .umap-delete:before, .dark .umap-empty:before,
 .dark .umap-to-polygon:before,
 .dark .umap-clone:before,
-.dark .umap-edit:before,
+.dark .umap-edit:before, .dark .umap-download:before,
 .dark .umap-to-polyline:before {
     background-image: url('./img/24-white.png');
     vertical-align: middle;
@@ -457,6 +470,9 @@ i.info {
 }
 .umap-empty:before {
     background-position: -160px -126px;
+}
+.umap-download:before {
+    background-position: -88px -168px;
 }
 .umap-edit-actions {
     padding-top: 5px;
