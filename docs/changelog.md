@@ -60,6 +60,8 @@ COMMIT;
   el (Greek), gl (Galician)
 - JS locales are now bundled, no need to generate them while installing
 - local settings are now loaded from `/etc/umap/umap.conf` if available
+- fixed an issue where it was not possible to change the tilelayer if the
+  tilelayer control was not added to the map (#587)
 
 
 

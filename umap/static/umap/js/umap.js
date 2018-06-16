@@ -247,7 +247,7 @@ L.U.Map.include({
         this._controls.fullscreen = new L.Control.Fullscreen({title: {'false': L._('View Fullscreen'), 'true': L._('Exit Fullscreen')}});
         this._controls.search = new L.U.SearchControl();
         this._controls.embed = new L.Control.Embed(this, this.options.embedOptions);
-        this._controls.tilelayers = new L.U.TileLayerControl();
+        this._controls.tilelayers = new L.U.TileLayerControl(this);
         this._controls.editinosm = new L.Control.EditInOSM({
             position: 'topleft',
             widgetOptions: {helpText: L._('Open this map extent in a map editor to provide more accurate data to OpenStreetMap')}

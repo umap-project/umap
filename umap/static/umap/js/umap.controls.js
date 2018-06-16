@@ -729,8 +729,14 @@ L.U.Map.include({
 
 
 L.U.TileLayerControl = L.Control.extend({
+
     options: {
         position: 'topleft'
+    },
+
+    initialize: function (map, options) {
+        this.map = map;
+        L.Control.prototype.initialize.call(this, options);
     },
 
     onAdd: function () {
@@ -754,22 +760,22 @@ L.U.TileLayerControl = L.Control.extend({
     },
 
     buildList: function (options) {
-        this._map.eachTileLayer(function (tilelayer) {
+        this.map.eachTileLayer(function (tilelayer) {
             this.addTileLayerElement(tilelayer, options);
         }, this);
-        this._map.ui.openPanel({data: {html: this._tilelayers_container}, className: options.className});
+        this.map.ui.openPanel({data: {html: this._tilelayers_container}, className: options.className});
     },
 
     addTileLayerElement: function (tilelayer, options) {
-        var selectedClass = this._map.hasLayer(tilelayer) ? 'selected' : '',
+        var selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : '',
             el = L.DomUtil.create('li', selectedClass, this._tilelayers_container),
             img = L.DomUtil.create('img', '', el),
             name = L.DomUtil.create('div', '', el);
-        img.src = L.Util.template(tilelayer.options.url_template, this._map.demoTileInfos);
+        img.src = L.Util.template(tilelayer.options.url_template, this.map.demoTileInfos);
         name.innerHTML = tilelayer.options.name;
         L.DomEvent.on(el, 'click', function () {
-            this._map.selectTileLayer(tilelayer);
-            this._map.ui.closePanel();
+            this.map.selectTileLayer(tilelayer);
+            this.map.ui.closePanel();
             if (options && options.callback) options.callback(tilelayer);
         }, this);
     }
