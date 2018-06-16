@@ -1073,9 +1073,10 @@ L.U.Map.include({
                 if (!this.options.umap_id) {
                     duration = 100000; // we want a longer message at map creation (TODO UGLY)
                     this.options.umap_id = data.id;
-                    if (history && history.pushState) history.pushState({}, this.options.name, data.url);
-                    else window.location = data.url;
                 }
+                // Update URL in case the name has changed.
+                if (history && history.pushState) history.pushState({}, this.options.name, data.url);
+                else window.location = data.url;
                 if (data.info) msg = data.info;
                 else msg = L._('Map has been saved!');
                 this.once('saved', function () {
