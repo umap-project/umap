@@ -8,6 +8,7 @@ L.FormBuilder.Element.include({
         if (this.options.inheritable) {
             className += this.get(true) === undefined ? ' inheritable undefined' : ' inheritable ';
         }
+        className += ' umap-field-' + this.name;
         this.wrapper = L.DomUtil.create('div', className, this.form);
         this.header = L.DomUtil.create('div', 'header', this.wrapper);
         if (this.options.inheritable) {
@@ -66,6 +67,11 @@ L.FormBuilder.Select.include({
 
     clear: function () {
         this.select.value = '';
+    },
+
+    getDefault: function () {
+        if (this.options.inheritable) return undefined
+        else return L.FormBuilder.Select.prototype.getDefault.call(this)
     }
 
 });

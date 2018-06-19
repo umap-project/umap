@@ -65,7 +65,7 @@ var cleanAlert = function () {
 };
 var defaultDatalayerData = function (custom) {
     var _default = {
-        icon_class: 'Default',
+        iconClass: 'Default',
         name: 'Elephants',
         displayOnLoad: true,
         id: 62,

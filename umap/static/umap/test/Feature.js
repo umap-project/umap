@@ -1,4 +1,4 @@
-describe('L.Utorage.FeatureMixin', function () {
+describe('L.U.FeatureMixin', function () {
 
     before(function () {
         this.server = sinon.fakeServer.create();

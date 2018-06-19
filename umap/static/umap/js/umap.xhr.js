@@ -55,7 +55,6 @@ L.U.Xhr = L.Evented.extend({
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
-                console.log(xhr.status)
                 if (xhr.status == 200) {
                     settings.callback.call(settings.context || xhr, xhr.responseText, xhr);
                 }

@@ -62,6 +62,9 @@ COMMIT;
 - local settings are now loaded from `/etc/umap/umap.conf` if available
 - fixed an issue where it was not possible to change the tilelayer if the
   tilelayer control was not added to the map (#587)
+- `showLabel` is now a ternary value (instead of having this plus `labelHover`)
+  (#553)
+- fixed resetting a select to undefined for inheritable fields (#551)
 
 
 

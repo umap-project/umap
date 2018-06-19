@@ -1,4 +1,4 @@
-describe('L.DataLayer', function () {
+describe('L.U.DataLayer', function () {
     var path = '/map/99/datalayer/edit/62/';
 
     before(function () {
@@ -202,6 +202,9 @@ describe('L.DataLayer', function () {
             changeSelectValue(qs('form#datalayer-advanced-properties select[name=iconClass]'), 'Circle');
             assert.notOk(qs('div.umap-div-icon'));
             assert.ok(qs('div.umap-circle-icon'));
+            happen.click(qs('form#datalayer-advanced-properties .umap-field-iconClass .undefine'));
+            assert.notOk(qs('div.umap-circle-icon'));
+            assert.ok(qs('div.umap-div-icon'));
             clickCancel();
         });
 
