@@ -146,7 +146,6 @@ L.U.FeatureMixin = {
             'properties._umap_options.popupTemplate',
             'properties._umap_options.showLabel',
             'properties._umap_options.labelDirection',
-            'properties._umap_options.labelHover',
             'properties._umap_options.labelInteractive'
         ];
     },
@@ -223,7 +222,7 @@ L.U.FeatureMixin = {
     },
 
     getOption: function (option, fallback) {
-        var value = fallback || null;
+        var value = fallback;
         if (typeof this.staticOptions[option] !== 'undefined') {
             value = this.staticOptions[option];
         }
@@ -392,13 +391,16 @@ L.U.FeatureMixin = {
 
     resetTooltip: function () {
         var displayName = this.getDisplayName(null),
+            showLabel = this.getOption('showLabel'),
+            oldLabelHover = this.getOption('labelHover'),
             options = {
-                permanent: !this.getOption('labelHover'),
                 direction: this.getOption('labelDirection'),
                 interactive: this.getOption('labelInteractive')
             };
+        if (oldLabelHover && showLabel) showLabel = null;  // Retrocompat.
+        options.permanent = showLabel === true;
         this.unbindTooltip();
-        if (this.getOption('showLabel') && displayName) this.bindTooltip(L.Util.escapeHTML(displayName), options);
+        if ((showLabel === true || showLabel === null) && displayName) this.bindTooltip(L.Util.escapeHTML(displayName), options);
     },
 
     matchFilter: function (filter, keys) {

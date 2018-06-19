@@ -767,7 +767,6 @@ L.U.DataLayer = L.Class.extend({
             'options.popupContentTemplate',
             'options.showLabel',
             'options.labelDirection',
-            'options.labelHover',
             'options.labelInteractive',
         ];
         builder = new L.U.FormBuilder(this, popupFields, {callback: redrawCallback});
@@ -820,10 +819,12 @@ L.U.DataLayer = L.Class.extend({
                     var datalayer = this.clone();
                     datalayer.edit();
                 }, this);
-        var download = L.DomUtil.create('a', 'button umap-download', advancedButtons);
-        download.innerHTML = L._('Download');
-        download.href = this._dataUrl();
-        download.target = '_blank';
+        if (this.umap_id) {
+            var download = L.DomUtil.create('a', 'button umap-download', advancedButtons);
+            download.innerHTML = L._('Download');
+            download.href = this._dataUrl();
+            download.target = '_blank';
+        }
         this.map.ui.openPanel({data: {html: container}, className: 'dark'});
 
     },

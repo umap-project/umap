@@ -540,7 +540,7 @@ L.U.Map.include({
     },
 
     getDefaultOption: function (option) {
-        return this.options['default_' + option] || null;
+        return this.options['default_' + option];
     },
 
     getOption: function (option) {
@@ -1012,7 +1012,6 @@ L.U.Map.include({
         'filterKey',
         'showLabel',
         'labelDirection',
-        'labelHover',
         'labelInteractive',
         'shortCredit',
         'longCredit',
@@ -1217,7 +1216,6 @@ L.U.Map.include({
             'options.popupContentTemplate',
             'options.showLabel',
             'options.labelDirection',
-            'options.labelHover',
             'options.labelInteractive'
         ];
         builder = new L.U.FormBuilder(this, popupFields, {

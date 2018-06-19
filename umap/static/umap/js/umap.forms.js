@@ -532,15 +532,9 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
 
 });
 
-L.FormBuilder.ControlChoice = L.FormBuilder.MultiChoice.extend({
+L.FormBuilder.TernaryChoices = L.FormBuilder.MultiChoice.extend({
 
     default: 'null',
-
-    choices: [
-        [true, L._('always')],
-        [false, L._('never')],
-        ['null', L._('hidden')]
-    ],
 
     toJS: function () {
         var value = this.value();
@@ -558,6 +552,29 @@ L.FormBuilder.ControlChoice = L.FormBuilder.MultiChoice.extend({
         }
         return value;
     }
+
+});
+
+L.FormBuilder.ControlChoice = L.FormBuilder.TernaryChoices.extend({
+
+    choices: [
+        [true, L._('always')],
+        [false, L._('never')],
+        ['null', L._('hidden')]
+    ]
+
+});
+
+
+L.FormBuilder.LabelChoice = L.FormBuilder.TernaryChoices.extend({
+
+    default: false,
+
+    choices: [
+        [true, L._('always')],
+        [false, L._('never')],
+        ['null', L._('on hover')]
+    ]
 
 });
 
@@ -688,8 +705,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
         displayPopupFooter: {handler: 'Switch', label: L._('Do you want to display popup footer?')},
         captionBar: {handler: 'Switch', label: L._('Do you want to display a caption bar?')},
         zoomTo: {handler: 'IntInput', placeholder: L._('Inherit'), helpEntries: 'zoomTo', label: L._('Default zoom level'), inheritable: true},
-        showLabel: {handler: 'Switch', label: L._('Display label'), inheritable: true},
-        labelHover: {handler: 'Switch', label: L._('Only display label on mouse hover'), inheritable: true},
+        showLabel: {handler: 'LabelChoice', label: L._('Display label'), inheritable: true},
         labelDirection: {handler: 'LabelDirection', label: L._('Label direction'), inheritable: true},
         labelInteractive: {handler: 'Switch', label: L._('Labels are clickable'), inheritable: true},
         labelKey: {helpEntries: 'labelKey', placeholder: L._('Default: name'), label: L._('Label key'), inheritable: true},
