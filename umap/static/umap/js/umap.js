@@ -149,10 +149,6 @@ L.U.Map.include({
             }
             delete this.options.displayDataBrowserOnLoad;
         }
-        this.onceDatalayersLoaded(function () {
-            if (this.options.onLoadPanel === 'databrowser') this.openBrowser();
-            else if (this.options.onLoadPanel === 'caption') this.displayCaption();
-        });
 
         this.ui.on('panel:closed', function () {
             this.invalidateSize({pan: false});
@@ -208,6 +204,10 @@ L.U.Map.include({
             this.initEditBar();
         }
         this.initShortcuts();
+        this.onceDatalayersLoaded(function () {
+            if (this.options.onLoadPanel === 'databrowser') this.openBrowser();
+            else if (this.options.onLoadPanel === 'caption') this.displayCaption();
+        });
 
 
         window.onbeforeunload = function (e) {
