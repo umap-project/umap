@@ -648,9 +648,10 @@ L.U.Map.include({
             filter = L.DomUtil.create('input', '', browserContainer),
             filterValue = '',
             featuresContainer = L.DomUtil.create('div', 'umap-browse-features', browserContainer),
-            filterKeys = (this.options.filterKey || this.options.sortKey || 'name').split(',');
+            filterKeys = this.getFilterKeys();
         filter.type = 'text';
         filter.placeholder = L._('Filter…');
+        filter.value = this.options.filter || '';
 
         var addFeature = function (feature) {
             var feature_li = L.DomUtil.create('li', feature.getClassName() + ' feature'),
@@ -709,14 +710,20 @@ L.U.Map.include({
         };
 
         var appendAll = function () {
+            this.options.filter = filterValue = filter.value;
             featuresContainer.innerHTML = '';
-            filterValue = filter.value;
             this.eachBrowsableDataLayer(function (datalayer) {
                 append(datalayer);
             });
         };
+        var resetLayers = function () {
+            this.eachBrowsableDataLayer(function (datalayer) {
+                datalayer.resetLayer(true);
+            });
+        }
         L.bind(appendAll, this)();
         L.DomEvent.on(filter, 'input', appendAll, this);
+        L.DomEvent.on(filter, 'input', resetLayers, this);
         var link = L.DomUtil.create('li', '');
         L.DomUtil.create('i', 'umap-icon-16 umap-caption', link);
         var label = L.DomUtil.create('span', '', link);

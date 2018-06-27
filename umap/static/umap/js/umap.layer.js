@@ -228,10 +228,14 @@ L.U.DataLayer = L.Class.extend({
         if (this.layer && this.options.type === this.layer._type && !force) return;
         var visible = this.isVisible();
         if (this.layer) this.layer.clearLayers();
+        // delete this.layer?
         if (visible) this.map.removeLayer(this.layer);
         var Class = L.U.Layer[this.options.type] || L.U.Layer.Default;
         this.layer = new Class(this);
+        var filterKeys = this.map.getFilterKeys(),
+            filter = this.map.options.filter;
         this.eachLayer(function (layer) {
+            if (filter && !layer.matchFilter(filter, filterKeys)) return;
             this.layer.addLayer(layer);
         });
         if (visible) this.map.addLayer(this.layer);

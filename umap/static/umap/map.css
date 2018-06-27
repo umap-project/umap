@@ -855,6 +855,7 @@ a.add-datalayer:hover,
     background-image: url('./img/16.png');
     display: inline;
     padding: 0 10px;
+    vertical-align: middle;
 }
 .umap-add {
     background-position: -12px -49px;
@@ -866,7 +867,7 @@ a.add-datalayer:hover,
     background-position: -92px -168px;
 }
 .umap-caption {
-    background-position: -170px -49px;
+    background-position: -170px -52px;
 }
 
 /* ********************************* */

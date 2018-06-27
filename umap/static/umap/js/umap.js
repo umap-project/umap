@@ -1637,6 +1637,10 @@ L.U.Map.include({
 
     search: function () {
         if (this._controls.search) this._controls.search.openPanel(this);
+    },
+
+    getFilterKeys: function () {
+        return (this.options.filterKey || this.options.sortKey || 'name').split(',');
     }
 
 });
