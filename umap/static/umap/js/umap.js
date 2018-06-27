@@ -1009,6 +1009,7 @@ L.U.Map.include({
         'captionBar',
         'slideshow',
         'sortKey',
+        'labelKey',
         'filterKey',
         'showLabel',
         'labelDirection',
