@@ -842,7 +842,7 @@ L.U.DataLayer = L.Class.extend({
 
         var appendVersion = function (data) {
             var date = new Date(parseInt(data.at, 10));
-            var content = date.toLocaleFormat() + ' (' + parseInt(data.size) / 1000 + 'Kb)';
+            var content = date.toLocaleDateString(L.locale) + ' (' + parseInt(data.size) / 1000 + 'Kb)';
             var el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer);
             var a = L.DomUtil.create('a', '', el);
             L.DomUtil.add('span', '', el, content);
