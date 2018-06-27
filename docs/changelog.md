@@ -65,6 +65,9 @@ COMMIT;
 - `showLabel` is now a ternary value (instead of having this plus `labelHover`)
   (#553)
 - fixed resetting a select to undefined for inheritable fields (#551)
+- fixed labelKey not being saved (#595)
+- filtering in data browser now is also reflected in the displayed features
+  (#550)
 
 
 
