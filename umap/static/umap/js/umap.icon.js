@@ -155,23 +155,27 @@ L.U.Icon.Cluster = L.DivIcon.extend({
         var container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster'),
             div = L.DomUtil.create('div', '', container),
             span = L.DomUtil.create('span', '', div),
-            backgroundColor = this.datalayer.getColor(),
-            color;
+            backgroundColor = this.datalayer.getColor();
         span.innerHTML = this.cluster.getChildCount();
         div.style.backgroundColor = backgroundColor;
+        return container;
+    },
+
+    computeTextColor: function (el) {
+        var color,
+            backgroundColor = this.datalayer.getColor();
         if (this.datalayer.options.cluster && this.datalayer.options.cluster.textColor) {
             color = this.datalayer.options.cluster.textColor;
         }
         if (!color) {
             if (typeof _CACHE_COLOR[backgroundColor] === 'undefined') {
-                color = L.DomUtil.TextColorFromBackgroundColor(div);
+                color = L.DomUtil.TextColorFromBackgroundColor(el);
                 _CACHE_COLOR[backgroundColor] = color;
             } else {
                 color = _CACHE_COLOR[backgroundColor];
             }
         }
-        div.style.color = color;
-        return container;
+        return color;
     }
 
 });

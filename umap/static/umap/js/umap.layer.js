@@ -23,6 +23,19 @@ L.U.Layer.Default = L.FeatureGroup.extend({
 });
 
 
+L.U.MarkerCluster = L.MarkerCluster.extend({
+// Custom class so we can call computeTextColor
+// when element is already on the DOM.
+
+    _initIcon: function () {
+        L.MarkerCluster.prototype._initIcon.call(this);
+        var div = this._icon.querySelector('div');
+        // Compute text color only when icon is added to the DOM.
+        div.style.color = this._iconObj.computeTextColor(div);
+    }
+
+});
+
 L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
     _type: 'Cluster',
     includes: [L.U.Layer],
@@ -41,6 +54,7 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
             options.maxClusterRadius = this.datalayer.options.cluster.radius;
         }
         L.MarkerClusterGroup.prototype.initialize.call(this, options);
+        this._markerCluster = L.U.MarkerCluster;
     },
 
     getEditableOptions: function () {
