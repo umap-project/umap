@@ -31,4 +31,20 @@ describe('L.U.Marker', function () {
 
     });
 
+    describe('#clone', function () {
+
+        it('should clone marker', function () {
+            var layer = new L.U.Marker(this.map, [10, 20], {datalayer: this.datalayer}).addTo(this.datalayer);
+            assert.equal(this.datalayer._index.length, 4);
+            other = layer.clone();
+            assert.ok(this.map.hasLayer(other));
+            assert.equal(this.datalayer._index.length, 5);
+            // Must not be the same reference
+            assert.notEqual(layer._latlng, other._latlng);
+            assert.equal(L.Util.formatNum(layer._latlng.lat), other._latlng.lat);
+            assert.equal(L.Util.formatNum(layer._latlng.lng), other._latlng.lng);
+        });
+
+    });
+
 });

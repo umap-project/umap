@@ -376,6 +376,11 @@ L.U.FeatureMixin = {
                 callback: this.confirmDelete,
                 context: this,
                 iconCls: 'umap-delete'
+            },
+            {
+                text: L._('Clone this feature'),
+                callback: this.clone,
+                context: this
             }
         );
         return items;
@@ -424,6 +429,13 @@ L.U.FeatureMixin = {
 
     isMulti: function () {
         return false;
+    },
+
+    clone: function () {
+        var layer = this.datalayer.geojsonToFeatures(this.toGeoJSON());
+        layer.isDirty = true;
+        layer.edit();
+        return layer;
     }
 
 };
@@ -750,11 +762,6 @@ L.U.PathMixin = {
 
     getContextMenuEditItems: function (e) {
         var items = L.U.FeatureMixin.getContextMenuEditItems.call(this, e);
-        items.push({
-            text: L._('Clone this feature'),
-            callback: this.clone,
-            context: this
-        });
         if (this.map.editedFeature && this.isSameClass(this.map.editedFeature) && this.map.editedFeature !== this) {
             items.push({
                 text: L._('Transfer shape to edited feature'),
@@ -788,14 +795,7 @@ L.U.PathMixin = {
     isOnScreen: function () {
         var bounds = this.map.getBounds();
         return bounds.overlaps(this.getBounds());
-    },
-
-    clone: function () {
-        var layer = this.datalayer.geojsonToFeatures(this.toGeoJSON());
-        layer.isDirty = true;
-        layer.edit();
-        return layer;
-    },
+    }
 
 };
 
