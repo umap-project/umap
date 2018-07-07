@@ -553,7 +553,29 @@ i.info {
     cursor: pointer;
     float: left;
 }
-
+input.blur {
+    width: calc(100% - 40px);
+    display: inline-block;
+    vertical-align: middle;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.blur + .button:before {
+    content: '✔';
+}
+.blur + .button {
+    width: 40px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 18px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    box-sizing: border-box;
+}
+input[type=hidden].blur + .button {
+    display: none;
+}
 
 /* *********** */
 /*    Panel    */

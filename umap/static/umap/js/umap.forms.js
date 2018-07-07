@@ -52,10 +52,10 @@ L.FormBuilder.Element.include({
             this.label = L.DomUtil.create('label', '', this.getLabelParent());
             this.label.innerHTML = this.label.title = this.options.label;
             if (this.options.helpEntries) this.builder.map.help.button(this.label, this.options.helpEntries);
-            else if (this.options.helpText) {
+            else if (this.options.helpTooltip) {
                 var info = L.DomUtil.create('i', 'info', this.label);
                 L.DomEvent.on(info, 'mouseover', function () {
-                    this.builder.map.ui.tooltip({anchor: info, content: this.options.helpText, position: 'top'});
+                    this.builder.map.ui.tooltip({anchor: info, content: this.options.helpTooltip, position: 'top'});
                 }, this);
             }
         }
@@ -355,28 +355,51 @@ L.FormBuilder.NullableBoolean = L.FormBuilder.Select.extend({
 
 });
 
-L.FormBuilder.IconUrl = L.FormBuilder.Input.extend({
+
+L.FormBuilder.BlurInput.include({
+
+    build: function () {
+        this.options.className = 'blur';
+        L.FormBuilder.Input.prototype.build.call(this);
+        var button = L.DomUtil.create('span', 'button blur-button');
+        L.DomUtil.after(this.input, button);
+    }
+
+});
+
+L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
     type: function () {
         return 'hidden';
     },
 
     build: function () {
-        L.FormBuilder.Input.prototype.build.call(this);
+        this.options.helpText = this.builder.map.help.formatIconSymbol;
+        L.FormBuilder.BlurInput.prototype.build.call(this);
         this.parentContainer = L.DomUtil.create('div', 'umap-form-iconfield', this.parentNode);
         this.buttonsContainer = L.DomUtil.create('div', '', this.parentContainer);
         this.pictogramsContainer = L.DomUtil.create('div', 'umap-pictogram-list', this.parentContainer);
         this.input.type = 'hidden';
-        this.input.placeholder = L._('Url');
+        this.input.placeholder = L._('Symbol or url');
         this.udpatePreview();
         this.on('define', this.fetchIconList);
     },
 
+    isUrl: function () {
+        return (this.value().indexOf('/') !== -1);
+    },
+
     udpatePreview: function () {
-        if (this.value() && this.value().indexOf('{') === -1) { // Do not try to render URL with variables
-            var img = L.DomUtil.create('img', '', L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer));
-            img.src = this.value();
-            L.DomEvent.on(img, 'click', this.fetchIconList, this);
+        if (this.value()&& this.value().indexOf('{') === -1) { // Do not try to render URL with variables
+            if (this.isUrl()) {
+                var img = L.DomUtil.create('img', '', L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer));
+                img.src = this.value();
+                L.DomEvent.on(img, 'click', this.fetchIconList, this);
+            } else {
+                var el = L.DomUtil.create('span', '', L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer));
+                el.textContent = this.value();
+                L.DomEvent.on(el, 'click', this.fetchIconList, this);
+            }
         }
         this.button = L.DomUtil.create('a', '', this.buttonsContainer);
         this.button.innerHTML = this.value() ? L._('Change symbol') : L._('Add symbol');
@@ -432,15 +455,15 @@ L.FormBuilder.IconUrl = L.FormBuilder.Input.extend({
                 this.udpatePreview();
             }, this);
         var customButton = L.DomUtil.create('a', '', this.pictogramsContainer);
-        customButton.innerHTML = L._('Set URL');
+        customButton.innerHTML = L._('Set symbol');
         customButton.href = '#';
         customButton.style.display = 'block';
         customButton.style.clear = 'both';
-        this.builder.map.help.button(customButton, 'formatIconURL');
+        this.builder.map.help.button(customButton, 'formatIconSymbol');
         L.DomEvent
             .on(customButton, 'click', L.DomEvent.stop)
             .on(customButton, 'click', function (e) {
-                this.input.type = 'url';
+                this.input.type = 'text';
                 this.pictogramsContainer.innerHTML = '';
             }, this);
     },
@@ -699,7 +722,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
         smoothFactor: {handler: 'Range', min: 0, max: 10, step: 0.5, label: L._('Simplify'), helpEntries: 'smoothFactor', inheritable: true},
         dashArray: {label: L._('dash array'), helpEntries: 'dashArray', inheritable: true},
         iconClass: {handler: 'IconClassSwitcher', label: L._('Icon shape'), inheritable: true},
-        iconUrl: {handler: 'IconUrl', label: L._('Icon symbol'), inheritable: true},
+        iconUrl: {handler: 'IconUrl', label: L._('Icon symbol'), inheritable: true, helpText: L.U.Help.formatIconSymbol},
         popupTemplate: {handler: 'PopupTemplate', label: L._('Popup style'), inheritable: true},
         popupContentTemplate: {label: L._('Popup content template'), handler: 'Textarea', helpEntries: ['dynamicProperties', 'textFormatting'], placeholder: '# {name}', inheritable: true},
         datalayer: {handler: 'DataLayerSwitcher', label: L._('Choose the layer of the feature')},

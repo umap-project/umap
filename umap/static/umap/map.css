@@ -1030,6 +1030,12 @@ a.add-datalayer:hover,
     vertical-align: middle;
     max-width: 24px !important;
 }
+.umap-div-icon .icon_container span,
+.umap-drop-icon .icon_container span {
+    vertical-align: middle;
+    color: white;
+    font-weight: bold;
+}
 .umap-circle-icon {
     border: 1px solid white;
     border-radius: 10px 10px 10px 10px;

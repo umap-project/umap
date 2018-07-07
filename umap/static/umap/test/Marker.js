@@ -31,6 +31,38 @@ describe('L.U.Marker', function () {
 
     });
 
+    describe('#iconSymbolChange()', function () {
+
+        it('should change icon symbol', function () {
+            enableEdit();
+            happen.click(qs('div.umap-drop-icon'));
+            happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'));
+            changeInputValue(qs('form#umap-feature-shape-properties .umap-field-iconUrl input[name=iconUrl]'), '1');
+            assert.equal(qs('div.umap-drop-icon span').textContent, '1');
+            changeInputValue(qs('form#umap-feature-shape-properties .umap-field-iconUrl input[name=iconUrl]'), '{name}');
+            assert.equal(qs('div.umap-drop-icon span').textContent, 'test');
+            clickCancel();
+        });
+
+    });
+
+    describe('#iconClassChange()', function () {
+
+        it('should change icon class', function () {
+            enableEdit();
+            happen.click(qs('div.umap-drop-icon'));
+            happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'));
+            changeSelectValue(qs('form#umap-feature-shape-properties .umap-field-iconClass select[name=iconClass]'), 'Circle');
+            assert.notOk(qs('div.umap-drop-icon'));
+            assert.ok(qs('div.umap-circle-icon'));
+            happen.click(qs('form#umap-feature-shape-properties .umap-field-iconClass .undefine'));
+            assert.notOk(qs('div.umap-circle-icon'));
+            assert.ok(qs('div.umap-drop-icon'));
+            clickCancel();
+        });
+
+    });
+
     describe('#clone', function () {
 
         it('should clone marker', function () {
