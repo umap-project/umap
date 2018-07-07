@@ -44,6 +44,7 @@ var clickCancel = function () {
 var changeInputValue = function (input, value) {
     input.value = value;
     happen.once(input, {type: 'input'});
+    happen.once(input, {type: 'blur'});
 };
 var changeSelectValue = function (path_or_select, value) {
     if (typeof path_or_select === 'string') path_or_select = qs(path_or_select);

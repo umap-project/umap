@@ -30,7 +30,7 @@ L.U.Icon = L.DivIcon.extend({
     },
 
     formatUrl: function (url, feature) {
-        return L.Util.greedyTemplate(url || '', feature ? feature.properties : {});
+        return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {});
     }
 
 });
@@ -59,9 +59,17 @@ L.U.Icon.Default = L.U.Icon.extend({
         this.elements.main = L.DomUtil.create('div');
         this.elements.container = L.DomUtil.create('div', 'icon_container', this.elements.main);
         this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main);
-        this.elements.img = L.DomUtil.create('img', null, this.elements.container);
         var src = this._getIconUrl('icon');
-        if (src) this.elements.img.src = src;
+        if (src) {
+            // An url.
+            if (src.indexOf('http') === 0 || src.indexOf('/') === 0) {
+                this.elements.img = L.DomUtil.create('img', null, this.elements.container);
+                this.elements.img.src = src;
+            } else {
+                this.elements.span = L.DomUtil.create('span', null, this.elements.container)
+                this.elements.span.textContent = src;
+            }
+        }
         this._setColor();
         this._setIconStyles(this.elements.main, 'icon');
         return this.elements.main;

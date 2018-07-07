@@ -410,7 +410,7 @@ L.U.Help = L.Class.extend({
     },
 
     formatURL: L._('Supported variables that will be dynamically replaced') + ': {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}...',
-    formatIconURL: L._('You can use feature properties as variables: ex.: with "http://myserver.org/images/{name}.png", the {name} variable will be replaced by the "name" value of each markers.'),
+    formatIconSymbol: L._('Symbol can be either a unicode caracter or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/{name}.png", the {name} variable will be replaced by the "name" value of each marker.'),
     colorValue: L._('Must be a valid CSS value (eg.: DarkBlue or #123456)'),
     smoothFactor: L._('How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)'),
     dashArray: L._('A comma separated list of numbers that defines the stroke dash pattern. Ex.: "5, 10, 15".'),

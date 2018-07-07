@@ -44,8 +44,8 @@ def anonymap(map):
 
 
 @pytest.fixture
-def cookieclient(client, anonymap):
-    key, value = anonymap.signed_cookie_elements
+def cookieclient(client, map):
+    key, value = map.signed_cookie_elements
     client.cookies[key] = get_cookie_signer(salt=key).sign(value)
     return client
 

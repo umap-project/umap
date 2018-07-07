@@ -66,6 +66,8 @@ i18n_urls += decorated_patterns(
         name='map_update'),
     url(r'^map/(?P<map_id>[\d]+)/update/permissions/$',
         views.UpdateMapPermissions.as_view(), name='map_update_permissions'),
+    url(r'^map/(?P<map_id>[\d]+)/update/owner/$',
+        views.AttachAnonymousMap.as_view(), name='map_attach_owner'),
     url(r'^map/(?P<map_id>[\d]+)/update/delete/$',
         views.MapDelete.as_view(), name='map_delete'),
     url(r'^map/(?P<map_id>[\d]+)/update/clone/$',

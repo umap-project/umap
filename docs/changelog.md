@@ -71,6 +71,7 @@ COMMIT;
 - fixed ClusterMarker text color on Chrome (#547)
 - allow to clone also markers
 - only list https ready tilerlayers when page is in https (#567)
+- allow to use an unicode character as Marker symbol (#527)
 
 
 

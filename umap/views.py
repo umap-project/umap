@@ -332,7 +332,7 @@ def simple_json_response(**kwargs):
 # ############## #
 
 
-class FormLessEditMixin(object):
+class FormLessEditMixin:
     http_method_names = [u'post', ]
 
     def form_invalid(self, form):
@@ -345,7 +345,7 @@ class FormLessEditMixin(object):
         return self.get_form_class()(**kwargs)
 
 
-class MapDetailMixin(object):
+class MapDetailMixin:
 
     model = Map
 
@@ -572,6 +572,20 @@ class UpdateMapPermissions(FormLessEditMixin, UpdateView):
         self.object = form.save()
         return simple_json_response(
             info=_("Map editors updated with success!"))
+
+
+class AttachAnonymousMap(View):
+
+    def post(self, *args, **kwargs):
+        self.object = kwargs['map_inst']
+        if (self.object.owner
+           or not self.object.is_anonymous_owner(self.request)
+           or not self.object.can_edit(self.request.user, self.request)
+           or not self.request.user.is_authenticated):
+            return HttpResponseForbidden('Forbidden.')
+        self.object.owner = self.request.user
+        self.object.save()
+        return simple_json_response()
 
 
 class MapDelete(DeleteView):

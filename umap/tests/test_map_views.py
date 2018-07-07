@@ -379,22 +379,6 @@ def test_bad_anonymous_edit_url_should_return_403(cookieclient, anonymap):
 
 
 @pytest.mark.usefixtures('allow_anonymous')
-def test_authenticated_user_with_cookie_is_attached_as_owner(cookieclient, anonymap, post_data, user):  # noqa
-    url = reverse('map_update', kwargs={'map_id': anonymap.pk})
-    cookieclient.login(username=user.username, password="123123")
-    assert anonymap.owner is None
-    # POST only mendatory filds
-    name = 'new map name for authenticat_anonymoused user'
-    post_data['name'] = name
-    response = cookieclient.post(url, post_data)
-    assert response.status_code == 200
-    j = json.loads(response.content.decode())
-    updated_map = Map.objects.get(pk=anonymap.pk)
-    assert j['id'] == updated_map.pk
-    assert updated_map.owner.pk, user.pk
-
-
-@pytest.mark.usefixtures('allow_anonymous')
 def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(client, anonymap, user):  # noqa
     assert Map.objects.count() == 1
     url = reverse('map_clone', kwargs={'map_id': anonymap.pk})
@@ -435,3 +419,55 @@ def test_anyone_can_access_anonymous_map(cookieclient, anonymap):
     anonymap.share_status = anonymap.PRIVATE
     response = cookieclient.get(url)
     assert response.status_code == 200
+
+
+@pytest.mark.usefixtures('allow_anonymous')
+def test_map_attach_owner(cookieclient, anonymap, user):
+    url = reverse('map_attach_owner', kwargs={'map_id': anonymap.pk})
+    cookieclient.login(username=user.username, password="123123")
+    assert anonymap.owner is None
+    response = cookieclient.post(url)
+    assert response.status_code == 200
+    map = Map.objects.get(pk=anonymap.pk)
+    assert map.owner == user
+
+
+@pytest.mark.usefixtures('allow_anonymous')
+def test_map_attach_owner_not_logged_in(cookieclient, anonymap, user):
+    url = reverse('map_attach_owner', kwargs={'map_id': anonymap.pk})
+    assert anonymap.owner is None
+    response = cookieclient.post(url)
+    assert response.status_code == 403
+
+
+@pytest.mark.usefixtures('allow_anonymous')
+def test_map_attach_owner_with_already_an_owner(cookieclient, map, user):
+    url = reverse('map_attach_owner', kwargs={'map_id': map.pk})
+    cookieclient.login(username=user.username, password="123123")
+    assert map.owner
+    assert map.owner != user
+    response = cookieclient.post(url)
+    assert response.status_code == 403
+
+
+def test_map_attach_owner_anonymous_not_allowed(cookieclient, anonymap, user):
+    url = reverse('map_attach_owner', kwargs={'map_id': anonymap.pk})
+    cookieclient.login(username=user.username, password="123123")
+    assert anonymap.owner is None
+    response = cookieclient.post(url)
+    assert response.status_code == 403
+
+    # # GET anonymous
+    # response = client.get(url)
+    # assert login_required(response)
+    # # POST anonymous
+    # response = client.post(url, {})
+    # assert login_required(response)
+    # # GET with wrong permissions
+    # client.login(username=user.username, password="123123")
+    # response = client.get(url)
+    # assert response.status_code == 403
+    # # POST with wrong permissions
+    # client.login(username=user.username, password="123123")
+    # response = client.post(url, {})
+    # assert response.status_code == 403
