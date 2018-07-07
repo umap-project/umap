@@ -4,8 +4,8 @@ import tempfile
 import pytest
 from django.core.signing import get_cookie_signer
 
-from .base import (DataLayerFactory, LicenceFactory, MapFactory,
-                   TileLayerFactory, UserFactory)
+from .base import DataLayerFactory, MapFactory, UserFactory
+from umap.models import Licence, TileLayer
 
 TMP_ROOT = tempfile.mkdtemp()
 
@@ -26,7 +26,8 @@ def user():
 
 @pytest.fixture
 def licence():
-    return LicenceFactory()
+    # Should be created by the migrations.
+    return Licence.objects.last()
 
 
 @pytest.fixture
@@ -61,4 +62,4 @@ def datalayer(map):
 
 @pytest.fixture
 def tilelayer():
-    return TileLayerFactory()
+    return TileLayer.objects.last()
