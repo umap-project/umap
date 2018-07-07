@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load umap_tags compress i18n %}
+{% block head_title %}{{ map.name }} - {{ SITE_NAME }}{% endblock %}
+{% block body_class %}map_detail{% endblock %}
+
+{% block extra_head %}
+    {% compress css %}
+        {% umap_css %}
+    {% endcompress %}
+    {% umap_js locale=locale %}
+    {% if object.share_status != object.PUBLIC %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% block map_init %}
+        {% include "umap/map_init.html" %}
+    {% endblock %}
+    {% include "umap/map_messages.html" %}
+{% endblock %}

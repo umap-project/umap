@@ -5,6 +5,8 @@ docs/_build
 umap/remote_static
 .idea
 tmp/*
+node_modules/*
+umap/static/umap/vendors
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -53,6 +55,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+.pytest_cache/
 
 # Translations
 *.mo

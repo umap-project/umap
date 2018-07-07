@@ -204,3 +204,183 @@ msgstr ""
 #: views.py:190
 msgid "View the map"
 msgstr ""
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr ""
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr ""
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr ""
+
+#: models.py:20
+msgid "name"
+msgstr ""
+
+#: models.py:42
+msgid "No licence set"
+msgstr ""
+
+#: models.py:51
+msgid "details"
+msgstr ""
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr ""
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr ""
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr ""
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr ""
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr ""
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr ""
+
+#: models.py:119
+msgid "anyone with link"
+msgstr ""
+
+#: models.py:120
+msgid "editors only"
+msgstr ""
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr ""
+
+#: models.py:124
+msgid "center"
+msgstr ""
+
+#: models.py:125
+msgid "zoom"
+msgstr ""
+
+#: models.py:126
+msgid "locate"
+msgstr ""
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr ""
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr ""
+
+#: models.py:130
+msgid "licence"
+msgstr ""
+
+#: models.py:135
+msgid "background"
+msgstr ""
+
+#: models.py:136
+msgid "owner"
+msgstr ""
+
+#: models.py:137
+msgid "editors"
+msgstr ""
+
+#: models.py:138
+msgid "edit status"
+msgstr ""
+
+#: models.py:139
+msgid "share status"
+msgstr ""
+
+#: models.py:140
+msgid "settings"
+msgstr ""
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr ""
+
+#: models.py:211
+msgid "Clone of"
+msgstr ""
+
+#: models.py:262
+msgid "display on load"
+msgstr ""
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr ""
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr ""
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr ""
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr ""
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr ""
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr ""
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr ""
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr ""
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr ""
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr ""
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr ""
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr ""
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr ""

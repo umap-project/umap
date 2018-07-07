@@ -1,0 +1,387 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Matej Urbančič <>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-09 21:37+0200\n"
+"PO-Revision-Date: 2018-06-02 14:15+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Slovenian (http://www.transifex.com/yohanboniface/umap/language/sl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Nazaj na začetno stran"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Prebrskaj zemljevide (%(current_user)s)"
+
+#: templates/leaflet_storage/map_detail.html:24
+msgid "Type editors nick to add…"
+msgstr "Vpišite vzdevek urednika ..."
+
+#: templates/leaflet_storage/map_detail.html:27
+msgid "Type new owner nick…"
+msgstr "Vpišite nov vzdevek lastnika ..."
+
+#: templates/leaflet_storage/map_list.html:7 views.py:184
+msgid "by"
+msgstr "–"
+
+#: templates/leaflet_storage/map_list.html:11
+msgid "More"
+msgstr "Več"
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Prijavite se z računom"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Uporabniško ime"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Geslo"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Prijava"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Izbor ponudnika"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "Okolje uMap omogoča hitro ustvarjanje plasti zemljevidov <a href=\"%(osm_url)s\" />OpenStreetMap</a> in vstavljanje povezav na spletno stran."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Izbor plasti na zemljevidu"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Dodajanje točk POI: označbe, črte, polja ..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Prilagajanje ikon in barv točk POI"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Upravljanje možnosti zemljevidov: določanje uporabnikov, vrst prikaza ..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Paketno uvažanje geografskih podatkov (geojson, gpx, kml, osm ...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Izbor dovoljenja za vpisane podatke"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Vstavljanje in objavljanje zemljevida"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Povrh vsega pa je projekt še <a href=\"%(repo_url)s\">odprtokoden</a>!"
+
+#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+msgid "Create a map"
+msgstr "Ustvari zemljevid"
+
+#: templates/umap/about_summary.html:34
+msgid "Play with the demo"
+msgstr "Pokaži preizkusne strani"
+
+#: templates/umap/home.html:10
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Preizkusna različica je na voljo za pregled in spoznavanje funkcionalnosti. Če potrebujete stabilno različico, uporabite <a href=\"%(stable_url)s\">%(stable_url)s</a>. Seveda lahko vzpostavite svoj strežnik, saj je orodje <a href=\"%(repo_url)s\">odprtokodno</a>!"
+
+#: templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Zemljevid spletišča uMaps"
+
+#: templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Poiščite zamisli, prebrskajte zemljevide"
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Moji zemljevidi"
+
+#: templates/umap/navigation.html:14
+msgid "Log in"
+msgstr "Prijava"
+
+#: templates/umap/navigation.html:14
+msgid "Sign in"
+msgstr "Vpis"
+
+#: templates/umap/navigation.html:16
+msgid "About"
+msgstr "O projektu"
+
+#: templates/umap/navigation.html:17
+msgid "Feedback"
+msgstr "Odziv"
+
+#: templates/umap/navigation.html:20
+msgid "Change password"
+msgstr "Zamenjaj geslo"
+
+#: templates/umap/navigation.html:22
+msgid "Log out"
+msgstr "Odjava"
+
+#: templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "Spremeni geslo"
+
+#: templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Iz varnostnih razlogov morate vpisati staro geslo in nato še dvakrat vpisati novo, da se prepričate v pravilnost vpisa."
+
+#: templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "Staro geslo"
+
+#: templates/umap/password_change.html:14
+msgid "New password"
+msgstr "Novo geslo"
+
+#: templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "Potrditev novega gesla"
+
+#: templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "Spremeni geslo"
+
+#: templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Geslo je uspešno spremenjeno."
+
+#: templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "Geslo je spremenjeno."
+
+#: templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Zemljevida ni mogoče najti."
+
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Poišči zemljevide"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Poišči"
+
+#: views.py:190
+msgid "View the map"
+msgstr "Pogled zemljevida"
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Skrivna povezava za urejanje je %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "Vsakdo lahko ureja"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Urejanje je mogoče le prek posebne skrivne povezave"
+
+#: models.py:20
+msgid "name"
+msgstr "ime"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "Ni določenega dovoljenja uporabe"
+
+#: models.py:51
+msgid "details"
+msgstr "podrobnosti"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "Povezava do strani, kjer je objavljeno dovoljenje."
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "Predloga naslova URL z uporabo zapisa OSM."
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "Vrstni red plasti v urejevalniku"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "Urejajo lahko le uredniki"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "Ureja lahko le lastnik"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "kdorkoli (javno)"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "kdorkoli s povezavo"
+
+#: models.py:120
+msgid "editors only"
+msgstr "le uredniki"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "opis"
+
+#: models.py:124
+msgid "center"
+msgstr "središče"
+
+#: models.py:125
+msgid "zoom"
+msgstr "približaj"
+
+#: models.py:126
+msgid "locate"
+msgstr "določi mesto"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "Al naj se ob zagonu določi trenutno mesto uporabnika?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "Izbor dovoljenja za zemljevid."
+
+#: models.py:130
+msgid "licence"
+msgstr "dovoljenje"
+
+#: models.py:135
+msgid "background"
+msgstr "ozadje"
+
+#: models.py:136
+msgid "owner"
+msgstr "lastnik"
+
+#: models.py:137
+msgid "editors"
+msgstr "uredniki"
+
+#: models.py:138
+msgid "edit status"
+msgstr "stanje urejanja"
+
+#: models.py:139
+msgid "share status"
+msgstr "stanje souporabe"
+
+#: models.py:140
+msgid "settings"
+msgstr "nastavitve"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "Anonimni zemljevid je povezan z računom %s"
+
+#: models.py:211
+msgid "Clone of"
+msgstr "Klon zemljevida"
+
+#: models.py:262
+msgid "display on load"
+msgstr "pokaži ob zagonu"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "Pokaži to plast med nalaganjem."
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Prijava je uspešno končana. Poteka nalaganje vsebine ..."
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "Dovoljenja za urejanje"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "Pred nadaljevanjem se je treba prijaviti."
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "Uporabniško ime in geslo nista skladna. Poskusite znova."
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Zemljevid je ustvarjen! Za urejanje z drugega računalnika uporabite povezavo: %(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "Zemljevid je uspešno ustvarjen!"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "Zemljevid je posodobljen!"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "seznam urednikov je posodobljen!"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "Zemljevid lahko izbriše le lastnik."
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Zemljevid je kloniran! Za urejanje z drugega računalnika uporabite povezavo: %(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "Zemljevid je uspešno kloniran!"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "Plast je uspešno izbrisana."

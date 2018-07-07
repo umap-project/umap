@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <title>Umap front Tests</title>
+        <meta charset="utf-8">
+        <script src="../vendors/leaflet/leaflet-src.js"></script>
+        <script src="../vendors/editable/Path.Drag.js"></script>
+        <script src="../vendors/editable/Leaflet.Editable.js"></script>
+        <script src="../vendors/hash/leaflet-hash.js"></script>
+        <script src="../vendors/i18n/Leaflet.i18n.js"></script>
+        <script src="../vendors/editinosm/Leaflet.EditInOSM.js"></script>
+        <script src="../vendors/minimap/Control.MiniMap.js"></script>
+        <script src="../vendors/csv2geojson/csv2geojson.js"></script>
+        <script src="../vendors/togeojson/togeojson.js"></script>
+        <script src="../vendors/osmtogeojson/osmtogeojson.js"></script>
+        <script src="../vendors/contextmenu/leaflet.contextmenu.js"></script>
+        <script src="../vendors/loading/Control.Loading.js"></script>
+        <script src="../vendors/markercluster/leaflet.markercluster-src.js"></script>
+        <script src="../vendors/photon/leaflet.photon.js"></script>
+        <script src="../vendors/heat/leaflet-heat.js"></script>
+        <script src="../vendors/fullscreen/Leaflet.fullscreen.js"></script>
+        <script src="../vendors/toolbar/leaflet.toolbar-src.js"></script>
+        <script src="../vendors/formbuilder/Leaflet.FormBuilder.js"></script>
+        <script src="../vendors/measurable/Leaflet.Measurable.js"></script>
+        <script src="../js/umap.core.js"></script>
+        <script src="../js/umap.autocomplete.js"></script>
+        <script src="../js/umap.popup.js"></script>
+        <script src="../js/umap.xhr.js"></script>
+        <script src="../js/umap.forms.js"></script>
+        <script src="../js/umap.icon.js"></script>
+        <script src="../js/umap.features.js"></script>
+        <script src="../js/umap.layer.js"></script>
+        <script src="../js/umap.controls.js"></script>
+        <script src="../js/umap.slideshow.js"></script>
+        <script src="../js/umap.tableeditor.js"></script>
+        <script src="../js/umap.permissions.js"></script>
+        <script src="../js/umap.js"></script>
+        <script src="../js/umap.ui.js"></script>
+        <link rel="stylesheet" href="../vendors/leaflet/leaflet.css" />
+        <link rel="stylesheet" href="../vendors/minimap/Control.MiniMap.css" />
+        <link rel="stylesheet" href="../vendors/editinosm/Leaflet.EditInOSM.css" />
+        <link rel="stylesheet" href="../vendors/markercluster/MarkerCluster.css" />
+        <link rel="stylesheet" href="../vendors/markercluster/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="../vendors/contextmenu/leaflet.contextmenu.css" />
+        <link rel="stylesheet" href="../vendors/toolbar/leaflet.toolbar.css" />
+        <link rel="stylesheet" href="../vendors/measurable/Leaflet.Measurable.css" />
+        <link rel="stylesheet" href="../../umap/font.css">
+        <link rel="stylesheet" href="../../umap/base.css">
+        <link rel="stylesheet" href="../../umap/content.css">
+        <link rel="stylesheet" href="../../umap/nav.css">
+        <link rel="stylesheet" href="../../umap/map.css" />
+        <link rel="stylesheet" href="../../umap/theme.css">
+
+        <script src="../../../../node_modules/sinon/pkg/sinon.js"></script>
+        <script src="../../../../node_modules/mocha/mocha.js"></script>
+        <script src="../../../../node_modules/chai/chai.js"></script>
+        <script src="../../../../node_modules/happen/happen.js"></script>
+        <link rel="stylesheet" href="../../../../node_modules/mocha/mocha.css" />
+        <script type="text/javascript">
+            mocha.setup({
+                ui: 'bdd',
+                bail: (window.location.search.indexOf('failfast') !== -1),
+                ignoreLeaks: true
+            });
+            chai.config.includeStack = true;
+            var assert = chai.assert;
+            var expect = chai.expect;
+        </script>
+        <script src="./_pre.js"></script>
+        <script src="./Map.js"></script>
+        <script src="./DataLayer.js"></script>
+        <script src="./TableEditor.js"></script>
+        <script src="./Feature.js"></script>
+        <script src="./Marker.js"></script>
+        <script src="./Polyline.js"></script>
+        <script src="./Polygon.js"></script>
+        <script src="./Util.js"></script>
+        <script src="./Controls.js"></script>
+        <script src="./Permissions.js"></script>
+        <style type="text/css">
+        #mocha {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            background-color: white;
+            box-shadow: 0px 0px 8px 0px black;
+            overflow-y: auto;
+            display: none;
+        }
+        #mocha-stats {
+            position: absolute;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="mocha"></div>
+        <div id="map"></div>
+        <script>
+            var runner = (window.mochaPhantomJS || window.mocha).run(function (failures) {
+                if (window.location.search.indexOf('debug') === -1) qs('#mocha').style.display = 'block';
+                console.log(failures);
+            });
+            if (window.location.search.indexOf('debug') !== -1) {
+                runner.on('fail', function(test, err) {
+                    console.log(test.title, test.err);
+                    console.log(test.err.expected, test.err.actual);
+                    console.log(test.err.stack);
+                });
+                sinon.log = function (message) {
+                    console.log(message);
+                };
+            }
+        </script>
+    </body>
+</html>

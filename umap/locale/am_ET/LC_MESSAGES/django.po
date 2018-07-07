@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2015-11-15 14:24+0000\n"
-"Last-Translator: Alazar Tekle <al3may3hu@gmail.com>\n"
-"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/yohanboniface/"
-"umap/language/am_ET/)\n"
-"Language: am_ET\n"
+"PO-Revision-Date: 2017-09-22 17:21+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/yohanboniface/umap/language/am_ET/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: am_ET\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: templates/404.html:7
@@ -33,10 +32,8 @@ msgid "Type editors nick to add…"
 msgstr "የአራሚዎችን ኒክ በመፃፍ ጨምር"
 
 #: templates/leaflet_storage/map_detail.html:27
-#, fuzzy
-#| msgid "Type editors nick to add…"
 msgid "Type new owner nick…"
-msgstr "የአራሚዎችን ኒክ በመፃፍ ጨምር"
+msgstr ""
 
 #: templates/leaflet_storage/map_list.html:7 views.py:184
 msgid "by"
@@ -71,9 +68,7 @@ msgstr "እባክዎ አቅራቢ ይምረጡ"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
-"ዩማፕ በ <a href=\"%(osm_url)s\" />ኦፕን ስትሪት ማፕ</a> ሌየሮች ካርታዎችን በደቂቃ ውስጥ ሰርተን "
-"በገፃችን ማካተት እንድንችል ያደርገናል"
+msgstr "ዩማፕ በ <a href=\"%(osm_url)s\" />ኦፕን ስትሪት ማፕ</a> ሌየሮች ካርታዎችን በደቂቃ ውስጥ ሰርተን በገፃችን ማካተት እንድንችል ያደርገናል"
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -120,13 +115,10 @@ msgstr "በማሳያው ተለማመድ"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
-msgstr ""
-"ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋሚ የሆነ ማሳያ ከፈለጉ እባክዎ <a href="
-"\"%(stable_url)s\">%(stable_url)s</a> ይጠቀሙ። እንዲሁም የራስዎን ማስቀመጥ ይችላሉ፣ <a href="
-"\"%(repo_url)s\">ነፃ እና ክፍት</a> ነው!"
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋሚ የሆነ ማሳያ ከፈለጉ እባክዎ <a href=\"%(stable_url)s\">%(stable_url)s</a> ይጠቀሙ። እንዲሁም የራስዎን ማስቀመጥ ይችላሉ፣ <a href=\"%(repo_url)s\">ነፃ እና ክፍት</a> ነው!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -170,8 +162,8 @@ msgstr ""
 
 #: templates/umap/password_change.html:7
 msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
 msgstr ""
 
 #: templates/umap/password_change.html:12
@@ -214,5 +206,182 @@ msgstr "ፈልግ"
 msgid "View the map"
 msgstr "ካርታውን አሳይ"
 
-#~ msgid "Map settings"
-#~ msgstr "የካርታዎች ሁኔታ"
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "የሚስጥር የማረሚያ መስመሩ %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "ሁሉም ማረም ይችላል"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "በሚስጥር የመረሚያ መስመሩ ብቻ የሚታረም"
+
+#: models.py:20
+msgid "name"
+msgstr "ስም"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "ምንም ፈቃድ አልተሰጠም"
+
+#: models.py:51
+msgid "details"
+msgstr "ዝርዝሮች"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "ፈቃዱ በዝርዝር ከተቀመጠ ገፅ ጛር አገናኝ"
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "የድረ-ገፅ አድራሻ ተምሳሌ በኦ.ኤስ.ኤም. የታይል ፎርማት"
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "በማረሚያ ሳጥኑ ውስጥ የታይል ሌየሮቹ ቅደም ተከተል"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "አራሚዎች ብቻ ማረም ይችላሉ"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "ባለቤት ብቻ ማረም ይችላል"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "ሁሉም (የህዝብ)"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "አድራሻው ያለው ሁሉ"
+
+#: models.py:120
+msgid "editors only"
+msgstr "አራሚዎች ብቻ"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "መገለጫ"
+
+#: models.py:124
+msgid "center"
+msgstr "መሀከል"
+
+#: models.py:125
+msgid "zoom"
+msgstr "ዙም"
+
+#: models.py:126
+msgid "locate"
+msgstr "ጠቁም"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "በመጫን ላይ ያለውን ተጠቃሚ ጠቁም?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "የካርታውን ፈቃድ ከልስ"
+
+#: models.py:130
+msgid "licence"
+msgstr "ፈቃድ"
+
+#: models.py:135
+msgid "background"
+msgstr "ጀርባ"
+
+#: models.py:136
+msgid "owner"
+msgstr "ባለቤት"
+
+#: models.py:137
+msgid "editors"
+msgstr "አራሚዎች"
+
+#: models.py:138
+msgid "edit status"
+msgstr "ያለበትን ሁኔታ አርም"
+
+#: models.py:139
+msgid "share status"
+msgstr "ያለበትን ሁኔታ አጋራ"
+
+#: models.py:140
+msgid "settings"
+msgstr "ሁኔታዎች"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "በግልፅ ያልተቀመጠው ካርታዎ ከ %s አካውንትዎ ጋር ተያይዟል"
+
+#: models.py:211
+msgid "Clone of"
+msgstr "ድቃይ"
+
+#: models.py:262
+msgid "display on load"
+msgstr "በመጫን ላይ አሳይ"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "ሌየሩ በመጫን ላይ አሳይ"
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "ገብተዋል። በመቀጠል ላይ ..."
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "የካርታ ፍቃዶች"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "እባክዎ ለመቀጠል ይግቡ"
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "የተገልጋይ ስምዎ እና የይለፍ ቃልዎ አልተዛመደም። እባክዎ እንደገና ይሞክሩ።"
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "ካርታዎ ተፈጥሯል! ይህንን ካርታ ከሌላ ኮምፒውተር ላይ ሆነው ለማረም ከፈለጉ የሚከተለውን አድራሻ ይጠቀሙ %(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "እንኳን ደስ አለዎ ካርታዎ ተፈጥሯል!"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "ካርታው ታድሷል!"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "የካርታ አራሚዎች በትክክል ታድሰዋል!"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "ካርታውን የሚሰርዘው ባለቤቱ ብቻ ነው።"
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "ካርታዎ ተዳቅሏል! ይህንን ካርታ ከሌላ ኮምፒውተር ላይ ሆነው ለማረም ከፈለጉ የሚከተለውን አድራሻ ይጠቀሙ %(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "እንኳን ደስ አለዎ ካርታዎ ተዳቅሏል!"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "ሌየሩ በትክክል ተሰርዟ"

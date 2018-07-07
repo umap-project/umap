@@ -1,0 +1,36 @@
+{
+    "crs": null,
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "geometry": {
+                "type": "Point",
+                "coordinates": []
+            },
+            "type": "Feature",
+            "properties": {
+                "name": "London"
+            }
+        },
+        {
+            "geometry": {
+                "type": "LineString",
+                "coordinates": []
+            },
+            "type": "Feature",
+            "properties": {
+                "name": "2011"
+            }
+        },
+        {
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[]]
+            },
+            "type": "Feature",
+            "properties": {
+                "name": "test"
+            }
+        }
+    ]
+}

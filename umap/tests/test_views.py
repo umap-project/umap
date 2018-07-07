@@ -3,7 +3,7 @@ import socket
 import pytest
 from django.conf import settings
 from django.contrib.auth import get_user, get_user_model
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import RequestFactory
 
 from umap.views import validate_url
@@ -105,4 +105,4 @@ def test_can_login_with_username_and_password_if_enabled(client, settings):
     user.save()
     client.post(reverse('login'), {'username': 'test', 'password': 'test'})
     user = get_user(client)
-    assert user.is_authenticated()
+    assert user.is_authenticated

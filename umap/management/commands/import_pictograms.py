@@ -3,7 +3,7 @@ import os
 from django.core.files import File
 from django.core.management.base import BaseCommand
 
-from leaflet_storage.models import Pictogram
+from umap.models import Pictogram
 
 
 class Command(BaseCommand):

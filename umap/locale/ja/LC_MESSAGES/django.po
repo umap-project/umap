@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Satoshi IIDA <nyampire@gmail.com>, 2013-2014
 # tomoya muramoto <muramototomoya@gmail.com>, 2016
@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2016-10-02 07:23+0000\n"
+"PO-Revision-Date: 2017-09-19 22:33+0000\n"
 "Last-Translator: tomoya muramoto <muramototomoya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/yohanboniface/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -206,3 +206,183 @@ msgstr "検索"
 #: views.py:190
 msgid "View the map"
 msgstr "マップ表示"
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "非公開の編集用リンク %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "だれでも編集可能"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "非公開の編集リンクからのみ編集可能"
+
+#: models.py:20
+msgid "name"
+msgstr "名称"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "ライセンス未設定"
+
+#: models.py:51
+msgid "details"
+msgstr "詳細"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "ライセンス詳細ページへのリンク"
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "OSMタイルフォーマットを利用したURLテンプレート"
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "編集ボックス内のタイルレイヤ並び順"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "指定ユーザのみ編集可能"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "所有者のみ編集可能"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "制限なし (公開)"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "リンクを知っている人全員"
+
+#: models.py:120
+msgid "editors only"
+msgstr "編集者のみ"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "概要"
+
+#: models.py:124
+msgid "center"
+msgstr "中心点"
+
+#: models.py:125
+msgid "zoom"
+msgstr "ズーム"
+
+#: models.py:126
+msgid "locate"
+msgstr "現在地"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "読み込み時に現在地を表示？"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "マップのライセンスを選択"
+
+#: models.py:130
+msgid "licence"
+msgstr "ライセンス"
+
+#: models.py:135
+msgid "background"
+msgstr "背景地図"
+
+#: models.py:136
+msgid "owner"
+msgstr "所有者"
+
+#: models.py:137
+msgid "editors"
+msgstr "編集者"
+
+#: models.py:138
+msgid "edit status"
+msgstr "編集ステータス"
+
+#: models.py:139
+msgid "share status"
+msgstr "共有状況"
+
+#: models.py:140
+msgid "settings"
+msgstr "設定"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "所有者不明のマップがアカウント %s と関連付けられました"
+
+#: models.py:211
+msgid "Clone of"
+msgstr "複製元"
+
+#: models.py:262
+msgid "display on load"
+msgstr "読み込み時に表示"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "読み込み時にこのレイヤを表示"
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "ログインしました"
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "マップ編集許可"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "ログインが必要です"
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "ユーザ名とパスワードが不一致です。もう一度入力してください。"
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "マップの作成が完了しました！ このマップを他の端末から編集する場合、いかのリンクを使用してください: %(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "マップ作成完了です！"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "マップが更新されました！"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "マップ編集者の更新が完了しました！"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "マップを削除できるのは所有者だけです"
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "マップの複製が完了しました！ このマップを他の端末から編集する場合、以下のリンクを使用してください: %(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "マップの複製が完了しました！"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "レイヤ削除完了"

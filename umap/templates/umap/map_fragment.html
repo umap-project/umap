@@ -1,0 +1,5 @@
+{% load umap_tags %}
+    <div id="{{ prefix }}{{ map.pk }}" class="map_fragment"></div>
+    <script type="text/javascript">
+        new L.U.Map("{{ prefix }}{{ map.pk }}", {{ map_settings|notag|safe }});
+    </script>

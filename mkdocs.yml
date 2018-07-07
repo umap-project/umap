@@ -5,4 +5,6 @@ pages:
 - Contributing: contributing.md
 - how-tos:
   - Ubuntu from scratch: ubuntu.md
+  - Customize your uMap style: custom.md
+- Changelog: changelog.md
 theme: readthedocs

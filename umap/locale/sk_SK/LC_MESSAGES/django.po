@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Martin <martin@droid.sk>, 2016
 # Martin <martin@droid.sk>, 2016
@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2016-10-09 11:19+0000\n"
+"PO-Revision-Date: 2017-09-21 14:34+0000\n"
 "Last-Translator: Martin <martin@droid.sk>\n"
 "Language-Team: Slovak (Slovakia) (http://www.transifex.com/yohanboniface/umap/language/sk_SK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sk_SK\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: templates/404.html:7
 msgid "Take me to the home page"
@@ -207,3 +207,183 @@ msgstr "Hľadať"
 #: views.py:190
 msgid "View the map"
 msgstr "Prezrieť si túto mapu"
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Tajný odkaz umožňujúci úpravu mapy je %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "Hocikto môže upravovať"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Možné upravovať iba pomocou tajného odkazu"
+
+#: models.py:20
+msgid "name"
+msgstr "názov"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "Žiadná licencia nie je nastavená"
+
+#: models.py:51
+msgid "details"
+msgstr "podrobnosti"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "Odkaz na stránku s podrobnejším popisom licencie."
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "Vzor URL vo formáte pre dlaždice OSM"
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "Poradie vrstiev pri úprave"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "Upravovať môžu iba prispievatelia"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "Upravovať môže iba vlastník"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "hocikto (verejná)"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "hocikto pomocou odkazu"
+
+#: models.py:120
+msgid "editors only"
+msgstr "iba prispievatelia"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "popis"
+
+#: models.py:124
+msgid "center"
+msgstr "stred"
+
+#: models.py:125
+msgid "zoom"
+msgstr "priblíženie"
+
+#: models.py:126
+msgid "locate"
+msgstr "lokalizovať"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "Nájsť polohu používateľa pri štarte?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "Vyberte si licenciu mapy."
+
+#: models.py:130
+msgid "licence"
+msgstr "licencia"
+
+#: models.py:135
+msgid "background"
+msgstr "pozadie"
+
+#: models.py:136
+msgid "owner"
+msgstr "vlastník"
+
+#: models.py:137
+msgid "editors"
+msgstr "prispievatelia"
+
+#: models.py:138
+msgid "edit status"
+msgstr "kto môže vykonávať úpravy"
+
+#: models.py:139
+msgid "share status"
+msgstr "nastavenie zdieľania"
+
+#: models.py:140
+msgid "settings"
+msgstr "nastavenia"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "Vaša anonymná mapa bola pripojená k vašemu účtu %s"
+
+#: models.py:211
+msgid "Clone of"
+msgstr "Kópia"
+
+#: models.py:262
+msgid "display on load"
+msgstr "zobraziť pri štarte"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "Zobraziť túto vrstvu pri štarte."
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Ste prihláseni. Pokračujeme ďalej…"
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "Prístupové práva"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "Pre pokračovanie sa musíte prihlásiť"
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "Používateľské meno a heslo sa nezhodujú. Prosím, skúste to znova."
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Vaša mapa bola vytvorená! Ak chcete upravovať túto mapu z iného počítača, použite tento odkaz: %(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "Gratulujeme, vaša mapa bola vytvorená!"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "Mapa bola aktualizována!"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "Zoznam prispievovateľov bol úspešne upravený!"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "Iba vlastník môže vymazať túto mapu."
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Bola vytvorená kópia mapy! Ak chcete upravovať túto mapu z iného počítača, použite tento odkaz: %(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "Gratulujeme, bola vytvorená kópia mapy!"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "Vrstva bola úspešne vymazaná."

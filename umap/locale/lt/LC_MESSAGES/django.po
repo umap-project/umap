@@ -3,26 +3,25 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# ramunasd <ieskok@ramuno.lt>, 2014
+# Ramūnas D. <ieskok@ramuno.lt>, 2014
+# Ugne Urbelyte <ugneurbel@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2014-03-01 00:29+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Lithuanian (http://www.transifex.com/projects/p/umap/language/"
-"lt/)\n"
-"Language: lt\n"
+"PO-Revision-Date: 2017-09-19 23:05+0000\n"
+"Last-Translator: Ugne Urbelyte <ugneurbel@gmail.com>\n"
+"Language-Team: Lithuanian (http://www.transifex.com/yohanboniface/umap/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: lt\n"
+"Plural-Forms: nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: templates/404.html:7
 msgid "Take me to the home page"
-msgstr ""
+msgstr "Grįžti į pagrindinį puslapį"
 
 #: templates/auth/user_detail.html:7
 #, python-format
@@ -31,15 +30,15 @@ msgstr "Peržiūrėti %(current_user)s žemėlapius"
 
 #: templates/leaflet_storage/map_detail.html:24
 msgid "Type editors nick to add…"
-msgstr ""
+msgstr "Įveskite redaguotojų pseudonimus, kad pridėtu..."
 
 #: templates/leaflet_storage/map_detail.html:27
 msgid "Type new owner nick…"
-msgstr ""
+msgstr "Įveskite naują vartotojo vardą"
 
 #: templates/leaflet_storage/map_list.html:7 views.py:184
 msgid "by"
-msgstr ""
+msgstr "pagal"
 
 #: templates/leaflet_storage/map_list.html:11
 msgid "More"
@@ -47,19 +46,19 @@ msgstr "Daugiau"
 
 #: templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr ""
+msgstr "Prisijungti prie savo paskyros"
 
 #: templates/registration/login.html:18
 msgid "Username"
-msgstr ""
+msgstr "Vartotojo vardas"
 
 #: templates/registration/login.html:20
 msgid "Password"
-msgstr ""
+msgstr "Slaptažodis"
 
 #: templates/registration/login.html:21
 msgid "Login"
-msgstr ""
+msgstr "Prisijungti"
 
 #: templates/registration/login.html:27
 msgid "Please choose a provider"
@@ -70,9 +69,7 @@ msgstr "Pasirinkite teikėją"
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
-"uMap leidžia susikurti savo žemėlapį naudojant <a href=\"%(osm_url)s\" /"
-">OpenStreetMap</a> sluoksnius vos per minutę ir įterpti jį į savo puslapį."
+msgstr "uMap leidžia susikurti savo žemėlapį naudojant <a href=\"%(osm_url)s\" />OpenStreetMap</a> sluoksnius vos per minutę ir įterpti jį į savo puslapį."
 
 #: templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -88,13 +85,11 @@ msgstr "Valdyti POI spalvas ir ikonėles"
 
 #: templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
-"Valdyti žemėlapio nustatymus: rodyti mini žemėlapį, automatiškai nustatyti "
-"padėtį.."
+msgstr "Valdyti žemėlapio nustatymus: rodyti mini žemėlapį, automatiškai nustatyti padėtį.."
 
 #: templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "Masiškai importuoti geografinius duomenis (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -121,22 +116,18 @@ msgstr "Išbandyti demo"
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
-msgstr ""
-"Tai demonstracinė versija, naudojama testavimui ir naujų versijų "
-"demonstravimui. Jei Jums reikia stabilios versijos, tada geriau naudokitės "
-"<a href=\"%(stable_url)s\">%(stable_url)s</a>. Jūs taip pat gali pasileisti "
-"savo puslapį, juk tai <a href=\"%(repo_url)s\">atviras kodas</a>!"
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Tai demonstracinė versija, naudojama testavimui ir naujų versijų demonstravimui. Jei Jums reikia stabilios versijos, tada geriau naudokitės <a href=\"%(stable_url)s\">%(stable_url)s</a>. Jūs taip pat gali pasileisti savo puslapį, juk tai <a href=\"%(repo_url)s\">atviras kodas</a>!"
 
 #: templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "uMap žemėlapis"
 
 #: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "Peržiūrėkite žemėlapius, raskite įkvėpimą"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -160,7 +151,7 @@ msgstr "Atsiliepimai"
 
 #: templates/umap/navigation.html:20
 msgid "Change password"
-msgstr ""
+msgstr "Keisti slaptažodį"
 
 #: templates/umap/navigation.html:22
 msgid "Log out"
@@ -168,37 +159,37 @@ msgstr "Atsijungti"
 
 #: templates/umap/password_change.html:6
 msgid "Password change"
-msgstr ""
+msgstr "Slaptažodžio keitimas"
 
 #: templates/umap/password_change.html:7
 msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
-msgstr ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Saugumo sumetimais, įveskite savo dabartinį slaptažodį. Tuomet įveskite naują slaptažodį du kartus."
 
 #: templates/umap/password_change.html:12
 msgid "Old password"
-msgstr ""
+msgstr "Senas slaptažodis"
 
 #: templates/umap/password_change.html:14
 msgid "New password"
-msgstr ""
+msgstr "Naujas slaptažodis"
 
 #: templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr ""
+msgstr "Naujo slaptažodžio patvirtinimas"
 
 #: templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr ""
+msgstr "Keisti mano slaptažodį"
 
 #: templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr ""
+msgstr "Slaptažodžio pakeitimas sėkmingas."
 
 #: templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr ""
+msgstr "Jūsų slaptažodis buvo pakeistas."
 
 #: templates/umap/search.html:13
 msgid "Not map found."
@@ -214,7 +205,184 @@ msgstr "Ieškoti"
 
 #: views.py:190
 msgid "View the map"
-msgstr ""
+msgstr "Peržiūrėti žemėlapį"
 
-#~ msgid "Map settings"
-#~ msgstr "Žemėlapio nustatymai"
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Slapta redagavimo nuoroda %s"
+
+#: forms.py:47 models.py:113
+msgid "Everyone can edit"
+msgstr "Visi gali redaguoti"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Redaguojamas tik su slapta nuoroda"
+
+#: models.py:20
+msgid "name"
+msgstr "vardas"
+
+#: models.py:42
+msgid "No licence set"
+msgstr "Nenustatyta licenzija"
+
+#: models.py:51
+msgid "details"
+msgstr "išsamiau"
+
+#: models.py:52
+msgid "Link to a page where the licence is detailed."
+msgstr "Licenzijos aprašymo nuoroda."
+
+#: models.py:66
+msgid "URL template using OSM tile format"
+msgstr "URL šablonas OSM kaladėlių formatui"
+
+#: models.py:74
+msgid "Order of the tilelayers in the edit box"
+msgstr "Žemėlapio sluoksnių tvarka redagavimo lange"
+
+#: models.py:114
+msgid "Only editors can edit"
+msgstr "Tik redaktoriai gali keisti"
+
+#: models.py:115
+msgid "Only owner can edit"
+msgstr "Tik savininkas gali keisti"
+
+#: models.py:118
+msgid "everyone (public)"
+msgstr "visi (viešai)"
+
+#: models.py:119
+msgid "anyone with link"
+msgstr "visi su nuoroda"
+
+#: models.py:120
+msgid "editors only"
+msgstr "tik keitėjai"
+
+#: models.py:123 models.py:257
+msgid "description"
+msgstr "aprašymas"
+
+#: models.py:124
+msgid "center"
+msgstr "centras"
+
+#: models.py:125
+msgid "zoom"
+msgstr "mastelis"
+
+#: models.py:126
+msgid "locate"
+msgstr "nustatyti padėtį"
+
+#: models.py:126
+msgid "Locate user on load?"
+msgstr "Nustatyti padėti užsikrovus?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "Pasirinkite žemėlapio licenziją."
+
+#: models.py:130
+msgid "licence"
+msgstr "licenzija"
+
+#: models.py:135
+msgid "background"
+msgstr "fonas"
+
+#: models.py:136
+msgid "owner"
+msgstr "savininkas"
+
+#: models.py:137
+msgid "editors"
+msgstr "redaktoriai"
+
+#: models.py:138
+msgid "edit status"
+msgstr "keisti būseną"
+
+#: models.py:139
+msgid "share status"
+msgstr "pasidalinti būsena"
+
+#: models.py:140
+msgid "settings"
+msgstr "nustatymai"
+
+#: models.py:178
+#, python-format
+msgid "Your anonymous map has been attached to your account %s"
+msgstr "Jūsų anoniminis žemėlapis prijungtas prie Jūsų paskyros %s"
+
+#: models.py:211
+msgid "Clone of"
+msgstr "Kopija"
+
+#: models.py:262
+msgid "display on load"
+msgstr "rodyti pasikrovus"
+
+#: models.py:263
+msgid "Display this layer on load."
+msgstr "Rodyti šį sluoksnį pasrikrovus."
+
+#: templates/leaflet_storage/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Sėkmingai prisijungėte. Kraunasi..."
+
+#: templates/leaflet_storage/map_update_permissions.html:2
+msgid "Map permissions"
+msgstr "Žemėlapio leidimai"
+
+#: templates/registration/login.html:2
+msgid "Please log in to proceed"
+msgstr "Prisijunkite, kad tęsti"
+
+#: templates/registration/login.html:4
+msgid "Your username and password didn't match. Please try again."
+msgstr "Jūsų vardas ir slaptažodis yra neteisingi. Prašom pabandyti iš naujo."
+
+#: views.py:232
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Jūsų žemėlapis sėkmingai sukurtas! Jei norite redaguoti jį iš kito kompiuterio, pasinaudokite šia nuoroda: %(anonymous_url)s"
+
+#: views.py:237
+msgid "Congratulations, your map has been created!"
+msgstr "Sveikinam, Jūsų žemėlapis sukurtas!"
+
+#: views.py:264
+msgid "Map has been updated!"
+msgstr "Žemėlapis atnaujintas!"
+
+#: views.py:291
+msgid "Map editors updated with success!"
+msgstr "Žemėlapio keitėjai atnaujinti!"
+
+#: views.py:306
+msgid "Only its owner can delete the map."
+msgstr "Tik savininkas gali ištrinti žemėlapį."
+
+#: views.py:335
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Jūsų žemėlapis nukopijuotas! Jei norite redaguoti jį iš kito kompiuterio, pasinaudokite šia nuoroda: %(anonymous_url)s"
+
+#: views.py:340
+msgid "Congratulations, your map has been cloned!"
+msgstr "Sveikinam, Jūsų žemėlapis buvo nukopijuotas!"
+
+#: views.py:526
+msgid "Layer successfully deleted."
+msgstr "Sluoksnis sėkmingai ištrintas."
