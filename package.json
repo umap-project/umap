@@ -6,6 +6,8 @@
     "test": "test"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "chai": "^3.3.0",
     "grunt": "^0.4.4",
     "grunt-cli": "^1.2.0",
@@ -21,7 +23,7 @@
   },
   "scripts": {
     "test": "firefox test/index.html",
-    "build": "grunt"
+    "build": "npm babel umap/static/umap/src/ --out-dir umap/static/umap/js/"
   },
   "repository": {
     "type": "git",

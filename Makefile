@@ -44,12 +44,14 @@ ui:
 installjs:
 	npm install
 testjsfx:
-	firefox umap/static/umap/test/index.html
+	/Applications/Firefox.app/Contents/MacOS/firefox umap/static/umap/test/index.html
 testjs: node_modules
 	@./node_modules/mocha-phantomjs/bin/mocha-phantomjs --view 1024x768 umap/static/umap/test/index.html
 tx_push:
 	tx push -s
 tx_pull:
 	tx pull
+build:
+	npm run build
 
 .PHONY: ui
