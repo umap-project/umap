@@ -342,5 +342,22 @@
     "next": "suivant",
     "previous": "précédent",
     "width": "largeur",
-    "{count} errors during import: {message}": "{count} erreurs pendant l'import: {message}"
+    "{count} errors during import: {message}": "{count} erreurs pendant l'import: {message}",
+    "Measure distances": "Mesurer les distances",
+    "NM": "NM",
+    "kilometers": "kilomètres",
+    "km": "km",
+    "mi": "mi",
+    "miles": "miles",
+    "nautical miles": "miles nautiques",
+    "{area} acres": "{area} hectares",
+    "{area} ha": "{area} ha",
+    "{area} m&sup2;": "{area} m&sup2;",
+    "{area} mi&sup2;": "{area} mi&sup2;",
+    "{area} yd&sup2;": "{area} yd&sup2;",
+    "{distance} NM": "{distance} NM",
+    "{distance} km": "{distance} km",
+    "{distance} m": "{distance} m",
+    "{distance} miles": "{distance} miles",
+    "{distance} yd": "{distance} yd"
 }

@@ -14,10 +14,10 @@ clean:
 	rm -rf build/*
 compilemessages:
 	django-admin.py compilemessages
-	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values
+	umap generate_js_locale
 makemessages:
 	django-admin.py makemessages -a --ignore node_modules
-	umap generate_js_locale
+	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values
 ui:
 	mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/** umap/static/umap/vendors/leaflet/
 	mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet-editable/src/*.js umap/static/umap/vendors/editable/
