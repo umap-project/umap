@@ -653,7 +653,7 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
 
     build: function () {
         var options = {className: 'edit-owner'};
-        options.on_select = (choice) => {
+        options.on_select = function (choice) {
             this._value = {
                 'id': choice.item.value,
                 'name': choice.item.label,
@@ -677,7 +677,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
 
     build: function () {
         var options = {className: 'edit-editors'};
-        options.on_select = (choice) => {
+        options.on_select = function (choice) {
             this._values.push({
                 'id': choice.item.value,
                 'name': choice.item.label,
@@ -685,8 +685,8 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
             });
             this.set();
         }
-        options.on_unselect = (choice) => {
-            var index = this._values.findIndex((item) => item.id === choice.item.value);
+        options.on_unselect = function (choice) {
+            var index = this._values.findIndex(function (item) {return item.id === choice.item.value});
             if (index !== -1) {
                 this._values.splice(index, 1);
                 this.set();

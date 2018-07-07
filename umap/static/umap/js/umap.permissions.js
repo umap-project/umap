@@ -95,7 +95,7 @@ L.U.MapPermissions = L.Class.extend({
         if (!this.isDirty) return this.map.continueSaving();
         var formData = new FormData();
         if (!this.isAnonymousMap() && this.options.editors) {
-            const editors = this.options.editors.map((u) => u.id);
+            var editors = this.options.editors.map(function (u) {return u.id});
             for (var i = 0; i < this.options.editors.length; i++) formData.append('editors', this.options.editors[i].id);
         }
         if (this.isOwner() || this.isAnonymousMap()) formData.append('edit_status', this.options.edit_status);

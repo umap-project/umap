@@ -166,7 +166,7 @@ L.U.AutoComplete = L.Class.extend({
         }
         if( val + '' === this.CACHE + '') return;
         else this.CACHE = val;
-        this._do_search(val, (data) => {
+        this._do_search(val, function (data) {
             this.handleResults(data.data);
         });
     },
