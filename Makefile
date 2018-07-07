@@ -2,7 +2,7 @@ test:
 	py.test -xv umap/tests/
 develop:
 	python setup.py develop
-release: test makemessages
+release: test compilemessages
 	python setup.py sdist bdist_wheel
 test_publish:
 	twine upload -r testpypi dist/*

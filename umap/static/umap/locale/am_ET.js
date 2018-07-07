@@ -342,7 +342,24 @@ var locale = {
     "next": "ቀጥሎ",
     "previous": "ቀድሞ",
     "width": "ጎን",
-    "{count} errors during import: {message}": "{count} errors during import: {message}"
+    "{count} errors during import: {message}": "{count} errors during import: {message}",
+    "Measure distances": "Measure distances",
+    "NM": "NM",
+    "kilometers": "kilometers",
+    "km": "km",
+    "mi": "mi",
+    "miles": "miles",
+    "nautical miles": "nautical miles",
+    "{area} acres": "{area} acres",
+    "{area} ha": "{area} ha",
+    "{area} m&sup2;": "{area} m&sup2;",
+    "{area} mi&sup2;": "{area} mi&sup2;",
+    "{area} yd&sup2;": "{area} yd&sup2;",
+    "{distance} NM": "{distance} NM",
+    "{distance} km": "{distance} km",
+    "{distance} m": "{distance} m",
+    "{distance} miles": "{distance} miles",
+    "{distance} yd": "{distance} yd"
 };
 L.registerLocale("am_ET", locale);
 L.setLocale("am_ET");

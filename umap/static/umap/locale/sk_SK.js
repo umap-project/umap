@@ -342,7 +342,24 @@ var locale = {
     "next": "ďalší",
     "previous": "predchádzajúci",
     "width": "Šírka",
-    "{count} errors during import: {message}": "Počet chýb počas importu {count}: {message}"
+    "{count} errors during import: {message}": "Počet chýb počas importu {count}: {message}",
+    "Measure distances": "Measure distances",
+    "NM": "NM",
+    "kilometers": "kilometers",
+    "km": "km",
+    "mi": "mi",
+    "miles": "miles",
+    "nautical miles": "nautical miles",
+    "{area} acres": "{area} acres",
+    "{area} ha": "{area} ha",
+    "{area} m&sup2;": "{area} m&sup2;",
+    "{area} mi&sup2;": "{area} mi&sup2;",
+    "{area} yd&sup2;": "{area} yd&sup2;",
+    "{distance} NM": "{distance} NM",
+    "{distance} km": "{distance} km",
+    "{distance} m": "{distance} m",
+    "{distance} miles": "{distance} miles",
+    "{distance} yd": "{distance} yd"
 };
 L.registerLocale("sk_SK", locale);
 L.setLocale("sk_SK");
