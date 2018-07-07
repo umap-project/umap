@@ -1055,7 +1055,7 @@ L.U.IframeExporter = L.Class.extend({
         }
         var currentView = this.options.currentView ? window.location.hash : '',
             iframeUrl = this.baseUrl + '?' + this.map.xhr.buildQueryString(this.queryString) + currentView,
-            code = '<iframe width="' + this.dimensions.width + '" height="' + this.dimensions.height + '" frameBorder="0" src="' + iframeUrl + '"></iframe>';
+            code = '<iframe width="' + this.dimensions.width + '" height="' + this.dimensions.height + '" frameBorder="0" allowfullscreen src="' + iframeUrl + '"></iframe>';
         if (this.options.includeFullScreenLink) {
             code += '<p><a href="' + this.baseUrl + '">' + L._('See full screen') + '</a></p>';
         }

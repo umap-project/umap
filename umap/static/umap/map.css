@@ -33,6 +33,7 @@
     width: 36px;
     background-position: 0px 0px;
 }
+.leaflet-touch.leaflet-fullscreen-on .leaflet-control-fullscreen a,
 .leaflet-fullscreen-on .leaflet-control-fullscreen a {
     background-position: 0 -32px;
 }
