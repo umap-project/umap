@@ -1,4 +1,5 @@
 factory-boy==2.11.1
-pytest==3.0.7
-pytest-django==3.1.2
-mkdocs==0.16.3
+mkdocs==0.17.5
+pytest==3.6.3
+pytest-django==3.3.2
+transifex-client==0.13.4
