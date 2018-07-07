@@ -65,19 +65,30 @@ L.U.MapPermissions = L.Class.extend({
         var builder = new L.U.FormBuilder(this, fields);
         var form = builder.build();
         container.appendChild(form);
+        if (this.isAnonymousMap() && this.map.options.user) {
+            // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
+            // Note: real check is made on the back office anyway.
+            var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
+            var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions);
+            var download = L.DomUtil.create('a', 'button', advancedButtons);
+            download.href = '#';
+            download.innerHTML = L._('Attach the map to my account');
+            L.DomEvent
+                .on(download, 'click', L.DomEvent.stop)
+                .on(download, 'click', this.attach, this);
+        }
         this.map.ui.openPanel({data: {html: container}, className: 'dark'});
     },
 
-    anonymousMapPanel: function () {
-        var container = L.DomUtil.create('div'),
-            fields = [],
-            title = L.DomUtil.create('h4', '', container);
-        fields.push(['options.edit_status', {handler: 'IntSelect', label: L._('Who can edit'), selectOptions: this.map.options.edit_statuses}]);
-        title.innerHTML = L._('Update permissions');
-        var builder = new L.U.FormBuilder(this, fields);
-        var form = builder.build();
-        container.appendChild(form);
-        this.map.ui.openPanel({data: {html: container}, className: 'dark'});
+    attach: function () {
+        this.map.post(this.getAttachUrl(), {
+            callback: function () {
+                this.options.owner = this.map.options.user;
+                this.map.ui.alert({content: L._("Map has been attached to your account"), level: 'info'});
+                this.map.ui.closePanel();
+            },
+            context: this
+        })
     },
 
     save: function () {
@@ -104,6 +115,10 @@ L.U.MapPermissions = L.Class.extend({
 
     getUrl: function () {
         return L.Util.template(this.map.options.urls.map_update_permissions, {'map_id': this.map.options.umap_id});
+    },
+
+    getAttachUrl: function () {
+        return L.Util.template(this.map.options.urls.map_attach_owner, {'map_id': this.map.options.umap_id});
     },
 
     addOwnerLink: function (element, container) {

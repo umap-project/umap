@@ -172,14 +172,6 @@ class Map(NamedModel):
             if (getattr(settings, "UMAP_ALLOW_ANONYMOUS", False)
                     and self.is_anonymous_owner(request)):
                 can = True
-                if user and user.is_authenticated:
-                    # TODO: only when using the anonymous-edit URL with an
-                    # authenticated user
-                    # if user is authenticated, attach as owner
-                    self.owner = user
-                    self.save()
-                    msg = _("Your anonymous map has been attached to your account %s" % user)
-                    messages.info(request, msg)
         if self.edit_status == self.ANONYMOUS:
             can = True
         elif not user.is_authenticated:
