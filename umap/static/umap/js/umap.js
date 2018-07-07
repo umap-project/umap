@@ -292,7 +292,9 @@ L.U.Map.include({
     },
 
     initDatalayers: function () {
-        var toload = 0, datalayer, seen = 0, self = this;
+        var toload = this.options.datalayers.length,
+            datalayer, seen = this.options.datalayers.length,
+            self = this;
         var loaded = function () {
             self.datalayersLoaded = true;
             self.fire('datalayersloaded');
@@ -302,8 +304,6 @@ L.U.Map.include({
             if (toload === 0) loaded();
         };
         for (var j = 0; j < this.options.datalayers.length; j++) {
-            toload++;
-            seen++;
             datalayer = this.createDataLayer(this.options.datalayers[j]);
             if (datalayer.displayedOnLoad()) datalayer.onceLoaded(decrementToLoad);
             else decrementToLoad();
