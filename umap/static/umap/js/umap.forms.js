@@ -209,7 +209,8 @@ L.FormBuilder.PopupTemplate = L.FormBuilder.Select.extend({
         ['Table', L._('Table')],
         ['GeoRSSImage', L._('GeoRSS (title + image)')],
         ['GeoRSSLink', L._('GeoRSS (only link)')],
-        ['SimplePanel', L._('Side panel')]
+        ['SimplePanel', L._('Side panel')],
+        ['TablePanel', L._('Side panel')]
     ],
 
     toJS: function () {

@@ -74,6 +74,7 @@ COMMIT;
 - allow to use an unicode character as Marker symbol (#527)
 - add `{rank}` as dynamic feature property (to be used in popup or icon symbol)
 - add an explicit button to attach a owner to an anonyous map (#568)
+- Add 'TablePanel' popup template (#481)
 
 
 ## 0.8.0

@@ -21,7 +21,7 @@ L.U.Popup = L.Popup.extend({
     renderBody: function () {
         var template = this.feature.getOption('popupContentTemplate'),
             container = L.DomUtil.create('div', ''),
-            content, properties, center;
+            content = '', properties, center;
         if (this.options.parseTemplate) {
             properties = this.feature.extendedProperties();
             // Resolve properties inside description
@@ -106,36 +106,6 @@ L.U.Popup.BaseWithTitle = L.U.Popup.extend({
 
 });
 
-L.U.Popup.Table = L.U.Popup.BaseWithTitle.extend({
-
-    formatRow: function (key, value) {
-        if (value.indexOf('http') === 0) {
-            value = '<a href="' + value + '" target="_blank">' + value + '</a>';
-        }
-        return value;
-    },
-
-    addRow: function (container, key, value) {
-        var tr = L.DomUtil.create('tr', '', container);
-        L.DomUtil.add('th', '', tr, key);
-        L.DomUtil.add('td', '', tr, this.formatRow(key, value));
-    },
-
-    renderBody: function () {
-        var table = L.DomUtil.create('table');
-
-        for (var key in this.feature.properties) {
-            if (typeof this.feature.properties[key] === 'object' || key === 'name') continue;
-            // TODO, manage links (url, mailto, wikipedia...)
-            this.addRow(table, key, L.Util.escapeHTML(this.feature.properties[key]).trim());
-        }
-        return table;
-    }
-
-});
-
-L.U.Popup.table = L.U.Popup.Table;  // backward compatibility
-
 L.U.Popup.GeoRSSImage = L.U.Popup.BaseWithTitle.extend({
 
     options: {
@@ -178,11 +148,7 @@ L.U.Popup.GeoRSSLink = L.U.Popup.extend({
     }
 });
 
-L.U.Popup.SimplePanel = L.U.Popup.extend({
-
-    options: {
-        zoomAnimation: false
-    },
+L.U.Popup.PanelMixin = {
 
     allButton: function () {
         var button = L.DomUtil.create('li', '');
@@ -206,4 +172,54 @@ L.U.Popup.SimplePanel = L.U.Popup.extend({
     _updateLayout: function () {},
     _updatePosition: function () {},
     _adjustPan: function () {}
+
+}
+
+L.U.Popup.SimplePanel = L.U.Popup.extend({
+
+    includes: L.U.Popup.PanelMixin,
+
+    options: {
+        zoomAnimation: false
+    }
+
+});
+
+
+L.U.Popup.TableMixin = {
+
+    formatRow: function (key, value) {
+        if (value.indexOf('http') === 0) {
+            value = '<a href="' + value + '" target="_blank">' + value + '</a>';
+        }
+        return value;
+    },
+
+    addRow: function (container, key, value) {
+        var tr = L.DomUtil.create('tr', '', container);
+        L.DomUtil.add('th', '', tr, key);
+        L.DomUtil.add('td', '', tr, this.formatRow(key, value));
+    },
+
+    renderBody: function () {
+        var table = L.DomUtil.create('table');
+
+        for (var key in this.feature.properties) {
+            if (typeof this.feature.properties[key] === 'object' || key === 'name') continue;
+            // TODO, manage links (url, mailto, wikipedia...)
+            this.addRow(table, key, L.Util.escapeHTML(this.feature.properties[key]).trim());
+        }
+        return table;
+    }
+
+};
+
+L.U.Popup.Table = L.U.Popup.BaseWithTitle.extend({
+    includes: L.U.Popup.TableMixin
+});
+
+L.U.Popup.table = L.U.Popup.Table;  // backward compatibility
+
+L.U.Popup.TablePanel = L.U.Popup.extend({
+    includes: [L.U.Popup.PanelMixin, L.U.Popup.TableMixin]
 });
