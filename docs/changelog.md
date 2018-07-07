@@ -28,10 +28,6 @@ COMMIT;
 
         umap migrate --fake-initial
 
-- Then run the new migrations:
-
-        umap migrate
-
 - If you have customized some templates, change any `leaflet_storage/` path
   to `umap/`
 
@@ -41,6 +37,16 @@ COMMIT;
 - Each `LEAFLET_STORAGE_XXX` setting should be renamed in `UMAP_XXX` (but we
   still support them for now)
 
+- If you still have a `MIDDLEWARE_CLASSES` setting, rename to `MIDDLEWARE`
+
+- uMap now loads the local configuration from /etc/umap/umap.conf if
+  `UMAP_SETTINGS` is not set, so you may want to use that path and remove
+  the env var setting
+
+- As usual, remember to update statics:
+
+        umap collectstatic
+        umap compress
 
 
 ## 1.0.0.rc-1
