@@ -769,6 +769,7 @@ L.U.TileLayerControl = L.Control.extend({
 
     buildList: function (options) {
         this.map.eachTileLayer(function (tilelayer) {
+            if (window.location.protocol === 'https:' && tilelayer.options.url_template.indexOf('http:') === 0) return;
             this.addTileLayerElement(tilelayer, options);
         }, this);
         this.map.ui.openPanel({data: {html: this._tilelayers_container}, className: options.className});

@@ -68,6 +68,9 @@ COMMIT;
 - fixed labelKey not being saved (#595)
 - filtering in data browser now is also reflected in the displayed features
   (#550)
+- fixed ClusterMarker text color on Chrome (#547)
+- allow to clone also markers
+- only list https ready tilerlayers when page is in https (#567)
 
 
 
