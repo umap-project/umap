@@ -436,6 +436,24 @@ L.U.FeatureMixin = {
         layer.isDirty = true;
         layer.edit();
         return layer;
+    },
+
+    extendedProperties: function () {
+        // Include context properties
+        properties = this.map.getGeoContext();
+        center = this.getCenter();
+        properties.lat = center.lat;
+        properties.lon = center.lng;
+        properties.lng = center.lng;
+        properties.rank = this.getRank() + 1;
+        if (typeof this.getMeasure !== 'undefined') {
+            properties.measure = this.getMeasure();
+        }
+        return L.extend(properties, this.properties);
+    },
+
+    getRank: function () {
+        return this.datalayer._index.indexOf(L.stamp(this));
     }
 
 };

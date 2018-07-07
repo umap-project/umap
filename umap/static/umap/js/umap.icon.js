@@ -30,7 +30,7 @@ L.U.Icon = L.DivIcon.extend({
     },
 
     formatUrl: function (url, feature) {
-        return L.Util.greedyTemplate(url || '', feature ? feature.properties : {});
+        return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {});
     }
 
 });
