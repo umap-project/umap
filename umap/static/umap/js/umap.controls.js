@@ -475,10 +475,12 @@ L.U.DataLayersControl = L.Control.extend({
             this.update();
         }, this);
 
-        if (!L.Browser.touch) {
+        if (L.Browser.pointer) {
             L.DomEvent.disableClickPropagation(container);
             L.DomEvent.on(container, 'mousewheel', L.DomEvent.stopPropagation);
             L.DomEvent.on(container, 'MozMousePixelScroll', L.DomEvent.stopPropagation);
+        }
+        if (!L.Browser.touch) {
             L.DomEvent.on(container, {
                 mouseenter: this.expand,
                 mouseleave: this.collapse
