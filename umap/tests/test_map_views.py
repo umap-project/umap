@@ -264,6 +264,7 @@ def test_map_geojson_view(client, map):
     url = reverse('map_geojson', args=(map.pk, ))
     response = client.get(url)
     j = json.loads(response.content.decode())
+    assert 'json' in response['content-type']
     assert 'type' in j
 
 

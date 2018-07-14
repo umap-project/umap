@@ -6,7 +6,6 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.core.signing import Signer
-from django.contrib import messages
 from django.template.defaultfilters import slugify
 from django.core.files.base import File
 

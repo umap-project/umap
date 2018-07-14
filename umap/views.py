@@ -486,7 +486,8 @@ class MapViewGeoJSON(MapView):
         return reverse('map_geojson', args=(self.object.pk, ))
 
     def render_to_response(self, context, *args, **kwargs):
-        return HttpResponse(context['map_settings'])
+        return HttpResponse(context['map_settings'],
+                            content_type='application/json')
 
 
 class MapNew(MapDetailMixin, TemplateView):
