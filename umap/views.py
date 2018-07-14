@@ -353,7 +353,7 @@ class MapDetailMixin:
         context = super(MapDetailMixin, self).get_context_data(**kwargs)
         properties = {
             'urls': _urls_for_js(),
-            'tilelayers': self.get_tilelayers(),
+            'tilelayers': TileLayer.get_list(),
             'allowEdit': self.is_edit_allowed(),
             'default_iconUrl': "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             'umap_id': self.get_umap_id(),
@@ -383,9 +383,6 @@ class MapDetailMixin:
         context['map_settings'] = json.dumps(map_settings,
                                              indent=settings.DEBUG)
         return context
-
-    def get_tilelayers(self):
-        return TileLayer.get_list(selected=TileLayer.get_default())
 
     def get_datalayers(self):
         return []
@@ -431,9 +428,6 @@ class MapView(MapDetailMixin, DetailView):
     def get_datalayers(self):
         datalayers = DataLayer.objects.filter(map=self.object)
         return [l.metadata for l in datalayers]
-
-    def get_tilelayers(self):
-        return TileLayer.get_list(selected=self.object.get_tilelayer())
 
     def is_edit_allowed(self):
         return self.object.can_edit(self.request.user, self.request)

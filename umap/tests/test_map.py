@@ -68,7 +68,6 @@ def test_clone_should_return_new_instance(map, user):
     assert map.center == clone.center
     assert map.zoom == clone.zoom
     assert map.licence == clone.licence
-    assert map.tilelayer == clone.tilelayer
 
 
 def test_clone_should_keep_editors(map, user):

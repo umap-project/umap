@@ -29,12 +29,11 @@ def umap_js(locale=None):
 def map_fragment(map_instance, **kwargs):
     layers = DataLayer.objects.filter(map=map_instance)
     datalayer_data = [c.metadata for c in layers]
-    tilelayers = TileLayer.get_list()  # TODO: no need to all
     map_settings = map_instance.settings
     if "properties" not in map_settings:
         map_settings['properties'] = {}
     map_settings['properties'].update({
-        'tilelayers': tilelayers,
+        'tilelayers': [TileLayer.get_default().json],
         'datalayers': datalayer_data,
         'urls': _urls_for_js(),
         'STATIC_URL': settings.STATIC_URL,

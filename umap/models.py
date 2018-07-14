@@ -87,11 +87,12 @@ class TileLayer(NamedModel):
         return cls.objects.order_by('rank')[0]  # FIXME, make it administrable
 
     @classmethod
-    def get_list(cls, selected=None):
+    def get_list(cls):
+        default = cls.get_default()
         l = []
         for t in cls.objects.all():
             fields = t.json
-            if selected and selected.pk == t.pk:
+            if default and default.pk == t.pk:
                 fields['selected'] = True
             l.append(fields)
         return l
@@ -133,7 +134,6 @@ class Map(NamedModel):
         default=get_default_licence
     )
     modified_at = models.DateTimeField(auto_now=True)
-    tilelayer = models.ForeignKey(TileLayer, blank=True, null=True, related_name="maps",  verbose_name=_("background"), on_delete=models.PROTECT)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name="owned_maps", verbose_name=_("owner"), on_delete=models.PROTECT)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors"))
     edit_status = models.SmallIntegerField(choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status"))
