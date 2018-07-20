@@ -62,7 +62,7 @@ L.U.Icon.Default = L.U.Icon.extend({
         var src = this._getIconUrl('icon');
         if (src) {
             // An url.
-            if (src.indexOf('http') === 0 || src.indexOf('/') === 0) {
+            if (src.indexOf('http') === 0 || src.indexOf('/') === 0 || src.indexOf('data:image') === 0) {
                 this.elements.img = L.DomUtil.create('img', null, this.elements.container);
                 this.elements.img.src = src;
             } else {
