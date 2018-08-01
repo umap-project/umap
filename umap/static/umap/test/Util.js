@@ -146,6 +146,18 @@ describe('L.Util', function () {
             assert.equal(L.Util.greedyTemplate('A phrase with a {variable:fr}.', {}, true), 'A phrase with a {variable:fr}.');
         });
 
+        it('should replace nested variables', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var}.', {fr: {var: 'value'}}), 'A phrase with a value.');
+        });
+
+        it('should not fail if nested variable is missing', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.foo}.', {fr: {var: 'value'}}), 'A phrase with a .');
+        });
+
+        it('should not fail with nested variables and no data', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.foo}.', {}), 'A phrase with a .');
+        });
+
     });
 
     describe('#TextColorFromBackgroundColor', function () {

@@ -125,11 +125,16 @@ L.Util.usableOption = function (options, option) {
 
 L.Util.greedyTemplate = function (str, data, ignore) {
     // Don't throw error if some key is missing
-    return str.replace(/\{ *([\w_\:]+) *\}/g, function (str, key) {
-        var value = data[key];
-        if (value === undefined) {
-            if (ignore) value = str;
-            else value = '';
+    return str.replace(/\{ *([\w_\:\.]+) *\}/g, function (str, key) {
+        var path = key.split('.'),
+            leaf = path.length - 1, value = data;
+        for (var i = 0; i < path.length; i++) {
+            value = value[path[i]]
+            if (value === undefined) {
+                if (ignore) value = str;
+                else value = '';
+                break;
+            }
         }
         return value;
     });
