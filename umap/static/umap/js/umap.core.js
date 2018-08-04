@@ -73,6 +73,7 @@ L.Util.toHTML = function (r) {
     // links
     r = r.replace(/(\[\[http)/g, '[[h_t_t_p');  // Escape for avoiding clash between [[http://xxx]] and http://xxx
     r = r.replace(/({{http)/g, '{{h_t_t_p');
+    r = r.replace(/(=http)/g, '=h_t_t_p');  // http://xxx as query string, see https://github.com/umap-project/umap/issues/607
     r = r.replace(/(https?:[^ \<)\n]*)/g, '<a target="_blank" href="$1">$1</a>');
     r = r.replace(/\[\[(h_t_t_ps?:[^\]|]*?)\]\]/g, '<a target="_blank" href="$1">$1</a>');
     r = r.replace(/\[\[(h_t_t_ps?:[^|]*?)\|(.*?)\]\]/g, '<a target="_blank" href="$1">$2</a>');
