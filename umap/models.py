@@ -189,7 +189,8 @@ class Map(NamedModel):
         elif request.user == self.owner:
             can = True
         else:
-            can = not (self.share_status == self.PRIVATE and request.user not in self.editors.all())
+            can = not (self.share_status == self.PRIVATE
+                       and request.user not in self.editors.all())
         return can
 
     @property
@@ -204,7 +205,7 @@ class Map(NamedModel):
         new.pk = None
         new.name = u"%s %s" % (_("Clone of"), self.name)
         if "owner" in kwargs:
-            # can be None in case of anonymous cloning
+            # can be None in case of anonymous cloning
             new.owner = kwargs["owner"]
         new.save()
         for editor in self.editors.all():

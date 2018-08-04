@@ -350,7 +350,7 @@ class MapDetailMixin:
     model = Map
 
     def get_context_data(self, **kwargs):
-        context = super(MapDetailMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         properties = {
             'urls': _urls_for_js(),
             'tilelayers': TileLayer.get_list(),
@@ -447,6 +447,7 @@ class MapView(MapDetailMixin, DetailView):
         map_settings = self.object.settings
         if "properties" not in map_settings:
             map_settings['properties'] = {}
+        map_settings['properties']['name'] = self.object.name
         permissions = {}
         permissions['edit_status'] = self.object.edit_status
         permissions['share_status'] = self.object.share_status
