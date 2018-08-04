@@ -49,6 +49,13 @@ COMMIT;
         umap compress
 
 
+## dev
+
+- allow to cache proxied remote data requests (#513 #510 #160)
+- fixed popup template parsing of url with url as query string (#607)
+- naive support for nested variables in templates (#600)
+- Removed Map.tilelayer foreignkey
+
 ## 1.0.0.rc-1
 - BREAKING: support of python 2 is removed per upgrading to Django 2.0
 - WARNING: merge Leaflet-Storage and django-leaflet-storage inside umap to ease
@@ -81,7 +88,6 @@ COMMIT;
 - add `{rank}` as dynamic feature property (to be used in popup or icon symbol)
 - add an explicit button to attach a owner to an anonyous map (#568)
 - Add 'TablePanel' popup template (#481)
-- Removed Map.tilelayer foreignkey
 
 
 ## 0.8.0

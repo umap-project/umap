@@ -70,8 +70,8 @@ L.FormBuilder.Select.include({
     },
 
     getDefault: function () {
-        if (this.options.inheritable) return undefined
-        else return L.FormBuilder.Select.prototype.getDefault.call(this)
+        if (this.options.inheritable) return undefined;
+        return this.getOptions()[0][0];
     }
 
 });
@@ -197,6 +197,17 @@ L.FormBuilder.IconClassSwitcher = L.FormBuilder.Select.extend({
         ['Circle', L._('Circle')],
         ['Drop', L._('Drop')],
         ['Ball', L._('Ball')]
+    ]
+
+});
+
+L.FormBuilder.ProxyTTLSelect = L.FormBuilder.Select.extend({
+
+    selectOptions: [
+        [undefined, L._('No cache')],
+        ['300', L._('5 min')],
+        ['3600', L._('1 hour')],
+        ['86400', L._('1 day')]
     ]
 
 });

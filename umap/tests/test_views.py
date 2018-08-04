@@ -82,6 +82,34 @@ def test_valid_proxy_request(client):
     assert 'Cookie' not in response['Vary']
 
 
+def test_valid_proxy_request_with_ttl(client):
+    url = reverse('ajax-proxy')
+    params = {'url': 'http://example.org', 'ttl': 3600}
+    headers = {
+        'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
+        'HTTP_REFERER': settings.SITE_URL
+    }
+    response = client.get(url, params, **headers)
+    assert response.status_code == 200
+    assert 'Example Domain' in response.content.decode()
+    assert 'Cookie' not in response['Vary']
+    assert response['X-Accel-Expires'] == '3600'
+
+
+def test_valid_proxy_request_with_invalid_ttl(client):
+    url = reverse('ajax-proxy')
+    params = {'url': 'http://example.org', 'ttl': 'invalid'}
+    headers = {
+        'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
+        'HTTP_REFERER': settings.SITE_URL
+    }
+    response = client.get(url, params, **headers)
+    assert response.status_code == 200
+    assert 'Example Domain' in response.content.decode()
+    assert 'Cookie' not in response['Vary']
+    assert 'X-Accel-Expires' not in response
+
+
 @pytest.mark.django_db
 def test_login_does_not_contain_form_if_not_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = False

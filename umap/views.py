@@ -267,7 +267,7 @@ class AjaxProxy(View):
         # You should not use this in production (use Nginx or so)
         try:
             url = validate_url(self.request)
-        except AssertionError as e:
+        except AssertionError:
             return HttpResponseBadRequest()
         headers = {
             'User-Agent': 'uMapProxy +http://wiki.openstreetmap.org/wiki/UMap'
@@ -285,8 +285,15 @@ class AjaxProxy(View):
             content = proxied_request.read()
             # Quick hack to prevent Django from adding a Vary: Cookie header
             self.request.session.accessed = False
-            return HttpResponse(content, status=status_code,
-                                content_type=mimetype)
+            response = HttpResponse(content, status=status_code,
+                                    content_type=mimetype)
+            try:
+                ttl = int(self.request.GET.get('ttl'))
+            except (TypeError, ValueError):
+                pass
+            else:
+                response['X-Accel-Expires'] = ttl
+            return response
 ajax_proxy = AjaxProxy.as_view()
 
 

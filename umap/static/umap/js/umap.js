@@ -1624,9 +1624,9 @@ L.U.Map.include({
         return L.Util.greedyTemplate(url, this.getGeoContext(), true);
     },
 
-    proxyUrl: function (url) {
+    proxyUrl: function (url, ttl) {
         if (this.options.urls.ajax_proxy) {
-            url = L.Util.template(this.options.urls.ajax_proxy, {url: encodeURIComponent(url)});
+            url = L.Util.greedyTemplate(this.options.urls.ajax_proxy, {url: encodeURIComponent(url), ttl: ttl});
         }
         return url;
     },

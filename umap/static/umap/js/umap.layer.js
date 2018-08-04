@@ -339,7 +339,7 @@ L.U.DataLayer = L.Class.extend({
         if (!this.isVisible()) return;
         var self = this,
             url = this.map.localizeUrl(this.options.remoteData.url);
-        if (this.options.remoteData.proxy) url = this.map.proxyUrl(url);
+        if (this.options.remoteData.proxy) url = this.map.proxyUrl(url, this.options.remoteData.ttl);
         this.map.ajax({
             uri: url,
             verb: 'GET',
@@ -804,6 +804,7 @@ L.U.DataLayer = L.Class.extend({
         ];
         if (this.map.options.urls.ajax_proxy) {
             remoteDataFields.push(['options.remoteData.proxy', {handler: 'Switch', label: L._('Proxy request'), helpEntries: 'proxyRemoteData'}]);
+            remoteDataFields.push(['options.remoteData.ttl', {handler: 'ProxyTTLSelect', label: L._('Cache proxied request')}]);
         }
 
         var remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'));
