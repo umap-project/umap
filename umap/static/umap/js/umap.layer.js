@@ -781,6 +781,7 @@ L.U.DataLayer = L.Class.extend({
         advancedProperties.appendChild(builder.build());
 
         var popupFields = [
+            'options.popupShape',
             'options.popupTemplate',
             'options.popupContentTemplate',
             'options.showLabel',

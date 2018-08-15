@@ -242,7 +242,7 @@ L.U.Xhr = L.Evented.extend({
             else self.default_callback(data, {});
         };
         var ask_for_login = function (data) {
-            self.ui.openPanel({'data': data});
+            self.ui.openPanel({'data': data, className: 'login-panel'});
             self.listen_form('login_form', {
                 'callback': function (data) {
                     if (data.html) ask_for_login(data);  // Problem in the login - ask again

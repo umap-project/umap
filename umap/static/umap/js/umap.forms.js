@@ -212,23 +212,24 @@ L.FormBuilder.ProxyTTLSelect = L.FormBuilder.Select.extend({
 
 });
 
-L.FormBuilder.PopupTemplate = L.FormBuilder.Select.extend({
+L.FormBuilder.PopupShape = L.FormBuilder.Select.extend({
 
     selectOptions: [
-        ['Default', L._('Name and description')],
-        ['Large', L._('Name and description (large)')],
+        ['Default', L._('Popup')],
+        ['Large', L._('Popup (large)')],
+        ['Panel', L._('Side panel')],
+    ]
+
+});
+
+L.FormBuilder.PopupContent = L.FormBuilder.Select.extend({
+
+    selectOptions: [
+        ['Default', L._('Default')],
         ['Table', L._('Table')],
         ['GeoRSSImage', L._('GeoRSS (title + image)')],
         ['GeoRSSLink', L._('GeoRSS (only link)')],
-        ['SimplePanel', L._('Side panel')],
-        ['TablePanel', L._('Side panel')]
-    ],
-
-    toJS: function () {
-        var value = L.FormBuilder.Select.prototype.toJS.apply(this);
-        if (value === 'table') { value = 'Table'; }
-        return value;
-    }
+    ]
 
 });
 
@@ -735,7 +736,8 @@ L.U.FormBuilder = L.FormBuilder.extend({
         dashArray: {label: L._('dash array'), helpEntries: 'dashArray', inheritable: true},
         iconClass: {handler: 'IconClassSwitcher', label: L._('Icon shape'), inheritable: true},
         iconUrl: {handler: 'IconUrl', label: L._('Icon symbol'), inheritable: true, helpText: L.U.Help.formatIconSymbol},
-        popupTemplate: {handler: 'PopupTemplate', label: L._('Popup style'), inheritable: true},
+        popupShape: {handler: 'PopupShape', label: L._('Popup shape'), inheritable: true},
+        popupTemplate: {handler: 'PopupContent', label: L._('Popup content style'), inheritable: true},
         popupContentTemplate: {label: L._('Popup content template'), handler: 'Textarea', helpEntries: ['dynamicProperties', 'textFormatting'], placeholder: '# {name}', inheritable: true},
         datalayer: {handler: 'DataLayerSwitcher', label: L._('Choose the layer of the feature')},
         moreControl: {handler: 'Switch', label: L._('Do you want to display the «more» control?')},

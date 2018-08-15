@@ -1003,6 +1003,7 @@ L.U.Map.include({
         'fillColor',
         'fillOpacity',
         'dashArray',
+        'popupShape',
         'popupTemplate',
         'popupContentTemplate',
         'zoomTo',
@@ -1213,6 +1214,7 @@ L.U.Map.include({
         defaultProperties.appendChild(builder.build());
 
         var popupFields = [
+            'options.popupShape',
             'options.popupTemplate',
             'options.popupContentTemplate',
             'options.showLabel',
@@ -1221,7 +1223,7 @@ L.U.Map.include({
         ];
         builder = new L.U.FormBuilder(this, popupFields, {
             callback: function (e) {
-                if (e.helper.field === 'options.popupTemplate' || e.helper.field === 'options.popupContentTemplate') return;
+                if (e.helper.field === 'options.popupTemplate' || e.helper.field === 'options.popupContentTemplate' || e.helper.field === 'options.popupShape') return;
                 this.eachDataLayer(function (datalayer) {
                     datalayer.redraw();
                 })

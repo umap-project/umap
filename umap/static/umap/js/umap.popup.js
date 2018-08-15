@@ -1,3 +1,5 @@
+/* Shapes  */
+
 L.U.Popup = L.Popup.extend({
 
     options: {
@@ -12,68 +14,19 @@ L.U.Popup = L.Popup.extend({
         this.setContent(this.container);
     },
 
-    hasFooter: function () {
-        return this.feature.hasPopupFooter();
-    },
-
-    renderTitle: function () {},
-
-    renderBody: function () {
-        var template = this.feature.getOption('popupContentTemplate'),
-            container = L.DomUtil.create('div', ''),
-            content = '', properties, center;
-        if (this.options.parseTemplate) {
-            properties = this.feature.extendedProperties();
-            // Resolve properties inside description
-            properties.description = L.Util.greedyTemplate(this.feature.properties.description || '', properties);
-            content = L.Util.greedyTemplate(template, properties);
-        }
-        content = L.Util.toHTML(content);
-        container.innerHTML = content;
-        var els = container.querySelectorAll('img,iframe');
+    format: function () {
+        var mode = this.feature.getOption('popupTemplate') || 'Default',
+            klass = L.U.PopupTemplate[mode] || L.U.PopupTemplate.Default;
+        this.content = new klass(this.feature, this.container);
+        this.content.render();
+        var els = this.container.querySelectorAll('img,iframe');
         for (var i = 0; i < els.length; i++) {
             this.onElementLoaded(els[i]);
         }
-        if (!els.length && container.textContent.replace('\n', '') === '') {
-            container.innerHTML = '';
-            L.DomUtil.add('h3', '', container, this.feature.getDisplayName());
+        if (!els.length && this.container.textContent.replace('\n', '') === '') {
+            this.container.innerHTML = '';
+            L.DomUtil.add('h3', '', this.container, this.feature.getDisplayName());
         }
-        return container;
-    },
-
-    renderFooter: function () {
-        if (this.hasFooter()) {
-            var footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container),
-                previousLi = L.DomUtil.create('li', 'previous', footer),
-                zoomLi = L.DomUtil.create('li', 'zoom', footer),
-                nextLi = L.DomUtil.create('li', 'next', footer),
-                next = this.feature.getNext(),
-                prev = this.feature.getPrevious();
-            if (next) {
-                nextLi.title = L._('Go to «{feature}»', {feature: next.properties.name || L._('next')});
-            }
-            if (prev) {
-                previousLi.title = L._('Go to «{feature}»', {feature: prev.properties.name || L._('previous')});
-            }
-            zoomLi.title = L._('Zoom to this feature');
-            L.DomEvent.on(nextLi, 'click', function () {
-                if (next) next.bringToCenter({zoomTo: next.getOption('zoomTo'), callback: next.view});
-            });
-            L.DomEvent.on(previousLi, 'click', function () {
-                if (prev) prev.bringToCenter({zoomTo: prev.getOption('zoomTo'), callback: prev.view});
-            });
-            L.DomEvent.on(zoomLi, 'click', function () {
-                this.bringToCenter({zoomTo: this.getOption('zoomTo')});
-            }, this.feature);
-        }
-    },
-
-    format: function () {
-        var title = this.renderTitle();
-        if (title) this.container.appendChild(title);
-        var body = this.renderBody();
-        if (body) L.DomUtil.add('div', 'umap-popup-content', this.container, body);
-        this.renderFooter();
     },
 
     onElementLoaded: function (el) {
@@ -93,62 +46,12 @@ L.U.Popup.Large = L.U.Popup.extend({
     }
 });
 
-L.U.Popup.BaseWithTitle = L.U.Popup.extend({
 
-    renderTitle: function () {
-        var title;
-        if (this.feature.getDisplayName()) {
-            title = L.DomUtil.create('h3', 'popup-title');
-            title.innerHTML = L.Util.escapeHTML(this.feature.getDisplayName());
-        }
-        return title;
-    }
-
-});
-
-L.U.Popup.GeoRSSImage = L.U.Popup.BaseWithTitle.extend({
+L.U.Popup.Panel = L.U.Popup.extend({
 
     options: {
-        minWidth: 300,
-        maxWidth: 500,
-        className: 'umap-popup-large umap-georss-image'
+        zoomAnimation: false
     },
-
-    renderBody: function () {
-        var container = L.DomUtil.create('a');
-        container.href = this.feature.properties.link;
-        container.target = '_blank';
-        if (this.feature.properties.img) {
-            var img = L.DomUtil.create('img', '', container);
-            img.src = this.feature.properties.img;
-            // Sadly, we are unable to override this from JS the clean way
-            // See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847
-            img.style.maxWidth = this.options.maxWidth + 'px';
-            img.style.maxHeight = this.options.maxWidth + 'px';
-            this.onElementLoaded(img);
-        }
-        return container;
-    }
-
-});
-
-L.U.Popup.GeoRSSLink = L.U.Popup.extend({
-
-    options: {
-        className: 'umap-georss-link'
-    },
-
-    renderBody: function () {
-        var title = this.renderTitle(this),
-            a = L.DomUtil.add('a');
-        a.href = this.feature.properties.link;
-        a.target = '_blank';
-        a.appendChild(title);
-        return a;
-    }
-});
-
-L.U.Popup.PanelMixin = {
 
     allButton: function () {
         var button = L.DomUtil.create('li', '');
@@ -173,20 +76,70 @@ L.U.Popup.PanelMixin = {
     _updatePosition: function () {},
     _adjustPan: function () {}
 
-}
+});
+L.U.Popup.SimplePanel = L.U.Popup.Panel;  // Retrocompat.
 
-L.U.Popup.SimplePanel = L.U.Popup.extend({
+/* Content templates */
 
-    includes: L.U.Popup.PanelMixin,
+L.U.PopupTemplate = {};
 
-    options: {
-        zoomAnimation: false
+L.U.PopupTemplate.Default = L.Class.extend({
+
+    initialize: function (feature, container) {
+        this.feature = feature;
+        this.container = container;
+    },
+
+    renderTitle: function () {},
+
+    renderBody: function () {
+        var template = this.feature.getOption('popupContentTemplate'),
+            container = L.DomUtil.create('div', ''),
+            content = '', properties, center;
+        properties = this.feature.extendedProperties();
+        // Resolve properties inside description
+        properties.description = L.Util.greedyTemplate(this.feature.properties.description || '', properties);
+        content = L.Util.greedyTemplate(template, properties);
+        content = L.Util.toHTML(content);
+        container.innerHTML = content;
+        return container;
+    },
+
+    renderFooter: function () {
+        if (this.feature.hasPopupFooter()) {
+            var footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container),
+                previousLi = L.DomUtil.create('li', 'previous', footer),
+                zoomLi = L.DomUtil.create('li', 'zoom', footer),
+                nextLi = L.DomUtil.create('li', 'next', footer),
+                next = this.feature.getNext(),
+                prev = this.feature.getPrevious();
+            if (next) nextLi.title = L._('Go to «{feature}»', {feature: next.properties.name || L._('next')});
+            if (prev) previousLi.title = L._('Go to «{feature}»', {feature: prev.properties.name || L._('previous')});
+            zoomLi.title = L._('Zoom to this feature');
+            L.DomEvent.on(nextLi, 'click', function () {
+                if (next) next.bringToCenter({zoomTo: next.getOption('zoomTo'), callback: next.view});
+            });
+            L.DomEvent.on(previousLi, 'click', function () {
+                if (prev) prev.bringToCenter({zoomTo: prev.getOption('zoomTo'), callback: prev.view});
+            });
+            L.DomEvent.on(zoomLi, 'click', function () {
+                this.bringToCenter({zoomTo: this.getOption('zoomTo')});
+            }, this.feature);
+        }
+    },
+
+    render: function () {
+        var title = this.renderTitle();
+        if (title) this.container.appendChild(title);
+        var body = this.renderBody();
+        if (body) L.DomUtil.add('div', 'umap-popup-content', this.container, body);
+        this.renderFooter();
     }
 
 });
 
 
-L.U.Popup.TableMixin = {
+L.U.PopupTemplate.Table = L.U.PopupTemplate.Default.extend({
 
     formatRow: function (key, value) {
         if (value.indexOf('http') === 0) {
@@ -212,14 +165,59 @@ L.U.Popup.TableMixin = {
         return table;
     }
 
-};
-
-L.U.Popup.Table = L.U.Popup.BaseWithTitle.extend({
-    includes: L.U.Popup.TableMixin
 });
 
-L.U.Popup.table = L.U.Popup.Table;  // backward compatibility
+L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
 
-L.U.Popup.TablePanel = L.U.Popup.extend({
-    includes: [L.U.Popup.PanelMixin, L.U.Popup.TableMixin]
+    renderTitle: function () {
+        var title;
+        if (this.feature.getDisplayName()) {
+            title = L.DomUtil.create('h3', 'popup-title');
+            title.innerHTML = L.Util.escapeHTML(this.feature.getDisplayName());
+        }
+        return title;
+    }
+
+});
+
+L.U.PopupTemplate.GeoRSSImage = L.U.PopupTemplate.BaseWithTitle.extend({
+
+    options: {
+        minWidth: 300,
+        maxWidth: 500,
+        className: 'umap-popup-large umap-georss-image'
+    },
+
+    renderBody: function () {
+        var container = L.DomUtil.create('a');
+        container.href = this.feature.properties.link;
+        container.target = '_blank';
+        if (this.feature.properties.img) {
+            var img = L.DomUtil.create('img', '', container);
+            img.src = this.feature.properties.img;
+            // Sadly, we are unable to override this from JS the clean way
+            // See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847
+            img.style.maxWidth = this.options.maxWidth + 'px';
+            img.style.maxHeight = this.options.maxWidth + 'px';
+            this.onElementLoaded(img);
+        }
+        return container;
+    }
+
+});
+
+L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
+
+    options: {
+        className: 'umap-georss-link'
+    },
+
+    renderBody: function () {
+        var title = this.renderTitle(this),
+            a = L.DomUtil.add('a');
+        a.href = this.feature.properties.link;
+        a.target = '_blank';
+        a.appendChild(title);
+        return a;
+    }
 });

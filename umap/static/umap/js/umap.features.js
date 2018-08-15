@@ -143,6 +143,7 @@ L.U.FeatureMixin = {
 
     getInteractionOptions: function () {
         return [
+            'properties._umap_options.popupShape',
             'properties._umap_options.popupTemplate',
             'properties._umap_options.showLabel',
             'properties._umap_options.labelDirection',
@@ -165,7 +166,8 @@ L.U.FeatureMixin = {
     },
 
     getPopupClass: function () {
-        return L.U.Popup[this.getOption('popupTemplate')] || L.U.Popup;
+        var old = this.getOption('popupTemplate');  // Retrocompat.
+        return L.U.Popup[this.getOption('popupShape') || old] || L.U.Popup;
     },
 
     attachPopup: function () {

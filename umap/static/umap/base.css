@@ -585,7 +585,7 @@ input[type=hidden].blur + .button {
 }
 #umap-ui-container {
     width: 400px;
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     right: -400px;
@@ -596,6 +596,10 @@ input[type=hidden].blur + .button {
     background-color: #fff;
     opacity: 0.98;
     cursor: initial;
+}
+#umap-ui-container.login-panel {
+    position: fixed;  /* Should not scroll when used in content pages (like home page) */
+    z-index: 1011;  /* Above a map panel if any */
 }
 #umap-ui-container.dark {
     border-left: 1px solid #222;
