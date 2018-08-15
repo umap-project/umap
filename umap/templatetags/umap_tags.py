@@ -77,7 +77,7 @@ def notag(s):
 @register.simple_tag(takes_context=True)
 def paginate_querystring(context, page):
     qs = copy(context["request"].GET)
-    qs["p"] = page
+    qs["p"] = str(page)
     return qs.urlencode()
 
 

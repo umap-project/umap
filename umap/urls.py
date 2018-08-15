@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.conf.urls import include, url
-from django.urls import path
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.views import login
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.decorators.cache import (cache_control, cache_page,
                                            never_cache)
@@ -25,10 +23,10 @@ urlpatterns = [
         name='map_short_url'),
     url(r'^ajax-proxy/$', cache_page(180)(views.ajax_proxy),
         name='ajax-proxy'),
-    url(r'^change-password/', auth_views.password_change,
+    url(r'^change-password/', auth_views.PasswordChangeView.as_view(),
         {'template_name': 'umap/password_change.html'},
         name='password_change'),
-    url(r'^change-password-done/', auth_views.password_change_done,
+    url(r'^change-password-done/', auth_views.PasswordChangeDoneView.as_view(),
         {'template_name': 'umap/password_change_done.html'},
         name='password_change_done'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
@@ -36,7 +34,7 @@ urlpatterns = [
 ]
 
 i18n_urls = [
-    url(r'^login/$', jsonize_view(login), name='login'),  # noqa
+    url(r'^login/$', jsonize_view(auth_views.LoginView.as_view()), name='login'),  # noqa
     url(r'^login/popup/end/$', views.LoginPopupEnd.as_view(),
         name='login_popup_end'),
     url(r'^logout/$', views.logout, name='logout'),
