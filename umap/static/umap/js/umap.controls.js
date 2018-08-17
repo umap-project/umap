@@ -670,11 +670,11 @@ L.U.Map.include({
                 color.style.backgroundImage = 'url(' + symbol + ')';
             }
             L.DomEvent.on(zoom_to, 'click', function (e) {
-                e.callback = this.view;
+                e.callback = L.bind(this.view, this);
                 this.bringToCenter(e);
             }, feature);
             L.DomEvent.on(title, 'click', function (e) {
-                e.callback = this.view
+                e.callback = L.bind(this.view, this)
                 this.bringToCenter(e);
             }, feature);
             L.DomEvent.on(edit, 'click', function () {

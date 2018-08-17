@@ -62,6 +62,7 @@ L.U.FeatureMixin = {
             }
             return;
         }
+        // TODO deal with an event instead?
         if (this.map.slideshow) this.map.slideshow.current = this;
         this.attachPopup();
         this.openPopup(e && e.latlng || this.getCenter());
