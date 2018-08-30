@@ -463,7 +463,7 @@ L.U.FeatureMixin = {
 
 L.U.Marker = L.Marker.extend({
     parentClass: L.Marker,
-    includes: [L.U.FeatureMixin, L.Mixin.Events],
+    includes: [L.U.FeatureMixin],
 
     preInit: function () {
         this.setIcon(this.getIcon());
@@ -822,7 +822,7 @@ L.U.PathMixin = {
 
 L.U.Polyline = L.Polyline.extend({
     parentClass: L.Polyline,
-    includes: [L.U.FeatureMixin, L.U.PathMixin, L.Mixin.Events],
+    includes: [L.U.FeatureMixin, L.U.PathMixin],
 
     staticOptions: {
         stroke: true,
@@ -959,7 +959,7 @@ L.U.Polyline = L.Polyline.extend({
 
 L.U.Polygon = L.Polygon.extend({
     parentClass: L.Polygon,
-    includes: [L.U.FeatureMixin, L.U.PathMixin, L.Mixin.Events],
+    includes: [L.U.FeatureMixin, L.U.PathMixin],
 
     isSameClass: function (other) {
         return other instanceof L.U.Polygon;

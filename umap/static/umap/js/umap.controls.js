@@ -1003,8 +1003,7 @@ L.U.ContextMenu = L.Map.ContextMenu.extend({
 
 });
 
-L.U.IframeExporter = L.Class.extend({
-    includes: [L.Mixin.Events],
+L.U.IframeExporter = L.Evented.extend({
 
     options: {
         includeFullScreenLink: true,

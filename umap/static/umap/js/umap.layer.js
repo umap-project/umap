@@ -146,9 +146,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
 
 });
 
-L.U.DataLayer = L.Class.extend({
-
-    includes: [L.Mixin.Events],
+L.U.DataLayer = L.Evented.extend({
 
     options: {
         displayOnLoad: true,
