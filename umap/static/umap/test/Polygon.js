@@ -1,4 +1,4 @@
-describe('L.Utorage.Polygon', function () {
+describe('L.U.Polygon', function () {
     var p2ll, map;
 
     before(function () {
@@ -189,10 +189,10 @@ describe('L.Utorage.Polygon', function () {
             layer.edit();
             assert.notOk(layer.isMulti());
             happen.click(qs('.umap-draw-polygon-multi'));
-            happen.at('mousedown', 300, 300);
-            happen.at('mouseup', 300, 300);
-            happen.at('mousedown', 350, 300);
-            happen.at('mouseup', 350, 300);
+            happen.at('mousemove', 300, 300);
+            happen.at('click', 300, 300);
+            happen.at('mousemove', 350, 300);
+            happen.at('click', 350, 300);
             happen.at('click', 350, 300);
             assert.ok(layer.isMulti());
             assert.equal(this.datalayer._index.length, 1);
