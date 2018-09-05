@@ -1,18 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-import codecs
 import io
+from pathlib import Path
 
 from setuptools import setup, find_packages
 
 import umap
 
-long_description = codecs.open('README.md', "r", "utf-8").read()
-
 
 def is_pkg(line):
     return line and not line.startswith(('--', 'git', '#'))
+
 
 with io.open('requirements.txt', encoding='utf-8') as reqs:
     install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
@@ -29,7 +27,7 @@ setup(
     include_package_data=True,
     platforms=["any"],
     zip_safe=True,
-    long_description=long_description,
+    long_description=Path('README.md').read_text(),
     long_description_content_type='text/markdown',
     install_requires=install_requires,
     classifiers=[

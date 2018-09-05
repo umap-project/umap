@@ -49,7 +49,7 @@ COMMIT;
         umap compress
 
 
-## dev
+## 1.0.0.rc-2
 
 - allow to cache proxied remote data requests (#513 #510 #160)
 - fixed popup template parsing of url with url as query string (#607)
@@ -57,8 +57,9 @@ COMMIT;
 - Removed Map.tilelayer foreignkey
 - split popupTemplate in popupShape and popupTemplate: popupShape is for
   choosing between proper popup and panel, while popupTemplate now will allow
-  to choose between default "name + description" mode, or table, or geoRss ones.
+  to choose between default "name + description" mode, or table, or geoRSS ones.
   Allows to add more of those in the future also.
+- fixed popup not opening on first zoom button click when marker is clustered (#611)
 
 ## 1.0.0.rc-1
 - BREAKING: support of python 2 is removed per upgrading to Django 2.0
