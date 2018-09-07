@@ -18,9 +18,12 @@
 
 .leaflet-control-zoom,
 .umap-control {
-    background: none no-repeat scroll center center #F8F8F9;
+    background: none no-repeat scroll center center #fff;
     border-radius: 4px;
     border: 1px solid #bbb;
+}
+.umap-control a:hover {
+    background-color: #f4f4f4;
 }
 .leaflet-control-fullscreen a:hover,
 .leaflet-control-fullscreen a {
@@ -64,7 +67,7 @@ a.umap-control-less {
     display: none;
 }
 .leaflet-control-embed a {
-    background-position: -82px -122px;
+    background-position: -81px -121px;
 }
 .leaflet-control-tilelayers a {
     background-position: -82px -2px;
@@ -76,7 +79,7 @@ a.umap-control-less {
     background-position: -2px -122px;
 }
 .leaflet-control-search a {
-    background-position: -42px -122px;
+    background-position: -41px -121px;
     display: block;
 }
 .leaflet-control-search a.loading {
