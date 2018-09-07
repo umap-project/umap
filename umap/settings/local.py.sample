@@ -55,7 +55,7 @@ SOCIAL_AUTH_TWITTER_KEY = "xxx"
 SOCIAL_AUTH_TWITTER_SECRET = "xxx"
 SOCIAL_AUTH_OPENSTREETMAP_KEY = 'xxx'
 SOCIAL_AUTH_OPENSTREETMAP_SECRET = 'xxx'
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += (
     'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
@@ -97,6 +97,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # python manage.py dbshell
 # CREATE EXTENSION unaccent;
 UMAP_USE_UNACCENT = False
+
+# Put the site in readonly mode (useful for migration or any maintenance)
+UMAP_READONLY = False
+
 
 # For static deployment
 STATIC_ROOT = '/home/srv/var/static'

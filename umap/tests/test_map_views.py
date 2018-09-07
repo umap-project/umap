@@ -472,3 +472,12 @@ def test_map_attach_owner_anonymous_not_allowed(cookieclient, anonymap, user):
     # client.login(username=user.username, password="123123")
     # response = client.post(url, {})
     # assert response.status_code == 403
+
+
+def test_create_readonly(client, user, post_data, settings):
+    settings.UMAP_READONLY = True
+    url = reverse('map_create')
+    client.login(username=user.username, password="123123")
+    response = client.post(url, post_data)
+    assert response.status_code == 403
+    assert response.content == b'Site is readonly'

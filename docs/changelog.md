@@ -49,6 +49,12 @@ COMMIT;
         umap compress
 
 
+## dev
+
+- added a readonly mode (`UMAP_READONLY=True`), useful to disallow update while
+  migrating from one server to an other, for example
+
+
 ## 1.0.0.rc-2
 
 - allow to cache proxied remote data requests (#513 #510 #160)

@@ -160,3 +160,11 @@ def test_version_should_return_one_version_geojson(client, datalayer, map):
     datalayer.geojson.storage.save('%s/%s' % (root, name), ContentFile("{}"))
     url = reverse('datalayer_version', args=(datalayer.pk, name))
     assert client.get(url).content.decode() == "{}"
+
+
+def test_update_readonly(client, datalayer, map, post_data, settings):
+    settings.UMAP_READONLY = True
+    url = reverse('datalayer_update', args=(map.pk, datalayer.pk))
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 403
