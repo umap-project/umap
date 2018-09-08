@@ -40,15 +40,12 @@ var locale = {
     "Label direction": "Felirat iránya",
     "Label key": "Felirathoz használt kulcs",
     "Labels are clickable": "Kattintható feliratok",
-    "Name and description": "Név és leírás",
-    "Name and description (large)": "Név és leírás (nagy)",
     "None": "Semmi",
     "On the bottom": "Lent",
     "On the left": "Balra",
     "On the right": "Jobbra",
     "On the top": "Fent",
     "Popup content template": "Előugró tartalom sablonja",
-    "Popup style": "Előugrás stílusa",
     "Set symbol": "Szimbólum megadása",
     "Side panel": "Oldalsó panel",
     "Simplify": "Egyszerűsítés",
@@ -359,7 +356,16 @@ var locale = {
     "{distance} km": "{distance} km",
     "{distance} m": "{distance} m",
     "{distance} miles": "{distance} mérföld",
-    "{distance} yd": "{distance} yard"
+    "{distance} yd": "{distance} yard",
+    "1 day": "1 day",
+    "1 hour": "1 hour",
+    "5 min": "5 min",
+    "Cache proxied request": "Cache proxied request",
+    "No cache": "No cache",
+    "Popup": "Popup",
+    "Popup (large)": "Popup (large)",
+    "Popup content style": "Popup content style",
+    "Popup shape": "Popup shape"
 };
 L.registerLocale("hu", locale);
 L.setLocale("hu");

@@ -40,15 +40,12 @@ var locale = {
     "Label direction": "Label direction",
     "Label key": "Label key",
     "Labels are clickable": "Labels are clickable",
-    "Name and description": "Nom i descripció",
-    "Name and description (large)": "Nom i descripció (gran)",
     "None": "Cap",
     "On the bottom": "On the bottom",
     "On the left": "On the left",
     "On the right": "On the right",
     "On the top": "On the top",
     "Popup content template": "Popup content template",
-    "Popup style": "Popup style",
     "Set symbol": "Set symbol",
     "Side panel": "Side panel",
     "Simplify": "Simplify",
@@ -359,7 +356,16 @@ var locale = {
     "{distance} km": "{distance} km",
     "{distance} m": "{distance} m",
     "{distance} miles": "{distance} miles",
-    "{distance} yd": "{distance} yd"
+    "{distance} yd": "{distance} yd",
+    "1 day": "1 day",
+    "1 hour": "1 hour",
+    "5 min": "5 min",
+    "Cache proxied request": "Cache proxied request",
+    "No cache": "No cache",
+    "Popup": "Popup",
+    "Popup (large)": "Popup (large)",
+    "Popup content style": "Popup content style",
+    "Popup shape": "Popup shape"
 };
 L.registerLocale("ca", locale);
 L.setLocale("ca");

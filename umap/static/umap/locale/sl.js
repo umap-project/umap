@@ -40,15 +40,12 @@ var locale = {
     "Label direction": "Usmerjenost oznake",
     "Label key": "Oznaka",
     "Labels are clickable": "Oznake so klikljive",
-    "Name and description": "Ime in opis",
-    "Name and description (large)": "Ime in opis (veliko)",
     "None": "Brez",
     "On the bottom": "Na dnu",
     "On the left": "Na levi",
     "On the right": "Na desni",
     "On the top": "Na vrhu",
     "Popup content template": "Predloga pojavne vsebine",
-    "Popup style": "Slog pojavnega okna",
     "Set symbol": "Set symbol",
     "Side panel": "Bočno okno",
     "Simplify": "Poenostavi",
@@ -359,7 +356,16 @@ var locale = {
     "{distance} km": "{distance} km",
     "{distance} m": "{distance} m",
     "{distance} miles": "{distance} miles",
-    "{distance} yd": "{distance} yd"
+    "{distance} yd": "{distance} yd",
+    "1 day": "1 day",
+    "1 hour": "1 hour",
+    "5 min": "5 min",
+    "Cache proxied request": "Cache proxied request",
+    "No cache": "No cache",
+    "Popup": "Popup",
+    "Popup (large)": "Popup (large)",
+    "Popup content style": "Popup content style",
+    "Popup shape": "Popup shape"
 };
 L.registerLocale("sl", locale);
 L.setLocale("sl");

@@ -40,15 +40,12 @@ var locale = {
     "Label direction": "Direction de l'étiquette",
     "Label key": "Clé pour le libellé",
     "Labels are clickable": "Étiquette cliquable",
-    "Name and description": "Nom et description",
-    "Name and description (large)": "Nom et description (large)",
     "None": "Aucun",
     "On the bottom": "Bas",
     "On the left": "Gauche",
     "On the right": "Droite",
     "On the top": "Haut",
     "Popup content template": "Gabarit du contenu de la popup",
-    "Popup style": "Style de popup",
     "Set symbol": "Définir le pictogramme",
     "Side panel": "Panneau latéral",
     "Simplify": "Simplifier",
@@ -359,7 +356,16 @@ var locale = {
     "{distance} km": "{distance} km",
     "{distance} m": "{distance} m",
     "{distance} miles": "{distance} miles",
-    "{distance} yd": "{distance} yd"
+    "{distance} yd": "{distance} yd",
+    "1 day": "1 jour",
+    "1 hour": "1 heure",
+    "5 min": "5 min",
+    "Cache proxied request": "Cacher la requête avec proxy",
+    "No cache": "Pas de cache",
+    "Popup": "Popup",
+    "Popup (large)": "Popup (grande)",
+    "Popup content style": "Gabarit du contenu de la popup",
+    "Popup shape": "Forme de popup"
 };
 L.registerLocale("fr", locale);
 L.setLocale("fr");

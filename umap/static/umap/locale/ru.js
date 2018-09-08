@@ -40,15 +40,12 @@ var locale = {
     "Label direction": "Направление метки",
     "Label key": "Кнопка метки",
     "Labels are clickable": "Метки можно нажимать",
-    "Name and description": "Название и описание",
-    "Name and description (large)": "Название и описание (большие)",
     "None": "Нет",
     "On the bottom": "Внизу",
     "On the left": "Слева",
     "On the right": "Справа",
     "On the top": "Вверху",
     "Popup content template": "Шаблон всплывающей подсказки",
-    "Popup style": "Стиль всплывающего окна",
     "Set symbol": "Выбрать значок",
     "Side panel": "Боковая панель",
     "Simplify": "Упростить",
@@ -359,7 +356,16 @@ var locale = {
     "{distance} km": "{distance} км",
     "{distance} m": "{distance} м",
     "{distance} miles": "{distance} миль",
-    "{distance} yd": "{distance} ярдов"
+    "{distance} yd": "{distance} ярдов",
+    "1 day": "1 day",
+    "1 hour": "1 hour",
+    "5 min": "5 min",
+    "Cache proxied request": "Cache proxied request",
+    "No cache": "No cache",
+    "Popup": "Popup",
+    "Popup (large)": "Popup (large)",
+    "Popup content style": "Popup content style",
+    "Popup shape": "Popup shape"
 };
 L.registerLocale("ru", locale);
 L.setLocale("ru");
