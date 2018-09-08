@@ -33,6 +33,8 @@ def test_create(client, user, post_data):
     created_map = Map.objects.latest('pk')
     assert j['id'] == created_map.pk
     assert created_map.name == name
+    assert created_map.center.x == 13.447265624999998
+    assert created_map.center.y == 48.94415123418794
 
 
 def test_map_create_permissions(client, settings):

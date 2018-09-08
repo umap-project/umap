@@ -63,7 +63,8 @@ class MapSettingsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MapSettingsForm, self).__init__(*args, **kwargs)
-        self.fields["slug"].required = False
+        self.fields['slug'].required = False
+        self.fields['center'].widget.map_srid = 4326
 
     def clean_slug(self):
         slug = self.cleaned_data.get('slug', None)
