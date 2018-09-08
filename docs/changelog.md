@@ -49,7 +49,7 @@ COMMIT;
         umap compress
 
 
-## dev
+## 1.0.0.rc-3
 
 - added a readonly mode (`UMAP_READONLY=True`), useful to disallow update while
   migrating from one server to an other, for example
