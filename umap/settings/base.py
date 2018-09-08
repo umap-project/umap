@@ -187,6 +187,7 @@ DATABASES = {
     }
 }
 UMAP_READONLY = False
+LOCALE_PATHS = [os.path.join(PROJECT_DIR, 'locale')]
 
 # =============================================================================
 # Third party app settings

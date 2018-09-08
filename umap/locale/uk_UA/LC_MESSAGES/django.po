@@ -1,16 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Сергій Дубик <dubyk@ukr.net>, 2014,2017
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2017-09-20 04:50+0000\n"
-"Last-Translator: Сергій Дубик <dubyk@ukr.net>\n"
+"POT-Creation-Date: 2018-09-08 14:50+0000\n"
+"PO-Revision-Date: 2018-09-08 14:51+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/yohanboniface/umap/language/uk_UA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,100 +18,207 @@ msgstr ""
 "Language: uk_UA\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: templates/404.html:7
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Секретне посилання для редагування: %s"
+
+#: umap/forms.py:44 umap/models.py:114
+msgid "Everyone can edit"
+msgstr "Кожен може редагувати"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "Редагування можливе лише за наявності секретного посилання"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr ""
+
+#: umap/models.py:17
+msgid "name"
+msgstr "назва"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "подробиці"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "Посилання на сторінку з описом ліцензії"
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "шаблон посилання використовує формат шару OSM"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "Розташуйте шари мап у вікні редагування"
+
+#: umap/models.py:115
+msgid "Only editors can edit"
+msgstr "Лише редактори можуть редагувати"
+
+#: umap/models.py:116
+msgid "Only owner can edit"
+msgstr "Лише власник може редагувати"
+
+#: umap/models.py:119
+msgid "everyone (public)"
+msgstr "усі (відкритий доступ)"
+
+#: umap/models.py:120
+msgid "anyone with link"
+msgstr "усі, у кого є посилання"
+
+#: umap/models.py:121
+msgid "editors only"
+msgstr "лише редактори"
+
+#: umap/models.py:124 umap/models.py:252
+msgid "description"
+msgstr "опис"
+
+#: umap/models.py:125
+msgid "center"
+msgstr "центр"
+
+#: umap/models.py:126
+msgid "zoom"
+msgstr "масштаб"
+
+#: umap/models.py:127
+msgid "locate"
+msgstr "геолокація"
+
+#: umap/models.py:127
+msgid "Locate user on load?"
+msgstr "Використовувати геолокацію при завантаженні?"
+
+#: umap/models.py:130
+msgid "Choose the map licence."
+msgstr "Виберіть ліцензію для мапи."
+
+#: umap/models.py:131
+msgid "licence"
+msgstr "ліцензія"
+
+#: umap/models.py:136
+msgid "owner"
+msgstr "власник"
+
+#: umap/models.py:137
+msgid "editors"
+msgstr "редактори"
+
+#: umap/models.py:138
+msgid "edit status"
+msgstr "статус редагування"
+
+#: umap/models.py:139
+msgid "share status"
+msgstr "статус спільного використання"
+
+#: umap/models.py:140
+msgid "settings"
+msgstr "налаштування"
+
+#: umap/models.py:206
+msgid "Clone of"
+msgstr "Копія "
+
+#: umap/models.py:257
+msgid "display on load"
+msgstr "показувати при завантаженні"
+
+#: umap/models.py:258
+msgid "Display this layer on load."
+msgstr "Показати цей шар при завантаженні."
+
+#: umap/templates/404.html:7
 msgid "Take me to the home page"
 msgstr "Перемістіть мене на головну сторінку"
 
-#: templates/auth/user_detail.html:7
+#: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Перегляд мап користувача %(current_user)s"
 
-#: templates/leaflet_storage/map_detail.html:24
-msgid "Type editors nick to add…"
-msgstr "Введіть ім’я редактора, щоб додати…"
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr ""
 
-#: templates/leaflet_storage/map_detail.html:27
-msgid "Type new owner nick…"
-msgstr "Введіть нік нового власника..."
-
-#: templates/leaflet_storage/map_list.html:7 views.py:184
-msgid "by"
-msgstr " від "
-
-#: templates/leaflet_storage/map_list.html:11
-msgid "More"
-msgstr "Ще"
-
-#: templates/registration/login.html:4
+#: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
 msgstr "Будь ласка, увійдіть за обліковим записом"
 
-#: templates/registration/login.html:18
+#: umap/templates/registration/login.html:18
 msgid "Username"
 msgstr "Ім’я користувача"
 
-#: templates/registration/login.html:20
+#: umap/templates/registration/login.html:20
 msgid "Password"
 msgstr "Пароль"
 
-#: templates/registration/login.html:21
+#: umap/templates/registration/login.html:21
 msgid "Login"
 msgstr "Логін"
 
-#: templates/registration/login.html:27
+#: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "Виберіть провайдера автентифікації"
 
-#: templates/umap/about_summary.html:6
+#: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr "uMap дає Вам можливість за лічені хвилини створювати мапи на основі даних <a href=\"%(osm_url)s\" />OpenStreetMap</a> та публікувати їх на своєму сайті."
 
-#: templates/umap/about_summary.html:11
+#: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
 msgstr "Вибирайте шари для Вашої мапи"
 
-#: templates/umap/about_summary.html:12
+#: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Додавайте цікаві точки: позначки, лінії, полігони …"
 
-#: templates/umap/about_summary.html:13
+#: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
 msgstr "Вибирайте потрібні кольори та значки для цікавих об’єктів"
 
-#: templates/umap/about_summary.html:14
+#: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr "Змінюйте параметри мапи: відображення мінімапи, встановлення місця користувача при завантаженні …"
 
-#: templates/umap/about_summary.html:15
+#: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
 msgstr "Імпорт Ваших геоданих (GeoJSON, GPX, KML, OSM …)"
 
-#: templates/umap/about_summary.html:16
+#: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
 msgstr "Виберіть ліцензію для Вашої мапи"
 
-#: templates/umap/about_summary.html:17
+#: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
 msgstr "Вбудовуйте Вашу мапу та діліться нею"
 
-#: templates/umap/about_summary.html:23
+#: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "І це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
 msgid "Create a map"
 msgstr "Створити мапу"
 
-#: templates/umap/about_summary.html:34
+#: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
 msgstr "Погратися з демо-версією"
 
-#: templates/umap/home.html:10
+#: umap/templates/umap/home.html:9
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -120,268 +227,138 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Це демонстраційний сайт, що використовується для тестів та підготовки стабільних випусків.  Якщо Вам потрібна стабільна версія, перейдіть на <a href=\"%(stable_url)s\">%(stable_url)s</a>. Ви також можете створити свою інсталяцію, оскільки це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
 
-#: templates/umap/home.html:17
+#: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
 msgstr "Мапи на uMap"
 
-#: templates/umap/home.html:24
+#: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr "Дивіться чужі мапи та надихайтеся"
 
-#: templates/umap/navigation.html:12
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Ви увійшли.  Продовжимо …"
+
+#: umap/templates/umap/map_list.html:7 umap/views.py:212
+msgid "by"
+msgstr " від "
+
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "Ще"
+
+#: umap/templates/umap/navigation.html:10
 msgid "My maps"
 msgstr "Мої мапи"
 
-#: templates/umap/navigation.html:14
+#: umap/templates/umap/navigation.html:12
 msgid "Log in"
 msgstr "Увійти"
 
-#: templates/umap/navigation.html:14
+#: umap/templates/umap/navigation.html:12
 msgid "Sign in"
 msgstr "Зареєструватися"
 
-#: templates/umap/navigation.html:16
+#: umap/templates/umap/navigation.html:14
 msgid "About"
 msgstr "Про проект"
 
-#: templates/umap/navigation.html:17
+#: umap/templates/umap/navigation.html:15
 msgid "Feedback"
 msgstr "Зворотній зв’язок"
 
-#: templates/umap/navigation.html:20
+#: umap/templates/umap/navigation.html:18
 msgid "Change password"
 msgstr "Зміна паролю"
 
-#: templates/umap/navigation.html:22
+#: umap/templates/umap/navigation.html:20
 msgid "Log out"
 msgstr "Вийти"
 
-#: templates/umap/password_change.html:6
+#: umap/templates/umap/password_change.html:6
 msgid "Password change"
 msgstr "Зміна паролю"
 
-#: templates/umap/password_change.html:7
+#: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Будь ласка, введіть свій старий пароль, для надійності, а потім введіть новий пароль двічі, щоб ми могли переконатися, що Ви ввели його правильно."
 
-#: templates/umap/password_change.html:12
+#: umap/templates/umap/password_change.html:12
 msgid "Old password"
 msgstr "Старий пароль"
 
-#: templates/umap/password_change.html:14
+#: umap/templates/umap/password_change.html:14
 msgid "New password"
 msgstr "Новий пароль"
 
-#: templates/umap/password_change.html:16
+#: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr "Підтвердження для нового паролю"
 
-#: templates/umap/password_change.html:18
+#: umap/templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr "Змінити мій пароль"
 
-#: templates/umap/password_change_done.html:6
+#: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr "Зміна паролю успішна."
 
-#: templates/umap/password_change_done.html:7
+#: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr "Ваш пароль змінено."
 
-#: templates/umap/search.html:13
+#: umap/templates/umap/search.html:13
 msgid "Not map found."
 msgstr "Не знайдено жодної мапи."
 
-#: templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
 msgid "Search maps"
 msgstr "Пошук за мапами"
 
-#: templates/umap/search_bar.html:9
+#: umap/templates/umap/search_bar.html:9
 msgid "Search"
 msgstr "Шукати"
 
-#: views.py:190
+#: umap/views.py:218
 msgid "View the map"
 msgstr "Переглянути мапу"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Секретне посилання для редагування: %s"
-
-#: forms.py:47 models.py:113
-msgid "Everyone can edit"
-msgstr "Кожен може редагувати"
-
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Редагування можливе лише за наявності секретного посилання"
-
-#: models.py:20
-msgid "name"
-msgstr "назва"
-
-#: models.py:42
-msgid "No licence set"
-msgstr "Ліцензія не задана"
-
-#: models.py:51
-msgid "details"
-msgstr "подробиці"
-
-#: models.py:52
-msgid "Link to a page where the licence is detailed."
-msgstr "Посилання на сторінку з описом ліцензії"
-
-#: models.py:66
-msgid "URL template using OSM tile format"
-msgstr "шаблон посилання використовує формат шару OSM"
-
-#: models.py:74
-msgid "Order of the tilelayers in the edit box"
-msgstr "Розташуйте шари мап у вікні редагування"
-
-#: models.py:114
-msgid "Only editors can edit"
-msgstr "Лише редактори можуть редагувати"
-
-#: models.py:115
-msgid "Only owner can edit"
-msgstr "Лише власник може редагувати"
-
-#: models.py:118
-msgid "everyone (public)"
-msgstr "усі (відкритий доступ)"
-
-#: models.py:119
-msgid "anyone with link"
-msgstr "усі, у кого є посилання"
-
-#: models.py:120
-msgid "editors only"
-msgstr "лише редактори"
-
-#: models.py:123 models.py:257
-msgid "description"
-msgstr "опис"
-
-#: models.py:124
-msgid "center"
-msgstr "центр"
-
-#: models.py:125
-msgid "zoom"
-msgstr "масштаб"
-
-#: models.py:126
-msgid "locate"
-msgstr "геолокація"
-
-#: models.py:126
-msgid "Locate user on load?"
-msgstr "Використовувати геолокацію при завантаженні?"
-
-#: models.py:129
-msgid "Choose the map licence."
-msgstr "Виберіть ліцензію для мапи."
-
-#: models.py:130
-msgid "licence"
-msgstr "ліцензія"
-
-#: models.py:135
-msgid "background"
-msgstr "фоновий шар"
-
-#: models.py:136
-msgid "owner"
-msgstr "власник"
-
-#: models.py:137
-msgid "editors"
-msgstr "редактори"
-
-#: models.py:138
-msgid "edit status"
-msgstr "статус редагування"
-
-#: models.py:139
-msgid "share status"
-msgstr "статус спільного використання"
-
-#: models.py:140
-msgid "settings"
-msgstr "налаштування"
-
-#: models.py:178
-#, python-format
-msgid "Your anonymous map has been attached to your account %s"
-msgstr "Ваша анонімна мапа була приєднана до Вашого облікового запису %s"
-
-#: models.py:211
-msgid "Clone of"
-msgstr "Копія "
-
-#: models.py:262
-msgid "display on load"
-msgstr "показувати при завантаженні"
-
-#: models.py:263
-msgid "Display this layer on load."
-msgstr "Показати цей шар при завантаженні."
-
-#: templates/leaflet_storage/login_popup_end.html:2
-msgid "You are logged in. Continuing..."
-msgstr "Ви увійшли.  Продовжимо …"
-
-#: templates/leaflet_storage/map_update_permissions.html:2
-msgid "Map permissions"
-msgstr "Дозволи для мапи"
-
-#: templates/registration/login.html:2
-msgid "Please log in to proceed"
-msgstr "Щоб продовжити, виконайте вхід"
-
-#: templates/registration/login.html:4
-msgid "Your username and password didn't match. Please try again."
-msgstr "Ім’я користувача або пароль невірні.  Спробуйте ще раз."
-
-#: views.py:232
+#: umap/views.py:519
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Ваша мапа готова!  Якщо Ви хочете редагувати її на іншому комп’ютері, використовуйте це посилання: %(anonymous_url)s"
 
-#: views.py:237
+#: umap/views.py:524
 msgid "Congratulations, your map has been created!"
 msgstr "Вітаємо, Ваша мапа готова!"
 
-#: views.py:264
+#: umap/views.py:551
 msgid "Map has been updated!"
 msgstr "Мапа оновлена!"
 
-#: views.py:291
+#: umap/views.py:577
 msgid "Map editors updated with success!"
 msgstr "Редактори мапи успішно оновлені!"
 
-#: views.py:306
+#: umap/views.py:602
 msgid "Only its owner can delete the map."
 msgstr "Лише власник мапи може вилучити її."
 
-#: views.py:335
+#: umap/views.py:631
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Карта була скопійована.  Якщо Ви хочете редагувати її на іншому комп’ютері, використовуйте це посилання: %(anonymous_url)s"
 
-#: views.py:340
+#: umap/views.py:636
 msgid "Congratulations, your map has been cloned!"
 msgstr "Вітаємо, Ваша мапа скопійована!"
 
-#: views.py:526
+#: umap/views.py:803
 msgid "Layer successfully deleted."
 msgstr "Шар вилучено."

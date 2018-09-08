@@ -1,19 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
-# Supaplex <bejokeup@gmail.com>, 2014
+# Chia-liang Kao <clkao@clkao.org>, 2014
+# coop.shen <coop.shen@gmail.com>, 2014
 # Hsin-lin Cheng (lancetw) <lancetw@gmail.com>, 2014
 # Sean Young <assanges@icloud.com>, 2016
+# Supaplex <bejokeup@gmail.com>, 2014
 # Yuan CHAO <yuanchao@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2017-09-23 20:04+0000\n"
-"Last-Translator: Sean Young <assanges@icloud.com>\n"
+"POT-Creation-Date: 2018-09-08 14:50+0000\n"
+"PO-Revision-Date: 2018-09-08 14:51+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/yohanboniface/umap/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,100 +23,207 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: templates/404.html:7
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "不公開的私密編輯連結 %s"
+
+#: umap/forms.py:44 umap/models.py:114
+msgid "Everyone can edit"
+msgstr "所有人皆可編輯"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "僅能由私密連結編輯"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr ""
+
+#: umap/models.py:17
+msgid "name"
+msgstr "名稱"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "詳情"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "連結至授權條款說明網址"
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "URL 樣板，使用 OSM 地圖磚格式"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "編輯方塊中地圖磚的圖層順序"
+
+#: umap/models.py:115
+msgid "Only editors can edit"
+msgstr "僅編輯群可編輯"
+
+#: umap/models.py:116
+msgid "Only owner can edit"
+msgstr "僅擁有者可編輯"
+
+#: umap/models.py:119
+msgid "everyone (public)"
+msgstr "所有人（公開）"
+
+#: umap/models.py:120
+msgid "anyone with link"
+msgstr "任何有連結的人"
+
+#: umap/models.py:121
+msgid "editors only"
+msgstr "只有編輯者允許"
+
+#: umap/models.py:124 umap/models.py:252
+msgid "description"
+msgstr "描述"
+
+#: umap/models.py:125
+msgid "center"
+msgstr "中心"
+
+#: umap/models.py:126
+msgid "zoom"
+msgstr "縮放"
+
+#: umap/models.py:127
+msgid "locate"
+msgstr "定位"
+
+#: umap/models.py:127
+msgid "Locate user on load?"
+msgstr "載入時使用定位功能？"
+
+#: umap/models.py:130
+msgid "Choose the map licence."
+msgstr "選擇地圖授權"
+
+#: umap/models.py:131
+msgid "licence"
+msgstr "授權"
+
+#: umap/models.py:136
+msgid "owner"
+msgstr "擁有者"
+
+#: umap/models.py:137
+msgid "editors"
+msgstr "編輯者"
+
+#: umap/models.py:138
+msgid "edit status"
+msgstr "編輯狀態"
+
+#: umap/models.py:139
+msgid "share status"
+msgstr "分享狀態"
+
+#: umap/models.py:140
+msgid "settings"
+msgstr "設定"
+
+#: umap/models.py:206
+msgid "Clone of"
+msgstr "複製"
+
+#: umap/models.py:257
+msgid "display on load"
+msgstr "載入時顯示"
+
+#: umap/models.py:258
+msgid "Display this layer on load."
+msgstr "載入此圖層時顯示"
+
+#: umap/templates/404.html:7
 msgid "Take me to the home page"
 msgstr "帶我回主頁"
 
-#: templates/auth/user_detail.html:7
+#: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "瀏覽 %(current_user)s 的地圖"
 
-#: templates/leaflet_storage/map_detail.html:24
-msgid "Type editors nick to add…"
-msgstr "輸入編輯者的暱稱以加入..."
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr ""
 
-#: templates/leaflet_storage/map_detail.html:27
-msgid "Type new owner nick…"
-msgstr "輸入擁有者暱稱..."
-
-#: templates/leaflet_storage/map_list.html:7 views.py:184
-msgid "by"
-msgstr "由"
-
-#: templates/leaflet_storage/map_list.html:11
-msgid "More"
-msgstr "更多"
-
-#: templates/registration/login.html:4
+#: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
 msgstr "請先登入"
 
-#: templates/registration/login.html:18
+#: umap/templates/registration/login.html:18
 msgid "Username"
 msgstr "使用者名稱"
 
-#: templates/registration/login.html:20
+#: umap/templates/registration/login.html:20
 msgid "Password"
 msgstr "密碼"
 
-#: templates/registration/login.html:21
+#: umap/templates/registration/login.html:21
 msgid "Login"
 msgstr "登入"
 
-#: templates/registration/login.html:27
+#: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "選擇服務商"
 
-#: templates/umap/about_summary.html:6
+#: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr "uMap 讓您使用 <a href=\"%(osm_url)s\" />OpenStreetMap</a> 圖層來建立您的地圖﹐只需要幾分鐘就可以完成並嵌入您的網頁。"
 
-#: templates/umap/about_summary.html:11
+#: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
 msgstr "選擇您地圖的圖層"
 
-#: templates/umap/about_summary.html:12
+#: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "新增景點 POI：標記、線段、多邊形..."
 
-#: templates/umap/about_summary.html:13
+#: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
 msgstr "管理景點 POI 的顏色與圖示"
 
-#: templates/umap/about_summary.html:14
+#: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr "管理地圖選項：顯示小型地圖﹐設定初始位置..."
 
-#: templates/umap/about_summary.html:15
+#: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
 msgstr "批次匯入地理資訊 (geojson, gpx, kml, osm... )"
 
-#: templates/umap/about_summary.html:16
+#: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
 msgstr "選擇您的資料的授權條例"
 
-#: templates/umap/about_summary.html:17
+#: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
 msgstr "內嵌並分享您的地圖"
 
-#: templates/umap/about_summary.html:23
+#: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "而且是 <a href=\"%(repo_url)s\">開放原始碼</a> 的！"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
 msgid "Create a map"
 msgstr "建立地圖"
 
-#: templates/umap/about_summary.html:34
+#: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
 msgstr "播放展示"
 
-#: templates/umap/home.html:10
+#: umap/templates/umap/home.html:9
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -123,268 +232,138 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "這是範例服務﹐提供測試與正式版發行前驗證使用。如果您需要穩定的服務，請使用 <a href=\"%(stable_url)s\">%(stable_url)s</a>。您也可以自行架設服務﹐完全是 <a href=\"%(repo_url)s\">開放原始碼</a> 的！"
 
-#: templates/umap/home.html:17
+#: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
 msgstr "uMaps 地圖"
 
-#: templates/umap/home.html:24
+#: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr "找點子，瀏覽其他地圖"
 
-#: templates/umap/navigation.html:12
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "您已登入，繼續中..."
+
+#: umap/templates/umap/map_list.html:7 umap/views.py:212
+msgid "by"
+msgstr "由"
+
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "更多"
+
+#: umap/templates/umap/navigation.html:10
 msgid "My maps"
 msgstr "我的地圖"
 
-#: templates/umap/navigation.html:14
+#: umap/templates/umap/navigation.html:12
 msgid "Log in"
 msgstr "登入"
 
-#: templates/umap/navigation.html:14
+#: umap/templates/umap/navigation.html:12
 msgid "Sign in"
 msgstr "註冊"
 
-#: templates/umap/navigation.html:16
+#: umap/templates/umap/navigation.html:14
 msgid "About"
 msgstr "關於"
 
-#: templates/umap/navigation.html:17
+#: umap/templates/umap/navigation.html:15
 msgid "Feedback"
 msgstr "回報問題"
 
-#: templates/umap/navigation.html:20
+#: umap/templates/umap/navigation.html:18
 msgid "Change password"
 msgstr "更改密碼"
 
-#: templates/umap/navigation.html:22
+#: umap/templates/umap/navigation.html:20
 msgid "Log out"
 msgstr "登出"
 
-#: templates/umap/password_change.html:6
+#: umap/templates/umap/password_change.html:6
 msgid "Password change"
 msgstr "密碼變更"
 
-#: templates/umap/password_change.html:7
+#: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "為確保賬戸安全，請先輸入你的舊有密碼。然後輸入新密碼兩次，以便確認新密碼輸入正確。"
 
-#: templates/umap/password_change.html:12
+#: umap/templates/umap/password_change.html:12
 msgid "Old password"
 msgstr "舊密碼"
 
-#: templates/umap/password_change.html:14
+#: umap/templates/umap/password_change.html:14
 msgid "New password"
 msgstr "新密碼"
 
-#: templates/umap/password_change.html:16
+#: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr "再次輸入新密碼"
 
-#: templates/umap/password_change.html:18
+#: umap/templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr "更改我的密碼"
 
-#: templates/umap/password_change_done.html:6
+#: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr "成功更改密碼"
 
-#: templates/umap/password_change_done.html:7
+#: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr "你的密碼已更改。"
 
-#: templates/umap/search.html:13
+#: umap/templates/umap/search.html:13
 msgid "Not map found."
 msgstr "找不到地圖。"
 
-#: templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
 msgid "Search maps"
 msgstr "搜尋地圖"
 
-#: templates/umap/search_bar.html:9
+#: umap/templates/umap/search_bar.html:9
 msgid "Search"
 msgstr "搜尋"
 
-#: views.py:190
+#: umap/views.py:218
 msgid "View the map"
 msgstr "檢視地圖"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "不公開的私密編輯連結 %s"
-
-#: forms.py:47 models.py:113
-msgid "Everyone can edit"
-msgstr "所有人皆可編輯"
-
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "僅能由私密連結編輯"
-
-#: models.py:20
-msgid "name"
-msgstr "名稱"
-
-#: models.py:42
-msgid "No licence set"
-msgstr "未指定授權條款"
-
-#: models.py:51
-msgid "details"
-msgstr "詳情"
-
-#: models.py:52
-msgid "Link to a page where the licence is detailed."
-msgstr "連結至授權條款說明網址"
-
-#: models.py:66
-msgid "URL template using OSM tile format"
-msgstr "URL 樣板，使用 OSM 地圖磚格式"
-
-#: models.py:74
-msgid "Order of the tilelayers in the edit box"
-msgstr "編輯方塊中地圖磚的圖層順序"
-
-#: models.py:114
-msgid "Only editors can edit"
-msgstr "僅編輯群可編輯"
-
-#: models.py:115
-msgid "Only owner can edit"
-msgstr "僅擁有者可編輯"
-
-#: models.py:118
-msgid "everyone (public)"
-msgstr "所有人（公開）"
-
-#: models.py:119
-msgid "anyone with link"
-msgstr "任何有連結的人"
-
-#: models.py:120
-msgid "editors only"
-msgstr "只有編輯者允許"
-
-#: models.py:123 models.py:257
-msgid "description"
-msgstr "描述"
-
-#: models.py:124
-msgid "center"
-msgstr "中心"
-
-#: models.py:125
-msgid "zoom"
-msgstr "縮放"
-
-#: models.py:126
-msgid "locate"
-msgstr "定位"
-
-#: models.py:126
-msgid "Locate user on load?"
-msgstr "載入時使用定位功能？"
-
-#: models.py:129
-msgid "Choose the map licence."
-msgstr "選擇地圖授權"
-
-#: models.py:130
-msgid "licence"
-msgstr "授權"
-
-#: models.py:135
-msgid "background"
-msgstr "地圖背景"
-
-#: models.py:136
-msgid "owner"
-msgstr "擁有者"
-
-#: models.py:137
-msgid "editors"
-msgstr "編輯者"
-
-#: models.py:138
-msgid "edit status"
-msgstr "編輯狀態"
-
-#: models.py:139
-msgid "share status"
-msgstr "分享狀態"
-
-#: models.py:140
-msgid "settings"
-msgstr "設定"
-
-#: models.py:178
-#, python-format
-msgid "Your anonymous map has been attached to your account %s"
-msgstr "你的匿名地圖已經加入你的帳號 %s "
-
-#: models.py:211
-msgid "Clone of"
-msgstr "複製"
-
-#: models.py:262
-msgid "display on load"
-msgstr "載入時顯示"
-
-#: models.py:263
-msgid "Display this layer on load."
-msgstr "載入此圖層時顯示"
-
-#: templates/leaflet_storage/login_popup_end.html:2
-msgid "You are logged in. Continuing..."
-msgstr "您已登入，繼續中..."
-
-#: templates/leaflet_storage/map_update_permissions.html:2
-msgid "Map permissions"
-msgstr "地圖權限"
-
-#: templates/registration/login.html:2
-msgid "Please log in to proceed"
-msgstr "請先登入"
-
-#: templates/registration/login.html:4
-msgid "Your username and password didn't match. Please try again."
-msgstr "使用者代號或密碼不正確，請重新輸入。"
-
-#: views.py:232
+#: umap/views.py:519
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "您的地圖已建立完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
 
-#: views.py:237
+#: umap/views.py:524
 msgid "Congratulations, your map has been created!"
 msgstr "恭喜您的地圖已經新增完成"
 
-#: views.py:264
+#: umap/views.py:551
 msgid "Map has been updated!"
 msgstr "地圖已經更新"
 
-#: views.py:291
+#: umap/views.py:577
 msgid "Map editors updated with success!"
 msgstr "地圖編輯者更新完成"
 
-#: views.py:306
+#: umap/views.py:602
 msgid "Only its owner can delete the map."
 msgstr "只有擁有者可以刪除此地圖"
 
-#: views.py:335
+#: umap/views.py:631
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "您的地圖已複製完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
 
-#: views.py:340
+#: umap/views.py:636
 msgid "Congratulations, your map has been cloned!"
 msgstr "恭喜，您的地圖已被複製！"
 
-#: views.py:526
+#: umap/views.py:803
 msgid "Layer successfully deleted."
 msgstr "圖層已刪除"
