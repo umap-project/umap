@@ -426,7 +426,7 @@ class MapView(MapDetailMixin, DetailView):
                 canonical = "?".join([canonical, request.META['QUERY_STRING']])
             return HttpResponsePermanentRedirect(canonical)
         if not self.object.can_view(request):
-            return HttpResponseForbidden('Forbidden')
+            return HttpResponseForbidden()
         return super(MapView, self).get(request, *args, **kwargs)
 
     def get_canonical_url(self):
@@ -585,7 +585,7 @@ class AttachAnonymousMap(View):
            or not self.object.is_anonymous_owner(self.request)
            or not self.object.can_edit(self.request.user, self.request)
            or not self.request.user.is_authenticated):
-            return HttpResponseForbidden('Forbidden.')
+            return HttpResponseForbidden()
         self.object.owner = self.request.user
         self.object.save()
         return simple_json_response()
@@ -602,7 +602,7 @@ class MapDelete(DeleteView):
                 _('Only its owner can delete the map.'))
         if not self.object.owner\
            and not self.object.is_anonymous_owner(self.request):
-            return HttpResponseForbidden('Forbidden.')
+            return HttpResponseForbidden()
         self.object.delete()
         return simple_json_response(redirect="/")
 
@@ -612,7 +612,7 @@ class MapClone(View):
     def post(self, *args, **kwargs):
         if not getattr(settings, "UMAP_ALLOW_ANONYMOUS", False) \
            and not self.request.user.is_authenticated:
-            return HttpResponseForbidden('Forbidden')
+            return HttpResponseForbidden()
         owner = self.request.user if self.request.user.is_authenticated else None
         self.object = kwargs['map_inst'].clone(owner=owner)
         response = simple_json_response(redirect=self.object.get_absolute_url())
@@ -661,7 +661,7 @@ class MapAnonymousEditUrl(RedirectView):
         try:
             pk = signer.unsign(self.kwargs['signature'])
         except BadSignature:
-            return HttpResponseForbidden('Bad Signature')
+            return HttpResponseForbidden()
         else:
             map_inst = get_object_or_404(Map, pk=pk)
             url = map_inst.get_absolute_url()
@@ -786,7 +786,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.map != self.kwargs['map_inst']:
-            return HttpResponseForbidden('Route to nowhere')
+            return HttpResponseForbidden()
         if not self.if_match():
             return HttpResponse(status=412)
         return super(DataLayerUpdate, self).post(request, *args, **kwargs)
@@ -798,7 +798,7 @@ class DataLayerDelete(DeleteView):
     def delete(self, *args, **kwargs):
         self.object = self.get_object()
         if self.object.map != self.kwargs['map_inst']:
-            return HttpResponseForbidden('Route to nowhere')
+            return HttpResponseForbidden()
         self.object.delete()
         return simple_json_response(info=_("Layer successfully deleted."))
 

@@ -480,4 +480,4 @@ def test_create_readonly(client, user, post_data, settings):
     client.login(username=user.username, password="123123")
     response = client.post(url, post_data)
     assert response.status_code == 403
-    assert response.content == b'Site is readonly'
+    assert response.content == b'Site is readonly for maintenance'

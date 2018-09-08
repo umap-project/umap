@@ -59,7 +59,7 @@ L.U.Xhr = L.Evented.extend({
                     settings.callback.call(settings.context || xhr, xhr.responseText, xhr);
                 }
                 else if (xhr.status === 403) {
-                    self.ui.alert({content: L._('Action not allowed :('), level: 'error'});
+                    self.ui.alert({content: xhr.responseText || L._('Action not allowed :('), level: 'error'});
                 }
                 else if (xhr.status === 412) {
                     var msg = L._('Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.');

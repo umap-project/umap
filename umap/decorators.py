@@ -38,8 +38,7 @@ def map_permissions_check(view_func):
             if not can_edit:
                 if map_inst.owner and not user.is_authenticated:
                     return simple_json_response(login_required=str(LOGIN_URL))
-                else:
-                    return HttpResponseForbidden('Action not allowed for user.')
+                return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
     return wrapper
 
