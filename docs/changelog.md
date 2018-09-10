@@ -49,6 +49,12 @@ COMMIT;
         umap compress
 
 
+## 1.0.0.rc-4
+
+- fixed geodjango defaulting geojson parsing to SRID 3857 instead of 4326
+- fixed tooltip on hover (cf #631)
+
+
 ## 1.0.0.rc-3
 
 - added a readonly mode (`UMAP_READONLY=True`), useful to disallow update while

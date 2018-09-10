@@ -215,4 +215,28 @@ describe('L.Util', function () {
 
     });
 
+    describe('#usableOption()', function () {
+
+        it('should consider false', function () {
+            assert.ok(L.Util.usableOption({key: false}, 'key'));
+        })
+
+        it('should consider 0', function () {
+            assert.ok(L.Util.usableOption({key: 0}, 'key'));
+        })
+
+        it('should not consider undefined', function () {
+            assert.notOk(L.Util.usableOption({}, 'key'));
+        })
+
+        it('should not consider empty string', function () {
+            assert.notOk(L.Util.usableOption({key: ''}, 'key'));
+        })
+
+        it('should consider null', function () {
+            assert.ok(L.Util.usableOption({key: null}, 'key'));
+        })
+
+    });
+
 });

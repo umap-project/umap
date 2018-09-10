@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Joao Ponce de Leao Paulouro <joao.ponceleao@gmail.com>, 2014
-# Rui <xymarior@yandex.com>, 2016
+# Rui <xymarior@yandex.com>, 2016,2018
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-08 14:50+0000\n"
-"PO-Revision-Date: 2018-09-08 14:51+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"PO-Revision-Date: 2018-09-08 18:29+0000\n"
+"Last-Translator: Rui <xymarior@yandex.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/yohanboniface/umap/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,7 +34,7 @@ msgstr "Unicamente editável através de link secreto"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "O site está em modo de leitura para manutenção"
 
 #: umap/models.py:17
 msgid "name"
@@ -94,7 +94,7 @@ msgstr "localizar"
 
 #: umap/models.py:127
 msgid "Locate user on load?"
-msgstr "Localizar usuário no início?"
+msgstr "Localizar utilizador no início?"
 
 #: umap/models.py:130
 msgid "Choose the map licence."
@@ -148,7 +148,7 @@ msgstr "Consulte os mapas de %(current_user)s"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "%(current_user)s não tem mapas."
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
