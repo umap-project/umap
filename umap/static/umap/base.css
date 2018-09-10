@@ -805,13 +805,13 @@ input[type=hidden].blur + .button {
 .dark .umap-close-link:hover {
     background-color: #2e3436;
 }
-.umap-alert .umap-close-link {
+#umap-alert-container .umap-close-link {
     color: #fff;
     float: right;
     padding-right: 10px;
 }
-.umap-alert .umap-close-icon {
-    background-position: -128px -90px;
+#umap-alert-container .umap-close-icon {
+    background-position: -128px -93px;
 }
 
 
