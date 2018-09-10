@@ -103,6 +103,11 @@ a.umap-control-text {
     background-position: -1px -1px;
     background-color: #353c3e;
 }
+.leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
+.leaflet-control-edit-enable a:hover {
+    background-color: #4d5759;
+}
+
 
 
 
@@ -177,9 +182,6 @@ ul.photon-autocomplete {
 }
 .leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
     background-image: url('./img/24-white.png');
-}
-.leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover {
-    background-color: #353c3e;
 }
 .umap-toolbar {
     margin-top: 0;
