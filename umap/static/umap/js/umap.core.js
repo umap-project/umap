@@ -121,7 +121,7 @@ L.Util.detectFileType = function (f) {
 };
 
 L.Util.usableOption = function (options, option) {
-    return typeof options[option] !== 'undefined' && options[option] !== '' && options[option] !== null;
+    return typeof options[option] !== 'undefined' && options[option] !== '';
 };
 
 L.Util.greedyTemplate = function (str, data, ignore) {

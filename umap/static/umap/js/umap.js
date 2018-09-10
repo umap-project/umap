@@ -545,7 +545,7 @@ L.U.Map.include({
 
     getOption: function (option) {
         if (L.Util.usableOption(this.options, option)) return this.options[option];
-        else return this.getDefaultOption(option);
+        return this.getDefaultOption(option);
     },
 
     updateExtent: function() {
