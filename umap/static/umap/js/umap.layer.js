@@ -562,7 +562,7 @@ L.U.DataLayer = L.Evented.extend({
                 return this.geojsonToFeatures(geometry.geometries);
 
             default:
-                this.map.ui.alert({content: L._('Skipping unkown geometry.type: {type}', {type: geometry.type}), level: 'error'});
+                this.map.ui.alert({content: L._('Skipping unknown geometry.type: {type}', {type: geometry.type || 'undefined'}), level: 'error'});
         }
         if (layer) {
             this.addLayer(layer);

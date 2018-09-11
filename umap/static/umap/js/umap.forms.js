@@ -665,15 +665,10 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
 L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
 
     build: function () {
-        var options = {className: 'edit-owner'};
-        options.on_select = function (choice) {
-            this._value = {
-                'id': choice.item.value,
-                'name': choice.item.label,
-                'url': choice.item.url
-            };
-            this.set();
-        }
+        var options = {
+            className: 'edit-owner',
+            on_select: L.bind(this.onSelect, this)
+        };
         this.autocomplete = new L.U.AutoComplete.Ajax.Select(this.parentNode, options);
         var owner = this.toHTML();
         if (owner) this.autocomplete.displaySelected({'item': {'value': owner.id, 'label': owner.name}});
@@ -681,7 +676,17 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
 
     value: function () {
         return this._value;
+    },
+
+    onSelect: function (choice) {
+        this._value = {
+            'id': choice.item.value,
+            'name': choice.item.label,
+            'url': choice.item.url
+        };
+        this.set();
     }
+
 
 });
 
@@ -689,22 +694,11 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
 L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
 
     build: function () {
-        var options = {className: 'edit-editors'};
-        options.on_select = function (choice) {
-            this._values.push({
-                'id': choice.item.value,
-                'name': choice.item.label,
-                'url': choice.item.url
-            });
-            this.set();
-        }
-        options.on_unselect = function (choice) {
-            var index = this._values.findIndex(function (item) {return item.id === choice.item.value});
-            if (index !== -1) {
-                this._values.splice(index, 1);
-                this.set();
-            }
-        }
+        var options = {
+            className: 'edit-editors',
+            on_select: L.bind(this.onSelect, this),
+            on_unselect: L.bind(this.onUnselect, this)
+        };
         this.autocomplete = new L.U.AutoComplete.Ajax.SelectMultiple(this.parentNode, options);
         this._values = this.toHTML();
         if (this._values) for (var i = 0; i < this._values.length; i++) this.autocomplete.displaySelected({'item': {'value': this._values[i].id, 'label': this._values[i].name}});
@@ -712,6 +706,23 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
 
     value: function () {
         return this._values;
+    },
+
+    onSelect: function (choice) {
+        this._values.push({
+            'id': choice.item.value,
+            'name': choice.item.label,
+            'url': choice.item.url
+        });
+        this.set();
+    },
+
+    onUnselect: function (choice) {
+        var index = this._values.findIndex(function (item) {return item.id === choice.item.value});
+        if (index !== -1) {
+            this._values.splice(index, 1);
+            this.set();
+        }
     }
 
 });

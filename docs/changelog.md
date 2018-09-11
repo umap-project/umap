@@ -49,6 +49,10 @@ COMMIT;
         umap compress
 
 
+## 1.0.0.rc-5
+
+- Fixed user autocompletion in permissions panel (cf #635)
+
 ## 1.0.0.rc-4
 
 - fixed geodjango defaulting geojson parsing to SRID 3857 instead of 4326

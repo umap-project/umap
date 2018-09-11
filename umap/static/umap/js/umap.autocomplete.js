@@ -78,7 +78,7 @@ L.U.AutoComplete = L.Class.extend({
                 break;
             case L.U.Keys.DOWN:
                 if(this.RESULTS.length > 0) {
-                    if(this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) { // what if one resutl?
+                    if(this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) { // what if one result?
                         this.CURRENT++;
                         this.highlight();
                     }
@@ -168,7 +168,7 @@ L.U.AutoComplete = L.Class.extend({
         else this.CACHE = val;
         this._do_search(val, function (data) {
             this.handleResults(data.data);
-        });
+        }, this);
     },
 
     createResult: function (item) {
@@ -191,7 +191,7 @@ L.U.AutoComplete = L.Class.extend({
     resultToIndex: function (result) {
         var out = null;
         this.forEach(this.RESULTS, function (item, index) {
-            if (item.value == result.value) {
+            if (item.item.value == result.item.value) {
                 out = index;
                 return;
             }
@@ -215,12 +215,8 @@ L.U.AutoComplete = L.Class.extend({
     highlight: function () {
         var self = this;
         this.forEach(this.RESULTS, function (result, index) {
-            if (index === self.CURRENT) {
-                L.DomUtil.addClass(result.el, 'on');
-            }
-            else {
-                L.DomUtil.removeClass(result.el, 'on');
-            }
+            if (index === self.CURRENT) L.DomUtil.addClass(result.el, 'on');
+            else L.DomUtil.removeClass(result.el, 'on');
         });
     },
 
@@ -268,9 +264,9 @@ L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
         };
     },
 
-    _do_search: function (val, callback) {
+    _do_search: function (val, callback, context) {
          val = val.toLowerCase();
-        this.xhr.get('/agnocomplete/AutocompleteUser/?q=' + encodeURIComponent(val), {callback: callback});
+        this.xhr.get('/agnocomplete/AutocompleteUser/?q=' + encodeURIComponent(val), {callback: callback, context: context || this});
     }
 
 });
@@ -310,7 +306,6 @@ L.U.AutoComplete.Ajax.Select = L.U.AutoComplete.Ajax.extend({
         this.input.style.display = 'none';
         L.DomEvent.on(close, 'click', function () {
             this.selected_container.innerHTML = '';
-            this.options.on_unselect(result);
             this.input.style.display = 'block';
         }, this);
         this.hide();
