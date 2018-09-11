@@ -51,7 +51,8 @@ COMMIT;
 
 ## 1.0.0.rc-5
 
-- Fixed user autocompletion in permissions panel (cf #635)
+- fixed user autocompletion in permissions panel (cf #635)
+- fixed ternary choice dealing with unknown values (cf #633)
 
 ## 1.0.0.rc-4
 
