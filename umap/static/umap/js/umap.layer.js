@@ -505,7 +505,7 @@ L.U.DataLayer = L.Evented.extend({
             } catch (e) {
                 d = toDom(c);
             }
-            callback(osmtogeojson(d));
+            callback(osmtogeojson(d, {flatProperties: true}));
         } else if (type === 'geojson') {
             try {
                 var gj = JSON.parse(c);

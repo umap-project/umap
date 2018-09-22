@@ -144,6 +144,20 @@ describe('L.U.Map', function(){
             assert.equal(this.datalayer._index.length, 2);
         });
 
+        it('should import osm from textarea', function () {
+            this.datalayer.empty()
+            happen.click(qs('a.upload-data'));
+            textarea = qs('.umap-upload textarea');
+            submit = qs('.umap-upload input[type="button"]');
+            formatSelect = qs('.umap-upload select[name="format"]');
+            assert.equal(this.datalayer._index.length, 0);
+            textarea.value = '{"version": 0.6,"generator": "Overpass API 0.7.55.4 3079d8ea","osm3s": {"timestamp_osm_base": "2018-09-22T05:26:02Z","copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."},"elements": [{"type": "node","id": 3619112991,"lat": 48.9352995,"lon": 2.3570684,"tags": {"information": "map","map_size": "city","map_type": "scheme","tourism": "information"}},{"type": "node","id": 3682500756,"lat": 48.9804426,"lon": 2.2719725,"tags": {"information": "map","level": "0","tourism": "information"}}]}';
+            changeSelectValue(formatSelect, 'osm');
+            happen.click(submit);
+            assert.equal(this.datalayer._index.length, 2);
+            assert.equal(this.datalayer._layers[this.datalayer._index[0]].properties.tourism, 'information');
+        });
+
         it('should import kml from textarea', function () {
             this.datalayer.empty()
             happen.click(qs('a.upload-data'));
