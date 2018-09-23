@@ -360,12 +360,12 @@ var locale = {
     "1 day": "1 Tag",
     "1 hour": "1 Stunde",
     "5 min": "5 min",
-    "Cache proxied request": "Cache proxied request",
-    "No cache": "No cache",
+    "Cache proxied request": "Proxycache-Anfrage",
+    "No cache": "Kein Cache",
     "Popup": "Popup",
-    "Popup (large)": "Popup (large)",
-    "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup (large)": "Popup (groß)",
+    "Popup content style": "Popupinhaltstil",
+    "Popup shape": "Popupform"
 };
 L.registerLocale("de", locale);
 L.setLocale("de");
