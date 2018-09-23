@@ -448,7 +448,7 @@ class PermissionsMixin:
 
     def get_anonymous_edit_url(self):
         anonymous_url = self.object.get_anonymous_edit_url()
-        return f'{settings.SITE_URL}{anonymous_url}'
+        return settings.SITE_URL + anonymous_url
 
 
 class MapView(MapDetailMixin, PermissionsMixin, DetailView):
