@@ -1074,6 +1074,11 @@ L.U.Map.include({
                 if (!this.options.umap_id) {
                     duration = 100000; // we want a longer message at map creation (TODO UGLY)
                     this.options.umap_id = data.id;
+                    this.permissions.setOptions(data.permissions)
+                } else if (!this.permissions.isDirty) {
+                    // Do not override local changes to permissions,
+                    // but update in case some other editors changed them in the meantime.
+                    this.permissions.setOptions(data.permissions)
                 }
                 // Update URL in case the name has changed.
                 if (history && history.pushState) history.pushState({}, this.options.name, data.url);

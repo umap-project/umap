@@ -35,6 +35,18 @@ def test_create(client, user, post_data):
     assert created_map.name == name
     assert created_map.center.x == 13.447265624999998
     assert created_map.center.y == 48.94415123418794
+    assert j['permissions'] == {
+        'edit_status': 3,
+        'share_status': 1,
+        'owner': {
+            'id': user.pk,
+            'name': 'Joe',
+            'url': '/en/user/Joe/'
+        },
+        'editors': [],
+        'anonymous_edit_url': ('http://umap.org'
+                               + created_map.get_anonymous_edit_url())
+    }
 
 
 def test_map_create_permissions(client, settings):
@@ -315,6 +327,8 @@ def test_anonymous_create(cookieclient, post_data):
     j = json.loads(response.content.decode())
     created_map = Map.objects.latest('pk')
     assert j['id'] == created_map.pk
+    assert (created_map.get_anonymous_edit_url()
+            in j['permissions']['anonymous_edit_url'])
     assert created_map.name == name
     key, value = created_map.signed_cookie_elements
     assert key in cookieclient.cookies

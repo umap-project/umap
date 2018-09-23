@@ -10,7 +10,7 @@ L.U.MapPermissions = L.Class.extend({
     },
 
     initialize: function (map) {
-        this.options = map.options.permissions || {};
+        this.setOptions(map.options.permissions);
         this.map = map;
         var isDirty = false,
             self = this;
@@ -31,6 +31,10 @@ L.U.MapPermissions = L.Class.extend({
 
     },
 
+    setOptions: function (options) {
+        this.options = L.Util.setOptions(this, options);
+    },
+
     isOwner: function () {
         return this.map.options.user && this.options.owner && this.map.options.user.id == this.options.owner.id;
     },
@@ -49,8 +53,8 @@ L.U.MapPermissions = L.Class.extend({
             fields = [],
             title = L.DomUtil.create('h4', '', container);
         if (this.isAnonymousMap()) {
-            if (this.map.options.anonymous_edit_url) {
-                var helpText = L._('Secret edit link is:<br>{link}', {link: this.map.options.anonymous_edit_url});
+            if (this.options.anonymous_edit_url) {
+                var helpText = L._('Secret edit link is:<br>{link}', {link: this.options.anonymous_edit_url});
                 fields.push(['options.edit_status', {handler: 'IntSelect', label: L._('Who can edit'), selectOptions: this.map.options.anonymous_edit_statuses, helpText: helpText}]);
             }
         } else {

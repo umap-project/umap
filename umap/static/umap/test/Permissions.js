@@ -33,7 +33,7 @@ describe('L.Permissions', function () {
         var button;
 
         it('should only allow edit_status', function () {
-            this.map.options.anonymous_edit_url = 'http://anonymous.url'
+            this.map.permissions.options.anonymous_edit_url = 'http://anonymous.url';
             button = qs('a.update-map-permissions');
             happen.click(button);
             expect(qs('select[name="edit_status"]')).to.be.ok;

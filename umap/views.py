@@ -382,6 +382,14 @@ class MapDetailMixin:
             locale = to_locale(locale)
             properties['locale'] = locale
             context['locale'] = locale
+        user = self.request.user
+        if not user.is_anonymous:
+            properties['user'] = {
+                'id': user.pk,
+                'name': user.get_username(),
+                'url': reverse(settings.USER_MAPS_URL,
+                               args=(user.get_username(), ))
+            }
         map_settings = self.get_geojson()
         if "properties" not in map_settings:
             map_settings['properties'] = {}
@@ -416,7 +424,34 @@ class MapDetailMixin:
         return None
 
 
-class MapView(MapDetailMixin, DetailView):
+class PermissionsMixin:
+
+    def get_permissions(self):
+        permissions = {}
+        permissions['edit_status'] = self.object.edit_status
+        permissions['share_status'] = self.object.share_status
+        if self.object.owner:
+            permissions['owner'] = {
+                'id': self.object.owner.pk,
+                'name': self.object.owner.get_username(),
+                'url': reverse(settings.USER_MAPS_URL,
+                               args=(self.object.owner.get_username(), ))
+            }
+            permissions['editors'] = [{
+                'id': editor.pk,
+                'name': editor.get_username(),
+            } for editor in self.object.editors.all()]
+        if (not self.object.owner
+           and self.object.is_anonymous_owner(self.request)):
+            permissions['anonymous_edit_url'] = self.get_anonymous_edit_url()
+        return permissions
+
+    def get_anonymous_edit_url(self):
+        anonymous_url = self.object.get_anonymous_edit_url()
+        return f'{settings.SITE_URL}{anonymous_url}'
+
+
+class MapView(MapDetailMixin, PermissionsMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -455,36 +490,7 @@ class MapView(MapDetailMixin, DetailView):
         if "properties" not in map_settings:
             map_settings['properties'] = {}
         map_settings['properties']['name'] = self.object.name
-        permissions = {}
-        permissions['edit_status'] = self.object.edit_status
-        permissions['share_status'] = self.object.share_status
-        if self.object.owner:
-            permissions['owner'] = {
-                'id': self.object.owner.pk,
-                'name': self.object.owner.get_username(),
-                'url': reverse(settings.USER_MAPS_URL,
-                               args=(self.object.owner.get_username(), ))
-            }
-            permissions['editors'] = [{
-                'id': editor.pk,
-                'name': editor.get_username(),
-            } for editor in self.object.editors.all()]
-        map_settings['properties']['permissions'] = permissions
-        user = self.request.user
-        if not user.is_anonymous:
-            map_settings['properties']['user'] = {
-                'id': user.pk,
-                'name': user.get_username(),
-                'url': reverse(settings.USER_MAPS_URL,
-                               args=(user.get_username(), ))
-            }
-        if (not self.object.owner
-           and self.object.is_anonymous_owner(self.request)):
-            anonymous_url = "%s%s" % (
-                settings.SITE_URL,
-                self.object.get_anonymous_edit_url()
-            )
-            map_settings['properties']['anonymous_edit_url'] = anonymous_url
+        map_settings['properties']['permissions'] = self.get_permissions()
         return map_settings
 
 
@@ -502,7 +508,7 @@ class MapNew(MapDetailMixin, TemplateView):
     template_name = "umap/map_detail.html"
 
 
-class MapCreate(FormLessEditMixin, CreateView):
+class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
     model = Map
     form_class = MapSettingsForm
 
@@ -510,11 +516,8 @@ class MapCreate(FormLessEditMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.owner = self.request.user
         self.object = form.save()
+        anonymous_url = self.get_anonymous_edit_url()
         if not self.request.user.is_authenticated:
-            anonymous_url = "%s%s" % (
-                settings.SITE_URL,
-                self.object.get_anonymous_edit_url()
-            )
             msg = _(
                 "Your map has been created! If you want to edit this map from "
                 "another computer, please use this link: %(anonymous_url)s"
@@ -522,9 +525,13 @@ class MapCreate(FormLessEditMixin, CreateView):
             )
         else:
             msg = _("Congratulations, your map has been created!")
+        permissions = self.get_permissions()
+        # User does not have the cookie yet.
+        permissions['anonymous_edit_url'] = anonymous_url
         response = simple_json_response(
             id=self.object.pk,
             url=self.object.get_absolute_url(),
+            permissions=permissions,
             info=msg
         )
         if not self.request.user.is_authenticated:
@@ -537,7 +544,7 @@ class MapCreate(FormLessEditMixin, CreateView):
         return response
 
 
-class MapUpdate(FormLessEditMixin, UpdateView):
+class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
     model = Map
     form_class = MapSettingsForm
     pk_url_kwarg = 'map_id'
@@ -548,7 +555,8 @@ class MapUpdate(FormLessEditMixin, UpdateView):
         return simple_json_response(
             id=self.object.pk,
             url=self.object.get_absolute_url(),
-            info=_("Map has been updated!")
+            permissions=self.get_permissions(),
+            info=_("Map has been updated!"),
         )
 
 
@@ -607,7 +615,7 @@ class MapDelete(DeleteView):
         return simple_json_response(redirect="/")
 
 
-class MapClone(View):
+class MapClone(PermissionsMixin, View):
 
     def post(self, *args, **kwargs):
         if not getattr(settings, "UMAP_ALLOW_ANONYMOUS", False) \
@@ -623,14 +631,10 @@ class MapClone(View):
                 value=value,
                 max_age=ANONYMOUS_COOKIE_MAX_AGE
             )
-            anonymous_url = "%s%s" % (
-                settings.SITE_URL,
-                self.object.get_anonymous_edit_url()
-            )
             msg = _(
                 "Your map has been cloned! If you want to edit this map from "
                 "another computer, please use this link: %(anonymous_url)s"
-                % {"anonymous_url": anonymous_url}
+                % {"anonymous_url": self.get_anonymous_edit_url()}
             )
         else:
             msg = _("Congratulations, your map has been cloned!")
