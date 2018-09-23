@@ -49,6 +49,11 @@ COMMIT;
         umap compress
 
 
+## 1.0.0.rc-6
+
+- fixed OSM properties not read anymore (cf #641)
+- fixed permissions panel not active at first map save
+
 ## 1.0.0.rc-5
 
 - fixed user autocompletion in permissions panel (cf #635)
