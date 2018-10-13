@@ -138,8 +138,21 @@ L.U.PopupTemplate.Default = L.Class.extend({
 
 });
 
+L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
 
-L.U.PopupTemplate.Table = L.U.PopupTemplate.Default.extend({
+    renderTitle: function () {
+        var title;
+        if (this.feature.getDisplayName()) {
+            title = L.DomUtil.create('h3', 'popup-title');
+            title.innerHTML = L.Util.escapeHTML(this.feature.getDisplayName());
+        }
+        return title;
+    }
+
+});
+
+
+L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
 
     formatRow: function (key, value) {
         if (value.indexOf('http') === 0) {
@@ -163,19 +176,6 @@ L.U.PopupTemplate.Table = L.U.PopupTemplate.Default.extend({
             this.addRow(table, key, L.Util.escapeHTML(this.feature.properties[key]).trim());
         }
         return table;
-    }
-
-});
-
-L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
-
-    renderTitle: function () {
-        var title;
-        if (this.feature.getDisplayName()) {
-            title = L.DomUtil.create('h3', 'popup-title');
-            title.innerHTML = L.Util.escapeHTML(this.feature.getDisplayName());
-        }
-        return title;
     }
 
 });
