@@ -49,29 +49,33 @@ COMMIT;
         umap compress
 
 
-## 1.0.0.rc-6
+## 1.0.0-rc.7
+
+- fixed table popup template not displaying name anymore (cf #647)
+
+## 1.0.0-rc.6
 
 - fixed OSM properties not read anymore (cf #641)
 - fixed permissions panel not active at first map save
 
-## 1.0.0.rc-5
+## 1.0.0-rc.5
 
 - fixed user autocompletion in permissions panel (cf #635)
 - fixed ternary choice dealing with unknown values (cf #633)
 
-## 1.0.0.rc-4
+## 1.0.0-rc.4
 
 - fixed geodjango defaulting geojson parsing to SRID 3857 instead of 4326
 - fixed tooltip on hover (cf #631)
 
 
-## 1.0.0.rc-3
+## 1.0.0-rc.3
 
 - added a readonly mode (`UMAP_READONLY=True`), useful to disallow update while
   migrating from one server to an other, for example
 
 
-## 1.0.0.rc-2
+## 1.0.0-rc.2
 
 - allow to cache proxied remote data requests (#513 #510 #160)
 - fixed popup template parsing of url with url as query string (#607)
@@ -83,7 +87,7 @@ COMMIT;
   Allows to add more of those in the future also.
 - fixed popup not opening on first zoom button click when marker is clustered (#611)
 
-## 1.0.0.rc-1
+## 1.0.0-rc.1
 - BREAKING: support of python 2 is removed per upgrading to Django 2.0
 - WARNING: merge Leaflet-Storage and django-leaflet-storage inside umap to ease
   maintenance and contribution; See [Upgrading to 1.0](#upgrading-to-1.0)
