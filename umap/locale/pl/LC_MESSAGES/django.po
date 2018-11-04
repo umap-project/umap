@@ -8,13 +8,14 @@
 # endro, 2015
 # Maciej Kowalik <m.kowalik.79@gmail.com>, 2016
 # Teiron, 2016
+# Tomasz Nycz <tomasz.merkato@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-08 14:50+0000\n"
-"PO-Revision-Date: 2018-09-08 14:51+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"PO-Revision-Date: 2018-10-20 05:37+0000\n"
+"Last-Translator: Tomasz Nycz <tomasz.merkato@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/yohanboniface/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +38,7 @@ msgstr "Edycja możliwa tylko z sekretnym odnośnikiem"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "Strona jest w trybie read-only aby wykonać prace konserwacyjne"
 
 #: umap/models.py:17
 msgid "name"
@@ -151,7 +152,7 @@ msgstr "Przeglądaj mapy %(current_user)s"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "%(current_user)snie posiada map."
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
