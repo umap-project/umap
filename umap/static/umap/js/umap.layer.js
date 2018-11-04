@@ -927,7 +927,11 @@ L.U.DataLayer = L.Evented.extend({
     },
 
     allowBrowse: function () {
-        return !!this.options.browsable && this.canBrowse() && this.isVisible() && this._index.length;
+        return !!this.options.browsable && this.canBrowse() && this.isVisible();
+    },
+
+    hasData: function () {
+        return !!this._index.length;
     },
 
     isVisible: function () {
@@ -960,7 +964,7 @@ L.U.DataLayer = L.Evented.extend({
     getPreviousBrowsable: function () {
         var id = this.getRank(), next, index = this.map.datalayers_index;
         while(id = index[++id] ? id : 0, next = index[id]) {
-            if (next === this || next.allowBrowse()) break;
+            if (next === this || (next.allowBrowse() && next.hasData())) break;
         }
         return next;
     },
@@ -968,7 +972,7 @@ L.U.DataLayer = L.Evented.extend({
     getNextBrowsable: function () {
         var id = this.getRank(), prev, index = this.map.datalayers_index;
         while(id = index[--id] ? id : index.length - 1, prev = index[id]) {
-            if (prev === this || prev.allowBrowse()) break;
+            if (prev === this || (prev.allowBrowse() && prev.hasData())) break;
         }
         return prev;
     },

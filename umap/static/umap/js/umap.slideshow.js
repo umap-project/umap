@@ -61,7 +61,7 @@ L.U.Slideshow = L.Class.extend({
     },
 
     defaultDatalayer: function () {
-        return this.map.findDataLayer(function (d) { return d.allowBrowse(); });
+        return this.map.findDataLayer(function (d) { return d.allowBrowse() && d.hasData(); });
     },
 
     timeSpinner: function () {
