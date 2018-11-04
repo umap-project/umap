@@ -49,6 +49,11 @@ COMMIT;
         umap compress
 
 
+## 1.0.0-rc.8
+
+- fixed non browsable missing in caption panel
+- fixed remote datalayers missing in browse data panel when displayed on load (cf #509)
+
 ## 1.0.0-rc.7
 
 - fixed table popup template not displaying name anymore (cf #647)
