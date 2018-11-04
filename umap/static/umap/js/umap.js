@@ -862,7 +862,7 @@ L.U.Map.include({
             description.innerHTML = L.Util.toHTML(this.options.description);
         }
         var datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container);
-        this.eachBrowsableDataLayer(function (datalayer) {
+        this.eachVisibleDataLayer(function (datalayer) {
             var p = L.DomUtil.create('p', '', datalayerContainer),
                 color = L.DomUtil.create('span', 'datalayer-color', p),
                 headline = L.DomUtil.create('strong', '', p),
@@ -926,8 +926,12 @@ L.U.Map.include({
         }
     },
 
-    eachBrowsableDataLayer: function (method, context, filter) {
+    eachBrowsableDataLayer: function (method, context) {
         this.eachDataLayerReverse(method, context, function (d) { return d.allowBrowse(); });
+    },
+
+    eachVisibleDataLayer: function (method, context) {
+        this.eachDataLayerReverse(method, context, function (d) { return d.isVisible(); });
     },
 
     findDataLayer: function (method, context) {
