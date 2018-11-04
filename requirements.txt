@@ -4,5 +4,5 @@ django-compressor==2.2
 Pillow==5.3.0
 psycopg2==2.7.5
 requests==2.20.0
-social-auth-app-django==2.1.0
-social-auth-core==1.7.0
+social-auth-app-django==3.1.0
+social-auth-core==2.0.0
