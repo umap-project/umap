@@ -134,7 +134,7 @@ var locale = {
     "Coordinates": "Koordináták",
     "Credits": "Alkotók",
     "Current view instead of default map view?": "Használja-e a jelenlegi nézetet az alapértelmezett helyett?",
-    "Custom background": "Egyéni háttér",
+    "Custom background": "Egyedi háttér",
     "Data is browsable": "Az adatok böngészhetők",
     "Default interaction options": "Alapértelmezett interakciós beállítások",
     "Default properties": "Alapértelmezett tulajdonságok",
@@ -357,15 +357,15 @@ var locale = {
     "{distance} m": "{distance} m",
     "{distance} miles": "{distance} mérföld",
     "{distance} yd": "{distance} yard",
-    "1 day": "1 day",
-    "1 hour": "1 hour",
-    "5 min": "5 min",
+    "1 day": "1 nap",
+    "1 hour": "1 óra",
+    "5 min": "5 perc",
     "Cache proxied request": "Cache proxied request",
-    "No cache": "No cache",
-    "Popup": "Popup",
-    "Popup (large)": "Popup (large)",
-    "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "No cache": "Nincs gyorsítótár",
+    "Popup": "Felugró",
+    "Popup (large)": "Felugró (nagy)",
+    "Popup content style": "Felugró tartalom stílusa",
+    "Popup shape": "Felugró ablak alakja"
 };
 L.registerLocale("hu", locale);
 L.setLocale("hu");
