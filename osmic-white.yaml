@@ -1,22 +1,22 @@
-input_dirs:
-  - "accommodation"
-  - "administration"
-  - "amenity"
-  - "barrier"
-  - "eat-drink"
-  - "emergency"
-  - "energy"
-  - "health"
-  - "money"
-  - "nature"
-  - "outdoor"
-  - "religious"
-  - "shop"
-  - "sports"
-  - "tourism"
-  - "transport"
+input:
+- name: accommodation
+- name: administration
+- name: amenity
+- name: barrier
+- name: eat-drink
+- name: emergency
+- name: energy
+- name: health
+- name: money
+- name: nature
+- name: outdoor
+- name: religious
+- name: shop
+- name: sports
+- name: tourism
+- name: transport
 
-output: "tmp/white"
+output_basedir: "tmp/white"
 empty_output: true
 format: "png"
 subdirs: false
