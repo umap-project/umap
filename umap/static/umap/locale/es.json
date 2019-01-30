@@ -361,9 +361,9 @@
     "1 hour": "1 hora",
     "5 min": "5 min",
     "Cache proxied request": "Cache proxied request",
-    "No cache": "No cache",
-    "Popup": "Popup",
-    "Popup (large)": "Popup (large)",
+    "No cache": "Sin cache",
+    "Popup": "Ventana emergente",
+    "Popup (large)": "Ventana emergente (grande)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape"
 }

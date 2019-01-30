@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Matej Urbančič <>, 2018
+# stefan.b <stefan.baebler@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-08 14:50+0000\n"
-"PO-Revision-Date: 2018-09-08 14:51+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"PO-Revision-Date: 2019-01-08 14:48+0000\n"
+"Last-Translator: stefan.b <stefan.baebler@gmail.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/yohanboniface/umap/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +34,7 @@ msgstr "Urejanje je mogoče le prek posebne skrivne povezave"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "Zaradi vzdrževanja je strežnik na voljo samo za ogled."
 
 #: umap/models.py:17
 msgid "name"
@@ -147,7 +148,7 @@ msgstr "Prebrskaj zemljevide (%(current_user)s)"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "%(current_user)s nima nobenega zemljevida."
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
