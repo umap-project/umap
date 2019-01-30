@@ -50,7 +50,7 @@ L.FormBuilder.Element.include({
     buildLabel: function () {
         if (this.options.label) {
             this.label = L.DomUtil.create('label', '', this.getLabelParent());
-            this.label.innerHTML = this.label.title = this.options.label;
+            this.label.textContent = this.label.title = this.options.label;
             if (this.options.helpEntries) this.builder.map.help.button(this.label, this.options.helpEntries);
             else if (this.options.helpTooltip) {
                 var info = L.DomUtil.create('i', 'info', this.label);
@@ -415,7 +415,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
             }
         }
         this.button = L.DomUtil.create('a', '', this.buttonsContainer);
-        this.button.innerHTML = this.value() ? L._('Change symbol') : L._('Add symbol');
+        this.button.textContent = this.value() ? L._('Change symbol') : L._('Add symbol');
         this.button.href = '#';
         L.DomEvent
             .on(this.button, 'click', L.DomEvent.stop)
@@ -457,7 +457,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
             this.addIconPreview(data.pictogram_list[idx]);
         }
         var cancelButton = L.DomUtil.create('a', '', this.pictogramsContainer);
-        cancelButton.innerHTML = L._('Cancel');
+        cancelButton.textContent = L._('Cancel');
         cancelButton.href = '#';
         cancelButton.style.display = 'block';
         cancelButton.style.clear = 'both';
@@ -468,7 +468,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
                 this.udpatePreview();
             }, this);
         var customButton = L.DomUtil.create('a', '', this.pictogramsContainer);
-        customButton.innerHTML = L._('Set symbol');
+        customButton.textContent = L._('Set symbol');
         customButton.href = '#';
         customButton.style.display = 'block';
         customButton.style.clear = 'both';

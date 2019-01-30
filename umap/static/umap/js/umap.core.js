@@ -306,7 +306,7 @@ L.U.Help = L.Class.extend({
         closeLink.href = '#';
         L.DomUtil.add('i', 'umap-close-icon', closeLink);
         var label = L.DomUtil.create('span', '', closeLink);
-        label.title = label.innerHTML = L._('Close');
+        label.title = label.textContent = L._('Close');
         this.content = L.DomUtil.create('div', 'umap-help-content', this.box);
         L.DomEvent.on(closeLink, 'click', this.hide, this);
     },
@@ -366,7 +366,7 @@ L.U.Help = L.Class.extend({
             L.DomEvent.on(actionContainer, 'click', action.addHooks, action);
             L.DomEvent.on(actionContainer, 'click', self.hide, self);
         };
-        title.innerHTML = L._('Where do we go from here?');
+        title.textContent = L._('Where do we go from here?');
         for (var id in this.map.helpMenuActions) {
             addAction(this.map.helpMenuActions[id]);
         }

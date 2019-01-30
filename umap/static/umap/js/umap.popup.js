@@ -57,7 +57,7 @@ L.U.Popup.Panel = L.U.Popup.extend({
         var button = L.DomUtil.create('li', '');
         L.DomUtil.create('i', 'umap-icon-16 umap-list', button);
         var label = L.DomUtil.create('span', '', button);
-        label.innerHTML = label.title = L._('See all');
+        label.textContent = label.title = L._('See all');
         L.DomEvent.on(button, 'click', this.feature.map.openBrowser, this.feature.map);
         return button;
     },
@@ -144,7 +144,7 @@ L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
         var title;
         if (this.feature.getDisplayName()) {
             title = L.DomUtil.create('h3', 'popup-title');
-            title.innerHTML = L.Util.escapeHTML(this.feature.getDisplayName());
+            title.textContent = this.feature.getDisplayName();
         }
         return title;
     }

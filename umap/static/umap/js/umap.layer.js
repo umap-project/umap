@@ -815,7 +815,7 @@ L.U.DataLayer = L.Evented.extend({
         var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
         var advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions);
         var deleteLink = L.DomUtil.create('a', 'button delete_datalayer_button umap-delete', advancedButtons);
-        deleteLink.innerHTML = L._('Delete');
+        deleteLink.textContent = L._('Delete');
         deleteLink.href = '#';
         L.DomEvent.on(deleteLink, 'click', L.DomEvent.stop)
                   .on(deleteLink, 'click', function () {
@@ -824,13 +824,13 @@ L.U.DataLayer = L.Evented.extend({
                 }, this);
         if (!this.isRemoteLayer()) {
             var emptyLink = L.DomUtil.create('a', 'button umap-empty', advancedButtons);
-            emptyLink.innerHTML = L._('Empty');
+            emptyLink.textContent = L._('Empty');
             emptyLink.href = '#';
             L.DomEvent.on(emptyLink, 'click', L.DomEvent.stop)
                       .on(emptyLink, 'click', this.empty, this);
         }
         var cloneLink = L.DomUtil.create('a', 'button umap-clone', advancedButtons);
-        cloneLink.innerHTML = L._('Clone');
+        cloneLink.textContent = L._('Clone');
         cloneLink.href = '#';
         L.DomEvent.on(cloneLink, 'click', L.DomEvent.stop)
                   .on(cloneLink, 'click', function () {
@@ -839,7 +839,7 @@ L.U.DataLayer = L.Evented.extend({
                 }, this);
         if (this.umap_id) {
             var download = L.DomUtil.create('a', 'button umap-download', advancedButtons);
-            download.innerHTML = L._('Download');
+            download.textContent = L._('Download');
             download.href = this._dataUrl();
             download.target = '_blank';
         }

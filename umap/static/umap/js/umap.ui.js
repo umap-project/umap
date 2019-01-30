@@ -39,7 +39,7 @@ L.U.UI = L.Evented.extend({
         var closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer);
         L.DomUtil.add('i', 'umap-close-icon', closeLink);
         var label = L.DomUtil.create('span', '', closeLink);
-        label.title = label.innerHTML = L._('Close');
+        label.title = label.textContent = L._('Close');
         if (e.actions) {
             for (var i = 0; i < e.actions.length; i++) {
                 actionsContainer.appendChild(e.actions[i]);
@@ -92,7 +92,7 @@ L.U.UI = L.Evented.extend({
         closeLink.href = '#';
         L.DomUtil.add('i', 'umap-close-icon', closeLink);
         var label = L.DomUtil.create('span', '', closeLink);
-        label.title = label.innerHTML = L._('Close');
+        label.title = label.textContent = L._('Close');
         L.DomEvent.on(closeLink, 'click', L.DomEvent.stop)
                   .on(closeLink, 'click', close, this);
         L.DomUtil.add('div', '', this._alert, e.content);
@@ -102,7 +102,7 @@ L.U.UI = L.Evented.extend({
                 action = e.actions[i];
                 el = L.DomUtil.element('a', {'className': 'umap-action'}, this._alert);
                 el.href = '#';
-                el.innerHTML = action.label;
+                el.textContent = action.label;
                 L.DomEvent.on(el, 'click', L.DomEvent.stop)
                           .on(el, 'click', close, this);
                 if (action.callback) L.DomEvent.on(el, 'click', action.callback, action.callbackContext || this.map);

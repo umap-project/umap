@@ -65,7 +65,7 @@ L.U.MapPermissions = L.Class.extend({
             }
             fields.push(['options.editors', {handler: 'ManageEditors', label: L._("Map's editors")}]);
         }
-        title.innerHTML = L._('Update permissions');
+        title.textContent = L._('Update permissions');
         var builder = new L.U.FormBuilder(this, fields);
         var form = builder.build();
         container.appendChild(form);
@@ -76,7 +76,7 @@ L.U.MapPermissions = L.Class.extend({
             var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions);
             var download = L.DomUtil.create('a', 'button', advancedButtons);
             download.href = '#';
-            download.innerHTML = L._('Attach the map to my account');
+            download.textContent = L._('Attach the map to my account');
             L.DomEvent
                 .on(download, 'click', L.DomEvent.stop)
                 .on(download, 'click', this.attach, this);
@@ -130,7 +130,7 @@ L.U.MapPermissions = L.Class.extend({
             var ownerContainer = L.DomUtil.add(element, 'umap-map-owner', container, ' ' + L._('by') + ' '),
                 owner = L.DomUtil.create('a');
             owner.href = this.options.owner.url;
-            owner.innerHTML = this.options.owner.name;
+            owner.textContent = this.options.owner.name;
             ownerContainer.appendChild(owner);
         }
     }

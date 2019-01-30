@@ -83,7 +83,7 @@ L.U.TableEditor = L.Class.extend({
         var addButton = L.DomUtil.create('li', 'add-property');
         L.DomUtil.create('i', 'umap-icon-16 umap-add', addButton);
         var label = L.DomUtil.create('span', '', addButton);
-        label.innerHTML = label.title = L._('Add a new property');
+        label.textContent = label.title = L._('Add a new property');
         var addProperty = function () {
             var newName = prompt(L._('Please enter the name of the property'));
             if (!newName) return;

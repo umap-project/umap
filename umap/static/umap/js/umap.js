@@ -645,13 +645,13 @@ L.U.Map.include({
             if (types.hasOwnProperty(key)) {
                 option = L.DomUtil.create('option', '', typeInput);
                 option.value = key;
-                option.innerHTML = types[key].name || key;
+                option.textContent = types[key].name || key;
                 if (types[key].selected) option.selected = true;
             }
         }
         toggleCaveat();
         var download = L.DomUtil.create('a', 'button', container);
-        download.innerHTML = L._('Download data');
+        download.textContent = L._('Download data');
         L.DomEvent.on(download, 'click', function () {
             var type = types[typeInput.value],
                 content = type.formatter(this),
@@ -694,17 +694,17 @@ L.U.Map.include({
             submitInput = L.DomUtil.create('input', '', container),
             map = this, option,
             types = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap'];
-        title.innerHTML = L._('Import data');
+        title.textContent = L._('Import data');
         fileInput.type = 'file';
         fileInput.multiple = 'multiple';
         submitInput.type = 'button';
         submitInput.value = L._('Import');
         submitInput.className = 'button';
-        typeLabel.innerHTML = L._('Choose the format of the data to import');
+        typeLabel.textContent = L._('Choose the format of the data to import');
         this.help.button(typeLabel, 'importFormats');
         var typeInput = L.DomUtil.create('select', '', typeLabel);
         typeInput.name = 'format';
-        layerLabel.innerHTML = L._('Choose the layer to import in');
+        layerLabel.textContent = L._('Choose the layer to import in');
         var layerInput = L.DomUtil.create('select', '', layerLabel);
         layerInput.name = 'datalayer';
         urlInput.type = 'text';
@@ -719,22 +719,22 @@ L.U.Map.include({
                 var id = L.stamp(datalayer);
                 option = L.DomUtil.create('option', '', layerInput);
                 option.value = id;
-                option.innerHTML = datalayer.options.name;
+                option.textContent = datalayer.options.name;
             }
         });
-        L.DomUtil.element('option', {value: '', innerHTML: L._('Import in a new layer')}, layerInput);
-        L.DomUtil.element('option', {value: '', innerHTML: L._('Choose the data format')}, typeInput);
+        L.DomUtil.element('option', {value: '', textContent: L._('Import in a new layer')}, layerInput);
+        L.DomUtil.element('option', {value: '', textContent: L._('Choose the data format')}, typeInput);
         for (var i = 0; i < types.length; i++) {
             option = L.DomUtil.create('option', '', typeInput);
-            option.value = option.innerHTML = types[i];
+            option.value = option.textContent = types[i];
         }
         if (this.options.importPresets.length) {
             var noPreset = L.DomUtil.create('option', '', presetSelect);
-            noPreset.value = noPreset.innerHTML = L._('Choose a preset');
+            noPreset.value = noPreset.textContent = L._('Choose a preset');
             for (var j = 0; j < this.options.importPresets.length; j++) {
                 option = L.DomUtil.create('option', '', presetSelect);
                 option.value = this.options.importPresets[j].url;
-                option.innerHTML = this.options.importPresets[j].label;
+                option.textContent = this.options.importPresets[j].label;
             }
         } else {
             presetBox.style.display = 'none';
@@ -855,7 +855,7 @@ L.U.Map.include({
     displayCaption: function () {
         var container = L.DomUtil.create('div', 'umap-caption'),
             title = L.DomUtil.create('h3', '', container);
-        title.innerHTML = this.options.name;
+        title.textContent = this.options.name;
         this.permissions.addOwnerLink('h5', container);
         if (this.options.description) {
             var description = L.DomUtil.create('div', 'umap-map-description', container);
@@ -891,11 +891,11 @@ L.U.Map.include({
         }
         L.DomUtil.create('hr', '', credits);
         title = L.DomUtil.create('h5', '', credits);
-        title.innerHTML = L._('Map background credits');
+        title.textContent = L._('Map background credits');
         var tilelayerCredit = L.DomUtil.create('p', '', credits),
             name = L.DomUtil.create('strong', '', tilelayerCredit),
             attribution = L.DomUtil.create('span', '', tilelayerCredit);
-        name.innerHTML = this.selected_tilelayer.options.name + ' ';
+        name.textContent = this.selected_tilelayer.options.name + ' ';
         attribution.innerHTML = this.selected_tilelayer.getAttribution();
         L.DomUtil.create('hr', '', credits);
         var umapCredit = L.DomUtil.create('p', '', credits),
@@ -908,7 +908,7 @@ L.U.Map.include({
         var browser = L.DomUtil.create('li', '');
         L.DomUtil.create('i', 'umap-icon-16 umap-list', browser);
         var label = L.DomUtil.create('span', '', browser);
-        label.innerHTML = label.title = L._('Browse data');
+        label.textContent = label.title = L._('Browse data');
         L.DomEvent.on(browser, 'click', this.openBrowser, this);
         this.ui.openPanel({data: {html: container}, actions: [browser]});
     },
@@ -1156,7 +1156,7 @@ L.U.Map.include({
                 'options.description'
             ],
             title = L.DomUtil.create('h4', '', container);
-        title.innerHTML = L._('Edit map properties');
+        title.textContent = L._('Edit map properties');
         var builder = new L.U.FormBuilder(this, metadataFields);
         var form = builder.build();
         container.appendChild(form);
@@ -1332,27 +1332,27 @@ L.U.Map.include({
         var advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions);
         var del = L.DomUtil.create('a', 'button umap-delete', advancedButtons);
         del.href = '#';
-        del.innerHTML = L._('Delete');
+        del.textContent = L._('Delete');
         L.DomEvent
             .on(del, 'click', L.DomEvent.stop)
             .on(del, 'click', this.del, this);
         var clone = L.DomUtil.create('a', 'button umap-clone', advancedButtons);
         clone.href = '#';
-        clone.innerHTML = L._('Clone');
+        clone.textContent = L._('Clone');
         clone.title = L._('Clone this map');
         L.DomEvent
             .on(clone, 'click', L.DomEvent.stop)
             .on(clone, 'click', this.clone, this);
         var empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons);
         empty.href = '#';
-        empty.innerHTML = L._('Empty');
+        empty.textContent = L._('Empty');
         empty.title = L._('Delete all layers');
         L.DomEvent
             .on(empty, 'click', L.DomEvent.stop)
             .on(empty, 'click', this.empty, this);
         var download = L.DomUtil.create('a', 'button umap-download', advancedButtons);
         download.href = '#';
-        download.innerHTML = L._('Download');
+        download.textContent = L._('Download');
         download.title = L._('Open download panel');
         L.DomEvent
             .on(download, 'click', L.DomEvent.stop)
@@ -1391,7 +1391,7 @@ L.U.Map.include({
         L.DomEvent.on(browser, 'click', L.DomEvent.stop)
                   .on(browser, 'click', this.openBrowser, this);
         var setName = function () {
-            name.innerHTML = this.getDisplayName();
+            name.textContent = this.getDisplayName();
         };
         L.bind(setName, this)();
         this.on('postsync', L.bind(setName, this));
@@ -1405,7 +1405,7 @@ L.U.Map.include({
             title = L.DomUtil.add('h3', '', container, L._('Editing') + '&nbsp;'),
             name = L.DomUtil.create('a', 'umap-click-to-edit', title),
             setName = function () {
-                name.innerHTML = this.getDisplayName();
+                name.textContent = this.getDisplayName();
             };
         L.bind(setName, this)();
         L.DomEvent.on(name, 'click', this.edit, this);
@@ -1414,14 +1414,14 @@ L.U.Map.include({
         var save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container);
         save.href = '#';
         save.title = L._('Save current edits') + ' (Ctrl-S)';
-        save.innerHTML = L._('Save');
+        save.textContent = L._('Save');
         var cancel = L.DomUtil.create('a', 'leaflet-control-edit-cancel button', container);
         cancel.href = '#';
         cancel.title = L._('Cancel edits');
-        cancel.innerHTML = L._('Cancel');
+        cancel.textContent = L._('Cancel');
         var disable = L.DomUtil.create('a', 'leaflet-control-edit-disable', container);
         disable.href = '#';
-        disable.title = disable.innerHTML = L._('Disable editing');
+        disable.title = disable.textContent = L._('Disable editing');
 
 
         L.DomEvent

@@ -109,7 +109,7 @@ L.U.FeatureMixin = {
     getAdvancedEditActions: function (container) {
         var deleteLink = L.DomUtil.create('a', 'button umap-delete', container);
         deleteLink.href = '#';
-        deleteLink.innerHTML = L._('Delete');
+        deleteLink.textContent = L._('Delete');
         L.DomEvent.on(deleteLink, 'click', function (e) {
             L.DomEvent.stop(e);
             if (this.confirmDelete()) this.map.ui.closePanel();
@@ -894,7 +894,7 @@ L.U.Polyline = L.Polyline.extend({
         L.U.FeatureMixin.getAdvancedEditActions.call(this, container);
         var toPolygon = L.DomUtil.create('a', 'button umap-to-polygon', container);
         toPolygon.href = '#';
-        toPolygon.innerHTML = L._('Transform to polygon');
+        toPolygon.textContent = L._('Transform to polygon');
         L.DomEvent.on(toPolygon, 'click', this.toPolygon, this);
     },
 
@@ -1029,7 +1029,7 @@ L.U.Polygon = L.Polygon.extend({
         L.U.FeatureMixin.getAdvancedEditActions.call(this, container);
         var toPolyline = L.DomUtil.create('a', 'button umap-to-polyline', container);
         toPolyline.href = '#';
-        toPolyline.innerHTML = L._('Transform to lines');
+        toPolyline.textContent = L._('Transform to lines');
         L.DomEvent.on(toPolyline, 'click', this.toPolyline, this);
     },
 

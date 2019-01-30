@@ -458,7 +458,7 @@ L.U.DataLayersControl = L.Control.extend({
 
         var link = L.DomUtil.create('a', 'umap-browse-link', actions);
         link.href = '#';
-        link.title = link.innerHTML = L._('Browse data');
+        link.title = link.textContent = L._('Browse data');
 
         var toggle = L.DomUtil.create('a', 'umap-browse-toggle', container);
         toggle.href = '#';
@@ -532,7 +532,7 @@ L.U.DataLayersControl = L.Control.extend({
         datalayerLi.id = 'browse_data_toggle_' + L.stamp(datalayer);
         L.DomUtil.classIf(datalayerLi, 'off', !datalayer.isVisible());
 
-        title.innerHTML = datalayer.options.name;
+        title.textContent = datalayer.options.name;
     },
 
     newDataLayer: function () {
@@ -563,7 +563,7 @@ L.U.DataLayersControl = L.Control.extend({
         var bar = L.DomUtil.create('div', 'button-bar', container),
             add = L.DomUtil.create('a', 'show-on-edit block add-datalayer button', bar);
         add.href = '#';
-        add.innerHTML = add.title = L._('Add a layer');
+        add.textContent = add.title = L._('Add a layer');
 
         L.DomEvent
             .on(add, 'click', L.DomEvent.stop)
@@ -664,7 +664,7 @@ L.U.Map.include({
                 symbol = feature._getIconUrl ? L.U.Icon.prototype.formatUrl(feature._getIconUrl(), feature): null;
             zoom_to.title = L._('Bring feature to center');
             edit.title = L._('Edit this feature');
-            title.innerHTML = feature.getDisplayName() || '—';
+            title.textContent = feature.getDisplayName() || '—';
             color.style.backgroundColor = feature.getOption('color');
             if (symbol) {
                 color.style.backgroundImage = 'url(' + symbol + ')';
@@ -729,7 +729,7 @@ L.U.Map.include({
         var link = L.DomUtil.create('li', '');
         L.DomUtil.create('i', 'umap-icon-16 umap-caption', link);
         var label = L.DomUtil.create('span', '', link);
-        label.innerHTML = label.title = L._('About');
+        label.textContent = label.title = L._('About');
         L.DomEvent.on(link, 'click', this.displayCaption, this);
         this.ui.openPanel({data: {html: browserContainer}, actions: [link]});
     }
@@ -783,7 +783,7 @@ L.U.TileLayerControl = L.Control.extend({
             img = L.DomUtil.create('img', '', el),
             name = L.DomUtil.create('div', '', el);
         img.src = L.Util.template(tilelayer.options.url_template, this.map.demoTileInfos);
-        name.innerHTML = tilelayer.options.name;
+        name.textContent = tilelayer.options.name;
         L.DomEvent.on(el, 'click', function () {
             this.map.selectTileLayer(tilelayer);
             this.map.ui.closePanel();
