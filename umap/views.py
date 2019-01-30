@@ -142,11 +142,13 @@ class UserMaps(DetailView, PaginatorMixin):
         owner = self.request.user == self.object
         manager = Map.objects if owner else Map.public
         maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
-        maps = maps.distinct().order_by('-modified_at')[:50]
         if owner:
             per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
+            limit = 100
         else:
             per_page = settings.UMAP_MAPS_PER_PAGE
+            limit = 50
+        maps = maps.distinct().order_by('-modified_at')[:limit]
         maps = self.paginate(maps, per_page)
         kwargs.update({
             "maps": maps
