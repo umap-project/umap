@@ -1046,6 +1046,7 @@ L.U.Map.include({
     serialize: function () {
         var umapfile = {
             type: 'umap',
+            uri: window.location.href,
             properties: this.exportOptions(),
             geometry: this.geometry(),
             layers: []
