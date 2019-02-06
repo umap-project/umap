@@ -49,6 +49,11 @@ COMMIT;
         umap compress
 
 
+## 1.0.0-rc.9
+- increased maps displayed in user maps page (cf #651)
+- exposed original map url in full export (cf #659)
+
+
 ## 1.0.0-rc.8
 
 - fixed non browsable missing in caption panel
