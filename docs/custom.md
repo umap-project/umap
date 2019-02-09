@@ -60,7 +60,9 @@ we'll customize also the CSS:
 
     mv mylogo.png /srv/umap/custom/static/umap/mylogo.png
 
-And then let's add some custom rules, for example the one to load our logo:
+And then let's add some custom rules in `theme.css`. This file will be automatically loaded by uMap.
+
+For example, this rule to load our logo:
 
 ```css
 .umap-nav h1 a {

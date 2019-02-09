@@ -43,6 +43,5 @@ else:
                 globals()['TEMPLATES'][0]['DIRS'].insert(0, value)
             elif key == 'UMAP_CUSTOM_STATICS':
                 globals()['STATICFILES_DIRS'].insert(0, value)
-                print(globals()['STATICFILES_DIRS'])
             else:
                 globals()[key] = value
