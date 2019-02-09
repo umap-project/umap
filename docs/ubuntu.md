@@ -6,7 +6,7 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Install system dependencies
 
-    sudo apt install python3.5 python3.5-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-9.5-postgis-2.2 git
+    sudo apt install build-essential autoconf python3.5 python3.5-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-server-dev-9.5 postgresql-9.5-postgis-2.2 git libxml2-dev libxslt1-dev zlib1g-dev
 
 
 *Note: uMap also works with python 2.7 and 3.4, so adapt the package names if you work with another version.*
@@ -31,6 +31,7 @@ on the various commands and configuration files if you go with your own.*
 ## Give umap user access to the config folder
 
     sudo chown umap:users /etc/umap
+    sudo chown umap:users /srv/umap
 
 
 ## Create a postgresql user
