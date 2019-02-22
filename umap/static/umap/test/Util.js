@@ -75,23 +75,23 @@ describe('L.Util', function () {
         });
 
         it('should handle iframe', function () {
-            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html}}}'), 'A simple iframe: <iframe frameBorder="0" src="http://osm.org/pouet.html" width="100%" height="300px"></iframe>');
+            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html}}}'), 'A simple iframe: <iframe frameborder="0" src="http://osm.org/pouet.html" width="100%" height="300px"></iframe>');
         });
 
         it('should handle iframe with height', function () {
-            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200}}}'), 'A simple iframe: <iframe frameBorder="0" src="http://osm.org/pouet.html" width="100%" height="200px"></iframe>');
+            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200}}}'), 'A simple iframe: <iframe frameborder="0" src="http://osm.org/pouet.html" width="100%" height="200px"></iframe>');
         });
 
         it('should handle iframe with height and width', function () {
-            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200*400}}}'), 'A simple iframe: <iframe frameBorder="0" src="http://osm.org/pouet.html" width="400px" height="200px"></iframe>');
+            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200*400}}}'), 'A simple iframe: <iframe frameborder="0" src="http://osm.org/pouet.html" width="400px" height="200px"></iframe>');
         });
 
         it('should handle iframe with height with px', function () {
-            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200px}}}'), 'A simple iframe: <iframe frameBorder="0" src="http://osm.org/pouet.html" width="100%" height="200px"></iframe>');
+            assert.equal(L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200px}}}'), 'A simple iframe: <iframe frameborder="0" src="http://osm.org/pouet.html" width="100%" height="200px"></iframe>');
         });
 
         it('should handle iframe with url parameter', function () {
-            assert.equal(L.Util.toHTML('A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'), 'A simple iframe: <iframe frameBorder="0" src="https://osm.org/?url=https%3A//anotherurl.com" width="100%" height="300px"></iframe>');
+            assert.equal(L.Util.toHTML('A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'), 'A simple iframe: <iframe frameborder="0" src="https://osm.org/?url=https%3A//anotherurl.com" width="100%" height="300px"></iframe>');
         });
 
         it('http link with http link as parameter as variable', function () {
