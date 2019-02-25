@@ -796,8 +796,8 @@ L.U.DataLayer = L.Evented.extend({
         var remoteDataFields = [
             ['options.remoteData.url', {handler: 'Url', label: L._('Url'), helpEntries: 'formatURL'}],
             ['options.remoteData.format', {handler: 'DataFormat', label: L._('Format')}],
-            ['options.remoteData.from', {label: L._('From zoom'), helpText: L._('Optionnal.')}],
-            ['options.remoteData.to', {label: L._('To zoom'), helpText: L._('Optionnal.')}],
+            ['options.remoteData.from', {label: L._('From zoom'), helpText: L._('Optional.')}],
+            ['options.remoteData.to', {label: L._('To zoom'), helpText: L._('Optional.')}],
             ['options.remoteData.dynamic', {handler: 'Switch', label: L._('Dynamic'), helpEntries: 'dynamicRemoteData'}],
             ['options.remoteData.licence', {label: L._('Licence'), helpText: L._('Please be sure the licence is compliant with your use.')}]
         ];

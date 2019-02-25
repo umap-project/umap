@@ -709,7 +709,7 @@ L.U.Map.include({
         layerInput.name = 'datalayer';
         urlInput.type = 'text';
         urlInput.placeholder = L._('Provide an URL here');
-        rawInput.placeholder = L._('Paste here your data');
+        rawInput.placeholder = L._('Paste your data here');
         clearLabel.textContent = L._('Replace layer content');
         var clearFlag = L.DomUtil.create('input', '', clearLabel);
         clearFlag.type = 'checkbox';
