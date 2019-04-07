@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Ouvrir cette carte dans un éditeur OpenStreetMap pour améliorer les données",
     "Optional intensity property for heatmap": "Propriété optionnelle à utiliser pour calculer l'intensité de la heatmap",
     "Optional. Same as color if not set.": "Optionnel. La couleur principale sera utilisée si laissé vide.",
-    "Optionnal.": "Optionnel.",
     "Override clustering radius (default 80)": "Valeur de rayon personnalisée pour le cluster (par défaut: 80)",
     "Override heatmap radius (default 25)": "Valeur de rayon personnalisée pour la heatmap (par défaut: 80)",
-    "Paste here your data": "Collez vos données ici",
     "Please be sure the licence is compliant with your use.": "Pensez à vérifier que la licence de ces données vous autorise à les utiliser.",
     "Please choose a format": "Merci de choisir un format",
     "Please enter the name of the property": "Merci d'entrer le nom de la propriété",
     "Please enter the new name of this property": "Veuillez entrer le nouveau nom de la propriété",
-    "Please save the map before": "Vous devez d'abord enregistrer la carte",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Propulsé par <a href=\"{leaflet}\">Leaflet</a> et <a href=\"{django}\">Django</a>, mis en musique par <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "Problème dans la réponse du serveur",
     "Problem in the response format": "Problème dans le format de la réponse",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (grande)",
     "Popup content style": "Gabarit du contenu de la popup",
     "Popup shape": "Forme de popup",
-    "Skipping unknown geometry.type: {type}": "Type de géométrie inconnu ignoré: {type}"
+    "Skipping unknown geometry.type: {type}": "Type de géométrie inconnu ignoré: {type}",
+    "Optional.": "Facultatif",
+    "Paste your data here": "Collez vos données ici",
+    "Please save the map first": "Vous devez d'abord enregistrer la carte"
 }

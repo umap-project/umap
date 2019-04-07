@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Open this map extent in a map editor to provide more accurate data to OpenStreetMap",
     "Optional intensity property for heatmap": "Optional intensity property for heatmap",
     "Optional. Same as color if not set.": "Optional. Same as color if not set.",
-    "Optionnal.": "Optionnal.",
     "Override clustering radius (default 80)": "Override clustering radius (default 80)",
     "Override heatmap radius (default 25)": "Override heatmap radius (default 25)",
-    "Paste here your data": "Paste here your data",
     "Please be sure the licence is compliant with your use.": "Please be sure the licence is compliant with your use.",
     "Please choose a format": "Hãy chọn một định dạng",
     "Please enter the name of the property": "Please enter the name of the property",
     "Please enter the new name of this property": "Please enter the new name of this property",
-    "Please save the map before": "Please save the map before",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "Problem in the response",
     "Problem in the response format": "Problem in the response format",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Abre a extensión deste mapa nun editor de mapas para fornecer datos máis precisos ó OpenStreetMap",
     "Optional intensity property for heatmap": "Propiedade de intensidade opcional para o mapa de calor",
     "Optional. Same as color if not set.": "Opcional. A mesma cor se non se estabelece.",
-    "Optionnal.": "Opcional.",
     "Override clustering radius (default 80)": "Sobrescribir o raio de agrupamento (predeterminado 80)",
     "Override heatmap radius (default 25)": "Sobreescribir o raio do mapa de calor (predeterminado 25)",
-    "Paste here your data": "Colar ou pegar aquí os seus datos",
     "Please be sure the licence is compliant with your use.": "Coide de que a licenza sexa compatíbel co emprego que lle vai a dár.",
     "Please choose a format": "Escolle un formato",
     "Please enter the name of the property": "Insira o nome da propiedade",
     "Please enter the new name of this property": "Insira o novo nome desta propiedade",
-    "Please save the map before": "Garde antes o mapa",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Fornecido polo <a href=\"{leaflet}\">Leaflet</a> e o <a href=\"{django}\">Django</a>, colado polo <a href=\"{umap}\">proxecto uMap</a>.",
     "Problem in the response": "Problema na resposta",
     "Problem in the response format": "Problema co formato de resposta",
@@ -365,5 +362,8 @@
     "Popup (large)": "Xanela emerxente (grande)",
     "Popup content style": "Estilo do contido da xanela emerxente",
     "Popup shape": "Forma da xanela emerxente",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

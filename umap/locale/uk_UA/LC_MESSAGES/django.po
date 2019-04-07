@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 09:15+0000\n"
-"PO-Revision-Date: 2019-04-07 09:15+0000\n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2019-04-07 14:28+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/yohanboniface/umap/language/uk_UA/)\n"
 "MIME-Version: 1.0\n"
@@ -223,9 +223,9 @@ msgstr "Виберіть провайдера автентифікації"
 #: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
-"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap дає Вам можливість за лічені хвилини створювати мапи на основі даних <a href=\"%(osm_url)s\" />OpenStreetMap</a> та публікувати їх на своєму сайті."
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"

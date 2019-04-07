@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Отворете тази карта в степен редактор на карта, за да предостави по-точни данни,OpenStreetMap",
     "Optional intensity property for heatmap": "Optional intensity property for heatmap",
     "Optional. Same as color if not set.": "По избор Същото като цвят, ако не е настроена.",
-    "Optionnal.": "По избор",
     "Override clustering radius (default 80)": "Override clustering radius (default 80)",
     "Override heatmap radius (default 25)": "Override heatmap radius (default 25)",
-    "Paste here your data": "Залепете тук вашите данни",
     "Please be sure the licence is compliant with your use.": "Моля, бъдете сигурни, че лицензът е съвместим с вашата употреба.",
     "Please choose a format": "Please choose a format",
     "Please enter the name of the property": "Please enter the name of the property",
     "Please enter the new name of this property": "Please enter the new name of this property",
-    "Please save the map before": "Моля, запазете картата преди",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "Проблем в отзивите",
     "Problem in the response format": "Проблем във формата на отговор",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("bg", locale);
 L.setLocale("bg");

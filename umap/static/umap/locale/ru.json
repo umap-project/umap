@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Откройте эту часть карты в редакторе OpenStreetMap, чтобы улучшить данные",
     "Optional intensity property for heatmap": "Дополнительные свойства интенсивности тепловой карты",
     "Optional. Same as color if not set.": "Дополнительно. Если не выбрано, то как цвет.",
-    "Optionnal.": "Дополнительно.",
     "Override clustering radius (default 80)": "Переопределить радиус кластеризации (по умолчанию 80)",
     "Override heatmap radius (default 25)": "Переопределить радиус для тепловой карты (по умолчанию 25)",
-    "Paste here your data": "Вставить данные сюда",
     "Please be sure the licence is compliant with your use.": "Убедитесь, что лицензия соответствует правилам использования.",
     "Please choose a format": "Пожалуйста, выберите формат",
     "Please enter the name of the property": "Введите название свойства",
     "Please enter the new name of this property": "Введите новое название свойства",
-    "Please save the map before": "Пожалуйста, сначала сохраните карту",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Работает на <a href=\"{leaflet}\">Leaflet</a> и <a href=\"{django}\">Django</a>, объединённые проектом <a href=\"{umap}\">uMap</a>.",
     "Problem in the response": "Проблема с ответом",
     "Problem in the response format": "Формат ответа не распознан",
@@ -365,5 +362,8 @@
     "Popup (large)": "Всплывающее окно (большое)",
     "Popup content style": "Стиль содержимого всплывающего окна",
     "Popup shape": "Форма всплывающего окна",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

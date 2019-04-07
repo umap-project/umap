@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Ανοίξτε αυτό το χάρτη σε έναν επεξεργαστή χαρτών για να παρέχετε πιο ακριβή δεδομένα στο OpenStreetMap",
     "Optional intensity property for heatmap": "Προαιρετική ιδιότητα έντασης για το χάρτης εγγύτητας ",
     "Optional. Same as color if not set.": "Προαιρετικό. Ίδιο χρώμα αν δεν διαμορφωθεί  ",
-    "Optionnal.": "Προαιρετικό ",
     "Override clustering radius (default 80)": "Αντικατάσταση ακτίνας συμπλέγματος (προεπιλογή 80)",
     "Override heatmap radius (default 25)": "Αντικατάσταση ακτίνας χάρτης εγγύτητας (προεπιλογή 25)",
-    "Paste here your data": "Επικόλλησε εδώ τα δεδομένα σου ",
     "Please be sure the licence is compliant with your use.": "Παρακαλώ χρησιμοποιείστε άδεια που συμμορφώνετε με την χρήση σας ",
     "Please choose a format": "Παρακαλώ επιλέξτε μια μορφή",
     "Please enter the name of the property": "Πληκτρολογήστε το όνομα της ιδιότητας",
     "Please enter the new name of this property": "Εισαγάγετε το νέο όνομα αυτής της ιδιότητας",
-    "Please save the map before": "Παρακαλώ αποθηκεύστε το χάρτη πριν",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Τροφοδοτείται από <a href=\"{leaflet}\">Leaflet</a> και <a href=\"{django}\">Django</a>, που συνδέθηκαν από το <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "Πρόβλημα στην απόκριση ",
     "Problem in the response format": "Πρόβλημα στη μορφή απόκρισης ",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Αναδυόμενο (μεγάλο) ",
     "Popup content style": "Στυλ περιεχομένου αναδυόμενου ",
     "Popup shape": "Σχήμα αναδυόμενου ",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("el", locale);
 L.setLocale("el");

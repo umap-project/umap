@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Atidaryti šį plotą duomenų redagavimui per OpenStreetMap",
     "Optional intensity property for heatmap": "Papildomas intensyvumo faktorius",
     "Optional. Same as color if not set.": "Neprivalomas. Toks pats kaip ir spalva, jei nenustatyta.",
-    "Optionnal.": "Neprivalomas.",
     "Override clustering radius (default 80)": "Perrašyti grupavimo spindulį (pagal nutylėjimą 80)",
     "Override heatmap radius (default 25)": "Perrašyti tankio žemėlapio spindulį (pagal nutylėjimą 25)",
-    "Paste here your data": "Įklijuokite Jūsų duomenis čia",
     "Please be sure the licence is compliant with your use.": "Prašom pasitikrinti ar licezija tikrai tinka Jūsų poreikiams.",
     "Please choose a format": "Pasirinkite formatą",
     "Please enter the name of the property": "Įveskite, prašom, savybės pavadinimą",
     "Please enter the new name of this property": "Įveskite, prašom, naują savybės pavadinimą",
-    "Please save the map before": "Prašom išsaugoti žemėlapį prieš",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Pagaminta naudojant <a href=\"{leaflet}\">Leaflet</a> ir <a href=\"{django}\">Django</a>, apjungta pagal <a href=\"{umap}\">uMap projektą</a>.",
     "Problem in the response": "Klaida atsakyme",
     "Problem in the response format": "Klaida atsakymo formate",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

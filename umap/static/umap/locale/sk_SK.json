@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Otvoriť túto mapovú oblasť v mapovom editore pre presnenie dát v OpenStreetMap",
     "Optional intensity property for heatmap": "Voliteľné vlastnosti intenzity pre heatmapu",
     "Optional. Same as color if not set.": "Nepovinné. Rovnaké ako farba, ak nie je nastavené.",
-    "Optionnal.": "Nepovinné",
     "Override clustering radius (default 80)": "Prepísať polomer zhlukovania (predvolené 80)",
     "Override heatmap radius (default 25)": "Prepísať polomer teplotnej mapy (predvolené 25)",
-    "Paste here your data": "Sem vložte vaše údaje",
     "Please be sure the licence is compliant with your use.": "Prosíme uistite sa, že licencia je v zhode s tým ako mapu používate.",
     "Please choose a format": "Prosím, zvoľte formát",
     "Please enter the name of the property": "Prosím, zadajte názov vlastnosti",
     "Please enter the new name of this property": "Prosím, zadajte nový názov tejto vlastnosti",
-    "Please save the map before": "Prosím, najprv uložte mapu",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Zostavené z <a href=\"{leaflet}\">Leaflet</a> a <a href=\"{django}\">Django</a>, prepojené pomocou <a href=\"{umap}\">projektu uMap</a>.",
     "Problem in the response": "Problém v odpovedi",
     "Problem in the response format": "Problém vo formáte odpovede",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

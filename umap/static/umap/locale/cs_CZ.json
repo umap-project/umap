@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Otevři tuto oblast v editoru OpenStreetMap. Toto vám umožní editovat přímo základní mapová data a přispět tak v tvorbě svobodné mapy pro všechny.",
     "Optional intensity property for heatmap": "Volitelná vlastnost pro výpočet intenzity v teplotní mapě",
     "Optional. Same as color if not set.": "Nepovinné. Stejné jako barva, pokud není nastaveno.",
-    "Optionnal.": "Nepovinné.",
     "Override clustering radius (default 80)": "Přepsat shlukovací poloměr (výchozí hodnota 80)",
     "Override heatmap radius (default 25)": "Přepsat poloměr teplotní mapy (výchozí hodnota 25)",
-    "Paste here your data": "Sem vložte vaše data",
     "Please be sure the licence is compliant with your use.": "Prosíme ujistěte se, že licence je ve shodě s tím jak mapu používáte.",
     "Please choose a format": "Zvolte formát",
     "Please enter the name of the property": "Zadejte prosím název vlastnosti",
     "Please enter the new name of this property": "Zadejte prosím nový název této vlastnosti",
-    "Please save the map before": "Prosíme, uložte nejdříve mapu",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Sestaveno z <a href=\"{leaflet}\">Leaflet</a> a <a href=\"{django}\">Django</a>, propojených pomocí <a href=\"{umap}\">projektu uMap</a>.",
     "Problem in the response": "Problém při odpovědi",
     "Problem in the response format": "Problém ve formátu odpovědi",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (velký)",
     "Popup content style": "Styl obsahu popupu",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

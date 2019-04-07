@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "ለOpernStreetMap ይበልጥ ትክክል ይሆነ መረጃ ለመስጠ የካርታውን ኤክስቴንት በካርታ ማረሚያ ክፈት",
     "Optional intensity property for heatmap": "ለሙቀት ካርታው ባህርይ አማራጭ ኢንቴንሲቲ",
     "Optional. Same as color if not set.": "አማራጭ፣ ካልተመረጠለት እንደቀለሙ የሚሆን",
-    "Optionnal.": "አማራጭ",
     "Override clustering radius (default 80)": "የራዲየስ ክለስተሪንግ አልፈህ ሂድ (ዲፎልት 80)",
     "Override heatmap radius (default 25)": "የሙቀት ካርታውን ራዲየስ አልፈህ ሂድ (ዲፎልት 25)",
-    "Paste here your data": "መረጃውን እዚህ ጋር ለጥፍ",
     "Please be sure the licence is compliant with your use.": "እባክዎ ፈቃዱ እስርዎ ሊጠቀሙ ካሉበት አገልግሎት ጋር መጣጣሙን ያረጋግጡ",
     "Please choose a format": "እባክዎ ፎርማት ይምረጡ",
     "Please enter the name of the property": "እባክዎ የባህርይውን ስም ያስገቡ",
     "Please enter the new name of this property": "እባክዎን አዲሱን የባህርይውን ስም ያስገቡ",
-    "Please save the map before": "እባክዎን ካርታውን በመጀመሪያ ያድኑ/ያስቀምጡ",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "በ <a href=\"{leaflet}\">ሊፍሌት</a> እየታገዘ በ<a href=\"{django}\"> ጃንጎ</a> ታግዞ በ<a href=\"{umap}\"> uMap ፕሮጀክት</a> አማካኝነት የቀረበ",
     "Problem in the response": "በምላሹ ላይ ችግር ተፈጥሯል",
     "Problem in the response format": "በምላሹ ፎርማት ላይ ችግር ተፈጥሯል",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

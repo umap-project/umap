@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Open this map extent in a map editor to provide more accurate data to OpenStreetMap",
     "Optional intensity property for heatmap": "Optional intensity property for heatmap",
     "Optional. Same as color if not set.": "Opcional. El mateix color si no s'estableix.",
-    "Optionnal.": "Opcional",
     "Override clustering radius (default 80)": "Override clustering radius (default 80)",
     "Override heatmap radius (default 25)": "Override heatmap radius (default 25)",
-    "Paste here your data": "Enganxeu aquí les vostres dades",
     "Please be sure the licence is compliant with your use.": "Assegureu-vos que la llicència és compatible amb l'ús que en feu.",
     "Please choose a format": "Please choose a format",
     "Please enter the name of the property": "Introduïu el nom de la propietat",
     "Please enter the new name of this property": "Introduïu el nom d'aquesta propietat",
-    "Please save the map before": "Deseu el mapa abans",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "Hi ha un problema en la resposta",
     "Problem in the response format": "Hi ha un problema en el format de resposta",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("ca", locale);
 L.setLocale("ca");

@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Åbn dette kort i en korteditor for at gøre geodata endnu bedre i OpenStreetMap",
     "Optional intensity property for heatmap": "Valgfrie  intensitets egenskaber for heatmap",
     "Optional. Same as color if not set.": "Valgfrit. Uden ændring samme farve.",
-    "Optionnal.": "Valgfrit.",
     "Override clustering radius (default 80)": "Overskriv klynge radius (standard 80)",
     "Override heatmap radius (default 25)": "Overskriv heatmap radius (standard 25)",
-    "Paste here your data": "Indsæt dine geodata her",
     "Please be sure the licence is compliant with your use.": "Vær sikker på at licensen er kompatibel med din brug.",
     "Please choose a format": "Vælg venligst et format",
     "Please enter the name of the property": "Vær venlig at indtaste navnet for egenskaben",
     "Please enter the new name of this property": "Vær venlig at indtaste et nyt navn for denne egenskab",
-    "Please save the map before": "Gem kortet først før du går videre",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Håndteret af <a href='{leaflet}'>Leaflet</a> og <a href='{django}'>Django</a>,  flettet ind i <a href='{umap}'>uMap projektet</a>.",
     "Problem in the response": "Problem med responsen",
     "Problem in the response format": "Der er et problem med det kaldte format",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("da", locale);
 L.setLocale("da");

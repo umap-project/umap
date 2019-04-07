@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Otwórz ten zakres mapy w edytorze, by wprowadzić do OpenStreetMap dokładniejsze dane",
     "Optional intensity property for heatmap": "Opcjonalna intensywności mapy cieplnej",
     "Optional. Same as color if not set.": "Opcjonalne. Taki sam jak kolor jeśli nie podano.",
-    "Optionnal.": "Opcjonalne.",
     "Override clustering radius (default 80)": "Nadpisz promień grupowania (domyślnie 80)",
     "Override heatmap radius (default 25)": "Nadpisz promień mapy cieplnej (domyślnie 25)",
-    "Paste here your data": "Wklej tutaj swoje dane",
     "Please be sure the licence is compliant with your use.": "Upewnij się czy licencja jest zgodna z twoim użyciem.",
     "Please choose a format": "Wybierz format",
     "Please enter the name of the property": "Podaj nazwę właściwości",
     "Please enter the new name of this property": "Podaj nową nazwę tej właściwości",
-    "Please save the map before": "Proszę najpierw zapisać mapę",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Zasilany przez <a href=\"{leaflet}\">Leaflet</a> i <a href=\"{django}\">Django</a>, sklejony przez <a href=\"{umap}\">projekt uMap</a>.",
     "Problem in the response": "Problem z odpowiedzią",
     "Problem in the response format": "Problem z formatem odpowiedzi",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Wyskakujące okienko (duże)",
     "Popup content style": "Styl zawartości wyskakującego okienka",
     "Popup shape": "Kształt wyskakującego okienka",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("pl", locale);
 L.setLocale("pl");

@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "現在表示中の領域をエディタで編集し、より正確なデータをOpenStreetMapへ書き込む",
     "Optional intensity property for heatmap": "ヒートマップ強調表示オプション",
     "Optional. Same as color if not set.": "オプション。設定がない場合、色指定と同様",
-    "Optionnal.": "オプション",
     "Override clustering radius (default 80)": "クラスタ包括半径を上書き (基本値 80)",
     "Override heatmap radius (default 25)": "ヒートマップ包括半径を上書き (基本値 25)",
-    "Paste here your data": "手持ちのデータからペースト",
     "Please be sure the licence is compliant with your use.": "利用目的に沿ったライセンスを選択するようにしてください",
     "Please choose a format": "フォーマットを指定してください",
     "Please enter the name of the property": "プロパティの名称を入力してください",
     "Please enter the new name of this property": "このプロパティに新しい名称を付与してください",
-    "Please save the map before": "いちどマップの保存を行ってください",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "レスポンスに問題があります",
     "Problem in the response format": "レスポンス形式に問題があります",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("ja", locale);
 L.setLocale("ja");

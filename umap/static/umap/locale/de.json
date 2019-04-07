@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Diesen Kartenauschnitt in einem Karten-Editor öffnen, um genauere Daten für OpenStreetMap bereitzustellen.",
     "Optional intensity property for heatmap": "Optionale Intensitätseigenschaft für die Heatmap",
     "Optional. Same as color if not set.": "Optional. Gleich wie Farbe, falls nicht ausgefüllt.",
-    "Optionnal.": "Optional",
     "Override clustering radius (default 80)": "Gruppierungsradius überschreiben (Standard: 80)",
     "Override heatmap radius (default 25)": "Heatmapradius überschreiben (Standard: 25)",
-    "Paste here your data": "Füge deine Daten hier ein",
     "Please be sure the licence is compliant with your use.": "Stelle bitte sicher, dass die Lizenz mit deiner Verwendung kompatibel ist.",
     "Please choose a format": "Bitte wähle ein Format",
     "Please enter the name of the property": "Bitte gib den Namen des Merkmals ein",
     "Please enter the new name of this property": "Bitte gib den neuen Namen des Merkmals ein",
-    "Please save the map before": "Bitte zuerst die Karte speichern",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Bereitgestellt von <a href=\"{leaflet}\">Leaflet</a> und <a href=\"{django}\">Django</a>, zusammengebastelt vom <a href=\"{umap}\">uMap Projekt</a>.",
     "Problem in the response": "Fehlerhafte Serverantwort",
     "Problem in the response format": "Ungültiges Format der Serverantwort",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (groß)",
     "Popup content style": "Popupinhaltstil",
     "Popup shape": "Popupform",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }

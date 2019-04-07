@@ -233,15 +233,12 @@ var locale = {
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Відкрийте цю частину мапи у редакторі OpenStreetMap, щоб поліпшити дані",
     "Optional intensity property for heatmap": "Додаткові властивості інтенсивності теплової мапи",
     "Optional. Same as color if not set.": "Додатково.  Якщо не вибрано, то як колір.",
-    "Optionnal.": "Додатково.",
     "Override clustering radius (default 80)": "Перевизначити радіус кластеризації (за умовчанням 80)",
     "Override heatmap radius (default 25)": "Перевизначити радіус для теплової мапи (за умовчанням 25)",
-    "Paste here your data": "Вставити Ваші дані сюди",
     "Please be sure the licence is compliant with your use.": "Переконайтеся, що ліцензія відповідає правилам використання.",
     "Please choose a format": "Будь ласка, виберіть формат",
     "Please enter the name of the property": "Будь ласка, введіть назву властивості",
     "Please enter the new name of this property": "Будь ласка, введіть нову назву властивості",
-    "Please save the map before": "Будь ласка, спочатку збережіть мапу",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Працює на <a href=\"{leaflet}\">Leaflet</a> та <a href=\"{django}\">Django</a>, об’єднані проектом <a href=\"{umap}\">uMap</a>.",
     "Problem in the response": "Проблема з відповіддю",
     "Problem in the response format": "Формат відповіді не розпізнано",
@@ -365,7 +362,10 @@ var locale = {
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 };
 L.registerLocale("uk_UA", locale);
 L.setLocale("uk_UA");

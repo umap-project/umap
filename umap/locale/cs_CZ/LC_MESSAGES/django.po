@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 09:15+0000\n"
-"PO-Revision-Date: 2019-04-07 09:15+0000\n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2019-04-07 14:28+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/yohanboniface/umap/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
@@ -225,9 +225,9 @@ msgstr "Vyberte poskytovatele mapy"
 #: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
-"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Vytvářejte a sdílejte vlastní <a href=\"%(osm_url)s\" />OpenStreet</a> mapy a během pár minut je použijte na svém webu."
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"

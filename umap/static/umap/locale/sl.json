@@ -233,15 +233,12 @@
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Odpri obseg zemljevida v urejevalniku za prenos podrobnejših podatkov na OpenStreetMap.",
     "Optional intensity property for heatmap": "Izbirna lastnost jakosti vročinskih točke",
     "Optional. Same as color if not set.": "Izbirno. Enako, kot nedoločena barva.",
-    "Optionnal.": "Izbirno.",
     "Override clustering radius (default 80)": "Prekliči radij združevanja (privzeto 80)",
     "Override heatmap radius (default 25)": "Prekliči radij vročinskih točk (privzeto 25)",
-    "Paste here your data": "Prilepite podatke",
     "Please be sure the licence is compliant with your use.": "Prepričajte se, da je zemljevid uporabljen v skladu z dovoljenjem.",
     "Please choose a format": "Izbrati je treba zapis",
     "Please enter the name of the property": "Ime lastnosti",
     "Please enter the new name of this property": "Novo ime lastnosti",
-    "Please save the map before": "Shranite zemljevid pred",
     "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Zasnovano na orodjih <a href=\"{leaflet}\">Leaflet</a> in <a href=\"{django}\">Django</a>, združeno pri <a href=\"{umap}\">projektu uMap</a>.",
     "Problem in the response": "Napaka v odzivu",
     "Problem in the response format": "Napaka v zapisu odziva",
@@ -365,5 +362,8 @@
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
     "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
+    "Optional.": "Optional.",
+    "Paste your data here": "Paste your data here",
+    "Please save the map first": "Please save the map first"
 }
