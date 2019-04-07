@@ -1,15 +1,19 @@
-dist: xenial
+sudo: false
 language: python
+dist: xenial
 python:
 - "3.5"
 - "3.6"
 services:
 - postgresql
+addons:
+  postgresql: "9.6"
+  apt:
+    packages:
+    - libgdal-dev
+    - postgresql-9.6-postgis-2.3
 env:
 - UMAP_SETTINGS=umap/tests/settings.py
-before_install:
-  - sudo apt-get install -y libgdal20
-  - gdal-config --version
 install:
 - pip install .
 - pip install -r requirements-dev.txt
