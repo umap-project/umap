@@ -48,7 +48,7 @@ L.U.MapPermissions = L.Class.extend({
     },
 
     edit: function () {
-        if (!this.map.options.umap_id) return this.map.ui.alert({content: L._('Please save the map before'), level: 'info'});
+        if (!this.map.options.umap_id) return this.map.ui.alert({content: L._('Please save the map first'), level: 'info'});
         var container = L.DomUtil.create('div', 'permissions-panel'),
             fields = [],
             title = L.DomUtil.create('h4', '', container);
