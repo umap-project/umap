@@ -8,8 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.signing import Signer
 from django.template.defaultfilters import slugify
 from django.core.files.base import File
+from django.contrib.postgres.fields import JSONField
 
-from .fields import DictField
 from .managers import PublicManager
 
 
@@ -137,7 +137,7 @@ class Map(NamedModel):
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors"))
     edit_status = models.SmallIntegerField(choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status"))
     share_status = models.SmallIntegerField(choices=SHARE_STATUS, default=PUBLIC, verbose_name=_("share status"))
-    settings = DictField(blank=True, null=True, verbose_name=_("settings"))
+    settings = JSONField(blank=True, null=True, verbose_name=_("settings"), default=dict)
 
     objects = models.Manager()
     public = PublicManager()
