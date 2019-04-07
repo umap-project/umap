@@ -265,6 +265,23 @@ def test_editors_can_access_map_with_share_status_private(client, map, user):
     assert response.status_code == 200
 
 
+def test_anonymous_cannot_access_map_with_share_status_blocked(client, map):
+    url = reverse('map', args=(map.slug, map.pk))
+    map.share_status = map.BLOCKED
+    map.save()
+    response = client.get(url)
+    assert response.status_code == 403
+
+
+def test_owner_cannot_access_map_with_share_status_blocked(client, map):
+    url = reverse('map', args=(map.slug, map.pk))
+    map.share_status = map.BLOCKED
+    map.save()
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(url)
+    assert response.status_code == 403
+
+
 def test_non_editor_cannot_access_map_if_share_status_private(client, map, user):  # noqa
     url = reverse('map', args=(map.slug, map.pk))
     map.share_status = map.PRIVATE

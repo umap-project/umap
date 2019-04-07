@@ -369,7 +369,7 @@ class MapDetailMixin:
             'licences': dict((l.name, l.json) for l in Licence.objects.all()),
             'edit_statuses': [(i, str(label)) for i, label in Map.EDIT_STATUS],
             'share_statuses': [(i, str(label))
-                               for i, label in Map.SHARE_STATUS],
+                               for i, label in Map.SHARE_STATUS if i != Map.BLOCKED],
             'anonymous_edit_statuses': [(i, str(label)) for i, label
                                         in AnonymousMapPermissionsForm.STATUS],
         }

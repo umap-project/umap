@@ -110,6 +110,7 @@ class Map(NamedModel):
     PUBLIC = 1
     OPEN = 2
     PRIVATE = 3
+    BLOCKED = 9
     EDIT_STATUS = (
         (ANONYMOUS, _('Everyone can edit')),
         (EDITORS, _('Only editors can edit')),
@@ -119,6 +120,7 @@ class Map(NamedModel):
         (PUBLIC, _('everyone (public)')),
         (OPEN, _('anyone with link')),
         (PRIVATE, _('editors only')),
+        (BLOCKED, _('blocked')),
     )
     slug = models.SlugField(db_index=True)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
@@ -182,7 +184,9 @@ class Map(NamedModel):
         return can
 
     def can_view(self, request):
-        if self.owner is None:
+        if self.share_status == self.BLOCKED:
+            can = False
+        elif self.owner is None:
             can = True
         elif self.share_status in [self.PUBLIC, self.OPEN]:
             can = True
