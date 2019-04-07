@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "አጭር ክሬዲት",
     "Show/hide layer": "ሌየሩን አሳይ/ደብቅ",
     "Simple link: [[http://example.com]]": "ቀላል መገኛ: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "ያልታወቁ ጂኦሜትሪዎችን በማለፍ ላይ።አይነት ፡{TYPE}",
     "Slideshow": "ስላይድሾው",
     "Smart transitions": "Smart transitions",
     "Sort key": "Sort key",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("am_ET", locale);
 L.setLocale("am_ET");

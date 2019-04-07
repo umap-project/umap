@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Kratek zapis zaslug",
     "Show/hide layer": "Pokaži / Skrij plast",
     "Simple link: [[http://example.com]]": "Enostavna povezava: [[http://primer.com]]",
-    "Skipping unkown geometry.type: {type}": "Preskoči neznano geometrično vrsto: {type}",
     "Slideshow": "Predstavitev",
     "Smart transitions": "Pametni prehodi",
     "Sort key": "Razvrščanje",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("sl", locale);
 L.setLocale("sl");

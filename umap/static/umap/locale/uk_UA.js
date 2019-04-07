@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Короткий опис прав/подяки",
     "Show/hide layer": "Показати/приховати шар",
     "Simple link: [[http://example.com]]": "Просте посилання: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "Пропущена невідома властивість geometry.type: {type}",
     "Slideshow": "Слайдшоу",
     "Smart transitions": "Smart transitions",
     "Sort key": "Sort key",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("uk_UA", locale);
 L.setLocale("uk_UA");

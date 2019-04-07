@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Krátký text autorství",
     "Show/hide layer": "Skrytí/zobrazení vrstvy",
     "Simple link: [[http://example.com]]": "Jednoduchý odkaz: [[http://priklad.cz]]",
-    "Skipping unkown geometry.type: {type}": "Přeskakuji neznámý typ geometrie: {type}",
     "Slideshow": "Prezentace",
     "Smart transitions": "Smart transitions",
     "Sort key": "Sort key",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (velký)",
     "Popup content style": "Styl obsahu popupu",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("cs_CZ", locale);
 L.setLocale("cs_CZ");

@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Short credits",
     "Show/hide layer": "显示/隐藏图层",
     "Simple link: [[http://example.com]]": "Simple link: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "Skipping unkown geometry.type: {type}",
     "Slideshow": "幻灯秀",
     "Smart transitions": "Smart transitions",
     "Sort key": "Sort key",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("zh", locale);
 L.setLocale("zh");

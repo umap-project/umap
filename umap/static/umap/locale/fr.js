@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Crédit court",
     "Show/hide layer": "Montrer/masquer un calque",
     "Simple link: [[http://example.com]]": "Lien simple: [[https://exemple.fr]]",
-    "Skipping unkown geometry.type: {type}": "Le type de géométrie suivant a été ignoré : {type}",
     "Slideshow": "Diaporama",
     "Smart transitions": "Transitions animées",
     "Sort key": "Clé de tri",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (grande)",
     "Popup content style": "Gabarit du contenu de la popup",
-    "Popup shape": "Forme de popup"
+    "Popup shape": "Forme de popup",
+    "Skipping unknown geometry.type: {type}": "Type de géométrie inconnu ignoré: {type}"
 };
 L.registerLocale("fr", locale);
 L.setLocale("fr");

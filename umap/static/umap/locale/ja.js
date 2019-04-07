@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "短縮表示板クレジット",
     "Show/hide layer": "レイヤ表示/非表示",
     "Simple link: [[http://example.com]]": "シンプルリンク: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "不明なジオメトリタイプ {type}をスキップしました",
     "Slideshow": "スライドショー",
     "Smart transitions": "Smart transitions",
     "Sort key": "並び替えに使うキー",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("ja", locale);
 L.setLocale("ja");

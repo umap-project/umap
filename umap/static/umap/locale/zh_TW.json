@@ -271,7 +271,6 @@
     "Short credits": "簡短工作人員名單",
     "Show/hide layer": "顯示/隱藏圖層",
     "Simple link: [[http://example.com]]": "簡單連結: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "略過未知的地理資料格式 geometry.type: {type}",
     "Slideshow": "投影片",
     "Smart transitions": "智慧轉換",
     "Sort key": "排序鍵",
@@ -365,5 +364,6 @@
     "Popup": "彈出式視窗",
     "Popup (large)": "彈出式視窗 (大)",
     "Popup content style": "彈出式視窗内容樣式",
-    "Popup shape": "彈出式視窗形狀"
+    "Popup shape": "彈出式視窗形狀",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 }

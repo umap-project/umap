@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Kurze Credits",
     "Show/hide layer": "Ebene Einblenden/Ausblenden",
     "Simple link: [[http://example.com]]": "Einfacher Link: [[http://beispiel.com]]",
-    "Skipping unkown geometry.type: {type}": "Überspringe unbekannten Geometrietyp: {type}",
     "Slideshow": "Diashow",
     "Smart transitions": "Weiche Übergänge",
     "Sort key": "Sortierschlüssel",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (groß)",
     "Popup content style": "Popupinhaltstil",
-    "Popup shape": "Popupform"
+    "Popup shape": "Popupform",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("de", locale);
 L.setLocale("de");

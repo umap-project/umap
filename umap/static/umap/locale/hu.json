@@ -271,7 +271,6 @@
     "Short credits": "Alkotók röviden",
     "Show/hide layer": "Réteg megjelenítése/elrejtése",
     "Simple link: [[http://example.com]]": "Egyszerű link: [[http://pelda.hu]]",
-    "Skipping unkown geometry.type: {type}": "Ismeretlen geometriatípus kihagyása: {type}",
     "Slideshow": "Diavetítés",
     "Smart transitions": "Intelligens áttűnések",
     "Sort key": "Sorba rendezéshez használt kulcs",
@@ -365,5 +364,6 @@
     "Popup": "Felugró",
     "Popup (large)": "Felugró (nagy)",
     "Popup content style": "Felugró tartalom stílusa",
-    "Popup shape": "Felugró ablak alakja"
+    "Popup shape": "Felugró ablak alakja",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 }

@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Σύντομες πιστώσεις.",
     "Show/hide layer": "Εμφάνιση / απόκρυψη επιπέδου",
     "Simple link: [[http://example.com]]": "Απλός σύνδεσμος:[[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "Παράλειψη άγνωστης γεωμετρίας: {type}",
     "Slideshow": "Παρουσίαση",
     "Smart transitions": "Έξυπνες μεταβάσεις",
     "Sort key": "Κλειδί ταξινόμησης ",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Αναδυόμενο",
     "Popup (large)": "Αναδυόμενο (μεγάλο) ",
     "Popup content style": "Στυλ περιεχομένου αναδυόμενου ",
-    "Popup shape": "Σχήμα αναδυόμενου "
+    "Popup shape": "Σχήμα αναδυόμενου ",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("el", locale);
 L.setLocale("el");

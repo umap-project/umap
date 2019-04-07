@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Cretos curtos",
     "Show/hide layer": "Amosar/agochar capa",
     "Simple link: [[http://example.com]]": "Ligazón sinxela: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "Estase a ignorar o tipo de xeometría descoñecida: {type}",
     "Slideshow": "Presentación",
     "Smart transitions": "Transicións intelixentes",
     "Sort key": "Orde da clave",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Xanela emerxente",
     "Popup (large)": "Xanela emerxente (grande)",
     "Popup content style": "Estilo do contido da xanela emerxente",
-    "Popup shape": "Forma da xanela emerxente"
+    "Popup shape": "Forma da xanela emerxente",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("gl", locale);
 L.setLocale("gl");

@@ -271,7 +271,6 @@
     "Short credits": "Krótkie źródło",
     "Show/hide layer": "Pokaż/ukryj warstwę",
     "Simple link: [[http://example.com]]": "Prosty link: [[http://przyklad.pl]]",
-    "Skipping unkown geometry.type: {type}": "Pomijanie nieznanego geometry.type: {type}",
     "Slideshow": "Pokaz slajdów",
     "Smart transitions": "Smart transitions",
     "Sort key": "Klucz sortowania",
@@ -365,5 +364,6 @@
     "Popup": "Wyskakujące okienko",
     "Popup (large)": "Wyskakujące okienko (duże)",
     "Popup content style": "Styl zawartości wyskakującego okienka",
-    "Popup shape": "Kształt wyskakującego okienka"
+    "Popup shape": "Kształt wyskakującego okienka",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 }

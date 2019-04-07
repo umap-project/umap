@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Short credits",
     "Show/hide layer": "Покажи / скрий слой",
     "Simple link: [[http://example.com]]": "проста връзка:[[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": ":Пропускане на неизвестна тип геометрия: {type}",
     "Slideshow": "Slideshow",
     "Smart transitions": "Smart transitions",
     "Sort key": "Sort key",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("bg", locale);
 L.setLocale("bg");

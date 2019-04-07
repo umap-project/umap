@@ -271,7 +271,6 @@ var locale = {
     "Short credits": "Trumpai apie kūrėjus",
     "Show/hide layer": "Rodyti/slėpti sluoksnį",
     "Simple link: [[http://example.com]]": "Paprasta nuoroda: [[http://example.com]]",
-    "Skipping unkown geometry.type: {type}": "Praleidžiamas nežinomas geometrijos tipas: {type}",
     "Slideshow": "Peržiūra",
     "Smart transitions": "Smart transitions",
     "Sort key": "Sort key",
@@ -365,7 +364,8 @@ var locale = {
     "Popup": "Popup",
     "Popup (large)": "Popup (large)",
     "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape"
+    "Popup shape": "Popup shape",
+    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}"
 };
 L.registerLocale("lt", locale);
 L.setLocale("lt");
