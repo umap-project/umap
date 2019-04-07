@@ -9,6 +9,7 @@ class TileLayerAdmin(admin.ModelAdmin):
 
 class MapAdmin(admin.OSMGeoAdmin):
     search_fields = ("name",)
+    autocomplete_fields = ("owner", "editors")
 
 
 admin.site.register(Map, MapAdmin)
