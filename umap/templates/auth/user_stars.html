@@ -1,0 +1,20 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+<div class="col wide">
+  <h2 class="section">{% blocktrans %}Browse {{ current_user }}'s starred maps{% endblocktrans %}</h2>
+</div>
+<div class="wrapper">
+<div class="map_list row">
+  {% if maps %}
+    {% include "umap/map_list.html" %}
+  {% else %}
+    <div>
+      {% blocktrans %}{{ current_user }} has no starred maps yet.{% endblocktrans %}
+    </div>
+  {% endif %}
+</div>
+</div>
+{% endblock maincontent %}

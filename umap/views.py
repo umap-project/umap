@@ -45,7 +45,7 @@ from .forms import (
     MapSettingsForm,
     UpdateMapPermissionsForm,
 )
-from .models import DataLayer, Licence, Map, Pictogram, TileLayer
+from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
 from .utils import get_uri_template, gzip_file, is_ajax
 
 try:
@@ -178,6 +178,30 @@ class UserMaps(DetailView, PaginatorMixin):
 
 
 user_maps = UserMaps.as_view()
+
+
+class UserStars(UserMaps):
+    template_name = "auth/user_stars.html"
+
+    def get_context_data(self, **kwargs):
+        owner = self.request.user == self.object
+        manager = Map.objects if owner else Map.public
+        stars = Star.objects.filter(by=self.object).values("map")
+        maps = manager.filter(pk__in=stars)
+        if owner:
+            per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
+            limit = 100
+        else:
+            per_page = settings.UMAP_MAPS_PER_PAGE
+            limit = 50
+        maps = maps.order_by('-modified_at')[:limit]
+        maps = self.paginate(maps, per_page)
+        kwargs.update({
+            "maps": maps
+        })
+        return kwargs
+
+user_stars = UserStars.as_view()
 
 
 class Search(TemplateView, PaginatorMixin):
@@ -360,6 +384,7 @@ class MapDetailMixin:
             "allowEdit": self.is_edit_allowed(),
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
+            'starred': self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
             "edit_statuses": [(i, str(label)) for i, label in Map.EDIT_STATUS],
             "share_statuses": [
@@ -403,6 +428,9 @@ class MapDetailMixin:
 
     def get_umap_id(self):
         return None
+
+    def is_starred(self):
+        return False
 
     def get_geojson(self):
         return {
@@ -488,6 +516,12 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         map_settings["properties"]["name"] = self.object.name
         map_settings["properties"]["permissions"] = self.get_permissions()
         return map_settings
+
+    def is_starred(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        return Star.objects.filter(by=user, map=self.object).exists()
 
 
 class MapViewGeoJSON(MapView):
@@ -629,6 +663,20 @@ class MapClone(PermissionsMixin, View):
             msg = _("Congratulations, your map has been cloned!")
         messages.info(self.request, msg)
         return response
+
+
+class MapStar(View):
+
+    def post(self, *args, **kwargs):
+        map_inst = get_object_or_404(Map, pk=kwargs['map_id'])
+        qs = Star.objects.filter(map=map_inst, by=self.request.user)
+        if qs.exists():
+            qs.delete()
+            status = False
+        else:
+            Star(map=map_inst, by=self.request.user).save()
+            status = True
+        return simple_json_response(starred=status)
 
 
 class MapShortUrl(RedirectView):

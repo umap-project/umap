@@ -349,3 +349,9 @@ class DataLayer(NamedModel):
                     self.geojson.storage.delete(path)
                 except FileNotFoundError:
                     pass
+
+
+class Star(models.Model):
+    at = models.DateTimeField(auto_now=True)
+    map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="stars", on_delete=models.CASCADE)

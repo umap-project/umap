@@ -1060,6 +1060,10 @@ L.U.FormBuilder = L.FormBuilder.extend({
       handler: 'DataLayersControl',
       label: L._('Display the data layers control'),
     },
+    starControl: {
+      handler: 'ControlChoice',
+      label: L._('Display the star map button'),
+    },
   },
 
   initialize: function (obj, fields, options) {
