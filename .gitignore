@@ -7,6 +7,7 @@ umap/remote_static
 tmp/*
 node_modules/*
 umap/static/umap/vendors
+site/*
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
