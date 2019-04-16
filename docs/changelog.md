@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1
+
+- downgraded psycopg2 to 2.7.7 (migrations where failing); should be fixed with
+  Django 2.2.1
+- fixed annoying bug where "load more map" would fail
+- allow to filter by share status in admin page
+
 ## 1.1.0
 
 - added `Map.BLOCKED` share status, to redact maps issuing legal complaints
