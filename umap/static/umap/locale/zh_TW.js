@@ -362,10 +362,10 @@ var locale = {
     "Popup (large)": "彈出式視窗 (大)",
     "Popup content style": "彈出式視窗内容樣式",
     "Popup shape": "彈出式視窗形狀",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Skipping unknown geometry.type: {type}": "略過不明的 geometry.type: {type}",
+    "Optional.": "可選",
+    "Paste your data here": "請在此貼上你的資料",
+    "Please save the map first": "請先儲存地圖"
 };
 L.registerLocale("zh_TW", locale);
 L.setLocale("zh_TW");
