@@ -50,6 +50,7 @@ LANGUAGES = (
     ('hu', 'Hungarian'),
     ('it', 'Italiano'),
     ('ja', 'Japanese'),
+    ('ko', 'Korean'),
     ('lt', 'Lithuanian'),
     ('nl', 'Dutch'),
     ('pl', 'Polish'),

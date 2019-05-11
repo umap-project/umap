@@ -366,6 +366,7 @@ var locale = {
     "Optional.": "Volitelné.",
     "Paste your data here": "Zde vložte svá data",
     "Please save the map first": "Prosím, nejprve uložte mapu"
-};
+}
+;
 L.registerLocale("cs_CZ", locale);
 L.setLocale("cs_CZ");
