@@ -94,6 +94,10 @@ describe('L.Util', function () {
             assert.equal(L.Util.toHTML('A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'), 'A simple iframe: <iframe frameborder="0" src="https://osm.org/?url=https%3A//anotherurl.com" width="100%" height="300px"></iframe>');
         });
 
+        it('should handle iframe with height with px', function () {
+            assert.equal(L.Util.toHTML('A double iframe: {{{https://osm.org/pouet}}}{{{https://osm.org/boudin}}}'), 'A double iframe: <iframe frameborder="0" src="https://osm.org/pouet" width="100%" height="300px"></iframe><iframe frameborder="0" src="https://osm.org/boudin" width="100%" height="300px"></iframe>');
+        });
+
         it('http link with http link as parameter as variable', function () {
             assert.equal(L.Util.toHTML('A phrase with a [[http://iframeurl.com?to=http://another.com]].'), 'A phrase with a <a target="_blank" href="http://iframeurl.com?to=http://another.com">http://iframeurl.com?to=http://another.com</a>.');
         });

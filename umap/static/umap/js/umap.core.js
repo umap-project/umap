@@ -81,9 +81,9 @@ L.Util.toHTML = function (r) {
     r = r.replace(/\[\[([^|]*?)\|(.*?)\]\]/g, '<a href="$1">$2</a>');
 
     // iframe
-    r = r.replace(/{{{(h_t_t_ps?[^ |]*)}}}/g, '<iframe frameborder="0" src="$1" width="100%" height="300px"></iframe>');
-    r = r.replace(/{{{(h_t_t_ps?[^ |]*)\|(\d*)(px)?}}}/g, '<iframe frameborder="0" src="$1" width="100%" height="$2px"></iframe>');
-    r = r.replace(/{{{(h_t_t_ps?[^ |]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g, '<iframe frameborder="0" src="$1" width="$4px" height="$2px"></iframe>');
+    r = r.replace(/{{{(h_t_t_ps?[^ |{]*)}}}/g, '<iframe frameborder="0" src="$1" width="100%" height="300px"></iframe>');
+    r = r.replace(/{{{(h_t_t_ps?[^ |{]*)\|(\d*)(px)?}}}/g, '<iframe frameborder="0" src="$1" width="100%" height="$2px"></iframe>');
+    r = r.replace(/{{{(h_t_t_ps?[^ |{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g, '<iframe frameborder="0" src="$1" width="$4px" height="$2px"></iframe>');
 
     // images
     r = r.replace(/{{([^\]|]*?)}}/g, '<img src="$1">');
