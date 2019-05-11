@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+- fixed parsing of two iframes
+- updated i18n
+- upgraded Django to 2.2.1 and psycopg2 to 2.8.1
+
 ## 1.1.1
 
 - downgraded psycopg2 to 2.7.7 (migrations where failing); should be fixed with
