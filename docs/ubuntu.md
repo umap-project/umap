@@ -251,6 +251,18 @@ In your local.py:
 
     UMAP_DEMO_SITE = False
     DEBUG = False
+    
+In your nginx config:
+
+    location /static {
+        autoindex off;
+        alias /path/to/umap/var/static/;   
+    }
+
+    location /uploads {
+        autoindex off;
+        alias /path/to/umap/var/data/;    
+    }
 
 ### Configure social auth
 
