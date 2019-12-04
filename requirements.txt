@@ -1,4 +1,4 @@
-Django==2.2.1
+Django==2.2.8
 django-agnocomplete==0.14.0
 django-compressor==2.2
 Pillow==6.0.0
