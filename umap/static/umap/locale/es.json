@@ -356,14 +356,14 @@
     "1 day": "1 día",
     "1 hour": "1 hora",
     "5 min": "5 min",
-    "Cache proxied request": "Cache proxied request",
+    "Cache proxied request": "Guardar la petición al proxy",
     "No cache": "Sin cache",
     "Popup": "Ventana emergente",
     "Popup (large)": "Ventana emergente (grande)",
-    "Popup content style": "Popup content style",
-    "Popup shape": "Popup shape",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Popup content style": "Estilo del contenido de la ventana emergente",
+    "Popup shape": "Forma de la ventana emergente",
+    "Skipping unknown geometry.type: {type}": "Ignorando tipo de geometría desconocida: {type}",
+    "Optional.": "Opcional.",
+    "Paste your data here": "Pega tus datos aquí",
+    "Please save the map first": "Por favor guarda primero el mapa"
 }

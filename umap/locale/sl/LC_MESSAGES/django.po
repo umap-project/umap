@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Matej Urbančič <>, 2018
-# stefan.b <stefan.baebler@gmail.com>, 2019
+# Štefan Baebler <stefan.baebler@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
