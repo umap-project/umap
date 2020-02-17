@@ -362,10 +362,10 @@ var locale = {
     "Popup (large)": "Xanela emerxente (grande)",
     "Popup content style": "Estilo do contido da xanela emerxente",
     "Popup shape": "Forma da xanela emerxente",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Skipping unknown geometry.type: {type}": "Brincando tipo descoñecido geometry.type: {type}",
+    "Optional.": "Opcional.",
+    "Paste your data here": "Pega os teus datos aquí",
+    "Please save the map first": "Por favor garda o mapa primeiro"
 };
 L.registerLocale("gl", locale);
 L.setLocale("gl");
