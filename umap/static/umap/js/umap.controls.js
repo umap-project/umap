@@ -1033,7 +1033,7 @@ L.U.IframeExporter = L.Evented.extend({
 
     initialize: function (map) {
         this.map = map;
-        this.baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+        this.baseUrl = '//' + window.location.host + window.location.pathname;
         // Use map default, not generic default
         this.queryString.onLoadPanel = this.map.options.onLoadPanel;
     },
