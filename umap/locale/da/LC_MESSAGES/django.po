@@ -5,15 +5,15 @@
 # Translators:
 # Kåre Thor Olsen <kaare@nightcall.dk>, 2019
 # Mikkel Kirkgaard Nielsen <memb_transifex@mikini.dk>, 2018
-# Neogeografen <soren.johannessen@gmail.com>, 2013-2014
+# Neogeografen <soren.johannessen@gmail.com>, 2013-2014,2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-09-02 16:33+0000\n"
-"Last-Translator: Kåre Thor Olsen <kaare@nightcall.dk>\n"
-"Language-Team: Danish (http://www.transifex.com/yohanboniface/umap/language/da/)\n"
+"PO-Revision-Date: 2020-02-26 16:16+0000\n"
+"Last-Translator: Neogeografen <soren.johannessen@gmail.com>\n"
+"Language-Team: Danish (http://www.transifex.com/openstreetmap/umap/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -296,7 +296,7 @@ msgstr "Feedback"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
-msgstr "Ændr adgangskode"
+msgstr "Skift adgangskode"
 
 #: umap/templates/umap/password_change.html:6
 msgid "Password change"

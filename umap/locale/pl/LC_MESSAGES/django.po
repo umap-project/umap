@@ -7,6 +7,7 @@
 # endro, 2016
 # endro, 2015
 # Maciej Kowalik <m.kowalik.79@gmail.com>, 2016
+# maro21 OSM, 2020
 # Piotr Strębski <strebski@gmail.com>, 2020
 # Teiron, 2016
 # Tomasz Nycz <tomasz.merkato@gmail.com>, 2018
@@ -15,9 +16,9 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-01-11 17:07+0000\n"
-"Last-Translator: Piotr Strębski <strebski@gmail.com>\n"
-"Language-Team: Polish (http://www.transifex.com/yohanboniface/umap/language/pl/)\n"
+"PO-Revision-Date: 2020-02-26 00:20+0000\n"
+"Last-Translator: maro21 OSM\n"
+"Language-Team: Polish (http://www.transifex.com/openstreetmap/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -58,7 +59,7 @@ msgstr "Rejestracja"
 #: tmp/framacarte/templates/umap/navigation.html:12
 #: umap/templates/umap/navigation.html:20
 msgid "Log out"
-msgstr "Wyloguj"
+msgstr "Wyloguj się"
 
 #: tmp/framacarte/templates/umap/search_bar.html:6
 #: umap/templates/umap/search_bar.html:6
@@ -86,7 +87,7 @@ msgstr "Edycja możliwa tylko z sekretnym odnośnikiem"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "Strona jest w trybie read-only aby wykonać prace konserwacyjne"
+msgstr "Strona jest w trybie tylko do odczytu z powodu prac konserwacyjnych"
 
 #: umap/models.py:17
 msgid "name"
@@ -204,7 +205,7 @@ msgstr "Przeglądaj mapy %(current_user)s"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr "%(current_user)snie posiada map."
+msgstr "%(current_user)s nie posiada map."
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
@@ -220,7 +221,7 @@ msgstr "Hasło"
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
-msgstr "Zaloguj"
+msgstr "Zaloguj się"
 
 #: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
@@ -231,7 +232,7 @@ msgstr "Proszę wybrać serwis"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap umożliwia Ci utworzenie w kilka minut mapy z użyciem warstw <a href=\"%(osm_url)s\" />OpenStreetMap</a> i zamieszczenie jej na swojej stronie internetowej."
+msgstr "uMap umożliwia ci utworzenie w kilka minut mapy z użyciem warstw <a href=\"%(osm_url)s\" />OpenStreetMap</a> i zamieszczenie jej na swojej stronie internetowej."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -247,7 +248,7 @@ msgstr "Zarządzaj kolorami oraz ikonami"
 
 #: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Zmieniaj ustawienia mapy: wyświetlanie mini-mapy, lokalizacja użytkownika po załadowaniu..."
+msgstr "Zmieniaj ustawienia mapy: wyświetlanie minimapy, lokalizacja użytkownika po załadowaniu..."
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
@@ -268,7 +269,7 @@ msgstr "I to wszystko <a href=\"%(repo_url)s\">na wolnej licencji</a>!"
 
 #: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
-msgstr "Wypróbuj wersję demo"
+msgstr "Zobacz wersję demo"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
@@ -310,7 +311,7 @@ msgstr "Zmiana hasła"
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr "Prosimy wpisać swoje poprzednie hasło, a następnie podać nowe dwukrotnie, by zweryfikować czy wpisało je poprawnie"
+msgstr "Prosimy wpisać swoje poprzednie hasło, a następnie podać nowe dwukrotnie, by zweryfikować, czy wpisano je poprawnie"
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
