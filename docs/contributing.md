@@ -16,6 +16,10 @@ You are very welcome to help us triaging [uMap issues](https://github.com/umap-p
 
 ### Environnement setup
 
+Choose one of the following two config:
+
+#### Config global to your desktop
+
 Follow the procedure [Ubuntu from scratch](ubuntu.md)
 
 But instead using folders /etc/umap, you can create a ~/.umap folder.
@@ -40,6 +44,14 @@ Then refresh your terminal
 
 Run your local uMap and check that it is working properly.
 
+#### Config inside your local git repo
+
+Follow the procedure [Ubuntu from scratch](ubuntu.md)
+
+You can use the local.py.sample in the git repo and copy it to your local git repo to umap/settings/local.py
+
+See [Installation](install.md)
+
 ### Hacking on the code
 
 Create a workspace folder ~/wk and go into it.
@@ -49,7 +61,7 @@ Create a workspace folder ~/wk and go into it.
 Several commands, needs you to be in a virtualenv:
 
     virtualenv ~/wk/umap/venv --python=/usr/bin/python3.6
-    source /srv/umap/venv/bin/activate
+    source ~/wk/umap/venv/bin/activate
 
 Now, command "umap" will be available
 

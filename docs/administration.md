@@ -1,28 +1,32 @@
 # Administration
 
-You can acces uMap administration page by navigating to  `https://your.server.org/admin`
+You can access uMap administration page by navigating to `https://your.server.org/admin`
 
-You will have to connect with the admin account create during installation. Default admin username is umap.
+You will have to connect with the admin account created during installation. Default admin username is "umap".
 
-## Pictograms
+## Icons
 
-Pictograms are icon that can be used in your map markers.
+Icons (aka pictograms in uMap sources) can be used in your map markers.
 
-Pictograms are not embedded in uMap sources, you will have to add them manually. So you can choose which pictograms you want to use.
+Icons are not embedded in uMap sources, you will have to add them manually. So you can choose which icons you want to use.
 
-Example of pictograms libraries you may want to use:
+Example of icons libraries you may want to use:
 
 - [Maki Icons](https://labs.mapbox.com/maki-icons/) (icon set made for map designers)
 - [Osmic Icons](https://gitlab.com/gmgeo/osmic)
 - [SJJB Icons](http://www.sjjb.co.uk/mapicons/contactsheet)
 
-### Import pictograms
+### Import icons manually
 
-To import pictograms on your uMap server, you will need to use command `umap import_pictograms`
+You can import icons manually by going to your uMap admin page: `https://your.server.org/admin`
+
+### Import icons automatically
+
+To import icons on your uMap server, you will need to use command `umap import_pictograms`
 
 Note, you can get help with `umap import_pictograms -h`
 
-In this example, we are gonna import Maki Icons.
+In this example, we will import Maki icons.
 
 First, we download icons from main site. Inside the downloaded archive, we keep only the icons folder that contains svg files. Place this folder on your server.
 
@@ -40,9 +44,9 @@ Notes:
 - you may also want to resize image with option `-resize 24x`
 - this solution is not optimal, generated png are blurry.
 
-This will convert the svg to png and rename them from *-15.svg to *-24.png
+This will convert the svg to png and rename them from `*-15.svg` to `*-24.png`
 
-Now we will import pictograms. Note pictograms names must ends with -24.png
+Now we will import icons. Note: icons names must end with `-24.png`
 
 `umap import_pictograms --attribution "Maki Icons by Mapbox" icons`
 
