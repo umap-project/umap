@@ -1,5 +1,7 @@
 # Installation
 
+*Note: for Ubuntu follow procedure [Ubuntu from scratch](ubuntu.md)*
+
 Create a geo aware database. See [Geodjango doc](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/) for backend installation.
 
 Create a virtual environment

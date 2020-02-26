@@ -6,8 +6,9 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Install system dependencies
 
-    sudo apt install build-essential autoconf python3.5 python3.5-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-server-dev-9.5 postgresql-9.5-postgis-2.2 git libxml2-dev libxslt1-dev zlib1g-dev
+    sudo apt install build-essential autoconf python3.6 python3.6-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-server-dev-9.5 postgresql-9.5-postgis-2.2 git libxml2-dev libxslt1-dev zlib1g-dev
 
+*Note: nginx and uwsgi are not required for local development environment*
 
 *Note: uMap also works with python 2.7 and 3.4, so adapt the package names if you work with another version.*
 
@@ -58,7 +59,7 @@ From now on, unless we say differently, the commands are run as `umap` user.
 
 ## Create a virtualenv and activate it
 
-    virtualenv /srv/umap/venv --python=/usr/bin/python3.5
+    virtualenv /srv/umap/venv --python=/usr/bin/python3.6
     source /srv/umap/venv/bin/activate
 
 *Note: this activation is not persistent, so if you open a new terminal window,
@@ -74,6 +75,16 @@ you will need to run again this last line.*
 
     wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /etc/umap/umap.conf
 
+## Customize umap.conf
+
+    nano /etc/umap/umap.conf
+
+Change the following properties:
+
+```
+STATIC_ROOT = '/srv/umap/var/static'
+MEDIA_ROOT = '/srv/umap/var/data'
+```
 
 ## Create the tables
 
