@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-26 19:51+0000\n"
+"PO-Revision-Date: 2020-02-27 13:06+0000\n"
 "Last-Translator: Andrey Golovin\n"
 "Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/openstreetmap/umap/language/uk_UA/)\n"
 "MIME-Version: 1.0\n"
@@ -81,7 +81,7 @@ msgstr "Редагування можливе лише за наявності �
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "Сайт доступний лише для перегляду на час робіт з його обслуговування."
 
 #: umap/models.py:17
 msgid "name"
@@ -226,7 +226,7 @@ msgstr "Виберіть провайдера автентифікації"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMap дозволяє вам створювати мапи з шарами з даних <a href=\"%(osm_url)s\" />OpenStreetMap</a> за лічені хвилини та вбудовувати їх у ваші веб-сайти."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"

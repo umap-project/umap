@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-26 00:20+0000\n"
+"PO-Revision-Date: 2020-02-26 22:30+0000\n"
 "Last-Translator: maro21 OSM\n"
 "Language-Team: Polish (http://www.transifex.com/openstreetmap/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -277,7 +277,7 @@ msgstr "Mapa uMapek"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Zainspiruj się"
+msgstr "Zainspiruj się, przejrzyj mapy"
 
 #: umap/templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."

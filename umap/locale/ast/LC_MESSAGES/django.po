@@ -3,20 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Roman Neumüller, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-27 11:54+0000\n"
-"Last-Translator: Roman Neumüller\n"
-"Language-Team: Turkish (http://www.transifex.com/openstreetmap/umap/language/tr/)\n"
+"PO-Revision-Date: 2019-04-07 14:28+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Asturian (http://www.transifex.com/openstreetmap/umap/language/ast/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: ast\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
 #, python-format
@@ -25,45 +24,45 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Bu örnek, testler ve yayın öncesi sürümler için kullanılan bir demo örneğidir. Kararlı bir örneğe ihtiyacınız varsa, lütfen <a href=\"%(stable_url)s\">%(stable_url)s</a> kullanın. Kendi örneğinizi de barındırabilirsiniz, cünkü <a href=\"%(repo_url)s\">açık kaynak yazılım</a>!"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
 #: umap/templates/umap/about_summary.html:33
 #: umap/templates/umap/navigation.html:26
 msgid "Create a map"
-msgstr "Bir harita oluştur"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/navigation.html:7
 #: umap/templates/umap/navigation.html:10
 msgid "My maps"
-msgstr "Haritalarım"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Log in"
-msgstr "Oturum aç"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Sign in"
-msgstr "Katıl"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/navigation.html:12
 #: umap/templates/umap/navigation.html:20
 msgid "Log out"
-msgstr "Oturum kapat"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/search_bar.html:6
 #: umap/templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr "Harita ara"
+msgstr ""
 
 #: tmp/framacarte/templates/umap/search_bar.html:10
 #: tmp/framacarte/templates/umap/search_bar.html:13
 #: umap/templates/umap/search_bar.html:9
 msgid "Search"
-msgstr "Ara"
+msgstr ""
 
 #: umap/forms.py:40
 #, python-format
@@ -72,7 +71,7 @@ msgstr ""
 
 #: umap/forms.py:44 umap/models.py:115
 msgid "Everyone can edit"
-msgstr "Herkes düzeltebilir"
+msgstr ""
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
@@ -84,11 +83,11 @@ msgstr ""
 
 #: umap/models.py:17
 msgid "name"
-msgstr "adı"
+msgstr ""
 
 #: umap/models.py:48
 msgid "details"
-msgstr "ayrıntılar"
+msgstr ""
 
 #: umap/models.py:49
 msgid "Link to a page where the licence is detailed."
@@ -104,15 +103,15 @@ msgstr ""
 
 #: umap/models.py:116
 msgid "Only editors can edit"
-msgstr "Sadece editörlerin düzelteme hakkı var"
+msgstr ""
 
 #: umap/models.py:117
 msgid "Only owner can edit"
-msgstr "Sadece sahibin düzelteme hakkı var"
+msgstr ""
 
 #: umap/models.py:120
 msgid "everyone (public)"
-msgstr "herkes (kamu)"
+msgstr ""
 
 #: umap/models.py:121
 msgid "anyone with link"
@@ -120,27 +119,27 @@ msgstr ""
 
 #: umap/models.py:122
 msgid "editors only"
-msgstr "sadece editörler"
+msgstr ""
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr "engellenmiş"
+msgstr ""
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
-msgstr "açıklama"
+msgstr ""
 
 #: umap/models.py:127
 msgid "center"
-msgstr "ortalaştır"
+msgstr ""
 
 #: umap/models.py:128
 msgid "zoom"
-msgstr "yakınlaştır"
+msgstr ""
 
 #: umap/models.py:129
 msgid "locate"
-msgstr "yerini belirt"
+msgstr ""
 
 #: umap/models.py:129
 msgid "Locate user on load?"
@@ -148,96 +147,96 @@ msgstr ""
 
 #: umap/models.py:132
 msgid "Choose the map licence."
-msgstr "Harita lisansi seç"
+msgstr ""
 
 #: umap/models.py:133
 msgid "licence"
-msgstr "lisans"
+msgstr ""
 
 #: umap/models.py:138
 msgid "owner"
-msgstr "sahibi"
+msgstr ""
 
 #: umap/models.py:139
 msgid "editors"
-msgstr "editörler"
+msgstr ""
 
 #: umap/models.py:140
 msgid "edit status"
-msgstr "düzeltme durumu"
+msgstr ""
 
 #: umap/models.py:141
 msgid "share status"
-msgstr "durum paylaş"
+msgstr ""
 
 #: umap/models.py:142
 msgid "settings"
-msgstr "ayarlar"
+msgstr ""
 
 #: umap/models.py:210
 msgid "Clone of"
-msgstr "Kopya"
+msgstr ""
 
 #: umap/models.py:261
 msgid "display on load"
-msgstr "yüklerken görüntüle"
+msgstr ""
 
 #: umap/models.py:262
 msgid "Display this layer on load."
-msgstr "Yüklerken bu katman görüntüle"
+msgstr ""
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr "Anasayfa aç"
+msgstr ""
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "%(current_user)s'nın haritaları görüntüle"
+msgstr ""
 
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr "%(current_user)s'nın haritaları yok."
+msgstr ""
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr "Lütfen hesabınızla giriş yapın"
+msgstr ""
 
 #: umap/templates/registration/login.html:18
 msgid "Username"
-msgstr "Kullanıcı adı"
+msgstr ""
 
 #: umap/templates/registration/login.html:20
 msgid "Password"
-msgstr "Şifre"
+msgstr ""
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
-msgstr "Giriş yap"
+msgstr ""
 
 #: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
-msgstr "Lütfen bir sağlayıcı seçin"
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap ile bir dakikada <a href=\"%(osm_url)s\" />OpenStreetMap</a> katmanları kullanıp kendi sitenize gömmesi özel haritalar oluşturmanıza sağlar."
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Haritanızın katmanlarını seçin"
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "İlgi noktaları ekle: işaretler, çizgiler, çokgenler"
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr "Renkleri ve sembolleri yönet"
+msgstr ""
 
 #: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
