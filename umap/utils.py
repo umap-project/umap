@@ -110,8 +110,12 @@ def gzip_file(from_path, to_path):
         with gzip.open(to_path, 'wb') as f_out:
             f_out.writelines(f_in)
 
-def user_details(strategy, details, user=None, *args, **kwargs):
-    """Update user details using data from provider."""
+def oauth_user_details(strategy, details, user=None, *args, **kwargs):
+    """
+    This method is a pipeline stage only to be used with social_auth
+    Note this is a workaround that can break if social_auth is updated
+    Update user details using data from provider.
+    """
     if not user:
         return
 
