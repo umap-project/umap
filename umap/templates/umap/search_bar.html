@@ -3,7 +3,11 @@
     <div class="row">
       <form action="{% url 'search' %}" method="GET">
       <div class="col two-third mwide">
-        <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
+        {% if q %}
+          <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q }}" />
+        {% else %}
+          <input name="q" type="search" placeholder="{% trans 'Search maps' %}" />
+        {% endif %}
       </div>
       <div class="col third mwide">
         <input type="submit" value="{% trans 'Search' %}" class="neutral" />

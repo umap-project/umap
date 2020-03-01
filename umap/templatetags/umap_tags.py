@@ -51,7 +51,11 @@ def map_fragment(map_instance, **kwargs):
     })
     map_settings['properties'].update(kwargs)
     prefix = kwargs.pop('prefix', None) or 'map'
-    page = kwargs.pop('page', None) or ''
+    params = kwargs.pop('params', None)
+    if params is not None and params.__contains__('p'):
+        page = params.p
+    else:
+        page = ''
     unique_id = prefix + str(page) + "_" + str(map_instance.pk)
     return {
         "map_settings": json.dumps(map_settings),

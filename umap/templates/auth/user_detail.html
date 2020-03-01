@@ -9,7 +9,7 @@
 <div class="wrapper">
 <div class="map_list row">
   {% if maps %}
-    {% include "umap/map_list.html" %}
+    {% include "umap/map_list.html" with prefix='user_detail' %}
   {% else %}
     <div>
       {% blocktrans %}{{ current_user }} has no maps.{% endblocktrans %}
