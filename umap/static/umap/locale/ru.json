@@ -56,7 +56,7 @@
     "collapsed": "Свёрнуто",
     "color": "цвет",
     "dash array": "штрихи",
-    "define": "обозначить",
+    "define": "Задать",
     "description": "описание",
     "expanded": "Развёрнуто",
     "fill": "заливка",
@@ -362,8 +362,8 @@
     "Popup (large)": "Всплывающее окно (большое)",
     "Popup content style": "Стиль содержимого всплывающего окна",
     "Popup shape": "Форма всплывающего окна",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Skipping unknown geometry.type: {type}": "Пропущено неизвестное свойство geometry.type: {type}",
+    "Optional.": "Необязательный.",
+    "Paste your data here": "Вставить ваши данные сюда",
+    "Please save the map first": "Пожалуйста, сначала сохраните карту"
 }

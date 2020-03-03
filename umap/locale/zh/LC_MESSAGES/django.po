@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Daniel Zhang <danielzhang130@gmail.com>, 2018
+# danielzhang130 <danielzhang130@gmail.com>, 2018
 # sun wei <sunwei.r@gmail.com>, 2014
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
 "PO-Revision-Date: 2019-04-07 14:28+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Chinese (http://www.transifex.com/yohanboniface/umap/language/zh/)\n"
+"Language-Team: Chinese (http://www.transifex.com/openstreetmap/umap/language/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

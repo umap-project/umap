@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Supaplex <bejokeup@gmail.com>, 2019
 # Chia-liang Kao <clkao@clkao.org>, 2014
 # coop.shen <coop.shen@gmail.com>, 2014
 # Hsin-lin Cheng (lancetw) <lancetw@gmail.com>, 2014
@@ -14,9 +15,9 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/yohanboniface/umap/language/zh_TW/)\n"
+"PO-Revision-Date: 2019-08-11 12:37+0000\n"
+"Last-Translator: Supaplex <bejokeup@gmail.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -129,7 +130,7 @@ msgstr "只有編輯者允許"
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "已經封鎖了"
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
@@ -230,7 +231,7 @@ msgstr "選擇服務商"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMap 讓你在幾分鐘的時間內用 <a href=\"%(osm_url)s\" />開放街圖</a>的圖層創建地圖，並且內嵌到你的網站上。"
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"

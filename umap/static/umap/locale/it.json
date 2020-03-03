@@ -303,7 +303,7 @@
     "User content credits": "Riconoscimenti ai contenuti utente",
     "User interface options": "Opzioni interfaccia utente",
     "Versions": "Versioni",
-    "View Fullscreen": "View Fullscreen",
+    "View Fullscreen": "Visualizza a schermo intero",
     "Where do we go from here?": "Da dove ci spostiamo da qui?",
     "Whether to display or not polygons paths.": "Whether to display or not polygons paths.",
     "Whether to fill polygons with color.": "Whether to fill polygons with color.",
@@ -362,8 +362,8 @@
     "Popup (large)": "Popup (grande)",
     "Popup content style": "Stile del contenuto del Popup",
     "Popup shape": "Forma del Popup",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Skipping unknown geometry.type: {type}": "Salta le geometrie sconosciute.type: {type}",
+    "Optional.": "Opzionale.",
+    "Paste your data here": "Incolla i tuoi dati qui",
+    "Please save the map first": "Per favore prima salva la mappa "
 }

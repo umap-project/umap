@@ -362,10 +362,10 @@ var locale = {
     "Popup (large)": "Felugró (nagy)",
     "Popup content style": "Felugró tartalom stílusa",
     "Popup shape": "Felugró ablak alakja",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Skipping unknown geometry.type: {type}": "Ismeretlen ({type}) geometriai típus kihagyása",
+    "Optional.": "Nem kötelező.",
+    "Paste your data here": "Illessze be ide az adatokat",
+    "Please save the map first": "Először mentse a térképet"
 };
 L.registerLocale("hu", locale);
 L.setLocale("hu");

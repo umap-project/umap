@@ -3,16 +3,17 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Kåre Thor Olsen <kaare@nightcall.dk>, 2019
 # Mikkel Kirkgaard Nielsen <memb_transifex@mikini.dk>, 2018
-# Neogeografen <soren.johannessen@gmail.com>, 2013-2014
+# Neogeografen <soren.johannessen@gmail.com>, 2013-2014,2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Danish (http://www.transifex.com/yohanboniface/umap/language/da/)\n"
+"PO-Revision-Date: 2020-02-26 16:16+0000\n"
+"Last-Translator: Neogeografen <soren.johannessen@gmail.com>\n"
+"Language-Team: Danish (http://www.transifex.com/openstreetmap/umap/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -81,7 +82,7 @@ msgstr "Er kun redigerbart med et hemmeligt link"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "Webstedet er skrivebeskyttet pga. vedligeholdelse"
 
 #: umap/models.py:17
 msgid "name"
@@ -93,7 +94,7 @@ msgstr "detaljer"
 
 #: umap/models.py:49
 msgid "Link to a page where the licence is detailed."
-msgstr "Link til siden hvor der er flere detaljer om licensen."
+msgstr "Link til en side hvor der er flere oplysninger om licensen."
 
 #: umap/models.py:63
 msgid "URL template using OSM tile format"
@@ -113,7 +114,7 @@ msgstr "Kun ejeren kan redigere"
 
 #: umap/models.py:120
 msgid "everyone (public)"
-msgstr "alle (fuldt offentlig)"
+msgstr "alle (offentlig)"
 
 #: umap/models.py:121
 msgid "anyone with link"
@@ -125,7 +126,7 @@ msgstr "kun redaktører "
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "blokeret"
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
@@ -141,7 +142,7 @@ msgstr "zoom"
 
 #: umap/models.py:129
 msgid "locate"
-msgstr "lokalisere"
+msgstr "lokaliser"
 
 #: umap/models.py:129
 msgid "Locate user on load?"
@@ -165,11 +166,11 @@ msgstr "redaktører"
 
 #: umap/models.py:140
 msgid "edit status"
-msgstr "rediger status"
+msgstr "redigeringsstatus"
 
 #: umap/models.py:141
 msgid "share status"
-msgstr "delestatus"
+msgstr "delingsstatus"
 
 #: umap/models.py:142
 msgid "settings"
@@ -177,7 +178,7 @@ msgstr "indstillinger"
 
 #: umap/models.py:210
 msgid "Clone of"
-msgstr "Klonet kopi af"
+msgstr "Kloning af"
 
 #: umap/models.py:261
 msgid "display on load"
@@ -185,11 +186,11 @@ msgstr "vis ved indlæsning"
 
 #: umap/models.py:262
 msgid "Display this layer on load."
-msgstr "Vis dette lag ved indlæsning"
+msgstr "Vis dette lag ved indlæsning."
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr "Tag mig til hjemmesiden"
+msgstr "Før mig til hjemmesiden"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
@@ -199,11 +200,11 @@ msgstr "Gennemse %(current_user)ss kort"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "%(current_user)s har ingen kort."
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr "Log venligst ind med din konto"
+msgstr "Log på din konto"
 
 #: umap/templates/registration/login.html:18
 msgid "Username"
@@ -211,7 +212,7 @@ msgstr "Brugernavn"
 
 #: umap/templates/registration/login.html:20
 msgid "Password"
-msgstr "Kodeord"
+msgstr "Adgangskode"
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
@@ -226,11 +227,11 @@ msgstr "Vælg en udbyder"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMap gør det muligt at oprette kort med <a href=\"%(osm_url)s\" />OpenStreetMap</a>-lag på et øjeblik, og indlejre dem på dit websted."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Vælg lag for dit kort"
+msgstr "Vælg lag til dit kort"
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
@@ -246,11 +247,11 @@ msgstr "Håndter kortindstillinger: vis et miniaturekort, lokaliser brugeren ved
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Masseimport af struktureret geodata (geojson, gpx, kml, osm...)"
+msgstr "Batchimport af geostrukturerede data (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Vælg en licens for dine geodata"
+msgstr "Vælg en licens til dine geodata"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
@@ -267,11 +268,11 @@ msgstr "Leg med demoen"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr "Kort lavet med uMaps"
+msgstr "Kort over uMaps"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Kig dig omkring i kortene og bliv inspireret"
+msgstr "Bliv inspireret, gennemse kort"
 
 #: umap/templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
@@ -295,41 +296,41 @@ msgstr "Feedback"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
-msgstr "Ændre kordeord"
+msgstr "Skift adgangskode"
 
 #: umap/templates/umap/password_change.html:6
 msgid "Password change"
-msgstr "Kodeordsændring"
+msgstr "Ændring af adgangskode"
 
 #: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr "Indtast venligst dit gamle kodeord, for sikkerhed, og indtast så det nye kodeord to gange så vi kan være sikre på at du har skrevet det korrekt."
+msgstr "Af sikkerhedshensyn skal du indtaste din gamle adgangskode, dernæst indtastes den nye adgangskode to gange, så vi kan være sikre på, at du har skrevet den korrekt."
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
-msgstr "Gammelt kodeord"
+msgstr "Gammel adgangskode"
 
 #: umap/templates/umap/password_change.html:14
 msgid "New password"
-msgstr "Nyt kodeord"
+msgstr "Ny adgangskode"
 
 #: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr "Bekræft nyt kodeord"
+msgstr "Bekræft ny adgangskode"
 
 #: umap/templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr "Ændr mit kodeord"
+msgstr "Ændr min adgangskode"
 
 #: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr "Kodeord ændret"
+msgstr "Adgangskode ændret"
 
 #: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr "Dit kodeord blev ændret"
+msgstr "Din adgangskode blev ændret."
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
@@ -344,19 +345,19 @@ msgstr "Vis kortet"
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr "Dit kort er blevet oprettet! Hvis du ønsker at redigere dette kort fra en anden computer, så brug dette link: %(anonymous_url)s"
+msgstr "Dit kort er oprettet! Hvis du ønsker at redigere kortet fra en anden computer, så brug følgende link: %(anonymous_url)s"
 
 #: umap/views.py:529
 msgid "Congratulations, your map has been created!"
-msgstr "Tillykke dit kort er nu blevet oprettet!"
+msgstr "Tillykke, dit kort er oprettet!"
 
 #: umap/views.py:561
 msgid "Map has been updated!"
-msgstr "Kortet er blevet opdateret!"
+msgstr "Kortet blev opdateret!"
 
 #: umap/views.py:587
 msgid "Map editors updated with success!"
-msgstr "Kortredaktører blev opdateret med succes!"
+msgstr "Kortredaktører blev opdateret!"
 
 #: umap/views.py:612
 msgid "Only its owner can delete the map."
@@ -367,12 +368,12 @@ msgstr "Kun ejeren kan slette kortet."
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr "Dit kort er blevet klonet! Hvis du ønsker at redigere dette kort fra en anden computer, så brug dette link: %(anonymous_url)s"
+msgstr "Dit kort er klonet! Hvis du ønsker at redigere kortet fra en anden computer, så brug følgende link: %(anonymous_url)s"
 
 #: umap/views.py:642
 msgid "Congratulations, your map has been cloned!"
-msgstr "Tillykke dit kort er blevet klonet!"
+msgstr "Tillykke, dit kort er klonet!"
 
 #: umap/views.py:809
 msgid "Layer successfully deleted."
-msgstr "Lag blev slettet med succes."
+msgstr "Lag blev slettet."

@@ -9,6 +9,7 @@
 # Marco <marcxosm@gmail.com>, 2019
 # Marco <marcxosm@gmail.com>, 2018
 # Maurizio Napolitano <maurizio.napolitano@okfn.org>, 2013,2017
+# MIrco Zorzo <mircozorzo@gmail.com>, 2020
 # claudiamocci <moccicm@gmail.com>, 2013
 # Simone Cortesi <simone@cortesi.com>, 2014
 # YOHAN BONIFACE <yb@enix.org>, 2012
@@ -17,9 +18,9 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Italian (http://www.transifex.com/yohanboniface/umap/language/it/)\n"
+"PO-Revision-Date: 2020-02-19 08:35+0000\n"
+"Last-Translator: MIrco Zorzo <mircozorzo@gmail.com>\n"
+"Language-Team: Italian (http://www.transifex.com/openstreetmap/umap/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,7 +34,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Questa è una demo da utilizzare solo per test e prototipi. Qualora sia necessaria una versione stabile si deve utilizzare l'indirizzo a href=\"%(stable_url)s\">%(stable_url)s</a>. Chiunque inoltre può crearsi una propria istanza, uMap è  <a href=\"%(repo_url)s\">software libero</a>!"
+msgstr "Questa è una demo da utilizzare solo per test e prototipi. Qualora sia necessaria una versione stabile si deve utilizzare l'indirizzo <a href=\"%(stable_url)s\">%(stable_url)s</a>. Chiunque inoltre può crearsi una propria istanza, uMap è  <a href=\"%(repo_url)s\">software libero</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
@@ -132,7 +133,7 @@ msgstr "solo autori"
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "bloccato"
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
@@ -233,7 +234,7 @@ msgstr "Seleziona un fornitore"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMap ti permette di creare mappe con livelli <a href=\"%(osm_url)s\" />OpenStreetMap</a> in un minuto e inserirle nel tuo sito."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"

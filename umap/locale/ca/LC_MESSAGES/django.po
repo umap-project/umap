@@ -4,15 +4,15 @@
 # 
 # Translators:
 # jmontane, 2014
-# jmontane, 2014
+# jmontane, 2014,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Catalan (http://www.transifex.com/yohanboniface/umap/language/ca/)\n"
+"PO-Revision-Date: 2019-09-13 09:58+0000\n"
+"Last-Translator: jmontane\n"
+"Language-Team: Catalan (http://www.transifex.com/openstreetmap/umap/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -81,7 +81,7 @@ msgstr "Només es pot editar amb l'enllaç d'edició secret"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "El lloc és en mode lectura per manteniment"
 
 #: umap/models.py:17
 msgid "name"
@@ -125,7 +125,7 @@ msgstr "només els editors"
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "blocat"
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
@@ -189,7 +189,7 @@ msgstr "Mostra aquesta capa en carregar."
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr ""
+msgstr "Vés a la pàgina d'inici"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
@@ -199,23 +199,23 @@ msgstr "Explora els mapes de %(current_user)s"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "%(current_user)s no té cap mapa."
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr ""
+msgstr "Inicieu sessió amb el vostre compte"
 
 #: umap/templates/registration/login.html:18
 msgid "Username"
-msgstr ""
+msgstr "Nom d'usuari"
 
 #: umap/templates/registration/login.html:20
 msgid "Password"
-msgstr ""
+msgstr "Contrasenya"
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
-msgstr ""
+msgstr "Inicia sessió"
 
 #: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
@@ -226,7 +226,7 @@ msgstr "Trieu un proveïdor"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "El uMap us permet crear mapes amb capes de l'<a href=\"%(osm_url)s\" />OpenStreetMap</a> en un minut i inserir-los en el vostre lloc web."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -295,41 +295,41 @@ msgstr "Comentaris"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
-msgstr ""
+msgstr "Canvia la contrasenya"
 
 #: umap/templates/umap/password_change.html:6
 msgid "Password change"
-msgstr ""
+msgstr "Canvi de contrasenya"
 
 #: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Introduïu la contrasenya antiga, per raons de seguretat, i després introduïu-ne la nova dues vegades perquè puguem verificar correctament."
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
-msgstr ""
+msgstr "Contrasenya antiga"
 
 #: umap/templates/umap/password_change.html:14
 msgid "New password"
-msgstr ""
+msgstr "Contrasenya nova"
 
 #: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr ""
+msgstr "Confirmació de la contrasenya nova"
 
 #: umap/templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr ""
+msgstr "Canvia la contrasenya"
 
 #: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr ""
+msgstr "La contrasenya s'ha canviat la contrasenya correctament"
 
 #: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr ""
+msgstr "S'ha canviat la contrasenya."
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
