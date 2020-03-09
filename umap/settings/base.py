@@ -64,6 +64,7 @@ LANGUAGES = (
     ('ko', 'Korean'),
     ('lt', 'Lithuanian'),
     ('nl', 'Dutch'),
+    ('no', 'Norwegian'),
     ('pl', 'Polish'),
     ('pt-br', 'Portuguese (Brazil)'),
     ('pt-pt', 'Portuguese (Portugal)'),
