@@ -362,10 +362,10 @@ var locale = {
     "Popup (large)": "Popup (largo)",
     "Popup content style": "Estilo do conteúdo do popup",
     "Popup shape": "Forma do popup",
-    "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
-    "Optional.": "Optional.",
-    "Paste your data here": "Paste your data here",
-    "Please save the map first": "Please save the map first"
+    "Skipping unknown geometry.type: {type}": "Ignorando geometry.type desconhecido: {type}",
+    "Optional.": "Opcional.",
+    "Paste your data here": "Cole seus dados aqui",
+    "Please save the map first": "Por favor, primeiro salve o mapa "
 };
 L.registerLocale("pt_BR", locale);
 L.setLocale("pt_BR");
