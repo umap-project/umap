@@ -75,6 +75,7 @@ LANGUAGES = (
     ('sk-sk', 'Slovak'),
     ('sl', 'Slovenian'),
     ('sr', 'Serbian'),
+    ('sv', 'Swedish'),
     ('th-th', 'Thai (Thailand)'),
     ('tr', 'Turkish'),
     ('uk-ua', 'Ukrainian'),
