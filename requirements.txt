@@ -1,5 +1,5 @@
 Django==2.2.1
-django-agnocomplete==0.14.0
+django-agnocomplete==1.0.0
 django-compressor==2.2
 Pillow==6.2.0
 psycopg2==2.8.2
