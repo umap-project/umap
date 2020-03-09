@@ -51,6 +51,7 @@ LANGUAGES = (
     ('el', 'Greek'),
     ('en', 'English'),
     ('es', 'Spanish'),
+    ('et', 'Estonian'),
     ('fi', 'Finnish'),
     ('fr', 'French'),
     ('gl', 'Galician'),
