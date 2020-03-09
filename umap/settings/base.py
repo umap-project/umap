@@ -25,6 +25,12 @@ LANG_INFO.update({
         'name': 'Chinese',
         'name_local': '简体中文',
     },
+    'si': {
+        'bidi': False,
+        'code': 'si',
+        'name': 'Sinhala',
+        'name_local': 'සිංහල',
+    },
 })
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
