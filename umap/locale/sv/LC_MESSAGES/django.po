@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Acrylic Boy, 2020
 # carlbacker, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-03-01 00:29+0000\n"
-"Last-Translator: carlbacker\n"
+"PO-Revision-Date: 2020-03-10 11:33+0000\n"
+"Last-Translator: Acrylic Boy\n"
 "Language-Team: Swedish (http://www.transifex.com/openstreetmap/umap/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -266,7 +267,7 @@ msgstr "Lek med demotjänsten"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "Mapa de los uMapas"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
@@ -332,7 +333,7 @@ msgstr "Ditt lösenord har ändrats."
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
-msgstr ""
+msgstr "No se encontró el mapa."
 
 #: umap/views.py:220
 msgid "View the map"
