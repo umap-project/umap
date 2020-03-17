@@ -1000,6 +1000,7 @@ a.add-datalayer:hover,
 .umap-div-icon .icon_container img {
     vertical-align: middle;
     max-width: 24px!important; /* leaflet.css has !important, so... */
+    max-height: 24px!important;
 }
 .umap-div-icon .icon_arrow {
     border-left: 8px solid transparent;
@@ -1035,6 +1036,7 @@ a.add-datalayer:hover,
 .umap-drop-icon .icon_container img {
     vertical-align: middle;
     max-width: 24px !important;
+    max-height: 24px!important;
 }
 .umap-div-icon .icon_container span,
 .umap-drop-icon .icon_container span {
