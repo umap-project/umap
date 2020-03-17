@@ -85,7 +85,7 @@ var locale = {
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Una lista separada por comas que define el patrón de trazos de guión. Ej.: \"5, 10, 15\".",
     "About": "Acerca de",
     "Action not allowed :(": "Acción no permitida :(",
-    "Activate slideshow mode": "Activate slideshow mode",
+    "Activate slideshow mode": "Activar el modo pase de diapositivas",
     "Add a layer": "Añadir una capa",
     "Add a line to the current multi": "Añadir una línea para el multi actual",
     "Add a new property": "Añadir una nueva propiedad",
