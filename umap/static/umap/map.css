@@ -1304,6 +1304,10 @@ a.add-datalayer:hover,
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
     max-width: 500px !important;
 }
+#umap-ui-container .umap-popup-content img,
+#umap-ui-container .umap-popup-content iframe {
+    max-width: 400px !important;
+}
 .umap-georss-link .popup-title {
     text-align: center;
 }
