@@ -76,7 +76,11 @@ a.umap-control-less {
     background-position: -122px -82px;
 }
 .leaflet-control-locate a {
-    background-position: -2px -122px;
+    background-position: -1px -121px;
+}
+.leaflet-control-locate.active a {
+    background-position: -80px -161px;
+    box-shadow: 0 0 4px 0 black inset;
 }
 .leaflet-control-search a {
     background-position: -41px -121px;
@@ -1327,6 +1331,26 @@ a.add-datalayer:hover,
     width: 36px;
     height: 36px;
     line-height: 36px;
+}
+
+/* *********** */
+/* Geolocation */
+/* *********** */
+@keyframes fade {
+  from { opacity: 0.5; }
+}
+
+.blinking {
+    animation: fade 1s infinite alternate;
+}
+
+.geolocated {
+    width: 10px !important;
+    height: 10px!important;
+    background-color: #3388ff;
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 1px 5px 5px black;
 }
 
 /* ****** */
