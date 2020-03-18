@@ -589,7 +589,7 @@ input[type=hidden].blur + .button {
     top: 0;
     bottom: 0;
     right: -400px;
-    padding: 0 20px 40px 20px;
+    padding: 0 20px;
     border-left: 1px solid #ddd;
     overflow-x: auto;
     z-index: 1010;

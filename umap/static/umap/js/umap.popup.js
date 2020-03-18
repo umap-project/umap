@@ -94,7 +94,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
 
     renderBody: function () {
         var template = this.feature.getOption('popupContentTemplate'),
-            container = L.DomUtil.create('div', ''),
+            container = L.DomUtil.create('div', 'umap-popup-container'),
             content = '', properties, center;
         properties = this.feature.extendedProperties();
         // Resolve properties inside description
