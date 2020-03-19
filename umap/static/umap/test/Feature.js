@@ -179,6 +179,17 @@ describe('L.U.FeatureMixin', function () {
 
     });
 
+    describe('#tooltip', function () {
+
+        it('should have a tooltip when active and allow variables', function () {
+            this.map.options.showLabel = true;
+            this.map.options.labelKey = "Foo {name}";
+            this.datalayer.redraw();
+            assert.equal(qs('.leaflet-tooltip-pane .leaflet-tooltip').textContent, "Foo name poly");
+        });
+
+    });
+
     describe('#properties()', function () {
 
         it('should rename property', function () {

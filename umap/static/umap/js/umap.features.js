@@ -157,6 +157,9 @@ L.U.FeatureMixin = {
     getDisplayName: function (fallback) {
         if (fallback === undefined) fallback = this.datalayer.options.name;
         var key = this.getOption('labelKey') || 'name';
+        // Variables mode.
+        if (key.indexOf("{") != -1) return L.Util.greedyTemplate(key, this.extendedProperties());
+        // Simple mode.
         return this.properties[key] || this.properties.title || fallback;
     },
 
