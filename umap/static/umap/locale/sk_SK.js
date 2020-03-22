@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Optional.",
     "Paste your data here": "Paste your data here",
     "Please save the map first": "Please save the map first",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("sk_SK", locale);
 L.setLocale("sk_SK");

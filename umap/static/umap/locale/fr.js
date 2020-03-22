@@ -16,7 +16,7 @@ var locale = {
     "Default: name": "Par défaut : name",
     "Display label": "Afficher une étiquette",
     "Display the control to open OpenStreetMap editor": "Afficher le bouton pour ouvrir l'éditeur d'OpenStreetMap",
-    "Display the data layers control": "Afficher le bouton d'accès rapide aux couches de données",
+    "Display the data layers control": "Afficher le bouton d'accès rapide aux calques de données",
     "Display the embed control": "Afficher le bouton de partage",
     "Display the fullscreen control": "Afficher le bouton de plein écran",
     "Display the locate control": "Afficher le bouton de localisation",
@@ -82,7 +82,7 @@ var locale = {
     "**double star for bold**": "**double astérisque pour gras**",
     "*simple star for italic*": "*simple astérisque pour italique*",
     "--- for an horizontal rule": "--- pour un séparateur horizontal",
-    "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Liste de nombre séparés par une virgule, définissant les tirets et espace. Ex.: \"5, 10, 15\".",
+    "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Liste de nombres séparés par une virgule, définissant les tirets et espaces. Ex.: \"5, 10, 15\".",
     "About": "À propos",
     "Action not allowed :(": "Action non autorisée :(",
     "Activate slideshow mode": "Activer le mode diaporama",
@@ -128,7 +128,7 @@ var locale = {
     "Close": "Fermer",
     "Clustering radius": "Rayon du cluster",
     "Comma separated list of properties to use when filtering features": "Propriétés à utiliser pour filtrer les éléments (séparées par des virgules)",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Virgule, tabulation ou point-virgule pour séparer des valeurs. SRS WGS84 est implicite. Seuls les points géométriques sont importés. L'importation se référera au titre dans les entêtes de colonnes de «lat» et «lon» au début de l'en-tête, et est insensible à la casse. Toutes les autres colonne sont importées en tant que propriétés.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Virgule, tabulation ou point-virgule pour séparer des valeurs. SRS WGS84 est implicite. Seuls les points géométriques sont importés. L'importation se référera au titre dans les entêtes de colonnes de «lat» et «lon» au début de l'en-tête, et est insensible à la casse. Toutes les autres colonnes sont importées en tant que propriétés.",
     "Continue line": "Continuer la ligne",
     "Continue line (Ctrl-click)": "Continue la ligne (Ctrl-clic)",
     "Coordinates": "Coordonnées",
@@ -199,7 +199,7 @@ var locale = {
     "Import": "Importer",
     "Import data": "Importer des données",
     "Import in a new layer": "Importer dans un nouveau calque",
-    "Imports all umap data, including layers and settings.": "Importer toutes les données de la carte, y compris les couches et les propriétés",
+    "Imports all umap data, including layers and settings.": "Importer toutes les données de la carte, y compris les calques et les propriétés",
     "Include full screen link?": "Inclure le lien \"plein écran\" ?",
     "Interaction options": "Options d'interaction",
     "Invalid umap data": "Données uMap invalides",
@@ -207,7 +207,7 @@ var locale = {
     "Keep current visible layers": "Garder les calques visibles actuellement",
     "Latitude": "Latitude",
     "Layer": "Calque",
-    "Layer properties": "Propriétés de la couche",
+    "Layer properties": "Propriétés du claque",
     "Licence": "Licence",
     "Limit bounds": "Limites géographiques",
     "Link to…": "Lien vers…",
@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Facultatif",
     "Paste your data here": "Collez vos données ici",
     "Please save the map first": "Vous devez d'abord enregistrer la carte",
-    "Unable to locate you.": "Impossible de vous localiser."
+    "Unable to locate you.": "Impossible de vous localiser.",
+    "Feature identifier key": "Clé unique d'un élément",
+    "Open current feature on load": "Ouvrir l'élément courant au chargement",
+    "Permalink": "Permalien",
+    "The name of the property to use as feature unique identifier.": "Nom de la propriété utilisée pour identifier un élément de façon unique"
 };
 L.registerLocale("fr", locale);
 L.setLocale("fr");

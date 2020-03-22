@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Опционо",
     "Paste your data here": "Прикачите Ваше податке овде",
     "Please save the map first": "Молимо Вас сачувајте мапу претходно",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("sr", locale);
 L.setLocale("sr");

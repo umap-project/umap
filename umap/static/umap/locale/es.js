@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Opcional.",
     "Paste your data here": "Pega tus datos aquí",
     "Please save the map first": "Por favor guarda primero el mapa",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("es", locale);
 L.setLocale("es");

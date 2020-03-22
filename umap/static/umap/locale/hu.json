@@ -366,5 +366,9 @@
     "Optional.": "Nem kötelező.",
     "Paste your data here": "Illessze be ide az adatokat",
     "Please save the map first": "Először mentse a térképet",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 }

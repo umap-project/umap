@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "可選",
     "Paste your data here": "請在此貼上你的資料",
     "Please save the map first": "請先儲存地圖",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("zh_TW", locale);
 L.setLocale("zh_TW");

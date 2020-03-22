@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Необязательный.",
     "Paste your data here": "Вставить ваши данные сюда",
     "Please save the map first": "Пожалуйста, сначала сохраните карту",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("ru", locale);
 L.setLocale("ru");

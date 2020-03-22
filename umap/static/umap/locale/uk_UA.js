@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Необов’язково.",
     "Paste your data here": "Вставте ваші дані тут",
     "Please save the map first": "Спочатку збережіть вашу мапу",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("uk_UA", locale);
 L.setLocale("uk_UA");

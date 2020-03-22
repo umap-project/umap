@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "İsteğe bağlı",
     "Paste your data here": "Veri brada yapıştır",
     "Please save the map first": "Lütfen önce haritayı kaydet",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("tr", locale);
 L.setLocale("tr");

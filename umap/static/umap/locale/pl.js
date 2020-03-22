@@ -366,7 +366,11 @@ var locale = {
     "Optional.": "Opcjonalnie.",
     "Paste your data here": "Wklej tutaj swoje dane",
     "Please save the map first": "Prosimy najpierw zapisać mapę",
-    "Unable to locate you.": "Unable to locate you."
+    "Unable to locate you.": "Unable to locate you.",
+    "Feature identifier key": "Feature identifier key",
+    "Open current feature on load": "Open current feature on load",
+    "Permalink": "Permalink",
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
 };
 L.registerLocale("pl", locale);
 L.setLocale("pl");
