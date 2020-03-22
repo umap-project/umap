@@ -826,21 +826,62 @@ L.U.LocateControl = L.Control.extend({
         position: 'topleft'
     },
 
+    onFound: function (e) {
+        this._map._geolocated_circle.setRadius(e.accuracy);
+        this._map._geolocated_circle.setLatLng(e.latlng);
+        this._map._geolocated_marker.setLatLng(e.latlng);
+        this._map.addLayer(this._map._geolocated_circle);
+        this._map.addLayer(this._map._geolocated_marker);
+    },
+
+    onError: function (e) {
+        this.ui.alert({content: L._('Unable to locate you.'), 'level': 'error'});
+    },
+
+    activate: function () {
+        this._map.locate({
+            setView: true,
+            enableHighAccuracy: true,
+            watch: true
+        });
+        this._active = true;
+    },
+
+    deactivate: function () {
+        this._map._geolocated_marker.removeFrom(this._map)
+        this._map._geolocated_circle.removeFrom(this._map)
+        this._map.stopLocate();
+        this._active = false;
+    },
+
+    toggle: function () {
+        if (!this._active) this.activate();
+        else this.deactivate();
+        L.DomUtil.classIf(this._container, "active", this._active);
+    },
+
     onAdd: function (map) {
         var container = L.DomUtil.create('div', 'leaflet-control-locate umap-control'),
             link = L.DomUtil.create('a', '', container);
         link.href = '#';
         link.title = L._('Center map on your location');
-        var fn = function () {
-            map.locate({
-                setView: true,
-                enableHighAccuracy: true
-            });
-        };
+
+        map._geolocated_circle = L.circle(map.getCenter(), {
+            radius: 10,
+            weight: 0
+        });
+
+        map._geolocated_marker = L.marker(map.getCenter(), {
+            icon: L.divIcon({className: 'geolocated', iconAnchor: [8, 9]}),
+        });
+
+        map.on("locationerror", this.onError, this);
+
+        map.on("locationfound", this.onFound, this);
 
         L.DomEvent
             .on(link, 'click', L.DomEvent.stop)
-            .on(link, 'click', fn, map)
+            .on(link, 'click', this.toggle, this)
             .on(link, 'dblclick', L.DomEvent.stopPropagation);
 
         return container;
