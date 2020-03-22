@@ -209,7 +209,7 @@ L.U.Map.include({
             if (this.options.onLoadPanel === 'databrowser') this.openBrowser();
             else if (this.options.onLoadPanel === 'caption') this.displayCaption();
         });
-        this.onceDatalayersDataLoaded(function () {
+        this.onceDataLoaded(function () {
             const slug = L.Util.queryString('feature');
             if (slug && this.features_index[slug]) this.features_index[slug].view();
         });
@@ -309,8 +309,8 @@ L.U.Map.include({
             if (toload === 0) loaded();
         };
         var dataLoaded = function () {
-            self.datalayersDataLoaded = true;
-            self.fire('datalayersdataloaded');
+            self.dataLoaded = true;
+            self.fire('dataloaded');
         };
         var decrementDataToLoad = function () {
             dataToload--;
@@ -354,12 +354,12 @@ L.U.Map.include({
         return this;
     },
 
-    onceDatalayersDataLoaded: function (callback, context) {
+    onceDataLoaded: function (callback, context) {
         // Once datalayers **data** have been loaded
-        if (this.datalayersDataLoaded) {
+        if (this.dataLoaded) {
             callback.call(context || this, this);
         } else {
-            this.once('datalayersdataloaded', callback, context);
+            this.once('dataloaded', callback, context);
         }
         return this;
     },

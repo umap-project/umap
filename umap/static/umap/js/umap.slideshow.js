@@ -46,7 +46,7 @@ L.U.Slideshow = L.Class.extend({
             // Certainly IE8, which has a limited version of defineProperty
         }
         if (this.options.autoplay) {
-            this.map.onceDatalayersDataLoaded(function () {
+            this.map.onceDataLoaded(function () {
                 this.play();
             }, this);
         }
