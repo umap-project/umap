@@ -90,7 +90,7 @@ L.U.Slideshow = L.Class.extend({
 
     play: function () {
         if (this._id) return;
-        if (this.map.editEnabled) return;
+        if (this.map.editEnabled || !this.map.options.slideshow.active) return;
         L.DomUtil.addClass(document.body, L.U.Slideshow.CLASSNAME);
         this._id = window.setInterval(L.bind(this.loop, this), this.options.delay);
         this.resetSpinners();
