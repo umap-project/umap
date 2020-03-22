@@ -364,8 +364,9 @@ var locale = {
     "Popup shape": "Popupfacon",
     "Skipping unknown geometry.type: {type}": "Springer over ukendt geometry.type: {type}",
     "Optional.": "Valgfrit.",
-    "Paste your data here": "Klistr dine data ind her",
-    "Please save the map first": "Gem først kortet"
+    "Paste your data here": "Indsæt dine data her",
+    "Please save the map first": "Gem først kortet",
+    "Unable to locate you.": "Unable to locate you."
 };
 L.registerLocale("da", locale);
 L.setLocale("da");

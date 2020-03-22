@@ -365,7 +365,8 @@ var locale = {
     "Skipping unknown geometry.type: {type}": "Skipping unknown geometry.type: {type}",
     "Optional.": "Опционо",
     "Paste your data here": "Прикачите Ваше податке овде",
-    "Please save the map first": "Молимо Вас сачувајте мапу претходно"
+    "Please save the map first": "Молимо Вас сачувајте мапу претходно",
+    "Unable to locate you.": "Unable to locate you."
 };
 L.registerLocale("sr", locale);
 L.setLocale("sr");

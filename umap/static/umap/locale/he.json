@@ -365,5 +365,6 @@
     "Skipping unknown geometry.type: {type}": "יתבצע דילוג על geometry.type לא ידוע: {type}",
     "Optional.": "רשות.",
     "Paste your data here": "נא להדביק את הנתונים שלך כאן",
-    "Please save the map first": "נא לשמור את המפה קודם"
+    "Please save the map first": "נא לשמור את המפה קודם",
+    "Unable to locate you.": "Unable to locate you."
 }

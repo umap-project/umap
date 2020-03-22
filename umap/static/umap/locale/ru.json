@@ -365,5 +365,6 @@
     "Skipping unknown geometry.type: {type}": "Пропущено неизвестное свойство geometry.type: {type}",
     "Optional.": "Необязательный.",
     "Paste your data here": "Вставить ваши данные сюда",
-    "Please save the map first": "Пожалуйста, сначала сохраните карту"
+    "Please save the map first": "Пожалуйста, сначала сохраните карту",
+    "Unable to locate you.": "Unable to locate you."
 }

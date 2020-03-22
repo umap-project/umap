@@ -365,7 +365,8 @@ var locale = {
     "Skipping unknown geometry.type: {type}": "Ismeretlen ({type}) geometriai típus kihagyása",
     "Optional.": "Nem kötelező.",
     "Paste your data here": "Illessze be ide az adatokat",
-    "Please save the map first": "Először mentse a térképet"
+    "Please save the map first": "Először mentse a térképet",
+    "Unable to locate you.": "Unable to locate you."
 };
 L.registerLocale("hu", locale);
 L.setLocale("hu");

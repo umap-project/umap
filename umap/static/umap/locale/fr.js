@@ -365,7 +365,8 @@ var locale = {
     "Skipping unknown geometry.type: {type}": "Type de géométrie inconnu ignoré: {type}",
     "Optional.": "Facultatif",
     "Paste your data here": "Collez vos données ici",
-    "Please save the map first": "Vous devez d'abord enregistrer la carte"
+    "Please save the map first": "Vous devez d'abord enregistrer la carte",
+    "Unable to locate you.": "Impossible de vous localiser."
 };
 L.registerLocale("fr", locale);
 L.setLocale("fr");

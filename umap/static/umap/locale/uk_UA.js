@@ -365,7 +365,8 @@ var locale = {
     "Skipping unknown geometry.type: {type}": "Пропускаємо невідоме значення geometry.type: {type}",
     "Optional.": "Необов’язково.",
     "Paste your data here": "Вставте ваші дані тут",
-    "Please save the map first": "Спочатку збережіть вашу мапу"
+    "Please save the map first": "Спочатку збережіть вашу мапу",
+    "Unable to locate you.": "Unable to locate you."
 };
 L.registerLocale("uk_UA", locale);
 L.setLocale("uk_UA");

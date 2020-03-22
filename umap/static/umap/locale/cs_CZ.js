@@ -365,7 +365,8 @@ var locale = {
     "Skipping unknown geometry.type: {type}": "Přeskakuji neznámý geometry.type: {type}",
     "Optional.": "Volitelné.",
     "Paste your data here": "Zde vložte svá data",
-    "Please save the map first": "Prosím, nejprve uložte mapu"
+    "Please save the map first": "Prosím, nejprve uložte mapu",
+    "Unable to locate you.": "Unable to locate you."
 };
 L.registerLocale("cs_CZ", locale);
 L.setLocale("cs_CZ");

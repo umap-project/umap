@@ -365,5 +365,6 @@
     "Skipping unknown geometry.type: {type}": "略過不明的 geometry.type: {type}",
     "Optional.": "可選",
     "Paste your data here": "請在此貼上你的資料",
-    "Please save the map first": "請先儲存地圖"
+    "Please save the map first": "請先儲存地圖",
+    "Unable to locate you.": "Unable to locate you."
 }
