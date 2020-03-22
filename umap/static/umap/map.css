@@ -1336,20 +1336,12 @@ a.add-datalayer:hover,
 /* *********** */
 /* Geolocation */
 /* *********** */
-@keyframes fade {
-  from { opacity: 0.5; }
-}
-
-.blinking {
-    animation: fade 1s infinite alternate;
-}
-
 .geolocated {
-    width: 10px !important;
-    height: 10px!important;
+    width: 16px !important;
+    height: 16px!important;
     background-color: #3388ff;
     border: 1px solid white;
-    border-radius: 5px;
+    border-radius: 8px;
     box-shadow: 1px 5px 5px black;
 }
 

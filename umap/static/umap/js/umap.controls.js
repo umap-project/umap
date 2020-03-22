@@ -868,12 +868,11 @@ L.U.LocateControl = L.Control.extend({
 
         map._geolocated_circle = L.circle(map.getCenter(), {
             radius: 10,
-            weight: 0,
-            className: "blinking"
+            weight: 0
         });
 
         map._geolocated_marker = L.marker(map.getCenter(), {
-            icon: L.divIcon({className: 'geolocated blinking', iconAnchor: [4, 7]}),
+            icon: L.divIcon({className: 'geolocated', iconAnchor: [8, 9]}),
         });
 
         map.on("locationerror", this.onError, this);
