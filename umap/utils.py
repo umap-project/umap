@@ -109,37 +109,3 @@ def gzip_file(from_path, to_path):
     with open(from_path, 'rb') as f_in:
         with gzip.open(to_path, 'wb') as f_out:
             f_out.writelines(f_in)
-
-def oauth_user_details(strategy, details, user=None, *args, **kwargs):
-    """
-    This method is a pipeline stage only to be used with social_auth
-    Note this is a workaround that can break if social_auth is updated
-    Update user details using data from provider.
-    """
-    if not user:
-        return
-
-    changed = False  # flag to track changes
-    # uMap fix: remove 'username' from protected fields
-    protected = ('id', 'pk', 'email') + \
-                tuple(strategy.setting('PROTECTED_USER_FIELDS', []))
-
-    # Update user model attributes with the new data sent by the current
-    # provider. Update on some attributes is disabled by default, for
-    # example username and id fields. It's also possible to disable update
-    # on fields defined in SOCIAL_AUTH_PROTECTED_USER_FIELDS.
-    for name, value in details.items():
-        if value is None or not hasattr(user, name) or name in protected:
-            continue
-
-        # Check https://github.com/omab/python-social-auth/issues/671
-        current_value = getattr(user, name, None)
-        # uMap fix: update field when value has changed
-        if current_value == value:
-            continue
-
-        changed = True
-        setattr(user, name, value)
-
-    if changed:
-        strategy.storage.user.changed(user)
