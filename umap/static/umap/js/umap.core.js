@@ -175,6 +175,19 @@ L.Util.flattenCoordinates = function (coords) {
     return coords;
 };
 
+
+L.Util.buildQueryString = function (params) {
+    var query_string = [];
+    for (var key in params) {
+        query_string.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+    }
+    return query_string.join('&');
+};
+
+L.Util.getBaseUrl = function () {
+    return '//' + window.location.host + window.location.pathname;
+};
+
 L.DomUtil.add = function (tagName, className, container, content) {
     var el = L.DomUtil.create(tagName, className, container);
     if (content) {
@@ -428,6 +441,7 @@ L.U.Help = L.Class.extend({
     shortCredit: L._('Will be displayed in the bottom right corner of the map'),
     longCredit: L._('Will be visible in the caption of the map'),
     sortKey: L._('Property to use for sorting features'),
+    slugKey: L._('The name of the property to use as feature unique identifier.'),
     filterKey: L._('Comma separated list of properties to use when filtering features'),
     interactive: L._('If false, the polygon will act as a part of the underlying map.'),
     outlink: L._('Define link to open in a new window on polygon click.'),

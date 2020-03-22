@@ -1049,7 +1049,8 @@ L.U.IframeExporter = L.Evented.extend({
     options: {
         includeFullScreenLink: true,
         currentView: false,
-        keepCurrentDatalayers: false
+        keepCurrentDatalayers: false,
+        viewCurrentFeature: false
     },
 
     queryString: {
@@ -1074,7 +1075,7 @@ L.U.IframeExporter = L.Evented.extend({
 
     initialize: function (map) {
         this.map = map;
-        this.baseUrl = '//' + window.location.host + window.location.pathname;
+        this.baseUrl = L.Util.getBaseUrl();
         // Use map default, not generic default
         this.queryString.onLoadPanel = this.map.options.onLoadPanel;
     },
@@ -1085,6 +1086,9 @@ L.U.IframeExporter = L.Evented.extend({
 
     build: function () {
         var datalayers = [];
+        if (this.options.viewCurrentFeature && this.map.currentFeature) {
+            this.queryString.feature = this.map.currentFeature.getSlug();
+        }
         if (this.options.keepCurrentDatalayers) {
             this.map.eachDataLayer(function (datalayer) {
                 if (datalayer.isVisible() && datalayer.umap_id) {
@@ -1096,7 +1100,7 @@ L.U.IframeExporter = L.Evented.extend({
             delete this.queryString.datalayers;
         }
         var currentView = this.options.currentView ? window.location.hash : '',
-            iframeUrl = this.baseUrl + '?' + this.map.xhr.buildQueryString(this.queryString) + currentView,
+            iframeUrl = this.baseUrl + '?' + L.Util.buildQueryString(this.queryString) + currentView,
             code = '<iframe width="' + this.dimensions.width + '" height="' + this.dimensions.height + '" frameborder="0" allowfullscreen src="' + iframeUrl + '"></iframe>';
         if (this.options.includeFullScreenLink) {
             code += '<p><a href="' + this.baseUrl + '">' + L._('See full screen') + '</a></p>';
