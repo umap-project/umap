@@ -1,5 +1,20 @@
 # Changelog
 
+## dev
+
+- added translations for ar, ast, et, he, id, is, no, pt-br, pt-pt, si-lk, sr,
+  sv, th-th, tr
+- fixed username not updated when login with OAuth (by @Binnette, cf #754)
+- removed protocol from iframe URL (by @Binnette, cf #748)
+- fixed icon max-height (cf #143)
+- better image and iframe sizing in right panel (cf #184)
+- allow to use variables for tooltips (cf #737)
+- add a marker on user geolocation (cf #339)
+- change arrow direction when "more controls" is active (cf #485)
+- add an experimental feature permalink (cf #294)
+- fixed edge case where slideshow will run even when inactive
+- fixed bug when trying to add a property with a dot in the name (cf #426)
+
 ## 1.1.2
 
 - fixed parsing of two iframes
