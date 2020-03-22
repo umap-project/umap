@@ -13,7 +13,7 @@
    height="240"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.4 5da689c313, 2019-01-14"
    sodipodi:docname="16-white.svg"
    inkscape:export-filename="/home/ybon/Code/js/Leaflet.Storage/src/img/16-white.png"
    inkscape:export-xdpi="89.996864"
@@ -34,9 +34,9 @@
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="3840"
-     inkscape:window-height="2031"
+     inkscape:window-height="2032"
      inkscape:window-x="0"
-     inkscape:window-y="55"
+     inkscape:window-y="54"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -52,45 +52,55 @@
     <sodipodi:guide
        orientation="1,0"
        position="40,40"
-       id="guide3084" />
+       id="guide3084"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="120,120"
-       id="guide3086" />
+       id="guide3086"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="1,0"
        position="80,80"
-       id="guide3088" />
+       id="guide3088"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="80,80"
-       id="guide3090" />
+       id="guide3090"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="1,0"
        position="120,120"
-       id="guide14621" />
+       id="guide14621"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="40,40"
-       id="guide17864" />
+       id="guide17864"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="0,1"
        position="160,160"
-       id="guide3026" />
+       id="guide3026"
+       inkscape:locked="false" />
     <sodipodi:guide
        orientation="1,0"
        position="160,160"
-       id="guide3028" />
+       id="guide3028"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="200,168"
        orientation="1,0"
        id="guide4869"
        inkscape:label=""
-       inkscape:color="rgb(0,0,255)" />
+       inkscape:color="rgb(0,0,255)"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="-60,200"
        orientation="0,1"
-       id="guide5766" />
+       id="guide5766"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -111,15 +121,15 @@
      transform="translate(0,-812.36218)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="13.786797"
        y="953.80786"
-       id="text4457"
-       sodipodi:linespacing="125%"><tspan
+       id="text4457"><tspan
          y="953.80786"
          x="13.786797"
          sodipodi:role="line"
-         id="tspan4459" /></text>
+         id="tspan4459"
+         style="font-size:40px;line-height:1.25;font-family:sans-serif"> </tspan></text>
     <g
        id="g3001"
        transform="translate(-15.255701,-111.38651)">
@@ -264,15 +274,15 @@
        sodipodi:nodetypes="cccccccccccccc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:30.4761982px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="81.647079"
        y="988.79706"
-       id="text4457-6"
-       sodipodi:linespacing="125%"><tspan
+       id="text4457-6"><tspan
          y="988.79706"
          x="81.647079"
          sodipodi:role="line"
-         id="tspan4459-6" /></text>
+         id="tspan4459-6"
+         style="font-size:30.4761982px;line-height:1.25;font-family:sans-serif"> </tspan></text>
     <g
        id="text4356-2"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
@@ -713,6 +723,11 @@
        style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.1772268;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 179.96039,1032.4893 -7.74718,7.7842 15.49436,0 z"
        id="path4407"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.1772268;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 139.96039,1040.2365 7.74718,-7.7842 h -15.49436 z"
+       id="path4407-3"
        inkscape:connector-curvature="0" />
   </g>
 </svg>
