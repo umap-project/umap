@@ -45,6 +45,15 @@ L.U.FeatureMixin = {
         return this.datalayer && this.datalayer.isRemoteLayer();
     },
 
+    getSlug: function () {
+        return this.properties[this.map.options.slugKey || 'name'] || '';
+    },
+
+    getPermalink: function () {
+        const slug = this.getSlug();
+        if (slug) return L.Util.getBaseUrl() + "?" + L.Util.buildQueryString({feature: slug}) + window.location.hash;
+    },
+
     view: function(e) {
         if (this.map.editEnabled) return;
         var outlink = this.properties._umap_options.outlink,
@@ -64,6 +73,7 @@ L.U.FeatureMixin = {
         }
         // TODO deal with an event instead?
         if (this.map.slideshow) this.map.slideshow.current = this;
+        this.map.currentFeature = this;
         this.attachPopup();
         this.openPopup(e && e.latlng || this.getCenter());
     },
@@ -351,7 +361,9 @@ L.U.FeatureMixin = {
     },
 
     getContextMenuItems: function (e) {
-        var items = [];
+        var permalink = this.getPermalink(),
+            items = [];
+        if (permalink) items.push({text: L._('Permalink'), callback: function() {window.open(permalink);}});
         if (this.map.editEnabled && !this.isReadOnly()) {
             items = items.concat(this.getContextMenuEditItems(e));
         }

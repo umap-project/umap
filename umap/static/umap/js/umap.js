@@ -122,10 +122,11 @@ L.U.Map.include({
 
         this.initTileLayers(this.options.tilelayers);
 
-        // Global storage for retrieving datalayers
+        // Global storage for retrieving datalayers and features
         this.datalayers = {};
         this.datalayers_index = [];
         this.dirty_datalayers = [];
+        this.features_index = {};
 
         // Retrocompat
         if (this.options.slideshow && this.options.slideshow.delay && this.options.slideshow.active === undefined) this.options.slideshow.active = true;
@@ -207,6 +208,10 @@ L.U.Map.include({
         this.onceDatalayersLoaded(function () {
             if (this.options.onLoadPanel === 'databrowser') this.openBrowser();
             else if (this.options.onLoadPanel === 'caption') this.displayCaption();
+        });
+        this.onceDataLoaded(function () {
+            const slug = L.Util.queryString('feature');
+            if (slug && this.features_index[slug]) this.features_index[slug].view();
         });
 
 
@@ -292,9 +297,9 @@ L.U.Map.include({
     },
 
     initDatalayers: function () {
-        var toload = this.options.datalayers.length,
-            datalayer, seen = this.options.datalayers.length,
-            self = this;
+        var toload = dataToload = seen = this.options.datalayers.length,
+            self = this,
+            datalayer;
         var loaded = function () {
             self.datalayersLoaded = true;
             self.fire('datalayersloaded');
@@ -303,12 +308,22 @@ L.U.Map.include({
             toload--;
             if (toload === 0) loaded();
         };
+        var dataLoaded = function () {
+            self.dataLoaded = true;
+            self.fire('dataloaded');
+        };
+        var decrementDataToLoad = function () {
+            dataToload--;
+            if (dataToload === 0) dataLoaded();
+        };
         for (var j = 0; j < this.options.datalayers.length; j++) {
             datalayer = this.createDataLayer(this.options.datalayers[j]);
             if (datalayer.displayedOnLoad()) datalayer.onceLoaded(decrementToLoad);
             else decrementToLoad();
+            if (datalayer.displayedOnLoad()) datalayer.onceDataLoaded(decrementDataToLoad);
+            else decrementDataToLoad();
         }
-        if (seen === 0) loaded();  // no datalayer
+        if (seen === 0) loaded() && dataLoaded();  // no datalayer
     },
 
     indexDatalayers: function () {
@@ -330,10 +345,21 @@ L.U.Map.include({
     },
 
     onceDatalayersLoaded: function (callback, context) {
+        // Once datalayers **metadata** have been loaded
         if (this.datalayersLoaded) {
             callback.call(context || this, this);
         } else {
             this.once('datalayersloaded', callback, context);
+        }
+        return this;
+    },
+
+    onceDataLoaded: function (callback, context) {
+        // Once datalayers **data** have been loaded
+        if (this.dataLoaded) {
+            callback.call(context || this, this);
+        } else {
+            this.once('dataloaded', callback, context);
         }
         return this;
     },
@@ -579,6 +605,7 @@ L.U.Map.include({
             ['options.includeFullScreenLink', {handler: 'Switch', label: L._('Include full screen link?')}],
             ['options.currentView', {handler: 'Switch', label: L._('Current view instead of default map view?')}],
             ['options.keepCurrentDatalayers', {handler: 'Switch', label: L._('Keep current visible layers')}],
+            ['options.viewCurrentFeature', {handler: 'Switch', label: L._('Open current item')}],
             'queryString.moreControl',
             'queryString.scrollWheelZoom',
             'queryString.miniMap',
@@ -1016,6 +1043,7 @@ L.U.Map.include({
         'sortKey',
         'labelKey',
         'filterKey',
+        'slugKey',
         'showLabel',
         'labelDirection',
         'labelInteractive',
@@ -1209,7 +1237,8 @@ L.U.Map.include({
             ['options.easing', {handler: 'Switch', label: L._('Advanced transition')}],
             'options.labelKey',
             ['options.sortKey', {handler: 'BlurInput', helpEntries: 'sortKey', placeholder: L._('Default: name'), label: L._('Sort key'), inheritable: true}],
-            ['options.filterKey', {handler: 'Input', helpEntries: 'filterKey', placeholder: L._('Default: name'), label: L._('Filter keys'), inheritable: true}]
+            ['options.filterKey', {handler: 'Input', helpEntries: 'filterKey', placeholder: L._('Default: name'), label: L._('Filter keys'), inheritable: true}],
+            ['options.slugKey', {handler: 'BlurInput', helpEntries: 'slugKey', placeholder: L._('Default: name'), label: L._('Feature identifier key')}]
         ];
 
         builder = new L.U.FormBuilder(this, optionsFields, {

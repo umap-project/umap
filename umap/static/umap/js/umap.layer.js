@@ -421,6 +421,7 @@ L.U.DataLayer = L.Evented.extend({
         this.layer.addLayer(feature);
         this.indexProperties(feature);
         if (this.hasDataLoaded()) this.fire('datachanged');
+        this.map.features_index[feature.getSlug()] = feature;
     },
 
     removeLayer: function (feature) {
@@ -429,6 +430,7 @@ L.U.DataLayer = L.Evented.extend({
         this._index.splice(this._index.indexOf(id), 1);
         delete this._layers[id];
         this.layer.removeLayer(feature);
+        delete this.map.features_index[feature.getSlug()];
         if (this.hasDataLoaded()) this.fire('datachanged');
     },
 
