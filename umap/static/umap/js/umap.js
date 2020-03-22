@@ -605,7 +605,7 @@ L.U.Map.include({
             ['options.includeFullScreenLink', {handler: 'Switch', label: L._('Include full screen link?')}],
             ['options.currentView', {handler: 'Switch', label: L._('Current view instead of default map view?')}],
             ['options.keepCurrentDatalayers', {handler: 'Switch', label: L._('Keep current visible layers')}],
-            ['options.viewCurrentFeature', {handler: 'Switch', label: L._('Open current item')}],
+            ['options.viewCurrentFeature', {handler: 'Switch', label: L._('Open current feature on load')}],
             'queryString.moreControl',
             'queryString.scrollWheelZoom',
             'queryString.miniMap',
