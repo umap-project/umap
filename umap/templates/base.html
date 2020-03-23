@@ -1,6 +1,6 @@
 {% load compress umap_tags i18n %}
 <!DOCTYPE html>
-<html>
+<html{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
 <head>
     <title>{% block head_title %}{{ SITE_NAME }}{% endblock %}</title>
     <meta charset="utf-8">
