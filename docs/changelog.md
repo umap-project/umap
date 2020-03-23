@@ -1,6 +1,6 @@
 # Changelog
 
-## dev
+## 1.2.0
 
 - added translations for ar, ast, et, he, id, is, no, pt-br, pt-pt, si-lk, sr,
   sv, th-th, tr
