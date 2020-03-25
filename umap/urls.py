@@ -83,7 +83,7 @@ urlpatterns += i18n_patterns(
         name='maps_showcase'),
     url(r'^search/$', views.search, name="search"),
     url(r'^about/$', views.about, name="about"),
-    url(r'^user/(?P<username>[-_\w@]+)/$', views.user_maps, name='user_maps'),
+    url(r'^user/(?P<username>.+)/$', views.user_maps, name='user_maps'),
     url(r'', include(i18n_urls)),
 )
 
