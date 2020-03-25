@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1
+
+- minimal RTL support (cf #752)
+- fix username URL regex to allow spaces (cf #774)
+
 ## 1.2.0
 
 - added translations for ar, ast, et, he, id, is, no, pt-br, pt-pt, si-lk, sr,
