@@ -877,7 +877,7 @@ L.U.Polyline = L.Polyline.extend({
                 });
             } else if (index === 0 || index === e.vertex.getLastIndex()) {
                 items.push({
-                    text: L._('Continue line (Ctrl-click)'),
+                    text: L._('Continue line (Ctrl+Click)'),
                     callback: e.vertex.continue,
                     context: e.vertex.continue
                 });
