@@ -1289,8 +1289,6 @@ a.add-datalayer:hover,
 }
 .umap-popup-container {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
 }
 .leaflet-popup-content h3 {
     margin-bottom: 0;
