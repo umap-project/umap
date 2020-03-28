@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+
+- Fix bug in popup inner HTML (cf #776)
+
 ## 1.2.1
 
 - minimal RTL support (cf #752)
