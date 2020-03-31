@@ -1443,7 +1443,7 @@ L.U.Map.include({
         this.help.button(title, 'edit');
         var save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container);
         save.href = '#';
-        save.title = L._('Save current edits') + ' (Ctrl-S)';
+        save.title = L._('Save current edits') + ' (Ctrl+S)';
         save.textContent = L._('Save');
         var cancel = L.DomUtil.create('a', 'leaflet-control-edit-cancel button', container);
         cancel.href = '#';
@@ -1567,7 +1567,7 @@ L.U.Map.include({
                 if (this.options.enableMarkerDraw) {
                     items.push(
                         {
-                            text: L._('Draw a marker') + ' (Ctrl-M)',
+                            text: L._('Draw a marker') + ' (Ctrl+M)',
                             callback: this.startMarker,
                             context: this
                         });
@@ -1575,7 +1575,7 @@ L.U.Map.include({
                 if (this.options.enablePolylineDraw) {
                     items.push(
                         {
-                            text: L._('Draw a polygon') + ' (Ctrl-P)',
+                            text: L._('Draw a polygon') + ' (Ctrl+P)',
                             callback: this.startPolygon,
                             context: this
                         });
@@ -1583,7 +1583,7 @@ L.U.Map.include({
                 if (this.options.enablePolygonDraw) {
                     items.push(
                       {
-                           text: L._('Draw a line') + ' (Ctrl-L)',
+                           text: L._('Draw a line') + ' (Ctrl+L)',
                            callback: this.startPolyline,
                            context: this
                        });

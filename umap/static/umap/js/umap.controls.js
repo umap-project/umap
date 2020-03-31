@@ -200,7 +200,7 @@ L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
     options: {
         toolbarIcon: {
             className: 'umap-toggle-edit',
-            tooltip: L._('Toggle edit mode (shift-click)')
+            tooltip: L._('Toggle edit mode (Shift+Click)')
         }
     },
 
@@ -274,7 +274,7 @@ L.U.DeleteVertexAction = L.U.BaseVertexAction.extend({
     options: {
         toolbarIcon: {
             className: 'umap-delete-vertex',
-            tooltip: L._('Delete this vertex (Alt-click)')
+            tooltip: L._('Delete this vertex (Alt+Click)')
         }
     },
 
@@ -363,7 +363,7 @@ L.U.EditControl = L.Control.extend({
         var container = L.DomUtil.create('div', 'leaflet-control-edit-enable umap-control'),
             edit = L.DomUtil.create('a', '', container);
         edit.href = '#';
-        edit.title = L._('Enable editing') + ' (Ctrl-E)';
+        edit.title = L._('Enable editing') + ' (Ctrl+E)';
 
         L.DomEvent
             .addListener(edit, 'click', L.DomEvent.stop)

@@ -130,7 +130,7 @@ var locale = {
     "Comma separated list of properties to use when filtering features": "Список свойств, разделённых запятыми, для использования при фильтрации",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "В качестве разделителя используются запятые, табуляции и точки с запятой. Применяется датум WGS84. Импорт просматривает заголовок на наличие полей «lat» и «lon», регистр не имеет значения. Все остальные поля импортируются как свойства.",
     "Continue line": "Продолжить линию",
-    "Continue line (Ctrl-click)": "Продолжить линию (Ctrl-click)",
+    "Continue line (Ctrl+Click)": "Продолжить линию (Ctrl+Click)",
     "Coordinates": "Координаты",
     "Credits": "Авторские права",
     "Current view instead of default map view?": "Использовать текущий вид вместо карты по умолчанию?",
@@ -147,7 +147,7 @@ var locale = {
     "Delete this feature": "Удалить объект",
     "Delete this property on all the features": "Удалить это свойство у всех объектов",
     "Delete this shape": "Удалить эту фигуру",
-    "Delete this vertex (Alt-click)": "Удалить эту точку (Alt-клик)",
+    "Delete this vertex (Alt+Click)": "Удалить эту точку (Alt+клик)",
     "Directions from here": "Навигация отсюда",
     "Disable editing": "Отключить редактирование",
     "Display measure": "Display measure",
@@ -287,7 +287,7 @@ var locale = {
     "The zoom and center have been setted.": "Масштаб и положение установлены",
     "To use if remote server doesn't allow cross domain (slower)": "Если удалённый сервер не позволяет кросс-домен (медленно)",
     "To zoom": "Масштабировать",
-    "Toggle edit mode (shift-click)": "Переключиться в режим редактирования (shift-click)",
+    "Toggle edit mode (Shift+Click)": "Переключиться в режим редактирования (Shift+Click)",
     "Transfer shape to edited feature": "Перенести фигуру на редактируемый объект",
     "Transform to lines": "Преобразовать в линию",
     "Transform to polygon": "Преобразовать в полигон",
@@ -366,11 +366,12 @@ var locale = {
     "Optional.": "Необязательный.",
     "Paste your data here": "Вставить ваши данные сюда",
     "Please save the map first": "Пожалуйста, сначала сохраните карту",
-    "Unable to locate you.": "Unable to locate you.",
+    "Unable to locate you.": "Не могу вас найти.",
     "Feature identifier key": "Feature identifier key",
     "Open current feature on load": "Open current feature on load",
-    "Permalink": "Permalink",
+    "Permalink": "Постоянная ссылка",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("ru", locale);
 L.setLocale("ru");

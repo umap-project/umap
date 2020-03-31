@@ -274,7 +274,7 @@ COMMIT;
   and https://github.com/mapbox/togeojson
 - download is handled client side
 - option "outlink" as been added, to open external URL on polygon click
-- edit shortcuts has been added (Ctrl-E to toggle edit status, Ctrl-S to save, etc.)
+- edit shortcuts has been added (Ctrl+E to toggle edit status, Ctrl+S to save, etc.)
 - links in popup now open in a now window
 - possibility to add custom icon symbols
 - new option to clusterize markers, thanks to https://github.com/Leaflet/Leaflet.markercluster
@@ -293,9 +293,9 @@ COMMIT;
 - fix bug where features were duplicated when datalayer was deleted then reverted
 - add layer action to databrowser
 - add optional default CSS
-- allow to close panel by ctrl-Enter when editing in textarea
+- allow to close panel by Ctrl+Enter when editing in textarea
 - add management for map max bounds
-- add Ctrl-Z for canceling changes
+- add Ctrl+Z for canceling changes
 - internal storage structure totally reviewed: datalayers are stored as geojson files,
   instead of being split in features stored in PostGIS
 - upload and download moved to client side (see Leaflet.Storage)

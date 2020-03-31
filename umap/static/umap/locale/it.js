@@ -130,7 +130,7 @@ var locale = {
     "Comma separated list of properties to use when filtering features": "Lista di proprietà separate da virgola da utilizzare per filtrare le geometrie",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Valori separati da virgola, tabulatore o punto e virgola. Il sistema di riferimento spaziale implementato è WGS84. Vengono importati solo punti. La funzione di importazione va a cercare nell'intestazione le colonne  «lat» e «lon» indifferentemente se scritte in maiuscolo o minuscolo. Tutte le altre colonne sono importate come proprietà.",
     "Continue line": "Linea continua",
-    "Continue line (Ctrl-click)": "Continua linea (Ctrl-click)",
+    "Continue line (Ctrl+Click)": "Continua linea (Ctrl+Click)",
     "Coordinates": "Coordinate",
     "Credits": "Ringraziamenti",
     "Current view instead of default map view?": "Vista attuale invece che quella della mappa preimpostata?",
@@ -147,7 +147,7 @@ var locale = {
     "Delete this feature": "Cancella questa geometria",
     "Delete this property on all the features": "Cancella questa proprietà in tutte le geometrie",
     "Delete this shape": "Cancella questa geometria",
-    "Delete this vertex (Alt-click)": "Delete this vertex (Alt-click)",
+    "Delete this vertex (Alt+Click)": "Delete this vertex (Alt+Click)",
     "Directions from here": "Indicazioni stradali da qui",
     "Disable editing": "Disabilita la modifica",
     "Display measure": "Display measure",
@@ -287,7 +287,7 @@ var locale = {
     "The zoom and center have been setted.": "Il livello di zoom e il centro sono stati impostati.",
     "To use if remote server doesn't allow cross domain (slower)": "Da utilizzare se il server remoto non permette l'accesso incrociato ai domini (lento)",
     "To zoom": "Allo zoom",
-    "Toggle edit mode (shift-click)": "Toggle edit mode (shift-click)",
+    "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",
     "Transfer shape to edited feature": "Trasforma la geometria in una modificabile",
     "Transform to lines": "Trasforma in linee",
     "Transform to polygon": "Trasforma in poligono",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("it", locale);
 L.setLocale("it");

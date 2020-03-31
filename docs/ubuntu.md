@@ -104,7 +104,7 @@ MEDIA_ROOT = '/srv/umap/var/data'
 
 You can now go to [http://localhost:8000/](http://localhost:8000/) and try to create a map for testing.
 
-When you're done with testing, quit the demo server (type Ctrl-C).
+When you're done with testing, quit the demo server (type Ctrl+C).
 
 
 ## Configure the HTTP API
@@ -211,7 +211,7 @@ Remember to adapt the domain name.
 
 ### Activate and restart the services
 
-Now quit the `umap` session, simply by typing ctrl+D.
+Now quit the `umap` session, simply by typing Ctrl+D.
 
 You should now be logged in as your normal user, which is sudoer.
 
