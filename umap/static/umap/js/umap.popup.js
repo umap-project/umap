@@ -107,7 +107,8 @@ L.U.PopupTemplate.Default = L.Class.extend({
 
     renderFooter: function () {
         if (this.feature.hasPopupFooter()) {
-            var footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container),
+            var footerContainer = L.DomUtil.create('div', 'umap-footer-container', this.container),
+                footer = L.DomUtil.create('ul', 'umap-popup-footer', footerContainer),
                 previousLi = L.DomUtil.create('li', 'previous', footer),
                 zoomLi = L.DomUtil.create('li', 'zoom', footer),
                 nextLi = L.DomUtil.create('li', 'next', footer),

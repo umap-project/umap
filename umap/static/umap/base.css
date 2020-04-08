@@ -500,6 +500,17 @@ i.info {
 .umap-edit-actions li:hover {
     background-color: #353c3e;
 }
+.permissions-panel,
+.umap-upload,
+.umap-share,
+.umap-edit-container,
+.umap-datalayer-container,
+.umap-layer-properties-container,
+.umap-footer-container,
+.umap-browse-data,
+.umap-browse-datalayers {
+    padding: 0 10px;
+}
 .umap-form-iconfield {
     position: relative;
     overflow: hidden;
@@ -589,7 +600,7 @@ input[type=hidden].blur + .button {
     top: 0;
     bottom: 0;
     right: -400px;
-    padding: 0 20px;
+    padding: 0 10px;
     border-left: 1px solid #ddd;
     overflow-x: auto;
     z-index: 1010;
@@ -645,10 +656,10 @@ input[type=hidden].blur + .button {
 }
 #umap-ui-container .body {
     clear: both;
-    height: calc(100% - 46px); /* Minus size of toolbox */
+    height: calc(100% - 54px); /* Minus size of toolbox */
 }
 #umap-ui-container .toolbox {
-    padding: 5px 0;
+    padding: 5px 10px;
     overflow: hidden;
 }
 #umap-ui-container .toolbox li {
