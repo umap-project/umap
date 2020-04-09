@@ -1294,7 +1294,6 @@ a.add-datalayer:hover,
 }
 .umap-popup-container {
     flex-grow: 1;
-    text-align: justify;
     padding: 0 10px;
 }
 .leaflet-popup-content h3 {
@@ -1312,18 +1311,13 @@ a.add-datalayer:hover,
 .leaflet-contextmenu-icon {
     display: none;
 }
-.umap-popup-content img {
-    max-width: 300px !important;
-    width: 100%;
-}
 .umap-popup-large iframe,
 .umap-popup-large img {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
     max-width: 500px !important;
 }
-#umap-ui-container .umap-popup-content img {
-    max-width: 400px !important;
-    width: 100%
+.umap-popup-content img {
+    max-width: 100%;
 }
 .umap-georss-link .popup-title {
     text-align: center;
