@@ -717,7 +717,7 @@ L.U.DataLayer = L.Evented.extend({
 
     edit: function () {
         if(!this.map.editEnabled || !this.isLoaded()) {return;}
-        var container = L.DomUtil.create('div'),
+        var container = L.DomUtil.create('div', 'umap-layer-properties-container'),
             metadataFields = [
                 'options.name',
                 'options.description',

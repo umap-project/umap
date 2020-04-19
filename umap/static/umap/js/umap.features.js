@@ -85,7 +85,7 @@ L.U.FeatureMixin = {
 
     edit: function(e) {
         if(!this.map.editEnabled || this.isReadOnly()) return;
-        var container = L.DomUtil.create('div');
+        var container = L.DomUtil.create('div', 'umap-datalayer-container');
 
         var builder = new L.U.FormBuilder(this, ['datalayer'], {
             callback: function () {this.edit(e);}  // removeLayer step will close the edit panel, let's reopen it

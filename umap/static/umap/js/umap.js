@@ -1179,7 +1179,7 @@ L.U.Map.include({
 
     edit: function () {
         if(!this.editEnabled) return;
-        var container = L.DomUtil.create('div'),
+        var container = L.DomUtil.create('div','umap-edit-container'),
             metadataFields = [
                 'options.name',
                 'options.description'
