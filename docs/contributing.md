@@ -4,7 +4,7 @@
 
 Translation is managed through [Transifex](https://www.transifex.com/openstreetmap/umap/).
 
-## Bugs Triaging
+## Bug Triaging
 
 You are very welcome to help us triaging [uMap issues](https://github.com/umap-project/umap/issues).
 
@@ -14,7 +14,7 @@ You are very welcome to help us triaging [uMap issues](https://github.com/umap-p
 
 ## Development on Ubuntu
 
-### Environnement setup
+### Environment setup
 
 Choose one of the following two config:
 
@@ -58,7 +58,7 @@ Create a workspace folder ~/wk and go into it.
 
 "git clone" the main repository and go in the umap folder
 
-Several commands, needs you to be in a virtualenv:
+Several commands you need to issue to be in a virtualenv:
 
     virtualenv ~/wk/umap/venv --python=/usr/bin/python3.6
     source ~/wk/umap/venv/bin/activate
@@ -74,7 +74,7 @@ To test your code, you will add to install umap from your git folder. Go to ~/wk
     pip install -e .
     # or pip install -e ~/wk/umap
 
-This command, will check dependencies and install uMap from sources inside folder.
+This command will check dependencies and install uMap from sources inside folder.
 
 To start your local uMap:
 
@@ -91,6 +91,7 @@ Pull the translations from transifex website:
     tx pull -f
 
 Then you will need to update binary files with command:
+
     make compilemessages
 
 Done. You can now review and commit modified/added files.
