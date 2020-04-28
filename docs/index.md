@@ -1,4 +1,4 @@
-# uMap developper documentation
+# uMap developer documentation
 
 *This documentation is intended for people aiming to install and configure uMap.
 If you are looking for user documentation, have a look at [the OSM wiki page](http://wiki.openstreetmap.org/wiki/UMap#Tutorials).*
