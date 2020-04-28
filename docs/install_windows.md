@@ -13,6 +13,8 @@ This assumes you've installed PostgreSQL.
 
 ##2. Create a directory and a Python virtual environment 
 
+This assumes you've installed Python (version 3.8+ 64-bit is a good choice) and virtualenv.
+
 Open a Windows command window, and cd to a directory of your choice.  You need to create a sub-directory but the name is
 up to you (it doesn't need to be called "production"):
 ```
@@ -135,3 +137,8 @@ Edit `test\venv\lib\site-packages\django\core\files\storage.py`, and comment out
 Now adding features and saving should work.  _Now here's the weird part._   Edit `storage.py` to restore it to it's 
 original state by removing the comment characters you put in.  Save the changes, do some more feature editing and 
 saving in your browser.  It still works!  This may be due to file/directory locking by Windows.
+
+##6. Installing for development
+
+The previous sections describe the install procedure for running the released version of uMap "as-is".  If you want to 
+modify uMap (and possibly contribute your changes back to the uMap team), have a look at [Contributing](contributing.md)
