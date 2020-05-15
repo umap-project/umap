@@ -1,12 +1,17 @@
 sudo: false
 language: python
+dist: xenial
 python:
-- "2.7"
-- "3.4"
 - "3.5"
 - "3.6"
 services:
 - postgresql
+addons:
+  postgresql: "9.6"
+  apt:
+    packages:
+    - libgdal-dev
+    - postgresql-9.6-postgis-2.4
 env:
 - UMAP_SETTINGS=umap/tests/settings.py
 install:

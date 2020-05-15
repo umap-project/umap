@@ -1,0 +1,5 @@
+{% load umap_tags %}
+    <div id="map"></div>
+    <script type="text/javascript">
+        var MAP = new L.U.Map("map", {{ map_settings|notag|safe }});
+    </script>

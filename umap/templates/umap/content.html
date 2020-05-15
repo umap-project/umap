@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% load leaflet_storage_tags compress i18n %}
+{% load umap_tags compress i18n %}
 
 {% block body_class %}content{% endblock %}
 
 {% block extra_head %}
     {% compress css %}
-      {% leaflet_storage_css %}
+      {% umap_css %}
     {% endcompress css %}
-    {% leaflet_storage_js %}
+    {% umap_js %}
 {% endblock %}
 
 {% block header %}
@@ -26,8 +26,8 @@
   {{ block.super }}
   <script type="text/javascript">
     !(function() {
-    var ui = new L.S.UI(document.querySelector('header'));
-    var xhr = new L.S.Xhr(ui);
+    var ui = new L.U.UI(document.querySelector('header'));
+    var xhr = new L.U.Xhr(ui);
     var login = document.querySelector('a.login');
     if (login) {
       L.DomEvent.on(login, 'click', function (e) {

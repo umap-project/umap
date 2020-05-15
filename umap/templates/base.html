@@ -1,25 +1,11 @@
 {% load compress umap_tags i18n %}
 <!DOCTYPE html>
-<html>
+<html{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
 <head>
     <title>{% block head_title %}{{ SITE_NAME }}{% endblock %}</title>
     <meta charset="utf-8">
-    {% compress css %}
-    <!-- Included CSS Files (Compressed) -->
-    <link rel="stylesheet" href="{{ STATIC_URL }}storage/contrib/css/storage.ui.default.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/umap.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/nav.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}umap/theme.css">
-    {% endcompress css %}
-    <!-- IE Fix for HTML5 Tags -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
     {% block extra_head %}
     {% endblock extra_head %}
-    {% compress js %}
-    <script src="{{ STATIC_URL }}umap/js/autocomplete.js"></script>
-    {% endcompress js %}
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>

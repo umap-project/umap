@@ -1,0 +1,316 @@
+/*
+* Content
+*/
+body.content {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+
+/* Search form */
+input::-webkit-input-placeholder, ::-webkit-input-placeholder {
+   color: #a5a5a5;
+}
+
+input:-moz-placeholder, :-moz-placeholder {
+   color: #a5a5a5;
+}
+
+#umap-ui-container textarea {
+    height: 100px;
+    margin-bottom: 14px;
+}
+#umap-ui-container select {
+    margin-bottom: 10px;
+}
+
+#umap-ui-container.warning .button {
+    background-color: #c60f13;
+    border: 1px solid #7f0a0c;
+}
+#umap-ui-container.warning .button:hover {
+    background-color: #970b0e;
+}
+
+
+/* **************** */
+/*    Login icons   */
+/* **************** */
+.login-grid li,
+.login-grid a {
+    display: inline-block;
+}
+
+.login-grid a {
+    border: 1px solid #e5e5e5;
+    padding: 5px;
+    color: #000;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: 92px 92px;
+    height: 92px;
+    width: 92px;
+    margin-right: 10px;
+}
+.login-grid .login-github {
+    background-image: url("./github.png");
+}
+.login-grid .login-bitbucket {
+    background-image: url("./bitbucket.png");
+}
+.login-grid .login-twitter {
+    background-image: url("./twitter.png");
+}
+.login-grid .login-openstreetmap {
+    background-image: url("./openstreetmap.png");
+}
+
+
+/* **************************** */
+/*            home              */
+/* **************************** */
+.map_fragment {
+    width: 100%;
+}
+.map_list .map_fragment,
+.demo_map .map_fragment {
+    height: 210px;
+}
+.map_list .legend {
+    padding-top: 7px;
+    margin-bottom: 28px;
+    text-align: center;
+    font-size: 1.2em;
+}
+.map_list .legend a {
+    color: #222;
+    font-weight: bold;
+}
+.map_list .legend em,
+.map_list .legend em a {
+    color: #444;
+    font-weight: normal;
+}
+.map_list hr {
+    display: none;
+}
+.map_list .wide + hr {
+    display: block;
+}
+.umap-features-list ul {
+    margin-top: 14px;
+}
+.umap-features-list li {
+    line-height: 21px;
+}
+.umap-features-list li:before {
+    content: "✔";
+    color: #323E56;
+    padding-right: 5px;
+}
+.summary {
+    background-color: #eee;
+}
+.summary .row {
+    margin-top: 0;
+    padding-top: 20px;
+}
+.search_wrapper .row {
+    margin-top: 0;
+    padding-top: 20px;
+}
+.showcase-map {
+    background-color: #fff;
+    padding-bottom: 28px;
+}
+.showcase-map .row {
+    margin-top: 28px;
+}
+h2.section {
+    text-transform: uppercase;
+    color: #666;
+    text-align: center;
+    padding-top: 28px;
+}
+.showcase-map .map_fragment {
+    height: 400px;
+}
+.highlights {
+    text-align: center;
+}
+.highlights img.colophon {
+    display: inline-block;
+    height: 128px;
+}
+.demo-instance-warning {
+    background-color: #c0392b;
+    color: #efefef;
+    margin-top: 0;
+    padding: 14px 0;
+}
+.demo-instance-warning .row {
+    margin-top: 0;
+}
+.demo-instance-warning a {
+    color: #efefef;
+    text-decoration: underline;
+}
+body.content #umap-ui-container {
+    background-color: #fff;
+}
+
+
+/* **************************** */
+/*            colors            */
+/* **************************** */
+
+input[type="submit"],
+.button {
+    background-color: #79c1c0;
+    color: #eeeeec;
+}
+.wrapper input[type="submit"]:hover {
+    background-color: #689191;
+}
+.wrapper .neutral, .wrapper input[type="submit"].neutral {
+    background-color: #ddd;
+    color: #666;
+}
+.wrapper.somber {
+    background-color: #2E3641;
+    color: #efefef;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+.wrapper.somber .row {
+    margin-top: 0;
+}
+.wrapper .button,
+.wrapper input {
+    height: 56px;
+    line-height: 43px;
+}
+
+/* **************************** */
+/*             404              */
+/* **************************** */
+.content404 {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    text-align: center;
+}
+.content404 a {
+    color: #3A4259;
+}
+.content404 h1 {
+    font-size: 10em;
+    margin-bottom: 0;
+    line-height: 0.5em;
+    margin-top: 40px;
+}
+.content404 h2 {
+    font-size: 4em;
+    margin-top: 0;
+}
+.content404 img {
+    width: 32%;
+}
+
+
+/* **************************** */
+/*         Autocomplete         */
+/* **************************** */
+ul.umap-autocomplete {
+    position: absolute;
+    background-color: white;
+    z-index: 1010;
+    box-shadow: 0 4px 9px #999999;
+}
+.umap-autocomplete li {
+    height: 56px;
+    line-height: 28px;
+    padding: 14px;
+}
+.umap-autocomplete li.on {
+    background-color: SeaGreen;
+    cursor: pointer;
+}
+.umap-singleresult {
+    margin-bottom: 10px;
+}
+.umap-singleresult div,
+.umap-multiresult li {
+    width: 100%;
+    background-color: #2e3436;
+    border-radius: 2px;
+    border: 1px solid #202425;
+    padding: 7px;
+    color: #eeeeec;
+}
+.umap-multiresult li + li {
+    margin-top: 7px;
+}
+.umap-singleresult div .close,
+.umap-multiresult li .close {
+    float: right;
+    cursor: pointer;
+}
+
+
+
+/* **************************** */
+/*   Override Leaflet.Storage   */
+/* **************************** */
+#id_editors + br + span.helptext {
+    display: none;
+}
+.leaflet-container a.button {
+    color: #eeeeec;
+}
+
+/* ************************************************* */
+/* ********************* MOBILE ******************** */
+/* ************************************************* */
+@media only screen and (max-width:770px) {
+    .row {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .twide {
+        width: 100%;
+        padding-left: 0!important;
+    }
+    .tthird {
+        width: 33.3333%;
+    }
+    .ttwo-third {
+        width: 66.6666%;
+    }
+    .tshow {
+        display: inherit;
+    }
+    .thide {
+        display: none;
+    }
+}
+@media only screen and (max-width: 639px) {
+    .mwide {
+        padding-left: 0!important;
+        width: 100%;
+    }
+    .mwide + .mwide {
+        margin-top: 20px;
+    }
+    .mthird {
+        width: 33.3333%;
+    }
+    .mshow {
+        display: inherit;
+    }
+    .mhide {
+        display: none;
+    }
+}

@@ -2,7 +2,10 @@ site_name: uMap
 pages:
 - Home: index.md
 - Installation: install.md
+- Administration: administration.md
 - Contributing: contributing.md
 - how-tos:
   - Ubuntu from scratch: ubuntu.md
+  - Customize your uMap style: custom.md
+- Changelog: changelog.md
 theme: readthedocs

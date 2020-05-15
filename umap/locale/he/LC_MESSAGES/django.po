@@ -1,0 +1,377 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2020-02-26 06:19+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew (http://www.transifex.com/openstreetmap/umap/language/he/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: he\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
+
+#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "זה עותק לדוגמה, משמש לבדיקות ולמהדורות טרום הפצה. אם ברצונך להשתמש בעותק יציב, נא להשתמש בעותק <a href=\"%(stable_url)s\">%(stable_url)s</a>. יש לך גם אפשרות לארח עותק משלך, המערכת היא ב<a href=\"%(repo_url)s\">קוד פתוח</a>!"
+
+#: tmp/framacarte/templates/umap/home.html:83
+#: tmp/framacarte/templates/umap/navigation.html:14
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
+msgid "Create a map"
+msgstr "יצירת מפה"
+
+#: tmp/framacarte/templates/umap/navigation.html:7
+#: umap/templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "המפות שלי"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Log in"
+msgstr "כניסה"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Sign in"
+msgstr "הרשמה"
+
+#: tmp/framacarte/templates/umap/navigation.html:12
+#: umap/templates/umap/navigation.html:20
+msgid "Log out"
+msgstr "יציאה"
+
+#: tmp/framacarte/templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "חיפוש במפות"
+
+#: tmp/framacarte/templates/umap/search_bar.html:10
+#: tmp/framacarte/templates/umap/search_bar.html:13
+#: umap/templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "חיפוש"
+
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "קישור העריכה הסודי הוא %s"
+
+#: umap/forms.py:44 umap/models.py:115
+msgid "Everyone can edit"
+msgstr "לכולם יש הרשאות לערוך"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "רק למי שיש את קישור העריכה הסודי יכול לערוך"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "האתר הוא לקריאה בלבד לצורך תחזוקה"
+
+#: umap/models.py:17
+msgid "name"
+msgstr "שם"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "פרטים"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "קישור לעמוד בו הרישיון מפורט."
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "תבנית כתובת עם תבנית האריחים של OSM"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "סדר שכבת האריחים בתיבת העריכה"
+
+#: umap/models.py:116
+msgid "Only editors can edit"
+msgstr "רק עורכים יכולים לערוך"
+
+#: umap/models.py:117
+msgid "Only owner can edit"
+msgstr "רק בעלים יכולים לערוך"
+
+#: umap/models.py:120
+msgid "everyone (public)"
+msgstr "כולם (ציבורי)"
+
+#: umap/models.py:121
+msgid "anyone with link"
+msgstr "לכל מי שיש את הקישור"
+
+#: umap/models.py:122
+msgid "editors only"
+msgstr "עורכים בלבד"
+
+#: umap/models.py:123
+msgid "blocked"
+msgstr "חסום"
+
+#: umap/models.py:126 umap/models.py:256
+msgid "description"
+msgstr "תיאור"
+
+#: umap/models.py:127
+msgid "center"
+msgstr "מרכז"
+
+#: umap/models.py:128
+msgid "zoom"
+msgstr "תקריב"
+
+#: umap/models.py:129
+msgid "locate"
+msgstr "איתור"
+
+#: umap/models.py:129
+msgid "Locate user on load?"
+msgstr "לאתר משתמש עם הטעינה?"
+
+#: umap/models.py:132
+msgid "Choose the map licence."
+msgstr "נא לבחור את רישיון המפה."
+
+#: umap/models.py:133
+msgid "licence"
+msgstr "רישיון"
+
+#: umap/models.py:138
+msgid "owner"
+msgstr "בעלות"
+
+#: umap/models.py:139
+msgid "editors"
+msgstr "עורכים"
+
+#: umap/models.py:140
+msgid "edit status"
+msgstr "מצב עריכה"
+
+#: umap/models.py:141
+msgid "share status"
+msgstr "מצב שיתוף"
+
+#: umap/models.py:142
+msgid "settings"
+msgstr "הגדרות"
+
+#: umap/models.py:210
+msgid "Clone of"
+msgstr "עותק של"
+
+#: umap/models.py:261
+msgid "display on load"
+msgstr "הצגה עם הטעינה"
+
+#: umap/models.py:262
+msgid "Display this layer on load."
+msgstr "הצגת השכבה הזאת עם הטעינה."
+
+#: umap/templates/404.html:7
+msgid "Take me to the home page"
+msgstr "נא לעבור לדף הבית"
+
+#: umap/templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "עיון במפות של %(current_user)s"
+
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "למשתמש %(current_user)s אין מפות."
+
+#: umap/templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "נא להיכנס עם החשבון שלך"
+
+#: umap/templates/registration/login.html:18
+msgid "Username"
+msgstr "שם משתמש"
+
+#: umap/templates/registration/login.html:20
+msgid "Password"
+msgstr "ססמה"
+
+#: umap/templates/registration/login.html:21
+msgid "Login"
+msgstr "כניסה"
+
+#: umap/templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "נא לבחור ספק"
+
+#: umap/templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap מאפשר לך ליצור מפות עם שכבות של <a href=\"%(osm_url)s\" />OpenStreetMap</a> תוך דקה ולהטמיע אותן באתר שלך."
+
+#: umap/templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "נא לבחור את שכבות המפה שלך"
+
+#: umap/templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "הוספת נקודות עניין, קווים, מצולעים…"
+
+#: umap/templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "ניהול נקודות עניין וסמלים"
+
+#: umap/templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "ניהול אפשרויות מפה, איתור משתמש עם הטעינה…"
+
+#: umap/templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "ייבוא כמותי של נתונים שהורכבו לטובת מיפוי גאוגרפי (geojson,‏ gpx,‏ kml,‏ osm…)"
+
+#: umap/templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "נא לבחור את רישיון הנתונים שלך"
+
+#: umap/templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "הטמעה ושיתוף של המפה שלך"
+
+#: umap/templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "וכל זה ב<a href=\"%(repo_url)s\">קוד פתוח</a>!"
+
+#: umap/templates/umap/about_summary.html:35
+msgid "Play with the demo"
+msgstr "משחק עם ההדגמה"
+
+#: umap/templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "המפות של uMap"
+
+#: umap/templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "מפות שתענקנה לך השראה"
+
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "נכנסת למערכת. ממשיכים הלאה…"
+
+#: umap/templates/umap/map_list.html:7 umap/views.py:214
+msgid "by"
+msgstr "מאת"
+
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "עוד"
+
+#: umap/templates/umap/navigation.html:14
+msgid "About"
+msgstr "על אודות"
+
+#: umap/templates/umap/navigation.html:15
+msgid "Feedback"
+msgstr "משוב"
+
+#: umap/templates/umap/navigation.html:18
+msgid "Change password"
+msgstr "החלפת ססמה"
+
+#: umap/templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "החלפת ססמה"
+
+#: umap/templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "נא להקליד את הססמה הישנה שלך, מטעמי אבטחה, לאחר מכן את הססמה החדשה שלך פעמיים כדי שנוכל לוודא שהקלדת אותה כראוי."
+
+#: umap/templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "ססמה ישנה"
+
+#: umap/templates/umap/password_change.html:14
+msgid "New password"
+msgstr "ססמה חדשה"
+
+#: umap/templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "אימות ססמה חדשה"
+
+#: umap/templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "החלפת הססמה שלי"
+
+#: umap/templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "החלפת הססמה הצליחה"
+
+#: umap/templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "הססמה שלך הוחלפה."
+
+#: umap/templates/umap/search.html:13
+msgid "Not map found."
+msgstr "לא נמצאה מפה."
+
+#: umap/views.py:220
+msgid "View the map"
+msgstr "הצגת המפה"
+
+#: umap/views.py:524
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "המפה שלך נוצרה! אם מעניין אותן לערוך את המפה הזאת ממחשב אחר נא להשתמש בקישור הבא: %(anonymous_url)s"
+
+#: umap/views.py:529
+msgid "Congratulations, your map has been created!"
+msgstr "ברכותינו, המפה שלך נוצרה!"
+
+#: umap/views.py:561
+msgid "Map has been updated!"
+msgstr "המפה עודכנה!"
+
+#: umap/views.py:587
+msgid "Map editors updated with success!"
+msgstr "עורכי המפה עודכנו בהצלחה!"
+
+#: umap/views.py:612
+msgid "Only its owner can delete the map."
+msgstr "רק לבעלים יש אפשרות למחוק את המפה."
+
+#: umap/views.py:637
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "המפה שלך שוכפלה! אם מעניין אותך לערוך את המפה הזאת ממחשב אחר, נא להשתמש בקישור הבא: %(anonymous_url)s"
+
+#: umap/views.py:642
+msgid "Congratulations, your map has been cloned!"
+msgstr "ברכותינו, המפה שלך שוכפלה!"
+
+#: umap/views.py:809
+msgid "Layer successfully deleted."
+msgstr "השכבה נמחקה בהצלחה."

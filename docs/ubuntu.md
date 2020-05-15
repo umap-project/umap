@@ -6,8 +6,9 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Install system dependencies
 
-    sudo apt install python3.5 python3.5-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-9.5-postgis-2.2 git
+    sudo apt install build-essential autoconf python3.6 python3.6-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-server-dev-9.5 postgresql-9.5-postgis-2.2 git libxml2-dev libxslt1-dev zlib1g-dev
 
+*Note: nginx and uwsgi are not required for local development environment*
 
 *Note: uMap also works with python 2.7 and 3.4, so adapt the package names if you work with another version.*
 
@@ -31,6 +32,7 @@ on the various commands and configuration files if you go with your own.*
 ## Give umap user access to the config folder
 
     sudo chown umap:users /etc/umap
+    sudo chown umap:users /srv/umap
 
 
 ## Create a postgresql user
@@ -57,7 +59,7 @@ From now on, unless we say differently, the commands are run as `umap` user.
 
 ## Create a virtualenv and activate it
 
-    virtualenv /srv/umap/venv --python=/usr/bin/python3.5
+    virtualenv /srv/umap/venv --python=/usr/bin/python3.6
     source /srv/umap/venv/bin/activate
 
 *Note: this activation is not persistent, so if you open a new terminal window,
@@ -73,6 +75,16 @@ you will need to run again this last line.*
 
     wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /etc/umap/umap.conf
 
+## Customize umap.conf
+
+    nano /etc/umap/umap.conf
+
+Change the following properties:
+
+```
+STATIC_ROOT = '/srv/umap/var/static'
+MEDIA_ROOT = '/srv/umap/var/data'
+```
 
 ## Create the tables
 
@@ -81,10 +93,6 @@ you will need to run again this last line.*
 ## Collect the statics
 
     umap collectstatic
-
-## Create languages files
-
-    umap storagei18n
 
 ## Create a superuser
 
@@ -96,7 +104,7 @@ you will need to run again this last line.*
 
 You can now go to [http://localhost:8000/](http://localhost:8000/) and try to create a map for testing.
 
-When you're done with testing, quit the demo server (type Ctrl-C).
+When you're done with testing, quit the demo server (type Ctrl+C).
 
 
 ## Configure the HTTP API
@@ -203,7 +211,7 @@ Remember to adapt the domain name.
 
 ### Activate and restart the services
 
-Now quit the `umap` session, simply by typing ctrl+D.
+Now quit the `umap` session, simply by typing Ctrl+D.
 
 You should now be logged in as your normal user, which is sudoer.
 
@@ -254,6 +262,18 @@ In your local.py:
 
     UMAP_DEMO_SITE = False
     DEBUG = False
+    
+In your nginx config:
+
+    location /static {
+        autoindex off;
+        alias /path/to/umap/var/static/;   
+    }
+
+    location /uploads {
+        autoindex off;
+        alias /path/to/umap/var/data/;    
+    }
 
 ### Configure social auth
 

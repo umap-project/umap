@@ -55,7 +55,7 @@ SOCIAL_AUTH_TWITTER_KEY = "xxx"
 SOCIAL_AUTH_TWITTER_SECRET = "xxx"
 SOCIAL_AUTH_OPENSTREETMAP_KEY = 'xxx'
 SOCIAL_AUTH_OPENSTREETMAP_SECRET = 'xxx'
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += (
     'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
@@ -69,7 +69,7 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 UMAP_DEMO_SITE = True
 
 # Whether to allow non authenticated people to create maps.
-LEAFLET_STORAGE_ALLOW_ANONYMOUS = True
+UMAP_ALLOW_ANONYMOUS = True
 
 # This setting will exclude empty maps (in fact, it will exclude all maps where
 # the default center has not been updated)
@@ -98,6 +98,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # CREATE EXTENSION unaccent;
 UMAP_USE_UNACCENT = False
 
+# Put the site in readonly mode (useful for migration or any maintenance)
+UMAP_READONLY = False
+
+
 # For static deployment
 STATIC_ROOT = '/home/srv/var/static'
 
@@ -110,4 +114,4 @@ LEAFLET_LATITUDE = 51
 LEAFLET_ZOOM = 6
 
 # Number of old version to keep per datalayer.
-LEAFLET_STORAGE_KEEP_VERSIONS = 10
+UMAP_KEEP_VERSIONS = 10

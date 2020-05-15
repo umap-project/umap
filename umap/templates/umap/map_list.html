@@ -1,0 +1,12 @@
+{% load umap_tags umap_tags i18n %}
+
+{% for map_inst in maps %}
+<hr />
+<div class="col wide">
+    {% map_fragment map_inst prefix=prefix page=request.GET.p %}
+    <div class="legend"><a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>{% if map_inst.owner %} <em>{% trans "by" %} <a href="{% url 'user_maps' map_inst.owner.username %}">{{ map_inst.owner }}</a></em>{% endif %}</div>
+</div>
+{% endfor %}
+{% if maps.has_next %}
+<div class="col wide"><a href="?{% paginate_querystring maps.next_page_number %}" class="button more_button neutral">{% trans "More" %}</a></div>
+{% endif %}

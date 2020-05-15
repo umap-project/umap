@@ -1,221 +1,377 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Thanh Le Viet <lethanhx2k@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2014-08-11 00:35+0000\n"
-"Last-Translator: Thanh Le Viet <lethanhx2k@gmail.com>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/projects/p/umap/language/"
-"vi/)\n"
-"Language: vi\n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2019-04-07 14:28+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/openstreetmap/umap/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: templates/404.html:7
+#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Đây là một bản demo được dùng để kiểm tra và xuất bản thử. Nếu bạn cần  một bản ổ định, hãy sử dụng  <a href=\"%(stable_url)s\">%(stable_url)s</a>. Bạn cũng có thể chạy nó trên máy tính của mình vì nó là phần mềm <a href=\"%(repo_url)s\">nguồn mở</a>"
+
+#: tmp/framacarte/templates/umap/home.html:83
+#: tmp/framacarte/templates/umap/navigation.html:14
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
+msgid "Create a map"
+msgstr "Tạo bản đồ"
+
+#: tmp/framacarte/templates/umap/navigation.html:7
+#: umap/templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "Bản đồ của tôi"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Log in"
+msgstr "Đăng nhập"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Sign in"
+msgstr "Đăng nhập"
+
+#: tmp/framacarte/templates/umap/navigation.html:12
+#: umap/templates/umap/navigation.html:20
+msgid "Log out"
+msgstr "Thoát"
+
+#: tmp/framacarte/templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Tìm bản đồ"
+
+#: tmp/framacarte/templates/umap/search_bar.html:10
+#: tmp/framacarte/templates/umap/search_bar.html:13
+#: umap/templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Tìm"
+
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Link chỉnh sửa bí mật là %s"
+
+#: umap/forms.py:44 umap/models.py:115
+msgid "Everyone can edit"
+msgstr "Ai cũng có thể chỉnh sửa"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "Chỉ có thể sửa với liên kết chỉnh sửa bí mật"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr ""
+
+#: umap/models.py:17
+msgid "name"
+msgstr "tên"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "chi tiết"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "Liên kết đến trang có chi tiết về bản quyền"
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "Mẫu URL sử dụng định dạng tile của OSM"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "Thứ tự các titlelayer trong hộp chỉnh sửa"
+
+#: umap/models.py:116
+msgid "Only editors can edit"
+msgstr "Chỉ chỉnh sửa bởi người có quyền"
+
+#: umap/models.py:117
+msgid "Only owner can edit"
+msgstr "Chỉ người sở hữu có thể chỉnh sửa"
+
+#: umap/models.py:120
+msgid "everyone (public)"
+msgstr "mọi người"
+
+#: umap/models.py:121
+msgid "anyone with link"
+msgstr "bất kì ai với liên kết"
+
+#: umap/models.py:122
+msgid "editors only"
+msgstr "chỉ người có quyền"
+
+#: umap/models.py:123
+msgid "blocked"
+msgstr ""
+
+#: umap/models.py:126 umap/models.py:256
+msgid "description"
+msgstr "mô tả"
+
+#: umap/models.py:127
+msgid "center"
+msgstr "trung tâm"
+
+#: umap/models.py:128
+msgid "zoom"
+msgstr "thu phóng"
+
+#: umap/models.py:129
+msgid "locate"
+msgstr "xác định"
+
+#: umap/models.py:129
+msgid "Locate user on load?"
+msgstr "Xác định người dùng khi tải trang?"
+
+#: umap/models.py:132
+msgid "Choose the map licence."
+msgstr "Chọn bản quyền cho bản đồ"
+
+#: umap/models.py:133
+msgid "licence"
+msgstr "bản quyền"
+
+#: umap/models.py:138
+msgid "owner"
+msgstr "chủ nhân"
+
+#: umap/models.py:139
+msgid "editors"
+msgstr "người chỉnh sửa"
+
+#: umap/models.py:140
+msgid "edit status"
+msgstr "trạng thái chỉnh sửa"
+
+#: umap/models.py:141
+msgid "share status"
+msgstr "chia sẻ trạng thái"
+
+#: umap/models.py:142
+msgid "settings"
+msgstr "thiết lập"
+
+#: umap/models.py:210
+msgid "Clone of"
+msgstr "Sao chép của"
+
+#: umap/models.py:261
+msgid "display on load"
+msgstr "hiển thị khi tải trang"
+
+#: umap/models.py:262
+msgid "Display this layer on load."
+msgstr "Hiển thị layer này khi tải trang"
+
+#: umap/templates/404.html:7
 msgid "Take me to the home page"
 msgstr ""
 
-#: templates/auth/user_detail.html:7
+#: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Xem bản đồ của %(current_user)s"
 
-#: templates/leaflet_storage/map_detail.html:24
-msgid "Type editors nick to add…"
-msgstr "Nhập nick thành viên để thêm vào..."
-
-#: templates/leaflet_storage/map_detail.html:27
-#, fuzzy
-#| msgid "Type editors nick to add…"
-msgid "Type new owner nick…"
-msgstr "Nhập nick thành viên để thêm vào..."
-
-#: templates/leaflet_storage/map_list.html:7 views.py:184
-msgid "by"
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
 msgstr ""
 
-#: templates/leaflet_storage/map_list.html:11
-msgid "More"
-msgstr "Thêm"
-
-#: templates/registration/login.html:4
+#: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
 msgstr ""
 
-#: templates/registration/login.html:18
+#: umap/templates/registration/login.html:18
 msgid "Username"
 msgstr ""
 
-#: templates/registration/login.html:20
+#: umap/templates/registration/login.html:20
 msgid "Password"
 msgstr ""
 
-#: templates/registration/login.html:21
+#: umap/templates/registration/login.html:21
 msgid "Login"
 msgstr ""
 
-#: templates/registration/login.html:27
+#: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "Hãy chọn một nhà cung cấp"
 
-#: templates/umap/about_summary.html:6
+#: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
-"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr ""
-"uMap cho phép bạn tạo bản đồ với các layer của <a href=\"%(osm_url)s\" /"
-">OpenStreetMap</a> trong vài phút và chèn nó vào trong website của bạn"
 
-#: templates/umap/about_summary.html:11
+#: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
 msgstr "Chọn layer của bản đồ"
 
-#: templates/umap/about_summary.html:12
+#: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Thêm POI: điểm, đường, vùng..."
 
-#: templates/umap/about_summary.html:13
+#: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
 msgstr "Quản lý màu và biểu tượng POI"
 
-#: templates/umap/about_summary.html:14
+#: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
-"Quản lý thiết lập bản đồ: hiển thị bản đồ con, xác định vị trí người dùng "
-"khi tải bản đồ..."
+msgstr "Quản lý thiết lập bản đồ: hiển thị bản đồ con, xác định vị trí người dùng khi tải bản đồ..."
 
-#: templates/umap/about_summary.html:15
+#: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
 msgstr "Import hàng loạt dữ liệu địa lý (geojson, gpx, kml, osm...)"
 
-#: templates/umap/about_summary.html:16
+#: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
 msgstr "Chọn bản quyền cho dữ liệu của bạn"
 
-#: templates/umap/about_summary.html:17
+#: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
 msgstr "Chèn và chia sẻ bản đồ"
 
-#: templates/umap/about_summary.html:23
+#: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Và nó là  <a href=\"%(repo_url)s\">mã nguồn mở <a>! "
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
-msgid "Create a map"
-msgstr "Tạo bản đồ"
-
-#: templates/umap/about_summary.html:34
+#: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
 msgstr "Xem thử demo"
 
-#: templates/umap/home.html:10
-#, python-format
-msgid ""
-"This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
-msgstr ""
-"Đây là một bản demo được dùng để kiểm tra và xuất bản thử. Nếu bạn cần  một "
-"bản ổ định, hãy sử dụng  <a href=\"%(stable_url)s\">%(stable_url)s</a>. Bạn "
-"cũng có thể chạy nó trên máy tính của mình vì nó là phần mềm <a href="
-"\"%(repo_url)s\">nguồn mở</a>"
-
-#: templates/umap/home.html:17
+#: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
 msgstr "Bản đồ của uMaps"
 
-#: templates/umap/home.html:24
+#: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr "Tham khảo các bản đồ"
 
-#: templates/umap/navigation.html:12
-msgid "My maps"
-msgstr "Bản đồ của tôi"
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Bạn đã đăng nhập, Đang tiếp tục..."
 
-#: templates/umap/navigation.html:14
-msgid "Log in"
-msgstr "Đăng nhập"
+#: umap/templates/umap/map_list.html:7 umap/views.py:214
+msgid "by"
+msgstr ""
 
-#: templates/umap/navigation.html:14
-msgid "Sign in"
-msgstr "Đăng nhập"
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "Thêm"
 
-#: templates/umap/navigation.html:16
+#: umap/templates/umap/navigation.html:14
 msgid "About"
 msgstr "Về"
 
-#: templates/umap/navigation.html:17
+#: umap/templates/umap/navigation.html:15
 msgid "Feedback"
 msgstr "Đóng góp"
 
-#: templates/umap/navigation.html:20
+#: umap/templates/umap/navigation.html:18
 msgid "Change password"
 msgstr ""
 
-#: templates/umap/navigation.html:22
-msgid "Log out"
-msgstr "Thoát"
-
-#: templates/umap/password_change.html:6
+#: umap/templates/umap/password_change.html:6
 msgid "Password change"
 msgstr ""
 
-#: templates/umap/password_change.html:7
+#: umap/templates/umap/password_change.html:7
 msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
 msgstr ""
 
-#: templates/umap/password_change.html:12
+#: umap/templates/umap/password_change.html:12
 msgid "Old password"
 msgstr ""
 
-#: templates/umap/password_change.html:14
+#: umap/templates/umap/password_change.html:14
 msgid "New password"
 msgstr ""
 
-#: templates/umap/password_change.html:16
+#: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr ""
 
-#: templates/umap/password_change.html:18
+#: umap/templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr ""
 
-#: templates/umap/password_change_done.html:6
+#: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr ""
 
-#: templates/umap/password_change_done.html:7
+#: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr ""
 
-#: templates/umap/search.html:13
+#: umap/templates/umap/search.html:13
 msgid "Not map found."
 msgstr "Không tìm thấy bản đồ"
 
-#: templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "Tìm bản đồ"
-
-#: templates/umap/search_bar.html:9
-msgid "Search"
-msgstr "Tìm"
-
-#: views.py:190
+#: umap/views.py:220
 msgid "View the map"
 msgstr "Xem bản đồ"
 
-#~ msgid "Map settings"
-#~ msgstr "Thiết lập bản đồ"
+#: umap/views.py:524
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Bản đồ của bạn đã được tạo! Nếu bạn muốn chỉnh sửa bản đồ từ máy tính khác, vui lòng sử dụng liên kết này %(anonymous_url)s"
+
+#: umap/views.py:529
+msgid "Congratulations, your map has been created!"
+msgstr "Chúc mừng, bản đồ của bạn đã được tạo!"
+
+#: umap/views.py:561
+msgid "Map has been updated!"
+msgstr "Bản đồ đã được cập nhật!"
+
+#: umap/views.py:587
+msgid "Map editors updated with success!"
+msgstr "Bản đồ được cập nhật thành công!"
+
+#: umap/views.py:612
+msgid "Only its owner can delete the map."
+msgstr "Chỉ chủ nhân của bản đồ mới có quyền xóa."
+
+#: umap/views.py:637
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Bản đồ của bạn đã được sao chép. Nếu bạn muốn chỉnh sửa bản đồ từ máy tính khác, vui lòng sử dụng liên kết này %(anonymous_url)s"
+
+#: umap/views.py:642
+msgid "Congratulations, your map has been cloned!"
+msgstr "Chúc mừng, bản đồ của bạn đã được sao chép!"
+
+#: umap/views.py:809
+msgid "Layer successfully deleted."
+msgstr "Đã xóa layer"

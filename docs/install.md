@@ -1,5 +1,9 @@
 # Installation
 
+*Note: for Ubuntu follow procedure [Ubuntu from scratch](ubuntu.md)*
+
+*Note: for a Windows installation follow procedure [Installing on Windows](install_windows.md)*
+
 Create a geo aware database. See [Geodjango doc](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/) for backend installation.
 
 Create a virtual environment
@@ -21,7 +25,7 @@ Reference it as env var:
     export UMAP_SETTINGS=`pwd`/local.py
 
 
-Add database connexion informations in `local.py`, for example
+Add database connection information in `local.py`, for example
 
     DATABASES = {
         'default': {
@@ -75,8 +79,8 @@ Start the server
 
 ## Search
 
-UMap uses Postgresql tsvector for searching. It case your database is big, you
-may want to add an index. For that, you sould do so:
+UMap uses PostgreSQL tsvector for searching. In case your database is big, you
+may want to add an index. For that, you should do so:
 
     CREATE EXTENSION unaccent;
     CREATE EXTENSION btree_gin;
@@ -87,6 +91,6 @@ may want to add an index. For that, you sould do so:
 
 ## Optimisations
 
-To speep up umap home page rendering on large instance, the following index can be added too (make sure you set the center to your default instance map center):
+To speed up uMap homepage rendering on a large instance, the following index can be added as well (make sure you set the center to your default instance map center):
 
     CREATE INDEX leaflet_storage_map_optim ON leaflet_storage_map (modified_at) WHERE ("leaflet_storage_map"."share_status" = 1 AND ST_Distance("leaflet_storage_map"."center", ST_GeomFromEWKT('SRID=4326;POINT(2 51)')) > 1000.0);

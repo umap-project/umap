@@ -1,0 +1,10 @@
+<script type="text/javascript">
+    {% for m in messages %}
+        {# We have just one, but we need to loop, as for messages API #}
+        L.U.fire('ui:alert', {
+            content: "{{ m }}",
+            level: "{{ m.tags }}",
+            duration: 100000
+        });
+    {% endfor %}
+</script>

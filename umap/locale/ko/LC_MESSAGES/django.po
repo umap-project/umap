@@ -1,0 +1,377 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Dongha Hwang <depth221@gmail.com>, 2019
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2019-04-30 12:39+0000\n"
+"Last-Translator: Dongha Hwang <depth221@gmail.com>\n"
+"Language-Team: Korean (http://www.transifex.com/openstreetmap/umap/language/ko/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "현재 테스트/맛보기용 데모 버전을 사용하고 있습니다. 안정적인 버전을 이용하고 싶다면, <a href=\"%(stable_url)s\">%(stable_url)s</a>을/를 이용하세요. 자신만의 uMap을 호스팅할 수도 있습니다. uMap은 <a href=\"%(repo_url)s\">오픈 소스</a>입니다!"
+
+#: tmp/framacarte/templates/umap/home.html:83
+#: tmp/framacarte/templates/umap/navigation.html:14
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
+msgid "Create a map"
+msgstr "지도 제작"
+
+#: tmp/framacarte/templates/umap/navigation.html:7
+#: umap/templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "내 지도"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Log in"
+msgstr "로그인"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Sign in"
+msgstr "로그인"
+
+#: tmp/framacarte/templates/umap/navigation.html:12
+#: umap/templates/umap/navigation.html:20
+msgid "Log out"
+msgstr "로그아웃"
+
+#: tmp/framacarte/templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "지도 검색"
+
+#: tmp/framacarte/templates/umap/search_bar.html:10
+#: tmp/framacarte/templates/umap/search_bar.html:13
+#: umap/templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "검색"
+
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "비공개 편집 링크 %s"
+
+#: umap/forms.py:44 umap/models.py:115
+msgid "Everyone can edit"
+msgstr "누구나 편집할 수 있음"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "비공개 편집 링크를 가진 사람만 편집할 수 있음"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "유지보수 중입니다. 읽기 전용으로 구동 중입니다."
+
+#: umap/models.py:17
+msgid "name"
+msgstr "이름"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "세부 정보"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "라이선스가 명시된 페이지로 이동하는 링크입니다."
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "오픈스트리트맵 타일 포맷을 이용한 URL 템플릿"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "편집 창에서 타일 레이어의 순서"
+
+#: umap/models.py:116
+msgid "Only editors can edit"
+msgstr "편집자만 편집할 수 있음"
+
+#: umap/models.py:117
+msgid "Only owner can edit"
+msgstr "소유주만 편집할 수 있음"
+
+#: umap/models.py:120
+msgid "everyone (public)"
+msgstr "누구나(공개)"
+
+#: umap/models.py:121
+msgid "anyone with link"
+msgstr "링크를 가지고 있는 사람"
+
+#: umap/models.py:122
+msgid "editors only"
+msgstr "편집자만"
+
+#: umap/models.py:123
+msgid "blocked"
+msgstr "차단됨"
+
+#: umap/models.py:126 umap/models.py:256
+msgid "description"
+msgstr "설명"
+
+#: umap/models.py:127
+msgid "center"
+msgstr "중앙"
+
+#: umap/models.py:128
+msgid "zoom"
+msgstr "줌"
+
+#: umap/models.py:129
+msgid "locate"
+msgstr "위치"
+
+#: umap/models.py:129
+msgid "Locate user on load?"
+msgstr "불러오면서 위치를 잡으시겠습니까?"
+
+#: umap/models.py:132
+msgid "Choose the map licence."
+msgstr "지도의 라이선스를 선택해 주세요."
+
+#: umap/models.py:133
+msgid "licence"
+msgstr "라이선스"
+
+#: umap/models.py:138
+msgid "owner"
+msgstr "소유주"
+
+#: umap/models.py:139
+msgid "editors"
+msgstr "편집자"
+
+#: umap/models.py:140
+msgid "edit status"
+msgstr "편집 상태"
+
+#: umap/models.py:141
+msgid "share status"
+msgstr "공유 상태"
+
+#: umap/models.py:142
+msgid "settings"
+msgstr "설정"
+
+#: umap/models.py:210
+msgid "Clone of"
+msgstr "원본:"
+
+#: umap/models.py:261
+msgid "display on load"
+msgstr "불러오면서 표시"
+
+#: umap/models.py:262
+msgid "Display this layer on load."
+msgstr "불러오면서 동시에 이 레이어를 띄웁니다."
+
+#: umap/templates/404.html:7
+msgid "Take me to the home page"
+msgstr "첫 화면으로 이동"
+
+#: umap/templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "%(current_user)s의 지도 탐색"
+
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "%(current_user)s은/는 지도를 만들지 않았습니다."
+
+#: umap/templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "로그인해 주세요"
+
+#: umap/templates/registration/login.html:18
+msgid "Username"
+msgstr "사용자명"
+
+#: umap/templates/registration/login.html:20
+msgid "Password"
+msgstr "비밀번호"
+
+#: umap/templates/registration/login.html:21
+msgid "Login"
+msgstr "로그인"
+
+#: umap/templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "제공자를 선택해 주세요"
+
+#: umap/templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr " uMap과 <a href=\"%(osm_url)s\" />OpenStreetMap</a>으로 쉽게 지도를 만들 수 있습니다. 만든 지도는 당신의 사이트에 넣을 수 있습니다."
+
+#: umap/templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "지도 레이어를 선택하세요"
+
+#: umap/templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "POI 추가하기: 마커, 선, 도형..."
+
+#: umap/templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "POI의 색·아이콘 관리하기"
+
+#: umap/templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "지도의 옵션 관리하기: 미니맵 표시, 사용자의 위치..."
+
+#: umap/templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "지리 데이터 가져오기(geojson, gpx, kml, osm...)"
+
+#: umap/templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "라이선스 선택하기"
+
+#: umap/templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "지도를 삽입하고 공유하기"
+
+#: umap/templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "게다가 <a href=\"%(repo_url)s\">오픈소스</a>입니다!"
+
+#: umap/templates/umap/about_summary.html:35
+msgid "Play with the demo"
+msgstr "데모 사용해 보기"
+
+#: umap/templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "uMap의 지도"
+
+#: umap/templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "푹 빠져 보세요, 지도를 검색해 보세요"
+
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "로그인되었습니다. 잠시만 기다려 주세요..."
+
+#: umap/templates/umap/map_list.html:7 umap/views.py:214
+msgid "by"
+msgstr "제작:"
+
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "더 보기"
+
+#: umap/templates/umap/navigation.html:14
+msgid "About"
+msgstr "정보"
+
+#: umap/templates/umap/navigation.html:15
+msgid "Feedback"
+msgstr "피드백"
+
+#: umap/templates/umap/navigation.html:18
+msgid "Change password"
+msgstr "비밀번호 변경"
+
+#: umap/templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "비밀번호 변경"
+
+#: umap/templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "이전 비밀번호를 먼저 입력해 주세요. 그러고 나서 새로운 비밀번호를 2번 입력해 주세요. 비밀번호를 올바르게 입력했는지 확인하는 절차입니다."
+
+#: umap/templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "이전 비밀번호"
+
+#: umap/templates/umap/password_change.html:14
+msgid "New password"
+msgstr "새로운 비밀번호"
+
+#: umap/templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "새로운 비밀번호 확인"
+
+#: umap/templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "비밀번호 변경"
+
+#: umap/templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "비밀번호가 성공적으로 변경되었습니다"
+
+#: umap/templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "비밀번호가 변경되었습니다."
+
+#: umap/templates/umap/search.html:13
+msgid "Not map found."
+msgstr "지도를 찾을 수 없습니다."
+
+#: umap/views.py:220
+msgid "View the map"
+msgstr "지도 보기"
+
+#: umap/views.py:524
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "지도가 생성되었습니다! 다른 컴퓨터에서 지도를 편집하고 싶다면 다음 링크를 사용하세요: %(anonymous_url)s"
+
+#: umap/views.py:529
+msgid "Congratulations, your map has been created!"
+msgstr "축하드립니다, 지도가 생성되었습니다!"
+
+#: umap/views.py:561
+msgid "Map has been updated!"
+msgstr "지도가 업데이트되었습니다!"
+
+#: umap/views.py:587
+msgid "Map editors updated with success!"
+msgstr "지도 편집자가 성공적으로 업데이트되었습니다!"
+
+#: umap/views.py:612
+msgid "Only its owner can delete the map."
+msgstr "소유주만 지도를 삭제할 수 있습니다."
+
+#: umap/views.py:637
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "지도가 복제되었습니다! 다른 컴퓨터에서 지도를 편집하고 싶다면 다음 링크를 사용하세요: %(anonymous_url)s"
+
+#: umap/views.py:642
+msgid "Congratulations, your map has been cloned!"
+msgstr "축하드립니다, 지도가 복제되었습니다!"
+
+#: umap/views.py:809
+msgid "Layer successfully deleted."
+msgstr "레이어가 성공적으로 삭제되었습니다."

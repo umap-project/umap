@@ -3,3 +3,5 @@ include requirements.txt
 recursive-include umap/static *
 recursive-include umap/templates *
 recursive-include umap/locale *
+recursive-include ui *
+exclude umap/settings/local.py

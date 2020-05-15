@@ -1,0 +1,377 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Sveinn í Felli <sv1@fellsnet.is>, 2020
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2020-02-27 06:51+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"Language-Team: Icelandic (http://www.transifex.com/openstreetmap/umap/language/is/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: is\n"
+"Plural-Forms: nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);\n"
+
+#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Þetta er sýnitilvik, notað fyrir prófanir og skoðun á eiginleikum áður en að útgáfu kemur. Ef þú þarft að nota stöðuga útgáfu, ættirðu að nota frekar <a href=\"%(stable_url)s\">%(stable_url)s</a>. Þú getur líka hýst þitt eigið tilvik, þetta er nú einu sinni <a href=\"%(repo_url)s\">frjáls hugbúnaður með opinn grunnkóða</a>!"
+
+#: tmp/framacarte/templates/umap/home.html:83
+#: tmp/framacarte/templates/umap/navigation.html:14
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
+msgid "Create a map"
+msgstr "Útbúðu landakort"
+
+#: tmp/framacarte/templates/umap/navigation.html:7
+#: umap/templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "Landakortin mín"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Log in"
+msgstr "Skrá inn"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Sign in"
+msgstr "Nýskrá"
+
+#: tmp/framacarte/templates/umap/navigation.html:12
+#: umap/templates/umap/navigation.html:20
+msgid "Log out"
+msgstr "Skrá út"
+
+#: tmp/framacarte/templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Leita í landakortum"
+
+#: tmp/framacarte/templates/umap/search_bar.html:10
+#: tmp/framacarte/templates/umap/search_bar.html:13
+#: umap/templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Leita"
+
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Leynilegur breytingatengill er %s"
+
+#: umap/forms.py:44 umap/models.py:115
+msgid "Everyone can edit"
+msgstr "Allir geta breytt"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "Aðeins breytanlegt með leynilegum breytingatengli"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "Vefsvæðið er núna skrifvarið vegna viðhaldsvinnu"
+
+#: umap/models.py:17
+msgid "name"
+msgstr "nafn"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "nánar"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "Tengill á síðu þar sem notkunarleyfi er útskýrt."
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "URL-sniðmát sem notar OSM-kortatíglasnið"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "Röð kortatíglalaga í breytingareitnum"
+
+#: umap/models.py:116
+msgid "Only editors can edit"
+msgstr "Aðeins ritstjórar geta breytt"
+
+#: umap/models.py:117
+msgid "Only owner can edit"
+msgstr "Aðeins eigandi getur breytt"
+
+#: umap/models.py:120
+msgid "everyone (public)"
+msgstr "allir (opinbert)"
+
+#: umap/models.py:121
+msgid "anyone with link"
+msgstr "allir með tengil"
+
+#: umap/models.py:122
+msgid "editors only"
+msgstr "aðeins ritstjórar"
+
+#: umap/models.py:123
+msgid "blocked"
+msgstr "útilokað"
+
+#: umap/models.py:126 umap/models.py:256
+msgid "description"
+msgstr "lýsing"
+
+#: umap/models.py:127
+msgid "center"
+msgstr "miðja"
+
+#: umap/models.py:128
+msgid "zoom"
+msgstr "aðdráttur"
+
+#: umap/models.py:129
+msgid "locate"
+msgstr "staðsetja"
+
+#: umap/models.py:129
+msgid "Locate user on load?"
+msgstr "Staðsetja notanda við innhleðslu?"
+
+#: umap/models.py:132
+msgid "Choose the map licence."
+msgstr "Veldu notkunarleyfi fyrir kortið."
+
+#: umap/models.py:133
+msgid "licence"
+msgstr "notkunarleyfi"
+
+#: umap/models.py:138
+msgid "owner"
+msgstr "eigandi"
+
+#: umap/models.py:139
+msgid "editors"
+msgstr "ritstjórar"
+
+#: umap/models.py:140
+msgid "edit status"
+msgstr "staða vinnslu"
+
+#: umap/models.py:141
+msgid "share status"
+msgstr "staða deilingar"
+
+#: umap/models.py:142
+msgid "settings"
+msgstr "stillingar"
+
+#: umap/models.py:210
+msgid "Clone of"
+msgstr "Klón af"
+
+#: umap/models.py:261
+msgid "display on load"
+msgstr "birta við innhleðslu"
+
+#: umap/models.py:262
+msgid "Display this layer on load."
+msgstr "Birta þetta lag við innhleðslu."
+
+#: umap/templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Fara á forsíðuna"
+
+#: umap/templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Skoða landakort frá %(current_user)s"
+
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "%(current_user)s er ekki með nein landakort."
+
+#: umap/templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Skráðu þig inn í notandaaðganginn þinn"
+
+#: umap/templates/registration/login.html:18
+msgid "Username"
+msgstr "Notandanafn"
+
+#: umap/templates/registration/login.html:20
+msgid "Password"
+msgstr "Lykilorð"
+
+#: umap/templates/registration/login.html:21
+msgid "Login"
+msgstr "Innskráning"
+
+#: umap/templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Veldu þjónustuveitu"
+
+#: umap/templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap gerir þér kleift að útbúa landakort með <a href=\"%(osm_url)s\" />OpenStreetMap</a> lögum á nokkrum mínútum og birta þau á vefsvæðinu þínu."
+
+#: umap/templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Veldu lög á kortið þitt"
+
+#: umap/templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Bættu við merkisstöðum (POI): merki, línur, flákar..."
+
+#: umap/templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Sýsla með liti og táknmyndir merkisstaða"
+
+#: umap/templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Sýsla með valkosti korts: birta yfirlitskort, staðsetja notanda við innhleðslu…"
+
+#: umap/templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Magnflytja inn hnattuppbyggð gögn (geostructured data: geojson, gpx, kml, osm...)"
+
+#: umap/templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Veldu notkunarleyfi fyrir gögnin þín"
+
+#: umap/templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Settu þetta inn á vefsíðu og deildu kortinu þínu"
+
+#: umap/templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "And it's <a href=\"%(repo_url)s\">open source</a>!"
+
+#: umap/templates/umap/about_summary.html:35
+msgid "Play with the demo"
+msgstr "Leiktu þér með sýnisútgáfuna"
+
+#: umap/templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "Kort í uMaps"
+
+#: umap/templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "Fáðu hugmyndir, skoðaðu önnur landakort"
+
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Þú ert skráð/ur inn. Held áfram..."
+
+#: umap/templates/umap/map_list.html:7 umap/views.py:214
+msgid "by"
+msgstr "eftir"
+
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "Meira"
+
+#: umap/templates/umap/navigation.html:14
+msgid "About"
+msgstr "Um hugbúnaðinn"
+
+#: umap/templates/umap/navigation.html:15
+msgid "Feedback"
+msgstr "Umsagnir"
+
+#: umap/templates/umap/navigation.html:18
+msgid "Change password"
+msgstr "Breyta lykilorði"
+
+#: umap/templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "Breyting á lykilorði"
+
+#: umap/templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Settu gamla lykilorðið þitt inn í öryggisskyni og settu síðan nýja lykilorðið þitt inn tvisvar, svo að við getum sannreynt að þú hafir slegið það rétt inn."
+
+#: umap/templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "Gamla lykilorðið"
+
+#: umap/templates/umap/password_change.html:14
+msgid "New password"
+msgstr "Nýtt lykilorð"
+
+#: umap/templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "Staðfesting á nýju lykilorði"
+
+#: umap/templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "Breyta lykilorðinu mínu"
+
+#: umap/templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Breyting á lykilorði tókst"
+
+#: umap/templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "Lykilorðinu þínu hefur verið breytt"
+
+#: umap/templates/umap/search.html:13
+msgid "Not map found."
+msgstr "Ekkert landakort fannst."
+
+#: umap/views.py:220
+msgid "View the map"
+msgstr "Skoða kortið"
+
+#: umap/views.py:524
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Það tókst að útbúa landakortið þitt! Ef þú ætlar að breyta þessu landakorti úr annarri tölvu, ættirðu að nota þennan tengil: %(anonymous_url)s"
+
+#: umap/views.py:529
+msgid "Congratulations, your map has been created!"
+msgstr "Til hamingju, það tókst að útbúa landakortið þitt!"
+
+#: umap/views.py:561
+msgid "Map has been updated!"
+msgstr "Kortið hefur verið uppfært!"
+
+#: umap/views.py:587
+msgid "Map editors updated with success!"
+msgstr "Tókst að uppfæra vinnslu korta!"
+
+#: umap/views.py:612
+msgid "Only its owner can delete the map."
+msgstr "Aðeins eigandinn getur eytt landakortinu."
+
+#: umap/views.py:637
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Það tókst að klóna landakortið þitt! Ef þú ætlar að breyta þessu landakorti úr annarri tölvu, ættirðu að nota þennan tengil: %(anonymous_url)s"
+
+#: umap/views.py:642
+msgid "Congratulations, your map has been cloned!"
+msgstr "Til hamingju, það tókst að klóna landakortið þitt!"
+
+#: umap/views.py:809
+msgid "Layer successfully deleted."
+msgstr "Tókst að eyða lagi."

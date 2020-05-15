@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col quarter mwide">
       <img class="colophon" src="{{ STATIC_URL }}umap/img/osm.svg" />
-      <p>{% blocktrans with osm_url="http://osm.org" %}uMap let you create maps with <a href="{{ osm_url }}" />OpenStreetMap</a> layers in a minute and embed them in your site.{% endblocktrans %}</p>
+      <p>{% blocktrans with osm_url="http://osm.org" %}uMap lets you create maps with <a href="{{ osm_url }}" />OpenStreetMap</a> layers in a minute and embed them in your site.{% endblocktrans %}</p>
     </div>
     <div class="col umap-features-list half mwide">
       <img class="colophon" src="{{ STATIC_URL }}umap/img/edit.svg" />
@@ -25,14 +25,16 @@
     </div>
   </div>
 </div>
-<div class="wrapper button-bar">
+<div class="wrapper">
   <div class="row">
     <div class="col half center mwide">
     {% spaceless %}
+    <div class="button-bar {% if demo_map %}half{% endif %}">
       <a href="{% url 'map_new' %}" class="button half">{% trans "Create a map" %}</a>
       {% if demo_map %}
         <a href="{{ demo_map.get_absolute_url }}" class="button half neutral">{% trans "Play with the demo" %}</a>
       {% endif %}
+    </div>
     {% endspaceless %}
     </div>
   </div>

@@ -1,218 +1,377 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Alazar Tekle <al3may3hu@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 21:37+0200\n"
-"PO-Revision-Date: 2015-11-15 14:24+0000\n"
-"Last-Translator: Alazar Tekle <al3may3hu@gmail.com>\n"
-"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/yohanboniface/"
-"umap/language/am_ET/)\n"
-"Language: am_ET\n"
+"POT-Creation-Date: 2019-04-07 14:28+0000\n"
+"PO-Revision-Date: 2019-04-07 14:28+0000\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/openstreetmap/umap/language/am_ET/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: am_ET\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/404.html:7
+#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋሚ የሆነ ማሳያ ከፈለጉ እባክዎ <a href=\"%(stable_url)s\">%(stable_url)s</a> ይጠቀሙ። እንዲሁም የራስዎን ማስቀመጥ ይችላሉ፣ <a href=\"%(repo_url)s\">ነፃ እና ክፍት</a> ነው!"
+
+#: tmp/framacarte/templates/umap/home.html:83
+#: tmp/framacarte/templates/umap/navigation.html:14
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
+msgid "Create a map"
+msgstr "ካርታ ፍጠር"
+
+#: tmp/framacarte/templates/umap/navigation.html:7
+#: umap/templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "የኔ ካርታዎች"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Log in"
+msgstr "ግባ"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Sign in"
+msgstr "ግባ"
+
+#: tmp/framacarte/templates/umap/navigation.html:12
+#: umap/templates/umap/navigation.html:20
+msgid "Log out"
+msgstr "ውጣ"
+
+#: tmp/framacarte/templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "ካርታዎች መሀከል ፈልግ"
+
+#: tmp/framacarte/templates/umap/search_bar.html:10
+#: tmp/framacarte/templates/umap/search_bar.html:13
+#: umap/templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "ፈልግ"
+
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "የሚስጥር የማረሚያ መስመሩ %s"
+
+#: umap/forms.py:44 umap/models.py:115
+msgid "Everyone can edit"
+msgstr "ሁሉም ማረም ይችላል"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "በሚስጥር የመረሚያ መስመሩ ብቻ የሚታረም"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr ""
+
+#: umap/models.py:17
+msgid "name"
+msgstr "ስም"
+
+#: umap/models.py:48
+msgid "details"
+msgstr "ዝርዝሮች"
+
+#: umap/models.py:49
+msgid "Link to a page where the licence is detailed."
+msgstr "ፈቃዱ በዝርዝር ከተቀመጠ ገፅ ጛር አገናኝ"
+
+#: umap/models.py:63
+msgid "URL template using OSM tile format"
+msgstr "የድረ-ገፅ አድራሻ ተምሳሌ በኦ.ኤስ.ኤም. የታይል ፎርማት"
+
+#: umap/models.py:71
+msgid "Order of the tilelayers in the edit box"
+msgstr "በማረሚያ ሳጥኑ ውስጥ የታይል ሌየሮቹ ቅደም ተከተል"
+
+#: umap/models.py:116
+msgid "Only editors can edit"
+msgstr "አራሚዎች ብቻ ማረም ይችላሉ"
+
+#: umap/models.py:117
+msgid "Only owner can edit"
+msgstr "ባለቤት ብቻ ማረም ይችላል"
+
+#: umap/models.py:120
+msgid "everyone (public)"
+msgstr "ሁሉም (የህዝብ)"
+
+#: umap/models.py:121
+msgid "anyone with link"
+msgstr "አድራሻው ያለው ሁሉ"
+
+#: umap/models.py:122
+msgid "editors only"
+msgstr "አራሚዎች ብቻ"
+
+#: umap/models.py:123
+msgid "blocked"
+msgstr ""
+
+#: umap/models.py:126 umap/models.py:256
+msgid "description"
+msgstr "መገለጫ"
+
+#: umap/models.py:127
+msgid "center"
+msgstr "መሀከል"
+
+#: umap/models.py:128
+msgid "zoom"
+msgstr "ዙም"
+
+#: umap/models.py:129
+msgid "locate"
+msgstr "ጠቁም"
+
+#: umap/models.py:129
+msgid "Locate user on load?"
+msgstr "በመጫን ላይ ያለውን ተጠቃሚ ጠቁም?"
+
+#: umap/models.py:132
+msgid "Choose the map licence."
+msgstr "የካርታውን ፈቃድ ከልስ"
+
+#: umap/models.py:133
+msgid "licence"
+msgstr "ፈቃድ"
+
+#: umap/models.py:138
+msgid "owner"
+msgstr "ባለቤት"
+
+#: umap/models.py:139
+msgid "editors"
+msgstr "አራሚዎች"
+
+#: umap/models.py:140
+msgid "edit status"
+msgstr "ያለበትን ሁኔታ አርም"
+
+#: umap/models.py:141
+msgid "share status"
+msgstr "ያለበትን ሁኔታ አጋራ"
+
+#: umap/models.py:142
+msgid "settings"
+msgstr "ሁኔታዎች"
+
+#: umap/models.py:210
+msgid "Clone of"
+msgstr "ድቃይ"
+
+#: umap/models.py:261
+msgid "display on load"
+msgstr "በመጫን ላይ አሳይ"
+
+#: umap/models.py:262
+msgid "Display this layer on load."
+msgstr "ሌየሩ በመጫን ላይ አሳይ"
+
+#: umap/templates/404.html:7
 msgid "Take me to the home page"
 msgstr ""
 
-#: templates/auth/user_detail.html:7
+#: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "የ %(current_user)s'ን ካርታ አስስ"
 
-#: templates/leaflet_storage/map_detail.html:24
-msgid "Type editors nick to add…"
-msgstr "የአራሚዎችን ኒክ በመፃፍ ጨምር"
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr ""
 
-#: templates/leaflet_storage/map_detail.html:27
-#, fuzzy
-#| msgid "Type editors nick to add…"
-msgid "Type new owner nick…"
-msgstr "የአራሚዎችን ኒክ በመፃፍ ጨምር"
-
-#: templates/leaflet_storage/map_list.html:7 views.py:184
-msgid "by"
-msgstr "በ"
-
-#: templates/leaflet_storage/map_list.html:11
-msgid "More"
-msgstr "ተጨማሪ"
-
-#: templates/registration/login.html:4
+#: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
 msgstr ""
 
-#: templates/registration/login.html:18
+#: umap/templates/registration/login.html:18
 msgid "Username"
 msgstr ""
 
-#: templates/registration/login.html:20
+#: umap/templates/registration/login.html:20
 msgid "Password"
 msgstr ""
 
-#: templates/registration/login.html:21
+#: umap/templates/registration/login.html:21
 msgid "Login"
 msgstr ""
 
-#: templates/registration/login.html:27
+#: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
 msgstr "እባክዎ አቅራቢ ይምረጡ"
 
-#: templates/umap/about_summary.html:6
+#: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
-"uMap let you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr ""
-"ዩማፕ በ <a href=\"%(osm_url)s\" />ኦፕን ስትሪት ማፕ</a> ሌየሮች ካርታዎችን በደቂቃ ውስጥ ሰርተን "
-"በገፃችን ማካተት እንድንችል ያደርገናል"
 
-#: templates/umap/about_summary.html:11
+#: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
 msgstr "የካርታዎን ሌየሮች ይምረጡ"
 
-#: templates/umap/about_summary.html:12
+#: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "ፒ.ኦ.አይ. ይጨምሩ፡ ማርከሮች፣ መስመሮች፣ ፖሊጎኖች ..."
 
-#: templates/umap/about_summary.html:13
+#: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
 msgstr "የፒ.ኦ.አይ. ከለሮችን እና ጠቋሚዎችን ያስተዳድሩ"
 
-#: templates/umap/about_summary.html:14
+#: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr "የካርታ አማራጮችን ያስተዳድሩ። ትንሽ ካርታ አሳይ፣ ተጠቃሚውን በመጫን ላይ አሳይ ..."
 
-#: templates/umap/about_summary.html:15
+#: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
 msgstr "ጂዖስትራክቸርድ የሆነ መረጃ በጅምላ አምጣ (geojson, gpx, kml, osm...)"
 
-#: templates/umap/about_summary.html:16
+#: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
 msgstr "ለመረጃዎ ፈቃድ ይምረጡ"
 
-#: templates/umap/about_summary.html:17
+#: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
 msgstr "ካርታዎን ያካትቱ እና ይጋሩ"
 
-#: templates/umap/about_summary.html:23
+#: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "እንዲሁም <a href=\"%(repo_url)s\">ነፃ እና ክፍት ነው</a> !"
 
-#: templates/umap/about_summary.html:32 templates/umap/navigation.html:31
-msgid "Create a map"
-msgstr "ካርታ ፍጠር"
-
-#: templates/umap/about_summary.html:34
+#: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
 msgstr "በማሳያው ተለማመድ"
 
-#: templates/umap/home.html:10
-#, python-format
-msgid ""
-"This is a demo instance, used for tests and pre-rolling releases. If you "
-"need a stable instance, please use <a href=\"%(stable_url)s\">"
-"%(stable_url)s</a>. You can also host your own instance, it's <a href="
-"\"%(repo_url)s\">open source</a>!"
-msgstr ""
-"ይህ ለሙከራ እና ፕሪ-ሮሊግ ሪሊዞች የሚያገለግል ማሳያ ነው። ቋሚ የሆነ ማሳያ ከፈለጉ እባክዎ <a href="
-"\"%(stable_url)s\">%(stable_url)s</a> ይጠቀሙ። እንዲሁም የራስዎን ማስቀመጥ ይችላሉ፣ <a href="
-"\"%(repo_url)s\">ነፃ እና ክፍት</a> ነው!"
-
-#: templates/umap/home.html:17
+#: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
 msgstr "የዩማፖች ካርታ"
 
-#: templates/umap/home.html:24
+#: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr "ካርታዎችን ተመልከት፣ ስሜትህን አነቃቃ!"
 
-#: templates/umap/navigation.html:12
-msgid "My maps"
-msgstr "የኔ ካርታዎች"
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "ገብተዋል። በመቀጠል ላይ ..."
 
-#: templates/umap/navigation.html:14
-msgid "Log in"
-msgstr "ግባ"
+#: umap/templates/umap/map_list.html:7 umap/views.py:214
+msgid "by"
+msgstr "በ"
 
-#: templates/umap/navigation.html:14
-msgid "Sign in"
-msgstr "ግባ"
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "ተጨማሪ"
 
-#: templates/umap/navigation.html:16
+#: umap/templates/umap/navigation.html:14
 msgid "About"
 msgstr "ስለ"
 
-#: templates/umap/navigation.html:17
+#: umap/templates/umap/navigation.html:15
 msgid "Feedback"
 msgstr "አስተያየት"
 
-#: templates/umap/navigation.html:20
+#: umap/templates/umap/navigation.html:18
 msgid "Change password"
 msgstr ""
 
-#: templates/umap/navigation.html:22
-msgid "Log out"
-msgstr "ውጣ"
-
-#: templates/umap/password_change.html:6
+#: umap/templates/umap/password_change.html:6
 msgid "Password change"
 msgstr ""
 
-#: templates/umap/password_change.html:7
+#: umap/templates/umap/password_change.html:7
 msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
 msgstr ""
 
-#: templates/umap/password_change.html:12
+#: umap/templates/umap/password_change.html:12
 msgid "Old password"
 msgstr ""
 
-#: templates/umap/password_change.html:14
+#: umap/templates/umap/password_change.html:14
 msgid "New password"
 msgstr ""
 
-#: templates/umap/password_change.html:16
+#: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr ""
 
-#: templates/umap/password_change.html:18
+#: umap/templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr ""
 
-#: templates/umap/password_change_done.html:6
+#: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr ""
 
-#: templates/umap/password_change_done.html:7
+#: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr ""
 
-#: templates/umap/search.html:13
+#: umap/templates/umap/search.html:13
 msgid "Not map found."
 msgstr "ካርታው አልተገኘም"
 
-#: templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "ካርታዎች መሀከል ፈልግ"
-
-#: templates/umap/search_bar.html:9
-msgid "Search"
-msgstr "ፈልግ"
-
-#: views.py:190
+#: umap/views.py:220
 msgid "View the map"
 msgstr "ካርታውን አሳይ"
 
-#~ msgid "Map settings"
-#~ msgstr "የካርታዎች ሁኔታ"
+#: umap/views.py:524
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "ካርታዎ ተፈጥሯል! ይህንን ካርታ ከሌላ ኮምፒውተር ላይ ሆነው ለማረም ከፈለጉ የሚከተለውን አድራሻ ይጠቀሙ %(anonymous_url)s"
+
+#: umap/views.py:529
+msgid "Congratulations, your map has been created!"
+msgstr "እንኳን ደስ አለዎ ካርታዎ ተፈጥሯል!"
+
+#: umap/views.py:561
+msgid "Map has been updated!"
+msgstr "ካርታው ታድሷል!"
+
+#: umap/views.py:587
+msgid "Map editors updated with success!"
+msgstr "የካርታ አራሚዎች በትክክል ታድሰዋል!"
+
+#: umap/views.py:612
+msgid "Only its owner can delete the map."
+msgstr "ካርታውን የሚሰርዘው ባለቤቱ ብቻ ነው።"
+
+#: umap/views.py:637
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "ካርታዎ ተዳቅሏል! ይህንን ካርታ ከሌላ ኮምፒውተር ላይ ሆነው ለማረም ከፈለጉ የሚከተለውን አድራሻ ይጠቀሙ %(anonymous_url)s"
+
+#: umap/views.py:642
+msgid "Congratulations, your map has been cloned!"
+msgstr "እንኳን ደስ አለዎ ካርታዎ ተዳቅሏል!"
+
+#: umap/views.py:809
+msgid "Layer successfully deleted."
+msgstr "ሌየሩ በትክክል ተሰርዟ"

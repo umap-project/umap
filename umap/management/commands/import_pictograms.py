@@ -3,7 +3,7 @@ import os
 from django.core.files import File
 from django.core.management.base import BaseCommand
 
-from leaflet_storage.models import Pictogram
+from umap.models import Pictogram
 
 
 class Command(BaseCommand):
@@ -14,7 +14,7 @@ class Command(BaseCommand):
         parser.add_argument('--attribution', required=True,
                             help='Attribution of the imported pictograms')
         parser.add_argument('--suffix',
-                            help='Optionnal suffix to add to each name')
+                            help='Optional suffix to add to each name')
         parser.add_argument('--force', action='store_true',
                             help='Update picto if it already exists.')
 
