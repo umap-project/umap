@@ -166,6 +166,10 @@ describe('L.Util', function () {
             assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.foo}.', {}), 'A phrase with a .');
         });
 
+        it('should handle fallback value if any', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.foo|default}.', {}), 'A phrase with a default.');
+        });
+
     });
 
     describe('#TextColorFromBackgroundColor', function () {
