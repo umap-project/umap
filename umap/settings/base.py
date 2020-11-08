@@ -191,7 +191,8 @@ ENABLE_ACCOUNT_LOGIN = False
 UMAP_ALLOW_ANONYMOUS = False
 UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',  # noqa
-    'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}'
+    'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}',
+    'search': 'https://photon.komoot.io/api/?',
 }
 UMAP_KEEP_VERSIONS = 10
 SITE_URL = "http://umap.org"
