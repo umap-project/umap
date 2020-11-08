@@ -546,3 +546,7 @@ L.U.Orderable = L.Evented.extend({
     }
 
 });
+
+L.LatLng.prototype.isValid = function () {
+    return !isNaN(this.lat) && !isNaN(this.lng);
+}

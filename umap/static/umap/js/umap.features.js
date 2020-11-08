@@ -585,6 +585,7 @@ L.U.Marker = L.Marker.extend({
         ];
         var builder = new L.U.FormBuilder(this, coordinatesOptions, {
             callback: function () {
+                if (!this._latlng.isValid()) return;
                 this._redraw();
                 this.bringToCenter();
             },
