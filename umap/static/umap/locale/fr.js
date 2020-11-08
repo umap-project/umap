@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Ouvrir l'élément courant au chargement",
     "Permalink": "Permalien",
     "The name of the property to use as feature unique identifier.": "Nom de la propriété utilisée pour identifier un élément de façon unique"
-};
+}
+;
 L.registerLocale("fr", locale);
 L.setLocale("fr");

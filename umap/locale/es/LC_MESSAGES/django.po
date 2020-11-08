@@ -5,16 +5,16 @@
 # Translators:
 # Gonzalo Gabriel Perez <zalitoar@gmail.com>, 2019
 # Igor Támara <igor@tamarapatino.org>, 2013
-# Marco Antonio <marcoantoniofrias@gmail.com>, 2014
-# Marco Antonio <marcoantoniofrias@gmail.com>, 2014,2016-2017
+# 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>, 2014
+# 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>, 2014,2016-2017,2020
 # Rafael Ávila Coya <ravilacoya@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-11-19 15:09+0000\n"
-"Last-Translator: Gonzalo Gabriel Perez <zalitoar@gmail.com>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2020-04-27 21:31+0000\n"
+"Last-Translator: 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>\n"
 "Language-Team: Spanish (http://www.transifex.com/openstreetmap/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +29,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Esta es una instancia de demostración, usada para pruebas y lanzamientos previos. Si necesitas una instancia estable, usa <a href=\"%(stable_url)s\">%(stable_url)s</a>. También puedes instalar tu propia instancia en tu servidor; ¡es <a href=\"%(repo_url)s\">código abierto</a>!"
+msgstr "Esta es una instancia de demostración, usada para pruebas y lanzamientos previos. Si necesita una instancia estable, use <a href=\"%(stable_url)s\">%(stable_url)s</a>. También puede instalar su propia instancia en su servidor; ¡es <a href=\"%(repo_url)s\">código abierto</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
@@ -144,11 +144,11 @@ msgstr "acercar/alejar"
 
 #: umap/models.py:129
 msgid "locate"
-msgstr "localizar"
+msgstr "ubicar"
 
 #: umap/models.py:129
 msgid "Locate user on load?"
-msgstr "¿Al cargar localizar el usuario?"
+msgstr "¿Al cargar ubicar al usuario?"
 
 #: umap/models.py:132
 msgid "Choose the map licence."
@@ -192,7 +192,7 @@ msgstr "Mostrar esta capa al cargar."
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr "Llévame a la página principal"
+msgstr "Lléveme a la página principal"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
@@ -233,7 +233,7 @@ msgstr "uMap te permite crear mapas con capas de <a href=\"%(osm_url)s\" />OpenS
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Elige las capas de tu mapa"
+msgstr "Elija las capas de su mapa"
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
@@ -241,7 +241,7 @@ msgstr "Añade PDIs: marcadores, líneas, polígonos..."
 
 #: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr "Elige los colores y los iconos de los PDIs"
+msgstr "Elija los colores y los iconos de los PDIs"
 
 #: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"

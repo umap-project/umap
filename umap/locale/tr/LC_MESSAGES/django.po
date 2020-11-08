@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Emrah Yılmaz <emrahy@yahoo.com>, 2020
 # Roman Neumüller, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-27 11:54+0000\n"
-"Last-Translator: Roman Neumüller\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2020-08-03 21:35+0000\n"
+"Last-Translator: Emrah Yılmaz <emrahy@yahoo.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/openstreetmap/umap/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,7 +69,7 @@ msgstr "Ara"
 #: umap/forms.py:40
 #, python-format
 msgid "Secret edit link is %s"
-msgstr ""
+msgstr "Saklı düzenleme bağlantısı şu: %s"
 
 #: umap/forms.py:44 umap/models.py:115
 msgid "Everyone can edit"
@@ -76,11 +77,11 @@ msgstr "Herkes düzeltebilir"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr ""
+msgstr "Yalnızca gizli düzenleme bağlantısı ile düzenlenebilir"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "Sitenin bakım modu olduğu için salt okunur"
 
 #: umap/models.py:17
 msgid "name"
@@ -116,7 +117,7 @@ msgstr "herkes (kamu)"
 
 #: umap/models.py:121
 msgid "anyone with link"
-msgstr ""
+msgstr "bağlantısı olan herkes"
 
 #: umap/models.py:122
 msgid "editors only"
@@ -249,7 +250,7 @@ msgstr ""
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr ""
+msgstr "Verileriniz için lisansı seçin"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
@@ -258,85 +259,85 @@ msgstr ""
 #: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "Ve üsttelik <a href=\"%(repo_url)s\">açık kaynak kodlu</a>!"
 
 #: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
-msgstr ""
+msgstr "Deneme sayfalarla oyna"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "uMaps'in haritası"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "İlham alın, haritalara göz atın"
 
 #: umap/templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
-msgstr ""
+msgstr "Giriş tamamlandı. Devam..."
 
 #: umap/templates/umap/map_list.html:7 umap/views.py:214
 msgid "by"
-msgstr ""
+msgstr "tarafından"
 
 #: umap/templates/umap/map_list.html:11
 msgid "More"
-msgstr ""
+msgstr "Daha fazla"
 
 #: umap/templates/umap/navigation.html:14
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: umap/templates/umap/navigation.html:15
 msgid "Feedback"
-msgstr ""
+msgstr "Geri bildirim"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
-msgstr ""
+msgstr "Şifre değiştir"
 
 #: umap/templates/umap/password_change.html:6
 msgid "Password change"
-msgstr ""
+msgstr "Şifre değiştirme işlemi"
 
 #: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Güvenlik açısından lütfen eski şifrenizi girip ardından doğru girdiğinizi doğrulayabilmemiz için yeni şifrenizi iki kez girin."
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
-msgstr ""
+msgstr "Eski şifre"
 
 #: umap/templates/umap/password_change.html:14
 msgid "New password"
-msgstr ""
+msgstr "Yeni şifre"
 
 #: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr ""
+msgstr "Yeni şifre tekrar"
 
 #: umap/templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr ""
+msgstr "Şifrem değiştir"
 
 #: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr ""
+msgstr "Şifrenin değiştirmesi başarıyla tamamlandı"
 
 #: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr ""
+msgstr "Şifren değiştirildi."
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
-msgstr ""
+msgstr "Harita bulunmadı"
 
 #: umap/views.py:220
 msgid "View the map"
-msgstr ""
+msgstr "Haritayı görüntüle"
 
 #: umap/views.py:524
 #, python-format
@@ -347,19 +348,19 @@ msgstr ""
 
 #: umap/views.py:529
 msgid "Congratulations, your map has been created!"
-msgstr ""
+msgstr "Tebrikler, haritan oluşturuldu!"
 
 #: umap/views.py:561
 msgid "Map has been updated!"
-msgstr ""
+msgstr "Harita güncellendi!"
 
 #: umap/views.py:587
 msgid "Map editors updated with success!"
-msgstr ""
+msgstr "Haritanın editörleri başarıyla güncellendi!"
 
 #: umap/views.py:612
 msgid "Only its owner can delete the map."
-msgstr ""
+msgstr "Salt haritanın sahibi haritayı silebilir."
 
 #: umap/views.py:637
 #, python-format
@@ -374,4 +375,4 @@ msgstr ""
 
 #: umap/views.py:809
 msgid "Layer successfully deleted."
-msgstr ""
+msgstr "Katman başarıyla silindi"

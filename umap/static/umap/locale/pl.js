@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Otwórz bieżący obiekt po załadowaniu",
     "Permalink": "Bezpośredni odnośnik.",
     "The name of the property to use as feature unique identifier.": "Nazwa właściwości używana jako unikalny identyfikator obiektu."
-};
+}
+;
 L.registerLocale("pl", locale);
 L.setLocale("pl");

@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("sl", locale);
 L.setLocale("sl");
