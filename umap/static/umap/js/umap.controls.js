@@ -841,6 +841,7 @@ L.U.LocateControl = L.Control.extend({
     activate: function () {
         this._map.locate({
             setView: true,
+            maxZoom: this._map.getZoom(),
             enableHighAccuracy: true,
             watch: true
         });
