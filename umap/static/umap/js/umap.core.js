@@ -125,17 +125,25 @@ L.Util.usableOption = function (options, option) {
 };
 
 L.Util.greedyTemplate = function (str, data, ignore) {
-    // Don't throw error if some key is missing
-    return str.replace(/\{ *([\w_\:\.]+)(\|([^\}]+))? *\}/g, function (str, key, _, fallback) {
-        var path = key.split('.'),
-            leaf = path.length - 1, value = data;
+    function getValue(data, path) {
+        var value = data
         for (var i = 0; i < path.length; i++) {
             value = value[path[i]]
-            if (value === undefined) {
-                if (ignore) value = str;
-                else value = fallback || '';
-                break;
-            }
+            if (value === undefined) break;
+        }
+        return value;
+    }
+
+    return str.replace(/\{ *([\w_\:\."\|]+) *\}/g, function (str, key) {
+        var vars = key.split('|'), value, path;
+        for (var i = 0; i < vars.length; i++) {
+            path = vars[i];
+            if (path.startsWith('"') && path.endsWith('"')) value = path.substring(1, path.length -1); // static default value.
+            else value = getValue(data, path.split('.'));
+        }
+        if (value === undefined) {
+            if (ignore) value = str;
+            else value = '';
         }
         return value;
     });

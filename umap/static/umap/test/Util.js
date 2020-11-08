@@ -167,7 +167,15 @@ describe('L.Util', function () {
         });
 
         it('should handle fallback value if any', function () {
-            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.foo|default}.', {}), 'A phrase with a default.');
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|"default"}.', {}), 'A phrase with a default.');
+        });
+
+        it('should handle fallback var if any', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|fallback}.', {fallback: "default"}), 'A phrase with a default.');
+        });
+
+        it('should handle multiple fallbacks', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {}), 'A phrase with a default.');
         });
 
     });
