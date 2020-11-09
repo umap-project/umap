@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Litur á texta fyrir skýringu á klasa",
     "Text formatting": "Snið á texta",
     "The name of the property to use as feature label (ex.: \"nom\")": "Heiti eigindisins sem á að nota sem skýringu á fitju (dæmi: \"nafn\")",
-    "The zoom and center have been setted.": "Búið er að stilla aðdrátt og miðjun.",
+    "The zoom and center have been set.": "Búið er að stilla aðdrátt og miðjun.",
     "To use if remote server doesn't allow cross domain (slower)": "Nota ef fjartengdur þjónn leyfir ekki millivísanir léna (hægvirkara)",
     "To zoom": "Í aðdrátt",
     "Toggle edit mode (Shift+Click)": "Víxla breytingaham af/á (Shift+Smella)",

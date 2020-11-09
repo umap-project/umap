@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Barva textu popisku shluku",
     "Text formatting": "Formátování textu",
     "The name of the property to use as feature label (ex.: \"nom\")": "Název vlastnosti pro použití v popisku objektu (ex.: \"nom\")",
-    "The zoom and center have been setted.": "Přiblížení a střed mapy byly nastaveny",
+    "The zoom and center have been set.": "Přiblížení a střed mapy byly nastaveny",
     "To use if remote server doesn't allow cross domain (slower)": "Pro případ že vzdálený server neumožňuje cross domain (pomalejší)",
     "To zoom": "Maximální přiblížení",
     "Toggle edit mode (Shift+Click)": "Přepnout do editovacího módu (Shift+Click)",

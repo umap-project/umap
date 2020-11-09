@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Χρώμα κειμένου για την ετικέτα ομαδοποίησης",
     "Text formatting": "Μορφοποίηση κειμένου",
     "The name of the property to use as feature label (ex.: \"nom\")": "Το όνομα της ιδιότητας που θα χρησιμοποιηθεί ως ετικέτα χαρακτηριστικών (π.χ. \"nom\")",
-    "The zoom and center have been setted.": "Το επίπεδο μεγέθυνσης  και το κέντρο χάρτη έχουν ρυθμιστεί.",
+    "The zoom and center have been set.": "Το επίπεδο μεγέθυνσης  και το κέντρο χάρτη έχουν ρυθμιστεί.",
     "To use if remote server doesn't allow cross domain (slower)": "Για χρήση εάν ο απομακρυσμένος διακομιστής δεν επιτρέπει cross domain (πιο αργή)",
     "To zoom": "Για Μεγέθυνση  ",
     "Toggle edit mode (Shift+Click)": "Εναλλαγή λειτουργίας επεξεργασίας (Shift+Click)",

@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Kleur van de text voor het label van de cluster",
     "Text formatting": "Opmaak van de tekst",
     "The name of the property to use as feature label (ex.: \"nom\")": "De naam van de eigenschap om het object te labelen (vb.: \"naam\")",
-    "The zoom and center have been setted.": "Het zoomniveau en de positie op de kaarten zijn ingesteld",
+    "The zoom and center have been set.": "Het zoomniveau en de positie op de kaarten zijn ingesteld",
     "To use if remote server doesn't allow cross domain (slower)": "Activeer indien de externe server geen cross domain toelaat (trager)",
     "To zoom": "Tot zoomniveau",
     "Toggle edit mode (Shift+Click)": "Schakelaar voor editeermodus (Shift+Click)",

@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Text color for the cluster label",
     "Text formatting": "Text formatting",
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
-    "The zoom and center have been setted.": "Zoom och centrering har satts.",
+    "The zoom and center have been set.": "Zoom och centrering har satts.",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "To zoom",
     "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",

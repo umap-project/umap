@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Kolor tekstu dla etykiety grupy",
     "Text formatting": "Formatowanie tekstu",
     "The name of the property to use as feature label (ex.: \"nom\")": "Nazwa właściwości, która ma być używana jako etykieta obiektu (np. \"name\")",
-    "The zoom and center have been setted.": "Przybliżenie i środek zostały ustawione.",
+    "The zoom and center have been set.": "Przybliżenie i środek zostały ustawione.",
     "To use if remote server doesn't allow cross domain (slower)": "Używaj, jeśli zdalny serwer nie zezwala na cross domain (wolne)",
     "To zoom": "Przybliżać",
     "Toggle edit mode (Shift+Click)": "Przełącz tryb edycji (Shift+Klik)",

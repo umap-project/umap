@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Textfarbe für die Gruppierungsbezeichnung",
     "Text formatting": "Textformatierung",
     "The name of the property to use as feature label (ex.: \"nom\")": "Den Namen des Merkmals als Elementbezeichnung verwenden (z.B.: \"Name\")",
-    "The zoom and center have been setted.": "Zoomstufe und Mittelpunkt wurden gespeichert.",
+    "The zoom and center have been set.": "Zoomstufe und Mittelpunkt wurden gespeichert.",
     "To use if remote server doesn't allow cross domain (slower)": "Anzuwenden, wenn der Zielserver kein Cross Origin Resource Sharing (CORS) erlaubt (langsamer).",
     "To zoom": "Bis Zoomstufe",
     "Toggle edit mode (Shift+Click)": "Bearbeitungsmodus umschalten (Umschalt+Klick)",
