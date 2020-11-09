@@ -284,7 +284,7 @@
     "Text color for the cluster label": "Color del texto para la etiqueta clúster",
     "Text formatting": "Formato de texto",
     "The name of the property to use as feature label (ex.: \"nom\")": "El nombre de la propiedad a usar como etiqueta del elemento (ejemplo: «nom»)",
-    "The zoom and center have been setted.": "El acercamiento y el centrado han sido establecidos.",
+    "The zoom and center have been set.": "El acercamiento y el centrado han sido establecidos.",
     "To use if remote server doesn't allow cross domain (slower)": "Para utilizar si el servidor remoto no permite dominios cruzados (más lento)",
     "To zoom": "Para acercar/alejar",
     "Toggle edit mode (Shift+Click)": "Conmuta el modo edición (Shift+Clic)",

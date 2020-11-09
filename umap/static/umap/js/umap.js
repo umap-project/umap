@@ -578,7 +578,7 @@ L.U.Map.include({
         this.options.center = this.getCenter();
         this.options.zoom = this.getZoom();
         this.isDirty = true;
-        this.ui.alert({content: L._('The zoom and center have been setted.'), 'level': 'info'});
+        this.ui.alert({content: L._('The zoom and center have been set.'), 'level': 'info'});
     },
 
     updateTileLayers: function () {

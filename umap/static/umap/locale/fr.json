@@ -284,7 +284,7 @@
     "Text color for the cluster label": "Couleur du texte du cluster",
     "Text formatting": "Mise en forme du texte",
     "The name of the property to use as feature label (ex.: \"nom\")": "Le nom de la propriété à utiliser comme libellé des éléments (ex. : \"nom\")",
-    "The zoom and center have been setted.": "Le zoom et le centre ont été enregistrés.",
+    "The zoom and center have been set.": "Le zoom et le centre ont été enregistrés.",
     "To use if remote server doesn't allow cross domain (slower)": "Cocher si le serveur distant n'autorise pas le cross domain (plus lent)",
     "To zoom": "Jusqu'au zoom",
     "Toggle edit mode (Shift+Click)": "Alterner le mode édition (Shift+Clic)",

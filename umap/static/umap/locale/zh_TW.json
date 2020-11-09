@@ -284,7 +284,7 @@
     "Text color for the cluster label": "叢集標籤的文字顏色",
     "Text formatting": "文字格式",
     "The name of the property to use as feature label (ex.: \"nom\")": "用作圖徵標籤的屬性名稱 (例如：“nom”)",
-    "The zoom and center have been setted.": "已完成置中及切換功能設定",
+    "The zoom and center have been set.": "已完成置中及切換功能設定",
     "To use if remote server doesn't allow cross domain (slower)": "如果遠端伺服器不允許跨網域存取時使用 (效率較差)",
     "To zoom": "至縮放大小",
     "Toggle edit mode (Shift+Click)": "切換編輯模式 (Shift+Click)",
