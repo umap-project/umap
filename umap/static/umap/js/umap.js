@@ -178,6 +178,7 @@ L.U.Map.include({
         // Creation mode
         if (!this.options.umap_id) {
             this.isDirty = true;
+            this._default_extent = true;
             this.options.name = L._('Untitled map');
             this.options.allowEdit = true;
             var datalayer = this.createDataLayer();
@@ -578,6 +579,7 @@ L.U.Map.include({
         this.options.center = this.getCenter();
         this.options.zoom = this.getZoom();
         this.isDirty = true;
+        this._default_extent = false;
         this.ui.alert({content: L._('The zoom and center have been set.'), 'level': 'info'});
     },
 
@@ -1089,6 +1091,7 @@ L.U.Map.include({
 
     save: function () {
         if (!this.isDirty) return;
+        if (this._default_extent) this.updateExtent();
         var geojson = {
             type: 'Feature',
             geometry: this.geometry(),
