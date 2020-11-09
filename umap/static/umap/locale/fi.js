@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Tekstin väri klusterietiketissä",
     "Text formatting": "Tekstin muotoilu",
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
-    "The zoom and center have been setted.": "Kartan keskitys ja zoomaustaso on asetettu.",
+    "The zoom and center have been set.": "Kartan keskitys ja zoomaustaso on asetettu.",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "Zoomaukseen",
     "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",

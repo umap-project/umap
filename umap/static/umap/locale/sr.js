@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Text color for the cluster label",
     "Text formatting": "Text formatting",
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
-    "The zoom and center have been setted.": "Мапа је центрирана.",
+    "The zoom and center have been set.": "Мапа је центрирана.",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "Увећај",
     "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",
