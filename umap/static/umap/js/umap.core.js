@@ -140,6 +140,7 @@ L.Util.greedyTemplate = function (str, data, ignore) {
             path = vars[i];
             if (path.startsWith('"') && path.endsWith('"')) value = path.substring(1, path.length -1); // static default value.
             else value = getValue(data, path.split('.'));
+            if (value !== undefined) break;
         }
         if (value === undefined) {
             if (ignore) value = str;

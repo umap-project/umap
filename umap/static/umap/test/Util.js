@@ -178,6 +178,13 @@ describe('L.Util', function () {
             assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {}), 'A phrase with a default.');
         });
 
+        it('should use the first defined value', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {try: { again: 'please'}}), 'A phrase with a please.');
+        });
+
+        it('should use the first defined value', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {try: { again: 'again'}, fr: {var: {bar: 'value'}}}), 'A phrase with a value.');
+        });
     });
 
     describe('#TextColorFromBackgroundColor', function () {
