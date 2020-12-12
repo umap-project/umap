@@ -134,8 +134,11 @@ L.Util.greedyTemplate = function (str, data, ignore) {
         return value;
     }
 
-    return str.replace(/\{ *([\w_\:\."\|]+) *\}/g, function (str, key) {
+    return str.replace(/\{ *([\w_\:\.\|]+)(?:\|("[^"]*"))? *\}/g, function (str, key, staticFallback) {
         var vars = key.split('|'), value, path;
+        if (staticFallback !== undefined) {
+            vars.push(staticFallback);
+        }
         for (var i = 0; i < vars.length; i++) {
             path = vars[i];
             if (path.startsWith('"') && path.endsWith('"')) value = path.substring(1, path.length -1); // static default value.
