@@ -23,7 +23,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_bytes, smart_bytes
 from django.utils.http import http_date
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
 from django.views.generic import DetailView, TemplateView, View
 from django.views.generic.base import RedirectView
@@ -35,7 +35,7 @@ from .forms import (DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_CENTER,
                     AnonymousMapPermissionsForm, DataLayerForm, FlatErrorList,
                     MapSettingsForm, UpdateMapPermissionsForm)
 from .models import DataLayer, Licence, Map, Pictogram, TileLayer
-from .utils import get_uri_template, gzip_file
+from .utils import get_uri_template, gzip_file, is_ajax
 
 try:
     # python3
@@ -116,7 +116,7 @@ class Home(TemplateView, PaginatorMixin):
         """
         Dispatch template according to the kind of request: ajax or normal.
         """
-        if self.request.is_ajax():
+        if is_ajax(self.request):
             return [self.list_template_name]
         else:
             return [self.template_name]
@@ -159,7 +159,7 @@ class UserMaps(DetailView, PaginatorMixin):
         """
         Dispatch template according to the kind of request: ajax or normal.
         """
-        if self.request.is_ajax():
+        if is_ajax(self.request):
             return [self.list_template_name]
         else:
             return super(UserMaps, self).get_template_names()
@@ -192,7 +192,7 @@ class Search(TemplateView, PaginatorMixin):
         """
         Dispatch template according to the kind of request: ajax or normal.
         """
-        if self.request.is_ajax():
+        if is_ajax(self.request):
             return [self.list_template_name]
         else:
             return super(Search, self).get_template_names()
@@ -239,7 +239,7 @@ showcase = MapsShowCase.as_view()
 
 def validate_url(request):
     assert request.method == "GET"
-    assert request.is_ajax()
+    assert is_ajax(request)
     url = request.GET.get('url')
     assert url
     try:
