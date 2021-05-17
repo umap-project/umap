@@ -1,6 +1,6 @@
-import imp
 import os
 import sys
+import types
 
 from django.utils.termcolors import colorize
 
@@ -22,7 +22,7 @@ if not path:
             print(colorize(msg, fg='red'))
             sys.exit(1)
 
-d = imp.new_module('config')
+d = types.ModuleType('config')
 d.__file__ = path
 try:
     with open(path) as config_file:

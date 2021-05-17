@@ -1,8 +1,8 @@
-Django==2.2.17
+Django==3.2.3
 django-agnocomplete==1.0.0
-django-compressor==2.4
-Pillow==8.0.1
-psycopg2==2.8.4
-requests==2.23.0
-social-auth-core==3.3.2
-social-auth-app-django==3.1.0
+django-compressor==2.4.1
+Pillow==8.2.0
+psycopg2==2.8.6
+requests==2.25.1
+social-auth-core==4.1.0
+social-auth-app-django==4.0.0
