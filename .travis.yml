@@ -1,21 +1,22 @@
-sudo: false
+os: linux
 language: python
-dist: xenial
+dist: focal
 python:
 - "3.6"
 - "3.7"
 - "3.8"
 - "3.9"
 services:
-- postgresql
+  - postgresql
 addons:
-  postgresql: "9.6"
   apt:
     packages:
     - libgdal-dev
-    - postgresql-9.6-postgis-2.4
+    - postgresql-12-postgis-3
 env:
-- UMAP_SETTINGS=umap/tests/settings.py
+  global:
+  - PGPORT=5432
+  - UMAP_SETTINGS=umap/tests/settings.py
 install:
 - pip install .
 - pip install -r requirements-dev.txt
@@ -23,7 +24,7 @@ script: make test
 notifications:
   irc:
     channels:
-    - "irc.freenode.net#umap"
+    - "irc.libera.chat#umap"
     on_success: change
     on_failure: always
   email: false
