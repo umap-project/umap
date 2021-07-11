@@ -3,17 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Emmanuel Verigos <emverigos@geodev.gr>, 2018
+# Emmanuel Verigos <emverigos@geodev.gr>, 2017-2018,2021
 # Emmanuel Verigos <emverigos@geodev.gr>, 2018
 # Emmanuel Verigos <emverigos@geodev.gr>, 2017
 # prendi <prendi@openmailbox.org>, 2017
+# Yannis Kaskamanidis <kiolalis@gmail.com>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2021-07-11 08:06+0000\n"
+"Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/openstreetmap/umap/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +29,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Αυτό η εκδοχή, χρησιμοποιήθηκε για δοκιμή και προκαταρκτικές εκδόσεις. Αν χρειάζεσαι μια σταθερή έκδοση, παρακαλώ χρησιμοποίησε <a href=\"%(stable_url)s\">%(stable_url)s</a>. Μπορείς επίσης φιλοξενήσεις την δική σου εκδοχή, είναι <a href=\"%(repo_url)s\">ανοικτού κώδικα</a>!"
+msgstr "Αυτή είναι μια έκδοση επίδειξης, που χρησιμοποιήθηκε για δοκιμές και προκαταρκτικές εκδόσεις. Αν χρειάζεστε μια σταθερή έκδοση, παρακαλώ χρησιμοποιήστε την <a href=\"%(stable_url)s\">%(stable_url)s</a>. Μπορείτε, επίσης, να φιλοξενήσετε τη δική σας έκδοση, είναι <a href=\"%(repo_url)s\">ανοικτού κώδικα</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
@@ -60,13 +61,13 @@ msgstr "Αποσύνδεση"
 #: tmp/framacarte/templates/umap/search_bar.html:6
 #: umap/templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr "Ψάξε χάρτες "
+msgstr "Αναζήτηση χαρτών"
 
 #: tmp/framacarte/templates/umap/search_bar.html:10
 #: tmp/framacarte/templates/umap/search_bar.html:13
 #: umap/templates/umap/search_bar.html:9
 msgid "Search"
-msgstr "Ψάξε "
+msgstr "Αναζήτηση"
 
 #: umap/forms.py:40
 #, python-format
@@ -79,39 +80,39 @@ msgstr "Επεξεργασία από όλους"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr "Επεξεργάσιμο μόνο με μυστικό σύνδεσμο "
+msgstr "Επεξεργάσιμο μόνο με μυστικό σύνδεσμο"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "Ο δικτυακός τόπος είναι μόνο για ανάγνωση λόγο επεξεργασίας"
+msgstr "Λόγω συντήρησης, ο ιστότοπος είναι μόνο για ανάγνωση"
 
 #: umap/models.py:17
 msgid "name"
-msgstr "'Ονομα"
+msgstr "Όνομα"
 
 #: umap/models.py:48
 msgid "details"
-msgstr "Λεπτομέρειες "
+msgstr "Λεπτομέρειες"
 
 #: umap/models.py:49
 msgid "Link to a page where the licence is detailed."
-msgstr "Σύνδεσμος σελίδας Αναλυτικής Άδειας Χρήσης "
+msgstr "Σύνδεσμος σελίδας Αναλυτικής Άδειας Χρήσης."
 
 #: umap/models.py:63
 msgid "URL template using OSM tile format"
-msgstr "URL υπόδειγμα με χρήση μορφή υποβάθρου  OSM "
+msgstr "URL προτύπου που χρησιμοποιεί μορφοποίηση πλακιδίων OSM"
 
 #: umap/models.py:71
 msgid "Order of the tilelayers in the edit box"
-msgstr "Σειρά υποβάθρων στο πλαίσιο επεξεργασίας "
+msgstr "Σειρά των υπόβαθρων στο πλαίσιο επεξεργασίας"
 
 #: umap/models.py:116
 msgid "Only editors can edit"
-msgstr "Μόνο οι συντάκτες μπορούν να επεξεργαστούν"
+msgstr "Μόνο οι συντάκτες μπορούν να κάνουν επεξεργασία"
 
 #: umap/models.py:117
 msgid "Only owner can edit"
-msgstr "Μόνο ο ιδιοκτήτης μπορεί να επεξεργαστεί"
+msgstr "Μόνο ο ιδιοκτήτης μπορεί να κάνει επεξεργασία"
 
 #: umap/models.py:120
 msgid "everyone (public)"
@@ -119,15 +120,15 @@ msgstr "Όλοι (κοινό)"
 
 #: umap/models.py:121
 msgid "anyone with link"
-msgstr "Οποιοσδήποτε έχει τον σύνδεσμο "
+msgstr "Οποιοσδήποτε έχει τον σύνδεσμο"
 
 #: umap/models.py:122
 msgid "editors only"
-msgstr "Συντάκτες μόνο"
+msgstr "Μόνο συντάκτες"
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "Αποκλεισμένο"
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
@@ -139,19 +140,19 @@ msgstr "Κέντρο"
 
 #: umap/models.py:128
 msgid "zoom"
-msgstr "Μεγέθυνση "
+msgstr "Εστίαση"
 
 #: umap/models.py:129
 msgid "locate"
-msgstr "Εντοπισμός Θέσης"
+msgstr "Εντοπισμός θέσης"
 
 #: umap/models.py:129
 msgid "Locate user on load?"
-msgstr "Εντοπισμός θέσης κατά την φόρτωση ;"
+msgstr "Εντοπισμός θέσης χρήστη κατά την φόρτωση;"
 
 #: umap/models.py:132
 msgid "Choose the map licence."
-msgstr "Επιλογή άδειας χρήσης του χάρτη"
+msgstr "Επιλογή άδειας χρήσης του χάρτη."
 
 #: umap/models.py:133
 msgid "licence"
@@ -167,11 +168,11 @@ msgstr "Συντάκτες"
 
 #: umap/models.py:140
 msgid "edit status"
-msgstr "Επεξεργασία κατάστασης"
+msgstr "Κατάσταση επεξεργασίας"
 
 #: umap/models.py:141
 msgid "share status"
-msgstr "Διαμοιρασμός κατάστασης"
+msgstr "Κατάσταση διαμοιρασμού"
 
 #: umap/models.py:142
 msgid "settings"
@@ -179,37 +180,37 @@ msgstr "Ρυθμίσεις"
 
 #: umap/models.py:210
 msgid "Clone of"
-msgstr "Κλωνοποίηση "
+msgstr "Κλώνος του"
 
 #: umap/models.py:261
 msgid "display on load"
-msgstr "Εμφάνιση κατά την φόρτωση "
+msgstr "Εμφάνιση κατά την φόρτωση"
 
 #: umap/models.py:262
 msgid "Display this layer on load."
-msgstr "Εμφάνισε αυτό το επίπεδο κατά την φόρτωση "
+msgstr "Εμφάνιση αυτού του επιπέδου κατά την φόρτωση."
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr "Επιστροφή στην Αρχική "
+msgstr "Επιστροφή στην αρχική σελίδα"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr "Περιήγηση %(current_user)s χάρτη"
+msgstr "Περιήγηση στους χάρτες του χρήστη %(current_user)s"
 
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr "%(current_user)s δεν έχει χάρτη"
+msgstr "Ο %(current_user)s χρήστης δεν έχει χάρτες"
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr "Παρακαλώ συνδεθείτε με τον λογαριασμό σας "
+msgstr "Παρακαλώ συνδεθείτε με τον λογαριασμό σας"
 
 #: umap/templates/registration/login.html:18
 msgid "Username"
-msgstr "Όνομα Χρήστη "
+msgstr "Όνομα χρήστη"
 
 #: umap/templates/registration/login.html:20
 msgid "Password"
@@ -217,63 +218,63 @@ msgstr "Κωδικός πρόσβασης"
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
-msgstr "Σύνδεση "
+msgstr "Σύνδεση"
 
 #: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
-msgstr "Παρακαλώ επιλέξτε παροχέα"
+msgstr "Παρακαλώ επιλέξτε έναν πάροχο"
 
 #: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "Το uMap σου επιτρέπει να δημιουργήσεις χάρτες με<a href=\"%(osm_url)s\" />OpenStreetMap</a> επίπεδα πολύ γρήγορα και να τα ενσωματώσεις στον ιστότοπο σου."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Διάλεξε το χαρτογραφικό επίπεδο "
+msgstr "Επιλέξτε επίπεδα από τον χάρτη σας"
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Πρόσθεσε σημεία ενδιαφέροντος : δείκτες, γραμμές, πολύγωνα..."
+msgstr "Προσθήκη σημείων ενδιαφέροντος: δείκτες, γραμμές, πολύγωνα..."
 
 #: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr "Διαχείριση χρωμάτων και συμβόλων σημείων ενδιαφέροντος "
+msgstr "Διαχείριση χρωμάτων και συμβόλων των σημείων ενδιαφέροντος"
 
 #: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Διαχείριση επιλογών χάρτη: εμφάνιση χάρτη προσανατολισμού, γεωεντοπισμός χρήστη κατά την φόρτωση "
+msgstr "Διαχείριση επιλογών χάρτη: εμφάνιση χάρτη προσανατολισμού, γεωεντοπισμός χρήστη κατά την φόρτωση..."
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Ομαδική εισαγωγή για γεωχωρικά δεδομένα (geojson, gpx, kml, osm...)"
+msgstr "Μαζική εισαγωγή δομημένων γεωγραφικών δεδομένων (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Διάλεξε άδεια χρήσης των δεδομένων "
+msgstr "Επιλογή άδειας χρήσης των δεδομένων σας"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
-msgstr " Ενσωμάτωσε και μοιράσου τον χάρτη "
+msgstr "Ενσωματώστε και διαμοιραστείτε τον χάρτης σας"
 
 #: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Και είναι <a href=\"%(repo_url)s\">ανοικτού κώδικα </a>! "
+msgstr "Και είναι <a href=\"%(repo_url)s\">ανοικτού κώδικα</a>!"
 
 #: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
-msgstr "Παίξε με το παράδειγμα "
+msgstr "Δοκιμή με την έκδοση επίδειξης"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr "Χάρτης από τους uMaps"
+msgstr "Χάρτης των uMaps"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Εμπνεύσου, περιηγήσου στους χάρτες"
+msgstr "Έμπνευση και περιήγηση στους χάρτες"
 
 #: umap/templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
@@ -285,7 +286,7 @@ msgstr "Από"
 
 #: umap/templates/umap/map_list.html:11
 msgid "More"
-msgstr "περισσότερα "
+msgstr "Περισσότερα"
 
 #: umap/templates/umap/navigation.html:14
 msgid "About"
@@ -293,21 +294,21 @@ msgstr "Σχετικά"
 
 #: umap/templates/umap/navigation.html:15
 msgid "Feedback"
-msgstr "Κρητική"
+msgstr "Ανατροφοδότηση"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
-msgstr "Αλλαγή κωδικού πρόσβασης "
+msgstr "Αλλαγή κωδικού πρόσβασης"
 
 #: umap/templates/umap/password_change.html:6
 msgid "Password change"
-msgstr "Κωδικός πρόσβασης αλλαγή"
+msgstr "Αλλαγή κωδικού πρόσβασης"
 
 #: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr "Παρακαλώ εισάγεται τον παλιό κωδικό πρόσβασης, για λόγους ασφαλείας, και μετά εισάγεται τον νέο κωδικό πρόσβασης δύο φορές ώστε να επιβεβαιώσουμε ότι πληκτρολογήθηκε σωστά."
+msgstr "Παρακαλώ εισάγετε τον παλιό κωδικό πρόσβασης και μετά εισάγετε τον νέο κωδικό πρόσβασης δύο φορές, ώστε να επιβεβαιωθεί ότι πληκτρολογήθηκε σωστά."
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
@@ -319,23 +320,23 @@ msgstr "Νέος κωδικός πρόσβασης"
 
 #: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr "Νέα επιβεβαίωση κωδικού πρόσβασης"
+msgstr "Επιβεβαίωση νέου κωδικού πρόσβασης"
 
 #: umap/templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr "Αλλαγή κωδικού πρόσβασης "
+msgstr "Αλλαγή του κωδικού πρόσβασης"
 
 #: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr "Επιτυχής αλλαγή κωδικού πρόσβασης"
+msgstr "Η αλλαγή του κωδικού πρόσβασης ήταν επιτυχημένη"
 
 #: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr "Ο κωδικός πρόσβασης άλλαξε "
+msgstr "Ο κωδικός πρόσβασης άλλαξε"
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
-msgstr "Δεν βρέθηκε χάρτης"
+msgstr "Δεν βρέθηκε χάρτης."
 
 #: umap/views.py:220
 msgid "View the map"
@@ -346,35 +347,35 @@ msgstr "Προβολή του χάρτη"
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr "Ο χάρτης σου δημιουργήθηκε ! Αν επιθυμείς την επεξεργασία αυτού του χάρτη από άλλο υπολογιστή, παρακαλώ χρησιμοποίησε αυτόν τον σύνδεσμο:%(anonymous_url)s"
+msgstr "Ο χάρτης σας δημιουργήθηκε! Αν επιθυμείτε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
 #: umap/views.py:529
 msgid "Congratulations, your map has been created!"
-msgstr "Συγχαρητήρια, ο χάρτης σου δημιουργήθηκε !"
+msgstr "Συγχαρητήρια, ο χάρτης σας δημιουργήθηκε!"
 
 #: umap/views.py:561
 msgid "Map has been updated!"
-msgstr "Ο χάρτης ανανεώθηκε !"
+msgstr "Ο χάρτης ενημερώθηκε!"
 
 #: umap/views.py:587
 msgid "Map editors updated with success!"
-msgstr "Ανανέωση συντακτών επιτυχείς !"
+msgstr "Η ενημέρωση των συντακτών χάρτη ήταν επιτυχής!"
 
 #: umap/views.py:612
 msgid "Only its owner can delete the map."
-msgstr "Μονό ό ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη. "
+msgstr "Μονό ο ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη."
 
 #: umap/views.py:637
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr "Ο χάρτης κλωνοποιήθηκε! Αν επιθυμείς την επεξεργασία αυτού του χάρτη από άλλο υπολογιστή, παρακαλώ χρησιμοποίησε αυτόν τον σύνδεσμο:%(anonymous_url)s"
+msgstr "Ο χάρτης κλωνοποιήθηκε! Αν θέλετε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
 #: umap/views.py:642
 msgid "Congratulations, your map has been cloned!"
-msgstr "Συγχαρητήρια ο χάρτης σου κλωνοποιήθηκε ! "
+msgstr "Συγχαρητήρια ο χάρτης σας κλωνοποιήθηκε!"
 
 #: umap/views.py:809
 msgid "Layer successfully deleted."
-msgstr "Επίπεδο διαγράφηκε επιτυχώς."
+msgstr "Το επίπεδο διαγράφηκε με επιτυχία."

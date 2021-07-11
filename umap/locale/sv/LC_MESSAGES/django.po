@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Acrylic Boy, 2020
+# d402bbf52766ea36c1c6bd472b2de8fb_a8a94ad, 2020
 # carlbacker, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-03-10 20:08+0000\n"
-"Last-Translator: Binnette <binnette@gmail.com>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2020-12-04 00:01+0000\n"
+"Last-Translator: carlbacker\n"
 "Language-Team: Swedish (http://www.transifex.com/openstreetmap/umap/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -250,7 +250,7 @@ msgstr "Importera strukturerad geodata (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Välja licens för dina data"
+msgstr "Välj licens för dina data"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
@@ -267,7 +267,7 @@ msgstr "Lek med demotjänsten"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "Karta över uMap-kartor."
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
@@ -333,7 +333,7 @@ msgstr "Ditt lösenord har ändrats."
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
-msgstr ""
+msgstr "Ingen karta hittades."
 
 #: umap/views.py:220
 msgid "View the map"
