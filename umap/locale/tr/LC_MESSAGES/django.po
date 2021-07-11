@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Emrah Yılmaz <emrahy@yahoo.com>, 2020
+# irem TACYILDIZ <iremeriaia@gmail.com>, 2021
 # Roman Neumüller, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2020-08-03 21:35+0000\n"
-"Last-Translator: Emrah Yılmaz <emrahy@yahoo.com>\n"
+"PO-Revision-Date: 2021-01-05 16:24+0000\n"
+"Last-Translator: irem TACYILDIZ <iremeriaia@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/openstreetmap/umap/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -93,15 +94,15 @@ msgstr "ayrıntılar"
 
 #: umap/models.py:49
 msgid "Link to a page where the licence is detailed."
-msgstr ""
+msgstr "Lisansın detaylandırıldığı bir sayfaya bağlantı"
 
 #: umap/models.py:63
 msgid "URL template using OSM tile format"
-msgstr ""
+msgstr "URL şablonu OSM döşeme biçimini kullanıyor"
 
 #: umap/models.py:71
 msgid "Order of the tilelayers in the edit box"
-msgstr ""
+msgstr "Harita katmanları sırası düzenleme kutusunda"
 
 #: umap/models.py:116
 msgid "Only editors can edit"
@@ -145,7 +146,7 @@ msgstr "yerini belirt"
 
 #: umap/models.py:129
 msgid "Locate user on load?"
-msgstr ""
+msgstr "Yüklenen kullanıcılar bulunsun mu?"
 
 #: umap/models.py:132
 msgid "Choose the map licence."
@@ -242,11 +243,11 @@ msgstr "Renkleri ve sembolleri yönet"
 
 #: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
+msgstr "Harita seçeneklerini yönet: bir mini harita göster, yükleyen kullanıcıyı göster"
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "Coğrafi yapılandırılmış verileri yığın olarak içe aktar (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
@@ -254,7 +255,7 @@ msgstr "Verileriniz için lisansı seçin"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
-msgstr ""
+msgstr "Haritanızı yerleştirin ve paylaşın"
 
 #: umap/templates/umap/about_summary.html:23
 #, python-format
@@ -344,7 +345,7 @@ msgstr "Haritayı görüntüle"
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr ""
+msgstr "Haritanız oluşturuldu! Eğer bu haritayı başka bir bilgisayardan düzenlemek isterseniz, lütfen bu bağlantıyı kullanın: %(anonymous_url)s"
 
 #: umap/views.py:529
 msgid "Congratulations, your map has been created!"
@@ -367,11 +368,11 @@ msgstr "Salt haritanın sahibi haritayı silebilir."
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr ""
+msgstr "Haritanız çoğaltıldı! Eğer bu haritayı başka bir bilgisayardan düzenlemek isterseniz, lütfen bu bağlantıyı kullanın: %(anonymous_url)s"
 
 #: umap/views.py:642
 msgid "Congratulations, your map has been cloned!"
-msgstr ""
+msgstr "Tebrikler, haritanız çoğaltıldı!"
 
 #: umap/views.py:809
 msgid "Layer successfully deleted."
