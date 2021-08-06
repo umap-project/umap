@@ -4,7 +4,7 @@ import time
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.core.signing import Signer
 from django.template.defaultfilters import slugify
 from django.core.files.base import File

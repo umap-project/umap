@@ -10,14 +10,14 @@ from umap.models import DataLayer, Licence, Map, TileLayer
 User = get_user_model()
 
 
-class LicenceFactory(factory.DjangoModelFactory):
+class LicenceFactory(factory.django.DjangoModelFactory):
     name = "WTFPL"
 
     class Meta:
         model = Licence
 
 
-class TileLayerFactory(factory.DjangoModelFactory):
+class TileLayerFactory(factory.django.DjangoModelFactory):
     name = "Test zoom layer"
     url_template = "http://{s}.test.org/{z}/{x}/{y}.png"
     attribution = "Test layer attribution"
@@ -26,7 +26,7 @@ class TileLayerFactory(factory.DjangoModelFactory):
         model = TileLayer
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserFactory(factory.django.DjangoModelFactory):
     username = 'Joe'
     email = factory.LazyAttribute(
         lambda a: '{0}@example.com'.format(a.username).lower())
@@ -36,7 +36,7 @@ class UserFactory(factory.DjangoModelFactory):
         model = User
 
 
-class MapFactory(factory.DjangoModelFactory):
+class MapFactory(factory.django.DjangoModelFactory):
     name = "test map"
     slug = "test-map"
     center = DEFAULT_CENTER
@@ -76,7 +76,7 @@ class MapFactory(factory.DjangoModelFactory):
         model = Map
 
 
-class DataLayerFactory(factory.DjangoModelFactory):
+class DataLayerFactory(factory.django.DjangoModelFactory):
     map = factory.SubFactory(MapFactory)
     name = "test datalayer"
     description = "test description"
