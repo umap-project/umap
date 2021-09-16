@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Satoshi IIDA <nyampire@gmail.com>, 2013-2014
-# tomoya muramoto <muramototomoya@gmail.com>, 2016
+# tomoya muramoto <muramototomoya@gmail.com>, 2016,2021
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2021-08-01 09:46+0000\n"
+"Last-Translator: tomoya muramoto <muramototomoya@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/openstreetmap/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -81,7 +81,7 @@ msgstr "非公開の編集リンクからのみ編集可能"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "メンテナンス中のため現在読み込み専用です。"
 
 #: umap/models.py:17
 msgid "name"
@@ -125,7 +125,7 @@ msgstr "編集者のみ"
 
 #: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "ブロック"
 
 #: umap/models.py:126 umap/models.py:256
 msgid "description"
@@ -199,7 +199,7 @@ msgstr "%(current_user)sのマップを閲覧"
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "%(current_user)s はまだ地図を作成していません。"
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
@@ -226,7 +226,7 @@ msgstr "連携アカウント選択"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMapを使うと <a href=\"%(osm_url)s\" />OpenStreetMap</a> レイヤを使った地図を作って、ウェブページに埋め込むことが簡単にできます。"
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -259,7 +259,7 @@ msgstr "サイトへのマップ表示と共有"
 #: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "uMapは <a href=\"%(repo_url)s\">Open Source</a>です！"
+msgstr "uMapは <a href=\"%(repo_url)s\">オープンソース</a>です！"
 
 #: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
