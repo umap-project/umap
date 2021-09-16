@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'social_django',
     'agnocomplete',
 )
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # =============================================================================
 # Calculation of directories relative to the project module location
