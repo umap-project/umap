@@ -45,7 +45,8 @@ L.Map.mergeOptions({
     captionBar: false,
     slideshow: {},
     clickable: true,
-    easing: true
+    easing: true,
+    permissions: {}
 });
 
 L.U.Map.include({
@@ -196,7 +197,7 @@ L.U.Map.include({
 
         this.help = new L.U.Help(this);
         this.slideshow = new L.U.Slideshow(this, this.options.slideshow);
-        this.permissions = new L.U.MapPermissions(this, this.options.permissions);
+        this.permissions = new L.U.MapPermissions(this);
         this.initCaptionBar();
         if (this.options.allowEdit) {
             this.editTools = new L.U.Editable(this);
