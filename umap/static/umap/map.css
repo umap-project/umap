@@ -1297,6 +1297,7 @@ a.add-datalayer:hover,
 .umap-popup-container {
     flex-grow: 1;
     padding: 0 10px;
+    word-break: break-word;
 }
 .leaflet-popup-content h3 {
     margin-bottom: 0;
