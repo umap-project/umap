@@ -112,6 +112,11 @@ i18n_urls += decorated_patterns(
         name="map_update_permissions",
     ),
     re_path(
+        r"^map/(?P<map_id>[\d]+)/send-edit-link/$",
+        views.SendEditLink.as_view(),
+        name="map_send_edit_link",
+    ),
+    re_path(
         r"^map/(?P<map_id>[\d]+)/update/owner/$",
         views.AttachAnonymousMap.as_view(),
         name="map_attach_owner",

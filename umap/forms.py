@@ -25,6 +25,10 @@ class FlatErrorList(ErrorList):
         return u' — '.join([e for e in self])
 
 
+class SendLinkForm(forms.Form):
+    email = forms.EmailField()
+
+
 class UpdateMapPermissionsForm(forms.ModelForm):
 
     class Meta:

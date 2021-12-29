@@ -622,6 +622,28 @@ class AttachAnonymousMap(View):
         return simple_json_response()
 
 
+class SendEditLink(FormLessEditMixin, PermissionsMixin, UpdateView):
+    model = Map
+    pk_url_kwarg = 'map_id'
+
+    def form_valid(self, form):
+        if (self.object.owner
+           or not self.object.is_anonymous_owner(self.request)
+           or not self.object.can_edit(self.request.user, self.request)):
+            return HttpResponseForbidden()
+        email = form.cleaned_data["email"]
+        from django.core.mail import send_mail
+
+        send_mail(
+            _('Your secret edit link'),
+            _('Here is your secret edit link: %(link)s' % {"link": link}),
+            settings.FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
+        return simple_json_response(info=_("Email sent to %(email)s" % {"email": email}))
+
+
 class MapDelete(DeleteView):
     model = Map
     pk_url_kwarg = "map_id"

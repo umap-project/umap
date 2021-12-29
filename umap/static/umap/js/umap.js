@@ -1336,11 +1336,23 @@ L.U.Map.include({
       data: formData,
       context: this,
       callback: function (data) {
-        let duration = 3000
+        let duration = 3000,
+          alert = { content: L._('Map has been saved!'), level: 'info' }
         if (!this.options.umap_id) {
-          duration = 100000 // we want a longer message at map creation (TODO UGLY)
+          alert.duration = 100000 // we want a longer message at map creation (TODO UGLY)
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
+          if (data.permissions && data.permissions.anonymous_edit_url) {
+            alert.actions = [
+              {
+                label: L._('Send me edit link by email'),
+                callback: function () {
+                  this.sendEditLink()
+                },
+                callbackContext: this,
+              },
+            ]
+          }
         } else if (!this.permissions.isDirty) {
           // Do not override local changes to permissions,
           // but update in case some other editors changed them in the meantime.
@@ -1350,15 +1362,20 @@ L.U.Map.include({
         if (history && history.pushState)
           history.pushState({}, this.options.name, data.url)
         else window.location = data.url
-        if (data.info) msg = data.info
-        else msg = L._('Map has been saved!')
+        alert.content = data.info || alert.content
         this.once('saved', function () {
           this.isDirty = false
-          this.ui.alert({ content: msg, level: 'info', duration: duration })
+          this.ui.alert(alert)
         })
         this.ui.closePanel()
         this.permissions.save()
       },
+    })
+  },
+
+  sendEditLink: function () {
+    var url = L.Util.template(this.options.urls.map_send_edit_link, {
+      map_id: this.options.umap_id,
     })
   },
 
