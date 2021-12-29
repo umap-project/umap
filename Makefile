@@ -1,8 +1,7 @@
 test:
 	py.test -xv umap/tests/
 develop:
-	python setup.py develop
-	pip install -r requirements-dev.txt
+	pip install -e .[test,dev]
 release: test compilemessages
 	python setup.py sdist bdist_wheel
 test_publish:

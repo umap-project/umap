@@ -18,8 +18,7 @@ env:
   - PGPORT=5432
   - UMAP_SETTINGS=umap/tests/settings.py
 install:
-- pip install .
-- pip install -r requirements-dev.txt
+- make develop
 script: make test
 notifications:
   irc:
