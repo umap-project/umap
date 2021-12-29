@@ -1283,18 +1283,22 @@ a.add-datalayer:hover,
 .umap-popup-content {
     max-height: 500px;
     flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
     margin-bottom: 4px;
     display: flex;
     flex-direction: column;
 }
 .umap-popup-content iframe {
     min-width: 310px;
+    max-width: 100%;
+}
+.umap-popup-content th,
+.umap-popup-content td {
+    word-break: break-word;
 }
 .umap-popup-container {
     flex-grow: 1;
     padding: 0 10px;
+    word-break: break-word;
 }
 .leaflet-popup-content h3 {
     margin-bottom: 0;
