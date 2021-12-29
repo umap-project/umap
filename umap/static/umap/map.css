@@ -1289,6 +1289,7 @@ a.add-datalayer:hover,
 }
 .umap-popup-content iframe {
     min-width: 310px;
+    max-width: 100%;
 }
 .umap-popup-content th,
 .umap-popup-content td {
