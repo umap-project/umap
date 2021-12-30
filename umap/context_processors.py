@@ -1,6 +1,6 @@
 from django.conf import settings as djsettings
 
-from . import __version__
+from . import VERSION
 
 
 def settings(request):
@@ -13,5 +13,5 @@ def settings(request):
 
 def version(request):
     return {
-        'UMAP_VERSION': __version__
+        'UMAP_VERSION': VERSION
     }
