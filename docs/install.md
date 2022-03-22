@@ -86,11 +86,11 @@ may want to add an index. For that, you should do so:
     CREATE EXTENSION btree_gin;
     ALTER FUNCTION unaccent(text) IMMUTABLE;
     ALTER FUNCTION to_tsvector(text) IMMUTABLE;
-    CREATE INDEX search_idx ON leaflet_storage_map USING gin(to_tsvector(unaccent(name)), share_status);
+    CREATE INDEX search_idx ON umap_map USING gin(to_tsvector(unaccent(name)), share_status);
 
 
 ## Optimisations
 
 To speed up uMap homepage rendering on a large instance, the following index can be added as well (make sure you set the center to your default instance map center):
 
-    CREATE INDEX leaflet_storage_map_optim ON leaflet_storage_map (modified_at) WHERE ("leaflet_storage_map"."share_status" = 1 AND ST_Distance("leaflet_storage_map"."center", ST_GeomFromEWKT('SRID=4326;POINT(2 51)')) > 1000.0);
+    CREATE INDEX umap_map_optim ON umap_map (modified_at) WHERE ("umap_map"."share_status" = 1 AND ST_Distance("umap_map"."center", ST_GeomFromEWKT('SRID=4326;POINT(2 51)')) > 1000.0);
