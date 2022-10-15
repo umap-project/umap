@@ -1,5 +1,5 @@
 site_name: uMap
-pages:
+nav:
 - Home: index.md
 - Installation: install.md
 - Administration: administration.md

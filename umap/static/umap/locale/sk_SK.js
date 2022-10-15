@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Farba textu pre popis zhluku",
     "Text formatting": "Formátovanie textu",
     "The name of the property to use as feature label (ex.: \"nom\")": "Názov vlastnosti používať ako popis objektu (napr.: \"nom\")",
-    "The zoom and center have been setted.": "Priblíženie a stred mapy boli nastavené",
+    "The zoom and center have been set.": "Priblíženie a stred mapy boli nastavené",
     "To use if remote server doesn't allow cross domain (slower)": "Použiť keď vzdialený server nepovoľuje cross-domain (pomalšie)",
     "To zoom": "Max. priblíženie",
     "Toggle edit mode (Shift+Click)": "Prepnúť režim úprav (Shift+Klik)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("sk_SK", locale);
 L.setLocale("sk_SK");

@@ -3,6 +3,8 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Christopher <github@1011.link>, 2020
+# Claus Ruedinger <clausruedinger@gmail.com>, 2020
 # Ettore Atalan <atalanttore@googlemail.com>, 2016
 # hno2 <hno2@gmx.net>, 2013-2014
 # Jannis Leidel <jannis@leidel.info>, 2016
@@ -12,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 18:04+0000\n"
-"Last-Translator: Klumbumbus\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2020-11-24 20:26+0000\n"
+"Last-Translator: Christopher <github@1011.link>\n"
 "Language-Team: German (http://www.transifex.com/openstreetmap/umap/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +31,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "Dies ist eine Demo-Instanz und wird für Tests und Vorveröffentlichungen benutzt. Wenn du eine stabile Instanz benötigst, benutze bitte <a href=\"%(stable_url)s\">%(stable_url)s</a>. Du kannst auch deine eigene Instanz hosten, uMap ist <a href=\"%(repo_url)s\">Open Source</a>!"
+msgstr "Dies ist eine Demo-Instanz, die für Tests und Vorveröffentlichungen verwendet wird. Wenn du eine stabile Instanz benötigst, benutze bitte <a href=\"%(stable_url)s\">%(stable_url)s</a>. Du kannst auch deine eigene Instanz hosten, uMap ist <a href=\"%(repo_url)s\">Open Source</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
@@ -51,7 +53,7 @@ msgstr "Einloggen"
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Sign in"
-msgstr "Einloggen"
+msgstr "Anmelden"
 
 #: tmp/framacarte/templates/umap/navigation.html:12
 #: umap/templates/umap/navigation.html:20
@@ -80,11 +82,11 @@ msgstr "Jeder kann bearbeiten"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr "Nur mit geheimen Bearbeitungslink zu bearbeiten"
+msgstr "Nur mit geheimem Bearbeitungslink zu bearbeiten"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "DIe Seite ist wegen Wartungsarbeiten im Nur-Lesen-Modus."
+msgstr "Die Seite ist wegen Wartungsarbeiten im Nur-Lesen-Modus."
 
 #: umap/models.py:17
 msgid "name"
@@ -180,7 +182,7 @@ msgstr "Einstellungen"
 
 #: umap/models.py:210
 msgid "Clone of"
-msgstr "Duplicat von"
+msgstr "Duplikat von"
 
 #: umap/models.py:261
 msgid "display on load"

@@ -83,7 +83,7 @@ var locale = {
     "*simple star for italic*": "*enojna zvezdica za ležečo pisavo*",
     "--- for an horizontal rule": "--- za vodoravno črto",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Z vejilo ločen seznam števil, ki določajo vzorec poteze. Na primer »5, 10, 15«.",
-    "About": "O programu",
+    "About": "O zemljevidu",
     "Action not allowed :(": "Dejanje ni dovoljeno :(",
     "Activate slideshow mode": "Omogoči predstavitveni način",
     "Add a layer": "Dodaj plast",

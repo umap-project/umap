@@ -36,11 +36,11 @@ L.U.MapPermissions = L.Class.extend({
     },
 
     isOwner: function () {
-        return this.map.options.user && this.options.owner && this.map.options.user.id == this.options.owner.id;
+        return this.map.options.user && this.map.options.permissions.owner && this.map.options.user.id == this.map.options.permissions.owner.id;
     },
 
     isAnonymousMap: function () {
-        return !this.options.owner;
+        return !this.map.options.permissions.owner;
     },
 
     getMap: function () {
@@ -111,6 +111,7 @@ L.U.MapPermissions = L.Class.extend({
             data: formData,
             context: this,
             callback: function (data) {
+                this.commit();
                 this.isDirty = false;
                 this.map.continueSaving();
             }
@@ -133,6 +134,10 @@ L.U.MapPermissions = L.Class.extend({
             owner.textContent = this.options.owner.name;
             ownerContainer.appendChild(owner);
         }
+    },
+
+    commit: function () {
+        L.Util.extend(this.map.options.permissions, this.options);
     }
 
 });

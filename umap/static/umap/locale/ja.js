@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "クラスタラベルのテキスト色",
     "Text formatting": "テキスト形式",
     "The name of the property to use as feature label (ex.: \"nom\")": "地物のラベルとして用いるプロパティ名を入力する",
-    "The zoom and center have been setted.": "ズームと地図中心点の設定完了",
+    "The zoom and center have been set.": "ズームと地図中心点の設定完了",
     "To use if remote server doesn't allow cross domain (slower)": "外部サーバがクロスドメインを許可していない場合に使用します (処理速度低下)",
     "To zoom": "非表示にするズームレベル",
     "Toggle edit mode (Shift+Click)": "編集モードを切り替える(シフトキーを押しながらクリック)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("ja", locale);
 L.setLocale("ja");

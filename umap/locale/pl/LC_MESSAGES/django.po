@@ -7,7 +7,7 @@
 # endro, 2016
 # endro, 2015
 # Maciej Kowalik <m.kowalik.79@gmail.com>, 2016
-# maro21 OSM, 2020
+# maro21 OSM, 2020-2021
 # Piotr Strębski <strebski@gmail.com>, 2020
 # Teiron, 2016
 # Tomasz Nycz <tomasz.merkato@gmail.com>, 2018
@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-26 22:30+0000\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2021-02-08 15:11+0000\n"
 "Last-Translator: maro21 OSM\n"
 "Language-Team: Polish (http://www.transifex.com/openstreetmap/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -256,7 +256,7 @@ msgstr "Importuj geostrukturalne dane (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Wybierz licencję dla swoich danych"
+msgstr "Wybierz licencję swoich danych"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"

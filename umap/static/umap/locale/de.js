@@ -152,7 +152,7 @@ var locale = {
     "Disable editing": "Bearbeiten deaktivieren",
     "Display measure": "Display measure",
     "Display on load": "Beim Seitenaufruf anzeigen.",
-    "Download": "Heruterladen",
+    "Download": "Herunterladen",
     "Download data": "Daten herunterladen",
     "Drag to reorder": "Ziehen zum Neuanordnen",
     "Draw a line": "Eine Linie zeichnen",
@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Textfarbe für die Gruppierungsbezeichnung",
     "Text formatting": "Textformatierung",
     "The name of the property to use as feature label (ex.: \"nom\")": "Den Namen des Merkmals als Elementbezeichnung verwenden (z.B.: \"Name\")",
-    "The zoom and center have been setted.": "Zoomstufe und Mittelpunkt wurden gespeichert.",
+    "The zoom and center have been set.": "Zoomstufe und Mittelpunkt wurden gespeichert.",
     "To use if remote server doesn't allow cross domain (slower)": "Anzuwenden, wenn der Zielserver kein Cross Origin Resource Sharing (CORS) erlaubt (langsamer).",
     "To zoom": "Bis Zoomstufe",
     "Toggle edit mode (Shift+Click)": "Bearbeitungsmodus umschalten (Umschalt+Klick)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("de", locale);
 L.setLocale("de");

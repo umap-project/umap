@@ -58,6 +58,7 @@ SOCIAL_AUTH_OPENSTREETMAP_SECRET = 'xxx'
 MIDDLEWARE += (
     'social_django.middleware.SocialAuthExceptionMiddleware',
 )
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 

@@ -166,6 +166,45 @@ describe('L.Util', function () {
             assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.foo}.', {}), 'A phrase with a .');
         });
 
+        it('should handle fallback value if any', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|"default"}.', {}), 'A phrase with a default.');
+        });
+
+        it('should handle fallback var if any', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|fallback}.', {fallback: "default"}), 'A phrase with a default.');
+        });
+
+        it('should handle multiple fallbacks', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {}), 'A phrase with a default.');
+        });
+
+        it('should use the first defined value', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {try: { again: 'please'}}), 'A phrase with a please.');
+        });
+
+        it('should use the first defined value', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with a {fr.var.bar|try.again|"default"}.', {try: { again: 'again'}, fr: {var: {bar: 'value'}}}), 'A phrase with a value.');
+        });
+
+        it('should support the first example from #820 when translated to final syntax', function () {
+            assert.equal(L.Util.greedyTemplate('# {name} ({ele|"-"} m ü. M.)', {name: 'Portalet'}), '# Portalet (- m ü. M.)');
+        });
+
+        it('should support the first example from #820 when translated to final syntax when no fallback required', function () {
+            assert.equal(L.Util.greedyTemplate('# {name} ({ele|"-"} m ü. M.)', {name: 'Portalet', ele: 3344}), '# Portalet (3344 m ü. M.)');
+        });
+
+        it('should support white space in fallback', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with {var|"white space in the fallback."}', {}), 'A phrase with white space in the fallback.');
+        });
+
+        it('should support empty string as fallback', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with empty string ("{var|""}") in the fallback.', {}), 'A phrase with empty string ("") in the fallback.');
+        });
+
+        it('should support e.g. links as fallback', function () {
+            assert.equal(L.Util.greedyTemplate('A phrase with {var|"[[https://osm.org|link]]"} as fallback.', {}), 'A phrase with [[https://osm.org|link]] as fallback.');
+        });
     });
 
     describe('#TextColorFromBackgroundColor', function () {

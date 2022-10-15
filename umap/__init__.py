@@ -1,7 +1,7 @@
-"Create maps with OpenStreetMap layers in a minute and embed them in your site."
-VERSION = (1, 2, 2)
-
-__author__ = 'Yohan Boniface'
-__contact__ = "ybon@openstreetmap.fr"
-__homepage__ = "https://github.com/umap-project/umap"
-__version__ = ".".join(map(str, VERSION))
+try:
+    import pkg_resources
+except ImportError:  # pragma: no cover
+    pass
+else:
+    if __package__:
+        VERSION = pkg_resources.get_distribution("umap-project").version

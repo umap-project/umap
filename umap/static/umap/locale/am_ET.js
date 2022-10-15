@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "የክላስተሩን ሌብ ፅሑፍ ከለር",
     "Text formatting": "ፅሁፍ ማስተካከያ",
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
-    "The zoom and center have been setted.": "ዙሙ እና መሀከሉ ተወስነዋል",
+    "The zoom and center have been set.": "ዙሙ እና መሀከሉ ተወስነዋል",
     "To use if remote server doesn't allow cross domain (slower)": "ሪሞት ሰርቨሩ የዶሜይን ልውውጥን የማይፈቅድ ከሆነ ይህን ለመጠቀም (አዝጋሚ)",
     "To zoom": "ለማጉላት",
     "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("am_ET", locale);
 L.setLocale("am_ET");

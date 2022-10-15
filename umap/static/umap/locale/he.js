@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "צבע טקסט לתווית הקבוצה",
     "Text formatting": "עיצוב טקסט",
     "The name of the property to use as feature label (ex.: \"nom\")": "שם המאפיין לשימוש כתווית תכונה (למשל: „nom”)",
-    "The zoom and center have been setted.": "התקריב והמרכז הוגדרו.",
+    "The zoom and center have been set.": "התקריב והמרכז הוגדרו.",
     "To use if remote server doesn't allow cross domain (slower)": "יש להשתמש אם השרת המרוחק לא מאפשר קישור בין שמות תחומים (Cross Origin - אטי יותר)",
     "To zoom": "לתקריב",
     "Toggle edit mode (Shift+Click)": "החלפת מצב עריכה ‪(Shift+לחיצה)",

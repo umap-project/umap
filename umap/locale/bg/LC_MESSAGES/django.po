@@ -5,13 +5,14 @@
 # Translators:
 # lillyvip <lillyvalpi@gmail.com>, 2013-2014
 # yohanboniface <yohanboniface@free.fr>, 2014
+# Пламен, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2021-05-20 21:06+0000\n"
+"Last-Translator: Пламен\n"
 "Language-Team: Bulgarian (http://www.transifex.com/openstreetmap/umap/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +39,7 @@ msgstr "Създай карта"
 #: tmp/framacarte/templates/umap/navigation.html:7
 #: umap/templates/umap/navigation.html:10
 msgid "My maps"
-msgstr "Мойте карти"
+msgstr "Моите карти"
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
@@ -207,15 +208,15 @@ msgstr ""
 
 #: umap/templates/registration/login.html:18
 msgid "Username"
-msgstr ""
+msgstr "Потр. име"
 
 #: umap/templates/registration/login.html:20
 msgid "Password"
-msgstr ""
+msgstr "Парола"
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
-msgstr ""
+msgstr "Вход"
 
 #: umap/templates/registration/login.html:27
 msgid "Please choose a provider"

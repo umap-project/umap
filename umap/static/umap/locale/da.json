@@ -284,7 +284,7 @@
     "Text color for the cluster label": "Tekstfarve for klyngelabel",
     "Text formatting": "Tekstformatering",
     "The name of the property to use as feature label (ex.: \"nom\")": "Navnet på den egenskab, der skal anvendes som objektlabel (fx: \"nom\")",
-    "The zoom and center have been setted.": "Zoom og center er blevet justeret.",
+    "The zoom and center have been set.": "Zoom og center er blevet justeret.",
     "To use if remote server doesn't allow cross domain (slower)": "Anvendes hvis fjernserver ikke tillader krydsdomæne (langsommere)",
     "To zoom": "For at zoome",
     "Toggle edit mode (Shift+Click)": "Skift redigeringstilstand (Shift+Click)",

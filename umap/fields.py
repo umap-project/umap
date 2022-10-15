@@ -1,6 +1,6 @@
 import json
 
-from django.utils import six
+import six
 from django.db import models
 from django.utils.encoding import smart_text
 

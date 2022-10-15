@@ -1,6 +1,5 @@
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
-from django.conf.global_settings import *   # pylint: disable=W0614,W0401
 from django.template.defaultfilters import slugify
 from django.conf.locale import LANG_INFO
 
@@ -102,6 +101,7 @@ INSTALLED_APPS = (
     'social_django',
     'agnocomplete',
 )
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # =============================================================================
 # Calculation of directories relative to the project module location
@@ -130,8 +130,10 @@ STATIC_ROOT = os.path.join('static')
 MEDIA_ROOT = os.path.join('uploads')
 
 STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
-] + STATICFILES_FINDERS
+]
 
 # =============================================================================
 # Templates
@@ -191,7 +193,8 @@ ENABLE_ACCOUNT_LOGIN = False
 UMAP_ALLOW_ANONYMOUS = False
 UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',  # noqa
-    'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}'
+    'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}',
+    'search': 'https://photon.komoot.io/api/?',
 }
 UMAP_KEEP_VERSIONS = 10
 SITE_URL = "http://umap.org"

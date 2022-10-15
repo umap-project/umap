@@ -1,8 +1,20 @@
 # Changelog
 
+## 1.2.3
+
+- improved panel layout and image sizing (by @Binnette, cf #824)
+- upgraded Django to 2.2.17 and Pillow 8.0.1 (which drops support for python 3.5)
+- experimental fallback handling in templating (cf #820)
+- fixed search URL, and allow to control it from settings (cf #842)
+- fixed map frozen when setting by hand invalid coordinates (cf #799)
+- fixed changing map ownership (cf #780)
+- do not change map zoom when locating user (cf #763)
+- update map extent on first save if it has not been changed yet (cf #841)
+
+
 ## 1.2.2
 
-- Fix bug in popup inner HTML (cf #776)
+- fixed bug in popup inner HTML (cf #776)
 
 ## 1.2.1
 

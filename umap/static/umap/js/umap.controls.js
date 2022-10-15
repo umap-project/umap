@@ -841,6 +841,7 @@ L.U.LocateControl = L.Control.extend({
     activate: function () {
         this._map.locate({
             setView: true,
+            maxZoom: this._map.getZoom(),
             enableHighAccuracy: true,
             watch: true
         });
@@ -890,6 +891,11 @@ L.U.LocateControl = L.Control.extend({
 
 
 L.U.Search = L.PhotonSearch.extend({
+
+    initialize: function (map, input, options) {
+        L.PhotonSearch.prototype.initialize.call(this, map, input, options);
+        this.options.url = map.options.urls.search;
+    },
 
     onBlur: function (e) {
         // Overrided because we don't want to hide the results on blur.

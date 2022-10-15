@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Teksto spalva klasterio pavadinimui",
     "Text formatting": "Teksto formatavimas",
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
-    "The zoom and center have been setted.": "Šis mastelis ir centras išsaugoti.",
+    "The zoom and center have been set.": "Šis mastelis ir centras išsaugoti.",
     "To use if remote server doesn't allow cross domain (slower)": "Naudoti jei serveris neleidžia cross domain užklausų (lėtesnis sprendimas)",
     "To zoom": "Padidinti",
     "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("lt", locale);
 L.setLocale("lt");

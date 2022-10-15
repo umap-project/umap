@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Csoportcímke szövegének színe",
     "Text formatting": "Szövegformázás",
     "The name of the property to use as feature label (ex.: \"nom\")": "Az objektum felirataként használandó tulajdonság neve (pl.: „név”)",
-    "The zoom and center have been setted.": "Nagyítás és középpont beállítva.",
+    "The zoom and center have been set.": "Nagyítás és középpont beállítva.",
     "To use if remote server doesn't allow cross domain (slower)": "Akkor használja, ha a távoli kiszolgáló nem engedélyezi a tartományok közötti (cross-domain) átvitelt (lassabb)",
     "To zoom": "Eddig a nagyítási szintig",
     "Toggle edit mode (Shift+Click)": "Szerkesztési mód bekapcsolása (Shift+Klikk)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("hu", locale);
 L.setLocale("hu");

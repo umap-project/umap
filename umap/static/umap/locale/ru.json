@@ -284,7 +284,7 @@
     "Text color for the cluster label": "Цвет текста для меток кластера",
     "Text formatting": "Форматирование текста",
     "The name of the property to use as feature label (ex.: \"nom\")": "Название свойства в качестве метки объекта (напр., «Номер»)",
-    "The zoom and center have been setted.": "Масштаб и положение установлены",
+    "The zoom and center have been set.": "Масштаб и положение установлены",
     "To use if remote server doesn't allow cross domain (slower)": "Если удалённый сервер не позволяет кросс-домен (медленно)",
     "To zoom": "Масштабировать",
     "Toggle edit mode (Shift+Click)": "Переключиться в режим редактирования (Shift+Click)",

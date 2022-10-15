@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "标注文本颜色",
     "Text formatting": "文本格式",
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
-    "The zoom and center have been setted.": "缩放比例尺与中心设置完成",
+    "The zoom and center have been set.": "缩放比例尺与中心设置完成",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "放大",
     "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",

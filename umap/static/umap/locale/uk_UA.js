@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Колір тексту для позначок кластера",
     "Text formatting": "Форматування тексту",
     "The name of the property to use as feature label (ex.: \"nom\")": "Назва параметру для використання в якості мітки об’єкта (напр.: „nom“)",
-    "The zoom and center have been setted.": "Масштаб й центрування виставлені",
+    "The zoom and center have been set.": "Масштаб й центрування виставлені",
     "To use if remote server doesn't allow cross domain (slower)": "Якщо віддалений сервер не дозволяє крос-домен (повільно)",
     "To zoom": "Масштабувати",
     "Toggle edit mode (Shift+Click)": "Перейти у режим редагування (Shift+клац)",
@@ -371,6 +371,7 @@ var locale = {
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
     "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-};
+}
+;
 L.registerLocale("uk_UA", locale);
 L.setLocale("uk_UA");
