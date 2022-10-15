@@ -1,4 +1,3 @@
--r requirements.txt
 django-environ==0.4.1
 django-redis==4.7.0
 uwsgi==2.0.14
