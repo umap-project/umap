@@ -76,6 +76,8 @@ To test your code, you will add to install umap from your git folder. Go to ~/wk
 
 This command will check dependencies and install uMap from sources inside folder.
 
+When installing from the git repository, do not forget to run `make installjs` and `make vendors`, before running `umap collectstatic` (as mentioned in [Ubuntu from scratch](ubuntu.md)).
+
 To start your local uMap:
 
     umap runserver 0.0.0.0:8000
