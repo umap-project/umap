@@ -1345,18 +1345,6 @@ a.add-datalayer:hover,
     line-height: 36px;
 }
 
-/* *********** */
-/* Geolocation */
-/* *********** */
-.geolocated {
-    width: 16px !important;
-    height: 16px!important;
-    background-color: #3388ff;
-    border: 1px solid white;
-    border-radius: 8px;
-    box-shadow: 1px 5px 5px black;
-}
-
 /* ****** */
 /* Mobile */
 /* ****** */
