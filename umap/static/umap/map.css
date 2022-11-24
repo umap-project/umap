@@ -41,6 +41,7 @@
     background-position: 0 -32px;
 }
 .leaflet-measure-control a,
+.leaflet-control-locate a,
 .umap-control a {
     background-position: 50% 50%;
     background-repeat: no-repeat;
@@ -81,7 +82,9 @@ a.umap-control-less {
 .leaflet-control-locate a {
     background-position: -1px -121px;
 }
-.leaflet-control-locate.active a {
+.leaflet-control-locate.active a,
+.leaflet-control-locate.requesting a
+ {
     background-position: -80px -161px;
     box-shadow: 0 0 4px 0 black inset;
 }
@@ -263,6 +266,10 @@ ul.photon-autocomplete {
     display: inline-block;
     vertical-align: middle;
 }
+.leaflet-control-locate-location circle {
+  animation: none;
+}
+
 
 
 /* ********************************* */
