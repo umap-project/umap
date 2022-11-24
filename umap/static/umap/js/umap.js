@@ -258,8 +258,8 @@ L.U.Map.include({
             // We style this control in our own CSS for consistency with other controls,
             // but the control breaks if we don't specify a class here, so a fake class
             // will do.
-            icon: 'umap-empty',
-            iconLoading: 'umap-empty',
+            icon: 'umap-fake-class',
+            iconLoading: 'umap-fake-class',
             flyTo: true,
         });
         this._controls.fullscreen = new L.Control.Fullscreen({title: {'false': L._('View Fullscreen'), 'true': L._('Exit Fullscreen')}});
