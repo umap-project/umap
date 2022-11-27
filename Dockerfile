@@ -1,4 +1,4 @@
-FROM node:12 AS vendors
+FROM node:18 AS vendors
 
 COPY . /srv/umap
 
