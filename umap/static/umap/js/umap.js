@@ -250,7 +250,18 @@ L.U.Map.include({
         }
         this._controls.zoom = new L.Control.Zoom({zoomInTitle: L._('Zoom in'), zoomOutTitle: L._('Zoom out')});
         this._controls.datalayers = new L.U.DataLayersControl(this);
-        this._controls.locate = new L.U.LocateControl();
+        this._controls.locate = L.control.locate({
+            strings: {
+                title: L._('Center map on your location'),
+            },
+            showPopup: false,
+            // We style this control in our own CSS for consistency with other controls,
+            // but the control breaks if we don't specify a class here, so a fake class
+            // will do.
+            icon: 'umap-fake-class',
+            iconLoading: 'umap-fake-class',
+            flyTo: true,
+        });
         this._controls.fullscreen = new L.Control.Fullscreen({title: {'false': L._('View Fullscreen'), 'true': L._('Exit Fullscreen')}});
         this._controls.search = new L.U.SearchControl();
         this._controls.embed = new L.Control.Embed(this, this.options.embedOptions);
