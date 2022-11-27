@@ -25,6 +25,7 @@ WORKDIR /srv/umap
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        tini \
         uwsgi \
         libpq-dev \
         build-essential \
@@ -59,13 +60,8 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Add Tini
-ENV TINI_VERSION v0.14.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
-
 EXPOSE 8000
 
-ENTRYPOINT ["/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 
 CMD ["/srv/umap/docker-entrypoint.sh"]
