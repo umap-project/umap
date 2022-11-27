@@ -11,7 +11,6 @@
     "mocha": "^2.3.3",
     "mocha-phantomjs": "^4.0.1",
     "optimist": "~0.4.0",
-    "phantomjs": "^1.9.18",
     "sinon": "^1.10.3",
     "uglify-js": "~2.2.3"
   },
