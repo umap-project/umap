@@ -954,12 +954,14 @@ L.U.AttributionControl = L.Control.Attribution.extend({
         if (this._map.options.shortCredit) {
             L.DomUtil.add('span', '', this._container, ' — ' + L.Util.toHTML(this._map.options.shortCredit));
         }
-        var link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'));
-        L.DomEvent
-            .on(link, 'click', L.DomEvent.stop)
-            .on(link, 'click', this._map.displayCaption, this._map)
-            .on(link, 'dblclick', L.DomEvent.stop);
-        if (window.top === window.self) {
+        if (this._map.options.captionMenus) {
+            var link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'));
+            L.DomEvent
+                .on(link, 'click', L.DomEvent.stop)
+                .on(link, 'click', this._map.displayCaption, this._map)
+                .on(link, 'dblclick', L.DomEvent.stop);
+        }
+        if (window.top === window.self && this._map.options.captionMenus) {
             // We are not in iframe mode
             var home = L.DomUtil.add('a', '', this._container, ' — ' + L._('Home'));
             home.href = '/';
@@ -1150,7 +1152,8 @@ L.U.IframeExporter = L.Evented.extend({
         embedControl: null,
         datalayersControl: true,
         onLoadPanel: 'none',
-        captionBar: false
+        captionBar: false,
+        captionMenus: true
     },
 
     dimensions: {

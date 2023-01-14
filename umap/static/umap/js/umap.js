@@ -43,6 +43,7 @@ L.Map.mergeOptions({
     ],
     moreControl: true,
     captionBar: false,
+    captionMenus: true,
     slideshow: {},
     clickable: true,
     easing: true,
@@ -89,6 +90,7 @@ L.U.Map.include({
         L.Util.setBooleanFromQueryString(this.options, 'displayDataBrowserOnLoad');
         L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad');
         L.Util.setBooleanFromQueryString(this.options, 'captionBar');
+        L.Util.setBooleanFromQueryString(this.options, 'captionMenus');
         for (var i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
             L.Util.setNullableBooleanFromQueryString(this.options, this.HIDDABLE_CONTROLS[i] + 'Control');
         }
@@ -628,7 +630,8 @@ L.U.Map.include({
             'queryString.miniMap',
             'queryString.scaleControl',
             'queryString.onLoadPanel',
-            'queryString.captionBar'
+            'queryString.captionBar',
+            'queryString.captionMenus'
         ];
         for (var i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
             UIFields.push('queryString.' + this.HIDDABLE_CONTROLS[i] + 'Control');
@@ -1067,6 +1070,7 @@ L.U.Map.include({
         'popupContentTemplate',
         'zoomTo',
         'captionBar',
+        'captionMenus',
         'slideshow',
         'sortKey',
         'labelKey',
@@ -1232,10 +1236,14 @@ L.U.Map.include({
             'options.scaleControl',
             'options.onLoadPanel',
             'options.displayPopupFooter',
-            'options.captionBar'
+            'options.captionBar',
+            'options.captionMenus'
         ]);
         builder = new L.U.FormBuilder(this, UIFields, {
-            callback: this.renderControls,
+            callback: function() {
+                this.renderControls();
+                this.initCaptionBar();
+            },
             callbackContext: this
         });
         var controlsOptions = L.DomUtil.createFieldset(container, L._('User interface options'));
@@ -1450,17 +1458,19 @@ L.U.Map.include({
             name = L.DomUtil.create('h3', '', container);
         L.DomEvent.disableClickPropagation(container);
         this.permissions.addOwnerLink('span', container);
-        var about = L.DomUtil.add('a', 'umap-about-link', container, ' — ' + L._('About'));
-        about.href = '#';
-        L.DomEvent.on(about, 'click', this.displayCaption, this);
-        var browser = L.DomUtil.add('a', 'umap-open-browser-link', container, ' | ' + L._('Browse data'));
-        browser.href = '#';
-        L.DomEvent.on(browser, 'click', L.DomEvent.stop)
-                  .on(browser, 'click', this.openBrowser, this);
-        var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Filter data'));
-        filter.href = '#';
-        L.DomEvent.on(filter, 'click', L.DomEvent.stop)
-            .on(filter, 'click', this.openFilter, this);
+        if (this.options.captionMenus) {
+            var about = L.DomUtil.add('a', 'umap-about-link', container, ' — ' + L._('About'));
+            about.href = '#';
+            L.DomEvent.on(about, 'click', this.displayCaption, this);
+            var browser = L.DomUtil.add('a', 'umap-open-browser-link', container, ' | ' + L._('Browse data'));
+            browser.href = '#';
+            L.DomEvent.on(browser, 'click', L.DomEvent.stop)
+                    .on(browser, 'click', this.openBrowser, this);
+            var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Filter data'));
+            filter.href = '#';
+            L.DomEvent.on(filter, 'click', L.DomEvent.stop)
+                .on(filter, 'click', this.openFilter, this);
+        }
         var setName = function () {
             name.textContent = this.getDisplayName();
         };
