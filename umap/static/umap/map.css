@@ -117,6 +117,12 @@ a.umap-control-text {
 .leaflet-control-edit-enable a:hover {
     background-color: #4d5759;
 }
+.umap-permanent-credits-container {
+    max-width: 20rem;
+    margin: 0!important;
+    padding: 0.5rem;
+    border-top-right-radius: 1rem;
+}
 
 
 
@@ -1365,6 +1371,11 @@ a.add-datalayer:hover,
 
     .leaflet-control-layers-expanded {
         margin-left: 10px;
+    }
+
+    .umap-permanent-credits-container {
+        max-width: 100%;
+        border-top-right-radius: 0;
     }
 }
 

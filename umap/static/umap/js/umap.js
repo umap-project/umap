@@ -46,7 +46,8 @@ L.Map.mergeOptions({
     slideshow: {},
     clickable: true,
     easing: true,
-    permissions: {}
+    permissions: {},
+    permanentCreditBackground: true,
 });
 
 L.U.Map.include({
@@ -274,6 +275,7 @@ L.U.Map.include({
         this._controls.measure = (new L.MeasureControl()).initHandler(this);
         this._controls.more = new L.U.MoreControls();
         this._controls.scale = L.control.scale();
+        if (this.options.permanentCredit) this.permanentCreditControl = (new L.U.PermanentCreditsControl(this)).addTo(this);
         if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable();
         else this.scrollWheelZoom.disable();
         this.renderControls();
@@ -1076,6 +1078,8 @@ L.U.Map.include({
         'labelInteractive',
         'shortCredit',
         'longCredit',
+        'permanentCredit',
+        'permanentCreditBackground',
         'zoomControl',
         'datalayersControl',
         'searchControl',
@@ -1379,10 +1383,14 @@ L.U.Map.include({
         var creditsFields = [
             ['options.licence', {handler: 'LicenceChooser', label: L._('licence')}],
             ['options.shortCredit', {handler: 'Input', label: L._('Short credits'), helpEntries: ['shortCredit', 'textFormatting']}],
-            ['options.longCredit', {handler: 'Textarea', label: L._('Long credits'), helpEntries: ['longCredit', 'textFormatting']}]
+            ['options.longCredit', {handler: 'Textarea', label: L._('Long credits'), helpEntries: ['longCredit', 'textFormatting']}],
+            ['options.permanentCredit', {handler: 'Textarea', label: L._('Permanent credits'), helpEntries: ['permanentCredit', 'textFormatting']}],
+            ['options.permanentCreditBackground', {handler: 'Switch', label: L._('Permanent credits background')}]
         ];
         var creditsBuilder = new L.U.FormBuilder(this, creditsFields, {
-            callback: function () {this._controls.attribution._update();},
+            callback: function () {
+                this._controls.attribution._update();
+                this.permanentCreditControl._update();},
             callbackContext: this
         });
         credits.appendChild(creditsBuilder.build());

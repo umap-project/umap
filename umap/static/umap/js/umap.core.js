@@ -452,6 +452,7 @@ L.U.Help = L.Class.extend({
     fillColor: L._('Optional. Same as color if not set.'),
     shortCredit: L._('Will be displayed in the bottom right corner of the map'),
     longCredit: L._('Will be visible in the caption of the map'),
+    permanentCredit: L._('Will be permanently visible in the bottom left corner of the map'),
     sortKey: L._('Property to use for sorting features'),
     slugKey: L._('The name of the property to use as feature unique identifier.'),
     filterKey: L._('Comma separated list of properties to use when filtering features'),

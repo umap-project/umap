@@ -434,6 +434,47 @@ L.U.MoreControls = L.Control.extend({
 });
 
 
+L.U.PermanentCreditsControl = L.Control.extend({
+
+    options: {
+        position: 'bottomleft'
+    },
+
+    initialize: function (map) {
+        this.map = map;
+    },
+
+    onAdd: function () {
+        var paragraphContainer = L.DomUtil.create('div', 'umap-permanent-credits-container'),
+            creditsParagraph = L.DomUtil.create('p', '', paragraphContainer);
+
+        this.paragraphContainer = paragraphContainer;
+        this.setCredits();
+        this.setBackground();
+
+        return paragraphContainer;
+    },
+
+    _update: function () {
+        this.setCredits();
+        this.setBackground();
+    },
+
+    setCredits: function () {
+        this.paragraphContainer.innerHTML = L.Util.toHTML(this.map.options.permanentCredit);
+    },
+
+    setBackground: function () {
+        if (this.map.options.permanentCreditBackground) {
+            this.paragraphContainer.style.backgroundColor = '#FFFFFFB0';
+        } else {
+            this.paragraphContainer.style.backgroundColor = '';
+        }
+    }
+    
+});
+
+
 L.U.DataLayersControl = L.Control.extend({
 
     options: {
