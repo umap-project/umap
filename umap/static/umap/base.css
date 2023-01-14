@@ -508,6 +508,7 @@ i.info {
 .umap-layer-properties-container,
 .umap-footer-container,
 .umap-browse-data,
+.umap-filter-data,
 .umap-browse-datalayers {
     padding: 0 10px;
 }

@@ -287,7 +287,8 @@ L.FormBuilder.onLoadPanel = L.FormBuilder.Select.extend({
     selectOptions: [
         ['none', L._('None')],
         ['caption', L._('Caption')],
-        ['databrowser', L._('Data browser')]
+        ['databrowser', L._('Data browser')],
+        ['datafilters', L._('Data filters')]
     ]
 
 });

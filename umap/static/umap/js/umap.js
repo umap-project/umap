@@ -210,6 +210,7 @@ L.U.Map.include({
         this.onceDatalayersLoaded(function () {
             if (this.options.onLoadPanel === 'databrowser') this.openBrowser();
             else if (this.options.onLoadPanel === 'caption') this.displayCaption();
+            else if (this.options.onLoadPanel === 'datafilters') this.openFilter();
         });
         this.onceDataLoaded(function () {
             const slug = L.Util.queryString('feature');
@@ -893,6 +894,12 @@ L.U.Map.include({
         });
     },
 
+    openFilter: function () {
+        this.onceDatalayersLoaded(function () {
+            this._openFilter();
+        });
+    },
+
     displayCaption: function () {
         var container = L.DomUtil.create('div', 'umap-caption'),
             title = L.DomUtil.create('h3', '', container);
@@ -948,10 +955,15 @@ L.U.Map.include({
         umapCredit.innerHTML = L._('Powered by <a href="{leaflet}">Leaflet</a> and <a href="{django}">Django</a>, glued by <a href="{umap}">uMap project</a>.', urls);
         var browser = L.DomUtil.create('li', '');
         L.DomUtil.create('i', 'umap-icon-16 umap-list', browser);
-        var label = L.DomUtil.create('span', '', browser);
-        label.textContent = label.title = L._('Browse data');
+        var labelBrowser = L.DomUtil.create('span', '', browser);
+        labelBrowser.textContent = labelBrowser.title = L._('Browse data');
         L.DomEvent.on(browser, 'click', this.openBrowser, this);
-        this.ui.openPanel({data: {html: container}, actions: [browser]});
+        var filter = L.DomUtil.create('li', '');
+        L.DomUtil.create('i', 'umap-icon-16 umap-add', filter);
+        var labelFilter = L.DomUtil.create('span', '', filter);
+        labelFilter.textContent = labelFilter.title = L._('Filter data');
+        L.DomEvent.on(filter, 'click', this.openFilter, this);
+        this.ui.openPanel({data: {html: container}, actions: [browser, filter]});
     },
 
     eachDataLayer: function (method, context) {
@@ -1057,6 +1069,7 @@ L.U.Map.include({
         'sortKey',
         'labelKey',
         'filterKey',
+        'advancedFilterKey',
         'slugKey',
         'showLabel',
         'labelDirection',
@@ -1253,6 +1266,7 @@ L.U.Map.include({
             'options.labelKey',
             ['options.sortKey', {handler: 'BlurInput', helpEntries: 'sortKey', placeholder: L._('Default: name'), label: L._('Sort key'), inheritable: true}],
             ['options.filterKey', {handler: 'Input', helpEntries: 'filterKey', placeholder: L._('Default: name'), label: L._('Filter keys'), inheritable: true}],
+            ['options.advancedFilterKey', {handler: 'Input', helpEntries: 'advancedFilterKey', placeholder: L._('Example: key1,key2,key3'), label: L._('Advanced filter keys'), inheritable: true}],
             ['options.slugKey', {handler: 'BlurInput', helpEntries: 'slugKey', placeholder: L._('Default: name'), label: L._('Feature identifier key')}]
         ];
 
@@ -1435,6 +1449,10 @@ L.U.Map.include({
         browser.href = '#';
         L.DomEvent.on(browser, 'click', L.DomEvent.stop)
                   .on(browser, 'click', this.openBrowser, this);
+        var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Filter data'));
+        filter.href = '#';
+        L.DomEvent.on(filter, 'click', L.DomEvent.stop)
+            .on(filter, 'click', this.openFilter, this);
         var setName = function () {
             name.textContent = this.getDisplayName();
         };
@@ -1621,6 +1639,10 @@ L.U.Map.include({
                 callback: this.openBrowser
             },
             {
+                text: L._('Filter data'),
+                callback: this.openFilter
+            },
+            {
                 text: L._('About'),
                 callback: this.displayCaption
             },
@@ -1698,6 +1720,10 @@ L.U.Map.include({
 
     getFilterKeys: function () {
         return (this.options.filterKey || this.options.sortKey || 'name').split(',');
+    },
+
+    getAdvancedFilterKeys: function () {
+        return (this.options.advancedFilterKey || '').split(",");
     }
 
 });
