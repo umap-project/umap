@@ -440,8 +440,9 @@ L.U.PermanentCreditsControl = L.Control.extend({
         position: 'bottomleft'
     },
 
-    initialize: function (map) {
+    initialize: function (map, options) {
         this.map = map;
+        L.Control.prototype.initialize.call(this, options);
     },
 
     onAdd: function () {
@@ -453,11 +454,6 @@ L.U.PermanentCreditsControl = L.Control.extend({
         this.setBackground();
 
         return paragraphContainer;
-    },
-
-    _update: function () {
-        this.setCredits();
-        this.setBackground();
     },
 
     setCredits: function () {

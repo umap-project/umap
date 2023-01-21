@@ -277,7 +277,7 @@ L.U.Map.include({
         this._controls.measure = (new L.MeasureControl()).initHandler(this);
         this._controls.more = new L.U.MoreControls();
         this._controls.scale = L.control.scale();
-        if (this.options.permanentCredit) this.permanentCreditControl = (new L.U.PermanentCreditsControl(this)).addTo(this);
+        this._controls.permanentCredit = new L.U.PermanentCreditsControl(this);
         if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable();
         else this.scrollWheelZoom.disable();
         this.renderControls();
@@ -310,6 +310,7 @@ L.U.Map.include({
             if (status === undefined || status === null) L.DomUtil.addClass(control._container, 'display-on-more');
             else L.DomUtil.removeClass(control._container, 'display-on-more');
         }
+        if (this.options.permanentCredit) this._controls.permanentCredit.addTo(this);
         if (this.options.moreControl) this._controls.more.addTo(this);
         if (this.options.scaleControl) this._controls.scale.addTo(this);
     },
@@ -1396,9 +1397,7 @@ L.U.Map.include({
             ['options.permanentCreditBackground', {handler: 'Switch', label: L._('Permanent credits background')}]
         ];
         var creditsBuilder = new L.U.FormBuilder(this, creditsFields, {
-            callback: function () {
-                this._controls.attribution._update();
-                this.permanentCreditControl._update();},
+            callback: this.renderControls,
             callbackContext: this
         });
         credits.appendChild(creditsBuilder.build());
