@@ -119,9 +119,9 @@ a.umap-control-text {
 }
 .umap-permanent-credits-container {
     max-width: 20rem;
-    margin: 0!important;
+    margin-left: 5px!important;
+    margin-bottom: 5px!important;
     padding: 0.5rem;
-    border-top-right-radius: 1rem;
 }
 
 
@@ -1375,7 +1375,6 @@ a.add-datalayer:hover,
 
     .umap-permanent-credits-container {
         max-width: 100%;
-        border-top-right-radius: 0;
     }
 }
 
