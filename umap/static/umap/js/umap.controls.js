@@ -785,7 +785,7 @@ L.U.Map.include({
         }
         advancedFilterKeys.forEach(property => {
             advancedFiltersFull[property] = [];
-            if (!filtersAlreadyLoaded) {
+            if (!filtersAlreadyLoaded || !this.getMap().options.advancedFilters[property]) {
                 this.getMap().options.advancedFilters[property] = [];
             }
         });
