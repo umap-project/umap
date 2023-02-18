@@ -964,12 +964,16 @@ L.U.Map.include({
         var labelBrowser = L.DomUtil.create('span', '', browser);
         labelBrowser.textContent = labelBrowser.title = L._('Browse data');
         L.DomEvent.on(browser, 'click', this.openBrowser, this);
-        var filter = L.DomUtil.create('li', '');
-        L.DomUtil.create('i', 'umap-icon-16 umap-add', filter);
-        var labelFilter = L.DomUtil.create('span', '', filter);
-        labelFilter.textContent = labelFilter.title = L._('Filter data');
-        L.DomEvent.on(filter, 'click', this.openFilter, this);
-        this.ui.openPanel({data: {html: container}, actions: [browser, filter]});
+        var actions = [browser];
+        if (this.options.advancedFilterKey) {
+            var filter = L.DomUtil.create('li', '');
+            L.DomUtil.create('i', 'umap-icon-16 umap-add', filter);
+            var labelFilter = L.DomUtil.create('span', '', filter);
+            labelFilter.textContent = labelFilter.title = L._('Filter data');
+            L.DomEvent.on(filter, 'click', this.openFilter, this);
+            actions.push(filter)
+        }
+        this.ui.openPanel({data: {html: container}, actions: actions});
     },
 
     eachDataLayer: function (method, context) {
@@ -1285,6 +1289,7 @@ L.U.Map.include({
 
         builder = new L.U.FormBuilder(this, optionsFields, {
             callback: function (e) {
+                this.initCaptionBar();
                 this.eachDataLayer(function (datalayer) {
                     if (e.helper.field === 'options.sortKey') datalayer.reindex();
                     datalayer.redraw();
@@ -1465,10 +1470,12 @@ L.U.Map.include({
             browser.href = '#';
             L.DomEvent.on(browser, 'click', L.DomEvent.stop)
                     .on(browser, 'click', this.openBrowser, this);
-            var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Filter data'));
-            filter.href = '#';
-            L.DomEvent.on(filter, 'click', L.DomEvent.stop)
-                .on(filter, 'click', this.openFilter, this);
+            if (this.options.advancedFilterKey) {
+                var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Filter data'));
+                filter.href = '#';
+                L.DomEvent.on(filter, 'click', L.DomEvent.stop)
+                    .on(filter, 'click', this.openFilter, this);
+            }
         }
         var setName = function () {
             name.textContent = this.getDisplayName();
@@ -1650,15 +1657,17 @@ L.U.Map.include({
                 });
             }
         }
-        items.push('-',
-            {
-                text: L._('Browse data'),
-                callback: this.openBrowser
-            },
-            {
+        items.push('-', {
+            text: L._('Browse data'),
+            callback: this.openBrowser
+        });
+        if (this.options.advancedFilterKey) {
+            items.push({
                 text: L._('Filter data'),
                 callback: this.openFilter
-            },
+            })
+        }
+        items.push(
             {
                 text: L._('About'),
                 callback: this.displayCaption
