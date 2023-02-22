@@ -6,6 +6,7 @@
 # Emmanuel Verigos <emverigos@geodev.gr>, 2017-2018,2021
 # Emmanuel Verigos <emverigos@geodev.gr>, 2018
 # Emmanuel Verigos <emverigos@geodev.gr>, 2017
+# Jim Kats <jim-kats@hotmail.com>, 2022
 # prendi <prendi@openmailbox.org>, 2017
 # Yannis Kaskamanidis <kiolalis@gmail.com>, 2021
 msgid ""
@@ -13,8 +14,8 @@ msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2021-07-11 08:06+0000\n"
-"Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Jim Kats <jim-kats@hotmail.com>, 2022\n"
 "Language-Team: Greek (http://www.transifex.com/openstreetmap/umap/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,7 +101,7 @@ msgstr "Σύνδεσμος σελίδας Αναλυτικής Άδειας Χρ
 
 #: umap/models.py:63
 msgid "URL template using OSM tile format"
-msgstr "URL προτύπου που χρησιμοποιεί μορφοποίηση πλακιδίων OSM"
+msgstr "Πρότυπο URL που χρησιμοποιεί μορφοποίηση πλακιδίων OSM"
 
 #: umap/models.py:71
 msgid "Order of the tilelayers in the edit box"
@@ -229,7 +230,7 @@ msgstr "Παρακαλώ επιλέξτε έναν πάροχο"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Το uMap σου επιτρέπει να δημιουργήσεις χάρτες με<a href=\"%(osm_url)s\" />OpenStreetMap</a> επίπεδα πολύ γρήγορα και να τα ενσωματώσεις στον ιστότοπο σου."
+msgstr "Το uMap σου επιτρέπει να δημιουργήσεις πολύ γρήγορα χάρτες με<a href=\"%(osm_url)s\" />OpenStreetMap</a> και να τους ενσωματώσεις στον ιστότοπο σου."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
@@ -274,7 +275,7 @@ msgstr "Χάρτης των uMaps"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr "Έμπνευση και περιήγηση στους χάρτες"
+msgstr "Περιηγήσου και αναζήτησε την έμπνευση στους παρακάτω χάρτες!"
 
 #: umap/templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."

@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Cees Geuze <info@cgid.nl>, 2020
+# danieldegroot2 <danieldegroot18@gmail.com>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2020-07-19 19:55+0000\n"
-"Last-Translator: Cees Geuze <info@cgid.nl>\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: danieldegroot2 <danieldegroot18@gmail.com>, 2022\n"
 "Language-Team: Dutch (http://www.transifex.com/openstreetmap/umap/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +26,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "Dit is een demo-versie, gebruikt voor tests en pre-rolling releases. Als u een stabiele versie nodig hebt, gebruik <a href=\"%(stable_url)s\">%(stable_url)s</a>. U kan ook uw eigen versie hosten, het is namelijk <a href=\"%(repo_url)s\">open source</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
@@ -42,7 +43,7 @@ msgstr "Mijn kaarten"
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Log in"
-msgstr ""
+msgstr "Inloggen"
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
@@ -68,19 +69,19 @@ msgstr "Zoeken"
 #: umap/forms.py:40
 #, python-format
 msgid "Secret edit link is %s"
-msgstr ""
+msgstr "Geheime link om te bewerken is %s"
 
 #: umap/forms.py:44 umap/models.py:115
 msgid "Everyone can edit"
-msgstr "Iedereen kan wijzigen"
+msgstr "Iedereen kan wijzigingen maken"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr ""
+msgstr "Alleen te bewerken met een geheime link"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "Kaart is 'alleen lezen' wegens onderhoud"
+msgstr "Site is 'alleen lezen' wegens onderhoud"
 
 #: umap/models.py:17
 msgid "name"
@@ -96,11 +97,11 @@ msgstr "Link naar pagina waar de licentie details staan"
 
 #: umap/models.py:63
 msgid "URL template using OSM tile format"
-msgstr ""
+msgstr "URL-sjabloon met OSM tegel-formaat"
 
 #: umap/models.py:71
 msgid "Order of the tilelayers in the edit box"
-msgstr ""
+msgstr "Volgorde van de tegel-lagen in het bewerkingsvak."
 
 #: umap/models.py:116
 msgid "Only editors can edit"
@@ -188,7 +189,7 @@ msgstr "Toon deze laag tijdens laden."
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr "Ga naar de home page"
+msgstr "Ga naar de home-pagina"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
@@ -225,11 +226,11 @@ msgstr "Kies een provider"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Maak in enkele ogenblikken kaarten met uMaps <a href=\"%(osm_url)s\" />OpenStreetMap</a> kaartlagen en toon ze op uw site."
+msgstr "Maak in enkele ogenblikken kaarten met <a href=\"%(osm_url)s\" />OpenStreetMap</a>-kaartlagen en toon ze op uw site."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Kies de lagen van je kaart"
+msgstr "Kies de lagen van uw kaart"
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
@@ -245,11 +246,11 @@ msgstr "Stel kaartopties in: toon minikaart, zoek gebruiker tijdens laden..."
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "Batchimporteer geo-gestructureerde gegevens (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Kies de licentie voor je data"
+msgstr "Kies de licentie voor uw data"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
@@ -304,7 +305,7 @@ msgstr "Wachtwoord wijziging"
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr "Vul uw oude wachtwoord in ,om veiligheidsredenen, en vul daarna tweemaal uw nieuwe wachtwoord in, zodat we zeker weten dat u het correct hebt ingevoerd."
+msgstr "Vul uw oude wachtwoord in -om veiligheidsredenen- en vul daarna tweemaal uw nieuwe wachtwoord in, zodat we zeker weten dat u het correct hebt ingevoerd."
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"

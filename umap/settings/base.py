@@ -30,6 +30,12 @@ LANG_INFO.update({
         'name': 'Sinhala',
         'name_local': 'සිංහල',
     },
+    "ms": {
+        "bidi": False,
+        "code": "ms",
+        "name": "Malay",
+        "name_local": "Bahasa Melayu",
+    },
 })
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -51,6 +57,7 @@ LANGUAGES = (
     ('en', 'English'),
     ('es', 'Spanish'),
     ('et', 'Estonian'),
+    ('fa-ir', 'Persian (Iran)'),
     ('fi', 'Finnish'),
     ('fr', 'French'),
     ('gl', 'Galician'),
@@ -63,9 +70,11 @@ LANGUAGES = (
     ('ja', 'Japanese'),
     ('ko', 'Korean'),
     ('lt', 'Lithuanian'),
+    ('ms', 'Malay'),
     ('nl', 'Dutch'),
     ('no', 'Norwegian'),
     ('pl', 'Polish'),
+    ('pt', 'Portuguese'),
     ('pt-br', 'Portuguese (Brazil)'),
     ('pt-pt', 'Portuguese (Portugal)'),
     ('ro', 'Romanian'),

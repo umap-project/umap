@@ -3,19 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Aleš Fiala <f.ales1@seznam.cz>, 2023
 # Jakub A. Tesinsky, 2014
 # Jakub A. Tesinsky, 2014
-# trendspotter <j.podhorecky@volny.cz>, 2019
-# trendspotter <j.podhorecky@volny.cz>, 2018
-# trendspotter <j.podhorecky@volny.cz>, 2018
-# trendspotter <j.podhorecky@volny.cz>, 2018-2019
+# Jiří Podhorecký, 2019
+# Jiří Podhorecký, 2018
+# Jiří Podhorecký, 2018
+# Jiří Podhorecký, 2018-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-07-10 10:59+0000\n"
-"Last-Translator: trendspotter <j.podhorecky@volny.cz>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Aleš Fiala <f.ales1@seznam.cz>, 2023\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/openstreetmap/umap/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -185,7 +186,7 @@ msgstr "Kopie"
 
 #: umap/models.py:261
 msgid "display on load"
-msgstr "zbraz na startu"
+msgstr "zobrazit při startu"
 
 #: umap/models.py:262
 msgid "Display this layer on load."
