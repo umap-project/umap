@@ -605,7 +605,7 @@ class MapDelete(DeleteView):
     model = Map
     pk_url_kwarg = "map_id"
 
-    def delete(self, *args, **kwargs):
+    def form_valid(self, form):
         self.object = self.get_object()
         if self.object.owner and self.request.user != self.object.owner:
             return HttpResponseForbidden(
@@ -801,7 +801,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 class DataLayerDelete(DeleteView):
     model = DataLayer
 
-    def delete(self, *args, **kwargs):
+    def form_valid(self, form):
         self.object = self.get_object()
         if self.object.map != self.kwargs['map_inst']:
             return HttpResponseForbidden()
