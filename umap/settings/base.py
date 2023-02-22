@@ -36,7 +36,6 @@ LANG_INFO.update({
 TIME_ZONE = 'UTC'
 USE_TZ = True
 USE_I18N = True
-USE_L10N = True
 LANGUAGE_CODE = 'en'
 LANGUAGES = (
     ('am-et', 'Amharic'),
@@ -99,7 +98,10 @@ INSTALLED_APPS = (
     'umap',
     'compressor',
     'social_django',
-    'agnocomplete',
+    # See https://github.com/peopledoc/django-agnocomplete/commit/26eda2dfa4a2f8a805ca2ea19a0c504b9d773a1c
+    # Django does not find the app config in the default place, so the app is not loaded
+    # so the "autodiscover" is not run.
+    'agnocomplete.app.AgnocompleteConfig',
 )
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

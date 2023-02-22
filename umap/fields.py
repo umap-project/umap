@@ -2,7 +2,7 @@ import json
 
 import six
 from django.db import models
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 
 class DictField(models.TextField):
@@ -30,4 +30,4 @@ class DictField(models.TextField):
 
     def value_to_string(self, obj):
         """Return value from object converted to string properly"""
-        return smart_text(self.get_prep_value(self.value_from_object(obj)))
+        return smart_str(self.get_prep_value(self.value_from_object(obj)))
