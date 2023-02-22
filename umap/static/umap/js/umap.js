@@ -969,7 +969,7 @@ L.U.Map.include({
             var filter = L.DomUtil.create('li', '');
             L.DomUtil.create('i', 'umap-icon-16 umap-add', filter);
             var labelFilter = L.DomUtil.create('span', '', filter);
-            labelFilter.textContent = labelFilter.title = L._('Filter data');
+            labelFilter.textContent = labelFilter.title = L._('Select data');
             L.DomEvent.on(filter, 'click', this.openFilter, this);
             actions.push(filter)
         }
@@ -1471,7 +1471,7 @@ L.U.Map.include({
             L.DomEvent.on(browser, 'click', L.DomEvent.stop)
                     .on(browser, 'click', this.openBrowser, this);
             if (this.options.advancedFilterKey) {
-                var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Filter data'));
+                var filter = L.DomUtil.add('a', 'umap-open-filter-link', container, ' | ' + L._('Select data'));
                 filter.href = '#';
                 L.DomEvent.on(filter, 'click', L.DomEvent.stop)
                     .on(filter, 'click', this.openFilter, this);
@@ -1663,7 +1663,7 @@ L.U.Map.include({
         });
         if (this.options.advancedFilterKey) {
             items.push({
-                text: L._('Filter data'),
+                text: L._('Select data'),
                 callback: this.openFilter
             })
         }

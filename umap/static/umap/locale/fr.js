@@ -262,6 +262,7 @@ var locale = {
     "See all": "Tout voir",
     "See data layers": "Voir les calques",
     "See full screen": "Voir en plein écran",
+    "Select data": "Sélectionner les données",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Désactiver pour masquer ce calque du diaporama, du navigateur de données…",
     "Shape properties": "Propriétés de la forme",
     "Short URL": "URL courte",
