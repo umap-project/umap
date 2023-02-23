@@ -117,6 +117,12 @@ a.umap-control-text {
 .leaflet-control-edit-enable a:hover {
     background-color: #4d5759;
 }
+.umap-permanent-credits-container {
+    max-width: 20rem;
+    margin-left: 5px!important;
+    margin-bottom: 5px!important;
+    padding: 0.5rem;
+}
 
 
 
@@ -729,20 +735,24 @@ a.add-datalayer:hover,
     margin-bottom: 14px;
     border-radius: 2px;
 }
+.umap-browse-features h5, .umap-filter-data h5 {
+    margin-bottom: 0;
+    overflow: hidden;
+    padding-left: 5px;
+}
 .umap-browse-features h5 {
     height: 30px;
     line-height: 30px;
     background-color: #eeeee0;
-    margin-bottom: 0;
     color: #666;
-    overflow: hidden;
-    padding-left: 5px;
 }
 .umap-browse-features h5 span {
     margin-left: 10px;
 }
 .umap-browse-features li {
     padding: 2px 0;
+}
+.umap-browse-features li, .umap-filter-data li {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -774,6 +784,9 @@ a.add-datalayer:hover,
 }
 .umap-browse-features .polygon .feature-color {
     background-position: -32px -16px;
+}
+.umap-filter-data .property-container:not(:first-child) {
+    margin-top: 14px;
 }
 .show-on-edit {
     display: none!important;
@@ -1358,6 +1371,10 @@ a.add-datalayer:hover,
 
     .leaflet-control-layers-expanded {
         margin-left: 10px;
+    }
+
+    .umap-permanent-credits-container {
+        max-width: 100%;
     }
 }
 

@@ -434,6 +434,43 @@ L.U.MoreControls = L.Control.extend({
 });
 
 
+L.U.PermanentCreditsControl = L.Control.extend({
+
+    options: {
+        position: 'bottomleft'
+    },
+
+    initialize: function (map, options) {
+        this.map = map;
+        L.Control.prototype.initialize.call(this, options);
+    },
+
+    onAdd: function () {
+        var paragraphContainer = L.DomUtil.create('div', 'umap-permanent-credits-container'),
+            creditsParagraph = L.DomUtil.create('p', '', paragraphContainer);
+
+        this.paragraphContainer = paragraphContainer;
+        this.setCredits();
+        this.setBackground();
+
+        return paragraphContainer;
+    },
+
+    setCredits: function () {
+        this.paragraphContainer.innerHTML = L.Util.toHTML(this.map.options.permanentCredit);
+    },
+
+    setBackground: function () {
+        if (this.map.options.permanentCreditBackground) {
+            this.paragraphContainer.style.backgroundColor = '#FFFFFFB0';
+        } else {
+            this.paragraphContainer.style.backgroundColor = '';
+        }
+    }
+    
+});
+
+
 L.U.DataLayersControl = L.Control.extend({
 
     options: {
@@ -695,7 +732,7 @@ L.U.Map.include({
             var build = function () {
                 ul.innerHTML = '';
                 datalayer.eachFeature(function (feature) {
-                    if (filterValue && !feature.matchFilter(filterValue, filterKeys)) return;
+                    if ((filterValue && !feature.matchFilter(filterValue, filterKeys)) || feature.properties.isVisible === false) return;
                     ul.appendChild(addFeature(feature));
                 });
             };
@@ -732,6 +769,114 @@ L.U.Map.include({
         label.textContent = label.title = L._('About');
         L.DomEvent.on(link, 'click', this.displayCaption, this);
         this.ui.openPanel({data: {html: browserContainer}, actions: [link]});
+    },
+
+    _openFilter: function () {
+        var filterContainer = L.DomUtil.create('div', 'umap-filter-data'),
+            title = L.DomUtil.add('h3', 'umap-filter-title', filterContainer, this.options.name),
+            propertiesContainer = L.DomUtil.create('div', 'umap-filter-properties', filterContainer),
+            advancedFilterKeys = this.getAdvancedFilterKeys();
+
+        var advancedFiltersFull = {};
+        var filtersAlreadyLoaded = true;
+        if (!this.getMap().options.advancedFilters) {
+            this.getMap().options.advancedFilters = {};
+            filtersAlreadyLoaded = false;
+        }
+        advancedFilterKeys.forEach(property => {
+            advancedFiltersFull[property] = [];
+            if (!filtersAlreadyLoaded || !this.getMap().options.advancedFilters[property]) {
+                this.getMap().options.advancedFilters[property] = [];
+            }
+        });
+        this.eachDataLayer(function (datalayer) {
+            datalayer.eachFeature(function (feature) {
+                advancedFilterKeys.forEach(property => {
+                    if (feature.properties[property]) {
+                        if (!advancedFiltersFull[property].includes(feature.properties[property])) {
+                            advancedFiltersFull[property].push(feature.properties[property]);
+                        }
+                    }
+                });
+            });
+        });
+
+        var addPropertyValue = function (property, value) {
+            var property_li = L.DomUtil.create('li', ''),
+                filter_check = L.DomUtil.create('input', '', property_li),
+                filter_label = L.DomUtil.create('label', '', property_li);
+            filter_check.type = 'checkbox';
+            filter_check.id = `checkbox_${property}_${value}`;
+            filter_check.checked = this.getMap().options.advancedFilters[property] && this.getMap().options.advancedFilters[property].includes(value);
+            filter_check.setAttribute('data-property', property);
+            filter_check.setAttribute('data-value', value);
+            filter_label.htmlFor = `checkbox_${property}_${value}`;
+            filter_label.innerHTML = value;
+            L.DomEvent.on(filter_check, 'change', function (e) {
+                var property = e.srcElement.dataset.property;
+                var value = e.srcElement.dataset.value;
+                if (e.srcElement.checked) {
+                    this.getMap().options.advancedFilters[property].push(value);
+                } else {
+                    this.getMap().options.advancedFilters[property].splice(this.getMap().options.advancedFilters[property].indexOf(value), 1);
+                }
+                L.bind(filterFeatures, this)();
+            }, this);
+            return property_li
+        };
+
+        var addProperty = function (property) {
+            var container = L.DomUtil.create('div', 'property-container', propertiesContainer),
+                headline = L.DomUtil.add('h5', '', container, property);
+            var ul = L.DomUtil.create('ul', '', container);
+            var orderedValues = advancedFiltersFull[property];
+            orderedValues.sort();
+            orderedValues.forEach(value => {
+                ul.appendChild(L.bind(addPropertyValue, this)(property, value));
+            });
+        };
+
+        var filterFeatures = function () {
+            var noResults = true;
+            this.eachDataLayer(function (datalayer) {
+                datalayer.eachFeature(function (feature) {
+                    feature.properties.isVisible = true;
+                    for (const [property, values] of Object.entries(this.map.options.advancedFilters)) {
+                        if (values.length > 0) {
+                            if (!feature.properties[property] || !values.includes(feature.properties[property])) {
+                                feature.properties.isVisible = false;
+                            }
+                        }
+                    }
+                    if (feature.properties.isVisible) {
+                        noResults = false;
+                        if (!this.isLoaded()) this.fetchData();
+                        this.map.addLayer(feature);
+                        this.fire('show');
+                    } else {
+                        this.map.removeLayer(feature);
+                        this.fire('hide');
+                    }
+                });
+            });
+            if (noResults) {
+                this.help.show('advancedFiltersNoResults');
+            } else {
+                this.help.hide();
+            }
+        };
+
+        propertiesContainer.innerHTML = '';
+        advancedFilterKeys.forEach(property => {
+            L.bind(addProperty, this)(property);
+        });
+
+        var link = L.DomUtil.create('li', '');
+        L.DomUtil.create('i', 'umap-icon-16 umap-caption', link);
+        var label = L.DomUtil.create('span', '', link);
+        label.textContent = label.title = L._('About');
+        L.DomEvent.on(link, 'click', this.displayCaption, this);
+        this.ui.openPanel({ data: { html: filterContainer }, actions: [link] });
     }
 
 });
@@ -805,12 +950,14 @@ L.U.AttributionControl = L.Control.Attribution.extend({
         if (this._map.options.shortCredit) {
             L.DomUtil.add('span', '', this._container, ' — ' + L.Util.toHTML(this._map.options.shortCredit));
         }
-        var link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'));
-        L.DomEvent
-            .on(link, 'click', L.DomEvent.stop)
-            .on(link, 'click', this._map.displayCaption, this._map)
-            .on(link, 'dblclick', L.DomEvent.stop);
-        if (window.top === window.self) {
+        if (this._map.options.captionMenus) {
+            var link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'));
+            L.DomEvent
+                .on(link, 'click', L.DomEvent.stop)
+                .on(link, 'click', this._map.displayCaption, this._map)
+                .on(link, 'dblclick', L.DomEvent.stop);
+        }
+        if (window.top === window.self && this._map.options.captionMenus) {
             // We are not in iframe mode
             var home = L.DomUtil.add('a', '', this._container, ' — ' + L._('Home'));
             home.href = '/';
@@ -1001,7 +1148,8 @@ L.U.IframeExporter = L.Evented.extend({
         embedControl: null,
         datalayersControl: true,
         onLoadPanel: 'none',
-        captionBar: false
+        captionBar: false,
+        captionMenus: true
     },
 
     dimensions: {

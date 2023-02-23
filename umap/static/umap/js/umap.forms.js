@@ -287,7 +287,8 @@ L.FormBuilder.onLoadPanel = L.FormBuilder.Select.extend({
     selectOptions: [
         ['none', L._('None')],
         ['caption', L._('Caption')],
-        ['databrowser', L._('Data browser')]
+        ['databrowser', L._('Data browser')],
+        ['datafilters', L._('Data filters')]
     ]
 
 });
@@ -758,6 +759,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
         onLoadPanel: {handler: 'onLoadPanel', label: L._('Do you want to display a panel on load?')},
         displayPopupFooter: {handler: 'Switch', label: L._('Do you want to display popup footer?')},
         captionBar: {handler: 'Switch', label: L._('Do you want to display a caption bar?')},
+        captionMenus: {handler: 'Switch', label: L._('Do you want to display caption menus?')},
         zoomTo: {handler: 'IntInput', placeholder: L._('Inherit'), helpEntries: 'zoomTo', label: L._('Default zoom level'), inheritable: true},
         showLabel: {handler: 'LabelChoice', label: L._('Display label'), inheritable: true},
         labelDirection: {handler: 'LabelDirection', label: L._('Label direction'), inheritable: true},
