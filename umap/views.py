@@ -719,7 +719,7 @@ class GZipMixin(object):
     def etag(self):
         path = self.path()
         with open(path, mode='rb') as f:
-            return hashlib.md5(f.read()).hexdigest()
+            return '"%s"' % hashlib.md5(f.read()).hexdigest()
 
 
 class DataLayerView(GZipMixin, BaseDetailView):
@@ -742,7 +742,7 @@ class DataLayerView(GZipMixin, BaseDetailView):
                     content_type='application/json'
                 )
             response["Last-Modified"] = http_date(statobj.st_mtime)
-            response['ETag'] = '%s' % hashlib.md5(force_bytes(response.content)).hexdigest()  # noqa
+            response['ETag'] = '"%s"' % hashlib.md5(force_bytes(response.content)).hexdigest()  # noqa
             response['Content-Length'] = len(response.content)
         if path.endswith(self.EXT):
             response['Content-Encoding'] = 'gzip'
