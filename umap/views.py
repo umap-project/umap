@@ -744,6 +744,7 @@ class DataLayerView(GZipMixin, BaseDetailView):
             response["Last-Modified"] = http_date(statobj.st_mtime)
             response['ETag'] = '"%s"' % hashlib.md5(force_bytes(response.content)).hexdigest()  # noqa
             response['Content-Length'] = len(response.content)
+            response['Vary'] = 'Accept-Encoding'
         if path.endswith(self.EXT):
             response['Content-Encoding'] = 'gzip'
         return response

@@ -28,6 +28,7 @@ def test_get(client, settings, datalayer):
         assert response['ETag'] is not None
     assert response['Last-Modified'] is not None
     assert response['Cache-Control'] is not None
+    assert response['Vary'] == 'Accept-Encoding'
     assert 'Content-Encoding' not in response
     j = json.loads(response.content.decode())
     assert '_umap_options' in j
