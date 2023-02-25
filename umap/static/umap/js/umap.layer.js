@@ -401,8 +401,11 @@ L.U.DataLayer = L.Evented.extend({
     },
 
     _dataUrl: function() {
-        var template = this.map.options.urls.datalayer_view;
-        return L.Util.template(template, {'pk': this.umap_id, 'map_id': this.map.options.umap_id});
+        var template = this.map.options.urls.datalayer_view,
+            url = L.Util.template(template, {'pk': this.umap_id, 'map_id': this.map.options.umap_id});
+        // No browser cache for owners/editors.
+        if (this.map.options.allowEdit) url = url + '?' + Date.now();
+        return url;
     },
 
     isRemoteLayer: function () {
