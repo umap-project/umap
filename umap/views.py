@@ -699,8 +699,11 @@ class GZipMixin(object):
 
     def etag(self):
         path = self.path()
-        with open(path, mode='rb') as f:
-            return '"%s"' % hashlib.md5(f.read()).hexdigest()
+        # Align ETag with Nginx one, because when using X-Send-File, If-None-Match
+        # and If-Modified-Since are handled by Nginx.
+        # https://github.com/nginx/nginx/blob/4ace957c4e08bcbf9ef5e9f83b8e43458bead77f/src/http/ngx_http_core_module.c#L1675-L1709
+        statobj = os.stat(path)
+        return 'W/"%x-%x"' % (int(statobj.st_mtime), statobj.st_size)
 
 
 class DataLayerView(GZipMixin, BaseDetailView):
@@ -724,8 +727,8 @@ class DataLayerView(GZipMixin, BaseDetailView):
                     content_type="application/json"
                 )
             response["Last-Modified"] = http_date(statobj.st_mtime)
-            response['ETag'] = '"%s"' % hashlib.md5(force_bytes(response.content)).hexdigest()  # noqa
-            response['Content-Length'] = len(response.content)
+            response['ETag'] = self.etag()
+            response['Content-Length'] = statobj.st_size
             response['Vary'] = 'Accept-Encoding'
         if path.endswith(self.EXT):
             response['Content-Encoding'] = 'gzip'
@@ -747,6 +750,7 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
     def form_valid(self, form):
         form.instance.map = self.kwargs['map_inst']
         self.object = form.save()
+        # Simple response with only metadatas (including new id)
         response = simple_json_response(**self.object.metadata)
         response['ETag'] = self.etag()
         return response
@@ -758,6 +762,8 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        # Simple response with only metadatas (client should not reload all data
+        # on save)
         response = simple_json_response(**self.object.metadata)
         response['ETag'] = self.etag()
         return response
