@@ -274,7 +274,7 @@ L.U.DataLayer = L.Evented.extend({
         if (!this.umap_id) return;
         this.map.get(this._dataUrl(), {
             callback: function (geojson, response) {
-                this._etag = response.getResponseHeader('ETag');
+                this._last_modified = response.getResponseHeader('Last-Modified');
                 this.fromUmapGeoJSON(geojson);
                 this.backupOptions();
                 this.fire('loaded');
@@ -1017,7 +1017,7 @@ L.U.DataLayer = L.Evented.extend({
             data: formData,
             callback: function (data, response) {
                 this._geojson = geojson;
-                this._etag = response.getResponseHeader('ETag');
+                this._last_modified = response.getResponseHeader('Last-Modified');
                 this.setUmapId(data.id);
                 this.updateOptions(data);
                 this.backupOptions();
@@ -1028,7 +1028,7 @@ L.U.DataLayer = L.Evented.extend({
                 this.map.continueSaving();
             },
             context: this,
-            headers: {'If-Match': this._etag || ''}
+            headers: this._last_modified ? {'If-Unmodified-Since': this._last_modified} : {}
         });
     },
 

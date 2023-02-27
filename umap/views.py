@@ -693,12 +693,10 @@ class GZipMixin(object):
     def path(self):
         return self.object.geojson.path
 
-    def etag(self):
-        # Align ETag with Nginx one, because when using X-Send-File, If-None-Match
-        # and If-Modified-Since are handled by Nginx.
-        # https://github.com/nginx/nginx/blob/4ace957c4e08bcbf9ef5e9f83b8e43458bead77f/src/http/ngx_http_core_module.c#L1675-L1709
-        statobj = os.stat(self.path)
-        return '"%x-%x"' % (int(statobj.st_mtime), statobj.st_size)
+    @property
+    def last_modified(self):
+        stat = os.stat(self.path)
+        return http_date(stat.st_mtime)
 
 
 class DataLayerView(GZipMixin, BaseDetailView):
@@ -727,8 +725,7 @@ class DataLayerView(GZipMixin, BaseDetailView):
             with open(path, "rb") as f:
                 # Should not be used in production!
                 response = HttpResponse(f.read(), content_type="application/geo+json")
-            response["Last-Modified"] = http_date(statobj.st_mtime)
-            response["ETag"] = self.etag()
+            response["Last-Modified"] = self.last_modified
             response["Content-Length"] = statobj.st_size
             response["Vary"] = "Accept-Encoding"
             if accepts_gzip and settings.UMAP_GZIP:
@@ -737,7 +734,6 @@ class DataLayerView(GZipMixin, BaseDetailView):
 
 
 class DataLayerVersion(DataLayerView):
-
     @property
     def path(self):
         return "{root}/{path}".format(
@@ -755,7 +751,7 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
         self.object = form.save()
         # Simple response with only metadatas (including new id)
         response = simple_json_response(**self.object.metadata)
-        response["ETag"] = self.etag()
+        response["Last-Modified"] = self.last_modified
         return response
 
 
@@ -768,24 +764,23 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         # Simple response with only metadatas (client should not reload all data
         # on save)
         response = simple_json_response(**self.object.metadata)
-        response["ETag"] = self.etag()
+        response["Last-Modified"] = self.last_modified
         return response
 
-    def if_match(self):
+    def is_unmodified(self):
         """Optimistic concurrency control."""
-        match = True
-        if_match = self.request.META.get("HTTP_IF_MATCH")
-        if if_match:
-            etag = self.etag()
-            if etag != if_match:
-                match = False
-        return match
+        modified = True
+        if_unmodified = self.request.META.get("HTTP_IF_UNMODIFIED_SINCE")
+        if if_unmodified:
+            if self.last_modified != if_unmodified:
+                modified = False
+        return modified
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.map != self.kwargs["map_inst"]:
             return HttpResponseForbidden()
-        if not self.if_match():
+        if not self.is_unmodified():
             return HttpResponse(status=412)
         return super(DataLayerUpdate, self).post(request, *args, **kwargs)
 
