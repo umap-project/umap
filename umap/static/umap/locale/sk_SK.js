@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Farba textu pre popis zhluku",
     "Text formatting": "Formátovanie textu",
     "The name of the property to use as feature label (ex.: \"nom\")": "Názov vlastnosti používať ako popis objektu (napr.: \"nom\")",
-    "The zoom and center have been set.": "Priblíženie a stred mapy boli nastavené",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "Použiť keď vzdialený server nepovoľuje cross-domain (pomalšie)",
     "To zoom": "Max. priblíženie",
     "Toggle edit mode (Shift+Click)": "Prepnúť režim úprav (Shift+Klik)",
@@ -366,12 +366,22 @@ var locale = {
     "Optional.": "Optional.",
     "Paste your data here": "Paste your data here",
     "Please save the map first": "Please save the map first",
-    "Unable to locate you.": "Unable to locate you.",
     "Feature identifier key": "Feature identifier key",
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
-    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-}
-;
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier.",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
+};
 L.registerLocale("sk_SK", locale);
 L.setLocale("sk_SK");

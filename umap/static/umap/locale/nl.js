@@ -87,7 +87,7 @@ var locale = {
     "Action not allowed :(": "Handeling niet toegestaan :(",
     "Activate slideshow mode": "Activeer slidshow modus",
     "Add a layer": "Laag toevoegen",
-    "Add a line to the current multi": "Voeg een lijn to aan de huidige multilijn",
+    "Add a line to the current multi": "Voeg een lijn toe aan de huidige multilijn",
     "Add a new property": "Voeg een nieuwe eigenschap toe",
     "Add a polygon to the current multi": "Voeg een nieuwe polygoon toe aan de huidige multipolygoon",
     "Advanced actions": "Geavanceerde acties",
@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Kleur van de text voor het label van de cluster",
     "Text formatting": "Opmaak van de tekst",
     "The name of the property to use as feature label (ex.: \"nom\")": "De naam van de eigenschap om het object te labelen (vb.: \"naam\")",
-    "The zoom and center have been set.": "Het zoomniveau en de positie op de kaarten zijn ingesteld",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "Activeer indien de externe server geen cross domain toelaat (trager)",
     "To zoom": "Tot zoomniveau",
     "Toggle edit mode (Shift+Click)": "Schakelaar voor editeermodus (Shift+Click)",
@@ -366,11 +366,22 @@ var locale = {
     "Optional.": "Optioneel.",
     "Paste your data here": "Plak je data hier",
     "Please save the map first": "Graag eerst de kaart opslaan",
-    "Unable to locate you.": "Niet gelukt om je te lokaliseren.",
     "Feature identifier key": "Unieke identificator van het object",
     "Open current feature on load": "Dit object openen bij laden",
     "Permalink": "Permalink",
-    "The name of the property to use as feature unique identifier.": "De naam van de eigenschap die als unieke identificator van objecten geldt"
+    "The name of the property to use as feature unique identifier.": "De naam van de eigenschap die als unieke identificator van objecten geldt",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
 };
 L.registerLocale("nl", locale);
 L.setLocale("nl");

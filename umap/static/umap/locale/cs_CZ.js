@@ -48,7 +48,7 @@ var locale = {
     "Popup content template": "Šablona obsahu bubliny",
     "Set symbol": "Nastavit symbol",
     "Side panel": "Boční panel",
-    "Simplify": "Simplify",
+    "Simplify": "Zjednodušit",
     "Symbol or url": "Symbol nebo adresa URL",
     "Table": "Tabulka",
     "always": "vždy",
@@ -168,7 +168,7 @@ var locale = {
     "Edit properties in a table": "Upravit vlastnosti v tabulce",
     "Edit this feature": "Upravit tento objekt",
     "Editing": "Upravujete",
-    "Embed and share this map": "Sílet mapu nebo ji vložit do jiného webu",
+    "Embed and share this map": "Sdílet mapu nebo ji vložit do jiného webu",
     "Embed the map": "Vložit mapu do jiného webu",
     "Empty": "Vyprázdnit",
     "Enable editing": "Povolit úpravy",
@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Barva textu popisku shluku",
     "Text formatting": "Formátování textu",
     "The name of the property to use as feature label (ex.: \"nom\")": "Název vlastnosti pro použití v popisku objektu (ex.: \"nom\")",
-    "The zoom and center have been set.": "Přiblížení a střed mapy byly nastaveny",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "Pro případ že vzdálený server neumožňuje cross domain (pomalejší)",
     "To zoom": "Maximální přiblížení",
     "Toggle edit mode (Shift+Click)": "Přepnout do editovacího módu (Shift+Click)",
@@ -366,12 +366,22 @@ var locale = {
     "Optional.": "Volitelné.",
     "Paste your data here": "Zde vložte svá data",
     "Please save the map first": "Prosím, nejprve uložte mapu",
-    "Unable to locate you.": "Unable to locate you.",
-    "Feature identifier key": "Feature identifier key",
-    "Open current feature on load": "Open current feature on load",
-    "Permalink": "Permalink",
-    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-}
-;
+    "Feature identifier key": "Identifikační klíč funkce",
+    "Open current feature on load": "Otevřít současnou funkci při zatížení",
+    "Permalink": "Trvalý odkaz",
+    "The name of the property to use as feature unique identifier.": "Název vlastnosti pro použití v popisku jedinečného identifikátoru objektu.",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
+};
 L.registerLocale("cs_CZ", locale);
 L.setLocale("cs_CZ");

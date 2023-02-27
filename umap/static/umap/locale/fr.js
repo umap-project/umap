@@ -220,7 +220,7 @@ var locale = {
     "Map has been attached to your account": "La  carte est maintenant liée à votre compte",
     "Map has been saved!": "La carte a été sauvegardée !",
     "Map user content has been published under licence": "Les contenus sur la carte ont été publiés avec la licence",
-    "Map's editors": "Éditeurs",
+    "Map's editors": "Éditeurs de la carte",
     "Map's owner": "Propriétaire de la carte",
     "Merge lines": "Fusionner les lignes",
     "More controls": "Plus d'outils",
@@ -262,7 +262,6 @@ var locale = {
     "See all": "Tout voir",
     "See data layers": "Voir les calques",
     "See full screen": "Voir en plein écran",
-    "Select data": "Sélectionner les données",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Désactiver pour masquer ce calque du diaporama, du navigateur de données…",
     "Shape properties": "Propriétés de la forme",
     "Short URL": "URL courte",
@@ -285,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Couleur du texte du cluster",
     "Text formatting": "Mise en forme du texte",
     "The name of the property to use as feature label (ex.: \"nom\")": "Le nom de la propriété à utiliser comme libellé des éléments (ex. : \"nom\")",
-    "The zoom and center have been set.": "Le zoom et le centre ont été enregistrés.",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "Cocher si le serveur distant n'autorise pas le cross domain (plus lent)",
     "To zoom": "Jusqu'au zoom",
     "Toggle edit mode (Shift+Click)": "Alterner le mode édition (Shift+Clic)",
@@ -367,12 +366,22 @@ var locale = {
     "Optional.": "Facultatif",
     "Paste your data here": "Collez vos données ici",
     "Please save the map first": "Vous devez d'abord enregistrer la carte",
-    "Unable to locate you.": "Impossible de vous localiser.",
     "Feature identifier key": "Clé unique d'un élément",
     "Open current feature on load": "Ouvrir l'élément courant au chargement",
     "Permalink": "Permalien",
-    "The name of the property to use as feature unique identifier.": "Nom de la propriété utilisée pour identifier un élément de façon unique"
-}
-;
+    "The name of the property to use as feature unique identifier.": "Nom de la propriété utilisée pour identifier un élément de façon unique",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
+};
 L.registerLocale("fr", locale);
 L.setLocale("fr");

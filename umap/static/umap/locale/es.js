@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Color del texto para la etiqueta clúster",
     "Text formatting": "Formato de texto",
     "The name of the property to use as feature label (ex.: \"nom\")": "El nombre de la propiedad a usar como etiqueta del elemento (ejemplo: «nom»)",
-    "The zoom and center have been set.": "El acercamiento y el centrado han sido establecidos.",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "Para utilizar si el servidor remoto no permite dominios cruzados (más lento)",
     "To zoom": "Para acercar/alejar",
     "Toggle edit mode (Shift+Click)": "Conmuta el modo edición (Shift+Clic)",
@@ -366,11 +366,22 @@ var locale = {
     "Optional.": "Opcional.",
     "Paste your data here": "Pega tus datos aquí",
     "Please save the map first": "Guarde primero el mapa",
-    "Unable to locate you.": "No se pudo ubicar.",
     "Feature identifier key": "Clave de identificación del elemento",
     "Open current feature on load": "Abrir el elemento actual al cargar",
     "Permalink": "Permalink",
-    "The name of the property to use as feature unique identifier.": "El nombre de la propiedad a utilizar como identificador único del elemento."
+    "The name of the property to use as feature unique identifier.": "El nombre de la propiedad a utilizar como identificador único del elemento.",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
 };
 L.registerLocale("es", locale);
 L.setLocale("es");

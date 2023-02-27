@@ -1,4 +1,4 @@
-{
+var locale = {
     "Add symbol": "اضافه کردن نماد",
     "Allow scroll wheel zoom?": "آیا به زوم چرخ اسکرول اجازه داده شود؟",
     "Automatic": "خودکار",
@@ -382,4 +382,6 @@
     "Permanent credits background": "Permanent credits background",
     "Select data": "Select data",
     "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
-}
+};
+L.registerLocale("fa_IR", locale);
+L.setLocale("fa_IR");

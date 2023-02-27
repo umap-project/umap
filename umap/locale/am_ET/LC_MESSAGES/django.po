@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Alazar Tekle <al3may3hu@gmail.com>, 2015\n"
 "Language-Team: Amharic (Ethiopia) (http://www.transifex.com/openstreetmap/umap/language/am_ET/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,7 +70,7 @@ msgstr "ፈልግ"
 msgid "Secret edit link is %s"
 msgstr "የሚስጥር የማረሚያ መስመሩ %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "ሁሉም ማረም ይችላል"
 
@@ -82,107 +82,107 @@ msgstr "በሚስጥር የመረሚያ መስመሩ ብቻ የሚታረም"
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "ስም"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "ዝርዝሮች"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "ፈቃዱ በዝርዝር ከተቀመጠ ገፅ ጛር አገናኝ"
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "የድረ-ገፅ አድራሻ ተምሳሌ በኦ.ኤስ.ኤም. የታይል ፎርማት"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "በማረሚያ ሳጥኑ ውስጥ የታይል ሌየሮቹ ቅደም ተከተል"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "አራሚዎች ብቻ ማረም ይችላሉ"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "ባለቤት ብቻ ማረም ይችላል"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "ሁሉም (የህዝብ)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "አድራሻው ያለው ሁሉ"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "አራሚዎች ብቻ"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr ""
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "መገለጫ"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "መሀከል"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "ዙም"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "ጠቁም"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "በመጫን ላይ ያለውን ተጠቃሚ ጠቁም?"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "የካርታውን ፈቃድ ከልስ"
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "ፈቃድ"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "ባለቤት"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "አራሚዎች"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "ያለበትን ሁኔታ አርም"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "ያለበትን ሁኔታ አጋራ"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "ሁኔታዎች"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "ድቃይ"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "በመጫን ላይ አሳይ"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "ሌየሩ በመጫን ላይ አሳይ"
 
@@ -276,7 +276,7 @@ msgstr "ካርታዎችን ተመልከት፣ ስሜትህን አነቃቃ!"
 msgid "You are logged in. Continuing..."
 msgstr "ገብተዋል። በመቀጠል ላይ ..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "በ"
 
@@ -289,8 +289,8 @@ msgid "About"
 msgstr "ስለ"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "አስተያየት"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -334,30 +334,30 @@ msgstr ""
 msgid "Not map found."
 msgstr "ካርታው አልተገኘም"
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "ካርታውን አሳይ"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "ካርታዎ ተፈጥሯል! ይህንን ካርታ ከሌላ ኮምፒውተር ላይ ሆነው ለማረም ከፈለጉ የሚከተለውን አድራሻ ይጠቀሙ %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "እንኳን ደስ አለዎ ካርታዎ ተፈጥሯል!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "ካርታው ታድሷል!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "የካርታ አራሚዎች በትክክል ታድሰዋል!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "ካርታውን የሚሰርዘው ባለቤቱ ብቻ ነው።"
 
@@ -372,6 +372,6 @@ msgstr "ካርታዎ ተዳቅሏል! ይህንን ካርታ ከሌላ ኮምፒ
 msgid "Congratulations, your map has been cloned!"
 msgstr "እንኳን ደስ አለዎ ካርታዎ ተዳቅሏል!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "ሌየሩ በትክክል ተሰርዟ"

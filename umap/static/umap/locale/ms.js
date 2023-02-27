@@ -1,4 +1,4 @@
-{
+var locale = {
     "Add symbol": "Tambah simbol",
     "Allow scroll wheel zoom?": "Benarkan zum dengan roda tatal?",
     "Automatic": "Automatik",
@@ -382,4 +382,6 @@
     "Permanent credits background": "Permanent credits background",
     "Select data": "Select data",
     "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
-}
+};
+L.registerLocale("ms", locale);
+L.setLocale("ms");

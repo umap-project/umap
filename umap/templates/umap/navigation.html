@@ -12,7 +12,7 @@
         <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
       {% endif %}
       <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-      <li><a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Feedback" %}</a></li>
+      <li><a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Help" %}</a></li>
       {% if user.is_authenticated %}
         {% if user.has_usable_password %}
           <li><a href="{% url 'password_change' %}" >{% trans "Change password" %}</a></li>

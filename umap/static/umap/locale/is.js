@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "Litur á texta fyrir skýringu á klasa",
     "Text formatting": "Snið á texta",
     "The name of the property to use as feature label (ex.: \"nom\")": "Heiti eigindisins sem á að nota sem skýringu á fitju (dæmi: \"nafn\")",
-    "The zoom and center have been set.": "Búið er að stilla aðdrátt og miðjun.",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "Nota ef fjartengdur þjónn leyfir ekki millivísanir léna (hægvirkara)",
     "To zoom": "Í aðdrátt",
     "Toggle edit mode (Shift+Click)": "Víxla breytingaham af/á (Shift+Smella)",
@@ -366,12 +366,22 @@ var locale = {
     "Optional.": "Valfrjálst.",
     "Paste your data here": "Límdu gögnin þín hér",
     "Please save the map first": "Vistaðu fyrst kortið",
-    "Unable to locate you.": "Unable to locate you.",
     "Feature identifier key": "Feature identifier key",
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
-    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-}
-;
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier.",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
+};
 L.registerLocale("is", locale);
 L.setLocale("is");

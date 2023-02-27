@@ -284,7 +284,7 @@ var locale = {
     "Text color for the cluster label": "叢集標籤的文字顏色",
     "Text formatting": "文字格式",
     "The name of the property to use as feature label (ex.: \"nom\")": "用作圖徵標籤的屬性名稱 (例如：“nom”)",
-    "The zoom and center have been set.": "已完成置中及切換功能設定",
+    "The zoom and center have been set.": "The zoom and center have been set.",
     "To use if remote server doesn't allow cross domain (slower)": "如果遠端伺服器不允許跨網域存取時使用 (效率較差)",
     "To zoom": "至縮放大小",
     "Toggle edit mode (Shift+Click)": "切換編輯模式 (Shift+Click)",
@@ -366,12 +366,22 @@ var locale = {
     "Optional.": "可選",
     "Paste your data here": "請在此貼上你的資料",
     "Please save the map first": "請先儲存地圖",
-    "Unable to locate you.": "Unable to locate you.",
     "Feature identifier key": "Feature identifier key",
     "Open current feature on load": "Open current feature on load",
     "Permalink": "Permalink",
-    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier."
-}
-;
+    "The name of the property to use as feature unique identifier.": "The name of the property to use as feature unique identifier.",
+    "Advanced filter keys": "Advanced filter keys",
+    "Comma separated list of properties to use for checkbox filtering": "Comma separated list of properties to use for checkbox filtering",
+    "Data filters": "Data filters",
+    "Do you want to display caption menus?": "Do you want to display caption menus?",
+    "Example: key1,key2,key3": "Example: key1,key2,key3",
+    "Invalid latitude or longitude": "Invalid latitude or longitude",
+    "Invalide property name: {name}": "Invalide property name: {name}",
+    "No results for these filters": "No results for these filters",
+    "Permanent credits": "Permanent credits",
+    "Permanent credits background": "Permanent credits background",
+    "Select data": "Select data",
+    "Will be permanently visible in the bottom left corner of the map": "Will be permanently visible in the bottom left corner of the map"
+};
 L.registerLocale("zh_TW", locale);
 L.setLocale("zh_TW");
