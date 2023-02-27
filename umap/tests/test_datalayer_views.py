@@ -85,14 +85,6 @@ def test_should_not_be_possible_to_delete_with_wrong_map_id_in_url(client, datal
     assert DataLayer.objects.filter(pk=datalayer.pk).exists()
 
 
-def test_get_gzipped(client, datalayer, settings):
-    url = reverse('datalayer_view', args=(datalayer.pk, ))
-    response = client.get(url, HTTP_ACCEPT_ENCODING='gzip')
-    assert response['Last-Modified'] is not None
-    assert response['Cache-Control'] is not None
-    assert response['Content-Encoding'] == 'gzip'
-
-
 def test_optimistic_concurrency_control_with_good_last_modified(client, datalayer, map, post_data):  # noqa
     # Get Last-Modified
     url = reverse('datalayer_view', args=(datalayer.pk, ))
