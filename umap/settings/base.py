@@ -216,6 +216,7 @@ DATABASES = {
     }
 }
 UMAP_READONLY = False
+UMAP_GZIP = True
 LOCALE_PATHS = [os.path.join(PROJECT_DIR, 'locale')]
 
 # =============================================================================

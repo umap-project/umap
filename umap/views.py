@@ -1,10 +1,10 @@
-import hashlib
 import json
+import mimetypes
 import os
 import re
 import socket
+from pathlib import Path
 
-import mimetypes
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout as do_logout
@@ -672,38 +672,16 @@ class GZipMixin(object):
 
     EXT = '.gz'
 
-    def _path(self):
+    @property
+    def path(self):
         return self.object.geojson.path
 
-    def path(self):
-        """
-        Serve gzip file if client accept it.
-        Generate or update the gzip file if needed.
-        """
-        path = self._path()
-        statobj = os.stat(path)
-        ae = self.request.META.get('HTTP_ACCEPT_ENCODING', '')
-        if re_accepts_gzip.search(ae) and getattr(settings, 'UMAP_GZIP', True):
-            gzip_path = "{path}{ext}".format(path=path, ext=self.EXT)
-            up_to_date = True
-            if not os.path.exists(gzip_path):
-                up_to_date = False
-            else:
-                gzip_statobj = os.stat(gzip_path)
-                if statobj.st_mtime > gzip_statobj.st_mtime:
-                    up_to_date = False
-            if not up_to_date:
-                gzip_file(path, gzip_path)
-            path = gzip_path
-        return path
-
     def etag(self):
-        path = self.path()
         # Align ETag with Nginx one, because when using X-Send-File, If-None-Match
         # and If-Modified-Since are handled by Nginx.
         # https://github.com/nginx/nginx/blob/4ace957c4e08bcbf9ef5e9f83b8e43458bead77f/src/http/ngx_http_core_module.c#L1675-L1709
-        statobj = os.stat(path)
-        return 'W/"%x-%x"' % (int(statobj.st_mtime), statobj.st_size)
+        statobj = os.stat(self.path)
+        return '"%x-%x"' % (int(statobj.st_mtime), statobj.st_size)
 
 
 class DataLayerView(GZipMixin, BaseDetailView):
@@ -711,32 +689,40 @@ class DataLayerView(GZipMixin, BaseDetailView):
 
     def render_to_response(self, context, **response_kwargs):
         response = None
-        path = self.path()
+        path = self.path
+        # Generate gzip if needed
+        accepts_gzip = re_accepts_gzip.search(
+            self.request.META.get("HTTP_ACCEPT_ENCODING", "")
+        )
+        if accepts_gzip and settings.UMAP_GZIP:
+            gzip_path = Path(f"{path}{self.EXT}")
+            if not gzip_path.exists():
+                gzip_file(path, gzip_path)
 
         if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
             response = HttpResponse()
             path = path.replace(settings.MEDIA_ROOT, "/internal")
             response[settings.UMAP_XSENDFILE_HEADER] = path
         else:
-            # TODO IMS
+            # Do not use in production
+            # (no cache-control/If-Modified-Since/If-None-Match)
             statobj = os.stat(path)
             with open(path, "rb") as f:
                 # Should not be used in production!
-                response = HttpResponse(
-                    f.read(),
-                    content_type="application/json"
-                )
+                response = HttpResponse(f.read(), content_type="application/geo+json")
             response["Last-Modified"] = http_date(statobj.st_mtime)
-            response['ETag'] = self.etag()
-            response['Content-Length'] = statobj.st_size
-            response['Vary'] = 'Accept-Encoding'
-        if path.endswith(self.EXT):
-            response['Content-Encoding'] = 'gzip'
+            response["ETag"] = self.etag()
+            response["Content-Length"] = statobj.st_size
+            response["Vary"] = "Accept-Encoding"
+            if accepts_gzip and settings.UMAP_GZIP:
+                response["Content-Encoding"] = "gzip"
         return response
 
 
 class DataLayerVersion(DataLayerView):
-    def _path(self):
+
+    @property
+    def path(self):
         return "{root}/{path}".format(
             root=settings.MEDIA_ROOT,
             path=self.object.get_version_path(self.kwargs["name"]),

@@ -1,4 +1,5 @@
 import gzip
+import os
 
 from django.urls import get_resolver
 from django.urls import URLPattern, URLResolver
@@ -106,9 +107,11 @@ def decorated_patterns(func, *urls):
 
 
 def gzip_file(from_path, to_path):
+    stat = os.stat(from_path)
     with open(from_path, 'rb') as f_in:
         with gzip.open(to_path, 'wb') as f_out:
             f_out.writelines(f_in)
+    os.utime(to_path, (stat.st_mtime, stat.st_mtime))
 
 
 def is_ajax(request):
