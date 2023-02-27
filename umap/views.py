@@ -720,16 +720,13 @@ class DataLayerView(GZipMixin, BaseDetailView):
             response[settings.UMAP_XSENDFILE_HEADER] = path
         else:
             # Do not use in production
-            # (no cache-control/If-Modified-Since/If-None-Match)
+            # (no gzip/cache-control/If-Modified-Since/If-None-Match)
             statobj = os.stat(path)
             with open(path, "rb") as f:
                 # Should not be used in production!
                 response = HttpResponse(f.read(), content_type="application/geo+json")
             response["Last-Modified"] = self.last_modified
             response["Content-Length"] = statobj.st_size
-            response["Vary"] = "Accept-Encoding"
-            if accepts_gzip and settings.UMAP_GZIP:
-                response["Content-Encoding"] = "gzip"
         return response
 
 
