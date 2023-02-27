@@ -14,9 +14,13 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
 from django.db.models import Q
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden, HttpResponsePermanentRedirect,
-                         HttpResponseRedirect)
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponsePermanentRedirect,
+    HttpResponseRedirect,
+)
 from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -31,9 +35,16 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from .forms import (DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_CENTER,
-                    AnonymousMapPermissionsForm, DataLayerForm, FlatErrorList,
-                    MapSettingsForm, UpdateMapPermissionsForm)
+from .forms import (
+    DEFAULT_LATITUDE,
+    DEFAULT_LONGITUDE,
+    DEFAULT_CENTER,
+    AnonymousMapPermissionsForm,
+    DataLayerForm,
+    FlatErrorList,
+    MapSettingsForm,
+    UpdateMapPermissionsForm,
+)
 from .models import DataLayer, Licence, Map, Pictogram, TileLayer
 from .utils import get_uri_template, gzip_file, is_ajax
 
@@ -676,7 +687,7 @@ class MapAnonymousEditUrl(RedirectView):
 
 class GZipMixin(object):
 
-    EXT = '.gz'
+    EXT = ".gz"
 
     def _path(self):
         return self.object.geojson.path
@@ -719,7 +730,7 @@ class DataLayerView(GZipMixin, BaseDetailView):
         response = None
         path = self.path()
 
-        if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
+        if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
             path = path.replace(settings.MEDIA_ROOT, "/internal")
             response[settings.UMAP_XSENDFILE_HEADER] = path
@@ -728,16 +739,13 @@ class DataLayerView(GZipMixin, BaseDetailView):
             statobj = os.stat(path)
             with open(path, "rb") as f:
                 # Should not be used in production!
-                response = HttpResponse(
-                    f.read(),
-                    content_type="application/json"
-                )
+                response = HttpResponse(f.read(), content_type="application/json")
             response["Last-Modified"] = http_date(statobj.st_mtime)
-            response['ETag'] = self.etag()
-            response['Content-Length'] = statobj.st_size
-            response['Vary'] = 'Accept-Encoding'
+            response["ETag"] = self.etag()
+            response["Content-Length"] = statobj.st_size
+            response["Vary"] = "Accept-Encoding"
         if path.endswith(self.EXT):
-            response['Content-Encoding'] = 'gzip'
+            response["Content-Encoding"] = "gzip"
         return response
 
 
@@ -754,11 +762,11 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
     form_class = DataLayerForm
 
     def form_valid(self, form):
-        form.instance.map = self.kwargs['map_inst']
+        form.instance.map = self.kwargs["map_inst"]
         self.object = form.save()
         # Simple response with only metadatas (including new id)
         response = simple_json_response(**self.object.metadata)
-        response['ETag'] = self.etag()
+        response["ETag"] = self.etag()
         return response
 
 
@@ -771,13 +779,13 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         # Simple response with only metadatas (client should not reload all data
         # on save)
         response = simple_json_response(**self.object.metadata)
-        response['ETag'] = self.etag()
+        response["ETag"] = self.etag()
         return response
 
     def if_match(self):
         """Optimistic concurrency control."""
         match = True
-        if_match = self.request.META.get('HTTP_IF_MATCH')
+        if_match = self.request.META.get("HTTP_IF_MATCH")
         if if_match:
             etag = self.etag()
             if etag != if_match:
