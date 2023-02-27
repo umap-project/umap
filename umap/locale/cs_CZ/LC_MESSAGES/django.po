@@ -296,7 +296,7 @@ msgstr "O uMap"
 
 #: umap/templates/umap/navigation.html:15
 msgid "Help"
-msgstr ""
+msgstr "Nápověda"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
