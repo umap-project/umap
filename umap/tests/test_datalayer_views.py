@@ -24,11 +24,8 @@ def post_data():
 def test_get(client, settings, datalayer):
     url = reverse('datalayer_view', args=(datalayer.pk, ))
     response = client.get(url)
-    if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
-        assert response['ETag'] is not None
     assert response['Last-Modified'] is not None
     assert response['Cache-Control'] is not None
-    assert response['Vary'] == 'Accept-Encoding'
     assert 'Content-Encoding' not in response
     j = json.loads(response.content.decode())
     assert '_umap_options' in j
@@ -91,46 +88,44 @@ def test_should_not_be_possible_to_delete_with_wrong_map_id_in_url(client, datal
 def test_get_gzipped(client, datalayer, settings):
     url = reverse('datalayer_view', args=(datalayer.pk, ))
     response = client.get(url, HTTP_ACCEPT_ENCODING='gzip')
-    if getattr(settings, 'UMAP_XSENDFILE_HEADER', None):
-        assert response['ETag'] is not None
     assert response['Last-Modified'] is not None
     assert response['Cache-Control'] is not None
     assert response['Content-Encoding'] == 'gzip'
 
 
-def test_optimistic_concurrency_control_with_good_etag(client, datalayer, map, post_data):  # noqa
-    # Get Etag
+def test_optimistic_concurrency_control_with_good_last_modified(client, datalayer, map, post_data):  # noqa
+    # Get Last-Modified
     url = reverse('datalayer_view', args=(datalayer.pk, ))
     response = client.get(url)
-    etag = response['ETag']
+    last_modified = response['Last-Modified']
     url = reverse('datalayer_update',
                   args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password="123123")
     name = 'new name'
     post_data['name'] = 'new name'
-    response = client.post(url, post_data, follow=True, HTTP_IF_MATCH=etag)
+    response = client.post(url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=last_modified)
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name == name
 
 
-def test_optimistic_concurrency_control_with_bad_etag(client, datalayer, map, post_data):  # noqa
+def test_optimistic_concurrency_control_with_bad_last_modified(client, datalayer, map, post_data):  # noqa
     url = reverse('datalayer_update', args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password='123123')
     name = 'new name'
     post_data['name'] = name
-    response = client.post(url, post_data, follow=True, HTTP_IF_MATCH='xxx')
+    response = client.post(url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE='xxx')
     assert response.status_code == 412
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name != name
 
 
-def test_optimistic_concurrency_control_with_empty_etag(client, datalayer, map, post_data):  # noqa
+def test_optimistic_concurrency_control_with_empty_last_modified(client, datalayer, map, post_data):  # noqa
     url = reverse('datalayer_update', args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password='123123')
     name = 'new name'
     post_data['name'] = name
-    response = client.post(url, post_data, follow=True, HTTP_IF_MATCH=None)
+    response = client.post(url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=None)
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name == name
