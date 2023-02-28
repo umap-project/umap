@@ -1,6 +1,5 @@
 L.Map.mergeOptions({
-    base_layers: null,
-    overlay_layers: null,
+    overlay: null,
     datalayers: [],
     center: [4, 50],
     zoom: 6,
@@ -507,6 +506,7 @@ L.U.Map.include({
             // Users can put tilelayer URLs by hand, and if they add wrong {variable},
             // Leaflet throw an error, and then the map is no more editable
         }
+        this.setOverlay()
     },
 
     eachTileLayer: function (method, context) {
@@ -519,6 +519,20 @@ L.U.Map.include({
         }
         if (this.customTilelayer && (Array.prototype.indexOf && urls.indexOf(this.customTilelayer._url) === -1)) {
             method.call(context || this, this.customTilelayer);
+        }
+    },
+
+    setOverlay: function () {
+        if (!this.options.overlay || !this.options.overlay.url_template) return;
+        var overlay = this.createTileLayer(this.options.overlay);
+        try {
+            this.addLayer(overlay);
+            if (this.overlay) this.removeLayer(this.overlay);
+            this.overlay = overlay;
+        } catch (e) {
+            this.removeLayer(overlay);
+            console.error(e);
+            this.ui.alert({content: L._('Error in the overlay URL') + ': ' + overlay._url, level: 'error'});
         }
     },
 
@@ -1059,6 +1073,7 @@ L.U.Map.include({
         'description',
         'licence',
         'tilelayer',
+        'overlay',
         'limitBounds',
         'color',
         'iconClass',
@@ -1334,6 +1349,26 @@ L.U.Map.include({
         customTilelayer.appendChild(builder.build());
     },
 
+    _editOverlay: function (container) {
+        if (!L.Util.isObject(this.options.overlay)) {
+            this.options.overlay = {};
+        }
+        var overlayFields = [
+            ['options.overlay.url_template', {handler: 'BlurInput', helpText: L._('Supported scheme') + ': http://{s}.domain.com/{z}/{x}/{y}.png', placeholder: 'url', helpText: L._('Background overlay url')}],
+            ['options.overlay.maxZoom', {handler: 'BlurIntInput', placeholder: L._('max zoom')}],
+            ['options.overlay.minZoom', {handler: 'BlurIntInput', placeholder: L._('min zoom')}],
+            ['options.overlay.attribution', {handler: 'BlurInput', placeholder: L._('attribution')}],
+            ['options.overlay.opacity', {handler: 'Range', min: 0, max: 1, step: 'any', placeholder: L._('opacity')}],
+            ['options.overlay.tms', {handler: 'Switch', label: L._('TMS format')}]
+        ];
+        var overlay = L.DomUtil.createFieldset(container, L._('Custom overlay'));
+        builder = new L.U.FormBuilder(this, overlayFields, {
+            callback: this.initTileLayers,
+            callbackContext: this
+        });
+        overlay.appendChild(builder.build());
+    },
+
     _editBounds: function (container) {
         if (!L.Util.isObject(this.options.limitBounds)) {
             this.options.limitBounds = {};
@@ -1460,6 +1495,7 @@ L.U.Map.include({
         this._editDefaultProperties(container);
         this._editInteractionsProperties(container);
         this._editTilelayer(container);
+        this._editOverlay(container);
         this._editBounds(container);
         this._editSlideshow(container);
         this._editCredits(container);
