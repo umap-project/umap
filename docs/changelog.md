@@ -1,5 +1,20 @@
 # Changelog
 
+## dev
+
+- upgrade to Django 4.x
+- added a filter by category panel (cf #1041, thanks @k-3st3ban)
+- added a permanent credit (cf #1041, thanks @k-3st3ban)
+- allow to add an overlay tilelayer
+- switched from `If-None-Match` to `If-Unmodified-Since` for concurrency control
+- prevent caching datalayers geojson when in edit mode
+- replaced custom locate control with Leaflet.Locate (cf #1031n thanks @aleksejspopovs)
+- fixed bug where we coud not edit permissions of a new saved map unless reloading the page
+- CSS: Fix cut of text in iframes of popup content (cf #971, thanks @tordans)
+- switched from custom DictField to propert JsonField
+- enhanced property fallback in string formatting (cf #862, thanks @mstock)
+
+
 ## 1.2.3
 
 - improved panel layout and image sizing (by @Binnette, cf #824)
