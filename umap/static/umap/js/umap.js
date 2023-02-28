@@ -1218,18 +1218,7 @@ L.U.Map.include({
         return this.findDataLayer(function (d) { return d.umap_id == umap_id; });
     },
 
-    edit: function () {
-        if(!this.editEnabled) return;
-        var container = L.DomUtil.create('div','umap-edit-container'),
-            metadataFields = [
-                'options.name',
-                'options.description'
-            ],
-            title = L.DomUtil.create('h4', '', container);
-        title.textContent = L._('Edit map properties');
-        var builder = new L.U.FormBuilder(this, metadataFields);
-        var form = builder.build();
-        container.appendChild(form);
+    _editControls: function (container) {
         var UIFields = [];
         for (var i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
             UIFields.push('options.' + this.HIDDABLE_CONTROLS[i] + 'Control');
@@ -1253,7 +1242,9 @@ L.U.Map.include({
         });
         var controlsOptions = L.DomUtil.createFieldset(container, L._('User interface options'));
         controlsOptions.appendChild(builder.build());
+    },
 
+    _editShapeProperties: function (container) {
         var shapeOptions = [
             'options.color',
             'options.iconClass',
@@ -1274,7 +1265,9 @@ L.U.Map.include({
         });
         var defaultShapeProperties = L.DomUtil.createFieldset(container, L._('Default shape properties'));
         defaultShapeProperties.appendChild(builder.build());
+    },
 
+    _editDefaultProperties: function (container) {
         var optionsFields = [
             'options.smoothFactor',
             'options.dashArray',
@@ -1298,7 +1291,9 @@ L.U.Map.include({
         });
         var defaultProperties = L.DomUtil.createFieldset(container, L._('Default properties'));
         defaultProperties.appendChild(builder.build());
+    },
 
+    _editInteractionsProperties: function (container) {
         var popupFields = [
             'options.popupShape',
             'options.popupTemplate',
@@ -1317,7 +1312,9 @@ L.U.Map.include({
         });
         var popupFieldset = L.DomUtil.createFieldset(container, L._('Default interaction options'));
         popupFieldset.appendChild(builder.build());
+    },
 
+    _editTilelayer: function (container) {
         if (!L.Util.isObject(this.options.tilelayer)) {
             this.options.tilelayer = {};
         }
@@ -1335,7 +1332,9 @@ L.U.Map.include({
             callbackContext: this
         });
         customTilelayer.appendChild(builder.build());
+    },
 
+    _editBounds: function (container) {
         if (!L.Util.isObject(this.options.limitBounds)) {
             this.options.limitBounds = {};
         }
@@ -1375,7 +1374,9 @@ L.U.Map.include({
             this.isDirty = true;
             this.handleLimitBounds();
         }, this);
+    },
 
+    _editSlideshow: function (container) {
         var slideshow = L.DomUtil.createFieldset(container, L._('Slideshow'));
         var slideshowFields = [
             ['options.slideshow.active', {handler: 'Switch', label: L._('Activate slideshow mode')}],
@@ -1392,7 +1393,9 @@ L.U.Map.include({
             callbackContext: this
         });
         slideshow.appendChild(slideshowBuilder.build());
+    },
 
+    _editCredits: function (container) {
         var credits = L.DomUtil.createFieldset(container, L._('Credits'));
         var creditsFields = [
             ['options.licence', {handler: 'LicenceChooser', label: L._('licence')}],
@@ -1406,7 +1409,9 @@ L.U.Map.include({
             callbackContext: this
         });
         credits.appendChild(creditsBuilder.build());
+    },
 
+    _advancedActions: function (container) {
         var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'));
         var advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions);
         var del = L.DomUtil.create('a', 'button umap-delete', advancedButtons);
@@ -1436,6 +1441,30 @@ L.U.Map.include({
         L.DomEvent
             .on(download, 'click', L.DomEvent.stop)
             .on(download, 'click', this.renderShareBox, this);
+    },
+
+    edit: function () {
+        if(!this.editEnabled) return;
+        var container = L.DomUtil.create('div','umap-edit-container'),
+            metadataFields = [
+                'options.name',
+                'options.description'
+            ],
+            title = L.DomUtil.create('h4', '', container);
+        title.textContent = L._('Edit map properties');
+        var builder = new L.U.FormBuilder(this, metadataFields);
+        var form = builder.build();
+        container.appendChild(form);
+        this._editControls(container);
+        this._editShapeProperties(container);
+        this._editDefaultProperties(container);
+        this._editInteractionsProperties(container);
+        this._editTilelayer(container);
+        this._editBounds(container);
+        this._editSlideshow(container);
+        this._editCredits(container);
+        this._advancedActions(container);
+
         this.ui.openPanel({data: {html: container}, className: 'dark'});
     },
 
