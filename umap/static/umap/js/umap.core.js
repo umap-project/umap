@@ -46,6 +46,7 @@ L.Util.escapeHTML = function (s) {
     return s.replace(/</gm, '&lt;');
 };
 L.Util.toHTML = function (r) {
+    if (!r) return '';
     var ii;
 
     // detect newline format
