@@ -714,7 +714,7 @@ input[type=hidden].blur + .button {
     font-weight: bold;
     color: #fff;
     font-size: 0.8em;
-    z-index: 1002;
+    z-index: 1012;
     border-radius: 2px;
 }
 #umap-alert-container.error {
