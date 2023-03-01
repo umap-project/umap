@@ -777,7 +777,7 @@ L.U.Map.include({
         clearFlag.type = 'checkbox';
         clearFlag.name = 'clear';
         this.eachDataLayerReverse(function (datalayer) {
-            if (datalayer.isLoaded()) {
+            if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
                 var id = L.stamp(datalayer);
                 option = L.DomUtil.create('option', '', layerInput);
                 option.value = id;
