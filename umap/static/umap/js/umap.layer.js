@@ -365,7 +365,7 @@ L.U.DataLayer = L.Evented.extend({
     },
 
     hasDataLoaded: function () {
-        return !this.umap_id || this._geojson !== null;
+        return this._geojson !== null;
     },
 
     setUmapId: function (id) {
