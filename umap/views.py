@@ -23,9 +23,8 @@ from django.http import (
 )
 from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.utils.encoding import force_bytes, smart_bytes
+from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
 from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
@@ -327,15 +326,6 @@ def _urls_for_js(urls=None):
     urls = dict(zip(urls, [get_uri_template(url) for url in urls]))
     urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
     return urls
-
-
-def render_to_json(templates, context, request):
-    """
-    Generate a JSON HttpResponse with rendered template HTML.
-    """
-    html = render_to_string(templates, context=context, request=request)
-    _json = json.dumps({"html": html})
-    return HttpResponse(_json)
 
 
 def simple_json_response(**kwargs):
