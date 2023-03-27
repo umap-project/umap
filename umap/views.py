@@ -646,17 +646,21 @@ class MapAnonymousEditUrl(RedirectView):
         try:
             pk = signer.unsign(self.kwargs["signature"])
         except BadSignature:
-            return HttpResponseForbidden()
-        else:
-            map_inst = get_object_or_404(Map, pk=pk)
-            url = map_inst.get_absolute_url()
-            response = HttpResponseRedirect(url)
-            if not map_inst.owner:
-                key, value = map_inst.signed_cookie_elements
-                response.set_signed_cookie(
-                    key=key, value=value, max_age=ANONYMOUS_COOKIE_MAX_AGE
-                )
-            return response
+            signer = Signer(algorithm='sha1')
+            try:
+                pk = signer.unsign(self.kwargs["signature"])
+            except BadSignature:
+                return HttpResponseForbidden()
+
+        map_inst = get_object_or_404(Map, pk=pk)
+        url = map_inst.get_absolute_url()
+        response = HttpResponseRedirect(url)
+        if not map_inst.owner:
+            key, value = map_inst.signed_cookie_elements
+            response.set_signed_cookie(
+                key=key, value=value, max_age=ANONYMOUS_COOKIE_MAX_AGE
+            )
+        return response
 
 
 # ############## #
