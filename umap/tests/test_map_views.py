@@ -4,6 +4,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from django.core.signing import Signer
 from umap.models import DataLayer, Map
 
 from .base import login_required
@@ -392,6 +393,20 @@ def test_no_cookie_cant_delete(client, anonymap):
 @pytest.mark.usefixtures('allow_anonymous')
 def test_anonymous_edit_url(cookieclient, anonymap):
     url = anonymap.get_anonymous_edit_url()
+    canonical = reverse('map', kwargs={'pk': anonymap.pk,
+                                       'slug': anonymap.slug})
+    response = cookieclient.get(url)
+    assert response.status_code == 302
+    assert response['Location'] == canonical
+    key, value = anonymap.signed_cookie_elements
+    assert key in cookieclient.cookies
+
+
+@pytest.mark.usefixtures('allow_anonymous')
+def test_sha1_anonymous_edit_url(cookieclient, anonymap):
+    signer = Signer(algorithm='sha1')
+    signature = signer.sign(anonymap.pk)
+    url = reverse('map_anonymous_edit_url', kwargs={'signature': signature})
     canonical = reverse('map', kwargs={'pk': anonymap.pk,
                                        'slug': anonymap.slug})
     response = cookieclient.get(url)
