@@ -1,5 +1,6 @@
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
+from django.conf.global_settings import *
 from django.template.defaultfilters import slugify
 from django.conf.locale import LANG_INFO
 
