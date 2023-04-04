@@ -145,6 +145,7 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 ]
+STATICFILES_DIRS = []  # May be extended when using UMAP_CUSTOM_STATICS
 
 # =============================================================================
 # Templates
