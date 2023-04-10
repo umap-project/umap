@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+
+  app:
+    build:
+      target: app_python_debug
+    environment:
+      PYTHON_DEBUG: True
+    volumes:
+      - ./umap:/srv/app/umap
+    ports:
+      - 8000:8000
+      - 5678:5678

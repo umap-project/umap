@@ -27,5 +27,9 @@ umap collectstatic --noinput
 #umap storagei18n
 # compress static files
 umap compress
-# run uWSGI
-exec uwsgi --ini uwsgi.ini
+
+if [ "$PYTHON_DEBUG" = true ] ; then
+  python -m debugpy --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --nothreading --noreload
+else
+  exec uwsgi --ini uwsgi.ini
+fi

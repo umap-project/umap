@@ -1,0 +1,28 @@
+version: '2'
+services:
+  postgres:
+    image: postgis/postgis:14-3.2
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  redis:
+    image: redis:latest
+  app:
+    build:
+      context: .
+      target: app_python
+    environment:
+      DATABASE_URL: postgis://postgres:postgres@postgres/postgres
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: some-long-and-weirdly-unrandom-secret-key
+      ALLOWED_HOSTS: "*"
+      SITE_URL: http://localhost:8000/
+      LEAFLET_STORAGE_ALLOW_ANONYMOUS: true
+    depends_on:
+      - postgres
+    volumes:
+      - $PWD:/srv/umap
+    ports:
+      - "8000:8000"

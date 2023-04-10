@@ -13,9 +13,9 @@ env = environ.Env()
 
 SECRET_KEY = env('SECRET_KEY')
 INTERNAL_IPS = env.list('INTERNAL_IPS', default='127.0.0.1')
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default='*')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool('PYTHON_DEBUG', default=False)
 
 ADMIN_EMAILS = env.list('ADMIN_EMAIL', default='')
 ADMINS = [(email, email) for email in ADMIN_EMAILS]
@@ -111,10 +111,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 UMAP_USE_UNACCENT = False
 
 # For static deployment
-STATIC_ROOT = '/srv/umap/static'
+STATIC_ROOT = '/srv/app/static'
 
 # For users' statics (geojson mainly)
-MEDIA_ROOT = '/srv/umap/uploads'
+MEDIA_ROOT = '/srv/app/uploads'
 
 # Default map location for new maps
 LEAFLET_LONGITUDE = env.int('LEAFLET_LONGITUDE', default=2)

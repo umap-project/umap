@@ -1,27 +1,13 @@
 FROM node:18 AS vendors
 
-COPY . /srv/umap
+COPY . /srv/app
 
-WORKDIR /srv/umap
+WORKDIR /srv/app
 
 RUN make installjs
-
 RUN make vendors
 
-FROM python:3.8-slim
-
-ENV PYTHONUNBUFFERED=1 \
-    UMAP_SETTINGS=/srv/umap/umap/settings/docker.py \
-    PORT=8000
-
-RUN mkdir -p /srv/umap/data && \
-    mkdir -p /srv/umap/uploads
-
-COPY . /srv/umap
-
-COPY --from=vendors /srv/umap/umap/static/umap/vendors /srv/umap/umap/static/umap/vendors
-
-WORKDIR /srv/umap
+FROM python:3.8-slim as app_python
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -42,10 +28,21 @@ RUN apt-get update && \
         zlib1g-dev \
         libfreetype6-dev \
         liblcms2-dev \
-        libwebp-dev \
-        && \
-    pip install --no-cache -r requirements-docker.txt && pip install . && \
-    apt-get remove -y \
+        libwebp-dev
+
+ENV PYTHONUNBUFFERED=1 \
+    UMAP_SETTINGS=/srv/app/umap/settings/docker.py \
+    PORT=8000
+
+COPY . /srv/app
+RUN mkdir -p /srv/app/data && \
+    mkdir -p /srv/app/uploads
+COPY --from=vendors /srv/app/umap/static/umap/vendors /srv/app/umap/static/umap/vendors
+
+WORKDIR /srv/app
+
+RUN pip install --no-cache -r requirements-docker.txt && pip install .
+RUN apt-get remove -y \
         binutils \
         libproj-dev \
         libffi-dev \
@@ -64,4 +61,10 @@ EXPOSE 8000
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["/srv/umap/docker-entrypoint.sh"]
+CMD ["/srv/app/docker-entrypoint.sh"]
+
+FROM app_python as app_python_debug
+
+WORKDIR /srv/app
+
+RUN pip install debugpy==1.6.7

@@ -12,5 +12,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'umap',
+        'SECRET_KEY': 'some-long-and-weirdly-unrandom-secret-key',
     }
 }
