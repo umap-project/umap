@@ -8,6 +8,8 @@ node_modules/*
 umap/static/umap/vendors
 site/*
 .pytest_cache/
+static/
+uploads/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -17,4 +19,7 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+
+.env
+.venv/
 

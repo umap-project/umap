@@ -1,0 +1,28 @@
+version: '2'
+services:
+  postgres:
+    image: postgis/postgis:14-3.2
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  redis:
+    image: redis:latest
+  app:
+    build:
+      context: .
+      target: app_python
+    environment:
+      DATABASE_URL: postgis://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres/postgres
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: ${SECRET_KEY}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
+      SITE_URL: ${SITE_URL}
+      LEAFLET_STORAGE_ALLOW_ANONYMOUS: true
+    depends_on:
+      - postgres
+    volumes:
+      - ./uploads:/srv/app/uploads
+    ports:
+      - "8000:8000"

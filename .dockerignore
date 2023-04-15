@@ -1,0 +1,6 @@
+.vscode/
+.venv/
+build/
+static/
+umap_project.egg-info/
+data/

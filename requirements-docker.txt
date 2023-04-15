@@ -1,0 +1,3 @@
+django-environ==0.4.1
+django-redis==5.2.0
+uwsgi==2.0.21
