@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# pgeo, 2023
 # Christopher <github@1011.link>, 2020
 # Claus Ruedinger <clausruedinger@gmail.com>, 2020
 # Ettore Atalan <atalanttore@googlemail.com>, 2016
@@ -16,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-27 12:54+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Christopher <github@1011.link>, 2020\n"
-"Language-Team: German (http://www.transifex.com/openstreetmap/umap/language/de/)\n"
+"Last-Translator: pgeo, 2023\n"
+"Language-Team: German (http://app.transifex.com/openstreetmap/umap/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -296,7 +297,7 @@ msgstr "Über"
 
 #: umap/templates/umap/navigation.html:15
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"

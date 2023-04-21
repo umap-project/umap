@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"POT-Creation-Date: 2023-04-21 20:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,7 +275,7 @@ msgstr ""
 msgid "You are logged in. Continuing..."
 msgstr ""
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:227
+#: umap/templates/umap/map_list.html:7 umap/views.py:226
 msgid "by"
 msgstr ""
 
@@ -333,44 +333,44 @@ msgstr ""
 msgid "Not map found."
 msgstr ""
 
-#: umap/views.py:232
+#: umap/views.py:231
 msgid "View the map"
 msgstr ""
 
-#: umap/views.py:529
+#: umap/views.py:519
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: umap/views.py:534
+#: umap/views.py:524
 msgid "Congratulations, your map has been created!"
 msgstr ""
 
-#: umap/views.py:564
+#: umap/views.py:554
 msgid "Map has been updated!"
 msgstr ""
 
-#: umap/views.py:589
+#: umap/views.py:579
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: umap/views.py:614
+#: umap/views.py:604
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: umap/views.py:637
+#: umap/views.py:627
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: umap/views.py:642
+#: umap/views.py:632
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: umap/views.py:793
+#: umap/views.py:787
 msgid "Layer successfully deleted."
 msgstr ""
