@@ -1198,7 +1198,7 @@ L.U.Editable = L.Editable.extend({
 
     initialize: function (map, options) {
         L.Editable.prototype.initialize.call(this, map, options);
-        this.on('editable:drawing:start editable:drawing:click', this.drawingTooltip);
+        this.on('editable:drawing:start editable:drawing:click editable:drawing:move', this.drawingTooltip);
         this.on('editable:drawing:end', this.closeTooltip);
         // Layer for items added by users
         this.on('editable:drawing:cancel', function (e) {
@@ -1250,18 +1250,26 @@ L.U.Editable = L.Editable.extend({
 
     drawingTooltip: function (e) {
         var content;
+        var readableDistance;
         if (e.layer instanceof L.Marker) content = L._('Click to add a marker');
         else if (e.layer instanceof L.Polyline) {
             if (!e.layer.editor._drawnLatLngs.length) {
-                if (e.layer instanceof L.Polygon) content = L._('Click to start drawing a polygon');
-                else if (e.layer instanceof L.Polyline) content = L._('Click to start drawing a line');
-            } else if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
-                content = L._('Click to continue drawing');
+                if (e.layer instanceof L.Polygon){
+                    content = L._('Click to start drawing a polygon');
+                } else if (e.layer instanceof L.Polyline) {
+                    content = L._('Click to start drawing a line');
+                }
             } else {
-                content = L._('Click last point to finish shape');
+                var tempLatLngs = e.layer.editor._drawnLatLngs.slice();
+                tempLatLngs.push(e.latlng);
+                var length = L.GeoUtil.lineLength(this.map, tempLatLngs);
+                readableDistance = L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit());
+                content = L._('Click last point to finish shape ({distance})', {distance: readableDistance});
             }
         }
-        if (content) this.map.ui.tooltip({content: content});
+        if (content) {
+            this.map.ui.tooltip({content: content});
+        }
     },
 
     closeTooltip: function () {
