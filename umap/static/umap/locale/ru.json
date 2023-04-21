@@ -115,7 +115,7 @@
     "Choose a preset": "Выберите шаблон",
     "Choose the format of the data to import": "Выберите формат данных для импорта",
     "Choose the layer to import in": "Выбрать слой для импорта в него",
-    "Click last point to finish shape": "Щёлкните на последней точке, чтобы завершить",
+    "Click last point to finish shape ({distance})": "Щёлкните на последней точке, чтобы завершить ({distance})",
     "Click to add a marker": "Щёлкните, чтобы добавить метку",
     "Click to continue drawing": "Щёлкайте, чтобы продолжить рисование",
     "Click to edit": "Щёлкните, чтобы изменить",

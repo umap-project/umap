@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Vyberte predvoľbu",
     "Choose the format of the data to import": "Zvoľte v akom formáte sú importované údaje",
     "Choose the layer to import in": "Zvoľte vrstvu, do ktorej sa bude importovať",
-    "Click last point to finish shape": "Kliknite na posledný bod pre dokončenie tvaru",
+    "Click last point to finish shape ({distance})": "Kliknite na posledný bod pre dokončenie tvaru ({distance})",
     "Click to add a marker": "Kliknutím pridáte značku",
     "Click to continue drawing": "Kliknutím môžete pokračovať v kreslení",
     "Click to edit": "Kliknutím upravte",

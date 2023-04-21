@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Seleziona una preimpostazione",
     "Choose the format of the data to import": "Seleziona il formato dei dati da importare",
     "Choose the layer to import in": "Seleziona su quale livello fare l'importazione",
-    "Click last point to finish shape": "Click su ultimo punto per completare la geometria",
+    "Click last point to finish shape ({distance})": "Click su ultimo punto per completare la geometria ({distance})",
     "Click to add a marker": "Clicca per aggiungere un marcatore",
     "Click to continue drawing": "Clic per continuare a disegnare",
     "Click to edit": "Clic per la modifica",

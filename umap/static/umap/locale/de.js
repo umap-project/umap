@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Wähle eine Vorlage",
     "Choose the format of the data to import": "Wähle das Datenformat für den Import",
     "Choose the layer to import in": "Wähle die Ebene, in die importiert werden soll",
-    "Click last point to finish shape": "Kllicke den letzten Punkt an, um die Form abzuschließen",
+    "Click last point to finish shape ({distance})": "Kllicke den letzten Punkt an, um die Form abzuschließen ({distance})",
     "Click to add a marker": "Klicke, um einen Marker hinzuzufügen",
     "Click to continue drawing": "Klicke, um weiter zu zeichnen",
     "Click to edit": "Zum Bearbeiten klicken",

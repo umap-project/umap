@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Pasirinkite šabloną",
     "Choose the format of the data to import": "Pasirinkite importuojamų uomenų formatą",
     "Choose the layer to import in": "Pasirinkite sluoksnį importavimui",
-    "Click last point to finish shape": "Paspauskite ant paskutinio taško kad baigti piešimą",
+    "Click last point to finish shape ({distance})": "Paspauskite ant paskutinio taško kad baigti piešimą ({distance})",
     "Click to add a marker": "Paspauskite kad pridėti žymeklį",
     "Click to continue drawing": "Paspauskite kad tęsti piešimą",
     "Click to edit": "Click to edit",

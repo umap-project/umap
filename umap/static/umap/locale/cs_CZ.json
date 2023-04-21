@@ -115,7 +115,7 @@
     "Choose a preset": "Zvolte přednastavení",
     "Choose the format of the data to import": "Zvolte v jakém formátu jsou importovaná data",
     "Choose the layer to import in": "Zvolte vrstvu, do které se bude importovat",
-    "Click last point to finish shape": "Klikněte na poslední bod pro dokončení tvaru",
+    "Click last point to finish shape ({distance})": "Klikněte na poslední bod pro dokončení tvaru ({distance})",
     "Click to add a marker": "Kliknutím přidáš značku",
     "Click to continue drawing": "Kliknutím můžeš pokračovat v kreslení",
     "Click to edit": "Klikněte pro úpravy",

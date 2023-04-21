@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Kies een voorkeuzeinstelling",
     "Choose the format of the data to import": "Kies het formaat van de te importeren gegevens",
     "Choose the layer to import in": "Kies de laag om in te importeren",
-    "Click last point to finish shape": "Klik op het laatste punt om de vorm af te maken",
+    "Click last point to finish shape ({distance})": "Klik op het laatste punt om de vorm af te maken ({distance})",
     "Click to add a marker": "Klik om een punt toe te voegen",
     "Click to continue drawing": "Klik om te blijven tekenen",
     "Click to edit": "Klik om te bewerken",

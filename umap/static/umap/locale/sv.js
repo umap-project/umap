@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Välj förinställning",
     "Choose the format of the data to import": "Välj dataformat för importen",
     "Choose the layer to import in": "Välj lager att importera till",
-    "Click last point to finish shape": "Klicka på sista punkten för att slutföra formen",
+    "Click last point to finish shape ({distance})": "Klicka på sista punkten för att slutföra formen ({distance})",
     "Click to add a marker": "Klicka för att lägga till en markör",
     "Click to continue drawing": "Klicka för att fortsätta rita",
     "Click to edit": "Klicka för att redigera",

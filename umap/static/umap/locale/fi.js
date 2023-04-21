@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Valitse",
     "Choose the format of the data to import": "Valitse tuotavien tietojen formaatti",
     "Choose the layer to import in": "Valitse kerros johon tieto tuodaan",
-    "Click last point to finish shape": "Klikkaa viimeistä pistettä täydentääksesi muodon",
+    "Click last point to finish shape ({distance})": "Klikkaa viimeistä pistettä täydentääksesi muodon ({distance})",
     "Click to add a marker": "Klikkaa lisätäksesi karttamerkki",
     "Click to continue drawing": "Klikkaa jatkaaksesi piirtämistä",
     "Click to edit": "Klikkaa muokataksesi",

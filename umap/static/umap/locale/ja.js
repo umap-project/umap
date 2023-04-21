@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "プリセット選択",
     "Choose the format of the data to import": "インポートデータ形式を選択",
     "Choose the layer to import in": "インポート対象レイヤ選択",
-    "Click last point to finish shape": "クリックでシェイプの作成を終了",
+    "Click last point to finish shape ({distance})": "クリックでシェイプの作成を終了 ({distance})",
     "Click to add a marker": "クリックでマーカー追加",
     "Click to continue drawing": "クリックで描画を継続",
     "Click to edit": "クリックで編集",
