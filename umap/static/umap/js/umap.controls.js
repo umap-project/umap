@@ -1250,21 +1250,34 @@ L.U.Editable = L.Editable.extend({
 
     drawingTooltip: function (e) {
         var content;
-        var readableDistance;
         if (e.layer instanceof L.Marker) content = L._('Click to add a marker');
         else if (e.layer instanceof L.Polyline) {
-            if (!e.layer.editor._drawnLatLngs.length) {
-                if (e.layer instanceof L.Polygon){
-                    content = L._('Click to start drawing a polygon');
-                } else if (e.layer instanceof L.Polyline) {
-                    content = L._('Click to start drawing a line');
+            // when drawing a Polyline or Polygon
+            if (e.layer.editor._drawnLatLngs) {
+                // when drawing first point
+                if (!e.layer.editor._drawnLatLngs.length) {
+                    if (e.layer instanceof L.Polygon){
+                        content = L._('Click to start drawing a polygon');
+                    } else if (e.layer instanceof L.Polyline) {
+                        content = L._('Click to start drawing a line');
+                    }
+                } else {
+                    var readableDistance = e.layer.getMeasure(e.latlng);
+                    if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
+                        // when drawing second point
+                        content = L._('Click to continue drawing ({distance})', { distance: readableDistance });
+                    }  else {
+                        // when drawing third point (or more)
+                        content = L._('Click last point to finish shape ({distance})', { distance: readableDistance });
+                    }
                 }
             } else {
-                var tempLatLngs = e.layer.editor._drawnLatLngs.slice();
-                tempLatLngs.push(e.latlng);
-                var length = L.GeoUtil.lineLength(this.map, tempLatLngs);
-                readableDistance = L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit());
-                content = L._('Click last point to finish shape ({distance})', {distance: readableDistance});
+                // when moving an existing point
+                if (e.layer instanceof L.Polygon){
+                    content = L._('Polygon area: {area}', { area: e.layer.getMeasure() });
+                } else if (e.layer instanceof L.Polyline) {
+                    content = L._('Line distance: {distance}', { distance: e.layer.getMeasure() });
+                }
             }
         }
         if (content) {

@@ -853,8 +853,16 @@ L.U.Polyline = L.Polyline.extend({
         return 'polyline';
     },
 
-    getMeasure: function () {
-        var length = L.GeoUtil.lineLength(this.map, this._defaultShape());
+    getMeasure: function (extraPoint) {
+        var polyline;
+        if (extraPoint){
+            var tmpLatLngs = this.editor._drawnLatLngs.slice();
+            tmpLatLngs.push(extraPoint);
+            polyline = tmpLatLngs;
+        } else {
+            polyline = this._defaultShape();
+        }
+        var length = L.GeoUtil.lineLength(this.map, polyline);
         return L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit());
     },
 
