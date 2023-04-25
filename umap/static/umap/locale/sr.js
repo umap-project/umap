@@ -116,6 +116,8 @@ var locale = {
     "Choose the format of the data to import": "Изаберите формат података за увоз",
     "Choose the layer to import in": "Одабери лејер за увоз",
     "Click last point to finish shape ({distance})": "Кликните на последњу тачку да бисте довршили облик ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Клик за додавање ознаке",
     "Click to continue drawing ({distance})": "Клик да наставите са цртањем ({distance})",
     "Click to edit": "Клик за уређивање",

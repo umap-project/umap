@@ -116,6 +116,8 @@
     "Choose the format of the data to import": "Zvoľte v akom formáte sú importované údaje",
     "Choose the layer to import in": "Zvoľte vrstvu, do ktorej sa bude importovať",
     "Click last point to finish shape ({distance})": "Kliknite na posledný bod pre dokončenie tvaru ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Kliknutím pridáte značku",
     "Click to continue drawing ({distance})": "Kliknutím môžete pokračovať v kreslení ({distance})",
     "Click to edit": "Kliknutím upravte",

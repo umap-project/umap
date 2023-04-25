@@ -116,6 +116,8 @@ var locale = {
     "Choose the format of the data to import": "Виберіть формат даних для імпорту",
     "Choose the layer to import in": "Виберіть шар для імпорту в нього",
     "Click last point to finish shape ({distance})": "Клацніть на останній точці, щоб завершити ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Клацніть, щоб додати позначку",
     "Click to continue drawing ({distance})": "Клацайте, щоб продовжити креслення ({distance})",
     "Click to edit": "Натисніть для редагування",

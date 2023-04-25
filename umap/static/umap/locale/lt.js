@@ -116,6 +116,8 @@ var locale = {
     "Choose the format of the data to import": "Pasirinkite importuojamų uomenų formatą",
     "Choose the layer to import in": "Pasirinkite sluoksnį importavimui",
     "Click last point to finish shape ({distance})": "Paspauskite ant paskutinio taško kad baigti piešimą ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Paspauskite kad pridėti žymeklį",
     "Click to continue drawing ({distance})": "Paspauskite kad tęsti piešimą ({distance})",
     "Click to edit": "Click to edit",

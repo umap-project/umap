@@ -116,6 +116,8 @@
     "Choose the format of the data to import": "Choisir le format des données pour l'import",
     "Choose the layer to import in": "Choisir le calque de données pour l'import",
     "Click last point to finish shape ({distance})": "Cliquer sur le dernier point pour finir le tracé ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Cliquer pour ajouter le marqueur",
     "Click to continue drawing ({distance})": "Cliquer pour continuer le tracé ({distance})",
     "Click to edit": "Cliquer pour modifier",

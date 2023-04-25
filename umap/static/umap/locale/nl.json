@@ -116,6 +116,8 @@
     "Choose the format of the data to import": "Kies het formaat van de te importeren gegevens",
     "Choose the layer to import in": "Kies de laag om in te importeren",
     "Click last point to finish shape ({distance})": "Klik op het laatste punt om de vorm af te maken ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Klik om een punt toe te voegen",
     "Click to continue drawing ({distance})": "Klik om te blijven tekenen ({distance})",
     "Click to edit": "Klik om te bewerken",

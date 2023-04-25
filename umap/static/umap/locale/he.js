@@ -116,6 +116,8 @@ var locale = {
     "Choose the format of the data to import": "נא לבחור את תצורת הנתונים לייבוא",
     "Choose the layer to import in": "נא לבחור את השכבה אליה יתבצע הייבוא",
     "Click last point to finish shape ({distance})": "יש ללחוץ על הנקודה האחרונה כדי לסיים את הצורה ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "יש ללחוץ כדי להוסיף סמן",
     "Click to continue drawing ({distance})": "יש ללחוץ כדי להמשיך בציור ({distance})",
     "Click to edit": "יש ללחוץ כדי לערוך",

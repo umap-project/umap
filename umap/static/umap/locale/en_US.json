@@ -116,6 +116,8 @@
     "Choose the format of the data to import": "Data format:",
     "Choose the layer to import in": "Import into layer:",
     "Click last point to finish shape ({distance})": "Click last point to finish shape ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Click to add a marker",
     "Click to continue drawing ({distance})": "Click to continue drawing ({distance})",
     "Click to edit": "Click to edit",

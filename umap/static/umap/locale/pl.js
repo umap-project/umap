@@ -116,6 +116,8 @@ var locale = {
     "Choose the format of the data to import": "Wybierz format importowanych danych",
     "Choose the layer to import in": "Wybierz warstwę docelową",
     "Click last point to finish shape ({distance})": "Kliknij ostatni punkt, aby zakończyć rysowanie ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Kliknij, aby dodać znacznik",
     "Click to continue drawing ({distance})": "Kliknij, aby kontynuować rysowanie ({distance})",
     "Click to edit": "Kliknij, aby edytować",

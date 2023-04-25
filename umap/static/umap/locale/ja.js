@@ -116,6 +116,8 @@ var locale = {
     "Choose the format of the data to import": "インポートデータ形式を選択",
     "Choose the layer to import in": "インポート対象レイヤ選択",
     "Click last point to finish shape ({distance})": "クリックでシェイプの作成を終了 ({distance})",
+    "Line distance: {distance}": "Line distance: {distance}",
+    "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "クリックでマーカー追加",
     "Click to continue drawing ({distance})": "クリックで描画を継続 ({distance})",
     "Click to edit": "クリックで編集",
