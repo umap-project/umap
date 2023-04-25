@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Vali kiht, millesse importida",
     "Click last point to finish shape ({distance})": "Klõpsa kujundi lõpetamiseks viimasel punktil ({distance})",
     "Click to add a marker": "Klõpsa markeri lisamiseks",
-    "Click to continue drawing": "Klõpsa joonistamise jätkamiseks",
+    "Click to continue drawing ({distance})": "Klõpsa joonistamise jätkamiseks ({distance})",
     "Click to edit": "Klõpsa muutmiseks",
     "Click to start drawing a line": "Klõpsa joone alustamiseks",
     "Click to start drawing a polygon": "Klõpsa hulknurga alustamiseks",

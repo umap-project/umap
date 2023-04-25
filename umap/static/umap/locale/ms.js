@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Pilih lapisan untuk diimport",
     "Click last point to finish shape ({distance})": "Klik titik akhir untuk lengkapkan bentuk ({distance})",
     "Click to add a marker": "Klik untuk tambahkan penanda",
-    "Click to continue drawing": "Klik untuk terus melukis",
+    "Click to continue drawing ({distance})": "Klik untuk terus melukis ({distance})",
     "Click to edit": "Klik untuk menyunting",
     "Click to start drawing a line": "Klik untuk mula melukis garisan",
     "Click to start drawing a polygon": "Klik untuk mula melukis poligon",

@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Valitse kerros johon tieto tuodaan",
     "Click last point to finish shape ({distance})": "Klikkaa viimeistä pistettä täydentääksesi muodon ({distance})",
     "Click to add a marker": "Klikkaa lisätäksesi karttamerkki",
-    "Click to continue drawing": "Klikkaa jatkaaksesi piirtämistä",
+    "Click to continue drawing ({distance})": "Klikkaa jatkaaksesi piirtämistä ({distance})",
     "Click to edit": "Klikkaa muokataksesi",
     "Click to start drawing a line": "Klikkaa aloittaaksesi viivan piirtäminen",
     "Click to start drawing a polygon": "Klikkaa aloittaaksesi monikulmion piirtäminen",

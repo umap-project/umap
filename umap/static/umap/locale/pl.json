@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Wybierz warstwę docelową",
     "Click last point to finish shape ({distance})": "Kliknij ostatni punkt, aby zakończyć rysowanie ({distance})",
     "Click to add a marker": "Kliknij, aby dodać znacznik",
-    "Click to continue drawing": "Kliknij, aby kontynuować rysowanie",
+    "Click to continue drawing ({distance})": "Kliknij, aby kontynuować rysowanie ({distance})",
     "Click to edit": "Kliknij, aby edytować",
     "Click to start drawing a line": "Kliknij, aby zacząć rysować linię",
     "Click to start drawing a polygon": "Kliknij, aby zacząć rysować obszar",

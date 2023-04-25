@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "選擇匯入圖層",
     "Click last point to finish shape ({distance})": "點下最後一點後完成外形 ({distance})",
     "Click to add a marker": "點選以新增標記",
-    "Click to continue drawing": "點擊以繼續繪製",
+    "Click to continue drawing ({distance})": "點擊以繼續繪製 ({distance})",
     "Click to edit": "點擊開始編輯",
     "Click to start drawing a line": "點擊以開始繪製直線",
     "Click to start drawing a polygon": "點選開始繪製多邊形",

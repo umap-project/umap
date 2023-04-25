@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Kies de laag om in te importeren",
     "Click last point to finish shape ({distance})": "Klik op het laatste punt om de vorm af te maken ({distance})",
     "Click to add a marker": "Klik om een punt toe te voegen",
-    "Click to continue drawing": "Klik om te blijven tekenen",
+    "Click to continue drawing ({distance})": "Klik om te blijven tekenen ({distance})",
     "Click to edit": "Klik om te bewerken",
     "Click to start drawing a line": "Klik om een lijn te beginnen tekenen",
     "Click to start drawing a polygon": "Klik om een polygoon te beginnen tekenen",

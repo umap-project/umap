@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Виберіть шар для імпорту в нього",
     "Click last point to finish shape ({distance})": "Клацніть на останній точці, щоб завершити ({distance})",
     "Click to add a marker": "Клацніть, щоб додати позначку",
-    "Click to continue drawing": "Клацайте, щоб продовжити креслення",
+    "Click to continue drawing ({distance})": "Клацайте, щоб продовжити креслення ({distance})",
     "Click to edit": "Натисніть для редагування",
     "Click to start drawing a line": "Клацайте, щоб продовжити креслення",
     "Click to start drawing a polygon": "Клацніть, щоб почати креслення багатокутника",

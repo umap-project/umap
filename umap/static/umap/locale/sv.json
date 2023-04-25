@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Välj lager att importera till",
     "Click last point to finish shape ({distance})": "Klicka på sista punkten för att slutföra formen ({distance})",
     "Click to add a marker": "Klicka för att lägga till en markör",
-    "Click to continue drawing": "Klicka för att fortsätta rita",
+    "Click to continue drawing ({distance})": "Klicka för att fortsätta rita ({distance})",
     "Click to edit": "Klicka för att redigera",
     "Click to start drawing a line": "Klicka för att börja rita en linje",
     "Click to start drawing a polygon": "Klicka för att börja rita en polygon",

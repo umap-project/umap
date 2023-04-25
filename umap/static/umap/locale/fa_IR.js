@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "لایه ای را برای وارد کردن انتخاب کنید",
     "Click last point to finish shape ({distance})": "برای پایان دادن به شکل روی آخرین نقطه کلیک کنید ({distance})",
     "Click to add a marker": "برای افزودن نشانگر کلیک کنید",
-    "Click to continue drawing": "برای ادامه ترسیم کلیک کنید",
+    "Click to continue drawing ({distance})": "برای ادامه ترسیم کلیک کنید ({distance})",
     "Click to edit": "برای ویرایش کلیک کنید",
     "Click to start drawing a line": "برای شروع رسم خط کلیک کنید",
     "Click to start drawing a polygon": "برای شروع ترسیم چند ضلعی کلیک کنید",

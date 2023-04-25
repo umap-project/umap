@@ -117,7 +117,7 @@
     "Choose the layer to import in": "የሚያስገቡበት ሌየር ይምረጡ",
     "Click last point to finish shape ({distance})": "ቅርፁን ለማስጨረስ የመጨረሻውን ነጥብ ጠቅ ያድርጉ ({distance})",
     "Click to add a marker": "መለያ ለመጨመር ጠቅ አድርግ",
-    "Click to continue drawing": "መሳል ለመቀጠል ጠቅ አድርግ",
+    "Click to continue drawing ({distance})": "መሳል ለመቀጠል ጠቅ አድርግ ({distance})",
     "Click to edit": "ለማረም ጠቅ አድርግ",
     "Click to start drawing a line": "መስመር ለመሳል ጠቅ አድርግ",
     "Click to start drawing a polygon": "ፖሊጎን ለመሳል ጠቅ አድርግ",

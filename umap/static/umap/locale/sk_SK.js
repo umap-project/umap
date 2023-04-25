@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Zvoľte vrstvu, do ktorej sa bude importovať",
     "Click last point to finish shape ({distance})": "Kliknite na posledný bod pre dokončenie tvaru ({distance})",
     "Click to add a marker": "Kliknutím pridáte značku",
-    "Click to continue drawing": "Kliknutím môžete pokračovať v kreslení",
+    "Click to continue drawing ({distance})": "Kliknutím môžete pokračovať v kreslení ({distance})",
     "Click to edit": "Kliknutím upravte",
     "Click to start drawing a line": "Kliknutím začnete kresliť čiaru",
     "Click to start drawing a polygon": "Kliknutím začnete kresliť polygón",

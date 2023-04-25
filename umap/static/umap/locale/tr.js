@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "İçe aktarılacak katmanı seç",
     "Click last point to finish shape ({distance})": "Şekli bitirmek için son noktaya tıklayın ({distance})",
     "Click to add a marker": "Bir işaretleyici eklemek için tıklayın",
-    "Click to continue drawing": "Çizime devam etmek için tıklayın",
+    "Click to continue drawing ({distance})": "Çizime devam etmek için tıklayın ({distance})",
     "Click to edit": "Düzenlemek için tıkla",
     "Click to start drawing a line": "Çizgi çizmeye başlamak için tıkla",
     "Click to start drawing a polygon": "Çokgen çizmeye başlamak için tıkla",

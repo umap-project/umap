@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Importálandó réteg kiválasztása",
     "Click last point to finish shape ({distance})": "Az alakzat befejezéséhez kattintson az utolsó pontra ({distance})",
     "Click to add a marker": "Jelölő hozzáadásához kattintson",
-    "Click to continue drawing": "Kattintson a rajzolás folytatásához",
+    "Click to continue drawing ({distance})": "Kattintson a rajzolás folytatásához ({distance})",
     "Click to edit": "Kattintson a szerkesztéshez",
     "Click to start drawing a line": "Kattintson egy vonal rajzolásához",
     "Click to start drawing a polygon": "Kattintson egy sokszög rajzolásához",

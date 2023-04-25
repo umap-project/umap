@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Zvolte vrstvu, do které se bude importovat",
     "Click last point to finish shape ({distance})": "Klikněte na poslední bod pro dokončení tvaru ({distance})",
     "Click to add a marker": "Kliknutím přidáš značku",
-    "Click to continue drawing": "Kliknutím můžeš pokračovat v kreslení",
+    "Click to continue drawing ({distance})": "Kliknutím můžeš pokračovat v kreslení ({distance})",
     "Click to edit": "Klikněte pro úpravy",
     "Click to start drawing a line": "Klikněte pro začátek kreslení čáry",
     "Click to start drawing a polygon": "Klikněte pro začátek kreslení polygonu",

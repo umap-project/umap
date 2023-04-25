@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Izbor plasti za uvoz podatkov",
     "Click last point to finish shape ({distance})": "Kliknite na zadnjo točko za dokončanje risanja oblike ({distance})",
     "Click to add a marker": "Kliknite za dodajanje označbe",
-    "Click to continue drawing": "Kliknite za nadaljevanje risanja",
+    "Click to continue drawing ({distance})": "Kliknite za nadaljevanje risanja ({distance})",
     "Click to edit": "Kliknite za urejanje",
     "Click to start drawing a line": "Kliknite za začetek risanja črte",
     "Click to start drawing a polygon": "Kliknite za začetek risanja mnogokotnika",

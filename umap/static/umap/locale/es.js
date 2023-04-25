@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Elegir la capa a la que se importa",
     "Click last point to finish shape ({distance})": "Haga clic en el último punto para terminar la figura ({distance})",
     "Click to add a marker": "Haga clic para añadir un marcador",
-    "Click to continue drawing": "Haga clic para continuar dibujando",
+    "Click to continue drawing ({distance})": "Haga clic para continuar dibujando ({distance})",
     "Click to edit": "Clic para editar",
     "Click to start drawing a line": "Haga clic para empezar a dibujar una línea",
     "Click to start drawing a polygon": "Haga clic para empezar a dibujar un polígono",

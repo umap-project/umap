@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Choisir le calque de données pour l'import",
     "Click last point to finish shape ({distance})": "Cliquer sur le dernier point pour finir le tracé ({distance})",
     "Click to add a marker": "Cliquer pour ajouter le marqueur",
-    "Click to continue drawing": "Cliquer pour continuer le tracé",
+    "Click to continue drawing ({distance})": "Cliquer pour continuer le tracé ({distance})",
     "Click to edit": "Cliquer pour modifier",
     "Click to start drawing a line": "Cliquer pour commencer une ligne",
     "Click to start drawing a polygon": "Cliquer pour commencer un polygone",

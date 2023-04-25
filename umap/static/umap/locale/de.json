@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Wähle die Ebene, in die importiert werden soll",
     "Click last point to finish shape ({distance})": "Klicke den letzten Punkt an, um die Form abzuschließen ({distance})",
     "Click to add a marker": "Klicke, um einen Marker hinzuzufügen",
-    "Click to continue drawing": "Klicke, um weiter zu zeichnen",
+    "Click to continue drawing ({distance})": "Klicke, um weiter zu zeichnen ({distance})",
     "Click to edit": "Zum Bearbeiten klicken",
     "Click to start drawing a line": "Klicke, um eine Linie zu zeichnen",
     "Click to start drawing a polygon": "Klicke, um eine Fläche zu zeichnen",

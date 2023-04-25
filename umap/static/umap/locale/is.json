@@ -117,7 +117,7 @@
     "Choose the layer to import in": "Veldu lagið sem á að flytja inn í",
     "Click last point to finish shape ({distance})": "Smelltu á síðasta punktinn til að ljúka lögun ({distance})",
     "Click to add a marker": "Smella til að bæta við kortamerki",
-    "Click to continue drawing": "Smelltu til að halda áfram að teikna",
+    "Click to continue drawing ({distance})": "Smelltu til að halda áfram að teikna ({distance})",
     "Click to edit": "Smelltu til að breyta",
     "Click to start drawing a line": "Smelltu til að byrja að teikna línu",
     "Click to start drawing a polygon": "Smelltu til að byrja að teikna fláka (marghyrning)",

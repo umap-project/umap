@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "נא לבחור את השכבה אליה יתבצע הייבוא",
     "Click last point to finish shape ({distance})": "יש ללחוץ על הנקודה האחרונה כדי לסיים את הצורה ({distance})",
     "Click to add a marker": "יש ללחוץ כדי להוסיף סמן",
-    "Click to continue drawing": "יש ללחוץ כדי להמשיך בציור",
+    "Click to continue drawing ({distance})": "יש ללחוץ כדי להמשיך בציור ({distance})",
     "Click to edit": "יש ללחוץ כדי לערוך",
     "Click to start drawing a line": "יש ללחוץ כדי להתחיל לצייר קו",
     "Click to start drawing a polygon": "יש ללחוץ כדי להתחיל לצייר מצולע",

@@ -117,7 +117,7 @@ var locale = {
     "Choose the layer to import in": "Vælg lag der skal importeres",
     "Click last point to finish shape ({distance})": "Klik på det det sidste punkt for at afslutte figur ({distance})",
     "Click to add a marker": "Klik for at tilføje en  markør",
-    "Click to continue drawing": "Klik for at fortsætte indtegning",
+    "Click to continue drawing ({distance})": "Klik for at fortsætte indtegning ({distance})",
     "Click to edit": "Klik for at redigere",
     "Click to start drawing a line": "Klik for at starte indtegning af linje",
     "Click to start drawing a polygon": "Klik for at starte indtegning af polygon",
