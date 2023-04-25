@@ -1012,8 +1012,17 @@ L.U.Polygon = L.Polygon.extend({
         return options.concat(L.U.FeatureMixin.getInteractionOptions());
     },
 
-    getMeasure: function () {
-        var area = L.GeoUtil.geodesicArea(this._defaultShape());
+    getMeasure: function (extraPoint) {
+        var polygon;
+        if (extraPoint){
+            var tmpLatLngs = this.editor._drawnLatLngs.slice();
+            tmpLatLngs.push(extraPoint);
+            polygon = tmpLatLngs;
+        } else {
+            polygon = this._defaultShape();
+        }
+
+        var area = L.GeoUtil.geodesicArea(polygon);
         return L.GeoUtil.readableArea(area, this.map.measureTools.getMeasureUnit());
     },
 
