@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Choose a preset",
     "Choose the format of the data to import": "选择导入的数据格式",
     "Choose the layer to import in": "选择导入的图层",
-    "Click last point to finish shape ({distance})": "Click last point to finish shape ({distance})",
+    "Click last point to finish shape": "Click last point to finish shape",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Click to add a marker",

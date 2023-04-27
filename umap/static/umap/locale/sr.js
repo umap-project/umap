@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Изаберите претходно подешавање",
     "Choose the format of the data to import": "Изаберите формат података за увоз",
     "Choose the layer to import in": "Одабери лејер за увоз",
-    "Click last point to finish shape ({distance})": "Кликните на последњу тачку да бисте довршили облик ({distance})",
+    "Click last point to finish shape": "Кликните на последњу тачку да бисте довршили облик",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Клик за додавање ознаке",

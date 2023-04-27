@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "ፕሪሴት ምረጥ",
     "Choose the format of the data to import": "ሊያመጡ የፈለጉትን የመረጃ ፎርማት ይምረጡ",
     "Choose the layer to import in": "የሚያስገቡበት ሌየር ይምረጡ",
-    "Click last point to finish shape ({distance})": "ቅርፁን ለማስጨረስ የመጨረሻውን ነጥብ ጠቅ ያድርጉ ({distance})",
+    "Click last point to finish shape": "ቅርፁን ለማስጨረስ የመጨረሻውን ነጥብ ጠቅ ያድርጉ",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "መለያ ለመጨመር ጠቅ አድርግ",

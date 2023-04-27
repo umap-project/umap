@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Escoller un predefinido",
     "Choose the format of the data to import": "Escoller o formato dos datos a importar",
     "Choose the layer to import in": "Escoller a capa á que se importa",
-    "Click last point to finish shape ({distance})": "Preme no derradeiro punto para rematar a forma ({distance})",
+    "Click last point to finish shape": "Preme no derradeiro punto para rematar a forma",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Preme para engadir unha marcaxe",

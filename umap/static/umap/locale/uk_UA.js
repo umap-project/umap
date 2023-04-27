@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Виберіть шаблон",
     "Choose the format of the data to import": "Виберіть формат даних для імпорту",
     "Choose the layer to import in": "Виберіть шар для імпорту в нього",
-    "Click last point to finish shape ({distance})": "Клацніть на останній точці, щоб завершити ({distance})",
+    "Click last point to finish shape": "Клацніть на останній точці, щоб завершити",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Клацніть, щоб додати позначку",

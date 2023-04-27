@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Kies een voorkeuzeinstelling",
     "Choose the format of the data to import": "Kies het formaat van de te importeren gegevens",
     "Choose the layer to import in": "Kies de laag om in te importeren",
-    "Click last point to finish shape ({distance})": "Klik op het laatste punt om de vorm af te maken ({distance})",
+    "Click last point to finish shape": "Klik op het laatste punt om de vorm af te maken",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Klik om een punt toe te voegen",

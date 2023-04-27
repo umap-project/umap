@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Vali algseade",
     "Choose the format of the data to import": "Vali importimise andmevorming",
     "Choose the layer to import in": "Vali kiht, millesse importida",
-    "Click last point to finish shape ({distance})": "Klõpsa kujundi lõpetamiseks viimasel punktil ({distance})",
+    "Click last point to finish shape": "Klõpsa kujundi lõpetamiseks viimasel punktil",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Klõpsa markeri lisamiseks",

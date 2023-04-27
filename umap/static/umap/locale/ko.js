@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "프리셋 선택",
     "Choose the format of the data to import": "삽입할 데이터의 포맷 선택",
     "Choose the layer to import in": "삽입할 레이어 선택",
-    "Click last point to finish shape ({distance})": "도형을 그만 그리려면 마지막 점을 클릭 ({distance})",
+    "Click last point to finish shape": "도형을 그만 그리려면 마지막 점을 클릭",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "마커를 추가하려면 클릭",

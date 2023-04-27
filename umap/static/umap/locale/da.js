@@ -115,7 +115,7 @@ var locale = {
     "Choose a preset": "Vælg en forudindstilling",
     "Choose the format of the data to import": "Vælg imports dataformat",
     "Choose the layer to import in": "Vælg lag der skal importeres",
-    "Click last point to finish shape ({distance})": "Klik på det det sidste punkt for at afslutte figur ({distance})",
+    "Click last point to finish shape": "Klik på det det sidste punkt for at afslutte figur",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Klik for at tilføje en  markør",

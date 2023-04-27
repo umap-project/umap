@@ -115,7 +115,7 @@
     "Choose a preset": "Seleziona una preimpostazione",
     "Choose the format of the data to import": "Seleziona il formato dei dati da importare",
     "Choose the layer to import in": "Seleziona su quale livello fare l'importazione",
-    "Click last point to finish shape ({distance})": "Click su ultimo punto per completare la geometria ({distance})",
+    "Click last point to finish shape": "Click su ultimo punto per completare la geometria",
     "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Clicca per aggiungere un marcatore",
