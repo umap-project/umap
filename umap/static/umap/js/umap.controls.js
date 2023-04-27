@@ -1262,7 +1262,7 @@ L.U.Editable = L.Editable.extend({
                         content = L._('Click to start drawing a line');
                     }
                 } else {
-                    var tmpLatLngs = this.editor._drawnLatLngs.slice();
+                    var tmpLatLngs = e.layer.editor._drawnLatLngs.slice();
                     tmpLatLngs.push(e.latlng);
                     var readableDistance = e.layer.getMeasure(tmpLatLngs);
                     if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
