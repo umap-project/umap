@@ -853,17 +853,9 @@ L.U.Polyline = L.Polyline.extend({
         return 'polyline';
     },
 
-    getMeasure: function (extraPoint) {
-        var polyline;
-        if (extraPoint){
-            var tmpLatLngs = this.editor._drawnLatLngs.slice();
-            tmpLatLngs.push(extraPoint);
-            polyline = tmpLatLngs;
-        } else {
-            polyline = this._defaultShape();
-        }
-        var length = L.GeoUtil.lineLength(this.map, polyline);
-        return L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit());
+    getMeasure: function (shape) {
+        var measure = L.GeoUtil.lineLength(this.map, shape | this._defaultShape());
+        return L.GeoUtil.readableDistance(measure, this.map.measureTools.getMeasureUnit());
     },
 
     getContextMenuEditItems: function (e) {
@@ -1012,18 +1004,9 @@ L.U.Polygon = L.Polygon.extend({
         return options.concat(L.U.FeatureMixin.getInteractionOptions());
     },
 
-    getMeasure: function (extraPoint) {
-        var polygon;
-        if (extraPoint){
-            var tmpLatLngs = this.editor._drawnLatLngs.slice();
-            tmpLatLngs.push(extraPoint);
-            polygon = tmpLatLngs;
-        } else {
-            polygon = this._defaultShape();
-        }
-
-        var area = L.GeoUtil.geodesicArea(polygon);
-        return L.GeoUtil.readableArea(area, this.map.measureTools.getMeasureUnit());
+    getMeasure: function (shape) {
+        var measure = L.GeoUtil.lineLength(this.map, shape | this._defaultShape());
+        return L.GeoUtil.readableArea(measure, this.map.measureTools.getMeasureUnit());
     },
 
     getContextMenuEditItems: function (e) {
