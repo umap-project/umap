@@ -1277,9 +1277,9 @@ L.U.Editable = L.Editable.extend({
             } else {
                 // when moving an existing point
                 if (e.layer instanceof L.Polygon){
-                    content = L._('Polygon area: {area}', { area: e.layer.getMeasure() });
+                    content = L._('Polygon area: {measure}', { measure: e.layer.getMeasure() });
                 } else if (e.layer instanceof L.Polyline) {
-                    content = L._('Line distance: {distance}', { distance: e.layer.getMeasure() });
+                    content = L._('Line distance: {measure}', { measure: e.layer.getMeasure() });
                 }
             }
         }
