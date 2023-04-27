@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Click to add a marker",
-    "Click to continue drawing ({distance})": "Click to continue drawing ({distance})",
+    "Click to continue drawing": "Click to continue drawing",
     "Click to edit": "Click to edit",
     "Click to start drawing a line": "Click to start drawing a line",
     "Click to start drawing a polygon": "Click to start drawing a polygon",

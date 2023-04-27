@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Klikkaa lisätäksesi karttamerkki",
-    "Click to continue drawing ({distance})": "Klikkaa jatkaaksesi piirtämistä ({distance})",
+    "Click to continue drawing": "Klikkaa jatkaaksesi piirtämistä",
     "Click to edit": "Klikkaa muokataksesi",
     "Click to start drawing a line": "Klikkaa aloittaaksesi viivan piirtäminen",
     "Click to start drawing a polygon": "Klikkaa aloittaaksesi monikulmion piirtäminen",

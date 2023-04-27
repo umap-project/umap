@@ -119,7 +119,7 @@
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Smella til að bæta við kortamerki",
-    "Click to continue drawing ({distance})": "Smelltu til að halda áfram að teikna ({distance})",
+    "Click to continue drawing": "Smelltu til að halda áfram að teikna",
     "Click to edit": "Smelltu til að breyta",
     "Click to start drawing a line": "Smelltu til að byrja að teikna línu",
     "Click to start drawing a polygon": "Smelltu til að byrja að teikna fláka (marghyrning)",

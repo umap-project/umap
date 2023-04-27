@@ -119,7 +119,7 @@
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Bir işaretleyici eklemek için tıklayın",
-    "Click to continue drawing ({distance})": "Çizime devam etmek için tıklayın ({distance})",
+    "Click to continue drawing": "Çizime devam etmek için tıklayın",
     "Click to edit": "Düzenlemek için tıkla",
     "Click to start drawing a line": "Çizgi çizmeye başlamak için tıkla",
     "Click to start drawing a polygon": "Çokgen çizmeye başlamak için tıkla",

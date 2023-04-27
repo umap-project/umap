@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Klicke, um einen Marker hinzuzufügen",
-    "Click to continue drawing ({distance})": "Klicke, um weiter zu zeichnen ({distance})",
+    "Click to continue drawing": "Klicke, um weiter zu zeichnen",
     "Click to edit": "Zum Bearbeiten klicken",
     "Click to start drawing a line": "Klicke, um eine Linie zu zeichnen",
     "Click to start drawing a polygon": "Klicke, um eine Fläche zu zeichnen",

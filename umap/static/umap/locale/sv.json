@@ -119,7 +119,7 @@
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Klicka för att lägga till en markör",
-    "Click to continue drawing ({distance})": "Klicka för att fortsätta rita ({distance})",
+    "Click to continue drawing": "Klicka för att fortsätta rita",
     "Click to edit": "Klicka för att redigera",
     "Click to start drawing a line": "Klicka för att börja rita en linje",
     "Click to start drawing a polygon": "Klicka för att börja rita en polygon",

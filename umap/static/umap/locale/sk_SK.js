@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Kliknutím pridáte značku",
-    "Click to continue drawing ({distance})": "Kliknutím môžete pokračovať v kreslení ({distance})",
+    "Click to continue drawing": "Kliknutím môžete pokračovať v kreslení",
     "Click to edit": "Kliknutím upravte",
     "Click to start drawing a line": "Kliknutím začnete kresliť čiaru",
     "Click to start drawing a polygon": "Kliknutím začnete kresliť polygón",

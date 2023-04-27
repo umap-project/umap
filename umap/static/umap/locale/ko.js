@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "마커를 추가하려면 클릭",
-    "Click to continue drawing ({distance})": "계속 그리려면 클릭 ({distance})",
+    "Click to continue drawing": "계속 그리려면 클릭",
     "Click to edit": "편집하려면 클릭",
     "Click to start drawing a line": "선을 그리려면 클릭",
     "Click to start drawing a polygon": "도형을 그리려면 클릭",

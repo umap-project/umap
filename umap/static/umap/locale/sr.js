@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Клик за додавање ознаке",
-    "Click to continue drawing ({distance})": "Клик да наставите са цртањем ({distance})",
+    "Click to continue drawing": "Клик да наставите са цртањем",
     "Click to edit": "Клик за уређивање",
     "Click to start drawing a line": "Клик да започнете цртање линије",
     "Click to start drawing a polygon": "Клик да започнете цртање површине",

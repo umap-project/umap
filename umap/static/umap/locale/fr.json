@@ -119,7 +119,7 @@
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Cliquer pour ajouter le marqueur",
-    "Click to continue drawing ({distance})": "Cliquer pour continuer le tracé ({distance})",
+    "Click to continue drawing": "Cliquer pour continuer le tracé",
     "Click to edit": "Cliquer pour modifier",
     "Click to start drawing a line": "Cliquer pour commencer une ligne",
     "Click to start drawing a polygon": "Cliquer pour commencer un polygone",

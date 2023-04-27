@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Paspauskite kad pridėti žymeklį",
-    "Click to continue drawing ({distance})": "Paspauskite kad tęsti piešimą ({distance})",
+    "Click to continue drawing": "Paspauskite kad tęsti piešimą",
     "Click to edit": "Click to edit",
     "Click to start drawing a line": "Paspauskite ir pradėsite piešti liniją",
     "Click to start drawing a polygon": "Paspauskite ir pradėsite priešti poligoną",

@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "መለያ ለመጨመር ጠቅ አድርግ",
-    "Click to continue drawing ({distance})": "መሳል ለመቀጠል ጠቅ አድርግ ({distance})",
+    "Click to continue drawing": "መሳል ለመቀጠል ጠቅ አድርግ",
     "Click to edit": "ለማረም ጠቅ አድርግ",
     "Click to start drawing a line": "መስመር ለመሳል ጠቅ አድርግ",
     "Click to start drawing a polygon": "ፖሊጎን ለመሳል ጠቅ አድርግ",

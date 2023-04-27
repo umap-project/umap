@@ -119,7 +119,7 @@ var locale = {
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "クリックでマーカー追加",
-    "Click to continue drawing ({distance})": "クリックで描画を継続 ({distance})",
+    "Click to continue drawing": "クリックで描画を継続",
     "Click to edit": "クリックで編集",
     "Click to start drawing a line": "クリックでラインの描画開始",
     "Click to start drawing a polygon": "クリックでポリゴンの描画開始",

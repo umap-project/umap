@@ -119,7 +119,7 @@
     "Line distance: {distance}": "Line distance: {distance}",
     "Polygon area: {area}": "Polygon area: {area}",
     "Click to add a marker": "Klõpsa markeri lisamiseks",
-    "Click to continue drawing ({distance})": "Klõpsa joonistamise jätkamiseks ({distance})",
+    "Click to continue drawing": "Klõpsa joonistamise jätkamiseks",
     "Click to edit": "Klõpsa muutmiseks",
     "Click to start drawing a line": "Klõpsa joone alustamiseks",
     "Click to start drawing a polygon": "Klõpsa hulknurga alustamiseks",
