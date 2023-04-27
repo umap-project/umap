@@ -1267,11 +1267,12 @@ L.U.Editable = L.Editable.extend({
                     var readableDistance = e.layer.getMeasure(tmpLatLngs);
                     if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
                         // when drawing second point
-                        content = L._('Click to continue drawing ({distance})', { distance: readableDistance });
+                        content = L._('Click to continue drawing');
                     }  else {
                         // when drawing third point (or more)
-                        content = L._('Click last point to finish shape ({distance})', { distance: readableDistance });
+                        content = L._('Click last point to finish shape');
                     }
+                    content += " ("+readableDistance+")";
                 }
             } else {
                 // when moving an existing point
