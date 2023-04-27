@@ -854,8 +854,8 @@ L.U.Polyline = L.Polyline.extend({
     },
 
     getMeasure: function (shape) {
-        var measure = L.GeoUtil.lineLength(this.map, shape || this._defaultShape());
-        return L.GeoUtil.readableDistance(measure, this.map.measureTools.getMeasureUnit());
+        var length = L.GeoUtil.lineLength(this.map, shape || this._defaultShape());
+        return L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit());
     },
 
     getContextMenuEditItems: function (e) {
@@ -1005,8 +1005,8 @@ L.U.Polygon = L.Polygon.extend({
     },
 
     getMeasure: function (shape) {
-        var measure = L.GeoUtil.lineLength(this.map, shape || this._defaultShape());
-        return L.GeoUtil.readableArea(measure, this.map.measureTools.getMeasureUnit());
+        var area = L.GeoUtil.geodesicArea(shape || this._defaultShape());
+        return L.GeoUtil.readableArea(area, this.map.measureTools.getMeasureUnit());
     },
 
     getContextMenuEditItems: function (e) {
