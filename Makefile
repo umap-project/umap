@@ -8,6 +8,7 @@ install: ## Install the dependencies
 .PHONY: develop
 develop: ## Install the test and dev dependencies
 	python3 -m pip install -e .[test,dev]
+	playwright install
 
 .PHONY: pretty-templates
 pretty-templates: ## Prettify template files
@@ -45,9 +46,12 @@ publish: ## Publish the Python package to Pypi
 	@hatch publish
 	make clean
 
-
 test:
 	py.test -xv umap/tests/
+
+test-integration:
+	DJANGO_ALLOW_ASYNC_UNSAFE=1 py.test -xv umap/tests/integration/
+
 clean:
 	rm -f dist/*
 	rm -rf build/*
