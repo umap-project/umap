@@ -734,12 +734,26 @@ class DataLayerVersion(DataLayerView):
         )
     
 class DataLayerDownloadVersion(DataLayerView):
-    def render_to_response(self, context, **response_kwargs):        
-        with open(self.path, 'rb') as f:
-            response = HttpResponse(f, content_type='application/geo+json')
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(self.path)}"'
-            
+    def render_to_response(self, context, **response_kwargs):
+        supported_types = {
+            'geojson': 'application/geo+json',
+            'gzip': 'application/gzip'
+        }
+        
+        ext = self.request.GET.get('ext', 'geojson')
+        
+        if ext not in supported_types:
+            raise ValueError('Unsupported file type: {}'.format(ext))
+        
+        file_path = self.path + ('.gz' if ext == 'gzip' else '')
+        content_type = supported_types[ext]
+        
+        with open(file_path, 'rb') as f:
+            response = HttpResponse(f, content_type=content_type)
+            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+        
         return response
+
         
 
 
