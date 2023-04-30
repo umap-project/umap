@@ -1,0 +1,2 @@
+# Force rtfd to use a recent version of mkdocs
+mkdocs==1.4.2
