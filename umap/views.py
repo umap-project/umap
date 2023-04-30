@@ -721,6 +721,7 @@ class DataLayerView(GZipMixin, BaseDetailView):
                 response = HttpResponse(f.read(), content_type="application/geo+json")
             response["Last-Modified"] = self.last_modified
             response["Content-Length"] = statobj.st_size
+
         return response
 
 
@@ -731,6 +732,20 @@ class DataLayerVersion(DataLayerView):
             root=settings.MEDIA_ROOT,
             path=self.object.get_version_path(self.kwargs["name"]),
         )
+    
+class DataLayerDownloadVersion(DataLayerView):
+    def render_to_response(self, context, **response_kwargs):
+        
+
+        filename = os.path.basename(self.path)
+        
+        with open(self.path, 'rb') as f:
+            response = HttpResponse(f, content_type='application/geo+json')
+            
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            
+        return response
+        
 
 
 class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
