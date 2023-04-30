@@ -734,15 +734,10 @@ class DataLayerVersion(DataLayerView):
         )
     
 class DataLayerDownloadVersion(DataLayerView):
-    def render_to_response(self, context, **response_kwargs):
-        
-
-        filename = os.path.basename(self.path)
-        
+    def render_to_response(self, context, **response_kwargs):        
         with open(self.path, 'rb') as f:
             response = HttpResponse(f, content_type='application/geo+json')
-            
-            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(self.path)}"'
             
         return response
         

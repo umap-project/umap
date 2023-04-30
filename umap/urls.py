@@ -81,9 +81,9 @@ i18n_urls += decorated_patterns(
         name="datalayer_version",
     ),
     re_path(
-        r"^datalayer/download/(?P<pk>[\d]+)/(?P<name>[_\w]+.geojson)$",
+        r"^datalayer/download/(?P<pk>[\d]+)$",
         views.DataLayerDownloadVersion.as_view(),
-        name="datalayer_version",
+        name="datalayer_download",
     ),
 )
 i18n_urls += decorated_patterns(
