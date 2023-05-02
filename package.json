@@ -44,7 +44,7 @@
     "leaflet-hash": "0.2.1",
     "leaflet-i18n": "0.3.1",
     "leaflet-loading": "0.1.24",
-    "leaflet-measurable": "0.0.5",
+    "leaflet-measurable": "0.1.0",
     "leaflet-minimap": "^3.6.1",
     "leaflet-toolbar": "umap-project/Leaflet.toolbar",
     "leaflet.heat": "0.2.0",
