@@ -1250,8 +1250,9 @@ L.U.Editable = L.Editable.extend({
 
     drawingTooltip: function (e) {
         var content;
-        if (e.layer instanceof L.Marker) content = L._('Click to add a marker');
-        else if (e.layer instanceof L.Polyline) {
+        if (e.layer instanceof L.Marker && e.type != "editable:drawing:move") {
+            content = L._('Click to add a marker');
+        } else if (e.layer instanceof L.Polyline) {
             // when drawing a Polyline or Polygon
             if (e.layer.editor._drawnLatLngs) {
                 // when drawing first point
