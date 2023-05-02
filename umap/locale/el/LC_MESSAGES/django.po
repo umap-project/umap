@@ -8,15 +8,15 @@
 # Emmanuel Verigos <emverigos@geodev.gr>, 2017
 # Jim Kats <jim-kats@hotmail.com>, 2022
 # prendi <prendi@openmailbox.org>, 2017
-# Yannis Kaskamanidis <kiolalis@gmail.com>, 2021
+# Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-27 12:54+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Jim Kats <jim-kats@hotmail.com>, 2022\n"
-"Language-Team: Greek (http://www.transifex.com/openstreetmap/umap/language/el/)\n"
+"Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023\n"
+"Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -295,7 +295,7 @@ msgstr "Σχετικά"
 
 #: umap/templates/umap/navigation.html:15
 msgid "Help"
-msgstr ""
+msgstr "Βοήθεια"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
