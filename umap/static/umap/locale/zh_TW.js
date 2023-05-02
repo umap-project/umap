@@ -116,7 +116,6 @@ var locale = {
     "Choose the format of the data to import": "選擇匯入的資料格式",
     "Choose the layer to import in": "選擇匯入圖層",
     "Click last point to finish shape": "點下最後一點後完成外形",
-    "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "點選以新增標記",
     "Click to continue drawing": "點擊以繼續繪製",
     "Click to edit": "點擊開始編輯",

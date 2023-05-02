@@ -116,7 +116,6 @@ var locale = {
     "Choose the format of the data to import": "İçe aktarılacak verilerin biçimini seç",
     "Choose the layer to import in": "İçe aktarılacak katmanı seç",
     "Click last point to finish shape": "Şekli bitirmek için son noktaya tıklayın",
-    "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Bir işaretleyici eklemek için tıklayın",
     "Click to continue drawing": "Çizime devam etmek için tıklayın",
     "Click to edit": "Düzenlemek için tıkla",
