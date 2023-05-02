@@ -1280,7 +1280,6 @@ L.U.Editable = L.Editable.extend({
                     // when drawing third point (or more)
                     content = L._('Click last point to finish shape');
                 }
-                content += ", "
             }
         } else {
             // when moving an existing point
@@ -1288,9 +1287,9 @@ L.U.Editable = L.Editable.extend({
         }
         if (measure){
             if (e.layer instanceof L.Polygon){
-                content = L._('Polygon area: {measure}', { measure: measure });
+                content += L._(' (area: {measure})', { measure: measure });
             } else if (e.layer instanceof L.Polyline) {
-                content = L._('Line length: {measure}', { measure: measure });
+                content +=  L._(' (length: {measure})', { measure: measure });
             }
         }
         if (content) {
