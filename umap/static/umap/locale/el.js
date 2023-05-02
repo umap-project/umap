@@ -116,7 +116,6 @@ var locale = {
     "Choose the format of the data to import": "Επιλέξτε τη μορφοποίηση των δεδομένων που θα εισαχθούν",
     "Choose the layer to import in": "Επιλέξτε το επίπεδο στο οποίο θα η εισαγωγή",
     "Click last point to finish shape": "Πατήστε στο τελευταίο σημείο για να ολοκληρωθεί το σχήμα",
-    "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Πατήστε για την εισαγωγή σημείου",
     "Click to continue drawing": "Πατήστε για συνέχεια σχεδίασης",

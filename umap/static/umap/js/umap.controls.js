@@ -1290,7 +1290,7 @@ L.U.Editable = L.Editable.extend({
             if (e.layer instanceof L.Polygon){
                 content = L._('Polygon area: {measure}', { measure: measure });
             } else if (e.layer instanceof L.Polyline) {
-                content = L._('Line distance: {measure}', { measure: measure });
+                content = L._('Line length: {measure}', { measure: measure });
             }
         }
         if (content) {

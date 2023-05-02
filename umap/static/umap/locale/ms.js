@@ -116,7 +116,6 @@ var locale = {
     "Choose the format of the data to import": "Pilih format data yang ingin diimport",
     "Choose the layer to import in": "Pilih lapisan untuk diimport",
     "Click last point to finish shape": "Klik titik akhir untuk lengkapkan bentuk",
-    "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "Klik untuk tambahkan penanda",
     "Click to continue drawing": "Klik untuk terus melukis",

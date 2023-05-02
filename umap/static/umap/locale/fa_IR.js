@@ -116,7 +116,6 @@ var locale = {
     "Choose the format of the data to import": "قالب داده را برای وارد کردن انتخاب کنید",
     "Choose the layer to import in": "لایه ای را برای وارد کردن انتخاب کنید",
     "Click last point to finish shape": "برای پایان دادن به شکل روی آخرین نقطه کلیک کنید",
-    "Line distance: {measure}": "Line distance: {measure}",
     "Polygon area: {measure}": "Polygon area: {measure}",
     "Click to add a marker": "برای افزودن نشانگر کلیک کنید",
     "Click to continue drawing": "برای ادامه ترسیم کلیک کنید",
