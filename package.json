@@ -13,7 +13,7 @@
     "optimist": "~0.4.0",
     "phantomjs": "^1.9.18",
     "sinon": "^1.10.3",
-    "uglify-js": "~2.2.3"
+    "uglify-js": "~3.17.4"
   },
   "scripts": {
     "test": "firefox test/index.html",
