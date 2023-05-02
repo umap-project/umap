@@ -1249,39 +1249,48 @@ L.U.Editable = L.Editable.extend({
     },
 
     drawingTooltip: function (e) {
-        var content;
         if (e.layer instanceof L.Marker && e.type != "editable:drawing:move") {
-            content = L._('Click to add a marker');
-        } else if (e.layer instanceof L.Polyline) {
-            // when drawing a Polyline or Polygon
-            if (e.layer.editor._drawnLatLngs) {
+            this.map.ui.tooltip({content: L._('Click to add a marker')});
+        }
+        if (!(e.layer instanceof L.Polyline)) {
+            // only continue with Polylines and Polygons
+            return;
+        }
+
+        var content;
+        var measure;
+        if (e.layer.editor._drawnLatLngs) {
+            // when drawing (a Polyline or Polygon)
+            if (!e.layer.editor._drawnLatLngs.length) {
                 // when drawing first point
-                if (!e.layer.editor._drawnLatLngs.length) {
-                    if (e.layer instanceof L.Polygon){
-                        content = L._('Click to start drawing a polygon');
-                    } else if (e.layer instanceof L.Polyline) {
-                        content = L._('Click to start drawing a line');
-                    }
-                } else {
-                    var tmpLatLngs = e.layer.editor._drawnLatLngs.slice();
-                    tmpLatLngs.push(e.latlng);
-                    var readableDistance = e.layer.getMeasure(tmpLatLngs);
-                    if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
-                        // when drawing second point
-                        content = L._('Click to continue drawing');
-                    }  else {
-                        // when drawing third point (or more)
-                        content = L._('Click last point to finish shape');
-                    }
-                    content += " ("+readableDistance+")";
+                if (e.layer instanceof L.Polygon){
+                    content = L._('Click to start drawing a polygon');
+                } else if (e.layer instanceof L.Polyline) {
+                    content = L._('Click to start drawing a line');
                 }
             } else {
-                // when moving an existing point
-                if (e.layer instanceof L.Polygon){
-                    content = L._('Polygon area: {measure}', { measure: e.layer.getMeasure() });
-                } else if (e.layer instanceof L.Polyline) {
-                    content = L._('Line distance: {measure}', { measure: e.layer.getMeasure() });
+                var tmpLatLngs = e.layer.editor._drawnLatLngs.slice();
+                tmpLatLngs.push(e.latlng);
+                measure = e.layer.getMeasure(tmpLatLngs);
+
+                if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
+                    // when drawing second point
+                    content = L._('Click to continue drawing');
+                }  else {
+                    // when drawing third point (or more)
+                    content = L._('Click last point to finish shape');
                 }
+                content += ", "
+            }
+        } else {
+            // when moving an existing point
+            measure = e.layer.getMeasure();
+        }
+        if (measure){
+            if (e.layer instanceof L.Polygon){
+                content = L._('Polygon area: {measure}', { measure: measure });
+            } else if (e.layer instanceof L.Polyline) {
+                content = L._('Line distance: {measure}', { measure: measure });
             }
         }
         if (content) {
