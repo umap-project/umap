@@ -13,6 +13,7 @@
 - CSS: Fix cut of text in iframes of popup content (cf #971, thanks @tordans)
 - switched from custom DictField to propert JsonField
 - enhanced property fallback in string formatting (cf #862, thanks @mstock)
+- lines and polygons measure is now displayed while drawing (cf #1068, thanks @knowname)
 
 
 ## 1.2.3
