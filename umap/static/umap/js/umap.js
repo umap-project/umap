@@ -302,6 +302,7 @@ L.U.Map.include({
         L.U.ChangeTileLayerAction,
         L.U.UpdateExtentAction,
         L.U.UpdatePermsAction,
+        L.U.PrintAction,
       ]
       new L.U.SettingsToolbar({ actions: editActions }).addTo(this)
     }

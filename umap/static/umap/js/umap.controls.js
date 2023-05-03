@@ -86,6 +86,39 @@ L.U.UpdatePermsAction = L.U.BaseAction.extend({
   },
 })
 
+L.U.PrintAction = L.U.BaseAction.extend({
+
+    options: {
+        className: 'print-map dark',
+        tooltip: L._('Print the current view')
+    },
+
+    addHooks: function () {
+        // dom-to-image creates the image from the map which is then inserted
+        // and opened within a new tab to be able to print it, we close the
+        // window in case the body regain the focus (printing cancelled).
+        domtoimage
+            .toPng(this.map._container)
+            .then(function (dataUrl) {
+                var win = window.open('about:blank', "_new");
+                win.document.open();
+                win.document.write(`
+                    <html>
+                       <body
+                           onload="window.print()"
+                           onafterprint="window.close()"
+                           onfocus="window.close()"
+                           >
+                           <img src="${dataUrl}" style="max-width: 100%;"/>
+                       </body>
+                    </html>
+                `);
+                win.document.close();
+            });
+    }
+
+});
+
 L.U.DrawMarkerAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
