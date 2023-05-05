@@ -12,7 +12,6 @@ L.Map.mergeOptions({
     default_fill: true,
     default_weight: 3,
     default_iconClass: 'Default',
-    default_zoomTo: 16,
     default_popupContentTemplate: '# {name}\n{description}',
     default_interactive: true,
     default_labelDirection: 'auto',
@@ -45,7 +44,7 @@ L.Map.mergeOptions({
     captionMenus: true,
     slideshow: {},
     clickable: true,
-    easing: true,
+    easing: false,
     permissions: {},
     permanentCreditBackground: true,
 });
@@ -262,8 +261,7 @@ L.U.Map.include({
             // but the control breaks if we don't specify a class here, so a fake class
             // will do.
             icon: 'umap-fake-class',
-            iconLoading: 'umap-fake-class',
-            flyTo: true,
+            iconLoading: 'umap-fake-class'
         });
         this._controls.fullscreen = new L.Control.Fullscreen({title: {'false': L._('View Fullscreen'), 'true': L._('Exit Fullscreen')}});
         this._controls.search = new L.U.SearchControl();
@@ -1287,7 +1285,7 @@ L.U.Map.include({
             'options.smoothFactor',
             'options.dashArray',
             'options.zoomTo',
-            ['options.easing', {handler: 'Switch', label: L._('Advanced transition')}],
+            ['options.easing', {handler: 'Switch', label: L._('Animated transitions')}],
             'options.labelKey',
             ['options.sortKey', {handler: 'BlurInput', helpEntries: 'sortKey', placeholder: L._('Default: name'), label: L._('Sort key'), inheritable: true}],
             ['options.filterKey', {handler: 'Input', helpEntries: 'filterKey', placeholder: L._('Default: name'), label: L._('Filter keys'), inheritable: true}],
@@ -1416,7 +1414,7 @@ L.U.Map.include({
         var slideshowFields = [
             ['options.slideshow.active', {handler: 'Switch', label: L._('Activate slideshow mode')}],
             ['options.slideshow.delay', {handler: 'SlideshowDelay', helpText: L._('Delay between two transitions when in play mode')}],
-            ['options.slideshow.easing', {handler: 'Switch', label: L._('Smart transitions'), inheritable: true}],
+            ['options.slideshow.easing', {handler: 'Switch', label: L._('Animated transitions'), inheritable: true}],
             ['options.slideshow.autoplay', {handler: 'Switch', label: L._('Autostart when map is loaded')}]
         ];
         var slideshowHandler = function () {

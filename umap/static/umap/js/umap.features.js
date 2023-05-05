@@ -113,7 +113,7 @@ L.U.FeatureMixin = {
         this.getAdvancedEditActions(advancedActions);
         this.map.ui.openPanel({data: {html: container}, className: 'dark'});
         this.map.editedFeature = this;
-        if (!this.isOnScreen()) this.bringToCenter(e);
+        if (!this.isOnScreen()) this.zoomTo(e);
     },
 
     getAdvancedEditActions: function (container) {
@@ -254,26 +254,21 @@ L.U.FeatureMixin = {
         return value;
     },
 
-    bringToCenter: function (e) {
-        e = e || {};
-        var latlng = e.latlng || this.getCenter();
-        this.map.setView(latlng, e.zoomTo || this.map.getZoom());
-        if (e.callback) e.callback.call(this);
-    },
-
     zoomTo: function (e) {
         e = e || {};
         var easing = e.easing !== undefined ? e.easing : this.map.options.easing;
-        if (easing) this.flyTo();
-        else this.bringToCenter({zoomTo: this.getBestZoom(), callback: e.callback});
+        if (easing) {
+            this.map.flyTo(this.getCenter(), this.getBestZoom());
+        }
+        else {
+            var latlng = e.latlng || this.getCenter();
+            this.map.setView(latlng, this.getBestZoom() || this.map.getZoom());
+        }
+        if (e.callback) e.callback.call(this);
     },
 
     getBestZoom: function () {
         return this.getOption('zoomTo');
-    },
-
-    flyTo: function () {
-        this.map.flyTo(this.getCenter(), this.getBestZoom());
     },
 
     getNext: function () {
@@ -587,7 +582,7 @@ L.U.Marker = L.Marker.extend({
             callback: function () {
                 if (!this._latlng.isValid()) return this.map.ui.alert({content: L._('Invalid latitude or longitude'), level: 'error'});
                 this._redraw();
-                this.bringToCenter();
+                this.zoomTo({easing: false});
             },
             callbackContext: this
         });
@@ -595,12 +590,12 @@ L.U.Marker = L.Marker.extend({
         fieldset.appendChild(builder.build());
     },
 
-    bringToCenter: function (e) {
+    zoomTo: function (e) {
         if (this.datalayer.isClustered() && !this._icon) {
             // callback is mandatory for zoomToShowLayer
             this.datalayer.layer.zoomToShowLayer(this, e.callback || function (){});
         } else {
-            L.U.FeatureMixin.bringToCenter.call(this, e);
+            L.U.FeatureMixin.zoomTo.call(this, e);
         }
     },
 
@@ -711,9 +706,7 @@ L.U.PathMixin = {
     },
 
     getBestZoom: function () {
-        if (this.options.zoomTo) return this.options.zoomTo;
-        var bounds = this.getBounds();
-        return this.map.getBoundsZoom(bounds, true);
+        return this.getOption("zoomTo") || this.map.getBoundsZoom(this.getBounds(), true);
     },
 
     endEdit: function () {

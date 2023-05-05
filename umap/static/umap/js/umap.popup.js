@@ -118,13 +118,13 @@ L.U.PopupTemplate.Default = L.Class.extend({
             if (prev) previousLi.title = L._('Go to «{feature}»', {feature: prev.properties.name || L._('previous')});
             zoomLi.title = L._('Zoom to this feature');
             L.DomEvent.on(nextLi, 'click', function () {
-                if (next) next.bringToCenter({zoomTo: next.getOption('zoomTo'), callback: next.view});
+                if (next) next.zoomTo({callback: next.view});
             });
             L.DomEvent.on(previousLi, 'click', function () {
-                if (prev) prev.bringToCenter({zoomTo: prev.getOption('zoomTo'), callback: prev.view});
+                if (prev) prev.zoomTo({callback: prev.view});
             });
             L.DomEvent.on(zoomLi, 'click', function () {
-                this.bringToCenter({zoomTo: this.getOption('zoomTo')});
+                this.zoomTo();
             }, this.feature);
         }
     },

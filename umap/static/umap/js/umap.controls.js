@@ -708,11 +708,11 @@ L.U.Map.include({
             }
             L.DomEvent.on(zoom_to, 'click', function (e) {
                 e.callback = L.bind(this.view, this);
-                this.bringToCenter(e);
+                this.zoomTo(e);
             }, feature);
             L.DomEvent.on(title, 'click', function (e) {
                 e.callback = L.bind(this.view, this)
-                this.bringToCenter(e);
+                this.zoomTo(e);
             }, feature);
             L.DomEvent.on(edit, 'click', function () {
                 this.edit();
