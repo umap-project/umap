@@ -89,10 +89,10 @@ a.umap-control-less {
     box-shadow: 0 0 4px 0 black inset;
 }
 .leaflet-control-star a {
-    background-position: -122px -162px;
+    background-position: -118px -160px;
 }
 .leaflet-control-star.starred a {
-    background-position: -82px -162px;
+    background-position: -158px -160px;
 }
 .leaflet-control-search a {
     background-position: -41px -121px;
