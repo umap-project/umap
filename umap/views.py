@@ -674,7 +674,7 @@ class MapStar(View):
             qs.delete()
             status = False
         else:
-            Star(map=map_inst, by=self.request.user).save()
+            Star.objects.create(map=map_inst, by=self.request.user)
             status = True
         return simple_json_response(starred=status)
 
