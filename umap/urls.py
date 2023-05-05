@@ -97,7 +97,7 @@ i18n_urls += decorated_patterns(
     [login_required],
     re_path(
         r'^map/(?P<map_id>[\d]+)/star/$',
-        views.MapStar.as_view(),
+        views.ToggleMapStarStatus.as_view(),
         name='map_star'
     ),
 )

@@ -665,7 +665,7 @@ class MapClone(PermissionsMixin, View):
         return response
 
 
-class MapStar(View):
+class ToggleMapStarStatus(View):
 
     def post(self, *args, **kwargs):
         map_inst = get_object_or_404(Map, pk=kwargs['map_id'])
