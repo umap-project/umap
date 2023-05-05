@@ -557,3 +557,15 @@ def test_anonymous_cannot_star_map(client, map):
     assert response.status_code == 302
     assert "login" in response["Location"]
     assert Star.objects.count() == 0
+
+
+def test_user_can_see_their_star(client, map, user):
+    url = reverse('map_star', args=(map.pk,))
+    client.login(username=user.username, password="123123")
+    assert Star.objects.filter(by=user).count() == 0
+    response = client.post(url)
+    assert response.status_code == 200
+    url = reverse('user_stars', args=(user.username,))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert map.name in response.content.decode()
