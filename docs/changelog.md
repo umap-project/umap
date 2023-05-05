@@ -14,6 +14,8 @@
 - switched from custom DictField to propert JsonField
 - enhanced property fallback in string formatting (cf #862, thanks @mstock)
 - lines and polygons measure is now displayed while drawing (cf #1068, thanks @knowname)
+- refactored zoomTo while making easing transition non default (cf #679 #179)
+- fixed old `_storage_options` not being cleaned when saving map (cf #1076)
 
 
 ## 1.2.3
