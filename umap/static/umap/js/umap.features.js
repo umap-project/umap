@@ -301,6 +301,7 @@ L.U.FeatureMixin = {
     toGeoJSON: function () {
         var geojson = this.parentClass.prototype.toGeoJSON.call(this);
         geojson.properties = this.cloneProperties();
+        delete geojson.properties._storage_options;
         return geojson;
     },
 
