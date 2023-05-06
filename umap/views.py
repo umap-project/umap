@@ -451,6 +451,8 @@ class PermissionsMixin:
 
 
 class MapView(MapDetailMixin, PermissionsMixin, DetailView):
+    query_pk_and_slug = True
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         canonical = self.get_canonical_url()

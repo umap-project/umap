@@ -122,20 +122,8 @@ def test_delete(client, map, datalayer):
 
 def test_wrong_slug_should_redirect_to_canonical(client, map):
     url = reverse("map", kwargs={"pk": map.pk, "slug": "wrong-slug"})
-    canonical = reverse("map", kwargs={"pk": map.pk, "slug": map.slug})
     response = client.get(url)
-    assert response.status_code == 301
-    assert response["Location"] == canonical
-
-
-def test_wrong_slug_should_redirect_with_query_string(client, map):
-    url = reverse("map", kwargs={"pk": map.pk, "slug": "wrong-slug"})
-    url = "{}?allowEdit=0".format(url)
-    canonical = reverse("map", kwargs={"pk": map.pk, "slug": map.slug})
-    canonical = "{}?allowEdit=0".format(canonical)
-    response = client.get(url)
-    assert response.status_code == 301
-    assert response["Location"] == canonical
+    assert response.status_code == 404
 
 
 def test_should_not_consider_the_query_string_for_canonical_check(client, map):
