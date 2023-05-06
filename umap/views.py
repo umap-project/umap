@@ -140,7 +140,6 @@ home = Home.as_view()
 
 
 class About(Home):
-
     template_name = "umap/about.html"
 
 
@@ -352,7 +351,6 @@ class FormLessEditMixin:
 
 
 class MapDetailMixin:
-
     model = Map
 
     def get_context_data(self, **kwargs):
@@ -649,7 +647,6 @@ class MapShortUrl(RedirectView):
 
 
 class MapAnonymousEditUrl(RedirectView):
-
     permanent = False
 
     def get(self, request, *args, **kwargs):
@@ -657,7 +654,7 @@ class MapAnonymousEditUrl(RedirectView):
         try:
             pk = signer.unsign(self.kwargs["signature"])
         except BadSignature:
-            signer = Signer(algorithm='sha1')
+            signer = Signer(algorithm="sha1")
             try:
                 pk = signer.unsign(self.kwargs["signature"])
             except BadSignature:
@@ -680,7 +677,6 @@ class MapAnonymousEditUrl(RedirectView):
 
 
 class GZipMixin(object):
-
     EXT = ".gz"
 
     @property
