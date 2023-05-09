@@ -1,7 +1,7 @@
 L.U.Icon = L.DivIcon.extend({
-  initialize: function (map, options) {
+  initialize(map, options) {
     this.map = map
-    var default_options = {
+    const default_options = {
       iconSize: null, // Made in css
       iconUrl: this.map.getDefaultOption('iconUrl'),
       feature: null,
@@ -14,23 +14,23 @@ L.U.Icon = L.DivIcon.extend({
     }
   },
 
-  _getIconUrl: function (name) {
-    var url
+  _getIconUrl(name) {
+    let url
     if (this.feature && this.feature._getIconUrl(name))
       url = this.feature._getIconUrl(name)
-    else url = this.options[name + 'Url']
+    else url = this.options[`${name}Url`]
     return this.formatUrl(url, this.feature)
   },
 
-  _getColor: function () {
-    var color
+  _getColor() {
+    let color
     if (this.feature) color = this.feature.getOption('color')
     else if (this.options.color) color = this.options.color
     else color = this.map.getDefaultOption('color')
     return color
   },
 
-  formatUrl: function (url, feature) {
+  formatUrl(url, feature) {
     return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
   },
 })
@@ -43,18 +43,18 @@ L.U.Icon.Default = L.U.Icon.extend({
     className: 'umap-div-icon',
   },
 
-  initialize: function (map, options) {
+  initialize(map, options) {
     options = L.Util.extend({}, this.default_options, options)
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
-  _setColor: function () {
-    var color = this._getColor()
+  _setColor() {
+    const color = this._getColor()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
   },
 
-  createIcon: function () {
+  createIcon() {
     this.elements = {}
     this.elements.main = L.DomUtil.create('div')
     this.elements.container = L.DomUtil.create(
@@ -63,7 +63,7 @@ L.U.Icon.Default = L.U.Icon.extend({
       this.elements.main
     )
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
-    var src = this._getIconUrl('icon')
+    const src = this._getIconUrl('icon')
     if (src) {
       // An url.
       if (
@@ -85,8 +85,8 @@ L.U.Icon.Default = L.U.Icon.extend({
 })
 
 L.U.Icon.Circle = L.U.Icon.extend({
-  initialize: function (map, options) {
-    var default_options = {
+  initialize(map, options) {
+    const default_options = {
       iconAnchor: new L.Point(6, 6),
       popupAnchor: new L.Point(0, -6),
       tooltipAnchor: new L.Point(6, 0),
@@ -96,11 +96,11 @@ L.U.Icon.Circle = L.U.Icon.extend({
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
-  _setColor: function () {
+  _setColor() {
     this.elements.main.style.backgroundColor = this._getColor()
   },
 
-  createIcon: function () {
+  createIcon() {
     this.elements = {}
     this.elements.main = L.DomUtil.create('div')
     this.elements.main.innerHTML = '&nbsp;'
@@ -127,7 +127,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
     className: 'umap-ball-icon',
   },
 
-  createIcon: function () {
+  createIcon() {
     this.elements = {}
     this.elements.main = L.DomUtil.create('div')
     this.elements.container = L.DomUtil.create(
@@ -141,48 +141,44 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
     return this.elements.main
   },
 
-  _setColor: function () {
-    var color = this._getColor('color'),
-      background
+  _setColor() {
+    const color = this._getColor('color')
+    let background
     if (L.Browser.ielt9) {
       background = color
     } else if (L.Browser.webkit) {
-      background =
-        '-webkit-gradient( radial, 6 38%, 0, 6 38%, 8, from(white), to(' + color + ') )'
+      background = `-webkit-gradient( radial, 6 38%, 0, 6 38%, 8, from(white), to(${color}) )`
     } else {
-      background =
-        'radial-gradient(circle at 6px 38% , white -4px, ' +
-        color +
-        ' 8px) repeat scroll 0 0 transparent'
+      background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
     }
     this.elements.container.style.background = background
   },
 })
 
-var _CACHE_COLOR = {}
+const _CACHE_COLOR = {}
 L.U.Icon.Cluster = L.DivIcon.extend({
   options: {
     iconSize: [40, 40],
   },
 
-  initialize: function (datalayer, cluster) {
+  initialize(datalayer, cluster) {
     this.datalayer = datalayer
     this.cluster = cluster
   },
 
-  createIcon: function () {
-    var container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster'),
-      div = L.DomUtil.create('div', '', container),
-      span = L.DomUtil.create('span', '', div),
-      backgroundColor = this.datalayer.getColor()
+  createIcon() {
+    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster')
+    const div = L.DomUtil.create('div', '', container)
+    const span = L.DomUtil.create('span', '', div)
+    const backgroundColor = this.datalayer.getColor()
     span.textContent = this.cluster.getChildCount()
     div.style.backgroundColor = backgroundColor
     return container
   },
 
-  computeTextColor: function (el) {
-    var color,
-      backgroundColor = this.datalayer.getColor()
+  computeTextColor(el) {
+    let color
+    const backgroundColor = this.datalayer.getColor()
     if (this.datalayer.options.cluster && this.datalayer.options.cluster.textColor) {
       color = this.datalayer.options.cluster.textColor
     }
