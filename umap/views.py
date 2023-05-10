@@ -192,7 +192,7 @@ class Search(TemplateView, PaginatorMixin):
         if q:
             where = "to_tsvector(name) @@ websearch_to_tsquery(%s)"
             if getattr(settings, "UMAP_USE_UNACCENT", False):
-                where = "to_tsvector(unaccent(name)) @@ websearch_to_tsquery(unaccent(%s))"  # noqa
+                where = "to_tsvector('umapdict',name) @@ websearch_to_tsquery('umapdict',%s)"  # noqa
             results = Map.objects.filter(share_status=Map.PUBLIC)
             results = results.extra(where=[where], params=[q])
             results = results.order_by("-modified_at")
