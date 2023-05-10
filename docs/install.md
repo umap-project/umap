@@ -84,13 +84,6 @@ may want to add an index. For that, you should do so:
 
     CREATE EXTENSION unaccent;
     CREATE EXTENSION btree_gin;
-    ALTER FUNCTION unaccent(text) IMMUTABLE;
-    ALTER FUNCTION to_tsvector(text) IMMUTABLE;
-    CREATE INDEX search_idx ON umap_map USING gin(to_tsvector(unaccent(name)), share_status);
-
-
-## Optimisations
-
-To speed up uMap homepage rendering on a large instance, the following index can be added as well (make sure you set the center to your default instance map center):
-
-    CREATE INDEX umap_map_optim ON umap_map (modified_at) WHERE ("umap_map"."share_status" = 1 AND ST_Distance("umap_map"."center", ST_GeomFromEWKT('SRID=4326;POINT(2 51)')) > 1000.0);
+    CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
+    ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
+    CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', name), share_status);
