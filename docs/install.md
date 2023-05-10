@@ -82,15 +82,15 @@ Start the server
 UMap uses PostgreSQL tsvector for searching. In case your database is big, you
 may want to add an index. For that, you should do so:
 
+    # Create a basic search configuration
+    CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
+
+    # If you also want to deal with accents and case, add this before creating the index
     CREATE EXTENSION unaccent;
     CREATE EXTENSION btree_gin;
-    ALTER FUNCTION unaccent(text) IMMUTABLE;
-    ALTER FUNCTION to_tsvector(text) IMMUTABLE;
-    CREATE INDEX search_idx ON leaflet_storage_map USING gin(to_tsvector(unaccent(name)), share_status);
+    ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
 
+    # Now create the index
+    CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', name), share_status);
 
-## Optimisations
-
-To speed up uMap homepage rendering on a large instance, the following index can be added as well (make sure you set the center to your default instance map center):
-
-    CREATE INDEX leaflet_storage_map_optim ON leaflet_storage_map (modified_at) WHERE ("leaflet_storage_map"."share_status" = 1 AND ST_Distance("leaflet_storage_map"."center", ST_GeomFromEWKT('SRID=4326;POINT(2 51)')) > 1000.0);
+And change `UMAP_SEARCH_CONFIGURATION = "umapdict"` in your settings.
