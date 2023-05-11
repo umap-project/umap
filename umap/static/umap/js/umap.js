@@ -261,7 +261,8 @@ L.U.Map.include({
             // but the control breaks if we don't specify a class here, so a fake class
             // will do.
             icon: 'umap-fake-class',
-            iconLoading: 'umap-fake-class'
+            iconLoading: 'umap-fake-class',
+            flyTo: this.options.easing
         });
         this._controls.fullscreen = new L.Control.Fullscreen({title: {'false': L._('View Fullscreen'), 'true': L._('Exit Fullscreen')}});
         this._controls.search = new L.U.SearchControl();
