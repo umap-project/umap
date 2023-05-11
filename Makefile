@@ -52,3 +52,16 @@ tx_push:
 	tx push -s
 tx_pull:
 	tx pull
+
+jsdir = umap/static/umap/js/
+filepath = "${jsdir}*.js"
+pretty: ## Apply PrettierJS to all JS files (or specified `filepath`)
+	./node_modules/prettier/bin-prettier.js --write ${filepath}
+
+lebab: ## Convert JS `filepath` to modern syntax with Lebab, then prettify
+	./node_modules/lebab/bin/index.js --replace ${filepath} --transform arrow,arrow-return,for-of,for-each,arg-rest,arg-spread,obj-method,obj-shorthand,no-strict,exponent,multi-var
+	./node_modules/lebab/bin/index.js --replace ${filepath} --transform let,class,commonjs,template,default-param,destruct-param,includes
+	$(MAKE) pretty filepath=${filepath}
+
+lebab-all: $(jsdir)* ## Convert all JS files to modern syntax with Lebab + prettify
+	for file in $^ ; do $(MAKE) lebab filepath=$${file}; done
