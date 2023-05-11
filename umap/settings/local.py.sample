@@ -94,11 +94,6 @@ SHORT_SITE_URL = "http://s.hort"
 # POSTGIS_VERSION = (2, 1, 0)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# You need to unable accent extension before using UMAP_USE_UNACCENT
-# python manage.py dbshell
-# CREATE EXTENSION unaccent;
-UMAP_USE_UNACCENT = False
-
 # Put the site in readonly mode (useful for migration or any maintenance)
 UMAP_READONLY = False
 

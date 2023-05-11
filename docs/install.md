@@ -82,8 +82,15 @@ Start the server
 UMap uses PostgreSQL tsvector for searching. In case your database is big, you
 may want to add an index. For that, you should do so:
 
+    # Create a basic search configuration
+    CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
+
+    # If you also want to deal with accents and case, add this before creating the index
     CREATE EXTENSION unaccent;
     CREATE EXTENSION btree_gin;
-    CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
     ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
+
+    # Now create the index
     CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', name), share_status);
+
+And change `UMAP_SEARCH_CONFIGURATION = "umapdict"` in your settings.

@@ -529,3 +529,13 @@ def test_create_readonly(client, user, post_data, settings):
     response = client.post(url, post_data)
     assert response.status_code == 403
     assert response.content == b'Site is readonly for maintenance'
+
+
+def test_search(client, map):
+    # Very basic search, that do not deal with accent nor case.
+    # See install.md for how to have a smarter dict + index.
+    map.name = "Blé dur"
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?q=Blé")
+    assert "Blé dur" in response.content.decode()

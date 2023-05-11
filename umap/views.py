@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
@@ -190,13 +191,13 @@ class Search(TemplateView, PaginatorMixin):
         q = self.request.GET.get("q")
         results = []
         if q:
-            where = "to_tsvector(name) @@ websearch_to_tsquery(%s)"
-            if getattr(settings, "UMAP_USE_UNACCENT", False):
-                where = "to_tsvector('umapdict',name) @@ websearch_to_tsquery('umapdict',%s)"  # noqa
-            results = Map.objects.filter(share_status=Map.PUBLIC)
-            results = results.extra(where=[where], params=[q])
-            results = results.order_by("-modified_at")
-            results = self.paginate(results)
+            vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
+            query = SearchQuery(
+                q, config=settings.UMAP_SEARCH_CONFIGURATION, search_type="websearch"
+            )
+            qs = Map.objects.annotate(search=vector).filter(search=query)
+            qs = qs.filter(share_status=Map.PUBLIC).order_by('-modified_at')
+            results = self.paginate(qs)
         kwargs.update({"maps": results, "q": q})
         return kwargs
 
