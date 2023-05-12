@@ -52,3 +52,9 @@ tx_push:
 	tx push -s
 tx_pull:
 	tx pull
+
+jsdir = umap/static/umap/js/
+filepath = "${jsdir}*.js"
+pretty: ## Apply PrettierJS to all JS files (or specified `filepath`)
+	./node_modules/prettier/bin-prettier.js --write ${filepath}
+
