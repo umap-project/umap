@@ -343,7 +343,7 @@ L.U.DataLayer = L.Evented.extend({
 
   reindex: function () {
     var features = []
-    this.eachFeature(function (feature) {
+    this.eachFeature((feature) => {
       features.push(feature)
     })
     L.Util.sortFeatures(features, this.map.getOption('sortKey'))
@@ -375,7 +375,7 @@ L.U.DataLayer = L.Evented.extend({
       verb: 'GET',
       callback: function (raw) {
         self.clear()
-        self.rawToGeoJSON(raw, self.options.remoteData.format, function (geojson) {
+        self.rawToGeoJSON(raw, self.options.remoteData.format, (geojson) => {
           self.fromGeoJSON(geojson)
         })
       },
@@ -509,16 +509,14 @@ L.U.DataLayer = L.Evented.extend({
 
   addRawData: function (c, type) {
     var self = this
-    this.rawToGeoJSON(c, type, function (geojson) {
+    this.rawToGeoJSON(c, type, (geojson) => {
       self.addData(geojson)
     })
   },
 
   rawToGeoJSON: function (c, type, callback) {
     var self = this
-    var toDom = function (x) {
-      return new DOMParser().parseFromString(x, 'text/xml')
-    }
+    var toDom = (x) => new DOMParser().parseFromString(x, 'text/xml')
 
     // TODO add a duck typing guessType
     if (type === 'csv') {
@@ -528,7 +526,7 @@ L.U.DataLayer = L.Evented.extend({
           delimiter: 'auto',
           includeLatLon: false,
         },
-        function (err, result) {
+        (err, result) => {
           if (err) {
             var message
             if (err.type === 'Error') {
@@ -674,7 +672,7 @@ L.U.DataLayer = L.Evented.extend({
       self = this
     type = type || L.Util.detectFileType(f)
     reader.readAsText(f)
-    reader.onload = function (e) {
+    reader.onload = (e) => {
       self.importRaw(e.target.result, type)
     }
   },
@@ -1034,7 +1032,7 @@ L.U.DataLayer = L.Evented.extend({
 
   featuresToGeoJSON: function () {
     var features = []
-    this.eachLayer(function (layer) {
+    this.eachLayer((layer) => {
       features.push(layer.toGeoJSON())
     })
     return features

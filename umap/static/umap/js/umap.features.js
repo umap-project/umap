@@ -622,7 +622,7 @@ L.U.Marker = L.Marker.extend({
   zoomTo: function (e) {
     if (this.datalayer.isClustered() && !this._icon) {
       // callback is mandatory for zoomToShowLayer
-      this.datalayer.layer.zoomToShowLayer(this, e.callback || function () {})
+      this.datalayer.layer.zoomToShowLayer(this, e.callback || (() => {}))
     } else {
       L.U.FeatureMixin.zoomTo.call(this, e)
     }

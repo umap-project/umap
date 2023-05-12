@@ -7,10 +7,8 @@ L.U.Map = L.Map.extend({})
 /*
  * Utils
  */
-L.Util.queryString = function (name, fallback) {
-  var decode = function (s) {
-    return decodeURIComponent(s.replace(/\+/g, ' '))
-  }
+L.Util.queryString = (name, fallback) => {
+  var decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
   var qs = window.location.search.slice(1).split('&'),
     qa = {}
   for (var i in qs) {
@@ -21,21 +19,21 @@ L.Util.queryString = function (name, fallback) {
   return qa[name] || fallback
 }
 
-L.Util.booleanFromQueryString = function (name) {
+L.Util.booleanFromQueryString = (name) => {
   var value = L.Util.queryString(name)
   return value === '1' || value === 'true'
 }
 
-L.Util.setFromQueryString = function (options, name) {
+L.Util.setFromQueryString = (options, name) => {
   var value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value
 }
 
-L.Util.setBooleanFromQueryString = function (options, name) {
+L.Util.setBooleanFromQueryString = (options, name) => {
   var value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
 }
-L.Util.setNullableBooleanFromQueryString = function (options, name) {
+L.Util.setNullableBooleanFromQueryString = (options, name) => {
   var value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {
     if (value === 'null') value = null
@@ -44,11 +42,11 @@ L.Util.setNullableBooleanFromQueryString = function (options, name) {
     options[name] = value
   }
 }
-L.Util.escapeHTML = function (s) {
+L.Util.escapeHTML = (s) => {
   s = s ? s.toString() : ''
   return s.replace(/</gm, '&lt;')
 }
-L.Util.toHTML = function (r) {
+L.Util.toHTML = (r) => {
   if (!r) return ''
   var ii
 
@@ -113,13 +111,9 @@ L.Util.toHTML = function (r) {
 
   return r
 }
-L.Util.isObject = function (what) {
-  return typeof what === 'object' && what !== null
-}
-L.Util.CopyJSON = function (geojson) {
-  return JSON.parse(JSON.stringify(geojson))
-}
-L.Util.detectFileType = function (f) {
+L.Util.isObject = (what) => typeof what === 'object' && what !== null
+L.Util.CopyJSON = (geojson) => JSON.parse(JSON.stringify(geojson))
+L.Util.detectFileType = (f) => {
   var filename = f.name ? escape(f.name.toLowerCase()) : ''
   function ext(_) {
     return filename.indexOf(_) !== -1
@@ -136,11 +130,10 @@ L.Util.detectFileType = function (f) {
   if (ext('.umap')) return 'umap'
 }
 
-L.Util.usableOption = function (options, option) {
-  return options[option] !== undefined && options[option] !== ''
-}
+L.Util.usableOption = (options, option) =>
+  options[option] !== undefined && options[option] !== ''
 
-L.Util.greedyTemplate = function (str, data, ignore) {
+L.Util.greedyTemplate = (str, data, ignore) => {
   function getValue(data, path) {
     var value = data
     for (var i = 0; i < path.length; i++) {
@@ -152,7 +145,7 @@ L.Util.greedyTemplate = function (str, data, ignore) {
 
   return str.replace(
     /\{ *([\w_\:\.\|]+)(?:\|("[^"]*"))? *\}/g,
-    function (str, key, staticFallback) {
+    (str, key, staticFallback) => {
       var vars = key.split('|'),
         value,
         path
@@ -175,10 +168,10 @@ L.Util.greedyTemplate = function (str, data, ignore) {
   )
 }
 
-L.Util.sortFeatures = function (features, sortKey) {
+L.Util.sortFeatures = (features, sortKey) => {
   var sortKeys = (sortKey || 'name').split(',')
 
-  var sort = function (a, b, i) {
+  var sort = (a, b, i) => {
     var sortKey = sortKeys[i],
       score,
       valA = a.properties[sortKey] || '',
@@ -194,7 +187,7 @@ L.Util.sortFeatures = function (features, sortKey) {
     return score
   }
 
-  features.sort(function (a, b) {
+  features.sort((a, b) => {
     if (!a.properties || !b.properties) {
       return 0
     }
@@ -204,12 +197,12 @@ L.Util.sortFeatures = function (features, sortKey) {
   return features
 }
 
-L.Util.flattenCoordinates = function (coords) {
+L.Util.flattenCoordinates = (coords) => {
   while (coords[0] && typeof coords[0][0] !== 'number') coords = coords[0]
   return coords
 }
 
-L.Util.buildQueryString = function (params) {
+L.Util.buildQueryString = (params) => {
   var query_string = []
   for (var key in params) {
     query_string.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
@@ -217,11 +210,9 @@ L.Util.buildQueryString = function (params) {
   return query_string.join('&')
 }
 
-L.Util.getBaseUrl = function () {
-  return '//' + window.location.host + window.location.pathname
-}
+L.Util.getBaseUrl = () => '//' + window.location.host + window.location.pathname
 
-L.DomUtil.add = function (tagName, className, container, content) {
+L.DomUtil.add = (tagName, className, container, content) => {
   var el = L.DomUtil.create(tagName, className, container)
   if (content) {
     if (content.nodeType && content.nodeType === 1) {
@@ -233,7 +224,7 @@ L.DomUtil.add = function (tagName, className, container, content) {
   return el
 }
 
-L.DomUtil.createFieldset = function (container, legend, options) {
+L.DomUtil.createFieldset = (container, legend, options) => {
   options = options || {}
   var fieldset = L.DomUtil.create('div', 'fieldset toggle', container)
   var legendEl = L.DomUtil.add('h5', 'legend style_options_toggle', fieldset, legend)
@@ -249,12 +240,12 @@ L.DomUtil.createFieldset = function (container, legend, options) {
   return fieldsEl
 }
 
-L.DomUtil.classIf = function (el, className, bool) {
+L.DomUtil.classIf = (el, className, bool) => {
   if (bool) L.DomUtil.addClass(el, className)
   else L.DomUtil.removeClass(el, className)
 }
 
-L.DomUtil.element = function (what, attrs, parent) {
+L.DomUtil.element = (what, attrs, parent) => {
   var el = document.createElement(what)
   for (var attr in attrs) {
     el[attr] = attrs[attr]
@@ -265,19 +256,19 @@ L.DomUtil.element = function (what, attrs, parent) {
   return el
 }
 
-L.DomUtil.before = function (target, el) {
+L.DomUtil.before = (target, el) => {
   target.parentNode.insertBefore(el, target)
   return el
 }
 
-L.DomUtil.after = function (target, el) {
+L.DomUtil.after = (target, el) => {
   target.parentNode.insertBefore(el, target.nextSibling)
   return el
 }
 
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
 
-L.DomUtil.TextColorFromBackgroundColor = function (el) {
+L.DomUtil.TextColorFromBackgroundColor = (el) => {
   var out = '#000000'
   if (!window.getComputedStyle) {
     return out
@@ -293,7 +284,7 @@ L.DomUtil.TextColorFromBackgroundColor = function (el) {
   }
   return out
 }
-L.DomEvent.once = function (el, types, fn, context) {
+L.DomEvent.once = (el, types, fn, context) => {
   // cf https://github.com/Leaflet/Leaflet/pull/3528#issuecomment-134551575
 
   if (typeof types === 'object') {
@@ -303,7 +294,7 @@ L.DomEvent.once = function (el, types, fn, context) {
     return L.DomEvent
   }
 
-  var handler = L.bind(function () {
+  var handler = L.bind(() => {
     L.DomEvent.off(el, types, fn, context).off(el, types, handler, context)
   }, L.DomEvent)
 
@@ -405,7 +396,7 @@ L.U.Help = L.Class.extend({
       self = this,
       title = L.DomUtil.create('h3', '', container),
       actionsContainer = L.DomUtil.create('ul', 'umap-edit-actions', container)
-    var addAction = function (action) {
+    var addAction = (action) => {
       var actionContainer = L.DomUtil.add('li', '', actionsContainer)
       L.DomUtil.add('i', action.options.className, actionContainer),
         L.DomUtil.add('span', '', actionContainer, action.options.tooltip)

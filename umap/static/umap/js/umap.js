@@ -255,7 +255,7 @@ L.U.Map.include({
       if (slug && this.features_index[slug]) this.features_index[slug].view()
     })
 
-    window.onbeforeunload = function (e) {
+    window.onbeforeunload = (e) => {
       var msg = L._('You have unsaved changes.')
       if (self.isDirty) {
         e.returnValue = msg
@@ -374,19 +374,19 @@ L.U.Map.include({
     var toload = (dataToload = seen = this.options.datalayers.length),
       self = this,
       datalayer
-    var loaded = function () {
+    var loaded = () => {
       self.datalayersLoaded = true
       self.fire('datalayersloaded')
     }
-    var decrementToLoad = function () {
+    var decrementToLoad = () => {
       toload--
       if (toload === 0) loaded()
     }
-    var dataLoaded = function () {
+    var dataLoaded = () => {
       self.dataLoaded = true
       self.fire('dataloaded')
     }
-    var decrementDataToLoad = function () {
+    var decrementDataToLoad = () => {
       dataToload--
       if (dataToload === 0) dataLoaded()
     }
@@ -413,7 +413,7 @@ L.U.Map.include({
   },
 
   ensurePanesOrder: function () {
-    this.eachDataLayer(function (datalayer) {
+    this.eachDataLayer((datalayer) => {
       datalayer.bringToTop()
     })
   },
@@ -707,7 +707,7 @@ L.U.Map.include({
 
   updateTileLayers: function () {
     var self = this,
-      callback = function (tilelayer) {
+      callback = (tilelayer) => {
         self.options.tilelayer = tilelayer.toJSON()
         self.isDirty = true
       }
@@ -755,7 +755,7 @@ L.U.Map.include({
       UIFields.push('queryString.' + this.HIDDABLE_CONTROLS[i] + 'Control')
     }
     var iframeExporter = new L.U.IframeExporter(this)
-    var buildIframeCode = function () {
+    var buildIframeCode = () => {
       iframe.innerHTML = iframeExporter.build()
     }
     buildIframeCode()
@@ -785,7 +785,7 @@ L.U.Map.include({
       L._('Only visible features will be downloaded.')
     )
     exportCaveat.id = 'export_caveat_text'
-    var toggleCaveat = function () {
+    var toggleCaveat = () => {
       if (typeInput.value === 'umap') exportCaveat.style.display = 'none'
       else exportCaveat.style.display = 'inherit'
     }
@@ -853,7 +853,7 @@ L.U.Map.include({
 
   toGeoJSON: function () {
     var features = []
-    this.eachDataLayer(function (datalayer) {
+    this.eachDataLayer((datalayer) => {
       if (datalayer.isVisible()) {
         features = features.concat(datalayer.featuresToGeoJSON())
       }
@@ -901,7 +901,7 @@ L.U.Map.include({
     var clearFlag = L.DomUtil.create('input', '', clearLabel)
     clearFlag.type = 'checkbox'
     clearFlag.name = 'clear'
-    this.eachDataLayerReverse(function (datalayer) {
+    this.eachDataLayerReverse((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
         var id = L.stamp(datalayer)
         option = L.DomUtil.create('option', '', layerInput)
@@ -993,7 +993,7 @@ L.U.Map.include({
     L.DomEvent.on(
       fileInput,
       'change',
-      function (e) {
+      (e) => {
         var type = '',
           newType
         for (var i = 0; i < e.target.files.length; i++) {
@@ -1026,7 +1026,7 @@ L.U.Map.include({
 
     if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
     var self = this
-    importedData.layers.forEach(function (geojson) {
+    importedData.layers.forEach((geojson) => {
       var dataLayer = self.createDataLayer()
       dataLayer.fromUmapGeoJSON(geojson)
     })
@@ -1034,7 +1034,7 @@ L.U.Map.include({
     this.initTileLayers()
     this.renderControls()
     this.handleLimitBounds()
-    this.eachDataLayer(function (datalayer) {
+    this.eachDataLayer((datalayer) => {
       if (mustReindex) datalayer.reindex()
       datalayer.redraw()
     })
@@ -1046,7 +1046,7 @@ L.U.Map.include({
     var reader = new FileReader()
     reader.readAsText(file)
     var self = this
-    reader.onload = function (e) {
+    reader.onload = (e) => {
       var rawData = e.target.result
       try {
         self.importRaw(rawData)
@@ -1082,7 +1082,7 @@ L.U.Map.include({
       description.innerHTML = L.Util.toHTML(this.options.description)
     }
     var datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
-    this.eachVisibleDataLayer(function (datalayer) {
+    this.eachVisibleDataLayer((datalayer) => {
       var p = L.DomUtil.create('p', '', datalayerContainer),
         color = L.DomUtil.create('span', 'datalayer-color', p),
         headline = L.DomUtil.create('strong', '', p),
@@ -1169,15 +1169,11 @@ L.U.Map.include({
   },
 
   eachBrowsableDataLayer: function (method, context) {
-    this.eachDataLayerReverse(method, context, function (d) {
-      return d.allowBrowse()
-    })
+    this.eachDataLayerReverse(method, context, (d) => d.allowBrowse())
   },
 
   eachVisibleDataLayer: function (method, context) {
-    this.eachDataLayerReverse(method, context, function (d) {
-      return d.isVisible()
-    })
+    this.eachDataLayerReverse(method, context, (d) => d.isVisible())
   },
 
   findDataLayer: function (method, context) {
@@ -1196,7 +1192,7 @@ L.U.Map.include({
     if (this.editTools) this.editTools.stopDrawing()
     this.resetOptions()
     this.datalayers_index = [].concat(this._datalayers_index_bk)
-    this.dirty_datalayers.slice().forEach(function (datalayer) {
+    this.dirty_datalayers.slice().forEach((datalayer) => {
       if (datalayer.isDeleted) datalayer.connectToMap()
       datalayer.reset()
     })
@@ -1305,7 +1301,7 @@ L.U.Map.include({
       layers: [],
     }
 
-    this.eachDataLayer(function (datalayer) {
+    this.eachDataLayer((datalayer) => {
       umapfile.layers.push(datalayer.umapGeoJSON())
     })
 
@@ -1389,7 +1385,7 @@ L.U.Map.include({
     ) {
       return datalayer
     }
-    datalayer = this.findDataLayer(function (datalayer) {
+    datalayer = this.findDataLayer((datalayer) => {
       if (!datalayer.isRemoteLayer() && datalayer.canBrowse()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
@@ -1405,9 +1401,7 @@ L.U.Map.include({
   },
 
   getDataLayerByUmapId: function (umap_id) {
-    return this.findDataLayer(function (d) {
-      return d.umap_id == umap_id
-    })
+    return this.findDataLayer((d) => d.umap_id == umap_id)
   },
 
   _editControls: function (container) {
@@ -1453,7 +1447,7 @@ L.U.Map.include({
 
     builder = new L.U.FormBuilder(this, shapeOptions, {
       callback: function (e) {
-        this.eachDataLayer(function (datalayer) {
+        this.eachDataLayer((datalayer) => {
           datalayer.redraw()
         })
       },
@@ -1516,7 +1510,7 @@ L.U.Map.include({
     builder = new L.U.FormBuilder(this, optionsFields, {
       callback: function (e) {
         this.initCaptionBar()
-        this.eachDataLayer(function (datalayer) {
+        this.eachDataLayer((datalayer) => {
           if (e.helper.field === 'options.sortKey') datalayer.reindex()
           datalayer.redraw()
         })
@@ -1546,7 +1540,7 @@ L.U.Map.include({
           e.helper.field === 'options.popupShape'
         )
           return
-        this.eachDataLayer(function (datalayer) {
+        this.eachDataLayer((datalayer) => {
           datalayer.redraw()
         })
       },
@@ -1990,7 +1984,7 @@ L.U.Map.include({
   },
 
   empty: function () {
-    this.eachDataLayerReverse(function (datalayer) {
+    this.eachDataLayerReverse((datalayer) => {
       datalayer._delete()
     })
   },

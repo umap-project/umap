@@ -566,7 +566,7 @@ L.U.DataLayersControl = L.Control.extend({
         if (e.finalIndex === 0) layer.bringToTop()
         else if (e.finalIndex > e.initialIndex) layer.insertBefore(other)
         else layer.insertAfter(other)
-        this.map.eachDataLayerReverse(function (datalayer) {
+        this.map.eachDataLayerReverse((datalayer) => {
           if (datalayer.getRank() >= minIndex) datalayer.isDirty = true
         })
         this.map.indexDatalayers()
@@ -681,7 +681,7 @@ L.U.Map.include({
     filter.placeholder = L._('Filter…')
     filter.value = this.options.filter || ''
 
-    var addFeature = function (feature) {
+    var addFeature = (feature) => {
       var feature_li = L.DomUtil.create('li', feature.getClassName() + ' feature'),
         zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
         edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
@@ -726,7 +726,7 @@ L.U.Map.include({
       return feature_li
     }
 
-    var append = function (datalayer) {
+    var append = (datalayer) => {
       var container = L.DomUtil.create(
           'div',
           datalayer.getHidableClass(),
@@ -739,9 +739,9 @@ L.U.Map.include({
       var ul = L.DomUtil.create('ul', '', container)
       L.DomUtil.classIf(container, 'off', !datalayer.isVisible())
 
-      var build = function () {
+      var build = () => {
         ul.innerHTML = ''
-        datalayer.eachFeature(function (feature) {
+        datalayer.eachFeature((feature) => {
           if (
             (filterValue && !feature.matchFilter(filterValue, filterKeys)) ||
             feature.properties.isVisible === false
@@ -752,11 +752,11 @@ L.U.Map.include({
       }
       build()
       datalayer.on('datachanged', build)
-      datalayer.map.ui.once('panel:closed', function () {
+      datalayer.map.ui.once('panel:closed', () => {
         datalayer.off('datachanged', build)
       })
-      datalayer.map.ui.once('panel:ready', function () {
-        datalayer.map.ui.once('panel:ready', function () {
+      datalayer.map.ui.once('panel:ready', () => {
+        datalayer.map.ui.once('panel:ready', () => {
           datalayer.off('datachanged', build)
         })
       })
@@ -765,12 +765,12 @@ L.U.Map.include({
     var appendAll = function () {
       this.options.filter = filterValue = filter.value
       featuresContainer.innerHTML = ''
-      this.eachBrowsableDataLayer(function (datalayer) {
+      this.eachBrowsableDataLayer((datalayer) => {
         append(datalayer)
       })
     }
     var resetLayers = function () {
-      this.eachBrowsableDataLayer(function (datalayer) {
+      this.eachBrowsableDataLayer((datalayer) => {
         datalayer.resetLayer(true)
       })
     }
@@ -812,8 +812,8 @@ L.U.Map.include({
         this.getMap().options.advancedFilters[property] = []
       }
     })
-    this.eachDataLayer(function (datalayer) {
-      datalayer.eachFeature(function (feature) {
+    this.eachDataLayer((datalayer) => {
+      datalayer.eachFeature((feature) => {
         advancedFilterKeys.forEach((property) => {
           if (feature.properties[property]) {
             if (!advancedFiltersFull[property].includes(feature.properties[property])) {
@@ -875,7 +875,7 @@ L.U.Map.include({
 
     var filterFeatures = function () {
       var noResults = true
-      this.eachDataLayer(function (datalayer) {
+      this.eachDataLayer((datalayer) => {
         datalayer.eachFeature(function (feature) {
           feature.properties.isVisible = true
           for (const [property, values] of Object.entries(
@@ -1038,11 +1038,11 @@ L.U.Search = L.PhotonSearch.extend({
     edit.title = L._('Save this location as new feature')
     // We need to use "mousedown" because Leaflet.Photon listen to mousedown
     // on el.
-    L.DomEvent.on(zoom, 'mousedown', function (e) {
+    L.DomEvent.on(zoom, 'mousedown', (e) => {
       L.DomEvent.stop(e)
       self.zoomToFeature(feature)
     })
-    L.DomEvent.on(edit, 'mousedown', function (e) {
+    L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
       var datalayer = self.map.defaultDataLayer()
       var layer = datalayer.geojsonToFeatures(feature)
@@ -1079,7 +1079,7 @@ L.U.SearchControl = L.Control.extend({
     var link = L.DomUtil.create('a', '', container)
     link.href = '#'
     link.title = L._('Search a place name')
-    L.DomEvent.on(link, 'click', function (e) {
+    L.DomEvent.on(link, 'click', (e) => {
       L.DomEvent.stop(e)
       self.openPanel(map)
     })
@@ -1100,14 +1100,14 @@ L.U.SearchControl = L.Control.extend({
     var resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
     this.search = new L.U.Search(map, input, options)
     var id = Math.random()
-    this.search.on('ajax:send', function () {
+    this.search.on('ajax:send', () => {
       map.fire('dataloading', { id: id })
     })
-    this.search.on('ajax:return', function () {
+    this.search.on('ajax:return', () => {
       map.fire('dataload', { id: id })
     })
     this.search.resultsContainer = resultsContainer
-    map.ui.once('panel:ready', function () {
+    map.ui.once('panel:ready', () => {
       input.focus()
     })
     map.ui.openPanel({ data: { html: container } })
@@ -1214,7 +1214,7 @@ L.U.IframeExporter = L.Evented.extend({
       this.queryString.feature = this.map.currentFeature.getSlug()
     }
     if (this.options.keepCurrentDatalayers) {
-      this.map.eachDataLayer(function (datalayer) {
+      this.map.eachDataLayer((datalayer) => {
         if (datalayer.isVisible() && datalayer.umap_id) {
           datalayers.push(datalayer.umap_id)
         }
@@ -1250,7 +1250,7 @@ L.U.Editable = L.Editable.extend({
     )
     this.on('editable:drawing:end', this.closeTooltip)
     // Layer for items added by users
-    this.on('editable:drawing:cancel', function (e) {
+    this.on('editable:drawing:cancel', (e) => {
       if (e.layer._latlngs && e.layer._latlngs.length < e.layer.editor.MIN_VERTEX)
         e.layer.del()
       if (e.layer instanceof L.U.Marker) e.layer.del()
@@ -1259,7 +1259,7 @@ L.U.Editable = L.Editable.extend({
       e.layer.isDirty = true
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
     })
-    this.on('editable:editing', function (e) {
+    this.on('editable:editing', (e) => {
       var layer = e.layer
       layer.isDirty = true
       if (layer._tooltip && layer.isTooltipOpen()) {
@@ -1267,12 +1267,12 @@ L.U.Editable = L.Editable.extend({
         layer._tooltip.update()
       }
     })
-    this.on('editable:vertex:ctrlclick', function (e) {
+    this.on('editable:vertex:ctrlclick', (e) => {
       var index = e.vertex.getIndex()
       if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue))
         e.vertex.continue()
     })
-    this.on('editable:vertex:altclick', function (e) {
+    this.on('editable:vertex:altclick', (e) => {
       if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) e.vertex.delete()
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
