@@ -1231,7 +1231,7 @@ L.U.IframeExporter = L.Evented.extend({
         this.dimensions.width +
         '" height="' +
         this.dimensions.height +
-        '" frameborder="0" allowfullscreen src="' +
+        '" frameborder="0" allowfullscreen allow="geolocation" src="' +
         iframeUrl +
         '"></iframe>'
     if (this.options.includeFullScreenLink) {
