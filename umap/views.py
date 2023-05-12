@@ -160,11 +160,9 @@ class UserMaps(DetailView, PaginatorMixin):
         maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
         if owner:
             per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
-            limit = 100
         else:
             per_page = settings.UMAP_MAPS_PER_PAGE
-            limit = 50
-        maps = maps.distinct().order_by("-modified_at")[:limit]
+        maps = maps.distinct().order_by("-modified_at")
         maps = self.paginate(maps, per_page)
         kwargs.update({"maps": maps})
         return super(UserMaps, self).get_context_data(**kwargs)
