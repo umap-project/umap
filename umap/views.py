@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
@@ -140,7 +141,6 @@ home = Home.as_view()
 
 
 class About(Home):
-
     template_name = "umap/about.html"
 
 
@@ -190,13 +190,13 @@ class Search(TemplateView, PaginatorMixin):
         q = self.request.GET.get("q")
         results = []
         if q:
-            where = "to_tsvector(name) @@ plainto_tsquery(%s)"
-            if getattr(settings, "UMAP_USE_UNACCENT", False):
-                where = "to_tsvector(unaccent(name)) @@ plainto_tsquery(unaccent(%s))"  # noqa
-            results = Map.objects.filter(share_status=Map.PUBLIC)
-            results = results.extra(where=[where], params=[q])
-            results = results.order_by("-modified_at")
-            results = self.paginate(results)
+            vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
+            query = SearchQuery(
+                q, config=settings.UMAP_SEARCH_CONFIGURATION, search_type="websearch"
+            )
+            qs = Map.objects.annotate(search=vector).filter(search=query)
+            qs = qs.filter(share_status=Map.PUBLIC).order_by('-modified_at')
+            results = self.paginate(qs)
         kwargs.update({"maps": results, "q": q})
         return kwargs
 
@@ -352,7 +352,6 @@ class FormLessEditMixin:
 
 
 class MapDetailMixin:
-
     model = Map
 
     def get_context_data(self, **kwargs):
@@ -649,7 +648,6 @@ class MapShortUrl(RedirectView):
 
 
 class MapAnonymousEditUrl(RedirectView):
-
     permanent = False
 
     def get(self, request, *args, **kwargs):
@@ -657,7 +655,7 @@ class MapAnonymousEditUrl(RedirectView):
         try:
             pk = signer.unsign(self.kwargs["signature"])
         except BadSignature:
-            signer = Signer(algorithm='sha1')
+            signer = Signer(algorithm="sha1")
             try:
                 pk = signer.unsign(self.kwargs["signature"])
             except BadSignature:
@@ -680,7 +678,6 @@ class MapAnonymousEditUrl(RedirectView):
 
 
 class GZipMixin(object):
-
     EXT = ".gz"
 
     @property
