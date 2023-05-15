@@ -8,6 +8,7 @@
     <ul>
       {% if user.is_authenticated %}
         <li><a href="{% url 'user_maps' user.username %}">{% trans "My maps" %} ({{ user }})</a></li>
+        <li><a href="{% url 'user_stars' user.username %}">{% trans "Starred maps" %}</a></li>
       {% else %}
         <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
       {% endif %}

@@ -60,6 +60,7 @@ L.U.Map.include({
     'tilelayers',
     'editinosm',
     'datalayers',
+    'star',
   ],
 
   initialize: function (el, geojson) {
@@ -309,6 +310,7 @@ L.U.Map.include({
     this._controls.search = new L.U.SearchControl()
     this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
     this._controls.tilelayers = new L.U.TileLayerControl(this)
+    this._controls.star = new L.U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -1283,6 +1285,7 @@ L.U.Map.include({
     'embedControl',
     'measureControl',
     'tilelayersControl',
+    'starControl',
     'easing',
   ],
 
@@ -1367,6 +1370,28 @@ L.U.Map.include({
 
   getSaveUrl: function () {
     return (this.options.umap_id && this.getEditUrl()) || this.getCreateUrl()
+  },
+
+  star: function () {
+    if (!this.options.umap_id)
+      return this.ui.alert({
+        content: L._('Please save the map first'),
+        level: 'error',
+      })
+    let url = L.Util.template(this.options.urls.map_star, {
+      map_id: this.options.umap_id,
+    })
+    this.post(url, {
+      context: this,
+      callback: function (data) {
+        this.options.starred = data.starred
+        let msg = data.starred
+          ? L._('Map has been starred')
+          : L._('Map has been unstarred')
+        this.ui.alert({ content: msg, level: 'info' })
+        this.renderControls()
+      },
+    })
   },
 
   geometry: function () {

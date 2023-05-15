@@ -2,22 +2,22 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="200"
    height="200"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.4 5da689c313, 2019-01-14"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="24.svg"
    inkscape:export-filename="/home/ybon/Code/js/Leaflet.Storage/src/img/24.png"
    inkscape:export-xdpi="89.996864"
-   inkscape:export-ydpi="89.996864">
+   inkscape:export-ydpi="89.996864"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -27,19 +27,22 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.839192"
-     inkscape:cx="101.80916"
-     inkscape:cy="48.17346"
+     inkscape:zoom="3.3180469"
+     inkscape:cx="168.92468"
+     inkscape:cy="113.47037"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="3840"
-     inkscape:window-height="2032"
+     inkscape:window-width="1920"
+     inkscape:window-height="1019"
      inkscape:window-x="0"
-     inkscape:window-y="54"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid3004"
@@ -464,5 +467,21 @@
        style="fill:#464646;fill-opacity:1;stroke:none;stroke-width:4.28879309"
        id="path4819-7"
        transform="rotate(-111.82202)" />
+    <path
+       style="fill:#464646;fill-opacity:1;stroke:none;stroke-width:6.97516;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:transform-center-x="-0.0017170804"
+       inkscape:transform-center-y="-1.1593678"
+       d="m 130.9794,1042.1863 2.18213,-8.2579 -6.37758,-5.1021 h 8.14486 l 2.85897,-8.6349 2.85166,8.6333 h 8.14451 l -6.38242,5.1066 2.17462,8.2601 -6.79622,-4.7336 z"
+       id="path4734"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#464646;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:transform-center-x="-0.0017170804"
+       inkscape:transform-center-y="-1.1593678"
+       d="m 170.9794,1042.1863 2.18213,-8.2579 -6.37758,-5.1021 h 8.14486 l 2.85897,-8.6349 2.85166,8.6333 h 8.14451 l -6.38242,5.1066 2.17462,8.2601 -6.79623,-4.7336 z"
+       id="path4734-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccc" />
   </g>
 </svg>

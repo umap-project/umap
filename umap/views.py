@@ -45,7 +45,7 @@ from .forms import (
     MapSettingsForm,
     UpdateMapPermissionsForm,
 )
-from .models import DataLayer, Licence, Map, Pictogram, TileLayer
+from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
 from .utils import get_uri_template, gzip_file, is_ajax
 
 try:
@@ -154,18 +154,26 @@ class UserMaps(DetailView, PaginatorMixin):
     list_template_name = "umap/map_list.html"
     context_object_name = "current_user"
 
+    def is_owner(self):
+        return self.request.user == self.object
+
+    @property
+    def per_page(self):
+        if self.is_owner():
+            return settings.UMAP_MAPS_PER_PAGE_OWNER
+        return settings.UMAP_MAPS_PER_PAGE
+
+    def get_map_queryset(self):
+        return Map.objects if self.is_owner() else Map.public
+
+    def get_maps(self):
+        qs = self.get_map_queryset()
+        qs = qs.filter(Q(owner=self.object) | Q(editors=self.object))
+        return qs.distinct().order_by("-modified_at")
+
     def get_context_data(self, **kwargs):
-        owner = self.request.user == self.object
-        manager = Map.objects if owner else Map.public
-        maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
-        if owner:
-            per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
-        else:
-            per_page = settings.UMAP_MAPS_PER_PAGE
-        maps = maps.distinct().order_by("-modified_at")
-        maps = self.paginate(maps, per_page)
-        kwargs.update({"maps": maps})
-        return super(UserMaps, self).get_context_data(**kwargs)
+        kwargs.update({"maps": self.paginate(self.get_maps(), self.per_page)})
+        return super().get_context_data(**kwargs)
 
     def get_template_names(self):
         """
@@ -178,6 +186,19 @@ class UserMaps(DetailView, PaginatorMixin):
 
 
 user_maps = UserMaps.as_view()
+
+
+class UserStars(UserMaps):
+    template_name = "auth/user_stars.html"
+
+    def get_maps(self):
+        qs = self.get_map_queryset()
+        stars = Star.objects.filter(by=self.object).values("map")
+        qs = qs.filter(pk__in=stars)
+        return qs.order_by("-modified_at")
+
+
+user_stars = UserStars.as_view()
 
 
 class Search(TemplateView, PaginatorMixin):
@@ -360,6 +381,7 @@ class MapDetailMixin:
             "allowEdit": self.is_edit_allowed(),
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
+            'starred': self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
             "edit_statuses": [(i, str(label)) for i, label in Map.EDIT_STATUS],
             "share_statuses": [
@@ -403,6 +425,9 @@ class MapDetailMixin:
 
     def get_umap_id(self):
         return None
+
+    def is_starred(self):
+        return False
 
     def get_geojson(self):
         return {
@@ -488,6 +513,12 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         map_settings["properties"]["name"] = self.object.name
         map_settings["properties"]["permissions"] = self.get_permissions()
         return map_settings
+
+    def is_starred(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        return Star.objects.filter(by=user, map=self.object).exists()
 
 
 class MapViewGeoJSON(MapView):
@@ -629,6 +660,20 @@ class MapClone(PermissionsMixin, View):
             msg = _("Congratulations, your map has been cloned!")
         messages.info(self.request, msg)
         return response
+
+
+class ToggleMapStarStatus(View):
+
+    def post(self, *args, **kwargs):
+        map_inst = get_object_or_404(Map, pk=kwargs['map_id'])
+        qs = Star.objects.filter(map=map_inst, by=self.request.user)
+        if qs.exists():
+            qs.delete()
+            status = False
+        else:
+            Star.objects.create(map=map_inst, by=self.request.user)
+            status = True
+        return simple_json_response(starred=status)
 
 
 class MapShortUrl(RedirectView):

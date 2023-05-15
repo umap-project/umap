@@ -1018,6 +1018,28 @@ L.U.AttributionControl = L.Control.Attribution.extend({
   },
 })
 
+L.U.StarControl = L.Control.extend({
+  options: {
+    position: 'topleft',
+  },
+
+  onAdd: function (map) {
+    var status = map.options.starred ? ' starred' : ''
+    var container = L.DomUtil.create(
+        'div',
+        'leaflet-control-star umap-control' + status
+      ),
+      link = L.DomUtil.create('a', '', container)
+    link.href = '#'
+    link.title = L._('Star this map')
+    L.DomEvent.on(link, 'click', L.DomEvent.stop)
+      .on(link, 'click', map.star, map)
+      .on(link, 'dblclick', L.DomEvent.stopPropagation)
+
+    return container
+  },
+})
+
 L.U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
