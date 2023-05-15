@@ -154,18 +154,26 @@ class UserMaps(DetailView, PaginatorMixin):
     list_template_name = "umap/map_list.html"
     context_object_name = "current_user"
 
+    def is_owner(self):
+        return self.request.user == self.object
+
+    @property
+    def per_page(self):
+        if self.is_owner():
+            return settings.UMAP_MAPS_PER_PAGE_OWNER
+        return settings.UMAP_MAPS_PER_PAGE
+
+    def get_map_queryset(self):
+        return Map.objects if self.is_owner() else Map.public
+
+    def get_maps(self):
+        qs = self.get_map_queryset()
+        qs = qs.filter(Q(owner=self.object) | Q(editors=self.object))
+        return qs.distinct().order_by("-modified_at")
+
     def get_context_data(self, **kwargs):
-        owner = self.request.user == self.object
-        manager = Map.objects if owner else Map.public
-        maps = manager.filter(Q(owner=self.object) | Q(editors=self.object))
-        if owner:
-            per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
-        else:
-            per_page = settings.UMAP_MAPS_PER_PAGE
-        maps = maps.distinct().order_by("-modified_at")
-        maps = self.paginate(maps, per_page)
-        kwargs.update({"maps": maps})
-        return super(UserMaps, self).get_context_data(**kwargs)
+        kwargs.update({"maps": self.paginate(self.get_maps(), self.per_page)})
+        return super().get_context_data(**kwargs)
 
     def get_template_names(self):
         """
@@ -183,23 +191,12 @@ user_maps = UserMaps.as_view()
 class UserStars(UserMaps):
     template_name = "auth/user_stars.html"
 
-    def get_context_data(self, **kwargs):
-        owner = self.request.user == self.object
-        manager = Map.objects if owner else Map.public
+    def get_maps(self):
+        qs = self.get_map_queryset()
         stars = Star.objects.filter(by=self.object).values("map")
-        maps = manager.filter(pk__in=stars)
-        if owner:
-            per_page = settings.UMAP_MAPS_PER_PAGE_OWNER
-            limit = 100
-        else:
-            per_page = settings.UMAP_MAPS_PER_PAGE
-            limit = 50
-        maps = maps.order_by('-modified_at')[:limit]
-        maps = self.paginate(maps, per_page)
-        kwargs.update({
-            "maps": maps
-        })
-        return kwargs
+        qs = qs.filter(pk__in=stars)
+        return qs.order_by("-modified_at")
+
 
 user_stars = UserStars.as_view()
 
