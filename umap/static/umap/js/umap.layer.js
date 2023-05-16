@@ -343,9 +343,7 @@ L.U.DataLayer = L.Evented.extend({
 
   reindex: function () {
     var features = []
-    this.eachFeature((feature) => {
-      features.push(feature)
-    })
+    this.eachFeature((feature) => features.push(feature))
     L.Util.sortFeatures(features, this.map.getOption('sortKey'))
     this._index = []
     for (var i = 0; i < features.length; i++) {
@@ -366,18 +364,17 @@ L.U.DataLayer = L.Evented.extend({
     }
     if (!this.options.remoteData.dynamic && this.hasDataLoaded()) return
     if (!this.isVisible()) return
-    var self = this,
-      url = this.map.localizeUrl(this.options.remoteData.url)
+    var url = this.map.localizeUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy)
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
     this.map.ajax({
       uri: url,
       verb: 'GET',
-      callback: function (raw) {
-        self.clear()
-        self.rawToGeoJSON(raw, self.options.remoteData.format, (geojson) => {
-          self.fromGeoJSON(geojson)
-        })
+      callback: (raw) => {
+        this.clear()
+        this.rawToGeoJSON(raw, this.options.remoteData.format, (geojson) =>
+          this.fromGeoJSON(geojson)
+        )
       },
     })
   },
@@ -508,14 +505,10 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   addRawData: function (c, type) {
-    var self = this
-    this.rawToGeoJSON(c, type, (geojson) => {
-      self.addData(geojson)
-    })
+    this.rawToGeoJSON(c, type, (geojson) => this.addData(geojson))
   },
 
   rawToGeoJSON: function (c, type, callback) {
-    var self = this
     var toDom = (x) => new DOMParser().parseFromString(x, 'text/xml')
 
     // TODO add a duck typing guessType
@@ -537,7 +530,7 @@ L.U.DataLayer = L.Evented.extend({
                 message: err[0].message,
               })
             }
-            self.map.ui.alert({ content: message, level: 'error', duration: 10000 })
+            this.map.ui.alert({ content: message, level: 'error', duration: 10000 })
             console.log(err)
           }
           if (result && result.features.length) {
@@ -564,7 +557,7 @@ L.U.DataLayer = L.Evented.extend({
         var gj = JSON.parse(c)
         callback(gj)
       } catch (err) {
-        self.map.ui.alert({ content: 'Invalid JSON file: ' + err })
+        this.map.ui.alert({ content: 'Invalid JSON file: ' + err })
         return
       }
     }
@@ -668,24 +661,18 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   importFromFile: function (f, type) {
-    var reader = new FileReader(),
-      self = this
+    var reader = new FileReader()
     type = type || L.Util.detectFileType(f)
     reader.readAsText(f)
-    reader.onload = (e) => {
-      self.importRaw(e.target.result, type)
-    }
+    reader.onload = (e) => this.importRaw(e.target.result, type)
   },
 
   importFromUrl: function (url, type) {
     url = this.map.localizeUrl(url)
-    var self = this
     this.map.xhr._ajax({
       verb: 'GET',
       uri: url,
-      callback: function (data) {
-        self.importRaw(data, type)
-      },
+      callback: (data) => this.importRaw(data, type),
     })
   },
 
@@ -1032,9 +1019,7 @@ L.U.DataLayer = L.Evented.extend({
 
   featuresToGeoJSON: function () {
     var features = []
-    this.eachLayer((layer) => {
-      features.push(layer.toGeoJSON())
-    })
+    this.eachLayer((layer) => features.push(layer.toGeoJSON()))
     return features
   },
 

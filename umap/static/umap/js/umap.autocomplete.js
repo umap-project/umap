@@ -129,10 +129,7 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   onBlur: function () {
-    var self = this
-    setTimeout(() => {
-      self.hide()
-    }, 100)
+    setTimeout(() => this.hide(), 100)
   },
 
   clear: function () {
@@ -217,12 +214,11 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   handleResults: function (data) {
-    var self = this
     this.clear()
     this.container.style.display = 'block'
     this.resizeContainer()
     this.forEach(data, (item) => {
-      self.RESULTS.push(self.createResult(item))
+      this.RESULTS.push(this.createResult(item))
     })
     this.CURRENT = 0
     this.highlight()
@@ -230,9 +226,8 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   highlight: function () {
-    var self = this
     this.forEach(this.RESULTS, (result, index) => {
-      if (index === self.CURRENT) L.DomUtil.addClass(result.el, 'on')
+      if (index === this.CURRENT) L.DomUtil.addClass(result.el, 'on')
       else L.DomUtil.removeClass(result.el, 'on')
     })
   },
