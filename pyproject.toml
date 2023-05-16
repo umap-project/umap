@@ -52,7 +52,7 @@ dev = [
 ]
 test = [
   "factory-boy==3.2.1",
-  "playwright==1.32.1",
+  "playwright==1.33.0",
   "pytest==6.2.5",
   "pytest-django==4.5.2",
   "pytest-playwright==0.3.3",
