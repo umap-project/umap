@@ -136,10 +136,10 @@ L.U.PopupTemplate.Default = L.Class.extend({
           feature: prev.properties.name || L._('previous'),
         })
       zoomLi.title = L._('Zoom to this feature')
-      L.DomEvent.on(nextLi, 'click', function () {
+      L.DomEvent.on(nextLi, 'click', () => {
         if (next) next.zoomTo({ callback: next.view })
       })
-      L.DomEvent.on(previousLi, 'click', function () {
+      L.DomEvent.on(previousLi, 'click', () => {
         if (prev) prev.zoomTo({ callback: prev.view })
       })
       L.DomEvent.on(

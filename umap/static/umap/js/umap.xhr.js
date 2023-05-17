@@ -6,7 +6,7 @@ L.U.Xhr = L.Evented.extend({
   _wrapper: function () {
     var wrapper
     if (window.XMLHttpRequest === undefined) {
-      wrapper = function () {
+      wrapper = () => {
         try {
           return new window.ActiveXObject('Microsoft.XMLHTTP.6.0')
         } catch (e1) {
@@ -28,7 +28,7 @@ L.U.Xhr = L.Evented.extend({
       id = Math.random(),
       self = this
     this.fire('dataloading', { id: id })
-    var loaded = function () {
+    var loaded = () => {
       self.fire('dataload', { id: id })
     }
 
@@ -58,7 +58,7 @@ L.U.Xhr = L.Evented.extend({
       }
     }
 
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status == 200) {
           settings.callback.call(settings.context || xhr, xhr.responseText, xhr)
@@ -194,7 +194,7 @@ L.U.Xhr = L.Evented.extend({
     if (!form) return
     L.DomEvent.on(form, 'submit', L.DomEvent.stopPropagation)
       .on(form, 'submit', L.DomEvent.preventDefault)
-      .on(form, 'submit', function () {
+      .on(form, 'submit', () => {
         self.submit_form(form_id, options)
       })
   },
@@ -203,7 +203,7 @@ L.U.Xhr = L.Evented.extend({
     var link = L.DomUtil.get(link_id),
       self = this
     if (link) {
-      L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', function () {
+      L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', () => {
         if (options.confirm && !confirm(options.confirm)) {
           return
         }
@@ -252,12 +252,12 @@ L.U.Xhr = L.Evented.extend({
     // data.html: login form
     // args: args of the first _json call, to call again at process end
     var self = this
-    var proceed = function () {
+    var proceed = () => {
       self.ui.closePanel()
       if (typeof args !== 'undefined') self._json.apply(self, args)
       else self.default_callback(data, {})
     }
-    var ask_for_login = function (data) {
+    var ask_for_login = (data) => {
       self.ui.openPanel({ data: data, className: 'login-panel' })
       self.listen_form('login_form', {
         callback: function (data) {
@@ -267,12 +267,12 @@ L.U.Xhr = L.Evented.extend({
       })
       // Auth links
       var links = document.getElementsByClassName('umap-login-popup')
-      Object.keys(links).forEach(function (el) {
+      Object.keys(links).forEach((el) => {
         var link = links[el]
-        L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', function () {
+        L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', () => {
           self.ui.closePanel()
           var win = window.open(link.href)
-          window.umap_proceed = function () {
+          window.umap_proceed = () => {
             proceed()
             win.close()
           }

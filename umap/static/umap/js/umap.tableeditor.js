@@ -27,7 +27,7 @@ L.U.TableEditor = L.Class.extend({
           L._('Are you sure you want to delete this property on all the features?')
         )
       ) {
-        this.datalayer.eachLayer(function (feature) {
+        this.datalayer.eachLayer((feature) => {
           feature.deleteProperty(property)
         })
         this.datalayer.deindexProperty(property)
@@ -38,7 +38,7 @@ L.U.TableEditor = L.Class.extend({
     var doRename = function () {
       var newName = prompt(L._('Please enter the new name of this property'), property)
       if (!newName || !this.validateName(newName)) return
-      this.datalayer.eachLayer(function (feature) {
+      this.datalayer.eachLayer((feature) => {
         feature.renameProperty(property, newName)
       })
       this.datalayer.deindexProperty(property)

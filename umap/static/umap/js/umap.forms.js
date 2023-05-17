@@ -296,7 +296,7 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
 
   onBlur: function () {
     var self = this,
-      closePicker = function () {
+      closePicker = () => {
         self.container.style.display = 'none'
       }
     // We must leave time for the click to be listened.
@@ -395,7 +395,7 @@ L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
 L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     var options = []
-    this.builder.map.eachDataLayerReverse(function (datalayer) {
+    this.builder.map.eachDataLayerReverse((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer() && datalayer.canBrowse()) {
         options.push([L.stamp(datalayer), datalayer.getName()])
       }
@@ -864,9 +864,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   },
 
   onUnselect: function (choice) {
-    var index = this._values.findIndex(function (item) {
-      return item.id === choice.item.value
-    })
+    var index = this._values.findIndex((item) => item.id === choice.item.value)
     if (index !== -1) {
       this._values.splice(index, 1)
       this.set()
