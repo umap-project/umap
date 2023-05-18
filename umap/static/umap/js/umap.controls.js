@@ -975,6 +975,7 @@ L.U.TileLayerControl = L.Control.extend({
       img = L.DomUtil.create('img', '', el),
       name = L.DomUtil.create('div', '', el)
     img.src = L.Util.template(tilelayer.options.url_template, this.map.demoTileInfos)
+    img.loading = 'lazy'
     name.textContent = tilelayer.options.name
     L.DomEvent.on(
       el,
