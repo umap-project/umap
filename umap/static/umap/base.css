@@ -512,6 +512,13 @@ i.info {
 .umap-browse-datalayers {
     padding: 0 10px;
 }
+.umap-field-datalist {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    margin-top: -8px;
+    padding: 0 5px;
+}
 .umap-form-iconfield {
     position: relative;
     overflow: hidden;

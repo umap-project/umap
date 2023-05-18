@@ -801,6 +801,23 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
   value: function () {
     return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : this.input.value
   },
+
+  buildHelpText: function () {
+    var datalist = L.DomUtil.create(
+      'datalist',
+      'umap-field-datalist',
+      this.getHelpTextParent()
+    )
+    datalist.id = `range-${this.options.label}`
+    this.input.setAttribute('list', datalist.id)
+    var options = ''
+    for (var i = this.options.min; i <= this.options.max; i += this.options.step) {
+      options += `<option value="${i.toPrecision(2)}" label="${i.toPrecision(
+        2
+      )}"></option>`
+    }
+    datalist.innerHTML = options
+  },
 })
 
 L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
