@@ -292,6 +292,7 @@ ul.photon-autocomplete {
     position: absolute;
     margin: 0 calc(50% - 500px/2);
     width: 500px;
+    max-width: 100vw;
     padding: 40px 20px;
     border: 1px solid #222;
     background-color: #323737;
