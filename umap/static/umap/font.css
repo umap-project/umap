@@ -5,26 +5,29 @@
 
 @font-face {
     font-family: 'fira_sans';
-    src: url('./font/FiraSans-Light.woff2') format('woff2'),
-         url('./font/FiraSans-Light.woff') format('woff');
+    src: url('./font/firasans-light.woff2') format('woff2'),
+         url('./font/firasans-light.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'fira_sans';
-    src: url('./font/FiraSans-SemiBold.woff2') format('woff2'),
-         url('./font/FiraSans-SemiBold.woff') format('woff');
+    src: url('./font/firasans-semibold.woff2') format('woff2'),
+         url('./font/firasans-semibold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'fira_sans';
-    src: url('./font/FiraSans-LightItalic.woff2') format('woff2'),
-         url('./font/FiraSans-LightItalic.woff') format('woff');
+    src: url('./font/firasans-lightitalic.woff2') format('woff2'),
+         url('./font/firasans-lightitalic.woff') format('woff');
     font-weight: normal;
     font-style: italic;
+    font-display: swap;
 }
 
 
