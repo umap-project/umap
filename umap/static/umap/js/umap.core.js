@@ -44,7 +44,26 @@ L.Util.setNullableBooleanFromQueryString = (options, name) => {
 }
 L.Util.escapeHTML = (s) => {
   s = s ? s.toString() : ''
-  return s.replace(/</gm, '&lt;')
+  s = DOMPurify.sanitize(s, {
+    USE_PROFILES: { html: true },
+    ALLOWED_TAGS: [
+      'h3',
+      'h4',
+      'h5',
+      'hr',
+      'strong',
+      'em',
+      'ul',
+      'li',
+      'a',
+      'div',
+      'iframe',
+      'img',
+      'br',
+    ],
+    ALLOWED_ATTR: ['target', 'href', 'frameborder', 'src', 'width', 'height'],
+  })
+  return s
 }
 L.Util.toHTML = (r) => {
   if (!r) return ''
@@ -106,25 +125,7 @@ L.Util.toHTML = (r) => {
   // Preserver line breaks
   if (newline) r = r.replace(new RegExp(newline + '(?=[^]+)', 'g'), '<br>' + newline)
 
-  r = DOMPurify.sanitize(r, {
-    USE_PROFILES: { html: true },
-    ALLOWED_TAGS: [
-      'h3',
-      'h4',
-      'h5',
-      'hr',
-      'strong',
-      'em',
-      'ul',
-      'li',
-      'a',
-      'div',
-      'iframe',
-      'img',
-      'br',
-    ],
-    ALLOWED_ATTR: ['target', 'href', 'frameborder', 'src', 'width', 'height'],
-  })
+  r = L.Util.escapeHTML(r)
 
   return r
 }
