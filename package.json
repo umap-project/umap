@@ -36,6 +36,7 @@
   "homepage": "http://wiki.openstreetmap.org/wiki/UMap",
   "dependencies": {
     "csv2geojson": "5.1.1",
+    "dompurify": "^3.0.3",
     "georsstogeojson": "^0.1.0",
     "leaflet": "1.3.4",
     "leaflet-contextmenu": "^1.4.0",
