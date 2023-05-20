@@ -46,6 +46,7 @@ L.Util.escapeHTML = (s) => {
   s = s ? s.toString() : ''
   s = DOMPurify.sanitize(s, {
     USE_PROFILES: { html: true },
+    ADD_TAGS: ['iframe'],
     ALLOWED_TAGS: [
       'h3',
       'h4',
@@ -61,7 +62,8 @@ L.Util.escapeHTML = (s) => {
       'img',
       'br',
     ],
-    ALLOWED_ATTR: ['target', 'href', 'frameborder', 'src', 'width', 'height'],
+    ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    ALLOWED_ATTR: ['href', 'src', 'width', 'height'],
   })
   return s
 }
