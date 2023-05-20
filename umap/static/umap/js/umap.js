@@ -704,7 +704,14 @@ L.U.Map.include({
     this.options.zoom = this.getZoom()
     this.isDirty = true
     this._default_extent = false
-    this.ui.alert({ content: L._('The zoom and center have been set.'), level: 'info' })
+    if (this.options.umap_id) {
+      // We do not want an extra message during the map creation
+      // to avoid the double notification/alert.
+      this.ui.alert({
+        content: L._('The zoom and center have been set.'),
+        level: 'info',
+      })
+    }
   },
 
   updateTileLayers: function () {
