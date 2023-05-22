@@ -808,7 +808,7 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
       'umap-field-datalist',
       this.getHelpTextParent()
     )
-    datalist.id = `range-${this.options.label}`
+    datalist.id = `range-${this.options.label || this.name}`
     this.input.setAttribute('list', datalist.id)
     var options = ''
     for (var i = this.options.min; i <= this.options.max; i += this.options.step) {

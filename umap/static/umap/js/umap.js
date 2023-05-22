@@ -1651,7 +1651,7 @@ L.U.Map.include({
       ],
       [
         'options.overlay.opacity',
-        { handler: 'Range', min: 0, max: 1, step: 'any', placeholder: L._('opacity') },
+        { handler: 'Range', min: 0, max: 1, step: 0.1, label: L._('Opacity') },
       ],
       ['options.overlay.tms', { handler: 'Switch', label: L._('TMS format') }],
     ]
