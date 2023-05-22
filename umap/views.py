@@ -3,6 +3,7 @@ import mimetypes
 import os
 import re
 import socket
+from datetime import date, timedelta
 from pathlib import Path
 
 from django.conf import settings
@@ -10,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
@@ -214,7 +215,7 @@ class Search(TemplateView, PaginatorMixin):
                 q, config=settings.UMAP_SEARCH_CONFIGURATION, search_type="websearch"
             )
             qs = Map.objects.annotate(search=vector).filter(search=query)
-            qs = qs.filter(share_status=Map.PUBLIC).order_by('-modified_at')
+            qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             results = self.paginate(qs)
         kwargs.update({"maps": results, "q": q})
         return kwargs
@@ -381,7 +382,7 @@ class MapDetailMixin:
             "allowEdit": self.is_edit_allowed(),
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
-            'starred': self.is_starred(),
+            "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
             "edit_statuses": [(i, str(label)) for i, label in Map.EDIT_STATUS],
             "share_statuses": [
@@ -663,9 +664,8 @@ class MapClone(PermissionsMixin, View):
 
 
 class ToggleMapStarStatus(View):
-
     def post(self, *args, **kwargs):
-        map_inst = get_object_or_404(Map, pk=kwargs['map_id'])
+        map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
         qs = Star.objects.filter(map=map_inst, by=self.request.user)
         if qs.exists():
             qs.delete()
@@ -850,6 +850,22 @@ class PictogramJSONList(ListView):
 # ############## #
 #     Generic    #
 # ############## #
+
+
+def stats(request):
+    last_week = date.today() - timedelta(days=7)
+    return simple_json_response(
+        **{
+            "maps_count": Map.objects.count(),
+            "maps_active_last_week_count": Map.objects.filter(
+                modified_at__gt=last_week
+            ).count(),
+            "users_count": User.objects.count(),
+            "users_active_last_week_count": User.objects.filter(
+                last_login__gt=last_week
+            ).count(),
+        }
+    )
 
 
 def logout(request):
