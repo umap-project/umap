@@ -140,7 +140,7 @@ L.U.FeatureMixin = {
 
   appendEditFieldsets: function (container) {
     const optionsFields = this.getShapeOptions()
-    var builder = new L.U.FormBuilder(this, optionsFields, {
+    let builder = new L.U.FormBuilder(this, optionsFields, {
       id: 'umap-feature-shape-properties',
       callback: this._redraw,
     })
@@ -148,7 +148,7 @@ L.U.FeatureMixin = {
     shapeProperties.appendChild(builder.build())
 
     const advancedOptions = this.getAdvancedOptions()
-    var builder = new L.U.FormBuilder(this, advancedOptions, {
+    builder = new L.U.FormBuilder(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
       callback: this._redraw,
     })

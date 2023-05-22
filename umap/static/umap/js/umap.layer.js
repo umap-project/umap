@@ -644,7 +644,7 @@ L.U.DataLayer = L.Evented.extend({
 
   _polygonToLayer: function (geojson, latlngs) {
     // Ensure no empty hole
-    // for (var i = latlngs.length - 1; i > 0; i--) {
+    // for (let i = latlngs.length - 1; i > 0; i--) {
     //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
     // }
     return new L.U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
@@ -984,14 +984,12 @@ L.U.DataLayer = L.Evented.extend({
       L.DomEvent.on(a, 'click', L.DomEvent.stop).on(
         a,
         'click',
-        function () {
-          this.restore(data.name)
-        },
+        () => this.restore(data.name),
         this
       )
     }
 
-    var versionsContainer = L.DomUtil.createFieldset(container, L._('Versions'), {
+    const versionsContainer = L.DomUtil.createFieldset(container, L._('Versions'), {
       callback: function () {
         this.map.xhr.get(this.getVersionsUrl(), {
           callback: function (data) {
@@ -1073,8 +1071,8 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   getNextFeature: function (feature) {
-    const id = this._index.indexOf(L.stamp(feature)),
-      nextId = this._index[id + 1]
+    const id = this._index.indexOf(L.stamp(feature))
+    const nextId = this._index[id + 1]
     return nextId ? this._layers[nextId] : this.getNextBrowsable().getFeatureByIndex(0)
   },
 
@@ -1082,8 +1080,8 @@ L.U.DataLayer = L.Evented.extend({
     if (this._index <= 1) {
       return null
     }
-    const id = this._index.indexOf(L.stamp(feature)),
-      previousId = this._index[id - 1]
+    const id = this._index.indexOf(L.stamp(feature))
+    const previousId = this._index[id - 1]
     return previousId
       ? this._layers[previousId]
       : this.getPreviousBrowsable().getFeatureByIndex(-1)

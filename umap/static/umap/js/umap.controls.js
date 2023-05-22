@@ -880,7 +880,7 @@ L.U.Map.include({
       })
     }
 
-    var filterFeatures = function () {
+    const filterFeatures = function () {
       let noResults = true
       this.eachDataLayer((datalayer) => {
         datalayer.eachFeature(function (feature) {

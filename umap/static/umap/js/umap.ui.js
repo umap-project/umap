@@ -85,7 +85,7 @@ L.U.UI = L.Evented.extend({
     this._alert.innerHTML = ''
     L.DomUtil.addClass(this.parent, 'umap-alert')
     L.DomUtil.addClass(this._alert, level_class)
-    const close = function () {
+    function close() {
       if (timeoutID !== this.ALERT_ID) {
         return
       } // Another alert has been forced

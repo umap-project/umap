@@ -340,7 +340,7 @@ L.U.Map.include({
       'umap-slideshow-enabled',
       this.options.slideshow && this.options.slideshow.active
     )
-    for (var i in this._controls) {
+    for (const i in this._controls) {
       this.removeControl(this._controls[i])
     }
     if (this.options.noControl) return
@@ -357,7 +357,7 @@ L.U.Map.include({
       })
     }
     let name, status, control
-    for (var i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
+    for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
       status = this.options[name + 'Control']
       if (status === false) continue
@@ -846,7 +846,7 @@ L.U.Map.include({
     L.DomEvent.on(
       download,
       'click',
-      function () {
+      () => {
         const type = types[typeInput.value]
         const content = type.formatter(this)
         let name = this.options.name || 'data'
@@ -957,7 +957,7 @@ L.U.Map.include({
       if (layerId) layer = map.datalayers[layerId]
       if (layer && clearFlag.checked) layer.empty()
       if (fileInput.files.length) {
-        var file
+        let file
         for (let i = 0, file; (file = fileInput.files[i]); i++) {
           type = type || L.Util.detectFileType(file)
           if (!type) {

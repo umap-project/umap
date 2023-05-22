@@ -13,8 +13,8 @@ L.U.Slideshow = L.Class.extend({
     this.map = map
     this._id = null
 
-    let // current feature
-      current = null
+    // current feature
+    let current = null
 
     const self = this
     try {
