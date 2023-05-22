@@ -8,11 +8,11 @@ L.U.Map = L.Map.extend({})
  * Utils
  */
 L.Util.queryString = (name, fallback) => {
-  var decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
-  var qs = window.location.search.slice(1).split('&'),
+  const decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
+  const qs = window.location.search.slice(1).split('&'),
     qa = {}
-  for (var i in qs) {
-    var key = qs[i].split('=')
+  for (const i in qs) {
+    const key = qs[i].split('=')
     if (!key) continue
     qa[decode(key[0])] = key[1] ? decode(key[1]) : 1
   }
@@ -20,21 +20,21 @@ L.Util.queryString = (name, fallback) => {
 }
 
 L.Util.booleanFromQueryString = (name) => {
-  var value = L.Util.queryString(name)
+  const value = L.Util.queryString(name)
   return value === '1' || value === 'true'
 }
 
 L.Util.setFromQueryString = (options, name) => {
-  var value = L.Util.queryString(name)
+  const value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value
 }
 
 L.Util.setBooleanFromQueryString = (options, name) => {
-  var value = L.Util.queryString(name)
+  const value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
 }
 L.Util.setNullableBooleanFromQueryString = (options, name) => {
-  var value = L.Util.queryString(name)
+  let value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {
     if (value === 'null') value = null
     else if (value === '0' || value === 'false') value = false
@@ -48,10 +48,10 @@ L.Util.escapeHTML = (s) => {
 }
 L.Util.toHTML = (r) => {
   if (!r) return ''
-  var ii
+  let ii
 
   // detect newline format
-  var newline = r.indexOf('\r\n') != -1 ? '\r\n' : r.indexOf('\n') != -1 ? '\n' : ''
+  const newline = r.indexOf('\r\n') != -1 ? '\r\n' : r.indexOf('\n') != -1 ? '\n' : ''
 
   // Escape tags
   r = r.replace(/</gm, '&lt;')
@@ -114,7 +114,7 @@ L.Util.toHTML = (r) => {
 L.Util.isObject = (what) => typeof what === 'object' && what !== null
 L.Util.CopyJSON = (geojson) => JSON.parse(JSON.stringify(geojson))
 L.Util.detectFileType = (f) => {
-  var filename = f.name ? escape(f.name.toLowerCase()) : ''
+  const filename = f.name ? escape(f.name.toLowerCase()) : ''
   function ext(_) {
     return filename.indexOf(_) !== -1
   }
@@ -135,8 +135,8 @@ L.Util.usableOption = (options, option) =>
 
 L.Util.greedyTemplate = (str, data, ignore) => {
   function getValue(data, path) {
-    var value = data
-    for (var i = 0; i < path.length; i++) {
+    let value = data
+    for (let i = 0; i < path.length; i++) {
       value = value[path[i]]
       if (value === undefined) break
     }
@@ -146,13 +146,13 @@ L.Util.greedyTemplate = (str, data, ignore) => {
   return str.replace(
     /\{ *([\w_\:\.\|]+)(?:\|("[^"]*"))? *\}/g,
     (str, key, staticFallback) => {
-      var vars = key.split('|'),
-        value,
-        path
+      const vars = key.split('|')
+      let value
+      let path
       if (staticFallback !== undefined) {
         vars.push(staticFallback)
       }
-      for (var i = 0; i < vars.length; i++) {
+      for (let i = 0; i < vars.length; i++) {
         path = vars[i]
         if (path.startsWith('"') && path.endsWith('"'))
           value = path.substring(1, path.length - 1) // static default value.
@@ -169,13 +169,13 @@ L.Util.greedyTemplate = (str, data, ignore) => {
 }
 
 L.Util.sortFeatures = (features, sortKey) => {
-  var sortKeys = (sortKey || 'name').split(',')
+  const sortKeys = (sortKey || 'name').split(',')
 
-  var sort = (a, b, i) => {
-    var sortKey = sortKeys[i],
-      score,
-      valA = a.properties[sortKey] || '',
-      valB = b.properties[sortKey] || ''
+  const sort = (a, b, i) => {
+    const sortKey = sortKeys[i]
+    let score
+    const valA = a.properties[sortKey] || ''
+    const valB = b.properties[sortKey] || ''
     if (!valA) {
       score = -1
     } else if (!valB) {
@@ -203,8 +203,8 @@ L.Util.flattenCoordinates = (coords) => {
 }
 
 L.Util.buildQueryString = (params) => {
-  var query_string = []
-  for (var key in params) {
+  const query_string = []
+  for (const key in params) {
     query_string.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
   }
   return query_string.join('&')
@@ -213,7 +213,7 @@ L.Util.buildQueryString = (params) => {
 L.Util.getBaseUrl = () => '//' + window.location.host + window.location.pathname
 
 L.DomUtil.add = (tagName, className, container, content) => {
-  var el = L.DomUtil.create(tagName, className, container)
+  const el = L.DomUtil.create(tagName, className, container)
   if (content) {
     if (content.nodeType && content.nodeType === 1) {
       el.appendChild(content)
@@ -226,9 +226,9 @@ L.DomUtil.add = (tagName, className, container, content) => {
 
 L.DomUtil.createFieldset = (container, legend, options) => {
   options = options || {}
-  var fieldset = L.DomUtil.create('div', 'fieldset toggle', container)
-  var legendEl = L.DomUtil.add('h5', 'legend style_options_toggle', fieldset, legend)
-  var fieldsEl = L.DomUtil.add('div', 'fields with-transition', fieldset)
+  const fieldset = L.DomUtil.create('div', 'fieldset toggle', container)
+  const legendEl = L.DomUtil.add('h5', 'legend style_options_toggle', fieldset, legend)
+  const fieldsEl = L.DomUtil.add('div', 'fields with-transition', fieldset)
   L.DomEvent.on(legendEl, 'click', function () {
     if (L.DomUtil.hasClass(fieldset, 'on')) {
       L.DomUtil.removeClass(fieldset, 'on')
@@ -246,8 +246,8 @@ L.DomUtil.classIf = (el, className, bool) => {
 }
 
 L.DomUtil.element = (what, attrs, parent) => {
-  var el = document.createElement(what)
-  for (var attr in attrs) {
+  const el = document.createElement(what)
+  for (const attr in attrs) {
     el[attr] = attrs[attr]
   }
   if (typeof parent !== 'undefined') {
@@ -269,11 +269,11 @@ L.DomUtil.after = (target, el) => {
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
 
 L.DomUtil.TextColorFromBackgroundColor = (el) => {
-  var out = '#000000'
+  let out = '#000000'
   if (!window.getComputedStyle) {
     return out
   }
-  var rgb = window.getComputedStyle(el).getPropertyValue('background-color')
+  let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
   if (!rgb || rgb.length !== 4) {
     return out
@@ -288,13 +288,13 @@ L.DomEvent.once = (el, types, fn, context) => {
   // cf https://github.com/Leaflet/Leaflet/pull/3528#issuecomment-134551575
 
   if (typeof types === 'object') {
-    for (var type in types) {
+    for (const type in types) {
       L.DomEvent.once(el, type, types[type], fn)
     }
     return L.DomEvent
   }
 
-  var handler = L.bind(() => {
+  const handler = L.bind(() => {
     L.DomEvent.off(el, types, fn, context).off(el, types, handler, context)
   }, L.DomEvent)
 
@@ -336,17 +336,17 @@ L.U.Help = L.Class.extend({
       'umap-help-box with-transition dark',
       document.body
     )
-    var closeLink = L.DomUtil.create('a', 'umap-close-link', this.box)
+    const closeLink = L.DomUtil.create('a', 'umap-close-link', this.box)
     closeLink.href = '#'
     L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    var label = L.DomUtil.create('span', '', closeLink)
+    const label = L.DomUtil.create('span', '', closeLink)
     label.title = label.textContent = L._('Close')
     this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
     L.DomEvent.on(closeLink, 'click', this.hide, this)
   },
 
   onKeyDown: function (e) {
-    var key = e.keyCode,
+    const key = e.keyCode,
       ESC = 27
     if (key === ESC) {
       this.hide()
@@ -355,7 +355,7 @@ L.U.Help = L.Class.extend({
 
   show: function () {
     this.content.innerHTML = ''
-    for (var i = 0, name; i < arguments.length; i++) {
+    for (let i = 0, name; i < arguments.length; i++) {
       name = arguments[i]
       L.DomUtil.add('div', 'umap-help-entry', this.content, this.resolve(name))
     }
@@ -375,14 +375,14 @@ L.U.Help = L.Class.extend({
   },
 
   button: function (container, entries) {
-    var helpButton = L.DomUtil.create('a', 'umap-help-button', container)
+    const helpButton = L.DomUtil.create('a', 'umap-help-button', container)
     helpButton.href = '#'
     if (entries) {
       L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
         helpButton,
         'click',
         function (e) {
-          var args = typeof entries === 'string' ? [entries] : entries
+          const args = typeof entries === 'string' ? [entries] : entries
           this.show.apply(this, args)
         },
         this
@@ -392,26 +392,26 @@ L.U.Help = L.Class.extend({
   },
 
   edit: function () {
-    var container = L.DomUtil.create('div', ''),
+    const container = L.DomUtil.create('div', ''),
       self = this,
       title = L.DomUtil.create('h3', '', container),
       actionsContainer = L.DomUtil.create('ul', 'umap-edit-actions', container)
-    var addAction = (action) => {
-      var actionContainer = L.DomUtil.add('li', '', actionsContainer)
+    const addAction = (action) => {
+      const actionContainer = L.DomUtil.add('li', '', actionsContainer)
       L.DomUtil.add('i', action.options.className, actionContainer),
         L.DomUtil.add('span', '', actionContainer, action.options.tooltip)
       L.DomEvent.on(actionContainer, 'click', action.addHooks, action)
       L.DomEvent.on(actionContainer, 'click', self.hide, self)
     }
     title.textContent = L._('Where do we go from here?')
-    for (var id in this.map.helpMenuActions) {
+    for (const id in this.map.helpMenuActions) {
       addAction(this.map.helpMenuActions[id])
     }
     return container
   },
 
   importFormats: function () {
-    var container = L.DomUtil.create('div')
+    const container = L.DomUtil.create('div')
     L.DomUtil.add('h3', '', container, 'GeojSON')
     L.DomUtil.add('p', '', container, L._('All properties are imported.'))
     L.DomUtil.add('h3', '', container, 'GPX')
@@ -438,7 +438,7 @@ L.U.Help = L.Class.extend({
   },
 
   textFormatting: function () {
-    var container = L.DomUtil.create('div'),
+    const container = L.DomUtil.create('div'),
       title = L.DomUtil.add('h3', '', container, L._('Text formatting')),
       elements = L.DomUtil.create('ul', '', container)
     L.DomUtil.add('li', '', elements, L._('*simple star for italic*'))
@@ -480,7 +480,7 @@ L.U.Help = L.Class.extend({
   },
 
   dynamicProperties: function () {
-    var container = L.DomUtil.create('div')
+    const container = L.DomUtil.create('div')
     L.DomUtil.add('h3', '', container, L._('Dynamic properties'))
     L.DomUtil.add(
       'p',
@@ -544,7 +544,7 @@ L.U.Orderable = L.Evented.extend({
     this.src = null
     this.dst = null
     this.els = this.parent.querySelectorAll(this.options.selector)
-    for (var i = 0; i < this.els.length; i++) this.makeDraggable(this.els[i])
+    for (let i = 0; i < this.els.length; i++) this.makeDraggable(this.els[i])
   },
 
   makeDraggable: function (node) {
@@ -586,10 +586,10 @@ L.U.Orderable = L.Evented.extend({
 
   onDragEnter: function (e) {
     // e.target is the current hover target.
-    var dst = this.findTarget(e.target)
+    const dst = this.findTarget(e.target)
     if (!dst || dst === this.src) return
     this.dst = dst
-    var targetIndex = this.nodeIndex(this.dst),
+    const targetIndex = this.nodeIndex(this.dst),
       srcIndex = this.nodeIndex(this.src)
     if (targetIndex > srcIndex) this.parent.insertBefore(this.dst, this.src)
     else this.parent.insertBefore(this.src, this.dst)

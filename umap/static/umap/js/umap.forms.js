@@ -7,7 +7,7 @@ L.FormBuilder.Element.include({
         this.form
       )
     }
-    var className = 'formbox'
+    let className = 'formbox'
     if (this.options.inheritable) {
       className +=
         this.get(true) === undefined ? ' inheritable undefined' : ' inheritable '
@@ -16,8 +16,8 @@ L.FormBuilder.Element.include({
     this.wrapper = L.DomUtil.create('div', className, this.form)
     this.header = L.DomUtil.create('div', 'header', this.wrapper)
     if (this.options.inheritable) {
-      var undefine = L.DomUtil.add('a', 'button undefine', this.header, L._('clear'))
-      var define = L.DomUtil.add('a', 'button define', this.header, L._('define'))
+      const undefine = L.DomUtil.add('a', 'button undefine', this.header, L._('clear'))
+      const define = L.DomUtil.add('a', 'button define', this.header, L._('define'))
       L.DomEvent.on(
         define,
         'click',
@@ -60,7 +60,7 @@ L.FormBuilder.Element.include({
 
   get: function (own) {
     if (!this.options.inheritable || own) return this.builder.getter(this.field)
-    var path = this.field.split('.'),
+    const path = this.field.split('.'),
       key = path[path.length - 1]
     return this.obj.getOption(key)
   },
@@ -72,7 +72,7 @@ L.FormBuilder.Element.include({
       if (this.options.helpEntries)
         this.builder.map.help.button(this.label, this.options.helpEntries)
       else if (this.options.helpTooltip) {
-        var info = L.DomUtil.create('i', 'info', this.label)
+        const info = L.DomUtil.create('i', 'info', this.label)
         L.DomEvent.on(
           info,
           'mouseover',
@@ -278,7 +278,7 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
       this.extendedContainer
     )
     this.container.style.display = 'none'
-    for (var idx in this.colors) {
+    for (const idx in this.colors) {
       this.addColor(this.colors[idx])
     }
     this.spreadColor()
@@ -295,7 +295,7 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
   },
 
   onBlur: function () {
-    var self = this,
+    const self = this,
       closePicker = () => {
         self.container.style.display = 'none'
       }
@@ -314,9 +314,9 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
   },
 
   addColor: function (colorName) {
-    var span = L.DomUtil.create('span', '', this.container)
+    const span = L.DomUtil.create('span', '', this.container)
     span.style.backgroundColor = span.title = colorName
-    var updateColorInput = function () {
+    const updateColorInput = function () {
       this.input.value = colorName
       this.sync()
       this.container.style.display = 'none'
@@ -384,8 +384,8 @@ L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
 
 L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
   getOptions: function () {
-    var options = []
-    for (var i = 1; i < 30; i++) {
+    const options = []
+    for (let i = 1; i < 30; i++) {
       options.push([i * 1000, L._('{delay} seconds', { delay: i })])
     }
     return options
@@ -394,7 +394,7 @@ L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
 
 L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
-    var options = []
+    const options = []
     this.builder.map.eachDataLayerReverse((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer() && datalayer.canBrowse()) {
         options.push([L.stamp(datalayer), datalayer.getName()])
@@ -450,10 +450,10 @@ L.FormBuilder.LabelDirection = L.FormBuilder.Select.extend({
 
 L.FormBuilder.LicenceChooser = L.FormBuilder.Select.extend({
   getOptions: function () {
-    var licences = [],
-      licencesList = this.builder.obj.options.licences,
-      licence
-    for (var i in licencesList) {
+    const licences = []
+    const licencesList = this.builder.obj.options.licences
+    let licence
+    for (const i in licencesList) {
       licence = licencesList[i]
       licences.push([i, licence.name])
     }
@@ -477,7 +477,7 @@ L.FormBuilder.NullableBoolean = L.FormBuilder.Select.extend({
   ],
 
   toJS: function () {
-    var value = this.value()
+    let value = this.value()
     switch (value) {
       case 'true':
       case true:
@@ -498,7 +498,7 @@ L.FormBuilder.BlurInput.include({
   build: function () {
     this.options.className = 'blur'
     L.FormBuilder.Input.prototype.build.call(this)
-    var button = L.DomUtil.create('span', 'button blur-button')
+    const button = L.DomUtil.create('span', 'button blur-button')
     L.DomUtil.after(this.input, button)
   },
 })
@@ -536,7 +536,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (this.value() && this.value().indexOf('{') === -1) {
       // Do not try to render URL with variables
       if (this.isUrl()) {
-        var img = L.DomUtil.create(
+        const img = L.DomUtil.create(
           'img',
           '',
           L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer)
@@ -544,7 +544,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         img.src = this.value()
         L.DomEvent.on(img, 'click', this.fetchIconList, this)
       } else {
-        var el = L.DomUtil.create(
+        const el = L.DomUtil.create(
           'span',
           '',
           L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer)
@@ -565,7 +565,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addIconPreview: function (pictogram) {
-    var baseClass = 'umap-icon-choice',
+    const baseClass = 'umap-icon-choice',
       value = pictogram.src,
       className = value === this.value() ? baseClass + ' selected' : baseClass,
       container = L.DomUtil.create('div', className, this.pictogramsContainer),
@@ -600,10 +600,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   buildIconList: function (data) {
     this.pictogramsContainer.innerHTML = ''
     this.buttonsContainer.innerHTML = ''
-    for (var idx in data.pictogram_list) {
+    for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
-    var cancelButton = L.DomUtil.create('a', '', this.pictogramsContainer)
+    const cancelButton = L.DomUtil.create('a', '', this.pictogramsContainer)
     cancelButton.textContent = L._('Cancel')
     cancelButton.href = '#'
     cancelButton.style.display = 'block'
@@ -617,7 +617,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       },
       this
     )
-    var customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
+    const customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
     customButton.textContent = L._('Set symbol')
     customButton.href = '#'
     customButton.style.display = 'block'
@@ -642,8 +642,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   unselectAll: function (container) {
-    var els = container.querySelectorAll('div.selected')
-    for (var el in els) {
+    const els = container.querySelectorAll('div.selected')
+    for (const el in els) {
       if (els.hasOwnProperty(el)) L.DomUtil.removeClass(els[el], 'selected')
     }
   },
@@ -668,7 +668,7 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
       this.label = L.DomUtil.create('label', '', this.input.parentNode)
     else this.input.parentNode.appendChild(this.label)
     L.DomUtil.addClass(this.input.parentNode, 'with-switch')
-    var id = (this.builder.options.id || Date.now()) + '.' + this.name
+    const id = (this.builder.options.id || Date.now()) + '.' + this.name
     this.label.setAttribute('for', id)
     L.DomUtil.addClass(this.input, 'switch')
     this.input.id = id
@@ -680,12 +680,12 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   className: 'umap-multiplechoice',
 
   clear: function () {
-    var checked = this.container.querySelector('input[type="radio"]:checked')
+    const checked = this.container.querySelector('input[type="radio"]:checked')
     if (checked) checked.checked = false
   },
 
   fetch: function () {
-    var value = (this.backup = this.toHTML())
+    let value = (this.backup = this.toHTML())
     if (!this.container.querySelector('input[type="radio"][value="' + value + '"]'))
       value = this.default
     this.container.querySelector(
@@ -694,7 +694,7 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   },
 
   value: function () {
-    var checked = this.container.querySelector('input[type="radio"]:checked')
+    const checked = this.container.querySelector('input[type="radio"]:checked')
     if (checked) return checked.value
   },
 
@@ -703,25 +703,25 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   },
 
   build: function () {
-    var choices = this.getChoices()
+    const choices = this.getChoices()
     this.container = L.DomUtil.create(
       'div',
       this.className + ' by' + choices.length,
       this.parentNode
     )
-    for (var i = 0; i < choices.length; i++) {
+    for (let i = 0; i < choices.length; i++) {
       this.addChoice(choices[i][0], choices[i][1], i)
     }
     this.fetch()
   },
 
   addChoice: function (value, label, counter) {
-    var input = L.DomUtil.create('input', '', this.container)
+    const input = L.DomUtil.create('input', '', this.container)
     label = L.DomUtil.add('label', '', this.container, label)
     input.type = 'radio'
     input.name = this.name
     input.value = value
-    var id = Date.now() + '.' + this.name + '.' + counter
+    const id = Date.now() + '.' + this.name + '.' + counter
     label.setAttribute('for', id)
     input.id = id
     L.DomEvent.on(input, 'change', this.sync, this)
@@ -732,7 +732,7 @@ L.FormBuilder.TernaryChoices = L.FormBuilder.MultiChoice.extend({
   default: 'null',
 
   toJS: function () {
-    var value = this.value()
+    let value = this.value()
     switch (value) {
       case 'true':
       case true:
@@ -776,7 +776,7 @@ L.FormBuilder.DataLayersControl = L.FormBuilder.ControlChoice.extend({
   ],
 
   toJS: function () {
-    var value = this.value()
+    let value = this.value()
     if (value !== 'expanded')
       value = L.FormBuilder.ControlChoice.prototype.toJS.call(this)
     return value
@@ -803,15 +803,15 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
   },
 
   buildHelpText: function () {
-    var datalist = L.DomUtil.create(
+    const datalist = L.DomUtil.create(
       'datalist',
       'umap-field-datalist',
       this.getHelpTextParent()
     )
     datalist.id = `range-${this.options.label || this.name}`
     this.input.setAttribute('list', datalist.id)
-    var options = ''
-    for (var i = this.options.min; i <= this.options.max; i += this.options.step) {
+    let options = ''
+    for (let i = this.options.min; i <= this.options.max; i += this.options.step) {
       options += `<option value="${i.toPrecision(2)}" label="${i.toPrecision(
         2
       )}"></option>`
@@ -822,12 +822,12 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
 
 L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
   build: function () {
-    var options = {
+    const options = {
       className: 'edit-owner',
       on_select: L.bind(this.onSelect, this),
     }
     this.autocomplete = new L.U.AutoComplete.Ajax.Select(this.parentNode, options)
-    var owner = this.toHTML()
+    const owner = this.toHTML()
     if (owner)
       this.autocomplete.displaySelected({
         item: { value: owner.id, label: owner.name },
@@ -850,7 +850,7 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
 
 L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   build: function () {
-    var options = {
+    const options = {
       className: 'edit-editors',
       on_select: L.bind(this.onSelect, this),
       on_unselect: L.bind(this.onUnselect, this),
@@ -861,7 +861,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
     )
     this._values = this.toHTML()
     if (this._values)
-      for (var i = 0; i < this._values.length; i++)
+      for (let i = 0; i < this._values.length; i++)
         this.autocomplete.displaySelected({
           item: { value: this._values[i].id, label: this._values[i].name },
         })
@@ -881,7 +881,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   },
 
   onUnselect: function (choice) {
-    var index = this._values.findIndex((item) => item.id === choice.item.value)
+    const index = this._values.findIndex((item) => item.id === choice.item.value)
     if (index !== -1) {
       this._values.splice(index, 1)
       this.set()

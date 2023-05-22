@@ -302,7 +302,7 @@ L.U.DrawToolbar = L.Toolbar.Control.extend({
   },
 
   redraw: function () {
-    var container = this._control.getContainer()
+    const container = this._control.getContainer()
     container.innerHTML = ''
     this.appendToContainer(container)
   },
@@ -314,7 +314,10 @@ L.U.EditControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    var container = L.DomUtil.create('div', 'leaflet-control-edit-enable umap-control'),
+    const container = L.DomUtil.create(
+        'div',
+        'leaflet-control-edit-enable umap-control'
+      ),
       edit = L.DomUtil.create('a', '', container)
     edit.href = '#'
     edit.title = L._('Enable editing') + ' (Ctrl+E)'
@@ -336,9 +339,9 @@ L.Control.Embed = L.Control.extend({
   },
 
   onAdd: function (map) {
-    var container = L.DomUtil.create('div', 'leaflet-control-embed umap-control')
+    const container = L.DomUtil.create('div', 'leaflet-control-embed umap-control')
 
-    var link = L.DomUtil.create('a', '', container)
+    const link = L.DomUtil.create('a', '', container)
     link.href = '#'
     link.title = L._('Embed and share this map')
 
@@ -356,7 +359,7 @@ L.U.MoreControls = L.Control.extend({
   },
 
   onAdd: function () {
-    var container = L.DomUtil.create('div', ''),
+    const container = L.DomUtil.create('div', ''),
       more = L.DomUtil.create('a', 'umap-control-more umap-control-text', container),
       less = L.DomUtil.create('a', 'umap-control-less umap-control-text', container)
     more.href = '#'
@@ -373,7 +376,7 @@ L.U.MoreControls = L.Control.extend({
   },
 
   toggle: function () {
-    var pos = this.getPosition(),
+    const pos = this.getPosition(),
       corner = this._map._controlCorners[pos],
       className = 'umap-more-controls'
     if (L.DomUtil.hasClass(corner, className)) L.DomUtil.removeClass(corner, className)
@@ -392,7 +395,7 @@ L.U.PermanentCreditsControl = L.Control.extend({
   },
 
   onAdd: function () {
-    var paragraphContainer = L.DomUtil.create(
+    const paragraphContainer = L.DomUtil.create(
         'div',
         'umap-permanent-credits-container'
       ),
@@ -435,7 +438,7 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   _initLayout: function (map) {
-    var container = (this._container = L.DomUtil.create(
+    const container = (this._container = L.DomUtil.create(
         'div',
         'leaflet-control-browse umap-control'
       )),
@@ -446,11 +449,11 @@ L.U.DataLayersControl = L.Control.extend({
       actions
     )
 
-    var link = L.DomUtil.create('a', 'umap-browse-link', actions)
+    const link = L.DomUtil.create('a', 'umap-browse-link', actions)
     link.href = '#'
     link.title = link.textContent = L._('Browse data')
 
-    var toggle = L.DomUtil.create('a', 'umap-browse-toggle', container)
+    const toggle = L.DomUtil.create('a', 'umap-browse-toggle', container)
     toggle.href = '#'
     toggle.title = L._('See data layers')
 
@@ -524,7 +527,7 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   addDataLayer: function (container, datalayer, draggable) {
-    var datalayerLi = L.DomUtil.create('li', '', container)
+    const datalayerLi = L.DomUtil.create('li', '', container)
     if (draggable)
       L.DomUtil.element(
         'i',
@@ -532,7 +535,7 @@ L.U.DataLayersControl = L.Control.extend({
         datalayerLi
       )
     datalayer.renderToolbox(datalayerLi)
-    var title = L.DomUtil.add(
+    const title = L.DomUtil.add(
       'span',
       'layer-title',
       datalayerLi,
@@ -546,21 +549,21 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   newDataLayer: function () {
-    var datalayer = this.map.createDataLayer({})
+    const datalayer = this.map.createDataLayer({})
     datalayer.edit()
   },
 
   openPanel: function () {
     if (!this.map.editEnabled) return
-    var container = L.DomUtil.create('ul', 'umap-browse-datalayers')
+    const container = L.DomUtil.create('ul', 'umap-browse-datalayers')
     this.map.eachDataLayerReverse(function (datalayer) {
       this.addDataLayer(container, datalayer, true)
     }, this)
-    var orderable = new L.U.Orderable(container)
+    const orderable = new L.U.Orderable(container)
     orderable.on(
       'drop',
       function (e) {
-        var layer = this.map.datalayers[e.src.dataset.id],
+        const layer = this.map.datalayers[e.src.dataset.id],
           other = this.map.datalayers[e.dst.dataset.id],
           minIndex = Math.min(e.initialIndex, e.finalIndex)
         if (e.finalIndex === 0) layer.bringToTop()
@@ -574,7 +577,7 @@ L.U.DataLayersControl = L.Control.extend({
       this
     )
 
-    var bar = L.DomUtil.create('div', 'button-bar', container),
+    const bar = L.DomUtil.create('div', 'button-bar', container),
       add = L.DomUtil.create('a', 'show-on-edit block add-datalayer button', bar)
     add.href = '#'
     add.textContent = add.title = L._('Add a layer')
@@ -592,7 +595,7 @@ L.U.DataLayersControl = L.Control.extend({
 
 L.U.DataLayer.include({
   renderToolbox: function (container) {
-    var toggle = L.DomUtil.create('i', 'layer-toggle', container),
+    const toggle = L.DomUtil.create('i', 'layer-toggle', container),
       zoomTo = L.DomUtil.create('i', 'layer-zoom_to', container),
       edit = L.DomUtil.create('i', 'layer-edit show-on-edit', container),
       table = L.DomUtil.create('i', 'layer-table-edit show-on-edit', container),
@@ -631,23 +634,23 @@ L.U.DataLayer.include({
   },
 
   propagateRemote: function () {
-    var els = this.getHidableElements()
-    for (var i = 0; i < els.length; i++) {
+    const els = this.getHidableElements()
+    for (let i = 0; i < els.length; i++) {
       L.DomUtil.classIf(els[i], 'remotelayer', this.isRemoteLayer())
     }
   },
 
   propagateHide: function () {
-    var els = this.getHidableElements()
-    for (var i = 0; i < els.length; i++) {
+    const els = this.getHidableElements()
+    for (let i = 0; i < els.length; i++) {
       L.DomUtil.addClass(els[i], 'off')
     }
   },
 
   propagateShow: function () {
     this.onceLoaded(function () {
-      var els = this.getHidableElements()
-      for (var i = 0; i < els.length; i++) {
+      const els = this.getHidableElements()
+      for (let i = 0; i < els.length; i++) {
         L.DomUtil.removeClass(els[i], 'off')
       }
     }, this)
@@ -662,27 +665,31 @@ L.U.DataLayer.addInitHook(function () {
 
 L.U.Map.include({
   _openBrowser: function () {
-    var browserContainer = L.DomUtil.create('div', 'umap-browse-data'),
-      title = L.DomUtil.add(
-        'h3',
-        'umap-browse-title',
-        browserContainer,
-        this.options.name
-      ),
-      filter = L.DomUtil.create('input', '', browserContainer),
-      filterValue = '',
-      featuresContainer = L.DomUtil.create(
-        'div',
-        'umap-browse-features',
-        browserContainer
-      ),
-      filterKeys = this.getFilterKeys()
+    const browserContainer = L.DomUtil.create('div', 'umap-browse-data')
+
+    const title = L.DomUtil.add(
+      'h3',
+      'umap-browse-title',
+      browserContainer,
+      this.options.name
+    )
+
+    const filter = L.DomUtil.create('input', '', browserContainer)
+    let filterValue = ''
+
+    const featuresContainer = L.DomUtil.create(
+      'div',
+      'umap-browse-features',
+      browserContainer
+    )
+
+    const filterKeys = this.getFilterKeys()
     filter.type = 'text'
     filter.placeholder = L._('Filter…')
     filter.value = this.options.filter || ''
 
-    var addFeature = (feature) => {
-      var feature_li = L.DomUtil.create('li', feature.getClassName() + ' feature'),
+    const addFeature = (feature) => {
+      const feature_li = L.DomUtil.create('li', feature.getClassName() + ' feature'),
         zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
         edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
         color = L.DomUtil.create('i', 'feature-color', feature_li),
@@ -726,8 +733,8 @@ L.U.Map.include({
       return feature_li
     }
 
-    var append = (datalayer) => {
-      var container = L.DomUtil.create(
+    const append = (datalayer) => {
+      const container = L.DomUtil.create(
           'div',
           datalayer.getHidableClass(),
           featuresContainer
@@ -736,10 +743,10 @@ L.U.Map.include({
       container.id = 'browse_data_datalayer_' + datalayer.umap_id
       datalayer.renderToolbox(headline)
       L.DomUtil.add('span', '', headline, datalayer.options.name)
-      var ul = L.DomUtil.create('ul', '', container)
+      const ul = L.DomUtil.create('ul', '', container)
       L.DomUtil.classIf(container, 'off', !datalayer.isVisible())
 
-      var build = () => {
+      const build = () => {
         ul.innerHTML = ''
         datalayer.eachFeature((feature) => {
           if (
@@ -762,14 +769,14 @@ L.U.Map.include({
       })
     }
 
-    var appendAll = function () {
+    const appendAll = function () {
       this.options.filter = filterValue = filter.value
       featuresContainer.innerHTML = ''
       this.eachBrowsableDataLayer((datalayer) => {
         append(datalayer)
       })
     }
-    var resetLayers = function () {
+    const resetLayers = function () {
       this.eachBrowsableDataLayer((datalayer) => {
         datalayer.resetLayer(true)
       })
@@ -777,16 +784,16 @@ L.U.Map.include({
     L.bind(appendAll, this)()
     L.DomEvent.on(filter, 'input', appendAll, this)
     L.DomEvent.on(filter, 'input', resetLayers, this)
-    var link = L.DomUtil.create('li', '')
+    const link = L.DomUtil.create('li', '')
     L.DomUtil.create('i', 'umap-icon-16 umap-caption', link)
-    var label = L.DomUtil.create('span', '', link)
+    const label = L.DomUtil.create('span', '', link)
     label.textContent = label.title = L._('About')
     L.DomEvent.on(link, 'click', this.displayCaption, this)
     this.ui.openPanel({ data: { html: browserContainer }, actions: [link] })
   },
 
   _openFilter: function () {
-    var filterContainer = L.DomUtil.create('div', 'umap-filter-data'),
+    const filterContainer = L.DomUtil.create('div', 'umap-filter-data'),
       title = L.DomUtil.add(
         'h3',
         'umap-filter-title',
@@ -800,8 +807,8 @@ L.U.Map.include({
       ),
       advancedFilterKeys = this.getAdvancedFilterKeys()
 
-    var advancedFiltersFull = {}
-    var filtersAlreadyLoaded = true
+    const advancedFiltersFull = {}
+    let filtersAlreadyLoaded = true
     if (!this.getMap().options.advancedFilters) {
       this.getMap().options.advancedFilters = {}
       filtersAlreadyLoaded = false
@@ -824,8 +831,8 @@ L.U.Map.include({
       })
     })
 
-    var addPropertyValue = function (property, value) {
-      var property_li = L.DomUtil.create('li', ''),
+    const addPropertyValue = function (property, value) {
+      const property_li = L.DomUtil.create('li', ''),
         filter_check = L.DomUtil.create('input', '', property_li),
         filter_label = L.DomUtil.create('label', '', property_li)
       filter_check.type = 'checkbox'
@@ -841,8 +848,8 @@ L.U.Map.include({
         filter_check,
         'change',
         function (e) {
-          var property = e.srcElement.dataset.property
-          var value = e.srcElement.dataset.value
+          const property = e.srcElement.dataset.property
+          const value = e.srcElement.dataset.value
           if (e.srcElement.checked) {
             this.getMap().options.advancedFilters[property].push(value)
           } else {
@@ -858,15 +865,15 @@ L.U.Map.include({
       return property_li
     }
 
-    var addProperty = function (property) {
-      var container = L.DomUtil.create(
+    const addProperty = function (property) {
+      const container = L.DomUtil.create(
           'div',
           'property-container',
           propertiesContainer
         ),
         headline = L.DomUtil.add('h5', '', container, property)
-      var ul = L.DomUtil.create('ul', '', container)
-      var orderedValues = advancedFiltersFull[property]
+      const ul = L.DomUtil.create('ul', '', container)
+      const orderedValues = advancedFiltersFull[property]
       orderedValues.sort()
       orderedValues.forEach((value) => {
         ul.appendChild(L.bind(addPropertyValue, this)(property, value))
@@ -874,7 +881,7 @@ L.U.Map.include({
     }
 
     var filterFeatures = function () {
-      var noResults = true
+      let noResults = true
       this.eachDataLayer((datalayer) => {
         datalayer.eachFeature(function (feature) {
           feature.properties.isVisible = true
@@ -913,9 +920,9 @@ L.U.Map.include({
       L.bind(addProperty, this)(property)
     })
 
-    var link = L.DomUtil.create('li', '')
+    const link = L.DomUtil.create('li', '')
     L.DomUtil.create('i', 'umap-icon-16 umap-caption', link)
-    var label = L.DomUtil.create('span', '', link)
+    const label = L.DomUtil.create('span', '', link)
     label.textContent = label.title = L._('About')
     L.DomEvent.on(link, 'click', this.displayCaption, this)
     this.ui.openPanel({ data: { html: filterContainer }, actions: [link] })
@@ -933,9 +940,9 @@ L.U.TileLayerControl = L.Control.extend({
   },
 
   onAdd: function () {
-    var container = L.DomUtil.create('div', 'leaflet-control-tilelayers umap-control')
+    const container = L.DomUtil.create('div', 'leaflet-control-tilelayers umap-control')
 
-    var link = L.DomUtil.create('a', '', container)
+    const link = L.DomUtil.create('a', '', container)
     link.href = '#'
     link.title = L._('Change map background')
 
@@ -970,7 +977,7 @@ L.U.TileLayerControl = L.Control.extend({
   },
 
   addTileLayerElement: function (tilelayer, options) {
-    var selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : '',
+    const selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : '',
       el = L.DomUtil.create('li', selectedClass, this._tilelayers_container),
       img = L.DomUtil.create('img', '', el),
       name = L.DomUtil.create('div', '', el)
@@ -1006,14 +1013,14 @@ L.U.AttributionControl = L.Control.Attribution.extend({
       )
     }
     if (this._map.options.captionMenus) {
-      var link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'))
+      const link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'))
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
         .on(link, 'click', this._map.displayCaption, this._map)
         .on(link, 'dblclick', L.DomEvent.stop)
     }
     if (window.top === window.self && this._map.options.captionMenus) {
       // We are not in iframe mode
-      var home = L.DomUtil.add('a', '', this._container, ' — ' + L._('Home'))
+      const home = L.DomUtil.add('a', '', this._container, ' — ' + L._('Home'))
       home.href = '/'
     }
   },
@@ -1025,8 +1032,8 @@ L.U.StarControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    var status = map.options.starred ? ' starred' : ''
-    var container = L.DomUtil.create(
+    const status = map.options.starred ? ' starred' : ''
+    const container = L.DomUtil.create(
         'div',
         'leaflet-control-star umap-control' + status
       ),
@@ -1053,8 +1060,8 @@ L.U.Search = L.PhotonSearch.extend({
   },
 
   formatResult: function (feature, el) {
-    var self = this
-    var tools = L.DomUtil.create('span', 'search-result-tools', el),
+    const self = this
+    const tools = L.DomUtil.create('span', 'search-result-tools', el),
       zoom = L.DomUtil.create('i', 'feature-zoom_to', tools),
       edit = L.DomUtil.create('i', 'feature-edit show-on-edit', tools)
     zoom.title = L._('Zoom to this place')
@@ -1067,8 +1074,8 @@ L.U.Search = L.PhotonSearch.extend({
     })
     L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
-      var datalayer = self.map.defaultDataLayer()
-      var layer = datalayer.geojsonToFeatures(feature)
+      const datalayer = self.map.defaultDataLayer()
+      const layer = datalayer.geojsonToFeatures(feature)
       layer.isDirty = true
       layer.edit()
     })
@@ -1076,7 +1083,7 @@ L.U.Search = L.PhotonSearch.extend({
   },
 
   zoomToFeature: function (feature) {
-    var zoom = Math.max(this.map.getZoom(), 16) // Never unzoom.
+    const zoom = Math.max(this.map.getZoom(), 16) // Never unzoom.
     this.map.setView(
       [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
       zoom
@@ -1095,11 +1102,11 @@ L.U.SearchControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    var container = L.DomUtil.create('div', 'leaflet-control-search umap-control'),
+    const container = L.DomUtil.create('div', 'leaflet-control-search umap-control'),
       self = this
 
     L.DomEvent.disableClickPropagation(container)
-    var link = L.DomUtil.create('a', '', container)
+    const link = L.DomUtil.create('a', '', container)
     link.href = '#'
     link.title = L._('Search a place name')
     L.DomEvent.on(link, 'click', (e) => {
@@ -1110,19 +1117,19 @@ L.U.SearchControl = L.Control.extend({
   },
 
   openPanel: function (map) {
-    var options = {
+    const options = {
       limit: 10,
       noResultLabel: L._('No results'),
     }
     if (map.options.photonUrl) options.url = map.options.photonUrl
-    var container = L.DomUtil.create('div', '')
+    const container = L.DomUtil.create('div', '')
 
-    var title = L.DomUtil.create('h3', '', container)
+    const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Search location')
-    var input = L.DomUtil.create('input', 'photon-input', container)
-    var resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
+    const input = L.DomUtil.create('input', 'photon-input', container)
+    const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
     this.search = new L.U.Search(map, input, options)
-    var id = Math.random()
+    const id = Math.random()
     this.search.on('ajax:send', () => {
       map.fire('dataloading', { id: id })
     })
@@ -1144,7 +1151,7 @@ L.Control.MiniMap.include({
   },
 
   onMainMapBaseLayerChange: function (e) {
-    var layer = this._cloneLayer(e.layer)
+    const layer = this._cloneLayer(e.layer)
     if (this._miniMap.hasLayer(this._layer)) {
       this._miniMap.removeLayer(this._layer)
     }
@@ -1232,7 +1239,7 @@ L.U.IframeExporter = L.Evented.extend({
   },
 
   buildUrl: function () {
-    var datalayers = []
+    const datalayers = []
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
     }
@@ -1246,13 +1253,13 @@ L.U.IframeExporter = L.Evented.extend({
     } else {
       delete this.queryString.datalayers
     }
-    var currentView = this.options.currentView ? window.location.hash : ''
+    const currentView = this.options.currentView ? window.location.hash : ''
     return this.baseUrl + '?' + L.Util.buildQueryString(this.queryString) + currentView
   },
 
   build: function () {
-    var iframeUrl = this.buildUrl()
-    var code =
+    const iframeUrl = this.buildUrl()
+    const code =
       '<iframe width="' +
       this.dimensions.width +
       '" height="' +
@@ -1286,7 +1293,7 @@ L.U.Editable = L.Editable.extend({
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
     })
     this.on('editable:editing', (e) => {
-      var layer = e.layer
+      const layer = e.layer
       layer.isDirty = true
       if (layer._tooltip && layer.isTooltipOpen()) {
         layer._tooltip.setLatLng(layer.getCenter())
@@ -1294,7 +1301,7 @@ L.U.Editable = L.Editable.extend({
       }
     })
     this.on('editable:vertex:ctrlclick', (e) => {
-      var index = e.vertex.getIndex()
+      const index = e.vertex.getIndex()
       if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue))
         e.vertex.continue()
     })
@@ -1309,7 +1316,7 @@ L.U.Editable = L.Editable.extend({
   },
 
   createPolygon: function (latlngs) {
-    var polygon = new L.U.Polygon(this.map, latlngs)
+    const polygon = new L.U.Polygon(this.map, latlngs)
     return polygon
   },
 
@@ -1319,7 +1326,7 @@ L.U.Editable = L.Editable.extend({
 
   connectCreatedToMap: function (layer) {
     // Overrided from Leaflet.Editable
-    var datalayer = this.map.defaultDataLayer()
+    const datalayer = this.map.defaultDataLayer()
     datalayer.addLayer(layer)
     layer.isDirty = true
     return layer
@@ -1334,8 +1341,8 @@ L.U.Editable = L.Editable.extend({
       return
     }
 
-    var content
-    var measure
+    let content
+    let measure
     if (e.layer.editor._drawnLatLngs) {
       // when drawing (a Polyline or Polygon)
       if (!e.layer.editor._drawnLatLngs.length) {
@@ -1346,7 +1353,7 @@ L.U.Editable = L.Editable.extend({
           content = L._('Click to start drawing a line')
         }
       } else {
-        var tmpLatLngs = e.layer.editor._drawnLatLngs.slice()
+        const tmpLatLngs = e.layer.editor._drawnLatLngs.slice()
         tmpLatLngs.push(e.latlng)
         measure = e.layer.getMeasure(tmpLatLngs)
 

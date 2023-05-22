@@ -11,8 +11,8 @@ L.U.MapPermissions = L.Class.extend({
   initialize: function (map) {
     this.setOptions(map.options.permissions)
     this.map = map
-    var isDirty = false,
-      self = this
+    let isDirty = false
+    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
         get: function () {
@@ -54,12 +54,12 @@ L.U.MapPermissions = L.Class.extend({
         content: L._('Please save the map first'),
         level: 'info',
       })
-    var container = L.DomUtil.create('div', 'permissions-panel'),
+    const container = L.DomUtil.create('div', 'permissions-panel'),
       fields = [],
       title = L.DomUtil.create('h4', '', container)
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
-        var helpText = L._('Secret edit link is:<br>{link}', {
+        const helpText = L._('Secret edit link is:<br>{link}', {
           link: this.options.anonymous_edit_url,
         })
         fields.push([
@@ -101,15 +101,18 @@ L.U.MapPermissions = L.Class.extend({
       ])
     }
     title.textContent = L._('Update permissions')
-    var builder = new L.U.FormBuilder(this, fields)
-    var form = builder.build()
+    const builder = new L.U.FormBuilder(this, fields)
+    const form = builder.build()
     container.appendChild(form)
     if (this.isAnonymousMap() && this.map.options.user) {
       // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
       // Note: real check is made on the back office anyway.
-      var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
-      var advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions)
-      var download = L.DomUtil.create('a', 'button', advancedButtons)
+      const advancedActions = L.DomUtil.createFieldset(
+        container,
+        L._('Advanced actions')
+      )
+      const advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions)
+      const download = L.DomUtil.create('a', 'button', advancedButtons)
       download.href = '#'
       download.textContent = L._('Attach the map to my account')
       L.DomEvent.on(download, 'click', L.DomEvent.stop).on(
@@ -138,10 +141,10 @@ L.U.MapPermissions = L.Class.extend({
 
   save: function () {
     if (!this.isDirty) return this.map.continueSaving()
-    var formData = new FormData()
+    const formData = new FormData()
     if (!this.isAnonymousMap() && this.options.editors) {
-      var editors = this.options.editors.map((u) => u.id)
-      for (var i = 0; i < this.options.editors.length; i++)
+      const editors = this.options.editors.map((u) => u.id)
+      for (let i = 0; i < this.options.editors.length; i++)
         formData.append('editors', this.options.editors[i].id)
     }
     if (this.isOwner() || this.isAnonymousMap())
@@ -175,7 +178,7 @@ L.U.MapPermissions = L.Class.extend({
 
   addOwnerLink: function (element, container) {
     if (this.options.owner && this.options.owner.name && this.options.owner.url) {
-      var ownerContainer = L.DomUtil.add(
+      const ownerContainer = L.DomUtil.add(
           element,
           'umap-map-owner',
           container,

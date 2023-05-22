@@ -12,10 +12,10 @@ L.U.AutoComplete = L.Class.extend({
 
   initialize: function (el, options) {
     this.el = el
-    var ui = new L.U.UI(document.querySelector('header'))
+    const ui = new L.U.UI(document.querySelector('header'))
     this.xhr = new L.U.Xhr(ui)
     L.setOptions(this, options)
-    var CURRENT = null
+    let CURRENT = null
     try {
       Object.defineProperty(this, 'CURRENT', {
         get: function () {
@@ -59,11 +59,11 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   resizeContainer: function () {
-    var l = this.getLeft(this.input)
-    var t = this.getTop(this.input) + this.input.offsetHeight
+    const l = this.getLeft(this.input)
+    const t = this.getTop(this.input) + this.input.offsetHeight
     this.container.style.left = l + 'px'
     this.container.style.top = t + 'px'
-    var width = this.options.width ? this.options.width : this.input.offsetWidth - 2
+    const width = this.options.width ? this.options.width : this.input.offsetWidth - 2
     this.container.style.width = width + 'px'
   },
 
@@ -111,7 +111,7 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   onKeyUp: function (e) {
-    var special = [
+    const special = [
       L.U.Keys.TAB,
       L.U.Keys.ENTER,
       L.U.Keys.LEFT,
@@ -159,7 +159,7 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   search: function () {
-    var val = this.input.value
+    const val = this.input.value
     if (val.length < this.options.minChar) {
       this.clear()
       return
@@ -176,9 +176,9 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   createResult: function (item) {
-    var el = L.DomUtil.element('li', {}, this.container)
+    const el = L.DomUtil.element('li', {}, this.container)
     el.textContent = item.label
-    var result = {
+    const result = {
       item: item,
       el: el,
     }
@@ -203,7 +203,7 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   resultToIndex: function (result) {
-    var out = null
+    let out = null
     this.forEach(this.RESULTS, (item, index) => {
       if (item.item.value == result.item.value) {
         out = index
@@ -233,7 +233,7 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   getLeft: function (el) {
-    var tmp = el.offsetLeft
+    let tmp = el.offsetLeft
     el = el.offsetParent
     while (el) {
       tmp += el.offsetLeft
@@ -243,7 +243,7 @@ L.U.AutoComplete = L.Class.extend({
   },
 
   getTop: function (el) {
-    var tmp = el.offsetTop
+    let tmp = el.offsetTop
     el = el.offsetParent
     while (el) {
       tmp += el.offsetTop
@@ -291,9 +291,9 @@ L.U.AutoComplete.Ajax.SelectMultiple = L.U.AutoComplete.Ajax.extend({
   },
 
   displaySelected: function (result) {
-    var result_el = L.DomUtil.element('li', {}, this.selected_container)
+    const result_el = L.DomUtil.element('li', {}, this.selected_container)
     result_el.textContent = result.item.label
-    var close = L.DomUtil.element('span', { className: 'close' }, result_el)
+    const close = L.DomUtil.element('span', { className: 'close' }, result_el)
     close.textContent = '×'
     L.DomEvent.on(
       close,
@@ -317,9 +317,9 @@ L.U.AutoComplete.Ajax.Select = L.U.AutoComplete.Ajax.extend({
   },
 
   displaySelected: function (result) {
-    var result_el = L.DomUtil.element('div', {}, this.selected_container)
+    const result_el = L.DomUtil.element('div', {}, this.selected_container)
     result_el.textContent = result.item.label
-    var close = L.DomUtil.element('span', { className: 'close' }, result_el)
+    const close = L.DomUtil.element('span', { className: 'close' }, result_el)
     close.textContent = '×'
     this.input.style.display = 'none'
     L.DomEvent.on(

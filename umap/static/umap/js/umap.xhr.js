@@ -4,7 +4,7 @@ L.U.Xhr = L.Evented.extend({
   },
 
   _wrapper: function () {
-    var wrapper
+    let wrapper
     if (window.XMLHttpRequest === undefined) {
       wrapper = () => {
         try {
@@ -24,11 +24,11 @@ L.U.Xhr = L.Evented.extend({
   },
 
   _ajax: function (settings) {
-    var xhr = this._wrapper(),
+    const xhr = this._wrapper(),
       id = Math.random(),
       self = this
     this.fire('dataloading', { id: id })
-    var loaded = () => {
+    const loaded = () => {
       self.fire('dataload', { id: id })
     }
 
@@ -53,7 +53,7 @@ L.U.Xhr = L.Evented.extend({
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     }
     if (settings.headers) {
-      for (var name in settings.headers) {
+      for (const name in settings.headers) {
         xhr.setRequestHeader(name, settings.headers[name])
       }
     }
@@ -68,10 +68,10 @@ L.U.Xhr = L.Evented.extend({
             level: 'error',
           })
         } else if (xhr.status === 412) {
-          var msg = L._(
+          const msg = L._(
             'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
           )
-          var actions = [
+          const actions = [
             {
               label: L._('Save anyway'),
               callback: function () {
@@ -111,20 +111,20 @@ L.U.Xhr = L.Evented.extend({
 
   // supports only JSON as response data type
   _json: function (verb, uri, options) {
-    var args = arguments,
+    const args = arguments,
       self = this
-    var default_options = {
+    const default_options = {
       async: true,
       callback: null,
       responseType: 'text',
       data: null,
       listen_form: null, // optional form to listen in default callback
     }
-    var settings = L.Util.extend({}, default_options, options)
+    const settings = L.Util.extend({}, default_options, options)
 
     if (verb === 'POST') {
       // find a way not to make this django specific
-      var token = document.cookie.replace(
+      const token = document.cookie.replace(
         /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
         '$1'
       )
@@ -134,8 +134,8 @@ L.U.Xhr = L.Evented.extend({
       }
     }
 
-    var callback = function (responseText, response) {
-      var data
+    const callback = function (responseText, response) {
+      let data
       try {
         data = JSON.parse(responseText)
       } catch (err) {
@@ -180,8 +180,8 @@ L.U.Xhr = L.Evented.extend({
 
   submit_form: function (form_id, options) {
     if (typeof options === 'undefined') options = {}
-    var form = L.DomUtil.get(form_id)
-    var formData = new FormData(form)
+    const form = L.DomUtil.get(form_id)
+    const formData = new FormData(form)
     if (options.extraFormData) formData.append(options.extraFormData)
     options.data = formData
     this.post(form.action, options)
@@ -189,7 +189,7 @@ L.U.Xhr = L.Evented.extend({
   },
 
   listen_form: function (form_id, options) {
-    var form = L.DomUtil.get(form_id),
+    const form = L.DomUtil.get(form_id),
       self = this
     if (!form) return
     L.DomEvent.on(form, 'submit', L.DomEvent.stopPropagation)
@@ -200,7 +200,7 @@ L.U.Xhr = L.Evented.extend({
   },
 
   listen_link: function (link_id, options) {
-    var link = L.DomUtil.get(link_id),
+    const link = L.DomUtil.get(link_id),
       self = this
     if (link) {
       L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', () => {
@@ -215,7 +215,7 @@ L.U.Xhr = L.Evented.extend({
   default_callback: function (data, options) {
     // default callback, to avoid boilerplate
     if (data.redirect) {
-      var newPath = data.redirect
+      const newPath = data.redirect
       if (window.location.pathname == newPath)
         window.location.reload() // Keep the hash, so the current view
       else window.location = newPath
@@ -225,8 +225,8 @@ L.U.Xhr = L.Evented.extend({
     } else if (data.error) {
       this.ui.alert({ content: data.error, level: 'error' })
     } else if (data.html) {
-      var ui_options = { data: data },
-        listen_options
+      const ui_options = { data: data }
+      let listen_options
       if (options.className) ui_options.className = options.className
       this.ui.openPanel(ui_options)
       // To low boilerplate, if there is a form, listen it
@@ -236,7 +236,7 @@ L.U.Xhr = L.Evented.extend({
         this.listen_form(options.listen_form.id, listen_options)
       }
       if (options.listen_link) {
-        for (var i = 0, l = options.listen_link.length; i < l; i++) {
+        for (let i = 0, l = options.listen_link.length; i < l; i++) {
           // Listen link again
           listen_options = L.Util.extend({}, options, options.listen_link[i].options)
           this.listen_link(options.listen_link[i].id, listen_options)
@@ -251,13 +251,13 @@ L.U.Xhr = L.Evented.extend({
   login: function (data, args) {
     // data.html: login form
     // args: args of the first _json call, to call again at process end
-    var self = this
-    var proceed = () => {
+    const self = this
+    const proceed = () => {
       self.ui.closePanel()
       if (typeof args !== 'undefined') self._json.apply(self, args)
       else self.default_callback(data, {})
     }
-    var ask_for_login = (data) => {
+    const ask_for_login = (data) => {
       self.ui.openPanel({ data: data, className: 'login-panel' })
       self.listen_form('login_form', {
         callback: function (data) {
@@ -266,12 +266,12 @@ L.U.Xhr = L.Evented.extend({
         },
       })
       // Auth links
-      var links = document.getElementsByClassName('umap-login-popup')
+      const links = document.getElementsByClassName('umap-login-popup')
       Object.keys(links).forEach((el) => {
-        var link = links[el]
+        const link = links[el]
         L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', () => {
           self.ui.closePanel()
-          var win = window.open(link.href)
+          const win = window.open(link.href)
           window.umap_proceed = () => {
             proceed()
             win.close()

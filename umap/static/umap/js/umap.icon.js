@@ -1,7 +1,7 @@
 L.U.Icon = L.DivIcon.extend({
   initialize: function (map, options) {
     this.map = map
-    var default_options = {
+    const default_options = {
       iconSize: null, // Made in css
       iconUrl: this.map.getDefaultOption('iconUrl'),
       feature: null,
@@ -15,7 +15,7 @@ L.U.Icon = L.DivIcon.extend({
   },
 
   _getIconUrl: function (name) {
-    var url
+    let url
     if (this.feature && this.feature._getIconUrl(name))
       url = this.feature._getIconUrl(name)
     else url = this.options[name + 'Url']
@@ -23,7 +23,7 @@ L.U.Icon = L.DivIcon.extend({
   },
 
   _getColor: function () {
-    var color
+    let color
     if (this.feature) color = this.feature.getOption('color')
     else if (this.options.color) color = this.options.color
     else color = this.map.getDefaultOption('color')
@@ -49,7 +49,7 @@ L.U.Icon.Default = L.U.Icon.extend({
   },
 
   _setColor: function () {
-    var color = this._getColor()
+    const color = this._getColor()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
   },
@@ -63,7 +63,7 @@ L.U.Icon.Default = L.U.Icon.extend({
       this.elements.main
     )
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
-    var src = this._getIconUrl('icon')
+    const src = this._getIconUrl('icon')
     if (src) {
       // An url.
       if (
@@ -86,7 +86,7 @@ L.U.Icon.Default = L.U.Icon.extend({
 
 L.U.Icon.Circle = L.U.Icon.extend({
   initialize: function (map, options) {
-    var default_options = {
+    const default_options = {
       iconAnchor: new L.Point(6, 6),
       popupAnchor: new L.Point(0, -6),
       tooltipAnchor: new L.Point(6, 0),
@@ -142,8 +142,8 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 
   _setColor: function () {
-    var color = this._getColor('color'),
-      background
+    const color = this._getColor('color')
+    let background
     if (L.Browser.ielt9) {
       background = color
     } else if (L.Browser.webkit) {
@@ -159,7 +159,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 })
 
-var _CACHE_COLOR = {}
+const _CACHE_COLOR = {}
 L.U.Icon.Cluster = L.DivIcon.extend({
   options: {
     iconSize: [40, 40],
@@ -171,7 +171,7 @@ L.U.Icon.Cluster = L.DivIcon.extend({
   },
 
   createIcon: function () {
-    var container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster'),
+    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster'),
       div = L.DomUtil.create('div', '', container),
       span = L.DomUtil.create('span', '', div),
       backgroundColor = this.datalayer.getColor()
@@ -181,8 +181,8 @@ L.U.Icon.Cluster = L.DivIcon.extend({
   },
 
   computeTextColor: function (el) {
-    var color,
-      backgroundColor = this.datalayer.getColor()
+    let color
+    const backgroundColor = this.datalayer.getColor()
     if (this.datalayer.options.cluster && this.datalayer.options.cluster.textColor) {
       color = this.datalayer.options.cluster.textColor
     }

@@ -28,7 +28,7 @@ L.U.MarkerCluster = L.MarkerCluster.extend({
 
   _initIcon: function () {
     L.MarkerCluster.prototype._initIcon.call(this)
-    var div = this._icon.querySelector('div')
+    const div = this._icon.querySelector('div')
     // Compute text color only when icon is added to the DOM.
     div.style.color = this._iconObj.computeTextColor(div)
   },
@@ -40,7 +40,7 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    var options = {
+    const options = {
       polygonOptions: {
         color: this.datalayer.getColor(),
       },
@@ -103,7 +103,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
 
   addLayer: function (layer) {
     if (layer instanceof L.Marker) {
-      var latlng = layer.getLatLng(),
+      let latlng = layer.getLatLng(),
         alt
       if (
         this.datalayer.options.heat &&
@@ -192,9 +192,9 @@ L.U.DataLayer = L.Evented.extend({
     this.pane.dataset.id = L.stamp(this)
     this.renderer = L.svg({ pane: this.pane })
 
-    var isDirty = false,
-      isDeleted = false,
-      self = this
+    let isDirty = false
+    let isDeleted = false
+    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
         get: function () {
@@ -267,13 +267,13 @@ L.U.DataLayer = L.Evented.extend({
 
   resetLayer: function (force) {
     if (this.layer && this.options.type === this.layer._type && !force) return
-    var visible = this.isVisible()
+    const visible = this.isVisible()
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
     if (visible) this.map.removeLayer(this.layer)
-    var Class = L.U.Layer[this.options.type] || L.U.Layer.Default
+    const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
     this.layer = new Class(this)
-    var filterKeys = this.map.getFilterKeys(),
+    const filterKeys = this.map.getFilterKeys(),
       filter = this.map.options.filter
     this.eachLayer(function (layer) {
       if (filter && !layer.matchFilter(filter, filterKeys)) return
@@ -284,7 +284,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   eachLayer: function (method, context) {
-    for (var i in this._layers) {
+    for (const i in this._layers) {
       method.call(context || this, this._layers[i])
     }
     return this
@@ -292,7 +292,7 @@ L.U.DataLayer = L.Evented.extend({
 
   eachFeature: function (method, context) {
     if (this.layer && this.layer.canBrowse) {
-      for (var i = 0; i < this._index.length; i++) {
+      for (let i = 0; i < this._index.length; i++) {
         method.call(context || this, this._layers[this._index[i]])
       }
     }
@@ -342,18 +342,18 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   reindex: function () {
-    var features = []
+    const features = []
     this.eachFeature((feature) => features.push(feature))
     L.Util.sortFeatures(features, this.map.getOption('sortKey'))
     this._index = []
-    for (var i = 0; i < features.length; i++) {
+    for (let i = 0; i < features.length; i++) {
       this._index.push(L.Util.stamp(features[i]))
     }
   },
 
   fetchRemoteData: function () {
     if (!this.isRemoteLayer()) return
-    var from = parseInt(this.options.remoteData.from, 10),
+    const from = parseInt(this.options.remoteData.from, 10),
       to = parseInt(this.options.remoteData.to, 10)
     if (
       (!isNaN(from) && this.map.getZoom() < from) ||
@@ -364,7 +364,7 @@ L.U.DataLayer = L.Evented.extend({
     }
     if (!this.options.remoteData.dynamic && this.hasDataLoaded()) return
     if (!this.isVisible()) return
-    var url = this.map.localizeUrl(this.options.remoteData.url)
+    let url = this.map.localizeUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy)
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
     this.map.ajax({
@@ -423,7 +423,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   connectToMap: function () {
-    var id = L.stamp(this)
+    const id = L.stamp(this)
     if (!this.map.datalayers[id]) {
       this.map.datalayers[id] = this
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
@@ -433,11 +433,13 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   _dataUrl: function () {
-    var template = this.map.options.urls.datalayer_view,
-      url = L.Util.template(template, {
-        pk: this.umap_id,
-        map_id: this.map.options.umap_id,
-      })
+    const template = this.map.options.urls.datalayer_view
+
+    let url = L.Util.template(template, {
+      pk: this.umap_id,
+      map_id: this.map.options.umap_id,
+    })
+
     // No browser cache for owners/editors.
     if (this.map.options.allowEdit) url = url + '?' + Date.now()
     return url
@@ -456,7 +458,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   addLayer: function (feature) {
-    var id = L.stamp(feature)
+    const id = L.stamp(feature)
     feature.connectToDataLayer(this)
     this._index.push(id)
     this._layers[id] = feature
@@ -467,7 +469,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   removeLayer: function (feature) {
-    var id = L.stamp(feature)
+    const id = L.stamp(feature)
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
     delete this._layers[id]
@@ -477,7 +479,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   indexProperties: function (feature) {
-    for (var i in feature.properties)
+    for (const i in feature.properties)
       if (typeof feature.properties[i] !== 'object') this.indexProperty(i)
   },
 
@@ -489,7 +491,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   deindexProperty: function (name) {
-    var idx = this._propertiesIndex.indexOf(name)
+    const idx = this._propertiesIndex.indexOf(name)
     if (idx !== -1) this._propertiesIndex.splice(idx, 1)
   },
 
@@ -509,7 +511,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   rawToGeoJSON: function (c, type, callback) {
-    var toDom = (x) => new DOMParser().parseFromString(x, 'text/xml')
+    const toDom = (x) => new DOMParser().parseFromString(x, 'text/xml')
 
     // TODO add a duck typing guessType
     if (type === 'csv') {
@@ -521,7 +523,7 @@ L.U.DataLayer = L.Evented.extend({
         },
         (err, result) => {
           if (err) {
-            var message
+            let message
             if (err.type === 'Error') {
               message = err.message
             } else {
@@ -545,7 +547,7 @@ L.U.DataLayer = L.Evented.extend({
     } else if (type === 'kml') {
       callback(toGeoJSON.kml(toDom(c)))
     } else if (type === 'osm') {
-      var d
+      let d
       try {
         d = JSON.parse(c)
       } catch (e) {
@@ -554,7 +556,7 @@ L.U.DataLayer = L.Evented.extend({
       callback(osmtogeojson(d, { flatProperties: true }))
     } else if (type === 'geojson') {
       try {
-        var gj = JSON.parse(c)
+        const gj = JSON.parse(c)
         callback(gj)
       } catch (err) {
         this.map.ui.alert({ content: 'Invalid JSON file: ' + err })
@@ -565,11 +567,11 @@ L.U.DataLayer = L.Evented.extend({
 
   geojsonToFeatures: function (geojson) {
     if (!geojson) return
-    var features = geojson instanceof Array ? geojson : geojson.features,
-      i,
-      len,
-      latlng,
-      latlngs
+    const features = geojson instanceof Array ? geojson : geojson.features
+    let i
+    let len
+    let latlng
+    let latlngs
 
     if (features) {
       L.Util.sortFeatures(features, this.map.getOption('sortKey'))
@@ -579,11 +581,11 @@ L.U.DataLayer = L.Evented.extend({
       return this
     }
 
-    var geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
+    const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
     if (!geometry) return // null geometry is valid geojson.
-    var coords = geometry.coordinates,
-      layer,
-      tmp
+    const coords = geometry.coordinates
+    let layer
+    let tmp
 
     switch (geometry.type) {
       case 'Point':
@@ -655,13 +657,13 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   importFromFiles: function (files, type) {
-    for (var i = 0, f; (f = files[i]); i++) {
+    for (let i = 0, f; (f = files[i]); i++) {
       this.importFromFile(f, type)
     }
   },
 
   importFromFile: function (f, type) {
-    var reader = new FileReader()
+    const reader = new FileReader()
     type = type || L.Util.detectFileType(f)
     reader.readAsText(f)
     reader.onload = (e) => this.importRaw(e.target.result, type)
@@ -731,10 +733,10 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   clone: function () {
-    var options = L.Util.CopyJSON(this.options)
+    const options = L.Util.CopyJSON(this.options)
     options.name = L._('Clone of {name}', { name: this.options.name })
     delete options.id
-    var geojson = L.Util.CopyJSON(this._geojson),
+    const geojson = L.Util.CopyJSON(this._geojson),
       datalayer = this.map.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
@@ -779,7 +781,7 @@ L.U.DataLayer = L.Evented.extend({
     if (!this.map.editEnabled || !this.isLoaded()) {
       return
     }
-    var container = L.DomUtil.create('div', 'umap-layer-properties-container'),
+    const container = L.DomUtil.create('div', 'umap-layer-properties-container'),
       metadataFields = [
         'options.name',
         'options.description',
@@ -794,8 +796,8 @@ L.U.DataLayer = L.Evented.extend({
           },
         ],
       ]
-    var title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
-    var builder = new L.U.FormBuilder(this, metadataFields, {
+    const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
+    let builder = new L.U.FormBuilder(this, metadataFields, {
       callback: function (e) {
         this.map.updateDatalayersControl()
         if (e.helper.field === 'options.type') {
@@ -806,7 +808,7 @@ L.U.DataLayer = L.Evented.extend({
     })
     container.appendChild(builder.build())
 
-    var shapeOptions = [
+    let shapeOptions = [
       'options.color',
       'options.iconClass',
       'options.iconUrl',
@@ -820,7 +822,7 @@ L.U.DataLayer = L.Evented.extend({
 
     shapeOptions = shapeOptions.concat(this.layer.getEditableOptions())
 
-    var redrawCallback = function (field) {
+    const redrawCallback = function (field) {
       this.hide()
       this.layer.postUpdate(field)
       this.show()
@@ -830,10 +832,10 @@ L.U.DataLayer = L.Evented.extend({
       id: 'datalayer-advanced-properties',
       callback: redrawCallback,
     })
-    var shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
+    const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
 
-    var optionsFields = [
+    let optionsFields = [
       'options.smoothFactor',
       'options.dashArray',
       'options.zoomTo',
@@ -846,13 +848,13 @@ L.U.DataLayer = L.Evented.extend({
       id: 'datalayer-advanced-properties',
       callback: redrawCallback,
     })
-    var advancedProperties = L.DomUtil.createFieldset(
+    const advancedProperties = L.DomUtil.createFieldset(
       container,
       L._('Advanced properties')
     )
     advancedProperties.appendChild(builder.build())
 
-    var popupFields = [
+    const popupFields = [
       'options.popupShape',
       'options.popupTemplate',
       'options.popupContentTemplate',
@@ -861,13 +863,16 @@ L.U.DataLayer = L.Evented.extend({
       'options.labelInteractive',
     ]
     builder = new L.U.FormBuilder(this, popupFields, { callback: redrawCallback })
-    var popupFieldset = L.DomUtil.createFieldset(container, L._('Interaction options'))
+    const popupFieldset = L.DomUtil.createFieldset(
+      container,
+      L._('Interaction options')
+    )
     popupFieldset.appendChild(builder.build())
 
     if (!L.Util.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
     }
-    var remoteDataFields = [
+    const remoteDataFields = [
       [
         'options.remoteData.url',
         { handler: 'Url', label: L._('Url'), helpEntries: 'formatURL' },
@@ -905,15 +910,15 @@ L.U.DataLayer = L.Evented.extend({
       ])
     }
 
-    var remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'))
+    const remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'))
     builder = new L.U.FormBuilder(this, remoteDataFields)
     remoteDataContainer.appendChild(builder.build())
 
     if (this.map.options.urls.datalayer_versions) this.buildVersionsFieldset(container)
 
-    var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
-    var advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
-    var deleteLink = L.DomUtil.create(
+    const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
+    const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
+    const deleteLink = L.DomUtil.create(
       'a',
       'button delete_datalayer_button umap-delete',
       advancedButtons
@@ -930,7 +935,7 @@ L.U.DataLayer = L.Evented.extend({
       this
     )
     if (!this.isRemoteLayer()) {
-      var emptyLink = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
+      const emptyLink = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
       emptyLink.textContent = L._('Empty')
       emptyLink.href = '#'
       L.DomEvent.on(emptyLink, 'click', L.DomEvent.stop).on(
@@ -940,20 +945,20 @@ L.U.DataLayer = L.Evented.extend({
         this
       )
     }
-    var cloneLink = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
+    const cloneLink = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
     cloneLink.textContent = L._('Clone')
     cloneLink.href = '#'
     L.DomEvent.on(cloneLink, 'click', L.DomEvent.stop).on(
       cloneLink,
       'click',
       function () {
-        var datalayer = this.clone()
+        const datalayer = this.clone()
         datalayer.edit()
       },
       this
     )
     if (this.umap_id) {
-      var download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
+      const download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
       download.textContent = L._('Download')
       download.href = this._dataUrl()
       download.target = '_blank'
@@ -967,12 +972,12 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   buildVersionsFieldset: function (container) {
-    var appendVersion = function (data) {
-      var date = new Date(parseInt(data.at, 10))
-      var content =
+    const appendVersion = function (data) {
+      const date = new Date(parseInt(data.at, 10))
+      const content =
         date.toLocaleDateString(L.locale) + ' (' + parseInt(data.size) / 1000 + 'Kb)'
-      var el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
-      var a = L.DomUtil.create('a', '', el)
+      const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
+      const a = L.DomUtil.create('a', '', el)
       L.DomUtil.add('span', '', el, content)
       a.href = '#'
       a.title = L._('Restore this version')
@@ -990,7 +995,7 @@ L.U.DataLayer = L.Evented.extend({
       callback: function () {
         this.map.xhr.get(this.getVersionsUrl(), {
           callback: function (data) {
-            for (var i = 0; i < data.versions.length; i++) {
+            for (let i = 0; i < data.versions.length; i++) {
               appendVersion.call(this, data.versions[i])
             }
           },
@@ -1018,7 +1023,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   featuresToGeoJSON: function () {
-    var features = []
+    const features = []
     this.eachLayer((layer) => features.push(layer.toGeoJSON()))
     return features
   },
@@ -1041,7 +1046,7 @@ L.U.DataLayer = L.Evented.extend({
 
   zoomTo: function () {
     if (!this.isVisible()) return
-    var bounds = this.layer.getBounds()
+    const bounds = this.layer.getBounds()
     if (bounds.isValid()) this.map.fitBounds(bounds)
   },
 
@@ -1063,12 +1068,12 @@ L.U.DataLayer = L.Evented.extend({
 
   getFeatureByIndex: function (index) {
     if (index === -1) index = this._index.length - 1
-    var id = this._index[index]
+    const id = this._index[index]
     return this._layers[id]
   },
 
   getNextFeature: function (feature) {
-    var id = this._index.indexOf(L.stamp(feature)),
+    const id = this._index.indexOf(L.stamp(feature)),
       nextId = this._index[id + 1]
     return nextId ? this._layers[nextId] : this.getNextBrowsable().getFeatureByIndex(0)
   },
@@ -1077,7 +1082,7 @@ L.U.DataLayer = L.Evented.extend({
     if (this._index <= 1) {
       return null
     }
-    var id = this._index.indexOf(L.stamp(feature)),
+    const id = this._index.indexOf(L.stamp(feature)),
       previousId = this._index[id - 1]
     return previousId
       ? this._layers[previousId]
@@ -1085,9 +1090,9 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   getPreviousBrowsable: function () {
-    var id = this.getRank(),
-      next,
-      index = this.map.datalayers_index
+    let id = this.getRank()
+    let next
+    const index = this.map.datalayers_index
     while (((id = index[++id] ? id : 0), (next = index[id]))) {
       if (next === this || (next.allowBrowse() && next.hasData())) break
     }
@@ -1095,9 +1100,9 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   getNextBrowsable: function () {
-    var id = this.getRank(),
-      prev,
-      index = this.map.datalayers_index
+    let id = this.getRank()
+    let prev
+    const index = this.map.datalayers_index
     while (((id = index[--id] ? id : index.length - 1), (prev = index[id]))) {
       if (prev === this || (prev.allowBrowse() && prev.hasData())) break
     }
@@ -1129,13 +1134,13 @@ L.U.DataLayer = L.Evented.extend({
     if (!this.isLoaded()) {
       return
     }
-    var geojson = this.umapGeoJSON()
-    var formData = new FormData()
+    const geojson = this.umapGeoJSON()
+    const formData = new FormData()
     formData.append('name', this.options.name)
     formData.append('display_on_load', !!this.options.displayOnLoad)
     formData.append('rank', this.getRank())
     // Filename support is shaky, don't do it for now.
-    var blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
+    const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
     this.map.post(this.getSaveUrl(), {
       data: formData,
@@ -1159,7 +1164,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   saveDelete: function () {
-    var callback = function () {
+    const callback = function () {
       this.isDirty = false
       this.map.continueSaving()
     }
@@ -1180,7 +1185,7 @@ L.U.DataLayer = L.Evented.extend({
 
   tableEdit: function () {
     if (this.isRemoteLayer() || !this.isVisible()) return
-    var editor = new L.U.TableEditor(this)
+    const editor = new L.U.TableEditor(this)
     editor.edit()
   },
 })

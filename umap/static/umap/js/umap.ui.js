@@ -31,17 +31,17 @@ L.U.UI = L.Evented.extend({
     // by previous ui processes...
     this.resetPanelClassName()
     this._panel.innerHTML = ''
-    var actionsContainer = L.DomUtil.create('ul', 'toolbox', this._panel)
-    var body = L.DomUtil.create('div', 'body', this._panel)
+    const actionsContainer = L.DomUtil.create('ul', 'toolbox', this._panel)
+    const body = L.DomUtil.create('div', 'body', this._panel)
     if (e.data.html.nodeType && e.data.html.nodeType === 1)
       body.appendChild(e.data.html)
     else body.innerHTML = e.data.html
-    var closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer)
+    const closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer)
     L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    var label = L.DomUtil.create('span', '', closeLink)
+    const label = L.DomUtil.create('span', '', closeLink)
     label.title = label.textContent = L._('Close')
     if (e.actions) {
-      for (var i = 0; i < e.actions.length; i++) {
+      for (let i = 0; i < e.actions.length; i++) {
         actionsContainer.appendChild(e.actions[i])
       }
     }
@@ -75,17 +75,17 @@ L.U.UI = L.Evented.extend({
   },
 
   popAlert: function (e) {
-    var self = this
+    const self = this
     if (!e) {
       if (this.ALERTS.length) e = this.ALERTS.pop()
       else return
     }
-    var timeoutID,
-      level_class = e.level && e.level == 'info' ? 'info' : 'error'
+    let timeoutID
+    const level_class = e.level && e.level == 'info' ? 'info' : 'error'
     this._alert.innerHTML = ''
     L.DomUtil.addClass(this.parent, 'umap-alert')
     L.DomUtil.addClass(this._alert, level_class)
-    var close = function () {
+    const close = function () {
       if (timeoutID !== this.ALERT_ID) {
         return
       } // Another alert has been forced
@@ -95,10 +95,10 @@ L.U.UI = L.Evented.extend({
       if (timeoutID) window.clearTimeout(timeoutID)
       this.popAlert()
     }
-    var closeLink = L.DomUtil.create('a', 'umap-close-link', this._alert)
+    const closeLink = L.DomUtil.create('a', 'umap-close-link', this._alert)
     closeLink.href = '#'
     L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    var label = L.DomUtil.create('span', '', closeLink)
+    const label = L.DomUtil.create('span', '', closeLink)
     label.title = label.textContent = L._('Close')
     L.DomEvent.on(closeLink, 'click', L.DomEvent.stop).on(
       closeLink,
@@ -108,8 +108,8 @@ L.U.UI = L.Evented.extend({
     )
     L.DomUtil.add('div', '', this._alert, e.content)
     if (e.actions) {
-      var action, el
-      for (var i = 0; i < e.actions.length; i++) {
+      let action, el
+      for (let i = 0; i < e.actions.length; i++) {
         action = e.actions[i]
         el = L.DomUtil.element('a', { className: 'umap-action' }, this._alert)
         el.href = '#'
@@ -132,7 +132,7 @@ L.U.UI = L.Evented.extend({
 
   tooltip: function (e) {
     this.TOOLTIP_ID = Math.random()
-    var id = this.TOOLTIP_ID
+    const id = this.TOOLTIP_ID
     L.DomUtil.addClass(this.parent, 'umap-tooltip')
     if (e.anchor && e.position === 'top') this.anchorTooltipTop(e.anchor)
     else if (e.anchor && e.position === 'left') this.anchorTooltipLeft(e.anchor)
@@ -148,7 +148,7 @@ L.U.UI = L.Evented.extend({
 
   anchorTooltipAbsolute: function () {
     this._tooltip.className = ''
-    var left =
+    const left =
         this.parent.offsetLeft +
         this.parent.clientWidth / 2 -
         this._tooltip.clientWidth / 2,
@@ -158,7 +158,7 @@ L.U.UI = L.Evented.extend({
 
   anchorTooltipTop: function (el) {
     this._tooltip.className = 'tooltip-top'
-    var coords = this.getPosition(el)
+    const coords = this.getPosition(el)
     this.setTooltipPosition({
       left: coords.left - 10,
       bottom: this.getDocHeight() - coords.top + 11,
@@ -167,7 +167,7 @@ L.U.UI = L.Evented.extend({
 
   anchorTooltipLeft: function (el) {
     this._tooltip.className = 'tooltip-left'
-    var coords = this.getPosition(el)
+    const coords = this.getPosition(el)
     this.setTooltipPosition({
       top: coords.top,
       right: document.documentElement.offsetWidth - coords.left + 11,
@@ -196,7 +196,7 @@ L.U.UI = L.Evented.extend({
   },
 
   getDocHeight: function () {
-    var D = document
+    const D = document
     return Math.max(
       D.body.scrollHeight,
       D.documentElement.scrollHeight,
