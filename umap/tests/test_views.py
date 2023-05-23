@@ -1,6 +1,6 @@
 import json
 import socket
-from datetime import date
+from datetime import date, timedelta
 
 import pytest
 from django.conf import settings
@@ -150,13 +150,15 @@ def test_stats_empty(client):
 
 
 @pytest.mark.django_db
-def test_stats_basic(client, map, datalayer):
+def test_stats_basic(client, map, datalayer, user2):
     map.owner.last_login = date.today()
     map.owner.save()
+    user2.last_login = date.today() - timedelta(days=8)
+    user2.save()
     response = client.get(reverse("stats"))
     assert json.loads(response.content.decode()) == {
         "maps_active_last_week_count": 1,
         "maps_count": 1,
         "users_active_last_week_count": 1,
-        "users_count": 1,
+        "users_count": 2,
     }
