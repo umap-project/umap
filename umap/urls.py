@@ -153,7 +153,7 @@ urlpatterns += i18n_patterns(
     re_path(r"^user/(?P<username>.+)/$", views.user_maps, name="user_maps"),
     re_path(r"", include(i18n_urls)),
 )
-urlpatterns += (path("stats/", views.stats, name="stats"),)
+urlpatterns += (path("stats/", cache_page(60 * 60)(views.stats), name="stats"),)
 
 if settings.DEBUG and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
