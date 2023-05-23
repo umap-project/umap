@@ -30,7 +30,7 @@
     <div class="col half center mwide">
     {% spaceless %}
     <div class="button-bar {% if demo_map %}half{% endif %}">
-      <a href="{% url 'map_new' %}" class="button half">{% trans "Create a map" %}</a>
+      <a href="{% url 'map_new' %}" class="button half">{% trans "Create a map" %} →</a>
       {% if demo_map %}
         <a href="{{ demo_map.get_absolute_url }}" class="button half neutral">{% trans "Play with the demo" %}</a>
       {% endif %}

@@ -8,7 +8,7 @@ footer {
     background-color: #2E3641;
     text-align: center;
     line-height: 140px;
-    color: #8F96A3;
+    color: white;
 }
 footer a.branding {
     background-image: url("./img/logo_filigree.png");
@@ -19,7 +19,7 @@ footer a.branding {
     font-weight: bold;
     height: 140px;
     padding-left: 70px;
-    color: #8F96A3;
+    color: white;
     display: inline-block;
 }
 
@@ -58,11 +58,15 @@ footer .i18n_switch {
 .umap-nav ul li {
     line-height: 2.5rem;
 }
-.umap-nav .button,
-.umap-nav .button:hover {
-    color: #fff;
+.umap-nav .button {
+    color: black;
     text-decoration: none;
     min-width: 150px;
+    font-weight: bold;
+}
+.umap-nav .button:hover {
+    background: #3A4259;
+    color: white;
 }
 
 @media only screen and (min-width: 500px) {

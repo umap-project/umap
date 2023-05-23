@@ -8,5 +8,5 @@
 </div>
 {% endfor %}
 {% if maps.has_next %}
-<div class="col wide"><a href="?{% paginate_querystring maps.next_page_number %}" class="button more_button neutral">{% trans "More" %}</a></div>
+<div class="col wide"><a href="?{% paginate_querystring maps.next_page_number %}" class="button more_button neutral">{% trans "More" %} ↓</a></div>
 {% endif %}

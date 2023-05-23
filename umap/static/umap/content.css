@@ -139,6 +139,9 @@ h2.section {
 .highlights {
     text-align: center;
 }
+.highlights a {
+    text-decoration: underline;
+}
 .highlights img.colophon {
     display: inline-block;
     height: 128px;
@@ -167,15 +170,23 @@ body.content #umap-ui-container {
 
 input[type="submit"],
 .button {
-    background-color: #79c1c0;
-    color: #eeeeec;
+    border: 3px solid #79c1c0;
+    color: black;
 }
 .wrapper input[type="submit"]:hover {
     background-color: #689191;
 }
-.wrapper .neutral, .wrapper input[type="submit"].neutral {
-    background-color: #ddd;
-    color: #666;
+.wrapper .neutral,
+.wrapper input[type="submit"].neutral {
+    border-color: #ddd;
+    background-color: white;
+    color: black;
+}
+.wrapper .neutral:hover,
+.wrapper input[type="submit"].neutral:hover {
+    border-color: #ddd;
+    background-color: dimgrey;
+    color: white;
 }
 .wrapper.somber {
     background-color: #2E3641;
@@ -189,7 +200,13 @@ input[type="submit"],
 .wrapper .button,
 .wrapper input {
     height: 56px;
-    line-height: 43px;
+    line-height: 36px;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+.wrapper .button:hover {
+    background: #3A4259;
+    color: white;
 }
 
 /* **************************** */
