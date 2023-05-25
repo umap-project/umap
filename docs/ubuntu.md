@@ -328,8 +328,6 @@ And then add this new location in your nginx config (before the `/` location):
 
     location /internal/ {
         internal;
-        gzip_vary on;
-        gzip_static on;
         alias /path/to/umap/var/data/;
     }
 
