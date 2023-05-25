@@ -59,7 +59,7 @@ input:-moz-placeholder, :-moz-placeholder {
 .login-grid .login-bitbucket {
     background-image: url("./bitbucket.png");
 }
-.login-grid .login-twitter {
+.login-grid .login-twitter-oauth2 {
     background-image: url("./twitter.png");
 }
 .login-grid .login-openstreetmap {
