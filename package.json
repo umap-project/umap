@@ -14,7 +14,7 @@
     "optimist": "~0.4.0",
     "phantomjs": "^1.9.18",
     "prettier": "^2.8.8",
-    "sinon": "^1.10.3",
+    "sinon": "^15.1.0",
     "uglify-js": "~3.17.4"
   },
   "scripts": {

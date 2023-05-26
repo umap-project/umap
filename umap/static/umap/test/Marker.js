@@ -3,7 +3,7 @@ describe('L.U.Marker', function () {
     this.server = sinon.fakeServer.create()
     var datalayer_response = JSON.parse(JSON.stringify(RESPONSES.datalayer62_GET)) // Copy.
     datalayer_response._umap_options.iconClass = 'Drop'
-    this.server.respondWith('GET', '/datalayer/62/', JSON.stringify(datalayer_response))
+    this.server.respondWith(/\/datalayer\/62\/\?.*/, JSON.stringify(datalayer_response))
     this.map = initMap({ umap_id: 99 })
     this.datalayer = this.map.getDataLayerByUmapId(62)
     this.server.respond()
