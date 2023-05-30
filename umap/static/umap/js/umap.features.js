@@ -12,8 +12,8 @@ L.U.FeatureMixin = {
     if (options.geojson) {
       this.populate(options.geojson)
     }
-    var isDirty = false,
-      self = this
+    let isDirty = false
+    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
         get: function () {
@@ -60,7 +60,7 @@ L.U.FeatureMixin = {
 
   view: function (e) {
     if (this.map.editEnabled) return
-    var outlink = this.properties._umap_options.outlink,
+    const outlink = this.properties._umap_options.outlink,
       target = this.properties._umap_options.outlinkTarget
     if (outlink) {
       switch (target) {
@@ -71,7 +71,7 @@ L.U.FeatureMixin = {
           window.top.location = outlink
           break
         default:
-          var win = window.open(this.properties._umap_options.outlink)
+          const win = window.open(this.properties._umap_options.outlink)
       }
       return
     }
@@ -89,18 +89,18 @@ L.U.FeatureMixin = {
 
   edit: function (e) {
     if (!this.map.editEnabled || this.isReadOnly()) return
-    var container = L.DomUtil.create('div', 'umap-datalayer-container')
+    const container = L.DomUtil.create('div', 'umap-datalayer-container')
 
-    var builder = new L.U.FormBuilder(this, ['datalayer'], {
+    let builder = new L.U.FormBuilder(this, ['datalayer'], {
       callback: function () {
         this.edit(e)
       }, // removeLayer step will close the edit panel, let's reopen it
     })
     container.appendChild(builder.build())
 
-    var properties = [],
-      property
-    for (var i = 0; i < this.datalayer._propertiesIndex.length; i++) {
+    const properties = []
+    let property
+    for (let i = 0; i < this.datalayer._propertiesIndex.length; i++) {
       property = this.datalayer._propertiesIndex[i]
       if (L.Util.indexOf(['name', 'description'], property) !== -1) {
         continue
@@ -116,7 +116,7 @@ L.U.FeatureMixin = {
     })
     container.appendChild(builder.build())
     this.appendEditFieldsets(container)
-    var advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
+    const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     this.getAdvancedEditActions(advancedActions)
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
     this.map.editedFeature = this
@@ -124,7 +124,7 @@ L.U.FeatureMixin = {
   },
 
   getAdvancedEditActions: function (container) {
-    var deleteLink = L.DomUtil.create('a', 'button umap-delete', container)
+    const deleteLink = L.DomUtil.create('a', 'button umap-delete', container)
     deleteLink.href = '#'
     deleteLink.textContent = L._('Delete')
     L.DomEvent.on(
@@ -139,30 +139,33 @@ L.U.FeatureMixin = {
   },
 
   appendEditFieldsets: function (container) {
-    var optionsFields = this.getShapeOptions()
-    var builder = new L.U.FormBuilder(this, optionsFields, {
+    const optionsFields = this.getShapeOptions()
+    let builder = new L.U.FormBuilder(this, optionsFields, {
       id: 'umap-feature-shape-properties',
       callback: this._redraw,
     })
-    var shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
+    const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
 
-    var advancedOptions = this.getAdvancedOptions()
-    var builder = new L.U.FormBuilder(this, advancedOptions, {
+    const advancedOptions = this.getAdvancedOptions()
+    builder = new L.U.FormBuilder(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
       callback: this._redraw,
     })
-    var advancedProperties = L.DomUtil.createFieldset(
+    const advancedProperties = L.DomUtil.createFieldset(
       container,
       L._('Advanced properties')
     )
     advancedProperties.appendChild(builder.build())
 
-    var interactionOptions = this.getInteractionOptions()
+    const interactionOptions = this.getInteractionOptions()
     builder = new L.U.FormBuilder(this, interactionOptions, {
       callback: this._redraw,
     })
-    var popupFieldset = L.DomUtil.createFieldset(container, L._('Interaction options'))
+    const popupFieldset = L.DomUtil.createFieldset(
+      container,
+      L._('Interaction options')
+    )
     popupFieldset.appendChild(builder.build())
   },
 
@@ -180,7 +183,7 @@ L.U.FeatureMixin = {
 
   getDisplayName: function (fallback) {
     if (fallback === undefined) fallback = this.datalayer.options.name
-    var key = this.getOption('labelKey') || 'name'
+    const key = this.getOption('labelKey') || 'name'
     // Variables mode.
     if (key.indexOf('{') != -1)
       return L.Util.greedyTemplate(key, this.extendedProperties())
@@ -196,12 +199,12 @@ L.U.FeatureMixin = {
   },
 
   getPopupClass: function () {
-    var old = this.getOption('popupTemplate') // Retrocompat.
+    const old = this.getOption('popupTemplate') // Retrocompat.
     return L.U.Popup[this.getOption('popupShape') || old] || L.U.Popup
   },
 
   attachPopup: function () {
-    var Class = this.getPopupClass()
+    const Class = this.getPopupClass()
     this.bindPopup(new Class(this))
   },
 
@@ -258,7 +261,7 @@ L.U.FeatureMixin = {
   },
 
   getOption: function (option, fallback) {
-    var value = fallback
+    let value = fallback
     if (typeof this.staticOptions[option] !== 'undefined') {
       value = this.staticOptions[option]
     } else if (L.Util.usableOption(this.properties._umap_options, option)) {
@@ -273,11 +276,11 @@ L.U.FeatureMixin = {
 
   zoomTo: function (e) {
     e = e || {}
-    var easing = e.easing !== undefined ? e.easing : this.map.options.easing
+    const easing = e.easing !== undefined ? e.easing : this.map.options.easing
     if (easing) {
       this.map.flyTo(this.getCenter(), this.getBestZoom())
     } else {
-      var latlng = e.latlng || this.getCenter()
+      const latlng = e.latlng || this.getCenter()
       this.map.setView(latlng, this.getBestZoom() || this.map.getZoom())
     }
     if (e.callback) e.callback.call(this)
@@ -296,7 +299,7 @@ L.U.FeatureMixin = {
   },
 
   cloneProperties: function () {
-    var properties = L.extend({}, this.properties)
+    const properties = L.extend({}, this.properties)
     properties._umap_options = L.extend({}, properties._umap_options)
     if (Object.keys && Object.keys(properties._umap_options).length === 0) {
       delete properties._umap_options // It can make a difference on big data sets
@@ -315,7 +318,7 @@ L.U.FeatureMixin = {
   },
 
   toGeoJSON: function () {
-    var geojson = this.parentClass.prototype.toGeoJSON.call(this)
+    const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
     delete geojson.properties._storage_options
     return geojson
@@ -356,7 +359,7 @@ L.U.FeatureMixin = {
 
   _showContextMenu: function (e) {
     L.DomEvent.stop(e)
-    var pt = this.map.mouseEventToContainerPoint(e.originalEvent)
+    const pt = this.map.mouseEventToContainerPoint(e.originalEvent)
     e.relatedTarget = this
     this.map.contextmenu.showAt(pt, e)
   },
@@ -370,8 +373,8 @@ L.U.FeatureMixin = {
   },
 
   getContextMenuItems: function (e) {
-    var permalink = this.getPermalink(),
-      items = []
+    const permalink = this.getPermalink()
+    let items = []
     if (permalink)
       items.push({
         text: L._('Permalink'),
@@ -386,7 +389,7 @@ L.U.FeatureMixin = {
   },
 
   getContextMenuEditItems: function () {
-    var items = ['-']
+    let items = ['-']
     if (this.map.editedFeature !== this) {
       items.push({
         text: L._('Edit this feature'),
@@ -426,13 +429,15 @@ L.U.FeatureMixin = {
   },
 
   resetTooltip: function () {
-    var displayName = this.getDisplayName(null),
-      showLabel = this.getOption('showLabel'),
-      oldLabelHover = this.getOption('labelHover'),
-      options = {
-        direction: this.getOption('labelDirection'),
-        interactive: this.getOption('labelInteractive'),
-      }
+    const displayName = this.getDisplayName(null)
+    let showLabel = this.getOption('showLabel')
+    const oldLabelHover = this.getOption('labelHover')
+
+    const options = {
+      direction: this.getOption('labelDirection'),
+      interactive: this.getOption('labelInteractive'),
+    }
+
     if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
     options.permanent = showLabel === true
     this.unbindTooltip()
@@ -442,7 +447,7 @@ L.U.FeatureMixin = {
 
   matchFilter: function (filter, keys) {
     filter = filter.toLowerCase()
-    for (var i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i++) {
       if ((this.properties[keys[i]] || '').toLowerCase().indexOf(filter) !== -1)
         return true
     }
@@ -465,7 +470,7 @@ L.U.FeatureMixin = {
   },
 
   clone: function () {
-    var layer = this.datalayer.geojsonToFeatures(this.toGeoJSON())
+    const layer = this.datalayer.geojsonToFeatures(this.toGeoJSON())
     layer.isDirty = true
     layer.edit()
     return layer
@@ -573,7 +578,7 @@ L.U.Marker = L.Marker.extend({
   },
 
   getIcon: function () {
-    var Class = L.U.Icon[this.getIconClass()] || L.U.Icon.Default
+    const Class = L.U.Icon[this.getIconClass()] || L.U.Icon.Default
     return new Class(this.map, { feature: this })
   },
 
@@ -599,11 +604,11 @@ L.U.Marker = L.Marker.extend({
 
   appendEditFieldsets: function (container) {
     L.U.FeatureMixin.appendEditFieldsets.call(this, container)
-    var coordinatesOptions = [
+    const coordinatesOptions = [
       ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude') }],
       ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude') }],
     ]
-    var builder = new L.U.FormBuilder(this, coordinatesOptions, {
+    const builder = new L.U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
         if (!this._latlng.isValid())
           return this.map.ui.alert({
@@ -615,7 +620,7 @@ L.U.Marker = L.Marker.extend({
       },
       callbackContext: this,
     })
-    var fieldset = L.DomUtil.createFieldset(container, L._('Coordinates'))
+    const fieldset = L.DomUtil.createFieldset(container, L._('Coordinates'))
     fieldset.appendChild(builder.build())
   },
 
@@ -629,7 +634,7 @@ L.U.Marker = L.Marker.extend({
   },
 
   isOnScreen: function () {
-    var bounds = this.map.getBounds()
+    const bounds = this.map.getBounds()
     return bounds.contains(this._latlng)
   },
 
@@ -696,8 +701,8 @@ L.U.PathMixin = {
 
   setStyle: function (options) {
     options = options || {}
-    var option
-    for (var idx in this.styleOptions) {
+    let option
+    for (const idx in this.styleOptions) {
       option = this.styleOptions[idx]
       options[option] = this.getOption(option)
     }
@@ -759,7 +764,7 @@ L.U.PathMixin = {
   },
 
   transferShape: function (at, to) {
-    var shape = this.enableEdit().deleteShapeAt(at)
+    const shape = this.enableEdit().deleteShapeAt(at)
     this.disableEdit()
     if (!shape) return
     to.enableEdit().appendShape(shape)
@@ -768,11 +773,11 @@ L.U.PathMixin = {
 
   isolateShape: function (at) {
     if (!this.isMulti()) return
-    var shape = this.enableEdit().deleteShapeAt(at)
+    const shape = this.enableEdit().deleteShapeAt(at)
     this.disableEdit()
     if (!shape) return
-    var properties = this.cloneProperties()
-    var other = new (this instanceof L.U.Polyline ? L.U.Polyline : L.U.Polygon)(
+    const properties = this.cloneProperties()
+    const other = new (this instanceof L.U.Polyline ? L.U.Polyline : L.U.Polygon)(
       this.map,
       shape,
       { geojson: { properties: properties } }
@@ -783,7 +788,7 @@ L.U.PathMixin = {
   },
 
   getContextMenuItems: function (e) {
-    var items = L.U.FeatureMixin.getContextMenuItems.call(this, e)
+    let items = L.U.FeatureMixin.getContextMenuItems.call(this, e)
     items.push({
       text: L._('Display measure'),
       callback: function () {
@@ -798,7 +803,7 @@ L.U.PathMixin = {
   },
 
   getContextMenuMultiItems: function (e) {
-    var items = [
+    const items = [
       '-',
       {
         text: L._('Remove shape from the multi'),
@@ -808,7 +813,7 @@ L.U.PathMixin = {
         context: this,
       },
     ]
-    var shape = this.shapeAt(e.latlng)
+    const shape = this.shapeAt(e.latlng)
     if (this._latlngs.indexOf(shape) > 0) {
       items.push({
         text: L._('Make main shape'),
@@ -823,7 +828,7 @@ L.U.PathMixin = {
   },
 
   getContextMenuEditItems: function (e) {
-    var items = L.U.FeatureMixin.getContextMenuEditItems.call(this, e)
+    const items = L.U.FeatureMixin.getContextMenuEditItems.call(this, e)
     if (
       this.map.editedFeature &&
       this.isSameClass(this.map.editedFeature) &&
@@ -850,7 +855,7 @@ L.U.PathMixin = {
   },
 
   getInplaceToolbarActions: function (e) {
-    var items = L.U.FeatureMixin.getInplaceToolbarActions.call(this, e)
+    const items = L.U.FeatureMixin.getInplaceToolbarActions.call(this, e)
     if (this.isMulti()) {
       items.push(L.U.DeleteShapeAction)
       items.push(L.U.ExtractShapeFromMultiAction)
@@ -859,7 +864,7 @@ L.U.PathMixin = {
   },
 
   isOnScreen: function () {
-    var bounds = this.map.getBounds()
+    const bounds = this.map.getBounds()
     return bounds.overlaps(this.getBounds())
   },
 }
@@ -882,14 +887,14 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getMeasure: function (shape) {
-    var length = L.GeoUtil.lineLength(this.map, shape || this._defaultShape())
+    const length = L.GeoUtil.lineLength(this.map, shape || this._defaultShape())
     return L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit())
   },
 
   getContextMenuEditItems: function (e) {
-    var items = L.U.PathMixin.getContextMenuEditItems.call(this, e),
-      vertexClicked = e.vertex,
-      index
+    const items = L.U.PathMixin.getContextMenuEditItems.call(this, e)
+    const vertexClicked = e.vertex
+    let index
     if (!this.isMulti()) {
       items.push({
         text: L._('Transform to polygon'),
@@ -917,7 +922,7 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getContextMenuMultiItems: function (e) {
-    var items = L.U.PathMixin.getContextMenuMultiItems.call(this, e)
+    const items = L.U.PathMixin.getContextMenuMultiItems.call(this, e)
     items.push({
       text: L._('Merge lines'),
       callback: this.mergeShapes,
@@ -927,34 +932,34 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   toPolygon: function () {
-    var geojson = this.toGeoJSON()
+    const geojson = this.toGeoJSON()
     geojson.geometry.type = 'Polygon'
     geojson.geometry.coordinates = [
       L.Util.flattenCoordinates(geojson.geometry.coordinates),
     ]
-    var polygon = this.datalayer.geojsonToFeatures(geojson)
+    const polygon = this.datalayer.geojsonToFeatures(geojson)
     polygon.edit()
     this.del()
   },
 
   getAdvancedEditActions: function (container) {
     L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    var toPolygon = L.DomUtil.create('a', 'button umap-to-polygon', container)
+    const toPolygon = L.DomUtil.create('a', 'button umap-to-polygon', container)
     toPolygon.href = '#'
     toPolygon.textContent = L._('Transform to polygon')
     L.DomEvent.on(toPolygon, 'click', this.toPolygon, this)
   },
 
   _mergeShapes: function (from, to) {
-    var toLeft = to[0],
-      toRight = to[to.length - 1],
-      fromLeft = from[0],
-      fromRight = from[from.length - 1],
-      l2ldistance = toLeft.distanceTo(fromLeft),
-      l2rdistance = toLeft.distanceTo(fromRight),
-      r2ldistance = toRight.distanceTo(fromLeft),
-      r2rdistance = toRight.distanceTo(fromRight),
-      toMerge
+    const toLeft = to[0]
+    const toRight = to[to.length - 1]
+    const fromLeft = from[0]
+    const fromRight = from[from.length - 1]
+    const l2ldistance = toLeft.distanceTo(fromLeft)
+    const l2rdistance = toLeft.distanceTo(fromRight)
+    const r2ldistance = toRight.distanceTo(fromLeft)
+    const r2rdistance = toRight.distanceTo(fromRight)
+    let toMerge
     if (l2rdistance < Math.min(l2ldistance, r2ldistance, r2rdistance)) {
       toMerge = [from, to]
     } else if (r2ldistance < Math.min(l2ldistance, l2rdistance, r2rdistance)) {
@@ -966,7 +971,7 @@ L.U.Polyline = L.Polyline.extend({
       from.reverse()
       toMerge = [from, to]
     }
-    var a = toMerge[0],
+    const a = toMerge[0],
       b = toMerge[1],
       p1 = this.map.latLngToContainerPoint(a[a.length - 1]),
       p2 = this.map.latLngToContainerPoint(b[0]),
@@ -979,7 +984,7 @@ L.U.Polyline = L.Polyline.extend({
 
   mergeShapes: function () {
     if (!this.isMulti()) return
-    var latlngs = this.getLatLngs()
+    const latlngs = this.getLatLngs()
     if (!latlngs.length) return
     while (latlngs.length > 1) {
       latlngs.splice(0, 2, this._mergeShapes(latlngs[1], latlngs[0]))
@@ -995,7 +1000,7 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getVertexActions: function (e) {
-    var actions = L.U.FeatureMixin.getVertexActions.call(this, e),
+    const actions = L.U.FeatureMixin.getVertexActions.call(this, e),
       index = e.vertex.getIndex()
     if (index === 0 || index === e.vertex.getLastIndex())
       actions.push(L.U.ContinueLineAction)
@@ -1017,7 +1022,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getShapeOptions: function () {
-    var options = L.U.PathMixin.getShapeOptions()
+    const options = L.U.PathMixin.getShapeOptions()
     options.push(
       'properties._umap_options.stroke',
       'properties._umap_options.fill',
@@ -1028,7 +1033,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getInteractionOptions: function () {
-    var options = [
+    const options = [
       [
         'properties._umap_options.interactive',
         {
@@ -1056,12 +1061,12 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getMeasure: function (shape) {
-    var area = L.GeoUtil.geodesicArea(shape || this._defaultShape())
+    const area = L.GeoUtil.geodesicArea(shape || this._defaultShape())
     return L.GeoUtil.readableArea(area, this.map.measureTools.getMeasureUnit())
   },
 
   getContextMenuEditItems: function (e) {
-    var items = L.U.PathMixin.getContextMenuEditItems.call(this, e),
+    const items = L.U.PathMixin.getContextMenuEditItems.call(this, e),
       shape = this.shapeAt(e.latlng)
     // No multi and no holes.
     if (shape && !this.isMulti() && (L.LineUtil.isFlat(shape) || shape.length === 1)) {
@@ -1084,19 +1089,19 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   toPolyline: function () {
-    var geojson = this.toGeoJSON()
+    const geojson = this.toGeoJSON()
     geojson.geometry.type = 'LineString'
     geojson.geometry.coordinates = L.Util.flattenCoordinates(
       geojson.geometry.coordinates
     )
-    var polyline = this.datalayer.geojsonToFeatures(geojson)
+    const polyline = this.datalayer.geojsonToFeatures(geojson)
     polyline.edit()
     this.del()
   },
 
   getAdvancedEditActions: function (container) {
     L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    var toPolyline = L.DomUtil.create('a', 'button umap-to-polyline', container)
+    const toPolyline = L.DomUtil.create('a', 'button umap-to-polyline', container)
     toPolyline.href = '#'
     toPolyline.textContent = L._('Transform to lines')
     L.DomEvent.on(toPolyline, 'click', this.toPolyline, this)
@@ -1112,7 +1117,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getInplaceToolbarActions: function (e) {
-    var items = L.U.PathMixin.getInplaceToolbarActions.call(this, e)
+    const items = L.U.PathMixin.getInplaceToolbarActions.call(this, e)
     items.push(L.U.CreateHoleAction)
     return items
   },

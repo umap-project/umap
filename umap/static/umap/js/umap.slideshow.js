@@ -12,13 +12,16 @@ L.U.Slideshow = L.Class.extend({
     this.setOptions(options)
     this.map = map
     this._id = null
-    var current = null, // current feature
-      self = this
+
+    // current feature
+    let current = null
+
+    const self = this
     try {
       Object.defineProperty(this, 'current', {
         get: function () {
           if (!current) {
-            var datalayer = this.defaultDatalayer()
+            const datalayer = this.defaultDatalayer()
             if (datalayer) current = datalayer.getFeatureByIndex(0)
           }
           return current
@@ -66,11 +69,11 @@ L.U.Slideshow = L.Class.extend({
   },
 
   timeSpinner: function () {
-    var time = parseInt(this.options.delay, 10)
+    const time = parseInt(this.options.delay, 10)
     if (!time) return
-    var css = 'rotation ' + time / 1000 + 's infinite linear',
+    const css = 'rotation ' + time / 1000 + 's infinite linear',
       spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
-    for (var i = 0; i < spinners.length; i++) {
+    for (let i = 0; i < spinners.length; i++) {
       spinners[i].style.animation = css
       spinners[i].style['-webkit-animation'] = css
       spinners[i].style['-moz-animation'] = css
@@ -80,10 +83,11 @@ L.U.Slideshow = L.Class.extend({
 
   resetSpinners: function () {
     // Make that animnation is coordinated with user actions
-    var spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner'),
-      el,
-      newOne
-    for (var i = 0; i < spinners.length; i++) {
+    const spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
+
+    let el
+    let newOne
+    for (let i = 0; i < spinners.length; i++) {
       el = spinners[i]
       newOne = el.cloneNode(true)
       el.parentNode.replaceChild(newOne, el)
@@ -136,7 +140,7 @@ L.U.Slideshow = L.Class.extend({
   },
 
   renderToolbox: function (container) {
-    var box = L.DomUtil.create('ul', 'umap-slideshow-toolbox'),
+    const box = L.DomUtil.create('ul', 'umap-slideshow-toolbox'),
       play = L.DomUtil.create('li', 'play', box),
       stop = L.DomUtil.create('li', 'stop', box),
       prev = L.DomUtil.create('li', 'prev', box),
@@ -146,7 +150,7 @@ L.U.Slideshow = L.Class.extend({
     stop.title = L._('Stop slideshow')
     next.title = L._('Zoom to the next')
     prev.title = L._('Zoom to the previous')
-    var toggle = function () {
+    const toggle = function () {
       if (this._id) this.pause()
       else this.play()
     }
