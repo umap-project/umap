@@ -708,7 +708,7 @@ L.U.Map.include({
       // We do not want an extra message during the map creation
       // to avoid the double notification/alert.
       this.ui.alert({
-        content: L._('The zoom and center have been set.'),
+        content: L._('The zoom and center have been modified.'),
         level: 'info',
       })
     }
