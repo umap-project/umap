@@ -162,3 +162,37 @@ def test_stats_basic(client, map, datalayer, user2):
         "users_active_last_week_count": 1,
         "users_count": 2,
     }
+
+
+@pytest.mark.django_db
+def test_read_only_displays_message_if_enabled(client, settings):
+    settings.UMAP_READONLY = True
+    response = client.get(reverse("home"))
+    assert (
+        "This instance of uMap is currently in read only mode"
+        in response.content.decode()
+    )
+
+
+@pytest.mark.django_db
+def test_read_only_does_not_display_message_if_disabled(client, settings):
+    settings.UMAP_READONLY = False
+    response = client.get(reverse("home"))
+    assert (
+        "This instance of uMap is currently in read only mode"
+        not in response.content.decode()
+    )
+
+
+@pytest.mark.django_db
+def test_read_only_hides_create_buttons_if_enabled(client, settings):
+    settings.UMAP_READONLY = True
+    response = client.get(reverse("home"))
+    assert "Create a map" not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_read_only_shows_create_buttons_if_disabled(client, settings):
+    settings.UMAP_READONLY = False
+    response = client.get(reverse("home"))
+    assert "Create a map" in response.content.decode()

@@ -18,6 +18,22 @@
 {% endblock %}
 
 {% block content %}
+  {% if UMAP_READONLY %}
+    <div class="wrapper demo-instance-warning">
+      <div class="row">
+        <p>
+          {% blocktrans %}This instance of uMap is currently in read only mode, no creation/edit is allowed.{% endblocktrans %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+  {% if UMAP_DEMO_SITE %}
+    <div class="wrapper demo-instance-warning">
+      <div class="row">
+        {% blocktrans with repo_url="https://github.com/umap-project/umap" stable_url="http://umap.openstreetmap.fr" %}This is a demo instance, used for tests and pre-rolling releases. If you need a stable instance, please use <a href="{{ stable_url }}">{{ stable_url }}</a>. You can also host your own instance, it's <a href="{{ repo_url }}">open source</a>!{% endblocktrans %}
+      </div>
+    </div>
+  {% endif %}
   {% block maincontent %}
   {% endblock maincontent %}
 {% endblock content %}

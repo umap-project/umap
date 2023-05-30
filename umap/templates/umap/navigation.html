@@ -24,6 +24,8 @@
   </section>
 
   <section>
-    <a href="{% url 'map_new' %}" class="button">{% trans "Create a map" %}</a>
+    {% if not UMAP_READONLY %}
+      <a href="{% url 'map_new' %}" class="button">{% trans "Create a map" %}</a>
+    {% endif %}
   </section>
 </nav>
