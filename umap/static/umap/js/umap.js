@@ -108,7 +108,7 @@ L.U.Map.include({
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       L.Util.setNullableBooleanFromQueryString(
         this.options,
-        this.HIDDABLE_CONTROLS[i] + 'Control'
+        `${this.HIDDABLE_CONTROLS[i]}Control`
       )
     }
     this.datalayersOnLoad = L.Util.queryString('datalayers')
@@ -359,7 +359,7 @@ L.U.Map.include({
     let name, status, control
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
-      status = this.options[name + 'Control']
+      status = this.options[`${name}Control`]
       if (status === false) continue
       control = this._controls[name]
       control.addTo(this)
@@ -582,7 +582,7 @@ L.U.Map.include({
     } catch (e) {
       this.removeLayer(tilelayer)
       this.ui.alert({
-        content: L._('Error in the tilelayer URL') + ': ' + tilelayer._url,
+        content: `${L._('Error in the tilelayer URL')}: ${tilelayer._url}`,
         level: 'error',
       })
       // Users can put tilelayer URLs by hand, and if they add wrong {variable},
@@ -619,7 +619,7 @@ L.U.Map.include({
       this.removeLayer(overlay)
       console.error(e)
       this.ui.alert({
-        content: L._('Error in the overlay URL') + ': ' + overlay._url,
+        content: `${L._('Error in the overlay URL')}: ${overlay._url}`,
         level: 'error',
       })
     }
@@ -685,13 +685,13 @@ L.U.Map.include({
 
   createDataLayer: function (datalayer) {
     datalayer = datalayer || {
-      name: L._('Layer') + ' ' + (this.datalayers_index.length + 1),
+      name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
     }
     return new L.U.DataLayer(this, datalayer)
   },
 
   getDefaultOption: function (option) {
-    return this.options['default_' + option]
+    return this.options[`default_${option}`]
   },
 
   getOption: function (option) {
@@ -764,7 +764,7 @@ L.U.Map.include({
       'queryString.captionMenus',
     ]
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
-      UIFields.push('queryString.' + this.HIDDABLE_CONTROLS[i] + 'Control')
+      UIFields.push(`queryString.${this.HIDDABLE_CONTROLS[i]}Control`)
     }
     const iframeExporter = new L.U.IframeExporter(this)
     const buildIframeCode = () => {
@@ -1104,7 +1104,7 @@ L.U.Map.include({
         }
       })
       datalayer.renderToolbox(headline)
-      L.DomUtil.add('span', '', headline, datalayer.options.name + ' ')
+      L.DomUtil.add('span', '', headline, `${datalayer.options.name} `)
     })
     const creditsContainer = L.DomUtil.create('div', 'credits-container', container),
       credits = L.DomUtil.createFieldset(creditsContainer, L._('Credits'))
@@ -1122,7 +1122,7 @@ L.U.Map.include({
           'p',
           '',
           credits,
-          L._('Map user content has been published under licence') + ' '
+          `${L._('Map user content has been published under licence')} `
         ),
         link = L.DomUtil.add('a', '', licence, this.options.licence.name)
       link.href = this.options.licence.url
@@ -1135,7 +1135,7 @@ L.U.Map.include({
     const tilelayerCredit = L.DomUtil.create('p', '', credits),
       name = L.DomUtil.create('strong', '', tilelayerCredit),
       attribution = L.DomUtil.create('span', '', tilelayerCredit)
-    name.textContent = this.selected_tilelayer.options.name + ' '
+    name.textContent = `${this.selected_tilelayer.options.name} `
     attribution.innerHTML = this.selected_tilelayer.getAttribution()
     L.DomUtil.create('hr', '', credits)
     const umapCredit = L.DomUtil.create('p', '', credits),
@@ -1440,7 +1440,7 @@ L.U.Map.include({
   _editControls: function (container) {
     let UIFields = []
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
-      UIFields.push('options.' + this.HIDDABLE_CONTROLS[i] + 'Control')
+      UIFields.push(`options.${this.HIDDABLE_CONTROLS[i]}Control`)
     }
     UIFields = UIFields.concat([
       'options.moreControl',
@@ -1598,7 +1598,7 @@ L.U.Map.include({
         'options.tilelayer.url_template',
         {
           handler: 'BlurInput',
-          helpText: L._('Supported scheme') + ': http://{s}.domain.com/{z}/{x}/{y}.png',
+          helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
         },
       ],
@@ -1636,7 +1636,7 @@ L.U.Map.include({
         'options.overlay.url_template',
         {
           handler: 'BlurInput',
-          helpText: L._('Supported scheme') + ': http://{s}.domain.com/{z}/{x}/{y}.png',
+          helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
           helpText: L._('Background overlay url'),
         },
@@ -1894,7 +1894,7 @@ L.U.Map.include({
         'a',
         'umap-about-link',
         container,
-        ' — ' + L._('About')
+        ` — ${L._('About')}`
       )
       about.href = '#'
       L.DomEvent.on(about, 'click', this.displayCaption, this)
@@ -1902,7 +1902,7 @@ L.U.Map.include({
         'a',
         'umap-open-browser-link',
         container,
-        ' | ' + L._('Browse data')
+        ` | ${L._('Browse data')}`
       )
       browser.href = '#'
       L.DomEvent.on(browser, 'click', L.DomEvent.stop).on(
@@ -1916,7 +1916,7 @@ L.U.Map.include({
           'a',
           'umap-open-filter-link',
           container,
-          ' | ' + L._('Select data')
+          ` | ${L._('Select data')}`
         )
         filter.href = '#'
         L.DomEvent.on(filter, 'click', L.DomEvent.stop).on(
@@ -1943,7 +1943,7 @@ L.U.Map.include({
         'umap-main-edit-toolbox with-transition dark',
         this._controlContainer
       ),
-      title = L.DomUtil.add('h3', '', container, L._('Editing') + '&nbsp;'),
+      title = L.DomUtil.add('h3', '', container, `${L._('Editing')}&nbsp;`),
       name = L.DomUtil.create('a', 'umap-click-to-edit', title),
       setName = function () {
         name.textContent = this.getDisplayName()
@@ -1954,7 +1954,7 @@ L.U.Map.include({
     this.help.button(title, 'edit')
     const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
     save.href = '#'
-    save.title = L._('Save current edits') + ' (Ctrl+S)'
+    save.title = `${L._('Save current edits')} (Ctrl+S)`
     save.textContent = L._('Save')
     const cancel = L.DomUtil.create(
       'a',
@@ -2093,27 +2093,27 @@ L.U.Map.include({
       if (this.editEnabled) {
         if (!this.isDirty) {
           items.push({
-            text: L._('Stop editing') + ' (Ctrl+E)',
+            text: `${L._('Stop editing')} (Ctrl+E)`,
             callback: this.disableEdit,
           })
         }
         if (this.options.enableMarkerDraw) {
           items.push({
-            text: L._('Draw a marker') + ' (Ctrl+M)',
+            text: `${L._('Draw a marker')} (Ctrl+M)`,
             callback: this.startMarker,
             context: this,
           })
         }
         if (this.options.enablePolylineDraw) {
           items.push({
-            text: L._('Draw a polygon') + ' (Ctrl+P)',
+            text: `${L._('Draw a polygon')} (Ctrl+P)`,
             callback: this.startPolygon,
             context: this,
           })
         }
         if (this.options.enablePolygonDraw) {
           items.push({
-            text: L._('Draw a line') + ' (Ctrl+L)',
+            text: `${L._('Draw a line')} (Ctrl+L)`,
             callback: this.startPolyline,
             context: this,
           })
@@ -2127,7 +2127,7 @@ L.U.Map.include({
         })
       } else {
         items.push({
-          text: L._('Start editing') + ' (Ctrl+E)',
+          text: `${L._('Start editing')} (Ctrl+E)`,
           callback: this.enableEdit,
         })
       }

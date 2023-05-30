@@ -18,7 +18,7 @@ L.U.Icon = L.DivIcon.extend({
     let url
     if (this.feature && this.feature._getIconUrl(name))
       url = this.feature._getIconUrl(name)
-    else url = this.options[name + 'Url']
+    else url = this.options[`${name}Url`]
     return this.formatUrl(url, this.feature)
   },
 
@@ -147,13 +147,9 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
     if (L.Browser.ielt9) {
       background = color
     } else if (L.Browser.webkit) {
-      background =
-        '-webkit-gradient( radial, 6 38%, 0, 6 38%, 8, from(white), to(' + color + ') )'
+      background = `-webkit-gradient( radial, 6 38%, 0, 6 38%, 8, from(white), to(${color}) )`
     } else {
-      background =
-        'radial-gradient(circle at 6px 38% , white -4px, ' +
-        color +
-        ' 8px) repeat scroll 0 0 transparent'
+      background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
     }
     this.elements.container.style.background = background
   },

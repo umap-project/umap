@@ -55,7 +55,7 @@ L.U.TableEditor = L.Class.extend({
 
   renderRow: function (feature) {
     const builder = new L.U.FormBuilder(feature, this.field_properties, {
-      id: 'umap-feature-properties_' + L.stamp(feature),
+      id: `umap-feature-properties_${L.stamp(feature)}`,
       className: 'trow',
       callback: feature.resetTooltip,
     })
@@ -71,7 +71,7 @@ L.U.TableEditor = L.Class.extend({
     this.field_properties = []
     for (let i = 0; i < this.properties.length; i++) {
       this.field_properties.push([
-        'properties.' + this.properties[i],
+        `properties.${this.properties[i]}`,
         { wrapper: 'div', wrapperClass: 'tcell' },
       ])
     }

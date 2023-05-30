@@ -15,7 +15,7 @@ L.U.ImportAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'upload-data dark',
-    tooltip: L._('Import data') + ' (Ctrl+I)',
+    tooltip: `${L._('Import data')} (Ctrl+I)`,
   },
 
   addHooks: function () {
@@ -320,7 +320,7 @@ L.U.EditControl = L.Control.extend({
       ),
       edit = L.DomUtil.create('a', '', container)
     edit.href = '#'
-    edit.title = L._('Enable editing') + ' (Ctrl+E)'
+    edit.title = `${L._('Enable editing')} (Ctrl+E)`
 
     L.DomEvent.addListener(edit, 'click', L.DomEvent.stop).addListener(
       edit,
@@ -542,7 +542,7 @@ L.U.DataLayersControl = L.Control.extend({
       datalayer.options.name
     )
 
-    datalayerLi.id = 'browse_data_toggle_' + L.stamp(datalayer)
+    datalayerLi.id = `browse_data_toggle_${L.stamp(datalayer)}`
     L.DomUtil.classIf(datalayerLi, 'off', !datalayer.isVisible())
 
     title.textContent = datalayer.options.name
@@ -626,11 +626,11 @@ L.U.DataLayer.include({
   },
 
   getHidableElements: function () {
-    return document.querySelectorAll('.' + this.getHidableClass())
+    return document.querySelectorAll(`.${this.getHidableClass()}`)
   },
 
   getHidableClass: function () {
-    return 'show_with_datalayer_' + L.stamp(this)
+    return `show_with_datalayer_${L.stamp(this)}`
   },
 
   propagateRemote: function () {
@@ -689,7 +689,7 @@ L.U.Map.include({
     filter.value = this.options.filter || ''
 
     const addFeature = (feature) => {
-      const feature_li = L.DomUtil.create('li', feature.getClassName() + ' feature'),
+      const feature_li = L.DomUtil.create('li', `${feature.getClassName()} feature`),
         zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
         edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
         color = L.DomUtil.create('i', 'feature-color', feature_li),
@@ -702,7 +702,7 @@ L.U.Map.include({
       title.textContent = feature.getDisplayName() || '—'
       color.style.backgroundColor = feature.getOption('color')
       if (symbol) {
-        color.style.backgroundImage = 'url(' + symbol + ')'
+        color.style.backgroundImage = `url(${symbol})`
       }
       L.DomEvent.on(
         zoom_to,
@@ -740,7 +740,7 @@ L.U.Map.include({
           featuresContainer
         ),
         headline = L.DomUtil.create('h5', '', container)
-      container.id = 'browse_data_datalayer_' + datalayer.umap_id
+      container.id = `browse_data_datalayer_${datalayer.umap_id}`
       datalayer.renderToolbox(headline)
       L.DomUtil.add('span', '', headline, datalayer.options.name)
       const ul = L.DomUtil.create('ul', '', container)
@@ -1009,18 +1009,18 @@ L.U.AttributionControl = L.Control.Attribution.extend({
         'span',
         '',
         this._container,
-        ' — ' + L.Util.toHTML(this._map.options.shortCredit)
+        ` — ${L.Util.toHTML(this._map.options.shortCredit)}`
       )
     }
     if (this._map.options.captionMenus) {
-      const link = L.DomUtil.add('a', '', this._container, ' — ' + L._('About'))
+      const link = L.DomUtil.add('a', '', this._container, ` — ${L._('About')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
         .on(link, 'click', this._map.displayCaption, this._map)
         .on(link, 'dblclick', L.DomEvent.stop)
     }
     if (window.top === window.self && this._map.options.captionMenus) {
       // We are not in iframe mode
-      const home = L.DomUtil.add('a', '', this._container, ' — ' + L._('Home'))
+      const home = L.DomUtil.add('a', '', this._container, ` — ${L._('Home')}`)
       home.href = '/'
     }
   },
@@ -1035,7 +1035,7 @@ L.U.StarControl = L.Control.extend({
     const status = map.options.starred ? ' starred' : ''
     const container = L.DomUtil.create(
         'div',
-        'leaflet-control-star umap-control' + status
+        `leaflet-control-star umap-control${status}`
       ),
       link = L.DomUtil.create('a', '', container)
     link.href = '#'
@@ -1254,21 +1254,14 @@ L.U.IframeExporter = L.Evented.extend({
       delete this.queryString.datalayers
     }
     const currentView = this.options.currentView ? window.location.hash : ''
-    return this.baseUrl + '?' + L.Util.buildQueryString(this.queryString) + currentView
+    return `${this.baseUrl}?${L.Util.buildQueryString(this.queryString)}${currentView}`
   },
 
   build: function () {
     const iframeUrl = this.buildUrl()
-    const code =
-      '<iframe width="' +
-      this.dimensions.width +
-      '" height="' +
-      this.dimensions.height +
-      '" frameborder="0" allowfullscreen allow="geolocation" src="' +
-      iframeUrl +
-      '"></iframe>'
+    const code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
-      code += '<p><a href="' + this.baseUrl + '">' + L._('See full screen') + '</a></p>'
+      code += `<p><a href="${this.baseUrl}">${L._('See full screen')}</a></p>`
     }
     return code
   },

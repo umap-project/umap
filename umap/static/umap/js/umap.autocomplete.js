@@ -61,10 +61,10 @@ L.U.AutoComplete = L.Class.extend({
   resizeContainer: function () {
     const l = this.getLeft(this.input)
     const t = this.getTop(this.input) + this.input.offsetHeight
-    this.container.style.left = l + 'px'
-    this.container.style.top = t + 'px'
+    this.container.style.left = `${l}px`
+    this.container.style.top = `${t}px`
     const width = this.options.width ? this.options.width : this.input.offsetWidth - 2
-    this.container.style.width = width + 'px'
+    this.container.style.width = `${width}px`
   },
 
   onKeyDown: function (e) {
@@ -164,7 +164,7 @@ L.U.AutoComplete = L.Class.extend({
       this.clear()
       return
     }
-    if (val + '' === this.CACHE + '') return
+    if (`${val}` === `${this.CACHE}`) return
     else this.CACHE = val
     this._do_search(
       val,
@@ -275,7 +275,7 @@ L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
 
   _do_search: function (val, callback, context) {
     val = val.toLowerCase()
-    this.xhr.get('/agnocomplete/AutocompleteUser/?q=' + encodeURIComponent(val), {
+    this.xhr.get(`/agnocomplete/AutocompleteUser/?q=${encodeURIComponent(val)}`, {
       callback: callback,
       context: context || this,
     })
