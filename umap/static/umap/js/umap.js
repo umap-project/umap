@@ -732,7 +732,10 @@ L.U.Map.include({
     var container = L.DomUtil.create('div', 'umap-share'),
       embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map')),
       iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container),
+      urlTitle = L.DomUtil.add('h4', '', container, L._('Direct link')),
+      exportUrl = L.DomUtil.create('input', 'umap-share-url', container),
       option
+    exportUrl.type = 'text'
     var UIFields = [
       ['dimensions.width', { handler: 'Input', label: L._('width') }],
       ['dimensions.height', { handler: 'Input', label: L._('height') }],
@@ -766,6 +769,7 @@ L.U.Map.include({
     var iframeExporter = new L.U.IframeExporter(this)
     var buildIframeCode = () => {
       iframe.innerHTML = iframeExporter.build()
+      exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
     }
     buildIframeCode()
     var builder = new L.U.FormBuilder(iframeExporter, UIFields, {
@@ -773,7 +777,7 @@ L.U.Map.include({
     })
     var iframeOptions = L.DomUtil.createFieldset(
       container,
-      L._('Iframe export options')
+      L._('Export options')
     )
     iframeOptions.appendChild(builder.build())
     if (this.options.shortUrl) {
