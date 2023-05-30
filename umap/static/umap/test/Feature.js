@@ -2,8 +2,7 @@ describe('L.U.FeatureMixin', function () {
   before(function () {
     this.server = sinon.fakeServer.create()
     this.server.respondWith(
-      'GET',
-      '/datalayer/62/',
+      /\/datalayer\/62\/\?.*/,
       JSON.stringify(RESPONSES.datalayer62_GET)
     )
     this.map = initMap({ umap_id: 99 })

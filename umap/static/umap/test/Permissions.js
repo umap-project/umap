@@ -4,8 +4,7 @@ describe('L.Permissions', function () {
   before(function () {
     this.server = sinon.fakeServer.create()
     this.server.respondWith(
-      'GET',
-      '/datalayer/62/',
+      /\/datalayer\/62\/\?.*/,
       JSON.stringify(RESPONSES.datalayer62_GET)
     )
     this.map = initMap({ umap_id: 99 })
@@ -49,7 +48,7 @@ describe('L.Permissions', function () {
     var button
 
     it('should only allow editors', function () {
-      this.map.permissions.options.owner = { id: 1, url: '/url', name: 'jojo' }
+      this.map.options.permissions.owner = { id: 1, url: '/url', name: 'jojo' }
       button = qs('a.update-map-permissions')
       happen.click(button)
       expect(qs('select[name="edit_status"]')).not.to.be.ok
@@ -63,7 +62,7 @@ describe('L.Permissions', function () {
     var button
 
     it('should allow everything', function () {
-      this.map.permissions.options.owner = { id: 1, url: '/url', name: 'jojo' }
+      this.map.options.permissions.owner = { id: 1, url: '/url', name: 'jojo' }
       this.map.options.user = { id: 1, url: '/url', name: 'jojo' }
       button = qs('a.update-map-permissions')
       happen.click(button)

@@ -1,7 +1,10 @@
 describe('L.U.Map', function () {
   before(function () {
     this.server = sinon.fakeServer.create()
-    this.server.respondWith('/datalayer/62/', JSON.stringify(RESPONSES.datalayer62_GET))
+    this.server.respondWith(
+      /\/datalayer\/62\/\?.*/,
+      JSON.stringify(RESPONSES.datalayer62_GET)
+    )
     this.options = {
       umap_id: 99,
     }

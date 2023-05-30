@@ -255,19 +255,6 @@ var RESPONSES = {
   },
 }
 
-sinon.fakeServer.getRequest = function (path, method) {
-  var request
-  for (var i = 0, l = this.requests.length; i < l; i++) {
-    request = this.requests[i]
-    // In case of a form submit, the request start with file://
-    if (request.url.indexOf(path) !== -1) {
-      if (!method || request.method === method) {
-        return request
-      }
-    }
-  }
-}
-
 sinon.fakeServer.flush = function () {
   this.responses = []
 }
