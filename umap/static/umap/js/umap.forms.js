@@ -12,7 +12,7 @@ L.FormBuilder.Element.include({
       className +=
         this.get(true) === undefined ? ' inheritable undefined' : ' inheritable '
     }
-    className += ' umap-field-' + this.name
+    className += ` umap-field-${this.name}`
     this.wrapper = L.DomUtil.create('div', className, this.form)
     this.header = L.DomUtil.create('div', 'header', this.wrapper)
     if (this.options.inheritable) {
@@ -567,12 +567,12 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   addIconPreview: function (pictogram) {
     const baseClass = 'umap-icon-choice',
       value = pictogram.src,
-      className = value === this.value() ? baseClass + ' selected' : baseClass,
+      className = value === this.value() ? `${baseClass} selected` : baseClass,
       container = L.DomUtil.create('div', className, this.pictogramsContainer),
       img = L.DomUtil.create('img', '', container)
     img.src = value
     if (pictogram.name && pictogram.attribution) {
-      img.title = pictogram.name + ' — © ' + pictogram.attribution
+      img.title = `${pictogram.name} — © ${pictogram.attribution}`
     }
     L.DomEvent.on(
       container,
@@ -668,7 +668,7 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
       this.label = L.DomUtil.create('label', '', this.input.parentNode)
     else this.input.parentNode.appendChild(this.label)
     L.DomUtil.addClass(this.input.parentNode, 'with-switch')
-    const id = (this.builder.options.id || Date.now()) + '.' + this.name
+    const id = `${this.builder.options.id || Date.now()}.${this.name}`
     this.label.setAttribute('for', id)
     L.DomUtil.addClass(this.input, 'switch')
     this.input.id = id
@@ -686,11 +686,9 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
 
   fetch: function () {
     let value = (this.backup = this.toHTML())
-    if (!this.container.querySelector('input[type="radio"][value="' + value + '"]'))
+    if (!this.container.querySelector(`input[type="radio"][value="${value}"]`))
       value = this.default
-    this.container.querySelector(
-      'input[type="radio"][value="' + value + '"]'
-    ).checked = true
+    this.container.querySelector(`input[type="radio"][value="${value}"]`).checked = true
   },
 
   value: function () {
@@ -706,7 +704,7 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
     const choices = this.getChoices()
     this.container = L.DomUtil.create(
       'div',
-      this.className + ' by' + choices.length,
+      `${this.className} by${choices.length}`,
       this.parentNode
     )
     for (let i = 0; i < choices.length; i++) {
@@ -721,7 +719,7 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
     input.type = 'radio'
     input.name = this.name
     input.value = value
-    const id = Date.now() + '.' + this.name + '.' + counter
+    const id = `${Date.now()}.${this.name}.${counter}`
     label.setAttribute('for', id)
     input.id = id
     L.DomEvent.on(input, 'change', this.sync, this)

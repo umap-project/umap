@@ -50,12 +50,9 @@ L.U.FeatureMixin = {
   getPermalink: function () {
     const slug = this.getSlug()
     if (slug)
-      return (
-        L.Util.getBaseUrl() +
-        '?' +
-        L.Util.buildQueryString({ feature: slug }) +
+      return `${L.Util.getBaseUrl()}?${L.Util.buildQueryString({ feature: slug })}${
         window.location.hash
-      )
+      }`
   },
 
   view: function (e) {
@@ -105,7 +102,7 @@ L.U.FeatureMixin = {
       if (L.Util.indexOf(['name', 'description'], property) !== -1) {
         continue
       }
-      properties.push(['properties.' + property, { label: property }])
+      properties.push([`properties.${property}`, { label: property }])
     }
     // We always want name and description for now (properties management to come)
     properties.unshift('properties.description')
@@ -570,7 +567,7 @@ L.U.Marker = L.Marker.extend({
 
   _getIconUrl: function (name) {
     if (typeof name === 'undefined') name = 'icon'
-    return this.getOption(name + 'Url')
+    return this.getOption(`${name}Url`)
   },
 
   getIconClass: function () {

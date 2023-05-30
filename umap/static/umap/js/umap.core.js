@@ -70,7 +70,7 @@ L.Util.toHTML = (r) => {
   r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
   r = r.replace(/^\* (.*)/gm, '<ul><li>$1</li></ul>')
   for (ii = 0; ii < 3; ii++)
-    r = r.replace(new RegExp('</ul>' + newline + '<ul>', 'g'), newline)
+    r = r.replace(new RegExp(`</ul>${newline}<ul>`, 'g'), newline)
 
   // links
   r = r.replace(/(\[\[http)/g, '[[h_t_t_p') // Escape for avoiding clash between [[http://xxx]] and http://xxx
@@ -107,7 +107,7 @@ L.Util.toHTML = (r) => {
   r = r.replace(/(h_t_t_p)/g, 'http')
 
   // Preserver line breaks
-  if (newline) r = r.replace(new RegExp(newline + '(?=[^]+)', 'g'), '<br>' + newline)
+  if (newline) r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)
 
   return r
 }
@@ -205,12 +205,12 @@ L.Util.flattenCoordinates = (coords) => {
 L.Util.buildQueryString = (params) => {
   const query_string = []
   for (const key in params) {
-    query_string.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    query_string.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
   }
   return query_string.join('&')
 }
 
-L.Util.getBaseUrl = () => '//' + window.location.host + window.location.pathname
+L.Util.getBaseUrl = () => `//${window.location.host}${window.location.pathname}`
 
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
@@ -415,9 +415,9 @@ L.U.Help = L.Class.extend({
     L.DomUtil.add('h3', '', container, 'GeojSON')
     L.DomUtil.add('p', '', container, L._('All properties are imported.'))
     L.DomUtil.add('h3', '', container, 'GPX')
-    L.DomUtil.add('p', '', container, L._('Properties imported:') + 'name, desc')
+    L.DomUtil.add('p', '', container, `${L._('Properties imported:')}name, desc`)
     L.DomUtil.add('h3', '', container, 'KML')
-    L.DomUtil.add('p', '', container, L._('Properties imported:') + 'name, description')
+    L.DomUtil.add('p', '', container, `${L._('Properties imported:')}name, description`)
     L.DomUtil.add('h3', '', container, 'CSV')
     L.DomUtil.add(
       'p',
@@ -493,9 +493,9 @@ L.U.Help = L.Class.extend({
     return container
   },
 
-  formatURL:
-    L._('Supported variables that will be dynamically replaced') +
-    ': {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}...',
+  formatURL: `${L._(
+    'Supported variables that will be dynamically replaced'
+  )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}...`,
   formatIconSymbol: L._(
     'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/{name}.png", the {name} variable will be replaced by the "name" value of each marker.'
   ),

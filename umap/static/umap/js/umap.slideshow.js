@@ -71,7 +71,7 @@ L.U.Slideshow = L.Class.extend({
   timeSpinner: function () {
     const time = parseInt(this.options.delay, 10)
     if (!time) return
-    const css = 'rotation ' + time / 1000 + 's infinite linear',
+    const css = `rotation ${time / 1000}s infinite linear`,
       spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
     for (let i = 0; i < spinners.length; i++) {
       spinners[i].style.animation = css

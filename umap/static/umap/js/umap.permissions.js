@@ -182,7 +182,7 @@ L.U.MapPermissions = L.Class.extend({
           element,
           'umap-map-owner',
           container,
-          ' ' + L._('by') + ' '
+          ` ${L._('by')} `
         ),
         owner = L.DomUtil.create('a')
       owner.href = this.options.owner.url

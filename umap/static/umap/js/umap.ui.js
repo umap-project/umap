@@ -185,13 +185,13 @@ L.U.UI = L.Evented.extend({
   },
 
   setTooltipPosition: function (coords) {
-    if (coords.left) this._tooltip.style.left = coords.left + 'px'
+    if (coords.left) this._tooltip.style.left = `${coords.left}px`
     else this._tooltip.style.left = 'initial'
-    if (coords.right) this._tooltip.style.right = coords.right + 'px'
+    if (coords.right) this._tooltip.style.right = `${coords.right}px`
     else this._tooltip.style.right = 'initial'
-    if (coords.top) this._tooltip.style.top = coords.top + 'px'
+    if (coords.top) this._tooltip.style.top = `${coords.top}px`
     else this._tooltip.style.top = 'initial'
-    if (coords.bottom) this._tooltip.style.bottom = coords.bottom + 'px'
+    if (coords.bottom) this._tooltip.style.bottom = `${coords.bottom}px`
     else this._tooltip.style.bottom = 'initial'
   },
 

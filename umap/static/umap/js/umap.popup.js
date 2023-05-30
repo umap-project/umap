@@ -176,7 +176,7 @@ L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
 L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
   formatRow: function (key, value) {
     if (value.indexOf('http') === 0) {
-      value = '<a href="' + value + '" target="_blank">' + value + '</a>'
+      value = `<a href="${value}" target="_blank">${value}</a>`
     }
     return value
   },
@@ -215,8 +215,8 @@ L.U.PopupTemplate.GeoRSSImage = L.U.PopupTemplate.BaseWithTitle.extend({
       img.src = this.feature.properties.img
       // Sadly, we are unable to override this from JS the clean way
       // See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847
-      img.style.maxWidth = this.options.maxWidth + 'px'
-      img.style.maxHeight = this.options.maxWidth + 'px'
+      img.style.maxWidth = `${this.options.maxWidth}px`
+      img.style.maxHeight = `${this.options.maxWidth}px`
       this.onElementLoaded(img)
     }
     return container

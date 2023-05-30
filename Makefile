@@ -61,6 +61,7 @@ pretty: ## Apply PrettierJS to all JS files (or specified `filepath`)
 lebab: ## Convert JS `filepath` to modern syntax with Lebab, then prettify
 	./node_modules/lebab/bin/index.js --replace ${filepath} --transform arrow,arrow-return
 	./node_modules/lebab/bin/index.js --replace ${filepath} --transform let
+	./node_modules/lebab/bin/index.js --replace ${filepath} --transform template
 	$(MAKE) pretty filepath=${filepath}
 
 lebab-all: $(jsdir)* ## Convert all JS files to modern syntax with Lebab + prettify

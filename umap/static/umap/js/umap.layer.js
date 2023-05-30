@@ -188,7 +188,7 @@ L.U.DataLayer = L.Evented.extend({
     this._propertiesIndex = []
 
     this.parentPane = this.map.getPane('overlayPane')
-    this.pane = this.map.createPane('datalayer' + L.stamp(this), this.parentPane)
+    this.pane = this.map.createPane(`datalayer${L.stamp(this)}`, this.parentPane)
     this.pane.dataset.id = L.stamp(this)
     this.renderer = L.svg({ pane: this.pane })
 
@@ -441,7 +441,7 @@ L.U.DataLayer = L.Evented.extend({
     })
 
     // No browser cache for owners/editors.
-    if (this.map.options.allowEdit) url = url + '?' + Date.now()
+    if (this.map.options.allowEdit) url = `${url}?${Date.now()}`
     return url
   },
 
@@ -559,7 +559,7 @@ L.U.DataLayer = L.Evented.extend({
         const gj = JSON.parse(c)
         callback(gj)
       } catch (err) {
-        this.map.ui.alert({ content: 'Invalid JSON file: ' + err })
+        this.map.ui.alert({ content: `Invalid JSON file: ${err}` })
         return
       }
     }
@@ -974,8 +974,9 @@ L.U.DataLayer = L.Evented.extend({
   buildVersionsFieldset: function (container) {
     const appendVersion = function (data) {
       const date = new Date(parseInt(data.at, 10))
-      const content =
-        date.toLocaleDateString(L.locale) + ' (' + parseInt(data.size) / 1000 + 'Kb)'
+      const content = `${date.toLocaleDateString(L.locale)} (${
+        parseInt(data.size) / 1000
+      }Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
       const a = L.DomUtil.create('a', '', el)
       L.DomUtil.add('span', '', el, content)
