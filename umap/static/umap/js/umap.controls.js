@@ -1231,7 +1231,7 @@ L.U.IframeExporter = L.Evented.extend({
     return this.map
   },
 
-  build: function () {
+  buildUrl: function () {
     var datalayers = []
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
@@ -1246,17 +1246,20 @@ L.U.IframeExporter = L.Evented.extend({
     } else {
       delete this.queryString.datalayers
     }
-    var currentView = this.options.currentView ? window.location.hash : '',
-      iframeUrl =
-        this.baseUrl + '?' + L.Util.buildQueryString(this.queryString) + currentView,
-      code =
-        '<iframe width="' +
-        this.dimensions.width +
-        '" height="' +
-        this.dimensions.height +
-        '" frameborder="0" allowfullscreen allow="geolocation" src="' +
-        iframeUrl +
-        '"></iframe>'
+    var currentView = this.options.currentView ? window.location.hash : ''
+    return this.baseUrl + '?' + L.Util.buildQueryString(this.queryString) + currentView
+  },
+
+  build: function () {
+    var iframeUrl = this.buildUrl()
+    var code =
+      '<iframe width="' +
+      this.dimensions.width +
+      '" height="' +
+      this.dimensions.height +
+      '" frameborder="0" allowfullscreen allow="geolocation" src="' +
+      iframeUrl +
+      '"></iframe>'
     if (this.options.includeFullScreenLink) {
       code += '<p><a href="' + this.baseUrl + '">' + L._('See full screen') + '</a></p>'
     }
