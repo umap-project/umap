@@ -42,6 +42,7 @@ vendors:
 	mkdir -p umap/static/umap/vendors/togpx/ && cp -r node_modules/togpx/togpx.js umap/static/umap/vendors/togpx/
 	mkdir -p umap/static/umap/vendors/tokml && cp -r node_modules/tokml/tokml.js umap/static/umap/vendors/tokml
 	mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/{dist/L.Control.Locate.css,src/L.Control.Locate.js} umap/static/umap/vendors/locatecontrol/
+	mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.js umap/static/umap/vendors/dompurify/
 installjs:
 	npm install
 testjsfx:

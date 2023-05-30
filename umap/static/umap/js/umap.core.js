@@ -44,7 +44,28 @@ L.Util.setNullableBooleanFromQueryString = (options, name) => {
 }
 L.Util.escapeHTML = (s) => {
   s = s ? s.toString() : ''
-  return s.replace(/</gm, '&lt;')
+  s = DOMPurify.sanitize(s, {
+    USE_PROFILES: { html: true },
+    ADD_TAGS: ['iframe'],
+    ALLOWED_TAGS: [
+      'h3',
+      'h4',
+      'h5',
+      'hr',
+      'strong',
+      'em',
+      'ul',
+      'li',
+      'a',
+      'div',
+      'iframe',
+      'img',
+      'br',
+    ],
+    ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    ALLOWED_ATTR: ['href', 'src', 'width', 'height'],
+  })
+  return s
 }
 L.Util.toHTML = (r) => {
   if (!r) return ''
@@ -52,9 +73,6 @@ L.Util.toHTML = (r) => {
 
   // detect newline format
   const newline = r.indexOf('\r\n') != -1 ? '\r\n' : r.indexOf('\n') != -1 ? '\n' : ''
-
-  // Escape tags
-  r = r.replace(/</gm, '&lt;')
 
   // headings and hr
   r = r.replace(/^### (.*)/gm, '<h5>$1</h5>')
@@ -108,6 +126,8 @@ L.Util.toHTML = (r) => {
 
   // Preserver line breaks
   if (newline) r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)
+
+  r = L.Util.escapeHTML(r)
 
   return r
 }
