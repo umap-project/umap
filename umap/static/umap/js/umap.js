@@ -1339,7 +1339,7 @@ L.U.Map.include({
         let duration = 3000,
           alert = { content: L._('Map has been saved!'), level: 'info' }
         if (!this.options.umap_id) {
-          alert.duration = 100000 // we want a longer message at map creation (TODO UGLY)
+          alert.duration = Infinity
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
           if (data.permissions && data.permissions.anonymous_edit_url) {

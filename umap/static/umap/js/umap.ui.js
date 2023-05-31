@@ -124,10 +124,12 @@ L.U.UI = L.Evented.extend({
           )
       }
     }
-    self.ALERT_ID = timeoutID = window.setTimeout(
-      L.bind(close, this),
-      e.duration || 3000
-    )
+    if (e.duration !== Infinity) {
+      this.ALERT_ID = timeoutID = window.setTimeout(
+        L.bind(close, this),
+        e.duration || 3000
+      )
+    }
   },
 
   tooltip: function (e) {
