@@ -1,7 +1,6 @@
 import sys
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
 
 from umap.models import Map
 
@@ -25,4 +24,4 @@ class Command(BaseCommand):
             self.abort('Map with pk {} not found'.format(pk))
         if map_.owner:
             self.abort('Map is not anonymous (owner: {})'.format(map_.owner))
-        print(settings.SITE_URL + map_.get_anonymous_edit_url())
+        print(map_.get_anonymous_edit_url())

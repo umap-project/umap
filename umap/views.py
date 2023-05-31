@@ -466,12 +466,8 @@ class PermissionsMixin:
                 for editor in self.object.editors.all()
             ]
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
-            permissions["anonymous_edit_url"] = self.get_anonymous_edit_url()
+            permissions["anonymous_edit_url"] = self.object.get_anonymous_edit_url()
         return permissions
-
-    def get_anonymous_edit_url(self):
-        anonymous_url = self.object.get_anonymous_edit_url()
-        return settings.SITE_URL + anonymous_url
 
 
 class MapView(MapDetailMixin, PermissionsMixin, DetailView):
@@ -541,7 +537,7 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.owner = self.request.user
         self.object = form.save()
-        anonymous_url = self.get_anonymous_edit_url()
+        anonymous_url = self.object.get_anonymous_edit_url()
         if not self.request.user.is_authenticated:
             msg = _(
                 "Your map has been created! If you want to edit this map from "
@@ -676,7 +672,7 @@ class MapClone(PermissionsMixin, View):
             msg = _(
                 "Your map has been cloned! If you want to edit this map from "
                 "another computer, please use this link: %(anonymous_url)s"
-                % {"anonymous_url": self.get_anonymous_edit_url()}
+                % {"anonymous_url": self.object.get_anonymous_edit_url()}
             )
         else:
             msg = _("Congratulations, your map has been cloned!")
