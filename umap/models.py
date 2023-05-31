@@ -12,6 +12,52 @@ from django.core.files.base import File
 from .managers import PublicManager
 
 
+class PermissionsModel(models.Model):
+    ANONYMOUS = 1
+    EDITORS = 2
+    OWNER = 3
+    PUBLIC = 1
+    OPEN = 2
+    PRIVATE = 3
+    BLOCKED = 9
+    EDIT_STATUS = (
+        (ANONYMOUS, _("Everyone can edit")),
+        (EDITORS, _("Only editors can edit")),
+        (OWNER, _("Only owner can edit")),
+    )
+    SHARE_STATUS = (
+        (PUBLIC, _("everyone (public)")),
+        (OPEN, _("anyone with link")),
+        (PRIVATE, _("editors only")),
+        (BLOCKED, _("blocked")),
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        verbose_name=_("owner"),
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_owner_related",
+        related_query_name="%(app_label)s_%(class)ss",
+    )
+    editors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        verbose_name=_("editors"),
+        related_name="%(app_label)s_%(class)s_editors_related",
+        related_query_name="%(app_label)s_%(class)ss",
+    )
+    edit_status = models.SmallIntegerField(
+        choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status")
+    )
+    share_status = models.SmallIntegerField(
+        choices=SHARE_STATUS, default=PUBLIC, verbose_name=_("share status")
+    )
+
+    class Meta:
+        abstract = True
+
+
 class NamedModel(models.Model):
     name = models.CharField(max_length=200, verbose_name=_("name"))
 
@@ -94,29 +140,11 @@ class TileLayer(NamedModel):
         ordering = ("rank", "name")
 
 
-class Map(NamedModel):
+class Map(NamedModel, PermissionsModel):
     """
     A single thematical map.
     """
 
-    ANONYMOUS = 1
-    EDITORS = 2
-    OWNER = 3
-    PUBLIC = 1
-    OPEN = 2
-    PRIVATE = 3
-    BLOCKED = 9
-    EDIT_STATUS = (
-        (ANONYMOUS, _("Everyone can edit")),
-        (EDITORS, _("Only editors can edit")),
-        (OWNER, _("Only owner can edit")),
-    )
-    SHARE_STATUS = (
-        (PUBLIC, _("everyone (public)")),
-        (OPEN, _("anyone with link")),
-        (PRIVATE, _("editors only")),
-        (BLOCKED, _("blocked")),
-    )
     slug = models.SlugField(db_index=True)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     center = models.PointField(geography=True, verbose_name=_("center"))
@@ -132,23 +160,6 @@ class Map(NamedModel):
         default=get_default_licence,
     )
     modified_at = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        blank=True,
-        null=True,
-        related_name="owned_maps",
-        verbose_name=_("owner"),
-        on_delete=models.PROTECT,
-    )
-    editors = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
-    )
-    edit_status = models.SmallIntegerField(
-        choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status")
-    )
-    share_status = models.SmallIntegerField(
-        choices=SHARE_STATUS, default=PUBLIC, verbose_name=_("share status")
-    )
     settings = models.JSONField(
         blank=True, null=True, verbose_name=_("settings"), default=dict
     )
@@ -261,7 +272,7 @@ def upload_to(instance, filename):
     return os.path.join(instance.storage_root(), name)
 
 
-class DataLayer(NamedModel):
+class DataLayer(NamedModel, PermissionsModel):
     """
     Layer to store Features in.
     """
