@@ -748,6 +748,10 @@ input[type=hidden].blur + .button {
 .umap-alert .error .umap-action:hover {
     color: #fff;
 }
+.umap-alert input {
+    padding: 5px;
+    border-radius: 4px;
+}
 
 /* *********** */
 /*   Tooltip   */

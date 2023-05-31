@@ -1345,10 +1345,9 @@ L.U.Map.include({
           if (data.permissions && data.permissions.anonymous_edit_url) {
             alert.actions = [
               {
-                label: L._('Send me edit link by email'),
-                callback: function () {
-                  this.sendEditLink()
-                },
+                label: L._('Send me the link'),
+                input: L._('Email'),
+                callback: this.sendEditLink,
                 callbackContext: this,
               },
             ]
@@ -1374,8 +1373,16 @@ L.U.Map.include({
   },
 
   sendEditLink: function () {
-    var url = L.Util.template(this.options.urls.map_send_edit_link, {
-      map_id: this.options.umap_id,
+    const url = L.Util.template(this.options.urls.map_send_edit_link, {
+        map_id: this.options.umap_id,
+      }),
+      input = this.ui._alert.querySelector('input'),
+      email = input.value
+
+    const formData = new FormData()
+    formData.append('email', email)
+    this.post(url, {
+      data: formData,
     })
   },
 

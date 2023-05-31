@@ -12,6 +12,7 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
@@ -33,7 +34,7 @@ from django.utils.translation import to_locale
 from django.views.generic import DetailView, TemplateView, View
 from django.views.generic.base import RedirectView
 from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.list import ListView
 
 from .forms import (
@@ -44,6 +45,7 @@ from .forms import (
     DataLayerForm,
     FlatErrorList,
     MapSettingsForm,
+    SendLinkForm,
     UpdateMapPermissionsForm,
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
@@ -618,26 +620,34 @@ class AttachAnonymousMap(View):
         return simple_json_response()
 
 
-class SendEditLink(FormLessEditMixin, PermissionsMixin, UpdateView):
-    model = Map
-    pk_url_kwarg = 'map_id'
+class SendEditLink(FormLessEditMixin, FormView):
+    form_class = SendLinkForm
 
-    def form_valid(self, form):
-        if (self.object.owner
-           or not self.object.is_anonymous_owner(self.request)
-           or not self.object.can_edit(self.request.user, self.request)):
+    def post(self, form, **kwargs):
+        self.object = kwargs["map_inst"]
+        if (
+            self.object.owner
+            or not self.object.is_anonymous_owner(self.request)
+            or not self.object.can_edit(self.request.user, self.request)
+        ):
             return HttpResponseForbidden()
-        email = form.cleaned_data["email"]
-        from django.core.mail import send_mail
+        form = self.get_form()
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+        else:
+            return HttpResponseBadRequest("Invalid")
+        link = self.object.get_anonymous_edit_url()
 
         send_mail(
-            _('Your secret edit link'),
-            _('Here is your secret edit link: %(link)s' % {"link": link}),
+            _("Your secret edit link"),
+            _("Here is your secret edit link: %(link)s" % {"link": link}),
             settings.FROM_EMAIL,
             [email],
             fail_silently=False,
         )
-        return simple_json_response(info=_("Email sent to %(email)s" % {"email": email}))
+        return simple_json_response(
+            info=_("Email sent to %(email)s" % {"email": email})
+        )
 
 
 class MapDelete(DeleteView):

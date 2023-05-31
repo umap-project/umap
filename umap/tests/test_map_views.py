@@ -2,9 +2,10 @@ import json
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.urls import reverse
-
 from django.core.signing import Signer
+
 from umap.models import DataLayer, Map, Star
 
 from .base import login_required
@@ -568,3 +569,32 @@ def test_user_can_see_their_star(client, map, user):
     response = client.get(url)
     assert response.status_code == 200
     assert map.name in response.content.decode()
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_cannot_send_link_on_owned_map(client, map):
+    assert len(mail.outbox) == 0
+    url = reverse("map_send_edit_link", args=(map.pk,))
+    resp = client.post(url, {"email": "foo@bar.org"})
+    assert resp.status_code == 200
+    assert json.loads(resp.content.decode()) == {"login_required": "/en/login/"}
+    assert len(mail.outbox) == 0
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_cannot_send_link_on_anonymous_map_without_cookie(client, anonymap):
+    assert len(mail.outbox) == 0
+    url = reverse("map_send_edit_link", args=(anonymap.pk,))
+    resp = client.post(url, {"email": "foo@bar.org"})
+    assert resp.status_code == 403
+    assert len(mail.outbox) == 0
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_can_send_link_on_anonymous_map_with_cookie(cookieclient, anonymap):
+    assert len(mail.outbox) == 0
+    url = reverse("map_send_edit_link", args=(anonymap.pk,))
+    resp = cookieclient.post(url, {"email": "foo@bar.org"})
+    assert resp.status_code == 200
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "Your secret edit link"

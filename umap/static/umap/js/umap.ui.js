@@ -75,7 +75,6 @@ L.U.UI = L.Evented.extend({
   },
 
   popAlert: function (e) {
-    const self = this
     if (!e) {
       if (this.ALERTS.length) e = this.ALERTS.pop()
       else return
@@ -108,20 +107,25 @@ L.U.UI = L.Evented.extend({
     )
     L.DomUtil.add('div', '', this._alert, e.content)
     if (e.actions) {
-      let action, el
+      let action, el, input
       for (let i = 0; i < e.actions.length; i++) {
         action = e.actions[i]
+        if (action.input) {
+          input = L.DomUtil.element(
+            'input',
+            { className: 'umap-alert-input', placeholder: action.input },
+            this._alert
+          )
+        }
         el = L.DomUtil.element('a', { className: 'umap-action' }, this._alert)
         el.href = '#'
         el.textContent = action.label
         L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', close, this)
         if (action.callback)
-          L.DomEvent.on(
-            el,
-            'click',
-            action.callback,
-            action.callbackContext || this.map
-          )
+          L.DomEvent.on(el, 'click', () => {
+            action.callback.bind(action.callbackContext || this.map)()
+            close.bind(this)()
+          })
       }
     }
     if (e.duration !== Infinity) {
