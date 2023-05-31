@@ -1259,7 +1259,7 @@ L.U.IframeExporter = L.Evented.extend({
 
   build: function () {
     const iframeUrl = this.buildUrl()
-    const code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
+    let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
       code += `<p><a href="${this.baseUrl}">${L._('See full screen')}</a></p>`
     }
