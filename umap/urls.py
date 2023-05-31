@@ -99,8 +99,7 @@ i18n_urls += decorated_patterns(
         name="map_star",
     ),
 )
-i18n_urls += decorated_patterns(
-    [map_permissions_check, never_cache],
+map_urls = [
     re_path(
         r"^map/(?P<map_id>[\d]+)/update/settings/$",
         views.MapUpdate.as_view(),
@@ -110,11 +109,6 @@ i18n_urls += decorated_patterns(
         r"^map/(?P<map_id>[\d]+)/update/permissions/$",
         views.UpdateMapPermissions.as_view(),
         name="map_update_permissions",
-    ),
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/send-edit-link/$",
-        views.SendEditLink.as_view(),
-        name="map_send_edit_link",
     ),
     re_path(
         r"^map/(?P<map_id>[\d]+)/update/owner/$",
@@ -146,7 +140,16 @@ i18n_urls += decorated_patterns(
         views.DataLayerDelete.as_view(),
         name="datalayer_delete",
     ),
-)
+]
+if settings.FROM_EMAIL:
+    map_urls.append(
+        re_path(
+            r"^map/(?P<map_id>[\d]+)/send-edit-link/$",
+            views.SendEditLink.as_view(),
+            name="map_send_edit_link",
+        )
+    )
+i18n_urls += decorated_patterns([map_permissions_check, never_cache], *map_urls)
 urlpatterns += i18n_patterns(
     re_path(r"^$", views.home, name="home"),
     re_path(

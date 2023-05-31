@@ -1342,7 +1342,11 @@ L.U.Map.include({
           alert.duration = Infinity
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
-          if (data.permissions && data.permissions.anonymous_edit_url) {
+          if (
+            data.permissions &&
+            data.permissions.anonymous_edit_url &&
+            this.options.urls.map_send_edit_link
+          ) {
             alert.actions = [
               {
                 label: L._('Send me the link'),
