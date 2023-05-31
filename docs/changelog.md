@@ -1,6 +1,6 @@
 # Changelog
 
-## dev
+## 1.3.0
 
 - added a filter by category panel (cf #1041, thanks @k-3st3ban)
 - added a permanent credit (cf #1041, thanks @k-3st3ban)
@@ -22,7 +22,7 @@
 - lazy load tile layers thumbnails (cf #1089)
 - allow geolocation from iframe embeds (cf #898)
 - remove the limit of visible maps in user’s view (cf #1025)
-- switch to Django full text instead of home made (cf #519)
+- switch to Django full text search instead of home made (cf #519)
 
 ## 1.2.7
 - redirect to `user_maps` at auth end when `window.opener` is unavailable (Twitter auth flow)
