@@ -540,14 +540,6 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
             form.instance.owner = self.request.user
         self.object = form.save()
         anonymous_url = self.object.get_anonymous_edit_url()
-        if not self.request.user.is_authenticated:
-            msg = _(
-                "Your map has been created! As you are not logged in, here is your "
-                "secret link to edit the map, please keep it safe:"
-                + f"<br>{anonymous_url}"
-            )
-        else:
-            msg = _("Congratulations, your map has been created!")
         permissions = self.get_permissions()
         # User does not have the cookie yet.
         permissions["anonymous_edit_url"] = anonymous_url
@@ -555,7 +547,6 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=permissions,
-            info=msg,
         )
         if not self.request.user.is_authenticated:
             key, value = self.object.signed_cookie_elements

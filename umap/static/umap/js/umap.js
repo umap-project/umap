@@ -1339,7 +1339,7 @@ L.U.Map.include({
         let duration = 3000,
           alert = { content: L._('Map has been saved!'), level: 'info' }
         if (!this.options.umap_id) {
-          alert.duration = Infinity
+          alert.content = L._('Congratulations, your map has been created!')
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
           if (
@@ -1347,11 +1347,25 @@ L.U.Map.include({
             data.permissions.anonymous_edit_url &&
             this.options.urls.map_send_edit_link
           ) {
+            alert.duration = Infinity
+            alert.content =
+              L._(
+                'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
+              ) + `<br>${data.permissions.anonymous_edit_url}`
+
             alert.actions = [
               {
                 label: L._('Send me the link'),
                 input: L._('Email'),
                 callback: this.sendEditLink,
+                callbackContext: this,
+              },
+              {
+                label: L._('Copy link'),
+                callback: () => {
+                  navigator.clipboard.writeText(data.permissions.anonymous_edit_url)
+                  this.ui.alert({content: L._('Copied!'), level: 'info'})
+                },
                 callbackContext: this,
               },
             ]
