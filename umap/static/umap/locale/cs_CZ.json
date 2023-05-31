@@ -189,7 +189,6 @@
     "Home": "Domů",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Jak moc zahlazovat a zjednodušovat při oddálení (větší = rychlejší odezva a plynulejší vzhled, menší = přesnější)",
     "If false, the polygon will act as a part of the underlying map.": "Pokud je vypnuto, polygon se bude chovat jako součást mapového podkladu.",
-    "Iframe export options": "Možnosti exportu pro iframe",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe s vlastní výškou (v px): {{{http://iframe.url.com|výška}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe s vlastní výškou a šířkou (in px): {{{http://iframe.url.com|výška*šířka}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -281,7 +280,6 @@
     "Text color for the cluster label": "Barva textu popisku shluku",
     "Text formatting": "Formátování textu",
     "The name of the property to use as feature label (ex.: \"nom\")": "Název vlastnosti pro použití v popisku objektu (ex.: \"nom\")",
-    "The zoom and center have been set.": "Přiblížení a střed mapy byly nastaveny",
     "To use if remote server doesn't allow cross domain (slower)": "Pro případ že vzdálený server neumožňuje cross domain (pomalejší)",
     "To zoom": "Maximální přiblížení",
     "Toggle edit mode (Shift+Click)": "Přepnout do editovacího módu (Shift+Click)",
@@ -390,5 +388,8 @@
     "Map has been unstarred": "Map has been unstarred",
     "Opacity": "Opacity",
     "Star this map": "Star this map",
-    "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.": "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker."
+    "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.": "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.",
+    "Direct link": "Direct link",
+    "Export options": "Export options",
+    "The zoom and center have been modified.": "The zoom and center have been modified."
 }
