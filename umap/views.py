@@ -542,9 +542,9 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
         anonymous_url = self.object.get_anonymous_edit_url()
         if not self.request.user.is_authenticated:
             msg = _(
-                "Your map has been created! If you want to edit this map from "
-                "another computer, please use this link: %(anonymous_url)s"
-                % {"anonymous_url": anonymous_url}
+                "Your map has been created! As you are not logged in, here is your "
+                "secret link to edit the map, please keep it safe:"
+                + f"<br>{anonymous_url}"
             )
         else:
             msg = _("Congratulations, your map has been created!")
