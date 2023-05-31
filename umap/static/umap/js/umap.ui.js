@@ -85,7 +85,7 @@ L.U.UI = L.Evented.extend({
     L.DomUtil.addClass(this.parent, 'umap-alert')
     L.DomUtil.addClass(this._alert, level_class)
     const close = () => {
-      if (timeoutID !== this.ALERT_ID) {
+      if (timeoutID && timeoutID !== this.ALERT_ID) {
         return
       } // Another alert has been forced
       this._alert.innerHTML = ''
@@ -123,7 +123,7 @@ L.U.UI = L.Evented.extend({
         L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', close, this)
         if (action.callback)
           L.DomEvent.on(el, 'click', () => {
-            action.callback.bind(action.callbackContext || this.map)()
+            action.callback.call(action.callbackContext || this.map)
             close()
           })
       }
