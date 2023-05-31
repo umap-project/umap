@@ -94,3 +94,24 @@ may want to add an index. For that, you should do so:
     CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', name), share_status);
 
 And change `UMAP_SEARCH_CONFIGURATION = "umapdict"` in your settings.
+
+
+## Emails
+
+UMap can send the anonymous edit link by email. For this to work, you need to
+add email specific settings. See [Django](https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend)
+documentation.
+
+In general, you'll need to add something like this in your local settings:
+
+```
+FROM_EMAIL = "youradmin@email.org"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.provider.org"
+EMAIL_PORT = 456
+EMAIL_HOST_USER = "username"
+EMAIL_HOST_PASSWORD = "xxxx"
+EMAIL_USE_TLS = True
+# or
+EMAIL_USE_SSL = True
+```
