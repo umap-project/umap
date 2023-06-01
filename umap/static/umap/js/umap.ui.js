@@ -120,12 +120,11 @@ L.U.UI = L.Evented.extend({
         el = L.DomUtil.element('a', { className: 'umap-action' }, this._alert)
         el.href = '#'
         el.textContent = action.label
-        L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', close, this)
-        if (action.callback)
-          L.DomEvent.on(el, 'click', () => {
-            action.callback.call(action.callbackContext || this.map)
-            close()
-          })
+        L.DomEvent.on(el, 'click', L.DomEvent.stop)
+        if (action.callback) {
+          L.DomEvent.on(el, 'click', action.callback, action.callbackContext || this.map)
+        }
+        L.DomEvent.on(el, 'click', close, this)
       }
     }
     if (e.duration !== Infinity) {
