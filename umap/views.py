@@ -5,6 +5,7 @@ import re
 import socket
 from datetime import date, timedelta
 from pathlib import Path
+from urllib.error import URLError
 
 from django.conf import settings
 from django.contrib import messages
@@ -303,6 +304,8 @@ class AjaxProxy(View):
             proxied_request = opener.open(request)
         except HTTPError as e:
             return HttpResponse(e.msg, status=e.code, content_type="text/plain")
+        except URLError:
+            return HttpResponseBadRequest("URL error")
         else:
             status_code = proxied_request.code
             mimetype = proxied_request.headers.get(
