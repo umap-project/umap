@@ -25,6 +25,10 @@ class FlatErrorList(ErrorList):
         return u' — '.join([e for e in self])
 
 
+class SendLinkForm(forms.Form):
+    email = forms.EmailField()
+
+
 class UpdateMapPermissionsForm(forms.ModelForm):
 
     class Meta:
@@ -36,8 +40,7 @@ class AnonymousMapPermissionsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AnonymousMapPermissionsForm, self).__init__(*args, **kwargs)
-        full_secret_link = "%s%s" % (settings.SITE_URL, self.instance.get_anonymous_edit_url())
-        help_text = _('Secret edit link is %s') % full_secret_link
+        help_text = _('Secret edit link is %s') % self.instance.get_anonymous_edit_url()
         self.fields['edit_status'].help_text = _(help_text)
 
     STATUS = (

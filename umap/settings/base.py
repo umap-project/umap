@@ -114,6 +114,9 @@ INSTALLED_APPS = (
 )
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+FROM_EMAIL = None
+
 # =============================================================================
 # Calculation of directories relative to the project module location
 # =============================================================================

@@ -14,6 +14,7 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
@@ -35,7 +36,7 @@ from django.utils.translation import to_locale
 from django.views.generic import DetailView, TemplateView, View
 from django.views.generic.base import RedirectView
 from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.list import ListView
 
 from .forms import (
@@ -46,6 +47,7 @@ from .forms import (
     DataLayerForm,
     FlatErrorList,
     MapSettingsForm,
+    SendLinkForm,
     UpdateMapPermissionsForm,
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
@@ -472,12 +474,8 @@ class PermissionsMixin:
                 for editor in self.object.editors.all()
             ]
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
-            permissions["anonymous_edit_url"] = self.get_anonymous_edit_url()
+            permissions["anonymous_edit_url"] = self.object.get_anonymous_edit_url()
         return permissions
-
-    def get_anonymous_edit_url(self):
-        anonymous_url = self.object.get_anonymous_edit_url()
-        return settings.SITE_URL + anonymous_url
 
 
 class MapView(MapDetailMixin, PermissionsMixin, DetailView):
@@ -547,15 +545,7 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.owner = self.request.user
         self.object = form.save()
-        anonymous_url = self.get_anonymous_edit_url()
-        if not self.request.user.is_authenticated:
-            msg = _(
-                "Your map has been created! If you want to edit this map from "
-                "another computer, please use this link: %(anonymous_url)s"
-                % {"anonymous_url": anonymous_url}
-            )
-        else:
-            msg = _("Congratulations, your map has been created!")
+        anonymous_url = self.object.get_anonymous_edit_url()
         permissions = self.get_permissions()
         # User does not have the cookie yet.
         permissions["anonymous_edit_url"] = anonymous_url
@@ -563,7 +553,6 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=permissions,
-            info=msg,
         )
         if not self.request.user.is_authenticated:
             key, value = self.object.signed_cookie_elements
@@ -628,6 +617,36 @@ class AttachAnonymousMap(View):
         return simple_json_response()
 
 
+class SendEditLink(FormLessEditMixin, FormView):
+    form_class = SendLinkForm
+
+    def post(self, form, **kwargs):
+        self.object = kwargs["map_inst"]
+        if (
+            self.object.owner
+            or not self.object.is_anonymous_owner(self.request)
+            or not self.object.can_edit(self.request.user, self.request)
+        ):
+            return HttpResponseForbidden()
+        form = self.get_form()
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+        else:
+            return HttpResponseBadRequest("Invalid")
+        link = self.object.get_anonymous_edit_url()
+
+        send_mail(
+            _("The uMap edit link for your map: %(map_name)s" % {"map_name": self.object.name}),
+            _("Here is your secret edit link: %(link)s" % {"link": link}),
+            settings.FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
+        return simple_json_response(
+            info=_("Email sent to %(email)s" % {"email": email})
+        )
+
+
 class MapDelete(DeleteView):
     model = Map
     pk_url_kwarg = "map_id"
@@ -660,7 +679,7 @@ class MapClone(PermissionsMixin, View):
             msg = _(
                 "Your map has been cloned! If you want to edit this map from "
                 "another computer, please use this link: %(anonymous_url)s"
-                % {"anonymous_url": self.get_anonymous_edit_url()}
+                % {"anonymous_url": self.object.get_anonymous_edit_url()}
             )
         else:
             msg = _("Congratulations, your map has been cloned!")

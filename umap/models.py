@@ -162,7 +162,8 @@ class Map(NamedModel):
     def get_anonymous_edit_url(self):
         signer = Signer()
         signature = signer.sign(self.pk)
-        return reverse("map_anonymous_edit_url", kwargs={"signature": signature})
+        path = reverse("map_anonymous_edit_url", kwargs={"signature": signature})
+        return settings.SITE_URL + path
 
     def is_anonymous_owner(self, request):
         if self.owner:

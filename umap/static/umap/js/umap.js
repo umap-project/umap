@@ -1332,15 +1332,75 @@ L.U.Map.include({
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
+
+    function copyToClipboard(textToCopy) {
+      // https://stackoverflow.com/a/65996386
+      // Navigator clipboard api needs a secure context (https)
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy)
+      } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement('textarea')
+        textArea.value = textToCopy
+
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = 'absolute'
+        textArea.style.left = '-999999px'
+
+        document.body.prepend(textArea)
+        textArea.select()
+
+        try {
+          document.execCommand('copy')
+        } catch (error) {
+          console.error(error)
+        } finally {
+          textArea.remove()
+        }
+      }
+    }
+
     this.post(this.getSaveUrl(), {
       data: formData,
       context: this,
       callback: function (data) {
-        let duration = 3000
+        let duration = 3000,
+          alert = { content: L._('Map has been saved!'), level: 'info' }
         if (!this.options.umap_id) {
-          duration = 100000 // we want a longer message at map creation (TODO UGLY)
+          alert.content = L._('Congratulations, your map has been created!')
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
+          if (
+            data.permissions &&
+            data.permissions.anonymous_edit_url &&
+            this.options.urls.map_send_edit_link
+          ) {
+            alert.duration = Infinity
+            alert.content =
+              L._(
+                'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
+              ) + `<br>${data.permissions.anonymous_edit_url}`
+
+            alert.actions = [
+              {
+                label: L._('Send me the link'),
+                input: L._('Email'),
+                callback: this.sendEditLink,
+                callbackContext: this,
+              },
+              {
+                label: L._('Copy link'),
+                callback: () => {
+                  copyToClipboard(data.permissions.anonymous_edit_url)
+                  this.ui.alert({
+                    content: L._('Secret edit link copied to clipboard!'),
+                    level: 'info',
+                  })
+                },
+                callbackContext: this,
+              },
+            ]
+          }
         } else if (!this.permissions.isDirty) {
           // Do not override local changes to permissions,
           // but update in case some other editors changed them in the meantime.
@@ -1350,15 +1410,28 @@ L.U.Map.include({
         if (history && history.pushState)
           history.pushState({}, this.options.name, data.url)
         else window.location = data.url
-        if (data.info) msg = data.info
-        else msg = L._('Map has been saved!')
+        alert.content = data.info || alert.content
         this.once('saved', function () {
           this.isDirty = false
-          this.ui.alert({ content: msg, level: 'info', duration: duration })
+          this.ui.alert(alert)
         })
         this.ui.closePanel()
         this.permissions.save()
       },
+    })
+  },
+
+  sendEditLink: function () {
+    const url = L.Util.template(this.options.urls.map_send_edit_link, {
+        map_id: this.options.umap_id,
+      }),
+      input = this.ui._alert.querySelector('input'),
+      email = input.value
+
+    const formData = new FormData()
+    formData.append('email', email)
+    this.post(url, {
+      data: formData,
     })
   },
 
