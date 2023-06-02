@@ -596,4 +596,4 @@ def test_can_send_link_on_anonymous_map_with_cookie(cookieclient, anonymap):
     resp = cookieclient.post(url, {"email": "foo@bar.org"})
     assert resp.status_code == 200
     assert len(mail.outbox) == 1
-    assert mail.outbox[0].subject == "Your secret edit link"
+    assert mail.outbox[0].subject == "The uMap edit link for your map: test map"
