@@ -1318,9 +1318,18 @@ a.add-datalayer:hover,
     min-width: 310px;
     max-width: 100%;
 }
-.umap-popup-content th,
+.umap-popup-content tr:nth-child(odd) {
+   background-color: #f6f6f6;
+}
+.umap-popup-content th {
+    text-align: left;
+}
 .umap-popup-content td {
     word-break: break-word;
+}
+.umap-popup-content th,
+.umap-popup-content td {
+    padding: 1px 3px;
 }
 .umap-popup-container {
     flex-grow: 1;
