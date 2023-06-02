@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2021-08-01 09:46+0000\n"
-"Last-Translator: tomoya muramoto <muramototomoya@gmail.com>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: tomoya muramoto <muramototomoya@gmail.com>, 2016,2021\n"
 "Language-Team: Japanese (http://www.transifex.com/openstreetmap/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,7 +71,7 @@ msgstr "検索"
 msgid "Secret edit link is %s"
 msgstr "非公開の編集用リンク %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "だれでも編集可能"
 
@@ -83,107 +83,107 @@ msgstr "非公開の編集リンクからのみ編集可能"
 msgid "Site is readonly for maintenance"
 msgstr "メンテナンス中のため現在読み込み専用です。"
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "名称"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "詳細"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "ライセンス詳細ページへのリンク"
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "OSMタイルフォーマットを利用したURLテンプレート"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "編集ボックス内のタイルレイヤ並び順"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "指定ユーザのみ編集可能"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "所有者のみ編集可能"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "制限なし (公開)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "リンクを知っている人全員"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "編集者のみ"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr "ブロック"
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "概要"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "中心点"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "ズーム"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "現在地"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "読み込み時に現在地を表示？"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "マップのライセンスを選択"
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "ライセンス"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "所有者"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "編集者"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "編集ステータス"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "共有状況"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "設定"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "複製元"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "読み込み時に表示"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "読み込み時にこのレイヤを表示"
 
@@ -277,7 +277,7 @@ msgstr "Get inspired, browse maps"
 msgid "You are logged in. Continuing..."
 msgstr "ログインしました"
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "by"
 
@@ -290,8 +290,8 @@ msgid "About"
 msgstr "uMapについて"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "フィードバック"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -335,30 +335,30 @@ msgstr "パスワードは変更されました"
 msgid "Not map found."
 msgstr "検索結果がありません"
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "マップ表示"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "マップの作成が完了しました！ このマップを他の端末から編集する場合、いかのリンクを使用してください: %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "マップ作成完了です！"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "マップが更新されました！"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "マップ編集者の更新が完了しました！"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "マップを削除できるのは所有者だけです"
 
@@ -373,6 +373,6 @@ msgstr "マップの複製が完了しました！ このマップを他の端�
 msgid "Congratulations, your map has been cloned!"
 msgstr "マップの複製が完了しました！"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "レイヤ削除完了"

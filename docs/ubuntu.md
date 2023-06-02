@@ -6,12 +6,9 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Install system dependencies
 
-    sudo apt install build-essential autoconf python3.6 python3.6-dev python-virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql-9.5 postgresql-server-dev-9.5 postgresql-9.5-postgis-2.2 git libxml2-dev libxslt1-dev zlib1g-dev
+    sudo apt install python3 python3-dev python3-venv wget nginx uwsgi uwsgi-plugin-python3 postgresql gcc postgis libpq-dev
 
 *Note: nginx and uwsgi are not required for local development environment*
-
-*Note: uMap also works with python 2.7 and 3.4, so adapt the package names if you work with another version.*
-
 
 ## Create deployment directories:
 
@@ -262,17 +259,30 @@ In your local.py:
 
     UMAP_DEMO_SITE = False
     DEBUG = False
-    
+
+### Configure Nginx to serve statics and uploaded files:
+
 In your nginx config:
 
     location /static {
         autoindex off;
+        access_log off;
+        log_not_found off;
+        sendfile on;
+        gzip on;
+        gzip_vary on;
         alias /path/to/umap/var/static/;   
     }
 
     location /uploads {
         autoindex off;
-        alias /path/to/umap/var/data/;    
+        sendfile on;
+        gzip on;
+        gzip_vary on;
+        alias /path/to/umap/var/data/;
+        # Exclude direct acces to geojson, as permissions must be
+        # checked py django.
+        location /uploads/datalayer/ { return 404; }
     }
 
 ### Configure social auth
@@ -294,6 +304,9 @@ In your local.py, set `COMPRESS_ENABLED = True`, and then run the following comm
 
     umap compress
 
+Optionally add `COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"`
+and add `gzip_static on` directive to Nginx `/static` location, so Nginx will
+serve pregenerated files instead of compressing them on the fly.
 
 ### Configure the site URL and short URL
 
@@ -303,6 +316,55 @@ In your local.py:
     SHORT_SITE_URL = "http://s.hort"
 
 Also adapt `ALLOWED_HOSTS` accordingly.
+
+### Configure X-Accel-Redirect
+
+In order to let Nginx serve the layer geojsons but uMap still check the permissions,
+you can add this settings:
+
+    UMAP_XSENDFILE_HEADER = 'X-Accel-Redirect'
+
+And then add this new location in your nginx config (before the `/` location):
+
+    location /internal/ {
+        internal;
+        gzip_vary on;
+        gzip_static on;
+        alias /path/to/umap/var/data/;
+    }
+
+### Configure ajax proxy cache
+
+In Nginx:
+
+- add the proxy cache
+
+        proxy_cache_path /tmp/nginx_ajax_proxy_cache levels=1:2 keys_zone=ajax_proxy:10m inactive=60m;
+        proxy_cache_key "$args";
+
+- add this location (before the `/` location):
+
+        location /ajax-proxy/ {
+            valid_referers server_names;
+            if ($invalid_referer) {
+                return 400;
+            }
+            add_header X-Proxy-Cache $upstream_cache_status always;
+            proxy_cache ajax_proxy;
+            proxy_cache_valid 1m;  # Default. Umap will override using X-Accel-Expires
+            gzip on;
+            gzip_proxied any;
+            gzip_types
+                application/vnd.google-earth.kml+xml
+                application/geo+json
+                application/json
+                application/javascript
+                text/xml
+                application/xml;
+            uwsgi_pass umap;
+            include /srv/umap/uwsgi_params;
+        }
+
 
 
 ## Add more tilelayers, pictograms…

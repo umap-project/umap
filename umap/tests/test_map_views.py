@@ -4,7 +4,8 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from umap.models import DataLayer, Map
+from django.core.signing import Signer
+from umap.models import DataLayer, Map, Star
 
 from .base import login_required
 
@@ -402,6 +403,20 @@ def test_anonymous_edit_url(cookieclient, anonymap):
 
 
 @pytest.mark.usefixtures('allow_anonymous')
+def test_sha1_anonymous_edit_url(cookieclient, anonymap):
+    signer = Signer(algorithm='sha1')
+    signature = signer.sign(anonymap.pk)
+    url = reverse('map_anonymous_edit_url', kwargs={'signature': signature})
+    canonical = reverse('map', kwargs={'pk': anonymap.pk,
+                                       'slug': anonymap.slug})
+    response = cookieclient.get(url)
+    assert response.status_code == 302
+    assert response['Location'] == canonical
+    key, value = anonymap.signed_cookie_elements
+    assert key in cookieclient.cookies
+
+
+@pytest.mark.usefixtures('allow_anonymous')
 def test_bad_anonymous_edit_url_should_return_403(cookieclient, anonymap):
     url = anonymap.get_anonymous_edit_url()
     url = reverse(
@@ -514,3 +529,43 @@ def test_create_readonly(client, user, post_data, settings):
     response = client.post(url, post_data)
     assert response.status_code == 403
     assert response.content == b'Site is readonly for maintenance'
+
+
+def test_search(client, map):
+    # Very basic search, that do not deal with accent nor case.
+    # See install.md for how to have a smarter dict + index.
+    map.name = "Blé dur"
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?q=Blé")
+    assert "Blé dur" in response.content.decode()
+
+
+def test_authenticated_user_can_star_map(client, map, user):
+    url = reverse('map_star', args=(map.pk,))
+    client.login(username=user.username, password="123123")
+    assert Star.objects.filter(by=user).count() == 0
+    response = client.post(url)
+    assert response.status_code == 200
+    assert Star.objects.filter(by=user).count() == 1
+
+
+def test_anonymous_cannot_star_map(client, map):
+    url = reverse('map_star', args=(map.pk,))
+    assert Star.objects.count() == 0
+    response = client.post(url)
+    assert response.status_code == 302
+    assert "login" in response["Location"]
+    assert Star.objects.count() == 0
+
+
+def test_user_can_see_their_star(client, map, user):
+    url = reverse('map_star', args=(map.pk,))
+    client.login(username=user.username, password="123123")
+    assert Star.objects.filter(by=user).count() == 0
+    response = client.post(url)
+    assert response.status_code == 200
+    url = reverse('user_stars', args=(user.username,))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert map.name in response.content.decode()

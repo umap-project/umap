@@ -16,7 +16,7 @@ compilemessages:
 	umap compilemessages
 	umap generate_js_locale
 messages:
-	umap makemessages -l en --ignore node_modules --ignore umap_project.egg-info --ignore __pycache__ --ignore umap/tests
+	cd umap && umap makemessages -l en
 	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values
 vendors:
 	mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/** umap/static/umap/vendors/leaflet/
@@ -24,7 +24,7 @@ vendors:
 	mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet.path.drag/src/*.js umap/static/umap/vendors/editable/
 	mkdir -p umap/static/umap/vendors/hash/ && cp -r node_modules/leaflet-hash/*.js umap/static/umap/vendors/hash/
 	mkdir -p umap/static/umap/vendors/i18n/ && cp -r node_modules/leaflet-i18n/*.js umap/static/umap/vendors/i18n/
-	mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/Leaflet.EditInOSM.* umap/static/umap/vendors/editinosm/
+	mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/{Leaflet.EditInOSM.*,edit-in-osm.png} umap/static/umap/vendors/editinosm/
 	mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap/src/** umap/static/umap/vendors/minimap/
 	mkdir -p umap/static/umap/vendors/loading/ && cp -r node_modules/leaflet-loading/src/** umap/static/umap/vendors/loading/
 	mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/** umap/static/umap/vendors/markercluster/
@@ -43,6 +43,7 @@ vendors:
 	mkdir -p umap/static/umap/vendors/tokml && cp -r node_modules/tokml/tokml.js umap/static/umap/vendors/tokml
 	mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.css umap/static/umap/vendors/locatecontrol/
 	mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/src/L.Control.Locate.js umap/static/umap/vendors/locatecontrol/
+	mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.js umap/static/umap/vendors/dompurify/
 installjs:
 	npm install
 testjsfx:
@@ -53,3 +54,17 @@ tx_push:
 	tx push -s
 tx_pull:
 	tx pull
+
+jsdir = umap/static/umap/js/
+filepath = "${jsdir}*.js"
+pretty: ## Apply PrettierJS to all JS files (or specified `filepath`)
+	./node_modules/prettier/bin-prettier.js --write ${filepath}
+
+lebab: ## Convert JS `filepath` to modern syntax with Lebab, then prettify
+	./node_modules/lebab/bin/index.js --replace ${filepath} --transform arrow,arrow-return
+	./node_modules/lebab/bin/index.js --replace ${filepath} --transform let
+	./node_modules/lebab/bin/index.js --replace ${filepath} --transform template
+	$(MAKE) pretty filepath=${filepath}
+
+lebab-all: $(jsdir)* ## Convert all JS files to modern syntax with Lebab + prettify
+	for file in $^ ; do $(MAKE) lebab filepath=$${file}; done

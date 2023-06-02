@@ -7,7 +7,7 @@ class TileLayerAdmin(admin.ModelAdmin):
     list_editable = ('rank', )
 
 
-class MapAdmin(admin.OSMGeoAdmin):
+class MapAdmin(admin.GISModelAdmin):
     search_fields = ("name",)
     autocomplete_fields = ("owner", "editors")
     list_filter = ("share_status",)

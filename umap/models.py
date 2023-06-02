@@ -17,7 +17,7 @@ class NamedModel(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('name', )
+        ordering = ("name",)
 
     def __unicode__(self):
         return self.name
@@ -34,8 +34,7 @@ def get_default_licence():
     """
     return Licence.objects.get_or_create(
         # can't use ugettext_lazy for database storage, see #13965
-        name=getattr(settings, "UMAP_DEFAULT_LICENCE_NAME",
-                     'No licence set')
+        name=getattr(settings, "UMAP_DEFAULT_LICENCE_NAME", "No licence set")
     )[0]
 
 
@@ -43,46 +42,42 @@ class Licence(NamedModel):
     """
     The licence one map is published on.
     """
+
     details = models.URLField(
-        verbose_name=_('details'),
-        help_text=_('Link to a page where the licence is detailed.')
+        verbose_name=_("details"),
+        help_text=_("Link to a page where the licence is detailed."),
     )
 
     @property
     def json(self):
-        return {
-            'name': self.name,
-            'url': self.details
-        }
+        return {"name": self.name, "url": self.details}
 
 
 class TileLayer(NamedModel):
     url_template = models.CharField(
-        max_length=200,
-        help_text=_("URL template using OSM tile format")
+        max_length=200, help_text=_("URL template using OSM tile format")
     )
     minZoom = models.IntegerField(default=0)
     maxZoom = models.IntegerField(default=18)
     attribution = models.CharField(max_length=300)
     rank = models.SmallIntegerField(
-        blank=True,
-        null=True,
-        help_text=_('Order of the tilelayers in the edit box')
+        blank=True, null=True, help_text=_("Order of the tilelayers in the edit box")
     )
     # See https://wiki.openstreetmap.org/wiki/TMS#The_Y_coordinate
     tms = models.BooleanField(default=False)
 
     @property
     def json(self):
-        return dict((field.name, getattr(self, field.name))
-                    for field in self._meta.fields)
+        return dict(
+            (field.name, getattr(self, field.name)) for field in self._meta.fields
+        )
 
     @classmethod
     def get_default(cls):
         """
         Returns the default tile layer (used for a map when no layer is set).
         """
-        return cls.objects.order_by('rank')[0]  # FIXME, make it administrable
+        return cls.objects.order_by("rank")[0]  # FIXME, make it administrable
 
     @classmethod
     def get_list(cls):
@@ -91,18 +86,19 @@ class TileLayer(NamedModel):
         for t in cls.objects.all():
             fields = t.json
             if default and default.pk == t.pk:
-                fields['selected'] = True
+                fields["selected"] = True
             l.append(fields)
         return l
 
     class Meta:
-        ordering = ('rank', 'name', )
+        ordering = ("rank", "name")
 
 
 class Map(NamedModel):
     """
     A single thematical map.
     """
+
     ANONYMOUS = 1
     EDITORS = 2
     OWNER = 3
@@ -111,45 +107,62 @@ class Map(NamedModel):
     PRIVATE = 3
     BLOCKED = 9
     EDIT_STATUS = (
-        (ANONYMOUS, _('Everyone can edit')),
-        (EDITORS, _('Only editors can edit')),
-        (OWNER, _('Only owner can edit')),
+        (ANONYMOUS, _("Everyone can edit")),
+        (EDITORS, _("Only editors can edit")),
+        (OWNER, _("Only owner can edit")),
     )
     SHARE_STATUS = (
-        (PUBLIC, _('everyone (public)')),
-        (OPEN, _('anyone with link')),
-        (PRIVATE, _('editors only')),
-        (BLOCKED, _('blocked')),
+        (PUBLIC, _("everyone (public)")),
+        (OPEN, _("anyone with link")),
+        (PRIVATE, _("editors only")),
+        (BLOCKED, _("blocked")),
     )
     slug = models.SlugField(db_index=True)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     center = models.PointField(geography=True, verbose_name=_("center"))
     zoom = models.IntegerField(default=7, verbose_name=_("zoom"))
-    locate = models.BooleanField(default=False, verbose_name=_("locate"), help_text=_("Locate user on load?"))
+    locate = models.BooleanField(
+        default=False, verbose_name=_("locate"), help_text=_("Locate user on load?")
+    )
     licence = models.ForeignKey(
         Licence,
         help_text=_("Choose the map licence."),
-        verbose_name=_('licence'),
+        verbose_name=_("licence"),
         on_delete=models.SET_DEFAULT,
-        default=get_default_licence
+        default=get_default_licence,
     )
     modified_at = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name="owned_maps", verbose_name=_("owner"), on_delete=models.PROTECT)
-    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors"))
-    edit_status = models.SmallIntegerField(choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status"))
-    share_status = models.SmallIntegerField(choices=SHARE_STATUS, default=PUBLIC, verbose_name=_("share status"))
-    settings = models.JSONField(blank=True, null=True, verbose_name=_("settings"), default=dict)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        related_name="owned_maps",
+        verbose_name=_("owner"),
+        on_delete=models.PROTECT,
+    )
+    editors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
+    )
+    edit_status = models.SmallIntegerField(
+        choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status")
+    )
+    share_status = models.SmallIntegerField(
+        choices=SHARE_STATUS, default=PUBLIC, verbose_name=_("share status")
+    )
+    settings = models.JSONField(
+        blank=True, null=True, verbose_name=_("settings"), default=dict
+    )
 
     objects = models.Manager()
     public = PublicManager()
 
     def get_absolute_url(self):
-        return reverse("map", kwargs={'slug': self.slug or "map", 'pk': self.pk})
+        return reverse("map", kwargs={"slug": self.slug or "map", "pk": self.pk})
 
     def get_anonymous_edit_url(self):
         signer = Signer()
         signature = signer.sign(self.pk)
-        return reverse('map_anonymous_edit_url', kwargs={'signature': signature})
+        return reverse("map_anonymous_edit_url", kwargs={"signature": signature})
 
     def is_anonymous_owner(self, request):
         if self.owner:
@@ -169,8 +182,9 @@ class Map(NamedModel):
         """
         can = False
         if request and not self.owner:
-            if (getattr(settings, "UMAP_ALLOW_ANONYMOUS", False)
-                    and self.is_anonymous_owner(request)):
+            if getattr(
+                settings, "UMAP_ALLOW_ANONYMOUS", False
+            ) and self.is_anonymous_owner(request):
                 can = True
         if self.edit_status == self.ANONYMOUS:
             can = True
@@ -192,13 +206,15 @@ class Map(NamedModel):
         elif request.user == self.owner:
             can = True
         else:
-            can = not (self.share_status == self.PRIVATE
-                       and request.user not in self.editors.all())
+            can = not (
+                self.share_status == self.PRIVATE
+                and request.user not in self.editors.all()
+            )
         return can
 
     @property
     def signed_cookie_elements(self):
-        return ('anonymous_owner|%s' % self.pk, self.pk)
+        return ("anonymous_owner|%s" % self.pk, self.pk)
 
     def get_tilelayer(self):
         return self.tilelayer or TileLayer.get_default()
@@ -206,7 +222,7 @@ class Map(NamedModel):
     def clone(self, **kwargs):
         new = self.__class__.objects.get(pk=self.pk)
         new.pk = None
-        new.name = u"%s %s" % (_("Clone of"), self.name)
+        new.name = "%s %s" % (_("Clone of"), self.name)
         if "owner" in kwargs:
             # can be None in case of anonymous cloning
             new.owner = kwargs["owner"]
@@ -222,6 +238,7 @@ class Pictogram(NamedModel):
     """
     An image added to an icon of the map.
     """
+
     attribution = models.CharField(max_length=300)
     pictogram = models.ImageField(upload_to="pictogram")
 
@@ -231,7 +248,7 @@ class Pictogram(NamedModel):
             "id": self.pk,
             "attribution": self.attribution,
             "name": self.name,
-            "src": self.pictogram.url
+            "src": self.pictogram.url,
         }
 
 
@@ -248,22 +265,19 @@ class DataLayer(NamedModel):
     """
     Layer to store Features in.
     """
+
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
-    description = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name=_("description")
-    )
+    description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
     display_on_load = models.BooleanField(
         default=False,
         verbose_name=_("display on load"),
-        help_text=_("Display this layer on load.")
+        help_text=_("Display this layer on load."),
     )
     rank = models.SmallIntegerField(default=0)
 
     class Meta:
-        ordering = ('rank',)
+        ordering = ("rank",)
 
     def save(self, force_insert=False, force_update=False, **kwargs):
         is_new = not bool(self.pk)
@@ -281,7 +295,7 @@ class DataLayer(NamedModel):
 
     def upload_to(self):
         root = self.storage_root()
-        name = '%s_%s.geojson' % (self.pk, int(time.time() * 1000))
+        name = "%s_%s.geojson" % (self.pk, int(time.time() * 1000))
         return os.path.join(root, name)
 
     def storage_root(self):
@@ -293,11 +307,7 @@ class DataLayer(NamedModel):
 
     @property
     def metadata(self):
-        return {
-            "name": self.name,
-            "id": self.pk,
-            "displayOnLoad": self.display_on_load
-        }
+        return {"name": self.name, "id": self.pk, "displayOnLoad": self.display_on_load}
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
@@ -309,14 +319,14 @@ class DataLayer(NamedModel):
         return new
 
     def is_valid_version(self, name):
-        return name.startswith('%s_' % self.pk) and name.endswith('.geojson')
+        return name.startswith("%s_" % self.pk) and name.endswith(".geojson")
 
     def version_metadata(self, name):
-        els = name.split('.')[0].split('_')
+        els = name.split(".")[0].split("_")
         return {
             "name": name,
             "at": els[1],
-            "size": self.geojson.storage.size(self.get_version_path(name))
+            "size": self.geojson.storage.size(self.get_version_path(name)),
         }
 
     def get_versions(self):
@@ -333,19 +343,27 @@ class DataLayer(NamedModel):
 
     def get_version(self, name):
         path = self.get_version_path(name)
-        with self.geojson.storage.open(path, 'r') as f:
+        with self.geojson.storage.open(path, "r") as f:
             return f.read()
 
     def get_version_path(self, name):
-        return '{root}/{name}'.format(root=self.storage_root(), name=name)
+        return "{root}/{name}".format(root=self.storage_root(), name=name)
 
     def purge_old_versions(self):
         root = self.storage_root()
-        names = self.get_versions()[settings.UMAP_KEEP_VERSIONS:]
+        names = self.get_versions()[settings.UMAP_KEEP_VERSIONS :]
         for name in names:
-            for ext in ['', '.gz']:
+            for ext in ["", ".gz"]:
                 path = os.path.join(root, name + ext)
                 try:
                     self.geojson.storage.delete(path)
                 except FileNotFoundError:
                     pass
+
+
+class Star(models.Model):
+    at = models.DateTimeField(auto_now=True)
+    map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="stars", on_delete=models.CASCADE
+    )

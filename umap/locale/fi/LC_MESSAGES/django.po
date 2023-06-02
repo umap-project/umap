@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Jaakko Helleranta <jaakko@helleranta.com>, 2013\n"
 "Language-Team: Finnish (http://www.transifex.com/openstreetmap/umap/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -74,7 +74,7 @@ msgstr "Etsi"
 msgid "Secret edit link is %s"
 msgstr "Salainen muokkauslinkki on %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "Kuka tahansa saa muokata"
 
@@ -86,107 +86,107 @@ msgstr "Muokattavissa vain salaisella muokkauslinkillä"
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "nimi"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "tarkemmat tiedot"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "Linkki sivulle, jossa lisenssi on määritetty yksityiskohtaisesti."
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "OSM-karttatiiliformaattia mukaileva URL-sapluuna"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "Taustakarttojen järjestys muokkauslaatikossa"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "Vain julkaisijat saavat muokata"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "Vain omistaja saa muokata"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "kaikille (julkinen)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "linkinhaltijoille"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "vain muokkaajille"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr ""
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "kuvaus"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "keskitä"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "zoomaa"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "paikanna"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "Paikanna käyttäjä sivua ladattaessa?"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "Valitse kartan lisenssi"
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "lisenssi"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "omistaja"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "julkaisija"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "muokkaa tilaa"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "jaa status"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "asetukset"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "Kloonattu kartasta"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "näytä ladattaessa"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "Näytä tämä kerros ladattaessa."
 
@@ -280,7 +280,7 @@ msgstr "Inspiroidu selaamalla karttoja"
 msgid "You are logged in. Continuing..."
 msgstr "Sisäänkirjautumisesi onnistui. Jatketahan..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "taholta"
 
@@ -293,8 +293,8 @@ msgid "About"
 msgstr "Tietoja"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "Palaute"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -338,30 +338,30 @@ msgstr ""
 msgid "Not map found."
 msgstr "Karttaa ei löytynyt."
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "Katso karttaa"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Karttasi on luotu! Jos haluat muokata tätä karttaa joltain muulta tietokoneelta, käytä tätä linkkiä: %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "Onneksi olkoon! Uusi karttasi on luotu!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "Kartta on päivitetty!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "Kartan toimittajat päivitetty onnistuneesti!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "Vain kartan omistaja voi poistaa kartan."
 
@@ -376,6 +376,6 @@ msgstr "Karttasi on kloonattu! Jos haluat muokata tätä karttaa joltain muulta 
 msgid "Congratulations, your map has been cloned!"
 msgstr "Onneksi olkoon! Karttasi on kloonattu!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "Kerros onnistuneesti poistettu. Pysyvästi."

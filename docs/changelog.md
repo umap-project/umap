@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.3.0
+
+- added a filter by category panel (cf #1041, thanks @k-3st3ban)
+- added a permanent credit (cf #1041, thanks @k-3st3ban)
+- allow to add an overlay tilelayer
+- replaced custom locate control with Leaflet.Locate (cf #1031, thanks @aleksejspopovs)
+- fixed bug where we coud not edit permissions of a new saved map unless reloading the page
+- CSS: Fix cut of text in iframes of popup content (cf #971, thanks @tordans)
+- enhanced property fallback in string formatting (cf #862, thanks @mstock)
+- lines and polygons measure is now displayed while drawing (cf #1068, thanks @knowname)
+- refactored zoomTo while making easing transition non default (cf #679 #179)
+- fixed old `_storage_options` not being cleaned when saving map (cf #1076)
+- added star maps feature (cf #683)
+- added a banner + removed create buttons when in read only mode (cf #1095)
+- added DOMPurify to escape malicious input from user (cf #1094)
+- expose direct map URL in the export panel (cf #699)
+- added a very basic `/stats/` JSON view (cf #1100)
+- added max width for the help box (on small screens, cf #887)
+- display the steps for inputs of type range (cf #877)
+- lazy load tile layers thumbnails (cf #1089)
+- allow geolocation from iframe embeds (cf #898)
+- remove the limit of visible maps in user’s view (cf #1025)
+- switch to Django full text search instead of home made (cf #519)
+
+## 1.2.7
+- redirect to `user_maps` at auth end when `window.opener` is unavailable (Twitter auth flow)
+
+## 1.2.6
+- marked User.id as protected, to fix Twitter auth
+
+## 1.2.5
+- Allow to create search index without changing unaccent mutability (cf #519)
+- switched from `If-None-Match` to `If-Unmodified-Since` for concurrency control
+- prevent caching datalayers geojson when in edit mode
+- refactored gzip management
+
+## 1.2.4
+- upgrade to Django 4.x, and upgrade of other deps
+- switched from custom DictField to propert JsonField
+
 ## 1.2.3
 
 - improved panel layout and image sizing (by @Binnette, cf #824)

@@ -5,8 +5,11 @@
 
     function proceed()
     {
-        if (window.opener) {
+        if (window.opener && window.opener.umap_proceed) {
             window.opener.umap_proceed();
+        } else {
+            // Trade off as Twitter does not allow us to access window.opener
+            window.location.href = '{% url "user_maps" request.user.username %}'
         }
     }
 

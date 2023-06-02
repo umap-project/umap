@@ -54,22 +54,22 @@ See [Installation](install.md)
 
 ### Hacking on the code
 
-Create a workspace folder ~/wk and go into it.
+Create a workspace folder `~/wk` and go into it.
 
-"git clone" the main repository and go in the umap folder
+"git clone" the main repository and go in the `umap/` folder.
 
-Several commands you need to issue to be in a virtualenv:
+Once you are in the `umap/` folder, create a Python virtual environment:
 
-    virtualenv ~/wk/umap/venv --python=/usr/bin/python3.6
-    source ~/wk/umap/venv/bin/activate
+    python3 -m venv venv
+    source venv/bin/activate
 
-Now, command "umap" will be available
+Now, the `umap` command will be available.
 
-*Note: if you close your terminal, you will need to re-run command:*
+*Note: if you close your terminal, you will need to re-run that command from `~/wk/umap`:*
 
-    source /srv/umap/venv/bin/activate
+    source venv/bin/activate
 
-To test your code, you will add to install umap from your git folder. Go to ~/wk/umap and run:
+To test your code, you will add to install umap from your git folder. Go to `~/wk/umap` and run:
 
     pip install -e .
     # or pip install -e ~/wk/umap
@@ -78,7 +78,12 @@ This command will check dependencies and install uMap from sources inside folder
 
 When installing from the git repository, do not forget to run `make installjs` and `make vendors`, before running `umap collectstatic` (as mentioned in [Ubuntu from scratch](ubuntu.md)).
 
-To start your local uMap:
+Create a PostgreSQL database and apply migrations to setup your database:
+
+    createdb umap
+    umap migrate
+
+You should now be able to start your local uMap instance:
 
     umap runserver 0.0.0.0:8000
 

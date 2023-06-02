@@ -9,7 +9,7 @@
 # Marco <marcxosm@gmail.com>, 2019
 # Marco <marcxosm@gmail.com>, 2018
 # Maurizio Napolitano <maurizio.napolitano@okfn.org>, 2013,2017
-# MIrco Zorzo <mircozorzo@gmail.com>, 2020
+# Mirco Zorzo <mircozorzo@gmail.com>, 2020
 # claudiamocci <moccicm@gmail.com>, 2013
 # Simone Cortesi <simone@cortesi.com>, 2014
 # YOHAN BONIFACE <yb@enix.org>, 2012
@@ -17,15 +17,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-19 08:35+0000\n"
-"Last-Translator: MIrco Zorzo <mircozorzo@gmail.com>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Mirco Zorzo <mircozorzo@gmail.com>, 2020\n"
 "Language-Team: Italian (http://www.transifex.com/openstreetmap/umap/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
 #, python-format
@@ -79,7 +79,7 @@ msgstr "Cerca"
 msgid "Secret edit link is %s"
 msgstr "Il link segreto per la modifica %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "Chiunque può modificare"
 
@@ -91,107 +91,107 @@ msgstr "Modificabile solo con il link segreto"
 msgid "Site is readonly for maintenance"
 msgstr "Il sito in sola lettura per la manutenzione"
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "nome"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "dettagli"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "Link alla pagina con i dettagli della licenza"
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "Modello dell'URL usando il formato delle tile OSM"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordine degli sfondi (tilelayers) nel box di modifica"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "Solo gli editor possono fare modifiche"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "Solo il proprietario può effettuare modifiche"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "chiunque (pubblico)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "chiunque abbia il ilnk"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "solo autori"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr "bloccato"
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "descrizione"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "centra"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "zoom"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "localizza"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "Geolocalizzare l'utente al caricamento?"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "Scegliere una licenza per la mappa."
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "licenza"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "proprietario"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "editor"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "stato della modifica"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "stato condivisione"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "impostazioni"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "Duplicata da "
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "mostra al caricamento"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "Visualizza questo layer al caricamento."
 
@@ -285,7 +285,7 @@ msgstr "Prendi ispirazione, visualizza mappe"
 msgid "You are logged in. Continuing..."
 msgstr "Utente loggato. Continuare..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "di"
 
@@ -298,8 +298,8 @@ msgid "About"
 msgstr "Informazioni"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "Feedback"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -343,30 +343,30 @@ msgstr "La tua password è stata cambiata."
 msgid "Not map found."
 msgstr "Nessuna mappa trovata."
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "Visualizza la mappa"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "La mappa è stata creata! Per modificarla da un altro computer, si deve utilizzare questo link:   %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "Congratulazioni, la mappa è stata creata!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "La mappa è stata aggiornata!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "Aggiornato l'elenco degli editor abilitati alla modifica della mappa!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "Solo il proprietario può eliminare la mappa."
 
@@ -381,6 +381,6 @@ msgstr "La mappa è stata clonata! Per modificarla usando un altro computer, si 
 msgid "Congratulations, your map has been cloned!"
 msgstr "Perfetto, la tua mappa è stata clonata!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "Layer eliminato correttamente"

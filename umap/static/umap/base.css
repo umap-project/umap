@@ -508,8 +508,16 @@ i.info {
 .umap-layer-properties-container,
 .umap-footer-container,
 .umap-browse-data,
+.umap-filter-data,
 .umap-browse-datalayers {
     padding: 0 10px;
+}
+.umap-field-datalist {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    margin-top: -8px;
+    padding: 0 5px;
 }
 .umap-form-iconfield {
     position: relative;
@@ -713,7 +721,7 @@ input[type=hidden].blur + .button {
     font-weight: bold;
     color: #fff;
     font-size: 0.8em;
-    z-index: 1002;
+    z-index: 1012;
     border-radius: 2px;
 }
 #umap-alert-container.error {

@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Eyad Alomar, 2023
 # Med Limem Smida <medlimem200@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
+"POT-Creation-Date: 2020-03-22 14:24+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Eyad Alomar, 2023\n"
 "Language-Team: Arabic (http://www.transifex.com/openstreetmap/umap/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +33,7 @@ msgstr ""
 #: umap/templates/umap/about_summary.html:33
 #: umap/templates/umap/navigation.html:26
 msgid "Create a map"
-msgstr "أعد خريطة"
+msgstr "أنشئ خريطةً"
 
 #: tmp/framacarte/templates/umap/navigation.html:7
 #: umap/templates/umap/navigation.html:10
@@ -52,7 +53,7 @@ msgstr "تسجيل"
 #: tmp/framacarte/templates/umap/navigation.html:12
 #: umap/templates/umap/navigation.html:20
 msgid "Log out"
-msgstr "خروج"
+msgstr "تسجيل خروج"
 
 #: tmp/framacarte/templates/umap/search_bar.html:6
 #: umap/templates/umap/search_bar.html:6
@@ -72,15 +73,15 @@ msgstr ""
 
 #: umap/forms.py:44 umap/models.py:115
 msgid "Everyone can edit"
-msgstr "يمكن للجميع التغيير"
+msgstr "يمكن للجميع التعدبل"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr "قابل للتغيير من خلال رابط خفي فقط"
+msgstr "قابل للتعديل فقط مع رابط تعديلٍ سري"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "لغاية الصيانة، الموقع مفتوح للقراءة فقط"
+msgstr "الموقع مفتوح للقراءة فقط لغاية الصيانة"
 
 #: umap/models.py:17
 msgid "name"

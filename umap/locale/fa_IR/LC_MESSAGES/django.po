@@ -1,0 +1,379 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Goudarz Jafari <goudarz.jafari@gmail.com>, 2020
+# *Sociologist Abedi*, 2023
+# *Sociologist Abedi*, 2021
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: *Sociologist Abedi*, 2023\n"
+"Language-Team: Persian (Iran) (http://app.transifex.com/openstreetmap/umap/language/fa_IR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "این یک نمونه آزمایشی است که برای آزمایشات و نسخه های پیش از انتشار استفاده می شود. اگر به نمونه پایدار نیاز دارید، لطفاً <a href=\"%(stable_url)s\">%(stable_url)s</a> استفاده کنید. همچنین می توانید نمونه شخصی خود را میزبانی کنید، <a href=\"%(repo_url)s\"> منبع باز است!"
+
+#: tmp/framacarte/templates/umap/home.html:83
+#: tmp/framacarte/templates/umap/navigation.html:14
+#: umap/templates/umap/about_summary.html:33
+#: umap/templates/umap/navigation.html:26
+msgid "Create a map"
+msgstr "ایجاد نقشه"
+
+#: tmp/framacarte/templates/umap/navigation.html:7
+#: umap/templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "نقشه‌های من"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Log in"
+msgstr "ورود"
+
+#: tmp/framacarte/templates/umap/navigation.html:9
+#: umap/templates/umap/navigation.html:12
+msgid "Sign in"
+msgstr "ثبت نام"
+
+#: tmp/framacarte/templates/umap/navigation.html:12
+#: umap/templates/umap/navigation.html:20
+msgid "Log out"
+msgstr "خروج"
+
+#: tmp/framacarte/templates/umap/search_bar.html:6
+#: umap/templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "جستجوی نقشه‌ها"
+
+#: tmp/framacarte/templates/umap/search_bar.html:10
+#: tmp/framacarte/templates/umap/search_bar.html:13
+#: umap/templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "جستجو"
+
+#: umap/forms.py:40
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "لینک ویرایش مخفی %s است"
+
+#: umap/forms.py:44 umap/models.py:114
+msgid "Everyone can edit"
+msgstr "همه می‌توانند ویرایش کنند"
+
+#: umap/forms.py:45
+msgid "Only editable with secret edit link"
+msgstr "فقط با لینک ویرایش مخفی قابل ویرایش است"
+
+#: umap/middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "سایت در حال حاضر برای نگهداری فقط خواندنی است"
+
+#: umap/models.py:16
+msgid "name"
+msgstr "نام"
+
+#: umap/models.py:47
+msgid "details"
+msgstr "جزئیات"
+
+#: umap/models.py:48
+msgid "Link to a page where the licence is detailed."
+msgstr "پیوندی به صفحه ای که مجوز در آن دقیق است."
+
+#: umap/models.py:62
+msgid "URL template using OSM tile format"
+msgstr "قالب آدرس اینترنتی با استفاده از قالب کاشی OSM"
+
+#: umap/models.py:70
+msgid "Order of the tilelayers in the edit box"
+msgstr "ترتیب لایه های کاشی در جعبه ویرایش"
+
+#: umap/models.py:115
+msgid "Only editors can edit"
+msgstr "فقط ویراستاران می‌توانند ویرایش کنند"
+
+#: umap/models.py:116
+msgid "Only owner can edit"
+msgstr "فقط مالک می‌تواند ویرایش کند"
+
+#: umap/models.py:119
+msgid "everyone (public)"
+msgstr "همه (عمومی)"
+
+#: umap/models.py:120
+msgid "anyone with link"
+msgstr "هر کسی با لینک"
+
+#: umap/models.py:121
+msgid "editors only"
+msgstr "فقط ویراستاران"
+
+#: umap/models.py:122
+msgid "blocked"
+msgstr "مسدود شد"
+
+#: umap/models.py:125 umap/models.py:255
+msgid "description"
+msgstr "توضیحات"
+
+#: umap/models.py:126
+msgid "center"
+msgstr "مرکز"
+
+#: umap/models.py:127
+msgid "zoom"
+msgstr "بزرگ‌نمایی"
+
+#: umap/models.py:128
+msgid "locate"
+msgstr "مکان یابی"
+
+#: umap/models.py:128
+msgid "Locate user on load?"
+msgstr "کاربر را در حال بارگیری مکان یابی کنید؟"
+
+#: umap/models.py:131
+msgid "Choose the map licence."
+msgstr "مجوز نقشه را انتخاب کنید."
+
+#: umap/models.py:132
+msgid "licence"
+msgstr "مجوز"
+
+#: umap/models.py:137
+msgid "owner"
+msgstr "مالک"
+
+#: umap/models.py:138
+msgid "editors"
+msgstr "ویراستاران"
+
+#: umap/models.py:139
+msgid "edit status"
+msgstr "ویرایش وضعیت"
+
+#: umap/models.py:140
+msgid "share status"
+msgstr "وضعیت اشتراک گذاری"
+
+#: umap/models.py:141
+msgid "settings"
+msgstr "تنظیمات"
+
+#: umap/models.py:209
+msgid "Clone of"
+msgstr "کلون از"
+
+#: umap/models.py:260
+msgid "display on load"
+msgstr "نمایش روی بارگذاری"
+
+#: umap/models.py:261
+msgid "Display this layer on load."
+msgstr "این لایه را روی بارگذاری نمایش دهید."
+
+#: umap/templates/404.html:7
+msgid "Take me to the home page"
+msgstr "مرا به صفحه اصلی ببرید"
+
+#: umap/templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "نقشه‌های %(current_user)s را مرور کنید"
+
+#: umap/templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "%(current_user)s هیچ نقشه‌ای ندارد"
+
+#: umap/templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "لطفا با حساب کاربری خود وارد شوید"
+
+#: umap/templates/registration/login.html:18
+msgid "Username"
+msgstr "نام کاربری"
+
+#: umap/templates/registration/login.html:20
+msgid "Password"
+msgstr "رمز عبور"
+
+#: umap/templates/registration/login.html:21
+msgid "Login"
+msgstr "ورود"
+
+#: umap/templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "لطفا ارائه دهنده را انتخاب کنید"
+
+#: umap/templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap به شما این امکان را می‌دهد تا در یک دقیقه با لایه‌های <a href=\"%(osm_url)s\" />اوپن‌استریت‌مپ</a> نقشه ایجاد کنید و آن‌ها را در سایت خود قرار دهید."
+
+#: umap/templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "لایه‌های نقشه خود را انتخاب کنید"
+
+#: umap/templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "POI را اضافه کنید: نشانگرها، خطوط، چند ضلعی‌ها..."
+
+#: umap/templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "رنگ‌ها و آیکون‌های POI را مدیریت کنید"
+
+#: umap/templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "مدیریت گزینه های نقشه: نمایش حداقل نقشه، مکان یابی کاربر در حال بارگذاری…"
+
+#: umap/templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "واردات داده های زمین ساختار (geojson ، gpx ، kml ، osm ...)"
+
+#: umap/templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "مجوز داده های خود را انتخاب کنید"
+
+#: umap/templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "نقشه خود را جاسازی کرده و به اشتراک بگذارید"
+
+#: umap/templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "و <a href=\"%(repo_url)s\">متن باز</a> است!"
+
+#: umap/templates/umap/about_summary.html:35
+msgid "Play with the demo"
+msgstr "با نسخه ی نمایشی کار کنید"
+
+#: umap/templates/umap/home.html:17
+msgid "Map of the uMaps"
+msgstr "نقشه uMaps"
+
+#: umap/templates/umap/home.html:24
+msgid "Get inspired, browse maps"
+msgstr "الهام بگیرید، نقشه‌ها را مرور کنید"
+
+#: umap/templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "شما وارد سیستم شده اید. ادامه..."
+
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
+msgid "by"
+msgstr "توسط"
+
+#: umap/templates/umap/map_list.html:11
+msgid "More"
+msgstr "بیشتر"
+
+#: umap/templates/umap/navigation.html:14
+msgid "About"
+msgstr "درباره"
+
+#: umap/templates/umap/navigation.html:15
+msgid "Help"
+msgstr "راهنما"
+
+#: umap/templates/umap/navigation.html:18
+msgid "Change password"
+msgstr "رمز عبور را تغییر دهید"
+
+#: umap/templates/umap/password_change.html:6
+msgid "Password change"
+msgstr "تغییر رمز عبور"
+
+#: umap/templates/umap/password_change.html:7
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "لطفاً برای حفظ امنیت گذرواژه قدیمی خود را وارد کنید و سپس رمز جدید خود را دوبار وارد کنید تا بتوانیم تأیید کنیم که شما آن را به درستی وارد کرده اید."
+
+#: umap/templates/umap/password_change.html:12
+msgid "Old password"
+msgstr "رمز عبور قدیمی"
+
+#: umap/templates/umap/password_change.html:14
+msgid "New password"
+msgstr "رمز عبور جدید"
+
+#: umap/templates/umap/password_change.html:16
+msgid "New password confirmation"
+msgstr "تایید رمز عبور جدید"
+
+#: umap/templates/umap/password_change.html:18
+msgid "Change my password"
+msgstr "تغییر رمز عبور خود"
+
+#: umap/templates/umap/password_change_done.html:6
+msgid "Password change successful"
+msgstr "تغییر رمز عبور موفقیت آمیز بود"
+
+#: umap/templates/umap/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "رمز عبور شما تغییر کرد"
+
+#: umap/templates/umap/search.html:13
+msgid "Not map found."
+msgstr "نقشه یافت نشد."
+
+#: umap/views.py:232
+msgid "View the map"
+msgstr "مشاهده نقشه"
+
+#: umap/views.py:529
+#, python-format
+msgid ""
+"Your map has been created! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "نقشه شما ایجاد شده است! اگر می‌خواهید این نقشه را از یک رایانه دیگر ویرایش کنید، از این لینک استفاده کنید: %(anonymous_url)s"
+
+#: umap/views.py:534
+msgid "Congratulations, your map has been created!"
+msgstr "تبریک می‌گویم، نقشه شما ایجاد شده است!"
+
+#: umap/views.py:564
+msgid "Map has been updated!"
+msgstr "نقشه به روز شده است!"
+
+#: umap/views.py:589
+msgid "Map editors updated with success!"
+msgstr "ویراستاران نقشه با موفقیت به روز شد!"
+
+#: umap/views.py:614
+msgid "Only its owner can delete the map."
+msgstr "فقط مالک آن می‌تواند نقشه را حذف کند."
+
+#: umap/views.py:637
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "نقشه شما شبیه سازی شده است! اگر می خواهید این نقشه را از رایانه دیگری ویرایش کنید، لطفاً از این پیوند استفاده کنید: %(anonymous_url)s"
+
+#: umap/views.py:642
+msgid "Congratulations, your map has been cloned!"
+msgstr "تبریک می گویم، نقشه شما شبیه سازی شده است!"
+
+#: umap/views.py:793
+msgid "Layer successfully deleted."
+msgstr "لایه با موفقیت حذف شد."

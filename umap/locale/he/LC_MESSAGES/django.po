@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2020-02-26 06:19+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>, 2020\n"
 "Language-Team: Hebrew (http://www.transifex.com/openstreetmap/umap/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,7 +70,7 @@ msgstr "חיפוש"
 msgid "Secret edit link is %s"
 msgstr "קישור העריכה הסודי הוא %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "לכולם יש הרשאות לערוך"
 
@@ -82,107 +82,107 @@ msgstr "רק למי שיש את קישור העריכה הסודי יכול לע
 msgid "Site is readonly for maintenance"
 msgstr "האתר הוא לקריאה בלבד לצורך תחזוקה"
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "שם"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "פרטים"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "קישור לעמוד בו הרישיון מפורט."
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "תבנית כתובת עם תבנית האריחים של OSM"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "סדר שכבת האריחים בתיבת העריכה"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "רק עורכים יכולים לערוך"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "רק בעלים יכולים לערוך"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "כולם (ציבורי)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "לכל מי שיש את הקישור"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "עורכים בלבד"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr "חסום"
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "תיאור"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "מרכז"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "תקריב"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "איתור"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "לאתר משתמש עם הטעינה?"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "נא לבחור את רישיון המפה."
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "רישיון"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "בעלות"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "עורכים"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "מצב עריכה"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "מצב שיתוף"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "הגדרות"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "עותק של"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "הצגה עם הטעינה"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "הצגת השכבה הזאת עם הטעינה."
 
@@ -276,7 +276,7 @@ msgstr "מפות שתענקנה לך השראה"
 msgid "You are logged in. Continuing..."
 msgstr "נכנסת למערכת. ממשיכים הלאה…"
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "מאת"
 
@@ -289,8 +289,8 @@ msgid "About"
 msgstr "על אודות"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "משוב"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -334,30 +334,30 @@ msgstr "הססמה שלך הוחלפה."
 msgid "Not map found."
 msgstr "לא נמצאה מפה."
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "הצגת המפה"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "המפה שלך נוצרה! אם מעניין אותן לערוך את המפה הזאת ממחשב אחר נא להשתמש בקישור הבא: %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "ברכותינו, המפה שלך נוצרה!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "המפה עודכנה!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "עורכי המפה עודכנו בהצלחה!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "רק לבעלים יש אפשרות למחוק את המפה."
 
@@ -372,6 +372,6 @@ msgstr "המפה שלך שוכפלה! אם מעניין אותך לערוך את
 msgid "Congratulations, your map has been cloned!"
 msgstr "ברכותינו, המפה שלך שוכפלה!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "השכבה נמחקה בהצלחה."

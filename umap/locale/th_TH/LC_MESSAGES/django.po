@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Krittin Leewanich, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 14:28+0000\n"
-"PO-Revision-Date: 2019-04-07 14:28+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>\n"
-"Language-Team: Thai (Thailand) (http://www.transifex.com/openstreetmap/umap/language/th_TH/)\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Krittin Leewanich, 2023\n"
+"Language-Team: Thai (Thailand) (http://app.transifex.com/openstreetmap/umap/language/th_TH/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,353 +25,353 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "นี่เป็นเพียงตัวอย่างสาธิต ใช้สำหรับการทดสอบและการเผยแพร่ล่วงหน้า  ถ้าต้องการตัวอย่าง\nเสถียร โปรดใช้ <a href=\"%(stable_url)s\">%(stable_url)s</a> คุณยังสามารถโฮสต์ตัวอย่างของคุณได้ เนื่องจากเป็น<a href=\"%(repo_url)s\">โอเพนซอร์ส</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
 #: umap/templates/umap/about_summary.html:33
 #: umap/templates/umap/navigation.html:26
 msgid "Create a map"
-msgstr ""
+msgstr "สร้างแผนที่"
 
 #: tmp/framacarte/templates/umap/navigation.html:7
 #: umap/templates/umap/navigation.html:10
 msgid "My maps"
-msgstr ""
+msgstr "แผนที่ของฉัน"
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Log in"
-msgstr ""
+msgstr "เข้าสู่ระบบ"
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Sign in"
-msgstr ""
+msgstr "ลงชื่อเข้าใช้"
 
 #: tmp/framacarte/templates/umap/navigation.html:12
 #: umap/templates/umap/navigation.html:20
 msgid "Log out"
-msgstr ""
+msgstr "ออกจากระบบ"
 
 #: tmp/framacarte/templates/umap/search_bar.html:6
 #: umap/templates/umap/search_bar.html:6
 msgid "Search maps"
-msgstr ""
+msgstr "ค้นหาแผนที่"
 
 #: tmp/framacarte/templates/umap/search_bar.html:10
 #: tmp/framacarte/templates/umap/search_bar.html:13
 #: umap/templates/umap/search_bar.html:9
 msgid "Search"
-msgstr ""
+msgstr "ค้นหา"
 
 #: umap/forms.py:40
 #, python-format
 msgid "Secret edit link is %s"
-msgstr ""
+msgstr "ลิงก์แก้ไขลับคือ %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
-msgstr ""
+msgstr "ทุนคนแก้ไขได้"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr ""
+msgstr "แก้ไขได้ ด้วยลิงก์ลับ"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "สามารถอ่านไซต์เท่านั้น เนื่องจากมีการซ่อมบำรุง"
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
-msgstr ""
+msgstr "ชื่อ"
+
+#: umap/models.py:47
+msgid "details"
+msgstr "รายละเอียด"
 
 #: umap/models.py:48
-msgid "details"
-msgstr ""
-
-#: umap/models.py:49
 msgid "Link to a page where the licence is detailed."
-msgstr ""
+msgstr "ลิงก์ไปยังหน้ารายละเอียดใบอนุญาต"
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
-msgstr ""
+msgstr "แม่แบบ URL ที่ใช้ฟอร์แมตไทล์ OSM"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
-msgstr ""
+msgstr "ลำดับของเลเยอร์ไทล์ในกล่องแก้ไข"
+
+#: umap/models.py:115
+msgid "Only editors can edit"
+msgstr "แก้ไขเฉพาะผู้แก้ไข"
 
 #: umap/models.py:116
-msgid "Only editors can edit"
-msgstr ""
-
-#: umap/models.py:117
 msgid "Only owner can edit"
-msgstr ""
+msgstr "แก้ไขเฉพาะเจ้าของ"
+
+#: umap/models.py:119
+msgid "everyone (public)"
+msgstr "ทุกคน (สาธารณะ)"
 
 #: umap/models.py:120
-msgid "everyone (public)"
-msgstr ""
+msgid "anyone with link"
+msgstr "ทุกคนที่มีลิงก์"
 
 #: umap/models.py:121
-msgid "anyone with link"
-msgstr ""
+msgid "editors only"
+msgstr "เฉพาะผู้แก้ไข"
 
 #: umap/models.py:122
-msgid "editors only"
-msgstr ""
-
-#: umap/models.py:123
 msgid "blocked"
-msgstr ""
+msgstr "บล็อก"
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
-msgstr ""
+msgstr "คำอธิบาย"
+
+#: umap/models.py:126
+msgid "center"
+msgstr "ทำให้อยู่ตรงกลาง"
 
 #: umap/models.py:127
-msgid "center"
-msgstr ""
+msgid "zoom"
+msgstr "ซูม"
 
 #: umap/models.py:128
-msgid "zoom"
-msgstr ""
-
-#: umap/models.py:129
 msgid "locate"
-msgstr ""
+msgstr "ระบุตำแหน่ง"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
-msgstr ""
+msgstr "ระบุตำแหน่งผู้ใช้ที่กำลังโหลด?"
+
+#: umap/models.py:131
+msgid "Choose the map licence."
+msgstr "เลือกใบอนุญาติแผนที่"
 
 #: umap/models.py:132
-msgid "Choose the map licence."
-msgstr ""
-
-#: umap/models.py:133
 msgid "licence"
-msgstr ""
+msgstr "ใบอนุญาติ"
+
+#: umap/models.py:137
+msgid "owner"
+msgstr "เจ้าของ"
 
 #: umap/models.py:138
-msgid "owner"
-msgstr ""
+msgid "editors"
+msgstr "ผู้แก้ไข"
 
 #: umap/models.py:139
-msgid "editors"
-msgstr ""
+msgid "edit status"
+msgstr "สถานะการแก้ไข"
 
 #: umap/models.py:140
-msgid "edit status"
-msgstr ""
+msgid "share status"
+msgstr "สถานะการแชร์"
 
 #: umap/models.py:141
-msgid "share status"
-msgstr ""
-
-#: umap/models.py:142
 msgid "settings"
-msgstr ""
+msgstr "การตั้งค่า"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
-msgstr ""
+msgstr "โคลนของ"
+
+#: umap/models.py:260
+msgid "display on load"
+msgstr "แสดงตอนโหลด"
 
 #: umap/models.py:261
-msgid "display on load"
-msgstr ""
-
-#: umap/models.py:262
 msgid "Display this layer on load."
-msgstr ""
+msgstr "แสดงเลเยอร์ตอนโหลด"
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr ""
+msgstr "ไปหน้าหลัก"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
 msgid "Browse %(current_user)s's maps"
-msgstr ""
+msgstr "เรียกดูแผนที่ของ %(current_user)s"
 
 #: umap/templates/auth/user_detail.html:15
 #, python-format
 msgid "%(current_user)s has no maps."
-msgstr ""
+msgstr "ไม่มีแผนที่ของ %(current_user)s"
 
 #: umap/templates/registration/login.html:4
 msgid "Please log in with your account"
-msgstr ""
+msgstr "โปรดเข้าสู่ระบบ"
 
 #: umap/templates/registration/login.html:18
 msgid "Username"
-msgstr ""
+msgstr "ชื่อผู้ใช้"
 
 #: umap/templates/registration/login.html:20
 msgid "Password"
-msgstr ""
+msgstr "รหัสผ่าน"
 
 #: umap/templates/registration/login.html:21
 msgid "Login"
-msgstr ""
+msgstr "ลงชื่อเข้าใช้"
 
 #: umap/templates/registration/login.html:27
 msgid "Please choose a provider"
-msgstr ""
+msgstr "โปรดเลือกผู้ให้บริการ"
 
 #: umap/templates/umap/about_summary.html:6
 #, python-format
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr ""
+msgstr "uMap ช่วยให้คุณสร้างแผนที่ด้วยเลเยอร์จาก <a href=\"%(osm_url)s\" />OpenStreetMap</a> ในระยะเวลาไม่กี่นาที และฝังไว้ในเว็บไซต์ของคุณ"
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr ""
+msgstr "เลือกเลเยอร์ของแผนที่"
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
-msgstr ""
+msgstr "เพิ่ม POI: เครื่องหมาย, เส้น, รูปร่าง..."
 
 #: umap/templates/umap/about_summary.html:13
 msgid "Manage POIs colours and icons"
-msgstr ""
+msgstr "จัดการสีและสัญลักษณ์ POI"
 
 #: umap/templates/umap/about_summary.html:14
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
+msgstr "จัดการตัวเลือกแผนที่: แสดงแผนที่เล็ก, ระบุตำแหน่งผู้ใช้ตอนโหลด..."
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "แบทช์นำเข้าข้อมูลโครงสร้างทางภูมิศาสตร์ (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr ""
+msgstr "เลือกใบอนุญาติสำหรับข้อมูล"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
-msgstr ""
+msgstr "ฝังและแชร์แผนที่"
 
 #: umap/templates/umap/about_summary.html:23
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "และเป็น<a href=\"%(repo_url)s\">โอเพ่นซอร์ส</a>!"
 
 #: umap/templates/umap/about_summary.html:35
 msgid "Play with the demo"
-msgstr ""
+msgstr "เล่นกับตัวอย่างเดโม่"
 
 #: umap/templates/umap/home.html:17
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "แผนที่จาก uMaps"
 
 #: umap/templates/umap/home.html:24
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "รับแรงบันดาลใจ เรียกดูแผนที่"
 
 #: umap/templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
-msgstr ""
+msgstr "คุณเข้าสู่ระบบแล้ว กำลังดำเนินการต่อ..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
-msgstr ""
+msgstr "โดย"
 
 #: umap/templates/umap/map_list.html:11
 msgid "More"
-msgstr ""
+msgstr "เพิ่มเติม"
 
 #: umap/templates/umap/navigation.html:14
 msgid "About"
-msgstr ""
+msgstr "เกี่ยวกับ"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr ""
+msgid "Help"
+msgstr "ช่วยเหลือ"
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
-msgstr ""
+msgstr "เปลี่ยนรหัสผ่าน"
 
 #: umap/templates/umap/password_change.html:6
 msgid "Password change"
-msgstr ""
+msgstr "การเปลี่ยนแปลงรหัสผ่าน"
 
 #: umap/templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "โปรดใส่รหัสผ่านเก่าของคุณ และเพื่อความปลอดภัย ป้อนรหัสผ่ายใหม่สองครั้งเพื่อตรวจสอบว่าคุณนั้นพิมพ์ถูกต้องแล้ว"
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
-msgstr ""
+msgstr "รหัสผ่านเก่า"
 
 #: umap/templates/umap/password_change.html:14
 msgid "New password"
-msgstr ""
+msgstr "รหัสผ่านใหม่"
 
 #: umap/templates/umap/password_change.html:16
 msgid "New password confirmation"
-msgstr ""
+msgstr "ยืนยันรหัสผ่านใหม่"
 
 #: umap/templates/umap/password_change.html:18
 msgid "Change my password"
-msgstr ""
+msgstr "เปลี่ยนรหัสผ่าน"
 
 #: umap/templates/umap/password_change_done.html:6
 msgid "Password change successful"
-msgstr ""
+msgstr "เปลี่ยนรหัสผ่านแล้ว"
 
 #: umap/templates/umap/password_change_done.html:7
 msgid "Your password was changed."
-msgstr ""
+msgstr "รหัสผ่านของคุณนั้นถูกเปลี่ยนแล้ว"
 
 #: umap/templates/umap/search.html:13
 msgid "Not map found."
-msgstr ""
+msgstr "ไม่พบแผนที่"
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
-msgstr ""
+msgstr "ดูแผนที่"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr ""
+msgstr "แผนที่ของคุณถูกสร้างแล้ว! ถ้าคุณต้องการแก้ไขแผนที่นี้จากอุปกรณ์อื่น โปรดใช้ลิงค์: %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
-msgstr ""
+msgstr "ยินดีด้วย แผนที่ของคุณถูกสร้างขึ้นแล้ว!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
-msgstr ""
+msgstr "อัพเดทแผนที่แล้ว!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
-msgstr ""
+msgstr "ผู้แก้ไขแผนที่อัปเดตสำเร็จแล้ว!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
-msgstr ""
+msgstr "เฉพาะเจ้าของสามารถลบแผนที่ได้เท่านั้น"
 
 #: umap/views.py:637
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr ""
+msgstr "แผนที่ของคุณถูกโคลนแล้ว! ถ้าคุณต้องการแก้ไขแผนที่นี้จากอุปกรณ์อื่น โปรดใช้ลิงค์: %(anonymous_url)s"
 
 #: umap/views.py:642
 msgid "Congratulations, your map has been cloned!"
-msgstr ""
+msgstr "ยินดีด้วย แผนที่ของคุณถูกโคลนแล้ว!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
-msgstr ""
+msgstr "ลบเลเยอร์สำเร็จแล้ว"

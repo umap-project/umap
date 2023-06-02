@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2021-05-20 21:06+0000\n"
-"Last-Translator: Пламен\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Пламен, 2021\n"
 "Language-Team: Bulgarian (http://www.transifex.com/openstreetmap/umap/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,7 +72,7 @@ msgstr "Търсене"
 msgid "Secret edit link is %s"
 msgstr "Тайно редактиране на линк е %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "Всеки може да редактира"
 
@@ -84,107 +84,107 @@ msgstr "Само може да се редактира с тайно редак�
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "име"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "детайли"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "Линк към страницата с подробно описание за лиценза."
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "URL шаблон, използван формат OSM плочи"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "Поръчка на tilelayers в полето за редактиране"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "Само редактори могат да редактират"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "Само притежателят може да редактира"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "всеки (публично)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "всеки които има линк"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "само редакторите"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr ""
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "описание"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "център"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "мащаб"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "локализирай"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "Локализирай потребител при зареждане?"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "Избери лиценз за картата."
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "лиценз"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "притежател"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "редактори"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "статус на редактиране"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "сподели статус"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "настройки"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "Клониране на"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "покажи при зареждане"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "Покажи този слой при зареждане"
 
@@ -278,7 +278,7 @@ msgstr "Вдъхнови се, разгледай други карти "
 msgid "You are logged in. Continuing..."
 msgstr "В процес на включване. Продължение..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "от"
 
@@ -291,8 +291,8 @@ msgid "About"
 msgstr "Относно"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "Мнения"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -336,30 +336,30 @@ msgstr ""
 msgid "Not map found."
 msgstr "Няма такава карта."
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "Виж картата"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Вашата карта е създадена! Ако искате да редактирате тази карта от друг компютър, моля използвайте този линк : %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "Поздравления, вашата карта е създадена!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "Карта е актуализирана!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "Редакторите на картата актуализират с успех!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "Само собственикът може да изтрие картата."
 
@@ -374,6 +374,6 @@ msgstr "Вашата карта е клонирана! Ако искате да 
 msgid "Congratulations, your map has been cloned!"
 msgstr "Поздравления, вашата карта е клонирана!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "Слоят е изтрит успешно."

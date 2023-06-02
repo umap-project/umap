@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Cees Geuze <info@cgid.nl>, 2020
+# danieldegroot2 <danieldegroot18@gmail.com>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2020-07-19 19:55+0000\n"
-"Last-Translator: Cees Geuze <info@cgid.nl>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: danieldegroot2 <danieldegroot18@gmail.com>, 2022\n"
 "Language-Team: Dutch (http://www.transifex.com/openstreetmap/umap/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +26,7 @@ msgid ""
 "need a stable instance, please use <a "
 "href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
+msgstr "Dit is een demo-versie, gebruikt voor tests en pre-rolling releases. Als u een stabiele versie nodig hebt, gebruik <a href=\"%(stable_url)s\">%(stable_url)s</a>. U kan ook uw eigen versie hosten, het is namelijk <a href=\"%(repo_url)s\">open source</a>!"
 
 #: tmp/framacarte/templates/umap/home.html:83
 #: tmp/framacarte/templates/umap/navigation.html:14
@@ -42,7 +43,7 @@ msgstr "Mijn kaarten"
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
 msgid "Log in"
-msgstr ""
+msgstr "Inloggen"
 
 #: tmp/framacarte/templates/umap/navigation.html:9
 #: umap/templates/umap/navigation.html:12
@@ -68,127 +69,127 @@ msgstr "Zoeken"
 #: umap/forms.py:40
 #, python-format
 msgid "Secret edit link is %s"
-msgstr ""
+msgstr "Geheime link om te bewerken is %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
-msgstr "Iedereen kan wijzigen"
+msgstr "Iedereen kan wijzigingen maken"
 
 #: umap/forms.py:45
 msgid "Only editable with secret edit link"
-msgstr ""
+msgstr "Alleen te bewerken met een geheime link"
 
 #: umap/middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "Kaart is 'alleen lezen' wegens onderhoud"
+msgstr "Site is 'alleen lezen' wegens onderhoud"
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "naam"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "details"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "Link naar pagina waar de licentie details staan"
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
-msgstr ""
+msgstr "URL-sjabloon met OSM tegel-formaat"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
-msgstr ""
+msgstr "Volgorde van de tegel-lagen in het bewerkingsvak."
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "Alleen editors kunnen wijzigen"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "Alleen eigenaar kan wijzigen"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "iedereen (openbaar)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "Iedereen met een link"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "alleen editors"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr "geblokkeerd"
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "omschrijving"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "centreer"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "zoom"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "zoek"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "Gebruiker zoeken tijdens laden?"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "Kies de kaartlicentie"
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "Licentie"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "eigenaar"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "editors"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "wijzig status"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "deel status"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "instellingen"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "Kopie van"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "toon tijdens laden"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "Toon deze laag tijdens laden."
 
 #: umap/templates/404.html:7
 msgid "Take me to the home page"
-msgstr "Ga naar de home page"
+msgstr "Ga naar de home-pagina"
 
 #: umap/templates/auth/user_detail.html:7
 #, python-format
@@ -225,11 +226,11 @@ msgstr "Kies een provider"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Maak in enkele ogenblikken kaarten met uMaps <a href=\"%(osm_url)s\" />OpenStreetMap</a> kaartlagen en toon ze op uw site."
+msgstr "Maak in enkele ogenblikken kaarten met <a href=\"%(osm_url)s\" />OpenStreetMap</a>-kaartlagen en toon ze op uw site."
 
 #: umap/templates/umap/about_summary.html:11
 msgid "Choose the layers of your map"
-msgstr "Kies de lagen van je kaart"
+msgstr "Kies de lagen van uw kaart"
 
 #: umap/templates/umap/about_summary.html:12
 msgid "Add POIs: markers, lines, polygons..."
@@ -245,11 +246,11 @@ msgstr "Stel kaartopties in: toon minikaart, zoek gebruiker tijdens laden..."
 
 #: umap/templates/umap/about_summary.html:15
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
+msgstr "Batchimporteer geo-gestructureerde gegevens (geojson, gpx, kml, osm...)"
 
 #: umap/templates/umap/about_summary.html:16
 msgid "Choose the license for your data"
-msgstr "Kies de licentie voor je data"
+msgstr "Kies de licentie voor uw data"
 
 #: umap/templates/umap/about_summary.html:17
 msgid "Embed and share your map"
@@ -276,7 +277,7 @@ msgstr "Laat u inspireren, blader door kaarten"
 msgid "You are logged in. Continuing..."
 msgstr "U bent ingelogd. Ga verder..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "door"
 
@@ -289,8 +290,8 @@ msgid "About"
 msgstr "Over"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "Terugkoppeling"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -304,7 +305,7 @@ msgstr "Wachtwoord wijziging"
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr "Vul uw oude wachtwoord in ,om veiligheidsredenen, en vul daarna tweemaal uw nieuwe wachtwoord in, zodat we zeker weten dat u het correct hebt ingevoerd."
+msgstr "Vul uw oude wachtwoord in -om veiligheidsredenen- en vul daarna tweemaal uw nieuwe wachtwoord in, zodat we zeker weten dat u het correct hebt ingevoerd."
 
 #: umap/templates/umap/password_change.html:12
 msgid "Old password"
@@ -334,30 +335,30 @@ msgstr "Uw wachtwoord is gewijzigd."
 msgid "Not map found."
 msgstr "Geen kaart gevonden."
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "Bekijk de kaart"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Uw kaart is gemaakt! Als u deze kaart wilt wijzigen vanaf een andere computer, gebruik dan deze link: %(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "Gefeliciteerd, uw kaart is gemaakt!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "Kaart is bijgewerkt!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "Kaarteditors met succes bijgewerkt!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "Kaart kan alleen door eigenaar worden verwijderd."
 
@@ -372,6 +373,6 @@ msgstr "Uw kaart is gekopieerd! Als u deze kaart wilt wijzigen vanaf een andere 
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gefeliciteerd, uw kaart is gekopieerd!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "Laag is verwijderd."

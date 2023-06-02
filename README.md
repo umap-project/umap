@@ -8,7 +8,7 @@
 
 uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site.
 *Because we think that the more OSM will be used, the more OSM will be improved.*
-It uses [django-leaflet-storage](https://github.com/umap-project/django-leaflet-storage) and [Leaflet.Storage](https://github.com/umap-project/Leaflet.Storage),  built on top of Django and Leaflet.
+Built on top of Django and Leaflet.
 
 
 ## Installation and configuration

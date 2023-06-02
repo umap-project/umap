@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 14:24+0000\n"
-"PO-Revision-Date: 2020-04-08 15:29+0000\n"
-"Last-Translator: kingserbi <stefan.andjelkovic.sf@gmail.com>\n"
+"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: kingserbi <stefan.andjelkovic.sf@gmail.com>, 2019-2020\n"
 "Language-Team: Serbian (http://www.transifex.com/openstreetmap/umap/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,7 +70,7 @@ msgstr "Претрага"
 msgid "Secret edit link is %s"
 msgstr "Тајни лик за уређивање је %s"
 
-#: umap/forms.py:44 umap/models.py:115
+#: umap/forms.py:44 umap/models.py:114
 msgid "Everyone can edit"
 msgstr "Свако може да уређује"
 
@@ -82,107 +82,107 @@ msgstr "Могуће је уређивати само са тајним линк
 msgid "Site is readonly for maintenance"
 msgstr "Доступно само ради одржавања сајта"
 
-#: umap/models.py:17
+#: umap/models.py:16
 msgid "name"
 msgstr "Име"
 
-#: umap/models.py:48
+#: umap/models.py:47
 msgid "details"
 msgstr "Детаљи"
 
-#: umap/models.py:49
+#: umap/models.py:48
 msgid "Link to a page where the licence is detailed."
 msgstr "Линк до странице на којој је лиценца детаљно описана"
 
-#: umap/models.py:63
+#: umap/models.py:62
 msgid "URL template using OSM tile format"
 msgstr "URL шаблон користећи OSM формат"
 
-#: umap/models.py:71
+#: umap/models.py:70
 msgid "Order of the tilelayers in the edit box"
 msgstr "Редослед слојева у пољу за уређивање"
 
-#: umap/models.py:116
+#: umap/models.py:115
 msgid "Only editors can edit"
 msgstr "Само уређивачи могу да уређују"
 
-#: umap/models.py:117
+#: umap/models.py:116
 msgid "Only owner can edit"
 msgstr "Само власник може да уређује"
 
-#: umap/models.py:120
+#: umap/models.py:119
 msgid "everyone (public)"
 msgstr "свако (јавно)"
 
-#: umap/models.py:121
+#: umap/models.py:120
 msgid "anyone with link"
 msgstr "свако са линком"
 
-#: umap/models.py:122
+#: umap/models.py:121
 msgid "editors only"
 msgstr "само уређивачи"
 
-#: umap/models.py:123
+#: umap/models.py:122
 msgid "blocked"
 msgstr "блокирано"
 
-#: umap/models.py:126 umap/models.py:256
+#: umap/models.py:125 umap/models.py:255
 msgid "description"
 msgstr "опис"
 
-#: umap/models.py:127
+#: umap/models.py:126
 msgid "center"
 msgstr "центар"
 
-#: umap/models.py:128
+#: umap/models.py:127
 msgid "zoom"
 msgstr "увећање"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "locate"
 msgstr "пронаћи"
 
-#: umap/models.py:129
+#: umap/models.py:128
 msgid "Locate user on load?"
 msgstr "Пронаћи корисника при уређивању"
 
-#: umap/models.py:132
+#: umap/models.py:131
 msgid "Choose the map licence."
 msgstr "Изаберите лиценцу мапе"
 
-#: umap/models.py:133
+#: umap/models.py:132
 msgid "licence"
 msgstr "лиценца"
 
-#: umap/models.py:138
+#: umap/models.py:137
 msgid "owner"
 msgstr "власник"
 
-#: umap/models.py:139
+#: umap/models.py:138
 msgid "editors"
 msgstr "уређивачи"
 
-#: umap/models.py:140
+#: umap/models.py:139
 msgid "edit status"
 msgstr "статус уређивања"
 
-#: umap/models.py:141
+#: umap/models.py:140
 msgid "share status"
 msgstr "подели статус"
 
-#: umap/models.py:142
+#: umap/models.py:141
 msgid "settings"
 msgstr "подешавања"
 
-#: umap/models.py:210
+#: umap/models.py:209
 msgid "Clone of"
 msgstr "клон од"
 
-#: umap/models.py:261
+#: umap/models.py:260
 msgid "display on load"
 msgstr "приказ при учитавању"
 
-#: umap/models.py:262
+#: umap/models.py:261
 msgid "Display this layer on load."
 msgstr "Прикажи овај лејер при учитавању"
 
@@ -276,7 +276,7 @@ msgstr "Инспиришите се, претражите мапе"
 msgid "You are logged in. Continuing..."
 msgstr "Улоговани сте. Учитава се..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:214
+#: umap/templates/umap/map_list.html:7 umap/views.py:227
 msgid "by"
 msgstr "од стране"
 
@@ -289,8 +289,8 @@ msgid "About"
 msgstr "О апликацији"
 
 #: umap/templates/umap/navigation.html:15
-msgid "Feedback"
-msgstr "Повратна информација"
+msgid "Help"
+msgstr ""
 
 #: umap/templates/umap/navigation.html:18
 msgid "Change password"
@@ -334,30 +334,30 @@ msgstr "Ваша лозинка је промењена."
 msgid "Not map found."
 msgstr "Мапа није пронађена."
 
-#: umap/views.py:220
+#: umap/views.py:232
 msgid "View the map"
 msgstr "Преглед мапе"
 
-#: umap/views.py:524
+#: umap/views.py:529
 #, python-format
 msgid ""
 "Your map has been created! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Мапа успешно креирана! Ако желите да уређује мапу са другог рачунара, користите овај линк:%(anonymous_url)s"
 
-#: umap/views.py:529
+#: umap/views.py:534
 msgid "Congratulations, your map has been created!"
 msgstr "Чесистамо, ваша мапа је креирана!"
 
-#: umap/views.py:561
+#: umap/views.py:564
 msgid "Map has been updated!"
 msgstr "Мапа је ажурирана!"
 
-#: umap/views.py:587
+#: umap/views.py:589
 msgid "Map editors updated with success!"
 msgstr "Успешно су ажурирани уредници мапа!"
 
-#: umap/views.py:612
+#: umap/views.py:614
 msgid "Only its owner can delete the map."
 msgstr "Власник мапе једино може да обрише мапу."
 
@@ -372,6 +372,6 @@ msgstr "Мапа успешно дуплирана! Ако желите да у�
 msgid "Congratulations, your map has been cloned!"
 msgstr "Честитамо, ваша мапа је дуплирана!"
 
-#: umap/views.py:809
+#: umap/views.py:793
 msgid "Layer successfully deleted."
 msgstr "Лејер успешно избрисан."
