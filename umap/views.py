@@ -630,7 +630,7 @@ class SendEditLink(FormLessEditMixin, FormView):
         link = self.object.get_anonymous_edit_url()
 
         send_mail(
-            _("Your secret edit link"),
+            _("The uMap edit link for your map: %(map_name)s" % {"map_name": self.object.name}),
             _("Here is your secret edit link: %(link)s" % {"link": link}),
             settings.FROM_EMAIL,
             [email],
