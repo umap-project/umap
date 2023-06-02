@@ -112,6 +112,17 @@ def test_valid_proxy_request_with_invalid_ttl(client):
     assert "X-Accel-Expires" not in response
 
 
+def test_invalid_proxy_url_should_return_400(client):
+    url = reverse("ajax-proxy")
+    params = {"url": "http://example.org/a space is invalid"}
+    headers = {
+        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
+        "HTTP_REFERER": settings.SITE_URL,
+    }
+    response = client.get(url, params, **headers)
+    assert response.status_code == 400
+
+
 @pytest.mark.django_db
 def test_login_does_not_contain_form_if_not_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = False

@@ -4,6 +4,7 @@ import os
 import re
 import socket
 from datetime import date, timedelta
+from http.client import InvalidURL
 from pathlib import Path
 from urllib.error import URLError
 
@@ -306,6 +307,8 @@ class AjaxProxy(View):
             return HttpResponse(e.msg, status=e.code, content_type="text/plain")
         except URLError:
             return HttpResponseBadRequest("URL error")
+        except InvalidURL:
+            return HttpResponseBadRequest("Invalid URL")
         else:
             status_code = proxied_request.code
             mimetype = proxied_request.headers.get(
