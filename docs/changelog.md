@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+- fix table rendering (cf #1117)
+- fix some errors not caught in ajax proxy (cf #1118 #1119)
+- add simple form to send secret edit link by email in anonymous mode (cf #1102)
+
 ## 1.3.0
 
 - added a filter by category panel (cf #1041, thanks @k-3st3ban)
