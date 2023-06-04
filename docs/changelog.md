@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.2
+
+- fix wrong message after creating a map while authenticated
+- display user name in the map edit toolbar when authenticated
+
 ## 1.3.1
 
 - fix table rendering (cf #1117)
