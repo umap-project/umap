@@ -430,6 +430,16 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox h3 {
     display: inline;
 }
+.umap-main-edit-toolbox .umap-user:before {
+    content: '|';
+    color: #fff;
+    padding-right: 10px;
+    background-image: url('./img/16-white.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-position: -80px -202px;
+    width: 20px;
+}
 .umap-edit-enabled .leaflet-top {
     top: 48px;
 }

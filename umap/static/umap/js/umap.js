@@ -2021,10 +2021,14 @@ L.U.Map.include({
       setName = function () {
         name.textContent = this.getDisplayName()
       }
+    if (this.options.user) {
+        const userLabel = L.DomUtil.add('a', 'umap-user', title, this.options.user.name)
+        userLabel.href = this.options.user.url
+    }
     L.bind(setName, this)()
     L.DomEvent.on(name, 'click', this.edit, this)
     this.on('postsync', L.bind(setName, this))
-    this.help.button(title, 'edit')
+    this.help.button(name, 'edit')
     const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
     save.href = '#'
     save.title = `${L._('Save current edits')} (Ctrl+S)`
