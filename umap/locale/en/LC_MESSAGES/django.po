@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 07:12+0000\n"
+"POT-Creation-Date: 2023-06-04 06:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:40
+#: forms.py:43
 #, python-format
 msgid "Secret edit link is %s"
 msgstr ""
 
-#: forms.py:44 models.py:110
+#: forms.py:47 models.py:110
 msgid "Everyone can edit"
 msgstr ""
 
-#: forms.py:45
+#: forms.py:48
 msgid "Only editable with secret edit link"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgstr ""
 msgid "blocked"
 msgstr ""
 
-#: models.py:121 models.py:270
+#: models.py:121 models.py:271
 msgid "description"
 msgstr ""
 
@@ -126,15 +126,15 @@ msgstr ""
 msgid "settings"
 msgstr ""
 
-#: models.py:225
+#: models.py:226
 msgid "Clone of"
 msgstr ""
 
-#: models.py:274
+#: models.py:275
 msgid "display on load"
 msgstr ""
 
-#: models.py:275
+#: models.py:276
 msgid "Display this layer on load."
 msgstr ""
 
@@ -257,7 +257,7 @@ msgstr ""
 msgid "You are logged in. Continuing..."
 msgstr ""
 
-#: templates/umap/map_list.html:7 views.py:245
+#: templates/umap/map_list.html:7 views.py:249
 msgid "by"
 msgstr ""
 
@@ -343,44 +343,48 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: views.py:250
+#: views.py:254
 msgid "View the map"
 msgstr ""
 
-#: views.py:547
-#, python-format
-msgid ""
-"Your map has been created! If you want to edit this map from another "
-"computer, please use this link: %(anonymous_url)s"
-msgstr ""
-
-#: views.py:552
-msgid "Congratulations, your map has been created!"
-msgstr ""
-
-#: views.py:582
+#: views.py:578
 msgid "Map has been updated!"
 msgstr ""
 
-#: views.py:607
+#: views.py:603
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:632
+#: views.py:640
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:641
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:647
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:658
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:655
+#: views.py:681
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:660
+#: views.py:686
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:826
+#: views.py:852
 msgid "Layer successfully deleted."
 msgstr ""

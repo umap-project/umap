@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Alexander Istomin, 2018
+# Alexander Istomin, 2018
 # Кругликов Илья <ilis@inbox.ru>, 2014
 # Кругликов Илья <ilis@inbox.ru>, 2014
 # Nikolay Parukhin <parukhin@gmail.com>, 2019
@@ -12,17 +13,236 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"POT-Creation-Date: 2023-06-04 06:47+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>, 2019\n"
-"Language-Team: Russian (http://www.transifex.com/openstreetmap/umap/language/ru/)\n"
+"Last-Translator: Кругликов Илья <ilis@inbox.ru>, 2014,2016\n"
+"Language-Team: Russian (http://app.transifex.com/openstreetmap/umap/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Секретная ссылка для редактирования: %s"
+
+#: forms.py:47 models.py:110
+msgid "Everyone can edit"
+msgstr "Все могут редактировать"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Редактирование возможно только при наличии секретной ссылки"
+
+#: middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "Сайт доступен только для обслуживания"
+
+#: models.py:16
+msgid "name"
+msgstr "название"
+
+#: models.py:47
+msgid "details"
+msgstr "подробности"
+
+#: models.py:48
+msgid "Link to a page where the licence is detailed."
+msgstr "Ссылка на страницу с описанием лицензии"
+
+#: models.py:58
+msgid "URL template using OSM tile format"
+msgstr "шаблон ссылки использует формат слоя OSM"
+
+#: models.py:64
+msgid "Order of the tilelayers in the edit box"
+msgstr "Расположите слои карт в окне редактирования"
+
+#: models.py:111
+msgid "Only editors can edit"
+msgstr "Только редакторы могут редактировать"
+
+#: models.py:112
+msgid "Only owner can edit"
+msgstr "Только владелец может редактировать"
+
+#: models.py:115
+msgid "everyone (public)"
+msgstr "все (без ограничений)"
+
+#: models.py:116
+msgid "anyone with link"
+msgstr "все, у кого есть ссылка"
+
+#: models.py:117
+msgid "editors only"
+msgstr "только редакторы"
+
+#: models.py:118
+msgid "blocked"
+msgstr "блокировано"
+
+#: models.py:121 models.py:271
+msgid "description"
+msgstr "описание"
+
+#: models.py:122
+msgid "center"
+msgstr "центр"
+
+#: models.py:123
+msgid "zoom"
+msgstr "масштаб"
+
+#: models.py:125
+msgid "locate"
+msgstr "геолокация"
+
+#: models.py:125
+msgid "Locate user on load?"
+msgstr "Использовать геолокацию при загрузке?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "Выберите лицензию для карты."
+
+#: models.py:130
+msgid "licence"
+msgstr "лицензия"
+
+#: models.py:140
+msgid "owner"
+msgstr "владелец"
+
+#: models.py:144
+msgid "editors"
+msgstr "редакторы"
+
+#: models.py:147
+msgid "edit status"
+msgstr "статус редактирования"
+
+#: models.py:150
+msgid "share status"
+msgstr "статус совместного использования"
+
+#: models.py:153
+msgid "settings"
+msgstr "настройки"
+
+#: models.py:226
+msgid "Clone of"
+msgstr "Копия"
+
+#: models.py:275
+msgid "display on load"
+msgstr "показывать при загрузке"
+
+#: models.py:276
+msgid "Display this layer on load."
+msgstr "Показать этот слой при загрузке."
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Перейти на заглавную страницу"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Просмотр карт пользователя %(current_user)s"
+
+#: templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "У пользователя %(current_user)sнет карт."
+
+#: templates/auth/user_stars.html:7
+#, python-format
+msgid "Browse %(current_user)s's starred maps"
+msgstr ""
+
+#: templates/auth/user_stars.html:15
+#, python-format
+msgid "%(current_user)s has no starred maps yet."
+msgstr ""
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Войдите, используя свою учётную запись"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Пароль"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Войти"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Выберите провайдера аутентификации"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap даёт вам возможность создавать карты, основанные на данных <a href=\"%(osm_url)s\" />OpenStreetMap</a>, в считанные минуты, и публиковать их на своём сайте."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Выбирайте слои для вашей карты"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Добавляйте точки интереса: маркеры, линии, полигоны..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Выбирайте нужные цвета и изображения для объектов"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Меняйте свойства карты: отображение миникарты и других элементов управления..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Импортируйте свои геоданные (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Выберите лицензию для вашей карты"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Встраивайте вашу карту и делитесь ей"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "И это <a href=\"%(repo_url)s\">открытое ПО</a>!"
+
+#: templates/umap/about_summary.html:34 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Создать карту"
+
+#: templates/umap/about_summary.html:37
+msgid "Play with the demo"
+msgstr "Пробная карта"
+
+#: templates/umap/content.html:25
+msgid ""
+"This instance of uMap is currently in read only mode, no creation/edit is "
+"allowed."
+msgstr ""
+
+#: templates/umap/content.html:33
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -31,351 +251,146 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Это демонстрационный сайт, использующийся для тестов и подготовки стабильных выпусков. Если вам нужна стабильная версия, перейдите на  <a href=\"%(stable_url)s\">%(stable_url)s</a>. Вы можете создать свою версию, потому что это <a href=\"%(repo_url)s\">открытое ПО</a>!"
 
-#: tmp/framacarte/templates/umap/home.html:83
-#: tmp/framacarte/templates/umap/navigation.html:14
-#: umap/templates/umap/about_summary.html:33
-#: umap/templates/umap/navigation.html:26
-msgid "Create a map"
-msgstr "Создать карту"
-
-#: tmp/framacarte/templates/umap/navigation.html:7
-#: umap/templates/umap/navigation.html:10
-msgid "My maps"
-msgstr "Мои карты"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Log in"
-msgstr "Войти"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Sign in"
-msgstr "Зарегистрироваться"
-
-#: tmp/framacarte/templates/umap/navigation.html:12
-#: umap/templates/umap/navigation.html:20
-msgid "Log out"
-msgstr "Выйти"
-
-#: tmp/framacarte/templates/umap/search_bar.html:6
-#: umap/templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "Поиск карт"
-
-#: tmp/framacarte/templates/umap/search_bar.html:10
-#: tmp/framacarte/templates/umap/search_bar.html:13
-#: umap/templates/umap/search_bar.html:9
-msgid "Search"
-msgstr "Найти"
-
-#: umap/forms.py:40
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Секретная ссылка для редактирования: %s"
-
-#: umap/forms.py:44 umap/models.py:114
-msgid "Everyone can edit"
-msgstr "Все могут редактировать"
-
-#: umap/forms.py:45
-msgid "Only editable with secret edit link"
-msgstr "Редактирование возможно только при наличии секретной ссылки"
-
-#: umap/middleware.py:14
-msgid "Site is readonly for maintenance"
-msgstr "Сайт доступен только для обслуживания"
-
-#: umap/models.py:16
-msgid "name"
-msgstr "название"
-
-#: umap/models.py:47
-msgid "details"
-msgstr "подробности"
-
-#: umap/models.py:48
-msgid "Link to a page where the licence is detailed."
-msgstr "Ссылка на страницу с описанием лицензии"
-
-#: umap/models.py:62
-msgid "URL template using OSM tile format"
-msgstr "шаблон ссылки использует формат слоя OSM"
-
-#: umap/models.py:70
-msgid "Order of the tilelayers in the edit box"
-msgstr "Расположите слои карт в окне редактирования"
-
-#: umap/models.py:115
-msgid "Only editors can edit"
-msgstr "Только редакторы могут редактировать"
-
-#: umap/models.py:116
-msgid "Only owner can edit"
-msgstr "Только владелец может редактировать"
-
-#: umap/models.py:119
-msgid "everyone (public)"
-msgstr "все (без ограничений)"
-
-#: umap/models.py:120
-msgid "anyone with link"
-msgstr "все, у кого есть ссылка"
-
-#: umap/models.py:121
-msgid "editors only"
-msgstr "только редакторы"
-
-#: umap/models.py:122
-msgid "blocked"
-msgstr "блокировано"
-
-#: umap/models.py:125 umap/models.py:255
-msgid "description"
-msgstr "описание"
-
-#: umap/models.py:126
-msgid "center"
-msgstr "центр"
-
-#: umap/models.py:127
-msgid "zoom"
-msgstr "масштаб"
-
-#: umap/models.py:128
-msgid "locate"
-msgstr "геолокация"
-
-#: umap/models.py:128
-msgid "Locate user on load?"
-msgstr "Использовать геолокацию при загрузке?"
-
-#: umap/models.py:131
-msgid "Choose the map licence."
-msgstr "Выберите лицензию для карты."
-
-#: umap/models.py:132
-msgid "licence"
-msgstr "лицензия"
-
-#: umap/models.py:137
-msgid "owner"
-msgstr "владелец"
-
-#: umap/models.py:138
-msgid "editors"
-msgstr "редакторы"
-
-#: umap/models.py:139
-msgid "edit status"
-msgstr "статус редактирования"
-
-#: umap/models.py:140
-msgid "share status"
-msgstr "статус совместного использования"
-
-#: umap/models.py:141
-msgid "settings"
-msgstr "настройки"
-
-#: umap/models.py:209
-msgid "Clone of"
-msgstr "Копия"
-
-#: umap/models.py:260
-msgid "display on load"
-msgstr "показывать при загрузке"
-
-#: umap/models.py:261
-msgid "Display this layer on load."
-msgstr "Показать этот слой при загрузке."
-
-#: umap/templates/404.html:7
-msgid "Take me to the home page"
-msgstr "Перейти на заглавную страницу"
-
-#: umap/templates/auth/user_detail.html:7
-#, python-format
-msgid "Browse %(current_user)s's maps"
-msgstr "Просмотр карт пользователя %(current_user)s"
-
-#: umap/templates/auth/user_detail.html:15
-#, python-format
-msgid "%(current_user)s has no maps."
-msgstr "У пользователя %(current_user)sнет карт."
-
-#: umap/templates/registration/login.html:4
-msgid "Please log in with your account"
-msgstr "Войдите, используя свою учётную запись"
-
-#: umap/templates/registration/login.html:18
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: umap/templates/registration/login.html:20
-msgid "Password"
-msgstr "Пароль"
-
-#: umap/templates/registration/login.html:21
-msgid "Login"
-msgstr "Войти"
-
-#: umap/templates/registration/login.html:27
-msgid "Please choose a provider"
-msgstr "Выберите провайдера аутентификации"
-
-#: umap/templates/umap/about_summary.html:6
-#, python-format
-msgid ""
-"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
-"layers in a minute and embed them in your site."
-msgstr "uMap даёт вам возможность создавать карты, основанные на данных <a href=\"%(osm_url)s\" />OpenStreetMap</a>, в считанные минуты, и публиковать их на своём сайте."
-
-#: umap/templates/umap/about_summary.html:11
-msgid "Choose the layers of your map"
-msgstr "Выбирайте слои для вашей карты"
-
-#: umap/templates/umap/about_summary.html:12
-msgid "Add POIs: markers, lines, polygons..."
-msgstr "Добавляйте точки интереса: маркеры, линии, полигоны..."
-
-#: umap/templates/umap/about_summary.html:13
-msgid "Manage POIs colours and icons"
-msgstr "Выбирайте нужные цвета и изображения для объектов"
-
-#: umap/templates/umap/about_summary.html:14
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Меняйте свойства карты: отображение миникарты и других элементов управления..."
-
-#: umap/templates/umap/about_summary.html:15
-msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Импортируйте свои геоданные (geojson, gpx, kml, osm...)"
-
-#: umap/templates/umap/about_summary.html:16
-msgid "Choose the license for your data"
-msgstr "Выберите лицензию для вашей карты"
-
-#: umap/templates/umap/about_summary.html:17
-msgid "Embed and share your map"
-msgstr "Встраивайте вашу карту и делитесь ей"
-
-#: umap/templates/umap/about_summary.html:23
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "И это <a href=\"%(repo_url)s\">открытое ПО</a>!"
-
-#: umap/templates/umap/about_summary.html:35
-msgid "Play with the demo"
-msgstr "Пробная карта"
-
-#: umap/templates/umap/home.html:17
+#: templates/umap/home.html:10
 msgid "Map of the uMaps"
 msgstr "Карты uMap"
 
-#: umap/templates/umap/home.html:24
+#: templates/umap/home.html:17
 msgid "Get inspired, browse maps"
 msgstr "Смотрите чужие карты и вдохновляйтесь"
 
-#: umap/templates/umap/login_popup_end.html:2
+#: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
 msgstr "Вы вошли. Продолжим..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:227
+#: templates/umap/map_list.html:7 views.py:249
 msgid "by"
 msgstr "от"
 
-#: umap/templates/umap/map_list.html:11
+#: templates/umap/map_list.html:11
 msgid "More"
 msgstr "Ещё"
 
-#: umap/templates/umap/navigation.html:14
+#: templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "Мои карты"
+
+#: templates/umap/navigation.html:11
+msgid "Starred maps"
+msgstr ""
+
+#: templates/umap/navigation.html:13
+msgid "Log in"
+msgstr "Войти"
+
+#: templates/umap/navigation.html:13
+msgid "Sign in"
+msgstr "Зарегистрироваться"
+
+#: templates/umap/navigation.html:15
 msgid "About"
 msgstr "О проекте"
 
-#: umap/templates/umap/navigation.html:15
+#: templates/umap/navigation.html:16
 msgid "Help"
 msgstr ""
 
-#: umap/templates/umap/navigation.html:18
+#: templates/umap/navigation.html:19
 msgid "Change password"
 msgstr "Сменить пароль"
 
-#: umap/templates/umap/password_change.html:6
+#: templates/umap/navigation.html:21
+msgid "Log out"
+msgstr "Выйти"
+
+#: templates/umap/password_change.html:6
 msgid "Password change"
 msgstr "Изменение пароля"
 
-#: umap/templates/umap/password_change.html:7
+#: templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Введите старый пароль для безопасности, затем введите новый пароль дважды, чтобы убедиться, что он набран без ошибок."
 
-#: umap/templates/umap/password_change.html:12
+#: templates/umap/password_change.html:12
 msgid "Old password"
 msgstr "Старый пароль"
 
-#: umap/templates/umap/password_change.html:14
+#: templates/umap/password_change.html:14
 msgid "New password"
 msgstr "Новый пароль"
 
-#: umap/templates/umap/password_change.html:16
+#: templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr "Новый пароль для проверки"
 
-#: umap/templates/umap/password_change.html:18
+#: templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr "Изменить пароль"
 
-#: umap/templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr "Пароль изменён"
 
-#: umap/templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr "Ваш пароль был изменён."
 
-#: umap/templates/umap/search.html:13
+#: templates/umap/search.html:13
 msgid "Not map found."
 msgstr "Карта не найдена."
 
-#: umap/views.py:232
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Поиск карт"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Найти"
+
+#: views.py:254
 msgid "View the map"
 msgstr "Посмотреть карту"
 
-#: umap/views.py:529
-#, python-format
-msgid ""
-"Your map has been created! If you want to edit this map from another "
-"computer, please use this link: %(anonymous_url)s"
-msgstr "Ваша карта готова! Если вы хотите редактировать её на другом компьютере, используйте эту ссылку:: %(anonymous_url)s"
-
-#: umap/views.py:534
-msgid "Congratulations, your map has been created!"
-msgstr "Поздравляем, ваша карта готова!"
-
-#: umap/views.py:564
+#: views.py:578
 msgid "Map has been updated!"
 msgstr "Карта обновлена!"
 
-#: umap/views.py:589
+#: views.py:603
 msgid "Map editors updated with success!"
 msgstr "Редакторы карты успешно обновлены!"
 
-#: umap/views.py:614
+#: views.py:640
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:641
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:647
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:658
 msgid "Only its owner can delete the map."
 msgstr "Только владелец карты может удалить её."
 
-#: umap/views.py:637
+#: views.py:681
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Карта была скопирована. Если вы хотите редактировать её на другом компьютере, используйте эту ссылку: %(anonymous_url)s"
 
-#: umap/views.py:642
+#: views.py:686
 msgid "Congratulations, your map has been cloned!"
 msgstr "Поздравляем, ваша карта скопирована!"
 
-#: umap/views.py:793
+#: views.py:852
 msgid "Layer successfully deleted."
 msgstr "Слой удалён."

@@ -9,17 +9,236 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"POT-Creation-Date: 2023-06-04 06:47+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: tomoya muramoto <muramototomoya@gmail.com>, 2016,2021\n"
-"Language-Team: Japanese (http://www.transifex.com/openstreetmap/umap/language/ja/)\n"
+"Language-Team: Japanese (http://app.transifex.com/openstreetmap/umap/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "非公開の編集用リンク %s"
+
+#: forms.py:47 models.py:110
+msgid "Everyone can edit"
+msgstr "だれでも編集可能"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "非公開の編集リンクからのみ編集可能"
+
+#: middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "メンテナンス中のため現在読み込み専用です。"
+
+#: models.py:16
+msgid "name"
+msgstr "名称"
+
+#: models.py:47
+msgid "details"
+msgstr "詳細"
+
+#: models.py:48
+msgid "Link to a page where the licence is detailed."
+msgstr "ライセンス詳細ページへのリンク"
+
+#: models.py:58
+msgid "URL template using OSM tile format"
+msgstr "OSMタイルフォーマットを利用したURLテンプレート"
+
+#: models.py:64
+msgid "Order of the tilelayers in the edit box"
+msgstr "編集ボックス内のタイルレイヤ並び順"
+
+#: models.py:111
+msgid "Only editors can edit"
+msgstr "指定ユーザのみ編集可能"
+
+#: models.py:112
+msgid "Only owner can edit"
+msgstr "所有者のみ編集可能"
+
+#: models.py:115
+msgid "everyone (public)"
+msgstr "制限なし (公開)"
+
+#: models.py:116
+msgid "anyone with link"
+msgstr "リンクを知っている人全員"
+
+#: models.py:117
+msgid "editors only"
+msgstr "編集者のみ"
+
+#: models.py:118
+msgid "blocked"
+msgstr "ブロック"
+
+#: models.py:121 models.py:271
+msgid "description"
+msgstr "概要"
+
+#: models.py:122
+msgid "center"
+msgstr "中心点"
+
+#: models.py:123
+msgid "zoom"
+msgstr "ズーム"
+
+#: models.py:125
+msgid "locate"
+msgstr "現在地"
+
+#: models.py:125
+msgid "Locate user on load?"
+msgstr "読み込み時に現在地を表示？"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "マップのライセンスを選択"
+
+#: models.py:130
+msgid "licence"
+msgstr "ライセンス"
+
+#: models.py:140
+msgid "owner"
+msgstr "所有者"
+
+#: models.py:144
+msgid "editors"
+msgstr "編集者"
+
+#: models.py:147
+msgid "edit status"
+msgstr "編集ステータス"
+
+#: models.py:150
+msgid "share status"
+msgstr "共有状況"
+
+#: models.py:153
+msgid "settings"
+msgstr "設定"
+
+#: models.py:226
+msgid "Clone of"
+msgstr "複製元"
+
+#: models.py:275
+msgid "display on load"
+msgstr "読み込み時に表示"
+
+#: models.py:276
+msgid "Display this layer on load."
+msgstr "読み込み時にこのレイヤを表示"
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "ホームページに移動"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "%(current_user)sのマップを閲覧"
+
+#: templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "%(current_user)s はまだ地図を作成していません。"
+
+#: templates/auth/user_stars.html:7
+#, python-format
+msgid "Browse %(current_user)s's starred maps"
+msgstr ""
+
+#: templates/auth/user_stars.html:15
+#, python-format
+msgid "%(current_user)s has no starred maps yet."
+msgstr ""
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "アカウントでログインしてください"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "ユーザー名"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "パスワード"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "ログイン"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "連携アカウント選択"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMapを使うと <a href=\"%(osm_url)s\" />OpenStreetMap</a> レイヤを使った地図を作って、ウェブページに埋め込むことが簡単にできます。"
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "マップに表示させるレイヤを選択"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "POI: マーカーやライン、ポリゴンなどを追加"
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "POIのアイコンと色を調整"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置へ移動、等々"
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "地理データの一括インポート (geojson, gpx, kml, osmなど)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "作成したデータのライセンスを選択"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "サイトへのマップ表示と共有"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "uMapは <a href=\"%(repo_url)s\">オープンソース</a>です！"
+
+#: templates/umap/about_summary.html:34 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "マップを作成"
+
+#: templates/umap/about_summary.html:37
+msgid "Play with the demo"
+msgstr "デモを表示"
+
+#: templates/umap/content.html:25
+msgid ""
+"This instance of uMap is currently in read only mode, no creation/edit is "
+"allowed."
+msgstr ""
+
+#: templates/umap/content.html:33
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -28,351 +247,146 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "これはリリース前テストと試運転用のデモサーバです。安定したサーバは<a href=\"%(stable_url)s\">%(stable_url)s</a>を利用してください。uMapは<a href=\"%(repo_url)s\">Open Source</a>ですので、自分でサーバを作ることも可能です！"
 
-#: tmp/framacarte/templates/umap/home.html:83
-#: tmp/framacarte/templates/umap/navigation.html:14
-#: umap/templates/umap/about_summary.html:33
-#: umap/templates/umap/navigation.html:26
-msgid "Create a map"
-msgstr "マップを作成"
-
-#: tmp/framacarte/templates/umap/navigation.html:7
-#: umap/templates/umap/navigation.html:10
-msgid "My maps"
-msgstr "自分のマップ"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Log in"
-msgstr "ログイン"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Sign in"
-msgstr "サインイン"
-
-#: tmp/framacarte/templates/umap/navigation.html:12
-#: umap/templates/umap/navigation.html:20
-msgid "Log out"
-msgstr "ログアウト"
-
-#: tmp/framacarte/templates/umap/search_bar.html:6
-#: umap/templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "地図を検索"
-
-#: tmp/framacarte/templates/umap/search_bar.html:10
-#: tmp/framacarte/templates/umap/search_bar.html:13
-#: umap/templates/umap/search_bar.html:9
-msgid "Search"
-msgstr "検索"
-
-#: umap/forms.py:40
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "非公開の編集用リンク %s"
-
-#: umap/forms.py:44 umap/models.py:114
-msgid "Everyone can edit"
-msgstr "だれでも編集可能"
-
-#: umap/forms.py:45
-msgid "Only editable with secret edit link"
-msgstr "非公開の編集リンクからのみ編集可能"
-
-#: umap/middleware.py:14
-msgid "Site is readonly for maintenance"
-msgstr "メンテナンス中のため現在読み込み専用です。"
-
-#: umap/models.py:16
-msgid "name"
-msgstr "名称"
-
-#: umap/models.py:47
-msgid "details"
-msgstr "詳細"
-
-#: umap/models.py:48
-msgid "Link to a page where the licence is detailed."
-msgstr "ライセンス詳細ページへのリンク"
-
-#: umap/models.py:62
-msgid "URL template using OSM tile format"
-msgstr "OSMタイルフォーマットを利用したURLテンプレート"
-
-#: umap/models.py:70
-msgid "Order of the tilelayers in the edit box"
-msgstr "編集ボックス内のタイルレイヤ並び順"
-
-#: umap/models.py:115
-msgid "Only editors can edit"
-msgstr "指定ユーザのみ編集可能"
-
-#: umap/models.py:116
-msgid "Only owner can edit"
-msgstr "所有者のみ編集可能"
-
-#: umap/models.py:119
-msgid "everyone (public)"
-msgstr "制限なし (公開)"
-
-#: umap/models.py:120
-msgid "anyone with link"
-msgstr "リンクを知っている人全員"
-
-#: umap/models.py:121
-msgid "editors only"
-msgstr "編集者のみ"
-
-#: umap/models.py:122
-msgid "blocked"
-msgstr "ブロック"
-
-#: umap/models.py:125 umap/models.py:255
-msgid "description"
-msgstr "概要"
-
-#: umap/models.py:126
-msgid "center"
-msgstr "中心点"
-
-#: umap/models.py:127
-msgid "zoom"
-msgstr "ズーム"
-
-#: umap/models.py:128
-msgid "locate"
-msgstr "現在地"
-
-#: umap/models.py:128
-msgid "Locate user on load?"
-msgstr "読み込み時に現在地を表示？"
-
-#: umap/models.py:131
-msgid "Choose the map licence."
-msgstr "マップのライセンスを選択"
-
-#: umap/models.py:132
-msgid "licence"
-msgstr "ライセンス"
-
-#: umap/models.py:137
-msgid "owner"
-msgstr "所有者"
-
-#: umap/models.py:138
-msgid "editors"
-msgstr "編集者"
-
-#: umap/models.py:139
-msgid "edit status"
-msgstr "編集ステータス"
-
-#: umap/models.py:140
-msgid "share status"
-msgstr "共有状況"
-
-#: umap/models.py:141
-msgid "settings"
-msgstr "設定"
-
-#: umap/models.py:209
-msgid "Clone of"
-msgstr "複製元"
-
-#: umap/models.py:260
-msgid "display on load"
-msgstr "読み込み時に表示"
-
-#: umap/models.py:261
-msgid "Display this layer on load."
-msgstr "読み込み時にこのレイヤを表示"
-
-#: umap/templates/404.html:7
-msgid "Take me to the home page"
-msgstr "ホームページに移動"
-
-#: umap/templates/auth/user_detail.html:7
-#, python-format
-msgid "Browse %(current_user)s's maps"
-msgstr "%(current_user)sのマップを閲覧"
-
-#: umap/templates/auth/user_detail.html:15
-#, python-format
-msgid "%(current_user)s has no maps."
-msgstr "%(current_user)s はまだ地図を作成していません。"
-
-#: umap/templates/registration/login.html:4
-msgid "Please log in with your account"
-msgstr "アカウントでログインしてください"
-
-#: umap/templates/registration/login.html:18
-msgid "Username"
-msgstr "ユーザー名"
-
-#: umap/templates/registration/login.html:20
-msgid "Password"
-msgstr "パスワード"
-
-#: umap/templates/registration/login.html:21
-msgid "Login"
-msgstr "ログイン"
-
-#: umap/templates/registration/login.html:27
-msgid "Please choose a provider"
-msgstr "連携アカウント選択"
-
-#: umap/templates/umap/about_summary.html:6
-#, python-format
-msgid ""
-"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
-"layers in a minute and embed them in your site."
-msgstr "uMapを使うと <a href=\"%(osm_url)s\" />OpenStreetMap</a> レイヤを使った地図を作って、ウェブページに埋め込むことが簡単にできます。"
-
-#: umap/templates/umap/about_summary.html:11
-msgid "Choose the layers of your map"
-msgstr "マップに表示させるレイヤを選択"
-
-#: umap/templates/umap/about_summary.html:12
-msgid "Add POIs: markers, lines, polygons..."
-msgstr "POI: マーカーやライン、ポリゴンなどを追加"
-
-#: umap/templates/umap/about_summary.html:13
-msgid "Manage POIs colours and icons"
-msgstr "POIのアイコンと色を調整"
-
-#: umap/templates/umap/about_summary.html:14
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "オプション選択: ミニマップの表示、表示時にユーザの位置へ移動、等々"
-
-#: umap/templates/umap/about_summary.html:15
-msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "地理データの一括インポート (geojson, gpx, kml, osmなど)"
-
-#: umap/templates/umap/about_summary.html:16
-msgid "Choose the license for your data"
-msgstr "作成したデータのライセンスを選択"
-
-#: umap/templates/umap/about_summary.html:17
-msgid "Embed and share your map"
-msgstr "サイトへのマップ表示と共有"
-
-#: umap/templates/umap/about_summary.html:23
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "uMapは <a href=\"%(repo_url)s\">オープンソース</a>です！"
-
-#: umap/templates/umap/about_summary.html:35
-msgid "Play with the demo"
-msgstr "デモを表示"
-
-#: umap/templates/umap/home.html:17
+#: templates/umap/home.html:10
 msgid "Map of the uMaps"
 msgstr "Map of the uMaps"
 
-#: umap/templates/umap/home.html:24
+#: templates/umap/home.html:17
 msgid "Get inspired, browse maps"
 msgstr "Get inspired, browse maps"
 
-#: umap/templates/umap/login_popup_end.html:2
+#: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
 msgstr "ログインしました"
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:227
+#: templates/umap/map_list.html:7 views.py:249
 msgid "by"
 msgstr "by"
 
-#: umap/templates/umap/map_list.html:11
+#: templates/umap/map_list.html:11
 msgid "More"
 msgstr "さらに表示"
 
-#: umap/templates/umap/navigation.html:14
+#: templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "自分のマップ"
+
+#: templates/umap/navigation.html:11
+msgid "Starred maps"
+msgstr ""
+
+#: templates/umap/navigation.html:13
+msgid "Log in"
+msgstr "ログイン"
+
+#: templates/umap/navigation.html:13
+msgid "Sign in"
+msgstr "サインイン"
+
+#: templates/umap/navigation.html:15
 msgid "About"
 msgstr "uMapについて"
 
-#: umap/templates/umap/navigation.html:15
+#: templates/umap/navigation.html:16
 msgid "Help"
 msgstr ""
 
-#: umap/templates/umap/navigation.html:18
+#: templates/umap/navigation.html:19
 msgid "Change password"
 msgstr "パスワードを変更"
 
-#: umap/templates/umap/password_change.html:6
+#: templates/umap/navigation.html:21
+msgid "Log out"
+msgstr "ログアウト"
+
+#: templates/umap/password_change.html:6
 msgid "Password change"
 msgstr "パスワードを変更"
 
-#: umap/templates/umap/password_change.html:7
+#: templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "セキュリティ確認のため、古いパスワードを入力してください。次に、入力ミスがないように、新しいパスワードを2回入力してください。"
 
-#: umap/templates/umap/password_change.html:12
+#: templates/umap/password_change.html:12
 msgid "Old password"
 msgstr "古いパスワード"
 
-#: umap/templates/umap/password_change.html:14
+#: templates/umap/password_change.html:14
 msgid "New password"
 msgstr "新しいパスワード"
 
-#: umap/templates/umap/password_change.html:16
+#: templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr "新しいパスワードの確認"
 
-#: umap/templates/umap/password_change.html:18
+#: templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr "パスワードを変更"
 
-#: umap/templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr "パスワード変更に成功"
 
-#: umap/templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr "パスワードは変更されました"
 
-#: umap/templates/umap/search.html:13
+#: templates/umap/search.html:13
 msgid "Not map found."
 msgstr "検索結果がありません"
 
-#: umap/views.py:232
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "地図を検索"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "検索"
+
+#: views.py:254
 msgid "View the map"
 msgstr "マップ表示"
 
-#: umap/views.py:529
-#, python-format
-msgid ""
-"Your map has been created! If you want to edit this map from another "
-"computer, please use this link: %(anonymous_url)s"
-msgstr "マップの作成が完了しました！ このマップを他の端末から編集する場合、いかのリンクを使用してください: %(anonymous_url)s"
-
-#: umap/views.py:534
-msgid "Congratulations, your map has been created!"
-msgstr "マップ作成完了です！"
-
-#: umap/views.py:564
+#: views.py:578
 msgid "Map has been updated!"
 msgstr "マップが更新されました！"
 
-#: umap/views.py:589
+#: views.py:603
 msgid "Map editors updated with success!"
 msgstr "マップ編集者の更新が完了しました！"
 
-#: umap/views.py:614
+#: views.py:640
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:641
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:647
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:658
 msgid "Only its owner can delete the map."
 msgstr "マップを削除できるのは所有者だけです"
 
-#: umap/views.py:637
+#: views.py:681
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "マップの複製が完了しました！ このマップを他の端末から編集する場合、以下のリンクを使用してください: %(anonymous_url)s"
 
-#: umap/views.py:642
+#: views.py:686
 msgid "Congratulations, your map has been cloned!"
 msgstr "マップの複製が完了しました！"
 
-#: umap/views.py:793
+#: views.py:852
 msgid "Layer successfully deleted."
 msgstr "レイヤ削除完了"

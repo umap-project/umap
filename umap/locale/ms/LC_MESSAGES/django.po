@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 07:12+0000\n"
+"POT-Creation-Date: 2023-06-04 06:47+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023\n"
 "Language-Team: Malay (http://app.transifex.com/openstreetmap/umap/language/ms/)\n"
@@ -19,16 +19,16 @@ msgstr ""
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: forms.py:40
+#: forms.py:43
 #, python-format
 msgid "Secret edit link is %s"
 msgstr "Pautan suntingan rahsia ialah %s"
 
-#: forms.py:44 models.py:110
+#: forms.py:47 models.py:110
 msgid "Everyone can edit"
 msgstr "Sesiapa pun boleh sunting"
 
-#: forms.py:45
+#: forms.py:48
 msgid "Only editable with secret edit link"
 msgstr "Hanya boleh disunting dengan pautan rahsia"
 
@@ -80,7 +80,7 @@ msgstr "penyunting sahaja"
 msgid "blocked"
 msgstr "disekat"
 
-#: models.py:121 models.py:270
+#: models.py:121 models.py:271
 msgid "description"
 msgstr "keterangan"
 
@@ -128,15 +128,15 @@ msgstr "status perkongsian"
 msgid "settings"
 msgstr "tetapan"
 
-#: models.py:225
+#: models.py:226
 msgid "Clone of"
 msgstr "Klon bagi"
 
-#: models.py:274
+#: models.py:275
 msgid "display on load"
 msgstr "paparkan semasa dimuatkan"
 
-#: models.py:275
+#: models.py:276
 msgid "Display this layer on load."
 msgstr "Paparkan lapisan ini ketika dimuatkan."
 
@@ -236,7 +236,7 @@ msgstr "Main dengan demo"
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "Tika uMap ini kini berada dalam mod baca sahaja, tiada penciptaan/suntingan dibenarkan."
 
 #: templates/umap/content.html:33
 #, python-format
@@ -259,7 +259,7 @@ msgstr "Dapatkan inspirasi, layari peta-peta"
 msgid "You are logged in. Continuing..."
 msgstr "Anda telah log masuk. Menyambung..."
 
-#: templates/umap/map_list.html:7 views.py:245
+#: templates/umap/map_list.html:7 views.py:249
 msgid "by"
 msgstr "oleh"
 
@@ -345,44 +345,48 @@ msgstr "Cari peta"
 msgid "Search"
 msgstr "Gelintar"
 
-#: views.py:250
+#: views.py:254
 msgid "View the map"
 msgstr "Lihat peta"
 
-#: views.py:547
-#, python-format
-msgid ""
-"Your map has been created! If you want to edit this map from another "
-"computer, please use this link: %(anonymous_url)s"
-msgstr "Peta anda telah dicipta! Jika anda ingin menyunting peta ini dari komputer lain, sila gunakan pautan ini: %(anonymous_url)s"
-
-#: views.py:552
-msgid "Congratulations, your map has been created!"
-msgstr "Tahniah, peta anda telah berjaya dicipta!"
-
-#: views.py:582
+#: views.py:578
 msgid "Map has been updated!"
 msgstr "Peta telah dikemas kini!"
 
-#: views.py:607
+#: views.py:603
 msgid "Map editors updated with success!"
 msgstr "Penyunting peta telah dikemas kini dengan jayanya!"
 
-#: views.py:632
+#: views.py:640
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:641
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:647
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:658
 msgid "Only its owner can delete the map."
 msgstr "Hanya pemiliknya sahaja mampu memadamkan peta."
 
-#: views.py:655
+#: views.py:681
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Peta anda telah diklon! Jika anda ingin menyunting peta ini dari komputer lain, sila gunakan pautan ini: %(anonymous_url)s"
 
-#: views.py:660
+#: views.py:686
 msgid "Congratulations, your map has been cloned!"
 msgstr "Tahniah, peta anda telah berjaya diklon!"
 
-#: views.py:826
+#: views.py:852
 msgid "Layer successfully deleted."
 msgstr "Lapisan telah berjaya dipadamkan."

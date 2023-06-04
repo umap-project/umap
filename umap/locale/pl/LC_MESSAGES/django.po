@@ -5,7 +5,7 @@
 # Translators:
 # Daniel Koć <daniel@xn--ko-wla.pl>, 2015
 # endro, 2016
-# endro, 2015
+# endro, 2015-2016
 # Maciej Kowalik <m.kowalik.79@gmail.com>, 2016
 # maro21 OSM, 2020-2021
 # Piotr Strębski <strebski@gmail.com>, 2020
@@ -15,17 +15,236 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"POT-Creation-Date: 2023-06-04 06:47+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: maro21 OSM, 2020-2021\n"
-"Language-Team: Polish (http://www.transifex.com/openstreetmap/umap/language/pl/)\n"
+"Last-Translator: Tomasz Nycz <tomasz.merkato@gmail.com>, 2018\n"
+"Language-Team: Polish (http://app.transifex.com/openstreetmap/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Sekretnym odnośnikiem do edycji jest %s"
+
+#: forms.py:47 models.py:110
+msgid "Everyone can edit"
+msgstr "Wszyscy mogą edytować"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Edycja możliwa tylko z sekretnym odnośnikiem"
+
+#: middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "Strona jest w trybie tylko do odczytu z powodu prac konserwacyjnych"
+
+#: models.py:16
+msgid "name"
+msgstr "nazwa"
+
+#: models.py:47
+msgid "details"
+msgstr "szczegóły"
+
+#: models.py:48
+msgid "Link to a page where the licence is detailed."
+msgstr "Odnośnik do strony ze szczegółowym opisem licencji."
+
+#: models.py:58
+msgid "URL template using OSM tile format"
+msgstr "Szablon URL używający formatu kafelków OSM"
+
+#: models.py:64
+msgid "Order of the tilelayers in the edit box"
+msgstr "Kolejność podkładów w oknie edycji"
+
+#: models.py:111
+msgid "Only editors can edit"
+msgstr "Tylko edytorzy mogą edytować"
+
+#: models.py:112
+msgid "Only owner can edit"
+msgstr "Tylko właściciel może edytować"
+
+#: models.py:115
+msgid "everyone (public)"
+msgstr "wszyscy (publiczne)"
+
+#: models.py:116
+msgid "anyone with link"
+msgstr "każdy z linkiem"
+
+#: models.py:117
+msgid "editors only"
+msgstr "tylko edytorzy"
+
+#: models.py:118
+msgid "blocked"
+msgstr "zablokowane"
+
+#: models.py:121 models.py:271
+msgid "description"
+msgstr "opis"
+
+#: models.py:122
+msgid "center"
+msgstr "środek"
+
+#: models.py:123
+msgid "zoom"
+msgstr "przybliżenie"
+
+#: models.py:125
+msgid "locate"
+msgstr "lokalizuj"
+
+#: models.py:125
+msgid "Locate user on load?"
+msgstr "Lokalizować użytkownika po załadowaniu?"
+
+#: models.py:129
+msgid "Choose the map licence."
+msgstr "Wybierz licencję mapy."
+
+#: models.py:130
+msgid "licence"
+msgstr "licencja"
+
+#: models.py:140
+msgid "owner"
+msgstr "właściciel"
+
+#: models.py:144
+msgid "editors"
+msgstr "edytorzy"
+
+#: models.py:147
+msgid "edit status"
+msgstr "status edycji"
+
+#: models.py:150
+msgid "share status"
+msgstr "udostępnij status"
+
+#: models.py:153
+msgid "settings"
+msgstr "ustawienia"
+
+#: models.py:226
+msgid "Clone of"
+msgstr "Kopia"
+
+#: models.py:275
+msgid "display on load"
+msgstr "wyświetl po załadowaniu"
+
+#: models.py:276
+msgid "Display this layer on load."
+msgstr "Wyświetl tę warstwę po załadowaniu."
+
+#: templates/404.html:7
+msgid "Take me to the home page"
+msgstr "Zabierz mnie na stronę główną"
+
+#: templates/auth/user_detail.html:7
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Przeglądaj mapy %(current_user)s"
+
+#: templates/auth/user_detail.html:15
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "%(current_user)s nie posiada map."
+
+#: templates/auth/user_stars.html:7
+#, python-format
+msgid "Browse %(current_user)s's starred maps"
+msgstr ""
+
+#: templates/auth/user_stars.html:15
+#, python-format
+msgid "%(current_user)s has no starred maps yet."
+msgstr ""
+
+#: templates/registration/login.html:4
+msgid "Please log in with your account"
+msgstr "Proszę zalogować się na swoje konto"
+
+#: templates/registration/login.html:18
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+#: templates/registration/login.html:20
+msgid "Password"
+msgstr "Hasło"
+
+#: templates/registration/login.html:21
+msgid "Login"
+msgstr "Zaloguj się"
+
+#: templates/registration/login.html:27
+msgid "Please choose a provider"
+msgstr "Proszę wybrać serwis"
+
+#: templates/umap/about_summary.html:6
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMap umożliwia ci utworzenie w kilka minut mapy z użyciem warstw <a href=\"%(osm_url)s\" />OpenStreetMap</a> i zamieszczenie jej na swojej stronie internetowej."
+
+#: templates/umap/about_summary.html:11
+msgid "Choose the layers of your map"
+msgstr "Wybierz warstwy swojej mapy"
+
+#: templates/umap/about_summary.html:12
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Dodaj POI: znaczniki, linie, obszary..."
+
+#: templates/umap/about_summary.html:13
+msgid "Manage POIs colours and icons"
+msgstr "Zarządzaj kolorami oraz ikonami"
+
+#: templates/umap/about_summary.html:14
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Zmieniaj ustawienia mapy: wyświetlanie minimapy, lokalizacja użytkownika po załadowaniu..."
+
+#: templates/umap/about_summary.html:15
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Importuj geostrukturalne dane (geojson, gpx, kml, osm...)"
+
+#: templates/umap/about_summary.html:16
+msgid "Choose the license for your data"
+msgstr "Wybierz licencję swoich danych"
+
+#: templates/umap/about_summary.html:17
+msgid "Embed and share your map"
+msgstr "Umieszczaj mapy w sieci i dziel się nimi"
+
+#: templates/umap/about_summary.html:23
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "I to wszystko <a href=\"%(repo_url)s\">na wolnej licencji</a>!"
+
+#: templates/umap/about_summary.html:34 templates/umap/navigation.html:28
+msgid "Create a map"
+msgstr "Stwórz mapę"
+
+#: templates/umap/about_summary.html:37
+msgid "Play with the demo"
+msgstr "Zobacz wersję demo"
+
+#: templates/umap/content.html:25
+msgid ""
+"This instance of uMap is currently in read only mode, no creation/edit is "
+"allowed."
+msgstr ""
+
+#: templates/umap/content.html:33
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -34,351 +253,146 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "To jest serwer demonstracyjny, używany do testów i niefinalnych wydań. Jeśli potrzebujesz stabilnego serwera, użyj <a href=\"%(stable_url)s\">%(stable_url)s</a>. Możesz także postawić swój własny, wszystko jest <a href=\"%(repo_url)s\">open source</a>!"
 
-#: tmp/framacarte/templates/umap/home.html:83
-#: tmp/framacarte/templates/umap/navigation.html:14
-#: umap/templates/umap/about_summary.html:33
-#: umap/templates/umap/navigation.html:26
-msgid "Create a map"
-msgstr "Stwórz mapę"
-
-#: tmp/framacarte/templates/umap/navigation.html:7
-#: umap/templates/umap/navigation.html:10
-msgid "My maps"
-msgstr "Moje mapy"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Log in"
-msgstr "Logowanie"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Sign in"
-msgstr "Rejestracja"
-
-#: tmp/framacarte/templates/umap/navigation.html:12
-#: umap/templates/umap/navigation.html:20
-msgid "Log out"
-msgstr "Wyloguj się"
-
-#: tmp/framacarte/templates/umap/search_bar.html:6
-#: umap/templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "Znajdź mapy"
-
-#: tmp/framacarte/templates/umap/search_bar.html:10
-#: tmp/framacarte/templates/umap/search_bar.html:13
-#: umap/templates/umap/search_bar.html:9
-msgid "Search"
-msgstr "Szukaj"
-
-#: umap/forms.py:40
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Sekretnym odnośnikiem do edycji jest %s"
-
-#: umap/forms.py:44 umap/models.py:114
-msgid "Everyone can edit"
-msgstr "Wszyscy mogą edytować"
-
-#: umap/forms.py:45
-msgid "Only editable with secret edit link"
-msgstr "Edycja możliwa tylko z sekretnym odnośnikiem"
-
-#: umap/middleware.py:14
-msgid "Site is readonly for maintenance"
-msgstr "Strona jest w trybie tylko do odczytu z powodu prac konserwacyjnych"
-
-#: umap/models.py:16
-msgid "name"
-msgstr "nazwa"
-
-#: umap/models.py:47
-msgid "details"
-msgstr "szczegóły"
-
-#: umap/models.py:48
-msgid "Link to a page where the licence is detailed."
-msgstr "Odnośnik do strony ze szczegółowym opisem licencji."
-
-#: umap/models.py:62
-msgid "URL template using OSM tile format"
-msgstr "Szablon URL używający formatu kafelków OSM"
-
-#: umap/models.py:70
-msgid "Order of the tilelayers in the edit box"
-msgstr "Kolejność podkładów w oknie edycji"
-
-#: umap/models.py:115
-msgid "Only editors can edit"
-msgstr "Tylko edytorzy mogą edytować"
-
-#: umap/models.py:116
-msgid "Only owner can edit"
-msgstr "Tylko właściciel może edytować"
-
-#: umap/models.py:119
-msgid "everyone (public)"
-msgstr "wszyscy (publiczne)"
-
-#: umap/models.py:120
-msgid "anyone with link"
-msgstr "każdy z linkiem"
-
-#: umap/models.py:121
-msgid "editors only"
-msgstr "tylko edytorzy"
-
-#: umap/models.py:122
-msgid "blocked"
-msgstr "zablokowane"
-
-#: umap/models.py:125 umap/models.py:255
-msgid "description"
-msgstr "opis"
-
-#: umap/models.py:126
-msgid "center"
-msgstr "środek"
-
-#: umap/models.py:127
-msgid "zoom"
-msgstr "przybliżenie"
-
-#: umap/models.py:128
-msgid "locate"
-msgstr "lokalizuj"
-
-#: umap/models.py:128
-msgid "Locate user on load?"
-msgstr "Lokalizować użytkownika po załadowaniu?"
-
-#: umap/models.py:131
-msgid "Choose the map licence."
-msgstr "Wybierz licencję mapy."
-
-#: umap/models.py:132
-msgid "licence"
-msgstr "licencja"
-
-#: umap/models.py:137
-msgid "owner"
-msgstr "właściciel"
-
-#: umap/models.py:138
-msgid "editors"
-msgstr "edytorzy"
-
-#: umap/models.py:139
-msgid "edit status"
-msgstr "status edycji"
-
-#: umap/models.py:140
-msgid "share status"
-msgstr "udostępnij status"
-
-#: umap/models.py:141
-msgid "settings"
-msgstr "ustawienia"
-
-#: umap/models.py:209
-msgid "Clone of"
-msgstr "Kopia"
-
-#: umap/models.py:260
-msgid "display on load"
-msgstr "wyświetl po załadowaniu"
-
-#: umap/models.py:261
-msgid "Display this layer on load."
-msgstr "Wyświetl tę warstwę po załadowaniu."
-
-#: umap/templates/404.html:7
-msgid "Take me to the home page"
-msgstr "Zabierz mnie na stronę główną"
-
-#: umap/templates/auth/user_detail.html:7
-#, python-format
-msgid "Browse %(current_user)s's maps"
-msgstr "Przeglądaj mapy %(current_user)s"
-
-#: umap/templates/auth/user_detail.html:15
-#, python-format
-msgid "%(current_user)s has no maps."
-msgstr "%(current_user)s nie posiada map."
-
-#: umap/templates/registration/login.html:4
-msgid "Please log in with your account"
-msgstr "Proszę zalogować się na swoje konto"
-
-#: umap/templates/registration/login.html:18
-msgid "Username"
-msgstr "Nazwa użytkownika"
-
-#: umap/templates/registration/login.html:20
-msgid "Password"
-msgstr "Hasło"
-
-#: umap/templates/registration/login.html:21
-msgid "Login"
-msgstr "Zaloguj się"
-
-#: umap/templates/registration/login.html:27
-msgid "Please choose a provider"
-msgstr "Proszę wybrać serwis"
-
-#: umap/templates/umap/about_summary.html:6
-#, python-format
-msgid ""
-"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
-"layers in a minute and embed them in your site."
-msgstr "uMap umożliwia ci utworzenie w kilka minut mapy z użyciem warstw <a href=\"%(osm_url)s\" />OpenStreetMap</a> i zamieszczenie jej na swojej stronie internetowej."
-
-#: umap/templates/umap/about_summary.html:11
-msgid "Choose the layers of your map"
-msgstr "Wybierz warstwy swojej mapy"
-
-#: umap/templates/umap/about_summary.html:12
-msgid "Add POIs: markers, lines, polygons..."
-msgstr "Dodaj POI: znaczniki, linie, obszary..."
-
-#: umap/templates/umap/about_summary.html:13
-msgid "Manage POIs colours and icons"
-msgstr "Zarządzaj kolorami oraz ikonami"
-
-#: umap/templates/umap/about_summary.html:14
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr "Zmieniaj ustawienia mapy: wyświetlanie minimapy, lokalizacja użytkownika po załadowaniu..."
-
-#: umap/templates/umap/about_summary.html:15
-msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Importuj geostrukturalne dane (geojson, gpx, kml, osm...)"
-
-#: umap/templates/umap/about_summary.html:16
-msgid "Choose the license for your data"
-msgstr "Wybierz licencję swoich danych"
-
-#: umap/templates/umap/about_summary.html:17
-msgid "Embed and share your map"
-msgstr "Umieszczaj mapy w sieci i dziel się nimi"
-
-#: umap/templates/umap/about_summary.html:23
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr "I to wszystko <a href=\"%(repo_url)s\">na wolnej licencji</a>!"
-
-#: umap/templates/umap/about_summary.html:35
-msgid "Play with the demo"
-msgstr "Zobacz wersję demo"
-
-#: umap/templates/umap/home.html:17
+#: templates/umap/home.html:10
 msgid "Map of the uMaps"
 msgstr "Mapa uMapek"
 
-#: umap/templates/umap/home.html:24
+#: templates/umap/home.html:17
 msgid "Get inspired, browse maps"
 msgstr "Zainspiruj się, przejrzyj mapy"
 
-#: umap/templates/umap/login_popup_end.html:2
+#: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
 msgstr "Jesteś zalogowany. Kontynuowanie..."
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:227
+#: templates/umap/map_list.html:7 views.py:249
 msgid "by"
 msgstr "przez"
 
-#: umap/templates/umap/map_list.html:11
+#: templates/umap/map_list.html:11
 msgid "More"
 msgstr "Więcej"
 
-#: umap/templates/umap/navigation.html:14
+#: templates/umap/navigation.html:10
+msgid "My maps"
+msgstr "Moje mapy"
+
+#: templates/umap/navigation.html:11
+msgid "Starred maps"
+msgstr ""
+
+#: templates/umap/navigation.html:13
+msgid "Log in"
+msgstr "Logowanie"
+
+#: templates/umap/navigation.html:13
+msgid "Sign in"
+msgstr "Rejestracja"
+
+#: templates/umap/navigation.html:15
 msgid "About"
 msgstr "Informacje"
 
-#: umap/templates/umap/navigation.html:15
+#: templates/umap/navigation.html:16
 msgid "Help"
 msgstr ""
 
-#: umap/templates/umap/navigation.html:18
+#: templates/umap/navigation.html:19
 msgid "Change password"
 msgstr "Zmień hasło"
 
-#: umap/templates/umap/password_change.html:6
+#: templates/umap/navigation.html:21
+msgid "Log out"
+msgstr "Wyloguj się"
+
+#: templates/umap/password_change.html:6
 msgid "Password change"
 msgstr "Zmiana hasła"
 
-#: umap/templates/umap/password_change.html:7
+#: templates/umap/password_change.html:7
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Prosimy wpisać swoje poprzednie hasło, a następnie podać nowe dwukrotnie, by zweryfikować, czy wpisano je poprawnie"
 
-#: umap/templates/umap/password_change.html:12
+#: templates/umap/password_change.html:12
 msgid "Old password"
 msgstr "Stare hasło"
 
-#: umap/templates/umap/password_change.html:14
+#: templates/umap/password_change.html:14
 msgid "New password"
 msgstr "Nowe hasło"
 
-#: umap/templates/umap/password_change.html:16
+#: templates/umap/password_change.html:16
 msgid "New password confirmation"
 msgstr "Potwierdź nowe hasło"
 
-#: umap/templates/umap/password_change.html:18
+#: templates/umap/password_change.html:18
 msgid "Change my password"
 msgstr "Zmień moje hasło"
 
-#: umap/templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:6
 msgid "Password change successful"
 msgstr "Zmiana hasła powiodła się"
 
-#: umap/templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:7
 msgid "Your password was changed."
 msgstr "Twoje hasło zostało zmienione."
 
-#: umap/templates/umap/search.html:13
+#: templates/umap/search.html:13
 msgid "Not map found."
 msgstr "Nie znaleziono mapy."
 
-#: umap/views.py:232
+#: templates/umap/search_bar.html:6
+msgid "Search maps"
+msgstr "Znajdź mapy"
+
+#: templates/umap/search_bar.html:9
+msgid "Search"
+msgstr "Szukaj"
+
+#: views.py:254
 msgid "View the map"
 msgstr "Zobacz mapę"
 
-#: umap/views.py:529
-#, python-format
-msgid ""
-"Your map has been created! If you want to edit this map from another "
-"computer, please use this link: %(anonymous_url)s"
-msgstr "Twoja mapa została utworzona! Jeśli chcesz edytować ją z innego komputera, użyj odnośnika: %(anonymous_url)s"
-
-#: umap/views.py:534
-msgid "Congratulations, your map has been created!"
-msgstr "Gratulacje, twoja mapa została utworzona!"
-
-#: umap/views.py:564
+#: views.py:578
 msgid "Map has been updated!"
 msgstr "Mapa została zaktualizowana!"
 
-#: umap/views.py:589
+#: views.py:603
 msgid "Map editors updated with success!"
 msgstr "Edytorzy mapy zaktualizowani pomyślnie!"
 
-#: umap/views.py:614
+#: views.py:640
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:641
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:647
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:658
 msgid "Only its owner can delete the map."
 msgstr "Tylko właściciel może usunąć mapę."
 
-#: umap/views.py:637
+#: views.py:681
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Twoja mapa została skopiowana! Jeśli chcesz edytować ją z innego komputera, użyj odnośnika: %(anonymous_url)s"
 
-#: umap/views.py:642
+#: views.py:686
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulacje, twoja mapa została skopiowana!"
 
-#: umap/views.py:793
+#: views.py:852
 msgid "Layer successfully deleted."
 msgstr "Warstwa usunięta pomyślnie."

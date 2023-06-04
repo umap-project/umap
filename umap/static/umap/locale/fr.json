@@ -391,5 +391,11 @@
     "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.": "Utilisez soit un caractère unique soit une URL. Vous pouvez utiliser des propriétés des marqueurs comme variables : par exemple avec \"http://myserver.org/images/{name}.png\", la variable {name} sera remplacée par la valeur de \"name\" de chacun des marqueurs.",
     "Direct link": "Lien",
     "Export options": "Options d'export",
-    "The zoom and center have been modified.": "Le niveau de zoom et le centre ont été modifiés."
+    "The zoom and center have been modified.": "Le niveau de zoom et le centre ont été modifiés.",
+    "Congratulations, your map has been created!": "Félicitations, votre carte a bien été créée !",
+    "Copy link": "Copier le lien",
+    "Email": "Courriel",
+    "Secret edit link copied to clipboard!": "Lien d'édition secret copié dans le presse-papier!",
+    "Send me the link": "Envoyer le lien",
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Votre carte a été créée! Comme vous n'êtes pas identifié, voici le lien secret pour éditer la carte à l'avenir, conservez-le précieusement:"
 }
