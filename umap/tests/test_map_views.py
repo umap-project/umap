@@ -42,7 +42,6 @@ def test_create(client, user, post_data):
         "share_status": 1,
         "owner": {"id": user.pk, "name": "Joe", "url": "/en/user/Joe/"},
         "editors": [],
-        "anonymous_edit_url": created_map.get_anonymous_edit_url(),
     }
 
 

@@ -545,10 +545,11 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
         if self.request.user.is_authenticated:
             form.instance.owner = self.request.user
         self.object = form.save()
-        anonymous_url = self.object.get_anonymous_edit_url()
         permissions = self.get_permissions()
         # User does not have the cookie yet.
-        permissions["anonymous_edit_url"] = anonymous_url
+        if not self.object.owner:
+            anonymous_url = self.object.get_anonymous_edit_url()
+            permissions["anonymous_edit_url"] = anonymous_url
         response = simple_json_response(
             id=self.object.pk,
             url=self.object.get_absolute_url(),
