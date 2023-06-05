@@ -23,8 +23,6 @@ wait_for_database
 umap migrate
 # then collect static files
 umap collectstatic --noinput
-# create languagae files
-#umap storagei18n
 # compress static files
 umap compress
 # run uWSGI
