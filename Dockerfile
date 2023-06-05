@@ -63,4 +63,4 @@ EXPOSE 8000
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["/srv/umap/docker-entrypoint.sh"]
+CMD ["/srv/umap/docker/entrypoint.sh"]

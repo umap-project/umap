@@ -26,4 +26,4 @@ umap collectstatic --noinput
 # compress static files
 umap compress
 # run uWSGI
-exec uwsgi --ini uwsgi.ini
+exec uwsgi --ini docker/uwsgi.ini
