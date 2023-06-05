@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+source /venv/bin/activate
+
 # default variables
 : "${SLEEP:=1}"
 : "${TRIES:=60}"
