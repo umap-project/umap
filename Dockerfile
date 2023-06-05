@@ -1,12 +1,12 @@
-FROM node:18 AS vendors
+FROM node:alpine AS vendors
 
 COPY . /srv/umap
 
 WORKDIR /srv/umap
 
-RUN make installjs
+RUN npm install
 
-RUN make vendors
+RUN npm run vendors
 
 FROM python:3.11-slim
 

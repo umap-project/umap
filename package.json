@@ -17,7 +17,7 @@
   },
   "scripts": {
     "test": "firefox test/index.html",
-    "build": "grunt"
+    "vendors": "scripts/vendorsjs.sh"
   },
   "repository": {
     "type": "git",
