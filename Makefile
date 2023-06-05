@@ -24,7 +24,8 @@ vendors:
 	mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet.path.drag/src/*.js umap/static/umap/vendors/editable/
 	mkdir -p umap/static/umap/vendors/hash/ && cp -r node_modules/leaflet-hash/*.js umap/static/umap/vendors/hash/
 	mkdir -p umap/static/umap/vendors/i18n/ && cp -r node_modules/leaflet-i18n/*.js umap/static/umap/vendors/i18n/
-	mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/{Leaflet.EditInOSM.*,edit-in-osm.png} umap/static/umap/vendors/editinosm/
+	mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/Leaflet.EditInOSM.* umap/static/umap/vendors/editinosm/
+	mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/edit-in-osm.png umap/static/umap/vendors/editinosm/
 	mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap/src/** umap/static/umap/vendors/minimap/
 	mkdir -p umap/static/umap/vendors/loading/ && cp -r node_modules/leaflet-loading/src/** umap/static/umap/vendors/loading/
 	mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/** umap/static/umap/vendors/markercluster/
