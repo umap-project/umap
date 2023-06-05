@@ -43,7 +43,7 @@ RUN apt-get update && \
         liblcms2-dev \
         libwebp-dev \
         && \
-    pip install --no-cache -r requirements-docker.txt && pip install . && \
+    pip install .[docker] && \
     apt-get remove -y \
         binutils \
         libproj-dev \
