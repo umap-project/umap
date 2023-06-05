@@ -12,6 +12,7 @@ COPY . .
 
 RUN npm run vendors
 
+# This part installs deps needed at runtime.
 FROM python:3.11-slim as common
 
 RUN apt-get update && \
@@ -26,6 +27,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# This part adds deps needed only at buildtime.
 FROM common as build
 
 RUN apt-get update && \
