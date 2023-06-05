@@ -13,8 +13,7 @@ FROM python:3.11-slim
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000
 
-RUN mkdir -p /srv/umap/data && \
-    mkdir -p /srv/umap/uploads
+RUN mkdir -p /srv/umap/uploads
 
 COPY . /srv/umap
 
