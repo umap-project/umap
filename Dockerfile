@@ -8,7 +8,7 @@ RUN make installjs
 
 RUN make vendors
 
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000
