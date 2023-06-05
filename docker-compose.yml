@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgis/postgis:14-3.3-alpine
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  app:
+    image: umap:1.3.0
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=postgis://postgres@db/postgres
+      - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
+      - SITE_URL=https://umap.local/
+      - UMAP_ALLOW_ANONYMOUS=True
+      - DEBUG=1
+    volumes:
+      - data:/srv/umap/uploads
+
+volumes:
+  data:
+  db:

@@ -1,13 +1,24 @@
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
+from email.utils import parseaddr
+
 from django.template.defaultfilters import slugify
 from django.conf.locale import LANG_INFO
+import environ
+
+env = environ.Env()
 
 # =============================================================================
 # Generic Django project settings
 # =============================================================================
 
-DEBUG = True
+
+INTERNAL_IPS = env.list('INTERNAL_IPS', default=['127.0.0.1'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+ADMINS = tuple(parseaddr(email) for email in env.list('ADMINS', default=[]))
+
+
+DEBUG = env.bool('DEBUG', default=False)
 
 SITE_ID = 1
 # Add languages we're missing from Django
@@ -92,7 +103,7 @@ LANGUAGES = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = ''
+SECRET_KEY = env('SECRET_KEY', default=None)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -200,21 +211,25 @@ MIDDLEWARE = (
 # Auth / security
 # =============================================================================
 
-ENABLE_ACCOUNT_LOGIN = False
+# Set to True if login into django account should be possible. Default is to
+# only use OAuth flow.
+ENABLE_ACCOUNT_LOGIN = env.bool("ENABLE_ACCOUNT_LOGIN", default=False)
 
 # =============================================================================
 # Miscellaneous project settings
 # =============================================================================
-UMAP_ALLOW_ANONYMOUS = False
+UMAP_ALLOW_ANONYMOUS = env.bool("UMAP_ALLOW_ANONYMOUS", default=False)
+
 UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',  # noqa
     'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}',
     'search': 'https://photon.komoot.io/api/?',
 }
-UMAP_KEEP_VERSIONS = 10
-SITE_URL = "http://umap.org"
+UMAP_KEEP_VERSIONS = env.int('UMAP_KEEP_VERSIONS', default=10)
+SITE_URL = env("SITE_URL", default="http://umap.org")
+SHORT_SITE_URL = env('SHORT_SITE_URL', default=None)
 SITE_NAME = 'uMap'
-UMAP_DEMO_SITE = False
+UMAP_DEMO_SITE = env('UMAP_DEMO_SITE', default=False)
 UMAP_EXCLUDE_DEFAULT_MAPS = False
 UMAP_MAPS_PER_PAGE = 5
 UMAP_MAPS_PER_PAGE_OWNER = 10
@@ -222,14 +237,17 @@ UMAP_SEARCH_CONFIGURATION = "simple"
 UMAP_FEEDBACK_LINK = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"  # noqa
 USER_MAPS_URL = 'user_maps'
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'umap',
-    }
+    'default': env.db(default='postgis://localhost:5432/umap')
 }
-UMAP_READONLY = False
+
+UMAP_READONLY = env('UMAP_READONLY', default=False)
 UMAP_GZIP = True
 LOCALE_PATHS = [os.path.join(PROJECT_DIR, 'locale')]
+
+LEAFLET_LONGITUDE = env.int('LEAFLET_LONGITUDE', default=2)
+LEAFLET_LATITUDE = env.int('LEAFLET_LATITUDE', default=51)
+LEAFLET_ZOOM = env.int('LEAFLET_ZOOM', default=6)
+
 
 # =============================================================================
 # Third party app settings
@@ -243,3 +261,34 @@ SOCIAL_AUTH_NO_DEFAULT_PROTECTED_USER_FIELDS = True
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ("id", )
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
+
+AUTHENTICATION_BACKENDS = ()
+
+SOCIAL_AUTH_OPENSTREETMAP_KEY = env('SOCIAL_AUTH_OPENSTREETMAP_KEY', default="")
+SOCIAL_AUTH_OPENSTREETMAP_SECRET = env('SOCIAL_AUTH_OPENSTREETMAP_SECRET', default="")
+if SOCIAL_AUTH_OPENSTREETMAP_KEY and SOCIAL_AUTH_OPENSTREETMAP_SECRET:
+    AUTHENTICATION_BACKENDS += (
+        'social_core.backends.openstreetmap.OpenStreetMapOAuth',
+    )
+
+AUTHENTICATION_BACKENDS += (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'ERROR',
+            'filters': None,
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+        },
+    },
+}

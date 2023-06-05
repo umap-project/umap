@@ -7,5 +7,6 @@ nav:
 - how-tos:
   - Ubuntu from scratch: ubuntu.md
   - Customize your uMap style: custom.md
+  - Install with Docker: docker.md
 - Changelog: changelog.md
 theme: readthedocs
