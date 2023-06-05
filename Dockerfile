@@ -1,10 +1,14 @@
 FROM node:alpine AS vendors
 
-COPY . /srv/umap
+RUN apk add git
 
 WORKDIR /srv/umap
 
+COPY package.json .
+
 RUN npm install
+
+COPY . .
 
 RUN npm run vendors
 
