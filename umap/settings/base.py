@@ -259,6 +259,19 @@ SOCIAL_AUTH_PROTECTED_USER_FIELDS = ("id", )
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 
+AUTHENTICATION_BACKENDS = ()
+
+SOCIAL_AUTH_OPENSTREETMAP_KEY = env('SOCIAL_AUTH_OPENSTREETMAP_KEY', default="")
+SOCIAL_AUTH_OPENSTREETMAP_SECRET = env('SOCIAL_AUTH_OPENSTREETMAP_SECRET', default="")
+if SOCIAL_AUTH_OPENSTREETMAP_KEY and SOCIAL_AUTH_OPENSTREETMAP_SECRET:
+    AUTHENTICATION_BACKENDS += (
+        'social_core.backends.openstreetmap.OpenStreetMapOAuth',
+    )
+
+AUTHENTICATION_BACKENDS += (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
