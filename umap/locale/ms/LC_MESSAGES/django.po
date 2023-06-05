@@ -360,17 +360,17 @@ msgstr "Penyunting peta telah dikemas kini dengan jayanya!"
 #: views.py:640
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "Pautan suntingan uMap untuk peta anda: %(map_name)s"
 
 #: views.py:641
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "Ini pautan suntingan rahsia anda: %(link)s"
 
 #: views.py:647
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "E-mel telah dihantar ke %(email)s"
 
 #: views.py:658
 msgid "Only its owner can delete the map."

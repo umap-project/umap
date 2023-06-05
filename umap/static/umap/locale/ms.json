@@ -389,7 +389,13 @@
     "Opacity": "Kelegapan",
     "Star this map": "Tandai bintang peta ini",
     "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.": "Simbol boleh jadi aksara unicode atau URL. Anda boleh gunakan ciri-ciri sifat sebagai pemboleh ubah: cth.: dengan \"http://myserver.org/images/{name}.png\", pemboleh ubah {name} akan digantikan dengan nilai \"name\" bagi setiap penanda.",
-    "Direct link": "Direct link",
-    "Export options": "Export options",
-    "The zoom and center have been modified.": "The zoom and center have been modified."
+    "Direct link": "Pautan terus",
+    "Export options": "Pilihan eksport",
+    "The zoom and center have been modified.": "Zum dan kedudukan tengah telah diubah suai.",
+    "Congratulations, your map has been created!": "Tahniah, peta anda telah berjaya dicipta!",
+    "Copy link": "Salin pautan",
+    "Email": "E-mel",
+    "Secret edit link copied to clipboard!": "Pautan suntingan rahsia telah disalin ke papan keratan!",
+    "Send me the link": "Hantarkan pautan kepada saya",
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Peta anda telah berjaya dicipta! Memandangkan anda tidak log masuk, ini pautan rahsia anda untuk menyunting peta, sila simpannya dengan selamat:"
 }
