@@ -1,5 +1,7 @@
 version: '3'
+
 services:
+
   db:
     image: postgis/postgis:14-3.3-alpine
     environment:
@@ -8,9 +10,9 @@ services:
       - db:/var/lib/postgresql/data
 
   app:
-    image: umap:1.3.0
+    image: umap/umap:1.3.2
     ports:
-      - "8001:8000"
+      - "${PORT-8000}:8000"
     environment:
       - DATABASE_URL=postgis://postgres@db/postgres
       - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
