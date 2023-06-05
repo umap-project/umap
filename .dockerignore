@@ -4,3 +4,5 @@ dist/
 *.egg-info/
 node_modules/
 umap/settings/local.py
+Dockerfile
+.git/
