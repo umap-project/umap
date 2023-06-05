@@ -11,7 +11,6 @@ RUN make vendors
 FROM python:3.8-slim
 
 ENV PYTHONUNBUFFERED=1 \
-    UMAP_SETTINGS=/srv/umap/umap/settings/docker.py \
     PORT=8000
 
 RUN mkdir -p /srv/umap/data && \

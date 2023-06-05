@@ -17,31 +17,30 @@ if not path:
         path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                             'local.py')
         if not os.path.exists(path):
-            msg = ('You must configure UMAP_SETTINGS or define '
-                   '/etc/umap/umap.conf')
-            print(colorize(msg, fg='red'))
-            sys.exit(1)
+            print(colorize('No valid UMAP_SETTINGS found', fg='yellow'))
+            path = None
 
-d = types.ModuleType('config')
-d.__file__ = path
-try:
-    with open(path) as config_file:
-        exec(compile(config_file.read(), path, 'exec'), d.__dict__)
-except IOError as e:
-    msg = 'Unable to import {} from UMAP_SETTINGS'.format(path)
-    print(colorize(msg, fg='red'))
-    sys.exit(e)
-else:
-    print('Loaded local config from', path)
-    for key in dir(d):
-        if key.isupper():
-            value = getattr(d, key)
-            if key.startswith('LEAFLET_STORAGE'):
-                # Retrocompat pre 1.0, remove me in 1.1.
-                globals()['UMAP' + key[15:]] = value
-            elif key == 'UMAP_CUSTOM_TEMPLATES':
-                globals()['TEMPLATES'][0]['DIRS'].insert(0, value)
-            elif key == 'UMAP_CUSTOM_STATICS':
-                globals()['STATICFILES_DIRS'].insert(0, value)
-            else:
-                globals()[key] = value
+if path:
+    d = types.ModuleType('config')
+    d.__file__ = path
+    try:
+        with open(path) as config_file:
+            exec(compile(config_file.read(), path, 'exec'), d.__dict__)
+    except IOError as e:
+        msg = 'Unable to import {} from UMAP_SETTINGS'.format(path)
+        print(colorize(msg, fg='red'))
+        sys.exit(e)
+    else:
+        print('Loaded local config from', path)
+        for key in dir(d):
+            if key.isupper():
+                value = getattr(d, key)
+                if key.startswith('LEAFLET_STORAGE'):
+                    # Retrocompat pre 1.0, remove me in 1.1.
+                    globals()['UMAP' + key[15:]] = value
+                elif key == 'UMAP_CUSTOM_TEMPLATES':
+                    globals()['TEMPLATES'][0]['DIRS'].insert(0, value)
+                elif key == 'UMAP_CUSTOM_STATICS':
+                    globals()['STATICFILES_DIRS'].insert(0, value)
+                else:
+                    globals()[key] = value
