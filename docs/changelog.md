@@ -1,17 +1,17 @@
 # Changelog
 
-## 1.3.2
+## 1.3.2 - 2023-06-04
 
 - fix wrong message after creating a map while authenticated
 - display user name in the map edit toolbar when authenticated
 
-## 1.3.1
+## 1.3.1 - 2023-06-03
 
 - fix table rendering (cf #1117)
 - fix some errors not caught in ajax proxy (cf #1118 #1119)
 - add simple form to send secret edit link by email in anonymous mode (cf #1102)
 
-## 1.3.0
+## 1.3.0 - 2023-05-31
 
 - added a filter by category panel (cf #1041, thanks @k-3st3ban)
 - added a permanent credit (cf #1041, thanks @k-3st3ban)
