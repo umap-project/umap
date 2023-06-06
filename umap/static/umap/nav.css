@@ -8,7 +8,11 @@ footer {
     background-color: #2E3641;
     text-align: center;
     line-height: 140px;
-    color: #8F96A3;
+    color: #fff;
+}
+footer a {
+    color: #fff;
+    text-decoration: underline;
 }
 footer a.branding {
     background-image: url("./img/logo_filigree.png");
@@ -19,7 +23,6 @@ footer a.branding {
     font-weight: bold;
     height: 140px;
     padding-left: 70px;
-    color: #8F96A3;
     display: inline-block;
 }
 
