@@ -1143,9 +1143,16 @@ L.U.Map.include({
         leaflet: 'http://leafletjs.com',
         django: 'https://www.djangoproject.com',
         umap: 'http://wiki.openstreetmap.org/wiki/UMap',
+        changelog: 'https://umap-project.readthedocs.io/en/latest/changelog/',
+        version: this.options.umap_version,
       }
     umapCredit.innerHTML = L._(
-      'Powered by <a href="{leaflet}">Leaflet</a> and <a href="{django}">Django</a>, glued by <a href="{umap}">uMap project</a>.',
+      `
+      Powered by <a href="{leaflet}">Leaflet</a> and
+      <a href="{django}">Django</a>,
+      glued by <a href="{umap}">uMap project</a>
+      (version <a href="{changelog}">{version}</a>).
+      `,
       urls
     )
     const browser = L.DomUtil.create('li', '')
@@ -2022,8 +2029,8 @@ L.U.Map.include({
         name.textContent = this.getDisplayName()
       }
     if (this.options.user) {
-        const userLabel = L.DomUtil.add('a', 'umap-user', title, this.options.user.name)
-        userLabel.href = this.options.user.url
+      const userLabel = L.DomUtil.add('a', 'umap-user', title, this.options.user.name)
+      userLabel.href = this.options.user.url
     }
     L.bind(setName, this)()
     L.DomEvent.on(name, 'click', this.edit, this)

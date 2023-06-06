@@ -39,6 +39,7 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.list import ListView
 
+from . import VERSION
 from .forms import (
     DEFAULT_LATITUDE,
     DEFAULT_LONGITUDE,
@@ -398,6 +399,7 @@ class MapDetailMixin:
             "anonymous_edit_statuses": [
                 (i, str(label)) for i, label in AnonymousMapPermissionsForm.STATUS
             ],
+            "umap_version": VERSION,
         }
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
@@ -637,7 +639,10 @@ class SendEditLink(FormLessEditMixin, FormView):
         link = self.object.get_anonymous_edit_url()
 
         send_mail(
-            _("The uMap edit link for your map: %(map_name)s" % {"map_name": self.object.name}),
+            _(
+                "The uMap edit link for your map: %(map_name)s"
+                % {"map_name": self.object.name}
+            ),
             _("Here is your secret edit link: %(link)s" % {"link": link}),
             settings.FROM_EMAIL,
             [email],
