@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.3 - 2023-06-07
+
+- add Dockerfile
+- fix content overlflow on popups (cf #1128)
+- display uMap version in the credit box + link to changelog (cf #1129)
+
 ## 1.3.2 - 2023-06-04
 
 - fix wrong message after creating a map while authenticated
