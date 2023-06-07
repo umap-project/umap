@@ -237,7 +237,6 @@
     "Please choose a format": "Sila pilih format",
     "Please enter the name of the property": "Sila masukkan nama ciri-ciri",
     "Please enter the new name of this property": "Sila masukkan nama baharu bagi ciri-ciri ini",
-    "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Dikuasakan oleh <a href=\"{leaflet}\">Leaflet</a> dan <a href=\"{django}\">Django</a>, dicantumkan oleh <a href=\"{umap}\">projek uMap</a>.",
     "Problem in the response": "Masalah dalam tindak balas",
     "Problem in the response format": "Masalah dalam format tindak balas",
     "Properties imported:": "Ciri-ciri diimport:",

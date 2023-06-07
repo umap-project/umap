@@ -237,7 +237,6 @@
     "Please choose a format": "Merci de choisir un format",
     "Please enter the name of the property": "Merci d'entrer le nom de la propriété",
     "Please enter the new name of this property": "Veuillez entrer le nouveau nom de la propriété",
-    "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Propulsé par <a href=\"{leaflet}\">Leaflet</a> et <a href=\"{django}\">Django</a>, mis en musique par <a href=\"{umap}\">uMap project</a>.",
     "Problem in the response": "Problème dans la réponse du serveur",
     "Problem in the response format": "Problème dans le format de la réponse",
     "Properties imported:": "Propriétés importées :",
