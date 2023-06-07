@@ -237,7 +237,6 @@ const locale = {
     "Please choose a format": "Veldu snið",
     "Please enter the name of the property": "Settu inn heiti á eigindið",
     "Please enter the new name of this property": "Settu inn nýja heitið á þetta eigindi",
-    "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Keyrt með <a href=\"{leaflet}\">Leaflet</a> og <a href=\"{django}\">Django</a>, límt saman af <a href=\"{umap}\">uMap verkefninu</a>.",
     "Problem in the response": "Vandamál í svarinu",
     "Problem in the response format": "Vandamál með snið svarsins",
     "Properties imported:": "Innflutt eigindi:",
@@ -391,7 +390,13 @@ const locale = {
     "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.": "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.",
     "Direct link": "Direct link",
     "Export options": "Export options",
-    "The zoom and center have been modified.": "The zoom and center have been modified."
+    "The zoom and center have been modified.": "The zoom and center have been modified.",
+    "Congratulations, your map has been created!": "Congratulations, your map has been created!",
+    "Copy link": "Copy link",
+    "Email": "Email",
+    "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
+    "Send me the link": "Send me the link",
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

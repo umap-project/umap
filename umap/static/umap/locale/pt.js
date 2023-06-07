@@ -237,7 +237,6 @@ const locale = {
     "Please choose a format": "Por favor escolha um formato",
     "Please enter the name of the property": "Por favor introduza o nome da propriedade",
     "Please enter the new name of this property": "Por favor introduza um novo nome desta propriedade",
-    "Powered by <a href=\"{leaflet}\">Leaflet</a> and <a href=\"{django}\">Django</a>, glued by <a href=\"{umap}\">uMap project</a>.": "Criado com <a href=\"{leaflet}\">Leaflet</a> e <a href=\"{django}\">Django</a> pelo <a href=\"{umap}\">projeto uMap</a>.",
     "Problem in the response": "Problema na resposta do servidor",
     "Problem in the response format": "Problema no formato da resposta",
     "Properties imported:": "Propriedades importadas:",
@@ -391,7 +390,13 @@ const locale = {
     "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.": "Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with \"http://myserver.org/images/{name}.png\", the {name} variable will be replaced by the \"name\" value of each marker.",
     "Direct link": "Direct link",
     "Export options": "Export options",
-    "The zoom and center have been modified.": "The zoom and center have been modified."
+    "The zoom and center have been modified.": "The zoom and center have been modified.",
+    "Congratulations, your map has been created!": "Congratulations, your map has been created!",
+    "Copy link": "Copy link",
+    "Email": "Email",
+    "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
+    "Send me the link": "Send me the link",
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
 }
 L.registerLocale("pt", locale)
 L.setLocale("pt")
