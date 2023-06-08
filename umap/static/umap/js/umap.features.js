@@ -592,6 +592,7 @@ L.U.Marker = L.Marker.extend({
       'properties._umap_options.color',
       'properties._umap_options.iconClass',
       'properties._umap_options.iconUrl',
+      'properties._umap_options.iconOpacity',
     ]
   },
 

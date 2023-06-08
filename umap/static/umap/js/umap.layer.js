@@ -812,6 +812,7 @@ L.U.DataLayer = L.Evented.extend({
       'options.color',
       'options.iconClass',
       'options.iconUrl',
+      'options.iconOpacity',
       'options.opacity',
       'options.stroke',
       'options.weight',

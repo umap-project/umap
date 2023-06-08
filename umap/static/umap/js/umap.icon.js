@@ -30,6 +30,11 @@ L.U.Icon = L.DivIcon.extend({
     return color
   },
 
+  _getOpacity: function () {
+    if (this.feature) return this.feature.getOption('iconOpacity')
+    return this.map.getDefaultOption('iconOpacity')
+  },
+
   formatUrl: function (url, feature) {
     return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
   },
@@ -50,9 +55,12 @@ L.U.Icon.Default = L.U.Icon.extend({
 
   _setIconStyles: function (img, name) {
     L.U.Icon.prototype._setIconStyles.call(this, img, name)
-    const color = this._getColor()
+    const color = this._getColor(),
+          opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
+    this.elements.container.style.opacity = opacity
+    this.elements.arrow.style.opacity = opacity
   },
 
   createIcon: function () {
@@ -99,6 +107,7 @@ L.U.Icon.Circle = L.U.Icon.extend({
  _setIconStyles: function (img, name) {
     L.U.Icon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
+    this.elements.main.style.opacity = this._getOpacity()
   },
 
   createIcon: function () {
@@ -152,6 +161,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
       background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
     }
     this.elements.container.style.background = background
+    this.elements.container.style.opacity = this._getOpacity()
   },
 })
 
