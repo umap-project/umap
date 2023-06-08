@@ -48,7 +48,8 @@ L.U.Icon.Default = L.U.Icon.extend({
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
-  _setColor: function () {
+  _setIconStyles: function (img, name) {
+    L.U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
@@ -78,7 +79,6 @@ L.U.Icon.Default = L.U.Icon.extend({
         this.elements.span.textContent = src
       }
     }
-    this._setColor()
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
@@ -96,7 +96,8 @@ L.U.Icon.Circle = L.U.Icon.extend({
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
-  _setColor: function () {
+ _setIconStyles: function (img, name) {
+    L.U.Icon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
   },
 
@@ -104,7 +105,6 @@ L.U.Icon.Circle = L.U.Icon.extend({
     this.elements = {}
     this.elements.main = L.DomUtil.create('div')
     this.elements.main.innerHTML = '&nbsp;'
-    this._setColor()
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
@@ -136,12 +136,12 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
       this.elements.main
     )
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
-    this._setColor()
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
 
-  _setColor: function () {
+  _setIconStyles: function (img, name) {
+    L.U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor('color')
     let background
     if (L.Browser.ielt9) {
