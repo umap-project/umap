@@ -56,7 +56,7 @@ L.U.Icon.Default = L.U.Icon.extend({
   _setIconStyles: function (img, name) {
     L.U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor(),
-          opacity = this._getOpacity()
+      opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
     this.elements.container.style.opacity = opacity
@@ -104,7 +104,7 @@ L.U.Icon.Circle = L.U.Icon.extend({
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
- _setIconStyles: function (img, name) {
+  _setIconStyles: function (img, name) {
     L.U.Icon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
     this.elements.main.style.opacity = this._getOpacity()
