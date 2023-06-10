@@ -136,9 +136,8 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       this.datalayer.options.choropleth.mode || 'q',
       this.datalayer.options.choropleth.steps || 5
     )
-    const color = this.datalayer.getOption('color')
     this.options.colors = chroma
-      .scale(['white', color])
+      .scale(this.datalayer.options.choropleth.brewer || 'Blues')
       .colors(this.options.limits.length)
   },
 
@@ -173,6 +172,12 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   getEditableOptions: function () {
+    // chroma expose each palette both in title mode and in lowercase
+    // TODO: PR to chroma to get a accessor to the palettes names list
+    const brewerPalettes = Object.keys(chroma.brewer)
+      .filter((s) => s[0] == s[0].toUpperCase())
+      .sort()
+      .map((k) => [k, k])
     return [
       [
         'options.choropleth.property',
@@ -180,6 +185,14 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
           handler: 'BlurInput',
           placeholder: L._('Choropleth property value'),
           helpText: L._('Choropleth property value'),
+        },
+      ],
+      [
+        'options.choropleth.brewer',
+        {
+          handler: 'Select',
+          label: L._('Choropleth color palette'),
+          selectOptions: brewerPalettes,
         },
       ],
       [
