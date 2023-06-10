@@ -123,9 +123,14 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     )
   },
 
+  _getValue: function (feature) {
+    const key = this.datalayer.options.choropleth.property || 'value'
+    return feature.properties[key]
+  },
+
   computeLimits: function () {
     const values = []
-    this.datalayer.eachLayer((layer) => values.push(layer.properties.density))
+    this.datalayer.eachLayer((layer) => values.push(this._getValue(layer)))
     this.options.limits = chroma.limits(
       values,
       this.datalayer.options.choropleth.mode || 'q',
@@ -139,7 +144,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
 
   getColor: function (feature) {
     if (!feature) return // FIXME shold not happen
-    const featureValue = feature.properties.density
+    const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
     for (let i = 0; i < this.options.limits.length; i++) {
       if (featureValue <= this.options.limits[i]) {
@@ -169,6 +174,14 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
 
   getEditableOptions: function () {
     return [
+      [
+        'options.choropleth.property',
+        {
+          handler: 'BlurInput',
+          placeholder: L._('Choropleth property value'),
+          helpText: L._('Choropleth property value'),
+        },
+      ],
       [
         'options.choropleth.steps',
         {
