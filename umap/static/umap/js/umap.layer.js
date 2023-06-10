@@ -106,6 +106,94 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 })
 
+L.U.Layer.Choropleth = L.FeatureGroup.extend({
+  _type: 'Choropleth',
+  includes: [L.U.Layer],
+  canBrowse: true,
+
+  initialize: function (datalayer) {
+    this.datalayer = datalayer
+    if (!L.Util.isObject(this.datalayer.options.choropleth)) {
+      this.datalayer.options.choropleth = {}
+    }
+    L.FeatureGroup.prototype.initialize.call(
+      this,
+      [],
+      this.datalayer.options.choropleth
+    )
+  },
+
+  computeLimits: function () {
+    const values = []
+    this.datalayer.eachLayer((layer) => values.push(layer.properties.density))
+    this.options.limits = chroma.limits(
+      values,
+      this.datalayer.options.choropleth.mode || 'q',
+      this.datalayer.options.choropleth.steps || 5
+    )
+    const color = this.datalayer.getOption('color')
+    this.options.colors = chroma
+      .scale(['white', color])
+      .colors(this.options.limits.length)
+  },
+
+  getColor: function (feature) {
+    if (!feature) return // FIXME shold not happen
+    const featureValue = feature.properties.density
+    // Find the bucket/step/limit that this value is less than and give it that color
+    for (let i = 0; i < this.options.limits.length; i++) {
+      if (featureValue <= this.options.limits[i]) {
+        return this.options.colors[i]
+      }
+    }
+  },
+
+  getOption: function (option, feature) {
+    if (option === 'fillColor' || option === 'color') return this.getColor(feature)
+  },
+
+  addLayer: function (layer) {
+    this.computeLimits()
+    L.FeatureGroup.prototype.addLayer.call(this, layer)
+  },
+
+  removeLayer: function (layer) {
+    this.computeLimits()
+    L.FeatureGroup.prototype.removeLayer.call(this, layer)
+  },
+
+  onAdd: function (map) {
+    this.computeLimits()
+    L.FeatureGroup.prototype.onAdd.call(this, map)
+  },
+
+  getEditableOptions: function () {
+    return [
+      [
+        'options.choropleth.steps',
+        {
+          handler: 'IntInput',
+          placeholder: L._('Choropleth steps'),
+          helpText: L._('Choropleth steps (default 5)'),
+        },
+      ],
+      [
+        'options.choropleth.mode',
+        {
+          handler: 'Select',
+          selectOptions: [
+            ['q', L._('quantile')],
+            ['e', L._('equidistant')],
+            ['l', L._('logarithmic')],
+            ['k', L._('k-mean')],
+          ],
+          helpText: L._('Choropleth mode'),
+        },
+      ],
+    ]
+  },
+})
+
 L.U.Layer.Heat = L.HeatLayer.extend({
   _type: 'Heat',
   includes: [L.U.Layer],
@@ -897,8 +985,6 @@ L.U.DataLayer = L.Evented.extend({
       'options.fillOpacity',
     ]
 
-    shapeOptions = shapeOptions.concat(this.layer.getEditableOptions())
-
     const redrawCallback = function (field) {
       this.hide()
       this.layer.postUpdate(field)
@@ -1050,7 +1136,11 @@ L.U.DataLayer = L.Evented.extend({
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
   },
 
-  getOption: function (option) {
+  getOption: function (option, feature) {
+    if (this.layer && this.layer.getOption) {
+      const value = this.layer.getOption(option, feature)
+      if (value) return value
+    }
     if (L.Util.usableOption(this.options, option)) return this.options[option]
     else return this.map.getOption(option)
   },

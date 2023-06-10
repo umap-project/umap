@@ -379,6 +379,7 @@ L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
     ['Default', L._('Default')],
     ['Cluster', L._('Clustered')],
     ['Heat', L._('Heatmap')],
+    ['Choropleth', L._('Choropleth')],
   ],
 })
 

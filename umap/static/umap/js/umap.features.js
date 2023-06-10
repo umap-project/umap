@@ -283,7 +283,7 @@ L.U.FeatureMixin = {
     } else if (L.Util.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
-      value = this.datalayer.getOption(option)
+      value = this.datalayer.getOption(option, this)
     } else {
       value = this.map.getOption(option)
     }
