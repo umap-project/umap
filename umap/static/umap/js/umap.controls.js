@@ -927,6 +927,96 @@ L.U.Map.include({
     L.DomEvent.on(link, 'click', this.displayCaption, this)
     this.ui.openPanel({ data: { html: filterContainer }, actions: [link] })
   },
+
+  displayCaption: function () {
+    const container = L.DomUtil.create('div', 'umap-caption')
+    let title = L.DomUtil.create('h3', '', container)
+    title.textContent = this.options.name
+    this.permissions.addOwnerLink('h5', container)
+    if (this.options.description) {
+      const description = L.DomUtil.create('div', 'umap-map-description', container)
+      description.innerHTML = L.Util.toHTML(this.options.description)
+    }
+    const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
+    this.eachVisibleDataLayer((datalayer) => {
+      const p = L.DomUtil.create('p', '', datalayerContainer),
+        color = L.DomUtil.create('span', 'datalayer-color', p),
+        headline = L.DomUtil.create('strong', '', p),
+        description = L.DomUtil.create('span', '', p)
+      datalayer.onceLoaded(function () {
+        color.style.backgroundColor = this.getColor()
+        if (datalayer.options.description) {
+          description.innerHTML = L.Util.toHTML(datalayer.options.description)
+        }
+      })
+      datalayer.renderToolbox(headline)
+      L.DomUtil.add('span', '', headline, `${datalayer.options.name} `)
+    })
+    const creditsContainer = L.DomUtil.create('div', 'credits-container', container),
+      credits = L.DomUtil.createFieldset(creditsContainer, L._('Credits'))
+    title = L.DomUtil.add('h5', '', credits, L._('User content credits'))
+    if (this.options.shortCredit || this.options.longCredit) {
+      L.DomUtil.add(
+        'p',
+        '',
+        credits,
+        L.Util.toHTML(this.options.longCredit || this.options.shortCredit)
+      )
+    }
+    if (this.options.licence) {
+      const licence = L.DomUtil.add(
+          'p',
+          '',
+          credits,
+          `${L._('Map user content has been published under licence')} `
+        ),
+        link = L.DomUtil.add('a', '', licence, this.options.licence.name)
+      link.href = this.options.licence.url
+    } else {
+      L.DomUtil.add('p', '', credits, L._('No licence has been set'))
+    }
+    L.DomUtil.create('hr', '', credits)
+    title = L.DomUtil.create('h5', '', credits)
+    title.textContent = L._('Map background credits')
+    const tilelayerCredit = L.DomUtil.create('p', '', credits),
+      name = L.DomUtil.create('strong', '', tilelayerCredit),
+      attribution = L.DomUtil.create('span', '', tilelayerCredit)
+    name.textContent = `${this.selected_tilelayer.options.name} `
+    attribution.innerHTML = this.selected_tilelayer.getAttribution()
+    L.DomUtil.create('hr', '', credits)
+    const umapCredit = L.DomUtil.create('p', '', credits),
+      urls = {
+        leaflet: 'http://leafletjs.com',
+        django: 'https://www.djangoproject.com',
+        umap: 'http://wiki.openstreetmap.org/wiki/UMap',
+        changelog: 'https://umap-project.readthedocs.io/en/latest/changelog/',
+        version: this.options.umap_version,
+      }
+    umapCredit.innerHTML = L._(
+      `
+      Powered by <a href="{leaflet}">Leaflet</a> and
+      <a href="{django}">Django</a>,
+      glued by <a href="{umap}">uMap project</a>
+      (version <a href="{changelog}">{version}</a>).
+      `,
+      urls
+    )
+    const browser = L.DomUtil.create('li', '')
+    L.DomUtil.create('i', 'umap-icon-16 umap-list', browser)
+    const labelBrowser = L.DomUtil.create('span', '', browser)
+    labelBrowser.textContent = labelBrowser.title = L._('Browse data')
+    L.DomEvent.on(browser, 'click', this.openBrowser, this)
+    const actions = [browser]
+    if (this.options.advancedFilterKey) {
+      const filter = L.DomUtil.create('li', '')
+      L.DomUtil.create('i', 'umap-icon-16 umap-add', filter)
+      const labelFilter = L.DomUtil.create('span', '', filter)
+      labelFilter.textContent = labelFilter.title = L._('Select data')
+      L.DomEvent.on(filter, 'click', this.openFilter, this)
+      actions.push(filter)
+    }
+    this.ui.openPanel({ data: { html: container }, actions: actions })
+  },
 })
 
 L.U.TileLayerControl = L.Control.extend({
