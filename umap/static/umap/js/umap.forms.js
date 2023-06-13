@@ -905,6 +905,14 @@ L.U.FormBuilder = L.FormBuilder.extend({
       helpEntries: 'colorValue',
       inheritable: true,
     },
+    iconOpacity: {
+      handler: 'Range',
+      min: 0.1,
+      max: 1,
+      step: 0.1,
+      label: L._('icon opacity'),
+      inheritable: true,
+    },
     opacity: {
       handler: 'Range',
       min: 0.1,

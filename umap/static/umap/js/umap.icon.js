@@ -30,6 +30,11 @@ L.U.Icon = L.DivIcon.extend({
     return color
   },
 
+  _getOpacity: function () {
+    if (this.feature) return this.feature.getOption('iconOpacity')
+    return this.map.getDefaultOption('iconOpacity')
+  },
+
   formatUrl: function (url, feature) {
     return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
   },
@@ -48,10 +53,14 @@ L.U.Icon.Default = L.U.Icon.extend({
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
-  _setColor: function () {
-    const color = this._getColor()
+  _setIconStyles: function (img, name) {
+    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    const color = this._getColor(),
+      opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
+    this.elements.container.style.opacity = opacity
+    this.elements.arrow.style.opacity = opacity
   },
 
   createIcon: function () {
@@ -78,7 +87,6 @@ L.U.Icon.Default = L.U.Icon.extend({
         this.elements.span.textContent = src
       }
     }
-    this._setColor()
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
@@ -96,15 +104,16 @@ L.U.Icon.Circle = L.U.Icon.extend({
     L.U.Icon.prototype.initialize.call(this, map, options)
   },
 
-  _setColor: function () {
+  _setIconStyles: function (img, name) {
+    L.U.Icon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
+    this.elements.main.style.opacity = this._getOpacity()
   },
 
   createIcon: function () {
     this.elements = {}
     this.elements.main = L.DomUtil.create('div')
     this.elements.main.innerHTML = '&nbsp;'
-    this._setColor()
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
@@ -136,12 +145,12 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
       this.elements.main
     )
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
-    this._setColor()
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
 
-  _setColor: function () {
+  _setIconStyles: function (img, name) {
+    L.U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor('color')
     let background
     if (L.Browser.ielt9) {
@@ -152,6 +161,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
       background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
     }
     this.elements.container.style.background = background
+    this.elements.container.style.opacity = this._getOpacity()
   },
 })
 

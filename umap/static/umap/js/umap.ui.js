@@ -122,7 +122,12 @@ L.U.UI = L.Evented.extend({
         el.textContent = action.label
         L.DomEvent.on(el, 'click', L.DomEvent.stop)
         if (action.callback) {
-          L.DomEvent.on(el, 'click', action.callback, action.callbackContext || this.map)
+          L.DomEvent.on(
+            el,
+            'click',
+            action.callback,
+            action.callbackContext || this.map
+          )
         }
         L.DomEvent.on(el, 'click', close, this)
       }
