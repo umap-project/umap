@@ -166,6 +166,13 @@ describe('L.Util', function () {
       assert.equal(L.Util.escapeHTML('<span onload="alert(oups)">'), '<span></span>')
     })
 
+    it('should not escape geo: links', function () {
+      assert.equal(
+        L.Util.escapeHTML('<a href="geo:1,2"></a>'),
+        '<a href="geo:1,2"></a>'
+      )
+    })
+
     it('should not fail with int value', function () {
       assert.equal(L.Util.escapeHTML(25), '25')
     })
