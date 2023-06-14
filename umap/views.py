@@ -212,6 +212,7 @@ class Search(TemplateView, PaginatorMixin):
 
     def get_context_data(self, **kwargs):
         q = self.request.GET.get("q")
+        qs_count = 0
         results = []
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
@@ -220,8 +221,9 @@ class Search(TemplateView, PaginatorMixin):
             )
             qs = Map.objects.annotate(search=vector).filter(search=query)
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
+            qs_count = qs.count()
             results = self.paginate(qs)
-        kwargs.update({"maps": results, "q": q})
+        kwargs.update({"maps": results, "count": qs_count, "q": q})
         return kwargs
 
     def get_template_names(self):
