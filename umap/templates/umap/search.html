@@ -7,11 +7,18 @@
 {% if q %}
   <div class="wrapper">
     <div class="map_list row">
-    {% if maps %}
-      {% include "umap/map_list.html" with prefix='search_map' %}
-    {% else %}
-        {% trans "Not map found." %}
-    {% endif %}
+      {% if maps %}
+        <h2>
+          {% blocktranslate count counter=count %}
+            {{ count }} map found:
+          {% plural %}
+            {{ count }} maps found:
+          {% endblocktranslate %}
+        </h2>
+        {% include "umap/map_list.html" with prefix='search_map' %}
+      {% else %}
+        <h2>{% trans "No map found." %}</h2>
+      {% endif %}
     </div>
   </div>
 {% endif %}
