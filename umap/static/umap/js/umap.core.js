@@ -64,6 +64,12 @@ L.Util.escapeHTML = (s) => {
     ],
     ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'frameborder', 'scrolling'],
     ALLOWED_ATTR: ['href', 'src', 'width', 'height'],
+    // Added: `geo:` URL scheme as defined in RFC5870:
+    // https://www.rfc-editor.org/rfc/rfc5870.html
+    // The base RegExp comes from:
+    // https://github.com/cure53/DOMPurify/blob/main/src/regexp.js#L10
+    ALLOWED_URI_REGEXP:
+      /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|geo):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
   })
   return s
 }
