@@ -587,7 +587,8 @@ ul.photon-autocomplete {
     border-radius: 2px;
 }
 .leaflet-control-browse .umap-browse-datalayers {
-    height: max-content;
+    height: fit-content;
+    max-height: 40em;
     overflow-y: auto;
     resize: vertical;
 }
