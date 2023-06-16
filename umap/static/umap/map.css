@@ -1317,7 +1317,6 @@ a.add-datalayer:hover,
 }
 .leaflet-popup-content-wrapper {
     border-radius: 4px;
-    overflow-y: scroll;
 }
 .umap-popup-content {
     max-height: 500px;
@@ -1325,6 +1324,7 @@ a.add-datalayer:hover,
     margin-bottom: 4px;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 .umap-popup-content iframe {
     min-width: 310px;
