@@ -211,6 +211,11 @@ MIDDLEWARE = (
 # Set to True if login into django account should be possible. Default is to
 # only use OAuth flow.
 ENABLE_ACCOUNT_LOGIN = env.bool("ENABLE_ACCOUNT_LOGIN", default=False)
+USER_DISPLAY_NAME = "{username}"
+# For use by Agnocomplete
+# See https://django-agnocomplete.readthedocs.io/en/latest/autocomplete-definition.html#agnocompletemode
+USER_AUTOCOMPLETE_FIELDS = ["^username"]
+USER_URL_FIELD = "username"
 
 # =============================================================================
 # Miscellaneous project settings

@@ -154,8 +154,8 @@ about = About.as_view()
 
 class UserMaps(DetailView, PaginatorMixin):
     model = User
-    slug_url_kwarg = "username"
-    slug_field = "username"
+    slug_url_kwarg = "identifier"
+    slug_field = settings.USER_URL_FIELD
     list_template_name = "umap/map_list.html"
     context_object_name = "current_user"
 
@@ -250,7 +250,7 @@ class MapsShowCase(View):
                 description = "{description}\n{by} [[{url}|{name}]]".format(
                     description=description,
                     by=_("by"),
-                    url=reverse("user_maps", kwargs={"username": m.owner.username}),
+                    url=m.owner.get_url(),
                     name=m.owner,
                 )
             description = "{}\n[[{}|{}]]".format(
@@ -418,8 +418,8 @@ class MapDetailMixin:
         if not user.is_anonymous:
             properties["user"] = {
                 "id": user.pk,
-                "name": user.get_username(),
-                "url": reverse(settings.USER_MAPS_URL, args=(user.get_username(),)),
+                "name": str(user),
+                "url": user.get_url(),
             }
         map_settings = self.get_geojson()
         if "properties" not in map_settings:
@@ -465,16 +465,11 @@ class PermissionsMixin:
         if self.object.owner:
             permissions["owner"] = {
                 "id": self.object.owner.pk,
-                "name": self.object.owner.get_username(),
-                "url": reverse(
-                    settings.USER_MAPS_URL, args=(self.object.owner.get_username(),)
-                ),
+                "name": str(self.object.owner),
+                "url": self.object.owner.get_url(),
             }
             permissions["editors"] = [
-                {
-                    "id": editor.pk,
-                    "name": editor.get_username(),
-                }
+                {"id": editor.pk, "name": str(editor)}
                 for editor in self.object.editors.all()
             ]
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
