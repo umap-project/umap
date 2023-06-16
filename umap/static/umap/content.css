@@ -259,6 +259,27 @@ ul.umap-autocomplete {
     cursor: pointer;
 }
 
+/* **************************** */
+/*           Messages           */
+/* **************************** */
+.messages li {
+    border-radius: 1px;
+    color: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    background-color: #444;
+    font-weight: bold;
+}
+
+.messages .success {
+    background-color: #16a085;
+}
+
+.messages .error {
+    background-color: #c60f13;
+}
 
 
 /* **************************** */
