@@ -207,3 +207,33 @@ def test_read_only_shows_create_buttons_if_disabled(client, settings):
     settings.UMAP_READONLY = False
     response = client.get(reverse("home"))
     assert "Create a map" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_change_user_display_name(client, user, settings):
+    username = "MyUserFooName"
+    first_name = "Ezekiel"
+    user.username = username
+    user.first_name = first_name
+    user.save()
+    client.login(username=username, password="123123")
+    response = client.get(reverse("home"))
+    assert username in response.content.decode()
+    assert first_name not in response.content.decode()
+    settings.USER_DISPLAY_NAME = "{first_name}"
+    response = client.get(reverse("home"))
+    assert first_name in response.content.decode()
+    # username will still be in the contant as it's in the "my maps" URL path.
+
+
+@pytest.mark.django_db
+def test_change_user_slug(client, user, settings):
+    username = "MyUserFooName"
+    user.username = username
+    user.save()
+    client.login(username=username, password="123123")
+    response = client.get(reverse("home"))
+    assert f"/en/user/{username}/" in response.content.decode()
+    settings.USER_URL_FIELD = "pk"
+    response = client.get(reverse("home"))
+    assert f"/en/user/{user.pk}/" in response.content.decode()
