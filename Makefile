@@ -24,11 +24,13 @@ docker: ## Create a new Docker image and publish it
 	docker build -t umap/umap:${VERSION} .
 	docker push umap/umap:${VERSION}
 
+.PHONY: build
+build: test compilemessages  ## Build the Python package before release
+	@hatch build
+
 
 test:
 	py.test -xv umap/tests/
-release: test compilemessages
-	python setup.py sdist bdist_wheel
 test_publish:
 	twine upload -r testpypi dist/*
 publish:

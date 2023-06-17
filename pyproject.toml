@@ -58,6 +58,14 @@ docker = [
   "uwsgi==2.0.21",
 ]
 
+[tool.hatch.build.targets.sdist]
+include = [
+  "/umap",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["umap"]
+
 [project.scripts]
 umap = "umap.bin:main"
 
