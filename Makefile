@@ -28,14 +28,14 @@ docker: ## Create a new Docker image and publish it
 build: test compilemessages  ## Build the Python package before release
 	@hatch build
 
+.PHONY: publish
+publish: ## Publish the Python package to Pypi
+	@hatch publish
+	make clean
+
 
 test:
 	py.test -xv umap/tests/
-test_publish:
-	twine upload -r testpypi dist/*
-publish:
-	twine upload dist/*
-	make clean
 clean:
 	rm -f dist/*
 	rm -rf build/*
