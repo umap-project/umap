@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.5 - 2023-06-17
+
+- fix stars link in header
+
 ## 1.3.4 - 2023-06-17
 
 - allow to control icon opacity (cf #236)
