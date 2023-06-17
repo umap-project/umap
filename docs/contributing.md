@@ -71,8 +71,7 @@ Now, the `umap` command will be available.
 
 To test your code, you will add to install umap from your git folder. Go to `~/wk/umap` and run:
 
-    pip install -e .
-    # or pip install -e ~/wk/umap
+    make install
 
 This command will check dependencies and install uMap from sources inside folder.
 

@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "umap-project"
+dynamic = ["version"]
+description = "Create maps with OpenStreetMap layers in a minute and embed them in your site."
+readme = "README.md"
+authors = [
+  { name = "Yohan Boniface", email = "yb@enix.org" },
+]
+maintainers = [
+  { name = "David Larlet", email = "david@larlet.fr" },
+]
+homepage = "https://github.com/umap-project/umap"
+keywords = ["django", "leaflet", "geodjango", "openstreetmap", "map"]
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.4",
+  "Programming Language :: Python :: 3.5",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+  "Django>=4.1",
+  "django-agnocomplete==2.2.0",
+  "django-compressor==4.3.1",
+  "django-environ==0.10.0",
+  "Pillow==9.5.0",
+  "psycopg2==2.9.6",
+  "requests==2.30.0",
+  "social-auth-core==4.4.2",
+  "social-auth-app-django==5.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "hatch==1.7.0",
+  "black==21.10b0",
+  "mkdocs==1.2.3",
+]
+test = [
+  "factory-boy==3.2.1",
+  "pytest==6.2.5",
+  "pytest-django==4.5.2",
+]
+docker = [
+  "uwsgi==2.0.21",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/umap",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["umap"]
+
+[project.scripts]
+umap = "umap.bin:main"
+
+[tool.hatch.version]
+path = "umap/__init__.py"
+
+[tool.flake8]
+# Black crazyness.
+max-line-length = 88
