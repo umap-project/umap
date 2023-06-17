@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.4 - 2023-06-17
+
+- allow to control icon opacity (cf #236)
+- display the number of maps on search results page
+- allow to customize user display name and URL slug
+- fix geo: scheme in (description) links (cf #1140)
+- fix popup footer floating within the content (cf #1146)
+
 ## 1.3.3 - 2023-06-07
 
 - add Dockerfile
