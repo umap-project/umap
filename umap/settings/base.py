@@ -211,6 +211,11 @@ MIDDLEWARE = (
 # Set to True if login into django account should be possible. Default is to
 # only use OAuth flow.
 ENABLE_ACCOUNT_LOGIN = env.bool("ENABLE_ACCOUNT_LOGIN", default=False)
+USER_DISPLAY_NAME = "{username}"
+# For use by Agnocomplete
+# See https://django-agnocomplete.readthedocs.io/en/latest/autocomplete-definition.html#agnocompletemode
+USER_AUTOCOMPLETE_FIELDS = ["^username"]
+USER_URL_FIELD = "username"
 
 # =============================================================================
 # Miscellaneous project settings
@@ -252,8 +257,6 @@ LEAFLET_ZOOM = env.int('LEAFLET_ZOOM', default=6)
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
-SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)
-SOCIAL_AUTH_ASSOCIATE_BY_EMAIL = True
 SOCIAL_AUTH_NO_DEFAULT_PROTECTED_USER_FIELDS = True
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ("id", )
 LOGIN_URL = "login"

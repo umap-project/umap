@@ -82,4 +82,22 @@ And so on!
 
 See also
 [https://github.com/etalab/cartes.data.gouv.fr](https://github.com/etalab/cartes.data.gouv.fr)
-for an example of customization.
+for an example of theme customization.
+
+
+## Custom user display name
+
+In some situation, you may want to customize the display name of users, which
+is by default the username.
+
+There are three settings you can play with to control that:
+
+    # The display name itself, could be for example "{first_name} {last_name}"
+    USER_DISPLAY_NAME = "{username}"
+    # Which field to search for when autocompleting users (for permissions)
+    # See https://django-agnocomplete.readthedocs.io/en/latest/autocomplete-definition.html#agnocompletemode
+    USER_AUTOCOMPLETE_FIELDS = ["^username"]
+    # Which field to use in the URL, may also be for example "pk" to use the
+    # primary key and not expose the username (which may be private or may change too
+    # often for URL persistance)
+    USER_URL_FIELD = "username"

@@ -1,6 +1,7 @@
 import os
 import time
 
+from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.urls import reverse
@@ -10,6 +11,29 @@ from django.template.defaultfilters import slugify
 from django.core.files.base import File
 
 from .managers import PublicManager
+
+
+# Did not find a clean way to do this in Django
+# - creating a Proxy model would mean replacing get_user_model by this proxy model
+#   in every template
+# - extending User model woulc mean a non trivial migration
+def display_name(self):
+    return settings.USER_DISPLAY_NAME.format(**self.__dict__)
+
+
+def get_user_url(self):
+    identifier = getattr(self, settings.USER_URL_FIELD)
+    return reverse(settings.USER_MAPS_URL, kwargs={"identifier": identifier})
+
+
+def get_user_stars_url(self):
+    identifier = getattr(self, settings.USER_URL_FIELD)
+    return reverse("user_stars", kwargs={"identifier": identifier})
+
+
+User.add_to_class("__str__", display_name)
+User.add_to_class("get_url", get_user_url)
+User.add_to_class("get_stars_url", get_user_stars_url)
 
 
 class NamedModel(models.Model):
