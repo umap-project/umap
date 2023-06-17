@@ -569,6 +569,13 @@ def test_user_can_see_their_star(client, map, user):
     assert map.name in response.content.decode()
 
 
+def test_stars_link(client, map, user):
+    client.login(username=user.username, password="123123")
+    response = client.get(reverse("home"))
+    assert response.status_code == 200
+    assert "/user/Joe/stars" in response.content.decode()
+
+
 @pytest.mark.usefixtures("allow_anonymous")
 def test_cannot_send_link_on_owned_map(client, map):
     assert len(mail.outbox) == 0
