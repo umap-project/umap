@@ -28,8 +28,21 @@ describe('L.U.FeatureMixin', function () {
       assert.ok(qs('path[fill="DarkBlue"]')) // Polygon
     })
 
-    it('should take into account styles changes made in the datalayer', function () {
+    it('should toggle edit panel on shift-clic', function () {
       enableEdit()
+      happen.click(qs('path[fill="DarkBlue"]'), {shiftKey: true})
+      assert.ok(qs('form#umap-feature-properties'))
+      happen.click(qs('path[fill="DarkBlue"]'), {shiftKey: true})
+      assert.notOk(qs('form#umap-feature-properties'))
+    })
+
+    it('should open datalayer edit panel on ctrl-shift-clic', function () {
+      enableEdit()
+      happen.click(qs('path[fill="DarkBlue"]'), {shiftKey: true, ctrlKey: true})
+      assert.ok(qs('div.umap-layer-properties-container'))
+    })
+
+    it('should take into account styles changes made in the datalayer', function () {
       happen.click(
         qs('#browse_data_toggle_' + L.stamp(this.datalayer) + ' .layer-edit')
       )
