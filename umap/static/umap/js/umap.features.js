@@ -1,5 +1,5 @@
 L.U.FeatureMixin = {
-  staticOptions: {mainColor: 'color'},
+  staticOptions: { mainColor: 'color' },
 
   initialize: function (map, latlng, options) {
     this.map = map
@@ -948,6 +948,7 @@ L.U.Polyline = L.Polyline.extend({
   staticOptions: {
     stroke: true,
     fill: false,
+    mainColor: 'color',
   },
 
   isSameClass: function (other) {

@@ -132,7 +132,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
 
   _getValue: function (feature) {
     const key = this.datalayer.options.choropleth.property || 'value'
-    return feature.properties[key]
+    return +feature.properties[key] // TODO: should we catch values non castable to int ?
   },
 
   computeLimits: function () {
