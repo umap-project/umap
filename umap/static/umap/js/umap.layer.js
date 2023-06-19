@@ -110,6 +110,13 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   _type: 'Choropleth',
   includes: [L.U.Layer],
   canBrowse: true,
+  // Have defaults that better suit the choropleth mode.
+  defaults: {
+    color: 'white',
+    fillColor: 'red',
+    fillOpacity: 0.7,
+    weight: 2,
+  },
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -136,24 +143,25 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       this.datalayer.options.choropleth.mode || 'q',
       this.datalayer.options.choropleth.steps || 5
     )
+    const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     this.options.colors = chroma
-      .scale(this.datalayer.options.choropleth.brewer || 'Blues')
-      .colors(this.options.limits.length - 1)
+      .scale(this.datalayer.options.choropleth.brewer || ['white', fillColor])
+      .colors(this.options.limits.length)
   },
 
   getColor: function (feature) {
     if (!feature) return // FIXME shold not happen
     const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
-    for (let i = 1; i < this.options.limits.length; i++) {
+    for (let i = 0; i < this.options.limits.length; i++) {
       if (featureValue <= this.options.limits[i]) {
-        return this.options.colors[i-1]
+        return this.options.colors[i]
       }
     }
   },
 
   getOption: function (option, feature) {
-    if (option === 'fillColor' || option === 'color') return this.getColor(feature)
+    if (feature && option === feature.staticOptions.mainColor) return this.getColor(feature)
   },
 
   addLayer: function (layer) {
@@ -228,7 +236,9 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       color = L.DomUtil.create('span', 'datalayer-color', li)
       color.style.backgroundColor = this.options.colors[index]
       label = L.DomUtil.create('span', '', li)
-      label.textContent = `${+this.options.limits[index].toFixed(1)} - ${+this.options.limits[index+1].toFixed(1)}`
+      label.textContent = `${+this.options.limits[index].toFixed(
+        1
+      )} - ${+this.options.limits[index + 1].toFixed(1)}`
     })
   },
 })
@@ -1175,13 +1185,22 @@ L.U.DataLayer = L.Evented.extend({
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
   },
 
+  getOwnOption: function (option) {
+    if (L.Util.usableOption(this.options, option)) return this.options[option]
+  },
+
   getOption: function (option, feature) {
     if (this.layer && this.layer.getOption) {
       const value = this.layer.getOption(option, feature)
       if (value) return value
     }
-    if (L.Util.usableOption(this.options, option)) return this.options[option]
-    else return this.map.getOption(option)
+    if (this.getOwnOption(option)) {
+      return this.getOwnOption(option)
+    } else if (this.layer && this.layer.defaults && this.layer.defaults[option]) {
+      return this.layer.defaults[option]
+    } else {
+      return this.map.getOption(option)
+    }
   },
 
   buildVersionsFieldset: function (container) {
