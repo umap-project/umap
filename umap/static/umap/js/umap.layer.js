@@ -190,7 +190,8 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       [
         'options.choropleth.property',
         {
-          handler: 'BlurInput',
+          handler: 'Select',
+          selectOptions: this.datalayer._propertiesIndex,
           placeholder: L._('Choropleth property value'),
           helpText: L._('Choropleth property value'),
         },
