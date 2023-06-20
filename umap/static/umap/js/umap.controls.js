@@ -594,6 +594,11 @@ L.U.DataLayersControl = L.Control.extend({
 })
 
 L.U.DataLayer.include({
+  renderLegend: function (container) {
+    const color = L.DomUtil.create('span', 'datalayer-color', container)
+    color.style.backgroundColor = this.getColor()
+  },
+
   renderToolbox: function (container) {
     const toggle = L.DomUtil.create('i', 'layer-toggle', container),
       zoomTo = L.DomUtil.create('i', 'layer-zoom_to', container),
@@ -939,12 +944,12 @@ L.U.Map.include({
     }
     const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
     this.eachVisibleDataLayer((datalayer) => {
-      const p = L.DomUtil.create('p', '', datalayerContainer),
-        color = L.DomUtil.create('span', 'datalayer-color', p),
+      const p = L.DomUtil.create('p', 'datalayer-legend', datalayerContainer),
+        legend = L.DomUtil.create('span', '', p),
         headline = L.DomUtil.create('strong', '', p),
         description = L.DomUtil.create('span', '', p)
       datalayer.onceLoaded(function () {
-        color.style.backgroundColor = this.getColor()
+        datalayer.renderLegend(legend)
         if (datalayer.options.description) {
           description.innerHTML = L.Util.toHTML(datalayer.options.description)
         }
