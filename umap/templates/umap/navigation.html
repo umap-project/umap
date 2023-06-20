@@ -2,7 +2,7 @@
 <nav class="umap-nav">
   <section>
     <h1>
-      <a href="/">{{ title }}</a>
+      <a href="{% url "home" %}">{{ title }}</a>
     </h1>
   </section>
   <section>
@@ -16,11 +16,11 @@
         </li>
       {% else %}
         <li>
-          <a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a>
+          <a href="{% url "login" %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a>
         </li>
       {% endif %}
       <li>
-        <a href="{% url 'about' %}">{% trans "About" %}</a>
+        <a href="{% url "about" %}">{% trans "About" %}</a>
       </li>
       <li>
         <a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Help" %}</a>
@@ -28,18 +28,18 @@
       {% if user.is_authenticated %}
         {% if user.has_usable_password %}
           <li>
-            <a href="{% url 'password_change' %}">{% trans "Change password" %}</a>
+            <a href="{% url "password_change" %}">{% trans "Change password" %}</a>
           </li>
         {% endif %}
         <li>
-          <a href="{% url 'logout' %}" class="logout">{% trans "Log out" %}</a>
+          <a href="{% url "logout" %}" class="logout">{% trans "Log out" %}</a>
         </li>
       {% endif %}
     </ul>
   </section>
   <section>
     {% if not UMAP_READONLY %}
-      <a href="{% url 'map_new' %}" class="button">{% trans "Create a map" %}</a>
+      <a href="{% url "map_new" %}" class="button">{% trans "Create a map" %}</a>
     {% endif %}
   </section>
 </nav>

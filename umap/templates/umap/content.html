@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 {% load umap_tags compress i18n %}
-{% block body_class %}content{% endblock %}
+{% block body_class %}
+  content
+{% endblock body_class %}
 {% block extra_head %}
   {% compress css %}
     {% umap_css %}
   {% endcompress css %}
   {% umap_js %}
-{% endblock %}
+{% endblock extra_head %}
 {% block header %}
   <header class="wrapper row">
-    {% include 'umap/navigation.html' with title=SITE_NAME %}
+    {% include "umap/navigation.html" with title=SITE_NAME %}
   </header>
-  {% include 'umap/messages.html' with title=SITE_NAME %}
-{% endblock %}
+  {% include "umap/messages.html" with title=SITE_NAME %}
+{% endblock header %}
 {% block content %}
   {% if UMAP_READONLY %}
     <div class="wrapper demo-instance-warning">

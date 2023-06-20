@@ -3,15 +3,20 @@
 <html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
   <head>
     <title>
-      {% block head_title %}{{ SITE_NAME }}{% endblock %}
+      {% block head_title %}
+        {{ SITE_NAME }}
+      {% endblock head_title %}
     </title>
     <meta charset="utf-8">
+    <meta name="description"
+          content="{% trans "uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site." %}">
+    <meta name="keywords" content="map, umap">
     {% block extra_head %}
     {% endblock extra_head %}
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   </head>
-  <body class="{% block body_class %}{% endblock %}">
+  <body class="{% block body_class %}{% endblock body_class %}">
     {% block header %}
     {% endblock header %}
     {% block content %}

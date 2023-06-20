@@ -13,6 +13,10 @@ develop: ## Install the test and dev dependencies
 pretty-templates: ## Prettify template files
 	djlint umap/templates --reformat
 
+.PHONY: lint-templates
+lint-templates: ## Lint template files
+	djlint umap/templates --lint
+
 .PHONY: version
 version: ## Display the current version
 	@hatch version
