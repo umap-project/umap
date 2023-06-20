@@ -333,7 +333,7 @@ L.U.FeatureMixin = {
       this.view(e)
     } else if (!this.isReadOnly()) {
       if (e.originalEvent.shiftKey) {
-        if (e.originalEvent.ctrlKey) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
           this.datalayer.edit(e)
         } else {
           if (this._toggleEditing) this._toggleEditing(e)
