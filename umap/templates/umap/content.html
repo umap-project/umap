@@ -38,50 +38,53 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
-    !(function() {
-      var ui = new L.U.UI(document.querySelector('header'));
-      var xhr = new L.U.Xhr(ui);
-      var login = document.querySelector('a.login');
+    !(function () {
+      const ui = new L.U.UI(document.querySelector('header'))
+      const xhr = new L.U.Xhr(ui)
+      const login = document.querySelector('a.login')
       if (login) {
         L.DomEvent.on(login, 'click', function (e) {
-          L.DomEvent.stop(e);
+          L.DomEvent.stop(e)
           xhr.login({
-            "login_required": this.getAttribute('href'),
-            "redirect": "/"
-          });
-        });
+            login_required: this.getAttribute('href'),
+            redirect: '/',
+          })
+        })
       }
-      var logout = document.querySelector('a.logout');
+      const logout = document.querySelector('a.logout')
       if (logout) {
         L.DomEvent.on(logout, 'click', function (e) {
-          L.DomEvent.stop(e);
-          xhr.logout(this.getAttribute('href'));
-        });
+          L.DomEvent.stop(e)
+          xhr.logout(this.getAttribute('href'))
+        })
       }
-      var getMore = function (e) {
-        L.DomEvent.stop(e);
+      const getMore = function (e) {
+        L.DomEvent.stop(e)
         xhr._ajax({
           uri: this.href,
           verb: 'GET',
           callback: function (data) {
-            var container = this.parentNode;
-            container.innerHTML = data;
-            Array.prototype.forEach.call(container.querySelectorAll('script'), function (item) {
-              eval(item.firstChild.textContent);
-            });
-            var more = document.querySelector('.more_button');
+            const container = this.parentNode
+            container.innerHTML = data
+            Array.prototype.forEach.call(
+              container.querySelectorAll('script'),
+              function (item) {
+                eval(item.firstChild.textContent)
+              }
+            )
+            const more = document.querySelector('.more_button')
             if (more) {
-              L.DomEvent.on(more, 'click', getMore, more);
+              L.DomEvent.on(more, 'click', getMore, more)
             }
           },
-          context: this
-        });
-      };
-      var more = document.querySelector('.more_button');
-      if (more) {
-        L.DomEvent.on(more, 'click', getMore, more);
+          context: this,
+        })
       }
-    })(this);
+      const more = document.querySelector('.more_button')
+      if (more) {
+        L.DomEvent.on(more, 'click', getMore, more)
+      }
+    })(this)
   </script>
 {% endblock bottom_js %}
 {% block footer %}
