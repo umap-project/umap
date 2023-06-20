@@ -1,3 +1,7 @@
 {% load umap_tags %}
 <div id="map"></div>
-<script type="text/javascript">var MAP = new L.U.Map("map", {{ map_settings|notag|safe }});</script>
+<!-- djlint:off -->
+<script type="text/javascript">
+  let MAP = new L.U.Map("map", {{ map_settings|notag|safe }})
+</script>
+<!-- djlint:on -->
