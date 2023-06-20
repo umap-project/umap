@@ -218,6 +218,19 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       ],
     ]
   },
+
+  renderLegend: function (container) {
+    const parent = L.DomUtil.create('ul', '', container)
+    let li, color, label
+
+    this.options.limits.slice(0, -1).forEach((limit, index) => {
+      li = L.DomUtil.create('li', '', parent)
+      color = L.DomUtil.create('span', 'datalayer-color', li)
+      color.style.backgroundColor = this.options.colors[index]
+      label = L.DomUtil.create('span', '', li)
+      label.textContent = `${+this.options.limits[index].toFixed(1)} - ${+this.options.limits[index+1].toFixed(1)}`
+    })
+  },
 })
 
 L.U.Layer.Heat = L.HeatLayer.extend({

@@ -598,6 +598,7 @@ L.U.DataLayersControl = L.Control.extend({
 
 L.U.DataLayer.include({
   renderLegend: function (container) {
+    if (this.layer.renderLegend) return this.layer.renderLegend(container)
     const color = L.DomUtil.create('span', 'datalayer-color', container)
     color.style.backgroundColor = this.getColor()
   },
