@@ -1,19 +1,18 @@
 {% load i18n %}
 <h3>{% trans "You are logged in. Continuing..." %}</h3>
-
 <script type="text/javascript">
 
-    function proceed()
-    {
-        if (window.opener && window.opener.umap_proceed) {
-            window.opener.umap_proceed();
-        } else {
+  function proceed()
+  {
+    if (window.opener && window.opener.umap_proceed) {
+      window.opener.umap_proceed();
+    } else {
             // Trade off as Twitter does not allow us to access window.opener
-            window.location.href = '{{ request.user.get_url }}'
-        }
+      window.location.href = '{{ request.user.get_url }}'
     }
+  }
 
-proceed();
+  proceed();
 
 // To handle errors, this template should be integrated into your authentication error message page
 // Note that you can call any window.opener function like window.opener.func

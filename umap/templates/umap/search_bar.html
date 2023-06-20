@@ -1,13 +1,16 @@
 {% load i18n %}
 <div class="wrapper search_wrapper">
-    <div class="row">
-      <form action="{% url 'search' %}" method="GET">
+  <div class="row">
+    <form action="{% url 'search' %}" method="GET">
       <div class="col two-third mwide">
-        <input name="q" type="search" placeholder="{% trans 'Search maps' %}" value="{{ q|default:"" }}" />
+        <input name="q"
+               type="search"
+               placeholder="{% trans 'Search maps' %}"
+               value="{{ q|default:"" }}" />
       </div>
       <div class="col third mwide">
         <input type="submit" value="{% trans 'Search' %}" class="neutral" />
       </div>
-      </form>
-    </div>
+    </form>
+  </div>
 </div>

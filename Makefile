@@ -9,6 +9,10 @@ install: ## Install the dependencies
 develop: ## Install the test and dev dependencies
 	python3 -m pip install -e .[test,dev]
 
+.PHONY: pretty-templates
+pretty-templates: ## Prettify template files
+	djlint umap/templates --reformat
+
 .PHONY: version
 version: ## Display the current version
 	@hatch version

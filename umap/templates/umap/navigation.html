@@ -1,28 +1,42 @@
 {% load i18n %}
 <nav class="umap-nav">
   <section>
-    <h1><a href="/">{{ title }}</a></h1>
+    <h1>
+      <a href="/">{{ title }}</a>
+    </h1>
   </section>
-
   <section>
     <ul>
       {% if user.is_authenticated %}
-        <li><a href="{{ user.get_url }}">{% trans "My maps" %} ({{ user }})</a></li>
-        <li><a href="{{ user.get_stars_url }}">{% trans "Starred maps" %}</a></li>
+        <li>
+          <a href="{{ user.get_url }}">{% trans "My maps" %} ({{ user }})</a>
+        </li>
+        <li>
+          <a href="{{ user.get_stars_url }}">{% trans "Starred maps" %}</a>
+        </li>
       {% else %}
-        <li><a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a></li>
+        <li>
+          <a href="{% url 'login' %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a>
+        </li>
       {% endif %}
-      <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-      <li><a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Help" %}</a></li>
+      <li>
+        <a href="{% url 'about' %}">{% trans "About" %}</a>
+      </li>
+      <li>
+        <a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Help" %}</a>
+      </li>
       {% if user.is_authenticated %}
         {% if user.has_usable_password %}
-          <li><a href="{% url 'password_change' %}" >{% trans "Change password" %}</a></li>
+          <li>
+            <a href="{% url 'password_change' %}">{% trans "Change password" %}</a>
+          </li>
         {% endif %}
-        <li><a href="{% url 'logout' %}" class="logout">{% trans "Log out" %}</a></li>
+        <li>
+          <a href="{% url 'logout' %}" class="logout">{% trans "Log out" %}</a>
+        </li>
       {% endif %}
     </ul>
   </section>
-
   <section>
     {% if not UMAP_READONLY %}
       <a href="{% url 'map_new' %}" class="button">{% trans "Create a map" %}</a>

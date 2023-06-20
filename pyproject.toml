@@ -47,6 +47,7 @@ dependencies = [
 dev = [
   "hatch==1.7.0",
   "black==21.10b0",
+  "djlint==1.31.0",
   "mkdocs==1.2.3",
 ]
 test = [
@@ -75,3 +76,8 @@ path = "umap/__init__.py"
 [tool.flake8]
 # Black crazyness.
 max-line-length = 88
+
+[tool.djlint]
+profile="django"
+indent=2
+format_css=true

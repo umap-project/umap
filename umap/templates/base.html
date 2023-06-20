@@ -1,26 +1,25 @@
 {% load compress umap_tags i18n %}
 <!DOCTYPE html>
-<html{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
-<head>
-    <title>{% block head_title %}{{ SITE_NAME }}{% endblock %}</title>
+<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+  <head>
+    <title>
+      {% block head_title %}{{ SITE_NAME }}{% endblock %}
+    </title>
     <meta charset="utf-8">
     {% block extra_head %}
     {% endblock extra_head %}
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-</head>
-<body class="{% block body_class %}{% endblock %}">
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
     {% block header %}
     {% endblock header %}
-
     {% block content %}
     {% endblock content %}
     {% block bottom_js %}
     {% endblock bottom_js %}
-
     {% block footer %}
-        {% include "umap/footer.html" %}
+      {% include "umap/footer.html" %}
     {% endblock footer %}
-</body>
+  </body>
 </html>
