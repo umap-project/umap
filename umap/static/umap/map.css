@@ -1323,7 +1323,7 @@ a.add-datalayer:hover,
     margin-bottom: 4px;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .umap-popup-content iframe {
     min-width: 310px;
