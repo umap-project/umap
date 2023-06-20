@@ -824,7 +824,7 @@ L.U.Map.include({
         this.getMap().options.advancedFilters[property] = []
       }
     })
-    this.eachDataLayer((datalayer) => {
+    this.eachBrowsableDataLayer((datalayer) => {
       datalayer.eachFeature((feature) => {
         advancedFilterKeys.forEach((property) => {
           if (feature.properties[property]) {
@@ -887,7 +887,7 @@ L.U.Map.include({
 
     const filterFeatures = function () {
       let noResults = true
-      this.eachDataLayer((datalayer) => {
+      this.eachBrowsableDataLayer((datalayer) => {
         datalayer.eachFeature(function (feature) {
           feature.properties.isVisible = true
           for (const [property, values] of Object.entries(

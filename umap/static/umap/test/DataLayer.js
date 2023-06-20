@@ -373,4 +373,33 @@ describe('L.U.DataLayer', function () {
       assert.ok(qs('div.icon_container'))
     })
   })
+  describe('#advanced-filters()', function () {
+    before(function () {
+      this.server.respondWith(
+        /\/datalayer\/63\/\?.*/,
+        JSON.stringify(RESPONSES.datalayer63_GET)
+      )
+      this.map.options.advancedFilterKey = 'name'
+      this.map.createDataLayer(RESPONSES.datalayer63_GET._umap_options)
+      this.server.respond()
+    })
+    it('should show non browsable layer', function () {
+      assert.ok(qs('path[fill="SteelBlue"]'))
+    })
+    it('should allow advanced filter', function () {
+      this.map.openFilter()
+      assert.ok(qs('div.umap-filter-properties'))
+      // This one if from the normal datalayer
+      // it's name is "test", so it should be hidden
+      // by the filter
+      assert.ok(qs('path[fill="none"]'))
+      happen.click(qs('input[data-value="name poly"]'))
+      assert.notOk(qs('path[fill="none"]'))
+      // This one comes from a non browsable layer
+      // so it should not be affected by the filter
+      assert.ok(qs('path[fill="SteelBlue"]'))
+    })
+
+
+  })
 })
