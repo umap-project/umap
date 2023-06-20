@@ -393,7 +393,7 @@ L.U.FeatureMixin = {
     let items = ['-']
     if (this.map.editedFeature !== this) {
       items.push({
-        text: L._('Edit this feature') + ' (⇧+click)',
+        text: L._('Edit this feature') + ' (⇧+Click)',
         callback: this.edit,
         context: this,
         iconCls: 'umap-edit',
@@ -401,7 +401,7 @@ L.U.FeatureMixin = {
     }
     items = items.concat(
       {
-        text: L._("Edit feature's layer") + ' (Ctrl+⇧+click)',
+        text: L._("Edit feature's layer") + ' (Ctrl+⇧+Click)',
         callback: this.datalayer.edit,
         context: this.datalayer,
         iconCls: 'umap-edit',
