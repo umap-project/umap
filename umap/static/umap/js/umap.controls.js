@@ -172,7 +172,7 @@ L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-toggle-edit',
-      tooltip: L._('Toggle edit mode (Shift+Click)'),
+      tooltip: L._('Toggle edit mode (⇧+Click)'),
     },
   },
 

@@ -333,8 +333,12 @@ L.U.FeatureMixin = {
       this.view(e)
     } else if (!this.isReadOnly()) {
       if (e.originalEvent.shiftKey) {
-        if (this._toggleEditing) this._toggleEditing(e)
-        else this.edit(e)
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+          this.datalayer.edit(e)
+        } else {
+          if (this._toggleEditing) this._toggleEditing(e)
+          else this.edit(e)
+        }
       } else {
         new L.Toolbar.Popup(e.latlng, {
           className: 'leaflet-inplace-toolbar',
@@ -389,7 +393,7 @@ L.U.FeatureMixin = {
     let items = ['-']
     if (this.map.editedFeature !== this) {
       items.push({
-        text: L._('Edit this feature'),
+        text: L._('Edit this feature') + ' (⇧+Click)',
         callback: this.edit,
         context: this,
         iconCls: 'umap-edit',
@@ -397,7 +401,7 @@ L.U.FeatureMixin = {
     }
     items = items.concat(
       {
-        text: L._("Edit feature's layer"),
+        text: L._("Edit feature's layer") + ' (Ctrl+⇧+Click)',
         callback: this.datalayer.edit,
         context: this.datalayer,
         iconCls: 'umap-edit',
