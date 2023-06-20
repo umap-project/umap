@@ -1,37 +1,37 @@
 {% load i18n %}
-
 {% if ENABLE_ACCOUNT_LOGIN %}
-<h5>{% trans "Please log in with your account" %}</h5>
-
-<div>
+  <h5>{% trans "Please log in with your account" %}</h5>
+  <div>
     {% if form.non_field_errors %}
-        <ul class='form-errors'>
-            {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+      <ul class="form-errors">
+        {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+      </ul>
     {% endif %}
-
-    <form id='login_form' action="{% url 'login' %}" method="POST">
-        {% csrf_token %}
-        {{ form.username.errors }}
-        <input type="text" name="username" placeholder="{% trans 'Username' %}" autofocus />
-        {{ form.password.errors }}
-        <input type="password" name="password" placeholder="{% trans 'Password' %}" />
-        <input type="submit" value="{% trans 'Login' %}" />
+    <form id="login_form" action="{% url "login" %}" method="post">
+      {% csrf_token %}
+      {{ form.username.errors }}
+      <input type="text"
+             name="username"
+             placeholder="{% trans "Username" %}"
+             autofocus />
+      {{ form.password.errors }}
+      <input type="password" name="password" placeholder="{% trans "Password" %}" />
+      <input type="submit" value="{% trans "Login" %}" />
     </form>
-</div>
+  </div>
 {% endif %}
-
 {% if backends.backends|length %}
-<h5>{% trans "Please choose a provider" %}</h5>
-<div>
+  <h5>{% trans "Please choose a provider" %}</h5>
+  <div>
     <ul class="login-grid block-grid">
-        {% for name in backends.backends %}
-            <li>
-                <a rel="nofollow" href="{% url "social:begin" name %}" class="umap-login-popup login-{{ name }}" title="{{ name|title }}"></a>
-            </li>
-        {% endfor %}
+      {% for name in backends.backends %}
+        <li>
+          <a rel="nofollow"
+             href="{% url "social:begin" name %}"
+             class="umap-login-popup login-{{ name }}"
+             title="{{ name|title }}"></a>
+        </li>
+      {% endfor %}
     </ul>
-</div>
+  </div>
 {% endif %}

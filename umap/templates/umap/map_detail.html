@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% load umap_tags compress i18n %}
-{% block head_title %}{{ map.name }} - {{ SITE_NAME }}{% endblock %}
-{% block body_class %}map_detail{% endblock %}
-
+{% block head_title %}
+  {{ map.name }} - {{ SITE_NAME }}
+{% endblock head_title %}
+{% block body_class %}
+  map_detail
+{% endblock body_class %}
 {% block extra_head %}
-    {% compress css %}
-        {% umap_css %}
-    {% endcompress %}
-    {% umap_js locale=locale %}
-    {% if object.share_status != object.PUBLIC %}
-        <meta name="robots" content="noindex">
-    {% endif %}
-{% endblock %}
-
+  {% compress css %}
+    {% umap_css %}
+  {% endcompress %}
+  {% umap_js locale=locale %}
+  {% if object.share_status != object.PUBLIC %}<meta name="robots" content="noindex">{% endif %}
+{% endblock extra_head %}
 {% block content %}
-    {% block map_init %}
-        {% include "umap/map_init.html" %}
-    {% endblock %}
-    {% include "umap/map_messages.html" %}
-{% endblock %}
+  {% block map_init %}
+    {% include "umap/map_init.html" %}
+  {% endblock map_init %}
+  {% include "umap/map_messages.html" %}
+{% endblock content %}
