@@ -883,6 +883,7 @@ def stats(request):
     last_week = date.today() - timedelta(days=7)
     return simple_json_response(
         **{
+            "version": VERSION,
             "maps_count": Map.objects.count(),
             "maps_active_last_week_count": Map.objects.filter(
                 modified_at__gt=last_week
