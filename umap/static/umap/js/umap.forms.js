@@ -1081,6 +1081,10 @@ L.U.FormBuilder = L.FormBuilder.extend({
       handler: 'DataLayersControl',
       label: L._('Display the data layers control'),
     },
+    advancedEditControl: {
+      handler: 'Switch',
+      label: L._('Show advanced edit buttons to other editors'),
+    },
     starControl: {
       handler: 'ControlChoice',
       label: L._('Display the star map button'),

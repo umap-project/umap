@@ -25,6 +25,7 @@ L.Map.mergeOptions({
   editInOSMControl: false,
   editInOSMControlOptions: false,
   scaleControl: true,
+  advancedEditControl: true,
   noControl: false, // Do not render any control.
   miniMap: false,
   name: '',
@@ -161,6 +162,8 @@ L.U.Map.include({
     )
       this.options.slideshow.active = true
 
+    this.permissions = new L.U.MapPermissions(this)
+
     this.initControls()
 
     // create datalayers
@@ -233,7 +236,6 @@ L.U.Map.include({
 
     this.help = new L.U.Help(this)
     this.slideshow = new L.U.Slideshow(this, this.options.slideshow)
-    this.permissions = new L.U.MapPermissions(this)
     this.initCaptionBar()
     if (this.options.allowEdit) {
       this.editTools = new L.U.Editable(this)
@@ -1209,6 +1211,7 @@ L.U.Map.include({
     'measureControl',
     'tilelayersControl',
     'starControl',
+    'advancedEditControl',
     'easing',
   ],
 
@@ -1444,6 +1447,7 @@ L.U.Map.include({
       'options.captionBar',
       'options.captionMenus',
     ])
+    if (!this.permissions.isAnonymousMap()) UIFields.push('options.advancedEditControl')
     builder = new L.U.FormBuilder(this, UIFields, {
       callback: function () {
         this.renderControls()

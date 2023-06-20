@@ -272,8 +272,13 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
   },
 })
 
-// Leaflet.Toolbar doesn't allow twice same toolbar class…
-L.U.SettingsToolbar = L.Toolbar.Control.extend({})
+L.U.SettingsToolbar = L.Toolbar.Control.extend({
+
+  addTo: function (map) {
+    if (map.options.advancedEditControl === false && !map.permissions.isOwner()) return
+    L.Toolbar.Control.prototype.addTo.call(this, map)
+  }
+})
 L.U.DrawToolbar = L.Toolbar.Control.extend({
   initialize: function (options) {
     L.Toolbar.Control.prototype.initialize.call(this, options)
