@@ -73,8 +73,9 @@ L.Util.escapeHTML = (s) => {
   })
   return s
 }
-L.Util.toHTML = (r) => {
+L.Util.toHTML = (r, options) => {
   if (!r) return ''
+  const target = options && options.target || 'blank'
   let ii
 
   // detect newline format
@@ -100,14 +101,14 @@ L.Util.toHTML = (r) => {
   r = r.replace(/(\[\[http)/g, '[[h_t_t_p') // Escape for avoiding clash between [[http://xxx]] and http://xxx
   r = r.replace(/({{http)/g, '{{h_t_t_p')
   r = r.replace(/(=http)/g, '=h_t_t_p') // http://xxx as query string, see https://github.com/umap-project/umap/issues/607
-  r = r.replace(/(https?:[^ \<)\n]*)/g, '<a target="_blank" href="$1">$1</a>')
-  r = r.replace(/\[\[(h_t_t_ps?:[^\]|]*?)\]\]/g, '<a target="_blank" href="$1">$1</a>')
+  r = r.replace(/(https?:[^ \<)\n]*)/g, `<a target="_${target}" href="$1">$1</a>`)
+  r = r.replace(/\[\[(h_t_t_ps?:[^\]|]*?)\]\]/g, `<a target="_${target}" href="$1">$1</a>`)
   r = r.replace(
     /\[\[(h_t_t_ps?:[^|]*?)\|(.*?)\]\]/g,
-    '<a target="_blank" href="$1">$2</a>'
+    `<a target="_${target}" href="$1">$2</a>`
   )
-  r = r.replace(/\[\[([^\]|]*?)\]\]/g, '<a href="$1">$1</a>')
-  r = r.replace(/\[\[([^|]*?)\|(.*?)\]\]/g, '<a href="$1">$2</a>')
+  r = r.replace(/\[\[([^\]|]*?)\]\]/g, `<a target="_${target}" href="$1">$1</a>`)
+  r = r.replace(/\[\[([^|]*?)\|(.*?)\]\]/g, `<a target="_${target}" href="$1">$2</a>`)
 
   // iframe
   r = r.replace(

@@ -84,6 +84,13 @@ describe('L.Util', function () {
       )
     })
 
+    it('should handle target option', function () {
+      assert.equal(
+        L.Util.toHTML('A simple http://osm.org link', {target: 'self'}),
+        'A simple <a href="http://osm.org" target="_self">http://osm.org</a> link'
+      )
+    })
+
     it('should handle image', function () {
       assert.equal(
         L.Util.toHTML('A simple image: {{http://osm.org/pouet.png}}'),
