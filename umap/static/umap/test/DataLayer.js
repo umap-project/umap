@@ -373,6 +373,36 @@ describe('L.U.DataLayer', function () {
       assert.ok(qs('div.icon_container'))
     })
   })
+  describe('#smart-options()', function () {
+    let poly, marker
+    before(function () {
+      this.datalayer.eachLayer(function (layer) {
+        if (!poly && layer instanceof L.Polygon) {
+          poly = layer
+        }
+        if (!marker && layer instanceof L.Marker) {
+          marker = layer
+        }
+      })
+    })
+
+    it('should parse color variable', function () {
+      let icon = qs('div.umap-div-icon .icon_container')
+      poly.properties.mycolor = 'DarkGoldenRod'
+      marker.properties.mycolor = 'DarkRed'
+      marker.properties._umap_options.color = undefined
+      assert.notOk(qs('path[fill="DarkGoldenRod"]'))
+      assert.equal(icon.style.backgroundColor, 'olivedrab')
+      this.datalayer.options.color = '{mycolor}'
+      this.datalayer.options.fillColor = '{mycolor}'
+      this.datalayer.indexProperties(poly)
+      this.datalayer.indexProperties(marker)
+      this.datalayer.redraw()
+      icon = qs('div.umap-div-icon .icon_container')
+      assert.equal(icon.style.backgroundColor, 'darkred')
+      assert.ok(qs('path[fill="DarkGoldenRod"]'))
+    })
+  })
   describe('#advanced-filters()', function () {
     before(function () {
       this.server.respondWith(
@@ -399,7 +429,5 @@ describe('L.U.DataLayer', function () {
       // so it should not be affected by the filter
       assert.ok(qs('path[fill="SteelBlue"]'))
     })
-
-
   })
 })

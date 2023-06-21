@@ -109,7 +109,7 @@ L.U.FeatureMixin = {
     properties.unshift('properties.name')
     builder = new L.U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
-      callback: this.resetTooltip,
+      callback: this._redraw, // In case we have smart options…
     })
     container.appendChild(builder.build())
     this.appendEditFieldsets(container)
@@ -267,6 +267,18 @@ L.U.FeatureMixin = {
       value = this.datalayer.getOption(option)
     } else {
       value = this.map.getOption(option)
+    }
+    return value
+  },
+
+  getSmartOption: function (option, fallback) {
+    let value = this.getOption(option, fallback)
+    // There is a variable inside.
+    if (typeof value === 'string' && value.indexOf('{') != -1) {
+      value = L.Util.greedyTemplate(value, this.properties)
+      // We've not been able to replace the variable, let's reset
+      // so we can set a decent default at next step.
+      if (value.indexOf('{') != -1) value = undefined
     }
     return value
   },
@@ -706,7 +718,7 @@ L.U.PathMixin = {
     let option
     for (const idx in this.styleOptions) {
       option = this.styleOptions[idx]
-      options[option] = this.getOption(option)
+      options[option] = this.getSmartOption(option)
     }
     if (options.interactive) this.options.pointerEvents = 'visiblePainted'
     else this.options.pointerEvents = 'stroke'
