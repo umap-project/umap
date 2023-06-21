@@ -862,6 +862,7 @@ L.U.DataLayer = L.Evented.extend({
       'options.showLabel',
       'options.labelDirection',
       'options.labelInteractive',
+      'options.outlinkTarget',
     ]
     builder = new L.U.FormBuilder(this, popupFields, { callback: redrawCallback })
     const popupFieldset = L.DomUtil.createFieldset(

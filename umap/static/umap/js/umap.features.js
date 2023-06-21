@@ -57,8 +57,8 @@ L.U.FeatureMixin = {
 
   view: function (e) {
     if (this.map.editEnabled) return
-    const outlink = this.properties._umap_options.outlink,
-      target = this.properties._umap_options.outlinkTarget
+    const outlink = this.getOption('outlink'),
+      target = this.getOption('outlinkTarget')
     if (outlink) {
       switch (target) {
         case 'self':
