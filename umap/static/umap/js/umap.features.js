@@ -485,6 +485,7 @@ L.U.FeatureMixin = {
     properties.lon = center.lng
     properties.lng = center.lng
     properties.rank = this.getRank() + 1
+    if (L.locale) properties.locale = L.locale
     if (typeof this.getMeasure !== 'undefined') {
       properties.measure = this.getMeasure()
     }

@@ -185,6 +185,7 @@ function initMap(options) {
       },
       name: 'name of the map',
       description: 'The description of the map',
+      locale: 'en',
       allowEdit: true,
       moreControl: true,
       scaleControl: true,

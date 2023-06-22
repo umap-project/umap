@@ -30,15 +30,15 @@ describe('L.U.FeatureMixin', function () {
 
     it('should toggle edit panel on shift-clic', function () {
       enableEdit()
-      happen.click(qs('path[fill="DarkBlue"]'), {shiftKey: true})
+      happen.click(qs('path[fill="DarkBlue"]'), { shiftKey: true })
       assert.ok(qs('form#umap-feature-properties'))
-      happen.click(qs('path[fill="DarkBlue"]'), {shiftKey: true})
+      happen.click(qs('path[fill="DarkBlue"]'), { shiftKey: true })
       assert.notOk(qs('form#umap-feature-properties'))
     })
 
     it('should open datalayer edit panel on ctrl-shift-clic', function () {
       enableEdit()
-      happen.click(qs('path[fill="DarkBlue"]'), {shiftKey: true, ctrlKey: true})
+      happen.click(qs('path[fill="DarkBlue"]'), { shiftKey: true, ctrlKey: true })
       assert.ok(qs('div.umap-layer-properties-container'))
     })
 
@@ -209,12 +209,34 @@ describe('L.U.FeatureMixin', function () {
   })
 
   describe('#openPopup()', function () {
+    let poly
+    before(function () {
+      this.datalayer.eachLayer(function (layer) {
+        if (!poly && layer instanceof L.Polygon) {
+          poly = layer
+        }
+      })
+    })
+
     it('should open a popup on click', function () {
       assert.notOk(qs('.leaflet-popup-content'))
       happen.click(qs('path[fill="DarkBlue"]'))
       var title = qs('.leaflet-popup-content')
       assert.ok(title)
-      assert.ok(title.innerHTML.indexOf('name poly'))
+      assert.include(title.innerHTML, 'name poly')
+      happen.click(qs('#map')) // Close popup
+    })
+
+    it('should handle locale parameter inside description', function (done) {
+      poly.properties.description = "This is a link to [[https://domain.org/?locale={locale}|Wikipedia]]"
+      happen.click(qs('path[fill="DarkBlue"]'))
+      window.setTimeout(function () {
+        let content = qs('.umap-popup-container')
+        assert.ok(content)
+        assert.include(content.innerHTML, '<a href="https://domain.org/?locale=en" target="_blank">Wikipedia</a>')
+        happen.click(qs('#map')) // Close popup
+        done()
+      }, 500) // No idea why needed…
     })
   })
 

@@ -521,7 +521,7 @@ L.U.Help = L.Class.extend({
 
   formatURL: `${L._(
     'Supported variables that will be dynamically replaced'
-  )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}...`,
+  )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}..., locale`,
   formatIconSymbol: L._(
     'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/{name}.png", the {name} variable will be replaced by the "name" value of each marker.'
   ),
