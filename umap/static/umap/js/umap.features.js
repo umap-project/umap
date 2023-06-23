@@ -109,7 +109,7 @@ L.U.FeatureMixin = {
     properties.unshift('properties.name')
     builder = new L.U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
-      callback: this._redraw, // In case we have smart options…
+      callback: this._redraw, // In case we have dynamic options…
     })
     container.appendChild(builder.build())
     this.appendEditFieldsets(container)
