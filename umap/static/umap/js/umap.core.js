@@ -75,7 +75,7 @@ L.Util.escapeHTML = (s) => {
 }
 L.Util.toHTML = (r, options) => {
   if (!r) return ''
-  const target = options && options.target || 'blank'
+  const target = (options && options.target) || 'blank'
   let ii
 
   // detect newline format
@@ -102,7 +102,10 @@ L.Util.toHTML = (r, options) => {
   r = r.replace(/({{http)/g, '{{h_t_t_p')
   r = r.replace(/(=http)/g, '=h_t_t_p') // http://xxx as query string, see https://github.com/umap-project/umap/issues/607
   r = r.replace(/(https?:[^ \<)\n]*)/g, `<a target="_${target}" href="$1">$1</a>`)
-  r = r.replace(/\[\[(h_t_t_ps?:[^\]|]*?)\]\]/g, `<a target="_${target}" href="$1">$1</a>`)
+  r = r.replace(
+    /\[\[(h_t_t_ps?:[^\]|]*?)\]\]/g,
+    `<a target="_${target}" href="$1">$1</a>`
+  )
   r = r.replace(
     /\[\[(h_t_t_ps?:[^|]*?)\|(.*?)\]\]/g,
     `<a target="_${target}" href="$1">$2</a>`
@@ -208,7 +211,14 @@ L.Util.sortFeatures = (features, sortKey) => {
     } else if (!valB) {
       score = 1
     } else {
-      score = valA.toString().toLowerCase().localeCompare(valB.toString().toLowerCase())
+      score = valA
+        .toString()
+        .toLowerCase()
+        .localeCompare(valB.toString().toLowerCase(), L.locale || 'en', {
+          sensitivity: 'base',
+          ignorePunctuation: true,
+          numeric: true,
+        })
     }
     if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
     return score
