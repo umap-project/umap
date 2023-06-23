@@ -24,7 +24,7 @@ L.U.Icon = L.DivIcon.extend({
 
   _getColor: function () {
     let color
-    if (this.feature) color = this.feature.getSmartOption('color')
+    if (this.feature) color = this.feature.getDynamicOption('color')
     else if (this.options.color) color = this.options.color
     else color = this.map.getDefaultOption('color')
     return color

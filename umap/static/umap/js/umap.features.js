@@ -271,7 +271,7 @@ L.U.FeatureMixin = {
     return value
   },
 
-  getSmartOption: function (option, fallback) {
+  getDynamicOption: function (option, fallback) {
     let value = this.getOption(option, fallback)
     // There is a variable inside.
     if (typeof value === 'string' && value.indexOf('{') != -1) {
@@ -718,7 +718,7 @@ L.U.PathMixin = {
     let option
     for (const idx in this.styleOptions) {
       option = this.styleOptions[idx]
-      options[option] = this.getSmartOption(option)
+      options[option] = this.getDynamicOption(option)
     }
     if (options.interactive) this.options.pointerEvents = 'visiblePainted'
     else this.options.pointerEvents = 'stroke'
