@@ -1045,6 +1045,17 @@ L.U.FormBuilder = L.FormBuilder.extend({
       label: L._('Labels are clickable'),
       inheritable: true,
     },
+    outlink: {
+      label: L._('Link to…'),
+      helpEntries: 'outlink',
+      placeholder: 'http://...',
+      inheritable: true,
+    },
+    outlinkTarget: {
+      handler: 'OutlinkTarget',
+      label: L._('Open link in…'),
+      inheritable: true,
+    },
     labelKey: {
       helpEntries: 'labelKey',
       placeholder: L._('Default: name'),

@@ -57,8 +57,8 @@ L.U.FeatureMixin = {
 
   view: function (e) {
     if (this.map.editEnabled) return
-    const outlink = this.properties._umap_options.outlink,
-      target = this.properties._umap_options.outlinkTarget
+    const outlink = this.getOption('outlink'),
+      target = this.getOption('outlinkTarget')
     if (outlink) {
       switch (target) {
         case 'self':
@@ -173,6 +173,8 @@ L.U.FeatureMixin = {
       'properties._umap_options.showLabel',
       'properties._umap_options.labelDirection',
       'properties._umap_options.labelInteractive',
+      'properties._umap_options.outlink',
+      'properties._umap_options.outlinkTarget',
     ]
   },
 
@@ -1045,19 +1047,6 @@ L.U.Polygon = L.Polygon.extend({
           helpEntries: 'interactive',
           inheritable: true,
         },
-      ],
-      [
-        'properties._umap_options.outlink',
-        {
-          label: L._('Link to…'),
-          helpEntries: 'outlink',
-          placeholder: 'http://...',
-          inheritable: true,
-        },
-      ],
-      [
-        'properties._umap_options.outlinkTarget',
-        { handler: 'OutlinkTarget', label: L._('Open link in…'), inheritable: true },
       ],
     ]
     return options.concat(L.U.FeatureMixin.getInteractionOptions())

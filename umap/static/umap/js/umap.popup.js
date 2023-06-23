@@ -98,6 +98,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
 
   renderBody: function () {
     const template = this.feature.getOption('popupContentTemplate')
+    const target = this.feature.getOption('outlinkTarget')
     const container = L.DomUtil.create('div', 'umap-popup-container')
     let content = ''
     let properties
@@ -109,7 +110,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
       properties
     )
     content = L.Util.greedyTemplate(template, properties)
-    content = L.Util.toHTML(content)
+    content = L.Util.toHTML(content, {target: target})
     container.innerHTML = content
     return container
   },
