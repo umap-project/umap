@@ -645,5 +645,10 @@ L.U.Orderable = L.Evented.extend({
 })
 
 L.LatLng.prototype.isValid = function () {
-  return (isFinite(this.lat) && Math.abs(this.lat) <= 90 && isFinite(this.lng) && Math.abs(this.lng) <= 180)
+  return (
+    isFinite(this.lat) &&
+    Math.abs(this.lat) <= 90 &&
+    isFinite(this.lng) &&
+    Math.abs(this.lng) <= 180
+  )
 }
