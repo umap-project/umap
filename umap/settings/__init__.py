@@ -39,7 +39,10 @@ if path:
                     # Retrocompat pre 1.0, remove me in 1.1.
                     globals()['UMAP' + key[15:]] = value
                 elif key == 'UMAP_CUSTOM_TEMPLATES':
-                    globals()['TEMPLATES'][0]['DIRS'].insert(0, value)
+                    if 'DIRS' in globals()['TEMPLATES'][0]:
+                        globals()['TEMPLATES'][0]['DIRS'].insert(0, value)
+                    else:
+                        globals()['TEMPLATES'][0]['DIRS'] = [value]
                 elif key == 'UMAP_CUSTOM_STATICS':
                     globals()['STATICFILES_DIRS'].insert(0, value)
                 else:
