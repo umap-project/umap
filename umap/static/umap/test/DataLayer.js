@@ -428,6 +428,37 @@ describe('L.U.DataLayer', function () {
       // This one comes from a non browsable layer
       // so it should not be affected by the filter
       assert.ok(qs('path[fill="SteelBlue"]'))
+      happen.click(qs('input[data-value="name poly"]'))  // Undo
     })
   })
+
+  describe("#openBrower()", function() {
+    let poly, marker, line
+    before(function () {
+      this.datalayer.eachLayer(function (layer) {
+        if (!poly && layer instanceof L.Polygon) {
+          poly = layer
+        } else if (!line && layer instanceof L.Polyline) {
+          line = layer
+        } else if (!marker && layer instanceof L.Marker) {
+          marker = layer
+        }
+      })
+    })
+
+    it('should sort feature in natural order', function () {
+      poly.properties.name = '9. a poly'
+      marker.properties.name = '1. a marker'
+      line.properties.name = '100. a line'
+      this.datalayer.reindex()
+      this.map.openBrowser()
+      const els = qsa('.umap-browse-features li')
+      assert.equal(els.length, 3)
+      assert.equal(els[0].textContent, '1. a marker')
+      assert.equal(els[1].textContent, '9. a poly')
+      assert.equal(els[2].textContent, '100. a line')
+    })
+
+  })
+
 })
