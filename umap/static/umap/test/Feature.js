@@ -186,28 +186,6 @@ describe('L.U.FeatureMixin', function () {
     })
   })
 
-  describe('#changeDataLayer()', function () {
-    it('should change style on datalayer select change', function () {
-      enableEdit()
-      happen.click(qs('.manage-datalayers'))
-      happen.click(qs('#umap-ui-container .add-datalayer'))
-      changeInputValue(qs('form.umap-form input[name="name"]'), 'New layer')
-      changeInputValue(
-        qs('form#datalayer-advanced-properties input[name=color]'),
-        'MediumAquaMarine'
-      )
-      happen.click(qs('path[fill="DarkBlue"]'))
-      happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
-      var select = qs('select[name=datalayer]')
-      select.selectedIndex = 0
-      happen.once(select, { type: 'change' })
-      assert.ok(qs('path[fill="none"]')) // Polyline fill is unchanged
-      assert.notOk(qs('path[fill="DarkBlue"]'))
-      assert.ok(qs('path[fill="MediumAquaMarine"]'))
-      clickCancel()
-    })
-  })
-
   describe('#openPopup()', function () {
     let poly
     before(function () {
@@ -228,12 +206,16 @@ describe('L.U.FeatureMixin', function () {
     })
 
     it('should handle locale parameter inside description', function (done) {
-      poly.properties.description = "This is a link to [[https://domain.org/?locale={locale}|Wikipedia]]"
+      poly.properties.description =
+        'This is a link to [[https://domain.org/?locale={locale}|Wikipedia]]'
       happen.click(qs('path[fill="DarkBlue"]'))
       window.setTimeout(function () {
         let content = qs('.umap-popup-container')
         assert.ok(content)
-        assert.include(content.innerHTML, '<a href="https://domain.org/?locale=en" target="_blank">Wikipedia</a>')
+        assert.include(
+          content.innerHTML,
+          '<a href="https://domain.org/?locale=en" target="_blank">Wikipedia</a>'
+        )
         happen.click(qs('#map')) // Close popup
         done()
       }, 500) // No idea why needed…
@@ -314,6 +296,57 @@ describe('L.U.FeatureMixin', function () {
     it('should handle multiproperties', function () {
       poly.properties.city = 'Teulada'
       assert.ok(poly.matchFilter('eul', ['name', 'city', 'foo']))
+    })
+  })
+
+  describe('#quick-delete()', function () {
+    let poly, _confirm
+    before(function () {
+      _confirm = window.confirm
+      window.confirm = function (text) {
+        return true
+      }
+
+      this.datalayer.eachLayer(function (layer) {
+        if (!poly && layer instanceof L.Polygon) {
+          poly = layer
+        }
+      })
+    })
+
+    after(function () {
+      window.confirm = _confirm
+    })
+
+    it('should allow to delete from data browser', function () {
+      enableEdit()
+      assert.ok(qs('path[fill="DarkBlue"]'))
+      this.map.openBrowser()
+      happen.click(qs('.feature-delete'))
+      assert.notOk(qs('path[fill="DarkBlue"]'))
+      clickCancel()
+    })
+  })
+
+  describe('#changeDataLayer()', function () {
+    it('should change style on datalayer select change', function () {
+      enableEdit()
+      happen.click(qs('.manage-datalayers'))
+      happen.click(qs('#umap-ui-container .add-datalayer'))
+      changeInputValue(qs('form.umap-form input[name="name"]'), 'New layer')
+      changeInputValue(
+        qs('form#datalayer-advanced-properties input[name=color]'),
+        'MediumAquaMarine'
+      )
+      happen.click(qs('path[fill="DarkBlue"]'))
+      happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
+      var select = qs('select[name=datalayer]')
+      select.selectedIndex = 0
+      happen.once(select, { type: 'change' })
+      assert.ok(qs('path[fill="none"]')) // Polyline fill is unchanged
+      assert.notOk(qs('path[fill="DarkBlue"]'))
+      assert.ok(qs('path[fill="MediumAquaMarine"]'))
+      clickCancel()
     })
   })
 })

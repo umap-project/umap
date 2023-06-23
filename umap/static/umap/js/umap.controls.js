@@ -697,6 +697,7 @@ L.U.Map.include({
       const feature_li = L.DomUtil.create('li', `${feature.getClassName()} feature`),
         zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
         edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
+        del = L.DomUtil.create('i', 'show-on-edit feature-delete', feature_li),
         color = L.DomUtil.create('i', 'feature-color', feature_li),
         title = L.DomUtil.create('span', 'feature-title', feature_li),
         symbol = feature._getIconUrl
@@ -704,6 +705,7 @@ L.U.Map.include({
           : null
       zoom_to.title = L._('Bring feature to center')
       edit.title = L._('Edit this feature')
+      del.title = L._('Delete this feature')
       title.textContent = feature.getDisplayName() || '—'
       color.style.backgroundColor = feature.getOption('color')
       if (symbol) {
@@ -727,14 +729,8 @@ L.U.Map.include({
         },
         feature
       )
-      L.DomEvent.on(
-        edit,
-        'click',
-        function () {
-          this.edit()
-        },
-        feature
-      )
+      L.DomEvent.on(edit, 'click', feature.edit, feature)
+      L.DomEvent.on(del, 'click', feature.confirmDelete, feature)
       return feature_li
     }
 

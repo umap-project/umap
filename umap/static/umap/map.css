@@ -641,6 +641,7 @@ ul.photon-autocomplete {
 .layer-table-edit {
     background-position: -90px -10px;
 }
+.feature-delete,
 .layer-delete {
     background-position: -209px -90px;
 }
