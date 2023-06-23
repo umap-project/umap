@@ -606,17 +606,22 @@ L.U.Marker = L.Marker.extend({
 
   appendEditFieldsets: function (container) {
     L.U.FeatureMixin.appendEditFieldsets.call(this, container)
+    const latbk = this._latlng.lat,
+      lngbk = this._latlng.lng
     const coordinatesOptions = [
       ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude') }],
       ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude') }],
     ]
     const builder = new L.U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
-        if (!this._latlng.isValid())
-          return this.map.ui.alert({
+        if (!this._latlng.isValid()) {
+          this.map.ui.alert({
             content: L._('Invalid latitude or longitude'),
             level: 'error',
           })
+          builder.resetField('_latlng.lat')
+          builder.resetField('_latlng.lng')
+        }
         this._redraw()
         this.zoomTo({ easing: false })
       },
