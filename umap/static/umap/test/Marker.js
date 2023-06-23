@@ -95,4 +95,28 @@ describe('L.U.Marker', function () {
       assert.equal(L.Util.formatNum(layer._latlng.lng), other._latlng.lng)
     })
   })
+
+  describe('#edit()', function (done) {
+    it('should allow changing coordinates manually', function () {
+      var layer = new L.U.Marker(this.map, [10, 20], {
+        datalayer: this.datalayer,
+      }).addTo(this.datalayer)
+      enableEdit()
+      layer.edit()
+      changeInputValue(qs('form.umap-form input[name="lat"]'), '54.43')
+      assert.equal(layer._latlng.lat, 54.43)
+    })
+
+    it('should not allow invalid latitude nor longitude', function () {
+      var layer = new L.U.Marker(this.map, [10, 20], {
+        datalayer: this.datalayer,
+      }).addTo(this.datalayer)
+      enableEdit()
+      layer.edit()
+      changeInputValue(qs('form.umap-form input[name="lat"]'), '5443')
+      assert.equal(layer._latlng.lat, 10)
+      changeInputValue(qs('form.umap-form input[name="lng"]'), '5443')
+      assert.equal(layer._latlng.lng, 20)
+    })
+  })
 })
