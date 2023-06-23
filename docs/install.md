@@ -115,3 +115,20 @@ EMAIL_USE_TLS = True
 # or
 EMAIL_USE_SSL = True
 ```
+
+## Upgrading
+
+Usually, for upgrading, you need those steps:
+
+```
+pip install umap-project --upgrade
+umap migrate
+umap collectstatic
+umap compress
+```
+
+Then you need to restart your python server, for example:
+
+```
+sudo systemctl restart uwsgi  # or gunicorn, or…
+```
