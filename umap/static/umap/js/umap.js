@@ -1038,7 +1038,7 @@ L.U.Map.include({
     if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
     const self = this
     importedData.layers.forEach((geojson) => {
-      const dataLayer = self.createDataLayer()
+      const dataLayer = self.createDataLayer(geojson._umap_options)
       dataLayer.fromUmapGeoJSON(geojson)
     })
 
