@@ -1018,6 +1018,139 @@ L.U.Map.include({
     }
     this.ui.openPanel({ data: { html: container }, actions: actions })
   },
+
+  renderShareBox: function () {
+    const container = L.DomUtil.create('div', 'umap-share')
+    const embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map'))
+    const iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container)
+    const urlTitle = L.DomUtil.add('h4', '', container, L._('Direct link'))
+    const exportUrl = L.DomUtil.create('input', 'umap-share-url', container)
+    let option
+    exportUrl.type = 'text'
+    const UIFields = [
+      ['dimensions.width', { handler: 'Input', label: L._('width') }],
+      ['dimensions.height', { handler: 'Input', label: L._('height') }],
+      [
+        'options.includeFullScreenLink',
+        { handler: 'Switch', label: L._('Include full screen link?') },
+      ],
+      [
+        'options.currentView',
+        { handler: 'Switch', label: L._('Current view instead of default map view?') },
+      ],
+      [
+        'options.keepCurrentDatalayers',
+        { handler: 'Switch', label: L._('Keep current visible layers') },
+      ],
+      [
+        'options.viewCurrentFeature',
+        { handler: 'Switch', label: L._('Open current feature on load') },
+      ],
+      'queryString.moreControl',
+      'queryString.scrollWheelZoom',
+      'queryString.miniMap',
+      'queryString.scaleControl',
+      'queryString.onLoadPanel',
+      'queryString.captionBar',
+      'queryString.captionMenus',
+    ]
+    for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
+      UIFields.push(`queryString.${this.HIDDABLE_CONTROLS[i]}Control`)
+    }
+    const iframeExporter = new L.U.IframeExporter(this)
+    const buildIframeCode = () => {
+      iframe.innerHTML = iframeExporter.build()
+      exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
+    }
+    buildIframeCode()
+    const builder = new L.U.FormBuilder(iframeExporter, UIFields, {
+      callback: buildIframeCode,
+    })
+    const iframeOptions = L.DomUtil.createFieldset(container, L._('Export options'))
+    iframeOptions.appendChild(builder.build())
+    if (this.options.shortUrl) {
+      L.DomUtil.create('hr', '', container)
+      L.DomUtil.add('h4', '', container, L._('Short URL'))
+      const shortUrl = L.DomUtil.create('input', 'umap-short-url', container)
+      shortUrl.type = 'text'
+      shortUrl.value = this.options.shortUrl
+    }
+    L.DomUtil.create('hr', '', container)
+    L.DomUtil.add('h4', '', container, L._('Download data'))
+    const typeInput = L.DomUtil.create('select', '', container)
+    typeInput.name = 'format'
+    const exportCaveat = L.DomUtil.add(
+      'small',
+      'help-text',
+      container,
+      L._('Only visible features will be downloaded.')
+    )
+    exportCaveat.id = 'export_caveat_text'
+    const toggleCaveat = () => {
+      if (typeInput.value === 'umap') exportCaveat.style.display = 'none'
+      else exportCaveat.style.display = 'inherit'
+    }
+    L.DomEvent.on(typeInput, 'change', toggleCaveat)
+    const types = {
+      geojson: {
+        formatter: function (map) {
+          return JSON.stringify(map.toGeoJSON(), null, 2)
+        },
+        ext: '.geojson',
+        filetype: 'application/json',
+      },
+      gpx: {
+        formatter: function (map) {
+          return togpx(map.toGeoJSON())
+        },
+        ext: '.gpx',
+        filetype: 'application/xml',
+      },
+      kml: {
+        formatter: function (map) {
+          return tokml(map.toGeoJSON())
+        },
+        ext: '.kml',
+        filetype: 'application/vnd.google-earth.kml+xml',
+      },
+      umap: {
+        name: L._('Full map data'),
+        formatter: function (map) {
+          return map.serialize()
+        },
+        ext: '.umap',
+        filetype: 'application/json',
+        selected: true,
+      },
+    }
+    for (const key in types) {
+      if (types.hasOwnProperty(key)) {
+        option = L.DomUtil.create('option', '', typeInput)
+        option.value = key
+        option.textContent = types[key].name || key
+        if (types[key].selected) option.selected = true
+      }
+    }
+    toggleCaveat()
+    const download = L.DomUtil.create('a', 'button', container)
+    download.textContent = L._('Download data')
+    L.DomEvent.on(
+      download,
+      'click',
+      () => {
+        const type = types[typeInput.value]
+        const content = type.formatter(this)
+        let name = this.options.name || 'data'
+        name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+        download.download = name + type.ext
+        window.URL = window.URL || window.webkitURL
+        const blob = new Blob([content], { type: type.filetype })
+        download.href = window.URL.createObjectURL(blob)
+      },
+      this
+    )
+    this.ui.openPanel({ data: { html: container } })
+  },
 })
 
 L.U.TileLayerControl = L.Control.extend({
