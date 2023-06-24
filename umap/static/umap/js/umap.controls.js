@@ -1462,7 +1462,7 @@ L.U.IframeExporter = L.Evented.extend({
     return this.map
   },
 
-  buildUrl: function () {
+  buildUrl: function (options) {
     const datalayers = []
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
@@ -1478,14 +1478,17 @@ L.U.IframeExporter = L.Evented.extend({
       delete this.queryString.datalayers
     }
     const currentView = this.options.currentView ? window.location.hash : ''
-    return `${this.baseUrl}?${L.Util.buildQueryString(this.queryString)}${currentView}`
+    const queryString = L.extend({}, this.queryString, options)
+    return `${this.baseUrl}?${L.Util.buildQueryString(queryString)}${currentView}`
   },
 
   build: function () {
     const iframeUrl = this.buildUrl()
+    let fullUrl
     let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
-      code += `<p><a href="${this.baseUrl}">${L._('See full screen')}</a></p>`
+      fullUrl = this.buildUrl({ scrollWheelZoom: true })
+      code += `<p><a href="${fullUrl}">${L._('See full screen')}</a></p>`
     }
     return code
   },

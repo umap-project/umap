@@ -1,4 +1,4 @@
-describe('L.Utorage.Controls', function () {
+describe('L.U.Controls', function () {
   before(function () {
     this.server = sinon.fakeServer.create()
     this.server.respondWith(
@@ -46,6 +46,29 @@ describe('L.Utorage.Controls', function () {
       clickCancel()
       happen.click(qs('.umap-browse-actions .umap-browse-link'))
       assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
+    })
+  })
+
+  describe('#exportPanel()', function () {
+    it('should be opened at datalayer button click', function () {
+      let button = qs('.leaflet-control-embed a')
+      assert.ok(button)
+      happen.click(button)
+      assert.ok(qs('#umap-ui-container .umap-share'))
+    })
+    it('should update iframe link', function () {
+      let textarea = qs('.umap-share-iframe')
+      assert.ok(textarea)
+      console.log(textarea.textContent)
+      assert.include(textarea.textContent, 'src="')
+      assert.include(textarea.textContent, 'href="')
+      // We should ave both, once for iframe link, once for full screen
+      assert.include(textarea.textContent, 'scrollWheelZoom=true')
+      assert.include(textarea.textContent, 'scrollWheelZoom=false')
+      assert.notInclude(textarea.textContent, 'datalayers=62')
+      let switcher = qs('label[title="Keep current visible layers"]')
+      happen.click(switcher)
+      assert.include(textarea.textContent, 'datalayers=62')
     })
   })
 })
