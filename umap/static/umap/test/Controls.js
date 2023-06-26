@@ -15,6 +15,19 @@ describe('L.U.Controls', function () {
   })
 
   describe('#databrowser()', function () {
+    let poly, marker, line
+    before(function () {
+      this.datalayer.eachLayer(function (layer) {
+        if (!poly && layer instanceof L.Polygon) {
+          poly = layer
+        } else if (!line && layer instanceof L.Polyline) {
+          line = layer
+        } else if (!marker && layer instanceof L.Marker) {
+          marker = layer
+        }
+      })
+    })
+
     it('should be opened at datalayer button click', function () {
       var button = qs('.umap-browse-actions .umap-browse-link')
       assert.ok(button)
@@ -28,6 +41,19 @@ describe('L.U.Controls', function () {
 
     it("should contain datalayer's features list", function () {
       assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
+    })
+
+    it('should sort feature in natural order', function () {
+      poly.properties.name = '9. a poly'
+      marker.properties.name = '1. a marker'
+      line.properties.name = '100. a line'
+      this.datalayer.reindex()
+      this.map.openBrowser()
+      const els = qsa('.umap-browse-features li')
+      assert.equal(els.length, 3)
+      assert.equal(els[0].textContent, '1. a marker')
+      assert.equal(els[1].textContent, '9. a poly')
+      assert.equal(els[2].textContent, '100. a line')
     })
 
     it("should redraw datalayer's features list at feature delete", function () {
@@ -47,6 +73,7 @@ describe('L.U.Controls', function () {
       happen.click(qs('.umap-browse-actions .umap-browse-link'))
       assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
     })
+
   })
 
   describe('#exportPanel()', function () {
