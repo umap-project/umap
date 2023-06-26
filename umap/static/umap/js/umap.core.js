@@ -202,7 +202,12 @@ L.Util.sortFeatures = (features, sortKey) => {
   const sortKeys = (sortKey || 'name').split(',')
 
   const sort = (a, b, i) => {
-    const sortKey = sortKeys[i]
+    let sortKey = sortKeys[i],
+      reverse = 1
+    if (sortKey[0] === '-') {
+      reverse = -1
+      sortKey = sortKey.substring(1)
+    }
     let score
     const valA = a.properties[sortKey] || ''
     const valB = b.properties[sortKey] || ''
@@ -221,7 +226,7 @@ L.Util.sortFeatures = (features, sortKey) => {
         })
     }
     if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
-    return score
+    return score * reverse
   }
 
   features.sort((a, b) => {
