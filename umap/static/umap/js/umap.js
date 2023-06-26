@@ -905,6 +905,7 @@ L.U.Map.include({
     if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
     const self = this
     importedData.layers.forEach((geojson) => {
+      delete geojson._umap_options['id'] // Never trust an id at this stage
       const dataLayer = self.createDataLayer(geojson._umap_options)
       dataLayer.fromUmapGeoJSON(geojson)
     })
