@@ -84,6 +84,10 @@ lebab-all: $(jsdir)* ## Convert all JS files to modern syntax with Lebab + prett
 	for file in $^ ; do $(MAKE) lebab filepath=$${file}; done
 
 
+icons:
+	scour -i umap/static/umap/img/source/24.svg -o umap/static/umap/img/24.svg --strip-xml-prolog --enable-comment-stripping
+
+
 .PHONY: help
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)

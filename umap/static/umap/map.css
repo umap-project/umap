@@ -49,7 +49,7 @@
     height: 36px;
     width: 36px;
     line-height: 36px;
-    background-image: url('./img/24.png');
+    background-image: url('./img/24.svg');
 }
 .leaflet-control.display-on-more,
 a.umap-control-less {
@@ -71,31 +71,31 @@ a.umap-control-less {
     display: none;
 }
 .leaflet-control-embed a {
-    background-position: -81px -121px;
+    background-position: -72px -108px;
 }
 .leaflet-control-tilelayers a {
-    background-position: -82px -2px;
+    background-position: -72px 0;
 }
 .leaflet-control-home a {
     background-position: -122px -82px;
 }
 .leaflet-control-locate a {
-    background-position: -1px -121px;
+    background-position: 0 -108px;
 }
 .leaflet-control-locate.active a,
 .leaflet-control-locate.requesting a
  {
-    background-position: -80px -161px;
+    background-position: -72px -144px;
     box-shadow: 0 0 4px 0 black inset;
 }
 .leaflet-control-star a {
-    background-position: -118px -160px;
+    background-position: -108px -144px;
 }
 .leaflet-control-star.starred a {
-    background-position: -158px -160px;
+    background-position: -144px -144px;
 }
 .leaflet-control-search a {
-    background-position: -41px -121px;
+    background-position: -36px -108px;
     display: block;
 }
 .leaflet-control-search a.loading {
@@ -115,7 +115,7 @@ a.umap-control-text {
     font-size: 0.8em;
 }
 .leaflet-control-edit-enable a {
-    background-image: url('./img/24-white.png');
+    background-image: url('./img/24-white.svg');
     background-position: -1px -1px;
     background-color: #353c3e;
 }
@@ -199,11 +199,11 @@ ul.photon-autocomplete {
     background-color: #323737;
     border-right: 1px solid #eee;
     background-repeat: no-repeat;
-    background-image: url('./img/24.png');
+    background-image: url('./img/24.svg');
     background-size: auto auto;
 }
 .leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
-    background-image: url('./img/24-white.png');
+    background-image: url('./img/24-white.svg');
 }
 .umap-toolbar {
     margin-top: 0;
@@ -262,8 +262,8 @@ ul.photon-autocomplete {
 /* ********************************* */
 
 .leaflet-control-edit-in-osm .leaflet-control-edit-in-osm-toggle {
-    background-image: url('img/24.png');
-    background-position: -121px -121px;
+    background-image: url('img/24.svg');
+    background-position: -108px -108px;
 }
 .leaflet-measure-control,
 .leaflet-control-edit-in-osm {
@@ -272,7 +272,7 @@ ul.photon-autocomplete {
     box-shadow: none;
 }
 .leaflet-measure-control a {
-    background-position: -1px -81px;
+    background-position: 0 -72px;
 }
 .leaflet-control .leaflet-measure-toggle {
     display: inline-block;
@@ -574,10 +574,11 @@ ul.photon-autocomplete {
 /* ********************************* */
 
 .leaflet-control-browse .umap-browse-toggle {
-    background-image: url('./img/24.png');
+    background-image: url('./img/24.svg');
     width: 36px;
     height: 36px;
-    background-position: -41px -81px;
+    background-position: -36px -72px;
+    background-size: 180px;
 }
 .leaflet-control-browse .umap-browse-actions {
     background-color: #fff;
@@ -794,7 +795,7 @@ a.add-datalayer:hover,
 .umap-browse-features .polygon .feature-color,
 .umap-browse-features .polyline .feature-color {
     box-shadow: 0 0 4px 0 black inset;
-    background-image: url('./img/24.png');
+    background-image: url('./img/24.svg');
     background-size: 500%;
 }
 .umap-browse-features .polyline .feature-color {
