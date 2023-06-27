@@ -235,6 +235,10 @@ class Search(TemplateView, PaginatorMixin):
         else:
             return super(Search, self).get_template_names()
 
+    @property
+    def per_page(self):
+        return settings.UMAP_MAPS_PER_SEARCH
+
 
 search = Search.as_view()
 
