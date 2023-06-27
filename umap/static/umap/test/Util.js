@@ -446,4 +446,55 @@ describe('L.Util', function () {
       assert.ok(L.Util.usableOption({ key: null }, 'key'))
     })
   })
+
+  describe("#sortFeatures()", function () {
+    let feat1, feat2, feat3
+    before(function () {
+      feat1 = {properties: {}}
+      feat2 = {properties: {}}
+      feat3 = {properties: {}}
+    })
+    it('should sort feature from custom key', function () {
+      feat1.properties.mykey = "13. foo"
+      feat2.properties.mykey = "7. foo"
+      feat3.properties.mykey = "111. foo"
+      let features = L.Util.sortFeatures([feat1, feat2, feat3], "mykey")
+      assert.equal(features[0], feat2)
+      assert.equal(features[1], feat1)
+      assert.equal(features[2], feat3)
+    })
+    it('should sort feature from multiple keys', function () {
+      feat1.properties.mykey = "13. foo"
+      feat2.properties.mykey = "111. foo"
+      feat3.properties.mykey = "111. foo"
+      feat1.properties.otherkey = "C"
+      feat2.properties.otherkey = "B"
+      feat3.properties.otherkey = "A"
+      let features = L.Util.sortFeatures([feat1, feat2, feat3], "mykey,otherkey")
+      assert.equal(features[0], feat1)
+      assert.equal(features[1], feat3)
+      assert.equal(features[2], feat2)
+    })
+    it('should sort feature from custom key reverse', function () {
+      feat1.properties.mykey = "13. foo"
+      feat2.properties.mykey = "7. foo"
+      feat3.properties.mykey = "111. foo"
+      let features = L.Util.sortFeatures([feat1, feat2, feat3], "-mykey")
+      assert.equal(features[0], feat3)
+      assert.equal(features[1], feat1)
+      assert.equal(features[2], feat2)
+    })
+    it('should sort feature from multiple keys with reverse', function () {
+      feat1.properties.mykey = "13. foo"
+      feat2.properties.mykey = "111. foo"
+      feat3.properties.mykey = "111. foo"
+      feat1.properties.otherkey = "C"
+      feat2.properties.otherkey = "B"
+      feat3.properties.otherkey = "A"
+      let features = L.Util.sortFeatures([feat1, feat2, feat3], "mykey,-otherkey")
+      assert.equal(features[0], feat1)
+      assert.equal(features[1], feat2)
+      assert.equal(features[2], feat3)
+    })
+  })
 })

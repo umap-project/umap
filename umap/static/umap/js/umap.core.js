@@ -202,7 +202,12 @@ L.Util.sortFeatures = (features, sortKey) => {
   const sortKeys = (sortKey || 'name').split(',')
 
   const sort = (a, b, i) => {
-    const sortKey = sortKeys[i]
+    let sortKey = sortKeys[i],
+      reverse = 1
+    if (sortKey[0] === '-') {
+      reverse = -1
+      sortKey = sortKey.substring(1)
+    }
     let score
     const valA = a.properties[sortKey] || ''
     const valB = b.properties[sortKey] || ''
@@ -221,7 +226,7 @@ L.Util.sortFeatures = (features, sortKey) => {
         })
     }
     if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
-    return score
+    return score * reverse
   }
 
   features.sort((a, b) => {
@@ -553,7 +558,7 @@ L.U.Help = L.Class.extend({
   permanentCredit: L._(
     'Will be permanently visible in the bottom left corner of the map'
   ),
-  sortKey: L._('Property to use for sorting features'),
+  sortKey: L._('Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'),
   slugKey: L._('The name of the property to use as feature unique identifier.'),
   filterKey: L._('Comma separated list of properties to use when filtering features'),
   advancedFilterKey: L._(
