@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-04 06:47+0000\n"
+"POT-Creation-Date: 2023-06-06 21:16+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
@@ -30,7 +30,7 @@ msgstr "Bárki szerkesztheti"
 
 #: forms.py:48
 msgid "Only editable with secret edit link"
-msgstr "Kizárólag titkos szerkesztési linken szerkeszthető"
+msgstr "Kizárólag titkos szerkesztési linkkel szerkeszthető"
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -157,12 +157,12 @@ msgstr "%(current_user)s felhasználónak nincs térképe."
 #: templates/auth/user_stars.html:7
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
-msgstr ""
+msgstr "%(current_user)s megcsillagozott térképeinek böngészése"
 
 #: templates/auth/user_stars.html:15
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
-msgstr ""
+msgstr "%(current_user)s felhasználónak még nincs megcsillagozott térképe."
 
 #: templates/registration/login.html:4
 msgid "Please log in with your account"
@@ -236,7 +236,7 @@ msgstr "Játék a bemutatóval"
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "A uMap e példánya jelenleg csak olvasási módban működik, létrehozás/szerkesztés nem engedélyezett."
 
 #: templates/umap/content.html:33
 #, python-format
@@ -259,7 +259,7 @@ msgstr "Szerezzen ihletet, böngésszen a térképek között!"
 msgid "You are logged in. Continuing..."
 msgstr "Be van jelentkezve. Továbblépés…"
 
-#: templates/umap/map_list.html:7 views.py:249
+#: templates/umap/map_list.html:7 views.py:250
 msgid "by"
 msgstr "– készítette:"
 
@@ -273,7 +273,7 @@ msgstr "Térképeim"
 
 #: templates/umap/navigation.html:11
 msgid "Starred maps"
-msgstr ""
+msgstr "Megcsillagozott térképek"
 
 #: templates/umap/navigation.html:13
 msgid "Log in"
@@ -345,48 +345,48 @@ msgstr "Térképek keresése"
 msgid "Search"
 msgstr "Keresés"
 
-#: views.py:254
+#: views.py:255
 msgid "View the map"
 msgstr "Térkép megtekintése"
 
-#: views.py:578
+#: views.py:580
 msgid "Map has been updated!"
 msgstr "A térkép frissült."
 
-#: views.py:603
+#: views.py:605
 msgid "Map editors updated with success!"
 msgstr "A térképszerkesztők sikeresen frissültek."
 
-#: views.py:640
+#: views.py:643
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "A térképéhez tartozó uMap szerkesztési link: %(map_name)s"
 
-#: views.py:641
+#: views.py:646
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "Az Ön titkos szerkesztési linkje: %(link)s"
 
-#: views.py:647
+#: views.py:652
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "E-mail elküldve ide: %(email)s"
 
-#: views.py:658
+#: views.py:663
 msgid "Only its owner can delete the map."
 msgstr "A térképet csak a tulajdonosa törölheti."
 
-#: views.py:681
+#: views.py:686
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Elkészült a térképe másolata. Ha egy másik számítógépről szeretné szerkeszteni, ezt a linket használja: %(anonymous_url)s"
 
-#: views.py:686
+#: views.py:691
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulálunk, elkészült a térképe másolata!"
 
-#: views.py:852
+#: views.py:857
 msgid "Layer successfully deleted."
 msgstr "A réteg sikeresen törlődött."
