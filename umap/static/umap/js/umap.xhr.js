@@ -91,8 +91,15 @@ L.U.Xhr = L.Evented.extend({
             actions: actions,
           })
         } else {
-          if (xhr.status !== 0) {
-            // 0 === request cut by user
+          if (xhr.status === 0) {
+            // 0 === request cut by user or CORS
+            self.ui.alert({
+              content: L._(
+                'Issue reaching that URL (network problem or CORS protection)'
+              ),
+              level: 'error',
+            })
+          } else {
             self.ui.alert({ content: L._('Problem in the response'), level: 'error' })
           }
         }
