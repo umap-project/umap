@@ -558,7 +558,7 @@ L.U.Help = L.Class.extend({
   permanentCredit: L._(
     'Will be permanently visible in the bottom left corner of the map'
   ),
-  sortKey: L._('Property to use for sorting features'),
+  sortKey: L._('Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'),
   slugKey: L._('The name of the property to use as feature unique identifier.'),
   filterKey: L._('Comma separated list of properties to use when filtering features'),
   advancedFilterKey: L._(
