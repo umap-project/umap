@@ -234,6 +234,7 @@ SITE_NAME = 'uMap'
 UMAP_DEMO_SITE = env('UMAP_DEMO_SITE', default=False)
 UMAP_EXCLUDE_DEFAULT_MAPS = False
 UMAP_MAPS_PER_PAGE = 5
+UMAP_MAPS_PER_SEARCH = 25
 UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
 UMAP_FEEDBACK_LINK = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"  # noqa
