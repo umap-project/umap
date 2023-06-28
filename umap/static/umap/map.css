@@ -115,8 +115,7 @@ a.umap-control-text {
     font-size: 0.8em;
 }
 .leaflet-control-edit-enable a {
-    background-image: url('./img/24-white.svg');
-    background-position: -1px -1px;
+    background-position: 0 0;
     background-color: #353c3e;
 }
 .leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
@@ -202,6 +201,7 @@ ul.photon-autocomplete {
     background-image: url('./img/24.svg');
     background-size: auto auto;
 }
+.leaflet-control-edit-enable a,
 .leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
     background-image: url('./img/24-white.svg');
 }
@@ -210,46 +210,46 @@ ul.photon-autocomplete {
 }
 .update-map-extent,
 .leaflet-container .umap-toolbar .update-map-extent {
-    background-position: 0 -40px;
+    background-position: 0 -36px;
 }
 .umap-toolbar .update-map-tilelayers,
 .update-map-tilelayers {
-    background-position: -80px 0;
+    background-position: -72px 0;
 }
 .manage-datalayers {
-    background-position: -40px -80px;
+    background-position: -36px -72px;
 }
 .umap-toolbar .update-map-permissions,
 .update-map-permissions {
-    background-position: -40px -40px;
+    background-position: -36px -36px;
 }
 .umap-toolbar .upload-data,
 .upload-data {
-    background-position: -160px 0;
+    background-position: -144px 0;
 }
 .umap-toolbar .update-map-settings,
 .update-map-settings {
-    background-position: -120px 0;
+    background-position: -108px 0;
 }
 .umap-draw-marker,
 .umap-toolbar .umap-draw-marker {
-    background-position: -160px -40px;
+    background-position: -144px -36px;
 }
 .umap-draw-polyline,
 .umap-toolbar .umap-draw-polyline {
-    background-position: -120px -40px;
+    background-position: -108px -36px;
 }
 .umap-draw-polyline-multi,
 .umap-toolbar .umap-draw-polyline-multi {
-    background-position: -42px -162px;
+    background-position: -36px -144px;
 }
 .umap-draw-polygon,
 .umap-toolbar .umap-draw-polygon {
-    background-position: -80px -40px;
+    background-position: -72px -36px;
 }
 .umap-draw-polygon-multi,
 .umap-toolbar .umap-draw-polygon-multi {
-    background-position: -2px -162px;
+    background-position: 0 -144px;
 }
 .umap-edit-enabled .leaflet-control-toolbar > li > .leaflet-toolbar-icon,
 .umap-edit-enabled .umap-toolbar a {
