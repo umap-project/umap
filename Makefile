@@ -87,6 +87,8 @@ lebab-all: $(jsdir)* ## Convert all JS files to modern syntax with Lebab + prett
 icons:
 	scour -i umap/static/umap/img/source/24.svg -o umap/static/umap/img/24.svg --strip-xml-prolog --enable-comment-stripping
 	scour -i umap/static/umap/img/source/24-white.svg -o umap/static/umap/img/24-white.svg --strip-xml-prolog --enable-comment-stripping
+	scour -i umap/static/umap/img/source/16.svg -o umap/static/umap/img/16.svg --strip-xml-prolog --enable-comment-stripping
+	scour -i umap/static/umap/img/source/16-white.svg -o umap/static/umap/img/16-white.svg --strip-xml-prolog --enable-comment-stripping
 
 
 .PHONY: help

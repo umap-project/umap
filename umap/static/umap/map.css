@@ -57,11 +57,11 @@ a.umap-control-less {
 }
 .umap-control-more,
 .umap-control-less {
-    background-image: url('./img/16-white.png');
-    background-position: -121px -211px;
+    background-image: url('./img/16-white.svg');
+    background-position: -67px -120px;
 }
 .umap-control-less {
-    background-position: -161px -211px;
+    background-position: -91px -121px;
 }
 .umap-more-controls .display-on-more,
 .umap-more-controls .umap-control-less {
@@ -241,7 +241,7 @@ ul.photon-autocomplete {
 }
 .umap-draw-polyline-multi,
 .umap-toolbar .umap-draw-polyline-multi {
-    background-position: -36px -144px;
+    background-position: -36px -106px;
 }
 .umap-draw-polygon,
 .umap-toolbar .umap-draw-polygon {
@@ -249,7 +249,7 @@ ul.photon-autocomplete {
 }
 .umap-draw-polygon-multi,
 .umap-toolbar .umap-draw-polygon-multi {
-    background-position: 0 -144px;
+    background-position: 0 -108px;
 }
 .umap-edit-enabled .leaflet-control-toolbar > li > .leaflet-toolbar-icon,
 .umap-edit-enabled .umap-toolbar a {
@@ -309,13 +309,13 @@ ul.photon-autocomplete {
     width: 16px;
     height: 16px;
     margin-left: 5px;
-    background-position: -12px -12px;
+    background-position: -4px -4px;
     background-repeat: no-repeat;
-    background-image: url('./img/16.png');
+    background-image: url('./img/16.svg');
     vertical-align: middle;
 }
 .dark .umap-help-button {
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
 }
 .umap-help-on .umap-help-box {
     visibility: visible;
@@ -395,10 +395,10 @@ ul.photon-autocomplete {
     background-position: -82px -82px;
 }
 .umap-click-to-edit:hover:after {
-    background-image: url('./img/16.png');
+    background-image: url('./img/16.svg');
 }
 .dark .umap-click-to-edit:hover:after {
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
 }
 .umap-caption-bar {
     display: none;
@@ -434,10 +434,10 @@ ul.photon-autocomplete {
     content: '|';
     color: #fff;
     padding-right: 10px;
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
     background-repeat: no-repeat;
     display: inline-block;
-    background-position: -80px -202px;
+    background-position: -40px -115px;
     width: 20px;
 }
 .umap-edit-enabled .leaflet-top {
@@ -558,9 +558,9 @@ ul.photon-autocomplete {
     width: 20px;
     height: 20px;
     margin-left: 5px;
-    background-position: -209px -130px;
+    background-position: -123px -75px;
     background-repeat: no-repeat;
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
     vertical-align: middle;
     margin-right: 5px;
     border: 1px solid #202425;
@@ -597,7 +597,7 @@ ul.photon-autocomplete {
 .umap-caption i,
 .umap-browse-datalayers i {
     background-repeat: no-repeat;
-    background-image: url('./img/16.png');
+    background-image: url('./img/16.svg');
     display: inline;
     padding: 0 10px;
     cursor: pointer;
@@ -606,7 +606,7 @@ ul.photon-autocomplete {
     vertical-align: middle;
 }
 .dark .umap-browse-datalayers i {
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
 }
 .umap-browse-datalayers li[draggable] .drag-handle {
     float: right;
@@ -615,7 +615,7 @@ ul.photon-autocomplete {
     cursor: move;
 }
 .leaflet-inplace-toolbar a {
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
     background-color: #323737!important;
 }
 .leaflet-toolbar-tip {
@@ -628,54 +628,52 @@ ul.photon-autocomplete {
     cursor: inherit;
 }
 .layer-toggle {
-    background-position: -90px -51px;
+    background-position: -49px -31px;
 }
 .off .layer-toggle {
-    background-position: -130px -51px;
+    background-position: -73px -31px;
 }
 .feature-zoom_to {
-    background-position: -10px -88px;
+    background-position: -1px -54px;
 }
 .layer-zoom_to {
-    background-position: -10px -91px;
+    background-position: -1px -54px;
 }
 .layer-table-edit {
-    background-position: -90px -10px;
+    background-position: -50px -1px;
 }
 .feature-delete,
 .layer-delete {
-    background-position: -209px -90px;
+    background-position: -122px -49px;
 }
 .feature-edit,
 .layer-edit {
-    background-position: -90px -89px;
+    background-position: -50px -49px;
 }
 .umap-toggle-edit {
-    background-position: -85px -85px;
+    background-position: -44px -48px;
 }
 .off .layer-table-edit {
-    background-position: -129px -10px;
+    background-position: -74px -1px;
 }
 .off .layer-edit {
-    background-position: -90px -129px;
+    background-position: -51px -72px;
 }
 .off .layer-zoom_to {
-    background-position: -50px -91px;
+    background-position: -25px -54px;
 }
 .off .layer-delete {
-    background-position: -209px -208px;
+    background-position: -122px -121px;
 }
 .umap-new-hole {
-    background-position: -125px -165px;
-}
-.umap-delete-all {
-    background-position: -204px -85px;
+    background-position: -71px -94px;
 }
 .umap-delete-one-of-multi {
-    background-position: -165px -125px;
+    background-position: -97px -70px;
 }
+.umap-delete-all,
 .umap-delete-one-of-one {
-    background-position: -204px -86px;
+    background-position: -119px -48px;
 }
 .umap-delete-vertex {
     background-position: -205px -165px;
@@ -687,7 +685,7 @@ ul.photon-autocomplete {
     background-position: -205px -45px;
 }
 .umap-extract-shape-from-multi{
-    background-position: -205px -5px;
+    background-position: -119px 2px;
 }
 .umap-browse-features .feature-title,
 .leaflet-control-browse .umap-browse-actions .layer-title {
@@ -724,9 +722,9 @@ ul.photon-autocomplete {
 }
 a.add-datalayer:before,
 .leaflet-control-browse a.umap-browse-link:before {
-    background-image: url('./img/16.png');
+    background-image: url('./img/16.svg');
     background-repeat: no-repeat;
-    background-position: -92px -168px;
+    background-position: -45px -96px;
     width: 24px;
     height: 24px;
     content: " ";
@@ -904,23 +902,23 @@ a.add-datalayer:hover,
 /* ********************************* */
 .umap-icon-16 {
     background-repeat: no-repeat;
-    background-image: url('./img/16.png');
-    display: inline;
+    background-image: url('./img/16.svg');
+    display: inline-block;
+    height: 20px;
     padding: 0 10px;
     vertical-align: middle;
 }
 .umap-add {
-    background-position: -12px -49px;
+    background-position: -28px -27px;
 }
 .umap-list {
-    background-position: -52px -168px;
+    background-position: -28px -99px;
 }
 .umap-list-white {
     background-position: -92px -168px;
 }
 .umap-caption {
-    background-position: -170px -52px;
-    padding: 0 10px;
+    background-position: -99px -28px;
 }
 
 /* ********************************* */
@@ -1015,18 +1013,18 @@ a.add-datalayer:hover,
     height: 16px;
     margin-left: 5px;
     background-repeat: no-repeat;
-    background-image: url('./img/16.png');
+    background-image: url('./img/16.svg');
     vertical-align: middle;
     content: " ";
 }
 .umap-popup-footer li.zoom:before {
-    background-position: -12px -170px;
+    background-position: -5px -101px;
 }
 .umap-popup-footer li.previous:before {
-    background-position: -52px -130px;
+    background-position: -28px -77px;
 }
 .umap-popup-footer li.next:before {
-    background-position: -12px -130px;
+    background-position: -5px -77px;
 }
 
 
