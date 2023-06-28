@@ -392,7 +392,7 @@ ul.photon-autocomplete {
     width: 26px;
     height: 100%;
     display: inline-block;
-    background-position: -82px -82px;
+    background-position: -46px -41px;
 }
 .umap-click-to-edit:hover:after {
     background-image: url('./img/16.svg');
