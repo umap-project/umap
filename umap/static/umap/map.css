@@ -326,6 +326,32 @@ ul.photon-autocomplete {
     border-top: 1px solid #aaa;
     padding-top: 10px;
 }
+.umap-edit-actions {
+    padding-top: 5px;
+    clear: both;
+}
+.umap-edit-actions li {
+    height: 36px;
+    line-height: 36px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    border: 1px solid #222;
+}
+.umap-edit-actions li i {
+    background-image: url('./img/24-white.svg');
+    background-repeat: no-repeat;
+    display: table-cell;
+    width: 36px;
+    height: 36px;
+}
+.umap-edit-actions li span {
+    display: table-cell;
+    vertical-align: middle;
+}
+.umap-edit-actions li:hover {
+    background-color: #353c3e;
+}
 
 
 /* ********************************* */
