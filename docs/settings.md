@@ -7,13 +7,21 @@ The Django settings reference is here: https://docs.djangoproject.com/en/4.2/ref
 
 Here are a few relevent settings for uMap.
 
+## Usage
+
+Those settings should either:
+
+- be in `/etc/umap/umap.conf`, which uMap will try to load by default
+- be in a random place on your server, which is then reference with the
+  `UMAP_SETTINGS` env var
+- be declared as env vars directly, for simple ones (string/boolean/list)
 
 #### ALLOWED_HOSTS
 
 The hosts that uMap expects.
 `ALLOWED_HOSTS = ['umap.mydomain.org']`
 
-Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org`
+Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 
 #### DEBUG
 
@@ -57,7 +65,7 @@ Must be defined to something unique and secret.
 
 The final URL of you instance, including the protocol:
 
-`SITE_URL="http://umap.org"`
+`SITE_URL=http://umap.org`
 
 
 #### SHORT_SITE_URL
@@ -102,7 +110,7 @@ Eg.: `USER_URL_FIELD = "pk"`
 
 #### UMAP_ALLOW_ANONYMOUS
 
-Should uMap allows user without an account to create maps.
+Should uMap allows user without an account to create maps (default is False).
 
 Can be set through env var: `UMAP_ALLOW_ANONYMOUS=1`
 
