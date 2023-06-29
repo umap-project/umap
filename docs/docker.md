@@ -41,4 +41,4 @@ With docker-compose, run `docker-compose run app /venv/bin/umap createsuperuser`
 
 Some basic settings are available through env vars (see https://github.com/umap-project/umap/blob/master/umap/settings/base.py),
 but if you need more custom ones (like custom OAuth configuration), the easiest
-way is to push a settings file to `/etc/umap/umap.conf`.
+way is to push a [settings file](settings.md) to `/etc/umap/umap.conf`.
