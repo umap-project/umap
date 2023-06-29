@@ -151,7 +151,7 @@ See [search](install.md#search) for details.
 
 #### UMAP_READONLY
 
-Is your instance readonly ? Useful for server maintenance.
+Is your instance readonly? Useful for server maintenance.
 
 #### UMAP_GZIP
 
