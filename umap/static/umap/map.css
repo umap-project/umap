@@ -57,11 +57,11 @@ a.umap-control-less {
 }
 .umap-control-more,
 .umap-control-less {
-    background-image: url('./img/16-white.svg');
-    background-position: -67px -120px;
+    background-image: url('./img/24-white.svg');
+    background-position: -109px -476px;
 }
 .umap-control-less {
-    background-position: -91px -121px;
+    background-position: -73px -475px;
 }
 .umap-more-controls .display-on-more,
 .umap-more-controls .umap-control-less {
