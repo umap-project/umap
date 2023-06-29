@@ -2,6 +2,7 @@ site_name: uMap
 nav:
 - Home: index.md
 - Installation: install.md
+- Configuration: settings.md
 - Administration: administration.md
 - Contributing: contributing.md
 - how-tos:
