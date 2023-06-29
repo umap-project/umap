@@ -118,6 +118,19 @@ Should uMap allows user without an account to create maps (default is False).
 
 Can be set through env var: `UMAP_ALLOW_ANONYMOUS=1`
 
+#### UMAP_CUSTOM_TEMPLATES
+To be used when you want to override some HTML templates:
+
+    UMAP_CUSTOM_TEMPLATES = "/path/to/custom/templates"
+
+See [customization](custom.md) for details.
+
+#### UMAP_CUSTOM_STATICS
+To be used when you want to override some CSS or images:
+
+    UMAP_CUSTOM_STATICS = "/path/to/custom/static"
+
+See [customization](custom.md) for details.
 
 #### UMAP_EXTRA_URLS
 
