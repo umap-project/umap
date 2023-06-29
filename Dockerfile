@@ -66,7 +66,8 @@ WORKDIR /srv/umap
 RUN mkdir -p /srv/umap/uploads
 
 ENV PYTHONUNBUFFERED=1 \
-    PORT=8000
+    PORT=8000 \
+    PATH="/venv/bin:$PATH"
 
 EXPOSE 8000
 
