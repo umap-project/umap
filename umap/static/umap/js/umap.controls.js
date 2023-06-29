@@ -359,9 +359,9 @@ L.U.MoreControls = L.Control.extend({
   },
 
   onAdd: function () {
-    const container = L.DomUtil.create('div', ''),
-      more = L.DomUtil.create('a', 'umap-control-more umap-control-text', container),
-      less = L.DomUtil.create('a', 'umap-control-less umap-control-text', container)
+    const container = L.DomUtil.create('div', 'umap-control-text'),
+      more = L.DomUtil.create('a', 'umap-control-more', container),
+      less = L.DomUtil.create('a', 'umap-control-less', container)
     more.href = '#'
     more.title = L._('More controls')
 

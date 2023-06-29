@@ -58,10 +58,10 @@ a.umap-control-less {
 .umap-control-more,
 .umap-control-less {
     background-image: url('./img/24-white.svg');
-    background-position: -109px -476px;
+    background-position: -108px -476px;
 }
 .umap-control-less {
-    background-position: -73px -475px;
+    background-position: -72px -474px;
 }
 .umap-more-controls .display-on-more,
 .umap-more-controls .umap-control-less {
@@ -101,18 +101,20 @@ a.umap-control-less {
 .leaflet-control-search a.loading {
     background-image: url('./img/search.gif');
 }
-a.umap-control-text {
-    float: right;
-    margin: 0;
-    width: 36px;
-    height: 23px;
-    line-height: 23px;
+.umap-control-text {
     border: 1px solid #444;
     border-radius: 2px;
     background-color: #666;
     color: #f8f8f8;
     text-align: center;
     font-size: 0.8em;
+}
+.umap-control-text a {
+    float: right;
+    margin: 0;
+    width: 36px;
+    height: 23px;
+    line-height: 23px;
 }
 .leaflet-control-edit-enable a {
     background-position: 0 0;
