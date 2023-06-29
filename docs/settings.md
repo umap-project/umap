@@ -57,6 +57,8 @@ Default longitude, latitude and zoom for the map
 Where uMap should store your datalayers and icons, must be consistent with your
 Nginx configuration.
 
+See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#media-root)
+
 #### SECRET_KEY
 
 Must be defined to something unique and secret.
@@ -84,6 +86,8 @@ The name of the site, to be used in header and HTML title.
 
 Where uMap should store static files (CSS, JS…), must be consistent with your
 Nginx configuration.
+
+See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#static-root)
 
 #### USE_I18N
 
