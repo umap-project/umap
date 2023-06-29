@@ -46,7 +46,7 @@ Default longitude, latitude and zoom for the map
 
 #### MEDIA_ROOT
 
-Where uMap should datalayers and icons, must be consistent with your
+Where uMap should store your datalayers and icons, must be consistent with your
 Nginx configuration.
 
 #### SECRET_KEY
