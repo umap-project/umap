@@ -90,7 +90,7 @@ Eg.: `USER_AUTOCOMPLETE_FIELDS = ["^username", "email"]`
 #### USER_DISPLAY_NAME
 
 Advanced setting for controling which user fields will be used for displaying
-they name on the application, depending on which fields you collect with your
+their name on the application, depending on which fields you collect with your
 OAuth configuration.
 For example: `USER_DISPLAY_NAME = "{username}"`
 
