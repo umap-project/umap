@@ -372,6 +372,7 @@ L.FormBuilder.PopupContent = L.FormBuilder.Select.extend({
     ['Table', L._('Table')],
     ['GeoRSSImage', L._('GeoRSS (title + image)')],
     ['GeoRSSLink', L._('GeoRSS (only link)')],
+    ['OSM', L._('OpenStreetMap')],
   ],
 })
 

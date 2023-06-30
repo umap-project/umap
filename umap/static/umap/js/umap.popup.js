@@ -251,3 +251,24 @@ L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
     return a
   },
 })
+
+L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
+  options: {
+    className: 'umap-openstreetmap',
+  },
+
+  getName: function () {
+    const props = this.feature.properties
+    if (L.locale && props[`name:${L.locale}`]) return props[`name:${L.locale}`];
+    return props.name
+  },
+
+  renderBody: function () {
+    const props = this.feature.properties
+    let kind = props.shop || props.amenity || props.craft
+    const container = L.DomUtil.add('div')
+    const kindEl = L.DomUtil.add('h4', '', container, kind)
+    L.DomUtil.add('h3', 'popup-title', container, this.getName())
+    return container
+  },
+})
