@@ -417,7 +417,7 @@ input.switch:checked ~ label:after {
 }
 i.info {
     background-repeat: no-repeat;
-    background-image: url('./img/16.png');
+    background-image: url('./img/16.svg');
     background-position: -170px -50px;
     display: inline-block;
     margin-left: 5px;
@@ -426,7 +426,7 @@ i.info {
     height: 18px;
 }
 .dark i.info {
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
 }
 .with-transition {
     /*transition: top .7s, right .7s, left .7s, width .7s, visibility .7s;*/
@@ -441,7 +441,7 @@ i.info {
     height: 24px;
     line-height: 24px;
     display: inline-block;
-    background-image: url('./img/24.png');
+    background-image: url('./img/24.svg');
     vertical-align: bottom;
     content: " ";
 }
@@ -450,7 +450,7 @@ i.info {
 .dark .umap-clone:before,
 .dark .umap-edit:before, .dark .umap-download:before,
 .dark .umap-to-polyline:before {
-    background-image: url('./img/24-white.png');
+    background-image: url('./img/24-white.svg');
     vertical-align: middle;
 }
 .umap-to-polygon:before {
@@ -473,32 +473,6 @@ i.info {
 }
 .umap-download:before {
     background-position: -88px -168px;
-}
-.umap-edit-actions {
-    padding-top: 5px;
-    clear: both;
-}
-.umap-edit-actions li {
-    height: 36px;
-    line-height: 36px;
-    cursor: pointer;
-    margin-bottom: 5px;
-    border-radius: 2px;
-    border: 1px solid #222;
-}
-.umap-edit-actions li i {
-    background-image: url('./img/24-white.png');
-    background-repeat: no-repeat;
-    display: table-cell;
-    width: 36px;
-    height: 36px;
-}
-.umap-edit-actions li span {
-    display: table-cell;
-    vertical-align: middle;
-}
-.umap-edit-actions li:hover {
-    background-color: #353c3e;
 }
 .permissions-panel,
 .umap-upload,
@@ -808,14 +782,14 @@ input[type=hidden].blur + .button {
 /* *********** */
 .umap-close-icon {
     background-repeat: no-repeat;
-    background-image: url('./img/16.png');
-    background-position: -52px -13px;
+    background-image: url('./img/16.svg');
+    background-position: -28px -6px;
     display: inline;
     padding: 0 10px;
     vertical-align: middle;
 }
 .dark .umap-close-icon {
-    background-image: url('./img/16-white.png');
+    background-image: url('./img/16-white.svg');
 }
 .dark .umap-close-link {
     border: 1px solid #202425;
@@ -833,7 +807,7 @@ input[type=hidden].blur + .button {
     padding-right: 10px;
 }
 #umap-alert-container .umap-close-icon {
-    background-position: -128px -93px;
+    background-position: -74px -55px;
 }
 
 
