@@ -2,9 +2,9 @@
 {% load i18n %}
 {% block maincontent %}
   {% include "umap/search_bar.html" %}
-  {% if q %}
-    <div class="wrapper">
-      <div class="map_list row">
+  <div class="wrapper">
+    <div class="map_list row">
+      {% if q %}
         {% if maps %}
           <h2>
             {% blocktranslate count counter=count %}
@@ -17,7 +17,10 @@
         {% else %}
           <h2>{% trans "No map found." %}</h2>
         {% endif %}
-      </div>
+      {% else %}
+        <h2>{% trans "Latest created maps" %}</h2>
+        {% include "umap/map_list.html" with prefix="search_map" %}
+      {% endif %}
     </div>
-  {% endif %}
+  </div>
 {% endblock maincontent %}
