@@ -95,11 +95,9 @@ class PaginatorMixin(object):
         return qs
 
 
-class Home(TemplateView, PaginatorMixin):
-    template_name = "umap/home.html"
-    list_template_name = "umap/map_list.html"
+class PublicMapsMixin(object):
 
-    def get_context_data(self, **kwargs):
+    def get_public_maps(self):
         qs = Map.public
         if (
             settings.UMAP_EXCLUDE_DEFAULT_MAPS
@@ -107,6 +105,17 @@ class Home(TemplateView, PaginatorMixin):
         ):
             # Unsupported query type for sqlite.
             qs = qs.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
+        maps = qs.order_by("-modified_at")
+        return maps
+
+
+class Home(TemplateView, PublicMapsMixin, PaginatorMixin):
+    template_name = "umap/home.html"
+    list_template_name = "umap/map_list.html"
+
+    def get_context_data(self, **kwargs):
+        maps = self.get_public_maps()
+
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
             try:
@@ -114,7 +123,8 @@ class Home(TemplateView, PaginatorMixin):
             except Map.DoesNotExist:
                 pass
             else:
-                qs = qs.exclude(id=demo_map.pk)
+                maps = maps.exclude(id=demo_map.pk)
+
         showcase_map = None
         if hasattr(settings, "UMAP_SHOWCASE_PK"):
             try:
@@ -122,8 +132,8 @@ class Home(TemplateView, PaginatorMixin):
             except Map.DoesNotExist:
                 pass
             else:
-                qs = qs.exclude(id=showcase_map.pk)
-        maps = qs.order_by("-modified_at")[:50]
+                maps = maps.exclude(id=showcase_map.pk)
+
         maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
         return {
@@ -206,7 +216,7 @@ class UserStars(UserMaps):
 user_stars = UserStars.as_view()
 
 
-class Search(TemplateView, PaginatorMixin):
+class Search(TemplateView, PublicMapsMixin, PaginatorMixin):
     template_name = "umap/search.html"
     list_template_name = "umap/map_list.html"
 
@@ -223,6 +233,8 @@ class Search(TemplateView, PaginatorMixin):
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             qs_count = qs.count()
             results = self.paginate(qs)
+        else:
+            results = self.get_public_maps()[:settings.UMAP_MAPS_PER_SEARCH]
         kwargs.update({"maps": results, "count": qs_count, "q": q})
         return kwargs
 
