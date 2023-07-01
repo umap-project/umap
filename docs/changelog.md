@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.3.6 - 2023-07-01
+
+- set font-display: swap; for fonts definition
+- do not force scroll on popup content
+- document Shift-Click and add Ctrl-Shift-click to edit datalayer
+- advanced filter should not affect non browsable layers
+- expose 'locale' parameter in templates
+- pass options at datalayer creation when importing from umap file
+- allow to set the lang while generating an anonymous_edit_url
+- control links target
+- allow to use properties as color value
+- add "delete" link in data browser
+- more natural sort of features
+- be more strict when coordinates are set manually
+- allow to sort reverse
+- handle CORS errors with an explicit message
+- add basic doc about settings
+- add umap command in Docker PATH
+- add a setting for the number of maps per search
+- use SVG icons
+- display latest created maps on empty search
+
 ## 1.3.5 - 2023-06-17
 
 - fix stars link in header

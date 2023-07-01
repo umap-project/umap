@@ -34,7 +34,7 @@ docker: ## Create a new Docker image and publish it
 
 .PHONY: build
 build: test compilemessages  ## Build the Python package before release
-	@hatch build
+	@hatch build --clean
 
 .PHONY: publish
 publish: ## Publish the Python package to Pypi

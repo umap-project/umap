@@ -59,6 +59,12 @@ docker = [
   "uwsgi==2.0.21",
 ]
 
+[tool.hatch.build]
+artifacts = [
+  # Required because part of .gitignore (and thus excluded by hatch).
+  "/umap/static/umap/vendors",
+]
+
 [tool.hatch.build.targets.sdist]
 include = [
   "/umap",
