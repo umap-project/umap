@@ -58,9 +58,9 @@ L.U.Map.include({
     'embed',
     'locate',
     'measure',
-    'tilelayers',
     'editinosm',
     'datalayers',
+    'tilelayers',
     'star',
   ],
 
