@@ -9,17 +9,242 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 12:54+0000\n"
+"POT-Creation-Date: 2023-07-03 20:00+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Janjko <janjko@gmail.com>, 2013\n"
-"Language-Team: Croatian (http://www.transifex.com/openstreetmap/umap/language/hr/)\n"
+"Language-Team: Croatian (http://app.transifex.com/openstreetmap/umap/language/hr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hr\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: tmp/framacarte/templates/umap/home.html:8 umap/templates/umap/home.html:9
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr ""
+
+#: forms.py:47 models.py:134
+msgid "Everyone can edit"
+msgstr "Svi mogu uređivati"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr ""
+
+#: middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr ""
+
+#: models.py:40
+msgid "name"
+msgstr "ime"
+
+#: models.py:71
+msgid "details"
+msgstr "detalji"
+
+#: models.py:72
+msgid "Link to a page where the licence is detailed."
+msgstr ""
+
+#: models.py:82
+msgid "URL template using OSM tile format"
+msgstr ""
+
+#: models.py:88
+msgid "Order of the tilelayers in the edit box"
+msgstr ""
+
+#: models.py:135
+msgid "Only editors can edit"
+msgstr "Samo urednici mogu uređivati"
+
+#: models.py:136
+msgid "Only owner can edit"
+msgstr "Samo vlasnik može uređivati"
+
+#: models.py:139
+msgid "everyone (public)"
+msgstr ""
+
+#: models.py:140
+msgid "anyone with link"
+msgstr ""
+
+#: models.py:141
+msgid "editors only"
+msgstr ""
+
+#: models.py:142
+msgid "blocked"
+msgstr ""
+
+#: models.py:145 models.py:295
+msgid "description"
+msgstr "opis"
+
+#: models.py:146
+msgid "center"
+msgstr "centar"
+
+#: models.py:147
+msgid "zoom"
+msgstr "uvećanje"
+
+#: models.py:149
+msgid "locate"
+msgstr ""
+
+#: models.py:149
+msgid "Locate user on load?"
+msgstr ""
+
+#: models.py:153
+msgid "Choose the map licence."
+msgstr ""
+
+#: models.py:154
+msgid "licence"
+msgstr "licenca"
+
+#: models.py:164
+msgid "owner"
+msgstr "vlasnik"
+
+#: models.py:168
+msgid "editors"
+msgstr "urednici"
+
+#: models.py:171
+msgid "edit status"
+msgstr "status uređivanja"
+
+#: models.py:174
+msgid "share status"
+msgstr ""
+
+#: models.py:177
+msgid "settings"
+msgstr "postavke"
+
+#: models.py:250
+msgid "Clone of"
+msgstr "Duplikat od"
+
+#: models.py:299
+msgid "display on load"
+msgstr ""
+
+#: models.py:300
+msgid "Display this layer on load."
+msgstr ""
+
+#: templates/404.html:6
+msgid "Take me to the home page"
+msgstr ""
+
+#: templates/auth/user_detail.html:5
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr ""
+
+#: templates/auth/user_detail.html:12
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr ""
+
+#: templates/auth/user_stars.html:5
+#, python-format
+msgid "Browse %(current_user)s's starred maps"
+msgstr ""
+
+#: templates/auth/user_stars.html:12
+#, python-format
+msgid "%(current_user)s has no starred maps yet."
+msgstr ""
+
+#: templates/base.html:12
+msgid ""
+"uMap lets you create maps with OpenStreetMap layers in a minute and embed "
+"them in your site."
+msgstr ""
+
+#: templates/registration/login.html:3
+msgid "Please log in with your account"
+msgstr ""
+
+#: templates/registration/login.html:15
+msgid "Username"
+msgstr ""
+
+#: templates/registration/login.html:18
+msgid "Password"
+msgstr ""
+
+#: templates/registration/login.html:19
+msgid "Login"
+msgstr ""
+
+#: templates/registration/login.html:24
+msgid "Please choose a provider"
+msgstr ""
+
+#: templates/umap/about_summary.html:11
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr ""
+
+#: templates/umap/about_summary.html:21
+msgid "Choose the layers of your map"
+msgstr ""
+
+#: templates/umap/about_summary.html:22
+msgid "Add POIs: markers, lines, polygons..."
+msgstr ""
+
+#: templates/umap/about_summary.html:23
+msgid "Manage POIs colours and icons"
+msgstr ""
+
+#: templates/umap/about_summary.html:24
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr ""
+
+#: templates/umap/about_summary.html:25
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr ""
+
+#: templates/umap/about_summary.html:26
+msgid "Choose the license for your data"
+msgstr ""
+
+#: templates/umap/about_summary.html:27
+msgid "Embed and share your map"
+msgstr ""
+
+#: templates/umap/about_summary.html:37
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr ""
+
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+msgid "Create a map"
+msgstr "Stvori kartu"
+
+#: templates/umap/about_summary.html:51
+msgid "Play with the demo"
+msgstr ""
+
+#: templates/umap/content.html:23
+msgid ""
+"This instance of uMap is currently in read only mode, no creation/edit is "
+"allowed."
+msgstr ""
+
+#: templates/umap/content.html:31
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -28,351 +253,158 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: tmp/framacarte/templates/umap/home.html:83
-#: tmp/framacarte/templates/umap/navigation.html:14
-#: umap/templates/umap/about_summary.html:33
-#: umap/templates/umap/navigation.html:26
-msgid "Create a map"
-msgstr "Stvori kartu"
-
-#: tmp/framacarte/templates/umap/navigation.html:7
-#: umap/templates/umap/navigation.html:10
-msgid "My maps"
-msgstr "Moje karte"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Log in"
-msgstr "Prijava"
-
-#: tmp/framacarte/templates/umap/navigation.html:9
-#: umap/templates/umap/navigation.html:12
-msgid "Sign in"
-msgstr "Registracija"
-
-#: tmp/framacarte/templates/umap/navigation.html:12
-#: umap/templates/umap/navigation.html:20
-msgid "Log out"
-msgstr "Odjava"
-
-#: tmp/framacarte/templates/umap/search_bar.html:6
-#: umap/templates/umap/search_bar.html:6
-msgid "Search maps"
-msgstr "Pretraži karte"
-
-#: tmp/framacarte/templates/umap/search_bar.html:10
-#: tmp/framacarte/templates/umap/search_bar.html:13
-#: umap/templates/umap/search_bar.html:9
-msgid "Search"
-msgstr "Pretraživanje"
-
-#: umap/forms.py:40
-#, python-format
-msgid "Secret edit link is %s"
-msgstr ""
-
-#: umap/forms.py:44 umap/models.py:114
-msgid "Everyone can edit"
-msgstr "Svi mogu uređivati"
-
-#: umap/forms.py:45
-msgid "Only editable with secret edit link"
-msgstr ""
-
-#: umap/middleware.py:14
-msgid "Site is readonly for maintenance"
-msgstr ""
-
-#: umap/models.py:16
-msgid "name"
-msgstr "ime"
-
-#: umap/models.py:47
-msgid "details"
-msgstr "detalji"
-
-#: umap/models.py:48
-msgid "Link to a page where the licence is detailed."
-msgstr ""
-
-#: umap/models.py:62
-msgid "URL template using OSM tile format"
-msgstr ""
-
-#: umap/models.py:70
-msgid "Order of the tilelayers in the edit box"
-msgstr ""
-
-#: umap/models.py:115
-msgid "Only editors can edit"
-msgstr "Samo urednici mogu uređivati"
-
-#: umap/models.py:116
-msgid "Only owner can edit"
-msgstr "Samo vlasnik može uređivati"
-
-#: umap/models.py:119
-msgid "everyone (public)"
-msgstr ""
-
-#: umap/models.py:120
-msgid "anyone with link"
-msgstr ""
-
-#: umap/models.py:121
-msgid "editors only"
-msgstr ""
-
-#: umap/models.py:122
-msgid "blocked"
-msgstr ""
-
-#: umap/models.py:125 umap/models.py:255
-msgid "description"
-msgstr "opis"
-
-#: umap/models.py:126
-msgid "center"
-msgstr "centar"
-
-#: umap/models.py:127
-msgid "zoom"
-msgstr "uvećanje"
-
-#: umap/models.py:128
-msgid "locate"
-msgstr ""
-
-#: umap/models.py:128
-msgid "Locate user on load?"
-msgstr ""
-
-#: umap/models.py:131
-msgid "Choose the map licence."
-msgstr ""
-
-#: umap/models.py:132
-msgid "licence"
-msgstr "licenca"
-
-#: umap/models.py:137
-msgid "owner"
-msgstr "vlasnik"
-
-#: umap/models.py:138
-msgid "editors"
-msgstr "urednici"
-
-#: umap/models.py:139
-msgid "edit status"
-msgstr "status uređivanja"
-
-#: umap/models.py:140
-msgid "share status"
-msgstr ""
-
-#: umap/models.py:141
-msgid "settings"
-msgstr "postavke"
-
-#: umap/models.py:209
-msgid "Clone of"
-msgstr "Duplikat od"
-
-#: umap/models.py:260
-msgid "display on load"
-msgstr ""
-
-#: umap/models.py:261
-msgid "Display this layer on load."
-msgstr ""
-
-#: umap/templates/404.html:7
-msgid "Take me to the home page"
-msgstr ""
-
-#: umap/templates/auth/user_detail.html:7
-#, python-format
-msgid "Browse %(current_user)s's maps"
-msgstr ""
-
-#: umap/templates/auth/user_detail.html:15
-#, python-format
-msgid "%(current_user)s has no maps."
-msgstr ""
-
-#: umap/templates/registration/login.html:4
-msgid "Please log in with your account"
-msgstr ""
-
-#: umap/templates/registration/login.html:18
-msgid "Username"
-msgstr ""
-
-#: umap/templates/registration/login.html:20
-msgid "Password"
-msgstr ""
-
-#: umap/templates/registration/login.html:21
-msgid "Login"
-msgstr ""
-
-#: umap/templates/registration/login.html:27
-msgid "Please choose a provider"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:6
-#, python-format
-msgid ""
-"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
-"layers in a minute and embed them in your site."
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:11
-msgid "Choose the layers of your map"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:12
-msgid "Add POIs: markers, lines, polygons..."
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:13
-msgid "Manage POIs colours and icons"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:14
-msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:15
-msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:16
-msgid "Choose the license for your data"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:17
-msgid "Embed and share your map"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:23
-#, python-format
-msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
-msgstr ""
-
-#: umap/templates/umap/about_summary.html:35
-msgid "Play with the demo"
-msgstr ""
-
-#: umap/templates/umap/home.html:17
+#: templates/umap/home.html:8
 msgid "Map of the uMaps"
 msgstr ""
 
-#: umap/templates/umap/home.html:24
+#: templates/umap/home.html:13
 msgid "Get inspired, browse maps"
 msgstr ""
 
-#: umap/templates/umap/login_popup_end.html:2
+#: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
 msgstr ""
 
-#: umap/templates/umap/map_list.html:7 umap/views.py:227
+#: templates/umap/map_list.html:9 views.py:268
 msgid "by"
 msgstr ""
 
-#: umap/templates/umap/map_list.html:11
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Više"
 
-#: umap/templates/umap/navigation.html:14
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Moje karte"
+
+#: templates/umap/navigation.html:15
+msgid "Starred maps"
+msgstr ""
+
+#: templates/umap/navigation.html:19
+msgid "Log in"
+msgstr "Prijava"
+
+#: templates/umap/navigation.html:19
+msgid "Sign in"
+msgstr "Registracija"
+
+#: templates/umap/navigation.html:23
 msgid "About"
 msgstr "Više o"
 
-#: umap/templates/umap/navigation.html:15
+#: templates/umap/navigation.html:26
 msgid "Help"
 msgstr ""
 
-#: umap/templates/umap/navigation.html:18
+#: templates/umap/navigation.html:31
 msgid "Change password"
 msgstr ""
 
-#: umap/templates/umap/password_change.html:6
+#: templates/umap/navigation.html:35
+msgid "Log out"
+msgstr "Odjava"
+
+#: templates/umap/password_change.html:4
 msgid "Password change"
 msgstr ""
 
-#: umap/templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr ""
 
-#: umap/templates/umap/password_change.html:12
+#: templates/umap/password_change.html:13
 msgid "Old password"
 msgstr ""
 
-#: umap/templates/umap/password_change.html:14
+#: templates/umap/password_change.html:18
 msgid "New password"
 msgstr ""
 
-#: umap/templates/umap/password_change.html:16
+#: templates/umap/password_change.html:22
 msgid "New password confirmation"
 msgstr ""
 
-#: umap/templates/umap/password_change.html:18
+#: templates/umap/password_change.html:23
 msgid "Change my password"
 msgstr ""
 
-#: umap/templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:4
 msgid "Password change successful"
 msgstr ""
 
-#: umap/templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:5
 msgid "Your password was changed."
 msgstr ""
 
-#: umap/templates/umap/search.html:13
-msgid "Not map found."
-msgstr "Karta nije nađena"
+#: templates/umap/search.html:10
+#, python-format
+msgid "%(count)s map found:"
+msgid_plural "%(count)s maps found:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: umap/views.py:232
+#: templates/umap/search.html:18
+msgid "No map found."
+msgstr ""
+
+#: templates/umap/search.html:21
+msgid "Latest created maps"
+msgstr ""
+
+#: templates/umap/search_bar.html:8
+msgid "Search maps"
+msgstr "Pretraži karte"
+
+#: templates/umap/search_bar.html:12
+msgid "Search"
+msgstr "Pretraživanje"
+
+#: views.py:273
 msgid "View the map"
 msgstr ""
 
-#: umap/views.py:529
-#, python-format
-msgid ""
-"Your map has been created! If you want to edit this map from another "
-"computer, please use this link: %(anonymous_url)s"
-msgstr ""
-
-#: umap/views.py:534
-msgid "Congratulations, your map has been created!"
-msgstr ""
-
-#: umap/views.py:564
+#: views.py:594
 msgid "Map has been updated!"
 msgstr ""
 
-#: umap/views.py:589
+#: views.py:619
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: umap/views.py:614
+#: views.py:657
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:660
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:666
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:677
 msgid "Only its owner can delete the map."
 msgstr "Samo vlasnik karte ju može obrisati."
 
-#: umap/views.py:637
+#: views.py:700
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: umap/views.py:642
+#: views.py:705
 msgid "Congratulations, your map has been cloned!"
 msgstr "Karta je duplicirana."
 
-#: umap/views.py:793
+#: views.py:871
 msgid "Layer successfully deleted."
 msgstr "Sloj obrisan."

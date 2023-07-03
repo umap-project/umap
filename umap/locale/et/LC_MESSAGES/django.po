@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-04 06:47+0000\n"
+"POT-Creation-Date: 2023-07-03 20:00+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Moon Ika, 2020\n"
 "Language-Team: Estonian (http://app.transifex.com/openstreetmap/umap/language/et/)\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr "Salajane muutmislink on %s"
 
-#: forms.py:47 models.py:110
+#: forms.py:47 models.py:134
 msgid "Everyone can edit"
 msgstr "Igaüks saab muuta"
 
@@ -36,209 +36,215 @@ msgstr "Muudetav ainult salajase muutmislingiga"
 msgid "Site is readonly for maintenance"
 msgstr "Sait on hoolduseks kirjutuskaitstud"
 
-#: models.py:16
+#: models.py:40
 msgid "name"
 msgstr "nimi"
 
-#: models.py:47
+#: models.py:71
 msgid "details"
 msgstr "detailid"
 
-#: models.py:48
+#: models.py:72
 msgid "Link to a page where the licence is detailed."
 msgstr "Link litsentsi selgitavale lehele."
 
-#: models.py:58
+#: models.py:82
 msgid "URL template using OSM tile format"
 msgstr ""
 
-#: models.py:64
+#: models.py:88
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:111
+#: models.py:135
 msgid "Only editors can edit"
 msgstr "Ainult toimetajad saavad muuta"
 
-#: models.py:112
+#: models.py:136
 msgid "Only owner can edit"
 msgstr "Ainult omanik saab muuta"
 
-#: models.py:115
+#: models.py:139
 msgid "everyone (public)"
 msgstr "igaüks (avalik)"
 
-#: models.py:116
+#: models.py:140
 msgid "anyone with link"
 msgstr "kõik, kellel on link"
 
-#: models.py:117
+#: models.py:141
 msgid "editors only"
 msgstr "ainult toimetajad"
 
-#: models.py:118
+#: models.py:142
 msgid "blocked"
 msgstr "blokeeritud"
 
-#: models.py:121 models.py:271
+#: models.py:145 models.py:295
 msgid "description"
 msgstr "kirjeldus"
 
-#: models.py:122
+#: models.py:146
 msgid "center"
 msgstr "tsentreeri"
 
-#: models.py:123
+#: models.py:147
 msgid "zoom"
 msgstr "suurenda"
 
-#: models.py:125
+#: models.py:149
 msgid "locate"
 msgstr "määra asukoht"
 
-#: models.py:125
+#: models.py:149
 msgid "Locate user on load?"
 msgstr "Määra kasutaja asukoht laadimisel?"
 
-#: models.py:129
+#: models.py:153
 msgid "Choose the map licence."
 msgstr "Vali kaardi litsents."
 
-#: models.py:130
+#: models.py:154
 msgid "licence"
 msgstr "litsents"
 
-#: models.py:140
+#: models.py:164
 msgid "owner"
 msgstr "omanik"
 
-#: models.py:144
+#: models.py:168
 msgid "editors"
 msgstr "toimetajad"
 
-#: models.py:147
+#: models.py:171
 msgid "edit status"
 msgstr "muutmise staatus"
 
-#: models.py:150
+#: models.py:174
 msgid "share status"
 msgstr "jagamise staatus"
 
-#: models.py:153
+#: models.py:177
 msgid "settings"
 msgstr "seaded"
 
-#: models.py:226
+#: models.py:250
 msgid "Clone of"
 msgstr "Koopia"
 
-#: models.py:275
+#: models.py:299
 msgid "display on load"
 msgstr "kuva laadimisel"
 
-#: models.py:276
+#: models.py:300
 msgid "Display this layer on load."
 msgstr "Kuva seda kihti laadimisel"
 
-#: templates/404.html:7
+#: templates/404.html:6
 msgid "Take me to the home page"
 msgstr "Vii mind avalehele"
 
-#: templates/auth/user_detail.html:7
+#: templates/auth/user_detail.html:5
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Sirvi kasutaja %(current_user)s kaarte"
 
-#: templates/auth/user_detail.html:15
+#: templates/auth/user_detail.html:12
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "Kasutajal %(current_user)s pole kaarte."
 
-#: templates/auth/user_stars.html:7
+#: templates/auth/user_stars.html:5
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
 msgstr ""
 
-#: templates/auth/user_stars.html:15
+#: templates/auth/user_stars.html:12
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
 msgstr ""
 
-#: templates/registration/login.html:4
+#: templates/base.html:12
+msgid ""
+"uMap lets you create maps with OpenStreetMap layers in a minute and embed "
+"them in your site."
+msgstr ""
+
+#: templates/registration/login.html:3
 msgid "Please log in with your account"
 msgstr "Logi palun oma kontoga sisse"
 
-#: templates/registration/login.html:18
+#: templates/registration/login.html:15
 msgid "Username"
 msgstr "Kasutajanimi"
 
-#: templates/registration/login.html:20
+#: templates/registration/login.html:18
 msgid "Password"
 msgstr "Salasõna"
 
-#: templates/registration/login.html:21
+#: templates/registration/login.html:19
 msgid "Login"
 msgstr "Logi sisse"
 
-#: templates/registration/login.html:27
+#: templates/registration/login.html:24
 msgid "Please choose a provider"
 msgstr "Vali palun teenusepakkuja"
 
-#: templates/umap/about_summary.html:6
+#: templates/umap/about_summary.html:11
 #, python-format
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr "uMap võimaldab sul hetkega luua <a href=\"%(osm_url)s\" />OpenStreetMap</a> kihtidega kaarte ja manustada neid oma saidil."
 
-#: templates/umap/about_summary.html:11
+#: templates/umap/about_summary.html:21
 msgid "Choose the layers of your map"
 msgstr "Vali oma kaardile kihid"
 
-#: templates/umap/about_summary.html:12
+#: templates/umap/about_summary.html:22
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "Lisa POId: markerid, jooned, hulknurgad..."
 
-#: templates/umap/about_summary.html:13
+#: templates/umap/about_summary.html:23
 msgid "Manage POIs colours and icons"
 msgstr "Halda POIde värve ja ikoone"
 
-#: templates/umap/about_summary.html:14
+#: templates/umap/about_summary.html:24
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr "Halda kaardi suvandeid: kuva minikaart, määra laadimisel kasutaja asukoht..."
 
-#: templates/umap/about_summary.html:15
+#: templates/umap/about_summary.html:25
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
 msgstr "Geostruktureeritud andmete hulgiimport (geojson, gpx, kml, osm...)"
 
-#: templates/umap/about_summary.html:16
+#: templates/umap/about_summary.html:26
 msgid "Choose the license for your data"
 msgstr "Vali oma andmetele litsents"
 
-#: templates/umap/about_summary.html:17
+#: templates/umap/about_summary.html:27
 msgid "Embed and share your map"
 msgstr "Manusta ja jaga oma kaarti"
 
-#: templates/umap/about_summary.html:23
+#: templates/umap/about_summary.html:37
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Ja see kõik on <a href=\"%(repo_url)s\">avatud lähtekoodiga</a>!"
 
-#: templates/umap/about_summary.html:34 templates/umap/navigation.html:28
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
 msgid "Create a map"
 msgstr "Loo kaart"
 
-#: templates/umap/about_summary.html:37
+#: templates/umap/about_summary.html:51
 msgid "Play with the demo"
 msgstr "Mängi demoga"
 
-#: templates/umap/content.html:25
+#: templates/umap/content.html:23
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
 msgstr ""
 
-#: templates/umap/content.html:33
+#: templates/umap/content.html:31
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -247,11 +253,11 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
-#: templates/umap/home.html:10
+#: templates/umap/home.html:8
 msgid "Map of the uMaps"
 msgstr "uMaps'i kaart"
 
-#: templates/umap/home.html:17
+#: templates/umap/home.html:13
 msgid "Get inspired, browse maps"
 msgstr "Sirvi kaarte ja ammuta inspiratsiooni"
 
@@ -259,134 +265,145 @@ msgstr "Sirvi kaarte ja ammuta inspiratsiooni"
 msgid "You are logged in. Continuing..."
 msgstr "Oled sisse logitud. Jätkamine..."
 
-#: templates/umap/map_list.html:7 views.py:249
+#: templates/umap/map_list.html:9 views.py:268
 msgid "by"
 msgstr "kasutajalt"
 
-#: templates/umap/map_list.html:11
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Rohkem"
 
-#: templates/umap/navigation.html:10
+#: templates/umap/navigation.html:12
 msgid "My maps"
 msgstr "Minu kaardid"
 
-#: templates/umap/navigation.html:11
+#: templates/umap/navigation.html:15
 msgid "Starred maps"
 msgstr ""
 
-#: templates/umap/navigation.html:13
+#: templates/umap/navigation.html:19
 msgid "Log in"
 msgstr "Logi sisse"
 
-#: templates/umap/navigation.html:13
+#: templates/umap/navigation.html:19
 msgid "Sign in"
 msgstr "Loo konto"
 
-#: templates/umap/navigation.html:15
+#: templates/umap/navigation.html:23
 msgid "About"
 msgstr "Teave"
 
-#: templates/umap/navigation.html:16
+#: templates/umap/navigation.html:26
 msgid "Help"
 msgstr ""
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:31
 msgid "Change password"
 msgstr "Muuda salasõna"
 
-#: templates/umap/navigation.html:21
+#: templates/umap/navigation.html:35
 msgid "Log out"
 msgstr "Logi välja"
 
-#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:4
 msgid "Password change"
 msgstr "Salasõna vahetamine"
 
-#: templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Sisesta palun oma vana salasõna, seejärel kaks korda uus salasõna."
 
-#: templates/umap/password_change.html:12
+#: templates/umap/password_change.html:13
 msgid "Old password"
 msgstr "Vana salasõna"
 
-#: templates/umap/password_change.html:14
+#: templates/umap/password_change.html:18
 msgid "New password"
 msgstr "Uus salasõna"
 
-#: templates/umap/password_change.html:16
+#: templates/umap/password_change.html:22
 msgid "New password confirmation"
 msgstr "Uue salasõna kinnitamine"
 
-#: templates/umap/password_change.html:18
+#: templates/umap/password_change.html:23
 msgid "Change my password"
 msgstr "Muuda salasõna"
 
-#: templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:4
 msgid "Password change successful"
 msgstr "Salasõna vahetamine õnnestus"
 
-#: templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:5
 msgid "Your password was changed."
 msgstr "Sinu salasõna on muudetud."
 
-#: templates/umap/search.html:13
-msgid "Not map found."
-msgstr "Kaarti ei leitud."
+#: templates/umap/search.html:10
+#, python-format
+msgid "%(count)s map found:"
+msgid_plural "%(count)s maps found:"
+msgstr[0] ""
+msgstr[1] ""
 
-#: templates/umap/search_bar.html:6
+#: templates/umap/search.html:18
+msgid "No map found."
+msgstr ""
+
+#: templates/umap/search.html:21
+msgid "Latest created maps"
+msgstr ""
+
+#: templates/umap/search_bar.html:8
 msgid "Search maps"
 msgstr "Otsi kaarte"
 
-#: templates/umap/search_bar.html:9
+#: templates/umap/search_bar.html:12
 msgid "Search"
 msgstr "Otsi"
 
-#: views.py:254
+#: views.py:273
 msgid "View the map"
 msgstr "Vaata kaarti"
 
-#: views.py:578
+#: views.py:594
 msgid "Map has been updated!"
 msgstr "Kaart on uuendatud!"
 
-#: views.py:603
+#: views.py:619
 msgid "Map editors updated with success!"
 msgstr "Kaardi toimetajaid uuendati edukalt!"
 
-#: views.py:640
+#: views.py:657
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:641
+#: views.py:660
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:647
+#: views.py:666
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:658
+#: views.py:677
 msgid "Only its owner can delete the map."
 msgstr "Kaarti saab kustutada vaid selle omanik."
 
-#: views.py:681
+#: views.py:700
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Sinu kaart on kopeeritud! Kui sa soovid oma kaarti muuta teisest arvutist, kasuta palun seda linki: %(anonymous_url)s"
 
-#: views.py:686
+#: views.py:705
 msgid "Congratulations, your map has been cloned!"
 msgstr "Sinu kaart on kopeeritud!"
 
-#: views.py:852
+#: views.py:871
 msgid "Layer successfully deleted."
 msgstr "Kiht on kustutatud."

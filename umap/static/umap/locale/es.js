@@ -240,7 +240,6 @@ const locale = {
     "Problem in the response": "Problema en la respuesta",
     "Problem in the response format": "Problema con el formato de respuesta",
     "Properties imported:": "Propiedades importadas:",
-    "Property to use for sorting features": "Propiedad a utilizar para ordenar los elementos",
     "Provide an URL here": "Proporcione una URL aquí",
     "Proxy request": "Petición proxy",
     "Remote data": "Datos remotos",
@@ -281,7 +280,6 @@ const locale = {
     "The name of the property to use as feature label (ex.: \"nom\")": "El nombre de la propiedad a usar como etiqueta del elemento (ejemplo: «nom»)",
     "To use if remote server doesn't allow cross domain (slower)": "Para utilizar si el servidor remoto no permite dominios cruzados (más lento)",
     "To zoom": "Para acercar/alejar",
-    "Toggle edit mode (Shift+Click)": "Conmuta el modo edición (Shift+Clic)",
     "Transfer shape to edited feature": "Transferir la figura al elemento editado",
     "Transform to lines": "Transformar a líneas",
     "Transform to polygon": "Transformar a polígono",
@@ -396,7 +394,11 @@ const locale = {
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

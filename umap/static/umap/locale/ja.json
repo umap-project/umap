@@ -240,7 +240,6 @@
     "Problem in the response": "レスポンスに問題があります",
     "Problem in the response format": "レスポンス形式に問題があります",
     "Properties imported:": "インポートされたプロパティ:",
-    "Property to use for sorting features": "地物並び替え時のプロパティ",
     "Provide an URL here": "URLを入力してください",
     "Proxy request": "プロキシリクエスト",
     "Remote data": "サイト外のデータ",
@@ -281,7 +280,6 @@
     "The name of the property to use as feature label (ex.: \"nom\")": "地物のラベルとして用いるプロパティ名を入力する",
     "To use if remote server doesn't allow cross domain (slower)": "外部サーバがクロスドメインを許可していない場合に使用します (処理速度低下)",
     "To zoom": "非表示にするズームレベル",
-    "Toggle edit mode (Shift+Click)": "編集モードを切り替える(シフトキーを押しながらクリック)",
     "Transfer shape to edited feature": "シェイプを編集済み地物へ変換",
     "Transform to lines": "ラインへ変換",
     "Transform to polygon": "ポリゴンへ変換",
@@ -396,5 +394,9 @@
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }

@@ -240,7 +240,6 @@ const locale = {
     "Problem in the response": "Problème dans la réponse du serveur",
     "Problem in the response format": "Problème dans le format de la réponse",
     "Properties imported:": "Propriétés importées :",
-    "Property to use for sorting features": "Propriété utilisée pour trier les éléments",
     "Provide an URL here": "Renseigner une URL",
     "Proxy request": "Avec proxy",
     "Remote data": "Données distantes",
@@ -281,7 +280,6 @@ const locale = {
     "The name of the property to use as feature label (ex.: \"nom\")": "Le nom de la propriété à utiliser comme libellé des éléments (ex. : \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "Cocher si le serveur distant n'autorise pas le cross domain (plus lent)",
     "To zoom": "Jusqu'au zoom",
-    "Toggle edit mode (Shift+Click)": "Alterner le mode édition (Shift+Clic)",
     "Transfer shape to edited feature": "Adjoindre le tracé au groupe courant",
     "Transform to lines": "Transformer en lignes",
     "Transform to polygon": "Transformer en polygone",
@@ -396,7 +394,11 @@ const locale = {
     "Email": "Courriel",
     "Secret edit link copied to clipboard!": "Lien d'édition secret copié dans le presse-papier!",
     "Send me the link": "Envoyer le lien",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Votre carte a été créée! Comme vous n'êtes pas identifié, voici le lien secret pour éditer la carte à l'avenir, conservez-le précieusement:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Votre carte a été créée! Comme vous n'êtes pas identifié, voici le lien secret pour éditer la carte à l'avenir, conservez-le précieusement:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Liste de propriétés séparées par une virgule pour trier les éléments. Pour trier en descendant, ajouter un signe moins (-) devant. Ex.: maclé,-autreclé.",
+    "Issue reaching that URL (network problem or CORS protection)": "Problème pour charger l'URL (problème réseau ou protection CORS)",
+    "Toggle edit mode (⇧+Click)": "Alterner le mode édition (⇧+clic)",
+    "icon opacity": "Opacité de l'icône"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

@@ -240,7 +240,6 @@
     "Problem in the response": "Проблема с ответом",
     "Problem in the response format": "Формат ответа не распознан",
     "Properties imported:": "Импортированы свойства:",
-    "Property to use for sorting features": "Свойство для сортировки объектов",
     "Provide an URL here": "Укажите ссылку здесь",
     "Proxy request": "Проксировать запрос",
     "Remote data": "Данные с удаленного сервера",
@@ -281,7 +280,6 @@
     "The name of the property to use as feature label (ex.: \"nom\")": "Название свойства в качестве метки объекта (напр., «Номер»)",
     "To use if remote server doesn't allow cross domain (slower)": "Если удалённый сервер не позволяет кросс-домен (медленно)",
     "To zoom": "Масштабировать",
-    "Toggle edit mode (Shift+Click)": "Переключиться в режим редактирования (Shift+Click)",
     "Transfer shape to edited feature": "Перенести фигуру на редактируемый объект",
     "Transform to lines": "Преобразовать в линию",
     "Transform to polygon": "Преобразовать в полигон",
@@ -396,5 +394,9 @@
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }

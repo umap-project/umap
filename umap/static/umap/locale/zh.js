@@ -240,7 +240,6 @@ const locale = {
     "Problem in the response": "响应错误",
     "Problem in the response format": "响应内容格式问题",
     "Properties imported:": "Properties imported:",
-    "Property to use for sorting features": "Property to use for sorting features",
     "Provide an URL here": "提供URL",
     "Proxy request": "Proxy request",
     "Remote data": "远程数据",
@@ -281,7 +280,6 @@ const locale = {
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "放大",
-    "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",
     "Transfer shape to edited feature": "Transfer shape to edited feature",
     "Transform to lines": "转换为线",
     "Transform to polygon": "转换为多边形",
@@ -396,7 +394,11 @@ const locale = {
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }
 L.registerLocale("zh", locale)
 L.setLocale("zh")

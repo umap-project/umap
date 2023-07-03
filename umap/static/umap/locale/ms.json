@@ -240,7 +240,6 @@
     "Problem in the response": "Masalah dalam tindak balas",
     "Problem in the response format": "Masalah dalam format tindak balas",
     "Properties imported:": "Ciri-ciri diimport:",
-    "Property to use for sorting features": "Ciri-ciri untuk digunakan bagi mengisih sifat",
     "Provide an URL here": "Sediakan URL di sini",
     "Proxy request": "Permintaan proksi",
     "Remote data": "Data jarak jauh",
@@ -281,7 +280,6 @@
     "The name of the property to use as feature label (ex.: \"nom\")": "Nama ciri-ciri untuk digunakan sebagai label sifat (cth.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "Untuk digunakan jika pelayan jarak jauh tidak benarkan rentang domain (lebih perlahan)",
     "To zoom": "Untuk zum",
-    "Toggle edit mode (Shift+Click)": "Togol mod suntingan (Shift+Klik)",
     "Transfer shape to edited feature": "Pindah bentuk ke sifat yang disunting",
     "Transform to lines": "Jelmakan menjadi garisan",
     "Transform to polygon": "Jelmakan menjadi poligon",
@@ -396,5 +394,9 @@
     "Email": "E-mel",
     "Secret edit link copied to clipboard!": "Pautan suntingan rahsia telah disalin ke papan keratan!",
     "Send me the link": "Hantarkan pautan kepada saya",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Peta anda telah berjaya dicipta! Memandangkan anda tidak log masuk, ini pautan rahsia anda untuk menyunting peta, sila simpannya dengan selamat:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Peta anda telah berjaya dicipta! Memandangkan anda tidak log masuk, ini pautan rahsia anda untuk menyunting peta, sila simpannya dengan selamat:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }

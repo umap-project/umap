@@ -240,7 +240,6 @@ const locale = {
     "Problem in the response": "Hiba a válaszban",
     "Problem in the response format": "Hiba a válasz formátumában",
     "Properties imported:": "Importált tulajdonságok:",
-    "Property to use for sorting features": "Az objektumok sorba rendezéséhez használt tulajdonság",
     "Provide an URL here": "Itt adjon meg egy URL-t",
     "Proxy request": "Proxykérés",
     "Remote data": "Távoli adatok",
@@ -281,7 +280,6 @@ const locale = {
     "The name of the property to use as feature label (ex.: \"nom\")": "Az objektum felirataként használandó tulajdonság neve (pl.: „név”)",
     "To use if remote server doesn't allow cross domain (slower)": "Akkor használja, ha a távoli kiszolgáló nem engedélyezi a tartományok közötti (cross-domain) átvitelt (lassabb)",
     "To zoom": "Eddig a nagyítási szintig",
-    "Toggle edit mode (Shift+Click)": "Szerkesztési mód bekapcsolása (Shift+Klikk)",
     "Transfer shape to edited feature": "Alakzat átalakítása szerkesztett objektummá",
     "Transform to lines": "Átalakítás vonallá",
     "Transform to polygon": "Átalakítás sokszöggé",
@@ -396,7 +394,11 @@ const locale = {
     "Email": "E-mail",
     "Secret edit link copied to clipboard!": "Titkos szerkesztési link a vágólapra másolva.",
     "Send me the link": "Link elküldése magamnak",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "A térképee elkészült! Mivel nincs bejelentkezve, itt egy titkos link a térkép szerkesztéséhez, kérjük, őrizze meg:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "A térképee elkészült! Mivel nincs bejelentkezve, itt egy titkos link a térkép szerkesztéséhez, kérjük, őrizze meg:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

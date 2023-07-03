@@ -240,7 +240,6 @@
     "Problem in the response": "مشکل در پاسخگویی",
     "Problem in the response format": "مشکل در قالب پاسخگویی",
     "Properties imported:": "خواص وارد شده:",
-    "Property to use for sorting features": "ویژگی مورد استفاده برای مرتب سازی ویژگی ها",
     "Provide an URL here": "در اینجا آدرس اینترنتی ارائه دهید",
     "Proxy request": "درخواست پروکسی",
     "Remote data": "داده های از راه دور",
@@ -281,7 +280,6 @@
     "The name of the property to use as feature label (ex.: \"nom\")": "نام ویژگی مورد استفاده برای برچسب ویژگی (به عنوان مثال: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "برای استفاده در صورت عدم دسترسی سرور از راه دور به دامنه (کندتر)",
     "To zoom": "زوم",
-    "Toggle edit mode (Shift+Click)": "تغییر حالت ویرایش (Shift+Click)",
     "Transfer shape to edited feature": "انتقال شکل به ویژگی ویرایش شده",
     "Transform to lines": "تبدیل به خطوط",
     "Transform to polygon": "تبدیل به چند ضلعی",
@@ -396,5 +394,9 @@
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }

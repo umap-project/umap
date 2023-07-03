@@ -240,7 +240,6 @@
     "Problem in the response": "በምላሹ ላይ ችግር ተፈጥሯል",
     "Problem in the response format": "በምላሹ ፎርማት ላይ ችግር ተፈጥሯል",
     "Properties imported:": "ባህርያት መጥተዋል",
-    "Property to use for sorting features": "ፊችሮችን ለመደርደር የሚጥቀምበት ባህርይ",
     "Provide an URL here": "የድረገፁን መገኛ አድራሻ ያስገቡ",
     "Proxy request": "የፕሮክሲ ጥያቄ",
     "Remote data": "ሪሞት ዳታ",
@@ -281,7 +280,6 @@
     "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "ሪሞት ሰርቨሩ የዶሜይን ልውውጥን የማይፈቅድ ከሆነ ይህን ለመጠቀም (አዝጋሚ)",
     "To zoom": "ለማጉላት",
-    "Toggle edit mode (Shift+Click)": "Toggle edit mode (Shift+Click)",
     "Transfer shape to edited feature": "ቅርፁን ወደ ታረመ ፊቸር አስተላልፍ",
     "Transform to lines": "ወደመስመር ቀይር",
     "Transform to polygon": "ወደፖሊጎን ቀይር",
@@ -396,5 +394,9 @@
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }

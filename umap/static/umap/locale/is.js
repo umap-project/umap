@@ -240,7 +240,6 @@ const locale = {
     "Problem in the response": "Vandamál í svarinu",
     "Problem in the response format": "Vandamál með snið svarsins",
     "Properties imported:": "Innflutt eigindi:",
-    "Property to use for sorting features": "Eigindi til að nota við röðun fitja",
     "Provide an URL here": "Gefðu hér upp URL-slóð",
     "Proxy request": "Beiðni frá milliþjóni",
     "Remote data": "Fjartengd gögn",
@@ -281,7 +280,6 @@ const locale = {
     "The name of the property to use as feature label (ex.: \"nom\")": "Heiti eigindisins sem á að nota sem skýringu á fitju (dæmi: \"nafn\")",
     "To use if remote server doesn't allow cross domain (slower)": "Nota ef fjartengdur þjónn leyfir ekki millivísanir léna (hægvirkara)",
     "To zoom": "Í aðdrátt",
-    "Toggle edit mode (Shift+Click)": "Víxla breytingaham af/á (Shift+Smella)",
     "Transfer shape to edited feature": "Flytja lögun í breyttu fitjuna",
     "Transform to lines": "Umbreyta í línur",
     "Transform to polygon": "Umbreyta í fláka/marghyrning",
@@ -396,7 +394,11 @@ const locale = {
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

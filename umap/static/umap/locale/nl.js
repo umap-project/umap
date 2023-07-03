@@ -240,7 +240,6 @@ const locale = {
     "Problem in the response": "Probleem met het antwoord gekregen van de server",
     "Problem in the response format": "Probleem met het formaat van het antwoord van de server",
     "Properties imported:": "Geïmporteerde eigenschappen:",
-    "Property to use for sorting features": "Eigenschap om te gebruiken om objecten te sorteren",
     "Provide an URL here": "Geef hier een URL-adres op",
     "Proxy request": "Proxy request",
     "Remote data": "Data van elders",
@@ -281,7 +280,6 @@ const locale = {
     "The name of the property to use as feature label (ex.: \"nom\")": "De naam van de eigenschap om het object te labelen (vb.: \"naam\")",
     "To use if remote server doesn't allow cross domain (slower)": "Activeer indien de externe server geen cross domain toelaat (trager)",
     "To zoom": "Tot zoomniveau",
-    "Toggle edit mode (Shift+Click)": "Schakelaar voor editeermodus (Shift+Click)",
     "Transfer shape to edited feature": "Verplaats vorm naar bewerkt object",
     "Transform to lines": "Omzetten naar lijnen",
     "Transform to polygon": "Omzetten naar polygoon",
@@ -396,7 +394,11 @@ const locale = {
     "Email": "Email",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Send me the link": "Send me the link",
-    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:"
+    "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:",
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
+    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
+    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
+    "icon opacity": "icon opacity"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")
