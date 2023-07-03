@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.7 - 2023-07-03
+
+- changed datalayer and tilelayer icons (cf #1188)
+- fixed wrong language code passed to `localeCompare` (cf #1190)
+- fixed natural sort of feature not placing space before other chars (cf #1191)
+
 ## 1.3.6 - 2023-07-01
 
 - set font-display: swap; for fonts definition
