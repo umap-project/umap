@@ -146,16 +146,16 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     this.options.colors = chroma
       .scale(this.datalayer.options.choropleth.brewer || ['white', fillColor])
-      .colors(this.options.limits.length)
+      .colors(this.options.limits.length - 1)
   },
 
   getColor: function (feature) {
     if (!feature) return // FIXME shold not happen
     const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
-    for (let i = 0; i < this.options.limits.length; i++) {
+    for (let i = 1; i < this.options.limits.length; i++) {
       if (featureValue <= this.options.limits[i]) {
-        return this.options.colors[i]
+        return this.options.colors[i - 1]
       }
     }
   },
