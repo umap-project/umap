@@ -219,7 +219,7 @@ L.Util.sortFeatures = (features, sortKey) => {
       score = valA
         .toString()
         .toLowerCase()
-        .localeCompare(valB.toString().toLowerCase(), L.locale || 'en', {
+        .localeCompare(valB.toString().toLowerCase(), L.lang || 'en', {
           sensitivity: 'base',
           numeric: true,
         })
@@ -536,7 +536,7 @@ L.U.Help = L.Class.extend({
 
   formatURL: `${L._(
     'Supported variables that will be dynamically replaced'
-  )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}..., locale`,
+  )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}..., locale, lang`,
   formatIconSymbol: L._(
     'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/{name}.png", the {name} variable will be replaced by the "name" value of each marker.'
   ),
