@@ -58,9 +58,9 @@ L.U.Map.include({
     'embed',
     'locate',
     'measure',
-    'tilelayers',
     'editinosm',
     'datalayers',
+    'tilelayers',
     'star',
   ],
 
@@ -288,8 +288,8 @@ L.U.Map.include({
       const editActions = [
         L.U.ImportAction,
         L.U.EditPropertiesAction,
-        L.U.ChangeTileLayerAction,
         L.U.ManageDatalayersAction,
+        L.U.ChangeTileLayerAction,
         L.U.UpdateExtentAction,
         L.U.UpdatePermsAction,
       ]
