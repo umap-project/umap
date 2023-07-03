@@ -221,7 +221,6 @@ L.Util.sortFeatures = (features, sortKey) => {
         .toLowerCase()
         .localeCompare(valB.toString().toLowerCase(), L.locale || 'en', {
           sensitivity: 'base',
-          ignorePunctuation: true,
           numeric: true,
         })
     }

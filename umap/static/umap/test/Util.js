@@ -496,5 +496,14 @@ describe('L.Util', function () {
       assert.equal(features[1], feat2)
       assert.equal(features[2], feat3)
     })
+    it('should sort feature with space first', function () {
+      feat1.properties.mykey = "1 foo"
+      feat2.properties.mykey = "2 foo"
+      feat3.properties.mykey = "1a foo"
+      let features = L.Util.sortFeatures([feat1, feat2, feat3], "mykey")
+      assert.equal(features[0], feat1)
+      assert.equal(features[1], feat3)
+      assert.equal(features[2], feat2)
+    })
   })
 })
