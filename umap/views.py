@@ -423,11 +423,12 @@ class MapDetailMixin:
             properties["shortUrl"] = self.get_short_url()
 
         if settings.USE_I18N:
-            locale = settings.LANGUAGE_CODE
+            lang = settings.LANGUAGE_CODE
             # Check attr in case the middleware is not active
             if hasattr(self.request, "LANGUAGE_CODE"):
-                locale = self.request.LANGUAGE_CODE
-            locale = to_locale(locale)
+                lang = self.request.LANGUAGE_CODE
+            properties["lang"] = lang
+            locale = to_locale(lang)
             properties["locale"] = locale
             context["locale"] = locale
         user = self.request.user

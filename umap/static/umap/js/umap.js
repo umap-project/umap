@@ -65,8 +65,15 @@ L.U.Map.include({
   ],
 
   initialize: function (el, geojson) {
-    if (geojson.properties && geojson.properties.locale)
+    // Locale name (pt_PT, en_US…)
+    // To be used for Django localization
+    if (geojson.properties.locale)
       L.setLocale(geojson.properties.locale)
+
+    // Language code (pt-pt, en-us…)
+    // To be used in javascript APIs
+    if (geojson.properties.lang)
+      L.lang = geojson.properties.lang
 
     // Don't let default autocreation of controls
     const zoomControl =
