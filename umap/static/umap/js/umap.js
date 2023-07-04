@@ -260,6 +260,7 @@ L.U.Map.include({
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) this.enableEdit()
+      if (L.Util.queryString('download')) this.download()
     })
 
     window.onbeforeunload = (e) => {
