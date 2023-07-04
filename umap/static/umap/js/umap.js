@@ -254,6 +254,7 @@ L.U.Map.include({
       if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
       else if (this.options.onLoadPanel === 'caption') this.displayCaption()
       else if (this.options.onLoadPanel === 'datafilters') this.openFilter()
+      else if (this.options.onLoadPanel === 'share') this.renderShareBox()
     })
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
