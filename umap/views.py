@@ -96,7 +96,6 @@ class PaginatorMixin(object):
 
 
 class PublicMapsMixin(object):
-
     def get_public_maps(self):
         qs = Map.public
         if (
@@ -216,26 +215,32 @@ class UserStars(UserMaps):
 user_stars = UserStars.as_view()
 
 
-class Search(TemplateView, PublicMapsMixin, PaginatorMixin):
-    template_name = "umap/search.html"
-    list_template_name = "umap/map_list.html"
-
-    def get_context_data(self, **kwargs):
+class SearchMixin:
+    def get_search_queryset(self, **kwargs):
         q = self.request.GET.get("q")
-        qs_count = 0
-        results = []
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
                 q, config=settings.UMAP_SEARCH_CONFIGURATION, search_type="websearch"
             )
-            qs = Map.objects.annotate(search=vector).filter(search=query)
+            return Map.objects.annotate(search=vector).filter(search=query)
+
+
+class Search(TemplateView, PublicMapsMixin, PaginatorMixin, SearchMixin):
+    template_name = "umap/search.html"
+    list_template_name = "umap/map_list.html"
+
+    def get_context_data(self, **kwargs):
+        qs = self.get_search_queryset()
+        qs_count = 0
+        results = []
+        if qs:
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             qs_count = qs.count()
             results = self.paginate(qs)
         else:
-            results = self.get_public_maps()[:settings.UMAP_MAPS_PER_SEARCH]
-        kwargs.update({"maps": results, "count": qs_count, "q": q})
+            results = self.get_public_maps()[: settings.UMAP_MAPS_PER_SEARCH]
+        kwargs.update({"maps": results, "count": qs_count})
         return kwargs
 
     def get_template_names(self):
@@ -253,6 +258,28 @@ class Search(TemplateView, PublicMapsMixin, PaginatorMixin):
 
 
 search = Search.as_view()
+
+
+class UserDashboard(DetailView, PaginatorMixin, SearchMixin):
+    model = User
+    template_name = "umap/user_dashboard.html"
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_maps(self):
+        qs = self.get_search_queryset() or Map.objects.all()
+        qs = qs.filter(Q(owner=self.object) | Q(editors=self.object))
+        return qs.order_by("-modified_at")
+
+    def get_context_data(self, **kwargs):
+        kwargs.update(
+            {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)}
+        )
+        return super().get_context_data(**kwargs)
+
+
+user_dashboard = UserDashboard.as_view()
 
 
 class MapsShowCase(View):
@@ -436,7 +463,7 @@ class MapDetailMixin:
             properties["user"] = {
                 "id": user.pk,
                 "name": str(user),
-                "url": user.get_url(),
+                "url": reverse("user_dashboard"),
             }
         map_settings = self.get_geojson()
         if "properties" not in map_settings:

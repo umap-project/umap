@@ -283,6 +283,26 @@ ul.umap-autocomplete {
 
 
 /* **************************** */
+/*           Dashboard          */
+/* **************************** */
+table.maps {
+    width: 100%;
+}
+table.maps .map_fragment {
+    height: 100px;
+    width: 100%;
+    min-width: 200px;
+}
+table.maps tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+table.maps td {
+    text-align: center;
+}
+
+
+
+/* **************************** */
 /*   Override Leaflet.Storage   */
 /* **************************** */
 #id_editors + br + span.helptext {

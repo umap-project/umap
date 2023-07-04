@@ -1,12 +1,14 @@
 {% load i18n %}
+{% url "search" as search_url %}
+{% trans "Search maps" as default_placeholder %}
 <div class="wrapper search_wrapper">
   <div class="row">
-    <form action="{% url "search" %}" method="get">
+    <form action="{% firstof action search_url %}" method="get">
       <div class="col two-third mwide">
         <input name="q"
                type="search"
-               placeholder="{% trans "Search maps" %}"
-               value="{{ q|default:"" }}" />
+               placeholder="{% firstof placeholder default_placeholder %}"
+               value="{{ request.GET.q|default:"" }}" />
       </div>
       <div class="col third mwide">
         <input type="submit" value="{% trans "Search" %}" class="neutral" />

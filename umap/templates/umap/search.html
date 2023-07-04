@@ -4,7 +4,7 @@
   {% include "umap/search_bar.html" %}
   <div class="wrapper">
     <div class="map_list row">
-      {% if q %}
+      {% if request.GET.q %}
         {% if maps %}
           <h2>
             {% blocktranslate trimmed count counter=count %}
