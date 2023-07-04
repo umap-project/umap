@@ -91,12 +91,8 @@ L.U.Map.include({
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloding', function (e) {
-      this.fire('dataloding', e)
-    })
-    this.xhr.on('datalaod', function (e) {
-      this.fire('datalaod', e)
-    })
+    this.xhr.on('dataloading',  (e) => this.fire('dataloading', e))
+    this.xhr.on('dataload', (e) => this.fire('dataload', e))
 
     this.initLoader()
     this.name = this.options.name
