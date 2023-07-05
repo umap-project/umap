@@ -976,7 +976,7 @@ L.U.DataLayer = L.Evented.extend({
   buildVersionsFieldset: function (container) {
     const appendVersion = function (data) {
       const date = new Date(parseInt(data.at, 10))
-      const content = `${date.toLocaleDateString(L.locale)} (${
+      const content = `${date.toLocaleString(L.lang)} (${
         parseInt(data.size) / 1000
       }Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
