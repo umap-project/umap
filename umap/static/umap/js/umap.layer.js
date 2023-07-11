@@ -1060,7 +1060,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   isVisible: function () {
-    return this.map.hasLayer(this.layer)
+    return this.layer && this.map.hasLayer(this.layer)
   },
 
   canBrowse: function () {
