@@ -35,13 +35,13 @@ L.U.MapPermissions = L.Class.extend({
   isOwner: function () {
     return (
       this.map.options.user &&
-      this.map.options.permissions.owner &&
-      this.map.options.user.id == this.map.options.permissions.owner.id
+      this.map.permissions.options.owner &&
+      this.map.options.user.id == this.map.permissions.options.owner.id
     )
   },
 
   isAnonymousMap: function () {
-    return !this.map.options.permissions.owner
+    return !this.map.permissions.options.owner
   },
 
   getMap: function () {
