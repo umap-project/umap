@@ -1355,7 +1355,7 @@ a.add-datalayer:hover,
     overflow-x: hidden;
 }
 .umap-popup-content iframe {
-    min-width: 310px;
+    min-width: 300px;
     max-width: 100%;
 }
 .umap-popup-content tr:nth-child(odd) {
@@ -1373,7 +1373,6 @@ a.add-datalayer:hover,
 }
 .umap-popup-container {
     flex-grow: 1;
-    padding: 0 10px;
     word-break: break-word;
 }
 .leaflet-popup-content h3 {
