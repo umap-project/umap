@@ -1,5 +1,6 @@
 {% load umap_tags umap_tags i18n %}
 <table class="maps">
+  {% if not is_ajax %}
   <thead>
     <tr>
       <th>{% blocktrans %}Map{% endblocktrans %}</th>
@@ -10,6 +11,7 @@
       <th>{% blocktrans %}Actions{% endblocktrans %}</th>
     </tr>
   </thead>
+  {% endif %}
   <tbody>
     {% for map_inst in maps %}
       <tr>
@@ -31,3 +33,9 @@
     {% endfor %}
   </tbody>
 </table>
+{% if maps.has_next %}
+  <div class="col wide">
+    <a href="?{% paginate_querystring maps.next_page_number %}"
+       class="button more_button neutral">{% trans "More" %}</a>
+  </div>
+{% endif %}
