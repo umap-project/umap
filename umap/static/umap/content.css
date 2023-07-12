@@ -293,11 +293,14 @@ table.maps .map_fragment {
     width: 100%;
     min-width: 200px;
 }
-table.maps tr:nth-child(even) {
+table.maps tbody tr:nth-child(odd) {
     background-color: #f4f4f4;
 }
 table.maps td {
     text-align: center;
+}
+table.maps thead tr {
+    line-height: 2em;
 }
 
 
