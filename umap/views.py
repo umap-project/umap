@@ -228,7 +228,7 @@ class Search(PaginatorMixin, TemplateView, PublicMapsMixin, SearchMixin):
         qs = self.get_search_queryset()
         qs_count = 0
         results = []
-        if qs:
+        if qs is not None:
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             qs_count = qs.count()
             results = self.paginate(qs)
