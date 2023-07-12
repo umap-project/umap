@@ -257,5 +257,5 @@ def test_user_dashboard_display_user_maps(client, map):
     body = response.content.decode()
     assert map.name in body
     assert f"{map.get_absolute_url()}?edit" in body
-    assert f"{map.get_absolute_url()}?onLoadPanel=share" in body
+    assert f"{map.get_absolute_url()}?share" in body
     assert f"{map.get_absolute_url()}?download" in body
