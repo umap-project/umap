@@ -638,7 +638,7 @@ ul.photon-autocomplete {
 }
 .umap-browse-datalayers li[draggable] .drag-handle {
     float: right;
-    background-position: -130px -130px;
+    background-position: -72px -72px;
     margin-right: 5px;
     cursor: move;
 }
