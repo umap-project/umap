@@ -127,15 +127,17 @@
    <path id="path4873-4" d="m107.03 825.28-6.3585 6.3585" fill="none" stroke="#464646" stroke-width="2"/>
    <rect id="continue-line" x="104.21" y="824.34" width="4" height="4" fill="#464646"/>
   </g>
-  <g id="g4140" transform="translate(-86,-66)">
+  <g id="delete-vertex" transform="translate(-90,-64)">
    <path id="path4349-2-2-9-3-8-3-5" d="m216 918.36 4-8" fill="none" stroke="#808080" stroke-width="2"/>
    <path id="path4349-2-2-9-3-8-3-8" d="m220 910.36 8-4" fill="none" stroke="#808080" stroke-width="2"/>
    <rect id="rect4918-1" x="218.06" y="908.49" width="4" height="4" fill="#808080"/>
    <path id="path4353-1-6-1-3-5-1-9" d="m217 907.36 6 6" fill="none" stroke="#fff" stroke-width="2.482"/>
    <path id="path4353-1-6-1-3-5-1" d="m217 907.36 6 6" fill="none" stroke="#4d4d4d" stroke-width="1.4822"/>
   </g>
-  <path id="path4349-2-2-9-3-8-9" d="m136.64 830.89 1.4677-13.336" fill="none" stroke="#464646" stroke-width="2"/>
-  <path id="path4349-2-2-3-3-3" d="m131.66 830.95-2.4614-13.189" fill="none" stroke="#808080" stroke-width="2"/>
+  <g id="split-line" fill="none" stroke-width="2">
+   <path id="path4349-2-2-9-3-8-9" d="m134.64 830.89 1.4677-13.336" stroke="#464646"/>
+   <path id="path4349-2-2-3-3-3" d="m129.66 830.95-2.4614-13.189" stroke="#808080"/>
+  </g>
   <path id="delete-disabled" d="m131 937.36v1c-1.4286 0-3.2857 0.5999-4 2v1h10v-1c-0.71429-1.4001-2.5714-2-4-2v-1zm-4 5 2 9h6l2-9z" fill="#b3b3b3"/>
  </g>
 </svg>
