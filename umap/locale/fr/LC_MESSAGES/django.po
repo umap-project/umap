@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 20:00+0000\n"
+"POT-Creation-Date: 2023-07-15 07:38+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -244,6 +244,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Et c'est <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+#: templates/umap/user_dashboard.html:20
 msgid "Create a map"
 msgstr "Créer une carte"
 
@@ -278,13 +279,49 @@ msgstr "Naviguer dans les cartes"
 msgid "You are logged in. Continuing..."
 msgstr "Vous êtes maintenant identifié. Merci de patienter..."
 
-#: templates/umap/map_list.html:9 views.py:268
+#: templates/umap/map_list.html:9 views.py:281
 msgid "by"
 msgstr "par"
 
-#: templates/umap/map_list.html:17
+#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
 msgid "More"
 msgstr "Plus"
+
+#: templates/umap/map_table.html:6
+msgid "Map"
+msgstr "Carte"
+
+#: templates/umap/map_table.html:7
+msgid "Name"
+msgstr "Nom"
+
+#: templates/umap/map_table.html:8
+msgid "Status"
+msgstr "Statut"
+
+#: templates/umap/map_table.html:9
+msgid "Last save"
+msgstr "Dernière modification"
+
+#: templates/umap/map_table.html:10
+msgid "Owner"
+msgstr "Propriétaire"
+
+#: templates/umap/map_table.html:11
+msgid "Actions"
+msgstr "Actions"
+
+#: templates/umap/map_table.html:28
+msgid "Share"
+msgstr "Partager"
+
+#: templates/umap/map_table.html:29
+msgid "Edit"
+msgstr "Éditer"
+
+#: templates/umap/map_table.html:30
+msgid "Download"
+msgstr "Télécharger"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -356,9 +393,9 @@ msgstr "Votre mot de passe a été modifié"
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] "%(count)scarte trouvée:"
-msgstr[1] "%(count)scartes trouvées:"
-msgstr[2] "%(count)scartes trouvées:"
+msgstr[0] "%(count)s carte trouvée:"
+msgstr[1] "%(count)s cartes trouvées:"
+msgstr[2] "%(count)s cartes trouvées:"
 
 #: templates/umap/search.html:18
 msgid "No map found."
@@ -368,56 +405,68 @@ msgstr "Aucune carte trouvée."
 msgid "Latest created maps"
 msgstr "Dernières cartes créées."
 
-#: templates/umap/search_bar.html:8
+#: templates/umap/search_bar.html:3
 msgid "Search maps"
 msgstr "Chercher des cartes"
 
-#: templates/umap/search_bar.html:12
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr "Chercher"
 
-#: views.py:273
+#: templates/umap/user_dashboard.html:5 templates/umap/user_dashboard.html:11
+msgid "My dashboard"
+msgstr "Mon tableau de bord"
+
+#: templates/umap/user_dashboard.html:9
+msgid "Search my maps"
+msgstr "Chercher dans mes cartes"
+
+#: templates/umap/user_dashboard.html:20
+msgid "You have no map yet."
+msgstr "Vous n'avez pas encore de carte."
+
+#: views.py:286
 msgid "View the map"
 msgstr "Voir la carte"
 
-#: views.py:594
+#: views.py:607
 msgid "Map has been updated!"
 msgstr "La carte a été mise à jour !"
 
-#: views.py:619
+#: views.py:632
 msgid "Map editors updated with success!"
 msgstr "Éditeurs de la carte mis à jour !"
 
-#: views.py:657
+#: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "La lien d'édition uMap pour votre carte %(map_name)s"
 
-#: views.py:660
+#: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Voici votre lien d'édition secret: %(link)s"
 
-#: views.py:666
+#: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Courriel envoyé à %(email)s"
 
-#: views.py:677
+#: views.py:690
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:700
+#: views.py:713
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:705
+#: views.py:718
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:871
+#: views.py:884
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
