@@ -638,7 +638,7 @@ ul.photon-autocomplete {
 }
 .umap-browse-datalayers li[draggable] .drag-handle {
     float: right;
-    background-position: -130px -130px;
+    background-position: -72px -72px;
     margin-right: 5px;
     cursor: move;
 }
@@ -704,13 +704,13 @@ ul.photon-autocomplete {
     background-position: -119px -48px;
 }
 .umap-delete-vertex {
-    background-position: -205px -165px;
+    background-position: -119px -22px;
 }
 .umap-continue-line {
-    background-position: -165px -5px;
+    background-position: -96px 1px;
 }
 .umap-split-line {
-    background-position: -205px -45px;
+    background-position: -120px 1px;
 }
 .umap-extract-shape-from-multi{
     background-position: -119px 2px;
