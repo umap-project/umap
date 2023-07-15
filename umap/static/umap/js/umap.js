@@ -91,12 +91,8 @@ L.U.Map.include({
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloding', function (e) {
-      this.fire('dataloding', e)
-    })
-    this.xhr.on('datalaod', function (e) {
-      this.fire('datalaod', e)
-    })
+    this.xhr.on('dataloading',  (e) => this.fire('dataloading', e))
+    this.xhr.on('dataload', (e) => this.fire('dataload', e))
 
     this.initLoader()
     this.name = this.options.name
@@ -255,13 +251,16 @@ L.U.Map.include({
     }
     this.initShortcuts()
     this.onceDatalayersLoaded(function () {
-      if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
+      if (L.Util.queryString('share')) this.renderShareBox()
+      else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
       else if (this.options.onLoadPanel === 'caption') this.displayCaption()
       else if (this.options.onLoadPanel === 'datafilters') this.openFilter()
     })
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
+      if (L.Util.queryString('edit')) this.enableEdit()
+      if (L.Util.queryString('download')) this.download()
     })
 
     window.onbeforeunload = (e) => {

@@ -1019,6 +1019,39 @@ L.U.Map.include({
     this.ui.openPanel({ data: { html: container }, actions: actions })
   },
 
+  EXPORT_TYPES: {
+    geojson: {
+      formatter: function (map) {
+        return JSON.stringify(map.toGeoJSON(), null, 2)
+      },
+      ext: '.geojson',
+      filetype: 'application/json',
+    },
+    gpx: {
+      formatter: function (map) {
+        return togpx(map.toGeoJSON())
+      },
+      ext: '.gpx',
+      filetype: 'application/xml',
+    },
+    kml: {
+      formatter: function (map) {
+        return tokml(map.toGeoJSON())
+      },
+      ext: '.kml',
+      filetype: 'application/vnd.google-earth.kml+xml',
+    },
+    umap: {
+      name: L._('Full map data'),
+      formatter: function (map) {
+        return map.serialize()
+      },
+      ext: '.umap',
+      filetype: 'application/json',
+      selected: true,
+    },
+  },
+
   renderShareBox: function () {
     const container = L.DomUtil.create('div', 'umap-share')
     const embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map'))
@@ -1091,65 +1124,35 @@ L.U.Map.include({
       else exportCaveat.style.display = 'inherit'
     }
     L.DomEvent.on(typeInput, 'change', toggleCaveat)
-    const types = {
-      geojson: {
-        formatter: function (map) {
-          return JSON.stringify(map.toGeoJSON(), null, 2)
-        },
-        ext: '.geojson',
-        filetype: 'application/json',
-      },
-      gpx: {
-        formatter: function (map) {
-          return togpx(map.toGeoJSON())
-        },
-        ext: '.gpx',
-        filetype: 'application/xml',
-      },
-      kml: {
-        formatter: function (map) {
-          return tokml(map.toGeoJSON())
-        },
-        ext: '.kml',
-        filetype: 'application/vnd.google-earth.kml+xml',
-      },
-      umap: {
-        name: L._('Full map data'),
-        formatter: function (map) {
-          return map.serialize()
-        },
-        ext: '.umap',
-        filetype: 'application/json',
-        selected: true,
-      },
-    }
-    for (const key in types) {
-      if (types.hasOwnProperty(key)) {
+    for (const key in this.EXPORT_TYPES) {
+      if (this.EXPORT_TYPES.hasOwnProperty(key)) {
         option = L.DomUtil.create('option', '', typeInput)
         option.value = key
-        option.textContent = types[key].name || key
-        if (types[key].selected) option.selected = true
+        option.textContent = this.EXPORT_TYPES[key].name || key
+        if (this.EXPORT_TYPES[key].selected) option.selected = true
       }
     }
     toggleCaveat()
     const download = L.DomUtil.create('a', 'button', container)
     download.textContent = L._('Download data')
-    L.DomEvent.on(
-      download,
-      'click',
-      () => {
-        const type = types[typeInput.value]
-        const content = type.formatter(this)
-        let name = this.options.name || 'data'
-        name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-        download.download = name + type.ext
-        window.URL = window.URL || window.webkitURL
-        const blob = new Blob([content], { type: type.filetype })
-        download.href = window.URL.createObjectURL(blob)
-      },
-      this
-    )
+    L.DomEvent.on(download, 'click', () => this.download(typeInput.value), this)
     this.ui.openPanel({ data: { html: container } })
+  },
+
+  download: function (mode) {
+    const type = this.EXPORT_TYPES[mode || 'umap']
+    const content = type.formatter(this)
+    let name = this.options.name || 'data'
+    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+    window.URL = window.URL || window.webkitURL
+    const blob = new Blob([content], { type: type.filetype })
+    const el = document.createElement('a')
+    el.download = name + type.ext
+    el.href = window.URL.createObjectURL(blob)
+    el.style.display = 'none'
+    document.body.appendChild(el)
+    el.click()
+    document.body.removeChild(el)
   },
 })
 

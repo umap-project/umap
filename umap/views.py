@@ -77,7 +77,7 @@ PRIVATE_IP = re.compile(
 ANONYMOUS_COOKIE_MAX_AGE = 60 * 60 * 24 * 30  # One month
 
 
-class PaginatorMixin(object):
+class PaginatorMixin:
     per_page = 5
 
     def paginate(self, qs, per_page=None):
@@ -94,9 +94,20 @@ class PaginatorMixin(object):
             qs = paginator.page(paginator.num_pages)
         return qs
 
+    def get_context_data(self, **kwargs):
+        kwargs.update({"is_ajax": is_ajax(self.request)})
+        return super().get_context_data(**kwargs)
+
+    def get_template_names(self):
+        """
+        Dispatch template according to the kind of request: ajax or normal.
+        """
+        if is_ajax(self.request):
+            return [self.list_template_name]
+        return super().get_template_names()
+
 
 class PublicMapsMixin(object):
-
     def get_public_maps(self):
         qs = Map.public
         if (
@@ -109,7 +120,7 @@ class PublicMapsMixin(object):
         return maps
 
 
-class Home(TemplateView, PublicMapsMixin, PaginatorMixin):
+class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
     template_name = "umap/home.html"
     list_template_name = "umap/map_list.html"
 
@@ -142,15 +153,6 @@ class Home(TemplateView, PublicMapsMixin, PaginatorMixin):
             "showcase_map": showcase_map,
         }
 
-    def get_template_names(self):
-        """
-        Dispatch template according to the kind of request: ajax or normal.
-        """
-        if is_ajax(self.request):
-            return [self.list_template_name]
-        else:
-            return [self.template_name]
-
 
 home = Home.as_view()
 
@@ -162,7 +164,7 @@ class About(Home):
 about = About.as_view()
 
 
-class UserMaps(DetailView, PaginatorMixin):
+class UserMaps(PaginatorMixin, DetailView):
     model = User
     slug_url_kwarg = "identifier"
     slug_field = settings.USER_URL_FIELD
@@ -190,15 +192,6 @@ class UserMaps(DetailView, PaginatorMixin):
         kwargs.update({"maps": self.paginate(self.get_maps(), self.per_page)})
         return super().get_context_data(**kwargs)
 
-    def get_template_names(self):
-        """
-        Dispatch template according to the kind of request: ajax or normal.
-        """
-        if is_ajax(self.request):
-            return [self.list_template_name]
-        else:
-            return super(UserMaps, self).get_template_names()
-
 
 user_maps = UserMaps.as_view()
 
@@ -216,36 +209,33 @@ class UserStars(UserMaps):
 user_stars = UserStars.as_view()
 
 
-class Search(TemplateView, PublicMapsMixin, PaginatorMixin):
-    template_name = "umap/search.html"
-    list_template_name = "umap/map_list.html"
-
-    def get_context_data(self, **kwargs):
+class SearchMixin:
+    def get_search_queryset(self, **kwargs):
         q = self.request.GET.get("q")
-        qs_count = 0
-        results = []
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
                 q, config=settings.UMAP_SEARCH_CONFIGURATION, search_type="websearch"
             )
-            qs = Map.objects.annotate(search=vector).filter(search=query)
+            return Map.objects.annotate(search=vector).filter(search=query)
+
+
+class Search(PaginatorMixin, TemplateView, PublicMapsMixin, SearchMixin):
+    template_name = "umap/search.html"
+    list_template_name = "umap/map_list.html"
+
+    def get_context_data(self, **kwargs):
+        qs = self.get_search_queryset()
+        qs_count = 0
+        results = []
+        if qs is not None:
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             qs_count = qs.count()
             results = self.paginate(qs)
         else:
-            results = self.get_public_maps()[:settings.UMAP_MAPS_PER_SEARCH]
-        kwargs.update({"maps": results, "count": qs_count, "q": q})
+            results = self.get_public_maps()[: settings.UMAP_MAPS_PER_SEARCH]
+        kwargs.update({"maps": results, "count": qs_count})
         return kwargs
-
-    def get_template_names(self):
-        """
-        Dispatch template according to the kind of request: ajax or normal.
-        """
-        if is_ajax(self.request):
-            return [self.list_template_name]
-        else:
-            return super(Search, self).get_template_names()
 
     @property
     def per_page(self):
@@ -253,6 +243,29 @@ class Search(TemplateView, PublicMapsMixin, PaginatorMixin):
 
 
 search = Search.as_view()
+
+
+class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
+    model = User
+    template_name = "umap/user_dashboard.html"
+    list_template_name = "umap/map_table.html"
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_maps(self):
+        qs = self.get_search_queryset() or Map.objects.all()
+        qs = qs.filter(Q(owner=self.object) | Q(editors=self.object))
+        return qs.order_by("-modified_at")
+
+    def get_context_data(self, **kwargs):
+        kwargs.update(
+            {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)}
+        )
+        return super().get_context_data(**kwargs)
+
+
+user_dashboard = UserDashboard.as_view()
 
 
 class MapsShowCase(View):
@@ -436,7 +449,7 @@ class MapDetailMixin:
             properties["user"] = {
                 "id": user.pk,
                 "name": str(user),
-                "url": user.get_url(),
+                "url": reverse("user_dashboard"),
             }
         map_settings = self.get_geojson()
         if "properties" not in map_settings:

@@ -1,0 +1,25 @@
+{% extends "umap/content.html" %}
+{% load i18n %}
+
+{% block head_title %}
+    {{ SITE_NAME }} - {% trans "My dashboard" %}
+{% endblock head_title %}
+
+{% block maincontent %}
+  {% trans "Search my maps" as placeholder %}
+  <div class="col wide">
+    <h2 class="section">{% trans "My dashboard" %}</h2>
+    {% include "umap/search_bar.html" with action=request.get_full_path placeholder=placeholder %}
+  </div>
+  <div class="wrapper">
+    <div class="row">
+      {% if maps %}
+        {% include "umap/map_table.html" %}
+      {% else %}
+        <div>
+          {% blocktrans %}You have no map yet.{% endblocktrans %} <a href="{% url 'map_new' %}">{% translate "Create a map" %}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock maincontent %}

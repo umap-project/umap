@@ -240,3 +240,22 @@ def test_change_user_slug(client, user, settings):
     settings.USER_URL_FIELD = "pk"
     response = client.get(reverse("home"))
     assert f"/en/user/{user.pk}/" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_user_dashboard_is_restricted_to_logged_in(client):
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 302
+    assert response["Location"] == "/en/login/?next=/en/me"
+
+
+@pytest.mark.django_db
+def test_user_dashboard_display_user_maps(client, map):
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name in body
+    assert f"{map.get_absolute_url()}?edit" in body
+    assert f"{map.get_absolute_url()}?share" in body
+    assert f"{map.get_absolute_url()}?download" in body

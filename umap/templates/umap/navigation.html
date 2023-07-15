@@ -9,7 +9,7 @@
     <ul>
       {% if user.is_authenticated %}
         <li>
-          <a href="{{ user.get_url }}">{% trans "My maps" %} ({{ user }})</a>
+          <a href="{% url 'user_dashboard' %}">{% trans "My maps" %} ({{ user }})</a>
         </li>
         <li>
           <a href="{{ user.get_stars_url }}">{% trans "Starred maps" %}</a>
