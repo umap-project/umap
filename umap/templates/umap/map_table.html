@@ -1,16 +1,16 @@
 {% load umap_tags umap_tags i18n %}
 <table class="maps">
   {% if not is_ajax %}
-  <thead>
-    <tr>
-      <th>{% blocktrans %}Map{% endblocktrans %}</th>
-      <th>{% blocktrans %}Name{% endblocktrans %}</th>
-      <th>{% blocktrans %}Status{% endblocktrans %}</th>
-      <th>{% blocktrans %}Last save{% endblocktrans %}</th>
-      <th>{% blocktrans %}Owner{% endblocktrans %}</th>
-      <th>{% blocktrans %}Actions{% endblocktrans %}</th>
-    </tr>
-  </thead>
+    <thead>
+      <tr>
+        <th>{% blocktrans %}Map{% endblocktrans %}</th>
+        <th>{% blocktrans %}Name{% endblocktrans %}</th>
+        <th>{% blocktrans %}Status{% endblocktrans %}</th>
+        <th>{% blocktrans %}Last save{% endblocktrans %}</th>
+        <th>{% blocktrans %}Owner{% endblocktrans %}</th>
+        <th>{% blocktrans %}Actions{% endblocktrans %}</th>
+      </tr>
+    </thead>
   {% endif %}
   <tbody>
     {% for map_inst in maps %}

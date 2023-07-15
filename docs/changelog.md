@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0 - 2023-07-15
+- add basic version of a "My Dashboard" page (cf #1196)
+- better fit iframe in popups (cf #1203)
+- fix missing line edit icons (cf #1205)
+- bump Leaflet from 1.3.4 to 1.9.4 (cf #1201)
+- fix permissions panel empty at first save (cf #1200)
+- add `overflow-x: hidden` to popup (cf #1198)
+- add time in datalayer versions list (cf #1195)
+
 ## 1.3.7 - 2023-07-03
 
 - changed datalayer and tilelayer icons (cf #1188)
