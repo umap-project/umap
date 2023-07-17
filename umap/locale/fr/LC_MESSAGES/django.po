@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 07:38+0000\n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -37,7 +37,7 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr "Lien de modification secret : %s"
 
-#: forms.py:47 models.py:134
+#: forms.py:47
 msgid "Everyone can edit"
 msgstr "Tout le monde peut modifier"
 
@@ -69,28 +69,28 @@ msgstr "Modèle d'URL au format des tuiles OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordre des calques de tuiles dans le panneau de modification"
 
-#: models.py:135
-msgid "Only editors can edit"
-msgstr "Seuls les éditeurs peuvent modifier"
+#: models.py:134
+msgid "Everyone"
+msgstr "Tout le monde"
+
+#: models.py:135 models.py:141
+msgid "Editors only"
+msgstr "Éditeurs uniquement"
 
 #: models.py:136
-msgid "Only owner can edit"
-msgstr "Seul le créateur peut modifier"
+msgid "Owner only"
+msgstr "Propriétaire uniquement"
 
 #: models.py:139
-msgid "everyone (public)"
-msgstr "tout le monde (public)"
+msgid "Everyone (public)"
+msgstr "Tout le monde (public)"
 
 #: models.py:140
-msgid "anyone with link"
-msgstr "quiconque a le lien"
-
-#: models.py:141
-msgid "editors only"
-msgstr "seulement les modificateurs"
+msgid "Anyone with link"
+msgstr "Quiconque a le lien"
 
 #: models.py:142
-msgid "blocked"
+msgid "Blocked"
 msgstr "Bloquée"
 
 #: models.py:145 models.py:295
@@ -244,7 +244,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Et c'est <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/user_dashboard.html:18
 msgid "Create a map"
 msgstr "Créer une carte"
 
@@ -296,8 +296,8 @@ msgid "Name"
 msgstr "Nom"
 
 #: templates/umap/map_table.html:8
-msgid "Status"
-msgstr "Statut"
+msgid "Who can see / edit"
+msgstr "Qui peut voir / modifier"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
@@ -413,15 +413,15 @@ msgstr "Chercher des cartes"
 msgid "Search"
 msgstr "Chercher"
 
-#: templates/umap/user_dashboard.html:5 templates/umap/user_dashboard.html:11
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
 msgid "My dashboard"
 msgstr "Mon tableau de bord"
 
-#: templates/umap/user_dashboard.html:9
+#: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
 msgstr "Chercher dans mes cartes"
 
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/user_dashboard.html:18
 msgid "You have no map yet."
 msgstr "Vous n'avez pas encore de carte."
 

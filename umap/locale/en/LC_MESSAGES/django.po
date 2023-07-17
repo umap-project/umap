@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 07:38+0000\n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr ""
 
-#: forms.py:47 models.py:134
+#: forms.py:47
 msgid "Everyone can edit"
 msgstr ""
 
@@ -54,28 +54,28 @@ msgstr ""
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:135
-msgid "Only editors can edit"
+#: models.py:134
+msgid "Everyone"
+msgstr ""
+
+#: models.py:135 models.py:141
+msgid "Editors only"
 msgstr ""
 
 #: models.py:136
-msgid "Only owner can edit"
+msgid "Owner only"
 msgstr ""
 
 #: models.py:139
-msgid "everyone (public)"
+msgid "Everyone (public)"
 msgstr ""
 
 #: models.py:140
-msgid "anyone with link"
-msgstr ""
-
-#: models.py:141
-msgid "editors only"
+msgid "Anyone with link"
 msgstr ""
 
 #: models.py:142
-msgid "blocked"
+msgid "Blocked"
 msgstr ""
 
 #: models.py:145 models.py:295
@@ -229,7 +229,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/user_dashboard.html:18
 msgid "Create a map"
 msgstr ""
 
@@ -281,7 +281,7 @@ msgid "Name"
 msgstr ""
 
 #: templates/umap/map_table.html:8
-msgid "Status"
+msgid "Who can see / edit"
 msgstr ""
 
 #: templates/umap/map_table.html:9
@@ -397,15 +397,15 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:5 templates/umap/user_dashboard.html:11
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
 msgid "My dashboard"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:9
+#: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/user_dashboard.html:18
 msgid "You have no map yet."
 msgstr ""
 

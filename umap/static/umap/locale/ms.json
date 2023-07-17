@@ -21,7 +21,7 @@
     "Display the fullscreen control": "Paparkan kawalan skrin penuh",
     "Display the locate control": "Paparkan kawalan kesan kedudukan",
     "Display the measure control": "Paparkan kawalan pengukuran",
-    "Display the search control": "Paparkan kawalan gelintar",
+    "Display the search control": "Paparkan kawalan carian",
     "Display the tile layers control": "Paparkan kawalan lapisan jubin",
     "Display the zoom control": "Paparkan kawalan zum",
     "Do you want to display a caption bar?": "Adakah anda ingin paparkan bar keterangan?",
@@ -395,8 +395,8 @@
     "Secret edit link copied to clipboard!": "Pautan suntingan rahsia telah disalin ke papan keratan!",
     "Send me the link": "Hantarkan pautan kepada saya",
     "Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:": "Peta anda telah berjaya dicipta! Memandangkan anda tidak log masuk, ini pautan rahsia anda untuk menyunting peta, sila simpannya dengan selamat:",
-    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
-    "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Senarai ciri-ciri untuk digunakan bagi sifat isihan, dipisahkan dengan koma. Untuk mengundur isihan, letak tanda tolak (-) sebelumnya. Cth. kekuncisaya,-kekuncilain.",
+    "Issue reaching that URL (network problem or CORS protection)": "Ada isu ketika mencapai URL tersebut (masalah rangkaian atau perlindungan CORS)",
+    "Toggle edit mode (⇧+Click)": "Togol mod suntingan (⇧+Klik)",
+    "icon opacity": "kelegapan ikon"
 }

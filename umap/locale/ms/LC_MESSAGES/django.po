@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 20:00+0000\n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023\n"
 "Language-Team: Malay (http://app.transifex.com/openstreetmap/umap/language/ms/)\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr "Pautan suntingan rahsia ialah %s"
 
-#: forms.py:47 models.py:134
+#: forms.py:47
 msgid "Everyone can edit"
 msgstr "Sesiapa pun boleh sunting"
 
@@ -56,29 +56,29 @@ msgstr "Templat URL menggunakan format fail OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Kedudukan lapisan jubin dalam kotak suntingan"
 
-#: models.py:135
-msgid "Only editors can edit"
-msgstr "Hanya penyunting boleh sunting"
+#: models.py:134
+msgid "Everyone"
+msgstr ""
+
+#: models.py:135 models.py:141
+msgid "Editors only"
+msgstr ""
 
 #: models.py:136
-msgid "Only owner can edit"
-msgstr "Hanya pemilik boleh sunting"
+msgid "Owner only"
+msgstr ""
 
 #: models.py:139
-msgid "everyone (public)"
-msgstr "semua orang (umum)"
+msgid "Everyone (public)"
+msgstr ""
 
 #: models.py:140
-msgid "anyone with link"
-msgstr "sesiapa yang ada pautan"
-
-#: models.py:141
-msgid "editors only"
-msgstr "penyunting sahaja"
+msgid "Anyone with link"
+msgstr ""
 
 #: models.py:142
-msgid "blocked"
-msgstr "disekat"
+msgid "Blocked"
+msgstr ""
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -168,7 +168,7 @@ msgstr "%(current_user)s masih belum ada peta yang ditandai bintang."
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "uMap membolehkan anda mencipta peta dengan lapisan OpenStreetMap dalam masa singkat dan benamkan di laman anda."
 
 #: templates/registration/login.html:3
 msgid "Please log in with your account"
@@ -231,6 +231,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Dan ia <a href=\"%(repo_url)s\">bersumber terbuka</a>!"
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+#: templates/umap/user_dashboard.html:18
 msgid "Create a map"
 msgstr "Cipta peta"
 
@@ -265,13 +266,49 @@ msgstr "Dapatkan inspirasi, layari peta-peta"
 msgid "You are logged in. Continuing..."
 msgstr "Anda telah log masuk. Menyambung..."
 
-#: templates/umap/map_list.html:9 views.py:268
+#: templates/umap/map_list.html:9 views.py:281
 msgid "by"
 msgstr "oleh"
 
-#: templates/umap/map_list.html:17
+#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
 msgid "More"
 msgstr "Lebih lagi"
+
+#: templates/umap/map_table.html:6
+msgid "Map"
+msgstr "Peta"
+
+#: templates/umap/map_table.html:7
+msgid "Name"
+msgstr "Nama"
+
+#: templates/umap/map_table.html:8
+msgid "Who can see / edit"
+msgstr ""
+
+#: templates/umap/map_table.html:9
+msgid "Last save"
+msgstr "Simpan kali terakhir"
+
+#: templates/umap/map_table.html:10
+msgid "Owner"
+msgstr "Pemilik"
+
+#: templates/umap/map_table.html:11
+msgid "Actions"
+msgstr "Tindakan"
+
+#: templates/umap/map_table.html:28
+msgid "Share"
+msgstr "Kongsi"
+
+#: templates/umap/map_table.html:29
+msgid "Edit"
+msgstr "Sunting"
+
+#: templates/umap/map_table.html:30
+msgid "Download"
+msgstr "Muat turun"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -343,66 +380,78 @@ msgstr "Kata laluan anda telah ditukar."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
+msgstr[0] "%(count)s peta dijumpai:"
 
 #: templates/umap/search.html:18
 msgid "No map found."
-msgstr ""
+msgstr "Tiada peta dijumpai."
 
 #: templates/umap/search.html:21
 msgid "Latest created maps"
-msgstr ""
+msgstr "Peta dicipta baru-baru ini"
 
-#: templates/umap/search_bar.html:8
+#: templates/umap/search_bar.html:3
 msgid "Search maps"
 msgstr "Cari peta"
 
-#: templates/umap/search_bar.html:12
+#: templates/umap/search_bar.html:14
 msgid "Search"
-msgstr "Gelintar"
+msgstr "Cari"
 
-#: views.py:273
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
+msgid "My dashboard"
+msgstr "Papan pemuka saya"
+
+#: templates/umap/user_dashboard.html:7
+msgid "Search my maps"
+msgstr "Gelintar peta saya"
+
+#: templates/umap/user_dashboard.html:18
+msgid "You have no map yet."
+msgstr "Anda belum ada peta."
+
+#: views.py:286
 msgid "View the map"
 msgstr "Lihat peta"
 
-#: views.py:594
+#: views.py:607
 msgid "Map has been updated!"
 msgstr "Peta telah dikemas kini!"
 
-#: views.py:619
+#: views.py:632
 msgid "Map editors updated with success!"
 msgstr "Penyunting peta telah dikemas kini dengan jayanya!"
 
-#: views.py:657
+#: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Pautan suntingan uMap untuk peta anda: %(map_name)s"
 
-#: views.py:660
+#: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Ini pautan suntingan rahsia anda: %(link)s"
 
-#: views.py:666
+#: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mel telah dihantar ke %(email)s"
 
-#: views.py:677
+#: views.py:690
 msgid "Only its owner can delete the map."
 msgstr "Hanya pemiliknya sahaja mampu memadamkan peta."
 
-#: views.py:700
+#: views.py:713
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Peta anda telah diklon! Jika anda ingin menyunting peta ini dari komputer lain, sila gunakan pautan ini: %(anonymous_url)s"
 
-#: views.py:705
+#: views.py:718
 msgid "Congratulations, your map has been cloned!"
 msgstr "Tahniah, peta anda telah berjaya diklon!"
 
-#: views.py:871
+#: views.py:884
 msgid "Layer successfully deleted."
 msgstr "Lapisan telah berjaya dipadamkan."

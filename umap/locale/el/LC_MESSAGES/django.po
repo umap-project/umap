@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 20:00+0000\n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023\n"
 "Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
@@ -28,9 +28,9 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr "Ο μυστικός σύνδεσμος επεξεργασίας είναι %s"
 
-#: forms.py:47 models.py:134
+#: forms.py:47
 msgid "Everyone can edit"
-msgstr "Επεξεργασία από όλους"
+msgstr "Όλοι"
 
 #: forms.py:48
 msgid "Only editable with secret edit link"
@@ -60,29 +60,29 @@ msgstr "Πρότυπο URL που χρησιμοποιεί μορφοποίησ�
 msgid "Order of the tilelayers in the edit box"
 msgstr "Σειρά των υπόβαθρων στο πλαίσιο επεξεργασίας"
 
-#: models.py:135
-msgid "Only editors can edit"
-msgstr "Μόνο οι συντάκτες μπορούν να κάνουν επεξεργασία"
+#: models.py:134
+msgid "Everyone"
+msgstr ""
+
+#: models.py:135 models.py:141
+msgid "Editors only"
+msgstr ""
 
 #: models.py:136
-msgid "Only owner can edit"
-msgstr "Μόνο ο ιδιοκτήτης μπορεί να κάνει επεξεργασία"
+msgid "Owner only"
+msgstr ""
 
 #: models.py:139
-msgid "everyone (public)"
-msgstr "όλοι (κοινό)"
+msgid "Everyone (public)"
+msgstr ""
 
 #: models.py:140
-msgid "anyone with link"
-msgstr "οποιοσδήποτε έχει τον σύνδεσμο"
-
-#: models.py:141
-msgid "editors only"
-msgstr "μόνο συντάκτες"
+msgid "Anyone with link"
+msgstr ""
 
 #: models.py:142
-msgid "blocked"
-msgstr "αποκλεισμένο"
+msgid "Blocked"
+msgstr ""
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -172,7 +172,7 @@ msgstr "Ο %(current_user)s δεν έχει ακόμη χάρτες με αστ�
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "Το uMap σου επιτρέπει να δημιουργήσεις στο λεπτό χάρτες με στρώσεις OpenStreetMap και να τους ενσωματώσεις στον ιστότοπό σου."
 
 #: templates/registration/login.html:3
 msgid "Please log in with your account"
@@ -199,7 +199,7 @@ msgstr "Παρακαλώ επιλέξτε έναν πάροχο"
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "Το uMap σου επιτρέπει να δημιουργήσεις στο λεπτό χάρτες με στρώσεις στο <a href=\"%(osm_url)s\" />OpenStreetMap</a> και να τους ενσωματώσεις στον ιστότοπο σου."
+msgstr "Το uMap σου επιτρέπει να δημιουργήσεις στο λεπτό χάρτες με στρώσεις στο <a href=\"%(osm_url)s\" />OpenStreetMap</a> και να τους ενσωματώσεις στον ιστότοπό σου."
 
 #: templates/umap/about_summary.html:21
 msgid "Choose the layers of your map"
@@ -235,6 +235,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Και είναι <a href=\"%(repo_url)s\">ανοικτού κώδικα</a>!"
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+#: templates/umap/user_dashboard.html:18
 msgid "Create a map"
 msgstr "Δημιουργία χάρτη"
 
@@ -269,13 +270,49 @@ msgstr "Περιηγήσου και αναζήτησε την έμπνευση �
 msgid "You are logged in. Continuing..."
 msgstr "Είστε συνδεδεμένοι. Συνέχεια..."
 
-#: templates/umap/map_list.html:9 views.py:268
+#: templates/umap/map_list.html:9 views.py:281
 msgid "by"
 msgstr "από"
 
-#: templates/umap/map_list.html:17
+#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
 msgid "More"
 msgstr "Περισσότερα"
+
+#: templates/umap/map_table.html:6
+msgid "Map"
+msgstr ""
+
+#: templates/umap/map_table.html:7
+msgid "Name"
+msgstr ""
+
+#: templates/umap/map_table.html:8
+msgid "Who can see / edit"
+msgstr ""
+
+#: templates/umap/map_table.html:9
+msgid "Last save"
+msgstr ""
+
+#: templates/umap/map_table.html:10
+msgid "Owner"
+msgstr ""
+
+#: templates/umap/map_table.html:11
+msgid "Actions"
+msgstr ""
+
+#: templates/umap/map_table.html:28
+msgid "Share"
+msgstr ""
+
+#: templates/umap/map_table.html:29
+msgid "Edit"
+msgstr ""
+
+#: templates/umap/map_table.html:30
+msgid "Download"
+msgstr ""
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -347,67 +384,79 @@ msgstr "Ο κωδικός πρόσβασής σας άλλαξε."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s χάρτης βρέθηκε:"
+msgstr[1] "%(count)s χάρτες βρέθηκαν:"
 
 #: templates/umap/search.html:18
 msgid "No map found."
-msgstr ""
+msgstr "Δεν βρέθηκε κανένας χάρτης."
 
 #: templates/umap/search.html:21
 msgid "Latest created maps"
-msgstr ""
+msgstr "Χάρτες που δημιουργήθηκαν τελευταίοι"
 
-#: templates/umap/search_bar.html:8
+#: templates/umap/search_bar.html:3
 msgid "Search maps"
 msgstr "Αναζήτηση χαρτών"
 
-#: templates/umap/search_bar.html:12
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: views.py:273
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
+msgid "My dashboard"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:7
+msgid "Search my maps"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:18
+msgid "You have no map yet."
+msgstr ""
+
+#: views.py:286
 msgid "View the map"
 msgstr "Προβολή του χάρτη"
 
-#: views.py:594
+#: views.py:607
 msgid "Map has been updated!"
 msgstr "Ο χάρτης ενημερώθηκε!"
 
-#: views.py:619
+#: views.py:632
 msgid "Map editors updated with success!"
 msgstr "Η ενημέρωση των συντακτών χάρτη ήταν επιτυχής!"
 
-#: views.py:657
+#: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Ο uMap σύνδεσμος επεξεργασίας του χάρτη σας: %(map_name)s"
 
-#: views.py:660
+#: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Εδώ είναι ο μυστικός σύνδεσμος επεξεργασίας: %(link)s"
 
-#: views.py:666
+#: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Μήνυμα email στάλθηκε στο %(email)s"
 
-#: views.py:677
+#: views.py:690
 msgid "Only its owner can delete the map."
 msgstr "Μονό ο ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη."
 
-#: views.py:700
+#: views.py:713
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Ο χάρτης κλωνοποιήθηκε! Αν θέλετε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
-#: views.py:705
+#: views.py:718
 msgid "Congratulations, your map has been cloned!"
 msgstr "Συγχαρητήρια ο χάρτης σας κλωνοποιήθηκε!"
 
-#: views.py:871
+#: views.py:884
 msgid "Layer successfully deleted."
 msgstr "Το επίπεδο διαγράφηκε με επιτυχία."

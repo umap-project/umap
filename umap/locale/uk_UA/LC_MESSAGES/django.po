@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 20:00+0000\n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Сергій Дубик <dubyk@ukr.net>, 2014,2017\n"
 "Language-Team: Ukrainian (Ukraine) (http://app.transifex.com/openstreetmap/umap/language/uk_UA/)\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr "Секретне посилання для редагування: %s"
 
-#: forms.py:47 models.py:134
+#: forms.py:47
 msgid "Everyone can edit"
 msgstr "Кожен може редагувати"
 
@@ -57,29 +57,29 @@ msgstr "шаблон посилання використовує формат ш
 msgid "Order of the tilelayers in the edit box"
 msgstr "Розташуйте шари мап у вікні редагування"
 
-#: models.py:135
-msgid "Only editors can edit"
-msgstr "Лише редактори можуть редагувати"
+#: models.py:134
+msgid "Everyone"
+msgstr ""
+
+#: models.py:135 models.py:141
+msgid "Editors only"
+msgstr ""
 
 #: models.py:136
-msgid "Only owner can edit"
-msgstr "Лише власник може редагувати"
+msgid "Owner only"
+msgstr ""
 
 #: models.py:139
-msgid "everyone (public)"
-msgstr "усі (відкритий доступ)"
+msgid "Everyone (public)"
+msgstr ""
 
 #: models.py:140
-msgid "anyone with link"
-msgstr "усі, у кого є посилання"
-
-#: models.py:141
-msgid "editors only"
-msgstr "лише редактори"
+msgid "Anyone with link"
+msgstr ""
 
 #: models.py:142
-msgid "blocked"
-msgstr "заблоковано"
+msgid "Blocked"
+msgstr ""
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -232,6 +232,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "І це <a href=\"%(repo_url)s\">відкрите ПЗ</a>!"
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+#: templates/umap/user_dashboard.html:18
 msgid "Create a map"
 msgstr "Створити мапу"
 
@@ -266,13 +267,49 @@ msgstr "Дивіться чужі мапи та надихайтеся"
 msgid "You are logged in. Continuing..."
 msgstr "Ви увійшли.  Продовжимо …"
 
-#: templates/umap/map_list.html:9 views.py:268
+#: templates/umap/map_list.html:9 views.py:281
 msgid "by"
 msgstr " від "
 
-#: templates/umap/map_list.html:17
+#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
 msgid "More"
 msgstr "Ще"
+
+#: templates/umap/map_table.html:6
+msgid "Map"
+msgstr ""
+
+#: templates/umap/map_table.html:7
+msgid "Name"
+msgstr ""
+
+#: templates/umap/map_table.html:8
+msgid "Who can see / edit"
+msgstr ""
+
+#: templates/umap/map_table.html:9
+msgid "Last save"
+msgstr ""
+
+#: templates/umap/map_table.html:10
+msgid "Owner"
+msgstr ""
+
+#: templates/umap/map_table.html:11
+msgid "Actions"
+msgstr ""
+
+#: templates/umap/map_table.html:28
+msgid "Share"
+msgstr ""
+
+#: templates/umap/map_table.html:29
+msgid "Edit"
+msgstr ""
+
+#: templates/umap/map_table.html:30
+msgid "Download"
+msgstr ""
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -357,56 +394,68 @@ msgstr ""
 msgid "Latest created maps"
 msgstr ""
 
-#: templates/umap/search_bar.html:8
+#: templates/umap/search_bar.html:3
 msgid "Search maps"
 msgstr "Пошук за мапами"
 
-#: templates/umap/search_bar.html:12
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr "Шукати"
 
-#: views.py:273
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
+msgid "My dashboard"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:7
+msgid "Search my maps"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:18
+msgid "You have no map yet."
+msgstr ""
+
+#: views.py:286
 msgid "View the map"
 msgstr "Переглянути мапу"
 
-#: views.py:594
+#: views.py:607
 msgid "Map has been updated!"
 msgstr "Мапа оновлена!"
 
-#: views.py:619
+#: views.py:632
 msgid "Map editors updated with success!"
 msgstr "Редактори мапи успішно оновлені!"
 
-#: views.py:657
+#: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:660
+#: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:666
+#: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:677
+#: views.py:690
 msgid "Only its owner can delete the map."
 msgstr "Лише власник мапи може вилучити її."
 
-#: views.py:700
+#: views.py:713
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Карта була скопійована.  Якщо Ви хочете редагувати її на іншому комп’ютері, використовуйте це посилання: %(anonymous_url)s"
 
-#: views.py:705
+#: views.py:718
 msgid "Congratulations, your map has been cloned!"
 msgstr "Вітаємо, Ваша мапа скопійована!"
 
-#: views.py:871
+#: views.py:884
 msgid "Layer successfully deleted."
 msgstr "Шар вилучено."

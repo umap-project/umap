@@ -132,8 +132,8 @@ class Map(NamedModel):
     BLOCKED = 9
     EDIT_STATUS = (
         (ANONYMOUS, _("Everyone")),
-        (EDITORS, _("Only editors")),
-        (OWNER, _("Only owner")),
+        (EDITORS, _("Editors only")),
+        (OWNER, _("Owner only")),
     )
     SHARE_STATUS = (
         (PUBLIC, _("Everyone (public)")),

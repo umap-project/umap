@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 20:00+0000\n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Secret edit link is %s"
 msgstr "不公開的私密編輯連結 %s"
 
-#: forms.py:47 models.py:134
+#: forms.py:47
 msgid "Everyone can edit"
 msgstr "所有人皆可編輯"
 
@@ -62,29 +62,29 @@ msgstr "URL 樣板，使用 OSM 地圖磚格式"
 msgid "Order of the tilelayers in the edit box"
 msgstr "編輯方塊中地圖磚的圖層順序"
 
-#: models.py:135
-msgid "Only editors can edit"
-msgstr "僅編輯群可編輯"
+#: models.py:134
+msgid "Everyone"
+msgstr ""
+
+#: models.py:135 models.py:141
+msgid "Editors only"
+msgstr ""
 
 #: models.py:136
-msgid "Only owner can edit"
-msgstr "僅擁有者可編輯"
+msgid "Owner only"
+msgstr ""
 
 #: models.py:139
-msgid "everyone (public)"
-msgstr "所有人（公開）"
+msgid "Everyone (public)"
+msgstr ""
 
 #: models.py:140
-msgid "anyone with link"
-msgstr "任何有連結的人"
-
-#: models.py:141
-msgid "editors only"
-msgstr "只有編輯者允許"
+msgid "Anyone with link"
+msgstr ""
 
 #: models.py:142
-msgid "blocked"
-msgstr "已經封鎖了"
+msgid "Blocked"
+msgstr ""
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -237,6 +237,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "而且是 <a href=\"%(repo_url)s\">開放原始碼</a> 的！"
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+#: templates/umap/user_dashboard.html:18
 msgid "Create a map"
 msgstr "建立地圖"
 
@@ -271,13 +272,49 @@ msgstr "找點子，瀏覽其他地圖"
 msgid "You are logged in. Continuing..."
 msgstr "您已登入，繼續中..."
 
-#: templates/umap/map_list.html:9 views.py:268
+#: templates/umap/map_list.html:9 views.py:281
 msgid "by"
 msgstr "由"
 
-#: templates/umap/map_list.html:17
+#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
 msgid "More"
 msgstr "更多"
+
+#: templates/umap/map_table.html:6
+msgid "Map"
+msgstr ""
+
+#: templates/umap/map_table.html:7
+msgid "Name"
+msgstr ""
+
+#: templates/umap/map_table.html:8
+msgid "Who can see / edit"
+msgstr ""
+
+#: templates/umap/map_table.html:9
+msgid "Last save"
+msgstr ""
+
+#: templates/umap/map_table.html:10
+msgid "Owner"
+msgstr ""
+
+#: templates/umap/map_table.html:11
+msgid "Actions"
+msgstr ""
+
+#: templates/umap/map_table.html:28
+msgid "Share"
+msgstr ""
+
+#: templates/umap/map_table.html:29
+msgid "Edit"
+msgstr ""
+
+#: templates/umap/map_table.html:30
+msgid "Download"
+msgstr ""
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -359,56 +396,68 @@ msgstr "找不到地圖。"
 msgid "Latest created maps"
 msgstr "最新創建地圖"
 
-#: templates/umap/search_bar.html:8
+#: templates/umap/search_bar.html:3
 msgid "Search maps"
 msgstr "搜尋地圖"
 
-#: templates/umap/search_bar.html:12
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr "搜尋"
 
-#: views.py:273
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
+msgid "My dashboard"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:7
+msgid "Search my maps"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:18
+msgid "You have no map yet."
+msgstr ""
+
+#: views.py:286
 msgid "View the map"
 msgstr "檢視地圖"
 
-#: views.py:594
+#: views.py:607
 msgid "Map has been updated!"
 msgstr "地圖已經更新"
 
-#: views.py:619
+#: views.py:632
 msgid "Map editors updated with success!"
 msgstr "地圖編輯者更新完成"
 
-#: views.py:657
+#: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "你的地圖 uMap 編輯連結：%(map_name)s"
 
-#: views.py:660
+#: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "這是你的祕密編輯連結：%(link)s"
 
-#: views.py:666
+#: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "電子郵件寄至 %(email)s"
 
-#: views.py:677
+#: views.py:690
 msgid "Only its owner can delete the map."
 msgstr "只有擁有者可以刪除此地圖"
 
-#: views.py:700
+#: views.py:713
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "您的地圖已複製完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
 
-#: views.py:705
+#: views.py:718
 msgid "Congratulations, your map has been cloned!"
 msgstr "恭喜，您的地圖已被複製！"
 
-#: views.py:871
+#: views.py:884
 msgid "Layer successfully deleted."
 msgstr "圖層已刪除"
