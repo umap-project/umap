@@ -11,7 +11,7 @@ L.U.UI = L.Evented.extend({
     this.container = L.DomUtil.create('div', 'leaflet-ui-container', this.parent)
     L.DomEvent.disableClickPropagation(this.container)
     L.DomEvent.on(this.container, 'contextmenu', L.DomEvent.stopPropagation) // Do not activate our custom context menu.
-    L.DomEvent.on(this.container, 'mousewheel', L.DomEvent.stopPropagation)
+    L.DomEvent.on(this.container, 'wheel', L.DomEvent.stopPropagation)
     L.DomEvent.on(this.container, 'MozMousePixelScroll', L.DomEvent.stopPropagation)
     this._panel = L.DomUtil.create('div', '', this.container)
     this._panel.id = 'umap-ui-container'
