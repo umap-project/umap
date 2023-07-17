@@ -1,0 +1,457 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Mikel Larreategi <mlarreategi@codesyntax.com>, 2023
+msgid ""
+msgstr ""
+"Project-Id-Version: uMap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-17 13:14+0000\n"
+"PO-Revision-Date: 2013-11-22 14:00+0000\n"
+"Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>, 2023\n"
+"Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: eu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:43
+#, python-format
+msgid "Secret edit link is %s"
+msgstr "Editatzeko esteka sekretua hauxe da %s"
+
+#: forms.py:47
+msgid "Everyone can edit"
+msgstr "Edonork editatu dezake"
+
+#: forms.py:48
+msgid "Only editable with secret edit link"
+msgstr "Editatzeko esteka sekretuarekin bakarrik editatu daiteke"
+
+#: middleware.py:14
+msgid "Site is readonly for maintenance"
+msgstr "Webgunea irakurtzeko moduan dago mantentze-lanak direla-eta"
+
+#: models.py:40
+msgid "name"
+msgstr "izena"
+
+#: models.py:71
+msgid "details"
+msgstr "xehetasunak"
+
+#: models.py:72
+msgid "Link to a page where the licence is detailed."
+msgstr "Esteka egin lizentzia zehazten den orrialde batera."
+
+#: models.py:82
+msgid "URL template using OSM tile format"
+msgstr "URLaren txantiloia OSMren laukitxoen formatua erabiliz"
+
+#: models.py:88
+msgid "Order of the tilelayers in the edit box"
+msgstr "Edizio kutxan laukitxo-geruzek izango duten ordena"
+
+#: models.py:134
+msgid "Everyone"
+msgstr ""
+
+#: models.py:135 models.py:141
+msgid "Editors only"
+msgstr ""
+
+#: models.py:136
+msgid "Owner only"
+msgstr ""
+
+#: models.py:139
+msgid "Everyone (public)"
+msgstr ""
+
+#: models.py:140
+msgid "Anyone with link"
+msgstr ""
+
+#: models.py:142
+msgid "Blocked"
+msgstr ""
+
+#: models.py:145 models.py:295
+msgid "description"
+msgstr "deskribapena"
+
+#: models.py:146
+msgid "center"
+msgstr "erdiko puntua"
+
+#: models.py:147
+msgid "zoom"
+msgstr "zooma"
+
+#: models.py:149
+msgid "locate"
+msgstr "kokatu"
+
+#: models.py:149
+msgid "Locate user on load?"
+msgstr "Kokatu erabiltzailea mapa kargatzen denean?"
+
+#: models.py:153
+msgid "Choose the map licence."
+msgstr "Aukeratu maparen lizentzia."
+
+#: models.py:154
+msgid "licence"
+msgstr "lizentzia"
+
+#: models.py:164
+msgid "owner"
+msgstr "jabea"
+
+#: models.py:168
+msgid "editors"
+msgstr "editoreak"
+
+#: models.py:171
+msgid "edit status"
+msgstr "editatu egoera"
+
+#: models.py:174
+msgid "share status"
+msgstr "partekatu egoera"
+
+#: models.py:177
+msgid "settings"
+msgstr "ezarpenak"
+
+#: models.py:250
+msgid "Clone of"
+msgstr "Beste honen klona"
+
+#: models.py:299
+msgid "display on load"
+msgstr "erakutsi kargatzean"
+
+#: models.py:300
+msgid "Display this layer on load."
+msgstr "Erakutsi geruza hau kargatzean"
+
+#: templates/404.html:6
+msgid "Take me to the home page"
+msgstr "Eraman nazazu hasiera orrialdera"
+
+#: templates/auth/user_detail.html:5
+#, python-format
+msgid "Browse %(current_user)s's maps"
+msgstr "Arakatu %(current_user)s erabiltzailearen mapak"
+
+#: templates/auth/user_detail.html:12
+#, python-format
+msgid "%(current_user)s has no maps."
+msgstr "%(current_user)s erabiltzaileak ez du maparik."
+
+#: templates/auth/user_stars.html:5
+#, python-format
+msgid "Browse %(current_user)s's starred maps"
+msgstr ""
+
+#: templates/auth/user_stars.html:12
+#, python-format
+msgid "%(current_user)s has no starred maps yet."
+msgstr ""
+
+#: templates/base.html:12
+msgid ""
+"uMap lets you create maps with OpenStreetMap layers in a minute and embed "
+"them in your site."
+msgstr ""
+
+#: templates/registration/login.html:3
+msgid "Please log in with your account"
+msgstr "Sartu zure kontua erabiliz"
+
+#: templates/registration/login.html:15
+msgid "Username"
+msgstr "Erabiltzailea"
+
+#: templates/registration/login.html:18
+msgid "Password"
+msgstr "Pasahitza"
+
+#: templates/registration/login.html:19
+msgid "Login"
+msgstr "Sartu"
+
+#: templates/registration/login.html:24
+msgid "Please choose a provider"
+msgstr "Aukeratu hornitzaile bat"
+
+#: templates/umap/about_summary.html:11
+#, python-format
+msgid ""
+"uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
+"layers in a minute and embed them in your site."
+msgstr "uMapek <a href=\"%(osm_url)s\" />OpenStreetMap</a> geruzak darabiltzaten mapak sortzen uzten dizu ondoren nahi duzun webgunean txertatzeko."
+
+#: templates/umap/about_summary.html:21
+msgid "Choose the layers of your map"
+msgstr "Aukeratu zure maparen geruzak"
+
+#: templates/umap/about_summary.html:22
+msgid "Add POIs: markers, lines, polygons..."
+msgstr "Gehitu intereseko puntuak: markak, lerroak, poligonoak..."
+
+#: templates/umap/about_summary.html:23
+msgid "Manage POIs colours and icons"
+msgstr "Kudeatu intereseko puntuen kolore eta ikonoak"
+
+#: templates/umap/about_summary.html:24
+msgid "Manage map options: display a minimap, locate user on load…"
+msgstr "Kudeatu maparen aukerak: mapa txikia erakutsi, erabiltzailearen kokapena erabili..."
+
+#: templates/umap/about_summary.html:25
+msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
+msgstr "Inportatu egituratutako datuak (geojson, gpx, kml, osm, ...)"
+
+#: templates/umap/about_summary.html:26
+msgid "Choose the license for your data"
+msgstr "Aukeratu zure datuen lizentzia"
+
+#: templates/umap/about_summary.html:27
+msgid "Embed and share your map"
+msgstr "Txertatu eta partekatu zure mapa"
+
+#: templates/umap/about_summary.html:37
+#, python-format
+msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Eta <a href=\"%(repo_url)s\">software librea</a> da!"
+
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
+#: templates/umap/user_dashboard.html:18
+msgid "Create a map"
+msgstr "Sortu mapa bat"
+
+#: templates/umap/about_summary.html:51
+msgid "Play with the demo"
+msgstr "Jolastu probatako ingurunean"
+
+#: templates/umap/content.html:23
+msgid ""
+"This instance of uMap is currently in read only mode, no creation/edit is "
+"allowed."
+msgstr ""
+
+#: templates/umap/content.html:31
+#, python-format
+msgid ""
+"This is a demo instance, used for tests and pre-rolling releases. If you "
+"need a stable instance, please use <a "
+"href=\"%(stable_url)s\">%(stable_url)s</a>. You can also host your own "
+"instance, it's <a href=\"%(repo_url)s\">open source</a>!"
+msgstr "Hau probatako ingurunea da, testak egin eta argitaratu aurreko bertsioak probatzeko erabiltzen da. Ingurune egonkorra behar baduzu, erabili mesedez <a href=\"%(stable_url)s\">%(stable_url)s</a>. Zure instantzia propioa ere erabili dezakezu, <a href=\"%(repo_url)s\">software librea</a> da!"
+
+#: templates/umap/home.html:8
+msgid "Map of the uMaps"
+msgstr "uMapen mapa"
+
+#: templates/umap/home.html:13
+msgid "Get inspired, browse maps"
+msgstr "Inspira zaitez dauden mapak arakatzen"
+
+#: templates/umap/login_popup_end.html:2
+msgid "You are logged in. Continuing..."
+msgstr "Sartu egin zara. Jarraitu..."
+
+#: templates/umap/map_list.html:9 views.py:281
+msgid "by"
+msgstr "nork eginda"
+
+#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
+msgid "More"
+msgstr "Gehiago"
+
+#: templates/umap/map_table.html:6
+msgid "Map"
+msgstr ""
+
+#: templates/umap/map_table.html:7
+msgid "Name"
+msgstr ""
+
+#: templates/umap/map_table.html:8
+msgid "Who can see / edit"
+msgstr ""
+
+#: templates/umap/map_table.html:9
+msgid "Last save"
+msgstr ""
+
+#: templates/umap/map_table.html:10
+msgid "Owner"
+msgstr ""
+
+#: templates/umap/map_table.html:11
+msgid "Actions"
+msgstr ""
+
+#: templates/umap/map_table.html:28
+msgid "Share"
+msgstr ""
+
+#: templates/umap/map_table.html:29
+msgid "Edit"
+msgstr ""
+
+#: templates/umap/map_table.html:30
+msgid "Download"
+msgstr ""
+
+#: templates/umap/navigation.html:12
+msgid "My maps"
+msgstr "Nire mapak"
+
+#: templates/umap/navigation.html:15
+msgid "Starred maps"
+msgstr ""
+
+#: templates/umap/navigation.html:19
+msgid "Log in"
+msgstr "Sartu"
+
+#: templates/umap/navigation.html:19
+msgid "Sign in"
+msgstr "Izena eman"
+
+#: templates/umap/navigation.html:23
+msgid "About"
+msgstr "Honi buruz"
+
+#: templates/umap/navigation.html:26
+msgid "Help"
+msgstr "Laguntza"
+
+#: templates/umap/navigation.html:31
+msgid "Change password"
+msgstr "Aldatu pasahitza"
+
+#: templates/umap/navigation.html:35
+msgid "Log out"
+msgstr "Irten"
+
+#: templates/umap/password_change.html:4
+msgid "Password change"
+msgstr "Pasahiz aldaketa"
+
+#: templates/umap/password_change.html:6
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new"
+" password twice so we can verify you typed it in correctly."
+msgstr "Idatzi zure pasahitz zaharra, eta ondoren zure pasahitz berria birritan, horrela ondo sartu duzula egiaztatuko dugu."
+
+#: templates/umap/password_change.html:13
+msgid "Old password"
+msgstr "Pasahitz zaharra"
+
+#: templates/umap/password_change.html:18
+msgid "New password"
+msgstr "Pasahitz berria"
+
+#: templates/umap/password_change.html:22
+msgid "New password confirmation"
+msgstr "Pasahitz berriaren egiaztapena"
+
+#: templates/umap/password_change.html:23
+msgid "Change my password"
+msgstr "Aldatu nire pasahitza"
+
+#: templates/umap/password_change_done.html:4
+msgid "Password change successful"
+msgstr "Pasahitza ondo aldatu da"
+
+#: templates/umap/password_change_done.html:5
+msgid "Your password was changed."
+msgstr "Zure pasahitza aldatu egin da"
+
+#: templates/umap/search.html:10
+#, python-format
+msgid "%(count)s map found:"
+msgid_plural "%(count)s maps found:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/umap/search.html:18
+msgid "No map found."
+msgstr ""
+
+#: templates/umap/search.html:21
+msgid "Latest created maps"
+msgstr ""
+
+#: templates/umap/search_bar.html:3
+msgid "Search maps"
+msgstr "Bilatu mapak"
+
+#: templates/umap/search_bar.html:14
+msgid "Search"
+msgstr "Bilatu"
+
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
+msgid "My dashboard"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:7
+msgid "Search my maps"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:18
+msgid "You have no map yet."
+msgstr ""
+
+#: views.py:286
+msgid "View the map"
+msgstr "Mapa ikusi"
+
+#: views.py:607
+msgid "Map has been updated!"
+msgstr "Mapa eguneratu egin da!"
+
+#: views.py:632
+msgid "Map editors updated with success!"
+msgstr "Maparen editoreak ondo eguneratu dira!"
+
+#: views.py:670
+#, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:673
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:679
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr ""
+
+#: views.py:690
+msgid "Only its owner can delete the map."
+msgstr "Jabeak bakarrik ezabatu dezake mapa."
+
+#: views.py:713
+#, python-format
+msgid ""
+"Your map has been cloned! If you want to edit this map from another "
+"computer, please use this link: %(anonymous_url)s"
+msgstr "Zure mapa klonatu egin da! Mapa hau beste nabigatzaile batetik editatzeko erabili esteka hau: %(anonymous_url)s"
+
+#: views.py:718
+msgid "Congratulations, your map has been cloned!"
+msgstr "Zorionak, zure mapa ondo klonatu da!"
+
+#: views.py:884
+msgid "Layer successfully deleted."
+msgstr "Geruza ondo ezabatu da."
