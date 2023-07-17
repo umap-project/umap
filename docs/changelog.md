@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.1 - 2023-07-17
+
+- fix tooltip position, after Leaflet upgrade (cf #1207)
+- replace `mousewheel` event by `wheel`, to follow Leaflet change (cf #1211)
+- fallback user to dashboard after OAuth process (cf #1208)
+- add share status in user dashboard (cf #1209)
+
 ## 1.4.0 - 2023-07-15
 - add basic version of a "My Dashboard" page (cf #1196)
 - better fit iframe in popups (cf #1203)
