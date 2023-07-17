@@ -58,27 +58,27 @@ msgstr "Kedudukan lapisan jubin dalam kotak suntingan"
 
 #: models.py:134
 msgid "Everyone"
-msgstr ""
+msgstr "Semua orang"
 
 #: models.py:135 models.py:141
 msgid "Editors only"
-msgstr ""
+msgstr "Penyunting sahaja"
 
 #: models.py:136
 msgid "Owner only"
-msgstr ""
+msgstr "Pemilik sahaja"
 
 #: models.py:139
 msgid "Everyone (public)"
-msgstr ""
+msgstr "Semua orang (umum)"
 
 #: models.py:140
 msgid "Anyone with link"
-msgstr ""
+msgstr "Sesiapa yang ada pautan"
 
 #: models.py:142
 msgid "Blocked"
-msgstr ""
+msgstr "Disekat"
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -284,7 +284,7 @@ msgstr "Nama"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see / edit"
-msgstr ""
+msgstr "Siapa boleh lihat / sunting"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
