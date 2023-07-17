@@ -580,6 +580,20 @@ L.U.Marker = L.Marker.extend({
     this.resetTooltip()
   },
 
+  _getTooltipAnchor: function () {
+    const anchor = this.options.icon.options.tooltipAnchor,
+      direction = this.getOption('labelDirection')
+    if (direction === 'left') {
+      anchor.x *= -1
+    } else if (direction === 'bottom') {
+      anchor.x = 0
+      anchor.y = 0
+    } else if (direction === 'top') {
+      anchor.x = 0
+    }
+    return anchor
+  },
+
   disconnectFromDataLayer: function (datalayer) {
     this.options.icon.datalayer = null
     L.U.FeatureMixin.disconnectFromDataLayer.call(this, datalayer)
