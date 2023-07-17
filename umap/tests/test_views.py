@@ -260,4 +260,4 @@ def test_user_dashboard_display_user_maps(client, map):
     assert f"{map.get_absolute_url()}?share" in body
     assert f"{map.get_absolute_url()}?download" in body
     assert "Everyone (public)" in body
-    assert "Only owner" in body
+    assert "Owner only" in body
