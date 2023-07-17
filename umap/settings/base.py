@@ -89,7 +89,7 @@ LANGUAGES = (
     ('pt-pt', 'Portuguese (Portugal)'),
     ('ro', 'Romanian'),
     ('ru', 'Russian'),
-    ('si-lk', 'Sinhala (Sri Lanka)'),
+    ('si', 'Sinhala'),
     ('sk-sk', 'Slovak'),
     ('sl', 'Slovenian'),
     ('sr', 'Serbian'),
