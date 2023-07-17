@@ -131,15 +131,15 @@ class Map(NamedModel):
     PRIVATE = 3
     BLOCKED = 9
     EDIT_STATUS = (
-        (ANONYMOUS, _("Everyone can edit")),
-        (EDITORS, _("Only editors can edit")),
-        (OWNER, _("Only owner can edit")),
+        (ANONYMOUS, _("Everyone")),
+        (EDITORS, _("Only editors")),
+        (OWNER, _("Only owner")),
     )
     SHARE_STATUS = (
-        (PUBLIC, _("everyone (public)")),
-        (OPEN, _("anyone with link")),
-        (PRIVATE, _("editors only")),
-        (BLOCKED, _("blocked")),
+        (PUBLIC, _("Everyone (public)")),
+        (OPEN, _("Anyone with link")),
+        (PRIVATE, _("Editors only")),
+        (BLOCKED, _("Blocked")),
     )
     slug = models.SlugField(db_index=True)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
