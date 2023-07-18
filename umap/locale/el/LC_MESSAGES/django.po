@@ -62,27 +62,27 @@ msgstr "Σειρά των υπόβαθρων στο πλαίσιο επεξερ�
 
 #: models.py:134
 msgid "Everyone"
-msgstr ""
+msgstr "Οποιοσδήποτε"
 
 #: models.py:135 models.py:141
 msgid "Editors only"
-msgstr ""
+msgstr "Μόνο οι συντάκτες"
 
 #: models.py:136
 msgid "Owner only"
-msgstr ""
+msgstr "Μόνο ο κάτοχος"
 
 #: models.py:139
 msgid "Everyone (public)"
-msgstr ""
+msgstr "Όλοι (δημόσιος)"
 
 #: models.py:140
 msgid "Anyone with link"
-msgstr ""
+msgstr "Οποιοδήποτε με τον σύνδεσμο"
 
 #: models.py:142
 msgid "Blocked"
-msgstr ""
+msgstr "Αποκλεισμένος"
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -280,39 +280,39 @@ msgstr "Περισσότερα"
 
 #: templates/umap/map_table.html:6
 msgid "Map"
-msgstr ""
+msgstr "Χάρτης"
 
 #: templates/umap/map_table.html:7
 msgid "Name"
-msgstr ""
+msgstr "Όνομα"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see / edit"
-msgstr ""
+msgstr "Ποιος μπορεί να τον δει / επεξεργαστεί"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
-msgstr ""
+msgstr "Τελευταία αποθήκευση"
 
 #: templates/umap/map_table.html:10
 msgid "Owner"
-msgstr ""
+msgstr "Κάτοχος"
 
 #: templates/umap/map_table.html:11
 msgid "Actions"
-msgstr ""
+msgstr "Ενέργειες"
 
 #: templates/umap/map_table.html:28
 msgid "Share"
-msgstr ""
+msgstr "Διαμοιρασμός"
 
 #: templates/umap/map_table.html:29
 msgid "Edit"
-msgstr ""
+msgstr "Επεξεργασία"
 
 #: templates/umap/map_table.html:30
 msgid "Download"
-msgstr ""
+msgstr "Λήψη"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -405,15 +405,15 @@ msgstr "Αναζήτηση"
 
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
 msgid "My dashboard"
-msgstr ""
+msgstr "ΠΙΝΑΚΑΣ ΕΛΕΓΧΟΥ"
 
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
-msgstr ""
+msgstr "Αναζήτηση στους χάρτες μου"
 
 #: templates/umap/user_dashboard.html:18
 msgid "You have no map yet."
-msgstr ""
+msgstr "Δεν έχετε ακόμη χάρτη."
 
 #: views.py:286
 msgid "View the map"
