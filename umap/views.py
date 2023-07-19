@@ -785,9 +785,26 @@ class GZipMixin(object):
         return self.object.geojson.path
 
     @property
+    def gzip_path(self):
+        return Path(f"{self.path}{self.EXT}")
+
+    @property
     def last_modified(self):
-        stat = os.stat(self.path)
+        # Prior to 1.3.0 we did not set gzip mtime as geojson mtime,
+        # but we switched from If-Match header to IF-Unmodified-Since
+        # and when users accepts gzip their last modified value is the gzip
+        # (when umap is served by nginx and X-Accel-Redirect)
+        # one, so we need to compare with that value in that case.
+        # cf https://github.com/umap-project/umap/issues/1212
+        path = self.gzip_path if self.accepts_gzip else self.path
+        stat = os.stat(path)
         return http_date(stat.st_mtime)
+
+    @property
+    def accepts_gzip(self):
+        return settings.UMAP_GZIP and re_accepts_gzip.search(
+            self.request.META.get("HTTP_ACCEPT_ENCODING", "")
+        )
 
 
 class DataLayerView(GZipMixin, BaseDetailView):
@@ -797,13 +814,9 @@ class DataLayerView(GZipMixin, BaseDetailView):
         response = None
         path = self.path
         # Generate gzip if needed
-        accepts_gzip = re_accepts_gzip.search(
-            self.request.META.get("HTTP_ACCEPT_ENCODING", "")
-        )
-        if accepts_gzip and settings.UMAP_GZIP:
-            gzip_path = Path(f"{path}{self.EXT}")
-            if not gzip_path.exists():
-                gzip_file(path, gzip_path)
+        if self.accepts_gzip:
+            if not self.gzip_path.exists():
+                gzip_file(path, self.gzip_path)
 
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
