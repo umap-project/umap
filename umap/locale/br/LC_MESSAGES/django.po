@@ -74,7 +74,7 @@ msgstr "An holl (publik)"
 
 #: models.py:140
 msgid "Anyone with link"
-msgstr ""
+msgstr "Piv bennak en deus ul liamm"
 
 #: models.py:142
 msgid "Blocked"
@@ -203,7 +203,7 @@ msgstr "Dibab ar gwiskadoù evit ho kartenn"
 
 #: templates/umap/about_summary.html:22
 msgid "Add POIs: markers, lines, polygons..."
-msgstr "Ouzhpennañ \"poentoù heverk\": merkerioù, linennoù, lieskornoù..."
+msgstr "Ouzhpennañ \"poentoù heverk\": balizennoù, linennoù, lieskornoù..."
 
 #: templates/umap/about_summary.html:23
 msgid "Manage POIs colours and icons"
@@ -237,7 +237,7 @@ msgstr "Krouiñ ur gartenn"
 
 #: templates/umap/about_summary.html:51
 msgid "Play with the demo"
-msgstr ""
+msgstr "Amprouiñ an demo!"
 
 #: templates/umap/content.html:23
 msgid ""
@@ -260,7 +260,7 @@ msgstr ""
 
 #: templates/umap/home.html:13
 msgid "Get inspired, browse maps"
-msgstr ""
+msgstr "Bezit awenet en ur furchal ar c'hartennoù"
 
 #: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
@@ -276,39 +276,39 @@ msgstr "Muioc'h"
 
 #: templates/umap/map_table.html:6
 msgid "Map"
-msgstr ""
+msgstr "Kartenn"
 
 #: templates/umap/map_table.html:7
 msgid "Name"
-msgstr ""
+msgstr "Anv"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see / edit"
-msgstr ""
+msgstr "Piv a c'hall gwelet / aozañ"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
-msgstr ""
+msgstr "Enrollet da ziwezhañ"
 
 #: templates/umap/map_table.html:10
 msgid "Owner"
-msgstr ""
+msgstr "Perc'henner"
 
 #: templates/umap/map_table.html:11
 msgid "Actions"
-msgstr ""
+msgstr "Oberoù"
 
 #: templates/umap/map_table.html:28
 msgid "Share"
-msgstr ""
+msgstr "Rannañ"
 
 #: templates/umap/map_table.html:29
 msgid "Edit"
-msgstr ""
+msgstr "Aozañ"
 
 #: templates/umap/map_table.html:30
 msgid "Download"
-msgstr ""
+msgstr "Pellgargañ"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -316,7 +316,7 @@ msgstr "Ma c'hartennoù"
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
-msgstr ""
+msgstr "Kartennoù spilhennet"
 
 #: templates/umap/navigation.html:19
 msgid "Log in"
@@ -332,7 +332,7 @@ msgstr "Diwar-benn"
 
 #: templates/umap/navigation.html:26
 msgid "Help"
-msgstr ""
+msgstr "Skoazell"
 
 #: templates/umap/navigation.html:31
 msgid "Change password"
@@ -344,7 +344,7 @@ msgstr "Digevreañ"
 
 #: templates/umap/password_change.html:4
 msgid "Password change"
-msgstr ""
+msgstr "Cheñch ar ger-tremen"
 
 #: templates/umap/password_change.html:6
 msgid ""
@@ -362,7 +362,7 @@ msgstr "Ger-tremen nevez"
 
 #: templates/umap/password_change.html:22
 msgid "New password confirmation"
-msgstr ""
+msgstr "Kadarnaat ar ger-tremen nevez"
 
 #: templates/umap/password_change.html:23
 msgid "Change my password"
@@ -380,19 +380,19 @@ msgstr "Cheñchet eo bet ho ker-tremen."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%(count)s gartenn kavet :"
+msgstr[1] "%(count)s gartenn kavet :"
+msgstr[2] "%(count)s c'hartenn kavet :"
+msgstr[3] "%(count)s kartenn kavet :"
+msgstr[4] "%(count)s kartenn kavet :"
 
 #: templates/umap/search.html:18
 msgid "No map found."
-msgstr ""
+msgstr "Kartenn ebet kavet."
 
 #: templates/umap/search.html:21
 msgid "Latest created maps"
-msgstr ""
+msgstr "Kartennoù krouet da ziwezhañ"
 
 #: templates/umap/search_bar.html:3
 msgid "Search maps"
@@ -404,7 +404,7 @@ msgstr "Klask"
 
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
 msgid "My dashboard"
-msgstr ""
+msgstr "Ma zaolenn-vourzh"
 
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
@@ -412,7 +412,7 @@ msgstr ""
 
 #: templates/umap/user_dashboard.html:18
 msgid "You have no map yet."
-msgstr ""
+msgstr "N'ho peus kartenn ebet c'hoazh."
 
 #: views.py:286
 msgid "View the map"
@@ -439,11 +439,11 @@ msgstr ""
 #: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "Postel kaset da %(email)s"
 
 #: views.py:690
 msgid "Only its owner can delete the map."
-msgstr ""
+msgstr "N'eus nemet perc'henner ar gartenn a c'hall he dilemel."
 
 #: views.py:713
 #, python-format

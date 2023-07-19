@@ -288,7 +288,7 @@
     "Update permissions and editors": "Kemas kini kebenaran dan penyunting",
     "Url": "Url",
     "Use current bounds": "Guna batas semasa",
-    "Use placeholders with feature properties between brackets, eg. &#123;name&#125;, they will be dynamically replaced by the corresponding values.": "Guna pemegang tempat dengan ciri-ciri sifat di antara tanda kurung, spt. &#123;name&#125;, mereka akan digantikan dengan nilai yang berkenaan secara dinamiknya.",
+    "Use placeholders with feature properties between brackets, eg. &#123;name&#125;, they will be dynamically replaced by the corresponding values.": "Guna pemegang tempat dengan ciri-ciri sifat di antara tanda kurung dakap, spt. &#123;name&#125;, mereka akan digantikan dengan nilai yang berkenaan secara dinamiknya.",
     "User content credits": "Penghargaan kandungan pengguna",
     "User interface options": "Pilihan antara muka pengguna",
     "Versions": "Versi",
@@ -396,7 +396,7 @@
     "Issue reaching that URL (network problem or CORS protection)": "Ada isu ketika mencapai URL tersebut (masalah rangkaian atau perlindungan CORS)",
     "Toggle edit mode (⇧+Click)": "Togol mod suntingan (⇧+Klik)",
     "icon opacity": "kelegapan ikon",
-    "*single star for italic*": "*single star for italic*",
-    "--- for a horizontal rule": "--- for a horizontal rule",
-    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
+    "*single star for italic*": "*bintang tunggal untuk tulisan condong*",
+    "--- for a horizontal rule": "--- untuk garis melintang",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "Nama bagi ciri untuk digunakan sebagai label sifat (cth.: \"nom\"). Anda juga boleh gunakan ciri-ciri dalam kurungan dakap untuk guna lebih daripada satu ciri atau untuk gabung dengan kandungan statik (cth.: \"{name} di {place}\")"
 }
