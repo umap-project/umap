@@ -174,7 +174,7 @@ L.Util.greedyTemplate = (str, data, ignore) => {
   }
 
   return str.replace(
-    /\{ *([\w_\:\.\|]+)(?:\|("[^"]*"))? *\}/g,
+    /\{ *([\w_\:\.\|@]+)(?:\|("[^"]*"))? *\}/g,
     (str, key, staticFallback) => {
       const vars = key.split('|')
       let value

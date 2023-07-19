@@ -236,6 +236,15 @@ describe('L.Util', function () {
       )
     })
 
+    it('should accept arobase', function () {
+      assert.equal(
+        L.Util.greedyTemplate('A phrase with a {@variable}.', {
+          '@variable': 'value',
+        }),
+        'A phrase with a value.'
+      )
+    })
+
     it('should replace even with ignore if key is found', function () {
       assert.equal(
         L.Util.greedyTemplate(
