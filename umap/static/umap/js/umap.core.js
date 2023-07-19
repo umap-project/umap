@@ -482,7 +482,7 @@ L.U.Help = L.Class.extend({
     const container = L.DomUtil.create('div'),
       title = L.DomUtil.add('h3', '', container, L._('Text formatting')),
       elements = L.DomUtil.create('ul', '', container)
-    L.DomUtil.add('li', '', elements, L._('*simple star for italic*'))
+    L.DomUtil.add('li', '', elements, L._('*single star for italic*'))
     L.DomUtil.add('li', '', elements, L._('**double star for bold**'))
     L.DomUtil.add('li', '', elements, L._('# one hash for main heading'))
     L.DomUtil.add('li', '', elements, L._('## two hashes for second heading'))
@@ -516,7 +516,7 @@ L.U.Help = L.Class.extend({
         'Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}'
       )
     )
-    L.DomUtil.add('li', '', elements, L._('--- for an horizontal rule'))
+    L.DomUtil.add('li', '', elements, L._('--- for a horizontal rule'))
     return container
   },
 
