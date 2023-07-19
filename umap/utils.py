@@ -112,7 +112,7 @@ def gzip_file(from_path, to_path):
     with open(from_path, "rb") as f_in:
         with gzip.open(to_path, "wb") as f_out:
             f_out.writelines(f_in)
-    os.utime(to_path, (stat.st_mtime, stat.st_mtime))
+    os.utime(to_path, ns=(stat.st_mtime_ns, stat.st_mtime_ns))
 
 
 def is_ajax(request):
