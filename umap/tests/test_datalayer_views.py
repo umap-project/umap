@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pytest
 from django.core.files.base import ContentFile
@@ -33,6 +34,17 @@ def test_get(client, settings, datalayer):
     assert j["type"] == "FeatureCollection"
 
 
+def test_gzip_should_be_created_if_accepted(client, datalayer, map, post_data):
+    url = reverse("datalayer_view", args=(datalayer.pk,))
+    response = client.get(url, headers={"ACCEPT_ENCODING": "gzip"})
+    assert response.status_code == 200
+    flat = datalayer.geojson.path
+    gzipped = datalayer.geojson.path + ".gz"
+    assert Path(flat).exists()
+    assert Path(gzipped).exists()
+    assert Path(flat).stat().st_mtime_ns == Path(gzipped).stat().st_mtime_ns
+
+
 def test_update(client, datalayer, map, post_data):
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password="123123")
@@ -49,6 +61,7 @@ def test_update(client, datalayer, map, post_data):
     j = json.loads(response.content.decode())
     assert "id" in j
     assert datalayer.pk == j["id"]
+    assert Path(modified_datalayer.geojson.path).exists()
 
 
 def test_should_not_be_possible_to_update_with_wrong_map_id_in_url(
