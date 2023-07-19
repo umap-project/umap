@@ -80,8 +80,6 @@ const locale = {
     "## two hashes for second heading": "## két számjel: második címsor",
     "### three hashes for third heading": "### három számjel: harmadik címsor",
     "**double star for bold**": "**két csillag: félkövér**",
-    "*simple star for italic*": "*egy csillag: dőlt*",
-    "--- for an horizontal rule": "--- három kötőjel: vízszintes vonal",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Vesszővel elválasztott számsor, amely meghatározza a szaggatott vonalak mintázatát. Például 5,10,15 Ha nem világos, próbálkozz!",
     "About": "Névjegy",
     "Action not allowed :(": "Nem engedélyezett művelet :(",
@@ -277,7 +275,6 @@ const locale = {
     "TMS format": "TMS-formátum",
     "Text color for the cluster label": "Csoportcímke szövegének színe",
     "Text formatting": "Szövegformázás",
-    "The name of the property to use as feature label (ex.: \"nom\")": "Az objektum felirataként használandó tulajdonság neve (pl.: „név”)",
     "To use if remote server doesn't allow cross domain (slower)": "Akkor használja, ha a távoli kiszolgáló nem engedélyezi a tartományok közötti (cross-domain) átvitelt (lassabb)",
     "To zoom": "Eddig a nagyítási szintig",
     "Transfer shape to edited feature": "Alakzat átalakítása szerkesztett objektummá",
@@ -398,7 +395,10 @@ const locale = {
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

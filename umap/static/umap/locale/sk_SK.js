@@ -80,8 +80,6 @@ const locale = {
     "## two hashes for second heading": "## dve mriežky pre nadpis druhej úrovne",
     "### three hashes for third heading": "## tri mriežky pre nadpis tretej úrovne",
     "**double star for bold**": "**všetko medzi dvoma hviezdičkami je tučně**",
-    "*simple star for italic*": "*všetko medzi hviezdičkami bude kurzívou*",
-    "--- for an horizontal rule": "--- vytvorí vodorovnú linku",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Čiarkami oddelený zoznam čísel, ktorý popisuje vzor prerušovanej čiary. Napr. \"5, 10, 15\".",
     "About": "O uMap",
     "Action not allowed :(": "Akcia nie je povolená :(",
@@ -277,7 +275,6 @@ const locale = {
     "TMS format": "Formát TMS",
     "Text color for the cluster label": "Farba textu pre popis zhluku",
     "Text formatting": "Formátovanie textu",
-    "The name of the property to use as feature label (ex.: \"nom\")": "Názov vlastnosti používať ako popis objektu (napr.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "Použiť keď vzdialený server nepovoľuje cross-domain (pomalšie)",
     "To zoom": "Max. priblíženie",
     "Transfer shape to edited feature": "Preniesť tvar do upravovaného objektu",
@@ -398,7 +395,10 @@ const locale = {
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

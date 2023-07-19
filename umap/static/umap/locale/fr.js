@@ -80,8 +80,6 @@ const locale = {
     "## two hashes for second heading": "## deux dièses pour titre 2",
     "### three hashes for third heading": "### trois dièses pour titre 3",
     "**double star for bold**": "**double astérisque pour gras**",
-    "*simple star for italic*": "*simple astérisque pour italique*",
-    "--- for an horizontal rule": "--- pour un séparateur horizontal",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Liste de nombres séparés par une virgule, définissant les tirets et espaces. Ex.: \"5, 10, 15\".",
     "About": "À propos",
     "Action not allowed :(": "Action non autorisée :(",
@@ -277,7 +275,6 @@ const locale = {
     "TMS format": "format de type TMS",
     "Text color for the cluster label": "Couleur du texte du cluster",
     "Text formatting": "Mise en forme du texte",
-    "The name of the property to use as feature label (ex.: \"nom\")": "Le nom de la propriété à utiliser comme libellé des éléments (ex. : \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "Cocher si le serveur distant n'autorise pas le cross domain (plus lent)",
     "To zoom": "Jusqu'au zoom",
     "Transfer shape to edited feature": "Adjoindre le tracé au groupe courant",
@@ -398,7 +395,10 @@ const locale = {
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Liste de propriétés séparées par une virgule pour trier les éléments. Pour trier en descendant, ajouter un signe moins (-) devant. Ex.: maclé,-autreclé.",
     "Issue reaching that URL (network problem or CORS protection)": "Problème pour charger l'URL (problème réseau ou protection CORS)",
     "Toggle edit mode (⇧+Click)": "Alterner le mode édition (⇧+clic)",
-    "icon opacity": "Opacité de l'icône"
+    "icon opacity": "Opacité de l'icône",
+    "*single star for italic*": "*simple astérisque pour italique*",
+    "--- for a horizontal rule": "--- pour un séparateur horizontal",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "Nom de la propriété utilisée pour le libellé (ex.: \"nom\"). Il est possible d'utiliser des propriétés entre accolades pour en utiliser plusieurs ou ajouter du texte (ex.: \"{nom} à {lieu}\")"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

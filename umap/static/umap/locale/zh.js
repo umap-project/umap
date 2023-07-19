@@ -80,8 +80,6 @@ const locale = {
     "## two hashes for second heading": "## 两个井号表示二级标题",
     "### three hashes for third heading": "### 三个井号表示三级标题",
     "**double star for bold**": "**两个星号表示粗体**",
-    "*simple star for italic*": "*一个星号表示斜体*",
-    "--- for an horizontal rule": "--- for an horizontal rule",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "关于",
     "Action not allowed :(": "操作不允许",
@@ -277,7 +275,6 @@ const locale = {
     "TMS format": "TMS格式",
     "Text color for the cluster label": "标注文本颜色",
     "Text formatting": "文本格式",
-    "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "放大",
     "Transfer shape to edited feature": "Transfer shape to edited feature",
@@ -398,7 +395,10 @@ const locale = {
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }
 L.registerLocale("zh", locale)
 L.setLocale("zh")
