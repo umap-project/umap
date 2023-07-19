@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2 - 2023-07-19
+- fix If-Unmodified management for map prior to 1.3.0 (cf #1216)
+- allow arobases in variables (cf #1217)
+
 ## 1.4.1 - 2023-07-17
 
 - fix tooltip position, after Leaflet upgrade (cf #1207)
