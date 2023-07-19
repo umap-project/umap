@@ -80,8 +80,6 @@
     "## two hashes for second heading": "## dua tanda pagar untuk tajuk kedua",
     "### three hashes for third heading": "### tiga tanda pagar untuk tajuk ketiga",
     "**double star for bold**": "**bintang berganda untuk tulisan tebal**",
-    "*simple star for italic*": "*bintang tunggal untuk tulisan condong*",
-    "--- for an horizontal rule": "--- untuk garis melintang",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Senarai berpisahkan koma bagi nombor yang menentukan corak sengkang lejang. Cth.: \"5, 10, 15\".",
     "About": "Perihalan",
     "Action not allowed :(": "Tindakan tidak dibenarkan :(",
@@ -277,7 +275,6 @@
     "TMS format": "Format TMS",
     "Text color for the cluster label": "Warna tulisan label kelompok",
     "Text formatting": "Format tulisan",
-    "The name of the property to use as feature label (ex.: \"nom\")": "Nama ciri-ciri untuk digunakan sebagai label sifat (cth.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "Untuk digunakan jika pelayan jarak jauh tidak benarkan rentang domain (lebih perlahan)",
     "To zoom": "Untuk zum",
     "Transfer shape to edited feature": "Pindah bentuk ke sifat yang disunting",
@@ -398,5 +395,8 @@
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Senarai ciri-ciri untuk digunakan bagi sifat isihan, dipisahkan dengan koma. Untuk mengundur isihan, letak tanda tolak (-) sebelumnya. Cth. kekuncisaya,-kekuncilain.",
     "Issue reaching that URL (network problem or CORS protection)": "Ada isu ketika mencapai URL tersebut (masalah rangkaian atau perlindungan CORS)",
     "Toggle edit mode (⇧+Click)": "Togol mod suntingan (⇧+Klik)",
-    "icon opacity": "kelegapan ikon"
+    "icon opacity": "kelegapan ikon",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }

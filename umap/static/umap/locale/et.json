@@ -80,8 +80,6 @@
     "## two hashes for second heading": "## kaks trelli teise pealkirja jaoks",
     "### three hashes for third heading": "### kolm trelli kolmanda pealkirja jaoks",
     "**double star for bold**": "**kaks tärni paksu kirja jaoks**",
-    "*simple star for italic*": "* üks tärn kaldkirja jaoks*",
-    "--- for an horizontal rule": "--- horisontaaljoone jaoks",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Komaga eraldatud numbriloend, mis määrab katkendjoone mustri, nt \"5, 10, 15\".",
     "About": "Teave",
     "Action not allowed :(": "Tegevus pole lubatud :(",
@@ -277,7 +275,6 @@
     "TMS format": "TMS vorming",
     "Text color for the cluster label": "Text color for the cluster label",
     "Text formatting": "Tekstivorming",
-    "The name of the property to use as feature label (ex.: \"nom\")": "The name of the property to use as feature label (ex.: \"nom\")",
     "To use if remote server doesn't allow cross domain (slower)": "To use if remote server doesn't allow cross domain (slower)",
     "To zoom": "Suurendusastmeni",
     "Transfer shape to edited feature": "Transfer shape to edited feature",
@@ -398,5 +395,8 @@
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }

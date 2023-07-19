@@ -80,8 +80,6 @@
     "## two hashes for second heading": "## ハッシュ2つで第二見出し",
     "### three hashes for third heading": "### ハッシュ3つで第三見出し",
     "**double star for bold**": "**アスタリスク2つで太字**",
-    "*simple star for italic*": "*アスタリスク1つでイタリック体*",
-    "--- for an horizontal rule": "--- 横方向の罫線",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "カンマで数字を区切り、ストロークの破線パターンを指定。 例: \"5, 10, 15\"",
     "About": "概要",
     "Action not allowed :(": "そのアクションは禁止されています :(",
@@ -277,7 +275,6 @@
     "TMS format": "TMSフォーマット",
     "Text color for the cluster label": "クラスタラベルのテキスト色",
     "Text formatting": "テキスト形式",
-    "The name of the property to use as feature label (ex.: \"nom\")": "地物のラベルとして用いるプロパティ名を入力する",
     "To use if remote server doesn't allow cross domain (slower)": "外部サーバがクロスドメインを許可していない場合に使用します (処理速度低下)",
     "To zoom": "非表示にするズームレベル",
     "Transfer shape to edited feature": "シェイプを編集済み地物へ変換",
@@ -398,5 +395,8 @@
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }

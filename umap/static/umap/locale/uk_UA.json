@@ -80,8 +80,6 @@
     "## two hashes for second heading": "## два знаки решітки — підзаголовок",
     "### three hashes for third heading": "### три знаки решітки — підзаголовок підзаголовка",
     "**double star for bold**": "**подвійні зірочки — жирний**",
-    "*simple star for italic*": "*одинарні зірочки — курсив*",
-    "--- for an horizontal rule": "---  горизонтальна лінія",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Розділені комами числа, що представляють шаблон довжини штрихів та проміжків пунктирної лінії. Напр.: \"5, 10,15\".",
     "About": "Про це",
     "Action not allowed :(": "Дія недоступна :(",
@@ -277,7 +275,6 @@
     "TMS format": "Формат TMS",
     "Text color for the cluster label": "Колір тексту для позначок кластера",
     "Text formatting": "Форматування тексту",
-    "The name of the property to use as feature label (ex.: \"nom\")": "Назва параметру для використання в якості мітки об’єкта (напр.: „nom“)",
     "To use if remote server doesn't allow cross domain (slower)": "Якщо віддалений сервер не дозволяє крос-домен (повільно)",
     "To zoom": "Масштабувати",
     "Transfer shape to edited feature": "Перетворити полігон у редагований об’єкт",
@@ -398,5 +395,8 @@
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }

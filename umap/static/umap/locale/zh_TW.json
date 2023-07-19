@@ -80,8 +80,6 @@
     "## two hashes for second heading": "兩個 # 代表次標題",
     "### three hashes for third heading": "三個 # 代表第三標題",
     "**double star for bold**": "** 重複兩次星號代表粗體 **",
-    "*simple star for italic*": "*單個星號代表斜體*",
-    "--- for an horizontal rule": "-- 代表水平線",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "用逗號來分隔一列列的虛線模式，例如：\"5, 10, 15\"。",
     "About": "關於",
     "Action not allowed :(": "行為不被允許:(",
@@ -277,7 +275,6 @@
     "TMS format": "TMS 格式",
     "Text color for the cluster label": "叢集標籤的文字顏色",
     "Text formatting": "文字格式",
-    "The name of the property to use as feature label (ex.: \"nom\")": "用作圖徵標籤的屬性名稱 (例如：“nom”)",
     "To use if remote server doesn't allow cross domain (slower)": "如果遠端伺服器不允許跨網域存取時使用 (效率較差)",
     "To zoom": "至縮放大小",
     "Transfer shape to edited feature": "將外形加到編輯中的特徵",
@@ -398,5 +395,8 @@
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "用逗號分隔屬性清單來排序圖徵。要保存排序，在槊面加上減號 (-1)，例如 mykey,-otherkey。",
     "Issue reaching that URL (network problem or CORS protection)": "問題到達那個網址 (網路問題或是 CORS 保護)",
     "Toggle edit mode (⇧+Click)": "切換編輯模式 (⇧+Click)",
-    "icon opacity": "圖示透明度"
+    "icon opacity": "圖示透明度",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }

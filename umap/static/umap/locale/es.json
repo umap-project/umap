@@ -80,8 +80,6 @@
     "## two hashes for second heading": "## dos almohadillas para el encabezado secundario",
     "### three hashes for third heading": "### tres almohadillas para el encabezado ternario",
     "**double star for bold**": "**dos asteriscos para negrita**",
-    "*simple star for italic*": "*un asterisco para cursiva*",
-    "--- for an horizontal rule": "--- para una línea horizontal",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Una lista de números separados por comas que define el patrón de trazos. Por ejemplo: \"5, 10, 15\".",
     "About": "Acerca de",
     "Action not allowed :(": "Acción no permitida :(",
@@ -277,7 +275,6 @@
     "TMS format": "formato TMS",
     "Text color for the cluster label": "Color del texto para la etiqueta clúster",
     "Text formatting": "Formato de texto",
-    "The name of the property to use as feature label (ex.: \"nom\")": "El nombre de la propiedad a usar como etiqueta del elemento (ejemplo: «nom»)",
     "To use if remote server doesn't allow cross domain (slower)": "Para utilizar si el servidor remoto no permite dominios cruzados (más lento)",
     "To zoom": "Para acercar/alejar",
     "Transfer shape to edited feature": "Transferir la figura al elemento editado",
@@ -398,5 +395,8 @@
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Issue reaching that URL (network problem or CORS protection)": "Issue reaching that URL (network problem or CORS protection)",
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
-    "icon opacity": "icon opacity"
+    "icon opacity": "icon opacity",
+    "*single star for italic*": "*single star for italic*",
+    "--- for a horizontal rule": "--- for a horizontal rule",
+    "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")"
 }
