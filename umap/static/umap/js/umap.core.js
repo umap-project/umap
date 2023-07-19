@@ -548,7 +548,7 @@ L.U.Help = L.Class.extend({
     'A comma separated list of numbers that defines the stroke dash pattern. Ex.: "5, 10, 15".'
   ),
   zoomTo: L._('Zoom level for automatic zooms'),
-  labelKey: L._('The name of the property to use as feature label (ex.: "nom")'),
+  labelKey: L._('The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "{name} in {place}")'),
   stroke: L._('Whether to display or not polygons paths.'),
   fill: L._('Whether to fill polygons with color.'),
   fillColor: L._('Optional. Same as color if not set.'),
