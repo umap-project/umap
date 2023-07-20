@@ -48,7 +48,7 @@ describe('L.Permissions', function () {
     var button
 
     it('should only allow editors', function () {
-      this.map.options.permissions.owner = { id: 1, url: '/url', name: 'jojo' }
+      this.map.permissions.options.owner = { id: 1, url: '/url', name: 'jojo' }
       button = qs('a.update-map-permissions')
       happen.click(button)
       expect(qs('select[name="edit_status"]')).not.to.be.ok
@@ -62,7 +62,7 @@ describe('L.Permissions', function () {
     var button
 
     it('should allow everything', function () {
-      this.map.options.permissions.owner = { id: 1, url: '/url', name: 'jojo' }
+      this.map.permissions.options.owner = { id: 1, url: '/url', name: 'jojo' }
       this.map.options.user = { id: 1, url: '/url', name: 'jojo' }
       button = qs('a.update-map-permissions')
       happen.click(button)
