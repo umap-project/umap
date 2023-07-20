@@ -264,7 +264,7 @@ msgstr "Bezit awenet en ur furchal ar c'hartennoù"
 
 #: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
-msgstr ""
+msgstr "Kevreet oc'h. Gortozit ur pennadig..."
 
 #: templates/umap/map_list.html:9 views.py:281
 msgid "by"
@@ -424,7 +424,7 @@ msgstr "Hizivaet eo bet ar gartenn!"
 
 #: views.py:632
 msgid "Map editors updated with success!"
-msgstr ""
+msgstr "Aozerien ar gartenn bet hizivaet gant berzh!"
 
 #: views.py:670
 #, python-format
@@ -454,7 +454,7 @@ msgstr ""
 
 #: views.py:718
 msgid "Congratulations, your map has been cloned!"
-msgstr ""
+msgstr "Eilet eo bet ho kartenn gant berzh!"
 
 #: views.py:897
 msgid "Layer successfully deleted."
