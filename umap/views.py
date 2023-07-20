@@ -796,7 +796,11 @@ class GZipMixin(object):
         # (when umap is served by nginx and X-Accel-Redirect)
         # one, so we need to compare with that value in that case.
         # cf https://github.com/umap-project/umap/issues/1212
-        path = self.gzip_path if self.accepts_gzip else self.path
+        path = (
+            self.gzip_path
+            if self.accepts_gzip and self.gzip_path.exists()
+            else self.path
+        )
         stat = os.stat(path)
         return http_date(stat.st_mtime)
 
