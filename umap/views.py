@@ -336,7 +336,7 @@ class AjaxProxy(View):
         request = Request(url, headers=headers)
         opener = build_opener()
         try:
-            proxied_request = opener.open(request)
+            proxied_request = opener.open(request, timeout=10)
         except HTTPError as e:
             return HttpResponse(e.msg, status=e.code, content_type="text/plain")
         except URLError:
