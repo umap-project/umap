@@ -581,7 +581,7 @@ L.U.Marker = L.Marker.extend({
   },
 
   _getTooltipAnchor: function () {
-    const anchor = this.options.icon.options.tooltipAnchor,
+    const anchor = this.options.icon.options.tooltipAnchor.clone(),
       direction = this.getOption('labelDirection')
     if (direction === 'left') {
       anchor.x *= -1
