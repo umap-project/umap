@@ -22,7 +22,7 @@ msgstr ""
 #: forms.py:43
 #, python-format
 msgid "Secret edit link is %s"
-msgstr ""
+msgstr "Liamm aozañ kuzh: %s"
 
 #: forms.py:47
 msgid "Everyone can edit"
@@ -30,7 +30,7 @@ msgstr "An holl a c'hall kemmañ"
 
 #: forms.py:48
 msgid "Only editable with secret edit link"
-msgstr ""
+msgstr "N'haller he c'hemmañ nemet gant ul liamm aozañ kuzh"
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -46,11 +46,11 @@ msgstr "munudoù"
 
 #: models.py:72
 msgid "Link to a page where the licence is detailed."
-msgstr ""
+msgstr "Liamm war-zu ur bajenn a zispleg an aotre-implijout."
 
 #: models.py:82
 msgid "URL template using OSM tile format"
-msgstr ""
+msgstr "Patrom URL a implij furmad teol OSM"
 
 #: models.py:88
 msgid "Order of the tilelayers in the edit box"
@@ -66,7 +66,7 @@ msgstr "Aozerien nemetken"
 
 #: models.py:136
 msgid "Owner only"
-msgstr "Perc'henner nemetken"
+msgstr "Ar perc'henner hepken"
 
 #: models.py:139
 msgid "Everyone (public)"
@@ -98,7 +98,7 @@ msgstr "lec'hiañ"
 
 #: models.py:149
 msgid "Locate user on load?"
-msgstr ""
+msgstr "Lec'hiañ an implijer en ur gargañ?"
 
 #: models.py:153
 msgid "Choose the map licence."
@@ -118,11 +118,11 @@ msgstr "aozerien"
 
 #: models.py:171
 msgid "edit status"
-msgstr ""
+msgstr "statud aozañ"
 
 #: models.py:174
 msgid "share status"
-msgstr ""
+msgstr "digor da biv?"
 
 #: models.py:177
 msgid "settings"
@@ -130,11 +130,11 @@ msgstr "arventennoù"
 
 #: models.py:250
 msgid "Clone of"
-msgstr ""
+msgstr "Eilenn eus"
 
 #: models.py:299
 msgid "display on load"
-msgstr ""
+msgstr "diskwel pa vez karget"
 
 #: models.py:300
 msgid "Display this layer on load."
@@ -168,7 +168,7 @@ msgstr "%(current_user)s n'en/he deus kartenn spilhennet ebet."
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "uMap a ro tro deoc'h da grouiñ kartennoù en ur serr-lagad gant foñsoù OpenStreetMap ha d'o enframmañ e-barzh ho lec'hienn."
 
 #: templates/registration/login.html:3
 msgid "Please log in with your account"
@@ -207,11 +207,11 @@ msgstr "Ouzhpennañ \"poentoù heverk\": balizennoù, linennoù, lieskornoù..."
 
 #: templates/umap/about_summary.html:23
 msgid "Manage POIs colours and icons"
-msgstr "Dibab livioù an ikonoù hag ar poentoù heverk"
+msgstr "Dibab livioù hag ikonoù ar poentoù heverk"
 
 #: templates/umap/about_summary.html:24
 msgid "Manage map options: display a minimap, locate user on load…"
-msgstr ""
+msgstr "Merañ dibarzhioù ar gartenn: diskwel ar gartennig, lec'hiañ an implijer..."
 
 #: templates/umap/about_summary.html:25
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
@@ -219,7 +219,7 @@ msgstr "Enporzhiañ roadennoù geografek a-vern (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:26
 msgid "Choose the license for your data"
-msgstr "Dibab aotre-implijout ho roadennoù"
+msgstr "Diuzañ aotre-implijout ho roadennoù"
 
 #: templates/umap/about_summary.html:27
 msgid "Embed and share your map"
@@ -256,11 +256,11 @@ msgstr ""
 
 #: templates/umap/home.html:8
 msgid "Map of the uMaps"
-msgstr ""
+msgstr "Kartenn an uMapoù"
 
 #: templates/umap/home.html:13
 msgid "Get inspired, browse maps"
-msgstr "Bezit awenet en ur furchal ar c'hartennoù"
+msgstr "Bezit awenet en ur furchal kartennoù"
 
 #: templates/umap/login_popup_end.html:2
 msgid "You are logged in. Continuing..."
@@ -350,7 +350,7 @@ msgstr "Cheñch ar ger-tremen"
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Enankit ho ker-tremen kozh ha div wezh ho ker-tremen nevez war-lerc'h mar plij."
 
 #: templates/umap/password_change.html:13
 msgid "Old password"
@@ -408,7 +408,7 @@ msgstr "Ma zaolenn-vourzh"
 
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
-msgstr ""
+msgstr "Klask em c'hartennoù"
 
 #: templates/umap/user_dashboard.html:18
 msgid "You have no map yet."
@@ -429,12 +429,12 @@ msgstr "Aozerien ar gartenn bet hizivaet gant berzh!"
 #: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "Al liamm uMap evit aozañ ho kartenn: %(map_name)s"
 
 #: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "Setu ho liamm aozañ kuzh: %(link)s"
 
 #: views.py:679
 #, python-format
@@ -450,7 +450,7 @@ msgstr "N'eus nemet perc'henner ar gartenn a c'hall he dilemel."
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr ""
+msgstr "Eilet eo bet ho kartenn! M'ho peus c'hoant d'he c'hemmañ diwar un urzhiataer all, implijit al liamm-mañ: %(anonymous_url)s"
 
 #: views.py:718
 msgid "Congratulations, your map has been cloned!"
