@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.4 - 2023-07-22
+- fix tooltip anchor unstable (cf #1224)
+- add a timeout in ajax proxy default view (cf #1222)
+- allow non ascii chars in variables (cf #1221)
+- add missing DB migration for label changes
+
+
 ## 1.4.3 - 2023-07-20
 - fix issue introduced in 1.4.2 where trying to read a non existent gzip
 
