@@ -245,6 +245,25 @@ describe('L.Util', function () {
       )
     })
 
+    it('should accept space', function () {
+      assert.equal(
+        L.Util.greedyTemplate('A phrase with a {var iable}.', {
+          'var iable': 'value',
+        }),
+        'A phrase with a value.'
+      )
+    })
+
+    it('should accept non ascii chars', function () {
+      assert.equal(
+        L.Util.greedyTemplate('A phrase with a {Accessibilité} and {переменная}.', {
+          'Accessibilité': 'value',
+          'переменная': 'another',
+        }),
+        'A phrase with a value and another.'
+      )
+    })
+
     it('should replace even with ignore if key is found', function () {
       assert.equal(
         L.Util.greedyTemplate(
