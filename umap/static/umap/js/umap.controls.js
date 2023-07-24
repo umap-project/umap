@@ -1032,7 +1032,7 @@ L.U.Map.include({
         return togpx(map.toGeoJSON())
       },
       ext: '.gpx',
-      filetype: 'application/xml',
+      filetype: 'application/gpx+xml',
     },
     kml: {
       formatter: function (map) {
