@@ -1710,7 +1710,7 @@ L.U.Map.include({
     if (!this.editEnabled) return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
-      title = L.DomUtil.create('h4', '', container)
+      title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map properties')
     const builder = new L.U.FormBuilder(this, metadataFields)
     const form = builder.build()
