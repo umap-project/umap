@@ -34,7 +34,7 @@ msgstr "N'haller he c'hemmañ nemet gant ul liamm aozañ kuzh"
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr ""
+msgstr "Al lec'hienn zo da lenn hepken rak emeur ouzh he c'hempenn"
 
 #: models.py:40
 msgid "name"
@@ -138,7 +138,7 @@ msgstr "diskwel pa vez karget"
 
 #: models.py:300
 msgid "Display this layer on load."
-msgstr ""
+msgstr "Diskwel ar gwiskad-mañ pa vez karget"
 
 #: templates/404.html:6
 msgid "Take me to the home page"
@@ -243,7 +243,7 @@ msgstr "Amprouiñ an demo!"
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "uMap zo da lenn hepken evit ar mare, n'haller ket krouiñ/aozañ."
 
 #: templates/umap/content.html:31
 #, python-format
