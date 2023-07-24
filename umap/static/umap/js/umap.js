@@ -1810,19 +1810,19 @@ L.U.Map.include({
         'umap-main-edit-toolbox with-transition dark',
         this._controlContainer
       ),
-      title = L.DomUtil.add('h3', '', container, `${L._('Editing')}&nbsp;`),
-      name = L.DomUtil.create('a', 'umap-click-to-edit', title),
+      logo = L.DomUtil.add('a', 'logo', container),
+      name = L.DomUtil.add('a', 'umap-click-to-edit', container, this.getDisplayName()),
       setName = function () {
         name.textContent = this.getDisplayName()
       }
+    logo.href = '/'
     if (this.options.user) {
-      const userLabel = L.DomUtil.add('a', 'umap-user', title, this.options.user.name)
+      const userLabel = L.DomUtil.add('a', 'umap-user', container, this.options.user.name)
       userLabel.href = this.options.user.url
     }
-    L.bind(setName, this)()
+    this.help.button(container, 'edit')
     L.DomEvent.on(name, 'click', this.edit, this)
     this.on('postsync', L.bind(setName, this))
-    this.help.button(name, 'edit')
     const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
     save.href = '#'
     save.title = `${L._('Save current edits')} (Ctrl+S)`

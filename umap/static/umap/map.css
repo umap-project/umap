@@ -436,6 +436,7 @@ ul.photon-autocomplete {
 .umap-click-to-edit {
     color: #4a90d9;
     font-weight: bold;
+    cursor: pointer;
 }
 .umap-click-to-edit:after {
     content: "\00a0";
@@ -471,7 +472,20 @@ ul.photon-autocomplete {
     border-bottom: 1px solid #222;
     z-index: 1000;
     opacity: 0.98;
-    color: #efefef;
+    color: #fff;
+}
+.umap-main-edit-toolbox .logo {
+    background-image: url('./img/logo_small.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    width: 60px;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.umap-main-edit-toolbox a {
+    color: #fff;
+    font-size: 1.2em;
 }
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
