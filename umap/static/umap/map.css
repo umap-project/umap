@@ -433,26 +433,8 @@ ul.photon-autocomplete {
 .umap-is-dirty a.leaflet-control-edit-disable {
     display: none;
 }
-.umap-click-to-edit {
-    color: #4a90d9;
-    font-weight: bold;
-    cursor: pointer;
-}
-.umap-click-to-edit:after {
-    content: "\00a0";
-    background-repeat: no-repeat;
-    background-position: center center;
-    cursor: pointer;
-    width: 26px;
-    height: 100%;
-    display: inline-block;
-    background-position: -46px -41px;
-}
-.umap-click-to-edit:hover:after {
-    background-image: url('./img/16.svg');
-}
-.dark .umap-click-to-edit:hover:after {
-    background-image: url('./img/16-white.svg');
+.umap-click-to-edit:hover {
+    text-decoration: underline;
 }
 .umap-caption-bar {
     display: none;
@@ -486,6 +468,16 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox a {
     color: #fff;
     font-size: 1.2em;
+}
+.umap-main-edit-toolbox .map-name {
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    margin-right: 5px;
+    font-weight: bold;
 }
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;

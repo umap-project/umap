@@ -1811,10 +1811,11 @@ L.U.Map.include({
         this._controlContainer
       ),
       logo = L.DomUtil.add('a', 'logo', container),
-      name = L.DomUtil.add('a', 'umap-click-to-edit', container, this.getDisplayName()),
+      name = L.DomUtil.add('a', 'map-name', container, this.getDisplayName()),
       setName = function () {
         name.textContent = this.getDisplayName()
       }
+    name.href = '#'
     logo.href = '/'
     if (this.options.user) {
       const userLabel = L.DomUtil.add('a', 'umap-user', container, this.options.user.name)
