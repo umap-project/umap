@@ -1472,7 +1472,26 @@ a.add-datalayer:hover,
 /* Mobile */
 /* ****** */
 
+@media all and (max-width: 980px) {
+
+    .leaflet-container a.leaflet-control-edit-save,
+    .leaflet-container a.leaflet-control-edit-cancel {
+        text-indent: calc(100% - 20px);
+        width: 35px;
+        min-width: initial;
+    }
+
+    .umap-main-edit-toolbox .umap-help-button,
+    .umap-main-edit-toolbox .share-status {
+        display: none;
+    }
+
+}
 @media all and (max-width: 480px) {
+
+    .umap-main-edit-toolbox .map-name {
+        max-width: 100px;
+    }
 
     .leaflet-control-layers-expanded label {
         display: inline-block;
