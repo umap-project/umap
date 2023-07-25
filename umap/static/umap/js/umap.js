@@ -67,13 +67,11 @@ L.U.Map.include({
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
-    if (geojson.properties.locale)
-      L.setLocale(geojson.properties.locale)
+    if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs
-    if (geojson.properties.lang)
-      L.lang = geojson.properties.lang
+    if (geojson.properties.lang) L.lang = geojson.properties.lang
 
     // Don't let default autocreation of controls
     const zoomControl =
@@ -91,7 +89,7 @@ L.U.Map.include({
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloading',  (e) => this.fire('dataloading', e))
+    this.xhr.on('dataloading', (e) => this.fire('dataloading', e))
     this.xhr.on('dataload', (e) => this.fire('dataload', e))
 
     this.initLoader()
@@ -1811,19 +1809,31 @@ L.U.Map.include({
         this._controlContainer
       ),
       logo = L.DomUtil.add('a', 'logo', container),
-      name = L.DomUtil.add('a', 'map-name', container, this.getDisplayName()),
-      setName = function () {
+      name = L.DomUtil.create('a', 'map-name', container),
+      share_status = L.DomUtil.create('a', 'share-status', container),
+      update = () => {
         name.textContent = this.getDisplayName()
+        share_status.textContent = L._('Visibility: {status}', {
+          status: this.permissions.getShareStatusDisplay(),
+        })
       }
+    update()
     name.href = '#'
+    share_status.href = '#'
     logo.href = '/'
     if (this.options.user) {
-      const userLabel = L.DomUtil.add('a', 'umap-user', container, this.options.user.name)
+      const userLabel = L.DomUtil.add(
+        'a',
+        'umap-user',
+        container,
+        this.options.user.name
+      )
       userLabel.href = this.options.user.url
     }
     this.help.button(container, 'edit')
     L.DomEvent.on(name, 'click', this.edit, this)
-    this.on('postsync', L.bind(setName, this))
+    L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
+    this.on('postsync', L.bind(update, this))
     const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
     save.href = '#'
     save.title = `${L._('Save current edits')} (Ctrl+S)`

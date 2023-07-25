@@ -479,6 +479,9 @@ ul.photon-autocomplete {
     margin-right: 5px;
     font-weight: bold;
 }
+.umap-main-edit-toolbox .share-status {
+    margin: 0 5px;
+}
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
 }
