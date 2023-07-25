@@ -472,7 +472,7 @@ ul.photon-autocomplete {
     right: 0;
     height: 46px;
     background-color: #323737;
-    padding: 5px;
+    padding: 5px 10px;
     text-align: left;
     line-height: 36px;
     cursor: auto;
@@ -483,7 +483,7 @@ ul.photon-autocomplete {
 }
 .umap-main-edit-toolbox .logo {
     background-image: url('./img/logo_small.svg');
-    background-position: 10px center;
+    background-position: 0 center;
     background-repeat: no-repeat;
     width: 60px;
     display: inline-block;
