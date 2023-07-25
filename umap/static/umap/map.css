@@ -221,6 +221,31 @@ ul.photon-autocomplete {
 .manage-datalayers {
     background-position: -36px -72px;
 }
+.umap-edit-container h3:before,
+.umap-feature-properties:before,
+.umap-layer-properties-container h3:before {
+    height: 24px;
+    width: 24px;
+    background-repeat: no-repeat;
+    background-image: url('./img/16-white.svg');
+    background-size: auto auto;
+    background-position: -98px -117px;
+    content: " ";
+    vertical-align: bottom;
+    display: inline-block;
+}
+.umap-edit-container h3:before {
+    background-position: -27px -93px;
+}
+.umap-feature-properties.marker:before {
+    background-position: -72px -117px;
+}
+.umap-feature-properties.polyline:before {
+    background-position: 0 -117px;
+}
+.umap-feature-properties.polygon:before {
+    background-position: -24px -117px;
+}
 .umap-toolbar .update-map-permissions,
 .update-map-permissions {
     background-position: -36px -36px;
