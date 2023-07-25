@@ -95,7 +95,8 @@ L.U.Xhr = L.Evented.extend({
             // 0 === request cut by user or CORS
             self.ui.alert({
               content: L._(
-                'Issue reaching that URL (network problem or CORS protection)'
+                'Issue reaching that URL (network problem or CORS protection): {url}',
+                { url: settings.uri }
               ),
               level: 'error',
             })
