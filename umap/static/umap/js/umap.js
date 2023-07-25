@@ -1840,12 +1840,12 @@ L.U.Map.include({
     save.textContent = L._('Save')
     const cancel = L.DomUtil.create(
       'a',
-      'leaflet-control-edit-cancel button',
+      'leaflet-control-edit-cancel',
       container
     )
     cancel.href = '#'
     cancel.title = L._('Cancel edits')
-    cancel.textContent = L._('Cancel')
+    cancel.textContent = `${L._('Cancel all')} (Ctrl+Z)`
     const disable = L.DomUtil.create('a', 'leaflet-control-edit-disable', container)
     disable.href = '#'
     disable.title = disable.textContent = L._('Disable editing')

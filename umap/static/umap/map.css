@@ -407,8 +407,20 @@ ul.photon-autocomplete {
     padding: 0 10px;
     min-width: 100px;
 }
-.leaflet-container a.leaflet-control-edit-cancel {
-    background-color: #C60F13;
+.leaflet-container a.leaflet-control-edit-save:before,
+.leaflet-container a.leaflet-control-edit-cancel:before {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+    background-position: -50px -122px;
+    background-repeat: no-repeat;
+    background-image: url('./img/16-white.svg');
+    vertical-align: middle;
+    content: ' ';
+}
+.leaflet-container a.leaflet-control-edit-save:before {
+    background-position: -4px -25px;
 }
 .leaflet-container a.leaflet-control-edit-save {
     opacity: 0.5;
