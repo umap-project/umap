@@ -116,9 +116,26 @@ a.umap-control-less {
     height: 23px;
     line-height: 23px;
 }
+.leaflet-control-edit-enable a:before {
+    content: ' ';
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('./img/16-white.svg');
+    background-position: -52px -49px;
+}
+
 .leaflet-control-edit-enable a {
-    background-position: 0 0;
+    width: initial;
+    padding: 0 20px;
     background-color: #353c3e;
+    color: #fff;
+    background-image: none;
+    border-radius: 20px;
+    height: 36px;
+    line-height: 36px;
+    display: block;
 }
 .leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
 .leaflet-control-edit-enable a:hover {
@@ -203,7 +220,6 @@ ul.photon-autocomplete {
     background-image: url('./img/24.svg');
     background-size: auto auto;
 }
-.leaflet-control-edit-enable a,
 .leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
     background-image: url('./img/24-white.svg');
 }

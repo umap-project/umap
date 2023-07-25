@@ -316,11 +316,12 @@ L.U.EditControl = L.Control.extend({
   onAdd: function (map) {
     const container = L.DomUtil.create(
         'div',
-        'leaflet-control-edit-enable umap-control'
+        'leaflet-control-edit-enable',
       ),
       edit = L.DomUtil.create('a', '', container)
     edit.href = '#'
     edit.title = `${L._('Enable editing')} (Ctrl+E)`
+    edit.textContent = L._('Edit')
 
     L.DomEvent.addListener(edit, 'click', L.DomEvent.stop).addListener(
       edit,
