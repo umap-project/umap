@@ -433,9 +433,6 @@ ul.photon-autocomplete {
 .umap-is-dirty a.leaflet-control-edit-disable {
     display: none;
 }
-.umap-click-to-edit:hover {
-    text-decoration: underline;
-}
 .umap-caption-bar {
     display: none;
 }
@@ -468,6 +465,9 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox a {
     color: #fff;
     font-size: 1.2em;
+}
+.umap-main-edit-toolbox a:hover {
+    text-decoration: underline;
 }
 .umap-main-edit-toolbox .map-name {
     display: inline-block;
