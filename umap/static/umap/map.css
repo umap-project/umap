@@ -465,6 +465,7 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox a {
     color: #fff;
     font-size: 1.2em;
+    vertical-align: middle;
 }
 .umap-main-edit-toolbox a:hover {
     text-decoration: underline;
@@ -475,12 +476,11 @@ ul.photon-autocomplete {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    vertical-align: middle;
     margin-right: 5px;
     font-weight: bold;
 }
 .umap-main-edit-toolbox .share-status {
-    margin: 0 5px;
+    margin: 0 20px;
 }
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
@@ -492,15 +492,8 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox h3 {
     display: inline;
 }
-.umap-main-edit-toolbox .umap-user:before {
-    content: '|';
-    color: #fff;
-    padding-right: 10px;
-    background-image: url('./img/16-white.svg');
-    background-repeat: no-repeat;
-    display: inline-block;
-    background-position: -40px -115px;
-    width: 20px;
+.umap-main-edit-toolbox .umap-user {
+    margin-right: 20px;
 }
 .umap-edit-enabled .leaflet-top {
     top: 48px;

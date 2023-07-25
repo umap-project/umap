@@ -1826,7 +1826,7 @@ L.U.Map.include({
         'a',
         'umap-user',
         container,
-        this.options.user.name
+        L._(`My maps ({username})`, {username: this.options.user.name})
       )
       userLabel.href = this.options.user.url
     }
