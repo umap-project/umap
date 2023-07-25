@@ -245,7 +245,7 @@ L.U.Map.include({
         },
         this
       )
-      this.initEditBar()
+      this.renderEditToolbar()
     }
     this.initShortcuts()
     this.onceDatalayersLoaded(function () {
@@ -1800,79 +1800,6 @@ L.U.Map.include({
     this.onceDatalayersLoaded(function () {
       this.slideshow.renderToolbox(container)
     })
-  },
-
-  initEditBar: function () {
-    const container = L.DomUtil.create(
-        'div',
-        'umap-main-edit-toolbox with-transition dark',
-        this._controlContainer
-      ),
-      logo = L.DomUtil.add('a', 'logo', container),
-      name = L.DomUtil.create('a', 'map-name', container),
-      share_status = L.DomUtil.create('a', 'share-status', container),
-      update = () => {
-        name.textContent = this.getDisplayName()
-        share_status.textContent = L._('Visibility: {status}', {
-          status: this.permissions.getShareStatusDisplay(),
-        })
-      }
-    update()
-    name.href = '#'
-    share_status.href = '#'
-    logo.href = '/'
-    if (this.options.user) {
-      const userLabel = L.DomUtil.add(
-        'a',
-        'umap-user',
-        container,
-        L._(`My maps ({username})`, {username: this.options.user.name})
-      )
-      userLabel.href = this.options.user.url
-    }
-    this.help.button(container, 'edit')
-    L.DomEvent.on(name, 'click', this.edit, this)
-    L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
-    this.on('postsync', L.bind(update, this))
-    const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
-    save.href = '#'
-    save.title = `${L._('Save current edits')} (Ctrl+S)`
-    save.textContent = L._('Save')
-    const cancel = L.DomUtil.create(
-      'a',
-      'leaflet-control-edit-cancel',
-      container
-    )
-    cancel.href = '#'
-    cancel.title = L._('Cancel edits')
-    cancel.textContent = `${L._('Cancel all')} (Ctrl+Z)`
-    const disable = L.DomUtil.create('a', 'leaflet-control-edit-disable', container)
-    disable.href = '#'
-    disable.title = disable.textContent = L._('Disable editing')
-
-    L.DomEvent.addListener(disable, 'click', L.DomEvent.stop).addListener(
-      disable,
-      'click',
-      function (e) {
-        this.disableEdit(e)
-        this.ui.closePanel()
-      },
-      this
-    )
-
-    L.DomEvent.addListener(save, 'click', L.DomEvent.stop).addListener(
-      save,
-      'click',
-      this.save,
-      this
-    )
-
-    L.DomEvent.addListener(cancel, 'click', L.DomEvent.stop).addListener(
-      cancel,
-      'click',
-      this.askForReset,
-      this
-    )
   },
 
   askForReset: function (e) {
