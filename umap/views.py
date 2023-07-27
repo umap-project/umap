@@ -945,7 +945,9 @@ def stats(request):
 
 def logout(request):
     do_logout(request)
-    return simple_json_response(redirect="/")
+    if is_ajax(request):
+        return simple_json_response(redirect="/")
+    return HttpResponseRedirect("/")
 
 
 class LoginPopupEnd(TemplateView):
