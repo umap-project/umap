@@ -1415,10 +1415,10 @@ a.add-datalayer:hover,
 .leaflet-contextmenu-icon {
     display: none;
 }
-.umap-popup-large iframe,
-.umap-popup-large img {
+.umap-popup-large iframe {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
-    max-width: 500px !important;
+    max-width: 100% !important;
+    min-width: 500px;
 }
 .umap-popup-content img {
     max-width: 100%;
