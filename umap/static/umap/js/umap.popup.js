@@ -63,8 +63,8 @@ L.U.Popup.Panel = L.U.Popup.extend({
     return button
   },
 
-  update: function () {
-    this.feature.map.ui.openPanel({
+  onAdd: function (map) {
+    map.ui.openPanel({
       data: { html: this._content },
       actions: [this.allButton()],
     })
@@ -72,12 +72,9 @@ L.U.Popup.Panel = L.U.Popup.extend({
 
   onRemove: function (map) {
     map.ui.closePanel()
-    L.U.Popup.prototype.onRemove.call(this, map)
   },
 
-  _initLayout: function () {
-    this._container = L.DomUtil.create('span')
-  },
+  update: function () {},
   _updateLayout: function () {},
   _updatePosition: function () {},
   _adjustPan: function () {},
