@@ -470,6 +470,17 @@ L.U.FeatureMixin = {
     return false
   },
 
+  matchAdvancedFilters: function () {
+    const filters = this.map.options.advancedFilters
+    for (const [property, expected] of Object.entries(filters)) {
+      if (expected.length) {
+        let value = this.properties[property]
+        if (!value || !expected.includes(value)) return false
+      }
+    }
+    return true
+  },
+
   onVertexRawClick: function (e) {
     new L.Toolbar.Popup(e.latlng, {
       className: 'leaflet-inplace-toolbar',

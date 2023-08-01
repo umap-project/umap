@@ -882,38 +882,12 @@ L.U.Map.include({
     }
 
     const filterFeatures = function () {
-      let noResults = true
+      let found = false
       this.eachBrowsableDataLayer((datalayer) => {
-        datalayer.eachFeature(function (feature) {
-          feature.properties.isVisible = true
-          for (const [property, values] of Object.entries(
-            this.map.options.advancedFilters
-          )) {
-            if (values.length > 0) {
-              if (
-                !feature.properties[property] ||
-                !values.includes(feature.properties[property])
-              ) {
-                feature.properties.isVisible = false
-              }
-            }
-          }
-          if (feature.properties.isVisible) {
-            noResults = false
-            if (!this.isLoaded()) this.fetchData()
-            this.map.addLayer(feature)
-            this.fire('show')
-          } else {
-            this.map.removeLayer(feature)
-            this.fire('hide')
-          }
-        })
+        datalayer.resetLayer(true)
+        if (datalayer.hasDataVisible()) found = true
       })
-      if (noResults) {
-        this.help.show('advancedFiltersNoResults')
-      } else {
-        this.help.hide()
-      }
+      if (!found) this.ui.alert({content: L._('No results for these filters'), level: 'info'})
     }
 
     propertiesContainer.innerHTML = ''

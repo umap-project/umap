@@ -265,6 +265,10 @@ L.U.DataLayer = L.Evented.extend({
     this.parentPane.appendChild(this.pane)
   },
 
+  hasDataVisible: function () {
+    return !!Object.keys(this.layer._layers).length
+  },
+
   resetLayer: function (force) {
     if (this.layer && this.options.type === this.layer._type && !force) return
     const visible = this.isVisible()
@@ -277,6 +281,7 @@ L.U.DataLayer = L.Evented.extend({
       filter = this.map.options.filter
     this.eachLayer(function (layer) {
       if (filter && !layer.matchFilter(filter, filterKeys)) return
+      if (!layer.matchAdvancedFilters()) return
       this.layer.addLayer(layer)
     })
     if (visible) this.map.addLayer(this.layer)
