@@ -785,12 +785,8 @@ L.U.Map.include({
     L.bind(appendAll, this)()
     L.DomEvent.on(filter, 'input', appendAll, this)
     L.DomEvent.on(filter, 'input', resetLayers, this)
-    const link = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-caption', link)
-    const label = L.DomUtil.create('span', '', link)
-    label.textContent = label.title = L._('About')
-    L.DomEvent.on(link, 'click', this.displayCaption, this)
-    this.ui.openPanel({ data: { html: browserContainer }, actions: [link] })
+
+    this.ui.openPanel({ data: { html: browserContainer }, actions: [this._aboutLink()] })
   },
 
   _openFilter: function () {
@@ -887,7 +883,8 @@ L.U.Map.include({
         datalayer.resetLayer(true)
         if (datalayer.hasDataVisible()) found = true
       })
-      if (!found) this.ui.alert({content: L._('No results for these filters'), level: 'info'})
+      if (!found)
+        this.ui.alert({ content: L._('No results for these filters'), level: 'info' })
     }
 
     propertiesContainer.innerHTML = ''
@@ -895,12 +892,16 @@ L.U.Map.include({
       L.bind(addProperty, this)(property)
     })
 
+    this.ui.openPanel({ data: { html: filterContainer }, actions: [this._aboutLink()] })
+  },
+
+  _aboutLink: function () {
     const link = L.DomUtil.create('li', '')
     L.DomUtil.create('i', 'umap-icon-16 umap-caption', link)
     const label = L.DomUtil.create('span', '', link)
     label.textContent = label.title = L._('About')
     L.DomEvent.on(link, 'click', this.displayCaption, this)
-    this.ui.openPanel({ data: { html: filterContainer }, actions: [link] })
+    return link
   },
 
   displayCaption: function () {
