@@ -810,14 +810,14 @@ L.U.Map.include({
 
     const advancedFiltersFull = {}
     let filtersAlreadyLoaded = true
-    if (!this.getMap().options.advancedFilters) {
-      this.getMap().options.advancedFilters = {}
+    if (!this.options.advancedFilters) {
+      this.options.advancedFilters = {}
       filtersAlreadyLoaded = false
     }
     advancedFilterKeys.forEach((property) => {
       advancedFiltersFull[property] = []
-      if (!filtersAlreadyLoaded || !this.getMap().options.advancedFilters[property]) {
-        this.getMap().options.advancedFilters[property] = []
+      if (!filtersAlreadyLoaded || !this.options.advancedFilters[property]) {
+        this.options.advancedFilters[property] = []
       }
     })
     this.eachBrowsableDataLayer((datalayer) => {
@@ -839,10 +839,10 @@ L.U.Map.include({
       filter_check.type = 'checkbox'
       filter_check.id = `checkbox_${property}_${value}`
       filter_check.checked =
-        this.getMap().options.advancedFilters[property] &&
-        this.getMap().options.advancedFilters[property].includes(value)
-      filter_check.setAttribute('data-property', property)
-      filter_check.setAttribute('data-value', value)
+        this.options.advancedFilters[property] &&
+        this.options.advancedFilters[property].includes(value)
+      filter_check.dataset.property = property
+      filter_check.dataset.value = value
       filter_label.htmlFor = `checkbox_${property}_${value}`
       filter_label.innerHTML = value
       L.DomEvent.on(
@@ -852,10 +852,10 @@ L.U.Map.include({
           const property = e.srcElement.dataset.property
           const value = e.srcElement.dataset.value
           if (e.srcElement.checked) {
-            this.getMap().options.advancedFilters[property].push(value)
+            this.options.advancedFilters[property].push(value)
           } else {
-            this.getMap().options.advancedFilters[property].splice(
-              this.getMap().options.advancedFilters[property].indexOf(value),
+            this.options.advancedFilters[property].splice(
+              this.options.advancedFilters[property].indexOf(value),
               1
             )
           }
