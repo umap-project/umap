@@ -155,6 +155,7 @@ L.U.Map.include({
     this.datalayers_index = []
     this.dirty_datalayers = []
     this.features_index = {}
+    this.facets = {}
 
     // Retrocompat
     if (
@@ -163,6 +164,7 @@ L.U.Map.include({
       this.options.slideshow.active === undefined
     )
       this.options.slideshow.active = true
+    if (this.options.advancedFilterKey) this.options.facetKey = this.options.advancedFilterKey
 
     this.initControls()
 
@@ -254,7 +256,7 @@ L.U.Map.include({
       if (L.Util.queryString('share')) this.renderShareBox()
       else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
       else if (this.options.onLoadPanel === 'caption') this.displayCaption()
-      else if (this.options.onLoadPanel === 'datafilters') this.openFilter()
+      else if (this.options.onLoadPanel === 'facet' || this.options.onLoadPanel === 'datafilters') this.openFacet()
     })
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
@@ -951,9 +953,9 @@ L.U.Map.include({
     })
   },
 
-  openFilter: function () {
+  openFacet: function () {
     this.onceDatalayersLoaded(function () {
-      this._openFilter()
+      this._openFacet()
     })
   },
 
@@ -1064,7 +1066,7 @@ L.U.Map.include({
     'sortKey',
     'labelKey',
     'filterKey',
-    'advancedFilterKey',
+    'facetKey',
     'slugKey',
     'showLabel',
     'labelDirection',
@@ -1387,13 +1389,12 @@ L.U.Map.include({
         },
       ],
       [
-        'options.advancedFilterKey',
+        'options.facetKey',
         {
           handler: 'Input',
-          helpEntries: 'advancedFilterKey',
+          helpEntries: 'facetKey',
           placeholder: L._('Example: key1,key2,key3'),
-          label: L._('Advanced filter keys'),
-          inheritable: true,
+          label: L._('Facet keys')
         },
       ],
       [
@@ -1778,7 +1779,7 @@ L.U.Map.include({
         this.openBrowser,
         this
       )
-      if (this.options.advancedFilterKey) {
+      if (this.options.facetKey) {
         const filter = L.DomUtil.add(
           'a',
           'umap-open-filter-link',
@@ -1789,7 +1790,7 @@ L.U.Map.include({
         L.DomEvent.on(filter, 'click', L.DomEvent.stop).on(
           filter,
           'click',
-          this.openFilter,
+          this.openFacet,
           this
         )
       }
@@ -2007,10 +2008,10 @@ L.U.Map.include({
       text: L._('Browse data'),
       callback: this.openBrowser,
     })
-    if (this.options.advancedFilterKey) {
+    if (this.options.facetKey) {
       items.push({
-        text: L._('Select data'),
-        callback: this.openFilter,
+        text: L._('Facet search'),
+        callback: this.openFacet,
       })
     }
     items.push(
@@ -2095,7 +2096,7 @@ L.U.Map.include({
     return (this.options.filterKey || this.options.sortKey || 'name').split(',')
   },
 
-  getAdvancedFilterKeys: function () {
-    return (this.options.advancedFilterKey || '').split(',')
+  getFacetKeys: function () {
+    return (this.options.facetKey || '').split(',')
   },
 })

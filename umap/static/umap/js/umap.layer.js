@@ -281,7 +281,7 @@ L.U.DataLayer = L.Evented.extend({
       filter = this.map.options.filter
     this.eachLayer(function (layer) {
       if (filter && !layer.matchFilter(filter, filterKeys)) return
-      if (!layer.matchAdvancedFilters()) return
+      if (!layer.matchFacets()) return
       this.layer.addLayer(layer)
     })
     if (visible) this.map.addLayer(this.layer)

@@ -560,8 +560,8 @@ L.U.Help = L.Class.extend({
   sortKey: L._('Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'),
   slugKey: L._('The name of the property to use as feature unique identifier.'),
   filterKey: L._('Comma separated list of properties to use when filtering features'),
-  advancedFilterKey: L._(
-    'Comma separated list of properties to use for checkbox filtering'
+  facetKey: L._(
+    'Comma separated list of properties to use for facet search'
   ),
   interactive: L._('If false, the polygon will act as a part of the underlying map.'),
   outlink: L._('Define link to open in a new window on polygon click.'),

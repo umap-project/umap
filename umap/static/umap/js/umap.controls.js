@@ -750,11 +750,7 @@ L.U.Map.include({
       const build = () => {
         ul.innerHTML = ''
         datalayer.eachFeature((feature) => {
-          if (
-            (filterValue && !feature.matchFilter(filterValue, filterKeys)) ||
-            feature.properties.isVisible === false
-          )
-            return
+          if (filterValue && !feature.matchFilter(filterValue, filterKeys)) return
           ul.appendChild(addFeature(feature))
         })
       }
@@ -792,23 +788,16 @@ L.U.Map.include({
     })
   },
 
-  _openFilter: function () {
-    const container = L.DomUtil.create('div', 'umap-filter-data'),
-      title = L.DomUtil.add('h3', 'umap-filter-title', container, this.options.name),
-      propertiesContainer = L.DomUtil.create(
-        'div',
-        'umap-filter-properties',
-        container
-      ),
-      keys = this.getAdvancedFilterKeys()
+  _openFacet: function () {
+    const container = L.DomUtil.create('div', 'umap-facet-search'),
+      title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
+      keys = this.getFacetKeys()
 
     const knownValues = {}
-    if (!this.options.advancedFilters) this.options.advancedFilters = {}
 
     keys.forEach((key) => {
       knownValues[key] = []
-      if (!this.options.advancedFilters[key])
-        this.options.advancedFilters[key] = []
+      if (!this.facets[key]) this.facets[key] = []
     })
 
     this.eachBrowsableDataLayer((datalayer) => {
@@ -830,13 +819,13 @@ L.U.Map.include({
       })
       // TODO: display a results counter in the panel instead.
       if (!found)
-        this.ui.alert({ content: L._('No results for these filters'), level: 'info' })
+        this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
     }
 
     const fields = keys.map((current) => [
-      `options.advancedFilters.${current}`,
+      `facets.${current}`,
       {
-        handler: 'AdvancedFilter',
+        handler: 'FacetSearch',
         choices: knownValues[current],
       },
     ])
@@ -938,11 +927,11 @@ L.U.Map.include({
     labelBrowser.textContent = labelBrowser.title = L._('Browse data')
     L.DomEvent.on(browser, 'click', this.openBrowser, this)
     const actions = [browser]
-    if (this.options.advancedFilterKey) {
+    if (this.options.facetKey) {
       const filter = L.DomUtil.create('li', '')
       L.DomUtil.create('i', 'umap-icon-16 umap-add', filter)
       const labelFilter = L.DomUtil.create('span', '', filter)
-      labelFilter.textContent = labelFilter.title = L._('Select data')
+      labelFilter.textContent = labelFilter.title = L._('Facet search')
       L.DomEvent.on(filter, 'click', this.openFilter, this)
       actions.push(filter)
     }

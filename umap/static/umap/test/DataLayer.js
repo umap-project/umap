@@ -409,7 +409,7 @@ describe('L.U.DataLayer', function () {
         /\/datalayer\/63\/\?.*/,
         JSON.stringify(RESPONSES.datalayer63_GET)
       )
-      this.map.options.advancedFilterKey = 'name'
+      this.map.options.facetKey = 'name'
       this.map.createDataLayer(RESPONSES.datalayer63_GET._umap_options)
       this.server.respond()
     })
@@ -417,8 +417,8 @@ describe('L.U.DataLayer', function () {
       assert.ok(qs('path[fill="SteelBlue"]'))
     })
     it('should allow advanced filter', function () {
-      this.map.openFilter()
-      assert.ok(qs('div.umap-filter-properties'))
+      this.map.openFacet()
+      assert.ok(qs('div.umap-facet-search'))
       // This one if from the normal datalayer
       // it's name is "test", so it should be hidden
       // by the filter
