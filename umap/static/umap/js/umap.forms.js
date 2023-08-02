@@ -684,6 +684,34 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   },
 })
 
+L.FormBuilder.AdvancedFilter = L.FormBuilder.Element.extend({
+  build: function () {
+    this.container = L.DomUtil.create('div', 'property-container', this.parentNode)
+    this.headline = L.DomUtil.add('h5', '', this.container, this.name)
+    this.ul = L.DomUtil.create('ul', '', this.container)
+    const choices = this.options.choices
+    choices.sort()
+    choices.forEach((value) => this.buildLi(value))
+  },
+
+  buildLi: function (value) {
+    const property_li = L.DomUtil.create('li', '', this.ul),
+      input = L.DomUtil.create('input', '', property_li),
+      label = L.DomUtil.create('label', '', property_li)
+    input.type = 'checkbox'
+    input.id = `checkbox_${this.name}_${value}`
+    input.checked = this.get().includes(value)
+    input.dataset.value = value
+    label.htmlFor = `checkbox_${this.name}_${value}`
+    label.innerHTML = value
+    L.DomEvent.on(input, 'change', (e) => this.sync())
+  },
+
+  toJS: function () {
+    return [...this.ul.querySelectorAll('input:checked')].map(i => i.dataset.value)
+  },
+})
+
 L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   default: 'null',
   className: 'umap-multiplechoice',
@@ -1125,7 +1153,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
 
   setter: function (field, value) {
     L.FormBuilder.prototype.setter.call(this, field, value)
-    this.obj.isDirty = true
+    if (this.options.makeDirty !== false) this.obj.isDirty = true
   },
 
   finish: function () {

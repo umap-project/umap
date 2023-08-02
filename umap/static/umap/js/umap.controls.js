@@ -789,96 +789,41 @@ L.U.Map.include({
     L.DomEvent.on(filter, 'input', appendAll, this)
     L.DomEvent.on(filter, 'input', resetLayers, this)
 
-    this.ui.openPanel({ data: { html: browserContainer }, actions: [this._aboutLink()] })
+    this.ui.openPanel({
+      data: { html: browserContainer },
+      actions: [this._aboutLink()],
+    })
   },
 
   _openFilter: function () {
-    const filterContainer = L.DomUtil.create('div', 'umap-filter-data'),
-      title = L.DomUtil.add(
-        'h3',
-        'umap-filter-title',
-        filterContainer,
-        this.options.name
-      ),
+    const container = L.DomUtil.create('div', 'umap-filter-data'),
+      title = L.DomUtil.add('h3', 'umap-filter-title', container, this.options.name),
       propertiesContainer = L.DomUtil.create(
         'div',
         'umap-filter-properties',
-        filterContainer
+        container
       ),
-      advancedFilterKeys = this.getAdvancedFilterKeys()
+      keys = this.getAdvancedFilterKeys()
 
-    const advancedFiltersFull = {}
-    let filtersAlreadyLoaded = true
-    if (!this.options.advancedFilters) {
-      this.options.advancedFilters = {}
-      filtersAlreadyLoaded = false
-    }
-    advancedFilterKeys.forEach((property) => {
-      advancedFiltersFull[property] = []
-      if (!filtersAlreadyLoaded || !this.options.advancedFilters[property]) {
-        this.options.advancedFilters[property] = []
-      }
+    const knownValues = {}
+    if (!this.options.advancedFilters) this.options.advancedFilters = {}
+
+    keys.forEach((key) => {
+      knownValues[key] = []
+      if (!this.options.advancedFilters[key])
+        this.options.advancedFilters[key] = []
     })
+
     this.eachBrowsableDataLayer((datalayer) => {
       datalayer.eachFeature((feature) => {
-        advancedFilterKeys.forEach((property) => {
-          if (feature.properties[property]) {
-            if (!advancedFiltersFull[property].includes(feature.properties[property])) {
-              advancedFiltersFull[property].push(feature.properties[property])
-            }
+        keys.forEach((key) => {
+          let value = feature.properties[key]
+          if (typeof value !== 'undefined' && !knownValues[key].includes(value)) {
+            knownValues[key].push(value)
           }
         })
       })
     })
-
-    const addPropertyValue = function (property, value) {
-      const property_li = L.DomUtil.create('li', ''),
-        filter_check = L.DomUtil.create('input', '', property_li),
-        filter_label = L.DomUtil.create('label', '', property_li)
-      filter_check.type = 'checkbox'
-      filter_check.id = `checkbox_${property}_${value}`
-      filter_check.checked =
-        this.options.advancedFilters[property] &&
-        this.options.advancedFilters[property].includes(value)
-      filter_check.dataset.property = property
-      filter_check.dataset.value = value
-      filter_label.htmlFor = `checkbox_${property}_${value}`
-      filter_label.innerHTML = value
-      L.DomEvent.on(
-        filter_check,
-        'change',
-        function (e) {
-          const property = e.srcElement.dataset.property
-          const value = e.srcElement.dataset.value
-          if (e.srcElement.checked) {
-            this.options.advancedFilters[property].push(value)
-          } else {
-            this.options.advancedFilters[property].splice(
-              this.options.advancedFilters[property].indexOf(value),
-              1
-            )
-          }
-          L.bind(filterFeatures, this)()
-        },
-        this
-      )
-      return property_li
-    }
-
-    const addProperty = function (property) {
-      const container = L.DomUtil.create(
-          'div',
-          'property-container',
-          propertiesContainer
-        ),
-        headline = L.DomUtil.add('h5', '', container, property)
-      const ul = L.DomUtil.create('ul', '', container)
-      const orderedValues = advancedFiltersFull[property]
-      orderedValues.sort()
-      orderedValues.forEach((value) => {
-        ul.appendChild(L.bind(addPropertyValue, this)(property, value))
-      })
-    }
 
     const filterFeatures = function () {
       let found = false
@@ -886,16 +831,26 @@ L.U.Map.include({
         datalayer.resetLayer(true)
         if (datalayer.hasDataVisible()) found = true
       })
+      // TODO: display a results counter in the panel instead.
       if (!found)
         this.ui.alert({ content: L._('No results for these filters'), level: 'info' })
     }
 
-    propertiesContainer.innerHTML = ''
-    advancedFilterKeys.forEach((property) => {
-      L.bind(addProperty, this)(property)
+    const fields = keys.map((current) => [
+      `options.advancedFilters.${current}`,
+      {
+        handler: 'AdvancedFilter',
+        choices: knownValues[current],
+      },
+    ])
+    const builder = new L.U.FormBuilder(this, fields, {
+      makeDirty: false,
+      callback: filterFeatures,
+      callbackContext: this,
     })
+    container.appendChild(builder.build())
 
-    this.ui.openPanel({ data: { html: filterContainer }, actions: [this._aboutLink()] })
+    this.ui.openPanel({ data: { html: container }, actions: [this._aboutLink()] })
   },
 
   _aboutLink: function () {
