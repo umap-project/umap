@@ -805,7 +805,7 @@ a.add-datalayer:hover,
     margin-bottom: 14px;
     border-radius: 2px;
 }
-.umap-browse-features h5, .umap-filter-data h5 {
+.umap-browse-features h5, .umap-facet-search h5 {
     margin-bottom: 0;
     overflow: hidden;
     padding-left: 5px;
@@ -822,7 +822,7 @@ a.add-datalayer:hover,
 .umap-browse-features li {
     padding: 2px 0;
 }
-.umap-browse-features li, .umap-filter-data li {
+.umap-browse-features li, .umap-facet-search li {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -855,7 +855,7 @@ a.add-datalayer:hover,
 .umap-browse-features .polygon .feature-color {
     background-position: -32px -16px;
 }
-.umap-filter-data .property-container:not(:first-child) {
+.umap-facet-search .property-container:not(:first-child) {
     margin-top: 14px;
 }
 .show-on-edit {

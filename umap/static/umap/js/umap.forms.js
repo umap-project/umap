@@ -431,7 +431,7 @@ L.FormBuilder.OnLoadPanel = L.FormBuilder.Select.extend({
     ['none', L._('None')],
     ['caption', L._('Caption')],
     ['databrowser', L._('Data browser')],
-    ['datafilters', L._('Data filters')],
+    ['facet', L._('Facet search')],
   ],
 })
 
@@ -684,7 +684,7 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   },
 })
 
-L.FormBuilder.AdvancedFilter = L.FormBuilder.Element.extend({
+L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   build: function () {
     this.container = L.DomUtil.create('div', 'property-container', this.parentNode)
     this.headline = L.DomUtil.add('h5', '', this.container, this.name)

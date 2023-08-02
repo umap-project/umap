@@ -481,7 +481,7 @@ i.info {
 .umap-datalayer-container,
 .umap-layer-properties-container,
 .umap-browse-data,
-.umap-filter-data,
+.umap-facet-search,
 .umap-browse-datalayers {
     padding: 0 10px;
 }

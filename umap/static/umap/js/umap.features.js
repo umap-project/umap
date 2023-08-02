@@ -474,9 +474,9 @@ L.U.FeatureMixin = {
     return false
   },
 
-  matchAdvancedFilters: function () {
-    const filters = this.map.options.advancedFilters
-    for (const [property, expected] of Object.entries(filters)) {
+  matchFacets: function () {
+    const facets = this.map.facets
+    for (const [property, expected] of Object.entries(facets)) {
       if (expected.length) {
         let value = this.properties[property]
         if (!value || !expected.includes(value)) return false
