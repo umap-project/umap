@@ -108,35 +108,35 @@ describe('L.Util', function () {
     it('should handle image with width', function () {
       assert.equal(
         L.Util.toHTML('A simple image: {{http://osm.org/pouet.png|100}}'),
-        'A simple image: <img src="http://osm.org/pouet.png" width="100">'
+        'A simple image: <img width="100" src="http://osm.org/pouet.png">'
       )
     })
 
     it('should handle iframe', function () {
       assert.equal(
         L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html}}}'),
-        'A simple iframe: <div><iframe src="http://osm.org/pouet.html" width="100%" height="300px" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe height="300px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
       )
     })
 
     it('should handle iframe with height', function () {
       assert.equal(
         L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200}}}'),
-        'A simple iframe: <div><iframe src="http://osm.org/pouet.html" width="100%" height="200px" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe height="200px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
       )
     })
 
     it('should handle iframe with height and width', function () {
       assert.equal(
         L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200*400}}}'),
-        'A simple iframe: <div><iframe src="http://osm.org/pouet.html" width="400px" height="200px" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe height="200px" width="400px" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
       )
     })
 
     it('should handle iframe with height with px', function () {
       assert.equal(
         L.Util.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200px}}}'),
-        'A simple iframe: <div><iframe src="http://osm.org/pouet.html" width="100%" height="200px" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe height="200px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
       )
     })
 
@@ -145,7 +145,7 @@ describe('L.Util', function () {
         L.Util.toHTML(
           'A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'
         ),
-        'A simple iframe: <div><iframe src="https://osm.org/?url=https%3A//anotherurl.com" width="100%" height="300px" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe height="300px" width="100%" src="https://osm.org/?url=https%3A//anotherurl.com" frameborder="0"></iframe></div>'
       )
     })
 
@@ -154,7 +154,7 @@ describe('L.Util', function () {
         L.Util.toHTML(
           'A double iframe: {{{https://osm.org/pouet}}}{{{https://osm.org/boudin}}}'
         ),
-        'A double iframe: <div><iframe src="https://osm.org/pouet" width="100%" height="300px" frameborder="0"></iframe></div><div><iframe src="https://osm.org/boudin" width="100%" height="300px" frameborder="0"></iframe></div>'
+        'A double iframe: <div><iframe height="300px" width="100%" src="https://osm.org/pouet" frameborder="0"></iframe></div><div><iframe height="300px" width="100%" src="https://osm.org/boudin" frameborder="0"></iframe></div>'
       )
     })
 
