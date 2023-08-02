@@ -87,7 +87,12 @@ L.U.FeatureMixin = {
   edit: function (e) {
     if (!this.map.editEnabled || this.isReadOnly()) return
     const container = L.DomUtil.create('div', 'umap-feature-container')
-    L.DomUtil.add('h3', `umap-feature-properties ${this.getClassName()}`, container, L._('Feature properties'))
+    L.DomUtil.add(
+      'h3',
+      `umap-feature-properties ${this.getClassName()}`,
+      container,
+      L._('Feature properties')
+    )
 
     let builder = new L.U.FormBuilder(this, ['datalayer'], {
       callback: function () {
