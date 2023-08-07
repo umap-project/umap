@@ -244,6 +244,8 @@ USER_MAPS_URL = 'user_maps'
 DATABASES = {
     'default': env.db(default='postgis://localhost:5432/umap')
 }
+UMAP_DEFAULT_SHARE_STATUS = None
+UMAP_DEFAULT_EDIT_STATUS = None
 
 UMAP_READONLY = env('UMAP_READONLY', default=False)
 UMAP_GZIP = True

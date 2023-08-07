@@ -106,3 +106,19 @@ def test_publicmanager_should_get_only_public_maps(map, user, licence):
     assert map in Map.public.all()
     assert open_map not in Map.public.all()
     assert private_map not in Map.public.all()
+
+
+def test_can_change_default_edit_status(user, settings):
+    map = MapFactory(owner=user)
+    assert map.edit_status == Map.OWNER
+    settings.UMAP_DEFAULT_EDIT_STATUS = Map.EDITORS
+    map = MapFactory(owner=user)
+    assert map.edit_status == Map.EDITORS
+
+
+def test_can_change_default_share_status(user, settings):
+    map = MapFactory(owner=user)
+    assert map.share_status == Map.PUBLIC
+    settings.UMAP_DEFAULT_SHARE_STATUS = Map.PRIVATE
+    map = MapFactory(owner=user)
+    assert map.share_status == Map.PRIVATE
