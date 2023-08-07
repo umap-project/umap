@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-17 13:14+0000\n"
+"POT-Creation-Date: 2023-07-19 13:43+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Jiří Podhorecký, 2018-2019\n"
+"Last-Translator: Aleš Fiala <f.ales1@seznam.cz>, 2023\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/openstreetmap/umap/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,27 +64,27 @@ msgstr "Pořadí vrstev při editaci"
 
 #: models.py:134
 msgid "Everyone"
-msgstr ""
+msgstr "Kdokoli"
 
 #: models.py:135 models.py:141
 msgid "Editors only"
-msgstr ""
+msgstr "Jen přispěvatelé"
 
 #: models.py:136
 msgid "Owner only"
-msgstr ""
+msgstr "Jen vlastník"
 
 #: models.py:139
 msgid "Everyone (public)"
-msgstr ""
+msgstr "Kdokoli (veřejná)"
 
 #: models.py:140
 msgid "Anyone with link"
-msgstr ""
+msgstr "Kdokoli kdo má odkaz"
 
 #: models.py:142
 msgid "Blocked"
-msgstr ""
+msgstr "Blokováno"
 
 #: models.py:145 models.py:295
 msgid "description"
@@ -163,18 +163,18 @@ msgstr "%(current_user)s nemá mapy."
 #: templates/auth/user_stars.html:5
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
-msgstr ""
+msgstr "Prohlížet mapy označené hvězdičkou uživatele %(current_user)s"
 
 #: templates/auth/user_stars.html:12
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
-msgstr ""
+msgstr "%(current_user)s nemá zatím žádné mapy označené hvězdičkou."
 
 #: templates/base.html:12
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "uMap umožňuje vytvářet mapy s vrstvami OpenStreetMap za okamžik a vložit je do svých stránek."
 
 #: templates/registration/login.html:3
 msgid "Please log in with your account"
@@ -249,7 +249,7 @@ msgstr "Vyzkoušejte si to hned"
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "Tato instance uMap je aktuálně v režimu pouze pro čtení, není povoleno žádné vytváření/úpravy."
 
 #: templates/umap/content.html:31
 #, python-format
@@ -282,39 +282,39 @@ msgstr "Více"
 
 #: templates/umap/map_table.html:6
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: templates/umap/map_table.html:7
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see / edit"
-msgstr ""
+msgstr "Kdo může zobrazit / upravit"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
-msgstr ""
+msgstr "Poslední uložení"
 
 #: templates/umap/map_table.html:10
 msgid "Owner"
-msgstr ""
+msgstr "Vlastník"
 
 #: templates/umap/map_table.html:11
 msgid "Actions"
-msgstr ""
+msgstr "Akce"
 
 #: templates/umap/map_table.html:28
 msgid "Share"
-msgstr ""
+msgstr "Sdílet"
 
 #: templates/umap/map_table.html:29
 msgid "Edit"
-msgstr ""
+msgstr "Upravit"
 
 #: templates/umap/map_table.html:30
 msgid "Download"
-msgstr ""
+msgstr "Stažení"
 
 #: templates/umap/navigation.html:12
 msgid "My maps"
@@ -322,7 +322,7 @@ msgstr "Moje mapy"
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
-msgstr ""
+msgstr "Mapy označené hvězdičkou"
 
 #: templates/umap/navigation.html:19
 msgid "Log in"
@@ -386,18 +386,18 @@ msgstr "Vaše heslo bylo změněno."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%(count)s nalezená mapa:"
+msgstr[1] "%(count)s nalezené mapy:"
+msgstr[2] "%(count)s nalezené mapy:"
+msgstr[3] "%(count)s nalezených map:"
 
 #: templates/umap/search.html:18
 msgid "No map found."
-msgstr ""
+msgstr "Mapa nenalezena."
 
 #: templates/umap/search.html:21
 msgid "Latest created maps"
-msgstr ""
+msgstr "Nedávno vytvořené mapy"
 
 #: templates/umap/search_bar.html:3
 msgid "Search maps"
@@ -409,15 +409,15 @@ msgstr "Hledej"
 
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
 msgid "My dashboard"
-msgstr ""
+msgstr "Můj ovládací panel"
 
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
-msgstr ""
+msgstr "Prohledávat moje mapy"
 
 #: templates/umap/user_dashboard.html:18
 msgid "You have no map yet."
-msgstr ""
+msgstr "Zatím nemáte žádnou mapu."
 
 #: views.py:286
 msgid "View the map"
@@ -434,17 +434,17 @@ msgstr "Seznam přispěvovatelů byl úspěšně upraven!"
 #: views.py:670
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "Odkaz na úpravu uMap pro vaši mapu: %(map_name)s"
 
 #: views.py:673
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "Zde je váš tajný odkaz na úpravu: %(link)s"
 
 #: views.py:679
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "E-mail odeslán na %(email)s"
 
 #: views.py:690
 msgid "Only its owner can delete the map."
@@ -461,6 +461,6 @@ msgstr "Byla vytvořena kopie mapy! Pokud chcete upravovat tuto mapu z jiného p
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulujeme, byla vytvořena kopie mapy!"
 
-#: views.py:884
+#: views.py:897
 msgid "Layer successfully deleted."
 msgstr "Vrstva úspěšně vymazána."

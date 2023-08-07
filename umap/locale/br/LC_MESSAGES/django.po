@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Dren Ar Frankig <hadrienlouque@gmail.com>, 2023
-# Dren Ar Frankig <hadrienlouque@gmail.com>, 2023
+# Dren ar Frankig <hadrienlouque@gmail.com>, 2023
+# Dren ar Frankig <hadrienlouque@gmail.com>, 2023
+# Dren ar Frankig <hadrienlouque@gmail.com>, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-19 13:43+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Dren Ar Frankig <hadrienlouque@gmail.com>, 2023\n"
+"Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2023\n"
 "Language-Team: Breton (http://app.transifex.com/openstreetmap/umap/language/br/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -237,7 +238,7 @@ msgstr "Krouiñ ur gartenn"
 
 #: templates/umap/about_summary.html:51
 msgid "Play with the demo"
-msgstr "Amprouiñ an demo!"
+msgstr "Amprouiñ an tañva!"
 
 #: templates/umap/content.html:23
 msgid ""
