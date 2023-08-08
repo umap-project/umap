@@ -277,13 +277,7 @@ L.U.DataLayer = L.Evented.extend({
     if (visible) this.map.removeLayer(this.layer)
     const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
     this.layer = new Class(this)
-    const filterKeys = this.map.getFilterKeys(),
-      filter = this.map.options.filter
-    this.eachLayer(function (layer) {
-      if (filter && !layer.matchFilter(filter, filterKeys)) return
-      if (!layer.matchFacets()) return
-      this.layer.addLayer(layer)
-    })
+    this.eachLayer((feature) => this.showFeature(feature))
     if (visible) this.map.addLayer(this.layer)
     this.propagateRemote()
   },
@@ -462,15 +456,23 @@ L.U.DataLayer = L.Evented.extend({
     return this.options.type === 'Cluster'
   },
 
+  showFeature: function (feature) {
+    const filterKeys = this.map.getFilterKeys(),
+      filter = this.map.options.filter
+    if (filter && !feature.matchFilter(filter, filterKeys)) return
+    if (!feature.matchFacets()) return
+    this.layer.addLayer(feature)
+  },
+
   addLayer: function (feature) {
     const id = L.stamp(feature)
     feature.connectToDataLayer(this)
     this._index.push(id)
     this._layers[id] = feature
-    this.layer.addLayer(feature)
     this.indexProperties(feature)
-    if (this.hasDataLoaded()) this.fire('datachanged')
     this.map.features_index[feature.getSlug()] = feature
+    this.showFeature(feature)
+    if (this.hasDataLoaded()) this.fire('datachanged')
   },
 
   removeLayer: function (feature) {
