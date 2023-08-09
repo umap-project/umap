@@ -278,10 +278,8 @@ L.U.FeatureMixin = {
     let value = this.getOption(option, fallback)
     // There is a variable inside.
     if (typeof value === 'string' && value.indexOf('{') != -1) {
-      value = L.Util.greedyTemplate(value, this.properties)
-      // We've not been able to replace the variable, let's reset
-      // so we can set a decent default at next step.
-      if (value.indexOf('{') != -1) value = undefined
+      value = L.Util.greedyTemplate(value, this.properties, true)
+      if (value.indexOf('{') != -1) value = this.map.getDefaultOption(option)
     }
     return value
   },
