@@ -1216,7 +1216,6 @@ L.U.TileLayerControl = L.Control.extend({
       'click',
       function () {
         this.map.selectTileLayer(tilelayer)
-        this.map.ui.closePanel()
         if (options && options.callback) options.callback(tilelayer)
       },
       this
