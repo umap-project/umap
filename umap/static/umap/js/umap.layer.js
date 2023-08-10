@@ -10,6 +10,10 @@ L.U.Layer = {
   },
 
   postUpdate: function () {},
+
+  hasDataVisible: function () {
+    return !!Object.keys(this._layers).length
+  },
 }
 
 L.U.Layer.Default = L.FeatureGroup.extend({
@@ -53,6 +57,17 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
     this._markerCluster = L.U.MarkerCluster
+    this._layers = []
+  },
+
+  addLayer: function (layer) {
+    this._layers.push(layer)
+    return L.MarkerClusterGroup.prototype.addLayer.call(this, layer)
+  },
+
+  removeLayer: function (layer) {
+    this._layers.splice(this._layers.indexOf(layer), 1)
+    return L.MarkerClusterGroup.prototype.removeLayer.call(this, layer)
   },
 
   getEditableOptions: function () {
@@ -286,7 +301,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   hasDataVisible: function () {
-    return !!Object.keys(this.layer._layers).length
+    return this.layer.hasDataVisible()
   },
 
   resetLayer: function (force) {
