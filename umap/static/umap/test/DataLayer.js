@@ -432,4 +432,26 @@ describe('L.U.DataLayer', function () {
     })
   })
 
+  describe('#zoomEnd', function () {
+    it('should honour the fromZoom option', function () {
+      this.map.setZoom(6, {animate: false})
+      assert.ok(qs('path[fill="none"]'))
+      this.datalayer.options.fromZoom = 6
+      this.map.setZoom(5, {animate: false})
+      assert.notOk(qs('path[fill="none"]'))
+      this.map.setZoom(6, {animate: false})
+      assert.ok(qs('path[fill="none"]'))
+    })
+
+    it('should honour the toZoom option', function () {
+      this.map.setZoom(6, {animate: false})
+      assert.ok(qs('path[fill="none"]'))
+      this.datalayer.options.toZoom = 6
+      this.map.setZoom(7, {animate: false})
+      assert.notOk(qs('path[fill="none"]'))
+      this.map.setZoom(6, {animate: false})
+      assert.ok(qs('path[fill="none"]'))
+    })
+  })
+
 })

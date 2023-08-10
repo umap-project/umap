@@ -1096,6 +1096,12 @@ L.U.FormBuilder = L.FormBuilder.extend({
       handler: 'ControlChoice',
       label: L._('Display the star map button'),
     },
+    fromZoom: {
+      handler: 'IntInput',
+      label: L._('From zoom'),
+      helpText: L._('Optional.'),
+    },
+    toZoom: { handler: 'IntInput', label: L._('To zoom'), helpText: L._('Optional.') },
   },
 
   initialize: function (obj, fields, options) {
