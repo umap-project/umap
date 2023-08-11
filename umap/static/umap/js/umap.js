@@ -2097,6 +2097,10 @@ L.U.Map.include({
   },
 
   getFacetKeys: function () {
-    return (this.options.facetKey || '').split(',')
+    return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
+      const els = curr.split("|")
+      acc[els[0]] = els[1] || els[0]
+      return acc
+    }, {})
   },
 })

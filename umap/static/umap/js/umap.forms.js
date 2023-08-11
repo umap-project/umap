@@ -677,12 +677,15 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
 
 L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   build: function () {
-    this.container = L.DomUtil.create('div', 'property-container', this.parentNode)
-    this.headline = L.DomUtil.add('h5', '', this.container, this.name)
+    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
     this.ul = L.DomUtil.create('ul', '', this.container)
     const choices = this.options.choices
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
+  },
+
+  buildLabel: function () {
+      this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label);
   },
 
   buildLi: function (value) {

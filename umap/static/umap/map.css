@@ -853,9 +853,6 @@ a.add-datalayer:hover,
 .umap-browse-features .polygon .feature-color {
     background-position: -32px -16px;
 }
-.umap-facet-search .property-container:not(:first-child) {
-    margin-top: 14px;
-}
 .show-on-edit {
     display: none!important;
 }
