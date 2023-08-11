@@ -794,7 +794,7 @@ L.U.Map.include({
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),
       title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
-      keys = this.getFacetKeys()
+      keys = Object.keys(this.getFacetKeys())
 
     const knownValues = {}
 
@@ -830,6 +830,7 @@ L.U.Map.include({
       {
         handler: 'FacetSearch',
         choices: knownValues[current],
+        label: this.getFacetKeys()[current],
       },
     ])
     const builder = new L.U.FormBuilder(this, fields, {
