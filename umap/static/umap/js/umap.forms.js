@@ -417,7 +417,16 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   },
 })
 
-L.FormBuilder.onLoadPanel = L.FormBuilder.Select.extend({
+L.FormBuilder.DefaultView = L.FormBuilder.Select.extend({
+  selectOptions: [
+    ['center', L._('Saved center and zoom')],
+    ['bounds', L._('Layers bounds')],
+    ['latest', L._('Latest feature')],
+    ['locate', L._('User location')],
+  ],
+})
+
+L.FormBuilder.OnLoadPanel = L.FormBuilder.Select.extend({
   selectOptions: [
     ['none', L._('None')],
     ['caption', L._('Caption')],
@@ -1008,8 +1017,12 @@ L.U.FormBuilder = L.FormBuilder.extend({
       label: L._('Do you want to display the scale control?'),
     },
     onLoadPanel: {
-      handler: 'onLoadPanel',
+      handler: 'OnLoadPanel',
       label: L._('Do you want to display a panel on load?'),
+    },
+    defaultView: {
+      handler: 'DefaultView',
+      label: L._('Default view'),
     },
     displayPopupFooter: {
       handler: 'Switch',
