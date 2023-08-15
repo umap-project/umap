@@ -48,7 +48,7 @@ dev = [
   "hatch==1.7.0",
   "black==21.10b0",
   "djlint==1.31.0",
-  "mkdocs==1.2.3",
+  "mkdocs==1.5.2",
 ]
 test = [
   "factory-boy==3.2.1",
