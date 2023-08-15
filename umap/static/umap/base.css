@@ -460,7 +460,7 @@ i.info {
     background-position: -120px -48px;
 }
 .umap-clone:before {
-    background-position: -160px -88px;
+    background-position: -150px -78px;
 }
 .umap-delete:before {
     background-position: -40px -8px;
@@ -469,10 +469,10 @@ i.info {
     background-position: -6px -6px;
 }
 .umap-empty:before {
-    background-position: -160px -126px;
+    background-position: -110px -78px;
 }
 .umap-download:before {
-    background-position: -88px -168px;
+    background-position: -77px -78px;
 }
 .permissions-panel,
 .umap-upload,
