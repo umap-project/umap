@@ -445,6 +445,7 @@ L.U.FeatureMixin = {
   },
 
   resetTooltip: function () {
+    if (!this.hasGeom()) return
     const displayName = this.getDisplayName(null)
     let showLabel = this.getOption('showLabel')
     const oldLabelHover = this.getOption('labelHover')
@@ -495,15 +496,17 @@ L.U.FeatureMixin = {
   extendedProperties: function () {
     // Include context properties
     properties = this.map.getGeoContext()
-    center = this.getCenter()
-    properties.lat = center.lat
-    properties.lon = center.lng
-    properties.lng = center.lng
-    properties.rank = this.getRank() + 1
     if (L.locale) properties.locale = L.locale
     if (L.lang) properties.lang = L.lang
-    if (typeof this.getMeasure !== 'undefined') {
-      properties.measure = this.getMeasure()
+    properties.rank = this.getRank() + 1
+    if (this.hasGeom()) {
+      center = this.getCenter()
+      properties.lat = center.lat
+      properties.lon = center.lng
+      properties.lng = center.lng
+      if (typeof this.getMeasure !== 'undefined') {
+        properties.measure = this.getMeasure()
+      }
     }
     return L.extend(properties, this.properties)
   },
@@ -534,6 +537,10 @@ L.U.Marker = L.Marker.extend({
     if (!this.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
+  },
+
+  hasGeom: function () {
+    return !!this._latlng
   },
 
   _onMouseOut: function () {
@@ -680,6 +687,10 @@ L.U.Marker = L.Marker.extend({
 })
 
 L.U.PathMixin = {
+  hasGeom: function () {
+    return !this.isEmpty()
+  },
+
   connectToDataLayer: function (datalayer) {
     L.U.FeatureMixin.connectToDataLayer.call(this, datalayer)
     // We keep markers on their own layer on top of the paths.
