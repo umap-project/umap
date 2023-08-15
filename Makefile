@@ -21,9 +21,13 @@ lint-templates: ## Lint template files
 version: ## Display the current version
 	@hatch version
 
-.PHONY: bump
-bump: ## Bump the current version to a new minor one
+.PHONY: patch
+patch: ## Bump the current version to a new patch one
 	@hatch version fix
+
+.PHONY: minor
+minor: ## Bump the current version to a new minor one
+	@hatch version minor
 
 .PHONY: docker
 docker: ## Create a new Docker image and publish it
