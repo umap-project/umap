@@ -144,18 +144,6 @@ L.U.Map.include({
       // Certainly IE8, which has a limited version of defineProperty
     }
 
-    if (this.options.hash) this.addHash()
-    this.initCenter()
-    this.handleLimitBounds()
-
-    this.initTileLayers(this.options.tilelayers)
-
-    // Global storage for retrieving datalayers and features
-    this.datalayers = {}
-    this.datalayers_index = []
-    this.dirty_datalayers = []
-    this.features_index = {}
-
     // Retrocompat
     if (
       this.options.slideshow &&
@@ -164,9 +152,17 @@ L.U.Map.include({
     )
       this.options.slideshow.active = true
 
-    this.initControls()
+    // Global storage for retrieving datalayers and features
+    this.datalayers = {}
+    this.datalayers_index = []
+    this.dirty_datalayers = []
+    this.features_index = {}
 
-    // create datalayers
+    if (this.options.hash) this.addHash()
+    this.initControls()
+    this.initCenter()
+    this.handleLimitBounds()
+    this.initTileLayers(this.options.tilelayers)
     this.initDatalayers()
 
     if (this.options.displayCaptionOnLoad) {
@@ -636,10 +632,16 @@ L.U.Map.include({
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
-    } else if (this.options.locate && this.options.locate.setView) {
-      // Prevent from making two setViews at init
-      // which is not very fluid...
-      this.locate(this.options.locate)
+    } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
+      this._controls.locate.start()
+    } else if (this.options.defaultView === 'bounds') {
+      this.onceDataLoaded(() => this.fitBounds(this.getLayersBounds()))
+    } else if (this.options.defaultView === 'latest') {
+      this.onceDataLoaded(() => {
+        const datalayer = this.defaultDataLayer(),
+          feature = datalayer.getFeatureByIndex(-1)
+        if (feature) feature.zoomTo()
+      })
     } else {
       this.options.center = this.latLng(this.options.center)
       this.setView(this.options.center, this.options.zoom)
@@ -1036,6 +1038,7 @@ L.U.Map.include({
     'miniMap',
     'displayPopupFooter',
     'onLoadPanel',
+    'defaultView',
     'tilelayersControl',
     'name',
     'description',
@@ -1273,6 +1276,9 @@ L.U.Map.include({
     }
   },
 
+  // TODO: allow to control the default datalayer
+  // (edit and viewing)
+  // cf https://github.com/umap-project/umap/issues/585
   defaultDataLayer: function () {
     let datalayer, fallback
     datalayer = this.lastUsedDataLayer
@@ -1314,6 +1320,7 @@ L.U.Map.include({
       'options.miniMap',
       'options.scaleControl',
       'options.onLoadPanel',
+      'options.defaultView',
       'options.displayPopupFooter',
       'options.captionBar',
       'options.captionMenus',
@@ -2098,4 +2105,13 @@ L.U.Map.include({
   getAdvancedFilterKeys: function () {
     return (this.options.advancedFilterKey || '').split(',')
   },
+
+  getLayersBounds: function () {
+    const bounds = new L.latLngBounds()
+    this.eachBrowsableDataLayer((d) => {
+      if (d.isVisible()) bounds.extend(d.layer.getBounds())
+    })
+    return bounds
+  },
+
 })
