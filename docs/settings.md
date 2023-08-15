@@ -147,6 +147,27 @@ UMAP_EXTRA_URLS = {
 
 How many datalayer versions to keep. 10 by default.
 
+
+#### UMAP_DEFAULT_EDIT_STATUS
+
+Define the map default edit status.
+Possible values:
+
+- 1 (Everyone)
+- 2 (Editors only)
+- 3 (Owner only)
+
+
+#### UMAP_DEFAULT_SHARE_STATUS
+
+Define the map default share status.
+Possible values:
+
+- 1 (Everyone (public))
+- 2 (Anyone with link)
+- 3 (Editors only)
+
+
 #### UMAP_DEMO_SITE
 
 Set to True if you want to display a message saying that your instance is not

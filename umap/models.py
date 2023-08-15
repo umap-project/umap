@@ -36,6 +36,14 @@ User.add_to_class("get_url", get_user_url)
 User.add_to_class("get_stars_url", get_user_stars_url)
 
 
+def get_default_share_status():
+    return settings.UMAP_DEFAULT_SHARE_STATUS or Map.PUBLIC
+
+
+def get_default_edit_status():
+    return settings.UMAP_DEFAULT_EDIT_STATUS or Map.OWNER
+
+
 class NamedModel(models.Model):
     name = models.CharField(max_length=200, verbose_name=_("name"))
 
@@ -168,10 +176,10 @@ class Map(NamedModel):
         settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
     )
     edit_status = models.SmallIntegerField(
-        choices=EDIT_STATUS, default=OWNER, verbose_name=_("edit status")
+        choices=EDIT_STATUS, default=get_default_edit_status, verbose_name=_("edit status")
     )
     share_status = models.SmallIntegerField(
-        choices=SHARE_STATUS, default=PUBLIC, verbose_name=_("share status")
+        choices=SHARE_STATUS, default=get_default_share_status, verbose_name=_("share status")
     )
     settings = models.JSONField(
         blank=True, null=True, verbose_name=_("settings"), default=dict
