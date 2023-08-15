@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 13:43+0000\n"
+"POT-Creation-Date: 2023-08-15 14:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,107 +34,107 @@ msgstr ""
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: models.py:40
+#: models.py:48
 msgid "name"
 msgstr ""
 
-#: models.py:71
+#: models.py:79
 msgid "details"
 msgstr ""
 
-#: models.py:72
+#: models.py:80
 msgid "Link to a page where the licence is detailed."
 msgstr ""
 
-#: models.py:82
+#: models.py:90
 msgid "URL template using OSM tile format"
 msgstr ""
 
-#: models.py:88
+#: models.py:96
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:134
+#: models.py:142
 msgid "Everyone"
 msgstr ""
 
-#: models.py:135 models.py:141
+#: models.py:143 models.py:149
 msgid "Editors only"
 msgstr ""
 
-#: models.py:136
+#: models.py:144
 msgid "Owner only"
 msgstr ""
 
-#: models.py:139
+#: models.py:147
 msgid "Everyone (public)"
 msgstr ""
 
-#: models.py:140
+#: models.py:148
 msgid "Anyone with link"
 msgstr ""
 
-#: models.py:142
+#: models.py:150
 msgid "Blocked"
 msgstr ""
 
-#: models.py:145 models.py:295
+#: models.py:153 models.py:303
 msgid "description"
 msgstr ""
 
-#: models.py:146
+#: models.py:154
 msgid "center"
 msgstr ""
 
-#: models.py:147
+#: models.py:155
 msgid "zoom"
 msgstr ""
 
-#: models.py:149
+#: models.py:157
 msgid "locate"
 msgstr ""
 
-#: models.py:149
+#: models.py:157
 msgid "Locate user on load?"
 msgstr ""
 
-#: models.py:153
+#: models.py:161
 msgid "Choose the map licence."
 msgstr ""
 
-#: models.py:154
+#: models.py:162
 msgid "licence"
 msgstr ""
 
-#: models.py:164
+#: models.py:172
 msgid "owner"
 msgstr ""
 
-#: models.py:168
+#: models.py:176
 msgid "editors"
 msgstr ""
 
-#: models.py:171
+#: models.py:179
 msgid "edit status"
 msgstr ""
 
-#: models.py:174
+#: models.py:182
 msgid "share status"
 msgstr ""
 
-#: models.py:177
+#: models.py:185
 msgid "settings"
 msgstr ""
 
-#: models.py:250
+#: models.py:258
 msgid "Clone of"
 msgstr ""
 
-#: models.py:299
+#: models.py:307
 msgid "display on load"
 msgstr ""
 
-#: models.py:300
+#: models.py:308
 msgid "Display this layer on load."
 msgstr ""
 
@@ -451,6 +451,6 @@ msgstr ""
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:897
+#: views.py:901
 msgid "Layer successfully deleted."
 msgstr ""
