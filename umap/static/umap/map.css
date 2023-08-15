@@ -1456,6 +1456,9 @@ a.add-datalayer:hover,
     .umap-permanent-credits-container {
         max-width: 100%;
     }
+    .umap-popup-large iframe {
+        min-width: 300px;
+    }
 }
 
 /* ****** */
