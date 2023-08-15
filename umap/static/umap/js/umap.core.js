@@ -253,6 +253,10 @@ L.Util.buildQueryString = (params) => {
 
 L.Util.getBaseUrl = () => `//${window.location.host}${window.location.pathname}`
 
+L.Util.hasVar = (value) => {
+  return typeof value === 'string' && value.indexOf('{') != -1
+}
+
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
   if (content) {
@@ -548,7 +552,9 @@ L.U.Help = L.Class.extend({
     'A comma separated list of numbers that defines the stroke dash pattern. Ex.: "5, 10, 15".'
   ),
   zoomTo: L._('Zoom level for automatic zooms'),
-  labelKey: L._('The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "{name} in {place}")'),
+  labelKey: L._(
+    'The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "{name} in {place}")'
+  ),
   stroke: L._('Whether to display or not polygons paths.'),
   fill: L._('Whether to fill polygons with color.'),
   fillColor: L._('Optional. Same as color if not set.'),
@@ -557,7 +563,9 @@ L.U.Help = L.Class.extend({
   permanentCredit: L._(
     'Will be permanently visible in the bottom left corner of the map'
   ),
-  sortKey: L._('Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'),
+  sortKey: L._(
+    'Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'
+  ),
   slugKey: L._('The name of the property to use as feature unique identifier.'),
   filterKey: L._('Comma separated list of properties to use when filtering features'),
   advancedFilterKey: L._(
