@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1 - 2023-08-15
+
+- Fix layers behing hidden at zoom
+- Fix bad status show in edit header on map creation (cf #1260)
+
 ## 1.5.0 - 2023-08-15
 
 * Add target URL in CORS error message by @yohanboniface in https://github.com/umap-project/umap/pull/1228
