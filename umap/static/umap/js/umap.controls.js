@@ -991,6 +991,7 @@ L.U.Map.include({
         })
       }
     update()
+    this.once('saved', L.bind(update, this))
     name.href = '#'
     share_status.href = '#'
     logo.href = '/'
