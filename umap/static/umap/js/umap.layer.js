@@ -237,9 +237,29 @@ L.U.DataLayer = L.Evented.extend({
     this.connectToMap()
     if (this.displayedOnLoad()) this.show()
     if (!this.umap_id) this.isDirty = true
+
+    // Retrocompat
+    if (this.options.remoteData && this.options.remoteData.from) {
+      this.options.fromZoom = this.options.remoteData.from
+    }
+    if (this.options.remoteData && this.options.remoteData.to) {
+      this.options.toZoom = this.options.remoteData.to
+    }
+
     this.onceLoaded(function () {
-      this.map.on('moveend', this.fetchRemoteData, this)
+      this.map.on('moveend', this.onMoveEnd, this)
+      this.map.on('zoomend', this.onZoomEnd, this)
     })
+  },
+
+  onMoveEnd: function (e) {
+    if (this.isRemoteLayer()) this.fetchRemoteData()
+  },
+
+  onZoomEnd: function (e) {
+    if (this._forcedVisibility) return
+    if (!this.showAtZoom() && this.isVisible()) this.hide()
+    if (this.showAtZoom() && !this.isVisible()) this.show()
   },
 
   displayedOnLoad: function () {
@@ -335,6 +355,7 @@ L.U.DataLayer = L.Evented.extend({
       this.backupData()
       this._geojson = null
     }
+    this.fire('datachanged')
   },
 
   backupData: function () {
@@ -351,17 +372,17 @@ L.U.DataLayer = L.Evented.extend({
     }
   },
 
+  showAtZoom: function () {
+    const from = parseInt(this.options.fromZoom, 10),
+      to = parseInt(this.options.toZoom, 10),
+      zoom = this.map.getZoom()
+    if (isNaN(from) || isNaN(to)) return false
+    return (zoom >= from && zoom <= to)
+  },
+
   fetchRemoteData: function () {
     if (!this.isRemoteLayer()) return
-    const from = parseInt(this.options.remoteData.from, 10),
-      to = parseInt(this.options.remoteData.to, 10)
-    if (
-      (!isNaN(from) && this.map.getZoom() < from) ||
-      (!isNaN(to) && this.map.getZoom() > to)
-    ) {
-      this.clear()
-      return
-    }
+    if (!this.showAtZoom()) return
     if (!this.options.remoteData.dynamic && this.hasDataLoaded()) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
@@ -840,6 +861,8 @@ L.U.DataLayer = L.Evented.extend({
       'options.smoothFactor',
       'options.dashArray',
       'options.zoomTo',
+      'options.fromZoom',
+      'options.toZoom',
       'options.labelKey',
     ]
 
@@ -880,11 +903,8 @@ L.U.DataLayer = L.Evented.extend({
         { handler: 'Url', label: L._('Url'), helpEntries: 'formatURL' },
       ],
       ['options.remoteData.format', { handler: 'DataFormat', label: L._('Format') }],
-      [
-        'options.remoteData.from',
-        { label: L._('From zoom'), helpText: L._('Optional.') },
-      ],
-      ['options.remoteData.to', { label: L._('To zoom'), helpText: L._('Optional.') }],
+      'options.fromZoom',
+      'options.toZoom',
       [
         'options.remoteData.dynamic',
         { handler: 'Switch', label: L._('Dynamic'), helpEntries: 'dynamicRemoteData' },
@@ -976,9 +996,7 @@ L.U.DataLayer = L.Evented.extend({
   buildVersionsFieldset: function (container) {
     const appendVersion = function (data) {
       const date = new Date(parseInt(data.at, 10))
-      const content = `${date.toLocaleString(L.lang)} (${
-        parseInt(data.size) / 1000
-      }Kb)`
+      const content = `${date.toLocaleString(L.lang)} (${parseInt(data.size) / 1000}Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
       const a = L.DomUtil.create('a', '', el)
       L.DomUtil.add('span', '', el, content)
@@ -1041,6 +1059,9 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   toggle: function () {
+    // From now on, do not try to how/hide
+    // automatically this layer.
+    this._forcedVisibility = true
     if (!this.isVisible()) this.show()
     else this.hide()
   },
