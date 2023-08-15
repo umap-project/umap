@@ -116,9 +116,26 @@ a.umap-control-less {
     height: 23px;
     line-height: 23px;
 }
+.leaflet-control-edit-enable a:before {
+    content: ' ';
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('./img/16-white.svg');
+    background-position: -52px -49px;
+}
+
 .leaflet-control-edit-enable a {
-    background-position: 0 0;
+    width: initial;
+    padding: 0 20px;
     background-color: #353c3e;
+    color: #fff;
+    background-image: none;
+    border-radius: 20px;
+    height: 36px;
+    line-height: 36px;
+    display: block;
 }
 .leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
 .leaflet-control-edit-enable a:hover {
@@ -203,7 +220,6 @@ ul.photon-autocomplete {
     background-image: url('./img/24.svg');
     background-size: auto auto;
 }
-.leaflet-control-edit-enable a,
 .leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
     background-image: url('./img/24-white.svg');
 }
@@ -407,8 +423,20 @@ ul.photon-autocomplete {
     padding: 0 10px;
     min-width: 100px;
 }
-.leaflet-container a.leaflet-control-edit-cancel {
-    background-color: #C60F13;
+.leaflet-container a.leaflet-control-edit-save:before,
+.leaflet-container a.leaflet-control-edit-cancel:before {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+    background-position: -50px -122px;
+    background-repeat: no-repeat;
+    background-image: url('./img/16-white.svg');
+    vertical-align: middle;
+    content: ' ';
+}
+.leaflet-container a.leaflet-control-edit-save:before {
+    background-position: -4px -25px;
 }
 .leaflet-container a.leaflet-control-edit-save {
     opacity: 0.5;
@@ -433,26 +461,6 @@ ul.photon-autocomplete {
 .umap-is-dirty a.leaflet-control-edit-disable {
     display: none;
 }
-.umap-click-to-edit {
-    color: #4a90d9;
-    font-weight: bold;
-}
-.umap-click-to-edit:after {
-    content: "\00a0";
-    background-repeat: no-repeat;
-    background-position: center center;
-    cursor: pointer;
-    width: 26px;
-    height: 100%;
-    display: inline-block;
-    background-position: -46px -41px;
-}
-.umap-click-to-edit:hover:after {
-    background-image: url('./img/16.svg');
-}
-.dark .umap-click-to-edit:hover:after {
-    background-image: url('./img/16-white.svg');
-}
 .umap-caption-bar {
     display: none;
 }
@@ -464,14 +472,43 @@ ul.photon-autocomplete {
     right: 0;
     height: 46px;
     background-color: #323737;
-    padding: 5px;
+    padding: 5px 10px;
     text-align: left;
     line-height: 36px;
     cursor: auto;
     border-bottom: 1px solid #222;
     z-index: 1000;
     opacity: 0.98;
-    color: #efefef;
+    color: #fff;
+}
+.umap-main-edit-toolbox .logo {
+    background-image: url('./img/logo_small.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    width: 60px;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.umap-main-edit-toolbox a {
+    color: #fff;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+.umap-main-edit-toolbox a:hover {
+    text-decoration: underline;
+}
+.umap-main-edit-toolbox .map-name {
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 5px;
+    font-weight: bold;
+}
+.umap-main-edit-toolbox .share-status {
+    margin: 0 20px;
 }
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
@@ -483,15 +520,8 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox h3 {
     display: inline;
 }
-.umap-main-edit-toolbox .umap-user:before {
-    content: '|';
-    color: #fff;
-    padding-right: 10px;
-    background-image: url('./img/16-white.svg');
-    background-repeat: no-repeat;
-    display: inline-block;
-    background-position: -40px -115px;
-    width: 20px;
+.umap-main-edit-toolbox .umap-user {
+    margin-right: 20px;
 }
 .umap-edit-enabled .leaflet-top {
     top: 48px;
@@ -1437,7 +1467,26 @@ a.add-datalayer:hover,
 /* Mobile */
 /* ****** */
 
+@media all and (max-width: 980px) {
+
+    .leaflet-container a.leaflet-control-edit-save,
+    .leaflet-container a.leaflet-control-edit-cancel {
+        text-indent: calc(100% - 20px);
+        width: 35px;
+        min-width: initial;
+    }
+
+    .umap-main-edit-toolbox .umap-help-button,
+    .umap-main-edit-toolbox .share-status {
+        display: none;
+    }
+
+}
 @media all and (max-width: 480px) {
+
+    .umap-main-edit-toolbox .map-name {
+        max-width: 100px;
+    }
 
     .leaflet-control-layers-expanded label {
         display: inline-block;

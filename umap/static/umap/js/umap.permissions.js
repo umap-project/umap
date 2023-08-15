@@ -160,6 +160,7 @@ L.U.MapPermissions = L.Class.extend({
         this.commit()
         this.isDirty = false
         this.map.continueSaving()
+        this.map.fire('postsync')
       },
     })
   },
@@ -194,4 +195,8 @@ L.U.MapPermissions = L.Class.extend({
   commit: function () {
     L.Util.extend(this.map.options.permissions, this.options)
   },
+
+  getShareStatusDisplay: function () {
+    return Object.fromEntries(this.map.options.share_statuses)[this.options.share_status]
+  }
 })

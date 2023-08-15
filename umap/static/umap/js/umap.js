@@ -67,13 +67,11 @@ L.U.Map.include({
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
-    if (geojson.properties.locale)
-      L.setLocale(geojson.properties.locale)
+    if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs
-    if (geojson.properties.lang)
-      L.lang = geojson.properties.lang
+    if (geojson.properties.lang) L.lang = geojson.properties.lang
 
     // Don't let default autocreation of controls
     const zoomControl =
@@ -91,7 +89,7 @@ L.U.Map.include({
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloading',  (e) => this.fire('dataloading', e))
+    this.xhr.on('dataloading', (e) => this.fire('dataloading', e))
     this.xhr.on('dataload', (e) => this.fire('dataload', e))
 
     this.initLoader()
@@ -245,7 +243,7 @@ L.U.Map.include({
         },
         this
       )
-      this.initEditBar()
+      this.renderEditToolbar()
     }
     this.initShortcuts()
     this.onceDatalayersLoaded(function () {
@@ -1810,66 +1808,6 @@ L.U.Map.include({
     this.onceDatalayersLoaded(function () {
       this.slideshow.renderToolbox(container)
     })
-  },
-
-  initEditBar: function () {
-    const container = L.DomUtil.create(
-        'div',
-        'umap-main-edit-toolbox with-transition dark',
-        this._controlContainer
-      ),
-      title = L.DomUtil.add('h3', '', container, `${L._('Editing')}&nbsp;`),
-      name = L.DomUtil.create('a', 'umap-click-to-edit', title),
-      setName = function () {
-        name.textContent = this.getDisplayName()
-      }
-    if (this.options.user) {
-      const userLabel = L.DomUtil.add('a', 'umap-user', title, this.options.user.name)
-      userLabel.href = this.options.user.url
-    }
-    L.bind(setName, this)()
-    L.DomEvent.on(name, 'click', this.edit, this)
-    this.on('postsync', L.bind(setName, this))
-    this.help.button(name, 'edit')
-    const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
-    save.href = '#'
-    save.title = `${L._('Save current edits')} (Ctrl+S)`
-    save.textContent = L._('Save')
-    const cancel = L.DomUtil.create(
-      'a',
-      'leaflet-control-edit-cancel button',
-      container
-    )
-    cancel.href = '#'
-    cancel.title = L._('Cancel edits')
-    cancel.textContent = L._('Cancel')
-    const disable = L.DomUtil.create('a', 'leaflet-control-edit-disable', container)
-    disable.href = '#'
-    disable.title = disable.textContent = L._('Disable editing')
-
-    L.DomEvent.addListener(disable, 'click', L.DomEvent.stop).addListener(
-      disable,
-      'click',
-      function (e) {
-        this.disableEdit(e)
-        this.ui.closePanel()
-      },
-      this
-    )
-
-    L.DomEvent.addListener(save, 'click', L.DomEvent.stop).addListener(
-      save,
-      'click',
-      this.save,
-      this
-    )
-
-    L.DomEvent.addListener(cancel, 'click', L.DomEvent.stop).addListener(
-      cancel,
-      'click',
-      this.askForReset,
-      this
-    )
   },
 
   askForReset: function (e) {
