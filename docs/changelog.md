@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.5.0 - 2023-08-15
+
+* Add target URL in CORS error message by @yohanboniface in https://github.com/umap-project/umap/pull/1228
+* Use proper GPX mimetype by @yohanboniface in https://github.com/umap-project/umap/pull/1229
+* Add icons to better distinguish edit panels by @yohanboniface in https://github.com/umap-project/umap/pull/1232
+* Adapt logout behaviour in ajax/not ajax modes by @yohanboniface in https://github.com/umap-project/umap/pull/1235
+* Fix popup panel not opening from the data browser by @yohanboniface in https://github.com/umap-project/umap/pull/1240
+* Fix misplaced icons by @yohanboniface in https://github.com/umap-project/umap/pull/1241
+* Allow to configure default share and edit status by @yohanboniface in https://github.com/umap-project/umap/pull/1245
+* Bump mkdocs by @yohanboniface in https://github.com/umap-project/umap/pull/1246
+* Use maintained fork of togeojson by @yohanboniface in https://github.com/umap-project/umap/pull/1249
+* Do not try to compute geom based property before we have a geom by @yohanboniface in https://github.com/umap-project/umap/pull/1250
+* Do not close panel when switching tilelayer by @yohanboniface in https://github.com/umap-project/umap/pull/1252
+* Better control of default view by @yohanboniface in https://github.com/umap-project/umap/pull/1255
+* Use latest release of black by @yohanboniface in https://github.com/umap-project/umap/pull/1193
+* Explicitely use map default when dynamic var is unset by @yohanboniface in https://github.com/umap-project/umap/pull/1251
+* Make fromZoom and toZoom options available for all layers by @yohanboniface in https://github.com/umap-project/umap/pull/1253
+* Refactor "advanced filters" (and rename to facets) by @yohanboniface in https://github.com/umap-project/umap/pull/1243
+* Edit header revamp by @yohanboniface in https://github.com/umap-project/umap/pull/1233
+* adapt iframe min-width for popup large by @yohanboniface in https://github.com/umap-project/umap/pull/1238
+
 ## 1.4.4 - 2023-07-22
 - fix tooltip anchor unstable (cf #1224)
 - add a timeout in ajax proxy default view (cf #1222)
