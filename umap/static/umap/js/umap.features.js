@@ -185,7 +185,7 @@ L.U.FeatureMixin = {
     if (fallback === undefined) fallback = this.datalayer.options.name
     const key = this.getOption('labelKey') || 'name'
     // Variables mode.
-    if (key.indexOf('{') != -1)
+    if (L.Util.hasVar(key))
       return L.Util.greedyTemplate(key, this.extendedProperties())
     // Simple mode.
     return this.properties[key] || this.properties.title || fallback
@@ -277,9 +277,9 @@ L.U.FeatureMixin = {
   getDynamicOption: function (option, fallback) {
     let value = this.getOption(option, fallback)
     // There is a variable inside.
-    if (typeof value === 'string' && value.indexOf('{') != -1) {
+    if (L.Util.hasVar(value)) {
       value = L.Util.greedyTemplate(value, this.properties, true)
-      if (value.indexOf('{') != -1) value = this.map.getDefaultOption(option)
+      if (L.Util.hasVar(value)) value = this.map.getDefaultOption(option)
     }
     return value
   },

@@ -533,7 +533,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   udpatePreview: function () {
-    if (this.value() && this.value().indexOf('{') === -1) {
+    if (L.Util.hasVar(this.value())) {
       // Do not try to render URL with variables
       if (this.isUrl()) {
         const img = L.DomUtil.create(
