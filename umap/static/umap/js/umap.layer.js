@@ -376,7 +376,8 @@ L.U.DataLayer = L.Evented.extend({
     const from = parseInt(this.options.fromZoom, 10),
       to = parseInt(this.options.toZoom, 10),
       zoom = this.map.getZoom()
-    return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
+    if (isNaN(from) || isNaN(to)) return false
+    return (zoom >= from && zoom <= to)
   },
 
   fetchRemoteData: function () {
