@@ -313,7 +313,7 @@ L.U.DataLayer = L.Evented.extend({
     const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
     this.layer = new Class(this)
     this.eachLayer((feature) => this.showFeature(feature))
-    if (visible) this.map.addLayer(this.layer)
+    if (visible) this.show()
     this.propagateRemote()
   },
 
@@ -335,12 +335,15 @@ L.U.DataLayer = L.Evented.extend({
 
   fetchData: function () {
     if (!this.umap_id) return
+    if (this._loading) return
+    this._loading = true
     this.map.get(this._dataUrl(), {
       callback: function (geojson, response) {
         this._last_modified = response.getResponseHeader('Last-Modified')
         this.fromUmapGeoJSON(geojson)
         this.backupOptions()
         this.fire('loaded')
+        this._loading = false
       },
       context: this,
     })
