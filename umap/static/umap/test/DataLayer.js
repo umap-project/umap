@@ -403,22 +403,22 @@ describe('L.U.DataLayer', function () {
       assert.ok(qs('path[fill="DarkGoldenRod"]'))
     })
   })
-  describe('#advanced-filters()', function () {
+  describe('#facet-search()', function () {
     before(function () {
       this.server.respondWith(
         /\/datalayer\/63\/\?.*/,
         JSON.stringify(RESPONSES.datalayer63_GET)
       )
-      this.map.options.advancedFilterKey = 'name'
+      this.map.options.facetKey = 'name'
       this.map.createDataLayer(RESPONSES.datalayer63_GET._umap_options)
       this.server.respond()
     })
-    it('should show non browsable layer', function () {
+    it('should not impact non browsable layer', function () {
       assert.ok(qs('path[fill="SteelBlue"]'))
     })
     it('should allow advanced filter', function () {
-      this.map.openFilter()
-      assert.ok(qs('div.umap-filter-properties'))
+      this.map.openFacet()
+      assert.ok(qs('div.umap-facet-search'))
       // This one if from the normal datalayer
       // it's name is "test", so it should be hidden
       // by the filter
@@ -428,10 +428,15 @@ describe('L.U.DataLayer', function () {
       // This one comes from a non browsable layer
       // so it should not be affected by the filter
       assert.ok(qs('path[fill="SteelBlue"]'))
-      happen.click(qs('input[data-value="name poly"]'))  // Undo
+      happen.click(qs('input[data-value="name poly"]')) // Undo
+    })
+    it('should allow to control facet label', function () {
+      this.map.options.facetKey = 'name|Nom'
+      this.map.openFacet()
+      assert.ok(qs('div.umap-facet-search h5'))
+      assert.equal(qs('div.umap-facet-search h5').textContent, 'Nom')
     })
   })
-
   describe('#zoomEnd', function () {
     it('should honour the fromZoom option', function () {
       this.map.setZoom(6, {animate: false})
@@ -453,5 +458,4 @@ describe('L.U.DataLayer', function () {
       assert.ok(qs('path[fill="none"]'))
     })
   })
-
 })

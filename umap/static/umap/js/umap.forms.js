@@ -431,7 +431,7 @@ L.FormBuilder.OnLoadPanel = L.FormBuilder.Select.extend({
     ['none', L._('None')],
     ['caption', L._('Caption')],
     ['databrowser', L._('Data browser')],
-    ['datafilters', L._('Data filters')],
+    ['facet', L._('Facet search')],
   ],
 })
 
@@ -681,6 +681,37 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
     this.label.setAttribute('for', id)
     L.DomUtil.addClass(this.input, 'switch')
     this.input.id = id
+  },
+})
+
+L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
+  build: function () {
+    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
+    this.ul = L.DomUtil.create('ul', '', this.container)
+    const choices = this.options.choices
+    choices.sort()
+    choices.forEach((value) => this.buildLi(value))
+  },
+
+  buildLabel: function () {
+      this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label);
+  },
+
+  buildLi: function (value) {
+    const property_li = L.DomUtil.create('li', '', this.ul),
+      input = L.DomUtil.create('input', '', property_li),
+      label = L.DomUtil.create('label', '', property_li)
+    input.type = 'checkbox'
+    input.id = `checkbox_${this.name}_${value}`
+    input.checked = this.get().includes(value)
+    input.dataset.value = value
+    label.htmlFor = `checkbox_${this.name}_${value}`
+    label.innerHTML = value
+    L.DomEvent.on(input, 'change', (e) => this.sync())
+  },
+
+  toJS: function () {
+    return [...this.ul.querySelectorAll('input:checked')].map(i => i.dataset.value)
   },
 })
 
@@ -1125,7 +1156,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
 
   setter: function (field, value) {
     L.FormBuilder.prototype.setter.call(this, field, value)
-    this.obj.isDirty = true
+    if (this.options.makeDirty !== false) this.obj.isDirty = true
   },
 
   finish: function () {

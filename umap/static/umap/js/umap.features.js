@@ -87,7 +87,12 @@ L.U.FeatureMixin = {
   edit: function (e) {
     if (!this.map.editEnabled || this.isReadOnly()) return
     const container = L.DomUtil.create('div', 'umap-feature-container')
-    L.DomUtil.add('h3', `umap-feature-properties ${this.getClassName()}`, container, L._('Feature properties'))
+    L.DomUtil.add(
+      'h3',
+      `umap-feature-properties ${this.getClassName()}`,
+      container,
+      L._('Feature properties')
+    )
 
     let builder = new L.U.FormBuilder(this, ['datalayer'], {
       callback: function () {
@@ -467,6 +472,17 @@ L.U.FeatureMixin = {
         return true
     }
     return false
+  },
+
+  matchFacets: function () {
+    const facets = this.map.facets
+    for (const [property, expected] of Object.entries(facets)) {
+      if (expected.length) {
+        let value = this.properties[property]
+        if (!value || !expected.includes(value)) return false
+      }
+    }
+    return true
   },
 
   onVertexRawClick: function (e) {
