@@ -983,12 +983,15 @@ L.U.Map.include({
       name = L.DomUtil.create('a', 'map-name', container),
       share_status = L.DomUtil.create('a', 'share-status', container),
       update = () => {
+        const status = this.permissions.getShareStatusDisplay()
         name.textContent = this.getDisplayName()
-        share_status.textContent = L._('Visibility: {status}', {
-          status: this.permissions.getShareStatusDisplay(),
+        // status is not set until map is saved once
+        if (status) share_status.textContent = L._('Visibility: {status}', {
+          status: status,
         })
       }
     update()
+    this.once('saved', L.bind(update, this))
     name.href = '#'
     share_status.href = '#'
     logo.href = '/'
