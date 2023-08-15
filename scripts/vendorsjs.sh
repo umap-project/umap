@@ -18,7 +18,7 @@ mkdir -p umap/static/umap/vendors/formbuilder/ && cp -r node_modules/leaflet-for
 mkdir -p umap/static/umap/vendors/measurable/ && cp -r node_modules/leaflet-measurable/Leaflet.Measurable.* umap/static/umap/vendors/measurable/
 mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/*.js umap/static/umap/vendors/photon/
 mkdir -p umap/static/umap/vendors/csv2geojson/ && cp -r node_modules/csv2geojson/*.js umap/static/umap/vendors/csv2geojson/
-mkdir -p umap/static/umap/vendors/togeojson/ && cp -r node_modules/togeojson/*.js umap/static/umap/vendors/togeojson/
+mkdir -p umap/static/umap/vendors/togeojson/ && cp -r node_modules/@tmcw/togeojson/dist/togeojson.umd.js umap/static/umap/vendors/togeojson/togeojson.js
 mkdir -p umap/static/umap/vendors/osmtogeojson/ && cp -r node_modules/osmtogeojson/osmtogeojson.js umap/static/umap/vendors/osmtogeojson/
 mkdir -p umap/static/umap/vendors/georsstogeojson/ && cp -r node_modules/georsstogeojson/GeoRSSToGeoJSON.js umap/static/umap/vendors/georsstogeojson/
 mkdir -p umap/static/umap/vendors/togpx/ && cp -r node_modules/togpx/togpx.js umap/static/umap/vendors/togpx/
