@@ -136,6 +136,11 @@ function initMap(options) {
       },
       default_iconUrl: '../src/img/marker.png',
       zoom: 6,
+      share_statuses: [
+        [1, 'Tout le monde (public)'],
+        [2, 'Quiconque a le lien'],
+        [3, 'Éditeurs uniquement'],
+      ],
       tilelayers: [
         {
           attribution: '\u00a9 OSM Contributors',
