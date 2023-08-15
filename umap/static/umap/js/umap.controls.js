@@ -671,6 +671,9 @@ L.U.DataLayer.addInitHook(function () {
 L.U.Map.include({
   _openBrowser: function () {
     const browserContainer = L.DomUtil.create('div', 'umap-browse-data')
+    // HOTFIX. Remove when this is merged and released:
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    L.DomEvent.disableClickPropagation(browserContainer)
 
     const title = L.DomUtil.add(
       'h3',
