@@ -343,6 +343,8 @@ class AjaxProxy(View):
             return HttpResponseBadRequest("URL error")
         except InvalidURL:
             return HttpResponseBadRequest("Invalid URL")
+        except TimeoutError:
+            return HttpResponseBadRequest("Timeout")
         else:
             status_code = proxied_request.code
             mimetype = proxied_request.headers.get(
