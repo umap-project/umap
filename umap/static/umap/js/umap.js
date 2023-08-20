@@ -1,7 +1,7 @@
 L.Map.mergeOptions({
   overlay: null,
   datalayers: [],
-  center: [4, 50],
+  center: [50, 4],
   zoom: 6,
   hash: true,
   default_color: 'DarkBlue',
@@ -85,6 +85,10 @@ L.U.Map.include({
         : true
     geojson.properties.fullscreenControl = false
     L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom')
+
+    // Before calling parent initialize
+    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+
     L.Map.prototype.initialize.call(this, el, geojson.properties)
 
     this.ui = new L.U.UI(this._container)
@@ -96,7 +100,6 @@ L.U.Map.include({
     this.name = this.options.name
     this.description = this.options.description
     this.demoTileInfos = this.options.demoTileInfos
-    if (geojson.geometry) this.options.center = geojson.geometry
     this.options.zoomControl = zoomControl
     this.options.fullscreenControl = fullscreenControl
     L.Util.setBooleanFromQueryString(this.options, 'moreControl')
@@ -159,10 +162,12 @@ L.U.Map.include({
     this.facets = {}
 
     if (this.options.hash) this.addHash()
+    this.initTileLayers(this.options.tilelayers)
+    // Needs tilelayer to exist for minimap
     this.initControls()
+    // Needs locate control and hash to exist
     this.initCenter()
     this.handleLimitBounds()
-    this.initTileLayers(this.options.tilelayers)
     this.initDatalayers()
 
     if (this.options.displayCaptionOnLoad) {
