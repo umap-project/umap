@@ -248,11 +248,6 @@ L.U.DataLayer = L.Evented.extend({
     }
     this.setUmapId(data.id)
     this.setOptions(data)
-    this.backupOptions()
-    this.connectToMap()
-    if (this.displayedOnLoad()) this.show()
-    if (!this.umap_id) this.isDirty = true
-
     // Retrocompat
     if (this.options.remoteData && this.options.remoteData.from) {
       this.options.fromZoom = this.options.remoteData.from
@@ -260,11 +255,15 @@ L.U.DataLayer = L.Evented.extend({
     if (this.options.remoteData && this.options.remoteData.to) {
       this.options.toZoom = this.options.remoteData.to
     }
+    this.backupOptions()
+    this.connectToMap()
+    if (this.displayedOnLoad() && this.showAtZoom()) this.show()
+    if (!this.umap_id) this.isDirty = true
 
     this.onceLoaded(function () {
       this.map.on('moveend', this.onMoveEnd, this)
-      this.map.on('zoomend', this.onZoomEnd, this)
     })
+    this.map.on('zoomend', this.onZoomEnd, this)
   },
 
   onMoveEnd: function (e) {
@@ -1185,6 +1184,7 @@ L.U.DataLayer = L.Evented.extend({
     formData.append('name', this.options.name)
     formData.append('display_on_load', !!this.options.displayOnLoad)
     formData.append('rank', this.getRank())
+    formData.append('settings', JSON.stringify(this.options))
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
