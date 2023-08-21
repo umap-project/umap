@@ -133,6 +133,13 @@ h2.section {
     text-align: center;
     padding-top: 28px;
 }
+h2.tabs a {
+    font-weight: normal;
+    color: #666;
+}
+h2.tabs a:hover {
+    text-decoration: underline;
+}
 .showcase-map .map_fragment {
     height: 400px;
 }

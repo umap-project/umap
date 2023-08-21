@@ -129,6 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 FROM_EMAIL = None
+# https://docs.djangoproject.com/en/4.2/releases/4.1/#forms
+FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer"
 
 # =============================================================================
 # Calculation of directories relative to the project module location

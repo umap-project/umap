@@ -103,6 +103,11 @@ i18n_urls += decorated_patterns(
         views.user_dashboard,
         name="user_dashboard",
     ),
+    re_path(
+        r"^me/profile$",
+        views.user_profile,
+        name="user_profile",
+    ),
 )
 map_urls = [
     re_path(

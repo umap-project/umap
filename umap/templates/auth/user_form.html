@@ -1,0 +1,23 @@
+{% extends "umap/content.html" %}
+{% load i18n %}
+{% block maincontent %}
+  <div class="col wide">
+    <h2 class="section tabs">
+      <a href="{% url 'user_dashboard' %}">{% trans "My dashboard" %}</a> | {% trans "My profile" %}
+    </h2>
+  </div>
+  <div class="wrapper">
+    <div class="row">
+      {% if form.non_field_errors %}
+        <ul class="form-errors">
+          {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+      <form id="user_form" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="{% trans 'Save' %}" />
+      </form>
+    </div>
+  </div>
+{% endblock maincontent %}

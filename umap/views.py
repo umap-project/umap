@@ -50,6 +50,7 @@ from .forms import (
     MapSettingsForm,
     SendLinkForm,
     UpdateMapPermissionsForm,
+    UserProfileForm,
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
 from .utils import get_uri_template, gzip_file, is_ajax
@@ -162,6 +163,18 @@ class About(Home):
 
 
 about = About.as_view()
+
+
+class UserProfile(UpdateView):
+    model = User
+    form_class = UserProfileForm
+    success_url = reverse_lazy('user_profile')
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+
+user_profile = UserProfile.as_view()
 
 
 class UserMaps(PaginatorMixin, DetailView):
