@@ -194,6 +194,10 @@ select[multiple="multiple"] {
     font-size: 10px;
     border-radius: 0 2px;
 }
+.content .helptext {
+    background-color: #eee;
+    color: #000;
+}
 input + .help-text {
     margin-top: -14px;
 }
@@ -213,6 +217,9 @@ label {
     font-size: 12px;
     line-height: 21px;
     width: 100%;
+}
+.content label {
+    font-weight: bold;
 }
 input[type="checkbox"] + label {
     display: inline;
