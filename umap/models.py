@@ -176,10 +176,14 @@ class Map(NamedModel):
         settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
     )
     edit_status = models.SmallIntegerField(
-        choices=EDIT_STATUS, default=get_default_edit_status, verbose_name=_("edit status")
+        choices=EDIT_STATUS,
+        default=get_default_edit_status,
+        verbose_name=_("edit status"),
     )
     share_status = models.SmallIntegerField(
-        choices=SHARE_STATUS, default=get_default_share_status, verbose_name=_("share status")
+        choices=SHARE_STATUS,
+        default=get_default_share_status,
+        verbose_name=_("share status"),
     )
     settings = models.JSONField(
         blank=True, null=True, verbose_name=_("settings"), default=dict
@@ -308,6 +312,9 @@ class DataLayer(NamedModel):
         help_text=_("Display this layer on load."),
     )
     rank = models.SmallIntegerField(default=0)
+    settings = models.JSONField(
+        blank=True, null=True, verbose_name=_("settings"), default=dict
+    )
 
     class Meta:
         ordering = ("rank",)
@@ -340,7 +347,14 @@ class DataLayer(NamedModel):
 
     @property
     def metadata(self):
-        return {"name": self.name, "id": self.pk, "displayOnLoad": self.display_on_load}
+        # Retrocompat: minimal settings for maps not saved after settings property
+        # has been introduced
+        obj = self.settings or {
+            "name": self.name,
+            "displayOnLoad": self.display_on_load,
+        }
+        obj["id"] = self.pk
+        return obj
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
