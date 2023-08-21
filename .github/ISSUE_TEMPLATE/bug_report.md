@@ -12,7 +12,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Go to '...' (VERY IMPORTANT, we need to know which instance of uMap is concerned!)
+1. Go to 'http://link-to-your-map' (**⚠️ VERY IMPORTANT, we need to know which instance of uMap is concerned! Your issue will probably be ignored without that link**)
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
