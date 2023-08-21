@@ -168,10 +168,16 @@ about = About.as_view()
 class UserProfile(UpdateView):
     model = User
     form_class = UserProfileForm
-    success_url = reverse_lazy('user_profile')
+    success_url = reverse_lazy("user_profile")
 
     def get_object(self):
         return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        kwargs.update(
+            {"providers": self.object.social_auth.values_list("provider", flat=True)}
+        )
+        return super().get_context_data(**kwargs)
 
 
 user_profile = UserProfile.as_view()
