@@ -289,7 +289,7 @@ describe('L.U.Map', function () {
     })
 
     it('should update title bar (umap format import)', function () {
-      var title = qs('#map div.umap-main-edit-toolbox h3 a.umap-click-to-edit')
+      var title = qs('#map div.umap-main-edit-toolbox a.map-name')
       assert.equal(title.innerHTML, 'Imported map')
     })
 
