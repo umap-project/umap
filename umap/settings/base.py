@@ -129,6 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 FROM_EMAIL = None
+# https://docs.djangoproject.com/en/4.2/releases/4.1/#forms
+FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer"
 
 # =============================================================================
 # Calculation of directories relative to the project module location
@@ -262,8 +264,6 @@ LEAFLET_ZOOM = env.int('LEAFLET_ZOOM', default=6)
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
-SOCIAL_AUTH_NO_DEFAULT_PROTECTED_USER_FIELDS = True
-SOCIAL_AUTH_PROTECTED_USER_FIELDS = ("id", )
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 

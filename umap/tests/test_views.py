@@ -11,6 +11,8 @@ from django.test import RequestFactory
 from umap import VERSION
 from umap.views import validate_url
 
+User = get_user_model()
+
 
 def get(target="http://osm.org/georss.xml", verb="get", **kwargs):
     defaults = {
@@ -141,7 +143,6 @@ def test_login_contains_form_if_enabled(client, settings):
 @pytest.mark.django_db
 def test_can_login_with_username_and_password_if_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = True
-    User = get_user_model()
     user = User.objects.create(username="test")
     user.set_password("test")
     user.save()
@@ -279,3 +280,49 @@ def test_logout_should_return_redirect(client, user, settings):
     response = client.get(reverse("logout"))
     assert response.status_code == 302
     assert response["Location"] == "/"
+
+
+@pytest.mark.django_db
+def test_user_profile_is_restricted_to_logged_in(client):
+    response = client.get(reverse("user_profile"))
+    assert response.status_code == 302
+    assert response["Location"] == "/en/login/?next=/en/me/profile"
+
+
+@pytest.mark.django_db
+def test_user_profile_allows_to_edit_username(client, map):
+    client.login(username=map.owner.username, password="123123")
+    new_name = "newname"
+    response = client.post(
+        reverse("user_profile"), data={"username": new_name}, follow=True
+    )
+    assert response.status_code == 200
+    user = User.objects.get(pk=map.owner.pk)
+    assert user.username == new_name
+
+
+@pytest.mark.django_db
+def test_user_profile_cannot_set_to_existing_username(client, map, user2):
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(
+        reverse("user_profile"), data={"username": user2.username}, follow=True
+    )
+    assert response.status_code == 200
+    user = User.objects.get(pk=map.owner.pk)
+    assert user.username == map.owner.username
+    assert user.username != user2.username
+
+
+@pytest.mark.django_db
+def test_user_profile_does_not_allow_to_edit_other_fields(client, map):
+    client.login(username=map.owner.username, password="123123")
+    new_email = "foo@bar.com"
+    response = client.post(
+        reverse("user_profile"),
+        data={"username": new_email, "is_superuser": True},
+        follow=True,
+    )
+    assert response.status_code == 200
+    user = User.objects.get(pk=map.owner.pk)
+    assert user.email != new_email
+    assert user.is_superuser is False

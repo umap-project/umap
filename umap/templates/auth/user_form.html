@@ -1,0 +1,50 @@
+{% extends "umap/content.html" %}
+{% load i18n %}
+{% block maincontent %}
+  <div class="col wide">
+    <h2 class="section tabs">
+      <a href="{% url 'user_dashboard' %}">{% trans "My dashboard" %}</a> | {% trans "My profile" %}
+    </h2>
+  </div>
+  <div class="wrapper">
+    <div class="row">
+      {% if form.non_field_errors %}
+        <ul class="form-errors">
+          {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+      <form id="user_form" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="{% trans 'Save' %}" />
+      </form>
+    </div>
+    {% if backends.backends|length %}
+      <div class="row">
+        <h3>{% trans "Your current providers" %}</h3>
+        <ul>
+          {% for name in providers %}<li>{{ name|title }}</li>{% endfor %}
+        </ul>
+      </div>
+      <div class="row">
+        <h3>{% trans "Connect to another provider" %}</h3>
+        <p>
+          {% blocktrans %}It's a good habit to connect your account to more than one provider, in case one provider becomes unavailable, temporarily or even permanently.{% endblocktrans %}
+        </p>
+        <div>
+          <ul class="login-grid block-grid">
+            {% for name in backends.backends %}
+              {% if name not in providers %}
+                <li>
+                  <a href="{% url "social:begin" name %}"
+                     class="umap-login-popup login-{{ name }}"
+                     title="{{ name|title }}"></a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock maincontent %}
