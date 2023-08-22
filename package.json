@@ -50,7 +50,7 @@
     "leaflet-minimap": "^3.6.1",
     "leaflet-toolbar": "umap-project/Leaflet.toolbar",
     "leaflet.heat": "0.2.0",
-    "leaflet.locatecontrol": "^0.78.0",
+    "leaflet.locatecontrol": "^0.79.0",
     "leaflet.markercluster": "^1.5.3",
     "leaflet.path.drag": "0.0.6",
     "leaflet.photon": "0.8.0",
