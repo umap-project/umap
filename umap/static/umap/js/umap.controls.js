@@ -911,7 +911,7 @@ L.U.Map.include({
         leaflet: 'http://leafletjs.com',
         django: 'https://www.djangoproject.com',
         umap: 'http://wiki.openstreetmap.org/wiki/UMap',
-        changelog: 'https://umap-project.readthedocs.io/en/latest/changelog/',
+        changelog: 'https://umap-project.readthedocs.io/en/master/changelog/',
         version: this.options.umap_version,
       }
     umapCredit.innerHTML = L._(

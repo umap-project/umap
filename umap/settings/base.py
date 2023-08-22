@@ -2,9 +2,9 @@
 # Import global settings to make it easier to extend settings.
 from email.utils import parseaddr
 
-from django.template.defaultfilters import slugify
-from django.conf.locale import LANG_INFO
 import environ
+from django.conf.locale import LANG_INFO
+from django.template.defaultfilters import slugify
 
 env = environ.Env()
 
@@ -137,6 +137,7 @@ FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer"
 # =============================================================================
 
 import os
+
 import umap as project_module
 
 PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))

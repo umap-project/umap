@@ -2,7 +2,7 @@
 <footer>
   <a href="https://wiki.openstreetmap.org/wiki/UMap" class="branding">uMap</a>
   an OpenStreetMap project
-  (version <a href="https://umap-project.readthedocs.io/en/latest/changelog/">{{ UMAP_VERSION }}</a>)
+  (version <a href="https://umap-project.readthedocs.io/en/master/changelog/">{{ UMAP_VERSION }}</a>)
   {% get_language_info_list for LANGUAGES as languages %}
   <form action="{% url "set_language" %}" method="post" class="i18n_switch">
     {% csrf_token %}
