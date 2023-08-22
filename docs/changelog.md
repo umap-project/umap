@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.0 - 2023-08-22
+
+* Catch timeout error in ajax proxy by @yohanboniface in https://github.com/umap-project/umap/pull/1261
+* Fix bug where minimap would not be displayed on load by @yohanboniface in https://github.com/umap-project/umap/pull/1267
+* Allow to add more than one OAuth provider by @yohanboniface in https://github.com/umap-project/umap/pull/1271
+* Protect back username field from being modified by social auth login by @yohanboniface in https://github.com/umap-project/umap/pull/1270
+* Very lite "My Profile" page to allow changing username by @yohanboniface in https://github.com/umap-project/umap/pull/1269
+* Store DataLayer's settings in DB by @yohanboniface in https://github.com/umap-project/umap/pull/1266
+* When map has max bounds, use those bounds for limiting search by @yohanboniface in https://github.com/umap-project/umap/pull/1268
+* Only call propagateShow at init if layer is visible by @yohanboniface in https://github.com/umap-project/umap/pull/1272
+
+
 ## 1.5.1 - 2023-08-15
 
 - Fix layers behing hidden at zoom
