@@ -663,7 +663,7 @@ L.U.DataLayer.include({
 L.U.DataLayer.addInitHook(function () {
   this.on('hide', this.propagateHide)
   this.on('show', this.propagateShow)
-  this.propagateShow()
+  if (this.isVisible()) this.propagateShow()
 })
 
 L.U.Map.include({
