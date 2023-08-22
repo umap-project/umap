@@ -38,7 +38,7 @@ dependencies = [
   "django-environ==0.10.0",
   "Pillow==9.5.0",
   "psycopg2==2.9.6",
-  "requests==2.30.0",
+  "requests==2.31.0",
   "social-auth-core==4.4.2",
   "social-auth-app-django==5.2.0",
 ]
