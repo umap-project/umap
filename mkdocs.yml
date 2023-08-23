@@ -1,13 +1,15 @@
 site_name: uMap
 nav:
-- Home: index.md
-- Installation: install.md
-- Configuration: settings.md
-- Administration: administration.md
-- Contributing: contributing.md
-- how-tos:
-  - Ubuntu from scratch: ubuntu.md
-  - Customize your uMap style: custom.md
-  - Install with Docker: docker.md
-- Changelog: changelog.md
+  - Home: index.md
+  - Installation: install.md
+  - Configuration: settings.md
+  - Administration: administration.md
+  - Contributing: contributing.md
+  - how-tos:
+      - Ubuntu from scratch: ubuntu.md
+      - Customize your uMap style: custom.md
+      - Install with Docker: docker.md
+  - Changelog: changelog.md
 theme: readthedocs
+markdown_extensions:
+  - pymdownx.magiclink
