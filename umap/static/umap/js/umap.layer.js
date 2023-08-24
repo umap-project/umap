@@ -263,7 +263,10 @@ L.U.DataLayer = L.Evented.extend({
     this.onceLoaded(function () {
       this.map.on('moveend', this.onMoveEnd, this)
     })
-    this.map.on('zoomend', this.onZoomEnd, this)
+    // Only layers that are displayed on load must be hidden/shown
+    // Automatically, others will be shown manually, and thus will
+    // be in the "forced visibility" mode
+    if (this.displayedOnLoad()) this.map.on('zoomend', this.onZoomEnd, this)
   },
 
   onMoveEnd: function (e) {
