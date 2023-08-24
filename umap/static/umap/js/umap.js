@@ -357,7 +357,7 @@ L.U.Map.include({
     if (this.options.miniMap && !this.options.noControl) {
       this.whenReady(function () {
         if (this.selected_tilelayer) {
-          this._controls.miniMap = new L.Control.MiniMap(this.selected_tilelayer).addTo(
+          this._controls.miniMap = new L.U.MiniMap(this.selected_tilelayer).addTo(
             this
           )
           this._controls.miniMap._miniMap.invalidateSize()

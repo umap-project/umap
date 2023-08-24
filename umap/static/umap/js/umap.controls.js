@@ -1365,10 +1365,17 @@ L.U.SearchControl = L.Control.extend({
   },
 })
 
-L.Control.MiniMap.include({
+L.U.MiniMap = L.Control.MiniMap.extend({
   initialize: function (layer, options) {
     L.Util.setOptions(this, options)
     this._layer = this._cloneLayer(layer)
+  },
+
+  onAdd: function (map) {
+      L.Control.MiniMap.prototype.onAdd.call(this, map);
+      // Prevent the MiniMap to send a moveend at init
+      this._mainMapMoving = true
+      return this._container
   },
 
   onMainMapBaseLayerChange: function (e) {
