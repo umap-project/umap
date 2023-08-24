@@ -310,6 +310,7 @@ L.U.Map.include({
       icon: 'umap-fake-class',
       iconLoading: 'umap-fake-class',
       flyTo: this.options.easing,
+      onLocationError: (err) => this.ui.alert({content: err.message})
     })
     this._controls.fullscreen = new L.Control.Fullscreen({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
@@ -632,11 +633,17 @@ L.U.Map.include({
     }
   },
 
+  _setDefaultCenter: function () {
+      this.options.center = this.latLng(this.options.center)
+      this.setView(this.options.center, this.options.zoom)
+  },
+
   initCenter: function () {
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
+      this.once('locationerror', this._setDefaultCenter)
       this._controls.locate.start()
     } else if (this.options.defaultView === 'bounds') {
       this.onceDataLoaded(() => this.fitBounds(this.getLayersBounds()))
@@ -647,8 +654,7 @@ L.U.Map.include({
         if (feature) feature.zoomTo()
       })
     } else {
-      this.options.center = this.latLng(this.options.center)
-      this.setView(this.options.center, this.options.zoom)
+      this._setDefaultCenter()
     }
   },
 
