@@ -361,7 +361,6 @@ In Nginx:
               set $target_url $1/$2;
             }
             add_header X-Proxy-Target $target_url; # For debugging
-            resolver 8.8.8.8;
             proxy_read_timeout 10s;
             proxy_connect_timeout 5s;
             proxy_pass $target_url;
@@ -369,7 +368,6 @@ In Nginx:
             error_page 301 302 307 = @handle_proxy_redirect;
         }
         location @handle_proxy_redirect {
-            resolver 8.8.8.8;
             set $saved_redirect_location '$upstream_http_location';
             proxy_pass $saved_redirect_location;
         }
