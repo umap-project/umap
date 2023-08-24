@@ -403,6 +403,41 @@ describe('L.U.DataLayer', function () {
       assert.ok(qs('path[fill="DarkGoldenRod"]'))
     })
   })
+
+  describe("#displayOnLoad", function () {
+
+    beforeEach(function () {
+      this.server.respondWith(
+        /\/datalayer\/64\/\?.*/,
+        JSON.stringify(RESPONSES.datalayer64_GET)
+      )
+      this.datalayer = this.map.createDataLayer(RESPONSES.datalayer64_GET._umap_options)
+      // Force fetching the data, so to deal here with fake server
+      this.datalayer.fetchData()
+      this.server.respond()
+      this.map.setZoom(10, {animate: false})
+    });
+
+    afterEach(function () {
+      this.datalayer._delete()
+    })
+
+    it("should not display layer at load", function () {
+      assert.notOk(qs('path[fill="AliceBlue"]'))
+    })
+
+    it("should display on click", function () {
+      happen.click(qs(`[data-id='${L.stamp(this.datalayer)}'] .layer-toggle`))
+      assert.ok(qs('path[fill="AliceBlue"]'))
+    })
+
+    it("should not display on zoom", function () {
+      this.map.setZoom(9, {animate: false})
+      assert.notOk(qs('path[fill="AliceBlue"]'))
+    })
+
+  })
+
   describe('#facet-search()', function () {
     before(function () {
       this.server.respondWith(

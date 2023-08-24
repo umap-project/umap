@@ -314,6 +314,58 @@ var RESPONSES = {
       },
     ],
   },
+  // This one is not shown at load
+  datalayer64_GET: {
+    crs: null,
+    type: 'FeatureCollection',
+    _umap_options: defaultDatalayerData({name: 'hidden', id: 64, displayOnLoad: false }),
+    features: [
+      {
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [5.545478, 45.068383],
+              [5.545907, 45.067277],
+              [5.548439, 45.067565],
+              [5.552516, 45.06752],
+              [5.553288, 45.068217],
+              [5.549405, 45.069247],
+              [5.548224, 45.071005],
+              [5.545907, 45.071096],
+              [5.545478, 45.068383],
+            ],
+          ],
+        },
+        type: 'Feature',
+        id: 76,
+        properties: { name: 'not shown at load 1' },
+      },
+      {
+        type: 'Feature',
+        properties: {
+          _umap_options: {
+            color: 'AliceBlue',
+          },
+          name: 'not shown at load 2',
+        },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [5.550542, 45.071717],
+              [5.548182, 45.071051],
+              [5.549426, 45.069232],
+              [5.553331, 45.068171],
+              [5.554812, 45.070869],
+              [5.553396, 45.072384],
+              [5.550542, 45.071717],
+            ],
+          ],
+        },
+      },
+    ],
+  },
 }
 
 sinon.fakeServer.flush = function () {
