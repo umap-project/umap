@@ -1,8 +1,6 @@
 L.Map.mergeOptions({
   overlay: null,
   datalayers: [],
-  center: [50, 4],
-  zoom: 6,
   hash: true,
   default_color: 'DarkBlue',
   default_smoothFactor: 1.0,
@@ -86,10 +84,11 @@ L.U.Map.include({
     geojson.properties.fullscreenControl = false
     L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom')
 
-    // Before calling parent initialize
-    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
+
+    // After calling parent initialize, as we are doing initCenter our-selves
+    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
