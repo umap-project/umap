@@ -86,10 +86,12 @@ L.U.Map.include({
     geojson.properties.fullscreenControl = false
     L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom')
 
-    // Before calling parent initialize
+    L.Map.prototype.initialize.call(this, el, geojson.properties)
+
+    // After calling parent initialize, as we are doing the init center
+    // ourselves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
 
-    L.Map.prototype.initialize.call(this, el, geojson.properties)
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
@@ -162,11 +164,10 @@ L.U.Map.include({
     this.facets = {}
 
     if (this.options.hash) this.addHash()
+    this.initCenter()
     this.initTileLayers(this.options.tilelayers)
     // Needs tilelayer to exist for minimap
     this.initControls()
-    // Needs locate control and hash to exist
-    this.initCenter()
     this.handleLimitBounds()
     this.initDatalayers()
 
@@ -334,6 +335,7 @@ L.U.Map.include({
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
     this.renderControls()
+    this.fire('controlsready')
   },
 
   renderControls: function () {
@@ -638,7 +640,7 @@ L.U.Map.include({
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      this._controls.locate.start()
+      this.once('controlsready', () => this._controls.locate.start())
     } else if (this.options.defaultView === 'bounds') {
       this.onceDataLoaded(() => this.fitBounds(this.getLayersBounds()))
     } else if (this.options.defaultView === 'latest') {
@@ -648,7 +650,6 @@ L.U.Map.include({
         if (feature) feature.zoomTo()
       })
     } else {
-      this.options.center = this.latLng(this.options.center)
       this.setView(this.options.center, this.options.zoom)
     }
   },
