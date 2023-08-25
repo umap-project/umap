@@ -401,11 +401,11 @@ const locale = {
     "Feature properties": "Propriétés de l'élément",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Problème au chargement de cette URL (problème réseau ou protection CORS): {url}",
     "Latest feature": "Dernier élément",
-    "Layers bounds": "Emprises des calques",
     "No results for these facets": "Aucun résultat pour ces facettes",
     "Saved center and zoom": "Centre et zoom enregistrés",
     "User location": "Localisation de l'utilisateur",
-    "Visibility: {status}": "Visibilité: {status}"
+    "Visibility: {status}": "Visibilité: {status}",
+    "Fit all data": "Zoom sur les données"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

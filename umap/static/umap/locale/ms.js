@@ -393,19 +393,19 @@ const locale = {
     "*single star for italic*": "*bintang tunggal untuk tulisan condong*",
     "--- for a horizontal rule": "--- untuk garis melintang",
     "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "Nama bagi ciri untuk digunakan sebagai label sifat (cth.: \"nom\"). Anda juga boleh gunakan ciri-ciri dalam kurungan dakap untuk guna lebih daripada satu ciri atau untuk gabung dengan kandungan statik (cth.: \"{name} di {place}\")",
-    "Cancel all": "Cancel all",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)",
-    "Default view": "Default view",
-    "Facet keys": "Facet keys",
-    "Facet search": "Facet search",
-    "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
-    "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
-    "No results for these facets": "No results for these facets",
-    "Saved center and zoom": "Saved center and zoom",
-    "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Cancel all": "Batal semua",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Senarai berpisahkan koma bagi ciri-ciri untuk digunakan ketika menggelintar faset (cth.: kekuncisaya,kekuncilain). Untuk mengawal label, tambahkannya selepas tanda | (cth.: kekuncisaya|Kekunci Saya,kekuncilain|Kekunci Lain)",
+    "Default view": "Paparan lalai",
+    "Facet keys": "Kekunci faset",
+    "Facet search": "Gelintaran faset",
+    "Feature properties": "Ciri-ciri sifat",
+    "Issue reaching that URL (network problem or CORS protection): {url}": "Ada isu ketika mencapai URL tersebut (masalah rangkaian atau perlindungan CORS): {url}",
+    "Latest feature": "Sifat terbaru",
+    "No results for these facets": "Tiada hasil bagi faset ini",
+    "Saved center and zoom": "Kedudukan tengah dan zum telah disimpan",
+    "User location": "Kedudukan pengguna",
+    "Visibility: {status}": "Kebolehlihatan: {status}",
+    "Fit all data": "Fit all data"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 15:24+0000\n"
+"POT-Creation-Date: 2023-08-25 08:16+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023\n"
 "Language-Team: Malay (http://app.transifex.com/openstreetmap/umap/language/ms/)\n"
@@ -154,14 +154,14 @@ msgstr "Layari peta %(current_user)s"
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s tidak mempunyai peta."
 
-#: templates/auth/user_form.html:6 templates/umap/user_dashboard.html:4
-#: templates/umap/user_dashboard.html:10
-msgid "My dashboard"
-msgstr "Papan pemuka saya"
+#: templates/auth/user_form.html:6 templates/umap/navigation.html:12
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
+msgid "My Dashboard"
+msgstr ""
 
-#: templates/auth/user_form.html:6 templates/umap/user_dashboard.html:10
-msgid "My profile"
-msgstr "Profil saya"
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr ""
 
 #: templates/auth/user_form.html:19
 msgid "Save"
@@ -337,10 +337,6 @@ msgstr "Sunting"
 msgid "Download"
 msgstr "Muat turun"
 
-#: templates/umap/navigation.html:12
-msgid "My maps"
-msgstr "Peta saya"
-
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
 msgstr "Peta ditandai bintang"
@@ -428,6 +424,10 @@ msgstr "Cari"
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
 msgstr "Gelintar peta saya"
+
+#: templates/umap/user_dashboard.html:10
+msgid "My profile"
+msgstr "Profil saya"
 
 #: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."

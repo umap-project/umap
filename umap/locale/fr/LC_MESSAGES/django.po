@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 15:24+0000\n"
+"POT-Creation-Date: 2023-08-25 08:16+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -167,13 +167,13 @@ msgstr "Consulter les cartes de %(current_user)s"
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s n'a aucune carte."
 
-#: templates/auth/user_form.html:6 templates/umap/user_dashboard.html:4
-#: templates/umap/user_dashboard.html:10
-msgid "My dashboard"
-msgstr "Mon tableau de bord"
+#: templates/auth/user_form.html:6 templates/umap/navigation.html:12
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
+msgid "My Dashboard"
+msgstr "Mon espace"
 
-#: templates/auth/user_form.html:6 templates/umap/user_dashboard.html:10
-msgid "My profile"
+#: templates/auth/user_form.html:6
+msgid "My Profile"
 msgstr "Mon profil"
 
 #: templates/auth/user_form.html:19
@@ -350,10 +350,6 @@ msgstr "Éditer"
 msgid "Download"
 msgstr "Télécharger"
 
-#: templates/umap/navigation.html:12
-msgid "My maps"
-msgstr "Mes cartes"
-
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
 msgstr "Favoris"
@@ -443,6 +439,10 @@ msgstr "Chercher"
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
 msgstr "Chercher dans mes cartes"
+
+#: templates/umap/user_dashboard.html:10
+msgid "My profile"
+msgstr "Mon profil"
 
 #: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."

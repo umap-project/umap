@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-17 13:14+0000\n"
+"POT-Creation-Date: 2023-08-25 08:16+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Thanh Le Viet <lethanhx2k@gmail.com>, 2014\n"
 "Language-Team: Vietnamese (http://app.transifex.com/openstreetmap/umap/language/vi/)\n"
@@ -35,107 +35,107 @@ msgstr "Chỉ có thể sửa với liên kết chỉnh sửa bí mật"
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: models.py:40
+#: models.py:48
 msgid "name"
 msgstr "tên"
 
-#: models.py:71
+#: models.py:79
 msgid "details"
 msgstr "chi tiết"
 
-#: models.py:72
+#: models.py:80
 msgid "Link to a page where the licence is detailed."
 msgstr "Liên kết đến trang có chi tiết về bản quyền"
 
-#: models.py:82
+#: models.py:90
 msgid "URL template using OSM tile format"
 msgstr "Mẫu URL sử dụng định dạng tile của OSM"
 
-#: models.py:88
+#: models.py:96
 msgid "Order of the tilelayers in the edit box"
 msgstr "Thứ tự các titlelayer trong hộp chỉnh sửa"
 
-#: models.py:134
+#: models.py:142
 msgid "Everyone"
 msgstr ""
 
-#: models.py:135 models.py:141
+#: models.py:143 models.py:149
 msgid "Editors only"
 msgstr ""
 
-#: models.py:136
+#: models.py:144
 msgid "Owner only"
 msgstr ""
 
-#: models.py:139
+#: models.py:147
 msgid "Everyone (public)"
 msgstr ""
 
-#: models.py:140
+#: models.py:148
 msgid "Anyone with link"
 msgstr ""
 
-#: models.py:142
+#: models.py:150
 msgid "Blocked"
 msgstr ""
 
-#: models.py:145 models.py:295
+#: models.py:153 models.py:307
 msgid "description"
 msgstr "mô tả"
 
-#: models.py:146
+#: models.py:154
 msgid "center"
 msgstr "trung tâm"
 
-#: models.py:147
+#: models.py:155
 msgid "zoom"
 msgstr "thu phóng"
 
-#: models.py:149
+#: models.py:157
 msgid "locate"
 msgstr "xác định"
 
-#: models.py:149
+#: models.py:157
 msgid "Locate user on load?"
 msgstr "Xác định người dùng khi tải trang?"
 
-#: models.py:153
+#: models.py:161
 msgid "Choose the map licence."
 msgstr "Chọn bản quyền cho bản đồ"
 
-#: models.py:154
+#: models.py:162
 msgid "licence"
 msgstr "bản quyền"
 
-#: models.py:164
+#: models.py:172
 msgid "owner"
 msgstr "chủ nhân"
 
-#: models.py:168
+#: models.py:176
 msgid "editors"
 msgstr "người chỉnh sửa"
 
-#: models.py:171
+#: models.py:181
 msgid "edit status"
 msgstr "trạng thái chỉnh sửa"
 
-#: models.py:174
+#: models.py:186
 msgid "share status"
 msgstr "chia sẻ trạng thái"
 
-#: models.py:177
+#: models.py:189 models.py:316
 msgid "settings"
 msgstr "thiết lập"
 
-#: models.py:250
+#: models.py:262
 msgid "Clone of"
 msgstr "Sao chép của"
 
-#: models.py:299
+#: models.py:311
 msgid "display on load"
 msgstr "hiển thị khi tải trang"
 
-#: models.py:300
+#: models.py:312
 msgid "Display this layer on load."
 msgstr "Hiển thị layer này khi tải trang"
 
@@ -151,6 +151,33 @@ msgstr "Xem bản đồ của %(current_user)s"
 #: templates/auth/user_detail.html:12
 #, python-format
 msgid "%(current_user)s has no maps."
+msgstr ""
+
+#: templates/auth/user_form.html:6 templates/umap/navigation.html:12
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
+msgid "My Dashboard"
+msgstr ""
+
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr ""
+
+#: templates/auth/user_form.html:19
+msgid "Save"
+msgstr ""
+
+#: templates/auth/user_form.html:24
+msgid "Your current providers"
+msgstr ""
+
+#: templates/auth/user_form.html:30
+msgid "Connect to another provider"
+msgstr ""
+
+#: templates/auth/user_form.html:32
+msgid ""
+"It's a good habit to connect your account to more than one provider, in case"
+" one provider becomes unavailable, temporarily or even permanently."
 msgstr ""
 
 #: templates/auth/user_stars.html:5
@@ -230,7 +257,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Và nó là  <a href=\"%(repo_url)s\">mã nguồn mở <a>! "
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
-#: templates/umap/user_dashboard.html:18
+#: templates/umap/user_dashboard.html:20
 msgid "Create a map"
 msgstr "Tạo bản đồ"
 
@@ -265,7 +292,7 @@ msgstr "Tham khảo các bản đồ"
 msgid "You are logged in. Continuing..."
 msgstr "Bạn đã đăng nhập, Đang tiếp tục..."
 
-#: templates/umap/map_list.html:9 views.py:281
+#: templates/umap/map_list.html:9 views.py:300
 msgid "by"
 msgstr ""
 
@@ -308,10 +335,6 @@ msgstr ""
 #: templates/umap/map_table.html:30
 msgid "Download"
 msgstr ""
-
-#: templates/umap/navigation.html:12
-msgid "My maps"
-msgstr "Bản đồ của tôi"
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
@@ -397,60 +420,60 @@ msgstr "Tìm bản đồ"
 msgid "Search"
 msgstr "Tìm"
 
-#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:9
-msgid "My dashboard"
-msgstr ""
-
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:18
+#: templates/umap/user_dashboard.html:10
+msgid "My profile"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:286
+#: views.py:305
 msgid "View the map"
 msgstr "Xem bản đồ"
 
-#: views.py:607
+#: views.py:628
 msgid "Map has been updated!"
 msgstr "Bản đồ đã được cập nhật!"
 
-#: views.py:632
+#: views.py:653
 msgid "Map editors updated with success!"
 msgstr "Bản đồ được cập nhật thành công!"
 
-#: views.py:670
+#: views.py:691
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:673
+#: views.py:694
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:679
+#: views.py:700
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:690
+#: views.py:711
 msgid "Only its owner can delete the map."
 msgstr "Chỉ chủ nhân của bản đồ mới có quyền xóa."
 
-#: views.py:713
+#: views.py:734
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Bản đồ của bạn đã được sao chép. Nếu bạn muốn chỉnh sửa bản đồ từ máy tính khác, vui lòng sử dụng liên kết này %(anonymous_url)s"
 
-#: views.py:718
+#: views.py:739
 msgid "Congratulations, your map has been cloned!"
 msgstr "Chúc mừng, bản đồ của bạn đã được sao chép!"
 
-#: views.py:884
+#: views.py:922
 msgid "Layer successfully deleted."
 msgstr "Đã xóa layer"

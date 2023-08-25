@@ -1,13 +1,13 @@
 {% extends "umap/content.html" %}
 {% load i18n %}
 {% block head_title %}
-  {{ SITE_NAME }} - {% trans "My dashboard" %}
+  {{ SITE_NAME }} - {% trans "My Dashboard" %}
 {% endblock head_title %}
 {% block maincontent %}
   {% trans "Search my maps" as placeholder %}
   <div class="col wide">
     <h2 class="section tabs">
-      {% trans "My dashboard" %} | <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
+      {% trans "My Dashboard" %} | <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
     </h2>
     {% include "umap/search_bar.html" with action=request.get_full_path placeholder=placeholder %}
   </div>

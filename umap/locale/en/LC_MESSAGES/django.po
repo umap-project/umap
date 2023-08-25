@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 15:24+0000\n"
+"POT-Creation-Date: 2023-08-25 08:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,13 +152,13 @@ msgstr ""
 msgid "%(current_user)s has no maps."
 msgstr ""
 
-#: templates/auth/user_form.html:6 templates/umap/user_dashboard.html:4
-#: templates/umap/user_dashboard.html:10
-msgid "My dashboard"
+#: templates/auth/user_form.html:6 templates/umap/navigation.html:12
+#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
+msgid "My Dashboard"
 msgstr ""
 
-#: templates/auth/user_form.html:6 templates/umap/user_dashboard.html:10
-msgid "My profile"
+#: templates/auth/user_form.html:6
+msgid "My Profile"
 msgstr ""
 
 #: templates/auth/user_form.html:19
@@ -335,10 +335,6 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: templates/umap/navigation.html:12
-msgid "My maps"
-msgstr ""
-
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
 msgstr ""
@@ -426,6 +422,10 @@ msgstr ""
 
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:10
+msgid "My profile"
 msgstr ""
 
 #: templates/umap/user_dashboard.html:20

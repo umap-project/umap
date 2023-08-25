@@ -366,8 +366,8 @@ const locale = {
     "{distance}&#8239;m": "{distance}&#8239;μέτρα",
     "{distance}&#8239;miles": "{distance}&#8239;μίλια",
     "{distance}&#8239;yd": "{distance}&#8239;γιάρδες",
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    " (area: {measure})": "(περιοχή: {measure})",
+    " (length: {measure})": "(μήκος: {measure})",
     "Animated transitions": "Κινούμενες μεταβάσεις",
     "Background overlay url": "Διεύθυνση URL επικάλυψης φόντου",
     "Custom overlay": "Προσαρμοσμένη επικάλυψη",
@@ -391,7 +391,7 @@ const locale = {
     "Toggle edit mode (⇧+Click)": "Toggle edit mode (⇧+Click)",
     "icon opacity": "icon opacity",
     "*single star for italic*": "*single star for italic*",
-    "--- for a horizontal rule": "--- for a horizontal rule",
+    "--- for a horizontal rule": "--- για οριζόντιο χάρακα",
     "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")",
     "Cancel all": "Cancel all",
     "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)",
@@ -401,11 +401,11 @@ const locale = {
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

@@ -401,9 +401,9 @@
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data"
 }
