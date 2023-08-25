@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.1 - 2023-08-25
+
+* fix: correct changelog link by @eMerzh in https://github.com/umap-project/umap/pull/1275
+* Use magiclink extension for changelog with links by @davidbgk in https://github.com/umap-project/umap/pull/1278
+* Fix datalayers being shown on zoom even if displayOnLoad is false by @yohanboniface in https://github.com/umap-project/umap/pull/1283
+* Remove default center to prevent multiple map initialisations by @yohanboniface in https://github.com/umap-project/umap/pull/1284
+
 ## 1.6.0 - 2023-08-22
 
 * Catch timeout error in ajax proxy by @yohanboniface in https://github.com/umap-project/umap/pull/1261
@@ -10,7 +17,6 @@
 * Store DataLayer's settings in DB by @yohanboniface in https://github.com/umap-project/umap/pull/1266
 * When map has max bounds, use those bounds for limiting search by @yohanboniface in https://github.com/umap-project/umap/pull/1268
 * Only call propagateShow at init if layer is visible by @yohanboniface in https://github.com/umap-project/umap/pull/1272
-
 
 ## 1.5.1 - 2023-08-15
 
