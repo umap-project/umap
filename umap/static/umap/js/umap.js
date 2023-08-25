@@ -1,8 +1,6 @@
 L.Map.mergeOptions({
   overlay: null,
   datalayers: [],
-  center: [50, 4],
-  zoom: 6,
   hash: true,
   default_color: 'DarkBlue',
   default_smoothFactor: 1.0,
@@ -86,10 +84,10 @@ L.U.Map.include({
     geojson.properties.fullscreenControl = false
     L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom')
 
-    // Before calling parent initialize
-    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
-
     L.Map.prototype.initialize.call(this, el, geojson.properties)
+
+    // After calling parent initialize, as we are doing initCenter our-selves
+    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
@@ -152,7 +150,8 @@ L.U.Map.include({
       this.options.slideshow.active === undefined
     )
       this.options.slideshow.active = true
-    if (this.options.advancedFilterKey) this.options.facetKey = this.options.advancedFilterKey
+    if (this.options.advancedFilterKey)
+      this.options.facetKey = this.options.advancedFilterKey
 
     // Global storage for retrieving datalayers and features
     this.datalayers = {}
@@ -255,7 +254,11 @@ L.U.Map.include({
       if (L.Util.queryString('share')) this.renderShareBox()
       else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
       else if (this.options.onLoadPanel === 'caption') this.displayCaption()
-      else if (this.options.onLoadPanel === 'facet' || this.options.onLoadPanel === 'datafilters') this.openFacet()
+      else if (
+        this.options.onLoadPanel === 'facet' ||
+        this.options.onLoadPanel === 'datafilters'
+      )
+        this.openFacet()
     })
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
@@ -311,6 +314,7 @@ L.U.Map.include({
       icon: 'umap-fake-class',
       iconLoading: 'umap-fake-class',
       flyTo: this.options.easing,
+      onLocationError: (err) => this.ui.alert({ content: err.message }),
     })
     this._controls.fullscreen = new L.Control.Fullscreen({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
@@ -407,7 +411,11 @@ L.U.Map.include({
       if (datalayer.displayedOnLoad()) datalayer.onceDataLoaded(decrementDataToLoad)
       else decrementDataToLoad()
     }
-    if (seen === 0) loaded() && dataLoaded() // no datalayer
+    if (seen === 0) {
+      // no datalayer
+      loaded()
+      dataLoaded()
+    }
   },
 
   indexDatalayers: function () {
@@ -633,23 +641,44 @@ L.U.Map.include({
     }
   },
 
+  _setDefaultCenter: function () {
+    this.options.center = this.latLng(this.options.center)
+    this.setView(this.options.center, this.options.zoom)
+  },
+
+  hasData: function () {
+    for (const datalayer of this.datalayers_index) {
+      if (datalayer.hasData()) return true
+    }
+  },
+
   initCenter: function () {
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
+      this.once('locationerror', this._setDefaultCenter)
       this._controls.locate.start()
-    } else if (this.options.defaultView === 'bounds') {
-      this.onceDataLoaded(() => this.fitBounds(this.getLayersBounds()))
+    } else if (this.options.defaultView === 'data') {
+      this.onceDataLoaded(() => {
+        if (!this.hasData()) {
+          this._setDefaultCenter()
+          return
+        }
+        this.fitBounds(this.getLayersBounds())
+      })
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
+        if (!this.hasData()) {
+          this._setDefaultCenter()
+          return
+        }
         const datalayer = this.defaultDataLayer(),
           feature = datalayer.getFeatureByIndex(-1)
         if (feature) feature.zoomTo()
       })
     } else {
-      this.options.center = this.latLng(this.options.center)
-      this.setView(this.options.center, this.options.zoom)
+      this._setDefaultCenter()
     }
   },
 
@@ -1404,7 +1433,7 @@ L.U.Map.include({
           handler: 'Input',
           helpEntries: 'facetKey',
           placeholder: L._('Example: key1,key2,key3'),
-          label: L._('Facet keys')
+          label: L._('Facet keys'),
         },
       ],
       [
@@ -2048,7 +2077,7 @@ L.U.Map.include({
 
   getFacetKeys: function () {
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
-      const els = curr.split("|")
+      const els = curr.split('|')
       acc[els[0]] = els[1] || els[0]
       return acc
     }, {})
@@ -2061,5 +2090,4 @@ L.U.Map.include({
     })
     return bounds
   },
-
 })

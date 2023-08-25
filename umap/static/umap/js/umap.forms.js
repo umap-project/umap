@@ -420,7 +420,7 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
 L.FormBuilder.DefaultView = L.FormBuilder.Select.extend({
   selectOptions: [
     ['center', L._('Saved center and zoom')],
-    ['bounds', L._('Layers bounds')],
+    ['data', L._('Fit all data')],
     ['latest', L._('Latest feature')],
     ['locate', L._('User location')],
   ],

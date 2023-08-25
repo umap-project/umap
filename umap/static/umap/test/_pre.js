@@ -107,10 +107,6 @@ var defaultDatalayerData = function (custom) {
 
 function initMap(options) {
   default_options = {
-    geometry: {
-      type: 'Point',
-      coordinates: [5.0592041015625, 52.05924589011585],
-    },
     type: 'Feature',
     properties: {
       umap_id: 42,
@@ -197,7 +193,7 @@ function initMap(options) {
       allowEdit: true,
       moreControl: true,
       scaleControl: true,
-      miniMap: true,
+      miniMap: false,
       datalayersControl: true,
       displayCaptionOnLoad: false,
       displayPopupFooter: false,
@@ -205,7 +201,12 @@ function initMap(options) {
     },
   }
   default_options.properties.datalayers.push(defaultDatalayerData())
+  options = options || {}
   options.properties = L.extend({}, default_options.properties, options)
+  options.geometry = {
+    type: 'Point',
+    coordinates: [5.0592041015625, 52.05924589011585],
+  }
   return new L.U.Map('map', options)
 }
 
