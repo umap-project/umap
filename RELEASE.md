@@ -24,4 +24,4 @@ Makefile on @yohanboniface computer. TODO: share it :)
 
 ### ANCT
 
-Update the [Dockerfile](https://gitlab.com/incubateur-territoires/startups/donnees-et-territoires/umap-dsfr-moncomptepro/-/blob/main/Dockerfile?ref_type=heads) with correct version.
+Update the [Dockerfile](https://gitlab.com/incubateur-territoires/startups/donnees-et-territoires/umap-dsfr-moncomptepro/-/blob/main/Dockerfile?ref_type=heads) with correct version and put a tag `YYYY.MM.DD` in order to deploy it to production.
