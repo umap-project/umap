@@ -126,6 +126,22 @@ def test_invalid_proxy_url_should_return_400(client):
     assert response.status_code == 400
 
 
+def test_valid_proxy_request_with_x_accel_redirect(client, settings):
+    settings.UMAP_XSENDFILE_HEADER = 'X-Accel-Redirect'
+    url = reverse("ajax-proxy")
+    params = {"url": "http://example.org", "ttl": 300}
+    headers = {
+        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
+        "HTTP_REFERER": settings.SITE_URL,
+    }
+    response = client.get(url, params, **headers)
+    assert response.status_code == 200
+    assert "X-Accel-Redirect" in response.headers
+    assert response["X-Accel-Redirect"] == "/proxy/http://example.org"
+    assert "X-Accel-Expires" in response.headers
+    assert response["X-Accel-Expires"] == "300"
+
+
 @pytest.mark.django_db
 def test_login_does_not_contain_form_if_not_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = False
