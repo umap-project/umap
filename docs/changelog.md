@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1 - 2023-08-28
+
+- quote URL in ajax proxy before passing it to Nginx
+
 ## 1.7.0 - 2023-08-28
 
 - **BREAKING CHANGE** when `UMAP_XSENDFILE_HEADER` is set, uMap will now issue
