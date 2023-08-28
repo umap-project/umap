@@ -381,6 +381,7 @@ In Nginx:
             if ( $target_url ~ (.+?)%2F(.*) ){ # fix / after port, the rest will be decoded by proxy_pass
               set $target_url $1/$2;
             }
+            resolver 8.8.8.8;
             add_header X-Proxy-Target $target_url; # For debugging
             proxy_read_timeout 10s;
             proxy_connect_timeout 5s;
@@ -389,6 +390,7 @@ In Nginx:
             error_page 301 302 307 = @handle_proxy_redirect;
         }
         location @handle_proxy_redirect {
+            resolver 8.8.8.8;
             set $saved_redirect_location '$upstream_http_location';
             proxy_pass $saved_redirect_location;
         }
