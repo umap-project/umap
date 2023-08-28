@@ -332,7 +332,29 @@ And then add this new location in your nginx config (before the `/` location):
         alias /path/to/umap/var/data/;
     }
 
+
 ### Configure ajax proxy cache
+
+uMap allows to use remote URL as data sources, but those URLs are not always
+CORS open, so this is why there is this "ajax-proxy" feature, where the URL is
+passed to the backend.
+
+Additionally, there is a caching feature, which duration is configurable through
+frontend settings. Valid values are: disabled, 5 min, 1 hour, 1 day.
+
+This configuration provides a mix option, where python deals with validating the
+URL and parsing the TTL parameter, and then it passes the hand to nginx which
+will serve the remote content.
+
+So, roughly:
+
+- the client calls `/ajax-proxy/?url=xxx&ttl=300`
+- python will validate the URL (not internal calls…)
+- if `UMAP_XSENDFILE_HEADER` is set, then the python returns an empty response
+  with the path `/proxy/http://url` plus it will set the cache TTL through the
+  header `X-Accel-Expires`
+- this `/proxy/` location is then handled by nginx
+
 
 In Nginx:
 
@@ -341,28 +363,36 @@ In Nginx:
         proxy_cache_path /tmp/nginx_ajax_proxy_cache levels=1:2 keys_zone=ajax_proxy:10m inactive=60m;
         proxy_cache_key "$args";
 
-- add this location (before the `/` location):
+- add those locations (before the `/` location):
 
-        location /ajax-proxy/ {
-            valid_referers server_names;
-            if ($invalid_referer) {
-                return 400;
-            }
+        location ~ ^/proxy/(.*) {
+            internal;
             add_header X-Proxy-Cache $upstream_cache_status always;
             proxy_cache ajax_proxy;
             proxy_cache_valid 1m;  # Default. Umap will override using X-Accel-Expires
-            gzip on;
-            gzip_proxied any;
-            gzip_types
-                application/vnd.google-earth.kml+xml
-                application/geo+json
-                application/json
-                application/javascript
-                text/xml
-                application/xml;
-            uwsgi_pass umap;
-            include /srv/umap/uwsgi_params;
+            set $target_url $1;
+            # URL is encoded, so we need a few hack to clean it back.
+            if ( $target_url ~ (.+)%3A%2F%2F(.+) ){ # fix :// between scheme and destination
+              set $target_url $1://$2;
+            }
+            if ( $target_url ~ (.+?)%3A(.*) ){ # fix : between destination and port
+              set $target_url $1:$2;
+            }
+            if ( $target_url ~ (.+?)%2F(.*) ){ # fix / after port, the rest will be decoded by proxy_pass
+              set $target_url $1/$2;
+            }
+            add_header X-Proxy-Target $target_url; # For debugging
+            proxy_read_timeout 10s;
+            proxy_connect_timeout 5s;
+            proxy_pass $target_url;
+            proxy_intercept_errors on;
+            error_page 301 302 307 = @handle_proxy_redirect;
         }
+        location @handle_proxy_redirect {
+            set $saved_redirect_location '$upstream_http_location';
+            proxy_pass $saved_redirect_location;
+        }
+
 
 
 

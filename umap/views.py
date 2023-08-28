@@ -351,6 +351,17 @@ class AjaxProxy(View):
             url = validate_url(self.request)
         except AssertionError:
             return HttpResponseBadRequest()
+        try:
+            ttl = int(self.request.GET.get("ttl"))
+        except (TypeError, ValueError):
+            ttl = None
+        if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
+            response = HttpResponse()
+            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{url}"
+            if ttl:
+                response["X-Accel-Expires"] = ttl
+            return response
+
         headers = {"User-Agent": "uMapProxy +http://wiki.openstreetmap.org/wiki/UMap"}
         request = Request(url, headers=headers)
         opener = build_opener()
@@ -375,11 +386,7 @@ class AjaxProxy(View):
             # Quick hack to prevent Django from adding a Vary: Cookie header
             self.request.session.accessed = False
             response = HttpResponse(content, status=status_code, content_type=mimetype)
-            try:
-                ttl = int(self.request.GET.get("ttl"))
-            except (TypeError, ValueError):
-                pass
-            else:
+            if ttl:
                 response["X-Accel-Expires"] = ttl
             return response
 
