@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.0 - 2023-08-28
+
+- **BREAKING CHANGE** when `UMAP_XSENDFILE_HEADER` is set, uMap will now issue
+ an internal redirect to Nginx for `ajax-proxy` requests, so **Nginx configuration
+ needs to be updated**. See https://umap-project.readthedocs.io/en/master/ubuntu/#configure-ajax-proxy-cache
+ for details.
+
+
+
 ## 1.6.1 - 2023-08-25
 
 * fix: correct changelog link by @eMerzh in https://github.com/umap-project/umap/pull/1275
