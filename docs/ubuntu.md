@@ -335,6 +335,27 @@ And then add this new location in your nginx config (before the `/` location):
 
 ### Configure ajax proxy cache
 
+uMap allows to use remote URL as data sources, but those URLs are not always
+CORS open, so this is why there is this "ajax-proxy" feature, where the URL is
+passed to the backend.
+
+Additionally, there is a caching feature, which duration is configurable through
+frontend settings. Valid values are: disabled, 5 min, 1 hour, 1 day.
+
+This configuration provides a mix option, where python deals with validating the
+URL and parsing the TTL parameter, and then it passes the hand to nginx which
+will serve the remote content.
+
+So, roughly:
+
+- the client calls `/ajax-proxy/?url=xxx&ttl=300`
+- python will validate the URL (not internal calls…)
+- if `UMAP_XSENDFILE_HEADER` is set, then the python returns an empty response
+  with the path `/proxy/http://url` plus it will set the cache TTL through the
+  header `X-Accel-Expires`
+- this `/proxy/` location is then handled by nginx
+
+
 In Nginx:
 
 - add the proxy cache
