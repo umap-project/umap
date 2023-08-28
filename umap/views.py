@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from http.client import InvalidURL
 from pathlib import Path
 from urllib.error import URLError
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import messages
@@ -346,7 +347,6 @@ def validate_url(request):
 
 class AjaxProxy(View):
     def get(self, *args, **kwargs):
-        # You should not use this in production (use Nginx or so)
         try:
             url = validate_url(self.request)
         except AssertionError:
@@ -357,11 +357,12 @@ class AjaxProxy(View):
             ttl = None
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
-            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{url}"
+            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{quote(url)}"
             if ttl:
                 response["X-Accel-Expires"] = ttl
             return response
 
+        # You should not use this in production (use Nginx or so)
         headers = {"User-Agent": "uMapProxy +http://wiki.openstreetmap.org/wiki/UMap"}
         request = Request(url, headers=headers)
         opener = build_opener()

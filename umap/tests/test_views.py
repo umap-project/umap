@@ -127,9 +127,9 @@ def test_invalid_proxy_url_should_return_400(client):
 
 
 def test_valid_proxy_request_with_x_accel_redirect(client, settings):
-    settings.UMAP_XSENDFILE_HEADER = 'X-Accel-Redirect'
+    settings.UMAP_XSENDFILE_HEADER = "X-Accel-Redirect"
     url = reverse("ajax-proxy")
-    params = {"url": "http://example.org", "ttl": 300}
+    params = {"url": "http://example.org?foo=bar&bar=foo", "ttl": 300}
     headers = {
         "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
         "HTTP_REFERER": settings.SITE_URL,
@@ -137,7 +137,10 @@ def test_valid_proxy_request_with_x_accel_redirect(client, settings):
     response = client.get(url, params, **headers)
     assert response.status_code == 200
     assert "X-Accel-Redirect" in response.headers
-    assert response["X-Accel-Redirect"] == "/proxy/http://example.org"
+    assert (
+        response["X-Accel-Redirect"]
+        == "/proxy/http%3A//example.org%3Ffoo%3Dbar%26bar%3Dfoo"
+    )
     assert "X-Accel-Expires" in response.headers
     assert response["X-Accel-Expires"] == "300"
 
