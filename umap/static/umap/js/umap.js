@@ -267,13 +267,7 @@ L.U.Map.include({
       if (L.Util.queryString('download')) this.download()
     })
 
-    window.onbeforeunload = (e) => {
-      const msg = L._('You have unsaved changes.')
-      if (self.isDirty) {
-        e.returnValue = msg
-        return msg
-      }
-    }
+    window.onbeforeunload = () => this.isDirty || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
