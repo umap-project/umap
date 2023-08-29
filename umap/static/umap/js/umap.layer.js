@@ -201,6 +201,8 @@ L.U.DataLayer = L.Evented.extend({
     this._layers = {}
     this._geojson = null
     this._propertiesIndex = []
+    this._loaded = false  // Are layer metadata loaded
+    this._dataloaded = false  // Are layer data loaded
 
     this.parentPane = this.map.getPane('overlayPane')
     this.pane = this.map.createPane(`datalayer${L.stamp(this)}`, this.parentPane)
@@ -346,6 +348,7 @@ L.U.DataLayer = L.Evented.extend({
         this.backupOptions()
         this.fire('loaded')
         this._loading = false
+        this._dataloaded = true
       },
       context: this,
     })
@@ -411,6 +414,7 @@ L.U.DataLayer = L.Evented.extend({
       verb: 'GET',
       callback: (raw) => {
         this.clear()
+        this._dataloaded = true
         this.rawToGeoJSON(raw, this.options.remoteData.format, (geojson) =>
           this.fromGeoJSON(geojson)
         )
@@ -435,7 +439,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   hasDataLoaded: function () {
-    return this._geojson !== null
+    return !this.umap_id || this._dataloaded
   },
 
   setUmapId: function (id) {
@@ -800,6 +804,7 @@ L.U.DataLayer = L.Evented.extend({
     this.off()
     this.clear()
     delete this._loaded
+    delete this._dataloaded
   },
 
   reset: function () {
