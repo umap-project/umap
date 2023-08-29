@@ -396,23 +396,17 @@ ul.photon-autocomplete {
 .leaflet-container a.leaflet-control-edit-cancel,
 .leaflet-container a.leaflet-control-edit-disable {
     display: block;
-    height: 36px;
-    line-height: 36px;
-    color: #efefef;
     border: none;
     font-size: 11px;
     margin-left: 10px;
     float: right;
-}
-.leaflet-container a.leaflet-control-edit-disable,
-.leaflet-container a.leaflet-control-edit-cancel,
-.leaflet-container a.leaflet-control-edit-save {
+    border-radius: 20px;
     color: #f8f8f8;
     width: auto;
     height: 36px;
     line-height: 36px;
     min-height: 36px;
-    padding: 0 10px;
+    padding: 0 20px;
     min-width: 100px;
 }
 .leaflet-container a.leaflet-control-edit-disable:before,
@@ -421,7 +415,6 @@ ul.photon-autocomplete {
     display: inline-block;
     width: 24px;
     height: 24px;
-    margin-left: 5px;
     background-position: -50px -122px;
     background-repeat: no-repeat;
     background-image: url('./img/16-white.svg');
@@ -429,10 +422,14 @@ ul.photon-autocomplete {
     content: ' ';
 }
 .leaflet-container a.leaflet-control-edit-save:before {
-    background-position: -4px -25px;
+    background-position: -2px -25px;
 }
 .leaflet-container a.leaflet-control-edit-disable:before {
-    background-position: -24px -1px;
+    background-position: -28px -1px;
+}
+.leaflet-container a.leaflet-control-edit-cancel,
+.leaflet-container a.leaflet-control-edit-disable {
+    border: 1px solid #555;
 }
 .leaflet-container a.leaflet-control-edit-save {
     opacity: 0.5;
@@ -1482,7 +1479,7 @@ a.add-datalayer:hover,
     .leaflet-container a.leaflet-control-edit-save,
     .leaflet-container a.leaflet-control-edit-disable,
     .leaflet-container a.leaflet-control-edit-cancel {
-        text-indent: calc(100% - 20px);
+        text-indent: calc(100% - 10px);
         width: 35px;
         min-width: initial;
     }
