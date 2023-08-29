@@ -557,12 +557,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         L.DomEvent.on(el, 'click', this.fetchIconList, this)
       }
     }
-    this.button = L.DomUtil.create('a', 'button action-button', this.buttonsContainer)
-    this.button.textContent = this.value() ? L._('Change') : L._('Add')
-    this.button.href = '#'
-    L.DomEvent.on(this.button, 'click', L.DomEvent.stop).on(
-      this.button,
-      'click',
+    this.button = L.DomUtil.createButton(
+      'button action-button',
+      this.buttonsContainer,
+      this.value() ? L._('Change') : L._('Add'),
       this.fetchIconList,
       this
     )
@@ -616,34 +614,30 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
-    const closeButton = L.DomUtil.create('a', 'button action-button', this.pictogramsContainer)
-    closeButton.textContent = L._('Close')
-    closeButton.href = '#'
-    closeButton.style.display = 'block'
-    closeButton.style.clear = 'both'
-    L.DomEvent.on(closeButton, 'click', L.DomEvent.stop).on(
-      closeButton,
-      'click',
+    const cancelButton = L.DomUtil.createButton(
+      'button action-button',
+      this.pictogramsContainer,
+      L._('Close'),
       function (e) {
         this.pictogramsContainer.innerHTML = ''
         this.udpatePreview()
       },
       this
     )
-    const customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    customButton.textContent = L._('Toggle direct input (advanced)')
-    customButton.href = '#'
-    customButton.style.display = 'block'
-    customButton.style.clear = 'both'
-    this.builder.map.help.button(customButton, 'formatIconSymbol')
-    L.DomEvent.on(customButton, 'click', L.DomEvent.stop).on(
-      customButton,
-      'click',
+    cancelButton.style.display = 'block'
+    cancelButton.style.clear = 'both'
+    const customButton = L.DomUtil.createButton(
+      '',
+      this.pictogramsContainer,
+      L._('Toggle direct input (advanced)'),
       function (e) {
         this.input.type = this.input.type === 'text' ? 'hidden' : 'text'
       },
       this
     )
+    customButton.style.display = 'block'
+    customButton.style.clear = 'both'
+    this.builder.map.help.button(customButton, 'formatIconSymbol')
   },
 
   fetchIconList: function (e) {

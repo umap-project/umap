@@ -314,10 +314,21 @@ L.DomUtil.createFieldset = (container, legend, options) => {
 }
 
 L.DomUtil.createButton = (className, container, content, callback, context) => {
+  // TODO: actually switch to buttons’ elements.
   const el = L.DomUtil.add('a', className, container, content)
   el.href = '#'
+  // const el = L.DomUtil.add('button', className, container, content)
   if (callback) {
     L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)
+  }
+  return el
+}
+
+L.DomUtil.createLink = (className, container, content, url, target) => {
+  const el = L.DomUtil.add('a', className, container, content)
+  el.href = url
+  if (target) {
+    el.target = target
   }
   return el
 }
@@ -418,13 +429,17 @@ L.U.Help = L.Class.extend({
       'umap-help-box with-transition dark',
       document.body
     )
-    const closeLink = L.DomUtil.create('a', 'umap-close-link', this.box)
-    closeLink.href = '#'
-    L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    const label = L.DomUtil.create('span', '', closeLink)
+    const closeButton = L.DomUtil.createButton(
+      'umap-close-link',
+      this.box,
+      '',
+      this.hide,
+      this
+    )
+    L.DomUtil.add('i', 'umap-close-icon', closeButton)
+    const label = L.DomUtil.create('span', '', closeButton)
     label.title = label.textContent = L._('Close')
     this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
-    L.DomEvent.on(closeLink, 'click', this.hide, this)
   },
 
   onKeyDown: function (e) {
@@ -457,8 +472,11 @@ L.U.Help = L.Class.extend({
   },
 
   button: function (container, entries, classname) {
-    const helpButton = L.DomUtil.create('a', classname || 'umap-help-button', container)
-    helpButton.href = '#'
+    const helpButton = L.DomUtil.createButton(
+      classname || 'umap-help-button',
+      container,
+      L._('Help')
+    )
     if (entries) {
       L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
         helpButton,
@@ -475,7 +493,7 @@ L.U.Help = L.Class.extend({
 
   link: function (container, entries) {
     const helpButton = this.button(container, entries, 'umap-help-link')
-    helpButton.textContent = L._("Help")
+    helpButton.textContent = L._('Help')
     return helpButton
   },
 

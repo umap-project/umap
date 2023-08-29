@@ -93,17 +93,16 @@ L.U.UI = L.Evented.extend({
       if (timeoutID) window.clearTimeout(timeoutID)
       this.popAlert()
     }
-    const closeLink = L.DomUtil.create('a', 'umap-close-link', this._alert)
-    closeLink.href = '#'
-    L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    const label = L.DomUtil.create('span', '', closeLink)
-    label.title = label.textContent = L._('Close')
-    L.DomEvent.on(closeLink, 'click', L.DomEvent.stop).on(
-      closeLink,
-      'click',
+    const closeButton = L.DomUtil.createButton(
+      'umap-close-link',
+      this._alert,
+      '',
       close,
       this
     )
+    L.DomUtil.add('i', 'umap-close-icon', closeButton)
+    const label = L.DomUtil.create('span', '', closeButton)
+    label.title = label.textContent = L._('Close')
     L.DomUtil.add('div', '', this._alert, e.content)
     if (e.actions) {
       let action, el, input
@@ -116,18 +115,13 @@ L.U.UI = L.Evented.extend({
             this._alert
           )
         }
-        el = L.DomUtil.element('a', { className: 'umap-action' }, this._alert)
-        el.href = '#'
-        el.textContent = action.label
-        L.DomEvent.on(el, 'click', L.DomEvent.stop)
-        if (action.callback) {
-          L.DomEvent.on(
-            el,
-            'click',
-            action.callback,
-            action.callbackContext || this.map
-          )
-        }
+        el = L.DomUtil.createButton(
+          { className: 'umap-action' },
+          this._alert,
+          action.label,
+          action.callback,
+          action.callbackContext || this.map
+        )
         L.DomEvent.on(el, 'click', close, this)
       }
     }
