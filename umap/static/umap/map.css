@@ -507,6 +507,15 @@ ul.photon-autocomplete {
     margin-right: 5px;
     font-weight: bold;
 }
+a.map-name:after {
+    content:  '\00a0';
+    padding-left: 3px;
+    width: 5px;
+    display: inline-block;
+}
+.umap-is-dirty a.map-name:after {
+    content:  '*';
+}
 .umap-main-edit-toolbox .share-status {
     margin: 0 20px;
 }
