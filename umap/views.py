@@ -378,15 +378,15 @@ class AjaxProxy(View):
             return HttpResponseBadRequest("Timeout")
         else:
             status_code = proxied_request.code
-            mimetype = proxied_request.headers.get(
-                "Content-Type"
-            ) or mimetypes.guess_type(
-                url
-            )  # noqa
+            content_type = proxied_request.headers.get("Content-Type")
+            if not content_type:
+                content_type, encoding = mimetypes.guess_type(url)
             content = proxied_request.read()
             # Quick hack to prevent Django from adding a Vary: Cookie header
             self.request.session.accessed = False
-            response = HttpResponse(content, status=status_code, content_type=mimetype)
+            response = HttpResponse(
+                content, status=status_code, content_type=content_type
+            )
             if ttl:
                 response["X-Accel-Expires"] = ttl
             return response
