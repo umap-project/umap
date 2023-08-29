@@ -398,10 +398,10 @@ L.U.DataLayer = L.Evented.extend({
     return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
   },
 
-  fetchRemoteData: function () {
+  fetchRemoteData: function (force) {
     if (!this.isRemoteLayer()) return
     if (!this.showAtZoom()) return
-    if (!this.options.remoteData.dynamic && this.hasDataLoaded()) return
+    if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy)
@@ -961,6 +961,13 @@ L.U.DataLayer = L.Evented.extend({
     const remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'))
     builder = new L.U.FormBuilder(this, remoteDataFields)
     remoteDataContainer.appendChild(builder.build())
+    L.DomUtil.createButton(
+      'button umap-verify',
+      remoteDataContainer,
+      L._('Verify remote URL'),
+      () => this.fetchRemoteData(true),
+      this
+    )
 
     if (this.map.options.urls.datalayer_versions) this.buildVersionsFieldset(container)
 

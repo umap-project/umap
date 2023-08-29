@@ -285,6 +285,15 @@ L.DomUtil.createFieldset = (container, legend, options) => {
   return fieldsEl
 }
 
+L.DomUtil.createButton = (className, container, content, callback, context) => {
+  const el = L.DomUtil.add('a', className, container, content)
+  el.href = '#'
+  if (callback) {
+    L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)
+  }
+  return el
+}
+
 L.DomUtil.classIf = (el, className, bool) => {
   if (bool) L.DomUtil.addClass(el, className)
   else L.DomUtil.removeClass(el, className)
