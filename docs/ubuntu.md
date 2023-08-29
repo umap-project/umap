@@ -361,7 +361,7 @@ In Nginx:
 - add the proxy cache
 
         proxy_cache_path /tmp/nginx_ajax_proxy_cache levels=1:2 keys_zone=ajax_proxy:10m inactive=60m;
-        proxy_cache_key "$args";
+        proxy_cache_key "$uri$is_args$args";
 
 - add those locations (before the `/` location):
 
