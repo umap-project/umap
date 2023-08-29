@@ -995,16 +995,6 @@ L.U.Map.include({
     name.href = '#'
     share_status.href = '#'
     logo.href = '/'
-    if (this.options.user) {
-      const userLabel = L.DomUtil.add(
-        'a',
-        'umap-user',
-        container,
-        L._(`My Dashboard ({username})`, { username: this.options.user.name })
-      )
-      userLabel.href = this.options.user.url
-    }
-    this.help.button(container, 'edit')
     L.DomEvent.on(name, 'click', this.edit, this)
     L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
     this.on('postsync', L.bind(update, this))
@@ -1020,6 +1010,16 @@ L.U.Map.include({
     disable.href = '#'
     disable.textContent = L._('Disable editing')
     disable.title = `${disable.textContent} (Ctrl+E)`
+    this.help.button(container, 'edit')
+    if (this.options.user) {
+      const userLabel = L.DomUtil.add(
+        'a',
+        'umap-user',
+        container,
+        L._(`My Dashboard ({username})`, { username: this.options.user.name })
+      )
+      userLabel.href = this.options.user.url
+    }
 
     L.DomEvent.addListener(disable, 'click', L.DomEvent.stop).addListener(
       disable,

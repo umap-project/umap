@@ -431,6 +431,7 @@ L.U.Help = L.Class.extend({
   button: function (container, entries) {
     const helpButton = L.DomUtil.create('a', 'umap-help-button', container)
     helpButton.href = '#'
+    helpButton.textContent = L._("Help")
     if (entries) {
       L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
         helpButton,
