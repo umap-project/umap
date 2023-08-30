@@ -436,7 +436,6 @@ i.info {
     background-image: url('./img/16-white.svg');
 }
 .with-transition {
-    /*transition: top .7s, right .7s, left .7s, width .7s, visibility .7s;*/
     transition: all .7s;
 }
 
@@ -583,11 +582,8 @@ input[type=hidden].blur + .button {
     overflow-x: hidden;
 }
 #umap-ui-container {
-    width: 400px;
     position: absolute;
-    top: 0;
     bottom: 0;
-    right: -400px;
     padding: 0 10px;
     border-left: 1px solid #ddd;
     overflow-x: auto;
@@ -612,14 +608,8 @@ input[type=hidden].blur + .button {
     padding-right: 0;
     transition: all .7s;
 }
-.umap-edit-enabled #umap-ui-container {
-    top: 46px;
-}
 .umap-caption-bar-enabled #umap-ui-container {
     bottom: 46px;
-}
-.umap-ui #umap-ui-container {
-    right: 0;
 }
 .leaflet-top,
 .leaflet-right {
@@ -821,15 +811,29 @@ input[type=hidden].blur + .button {
 /* *********** */
 /*    Mobile   */
 /* *********** */
-@media all and (orientation:portrait) {
+@media all and (orientation:landscape) {
+    .umap-edit-enabled #umap-ui-container {
+        top: 46px;
+    }
+    #umap-ui-container {
+        width: 400px;
+        right: -400px;
+        top:  0;
+    }
     .umap-ui #umap-ui-container {
+        right: 0;
+    }
+}
+@media all and (orientation:portrait) {
+    #umap-ui-container {
         height: 50%;
         max-height: 400px;
         width: 100%;
-        top: inherit!important;
         bottom: 0;
+        right: -100%;
+    }
+    .umap-ui #umap-ui-container {
         right: 0;
-        left: 0;
     }
     .umap-ui .leaflet-right {
         right: 0;
