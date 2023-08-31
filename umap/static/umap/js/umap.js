@@ -1136,9 +1136,11 @@ L.U.Map.include({
   },
 
   serialize: function () {
+    // Do not use local path during unit tests
+    const uri = window.location.protocol === 'file:' ? null : window.location.href
     const umapfile = {
       type: 'umap',
-      uri: window.location.href,
+      uri: uri,
       properties: this.exportOptions(),
       geometry: this.geometry(),
       layers: [],

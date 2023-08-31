@@ -1147,15 +1147,21 @@ L.U.Map.include({
     this.loadDatalayers(true) // Force load
   },
 
-  download: function (mode) {
+  format: function (mode) {
     const type = this.EXPORT_TYPES[mode || 'umap']
     const content = type.formatter(this)
     let name = this.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+    const filename = name + type.ext
+    return {content, filetype: type.filetype, filename}
+  },
+
+  download: function (mode) {
+    const {content, filetype, filename} = this.format(mode)
+    const blob = new Blob([content], { type: filetype })
     window.URL = window.URL || window.webkitURL
-    const blob = new Blob([content], { type: type.filetype })
     const el = document.createElement('a')
-    el.download = name + type.ext
+    el.download = filename
     el.href = window.URL.createObjectURL(blob)
     el.style.display = 'none'
     document.body.appendChild(el)

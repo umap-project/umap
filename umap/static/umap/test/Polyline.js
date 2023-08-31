@@ -1,4 +1,4 @@
-describe('L.Utorage.Polyline', function () {
+describe('L.U.Polyline', function () {
   var p2ll, map
 
   before(function () {
