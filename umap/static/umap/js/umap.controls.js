@@ -986,9 +986,10 @@ L.U.Map.include({
         const status = this.permissions.getShareStatusDisplay()
         name.textContent = this.getDisplayName()
         // status is not set until map is saved once
-        if (status) share_status.textContent = L._('Visibility: {status}', {
-          status: status,
-        })
+        if (status)
+          share_status.textContent = L._('Visibility: {status}', {
+            status: status,
+          })
       }
     update()
     this.once('saved', L.bind(update, this))
@@ -1129,8 +1130,21 @@ L.U.Map.include({
     toggleCaveat()
     const download = L.DomUtil.create('a', 'button', container)
     download.textContent = L._('Download data')
-    L.DomEvent.on(download, 'click', () => this.download(typeInput.value), this)
+    L.DomEvent.on(
+      download,
+      'click',
+      () => {
+        if (typeInput.value === 'umap') this.fullDownload()
+        else this.download(typeInput.value)
+      }
+    )
     this.ui.openPanel({ data: { html: container } })
+  },
+
+  fullDownload: function () {
+    // Make sure all data is loaded before downloading
+    this.once('dataloaded', () => this.download())
+    this.loadDatalayers(true) // Force load
   },
 
   download: function (mode) {

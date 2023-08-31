@@ -379,33 +379,41 @@ L.U.Map.include({
   },
 
   initDatalayers: function () {
-    let toload = (dataToload = seen = this.options.datalayers.length)
-    const self = this
+    for (let j = 0; j < this.options.datalayers.length; j++) {
+      this.createDataLayer(this.options.datalayers[j])
+    }
+    this.loadDatalayers()
+  },
+
+  loadDatalayers: function (force) {
+    force = force || L.Util.queryString('download') // In case we are in download mode, let's go strait to loading all data
+    let toload = (dataToload = total = this.datalayers_index.length)
     let datalayer
     const loaded = () => {
-      self.datalayersLoaded = true
-      self.fire('datalayersloaded')
+      this.datalayersLoaded = true
+      this.fire('datalayersloaded')
     }
     const decrementToLoad = () => {
       toload--
       if (toload === 0) loaded()
     }
     const dataLoaded = () => {
-      self.dataLoaded = true
-      self.fire('dataloaded')
+      this.dataLoaded = true
+      this.fire('dataloaded')
     }
     const decrementDataToLoad = () => {
       dataToload--
       if (dataToload === 0) dataLoaded()
     }
-    for (let j = 0; j < this.options.datalayers.length; j++) {
-      datalayer = this.createDataLayer(this.options.datalayers[j])
-      if (datalayer.displayedOnLoad()) datalayer.onceLoaded(decrementToLoad)
+    this.eachDataLayer(function (datalayer) {
+      if (force && !datalayer.hasDataLoaded()) datalayer.show()
+      if (datalayer.displayedOnLoad() || force) datalayer.onceLoaded(decrementToLoad)
       else decrementToLoad()
-      if (datalayer.displayedOnLoad()) datalayer.onceDataLoaded(decrementDataToLoad)
+      if (datalayer.displayedOnLoad() || force)
+        datalayer.onceDataLoaded(decrementDataToLoad)
       else decrementDataToLoad()
-    }
-    if (seen === 0) {
+    })
+    if (total === 0) {
       // no datalayer
       loaded()
       dataLoaded()
