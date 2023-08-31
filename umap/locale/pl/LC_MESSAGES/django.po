@@ -6,6 +6,7 @@
 # Daniel Koć <daniel@xn--ko-wla.pl>, 2015
 # endro, 2016
 # endro, 2015-2016
+# Krzysztof Chorzempa, 2023
 # Maciej Kowalik <m.kowalik.79@gmail.com>, 2016
 # maro21 OSM, 2020-2021
 # Piotr Strębski <strebski@gmail.com>, 2020
@@ -17,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-25 08:16+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Tomasz Nycz <tomasz.merkato@gmail.com>, 2018\n"
+"Last-Translator: Krzysztof Chorzempa, 2023\n"
 "Language-Team: Polish (http://app.transifex.com/openstreetmap/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,15 +65,15 @@ msgstr "Kolejność podkładów w oknie edycji"
 
 #: models.py:142
 msgid "Everyone"
-msgstr ""
+msgstr "Każdy"
 
 #: models.py:143 models.py:149
 msgid "Editors only"
-msgstr ""
+msgstr "Tylko edytorzy"
 
 #: models.py:144
 msgid "Owner only"
-msgstr ""
+msgstr "Tylko właściciel"
 
 #: models.py:147
 msgid "Everyone (public)"
@@ -80,11 +81,11 @@ msgstr ""
 
 #: models.py:148
 msgid "Anyone with link"
-msgstr ""
+msgstr "Każdy z linkiem"
 
 #: models.py:150
 msgid "Blocked"
-msgstr ""
+msgstr "Zablokowane"
 
 #: models.py:153 models.py:307
 msgid "description"
@@ -167,11 +168,11 @@ msgstr ""
 
 #: templates/auth/user_form.html:6
 msgid "My Profile"
-msgstr ""
+msgstr "Mój profil"
 
 #: templates/auth/user_form.html:19
 msgid "Save"
-msgstr ""
+msgstr "Zapisz"
 
 #: templates/auth/user_form.html:24
 msgid "Your current providers"
@@ -309,7 +310,7 @@ msgstr "Więcej"
 
 #: templates/umap/map_table.html:6
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: templates/umap/map_table.html:7
 msgid "Name"
@@ -317,7 +318,7 @@ msgstr ""
 
 #: templates/umap/map_table.html:8
 msgid "Who can see / edit"
-msgstr ""
+msgstr "Kto może zobaczyć / edytować"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
@@ -325,7 +326,7 @@ msgstr ""
 
 #: templates/umap/map_table.html:10
 msgid "Owner"
-msgstr ""
+msgstr "Właściciel"
 
 #: templates/umap/map_table.html:11
 msgid "Actions"
@@ -333,15 +334,15 @@ msgstr ""
 
 #: templates/umap/map_table.html:28
 msgid "Share"
-msgstr ""
+msgstr "Udostępnij"
 
 #: templates/umap/map_table.html:29
 msgid "Edit"
-msgstr ""
+msgstr "Edytuj"
 
 #: templates/umap/map_table.html:30
 msgid "Download"
-msgstr ""
+msgstr "Pobierz"
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
@@ -361,7 +362,7 @@ msgstr "Informacje"
 
 #: templates/umap/navigation.html:26
 msgid "Help"
-msgstr ""
+msgstr "Pomoc"
 
 #: templates/umap/navigation.html:31
 msgid "Change password"
@@ -420,7 +421,7 @@ msgstr ""
 
 #: templates/umap/search.html:21
 msgid "Latest created maps"
-msgstr ""
+msgstr "Ostatnio utworzone mapy"
 
 #: templates/umap/search_bar.html:3
 msgid "Search maps"
@@ -436,7 +437,7 @@ msgstr ""
 
 #: templates/umap/user_dashboard.html:10
 msgid "My profile"
-msgstr ""
+msgstr "Mój profil"
 
 #: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."

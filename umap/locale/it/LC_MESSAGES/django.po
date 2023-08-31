@@ -9,7 +9,7 @@
 # lucacorsato <lucors@gmail.com>, 2014
 # Marco <marcxosm@gmail.com>, 2017-2019
 # Marco <marcxosm@gmail.com>, 2018
-# Maurizio Napolitano <maurizio.napolitano@okfn.org>, 2013,2017
+# Maurizio Napolitano <maurizio.napolitano@okfn.org>, 2013,2017,2023
 # Mirco Zorzo <mircozorzo@gmail.com>, 2020
 # Mirco Zorzo <mircozorzo@gmail.com>, 2020
 # claudiamocci <moccicm@gmail.com>, 2013
@@ -21,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-25 08:16+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: YOHAN BONIFACE <yb@enix.org>, 2012\n"
+"Last-Translator: Maurizio Napolitano <maurizio.napolitano@okfn.org>, 2013,2017,2023\n"
 "Language-Team: Italian (http://app.transifex.com/openstreetmap/umap/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,7 +44,7 @@ msgstr "Modificabile solo con il link segreto"
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
-msgstr "Il sito in sola lettura per la manutenzione"
+msgstr "Il sito in sola lettura per manutenzione"
 
 #: models.py:48
 msgid "name"
@@ -68,27 +68,27 @@ msgstr "Ordine degli sfondi (tilelayers) nel box di modifica"
 
 #: models.py:142
 msgid "Everyone"
-msgstr ""
+msgstr "Chiunque"
 
 #: models.py:143 models.py:149
 msgid "Editors only"
-msgstr ""
+msgstr "Solamente chi contribuisce"
 
 #: models.py:144
 msgid "Owner only"
-msgstr ""
+msgstr "Solo chi ha la proprietà"
 
 #: models.py:147
 msgid "Everyone (public)"
-msgstr ""
+msgstr "Chiunque (pubblico)"
 
 #: models.py:148
 msgid "Anyone with link"
-msgstr ""
+msgstr "Chiunque abbia il link"
 
 #: models.py:150
 msgid "Blocked"
-msgstr ""
+msgstr "Bloccata"
 
 #: models.py:153 models.py:307
 msgid "description"
@@ -124,7 +124,7 @@ msgstr "proprietario"
 
 #: models.py:176
 msgid "editors"
-msgstr "editor"
+msgstr "contributore"
 
 #: models.py:181
 msgid "edit status"
@@ -167,45 +167,45 @@ msgstr "%(current_user)s non ha mappe."
 #: templates/auth/user_form.html:6 templates/umap/navigation.html:12
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
 msgid "My Dashboard"
-msgstr ""
+msgstr "Mia Dashboard"
 
 #: templates/auth/user_form.html:6
 msgid "My Profile"
-msgstr ""
+msgstr "Mio Profilo"
 
 #: templates/auth/user_form.html:19
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: templates/auth/user_form.html:24
 msgid "Your current providers"
-msgstr ""
+msgstr "I tuoi fornitori attuali"
 
 #: templates/auth/user_form.html:30
 msgid "Connect to another provider"
-msgstr ""
+msgstr "Collegati ad un altro fornitore"
 
 #: templates/auth/user_form.html:32
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
-msgstr ""
+msgstr "È una buona abitudine connettere il tuo account a più di un fornitore, nel caso in cui un fornitore diventi non disponibile, temporaneamente o addirittura permanentemente."
 
 #: templates/auth/user_stars.html:5
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
-msgstr ""
+msgstr "Sfoglia le mappe selezionate da %(current_user)s"
 
 #: templates/auth/user_stars.html:12
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
-msgstr ""
+msgstr "%(current_user)snon ha ancora selezionato mappe"
 
 #: templates/base.html:12
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "uMap ti permette di creare mappe con OpenStreetMap come sfondo in un minuto e di integrarle nel tuo sito."
 
 #: templates/registration/login.html:3
 msgid "Please log in with your account"
@@ -225,14 +225,14 @@ msgstr "Login"
 
 #: templates/registration/login.html:24
 msgid "Please choose a provider"
-msgstr "Seleziona un fornitore"
+msgstr "Scegli un fornitore"
 
 #: templates/umap/about_summary.html:11
 #, python-format
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
-msgstr "uMap ti permette di creare mappe con livelli <a href=\"%(osm_url)s\" />OpenStreetMap</a> in un minuto e inserirle nel tuo sito."
+msgstr "uMap ti permette di creare mappe con layer <a href=\"%(osm_url)s\" />OpenStreetMap</a> in un minuto e inserirle nel tuo sito."
 
 #: templates/umap/about_summary.html:21
 msgid "Choose the layers of your map"
@@ -280,7 +280,7 @@ msgstr "Gioca con la demo"
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "Questa istanza di uMap è attualmente in modalità di sola lettura, non è consentita alcuna creazione/modifica."
 
 #: templates/umap/content.html:31
 #, python-format
@@ -313,43 +313,43 @@ msgstr "Altre mappe"
 
 #: templates/umap/map_table.html:6
 msgid "Map"
-msgstr ""
+msgstr "Mappa"
 
 #: templates/umap/map_table.html:7
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see / edit"
-msgstr ""
+msgstr "Chi può vedere / modificare"
 
 #: templates/umap/map_table.html:9
 msgid "Last save"
-msgstr ""
+msgstr "Ultimo salvataggio"
 
 #: templates/umap/map_table.html:10
 msgid "Owner"
-msgstr ""
+msgstr "Proprietario"
 
 #: templates/umap/map_table.html:11
 msgid "Actions"
-msgstr ""
+msgstr "Azioni"
 
 #: templates/umap/map_table.html:28
 msgid "Share"
-msgstr ""
+msgstr "Condividi"
 
 #: templates/umap/map_table.html:29
 msgid "Edit"
-msgstr ""
+msgstr "Modifica"
 
 #: templates/umap/map_table.html:30
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
-msgstr ""
+msgstr "Mappe selezionate"
 
 #: templates/umap/navigation.html:19
 msgid "Log in"
@@ -365,7 +365,7 @@ msgstr "Informazioni"
 
 #: templates/umap/navigation.html:26
 msgid "Help"
-msgstr ""
+msgstr "Aiuto"
 
 #: templates/umap/navigation.html:31
 msgid "Change password"
@@ -413,17 +413,17 @@ msgstr "La tua password è stata cambiata."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(count)s mappa trovata"
+msgstr[1] "%(count)s mappe trovate"
+msgstr[2] "%(count)s mappe trovate:"
 
 #: templates/umap/search.html:18
 msgid "No map found."
-msgstr ""
+msgstr "Nessuna mappa trovata."
 
 #: templates/umap/search.html:21
 msgid "Latest created maps"
-msgstr ""
+msgstr "Ultime mappe create"
 
 #: templates/umap/search_bar.html:3
 msgid "Search maps"
@@ -435,15 +435,15 @@ msgstr "Cerca"
 
 #: templates/umap/user_dashboard.html:7
 msgid "Search my maps"
-msgstr ""
+msgstr "Cerca nelle mie mappe"
 
 #: templates/umap/user_dashboard.html:10
 msgid "My profile"
-msgstr ""
+msgstr "Mio profilo"
 
 #: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."
-msgstr ""
+msgstr "Non hai ancora alcuna mappa."
 
 #: views.py:305
 msgid "View the map"
@@ -460,17 +460,17 @@ msgstr "Aggiornato l'elenco degli editor abilitati alla modifica della mappa!"
 #: views.py:691
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "Link uMap per la modifica della tua mappa: %(map_name)s"
 
 #: views.py:694
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "Qui il tuo link segreto: %(link)s"
 
 #: views.py:700
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "Email inviata a %(email)s"
 
 #: views.py:711
 msgid "Only its owner can delete the map."
