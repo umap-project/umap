@@ -1010,7 +1010,7 @@ L.U.Map.include({
     disable.href = '#'
     disable.textContent = L._('Disable editing')
     disable.title = `${disable.textContent} (Ctrl+E)`
-    this.help.button(container, 'edit')
+    this.help.link(container, 'edit')
     if (this.options.user) {
       const userLabel = L.DomUtil.add(
         'a',
