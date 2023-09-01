@@ -986,9 +986,10 @@ L.U.Map.include({
         const status = this.permissions.getShareStatusDisplay()
         name.textContent = this.getDisplayName()
         // status is not set until map is saved once
-        if (status) share_status.textContent = L._('Visibility: {status}', {
-          status: status,
-        })
+        if (status)
+          share_status.textContent = L._('Visibility: {status}', {
+            status: status,
+          })
       }
     update()
     this.once('saved', L.bind(update, this))
@@ -1129,19 +1130,38 @@ L.U.Map.include({
     toggleCaveat()
     const download = L.DomUtil.create('a', 'button', container)
     download.textContent = L._('Download data')
-    L.DomEvent.on(download, 'click', () => this.download(typeInput.value), this)
+    L.DomEvent.on(
+      download,
+      'click',
+      () => {
+        if (typeInput.value === 'umap') this.fullDownload()
+        else this.download(typeInput.value)
+      }
+    )
     this.ui.openPanel({ data: { html: container } })
   },
 
-  download: function (mode) {
+  fullDownload: function () {
+    // Make sure all data is loaded before downloading
+    this.once('dataloaded', () => this.download())
+    this.loadDatalayers(true) // Force load
+  },
+
+  format: function (mode) {
     const type = this.EXPORT_TYPES[mode || 'umap']
     const content = type.formatter(this)
     let name = this.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+    const filename = name + type.ext
+    return {content, filetype: type.filetype, filename}
+  },
+
+  download: function (mode) {
+    const {content, filetype, filename} = this.format(mode)
+    const blob = new Blob([content], { type: filetype })
     window.URL = window.URL || window.webkitURL
-    const blob = new Blob([content], { type: type.filetype })
     const el = document.createElement('a')
-    el.download = name + type.ext
+    el.download = filename
     el.href = window.URL.createObjectURL(blob)
     el.style.display = 'none'
     document.body.appendChild(el)
