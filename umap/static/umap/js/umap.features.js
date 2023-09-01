@@ -118,6 +118,9 @@ L.U.FeatureMixin = {
       callback: this._redraw, // In case we have dynamic options…
     })
     container.appendChild(builder.build())
+    this.map.ui.once('panel:ready', () => {
+      builder.helpers['properties.name'].input.focus()
+    })
     this.appendEditFieldsets(container)
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     this.getAdvancedEditActions(advancedActions)
