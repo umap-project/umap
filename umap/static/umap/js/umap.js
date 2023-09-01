@@ -407,9 +407,9 @@ L.U.Map.include({
     }
     this.eachDataLayer(function (datalayer) {
       if (force && !datalayer.hasDataLoaded()) datalayer.show()
-      if (datalayer.displayedOnLoad() || force) datalayer.onceLoaded(decrementToLoad)
+      if (datalayer.showAtLoad() || force) datalayer.onceLoaded(decrementToLoad)
       else decrementToLoad()
-      if (datalayer.displayedOnLoad() || force)
+      if (datalayer.showAtLoad() || force)
         datalayer.onceDataLoaded(decrementDataToLoad)
       else decrementDataToLoad()
     })
