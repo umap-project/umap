@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.7.2 - 2023-09-01
+
+* Fix remote data not fetched on first save and add a button to manually fetch data by @yohanboniface in https://github.com/umap-project/umap/pull/1289
+* Remove custom message from onbeforeunload event by @yohanboniface in https://github.com/umap-project/umap/pull/1288
+* Edit header polish: move "My Dashboard" and "Help" to the right, display asterisk in dirty mode by @yohanboniface in https://github.com/umap-project/umap/pull/1287
+* Make sure we load all data before downloading it by @yohanboniface in https://github.com/umap-project/umap/pull/1295
+* Fix datalayers not sending "dataloaded" event when min/maxZoom is set and map is loaded outside those values by @yohanboniface in https://github.com/umap-project/umap/pull/1296
+* Add back min-width for img in popup-large by @yohanboniface in https://github.com/umap-project/umap/pull/1297
+* Avoid using a tuple as a content type when guessed by @davidbgk in https://github.com/umap-project/umap/pull/1291
+* Put focus on name when opening feature edit panel by @yohanboniface in https://github.com/umap-project/umap/pull/1293
+* Better distinguish panel behaviour in portrait vs landscape modes by @yohanboniface in https://github.com/umap-project/umap/pull/1292
+
 ## 1.7.1 - 2023-08-28
 
 - quote URL in ajax proxy before passing it to Nginx
