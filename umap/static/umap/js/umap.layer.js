@@ -274,7 +274,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   onMoveEnd: function (e) {
-    if (this.isRemoteLayer()) this.fetchRemoteData()
+    if (this.isRemoteLayer() && this.showAtZoom()) this.fetchRemoteData()
   },
 
   onZoomEnd: function (e) {
@@ -409,7 +409,6 @@ L.U.DataLayer = L.Evented.extend({
 
   fetchRemoteData: function (force) {
     if (!this.isRemoteLayer()) return
-    if (!this.showAtZoom()) return
     if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
