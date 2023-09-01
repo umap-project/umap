@@ -261,7 +261,7 @@ L.U.DataLayer = L.Evented.extend({
     }
     this.backupOptions()
     this.connectToMap()
-    if (this.displayedOnLoad() && this.showAtZoom()) this.show()
+    if (this.showAtLoad()) this.show()
     if (!this.umap_id) this.isDirty = true
 
     this.onceLoaded(function () {
@@ -270,7 +270,7 @@ L.U.DataLayer = L.Evented.extend({
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
-    if (this.displayedOnLoad()) this.map.on('zoomend', this.onZoomEnd, this)
+    if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
   },
 
   onMoveEnd: function (e) {
@@ -283,7 +283,11 @@ L.U.DataLayer = L.Evented.extend({
     if (this.showAtZoom() && !this.isVisible()) this.show()
   },
 
-  displayedOnLoad: function () {
+  showAtLoad: function () {
+    return this.autoLoaded() && this.showAtZoom()
+  },
+
+  autoLoaded: function () {
     return (
       (this.map.datalayersOnLoad &&
         this.umap_id &&
