@@ -253,9 +253,11 @@ L.U.DataLayer = L.Evented.extend({
     // Retrocompat
     if (this.options.remoteData && this.options.remoteData.from) {
       this.options.fromZoom = this.options.remoteData.from
+      delete this.options.remoteData.from
     }
     if (this.options.remoteData && this.options.remoteData.to) {
       this.options.toZoom = this.options.remoteData.to
+      delete this.options.remoteData.to
     }
     this.backupOptions()
     this.connectToMap()
