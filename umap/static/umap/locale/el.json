@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "Θα εμφανιστεί στην κάτω δεξιά γωνία του χάρτη",
     "Will be visible in the caption of the map": "Θα είναι ορατό στη λεζάντα του χάρτη",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Οπς! Κάποιος άλλος φαίνεται πως έχει επεξεργαστεί τα δεδομένα. Μπορείτε να αποθηκεύσετε ούτως ή άλλως, αλλά αυτό θα διαγράψει τις αλλαγές που έγιναν από άλλους.",
-    "You have unsaved changes.": "Έχετε μη αποθηκευμένες αλλαγές.",
     "Zoom in": "Μεγέθυνση",
     "Zoom level for automatic zooms": "Επίπεδο εστίασης για αυτόματες μεγεθύνσεις/σμικρύνσεις",
     "Zoom out": "Σμίκρυνση",
@@ -405,5 +404,6 @@
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
-    "Fit all data": "Fit all data"
+    "Fit all data": "Μεγέθυνση στα δεδομένα",
+    "Verify remote URL": "Verify remote URL"
 }

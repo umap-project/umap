@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "S'affiche dans le coin en bas à droite de la carte",
     "Will be visible in the caption of the map": "Sera visible dans la légende de la carte",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Aïe ! Quelqu'un d'autre semble avoir modifié la carte. Vous pouvez continuer l'enregistrement, mais ses données seront perdues.",
-    "You have unsaved changes.": "Vous avez des changements non sauvegardés.",
     "Zoom in": "Zoomer",
     "Zoom level for automatic zooms": "Niveau de zoom automatique",
     "Zoom out": "Dézoomer",
@@ -405,5 +404,6 @@
     "Saved center and zoom": "Centre et zoom enregistrés",
     "User location": "Localisation de l'utilisateur",
     "Visibility: {status}": "Visibilité: {status}",
-    "Fit all data": "Zoom sur les données"
+    "Fit all data": "Zoom sur les données",
+    "Verify remote URL": "Vérifier l'URL"
 }

@@ -300,7 +300,6 @@ const locale = {
     "Will be displayed in the bottom right corner of the map": "Será mostrado no fundo à direita do mapa",
     "Will be visible in the caption of the map": "Será visível no cabeçalho do mapa",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Ops! Parece que alguém editou os dados. Pode gravar mesmo assim, mas isso irá eliminar as alterações feitas por outros.",
-    "You have unsaved changes.": "Tem alterações por gravar",
     "Zoom in": "Aproximar",
     "Zoom level for automatic zooms": "Nível de aproximação para aproximações automáticas",
     "Zoom out": "Afastar",
@@ -401,11 +400,12 @@ const locale = {
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }
 L.registerLocale("pt", locale)
 L.setLocale("pt")

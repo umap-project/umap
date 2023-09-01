@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "Akan dipaparkan di bucu kanan bawah peta",
     "Will be visible in the caption of the map": "Akan kelihatan dalam keterangan peta",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Alamak! Nampaknya orang lain telah menyunting data. Anda boleh simpan juga, tetapi ini akan memadam perubahan yang dibuat oleh orang lain.",
-    "You have unsaved changes.": "Anda ada perubahan yang belum disimpan.",
     "Zoom in": "Zum masuk",
     "Zoom level for automatic zooms": "Tahap zum bagi zum automatik",
     "Zoom out": "Zum keluar",
@@ -405,5 +404,6 @@
     "Saved center and zoom": "Kedudukan tengah dan zum telah disimpan",
     "User location": "Kedudukan pengguna",
     "Visibility: {status}": "Kebolehlihatan: {status}",
-    "Fit all data": "Fit all data"
+    "Fit all data": "Sesuaikan semua data",
+    "Verify remote URL": "Verify remote URL"
 }

@@ -300,7 +300,6 @@ const locale = {
     "Will be displayed in the bottom right corner of the map": "Prikazan bo v spodnjem desnem kotu zemljevida",
     "Will be visible in the caption of the map": "Prikazan bo v naslovu zemljevida",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Opa! Nekdo drug je najverjetneje urejal podatke. Spremembe lahko vseeno shranite, vendar bo to prepisalo spremembe, ustvarjene s strani drugih urednikov.",
-    "You have unsaved changes.": "Zaznane so neshranjene spremembe.",
     "Zoom in": "Približaj",
     "Zoom level for automatic zooms": "Raven za samodejno približanje",
     "Zoom out": "Oddalji",
@@ -401,11 +400,12 @@ const locale = {
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }
 L.registerLocale("sl", locale)
 L.setLocale("sl")

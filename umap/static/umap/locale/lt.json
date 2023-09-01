@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "Bus rodomas apatiniame dešiniame žemėlapio kampe",
     "Will be visible in the caption of the map": "Bus matoma žemėlapio antraštėje",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Dėmesio! Kažkas kitas jau paredagavo šiuos duomenis. Jūs galite išsaugoti, bet tuomet bus prarasti kiti pakeitimai.",
-    "You have unsaved changes.": "You have unsaved changes.",
     "Zoom in": "Padidinti mastelį",
     "Zoom level for automatic zooms": "Priartinimo lygis automatiniui režimui",
     "Zoom out": "Didinti",
@@ -401,9 +400,10 @@
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }

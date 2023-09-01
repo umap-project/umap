@@ -300,7 +300,6 @@ const locale = {
     "Will be displayed in the bottom right corner of the map": "Visas i nedre högra hörnet av kartan",
     "Will be visible in the caption of the map": "Visas i sidfotsfältet under kartan",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Hoppsan! \nNågon annan verkar ha hunnit före och redigerat i kartan redan! Du kan spara ändå, men det kommer att radera ändringar som någon annan har gjort.",
-    "You have unsaved changes.": "Du har ändringar som inte har sparats!",
     "Zoom in": "Zooma in",
     "Zoom level for automatic zooms": "Zoomnivå för automatisk zoom",
     "Zoom out": "Zooma ut",
@@ -401,11 +400,12 @@ const locale = {
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

@@ -300,7 +300,6 @@ const locale = {
     "Will be displayed in the bottom right corner of the map": "Diskwelet e vo e traoñ a-zehoù ar gartenn",
     "Will be visible in the caption of the map": "Gwelus e vo en alc'hwez ar gartenn",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Chaous! Seblant a ra ez eus bet kemmet ar gartenn gant unan bennak all. Gallout a rit enrollañ koulskoude, kollet e vo e roadennoù avat.",
-    "You have unsaved changes.": "N'ho peus ket enrollet ho kemmoù.",
     "Zoom in": "Zoumañ",
     "Zoom level for automatic zooms": "Live ar zoum emgefreek",
     "Zoom out": "Dizoumañ",
@@ -401,11 +400,12 @@ const locale = {
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }
 L.registerLocale("br", locale)
 L.setLocale("br")

@@ -300,7 +300,6 @@ const locale = {
     "Will be displayed in the bottom right corner of the map": "در گوشه سمت راست پایین نقشه نمایش داده می شود",
     "Will be visible in the caption of the map": "در زیرنویس نقشه قابل مشاهده خواهد بود",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "وای! به نظر می رسد شخص دیگری داده ها را ویرایش کرده است. در هر صورت می توانید ذخیره کنید، اما با این کار تغییرات ایجاد شده توسط دیگران پاک می شود.",
-    "You have unsaved changes.": "تغییرات ذخیره نشده ای دارید.",
     "Zoom in": "بزرگنمایی",
     "Zoom level for automatic zooms": "سطح زوم برای بزرگنمایی خودکار",
     "Zoom out": "کوچک نمایی",
@@ -401,11 +400,12 @@ const locale = {
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

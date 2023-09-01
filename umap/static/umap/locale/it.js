@@ -300,7 +300,6 @@ const locale = {
     "Will be displayed in the bottom right corner of the map": "Sarà visualizzato in un angolo in basso a destra sulla mappa",
     "Will be visible in the caption of the map": "Sarà visibile nella didascalia della mappa",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "OPS! Qualcun altro sembra aver modificato i dati. È possibile comunque salvare, ma questo cancellerà le modifiche apportate da altri.",
-    "You have unsaved changes.": "Ci sono delle modifiche che non sono state ancora salvate.",
     "Zoom in": "Ingrandisci",
     "Zoom level for automatic zooms": "Livelli di zoom per zoom automatici",
     "Zoom out": "Rimpicciolisci",
@@ -405,7 +404,8 @@ const locale = {
     "Saved center and zoom": "Centro e zoom salvati",
     "User location": "Posizione dell'utente",
     "Visibility: {status}": "Visibilità: {status}",
-    "Fit all data": "Adatta tutti i dati"
+    "Fit all data": "Adatta tutti i dati",
+    "Verify remote URL": "Verify remote URL"
 }
 L.registerLocale("it", locale)
 L.setLocale("it")

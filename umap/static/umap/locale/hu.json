@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "A térkép jobb alsó sarkában fog megjelenni",
     "Will be visible in the caption of the map": "A térkép címsávjában fog megjelenni",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Ajjaj… Úgy tűnik, időközben valaki más is szerkesztette az adatokat. Ennek ellenére elmentheti őket, de ezzel az időközben mások által végzett módosítások el fognak veszni.",
-    "You have unsaved changes.": "Vannak még nem mentett változtatásai.",
     "Zoom in": "Nagyítás",
     "Zoom level for automatic zooms": "Nagyítási szint automatikus nagyításoknál",
     "Zoom out": "Kicsinyítés",
@@ -401,9 +400,10 @@
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }

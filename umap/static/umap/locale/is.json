@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "Verður birt niðri í hægra horni kortsins",
     "Will be visible in the caption of the map": "Verður sýnilegt í skýringatexta kortsins",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "Úbbs! Það lítur út fyrir að einhver annar hafi breytt gögnunum. Þú getur samt vistað, en það mun hreinsa út breytingarnar sem hinn aðilinn gerði.",
-    "You have unsaved changes.": "Það eru óvistaðar breytingar.",
     "Zoom in": "Renna að",
     "Zoom level for automatic zooms": "Aðdráttarstig fyrir sjálfvirkan aðdrátt",
     "Zoom out": "Renna frá",
@@ -401,9 +400,10 @@
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }

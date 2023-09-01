@@ -300,7 +300,6 @@
     "Will be displayed in the bottom right corner of the map": "地図の右下に表示されます",
     "Will be visible in the caption of the map": "地図の脚注として表示されます",
     "Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.": "おおおっと！ 他の誰かがデータを編集したようです。あなたの編集内容をもう一度保存することもできますが、その場合、他の誰かが行った編集は削除されます。",
-    "You have unsaved changes.": "編集が保存されていません",
     "Zoom in": "ズームイン",
     "Zoom level for automatic zooms": "自動ズーム時のズームレベル",
     "Zoom out": "ズームアウト",
@@ -401,9 +400,10 @@
     "Feature properties": "Feature properties",
     "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
-    "Layers bounds": "Layers bounds",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
     "User location": "User location",
-    "Visibility: {status}": "Visibility: {status}"
+    "Visibility: {status}": "Visibility: {status}",
+    "Fit all data": "Fit all data",
+    "Verify remote URL": "Verify remote URL"
 }
