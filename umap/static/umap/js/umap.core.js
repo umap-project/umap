@@ -318,6 +318,7 @@ L.DomUtil.createButton = (className, container, content, callback, context) => {
   const el = L.DomUtil.add('a', className, container, content)
   el.href = '#'
   // const el = L.DomUtil.add('button', className, container, content)
+  // el.type = 'button'
   if (callback) {
     L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)
   }
