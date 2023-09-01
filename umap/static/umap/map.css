@@ -348,6 +348,19 @@ ul.photon-autocomplete {
     float: right;
 }
 .umap-help-button {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    background-position: -4px -4px;
+    background-repeat: no-repeat;
+    background-image: url('./img/16.svg');
+    vertical-align: middle;
+}
+.dark .umap-help-button {
+    background-image: url('./img/16-white.svg');
+ }
+.umap-help-link {
     float: right;
     margin-right: 20px;
 }
