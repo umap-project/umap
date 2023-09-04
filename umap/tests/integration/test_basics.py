@@ -18,7 +18,7 @@ def test_create_map_link(page, live_server, lang, link_name, link_url):
     expect(create_map_button).to_have_attribute("href", link_url)
 
 
-def test_create_map_with_cursor(page, live_server):
+def test_create_map_with_cursor(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a marker button on a new map.
