@@ -513,6 +513,10 @@ L.FormBuilder.BlurInput.include({
 })
 
 L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
+  type: function () {
+    return 'hidden'
+  },
+
   build: function () {
     L.FormBuilder.BlurInput.prototype.build.call(this)
     // Try to guess if the icon content has been customized, and if yes
@@ -532,7 +536,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   udpatePreview: function () {
-    if (L.Util.hasVar(this.value())) {
+    if (!L.Util.hasVar(this.value())) {
       // Do not try to render URL with variables
       if (this.isUrl()) {
         const img = L.DomUtil.create(
@@ -552,8 +556,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         L.DomEvent.on(el, 'click', this.fetchIconList, this)
       }
     }
-    this.button = L.DomUtil.create('a', 'button', this.buttonsContainer)
-    this.button.textContent = this.value() ? L._('Change symbol') : L._('Add symbol')
+    this.button = L.DomUtil.create('a', 'button action-button', this.buttonsContainer)
+    this.button.textContent = this.value() ? L._('Change') : L._('Add')
     this.button.href = '#'
     L.DomEvent.on(this.button, 'click', L.DomEvent.stop).on(
       this.button,
@@ -600,7 +604,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
-    const closeButton = L.DomUtil.create('a', 'button', this.pictogramsContainer)
+    const closeButton = L.DomUtil.create('a', 'button action-button', this.pictogramsContainer)
     closeButton.textContent = L._('Close')
     closeButton.href = '#'
     closeButton.style.display = 'block'

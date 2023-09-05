@@ -399,6 +399,7 @@ input.switch:checked ~ label:after {
     padding-top: 5px;
     margin-top: 5px;
 }
+.umap-field-iconUrl .action-button,
 .inheritable .define,
 .inheritable .undefine {
     float: right;
