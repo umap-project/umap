@@ -561,7 +561,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         L.DomEvent.on(el, 'click', this.fetchIconList, this)
       }
     }
-    this.button = L.DomUtil.create('a', '', this.buttonsContainer)
+    this.button = L.DomUtil.create('a', 'button', this.buttonsContainer)
     this.button.textContent = this.value() ? L._('Change symbol') : L._('Add symbol')
     this.button.href = '#'
     L.DomEvent.on(this.button, 'click', L.DomEvent.stop).on(
@@ -609,13 +609,13 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
-    const cancelButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    cancelButton.textContent = L._('Cancel')
-    cancelButton.href = '#'
-    cancelButton.style.display = 'block'
-    cancelButton.style.clear = 'both'
-    L.DomEvent.on(cancelButton, 'click', L.DomEvent.stop).on(
-      cancelButton,
+    const closeButton = L.DomUtil.create('a', 'button', this.pictogramsContainer)
+    closeButton.textContent = L._('Close')
+    closeButton.href = '#'
+    closeButton.style.display = 'block'
+    closeButton.style.clear = 'both'
+    L.DomEvent.on(closeButton, 'click', L.DomEvent.stop).on(
+      closeButton,
       'click',
       function (e) {
         this.pictogramsContainer.innerHTML = ''
@@ -624,7 +624,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       this
     )
     const customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    customButton.textContent = L._('Set symbol')
+    customButton.textContent = "> " + L._('Free content (advanced)')
     customButton.href = '#'
     customButton.style.display = 'block'
     customButton.style.clear = 'both'
