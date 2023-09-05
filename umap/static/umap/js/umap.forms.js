@@ -575,7 +575,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       img = L.DomUtil.create('img', '', container)
     img.src = value
     if (pictogram.name && pictogram.attribution) {
-      img.title = `${pictogram.name} — © ${pictogram.attribution}`
+      container.title = `${pictogram.name} — © ${pictogram.attribution}`
     }
     L.DomEvent.on(
       container,
@@ -598,9 +598,22 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.udpatePreview()
   },
 
+  search: function (e) {
+    const icons = [...this.parentNode.querySelectorAll('.umap-icon-choice')],
+      search = this.searchInput.value.toLowerCase()
+    icons.forEach((el) => {
+      if (el.title.toLowerCase().indexOf(search) != -1) el.style.display = 'block'
+      else el.style.display = 'none'
+    })
+  },
+
   buildIconList: function (data) {
     this.pictogramsContainer.innerHTML = ''
     this.buttonsContainer.innerHTML = ''
+    this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
+    this.searchInput.type = 'search'
+    this.searchInput.placeholder = L._('Search')
+    L.DomEvent.on(this.searchInput, 'input', this.search, this)
     for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
