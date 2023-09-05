@@ -518,7 +518,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   build: function () {
-    this.options.helpText = this.builder.map.help.formatIconSymbol
     L.FormBuilder.BlurInput.prototype.build.call(this)
     this.parentContainer = L.DomUtil.create(
       'div',
