@@ -590,8 +590,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         this.sync()
         this.unselectAll(this.pictogramsContainer)
         L.DomUtil.addClass(container, 'selected')
-        this.pictogramsContainer.innerHTML = ''
-        this.udpatePreview()
       },
       this
     )
