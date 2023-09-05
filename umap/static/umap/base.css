@@ -501,13 +501,6 @@ i.info {
     margin-top: -8px;
     padding: 0 5px;
 }
-.umap-form-iconfield {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    line-height: 30px;
-}
 .umap-icon-list, .umap-pictogram-list {
     clear: both;
 }

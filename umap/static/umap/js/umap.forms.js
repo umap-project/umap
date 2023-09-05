@@ -513,25 +513,16 @@ L.FormBuilder.BlurInput.include({
 })
 
 L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
-  type: function () {
-    return 'hidden'
-  },
-
   build: function () {
     L.FormBuilder.BlurInput.prototype.build.call(this)
-    this.parentContainer = L.DomUtil.create(
-      'div',
-      'umap-form-iconfield',
-      this.parentNode
-    )
-    this.buttonsContainer = L.DomUtil.create('div', '', this.parentContainer)
-    this.pictogramsContainer = L.DomUtil.create(
-      'div',
-      'umap-pictogram-list',
-      this.parentContainer
-    )
-    this.input.type = 'hidden'
+    // Try to guess if the icon content has been customized, and if yes
+    // directly display the field
+    this.input.type = this.value() && !this.value().startsWith('/') ? 'text' : 'hidden'
     this.input.placeholder = L._('Symbol or url')
+    this.buttonsContainer = L.DomUtil.create('div', '')
+    this.pictogramsContainer = L.DomUtil.create('div', 'umap-pictogram-list')
+    L.DomUtil.before(this.input, this.buttonsContainer)
+    L.DomUtil.before(this.input, this.pictogramsContainer)
     this.udpatePreview()
     this.on('define', this.fetchIconList)
   },
@@ -624,7 +615,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       this
     )
     const customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    customButton.textContent = "> " + L._('Free content (advanced)')
+    customButton.textContent = L._('Toggle direct input (advanced)')
     customButton.href = '#'
     customButton.style.display = 'block'
     customButton.style.clear = 'both'
@@ -633,8 +624,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       customButton,
       'click',
       function (e) {
-        this.input.type = 'text'
-        this.pictogramsContainer.innerHTML = ''
+        this.input.type = this.input.type === 'text' ? 'hidden' : 'text'
       },
       this
     )
@@ -691,7 +681,7 @@ L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-      this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label);
+    this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label)
   },
 
   buildLi: function (value) {
@@ -708,7 +698,7 @@ L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   },
 
   toJS: function () {
-    return [...this.ul.querySelectorAll('input:checked')].map(i => i.dataset.value)
+    return [...this.ul.querySelectorAll('input:checked')].map((i) => i.dataset.value)
   },
 })
 
