@@ -532,7 +532,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   isUrl: function () {
-    return this.value().indexOf('/') !== -1
+    return this.value() && this.value().indexOf('/') !== -1
   },
 
   udpatePreview: function () {
@@ -608,8 +608,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   buildIconList: function (data) {
-    this.pictogramsContainer.innerHTML = ''
-    this.buttonsContainer.innerHTML = ''
     this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
@@ -648,6 +646,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   fetchIconList: function (e) {
+    // Clean parent element before calling ajax, to prevent blinking
+    this.pictogramsContainer.innerHTML = ''
+    this.buttonsContainer.innerHTML = ''
     this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
       callback: this.buildIconList,
       context: this,
