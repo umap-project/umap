@@ -154,6 +154,11 @@ map_urls = [
         views.DataLayerDelete.as_view(),
         name="datalayer_delete",
     ),
+    re_path(
+        r"^map/(?P<map_id>[\d]+)/datalayer/permissions/(?P<pk>\d+)/$",
+        views.UpdateDataLayerPermissions.as_view(),
+        name="datalayer_permissions",
+    ),
 ]
 if settings.FROM_EMAIL:
     map_urls.append(

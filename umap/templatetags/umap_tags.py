@@ -28,7 +28,7 @@ def umap_js(locale=None):
 @register.inclusion_tag('umap/map_fragment.html')
 def map_fragment(map_instance, **kwargs):
     layers = DataLayer.objects.filter(map=map_instance)
-    datalayer_data = [c.metadata for c in layers]
+    datalayer_data = [c.metadata() for c in layers]
     map_settings = map_instance.settings
     if "properties" not in map_settings:
         map_settings['properties'] = {}
