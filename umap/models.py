@@ -216,6 +216,9 @@ class Map(NamedModel):
         """
         Define if a user can edit or not the instance, according to his account
         or the request.
+
+        In ownership mode: only owner and editors
+        In anononymous mode: only "anonymous owners" (having edit cookie set)
         """
         can = False
         if request and not self.owner:
@@ -223,13 +226,9 @@ class Map(NamedModel):
                 settings, "UMAP_ALLOW_ANONYMOUS", False
             ) and self.is_anonymous_owner(request):
                 can = True
-        if self.edit_status == self.ANONYMOUS:
+        if user == self.owner:
             can = True
-        elif not user.is_authenticated:
-            pass
-        elif user == self.owner:
-            can = True
-        elif self.edit_status == self.EDITORS and user in self.editors.all():
+        elif user in self.editors.all():
             can = True
         return can
 
@@ -303,6 +302,15 @@ class DataLayer(NamedModel):
     Layer to store Features in.
     """
 
+    ANONYMOUS = 1
+    EDITORS = 2
+    OWNER = 3
+    EDIT_STATUS = (
+        (ANONYMOUS, _("Everyone")),
+        (EDITORS, _("Editors only")),
+        (OWNER, _("Owner only")),
+    )
+
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
@@ -314,6 +322,11 @@ class DataLayer(NamedModel):
     rank = models.SmallIntegerField(default=0)
     settings = models.JSONField(
         blank=True, null=True, verbose_name=_("settings"), default=dict
+    )
+    edit_status = models.SmallIntegerField(
+        choices=EDIT_STATUS,
+        default=get_default_edit_status,
+        verbose_name=_("edit status"),
     )
 
     class Meta:
@@ -345,8 +358,7 @@ class DataLayer(NamedModel):
         path.append(str(self.map.pk))
         return os.path.join(*path)
 
-    @property
-    def metadata(self):
+    def metadata(self, user=None, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
         obj = self.settings or {
@@ -354,6 +366,8 @@ class DataLayer(NamedModel):
             "displayOnLoad": self.display_on_load,
         }
         obj["id"] = self.pk
+        obj["permissions"] = {"edit_status": self.edit_status}
+        obj["allowEdit"] = self.can_edit(user, request)
         return obj
 
     def clone(self, map_inst=None):
@@ -406,6 +420,19 @@ class DataLayer(NamedModel):
                     self.geojson.storage.delete(path)
                 except FileNotFoundError:
                     pass
+
+    def can_edit(self, user=None, request=None):
+        """
+        Define if a user can edit or not the instance, according to his account
+        or the request.
+        """
+        can = self.map.can_edit(user, request)
+        if can:
+            # Owner or editor, no need for further checks.
+            return can
+        if self.edit_status == self.ANONYMOUS:
+            can = True
+        return can
 
 
 class Star(models.Model):

@@ -261,6 +261,7 @@ L.U.DataLayer = L.Evented.extend({
     }
     this.backupOptions()
     this.connectToMap()
+    this.permissions = new L.U.DataLayerPermissions(this)
     if (this.showAtLoad()) this.show()
     if (!this.umap_id) this.isDirty = true
 
@@ -350,6 +351,13 @@ L.U.DataLayer = L.Evented.extend({
     this.map.get(this._dataUrl(), {
       callback: function (geojson, response) {
         this._last_modified = response.getResponseHeader('Last-Modified')
+        console.log(this.getName(), this.options)
+        // FIXME: for now this property is set dynamically from backend
+        // And thus it's not in the geojson file in the server
+        // So do not let all options to be reset
+        // Fix is a proper migration so all datalayers settings are
+        // in DB, and we remove it from geojson flat files.
+        geojson['_umap_options']['allowEdit'] = this.options.allowEdit
         this.fromUmapGeoJSON(geojson)
         this.backupOptions()
         this.fire('loaded')
@@ -1182,16 +1190,12 @@ L.U.DataLayer = L.Evented.extend({
     }
   },
 
-  metadata: function () {
-    return {
-      id: this.umap_id,
-      name: this.options.name,
-      displayOnLoad: this.options.displayOnLoad,
-    }
-  },
-
   getRank: function () {
     return this.map.datalayers_index.indexOf(this)
+  },
+
+  isReadOnly: function () {
+    return !this.options.allowEdit
   },
 
   save: function () {
@@ -1220,7 +1224,7 @@ L.U.DataLayer = L.Evented.extend({
         this._loaded = true
         this.redraw() // Needed for reordering features
         this.isDirty = false
-        this.map.continueSaving()
+        this.permissions.save()
       },
       context: this,
       headers: this._last_modified

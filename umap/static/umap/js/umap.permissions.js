@@ -122,6 +122,10 @@ L.U.MapPermissions = L.Class.extend({
         this
       )
     }
+    L.DomUtil.add('h3', '', container, L._('Datalayers'))
+    this.map.eachDataLayer((datalayer) => {
+      datalayer.permissions.edit(container)
+    })
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
   },
 

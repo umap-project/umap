@@ -47,6 +47,8 @@ from .forms import (
     DEFAULT_CENTER,
     AnonymousMapPermissionsForm,
     DataLayerForm,
+    DataLayerPermissionsForm,
+    AnonymousDataLayerPermissionsForm,
     FlatErrorList,
     MapSettingsForm,
     SendLinkForm,
@@ -552,11 +554,16 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        datalayers = DataLayer.objects.filter(map=self.object)
-        return [l.metadata for l in datalayers]
+        return [
+            l.metadata(self.request.user, self.request)
+            for l in self.object.datalayer_set.all()
+        ]
 
     def is_edit_allowed(self):
-        return self.object.can_edit(self.request.user, self.request)
+        return self.object.can_edit(self.request.user, self.request) or any(
+            d.can_edit(self.request.user, self.request)
+            for d in self.object.datalayer_set.all()
+        )
 
     def get_umap_id(self):
         return self.object.pk
@@ -884,7 +891,9 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
         form.instance.map = self.kwargs["map_inst"]
         self.object = form.save()
         # Simple response with only metadatas (including new id)
-        response = simple_json_response(**self.object.metadata)
+        response = simple_json_response(
+            **self.object.metadata(self.request.user, self.request)
+        )
         response["Last-Modified"] = self.last_modified
         return response
 
@@ -897,7 +906,9 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         self.object = form.save()
         # Simple response with only metadatas (client should not reload all data
         # on save)
-        response = simple_json_response(**self.object.metadata)
+        response = simple_json_response(
+            **self.object.metadata(self.request.user, self.request)
+        )
         response["Last-Modified"] = self.last_modified
         return response
 
@@ -935,6 +946,21 @@ class DataLayerVersions(BaseDetailView):
 
     def render_to_response(self, context, **response_kwargs):
         return simple_json_response(versions=self.object.versions)
+
+
+class UpdateDataLayerPermissions(FormLessEditMixin, UpdateView):
+    model = DataLayer
+    pk_url_kwarg = "pk"
+
+    def get_form_class(self):
+        if self.object.map.owner:
+            return DataLayerPermissionsForm
+        else:
+            return AnonymousDataLayerPermissionsForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return simple_json_response(info=_("Permissions updated with success!"))
 
 
 # ############## #
