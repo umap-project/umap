@@ -1130,14 +1130,10 @@ L.U.Map.include({
     toggleCaveat()
     const download = L.DomUtil.create('a', 'button', container)
     download.textContent = L._('Download data')
-    L.DomEvent.on(
-      download,
-      'click',
-      () => {
-        if (typeInput.value === 'umap') this.fullDownload()
-        else this.download(typeInput.value)
-      }
-    )
+    L.DomEvent.on(download, 'click', () => {
+      if (typeInput.value === 'umap') this.fullDownload()
+      else this.download(typeInput.value)
+    })
     this.ui.openPanel({ data: { html: container } })
   },
 
@@ -1153,11 +1149,11 @@ L.U.Map.include({
     let name = this.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
     const filename = name + type.ext
-    return {content, filetype: type.filetype, filename}
+    return { content, filetype: type.filetype, filename }
   },
 
   download: function (mode) {
-    const {content, filetype, filename} = this.format(mode)
+    const { content, filetype, filename } = this.format(mode)
     const blob = new Blob([content], { type: filetype })
     window.URL = window.URL || window.webkitURL
     const el = document.createElement('a')
@@ -1262,6 +1258,15 @@ L.U.AttributionControl = L.Control.Attribution.extend({
       // We are not in iframe mode
       const home = L.DomUtil.add('a', '', this._container, ` — ${L._('Home')}`)
       home.href = '/'
+    }
+    if (this._map.options.captionMenus) {
+      const poweredBy = L.DomUtil.add(
+        'a',
+        '',
+        this._container,
+        ` — ${L._('Powered by uMap')}`
+      )
+      poweredBy.href = 'https://github.com/umap-project/umap/'
     }
   },
 })
