@@ -163,7 +163,9 @@ select {
 select[multiple="multiple"] {
     height: auto;
 }
-.button, input[type="submit"] {
+.button,
+[type="button"],
+input[type="submit"] {
     display: block;
     margin-bottom: 14px;
     text-align: center;
@@ -177,12 +179,15 @@ select[multiple="multiple"] {
     border: none;
     text-decoration: none;
 }
-.dark .button {
+.dark .button,
+.dark [type="button"] {
     background-color: #2a2e30;
     color: #eeeeec;
     border: 1px solid #1b1f20;
 }
-.dark .button:hover, .dark input[type="submit"]:hover {
+.dark .button:hover,
+.dark [type="button"]:hover,
+.dark input[type="submit"]:hover {
     background-color: #2e3436;
 }
 .dark a {
@@ -361,7 +366,8 @@ input.switch:checked ~ label:after {
 .umap-multiplechoice.by4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-.button-bar .button {
+.button-bar .button,
+.button-bar [type="button"] {
     display: inline-block;
 }
 .umap-multiplechoice input[type='radio'] {
@@ -558,10 +564,12 @@ input.blur {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-.blur + .button:before {
+.blur + .button:before,
+.blur + [type="button"]:before {
     content: '✔';
 }
-.blur + .button {
+.blur + .button,
+.blur + [type="button"] {
     width: 40px;
     height: 18px;
     display: inline-block;
@@ -571,7 +579,8 @@ input.blur {
     border-bottom-left-radius: 0;
     box-sizing: border-box;
 }
-input[type=hidden].blur + .button {
+input[type=hidden].blur + .button,
+input[type=hidden].blur + [type="button"] {
     display: none;
 }
 

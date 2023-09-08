@@ -315,10 +315,10 @@ L.DomUtil.createFieldset = (container, legend, options) => {
 
 L.DomUtil.createButton = (className, container, content, callback, context) => {
   // TODO: actually switch to buttons’ elements.
-  const el = L.DomUtil.add('a', className, container, content)
-  el.href = '#'
-  // const el = L.DomUtil.add('button', className, container, content)
-  // el.type = 'button'
+  // const el = L.DomUtil.add('a', className, container, content)
+  // el.href = '#'
+  const el = L.DomUtil.add('button', className, container, content)
+  el.type = 'button'
   if (callback) {
     L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)
   }
