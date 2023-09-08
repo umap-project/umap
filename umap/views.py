@@ -45,7 +45,6 @@ from .forms import (
     DEFAULT_LATITUDE,
     DEFAULT_LONGITUDE,
     DEFAULT_CENTER,
-    AnonymousMapPermissionsForm,
     DataLayerForm,
     DataLayerPermissionsForm,
     AnonymousDataLayerPermissionsForm,
@@ -459,7 +458,7 @@ class MapDetailMixin:
                 (i, str(label)) for i, label in Map.SHARE_STATUS if i != Map.BLOCKED
             ],
             "anonymous_edit_statuses": [
-                (i, str(label)) for i, label in AnonymousMapPermissionsForm.STATUS
+                (i, str(label)) for i, label in AnonymousDataLayerPermissionsForm.STATUS
             ],
             "umap_version": VERSION,
         }
@@ -521,7 +520,6 @@ class MapDetailMixin:
 class PermissionsMixin:
     def get_permissions(self):
         permissions = {}
-        permissions["edit_status"] = self.object.edit_status
         permissions["share_status"] = self.object.share_status
         if self.object.owner:
             permissions["owner"] = {
@@ -647,18 +645,12 @@ class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
 class UpdateMapPermissions(FormLessEditMixin, UpdateView):
     model = Map
     pk_url_kwarg = "map_id"
-
-    def get_form_class(self):
-        if self.object.owner:
-            return UpdateMapPermissionsForm
-        else:
-            return AnonymousMapPermissionsForm
+    form_class = UpdateMapPermissionsForm
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         user = self.request.user
         if self.object.owner and not user == self.object.owner:
-            del form.fields["edit_status"]
             del form.fields["share_status"]
             del form.fields["owner"]
         return form
@@ -924,6 +916,8 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.map != self.kwargs["map_inst"]:
+            return HttpResponseForbidden()
+        if not self.object.can_edit(user=self.request.user, request=self.request):
             return HttpResponseForbidden()
         if not self.is_unmodified():
             return HttpResponse(status=412)

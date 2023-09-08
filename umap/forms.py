@@ -36,25 +36,7 @@ class SendLinkForm(forms.Form):
 class UpdateMapPermissionsForm(forms.ModelForm):
     class Meta:
         model = Map
-        fields = ("edit_status", "editors", "share_status", "owner")
-
-
-class AnonymousMapPermissionsForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AnonymousMapPermissionsForm, self).__init__(*args, **kwargs)
-        help_text = _("Secret edit link is %s") % self.instance.get_anonymous_edit_url()
-        self.fields["edit_status"].help_text = _(help_text)
-
-    STATUS = (
-        (Map.ANONYMOUS, _("Everyone can edit")),
-        (Map.OWNER, _("Only editable with secret edit link")),
-    )
-
-    edit_status = forms.ChoiceField(choices=STATUS)
-
-    class Meta:
-        model = Map
-        fields = ("edit_status",)
+        fields = ("editors", "share_status", "owner")
 
 
 class DataLayerForm(forms.ModelForm):

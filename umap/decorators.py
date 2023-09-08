@@ -26,9 +26,9 @@ def login_required_if_not_anonymous_allowed(view_func):
     return wrapper
 
 
-def map_permissions_check(view_func):
+def can_edit_map(view_func):
     """
-    Used for URLs dealing with the map.
+    Used for URLs dealing with editing the map.
     """
 
     @wraps(view_func)
@@ -36,12 +36,11 @@ def map_permissions_check(view_func):
         map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
         user = request.user
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
-        if map_inst.edit_status >= map_inst.EDITORS:
-            can_edit = map_inst.can_edit(user=user, request=request)
-            if not can_edit:
-                if map_inst.owner and not user.is_authenticated:
-                    return simple_json_response(login_required=str(LOGIN_URL))
-                return HttpResponseForbidden()
+        can_edit = map_inst.can_edit(user=user, request=request)
+        if not can_edit:
+            if map_inst.owner and not user.is_authenticated:
+                return simple_json_response(login_required=str(LOGIN_URL))
+            return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
 
     return wrapper
