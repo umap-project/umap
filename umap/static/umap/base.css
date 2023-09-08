@@ -185,6 +185,9 @@ select[multiple="multiple"] {
 .dark .button:hover, .dark input[type="submit"]:hover {
     background-color: #2e3436;
 }
+.dark a {
+    color: #eeeeec;
+}
 .help-text, .helptext {
     display: block;
     padding: 7px 7px;
@@ -396,6 +399,7 @@ input.switch:checked ~ label:after {
     padding-top: 5px;
     margin-top: 5px;
 }
+.umap-field-iconUrl .action-button,
 .inheritable .define,
 .inheritable .undefine {
     float: right;
@@ -497,13 +501,6 @@ i.info {
     font-size: 9px;
     margin-top: -8px;
     padding: 0 5px;
-}
-.umap-form-iconfield {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    line-height: 30px;
 }
 .umap-icon-list, .umap-pictogram-list {
     clear: both;

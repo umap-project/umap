@@ -518,31 +518,25 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   build: function () {
-    this.options.helpText = this.builder.map.help.formatIconSymbol
     L.FormBuilder.BlurInput.prototype.build.call(this)
-    this.parentContainer = L.DomUtil.create(
-      'div',
-      'umap-form-iconfield',
-      this.parentNode
-    )
-    this.buttonsContainer = L.DomUtil.create('div', '', this.parentContainer)
-    this.pictogramsContainer = L.DomUtil.create(
-      'div',
-      'umap-pictogram-list',
-      this.parentContainer
-    )
-    this.input.type = 'hidden'
+    // Try to guess if the icon content has been customized, and if yes
+    // directly display the field
+    this.input.type = this.value() && !this.value().startsWith('/') ? 'text' : 'hidden'
     this.input.placeholder = L._('Symbol or url')
+    this.buttonsContainer = L.DomUtil.create('div', '')
+    this.pictogramsContainer = L.DomUtil.create('div', 'umap-pictogram-list')
+    L.DomUtil.before(this.input, this.buttonsContainer)
+    L.DomUtil.before(this.input, this.pictogramsContainer)
     this.udpatePreview()
     this.on('define', this.fetchIconList)
   },
 
   isUrl: function () {
-    return this.value().indexOf('/') !== -1
+    return this.value() && this.value().indexOf('/') !== -1
   },
 
   udpatePreview: function () {
-    if (L.Util.hasVar(this.value())) {
+    if (!L.Util.hasVar(this.value())) {
       // Do not try to render URL with variables
       if (this.isUrl()) {
         const img = L.DomUtil.create(
@@ -562,8 +556,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         L.DomEvent.on(el, 'click', this.fetchIconList, this)
       }
     }
-    this.button = L.DomUtil.create('a', '', this.buttonsContainer)
-    this.button.textContent = this.value() ? L._('Change symbol') : L._('Add symbol')
+    this.button = L.DomUtil.create('a', 'button action-button', this.buttonsContainer)
+    this.button.textContent = this.value() ? L._('Change') : L._('Add')
     this.button.href = '#'
     L.DomEvent.on(this.button, 'click', L.DomEvent.stop).on(
       this.button,
@@ -581,7 +575,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       img = L.DomUtil.create('img', '', container)
     img.src = value
     if (pictogram.name && pictogram.attribution) {
-      img.title = `${pictogram.name} — © ${pictogram.attribution}`
+      container.title = `${pictogram.name} — © ${pictogram.attribution}`
     }
     L.DomEvent.on(
       container,
@@ -591,8 +585,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         this.sync()
         this.unselectAll(this.pictogramsContainer)
         L.DomUtil.addClass(container, 'selected')
-        this.pictogramsContainer.innerHTML = ''
-        this.udpatePreview()
       },
       this
     )
@@ -606,19 +598,30 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.udpatePreview()
   },
 
+  search: function (e) {
+    const icons = [...this.parentNode.querySelectorAll('.umap-icon-choice')],
+      search = this.searchInput.value.toLowerCase()
+    icons.forEach((el) => {
+      if (el.title.toLowerCase().indexOf(search) != -1) el.style.display = 'block'
+      else el.style.display = 'none'
+    })
+  },
+
   buildIconList: function (data) {
-    this.pictogramsContainer.innerHTML = ''
-    this.buttonsContainer.innerHTML = ''
+    this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
+    this.searchInput.type = 'search'
+    this.searchInput.placeholder = L._('Search')
+    L.DomEvent.on(this.searchInput, 'input', this.search, this)
     for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
-    const cancelButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    cancelButton.textContent = L._('Cancel')
-    cancelButton.href = '#'
-    cancelButton.style.display = 'block'
-    cancelButton.style.clear = 'both'
-    L.DomEvent.on(cancelButton, 'click', L.DomEvent.stop).on(
-      cancelButton,
+    const closeButton = L.DomUtil.create('a', 'button action-button', this.pictogramsContainer)
+    closeButton.textContent = L._('Close')
+    closeButton.href = '#'
+    closeButton.style.display = 'block'
+    closeButton.style.clear = 'both'
+    L.DomEvent.on(closeButton, 'click', L.DomEvent.stop).on(
+      closeButton,
       'click',
       function (e) {
         this.pictogramsContainer.innerHTML = ''
@@ -627,7 +630,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       this
     )
     const customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    customButton.textContent = L._('Set symbol')
+    customButton.textContent = L._('Toggle direct input (advanced)')
     customButton.href = '#'
     customButton.style.display = 'block'
     customButton.style.clear = 'both'
@@ -636,14 +639,16 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       customButton,
       'click',
       function (e) {
-        this.input.type = 'text'
-        this.pictogramsContainer.innerHTML = ''
+        this.input.type = this.input.type === 'text' ? 'hidden' : 'text'
       },
       this
     )
   },
 
   fetchIconList: function (e) {
+    // Clean parent element before calling ajax, to prevent blinking
+    this.pictogramsContainer.innerHTML = ''
+    this.buttonsContainer.innerHTML = ''
     this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
       callback: this.buildIconList,
       context: this,
@@ -694,7 +699,7 @@ L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-      this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label);
+    this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label)
   },
 
   buildLi: function (value) {
@@ -711,7 +716,7 @@ L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   },
 
   toJS: function () {
-    return [...this.ul.querySelectorAll('input:checked')].map(i => i.dataset.value)
+    return [...this.ul.querySelectorAll('input:checked')].map((i) => i.dataset.value)
   },
 })
 
