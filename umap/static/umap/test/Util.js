@@ -108,7 +108,7 @@ describe('L.Util', function () {
     it('should handle image with width', function () {
       assert.equal(
         L.Util.toHTML('A simple image: {{http://osm.org/pouet.png|100}}'),
-        'A simple image: <img width="100" src="http://osm.org/pouet.png">'
+        'A simple image: <img style="width:100px;min-width:100px;" src="http://osm.org/pouet.png">'
       )
     })
 

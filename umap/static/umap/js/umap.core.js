@@ -129,7 +129,7 @@ L.Util.toHTML = (r, options) => {
 
   // images
   r = r.replace(/{{([^\]|]*?)}}/g, '<img src="$1">')
-  r = r.replace(/{{([^|]*?)\|(\d*?)}}/g, '<img src="$1" width="$2">')
+  r = r.replace(/{{([^|]*?)\|(\d*?)(px)?}}/g, '<img src="$1" style="width:$2px;min-width:$2px;">')
 
   //Unescape http
   r = r.replace(/(h_t_t_p)/g, 'http')
