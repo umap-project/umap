@@ -19,7 +19,9 @@ L.U.MapPermissions = L.Class.extend({
         },
         set: function (status) {
           isDirty = status
-          if (status) self.map.hasDirty = status
+          if (status) {
+            self.map.hasDirty = status
+          }
         },
       })
     } catch (e) {
@@ -58,10 +60,8 @@ L.U.MapPermissions = L.Class.extend({
       title = L.DomUtil.create('h4', '', container)
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
-        const helpText = L._('Secret edit link is:<br>{link}', {
-          link: this.options.anonymous_edit_url,
-        })
-        L.DomUtil.create('p', 'help-text', container, helpText)
+        const helpText = `${L._('Secret edit link:')}<br>${this.options.anonymous_edit_url}`
+        L.DomUtil.add('p', 'help-text', container, helpText)
       }
     } else {
       if (this.isOwner()) {
