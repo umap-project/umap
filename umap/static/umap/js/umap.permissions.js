@@ -19,7 +19,7 @@ L.U.MapPermissions = L.Class.extend({
         },
         set: function (status) {
           isDirty = status
-          if (status) self.map.isDirty = status
+          if (status) self.map.hasDirty = status
         },
       })
     } catch (e) {
