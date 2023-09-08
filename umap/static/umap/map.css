@@ -506,7 +506,6 @@ ul.photon-autocomplete {
 }
 .umap-main-edit-toolbox .map-name {
     display: inline-block;
-    max-width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1496,6 +1495,9 @@ a.add-datalayer:hover,
         text-indent: calc(100% - 10px);
         width: 35px;
         min-width: initial;
+    }
+    .umap-main-edit-toolbox .map-name {
+        min-width: 80px;
     }
 
     .umap-main-edit-toolbox .umap-help-button {
