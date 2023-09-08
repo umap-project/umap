@@ -406,12 +406,19 @@ L.U.Map.include({
       if (dataToload === 0) dataLoaded()
     }
     this.eachDataLayer(function (datalayer) {
-      if (force && !datalayer.hasDataLoaded()) datalayer.show()
-      if (datalayer.showAtLoad() || force) datalayer.onceLoaded(decrementToLoad)
-      else decrementToLoad()
-      if (datalayer.showAtLoad() || force)
+      if (force && !datalayer.hasDataLoaded()) {
+        datalayer.show()
+      }
+      if (datalayer.showAtLoad() || force) {
+        datalayer.onceLoaded(decrementToLoad)
+      } else {
+        decrementToLoad()
+      }
+      if (datalayer.showAtLoad() || force) {
         datalayer.onceDataLoaded(decrementDataToLoad)
-      else decrementDataToLoad()
+      } else {
+        decrementDataToLoad({ sourceTarget: datalayer })
+      }
     })
     if (total === 0) {
       // no datalayer
