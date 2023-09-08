@@ -457,15 +457,19 @@ class MapDetailMixin:
             "umap_id": self.get_umap_id(),
             "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
-            "edit_statuses": [(i, str(label)) for i, label in Map.EDIT_STATUS],
             "share_statuses": [
                 (i, str(label)) for i, label in Map.SHARE_STATUS if i != Map.BLOCKED
             ],
-            "anonymous_edit_statuses": [
-                (i, str(label)) for i, label in AnonymousDataLayerPermissionsForm.STATUS
-            ],
             "umap_version": VERSION,
         }
+        if self.object.owner:
+            properties["edit_statuses"] = [
+                (i, str(label)) for i, label in Map.EDIT_STATUS
+            ]
+        else:
+            properties["edit_statuses"] = [
+                (i, str(label)) for i, label in AnonymousDataLayerPermissionsForm.STATUS
+            ]
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
 
