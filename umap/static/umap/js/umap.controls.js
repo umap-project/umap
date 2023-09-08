@@ -273,7 +273,12 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 })
 
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
-L.U.SettingsToolbar = L.Toolbar.Control.extend({})
+L.U.SettingsToolbar = L.Toolbar.Control.extend({
+  addTo: function (map) {
+    if (map.options.allowMapEdit === false) return
+    L.Toolbar.Control.prototype.addTo.call(this, map)
+  },
+})
 L.U.DrawToolbar = L.Toolbar.Control.extend({
   initialize: function (options) {
     L.Toolbar.Control.prototype.initialize.call(this, options)
@@ -608,21 +613,26 @@ L.U.DataLayer.include({
     edit.title = L._('Edit')
     table.title = L._('Edit properties in a table')
     remove.title = L._('Delete layer')
+    if (this.isReadOnly()) {
+      L.DomUtil.addClass(container, 'readonly')
+    }
+    else {
+      L.DomEvent.on(edit, 'click', this.edit, this)
+      L.DomEvent.on(table, 'click', this.tableEdit, this)
+      L.DomEvent.on(
+        remove,
+        'click',
+        function () {
+          if (!this.isVisible()) return
+          if (!confirm(L._('Are you sure you want to delete this layer?'))) return
+          this._delete()
+          this.map.ui.closePanel()
+        },
+        this
+      )
+    }
     L.DomEvent.on(toggle, 'click', this.toggle, this)
     L.DomEvent.on(zoomTo, 'click', this.zoomTo, this)
-    L.DomEvent.on(edit, 'click', this.edit, this)
-    L.DomEvent.on(table, 'click', this.tableEdit, this)
-    L.DomEvent.on(
-      remove,
-      'click',
-      function () {
-        if (!this.isVisible()) return
-        if (!confirm(L._('Are you sure you want to delete this layer?'))) return
-        this._delete()
-        this.map.ui.closePanel()
-      },
-      this
-    )
     L.DomUtil.addClass(container, this.getHidableClass())
     L.DomUtil.classIf(container, 'off', !this.isVisible())
     container.dataset.id = L.stamp(this)
@@ -1130,14 +1140,10 @@ L.U.Map.include({
     toggleCaveat()
     const download = L.DomUtil.create('a', 'button', container)
     download.textContent = L._('Download data')
-    L.DomEvent.on(
-      download,
-      'click',
-      () => {
-        if (typeInput.value === 'umap') this.fullDownload()
-        else this.download(typeInput.value)
-      }
-    )
+    L.DomEvent.on(download, 'click', () => {
+      if (typeInput.value === 'umap') this.fullDownload()
+      else this.download(typeInput.value)
+    })
     this.ui.openPanel({ data: { html: container } })
   },
 
@@ -1153,11 +1159,11 @@ L.U.Map.include({
     let name = this.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
     const filename = name + type.ext
-    return {content, filetype: type.filetype, filename}
+    return { content, filetype: type.filetype, filename }
   },
 
   download: function (mode) {
-    const {content, filetype, filename} = this.format(mode)
+    const { content, filetype, filename } = this.format(mode)
     const blob = new Blob([content], { type: filetype })
     window.URL = window.URL || window.webkitURL
     const el = document.createElement('a')

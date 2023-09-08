@@ -756,15 +756,18 @@ a.map-name:after {
 .umap-toggle-edit {
     background-position: -44px -48px;
 }
+.readonly .layer-table-edit,
 .off .layer-table-edit {
     background-position: -74px -1px;
 }
+.readonly .layer-edit,
 .off .layer-edit {
     background-position: -51px -72px;
 }
 .off .layer-zoom_to {
     background-position: -25px -54px;
 }
+.readonly .layer-delete,
 .off .layer-delete {
     background-position: -122px -121px;
 }
