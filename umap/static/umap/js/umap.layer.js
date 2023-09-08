@@ -1195,7 +1195,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   isReadOnly: function () {
-    return !this.options.allowEdit
+    return this.options.allowEdit === false
   },
 
   save: function () {
