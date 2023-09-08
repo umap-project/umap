@@ -192,16 +192,31 @@ L.U.Map.include({
       this
     )
 
-    let isDirty = false // global status
+    // FIXME naming
+    let hasDirty = false // global status
+    try {
+      Object.defineProperty(this, 'hasDirty', {
+        get: function () {
+          return hasDirty || this.dirty_datalayers.length
+        },
+        set: function (status) {
+          if (!hasDirty && status) self.fire('hasdirty')
+          hasDirty = status
+          self.checkDirty()
+        },
+      })
+    } catch (e) {
+      // Certainly IE8, which has a limited version of defineProperty
+    }
+    let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
         get: function () {
-          return isDirty || this.dirty_datalayers.length
+          return isDirty
         },
         set: function (status) {
-          if (!isDirty && status) self.fire('isdirty')
           isDirty = status
-          self.checkDirty()
+          if (status) hasDirty = true
         },
       })
     } catch (e) {
@@ -267,7 +282,7 @@ L.U.Map.include({
       if (L.Util.queryString('download')) this.download()
     })
 
-    window.onbeforeunload = () => this.isDirty || null
+    window.onbeforeunload = () => this.hasDirty || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
@@ -506,7 +521,7 @@ L.U.Map.include({
         key === L.U.Keys.E &&
         modifierKey &&
         this.editEnabled &&
-        !this.isDirty
+        !this.hasDirty
       ) {
         L.DomEvent.stop(e)
         this.disableEdit()
@@ -514,11 +529,11 @@ L.U.Map.include({
       }
       if (key === L.U.Keys.S && modifierKey) {
         L.DomEvent.stop(e)
-        if (this.isDirty) {
+        if (this.hasDirty) {
           this.save()
         }
       }
-      if (key === L.U.Keys.Z && modifierKey && this.isDirty) {
+      if (key === L.U.Keys.Z && modifierKey && this.hasDirty) {
         L.DomEvent.stop(e)
         this.askForReset()
       }
@@ -1047,17 +1062,18 @@ L.U.Map.include({
     this.dirty_datalayers = []
     this.updateDatalayersControl()
     this.initTileLayers()
+    this.hasDirty = false
     this.isDirty = false
   },
 
   checkDirty: function () {
-    L.DomUtil.classIf(this._container, 'umap-is-dirty', this.isDirty)
+    L.DomUtil.classIf(this._container, 'umap-is-dirty', this.hasDirty)
   },
 
   addDirtyDatalayer: function (datalayer) {
     if (this.dirty_datalayers.indexOf(datalayer) === -1) {
       this.dirty_datalayers.push(datalayer)
-      this.isDirty = true
+      this.hasDirty = true
     }
   },
 
@@ -1161,15 +1177,12 @@ L.U.Map.include({
     return JSON.stringify(umapfile, null, 2)
   },
 
-  save: function () {
-    if (!this.isDirty) return
-    if (this._default_extent) this.updateExtent()
+  saveSelf: function () {
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
       properties: this.exportOptions(),
     }
-    this.backup()
     const formData = new FormData()
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
@@ -1215,7 +1228,7 @@ L.U.Map.include({
               },
             ]
           }
-        } else if (!this.permissions.isDirty) {
+        } else if (!this.permissions.hasDirty) {
           // Do not override local changes to permissions,
           // but update in case some other editors changed them in the meantime.
           this.permissions.setOptions(data.permissions)
@@ -1225,14 +1238,23 @@ L.U.Map.include({
           history.pushState({}, this.options.name, data.url)
         else window.location = data.url
         alert.content = data.info || alert.content
-        this.once('saved', function () {
-          this.isDirty = false
-          this.ui.alert(alert)
-        })
+        this.once('saved', () => this.ui.alert(alert))
         this.ui.closePanel()
         this.permissions.save()
       },
     })
+  },
+
+  save: function () {
+    if (!this.hasDirty) return
+    if (this._default_extent) this.updateExtent()
+    this.backup()
+    this.once('saved', () => {
+      this.hasDirty = false
+      this.isDirty = false
+    })
+    if (this.isDirty) this.saveSelf()
+    else this.permissions.save() // Map itself has no change, check permissions and continue
   },
 
   sendEditLink: function () {
@@ -1761,7 +1783,7 @@ L.U.Map.include({
   },
 
   disableEdit: function () {
-    if (this.isDirty) return
+    if (this.hasDirty) return
     L.DomUtil.removeClass(document.body, 'umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
@@ -1927,7 +1949,7 @@ L.U.Map.include({
     if (this.options.allowEdit) {
       items.push('-')
       if (this.editEnabled) {
-        if (!this.isDirty) {
+        if (!this.hasDirty) {
           items.push({
             text: `${L._('Stop editing')} (Ctrl+E)`,
             callback: this.disableEdit,
