@@ -449,7 +449,10 @@ class MapDetailMixin:
         properties = {
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
-            "allowEdit": self.is_edit_allowed(),
+            "allowEdit": self.is_edit_allowed(),  # showEditMode
+            "allowMapEdit": self.object.can_edit(self.request.user, self.request)
+            if self.object
+            else True,  # FIXME naming
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
             "starred": self.is_starred(),
