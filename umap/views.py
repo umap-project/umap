@@ -915,7 +915,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.map != self.kwargs["map_inst"]:
+        if self.object.map.pk != int(self.kwargs["map_id"]):
             return HttpResponseForbidden()
         if not self.object.can_edit(user=self.request.user, request=self.request):
             return HttpResponseForbidden()
