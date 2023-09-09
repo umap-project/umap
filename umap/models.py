@@ -202,7 +202,7 @@ class Map(NamedModel):
         return settings.SITE_URL + path
 
     def is_anonymous_owner(self, request):
-        if self.owner:
+        if not request or self.owner:
             # edit cookies are only valid while map hasn't owner
             return False
         key, value = self.signed_cookie_elements
@@ -221,12 +221,10 @@ class Map(NamedModel):
         In anononymous mode: only "anonymous owners" (having edit cookie set)
         """
         can = False
-        if request and not self.owner:
-            if getattr(
-                settings, "UMAP_ALLOW_ANONYMOUS", False
-            ) and self.is_anonymous_owner(request):
+        if not self.owner:
+            if settings.UMAP_ALLOW_ANONYMOUS and self.is_anonymous_owner(request):
                 can = True
-        if user == self.owner:
+        elif user == self.owner:
             can = True
         elif user in self.editors.all():
             can = True

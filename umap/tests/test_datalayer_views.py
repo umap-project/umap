@@ -245,3 +245,94 @@ def test_update_readonly(client, datalayer, map, post_data, settings):
     client.login(username=map.owner.username, password="123123")
     response = client.post(url, post_data, follow=True)
     assert response.status_code == 403
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_anonymous_owner_can_edit_in_anonymous_owner_mode(
+    datalayer, cookieclient, anonymap, post_data
+):
+    datalayer.edit_status = DataLayer.OWNER
+    datalayer.save()
+    url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = cookieclient.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_anonymous_can_edit_in_anonymous_owner_but_public_mode(
+    datalayer, client, anonymap, post_data
+):
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_anonymous_cannot_edit_in_anonymous_owner_mode(
+    datalayer, client, anonymap, post_data
+):
+    datalayer.edit_status = DataLayer.OWNER
+    datalayer.save()
+    url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 403
+
+
+def test_anonymous_cannot_edit_in_owner_mode(datalayer, client, map, post_data):
+    datalayer.edit_status = DataLayer.OWNER
+    datalayer.save()
+    url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 403
+
+
+def test_anonymous_can_edit_in_owner_but_public_mode(datalayer, client, map, post_data):
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
+
+
+def test_owner_can_edit_in_owner_mode(datalayer, client, map, post_data):
+    client.login(username=map.owner.username, password="123123")
+    datalayer.edit_status = DataLayer.OWNER
+    datalayer.save()
+    url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
+
+
+def test_editor_can_edit_in_editors_mode(datalayer, client, map, post_data):
+    client.login(username=map.owner.username, password="123123")
+    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.save()
+    url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name

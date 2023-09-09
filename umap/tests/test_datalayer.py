@@ -4,6 +4,7 @@ import pytest
 from django.core.files.base import ContentFile
 
 from .base import DataLayerFactory, MapFactory
+from umap.models import DataLayer
 
 pytestmark = pytest.mark.django_db
 
@@ -21,7 +22,7 @@ def test_datalayers_should_be_ordered_by_rank(map, datalayer):
 def test_upload_to(map, datalayer):
     map.pk = 302
     datalayer.pk = 17
-    assert datalayer.upload_to().startswith('datalayer/2/0/302/17_')
+    assert datalayer.upload_to().startswith("datalayer/2/0/302/17_")
 
 
 def test_save_should_use_pk_as_name(map, datalayer):
@@ -81,3 +82,64 @@ def test_should_remove_old_versions_on_save(datalayer, map, settings):
     assert os.path.basename(other) in files
     assert os.path.basename(other + ".gz") in files
     assert os.path.basename(older) not in files
+    assert os.path.basename(older + ".gz") not in files
+
+
+def test_anonymous_cannot_edit_in_editors_mode(datalayer):
+    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.save()
+    assert not datalayer.can_edit()
+
+
+def test_owner_can_edit_in_editors_mode(datalayer, user):
+    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.save()
+    assert datalayer.can_edit(datalayer.map.owner)
+
+
+def test_editor_can_edit_in_editors_mode(datalayer, user):
+    map = datalayer.map
+    map.editors.add(user)
+    map.save()
+    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.save()
+    assert datalayer.can_edit(user)
+
+
+def test_anonymous_can_edit_in_public_mode(datalayer):
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    assert datalayer.can_edit()
+
+
+def test_owner_can_edit_in_public_mode(datalayer, user):
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    assert datalayer.can_edit(datalayer.map.owner)
+
+
+def test_editor_can_edit_in_public_mode(datalayer, user):
+    map = datalayer.map
+    map.editors.add(user)
+    map.save()
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    assert datalayer.can_edit(user)
+
+
+def test_anonymous_cannot_edit_in_anonymous_owner_mode(datalayer):
+    datalayer.edit_status = DataLayer.OWNER
+    datalayer.save()
+    map = datalayer.map
+    map.owner = None
+    map.save()
+    assert not datalayer.can_edit()
+
+
+def test_anonymous_can_edit_in_anonymous_owner_but_public_mode(datalayer):
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    map = datalayer.map
+    map.owner = None
+    map.save()
+    assert datalayer.can_edit()
