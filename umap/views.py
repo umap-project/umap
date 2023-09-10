@@ -451,7 +451,7 @@ class MapDetailMixin:
             "tilelayers": TileLayer.get_list(),
             "allowEdit": self.is_edit_allowed(),  # showEditMode
             "allowMapEdit": self.object.can_edit(self.request.user, self.request)
-            if self.object
+            if getattr(self, "object", None)
             else True,  # FIXME naming
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
@@ -462,7 +462,7 @@ class MapDetailMixin:
             ],
             "umap_version": VERSION,
         }
-        if self.object.owner:
+        if getattr(self, "object", None) and self.object.owner:
             properties["edit_statuses"] = [
                 (i, str(label)) for i, label in Map.EDIT_STATUS
             ]
