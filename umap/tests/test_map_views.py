@@ -127,9 +127,9 @@ def test_wrong_slug_should_redirect_to_canonical(client, map):
 
 def test_wrong_slug_should_redirect_with_query_string(client, map):
     url = reverse("map", kwargs={"map_id": map.pk, "slug": "wrong-slug"})
-    url = "{}?allowEdit=0".format(url)
+    url = "{}?editMode=simple".format(url)
     canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
-    canonical = "{}?allowEdit=0".format(canonical)
+    canonical = "{}?editMode=simple".format(canonical)
     response = client.get(url)
     assert response.status_code == 301
     assert response["Location"] == canonical
@@ -137,7 +137,7 @@ def test_wrong_slug_should_redirect_with_query_string(client, map):
 
 def test_should_not_consider_the_query_string_for_canonical_check(client, map):
     url = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
-    url = "{}?allowEdit=0".format(url)
+    url = "{}?editMode=simple".format(url)
     response = client.get(url)
     assert response.status_code == 200
 

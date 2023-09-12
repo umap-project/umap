@@ -275,7 +275,7 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
 L.U.SettingsToolbar = L.Toolbar.Control.extend({
   addTo: function (map) {
-    if (map.options.allowMapEdit === false) return
+    if (map.options.editMode !== 'advanced') return
     L.Toolbar.Control.prototype.addTo.call(this, map)
   },
 })
@@ -1467,7 +1467,7 @@ L.U.IframeExporter = L.Evented.extend({
     miniMap: false,
     scrollWheelZoom: false,
     zoomControl: true,
-    allowEdit: false,
+    editMode: 'disabled',
     moreControl: true,
     searchControl: null,
     tilelayersControl: null,

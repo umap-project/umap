@@ -356,7 +356,7 @@ L.U.DataLayer = L.Evented.extend({
         // So do not let all options to be reset
         // Fix is a proper migration so all datalayers settings are
         // in DB, and we remove it from geojson flat files.
-        geojson['_umap_options']['allowEdit'] = this.options.allowEdit
+        geojson['_umap_options']['editMode'] = this.options.editMode
         this.fromUmapGeoJSON(geojson)
         this.backupOptions()
         this.fire('loaded')
@@ -496,7 +496,7 @@ L.U.DataLayer = L.Evented.extend({
     })
 
     // No browser cache for owners/editors.
-    if (this.map.options.allowEdit) url = `${url}?${Date.now()}`
+    if (this.map.hasEditMode()) url = `${url}?${Date.now()}`
     return url
   },
 
@@ -1194,7 +1194,8 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   isReadOnly: function () {
-    return this.options.allowEdit === false
+    // isReadOnly must return true if unset
+    return this.options.editMode === 'disabled'
   },
 
   save: function () {
