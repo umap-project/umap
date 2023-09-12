@@ -192,22 +192,6 @@ L.U.Map.include({
       this
     )
 
-    // FIXME naming
-    let hasDirty = false // global status
-    try {
-      Object.defineProperty(this, 'hasDirty', {
-        get: function () {
-          return hasDirty || this.dirty_datalayers.length
-        },
-        set: function (status) {
-          if (!hasDirty && status) self.fire('hasdirty')
-          hasDirty = status
-          self.checkDirty()
-        },
-      })
-    } catch (e) {
-      // Certainly IE8, which has a limited version of defineProperty
-    }
     let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
@@ -216,7 +200,7 @@ L.U.Map.include({
         },
         set: function (status) {
           isDirty = status
-          if (status) hasDirty = true
+          this.checkDirty()
         },
       })
     } catch (e) {
@@ -282,7 +266,7 @@ L.U.Map.include({
       if (L.Util.queryString('download')) this.download()
     })
 
-    window.onbeforeunload = () => this.hasDirty || null
+    window.onbeforeunload = () => this.isDirty || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
@@ -521,7 +505,7 @@ L.U.Map.include({
         key === L.U.Keys.E &&
         modifierKey &&
         this.editEnabled &&
-        !this.hasDirty
+        !this.isDirty
       ) {
         L.DomEvent.stop(e)
         this.disableEdit()
@@ -529,11 +513,11 @@ L.U.Map.include({
       }
       if (key === L.U.Keys.S && modifierKey) {
         L.DomEvent.stop(e)
-        if (this.hasDirty) {
+        if (this.isDirty) {
           this.save()
         }
       }
-      if (key === L.U.Keys.Z && modifierKey && this.hasDirty) {
+      if (key === L.U.Keys.Z && modifierKey && this.isDirty) {
         L.DomEvent.stop(e)
         this.askForReset()
       }
@@ -1062,18 +1046,17 @@ L.U.Map.include({
     this.dirty_datalayers = []
     this.updateDatalayersControl()
     this.initTileLayers()
-    this.hasDirty = false
     this.isDirty = false
   },
 
   checkDirty: function () {
-    L.DomUtil.classIf(this._container, 'umap-is-dirty', this.hasDirty)
+    L.DomUtil.classIf(this._container, 'umap-is-dirty', this.isDirty)
   },
 
   addDirtyDatalayer: function (datalayer) {
     if (this.dirty_datalayers.indexOf(datalayer) === -1) {
       this.dirty_datalayers.push(datalayer)
-      this.hasDirty = true
+      this.isDirty = true
     }
   },
 
@@ -1228,7 +1211,7 @@ L.U.Map.include({
               },
             ]
           }
-        } else if (!this.permissions.hasDirty) {
+        } else if (!this.permissions.isDirty) {
           // Do not override local changes to permissions,
           // but update in case some other editors changed them in the meantime.
           this.permissions.setOptions(data.permissions)
@@ -1246,15 +1229,18 @@ L.U.Map.include({
   },
 
   save: function () {
-    if (!this.hasDirty) return
+    if (!this.isDirty) return
     if (this._default_extent) this.updateExtent()
     this.backup()
     this.once('saved', () => {
-      this.hasDirty = false
       this.isDirty = false
     })
-    if (this.isDirty) this.saveSelf()
-    else this.permissions.save() // Map itself has no change, check permissions and continue
+    if (this.options.editMode === 'advanced') {
+      // Only save the map if the user has the rights to do so.
+      this.saveSelf()
+    } else {
+      this.permissions.save()
+    }
   },
 
   sendEditLink: function () {
@@ -1783,7 +1769,7 @@ L.U.Map.include({
   },
 
   disableEdit: function () {
-    if (this.hasDirty) return
+    if (this.isDirty) return
     L.DomUtil.removeClass(document.body, 'umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
@@ -1793,7 +1779,6 @@ L.U.Map.include({
   hasEditMode: function () {
     return this.options.editMode === 'simple' || this.options.editMode === 'advanced'
   },
-
 
   getDisplayName: function () {
     return this.options.name || L._('Untitled map')
@@ -1954,7 +1939,7 @@ L.U.Map.include({
     if (this.hasEditMode()) {
       items.push('-')
       if (this.editEnabled) {
-        if (!this.hasDirty) {
+        if (!this.isDirty) {
           items.push({
             text: `${L._('Stop editing')} (Ctrl+E)`,
             callback: this.disableEdit,
