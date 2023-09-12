@@ -110,3 +110,22 @@ def test_map_update_with_editor(map, live_server, login, user):
     expect(edit_settings).to_be_visible()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
+
+
+def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
+    map.editors.add(user)
+    map.save()
+    page = login(user.username)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    edit_permissions = page.get_by_title("Update permissions and editors")
+    expect(edit_permissions).to_be_visible()
+    edit_permissions.click()
+    select = page.locator(".umap-field-share_status select")
+    expect(select).to_be_hidden()
+    # expect(select).to_have_value(Map.PUBLIC)  # Does not work
+    owner_field = page.locator(".umap-field-owner")
+    expect(owner_field).to_be_hidden()
+    editors_field = page.locator(".umap-field-editors input")
+    expect(editors_field).to_be_visible()
+    datalayer_label = page.get_by_text('Who can edit "Donau"')
+    expect(datalayer_label).to_be_visible()
