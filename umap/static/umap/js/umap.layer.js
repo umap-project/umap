@@ -351,7 +351,6 @@ L.U.DataLayer = L.Evented.extend({
     this.map.get(this._dataUrl(), {
       callback: function (geojson, response) {
         this._last_modified = response.getResponseHeader('Last-Modified')
-        console.log(this.getName(), this.options)
         // FIXME: for now this property is set dynamically from backend
         // And thus it's not in the geojson file in the server
         // So do not let all options to be reset
