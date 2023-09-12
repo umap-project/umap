@@ -20,7 +20,7 @@ L.U.MapPermissions = L.Class.extend({
         set: function (status) {
           isDirty = status
           if (status) {
-            self.map.hasDirty = status
+            self.map.isDirty = status
           }
         },
       })
@@ -60,7 +60,9 @@ L.U.MapPermissions = L.Class.extend({
       title = L.DomUtil.create('h4', '', container)
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
-        const helpText = `${L._('Secret edit link:')}<br>${this.options.anonymous_edit_url}`
+        const helpText = `${L._('Secret edit link:')}<br>${
+          this.options.anonymous_edit_url
+        }`
         L.DomUtil.add('p', 'help-text', container, helpText)
       }
     } else {
@@ -182,6 +184,8 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   getShareStatusDisplay: function () {
-    return Object.fromEntries(this.map.options.share_statuses)[this.options.share_status]
-  }
+    return Object.fromEntries(this.map.options.share_statuses)[
+      this.options.share_status
+    ]
+  },
 })
