@@ -448,10 +448,7 @@ class MapDetailMixin:
         properties = {
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
-            "allowEdit": self.is_edit_allowed(),  # showEditMode
-            "allowMapEdit": self.object.can_edit(self.request.user, self.request)
-            if getattr(self, "object", None)
-            else True,  # FIXME naming
+            "editMode": self.edit_mode,
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
             "starred": self.is_starred(),
@@ -499,8 +496,9 @@ class MapDetailMixin:
     def get_datalayers(self):
         return []
 
-    def is_edit_allowed(self):
-        return True
+    @property
+    def edit_mode(self):
+        return "advanced"
 
     def get_umap_id(self):
         return None
@@ -564,11 +562,17 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             for l in self.object.datalayer_set.all()
         ]
 
-    def is_edit_allowed(self):
-        return self.object.can_edit(self.request.user, self.request) or any(
+    @property
+    def edit_mode(self):
+        edit_mode = 'disabled'
+        if self.object.can_edit(self.request.user, self.request):
+            edit_mode = "advanced"
+        elif any(
             d.can_edit(self.request.user, self.request)
             for d in self.object.datalayer_set.all()
-        )
+        ):
+            edit_mode = "simple"
+        return edit_mode
 
     def get_umap_id(self):
         return self.object.pk

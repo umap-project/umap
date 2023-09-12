@@ -365,7 +365,7 @@ class DataLayer(NamedModel):
         }
         obj["id"] = self.pk
         obj["permissions"] = {"edit_status": self.edit_status}
-        obj["allowEdit"] = self.can_edit(user, request)
+        obj["editMode"] = "advanced" if self.can_edit(user, request) else 'disabled'
         return obj
 
     def clone(self, map_inst=None):

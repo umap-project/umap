@@ -37,7 +37,7 @@ def map_fragment(map_instance, **kwargs):
         'datalayers': datalayer_data,
         'urls': _urls_for_js(),
         'STATIC_URL': settings.STATIC_URL,
-        "allowEdit": False,
+        "editMode": 'disabled',
         'hash': False,
         'attributionControl': False,
         'scrollWheelZoom': False,

@@ -190,7 +190,7 @@ function initMap(options) {
       name: 'name of the map',
       description: 'The description of the map',
       locale: 'en',
-      allowEdit: true,
+      editMode: 'advanced',
       moreControl: true,
       scaleControl: true,
       miniMap: false,

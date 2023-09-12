@@ -15,7 +15,7 @@ L.Map.mergeOptions({
   default_interactive: true,
   default_labelDirection: 'auto',
   attributionControl: false,
-  allowEdit: true,
+  editMode: 'advanced',
   embedControl: true,
   zoomControl: true,
   datalayersControl: true,
@@ -103,7 +103,7 @@ L.U.Map.include({
     L.Util.setBooleanFromQueryString(this.options, 'moreControl')
     L.Util.setBooleanFromQueryString(this.options, 'scaleControl')
     L.Util.setBooleanFromQueryString(this.options, 'miniMap')
-    L.Util.setBooleanFromQueryString(this.options, 'allowEdit')
+    L.Util.setBooleanFromQueryString(this.options, 'editMode')
     L.Util.setBooleanFromQueryString(this.options, 'displayDataBrowserOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'captionBar')
@@ -122,7 +122,7 @@ L.U.Map.include({
     if (this.datalayersOnLoad)
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
 
-    if (L.Browser.ielt9) this.options.allowEdit = false // TODO include ie9
+    if (L.Browser.ielt9) this.options.editMode = 'disabled' // TODO include ie9
 
     let editedFeature = null
     const self = this
@@ -235,7 +235,7 @@ L.U.Map.include({
       this.isDirty = true
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      this.options.allowEdit = true
+      this.options.editMode = 'advanced'
       const datalayer = this.createDataLayer()
       datalayer.connectToMap()
       this.enableEdit()
@@ -253,7 +253,7 @@ L.U.Map.include({
     this.slideshow = new L.U.Slideshow(this, this.options.slideshow)
     this.permissions = new L.U.MapPermissions(this)
     this.initCaptionBar()
-    if (this.options.allowEdit) {
+    if (this.hasEditMode()) {
       this.editTools = new L.U.Editable(this)
       this.ui.on(
         'panel:closed panel:open',
@@ -292,7 +292,7 @@ L.U.Map.include({
     this.helpMenuActions = {}
     this._controls = {}
 
-    if (this.options.allowEdit && !this.options.noControl) {
+    if (this.hasEditMode() && !this.options.noControl) {
       new L.U.EditControl(this).addTo(this)
 
       new L.U.DrawToolbar({ map: this }).addTo(this)
@@ -511,7 +511,7 @@ L.U.Map.include({
         else this.ui.closePanel()
       }
 
-      if (!this.options.allowEdit) return
+      if (!this.hasEditMode()) return
 
       /* Edit mode only shortcuts */
       if (key === L.U.Keys.E && modifierKey && !this.editEnabled) {
@@ -1788,6 +1788,11 @@ L.U.Map.include({
     this.fire('edit:disabled')
   },
 
+  hasEditMode: function () {
+    return this.options.editMode === 'simple' || this.options.editMode === 'advanced'
+  },
+
+
   getDisplayName: function () {
     return this.options.name || L._('Untitled map')
   },
@@ -1944,7 +1949,7 @@ L.U.Map.include({
         items = items.concat(e.relatedTarget.getContextMenuItems(e))
       }
     }
-    if (this.options.allowEdit) {
+    if (this.hasEditMode()) {
       items.push('-')
       if (this.editEnabled) {
         if (!this.hasDirty) {
