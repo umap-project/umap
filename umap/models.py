@@ -41,7 +41,7 @@ def get_default_share_status():
 
 
 def get_default_edit_status():
-    return settings.UMAP_DEFAULT_EDIT_STATUS or Map.OWNER
+    return settings.UMAP_DEFAULT_EDIT_STATUS or DataLayer.RESTRICTED
 
 
 class NamedModel(models.Model):
@@ -300,13 +300,11 @@ class DataLayer(NamedModel):
     Layer to store Features in.
     """
 
-    ANONYMOUS = 1
-    EDITORS = 2
-    OWNER = 3
+    OPEN = 1
+    RESTRICTED = 2
     EDIT_STATUS = (
-        (ANONYMOUS, _("Everyone")),
-        (EDITORS, _("Editors only")),
-        (OWNER, _("Owner only")),
+        (OPEN, _("Everyone")),
+        (RESTRICTED, _("Restricted to editors")),
     )
 
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
@@ -428,7 +426,7 @@ class DataLayer(NamedModel):
         if can:
             # Owner or editor, no need for further checks.
             return can
-        if self.edit_status == self.ANONYMOUS:
+        if self.edit_status == self.OPEN:
             can = True
         return can
 

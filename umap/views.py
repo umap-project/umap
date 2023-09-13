@@ -460,7 +460,7 @@ class MapDetailMixin:
         }
         if getattr(self, "object", None) and self.object.owner:
             properties["edit_statuses"] = [
-                (i, str(label)) for i, label in Map.EDIT_STATUS
+                (i, str(label)) for i, label in DataLayer.EDIT_STATUS
             ]
         else:
             properties["edit_statuses"] = [

@@ -57,7 +57,7 @@ def test_map_update_with_anonymous(map, live_server, page):
 def test_map_update_with_anonymous_but_editable_datalayer(
     map, datalayer, live_server, page
 ):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     map_el = page.locator("#map")

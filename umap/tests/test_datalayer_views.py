@@ -191,7 +191,7 @@ def test_update_readonly(client, datalayer, map, post_data, settings):
 def test_anonymous_owner_can_edit_in_anonymous_owner_mode(
     datalayer, cookieclient, anonymap, post_data
 ):
-    datalayer.edit_status = DataLayer.OWNER
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
     name = "new name"
@@ -206,7 +206,7 @@ def test_anonymous_owner_can_edit_in_anonymous_owner_mode(
 def test_anonymous_can_edit_in_anonymous_owner_but_public_mode(
     datalayer, client, anonymap, post_data
 ):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
     name = "new name"
@@ -221,7 +221,7 @@ def test_anonymous_can_edit_in_anonymous_owner_but_public_mode(
 def test_anonymous_cannot_edit_in_anonymous_owner_mode(
     datalayer, client, anonymap, post_data
 ):
-    datalayer.edit_status = DataLayer.OWNER
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
     name = "new name"
@@ -231,7 +231,7 @@ def test_anonymous_cannot_edit_in_anonymous_owner_mode(
 
 
 def test_anonymous_cannot_edit_in_owner_mode(datalayer, client, map, post_data):
-    datalayer.edit_status = DataLayer.OWNER
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     name = "new name"
@@ -241,7 +241,7 @@ def test_anonymous_cannot_edit_in_owner_mode(datalayer, client, map, post_data):
 
 
 def test_anonymous_can_edit_in_owner_but_public_mode(datalayer, client, map, post_data):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     name = "new name"
@@ -254,7 +254,7 @@ def test_anonymous_can_edit_in_owner_but_public_mode(datalayer, client, map, pos
 
 def test_owner_can_edit_in_owner_mode(datalayer, client, map, post_data):
     client.login(username=map.owner.username, password="123123")
-    datalayer.edit_status = DataLayer.OWNER
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     name = "new name"
@@ -267,7 +267,7 @@ def test_owner_can_edit_in_owner_mode(datalayer, client, map, post_data):
 
 def test_editor_can_edit_in_editors_mode(datalayer, client, map, post_data):
     client.login(username=map.owner.username, password="123123")
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     name = "new name"

@@ -83,13 +83,13 @@ def test_should_remove_old_versions_on_save(datalayer, map, settings):
 
 
 def test_anonymous_cannot_edit_in_editors_mode(datalayer):
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     assert not datalayer.can_edit()
 
 
 def test_owner_can_edit_in_editors_mode(datalayer, user):
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     assert datalayer.can_edit(datalayer.map.owner)
 
@@ -98,19 +98,19 @@ def test_editor_can_edit_in_editors_mode(datalayer, user):
     map = datalayer.map
     map.editors.add(user)
     map.save()
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     assert datalayer.can_edit(user)
 
 
 def test_anonymous_can_edit_in_public_mode(datalayer):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     assert datalayer.can_edit()
 
 
 def test_owner_can_edit_in_public_mode(datalayer, user):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     assert datalayer.can_edit(datalayer.map.owner)
 
@@ -119,13 +119,13 @@ def test_editor_can_edit_in_public_mode(datalayer, user):
     map = datalayer.map
     map.editors.add(user)
     map.save()
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     assert datalayer.can_edit(user)
 
 
 def test_anonymous_cannot_edit_in_anonymous_owner_mode(datalayer):
-    datalayer.edit_status = DataLayer.OWNER
+    datalayer.edit_status = DataLayer.RESTRICTED
     datalayer.save()
     map = datalayer.map
     map.owner = None
@@ -134,7 +134,7 @@ def test_anonymous_cannot_edit_in_anonymous_owner_mode(datalayer):
 
 
 def test_anonymous_can_edit_in_anonymous_owner_but_public_mode(datalayer):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.edit_status = DataLayer.OPEN
     datalayer.save()
     map = datalayer.map
     map.owner = None
