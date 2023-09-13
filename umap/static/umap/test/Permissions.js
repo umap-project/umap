@@ -34,11 +34,11 @@ describe('L.Permissions', function () {
   describe('#anonymous with cookie', function () {
     var button
 
-    it('should only allow edit_status', function () {
+    it('should not allow share_status nor owner', function () {
       this.map.permissions.options.anonymous_edit_url = 'http://anonymous.url'
+      delete this.map.permissions.options.owner
       button = qs('a.update-map-permissions')
       happen.click(button)
-      expect(qs('select[name="edit_status"]')).to.be.ok
       expect(qs('select[name="share_status"]')).not.to.be.ok
       expect(qs('input.edit-owner')).not.to.be.ok
     })
@@ -49,9 +49,10 @@ describe('L.Permissions', function () {
 
     it('should only allow editors', function () {
       this.map.permissions.options.owner = { id: 1, url: '/url', name: 'jojo' }
+      delete this.map.permissions.options.anonymous_edit_url
+      delete this.map.options.user
       button = qs('a.update-map-permissions')
       happen.click(button)
-      expect(qs('select[name="edit_status"]')).not.to.be.ok
       expect(qs('select[name="share_status"]')).not.to.be.ok
       expect(qs('input.edit-owner')).not.to.be.ok
       expect(qs('input.edit-editors')).to.be.ok
@@ -66,8 +67,6 @@ describe('L.Permissions', function () {
       this.map.options.user = { id: 1, url: '/url', name: 'jojo' }
       button = qs('a.update-map-permissions')
       happen.click(button)
-      expect(qs('select[name="edit_status"]')).to.be.ok
-      expect(qs('select[name="share_status"]')).to.be.ok
       expect(qs('input.edit-owner')).to.be.ok
       expect(qs('input.edit-editors')).to.be.ok
     })

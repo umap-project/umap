@@ -105,7 +105,7 @@ describe('L.U.Map', function () {
       window.confirm = oldConfirm
     })
 
-    it('should ask for confirmation on delete link click', function (done) {
+    it('should ask for confirmation on delete link click', function () {
       var button = qs('a.update-map-settings')
       assert.ok(button, 'update map info button exists')
       happen.click(button)
@@ -117,7 +117,7 @@ describe('L.U.Map', function () {
       this.server.respond()
       assert(window.confirm.calledOnce)
       window.confirm.restore()
-      done()
+
     })
   })
 
