@@ -33,7 +33,7 @@ L.U.DataLayerPermissions = L.Class.extend({
           'options.edit_status',
           {
             handler: 'IntSelect',
-            label: `${L._('Who can edit')} "${this.datalayer.getName()}"`,
+            label: L._('Who can edit "{layer}"', { layer: this.datalayer.getName() }),
             selectOptions: this.datalayer.map.options.edit_statuses,
           },
         ],
