@@ -1713,20 +1713,28 @@ L.U.Map.include({
   _advancedActions: function (container) {
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
-    const del = L.DomUtil.create('a', 'button umap-delete', advancedButtons)
-    del.href = '#'
-    del.textContent = L._('Delete')
-    L.DomEvent.on(del, 'click', L.DomEvent.stop).on(del, 'click', this.del, this)
+    if (this.permissions.isOwner()) {
+      const del = L.DomUtil.create('a', 'button umap-delete', advancedButtons)
+      del.href = '#'
+      del.title = L._('Delete map')
+      del.textContent = L._('Delete')
+      L.DomEvent.on(del, 'click', L.DomEvent.stop).on(del, 'click', this.del, this)
+      const empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
+      empty.href = '#'
+      empty.textContent = L._('Empty')
+      empty.title = L._('Delete all layers')
+      L.DomEvent.on(empty, 'click', L.DomEvent.stop).on(
+        empty,
+        'click',
+        this.empty,
+        this
+      )
+    }
     const clone = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
     clone.href = '#'
     clone.textContent = L._('Clone')
     clone.title = L._('Clone this map')
     L.DomEvent.on(clone, 'click', L.DomEvent.stop).on(clone, 'click', this.clone, this)
-    const empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
-    empty.href = '#'
-    empty.textContent = L._('Empty')
-    empty.title = L._('Delete all layers')
-    L.DomEvent.on(empty, 'click', L.DomEvent.stop).on(empty, 'click', this.empty, this)
     const download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
     download.href = '#'
     download.textContent = L._('Download')

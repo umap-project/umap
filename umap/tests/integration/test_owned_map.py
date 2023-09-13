@@ -9,15 +9,15 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture
-def login(context, user, settings, live_server):
-    def do_login(username):
+def login(context, settings, live_server):
+    def do_login(user):
         # TODO use storage state to do login only once per session
         # https://playwright.dev/python/docs/auth
         settings.ENABLE_ACCOUNT_LOGIN = True
         page = context.new_page()
         page.goto(f"{live_server.url}/en/")
         page.locator(".login").click()
-        page.get_by_placeholder("Username").fill(username)
+        page.get_by_placeholder("Username").fill(user.username)
         page.get_by_placeholder("Password").fill("123123")
         page.locator('#login_form input[type="submit"]').click()
         sleep(1)  # Time for ajax login POST to proceed
@@ -27,7 +27,7 @@ def login(context, user, settings, live_server):
 
 
 def test_map_update_with_owner(map, live_server, login):
-    page = login(map.owner.username)
+    page = login(map.owner)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     map_el = page.locator("#map")
     expect(map_el).to_be_visible()
@@ -74,7 +74,7 @@ def test_map_update_with_anonymous_but_editable_datalayer(
 
 
 def test_owner_permissions_form(map, datalayer, live_server, login):
-    page = login(map.owner.username)
+    page = login(map.owner)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
@@ -93,7 +93,7 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
 def test_map_update_with_editor(map, live_server, login, user):
     map.editors.add(user)
     map.save()
-    page = login(user.username)
+    page = login(user)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     map_el = page.locator("#map")
     expect(map_el).to_be_visible()
@@ -115,7 +115,7 @@ def test_map_update_with_editor(map, live_server, login, user):
 def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
     map.editors.add(user)
     map.save()
-    page = login(user.username)
+    page = login(user)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
@@ -129,3 +129,31 @@ def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
     expect(editors_field).to_be_visible()
     datalayer_label = page.get_by_text('Who can edit "Donau"')
     expect(datalayer_label).to_be_visible()
+
+
+def test_owner_has_delete_map_button(map, live_server, login):
+    page = login(map.owner)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    settings = page.get_by_title("Edit map settings")
+    expect(settings).to_be_visible()
+    settings.click()
+    advanced = page.get_by_text("Advanced actions")
+    expect(advanced).to_be_visible()
+    advanced.click()
+    delete = page.get_by_role("link", name="Delete")
+    expect(delete).to_be_visible()
+
+
+def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
+    map.editors.add(user)
+    map.save()
+    page = login(user)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    settings = page.get_by_title("Edit map settings")
+    expect(settings).to_be_visible()
+    settings.click()
+    advanced = page.get_by_text("Advanced actions")
+    expect(advanced).to_be_visible()
+    advanced.click()
+    delete = page.get_by_role("link", name="Delete")
+    expect(delete).to_be_hidden()
