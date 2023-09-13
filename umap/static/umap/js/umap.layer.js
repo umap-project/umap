@@ -193,6 +193,7 @@ L.U.DataLayer = L.Evented.extend({
   options: {
     displayOnLoad: true,
     browsable: true,
+    editMode: 'advanced',
   },
 
   initialize: function (map, data) {
@@ -201,8 +202,8 @@ L.U.DataLayer = L.Evented.extend({
     this._layers = {}
     this._geojson = null
     this._propertiesIndex = []
-    this._loaded = false  // Are layer metadata loaded
-    this._dataloaded = false  // Are layer data loaded
+    this._loaded = false // Are layer metadata loaded
+    this._dataloaded = false // Are layer data loaded
 
     this.parentPane = this.map.getPane('overlayPane')
     this.pane = this.map.createPane(`datalayer${L.stamp(this)}`, this.parentPane)
