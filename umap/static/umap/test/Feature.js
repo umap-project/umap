@@ -32,8 +32,9 @@ describe('L.U.FeatureMixin', function () {
       enableEdit()
       happen.click(qs('path[fill="DarkBlue"]'), { shiftKey: true })
       assert.ok(qs('form#umap-feature-properties'))
+      assert.ok(qs('#map.umap-ui'))
       happen.click(qs('path[fill="DarkBlue"]'), { shiftKey: true })
-      assert.notOk(qs('form#umap-feature-properties'))
+      assert.notOk(qs('#map.umap-ui'))
     })
 
     it('should open datalayer edit panel on ctrl-shift-clic', function () {
