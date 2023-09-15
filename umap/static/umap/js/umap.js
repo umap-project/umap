@@ -1115,6 +1115,7 @@ L.U.Map.include({
     'showLabel',
     'labelDirection',
     'labelInteractive',
+    'outlinkTarget',
     'shortCredit',
     'longCredit',
     'permanentCredit',
@@ -1482,6 +1483,7 @@ L.U.Map.include({
       'options.showLabel',
       'options.labelDirection',
       'options.labelInteractive',
+      'options.outlinkTarget',
     ]
     builder = new L.U.FormBuilder(this, popupFields, {
       callback: function (e) {
