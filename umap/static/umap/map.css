@@ -42,7 +42,8 @@
 }
 .leaflet-measure-control a,
 .leaflet-control-locate a,
-.umap-control a {
+.umap-control a,
+.umap-control [type="button"] {
     background-position: 50% 50%;
     background-repeat: no-repeat;
     display: block;
@@ -50,15 +51,19 @@
     width: 36px;
     line-height: 36px;
     background-image: url('./img/24.svg');
+    text-indent: -9999px;
+    margin-bottom: 0;
 }
 .leaflet-control.display-on-more,
-a.umap-control-less {
+.umap-control-less {
     display: none;
 }
 .umap-control-more,
 .umap-control-less {
     background-image: url('./img/24-white.svg');
     background-position: -72px -474px;
+    text-indent: -9999px;
+    margin-bottom: 0;
 }
 .umap-control-less {
     background-position: -108px -476px;
@@ -70,13 +75,13 @@ a.umap-control-less {
 .umap-more-controls .umap-control-more {
     display: none;
 }
-.leaflet-control-embed a {
+.leaflet-control-embed [type="button"] {
     background-position: -72px -108px;
 }
-.leaflet-control-tilelayers a {
+.leaflet-control-tilelayers [type="button"] {
     background-position: -72px 0;
 }
-.leaflet-control-home a {
+.leaflet-control-home [type="button"] {
     background-position: -122px -82px;
 }
 .leaflet-control-locate a {
@@ -88,17 +93,17 @@ a.umap-control-less {
     background-position: -72px -144px;
     box-shadow: 0 0 4px 0 black inset;
 }
-.leaflet-control-star a {
+.leaflet-control-star [type="button"] {
     background-position: -108px -144px;
 }
-.leaflet-control-star.starred a {
+.leaflet-control-star.starred [type="button"] {
     background-position: -144px -144px;
 }
-.leaflet-control-search a {
+.leaflet-control-search [type="button"] {
     background-position: -36px -108px;
     display: block;
 }
-.leaflet-control-search a.loading {
+.leaflet-control-search [type="button"].loading {
     background-image: url('./img/search.gif');
 }
 .umap-control-text {
@@ -109,14 +114,15 @@ a.umap-control-less {
     text-align: center;
     font-size: 0.8em;
 }
-.umap-control-text a {
+.umap-control-text [type="button"] {
     float: right;
+    background-color: #666;
     margin: 0;
     width: 36px;
+    min-height: 23px;
     height: 23px;
-    line-height: 23px;
 }
-.leaflet-control-edit-enable a:before {
+.leaflet-control-edit-enable [type="button"]:before {
     content: ' ';
     width: 24px;
     height: 24px;
@@ -126,7 +132,7 @@ a.umap-control-less {
     background-position: -52px -49px;
 }
 
-.leaflet-control-edit-enable a {
+.leaflet-control-edit-enable [type="button"] {
     width: initial;
     padding: 0 20px;
     background-color: #353c3e;
@@ -138,7 +144,7 @@ a.umap-control-less {
     display: block;
 }
 .leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
-.leaflet-control-edit-enable a:hover {
+.leaflet-control-edit-enable [type="button"]:hover {
     background-color: #4d5759;
 }
 .umap-permanent-credits-container {
@@ -353,6 +359,7 @@ ul.photon-autocomplete {
 }
 .umap-help-box .umap-close-link {
     float: right;
+    width: 100px;
 }
 .umap-help-button {
     display: inline-block;
@@ -362,7 +369,12 @@ ul.photon-autocomplete {
     background-position: -4px -4px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
+    background-color: #323737 !important;
     vertical-align: middle;
+    text-indent: -9999px;
+    min-height: inherit;
+    padding-top: 5px;
+    border: none !important;
 }
 .dark .umap-help-button {
     background-image: url('./img/16-white.svg');
@@ -485,7 +497,7 @@ ul.photon-autocomplete {
     right: 0;
     height: 46px;
     background-color: #323737;
-    padding: 5px 10px;
+    padding: 0 10px;
     text-align: left;
     line-height: 36px;
     cursor: auto;
@@ -493,22 +505,29 @@ ul.photon-autocomplete {
     z-index: 1000;
     opacity: 0.98;
     color: #fff;
+    display: flex;
 }
 .umap-main-edit-toolbox .logo {
+    width: 39px;
+    height: 100%;
+}
+.umap-main-edit-toolbox .logo a {
     background-image: url('./img/logo_small.svg');
     background-position: 0 center;
     background-repeat: no-repeat;
-    width: 60px;
     display: inline-block;
+    width: 39px;
     height: 100%;
     vertical-align: middle;
+    text-indent: -9999px;
 }
-.umap-main-edit-toolbox a {
+.umap-main-edit-toolbox [type="button"] {
     color: #fff;
     font-size: 1.2em;
-    vertical-align: middle;
+    border: none;
+    background-color: #323737;
 }
-.umap-main-edit-toolbox a:hover {
+.umap-main-edit-toolbox [type="button"]:hover {
     text-decoration: underline;
 }
 .umap-main-edit-toolbox .map-name {
@@ -520,13 +539,13 @@ ul.photon-autocomplete {
     margin-right: 5px;
     font-weight: bold;
 }
-a.map-name:after {
+.map-name:after {
     content:  '\00a0';
     padding-left: 3px;
     width: 1ch;
     display: inline-block;
 }
-.umap-is-dirty a.map-name:after {
+.umap-is-dirty .map-name:after {
     content:  '*';
 }
 .umap-main-edit-toolbox .share-status {

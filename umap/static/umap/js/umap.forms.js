@@ -614,7 +614,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     for (const idx in data.pictogram_list) {
       this.addIconPreview(data.pictogram_list[idx])
     }
-    const cancelButton = L.DomUtil.createButton(
+    const closeButton = L.DomUtil.createButton(
       'button action-button',
       this.pictogramsContainer,
       L._('Close'),
@@ -624,8 +624,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       },
       this
     )
-    cancelButton.style.display = 'block'
-    cancelButton.style.clear = 'both'
+    closeButton.style.display = 'block'
+    closeButton.style.clear = 'both'
+
     const customButton = L.DomUtil.createButton(
       '',
       this.pictogramsContainer,

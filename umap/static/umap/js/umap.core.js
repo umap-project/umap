@@ -129,7 +129,10 @@ L.Util.toHTML = (r, options) => {
 
   // images
   r = r.replace(/{{([^\]|]*?)}}/g, '<img src="$1">')
-  r = r.replace(/{{([^|]*?)\|(\d*?)(px)?}}/g, '<img src="$1" style="width:$2px;min-width:$2px;">')
+  r = r.replace(
+    /{{([^|]*?)\|(\d*?)(px)?}}/g,
+    '<img src="$1" style="width:$2px;min-width:$2px;">'
+  )
 
   //Unescape http
   r = r.replace(/(h_t_t_p)/g, 'http')
@@ -325,11 +328,14 @@ L.DomUtil.createButton = (className, container, content, callback, context) => {
   return el
 }
 
-L.DomUtil.createLink = (className, container, content, url, target) => {
+L.DomUtil.createLink = (className, container, content, url, target, title) => {
   const el = L.DomUtil.add('a', className, container, content)
   el.href = url
   if (target) {
     el.target = target
+  }
+  if (title) {
+    el.title = title
   }
   return el
 }

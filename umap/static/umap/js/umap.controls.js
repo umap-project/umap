@@ -864,7 +864,8 @@ L.U.Map.include({
       'umap-main-edit-toolbox with-transition dark',
       this._controlContainer
     )
-    L.DomUtil.createLink('logo', container, '/')
+    const logo = L.DomUtil.create('div', 'logo', container)
+    L.DomUtil.createLink('', logo, 'uMap', '/', null, L._('Go to the homepage'))
     const nameButton = L.DomUtil.createButton(
       'map-name',
       container,
