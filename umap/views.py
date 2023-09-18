@@ -48,6 +48,7 @@ from .forms import (
     DataLayerForm,
     DataLayerPermissionsForm,
     AnonymousDataLayerPermissionsForm,
+    AnonymousMapPermissionsForm,
     FlatErrorList,
     MapSettingsForm,
     SendLinkForm,
@@ -526,6 +527,7 @@ class MapDetailMixin:
 class PermissionsMixin:
     def get_permissions(self):
         permissions = {}
+        permissions["edit_status"] = self.object.edit_status
         permissions["share_status"] = self.object.share_status
         if self.object.owner:
             permissions["owner"] = {
@@ -563,7 +565,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
 
     @property
     def edit_mode(self):
-        edit_mode = 'disabled'
+        edit_mode = "disabled"
         if self.object.can_edit(self.request.user, self.request):
             edit_mode = "advanced"
         elif any(
@@ -655,12 +657,18 @@ class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
 class UpdateMapPermissions(FormLessEditMixin, UpdateView):
     model = Map
     pk_url_kwarg = "map_id"
-    form_class = UpdateMapPermissionsForm
+
+    def get_form_class(self):
+        if self.object.owner:
+            return UpdateMapPermissionsForm
+        else:
+            return AnonymousMapPermissionsForm
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         user = self.request.user
         if self.object.owner and not user == self.object.owner:
+            del form.fields["edit_status"]
             del form.fields["share_status"]
             del form.fields["owner"]
         return form

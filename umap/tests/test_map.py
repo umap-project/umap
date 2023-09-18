@@ -9,33 +9,62 @@ from .base import MapFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_anonymous_cannot_edit(map):
+def test_anonymous_can_edit_if_status_anonymous(map):
     anonymous = AnonymousUser()
+    map.edit_status = map.ANONYMOUS
+    map.save()
+    assert map.can_edit(anonymous)
+
+
+def test_anonymous_cannot_edit_if_not_status_anonymous(map):
+    anonymous = AnonymousUser()
+    map.edit_status = map.OWNER
+    map.save()
     assert not map.can_edit(anonymous)
 
 
-def test_non_editors_cannot_edit(map, user):
+def test_non_editors_can_edit_if_status_anonymous(map, user):
     assert map.owner != user
+    map.edit_status = map.ANONYMOUS
+    map.save()
+    assert map.can_edit(user)
+
+
+def test_non_editors_cannot_edit_if_not_status_anonymous(map, user):
+    map.edit_status = map.OWNER
+    map.save()
     assert not map.can_edit(user)
 
 
-def test_editors_can_edit(map, user):
+def test_editors_cannot_edit_if_status_owner(map, user):
+    map.edit_status = map.OWNER
+    map.editors.add(user)
+    map.save()
+    assert not map.can_edit(user)
+
+
+def test_editors_can_edit_if_status_editors(map, user):
+    map.edit_status = map.EDITORS
     map.editors.add(user)
     map.save()
     assert map.can_edit(user)
 
 
-def test_owner_can_edit(map):
-    assert map.can_edit(map.owner)
-
-
-def test_logged_in_user_should_not_be_allowed_for_anonymous_map(map, user, rf):
+def test_logged_in_user_should_be_allowed_for_anonymous_map_with_anonymous_edit_status(map, user, rf):  # noqa
     map.owner = None
+    map.edit_status = map.ANONYMOUS
     map.save()
     url = reverse('map_update', kwargs={'map_id': map.pk})
     request = rf.get(url)
     request.user = user
-    assert not map.can_edit(user, request)
+    assert map.can_edit(user, request)
+
+
+def test_anonymous_user_should_not_be_allowed_for_anonymous_map(map, user, rf):  # noqa
+    map.owner = None
+    map.edit_status = map.OWNER
+    map.save()
+    assert not map.can_edit()
 
 
 def test_clone_should_return_new_instance(map, user):

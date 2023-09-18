@@ -5,6 +5,7 @@ L.U.MapPermissions = L.Class.extend({
     owner: null,
     editors: [],
     share_status: null,
+    edit_status: null,
   },
 
   initialize: function (map) {
@@ -64,9 +65,26 @@ L.U.MapPermissions = L.Class.extend({
           this.options.anonymous_edit_url
         }`
         L.DomUtil.add('p', 'help-text', container, helpText)
+        fields.push([
+          'options.edit_status',
+          {
+            handler: 'IntSelect',
+            label: L._('Who can edit'),
+            selectOptions: this.map.options.edit_statuses,
+            helpText: helpText,
+          },
+        ])
       }
     } else {
       if (this.isOwner()) {
+        fields.push([
+          'options.edit_status',
+          {
+            handler: 'IntSelect',
+            label: L._('Who can edit'),
+            selectOptions: this.map.options.edit_statuses,
+          },
+        ])
         fields.push([
           'options.share_status',
           {
@@ -136,6 +154,8 @@ L.U.MapPermissions = L.Class.extend({
       for (let i = 0; i < this.options.editors.length; i++)
         formData.append('editors', this.options.editors[i].id)
     }
+    if (this.isOwner() || this.isAnonymousMap())
+      formData.append('edit_status', this.options.edit_status)
     if (this.isOwner()) {
       formData.append('owner', this.options.owner && this.options.owner.id)
       formData.append('share_status', this.options.share_status)

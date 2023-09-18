@@ -5,7 +5,7 @@
       <tr>
         <th>{% blocktrans %}Map{% endblocktrans %}</th>
         <th>{% blocktrans %}Name{% endblocktrans %}</th>
-        <th>{% blocktrans %}Who can see{% endblocktrans %}</th>
+        <th>{% blocktrans %}Who can see / edit{% endblocktrans %}</th>
         <th>{% blocktrans %}Last save{% endblocktrans %}</th>
         <th>{% blocktrans %}Owner{% endblocktrans %}</th>
         <th>{% blocktrans %}Actions{% endblocktrans %}</th>
@@ -19,7 +19,7 @@
         <td>
           <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
         </td>
-        <td>{{ map_inst.get_share_status_display }}</td>
+        <td>{{ map_inst.get_share_status_display }} / {{ map_inst.get_edit_status_display }}</td>
         <td>{{ map_inst.modified_at }}</td>
         <td>
           <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
