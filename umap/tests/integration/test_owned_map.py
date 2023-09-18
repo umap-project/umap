@@ -86,7 +86,7 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
     expect(owner_field).to_be_visible()
     editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "Donau"')
+    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
 
 
@@ -127,7 +127,7 @@ def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
     expect(owner_field).to_be_hidden()
     editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "Donau"')
+    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
 
 

@@ -2,12 +2,32 @@ import json
 
 import factory
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
 from django.urls import reverse
 
 from umap.forms import DEFAULT_CENTER
 from umap.models import DataLayer, Licence, Map, TileLayer
 
 User = get_user_model()
+
+DATALAYER_DATA = {
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [13.68896484375, 48.55297816440071],
+            },
+            "properties": {
+                "_umap_options": {"color": "DarkCyan", "iconClass": "Ball"},
+                "name": "Here",
+                "description": "Da place anonymous again 755",
+            },
+        }
+    ],
+    "_umap_options": {"displayOnLoad": True, "name": "Donau", "id": 926},
+}
 
 
 class LicenceFactory(factory.django.DjangoModelFactory):
@@ -82,10 +102,16 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     name = "test datalayer"
     description = "test description"
     display_on_load = True
-    settings = {"displayOnLoad": True, "browsable": True, name: "test datalayer"}
-    geojson = factory.django.FileField(
-        data="""{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[13.68896484375,48.55297816440071]},"properties":{"_umap_options":{"color":"DarkCyan","iconClass":"Ball"},"name":"Here","description":"Da place anonymous again 755"}}],"_umap_options":{"displayOnLoad":true,"name":"Donau","id":926}}"""
-    )  # noqa
+    settings = {"displayOnLoad": True, "browsable": True, "name": "test datalayer"}
+    geojson = factory.django.FileField()
+
+    @factory.post_generation
+    def geojson_data(obj, create, extracted, **kwargs):
+        data = DATALAYER_DATA.copy()
+        obj.settings["name"] = obj.name
+        data["_umap_options"] = obj.settings
+        with open(obj.geojson.path, mode="w") as truc:
+            truc.write(json.dumps(data))
 
     class Meta:
         model = DataLayer

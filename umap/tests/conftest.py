@@ -72,7 +72,7 @@ def allow_anonymous(settings):
 
 @pytest.fixture
 def datalayer(map):
-    return DataLayerFactory(map=map, name="Default Datalayer")
+    return DataLayerFactory(map=map)
 
 
 @pytest.fixture
