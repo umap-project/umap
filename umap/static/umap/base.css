@@ -600,10 +600,10 @@ input[type=hidden].blur + .button {
 }
 #umap-ui-container.fullwidth {
     width: 100%;
+    right: -100%;
     z-index: 10000;
     padding-left: 0;
     padding-right: 0;
-    transition: all .7s;
 }
 .umap-caption-bar-enabled #umap-ui-container {
     bottom: 46px;
