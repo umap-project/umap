@@ -1310,14 +1310,14 @@ L.U.Map.include({
     datalayer = this.lastUsedDataLayer
     if (
       datalayer &&
-      !datalayer.isRemoteLayer() &&
+      !datalayer.isReadOnly() &&
       datalayer.canBrowse() &&
       datalayer.isVisible()
     ) {
       return datalayer
     }
     datalayer = this.findDataLayer((datalayer) => {
-      if (!datalayer.isRemoteLayer() && datalayer.canBrowse()) {
+      if (!datalayer.isReadOnly() && datalayer.canBrowse()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
       }

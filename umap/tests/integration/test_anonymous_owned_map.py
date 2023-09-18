@@ -1,8 +1,12 @@
+import re
+
 import pytest
 from django.core.signing import get_cookie_signer
 from playwright.sync_api import expect
 
 from umap.models import DataLayer
+
+from ..base import DataLayerFactory
 
 pytestmark = [pytest.mark.django_db, pytest.mark.usefixtures("allow_anonymous")]
 
@@ -77,5 +81,34 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
     expect(owner_field).to_be_hidden()
     editors_field = owner_session.locator(".umap-field-editors input")
     expect(editors_field).to_be_hidden()
-    datalayer_label = owner_session.get_by_text('Who can edit "Donau"')
+    datalayer_label = owner_session.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
+
+
+def test_anonymous_can_add_marker_on_editable_layer(
+    anonymap, datalayer, live_server, page
+):
+    datalayer.edit_status = DataLayer.OWNER
+    datalayer.name = "Should not be in the select"
+    datalayer.save()  # Non editable by anonymous users
+    assert datalayer.map == anonymap
+    other = DataLayerFactory(map=anonymap, edit_status=DataLayer.ANONYMOUS, name="Editable")
+    assert other.map == anonymap
+    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}?edit")
+    add_marker = page.get_by_title("Draw a marker")
+    expect(add_marker).to_be_visible()
+    marker = page.locator(".leaflet-marker-icon")
+    map_el = page.locator("#map")
+    expect(marker).to_have_count(2)
+    expect(map_el).not_to_have_class(re.compile("umap-ui"))
+    add_marker.click()
+    map_el.click(position={"x": 100, "y": 100})
+    expect(marker).to_have_count(3)
+    # Edit panel is open
+    expect(map_el).to_have_class(re.compile("umap-ui"))
+    datalayer_select = page.locator("select[name='datalayer']")
+    expect(datalayer_select).to_be_visible()
+    options = page.locator("select[name='datalayer'] option")
+    expect(options).to_have_count(1)  # Only Editable layer should be listed
+    option = page.locator("select[name='datalayer'] option:checked")
+    expect(option).to_have_text(other.name)
