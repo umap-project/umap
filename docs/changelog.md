@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.7.3 - 2023-09-18
+
+* Use css width for img custom width by @yohanboniface in https://github.com/umap-project/umap/pull/1306
+* Enhance icon selector form by @yohanboniface in https://github.com/umap-project/umap/pull/1303
+* Try to fix remote datalayer not sending dataloaded by @yohanboniface in https://github.com/umap-project/umap/pull/1298
+* Setup to create integration tests with Playwright by @davidbgk in https://github.com/umap-project/umap/pull/1069
+* Add a `powered by uMap` footer by @davidbgk in https://github.com/umap-project/umap/pull/1309
+* Add outlinkTarget to default interactionProperties by @jschleic in https://github.com/umap-project/umap/pull/1313
+
+
 ## 1.7.2 - 2023-09-01
 
 * Fix remote data not fetched on first save and add a button to manually fetch data by @yohanboniface in https://github.com/umap-project/umap/pull/1289
