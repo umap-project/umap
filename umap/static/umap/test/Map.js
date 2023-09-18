@@ -148,6 +148,18 @@ describe('L.U.Map', function () {
       assert.equal(this.datalayer._index.length, 2)
     })
 
+    it('should remove dot in property name', function () {
+      this.datalayer.empty()
+      assert.equal(this.datalayer._index.length, 0)
+      textarea.value =
+        '{"type": "FeatureCollection", "features": [{"geometry": {"type": "Point", "coordinates": [6.922931671142578, 47.481161607175736]}, "type": "Feature", "properties": {"color": "", "name": "Chez R\u00e9my", "A . in the name": ""}}, {"geometry": {"type": "LineString", "coordinates": [[2.4609375, 48.88639177703194], [2.48291015625, 48.76343113791796], [2.164306640625, 48.719961222646276]]}, "type": "Feature", "properties": {"color": "", "name": "P\u00e9rif", "with a dot.": ""}}]}'
+      changeSelectValue(formatSelect, 'geojson')
+      happen.click(submit)
+      assert.equal(this.datalayer._index.length, 2)
+      assert.ok(this.datalayer._propertiesIndex.includes('A _ in the name'))
+      assert.ok(this.datalayer._propertiesIndex.includes('with a dot_'))
+    })
+
     it('should import osm from textarea', function () {
       this.datalayer.empty()
       happen.click(qs('a.upload-data'))
