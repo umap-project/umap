@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Lisa sümbol",
     "Allow scroll wheel zoom?": "Luba hiirerullikuga suurendamine?",
     "Automatic": "Automaatne",
     "Ball": "Nööpnõel",
     "Cancel": "Loobu",
     "Caption": "Legend",
-    "Change symbol": "Vaheta sümbol",
     "Choose the data format": "Vali andmevorming",
     "Choose the layer of the feature": "Vali elemendi kiht",
     "Circle": "Ring",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Paremal",
     "On the top": "Ülal",
     "Popup content template": "Hüpiku mall",
-    "Set symbol": "Määra sümbol",
     "Side panel": "Külgpaneel",
     "Simplify": "Lihtsustamine",
     "Symbol or url": "Sümbol või URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("et", locale)
 L.setLocale("et")

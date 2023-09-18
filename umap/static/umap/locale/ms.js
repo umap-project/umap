@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Tambah simbol",
     "Allow scroll wheel zoom?": "Benarkan zum dengan roda tatal?",
     "Automatic": "Automatik",
     "Ball": "Bola",
     "Cancel": "Batal",
     "Caption": "Keterangan",
-    "Change symbol": "Tukar simbol",
     "Choose the data format": "Pilih format data",
     "Choose the layer of the feature": "Pilih lapisan bagi sifat",
     "Circle": "Bulatan",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Di kanan",
     "On the top": "Di atas",
     "Popup content template": "Templat kandungan tetingkap timbul",
-    "Set symbol": "Simbol set",
     "Side panel": "Panel sisi",
     "Simplify": "Permudahkan",
     "Symbol or url": "Simbol atau url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "Kedudukan pengguna",
     "Visibility: {status}": "Kebolehlihatan: {status}",
     "Fit all data": "Sesuaikan semua data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Sahkan URL jarak jauh",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

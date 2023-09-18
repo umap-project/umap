@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "أضف رمزًا",
     "Allow scroll wheel zoom?": "السماح بالتكبير بتمرير عجلة الفأرة؟",
     "Automatic": "تلقائي",
     "Ball": "كرة",
     "Cancel": "إلغاء",
     "Caption": "شرح",
-    "Change symbol": "غيّر الرمز",
     "Choose the data format": "اختر تنسيق البيانات",
     "Choose the layer of the feature": "اختر طبقة الشكل",
     "Circle": "دائرة",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "على اليمين",
     "On the top": "إلى الأعلى",
     "Popup content template": "Popup content template",
-    "Set symbol": "Set symbol",
     "Side panel": "لوحة جانبية",
     "Simplify": "بسّط",
     "Symbol or url": "Symbol or url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("ar", locale)
 L.setLocale("ar")

@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Legg til symbol",
     "Allow scroll wheel zoom?": "Tillat rulling med zoom-hjulet?",
     "Automatic": "Automatisk",
     "Ball": "Ball",
     "Cancel": "Avbryt",
     "Caption": "Caption",
-    "Change symbol": "Endre symbol",
     "Choose the data format": "Velg dataformatet",
     "Choose the layer of the feature": "Choose the layer of the feature",
     "Circle": "Sirkel",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Til høyre",
     "On the top": "På toppen",
     "Popup content template": "Popup content template",
-    "Set symbol": "Angi symbol",
     "Side panel": "Sidepanel",
     "Simplify": "Simplifisere",
     "Symbol or url": "Symbol eller URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("no", locale)
 L.setLocale("no")

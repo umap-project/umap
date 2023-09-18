@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Engade unha icona",
     "Allow scroll wheel zoom?": "Permitir o achegamento ca roda do rato?",
     "Automatic": "Automático",
     "Ball": "Bóla",
     "Cancel": "Desbotar",
     "Caption": "Subtítulo",
-    "Change symbol": "Mudar a icona",
     "Choose the data format": "Escoller o formato de datos",
     "Choose the layer of the feature": "Escoller a capa do elemento",
     "Circle": "Círculo",
@@ -46,7 +44,6 @@
     "On the right": "Á dereita",
     "On the top": "Na parte de enriba",
     "Popup content template": "Padrón do contido da xanela emerxente",
-    "Set symbol": "Estabelecer icona",
     "Side panel": "Lapela lateral",
     "Simplify": "Simplificar",
     "Symbol or url": "Icona ou URL",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

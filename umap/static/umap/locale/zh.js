@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "增加符号",
     "Allow scroll wheel zoom?": "是否允许滚轮缩放？",
     "Automatic": "Automatic",
     "Ball": "Ball",
     "Cancel": "取消",
     "Caption": "Caption",
-    "Change symbol": "改变符号",
     "Choose the data format": "选择数据格式",
     "Choose the layer of the feature": "选择要素的图层",
     "Circle": "圆",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "On the right",
     "On the top": "On the top",
     "Popup content template": "Popup content template",
-    "Set symbol": "Set symbol",
     "Side panel": "Side panel",
     "Simplify": "Simplify",
     "Symbol or url": "Symbol or url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("zh", locale)
 L.setLocale("zh")

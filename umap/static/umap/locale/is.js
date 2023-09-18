@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Bæta við tákni",
     "Allow scroll wheel zoom?": "Leyfa aðdrátt með skrunhjóli?",
     "Automatic": "Sjálfvirkt",
     "Ball": "Kúla",
     "Cancel": "Hætta við",
     "Caption": "Skýringatexti",
-    "Change symbol": "Skipta um tákn",
     "Choose the data format": "Veldu gagnasnið",
     "Choose the layer of the feature": "Veldu lagið með fitjunni",
     "Circle": "Hringur",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Hægra megin",
     "On the top": "Efst",
     "Popup content template": "Sniðmát efnis í sprettglugga",
-    "Set symbol": "Setja tákn",
     "Side panel": "Hliðarspjald",
     "Simplify": "Einfalda",
     "Symbol or url": "Tákn eða slóð",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

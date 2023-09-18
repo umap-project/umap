@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Sembol ekle",
     "Allow scroll wheel zoom?": "Kaydırma tekerleği yakınlaştırmasına izin verilsin mi?",
     "Automatic": "Otomatik",
     "Ball": "Top",
     "Cancel": "İptal",
     "Caption": "Başlık",
-    "Change symbol": "Sembol değiştir",
     "Choose the data format": "Veri biçimini seçin",
     "Choose the layer of the feature": "Nesnenin katmanını seçin",
     "Circle": "Daire",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Sağda",
     "On the top": "Üstte",
     "Popup content template": "Pop-up içerik şablonu",
-    "Set symbol": "Sembol seç",
     "Side panel": "Yan panel",
     "Simplify": "Basitleştir",
     "Symbol or url": "Sembol veya bağlantı",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

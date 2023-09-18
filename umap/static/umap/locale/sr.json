@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Додај симбол",
     "Allow scroll wheel zoom?": "Допусти увећање зумом миша",
     "Automatic": "Аутоматско",
     "Ball": "Лопта",
     "Cancel": "Откажи",
     "Caption": "Напомена",
-    "Change symbol": "Промени симбол",
     "Choose the data format": "Одабери формат датума",
     "Choose the layer of the feature": "Одабери лејер",
     "Circle": "Круг",
@@ -46,7 +44,6 @@
     "On the right": "На десно",
     "On the top": "На врху",
     "Popup content template": "Шаблон за садржај искачућег прозора",
-    "Set symbol": "Постави симбол",
     "Side panel": "Бочни панел",
     "Simplify": "Поједноставити",
     "Symbol or url": "Симбол или url",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

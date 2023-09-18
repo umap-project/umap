@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Добавить значок",
     "Allow scroll wheel zoom?": "Разрешить изменение масштаба колесом мыши?",
     "Automatic": "Автоматически",
     "Ball": "Булавка",
     "Cancel": "Отменить",
     "Caption": "Заголовок",
-    "Change symbol": "Изменить значок",
     "Choose the data format": "Выберите формат данных",
     "Choose the layer of the feature": "Выберите слой для объекта",
     "Circle": "Кружок",
@@ -46,7 +44,6 @@
     "On the right": "Справа",
     "On the top": "Вверху",
     "Popup content template": "Шаблон всплывающей подсказки",
-    "Set symbol": "Выбрать значок",
     "Side panel": "Боковая панель",
     "Simplify": "Упростить",
     "Symbol or url": "Значок или URL",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

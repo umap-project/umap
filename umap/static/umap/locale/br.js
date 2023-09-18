@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Ouzhpennañ un arouez",
     "Allow scroll wheel zoom?": "Aotren ar zoum gant ar rodell?",
     "Automatic": "Emgefreek",
     "Ball": "Spilhenn",
     "Cancel": "Nullañ",
     "Caption": "Alc'hwez",
-    "Change symbol": "Cheñch arouez",
     "Choose the data format": "Diuzañ furmad ar roadennoù",
     "Choose the layer of the feature": "Diuzañ gwiskad an elfenn",
     "Circle": "Kelc'h",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "A-zehoù",
     "On the top": "D'an nec'h",
     "Popup content template": "Popup content template",
-    "Set symbol": "Termenañ an arouez",
     "Side panel": "Panell gostez",
     "Simplify": "Eeunaat",
     "Symbol or url": "Arouez pe URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("br", locale)
 L.setLocale("br")

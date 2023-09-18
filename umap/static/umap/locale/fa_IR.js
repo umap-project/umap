@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "اضافه کردن نماد",
     "Allow scroll wheel zoom?": "آیا به زوم چرخ اسکرول اجازه داده شود؟",
     "Automatic": "خودکار",
     "Ball": "توپ",
     "Cancel": "انصراف",
     "Caption": "زیرنویس",
-    "Change symbol": "تغییر نماد",
     "Choose the data format": "قالب داده را انتخاب کنید",
     "Choose the layer of the feature": "لایه ویژگی را انتخاب کنید",
     "Circle": "دایره",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "در سمت راست",
     "On the top": "در بالا",
     "Popup content template": "قالب محتوای بازشو",
-    "Set symbol": "تنظیم نماد",
     "Side panel": "پنل کناری",
     "Simplify": "ساده کنید",
     "Symbol or url": "نماد یا آدرس اینترنتی",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

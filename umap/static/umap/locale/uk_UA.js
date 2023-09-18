@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Додати зображення",
     "Allow scroll wheel zoom?": "Дозволити зміну масштабу колесом миші?",
     "Automatic": "Автоматично",
     "Ball": "Шпилька",
     "Cancel": "Скасувати",
     "Caption": "Заголовок",
-    "Change symbol": "Змінити зображення",
     "Choose the data format": "Виберіть формат даних",
     "Choose the layer of the feature": "Виберіть шар для об’єкта",
     "Circle": "Коло",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Праворуч",
     "On the top": "Зверху",
     "Popup content template": "Шаблон спливаючої підказки",
-    "Set symbol": "Вибрати значок",
     "Side panel": "Бічна панель",
     "Simplify": "Спростити",
     "Symbol or url": "Значок чи URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

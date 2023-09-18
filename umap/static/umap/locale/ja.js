@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "シンボルを追加",
     "Allow scroll wheel zoom?": "マウスホイールでのスクロールを許可？",
     "Automatic": "自動",
     "Ball": "まち針",
     "Cancel": "キャンセル",
     "Caption": "表題",
-    "Change symbol": "シンボル変更",
     "Choose the data format": "データ形式選択",
     "Choose the layer of the feature": "地物のレイヤを選択",
     "Circle": "円形",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "右寄せ",
     "On the top": "上寄せ",
     "Popup content template": "ポップアップコンテンツのテンプレート",
-    "Set symbol": "シンボルを設定",
     "Side panel": "サイドパネル",
     "Simplify": "簡略化",
     "Symbol or url": "シンボルまたはURL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

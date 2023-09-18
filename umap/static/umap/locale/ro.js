@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Adaugă simbol",
     "Allow scroll wheel zoom?": "Allow scroll wheel zoom?",
     "Automatic": "Automatic",
     "Ball": "Ball",
     "Cancel": "Renunță",
     "Caption": "Caption",
-    "Change symbol": "Change symbol",
     "Choose the data format": "Choose the data format",
     "Choose the layer of the feature": "Choose the layer of the feature",
     "Circle": "Cerc",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "On the right",
     "On the top": "On the top",
     "Popup content template": "Popup content template",
-    "Set symbol": "Set symbol",
     "Side panel": "Side panel",
     "Simplify": "Simplify",
     "Symbol or url": "Symbol or url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("ro", locale)
 L.setLocale("ro")

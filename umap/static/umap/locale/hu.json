@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Szimbólum hozzáadása",
     "Allow scroll wheel zoom?": "Engedélyezi-e a görgetést nagyításkor?",
     "Automatic": "Automatikus",
     "Ball": "Gombostű",
     "Cancel": "Mégse",
     "Caption": "Cím",
-    "Change symbol": "Szimbólum módosítása",
     "Choose the data format": "Adatformátum kiválasztása",
     "Choose the layer of the feature": "Objektum rétegének kiválasztása",
     "Circle": "Kör",
@@ -46,7 +44,6 @@
     "On the right": "Jobbra",
     "On the top": "Fent",
     "Popup content template": "Előugró tartalom sablonja",
-    "Set symbol": "Szimbólum megadása",
     "Side panel": "Oldalsó panel",
     "Simplify": "Egyszerűsítés",
     "Symbol or url": "Szimbólum vagy URL",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Aggiungi un simbolo",
     "Allow scroll wheel zoom?": "Abilitare la rotellina del mouse per lo zoom?",
     "Automatic": "Automatico",
     "Ball": "Palla",
     "Cancel": "Annulla",
     "Caption": "Didascalia",
-    "Change symbol": "Cambia il simbolo",
     "Choose the data format": "Scegli il formato dati",
     "Choose the layer of the feature": "Scegli il layer dell'oggetto",
     "Circle": "Cerchio",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "A destra",
     "On the top": "In alto",
     "Popup content template": "Modello del contenuto del popup",
-    "Set symbol": "Imposta simbolo",
     "Side panel": "Pannello laterale",
     "Simplify": "Semplifica",
     "Symbol or url": "Simbolo o url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "Posizione dell'utente",
     "Visibility: {status}": "Visibilità: {status}",
     "Fit all data": "Adatta tutti i dati",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verifica URL remota",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("it", locale)
 L.setLocale("it")

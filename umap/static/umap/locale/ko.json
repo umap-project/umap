@@ -1,11 +1,9 @@
 {
-    "Add symbol": "심볼 추가",
     "Allow scroll wheel zoom?": "마우스 휠로 확대/축소할 수 있도록 하시겠습니까?",
     "Automatic": "자동",
     "Ball": "공",
     "Cancel": "취소",
     "Caption": "캡션",
-    "Change symbol": "심볼 변경",
     "Choose the data format": "데이터 포맷 선택",
     "Choose the layer of the feature": "지물이 속할 레이어 선택",
     "Circle": "원",
@@ -46,7 +44,6 @@
     "On the right": "오른쪽",
     "On the top": "위",
     "Popup content template": "팝업 내용",
-    "Set symbol": "심볼 설정",
     "Side panel": "가장자리 패널",
     "Simplify": "단순화",
     "Symbol or url": "심볼이나 URL",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

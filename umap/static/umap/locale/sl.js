@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Dodaj simbol",
     "Allow scroll wheel zoom?": "Ali naj se dovoli približanje pogleda s kolescem miške?",
     "Automatic": "Samodejno",
     "Ball": "Bucika",
     "Cancel": "Prekliči",
     "Caption": "Naslov",
-    "Change symbol": "Spremeni simbol",
     "Choose the data format": "Izbor zapisa podatkov",
     "Choose the layer of the feature": "Izbor plasti za postavitev predmeta",
     "Circle": "Točka",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Na desni",
     "On the top": "Na vrhu",
     "Popup content template": "Predloga pojavne vsebine",
-    "Set symbol": "Set symbol",
     "Side panel": "Bočno okno",
     "Simplify": "Poenostavi",
     "Symbol or url": "Symbol or url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("sl", locale)
 L.setLocale("sl")

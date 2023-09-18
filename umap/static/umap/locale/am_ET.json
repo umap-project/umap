@@ -1,11 +1,9 @@
 {
-    "Add symbol": "ምልክት ጨምር",
     "Allow scroll wheel zoom?": "በማውሱ መሀከለኛ ተሽከርካሪ ማጉላት ይፈቀድ?",
     "Automatic": ".",
     "Ball": "ኳስ",
     "Cancel": "አቁም/ሰርዝ",
     "Caption": "ካፕሽን",
-    "Change symbol": "ምልክቱን ይቀይሩ",
     "Choose the data format": "የረጃውን ፎርማት ቀይር",
     "Choose the layer of the feature": "የፊቸሩን ሌየር ይምረጡ",
     "Circle": "አክብብ/ክብ",
@@ -46,7 +44,6 @@
     "On the right": "On the right",
     "On the top": "On the top",
     "Popup content template": "የፖፕ-አፕ ኮንቴንት ተምሳሌ",
-    "Set symbol": "Set symbol",
     "Side panel": "የጎን ፓኔል",
     "Simplify": "Simplify",
     "Symbol or url": "Symbol or url",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

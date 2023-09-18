@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Přidat symbol",
     "Allow scroll wheel zoom?": "Povolit přibližování kolečkem myši?",
     "Automatic": "Automatic",
     "Ball": "špendlík",
     "Cancel": "Storno",
     "Caption": "Popisek",
-    "Change symbol": "Změnit symbol značky",
     "Choose the data format": "Vyberte formát dat",
     "Choose the layer of the feature": "Zvolte vrstvu do které objekt patří",
     "Circle": "Kruh",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Napravo",
     "On the top": "Shora",
     "Popup content template": "Šablona obsahu bubliny",
-    "Set symbol": "Nastavit symbol",
     "Side panel": "Boční panel",
     "Simplify": "Zjednodušit",
     "Symbol or url": "Symbol nebo adresa URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

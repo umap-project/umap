@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Pridėti simbolį",
     "Allow scroll wheel zoom?": "Leisti pelės ratuko veiksmus?",
     "Automatic": "Automatic",
     "Ball": "Rutulys",
     "Cancel": "Atšaukti",
     "Caption": "Antraštė",
-    "Change symbol": "Pakeisti simbolį",
     "Choose the data format": "Pasirinkite duomenų formatą",
     "Choose the layer of the feature": "Pasirinkite objekto sluoksnį",
     "Circle": "Apskritimas",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "On the right",
     "On the top": "On the top",
     "Popup content template": "Popup'o turinio šablonas",
-    "Set symbol": "Set symbol",
     "Side panel": "Šoninis skydelis",
     "Simplify": "Simplify",
     "Symbol or url": "Symbol or url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("lt", locale)
 L.setLocale("lt")

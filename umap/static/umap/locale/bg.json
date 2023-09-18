@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Добави символ",
     "Allow scroll wheel zoom?": "Мащабиране с колелцето на мишката?",
     "Automatic": "Автоматично",
     "Ball": "топка",
     "Cancel": "Отмени",
     "Caption": "Надпис",
-    "Change symbol": "Промяна символ",
     "Choose the data format": "Изберете формата на данните",
     "Choose the layer of the feature": "Изберете слой на функцията",
     "Circle": "окръжност",
@@ -46,7 +44,6 @@
     "On the right": "Вдясно",
     "On the top": "Отгоре",
     "Popup content template": "Popup content template",
-    "Set symbol": "Set symbol",
     "Side panel": "Страничен панел",
     "Simplify": "Опрости",
     "Symbol or url": "Символ или URL",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

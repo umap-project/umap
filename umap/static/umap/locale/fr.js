@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Ajouter un symbole",
     "Allow scroll wheel zoom?": "Autoriser le zoom avec la molette ?",
     "Automatic": "Automatique",
     "Ball": "Épingle",
     "Cancel": "Annuler",
     "Caption": "Légende",
-    "Change symbol": "Changer le pictogramme",
     "Choose the data format": "Choisir le format des données",
     "Choose the layer of the feature": "Choisir le calque de l'élément",
     "Circle": "Cercle",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Droite",
     "On the top": "Haut",
     "Popup content template": "Gabarit du contenu de la popup",
-    "Set symbol": "Définir le pictogramme",
     "Side panel": "Panneau latéral",
     "Simplify": "Simplifier",
     "Symbol or url": "Pictogramme ou URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "Localisation de l'utilisateur",
     "Visibility: {status}": "Visibilité: {status}",
     "Fit all data": "Zoom sur les données",
-    "Verify remote URL": "Vérifier l'URL"
+    "Verify remote URL": "Vérifier l'URL",
+    "Add": "Ajouter",
+    "Change": "Modifier",
+    "Powered by uMap": "Propulsé par uMap",
+    "Search": "Chercher",
+    "Toggle direct input (advanced)": "Afficher le champ libre (avancé)"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

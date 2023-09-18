@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Pridať symbol",
     "Allow scroll wheel zoom?": "Povoliť približovanie kolieskom myši?",
     "Automatic": "Automaticky",
     "Ball": "Špendlík",
     "Cancel": "Zrušiť",
     "Caption": "Nadpis",
-    "Change symbol": "Zmeniť symbol",
     "Choose the data format": "Zvoľte formát údajov",
     "Choose the layer of the feature": "Zvoľte vrstvu do ktorej objekt patrí",
     "Circle": "Kruh",
@@ -46,7 +44,6 @@
     "On the right": "Napravo",
     "On the top": "V hornej časti",
     "Popup content template": "Šablóna obsahu bubliny",
-    "Set symbol": "Set symbol",
     "Side panel": "Bočný panel",
     "Simplify": "Zjednodušiť",
     "Symbol or url": "Symbol or url",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

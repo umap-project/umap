@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Lisää symboli",
     "Allow scroll wheel zoom?": "Salli zoomaus hiiren rullalla?",
     "Automatic": "Automaattinen",
     "Ball": "Pallo",
     "Cancel": "Peruuta",
     "Caption": "Kuvateksti",
-    "Change symbol": "Vaihda symboli",
     "Choose the data format": "Valitse päivämäärän muoto",
     "Choose the layer of the feature": "Valitse piirteen kerros",
     "Circle": "Ympyrä",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Oikealla",
     "On the top": "Ylhäällä",
     "Popup content template": "Ponnahdusikkunan sisällön sapluuna",
-    "Set symbol": "Set symbol",
     "Side panel": "Sivupaneeli",
     "Simplify": "Yksinkertaista",
     "Symbol or url": "Symbol or url",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("fi", locale)
 L.setLocale("fi")

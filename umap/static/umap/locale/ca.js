@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Afegeix un símbol",
     "Allow scroll wheel zoom?": "Voleu permetre el zoom amb la roda de desplaçament?",
     "Automatic": "Automatic",
     "Ball": "Bola",
     "Cancel": "Cancel·la",
     "Caption": "Llegenda",
-    "Change symbol": "Canvia el símbol",
     "Choose the data format": "Trieu el format de dades",
     "Choose the layer of the feature": "Trieu la capa de la característica",
     "Circle": "Cercle",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "On the right",
     "On the top": "On the top",
     "Popup content template": "Popup content template",
-    "Set symbol": "Estableix el símbol",
     "Side panel": "Side panel",
     "Simplify": "Simplify",
     "Symbol or url": "Símbol o URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("ca", locale)
 L.setLocale("ca")

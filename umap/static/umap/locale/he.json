@@ -1,11 +1,9 @@
 {
-    "Add symbol": "הוספת סימן",
     "Allow scroll wheel zoom?": "לאפשר תקריב עם גלגלת העכבר?",
     "Automatic": "אוטומטי",
     "Ball": "כדור",
     "Cancel": "ביטול",
     "Caption": "כותרת",
-    "Change symbol": "החלפת סימן",
     "Choose the data format": "נא לבחור את מבנה הנתונים",
     "Choose the layer of the feature": "נא לבחור את שכבת התכונה",
     "Circle": "עיגול",
@@ -46,7 +44,6 @@
     "On the right": "מימין",
     "On the top": "מלמעלה",
     "Popup content template": "תבנית תוכן מוקפצת",
-    "Set symbol": "הגדרת סמן",
     "Side panel": "לוח צד",
     "Simplify": "פישוט",
     "Symbol or url": "סמן או כתובת",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

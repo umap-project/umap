@@ -1,11 +1,9 @@
 {
-    "Add symbol": "Προσθήκη συμβόλου",
     "Allow scroll wheel zoom?": "Επιτρέπεται κύλιση εστίασης",
     "Automatic": "Αυτόματα",
     "Ball": "Καρφίτσα",
     "Cancel": "Άκυρο",
     "Caption": "Λεζάντα",
-    "Change symbol": "Αλλαγή συμβόλου",
     "Choose the data format": "Επιλογή μορφοποίησης δεδομένων",
     "Choose the layer of the feature": "Επιλέξτε το επίπεδο του στοιχείου",
     "Circle": "Κύκλος",
@@ -46,7 +44,6 @@
     "On the right": "Στο δεξί μέρος",
     "On the top": "Στο πάνω μέρος",
     "Popup content template": "Αναδυόμενο πρότυπο περιεχομένου",
-    "Set symbol": "Ορισμός συμβόλου",
     "Side panel": "Πλευρική εργαλειοθήκη",
     "Simplify": "Απλοποίηση",
     "Symbol or url": "Σύμβολο ή σύνδεσμος",
@@ -405,5 +402,10 @@
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Μεγέθυνση στα δεδομένα",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }

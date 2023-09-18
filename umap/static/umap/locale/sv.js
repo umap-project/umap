@@ -1,11 +1,9 @@
 const locale = {
-    "Add symbol": "Lägg till symbol",
     "Allow scroll wheel zoom?": "Tillåt zoom med musens rullhjul?",
     "Automatic": "Automatisk",
     "Ball": "Knappnål",
     "Cancel": "Avbryt",
     "Caption": "Sidfotsfält",
-    "Change symbol": "Ändra symbol",
     "Choose the data format": "Välj dataformat",
     "Choose the layer of the feature": "Välj lager för objektet",
     "Circle": "Cirkel",
@@ -46,7 +44,6 @@ const locale = {
     "On the right": "Till höger",
     "On the top": "Ovanför",
     "Popup content template": "Mall för popup-innehåll",
-    "Set symbol": "Välj symbol",
     "Side panel": "Sidopanel",
     "Simplify": "Förenkla",
     "Symbol or url": "Symbol eller URL",
@@ -405,7 +402,12 @@ const locale = {
     "User location": "User location",
     "Visibility: {status}": "Visibility: {status}",
     "Fit all data": "Fit all data",
-    "Verify remote URL": "Verify remote URL"
+    "Verify remote URL": "Verify remote URL",
+    "Add": "Add",
+    "Change": "Change",
+    "Powered by uMap": "Powered by uMap",
+    "Search": "Search",
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")
