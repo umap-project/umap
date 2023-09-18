@@ -72,6 +72,7 @@ def test_should_remove_old_versions_on_save(datalayer, map, settings):
     assert len(datalayer.geojson.storage.listdir(root)[1]) == 6 + before
     datalayer.save()
     files = datalayer.geojson.storage.listdir(root)[1]
+    # Flat + gz files, but not latest gz, which is created at first datalayer read.
     assert len(files) == 5
     assert os.path.basename(newer) in files
     assert os.path.basename(newer + ".gz") in files

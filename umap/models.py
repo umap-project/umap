@@ -221,12 +221,16 @@ class Map(NamedModel):
         In anononymous mode: only "anonymous owners" (having edit cookie set)
         """
         can = False
-        if not self.owner:
+        if request and not self.owner:
             if settings.UMAP_ALLOW_ANONYMOUS and self.is_anonymous_owner(request):
                 can = True
+        if self.edit_status == self.ANONYMOUS:
+            can = True
+        elif user is None:
+            can = False
         elif user == self.owner:
             can = True
-        elif user in self.editors.all():
+        elif self.edit_status == self.EDITORS and user in self.editors.all():
             can = True
         return can
 
@@ -424,11 +428,15 @@ class DataLayer(NamedModel):
         Define if a user can edit or not the instance, according to his account
         or the request.
         """
-        can = self.map.can_edit(user, request)
-        if can:
-            # Owner or editor, no need for further checks.
-            return can
+        can = False
+        if not self.map.owner:
+            if settings.UMAP_ALLOW_ANONYMOUS and self.map.is_anonymous_owner(request):
+                can = True
         if self.edit_status == self.ANONYMOUS:
+            can = True
+        elif user is not None and user == self.map.owner:
+            can = True
+        elif self.edit_status == self.EDITORS and user in self.map.editors.all():
             can = True
         return can
 

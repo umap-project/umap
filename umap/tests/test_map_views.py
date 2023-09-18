@@ -38,6 +38,7 @@ def test_create(client, user, post_data):
     assert created_map.center.x == 13.447265624999998
     assert created_map.center.y == 48.94415123418794
     assert j["permissions"] == {
+        "edit_status": 3,
         "share_status": 1,
         "owner": {"id": user.pk, "name": "Joe", "url": "/en/user/Joe/"},
         "editors": [],
@@ -166,20 +167,24 @@ def test_user_not_allowed_should_not_clone_map(client, map, user, settings):
     settings.UMAP_ALLOW_ANONYMOUS = False
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": map.pk})
+    map.edit_status = map.OWNER
+    map.save()
     response = client.post(url)
     assert login_required(response)
     client.login(username=user.username, password="123123")
     response = client.post(url)
     assert response.status_code == 403
+    map.edit_status = map.ANONYMOUS
+    map.save()
     client.logout()
     response = client.post(url)
-    assert response.status_code == 200
-    assert "login_required" in json.loads(response.content)
+    assert response.status_code == 403
     assert Map.objects.count() == 1
 
 
 def test_clone_should_set_cloner_as_owner(client, map, user):
     url = reverse("map_clone", kwargs={"map_id": map.pk})
+    map.edit_status = map.EDITORS
     map.editors.add(user)
     map.save()
     client.login(username=user.username, password="123123")
@@ -297,19 +302,19 @@ def test_only_owner_can_delete(client, map, user):
     assert response.status_code == 403
 
 
-def test_map_editors_cannot_change_owner(client, map, user):
-    owner = map.owner
+def test_map_editors_do_not_see_owner_change_input(client, map, user):
     map.editors.add(user)
+    map.edit_status = map.EDITORS
     map.save()
     url = reverse("map_update_permissions", kwargs={"map_id": map.pk})
     client.login(username=user.username, password="123123")
-    response = client.post(url, data={"owner": user.pk})
-    assert response.status_code == 200
-    assert map.owner == owner
+    response = client.get(url)
+    assert "id_owner" not in response
 
 
-def test_logged_in_user_cannot_edit_map(client, map, user):
+def test_logged_in_user_can_edit_map_editable_by_anonymous(client, map, user):
     map.owner = None
+    map.edit_status = map.ANONYMOUS
     map.save()
     client.login(username=user.username, password="123123")
     url = reverse("map_update", kwargs={"map_id": map.pk})
@@ -319,7 +324,8 @@ def test_logged_in_user_cannot_edit_map(client, map, user):
         "name": new_name,
     }
     response = client.post(url, data)
-    assert response.status_code == 403
+    assert response.status_code == 200
+    assert Map.objects.get(pk=map.pk).name == new_name
 
 
 @pytest.mark.usefixtures("allow_anonymous")
@@ -416,15 +422,36 @@ def test_bad_anonymous_edit_url_should_return_403(cookieclient, anonymap):
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_clone_anonymous_map_should_not_be_possible(client, anonymap, user):  # noqa
+def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(
+    client, anonymap, user
+):  # noqa
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
+    anonymap.edit_status = anonymap.OWNER
+    anonymap.save()
     response = client.post(url)
     assert response.status_code == 403
     client.login(username=user.username, password="123123")
     response = client.post(url)
     assert response.status_code == 403
     assert Map.objects.count() == 1
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_clone_map_should_be_possible_if_edit_status_is_anonymous(
+    client, anonymap
+):  # noqa
+    assert Map.objects.count() == 1
+    url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
+    anonymap.edit_status = anonymap.ANONYMOUS
+    anonymap.save()
+    response = client.post(url)
+    assert response.status_code == 200
+    assert Map.objects.count() == 2
+    clone = Map.objects.latest("pk")
+    assert clone.pk != anonymap.pk
+    assert clone.name == "Clone of " + anonymap.name
+    assert clone.owner is None
 
 
 @pytest.mark.usefixtures("allow_anonymous")

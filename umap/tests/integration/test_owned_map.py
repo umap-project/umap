@@ -3,7 +3,7 @@ from time import sleep
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import DataLayer
+from umap.models import DataLayer, Map
 
 pytestmark = pytest.mark.django_db
 
@@ -91,6 +91,7 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
 
 
 def test_map_update_with_editor(map, live_server, login, user):
+    map.edit_status = Map.EDITORS
     map.editors.add(user)
     map.save()
     page = login(user)
@@ -113,6 +114,7 @@ def test_map_update_with_editor(map, live_server, login, user):
 
 
 def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
+    map.edit_status = Map.EDITORS
     map.editors.add(user)
     map.save()
     page = login(user)
@@ -145,6 +147,7 @@ def test_owner_has_delete_map_button(map, live_server, login):
 
 
 def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
+    map.edit_status = Map.EDITORS
     map.editors.add(user)
     map.save()
     page = login(user)
