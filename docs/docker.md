@@ -117,14 +117,14 @@ docker compose up
 
 Now you need to create your site superuser. Stop the server (Ctrl-C) and then type:
 ```bash
-docker-compose run app /venv/bin/umap createsuperuser` 
-``````
+docker-compose run app /venv/bin/umap createsuperuser
+```
 
 Once that's done, you can relaunch your server with `docker compose up`
 
 ### Try It!
 
-You should not ne able to brose to your uMap instance form a browser on your local system, by pointing your browser to ${SITE_URL} (see the docker-compose file, above.)
+You should now be able to browse to your uMap instance from a browser on your local system, by pointing your browser to `https://localhost:8001/` (equivalent to `${SITE_URL}` in the docker-compose file, above).
 
 ### Administration
 
