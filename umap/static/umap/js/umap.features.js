@@ -105,14 +105,15 @@ L.U.FeatureMixin = {
     let property
     for (let i = 0; i < this.datalayer._propertiesIndex.length; i++) {
       property = this.datalayer._propertiesIndex[i]
-      if (L.Util.indexOf(['name', 'description'], property) !== -1) {
+      if (L.Util.indexOf(['name', 'description', 'owner'], property) !== -1) {
         continue
       }
       properties.push([`properties.${property}`, { label: property }])
     }
-    // We always want name and description for now (properties management to come)
+    // We always want name, description, owner for now (properties management to come)
     properties.unshift('properties.description')
     properties.unshift('properties.name')
+    properties.unshift('properties.owner')
     builder = new L.U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
       callback: this._redraw, // In case we have dynamic options…

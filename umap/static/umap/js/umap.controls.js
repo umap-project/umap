@@ -1553,16 +1553,19 @@ L.U.Editable = L.Editable.extend({
   },
 
   createPolyline: function (latlngs) {
-    return new L.U.Polyline(this.map, latlngs)
+    return new L.U.Polyline(this.map, latlngs, this._getDefaultProperties())
   },
 
   createPolygon: function (latlngs) {
-    const polygon = new L.U.Polygon(this.map, latlngs)
-    return polygon
+    return new L.U.Polygon(this.map, latlngs, this._getDefaultProperties())
   },
 
   createMarker: function (latlng) {
-    return new L.U.Marker(this.map, latlng)
+    return new L.U.Marker(this.map, latlng, this._getDefaultProperties())
+  },
+
+  _getDefaultProperties: function() {
+    return { geojson: { properties: { owner: this.map.options.user.id } } }
   },
 
   connectCreatedToMap: function (layer) {

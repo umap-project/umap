@@ -939,6 +939,10 @@ L.U.FormBuilder = L.FormBuilder.extend({
 
   defaultOptions: {
     name: { label: L._('name') },
+    owner: {
+      label: 'owner',
+//      handler: 'BlurInput',  // this field should be hidden, not sure if blur does it.
+    },
     description: {
       label: L._('description'),
       handler: 'Textarea',
