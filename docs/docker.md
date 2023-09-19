@@ -128,6 +128,6 @@ You should now be able to browse to your uMap instance from a browser on your lo
 
 ### Administration
 
-To administer the site (add users, change map tiles, other customizations) log in as the root user you just created, then go to ${SITE_URL}/admin
+To administer the site (add users, change map tiles, other customizations) log in as the root user you just created, then go to `${SITE_URL}/admin`.
 
 
