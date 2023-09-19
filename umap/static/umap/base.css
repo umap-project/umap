@@ -669,6 +669,11 @@ input[type=hidden].blur + .button {
     /*box-shadow: inset 0 0 0 1px #215d9c;*/
     color: #efefef;
 }
+input:invalid {
+    border-color: red;
+    background-color: darkred;
+}
+
 
 /* *********** */
 /*   Alerts    */
