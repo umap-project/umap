@@ -111,7 +111,7 @@ Start the server with
 ```bash
 docker compose up
 ```
-... and let it run some initial setup until the output quiesces with a message about spawning uWSGI workers. Because there is a race between the time the app tries to connect to the DB and when the DB is actually ready, you might see a few exceptions/erros about 'psychopg' being unable to connect. This should sort itself out as the app retries. 
+... and let it run some initial setup until the output quiesces with a message about spawning uWSGI workers. Because there is a race between the time the app tries to connect to the DB and when the DB is actually ready, you might see a few exceptions/errors about 'psycopg' being unable to connect. This should sort itself out as the app retries. 
 
 ### Create superuser
 
