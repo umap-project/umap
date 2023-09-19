@@ -61,7 +61,7 @@ See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/
 
 #### SECRET_KEY
 
-Must be defined to something unique and secret. (See https://docs.djangoproject.com/en/4.2/ref/settings/#std:setting-SECRET_KEY if you want to know more.) 
+Must be defined to something unique and secret.
 
 #### SITE_URL
 
