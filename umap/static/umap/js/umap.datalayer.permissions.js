@@ -34,11 +34,11 @@ L.U.DataLayerPermissions = L.Class.extend({
           {
             handler: 'IntSelect',
             label: L._('Who can edit "{layer}"', { layer: this.datalayer.getName() }),
-            selectOptions: this.datalayer.map.options.edit_statuses,
+            selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
           },
         ],
       ],
-      builder = new L.U.FormBuilder(this, fields),
+      builder = new L.U.FormBuilder(this, fields, {className: 'umap-form datalayer-permissions'}),
       form = builder.build()
     container.appendChild(form)
   },

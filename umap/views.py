@@ -463,8 +463,14 @@ class MapDetailMixin:
             properties["edit_statuses"] = [
                 (i, str(label)) for i, label in Map.EDIT_STATUS
             ]
+            properties["datalayer_edit_statuses"] = [
+                (i, str(label)) for i, label in DataLayer.EDIT_STATUS
+            ]
         else:
             properties["edit_statuses"] = [
+                (i, str(label)) for i, label in AnonymousMapPermissionsForm.STATUS
+            ]
+            properties["datalayer_edit_statuses"] = [
                 (i, str(label)) for i, label in AnonymousDataLayerPermissionsForm.STATUS
             ]
         if self.get_short_url():
