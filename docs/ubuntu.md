@@ -6,13 +6,14 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Install system dependencies
 
-    sudo apt install python3 python3-dev python3-venv wget nginx uwsgi uwsgi-plugin-python3 postgresql gcc postgis libpq-dev
+    sudo apt update
+    sudo apt install python3 python3-dev python3-venv virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql gcc postgis libpq-dev
 
 *Note: nginx and uwsgi are not required for local development environment*
 
 ## Create deployment directories:
 
-   sudo mkdir -p /etc/umap
+    sudo mkdir -p /etc/umap
 
 *You can change this path, but then remember to adapt the other steps accordingly.*
 
@@ -33,17 +34,17 @@ on the various commands and configuration files if you go with your own.*
 
 ## Create a postgresql user
 
-    sudo -u postgres createuser umap
+    sudo -u postgres -D ~postgres createuser umap
 
 
 ## Create a postgresql database
 
-    sudo -u postgres createdb umap -O umap
+    sudo -u postgres -D ~postgres createdb umap -O umap
 
 
 ## Activate PostGIS extension
 
-    sudo -u postgres psql umap -c "CREATE EXTENSION postgis"
+    sudo -u postgres -D ~postgres psql umap -c "CREATE EXTENSION postgis"
 
 
 ## Login as umap Unix user
@@ -55,8 +56,8 @@ From now on, unless we say differently, the commands are run as `umap` user.
 
 ## Create a virtualenv and activate it
 
-    virtualenv /srv/umap/venv --python=/usr/bin/python3.6
-    source /srv/umap/venv/bin/activate
+    virtualenv /srv/umap/venv --python=/usr/bin/python3.10
+    . /srv/umap/venv/bin/activate
 
 *Note: this activation is not persistent, so if you open a new terminal window,
 you will need to run again this last line.*
@@ -75,12 +76,8 @@ you will need to run again this last line.*
 
     nano /etc/umap/umap.conf
 
-Change the following properties:
-
-```
-STATIC_ROOT = '/srv/umap/var/static'
-MEDIA_ROOT = '/srv/umap/var/data'
-```
+* update the SECRET_KEY
+* update the ADMINS list
 
 ## Create the tables
 
