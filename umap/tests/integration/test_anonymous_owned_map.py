@@ -83,6 +83,14 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
     expect(editors_field).to_be_hidden()
     datalayer_label = owner_session.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
+    options = owner_session.locator(
+        ".datalayer-permissions select[name='edit_status'] option"
+    )
+    expect(options).to_have_count(3)
+    option = owner_session.locator(
+        ".datalayer-permissions select[name='edit_status'] option:checked"
+    )
+    expect(option).to_have_text("Inherit")
 
 
 def test_anonymous_can_add_marker_on_editable_layer(
@@ -92,7 +100,9 @@ def test_anonymous_can_add_marker_on_editable_layer(
     datalayer.name = "Should not be in the select"
     datalayer.save()  # Non editable by anonymous users
     assert datalayer.map == anonymap
-    other = DataLayerFactory(map=anonymap, edit_status=DataLayer.ANONYMOUS, name="Editable")
+    other = DataLayerFactory(
+        map=anonymap, edit_status=DataLayer.ANONYMOUS, name="Editable"
+    )
     assert other.map == anonymap
     page.goto(f"{live_server.url}{anonymap.get_absolute_url()}?edit")
     add_marker = page.get_by_title("Draw a marker")

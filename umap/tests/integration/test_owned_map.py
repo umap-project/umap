@@ -88,6 +88,14 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
     expect(editors_field).to_be_visible()
     datalayer_label = page.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
+    options = page.locator(
+        ".datalayer-permissions select[name='edit_status'] option"
+    )
+    expect(options).to_have_count(4)
+    option = page.locator(
+        ".datalayer-permissions select[name='edit_status'] option:checked"
+    )
+    expect(option).to_have_text("Inherit")
 
 
 def test_map_update_with_editor(map, live_server, login, user):
