@@ -66,8 +66,9 @@ class DataLayerPermissionsForm(forms.ModelForm):
 
 class AnonymousDataLayerPermissionsForm(forms.ModelForm):
     STATUS = (
-        (Map.OWNER, _("Only editable with secret edit link")),
-        (Map.ANONYMOUS, _("Everyone can edit")),
+        (DataLayer.INHERIT, _("Inherit")),
+        (DataLayer.OWNER, _("Only editable with secret edit link")),
+        (DataLayer.ANONYMOUS, _("Everyone can edit")),
     )
 
     edit_status = forms.ChoiceField(choices=STATUS)

@@ -336,3 +336,52 @@ def test_editor_can_edit_in_editors_mode(datalayer, client, map, post_data):
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name == name
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_anonymous_owner_can_edit_if_inherit_and_map_in_owner_mode(
+    datalayer, cookieclient, anonymap, post_data
+):
+    anonymap.edit_status = Map.OWNER
+    anonymap.save()
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = cookieclient.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_anonymous_user_cannot_edit_if_inherit_and_map_in_owner_mode(
+    datalayer, client, anonymap, post_data
+):
+    anonymap.edit_status = Map.OWNER
+    anonymap.save()
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 403
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_anonymous_user_can_edit_if_inherit_and_map_in_public_mode(
+    datalayer, client, anonymap, post_data
+):
+    anonymap.edit_status = Map.ANONYMOUS
+    anonymap.save()
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    url = reverse("datalayer_update", args=(anonymap.pk, datalayer.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
