@@ -76,7 +76,7 @@ you will need to run again this last line.*
 
     nano /etc/umap/umap.conf
 
-* update the SECRET_KEY
+* update the [SECRET_KEY](settings.md#secret_key)
 * update the ADMINS list
 
 ## Create the tables
