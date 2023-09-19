@@ -193,8 +193,7 @@ L.U.FeatureMixin = {
     if (fallback === undefined) fallback = this.datalayer.options.name
     const key = this.getOption('labelKey') || 'name'
     // Variables mode.
-    if (L.Util.hasVar(key))
-      return L.Util.greedyTemplate(key, this.extendedProperties())
+    if (L.Util.hasVar(key)) return L.Util.greedyTemplate(key, this.extendedProperties())
     // Simple mode.
     return this.properties[key] || this.properties.title || fallback
   },
@@ -244,8 +243,17 @@ L.U.FeatureMixin = {
     }
   },
 
+  cleanProperty: function ([key, value]) {
+    // dot in key will break the dot based property access
+    // while editing the feature
+    key = key.replace('.', '_')
+    return [key, value]
+  },
+
   populate: function (feature) {
-    this.properties = L.extend({}, feature.properties)
+    this.properties = Object.fromEntries(
+      Object.entries(feature.properties || {}).map(this.cleanProperty)
+    )
     this.properties._umap_options = L.extend(
       {},
       this.properties._storage_options,
