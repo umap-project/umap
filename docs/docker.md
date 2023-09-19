@@ -41,7 +41,7 @@ volumes:
 
 ```
 
-next, create a basic settings file, named `umap.conf`` in the same directory. 
+Next, create a basic settings file, named `umap.conf` in the same directory. 
 
 You can use this example below and it will run, but you may want to look at the project sample config, using `wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /etc/umap/umap.conf` and modify as needed. 
 
