@@ -4,7 +4,7 @@ import pytest
 from django.core.files.base import ContentFile
 
 from .base import DataLayerFactory, MapFactory
-from umap.models import DataLayer
+from umap.models import DataLayer, Map
 
 pytestmark = pytest.mark.django_db
 
@@ -134,10 +134,66 @@ def test_anonymous_cannot_edit_in_anonymous_owner_mode(datalayer):
     assert not datalayer.can_edit()
 
 
-def test_anonymous_can_edit_in_anonymous_owner_but_public_mode(datalayer):
-    datalayer.edit_status = DataLayer.ANONYMOUS
+def test_owner_can_edit_in_inherit_mode_and_map_in_owner_mode(datalayer):
+    datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
-    map.owner = None
+    map.edit_status = Map.OWNER
+    map.save()
+    assert datalayer.can_edit(map.owner)
+
+
+def test_editors_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer, user):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    map = datalayer.map
+    map.editors.add(user)
+    map.edit_status = Map.OWNER
+    map.save()
+    assert not datalayer.can_edit(user)
+
+
+def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    map = datalayer.map
+    map.edit_status = Map.OWNER
+    map.save()
+    assert not datalayer.can_edit()
+
+
+def test_owner_can_edit_in_inherit_mode_and_map_in_editors_mode(datalayer):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    map = datalayer.map
+    map.edit_status = Map.EDITORS
+    map.save()
+    assert datalayer.can_edit(map.owner)
+
+
+def test_editors_can_edit_in_inherit_mode_and_map_in_editors_mode(datalayer, user):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    map = datalayer.map
+    map.editors.add(user)
+    map.edit_status = Map.EDITORS
+    map.save()
+    assert datalayer.can_edit(user)
+
+
+def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_editors_mode(datalayer):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    map = datalayer.map
+    map.edit_status = Map.EDITORS
+    map.save()
+    assert not datalayer.can_edit()
+
+
+def test_anonymous_can_edit_in_inherit_mode_and_map_in_public_mode(datalayer):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    map = datalayer.map
+    map.edit_status = Map.ANONYMOUS
     map.save()
     assert datalayer.can_edit()

@@ -304,10 +304,12 @@ class DataLayer(NamedModel):
     Layer to store Features in.
     """
 
+    INHERIT = 0
     ANONYMOUS = 1
     EDITORS = 2
     OWNER = 3
     EDIT_STATUS = (
+        (INHERIT, _("Inherit")),
         (ANONYMOUS, _("Everyone")),
         (EDITORS, _("Editors only")),
         (OWNER, _("Owner only")),
@@ -327,7 +329,7 @@ class DataLayer(NamedModel):
     )
     edit_status = models.SmallIntegerField(
         choices=EDIT_STATUS,
-        default=get_default_edit_status,
+        default=INHERIT,
         verbose_name=_("edit status"),
     )
 
@@ -428,6 +430,8 @@ class DataLayer(NamedModel):
         Define if a user can edit or not the instance, according to his account
         or the request.
         """
+        if self.edit_status == self.INHERIT:
+            return self.map.can_edit(user, request)
         can = False
         if not self.map.owner:
             if settings.UMAP_ALLOW_ANONYMOUS and self.map.is_anonymous_owner(request):
