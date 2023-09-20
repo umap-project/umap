@@ -36,6 +36,7 @@ dependencies = [
   "django-agnocomplete==2.2.0",
   "django-compressor==4.3.1",
   "django-environ==0.10.0",
+  "django-probes==1.7.0",
   "Pillow==9.5.0",
   "psycopg2==2.9.6",
   "requests==2.31.0",

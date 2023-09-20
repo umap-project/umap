@@ -117,6 +117,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
 
+    'django_probes',
     'umap',
     'compressor',
     'social_django',

@@ -3,6 +3,8 @@ set -eo pipefail
 
 source /venv/bin/activate
 
+# first wait for the database
+umap wait_for_database
 # then migrate the database
 umap migrate
 # then collect static files
