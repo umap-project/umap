@@ -102,7 +102,7 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     name = "test datalayer"
     description = "test description"
     display_on_load = True
-    settings = {"displayOnLoad": True, "browsable": True, "name": "test datalayer"}
+    settings = {"displayOnLoad": True, "browsable": True, "name": name}
     geojson = factory.django.FileField()
 
     @factory.post_generation
