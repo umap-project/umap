@@ -63,6 +63,11 @@ See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/
 
 Must be defined to something unique and secret.
 
+Running uMap / Django with a known SECRET_KEY defeats many of Django’s security protections, and can lead to privilege escalation and remote code execution vulnerabilities.
+
+See [Django documentation for SECRET_KEY](https://docs.djangoproject.com/en/4.2/ref/settings/#secret-key)
+
+
 #### SITE_URL
 
 The final URL of you instance, including the protocol:
