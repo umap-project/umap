@@ -45,7 +45,7 @@ Next, create a basic settings file, named `umap.conf` in the same directory.
 
 You can use this example below and it will run, but you may want to look at the project sample config, using `wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O /etc/umap/umap.conf` and modify as needed. 
 
-Make sure the settings in the docker-compose don't conflict with the sample config and vice-versa. In particular, remove the DATABASES section from the config file if useing the docker-compose file, or it will override the DATABASE_URL setting and things won't work. 
+Make sure the settings in the docker-compose don't conflict with the sample config and vice-versa. In particular, remove the DATABASES section from the config file if using the docker-compose file, or it will override the DATABASE_URL setting and things won't work. 
 
 _Sample umap.conf_ 
 ```python 
