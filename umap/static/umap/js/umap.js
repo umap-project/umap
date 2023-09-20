@@ -1113,7 +1113,6 @@ L.U.Map.include({
     'filterKey',
     'facetKey',
     'slugKey',
-    'featuresHaveOwners',
     'showLabel',
     'labelDirection',
     'labelInteractive',
@@ -1457,12 +1456,6 @@ L.U.Map.include({
           helpEntries: 'slugKey',
           placeholder: L._('Default: name'),
           label: L._('Feature identifier key'),
-        },
-      ],
-      [
-        'options.featuresHaveOwners',
-        {
-          handler: 'Switch', label: L._('Features have owners')
         },
       ],
     ]

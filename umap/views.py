@@ -460,6 +460,7 @@ class MapDetailMixin:
                 (i, str(label)) for i, label in AnonymousMapPermissionsForm.STATUS
             ],
             "umap_version": VERSION,
+            "featuresHaveOwners": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
         }
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
@@ -509,7 +510,6 @@ class MapDetailMixin:
             "properties": {
                 "zoom": getattr(settings, "LEAFLET_ZOOM", 6),
                 "datalayers": [],
-                "featuresHaveOwners": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
             },
         }
 
