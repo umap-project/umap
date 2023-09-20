@@ -1566,7 +1566,7 @@ L.U.Editable = L.Editable.extend({
 
   _getDefaultProperties: function() {
     const result = {}
-    if (this.map.options.hasOwnProperty('user')) {
+    if (this.map.options.featuresHaveOwner && this.map.options.hasOwnProperty('user')) {
       result.geojson = { properties: { owner: this.map.options.user.id } }
     }
     return result

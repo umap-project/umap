@@ -46,6 +46,7 @@ L.Map.mergeOptions({
   easing: false,
   permissions: {},
   permanentCreditBackground: true,
+  featuresHaveOwner: false,
 })
 
 L.U.Map.include({
@@ -108,7 +109,6 @@ L.U.Map.include({
     L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'captionBar')
     L.Util.setBooleanFromQueryString(this.options, 'captionMenus')
-    L.Util.setBooleanFromQueryString(this.options, 'featuresHaveOwners')
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       L.Util.setNullableBooleanFromQueryString(
         this.options,
