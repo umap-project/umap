@@ -1460,7 +1460,7 @@ L.U.Map.include({
         },
       ],
       [
-        'options.featuesHaveOwners',
+        'options.featuresHaveOwners',
         {
           handler: 'Switch', label: L._('Features have owners')
         },
