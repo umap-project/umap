@@ -88,9 +88,7 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
     expect(editors_field).to_be_visible()
     datalayer_label = page.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
-    options = page.locator(
-        ".datalayer-permissions select[name='edit_status'] option"
-    )
+    options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(4)
     option = page.locator(
         ".datalayer-permissions select[name='edit_status'] option:checked"
@@ -168,3 +166,49 @@ def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
     advanced.click()
     delete = page.get_by_role("link", name="Delete")
     expect(delete).to_be_hidden()
+
+
+def test_can_change_perms_after_create(tilelayer, live_server, login, user):
+    page = login(user)
+    page.goto(f"{live_server.url}/en/map/new")
+    save = page.get_by_title("Save current edits")
+    expect(save).to_be_visible()
+    save.click()
+    sleep(1)  # Let save ajax go back
+    edit_permissions = page.get_by_title("Update permissions and editors")
+    expect(edit_permissions).to_be_visible()
+    edit_permissions.click()
+    select = page.locator(".umap-field-share_status select")
+    expect(select).to_be_visible()
+    option = page.locator("select[name='share_status'] option:checked")
+    expect(option).to_have_text("Everyone (public)")
+    owner_field = page.locator(".umap-field-owner")
+    expect(owner_field).to_be_visible()
+    editors_field = page.locator(".umap-field-editors input")
+    expect(editors_field).to_be_visible()
+    datalayer_label = page.get_by_text('Who can edit "Layer 1"')
+    expect(datalayer_label).to_be_visible()
+    options = page.locator(".datalayer-permissions select[name='edit_status'] option")
+    expect(options).to_have_count(4)
+    option = page.locator(
+        ".datalayer-permissions select[name='edit_status'] option:checked"
+    )
+    expect(option).to_have_text("Inherit")
+
+
+def test_can_change_owner(map, live_server, login, user):
+    page = login(map.owner)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    edit_permissions = page.get_by_title("Update permissions and editors")
+    edit_permissions.click()
+    close = page.locator(".umap-field-owner .close")
+    close.click()
+    input = page.locator("input.edit-owner")
+    input.type(user.username)
+    input.press("Tab")
+    save = page.get_by_title("Save current edits")
+    expect(save).to_be_visible()
+    save.click()
+    sleep(1)  # Let save ajax go
+    modified = Map.objects.get(pk=map.pk)
+    assert modified.owner == user
