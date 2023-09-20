@@ -1,4 +1,5 @@
 import re
+from time import sleep
 
 import pytest
 from django.core.signing import get_cookie_signer
@@ -76,7 +77,6 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
     edit_permissions.click()
     select = owner_session.locator(".umap-field-share_status select")
     expect(select).to_be_hidden()
-    # expect(select).to_have_value(Map.PUBLIC)  # Does not work
     owner_field = owner_session.locator(".umap-field-owner")
     expect(owner_field).to_be_hidden()
     editors_field = owner_session.locator(".umap-field-editors input")
@@ -122,3 +122,28 @@ def test_anonymous_can_add_marker_on_editable_layer(
     expect(options).to_have_count(1)  # Only Editable layer should be listed
     option = page.locator("select[name='datalayer'] option:checked")
     expect(option).to_have_text(other.name)
+
+
+def test_can_change_perms_after_create(tilelayer, live_server, page):
+    page.goto(f"{live_server.url}/en/map/new")
+    save = page.get_by_title("Save current edits")
+    expect(save).to_be_visible()
+    save.click()
+    sleep(1)  # Let save ajax go back
+    edit_permissions = page.get_by_title("Update permissions and editors")
+    expect(edit_permissions).to_be_visible()
+    edit_permissions.click()
+    select = page.locator(".umap-field-share_status select")
+    expect(select).to_be_hidden()
+    owner_field = page.locator(".umap-field-owner")
+    expect(owner_field).to_be_hidden()
+    editors_field = page.locator(".umap-field-editors input")
+    expect(editors_field).to_be_hidden()
+    datalayer_label = page.get_by_text('Who can edit "Layer 1"')
+    expect(datalayer_label).to_be_visible()
+    options = page.locator(".datalayer-permissions select[name='edit_status'] option")
+    expect(options).to_have_count(3)
+    option = page.locator(
+        ".datalayer-permissions select[name='edit_status'] option:checked"
+    )
+    expect(option).to_have_text("Inherit")

@@ -447,6 +447,7 @@ class MapDetailMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
         properties = {
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
@@ -460,20 +461,19 @@ class MapDetailMixin:
             ],
             "umap_version": VERSION,
         }
-        if getattr(self, "object", None) and self.object.owner:
-            properties["edit_statuses"] = [
-                (i, str(label)) for i, label in Map.EDIT_STATUS
-            ]
-            properties["datalayer_edit_statuses"] = [
-                (i, str(label)) for i, label in DataLayer.EDIT_STATUS
-            ]
+        created = bool(getattr(self, "object", None))
+        if (created and self.object.owner) or (not created and not user.is_anonymous):
+            map_statuses = Map.EDIT_STATUS
+            datalayer_statuses = DataLayer.EDIT_STATUS
         else:
-            properties["edit_statuses"] = [
-                (i, str(label)) for i, label in AnonymousMapPermissionsForm.STATUS
-            ]
-            properties["datalayer_edit_statuses"] = [
-                (i, str(label)) for i, label in AnonymousDataLayerPermissionsForm.STATUS
-            ]
+            map_statuses = AnonymousMapPermissionsForm.STATUS
+            datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
+        properties["edit_statuses"] = [
+            (i, str(label)) for i, label in map_statuses
+        ]
+        properties["datalayer_edit_statuses"] = [
+            (i, str(label)) for i, label in datalayer_statuses
+        ]
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
 
@@ -486,7 +486,6 @@ class MapDetailMixin:
             locale = to_locale(lang)
             properties["locale"] = locale
             context["locale"] = locale
-        user = self.request.user
         if not user.is_anonymous:
             properties["user"] = {
                 "id": user.pk,

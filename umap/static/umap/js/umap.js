@@ -1180,6 +1180,7 @@ L.U.Map.include({
           alert.content = L._('Congratulations, your map has been created!')
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
+          this.permissions.commit()
           if (
             data.permissions &&
             data.permissions.anonymous_edit_url &&
@@ -1215,6 +1216,7 @@ L.U.Map.include({
           // Do not override local changes to permissions,
           // but update in case some other editors changed them in the meantime.
           this.permissions.setOptions(data.permissions)
+          this.permissions.commit()
         }
         // Update URL in case the name has changed.
         if (history && history.pushState)
