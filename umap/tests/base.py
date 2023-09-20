@@ -107,11 +107,13 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def geojson_data(obj, create, extracted, **kwargs):
+        # Make sure DB settings and file settings are aligned.
+        # At some point, file settings should be removed, but we are not there yet.
         data = DATALAYER_DATA.copy()
         obj.settings["name"] = obj.name
         data["_umap_options"] = obj.settings
-        with open(obj.geojson.path, mode="w") as truc:
-            truc.write(json.dumps(data))
+        with open(obj.geojson.path, mode="w") as f:
+            f.write(json.dumps(data))
 
     class Meta:
         model = DataLayer
