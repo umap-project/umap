@@ -1565,7 +1565,11 @@ L.U.Editable = L.Editable.extend({
   },
 
   _getDefaultProperties: function() {
-    return { geojson: { properties: { owner: this.map.options.user.id } } }
+    const result = {}
+    if (this.map.options.hasOwnProperty('user')) {
+      result.geojson = { properties: { owner: this.map.options.user.id } }
+    }
+    return result
   },
 
   connectCreatedToMap: function (layer) {
