@@ -1199,6 +1199,11 @@ L.U.DataLayer = L.Evented.extend({
     return this.options.editMode === 'disabled'
   },
 
+  isDataReadOnly: function () {
+    // This layer cannot accept features
+    return this.isReadOnly() || this.isRemoteLayer()
+  },
+
   save: function () {
     if (this.isDeleted) return this.saveDelete()
     if (!this.isLoaded()) {
