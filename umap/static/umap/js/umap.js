@@ -1309,14 +1309,14 @@ L.U.Map.include({
     datalayer = this.lastUsedDataLayer
     if (
       datalayer &&
-      !datalayer.isReadOnly() &&
+      !datalayer.isDataReadOnly() &&
       datalayer.canBrowse() &&
       datalayer.isVisible()
     ) {
       return datalayer
     }
     datalayer = this.findDataLayer((datalayer) => {
-      if (!datalayer.isReadOnly() && datalayer.canBrowse()) {
+      if (!datalayer.isDataReadOnly() && datalayer.canBrowse()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
       }
