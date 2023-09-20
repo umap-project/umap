@@ -11,6 +11,8 @@ from django.test import RequestFactory
 from umap import VERSION
 from umap.views import validate_url
 
+from .base import UserFactory
+
 User = get_user_model()
 
 
@@ -281,6 +283,21 @@ def test_user_dashboard_display_user_maps(client, map):
     assert f"{map.get_absolute_url()}?download" in body
     assert "Everyone (public)" in body
     assert "Owner only" in body
+
+
+@pytest.mark.django_db
+def test_user_dashboard_display_user_maps_distinct(client, map):
+    # cf https://github.com/umap-project/umap/issues/1325
+    user1 = UserFactory(username='user1')
+    user2 = UserFactory(username='user2')
+    map.editors.add(user1)
+    map.editors.add(user2)
+    map.save()
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert body.count(map.name) == 1
 
 
 @pytest.mark.django_db
