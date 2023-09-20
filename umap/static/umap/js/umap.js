@@ -108,6 +108,7 @@ L.U.Map.include({
     L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'captionBar')
     L.Util.setBooleanFromQueryString(this.options, 'captionMenus')
+    L.Util.setBooleanFromQueryString(this.options, 'featuresHaveOwners')
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       L.Util.setNullableBooleanFromQueryString(
         this.options,
@@ -1112,6 +1113,7 @@ L.U.Map.include({
     'filterKey',
     'facetKey',
     'slugKey',
+    'featuresHaveOwners',
     'showLabel',
     'labelDirection',
     'labelInteractive',
@@ -1455,6 +1457,12 @@ L.U.Map.include({
           helpEntries: 'slugKey',
           placeholder: L._('Default: name'),
           label: L._('Feature identifier key'),
+        },
+      ],
+      [
+        'options.featuesHaveOwners',
+        {
+          handler: 'Switch', label: L._('Features have owners')
         },
       ],
     ]

@@ -509,6 +509,7 @@ class MapDetailMixin:
             "properties": {
                 "zoom": getattr(settings, "LEAFLET_ZOOM", 6),
                 "datalayers": [],
+                "features_have_owners": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
             },
         }
 
