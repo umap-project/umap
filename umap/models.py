@@ -217,8 +217,13 @@ class Map(NamedModel):
         Define if a user can edit or not the instance, according to his account
         or the request.
 
-        In ownership mode: only owner and editors
-        In anononymous mode: only "anonymous owners" (having edit cookie set)
+        In owner mode:
+            - only owner by default (OWNER)
+            - any editor if mode is EDITORS
+            - anyone otherwise (ANONYMOUS)
+        In anonymous owner mode:
+            - only owner (has ownership cookie) by default (OWNER)
+            - anyone otherwise (ANONYMOUS)
         """
         can = False
         if request and not self.owner:
