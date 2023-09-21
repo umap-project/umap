@@ -8,6 +8,7 @@ node_modules/*
 umap/static/umap/vendors
 site/*
 .pytest_cache/
+venv
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -18,3 +19,6 @@ build/
 dist/
 *.egg-info/
 
+# Editors
+.fleet
+.idea
