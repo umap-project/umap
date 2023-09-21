@@ -1749,6 +1749,7 @@ L.U.Map.include({
 
   edit: function () {
     if (!this.editEnabled) return
+    if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)

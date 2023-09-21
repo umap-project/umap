@@ -1003,11 +1003,13 @@ L.U.Map.include({
       }
     update()
     this.once('saved', L.bind(update, this))
-    name.href = '#'
-    share_status.href = '#'
     logo.href = '/'
-    L.DomEvent.on(name, 'click', this.edit, this)
-    L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
+    if (this.options.editMode === 'advanced') {
+      name.href = '#'
+      share_status.href = '#'
+      L.DomEvent.on(name, 'click', this.edit, this)
+      L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
+    }
     this.on('postsync', L.bind(update, this))
     const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
     save.href = '#'

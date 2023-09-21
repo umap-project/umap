@@ -51,6 +51,7 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   edit: function () {
+    if (this.map.options.editMode !== 'advanced') return
     if (!this.map.options.umap_id)
       return this.map.ui.alert({
         content: L._('Please save the map first'),
