@@ -62,20 +62,22 @@ def test_should_remove_old_versions_on_save(datalayer, map, settings):
     settings.UMAP_KEEP_VERSIONS = 3
     root = datalayer.storage_root()
     before = len(datalayer.geojson.storage.listdir(root)[1])
-    newer = '%s/%s_1440924889.geojson' % (root, datalayer.pk)
-    medium = '%s/%s_1440923687.geojson' % (root, datalayer.pk)
-    older = '%s/%s_1440918637.geojson' % (root, datalayer.pk)
-    for path in [medium, newer, older]:
+    newer = f'{root}/{datalayer.pk}_1440924889.geojson'
+    medium = f'{root}/{datalayer.pk}_1440923687.geojson'
+    older = f'{root}/{datalayer.pk}_1440918637.geojson'
+    other = f'{root}/123456_1440918637.geojson'
+    for path in [medium, newer, older, other]:
         datalayer.geojson.storage.save(path, ContentFile("{}"))
         datalayer.geojson.storage.save(path + '.gz', ContentFile("{}"))
-    assert len(datalayer.geojson.storage.listdir(root)[1]) == 6 + before
+    assert len(datalayer.geojson.storage.listdir(root)[1]) == 8 + before
     datalayer.save()
     files = datalayer.geojson.storage.listdir(root)[1]
+    # Flat + gz files, but not latest gz, which is created at first datalayer read.
     assert len(files) == 5
     assert os.path.basename(newer) in files
-    assert os.path.basename(newer + '.gz') in files
     assert os.path.basename(medium) in files
-    assert os.path.basename(medium + '.gz') in files
     assert os.path.basename(datalayer.geojson.path) in files
+    # File from another datalayer, purge should have impacted it.
+    assert os.path.basename(other) in files
+    assert os.path.basename(other + ".gz") in files
     assert os.path.basename(older) not in files
-    assert os.path.basename(older + '.gz') not in files
