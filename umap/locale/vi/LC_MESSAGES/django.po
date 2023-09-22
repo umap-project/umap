@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Thanh Le Viet <lethanhx2k@gmail.com>, 2014\n"
 "Language-Team: Vietnamese (http://app.transifex.com/openstreetmap/umap/language/vi/)\n"
@@ -18,18 +18,17 @@ msgstr ""
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Link chỉnh sửa bí mật là %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "Chỉ có thể sửa với liên kết chỉnh sửa bí mật"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "Ai cũng có thể chỉnh sửa"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Chỉ có thể sửa với liên kết chỉnh sửa bí mật"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -55,15 +54,15 @@ msgstr "Mẫu URL sử dụng định dạng tile của OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Thứ tự các titlelayer trong hộp chỉnh sửa"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr ""
 
@@ -79,7 +78,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "mô tả"
 
@@ -115,7 +114,7 @@ msgstr "chủ nhân"
 msgid "editors"
 msgstr "người chỉnh sửa"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "trạng thái chỉnh sửa"
 
@@ -123,19 +122,19 @@ msgstr "trạng thái chỉnh sửa"
 msgid "share status"
 msgstr "chia sẻ trạng thái"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "thiết lập"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "Sao chép của"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "hiển thị khi tải trang"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "Hiển thị layer này khi tải trang"
 
@@ -292,7 +291,7 @@ msgstr "Tham khảo các bản đồ"
 msgid "You are logged in. Continuing..."
 msgstr "Bạn đã đăng nhập, Đang tiếp tục..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr ""
 
@@ -432,48 +431,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "Xem bản đồ"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "Bản đồ đã được cập nhật!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "Bản đồ được cập nhật thành công!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "Chỉ chủ nhân của bản đồ mới có quyền xóa."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Bản đồ của bạn đã được sao chép. Nếu bạn muốn chỉnh sửa bản đồ từ máy tính khác, vui lòng sử dụng liên kết này %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "Chúc mừng, bản đồ của bạn đã được sao chép!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "Đã xóa layer"
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

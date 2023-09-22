@@ -248,7 +248,6 @@
     "Save this location as new feature": "Salvesta see asukoht uue elemendina",
     "Search a place name": "Kohanime otsing",
     "Search location": "Asukoha otsing",
-    "Secret edit link is:<br>{link}": "Salajane muutmise link on:<br>{link}",
     "See all": "Näita kõiki",
     "See data layers": "Näita andmekihte",
     "See full screen": "Täisekraanvaade",
@@ -407,5 +406,9 @@
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Joan Montané, 2023\n"
 "Language-Team: Catalan (http://app.transifex.com/openstreetmap/umap/language/ca/)\n"
@@ -21,18 +21,17 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "L'enllaç d'edició secret és %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "Només es pot editar amb l'enllaç d'edició secret"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "Tothom pot editar"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Només es pot editar amb l'enllaç d'edició secret"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -58,15 +57,15 @@ msgstr "La plantilla de l'URL usa el format de tesel·les de l'OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordre de les capes de tessel·les al quadre d'edició"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr ""
 
@@ -82,7 +81,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "descripció"
 
@@ -118,7 +117,7 @@ msgstr "propietari"
 msgid "editors"
 msgstr "editors"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "edita l'estat"
 
@@ -126,19 +125,19 @@ msgstr "edita l'estat"
 msgid "share status"
 msgstr "comparteix l'estat"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "paràmetres"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "Clon de"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "mostra en carregar"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "Mostra aquesta capa en carregar."
 
@@ -295,7 +294,7 @@ msgstr "Inspireu-vos, exploreu mapes"
 msgid "You are logged in. Continuing..."
 msgstr "Heu iniciat sessió. S'està continuant..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "per"
 
@@ -436,48 +435,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "Mostra el mapa"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "S'ha actualitzat el mapa!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "S'han actualitzat els editors del mapa correctament!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "L'enllaç d'edició d'uMap per al vostre mapa: %(map_name)s"
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aquí teniu l'enllaç secret d'edició: %(link)s"
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "S'ha enviat un correu a %(email)s"
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "Només el propietari pot suprimir el mapa."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "S'ha clonat el vostre mapa! Si voleu editar aquest mapa en un altre ordinador, useu aquest enllaç: %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "Enhorabona, s'ha clonat el vostre mapa!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "S'ha suprimit la capa correctament."
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

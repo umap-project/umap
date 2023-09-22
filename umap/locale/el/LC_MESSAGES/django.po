@@ -6,16 +6,16 @@
 # Emmanuel Verigos <emverigos@geodev.gr>, 2017-2018,2021
 # Emmanuel Verigos <emverigos@geodev.gr>, 2018
 # Emmanuel Verigos <emverigos@geodev.gr>, 2017
-# Jim Kats <jim-kats@hotmail.com>, 2022
+# Jim Kats <jim-kats@hotmail.com>, 2022-2023
 # prendi <prendi@openmailbox.org>, 2017
 # Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023\n"
+"Last-Translator: Jim Kats <jim-kats@hotmail.com>, 2022-2023\n"
 "Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,18 +23,17 @@ msgstr ""
 "Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Ο μυστικός σύνδεσμος επεξεργασίας είναι %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "Επεξεργάσιμο μόνο με μυστικό σύνδεσμο"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "Όλοι"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Επεξεργάσιμο μόνο με μυστικό σύνδεσμο"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -60,15 +59,15 @@ msgstr "Πρότυπο URL που χρησιμοποιεί μορφοποίησ�
 msgid "Order of the tilelayers in the edit box"
 msgstr "Σειρά των υπόβαθρων στο πλαίσιο επεξεργασίας"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr "Οποιοσδήποτε"
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr "Μόνο οι συντάκτες"
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr "Μόνο ο κάτοχος"
 
@@ -84,7 +83,7 @@ msgstr "Οποιοδήποτε με τον σύνδεσμο"
 msgid "Blocked"
 msgstr "Αποκλεισμένος"
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "περιγραφή"
 
@@ -120,7 +119,7 @@ msgstr "ιδιοκτήτης"
 msgid "editors"
 msgstr "συντάκτες"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "κατάσταση επεξεργασίας"
 
@@ -128,19 +127,19 @@ msgstr "κατάσταση επεξεργασίας"
 msgid "share status"
 msgstr "κατάσταση διαμοιρασμού"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "ρυθμίσεις"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "Κλώνος του"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "εμφάνιση κατά τη φόρτωση"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "Εμφάνιση αυτού του επιπέδου κατά την φόρτωση."
 
@@ -161,29 +160,29 @@ msgstr "Ο %(current_user)s χρήστης δεν έχει χάρτες."
 #: templates/auth/user_form.html:6 templates/umap/navigation.html:12
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
 msgid "My Dashboard"
-msgstr ""
+msgstr "Το ταμπλό μου"
 
 #: templates/auth/user_form.html:6
 msgid "My Profile"
-msgstr ""
+msgstr "Το προφίλ μου"
 
 #: templates/auth/user_form.html:19
 msgid "Save"
-msgstr ""
+msgstr "Αποθήκευση"
 
 #: templates/auth/user_form.html:24
 msgid "Your current providers"
-msgstr ""
+msgstr "Οι τρέχοντες πάροχοι σας"
 
 #: templates/auth/user_form.html:30
 msgid "Connect to another provider"
-msgstr ""
+msgstr "Σύνδεση σε άλλον πάροχο"
 
 #: templates/auth/user_form.html:32
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
-msgstr ""
+msgstr "Είναι καλή συνήθεια να συνδέετε το λογαριασμό σας σε περισσότερους από έναν παρόχους, σε περίπτωση όπου ένας πάροχος δεν είναι διαθέσιμος, προσωρινά ή και μόνιμα."
 
 #: templates/auth/user_stars.html:5
 #, python-format
@@ -297,7 +296,7 @@ msgstr "Περιηγήσου και αναζήτησε την έμπνευση �
 msgid "You are logged in. Continuing..."
 msgstr "Είστε συνδεδεμένοι. Συνέχεια..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "από"
 
@@ -432,54 +431,58 @@ msgstr "Αναζήτηση στους χάρτες μου"
 
 #: templates/umap/user_dashboard.html:10
 msgid "My profile"
-msgstr ""
+msgstr "Το προφίλ μου"
 
 #: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."
 msgstr "Δεν έχετε ακόμη χάρτη."
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "Προβολή του χάρτη"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "Ο χάρτης ενημερώθηκε!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "Η ενημέρωση των συντακτών χάρτη ήταν επιτυχής!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Ο uMap σύνδεσμος επεξεργασίας του χάρτη σας: %(map_name)s"
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Εδώ είναι ο μυστικός σύνδεσμος επεξεργασίας: %(link)s"
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Μήνυμα email στάλθηκε στο %(email)s"
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "Μονό ο ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Ο χάρτης κλωνοποιήθηκε! Αν θέλετε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "Συγχαρητήρια ο χάρτης σας κλωνοποιήθηκε!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "Το επίπεδο διαγράφηκε με επιτυχία."
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>, 2023\n"
 "Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
@@ -18,18 +18,17 @@ msgstr ""
 "Language: eu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Editatzeko esteka sekretua hauxe da %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "Editatzeko esteka sekretuarekin bakarrik editatu daiteke"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "Edonork editatu dezake"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Editatzeko esteka sekretuarekin bakarrik editatu daiteke"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -55,15 +54,15 @@ msgstr "URLaren txantiloia OSMren laukitxoen formatua erabiliz"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Edizio kutxan laukitxo-geruzek izango duten ordena"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr ""
 
@@ -79,7 +78,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "deskribapena"
 
@@ -115,7 +114,7 @@ msgstr "jabea"
 msgid "editors"
 msgstr "editoreak"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "editatu egoera"
 
@@ -123,19 +122,19 @@ msgstr "editatu egoera"
 msgid "share status"
 msgstr "partekatu egoera"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "ezarpenak"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "Beste honen klona"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "erakutsi kargatzean"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "Erakutsi geruza hau kargatzean"
 
@@ -292,7 +291,7 @@ msgstr "Inspira zaitez dauden mapak arakatzen"
 msgid "You are logged in. Continuing..."
 msgstr "Sartu egin zara. Jarraitu..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "nork eginda"
 
@@ -433,48 +432,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "Mapa ikusi"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "Mapa eguneratu egin da!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "Maparen editoreak ondo eguneratu dira!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "Jabeak bakarrik ezabatu dezake mapa."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Zure mapa klonatu egin da! Mapa hau beste nabigatzaile batetik editatzeko erabili esteka hau: %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "Zorionak, zure mapa ondo klonatu da!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "Geruza ondo ezabatu da."
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: sun wei <sunwei.r@gmail.com>, 2014\n"
 "Language-Team: Chinese (http://app.transifex.com/openstreetmap/umap/language/zh/)\n"
@@ -20,18 +20,17 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "秘密的编辑链接是%s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "有秘密编辑链接的人可以编辑"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "所有人可编辑"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "有秘密编辑链接的人可以编辑"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -57,15 +56,15 @@ msgstr "使用OSM瓦片格式的URL模板"
 msgid "Order of the tilelayers in the edit box"
 msgstr "编辑框内瓦片图层的顺序"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr ""
 
@@ -81,7 +80,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "描述"
 
@@ -117,7 +116,7 @@ msgstr "所有者"
 msgid "editors"
 msgstr "编辑"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "编辑状态"
 
@@ -125,19 +124,19 @@ msgstr "编辑状态"
 msgid "share status"
 msgstr "分享状态"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "设置"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "复制"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "加载时显示"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "加载时显示该图层"
 
@@ -294,7 +293,7 @@ msgstr "浏览地图得灵感"
 msgid "You are logged in. Continuing..."
 msgstr "已登录。继续..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "由"
 
@@ -434,48 +433,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "浏览地图"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "地图已更新！"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "地图编辑员成功更新地图！"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "只有地图所有者可以删除地图."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "地图已复制！如果你想在其他电脑上编辑该地图，请使用以下链接:%(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "你的地图已复制，祝贺！"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "图层删除成功。"
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Jaakko Helleranta <jaakko@helleranta.com>, 2013\n"
 "Language-Team: Finnish (http://app.transifex.com/openstreetmap/umap/language/fi/)\n"
@@ -22,18 +22,17 @@ msgstr ""
 "Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Salainen muokkauslinkki on %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "Muokattavissa vain salaisella muokkauslinkillä"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "Kuka tahansa saa muokata"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Muokattavissa vain salaisella muokkauslinkillä"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -59,15 +58,15 @@ msgstr "OSM-karttatiiliformaattia mukaileva URL-sapluuna"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Taustakarttojen järjestys muokkauslaatikossa"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr ""
 
@@ -83,7 +82,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "kuvaus"
 
@@ -119,7 +118,7 @@ msgstr "omistaja"
 msgid "editors"
 msgstr "julkaisija"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "muokkaa tilaa"
 
@@ -127,19 +126,19 @@ msgstr "muokkaa tilaa"
 msgid "share status"
 msgstr "jaa status"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "asetukset"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "Kloonattu kartasta"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "näytä ladattaessa"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "Näytä tämä kerros ladattaessa."
 
@@ -296,7 +295,7 @@ msgstr "Inspiroidu selaamalla karttoja"
 msgid "You are logged in. Continuing..."
 msgstr "Sisäänkirjautumisesi onnistui. Jatketahan..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "taholta"
 
@@ -437,48 +436,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "Katso karttaa"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "Kartta on päivitetty!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "Kartan toimittajat päivitetty onnistuneesti!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "Vain kartan omistaja voi poistaa kartan."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Karttasi on kloonattu! Jos haluat muokata tätä karttaa joltain muulta tietokoneelta, käytä tätä linkkiä: %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "Onneksi olkoon! Karttasi on kloonattu!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "Kerros onnistuneesti poistettu. Pysyvästi."
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

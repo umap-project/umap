@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Dongha Hwang <depth221@gmail.com>, 2019\n"
 "Language-Team: Korean (http://app.transifex.com/openstreetmap/umap/language/ko/)\n"
@@ -18,18 +18,17 @@ msgstr ""
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "비공개 편집 링크 %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "비공개 편집 링크를 가진 사람만 편집할 수 있음"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "누구나 편집할 수 있음"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "비공개 편집 링크를 가진 사람만 편집할 수 있음"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -55,15 +54,15 @@ msgstr "오픈스트리트맵 타일 포맷을 이용한 URL 템플릿"
 msgid "Order of the tilelayers in the edit box"
 msgstr "편집 창에서 타일 레이어의 순서"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr ""
 
@@ -79,7 +78,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "설명"
 
@@ -115,7 +114,7 @@ msgstr "소유주"
 msgid "editors"
 msgstr "편집자"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "편집 상태"
 
@@ -123,19 +122,19 @@ msgstr "편집 상태"
 msgid "share status"
 msgstr "공유 상태"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "설정"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "원본:"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "불러오면서 표시"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "불러오면서 동시에 이 레이어를 띄웁니다."
 
@@ -292,7 +291,7 @@ msgstr "푹 빠져 보세요, 지도를 검색해 보세요"
 msgid "You are logged in. Continuing..."
 msgstr "로그인되었습니다. 잠시만 기다려 주세요..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "제작:"
 
@@ -432,48 +431,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "지도 보기"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "지도가 업데이트되었습니다!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "지도 편집자가 성공적으로 업데이트되었습니다!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "소유주만 지도를 삭제할 수 있습니다."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "지도가 복제되었습니다! 다른 컴퓨터에서 지도를 편집하고 싶다면 다음 링크를 사용하세요: %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "축하드립니다, 지도가 복제되었습니다!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "레이어가 성공적으로 삭제되었습니다."
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""

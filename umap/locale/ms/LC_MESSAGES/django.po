@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 08:16+0000\n"
+"POT-Creation-Date: 2023-09-22 16:21+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023\n"
 "Language-Team: Malay (http://app.transifex.com/openstreetmap/umap/language/ms/)\n"
@@ -19,18 +19,17 @@ msgstr ""
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: forms.py:43
-#, python-format
-msgid "Secret edit link is %s"
-msgstr "Pautan suntingan rahsia ialah %s"
+#: forms.py:44 forms.py:70
+msgid "Only editable with secret edit link"
+msgstr "Hanya boleh disunting dengan pautan rahsia"
 
-#: forms.py:47
+#: forms.py:45 forms.py:71
 msgid "Everyone can edit"
 msgstr "Sesiapa pun boleh sunting"
 
-#: forms.py:48
-msgid "Only editable with secret edit link"
-msgstr "Hanya boleh disunting dengan pautan rahsia"
+#: forms.py:69 models.py:317
+msgid "Inherit"
+msgstr ""
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -56,15 +55,15 @@ msgstr "Templat URL menggunakan format fail OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Kedudukan lapisan jubin dalam kotak suntingan"
 
-#: models.py:142
+#: models.py:142 models.py:318
 msgid "Everyone"
 msgstr "Semua orang"
 
-#: models.py:143 models.py:149
+#: models.py:143 models.py:149 models.py:319
 msgid "Editors only"
 msgstr "Penyunting sahaja"
 
-#: models.py:144
+#: models.py:144 models.py:320
 msgid "Owner only"
 msgstr "Pemilik sahaja"
 
@@ -80,7 +79,7 @@ msgstr "Sesiapa yang ada pautan"
 msgid "Blocked"
 msgstr "Disekat"
 
-#: models.py:153 models.py:307
+#: models.py:153 models.py:324
 msgid "description"
 msgstr "keterangan"
 
@@ -116,7 +115,7 @@ msgstr "pemilik"
 msgid "editors"
 msgstr "penyunting"
 
-#: models.py:181
+#: models.py:181 models.py:338
 msgid "edit status"
 msgstr "status suntingan"
 
@@ -124,19 +123,19 @@ msgstr "status suntingan"
 msgid "share status"
 msgstr "status perkongsian"
 
-#: models.py:189 models.py:316
+#: models.py:189 models.py:333
 msgid "settings"
 msgstr "tetapan"
 
-#: models.py:262
+#: models.py:268
 msgid "Clone of"
 msgstr "Klon bagi"
 
-#: models.py:311
+#: models.py:328
 msgid "display on load"
 msgstr "paparkan semasa dimuatkan"
 
-#: models.py:312
+#: models.py:329
 msgid "Display this layer on load."
 msgstr "Paparkan lapisan ini ketika dimuatkan."
 
@@ -157,11 +156,11 @@ msgstr "%(current_user)s tidak mempunyai peta."
 #: templates/auth/user_form.html:6 templates/umap/navigation.html:12
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
 msgid "My Dashboard"
-msgstr ""
+msgstr "Papan Pemuka Saya"
 
 #: templates/auth/user_form.html:6
 msgid "My Profile"
-msgstr ""
+msgstr "Profil Saya"
 
 #: templates/auth/user_form.html:19
 msgid "Save"
@@ -293,7 +292,7 @@ msgstr "Dapatkan inspirasi, layari peta-peta"
 msgid "You are logged in. Continuing..."
 msgstr "Anda telah log masuk. Menyambung..."
 
-#: templates/umap/map_list.html:9 views.py:300
+#: templates/umap/map_list.html:9 views.py:303
 msgid "by"
 msgstr "oleh"
 
@@ -433,48 +432,52 @@ msgstr "Profil saya"
 msgid "You have no map yet."
 msgstr "Anda belum ada peta."
 
-#: views.py:305
+#: views.py:308
 msgid "View the map"
 msgstr "Lihat peta"
 
-#: views.py:628
+#: views.py:658
 msgid "Map has been updated!"
 msgstr "Peta telah dikemas kini!"
 
-#: views.py:653
+#: views.py:683
 msgid "Map editors updated with success!"
 msgstr "Penyunting peta telah dikemas kini dengan jayanya!"
 
-#: views.py:691
+#: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Pautan suntingan uMap untuk peta anda: %(map_name)s"
 
-#: views.py:694
+#: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Ini pautan suntingan rahsia anda: %(link)s"
 
-#: views.py:700
+#: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mel telah dihantar ke %(email)s"
 
-#: views.py:711
+#: views.py:741
 msgid "Only its owner can delete the map."
 msgstr "Hanya pemiliknya sahaja mampu memadamkan peta."
 
-#: views.py:734
+#: views.py:764
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Peta anda telah diklon! Jika anda ingin menyunting peta ini dari komputer lain, sila gunakan pautan ini: %(anonymous_url)s"
 
-#: views.py:739
+#: views.py:769
 msgid "Congratulations, your map has been cloned!"
 msgstr "Tahniah, peta anda telah berjaya diklon!"
 
-#: views.py:922
+#: views.py:958
 msgid "Layer successfully deleted."
 msgstr "Lapisan telah berjaya dipadamkan."
+
+#: views.py:980
+msgid "Permissions updated with success!"
+msgstr ""
