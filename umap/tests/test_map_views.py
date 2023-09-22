@@ -119,17 +119,17 @@ def test_delete(client, map, datalayer):
 
 
 def test_wrong_slug_should_redirect_to_canonical(client, map):
-    url = reverse("map", kwargs={"pk": map.pk, "slug": "wrong-slug"})
-    canonical = reverse("map", kwargs={"pk": map.pk, "slug": map.slug})
+    url = reverse("map", kwargs={"map_id": map.pk, "slug": "wrong-slug"})
+    canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
     response = client.get(url)
     assert response.status_code == 301
     assert response["Location"] == canonical
 
 
 def test_wrong_slug_should_redirect_with_query_string(client, map):
-    url = reverse("map", kwargs={"pk": map.pk, "slug": "wrong-slug"})
+    url = reverse("map", kwargs={"map_id": map.pk, "slug": "wrong-slug"})
     url = "{}?allowEdit=0".format(url)
-    canonical = reverse("map", kwargs={"pk": map.pk, "slug": map.slug})
+    canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
     canonical = "{}?allowEdit=0".format(canonical)
     response = client.get(url)
     assert response.status_code == 301
@@ -137,7 +137,7 @@ def test_wrong_slug_should_redirect_with_query_string(client, map):
 
 
 def test_should_not_consider_the_query_string_for_canonical_check(client, map):
-    url = reverse("map", kwargs={"pk": map.pk, "slug": map.slug})
+    url = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
     url = "{}?allowEdit=0".format(url)
     response = client.get(url)
     assert response.status_code == 200
@@ -145,7 +145,7 @@ def test_should_not_consider_the_query_string_for_canonical_check(client, map):
 
 def test_short_url_should_redirect_to_canonical(client, map):
     url = reverse("map_short_url", kwargs={"pk": map.pk})
-    canonical = reverse("map", kwargs={"pk": map.pk, "slug": map.slug})
+    canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
     response = client.get(url)
     assert response.status_code == 301
     assert response["Location"] == canonical
@@ -390,7 +390,7 @@ def test_no_cookie_cant_delete(client, anonymap):
 @pytest.mark.usefixtures("allow_anonymous")
 def test_anonymous_edit_url(cookieclient, anonymap):
     url = anonymap.get_anonymous_edit_url()
-    canonical = reverse("map", kwargs={"pk": anonymap.pk, "slug": anonymap.slug})
+    canonical = reverse("map", kwargs={"map_id": anonymap.pk, "slug": anonymap.slug})
     response = cookieclient.get(url)
     assert response.status_code == 302
     assert response["Location"] == canonical
@@ -403,7 +403,7 @@ def test_sha1_anonymous_edit_url(cookieclient, anonymap):
     signer = Signer(algorithm="sha1")
     signature = signer.sign(anonymap.pk)
     url = reverse("map_anonymous_edit_url", kwargs={"signature": signature})
-    canonical = reverse("map", kwargs={"pk": anonymap.pk, "slug": anonymap.slug})
+    canonical = reverse("map", kwargs={"map_id": anonymap.pk, "slug": anonymap.slug})
     response = cookieclient.get(url)
     assert response.status_code == 302
     assert response["Location"] == canonical

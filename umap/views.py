@@ -441,6 +441,7 @@ class FormLessEditMixin:
 
 class MapDetailMixin:
     model = Map
+    pk_url_kwarg = "map_id"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -544,8 +545,6 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             if request.META.get("QUERY_STRING"):
                 canonical = "?".join([canonical, request.META["QUERY_STRING"]])
             return HttpResponsePermanentRedirect(canonical)
-        if not self.object.can_view(request):
-            return HttpResponseForbidden()
         return super(MapView, self).get(request, *args, **kwargs)
 
     def get_canonical_url(self):
