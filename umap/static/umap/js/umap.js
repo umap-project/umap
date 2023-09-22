@@ -1521,6 +1521,7 @@ L.U.Map.include({
           handler: 'BlurInput',
           helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
+          type: 'url',
         },
       ],
       [
@@ -1570,6 +1571,7 @@ L.U.Map.include({
           helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
           helpText: L._('Background overlay url'),
+          type: 'url',
         },
       ],
       [
