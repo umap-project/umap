@@ -26,9 +26,9 @@ def login_required_if_not_anonymous_allowed(view_func):
     return wrapper
 
 
-def map_permissions_check(view_func):
+def can_edit_map(view_func):
     """
-    Used for URLs dealing with the map.
+    Used for URLs dealing with editing the map.
     """
 
     @wraps(view_func)

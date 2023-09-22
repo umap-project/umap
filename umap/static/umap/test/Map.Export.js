@@ -207,6 +207,7 @@ describe('L.U.Map.Export', function () {
             _umap_options: {
               displayOnLoad: true,
               browsable: true,
+              editMode: 'advanced',
               iconClass: 'Default',
               name: 'Elephants',
               id: 62,

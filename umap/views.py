@@ -45,8 +45,10 @@ from .forms import (
     DEFAULT_LATITUDE,
     DEFAULT_LONGITUDE,
     DEFAULT_CENTER,
-    AnonymousMapPermissionsForm,
     DataLayerForm,
+    DataLayerPermissionsForm,
+    AnonymousDataLayerPermissionsForm,
+    AnonymousMapPermissionsForm,
     FlatErrorList,
     MapSettingsForm,
     SendLinkForm,
@@ -445,23 +447,33 @@ class MapDetailMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
         properties = {
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
-            "allowEdit": self.is_edit_allowed(),
+            "editMode": self.edit_mode,
             "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
             "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
-            "edit_statuses": [(i, str(label)) for i, label in Map.EDIT_STATUS],
             "share_statuses": [
                 (i, str(label)) for i, label in Map.SHARE_STATUS if i != Map.BLOCKED
             ],
-            "anonymous_edit_statuses": [
-                (i, str(label)) for i, label in AnonymousMapPermissionsForm.STATUS
-            ],
             "umap_version": VERSION,
         }
+        created = bool(getattr(self, "object", None))
+        if (created and self.object.owner) or (not created and not user.is_anonymous):
+            map_statuses = Map.EDIT_STATUS
+            datalayer_statuses = DataLayer.EDIT_STATUS
+        else:
+            map_statuses = AnonymousMapPermissionsForm.STATUS
+            datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
+        properties["edit_statuses"] = [
+            (i, str(label)) for i, label in map_statuses
+        ]
+        properties["datalayer_edit_statuses"] = [
+            (i, str(label)) for i, label in datalayer_statuses
+        ]
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
 
@@ -474,7 +486,6 @@ class MapDetailMixin:
             locale = to_locale(lang)
             properties["locale"] = locale
             context["locale"] = locale
-        user = self.request.user
         if not user.is_anonymous:
             properties["user"] = {
                 "id": user.pk,
@@ -492,8 +503,9 @@ class MapDetailMixin:
     def get_datalayers(self):
         return []
 
-    def is_edit_allowed(self):
-        return True
+    @property
+    def edit_mode(self):
+        return "advanced"
 
     def get_umap_id(self):
         return None
@@ -551,11 +563,22 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        datalayers = DataLayer.objects.filter(map=self.object)
-        return [l.metadata for l in datalayers]
+        return [
+            l.metadata(self.request.user, self.request)
+            for l in self.object.datalayer_set.all()
+        ]
 
-    def is_edit_allowed(self):
-        return self.object.can_edit(self.request.user, self.request)
+    @property
+    def edit_mode(self):
+        edit_mode = "disabled"
+        if self.object.can_edit(self.request.user, self.request):
+            edit_mode = "advanced"
+        elif any(
+            d.can_edit(self.request.user, self.request)
+            for d in self.object.datalayer_set.all()
+        ):
+            edit_mode = "simple"
+        return edit_mode
 
     def get_umap_id(self):
         return self.object.pk
@@ -883,7 +906,9 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
         form.instance.map = self.kwargs["map_inst"]
         self.object = form.save()
         # Simple response with only metadatas (including new id)
-        response = simple_json_response(**self.object.metadata)
+        response = simple_json_response(
+            **self.object.metadata(self.request.user, self.request)
+        )
         response["Last-Modified"] = self.last_modified
         return response
 
@@ -896,7 +921,9 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         self.object = form.save()
         # Simple response with only metadatas (client should not reload all data
         # on save)
-        response = simple_json_response(**self.object.metadata)
+        response = simple_json_response(
+            **self.object.metadata(self.request.user, self.request)
+        )
         response["Last-Modified"] = self.last_modified
         return response
 
@@ -911,7 +938,9 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.map != self.kwargs["map_inst"]:
+        if self.object.map.pk != int(self.kwargs["map_id"]):
+            return HttpResponseForbidden()
+        if not self.object.can_edit(user=self.request.user, request=self.request):
             return HttpResponseForbidden()
         if not self.is_unmodified():
             return HttpResponse(status=412)
@@ -934,6 +963,21 @@ class DataLayerVersions(BaseDetailView):
 
     def render_to_response(self, context, **response_kwargs):
         return simple_json_response(versions=self.object.versions)
+
+
+class UpdateDataLayerPermissions(FormLessEditMixin, UpdateView):
+    model = DataLayer
+    pk_url_kwarg = "pk"
+
+    def get_form_class(self):
+        if self.object.map.owner:
+            return DataLayerPermissionsForm
+        else:
+            return AnonymousDataLayerPermissionsForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return simple_json_response(info=_("Permissions updated with success!"))
 
 
 # ############## #

@@ -193,6 +193,7 @@ L.U.DataLayer = L.Evented.extend({
   options: {
     displayOnLoad: true,
     browsable: true,
+    editMode: 'advanced',
   },
 
   initialize: function (map, data) {
@@ -201,8 +202,8 @@ L.U.DataLayer = L.Evented.extend({
     this._layers = {}
     this._geojson = null
     this._propertiesIndex = []
-    this._loaded = false  // Are layer metadata loaded
-    this._dataloaded = false  // Are layer data loaded
+    this._loaded = false // Are layer metadata loaded
+    this._dataloaded = false // Are layer data loaded
 
     this.parentPane = this.map.getPane('overlayPane')
     this.pane = this.map.createPane(`datalayer${L.stamp(this)}`, this.parentPane)
@@ -261,6 +262,7 @@ L.U.DataLayer = L.Evented.extend({
     }
     this.backupOptions()
     this.connectToMap()
+    this.permissions = new L.U.DataLayerPermissions(this)
     if (this.showAtLoad()) this.show()
     if (!this.umap_id) this.isDirty = true
 
@@ -350,6 +352,12 @@ L.U.DataLayer = L.Evented.extend({
     this.map.get(this._dataUrl(), {
       callback: function (geojson, response) {
         this._last_modified = response.getResponseHeader('Last-Modified')
+        // FIXME: for now this property is set dynamically from backend
+        // And thus it's not in the geojson file in the server
+        // So do not let all options to be reset
+        // Fix is a proper migration so all datalayers settings are
+        // in DB, and we remove it from geojson flat files.
+        geojson['_umap_options']['editMode'] = this.options.editMode
         this.fromUmapGeoJSON(geojson)
         this.backupOptions()
         this.fire('loaded')
@@ -489,7 +497,7 @@ L.U.DataLayer = L.Evented.extend({
     })
 
     // No browser cache for owners/editors.
-    if (this.map.options.allowEdit) url = `${url}?${Date.now()}`
+    if (this.map.hasEditMode()) url = `${url}?${Date.now()}`
     return url
   },
 
@@ -1182,16 +1190,18 @@ L.U.DataLayer = L.Evented.extend({
     }
   },
 
-  metadata: function () {
-    return {
-      id: this.umap_id,
-      name: this.options.name,
-      displayOnLoad: this.options.displayOnLoad,
-    }
-  },
-
   getRank: function () {
     return this.map.datalayers_index.indexOf(this)
+  },
+
+  isReadOnly: function () {
+    // isReadOnly must return true if unset
+    return this.options.editMode === 'disabled'
+  },
+
+  isDataReadOnly: function () {
+    // This layer cannot accept features
+    return this.isReadOnly() || this.isRemoteLayer()
   },
 
   save: function () {
@@ -1220,7 +1230,7 @@ L.U.DataLayer = L.Evented.extend({
         this._loaded = true
         this.redraw() // Needed for reordering features
         this.isDirty = false
-        this.map.continueSaving()
+        this.permissions.save()
       },
       context: this,
       headers: this._last_modified

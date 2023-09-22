@@ -15,7 +15,7 @@ L.Map.mergeOptions({
   default_interactive: true,
   default_labelDirection: 'auto',
   attributionControl: false,
-  allowEdit: true,
+  editMode: 'advanced',
   embedControl: true,
   zoomControl: true,
   datalayersControl: true,
@@ -103,7 +103,7 @@ L.U.Map.include({
     L.Util.setBooleanFromQueryString(this.options, 'moreControl')
     L.Util.setBooleanFromQueryString(this.options, 'scaleControl')
     L.Util.setBooleanFromQueryString(this.options, 'miniMap')
-    L.Util.setBooleanFromQueryString(this.options, 'allowEdit')
+    L.Util.setBooleanFromQueryString(this.options, 'editMode')
     L.Util.setBooleanFromQueryString(this.options, 'displayDataBrowserOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'captionBar')
@@ -122,7 +122,7 @@ L.U.Map.include({
     if (this.datalayersOnLoad)
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
 
-    if (L.Browser.ielt9) this.options.allowEdit = false // TODO include ie9
+    if (L.Browser.ielt9) this.options.editMode = 'disabled' // TODO include ie9
 
     let editedFeature = null
     const self = this
@@ -192,16 +192,15 @@ L.U.Map.include({
       this
     )
 
-    let isDirty = false // global status
+    let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
         get: function () {
-          return isDirty || this.dirty_datalayers.length
+          return isDirty
         },
         set: function (status) {
-          if (!isDirty && status) self.fire('isdirty')
           isDirty = status
-          self.checkDirty()
+          this.checkDirty()
         },
       })
     } catch (e) {
@@ -220,7 +219,7 @@ L.U.Map.include({
       this.isDirty = true
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      this.options.allowEdit = true
+      this.options.editMode = 'advanced'
       const datalayer = this.createDataLayer()
       datalayer.connectToMap()
       this.enableEdit()
@@ -238,7 +237,7 @@ L.U.Map.include({
     this.slideshow = new L.U.Slideshow(this, this.options.slideshow)
     this.permissions = new L.U.MapPermissions(this)
     this.initCaptionBar()
-    if (this.options.allowEdit) {
+    if (this.hasEditMode()) {
       this.editTools = new L.U.Editable(this)
       this.ui.on(
         'panel:closed panel:open',
@@ -277,7 +276,7 @@ L.U.Map.include({
     this.helpMenuActions = {}
     this._controls = {}
 
-    if (this.options.allowEdit && !this.options.noControl) {
+    if (this.hasEditMode() && !this.options.noControl) {
       new L.U.EditControl(this).addTo(this)
 
       new L.U.DrawToolbar({ map: this }).addTo(this)
@@ -496,7 +495,7 @@ L.U.Map.include({
         else this.ui.closePanel()
       }
 
-      if (!this.options.allowEdit) return
+      if (!this.hasEditMode()) return
 
       /* Edit mode only shortcuts */
       if (key === L.U.Keys.E && modifierKey && !this.editEnabled) {
@@ -1161,47 +1160,16 @@ L.U.Map.include({
     return JSON.stringify(umapfile, null, 2)
   },
 
-  save: function () {
-    if (!this.isDirty) return
-    if (this._default_extent) this.updateExtent()
+  saveSelf: function () {
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
       properties: this.exportOptions(),
     }
-    this.backup()
     const formData = new FormData()
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
-
-    function copyToClipboard(textToCopy) {
-      // https://stackoverflow.com/a/65996386
-      // Navigator clipboard api needs a secure context (https)
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(textToCopy)
-      } else {
-        // Use the 'out of viewport hidden text area' trick
-        const textArea = document.createElement('textarea')
-        textArea.value = textToCopy
-
-        // Move textarea out of the viewport so it's not visible
-        textArea.style.position = 'absolute'
-        textArea.style.left = '-999999px'
-
-        document.body.prepend(textArea)
-        textArea.select()
-
-        try {
-          document.execCommand('copy')
-        } catch (error) {
-          console.error(error)
-        } finally {
-          textArea.remove()
-        }
-      }
-    }
-
     this.post(this.getSaveUrl(), {
       data: formData,
       context: this,
@@ -1212,6 +1180,7 @@ L.U.Map.include({
           alert.content = L._('Congratulations, your map has been created!')
           this.options.umap_id = data.id
           this.permissions.setOptions(data.permissions)
+          this.permissions.commit()
           if (
             data.permissions &&
             data.permissions.anonymous_edit_url &&
@@ -1233,7 +1202,7 @@ L.U.Map.include({
               {
                 label: L._('Copy link'),
                 callback: () => {
-                  copyToClipboard(data.permissions.anonymous_edit_url)
+                  L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
                   this.ui.alert({
                     content: L._('Secret edit link copied to clipboard!'),
                     level: 'info',
@@ -1247,20 +1216,33 @@ L.U.Map.include({
           // Do not override local changes to permissions,
           // but update in case some other editors changed them in the meantime.
           this.permissions.setOptions(data.permissions)
+          this.permissions.commit()
         }
         // Update URL in case the name has changed.
         if (history && history.pushState)
           history.pushState({}, this.options.name, data.url)
         else window.location = data.url
         alert.content = data.info || alert.content
-        this.once('saved', function () {
-          this.isDirty = false
-          this.ui.alert(alert)
-        })
+        this.once('saved', () => this.ui.alert(alert))
         this.ui.closePanel()
         this.permissions.save()
       },
     })
+  },
+
+  save: function () {
+    if (!this.isDirty) return
+    if (this._default_extent) this.updateExtent()
+    this.backup()
+    this.once('saved', () => {
+      this.isDirty = false
+    })
+    if (this.options.editMode === 'advanced') {
+      // Only save the map if the user has the rights to do so.
+      this.saveSelf()
+    } else {
+      this.permissions.save()
+    }
   },
 
   sendEditLink: function () {
@@ -1330,14 +1312,14 @@ L.U.Map.include({
     datalayer = this.lastUsedDataLayer
     if (
       datalayer &&
-      !datalayer.isRemoteLayer() &&
+      !datalayer.isDataReadOnly() &&
       datalayer.canBrowse() &&
       datalayer.isVisible()
     ) {
       return datalayer
     }
     datalayer = this.findDataLayer((datalayer) => {
-      if (!datalayer.isRemoteLayer() && datalayer.canBrowse()) {
+      if (!datalayer.isDataReadOnly() && datalayer.canBrowse()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
       }
@@ -1733,20 +1715,28 @@ L.U.Map.include({
   _advancedActions: function (container) {
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
-    const del = L.DomUtil.create('a', 'button umap-delete', advancedButtons)
-    del.href = '#'
-    del.textContent = L._('Delete')
-    L.DomEvent.on(del, 'click', L.DomEvent.stop).on(del, 'click', this.del, this)
+    if (this.permissions.isOwner()) {
+      const del = L.DomUtil.create('a', 'button umap-delete', advancedButtons)
+      del.href = '#'
+      del.title = L._('Delete map')
+      del.textContent = L._('Delete')
+      L.DomEvent.on(del, 'click', L.DomEvent.stop).on(del, 'click', this.del, this)
+      const empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
+      empty.href = '#'
+      empty.textContent = L._('Empty')
+      empty.title = L._('Delete all layers')
+      L.DomEvent.on(empty, 'click', L.DomEvent.stop).on(
+        empty,
+        'click',
+        this.empty,
+        this
+      )
+    }
     const clone = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
     clone.href = '#'
     clone.textContent = L._('Clone')
     clone.title = L._('Clone this map')
     L.DomEvent.on(clone, 'click', L.DomEvent.stop).on(clone, 'click', this.clone, this)
-    const empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
-    empty.href = '#'
-    empty.textContent = L._('Empty')
-    empty.title = L._('Delete all layers')
-    L.DomEvent.on(empty, 'click', L.DomEvent.stop).on(empty, 'click', this.empty, this)
     const download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
     download.href = '#'
     download.textContent = L._('Download')
@@ -1761,6 +1751,7 @@ L.U.Map.include({
 
   edit: function () {
     if (!this.editEnabled) return
+    if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
@@ -1794,6 +1785,10 @@ L.U.Map.include({
     this.editedFeature = null
     this.editEnabled = false
     this.fire('edit:disabled')
+  },
+
+  hasEditMode: function () {
+    return this.options.editMode === 'simple' || this.options.editMode === 'advanced'
   },
 
   getDisplayName: function () {
@@ -1952,7 +1947,7 @@ L.U.Map.include({
         items = items.concat(e.relatedTarget.getContextMenuItems(e))
       }
     }
-    if (this.options.allowEdit) {
+    if (this.hasEditMode()) {
       items.push('-')
       if (this.editEnabled) {
         if (!this.isDirty) {

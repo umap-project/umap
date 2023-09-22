@@ -273,7 +273,12 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 })
 
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
-L.U.SettingsToolbar = L.Toolbar.Control.extend({})
+L.U.SettingsToolbar = L.Toolbar.Control.extend({
+  addTo: function (map) {
+    if (map.options.editMode !== 'advanced') return
+    L.Toolbar.Control.prototype.addTo.call(this, map)
+  },
+})
 L.U.DrawToolbar = L.Toolbar.Control.extend({
   initialize: function (options) {
     L.Toolbar.Control.prototype.initialize.call(this, options)
@@ -608,21 +613,26 @@ L.U.DataLayer.include({
     edit.title = L._('Edit')
     table.title = L._('Edit properties in a table')
     remove.title = L._('Delete layer')
+    if (this.isReadOnly()) {
+      L.DomUtil.addClass(container, 'readonly')
+    }
+    else {
+      L.DomEvent.on(edit, 'click', this.edit, this)
+      L.DomEvent.on(table, 'click', this.tableEdit, this)
+      L.DomEvent.on(
+        remove,
+        'click',
+        function () {
+          if (!this.isVisible()) return
+          if (!confirm(L._('Are you sure you want to delete this layer?'))) return
+          this._delete()
+          this.map.ui.closePanel()
+        },
+        this
+      )
+    }
     L.DomEvent.on(toggle, 'click', this.toggle, this)
     L.DomEvent.on(zoomTo, 'click', this.zoomTo, this)
-    L.DomEvent.on(edit, 'click', this.edit, this)
-    L.DomEvent.on(table, 'click', this.tableEdit, this)
-    L.DomEvent.on(
-      remove,
-      'click',
-      function () {
-        if (!this.isVisible()) return
-        if (!confirm(L._('Are you sure you want to delete this layer?'))) return
-        this._delete()
-        this.map.ui.closePanel()
-      },
-      this
-    )
     L.DomUtil.addClass(container, this.getHidableClass())
     L.DomUtil.classIf(container, 'off', !this.isVisible())
     container.dataset.id = L.stamp(this)
@@ -993,11 +1003,13 @@ L.U.Map.include({
       }
     update()
     this.once('saved', L.bind(update, this))
-    name.href = '#'
-    share_status.href = '#'
     logo.href = '/'
-    L.DomEvent.on(name, 'click', this.edit, this)
-    L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
+    if (this.options.editMode === 'advanced') {
+      name.href = '#'
+      share_status.href = '#'
+      L.DomEvent.on(name, 'click', this.edit, this)
+      L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
+    }
     this.on('postsync', L.bind(update, this))
     const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
     save.href = '#'
@@ -1457,7 +1469,7 @@ L.U.IframeExporter = L.Evented.extend({
     miniMap: false,
     scrollWheelZoom: false,
     zoomControl: true,
-    allowEdit: false,
+    editMode: 'disabled',
     moreControl: true,
     searchControl: null,
     tilelayersControl: null,

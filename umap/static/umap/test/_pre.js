@@ -190,7 +190,7 @@ function initMap(options) {
       name: 'name of the map',
       description: 'The description of the map',
       locale: 'en',
-      allowEdit: true,
+      editMode: 'advanced',
       moreControl: true,
       scaleControl: true,
       miniMap: false,
@@ -198,6 +198,20 @@ function initMap(options) {
       displayCaptionOnLoad: false,
       displayPopupFooter: false,
       displayDataBrowserOnLoad: false,
+      permissions: {
+        share_status: 1,
+        owner: {
+          id: 1,
+          name: 'ybon',
+          url: '/en/user/ybon/',
+        },
+        editors: [],
+      },
+      user: {
+        id: 1,
+        name: 'foofoo',
+        url: '/en/me',
+      },
     },
   }
   default_options.properties.datalayers.push(defaultDatalayerData())
@@ -319,7 +333,11 @@ var RESPONSES = {
   datalayer64_GET: {
     crs: null,
     type: 'FeatureCollection',
-    _umap_options: defaultDatalayerData({name: 'hidden', id: 64, displayOnLoad: false }),
+    _umap_options: defaultDatalayerData({
+      name: 'hidden',
+      id: 64,
+      displayOnLoad: false,
+    }),
     features: [
       {
         geometry: {

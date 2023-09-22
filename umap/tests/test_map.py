@@ -60,6 +60,13 @@ def test_logged_in_user_should_be_allowed_for_anonymous_map_with_anonymous_edit_
     assert map.can_edit(user, request)
 
 
+def test_anonymous_user_should_not_be_allowed_for_anonymous_map(map, user, rf):  # noqa
+    map.owner = None
+    map.edit_status = map.OWNER
+    map.save()
+    assert not map.can_edit()
+
+
 def test_clone_should_return_new_instance(map, user):
     clone = map.clone()
     assert map.pk != clone.pk

@@ -20,7 +20,9 @@ L.U.MapPermissions = L.Class.extend({
         },
         set: function (status) {
           isDirty = status
-          if (status) self.map.isDirty = status
+          if (status) {
+            self.map.isDirty = status
+          }
         },
       })
     } catch (e) {
@@ -35,13 +37,13 @@ L.U.MapPermissions = L.Class.extend({
   isOwner: function () {
     return (
       this.map.options.user &&
-      this.map.permissions.options.owner &&
-      this.map.options.user.id == this.map.permissions.options.owner.id
+      this.map.options.permissions.owner &&
+      this.map.options.user.id == this.map.options.permissions.owner.id
     )
   },
 
   isAnonymousMap: function () {
-    return !this.map.permissions.options.owner
+    return !this.map.options.permissions.owner
   },
 
   getMap: function () {
@@ -49,6 +51,7 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   edit: function () {
+    if (this.map.options.editMode !== 'advanced') return
     if (!this.map.options.umap_id)
       return this.map.ui.alert({
         content: L._('Please save the map first'),
@@ -59,15 +62,16 @@ L.U.MapPermissions = L.Class.extend({
       title = L.DomUtil.create('h4', '', container)
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
-        const helpText = L._('Secret edit link is:<br>{link}', {
-          link: this.options.anonymous_edit_url,
-        })
+        const helpText = `${L._('Secret edit link:')}<br>${
+          this.options.anonymous_edit_url
+        }`
+        L.DomUtil.add('p', 'help-text', container, helpText)
         fields.push([
           'options.edit_status',
           {
             handler: 'IntSelect',
             label: L._('Who can edit'),
-            selectOptions: this.map.options.anonymous_edit_statuses,
+            selectOptions: this.map.options.edit_statuses,
             helpText: helpText,
           },
         ])
@@ -122,6 +126,10 @@ L.U.MapPermissions = L.Class.extend({
         this
       )
     }
+    L.DomUtil.add('h3', '', container, L._('Datalayers'))
+    this.map.eachDataLayer((datalayer) => {
+      datalayer.permissions.edit(container)
+    })
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
   },
 
@@ -197,6 +205,8 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   getShareStatusDisplay: function () {
-    return Object.fromEntries(this.map.options.share_statuses)[this.options.share_status]
-  }
+    return Object.fromEntries(this.map.options.share_statuses)[
+      this.options.share_status
+    ]
+  },
 })

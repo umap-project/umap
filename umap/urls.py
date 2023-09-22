@@ -13,7 +13,7 @@ from . import views
 from .decorators import (
     jsonize_view,
     login_required_if_not_anonymous_allowed,
-    map_permissions_check,
+    can_edit_map,
     can_view_map,
 )
 from .utils import decorated_patterns
@@ -145,14 +145,14 @@ map_urls = [
         name="datalayer_create",
     ),
     re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/update/(?P<pk>\d+)/$",
-        views.DataLayerUpdate.as_view(),
-        name="datalayer_update",
-    ),
-    re_path(
         r"^map/(?P<map_id>[\d]+)/datalayer/delete/(?P<pk>\d+)/$",
         views.DataLayerDelete.as_view(),
         name="datalayer_delete",
+    ),
+    re_path(
+        r"^map/(?P<map_id>[\d]+)/datalayer/permissions/(?P<pk>\d+)/$",
+        views.UpdateDataLayerPermissions.as_view(),
+        name="datalayer_permissions",
     ),
 ]
 if settings.FROM_EMAIL:
@@ -163,7 +163,15 @@ if settings.FROM_EMAIL:
             name="map_send_edit_link",
         )
     )
-i18n_urls += decorated_patterns([map_permissions_check, never_cache], *map_urls)
+datalayer_urls = [
+    re_path(
+        r"^map/(?P<map_id>[\d]+)/datalayer/update/(?P<pk>\d+)/$",
+        views.DataLayerUpdate.as_view(),
+        name="datalayer_update",
+    ),
+]
+i18n_urls += decorated_patterns([can_edit_map, never_cache], *map_urls)
+i18n_urls += decorated_patterns([never_cache], *datalayer_urls)
 urlpatterns += i18n_patterns(
     re_path(r"^$", views.home, name="home"),
     re_path(
