@@ -331,6 +331,7 @@ class DataLayer(NamedModel):
             self.geojson.storage.delete(old_name)
             self.geojson.name = new_name
             super(DataLayer, self).save(force_insert, force_update, **kwargs)
+        self.purge_gzip()
         self.purge_old_versions()
 
     def upload_to(self):
@@ -400,12 +401,17 @@ class DataLayer(NamedModel):
         root = self.storage_root()
         names = self.get_versions()[settings.UMAP_KEEP_VERSIONS :]
         for name in names:
-            for ext in ["", ".gz"]:
-                path = os.path.join(root, name + ext)
-                try:
-                    self.geojson.storage.delete(path)
-                except FileNotFoundError:
-                    pass
+            try:
+                self.geojson.storage.delete(os.path.join(root, name))
+            except FileNotFoundError:
+                pass
+
+    def purge_gzip(self):
+        root = self.storage_root()
+        names = self.geojson.storage.listdir(root)[1]
+        for name in names:
+            if name.startswith(f'{self.pk}_') and name.endswith(".gz"):
+                self.geojson.storage.delete(os.path.join(root, name))
 
 
 class Star(models.Model):
