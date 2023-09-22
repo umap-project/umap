@@ -14,6 +14,7 @@ from .decorators import (
     jsonize_view,
     login_required_if_not_anonymous_allowed,
     map_permissions_check,
+    can_view_map,
 )
 from .utils import decorated_patterns
 
@@ -47,7 +48,7 @@ i18n_urls = [
     ),
     re_path(r"^logout/$", views.logout, name="logout"),
     re_path(
-        r"^map/(?P<pk>\d+)/geojson/$",
+        r"^map/(?P<map_id>\d+)/geojson/$",
         views.MapViewGeoJSON.as_view(),
         name="map_geojson",
     ),
@@ -63,28 +64,31 @@ i18n_urls = [
     ),
 ]
 i18n_urls += decorated_patterns(
-    cache_control(must_revalidate=True),
+    [can_view_map, cache_control(must_revalidate=True)],
     re_path(
-        r"^datalayer/(?P<pk>[\d]+)/$",
+        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/$",
         views.DataLayerView.as_view(),
         name="datalayer_view",
     ),
     re_path(
-        r"^datalayer/(?P<pk>[\d]+)/versions/$",
+        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/versions/$",
         views.DataLayerVersions.as_view(),
         name="datalayer_versions",
     ),
     re_path(
-        r"^datalayer/(?P<pk>[\d]+)/(?P<name>[_\w]+.geojson)$",
+        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/(?P<name>[_\w]+.geojson)$",
         views.DataLayerVersion.as_view(),
         name="datalayer_version",
     ),
 )
 i18n_urls += decorated_patterns(
-    [ensure_csrf_cookie],
+    [can_view_map, ensure_csrf_cookie],
     re_path(
-        r"^map/(?P<slug>[-_\w]+)_(?P<pk>\d+)$", views.MapView.as_view(), name="map"
+        r"^map/(?P<slug>[-_\w]+)_(?P<map_id>\d+)$", views.MapView.as_view(), name="map"
     ),
+)
+i18n_urls += decorated_patterns(
+    [ensure_csrf_cookie],
     re_path(r"^map/new/$", views.MapNew.as_view(), name="map_new"),
 )
 i18n_urls += decorated_patterns(

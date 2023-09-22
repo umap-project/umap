@@ -47,6 +47,22 @@ def map_permissions_check(view_func):
     return wrapper
 
 
+def can_view_map(view_func):
+    """
+    Used for URLs dealing with viewing the map.
+    """
+
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
+        kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
+        if not map_inst.can_view(request):
+            return HttpResponseForbidden()
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
+
 def jsonize_view(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):

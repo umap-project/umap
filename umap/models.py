@@ -193,7 +193,7 @@ class Map(NamedModel):
     public = PublicManager()
 
     def get_absolute_url(self):
-        return reverse("map", kwargs={"slug": self.slug or "map", "pk": self.pk})
+        return reverse("map", kwargs={"slug": self.slug or "map", "map_id": self.pk})
 
     def get_anonymous_edit_url(self):
         signer = Signer()
