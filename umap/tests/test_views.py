@@ -11,7 +11,7 @@ from django.test import RequestFactory
 from umap import VERSION
 from umap.views import validate_url
 
-from .base import UserFactory
+from .base import UserFactory, MapFactory
 
 User = get_user_model()
 
@@ -288,6 +288,7 @@ def test_user_dashboard_display_user_maps(client, map):
 @pytest.mark.django_db
 def test_user_dashboard_display_user_maps_distinct(client, map):
     # cf https://github.com/umap-project/umap/issues/1325
+    anonymap = MapFactory(name="Map witout owner should not appear")
     user1 = UserFactory(username='user1')
     user2 = UserFactory(username='user2')
     map.editors.add(user1)
@@ -298,6 +299,7 @@ def test_user_dashboard_display_user_maps_distinct(client, map):
     assert response.status_code == 200
     body = response.content.decode()
     assert body.count(map.name) == 1
+    assert body.count(anonymap.name) == 0
 
 
 @pytest.mark.django_db
