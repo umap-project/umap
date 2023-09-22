@@ -357,7 +357,9 @@ L.U.DataLayer = L.Evented.extend({
         // So do not let all options to be reset
         // Fix is a proper migration so all datalayers settings are
         // in DB, and we remove it from geojson flat files.
-        geojson['_umap_options']['editMode'] = this.options.editMode
+        if (geojson._umap_options) geojson._umap_options.editMode = this.options.editMode
+        // In case of maps pre 1.0 still around
+        if (geojson._storage) geojson._storage.editMode = this.options.editMode
         this.fromUmapGeoJSON(geojson)
         this.backupOptions()
         this.fire('loaded')
