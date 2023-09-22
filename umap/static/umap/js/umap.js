@@ -104,7 +104,7 @@ L.U.Map.include({
     L.Util.setBooleanFromQueryString(this.options, 'moreControl')
     L.Util.setBooleanFromQueryString(this.options, 'scaleControl')
     L.Util.setBooleanFromQueryString(this.options, 'miniMap')
-    L.Util.setBooleanFromQueryString(this.options, 'editMode')
+    L.Util.setFromQueryString(this.options, 'editMode')
     L.Util.setBooleanFromQueryString(this.options, 'displayDataBrowserOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
     L.Util.setBooleanFromQueryString(this.options, 'captionBar')
