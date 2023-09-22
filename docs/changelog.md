@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 1.8.1 - 2023-09-22
+
+* Fix anonymous maps displayed by mistake in user dashboard by @yohanboniface in https://github.com/umap-project/umap/pull/1331
+* Do not try to set editMode on _umap_options for old maps by @yohanboniface in https://github.com/umap-project/umap/pull/1332
+* Fix datalayer's data duplicated at first save by @yohanboniface in https://github.com/umap-project/umap/pull/1334
+
+
 ## 1.8.0 - 2023-09-22
 
 * Allow to define permissions for each datalayer instead of for the whole map by @yohanboniface in https://github.com/umap-project/umap/pull/1307
