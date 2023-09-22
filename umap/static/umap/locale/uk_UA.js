@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Зберегти місце розташування як новий об’єкт",
     "Search a place name": "Шукати назву місця",
     "Search location": "Пошук місця",
-    "Secret edit link is:<br>{link}": "Секретне посилання для редагування:<br>{link}",
     "See all": "Переглянути усе",
     "See data layers": "Подивитися шари даних",
     "See full screen": "Дивитися в повноекранному режимі",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

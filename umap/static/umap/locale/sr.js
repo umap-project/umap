@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Сачувај локацију као нови елемент",
     "Search a place name": "Претражи локацију",
     "Search location": "Претражи локацију",
-    "Secret edit link is:<br>{link}": "Secret edit link is:<br>{link}",
     "See all": "Види све",
     "See data layers": "Прикажи унесене податке",
     "See full screen": "Увећана слика",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("sr", locale)
 L.setLocale("sr")

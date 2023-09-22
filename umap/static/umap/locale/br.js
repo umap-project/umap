@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Enrollañ al lec'h-mañ evel un elfenn nevez",
     "Search a place name": "Klask un anv-lec'h ",
     "Search location": "Klask ul lec'h",
-    "Secret edit link is:<br>{link}": "Liamm aozañ kuzh:<br>{link}",
     "See all": "Gwelet pep tra",
     "See data layers": "Diskouez ar gwiskadoù",
     "See full screen": "Gwelet e skramm a-bezh",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("br", locale)
 L.setLocale("br")

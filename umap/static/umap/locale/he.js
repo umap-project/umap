@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "לשמור את המיקום הזה כתכונה חדשה",
     "Search a place name": "חיפוש שם מקום",
     "Search location": "חיפוש מיקום",
-    "Secret edit link is:<br>{link}": "קישור העריכה הסודי הוא:<br>{link}",
     "See all": "להציג הכול",
     "See data layers": "להציג שכבות נתונים",
     "See full screen": "הצגת מסך מלא",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

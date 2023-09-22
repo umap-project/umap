@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Сохранить это местоположение как новый объект",
     "Search a place name": "Искать название места",
     "Search location": "Поиск местоположения",
-    "Secret edit link is:<br>{link}": "Секретная ссылка для редактирования:<br>{link}",
     "See all": "Посмотреть все",
     "See data layers": "Посмотреть слои данных",
     "See full screen": "Смотреть в полноэкранном режиме",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("ru", locale)
 L.setLocale("ru")

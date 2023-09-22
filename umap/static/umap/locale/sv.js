@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Spara denna plats som nytt kartobjekt",
     "Search a place name": "Sök efter ett platsnamn",
     "Search location": "Sök plats",
-    "Secret edit link is:<br>{link}": "Privat redigeringslänk är:<br>{link}",
     "See all": "Se alla",
     "See data layers": "Visa datalager",
     "See full screen": "Öppna i fullskärm",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

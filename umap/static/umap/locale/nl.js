@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Sla deze locatie op als nieuw object",
     "Search a place name": "Zoek plaatsnaam",
     "Search location": "Zoek locatie",
-    "Secret edit link is:<br>{link}": "Geheime link om te bewerken is\n{link}",
     "See all": "Toon alles",
     "See data layers": "Bekijk datalagen",
     "See full screen": "Op volledig scherm weergeven",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

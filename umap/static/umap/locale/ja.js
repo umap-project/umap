@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "この場所を新しい地物として保存",
     "Search a place name": "場所の名前を検索",
     "Search location": "地名で検索",
-    "Secret edit link is:<br>{link}": "非公開の編集用リンク:<br>{link}",
     "See all": "すべて表示",
     "See data layers": "データレイヤを見る",
     "See full screen": "フルスクリーン表示",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

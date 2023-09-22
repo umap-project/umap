@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Enregistrer ce lieu comme élément de la carte",
     "Search a place name": "Chercher un nom de lieu",
     "Search location": "Chercher un lieu",
-    "Secret edit link is:<br>{link}": "Lien d'édition secret : {link}",
     "See all": "Tout voir",
     "See data layers": "Voir les calques",
     "See full screen": "Voir en plein écran",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Modifier",
     "Powered by uMap": "Propulsé par uMap",
     "Search": "Chercher",
-    "Toggle direct input (advanced)": "Afficher le champ libre (avancé)"
+    "Toggle direct input (advanced)": "Afficher le champ libre (avancé)",
+    "Datalayers": "Calques",
+    "Delete map": "Supprimer la carte",
+    "Secret edit link:": "Lien d'édition secret :",
+    "Who can edit \"{layer}\"": "Qui peut modifier « {layer} »"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

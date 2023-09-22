@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Uložit tuto pozici jako nový objekt",
     "Search a place name": "Vyhledejte název místa",
     "Search location": "Vyhledat místo na mapě",
-    "Secret edit link is:<br>{link}": "Tajný odkaz na úpravy je: <br>{link}",
     "See all": "Zobraz vše",
     "See data layers": "Zobrazit datové vrstvy",
     "See full screen": "Na celou obrazovku",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

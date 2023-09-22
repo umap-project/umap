@@ -248,7 +248,6 @@ const locale = {
     "Save this location as new feature": "Salva questa posizione come nuovo oggetto",
     "Search a place name": "Cerca il nome di un luogo",
     "Search location": "Cerca un luogo",
-    "Secret edit link is:<br>{link}": "Il link segreto per la modifica è: {link}",
     "See all": "Vedi tutto",
     "See data layers": "Vedi i layer di dati",
     "See full screen": "Visualizza a schermo intero",
@@ -407,7 +406,11 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)"
+    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
+    "Datalayers": "Datalayers",
+    "Delete map": "Delete map",
+    "Secret edit link:": "Secret edit link:",
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
 }
 L.registerLocale("it", locale)
 L.setLocale("it")
