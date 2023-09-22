@@ -1,5 +1,19 @@
 # Changelog
 
+
+## 1.8.0 - 2023-09-22
+
+* Allow to define permissions for each datalayer instead of for the whole map by @yohanboniface in https://github.com/umap-project/umap/pull/1307
+* Fix table editor not closing anymore from fullwidth by @yohanboniface in https://github.com/umap-project/umap/pull/1316
+* Remove dot in property name by @yohanboniface in https://github.com/umap-project/umap/pull/1315
+* Update Ubuntu installation documentation by @jvmatl in https://github.com/umap-project/umap/pull/1322
+* Fix map displayed more than once in user dashboard when multiple editors by @yohanboniface in https://github.com/umap-project/umap/pull/1326
+* Update Docker documentation by @jvmatl in https://github.com/umap-project/umap/pull/1320
+* Docker: replace wait_for_database with depends_on and healthcheck by @openbrian in https://github.com/umap-project/umap/pull/1314
+* Prune old .gz when saving a datalayer by @yohanboniface in https://github.com/umap-project/umap/pull/1329
+* Restrict possible min/max zoom values by @davidbgk in https://github.com/umap-project/umap/pull/1321
+
+
 ## 1.7.3 - 2023-09-18
 
 * Use css width for img custom width by @yohanboniface in https://github.com/umap-project/umap/pull/1306
