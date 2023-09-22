@@ -14,6 +14,7 @@ L.Map.mergeOptions({
   default_popupContentTemplate: '# {name}\n{description}',
   default_interactive: true,
   default_labelDirection: 'auto',
+  maxZoomLimit: 20,
   attributionControl: false,
   editMode: 'advanced',
   embedControl: true,
@@ -1502,15 +1503,26 @@ L.U.Map.include({
           handler: 'BlurInput',
           helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
+          type: 'url',
         },
       ],
       [
         'options.tilelayer.maxZoom',
-        { handler: 'BlurIntInput', placeholder: L._('max zoom') },
+        {
+          handler: 'BlurIntInput',
+          placeholder: L._('max zoom'),
+          min: 0,
+          max: this.options.maxZoomLimit,
+        },
       ],
       [
         'options.tilelayer.minZoom',
-        { handler: 'BlurIntInput', placeholder: L._('min zoom') },
+        {
+          handler: 'BlurIntInput',
+          placeholder: L._('min zoom'),
+          min: 0,
+          max: this.options.maxZoomLimit,
+        },
       ],
       [
         'options.tilelayer.attribution',
@@ -1541,15 +1553,26 @@ L.U.Map.include({
           helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
           helpText: L._('Background overlay url'),
+          type: 'url',
         },
       ],
       [
         'options.overlay.maxZoom',
-        { handler: 'BlurIntInput', placeholder: L._('max zoom') },
+        {
+          handler: 'BlurIntInput',
+          placeholder: L._('max zoom'),
+          min: 0,
+          max: this.options.maxZoomLimit,
+        },
       ],
       [
         'options.overlay.minZoom',
-        { handler: 'BlurIntInput', placeholder: L._('min zoom') },
+        {
+          handler: 'BlurIntInput',
+          placeholder: L._('min zoom'),
+          min: 0,
+          max: this.options.maxZoomLimit,
+        },
       ],
       [
         'options.overlay.attribution',
