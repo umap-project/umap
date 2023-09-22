@@ -168,6 +168,24 @@ def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
     expect(delete).to_be_hidden()
 
 
+def test_create(tilelayer, live_server, login, user):
+    page = login(user)
+    page.goto(f"{live_server.url}/en/map/new")
+    add_marker = page.get_by_title("Draw a marker")
+    map_el = page.locator("#map")
+    expect(add_marker).to_be_visible()
+    marker = page.locator(".leaflet-marker-icon")
+    expect(marker).to_have_count(0)
+    add_marker.click()
+    map_el.click(position={"x": 100, "y": 100})
+    expect(marker).to_have_count(1)
+    save = page.get_by_title("Save current edits")
+    expect(save).to_be_visible()
+    save.click()
+    sleep(1)  # Let save ajax go back
+    expect(marker).to_have_count(1)
+
+
 def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     page = login(user)
     page.goto(f"{live_server.url}/en/map/new")
