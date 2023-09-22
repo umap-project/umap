@@ -317,7 +317,8 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   resetLayer: function (force) {
-    if (this.layer && this.options.type === this.layer._type && !force) return
+    // Only reset if type is defined (undefined is the default) and different from current type
+    if (this.layer && (!this.options.type || this.options.type === this.layer._type) && !force) return
     const visible = this.isVisible()
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
