@@ -263,7 +263,12 @@ L.U.Map.include({
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
-      if (L.Util.queryString('edit')) this.enableEdit()
+      if (L.Util.queryString('edit')) {
+        if (this.hasEditMode()) this.enableEdit()
+        // Sometimes users share the ?edit link by mistake, let's redirect
+        // to canonical in this case
+        else window.location = window.location.pathname
+      }
       if (L.Util.queryString('download')) this.download()
     })
 
