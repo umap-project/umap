@@ -51,12 +51,15 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   edit: function () {
-    if (this.map.options.editMode !== 'advanced') return
-    if (!this.map.options.umap_id)
+    if (this.map.options.editMode !== 'advanced') {
+      return
+    }
+    if (!this.map.options.umap_id) {
       return this.map.ui.alert({
         content: L._('Please save the map first'),
         level: 'info',
       })
+    }
     const container = L.DomUtil.create('div', 'permissions-panel'),
       fields = [],
       title = L.DomUtil.create('h4', '', container)
@@ -148,15 +151,19 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   save: function () {
-    if (!this.isDirty) return this.map.continueSaving()
+    if (!this.isDirty) {
+      return this.map.continueSaving()
+    }
     const formData = new FormData()
     if (!this.isAnonymousMap() && this.options.editors) {
       const editors = this.options.editors.map((u) => u.id)
-      for (let i = 0; i < this.options.editors.length; i++)
+      for (let i = 0; i < this.options.editors.length; i++) {
         formData.append('editors', this.options.editors[i].id)
+      }
     }
-    if (this.isOwner() || this.isAnonymousMap())
+    if (this.isOwner() || this.isAnonymousMap()) {
       formData.append('edit_status', this.options.edit_status)
+    }
     if (this.isOwner()) {
       formData.append('owner', this.options.owner && this.options.owner.id)
       formData.append('share_status', this.options.share_status)

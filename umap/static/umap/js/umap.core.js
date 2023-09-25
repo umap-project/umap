@@ -13,7 +13,9 @@ L.Util.queryString = (name, fallback) => {
     qa = {}
   for (const i in qs) {
     const key = qs[i].split('=')
-    if (!key) continue
+    if (!key) {
+      continue
+    }
     qa[decode(key[0])] = key[1] ? decode(key[1]) : 1
   }
   return qa[name] || fallback
@@ -26,19 +28,27 @@ L.Util.booleanFromQueryString = (name) => {
 
 L.Util.setFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value
+  if (typeof value !== 'undefined') {
+    options[name] = value
+  }
 }
 
 L.Util.setBooleanFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
+  if (typeof value !== 'undefined') {
+    options[name] = value == '1' || value == 'true'
+  }
 }
 L.Util.setNullableBooleanFromQueryString = (options, name) => {
   let value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {
-    if (value === 'null') value = null
-    else if (value === '0' || value === 'false') value = false
-    else value = true
+    if (value === 'null') {
+      value = null
+    } else if (value === '0' || value === 'false') {
+      value = false
+    } else {
+      value = true
+    }
     options[name] = value
   }
 }
@@ -74,7 +84,9 @@ L.Util.escapeHTML = (s) => {
   return s
 }
 L.Util.toHTML = (r, options) => {
-  if (!r) return ''
+  if (!r) {
+    return ''
+  }
   const target = (options && options.target) || 'blank'
   let ii
 
@@ -94,8 +106,9 @@ L.Util.toHTML = (r, options) => {
   // unordered lists
   r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
   r = r.replace(/^\* (.*)/gm, '<ul><li>$1</li></ul>')
-  for (ii = 0; ii < 3; ii++)
+  for (ii = 0; ii < 3; ii++) {
     r = r.replace(new RegExp(`</ul>${newline}<ul>`, 'g'), newline)
+  }
 
   // links
   r = r.replace(/(\[\[http)/g, '[[h_t_t_p') // Escape for avoiding clash between [[http://xxx]] and http://xxx
@@ -129,13 +142,18 @@ L.Util.toHTML = (r, options) => {
 
   // images
   r = r.replace(/{{([^\]|]*?)}}/g, '<img src="$1">')
-  r = r.replace(/{{([^|]*?)\|(\d*?)(px)?}}/g, '<img src="$1" style="width:$2px;min-width:$2px;">')
+  r = r.replace(
+    /{{([^|]*?)\|(\d*?)(px)?}}/g,
+    '<img src="$1" style="width:$2px;min-width:$2px;">'
+  )
 
   //Unescape http
   r = r.replace(/(h_t_t_p)/g, 'http')
 
   // Preserver line breaks
-  if (newline) r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)
+  if (newline) {
+    r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)
+  }
 
   r = L.Util.escapeHTML(r)
 
@@ -151,13 +169,21 @@ L.Util.detectFileType = (f) => {
   if (f.type === 'application/vnd.google-earth.kml+xml' || ext('.kml')) {
     return 'kml'
   }
-  if (ext('.gpx')) return 'gpx'
-  if (ext('.geojson') || ext('.json')) return 'geojson'
+  if (ext('.gpx')) {
+    return 'gpx'
+  }
+  if (ext('.geojson') || ext('.json')) {
+    return 'geojson'
+  }
   if (f.type === 'text/csv' || ext('.csv') || ext('.tsv') || ext('.dsv')) {
     return 'csv'
   }
-  if (ext('.xml') || ext('.osm')) return 'osm'
-  if (ext('.umap')) return 'umap'
+  if (ext('.xml') || ext('.osm')) {
+    return 'osm'
+  }
+  if (ext('.umap')) {
+    return 'umap'
+  }
 }
 
 L.Util.usableOption = (options, option) =>
@@ -168,7 +194,9 @@ L.Util.greedyTemplate = (str, data, ignore) => {
     let value = data
     for (let i = 0; i < path.length; i++) {
       value = value[path[i]]
-      if (value === undefined) break
+      if (value === undefined) {
+        break
+      }
     }
     return value
   }
@@ -184,14 +212,21 @@ L.Util.greedyTemplate = (str, data, ignore) => {
       }
       for (let i = 0; i < vars.length; i++) {
         path = vars[i]
-        if (path.startsWith('"') && path.endsWith('"'))
-          value = path.substring(1, path.length - 1) // static default value.
-        else value = getValue(data, path.split('.'))
-        if (value !== undefined) break
+        if (path.startsWith('"') && path.endsWith('"')) {
+          value = path.substring(1, path.length - 1)
+        } else {
+          value = getValue(data, path.split('.'))
+        }
+        if (value !== undefined) {
+          break
+        }
       }
       if (value === undefined) {
-        if (ignore) value = str
-        else value = ''
+        if (ignore) {
+          value = str
+        } else {
+          value = ''
+        }
       }
       return value
     }
@@ -224,7 +259,9 @@ L.Util.sortFeatures = (features, sortKey) => {
           numeric: true,
         })
     }
-    if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
+    if (score === 0 && sortKeys[i + 1]) {
+      return sort(a, b, i + 1)
+    }
     return score * reverse
   }
 
@@ -239,7 +276,9 @@ L.Util.sortFeatures = (features, sortKey) => {
 }
 
 L.Util.flattenCoordinates = (coords) => {
-  while (coords[0] && typeof coords[0][0] !== 'number') coords = coords[0]
+  while (coords[0] && typeof coords[0][0] !== 'number') {
+    coords = coords[0]
+  }
   return coords
 }
 
@@ -258,32 +297,31 @@ L.Util.hasVar = (value) => {
 }
 
 L.Util.copyToClipboard = function (textToCopy) {
-      // https://stackoverflow.com/a/65996386
-      // Navigator clipboard api needs a secure context (https)
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(textToCopy)
-      } else {
-        // Use the 'out of viewport hidden text area' trick
-        const textArea = document.createElement('textarea')
-        textArea.value = textToCopy
+  // https://stackoverflow.com/a/65996386
+  // Navigator clipboard api needs a secure context (https)
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy)
+  } else {
+    // Use the 'out of viewport hidden text area' trick
+    const textArea = document.createElement('textarea')
+    textArea.value = textToCopy
 
-        // Move textarea out of the viewport so it's not visible
-        textArea.style.position = 'absolute'
-        textArea.style.left = '-999999px'
+    // Move textarea out of the viewport so it's not visible
+    textArea.style.position = 'absolute'
+    textArea.style.left = '-999999px'
 
-        document.body.prepend(textArea)
-        textArea.select()
+    document.body.prepend(textArea)
+    textArea.select()
 
-        try {
-          document.execCommand('copy')
-        } catch (error) {
-          console.error(error)
-        } finally {
-          textArea.remove()
-        }
-      }
+    try {
+      document.execCommand('copy')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      textArea.remove()
     }
-
+  }
+}
 
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
@@ -307,7 +345,9 @@ L.DomUtil.createFieldset = (container, legend, options) => {
       L.DomUtil.removeClass(fieldset, 'on')
     } else {
       L.DomUtil.addClass(fieldset, 'on')
-      if (options.callback) options.callback.call(options.context || this)
+      if (options.callback) {
+        options.callback.call(options.context || this)
+      }
     }
   })
   return fieldsEl
@@ -323,8 +363,11 @@ L.DomUtil.createButton = (className, container, content, callback, context) => {
 }
 
 L.DomUtil.classIf = (el, className, bool) => {
-  if (bool) L.DomUtil.addClass(el, className)
-  else L.DomUtil.removeClass(el, className)
+  if (bool) {
+    L.DomUtil.addClass(el, className)
+  } else {
+    L.DomUtil.removeClass(el, className)
+  }
 }
 
 L.DomUtil.element = (what, attrs, parent) => {
@@ -475,7 +518,7 @@ L.U.Help = L.Class.extend({
 
   link: function (container, entries) {
     const helpButton = this.button(container, entries, 'umap-help-link')
-    helpButton.textContent = L._("Help")
+    helpButton.textContent = L._('Help')
     return helpButton
   },
 
@@ -635,7 +678,9 @@ L.U.Orderable = L.Evented.extend({
     this.src = null
     this.dst = null
     this.els = this.parent.querySelectorAll(this.options.selector)
-    for (let i = 0; i < this.els.length; i++) this.makeDraggable(this.els[i])
+    for (let i = 0; i < this.els.length; i++) {
+      this.makeDraggable(this.els[i])
+    }
   },
 
   makeDraggable: function (node) {
@@ -654,7 +699,9 @@ L.U.Orderable = L.Evented.extend({
 
   findTarget: function (node) {
     while (node) {
-      if (this.nodeIndex(node) !== -1) return node
+      if (this.nodeIndex(node) !== -1) {
+        return node
+      }
       node = node.parentNode
     }
   },
@@ -670,7 +717,9 @@ L.U.Orderable = L.Evented.extend({
   },
 
   onDragOver: function (e) {
-    if (e.preventDefault) e.preventDefault() // Necessary. Allows us to drop.
+    if (e.preventDefault) {
+      e.preventDefault()
+    } // Necessary. Allows us to drop.
     e.dataTransfer.dropEffect = 'move'
     return false
   },
@@ -678,12 +727,17 @@ L.U.Orderable = L.Evented.extend({
   onDragEnter: function (e) {
     // e.target is the current hover target.
     const dst = this.findTarget(e.target)
-    if (!dst || dst === this.src) return
+    if (!dst || dst === this.src) {
+      return
+    }
     this.dst = dst
     const targetIndex = this.nodeIndex(this.dst),
       srcIndex = this.nodeIndex(this.src)
-    if (targetIndex > srcIndex) this.parent.insertBefore(this.dst, this.src)
-    else this.parent.insertBefore(this.src, this.dst)
+    if (targetIndex > srcIndex) {
+      this.parent.insertBefore(this.dst, this.src)
+    } else {
+      this.parent.insertBefore(this.src, this.dst)
+    }
   },
 
   onDragLeave: function (e) {
@@ -692,8 +746,12 @@ L.U.Orderable = L.Evented.extend({
 
   onDrop: function (e) {
     // e.target is current target element.
-    if (e.stopPropagation) e.stopPropagation() // Stops the browser from redirecting.
-    if (!this.dst) return
+    if (e.stopPropagation) {
+      e.stopPropagation()
+    } // Stops the browser from redirecting.
+    if (!this.dst) {
+      return
+    }
     this.fire('drop', {
       src: this.src,
       initialIndex: this.initialIndex,

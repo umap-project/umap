@@ -33,9 +33,11 @@ L.U.UI = L.Evented.extend({
     this._panel.innerHTML = ''
     const actionsContainer = L.DomUtil.create('ul', 'toolbox', this._panel)
     const body = L.DomUtil.create('div', 'body', this._panel)
-    if (e.data.html.nodeType && e.data.html.nodeType === 1)
+    if (e.data.html.nodeType && e.data.html.nodeType === 1) {
       body.appendChild(e.data.html)
-    else body.innerHTML = e.data.html
+    } else {
+      body.innerHTML = e.data.html
+    }
     const closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer)
     L.DomUtil.add('i', 'umap-close-icon', closeLink)
     const label = L.DomUtil.create('span', '', closeLink)
@@ -45,7 +47,9 @@ L.U.UI = L.Evented.extend({
         actionsContainer.appendChild(e.actions[i])
       }
     }
-    if (e.className) L.DomUtil.addClass(this._panel, e.className)
+    if (e.className) {
+      L.DomUtil.addClass(this._panel, e.className)
+    }
     if (L.DomUtil.hasClass(this.parent, 'umap-ui')) {
       // Already open.
       this.fire('panel:ready')
@@ -69,14 +73,20 @@ L.U.UI = L.Evented.extend({
   },
 
   alert: function (e) {
-    if (L.DomUtil.hasClass(this.parent, 'umap-alert')) this.ALERTS.push(e)
-    else this.popAlert(e)
+    if (L.DomUtil.hasClass(this.parent, 'umap-alert')) {
+      this.ALERTS.push(e)
+    } else {
+      this.popAlert(e)
+    }
   },
 
   popAlert: function (e) {
     if (!e) {
-      if (this.ALERTS.length) e = this.ALERTS.pop()
-      else return
+      if (this.ALERTS.length) {
+        e = this.ALERTS.pop()
+      } else {
+        return
+      }
     }
     let timeoutID
     const level_class = e.level && e.level == 'info' ? 'info' : 'error'
@@ -90,7 +100,9 @@ L.U.UI = L.Evented.extend({
       this._alert.innerHTML = ''
       L.DomUtil.removeClass(this.parent, 'umap-alert')
       L.DomUtil.removeClass(this._alert, level_class)
-      if (timeoutID) window.clearTimeout(timeoutID)
+      if (timeoutID) {
+        window.clearTimeout(timeoutID)
+      }
       this.popAlert()
     }
     const closeLink = L.DomUtil.create('a', 'umap-close-link', this._alert)
@@ -143,16 +155,23 @@ L.U.UI = L.Evented.extend({
     this.TOOLTIP_ID = Math.random()
     const id = this.TOOLTIP_ID
     L.DomUtil.addClass(this.parent, 'umap-tooltip')
-    if (e.anchor && e.position === 'top') this.anchorTooltipTop(e.anchor)
-    else if (e.anchor && e.position === 'left') this.anchorTooltipLeft(e.anchor)
-    else this.anchorTooltipAbsolute()
+    if (e.anchor && e.position === 'top') {
+      this.anchorTooltipTop(e.anchor)
+    } else if (e.anchor && e.position === 'left') {
+      this.anchorTooltipLeft(e.anchor)
+    } else {
+      this.anchorTooltipAbsolute()
+    }
     this._tooltip.innerHTML = e.content
     function closeIt() {
       this.closeTooltip(id)
     }
-    if (e.anchor) L.DomEvent.once(e.anchor, 'mouseout', closeIt, this)
-    if (e.duration !== Infinity)
+    if (e.anchor) {
+      L.DomEvent.once(e.anchor, 'mouseout', closeIt, this)
+    }
+    if (e.duration !== Infinity) {
       window.setTimeout(L.bind(closeIt, this), e.duration || 3000)
+    }
   },
 
   anchorTooltipAbsolute: function () {
@@ -184,7 +203,9 @@ L.U.UI = L.Evented.extend({
   },
 
   closeTooltip: function (id) {
-    if (id && id !== this.TOOLTIP_ID) return
+    if (id && id !== this.TOOLTIP_ID) {
+      return
+    }
     this._tooltip.innerHTML = ''
     L.DomUtil.removeClass(this.parent, 'umap-tooltip')
   },
@@ -194,14 +215,26 @@ L.U.UI = L.Evented.extend({
   },
 
   setTooltipPosition: function (coords) {
-    if (coords.left) this._tooltip.style.left = `${coords.left}px`
-    else this._tooltip.style.left = 'initial'
-    if (coords.right) this._tooltip.style.right = `${coords.right}px`
-    else this._tooltip.style.right = 'initial'
-    if (coords.top) this._tooltip.style.top = `${coords.top}px`
-    else this._tooltip.style.top = 'initial'
-    if (coords.bottom) this._tooltip.style.bottom = `${coords.bottom}px`
-    else this._tooltip.style.bottom = 'initial'
+    if (coords.left) {
+      this._tooltip.style.left = `${coords.left}px`
+    } else {
+      this._tooltip.style.left = 'initial'
+    }
+    if (coords.right) {
+      this._tooltip.style.right = `${coords.right}px`
+    } else {
+      this._tooltip.style.right = 'initial'
+    }
+    if (coords.top) {
+      this._tooltip.style.top = `${coords.top}px`
+    } else {
+      this._tooltip.style.top = 'initial'
+    }
+    if (coords.bottom) {
+      this._tooltip.style.bottom = `${coords.bottom}px`
+    } else {
+      this._tooltip.style.bottom = 'initial'
+    }
   },
 
   getDocHeight: function () {

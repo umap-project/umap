@@ -15,7 +15,9 @@ L.U.DataLayerPermissions = L.Class.extend({
         },
         set: function (status) {
           isDirty = status
-          if (status) self.datalayer.isDirty = status
+          if (status) {
+            self.datalayer.isDirty = status
+          }
         },
       })
     } catch (e) {
@@ -38,7 +40,9 @@ L.U.DataLayerPermissions = L.Class.extend({
           },
         ],
       ],
-      builder = new L.U.FormBuilder(this, fields, {className: 'umap-form datalayer-permissions'}),
+      builder = new L.U.FormBuilder(this, fields, {
+        className: 'umap-form datalayer-permissions',
+      }),
       form = builder.build()
     container.appendChild(form)
   },
@@ -50,7 +54,9 @@ L.U.DataLayerPermissions = L.Class.extend({
     })
   },
   save: function () {
-    if (!this.isDirty) return this.datalayer.map.continueSaving()
+    if (!this.isDirty) {
+      return this.datalayer.map.continueSaving()
+    }
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
     this.datalayer.map.post(this.getUrl(), {

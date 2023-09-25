@@ -107,7 +107,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
       properties
     )
     content = L.Util.greedyTemplate(template, properties)
-    content = L.Util.toHTML(content, {target: target})
+    content = L.Util.toHTML(content, { target: target })
     container.innerHTML = content
     return container
   },
@@ -120,20 +120,26 @@ L.U.PopupTemplate.Default = L.Class.extend({
         nextLi = L.DomUtil.create('li', 'next', footer),
         next = this.feature.getNext(),
         prev = this.feature.getPrevious()
-      if (next)
+      if (next) {
         nextLi.title = L._('Go to «{feature}»', {
           feature: next.properties.name || L._('next'),
         })
-      if (prev)
+      }
+      if (prev) {
         previousLi.title = L._('Go to «{feature}»', {
           feature: prev.properties.name || L._('previous'),
         })
+      }
       zoomLi.title = L._('Zoom to this feature')
       L.DomEvent.on(nextLi, 'click', () => {
-        if (next) next.zoomTo({ callback: next.view })
+        if (next) {
+          next.zoomTo({ callback: next.view })
+        }
       })
       L.DomEvent.on(previousLi, 'click', () => {
-        if (prev) prev.zoomTo({ callback: prev.view })
+        if (prev) {
+          prev.zoomTo({ callback: prev.view })
+        }
       })
       L.DomEvent.on(
         zoomLi,
@@ -148,9 +154,13 @@ L.U.PopupTemplate.Default = L.Class.extend({
 
   render: function () {
     const title = this.renderTitle()
-    if (title) this.container.appendChild(title)
+    if (title) {
+      this.container.appendChild(title)
+    }
     const body = this.renderBody()
-    if (body) L.DomUtil.add('div', 'umap-popup-content', this.container, body)
+    if (body) {
+      L.DomUtil.add('div', 'umap-popup-content', this.container, body)
+    }
     this.renderFooter()
   },
 })
@@ -184,7 +194,9 @@ L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
     const table = L.DomUtil.create('table')
 
     for (const key in this.feature.properties) {
-      if (typeof this.feature.properties[key] === 'object' || key === 'name') continue
+      if (typeof this.feature.properties[key] === 'object' || key === 'name') {
+        continue
+      }
       // TODO, manage links (url, mailto, wikipedia...)
       this.addRow(table, key, L.Util.escapeHTML(this.feature.properties[key]).trim())
     }

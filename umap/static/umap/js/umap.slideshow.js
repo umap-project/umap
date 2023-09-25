@@ -22,7 +22,9 @@ L.U.Slideshow = L.Class.extend({
         get: function () {
           if (!current) {
             const datalayer = this.defaultDatalayer()
-            if (datalayer) current = datalayer.getFeatureByIndex(0)
+            if (datalayer) {
+              current = datalayer.getFeatureByIndex(0)
+            }
           }
           return current
         },
@@ -70,7 +72,9 @@ L.U.Slideshow = L.Class.extend({
 
   timeSpinner: function () {
     const time = parseInt(this.options.delay, 10)
-    if (!time) return
+    if (!time) {
+      return
+    }
     const css = `rotation ${time / 1000}s infinite linear`,
       spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
     for (let i = 0; i < spinners.length; i++) {
@@ -95,8 +99,12 @@ L.U.Slideshow = L.Class.extend({
   },
 
   play: function () {
-    if (this._id) return
-    if (this.map.editEnabled || !this.map.options.slideshow.active) return
+    if (this._id) {
+      return
+    }
+    if (this.map.editEnabled || !this.map.options.slideshow.active) {
+      return
+    }
     L.DomUtil.addClass(document.body, L.U.Slideshow.CLASSNAME)
     this._id = window.setInterval(L.bind(this.loop, this), this.options.delay)
     this.resetSpinners()
@@ -129,12 +137,16 @@ L.U.Slideshow = L.Class.extend({
 
   backward: function () {
     this.pause()
-    if (this.current) this.current = this.current.getPrevious()
+    if (this.current) {
+      this.current = this.current.getPrevious()
+    }
     this.step()
   },
 
   step: function () {
-    if (!this.current) return this.stop()
+    if (!this.current) {
+      return this.stop()
+    }
     this.current.zoomTo({ easing: this.options.easing })
     this.current.view()
   },
@@ -151,8 +163,11 @@ L.U.Slideshow = L.Class.extend({
     next.title = L._('Zoom to the next')
     prev.title = L._('Zoom to the previous')
     const toggle = function () {
-      if (this._id) this.pause()
-      else this.play()
+      if (this._id) {
+        this.pause()
+      } else {
+        this.play()
+      }
     }
     L.DomEvent.on(play, 'click', L.DomEvent.stop).on(play, 'click', toggle, this)
     L.DomEvent.on(stop, 'click', L.DomEvent.stop).on(stop, 'click', this.stop, this)

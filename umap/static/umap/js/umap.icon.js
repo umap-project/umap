@@ -16,22 +16,30 @@ L.U.Icon = L.DivIcon.extend({
 
   _getIconUrl: function (name) {
     let url
-    if (this.feature && this.feature._getIconUrl(name))
+    if (this.feature && this.feature._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
-    else url = this.options[`${name}Url`]
+    } else {
+      url = this.options[`${name}Url`]
+    }
     return this.formatUrl(url, this.feature)
   },
 
   _getColor: function () {
     let color
-    if (this.feature) color = this.feature.getDynamicOption('color')
-    else if (this.options.color) color = this.options.color
-    else color = this.map.getDefaultOption('color')
+    if (this.feature) {
+      color = this.feature.getDynamicOption('color')
+    } else if (this.options.color) {
+      color = this.options.color
+    } else {
+      color = this.map.getDefaultOption('color')
+    }
     return color
   },
 
   _getOpacity: function () {
-    if (this.feature) return this.feature.getOption('iconOpacity')
+    if (this.feature) {
+      return this.feature.getOption('iconOpacity')
+    }
     return this.map.getDefaultOption('iconOpacity')
   },
 

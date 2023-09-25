@@ -67,11 +67,15 @@ L.U.Map.include({
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
-    if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
+    if (geojson.properties.locale) {
+      L.setLocale(geojson.properties.locale)
+    }
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs
-    if (geojson.properties.lang) L.lang = geojson.properties.lang
+    if (geojson.properties.lang) {
+      L.lang = geojson.properties.lang
+    }
 
     // Don't let default autocreation of controls
     const zoomControl =
@@ -89,7 +93,9 @@ L.U.Map.include({
     L.Map.prototype.initialize.call(this, el, geojson.properties)
 
     // After calling parent initialize, as we are doing initCenter our-selves
-    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+    if (geojson.geometry) {
+      this.options.center = this.latLng(geojson.geometry)
+    }
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
@@ -121,10 +127,13 @@ L.U.Map.include({
       'onLoadPanel',
       this.options.onLoadPanel
     )
-    if (this.datalayersOnLoad)
+    if (this.datalayersOnLoad) {
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
+    }
 
-    if (L.Browser.ielt9) this.options.editMode = 'disabled' // TODO include ie9
+    if (L.Browser.ielt9) {
+      this.options.editMode = 'disabled'
+    } // TODO include ie9
 
     let editedFeature = null
     const self = this
@@ -150,10 +159,12 @@ L.U.Map.include({
       this.options.slideshow &&
       this.options.slideshow.delay &&
       this.options.slideshow.active === undefined
-    )
+    ) {
       this.options.slideshow.active = true
-    if (this.options.advancedFilterKey)
+    }
+    if (this.options.advancedFilterKey) {
       this.options.facetKey = this.options.advancedFilterKey
+    }
 
     // Global storage for retrieving datalayers and features
     this.datalayers = {}
@@ -162,7 +173,9 @@ L.U.Map.include({
     this.features_index = {}
     this.facets = {}
 
-    if (this.options.hash) this.addHash()
+    if (this.options.hash) {
+      this.addHash()
+    }
     this.initTileLayers(this.options.tilelayers)
     // Needs tilelayer to exist for minimap
     this.initControls()
@@ -211,7 +224,9 @@ L.U.Map.include({
     this.on(
       'baselayerchange',
       function (e) {
-        if (this._controls.miniMap) this._controls.miniMap.onMainMapBaseLayerChange(e)
+        if (this._controls.miniMap) {
+          this._controls.miniMap.onMainMapBaseLayerChange(e)
+        }
       },
       this
     )
@@ -252,20 +267,30 @@ L.U.Map.include({
     }
     this.initShortcuts()
     this.onceDatalayersLoaded(function () {
-      if (L.Util.queryString('share')) this.renderShareBox()
-      else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
-      else if (this.options.onLoadPanel === 'caption') this.displayCaption()
-      else if (
+      if (L.Util.queryString('share')) {
+        this.renderShareBox()
+      } else if (this.options.onLoadPanel === 'databrowser') {
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'caption') {
+        this.displayCaption()
+      } else if (
         this.options.onLoadPanel === 'facet' ||
         this.options.onLoadPanel === 'datafilters'
-      )
+      ) {
         this.openFacet()
+      }
     })
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
-      if (slug && this.features_index[slug]) this.features_index[slug].view()
-      if (L.Util.queryString('edit')) this.enableEdit()
-      if (L.Util.queryString('download')) this.download()
+      if (slug && this.features_index[slug]) {
+        this.features_index[slug].view()
+      }
+      if (L.Util.queryString('edit')) {
+        this.enableEdit()
+      }
+      if (L.Util.queryString('download')) {
+        this.download()
+      }
     })
 
     window.onbeforeunload = () => this.isDirty || null
@@ -330,8 +355,11 @@ L.U.Map.include({
     this._controls.more = new L.U.MoreControls()
     this._controls.scale = L.control.scale()
     this._controls.permanentCredit = new L.U.PermanentCreditsControl(this)
-    if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
-    else this.scrollWheelZoom.disable()
+    if (this.options.scrollWheelZoom) {
+      this.scrollWheelZoom.enable()
+    } else {
+      this.scrollWheelZoom.disable()
+    }
     this.renderControls()
   },
 
@@ -350,7 +378,9 @@ L.U.Map.include({
     for (const i in this._controls) {
       this.removeControl(this._controls[i])
     }
-    if (this.options.noControl) return
+    if (this.options.noControl) {
+      return
+    }
 
     this._controls.attribution = new L.U.AttributionControl().addTo(this)
     if (this.options.miniMap && !this.options.noControl) {
@@ -367,16 +397,26 @@ L.U.Map.include({
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
       status = this.options[`${name}Control`]
-      if (status === false) continue
+      if (status === false) {
+        continue
+      }
       control = this._controls[name]
       control.addTo(this)
-      if (status === undefined || status === null)
+      if (status === undefined || status === null) {
         L.DomUtil.addClass(control._container, 'display-on-more')
-      else L.DomUtil.removeClass(control._container, 'display-on-more')
+      } else {
+        L.DomUtil.removeClass(control._container, 'display-on-more')
+      }
     }
-    if (this.options.permanentCredit) this._controls.permanentCredit.addTo(this)
-    if (this.options.moreControl) this._controls.more.addTo(this)
-    if (this.options.scaleControl) this._controls.scale.addTo(this)
+    if (this.options.permanentCredit) {
+      this._controls.permanentCredit.addTo(this)
+    }
+    if (this.options.moreControl) {
+      this._controls.more.addTo(this)
+    }
+    if (this.options.scaleControl) {
+      this._controls.scale.addTo(this)
+    }
   },
 
   initDatalayers: function () {
@@ -396,7 +436,9 @@ L.U.Map.include({
     }
     const decrementToLoad = () => {
       toload--
-      if (toload === 0) loaded()
+      if (toload === 0) {
+        loaded()
+      }
     }
     const dataLoaded = () => {
       this.dataLoaded = true
@@ -404,7 +446,9 @@ L.U.Map.include({
     }
     const decrementDataToLoad = () => {
       dataToload--
-      if (dataToload === 0) dataLoaded()
+      if (dataToload === 0) {
+        dataLoaded()
+      }
     }
     this.eachDataLayer(function (datalayer) {
       if (force && !datalayer.hasDataLoaded()) {
@@ -434,7 +478,9 @@ L.U.Map.include({
     this.datalayers_index = []
     for (let i = 0; i < panes.children.length; i++) {
       pane = panes.children[i]
-      if (!pane.dataset || !pane.dataset.id) continue
+      if (!pane.dataset || !pane.dataset.id) {
+        continue
+      }
       this.datalayers_index.push(this.datalayers[pane.dataset.id])
     }
     this.updateDatalayersControl()
@@ -467,7 +513,9 @@ L.U.Map.include({
   },
 
   updateDatalayersControl: function () {
-    if (this._controls.datalayers) this._controls.datalayers.update()
+    if (this._controls.datalayers) {
+      this._controls.datalayers.update()
+    }
   },
 
   backupOptions: function () {
@@ -493,11 +541,16 @@ L.U.Map.include({
         L.DomEvent.stop(e)
         this.search()
       } else if (e.keyCode === L.U.Keys.ESC) {
-        if (this.help.visible()) this.help.hide()
-        else this.ui.closePanel()
+        if (this.help.visible()) {
+          this.help.hide()
+        } else {
+          this.ui.closePanel()
+        }
       }
 
-      if (!this.hasEditMode()) return
+      if (!this.hasEditMode()) {
+        return
+      }
 
       /* Edit mode only shortcuts */
       if (key === L.U.Keys.E && modifierKey && !this.editEnabled) {
@@ -544,8 +597,12 @@ L.U.Map.include({
         this.help.show('edit')
       }
       if (e.keyCode === L.U.Keys.ESC) {
-        if (this.editEnabled) this.editTools.stopDrawing()
-        if (this.measureTools.enabled()) this.measureTools.stopDrawing()
+        if (this.editEnabled) {
+          this.editTools.stopDrawing()
+        }
+        if (this.measureTools.enabled()) {
+          this.measureTools.stopDrawing()
+        }
       }
     }
     L.DomEvent.addListener(document, 'keydown', globalShortcuts, this)
@@ -635,11 +692,15 @@ L.U.Map.include({
   },
 
   setOverlay: function () {
-    if (!this.options.overlay || !this.options.overlay.url_template) return
+    if (!this.options.overlay || !this.options.overlay.url_template) {
+      return
+    }
     const overlay = this.createTileLayer(this.options.overlay)
     try {
       this.addLayer(overlay)
-      if (this.overlay) this.removeLayer(this.overlay)
+      if (this.overlay) {
+        this.removeLayer(this.overlay)
+      }
       this.overlay = overlay
     } catch (e) {
       this.removeLayer(overlay)
@@ -658,7 +719,9 @@ L.U.Map.include({
 
   hasData: function () {
     for (const datalayer of this.datalayers_index) {
-      if (datalayer.hasData()) return true
+      if (datalayer.hasData()) {
+        return true
+      }
     }
   },
 
@@ -685,7 +748,9 @@ L.U.Map.include({
         }
         const datalayer = this.defaultDataLayer(),
           feature = datalayer.getFeatureByIndex(-1)
-        if (feature) feature.zoomTo()
+        if (feature) {
+          feature.zoomTo()
+        }
       })
     } else {
       this._setDefaultCenter()
@@ -748,7 +813,9 @@ L.U.Map.include({
   },
 
   getOption: function (option) {
-    if (L.Util.usableOption(this.options, option)) return this.options[option]
+    if (L.Util.usableOption(this.options, option)) {
+      return this.options[option]
+    }
     return this.getDefaultOption(option)
   },
 
@@ -773,12 +840,15 @@ L.U.Map.include({
         self.options.tilelayer = tilelayer.toJSON()
         self.isDirty = true
       }
-    if (this._controls.tilelayers)
+    if (this._controls.tilelayers) {
       this._controls.tilelayers.openSwitcher({ callback: callback, className: 'dark' })
+    }
   },
 
   manageDatalayers: function () {
-    if (this._controls.datalayers) this._controls.datalayers.openPanel()
+    if (this._controls.datalayers) {
+      this._controls.datalayers.openPanel()
+    }
   },
 
   toGeoJSON: function () {
@@ -874,8 +944,12 @@ L.U.Map.include({
           this.setView(this.latLng(this.options.center), this.options.zoom)
         })
       }
-      if (layerId) layer = map.datalayers[layerId]
-      if (layer && clearFlag.checked) layer.empty()
+      if (layerId) {
+        layer = map.datalayers[layerId]
+      }
+      if (layer && clearFlag.checked) {
+        layer.empty()
+      }
       if (fileInput.files.length) {
         let file
         for (let i = 0, file; (file = fileInput.files[i]); i++) {
@@ -893,16 +967,19 @@ L.U.Map.include({
             this.importFromFile(file, 'umap')
           } else {
             let importLayer = layer
-            if (!layer) importLayer = this.createDataLayer({ name: file.name })
+            if (!layer) {
+              importLayer = this.createDataLayer({ name: file.name })
+            }
             importLayer.importFromFile(file, type)
           }
         }
       } else {
-        if (!type)
+        if (!type) {
           return this.ui.alert({
             content: L._('Please choose a format'),
             level: 'error',
           })
+        }
         if (rawInput.value && type === 'umap') {
           try {
             this.importRaw(rawInput.value, type)
@@ -911,11 +988,16 @@ L.U.Map.include({
             console.error(e)
           }
         } else {
-          if (!layer) layer = this.createDataLayer()
-          if (rawInput.value) layer.importRaw(rawInput.value, type)
-          else if (urlInput.value) layer.importFromUrl(urlInput.value, type)
-          else if (presetSelect.selectedIndex > 0)
+          if (!layer) {
+            layer = this.createDataLayer()
+          }
+          if (rawInput.value) {
+            layer.importRaw(rawInput.value, type)
+          } else if (urlInput.value) {
+            layer.importFromUrl(urlInput.value, type)
+          } else if (presetSelect.selectedIndex > 0) {
             layer.importFromUrl(presetSelect[presetSelect.selectedIndex].value, type)
+          }
         }
       }
     }
@@ -928,7 +1010,9 @@ L.U.Map.include({
           newType
         for (let i = 0; i < e.target.files.length; i++) {
           newType = L.Util.detectFileType(e.target.files[i])
-          if (!type && newType) type = newType
+          if (!type && newType) {
+            type = newType
+          }
           if (type && newType !== type) {
             type = ''
             break
@@ -950,11 +1034,15 @@ L.U.Map.include({
       const option = this.editableOptions[i]
       if (typeof importedData.properties[option] !== 'undefined') {
         this.options[option] = importedData.properties[option]
-        if (option === 'sortKey') mustReindex = true
+        if (option === 'sortKey') {
+          mustReindex = true
+        }
       }
     }
 
-    if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
+    if (importedData.geometry) {
+      this.options.center = this.latLng(importedData.geometry)
+    }
     const self = this
     importedData.layers.forEach((geojson) => {
       delete geojson._umap_options['id'] // Never trust an id at this stage
@@ -966,7 +1054,9 @@ L.U.Map.include({
     this.renderControls()
     this.handleLimitBounds()
     this.eachDataLayer((datalayer) => {
-      if (mustReindex) datalayer.reindex()
+      if (mustReindex) {
+        datalayer.reindex()
+      }
       datalayer.redraw()
     })
     this.fire('postsync')
@@ -1011,7 +1101,9 @@ L.U.Map.include({
 
   eachDataLayerReverse: function (method, context, filter) {
     for (let i = this.datalayers_index.length - 1; i >= 0; i--) {
-      if (filter && !filter.call(context, this.datalayers_index[i])) continue
+      if (filter && !filter.call(context, this.datalayers_index[i])) {
+        continue
+      }
       method.call(context, this.datalayers_index[i])
     }
   },
@@ -1026,8 +1118,9 @@ L.U.Map.include({
 
   findDataLayer: function (method, context) {
     for (let i = this.datalayers_index.length - 1; i >= 0; i--) {
-      if (method.call(context, this.datalayers_index[i]))
+      if (method.call(context, this.datalayers_index[i])) {
         return this.datalayers_index[i]
+      }
     }
   },
 
@@ -1037,11 +1130,15 @@ L.U.Map.include({
   },
 
   reset: function () {
-    if (this.editTools) this.editTools.stopDrawing()
+    if (this.editTools) {
+      this.editTools.stopDrawing()
+    }
     this.resetOptions()
     this.datalayers_index = [].concat(this._datalayers_index_bk)
     this.dirty_datalayers.slice().forEach((datalayer) => {
-      if (datalayer.isDeleted) datalayer.connectToMap()
+      if (datalayer.isDeleted) {
+        datalayer.connectToMap()
+      }
       datalayer.reset()
     })
     this.ensurePanesOrder()
@@ -1070,8 +1167,11 @@ L.U.Map.include({
   },
 
   continueSaving: function () {
-    if (this.dirty_datalayers.length) this.dirty_datalayers[0].save()
-    else this.fire('saved')
+    if (this.dirty_datalayers.length) {
+      this.dirty_datalayers[0].save()
+    } else {
+      this.fire('saved')
+    }
   },
 
   editableOptions: [
@@ -1221,9 +1321,11 @@ L.U.Map.include({
           this.permissions.commit()
         }
         // Update URL in case the name has changed.
-        if (history && history.pushState)
+        if (history && history.pushState) {
           history.pushState({}, this.options.name, data.url)
-        else window.location = data.url
+        } else {
+          window.location = data.url
+        }
         alert.content = data.info || alert.content
         this.once('saved', () => this.ui.alert(alert))
         this.ui.closePanel()
@@ -1233,8 +1335,12 @@ L.U.Map.include({
   },
 
   save: function () {
-    if (!this.isDirty) return
-    if (this._default_extent) this.updateExtent()
+    if (!this.isDirty) {
+      return
+    }
+    if (this._default_extent) {
+      this.updateExtent()
+    }
     this.backup()
     this.once('saved', () => {
       this.isDirty = false
@@ -1276,11 +1382,12 @@ L.U.Map.include({
   },
 
   star: function () {
-    if (!this.options.umap_id)
+    if (!this.options.umap_id) {
       return this.ui.alert({
         content: L._('Please save the map first'),
         level: 'error',
       })
+    }
     let url = L.Util.template(this.options.urls.map_star, {
       map_id: this.options.umap_id,
     })
@@ -1323,10 +1430,14 @@ L.U.Map.include({
     datalayer = this.findDataLayer((datalayer) => {
       if (!datalayer.isDataReadOnly() && datalayer.canBrowse()) {
         fallback = datalayer
-        if (datalayer.isVisible()) return true
+        if (datalayer.isVisible()) {
+          return true
+        }
       }
     })
-    if (datalayer) return datalayer
+    if (datalayer) {
+      return datalayer
+    }
     if (fallback) {
       // No datalayer visible, let's force one
       this.addLayer(fallback.layer)
@@ -1447,7 +1558,9 @@ L.U.Map.include({
       callback: function (e) {
         this.initCaptionBar()
         this.eachDataLayer((datalayer) => {
-          if (e.helper.field === 'options.sortKey') datalayer.reindex()
+          if (e.helper.field === 'options.sortKey') {
+            datalayer.reindex()
+          }
           datalayer.redraw()
         })
       },
@@ -1475,8 +1588,9 @@ L.U.Map.include({
           e.helper.field === 'options.popupTemplate' ||
           e.helper.field === 'options.popupContentTemplate' ||
           e.helper.field === 'options.popupShape'
-        )
+        ) {
           return
+        }
         this.eachDataLayer((datalayer) => {
           datalayer.redraw()
         })
@@ -1774,8 +1888,12 @@ L.U.Map.include({
   },
 
   edit: function () {
-    if (!this.editEnabled) return
-    if (this.options.editMode !== 'advanced') return
+    if (!this.editEnabled) {
+      return
+    }
+    if (this.options.editMode !== 'advanced') {
+      return
+    }
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
@@ -1804,7 +1922,9 @@ L.U.Map.include({
   },
 
   disableEdit: function () {
-    if (this.isDirty) return
+    if (this.isDirty) {
+      return
+    }
     L.DomUtil.removeClass(document.body, 'umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
@@ -1877,7 +1997,9 @@ L.U.Map.include({
   },
 
   askForReset: function (e) {
-    if (!confirm(L._('Are you sure you want to cancel your changes?'))) return
+    if (!confirm(L._('Are you sure you want to cancel your changes?'))) {
+      return
+    }
     this.reset()
     this.disableEdit(e)
     this.ui.closePanel()
@@ -2096,11 +2218,15 @@ L.U.Map.include({
 
   closeInplaceToolbar: function () {
     const toolbar = this._toolbars[L.Toolbar.Popup._toolbar_class_id]
-    if (toolbar) toolbar.remove()
+    if (toolbar) {
+      toolbar.remove()
+    }
   },
 
   search: function () {
-    if (this._controls.search) this._controls.search.openPanel(this)
+    if (this._controls.search) {
+      this._controls.search.openPanel(this)
+    }
   },
 
   getFilterKeys: function () {
@@ -2118,7 +2244,9 @@ L.U.Map.include({
   getLayersBounds: function () {
     const bounds = new L.latLngBounds()
     this.eachBrowsableDataLayer((d) => {
-      if (d.isVisible()) bounds.extend(d.layer.getBounds())
+      if (d.isVisible()) {
+        bounds.extend(d.layer.getBounds())
+      }
     })
     return bounds
   },

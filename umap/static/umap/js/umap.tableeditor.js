@@ -40,7 +40,9 @@ L.U.TableEditor = L.Class.extend({
         L._('Please enter the new name of this property'),
         property
       )
-      if (!newName || !this.validateName(newName)) return
+      if (!newName || !this.validateName(newName)) {
+        return
+      }
       this.datalayer.eachLayer((feature) => {
         feature.renameProperty(property, newName)
       })
@@ -63,10 +65,13 @@ L.U.TableEditor = L.Class.extend({
   },
 
   compileProperties: function () {
-    if (this.properties.length === 0) this.properties = ['name']
+    if (this.properties.length === 0) {
+      this.properties = ['name']
+    }
     // description is a forced textarea, don't edit it in a text input, or you lose cariage returns
-    if (this.properties.indexOf('description') !== -1)
+    if (this.properties.indexOf('description') !== -1) {
       this.properties.splice(this.properties.indexOf('description'), 1)
+    }
     this.properties.sort()
     this.field_properties = []
     for (let i = 0; i < this.properties.length; i++) {
@@ -105,7 +110,9 @@ L.U.TableEditor = L.Class.extend({
     label.textContent = label.title = L._('Add a new property')
     const addProperty = function () {
       const newName = prompt(L._('Please enter the name of the property'))
-      if (!newName || !this.validateName(newName)) return
+      if (!newName || !this.validateName(newName)) {
+        return
+      }
       this.datalayer.indexProperty(newName)
       this.edit()
     }

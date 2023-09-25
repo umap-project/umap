@@ -70,7 +70,9 @@ L.U.AutoComplete = L.Class.extend({
   onKeyDown: function (e) {
     switch (e.keyCode) {
       case L.U.Keys.TAB:
-        if (this.CURRENT !== null) this.setChoice()
+        if (this.CURRENT !== null) {
+          this.setChoice()
+        }
         L.DomEvent.stop(e)
         break
       case L.U.Keys.ENTER:
@@ -164,8 +166,11 @@ L.U.AutoComplete = L.Class.extend({
       this.clear()
       return
     }
-    if (`${val}` === `${this.CACHE}`) return
-    else this.CACHE = val
+    if (`${val}` === `${this.CACHE}`) {
+      return
+    } else {
+      this.CACHE = val
+    }
     this._do_search(
       val,
       function (data) {
@@ -227,8 +232,11 @@ L.U.AutoComplete = L.Class.extend({
 
   highlight: function () {
     this.forEach(this.RESULTS, (result, index) => {
-      if (index === this.CURRENT) L.DomUtil.addClass(result.el, 'on')
-      else L.DomUtil.removeClass(result.el, 'on')
+      if (index === this.CURRENT) {
+        L.DomUtil.addClass(result.el, 'on')
+      } else {
+        L.DomUtil.removeClass(result.el, 'on')
+      }
     })
   },
 
@@ -260,7 +268,9 @@ L.U.AutoComplete = L.Class.extend({
 L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
   initialize: function (el, options) {
     L.U.AutoComplete.prototype.initialize.call(this, el, options)
-    if (!this.el) return this
+    if (!this.el) {
+      return this
+    }
     this.createInput()
     this.createContainer()
     this.selected_container = this.initSelectedContainer()

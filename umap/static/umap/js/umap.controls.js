@@ -6,8 +6,9 @@ L.U.BaseAction = L.ToolbarAction.extend({
       tooltip: this.options.tooltip,
     }
     L.ToolbarAction.prototype.initialize.call(this)
-    if (this.options.helpMenu && !this.map.helpMenuActions[this.options.className])
+    if (this.options.helpMenu && !this.map.helpMenuActions[this.options.className]) {
       this.map.helpMenuActions[this.options.className] = this
+    }
   },
 })
 
@@ -177,8 +178,11 @@ L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
   },
 
   onClick: function (e) {
-    if (this.feature._toggleEditing) this.feature._toggleEditing(e) // Path
-    else this.feature.edit(e) // Marker
+    if (this.feature._toggleEditing) {
+      this.feature._toggleEditing(e)
+    } else {
+      this.feature.edit(e)
+    } // Marker
   },
 })
 
@@ -191,8 +195,9 @@ L.U.DeleteFeatureAction = L.U.BaseFeatureAction.extend({
   },
 
   postInit: function () {
-    if (!this.feature.isMulti())
+    if (!this.feature.isMulti()) {
       this.options.toolbarIcon.className = 'umap-delete-one-of-one'
+    }
   },
 
   onClick: function (e) {
@@ -275,7 +280,9 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
 L.U.SettingsToolbar = L.Toolbar.Control.extend({
   addTo: function (map) {
-    if (map.options.editMode !== 'advanced') return
+    if (map.options.editMode !== 'advanced') {
+      return
+    }
     L.Toolbar.Control.prototype.addTo.call(this, map)
   },
 })
@@ -382,8 +389,11 @@ L.U.MoreControls = L.Control.extend({
     const pos = this.getPosition(),
       corner = this._map._controlCorners[pos],
       className = 'umap-more-controls'
-    if (L.DomUtil.hasClass(corner, className)) L.DomUtil.removeClass(corner, className)
-    else L.DomUtil.addClass(corner, className)
+    if (L.DomUtil.hasClass(corner, className)) {
+      L.DomUtil.removeClass(corner, className)
+    } else {
+      L.DomUtil.addClass(corner, className)
+    }
   },
 })
 
@@ -502,8 +512,12 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    if (!this._container) this._initLayout(map)
-    if (map.options.datalayersControl === 'expanded') this.expand()
+    if (!this._container) {
+      this._initLayout(map)
+    }
+    if (map.options.datalayersControl === 'expanded') {
+      this.expand()
+    }
     return this._container
   },
 
@@ -525,18 +539,21 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   collapse: function () {
-    if (this._map.options.datalayersControl === 'expanded') return
+    if (this._map.options.datalayersControl === 'expanded') {
+      return
+    }
     L.DomUtil.removeClass(this._container, 'expanded')
   },
 
   addDataLayer: function (container, datalayer, draggable) {
     const datalayerLi = L.DomUtil.create('li', '', container)
-    if (draggable)
+    if (draggable) {
       L.DomUtil.element(
         'i',
         { className: 'drag-handle', title: L._('Drag to reorder') },
         datalayerLi
       )
+    }
     datalayer.renderToolbox(datalayerLi)
     const title = L.DomUtil.add(
       'span',
@@ -557,7 +574,9 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   openPanel: function () {
-    if (!this.map.editEnabled) return
+    if (!this.map.editEnabled) {
+      return
+    }
     const container = L.DomUtil.create('ul', 'umap-browse-datalayers')
     this.map.eachDataLayerReverse(function (datalayer) {
       this.addDataLayer(container, datalayer, true)
@@ -569,11 +588,17 @@ L.U.DataLayersControl = L.Control.extend({
         const layer = this.map.datalayers[e.src.dataset.id],
           other = this.map.datalayers[e.dst.dataset.id],
           minIndex = Math.min(e.initialIndex, e.finalIndex)
-        if (e.finalIndex === 0) layer.bringToTop()
-        else if (e.finalIndex > e.initialIndex) layer.insertBefore(other)
-        else layer.insertAfter(other)
+        if (e.finalIndex === 0) {
+          layer.bringToTop()
+        } else if (e.finalIndex > e.initialIndex) {
+          layer.insertBefore(other)
+        } else {
+          layer.insertAfter(other)
+        }
         this.map.eachDataLayerReverse((datalayer) => {
-          if (datalayer.getRank() >= minIndex) datalayer.isDirty = true
+          if (datalayer.getRank() >= minIndex) {
+            datalayer.isDirty = true
+          }
         })
         this.map.indexDatalayers()
       },
@@ -615,16 +640,19 @@ L.U.DataLayer.include({
     remove.title = L._('Delete layer')
     if (this.isReadOnly()) {
       L.DomUtil.addClass(container, 'readonly')
-    }
-    else {
+    } else {
       L.DomEvent.on(edit, 'click', this.edit, this)
       L.DomEvent.on(table, 'click', this.tableEdit, this)
       L.DomEvent.on(
         remove,
         'click',
         function () {
-          if (!this.isVisible()) return
-          if (!confirm(L._('Are you sure you want to delete this layer?'))) return
+          if (!this.isVisible()) {
+            return
+          }
+          if (!confirm(L._('Are you sure you want to delete this layer?'))) {
+            return
+          }
           this._delete()
           this.map.ui.closePanel()
         },
@@ -673,7 +701,9 @@ L.U.DataLayer.include({
 L.U.DataLayer.addInitHook(function () {
   this.on('hide', this.propagateHide)
   this.on('show', this.propagateShow)
-  if (this.isVisible()) this.propagateShow()
+  if (this.isVisible()) {
+    this.propagateShow()
+  }
 })
 
 L.U.Map.include({
@@ -761,7 +791,9 @@ L.U.Map.include({
       const build = () => {
         ul.innerHTML = ''
         datalayer.eachFeature((feature) => {
-          if (filterValue && !feature.matchFilter(filterValue, filterKeys)) return
+          if (filterValue && !feature.matchFilter(filterValue, filterKeys)) {
+            return
+          }
           ul.appendChild(addFeature(feature))
         })
       }
@@ -808,7 +840,9 @@ L.U.Map.include({
 
     keys.forEach((key) => {
       knownValues[key] = []
-      if (!this.facets[key]) this.facets[key] = []
+      if (!this.facets[key]) {
+        this.facets[key] = []
+      }
     })
 
     this.eachBrowsableDataLayer((datalayer) => {
@@ -826,11 +860,14 @@ L.U.Map.include({
       let found = false
       this.eachBrowsableDataLayer((datalayer) => {
         datalayer.resetLayer(true)
-        if (datalayer.hasDataVisible()) found = true
+        if (datalayer.hasDataVisible()) {
+          found = true
+        }
       })
       // TODO: display a results counter in the panel instead.
-      if (!found)
+      if (!found) {
         this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
+      }
     }
 
     const fields = keys.map((current) => [
@@ -996,10 +1033,11 @@ L.U.Map.include({
         const status = this.permissions.getShareStatusDisplay()
         name.textContent = this.getDisplayName()
         // status is not set until map is saved once
-        if (status)
+        if (status) {
           share_status.textContent = L._('Visibility: {status}', {
             status: status,
           })
+        }
       }
     update()
     this.once('saved', L.bind(update, this))
@@ -1127,8 +1165,11 @@ L.U.Map.include({
     )
     exportCaveat.id = 'export_caveat_text'
     const toggleCaveat = () => {
-      if (typeInput.value === 'umap') exportCaveat.style.display = 'none'
-      else exportCaveat.style.display = 'inherit'
+      if (typeInput.value === 'umap') {
+        exportCaveat.style.display = 'none'
+      } else {
+        exportCaveat.style.display = 'inherit'
+      }
     }
     L.DomEvent.on(typeInput, 'change', toggleCaveat)
     for (const key in this.EXPORT_TYPES) {
@@ -1136,15 +1177,20 @@ L.U.Map.include({
         option = L.DomUtil.create('option', '', typeInput)
         option.value = key
         option.textContent = this.EXPORT_TYPES[key].name || key
-        if (this.EXPORT_TYPES[key].selected) option.selected = true
+        if (this.EXPORT_TYPES[key].selected) {
+          option.selected = true
+        }
       }
     }
     toggleCaveat()
     const download = L.DomUtil.create('a', 'button', container)
     download.textContent = L._('Download data')
     L.DomEvent.on(download, 'click', () => {
-      if (typeInput.value === 'umap') this.fullDownload()
-      else this.download(typeInput.value)
+      if (typeInput.value === 'umap') {
+        this.fullDownload()
+      } else {
+        this.download(typeInput.value)
+      }
     })
     this.ui.openPanel({ data: { html: container } })
   },
@@ -1215,8 +1261,9 @@ L.U.TileLayerControl = L.Control.extend({
       if (
         window.location.protocol === 'https:' &&
         tilelayer.options.url_template.indexOf('http:') === 0
-      )
+      ) {
         return
+      }
       this.addTileLayerElement(tilelayer, options)
     }, this)
     this.map.ui.openPanel({
@@ -1238,7 +1285,9 @@ L.U.TileLayerControl = L.Control.extend({
       'click',
       function () {
         this.map.selectTileLayer(tilelayer)
-        if (options && options.callback) options.callback(tilelayer)
+        if (options && options.callback) {
+          options.callback(tilelayer)
+        }
       },
       this
     )
@@ -1309,7 +1358,9 @@ L.U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
     this.options.url = map.options.urls.search
-    if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
+    if (map.options.maxBounds) {
+      this.options.bbox = map.options.maxBounds.toBBoxString()
+    }
   },
 
   onBlur: function (e) {
@@ -1379,7 +1430,9 @@ L.U.SearchControl = L.Control.extend({
       limit: 10,
       noResultLabel: L._('No results'),
     }
-    if (map.options.photonUrl) options.url = map.options.photonUrl
+    if (map.options.photonUrl) {
+      options.url = map.options.photonUrl
+    }
     const container = L.DomUtil.create('div', '')
 
     const title = L.DomUtil.create('h3', '', container)
@@ -1537,13 +1590,18 @@ L.U.Editable = L.Editable.extend({
     this.on('editable:drawing:end', this.closeTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (e) => {
-      if (e.layer._latlngs && e.layer._latlngs.length < e.layer.editor.MIN_VERTEX)
+      if (e.layer._latlngs && e.layer._latlngs.length < e.layer.editor.MIN_VERTEX) {
         e.layer.del()
-      if (e.layer instanceof L.U.Marker) e.layer.del()
+      }
+      if (e.layer instanceof L.U.Marker) {
+        e.layer.del()
+      }
     })
     this.on('editable:drawing:commit', function (e) {
       e.layer.isDirty = true
-      if (this.map.editedFeature !== e.layer) e.layer.edit(e)
+      if (this.map.editedFeature !== e.layer) {
+        e.layer.edit(e)
+      }
     })
     this.on('editable:editing', (e) => {
       const layer = e.layer
@@ -1555,11 +1613,14 @@ L.U.Editable = L.Editable.extend({
     })
     this.on('editable:vertex:ctrlclick', (e) => {
       const index = e.vertex.getIndex()
-      if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue))
+      if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue)) {
         e.vertex.continue()
+      }
     })
     this.on('editable:vertex:altclick', (e) => {
-      if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) e.vertex.delete()
+      if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) {
+        e.vertex.delete()
+      }
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
   },
@@ -1576,7 +1637,7 @@ L.U.Editable = L.Editable.extend({
     return new L.U.Marker(this.map, latlng, this._getDefaultProperties())
   },
 
-  _getDefaultProperties: function() {
+  _getDefaultProperties: function () {
     const result = {}
     if (this.map.options.featuresHaveOwner && this.map.options.hasOwnProperty('user')) {
       result.geojson = { properties: { owner: this.map.options.user.id } }

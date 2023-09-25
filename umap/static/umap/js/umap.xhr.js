@@ -159,12 +159,17 @@ L.U.Xhr = L.Evented.extend({
         self.ui.alert({ content: L._('An error occured'), level: 'error' })
       } else if (data.login_required) {
         // login_required should be an URL for the login form
-        if (settings.login_callback) settings.login_callback(data)
-        else self.login(data, args)
+        if (settings.login_callback) {
+          settings.login_callback(data)
+        } else {
+          self.login(data, args)
+        }
       } else {
-        if (settings.callback)
+        if (settings.callback) {
           L.bind(settings.callback, settings.context || this)(data, response)
-        else self.default_callback(data, settings, response)
+        } else {
+          self.default_callback(data, settings, response)
+        }
       }
     }
 
@@ -187,10 +192,14 @@ L.U.Xhr = L.Evented.extend({
   },
 
   submit_form: function (form_id, options) {
-    if (typeof options === 'undefined') options = {}
+    if (typeof options === 'undefined') {
+      options = {}
+    }
     const form = L.DomUtil.get(form_id)
     const formData = new FormData(form)
-    if (options.extraFormData) formData.append(options.extraFormData)
+    if (options.extraFormData) {
+      formData.append(options.extraFormData)
+    }
     options.data = formData
     this.post(form.action, options)
     return false
@@ -199,7 +208,9 @@ L.U.Xhr = L.Evented.extend({
   listen_form: function (form_id, options) {
     const form = L.DomUtil.get(form_id),
       self = this
-    if (!form) return
+    if (!form) {
+      return
+    }
     L.DomEvent.on(form, 'submit', L.DomEvent.stopPropagation)
       .on(form, 'submit', L.DomEvent.preventDefault)
       .on(form, 'submit', () => {
@@ -224,9 +235,11 @@ L.U.Xhr = L.Evented.extend({
     // default callback, to avoid boilerplate
     if (data.redirect) {
       const newPath = data.redirect
-      if (window.location.pathname == newPath)
-        window.location.reload() // Keep the hash, so the current view
-      else window.location = newPath
+      if (window.location.pathname == newPath) {
+        window.location.reload()
+      } else {
+        window.location = newPath
+      }
     } else if (data.info) {
       this.ui.alert({ content: data.info, level: 'info' })
       this.ui.closePanel()
@@ -235,7 +248,9 @@ L.U.Xhr = L.Evented.extend({
     } else if (data.html) {
       const ui_options = { data: data }
       let listen_options
-      if (options.className) ui_options.className = options.className
+      if (options.className) {
+        ui_options.className = options.className
+      }
       this.ui.openPanel(ui_options)
       // To low boilerplate, if there is a form, listen it
       if (options.listen_form) {
@@ -262,15 +277,21 @@ L.U.Xhr = L.Evented.extend({
     const self = this
     const proceed = () => {
       self.ui.closePanel()
-      if (typeof args !== 'undefined') self._json.apply(self, args)
-      else self.default_callback(data, {})
+      if (typeof args !== 'undefined') {
+        self._json.apply(self, args)
+      } else {
+        self.default_callback(data, {})
+      }
     }
     const ask_for_login = (data) => {
       self.ui.openPanel({ data: data, className: 'login-panel' })
       self.listen_form('login_form', {
         callback: function (data) {
-          if (data.html) ask_for_login(data) // Problem in the login - ask again
-          else proceed()
+          if (data.html) {
+            ask_for_login(data)
+          } else {
+            proceed()
+          }
         },
       })
       // Auth links
