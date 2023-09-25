@@ -13,7 +13,7 @@ L.Util.queryString = (name, fallback) => {
     qa = {}
   for (const i in qs) {
     const key = qs[i].split('=')
-    if (!key) continue
+    if (!key) {continue}
     qa[decode(key[0])] = key[1] ? decode(key[1]) : 1
   }
   return qa[name] || fallback
@@ -26,19 +26,19 @@ L.Util.booleanFromQueryString = (name) => {
 
 L.Util.setFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value
+  if (typeof value !== 'undefined') {options[name] = value}
 }
 
 L.Util.setBooleanFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
+  if (typeof value !== 'undefined') {options[name] = value == '1' || value == 'true'}
 }
 L.Util.setNullableBooleanFromQueryString = (options, name) => {
   let value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {
-    if (value === 'null') value = null
-    else if (value === '0' || value === 'false') value = false
-    else value = true
+    if (value === 'null') {value = null}
+    else if (value === '0' || value === 'false') {value = false}
+    else {value = true}
     options[name] = value
   }
 }
@@ -74,7 +74,7 @@ L.Util.escapeHTML = (s) => {
   return s
 }
 L.Util.toHTML = (r, options) => {
-  if (!r) return ''
+  if (!r) {return ''}
   const target = (options && options.target) || 'blank'
   let ii
 
@@ -95,7 +95,7 @@ L.Util.toHTML = (r, options) => {
   r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
   r = r.replace(/^\* (.*)/gm, '<ul><li>$1</li></ul>')
   for (ii = 0; ii < 3; ii++)
-    r = r.replace(new RegExp(`</ul>${newline}<ul>`, 'g'), newline)
+    {r = r.replace(new RegExp(`</ul>${newline}<ul>`, 'g'), newline)}
 
   // links
   r = r.replace(/(\[\[http)/g, '[[h_t_t_p') // Escape for avoiding clash between [[http://xxx]] and http://xxx
@@ -135,7 +135,7 @@ L.Util.toHTML = (r, options) => {
   r = r.replace(/(h_t_t_p)/g, 'http')
 
   // Preserver line breaks
-  if (newline) r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)
+  if (newline) {r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)}
 
   r = L.Util.escapeHTML(r)
 
@@ -148,16 +148,16 @@ L.Util.detectFileType = (f) => {
   function ext(_) {
     return filename.indexOf(_) !== -1
   }
-  if (f.type === 'application/vnd.google-earth.kml+xml' || ext('.kml')) {
-    return 'kml'
-  }
-  if (ext('.gpx')) return 'gpx'
-  if (ext('.geojson') || ext('.json')) return 'geojson'
-  if (f.type === 'text/csv' || ext('.csv') || ext('.tsv') || ext('.dsv')) {
-    return 'csv'
-  }
-  if (ext('.xml') || ext('.osm')) return 'osm'
-  if (ext('.umap')) return 'umap'
+  if (f.type === 'application/vnd.google-earth.kml+xml' || ext('.kml')) 
+    {return 'kml'}
+  
+  if (ext('.gpx')) {return 'gpx'}
+  if (ext('.geojson') || ext('.json')) {return 'geojson'}
+  if (f.type === 'text/csv' || ext('.csv') || ext('.tsv') || ext('.dsv')) 
+    {return 'csv'}
+  
+  if (ext('.xml') || ext('.osm')) {return 'osm'}
+  if (ext('.umap')) {return 'umap'}
 }
 
 L.Util.usableOption = (options, option) =>
@@ -168,7 +168,7 @@ L.Util.greedyTemplate = (str, data, ignore) => {
     let value = data
     for (let i = 0; i < path.length; i++) {
       value = value[path[i]]
-      if (value === undefined) break
+      if (value === undefined) {break}
     }
     return value
   }
@@ -179,20 +179,20 @@ L.Util.greedyTemplate = (str, data, ignore) => {
       const vars = key.split('|')
       let value
       let path
-      if (staticFallback !== undefined) {
-        vars.push(staticFallback)
-      }
+      if (staticFallback !== undefined) 
+        {vars.push(staticFallback)}
+      
       for (let i = 0; i < vars.length; i++) {
         path = vars[i]
         if (path.startsWith('"') && path.endsWith('"'))
-          value = path.substring(1, path.length - 1) // static default value.
-        else value = getValue(data, path.split('.'))
-        if (value !== undefined) break
+          {value = path.substring(1, path.length - 1)} // static default value.
+        else {value = getValue(data, path.split('.'))}
+        if (value !== undefined) {break}
       }
-      if (value === undefined) {
-        if (ignore) value = str
-        else value = ''
-      }
+      if (value === undefined) 
+        {if (ignore) {value = str}
+        else {value = ''}}
+      
       return value
     }
   )
@@ -211,27 +211,27 @@ L.Util.sortFeatures = (features, sortKey) => {
     let score
     const valA = a.properties[sortKey] || ''
     const valB = b.properties[sortKey] || ''
-    if (!valA) {
-      score = -1
-    } else if (!valB) {
-      score = 1
-    } else {
-      score = valA
+    if (!valA) 
+      {score = -1}
+     else if (!valB) 
+      {score = 1}
+     else 
+      {score = valA
         .toString()
         .toLowerCase()
         .localeCompare(valB.toString().toLowerCase(), L.lang || 'en', {
           sensitivity: 'base',
           numeric: true,
-        })
-    }
-    if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
+        })}
+    
+    if (score === 0 && sortKeys[i + 1]) {return sort(a, b, i + 1)}
     return score * reverse
   }
 
   features.sort((a, b) => {
-    if (!a.properties || !b.properties) {
-      return 0
-    }
+    if (!a.properties || !b.properties) 
+      {return 0}
+    
     return sort(a, b, 0)
   })
 
@@ -239,15 +239,15 @@ L.Util.sortFeatures = (features, sortKey) => {
 }
 
 L.Util.flattenCoordinates = (coords) => {
-  while (coords[0] && typeof coords[0][0] !== 'number') coords = coords[0]
+  while (coords[0] && typeof coords[0][0] !== 'number') {coords = coords[0]}
   return coords
 }
 
 L.Util.buildQueryString = (params) => {
   const query_string = []
-  for (const key in params) {
-    query_string.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-  }
+  for (const key in params) 
+    {query_string.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)}
+  
   return query_string.join('&')
 }
 
@@ -287,13 +287,13 @@ L.Util.copyToClipboard = function (textToCopy) {
 
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
-  if (content) {
-    if (content.nodeType && content.nodeType === 1) {
-      el.appendChild(content)
-    } else {
-      el.innerHTML = content
-    }
-  }
+  if (content) 
+    {if (content.nodeType && content.nodeType === 1) 
+      {el.appendChild(content)}
+     else 
+      {el.innerHTML = content}}
+    
+  
   return el
 }
 
@@ -307,7 +307,7 @@ L.DomUtil.createFieldset = (container, legend, options) => {
       L.DomUtil.removeClass(fieldset, 'on')
     } else {
       L.DomUtil.addClass(fieldset, 'on')
-      if (options.callback) options.callback.call(options.context || this)
+      if (options.callback) {options.callback.call(options.context || this)}
     }
   })
   return fieldsEl
@@ -316,25 +316,25 @@ L.DomUtil.createFieldset = (container, legend, options) => {
 L.DomUtil.createButton = (className, container, content, callback, context) => {
   const el = L.DomUtil.add('a', className, container, content)
   el.href = '#'
-  if (callback) {
-    L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)
-  }
+  if (callback) 
+    {L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)}
+  
   return el
 }
 
 L.DomUtil.classIf = (el, className, bool) => {
-  if (bool) L.DomUtil.addClass(el, className)
-  else L.DomUtil.removeClass(el, className)
+  if (bool) {L.DomUtil.addClass(el, className)}
+  else {L.DomUtil.removeClass(el, className)}
 }
 
 L.DomUtil.element = (what, attrs, parent) => {
   const el = document.createElement(what)
-  for (const attr in attrs) {
-    el[attr] = attrs[attr]
-  }
-  if (typeof parent !== 'undefined') {
-    parent.appendChild(el)
-  }
+  for (const attr in attrs) 
+    {el[attr] = attrs[attr]}
+  
+  if (typeof parent !== 'undefined') 
+    {parent.appendChild(el)}
+  
   return el
 }
 
@@ -352,27 +352,27 @@ L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\
 
 L.DomUtil.TextColorFromBackgroundColor = (el) => {
   let out = '#000000'
-  if (!window.getComputedStyle) {
-    return out
-  }
+  if (!window.getComputedStyle) 
+    {return out}
+  
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
-  if (!rgb || rgb.length !== 4) {
-    return out
-  }
+  if (!rgb || rgb.length !== 4) 
+    {return out}
+  
   rgb = parseInt(rgb[1], 10) + parseInt(rgb[2], 10) + parseInt(rgb[3], 10)
-  if (rgb < (255 * 3) / 2) {
-    out = '#ffffff'
-  }
+  if (rgb < (255 * 3) / 2) 
+    {out = '#ffffff'}
+  
   return out
 }
 L.DomEvent.once = (el, types, fn, context) => {
   // cf https://github.com/Leaflet/Leaflet/pull/3528#issuecomment-134551575
 
   if (typeof types === 'object') {
-    for (const type in types) {
-      L.DomEvent.once(el, type, types[type], fn)
-    }
+    for (const type in types) 
+      {L.DomEvent.once(el, type, types[type], fn)}
+    
     return L.DomEvent
   }
 
@@ -430,9 +430,9 @@ L.U.Help = L.Class.extend({
   onKeyDown: function (e) {
     const key = e.keyCode,
       ESC = 27
-    if (key === ESC) {
-      this.hide()
-    }
+    if (key === ESC) 
+      {this.hide()}
+    
   },
 
   show: function () {
@@ -459,8 +459,8 @@ L.U.Help = L.Class.extend({
   button: function (container, entries, classname) {
     const helpButton = L.DomUtil.create('a', classname || 'umap-help-button', container)
     helpButton.href = '#'
-    if (entries) {
-      L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
+    if (entries) 
+      {L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
         helpButton,
         'click',
         function (e) {
@@ -468,8 +468,8 @@ L.U.Help = L.Class.extend({
           this.show.apply(this, args)
         },
         this
-      )
-    }
+      )}
+    
     return helpButton
   },
 
@@ -492,9 +492,9 @@ L.U.Help = L.Class.extend({
       L.DomEvent.on(actionContainer, 'click', self.hide, self)
     }
     title.textContent = L._('Where do we go from here?')
-    for (const id in this.map.helpMenuActions) {
-      addAction(this.map.helpMenuActions[id])
-    }
+    for (const id in this.map.helpMenuActions) 
+      {addAction(this.map.helpMenuActions[id])}
+    
     return container
   },
 
@@ -635,7 +635,7 @@ L.U.Orderable = L.Evented.extend({
     this.src = null
     this.dst = null
     this.els = this.parent.querySelectorAll(this.options.selector)
-    for (let i = 0; i < this.els.length; i++) this.makeDraggable(this.els[i])
+    for (let i = 0; i < this.els.length; i++) {this.makeDraggable(this.els[i])}
   },
 
   makeDraggable: function (node) {
@@ -654,7 +654,7 @@ L.U.Orderable = L.Evented.extend({
 
   findTarget: function (node) {
     while (node) {
-      if (this.nodeIndex(node) !== -1) return node
+      if (this.nodeIndex(node) !== -1) {return node}
       node = node.parentNode
     }
   },
@@ -670,7 +670,7 @@ L.U.Orderable = L.Evented.extend({
   },
 
   onDragOver: function (e) {
-    if (e.preventDefault) e.preventDefault() // Necessary. Allows us to drop.
+    if (e.preventDefault) {e.preventDefault()} // Necessary. Allows us to drop.
     e.dataTransfer.dropEffect = 'move'
     return false
   },
@@ -678,12 +678,12 @@ L.U.Orderable = L.Evented.extend({
   onDragEnter: function (e) {
     // e.target is the current hover target.
     const dst = this.findTarget(e.target)
-    if (!dst || dst === this.src) return
+    if (!dst || dst === this.src) {return}
     this.dst = dst
     const targetIndex = this.nodeIndex(this.dst),
       srcIndex = this.nodeIndex(this.src)
-    if (targetIndex > srcIndex) this.parent.insertBefore(this.dst, this.src)
-    else this.parent.insertBefore(this.src, this.dst)
+    if (targetIndex > srcIndex) {this.parent.insertBefore(this.dst, this.src)}
+    else {this.parent.insertBefore(this.src, this.dst)}
   },
 
   onDragLeave: function (e) {
@@ -692,8 +692,8 @@ L.U.Orderable = L.Evented.extend({
 
   onDrop: function (e) {
     // e.target is current target element.
-    if (e.stopPropagation) e.stopPropagation() // Stops the browser from redirecting.
-    if (!this.dst) return
+    if (e.stopPropagation) {e.stopPropagation()} // Stops the browser from redirecting.
+    if (!this.dst) {return}
     this.fire('drop', {
       src: this.src,
       initialIndex: this.initialIndex,
