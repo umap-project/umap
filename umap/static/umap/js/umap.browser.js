@@ -116,7 +116,7 @@ L.U.Browser = L.Class.extend({
       })
     }
     const fields = [
-      ['options.filter', { handler: 'Input' }],
+      ['options.filter', { handler: 'Input', placeholder: L._('Filter') }],
       ['options.inBbox', { handler: 'Switch', label: L._('Current map view') }],
     ]
     const builder = new L.U.FormBuilder(this, fields, {
