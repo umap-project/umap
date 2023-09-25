@@ -692,6 +692,9 @@ L.U.Map.include({
 
     const filter = L.DomUtil.create('input', '', browserContainer)
     let filterValue = ''
+    const bboxLabel = L.DomUtil.add('label', '', browserContainer, L._('Current map view'))
+      inBbox = L.DomUtil.create('input', '', bboxLabel)
+    inBbox.type = 'checkbox'
 
     const featuresContainer = L.DomUtil.create(
       'div',
@@ -760,15 +763,23 @@ L.U.Map.include({
 
       const build = () => {
         ul.innerHTML = ''
+        const bounds = this.getBounds()
         datalayer.eachFeature((feature) => {
           if (filterValue && !feature.matchFilter(filterValue, filterKeys)) return
+          if (inBbox.checked && !feature.isOnScreen(bounds)) return
           ul.appendChild(addFeature(feature))
         })
       }
       build()
+      L.DomEvent.on(inBbox, 'click', build)
+      L.DomEvent.on(inBbox, 'click', () => {
+        if (inBbox.checked) this.on('moveend', build)
+        else this.off('moveend', build)
+      })
       datalayer.on('datachanged', build)
       datalayer.map.ui.once('panel:closed', () => {
         datalayer.off('datachanged', build)
+        this.off('moveend', build)
       })
       datalayer.map.ui.once('panel:ready', () => {
         datalayer.map.ui.once('panel:ready', () => {
