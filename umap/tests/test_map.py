@@ -50,11 +50,13 @@ def test_editors_can_edit_if_status_editors(map, user):
     assert map.can_edit(user)
 
 
-def test_logged_in_user_should_be_allowed_for_anonymous_map_with_anonymous_edit_status(map, user, rf):  # noqa
+def test_logged_in_user_should_be_allowed_for_anonymous_map_with_anonymous_edit_status(
+    map, user, rf
+):  # noqa
     map.owner = None
     map.edit_status = map.ANONYMOUS
     map.save()
-    url = reverse('map_update', kwargs={'map_id': map.pk})
+    url = reverse("map_detail", kwargs={"pk": map.pk})
     request = rf.get(url)
     request.user = user
     assert map.can_edit(user, request)
@@ -70,7 +72,7 @@ def test_anonymous_user_should_not_be_allowed_for_anonymous_map(map, user, rf): 
 def test_clone_should_return_new_instance(map, user):
     clone = map.clone()
     assert map.pk != clone.pk
-    assert u"Clone of " + map.name == clone.name
+    assert "Clone of " + map.name == clone.name
     assert map.settings == clone.settings
     assert map.center == clone.center
     assert map.zoom == clone.zoom
@@ -108,8 +110,7 @@ def test_clone_should_clone_datalayers_and_features_too(map, user, datalayer):
 def test_publicmanager_should_get_only_public_maps(map, user, licence):
     map.share_status = map.PUBLIC
     open_map = MapFactory(owner=user, licence=licence, share_status=Map.OPEN)
-    private_map = MapFactory(owner=user, licence=licence,
-                             share_status=Map.PRIVATE)
+    private_map = MapFactory(owner=user, licence=licence, share_status=Map.PRIVATE)
     assert map in Map.public.all()
     assert open_map not in Map.public.all()
     assert private_map not in Map.public.all()

@@ -9,6 +9,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.decorators.cache import cache_control, cache_page, never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from . import api_views
 from . import views
 from .decorators import (
     jsonize_view,
@@ -93,7 +94,7 @@ i18n_urls += decorated_patterns(
 )
 i18n_urls += decorated_patterns(
     [login_required_if_not_anonymous_allowed, never_cache],
-    re_path(r"^map/create/$", views.MapCreate.as_view(), name="map_create"),
+    path("api/maps/", api_views.MapList.as_view(), name="map_list"),
 )
 i18n_urls += decorated_patterns(
     [login_required],
@@ -115,9 +116,9 @@ i18n_urls += decorated_patterns(
 )
 map_urls = [
     re_path(
-        r"^map/(?P<map_id>[\d]+)/update/settings/$",
-        views.MapUpdate.as_view(),
-        name="map_update",
+        r"^api/map/(?P<pk>[\d]+)/$",
+        api_views.MapDetail.as_view(),
+        name="map_detail",
     ),
     re_path(
         r"^map/(?P<map_id>[\d]+)/update/permissions/$",

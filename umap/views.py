@@ -50,7 +50,6 @@ from .forms import (
     AnonymousDataLayerPermissionsForm,
     AnonymousMapPermissionsForm,
     FlatErrorList,
-    MapSettingsForm,
     SendLinkForm,
     UpdateMapPermissionsForm,
     UserProfileForm,
@@ -469,9 +468,7 @@ class MapDetailMixin:
         else:
             map_statuses = AnonymousMapPermissionsForm.STATUS
             datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
-        properties["edit_statuses"] = [
-            (i, str(label)) for i, label in map_statuses
-        ]
+        properties["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
         properties["datalayer_edit_statuses"] = [
             (i, str(label)) for i, label in datalayer_statuses
         ]
@@ -616,48 +613,6 @@ class MapViewGeoJSON(MapView):
 
 class MapNew(MapDetailMixin, TemplateView):
     template_name = "umap/map_detail.html"
-
-
-class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
-    model = Map
-    form_class = MapSettingsForm
-
-    def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.instance.owner = self.request.user
-        self.object = form.save()
-        permissions = self.get_permissions()
-        # User does not have the cookie yet.
-        if not self.object.owner:
-            anonymous_url = self.object.get_anonymous_edit_url()
-            permissions["anonymous_edit_url"] = anonymous_url
-        response = simple_json_response(
-            id=self.object.pk,
-            url=self.object.get_absolute_url(),
-            permissions=permissions,
-        )
-        if not self.request.user.is_authenticated:
-            key, value = self.object.signed_cookie_elements
-            response.set_signed_cookie(
-                key=key, value=value, max_age=ANONYMOUS_COOKIE_MAX_AGE
-            )
-        return response
-
-
-class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
-    model = Map
-    form_class = MapSettingsForm
-    pk_url_kwarg = "map_id"
-
-    def form_valid(self, form):
-        self.object.settings = form.cleaned_data["settings"]
-        self.object.save()
-        return simple_json_response(
-            id=self.object.pk,
-            url=self.object.get_absolute_url(),
-            permissions=self.get_permissions(),
-            info=_("Map has been updated!"),
-        )
 
 
 class UpdateMapPermissions(FormLessEditMixin, UpdateView):

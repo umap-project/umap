@@ -76,11 +76,7 @@ describe('L.U.DataLayer', function () {
     it('should call datalayer.save on save button click', function (done) {
       sinon.spy(this.datalayer, 'save')
       this.server.flush()
-      this.server.respondWith(
-        'POST',
-        '/map/99/update/settings/',
-        JSON.stringify({ id: 99 })
-      )
+      this.server.respondWith('PUT', '/map/99/', JSON.stringify({ id: 99 }))
       this.server.respondWith(
         'POST',
         '/map/99/datalayer/update/62/',
@@ -97,11 +93,7 @@ describe('L.U.DataLayer', function () {
     it('should show alert if server respond 412', function () {
       cleanAlert()
       this.server.flush()
-      this.server.respondWith(
-        'POST',
-        '/map/99/update/settings/',
-        JSON.stringify({ id: 99 })
-      )
+      this.server.respondWith('PUT', '/map/99/', JSON.stringify({ id: 99 }))
       this.server.respondWith('POST', '/map/99/datalayer/update/62/', [412, {}, ''])
       happen.click(editButton)
       input = qs('form.umap-form input[name="name"]')
@@ -178,11 +170,7 @@ describe('L.U.DataLayer', function () {
     it('should set umap_id on save callback', function () {
       assert.notOk(newDatalayer.umap_id)
       this.server.flush()
-      this.server.respondWith(
-        'POST',
-        '/map/99/update/settings/',
-        JSON.stringify({ id: 99 })
-      )
+      this.server.respondWith('PUT', '/map/99/', JSON.stringify({ id: 99 }))
       this.server.respondWith(
         'POST',
         '/map/99/datalayer/create/',
@@ -219,11 +207,7 @@ describe('L.U.DataLayer', function () {
       }
       var spy = sinon.spy(response)
       this.server.flush()
-      this.server.respondWith(
-        'POST',
-        '/map/99/update/settings/',
-        JSON.stringify({ id: 99 })
-      )
+      this.server.respondWith('PUT', '/map/99/', JSON.stringify({ id: 99 }))
       this.server.respondWith('POST', '/map/99/datalayer/update/63/', spy)
       clickSave()
       this.server.respond()
@@ -404,8 +388,7 @@ describe('L.U.DataLayer', function () {
     })
   })
 
-  describe("#displayOnLoad", function () {
-
+  describe('#displayOnLoad', function () {
     beforeEach(function () {
       this.server.respondWith(
         /\/datalayer\/64\/\?.*/,
@@ -415,27 +398,26 @@ describe('L.U.DataLayer', function () {
       // Force fetching the data, so to deal here with fake server
       this.datalayer.fetchData()
       this.server.respond()
-      this.map.setZoom(10, {animate: false})
-    });
+      this.map.setZoom(10, { animate: false })
+    })
 
     afterEach(function () {
       this.datalayer._delete()
     })
 
-    it("should not display layer at load", function () {
+    it('should not display layer at load', function () {
       assert.notOk(qs('path[fill="AliceBlue"]'))
     })
 
-    it("should display on click", function () {
+    it('should display on click', function () {
       happen.click(qs(`[data-id='${L.stamp(this.datalayer)}'] .layer-toggle`))
       assert.ok(qs('path[fill="AliceBlue"]'))
     })
 
-    it("should not display on zoom", function () {
-      this.map.setZoom(9, {animate: false})
+    it('should not display on zoom', function () {
+      this.map.setZoom(9, { animate: false })
       assert.notOk(qs('path[fill="AliceBlue"]'))
     })
-
   })
 
   describe('#facet-search()', function () {
@@ -474,22 +456,22 @@ describe('L.U.DataLayer', function () {
   })
   describe('#zoomEnd', function () {
     it('should honour the fromZoom option', function () {
-      this.map.setZoom(6, {animate: false})
+      this.map.setZoom(6, { animate: false })
       assert.ok(qs('path[fill="none"]'))
       this.datalayer.options.fromZoom = 6
-      this.map.setZoom(5, {animate: false})
+      this.map.setZoom(5, { animate: false })
       assert.notOk(qs('path[fill="none"]'))
-      this.map.setZoom(6, {animate: false})
+      this.map.setZoom(6, { animate: false })
       assert.ok(qs('path[fill="none"]'))
     })
 
     it('should honour the toZoom option', function () {
-      this.map.setZoom(6, {animate: false})
+      this.map.setZoom(6, { animate: false })
       assert.ok(qs('path[fill="none"]'))
       this.datalayer.options.toZoom = 6
-      this.map.setZoom(7, {animate: false})
+      this.map.setZoom(7, { animate: false })
       assert.notOk(qs('path[fill="none"]'))
-      this.map.setZoom(6, {animate: false})
+      this.map.setZoom(6, { animate: false })
       assert.ok(qs('path[fill="none"]'))
     })
   })

@@ -24,13 +24,13 @@ def post_data():
 
 
 def test_create(client, user, post_data):
-    url = reverse("map_create")
-    # POST only mendatory fields
+    url = reverse("map_list")
+    # POST only mandatory fields
     name = "test-map-with-new-name"
     post_data["name"] = name
     client.login(username=user.username, password="123123")
     response = client.post(url, post_data)
-    assert response.status_code == 200
+    assert response.status_code == 201
     j = json.loads(response.content.decode())
     created_map = Map.objects.latest("pk")
     assert j["id"] == created_map.pk
@@ -45,21 +45,22 @@ def test_create(client, user, post_data):
     }
 
 
-def test_map_create_permissions(client, settings):
+def test_map_list_permissions(client, settings):
     settings.UMAP_ALLOW_ANONYMOUS = False
-    url = reverse("map_create")
+    url = reverse("map_list")
     # POST anonymous
     response = client.post(url, {})
+    assert response.status_code == 200
     assert login_required(response)
 
 
 def test_map_update_access(client, map, user):
-    url = reverse("map_update", kwargs={"map_id": map.pk})
+    url = reverse("map_detail", kwargs={"pk": map.pk})
     # GET anonymous
     response = client.get(url)
     assert login_required(response)
     # POST anonymous
-    response = client.post(url, {})
+    response = client.put(url, {}, content_type="application/json")
     assert login_required(response)
     # GET with wrong permissions
     client.login(username=user.username, password="123123")
@@ -67,7 +68,7 @@ def test_map_update_access(client, map, user):
     assert response.status_code == 403
     # POST with wrong permissions
     client.login(username=user.username, password="123123")
-    response = client.post(url, {})
+    response = client.put(url, {}, content_type="application/json")
     assert response.status_code == 403
 
 
@@ -90,12 +91,12 @@ def test_map_update_permissions_access(client, map, user):
 
 
 def test_update(client, map, post_data):
-    url = reverse("map_update", kwargs={"map_id": map.pk})
-    # POST only mendatory fields
+    url = reverse("map_detail", kwargs={"pk": map.pk})
+    # PUT only mandatory fields
     name = "new map name"
     post_data["name"] = name
     client.login(username=map.owner.username, password="123123")
-    response = client.post(url, post_data)
+    response = client.put(url, post_data, content_type="application/json")
     assert response.status_code == 200
     j = json.loads(response.content.decode())
     assert "html" not in j
@@ -198,13 +199,13 @@ def test_clone_should_set_cloner_as_owner(client, map, user):
 
 
 def test_map_creation_should_allow_unicode_names(client, map, post_data):
-    url = reverse("map_create")
-    # POST only mendatory fields
+    url = reverse("map_list")
+    # POST only mandatory fields
     name = "Академический"
     post_data["name"] = name
     client.login(username=map.owner.username, password="123123")
     response = client.post(url, post_data)
-    assert response.status_code == 200
+    assert response.status_code == 201
     j = json.loads(response.content.decode())
     created_map = Map.objects.latest("pk")
     assert j["id"] == created_map.pk
@@ -317,25 +318,25 @@ def test_logged_in_user_can_edit_map_editable_by_anonymous(client, map, user):
     map.edit_status = map.ANONYMOUS
     map.save()
     client.login(username=user.username, password="123123")
-    url = reverse("map_update", kwargs={"map_id": map.pk})
+    url = reverse("map_detail", kwargs={"pk": map.pk})
     new_name = "this is my new name"
     data = {
         "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',  # noqa
         "name": new_name,
     }
-    response = client.post(url, data)
+    response = client.put(url, data, content_type="application/json")
     assert response.status_code == 200
     assert Map.objects.get(pk=map.pk).name == new_name
 
 
 @pytest.mark.usefixtures("allow_anonymous")
 def test_anonymous_create(cookieclient, post_data):
-    url = reverse("map_create")
-    # POST only mendatory fields
+    url = reverse("map_list")
+    # POST only mandatory fields
     name = "test-map-with-new-name"
     post_data["name"] = name
     response = cookieclient.post(url, post_data)
-    assert response.status_code == 200
+    assert response.status_code == 201
     j = json.loads(response.content.decode())
     created_map = Map.objects.latest("pk")
     assert j["id"] == created_map.pk
@@ -349,8 +350,8 @@ def test_anonymous_create(cookieclient, post_data):
 
 @pytest.mark.usefixtures("allow_anonymous")
 def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):  # noqa
-    url = reverse("map_update", kwargs={"map_id": anonymap.pk})
-    response = client.post(url, post_data)
+    url = reverse("map_detail", kwargs={"pk": anonymap.pk})
+    response = client.put(url, post_data, content_type="application/json")
     assert response.status_code == 403
 
 
@@ -358,11 +359,11 @@ def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):  # 
 def test_anonymous_update_with_cookie_should_work(
     cookieclient, anonymap, post_data
 ):  # noqa
-    url = reverse("map_update", kwargs={"map_id": anonymap.pk})
-    # POST only mendatory fields
+    url = reverse("map_detail", kwargs={"pk": anonymap.pk})
+    # POST only mandatory fields
     name = "new map name"
     post_data["name"] = name
-    response = cookieclient.post(url, post_data)
+    response = cookieclient.put(url, post_data, content_type="application/json")
     assert response.status_code == 200
     j = json.loads(response.content.decode())
     updated_map = Map.objects.get(pk=anonymap.pk)
@@ -522,7 +523,7 @@ def test_map_attach_owner_anonymous_not_allowed(cookieclient, anonymap, user):
 
 def test_create_readonly(client, user, post_data, settings):
     settings.UMAP_READONLY = True
-    url = reverse("map_create")
+    url = reverse("map_list")
     client.login(username=user.username, password="123123")
     response = client.post(url, post_data)
     assert response.status_code == 403

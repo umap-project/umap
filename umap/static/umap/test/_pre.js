@@ -114,7 +114,8 @@ function initMap(options) {
       urls: {
         map: '/map/{slug}_{pk}',
         datalayer_view: '/datalayer/{pk}/',
-        map_update: '/map/{map_id}/update/settings/',
+        map_list: '/api/maps/',
+        map_detail: '/api/maps/{map_id}/',
         map_old_url: '/map/{username}/{slug}/',
         map_clone: '/map/{map_id}/update/clone/',
         map_short_url: '/m/{pk}/',
@@ -122,7 +123,6 @@ function initMap(options) {
         map_new: '/map/new/',
         datalayer_update: '/map/{map_id}/datalayer/update/{pk}/',
         map_delete: '/map/{map_id}/update/delete/',
-        map_create: '/map/create/',
         logout: '/logout/',
         datalayer_create: '/map/{map_id}/datalayer/create/',
         login_popup_end: '/login/popupd/',

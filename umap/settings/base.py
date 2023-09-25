@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     "umap",
     "compressor",
     "social_django",
+    "rest_framework",
     # See https://github.com/peopledoc/django-agnocomplete/commit/26eda2dfa4a2f8a805ca2ea19a0c504b9d773a1c
     # Django does not find the app config in the default place, so the app is not loaded
     # so the "autodiscover" is not run.
@@ -281,6 +282,11 @@ if SOCIAL_AUTH_OPENSTREETMAP_KEY and SOCIAL_AUTH_OPENSTREETMAP_SECRET:
     )
 
 AUTHENTICATION_BACKENDS += ("django.contrib.auth.backends.ModelBackend",)
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"]
+}
 
 LOGGING = {
     "version": 1,

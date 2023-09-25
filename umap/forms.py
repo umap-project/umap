@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.gis.geos import Point
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.forms.utils import ErrorList
 
@@ -76,34 +75,6 @@ class AnonymousDataLayerPermissionsForm(forms.ModelForm):
     class Meta:
         model = DataLayer
         fields = ("edit_status",)
-
-
-class MapSettingsForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(MapSettingsForm, self).__init__(*args, **kwargs)
-        self.fields["slug"].required = False
-        self.fields["center"].widget.map_srid = 4326
-
-    def clean_slug(self):
-        slug = self.cleaned_data.get("slug", None)
-        name = self.cleaned_data.get("name", None)
-        if not slug and name:
-            # If name is empty, don't do nothing, validation will raise
-            # later on the process because name is required
-            self.cleaned_data["slug"] = slugify(name) or "map"
-            return self.cleaned_data["slug"][:50]
-        else:
-            return ""
-
-    def clean_center(self):
-        if not self.cleaned_data["center"]:
-            point = DEFAULT_CENTER
-            self.cleaned_data["center"] = point
-        return self.cleaned_data["center"]
-
-    class Meta:
-        fields = ("settings", "name", "center", "slug")
-        model = Map
 
 
 class UserProfileForm(forms.ModelForm):

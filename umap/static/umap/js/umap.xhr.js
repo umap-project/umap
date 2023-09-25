@@ -60,7 +60,7 @@ L.U.Xhr = L.Evented.extend({
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
-        if (xhr.status == 200) {
+        if (xhr.status == 200 || xhr.status == 201) {
           settings.callback.call(settings.context || xhr, xhr.responseText, xhr)
         } else if (xhr.status === 403) {
           self.ui.alert({
@@ -130,7 +130,7 @@ L.U.Xhr = L.Evented.extend({
     }
     const settings = L.Util.extend({}, default_options, options)
 
-    if (verb === 'POST') {
+    if (verb === 'POST' || verb === 'PUT') {
       // find a way not to make this django specific
       const token = document.cookie.replace(
         /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
@@ -184,6 +184,10 @@ L.U.Xhr = L.Evented.extend({
 
   post: function (uri, options) {
     this._json('POST', uri, options)
+  },
+
+  put: function (uri, options) {
+    this._json('PUT', uri, options)
   },
 
   submit_form: function (form_id, options) {

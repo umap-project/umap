@@ -33,7 +33,7 @@ def can_edit_map(view_func):
 
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
+        map_inst = get_object_or_404(Map, pk=kwargs.get("map_id", kwargs.get("pk")))
         user = request.user
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
         if map_inst.edit_status >= map_inst.EDITORS:
@@ -54,7 +54,7 @@ def can_view_map(view_func):
 
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
+        map_inst = get_object_or_404(Map, pk=kwargs.get("map_id", kwargs.get("pk")))
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
         if not map_inst.can_view(request):
             return HttpResponseForbidden()
