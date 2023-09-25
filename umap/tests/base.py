@@ -103,17 +103,14 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     description = "test description"
     display_on_load = True
     settings = {"displayOnLoad": True, "browsable": True, "name": name}
-    geojson = factory.django.FileField()
 
-    @factory.post_generation
-    def geojson_data(obj, create, extracted, **kwargs):
-        # Make sure DB settings and file settings are aligned.
-        # At some point, file settings should be removed, but we are not there yet.
-        data = DATALAYER_DATA.copy()
-        obj.settings["name"] = obj.name
-        data["_umap_options"] = obj.settings
-        with open(obj.geojson.path, mode="w") as f:
-            f.write(json.dumps(data))
+    @classmethod
+    def _adjust_kwargs(cls, **kwargs):
+        data = kwargs.pop("data", DATALAYER_DATA).copy()
+        kwargs["settings"]["name"] = kwargs["name"]
+        data["_umap_options"] = kwargs["settings"]
+        kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")
+        return kwargs
 
     class Meta:
         model = DataLayer
