@@ -1463,11 +1463,13 @@ a.add-datalayer:hover,
 .leaflet-contextmenu-icon {
     display: none;
 }
-.umap-popup-large img,
 .umap-popup-large iframe {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
     max-width: 100% !important;
     min-width: 500px;
+}
+.umap-popup-large .umap-popup-content {
+    width: 500px;
 }
 .umap-popup-content img {
     max-width: 100%;
@@ -1534,9 +1536,11 @@ a.add-datalayer:hover,
     .umap-permanent-credits-container {
         max-width: 100%;
     }
-    .umap-popup-large img,
     .umap-popup-large iframe {
         min-width: 300px;
+    }
+    .umap-popup-large .umap-popup-content {
+        width: 300px;
     }
 }
 
