@@ -331,6 +331,7 @@ L.U.Map.include({
     this._controls.permanentCredit = new L.U.PermanentCreditsControl(this)
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
+    this.browser = new L.U.Browser(this)
     this.renderControls()
   },
 
@@ -992,7 +993,7 @@ L.U.Map.include({
 
   openBrowser: function () {
     this.onceDatalayersLoaded(function () {
-      this._openBrowser()
+      this.browser.open()
     })
   },
 
