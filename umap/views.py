@@ -460,6 +460,7 @@ class MapDetailMixin:
                 (i, str(label)) for i, label in Map.SHARE_STATUS if i != Map.BLOCKED
             ],
             "umap_version": VERSION,
+            "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
         }
         created = bool(getattr(self, "object", None))
         if (created and self.object.owner) or (not created and not user.is_anonymous):

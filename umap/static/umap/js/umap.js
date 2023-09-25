@@ -47,6 +47,7 @@ L.Map.mergeOptions({
   easing: false,
   permissions: {},
   permanentCreditBackground: true,
+  featuresHaveOwner: false,
 })
 
 L.U.Map.include({
