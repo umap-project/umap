@@ -672,11 +672,12 @@ L.U.Map.include({
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
       this.onceDataLoaded(() => {
-        if (!this.hasData()) {
+        const bounds = this.getLayersBounds()
+        if (!this.hasData() || !bounds.isValid()) {
           this._setDefaultCenter()
           return
         }
-        this.fitBounds(this.getLayersBounds())
+        this.fitBounds(bounds)
       })
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
