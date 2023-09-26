@@ -9,55 +9,55 @@ your code repository.
 
 """
 
-from umap.settings.base import *   # pylint: disable=W0614,W0401
+from umap.settings.base import *  # pylint: disable=W0614,W0401
 
-SECRET_KEY = '!!change me!!'
-INTERNAL_IPS = ('127.0.0.1', )
-ALLOWED_HOSTS = ['*', ]
+SECRET_KEY = "!!change me!!"
+INTERNAL_IPS = ("127.0.0.1",)
+ALLOWED_HOSTS = [
+    "*",
+]
 
 DEBUG = True
 
-ADMINS = (
-    ('You', 'your@email'),
-)
+ADMINS = (("You", "your@email"),)
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'umap',
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": "umap",
     }
 }
 
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = True
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = "en"
 
 # Set to False if login into django account should not be possible. You can
 # administer accounts in the admin interface.
 ENABLE_ACCOUNT_LOGIN = True
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.bitbucket.BitbucketOAuth',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.openstreetmap.OpenStreetMapOAuth',
-    'django.contrib.auth.backends.ModelBackend',
+    "social_core.backends.github.GithubOAuth2",
+    "social_core.backends.bitbucket.BitbucketOAuth",
+    "social_core.backends.twitter.TwitterOAuth",
+    "social_core.backends.openstreetmap.OpenStreetMapOAuth",
+    "django.contrib.auth.backends.ModelBackend",
 )
-SOCIAL_AUTH_GITHUB_KEY = 'xxx'
-SOCIAL_AUTH_GITHUB_SECRET = 'xxx'
-SOCIAL_AUTH_BITBUCKET_KEY = 'xxx'
-SOCIAL_AUTH_BITBUCKET_SECRET = 'xxx'
-# We need email to associate with other Oauth providers
-SOCIAL_AUTH_GITHUB_SCOPE = ["user:email", ]
+SOCIAL_AUTH_GITHUB_KEY = "xxx"
+SOCIAL_AUTH_GITHUB_SECRET = "xxx"
+SOCIAL_AUTH_BITBUCKET_KEY = "xxx"
+SOCIAL_AUTH_BITBUCKET_SECRET = "xxx"
+# We need email to associate with other Oauth providers
+SOCIAL_AUTH_GITHUB_SCOPE = [
+    "user:email",
+]
 SOCIAL_AUTH_TWITTER_KEY = "xxx"
 SOCIAL_AUTH_TWITTER_SECRET = "xxx"
-SOCIAL_AUTH_OPENSTREETMAP_KEY = 'xxx'
-SOCIAL_AUTH_OPENSTREETMAP_SECRET = 'xxx'
-MIDDLEWARE += (
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-)
+SOCIAL_AUTH_OPENSTREETMAP_KEY = "xxx"
+SOCIAL_AUTH_OPENSTREETMAP_SECRET = "xxx"
+MIDDLEWARE += ("social_django.middleware.SocialAuthExceptionMiddleware",)
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
@@ -94,17 +94,17 @@ SHORT_SITE_URL = "http://s.hort"
 # }
 
 # POSTGIS_VERSION = (2, 1, 0)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Put the site in readonly mode (useful for migration or any maintenance)
 UMAP_READONLY = False
 
 
-# For static deployment
-STATIC_ROOT = '/srv/umap/var/static'
+# For static deployment
+STATIC_ROOT = "/srv/umap/var/static"
 
-# For users' statics (geojson mainly)
-MEDIA_ROOT = '/srv/umap/var/data'
+# For users' statics (geojson mainly)
+MEDIA_ROOT = "/srv/umap/var/data"
 
 # Default map location for new maps
 LEAFLET_LONGITUDE = 2
