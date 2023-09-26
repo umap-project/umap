@@ -615,8 +615,7 @@ L.U.DataLayer.include({
     remove.title = L._('Delete layer')
     if (this.isReadOnly()) {
       L.DomUtil.addClass(container, 'readonly')
-    }
-    else {
+    } else {
       L.DomEvent.on(edit, 'click', this.edit, this)
       L.DomEvent.on(table, 'click', this.tableEdit, this)
       L.DomEvent.on(
@@ -677,127 +676,6 @@ L.U.DataLayer.addInitHook(function () {
 })
 
 L.U.Map.include({
-  _openBrowser: function () {
-    const browserContainer = L.DomUtil.create('div', 'umap-browse-data')
-    // HOTFIX. Remove when this is merged and released:
-    // https://github.com/Leaflet/Leaflet/pull/9052
-    L.DomEvent.disableClickPropagation(browserContainer)
-
-    const title = L.DomUtil.add(
-      'h3',
-      'umap-browse-title',
-      browserContainer,
-      this.options.name
-    )
-
-    const filter = L.DomUtil.create('input', '', browserContainer)
-    let filterValue = ''
-
-    const featuresContainer = L.DomUtil.create(
-      'div',
-      'umap-browse-features',
-      browserContainer
-    )
-
-    const filterKeys = this.getFilterKeys()
-    filter.type = 'text'
-    filter.placeholder = L._('Filter…')
-    filter.value = this.options.filter || ''
-
-    const addFeature = (feature) => {
-      const feature_li = L.DomUtil.create('li', `${feature.getClassName()} feature`),
-        zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
-        edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
-        del = L.DomUtil.create('i', 'show-on-edit feature-delete', feature_li),
-        color = L.DomUtil.create('i', 'feature-color', feature_li),
-        title = L.DomUtil.create('span', 'feature-title', feature_li),
-        symbol = feature._getIconUrl
-          ? L.U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
-          : null
-      zoom_to.title = L._('Bring feature to center')
-      edit.title = L._('Edit this feature')
-      del.title = L._('Delete this feature')
-      title.textContent = feature.getDisplayName() || '—'
-      color.style.backgroundColor = feature.getOption('color')
-      if (symbol) {
-        color.style.backgroundImage = `url(${symbol})`
-      }
-      L.DomEvent.on(
-        zoom_to,
-        'click',
-        function (e) {
-          e.callback = L.bind(this.view, this)
-          this.zoomTo(e)
-        },
-        feature
-      )
-      L.DomEvent.on(
-        title,
-        'click',
-        function (e) {
-          e.callback = L.bind(this.view, this)
-          this.zoomTo(e)
-        },
-        feature
-      )
-      L.DomEvent.on(edit, 'click', feature.edit, feature)
-      L.DomEvent.on(del, 'click', feature.confirmDelete, feature)
-      return feature_li
-    }
-
-    const append = (datalayer) => {
-      const container = L.DomUtil.create(
-          'div',
-          datalayer.getHidableClass(),
-          featuresContainer
-        ),
-        headline = L.DomUtil.create('h5', '', container)
-      container.id = `browse_data_datalayer_${datalayer.umap_id}`
-      datalayer.renderToolbox(headline)
-      L.DomUtil.add('span', '', headline, datalayer.options.name)
-      const ul = L.DomUtil.create('ul', '', container)
-      L.DomUtil.classIf(container, 'off', !datalayer.isVisible())
-
-      const build = () => {
-        ul.innerHTML = ''
-        datalayer.eachFeature((feature) => {
-          if (filterValue && !feature.matchFilter(filterValue, filterKeys)) return
-          ul.appendChild(addFeature(feature))
-        })
-      }
-      build()
-      datalayer.on('datachanged', build)
-      datalayer.map.ui.once('panel:closed', () => {
-        datalayer.off('datachanged', build)
-      })
-      datalayer.map.ui.once('panel:ready', () => {
-        datalayer.map.ui.once('panel:ready', () => {
-          datalayer.off('datachanged', build)
-        })
-      })
-    }
-
-    const appendAll = function () {
-      this.options.filter = filterValue = filter.value
-      featuresContainer.innerHTML = ''
-      this.eachBrowsableDataLayer((datalayer) => {
-        append(datalayer)
-      })
-    }
-    const resetLayers = function () {
-      this.eachBrowsableDataLayer((datalayer) => {
-        datalayer.resetLayer(true)
-      })
-    }
-    L.bind(appendAll, this)()
-    L.DomEvent.on(filter, 'input', appendAll, this)
-    L.DomEvent.on(filter, 'input', resetLayers, this)
-
-    this.ui.openPanel({
-      data: { html: browserContainer },
-      actions: [this._aboutLink()],
-    })
-  },
 
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),

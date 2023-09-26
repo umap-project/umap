@@ -1154,7 +1154,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
   },
 
   initialize: function (obj, fields, options) {
-    this.map = obj.getMap()
+    this.map = obj.map || obj.getMap()
     L.FormBuilder.prototype.initialize.call(this, obj, fields, options)
     this.on('finish', this.finish)
   },

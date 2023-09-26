@@ -701,8 +701,8 @@ L.U.Marker = L.Marker.extend({
     }
   },
 
-  isOnScreen: function () {
-    const bounds = this.map.getBounds()
+  isOnScreen: function (bounds) {
+    bounds = bounds || this.map.getBounds()
     return bounds.contains(this._latlng)
   },
 
@@ -935,8 +935,8 @@ L.U.PathMixin = {
     return items
   },
 
-  isOnScreen: function () {
-    const bounds = this.map.getBounds()
+  isOnScreen: function (bounds) {
+    bounds = bounds || this.map.getBounds()
     return bounds.overlaps(this.getBounds())
   },
 }
