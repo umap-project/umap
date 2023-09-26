@@ -585,11 +585,11 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.pk
 
     def get_short_url(self):
-        shortUrl = None
-        if hasattr(settings, "SHORT_SITE_URL"):
+        short_url = None
+        if getattr(settings, "SHORT_SITE_URL", None):
             short_path = reverse_lazy("map_short_url", kwargs={"pk": self.object.pk})
-            shortUrl = "%s%s" % (settings.SHORT_SITE_URL, short_path)
-        return shortUrl
+            short_url = "%s%s" % (settings.SHORT_SITE_URL, short_path)
+        return short_url
 
     def get_geojson(self):
         map_settings = self.object.settings
