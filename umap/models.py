@@ -163,6 +163,7 @@ class Map(NamedModel):
         on_delete=models.SET_DEFAULT,
         default=get_default_licence,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
