@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.2 - 2023-09-27
+
+* Allow to restrict data browser items to current map view by @yohanboniface in https://github.com/umap-project/umap/pull/1339
+* Set an explicit width to popup large container by @yohanboniface in https://github.com/umap-project/umap/pull/1343
+* Do no try to fit data bounds if bounds are not valid by @yohanboniface in https://github.com/umap-project/umap/pull/1347
+* Make sure SHORT_SITE_URL is defined before exposing Map.short_url by @yohanboniface in https://github.com/umap-project/umap/pull/1346
+* Fix map's title when “dirty star” is present by @jschleic in https://github.com/umap-project/umap/pull/1348
+* Redirect to canonical when URL contains the ?edit parameter by @yohanboniface in https://github.com/umap-project/umap/pull/1336
+* Allow to add username to features (opt-in by instance) by @openbrian in https://github.com/umap-project/umap/pull/1324
+
 
 ## 1.8.1 - 2023-09-22
 
