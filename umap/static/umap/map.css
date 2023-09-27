@@ -147,7 +147,14 @@ a.umap-control-less {
     margin-bottom: 5px!important;
     padding: 0.5rem;
 }
-
+.attribution-toggle {
+    display: none;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    background-image: url('./img/16.svg');
+    background-position: 0px 0px;
+}
 
 
 
@@ -1542,6 +1549,22 @@ a.add-datalayer:hover,
     .umap-popup-large .umap-popup-content {
         width: 300px;
     }
+
+    .attribution-toggle {
+        display: inline-block;
+    }
+    .attribution-container {
+        display: none;
+    }
+    .leaflet-control-attribution:active .attribution-container,
+    .leaflet-control-attribution:hover .attribution-container {
+        display: inline;
+    }
+    .leaflet-control-attribution:hover .attribution-toggle {
+        display: none;
+    }
+
+
 }
 
 /* ****** */
