@@ -264,7 +264,14 @@ L.U.Map.include({
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
-      if (L.Util.queryString('edit')) this.enableEdit()
+      if (L.Util.queryString('edit')) {
+        if (this.hasEditMode()) this.enableEdit()
+        // Sometimes users share the ?edit link by mistake, let's remove
+        // this search parameter from URL to prevent this
+        const url = new URL(window.location)
+        url.searchParams.delete('edit')
+        history.pushState({}, '', url)
+      }
       if (L.Util.queryString('download')) this.download()
     })
 
