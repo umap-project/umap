@@ -516,7 +516,7 @@ ul.photon-autocomplete {
 a.map-name:after {
     content:  '\00a0';
     padding-left: 3px;
-    width: 5px;
+    width: 1ch;
     display: inline-block;
 }
 .umap-is-dirty a.map-name:after {
