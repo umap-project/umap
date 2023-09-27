@@ -94,6 +94,8 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+    # Should have been removed since page load
+    assert "edit" not in page.url
 
 
 def test_map_update_with_editor(map, live_server, login, user):
