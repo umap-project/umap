@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Form als separates Element extrahieren",
     "Fetch data each time map view changes.": "Daten jedes Mal abrufen, wenn sich die Kartenansicht ändert.",
     "Filter keys": "Schlüssel filtern",
-    "Filter…": "Elemente filtern...",
     "Format": "Format",
     "From zoom": "Von Zoomstufe",
     "Full map data": "Vollständige Kartendaten",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("de", locale)
 L.setLocale("de")

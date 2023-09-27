@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Izloči obliko v ločen predmet",
     "Fetch data each time map view changes.": "Pridobi podatke vsakič, ko se spremeni pogled zemljevida.",
     "Filter keys": "Filtri",
-    "Filter…": "Filter ...",
     "Format": "zapis",
     "From zoom": "Iz približanja",
     "Full map data": "Polni podatki zemljevida",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("sl", locale)
 L.setLocale("sl")

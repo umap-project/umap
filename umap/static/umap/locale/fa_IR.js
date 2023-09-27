@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "استخراج شکل به ویژگی جدا",
     "Fetch data each time map view changes.": "هر بار که نمای نقشه تغییر می کند، داده ها را واکشی کنید.",
     "Filter keys": "کلیدهای فیلتر",
-    "Filter…": "فیلتر…",
     "Format": "قالب",
     "From zoom": "از زوم",
     "Full map data": "داده های نقشه کامل",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

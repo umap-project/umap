@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "由外形分離出圖徵",
     "Fetch data each time map view changes.": "每次地圖檢視改變時截取資料。",
     "Filter keys": "篩選鍵",
-    "Filter…": "篩選器",
     "Format": "格式",
     "From zoom": "由縮放大小",
     "Full map data": "全部地圖資料",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")

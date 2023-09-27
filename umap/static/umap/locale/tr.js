@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Özelliği ayırmak için şekli ayıklayın",
     "Fetch data each time map view changes.": "Harita görünümü her değiştiğinde verileri alın.",
     "Filter keys": "Anahtarları filtrele",
-    "Filter…": "Filtrele...",
     "Format": "Format",
     "From zoom": "Yakınlaştırmadan",
     "Full map data": "Tam harita verileri",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

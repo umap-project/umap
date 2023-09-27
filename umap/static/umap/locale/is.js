@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Flytja lögun í aðskilda fitju",
     "Fetch data each time map view changes.": "Sækja gögn í hvert skipti sem kortasýn breytist",
     "Filter keys": "Sía lykla",
-    "Filter…": "Sía…",
     "Format": "Snið",
     "From zoom": "Frá aðdráttarstigi",
     "Full map data": "Öll kortagögn",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

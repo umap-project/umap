@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Извлечь фигуру в отдельный объект",
     "Fetch data each time map view changes.": "Запрашивать данные при каждом изменении отображения карты",
     "Filter keys": "Кнопки фильтра",
-    "Filter…": "Фильтр...",
     "Format": "Формат",
     "From zoom": "С масштаба",
     "Full map data": "Все данные карты",
@@ -357,8 +356,8 @@ const locale = {
     "{area}&#8239;mi&sup2;": "{area} mi&sup2;",
     "{area}&#8239;yd&sup2;": "{area} yd&sup2;",
     "{distance}&#8239;NM": "{distance} NM",
-    "{distance}&#8239;km": "{distance} km",
-    "{distance}&#8239;m": "{distance} m",
+    "{distance}&#8239;km": "{distance} км",
+    "{distance}&#8239;m": "{distance} м",
     "{distance}&#8239;miles": "{distance} miles",
     "{distance}&#8239;yd": "{distance} yd",
     " (area: {measure})": "(area: {measure})",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("ru", locale)
 L.setLocale("ru")

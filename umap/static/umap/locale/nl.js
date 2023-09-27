@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Verplaats deze vorm naar een eigen object",
     "Fetch data each time map view changes.": "Haal data op elke keer het kaartaanzicht verandert",
     "Filter keys": "Filter op sleutel",
-    "Filter…": "Filter…",
     "Format": "Formaat",
     "From zoom": "Van zoom",
     "Full map data": "Alle kaartdata",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Εξαγωγή σχήματος σε ξεχωριστό στοιχείο",
     "Fetch data each time map view changes.": "Ανάκτηση δεδομένων κάθε φορά που αλλάζει η προβολή του χάρτη.",
     "Filter keys": "Βασικά φίλτρα",
-    "Filter…": "Φίλτρα...",
     "Format": "Μορφοποίηση",
     "From zoom": "Από εστίαση",
     "Full map data": "Ολοκληρωμένα δεδομένα χάρτη",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

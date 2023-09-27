@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "ፊቸሩን ለመለየት ቅርፁን ነጥለህ አውጣ",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
     "Filter keys": "Filter keys",
-    "Filter…": "አጣራ",
     "Format": "ፎርማት",
     "From zoom": "ከዙም",
     "Full map data": "Full map data",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("am_ET", locale)
 L.setLocale("am_ET")

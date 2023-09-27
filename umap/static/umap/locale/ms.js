@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Sarikan bentuk untuk memisahkan sifat",
     "Fetch data each time map view changes.": "Ambil data setiap kali pandangan peta berubah.",
     "Filter keys": "Kekunci tapisan",
-    "Filter…": "Tapis…",
     "Format": "Format",
     "From zoom": "Dari zum",
     "Full map data": "Data peta penuh",
@@ -407,10 +406,12 @@ const locale = {
     "Powered by uMap": "Dikuasakan oleh uMap",
     "Search": "Cari",
     "Toggle direct input (advanced)": "Togol input terus (lanjutan)",
-    "Datalayers": "Datalayers",
-    "Delete map": "Delete map",
-    "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Datalayers": "Lapisan data",
+    "Delete map": "Padam peta",
+    "Secret edit link:": "Pautan suntingan rahsia:",
+    "Who can edit \"{layer}\"": "Siapa boleh sunting \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

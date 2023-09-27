@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "シェイプを複数の地物に変換",
     "Fetch data each time map view changes.": "地図表示が変更されたらデータを再取得する",
     "Filter keys": "フィルタに使うキー",
-    "Filter…": "フィルタ...",
     "Format": "フォーマット",
     "From zoom": "表示開始するズームレベル",
     "Full map data": "Full map data",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

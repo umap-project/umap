@@ -34,7 +34,7 @@ msgstr "Todos pueden editar"
 
 #: forms.py:69 models.py:317
 msgid "Inherit"
-msgstr ""
+msgstr "Heredar"
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -161,39 +161,39 @@ msgstr "%(current_user)s no tiene mapas."
 #: templates/auth/user_form.html:6 templates/umap/navigation.html:12
 #: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
 msgid "My Dashboard"
-msgstr ""
+msgstr "Mi panel de control"
 
 #: templates/auth/user_form.html:6
 msgid "My Profile"
-msgstr ""
+msgstr "Mi perfil"
 
 #: templates/auth/user_form.html:19
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: templates/auth/user_form.html:24
 msgid "Your current providers"
-msgstr ""
+msgstr "Sus proveedores actuales"
 
 #: templates/auth/user_form.html:30
 msgid "Connect to another provider"
-msgstr ""
+msgstr "Conectarse a otro proveedor"
 
 #: templates/auth/user_form.html:32
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
-msgstr ""
+msgstr "Es una buena costumbre conectar tu cuenta a más de un proveedor, por si uno de ellos deja de estar disponible, temporal o incluso permanentemente."
 
 #: templates/auth/user_stars.html:5
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
-msgstr ""
+msgstr "Examinar los mapas con estrellas de %(current_user)s"
 
 #: templates/auth/user_stars.html:12
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
-msgstr ""
+msgstr "%(current_user)s aún no tiene mapas con estrellas."
 
 #: templates/base.html:12
 msgid ""
@@ -433,7 +433,7 @@ msgstr "Buscar en mis mapas"
 
 #: templates/umap/user_dashboard.html:10
 msgid "My profile"
-msgstr ""
+msgstr "Mi perfil"
 
 #: templates/umap/user_dashboard.html:20
 msgid "You have no map yet."
@@ -454,17 +454,17 @@ msgstr "¡Los editores del mapas han sido actualizados con éxito!"
 #: views.py:721
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "El enlace de edición de uMap para tu mapa: %(map_name)s"
 
 #: views.py:724
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "Aquí está tu enlace secreto de edición: %(link)s"
 
 #: views.py:730
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "Correo electrónico enviado a %(email)s"
 
 #: views.py:741
 msgid "Only its owner can delete the map."
@@ -487,4 +487,4 @@ msgstr "Se eliminó la capa con éxito."
 
 #: views.py:980
 msgid "Permissions updated with success!"
-msgstr ""
+msgstr "¡Permisos actualizados con éxito!"

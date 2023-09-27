@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Виокремити полігон в окремий об’єкт",
     "Fetch data each time map view changes.": "Запитувати нові дані під час кожного оновлення мапи.",
     "Filter keys": "Фільтрувати ключі",
-    "Filter…": "Фільтр…",
     "Format": "Формат",
     "From zoom": "З масштабу",
     "Full map data": "Дані мапи",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

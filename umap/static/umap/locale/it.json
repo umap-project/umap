@@ -171,7 +171,6 @@
     "Extract shape to separate feature": "Dividi la geometria in oggetti separati",
     "Fetch data each time map view changes.": "Recupera i dati ad ogni cambio della visualizzazione della mappa.",
     "Filter keys": "Filtro sui campi",
-    "Filter…": "Filtro...",
     "Format": "Formato",
     "From zoom": "Dallo zoom",
     "Full map data": "Mappa completa",
@@ -410,5 +409,7 @@
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }

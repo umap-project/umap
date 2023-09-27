@@ -171,7 +171,6 @@
     "Extract shape to separate feature": "Extraer a forma ó elemento separado",
     "Fetch data each time map view changes.": "Obter os datos cada vez que a vista do mapa muda.",
     "Filter keys": "Claves de filtrado",
-    "Filter…": "Filtro...",
     "Format": "Formato",
     "From zoom": "Dende o achegamento",
     "Full map data": "Mapa completo de datos",
@@ -410,5 +409,7 @@
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }

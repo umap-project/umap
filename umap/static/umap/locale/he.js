@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "יש לחלץ צורה כדי להפריד תכונה",
     "Fetch data each time map view changes.": "לקבל נתונים בכל פעם שתצוגת המפה משתנה.",
     "Filter keys": "סינון מפתחות",
-    "Filter…": "מסנן…",
     "Format": "תצורה",
     "From zoom": "מרמת תקריב",
     "Full map data": "נתוני מפה מלאים",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

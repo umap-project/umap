@@ -171,7 +171,6 @@
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
     "Filter keys": "Filter keys",
-    "Filter…": "Филтър ...",
     "Format": "формат",
     "From zoom": "От мащабиране",
     "Full map data": "Full map data",
@@ -410,5 +409,7 @@
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }

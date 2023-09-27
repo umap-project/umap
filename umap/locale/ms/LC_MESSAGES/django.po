@@ -29,7 +29,7 @@ msgstr "Sesiapa pun boleh sunting"
 
 #: forms.py:69 models.py:317
 msgid "Inherit"
-msgstr ""
+msgstr "Warisi"
 
 #: middleware.py:14
 msgid "Site is readonly for maintenance"
@@ -480,4 +480,4 @@ msgstr "Lapisan telah berjaya dipadamkan."
 
 #: views.py:980
 msgid "Permissions updated with success!"
-msgstr ""
+msgstr "Kebenaran telah dikemas kini dengan jayanya!"

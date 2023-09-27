@@ -171,7 +171,6 @@ const locale = {
     "Extract shape to separate feature": "Vyjmout tvar do samostatného objektu",
     "Fetch data each time map view changes.": "Získat data při každé změně zobrazení mapy.",
     "Filter keys": "Filtrovací klávesy",
-    "Filter…": "Filtr ...",
     "Format": "Formát",
     "From zoom": "Maximální oddálení",
     "Full map data": "Kompletní mapová data",
@@ -410,7 +409,9 @@ const locale = {
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

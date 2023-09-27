@@ -171,7 +171,6 @@
     "Extract shape to separate feature": "Alakzat kiemelése objektum széválasztásához",
     "Fetch data each time map view changes.": "Adatok beolvasása a térkép nézetének minden egyes változásánál.",
     "Filter keys": "Szűréshez használt kulcsok",
-    "Filter…": "Szűrés…",
     "Format": "Formátum",
     "From zoom": "Ettől a nagyítási szinttől",
     "Full map data": "Minden térképadat",
@@ -410,5 +409,7 @@
     "Datalayers": "Datalayers",
     "Delete map": "Delete map",
     "Secret edit link:": "Secret edit link:",
-    "Who can edit \"{layer}\"": "Who can edit \"{layer}\""
+    "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
+    "Current map view": "Current map view",
+    "Filter": "Filter"
 }
