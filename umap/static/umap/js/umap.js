@@ -158,6 +158,7 @@ L.U.Map.include({
     // Global storage for retrieving datalayers and features
     this.datalayers = {}
     this.datalayers_index = []
+    this.groups_index = {}
     this.dirty_datalayers = []
     this.features_index = {}
     this.facets = {}
@@ -438,14 +439,27 @@ L.U.Map.include({
 
   indexDatalayers: function () {
     const panes = this.getPane('overlayPane')
-    let pane
     this.datalayers_index = []
-    for (let i = 0; i < panes.children.length; i++) {
+    for (let i = 0, pane, datalayer; i < panes.children.length; i++) {
       pane = panes.children[i]
       if (!pane.dataset || !pane.dataset.id) continue
-      this.datalayers_index.push(this.datalayers[pane.dataset.id])
+      datalayer = this.datalayers[pane.dataset.id]
+      this.datalayers_index.push(datalayer)
     }
+    this.indexGroups()
     this.updateDatalayersControl()
+  },
+
+  indexGroups: function () {
+    this.groups_index = {}
+    this.eachDataLayer(this.indexGroup)
+  },
+
+  indexGroup: function (datalayer) {
+      const group = datalayer.options.group
+      if (!group) return
+      this.groups_index[group] = this.groups_index[group] || []
+      this.groups_index[group].push(L.stamp(datalayer))
   },
 
   ensurePanesOrder: function () {
@@ -1014,14 +1028,14 @@ L.U.Map.include({
 
   eachDataLayer: function (method, context) {
     for (let i = 0; i < this.datalayers_index.length; i++) {
-      method.call(context, this.datalayers_index[i])
+      method.call(context || this, this.datalayers_index[i])
     }
   },
 
   eachDataLayerReverse: function (method, context, filter) {
     for (let i = this.datalayers_index.length - 1; i >= 0; i--) {
       if (filter && !filter.call(context, this.datalayers_index[i])) continue
-      method.call(context, this.datalayers_index[i])
+      method.call(context || this, this.datalayers_index[i])
     }
   },
 
