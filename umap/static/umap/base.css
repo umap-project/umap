@@ -342,18 +342,23 @@ input.switch:checked ~ label:before {
 input.switch:checked ~ label:after {
     margin-left: 3em;
 }
-.button-bar {
+.button-bar, .umap-multiplechoice {
     margin-top: 5px;
     text-align: center;
     display: grid;
-    grid-gap: 7px;
     width: 100%
+}
+.button-bar {
+    grid-gap: 7px;
 }
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
 }
-.button-bar.third {
+.button-bar.third, .umap-multiplechoice.by3 {
     grid-template-columns: 1fr 1fr 1fr;
+}
+.umap-multiplechoice.by4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 .button-bar .button {
     display: inline-block;
@@ -365,14 +370,11 @@ input.switch:checked ~ label:after {
     border: 1px solid #374E75;
     cursor: pointer;
     background-color: #c9c9c7;
-    height: 30px;
+    min-height: 30px;
     line-height: 30px;
     text-align: center;
-    width: calc(100% / 3);
+    width: 100%;
     display: inline-block;
-}
-.umap-multiplechoice.by4 label {
-    width: calc(100% / 4);
 }
 .dark .umap-multiplechoice label {
     border: 1px solid black;
