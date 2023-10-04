@@ -354,7 +354,7 @@ input.switch:checked ~ label:after {
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
 }
-.button-bar.third, .umap-multiplechoice.by3 {
+.umap-multiplechoice.by3 {
     grid-template-columns: 1fr 1fr 1fr;
 }
 .umap-multiplechoice.by4 {
