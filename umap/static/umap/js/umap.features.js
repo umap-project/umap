@@ -816,6 +816,20 @@ L.U.PathMixin = {
     L.U.FeatureMixin.endEdit.call(this)
   },
 
+  highlightPath: function () {
+    this.parentClass.prototype.setStyle.call(this, {
+      opacity: 1.0,
+      weight: 1.3 * this.getDynamicOption('weight'),
+    })
+  },
+
+  resetPath: function () {
+    this.parentClass.prototype.setStyle.call(this, {
+      opacity: this.getDynamicOption('opacity'),
+      weight: this.getDynamicOption('weight'),
+    })
+  },
+
   _onMouseOver: function () {
     if (this.map.measureTools && this.map.measureTools.enabled()) {
       this.map.ui.tooltip({ content: this.getMeasure(), anchor: this })
@@ -829,6 +843,8 @@ L.U.PathMixin = {
     this.on('mouseover', this._onMouseOver)
     this.on('edit', this.makeDirty)
     this.on('drag editable:drag', this._onDrag)
+    this.on('popupopen', this.highlightPath)
+    this.on('popupclose', this.resetPath)
   },
 
   _onDrag: function () {
