@@ -836,13 +836,13 @@ L.FormBuilder.OutlinkTarget = L.FormBuilder.MultiChoice.extend({
   ],
 })
 
-L.FormBuilder.Range = L.FormBuilder.Input.extend({
+L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
   type: function () {
     return 'range'
   },
 
   value: function () {
-    return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : this.input.value
+    return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : L.FormBuilder.FloatInput.prototype.value.call(this)
   },
 
   buildHelpText: function () {
