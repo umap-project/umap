@@ -860,6 +860,7 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
       options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(digits)}"></option>`
     }
     datalist.innerHTML = options
+    L.FormBuilder.Input.prototype.buildHelpText.call(this)
   },
 })
 
