@@ -161,8 +161,11 @@ L.U.Layer.Heat = L.HeatLayer.extend({
       [
         'options.heat.radius',
         {
-          handler: 'BlurIntInput',
-          placeholder: L._('Heatmap radius'),
+          handler: 'Range',
+          min: 10,
+          max: 100,
+          step: 5,
+          label: L._('Heatmap radius'),
           helpText: L._('Override heatmap radius (default 25)'),
         },
       ],
