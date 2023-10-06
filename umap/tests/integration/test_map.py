@@ -3,6 +3,8 @@ from playwright.sync_api import expect
 
 from umap.models import Map
 
+from ..base import DataLayerFactory
+
 pytestmark = pytest.mark.django_db
 
 
@@ -35,3 +37,21 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
     expect(layers).to_have_count(2)
+
+
+def test_can_hide_datalayer_from_caption(map, live_server, datalayer, page):
+    # Faster than doing a login
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    # Add another DataLayer
+    other = DataLayerFactory(map=map, name="Hidden", settings={"inCaption": False})
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    toggle = page.get_by_text("About").first
+    expect(toggle).to_be_visible()
+    toggle.click()
+    layers = page.locator(".umap-caption .datalayer-legend")
+    expect(layers).to_have_count(1)
+    found = page.locator("#umap-ui-container").get_by_text(datalayer.name)
+    expect(found).to_be_visible()
+    hidden = page.locator("#umap-ui-container").get_by_text(other.name)
+    expect(hidden).to_be_hidden()

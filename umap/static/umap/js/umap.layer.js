@@ -192,6 +192,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
 L.U.DataLayer = L.Evented.extend({
   options: {
     displayOnLoad: true,
+    inCaption: true,
     browsable: true,
     editMode: 'advanced',
   },
@@ -861,6 +862,13 @@ L.U.DataLayer = L.Evented.extend({
             label: L._('Data is browsable'),
             handler: 'Switch',
             helpEntries: 'browsable',
+          },
+        ],
+        [
+          'options.inCaption',
+          {
+            label: L._('Show this layer in the caption'),
+            handler: 'Switch',
           },
         ],
       ]
