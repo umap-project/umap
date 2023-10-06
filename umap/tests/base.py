@@ -1,4 +1,5 @@
 import json
+import copy
 
 import factory
 from django.contrib.auth import get_user_model
@@ -102,13 +103,16 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     name = "test datalayer"
     description = "test description"
     display_on_load = True
-    settings = {"displayOnLoad": True, "browsable": True, "name": name}
+    settings = factory.Dict({"displayOnLoad": True, "browsable": True, "name": name})
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
-        data = kwargs.pop("data", DATALAYER_DATA).copy()
+        data = kwargs.pop("data", copy.deepcopy(DATALAYER_DATA))
         kwargs["settings"]["name"] = kwargs["name"]
-        data["_umap_options"] = kwargs["settings"]
+        data["_umap_options"] = {
+            **DataLayerFactory.settings._defaults,
+            **kwargs["settings"],
+        }
         kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")
         return kwargs
 
