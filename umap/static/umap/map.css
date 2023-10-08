@@ -1143,6 +1143,10 @@ a.add-datalayer:hover,
     text-align: center;
     line-height: 32px;
 }
+.umap-div-icon.umap-icon-active .icon_container {
+    box-shadow: 7px 10px 10px 1px white;
+    opacity: 1.0!important;
+}
 .umap-div-icon .icon_container img {
     vertical-align: middle;
     max-width: 24px!important; /* leaflet.css has !important, so... */
@@ -1159,6 +1163,9 @@ a.add-datalayer:hover,
     opacity: 0.9;
     /*box-shadow: 4px 8px 6px -3px black;*/
 }
+.umap-div-icon.umap-icon-active .icon_arrow {
+    opacity: 1.0!important;
+}
 .umap-drop-icon .icon_arrow {
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -1169,6 +1176,9 @@ a.add-datalayer:hover,
     top: -4px;
     width: 0;
 }
+.umap-drop-icon.umap-icon-active .icon_arrow {
+    opacity: 1.0!important;
+}
 .umap-drop-icon .icon_container {
     background-color: #2470B5;
     border-radius: 16px 16px 16px 16px;
@@ -1178,6 +1188,10 @@ a.add-datalayer:hover,
     opacity: 0.9;
     text-align: center;
     width: 32px;
+}
+.umap-drop-icon.umap-icon-active .icon_container {
+    box-shadow: 4px 11px 10px -2px white;
+    opacity: 1.0!important;
 }
 .umap-drop-icon .icon_container img {
     vertical-align: middle;
@@ -1193,8 +1207,17 @@ a.add-datalayer:hover,
 .umap-circle-icon {
     border: 1px solid white;
     border-radius: 10px 10px 10px 10px;
+    margin-left: -6px;
+    margin-top: -6px;
     height: 12px;
     width: 12px;
+}
+.umap-circle-icon.umap-icon-active {
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    opacity: 1.0!important;
+    width: 16px;
 }
 .umap-ball-icon .icon_container {
     background-color: darkblue;
@@ -1206,6 +1229,14 @@ a.add-datalayer:hover,
     text-align: center;
     width: 16px;
 }
+.umap-ball-icon.umap-icon-active .icon_container {
+    box-shadow: 1px 23px 6px -3px white;
+    margin-left: -2px;
+    margin-top: -4px;
+    height: 20px;
+    opacity: 1.0!important;
+    width: 20px;
+}
 .umap-ball-icon .icon_arrow {
     background-color: black;
     height: 16px;
@@ -1214,6 +1245,10 @@ a.add-datalayer:hover,
     position: relative;
     top: -1px;
     width: 2px;
+}
+.umap-icon-active {
+    z-index: 9500!important;
+    opacity: 1.0!important;
 }
 .umap-edit-enabled .readonly {
     cursor: not-allowed;

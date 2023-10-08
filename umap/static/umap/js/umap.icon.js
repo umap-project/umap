@@ -38,6 +38,13 @@ L.U.Icon = L.DivIcon.extend({
   formatUrl: function (url, feature) {
     return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
   },
+
+  highlight: function () {
+    L.DomUtil.addClass(this.elements.main, 'umap-icon-active')
+  },
+  resetHighlight: function () {
+    L.DomUtil.removeClass(this.elements.main, 'umap-icon-active')
+  },
 })
 
 L.U.Icon.Default = L.U.Icon.extend({
@@ -95,7 +102,6 @@ L.U.Icon.Default = L.U.Icon.extend({
 L.U.Icon.Circle = L.U.Icon.extend({
   initialize: function (map, options) {
     const default_options = {
-      iconAnchor: new L.Point(6, 6),
       popupAnchor: new L.Point(0, -6),
       tooltipAnchor: new L.Point(6, 0),
       className: 'umap-circle-icon',

@@ -562,6 +562,10 @@ L.U.Marker = L.Marker.extend({
     if (!this.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
+    this.once('add', () => {
+      this.on('popupopen', this.options.icon.highlight, this.options.icon)
+      this.on('popupclose', this.options.icon.resetHighlight, this.options.icon)
+    })
   },
 
   hasGeom: function () {
