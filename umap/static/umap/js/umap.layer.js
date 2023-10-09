@@ -218,14 +218,14 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       [
         'options.choropleth.mode',
         {
-          handler: 'Select',
-          selectOptions: [
+          handler: 'MultiChoice',
+          choices: [
             ['q', L._('quantile')],
             ['e', L._('equidistant')],
             ['l', L._('logarithmic')],
             ['k', L._('k-mean')],
           ],
-          helpText: L._('Choropleth mode'),
+          label: L._('Choropleth mode'),
         },
       ],
     ]
