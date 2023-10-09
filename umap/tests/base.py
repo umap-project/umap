@@ -107,12 +107,17 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
-        data = kwargs.pop("data", copy.deepcopy(DATALAYER_DATA))
-        kwargs["settings"]["name"] = kwargs["name"]
-        data["_umap_options"] = {
-            **DataLayerFactory.settings._defaults,
-            **kwargs["settings"],
-        }
+        if "data" in kwargs:
+            data = copy.deepcopy(kwargs.pop("data"))
+            if "settings" not in kwargs:
+                kwargs["settings"] = data.get("_umap_options", {})
+        else:
+            data = DATALAYER_DATA.copy()
+            data["_umap_options"] = {
+                **DataLayerFactory.settings._defaults,
+                **kwargs["settings"],
+            }
+        data["_umap_options"]["name"] = kwargs["name"]
         kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")
         return kwargs
 
