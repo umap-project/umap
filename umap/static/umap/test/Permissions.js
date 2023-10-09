@@ -36,7 +36,7 @@ describe('L.Permissions', function () {
 
     it('should not allow share_status nor owner', function () {
       this.map.permissions.options.anonymous_edit_url = 'http://anonymous.url'
-      delete this.map.permissions.options.owner
+      delete this.map.options.permissions.owner
       button = qs('a.update-map-permissions')
       happen.click(button)
       expect(qs('select[name="share_status"]')).not.to.be.ok
@@ -48,8 +48,8 @@ describe('L.Permissions', function () {
     var button
 
     it('should only allow editors', function () {
-      this.map.permissions.options.owner = { id: 1, url: '/url', name: 'jojo' }
-      delete this.map.permissions.options.anonymous_edit_url
+      this.map.options.permissions.owner = { id: 1, url: '/url', name: 'jojo' }
+      delete this.map.options.permissions.anonymous_edit_url
       delete this.map.options.user
       button = qs('a.update-map-permissions')
       happen.click(button)
