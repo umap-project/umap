@@ -219,6 +219,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
         'options.choropleth.mode',
         {
           handler: 'MultiChoice',
+          default: 'q',
           choices: [
             ['q', L._('quantile')],
             ['e', L._('equidistant')],
