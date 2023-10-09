@@ -1201,9 +1201,9 @@ L.U.DataLayer = L.Evented.extend({
   getOption: function (option, feature) {
     if (this.layer && this.layer.getOption) {
       const value = this.layer.getOption(option, feature)
-      if (value) return value
+      if (typeof value !== 'undefined') return value
     }
-    if (this.getOwnOption(option)) {
+    if (typeof this.getOwnOption(option) !== 'undefined') {
       return this.getOwnOption(option)
     } else if (this.layer && this.layer.defaults && this.layer.defaults[option]) {
       return this.layer.defaults[option]
