@@ -178,12 +178,6 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     return this;
   },
 
-  removeLayer: function (layer) {
-    var id = layer in this._layers ? layer : this.getLayerId(layer);
-    delete this._layers[id];
-    return this;
-  },
-
   onAdd: function (map) {
     this.computeLimits()
     L.FeatureGroup.prototype.onAdd.call(this, map)
@@ -478,7 +472,7 @@ L.U.DataLayer = L.Evented.extend({
     if (visible) this.map.removeLayer(this.layer)
     const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
     this.layer = new Class(this)
-    this.eachLayer((feature) => this.showFeature(feature))
+    this.eachLayer(this.showFeature)
     if (visible) this.show()
     this.propagateRemote()
   },

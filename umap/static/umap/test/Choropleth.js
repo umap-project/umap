@@ -188,6 +188,10 @@ describe('L.U.Choropleth', function () {
     this.map = initMap({ umap_id: 99 })
     this.datalayer = this.map.getDataLayerByUmapId(62)
     this.server.respond()
+    this.datalayer.options.type = 'Choropleth'
+    this.datalayer.options.choropleth = {
+      property: 'value',
+    }
     enableEdit()
     this.datalayer.eachLayer(function (layer) {
       if (layer.properties.name === 'number 1') {
@@ -211,12 +215,7 @@ describe('L.U.Choropleth', function () {
   })
   describe('#compute()', function () {
     it('choropleth should compute default colors', function () {
-      this.datalayer.options.type = 'Choropleth'
-      this.datalayer.options.choropleth = {
-        property: 'value',
-      }
-      this.datalayer.resetLayer()
-      DATALAYER = this.datalayer
+      this.datalayer.resetLayer(true)
       // Does not pass because chroma-js seems to have rounding issues
       //assert.deepEqual(this.datalayer.layer.options.limits, [45, 438.6, 707.0, 3231.0, 4935.2, 9898])
       assert.equal(poly1._path.attributes.fill.value, '#ffffff')
@@ -226,12 +225,12 @@ describe('L.U.Choropleth', function () {
     it('choropleth should compute brewer colors', function () {
       this.datalayer.options.choropleth.brewer = 'Blues'
       this.datalayer.resetLayer(true)
-      DATALAYER = this.datalayer
       assert.equal(poly1._path.attributes.fill.value, '#f7fbff')
       assert.equal(poly4._path.attributes.fill.value, '#c6dbef')
       assert.equal(poly9._path.attributes.fill.value, '#08306b')
     })
     it('choropleth should allow to change steps', function () {
+      this.datalayer.options.choropleth.brewer = 'Blues'
       this.datalayer.options.choropleth.steps = 6
       this.datalayer.resetLayer(true)
       assert.equal(poly1._path.attributes.fill.value, '#f7fbff')
