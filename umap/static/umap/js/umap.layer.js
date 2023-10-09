@@ -207,7 +207,10 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       [
         'options.choropleth.steps',
         {
-          handler: 'IntInput',
+          handler: 'Range',
+          min: 3,
+          max: 9,
+          step: 1,
           placeholder: L._('Choropleth steps'),
           helpText: L._('Choropleth steps (default 5)'),
         },
