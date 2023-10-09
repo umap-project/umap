@@ -128,6 +128,12 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       [],
       this.datalayer.options.choropleth
     )
+    this.datalayer.on('datachanged', this.redraw, this)
+  },
+
+  redraw: function () {
+    this.computeLimits()
+    if (this._map) this.eachLayer(this._map.addLayer, this._map)
   },
 
   _getValue: function (feature) {
@@ -165,13 +171,17 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   addLayer: function (layer) {
-    this.computeLimits()
-    L.FeatureGroup.prototype.addLayer.call(this, layer)
+    // Do not add yet the layer to the map
+    // wait for datachanged event, so we want compute limits once
+    var id = this.getLayerId(layer);
+    this._layers[id] = layer;
+    return this;
   },
 
   removeLayer: function (layer) {
-    this.computeLimits()
-    L.FeatureGroup.prototype.removeLayer.call(this, layer)
+    var id = layer in this._layers ? layer : this.getLayerId(layer);
+    delete this._layers[id];
+    return this;
   },
 
   onAdd: function (map) {
