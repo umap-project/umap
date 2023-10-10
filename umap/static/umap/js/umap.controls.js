@@ -514,10 +514,43 @@ L.U.DataLayersControl = L.Control.extend({
   update: function () {
     if (this._datalayers_container && this._map) {
       this._datalayers_container.innerHTML = ''
-      this._map.eachDataLayerReverse(function (datalayer) {
-        this.addDataLayer(this._datalayers_container, datalayer)
-      }, this)
+      const hasGroups = !!Object.keys(this._map.groups_index).length
+      L.DomUtil.classIf(this._datalayers_container, 'grouped', hasGroups)
+      if (hasGroups) this.renderGroupedList()
+      else this.renderFlatList()
     }
+  },
+
+  renderFlatList: function () {
+    this._map.eachDataLayerReverse(function (datalayer) {
+      this.addDataLayer(this._datalayers_container, datalayer)
+    }, this)
+  },
+
+  renderGroupedList: function () {
+    const groups = Object.keys(this._map.groups_index).sort(L.Util.naturalSort)
+    for (let group of groups) {
+      let ids = this._map.groups_index[group]
+      this.addGroupHeader(group, ids)
+      for (let id of ids) {
+        this.addDataLayer(this._datalayers_container, this._map.datalayers[id])
+      }
+    }
+  },
+
+  addGroupHeader: function (group, ids) {
+    const header = L.DomUtil.add('h4', 'layer-group', this._datalayers_container, group)
+    const toggle = L.DomUtil.create('i', 'group-toggle', header)
+    L.DomEvent.on(toggle, 'click', () => {
+      let show, datalayer
+      for (let id of ids) {
+        datalayer = this._map.datalayers[id]
+        // Show/hide all according to first datalayer
+        if (typeof(show) === 'undefined') show = !datalayer.isVisible()
+        if (show) datalayer.show()
+        else datalayer.hide()
+      }
+    })
   },
 
   expand: function () {
@@ -676,7 +709,6 @@ L.U.DataLayer.addInitHook(function () {
 })
 
 L.U.Map.include({
-
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),
       title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),

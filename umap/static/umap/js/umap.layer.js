@@ -488,6 +488,7 @@ L.U.DataLayer = L.Evented.extend({
       this.map.datalayers[id] = this
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
         this.map.datalayers_index.push(this)
+      this.map.indexGroup(this)
     }
     this.map.updateDatalayersControl()
   },
@@ -854,6 +855,7 @@ L.U.DataLayer = L.Evented.extend({
       metadataFields = [
         'options.name',
         'options.description',
+        ['options.group', { handler: 'BlurInput', label: L._('Layer group'), datalist: Object.keys(this.map.groups_index)}],
         ['options.type', { handler: 'LayerTypeChooser', label: L._('Type of layer') }],
         ['options.displayOnLoad', { label: L._('Display on load'), handler: 'Switch' }],
         [
@@ -875,6 +877,7 @@ L.U.DataLayer = L.Evented.extend({
     const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
     let builder = new L.U.FormBuilder(this, metadataFields, {
       callback: function (e) {
+        this.map.indexGroups()
         this.map.updateDatalayersControl()
         if (e.helper.field === 'options.type') {
           this.resetLayer()

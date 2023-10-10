@@ -694,6 +694,7 @@ a.map-name:after {
     max-height: 15em;
     overflow-y: auto;
 }
+.layer-group i,
 .search-result-tools i,
 .leaflet-inplace-toolbar a,
 .umap-browse-features i,
@@ -717,6 +718,12 @@ a.map-name:after {
     margin-right: 5px;
     cursor: move;
 }
+.umap-browse-datalayers.grouped li {
+    padding-left: 10px;
+}
+.umap-browse-datalayers.grouped h4 {
+    margin-bottom: 0;
+}
 .leaflet-inplace-toolbar a {
     background-image: url('./img/16-white.svg');
     background-color: #323737!important;
@@ -730,6 +737,7 @@ a.map-name:after {
 .leaflet-control-browse .umap-browse-datalayers .off i {
     cursor: inherit;
 }
+.group-toggle,
 .layer-toggle {
     background-position: -49px -31px;
 }
