@@ -749,6 +749,7 @@ L.U.Map.include({
     }
     const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
     this.eachVisibleDataLayer((datalayer) => {
+      if (!datalayer.options.inCaption) return
       const p = L.DomUtil.create('p', 'datalayer-legend', datalayerContainer),
         legend = L.DomUtil.create('span', '', p),
         headline = L.DomUtil.create('strong', '', p),
