@@ -68,10 +68,28 @@ L.U.Popup.Panel = L.U.Popup.extend({
       data: { html: this._content },
       actions: [this.allButton()],
     })
+
+    // fire events as in base class Popup.js:onAdd
+    map.fire('popupopen', {popup: this})
+    if (this._source) {
+        this._source.fire('popupopen', {popup: this}, true);
+        if (!(this._source instanceof L.Path)) {
+            this._source.on('preclick', L.DomEvent.stopPropagation);
+        }
+    }
   },
 
   onRemove: function (map) {
     map.ui.closePanel()
+
+    // fire events as in base class Popup.js:onRemove
+    map.fire('popupclose', {popup: this});
+    if (this._source) {
+        this._source.fire('popupclose', {popup: this}, true);
+        if (!(this._source instanceof L.Path)) {
+            this._source.off('preclick', L.DomEvent.stopPropagation);
+        }
+    }
   },
 
   update: function () {},
