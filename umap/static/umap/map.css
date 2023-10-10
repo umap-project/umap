@@ -1559,6 +1559,7 @@ a.add-datalayer:hover,
     .leaflet-control-attribution:active .attribution-container,
     .leaflet-control-attribution:hover .attribution-container {
         display: inline;
+        background-color: #fff;
     }
     .leaflet-control-attribution:hover .attribution-toggle {
         display: none;
