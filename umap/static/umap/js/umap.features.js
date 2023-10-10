@@ -822,6 +822,7 @@ L.U.PathMixin = {
 
   highlightPath: function () {
     this.parentClass.prototype.setStyle.call(this, {
+      fillOpacity: Math.sqrt(this.getDynamicOption('fillOpacity')),
       opacity: 1.0,
       weight: 1.3 * this.getDynamicOption('weight'),
     })
@@ -829,6 +830,7 @@ L.U.PathMixin = {
 
   resetPath: function () {
     this.parentClass.prototype.setStyle.call(this, {
+      fillOpacity: this.getDynamicOption('fillOpacity'),
       opacity: this.getDynamicOption('opacity'),
       weight: this.getDynamicOption('weight'),
     })
