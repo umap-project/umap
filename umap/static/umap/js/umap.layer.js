@@ -151,7 +151,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     )
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     this.options.colors = chroma
-      .scale(this.datalayer.options.choropleth.brewer || ['white', fillColor])
+      .scale(this.datalayer.options.choropleth.brewer || ['#f7f7f7', fillColor])
       .colors(this.options.limits.length - 1)
   },
 
