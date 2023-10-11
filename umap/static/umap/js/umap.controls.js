@@ -1131,34 +1131,39 @@ L.U.AttributionControl = L.Control.Attribution.extend({
 
   _update: function () {
     L.Control.Attribution.prototype._update.call(this)
+    // Use our how container, so we can hide/show on small screens
+    const credits = this._container.innerHTML
+    this._container.innerHTML = ''
+    const container = L.DomUtil.add('div', 'attribution-container', this._container, credits)
     if (this._map.options.shortCredit) {
       L.DomUtil.add(
         'span',
         '',
-        this._container,
+        container,
         ` — ${L.Util.toHTML(this._map.options.shortCredit)}`
       )
     }
     if (this._map.options.captionMenus) {
-      const link = L.DomUtil.add('a', '', this._container, ` — ${L._('About')}`)
+      const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
         .on(link, 'click', this._map.displayCaption, this._map)
         .on(link, 'dblclick', L.DomEvent.stop)
     }
     if (window.top === window.self && this._map.options.captionMenus) {
       // We are not in iframe mode
-      const home = L.DomUtil.add('a', '', this._container, ` — ${L._('Home')}`)
+      const home = L.DomUtil.add('a', '', container, ` — ${L._('Home')}`)
       home.href = '/'
     }
     if (this._map.options.captionMenus) {
       const poweredBy = L.DomUtil.add(
         'a',
         '',
-        this._container,
+        container,
         ` — ${L._('Powered by uMap')}`
       )
       poweredBy.href = 'https://github.com/umap-project/umap/'
     }
+    L.DomUtil.create('a', 'attribution-toggle', this._container)
   },
 })
 
