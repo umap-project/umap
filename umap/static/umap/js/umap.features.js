@@ -828,14 +828,6 @@ L.U.PathMixin = {
     })
   },
 
-  resetPath: function () {
-    this.parentClass.prototype.setStyle.call(this, {
-      fillOpacity: this.getDynamicOption('fillOpacity'),
-      opacity: this.getDynamicOption('opacity'),
-      weight: this.getDynamicOption('weight'),
-    })
-  },
-
   _onMouseOver: function () {
     if (this.map.measureTools && this.map.measureTools.enabled()) {
       this.map.ui.tooltip({ content: this.getMeasure(), anchor: this })
@@ -850,7 +842,7 @@ L.U.PathMixin = {
     this.on('edit', this.makeDirty)
     this.on('drag editable:drag', this._onDrag)
     this.on('popupopen', this.highlightPath)
-    this.on('popupclose', this.resetPath)
+    this.on('popupclose', this._redraw)
   },
 
   _onDrag: function () {
