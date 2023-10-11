@@ -836,13 +836,13 @@ L.FormBuilder.OutlinkTarget = L.FormBuilder.MultiChoice.extend({
   ],
 })
 
-L.FormBuilder.Range = L.FormBuilder.Input.extend({
+L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
   type: function () {
     return 'range'
   },
 
   value: function () {
-    return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : this.input.value
+    return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : L.FormBuilder.FloatInput.prototype.value.call(this)
   },
 
   buildHelpText: function () {
@@ -854,12 +854,13 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
     datalist.id = `range-${this.options.label || this.name}`
     this.input.setAttribute('list', datalist.id)
     let options = ''
+    const step = this.options.step || 1,
+      digits = step < 1 ? 2 : 0
     for (let i = this.options.min; i <= this.options.max; i += this.options.step) {
-      options += `<option value="${i.toPrecision(2)}" label="${i.toPrecision(
-        2
-      )}"></option>`
+      options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(digits)}"></option>`
     }
     datalist.innerHTML = options
+    L.FormBuilder.Input.prototype.buildHelpText.call(this)
   },
 })
 
