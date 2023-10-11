@@ -216,26 +216,28 @@ describe('L.U.Choropleth', function () {
   describe('#compute()', function () {
     it('choropleth should compute default colors', function () {
       this.datalayer.resetLayer(true)
-      // Does not pass because chroma-js seems to have rounding issues
-      //assert.deepEqual(this.datalayer.layer.options.limits, [45, 438.6, 707.0, 3231.0, 4935.2, 9898])
-      assert.equal(poly1._path.attributes.fill.value, '#ffffff')
-      assert.equal(poly4._path.attributes.fill.value, '#ffbfbf')
-      assert.equal(poly9._path.attributes.fill.value, '#ff0000')
+      assert.deepEqual(
+        this.datalayer.layer.options.breaks,
+        [45, 673, 3829, 4900, 9898, 9898]
+      )
+      assert.equal(poly1._path.attributes.fill.value, '#eff3ff')
+      assert.equal(poly4._path.attributes.fill.value, '#bdd7e7')
+      assert.equal(poly9._path.attributes.fill.value, '#3182bd')
     })
-    it('choropleth should compute brewer colors', function () {
-      this.datalayer.options.choropleth.brewer = 'Blues'
+    it('can change brewer scheme', function () {
+      this.datalayer.options.choropleth.brewer = 'Reds'
       this.datalayer.resetLayer(true)
-      assert.equal(poly1._path.attributes.fill.value, '#f7fbff')
-      assert.equal(poly4._path.attributes.fill.value, '#c6dbef')
-      assert.equal(poly9._path.attributes.fill.value, '#08306b')
+      assert.equal(poly1._path.attributes.fill.value, '#fee5d9')
+      assert.equal(poly4._path.attributes.fill.value, '#fcae91')
+      assert.equal(poly9._path.attributes.fill.value, '#de2d26')
     })
     it('choropleth should allow to change steps', function () {
       this.datalayer.options.choropleth.brewer = 'Blues'
       this.datalayer.options.choropleth.steps = 6
       this.datalayer.resetLayer(true)
-      assert.equal(poly1._path.attributes.fill.value, '#f7fbff')
-      assert.equal(poly4._path.attributes.fill.value, '#94c4df')
-      assert.equal(poly9._path.attributes.fill.value, '#08306b')
+      assert.equal(poly1._path.attributes.fill.value, '#eff3ff')
+      assert.equal(poly4._path.attributes.fill.value, '#c6dbef')
+      assert.equal(poly9._path.attributes.fill.value, '#3182bd')
     })
   })
 })

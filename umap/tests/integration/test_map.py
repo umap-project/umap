@@ -65,18 +65,18 @@ def test_basic_choropleth_map(map, live_server, page):
     data = json.loads(path.read_text())
     DataLayerFactory(data=data, map=map)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    # Hauts-de-France, PACA, Occitanie
-    paths = page.locator("path[fill='#08306b']")
-    expect(paths).to_have_count(3)
-    # Normandie, Grand-Est, Centre-Val-de-Loire, IdF
-    paths = page.locator("path[fill='#2171b5']")
-    expect(paths).to_have_count(4)
-    # Bourgogne-Franceh-Comté
-    paths = page.locator("path[fill='#6baed6']")
+    # Hauts-de-France
+    paths = page.locator("path[fill='#08519c']")
     expect(paths).to_have_count(1)
-    # Corse, Nouvelle-Aquitaine
-    paths = page.locator("path[fill='#c6dbef']")
+    # Occitanie
+    paths = page.locator("path[fill='#3182bd']")
+    expect(paths).to_have_count(1)
+    # Grand-Est, PACA
+    paths = page.locator("path[fill='#6baed6']")
     expect(paths).to_have_count(2)
+    # Bourgogne-Franche-Comté, Centre-Val-de-Loire, IdF, Normandie, Corse, Nouvelle-Aquitaine
+    paths = page.locator("path[fill='#bdd7e7']")
+    expect(paths).to_have_count(6)
     # Bretagne, Pays de la Loire, AURA
-    paths = page.locator("path[fill='#f7fbff']")
+    paths = page.locator("path[fill='#eff3ff']")
     expect(paths).to_have_count(3)

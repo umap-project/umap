@@ -117,6 +117,12 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     fillOpacity: 0.7,
     weight: 2,
   },
+  MODES: {
+    kmeans: L._('K-means'),
+    equidistant: L._('Equidistant'),
+    jenks: L._('Jenks-Fisher'),
+    quantiles: L._('Quantiles'),
+  },
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -132,7 +138,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   redraw: function () {
-    this.computeLimits()
+    this.computeBreaks()
     if (this._map) this.eachLayer(this._map.addLayer, this._map)
   },
 
@@ -141,26 +147,44 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     return +feature.properties[key] // TODO: should we catch values non castable to int ?
   },
 
-  computeLimits: function () {
+  computeBreaks: function () {
     const values = []
-    this.datalayer.eachLayer((layer) => values.push(this._getValue(layer)))
-    this.options.limits = chroma.limits(
-      values,
-      this.datalayer.options.choropleth.mode || 'q',
-      this.datalayer.options.choropleth.steps || 5
-    )
+    this.datalayer.eachLayer((layer) => {
+      let value = this._getValue(layer)
+      if (!isNaN(value)) values.push(value)
+    })
+    if (!values.length) {
+      this.options.breaks = []
+      this.options.colors = []
+      return
+    }
+    let mode = this.datalayer.options.choropleth.mode,
+      steps = +this.datalayer.options.choropleth.steps || 5,
+      breaks
+    if (mode === 'equidistant') {
+      breaks = ss.equalIntervalBreaks(values, steps)
+    } else if (mode === 'jenks') {
+      breaks = ss.jenks(values, steps)
+    } else if (mode === 'quantiles') {
+      const quantiles = [...Array(steps)].map((e, i) => i/steps).concat(1)
+      breaks = ss.quantile(values, quantiles)
+    } else {
+      breaks = ss.ckmeans(values, steps).map((cluster) => cluster[0])
+      breaks.push(ss.max(values))  // Needed for computing the legend
+    }
+    this.options.breaks = breaks
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
-    this.options.colors = chroma
-      .scale(this.datalayer.options.choropleth.brewer || ['#f7f7f7', fillColor])
-      .colors(this.options.limits.length - 1)
+    let colorScheme = this.datalayer.options.choropleth.brewer
+    if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
+    this.options.colors = colorbrewer[colorScheme][breaks.length - 1] || []
   },
 
   getColor: function (feature) {
     if (!feature) return // FIXME shold not happen
     const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
-    for (let i = 1; i < this.options.limits.length; i++) {
-      if (featureValue <= this.options.limits[i]) {
+    for (let i = 1; i < this.options.breaks.length; i++) {
+      if (featureValue <= this.options.breaks[i]) {
         return this.options.colors[i - 1]
       }
     }
@@ -172,24 +196,22 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
 
   addLayer: function (layer) {
     // Do not add yet the layer to the map
-    // wait for datachanged event, so we want compute limits once
-    var id = this.getLayerId(layer);
-    this._layers[id] = layer;
-    return this;
+    // wait for datachanged event, so we want compute breaks once
+    var id = this.getLayerId(layer)
+    this._layers[id] = layer
+    return this
   },
 
   onAdd: function (map) {
-    this.computeLimits()
+    this.computeBreaks()
     L.FeatureGroup.prototype.onAdd.call(this, map)
   },
 
   getEditableOptions: function () {
-    // chroma expose each palette both in title mode and in lowercase
-    // TODO: PR to chroma to get a accessor to the palettes names list
-    const brewerPalettes = Object.keys(chroma.brewer)
-      .filter((s) => s[0] == s[0].toUpperCase())
+    const brewerSchemes = Object.keys(colorbrewer)
+      .filter((k) => k !== 'schemeGroups')
       .sort()
-      .map((k) => [k, k])
+
     return [
       [
         'options.choropleth.property',
@@ -205,7 +227,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
         {
           handler: 'Select',
           label: L._('Choropleth color palette'),
-          selectOptions: brewerPalettes,
+          selectOptions: brewerSchemes,
         },
       ],
       [
@@ -223,13 +245,8 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
         'options.choropleth.mode',
         {
           handler: 'MultiChoice',
-          default: 'q',
-          choices: [
-            ['q', L._('quantile')],
-            ['e', L._('equidistant')],
-            ['l', L._('logarithmic')],
-            ['k', L._('k-mean')],
-          ],
+          default: 'kmeans',
+          choices: Object.entries(this.MODES),
           label: L._('Choropleth mode'),
         },
       ],
@@ -240,14 +257,14 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     const parent = L.DomUtil.create('ul', '', container)
     let li, color, label
 
-    this.options.limits.slice(0, -1).forEach((limit, index) => {
+    this.options.breaks.slice(0, -1).forEach((limit, index) => {
       li = L.DomUtil.create('li', '', parent)
       color = L.DomUtil.create('span', 'datalayer-color', li)
       color.style.backgroundColor = this.options.colors[index]
       label = L.DomUtil.create('span', '', li)
-      label.textContent = `${+this.options.limits[index].toFixed(
+      label.textContent = `${+this.options.breaks[index].toFixed(
         1
-      )} - ${+this.options.limits[index + 1].toFixed(1)}`
+      )} - ${+this.options.breaks[index + 1].toFixed(1)}`
     })
   },
 })
