@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.1 - 2023-10-12
+
+* Fix import of .umap file containing a choropleth layer by @yohanboniface in https://github.com/umap-project/umap/pull/1367
+
 ## 1.9.0 - 2023-10-12
 
 * Add experimental choropleth datalayer type by @yohanboniface in https://github.com/umap-project/umap/pull/1136
