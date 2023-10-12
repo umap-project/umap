@@ -514,7 +514,7 @@ L.U.DataLayersControl = L.Control.extend({
   update: function () {
     if (this._datalayers_container && this._map) {
       this._datalayers_container.innerHTML = ''
-      this._map.eachDataLayerReverse(function (datalayer) {
+      this.map.eachDataLayerReverse(function (datalayer) {
         this.addDataLayer(this._datalayers_container, datalayer)
       }, this)
     }
@@ -525,7 +525,7 @@ L.U.DataLayersControl = L.Control.extend({
   },
 
   collapse: function () {
-    if (this._map.options.datalayersControl === 'expanded') return
+    if (this.map.options.datalayersControl === 'expanded') return
     L.DomUtil.removeClass(this._container, 'expanded')
   },
 
