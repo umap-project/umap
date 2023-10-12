@@ -122,6 +122,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     equidistant: L._('Equidistant'),
     jenks: L._('Jenks-Fisher'),
     quantiles: L._('Quantiles'),
+    manual: L._('Manual'),
   },
 
   initialize: function (datalayer) {
@@ -159,20 +160,26 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       return
     }
     let mode = this.datalayer.options.choropleth.mode,
-      steps = +this.datalayer.options.choropleth.steps || 5,
-      breaks
-    if (mode === 'equidistant') {
-      breaks = ss.equalIntervalBreaks(values, steps)
+      classes = +this.datalayer.options.choropleth.classes || 5,
+      breaks = []
+    if (mode === 'manual') {
+      const manualBreaks = this.datalayer.options.choropleth.breaks
+      if (manualBreaks) {
+        breaks = manualBreaks.split(",").map(b => +b).filter(b => !isNaN(b))
+      }
+    } else if (mode === 'equidistant') {
+      breaks = ss.equalIntervalBreaks(values, classes)
     } else if (mode === 'jenks') {
-      breaks = ss.jenks(values, steps)
+      breaks = ss.jenks(values, classes)
     } else if (mode === 'quantiles') {
-      const quantiles = [...Array(steps)].map((e, i) => i/steps).concat(1)
+      const quantiles = [...Array(classes)].map((e, i) => i/classes).concat(1)
       breaks = ss.quantile(values, quantiles)
     } else {
-      breaks = ss.ckmeans(values, steps).map((cluster) => cluster[0])
+      breaks = ss.ckmeans(values, classes).map((cluster) => cluster[0])
       breaks.push(ss.max(values))  // Needed for computing the legend
     }
     this.options.breaks = breaks
+    this.datalayer.options.choropleth.breaks = this.options.breaks.map(b => +b.toFixed(2)).join(',')
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     let colorScheme = this.datalayer.options.choropleth.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
@@ -207,6 +214,17 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     L.FeatureGroup.prototype.onAdd.call(this, map)
   },
 
+  postUpdate: function (e) {
+    if (e.helper.field === 'options.choropleth.breaks') {
+      this.datalayer.options.choropleth.mode = 'manual'
+      e.helper.builder.helpers["options.choropleth.mode"].fetch()
+    }
+    this.computeBreaks()
+    if (e.helper.field !== 'options.choropleth.breaks') {
+      e.helper.builder.helpers["options.choropleth.breaks"].fetch()
+    }
+  },
+
   getEditableOptions: function () {
     const brewerSchemes = Object.keys(colorbrewer)
       .filter((k) => k !== 'schemeGroups')
@@ -218,8 +236,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
         {
           handler: 'Select',
           selectOptions: this.datalayer._propertiesIndex,
-          placeholder: L._('Choropleth property value'),
-          helpText: L._('Choropleth property value'),
+          label: L._('Choropleth property value'),
         },
       ],
       [
@@ -231,14 +248,22 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.steps',
+        'options.choropleth.classes',
         {
           handler: 'Range',
           min: 3,
           max: 9,
           step: 1,
-          placeholder: L._('Choropleth steps'),
-          helpText: L._('Choropleth steps (default 5)'),
+          label: L._('Choropleth classes'),
+          helpText: L._('Number of desired classes (default 5)'),
+        },
+      ],
+      [
+        'options.choropleth.breaks',
+        {
+          handler: 'BlurInput',
+          label: L._('Choropleth breakpoints'),
+          helpText: L._('Comma separated list of numbers, including min and max values.'),
         },
       ],
       [
@@ -1060,9 +1085,9 @@ L.U.DataLayer = L.Evented.extend({
       'options.fillOpacity',
     ]
 
-    const redrawCallback = function (field) {
+    const redrawCallback = function (e) {
       this.hide()
-      this.layer.postUpdate(field)
+      this.layer.postUpdate(e)
       this.show()
     }
 

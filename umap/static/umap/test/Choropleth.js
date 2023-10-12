@@ -233,7 +233,7 @@ describe('L.U.Choropleth', function () {
     })
     it('choropleth should allow to change steps', function () {
       this.datalayer.options.choropleth.brewer = 'Blues'
-      this.datalayer.options.choropleth.steps = 6
+      this.datalayer.options.choropleth.classes = 6
       this.datalayer.resetLayer(true)
       assert.equal(poly1._path.attributes.fill.value, '#eff3ff')
       assert.equal(poly4._path.attributes.fill.value, '#c6dbef')
