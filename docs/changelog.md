@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.0 - 2023-10-12
+
+* Add experimental choropleth datalayer type by @yohanboniface in https://github.com/umap-project/umap/pull/1136
+* Finally add Map.create_at field by @yohanboniface in https://github.com/umap-project/umap/pull/1350
+* Update uwsgi.ini to prevent buffers errors with NGINX reverse proxies by @sircharlo in https://github.com/umap-project/umap/pull/1354
+* switch to grid layout for multiple choice buttons by @jschleic in https://github.com/umap-project/umap/pull/1356
+* Allow to hide a datalayer from the caption list by @yohanboniface in https://github.com/umap-project/umap/pull/1362
+* Hide attribution on small screen and add a small ? to display it by @yohanboniface in https://github.com/umap-project/umap/pull/1349
+* Heatmap improvements by @yohanboniface in https://github.com/umap-project/umap/pull/1358
+
+
 ## 1.8.2 - 2023-09-27
 
 * Allow to restrict data browser items to current map view by @yohanboniface in https://github.com/umap-project/umap/pull/1339
