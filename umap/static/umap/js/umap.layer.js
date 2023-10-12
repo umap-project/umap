@@ -374,6 +374,14 @@ L.U.Layer.Heat = L.HeatLayer.extend({
     this._updateOptions()
   },
 
+  redraw: function () {
+    // setlalngs call _redraw through setAnimFrame, thus async, so this
+    // can ends with race condition if we remove the layer very faslty after.
+    // TODO: PR in upstream Leaflet.heat
+    if (!this._map) return
+    L.HeatLayer.prototype.redraw.call(this)
+  },
+
   _redraw: function () {
     // Import patch from https://github.com/Leaflet/Leaflet.heat/pull/78
     // Remove me when this get merged and released.
