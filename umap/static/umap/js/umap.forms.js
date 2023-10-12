@@ -379,6 +379,7 @@ L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
     ['Default', L._('Default')],
     ['Cluster', L._('Clustered')],
     ['Heat', L._('Heatmap')],
+    ['Choropleth', L._('Choropleth')],
   ],
 })
 
@@ -732,7 +733,7 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   fetch: function () {
     let value = (this.backup = this.toHTML())
     if (!this.container.querySelector(`input[type="radio"][value="${value}"]`))
-      value = this.default
+      value = typeof(this.options.default) !== 'undefined' ? this.options.default : this.default
     this.container.querySelector(`input[type="radio"][value="${value}"]`).checked = true
   },
 

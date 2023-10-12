@@ -106,6 +106,194 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 })
 
+L.U.Layer.Choropleth = L.FeatureGroup.extend({
+  _type: 'Choropleth',
+  includes: [L.U.Layer],
+  canBrowse: true,
+  // Have defaults that better suit the choropleth mode.
+  defaults: {
+    color: 'white',
+    fillColor: 'red',
+    fillOpacity: 0.7,
+    weight: 2,
+  },
+  MODES: {
+    kmeans: L._('K-means'),
+    equidistant: L._('Equidistant'),
+    jenks: L._('Jenks-Fisher'),
+    quantiles: L._('Quantiles'),
+    manual: L._('Manual'),
+  },
+
+  initialize: function (datalayer) {
+    this.datalayer = datalayer
+    if (!L.Util.isObject(this.datalayer.options.choropleth)) {
+      this.datalayer.options.choropleth = {}
+    }
+    L.FeatureGroup.prototype.initialize.call(
+      this,
+      [],
+      this.datalayer.options.choropleth
+    )
+    this.datalayer.on('datachanged', this.redraw, this)
+  },
+
+  redraw: function () {
+    this.computeBreaks()
+    if (this._map) this.eachLayer(this._map.addLayer, this._map)
+  },
+
+  _getValue: function (feature) {
+    const key = this.datalayer.options.choropleth.property || 'value'
+    return +feature.properties[key] // TODO: should we catch values non castable to int ?
+  },
+
+  computeBreaks: function () {
+    const values = []
+    this.datalayer.eachLayer((layer) => {
+      let value = this._getValue(layer)
+      if (!isNaN(value)) values.push(value)
+    })
+    if (!values.length) {
+      this.options.breaks = []
+      this.options.colors = []
+      return
+    }
+    let mode = this.datalayer.options.choropleth.mode,
+      classes = +this.datalayer.options.choropleth.classes || 5,
+      breaks = []
+    if (mode === 'manual') {
+      const manualBreaks = this.datalayer.options.choropleth.breaks
+      if (manualBreaks) {
+        breaks = manualBreaks.split(",").map(b => +b).filter(b => !isNaN(b))
+      }
+    } else if (mode === 'equidistant') {
+      breaks = ss.equalIntervalBreaks(values, classes)
+    } else if (mode === 'jenks') {
+      breaks = ss.jenks(values, classes)
+    } else if (mode === 'quantiles') {
+      const quantiles = [...Array(classes)].map((e, i) => i/classes).concat(1)
+      breaks = ss.quantile(values, quantiles)
+    } else {
+      breaks = ss.ckmeans(values, classes).map((cluster) => cluster[0])
+      breaks.push(ss.max(values))  // Needed for computing the legend
+    }
+    this.options.breaks = breaks
+    this.datalayer.options.choropleth.breaks = this.options.breaks.map(b => +b.toFixed(2)).join(',')
+    const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
+    let colorScheme = this.datalayer.options.choropleth.brewer
+    if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
+    this.options.colors = colorbrewer[colorScheme][breaks.length - 1] || []
+  },
+
+  getColor: function (feature) {
+    if (!feature) return // FIXME shold not happen
+    const featureValue = this._getValue(feature)
+    // Find the bucket/step/limit that this value is less than and give it that color
+    for (let i = 1; i < this.options.breaks.length; i++) {
+      if (featureValue <= this.options.breaks[i]) {
+        return this.options.colors[i - 1]
+      }
+    }
+  },
+
+  getOption: function (option, feature) {
+    if (feature && option === feature.staticOptions.mainColor) return this.getColor(feature)
+  },
+
+  addLayer: function (layer) {
+    // Do not add yet the layer to the map
+    // wait for datachanged event, so we want compute breaks once
+    var id = this.getLayerId(layer)
+    this._layers[id] = layer
+    return this
+  },
+
+  onAdd: function (map) {
+    this.computeBreaks()
+    L.FeatureGroup.prototype.onAdd.call(this, map)
+  },
+
+  postUpdate: function (e) {
+    if (e.helper.field === 'options.choropleth.breaks') {
+      this.datalayer.options.choropleth.mode = 'manual'
+      e.helper.builder.helpers["options.choropleth.mode"].fetch()
+    }
+    this.computeBreaks()
+    if (e.helper.field !== 'options.choropleth.breaks') {
+      e.helper.builder.helpers["options.choropleth.breaks"].fetch()
+    }
+  },
+
+  getEditableOptions: function () {
+    const brewerSchemes = Object.keys(colorbrewer)
+      .filter((k) => k !== 'schemeGroups')
+      .sort()
+
+    return [
+      [
+        'options.choropleth.property',
+        {
+          handler: 'Select',
+          selectOptions: this.datalayer._propertiesIndex,
+          label: L._('Choropleth property value'),
+        },
+      ],
+      [
+        'options.choropleth.brewer',
+        {
+          handler: 'Select',
+          label: L._('Choropleth color palette'),
+          selectOptions: brewerSchemes,
+        },
+      ],
+      [
+        'options.choropleth.classes',
+        {
+          handler: 'Range',
+          min: 3,
+          max: 9,
+          step: 1,
+          label: L._('Choropleth classes'),
+          helpText: L._('Number of desired classes (default 5)'),
+        },
+      ],
+      [
+        'options.choropleth.breaks',
+        {
+          handler: 'BlurInput',
+          label: L._('Choropleth breakpoints'),
+          helpText: L._('Comma separated list of numbers, including min and max values.'),
+        },
+      ],
+      [
+        'options.choropleth.mode',
+        {
+          handler: 'MultiChoice',
+          default: 'kmeans',
+          choices: Object.entries(this.MODES),
+          label: L._('Choropleth mode'),
+        },
+      ],
+    ]
+  },
+
+  renderLegend: function (container) {
+    const parent = L.DomUtil.create('ul', '', container)
+    let li, color, label
+
+    this.options.breaks.slice(0, -1).forEach((limit, index) => {
+      li = L.DomUtil.create('li', '', parent)
+      color = L.DomUtil.create('span', 'datalayer-color', li)
+      color.style.backgroundColor = this.options.colors[index]
+      label = L.DomUtil.create('span', '', li)
+      label.textContent = `${+this.options.breaks[index].toFixed(
+        1
+      )} - ${+this.options.breaks[index + 1].toFixed(1)}`
+    })
+  },
+})
+
 L.U.Layer.Heat = L.HeatLayer.extend({
   _type: 'Heat',
   includes: [L.U.Layer],
@@ -399,7 +587,7 @@ L.U.DataLayer = L.Evented.extend({
     if (visible) this.map.removeLayer(this.layer)
     const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
     this.layer = new Class(this)
-    this.eachLayer((feature) => this.showFeature(feature))
+    this.eachLayer(this.showFeature)
     if (visible) this.show()
     this.propagateRemote()
   },
@@ -970,11 +1158,9 @@ L.U.DataLayer = L.Evented.extend({
       'options.fillOpacity',
     ]
 
-    shapeOptions = shapeOptions.concat(this.layer.getEditableOptions())
-
-    const redrawCallback = function (field) {
+    const redrawCallback = function (e) {
       this.hide()
-      this.layer.postUpdate(field)
+      this.layer.postUpdate(e)
       this.show()
     }
 
@@ -1123,9 +1309,22 @@ L.U.DataLayer = L.Evented.extend({
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
   },
 
-  getOption: function (option) {
+  getOwnOption: function (option) {
     if (L.Util.usableOption(this.options, option)) return this.options[option]
-    else return this.map.getOption(option)
+  },
+
+  getOption: function (option, feature) {
+    if (this.layer && this.layer.getOption) {
+      const value = this.layer.getOption(option, feature)
+      if (typeof value !== 'undefined') return value
+    }
+    if (typeof this.getOwnOption(option) !== 'undefined') {
+      return this.getOwnOption(option)
+    } else if (this.layer && this.layer.defaults && this.layer.defaults[option]) {
+      return this.layer.defaults[option]
+    } else {
+      return this.map.getOption(option)
+    }
   },
 
   buildVersionsFieldset: function (container) {

@@ -1,5 +1,5 @@
 L.U.FeatureMixin = {
-  staticOptions: {},
+  staticOptions: { mainColor: 'color' },
 
   initialize: function (map, latlng, options) {
     this.map = map
@@ -283,7 +283,7 @@ L.U.FeatureMixin = {
     } else if (L.Util.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
-      value = this.datalayer.getOption(option)
+      value = this.datalayer.getOption(option, this)
     } else {
       value = this.map.getOption(option)
     }
@@ -948,6 +948,7 @@ L.U.Polyline = L.Polyline.extend({
   staticOptions: {
     stroke: true,
     fill: false,
+    mainColor: 'color',
   },
 
   isSameClass: function (other) {
@@ -1084,6 +1085,9 @@ L.U.Polyline = L.Polyline.extend({
 L.U.Polygon = L.Polygon.extend({
   parentClass: L.Polygon,
   includes: [L.U.FeatureMixin, L.U.PathMixin],
+  staticOptions: {
+    mainColor: 'fillColor',
+  },
 
   isSameClass: function (other) {
     return other instanceof L.U.Polygon
