@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-27 04:36+0000\n"
+"POT-Creation-Date: 2023-10-12 06:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Everyone can edit"
 msgstr ""
 
-#: forms.py:69 models.py:317
+#: forms.py:69 models.py:318
 msgid "Inherit"
 msgstr ""
 
@@ -53,15 +53,15 @@ msgstr ""
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:142 models.py:318
+#: models.py:142 models.py:319
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149 models.py:319
+#: models.py:143 models.py:149 models.py:320
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144 models.py:320
+#: models.py:144 models.py:321
 msgid "Owner only"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:324
+#: models.py:153 models.py:325
 msgid "description"
 msgstr ""
 
@@ -105,35 +105,35 @@ msgstr ""
 msgid "licence"
 msgstr ""
 
-#: models.py:172
+#: models.py:173
 msgid "owner"
 msgstr ""
 
-#: models.py:176
+#: models.py:177
 msgid "editors"
 msgstr ""
 
-#: models.py:181 models.py:338
+#: models.py:182 models.py:339
 msgid "edit status"
 msgstr ""
 
-#: models.py:186
+#: models.py:187
 msgid "share status"
 msgstr ""
 
-#: models.py:189 models.py:333
+#: models.py:190 models.py:334
 msgid "settings"
 msgstr ""
 
-#: models.py:268
+#: models.py:269
 msgid "Clone of"
 msgstr ""
 
-#: models.py:328
+#: models.py:329
 msgid "display on load"
 msgstr ""
 
-#: models.py:329
+#: models.py:330
 msgid "Display this layer on load."
 msgstr ""
 

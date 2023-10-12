@@ -411,5 +411,19 @@
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
     "Current map view": "Current map view",
-    "Filter": "Filter"
+    "Filter": "Filter",
+    "Choropleth": "Choropleth",
+    "Choropleth breakpoints": "Choropleth breakpoints",
+    "Choropleth classes": "Choropleth classes",
+    "Choropleth color palette": "Choropleth color palette",
+    "Choropleth mode": "Choropleth mode",
+    "Choropleth property value": "Choropleth property value",
+    "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
+    "Equidistant": "Equidistant",
+    "Jenks-Fisher": "Jenks-Fisher",
+    "K-means": "K-means",
+    "Manual": "Manual",
+    "Number of desired classes (default 5)": "Number of desired classes (default 5)",
+    "Quantiles": "Quantiles",
+    "Show this layer in the caption": "Show this layer in the caption"
 }
