@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.2 - 2023-10-12
+
+* Fix `map` reference in DataLayersControl by @yohanboniface in https://github.com/umap-project/umap/pull/1368
+* Add back `HeatLayer._map` reference check by @yohanboniface in https://github.com/umap-project/umap/pull/1369
+
+
 ## 1.9.1 - 2023-10-12
 
 * Fix import of .umap file containing a choropleth layer by @yohanboniface in https://github.com/umap-project/umap/pull/1367
