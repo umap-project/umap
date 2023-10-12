@@ -135,7 +135,10 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       [],
       this.datalayer.options.choropleth
     )
-    this.datalayer.on('datachanged', this.redraw, this)
+    this.datalayer.onceDataLoaded(() => {
+      this.redraw()
+      this.datalayer.on('datachanged', this.redraw, this)
+    })
   },
 
   redraw: function () {
@@ -717,7 +720,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   hasDataLoaded: function () {
-    return !this.umap_id || this._dataloaded
+    return this._dataloaded
   },
 
   setUmapId: function (id) {
