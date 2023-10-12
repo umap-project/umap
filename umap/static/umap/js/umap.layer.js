@@ -135,7 +135,10 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       [],
       this.datalayer.options.choropleth
     )
-    this.datalayer.on('datachanged', this.redraw, this)
+    this.datalayer.onceDataLoaded(() => {
+      this.redraw()
+      this.datalayer.on('datachanged', this.redraw, this)
+    })
   },
 
   redraw: function () {
@@ -161,7 +164,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     }
     let mode = this.datalayer.options.choropleth.mode,
       classes = +this.datalayer.options.choropleth.classes || 5,
-      breaks = []
+      breaks
     if (mode === 'manual') {
       const manualBreaks = this.datalayer.options.choropleth.breaks
       if (manualBreaks) {
@@ -178,12 +181,12 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
       breaks = ss.ckmeans(values, classes).map((cluster) => cluster[0])
       breaks.push(ss.max(values))  // Needed for computing the legend
     }
-    this.options.breaks = breaks
+    this.options.breaks = breaks || []
     this.datalayer.options.choropleth.breaks = this.options.breaks.map(b => +b.toFixed(2)).join(',')
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     let colorScheme = this.datalayer.options.choropleth.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
-    this.options.colors = colorbrewer[colorScheme][breaks.length - 1] || []
+    this.options.colors = colorbrewer[colorScheme][this.options.breaks.length - 1] || []
   },
 
   getColor: function (feature) {
@@ -717,7 +720,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   hasDataLoaded: function () {
-    return !this.umap_id || this._dataloaded
+    return this._dataloaded
   },
 
   setUmapId: function (id) {
