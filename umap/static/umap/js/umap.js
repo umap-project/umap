@@ -832,6 +832,25 @@ L.U.Map.include({
     document.body.removeChild(el)
   },
 
+  processFileToImport: function (file, layer, type) {
+    type = type || L.Util.detectFileType(file)
+    if (!type) {
+      this.ui.alert({
+        content: L._('Unable to detect format of file {filename}', {
+          filename: file.name,
+        }),
+        level: 'error',
+      })
+      return
+    }
+    if (type === 'umap') {
+      this.importFromFile(file, 'umap')
+    } else {
+      if (!layer) layer = this.createDataLayer({ name: file.name })
+      layer.importFromFile(file, type)
+    }
+  },
+
   importRaw: function (rawData) {
     const importedData = JSON.parse(rawData)
 
