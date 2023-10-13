@@ -313,6 +313,51 @@ L.U.DrawToolbar = L.Toolbar.Control.extend({
   },
 })
 
+L.U.DropControl = L.Class.extend({
+
+  initialize: function (map) {
+    this.map = map
+    this.dropbox = map._container
+  },
+
+  enable: function () {
+    L.DomEvent.on(this.dropbox, "dragenter", this.dragenter, this)
+    L.DomEvent.on(this.dropbox, "dragover", this.dragover, this)
+    L.DomEvent.on(this.dropbox, "drop", this.drop, this)
+    L.DomEvent.on(this.dropbox, "dragleave", this.dragleave, this)
+  },
+
+  disable: function () {
+    L.DomEvent.off(this.dropbox, "dragenter", this.dragenter, this)
+    L.DomEvent.off(this.dropbox, "dragover", this.dragover, this)
+    L.DomEvent.off(this.dropbox, "drop", this.drop, this)
+    L.DomEvent.off(this.dropbox, "dragleave", this.dragleave, this)
+  },
+
+  dragenter: function (e) {
+    L.DomEvent.stop(e)
+    this.map.scrollWheelZoom.disable()
+  },
+
+  dragover: function (e) {
+    L.DomEvent.stop(e)
+  },
+
+  drop: function (e) {
+    L.DomEvent.stop(e)
+    this.map.scrollWheelZoom.enable()
+    for (let i = 0, file; (file = e.dataTransfer.files[i]); i++) {
+      this.map.processFileToImport(file)
+    }
+    this.map.onceDataLoaded(this.map.fitDataBounds)
+  },
+
+  dragleave: function () {
+    this.map.scrollWheelZoom.enable()
+  }
+
+})
+
 L.U.EditControl = L.Control.extend({
   options: {
     position: 'topright',
