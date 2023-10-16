@@ -1347,15 +1347,14 @@ L.U.AttributionControl = L.Control.Attribution.extend({
       L.DomUtil.createLink('', container, ` — ${L._('Home')}`, '/')
     }
     if (this._map.options.captionMenus) {
-      const poweredBy = L.DomUtil.add(
-        'a',
+      L.DomUtil.createLink(
         '',
         container,
-        ` — ${L._('Powered by uMap')}`
+        ` — ${L._('Powered by uMap')}`,
+        'https://github.com/umap-project/umap/'
       )
-      poweredBy.href = 'https://github.com/umap-project/umap/'
     }
-    L.DomUtil.create('a', 'attribution-toggle', this._container)
+    L.DomUtil.createLink('attribution-toggle', this._container, '')
   },
 })
 
