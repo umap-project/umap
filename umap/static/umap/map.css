@@ -1549,6 +1549,7 @@ a.add-datalayer:hover,
 
 @media all and (max-width: 980px) {
 
+    .umap-main-edit-toolbox .umap-user span,
     .leaflet-container .leaflet-control-edit-save span,
     .leaflet-container .leaflet-control-edit-disable span,
     .leaflet-container .leaflet-control-edit-cancel span {
@@ -1565,6 +1566,10 @@ a.add-datalayer:hover,
     }
 }
 @media all and (max-width: 640px) {
+    .umap-main-edit-toolbox .umap-user {
+        display: none;
+    }
+
     .umap-main-edit-toolbox .map-name {
         max-width: 150px;
     }

@@ -946,7 +946,9 @@ L.U.Map.include({
       L.DomUtil.createLink(
         'umap-user',
         rightContainer,
-        L._(`My Dashboard ({username})`, { username: this.options.user.name }),
+        L._(`My Dashboard <span>({username})</span>`, {
+          username: this.options.user.name,
+        }),
         this.options.user.url
       )
     }
@@ -954,7 +956,7 @@ L.U.Map.include({
     const controlEditCancel = L.DomUtil.createButton(
       'leaflet-control-edit-cancel',
       rightContainer,
-      L._('Cancel edits'),
+      L.DomUtil.add('span', '', null, L._('Cancel edits')),
       this.askForReset,
       this
     )
