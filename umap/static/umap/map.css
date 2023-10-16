@@ -572,12 +572,15 @@ ul.photon-autocomplete {
     display: inline;
 }
 .umap-main-edit-toolbox .umap-user {
-    margin-right: 20px;
-    float: right;
+    color: #fff;
+}
+.umap-main-edit-toolbox .umap-user:hover {
+    text-decoration: underline;
 }
 .umap-main-edit-toolbox .umap-user:after {
     content: '|';
     padding-left: 20px;
+    display: inline-block; /* Prevents underline on hover. */
 }
 .umap-edit-enabled .leaflet-top {
     top: 48px;
