@@ -450,7 +450,7 @@ i.info {
 .umap-clone:before, .umap-edit:before, .umap-download:before,
 .umap-to-polyline:before {
     background-repeat: no-repeat;
-    text-indent: 38px;
+    text-indent: 36px;
     height: 24px;
     line-height: 24px;
     display: inline-block;
