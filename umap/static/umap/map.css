@@ -379,10 +379,6 @@ ul.photon-autocomplete {
 .dark .umap-help-button {
     background-image: url('./img/16-white.svg');
  }
-.umap-help-link {
-    float: right;
-    margin-right: 20px;
-}
 .umap-help-on .umap-help-box {
     visibility: visible;
     top: 100px;
@@ -423,27 +419,37 @@ ul.photon-autocomplete {
 /* ********************************* */
 /*   Edit main toolbox               */
 /* ********************************* */
+.umap-main-edit-toolbox [type="button"] {
+    color: #fff;
+    font-size: 1.2em;
+    border: none;
+    background-color: #323737;
+    width: auto;
+    margin-bottom: 0;
+}
+.umap-main-edit-toolbox [type="button"]:hover {
+    text-decoration: underline;
+}
 
-.leaflet-container a.leaflet-control-edit-save,
-.leaflet-container a.leaflet-control-edit-cancel,
-.leaflet-container a.leaflet-control-edit-disable {
+.leaflet-container .umap-help-link {
+    font-size: 12px;
+}
+.leaflet-container .leaflet-control-edit-save,
+.leaflet-container .leaflet-control-edit-cancel,
+.leaflet-container .leaflet-control-edit-disable {
     display: block;
     border: none;
-    font-size: 11px;
-    margin-left: 10px;
-    float: right;
+    font-size: 12px;
     border-radius: 20px;
     color: #f8f8f8;
-    width: auto;
     height: 36px;
     line-height: 36px;
     min-height: 36px;
     padding: 0 20px;
-    min-width: 100px;
 }
-.leaflet-container a.leaflet-control-edit-disable:before,
-.leaflet-container a.leaflet-control-edit-save:before,
-.leaflet-container a.leaflet-control-edit-cancel:before {
+.leaflet-container .leaflet-control-edit-disable:before,
+.leaflet-container .leaflet-control-edit-save:before,
+.leaflet-container .leaflet-control-edit-cancel:before {
     display: inline-block;
     width: 24px;
     height: 24px;
@@ -453,37 +459,37 @@ ul.photon-autocomplete {
     vertical-align: middle;
     content: ' ';
 }
-.leaflet-container a.leaflet-control-edit-save:before {
+.leaflet-container .leaflet-control-edit-save:before {
     background-position: -2px -25px;
 }
-.leaflet-container a.leaflet-control-edit-disable:before {
+.leaflet-container .leaflet-control-edit-disable:before {
     background-position: -26px -1px;
 }
-.leaflet-container a.leaflet-control-edit-cancel,
-.leaflet-container a.leaflet-control-edit-disable {
+.leaflet-container .leaflet-control-edit-cancel,
+.leaflet-container .leaflet-control-edit-disable {
     border: 1px solid #555;
 }
-.leaflet-container a.leaflet-control-edit-save {
+.leaflet-container .leaflet-control-edit-save {
     opacity: 0.5;
     cursor: not-allowed;
     background-color: #215d9c;
 }
-.umap-is-dirty a.leaflet-control-edit-save {
+.umap-is-dirty .leaflet-control-edit-save {
     opacity: 1;
     cursor: pointer;
 }
-.leaflet-container a.leaflet-control-edit-save,
-.leaflet-container a.leaflet-control-edit-cancel,
-.leaflet-container a.leaflet-control-edit-disable,
+.leaflet-container .leaflet-control-edit-save,
+.leaflet-container .leaflet-control-edit-cancel,
+.leaflet-container .leaflet-control-edit-disable,
 .umap-edit-enabled .leaflet-control-edit-enable {
     display: none;
 }
-.umap-edit-enabled a.leaflet-control-edit-save,
-.umap-edit-enabled a.leaflet-control-edit-disable,
-.umap-edit-enabled .umap-is-dirty a.leaflet-control-edit-cancel {
+.umap-edit-enabled .leaflet-control-edit-save,
+.umap-edit-enabled .leaflet-control-edit-disable,
+.umap-edit-enabled .umap-is-dirty .leaflet-control-edit-cancel {
     display: inline-block;
 }
-.umap-is-dirty a.leaflet-control-edit-disable {
+.umap-is-dirty .leaflet-control-edit-disable {
     display: none;
 }
 .umap-caption-bar {
@@ -506,7 +512,17 @@ ul.photon-autocomplete {
     opacity: 0.98;
     color: #fff;
     display: flex;
+    justify-content: space-between;
 }
+.umap-left-edit-toolbox,
+.umap-right-edit-toolbox {
+    display: flex;
+    column-gap: 10px;
+}
+.umap-right-edit-toolbox {
+    align-items: baseline;
+}
+
 .umap-main-edit-toolbox .logo {
     width: 39px;
     height: 100%;
@@ -521,24 +537,21 @@ ul.photon-autocomplete {
     vertical-align: middle;
     text-indent: -9999px;
 }
-.umap-main-edit-toolbox [type="button"] {
-    color: #fff;
-    font-size: 1.2em;
-    border: none;
-    background-color: #323737;
-}
-.umap-main-edit-toolbox [type="button"]:hover {
-    text-decoration: underline;
-}
 .umap-main-edit-toolbox .map-name {
     display: inline-block;
-    max-width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-right: 5px;
     font-weight: bold;
+    text-align: left;
 }
+.umap-main-edit-toolbox .share-status {
+    font-size: 1em;
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .map-name:after {
     content:  '\00a0';
     padding-left: 3px;
@@ -547,9 +560,6 @@ ul.photon-autocomplete {
 }
 .umap-is-dirty .map-name:after {
     content:  '*';
-}
-.umap-main-edit-toolbox .share-status {
-    margin: 0 20px;
 }
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
@@ -1532,14 +1542,11 @@ a.add-datalayer:hover,
 
 @media all and (max-width: 980px) {
 
-    .leaflet-container a.leaflet-control-edit-save,
-    .leaflet-container a.leaflet-control-edit-disable,
-    .leaflet-container a.leaflet-control-edit-cancel {
-        text-indent: calc(100% - 10px);
-        width: 35px;
-        min-width: initial;
+    .leaflet-container .leaflet-control-edit-save span,
+    .leaflet-container .leaflet-control-edit-disable span,
+    .leaflet-container .leaflet-control-edit-cancel span {
+        display: none;
     }
-
     .umap-main-edit-toolbox .umap-help-button {
         display: none;
     }
@@ -1549,7 +1556,11 @@ a.add-datalayer:hover,
     .umap-main-edit-toolbox .umap-user:after {
         display: none;
     }
-
+}
+@media all and (max-width: 640px) {
+    .umap-main-edit-toolbox .map-name {
+        max-width: 150px;
+    }
 }
 @media all and (max-width: 480px) {
 

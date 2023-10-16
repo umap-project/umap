@@ -320,13 +320,28 @@ L.U.EditControl = L.Control.extend({
 
   onAdd: function (map) {
     const container = L.DomUtil.create('div', 'leaflet-control-edit-enable')
-    L.DomUtil.createButton(
+    const enableEditing = L.DomUtil.createButton(
       '',
       container,
-      `${L._('Enable editing')} (Ctrl+E)`,
+      L._('Enable editing'),
       map.enableEdit,
       map
     )
+    L.DomEvent.on(
+      enableEditing,
+      'mouseover',
+      function () {
+        map.ui.tooltip({
+          content: `${L._('Edit map')} (<kbd>Ctrl+E</kbd>)`,
+          anchor: enableEditing,
+          position: 'bottom',
+          delay: 750,
+          duration: 5000,
+        })
+      },
+      this
+    )
+
     return container
   },
 })
@@ -864,21 +879,51 @@ L.U.Map.include({
       'umap-main-edit-toolbox with-transition dark',
       this._controlContainer
     )
-    const logo = L.DomUtil.create('div', 'logo', container)
+    const leftContainer = L.DomUtil.create('div', 'umap-left-edit-toolbox', container)
+    const rightContainer = L.DomUtil.create('div', 'umap-right-edit-toolbox', container)
+    const logo = L.DomUtil.create('div', 'logo', leftContainer)
     L.DomUtil.createLink('', logo, 'uMap', '/', null, L._('Go to the homepage'))
     const nameButton = L.DomUtil.createButton(
       'map-name',
-      container,
+      leftContainer,
       '',
       this.edit,
       this
     )
+    L.DomEvent.on(
+      nameButton,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: L._('Edit the title of the map'),
+          anchor: nameButton,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
     const shareStatusButton = L.DomUtil.createButton(
       'share-status',
-      container,
+      leftContainer,
       '',
       this.permissions.edit,
       this.permissions
+    )
+    L.DomEvent.on(
+      shareStatusButton,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: L._('Update who can see and edit the map'),
+          anchor: shareStatusButton,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
     )
     const update = () => {
       const status = this.permissions.getShareStatusDisplay()
@@ -897,39 +942,81 @@ L.U.Map.include({
       L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
     this.on('postsync', L.bind(update, this))
-    L.DomUtil.createButton(
-      'leaflet-control-edit-save button',
-      container,
-      `${L._('Save current edits')} (Ctrl+S)`,
-      this.save,
-      this
-    )
-    L.DomUtil.createButton(
+    if (this.options.user) {
+      L.DomUtil.createLink(
+        'umap-user',
+        rightContainer,
+        L._(`My Dashboard ({username})`, { username: this.options.user.name }),
+        this.options.user.url
+      )
+    }
+    this.help.link(rightContainer, 'edit')
+    const controlEditCancel = L.DomUtil.createButton(
       'leaflet-control-edit-cancel',
-      container,
-      `${L._('Cancel edits')} (Ctrl+Z)`,
+      rightContainer,
+      L._('Cancel edits'),
       this.askForReset,
       this
     )
-    L.DomUtil.createButton(
+    L.DomEvent.on(
+      controlEditCancel,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: `${L._('Cancel')} (<kbd>Ctrl+Z</kbd>)`,
+          anchor: controlEditCancel,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
+    const controlEditDisable = L.DomUtil.createButton(
       'leaflet-control-edit-disable',
-      container,
-      `${L._('Disable editing')} (Ctrl+E)`,
+      rightContainer,
+      L.DomUtil.add('span', '', null, L._('Disable editing')),
       function (e) {
         this.disableEdit(e)
         this.ui.closePanel()
       },
       this
     )
-    this.help.link(container, 'edit')
-    if (this.options.user) {
-      L.DomUtil.createLink(
-        'umap-user',
-        container,
-        L._(`My Dashboard ({username})`, { username: this.options.user.name }),
-        this.options.user.url
-      )
-    }
+    L.DomEvent.on(
+      controlEditDisable,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: `${L._('Disable editing')} (<kbd>Ctrl+E</kbd>)`,
+          anchor: controlEditDisable,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
+    const controlEditSave = L.DomUtil.createButton(
+      'leaflet-control-edit-save button',
+      rightContainer,
+      L.DomUtil.add('span', '', null, L._('Save current edits')),
+      this.save,
+      this
+    )
+    L.DomEvent.on(
+      controlEditSave,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: `${L._('Save')} (<kbd>Ctrl+S</kbd>)`,
+          anchor: controlEditSave,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
   },
 
   renderShareBox: function () {

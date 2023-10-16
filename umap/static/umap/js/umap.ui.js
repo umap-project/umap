@@ -106,18 +106,19 @@ L.U.UI = L.Evented.extend({
     L.DomUtil.add('div', '', this._alert, e.content)
     if (e.actions) {
       let action, el, input
+      const form = L.DomUtil.add('div', 'umap-alert-actions', this._alert)
       for (let i = 0; i < e.actions.length; i++) {
         action = e.actions[i]
         if (action.input) {
           input = L.DomUtil.element(
             'input',
             { className: 'umap-alert-input', placeholder: action.input },
-            this._alert
+            form
           )
         }
         el = L.DomUtil.createButton(
-          { className: 'umap-action' },
-          this._alert,
+          'umap-action',
+          form,
           action.label,
           action.callback,
           action.callbackContext || this.map
@@ -133,20 +134,32 @@ L.U.UI = L.Evented.extend({
     }
   },
 
-  tooltip: function (e) {
+  tooltip: function (opts) {
     this.TOOLTIP_ID = Math.random()
     const id = this.TOOLTIP_ID
-    L.DomUtil.addClass(this.parent, 'umap-tooltip')
-    if (e.anchor && e.position === 'top') this.anchorTooltipTop(e.anchor)
-    else if (e.anchor && e.position === 'left') this.anchorTooltipLeft(e.anchor)
-    else this.anchorTooltipAbsolute()
-    this._tooltip.innerHTML = e.content
+    function showIt() {
+      if (opts.anchor && opts.position === 'top') {
+        this.anchorTooltipTop(opts.anchor)
+      } else if (opts.anchor && opts.position === 'left') {
+        this.anchorTooltipLeft(opts.anchor)
+      } else if (opts.anchor && opts.position === 'bottom') {
+        this.anchorTooltipBottom(opts.anchor)
+      } else {
+        this.anchorTooltipAbsolute()
+      }
+      L.DomUtil.addClass(this.parent, 'umap-tooltip')
+      this._tooltip.innerHTML = opts.content
+    }
     function closeIt() {
       this.closeTooltip(id)
     }
-    if (e.anchor) L.DomEvent.once(e.anchor, 'mouseout', closeIt, this)
-    if (e.duration !== Infinity)
-      window.setTimeout(L.bind(closeIt, this), e.duration || 3000)
+    window.setTimeout(L.bind(showIt, this), opts.delay || 0)
+    if (opts.anchor) {
+      L.DomEvent.once(opts.anchor, 'mouseout', closeIt, this)
+    }
+    if (opts.duration !== Infinity) {
+      window.setTimeout(L.bind(closeIt, this), opts.duration || 3000)
+    }
   },
 
   anchorTooltipAbsolute: function () {
@@ -168,6 +181,15 @@ L.U.UI = L.Evented.extend({
     })
   },
 
+  anchorTooltipBottom: function (el) {
+    this._tooltip.className = 'tooltip-bottom'
+    const coords = this.getPosition(el)
+    this.setTooltipPosition({
+      left: coords.left + 30,
+      bottom: this.getDocHeight() - coords.top - 76,
+    })
+  },
+
   anchorTooltipLeft: function (el) {
     this._tooltip.className = 'tooltip-left'
     const coords = this.getPosition(el)
@@ -179,7 +201,9 @@ L.U.UI = L.Evented.extend({
 
   closeTooltip: function (id) {
     if (id && id !== this.TOOLTIP_ID) return
+    this._tooltip.className = ''
     this._tooltip.innerHTML = ''
+    this.setTooltipPosition({})
     L.DomUtil.removeClass(this.parent, 'umap-tooltip')
   },
 

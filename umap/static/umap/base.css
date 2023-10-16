@@ -735,6 +735,7 @@ input:invalid {
 .umap-alert input {
     padding: 5px;
     border-radius: 4px;
+    width: 100%;
 }
 
 /* *********** */
@@ -770,6 +771,20 @@ input:invalid {
     border-top-color: rgba(30, 30, 30, 0.8);
     border-width: 11px;
     margin-left: calc(-50% + 21px);
+}
+#umap-tooltip-container.tooltip-bottom:before {
+    top: -22px;
+    left: calc(50% - 11px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: rgba(30, 30, 30, 0.7);
+    border-width: 11px;
+    margin-left: calc(-50% + 21px);
+    transform: rotate(180deg);
 }
 #umap-tooltip-container.tooltip.tooltip-left:after {
     left: 100%;
@@ -816,9 +831,21 @@ input:invalid {
     color: #fff;
     float: right;
     padding-right: 10px;
+    width: 100px;
+    line-height: 1;
+    margin: .5rem;
+    background-color: #666;
+    font-size: .7rem;
 }
 #umap-alert-container .umap-close-icon {
     background-position: -74px -55px;
+}
+#umap-alert-container .umap-alert-actions {
+    display: flex;
+    margin: 1rem;
+}
+#umap-alert-container .umap-alert-actions .umap-action {
+    margin-bottom: 0;
 }
 
 
