@@ -848,13 +848,14 @@ ul.photon-autocomplete {
 .leaflet-control-browse .umap-browse-actions .off .layer-title {
     color: rgb(179, 179, 179);
 }
-.leaflet-control-browse.expanded > a {
+.leaflet-control-browse.expanded > a,
+.leaflet-control-browse.expanded > button {
     display: none;
 }
 .leaflet-control-browse.expanded .umap-browse-actions {
     display: block;
 }
-.leaflet-control-browse a.umap-browse-link {
+.leaflet-control-browse .umap-browse-link {
     background-image: none;
     background-color: rgb(68, 68, 68);
     color: white;
@@ -869,7 +870,7 @@ ul.photon-autocomplete {
     border-radius: 2px;
 }
 a.add-datalayer:before,
-.leaflet-control-browse a.umap-browse-link:before {
+.leaflet-control-browse .umap-browse-link:before {
     background-image: url('./img/16.svg');
     background-repeat: no-repeat;
     background-position: -45px -96px;
@@ -883,7 +884,7 @@ a.add-datalayer:before {
     background-position: -45px -45px;
 }
 a.add-datalayer:hover,
-.leaflet-control-browse a.umap-browse-link:hover {
+.leaflet-control-browse .umap-browse-link:hover {
     background-color: rgb(99, 99, 99);
 }
 .umap-browse-data .off .feature {
