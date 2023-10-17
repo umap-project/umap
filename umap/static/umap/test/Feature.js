@@ -223,6 +223,16 @@ describe('L.U.FeatureMixin', function () {
     })
   })
 
+  describe('#highlight()', function () {
+    it('should highlight marker on click', function () {
+      assert.notOk(qs('.umap-icon-active'))
+      happen.click(qs('div.leaflet-marker-icon'))
+      assert.ok(qs('.umap-icon-active'))
+      happen.click(qs('#map')) // Close popup
+      assert.notOk(qs('.umap-icon-active'))
+    })
+  })
+
   describe('#tooltip', function () {
     it('should have a tooltip when active and allow variables', function () {
       this.map.options.showLabel = true
