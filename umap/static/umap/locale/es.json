@@ -410,6 +410,20 @@
     "Delete map": "Borrar mapa",
     "Secret edit link:": "Enlace secreto de edición:",
     "Who can edit \"{layer}\"": "Quién puede editar \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter"
+    "Current map view": "Vista actual del mapa",
+    "Filter": "Filtro",
+    "Choropleth": "Coropleto",
+    "Choropleth breakpoints": "Puntos de ruptura de la Coropleta",
+    "Choropleth classes": "Clases de coropletas",
+    "Choropleth color palette": "Paleta de colores Coropleta",
+    "Choropleth mode": "Modo Coropleta",
+    "Choropleth property value": "Valor de la propiedad Choropleta",
+    "Comma separated list of numbers, including min and max values.": "Lista de números separados por comas, incluidos los valores mínimo y máximo.",
+    "Equidistant": "Equidistante",
+    "Jenks-Fisher": "Jenks-Fisher",
+    "K-means": "K-medias",
+    "Manual": "Manual",
+    "Number of desired classes (default 5)": "Número de clases deseadas (predeterminadas 5)",
+    "Quantiles": "Cuantiles",
+    "Show this layer in the caption": "Mostrar esta capa en la leyenda"
 }

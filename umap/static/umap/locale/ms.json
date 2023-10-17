@@ -410,6 +410,20 @@
     "Delete map": "Padam peta",
     "Secret edit link:": "Pautan suntingan rahsia:",
     "Who can edit \"{layer}\"": "Siapa boleh sunting \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter"
+    "Current map view": "Paparan peta semasa",
+    "Filter": "Tapis",
+    "Choropleth": "Koroplet",
+    "Choropleth breakpoints": "Titik putus koroplet",
+    "Choropleth classes": "Kelas koroplet",
+    "Choropleth color palette": "Palet warna koroplet",
+    "Choropleth mode": "Mod koroplet",
+    "Choropleth property value": "Nilai ciri koroplet",
+    "Comma separated list of numbers, including min and max values.": "Senarai nombor, dipisahkan dengan koma, termasuk nilai minimum dan maksimum.",
+    "Equidistant": "Sama jarak",
+    "Jenks-Fisher": "Jenks-Fisher",
+    "K-means": "Cara K",
+    "Manual": "Manual",
+    "Number of desired classes (default 5)": "Jumlah kelas yang diingini (lalainya 5)",
+    "Quantiles": "Kuantil",
+    "Show this layer in the caption": "Tunjuk lapisan ini dalam keterangan"
 }
