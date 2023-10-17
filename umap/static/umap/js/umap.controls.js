@@ -345,6 +345,7 @@ L.U.DropControl = L.Class.extend({
   },
 
   drop: function (e) {
+    this.map.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
     L.DomEvent.stop(e)
     for (let i = 0, file; (file = e.dataTransfer.files[i]); i++) {
