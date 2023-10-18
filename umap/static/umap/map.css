@@ -845,7 +845,7 @@ a.add-datalayer:before,
     float: left;
 }
 a.add-datalayer:before {
-    background-position: -45px -45px;
+    background-position: -20px -20px;
 }
 a.add-datalayer:hover,
 .leaflet-control-browse a.umap-browse-link:hover {
