@@ -340,6 +340,7 @@ L.U.Map.include({
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
     this.browser = new L.U.Browser(this)
+    this.drop = new L.U.DropControl(this)
     this.renderControls()
   },
 
@@ -670,6 +671,12 @@ L.U.Map.include({
     }
   },
 
+  fitDataBounds: function () {
+    const bounds = this.getLayersBounds()
+    if (!this.hasData() || !bounds.isValid()) return false
+    this.fitBounds(bounds)
+  },
+
   initCenter: function () {
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
@@ -679,12 +686,7 @@ L.U.Map.include({
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
       this.onceDataLoaded(() => {
-        const bounds = this.getLayersBounds()
-        if (!this.hasData() || !bounds.isValid()) {
-          this._setDefaultCenter()
-          return
-        }
-        this.fitBounds(bounds)
+        if (!this.fitDataBounds()) return this._setDefaultCenter()
       })
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
@@ -1710,11 +1712,13 @@ L.U.Map.include({
   enableEdit: function () {
     L.DomUtil.addClass(document.body, 'umap-edit-enabled')
     this.editEnabled = true
+    this.drop.enable()
     this.fire('edit:enabled')
   },
 
   disableEdit: function () {
     if (this.isDirty) return
+    this.drop.disable()
     L.DomUtil.removeClass(document.body, 'umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
