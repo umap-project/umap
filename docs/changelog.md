@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.3 - 2023-10-18
+
+* Add experimental drag and drop of file on the map container by @yohanboniface in https://github.com/umap-project/umap/pull/1370
+* Hide the next icon in buttons’ sprites by @davidbgk in https://github.com/umap-project/umap/pull/1371
+
+
 ## 1.9.2 - 2023-10-12
 
 * Fix `map` reference in DataLayersControl by @yohanboniface in https://github.com/umap-project/umap/pull/1368
