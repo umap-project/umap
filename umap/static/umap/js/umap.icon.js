@@ -38,13 +38,6 @@ L.U.Icon = L.DivIcon.extend({
   formatUrl: function (url, feature) {
     return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
   },
-
-  highlight: function () {
-    L.DomUtil.addClass(this.elements.main, 'umap-icon-active')
-  },
-  resetHighlight: function () {
-    L.DomUtil.removeClass(this.elements.main, 'umap-icon-active')
-  },
 })
 
 L.U.Icon.Default = L.U.Icon.extend({
