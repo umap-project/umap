@@ -231,6 +231,13 @@ describe('L.U.FeatureMixin', function () {
       happen.click(qs('#map')) // Close popup
       assert.notOk(qs('.umap-icon-active'))
     })
+
+    it('should still highlight marker after hide() and show()', function () {
+      this.datalayer.hide()
+      this.datalayer.show()
+      happen.click(qs('div.leaflet-marker-icon'))
+      assert.ok(qs('.umap-icon-active'))
+    })
   })
 
   describe('#tooltip', function () {
