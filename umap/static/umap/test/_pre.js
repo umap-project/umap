@@ -254,7 +254,7 @@ var RESPONSES = {
         },
         type: 'Feature',
         id: 20,
-        properties: { _umap_options: { fill: false }, name: 'test' },
+        properties: { _umap_options: { fill: false, opacity: 0.6 }, name: 'test' },
       },
       {
         geometry: {

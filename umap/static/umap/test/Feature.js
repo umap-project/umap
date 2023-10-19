@@ -238,6 +238,12 @@ describe('L.U.FeatureMixin', function () {
       happen.click(qs('div.leaflet-marker-icon'))
       assert.ok(qs('.umap-icon-active'))
     })
+
+    it('should highlight path', function () {
+      happen.click(qs('path[stroke-opacity="0.6"]'))
+      var path = qs('path[stroke-opacity="1"]')
+      assert.ok(path)
+    })
   })
 
   describe('#tooltip', function () {
