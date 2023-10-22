@@ -70,12 +70,12 @@ L.U.Popup.Panel = L.U.Popup.extend({
     })
 
     // fire events as in base class Popup.js:onAdd
-    map.fire('popupopen', {popup: this})
+    map.fire('popupopen', { popup: this })
     if (this._source) {
-        this._source.fire('popupopen', {popup: this}, true);
-        if (!(this._source instanceof L.Path)) {
-            this._source.on('preclick', L.DomEvent.stopPropagation);
-        }
+      this._source.fire('popupopen', { popup: this }, true)
+      if (!(this._source instanceof L.Path)) {
+        this._source.on('preclick', L.DomEvent.stopPropagation)
+      }
     }
   },
 
@@ -83,12 +83,12 @@ L.U.Popup.Panel = L.U.Popup.extend({
     map.ui.closePanel()
 
     // fire events as in base class Popup.js:onRemove
-    map.fire('popupclose', {popup: this});
+    map.fire('popupclose', { popup: this })
     if (this._source) {
-        this._source.fire('popupclose', {popup: this}, true);
-        if (!(this._source instanceof L.Path)) {
-            this._source.off('preclick', L.DomEvent.stopPropagation);
-        }
+      this._source.fire('popupclose', { popup: this }, true)
+      if (!(this._source instanceof L.Path)) {
+        this._source.off('preclick', L.DomEvent.stopPropagation)
+      }
     }
   },
 
@@ -125,7 +125,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
       properties
     )
     content = L.Util.greedyTemplate(template, properties)
-    content = L.Util.toHTML(content, {target: target})
+    content = L.Util.toHTML(content, { target: target })
     container.innerHTML = content
     return container
   },
