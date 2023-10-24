@@ -697,6 +697,7 @@ L.U.Map.include({
         const datalayer = this.defaultDataLayer(),
           feature = datalayer.getFeatureByIndex(-1)
         if (feature) feature.zoomTo()
+        else this._setDefaultCenter()
       })
     } else {
       this._setDefaultCenter()
