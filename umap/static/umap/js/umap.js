@@ -14,7 +14,7 @@ L.Map.mergeOptions({
   default_popupContentTemplate: '# {name}\n{description}',
   default_interactive: true,
   default_labelDirection: 'auto',
-  maxZoomLimit: 20,
+  maxZoomLimit: 24,
   attributionControl: false,
   editMode: 'advanced',
   embedControl: true,
