@@ -900,6 +900,22 @@ L.U.Map.include({
       ext: '.kml',
       filetype: 'application/vnd.google-earth.kml+xml',
     },
+    csv: {
+      formatter: function (map) {
+        const table = []
+        map.eachFeature((feature) => {
+          const row = feature.toGeoJSON()['properties'],
+            center = feature.getCenter()
+          delete row['_umap_options']
+          row['Latitude'] = center.lat
+          row['Longitude'] = center.lng
+          table.push(row)
+        })
+        return csv2geojson.dsv.csvFormat(table)
+      },
+      ext: '.csv',
+      filetype: 'text/csv',
+    },
     umap: {
       name: L._('Full map data'),
       formatter: function (map) {
