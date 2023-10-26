@@ -856,7 +856,7 @@ L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
     this.input.setAttribute('list', datalist.id)
     let options = ''
     const step = this.options.step || 1,
-      digits = step < 1 ? 2 : 0
+      digits = step < 1 ? 1 : 0
     for (let i = this.options.min; i <= this.options.max; i += this.options.step) {
       options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(digits)}"></option>`
     }
