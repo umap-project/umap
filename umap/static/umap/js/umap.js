@@ -807,6 +807,12 @@ L.U.Map.include({
     return geojson
   },
 
+  eachFeature: function (callback, context) {
+    this.eachDataLayer((datalayer) => {
+      if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
+    })
+  },
+
   fullDownload: function () {
     // Make sure all data is loaded before downloading
     this.once('dataloaded', () => this.download())
