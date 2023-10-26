@@ -478,8 +478,9 @@ L.U.FeatureMixin = {
 
   matchFilter: function (filter, keys) {
     filter = filter.toLowerCase()
-    for (let i = 0; i < keys.length; i++) {
-      if ((this.properties[keys[i]] || '').toLowerCase().indexOf(filter) !== -1)
+    for (let i = 0, value; i < keys.length; i++) {
+      value = (this.properties[keys[i]] || '') + ''
+      if (value.toLowerCase().indexOf(filter) !== -1)
         return true
     }
     return false
