@@ -1299,7 +1299,7 @@ L.U.Map.include({
 
     builder = new L.U.FormBuilder(this, shapeOptions, {
       callback: function (e) {
-        this.eachDataLayer((datalayer) => {
+        this.eachVisibleDataLayer((datalayer) => {
           datalayer.redraw()
         })
       },
@@ -1386,10 +1386,11 @@ L.U.Map.include({
         if (
           e.helper.field === 'options.popupTemplate' ||
           e.helper.field === 'options.popupContentTemplate' ||
-          e.helper.field === 'options.popupShape'
+          e.helper.field === 'options.popupShape' ||
+          e.helper.field === 'options.outlinkTarget'
         )
           return
-        this.eachDataLayer((datalayer) => {
+        this.eachVisibleDataLayer((datalayer) => {
           datalayer.redraw()
         })
       },
