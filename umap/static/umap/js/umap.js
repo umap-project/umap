@@ -1293,6 +1293,8 @@ L.U.Map.include({
       'options.fill',
       'options.fillColor',
       'options.fillOpacity',
+      'options.smoothFactor',
+      'options.dashArray',
     ]
 
     builder = new L.U.FormBuilder(this, shapeOptions, {
@@ -1311,8 +1313,6 @@ L.U.Map.include({
 
   _editDefaultProperties: function (container) {
     const optionsFields = [
-      'options.smoothFactor',
-      'options.dashArray',
       'options.zoomTo',
       ['options.easing', { handler: 'Switch', label: L._('Animated transitions') }],
       'options.labelKey',
@@ -1359,10 +1359,9 @@ L.U.Map.include({
     builder = new L.U.FormBuilder(this, optionsFields, {
       callback: function (e) {
         this.initCaptionBar()
-        this.eachDataLayer((datalayer) => {
-          if (e.helper.field === 'options.sortKey') datalayer.reindex()
-          datalayer.redraw()
-        })
+        if (e.helper.field === 'options.sortKey') {
+          this.eachDataLayer((datalayer) => datalayer.reindex())
+        }
       },
     })
     const defaultProperties = L.DomUtil.createFieldset(
