@@ -314,24 +314,23 @@ L.U.DrawToolbar = L.Toolbar.Control.extend({
 })
 
 L.U.DropControl = L.Class.extend({
-
   initialize: function (map) {
     this.map = map
     this.dropzone = map._container
   },
 
   enable: function () {
-    L.DomEvent.on(this.dropzone, "dragenter", this.dragenter, this)
-    L.DomEvent.on(this.dropzone, "dragover", this.dragover, this)
-    L.DomEvent.on(this.dropzone, "drop", this.drop, this)
-    L.DomEvent.on(this.dropzone, "dragleave", this.dragleave, this)
+    L.DomEvent.on(this.dropzone, 'dragenter', this.dragenter, this)
+    L.DomEvent.on(this.dropzone, 'dragover', this.dragover, this)
+    L.DomEvent.on(this.dropzone, 'drop', this.drop, this)
+    L.DomEvent.on(this.dropzone, 'dragleave', this.dragleave, this)
   },
 
   disable: function () {
-    L.DomEvent.off(this.dropzone, "dragenter", this.dragenter, this)
-    L.DomEvent.off(this.dropzone, "dragover", this.dragover, this)
-    L.DomEvent.off(this.dropzone, "drop", this.drop, this)
-    L.DomEvent.off(this.dropzone, "dragleave", this.dragleave, this)
+    L.DomEvent.off(this.dropzone, 'dragenter', this.dragenter, this)
+    L.DomEvent.off(this.dropzone, 'dragover', this.dragover, this)
+    L.DomEvent.off(this.dropzone, 'drop', this.drop, this)
+    L.DomEvent.off(this.dropzone, 'dragleave', this.dragleave, this)
   },
 
   dragenter: function (e) {
@@ -357,8 +356,7 @@ L.U.DropControl = L.Class.extend({
   dragleave: function () {
     this.map.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
-  }
-
+  },
 })
 
 L.U.EditControl = L.Control.extend({
@@ -1744,7 +1742,7 @@ L.U.Editable = L.Editable.extend({
       return
     }
 
-    let content
+    let content = L._('Drawing')
     let measure
     if (e.layer.editor._drawnLatLngs) {
       // when drawing (a Polyline or Polygon)
