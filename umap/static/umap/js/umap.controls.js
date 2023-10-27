@@ -323,7 +323,7 @@ L.U.EditControl = L.Control.extend({
     const enableEditing = L.DomUtil.createButton(
       '',
       container,
-      L._('Enable editing'),
+      L._('Edit'),
       map.enableEdit,
       map
     )
@@ -332,7 +332,7 @@ L.U.EditControl = L.Control.extend({
       'mouseover',
       function () {
         map.ui.tooltip({
-          content: `${L._('Edit map')} (<kbd>Ctrl+E</kbd>)`,
+          content: `${L._('Switch to edit mode')} (<kbd>Ctrl+E</kbd>)`,
           anchor: enableEditing,
           position: 'bottom',
           delay: 750,
@@ -977,7 +977,7 @@ L.U.Map.include({
     const controlEditDisable = L.DomUtil.createButton(
       'leaflet-control-edit-disable',
       rightContainer,
-      L.DomUtil.add('span', '', null, L._('Disable editing')),
+      L.DomUtil.add('span', '', null, L._('View')),
       function (e) {
         this.disableEdit(e)
         this.ui.closePanel()
@@ -989,7 +989,7 @@ L.U.Map.include({
       'mouseover',
       function () {
         this.ui.tooltip({
-          content: `${L._('Disable editing')} (<kbd>Ctrl+E</kbd>)`,
+          content: `${L._('Back to preview')} (<kbd>Ctrl+E</kbd>)`,
           anchor: controlEditDisable,
           position: 'bottom',
           delay: 500,
@@ -1001,7 +1001,7 @@ L.U.Map.include({
     const controlEditSave = L.DomUtil.createButton(
       'leaflet-control-edit-save button',
       rightContainer,
-      L.DomUtil.add('span', '', null, L._('Save current edits')),
+      L.DomUtil.add('span', '', null, L._('Save')),
       this.save,
       this
     )
@@ -1010,7 +1010,7 @@ L.U.Map.include({
       'mouseover',
       function () {
         this.ui.tooltip({
-          content: `${L._('Save')} (<kbd>Ctrl+S</kbd>)`,
+          content: `${L._('Save current edits')} (<kbd>Ctrl+S</kbd>)`,
           anchor: controlEditSave,
           position: 'bottom',
           delay: 500,
