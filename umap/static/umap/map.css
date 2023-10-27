@@ -432,8 +432,10 @@ ul.photon-autocomplete {
     text-decoration: underline;
 }
 
-.leaflet-container .umap-help-link {
+.leaflet-container [type="button"].umap-help-link {
     font-size: 12px;
+    padding-bottom: 3px;
+    background-color: inherit;
 }
 .leaflet-container .leaflet-control-edit-save,
 .leaflet-container .leaflet-control-edit-cancel,
