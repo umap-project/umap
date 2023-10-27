@@ -50,7 +50,7 @@ describe('L.U.Map', function () {
     })
 
     it('enable edit on click on toggle button', function () {
-      var el = qs('div.leaflet-control-edit-enable a')
+      var el = qs('div.leaflet-control-edit-enable button')
       happen.click(el)
       assert.isTrue(L.DomUtil.hasClass(document.body, 'umap-edit-enabled'))
     })
@@ -109,7 +109,7 @@ describe('L.U.Map', function () {
       var button = qs('a.update-map-settings')
       assert.ok(button, 'update map info button exists')
       happen.click(button)
-      var deleteLink = qs('a.umap-delete')
+      var deleteLink = qs('button.umap-delete')
       assert.ok(deleteLink, 'delete map button exists')
       sinon.spy(window, 'confirm')
       this.server.respondWith('POST', path, JSON.stringify({ redirect: '#' }))
@@ -301,7 +301,7 @@ describe('L.U.Map', function () {
     })
 
     it('should update title bar (umap format import)', function () {
-      var title = qs('#map div.umap-main-edit-toolbox a.map-name')
+      var title = qs('#map div.umap-main-edit-toolbox button.map-name')
       assert.equal(title.innerHTML, 'Imported map')
     })
 

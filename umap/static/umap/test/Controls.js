@@ -78,7 +78,7 @@ describe('L.U.Controls', function () {
 
   describe('#exportPanel()', function () {
     it('should be opened at datalayer button click', function () {
-      let button = qs('.leaflet-control-embed a')
+      let button = qs('.leaflet-control-embed button')
       assert.ok(button)
       happen.click(button)
       assert.ok(qs('#umap-ui-container .umap-share'))
