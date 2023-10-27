@@ -62,37 +62,45 @@ class MapFactory(factory.django.DjangoModelFactory):
     name = "test map"
     slug = "test-map"
     center = DEFAULT_CENTER
-    settings = {
-        "geometry": {
-            "coordinates": [13.447265624999998, 48.94415123418794],
-            "type": "Point",
-        },
-        "properties": {
-            "datalayersControl": True,
-            "description": "Which is just the Danube, at the end",
-            "displayCaptionOnLoad": False,
-            "displayDataBrowserOnLoad": False,
-            "displayPopupFooter": False,
-            "licence": "",
-            "miniMap": False,
-            "moreControl": True,
-            "name": "Cruising on the Donau",
-            "scaleControl": True,
-            "tilelayer": {
-                "attribution": "\xa9 OSM Contributors",
-                "maxZoom": 18,
-                "minZoom": 0,
-                "url_template": "http://{s}.osm.fr/{z}/{x}/{y}.png",
+    settings = factory.Dict(
+        {
+            "geometry": {
+                "coordinates": [13.447265624999998, 48.94415123418794],
+                "type": "Point",
             },
-            "tilelayersControl": True,
-            "zoom": 7,
-            "zoomControl": True,
-        },
-        "type": "Feature",
-    }
+            "properties": {
+                "datalayersControl": True,
+                "description": "Which is just the Danube, at the end",
+                "displayCaptionOnLoad": False,
+                "displayDataBrowserOnLoad": False,
+                "displayPopupFooter": False,
+                "licence": "",
+                "miniMap": False,
+                "moreControl": True,
+                "name": "Cruising on the Donau",
+                "scaleControl": True,
+                "tilelayer": {
+                    "attribution": "\xa9 OSM Contributors",
+                    "maxZoom": 18,
+                    "minZoom": 0,
+                    "url_template": "http://{s}.osm.fr/{z}/{x}/{y}.png",
+                },
+                "tilelayersControl": True,
+                "zoom": 7,
+                "zoomControl": True,
+            },
+            "type": "Feature",
+        }
+    )
 
     licence = factory.SubFactory(LicenceFactory)
     owner = factory.SubFactory(UserFactory)
+
+    @classmethod
+    def _adjust_kwargs(cls, **kwargs):
+        # Make sure there is no persistency
+        kwargs["settings"] = copy.deepcopy(kwargs["settings"])
+        return kwargs
 
     class Meta:
         model = Map

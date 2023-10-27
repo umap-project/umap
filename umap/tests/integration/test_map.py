@@ -39,7 +39,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     }
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    toggle = page.get_by_title("See data layers")
+    toggle = page.get_by_role("button", name="See data layers")
     expect(toggle).to_be_visible()
     toggle.click()
     layers = page.locator(".umap-browse-datalayers li")

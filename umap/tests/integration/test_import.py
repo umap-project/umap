@@ -16,7 +16,7 @@ def test_umap_import(live_server, datalayer, page):
     file_chooser = fc_info.value
     path = Path(__file__).parent.parent / "fixtures/display_on_load.umap"
     file_chooser.set_files(path)
-    button = page.get_by_role("button", name="Import")
+    button = page.get_by_role("button", name="Import", exact=True)
     expect(button).to_be_visible()
     button.click()
     layers = page.locator(".umap-browse-datalayers li")
