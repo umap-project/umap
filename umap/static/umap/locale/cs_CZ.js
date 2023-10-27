@@ -143,7 +143,6 @@ const locale = {
     "Delete this shape": "Smazat tento tvar",
     "Delete this vertex (Alt+Click)": "Smazat tento bod (Alt+Klik)",
     "Directions from here": "Navigovat odsud",
-    "Disable editing": "Zakázat úpravy",
     "Display measure": "Zobrazit měřítko",
     "Display on load": "Zobrazit při startu",
     "Download": "Stažení",
@@ -164,7 +163,6 @@ const locale = {
     "Embed and share this map": "Sdílet mapu nebo ji vložit do jiného webu",
     "Embed the map": "Vložit mapu do jiného webu",
     "Empty": "Vyprázdnit",
-    "Enable editing": "Povolit úpravy",
     "Error in the tilelayer URL": "Chyba v URL vrstvy dlaždic",
     "Error while fetching {url}": "Chyba při načítání {url}",
     "Exit Fullscreen": "Ukončit režim celé obrazovky",
@@ -387,7 +385,6 @@ const locale = {
     "*single star for italic*": "*vše mezi hvězdičkami bude kurzívou*",
     "--- for a horizontal rule": "--- vytvoří vodorovnou linku",
     "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "Název vlastnosti, která se má použít jako popis funkce (např.: \"nom\"). Můžete také použít vlastnosti uvnitř hranatých závorek a použít více než jednu nebo je kombinovat se statickým obsahem (např.: \"{jméno} v {místo}\")",
-    "Cancel all": "Zrušit vše",
     "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Seznam vlastností oddělených čárkou, které se mají použít pro hledání aspektů (např.: mykey,otherkey). Chcete-li změnit popisek, přidejte jej za | (např.: mykey|Můj klíč,otherkey|Jiný klíč)",
     "Default view": "Výchozí zobrazení",
     "Facet keys": "Aspekty klíče",
@@ -407,7 +404,6 @@ const locale = {
     "Search": "Hledat",
     "Toggle direct input (advanced)": "Přepínání přímého vstupu (pokročilé)",
     "Datalayers": "Datové vrstvy",
-    "Delete map": "Smazat mapu",
     "Secret edit link:": "Tajný odkaz na úpravy:",
     "Who can edit \"{layer}\"": "Kdo může upravovat \"{layer}\"",
     "Current map view": "Aktuální zobrazení mapy",
@@ -425,7 +421,14 @@ const locale = {
     "Manual": "Ručně",
     "Number of desired classes (default 5)": "Počet požadovaných tříd (výchozí 5)",
     "Quantiles": "Kvantily",
-    "Show this layer in the caption": "Zobrazit tuto vrstvu v nadpisu"
+    "Show this layer in the caption": "Zobrazit tuto vrstvu v nadpisu",
+    "Back to preview": "Back to preview",
+    "Drawing": "Drawing",
+    "Edit the title of the map": "Edit the title of the map",
+    "Go to the homepage": "Go to the homepage",
+    "Switch to edit mode": "Switch to edit mode",
+    "Update who can see and edit the map": "Update who can see and edit the map",
+    "View": "View"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

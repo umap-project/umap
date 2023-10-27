@@ -143,7 +143,6 @@ const locale = {
     "Delete this shape": "Padam bentuk ini",
     "Delete this vertex (Alt+Click)": "Padam bucu ini (Alt+Klik)",
     "Directions from here": "Arah dari sini",
-    "Disable editing": "Lumpuhkan suntingan",
     "Display measure": "Paparkan ukuran",
     "Display on load": "Paparkan semasa dimuatkan",
     "Download": "Muat turun",
@@ -164,7 +163,6 @@ const locale = {
     "Embed and share this map": "Benam dan kongsi peta ini",
     "Embed the map": "Benamkan peta",
     "Empty": "Kosongkan",
-    "Enable editing": "Bolehkan suntingan",
     "Error in the tilelayer URL": "Ralat dalam URL lapisan jubin",
     "Error while fetching {url}": "Ralat ketika mengambil {url}",
     "Exit Fullscreen": "Keluar Skrin Penuh",
@@ -387,7 +385,6 @@ const locale = {
     "*single star for italic*": "*bintang tunggal untuk tulisan condong*",
     "--- for a horizontal rule": "--- untuk garis melintang",
     "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "Nama bagi ciri untuk digunakan sebagai label sifat (cth.: \"nom\"). Anda juga boleh gunakan ciri-ciri dalam kurungan dakap untuk guna lebih daripada satu ciri atau untuk gabung dengan kandungan statik (cth.: \"{name} di {place}\")",
-    "Cancel all": "Batal semua",
     "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Senarai berpisahkan koma bagi ciri-ciri untuk digunakan ketika menggelintar faset (cth.: kekuncisaya,kekuncilain). Untuk mengawal label, tambahkannya selepas tanda | (cth.: kekuncisaya|Kekunci Saya,kekuncilain|Kekunci Lain)",
     "Default view": "Paparan lalai",
     "Facet keys": "Kekunci faset",
@@ -407,7 +404,6 @@ const locale = {
     "Search": "Cari",
     "Toggle direct input (advanced)": "Togol input terus (lanjutan)",
     "Datalayers": "Lapisan data",
-    "Delete map": "Padam peta",
     "Secret edit link:": "Pautan suntingan rahsia:",
     "Who can edit \"{layer}\"": "Siapa boleh sunting \"{layer}\"",
     "Current map view": "Paparan peta semasa",
@@ -425,7 +421,14 @@ const locale = {
     "Manual": "Manual",
     "Number of desired classes (default 5)": "Jumlah kelas yang diingini (lalainya 5)",
     "Quantiles": "Kuantil",
-    "Show this layer in the caption": "Tunjuk lapisan ini dalam keterangan"
+    "Show this layer in the caption": "Tunjuk lapisan ini dalam keterangan",
+    "Back to preview": "Back to preview",
+    "Drawing": "Drawing",
+    "Edit the title of the map": "Edit the title of the map",
+    "Go to the homepage": "Go to the homepage",
+    "Switch to edit mode": "Switch to edit mode",
+    "Update who can see and edit the map": "Update who can see and edit the map",
+    "View": "View"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

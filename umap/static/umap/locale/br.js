@@ -143,7 +143,6 @@ const locale = {
     "Delete this shape": "Dilemel an tres-mañ",
     "Delete this vertex (Alt+Click)": "Dilemel ar poent-mañ (Erl+Klik)",
     "Directions from here": "Heñchadurioù adalek amañ",
-    "Disable editing": "Paouez da aozañ",
     "Display measure": "Diskouez ar muzulioù",
     "Display on load": "Diskwel en ur gargañ",
     "Download": "Pellgargañ",
@@ -164,7 +163,6 @@ const locale = {
     "Embed and share this map": "Ezporzhiañ ha rannañ ar gartenn",
     "Embed the map": "Enframmañ ar gartenn",
     "Empty": "Goullonderiñ",
-    "Enable editing": "Kregiñ da aozañ",
     "Error in the tilelayer URL": "Ur fazi zo en URL foñs ar gartenn",
     "Error while fetching {url}": "Ur fazi ez eus bet en ur c'hervel an URL {url}",
     "Exit Fullscreen": "Kuitaat ar mod skramm a-bezh",
@@ -387,7 +385,6 @@ const locale = {
     "*single star for italic*": "*ur steredennig simpl evit italek*",
     "--- for a horizontal rule": "--- evit ul linenn-disparti a-blaen",
     "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")",
-    "Cancel all": "Nullañ pep tra",
     "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)",
     "Default view": "Gwel dre ziouer",
     "Facet keys": "Facet keys",
@@ -407,7 +404,6 @@ const locale = {
     "Search": "Klask",
     "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Gwiskadoù",
-    "Delete map": "Dilemel ar gartenn",
     "Secret edit link:": "Liamm aozañ kuzh:",
     "Who can edit \"{layer}\"": "Piv a c'hall aozañ \"{layer}\"",
     "Current map view": "Listenn an objedoù a c'haller gwelet",
@@ -425,7 +421,14 @@ const locale = {
     "Manual": "Manual",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "Quantiles": "Quantiles",
-    "Show this layer in the caption": "Show this layer in the caption"
+    "Show this layer in the caption": "Show this layer in the caption",
+    "Back to preview": "Back to preview",
+    "Drawing": "Drawing",
+    "Edit the title of the map": "Edit the title of the map",
+    "Go to the homepage": "Go to the homepage",
+    "Switch to edit mode": "Switch to edit mode",
+    "Update who can see and edit the map": "Update who can see and edit the map",
+    "View": "View"
 }
 L.registerLocale("br", locale)
 L.setLocale("br")

@@ -143,7 +143,6 @@ const locale = {
     "Delete this shape": "Borrar esta figura",
     "Delete this vertex (Alt+Click)": "Borrar este vértice (Alt+Clic)",
     "Directions from here": "Direcciones desde aquí",
-    "Disable editing": "Deshabilitar la edición",
     "Display measure": "Mostrar medición",
     "Display on load": "Mostrar al cargar",
     "Download": "Descargar",
@@ -164,7 +163,6 @@ const locale = {
     "Embed and share this map": "Embeber y compartir este mapa",
     "Embed the map": "Embeber el mapa",
     "Empty": "Vaciar",
-    "Enable editing": "Habilitar la edición",
     "Error in the tilelayer URL": "Error en la URL del la capa de teselas",
     "Error while fetching {url}": "Error al traer {url}",
     "Exit Fullscreen": "Salir de la pantalla completa",
@@ -387,7 +385,6 @@ const locale = {
     "*single star for italic*": "*una estrella para cursiva*",
     "--- for a horizontal rule": "--- para una regla horizontal",
     "The name of the property to use as feature label (eg.: \"nom\"). You can also use properties inside brackets to use more than one or mix with static content (eg.: \"{name} in {place}\")": "El nombre de la propiedad a utilizar como etiqueta de la característica (ej.: \"nom\"). También puede utilizar propiedades entre paréntesis para utilizar más de una o mezclarlas con contenido estático (p. ej.: \"{nombre} en {lugar}\").",
-    "Cancel all": "Cancelar todo",
     "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Lista separada por comas de las propiedades a utilizar para la búsqueda de facetas (ej.: miclave,otraclave). Para controlar la etiqueta, añádala después de | (ej.: mykey|Mi Clave,otherkey|Otra Clave)",
     "Default view": "Vista predeterminada",
     "Facet keys": "Claves de facetas",
@@ -407,7 +404,6 @@ const locale = {
     "Search": "Buscar",
     "Toggle direct input (advanced)": "Conmutar entrada directa (avanzado)",
     "Datalayers": "Capas de datos",
-    "Delete map": "Borrar mapa",
     "Secret edit link:": "Enlace secreto de edición:",
     "Who can edit \"{layer}\"": "Quién puede editar \"{layer}\"",
     "Current map view": "Vista actual del mapa",
@@ -425,7 +421,14 @@ const locale = {
     "Manual": "Manual",
     "Number of desired classes (default 5)": "Número de clases deseadas (predeterminadas 5)",
     "Quantiles": "Cuantiles",
-    "Show this layer in the caption": "Mostrar esta capa en la leyenda"
+    "Show this layer in the caption": "Mostrar esta capa en la leyenda",
+    "Back to preview": "Back to preview",
+    "Drawing": "Drawing",
+    "Edit the title of the map": "Edit the title of the map",
+    "Go to the homepage": "Go to the homepage",
+    "Switch to edit mode": "Switch to edit mode",
+    "Update who can see and edit the map": "Update who can see and edit the map",
+    "View": "View"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")
