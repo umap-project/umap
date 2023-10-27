@@ -843,7 +843,7 @@ input:invalid {
     width: 100px;
     line-height: 1;
     margin: .5rem;
-    background-color: #666;
+    background-color: #202425;
     font-size: .7rem;
 }
 #umap-alert-container .umap-close-icon {
