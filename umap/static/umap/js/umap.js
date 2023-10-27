@@ -397,7 +397,11 @@ L.U.Map.include({
 
   loadDatalayers: function (force) {
     force = force || L.Util.queryString('download') // In case we are in download mode, let's go strait to loading all data
-    let toload = (dataToload = total = this.datalayers_index.length)
+    const total = this.datalayers_index.length
+    // toload => datalayer metadata remaining to load (synchronous)
+    // dataToload => datalayer data remaining to load (asynchronous)
+    let toload = total,
+      dataToload = total
     let datalayer
     const loaded = () => {
       this.datalayersLoaded = true
