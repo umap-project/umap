@@ -1736,7 +1736,7 @@ L.U.Editable = L.Editable.extend({
   },
 
   drawingTooltip: function (e) {
-    if (e.layer instanceof L.Marker && e.type != 'editable:drawing:move') {
+    if (e.layer instanceof L.Marker && e.type == 'editable:drawing:start') {
       this.map.ui.tooltip({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {
