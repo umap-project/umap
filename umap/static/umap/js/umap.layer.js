@@ -1114,6 +1114,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   redraw: function () {
+    if (!this.isVisible()) return
     this.hide()
     this.show()
   },
