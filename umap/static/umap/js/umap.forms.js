@@ -640,8 +640,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       },
       this
     )
-    customButton.style.display = 'block'
-    customButton.style.clear = 'both'
     this.builder.map.help.button(customButton, 'formatIconSymbol')
   },
 
