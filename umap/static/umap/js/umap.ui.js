@@ -135,8 +135,6 @@ L.U.UI = L.Evented.extend({
   },
 
   tooltip: function (opts) {
-    this.TOOLTIP_ID = Math.random()
-    const id = this.TOOLTIP_ID
     function showIt() {
       if (opts.anchor && opts.position === 'top') {
         this.anchorTooltipTop(opts.anchor)
@@ -150,10 +148,11 @@ L.U.UI = L.Evented.extend({
       L.DomUtil.addClass(this.parent, 'umap-tooltip')
       this._tooltip.innerHTML = opts.content
     }
+    this.TOOLTIP_ID = window.setTimeout(L.bind(showIt, this), opts.delay || 0)
+    const id = this.TOOLTIP_ID
     function closeIt() {
       this.closeTooltip(id)
     }
-    window.setTimeout(L.bind(showIt, this), opts.delay || 0)
     if (opts.anchor) {
       L.DomEvent.once(opts.anchor, 'mouseout', closeIt, this)
     }
@@ -200,6 +199,9 @@ L.U.UI = L.Evented.extend({
   },
 
   closeTooltip: function (id) {
+    // Clear timetout even if a new tooltip has been added
+    // in the meantime. Eg. after a mouseout from the anchor.
+    window.clearTimeout(id)
     if (id && id !== this.TOOLTIP_ID) return
     this._tooltip.className = ''
     this._tooltip.innerHTML = ''
