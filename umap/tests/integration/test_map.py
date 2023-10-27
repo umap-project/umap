@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,20 @@ from umap.models import Map
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
+
+
+def test_default_view_latest_without_datalayer_should_use_default_center(
+    map, live_server, datalayer, page
+):
+    datalayer.settings["displayOnLoad"] = False
+    datalayer.save()
+    map.settings["defaultView"] = "latest"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    # Hash is defined, so map is initialized
+    expect(page).to_have_url(re.compile(".*#7/.*"))
+    layers = page.locator(".umap-browse-datalayers li")
+    expect(layers).to_have_count(1)
 
 
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(

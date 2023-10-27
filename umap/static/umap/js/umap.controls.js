@@ -1382,7 +1382,7 @@ L.U.Search = L.PhotonSearch.extend({
     })
     L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
-      const datalayer = self.map.defaultDataLayer()
+      const datalayer = self.map.defaultEditDataLayer()
       const layer = datalayer.geojsonToFeatures(feature)
       layer.isDirty = true
       layer.edit()
@@ -1636,7 +1636,7 @@ L.U.Editable = L.Editable.extend({
 
   connectCreatedToMap: function (layer) {
     // Overrided from Leaflet.Editable
-    const datalayer = this.map.defaultDataLayer()
+    const datalayer = this.map.defaultEditDataLayer()
     datalayer.addLayer(layer)
     layer.isDirty = true
     return layer
