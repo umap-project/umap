@@ -694,10 +694,17 @@ L.U.Map.include({
           this._setDefaultCenter()
           return
         }
-        const datalayer = this.defaultViewDataLayer(),
-          feature = datalayer ? datalayer.getFeatureByIndex(-1) : null
-        if (feature) feature.zoomTo()
-        else this._setDefaultCenter()
+        const datalayer = this.firstVisibleDatalayer()
+        let feature
+        if (datalayer) {
+          const feature = datalayer.getFeatureByIndex(-1)
+          if (feature) {
+            feature.zoomTo()
+            return
+          }
+        }
+        // Fallback, no datalayer or no feature found
+        this._setDefaultCenter()
       })
     } else {
       this._setDefaultCenter()
@@ -1225,13 +1232,10 @@ L.U.Map.include({
     }
   },
 
-  defaultViewDataLayer: function () {
-    let datalayer, fallback
-    datalayer = this.findDataLayer((datalayer) => {
-      fallback = datalayer
+  firstVisibleDatalayer: function () {
+    return this.findDataLayer((datalayer) => {
       if (datalayer.isVisible()) return true
     })
-    return datalayer || fallback
   },
 
   // TODO: allow to control the default datalayer
