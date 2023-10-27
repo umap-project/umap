@@ -454,16 +454,22 @@ ul.photon-autocomplete {
 .leaflet-container .leaflet-control-edit-save:before,
 .leaflet-container .leaflet-control-edit-cancel:before {
     display: inline-block;
-    width: 24px;
+    width: 19px;
     height: 24px;
     background-position: -50px -122px;
     background-repeat: no-repeat;
     background-image: url('./img/16-white.svg');
     vertical-align: middle;
     content: ' ';
+    text-align: center;
+}
+.leaflet-container .leaflet-control-edit-disable span,
+.leaflet-container .leaflet-control-edit-save span,
+.leaflet-container .leaflet-control-edit-cancel span {
+    margin-left: 4px;
 }
 .leaflet-container .leaflet-control-edit-save:before {
-    background-position: -2px -25px;
+    background-position: -1px -26px;
 }
 .leaflet-container .leaflet-control-edit-disable:before {
     background-position: -50px -25px;
