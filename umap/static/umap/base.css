@@ -178,6 +178,7 @@ input[type="submit"] {
     line-height: 32px;
     border: none;
     text-decoration: none;
+    background-color: white;
 }
 .dark .button,
 .dark [type="button"] {

@@ -326,6 +326,7 @@ ul.photon-autocomplete {
     border: 1px solid #bbb;
     border-radius: 4px;
     box-shadow: none;
+    background-color: white;
 }
 .leaflet-measure-control a {
     background-position: 0 -72px;
