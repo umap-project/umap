@@ -367,18 +367,29 @@ L.U.EditControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    const container = L.DomUtil.create('div', 'leaflet-control-edit-enable'),
-      edit = L.DomUtil.create('a', '', container)
-    edit.href = '#'
-    edit.title = `${L._('Enable editing')} (Ctrl+E)`
-    edit.textContent = L._('Edit')
-
-    L.DomEvent.addListener(edit, 'click', L.DomEvent.stop).addListener(
-      edit,
-      'click',
+    const container = L.DomUtil.create('div', 'leaflet-control-edit-enable')
+    const enableEditing = L.DomUtil.createButton(
+      '',
+      container,
+      L._('Edit'),
       map.enableEdit,
       map
     )
+    L.DomEvent.on(
+      enableEditing,
+      'mouseover',
+      function () {
+        map.ui.tooltip({
+          content: `${L._('Switch to edit mode')} (<kbd>Ctrl+E</kbd>)`,
+          anchor: enableEditing,
+          position: 'bottom',
+          delay: 750,
+          duration: 5000,
+        })
+      },
+      this
+    )
+
     return container
   },
 })
@@ -391,15 +402,14 @@ L.Control.Embed = L.Control.extend({
 
   onAdd: function (map) {
     const container = L.DomUtil.create('div', 'leaflet-control-embed umap-control')
-
-    const link = L.DomUtil.create('a', '', container)
-    link.href = '#'
-    link.title = L._('Embed and share this map')
-
-    L.DomEvent.on(link, 'click', L.DomEvent.stop)
-      .on(link, 'click', map.renderShareBox, map)
-      .on(link, 'dblclick', L.DomEvent.stopPropagation)
-
+    const shareButton = L.DomUtil.createButton(
+      '',
+      container,
+      L._('Embed and share this map'),
+      map.renderShareBox,
+      map
+    )
+    L.DomEvent.on(shareButton, 'dblclick', L.DomEvent.stopPropagation)
     return container
   },
 })
@@ -410,19 +420,21 @@ L.U.MoreControls = L.Control.extend({
   },
 
   onAdd: function () {
-    const container = L.DomUtil.create('div', 'umap-control-text'),
-      more = L.DomUtil.create('a', 'umap-control-more', container),
-      less = L.DomUtil.create('a', 'umap-control-less', container)
-    more.href = '#'
-    more.title = L._('More controls')
-
-    L.DomEvent.on(more, 'click', L.DomEvent.stop).on(more, 'click', this.toggle, this)
-
-    less.href = '#'
-    less.title = L._('Hide controls')
-
-    L.DomEvent.on(less, 'click', L.DomEvent.stop).on(less, 'click', this.toggle, this)
-
+    const container = L.DomUtil.create('div', 'umap-control-text')
+    const moreButton = L.DomUtil.createButton(
+      'umap-control-more',
+      container,
+      L._('More controls'),
+      this.toggle,
+      this
+    )
+    const lessButton = L.DomUtil.createButton(
+      'umap-control-less',
+      container,
+      L._('Hide controls'),
+      this.toggle,
+      this
+    )
     return container
   },
 
@@ -500,22 +512,20 @@ L.U.DataLayersControl = L.Control.extend({
       actions
     )
 
-    const link = L.DomUtil.create('a', 'umap-browse-link', actions)
-    link.href = '#'
-    link.title = link.textContent = L._('Browse data')
-
-    const toggle = L.DomUtil.create('a', 'umap-browse-toggle', container)
-    toggle.href = '#'
-    toggle.title = L._('See data layers')
-
-    L.DomEvent.on(toggle, 'click', L.DomEvent.stop)
-
-    L.DomEvent.on(link, 'click', L.DomEvent.stop).on(
-      link,
-      'click',
+    L.DomUtil.createButton(
+      'umap-browse-link',
+      actions,
+      L._('Browse data'),
       map.openBrowser,
       map
     )
+
+    const toggleButton = L.DomUtil.createButton(
+      'umap-browse-toggle',
+      container,
+      L._('See data layers')
+    )
+    L.DomEvent.on(toggleButton, 'click', L.DomEvent.stop)
 
     map.whenReady(function () {
       this.update()
@@ -537,8 +547,8 @@ L.U.DataLayersControl = L.Control.extend({
       )
     } else {
       L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation)
-      L.DomEvent.on(toggle, 'click', L.DomEvent.stop).on(
-        toggle,
+      L.DomEvent.on(toggleButton, 'click', L.DomEvent.stop).on(
+        toggleButton,
         'click',
         this.expand,
         this
@@ -628,14 +638,11 @@ L.U.DataLayersControl = L.Control.extend({
       this
     )
 
-    const bar = L.DomUtil.create('div', 'button-bar', container),
-      add = L.DomUtil.create('a', 'show-on-edit block add-datalayer button', bar)
-    add.href = '#'
-    add.textContent = add.title = L._('Add a layer')
-
-    L.DomEvent.on(add, 'click', L.DomEvent.stop).on(
-      add,
-      'click',
+    const bar = L.DomUtil.create('div', 'button-bar', container)
+    L.DomUtil.createButton(
+      'show-on-edit block add-datalayer button',
+      bar,
+      L._('Add a layer'),
       this.newDataLayer,
       this
     )
@@ -725,7 +732,6 @@ L.U.DataLayer.addInitHook(function () {
 })
 
 L.U.Map.include({
-
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),
       title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
@@ -825,13 +831,17 @@ L.U.Map.include({
     }
     if (this.options.licence) {
       const licence = L.DomUtil.add(
-          'p',
-          '',
-          credits,
-          `${L._('Map user content has been published under licence')} `
-        ),
-        link = L.DomUtil.add('a', '', licence, this.options.licence.name)
-      link.href = this.options.licence.url
+        'p',
+        '',
+        credits,
+        `${L._('Map user content has been published under licence')} `
+      )
+      L.DomUtil.createLink(
+        '',
+        licence,
+        this.options.licence.name,
+        this.options.licence.url
+      )
     } else {
       L.DomUtil.add('p', '', credits, L._('No licence has been set'))
     }
@@ -929,76 +939,148 @@ L.U.Map.include({
 
   renderEditToolbar: function () {
     const container = L.DomUtil.create(
-        'div',
-        'umap-main-edit-toolbox with-transition dark',
-        this._controlContainer
-      ),
-      logo = L.DomUtil.add('a', 'logo', container),
-      name = L.DomUtil.create('a', 'map-name', container),
-      share_status = L.DomUtil.create('a', 'share-status', container),
-      update = () => {
-        const status = this.permissions.getShareStatusDisplay()
-        name.textContent = this.getDisplayName()
-        // status is not set until map is saved once
-        if (status)
-          share_status.textContent = L._('Visibility: {status}', {
-            status: status,
-          })
+      'div',
+      'umap-main-edit-toolbox with-transition dark',
+      this._controlContainer
+    )
+    const leftContainer = L.DomUtil.create('div', 'umap-left-edit-toolbox', container)
+    const rightContainer = L.DomUtil.create('div', 'umap-right-edit-toolbox', container)
+    const logo = L.DomUtil.create('div', 'logo', leftContainer)
+    L.DomUtil.createLink('', logo, 'uMap', '/', null, L._('Go to the homepage'))
+    const nameButton = L.DomUtil.createButton(
+      'map-name',
+      leftContainer,
+      '',
+      this.edit,
+      this
+    )
+    L.DomEvent.on(
+      nameButton,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: L._('Edit the title of the map'),
+          anchor: nameButton,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
+    const shareStatusButton = L.DomUtil.createButton(
+      'share-status',
+      leftContainer,
+      '',
+      this.permissions.edit,
+      this.permissions
+    )
+    L.DomEvent.on(
+      shareStatusButton,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: L._('Update who can see and edit the map'),
+          anchor: shareStatusButton,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
+    const update = () => {
+      const status = this.permissions.getShareStatusDisplay()
+      nameButton.textContent = this.getDisplayName()
+      // status is not set until map is saved once
+      if (status) {
+        shareStatusButton.textContent = L._('Visibility: {status}', {
+          status: status,
+        })
       }
+    }
     update()
     this.once('saved', L.bind(update, this))
-    logo.href = '/'
     if (this.options.editMode === 'advanced') {
-      name.href = '#'
-      share_status.href = '#'
-      L.DomEvent.on(name, 'click', this.edit, this)
-      L.DomEvent.on(share_status, 'click', this.permissions.edit, this.permissions)
+      L.DomEvent.on(nameButton, 'click', this.edit, this)
+      L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
     this.on('postsync', L.bind(update, this))
-    const save = L.DomUtil.create('a', 'leaflet-control-edit-save button', container)
-    save.href = '#'
-    save.title = `${L._('Save current edits')} (Ctrl+S)`
-    save.textContent = L._('Save')
-    const cancel = L.DomUtil.create('a', 'leaflet-control-edit-cancel', container)
-    cancel.href = '#'
-    cancel.title = `${L._('Cancel edits')} (Ctrl+Z)`
-    cancel.textContent = L._('Cancel all')
-    const disable = L.DomUtil.create('a', 'leaflet-control-edit-disable', container)
-    disable.href = '#'
-    disable.textContent = L._('Disable editing')
-    disable.title = `${disable.textContent} (Ctrl+E)`
-    this.help.link(container, 'edit')
     if (this.options.user) {
-      const userLabel = L.DomUtil.add(
-        'a',
+      L.DomUtil.createLink(
         'umap-user',
-        container,
-        L._(`My Dashboard ({username})`, { username: this.options.user.name })
+        rightContainer,
+        L._(`My Dashboard <span>({username})</span>`, {
+          username: this.options.user.name,
+        }),
+        this.options.user.url
       )
-      userLabel.href = this.options.user.url
     }
-
-    L.DomEvent.addListener(disable, 'click', L.DomEvent.stop).addListener(
-      disable,
-      'click',
+    this.help.link(rightContainer, 'edit')
+    const controlEditCancel = L.DomUtil.createButton(
+      'leaflet-control-edit-cancel',
+      rightContainer,
+      L.DomUtil.add('span', '', null, L._('Cancel edits')),
+      this.askForReset,
+      this
+    )
+    L.DomEvent.on(
+      controlEditCancel,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: `${L._('Cancel')} (<kbd>Ctrl+Z</kbd>)`,
+          anchor: controlEditCancel,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
+    const controlEditDisable = L.DomUtil.createButton(
+      'leaflet-control-edit-disable',
+      rightContainer,
+      L.DomUtil.add('span', '', null, L._('View')),
       function (e) {
         this.disableEdit(e)
         this.ui.closePanel()
       },
       this
     )
-
-    L.DomEvent.addListener(save, 'click', L.DomEvent.stop).addListener(
-      save,
-      'click',
+    L.DomEvent.on(
+      controlEditDisable,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: `${L._('Back to preview')} (<kbd>Ctrl+E</kbd>)`,
+          anchor: controlEditDisable,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
+      this
+    )
+    const controlEditSave = L.DomUtil.createButton(
+      'leaflet-control-edit-save button',
+      rightContainer,
+      L.DomUtil.add('span', '', null, L._('Save')),
       this.save,
       this
     )
-
-    L.DomEvent.addListener(cancel, 'click', L.DomEvent.stop).addListener(
-      cancel,
-      'click',
-      this.askForReset,
+    L.DomEvent.on(
+      controlEditSave,
+      'mouseover',
+      function () {
+        this.ui.tooltip({
+          content: `${L._('Save current edits')} (<kbd>Ctrl+S</kbd>)`,
+          anchor: controlEditSave,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      },
       this
     )
   },
@@ -1084,12 +1166,19 @@ L.U.Map.include({
       }
     }
     toggleCaveat()
-    const download = L.DomUtil.create('a', 'button', container)
-    download.textContent = L._('Download data')
-    L.DomEvent.on(download, 'click', () => {
-      if (typeInput.value === 'umap') this.fullDownload()
-      else this.download(typeInput.value)
-    })
+    L.DomUtil.createButton(
+      'button',
+      container,
+      L._('Download data'),
+      () => {
+        if (typeInput.value === 'umap') {
+          this.fullDownload()
+        } else {
+          this.download(typeInput.value)
+        }
+      },
+      this
+    )
     this.ui.openPanel({ data: { html: container } })
   },
 
@@ -1235,15 +1324,14 @@ L.U.TileLayerControl = L.Control.extend({
 
   onAdd: function () {
     const container = L.DomUtil.create('div', 'leaflet-control-tilelayers umap-control')
-
-    const link = L.DomUtil.create('a', '', container)
-    link.href = '#'
-    link.title = L._('Change map background')
-
-    L.DomEvent.on(link, 'click', L.DomEvent.stop)
-      .on(link, 'click', this.openSwitcher, this)
-      .on(link, 'dblclick', L.DomEvent.stopPropagation)
-
+    const changeMapBackgroundButton = L.DomUtil.createButton(
+      '',
+      container,
+      L._('Change map background'),
+      this.openSwitcher,
+      this
+    )
+    L.DomEvent.on(changeMapBackgroundButton, 'dblclick', L.DomEvent.stopPropagation)
     return container
   },
 
@@ -1300,7 +1388,12 @@ L.U.AttributionControl = L.Control.Attribution.extend({
     // Use our how container, so we can hide/show on small screens
     const credits = this._container.innerHTML
     this._container.innerHTML = ''
-    const container = L.DomUtil.add('div', 'attribution-container', this._container, credits)
+    const container = L.DomUtil.add(
+      'div',
+      'attribution-container',
+      this._container,
+      credits
+    )
     if (this._map.options.shortCredit) {
       L.DomUtil.add(
         'span',
@@ -1317,19 +1410,17 @@ L.U.AttributionControl = L.Control.Attribution.extend({
     }
     if (window.top === window.self && this._map.options.captionMenus) {
       // We are not in iframe mode
-      const home = L.DomUtil.add('a', '', container, ` — ${L._('Home')}`)
-      home.href = '/'
+      L.DomUtil.createLink('', container, ` — ${L._('Home')}`, '/')
     }
     if (this._map.options.captionMenus) {
-      const poweredBy = L.DomUtil.add(
-        'a',
+      L.DomUtil.createLink(
         '',
         container,
-        ` — ${L._('Powered by uMap')}`
+        ` — ${L._('Powered by uMap')}`,
+        'https://github.com/umap-project/umap/'
       )
-      poweredBy.href = 'https://github.com/umap-project/umap/'
     }
-    L.DomUtil.create('a', 'attribution-toggle', this._container)
+    L.DomUtil.createLink('attribution-toggle', this._container, '')
   },
 })
 
@@ -1341,16 +1432,17 @@ L.U.StarControl = L.Control.extend({
   onAdd: function (map) {
     const status = map.options.starred ? ' starred' : ''
     const container = L.DomUtil.create(
-        'div',
-        `leaflet-control-star umap-control${status}`
-      ),
-      link = L.DomUtil.create('a', '', container)
-    link.href = '#'
-    link.title = L._('Star this map')
-    L.DomEvent.on(link, 'click', L.DomEvent.stop)
-      .on(link, 'click', map.star, map)
-      .on(link, 'dblclick', L.DomEvent.stopPropagation)
-
+      'div',
+      `leaflet-control-star umap-control${status}`
+    )
+    const starMapButton = L.DomUtil.createButton(
+      '',
+      container,
+      L._('Star this map'),
+      map.star,
+      map
+    )
+    L.DomEvent.on(starMapButton, 'dblclick', L.DomEvent.stopPropagation)
     return container
   },
 })
@@ -1410,17 +1502,18 @@ L.U.SearchControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    const container = L.DomUtil.create('div', 'leaflet-control-search umap-control'),
-      self = this
-
+    const container = L.DomUtil.create('div', 'leaflet-control-search umap-control')
     L.DomEvent.disableClickPropagation(container)
-    const link = L.DomUtil.create('a', '', container)
-    link.href = '#'
-    link.title = L._('Search a place name')
-    L.DomEvent.on(link, 'click', (e) => {
-      L.DomEvent.stop(e)
-      self.openPanel(map)
-    })
+    L.DomUtil.createButton(
+      '',
+      container,
+      L._('Search a place name'),
+      (e) => {
+        L.DomEvent.stop(e)
+        this.openPanel(map)
+      },
+      this
+    )
     return container
   },
 
@@ -1626,7 +1719,7 @@ L.U.Editable = L.Editable.extend({
     return new L.U.Marker(this.map, latlng, this._getDefaultProperties())
   },
 
-  _getDefaultProperties: function() {
+  _getDefaultProperties: function () {
     const result = {}
     if (this.map.options.featuresHaveOwner && this.map.options.hasOwnProperty('user')) {
       result.geojson = { properties: { owner: this.map.options.user.id } }

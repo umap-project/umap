@@ -129,7 +129,10 @@ L.Util.toHTML = (r, options) => {
 
   // images
   r = r.replace(/{{([^\]|]*?)}}/g, '<img src="$1">')
-  r = r.replace(/{{([^|]*?)\|(\d*?)(px)?}}/g, '<img src="$1" style="width:$2px;min-width:$2px;">')
+  r = r.replace(
+    /{{([^|]*?)\|(\d*?)(px)?}}/g,
+    '<img src="$1" style="width:$2px;min-width:$2px;">'
+  )
 
   //Unescape http
   r = r.replace(/(h_t_t_p)/g, 'http')
@@ -258,32 +261,31 @@ L.Util.hasVar = (value) => {
 }
 
 L.Util.copyToClipboard = function (textToCopy) {
-      // https://stackoverflow.com/a/65996386
-      // Navigator clipboard api needs a secure context (https)
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(textToCopy)
-      } else {
-        // Use the 'out of viewport hidden text area' trick
-        const textArea = document.createElement('textarea')
-        textArea.value = textToCopy
+  // https://stackoverflow.com/a/65996386
+  // Navigator clipboard api needs a secure context (https)
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy)
+  } else {
+    // Use the 'out of viewport hidden text area' trick
+    const textArea = document.createElement('textarea')
+    textArea.value = textToCopy
 
-        // Move textarea out of the viewport so it's not visible
-        textArea.style.position = 'absolute'
-        textArea.style.left = '-999999px'
+    // Move textarea out of the viewport so it's not visible
+    textArea.style.position = 'absolute'
+    textArea.style.left = '-999999px'
 
-        document.body.prepend(textArea)
-        textArea.select()
+    document.body.prepend(textArea)
+    textArea.select()
 
-        try {
-          document.execCommand('copy')
-        } catch (error) {
-          console.error(error)
-        } finally {
-          textArea.remove()
-        }
-      }
+    try {
+      document.execCommand('copy')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      textArea.remove()
     }
-
+  }
+}
 
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
@@ -314,10 +316,22 @@ L.DomUtil.createFieldset = (container, legend, options) => {
 }
 
 L.DomUtil.createButton = (className, container, content, callback, context) => {
-  const el = L.DomUtil.add('a', className, container, content)
-  el.href = '#'
+  const el = L.DomUtil.add('button', className, container, content)
+  el.type = 'button'
   if (callback) {
     L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback, context)
+  }
+  return el
+}
+
+L.DomUtil.createLink = (className, container, content, url, target, title) => {
+  const el = L.DomUtil.add('a', className, container, content)
+  el.href = url
+  if (target) {
+    el.target = target
+  }
+  if (title) {
+    el.title = title
   }
   return el
 }
@@ -418,13 +432,17 @@ L.U.Help = L.Class.extend({
       'umap-help-box with-transition dark',
       document.body
     )
-    const closeLink = L.DomUtil.create('a', 'umap-close-link', this.box)
-    closeLink.href = '#'
-    L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    const label = L.DomUtil.create('span', '', closeLink)
+    const closeButton = L.DomUtil.createButton(
+      'umap-close-link',
+      this.box,
+      '',
+      this.hide,
+      this
+    )
+    L.DomUtil.add('i', 'umap-close-icon', closeButton)
+    const label = L.DomUtil.create('span', '', closeButton)
     label.title = label.textContent = L._('Close')
     this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
-    L.DomEvent.on(closeLink, 'click', this.hide, this)
   },
 
   onKeyDown: function (e) {
@@ -457,8 +475,11 @@ L.U.Help = L.Class.extend({
   },
 
   button: function (container, entries, classname) {
-    const helpButton = L.DomUtil.create('a', classname || 'umap-help-button', container)
-    helpButton.href = '#'
+    const helpButton = L.DomUtil.createButton(
+      classname || 'umap-help-button',
+      container,
+      L._('Help')
+    )
     if (entries) {
       L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
         helpButton,
@@ -475,7 +496,7 @@ L.U.Help = L.Class.extend({
 
   link: function (container, entries) {
     const helpButton = this.button(container, entries, 'umap-help-link')
-    helpButton.textContent = L._("Help")
+    helpButton.textContent = L._('Help')
     return helpButton
   },
 

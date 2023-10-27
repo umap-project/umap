@@ -130,12 +130,10 @@ L.U.FeatureMixin = {
   },
 
   getAdvancedEditActions: function (container) {
-    const deleteLink = L.DomUtil.create('a', 'button umap-delete', container)
-    deleteLink.href = '#'
-    deleteLink.textContent = L._('Delete')
-    L.DomEvent.on(
-      deleteLink,
-      'click',
+    const deleteButton = L.DomUtil.createButton(
+      'button umap-delete',
+      container,
+      L._('Delete'),
       function (e) {
         L.DomEvent.stop(e)
         if (this.confirmDelete()) this.map.ui.closePanel()
@@ -1018,10 +1016,13 @@ L.U.Polyline = L.Polyline.extend({
 
   getAdvancedEditActions: function (container) {
     L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    const toPolygon = L.DomUtil.create('a', 'button umap-to-polygon', container)
-    toPolygon.href = '#'
-    toPolygon.textContent = L._('Transform to polygon')
-    L.DomEvent.on(toPolygon, 'click', this.toPolygon, this)
+    const toPolygon = L.DomUtil.createButton(
+      'button umap-to-polygon',
+      container,
+      L._('Transform to polygon'),
+      this.toPolygon,
+      this
+    )
   },
 
   _mergeShapes: function (from, to) {
@@ -1165,10 +1166,13 @@ L.U.Polygon = L.Polygon.extend({
 
   getAdvancedEditActions: function (container) {
     L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    const toPolyline = L.DomUtil.create('a', 'button umap-to-polyline', container)
-    toPolyline.href = '#'
-    toPolyline.textContent = L._('Transform to lines')
-    L.DomEvent.on(toPolyline, 'click', this.toPolyline, this)
+    const toPolyline = L.DomUtil.createButton(
+      'button umap-to-polyline',
+      container,
+      L._('Transform to lines'),
+      this.toPolyline,
+      this
+    )
   },
 
   isMulti: function () {

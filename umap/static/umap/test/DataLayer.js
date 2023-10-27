@@ -341,7 +341,7 @@ describe('L.U.DataLayer', function () {
       happen.click(
         qs('#browse_data_toggle_' + L.stamp(this.datalayer) + ' .layer-edit')
       )
-      deleteLink = qs('a.delete_datalayer_button')
+      deleteLink = qs('button.delete_datalayer_button')
       assert.ok(deleteLink)
     })
 

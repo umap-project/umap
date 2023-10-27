@@ -44,20 +44,20 @@ var resetMap = function () {
   document.body.className = ''
 }
 var enableEdit = function () {
-  happen.click(qs('div.leaflet-control-edit-enable a'))
+  happen.click(qs('div.leaflet-control-edit-enable button'))
 }
 var disableEdit = function () {
-  happen.click(qs('a.leaflet-control-edit-disable'))
+  happen.click(qs('.leaflet-control-edit-disable'))
 }
 var clickSave = function () {
-  happen.click(qs('a.leaflet-control-edit-save'))
+  happen.click(qs('.leaflet-control-edit-save'))
 }
 var clickCancel = function () {
   var _confirm = window.confirm
   window.confirm = function (text) {
     return true
   }
-  happen.click(qs('a.leaflet-control-edit-cancel'))
+  happen.click(qs('button.leaflet-control-edit-cancel'))
   happen.once(document.body, { type: 'keypress', keyCode: 13 })
   window.confirm = _confirm
 }

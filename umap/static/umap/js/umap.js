@@ -1558,16 +1558,10 @@ L.U.Map.include({
     })
     limitBounds.appendChild(boundsBuilder.build())
     const boundsButtons = L.DomUtil.create('div', 'button-bar half', limitBounds)
-    const setCurrentButton = L.DomUtil.add(
-      'a',
+    L.DomUtil.createButton(
       'button',
       boundsButtons,
-      L._('Use current bounds')
-    )
-    setCurrentButton.href = '#'
-    L.DomEvent.on(
-      setCurrentButton,
-      'click',
+      L._('Use current bounds'),
       function () {
         const bounds = this.getBounds()
         this.options.limitBounds.south = L.Util.formatNum(bounds.getSouth())
@@ -1580,11 +1574,10 @@ L.U.Map.include({
       },
       this
     )
-    const emptyBounds = L.DomUtil.add('a', 'button', boundsButtons, L._('Empty'))
-    emptyBounds.href = '#'
-    L.DomEvent.on(
-      emptyBounds,
-      'click',
+    L.DomUtil.createButton(
+      'button',
+      boundsButtons,
+      L._('Empty'),
       function () {
         this.options.limitBounds.south = null
         this.options.limitBounds.west = null
@@ -1676,34 +1669,39 @@ L.U.Map.include({
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
     if (this.permissions.isOwner()) {
-      const del = L.DomUtil.create('a', 'button umap-delete', advancedButtons)
-      del.href = '#'
-      del.title = L._('Delete map')
-      del.textContent = L._('Delete')
-      L.DomEvent.on(del, 'click', L.DomEvent.stop).on(del, 'click', this.del, this)
-      const empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
-      empty.href = '#'
-      empty.textContent = L._('Empty')
-      empty.title = L._('Delete all layers')
-      L.DomEvent.on(empty, 'click', L.DomEvent.stop).on(
-        empty,
-        'click',
+      L.DomUtil.createButton(
+        'button umap-delete',
+        advancedButtons,
+        L._('Delete'),
+        this.del,
+        this
+      )
+      L.DomUtil.createButton(
+        'button umap-empty',
+        advancedButtons,
+        L._('Empty'),
         this.empty,
         this
       )
     }
-    const clone = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
-    clone.href = '#'
-    clone.textContent = L._('Clone')
-    clone.title = L._('Clone this map')
-    L.DomEvent.on(clone, 'click', L.DomEvent.stop).on(clone, 'click', this.clone, this)
-    const download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
-    download.href = '#'
-    download.textContent = L._('Download')
-    download.title = L._('Open download panel')
-    L.DomEvent.on(download, 'click', L.DomEvent.stop).on(
-      download,
-      'click',
+    L.DomUtil.createButton(
+      'button umap-clone',
+      advancedButtons,
+      L._('Clone this map'),
+      this.clone,
+      this
+    )
+    L.DomUtil.createButton(
+      'button umap-empty',
+      advancedButtons,
+      L._('Delete all layers'),
+      this.empty,
+      this
+    )
+    L.DomUtil.createButton(
+      'button umap-download',
+      advancedButtons,
+      L._('Open download panel'),
       this.renderShareBox,
       this
     )
@@ -1767,38 +1765,25 @@ L.U.Map.include({
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
     if (this.options.captionMenus) {
-      const about = L.DomUtil.add(
-        'a',
+      L.DomUtil.createButton(
         'umap-about-link',
         container,
-        ` — ${L._('About')}`
+        ` — ${L._('About')}`,
+        this.displayCaption,
+        this
       )
-      about.href = '#'
-      L.DomEvent.on(about, 'click', this.displayCaption, this)
-      const browser = L.DomUtil.add(
-        'a',
+      L.DomUtil.createButton(
         'umap-open-browser-link',
         container,
-        ` | ${L._('Browse data')}`
-      )
-      browser.href = '#'
-      L.DomEvent.on(browser, 'click', L.DomEvent.stop).on(
-        browser,
-        'click',
+        ` | ${L._('Browse data')}`,
         this.openBrowser,
         this
       )
       if (this.options.facetKey) {
-        const filter = L.DomUtil.add(
-          'a',
+        L.DomUtil.createButton(
           'umap-open-filter-link',
           container,
-          ` | ${L._('Select data')}`
-        )
-        filter.href = '#'
-        L.DomEvent.on(filter, 'click', L.DomEvent.stop).on(
-          filter,
-          'click',
+          ` | ${L._('Select data')}`,
           this.openFacet,
           this
         )

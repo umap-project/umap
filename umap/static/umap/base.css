@@ -163,7 +163,9 @@ select {
 select[multiple="multiple"] {
     height: auto;
 }
-.button, input[type="submit"] {
+.button,
+[type="button"],
+input[type="submit"] {
     display: block;
     margin-bottom: 14px;
     text-align: center;
@@ -176,17 +178,30 @@ select[multiple="multiple"] {
     line-height: 32px;
     border: none;
     text-decoration: none;
+    background-color: white;
 }
-.dark .button {
+.dark .button,
+.dark [type="button"] {
     background-color: #2a2e30;
     color: #eeeeec;
     border: 1px solid #1b1f20;
 }
-.dark .button:hover, .dark input[type="submit"]:hover {
+.dark .button:hover,
+.dark [type="button"]:hover,
+.dark input[type="submit"]:hover {
     background-color: #2e3436;
 }
 .dark a {
     color: #eeeeec;
+}
+[type="button"].flat,
+.dark [type="button"].flat {
+    border: none;
+    background-color: inherit;
+    padding: 0;
+    text-align: left;
+    min-height: inherit;
+    text-decoration: underline;
 }
 .help-text, .helptext {
     display: block;
@@ -361,7 +376,8 @@ input.switch:checked ~ label:after {
 .umap-multiplechoice.by4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-.button-bar .button {
+.button-bar .button,
+.button-bar [type="button"] {
     display: inline-block;
 }
 .umap-multiplechoice input[type='radio'] {
@@ -558,10 +574,12 @@ input.blur {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-.blur + .button:before {
+.blur + .button:before,
+.blur + [type="button"]:before {
     content: '✔';
 }
-.blur + .button {
+.blur + .button,
+.blur + [type="button"] {
     width: 40px;
     height: 18px;
     display: inline-block;
@@ -571,7 +589,8 @@ input.blur {
     border-bottom-left-radius: 0;
     box-sizing: border-box;
 }
-input[type=hidden].blur + .button {
+input[type=hidden].blur + .button,
+input[type=hidden].blur + [type="button"] {
     display: none;
 }
 
@@ -726,6 +745,7 @@ input:invalid {
 .umap-alert input {
     padding: 5px;
     border-radius: 4px;
+    width: 100%;
 }
 
 /* *********** */
@@ -761,6 +781,19 @@ input:invalid {
     border-top-color: rgba(30, 30, 30, 0.8);
     border-width: 11px;
     margin-left: calc(-50% + 21px);
+}
+#umap-tooltip-container.tooltip-bottom:before {
+    top: -22px;
+    left: calc(50% - 11px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: rgba(30, 30, 30, 0.7);
+    border-width: 11px;
+    transform: rotate(180deg);
 }
 #umap-tooltip-container.tooltip.tooltip-left:after {
     left: 100%;
@@ -807,9 +840,21 @@ input:invalid {
     color: #fff;
     float: right;
     padding-right: 10px;
+    width: 100px;
+    line-height: 1;
+    margin: .5rem;
+    background-color: #666;
+    font-size: .7rem;
 }
 #umap-alert-container .umap-close-icon {
     background-position: -74px -55px;
+}
+#umap-alert-container .umap-alert-actions {
+    display: flex;
+    margin: 1rem;
+}
+#umap-alert-container .umap-alert-actions .umap-action {
+    margin-bottom: 0;
 }
 
 

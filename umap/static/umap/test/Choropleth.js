@@ -205,7 +205,7 @@ describe('L.U.Choropleth', function () {
   })
   after(function () {
     this.server.restore()
-    //resetMap()
+    resetMap()
   })
 
   describe('#init()', function () {

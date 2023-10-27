@@ -107,7 +107,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
       properties
     )
     content = L.Util.greedyTemplate(template, properties)
-    content = L.Util.toHTML(content, {target: target})
+    content = L.Util.toHTML(content, { target: target })
     container.innerHTML = content
     return container
   },

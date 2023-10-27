@@ -1273,16 +1273,10 @@ L.U.DataLayer = L.Evented.extend({
 
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
-    const deleteLink = L.DomUtil.create(
-      'a',
+    const deleteLink = L.DomUtil.createButton(
       'button delete_datalayer_button umap-delete',
-      advancedButtons
-    )
-    deleteLink.textContent = L._('Delete')
-    deleteLink.href = '#'
-    L.DomEvent.on(deleteLink, 'click', L.DomEvent.stop).on(
-      deleteLink,
-      'click',
+      advancedButtons,
+      L._('Delete'),
       function () {
         this._delete()
         this.map.ui.closePanel()
@@ -1290,22 +1284,18 @@ L.U.DataLayer = L.Evented.extend({
       this
     )
     if (!this.isRemoteLayer()) {
-      const emptyLink = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
-      emptyLink.textContent = L._('Empty')
-      emptyLink.href = '#'
-      L.DomEvent.on(emptyLink, 'click', L.DomEvent.stop).on(
-        emptyLink,
-        'click',
+      const emptyLink = L.DomUtil.createButton(
+        'button umap-empty',
+        advancedButtons,
+        L._('Empty'),
         this.empty,
         this
       )
     }
-    const cloneLink = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
-    cloneLink.textContent = L._('Clone')
-    cloneLink.href = '#'
-    L.DomEvent.on(cloneLink, 'click', L.DomEvent.stop).on(
-      cloneLink,
-      'click',
+    const cloneLink = L.DomUtil.createButton(
+      'button umap-clone',
+      advancedButtons,
+      L._('Clone'),
       function () {
         const datalayer = this.clone()
         datalayer.edit()
@@ -1313,10 +1303,13 @@ L.U.DataLayer = L.Evented.extend({
       this
     )
     if (this.umap_id) {
-      const download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
-      download.textContent = L._('Download')
-      download.href = this._dataUrl()
-      download.target = '_blank'
+      const download = L.DomUtil.createLink(
+        'button umap-download',
+        advancedButtons,
+        L._('Download'),
+        this._dataUrl(),
+        '_blank'
+      )
     }
     this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
   },
@@ -1344,16 +1337,14 @@ L.U.DataLayer = L.Evented.extend({
       const date = new Date(parseInt(data.at, 10))
       const content = `${date.toLocaleString(L.lang)} (${parseInt(data.size) / 1000}Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
-      const a = L.DomUtil.create('a', '', el)
-      L.DomUtil.add('span', '', el, content)
-      a.href = '#'
-      a.title = L._('Restore this version')
-      L.DomEvent.on(a, 'click', L.DomEvent.stop).on(
-        a,
-        'click',
+      const a = L.DomUtil.createButton(
+        '',
+        el,
+        L._('Restore this version'),
         () => this.restore(data.name),
         this
       )
+      L.DomUtil.add('span', '', el, content)
     }
 
     const versionsContainer = L.DomUtil.createFieldset(container, L._('Versions'), {
