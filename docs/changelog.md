@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.10.1 - 2023-10-27
+
+* Add minimal CSV export by @yohanboniface in https://github.com/umap-project/umap/pull/1376
+* A11Y: switch from links to buttons when pertinent by @davidbgk in https://github.com/umap-project/umap/pull/1290
+* Fix map not loading when defaultView=latest and datalayer has no data by @yohanboniface in https://github.com/umap-project/umap/pull/1375
+* Fix displayOnLoad not honoured at import by @yohanboniface in https://github.com/umap-project/umap/pull/1384
+* Fix filter data crashing when data contains non string values by @yohanboniface in https://github.com/umap-project/umap/pull/1378
+* Increase maxZoomLimit to 24 by @yohanboniface in https://github.com/umap-project/umap/pull/1381
+* Round range step to 1 digit by @yohanboniface in https://github.com/umap-project/umap/pull/1380
+* Keep only non graphic props in default properties, to prevent useless redraw by @yohanboniface in https://github.com/umap-project/umap/pull/1379
+* Split defaultDatalayer in defaultView/EditDatalayer by @yohanboniface in https://github.com/umap-project/umap/pull/1383
+* Fix variable declared globally by mistake by @yohanboniface in https://github.com/umap-project/umap/pull/1382
+* Cancel tooltip on mouseout by @yohanboniface in https://github.com/umap-project/umap/pull/1385
+* Update eye icon by @yohanboniface in https://github.com/umap-project/umap/pull/1386
+
+
 ## 1.9.3 - 2023-10-18
 
 * Add experimental drag and drop of file on the map container by @yohanboniface in https://github.com/umap-project/umap/pull/1370
