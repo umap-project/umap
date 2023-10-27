@@ -193,6 +193,15 @@ input[type="submit"] {
 .dark a {
     color: #eeeeec;
 }
+[type="button"].flat,
+.dark [type="button"].flat {
+    border: none;
+    background-color: inherit;
+    padding: 0;
+    text-align: left;
+    min-height: inherit;
+    text-decoration: underline;
+}
 .help-text, .helptext {
     display: block;
     padding: 7px 7px;

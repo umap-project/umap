@@ -397,7 +397,11 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     const options = []
     this.builder.map.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isDataReadOnly() && datalayer.canBrowse()) {
+      if (
+        datalayer.isLoaded() &&
+        !datalayer.isDataReadOnly() &&
+        datalayer.canBrowse()
+      ) {
         options.push([L.stamp(datalayer), datalayer.getName()])
       }
     })
@@ -628,7 +632,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     closeButton.style.clear = 'both'
 
     const customButton = L.DomUtil.createButton(
-      '',
+      'flat',
       this.pictogramsContainer,
       L._('Toggle direct input (advanced)'),
       function (e) {
@@ -728,7 +732,10 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   fetch: function () {
     let value = (this.backup = this.toHTML())
     if (!this.container.querySelector(`input[type="radio"][value="${value}"]`))
-      value = typeof(this.options.default) !== 'undefined' ? this.options.default : this.default
+      value =
+        typeof this.options.default !== 'undefined'
+          ? this.options.default
+          : this.default
     this.container.querySelector(`input[type="radio"][value="${value}"]`).checked = true
   },
 
@@ -838,7 +845,9 @@ L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
   },
 
   value: function () {
-    return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : L.FormBuilder.FloatInput.prototype.value.call(this)
+    return L.DomUtil.hasClass(this.wrapper, 'undefined')
+      ? undefined
+      : L.FormBuilder.FloatInput.prototype.value.call(this)
   },
 
   buildHelpText: function () {
@@ -853,7 +862,9 @@ L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
     const step = this.options.step || 1,
       digits = step < 1 ? 2 : 0
     for (let i = this.options.min; i <= this.options.max; i += this.options.step) {
-      options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(digits)}"></option>`
+      options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(
+        digits
+      )}"></option>`
     }
     datalist.innerHTML = options
     L.FormBuilder.Input.prototype.buildHelpText.call(this)
