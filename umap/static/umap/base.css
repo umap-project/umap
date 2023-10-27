@@ -762,7 +762,7 @@ input:invalid {
     color: #eeeeec;
     font-size: 0.8em;
     border-radius: 2px;
-    z-index: 1004;
+    z-index: 1011;
     font-weight: normal;
     max-width: 300px;
 }
