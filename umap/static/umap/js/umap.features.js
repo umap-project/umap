@@ -478,8 +478,7 @@ L.U.FeatureMixin = {
     filter = filter.toLowerCase()
     for (let i = 0, value; i < keys.length; i++) {
       value = (this.properties[keys[i]] || '') + ''
-      if (value.toLowerCase().indexOf(filter) !== -1)
-        return true
+      if (value.toLowerCase().indexOf(filter) !== -1) return true
     }
     return false
   },
@@ -669,8 +668,8 @@ L.U.Marker = L.Marker.extend({
   appendEditFieldsets: function (container) {
     L.U.FeatureMixin.appendEditFieldsets.call(this, container)
     const coordinatesOptions = [
-      ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude') }],
-      ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude') }],
+      ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude'), step: 'any' }],
+      ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude'), step: 'any' }],
     ]
     const builder = new L.U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
