@@ -792,7 +792,6 @@ input:invalid {
     pointer-events: none;
     border-top-color: rgba(30, 30, 30, 0.7);
     border-width: 11px;
-    margin-left: calc(-50% + 21px);
     transform: rotate(180deg);
 }
 #umap-tooltip-container.tooltip.tooltip-left:after {

@@ -185,8 +185,8 @@ L.U.UI = L.Evented.extend({
     this._tooltip.className = 'tooltip-bottom'
     const coords = this.getPosition(el)
     this.setTooltipPosition({
-      left: coords.left + 30,
-      bottom: this.getDocHeight() - coords.top - 76,
+      left: coords.left,
+      top: coords.bottom + 11,
     })
   },
 
