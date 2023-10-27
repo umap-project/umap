@@ -694,8 +694,8 @@ L.U.Map.include({
           this._setDefaultCenter()
           return
         }
-        const datalayer = this.defaultDataLayer(),
-          feature = datalayer.getFeatureByIndex(-1)
+        const datalayer = this.defaultViewDataLayer(),
+          feature = datalayer ? datalayer.getFeatureByIndex(-1) : null
         if (feature) feature.zoomTo()
         else this._setDefaultCenter()
       })
@@ -1225,10 +1225,19 @@ L.U.Map.include({
     }
   },
 
+  defaultViewDataLayer: function () {
+    let datalayer, fallback
+    datalayer = this.findDataLayer((datalayer) => {
+      fallback = datalayer
+      if (datalayer.isVisible()) return true
+    })
+    return datalayer || fallback
+  },
+
   // TODO: allow to control the default datalayer
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
-  defaultDataLayer: function () {
+  defaultEditDataLayer: function () {
     let datalayer, fallback
     datalayer = this.lastUsedDataLayer
     if (
