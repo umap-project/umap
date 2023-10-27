@@ -473,14 +473,12 @@ ul.photon-autocomplete {
 .leaflet-container .leaflet-control-edit-save {
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: #215d9c;
+    border: 1px solid #42ece6;
+    color: #42ece6;
 }
 .umap-is-dirty .leaflet-control-edit-save {
     opacity: 1;
     cursor: pointer;
-}
-.umap-is-dirty .leaflet-control-edit-save:hover {
-    background-color: #215d9c;
 }
 .leaflet-container .leaflet-control-edit-save,
 .leaflet-container .leaflet-control-edit-cancel,
