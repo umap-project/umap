@@ -28,7 +28,7 @@ You can import icons manually by going to your uMap admin page: `https://your.se
 
 ### Import icons automatically
 
-To import icons on your uMap server, you will need to use command `umap import_pictograms`.
+To import icons on your uMap server, you will need to use the command `umap import_pictograms`.
 
 Note: you can get help with `umap import_pictograms -h`
 
