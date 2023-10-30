@@ -284,7 +284,7 @@ class Pictogram(NamedModel):
     """
 
     attribution = models.CharField(max_length=300)
-    pictogram = models.ImageField(upload_to="pictogram")
+    pictogram = models.FileField(upload_to="pictogram")
 
     @property
     def json(self):

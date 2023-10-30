@@ -608,6 +608,8 @@ L.U.Marker = L.Marker.extend({
   _initIcon: function () {
     this.options.icon = this.getIcon()
     L.Marker.prototype._initIcon.call(this)
+    // Allow to run code when icon is actually part of the DOM
+    this.options.icon.onAdd()
     this.resetTooltip()
   },
 
