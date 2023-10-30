@@ -547,7 +547,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const img = L.DomUtil.create(
           'img',
           '',
-          L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer)
+          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         img.src = this.value()
         L.DomEvent.on(img, 'click', this.fetchIconList, this)
@@ -555,7 +555,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const el = L.DomUtil.create(
           'span',
           '',
-          L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer)
+          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         el.textContent = this.value()
         L.DomEvent.on(el, 'click', this.fetchIconList, this)
@@ -570,11 +570,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     )
   },
 
-  addIconPreview: function (pictogram) {
-    const baseClass = 'umap-icon-choice',
+  addIconPreview: function (pictogram, parent) {
+    const baseClass = 'umap-pictogram-choice',
       value = pictogram.src,
       className = value === this.value() ? `${baseClass} selected` : baseClass,
-      container = L.DomUtil.create('div', className, this.pictogramsContainer),
+      container = L.DomUtil.create('div', className, parent),
       img = L.DomUtil.create('img', '', container)
     img.src = value
     if (pictogram.name && pictogram.attribution) {
@@ -602,7 +602,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   search: function (e) {
-    const icons = [...this.parentNode.querySelectorAll('.umap-icon-choice')],
+    const icons = [...this.parentNode.querySelectorAll('.umap-pictogram-choice')],
       search = this.searchInput.value.toLowerCase()
     icons.forEach((el) => {
       if (el.title.toLowerCase().indexOf(search) != -1) el.style.display = 'block'
@@ -610,13 +610,36 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     })
   },
 
+  addCategory: function (category, items) {
+    const parent = L.DomUtil.create(
+        'div',
+        'umap-pictogram-category',
+        this.pictogramsContainer
+      ),
+      title = L.DomUtil.add('h6', '', parent, category),
+      grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+    for (let item of items) {
+      this.addIconPreview(item, grid)
+    }
+  },
+
   buildIconList: function (data) {
     this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
     L.DomEvent.on(this.searchInput, 'input', this.search, this)
-    for (const idx in data.pictogram_list) {
-      this.addIconPreview(data.pictogram_list[idx])
+    const categories = {}
+    let category
+    for (const props of data.pictogram_list) {
+      category = props.category || L._('Generic')
+      categories[category] = categories[category] || []
+      categories[category].push(props)
+    }
+    const sorted = Object.entries(categories).toSorted(([a], [b]) =>
+      L.Util.naturalSort(a, b)
+    )
+    for (let [category, items] of sorted) {
+      this.addCategory(category, items)
     }
     const closeButton = L.DomUtil.createButton(
       'button action-button',

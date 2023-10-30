@@ -201,6 +201,16 @@ L.Util.greedyTemplate = (str, data, ignore) => {
   )
 }
 
+L.Util.naturalSort = (a, b) => {
+  return a
+    .toString()
+    .toLowerCase()
+    .localeCompare(b.toString().toLowerCase(), L.lang || 'en', {
+      sensitivity: 'base',
+      numeric: true,
+    })
+}
+
 L.Util.sortFeatures = (features, sortKey) => {
   const sortKeys = (sortKey || 'name').split(',')
 
@@ -214,19 +224,9 @@ L.Util.sortFeatures = (features, sortKey) => {
     let score
     const valA = a.properties[sortKey] || ''
     const valB = b.properties[sortKey] || ''
-    if (!valA) {
-      score = -1
-    } else if (!valB) {
-      score = 1
-    } else {
-      score = valA
-        .toString()
-        .toLowerCase()
-        .localeCompare(valB.toString().toLowerCase(), L.lang || 'en', {
-          sensitivity: 'base',
-          numeric: true,
-        })
-    }
+    if (!valA) score = -1
+    else if (!valB) score = 1
+    else score = L.Util.naturalSort(valA, valB)
     if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
     return score * reverse
   }
