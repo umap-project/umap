@@ -10,9 +10,9 @@ Icons (aka pictograms in uMap sources) can be used in your map markers.
 
 Icons are not embedded in uMap sources, you will have to add them manually. So you can choose which icons you want to use.
 
-You can use either PNG, JPG or SVG files. SVG files are recommanded.
+You can use either PNG, JPG or SVG files. SVG files are recommended.
 
-When using SVG, it's recommanded to use icons without color. UMap will switch to white colors
+When using SVG, it's recommended to use icons without color. uMap will switch to white colors
 automatically according to the marker background color.
 
 Example of icons libraries you may want to use:
