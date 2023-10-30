@@ -363,21 +363,21 @@ L.DomUtil.after = (target, el) => {
 }
 
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
-
 L.DomUtil.TextColorFromBackgroundColor = (el) => {
-  let out = '#000000'
-  if (!window.getComputedStyle) {
-    return out
-  }
+  return L.DomUtil.contrastedColor(el) ? '#ffffff' : '#000000'
+}
+const _CACHE_CONSTRAST = {}
+L.DomUtil.contrastedColor = (el, bgcolor) => {
+  // Return 0 for black and 1 for white
+  // bgcolor is a human color, it can be a any keyword (purple…)
+  if (typeof _CACHE_CONSTRAST[bgcolor] !== 'undefined') return _CACHE_CONSTRAST[bgcolor]
+  let out = 0
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
-  if (!rgb || rgb.length !== 4) {
-    return out
-  }
+  if (!rgb || rgb.length !== 4) return out
   rgb = parseInt(rgb[1], 10) + parseInt(rgb[2], 10) + parseInt(rgb[3], 10)
-  if (rgb < (255 * 3) / 2) {
-    out = '#ffffff'
-  }
+  if (rgb < (255 * 3) / 2) out = 1
+  if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out
 }
 L.DomEvent.once = (el, types, fn, context) => {
