@@ -475,13 +475,18 @@ ul.photon-autocomplete {
 }
 .leaflet-container .leaflet-control-edit-cancel,
 .leaflet-container .leaflet-control-edit-disable {
-    border: 0.5px solid #f2f2f2;
+    border: 0.5px solid rgba(153, 153, 153, 0.40);
+}
+.leaflet-container .leaflet-control-edit-cancel:hover,
+.leaflet-container .leaflet-control-edit-disable:hover {
+    border: 0.5px solid rgba(153, 153, 153, 0.80);
+    text-decoration: none;
 }
 .leaflet-container .leaflet-control-edit-save {
     opacity: 0.5;
     cursor: not-allowed;
     border-radius: 16px;
-    border: 1px solid rgba(153, 153, 153, 0.40);
+    border: 0.5px solid rgba(153, 153, 153, 0.40);
     background: rgba(153, 153, 153, 0.10);
 }
 .dark [type="button"].leaflet-control-edit-save:hover {
@@ -491,7 +496,7 @@ ul.photon-autocomplete {
 .umap-is-dirty .leaflet-control-edit-save {
     opacity: 1;
     cursor: pointer;
-    border: 1px solid rgba(66, 236, 230, 0.40);
+    border: 0.5px solid rgba(66, 236, 230, 0.40);
     background: rgba(66, 236, 230, 0.10);
     color: #42ECE6;
 }
