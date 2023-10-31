@@ -445,9 +445,8 @@ ul.photon-autocomplete {
     font-size: 12px;
     border-radius: 20px;
     color: #f8f8f8;
-    height: 36px;
-    line-height: 36px;
-    min-height: 36px;
+    height: 32px;
+    line-height: 30px;
     padding: 0 20px;
 }
 .leaflet-container .leaflet-control-edit-disable:before,
@@ -466,27 +465,42 @@ ul.photon-autocomplete {
 .leaflet-container .leaflet-control-edit-disable span,
 .leaflet-container .leaflet-control-edit-save span,
 .leaflet-container .leaflet-control-edit-cancel span {
-    margin-left: 4px;
+    margin-left: 10px;
 }
 .leaflet-container .leaflet-control-edit-save:before {
-    background-position: -1px -26px;
+    background-position: -148px -2px;
 }
 .leaflet-container .leaflet-control-edit-disable:before {
     background-position: -50px -25px;
 }
 .leaflet-container .leaflet-control-edit-cancel,
 .leaflet-container .leaflet-control-edit-disable {
-    border: 1px solid #555;
+    border: 0.5px solid #f2f2f2;
 }
 .leaflet-container .leaflet-control-edit-save {
     opacity: 0.5;
     cursor: not-allowed;
-    border: 1px solid #42ece6;
-    color: #42ece6;
+    border-radius: 16px;
+    border: 1px solid rgba(153, 153, 153, 0.40);
+    background: rgba(153, 153, 153, 0.10);
+}
+.dark [type="button"].leaflet-control-edit-save:hover {
+    background: rgba(153, 153, 153, 0.10);
+    text-decoration: none;
 }
 .umap-is-dirty .leaflet-control-edit-save {
     opacity: 1;
     cursor: pointer;
+    border: 1px solid rgba(66, 236, 230, 0.40);
+    background: rgba(66, 236, 230, 0.10);
+    color: #42ECE6;
+}
+.umap-is-dirty .leaflet-control-edit-save:before {
+    background-position: -148px -26px;
+}
+.umap-is-dirty .dark [type="button"].leaflet-control-edit-save:hover {
+    border-color: rgba(66, 236, 230, 0.80);
+    background: rgba(66, 236, 230, 0.10);
 }
 .leaflet-container .leaflet-control-edit-save,
 .leaflet-container .leaflet-control-edit-cancel,
