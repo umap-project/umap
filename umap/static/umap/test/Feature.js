@@ -244,6 +244,12 @@ describe('L.U.FeatureMixin', function () {
       var path = qs('path[stroke-opacity="1"]')
       assert.ok(path)
     })
+
+    it('should highlight polygon', function () {
+      var path = qs('path[fill="DarkBlue"]')
+      happen.click(path)
+      assert.isAbove(path.attributes['fill-opacity'].value, 0.5)
+    })
   })
 
   describe('#tooltip', function () {

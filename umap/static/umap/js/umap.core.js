@@ -161,7 +161,7 @@ L.Util.detectFileType = (f) => {
 }
 
 L.Util.usableOption = (options, option) =>
-  options[option] !== undefined && options[option] !== ''
+  options[option] !== undefined && options[option] !== '' && options[option] !== null
 
 L.Util.greedyTemplate = (str, data, ignore) => {
   function getValue(data, path) {
