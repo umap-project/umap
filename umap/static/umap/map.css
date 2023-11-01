@@ -1144,8 +1144,14 @@ a.add-datalayer:hover,
     line-height: 32px;
 }
 .umap-div-icon.umap-icon-active .icon_container {
-    box-shadow: 7px 10px 10px 1px white;
+    border-radius: 5px;
+    box-shadow: 7px 10px 10px -1px black;
+    height: 36px;
+    line-height: 36px;
+    margin-left: -2px;
+    margin-top: -4px;
     opacity: 1.0!important;
+    width: 36px;
 }
 .umap-div-icon .icon_container img {
     vertical-align: middle;
@@ -1161,7 +1167,6 @@ a.add-datalayer:hover,
     position: relative;
     width: 0;
     opacity: 0.9;
-    /*box-shadow: 4px 8px 6px -3px black;*/
 }
 .umap-div-icon.umap-icon-active .icon_arrow {
     opacity: 1.0!important;
@@ -1177,6 +1182,10 @@ a.add-datalayer:hover,
     width: 0;
 }
 .umap-drop-icon.umap-icon-active .icon_arrow {
+    border-left-width: 12px;
+    border-right-width: 12px;
+    border-top-width: 18px;
+    left: 4px;
     opacity: 1.0!important;
 }
 .umap-drop-icon .icon_container {
@@ -1190,8 +1199,14 @@ a.add-datalayer:hover,
     width: 32px;
 }
 .umap-drop-icon.umap-icon-active .icon_container {
-    box-shadow: 4px 11px 10px -2px white;
+    box-shadow: 4px 11px 10px -2px black;
+    border-radius: 18px 18px 18px 18px;
+    height: 36px;
+    line-height: 36px;
+    margin-left: -2px;
+    margin-top: -6px;
     opacity: 1.0!important;
+    width: 36px;
 }
 .umap-drop-icon .icon_container img {
     vertical-align: middle;
@@ -1231,7 +1246,7 @@ a.add-datalayer:hover,
 }
 .umap-ball-icon.umap-icon-active .icon_container {
     border-radius: 10px 10px 10px 10px;
-    box-shadow: 1px 23px 6px -3px white;
+    box-shadow: 1px 23px 7px -1px black;
     margin-left: -2px;
     margin-top: -4px;
     height: 20px;
