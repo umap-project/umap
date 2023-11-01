@@ -14,6 +14,7 @@
 # severin.menard <severin.menard@protonmail.com>, 2014
 # spf, 2019
 # spf, 2019
+# Syl Martin, 2023
 # Philippe Verdy, 2017
 # yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023
 # YOHAN BONIFACE <yb@enix.org>, 2012
@@ -22,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-22 16:21+0000\n"
+"POT-Creation-Date: 2023-10-12 06:55+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023\n"
+"Last-Translator: Syl Martin, 2023\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +41,7 @@ msgstr "Modifiable seulement avec le lien de modification secret"
 msgid "Everyone can edit"
 msgstr "Tout le monde peut modifier"
 
-#: forms.py:69 models.py:317
+#: forms.py:69 models.py:318
 msgid "Inherit"
 msgstr "Par défaut"
 
@@ -68,15 +69,15 @@ msgstr "Modèle d'URL au format des tuiles OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordre des calques de tuiles dans le panneau de modification"
 
-#: models.py:142 models.py:318
+#: models.py:142 models.py:319
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: models.py:143 models.py:149 models.py:319
+#: models.py:143 models.py:149 models.py:320
 msgid "Editors only"
 msgstr "Éditeurs uniquement"
 
-#: models.py:144 models.py:320
+#: models.py:144 models.py:321
 msgid "Owner only"
 msgstr "Propriétaire uniquement"
 
@@ -92,7 +93,7 @@ msgstr "Quiconque a le lien"
 msgid "Blocked"
 msgstr "Bloquée"
 
-#: models.py:153 models.py:324
+#: models.py:153 models.py:325
 msgid "description"
 msgstr "description"
 
@@ -120,35 +121,35 @@ msgstr "Choisir une licence pour la carte"
 msgid "licence"
 msgstr "licence"
 
-#: models.py:172
+#: models.py:173
 msgid "owner"
 msgstr "créateur"
 
-#: models.py:176
+#: models.py:177
 msgid "editors"
 msgstr "éditeurs"
 
-#: models.py:181 models.py:338
+#: models.py:182 models.py:339
 msgid "edit status"
 msgstr "statut de modification"
 
-#: models.py:186
+#: models.py:187
 msgid "share status"
 msgstr "qui a accès"
 
-#: models.py:189 models.py:333
+#: models.py:190 models.py:334
 msgid "settings"
 msgstr "réglages"
 
-#: models.py:268
+#: models.py:269
 msgid "Clone of"
 msgstr "Clone de"
 
-#: models.py:328
+#: models.py:329
 msgid "display on load"
 msgstr "afficher au chargement."
 
-#: models.py:329
+#: models.py:330
 msgid "Display this layer on load."
 msgstr "Afficher ce calque au chargement."
 
@@ -254,7 +255,7 @@ msgstr "Gérer les options de la carte : afficher une minicarte, géolocaliser l
 
 #: templates/umap/about_summary.html:25
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
-msgstr "Import des données géographiques en masse (geojson, gpx, kml, osm...)"
+msgstr "Importer des données géographiques en masse (geojson, gpx, kml, osm...)"
 
 #: templates/umap/about_summary.html:26
 msgid "Choose the license for your data"
@@ -282,7 +283,7 @@ msgstr "Tester la démo"
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr "uMap est actuelle en mode lecture seule, aucune création ou modification n'est possible."
+msgstr "uMap est actuellement en mode lecture seule, aucune création ou modification n'est possible."
 
 #: templates/umap/content.html:31
 #, python-format
@@ -451,48 +452,48 @@ msgstr "Vous n'avez pas encore de carte."
 msgid "View the map"
 msgstr "Voir la carte"
 
-#: views.py:658
+#: views.py:659
 msgid "Map has been updated!"
 msgstr "La carte a été mise à jour !"
 
-#: views.py:683
+#: views.py:684
 msgid "Map editors updated with success!"
 msgstr "Éditeurs de la carte mis à jour !"
 
-#: views.py:721
+#: views.py:722
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "La lien d'édition uMap pour votre carte %(map_name)s"
 
-#: views.py:724
+#: views.py:725
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Voici votre lien d'édition secret: %(link)s"
 
-#: views.py:730
+#: views.py:731
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Courriel envoyé à %(email)s"
 
-#: views.py:741
+#: views.py:742
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:764
+#: views.py:765
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:769
+#: views.py:770
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:958
+#: views.py:959
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
 
-#: views.py:980
+#: views.py:981
 msgid "Permissions updated with success!"
 msgstr "Les permissions ont bien été modifiées !"

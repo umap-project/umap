@@ -422,11 +422,11 @@
     "Number of desired classes (default 5)": "Número de clases deseadas (predeterminadas 5)",
     "Quantiles": "Cuantiles",
     "Show this layer in the caption": "Mostrar esta capa en la leyenda",
-    "Back to preview": "Back to preview",
-    "Drawing": "Drawing",
-    "Edit the title of the map": "Edit the title of the map",
-    "Go to the homepage": "Go to the homepage",
-    "Switch to edit mode": "Switch to edit mode",
-    "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "Back to preview": "Volver a la vista previa",
+    "Drawing": "Dibujo",
+    "Edit the title of the map": "Editar el título del mapa",
+    "Go to the homepage": "Ir a la página de inicio",
+    "Switch to edit mode": "Cambiar al modo de edición",
+    "Update who can see and edit the map": "Actualizar quién puede ver y editar el mapa",
+    "View": "Vista"
 }
