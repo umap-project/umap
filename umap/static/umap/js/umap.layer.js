@@ -60,6 +60,16 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
     this._layers = []
   },
 
+  onRemove: function (map) {
+    // In some situation, the onRemove is called before the layer is really
+    // added to the map: basically when combining a defaultView=data + max/minZoom
+    // and loading the map at a zoom outside of that zoom range.
+    // FIXME: move this upstream (_unbindEvents should accept a map parameter
+    // instead of relying on this._map)
+    this._map = map
+    return L.MarkerClusterGroup.prototype.onRemove.call(this, map)
+  },
+
   addLayer: function (layer) {
     this._layers.push(layer)
     return L.MarkerClusterGroup.prototype.addLayer.call(this, layer)
