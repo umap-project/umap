@@ -278,7 +278,7 @@ input[type="file"] + .error {
     padding: 10px;
 }
 .fieldset.toggle .legend {
-    text-align: center;
+    text-align: left;
     display: block;
     cursor: pointer;
     background-color: #232729;
@@ -290,6 +290,20 @@ input[type="file"] + .error {
     font-weight: normal;
     font-size: 1.2em;
     padding: 0 5px;
+}
+.fieldset.toggle .legend:before {
+    background-repeat: no-repeat;
+    text-indent: 24px;
+    height: 24px;
+    line-height: 24px;
+    display: inline-block;
+    background-image: url('./img/16-white.svg');
+    vertical-align: bottom;
+    content: " ";
+    background-position: -144px -76px;
+}
+.fieldset.toggle.on .legend:before {
+    background-position: -144px -51px;
 }
 /* Switch */
 input.switch:empty {
