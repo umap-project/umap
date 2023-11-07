@@ -63,6 +63,11 @@ i18n_urls = [
         views.PictogramJSONList.as_view(),
         name="pictogram_list_json",
     ),
+    re_path(
+        r"^api/map/(?P<pk>[\d]+)/$",
+        api_views.MapDetail.as_view(),
+        name="map_detail",
+    ),
 ]
 i18n_urls += decorated_patterns(
     [can_view_map, cache_control(must_revalidate=True)],
@@ -115,11 +120,6 @@ i18n_urls += decorated_patterns(
     ),
 )
 map_urls = [
-    re_path(
-        r"^api/map/(?P<pk>[\d]+)/$",
-        api_views.MapDetail.as_view(),
-        name="map_detail",
-    ),
     re_path(
         r"^map/(?P<map_id>[\d]+)/update/permissions/$",
         views.UpdateMapPermissions.as_view(),

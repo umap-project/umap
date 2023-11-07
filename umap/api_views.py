@@ -1,4 +1,6 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
+from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 
 from .models import Map
@@ -16,23 +18,6 @@ class MapList(generics.ListCreateAPIView):
         else:
             serializer.save()
 
-    def get_map_permissions(self, map_):
-        permissions = {}
-        permissions["edit_status"] = map_.edit_status
-        permissions["share_status"] = map_.share_status
-        if map_.owner:
-            permissions["owner"] = {
-                "id": map_.owner.pk,
-                "name": str(map_.owner),
-                "url": map_.owner.get_url(),
-            }
-            permissions["editors"] = [
-                {"id": editor.pk, "name": str(editor)} for editor in map_.editors.all()
-            ]
-        if not map_.owner and map_.is_anonymous_owner(self.request):
-            permissions["anonymous_edit_url"] = map_.get_anonymous_edit_url()
-        return permissions
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -40,11 +25,9 @@ class MapList(generics.ListCreateAPIView):
         map_ = serializer.instance
         headers = self.get_success_headers(serializer.data)
         data = serializer.data
-        permissions = self.get_map_permissions(map_)
         if not map_.owner:
             anonymous_url = map_.get_anonymous_edit_url()
-            permissions["anonymous_edit_url"] = anonymous_url
-        data["permissions"] = permissions
+            data["permissions"]["anonymous_edit_url"] = anonymous_url
         response = Response(data, status=status.HTTP_201_CREATED, headers=headers)
         if not self.request.user.is_authenticated:
             key, value = map_.signed_cookie_elements
@@ -54,6 +37,27 @@ class MapList(generics.ListCreateAPIView):
         return response
 
 
+class MapPermission(BasePermission):
+    def has_permission(self, request, view):
+        map_inst = get_object_or_404(Map, pk=view.kwargs.get("pk"))
+        if request.method == "PUT":
+            return map_inst.can_edit(user=request.user, request=request)
+        if request.method == "GET":
+            return map_inst.can_view(request)
+
+
 class MapDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Map.public.all().order_by("-modified_at")
     serializer_class = MapSerializer
+
+    permission_classes = [MapPermission]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        if not instance.owner and instance.is_anonymous_owner(request):
+            data["permissions"][
+                "anonymous_edit_url"
+            ] = instance.get_anonymous_edit_url()
+        return Response(data)

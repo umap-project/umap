@@ -16,10 +16,26 @@ DEFAULT_CENTER = Point(DEFAULT_LONGITUDE, DEFAULT_LATITUDE)
 
 class MapSerializer(serializers.HyperlinkedModelSerializer):
     slug = serializers.CharField(required=False)
+    permissions = serializers.SerializerMethodField()
 
     class Meta:
         model = Map
-        fields = ["id", "name", "slug", "center", "settings"]
+        fields = ["id", "name", "slug", "center", "settings", "permissions"]
+
+    def get_permissions(self, obj):
+        permissions = {}
+        permissions["edit_status"] = obj.edit_status
+        permissions["share_status"] = obj.share_status
+        if obj.owner:
+            permissions["owner"] = {
+                "id": obj.owner.pk,
+                "name": str(obj.owner),
+                "url": obj.owner.get_url(),
+            }
+            permissions["editors"] = [
+                {"id": editor.pk, "name": str(editor)} for editor in obj.editors.all()
+            ]
+        return permissions
 
     def validate(self, data):
         slug = data.get("slug")
