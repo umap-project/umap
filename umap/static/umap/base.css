@@ -530,9 +530,8 @@ i.info {
     height: 30px;
     line-height: 30px;
     cursor: pointer;
-    background-image: url('./img/icon-bg.png');
+    background-color: #999;
     text-align: center;
-    box-shadow: 0 0 4px 0 black inset;
     margin-bottom: 5px;
     margin-right: 5px;
 }
