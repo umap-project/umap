@@ -521,16 +521,14 @@ i.info {
     margin-top: -8px;
     padding: 0 5px;
 }
-.umap-icon-list, .umap-pictogram-list {
-    clear: both;
+.umap-pictogram-grid {
+    display: flex;
+    flex-wrap: wrap;
 }
-.umap-icon-choice {
-    display: block;
-    float: left;
+.umap-pictogram-choice {
     width: 30px;
     height: 30px;
     line-height: 30px;
-    position: relative;
     cursor: pointer;
     background-image: url('./img/icon-bg.png');
     text-align: center;
@@ -538,16 +536,16 @@ i.info {
     margin-bottom: 5px;
     margin-right: 5px;
 }
-.umap-icon-choice img {
+.umap-pictogram-choice img {
     vertical-align: middle;
     max-width: 24px;
 }
-.umap-icon-choice:hover,
-.umap-icon-choice.selected,
+.umap-pictogram-choice:hover,
+.umap-pictogram-choice.selected,
 .umap-color-picker span:hover {
     box-shadow: 0 0 4px 0 black;
 }
-.umap-icon-choice .leaflet-marker-icon {
+.umap-pictogram-choice .leaflet-marker-icon {
     bottom: 0;
     left: 30px;
     position: absolute;
