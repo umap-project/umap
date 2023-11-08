@@ -469,9 +469,7 @@ class MapDetailMixin:
         else:
             map_statuses = AnonymousMapPermissionsForm.STATUS
             datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
-        properties["edit_statuses"] = [
-            (i, str(label)) for i, label in map_statuses
-        ]
+        properties["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
         properties["datalayer_edit_statuses"] = [
             (i, str(label)) for i, label in datalayer_statuses
         ]
@@ -604,6 +602,28 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         if not user.is_authenticated:
             return False
         return Star.objects.filter(by=user, map=self.object).exists()
+
+
+class MapDownload(DetailView):
+    model = Map
+    pk_url_kwarg = "map_id"
+
+    def get_canonical_url(self):
+        return reverse("map_download", args=(self.object.pk,))
+
+    def render_to_response(self, context, *args, **kwargs):
+        geojson = self.object.settings
+        geojson["type"] = "umap"
+        geojson["uri"] = self.request.build_absolute_uri(self.object.get_absolute_url())
+        datalayers = []
+        for datalayer in self.object.datalayer_set.all():
+            with open(datalayer.geojson.path, "rb") as f:
+                layer = json.loads(f.read())
+            if datalayer.settings:
+                layer["_umap_options"] = datalayer.settings
+            datalayers.append(layer)
+        geojson["layers"] = datalayers
+        return simple_json_response(**geojson)
 
 
 class MapViewGeoJSON(MapView):

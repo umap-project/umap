@@ -603,3 +603,62 @@ def test_can_send_link_on_anonymous_map_with_cookie(cookieclient, anonymap):
     assert resp.status_code == 200
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "The uMap edit link for your map: test map"
+
+
+def test_download(client, map, datalayer):
+    url = reverse("map_download", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 200
+    # Test response is a json
+    j = json.loads(response.content.decode())
+    assert j["type"] == "umap"
+    assert j["uri"] == "http://testserver/en/map/test-map_1"
+    assert j["geometry"] == {
+        "coordinates": [13.447265624999998, 48.94415123418794],
+        "type": "Point",
+    }
+    assert j["properties"] == {
+        "datalayersControl": True,
+        "description": "Which is just the Danube, at the end",
+        "displayCaptionOnLoad": False,
+        "displayDataBrowserOnLoad": False,
+        "displayPopupFooter": False,
+        "licence": "",
+        "miniMap": False,
+        "moreControl": True,
+        "name": "Cruising on the Donau",
+        "scaleControl": True,
+        "tilelayer": {
+            "attribution": "© OSM Contributors",
+            "maxZoom": 18,
+            "minZoom": 0,
+            "url_template": "http://{s}.osm.fr/{z}/{x}/{y}.png",
+        },
+        "tilelayersControl": True,
+        "zoom": 7,
+        "zoomControl": True,
+    }
+    assert j["layers"] == [
+        {
+            "_umap_options": {
+                "browsable": True,
+                "displayOnLoad": True,
+                "name": "test datalayer",
+            },
+            "features": [
+                {
+                    "geometry": {
+                        "coordinates": [13.68896484375, 48.55297816440071],
+                        "type": "Point",
+                    },
+                    "properties": {
+                        "_umap_options": {"color": "DarkCyan", "iconClass": "Ball"},
+                        "description": "Da place anonymous again 755",
+                        "name": "Here",
+                    },
+                    "type": "Feature",
+                }
+            ],
+            "type": "FeatureCollection",
+        },
+    ]
