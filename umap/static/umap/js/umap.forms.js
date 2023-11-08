@@ -1,4 +1,10 @@
 L.FormBuilder.Element.include({
+  undefine: function () {
+    L.DomUtil.addClass(this.wrapper, 'undefined')
+    this.clear()
+    this.sync()
+  },
+
   getParentNode: function () {
     if (this.options.wrapper) {
       return L.DomUtil.create(
@@ -29,15 +35,10 @@ L.FormBuilder.Element.include({
         },
         this
       )
-      L.DomEvent.on(
+      L.DomEvent.on(undefine, 'click', L.DomEvent.stop).on(
         undefine,
         'click',
-        function (e) {
-          L.DomEvent.stop(e)
-          L.DomUtil.addClass(this.wrapper, 'undefined')
-          this.clear()
-          this.sync()
-        },
+        this.undefine,
         this
       )
     }
@@ -524,16 +525,50 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   build: function () {
     L.FormBuilder.BlurInput.prototype.build.call(this)
-    // Try to guess if the icon content has been customized, and if yes
-    // directly display the field
-    this.input.type = this.value() && !this.value().startsWith('/') ? 'text' : 'hidden'
-    this.input.placeholder = L._('Symbol or url')
     this.buttonsContainer = L.DomUtil.create('div', '')
     this.pictogramsContainer = L.DomUtil.create('div', 'umap-pictogram-list')
+    this.tabsContainer = L.DomUtil.create('div', 'pictogram-tabs')
     L.DomUtil.before(this.input, this.buttonsContainer)
+    L.DomUtil.before(this.input, this.tabsContainer)
     L.DomUtil.before(this.input, this.pictogramsContainer)
     this.udpatePreview()
-    this.on('define', this.fetchIconList)
+    this.on('define', this.onDefine)
+  },
+
+  onDefine: function () {
+    this.buildTabs()
+    this.showSymbols()
+  },
+
+  buildTabs: function () {
+    const symbol = L.DomUtil.add(
+        'button',
+        'flat on',
+        this.tabsContainer,
+        L._('Symbol')
+      ),
+      char = L.DomUtil.add(
+        'button',
+        'flat',
+        this.tabsContainer,
+        L._('Emoji & Character')
+      )
+    url = L.DomUtil.add('button', 'flat', this.tabsContainer, L._('URL'))
+    toggle = (e) => {
+      L.DomUtil.removeClass(symbol, 'on')
+      L.DomUtil.removeClass(char, 'on')
+      L.DomUtil.removeClass(url, 'on')
+      L.DomUtil.addClass(e.target, 'on')
+    }
+    L.DomEvent.on(symbol, 'click', L.DomEvent.stop)
+      .on(symbol, 'click', this.showSymbols, this)
+      .on(symbol, 'click', toggle)
+    L.DomEvent.on(char, 'click', L.DomEvent.stop)
+      .on(char, 'click', this.showChars, this)
+      .on(char, 'click', toggle)
+    L.DomEvent.on(url, 'click', L.DomEvent.stop)
+      .on(url, 'click', this.showURL, this)
+      .on(url, 'click', toggle)
   },
 
   isUrl: function () {
@@ -541,6 +576,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   udpatePreview: function () {
+    if (this.isDefault()) {
+      this.buttonsContainer.innerHTML = ''
+      return
+    }
     if (!L.Util.hasVar(this.value())) {
       // Do not try to render URL with variables
       if (this.isUrl()) {
@@ -550,7 +589,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
           L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         img.src = this.value()
-        L.DomEvent.on(img, 'click', this.fetchIconList, this)
+        L.DomEvent.on(img, 'click', this.showSymbols, this)
       } else {
         const el = L.DomUtil.create(
           'span',
@@ -558,14 +597,14 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
           L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         el.textContent = this.value()
-        L.DomEvent.on(el, 'click', this.fetchIconList, this)
+        L.DomEvent.on(el, 'click', this.showSymbols, this)
       }
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
       this.buttonsContainer,
       this.value() ? L._('Change') : L._('Add'),
-      this.fetchIconList,
+      this.showSymbols,
       this
     )
   },
@@ -623,7 +662,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     }
   },
 
-  buildIconList: function (data) {
+  buildSymbolsList: function (data) {
     this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
@@ -647,33 +686,42 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       L._('Close'),
       function (e) {
         this.pictogramsContainer.innerHTML = ''
-        this.udpatePreview()
+        this.tabsContainer.innerHTML = ''
+        if (this.isDefault()) this.undefine(e)
+        else this.udpatePreview()
       },
       this
     )
-    closeButton.style.display = 'block'
-    closeButton.style.clear = 'both'
-
-    const customButton = L.DomUtil.createButton(
-      'flat',
-      this.pictogramsContainer,
-      L._('Toggle direct input (advanced)'),
-      function (e) {
-        this.input.type = this.input.type === 'text' ? 'hidden' : 'text'
-      },
-      this
-    )
-    this.builder.map.help.button(customButton, 'formatIconSymbol')
   },
 
-  fetchIconList: function (e) {
+  isDefault: function () {
+    return !this.value() || this.value() === this.obj.getMap().options.default_iconUrl
+  },
+
+  showChars: function () {
+    // Do not show default value here, as it's not a character
+    // and it has not been explicitely chosen by the user.
+    if (this.isDefault()) this.input.value = ''
+    this.input.type = 'text'
+    this.input.placeholder = L._('Type char or paste emoji')
+    this.pictogramsContainer.innerHTML = ''
+  },
+
+  showSymbols: function () {
+    this.input.type = 'hidden'
     // Clean parent element before calling ajax, to prevent blinking
     this.pictogramsContainer.innerHTML = ''
     this.buttonsContainer.innerHTML = ''
     this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
-      callback: this.buildIconList,
+      callback: this.buildSymbolsList,
       context: this,
     })
+  },
+
+  showURL: function () {
+    this.input.type = 'url'
+    this.input.placeholder = L._('Add URL')
+    this.pictogramsContainer.innerHTML = ''
   },
 
   unselectAll: function (container) {

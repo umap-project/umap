@@ -194,6 +194,7 @@ input[type="submit"] {
 .dark a {
     color: #eeeeec;
 }
+button.flat,
 [type="button"].flat,
 .dark [type="button"].flat {
     border: none;
@@ -535,9 +536,27 @@ i.info {
     margin-top: -8px;
     padding: 0 5px;
 }
-.umap-pictogram-grid {
+.pictogram-tabs {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-around;
+    font-size: 1.2em;
+    padding-bottom: 20px;
+}
+.pictogram-tabs button {
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+.pictogram-tabs .on {
+    font-weight: bold;
+    border-bottom: 1px solid #fff;
+}
+.umap-pictogram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 30px);
+    justify-content: space-between;
+    grid-gap: 5px;
 }
 .umap-pictogram-choice {
     width: 30px;
@@ -547,7 +566,6 @@ i.info {
     background-color: #999;
     text-align: center;
     margin-bottom: 5px;
-    margin-right: 5px;
 }
 .umap-pictogram-choice img {
     vertical-align: middle;
@@ -556,7 +574,8 @@ i.info {
 .umap-pictogram-choice:hover,
 .umap-pictogram-choice.selected,
 .umap-color-picker span:hover {
-    box-shadow: 0 0 4px 0 black;
+    box-shadow: 0 0 4px 0 rgb(66, 236, 230);
+    background-color: #aaa;
 }
 .umap-pictogram-choice .leaflet-marker-icon {
     bottom: 0;
