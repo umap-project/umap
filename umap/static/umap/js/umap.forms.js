@@ -586,7 +586,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const img = L.DomUtil.create(
           'img',
           '',
-          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
+          L.DomUtil.create('div', 'umap-pictogram-choice visible', this.buttonsContainer)
         )
         img.src = this.value()
         L.DomEvent.on(img, 'click', this.showSymbols, this)
@@ -594,7 +594,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const el = L.DomUtil.create(
           'span',
           '',
-          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
+          L.DomUtil.create('div', 'umap-pictogram-choice visible', this.buttonsContainer)
         )
         el.textContent = this.value()
         L.DomEvent.on(el, 'click', this.showSymbols, this)
@@ -610,7 +610,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addIconPreview: function (pictogram, parent) {
-    const baseClass = 'umap-pictogram-choice',
+    const baseClass = 'umap-pictogram-choice visible',
       value = pictogram.src,
       className = value === this.value() ? `${baseClass} selected` : baseClass,
       container = L.DomUtil.create('div', className, parent),
@@ -618,6 +618,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     img.src = value
     if (pictogram.name && pictogram.attribution) {
       container.title = `${pictogram.name} — © ${pictogram.attribution}`
+    } else if (pictogram.name) {
+      container.title = pictogram.name
     }
     L.DomEvent.on(
       container,
@@ -644,8 +646,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const icons = [...this.parentNode.querySelectorAll('.umap-pictogram-choice')],
       search = this.searchInput.value.toLowerCase()
     icons.forEach((el) => {
-      if (el.title.toLowerCase().indexOf(search) != -1) el.style.display = 'block'
-      else el.style.display = 'none'
+      L.DomUtil.classIf(el, 'visible', el.title.toLowerCase().indexOf(search) !== -1)
     })
   },
 

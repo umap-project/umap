@@ -566,6 +566,10 @@ i.info {
     background-color: #999;
     text-align: center;
     margin-bottom: 5px;
+    display: none;
+}
+.umap-pictogram-choice.visible {
+    display: block;
 }
 .umap-pictogram-choice img {
     vertical-align: middle;
