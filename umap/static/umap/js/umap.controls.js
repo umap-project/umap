@@ -924,15 +924,6 @@ L.U.Map.include({
       ext: '.csv',
       filetype: 'text/csv',
     },
-    umap: {
-      name: L._('Full map data'),
-      formatter: function (map) {
-        return map.serialize()
-      },
-      ext: '.umap',
-      filetype: 'application/json',
-      selected: true,
-    },
   },
 
   renderEditToolbar: function () {
@@ -1140,6 +1131,20 @@ L.U.Map.include({
       shortUrl.value = this.options.shortUrl
     }
     L.DomUtil.create('hr', '', container)
+    L.DomUtil.add('h4', '', container, L._('Backup data'))
+    const downloadUrl = L.Util.template(this.options.urls.map_download, {
+      map_id: this.options.umap_id,
+    })
+    const link = L.DomUtil.createLink(
+      'button',
+      container,
+      L._('Download uMap backup format'),
+      downloadUrl
+    )
+    let name = this.options.name || 'data'
+    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+    link.setAttribute('download', `${name}.umap`)
+    L.DomUtil.create('hr', '', container)
     L.DomUtil.add('h4', '', container, L._('Download data'))
     const typeInput = L.DomUtil.create('select', '', container)
     typeInput.name = 'format'
@@ -1149,12 +1154,6 @@ L.U.Map.include({
       container,
       L._('Only visible features will be downloaded.')
     )
-    exportCaveat.id = 'export_caveat_text'
-    const toggleCaveat = () => {
-      if (typeInput.value === 'umap') exportCaveat.style.display = 'none'
-      else exportCaveat.style.display = 'inherit'
-    }
-    L.DomEvent.on(typeInput, 'change', toggleCaveat)
     for (const key in this.EXPORT_TYPES) {
       if (this.EXPORT_TYPES.hasOwnProperty(key)) {
         option = L.DomUtil.create('option', '', typeInput)
@@ -1163,18 +1162,11 @@ L.U.Map.include({
         if (this.EXPORT_TYPES[key].selected) option.selected = true
       }
     }
-    toggleCaveat()
     L.DomUtil.createButton(
       'button',
       container,
       L._('Download data'),
-      () => {
-        if (typeInput.value === 'umap') {
-          this.fullDownload()
-        } else {
-          this.download(typeInput.value)
-        }
-      },
+      () => this.download(typeInput.value),
       this
     )
     this.ui.openPanel({ data: { html: container } })

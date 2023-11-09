@@ -831,7 +831,7 @@ L.U.Map.include({
   },
 
   format: function (mode) {
-    const type = this.EXPORT_TYPES[mode || 'umap']
+    const type = this.EXPORT_TYPES[mode || 'TODISCUSS']
     const content = type.formatter(this)
     let name = this.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
@@ -1072,24 +1072,6 @@ L.U.Map.include({
       }
     }
     return properties
-  },
-
-  serialize: function () {
-    // Do not use local path during unit tests
-    const uri = window.location.protocol === 'file:' ? null : window.location.href
-    const umapfile = {
-      type: 'umap',
-      uri: uri,
-      properties: this.exportOptions(),
-      geometry: this.geometry(),
-      layers: [],
-    }
-
-    this.eachDataLayer((datalayer) => {
-      umapfile.layers.push(datalayer.umapGeoJSON())
-    })
-
-    return JSON.stringify(umapfile, null, 2)
   },
 
   saveSelf: function () {
