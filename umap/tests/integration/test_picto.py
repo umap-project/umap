@@ -57,7 +57,7 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
-    symbols = page.locator(".umap-pictogram-choice.visible")
+    symbols = page.locator(".umap-pictogram-choice")
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-list input")
     search.type("star")

@@ -612,22 +612,21 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   addIconPreview: function (pictogram, parent) {
     const baseClass = 'umap-pictogram-choice visible',
       value = pictogram.src,
-      className = value === this.value() ? `${baseClass} selected` : baseClass,
+      search = this.searchInput.value.toLowerCase(),
+      title = pictogram.attribution ? `${pictogram.name} — © ${pictogram.attribution}` : pictogram.name
+    if (search && title.toLowerCase().indexOf(search) === -1) return
+    const className = value === this.value() ? `${baseClass} selected` : baseClass,
       container = L.DomUtil.create('div', className, parent),
       img = L.DomUtil.create('img', '', container)
     img.src = value
-    if (pictogram.name && pictogram.attribution) {
-      container.title = `${pictogram.name} — © ${pictogram.attribution}`
-    } else if (pictogram.name) {
-      container.title = pictogram.name
-    }
+    container.title = title
     L.DomEvent.on(
       container,
       'click',
       function (e) {
         this.input.value = value
         this.sync()
-        this.unselectAll(this.pictogramsContainer)
+        this.unselectAll(this.gridContainer)
         L.DomUtil.addClass(container, 'selected')
       },
       this
@@ -642,19 +641,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.udpatePreview()
   },
 
-  search: function (e) {
-    const icons = [...this.parentNode.querySelectorAll('.umap-pictogram-choice')],
-      search = this.searchInput.value.toLowerCase()
-    icons.forEach((el) => {
-      L.DomUtil.classIf(el, 'visible', el.title.toLowerCase().indexOf(search) !== -1)
-    })
-  },
-
   addCategory: function (category, items) {
     const parent = L.DomUtil.create(
         'div',
         'umap-pictogram-category',
-        this.pictogramsContainer
+        this.gridContainer
       ),
       title = L.DomUtil.add('h6', '', parent, category),
       grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
@@ -663,14 +654,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     }
   },
 
-  buildSymbolsList: function (data) {
-    this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
-    this.searchInput.type = 'search'
-    this.searchInput.placeholder = L._('Search')
-    L.DomEvent.on(this.searchInput, 'input', this.search, this)
+  buildSymbolsList: function () {
+    this.gridContainer.innerHTML = ''
     const categories = {}
     let category
-    for (const props of data.pictogram_list) {
+    for (const props of this.pictogram_list) {
       category = props.category || L._('Generic')
       categories[category] = categories[category] || []
       categories[category].push(props)
@@ -710,13 +698,23 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   showSymbols: function () {
     this.input.type = 'hidden'
-    // Clean parent element before calling ajax, to prevent blinking
-    this.pictogramsContainer.innerHTML = ''
     this.buttonsContainer.innerHTML = ''
-    this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
-      callback: this.buildSymbolsList,
-      context: this,
-    })
+    this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
+    this.searchInput.type = 'search'
+    this.searchInput.placeholder = L._('Search')
+    this.gridContainer = L.DomUtil.create('div', '', this.pictogramsContainer)
+    L.DomEvent.on(this.searchInput, 'input', this.buildSymbolsList, this)
+    if (this.pictogram_list) {
+      this.buildSymbolsList()
+    } else {
+      this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
+        callback: (data) => {
+          this.pictogram_list = data.pictogram_list
+          this.buildSymbolsList()
+        },
+        context: this,
+      })
+    }
   },
 
   showURL: function () {
