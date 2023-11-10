@@ -183,7 +183,15 @@ urlpatterns += i18n_patterns(
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
     re_path(r"", include(i18n_urls)),
 )
-urlpatterns += (path("stats/", cache_page(60 * 60)(views.stats), name="stats"),)
+urlpatterns += (
+    path("stats/", cache_page(60 * 60)(views.stats), name="stats"),
+    path("favicon.ico", views.favicon_file),
+    path("icon.svg", views.favicon_file),
+    path("apple-touch-icon.png", views.favicon_file),
+    path("manifest.webmanifest", views.favicon_file),
+    path("icon-192.png", views.favicon_file),
+    path("icon-512.png", views.favicon_file),
+)
 
 if settings.DEBUG and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

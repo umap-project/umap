@@ -21,6 +21,7 @@ from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
 from django.db.models import Q
 from django.http import (
+    FileResponse,
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
@@ -34,6 +35,8 @@ from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
 from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
+from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_GET
 from django.views.generic import DetailView, TemplateView, View
 from django.views.generic.base import RedirectView
 from django.views.generic.detail import BaseDetailView
@@ -469,9 +472,7 @@ class MapDetailMixin:
         else:
             map_statuses = AnonymousMapPermissionsForm.STATUS
             datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
-        properties["edit_statuses"] = [
-            (i, str(label)) for i, label in map_statuses
-        ]
+        properties["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
         properties["datalayer_edit_statuses"] = [
             (i, str(label)) for i, label in datalayer_statuses
         ]
@@ -1014,6 +1015,17 @@ def stats(request):
             ).count(),
         }
     )
+
+
+@require_GET
+@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
+def favicon_file(request):
+    # See https://adamj.eu/tech/2022/01/18/how-to-add-a-favicon-to-your-django-site/
+    name = request.path.lstrip("/")
+    file = (Path(settings.PROJECT_DIR) / "static" / "umap" / "favicons" / name).open(
+        "rb"
+    )
+    return FileResponse(file)
 
 
 def logout(request):
