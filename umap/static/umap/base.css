@@ -736,24 +736,24 @@ input:invalid {
     visibility: visible;
     top: 23px;
 }
-.umap-alert .umap-action {
+.umap-alert-container .umap-action {
     margin-left: 10px;
     background-color: #fff;
     color: #000;
     padding: 5px;
     border-radius: 4px;
 }
-.umap-alert .umap-action:hover {
+.umap-alert-container .umap-action:hover {
     color: #000;
 }
-.umap-alert .error .umap-action {
+.umap-alert-container .error .umap-action {
     background-color: #666;
     color: #eee;
 }
-.umap-alert .error .umap-action:hover {
+.umap-alert-container .error .umap-action:hover {
     color: #fff;
 }
-.umap-alert input {
+.umap-alert-container input {
     padding: 5px;
     border-radius: 4px;
     width: 100%;
