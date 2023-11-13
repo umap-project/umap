@@ -552,6 +552,9 @@ i.info {
     font-weight: bold;
     border-bottom: 1px solid #fff;
 }
+.umap-pictogram-category h6 {
+    font-size: 1.3em;
+}
 .umap-pictogram-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 30px);
