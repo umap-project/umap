@@ -66,3 +66,37 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
     undefine.click()
     expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
+
+
+def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
+    # Faster than doing a login
+    map.edit_status = Map.ANONYMOUS
+    map.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    marker = page.locator(".umap-div-icon img")
+    expect(marker).to_have_count(1)
+    # Should have default img
+    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
+    # Edit datalayer
+    marker.click(modifiers=["Control", "Shift"])
+    settings = page.get_by_text("Layer properties")
+    expect(settings).to_be_visible()
+    shape_settings = page.get_by_text("Shape properties")
+    expect(shape_settings).to_be_visible()
+    shape_settings.click()
+    define = page.locator(".umap-field-iconUrl .define")
+    undefine = page.locator(".umap-field-iconUrl .undefine")
+    expect(define).to_be_visible()
+    expect(undefine).to_be_hidden()
+    define.click()
+    symbols = page.locator(".umap-pictogram-choice")
+    expect(symbols).to_have_count(2)
+    search = page.locator(".umap-pictogram-list input")
+    search.type("circle")
+    expect(symbols).to_have_count(1)
+    symbols.click()
+    expect(marker).to_have_attribute("src", "/uploads/pictogram/circle.svg")
+    undefine.click()
+    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
