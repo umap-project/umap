@@ -669,18 +669,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     for (let [category, items] of sorted) {
       this.addCategory(category, items)
     }
-    const closeButton = L.DomUtil.createButton(
-      'button action-button',
-      this.pictogramsContainer,
-      L._('Close'),
-      function (e) {
-        this.pictogramsContainer.innerHTML = ''
-        this.tabsContainer.innerHTML = ''
-        if (this.isDefault()) this.undefine(e)
-        else this.udpatePreview()
-      },
-      this
-    )
   },
 
   isDefault: function () {
@@ -704,6 +692,18 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.searchInput.placeholder = L._('Search')
     this.gridContainer = L.DomUtil.create('div', '', this.pictogramsContainer)
     L.DomEvent.on(this.searchInput, 'input', this.buildSymbolsList, this)
+    const closeButton = L.DomUtil.createButton(
+      'button action-button',
+      this.pictogramsContainer,
+      L._('Close'),
+      function (e) {
+        this.pictogramsContainer.innerHTML = ''
+        this.tabsContainer.innerHTML = ''
+        if (this.isDefault()) this.undefine(e)
+        else this.udpatePreview()
+      },
+      this
+    )
     if (this.pictogram_list) {
       this.buildSymbolsList()
     } else {
