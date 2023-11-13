@@ -631,6 +631,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       },
       this
     )
+    return true  // Icon has been added (not filtered)
   },
 
   clear: function () {
@@ -645,13 +646,14 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const parent = L.DomUtil.create(
         'div',
         'umap-pictogram-category',
-        this.gridContainer
       ),
       title = L.DomUtil.add('h6', '', parent, category),
       grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+    let status = false
     for (let item of items) {
-      this.addIconPreview(item, grid)
+      status = this.addIconPreview(item, grid) || status
     }
+    if (status) this.gridContainer.appendChild(parent)
   },
 
   buildSymbolsList: function () {
