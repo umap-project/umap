@@ -120,6 +120,9 @@ L.U.PopupTemplate.Default = L.Class.extend({
         nextLi = L.DomUtil.create('li', 'next', footer),
         next = this.feature.getNext(),
         prev = this.feature.getPrevious()
+      // Fixme: remove me when this is merged and released
+      // https://github.com/Leaflet/Leaflet/pull/9052
+      L.DomEvent.disableClickPropagation(footer)
       if (next)
         nextLi.title = L._('Go to «{feature}»', {
           feature: next.properties.name || L._('next'),
