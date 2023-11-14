@@ -73,7 +73,6 @@ describe('L.U.Controls', function () {
       happen.click(qs('.umap-browse-actions .umap-browse-link'))
       assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
     })
-
   })
 
   describe('#exportPanel()', function () {
