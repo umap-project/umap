@@ -272,7 +272,10 @@ L.U.Map.include({
         url.searchParams.delete('edit')
         history.pushState({}, '', url)
       }
-      if (L.Util.queryString('download')) this.download()
+      if (L.Util.queryString('download'))
+        window.location = L.Util.template(this.options.urls.map_download, {
+          map_id: this.options.umap_id,
+        })
     })
 
     window.onbeforeunload = () => this.isDirty || null
@@ -396,7 +399,6 @@ L.U.Map.include({
   },
 
   loadDatalayers: function (force) {
-    force = force || L.Util.queryString('download') // In case we are in download mode, let's go strait to loading all data
     const total = this.datalayers_index.length
     // toload => datalayer metadata remaining to load (synchronous)
     // dataToload => datalayer data remaining to load (asynchronous)
@@ -824,14 +826,8 @@ L.U.Map.include({
     })
   },
 
-  fullDownload: function () {
-    // Make sure all data is loaded before downloading
-    this.once('dataloaded', () => this.download())
-    this.loadDatalayers(true) // Force load
-  },
-
   format: function (mode) {
-    const type = this.EXPORT_TYPES[mode || 'TODISCUSS']
+    const type = this.EXPORT_TYPES[mode]
     const content = type.formatter(this)
     let name = this.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()

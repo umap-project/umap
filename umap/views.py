@@ -623,7 +623,11 @@ class MapDownload(DetailView):
                 layer["_umap_options"] = datalayer.settings
             datalayers.append(layer)
         geojson["layers"] = datalayers
-        return simple_json_response(**geojson)
+        response = simple_json_response(**geojson)
+        response[
+            "Content-Disposition"
+        ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
+        return response
 
 
 class MapViewGeoJSON(MapView):
