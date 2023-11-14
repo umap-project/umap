@@ -537,38 +537,41 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   onDefine: function () {
     this.buildTabs()
-    this.showSymbols()
+    const value = this.value()
+    if (!value || value.startsWith('/')) this.showSymbolsTab()
+    else if (value.startsWith('http')) this.showURLTab()
+    else this.showCharsTab()
   },
 
   buildTabs: function () {
     const symbol = L.DomUtil.add(
         'button',
-        'flat on',
+        'flat tab-symbols',
         this.tabsContainer,
         L._('Symbol')
       ),
       char = L.DomUtil.add(
         'button',
-        'flat',
+        'flat tab-chars',
         this.tabsContainer,
         L._('Emoji & Character')
       )
-    url = L.DomUtil.add('button', 'flat', this.tabsContainer, L._('URL'))
-    toggle = (e) => {
-      L.DomUtil.removeClass(symbol, 'on')
-      L.DomUtil.removeClass(char, 'on')
-      L.DomUtil.removeClass(url, 'on')
-      L.DomUtil.addClass(e.target, 'on')
-    }
+    url = L.DomUtil.add('button', 'flat tab-url', this.tabsContainer, L._('URL'))
     L.DomEvent.on(symbol, 'click', L.DomEvent.stop)
-      .on(symbol, 'click', this.showSymbols, this)
-      .on(symbol, 'click', toggle)
+      .on(symbol, 'click', this.showSymbolsTab, this)
     L.DomEvent.on(char, 'click', L.DomEvent.stop)
-      .on(char, 'click', this.showChars, this)
-      .on(char, 'click', toggle)
+      .on(char, 'click', this.showCharsTab, this)
     L.DomEvent.on(url, 'click', L.DomEvent.stop)
-      .on(url, 'click', this.showURL, this)
-      .on(url, 'click', toggle)
+      .on(url, 'click', this.showURLTab, this)
+  },
+
+  highlightTab: function (name) {
+    const els = this.tabsContainer.querySelectorAll('button')
+    for (let el of els) {
+      L.DomUtil.removeClass(el, 'on')
+    }
+    let el = this.tabsContainer.querySelector(`.tab-${name}`)
+    L.DomUtil.addClass(el, 'on')
   },
 
   isUrl: function () {
@@ -586,25 +589,33 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const img = L.DomUtil.create(
           'img',
           '',
-          L.DomUtil.create('div', 'umap-pictogram-choice visible', this.buttonsContainer)
+          L.DomUtil.create(
+            'div',
+            'umap-pictogram-choice visible',
+            this.buttonsContainer
+          )
         )
         img.src = this.value()
-        L.DomEvent.on(img, 'click', this.showSymbols, this)
+        L.DomEvent.on(img, 'click', this.showSymbolsTab, this)
       } else {
         const el = L.DomUtil.create(
           'span',
           '',
-          L.DomUtil.create('div', 'umap-pictogram-choice visible', this.buttonsContainer)
+          L.DomUtil.create(
+            'div',
+            'umap-pictogram-choice visible',
+            this.buttonsContainer
+          )
         )
         el.textContent = this.value()
-        L.DomEvent.on(el, 'click', this.showSymbols, this)
+        L.DomEvent.on(el, 'click', this.showSymbolsTab, this)
       }
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
       this.buttonsContainer,
       this.value() ? L._('Change') : L._('Add'),
-      this.showSymbols,
+      this.onDefine,
       this
     )
   },
@@ -613,7 +624,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const baseClass = 'umap-pictogram-choice visible',
       value = pictogram.src,
       search = this.searchInput.value.toLowerCase(),
-      title = pictogram.attribution ? `${pictogram.name} — © ${pictogram.attribution}` : pictogram.name
+      title = pictogram.attribution
+        ? `${pictogram.name} — © ${pictogram.attribution}`
+        : pictogram.name
     if (search && title.toLowerCase().indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass,
       container = L.DomUtil.create('div', className, parent),
@@ -631,7 +644,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       },
       this
     )
-    return true  // Icon has been added (not filtered)
+    return true // Icon has been added (not filtered)
   },
 
   clear: function () {
@@ -643,10 +656,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addCategory: function (category, items) {
-    const parent = L.DomUtil.create(
-        'div',
-        'umap-pictogram-category',
-      ),
+    const parent = L.DomUtil.create('div', 'umap-pictogram-category'),
       title = L.DomUtil.add('h6', '', parent, category),
       grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
     let status = false
@@ -677,16 +687,18 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     return !this.value() || this.value() === this.obj.getMap().options.default_iconUrl
   },
 
-  showChars: function () {
+  showCharsTab: function () {
     // Do not show default value here, as it's not a character
     // and it has not been explicitely chosen by the user.
+    this.highlightTab('chars')
     if (this.isDefault()) this.input.value = ''
     this.input.type = 'text'
     this.input.placeholder = L._('Type char or paste emoji')
     this.pictogramsContainer.innerHTML = ''
   },
 
-  showSymbols: function () {
+  showSymbolsTab: function () {
+    this.highlightTab('symbols')
     this.input.type = 'hidden'
     this.buttonsContainer.innerHTML = ''
     this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
@@ -719,7 +731,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     }
   },
 
-  showURL: function () {
+  showURLTab: function () {
+    this.highlightTab('url')
     this.input.type = 'url'
     this.input.placeholder = L._('Add URL')
     this.pictogramsContainer.innerHTML = ''
