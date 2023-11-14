@@ -662,3 +662,24 @@ def test_download(client, map, datalayer):
             "type": "FeatureCollection",
         },
     ]
+
+
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED])
+def test_download_shared_status_map(client, map, datalayer, share_status):
+    map.share_status = share_status
+    map.save()
+    url = reverse("map_download", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 403
+
+
+def test_download_my_map(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("map_download", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 200
+    # Test response is a json
+    j = json.loads(response.content.decode())
+    assert j["type"] == "umap"
