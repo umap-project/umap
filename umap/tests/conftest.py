@@ -9,10 +9,10 @@ from umap.models import Map
 
 from .base import (
     DataLayerFactory,
-    MapFactory,
-    UserFactory,
-    TileLayerFactory,
     LicenceFactory,
+    MapFactory,
+    TileLayerFactory,
+    UserFactory,
 )
 
 TMP_ROOT = tempfile.mkdtemp()
@@ -80,3 +80,4 @@ def datalayer(map):
 @pytest.fixture
 def tilelayer():
     return TileLayerFactory()
+
