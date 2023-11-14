@@ -92,14 +92,12 @@ var defaultDatalayerData = function (custom) {
     displayOnLoad: true,
     id: 62,
     pictogram_url: null,
-    opacity: null,
     weight: null,
     fillColor: '',
     color: '',
     stroke: true,
     smoothFactor: null,
     dashArray: '',
-    fillOpacity: null,
     fill: true,
   }
   return L.extend({}, _default, custom)
