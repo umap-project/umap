@@ -1138,7 +1138,7 @@ L.U.Map.include({
     const link = L.DomUtil.createLink(
       'button',
       container,
-      L._('Download uMap backup format'),
+      L._('Download full data'),
       downloadUrl
     )
     let name = this.options.name || 'data'

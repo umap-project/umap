@@ -9,12 +9,12 @@ pytestmark = pytest.mark.django_db
 
 def test_umap_export(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
-    button = page.get_by_role("button", name="Download data")
-    expect(button).to_be_visible()
+    link = page.get_by_role("link", name="Download full data")
+    expect(link).to_be_visible()
     with page.expect_download() as download_info:
-        button.click()
+        link.click()
     download = download_info.value
-    assert download.suggested_filename == "test_map.umap"
+    assert download.suggested_filename == "umap_backup_test-map.umap"
     path = Path("/tmp/") / download.suggested_filename
     download.save_as(path)
     downloaded = json.loads(path.read_text())
@@ -29,14 +29,12 @@ def test_umap_export(map, live_server, datalayer, page):
                 "_umap_options": {
                     "browsable": True,
                     "displayOnLoad": True,
-                    "editMode": "disabled",
-                    "inCaption": True,
                     "name": "test datalayer",
                 },
                 "features": [
                     {
                         "geometry": {
-                            "coordinates": [13.688965, 48.552978],
+                            "coordinates": [13.68896484375, 48.55297816440071],
                             "type": "Point",
                         },
                         "properties": {
@@ -51,25 +49,14 @@ def test_umap_export(map, live_server, datalayer, page):
             }
         ],
         "properties": {
-            "captionBar": False,
-            "captionMenus": True,
             "datalayersControl": True,
             "description": "Which is just the Danube, at the end",
             "displayPopupFooter": False,
-            "easing": False,
-            "embedControl": True,
-            "fullscreenControl": True,
             "licence": "",
-            "limitBounds": {},
             "miniMap": False,
             "moreControl": True,
             "name": "test map",
-            "overlay": None,
-            "permanentCreditBackground": True,
             "scaleControl": True,
-            "scrollWheelZoom": True,
-            "searchControl": True,
-            "slideshow": {},
             "tilelayer": {
                 "attribution": "© OSM Contributors",
                 "maxZoom": 18,

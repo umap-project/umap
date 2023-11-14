@@ -71,13 +71,11 @@ class MapFactory(factory.django.DjangoModelFactory):
             "properties": {
                 "datalayersControl": True,
                 "description": "Which is just the Danube, at the end",
-                "displayCaptionOnLoad": False,
-                "displayDataBrowserOnLoad": False,
                 "displayPopupFooter": False,
                 "licence": "",
                 "miniMap": False,
                 "moreControl": True,
-                "name": "Cruising on the Donau",
+                "name": name,
                 "scaleControl": True,
                 "tilelayer": {
                     "attribution": "\xa9 OSM Contributors",
@@ -100,6 +98,7 @@ class MapFactory(factory.django.DjangoModelFactory):
     def _adjust_kwargs(cls, **kwargs):
         # Make sure there is no persistency
         kwargs["settings"] = copy.deepcopy(kwargs["settings"])
+        kwargs["settings"]["properties"]["name"] = kwargs["name"]
         return kwargs
 
     class Meta:

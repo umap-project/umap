@@ -612,7 +612,7 @@ def test_download(client, map, datalayer):
     # Test response is a json
     j = json.loads(response.content.decode())
     assert j["type"] == "umap"
-    assert j["uri"] == "http://testserver/en/map/test-map_1"
+    assert j["uri"] == f"http://testserver/en/map/test-map_{map.pk}"
     assert j["geometry"] == {
         "coordinates": [13.447265624999998, 48.94415123418794],
         "type": "Point",
@@ -620,13 +620,11 @@ def test_download(client, map, datalayer):
     assert j["properties"] == {
         "datalayersControl": True,
         "description": "Which is just the Danube, at the end",
-        "displayCaptionOnLoad": False,
-        "displayDataBrowserOnLoad": False,
         "displayPopupFooter": False,
         "licence": "",
         "miniMap": False,
         "moreControl": True,
-        "name": "Cruising on the Donau",
+        "name": "test map",
         "scaleControl": True,
         "tilelayer": {
             "attribution": "© OSM Contributors",
