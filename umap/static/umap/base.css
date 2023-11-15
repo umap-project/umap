@@ -295,6 +295,7 @@ input[type="file"] + .error {
     background-repeat: no-repeat;
     text-indent: 24px;
     height: 24px;
+    width: 24px;
     line-height: 24px;
     display: inline-block;
     background-image: url('./img/16-white.svg');
