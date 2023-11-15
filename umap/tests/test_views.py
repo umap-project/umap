@@ -364,3 +364,29 @@ def test_user_profile_does_not_allow_to_edit_other_fields(client, map):
     user = User.objects.get(pk=map.owner.pk)
     assert user.email != new_email
     assert user.is_superuser is False
+
+
+def test_favicon_redirection(client):
+    response = client.get("/favicon.ico")
+    assert response.status_code == 302
+    assert response.url == "/static/umap/favicons/favicon.ico"
+
+
+def test_webmanifest(client):
+    response = client.get("/manifest.webmanifest")
+    assert response.status_code == 200
+    assert response["content-type"] == "application/json"
+    assert response.json() == {
+        "icons": [
+            {
+                "sizes": "192x192",
+                "src": "/static/umap/favicons/icon-192.png",
+                "type": "image/png",
+            },
+            {
+                "sizes": "512x512",
+                "src": "/static/umap/favicons/icon-512.png",
+                "type": "image/png",
+            },
+        ]
+    }
