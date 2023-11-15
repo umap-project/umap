@@ -850,13 +850,13 @@ ul.photon-autocomplete {
     background-position: -119px -48px;
 }
 .umap-delete-vertex {
-    background-position: -119px -22px;
+    background-position: -119px -94px;
 }
 .umap-continue-line {
     background-position: -96px 1px;
 }
 .umap-split-line {
-    background-position: -120px 1px;
+    background-position: -119px -22px;
 }
 .umap-extract-shape-from-multi{
     background-position: -119px 2px;
