@@ -557,12 +557,19 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         L._('Emoji & Character')
       )
     url = L.DomUtil.add('button', 'flat tab-url', this.tabsContainer, L._('URL'))
-    L.DomEvent.on(symbol, 'click', L.DomEvent.stop)
-      .on(symbol, 'click', this.showSymbolsTab, this)
-    L.DomEvent.on(char, 'click', L.DomEvent.stop)
-      .on(char, 'click', this.showCharsTab, this)
-    L.DomEvent.on(url, 'click', L.DomEvent.stop)
-      .on(url, 'click', this.showURLTab, this)
+    L.DomEvent.on(symbol, 'click', L.DomEvent.stop).on(
+      symbol,
+      'click',
+      this.showSymbolsTab,
+      this
+    )
+    L.DomEvent.on(char, 'click', L.DomEvent.stop).on(
+      char,
+      'click',
+      this.showCharsTab,
+      this
+    )
+    L.DomEvent.on(url, 'click', L.DomEvent.stop).on(url, 'click', this.showURLTab, this)
   },
 
   highlightTab: function (name) {
@@ -589,11 +596,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const img = L.DomUtil.create(
           'img',
           '',
-          L.DomUtil.create(
-            'div',
-            'umap-pictogram-choice',
-            this.buttonsContainer
-          )
+          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         img.src = this.value()
         L.DomEvent.on(img, 'click', this.showSymbolsTab, this)
@@ -601,11 +604,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const el = L.DomUtil.create(
           'span',
           '',
-          L.DomUtil.create(
-            'div',
-            'umap-pictogram-choice',
-            this.buttonsContainer
-          )
+          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         el.textContent = this.value()
         L.DomEvent.on(el, 'click', this.showSymbolsTab, this)
@@ -623,11 +622,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   addIconPreview: function (pictogram, parent) {
     const baseClass = 'umap-pictogram-choice',
       value = pictogram.src,
-      search = this.searchInput.value.toLowerCase(),
+      search = L.Util.normalize(this.searchInput.value),
       title = pictogram.attribution
         ? `${pictogram.name} — © ${pictogram.attribution}`
         : pictogram.name
-    if (search && title.toLowerCase().indexOf(search) === -1) return
+    if (search && L.Util.normalize(title).indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass,
       container = L.DomUtil.create('div', className, parent),
       img = L.DomUtil.create('img', '', container)
