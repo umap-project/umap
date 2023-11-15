@@ -422,7 +422,7 @@ def _urls_for_js(urls=None):
 
 
 def simple_json_response(**kwargs):
-    return HttpResponse(json.dumps(kwargs))
+    return HttpResponse(json.dumps(kwargs), content_type="application/json")
 
 
 # ############## #
