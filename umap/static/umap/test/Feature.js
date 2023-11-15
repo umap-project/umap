@@ -223,6 +223,35 @@ describe('L.U.FeatureMixin', function () {
     })
   })
 
+  describe('#highlight()', function () {
+    it('should highlight marker on click', function () {
+      assert.notOk(qs('.umap-icon-active'))
+      happen.click(qs('div.leaflet-marker-icon'))
+      assert.ok(qs('.umap-icon-active'))
+      happen.click(qs('#map')) // Close popup
+      assert.notOk(qs('.umap-icon-active'))
+    })
+
+    it('should still highlight marker after hide() and show()', function () {
+      this.datalayer.hide()
+      this.datalayer.show()
+      happen.click(qs('div.leaflet-marker-icon'))
+      assert.ok(qs('.umap-icon-active'))
+    })
+
+    it('should highlight path', function () {
+      happen.click(qs('path[stroke-opacity="0.6"]'))
+      var path = qs('path[stroke-opacity="1"]')
+      assert.ok(path)
+    })
+
+    it('should highlight polygon', function () {
+      var path = qs('path[fill="DarkBlue"]')
+      happen.click(path)
+      assert.isAbove(path.attributes['fill-opacity'].value, 0.5)
+    })
+  })
+
   describe('#tooltip', function () {
     it('should have a tooltip when active and allow variables', function () {
       this.map.options.showLabel = true

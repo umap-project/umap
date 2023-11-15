@@ -64,6 +64,7 @@ describe('L.U.Map.Export', function () {
             properties: {
               _umap_options: {
                 fill: false,
+                opacity: 0.6,
               },
               name: 'test',
             },

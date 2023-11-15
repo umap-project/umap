@@ -110,7 +110,6 @@ L.U.Icon.Default = L.U.Icon.extend({
 L.U.Icon.Circle = L.U.Icon.extend({
   initialize: function (map, options) {
     const default_options = {
-      iconAnchor: new L.Point(6, 6),
       popupAnchor: new L.Point(0, -6),
       tooltipAnchor: new L.Point(6, 0),
       className: 'umap-circle-icon',

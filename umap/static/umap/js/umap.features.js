@@ -547,6 +547,14 @@ L.U.Marker = L.Marker.extend({
     this.setIcon(this.getIcon())
   },
 
+  highlight: function () {
+    L.DomUtil.addClass(this.options.icon.elements.main, 'umap-icon-active')
+  },
+
+  resetHighlight: function () {
+    L.DomUtil.removeClass(this.options.icon.elements.main, 'umap-icon-active')
+  },
+
   addInteractions: function () {
     L.U.FeatureMixin.addInteractions.call(this)
     this.on(
@@ -560,6 +568,8 @@ L.U.Marker = L.Marker.extend({
     if (!this.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
+    this.on('popupopen', this.highlight)
+    this.on('popupclose', this.resetHighlight)
   },
 
   hasGeom: function () {
@@ -816,6 +826,14 @@ L.U.PathMixin = {
     L.U.FeatureMixin.endEdit.call(this)
   },
 
+  highlightPath: function () {
+    this.parentClass.prototype.setStyle.call(this, {
+      fillOpacity: Math.sqrt(this.getDynamicOption('fillOpacity', 1.0)),
+      opacity: 1.0,
+      weight: 1.3 * this.getDynamicOption('weight'),
+    })
+  },
+
   _onMouseOver: function () {
     if (this.map.measureTools && this.map.measureTools.enabled()) {
       this.map.ui.tooltip({ content: this.getMeasure(), anchor: this })
@@ -829,6 +847,8 @@ L.U.PathMixin = {
     this.on('mouseover', this._onMouseOver)
     this.on('edit', this.makeDirty)
     this.on('drag editable:drag', this._onDrag)
+    this.on('popupopen', this.highlightPath)
+    this.on('popupclose', this._redraw)
   },
 
   _onDrag: function () {
