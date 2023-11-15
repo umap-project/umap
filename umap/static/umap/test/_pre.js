@@ -132,6 +132,7 @@ function initMap(options) {
         datalayer_version: '/datalayer/{pk}/{name}',
         pictogram_list_json: '/pictogram/json/',
         map_update_permissions: '/map/{map_id}/update/permissions/',
+        map_download: '/map/{map_id}/download/',
       },
       default_iconUrl: '../src/img/marker.png',
       zoom: 6,

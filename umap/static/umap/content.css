@@ -319,7 +319,8 @@ table.maps thead tr {
     display: none;
 }
 .leaflet-container a.button {
-    color: #eeeeec;
+    color: #323737;
+    font-size: 13.3px;
 }
 
 /* ************************************************* */
