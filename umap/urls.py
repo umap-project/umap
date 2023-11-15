@@ -5,9 +5,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.decorators.cache import cache_control, cache_page, never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.generic.base import RedirectView
 
 from . import views
 from .decorators import (
@@ -185,12 +187,20 @@ urlpatterns += i18n_patterns(
 )
 urlpatterns += (
     path("stats/", cache_page(60 * 60)(views.stats), name="stats"),
-    path("favicon.ico", views.favicon_file),
-    path("icon.svg", views.favicon_file),
-    path("apple-touch-icon.png", views.favicon_file),
-    path("manifest.webmanifest", views.favicon_file),
-    path("icon-192.png", views.favicon_file),
-    path("icon-512.png", views.favicon_file),
+    path(
+        "favicon.ico",
+        cache_control(max_age=60 * 60 * 24, immutable=True, public=True)(
+            RedirectView.as_view(
+                url=staticfiles_storage.url("umap/favicons/favicon.ico")
+            )
+        ),
+    ),
+    path(
+        "manifest.webmanifest",
+        cache_control(max_age=60 * 60 * 24, immutable=True, public=True)(
+            views.webmanifest
+        ),
+    ),
 )
 
 if settings.DEBUG and settings.MEDIA_ROOT:

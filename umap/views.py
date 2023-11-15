@@ -15,13 +15,13 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
 from django.db.models import Q
 from django.http import (
-    FileResponse,
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
@@ -1018,14 +1018,24 @@ def stats(request):
 
 
 @require_GET
-@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
-def favicon_file(request):
-    # See https://adamj.eu/tech/2022/01/18/how-to-add-a-favicon-to-your-django-site/
-    name = request.path.lstrip("/")
-    file = (Path(settings.PROJECT_DIR) / "static" / "umap" / "favicons" / name).open(
-        "rb"
+@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # One day.
+def webmanifest(request):
+    return simple_json_response(
+        **{
+            "icons": [
+                {
+                    "src": staticfiles_storage.url("umap/favicons/icon-192.png"),
+                    "type": "image/png",
+                    "sizes": "192x192",
+                },
+                {
+                    "src": staticfiles_storage.url("umap/favicons/icon-512.png"),
+                    "type": "image/png",
+                    "sizes": "512x512",
+                },
+            ]
+        }
     )
-    return FileResponse(file)
 
 
 def logout(request):
