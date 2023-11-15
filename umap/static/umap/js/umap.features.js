@@ -1,5 +1,5 @@
 L.U.FeatureMixin = {
-  staticOptions: {},
+  staticOptions: { mainColor: 'color' },
 
   initialize: function (map, latlng, options) {
     this.map = map
@@ -130,12 +130,10 @@ L.U.FeatureMixin = {
   },
 
   getAdvancedEditActions: function (container) {
-    const deleteLink = L.DomUtil.create('a', 'button umap-delete', container)
-    deleteLink.href = '#'
-    deleteLink.textContent = L._('Delete')
-    L.DomEvent.on(
-      deleteLink,
-      'click',
+    const deleteButton = L.DomUtil.createButton(
+      'button umap-delete',
+      container,
+      L._('Delete'),
       function (e) {
         L.DomEvent.stop(e)
         if (this.confirmDelete()) this.map.ui.closePanel()
@@ -283,7 +281,7 @@ L.U.FeatureMixin = {
     } else if (L.Util.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
-      value = this.datalayer.getOption(option)
+      value = this.datalayer.getOption(option, this)
     } else {
       value = this.map.getOption(option)
     }
@@ -478,9 +476,9 @@ L.U.FeatureMixin = {
 
   matchFilter: function (filter, keys) {
     filter = filter.toLowerCase()
-    for (let i = 0; i < keys.length; i++) {
-      if ((this.properties[keys[i]] || '').toLowerCase().indexOf(filter) !== -1)
-        return true
+    for (let i = 0, value; i < keys.length; i++) {
+      value = (this.properties[keys[i]] || '') + ''
+      if (value.toLowerCase().indexOf(filter) !== -1) return true
     }
     return false
   },
@@ -620,6 +618,8 @@ L.U.Marker = L.Marker.extend({
   _initIcon: function () {
     this.options.icon = this.getIcon()
     L.Marker.prototype._initIcon.call(this)
+    // Allow to run code when icon is actually part of the DOM
+    this.options.icon.onAdd()
     this.resetTooltip()
   },
 
@@ -680,8 +680,8 @@ L.U.Marker = L.Marker.extend({
   appendEditFieldsets: function (container) {
     L.U.FeatureMixin.appendEditFieldsets.call(this, container)
     const coordinatesOptions = [
-      ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude') }],
-      ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude') }],
+      ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude'), step: 'any' }],
+      ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude'), step: 'any' }],
     ]
     const builder = new L.U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
@@ -968,6 +968,7 @@ L.U.Polyline = L.Polyline.extend({
   staticOptions: {
     stroke: true,
     fill: false,
+    mainColor: 'color',
   },
 
   isSameClass: function (other) {
@@ -1036,10 +1037,13 @@ L.U.Polyline = L.Polyline.extend({
 
   getAdvancedEditActions: function (container) {
     L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    const toPolygon = L.DomUtil.create('a', 'button umap-to-polygon', container)
-    toPolygon.href = '#'
-    toPolygon.textContent = L._('Transform to polygon')
-    L.DomEvent.on(toPolygon, 'click', this.toPolygon, this)
+    const toPolygon = L.DomUtil.createButton(
+      'button umap-to-polygon',
+      container,
+      L._('Transform to polygon'),
+      this.toPolygon,
+      this
+    )
   },
 
   _mergeShapes: function (from, to) {
@@ -1104,6 +1108,9 @@ L.U.Polyline = L.Polyline.extend({
 L.U.Polygon = L.Polygon.extend({
   parentClass: L.Polygon,
   includes: [L.U.FeatureMixin, L.U.PathMixin],
+  staticOptions: {
+    mainColor: 'fillColor',
+  },
 
   isSameClass: function (other) {
     return other instanceof L.U.Polygon
@@ -1180,10 +1187,13 @@ L.U.Polygon = L.Polygon.extend({
 
   getAdvancedEditActions: function (container) {
     L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    const toPolyline = L.DomUtil.create('a', 'button umap-to-polyline', container)
-    toPolyline.href = '#'
-    toPolyline.textContent = L._('Transform to lines')
-    L.DomEvent.on(toPolyline, 'click', this.toPolyline, this)
+    const toPolyline = L.DomUtil.createButton(
+      'button umap-to-polyline',
+      container,
+      L._('Transform to lines'),
+      this.toPolyline,
+      this
+    )
   },
 
   isMulti: function () {

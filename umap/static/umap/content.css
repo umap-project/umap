@@ -175,14 +175,14 @@ body.content #umap-ui-container {
 input[type="submit"],
 .button {
     background-color: #79c1c0;
-    color: #eeeeec;
+    color: #323737;
 }
 .wrapper input[type="submit"]:hover {
     background-color: #689191;
 }
 .wrapper .neutral, .wrapper input[type="submit"].neutral {
     background-color: #ddd;
-    color: #666;
+    color: #323737;
 }
 .wrapper.somber {
     background-color: #2E3641;
@@ -319,7 +319,8 @@ table.maps thead tr {
     display: none;
 }
 .leaflet-container a.button {
-    color: #eeeeec;
+    color: #323737;
+    font-size: 13.3px;
 }
 
 /* ************************************************* */

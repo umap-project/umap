@@ -15,6 +15,7 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
@@ -34,6 +35,8 @@ from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
 from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
+from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_GET
 from django.views.generic import DetailView, TemplateView, View
 from django.views.generic.base import RedirectView
 from django.views.generic.detail import BaseDetailView
@@ -469,9 +472,7 @@ class MapDetailMixin:
         else:
             map_statuses = AnonymousMapPermissionsForm.STATUS
             datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
-        properties["edit_statuses"] = [
-            (i, str(label)) for i, label in map_statuses
-        ]
+        properties["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
         properties["datalayer_edit_statuses"] = [
             (i, str(label)) for i, label in datalayer_statuses
         ]
@@ -604,6 +605,32 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         if not user.is_authenticated:
             return False
         return Star.objects.filter(by=user, map=self.object).exists()
+
+
+class MapDownload(DetailView):
+    model = Map
+    pk_url_kwarg = "map_id"
+
+    def get_canonical_url(self):
+        return reverse("map_download", args=(self.object.pk,))
+
+    def render_to_response(self, context, *args, **kwargs):
+        geojson = self.object.settings
+        geojson["type"] = "umap"
+        geojson["uri"] = self.request.build_absolute_uri(self.object.get_absolute_url())
+        datalayers = []
+        for datalayer in self.object.datalayer_set.all():
+            with open(datalayer.geojson.path, "rb") as f:
+                layer = json.loads(f.read())
+            if datalayer.settings:
+                layer["_umap_options"] = datalayer.settings
+            datalayers.append(layer)
+        geojson["layers"] = datalayers
+        response = simple_json_response(**geojson)
+        response[
+            "Content-Disposition"
+        ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
+        return response
 
 
 class MapViewGeoJSON(MapView):
@@ -1012,6 +1039,27 @@ def stats(request):
             "users_active_last_week_count": User.objects.filter(
                 last_login__gt=last_week
             ).count(),
+        }
+    )
+
+
+@require_GET
+@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # One day.
+def webmanifest(request):
+    return simple_json_response(
+        **{
+            "icons": [
+                {
+                    "src": staticfiles_storage.url("umap/favicons/icon-192.png"),
+                    "type": "image/png",
+                    "sizes": "192x192",
+                },
+                {
+                    "src": staticfiles_storage.url("umap/favicons/icon-512.png"),
+                    "type": "image/png",
+                    "sizes": "512x512",
+                },
+            ]
         }
     )
 

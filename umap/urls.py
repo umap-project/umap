@@ -5,9 +5,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.decorators.cache import cache_control, cache_page, never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.generic.base import RedirectView
 
 from . import views
 from .decorators import (
@@ -39,6 +41,11 @@ urlpatterns = [
     ),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     re_path(r"^agnocomplete/", include("agnocomplete.urls")),
+    re_path(
+        r"^map/(?P<map_id>\d+)/download/",
+        can_view_map(views.MapDownload.as_view()),
+        name="map_download",
+    ),
 ]
 
 i18n_urls = [
@@ -183,7 +190,23 @@ urlpatterns += i18n_patterns(
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
     re_path(r"", include(i18n_urls)),
 )
-urlpatterns += (path("stats/", cache_page(60 * 60)(views.stats), name="stats"),)
+urlpatterns += (
+    path("stats/", cache_page(60 * 60)(views.stats), name="stats"),
+    path(
+        "favicon.ico",
+        cache_control(max_age=60 * 60 * 24, immutable=True, public=True)(
+            RedirectView.as_view(
+                url=staticfiles_storage.url("umap/favicons/favicon.ico")
+            )
+        ),
+    ),
+    path(
+        "manifest.webmanifest",
+        cache_control(max_age=60 * 60 * 24, immutable=True, public=True)(
+            views.webmanifest
+        ),
+    ),
+)
 
 if settings.DEBUG and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

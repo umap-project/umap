@@ -284,7 +284,8 @@ class Pictogram(NamedModel):
     """
 
     attribution = models.CharField(max_length=300)
-    pictogram = models.ImageField(upload_to="pictogram")
+    category = models.CharField(max_length=300, null=True, blank=True)
+    pictogram = models.FileField(upload_to="pictogram")
 
     @property
     def json(self):
@@ -292,6 +293,7 @@ class Pictogram(NamedModel):
             "id": self.pk,
             "attribution": self.attribution,
             "name": self.name,
+            "category": self.category,
             "src": self.pictogram.url,
         }
 

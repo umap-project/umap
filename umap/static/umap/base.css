@@ -163,7 +163,9 @@ select {
 select[multiple="multiple"] {
     height: auto;
 }
-.button, input[type="submit"] {
+.button,
+[type="button"],
+input[type="submit"] {
     display: block;
     margin-bottom: 14px;
     text-align: center;
@@ -176,17 +178,30 @@ select[multiple="multiple"] {
     line-height: 32px;
     border: none;
     text-decoration: none;
+    background-color: white;
 }
-.dark .button {
+.dark .button,
+.dark [type="button"] {
     background-color: #2a2e30;
     color: #eeeeec;
     border: 1px solid #1b1f20;
 }
-.dark .button:hover, .dark input[type="submit"]:hover {
+.dark .button:hover,
+.dark [type="button"]:hover,
+.dark input[type="submit"]:hover {
     background-color: #2e3436;
 }
 .dark a {
     color: #eeeeec;
+}
+[type="button"].flat,
+.dark [type="button"].flat {
+    border: none;
+    background-color: inherit;
+    padding: 0;
+    text-align: left;
+    min-height: inherit;
+    text-decoration: underline;
 }
 .help-text, .helptext {
     display: block;
@@ -263,7 +278,7 @@ input[type="file"] + .error {
     padding: 10px;
 }
 .fieldset.toggle .legend {
-    text-align: center;
+    text-align: left;
     display: block;
     cursor: pointer;
     background-color: #232729;
@@ -275,6 +290,20 @@ input[type="file"] + .error {
     font-weight: normal;
     font-size: 1.2em;
     padding: 0 5px;
+}
+.fieldset.toggle .legend:before {
+    background-repeat: no-repeat;
+    text-indent: 24px;
+    height: 24px;
+    line-height: 24px;
+    display: inline-block;
+    background-image: url('./img/16-white.svg');
+    vertical-align: bottom;
+    content: " ";
+    background-position: -144px -76px;
+}
+.fieldset.toggle.on .legend:before {
+    background-position: -144px -51px;
 }
 /* Switch */
 input.switch:empty {
@@ -354,13 +383,15 @@ input.switch:checked ~ label:after {
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
 }
-.umap-multiplechoice.by3 {
+.umap-multiplechoice.by3,
+.umap-multiplechoice.by5 {
     grid-template-columns: 1fr 1fr 1fr;
 }
 .umap-multiplechoice.by4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-.button-bar .button {
+.button-bar .button,
+.button-bar [type="button"] {
     display: inline-block;
 }
 .umap-multiplechoice input[type='radio'] {
@@ -449,7 +480,7 @@ i.info {
 .umap-clone:before, .umap-edit:before, .umap-download:before,
 .umap-to-polyline:before {
     background-repeat: no-repeat;
-    text-indent: 38px;
+    text-indent: 36px;
     height: 24px;
     line-height: 24px;
     display: inline-block;
@@ -504,33 +535,30 @@ i.info {
     margin-top: -8px;
     padding: 0 5px;
 }
-.umap-icon-list, .umap-pictogram-list {
-    clear: both;
+.umap-pictogram-grid {
+    display: flex;
+    flex-wrap: wrap;
 }
-.umap-icon-choice {
-    display: block;
-    float: left;
+.umap-pictogram-choice {
     width: 30px;
     height: 30px;
     line-height: 30px;
-    position: relative;
     cursor: pointer;
-    background-image: url('./img/icon-bg.png');
+    background-color: #999;
     text-align: center;
-    box-shadow: 0 0 4px 0 black inset;
     margin-bottom: 5px;
     margin-right: 5px;
 }
-.umap-icon-choice img {
+.umap-pictogram-choice img {
     vertical-align: middle;
     max-width: 24px;
 }
-.umap-icon-choice:hover,
-.umap-icon-choice.selected,
+.umap-pictogram-choice:hover,
+.umap-pictogram-choice.selected,
 .umap-color-picker span:hover {
     box-shadow: 0 0 4px 0 black;
 }
-.umap-icon-choice .leaflet-marker-icon {
+.umap-pictogram-choice .leaflet-marker-icon {
     bottom: 0;
     left: 30px;
     position: absolute;
@@ -557,10 +585,12 @@ input.blur {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-.blur + .button:before {
+.blur + .button:before,
+.blur + [type="button"]:before {
     content: '✔';
 }
-.blur + .button {
+.blur + .button,
+.blur + [type="button"] {
     width: 40px;
     height: 18px;
     display: inline-block;
@@ -570,7 +600,8 @@ input.blur {
     border-bottom-left-radius: 0;
     box-sizing: border-box;
 }
-input[type=hidden].blur + .button {
+input[type=hidden].blur + .button,
+input[type=hidden].blur + [type="button"] {
     display: none;
 }
 
@@ -705,26 +736,27 @@ input:invalid {
     visibility: visible;
     top: 23px;
 }
-.umap-alert .umap-action {
+.umap-alert-container .umap-action {
     margin-left: 10px;
     background-color: #fff;
     color: #000;
     padding: 5px;
     border-radius: 4px;
 }
-.umap-alert .umap-action:hover {
+.umap-alert-container .umap-action:hover {
     color: #000;
 }
-.umap-alert .error .umap-action {
+.umap-alert-container .error .umap-action {
     background-color: #666;
     color: #eee;
 }
-.umap-alert .error .umap-action:hover {
+.umap-alert-container .error .umap-action:hover {
     color: #fff;
 }
-.umap-alert input {
+.umap-alert-container input {
     padding: 5px;
     border-radius: 4px;
+    width: 100%;
 }
 
 /* *********** */
@@ -741,7 +773,7 @@ input:invalid {
     color: #eeeeec;
     font-size: 0.8em;
     border-radius: 2px;
-    z-index: 1004;
+    z-index: 1011;
     font-weight: normal;
     max-width: 300px;
 }
@@ -760,6 +792,19 @@ input:invalid {
     border-top-color: rgba(30, 30, 30, 0.8);
     border-width: 11px;
     margin-left: calc(-50% + 21px);
+}
+#umap-tooltip-container.tooltip-bottom:before {
+    top: -22px;
+    left: calc(50% - 11px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: rgba(30, 30, 30, 0.7);
+    border-width: 11px;
+    transform: rotate(180deg);
 }
 #umap-tooltip-container.tooltip.tooltip-left:after {
     left: 100%;
@@ -806,9 +851,40 @@ input:invalid {
     color: #fff;
     float: right;
     padding-right: 10px;
+    width: 100px;
+    line-height: 1;
+    margin: .5rem;
+    background-color: #202425;
+    font-size: .7rem;
 }
 #umap-alert-container .umap-close-icon {
     background-position: -74px -55px;
+}
+#umap-alert-container .umap-alert-actions {
+    display: flex;
+    margin: 1rem;
+}
+#umap-alert-container .umap-alert-actions .umap-action {
+    margin-bottom: 0;
+}
+
+
+/* *********** */
+/*   Various   */
+/* *********** */
+
+.umap-dragover:before {
+    content:  ' ';
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs">%3Cpath d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/>%3C/svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #323e56;
+    z-index: 401;
+    display: block;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.5;
 }
 
 

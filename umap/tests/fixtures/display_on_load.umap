@@ -1,0 +1,85 @@
+{
+  "type": "umap",
+  "uri": "http://localhost:8020/fr/map/carte-sans-nom_128#6/50.233/6.910",
+  "properties": {
+    "easing": false,
+    "embedControl": true,
+    "fullscreenControl": true,
+    "searchControl": true,
+    "datalayersControl": true,
+    "zoomControl": true,
+    "permanentCreditBackground": true,
+    "slideshow": {},
+    "captionMenus": true,
+    "captionBar": false,
+    "limitBounds": {},
+    "overlay": null,
+    "licence": "",
+    "description": "",
+    "name": "Carte sans nom",
+    "displayPopupFooter": false,
+    "miniMap": false,
+    "moreControl": true,
+    "scaleControl": true,
+    "scrollWheelZoom": true,
+    "zoom": 6
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      6.734619140625,
+      50.359480346298696
+    ]
+  },
+  "layers": [
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              5.141602,
+              50.889174
+            ]
+          }
+        }
+      ],
+      "_umap_options": {
+        "displayOnLoad": true,
+        "inCaption": true,
+        "browsable": true,
+        "editMode": "advanced",
+        "name": "Visible",
+        "remoteData": {}
+      }
+    },
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              5.383301,
+              49.809632
+            ]
+          }
+        }
+      ],
+      "_umap_options": {
+        "displayOnLoad": false,
+        "inCaption": true,
+        "browsable": true,
+        "editMode": "advanced",
+        "remoteData": {},
+        "name": "Invisible",
+        "color": "DarkRed"
+      }
+    }
+  ]
+}

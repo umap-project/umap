@@ -1,31 +1,31 @@
 # Installation
 
-*Note: for Ubuntu follow procedure [Ubuntu from scratch](ubuntu.md)*
+*Note: for Ubuntu, follow procedure [Ubuntu from scratch](ubuntu.md)*
 
-*Note: for a Windows installation follow procedure [Installing on Windows](install_windows.md)*
+*Note: for Windows, follow procedure [Installing on Windows](install_windows.md)*
 
 Create a geo aware database. See [Geodjango doc](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/) for backend installation.
 
 Create a virtual environment
 
-    virtualenv umap
-    source umap/bin/activate
+    python -m venv venv
+    source venv/bin/activate
 
 Install dependencies and project
 
     pip install umap-project
 
-Create a default local settings file
+Create a default `local_settings` file
 
-    wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O local.py
+    wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O local_settings.py
 
 
 Reference it as env var:
 
-    export UMAP_SETTINGS=`pwd`/local.py
+    export UMAP_SETTINGS=`pwd`/local_settings.py
 
 
-Add database connection information in `local.py`, for example
+Add database connection information in `local_settings.py`, for example
 
     DATABASES = {
         'default': {
@@ -34,9 +34,26 @@ Add database connection information in `local.py`, for example
         }
     }
 
-Add a `SECRET_KEY` in `local.py` with a long random secret key
+Depending on your installation, you might need to change the USER that connects the database.
+
+It should look like this:
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": "umap",
+        "USER": "postgres",
+    }
+}
+
+Add a `SECRET_KEY` in `local_settings.py` with a long random secret key
 
     SECRET_KEY = "a long and random secret key that must not be shared"
+
+You can easily generate one with openssl:
+
+    openssl rand -base64 32
 
 uMap uses [python-social-auth](http://python-social-auth.readthedocs.org/) for user authentication. So you will need to configure it according to your
 needs. For example

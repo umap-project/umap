@@ -26,5 +26,7 @@ mkdir -p umap/static/umap/vendors/tokml && cp -r node_modules/tokml/tokml.js uma
 mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.css umap/static/umap/vendors/locatecontrol/
 mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/src/L.Control.Locate.js umap/static/umap/vendors/locatecontrol/
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.js umap/static/umap/vendors/dompurify/
+mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
+mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-statistics/dist/simple-statistics.min.js umap/static/umap/vendors/simple-statistics/
 
 echo 'Done!'

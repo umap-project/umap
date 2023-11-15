@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-22 16:21+0000\n"
+"POT-Creation-Date: 2023-10-12 06:55+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Eric Armijo, 2023\n"
 "Language-Team: Spanish (http://app.transifex.com/openstreetmap/umap/language/es/)\n"
@@ -32,7 +32,7 @@ msgstr "Sólo puede editarse con el enlace secreto de edición"
 msgid "Everyone can edit"
 msgstr "Todos pueden editar"
 
-#: forms.py:69 models.py:317
+#: forms.py:69 models.py:318
 msgid "Inherit"
 msgstr "Heredar"
 
@@ -60,15 +60,15 @@ msgstr "Plantilla URL usando el formato de teselas OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Orden de las capas de teselas en la caja de edición"
 
-#: models.py:142 models.py:318
+#: models.py:142 models.py:319
 msgid "Everyone"
 msgstr "Todos"
 
-#: models.py:143 models.py:149 models.py:319
+#: models.py:143 models.py:149 models.py:320
 msgid "Editors only"
 msgstr "Sólo editores"
 
-#: models.py:144 models.py:320
+#: models.py:144 models.py:321
 msgid "Owner only"
 msgstr "Sólo propietario"
 
@@ -84,7 +84,7 @@ msgstr "Cualquiera con enlace"
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: models.py:153 models.py:324
+#: models.py:153 models.py:325
 msgid "description"
 msgstr "descripción"
 
@@ -112,35 +112,35 @@ msgstr "Elija la licencia del mapa."
 msgid "licence"
 msgstr "licencia"
 
-#: models.py:172
+#: models.py:173
 msgid "owner"
 msgstr "propietario"
 
-#: models.py:176
+#: models.py:177
 msgid "editors"
 msgstr "editores"
 
-#: models.py:181 models.py:338
+#: models.py:182 models.py:339
 msgid "edit status"
 msgstr "estado de la edición"
 
-#: models.py:186
+#: models.py:187
 msgid "share status"
 msgstr "compartir estado"
 
-#: models.py:189 models.py:333
+#: models.py:190 models.py:334
 msgid "settings"
 msgstr "ajustes"
 
-#: models.py:268
+#: models.py:269
 msgid "Clone of"
 msgstr "Clon de"
 
-#: models.py:328
+#: models.py:329
 msgid "display on load"
 msgstr "mostrar al cargar"
 
-#: models.py:329
+#: models.py:330
 msgid "Display this layer on load."
 msgstr "Mostrar esta capa al cargar."
 
@@ -407,9 +407,9 @@ msgstr "Su contraseña fue guardada."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(count)s mapa encontrado:"
+msgstr[1] "%(count)s mapas encontrados:"
+msgstr[2] "%(count)s mapas encontrados:"
 
 #: templates/umap/search.html:18
 msgid "No map found."
@@ -443,48 +443,48 @@ msgstr "Aún no tiene mapa."
 msgid "View the map"
 msgstr "Ver el mapa"
 
-#: views.py:658
+#: views.py:659
 msgid "Map has been updated!"
 msgstr "¡El mapa ha sido actualizado!"
 
-#: views.py:683
+#: views.py:684
 msgid "Map editors updated with success!"
 msgstr "¡Los editores del mapas han sido actualizados con éxito!"
 
-#: views.py:721
+#: views.py:722
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "El enlace de edición de uMap para tu mapa: %(map_name)s"
 
-#: views.py:724
+#: views.py:725
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aquí está tu enlace secreto de edición: %(link)s"
 
-#: views.py:730
+#: views.py:731
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Correo electrónico enviado a %(email)s"
 
-#: views.py:741
+#: views.py:742
 msgid "Only its owner can delete the map."
 msgstr "Sólo el propietario puede borrar el mapa."
 
-#: views.py:764
+#: views.py:765
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "¡Tu mapa ha sido clonado! Si quieres editar este mapa desde otro ordenador, usa este enlace: %(anonymous_url)s"
 
-#: views.py:769
+#: views.py:770
 msgid "Congratulations, your map has been cloned!"
 msgstr "¡Enhorabuena! ¡Tu mapa ha sido clonado!"
 
-#: views.py:958
+#: views.py:959
 msgid "Layer successfully deleted."
 msgstr "Se eliminó la capa con éxito."
 
-#: views.py:980
+#: views.py:981
 msgid "Permissions updated with success!"
 msgstr "¡Permisos actualizados con éxito!"

@@ -37,7 +37,7 @@ dependencies = [
   "django-compressor==4.3.1",
   "django-environ==0.10.0",
   "django-probes==1.7.0",
-  "Pillow==9.5.0",
+  "Pillow==10.0.1",
   "psycopg2==2.9.6",
   "requests==2.31.0",
   "social-auth-core==4.4.2",

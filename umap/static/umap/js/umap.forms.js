@@ -379,6 +379,7 @@ L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
     ['Default', L._('Default')],
     ['Cluster', L._('Clustered')],
     ['Heat', L._('Heatmap')],
+    ['Choropleth', L._('Choropleth')],
   ],
 })
 
@@ -396,7 +397,11 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     const options = []
     this.builder.map.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isDataReadOnly() && datalayer.canBrowse()) {
+      if (
+        datalayer.isLoaded() &&
+        !datalayer.isDataReadOnly() &&
+        datalayer.canBrowse()
+      ) {
         options.push([L.stamp(datalayer), datalayer.getName()])
       }
     })
@@ -542,7 +547,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const img = L.DomUtil.create(
           'img',
           '',
-          L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer)
+          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         img.src = this.value()
         L.DomEvent.on(img, 'click', this.fetchIconList, this)
@@ -550,28 +555,26 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         const el = L.DomUtil.create(
           'span',
           '',
-          L.DomUtil.create('div', 'umap-icon-choice', this.buttonsContainer)
+          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttonsContainer)
         )
         el.textContent = this.value()
         L.DomEvent.on(el, 'click', this.fetchIconList, this)
       }
     }
-    this.button = L.DomUtil.create('a', 'button action-button', this.buttonsContainer)
-    this.button.textContent = this.value() ? L._('Change') : L._('Add')
-    this.button.href = '#'
-    L.DomEvent.on(this.button, 'click', L.DomEvent.stop).on(
-      this.button,
-      'click',
+    this.button = L.DomUtil.createButton(
+      'button action-button',
+      this.buttonsContainer,
+      this.value() ? L._('Change') : L._('Add'),
       this.fetchIconList,
       this
     )
   },
 
-  addIconPreview: function (pictogram) {
-    const baseClass = 'umap-icon-choice',
+  addIconPreview: function (pictogram, parent) {
+    const baseClass = 'umap-pictogram-choice',
       value = pictogram.src,
       className = value === this.value() ? `${baseClass} selected` : baseClass,
-      container = L.DomUtil.create('div', className, this.pictogramsContainer),
+      container = L.DomUtil.create('div', className, parent),
       img = L.DomUtil.create('img', '', container)
     img.src = value
     if (pictogram.name && pictogram.attribution) {
@@ -599,7 +602,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   search: function (e) {
-    const icons = [...this.parentNode.querySelectorAll('.umap-icon-choice')],
+    const icons = [...this.parentNode.querySelectorAll('.umap-pictogram-choice')],
       search = this.searchInput.value.toLowerCase()
     icons.forEach((el) => {
       if (el.title.toLowerCase().indexOf(search) != -1) el.style.display = 'block'
@@ -607,42 +610,60 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     })
   },
 
+  addCategory: function (category, items) {
+    const parent = L.DomUtil.create(
+        'div',
+        'umap-pictogram-category',
+        this.pictogramsContainer
+      ),
+      title = L.DomUtil.add('h6', '', parent, category),
+      grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+    for (let item of items) {
+      this.addIconPreview(item, grid)
+    }
+  },
+
   buildIconList: function (data) {
     this.searchInput = L.DomUtil.create('input', '', this.pictogramsContainer)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
     L.DomEvent.on(this.searchInput, 'input', this.search, this)
-    for (const idx in data.pictogram_list) {
-      this.addIconPreview(data.pictogram_list[idx])
+    const categories = {}
+    let category
+    for (const props of data.pictogram_list) {
+      category = props.category || L._('Generic')
+      categories[category] = categories[category] || []
+      categories[category].push(props)
     }
-    const closeButton = L.DomUtil.create('a', 'button action-button', this.pictogramsContainer)
-    closeButton.textContent = L._('Close')
-    closeButton.href = '#'
-    closeButton.style.display = 'block'
-    closeButton.style.clear = 'both'
-    L.DomEvent.on(closeButton, 'click', L.DomEvent.stop).on(
-      closeButton,
-      'click',
+    const sorted = Object.entries(categories).toSorted(([a], [b]) =>
+      L.Util.naturalSort(a, b)
+    )
+    for (let [category, items] of sorted) {
+      this.addCategory(category, items)
+    }
+    const closeButton = L.DomUtil.createButton(
+      'button action-button',
+      this.pictogramsContainer,
+      L._('Close'),
       function (e) {
         this.pictogramsContainer.innerHTML = ''
         this.udpatePreview()
       },
       this
     )
-    const customButton = L.DomUtil.create('a', '', this.pictogramsContainer)
-    customButton.textContent = L._('Toggle direct input (advanced)')
-    customButton.href = '#'
-    customButton.style.display = 'block'
-    customButton.style.clear = 'both'
-    this.builder.map.help.button(customButton, 'formatIconSymbol')
-    L.DomEvent.on(customButton, 'click', L.DomEvent.stop).on(
-      customButton,
-      'click',
+    closeButton.style.display = 'block'
+    closeButton.style.clear = 'both'
+
+    const customButton = L.DomUtil.createButton(
+      'flat',
+      this.pictogramsContainer,
+      L._('Toggle direct input (advanced)'),
       function (e) {
         this.input.type = this.input.type === 'text' ? 'hidden' : 'text'
       },
       this
     )
+    this.builder.map.help.button(customButton, 'formatIconSymbol')
   },
 
   fetchIconList: function (e) {
@@ -732,7 +753,10 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   fetch: function () {
     let value = (this.backup = this.toHTML())
     if (!this.container.querySelector(`input[type="radio"][value="${value}"]`))
-      value = this.default
+      value =
+        typeof this.options.default !== 'undefined'
+          ? this.options.default
+          : this.default
     this.container.querySelector(`input[type="radio"][value="${value}"]`).checked = true
   },
 
@@ -836,13 +860,15 @@ L.FormBuilder.OutlinkTarget = L.FormBuilder.MultiChoice.extend({
   ],
 })
 
-L.FormBuilder.Range = L.FormBuilder.Input.extend({
+L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
   type: function () {
     return 'range'
   },
 
   value: function () {
-    return L.DomUtil.hasClass(this.wrapper, 'undefined') ? undefined : this.input.value
+    return L.DomUtil.hasClass(this.wrapper, 'undefined')
+      ? undefined
+      : L.FormBuilder.FloatInput.prototype.value.call(this)
   },
 
   buildHelpText: function () {
@@ -854,12 +880,15 @@ L.FormBuilder.Range = L.FormBuilder.Input.extend({
     datalist.id = `range-${this.options.label || this.name}`
     this.input.setAttribute('list', datalist.id)
     let options = ''
+    const step = this.options.step || 1,
+      digits = step < 1 ? 1 : 0
     for (let i = this.options.min; i <= this.options.max; i += this.options.step) {
-      options += `<option value="${i.toPrecision(2)}" label="${i.toPrecision(
-        2
+      options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(
+        digits
       )}"></option>`
     }
     datalist.innerHTML = options
+    L.FormBuilder.Input.prototype.buildHelpText.call(this)
   },
 })
 

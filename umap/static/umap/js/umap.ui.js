@@ -93,41 +93,36 @@ L.U.UI = L.Evented.extend({
       if (timeoutID) window.clearTimeout(timeoutID)
       this.popAlert()
     }
-    const closeLink = L.DomUtil.create('a', 'umap-close-link', this._alert)
-    closeLink.href = '#'
-    L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    const label = L.DomUtil.create('span', '', closeLink)
-    label.title = label.textContent = L._('Close')
-    L.DomEvent.on(closeLink, 'click', L.DomEvent.stop).on(
-      closeLink,
-      'click',
+    const closeButton = L.DomUtil.createButton(
+      'umap-close-link',
+      this._alert,
+      '',
       close,
       this
     )
+    L.DomUtil.add('i', 'umap-close-icon', closeButton)
+    const label = L.DomUtil.create('span', '', closeButton)
+    label.title = label.textContent = L._('Close')
     L.DomUtil.add('div', '', this._alert, e.content)
     if (e.actions) {
       let action, el, input
+      const form = L.DomUtil.add('div', 'umap-alert-actions', this._alert)
       for (let i = 0; i < e.actions.length; i++) {
         action = e.actions[i]
         if (action.input) {
           input = L.DomUtil.element(
             'input',
             { className: 'umap-alert-input', placeholder: action.input },
-            this._alert
+            form
           )
         }
-        el = L.DomUtil.element('a', { className: 'umap-action' }, this._alert)
-        el.href = '#'
-        el.textContent = action.label
-        L.DomEvent.on(el, 'click', L.DomEvent.stop)
-        if (action.callback) {
-          L.DomEvent.on(
-            el,
-            'click',
-            action.callback,
-            action.callbackContext || this.map
-          )
-        }
+        el = L.DomUtil.createButton(
+          'umap-action',
+          form,
+          action.label,
+          action.callback,
+          action.callbackContext || this.map
+        )
         L.DomEvent.on(el, 'click', close, this)
       }
     }
@@ -139,20 +134,31 @@ L.U.UI = L.Evented.extend({
     }
   },
 
-  tooltip: function (e) {
-    this.TOOLTIP_ID = Math.random()
+  tooltip: function (opts) {
+    function showIt() {
+      if (opts.anchor && opts.position === 'top') {
+        this.anchorTooltipTop(opts.anchor)
+      } else if (opts.anchor && opts.position === 'left') {
+        this.anchorTooltipLeft(opts.anchor)
+      } else if (opts.anchor && opts.position === 'bottom') {
+        this.anchorTooltipBottom(opts.anchor)
+      } else {
+        this.anchorTooltipAbsolute()
+      }
+      L.DomUtil.addClass(this.parent, 'umap-tooltip')
+      this._tooltip.innerHTML = opts.content
+    }
+    this.TOOLTIP_ID = window.setTimeout(L.bind(showIt, this), opts.delay || 0)
     const id = this.TOOLTIP_ID
-    L.DomUtil.addClass(this.parent, 'umap-tooltip')
-    if (e.anchor && e.position === 'top') this.anchorTooltipTop(e.anchor)
-    else if (e.anchor && e.position === 'left') this.anchorTooltipLeft(e.anchor)
-    else this.anchorTooltipAbsolute()
-    this._tooltip.innerHTML = e.content
     function closeIt() {
       this.closeTooltip(id)
     }
-    if (e.anchor) L.DomEvent.once(e.anchor, 'mouseout', closeIt, this)
-    if (e.duration !== Infinity)
-      window.setTimeout(L.bind(closeIt, this), e.duration || 3000)
+    if (opts.anchor) {
+      L.DomEvent.once(opts.anchor, 'mouseout', closeIt, this)
+    }
+    if (opts.duration !== Infinity) {
+      window.setTimeout(L.bind(closeIt, this), opts.duration || 3000)
+    }
   },
 
   anchorTooltipAbsolute: function () {
@@ -174,6 +180,15 @@ L.U.UI = L.Evented.extend({
     })
   },
 
+  anchorTooltipBottom: function (el) {
+    this._tooltip.className = 'tooltip-bottom'
+    const coords = this.getPosition(el)
+    this.setTooltipPosition({
+      left: coords.left,
+      top: coords.bottom + 11,
+    })
+  },
+
   anchorTooltipLeft: function (el) {
     this._tooltip.className = 'tooltip-left'
     const coords = this.getPosition(el)
@@ -184,8 +199,13 @@ L.U.UI = L.Evented.extend({
   },
 
   closeTooltip: function (id) {
+    // Clear timetout even if a new tooltip has been added
+    // in the meantime. Eg. after a mouseout from the anchor.
+    window.clearTimeout(id)
     if (id && id !== this.TOOLTIP_ID) return
+    this._tooltip.className = ''
     this._tooltip.innerHTML = ''
+    this.setTooltipPosition({})
     L.DomUtil.removeClass(this.parent, 'umap-tooltip')
   },
 

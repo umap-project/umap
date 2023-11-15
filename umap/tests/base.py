@@ -1,4 +1,5 @@
 import json
+import copy
 
 import factory
 from django.contrib.auth import get_user_model
@@ -61,37 +62,44 @@ class MapFactory(factory.django.DjangoModelFactory):
     name = "test map"
     slug = "test-map"
     center = DEFAULT_CENTER
-    settings = {
-        "geometry": {
-            "coordinates": [13.447265624999998, 48.94415123418794],
-            "type": "Point",
-        },
-        "properties": {
-            "datalayersControl": True,
-            "description": "Which is just the Danube, at the end",
-            "displayCaptionOnLoad": False,
-            "displayDataBrowserOnLoad": False,
-            "displayPopupFooter": False,
-            "licence": "",
-            "miniMap": False,
-            "moreControl": True,
-            "name": "Cruising on the Donau",
-            "scaleControl": True,
-            "tilelayer": {
-                "attribution": "\xa9 OSM Contributors",
-                "maxZoom": 18,
-                "minZoom": 0,
-                "url_template": "http://{s}.osm.fr/{z}/{x}/{y}.png",
+    settings = factory.Dict(
+        {
+            "geometry": {
+                "coordinates": [13.447265624999998, 48.94415123418794],
+                "type": "Point",
             },
-            "tilelayersControl": True,
-            "zoom": 7,
-            "zoomControl": True,
-        },
-        "type": "Feature",
-    }
+            "properties": {
+                "datalayersControl": True,
+                "description": "Which is just the Danube, at the end",
+                "displayPopupFooter": False,
+                "licence": "",
+                "miniMap": False,
+                "moreControl": True,
+                "name": name,
+                "scaleControl": True,
+                "tilelayer": {
+                    "attribution": "\xa9 OSM Contributors",
+                    "maxZoom": 18,
+                    "minZoom": 0,
+                    "url_template": "http://{s}.osm.fr/{z}/{x}/{y}.png",
+                },
+                "tilelayersControl": True,
+                "zoom": 7,
+                "zoomControl": True,
+            },
+            "type": "Feature",
+        }
+    )
 
     licence = factory.SubFactory(LicenceFactory)
     owner = factory.SubFactory(UserFactory)
+
+    @classmethod
+    def _adjust_kwargs(cls, **kwargs):
+        # Make sure there is no persistency
+        kwargs["settings"] = copy.deepcopy(kwargs["settings"])
+        kwargs["settings"]["properties"]["name"] = kwargs["name"]
+        return kwargs
 
     class Meta:
         model = Map
@@ -102,13 +110,21 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     name = "test datalayer"
     description = "test description"
     display_on_load = True
-    settings = {"displayOnLoad": True, "browsable": True, "name": name}
+    settings = factory.Dict({"displayOnLoad": True, "browsable": True, "name": name})
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
-        data = kwargs.pop("data", DATALAYER_DATA).copy()
-        kwargs["settings"]["name"] = kwargs["name"]
-        data["_umap_options"] = kwargs["settings"]
+        if "data" in kwargs:
+            data = copy.deepcopy(kwargs.pop("data"))
+            if "settings" not in kwargs:
+                kwargs["settings"] = data.get("_umap_options", {})
+        else:
+            data = DATALAYER_DATA.copy()
+            data["_umap_options"] = {
+                **DataLayerFactory.settings._defaults,
+                **kwargs["settings"],
+            }
+        data["_umap_options"]["name"] = kwargs["name"]
         kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")
         return kwargs
 

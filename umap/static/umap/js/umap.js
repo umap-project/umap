@@ -14,7 +14,7 @@ L.Map.mergeOptions({
   default_popupContentTemplate: '# {name}\n{description}',
   default_interactive: true,
   default_labelDirection: 'auto',
-  maxZoomLimit: 20,
+  maxZoomLimit: 24,
   attributionControl: false,
   editMode: 'advanced',
   embedControl: true,
@@ -272,7 +272,10 @@ L.U.Map.include({
         url.searchParams.delete('edit')
         history.pushState({}, '', url)
       }
-      if (L.Util.queryString('download')) this.download()
+      if (L.Util.queryString('download'))
+        window.location = L.Util.template(this.options.urls.map_download, {
+          map_id: this.options.umap_id,
+        })
     })
 
     window.onbeforeunload = () => this.isDirty || null
@@ -340,6 +343,7 @@ L.U.Map.include({
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
     this.browser = new L.U.Browser(this)
+    this.drop = new L.U.DropControl(this)
     this.renderControls()
   },
 
@@ -395,8 +399,11 @@ L.U.Map.include({
   },
 
   loadDatalayers: function (force) {
-    force = force || L.Util.queryString('download') // In case we are in download mode, let's go strait to loading all data
-    let toload = (dataToload = total = this.datalayers_index.length)
+    const total = this.datalayers_index.length
+    // toload => datalayer metadata remaining to load (synchronous)
+    // dataToload => datalayer data remaining to load (asynchronous)
+    let toload = total,
+      dataToload = total
     let datalayer
     const loaded = () => {
       this.datalayersLoaded = true
@@ -670,6 +677,12 @@ L.U.Map.include({
     }
   },
 
+  fitDataBounds: function () {
+    const bounds = this.getLayersBounds()
+    if (!this.hasData() || !bounds.isValid()) return false
+    this.fitBounds(bounds)
+  },
+
   initCenter: function () {
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
@@ -679,12 +692,7 @@ L.U.Map.include({
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
       this.onceDataLoaded(() => {
-        const bounds = this.getLayersBounds()
-        if (!this.hasData() || !bounds.isValid()) {
-          this._setDefaultCenter()
-          return
-        }
-        this.fitBounds(bounds)
+        if (!this.fitDataBounds()) return this._setDefaultCenter()
       })
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
@@ -692,9 +700,17 @@ L.U.Map.include({
           this._setDefaultCenter()
           return
         }
-        const datalayer = this.defaultDataLayer(),
-          feature = datalayer.getFeatureByIndex(-1)
-        if (feature) feature.zoomTo()
+        const datalayer = this.firstVisibleDatalayer()
+        let feature
+        if (datalayer) {
+          const feature = datalayer.getFeatureByIndex(-1)
+          if (feature) {
+            feature.zoomTo()
+            return
+          }
+        }
+        // Fallback, no datalayer or no feature found
+        this._setDefaultCenter()
       })
     } else {
       this._setDefaultCenter()
@@ -804,150 +820,51 @@ L.U.Map.include({
     return geojson
   },
 
-  importPanel: function () {
-    const container = L.DomUtil.create('div', 'umap-upload')
-    const title = L.DomUtil.create('h4', '', container)
-    const presetBox = L.DomUtil.create('div', 'formbox', container)
-    const presetSelect = L.DomUtil.create('select', '', presetBox)
-    const fileBox = L.DomUtil.create('div', 'formbox', container)
-    const fileInput = L.DomUtil.create('input', '', fileBox)
-    const urlInput = L.DomUtil.create('input', '', container)
-    const rawInput = L.DomUtil.create('textarea', '', container)
-    const typeLabel = L.DomUtil.create('label', '', container)
-    const layerLabel = L.DomUtil.create('label', '', container)
-    const clearLabel = L.DomUtil.create('label', '', container)
-    const submitInput = L.DomUtil.create('input', '', container)
-    const map = this
-    let option
-    const types = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
-    title.textContent = L._('Import data')
-    fileInput.type = 'file'
-    fileInput.multiple = 'multiple'
-    submitInput.type = 'button'
-    submitInput.value = L._('Import')
-    submitInput.className = 'button'
-    typeLabel.textContent = L._('Choose the format of the data to import')
-    this.help.button(typeLabel, 'importFormats')
-    const typeInput = L.DomUtil.create('select', '', typeLabel)
-    typeInput.name = 'format'
-    layerLabel.textContent = L._('Choose the layer to import in')
-    const layerInput = L.DomUtil.create('select', '', layerLabel)
-    layerInput.name = 'datalayer'
-    urlInput.type = 'text'
-    urlInput.placeholder = L._('Provide an URL here')
-    rawInput.placeholder = L._('Paste your data here')
-    clearLabel.textContent = L._('Replace layer content')
-    const clearFlag = L.DomUtil.create('input', '', clearLabel)
-    clearFlag.type = 'checkbox'
-    clearFlag.name = 'clear'
-    this.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        const id = L.stamp(datalayer)
-        option = L.DomUtil.create('option', '', layerInput)
-        option.value = id
-        option.textContent = datalayer.options.name
-      }
+  eachFeature: function (callback, context) {
+    this.eachDataLayer((datalayer) => {
+      if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
     })
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Import in a new layer') },
-      layerInput
-    )
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Choose the data format') },
-      typeInput
-    )
-    for (let i = 0; i < types.length; i++) {
-      option = L.DomUtil.create('option', '', typeInput)
-      option.value = option.textContent = types[i]
-    }
-    if (this.options.importPresets.length) {
-      const noPreset = L.DomUtil.create('option', '', presetSelect)
-      noPreset.value = noPreset.textContent = L._('Choose a preset')
-      for (let j = 0; j < this.options.importPresets.length; j++) {
-        option = L.DomUtil.create('option', '', presetSelect)
-        option.value = this.options.importPresets[j].url
-        option.textContent = this.options.importPresets[j].label
-      }
-    } else {
-      presetBox.style.display = 'none'
-    }
+  },
 
-    const submit = function () {
-      let type = typeInput.value
-      const layerId = layerInput[layerInput.selectedIndex].value
-      let layer
-      if (type === 'umap') {
-        this.once('postsync', function () {
-          this.setView(this.latLng(this.options.center), this.options.zoom)
-        })
-      }
-      if (layerId) layer = map.datalayers[layerId]
-      if (layer && clearFlag.checked) layer.empty()
-      if (fileInput.files.length) {
-        let file
-        for (let i = 0, file; (file = fileInput.files[i]); i++) {
-          type = type || L.Util.detectFileType(file)
-          if (!type) {
-            this.ui.alert({
-              content: L._('Unable to detect format of file {filename}', {
-                filename: file.name,
-              }),
-              level: 'error',
-            })
-            continue
-          }
-          if (type === 'umap') {
-            this.importFromFile(file, 'umap')
-          } else {
-            let importLayer = layer
-            if (!layer) importLayer = this.createDataLayer({ name: file.name })
-            importLayer.importFromFile(file, type)
-          }
-        }
-      } else {
-        if (!type)
-          return this.ui.alert({
-            content: L._('Please choose a format'),
-            level: 'error',
-          })
-        if (rawInput.value && type === 'umap') {
-          try {
-            this.importRaw(rawInput.value, type)
-          } catch (e) {
-            this.ui.alert({ content: L._('Invalid umap data'), level: 'error' })
-            console.error(e)
-          }
-        } else {
-          if (!layer) layer = this.createDataLayer()
-          if (rawInput.value) layer.importRaw(rawInput.value, type)
-          else if (urlInput.value) layer.importFromUrl(urlInput.value, type)
-          else if (presetSelect.selectedIndex > 0)
-            layer.importFromUrl(presetSelect[presetSelect.selectedIndex].value, type)
-        }
-      }
+  format: function (mode) {
+    const type = this.EXPORT_TYPES[mode]
+    const content = type.formatter(this)
+    let name = this.options.name || 'data'
+    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+    const filename = name + type.ext
+    return { content, filetype: type.filetype, filename }
+  },
+
+  download: function (mode) {
+    const { content, filetype, filename } = this.format(mode)
+    const blob = new Blob([content], { type: filetype })
+    window.URL = window.URL || window.webkitURL
+    const el = document.createElement('a')
+    el.download = filename
+    el.href = window.URL.createObjectURL(blob)
+    el.style.display = 'none'
+    document.body.appendChild(el)
+    el.click()
+    document.body.removeChild(el)
+  },
+
+  processFileToImport: function (file, layer, type) {
+    type = type || L.Util.detectFileType(file)
+    if (!type) {
+      this.ui.alert({
+        content: L._('Unable to detect format of file {filename}', {
+          filename: file.name,
+        }),
+        level: 'error',
+      })
+      return
     }
-    L.DomEvent.on(submitInput, 'click', submit, this)
-    L.DomEvent.on(
-      fileInput,
-      'change',
-      (e) => {
-        let type = '',
-          newType
-        for (let i = 0; i < e.target.files.length; i++) {
-          newType = L.Util.detectFileType(e.target.files[i])
-          if (!type && newType) type = newType
-          if (type && newType !== type) {
-            type = ''
-            break
-          }
-        }
-        typeInput.value = type
-      },
-      this
-    )
-    this.ui.openPanel({ data: { html: container }, className: 'dark' })
+    if (type === 'umap') {
+      this.importFromFile(file, 'umap')
+    } else {
+      if (!layer) layer = this.createDataLayer({ name: file.name })
+      layer.importFromFile(file, type)
+    }
   },
 
   importRaw: function (rawData) {
@@ -1153,24 +1070,6 @@ L.U.Map.include({
     return properties
   },
 
-  serialize: function () {
-    // Do not use local path during unit tests
-    const uri = window.location.protocol === 'file:' ? null : window.location.href
-    const umapfile = {
-      type: 'umap',
-      uri: uri,
-      properties: this.exportOptions(),
-      geometry: this.geometry(),
-      layers: [],
-    }
-
-    this.eachDataLayer((datalayer) => {
-      umapfile.layers.push(datalayer.umapGeoJSON())
-    })
-
-    return JSON.stringify(umapfile, null, 2)
-  },
-
   saveSelf: function () {
     const geojson = {
       type: 'Feature',
@@ -1315,10 +1214,16 @@ L.U.Map.include({
     }
   },
 
+  firstVisibleDatalayer: function () {
+    return this.findDataLayer((datalayer) => {
+      if (datalayer.isVisible()) return true
+    })
+  },
+
   // TODO: allow to control the default datalayer
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
-  defaultDataLayer: function () {
+  defaultEditDataLayer: function () {
     let datalayer, fallback
     datalayer = this.lastUsedDataLayer
     if (
@@ -1389,11 +1294,13 @@ L.U.Map.include({
       'options.fill',
       'options.fillColor',
       'options.fillOpacity',
+      'options.smoothFactor',
+      'options.dashArray',
     ]
 
     builder = new L.U.FormBuilder(this, shapeOptions, {
       callback: function (e) {
-        this.eachDataLayer((datalayer) => {
+        this.eachVisibleDataLayer((datalayer) => {
           datalayer.redraw()
         })
       },
@@ -1407,8 +1314,6 @@ L.U.Map.include({
 
   _editDefaultProperties: function (container) {
     const optionsFields = [
-      'options.smoothFactor',
-      'options.dashArray',
       'options.zoomTo',
       ['options.easing', { handler: 'Switch', label: L._('Animated transitions') }],
       'options.labelKey',
@@ -1455,10 +1360,9 @@ L.U.Map.include({
     builder = new L.U.FormBuilder(this, optionsFields, {
       callback: function (e) {
         this.initCaptionBar()
-        this.eachDataLayer((datalayer) => {
-          if (e.helper.field === 'options.sortKey') datalayer.reindex()
-          datalayer.redraw()
-        })
+        if (e.helper.field === 'options.sortKey') {
+          this.eachDataLayer((datalayer) => datalayer.reindex())
+        }
       },
     })
     const defaultProperties = L.DomUtil.createFieldset(
@@ -1483,10 +1387,11 @@ L.U.Map.include({
         if (
           e.helper.field === 'options.popupTemplate' ||
           e.helper.field === 'options.popupContentTemplate' ||
-          e.helper.field === 'options.popupShape'
+          e.helper.field === 'options.popupShape' ||
+          e.helper.field === 'options.outlinkTarget'
         )
           return
-        this.eachDataLayer((datalayer) => {
+        this.eachVisibleDataLayer((datalayer) => {
           datalayer.redraw()
         })
       },
@@ -1631,16 +1536,10 @@ L.U.Map.include({
     })
     limitBounds.appendChild(boundsBuilder.build())
     const boundsButtons = L.DomUtil.create('div', 'button-bar half', limitBounds)
-    const setCurrentButton = L.DomUtil.add(
-      'a',
+    L.DomUtil.createButton(
       'button',
       boundsButtons,
-      L._('Use current bounds')
-    )
-    setCurrentButton.href = '#'
-    L.DomEvent.on(
-      setCurrentButton,
-      'click',
+      L._('Use current bounds'),
       function () {
         const bounds = this.getBounds()
         this.options.limitBounds.south = L.Util.formatNum(bounds.getSouth())
@@ -1653,11 +1552,10 @@ L.U.Map.include({
       },
       this
     )
-    const emptyBounds = L.DomUtil.add('a', 'button', boundsButtons, L._('Empty'))
-    emptyBounds.href = '#'
-    L.DomEvent.on(
-      emptyBounds,
-      'click',
+    L.DomUtil.createButton(
+      'button',
+      boundsButtons,
+      L._('Empty'),
       function () {
         this.options.limitBounds.south = null
         this.options.limitBounds.west = null
@@ -1749,34 +1647,39 @@ L.U.Map.include({
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
     if (this.permissions.isOwner()) {
-      const del = L.DomUtil.create('a', 'button umap-delete', advancedButtons)
-      del.href = '#'
-      del.title = L._('Delete map')
-      del.textContent = L._('Delete')
-      L.DomEvent.on(del, 'click', L.DomEvent.stop).on(del, 'click', this.del, this)
-      const empty = L.DomUtil.create('a', 'button umap-empty', advancedButtons)
-      empty.href = '#'
-      empty.textContent = L._('Empty')
-      empty.title = L._('Delete all layers')
-      L.DomEvent.on(empty, 'click', L.DomEvent.stop).on(
-        empty,
-        'click',
+      L.DomUtil.createButton(
+        'button umap-delete',
+        advancedButtons,
+        L._('Delete'),
+        this.del,
+        this
+      )
+      L.DomUtil.createButton(
+        'button umap-empty',
+        advancedButtons,
+        L._('Empty'),
         this.empty,
         this
       )
     }
-    const clone = L.DomUtil.create('a', 'button umap-clone', advancedButtons)
-    clone.href = '#'
-    clone.textContent = L._('Clone')
-    clone.title = L._('Clone this map')
-    L.DomEvent.on(clone, 'click', L.DomEvent.stop).on(clone, 'click', this.clone, this)
-    const download = L.DomUtil.create('a', 'button umap-download', advancedButtons)
-    download.href = '#'
-    download.textContent = L._('Download')
-    download.title = L._('Open download panel')
-    L.DomEvent.on(download, 'click', L.DomEvent.stop).on(
-      download,
-      'click',
+    L.DomUtil.createButton(
+      'button umap-clone',
+      advancedButtons,
+      L._('Clone this map'),
+      this.clone,
+      this
+    )
+    L.DomUtil.createButton(
+      'button umap-empty',
+      advancedButtons,
+      L._('Delete all layers'),
+      this.empty,
+      this
+    )
+    L.DomUtil.createButton(
+      'button umap-download',
+      advancedButtons,
+      L._('Open download panel'),
       this.renderShareBox,
       this
     )
@@ -1809,11 +1712,13 @@ L.U.Map.include({
   enableEdit: function () {
     L.DomUtil.addClass(document.body, 'umap-edit-enabled')
     this.editEnabled = true
+    this.drop.enable()
     this.fire('edit:enabled')
   },
 
   disableEdit: function () {
     if (this.isDirty) return
+    this.drop.disable()
     L.DomUtil.removeClass(document.body, 'umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
@@ -1838,38 +1743,25 @@ L.U.Map.include({
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
     if (this.options.captionMenus) {
-      const about = L.DomUtil.add(
-        'a',
+      L.DomUtil.createButton(
         'umap-about-link',
         container,
-        ` — ${L._('About')}`
+        ` — ${L._('About')}`,
+        this.displayCaption,
+        this
       )
-      about.href = '#'
-      L.DomEvent.on(about, 'click', this.displayCaption, this)
-      const browser = L.DomUtil.add(
-        'a',
+      L.DomUtil.createButton(
         'umap-open-browser-link',
         container,
-        ` | ${L._('Browse data')}`
-      )
-      browser.href = '#'
-      L.DomEvent.on(browser, 'click', L.DomEvent.stop).on(
-        browser,
-        'click',
+        ` | ${L._('Browse data')}`,
         this.openBrowser,
         this
       )
       if (this.options.facetKey) {
-        const filter = L.DomUtil.add(
-          'a',
+        L.DomUtil.createButton(
           'umap-open-filter-link',
           container,
-          ` | ${L._('Select data')}`
-        )
-        filter.href = '#'
-        L.DomEvent.on(filter, 'click', L.DomEvent.stop).on(
-          filter,
-          'click',
+          ` | ${L._('Select data')}`,
           this.openFacet,
           this
         )

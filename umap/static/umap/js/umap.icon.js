@@ -38,6 +38,8 @@ L.U.Icon = L.DivIcon.extend({
   formatUrl: function (url, feature) {
     return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
   },
+
+  onAdd: function () {},
 })
 
 L.U.Icon.Default = L.U.Icon.extend({
@@ -63,6 +65,19 @@ L.U.Icon.Default = L.U.Icon.extend({
     this.elements.arrow.style.opacity = opacity
   },
 
+  onAdd: function () {
+    const src = this._getIconUrl('icon')
+    // Decide whether to switch svg to white or not, but do it
+    // only for internal SVG, as invert could do weird things
+    if (src.startsWith('/') && src.endsWith('.svg')) {
+      const bgcolor = this._getColor()
+      // Must be called after icon container is added to the DOM
+      if (L.DomUtil.contrastedColor(this.elements.container, bgcolor)) {
+        this.elements.img.style.filter = 'invert(1)'
+      }
+    }
+  },
+
   createIcon: function () {
     this.elements = {}
     this.elements.main = L.DomUtil.create('div')
@@ -76,9 +91,9 @@ L.U.Icon.Default = L.U.Icon.extend({
     if (src) {
       // An url.
       if (
-        src.indexOf('http') === 0 ||
-        src.indexOf('/') === 0 ||
-        src.indexOf('data:image') === 0
+        src.startsWith('http') ||
+        src.startsWith('/') ||
+        src.startsWith('data:image')
       ) {
         this.elements.img = L.DomUtil.create('img', null, this.elements.container)
         this.elements.img.src = src
@@ -164,7 +179,6 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 })
 
-const _CACHE_COLOR = {}
 L.U.Icon.Cluster = L.DivIcon.extend({
   options: {
     iconSize: [40, 40],
@@ -191,14 +205,6 @@ L.U.Icon.Cluster = L.DivIcon.extend({
     if (this.datalayer.options.cluster && this.datalayer.options.cluster.textColor) {
       color = this.datalayer.options.cluster.textColor
     }
-    if (!color) {
-      if (typeof _CACHE_COLOR[backgroundColor] === 'undefined') {
-        color = L.DomUtil.TextColorFromBackgroundColor(el)
-        _CACHE_COLOR[backgroundColor] = color
-      } else {
-        color = _CACHE_COLOR[backgroundColor]
-      }
-    }
-    return color
+    return color || L.DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
   },
 })

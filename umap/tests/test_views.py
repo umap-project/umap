@@ -289,8 +289,8 @@ def test_user_dashboard_display_user_maps(client, map):
 def test_user_dashboard_display_user_maps_distinct(client, map):
     # cf https://github.com/umap-project/umap/issues/1325
     anonymap = MapFactory(name="Map witout owner should not appear")
-    user1 = UserFactory(username='user1')
-    user2 = UserFactory(username='user2')
+    user1 = UserFactory(username="user1")
+    user2 = UserFactory(username="user2")
     map.editors.add(user1)
     map.editors.add(user2)
     map.save()
@@ -298,7 +298,7 @@ def test_user_dashboard_display_user_maps_distinct(client, map):
     response = client.get(reverse("user_dashboard"))
     assert response.status_code == 200
     body = response.content.decode()
-    assert body.count(map.name) == 1
+    assert body.count(f'<a href="/en/map/test-map_{map.pk}">test map</a>') == 1
     assert body.count(anonymap.name) == 0
 
 
