@@ -1619,6 +1619,9 @@ a.add-datalayer:hover,
     height: 36px;
     line-height: 34px;
 }
+.leaflet-container a {
+    color:  #323737;
+}
 
 /* ****** */
 /* Mobile */
