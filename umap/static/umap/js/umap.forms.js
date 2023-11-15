@@ -591,7 +591,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
           '',
           L.DomUtil.create(
             'div',
-            'umap-pictogram-choice visible',
+            'umap-pictogram-choice',
             this.buttonsContainer
           )
         )
@@ -603,7 +603,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
           '',
           L.DomUtil.create(
             'div',
-            'umap-pictogram-choice visible',
+            'umap-pictogram-choice',
             this.buttonsContainer
           )
         )
@@ -621,7 +621,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addIconPreview: function (pictogram, parent) {
-    const baseClass = 'umap-pictogram-choice visible',
+    const baseClass = 'umap-pictogram-choice',
       value = pictogram.src,
       search = this.searchInput.value.toLowerCase(),
       title = pictogram.attribution
