@@ -535,6 +535,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   onDefine: function () {
     this.buttons.innerHTML = ''
+    this.footer.innerHTML = ''
     this.buildTabs()
     const value = this.value()
     if (!value || value.startsWith('/')) this.showSymbolsTab()
@@ -556,6 +557,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   buildTabs: function () {
+    this.tabs.innerHTML = ''
     const symbol = L.DomUtil.add(
         'button',
         'flat tab-symbols',
@@ -613,22 +615,14 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (this.isDefault()) return
     if (!L.Util.hasVar(this.value())) {
       // Do not try to render URL with variables
+      const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
+      L.DomEvent.on(box, 'click', this.onDefine, this)
       if (this.isImg()) {
-        const img = L.DomUtil.create(
-          'img',
-          '',
-          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
-        )
+        const img = L.DomUtil.create('img', '', box)
         img.src = this.value()
-        L.DomEvent.on(img, 'click', this.showSymbolsTab, this)
       } else {
-        const el = L.DomUtil.create(
-          'span',
-          '',
-          L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
-        )
+        const el = L.DomUtil.create('span', '', box)
         el.textContent = this.value()
-        L.DomEvent.on(el, 'click', this.showSymbolsTab, this)
       }
     }
     this.button = L.DomUtil.createButton(

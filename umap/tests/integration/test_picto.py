@@ -210,8 +210,8 @@ def test_can_use_char_as_picto(map, live_server, page, pictos):
     close.click()
     edit_settings.click()
     shape_settings.click()
-    modify = page.locator(".umap-field-iconUrl").get_by_text("Change")
-    expect(modify).to_be_visible()
-    modify.click()
+    preview = page.locator(".umap-pictogram-choice")
+    expect(preview).to_be_visible()
+    preview.click()
     # Should be on URL tab
     expect(input_el).to_be_visible()
