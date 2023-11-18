@@ -1,0 +1,69 @@
+name: Test & Docs
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:12-2.5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        dependencies: [normal, minimal]
+        database: [postgresql]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        cache-dependency-path: '**/pyproject.toml'
+    - name: Change dependencies to minimal supported versions
+      run: sed -i -e '/requires-python/!s/>=/==/g; /requires-python/!s/~=.*==\(.*\)/==\1/g; /requires-python/!s/~=/==/g;' pyproject.toml
+      if: matrix.dependencies == 'minimal'
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install libgdal-dev
+        python -m pip install --upgrade pip
+        make develop installjs vendors
+    - name: run tests
+      run: make test
+      env:
+        DJANGO_SETTINGS_MODULE: 'umap.tests.settings'
+        UMAP_SETTINGS: 'umap/tests/settings.py'
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python3 -m pip install -e .[test,dev]
+
+    - name: Run Lint
+      run: make lint
+      
+    - name: Run Docs
+      run: make docs

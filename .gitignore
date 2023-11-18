@@ -4,10 +4,12 @@ umap/settings/local/*
 docs/_build
 umap/remote_static
 tmp/*
-node_modules/*
 umap/static/umap/vendors
 site/*
 .pytest_cache/
+node_modules
+umap.conf
+data
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
