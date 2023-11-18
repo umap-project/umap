@@ -205,13 +205,10 @@ class UserMaps(PaginatorMixin, DetailView):
             return settings.UMAP_MAPS_PER_PAGE_OWNER
         return settings.UMAP_MAPS_PER_PAGE
 
-    def get_map_queryset(self):
-        return Map.objects if self.is_owner() else Map.public
-
     def get_maps(self):
-        qs = self.get_map_queryset()
-        qs = qs.filter(Q(owner=self.object) | Q(editors=self.object))
-        return qs.distinct().order_by("-modified_at")
+        qs = Map.public
+        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
+        return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
         kwargs.update({"maps": self.paginate(self.get_maps(), self.per_page)})
@@ -225,9 +222,8 @@ class UserStars(UserMaps):
     template_name = "auth/user_stars.html"
 
     def get_maps(self):
-        qs = self.get_map_queryset()
         stars = Star.objects.filter(by=self.object).values("map")
-        qs = qs.filter(pk__in=stars)
+        qs = Map.public.filter(pk__in=stars)
         return qs.order_by("-modified_at")
 
 
