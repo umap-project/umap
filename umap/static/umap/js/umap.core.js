@@ -287,6 +287,13 @@ L.Util.copyToClipboard = function (textToCopy) {
   }
 }
 
+L.Util.normalize = function (s) {
+  return (s || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
   if (content) {

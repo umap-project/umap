@@ -475,6 +475,16 @@ describe('L.Util', function () {
     })
   })
 
+  describe("#normalize()", function () {
+
+    if('should remove accents', function () {
+      // French é
+      assert.equal(L.Util.normalize('aéroport'), 'aeroport')
+      // American é
+      assert.equal(L.Util.normalize('aéroport'), 'aeroport')
+    })
+  })
+
   describe("#sortFeatures()", function () {
     let feat1, feat2, feat3
     before(function () {

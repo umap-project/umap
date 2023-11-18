@@ -24,11 +24,8 @@ def pytest_configure(config):
     settings.MEDIA_ROOT = TMP_ROOT
 
 
-def pytest_unconfigure(config):
-    shutil.rmtree(TMP_ROOT, ignore_errors=True)
-
-
 def pytest_runtest_teardown():
+    shutil.rmtree(TMP_ROOT, ignore_errors=True)
     cache.clear()
 
 

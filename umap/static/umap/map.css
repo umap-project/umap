@@ -1298,6 +1298,7 @@ a.add-datalayer:hover,
     vertical-align: middle;
     color: white;
     font-weight: bold;
+    font-size: 1.2rem;
 }
 .umap-circle-icon {
     border: 1px solid white;
