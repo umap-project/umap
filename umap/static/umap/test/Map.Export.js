@@ -94,7 +94,7 @@ describe('L.U.Map.Export', function () {
       assert.equal(content, expected)
     })
 
-    it('should export to gpx', function () {
+    it('should export to kml', function () {
       const { content, filetype, filename } = this.map.format('kml')
       assert.equal(filetype, 'application/vnd.google-earth.kml+xml')
       assert.equal(filename, 'name_of_the_map.kml')
