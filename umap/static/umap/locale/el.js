@@ -46,7 +46,6 @@ const locale = {
     "Popup content template": "Αναδυόμενο πρότυπο περιεχομένου",
     "Side panel": "Πλευρική εργαλειοθήκη",
     "Simplify": "Απλοποίηση",
-    "Symbol or url": "Σύμβολο ή σύνδεσμος",
     "Table": "Πίνακας",
     "always": "πάντα",
     "clear": "Εκκαθάριση",
@@ -171,7 +170,6 @@ const locale = {
     "Filter keys": "Βασικά φίλτρα",
     "Format": "Μορφοποίηση",
     "From zoom": "Από εστίαση",
-    "Full map data": "Ολοκληρωμένα δεδομένα χάρτη",
     "Go to «{feature}»": "Μετάβαση στο «{feature}»",
     "Heatmap intensity property": "Ένταση του χάρτη εγγύτητας",
     "Heatmap radius": "Ακτίνα του χάρτη εγγύτητας",
@@ -402,7 +400,6 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
@@ -428,7 +425,15 @@ const locale = {
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

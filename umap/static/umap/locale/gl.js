@@ -46,7 +46,6 @@ const locale = {
     "Popup content template": "Padrón do contido da xanela emerxente",
     "Side panel": "Lapela lateral",
     "Simplify": "Simplificar",
-    "Symbol or url": "Icona ou URL",
     "Table": "Táboa",
     "always": "sempre",
     "clear": "limpar",
@@ -171,7 +170,6 @@ const locale = {
     "Filter keys": "Claves de filtrado",
     "Format": "Formato",
     "From zoom": "Dende o achegamento",
-    "Full map data": "Mapa completo de datos",
     "Go to «{feature}»": "Ir cara «{feature}»",
     "Heatmap intensity property": "Propiedade intensidade do mapa de calor",
     "Heatmap radius": "Raio do mapa de calor",
@@ -402,7 +400,6 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
@@ -428,7 +425,15 @@ const locale = {
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
 L.registerLocale("gl", locale)
 L.setLocale("gl")

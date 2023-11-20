@@ -46,7 +46,6 @@ const locale = {
     "Popup content template": "彈出內文範本",
     "Side panel": "側邊框",
     "Simplify": "簡化",
-    "Symbol or url": "標誌或URL地址",
     "Table": "表格",
     "always": "經常",
     "clear": "清除",
@@ -171,7 +170,6 @@ const locale = {
     "Filter keys": "篩選鍵",
     "Format": "格式",
     "From zoom": "由縮放大小",
-    "Full map data": "全部地圖資料",
     "Go to «{feature}»": "轉至 «{feature}»",
     "Heatmap intensity property": "熱點圖強度屬性",
     "Heatmap radius": "熱點圖半徑",
@@ -402,7 +400,6 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
@@ -428,7 +425,15 @@ const locale = {
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")

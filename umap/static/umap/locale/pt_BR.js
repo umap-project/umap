@@ -46,7 +46,6 @@ const locale = {
     "Popup content template": "Modelo de conteúdo do popup",
     "Side panel": "Painel lateral",
     "Simplify": "Simplificar",
-    "Symbol or url": "Símbolo ou URL",
     "Table": "Tabela",
     "always": "sempre",
     "clear": "limpar",
@@ -171,7 +170,6 @@ const locale = {
     "Filter keys": "Filtrar chaves",
     "Format": "Formato",
     "From zoom": "Do zoom",
-    "Full map data": "Todos os dados do mapa",
     "Go to «{feature}»": "Ir a «{feature}»",
     "Heatmap intensity property": "Propriedade da intensidade do mapa térmico",
     "Heatmap radius": "Raio do mapa térmico",
@@ -402,7 +400,6 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
@@ -428,7 +425,15 @@ const locale = {
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
 L.registerLocale("pt_BR", locale)
 L.setLocale("pt_BR")

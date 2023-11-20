@@ -46,7 +46,6 @@ const locale = {
     "Popup content template": "팝업 내용",
     "Side panel": "가장자리 패널",
     "Simplify": "단순화",
-    "Symbol or url": "심볼이나 URL",
     "Table": "표",
     "always": "항상",
     "clear": "초기화",
@@ -171,7 +170,6 @@ const locale = {
     "Filter keys": "Filter keys",
     "Format": "Format",
     "From zoom": "From zoom",
-    "Full map data": "Full map data",
     "Go to «{feature}»": "Go to «{feature}»",
     "Heatmap intensity property": "Heatmap intensity property",
     "Heatmap radius": "Heatmap radius",
@@ -402,7 +400,6 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
@@ -428,7 +425,15 @@ const locale = {
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")

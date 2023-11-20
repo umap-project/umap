@@ -46,7 +46,6 @@ const locale = {
     "Popup content template": "قالب محتوای بازشو",
     "Side panel": "پنل کناری",
     "Simplify": "ساده کنید",
-    "Symbol or url": "نماد یا آدرس اینترنتی",
     "Table": "جدول",
     "always": "همیشه",
     "clear": "روشن/شفاف",
@@ -171,7 +170,6 @@ const locale = {
     "Filter keys": "کلیدهای فیلتر",
     "Format": "قالب",
     "From zoom": "از زوم",
-    "Full map data": "داده های نقشه کامل",
     "Go to «{feature}»": "به «{ویژگی}» بروید",
     "Heatmap intensity property": "ویژگی شدت حرارت",
     "Heatmap radius": "شعاع نقشه حرارتی",
@@ -402,7 +400,6 @@ const locale = {
     "Change": "Change",
     "Powered by uMap": "Powered by uMap",
     "Search": "Search",
-    "Toggle direct input (advanced)": "Toggle direct input (advanced)",
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
@@ -428,7 +425,15 @@ const locale = {
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

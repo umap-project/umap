@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 06:55+0000\n"
+"POT-Creation-Date: 2023-11-20 10:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Everyone can edit"
 msgstr ""
 
-#: forms.py:69 models.py:318
+#: forms.py:69 models.py:320
 msgid "Inherit"
 msgstr ""
 
@@ -53,15 +53,15 @@ msgstr ""
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:142 models.py:319
+#: models.py:142 models.py:321
 msgid "Everyone"
 msgstr ""
 
-#: models.py:143 models.py:149 models.py:320
+#: models.py:143 models.py:149 models.py:322
 msgid "Editors only"
 msgstr ""
 
-#: models.py:144 models.py:321
+#: models.py:144 models.py:323
 msgid "Owner only"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:153 models.py:325
+#: models.py:153 models.py:327
 msgid "description"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "editors"
 msgstr ""
 
-#: models.py:182 models.py:339
+#: models.py:182 models.py:341
 msgid "edit status"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "share status"
 msgstr ""
 
-#: models.py:190 models.py:334
+#: models.py:190 models.py:336
 msgid "settings"
 msgstr ""
 
@@ -129,11 +129,11 @@ msgstr ""
 msgid "Clone of"
 msgstr ""
 
-#: models.py:329
+#: models.py:331
 msgid "display on load"
 msgstr ""
 
-#: models.py:330
+#: models.py:332
 msgid "Display this layer on load."
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "You are logged in. Continuing..."
 msgstr ""
 
-#: templates/umap/map_list.html:9 views.py:303
+#: templates/umap/map_list.html:9 views.py:302
 msgid "by"
 msgstr ""
 
@@ -431,52 +431,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:308
+#: views.py:307
 msgid "View the map"
 msgstr ""
 
-#: views.py:659
+#: views.py:682
 msgid "Map has been updated!"
 msgstr ""
 
-#: views.py:684
+#: views.py:707
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:722
+#: views.py:745
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:725
+#: views.py:748
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:731
+#: views.py:754
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:742
+#: views.py:765
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:765
+#: views.py:788
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:770
+#: views.py:793
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:959
+#: views.py:982
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:981
+#: views.py:1004
 msgid "Permissions updated with success!"
 msgstr ""

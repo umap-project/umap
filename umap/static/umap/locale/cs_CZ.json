@@ -46,7 +46,6 @@
     "Popup content template": "Šablona obsahu bubliny",
     "Side panel": "Boční panel",
     "Simplify": "Zjednodušit",
-    "Symbol or url": "Symbol nebo adresa URL",
     "Table": "Tabulka",
     "always": "vždy",
     "clear": "vymazat",
@@ -171,7 +170,6 @@
     "Filter keys": "Filtrovací klávesy",
     "Format": "Formát",
     "From zoom": "Maximální oddálení",
-    "Full map data": "Kompletní mapová data",
     "Go to «{feature}»": "Jdi na  \"{feature}\"",
     "Heatmap intensity property": "Vlastnost pro intenzitu teplotní mapy",
     "Heatmap radius": "Poloměr teplotní mapy",
@@ -402,7 +400,6 @@
     "Change": "Změnit",
     "Powered by uMap": "Běží na uMap",
     "Search": "Hledat",
-    "Toggle direct input (advanced)": "Přepínání přímého vstupu (pokročilé)",
     "Datalayers": "Datové vrstvy",
     "Secret edit link:": "Tajný odkaz na úpravy:",
     "Who can edit \"{layer}\"": "Kdo může upravovat \"{layer}\"",
@@ -428,5 +425,13 @@
     "Go to the homepage": "Go to the homepage",
     "Switch to edit mode": "Switch to edit mode",
     "Update who can see and edit the map": "Update who can see and edit the map",
-    "View": "View"
+    "View": "View",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }

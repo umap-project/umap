@@ -46,7 +46,6 @@
     "Popup content template": "Templat kandungan tetingkap timbul",
     "Side panel": "Panel sisi",
     "Simplify": "Permudahkan",
-    "Symbol or url": "Simbol atau url",
     "Table": "Meja",
     "always": "sentiasa",
     "clear": "kosongkan",
@@ -171,7 +170,6 @@
     "Filter keys": "Kekunci tapisan",
     "Format": "Format",
     "From zoom": "Dari zum",
-    "Full map data": "Data peta penuh",
     "Go to «{feature}»": "Pergi ke «{feature}»",
     "Heatmap intensity property": "Ciri-ciri keamatan peta tompokan",
     "Heatmap radius": "Jejari peta tompokan",
@@ -402,7 +400,6 @@
     "Change": "Tukar",
     "Powered by uMap": "Dikuasakan oleh uMap",
     "Search": "Cari",
-    "Toggle direct input (advanced)": "Togol input terus (lanjutan)",
     "Datalayers": "Lapisan data",
     "Secret edit link:": "Pautan suntingan rahsia:",
     "Who can edit \"{layer}\"": "Siapa boleh sunting \"{layer}\"",
@@ -428,5 +425,13 @@
     "Go to the homepage": "Pergi ke halaman utama",
     "Switch to edit mode": "Tukar ke mod suntingan",
     "Update who can see and edit the map": "Kemas kini siapa boleh lihat dan sunting peta",
-    "View": "Lihat"
+    "View": "Lihat",
+    "Add image URL": "Add image URL",
+    "Backup data": "Backup data",
+    "Download full data": "Download full data",
+    "Emoji & Character": "Emoji & Character",
+    "Generic": "Generic",
+    "Symbol": "Symbol",
+    "Type char or paste emoji": "Type char or paste emoji",
+    "URL": "URL"
 }
