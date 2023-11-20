@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.11.0 - 2023-11-20
+
+* Highlight selected feature by @jschleic in https://github.com/umap-project/umap/pull/1359
+* Full map download endpoint by @davidbgk in https://github.com/umap-project/umap/pull/1396
+* Refactor icon selector: use tabs, make options more explicit by @yohanboniface in https://github.com/umap-project/umap/pull/1395
+* Allow to upload SVG pictograms and change hue according to background color by @yohanboniface in https://github.com/umap-project/umap/pull/1387
+* Add Pictogram category by @yohanboniface in https://github.com/umap-project/umap/pull/1388
+* Update white eye closed by @yohanboniface in https://github.com/umap-project/umap/pull/1389
+* Update installation instructions by @almet in https://github.com/umap-project/umap/pull/1392
+* Fix race condition with cluster layer by @yohanboniface in https://github.com/umap-project/umap/pull/1390
+* Change background in pictograms list by @yohanboniface in https://github.com/umap-project/umap/pull/1394
+* Add triangle icon to form fieldset to make toggle clearer by @yohanboniface in https://github.com/umap-project/umap/pull/1393
+* Speedup the tests by using a weaker hash algo. by @almet in https://github.com/umap-project/umap/pull/1405
+* Improve buttons’ contrasts on the homepage #a11y by @davidbgk in https://github.com/umap-project/umap/pull/1406
+* Fix next/previous in popup footer in panel not openning next panel by @yohanboniface in https://github.com/umap-project/umap/pull/1403
+* Set a default favicon by @davidbgk in https://github.com/umap-project/umap/pull/1401
+* Fix vertex icons by @jschleic in https://github.com/umap-project/umap/pull/1407
+* Fix heavy request for getting user maps by @yohanboniface in https://github.com/umap-project/umap/pull/1412
+
 ## 1.10.1 - 2023-10-27
 
 * Add minimal CSV export by @yohanboniface in https://github.com/umap-project/umap/pull/1376
