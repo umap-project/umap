@@ -108,7 +108,7 @@ may want to add an index. For that, you should do so:
     ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
 
     # Now create the index
-    CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', name), share_status);
+    CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', COALESCE(name, ''::character varying)::text), share_status);
 
 And change `UMAP_SEARCH_CONFIGURATION = "umapdict"` in your settings.
 
