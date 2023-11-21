@@ -38,14 +38,14 @@ Depending on your installation, you might need to change the USER that connects 
 
 It should look like this:
 
-```python
-DATABASES = {
-    "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "umap",
-        "USER": "postgres",
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "NAME": "umap",
+            "USER": "postgres",
+        }
     }
-}
+
 
 Add a `SECRET_KEY` in `local_settings.py` with a long random secret key
 
