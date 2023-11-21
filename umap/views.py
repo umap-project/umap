@@ -140,8 +140,6 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
                 demo_map = Map.public.get(pk=settings.UMAP_DEMO_PK)
             except Map.DoesNotExist:
                 pass
-            else:
-                maps = maps.exclude(id=demo_map.pk)
 
         showcase_map = None
         if hasattr(settings, "UMAP_SHOWCASE_PK"):
@@ -149,8 +147,6 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
                 showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
             except Map.DoesNotExist:
                 pass
-            else:
-                maps = maps.exclude(id=showcase_map.pk)
 
         maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
