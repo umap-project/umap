@@ -202,6 +202,8 @@ button.flat,
     padding: 0;
     text-align: left;
     min-height: inherit;
+    width: initial;
+    display: initial;
     text-decoration: underline;
 }
 .help-text, .helptext {

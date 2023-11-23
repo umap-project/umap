@@ -1744,16 +1744,16 @@ L.U.Map.include({
     this.permissions.addOwnerLink('span', container)
     if (this.options.captionMenus) {
       L.DomUtil.createButton(
-        'umap-about-link',
+        'umap-about-link flat',
         container,
-        ` — ${L._('About')}`,
+        L._('About'),
         this.displayCaption,
         this
       )
       L.DomUtil.createButton(
-        'umap-open-browser-link',
+        'umap-open-browser-link flat',
         container,
-        ` | ${L._('Browse data')}`,
+        L._('Browse data'),
         this.openBrowser,
         this
       )

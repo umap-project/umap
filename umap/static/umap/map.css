@@ -600,6 +600,13 @@ ul.photon-autocomplete {
 .umap-main-edit-toolbox h3 {
     display: inline;
 }
+.umap-caption-bar button {
+    margin-left: 10px;
+}
+.umap-caption-bar button + button:before {
+    content: '|';
+    padding-right: 10px;
+}
 .umap-main-edit-toolbox .umap-user {
     color: #fff;
 }
