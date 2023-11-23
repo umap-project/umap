@@ -380,6 +380,10 @@ In Nginx:
             }
             resolver 8.8.8.8;
             add_header X-Proxy-Target $target_url; # For debugging
+            proxy_pass_request_headers off;
+            proxy_set_header Content-Type $http_content_type;
+            proxy_set_header Content-Encoding $http_content_encoding;
+            proxy_set_header Content-Length $http_content_length;
             proxy_read_timeout 10s;
             proxy_connect_timeout 5s;
             proxy_pass $target_url;
