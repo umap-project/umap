@@ -3,7 +3,7 @@ import mimetypes
 import os
 import re
 import socket
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 from http.client import InvalidURL
 from pathlib import Path
 from urllib.error import URLError
@@ -33,6 +33,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
 from django.views.decorators.cache import cache_control
@@ -1019,7 +1020,7 @@ class PictogramJSONList(ListView):
 
 
 def stats(request):
-    last_week = date.today() - timedelta(days=7)
+    last_week = make_aware(datetime.now()) - timedelta(days=7)
     return simple_json_response(
         **{
             "version": VERSION,

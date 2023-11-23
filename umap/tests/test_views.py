@@ -1,17 +1,18 @@
 import json
 import socket
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import pytest
 from django.conf import settings
 from django.contrib.auth import get_user, get_user_model
-from django.urls import reverse
 from django.test import RequestFactory
+from django.urls import reverse
+from django.utils.timezone import make_aware
 
 from umap import VERSION
 from umap.views import validate_url
 
-from .base import UserFactory, MapFactory
+from .base import MapFactory, UserFactory
 
 User = get_user_model()
 
@@ -186,9 +187,9 @@ def test_stats_empty(client):
 
 @pytest.mark.django_db
 def test_stats_basic(client, map, datalayer, user2):
-    map.owner.last_login = date.today()
+    map.owner.last_login = make_aware(datetime.now())
     map.owner.save()
-    user2.last_login = date.today() - timedelta(days=8)
+    user2.last_login = make_aware(datetime.now()) - timedelta(days=8)
     user2.save()
     response = client.get(reverse("stats"))
     assert json.loads(response.content.decode()) == {
