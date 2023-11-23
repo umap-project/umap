@@ -1347,13 +1347,14 @@ L.U.DataLayer = L.Evented.extend({
       const date = new Date(parseInt(data.at, 10))
       const content = `${date.toLocaleString(L.lang)} (${parseInt(data.size) / 1000}Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
-      const a = L.DomUtil.createButton(
+      const button = L.DomUtil.createButton(
         '',
         el,
-        L._('Restore this version'),
+        '',
         () => this.restore(data.name),
         this
       )
+      button.title = L._('Restore this version')
       L.DomUtil.add('span', '', el, content)
     }
 

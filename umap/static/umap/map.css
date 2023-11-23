@@ -724,18 +724,14 @@ ul.photon-autocomplete {
     padding: 5px 0;
     border-bottom: 1px solid #202425;
 }
-.umap-datalayer-version a {
+.umap-datalayer-version button {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-left: 5px;
-    background-position: -123px -75px;
+    width: 24px;
+    min-height: 24px;
+    background-position: -122px -73px;
     background-repeat: no-repeat;
     background-image: url('./img/16-white.svg');
-    vertical-align: middle;
-    margin-right: 5px;
-    border: 1px solid #202425;
-    background-color: #2c3233;
+    margin-right: 10px;
 }
 
 
