@@ -680,8 +680,8 @@ L.U.Marker = L.Marker.extend({
   appendEditFieldsets: function (container) {
     L.U.FeatureMixin.appendEditFieldsets.call(this, container)
     const coordinatesOptions = [
-      ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude'), step: 'any' }],
-      ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude'), step: 'any' }],
+      ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude') }],
+      ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude') }],
     ]
     const builder = new L.U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
