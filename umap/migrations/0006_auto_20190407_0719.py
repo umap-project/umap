@@ -5,15 +5,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('umap', '0005_remove_map_tilelayer'),
+        ("umap", "0005_remove_map_tilelayer"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='map',
-            name='settings',
-            field=django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict, null=True, verbose_name='settings'),
+            model_name="map",
+            name="settings",
+            field=django.contrib.postgres.fields.jsonb.JSONField(
+                blank=True, default=dict, null=True, verbose_name="settings"
+            ),
         ),
     ]

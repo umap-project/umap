@@ -59,7 +59,7 @@ class Command(BaseCommand):
                 else:
                     picto = Pictogram()
                     picto.name = name
-                if (path.name != self.path.name):  # Subfolders only
+                if path.name != self.path.name:  # Subfolders only
                     picto.category = path.name
                 picto.attribution = self.attribution
                 with (path / filename).open("rb") as f:

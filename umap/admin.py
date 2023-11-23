@@ -1,10 +1,14 @@
 from django.contrib.gis import admin
-from .models import Map, DataLayer, Pictogram, TileLayer, Licence
+
+from .models import DataLayer, Licence, Map, Pictogram, TileLayer
 
 
 class TileLayerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'rank', )
-    list_editable = ('rank', )
+    list_display = (
+        "name",
+        "rank",
+    )
+    list_editable = ("rank",)
 
 
 class MapAdmin(admin.GISModelAdmin):

@@ -3,8 +3,9 @@ import os
 import pytest
 from django.core.files.base import ContentFile
 
-from .base import DataLayerFactory, MapFactory
 from umap.models import DataLayer, Map
+
+from .base import DataLayerFactory, MapFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -63,13 +64,13 @@ def test_should_remove_old_versions_on_save(datalayer, map, settings):
     settings.UMAP_KEEP_VERSIONS = 3
     root = datalayer.storage_root()
     before = len(datalayer.geojson.storage.listdir(root)[1])
-    newer = f'{root}/{datalayer.pk}_1440924889.geojson'
-    medium = f'{root}/{datalayer.pk}_1440923687.geojson'
-    older = f'{root}/{datalayer.pk}_1440918637.geojson'
-    other = f'{root}/123456_1440918637.geojson'
+    newer = f"{root}/{datalayer.pk}_1440924889.geojson"
+    medium = f"{root}/{datalayer.pk}_1440923687.geojson"
+    older = f"{root}/{datalayer.pk}_1440918637.geojson"
+    other = f"{root}/123456_1440918637.geojson"
     for path in [medium, newer, older, other]:
         datalayer.geojson.storage.save(path, ContentFile("{}"))
-        datalayer.geojson.storage.save(path + '.gz', ContentFile("{}"))
+        datalayer.geojson.storage.save(path + ".gz", ContentFile("{}"))
     assert len(datalayer.geojson.storage.listdir(root)[1]) == 8 + before
     datalayer.save()
     files = datalayer.geojson.storage.listdir(root)[1]

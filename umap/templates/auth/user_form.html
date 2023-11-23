@@ -3,7 +3,7 @@
 {% block maincontent %}
   <div class="col wide">
     <h2 class="section tabs">
-      <a href="{% url 'user_dashboard' %}">{% trans "My Dashboard" %}</a> | {% trans "My Profile" %}
+      <a href="{% url "user_dashboard" %}">{% trans "My Dashboard" %}</a> | {% trans "My Profile" %}
     </h2>
   </div>
   <div class="wrapper">
@@ -16,7 +16,7 @@
       <form id="user_form" method="post">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="{% trans 'Save' %}" />
+        <input type="submit" value="{% trans "Save" %}" />
       </form>
     </div>
     {% if backends.backends|length %}

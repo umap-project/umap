@@ -1,13 +1,12 @@
 from functools import wraps
 
-from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseForbidden
 from django.conf import settings
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 
-from .views import simple_json_response
 from .models import Map
-
+from .views import simple_json_response
 
 LOGIN_URL = getattr(settings, "LOGIN_URL", "login")
 LOGIN_URL = reverse_lazy(LOGIN_URL) if not LOGIN_URL.startswith("/") else LOGIN_URL

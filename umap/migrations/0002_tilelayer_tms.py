@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('umap', '0001_initial'),
+        ("umap", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tilelayer',
-            name='tms',
+            model_name="tilelayer",
+            name="tms",
             field=models.BooleanField(default=False),
         ),
     ]

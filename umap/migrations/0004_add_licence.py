@@ -5,18 +5,15 @@ from django.db import migrations
 
 
 def add_licence(apps, *args):
-    Licence = apps.get_model('umap', 'Licence')
+    Licence = apps.get_model("umap", "Licence")
     if Licence.objects.count():
         return
-    Licence(
-        name='ODbL',
-        details='http://opendatacommons.org/licenses/odbl/').save()
+    Licence(name="ODbL", details="http://opendatacommons.org/licenses/odbl/").save()
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('umap', '0003_add_tilelayer'),
+        ("umap", "0003_add_tilelayer"),
     ]
 
     operations = [

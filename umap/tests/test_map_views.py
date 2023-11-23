@@ -3,8 +3,8 @@ import json
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.urls import reverse
 from django.core.signing import Signer
+from django.urls import reverse
 
 from umap.models import DataLayer, Map, Star
 
@@ -275,9 +275,7 @@ def test_owner_cannot_access_map_with_share_status_blocked(client, map):
     assert response.status_code == 403
 
 
-def test_non_editor_cannot_access_map_if_share_status_private(
-    client, map, user
-):  # noqa
+def test_non_editor_cannot_access_map_if_share_status_private(client, map, user):  # noqa
     url = reverse("map", args=(map.slug, map.pk))
     map.share_status = map.PRIVATE
     map.save()
@@ -355,9 +353,7 @@ def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):  # 
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_anonymous_update_with_cookie_should_work(
-    cookieclient, anonymap, post_data
-):  # noqa
+def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_data):  # noqa
     url = reverse("map_update", kwargs={"map_id": anonymap.pk})
     # POST only mendatory fields
     name = "new map name"
@@ -438,9 +434,7 @@ def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_clone_map_should_be_possible_if_edit_status_is_anonymous(
-    client, anonymap
-):  # noqa
+def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonymap):  # noqa
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
     anonymap.edit_status = anonymap.ANONYMOUS
