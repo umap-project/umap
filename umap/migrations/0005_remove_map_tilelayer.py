@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('umap', '0004_add_licence'),
+        ("umap", "0004_add_licence"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='map',
-            name='tilelayer',
+            model_name="map",
+            name="tilelayer",
         ),
     ]

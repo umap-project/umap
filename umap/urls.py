@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.urls import include, path, re_path
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -7,16 +6,17 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import include, path, re_path
 from django.views.decorators.cache import cache_control, cache_page, never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import RedirectView
 
 from . import views
 from .decorators import (
-    jsonize_view,
-    login_required_if_not_anonymous_allowed,
     can_edit_map,
     can_view_map,
+    jsonize_view,
+    login_required_if_not_anonymous_allowed,
 )
 from .utils import decorated_patterns
 

@@ -1,9 +1,7 @@
+from agnocomplete.core import AgnocompleteModel
+from agnocomplete.register import register
 from django.conf import settings
 from django.contrib.auth import get_user_model
-
-
-from agnocomplete.register import register
-from agnocomplete.core import AgnocompleteModel
 
 
 @register
@@ -13,5 +11,5 @@ class AutocompleteUser(AgnocompleteModel):
 
     def item(self, current_item):
         data = super().item(current_item)
-        data['url'] = current_item.get_url()
+        data["url"] = current_item.get_url()
         return data

@@ -1,12 +1,12 @@
 from django import forms
-from django.contrib.gis.geos import Point
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from django.template.defaultfilters import slugify
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import Point
 from django.forms.utils import ErrorList
+from django.template.defaultfilters import slugify
+from django.utils.translation import gettext_lazy as _
 
-from .models import Map, DataLayer
+from .models import DataLayer, Map
 
 DEFAULT_LATITUDE = (
     settings.LEAFLET_LATITUDE if hasattr(settings, "LEAFLET_LATITUDE") else 51

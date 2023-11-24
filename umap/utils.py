@@ -1,8 +1,7 @@
 import gzip
 import os
 
-from django.urls import get_resolver
-from django.urls import URLPattern, URLResolver
+from django.urls import URLPattern, URLResolver, get_resolver
 
 
 def get_uri_template(urlname, args=None, prefix=""):

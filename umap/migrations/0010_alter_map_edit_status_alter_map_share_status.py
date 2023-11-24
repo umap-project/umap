@@ -4,20 +4,32 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('umap', '0009_star'),
+        ("umap", "0009_star"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='map',
-            name='edit_status',
-            field=models.SmallIntegerField(choices=[(1, 'Everyone'), (2, 'Editors only'), (3, 'Owner only')], default=3, verbose_name='edit status'),
+            model_name="map",
+            name="edit_status",
+            field=models.SmallIntegerField(
+                choices=[(1, "Everyone"), (2, "Editors only"), (3, "Owner only")],
+                default=3,
+                verbose_name="edit status",
+            ),
         ),
         migrations.AlterField(
-            model_name='map',
-            name='share_status',
-            field=models.SmallIntegerField(choices=[(1, 'Everyone (public)'), (2, 'Anyone with link'), (3, 'Editors only'), (9, 'Blocked')], default=1, verbose_name='share status'),
+            model_name="map",
+            name="share_status",
+            field=models.SmallIntegerField(
+                choices=[
+                    (1, "Everyone (public)"),
+                    (2, "Anyone with link"),
+                    (3, "Editors only"),
+                    (9, "Blocked"),
+                ],
+                default=1,
+                verbose_name="share status",
+            ),
         ),
     ]

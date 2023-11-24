@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import expect
 from django.core.files.base import ContentFile
+from playwright.sync_api import expect
 
 from umap.models import Map, Pictogram
 

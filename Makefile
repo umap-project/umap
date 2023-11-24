@@ -10,13 +10,21 @@ develop: ## Install the test and dev dependencies
 	python3 -m pip install -e .[test,dev]
 	playwright install
 
-.PHONY: pretty-templates
-pretty-templates: ## Prettify template files
-	djlint umap/templates --reformat
+.PHONY: format
+format: ## Format the code and templates files
+	djlint umap/templates --reformat &&\
+	isort --profile black . &&\
+	ruff format --target-version=py38 .
 
-.PHONY: lint-templates
-lint-templates: ## Lint template files
-	djlint umap/templates --lint
+.PHONY: lint
+lint: ## Lint the code and template files
+	djlint umap/templates --lint &&\
+	isort --check --profile black . &&\
+    ruff format --check --target-version=py38 . &&\
+	vermin --no-tips --violations -t=3.8- .
+
+docs: ## Compile the docs
+	mkdocs build
 
 .PHONY: version
 version: ## Display the current version
@@ -47,10 +55,10 @@ publish: ## Publish the Python package to Pypi
 	make clean
 
 test:
-	py.test -xv umap/tests/
+	pytest -xv umap/tests/
 
 test-integration:
-	py.test -xv umap/tests/integration/
+	pytest -xv umap/tests/integration/
 
 clean:
 	rm -f dist/*

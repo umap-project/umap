@@ -1,14 +1,14 @@
 import os
 import time
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
-from django.conf import settings
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.core.files.base import File
 from django.core.signing import Signer
 from django.template.defaultfilters import slugify
-from django.core.files.base import File
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from .managers import PublicManager
 
@@ -380,7 +380,7 @@ class DataLayer(NamedModel):
         }
         obj["id"] = self.pk
         obj["permissions"] = {"edit_status": self.edit_status}
-        obj["editMode"] = "advanced" if self.can_edit(user, request) else 'disabled'
+        obj["editMode"] = "advanced" if self.can_edit(user, request) else "disabled"
         return obj
 
     def clone(self, map_inst=None):
@@ -436,7 +436,7 @@ class DataLayer(NamedModel):
         root = self.storage_root()
         names = self.geojson.storage.listdir(root)[1]
         for name in names:
-            if name.startswith(f'{self.pk}_') and name.endswith(".gz"):
+            if name.startswith(f"{self.pk}_") and name.endswith(".gz"):
                 self.geojson.storage.delete(os.path.join(root, name))
 
     def can_edit(self, user=None, request=None):

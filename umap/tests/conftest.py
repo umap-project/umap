@@ -77,4 +77,3 @@ def datalayer(map):
 @pytest.fixture
 def tilelayer():
     return TileLayerFactory()
-
