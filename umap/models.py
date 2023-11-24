@@ -1,3 +1,4 @@
+import json
 import os
 import time
 
@@ -221,6 +222,20 @@ class Map(NamedModel):
             }
         )
         return map_settings
+
+    def generate_geojson(self, request):
+        geojson = self.settings
+        geojson["type"] = "umap"
+        geojson["uri"] = request.build_absolute_uri(self.get_absolute_url())
+        datalayers = []
+        for datalayer in self.datalayer_set.all():
+            with open(datalayer.geojson.path, "rb") as f:
+                layer = json.loads(f.read())
+            if datalayer.settings:
+                layer["_umap_options"] = datalayer.settings
+            datalayers.append(layer)
+        geojson["layers"] = datalayers
+        return geojson
 
     def get_absolute_url(self):
         return reverse("map", kwargs={"slug": self.slug or "map", "map_id": self.pk})

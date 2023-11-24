@@ -109,16 +109,9 @@ i18n_urls += decorated_patterns(
         views.ToggleMapStarStatus.as_view(),
         name="map_star",
     ),
-    re_path(
-        r"^me$",
-        views.user_dashboard,
-        name="user_dashboard",
-    ),
-    re_path(
-        r"^me/profile$",
-        views.user_profile,
-        name="user_profile",
-    ),
+    re_path(r"^me$", views.user_dashboard, name="user_dashboard"),
+    re_path(r"^me/profile$", views.user_profile, name="user_profile"),
+    re_path(r"^me/download$", views.user_download, name="user_download"),
 )
 map_urls = [
     re_path(

@@ -43,6 +43,14 @@
       {% endwith %}
     {% endfor %}
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="5"></td>
+      <td>
+        <a href="{% url 'user_download' %}" class="button">{% translate "Download all maps" %}</a>
+      </td>
+    </tr>
+  </tfoot>
 </table>
 <div class="pagination">
   {% if maps.has_previous %}

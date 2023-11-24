@@ -1,8 +1,10 @@
+import io
 import json
 import mimetypes
 import os
 import re
 import socket
+import zipfile
 from datetime import datetime, timedelta
 from http.client import InvalidURL
 from io import BytesIO
@@ -300,6 +302,36 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
 
 user_dashboard = UserDashboard.as_view()
+
+
+class UserDownload(PaginatorMixin, DetailView, SearchMixin):
+    model = User
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_maps(self):
+        qs = self.get_search_queryset() or Map.objects.all()
+        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
+        return qs.order_by("-modified_at")
+
+    def render_to_response(self, context, *args, **kwargs):
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+            for map_ in self.get_maps():
+                map_geojson = map_.generate_geojson(self.request)
+                geojson_file = io.StringIO(json.dumps(map_geojson))
+                file_name = f"umap_backup_{map_.slug}.umap"
+                zip_file.writestr(file_name, geojson_file.getvalue())
+
+        response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="umap_backup_complete.zip"'
+        return response
+
+
+user_download = UserDownload.as_view()
 
 
 class MapsShowCase(View):
@@ -633,17 +665,7 @@ class MapDownload(DetailView):
         return reverse("map_download", args=(self.object.pk,))
 
     def render_to_response(self, context, *args, **kwargs):
-        geojson = self.object.settings
-        geojson["type"] = "umap"
-        geojson["uri"] = self.request.build_absolute_uri(self.object.get_absolute_url())
-        datalayers = []
-        for datalayer in self.object.datalayer_set.all():
-            with open(datalayer.geojson.path, "rb") as f:
-                layer = json.loads(f.read())
-            if datalayer.settings:
-                layer["_umap_options"] = datalayer.settings
-            datalayers.append(layer)
-        geojson["layers"] = datalayers
+        geojson = self.object.generate_geojson(self.request)
         response = simple_json_response(**geojson)
         response[
             "Content-Disposition"
