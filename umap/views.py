@@ -6,13 +6,14 @@ import socket
 from datetime import datetime, timedelta
 from http.client import InvalidURL
 from pathlib import Path
-from urllib.error import URLError
-from urllib.parse import quote
+from urllib.error import HTTPError, URLError
+from urllib.parse import quote, urlparse
+from urllib.request import Request, build_opener
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import logout as do_logout
 from django.contrib.auth import get_user_model
+from django.contrib.auth import logout as do_logout
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -46,13 +47,13 @@ from django.views.generic.list import ListView
 
 from . import VERSION
 from .forms import (
+    DEFAULT_CENTER,
     DEFAULT_LATITUDE,
     DEFAULT_LONGITUDE,
-    DEFAULT_CENTER,
-    DataLayerForm,
-    DataLayerPermissionsForm,
     AnonymousDataLayerPermissionsForm,
     AnonymousMapPermissionsForm,
+    DataLayerForm,
+    DataLayerPermissionsForm,
     FlatErrorList,
     MapSettingsForm,
     SendLinkForm,
@@ -61,16 +62,6 @@ from .forms import (
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
 from .utils import get_uri_template, gzip_file, is_ajax
-
-try:
-    # python3
-    from urllib.parse import urlparse
-    from urllib.request import Request, build_opener
-    from urllib.error import HTTPError
-except ImportError:
-    from urlparse import urlparse
-    from urllib2 import Request, HTTPError, build_opener
-
 
 User = get_user_model()
 
@@ -404,7 +395,7 @@ def _urls_for_js(urls=None):
     """
     if urls is None:
         # prevent circular import
-        from .urls import urlpatterns, i18n_urls
+        from .urls import i18n_urls, urlpatterns
 
         urls = [
             url.name for url in urlpatterns + i18n_urls if getattr(url, "name", None)
