@@ -698,12 +698,14 @@ L.U.Orderable = L.Evented.extend({
   },
 
   onDragOver: function (e) {
+    L.DomEvent.stop(e)
     if (e.preventDefault) e.preventDefault() // Necessary. Allows us to drop.
     e.dataTransfer.dropEffect = 'move'
     return false
   },
 
   onDragEnter: function (e) {
+    L.DomEvent.stop(e)
     // e.target is the current hover target.
     const dst = this.findTarget(e.target)
     if (!dst || dst === this.src) return
