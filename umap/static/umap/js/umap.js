@@ -688,7 +688,11 @@ L.U.Map.include({
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      this.once('locationerror', this._setDefaultCenter)
+      // When using locate as default map view AND activating easing
+      // Leaflet.locate will ask the map view to compute transition to user
+      // position, so in this case we do need a default center, so let's
+      // set it anyway
+      this._setDefaultCenter()
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
       this.onceDataLoaded(() => {
