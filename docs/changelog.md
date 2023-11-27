@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.11.1 - 2023-11-27
+
+* Reset increasing icon text size by @yohanboniface in https://github.com/umap-project/umap/pull/1434
+* But back blue links in popup and small credit by @yohanboniface in https://github.com/umap-project/umap/pull/1425
+* Restore missing buttons in caption bar by @yohanboniface in https://github.com/umap-project/umap/pull/1422
+* Restore style of "restore version button" by @yohanboniface in https://github.com/umap-project/umap/pull/1420
+* Prevent dragging a datalayer to activate drag on the map by @yohanboniface in https://github.com/umap-project/umap/pull/1419
+* Set map default center even if waiting for user location by @yohanboniface in https://github.com/umap-project/umap/pull/1432
+* Do not exclude DEMO and SHOWCASE maps anymore from home by @yohanboniface in https://github.com/umap-project/umap/pull/1415
+* Update search index command in documentation by @yohanboniface in https://github.com/umap-project/umap/pull/1416
+* Use step=any by default for FloatInput by @yohanboniface in https://github.com/umap-project/umap/pull/1421
+* Add in documentation example of filtering headers in ajax proxy conf by @yohanboniface in https://github.com/umap-project/umap/pull/1423
+* Reuse the map_download view/url for the dashboard by @davidbgk in https://github.com/umap-project/umap/pull/1429
+* Integrate with Github CI by @almet in https://github.com/umap-project/umap/pull/1413
+
 ## 1.11.0 - 2023-11-20
 
 * Highlight selected feature by @jschleic in https://github.com/umap-project/umap/pull/1359
