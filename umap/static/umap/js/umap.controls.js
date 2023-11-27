@@ -84,7 +84,7 @@ L.U.DrawMarkerAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-marker dark',
-    tooltip: L._('Draw a marker'),
+    tooltip: `${L._('Draw a marker')} (Ctrl+M)`,
   },
 
   addHooks: function () {
@@ -96,7 +96,7 @@ L.U.DrawPolylineAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polyline dark',
-    tooltip: L._('Draw a polyline'),
+    tooltip: `${L._('Draw a polyline')} (Ctrl+L)`,
   },
 
   addHooks: function () {
@@ -108,7 +108,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polygon dark',
-    tooltip: L._('Draw a polygon'),
+    tooltip: `${L._('Draw a polygone')} (Ctrl+P)`,
   },
 
   addHooks: function () {
