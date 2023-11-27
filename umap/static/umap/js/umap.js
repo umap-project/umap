@@ -1765,7 +1765,7 @@ L.U.Map.include({
         L.DomUtil.createButton(
           'umap-open-filter-link flat',
           container,
-          ` | ${L._('Select data')}`,
+          L._('Select data'),
           this.openFacet,
           this
         )
