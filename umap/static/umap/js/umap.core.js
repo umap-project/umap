@@ -434,6 +434,16 @@ L.U.Keys = {
 }
 
 L.U.Help = L.Class.extend({
+
+  SHORTCUTS: {
+    'Ctrl+M': L._('Draw a marker'),
+    'Ctrl+L': L._('Draw a polyline'),
+    'Ctrl+P': L._('Draw a polygon'),
+    'Ctrl+E': L._('Toggle edit mode'),
+    'Ctrl+S': L._('Save map'),
+    'Ctrl+I': L._('Open import panel'),
+  },
+
   initialize: function (map) {
     this.map = map
     this.box = L.DomUtil.create(
@@ -524,6 +534,10 @@ L.U.Help = L.Class.extend({
     title.textContent = L._('Where do we go from here?')
     for (const id in this.map.helpMenuActions) {
       addAction(this.map.helpMenuActions[id])
+    }
+    const kbdList = L.DomUtil.create('div', 'kbd-list', container)
+    for (const [kbd, label] of Object.entries(this.SHORTCUTS)) {
+      L.DomUtil.add('span', '', kbdList, `<kbd>${kbd}</kbd> ${label}`)
     }
     return container
   },
