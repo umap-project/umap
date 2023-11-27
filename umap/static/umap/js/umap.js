@@ -1881,27 +1881,27 @@ L.U.Map.include({
       if (this.editEnabled) {
         if (!this.isDirty) {
           items.push({
-            text: `${L._('Stop editing')} (Ctrl+E)`,
+            text: `${L._('Stop editing')} (<kbd>Ctrl+E</kbd>)`,
             callback: this.disableEdit,
           })
         }
         if (this.options.enableMarkerDraw) {
           items.push({
-            text: `${L._('Draw a marker')} (Ctrl+M)`,
+            text: `${L._('Draw a marker')} (<kbd>Ctrl+M</kbd>)`,
             callback: this.startMarker,
             context: this,
           })
         }
         if (this.options.enablePolylineDraw) {
           items.push({
-            text: `${L._('Draw a polygon')} (Ctrl+P)`,
+            text: `${L._('Draw a polygon')} (<kbd>Ctrl+P</kbd>)`,
             callback: this.startPolygon,
             context: this,
           })
         }
         if (this.options.enablePolygonDraw) {
           items.push({
-            text: `${L._('Draw a line')} (Ctrl+L)`,
+            text: `${L._('Draw a line')} (<kbd>Ctrl+L</kbd>)`,
             callback: this.startPolyline,
             context: this,
           })
@@ -1915,7 +1915,7 @@ L.U.Map.include({
         })
       } else {
         items.push({
-          text: `${L._('Start editing')} (Ctrl+E)`,
+          text: `${L._('Start editing')} (<kbd>Ctrl+E</kbd>)`,
           callback: this.enableEdit,
         })
       }
