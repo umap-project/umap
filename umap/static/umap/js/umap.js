@@ -1763,7 +1763,7 @@ L.U.Map.include({
       )
       if (this.options.facetKey) {
         L.DomUtil.createButton(
-          'umap-open-filter-link',
+          'umap-open-filter-link flat',
           container,
           ` | ${L._('Select data')}`,
           this.openFacet,
