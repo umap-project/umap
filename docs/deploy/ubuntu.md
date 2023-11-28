@@ -6,14 +6,20 @@ You need sudo grants on this server, and it must be connected to Internet.
 
 ## Install system dependencies
 
-    sudo apt update
-    sudo apt install python3 python3-dev python3-venv virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql gcc postgis libpq-dev
+``` bash
+sudo apt update
+sudo apt install python3 python3-dev python3-venv virtualenv wget nginx uwsgi uwsgi-plugin-python3 postgresql gcc postgis libpq-dev
+``` 
 
-*Note: nginx and uwsgi are not required for local development environment*
+!! note
+
+    Nginx and uwsgi are not required for local development environment.
 
 ## Create deployment directories:
 
-    sudo mkdir -p /etc/umap
+```bash
+sudo mkdir -p /etc/umap
+```
 
 *You can change this path, but then remember to adapt the other steps accordingly.*
 

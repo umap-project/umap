@@ -5,7 +5,7 @@ are doing.
 
 The Django settings reference is here: https://docs.djangoproject.com/en/4.2/ref/settings/
 
-Here are a few relevent settings for uMap.
+Here are a few relevant settings for uMap.
 
 ## Usage
 

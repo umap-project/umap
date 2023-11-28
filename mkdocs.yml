@@ -1,15 +1,46 @@
 site_name: uMap
+site_description: uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site
+repo_name: umap-project/umap
+repo_url: https://github.com/umap-project/umap
 nav:
   - Home: index.md
   - Installation: install.md
+  - Architecture:
+    - Frontend (JS): architecture/frontend.md
+  - Deployment:
+    - Ubuntu Server Howto: deploy/ubuntu.md
+    - Docker: deploy/docker.md
+    - Windows: deploy/windows.md
   - Configuration: settings.md
   - Administration: administration.md
   - Contributing: contributing.md
   - how-tos:
-      - Ubuntu from scratch: ubuntu.md
       - Customize your uMap style: custom.md
-      - Install with Docker: docker.md
   - Changelog: changelog.md
-theme: readthedocs
+theme:
+  name: material
+  palette:
+    - scheme: 'default'
+      media: '(prefers-color-scheme: light)'
+      toggle:
+        icon: 'material/lightbulb'
+        name: "Switch to dark mode"
+    - scheme: 'slate'
+      media: '(prefers-color-scheme: dark)'
+      primary: 'blue'
+      toggle:
+        icon: 'material/lightbulb-outline'
+        name: 'Switch to light mode'
+  features:
+      - navigation.sections
 markdown_extensions:
   - pymdownx.magiclink
+  - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true

@@ -1,6 +1,5 @@
 # Customize your uMap installation
 
-
 When running your own uMap, you may want to changed its appearance, for example
 you want your own logo on the home page, or you want to apply some design, or
 you want to add some tracking (but anonymous!) script…

@@ -1,11 +1,14 @@
 # Docker
 
-There is now an official [uMap](https://hub.docker.com/r/umap/umap) image.
+## Docker Hub
 
-To run it with docker compose, create a `docker-compose.yml` like this:
+An official [uMap docker image](https://hub.docker.com/r/umap/umap) is available on the docker hub.
 
-_Sample docker-compose.yml_ 
-```yaml
+## Docker compose
+
+If you prefer to run it with docker compose, here is the configuration file:
+
+```yaml title="docker-compose.yml"
 version: '3'
 services:
   db:
@@ -47,16 +50,17 @@ You can use this example below and it will run, but you may want to look at the 
 
 Make sure the settings in the docker-compose don't conflict with the sample config and vice-versa. In particular, remove the DATABASES section from the config file if using the docker-compose file, or it will override the DATABASE_URL setting and things won't work. 
 
-_Sample umap.conf_ 
-```python 
-"""                                                                                                                                                                                      
-Example settings for docker quickstart: 
-Lots of stuff has been removed for simplicity                                                                                                                                     
-                                                                                                                                                                                         
-See https://umap-project.readthedocs.io/en/master/settings/                                                                                                                              
-                                                                                                                                                                                         
-Things YOU need to change before launching:                                                                                                                                              
-- modify SECRET_KEY                                                                                                                                                                      
+```python title="umap.conf"
+"""
+Example settings for docker quickstart: lots of stuff has been removed for simplicity.
+
+You can get the whole list of settings at:
+
+  https://umap-project.readthedocs.io/en/master/settings/
+
+Here are the settings YOU HAVE TO CHANGE before launching:
+
+- SECRET_KEY
 """
 
 from umap.settings.base import *   # pylint: disable=W0614,W0401                                                                                                                         
@@ -88,32 +92,15 @@ Some basic settings are available through env vars (see https://github.com/umap-
 but if you need more custom ones (like custom OAuth configuration), the easiest
 way is to put them in a [settings file](settings.md) and mount it to `/etc/umap/umap.conf`.
 
----
+### Getting started with docker compose
 
-#### Quick sidebar about docker and docker-compose
-A multi-platform tutorial on [installing docker](https://docs.docker.com/get-docker/) and docker-compose is outside the scope of this howto, but if you are on a recent Ubuntu, this is all you need to install both:
+With docker installed on your machine, start the server with 
 
-```bash
-sudo groupadd docker 
-sudo snap install docker
-sudo usermod -aG docker $USER
-# EXIT and log back in to pickup the docker group membership, then test with
-docker run hello-world
-```
-
-Current versions of docker compose are integrated into the docker command and launch with `docker compose` (two words) -- older versions use a separate binary named `docker-compose`. Either one will work for this. 
-
----
-
-### Initial launch
-
-Start the server with 
 ```bash
 docker compose up
 ```
-... and let it run some initial setup until the output quiesces with a message about spawning uWSGI workers. Because there is a race between the time the app tries to connect to the DB and when the DB is actually ready, you might see a few exceptions/errors about 'psycopg' being unable to connect. This should sort itself out as the app retries. 
 
-### Create superuser
+... and let it run some initial setup until the output quiesces with a message about spawning uWSGI workers. Because there is a race between the time the app tries to connect to the DB and when the DB is actually ready, you might see a few exceptions/errors about 'psycopg' being unable to connect. This should sort itself out as the app retries. 
 
 Now you need to create your site superuser. Stop the server (Ctrl-C) and then type:
 ```bash
@@ -121,8 +108,6 @@ docker-compose run app /venv/bin/umap createsuperuser
 ```
 
 Once that's done, you can relaunch your server with `docker compose up`
-
-### Try It!
 
 You should now be able to browse to your uMap instance from a browser on your local system, by pointing your browser to `https://localhost:8001/` (equivalent to `${SITE_URL}` in the docker-compose file, above).
 
