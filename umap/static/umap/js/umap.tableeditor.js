@@ -110,13 +110,9 @@ L.U.TableEditor = L.Class.extend({
       this.edit()
     }
     L.DomEvent.on(addButton, 'click', addProperty, this)
-    const className =
-      this.properties.length > 2
-        ? 'umap-table-editor fullwidth dark'
-        : 'umap-table-editor dark'
     this.datalayer.map.ui.openPanel({
       data: { html: this.table },
-      className: className,
+      className: 'umap-table-editor fullwidth dark',
       actions: [addButton],
     })
     this.datalayer.map.fire('dataload', { id: id })
