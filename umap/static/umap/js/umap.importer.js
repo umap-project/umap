@@ -7,7 +7,7 @@ L.U.Importer = L.Class.extend({
 
   build: function () {
     this.container = L.DomUtil.create('div', 'umap-upload')
-    this.title = L.DomUtil.add('h4', '', this.container, L._('Import data'))
+    this.title = L.DomUtil.add('h3', '', this.container, L._('Import data'))
     this.presetBox = L.DomUtil.create('div', 'formbox', this.container)
     this.presetSelect = L.DomUtil.create('select', '', this.presetBox)
     this.fileBox = L.DomUtil.create('div', 'formbox', this.container)

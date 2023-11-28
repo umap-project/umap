@@ -27,7 +27,7 @@ L.U.EditPropertiesAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'update-map-settings dark',
-    tooltip: L._('Edit map settings'),
+    tooltip: L._('Edit map properties'),
   },
 
   addHooks: function () {
@@ -403,7 +403,7 @@ L.Control.Embed = L.Control.extend({
     const shareButton = L.DomUtil.createButton(
       '',
       container,
-      L._('Embed and share this map'),
+      L._('Share, download and embed this map'),
       map.renderShareBox,
       map
     )
@@ -1076,6 +1076,9 @@ L.U.Map.include({
 
   renderShareBox: function () {
     const container = L.DomUtil.create('div', 'umap-share')
+    const title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Share, download and embed this map')
+
     const embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map'))
     const iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container)
     const urlTitle = L.DomUtil.add('h4', '', container, L._('Direct link'))
@@ -1369,7 +1372,7 @@ L.U.SearchControl = L.Control.extend({
     L.DomUtil.createButton(
       '',
       container,
-      L._('Search a place name'),
+      L._('Search location'),
       (e) => {
         L.DomEvent.stop(e)
         this.openPanel(map)
@@ -1385,7 +1388,7 @@ L.U.SearchControl = L.Control.extend({
       noResultLabel: L._('No results'),
     }
     if (map.options.photonUrl) options.url = map.options.photonUrl
-    const container = L.DomUtil.create('div', '')
+    const container = L.DomUtil.create('div', 'umap-search')
 
     const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Search location')

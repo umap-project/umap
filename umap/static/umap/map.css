@@ -250,9 +250,13 @@ ul.photon-autocomplete {
 .manage-datalayers {
     background-position: -36px -72px;
 }
+.permissions-panel h3:before,
 .umap-edit-container h3:before,
 .umap-feature-properties:before,
-.umap-layer-properties-container h3:before {
+.umap-layer-properties-container h3:before,
+.umap-search h3:before,
+.umap-share h3:before,
+.umap-upload h3:before {
     height: 24px;
     width: 24px;
     background-repeat: no-repeat;
@@ -265,6 +269,20 @@ ul.photon-autocomplete {
 }
 .umap-edit-container h3:before {
     background-position: -27px -93px;
+}
+.permissions-panel h3:before {
+    background-position: -144px -117px;
+}
+.umap-upload h3:before {
+    background-position: -144px -93px;
+}
+.umap-search h3:before {
+    background-image: url('./img/16.svg');
+    background-position: -27px -117px;
+}
+.umap-share h3:before {
+    background-image: url('./img/16.svg');
+    background-position: 0 -117px;
 }
 .umap-feature-properties.marker:before {
     background-position: -72px -117px;

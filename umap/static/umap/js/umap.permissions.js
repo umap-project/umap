@@ -59,7 +59,7 @@ L.U.MapPermissions = L.Class.extend({
       })
     const container = L.DomUtil.create('div', 'permissions-panel'),
       fields = [],
-      title = L.DomUtil.create('h4', '', container)
+      title = L.DomUtil.create('h3', '', container)
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
         const helpText = `${L._('Secret edit link:')}<br>${
@@ -124,7 +124,7 @@ L.U.MapPermissions = L.Class.extend({
         this
       )
     }
-    L.DomUtil.add('h3', '', container, L._('Datalayers'))
+    L.DomUtil.add('h4', '', container, L._('Datalayers'))
     this.map.eachDataLayer((datalayer) => {
       datalayer.permissions.edit(container)
     })

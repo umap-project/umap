@@ -38,7 +38,9 @@ L.U.DataLayerPermissions = L.Class.extend({
           },
         ],
       ],
-      builder = new L.U.FormBuilder(this, fields, {className: 'umap-form datalayer-permissions'}),
+      builder = new L.U.FormBuilder(this, fields, {
+        className: 'umap-form datalayer-permissions',
+      }),
       form = builder.build()
     container.appendChild(form)
   },
