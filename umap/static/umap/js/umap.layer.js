@@ -178,21 +178,26 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     if (mode === 'manual') {
       const manualBreaks = this.datalayer.options.choropleth.breaks
       if (manualBreaks) {
-        breaks = manualBreaks.split(",").map(b => +b).filter(b => !isNaN(b))
+        breaks = manualBreaks
+          .split(',')
+          .map((b) => +b)
+          .filter((b) => !isNaN(b))
       }
     } else if (mode === 'equidistant') {
       breaks = ss.equalIntervalBreaks(values, classes)
     } else if (mode === 'jenks') {
       breaks = ss.jenks(values, classes)
     } else if (mode === 'quantiles') {
-      const quantiles = [...Array(classes)].map((e, i) => i/classes).concat(1)
+      const quantiles = [...Array(classes)].map((e, i) => i / classes).concat(1)
       breaks = ss.quantile(values, quantiles)
     } else {
       breaks = ss.ckmeans(values, classes).map((cluster) => cluster[0])
-      breaks.push(ss.max(values))  // Needed for computing the legend
+      breaks.push(ss.max(values)) // Needed for computing the legend
     }
     this.options.breaks = breaks || []
-    this.datalayer.options.choropleth.breaks = this.options.breaks.map(b => +b.toFixed(2)).join(',')
+    this.datalayer.options.choropleth.breaks = this.options.breaks
+      .map((b) => +b.toFixed(2))
+      .join(',')
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     let colorScheme = this.datalayer.options.choropleth.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
@@ -211,7 +216,9 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   getOption: function (option, feature) {
-    if (feature && option === feature.staticOptions.mainColor) return this.getColor(feature)
+    if (feature && option === feature.staticOptions.mainColor) {
+      return this.getColor(feature)
+    }
   },
 
   addLayer: function (layer) {
@@ -230,11 +237,11 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   postUpdate: function (e) {
     if (e.helper.field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
-      e.helper.builder.helpers["options.choropleth.mode"].fetch()
+      e.helper.builder.helpers['options.choropleth.mode'].fetch()
     }
     this.computeBreaks()
     if (e.helper.field !== 'options.choropleth.breaks') {
-      e.helper.builder.helpers["options.choropleth.breaks"].fetch()
+      e.helper.builder.helpers['options.choropleth.breaks'].fetch()
     }
   },
 
@@ -276,7 +283,9 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
         {
           handler: 'BlurInput',
           label: L._('Choropleth breakpoints'),
-          helpText: L._('Comma separated list of numbers, including min and max values.'),
+          helpText: L._(
+            'Comma separated list of numbers, including min and max values.'
+          ),
         },
       ],
       [
@@ -601,7 +610,13 @@ L.U.DataLayer = L.Evented.extend({
 
   resetLayer: function (force) {
     // Only reset if type is defined (undefined is the default) and different from current type
-    if (this.layer && (!this.options.type || this.options.type === this.layer._type) && !force) return
+    if (
+      this.layer &&
+      (!this.options.type || this.options.type === this.layer._type) &&
+      !force
+    ) {
+      return
+    }
     const visible = this.isVisible()
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
@@ -641,7 +656,9 @@ L.U.DataLayer = L.Evented.extend({
         // So do not let all options to be reset
         // Fix is a proper migration so all datalayers settings are
         // in DB, and we remove it from geojson flat files.
-        if (geojson._umap_options) geojson._umap_options.editMode = this.options.editMode
+        if (geojson._umap_options) {
+          geojson._umap_options.editMode = this.options.editMode
+        }
         // In case of maps pre 1.0 still around
         if (geojson._storage) geojson._storage.editMode = this.options.editMode
         this.fromUmapGeoJSON(geojson)
