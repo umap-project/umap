@@ -6,11 +6,11 @@ nav:
   - Home: index.md
   - Installation: install.md
   - Architecture:
-    - Frontend (JS): architecture/frontend.md
+      - Frontend (JS): architecture/frontend.md
   - Deployment:
-    - Ubuntu Server Howto: deploy/ubuntu.md
-    - Docker: deploy/docker.md
-    - Windows: deploy/windows.md
+      - Ubuntu Server Howto: deploy/ubuntu.md
+      - Docker: deploy/docker.md
+      - Windows: deploy/windows.md
   - Configuration: settings.md
   - Administration: administration.md
   - Contributing: contributing.md
@@ -22,17 +22,20 @@ theme:
   palette:
     - scheme: 'default'
       media: '(prefers-color-scheme: light)'
+      primary: 'custom'
       toggle:
         icon: 'material/lightbulb'
-        name: "Switch to dark mode"
+        name: 'Switch to dark mode'
     - scheme: 'slate'
       media: '(prefers-color-scheme: dark)'
-      primary: 'blue'
+      primary: 'custom'
       toggle:
         icon: 'material/lightbulb-outline'
         name: 'Switch to light mode'
   features:
-      - navigation.sections
+    - navigation.sections
+extra_css:
+  - stylesheets/extra.css
 markdown_extensions:
   - pymdownx.magiclink
   - admonition
