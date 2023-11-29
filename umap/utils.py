@@ -116,3 +116,32 @@ def gzip_file(from_path, to_path):
 
 def is_ajax(request):
     return request.headers.get("x-requested-with") == "XMLHttpRequest"
+
+
+class ConflictError(ValueError):
+    pass
+
+
+def merge_features(reference: list, latest: list, incoming: list):
+    """Finds the changes between reference and incoming, and reapplies them on top of latest."""
+    if latest == incoming:
+        return latest
+
+    removed = [item for item in reference if item not in incoming]
+    added = [item for item in incoming if item not in reference]
+
+    # Ensure that items changed in the reference weren't also changed in the latest.
+    for item in removed:
+        if item not in latest:
+            raise ConflictError()
+
+    merged = latest[:]
+
+    # Reapply the changes on top of the latest.
+    for item in removed:
+        merged.delete(item)
+
+    for item in added:
+        merged.append(item)
+
+    return merged

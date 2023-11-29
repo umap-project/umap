@@ -5,6 +5,7 @@ import re
 import socket
 from datetime import datetime, timedelta
 from http.client import InvalidURL
+from io import BytesIO
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlparse
@@ -61,7 +62,7 @@ from .forms import (
     UserProfileForm,
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
-from .utils import get_uri_template, gzip_file, is_ajax
+from .utils import ConflictError, get_uri_template, gzip_file, is_ajax, merge_features
 
 User = get_user_model()
 
@@ -851,6 +852,10 @@ class GZipMixin(object):
     def gzip_path(self):
         return Path(f"{self.path}{self.EXT}")
 
+    def compute_last_modified(self, path):
+        stat = os.stat(path)
+        return http_date(stat.st_mtime)
+
     @property
     def last_modified(self):
         # Prior to 1.3.0 we did not set gzip mtime as geojson mtime,
@@ -864,8 +869,7 @@ class GZipMixin(object):
             if self.accepts_gzip and self.gzip_path.exists()
             else self.path
         )
-        stat = os.stat(path)
-        return http_date(stat.st_mtime)
+        return self.compute_last_modified(path)
 
     @property
     def accepts_gzip(self):
@@ -929,34 +933,78 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
     model = DataLayer
     form_class = DataLayerForm
 
-    def form_valid(self, form):
-        self.object = form.save()
-        # Simple response with only metadatas (client should not reload all data
-        # on save)
-        response = simple_json_response(
-            **self.object.metadata(self.request.user, self.request)
-        )
-        response["Last-Modified"] = self.last_modified
-        return response
+    def has_been_modified_since(self, if_unmodified_since):
+        return if_unmodified_since and self.last_modified != if_unmodified_since
 
-    def is_unmodified(self):
-        """Optimistic concurrency control."""
-        modified = True
-        if_unmodified = self.request.META.get("HTTP_IF_UNMODIFIED_SINCE")
-        if if_unmodified:
-            if self.last_modified != if_unmodified:
-                modified = False
-        return modified
+    def merge(self, if_unmodified_since):
+        """
+        Attempt to apply the incoming changes to the document the client was using, and
+        then merge it with the last document we have on storage.
+
+        Returns either None (if the merge failed) or the merged python GeoJSON object.
+        """
+
+        # Use If-Modified-Since to find the correct version in our storage.
+        for name in self.object.get_versions():
+            path = os.path.join(settings.MEDIA_ROOT, self.object.get_version_path(name))
+            if if_unmodified_since == self.compute_last_modified(path):
+                with open(path) as f:
+                    reference = json.loads(f.read())
+                break
+        else:
+            # If the document is not found, we can't merge.
+            return None
+
+        # New data received in the request.
+        entrant = json.loads(self.request.FILES["geojson"].read())
+
+        # Latest known version of the data.
+        with open(self.path) as f:
+            latest = json.loads(f.read())
+
+        try:
+            merged_features = merge_features(
+                reference["features"], latest["features"], entrant["features"]
+            )
+            latest["features"] = merged_features
+            return latest
+        except ConflictError:
+            return None
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.map.pk != int(self.kwargs["map_id"]):
             return HttpResponseForbidden()
+
         if not self.object.can_edit(user=self.request.user, request=self.request):
             return HttpResponseForbidden()
-        if not self.is_unmodified():
-            return HttpResponse(status=412)
-        return super(DataLayerUpdate, self).post(request, *args, **kwargs)
+
+        ius_header = self.request.META.get("HTTP_IF_UNMODIFIED_SINCE")
+
+        if self.has_been_modified_since(ius_header):
+            merged = self.merge(ius_header)
+            if not merged:
+                return HttpResponse(status=412)
+
+            # Replace the uploaded file by the merged version.
+            self.request.FILES["geojson"].file = BytesIO(
+                json.dumps(merged).encode("utf-8")
+            )
+
+            # Mark the data to be reloaded by form_valid
+            self.request.session["needs_reload"] = True
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.object = form.save()
+        data = {**self.object.metadata(self.request.user, self.request)}
+        if self.request.session.get("needs_reload"):
+            data["geojson"] = json.loads(self.object.geojson.read().decode())
+            self.request.session["needs_reload"] = False
+        response = simple_json_response(**data)
+
+        response["Last-Modified"] = self.last_modified
+        return response
 
 
 class DataLayerDelete(DeleteView):
