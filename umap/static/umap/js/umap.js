@@ -368,9 +368,17 @@ L.U.Map.include({
     if (this.options.miniMap && !this.options.noControl) {
       this.whenReady(function () {
         if (this.selected_tilelayer) {
-          this._controls.miniMap = new L.Control.MiniMap(this.selected_tilelayer).addTo(
-            this
-          )
+          this._controls.miniMap = new L.Control.MiniMap(this.selected_tilelayer, {
+            aimingRectOptions: {
+              color: this.getOption('color'),
+              fillColor: this.getOption('fillColor'),
+              stroke: this.getOption('stroke'),
+              fill: this.getOption('fill'),
+              weight: this.getOption('weight'),
+              opacity: this.getOption('opacity'),
+              fillOpacity: this.getOption('fillOpacity'),
+            },
+          }).addTo(this)
           this._controls.miniMap._miniMap.invalidateSize()
         }
       })
@@ -1304,6 +1312,7 @@ L.U.Map.include({
 
     builder = new L.U.FormBuilder(this, shapeOptions, {
       callback: function (e) {
+        if (this._controls.miniMap) this.renderControls()
         this.eachVisibleDataLayer((datalayer) => {
           datalayer.redraw()
         })
