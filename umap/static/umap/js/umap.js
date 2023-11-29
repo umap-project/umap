@@ -559,7 +559,7 @@ L.U.Map.include({
         this.help.show('edit')
       }
       if (e.keyCode === L.U.Keys.ESC) {
-        if (this.editEnabled) this.editTools.stopDrawing()
+        if (this.editEnabled) this.editTools.commitDrawing()
         if (this.measureTools.enabled()) this.measureTools.stopDrawing()
       }
     }
