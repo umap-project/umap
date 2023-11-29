@@ -108,7 +108,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polygon dark',
-    tooltip: `${L._('Draw a polygone')} (Ctrl+P)`,
+    tooltip: `${L._('Draw a polygon')} (Ctrl+P)`,
   },
 
   addHooks: function () {
