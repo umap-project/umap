@@ -621,6 +621,7 @@ L.U.Map.include({
         this.setZoom(this.selected_tilelayer.options.maxZoom)
       }
     } catch (e) {
+      console.error(e)
       this.removeLayer(tilelayer)
       this.ui.alert({
         content: `${L._('Error in the tilelayer URL')}: ${tilelayer._url}`,
