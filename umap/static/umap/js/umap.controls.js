@@ -19,7 +19,7 @@ L.U.ImportAction = L.U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.importPanel()
+    this.map.importer.open()
   },
 })
 
@@ -1172,134 +1172,6 @@ L.U.Map.include({
     this.ui.openPanel({ data: { html: container } })
   },
 
-  importPanel: function () {
-    const container = L.DomUtil.create('div', 'umap-upload')
-    const title = L.DomUtil.create('h4', '', container)
-    const presetBox = L.DomUtil.create('div', 'formbox', container)
-    const presetSelect = L.DomUtil.create('select', '', presetBox)
-    const fileBox = L.DomUtil.create('div', 'formbox', container)
-    const fileInput = L.DomUtil.create('input', '', fileBox)
-    const urlInput = L.DomUtil.create('input', '', container)
-    const rawInput = L.DomUtil.create('textarea', '', container)
-    const typeLabel = L.DomUtil.create('label', '', container)
-    const layerLabel = L.DomUtil.create('label', '', container)
-    const clearLabel = L.DomUtil.create('label', '', container)
-    const submitInput = L.DomUtil.create('input', '', container)
-    const map = this
-    let option
-    const types = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
-    title.textContent = L._('Import data')
-    fileInput.type = 'file'
-    fileInput.multiple = 'multiple'
-    submitInput.type = 'button'
-    submitInput.value = L._('Import')
-    submitInput.className = 'button'
-    typeLabel.textContent = L._('Choose the format of the data to import')
-    this.help.button(typeLabel, 'importFormats')
-    const typeInput = L.DomUtil.create('select', '', typeLabel)
-    typeInput.name = 'format'
-    layerLabel.textContent = L._('Choose the layer to import in')
-    const layerInput = L.DomUtil.create('select', '', layerLabel)
-    layerInput.name = 'datalayer'
-    urlInput.type = 'text'
-    urlInput.placeholder = L._('Provide an URL here')
-    rawInput.placeholder = L._('Paste your data here')
-    clearLabel.textContent = L._('Replace layer content')
-    const clearFlag = L.DomUtil.create('input', '', clearLabel)
-    clearFlag.type = 'checkbox'
-    clearFlag.name = 'clear'
-    this.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        const id = L.stamp(datalayer)
-        option = L.DomUtil.create('option', '', layerInput)
-        option.value = id
-        option.textContent = datalayer.options.name
-      }
-    })
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Import in a new layer') },
-      layerInput
-    )
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Choose the data format') },
-      typeInput
-    )
-    for (let i = 0; i < types.length; i++) {
-      option = L.DomUtil.create('option', '', typeInput)
-      option.value = option.textContent = types[i]
-    }
-    if (this.options.importPresets.length) {
-      const noPreset = L.DomUtil.create('option', '', presetSelect)
-      noPreset.value = noPreset.textContent = L._('Choose a preset')
-      for (let j = 0; j < this.options.importPresets.length; j++) {
-        option = L.DomUtil.create('option', '', presetSelect)
-        option.value = this.options.importPresets[j].url
-        option.textContent = this.options.importPresets[j].label
-      }
-    } else {
-      presetBox.style.display = 'none'
-    }
-
-    const submit = function () {
-      let type = typeInput.value
-      const layerId = layerInput[layerInput.selectedIndex].value
-      let layer
-      if (type === 'umap') {
-        this.once('postsync', function () {
-          this.setView(this.latLng(this.options.center), this.options.zoom)
-        })
-      }
-      if (layerId) layer = map.datalayers[layerId]
-      if (layer && clearFlag.checked) layer.empty()
-      if (fileInput.files.length) {
-        for (let i = 0, file; (file = fileInput.files[i]); i++) {
-          this.processFileToImport(file, layer, type)
-        }
-      } else {
-        if (!type)
-          return this.ui.alert({
-            content: L._('Please choose a format'),
-            level: 'error',
-          })
-        if (rawInput.value && type === 'umap') {
-          try {
-            this.importRaw(rawInput.value, type)
-          } catch (e) {
-            this.ui.alert({ content: L._('Invalid umap data'), level: 'error' })
-            console.error(e)
-          }
-        } else {
-          if (!layer) layer = this.createDataLayer()
-          if (rawInput.value) layer.importRaw(rawInput.value, type)
-          else if (urlInput.value) layer.importFromUrl(urlInput.value, type)
-          else if (presetSelect.selectedIndex > 0)
-            layer.importFromUrl(presetSelect[presetSelect.selectedIndex].value, type)
-        }
-      }
-    }
-    L.DomEvent.on(submitInput, 'click', submit, this)
-    L.DomEvent.on(
-      fileInput,
-      'change',
-      (e) => {
-        let type = '',
-          newType
-        for (let i = 0; i < e.target.files.length; i++) {
-          newType = L.Util.detectFileType(e.target.files[i])
-          if (!type && newType) type = newType
-          if (type && newType !== type) {
-            type = ''
-            break
-          }
-        }
-        typeInput.value = type
-      },
-      this
-    )
-    this.ui.openPanel({ data: { html: container }, className: 'dark' })
-  },
 })
 
 L.U.TileLayerControl = L.Control.extend({

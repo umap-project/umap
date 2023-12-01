@@ -343,6 +343,7 @@ L.U.Map.include({
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
     this.browser = new L.U.Browser(this)
+    this.importer = new L.U.Importer(this)
     this.drop = new L.U.DropControl(this)
     this.renderControls()
   },
@@ -560,7 +561,7 @@ L.U.Map.include({
       }
       if (key === L.U.Keys.I && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
-        this.importPanel()
+        this.importer.open()
       }
       if (key === L.U.Keys.H && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
