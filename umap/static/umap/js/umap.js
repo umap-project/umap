@@ -563,6 +563,10 @@ L.U.Map.include({
         L.DomEvent.stop(e)
         this.importer.open()
       }
+      if (key === L.U.Keys.O && modifierKey && this.editEnabled) {
+        L.DomEvent.stop(e)
+        this.importer.openFiles()
+      }
       if (key === L.U.Keys.H && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.help.show('edit')
