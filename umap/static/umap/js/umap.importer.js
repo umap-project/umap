@@ -117,7 +117,7 @@ L.U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.fileInput.focus()
+    this.fileInput.showPicker()
     this.map.ui.openPanel({ data: { html: this.container }, className: 'dark' })
   },
 
