@@ -13,7 +13,7 @@ L.U.Importer = L.Class.extend({
     this.fileBox = L.DomUtil.create('div', 'formbox', this.container)
     this.fileInput = L.DomUtil.element(
       'input',
-      { type: 'file', multiple: 'multiple' },
+      { type: 'file', multiple: 'multiple', autofocus: true },
       this.fileBox
     )
     this.urlInput = L.DomUtil.element(
@@ -117,6 +117,7 @@ L.U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
+    this.fileInput.focus()
     this.map.ui.openPanel({ data: { html: this.container }, className: 'dark' })
   },
 
