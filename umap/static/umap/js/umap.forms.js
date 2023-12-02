@@ -1255,6 +1255,12 @@ L.U.FormBuilder = L.FormBuilder.extend({
       helpText: L._('Optional.'),
     },
     toZoom: { handler: 'IntInput', label: L._('To zoom'), helpText: L._('Optional.') },
+    interactive: {
+      handler: 'Switch',
+      label: L._('Allow interactions'),
+      helpEntries: 'interactive',
+      inheritable: true,
+    },
   },
 
   initialize: function (obj, fields, options) {
