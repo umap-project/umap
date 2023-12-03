@@ -937,7 +937,7 @@ L.U.Map.include({
   },
 
   openFacet: function () {
-    this.onceDatalayersLoaded(function () {
+    this.onceDataLoaded(function () {
       this._openFacet()
     })
   },
