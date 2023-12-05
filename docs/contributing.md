@@ -39,7 +39,7 @@ Multiple tests suites are in use in the project.
 
 | Test suite             | Location                  | Command                 |
 | ----------             | --------                  | -------                 |
-| Python unit tests      | `umap/tests/integration`  | `pytest . --ignore umap/tests/integration` |
+| Python unit tests      | `umap/tests/`  | `pytest . --ignore umap/tests/integration` |
 | Javascript unit tests  | `umap/static/test`        | `make testjs`|
 | Integration tests      | `umap/tests/integration`  | `pytest umap/tests/integration` |
 
