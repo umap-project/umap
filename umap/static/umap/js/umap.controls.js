@@ -1,6 +1,9 @@
 L.U.BaseAction = L.ToolbarAction.extend({
   initialize: function (map) {
     this.map = map
+    if (this.options.label) {
+      this.options.tooltip = this.map.help.displayLabel(this.options.label, withKbdTag=false)
+    }
     this.options.toolbarIcon = {
       className: this.options.className,
       tooltip: this.options.tooltip,
@@ -15,7 +18,7 @@ L.U.ImportAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'upload-data dark',
-    tooltip: `${L._('Import data')} (Ctrl+I)`,
+    label: 'IMPORT_PANEL'
   },
 
   addHooks: function () {
@@ -84,7 +87,7 @@ L.U.DrawMarkerAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-marker dark',
-    tooltip: `${L._('Draw a marker')} (Ctrl+M)`,
+    label: 'DRAW_MARKER'
   },
 
   addHooks: function () {
@@ -96,7 +99,7 @@ L.U.DrawPolylineAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polyline dark',
-    tooltip: `${L._('Draw a polyline')} (Ctrl+L)`,
+    label: 'DRAW_LINE'
   },
 
   addHooks: function () {
@@ -108,7 +111,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polygon dark',
-    tooltip: `${L._('Draw a polygon')} (Ctrl+P)`,
+    label: 'DRAW_POLYGON'
   },
 
   addHooks: function () {
@@ -1020,7 +1023,7 @@ L.U.Map.include({
       'mouseover',
       function () {
         this.ui.tooltip({
-          content: `${L._('Cancel')} (<kbd>Ctrl+Z</kbd>)`,
+          content: this.help.displayLabel('CANCEL'),
           anchor: controlEditCancel,
           position: 'bottom',
           delay: 500,
@@ -1044,7 +1047,7 @@ L.U.Map.include({
       'mouseover',
       function () {
         this.ui.tooltip({
-          content: `${L._('Back to preview')} (<kbd>Ctrl+E</kbd>)`,
+          content: this.help.displayLabel('PREVIEW'),
           anchor: controlEditDisable,
           position: 'bottom',
           delay: 500,
@@ -1065,7 +1068,7 @@ L.U.Map.include({
       'mouseover',
       function () {
         this.ui.tooltip({
-          content: `${L._('Save current edits')} (<kbd>Ctrl+S</kbd>)`,
+          content: this.help.displayLabel('SAVE'),
           anchor: controlEditSave,
           position: 'bottom',
           delay: 500,
