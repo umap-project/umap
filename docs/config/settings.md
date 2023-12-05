@@ -16,6 +16,7 @@ Those settings should either:
   `UMAP_SETTINGS` env var
 - be declared as env vars directly, for simple ones (string/boolean/list)
 
+
 #### ALLOWED_HOSTS
 
 The hosts that uMap expects.
@@ -23,15 +24,46 @@ The hosts that uMap expects.
 
 Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 
+#### COMPRESS_ENABLED
+#### COMPRESS_STORAGE
+
+To activate the compression of the static files, you can set this flag to `True`.
+
+You can then run the following command to compress the assets:
+
+```bash
+umap compress
+```
+
+Optionally add `COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"`
+and add `gzip_static on` directive to Nginx `/static` location, so Nginx will
+serve pregenerated files instead of compressing them on the fly.
+
 #### DEBUG
 
-Set it to True for easier debugging in case of error.
+Set it to `True`` for easier debugging in case of error.
 
 #### EMAIL_BACKEND
 
 Must be configured if you want uMap to send emails to anonymous users.
 
-See [Emails](install.md#emails) for more details.
+UMap can send the anonymous edit link by email. For this to work, you need to
+add email specific settings. See [Django](https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend)
+documentation.
+
+In general, you'll need to add something like this in your local settings:
+
+```python title="local_settings.py"
+FROM_EMAIL = "youradmin@email.org"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.provider.org"
+EMAIL_PORT = 456
+EMAIL_HOST_USER = "username"
+EMAIL_HOST_PASSWORD = "xxxx"
+EMAIL_USE_TLS = True
+# or
+EMAIL_USE_SSL = True
+```
 
 #### ENABLE_ACCOUNT_LOGIN
 
@@ -48,6 +80,7 @@ See `EMAIL_BACKEND`.
 
 Set it to the default language you want. `LANGUAGE_CODE = "it"`
 
+#### Default map center
 #### LEAFLET_LONGITUDE, LEAFLET_LATITUDE, LEAFLET_ZOOM
 
 Default longitude, latitude and zoom for the map
@@ -128,14 +161,14 @@ To be used when you want to override some HTML templates:
 
     UMAP_CUSTOM_TEMPLATES = "/path/to/custom/templates"
 
-See [customization](custom.md) for details.
+See [customization](customize.md) for details.
 
 #### UMAP_CUSTOM_STATICS
 To be used when you want to override some CSS or images:
 
     UMAP_CUSTOM_STATICS = "/path/to/custom/static"
 
-See [customization](custom.md) for details.
+See [customization](customize.md) for details.
 
 #### UMAP_EXTRA_URLS
 
@@ -198,7 +231,27 @@ How many maps to show in the user "my maps" page.
 
 Use it if you take control over the search configuration.
 
-See [search](install.md#search) for details.
+UMap uses PostgreSQL tsvector for searching. In case your database is big, you
+may want to add an index. For that, here are the SQL commands to run:
+
+```SQL
+# Create a basic search configuration
+CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
+
+# If you also want to deal with accents and case, add this before creating the index
+CREATE EXTENSION unaccent;
+CREATE EXTENSION btree_gin;
+ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
+
+# Now create the index
+CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', COALESCE(name, ''::character varying)::text), share_status);
+```
+
+Then set:
+
+```python title="settings.py"
+UMAP_SEARCH_CONFIGURATION = "umapdict"
+```
 
 #### UMAP_READONLY
 
@@ -207,6 +260,12 @@ Is your instance readonly? Useful for server maintenance.
 #### UMAP_GZIP
 
 Should uMap gzip datalayers geojson.
+
+#### UMAP_XSENDFILE_HEADER
+
+Can be set to `X-Accel-Redirect` to enable the [NGINX X-Accel](https://www.nginx.com/resources/wiki/start/topics/examples/xsendfile/) feature.
+
+See the NGINX documentation in addition.
 
 #### SOCIAL_AUTH_OPENSTREETMAP_KEY, SOCIAL_AUTH_OPENSTREETMAP_SECRET
 

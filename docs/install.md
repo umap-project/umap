@@ -1,13 +1,5 @@
 # Installation
 
-!!! info "Specific guides"
-
-    This page covers how to get started with uMap. If you plan on deploying the service on a server for other people to consume, you can follow different tutorials:
-
-    - [Deploying uMap on Ubuntu](deploy/ubuntu.md) (from scratch)
-    - [Deploying uMap using Docker](deploy/docker.md)
-    - Recent Windows distribution provide [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install), which makes it possible to run a Linux distribution of your choice.
-
 ## System dependencies
 
 uMap is built with the [Python](https://python.org) language, and the [Django](https://djangoproject.com) framework. It needs a [PostgreSQL](https://www.postgresql.org/) database, with the [Postgis](https://postgis.net/) extension enabled.
@@ -85,7 +77,7 @@ export UMAP_SETTINGS=`pwd`/local_settings.py
 
 Add database connection information in `local_settings.py`, for example
 
-```python
+```python title="local_settings.py"
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -98,7 +90,7 @@ Depending on your installation, you might need to change the user that connects 
 
 It should look like this:
 
-```python
+```python title="local_settings.py"
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -110,7 +102,7 @@ DATABASES = {
 
 Add a `SECRET_KEY` in `local_settings.py` with a long random secret key
 
-```python
+```title="local_settings.py"
 SECRET_KEY = "a long and random secret key that must not be shared"
 ```
 
@@ -122,7 +114,7 @@ openssl rand -base64 32
 
 uMap uses [python-social-auth](http://python-social-auth.readthedocs.org/) for user authentication. So you will need to configure it according to your needs. For example
 
-```python
+```title="local_settings.py"
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.github.GithubBackend',
     'social_auth.backends.contrib.bitbucket.BitbucketBackend',
@@ -162,49 +154,10 @@ umap createsuperuser
 umap runserver 0.0.0.0:8000
 ```
 
-## Configuring PostgreSQL search
-
-UMap uses PostgreSQL tsvector for searching. In case your database is big, you
-may want to add an index. For that, here are the SQL commands to run:
-
-```SQL
-# Create a basic search configuration
-CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
-
-# If you also want to deal with accents and case, add this before creating the index
-CREATE EXTENSION unaccent;
-CREATE EXTENSION btree_gin;
-ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
-
-# Now create the index
-CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', COALESCE(name, ''::character varying)::text), share_status);
-```
-
-And change your settings:
-
-```python
-UMAP_SEARCH_CONFIGURATION = "umapdict"
-```
-
 ## Configuring emails
 
 UMap can send the anonymous edit link by email. For this to work, you need to
-add email specific settings. See [Django](https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend)
-documentation.
-
-In general, you'll need to add something like this in your local settings:
-
-```python
-FROM_EMAIL = "youradmin@email.org"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.provider.org"
-EMAIL_PORT = 456
-EMAIL_HOST_USER = "username"
-EMAIL_HOST_PASSWORD = "xxxx"
-EMAIL_USE_TLS = True
-# or
-EMAIL_USE_SSL = True
-```
+add email specific settings. See [the related settings](config/settings.md#email_backend) for more info.
 
 ## Upgrading your installation
 
@@ -215,10 +168,4 @@ pip install umap-project --upgrade
 umap migrate
 umap collectstatic
 umap compress
-```
-
-Then you need to restart your python server, for example:
-
-```bash
-sudo systemctl restart uwsgi  # or gunicorn, or…
 ```

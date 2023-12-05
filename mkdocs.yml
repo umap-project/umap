@@ -1,24 +1,26 @@
-site_name: uMap
+site_name: uMap docs
 site_description: uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site
 repo_name: umap-project/umap
 repo_url: https://github.com/umap-project/umap
 nav:
-  - Home: index.md
-  - Installation: install.md
+  - How-tos:
+    - Getting started: install.md
+    - Contribute: contributing.md
   - Architecture:
-      - Frontend (JS): architecture/frontend.md
+      - Overview: architecture/overview.md
+      - Frontend: architecture/frontend.md
+  - Configuration:
+    - Settings: config/settings.md
+    - Customize: config/customize.md
+    - Icon packs: config/icons.md
   - Deployment:
-      - Ubuntu Server Howto: deploy/ubuntu.md
       - Docker: deploy/docker.md
-      - Windows: deploy/windows.md
-  - Configuration: settings.md
-  - Administration: administration.md
-  - Contributing: contributing.md
-  - how-tos:
-      - Customize your uMap style: custom.md
+      - Nginx: deploy/nginx.md
   - Changelog: changelog.md
 theme:
   name: material
+  logo: assets/logo.svg
+  homepage: https://umap-project.org
   palette:
     - scheme: 'default'
       media: '(prefers-color-scheme: light)'
@@ -34,6 +36,7 @@ theme:
         name: 'Switch to light mode'
   features:
     - navigation.sections
+    - navigation.footer
 extra_css:
   - stylesheets/extra.css
 markdown_extensions:

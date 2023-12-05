@@ -21,11 +21,35 @@ If you've encountered a bug, don't hesitate to tell us about it. The best way to
 
 Following the [installation instructions](install.md) should get you started to hack on the code.
 
-## Merging rules
+### Installing dev dependencies
 
-Pull requests 
+To be sure to install all the dev dependencies, and have everything working locally.
 
-## Update translations
+```bash
+make develop
+```
+
+### Hack!
+
+You can now do your changes in a specific branch, and when you're ready you can open a pull-request for us to review.
+
+### Run tests
+
+Multiple tests suites are in use in the project.
+
+| Test suite             | Location                  | Command                 |
+| ----------             | --------                  | -------                 |
+| Python unit tests      | `umap/tests/integration`  | `pytest . --ignore umap/tests/integration` |
+| Javascript unit tests  | `umap/static/test`        | `make testjs`|
+| Integration tests      | `umap/tests/integration`  | `pytest umap/tests/integration` |
+
+All the tests are run when you're creating a pull request, to avoid regressions.
+
+### Merging rules
+
+Pull requests need to be accepted by one maintainer of the project. Please be patient, we try to do our best, but it sometimes takes time.
+
+## Update the translations
 
 Install needed tools:
 

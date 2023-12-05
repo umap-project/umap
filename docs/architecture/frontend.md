@@ -1,6 +1,10 @@
 # The frontend
 
-uMap is using Leaflet on the frontend. It's actually extending it: each uMap object extends the ones from Leaflet.
+!!! info "These are notes"
+
+    Consider this page as notes taken while exploring uMap. It's not covering everything but hopefully will help you get a basic understanding of how things work.
+
+uMap uses Leaflet on the frontend. A lot of uMap objects extends the ones from Leaflet with additional abilities.
 
 ```mermaid
 erDiagram
