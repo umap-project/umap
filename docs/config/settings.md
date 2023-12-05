@@ -41,7 +41,7 @@ serve pregenerated files instead of compressing them on the fly.
 
 #### DEBUG
 
-Set it to `True`` for easier debugging in case of error.
+Set it to `True` for easier debugging in case of error.
 
 #### EMAIL_BACKEND
 
