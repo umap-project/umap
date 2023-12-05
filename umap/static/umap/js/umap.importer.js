@@ -117,13 +117,12 @@ L.U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.fileInput.showPicker()
     this.map.ui.openPanel({ data: { html: this.container }, className: 'dark' })
   },
 
   openFiles: function () {
     this.open()
-    this.fileInput.click()
+    this.fileInput.showPicker()
   },
 
   submit: function () {
