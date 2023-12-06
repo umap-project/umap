@@ -67,3 +67,18 @@ jobs:
       
     - name: Run Docs
       run: make docs
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python3 -m pip install -r docs/requirements.txt
+
+    - name: Run Docs
+      run: mkdocs build
