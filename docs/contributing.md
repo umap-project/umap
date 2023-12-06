@@ -1,92 +1,55 @@
 # Contributing
 
+So you want to contribute to uMap? Great news 🙌
+
+We've put together this document so you have a brief overview of how things work.
+You can help on different areas: translation, bug triage, documentation and development.
+
 ## Translating
 
-Translation is managed through [Transifex](https://www.transifex.com/openstreetmap/umap/).
+uMap is translated to more than 50 languages! The translation is managed through [Transifex](https://www.transifex.com/openstreetmap/umap/). You will need an account to get started, and then you'll be able to translate easily.
 
-## Bug Triaging
+## Bug Triage
 
-You are very welcome to help us triaging [uMap issues](https://github.com/umap-project/umap/issues).
+You are very welcome to help us triage [uMap issues](https://github.com/umap-project/umap/issues). Don't hesitate to help other users by answering questions, give your point of view in discussions and just report bugs!
 
-* Help other users by answering questions
-* Give your point of view in discussions
-* And so on...
+## Reporting a bug
 
-## Development on Ubuntu
+If you've encountered a bug, don't hesitate to tell us about it. The best way to do this is by [opening a ticket on the bug tracker](https://github.com/umap-project/umap/issues/new/choose). But please, first, [have a look around](https://github.com/umap-project/umap/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) to see if other users already reported something 😅
 
-### Environment setup
+## Hacking on the code
 
-Choose one of the following two config:
+Following the [installation instructions](install.md) should get you started to hack on the code.
 
-#### Config global to your desktop
+### Installing dev dependencies
 
-Follow the procedure [Ubuntu from scratch](ubuntu.md)
+To be sure to install all the dev dependencies, and have everything working locally.
 
-But instead using folders /etc/umap, you can create a ~/.umap folder.
-This folder will contain the umap.conf file.
-
-And for folder /srv/umap, you can create a ~/umap folder (We will remove this folder later)
-
-You will have to set an env var, we will set it in your .bashrc:
-
-    nano ~/.bashrc
-
-Add the following at the end of file:
-
-```
-# uMap
-export UMAP_SETTINGS=~/.umap/umap.conf
+```bash
+make develop
 ```
 
-Then refresh your terminal
+### Hack!
 
-    source ~/.bashrc
+You can now do your changes in a specific branch, and when you're ready you can open a pull-request for us to review.
 
-Run your local uMap and check that it is working properly.
+### Run tests
 
-#### Config inside your local git repo
+Multiple tests suites are in use in the project.
 
-Follow the procedure [Ubuntu from scratch](ubuntu.md)
+| Test suite             | Location                  | Command                 |
+| ----------             | --------                  | -------                 |
+| Python unit tests      | `umap/tests/`  | `pytest . --ignore umap/tests/integration` |
+| Javascript unit tests  | `umap/static/test`        | `make testjs`|
+| Integration tests      | `umap/tests/integration`  | `pytest umap/tests/integration` |
 
-You can use the local.py.sample in the git repo and copy it to your local git repo to umap/settings/local.py
+All the tests are run when you're creating a pull request, to avoid regressions.
 
-See [Installation](install.md)
+### Merging rules
 
-### Hacking on the code
+Pull requests need to be accepted by one maintainer of the project. Please be patient, we try to do our best, but it sometimes takes time.
 
-Create a workspace folder `~/wk` and go into it.
-
-"git clone" the main repository and go in the `umap/` folder.
-
-Once you are in the `umap/` folder, create a Python virtual environment:
-
-    python3 -m venv venv
-    source venv/bin/activate
-
-Now, the `umap` command will be available.
-
-*Note: if you close your terminal, you will need to re-run that command from `~/wk/umap`:*
-
-    source venv/bin/activate
-
-To test your code, you will add to install umap from your git folder. Go to `~/wk/umap` and run:
-
-    make install
-
-This command will check dependencies and install uMap from sources inside folder.
-
-When installing from the git repository, do not forget to run `make installjs` and `make vendors`, before running `umap collectstatic` (as mentioned in [Ubuntu from scratch](ubuntu.md)).
-
-Create a PostgreSQL database and apply migrations to setup your database:
-
-    createdb umap
-    umap migrate
-
-You should now be able to start your local uMap instance:
-
-    umap runserver 0.0.0.0:8000
-
-### Update translations
+## Update the translations
 
 Install needed tools:
 

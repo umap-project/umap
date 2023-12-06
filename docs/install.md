@@ -1,151 +1,171 @@
 # Installation
 
-*Note: for Ubuntu, follow procedure [Ubuntu from scratch](ubuntu.md)*
+## System dependencies
 
-*Note: for Windows, follow procedure [Installing on Windows](install_windows.md)*
+uMap is built with the [Python](https://python.org) language, and the [Django](https://djangoproject.com) framework. It needs a [PostgreSQL](https://www.postgresql.org/) database, with the [Postgis](https://postgis.net/) extension enabled.
 
-Create a geo aware database. See [Geodjango doc](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/) for backend installation.
+Here are the commands to install the required system dependencies.
 
-Create a virtual environment
+=== "Debian"
+    
+    ```bash
+    sudo apt update
+    sudo apt install python3 python3-dev python3-venv virtualenv postgresql gcc postgis libpq-dev
+    ``` 
 
-    python -m venv venv
-    source venv/bin/activate
+=== "Arch Linux"
+    ```bash
+    yay postgis extra/postgresql-libs
+    ```
 
-Install dependencies and project
+=== "OS X (with brew)"
 
-    pip install umap-project
+    ```bash
+    brew install postgis
+    ```
 
-Create a default `local_settings` file
+=== "Fedora"
 
-    wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O local_settings.py
+    ```bash
+    sudo dnf install postgis libpq-devel make gcc python3-devel
+    ```
 
+### PostgreSQL
+
+Depending on your system, you might need to create a postgres user, the database, and initialize postgres. Here's how:
+
+```bash
+createuser umap -U postgres
+createdb umap -O umap -U postgres
+psql umap -c "CREATE EXTENSION postgis" -Upostgres
+```
+
+## Getting started
+
+Create a geo aware database. See the [GeoDjango docs](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/) for backend installation.
+
+### Creating a virtual environment 
+
+It is recommended to install python projects in a virtual environment to avoid mixing the project installation with your system dependencies. But it's not a requirement and it is up to you 🫣
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+### Installing the dependencies
+
+You can get all the project dependencies installed with the following command:
+
+```bash
+pip install umap-project
+```
+
+### Configuration
+
+Create a default `local_settings.py` file, that you will modify with your setting.
+
+```bash
+wget https://raw.githubusercontent.com/umap-project/umap/master/umap/settings/local.py.sample -O local_settings.py
+```
 
 Reference it as env var:
 
-    export UMAP_SETTINGS=`pwd`/local_settings.py
-
+```bash
+export UMAP_SETTINGS=`pwd`/local_settings.py
+```
 
 Add database connection information in `local_settings.py`, for example
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'umap',
-        }
+```python title="local_settings.py"
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'umap',
     }
+}
+```
 
-Depending on your installation, you might need to change the USER that connects the database.
+Depending on your installation, you might need to change the user that connects the database.
 
 It should look like this:
 
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.contrib.gis.db.backends.postgis",
-            "NAME": "umap",
-            "USER": "postgres",
-        }
+```python title="local_settings.py"
+DATABASES = {
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": "umap",
+        "USER": "postgres",
     }
-
+}
+```
 
 Add a `SECRET_KEY` in `local_settings.py` with a long random secret key
 
-    SECRET_KEY = "a long and random secret key that must not be shared"
+```title="local_settings.py"
+SECRET_KEY = "a long and random secret key that must not be shared"
+```
 
-You can easily generate one with openssl:
+You can easily generate one with [openssl](https://www.openssl.org/):
 
-    openssl rand -base64 32
+```bash
+openssl rand -base64 32
+```
 
-uMap uses [python-social-auth](http://python-social-auth.readthedocs.org/) for user authentication. So you will need to configure it according to your
-needs. For example
+uMap uses [python-social-auth](http://python-social-auth.readthedocs.org/) for user authentication. So you will need to configure it according to your needs. For example
 
-    AUTHENTICATION_BACKENDS = (
-        'social_auth.backends.contrib.github.GithubBackend',
-        'social_auth.backends.contrib.bitbucket.BitbucketBackend',
-        'social_auth.backends.twitter.TwitterBackend',
-        'django.contrib.auth.backends.ModelBackend',
-    )
-    GITHUB_APP_ID = 'xxx'
-    GITHUB_API_SECRET = 'zzz'
-    BITBUCKET_CONSUMER_KEY = 'xxx'
-    BITBUCKET_CONSUMER_SECRET = 'zzz'
-    TWITTER_CONSUMER_KEY = "xxx"
-    TWITTER_CONSUMER_SECRET = "yyy"
+```title="local_settings.py"
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.contrib.bitbucket.BitbucketBackend',
+    'social_auth.backends.twitter.TwitterBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+GITHUB_APP_ID = 'xxx'
+GITHUB_API_SECRET = 'zzz'
+BITBUCKET_CONSUMER_KEY = 'xxx'
+BITBUCKET_CONSUMER_SECRET = 'zzz'
+TWITTER_CONSUMER_KEY = "xxx"
+TWITTER_CONSUMER_SECRET = "yyy"
+```
 
 Example of callback URL to use for setting up OAuth apps
 
- http://umap.foo.bar/complete/github/
+http://umap.foo.bar/complete/github/
 
 Adapt the `STATIC_ROOT` and `MEDIA_ROOT` to your local environment.
 
-Create the tables
+## Bootstrapping the database
 
-    umap migrate
+Here are the commands you'll need to run to create the tables, collect the static files, etc.
 
-Collect and compress the statics
+```bash
+# Create the database tables
+umap migrate
 
-    umap collectstatic
-    umap compress
+# Collect and compress static files
+umap collectstatic
+umap compress
 
-Create a superuser
+# Create a super user
+umap createsuperuser
 
-    umap createsuperuser
+# Finally start the server
+umap runserver 0.0.0.0:8000
+```
 
-Start the server
-
-    umap runserver 0.0.0.0:8000
-
-## Search
-
-UMap uses PostgreSQL tsvector for searching. In case your database is big, you
-may want to add an index. For that, you should do so:
-
-    # Create a basic search configuration
-    CREATE TEXT SEARCH CONFIGURATION umapdict (COPY=simple);
-
-    # If you also want to deal with accents and case, add this before creating the index
-    CREATE EXTENSION unaccent;
-    CREATE EXTENSION btree_gin;
-    ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
-
-    # Now create the index
-    CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', COALESCE(name, ''::character varying)::text), share_status);
-
-And change `UMAP_SEARCH_CONFIGURATION = "umapdict"` in your settings.
-
-
-## Emails
+## Configuring emails
 
 UMap can send the anonymous edit link by email. For this to work, you need to
-add email specific settings. See [Django](https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend)
-documentation.
+add email specific settings. See [the related settings](config/settings.md#email_backend) for more info.
 
-In general, you'll need to add something like this in your local settings:
-
-```
-FROM_EMAIL = "youradmin@email.org"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.provider.org"
-EMAIL_PORT = 456
-EMAIL_HOST_USER = "username"
-EMAIL_HOST_PASSWORD = "xxxx"
-EMAIL_USE_TLS = True
-# or
-EMAIL_USE_SSL = True
-```
-
-## Upgrading
+## Upgrading your installation
 
 Usually, for upgrading, you need those steps:
 
-```
+```bash
 pip install umap-project --upgrade
 umap migrate
 umap collectstatic
 umap compress
-```
-
-Then you need to restart your python server, for example:
-
-```
-sudo systemctl restart uwsgi  # or gunicorn, or…
 ```

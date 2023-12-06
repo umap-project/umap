@@ -1,7 +1,6 @@
 # Customize your uMap installation
 
-
-When running your own uMap, you may want to changed its appearance, for example
+When running your own uMap, you may want to change its appearance, for example
 you want your own logo on the home page, or you want to apply some design, or
 you want to add some tracking (but anonymous!) script…
 
@@ -10,7 +9,7 @@ that.
 So basically you'll have your own templates and/or statics directories where
 you will put the templates or statics you want to control (and only those).
 
-Inside thore directory, you need to respect the exact relative path of the
+Inside those directories, you need to respect the exact relative path of the
 templates or statics you are adding, relatively to the
 [templates](https://github.com/umap-project/umap/tree/master/umap/templates)
 and

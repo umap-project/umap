@@ -1,10 +1,4 @@
-# Administration
-
-You can access uMap administration page by navigating to `https://your.server.org/admin`
-
-You will have to connect with the admin account created during installation. Default admin username is "umap".
-
-## Icons
+# Icons
 
 Icons (aka pictograms in uMap sources) can be used in your map markers.
 
@@ -22,11 +16,11 @@ Example of icons libraries you may want to use:
 - [SJJB Icons](http://www.sjjb.co.uk/mapicons/contactsheet)
 - [Remix](https://remixicon.com/)
 
-### Import icons manually
+## Import icons manually
 
 You can import icons manually by going to your uMap admin page: `https://your.server.org/admin`
 
-### Import icons automatically
+## Import icons automatically
 
 To import icons on your uMap server, you will need to use the command `umap import_pictograms`.
 
@@ -34,9 +28,11 @@ Note: you can get help with `umap import_pictograms -h`
 
 Basic usage:
 
-    umap import_pictograms --attribution "Maki Icons by Mapbox" path/to/icons/directory/
+```bash
+umap import_pictograms --attribution "Maki Icons by Mapbox" path/to/icons/directory/
+```
 
-### Categories
+## Categories
 
 uMap can render icons grouped into categories. When using the import script, any
 subfolder will be used as category.

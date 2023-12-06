@@ -1,8 +1,13 @@
 # uMap developer documentation
 
-*This documentation is intended for people aiming to install and configure uMap.
-If you are looking for user documentation, have a look at [the OSM wiki page](http://wiki.openstreetmap.org/wiki/UMap#Tutorials).*
+!!! info "Developer docs"
 
-uMap is a Django project, so in case of doubt always refer to the [Django documentation](https://docs.djangoproject.com).
+    This documentation is intended for developers or system administrators.
+    
+    If you are looking for user documentation, have a look at [the OSM wiki page](http://wiki.openstreetmap.org/wiki/UMap#Tutorials).
 
-Now let's start by [installing uMap](install.md)!
+uMap lets you create maps with OpenStreetMap layers in a minute, and embed them in your site.
+
+- 🤗 Get started and [follow the installation guide](install.md).
+- 🤩 Want to contribute? [Read the contributing guidelines](contributing.md).
+- 🤔 Curious about umap internals? [Check the architecture overview](architecture/overview.md).

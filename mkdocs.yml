@@ -1,15 +1,52 @@
-site_name: uMap
+site_name: uMap docs
+site_description: uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site
+repo_name: umap-project/umap
+repo_url: https://github.com/umap-project/umap
 nav:
-  - Home: index.md
-  - Installation: install.md
-  - Configuration: settings.md
-  - Administration: administration.md
-  - Contributing: contributing.md
-  - how-tos:
-      - Ubuntu from scratch: ubuntu.md
-      - Customize your uMap style: custom.md
-      - Install with Docker: docker.md
+  - How-tos:
+    - Getting started: install.md
+    - Contribute: contributing.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Frontend: architecture/frontend.md
+  - Configuration:
+    - Settings: config/settings.md
+    - Customize: config/customize.md
+    - Icon packs: config/icons.md
+  - Deployment:
+      - Docker: deploy/docker.md
+      - Nginx: deploy/nginx.md
   - Changelog: changelog.md
-theme: readthedocs
+theme:
+  name: material
+  logo: assets/logo.svg
+  homepage: https://umap-project.org
+  palette:
+    - scheme: 'default'
+      media: '(prefers-color-scheme: light)'
+      primary: 'custom'
+      toggle:
+        icon: 'material/lightbulb'
+        name: 'Switch to dark mode'
+    - scheme: 'slate'
+      media: '(prefers-color-scheme: dark)'
+      primary: 'custom'
+      toggle:
+        icon: 'material/lightbulb-outline'
+        name: 'Switch to light mode'
+  features:
+    - navigation.sections
+    - navigation.footer
+extra_css:
+  - stylesheets/extra.css
 markdown_extensions:
   - pymdownx.magiclink
+  - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
