@@ -2,133 +2,133 @@
 
 ## 1.11.1 - 2023-11-27
 
-* Reset increasing icon text size by @yohanboniface in https://github.com/umap-project/umap/pull/1434
-* But back blue links in popup and small credit by @yohanboniface in https://github.com/umap-project/umap/pull/1425
-* Restore missing buttons in caption bar by @yohanboniface in https://github.com/umap-project/umap/pull/1422
-* Restore style of "restore version button" by @yohanboniface in https://github.com/umap-project/umap/pull/1420
-* Prevent dragging a datalayer to activate drag on the map by @yohanboniface in https://github.com/umap-project/umap/pull/1419
-* Set map default center even if waiting for user location by @yohanboniface in https://github.com/umap-project/umap/pull/1432
-* Do not exclude DEMO and SHOWCASE maps anymore from home by @yohanboniface in https://github.com/umap-project/umap/pull/1415
-* Update search index command in documentation by @yohanboniface in https://github.com/umap-project/umap/pull/1416
-* Use step=any by default for FloatInput by @yohanboniface in https://github.com/umap-project/umap/pull/1421
-* Add in documentation example of filtering headers in ajax proxy conf by @yohanboniface in https://github.com/umap-project/umap/pull/1423
-* Reuse the map_download view/url for the dashboard by @davidbgk in https://github.com/umap-project/umap/pull/1429
-* Integrate with Github CI by @almet in https://github.com/umap-project/umap/pull/1413
+* Reset increasing icon text size by @yohanboniface in #1434
+* But back blue links in popup and small credit by @yohanboniface in #1425
+* Restore missing buttons in caption bar by @yohanboniface in #1422
+* Restore style of "restore version button" by @yohanboniface in #1420
+* Prevent dragging a datalayer to activate drag on the map by @yohanboniface in #1419
+* Set map default center even if waiting for user location by @yohanboniface in #1432
+* Do not exclude DEMO and SHOWCASE maps anymore from home by @yohanboniface in #1415
+* Update search index command in documentation by @yohanboniface in #1416
+* Use step=any by default for FloatInput by @yohanboniface in #1421
+* Add in documentation example of filtering headers in ajax proxy conf by @yohanboniface in #1423
+* Reuse the map_download view/url for the dashboard by @davidbgk in #1429
+* Integrate with Github CI by @almet in #1413
 
 ## 1.11.0 - 2023-11-20
 
-* Highlight selected feature by @jschleic in https://github.com/umap-project/umap/pull/1359
-* Full map download endpoint by @davidbgk in https://github.com/umap-project/umap/pull/1396
-* Refactor icon selector: use tabs, make options more explicit by @yohanboniface in https://github.com/umap-project/umap/pull/1395
-* Allow to upload SVG pictograms and change hue according to background color by @yohanboniface in https://github.com/umap-project/umap/pull/1387
-* Add Pictogram category by @yohanboniface in https://github.com/umap-project/umap/pull/1388
-* Update white eye closed by @yohanboniface in https://github.com/umap-project/umap/pull/1389
-* Update installation instructions by @almet in https://github.com/umap-project/umap/pull/1392
-* Fix race condition with cluster layer by @yohanboniface in https://github.com/umap-project/umap/pull/1390
-* Change background in pictograms list by @yohanboniface in https://github.com/umap-project/umap/pull/1394
-* Add triangle icon to form fieldset to make toggle clearer by @yohanboniface in https://github.com/umap-project/umap/pull/1393
-* Speedup the tests by using a weaker hash algo. by @almet in https://github.com/umap-project/umap/pull/1405
-* Improve buttons’ contrasts on the homepage #a11y by @davidbgk in https://github.com/umap-project/umap/pull/1406
-* Fix next/previous in popup footer in panel not openning next panel by @yohanboniface in https://github.com/umap-project/umap/pull/1403
-* Set a default favicon by @davidbgk in https://github.com/umap-project/umap/pull/1401
-* Fix vertex icons by @jschleic in https://github.com/umap-project/umap/pull/1407
-* Fix heavy request for getting user maps by @yohanboniface in https://github.com/umap-project/umap/pull/1412
+* Highlight selected feature by @jschleic in #1359
+* Full map download endpoint by @davidbgk in #1396
+* Refactor icon selector: use tabs, make options more explicit by @yohanboniface in #1395
+* Allow to upload SVG pictograms and change hue according to background color by @yohanboniface in #1387
+* Add Pictogram category by @yohanboniface in #1388
+* Update white eye closed by @yohanboniface in #1389
+* Update installation instructions by @almet in #1392
+* Fix race condition with cluster layer by @yohanboniface in #1390
+* Change background in pictograms list by @yohanboniface in #1394
+* Add triangle icon to form fieldset to make toggle clearer by @yohanboniface in #1393
+* Speedup the tests by using a weaker hash algo. by @almet in #1405
+* Improve buttons’ contrasts on the homepage #a11y by @davidbgk in #1406
+* Fix next/previous in popup footer in panel not openning next panel by @yohanboniface in #1403
+* Set a default favicon by @davidbgk in #1401
+* Fix vertex icons by @jschleic in #1407
+* Fix heavy request for getting user maps by @yohanboniface in #1412
 
 ## 1.10.1 - 2023-10-27
 
-* Add minimal CSV export by @yohanboniface in https://github.com/umap-project/umap/pull/1376
-* A11Y: switch from links to buttons when pertinent by @davidbgk in https://github.com/umap-project/umap/pull/1290
-* Fix map not loading when defaultView=latest and datalayer has no data by @yohanboniface in https://github.com/umap-project/umap/pull/1375
-* Fix displayOnLoad not honoured at import by @yohanboniface in https://github.com/umap-project/umap/pull/1384
-* Fix filter data crashing when data contains non string values by @yohanboniface in https://github.com/umap-project/umap/pull/1378
-* Increase maxZoomLimit to 24 by @yohanboniface in https://github.com/umap-project/umap/pull/1381
-* Round range step to 1 digit by @yohanboniface in https://github.com/umap-project/umap/pull/1380
-* Keep only non graphic props in default properties, to prevent useless redraw by @yohanboniface in https://github.com/umap-project/umap/pull/1379
-* Split defaultDatalayer in defaultView/EditDatalayer by @yohanboniface in https://github.com/umap-project/umap/pull/1383
-* Fix variable declared globally by mistake by @yohanboniface in https://github.com/umap-project/umap/pull/1382
-* Cancel tooltip on mouseout by @yohanboniface in https://github.com/umap-project/umap/pull/1385
-* Update eye icon by @yohanboniface in https://github.com/umap-project/umap/pull/1386
+* Add minimal CSV export by @yohanboniface in #1376
+* A11Y: switch from links to buttons when pertinent by @davidbgk in #1290
+* Fix map not loading when defaultView=latest and datalayer has no data by @yohanboniface in #1375
+* Fix displayOnLoad not honoured at import by @yohanboniface in #1384
+* Fix filter data crashing when data contains non string values by @yohanboniface in #1378
+* Increase maxZoomLimit to 24 by @yohanboniface in #1381
+* Round range step to 1 digit by @yohanboniface in #1380
+* Keep only non graphic props in default properties, to prevent useless redraw by @yohanboniface in #1379
+* Split defaultDatalayer in defaultView/EditDatalayer by @yohanboniface in #1383
+* Fix variable declared globally by mistake by @yohanboniface in #1382
+* Cancel tooltip on mouseout by @yohanboniface in #1385
+* Update eye icon by @yohanboniface in #1386
 
 
 ## 1.9.3 - 2023-10-18
 
-* Add experimental drag and drop of file on the map container by @yohanboniface in https://github.com/umap-project/umap/pull/1370
-* Hide the next icon in buttons’ sprites by @davidbgk in https://github.com/umap-project/umap/pull/1371
+* Add experimental drag and drop of file on the map container by @yohanboniface in #1370
+* Hide the next icon in buttons’ sprites by @davidbgk in #1371
 
 
 ## 1.9.2 - 2023-10-12
 
-* Fix `map` reference in DataLayersControl by @yohanboniface in https://github.com/umap-project/umap/pull/1368
-* Add back `HeatLayer._map` reference check by @yohanboniface in https://github.com/umap-project/umap/pull/1369
+* Fix `map` reference in DataLayersControl by @yohanboniface in #1368
+* Add back `HeatLayer._map` reference check by @yohanboniface in #1369
 
 
 ## 1.9.1 - 2023-10-12
 
-* Fix import of .umap file containing a choropleth layer by @yohanboniface in https://github.com/umap-project/umap/pull/1367
+* Fix import of .umap file containing a choropleth layer by @yohanboniface in #1367
 
 ## 1.9.0 - 2023-10-12
 
-* Add experimental choropleth datalayer type by @yohanboniface in https://github.com/umap-project/umap/pull/1136
-* Finally add Map.create_at field by @yohanboniface in https://github.com/umap-project/umap/pull/1350
-* Update uwsgi.ini to prevent buffers errors with NGINX reverse proxies by @sircharlo in https://github.com/umap-project/umap/pull/1354
-* switch to grid layout for multiple choice buttons by @jschleic in https://github.com/umap-project/umap/pull/1356
-* Allow to hide a datalayer from the caption list by @yohanboniface in https://github.com/umap-project/umap/pull/1362
-* Hide attribution on small screen and add a small ? to display it by @yohanboniface in https://github.com/umap-project/umap/pull/1349
-* Heatmap improvements by @yohanboniface in https://github.com/umap-project/umap/pull/1358
+* Add experimental choropleth datalayer type by @yohanboniface in #1136
+* Finally add Map.create_at field by @yohanboniface in #1350
+* Update uwsgi.ini to prevent buffers errors with NGINX reverse proxies by @sircharlo in #1354
+* switch to grid layout for multiple choice buttons by @jschleic in #1356
+* Allow to hide a datalayer from the caption list by @yohanboniface in #1362
+* Hide attribution on small screen and add a small ? to display it by @yohanboniface in #1349
+* Heatmap improvements by @yohanboniface in #1358
 
 
 ## 1.8.2 - 2023-09-27
 
-* Allow to restrict data browser items to current map view by @yohanboniface in https://github.com/umap-project/umap/pull/1339
-* Set an explicit width to popup large container by @yohanboniface in https://github.com/umap-project/umap/pull/1343
-* Do no try to fit data bounds if bounds are not valid by @yohanboniface in https://github.com/umap-project/umap/pull/1347
-* Make sure SHORT_SITE_URL is defined before exposing Map.short_url by @yohanboniface in https://github.com/umap-project/umap/pull/1346
-* Fix map's title when “dirty star” is present by @jschleic in https://github.com/umap-project/umap/pull/1348
-* Redirect to canonical when URL contains the ?edit parameter by @yohanboniface in https://github.com/umap-project/umap/pull/1336
-* Allow to add username to features (opt-in by instance) by @openbrian in https://github.com/umap-project/umap/pull/1324
+* Allow to restrict data browser items to current map view by @yohanboniface in #1339
+* Set an explicit width to popup large container by @yohanboniface in #1343
+* Do no try to fit data bounds if bounds are not valid by @yohanboniface in #1347
+* Make sure SHORT_SITE_URL is defined before exposing Map.short_url by @yohanboniface in #1346
+* Fix map's title when “dirty star” is present by @jschleic in #1348
+* Redirect to canonical when URL contains the ?edit parameter by @yohanboniface in #1336
+* Allow to add username to features (opt-in by instance) by @openbrian in #1324
 
 
 ## 1.8.1 - 2023-09-22
 
-* Fix anonymous maps displayed by mistake in user dashboard by @yohanboniface in https://github.com/umap-project/umap/pull/1331
-* Do not try to set editMode on _umap_options for old maps by @yohanboniface in https://github.com/umap-project/umap/pull/1332
-* Fix datalayer's data duplicated at first save by @yohanboniface in https://github.com/umap-project/umap/pull/1334
+* Fix anonymous maps displayed by mistake in user dashboard by @yohanboniface in #1331
+* Do not try to set editMode on _umap_options for old maps by @yohanboniface in #1332
+* Fix datalayer's data duplicated at first save by @yohanboniface in #1334
 
 
 ## 1.8.0 - 2023-09-22
 
-* Allow to define permissions for each datalayer instead of for the whole map by @yohanboniface in https://github.com/umap-project/umap/pull/1307
-* Fix table editor not closing anymore from fullwidth by @yohanboniface in https://github.com/umap-project/umap/pull/1316
-* Remove dot in property name by @yohanboniface in https://github.com/umap-project/umap/pull/1315
-* Update Ubuntu installation documentation by @jvmatl in https://github.com/umap-project/umap/pull/1322
-* Fix map displayed more than once in user dashboard when multiple editors by @yohanboniface in https://github.com/umap-project/umap/pull/1326
-* Update Docker documentation by @jvmatl in https://github.com/umap-project/umap/pull/1320
-* Docker: replace wait_for_database with depends_on and healthcheck by @openbrian in https://github.com/umap-project/umap/pull/1314
-* Prune old .gz when saving a datalayer by @yohanboniface in https://github.com/umap-project/umap/pull/1329
-* Restrict possible min/max zoom values by @davidbgk in https://github.com/umap-project/umap/pull/1321
+* Allow to define permissions for each datalayer instead of for the whole map by @yohanboniface in #1307
+* Fix table editor not closing anymore from fullwidth by @yohanboniface in #1316
+* Remove dot in property name by @yohanboniface in #1315
+* Update Ubuntu installation documentation by @jvmatl in #1322
+* Fix map displayed more than once in user dashboard when multiple editors by @yohanboniface in #1326
+* Update Docker documentation by @jvmatl in #1320
+* Docker: replace wait_for_database with depends_on and healthcheck by @openbrian in #1314
+* Prune old .gz when saving a datalayer by @yohanboniface in #1329
+* Restrict possible min/max zoom values by @davidbgk in #1321
 
 
 ## 1.7.3 - 2023-09-18
 
-* Use css width for img custom width by @yohanboniface in https://github.com/umap-project/umap/pull/1306
-* Enhance icon selector form by @yohanboniface in https://github.com/umap-project/umap/pull/1303
-* Try to fix remote datalayer not sending dataloaded by @yohanboniface in https://github.com/umap-project/umap/pull/1298
-* Setup to create integration tests with Playwright by @davidbgk in https://github.com/umap-project/umap/pull/1069
-* Add a `powered by uMap` footer by @davidbgk in https://github.com/umap-project/umap/pull/1309
-* Add outlinkTarget to default interactionProperties by @jschleic in https://github.com/umap-project/umap/pull/1313
+* Use css width for img custom width by @yohanboniface in #1306
+* Enhance icon selector form by @yohanboniface in #1303
+* Try to fix remote datalayer not sending dataloaded by @yohanboniface in #1298
+* Setup to create integration tests with Playwright by @davidbgk in #1069
+* Add a `powered by uMap` footer by @davidbgk in #1309
+* Add outlinkTarget to default interactionProperties by @jschleic in #1313
 
 
 ## 1.7.2 - 2023-09-01
 
-* Fix remote data not fetched on first save and add a button to manually fetch data by @yohanboniface in https://github.com/umap-project/umap/pull/1289
-* Remove custom message from onbeforeunload event by @yohanboniface in https://github.com/umap-project/umap/pull/1288
-* Edit header polish: move "My Dashboard" and "Help" to the right, display asterisk in dirty mode by @yohanboniface in https://github.com/umap-project/umap/pull/1287
-* Make sure we load all data before downloading it by @yohanboniface in https://github.com/umap-project/umap/pull/1295
-* Fix datalayers not sending "dataloaded" event when min/maxZoom is set and map is loaded outside those values by @yohanboniface in https://github.com/umap-project/umap/pull/1296
-* Add back min-width for img in popup-large by @yohanboniface in https://github.com/umap-project/umap/pull/1297
-* Avoid using a tuple as a content type when guessed by @davidbgk in https://github.com/umap-project/umap/pull/1291
-* Put focus on name when opening feature edit panel by @yohanboniface in https://github.com/umap-project/umap/pull/1293
-* Better distinguish panel behaviour in portrait vs landscape modes by @yohanboniface in https://github.com/umap-project/umap/pull/1292
+* Fix remote data not fetched on first save and add a button to manually fetch data by @yohanboniface in #1289
+* Remove custom message from onbeforeunload event by @yohanboniface in #1288
+* Edit header polish: move "My Dashboard" and "Help" to the right, display asterisk in dirty mode by @yohanboniface in #1287
+* Make sure we load all data before downloading it by @yohanboniface in #1295
+* Fix datalayers not sending "dataloaded" event when min/maxZoom is set and map is loaded outside those values by @yohanboniface in #1296
+* Add back min-width for img in popup-large by @yohanboniface in #1297
+* Avoid using a tuple as a content type when guessed by @davidbgk in #1291
+* Put focus on name when opening feature edit panel by @yohanboniface in #1293
+* Better distinguish panel behaviour in portrait vs landscape modes by @yohanboniface in #1292
 
 ## 1.7.1 - 2023-08-28
 
@@ -145,21 +145,21 @@
 
 ## 1.6.1 - 2023-08-25
 
-* fix: correct changelog link by @eMerzh in https://github.com/umap-project/umap/pull/1275
-* Use magiclink extension for changelog with links by @davidbgk in https://github.com/umap-project/umap/pull/1278
-* Fix datalayers being shown on zoom even if displayOnLoad is false by @yohanboniface in https://github.com/umap-project/umap/pull/1283
-* Remove default center to prevent multiple map initialisations by @yohanboniface in https://github.com/umap-project/umap/pull/1284
+* fix: correct changelog link by @eMerzh in #1275
+* Use magiclink extension for changelog with links by @davidbgk in #1278
+* Fix datalayers being shown on zoom even if displayOnLoad is false by @yohanboniface in #1283
+* Remove default center to prevent multiple map initialisations by @yohanboniface in #1284
 
 ## 1.6.0 - 2023-08-22
 
-* Catch timeout error in ajax proxy by @yohanboniface in https://github.com/umap-project/umap/pull/1261
-* Fix bug where minimap would not be displayed on load by @yohanboniface in https://github.com/umap-project/umap/pull/1267
-* Allow to add more than one OAuth provider by @yohanboniface in https://github.com/umap-project/umap/pull/1271
-* Protect back username field from being modified by social auth login by @yohanboniface in https://github.com/umap-project/umap/pull/1270
-* Very lite "My Profile" page to allow changing username by @yohanboniface in https://github.com/umap-project/umap/pull/1269
-* Store DataLayer's settings in DB by @yohanboniface in https://github.com/umap-project/umap/pull/1266
-* When map has max bounds, use those bounds for limiting search by @yohanboniface in https://github.com/umap-project/umap/pull/1268
-* Only call propagateShow at init if layer is visible by @yohanboniface in https://github.com/umap-project/umap/pull/1272
+* Catch timeout error in ajax proxy by @yohanboniface in #1261
+* Fix bug where minimap would not be displayed on load by @yohanboniface in #1267
+* Allow to add more than one OAuth provider by @yohanboniface in #1271
+* Protect back username field from being modified by social auth login by @yohanboniface in #1270
+* Very lite "My Profile" page to allow changing username by @yohanboniface in #1269
+* Store DataLayer's settings in DB by @yohanboniface in #1266
+* When map has max bounds, use those bounds for limiting search by @yohanboniface in #1268
+* Only call propagateShow at init if layer is visible by @yohanboniface in #1272
 
 ## 1.5.1 - 2023-08-15
 
@@ -168,24 +168,24 @@
 
 ## 1.5.0 - 2023-08-15
 
-* Add target URL in CORS error message by @yohanboniface in https://github.com/umap-project/umap/pull/1228
-* Use proper GPX mimetype by @yohanboniface in https://github.com/umap-project/umap/pull/1229
-* Add icons to better distinguish edit panels by @yohanboniface in https://github.com/umap-project/umap/pull/1232
-* Adapt logout behaviour in ajax/not ajax modes by @yohanboniface in https://github.com/umap-project/umap/pull/1235
-* Fix popup panel not opening from the data browser by @yohanboniface in https://github.com/umap-project/umap/pull/1240
-* Fix misplaced icons by @yohanboniface in https://github.com/umap-project/umap/pull/1241
-* Allow to configure default share and edit status by @yohanboniface in https://github.com/umap-project/umap/pull/1245
-* Bump mkdocs by @yohanboniface in https://github.com/umap-project/umap/pull/1246
-* Use maintained fork of togeojson by @yohanboniface in https://github.com/umap-project/umap/pull/1249
-* Do not try to compute geom based property before we have a geom by @yohanboniface in https://github.com/umap-project/umap/pull/1250
-* Do not close panel when switching tilelayer by @yohanboniface in https://github.com/umap-project/umap/pull/1252
-* Better control of default view by @yohanboniface in https://github.com/umap-project/umap/pull/1255
-* Use latest release of black by @yohanboniface in https://github.com/umap-project/umap/pull/1193
-* Explicitely use map default when dynamic var is unset by @yohanboniface in https://github.com/umap-project/umap/pull/1251
-* Make fromZoom and toZoom options available for all layers by @yohanboniface in https://github.com/umap-project/umap/pull/1253
-* Refactor "advanced filters" (and rename to facets) by @yohanboniface in https://github.com/umap-project/umap/pull/1243
-* Edit header revamp by @yohanboniface in https://github.com/umap-project/umap/pull/1233
-* adapt iframe min-width for popup large by @yohanboniface in https://github.com/umap-project/umap/pull/1238
+* Add target URL in CORS error message by @yohanboniface in #1228
+* Use proper GPX mimetype by @yohanboniface in #1229
+* Add icons to better distinguish edit panels by @yohanboniface in #1232
+* Adapt logout behaviour in ajax/not ajax modes by @yohanboniface in #1235
+* Fix popup panel not opening from the data browser by @yohanboniface in #1240
+* Fix misplaced icons by @yohanboniface in #1241
+* Allow to configure default share and edit status by @yohanboniface in #1245
+* Bump mkdocs by @yohanboniface in #1246
+* Use maintained fork of togeojson by @yohanboniface in #1249
+* Do not try to compute geom based property before we have a geom by @yohanboniface in #1250
+* Do not close panel when switching tilelayer by @yohanboniface in #1252
+* Better control of default view by @yohanboniface in #1255
+* Use latest release of black by @yohanboniface in #1193
+* Explicitely use map default when dynamic var is unset by @yohanboniface in #1251
+* Make fromZoom and toZoom options available for all layers by @yohanboniface in #1253
+* Refactor "advanced filters" (and rename to facets) by @yohanboniface in #1243
+* Edit header revamp by @yohanboniface in #1233
+* adapt iframe min-width for popup large by @yohanboniface in #1238
 
 ## 1.4.4 - 2023-07-22
 - fix tooltip anchor unstable (cf #1224)
