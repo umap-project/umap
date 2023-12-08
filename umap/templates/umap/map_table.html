@@ -45,9 +45,9 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="5"></td>
-      <td>
-        <a href="{% url 'user_download' %}" class="button">{% translate "Download all maps" %}</a>
+      <td colspan="4"></td>
+      <td colspan="2">
+        <a href="{% url 'user_download' %}?p={{ request.GET.p }}" class="button">{% translate "Download all these maps" %}</a>
       </td>
     </tr>
   </tfoot>

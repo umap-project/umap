@@ -307,6 +307,15 @@ user_dashboard = UserDashboard.as_view()
 class UserDownload(PaginatorMixin, DetailView, SearchMixin):
     model = User
 
+    def is_owner(self):
+        return self.request.user == self.object
+
+    @property
+    def per_page(self):
+        if self.is_owner():
+            return settings.UMAP_MAPS_PER_PAGE_OWNER
+        return settings.UMAP_MAPS_PER_PAGE
+
     def get_object(self):
         return self.get_queryset().get(pk=self.request.user.pk)
 
@@ -318,10 +327,10 @@ class UserDownload(PaginatorMixin, DetailView, SearchMixin):
     def render_to_response(self, context, *args, **kwargs):
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-            for map_ in self.get_maps():
+            for map_ in self.paginate(self.get_maps()):
                 map_geojson = map_.generate_geojson(self.request)
                 geojson_file = io.StringIO(json.dumps(map_geojson))
-                file_name = f"umap_backup_{map_.slug}.umap"
+                file_name = f"umap_backup_{map_.slug}_{map_.pk}.umap"
                 zip_file.writestr(file_name, geojson_file.getvalue())
 
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
