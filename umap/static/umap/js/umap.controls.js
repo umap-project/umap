@@ -615,6 +615,8 @@ L.U.DataLayersControl = L.Control.extend({
   openPanel: function () {
     if (!this.map.editEnabled) return
     const container = L.DomUtil.create('ul', 'umap-browse-datalayers')
+    const title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Manage layers')
     this.map.eachDataLayerReverse(function (datalayer) {
       this.addDataLayer(container, datalayer, true)
     }, this)
@@ -1174,7 +1176,6 @@ L.U.Map.include({
     )
     this.ui.openPanel({ data: { html: container } })
   },
-
 })
 
 L.U.TileLayerControl = L.Control.extend({
@@ -1201,11 +1202,15 @@ L.U.TileLayerControl = L.Control.extend({
   },
 
   openSwitcher: function (options) {
-    this._tilelayers_container = L.DomUtil.create(
-      'ul',
-      'umap-tilelayer-switcher-container'
-    )
+    const container = L.DomUtil.create('div', 'umap-tilelayer-switcher-container')
+    const title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Change tilelayers')
+    this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
+    this.map.ui.openPanel({
+      data: { html: container },
+      className: options.className,
+    })
   },
 
   buildList: function (options) {
@@ -1217,10 +1222,6 @@ L.U.TileLayerControl = L.Control.extend({
         return
       this.addTileLayerElement(tilelayer, options)
     }, this)
-    this.map.ui.openPanel({
-      data: { html: this._tilelayers_container },
-      className: options.className,
-    })
   },
 
   addTileLayerElement: function (tilelayer, options) {
