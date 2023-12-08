@@ -46,7 +46,7 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     expect(marker).to_have_count(1)
     # Should have default img
     expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
-    edit_settings = page.get_by_title("Edit map settings")
+    edit_settings = page.get_by_title("Edit map properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -146,7 +146,7 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     expect(marker).to_have_count(1)
     # Should have default img
     expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
-    edit_settings = page.get_by_title("Edit map settings")
+    edit_settings = page.get_by_title("Edit map properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -186,7 +186,7 @@ def test_can_use_char_as_picto(map, live_server, page, pictos):
     marker = page.locator(".umap-div-icon span")
     # Should have default img, so not a span
     expect(marker).to_have_count(0)
-    edit_settings = page.get_by_title("Edit map settings")
+    edit_settings = page.get_by_title("Edit map properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
