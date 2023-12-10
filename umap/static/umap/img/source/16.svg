@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="144"
+   width="168"
    height="168"
    id="svg2"
    version="1.1"
@@ -41,8 +41,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.5893817"
-     inkscape:cx="68.418802"
-     inkscape:cy="100.88505"
+     inkscape:cx="69.29038"
+     inkscape:cy="81.928248"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -127,7 +127,7 @@
        inkscape:label=""
        inkscape:color="rgb(0,134,229)" />
     <sodipodi:guide
-       position="120,96"
+       position="120,168"
        orientation="-1,0"
        id="guide4869"
        inkscape:label=""
@@ -145,6 +145,13 @@
        inkscape:label=""
        inkscape:locked="false"
        inkscape:color="rgb(0,134,229)" />
+    <sodipodi:guide
+       position="144,168"
+       orientation="-1,0"
+       id="guide10571"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -852,5 +859,17 @@
          id="path2378"
          style="stroke-width:0.264583" />
     </g>
+    <path
+       id="arrow-down"
+       d="m 156,875.36218 6,-6 h -12 z"
+       fill="#f2f2f2"
+       fill-rule="evenodd"
+       style="fill:#4d4d4d;fill-opacity:1" />
+    <path
+       id="arrow-right"
+       d="m 159,896.36218 -6,-6 v 12 z"
+       fill="#f2f2f2"
+       fill-rule="evenodd"
+       style="fill:#4d4d4d;fill-opacity:1" />
   </g>
 </svg>

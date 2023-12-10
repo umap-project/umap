@@ -1086,12 +1086,77 @@ L.U.Map.include({
     const container = L.DomUtil.create('div', 'umap-share')
     const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Share, download and embed this map')
+    if (this.options.shortUrl) {
+      L.DomUtil.createButton(
+        'button copy-button',
+        container,
+        L._('copy'),
+        () => navigator.clipboard.writeText(this.options.shortUrl),
+        this
+      )
+      L.DomUtil.add('h4', '', container, L._('Short URL'))
+      const shortUrlLabel = L.DomUtil.create('label', '', container)
+      shortUrlLabel.textContent = L._('Share this link to view the map')
+      const shortUrl = L.DomUtil.create('input', 'umap-short-url', container)
+      shortUrl.type = 'text'
+      shortUrl.value = this.options.shortUrl
+      L.DomUtil.create('hr', '', container)
+    }
+
+    L.DomUtil.add('h4', '', container, L._('Download data'))
+    const downloadLabel = L.DomUtil.create('label', '', container)
+    downloadLabel.textContent = L._('Choose the format of the data to export')
+    const exportCaveat = L.DomUtil.add(
+      'small',
+      'help-text',
+      container,
+      L._('Only visible features will be downloaded.')
+    )
+    console.log(this.EXPORT_TYPES)
+    const typeInput = L.DomUtil.create(
+      'div',
+      `button-bar by${Object.keys(this.EXPORT_TYPES).length}`,
+      container
+    )
+    let option
+    for (const key in this.EXPORT_TYPES) {
+      if (this.EXPORT_TYPES.hasOwnProperty(key)) {
+        L.DomUtil.createButton(
+          'button',
+          typeInput,
+          this.EXPORT_TYPES[key].name || key,
+          () => this.download(key),
+          this
+        )
+      }
+    }
+    L.DomUtil.create('hr', '', container)
+
+    L.DomUtil.add('h4', '', container, L._('Backup data'))
+    const backupLabel = L.DomUtil.create('label', '', container)
+    backupLabel.textContent = L._('Download all data and settings of the map')
+    const downloadUrl = L.Util.template(this.options.urls.map_download, {
+      map_id: this.options.umap_id,
+    })
+    const link = L.DomUtil.createLink(
+      'button',
+      container,
+      L._('Download full backup'),
+      downloadUrl
+    )
+    let name = this.options.name || 'data'
+    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+    link.setAttribute('download', `${name}.umap`)
+    L.DomUtil.create('hr', '', container)
 
     const embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map'))
     const iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container)
     const urlTitle = L.DomUtil.add('h4', '', container, L._('Direct link'))
+    const shortUrlLabel = L.DomUtil.create('label', '', container)
+    shortUrlLabel.textContent = L._(
+      'Share this link to open a customized map view'
+    )
     const exportUrl = L.DomUtil.create('input', 'umap-share-url', container)
-    let option
     exportUrl.type = 'text'
     const UIFields = [
       ['dimensions.width', { handler: 'Input', label: L._('width') }],
@@ -1132,54 +1197,12 @@ L.U.Map.include({
     const builder = new L.U.FormBuilder(iframeExporter, UIFields, {
       callback: buildIframeCode,
     })
-    const iframeOptions = L.DomUtil.createFieldset(container, L._('Export options'))
+    const iframeOptions = L.DomUtil.createFieldset(
+      container,
+      L._('Embed and link options')
+    )
     iframeOptions.appendChild(builder.build())
-    if (this.options.shortUrl) {
-      L.DomUtil.create('hr', '', container)
-      L.DomUtil.add('h4', '', container, L._('Short URL'))
-      const shortUrl = L.DomUtil.create('input', 'umap-short-url', container)
-      shortUrl.type = 'text'
-      shortUrl.value = this.options.shortUrl
-    }
-    L.DomUtil.create('hr', '', container)
-    L.DomUtil.add('h4', '', container, L._('Backup data'))
-    const downloadUrl = L.Util.template(this.options.urls.map_download, {
-      map_id: this.options.umap_id,
-    })
-    const link = L.DomUtil.createLink(
-      'button',
-      container,
-      L._('Download full data'),
-      downloadUrl
-    )
-    let name = this.options.name || 'data'
-    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    link.setAttribute('download', `${name}.umap`)
-    L.DomUtil.create('hr', '', container)
-    L.DomUtil.add('h4', '', container, L._('Download data'))
-    const typeInput = L.DomUtil.create('select', '', container)
-    typeInput.name = 'format'
-    const exportCaveat = L.DomUtil.add(
-      'small',
-      'help-text',
-      container,
-      L._('Only visible features will be downloaded.')
-    )
-    for (const key in this.EXPORT_TYPES) {
-      if (this.EXPORT_TYPES.hasOwnProperty(key)) {
-        option = L.DomUtil.create('option', '', typeInput)
-        option.value = key
-        option.textContent = this.EXPORT_TYPES[key].name || key
-        if (this.EXPORT_TYPES[key].selected) option.selected = true
-      }
-    }
-    L.DomUtil.createButton(
-      'button',
-      container,
-      L._('Download data'),
-      () => this.download(typeInput.value),
-      this
-    )
+
     this.ui.openPanel({ data: { html: container } })
   },
 })
