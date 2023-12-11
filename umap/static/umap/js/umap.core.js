@@ -584,10 +584,6 @@ L.U.Help = L.Class.extend({
     for (const id in this.map.helpMenuActions) {
       addAction(this.map.helpMenuActions[id])
     }
-    const kbdList = L.DomUtil.create('ul', 'kbd-list', container)
-    for (const key of Object.keys(this.SHORTCUTS)) {
-      L.DomUtil.add('li', '', kbdList, this.displayLabel(key))
-    }
     return container
   },
 
