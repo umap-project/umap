@@ -90,6 +90,7 @@ L.U.Map.include({
 
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+    this.urls = new window.umap.URLs(this.options.urls)
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
@@ -272,10 +273,12 @@ L.U.Map.include({
         url.searchParams.delete('edit')
         history.pushState({}, '', url)
       }
-      if (L.Util.queryString('download'))
-        window.location = L.Util.template(this.options.urls.map_download, {
+      if (L.Util.queryString('download')) {
+        const download_url = this.urls.get('map_download', {
           map_id: this.options.umap_id,
         })
+        window.location = download_url
+      }
     })
 
     window.onbeforeunload = () => this.isDirty || null
@@ -1093,7 +1096,7 @@ L.U.Map.include({
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
-    this.post(this.getSaveUrl(), {
+    this.post(this.urls.get('map_save', { map_id: this.options.umap_id }), {
       data: formData,
       context: this,
       callback: function (data) {
@@ -1169,31 +1172,16 @@ L.U.Map.include({
   },
 
   sendEditLink: function () {
-    const url = L.Util.template(this.options.urls.map_send_edit_link, {
-        map_id: this.options.umap_id,
-      }),
-      input = this.ui._alert.querySelector('input'),
-      email = input.value
+    const input = this.ui._alert.querySelector('input')
+    const email = input.value
 
     const formData = new FormData()
     formData.append('email', email)
+
+    const url = this.urls.get('map_send_edit_link', { map_id: this.options.umap_id })
     this.post(url, {
       data: formData,
     })
-  },
-
-  getEditUrl: function () {
-    return L.Util.template(this.options.urls.map_update, {
-      map_id: this.options.umap_id,
-    })
-  },
-
-  getCreateUrl: function () {
-    return L.Util.template(this.options.urls.map_create)
-  },
-
-  getSaveUrl: function () {
-    return (this.options.umap_id && this.getEditUrl()) || this.getCreateUrl()
   },
 
   star: function () {
@@ -1202,9 +1190,7 @@ L.U.Map.include({
         content: L._('Please save the map first'),
         level: 'error',
       })
-    let url = L.Util.template(this.options.urls.map_star, {
-      map_id: this.options.umap_id,
-    })
+    const url = this.urls.get('map_star', { map_id: this.options.umap_id })
     this.post(url, {
       context: this,
       callback: function (data) {
@@ -1812,9 +1798,7 @@ L.U.Map.include({
 
   del: function () {
     if (confirm(L._('Are you sure you want to delete this map?'))) {
-      const url = L.Util.template(this.options.urls.map_delete, {
-        map_id: this.options.umap_id,
-      })
+      const url = this.urls.get('map_delete', { map_id: this.options.umap_id })
       this.post(url)
     }
   },
@@ -1823,9 +1807,7 @@ L.U.Map.include({
     if (
       confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
     ) {
-      const url = L.Util.template(this.options.urls.map_clone, {
-        map_id: this.options.umap_id,
-      })
+      const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
       this.post(url)
     }
   },
@@ -1960,17 +1942,13 @@ L.U.Map.include({
   },
 
   openExternalRouting: function (e) {
-    const url = this.options.urls.routing
-    if (url) {
-      const params = {
-        lat: e.latlng.lat,
-        lng: e.latlng.lng,
-        locale: L.locale,
-        zoom: this.getZoom(),
-      }
-      window.open(L.Util.template(url, params))
-    }
-    return
+    const url = this.urls.get('routing', {
+      lat: e.latlng.lat,
+      lng: e.latlng.lng,
+      locale: L.locale,
+      zoom: this.getZoom(),
+    })
+    if (url) window.open(url)
   },
 
   getMap: function () {

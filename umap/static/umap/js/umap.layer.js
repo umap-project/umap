@@ -1045,23 +1045,6 @@ L.U.DataLayer = L.Evented.extend({
     })
   },
 
-  getEditUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_update, {
-      map_id: this.map.options.umap_id,
-      pk: this.umap_id,
-    })
-  },
-
-  getCreateUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_create, {
-      map_id: this.map.options.umap_id,
-    })
-  },
-
-  getSaveUrl: function () {
-    return (this.umap_id && this.getEditUrl()) || this.getCreateUrl()
-  },
-
   getColor: function () {
     return this.options.color || this.map.getOption('color')
   },
@@ -1532,7 +1515,11 @@ L.U.DataLayer = L.Evented.extend({
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    this.map.post(this.getSaveUrl(), {
+    const saveUrl = this.map.urls.get('datalayer_save', {
+      map_id: this.map.options.umap_id,
+      pk: this.umap_id,
+    })
+    this.map.post(saveUrl, {
       data: formData,
       callback: function (data, response) {
         // Response contains geojson only if save has conflicted and conflicts have

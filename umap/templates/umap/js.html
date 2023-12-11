@@ -29,6 +29,7 @@
 {% endcompress %}
 {% if locale %}<script src="{{ STATIC_URL }}umap/locale/{{ locale }}.js"></script>{% endif %}
 {% compress js %}
+  <script type="module" src="{{ STATIC_URL }}umap/js/modules/index.js"></script>
   <script src="{{ STATIC_URL }}umap/js/umap.core.js"></script>
   <script src="{{ STATIC_URL }}umap/js/umap.autocomplete.js"></script>
   <script src="{{ STATIC_URL }}umap/js/umap.popup.js"></script>
