@@ -73,7 +73,7 @@ L.U.Map.include({
     // To be used in javascript APIs
     if (geojson.properties.lang) L.lang = geojson.properties.lang
 
-    // Don't let default autocreation of controls
+    // Don't let default auto-creation of controls
     const zoomControl =
       typeof geojson.properties.zoomControl !== 'undefined'
         ? geojson.properties.zoomControl
@@ -88,8 +88,10 @@ L.U.Map.include({
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
 
-    // After calling parent initialize, as we are doing initCenter our-selves
+    // After calling parent initialize, as we are doing initCenter ourselves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+    this.urls = new window.URLs(this.options.urls);
+    this.storage = new window.SyncStorage(this, this.urls);
 
     this.ui = new L.U.UI(this._container)
     this.xhr = new L.U.Xhr(this.ui)
@@ -273,9 +275,7 @@ L.U.Map.include({
         history.pushState({}, '', url)
       }
       if (L.Util.queryString('download'))
-        window.location = L.Util.template(this.options.urls.map_download, {
-          map_id: this.options.umap_id,
-        })
+        window.location = this.urls.downloadMap(this.options.umap_id);
     })
 
     window.onbeforeunload = () => this.isDirty || null
@@ -1083,97 +1083,25 @@ L.U.Map.include({
     return properties
   },
 
-  saveSelf: function () {
-    const geojson = {
-      type: 'Feature',
-      geometry: this.geometry(),
-      properties: this.exportOptions(),
-    }
-    const formData = new FormData()
-    formData.append('name', this.options.name)
-    formData.append('center', JSON.stringify(this.geometry()))
-    formData.append('settings', JSON.stringify(geojson))
-    this.post(this.getSaveUrl(), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        let duration = 3000,
-          alert = { content: L._('Map has been saved!'), level: 'info' }
-        if (!this.options.umap_id) {
-          alert.content = L._('Congratulations, your map has been created!')
-          this.options.umap_id = data.id
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
-          if (
-            data.permissions &&
-            data.permissions.anonymous_edit_url &&
-            this.options.urls.map_send_edit_link
-          ) {
-            alert.duration = Infinity
-            alert.content =
-              L._(
-                'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
-              ) + `<br>${data.permissions.anonymous_edit_url}`
-
-            alert.actions = [
-              {
-                label: L._('Send me the link'),
-                input: L._('Email'),
-                callback: this.sendEditLink,
-                callbackContext: this,
-              },
-              {
-                label: L._('Copy link'),
-                callback: () => {
-                  L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-                  this.ui.alert({
-                    content: L._('Secret edit link copied to clipboard!'),
-                    level: 'info',
-                  })
-                },
-                callbackContext: this,
-              },
-            ]
-          }
-        } else if (!this.permissions.isDirty) {
-          // Do not override local changes to permissions,
-          // but update in case some other editors changed them in the meantime.
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
-        }
-        // Update URL in case the name has changed.
-        if (history && history.pushState)
-          history.pushState({}, this.options.name, data.url)
-        else window.location = data.url
-        alert.content = data.info || alert.content
-        this.once('saved', () => this.ui.alert(alert))
-        this.ui.closePanel()
-        this.permissions.save()
-      },
-    })
-  },
-
   save: function () {
     if (!this.isDirty) return
     if (this._default_extent) this.updateExtent()
     this.backup()
     this.once('saved', () => {
       this.isDirty = false
-    })
+    });
     if (this.options.editMode === 'advanced') {
       // Only save the map if the user has the rights to do so.
-      this.saveSelf()
+      this.storage.saveMap()
     } else {
       this.permissions.save()
     }
   },
 
   sendEditLink: function () {
-    const url = L.Util.template(this.options.urls.map_send_edit_link, {
-        map_id: this.options.umap_id,
-      }),
-      input = this.ui._alert.querySelector('input'),
-      email = input.value
+    const url = this.urls.get('sendEditLink', this.options.umap_id);
+    const input = this.ui._alert.querySelector('input');
+    const email = input.value;
 
     const formData = new FormData()
     formData.append('email', email)
@@ -1182,29 +1110,14 @@ L.U.Map.include({
     })
   },
 
-  getEditUrl: function () {
-    return L.Util.template(this.options.urls.map_update, {
-      map_id: this.options.umap_id,
-    })
-  },
-
-  getCreateUrl: function () {
-    return L.Util.template(this.options.urls.map_create)
-  },
-
-  getSaveUrl: function () {
-    return (this.options.umap_id && this.getEditUrl()) || this.getCreateUrl()
-  },
-
   star: function () {
     if (!this.options.umap_id)
       return this.ui.alert({
         content: L._('Please save the map first'),
         level: 'error',
       })
-    let url = L.Util.template(this.options.urls.map_star, {
-      map_id: this.options.umap_id,
-    })
+    let url = this.urls.get("StarMap", this.options.umap_id);
+
     this.post(url, {
       context: this,
       callback: function (data) {
@@ -1812,9 +1725,7 @@ L.U.Map.include({
 
   del: function () {
     if (confirm(L._('Are you sure you want to delete this map?'))) {
-      const url = L.Util.template(this.options.urls.map_delete, {
-        map_id: this.options.umap_id,
-      })
+      const url = this.urls.deleteMap(this.options.umap_id);
       this.post(url)
     }
   },
@@ -1823,10 +1734,7 @@ L.U.Map.include({
     if (
       confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
     ) {
-      const url = L.Util.template(this.options.urls.map_clone, {
-        map_id: this.options.umap_id,
-      })
-      this.post(url)
+      this.post(this.urls.cloneMap(this.options.umap_id));
     }
   },
 

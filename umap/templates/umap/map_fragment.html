@@ -1,7 +1,9 @@
 {% load umap_tags %}
 <div id="{{ unique_id }}" class="map_fragment"></div>
 <!-- djlint:off -->
-<script type="text/javascript">
-  new L.U.Map("{{ unique_id }}", {{ map_settings|notag|safe }})
+<script defer type="text/javascript">
+  window.addEventListener('load', (event) => {
+    new L.U.Map("{{ unique_id }}", {{ map_settings|notag|safe }})
+  });
 </script>
 <!-- djlint:on -->

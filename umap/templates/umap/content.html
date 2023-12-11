@@ -37,7 +37,7 @@
 {% endblock content %}
 {% block bottom_js %}
   {{ block.super }}
-  <script type="text/javascript">
+  <script defer type="text/javascript">
     !(function () {
       const ui = new L.U.UI(document.querySelector('header'))
       const xhr = new L.U.Xhr(ui)
