@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Umap front Tests</title>
@@ -28,6 +29,7 @@
     <script src="../vendors/tokml/tokml.js"></script>
     <script src="../vendors/simple-statistics/simple-statistics.min.js"></script>
     <script src="../vendors/colorbrewer/colorbrewer.js"></script>
+    <script type="module" src="../js/modules/index.js"></script>
     <script src="../js/umap.core.js"></script>
     <script src="../js/umap.autocomplete.js"></script>
     <script src="../js/umap.popup.js"></script>
@@ -50,8 +52,10 @@
     <link rel="stylesheet" href="../vendors/minimap/Control.MiniMap.css" />
     <link rel="stylesheet" href="../vendors/editinosm/Leaflet.EditInOSM.css" />
     <link rel="stylesheet" href="../vendors/markercluster/MarkerCluster.css" />
-    <link rel="stylesheet" href="../vendors/markercluster/MarkerCluster.Default.css" />
-    <link rel="stylesheet" href="../vendors/contextmenu/leaflet.contextmenu.css" />
+    <link rel="stylesheet"
+          href="../vendors/markercluster/MarkerCluster.Default.css" />
+    <link rel="stylesheet"
+          href="../vendors/contextmenu/leaflet.contextmenu.css" />
     <link rel="stylesheet" href="../vendors/toolbar/leaflet.toolbar.css" />
     <link rel="stylesheet" href="../vendors/measurable/Leaflet.Measurable.css" />
     <link rel="stylesheet" href="../vendors/iconlayers/iconLayers.css" />
@@ -61,7 +65,6 @@
     <link rel="stylesheet" href="../../umap/nav.css" />
     <link rel="stylesheet" href="../../umap/map.css" />
     <link rel="stylesheet" href="../../umap/theme.css" />
-
     <script src="../../../../node_modules/sinon/pkg/sinon.js"></script>
     <script src="../../../../node_modules/mocha/mocha.js"></script>
     <script src="../../../../node_modules/chai/chai.js"></script>
@@ -89,22 +92,24 @@
     <script src="./Controls.js"></script>
     <script src="./Permissions.js"></script>
     <script src="./Choropleth.js"></script>
+    <script type="module" src="./URLs.js"></script>
     <style type="text/css">
-      #mocha {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 10000;
-        background-color: white;
-        box-shadow: 0px 0px 8px 0px black;
-        overflow-y: auto;
-        display: none;
-      }
-      #mocha-stats {
-        position: absolute;
-      }
+        #mocha {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            background-color: white;
+            box-shadow: 0px 0px 8px 0px black;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #mocha-stats {
+            position: absolute;
+        }
     </style>
   </head>
   <body>
