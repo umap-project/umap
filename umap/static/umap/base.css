@@ -47,6 +47,16 @@ p {
     margin-top: 14px;
     margin-bottom: 14px;
 }
+kbd {
+  border: 1px solid #b4b4b4;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.2),
+    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+  border-radius: 3px;
+  padding: 1px 4px;
+  display: inline-block;
+  white-space: nowrap;
+}
 
 /*
 * List

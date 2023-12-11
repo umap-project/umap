@@ -488,7 +488,7 @@ L.U.Help = L.Class.extend({
       shortcut = shortcut.split('+').map((el) => `<kbd>${el}</kbd>`).join('+')
     }
     const modifier = this.isMacOS ? 'Cmd' : 'Ctrl'
-    label += ` (${shortcut.replace('Modifier', modifier)})`
+    label += ` ${shortcut.replace('Modifier', modifier)}`
     return label
   },
 
