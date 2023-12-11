@@ -284,9 +284,14 @@ ul.photon-autocomplete {
 }
 .umap-share h3:before {
     background-image: url('./img/16.svg');
-    background-position: 0 -117px;
+    background-position: -4px -119px;
+}
+.dark .umap-tilelayer-switcher-container h3:before {
+    background-image: url('./img/16-white.svg');
+    background-position: -98px -141px;
 }
 .umap-tilelayer-switcher-container h3:before {
+    background-image: url('./img/16.svg');
     background-position: -98px -141px;
 }
 .umap-feature-properties.marker:before {
