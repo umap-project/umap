@@ -598,12 +598,10 @@ U.Help = L.Class.extend({
     return typeof this[name] === 'function' ? this[name]() : this[name]
   },
 
-  button: function (container, entries, classname) {
-    const helpButton = L.DomUtil.createButton(
-      classname || 'umap-help-button',
-      container,
-      L._('Help')
-    )
+  button: function (container, entries, classname, button) {
+    const helpButton =
+      button ||
+      L.DomUtil.createButton(classname || 'umap-help-button', container, L._('Help'))
     if (entries) {
       L.DomEvent.on(helpButton, 'click', L.DomEvent.stop).on(
         helpButton,

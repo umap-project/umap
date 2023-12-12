@@ -1,5 +1,45 @@
-{% load umap_tags %}
+{% load i18n umap_tags %}
 <div id="map"></div>
+
+<template id="umap-upload">
+  <form class="umap-upload">
+    <h4>{% blocktrans %}Import data{% endblocktrans %}</h4>
+    <div id="preset-box" class="formbox" hidden>
+      <select name="preset-select"></select>
+    </div>
+    <div class="formbox">
+      <input type="file" name="file-input" multiple>
+    </div>
+    <input type="url" name="url-input" placeholder="{% blocktrans %}Provide an URL here{% endblocktrans %}">
+    <textarea name="raw-input" placeholder="{% blocktrans %}Paste your data here{% endblocktrans %}"></textarea>
+
+    <label id="type-label">
+      {% blocktrans %}Choose the format of the data to import{% endblocktrans %}
+      <button class="umap-help-button" type="button">{% blocktrans %}Help{% endblocktrans %}</button>
+      <select name="format">
+        <option value disabled selected>
+          {% blocktrans %}Choose the data format{% endblocktrans %}
+        </option>
+        <option value="geojson">geojson</option>
+        <option value="csv">csv</option>
+        <option value="gpx">gpx</option>
+        <option value="kml">kml</option>
+        <option value="osm">osm</option>
+        <option value="georss">georss</option>
+        <option value="umap">umap</option>
+      </select>
+    </label>
+    <label id="layer-label">
+      {% blocktrans %}Choose the layer to import in{% endblocktrans %}
+      <select name="datalayer"></select>
+    </label>
+    <label>
+      {% blocktrans %}Replace layer content{% endblocktrans %}
+      <input type="checkbox" name="clear">
+    </label>
+    <input type="button" class="button" name="submit-input" value="{% blocktrans %}Import{% endblocktrans %}">
+  </form>
+</template>
 <!-- djlint:off -->
 <script defer type="text/javascript">
   let MAP
