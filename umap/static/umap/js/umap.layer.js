@@ -665,7 +665,6 @@ L.U.DataLayer = L.Evented.extend({
         this.backupOptions()
         this.fire('loaded')
         this._loading = false
-        this._dataloaded = true
       },
       context: this,
     })
@@ -674,6 +673,7 @@ L.U.DataLayer = L.Evented.extend({
   fromGeoJSON: function (geojson) {
     this.addData(geojson)
     this._geojson = geojson
+    this._dataloaded = true
     this.fire('dataloaded')
     this.fire('datachanged')
   },
@@ -730,7 +730,6 @@ L.U.DataLayer = L.Evented.extend({
       verb: 'GET',
       callback: (raw) => {
         this.clear()
-        this._dataloaded = true
         this.rawToGeoJSON(raw, this.options.remoteData.format, (geojson) =>
           this.fromGeoJSON(geojson)
         )
