@@ -81,7 +81,7 @@ class MapFactory(factory.django.DjangoModelFactory):
                     "attribution": "\xa9 OSM Contributors",
                     "maxZoom": 18,
                     "minZoom": 0,
-                    "url_template": "http://{s}.osm.fr/{z}/{x}/{y}.png",
+                    "url_template": "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
                 },
                 "tilelayersControl": True,
                 "zoom": 7,
