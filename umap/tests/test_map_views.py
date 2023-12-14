@@ -640,7 +640,7 @@ def test_download(client, map, datalayer):
             "features": [
                 {
                     "geometry": {
-                        "coordinates": [13.68896484375, 48.55297816440071],
+                        "coordinates": [14.68896484375, 48.55297816440071],
                         "type": "Point",
                     },
                     "properties": {

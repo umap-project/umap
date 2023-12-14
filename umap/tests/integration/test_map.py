@@ -17,11 +17,80 @@ def test_default_view_latest_without_datalayer_should_use_default_center(
 ):
     datalayer.settings["displayOnLoad"] = False
     datalayer.save()
-    map.settings["defaultView"] = "latest"
+    map.settings["properties"]["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     # Hash is defined, so map is initialized
-    expect(page).to_have_url(re.compile(".*#7/.*"))
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
+    layers = page.locator(".umap-browse-datalayers li")
+    expect(layers).to_have_count(1)
+
+
+def test_default_view_latest_with_marker(map, live_server, datalayer, page):
+    map.settings["properties"]["defaultView"] = "latest"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    # Hash is defined, so map is initialized
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
+    layers = page.locator(".umap-browse-datalayers li")
+    expect(layers).to_have_count(1)
+
+
+def test_default_view_latest_with_line(map, live_server, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "a line"},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [2.12, 49.57],
+                        [3.19, 48.77],
+                        [2.51, 47.55],
+                        [1.08, 49.02],
+                    ],
+                },
+            }
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    map.settings["properties"]["defaultView"] = "latest"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
+    layers = page.locator(".umap-browse-datalayers li")
+    expect(layers).to_have_count(1)
+
+
+def test_default_view_latest_with_polygon(map, live_server, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "a polygon"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [2.12, 49.57],
+                            [1.08, 49.02],
+                            [2.51, 47.55],
+                            [3.19, 48.77],
+                            [2.12, 49.57],
+                        ]
+                    ],
+                },
+            }
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    map.settings["properties"]["defaultView"] = "latest"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
     layers = page.locator(".umap-browse-datalayers li")
     expect(layers).to_have_count(1)
 
