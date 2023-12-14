@@ -27,7 +27,7 @@ L.U.EditPropertiesAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'update-map-settings dark',
-    tooltip: L._('Edit map settings'),
+    tooltip: L._('Edit map properties'),
   },
 
   addHooks: function () {
@@ -403,7 +403,7 @@ L.Control.Embed = L.Control.extend({
     const shareButton = L.DomUtil.createButton(
       '',
       container,
-      L._('Embed and share this map'),
+      L._('Share, download and embed this map'),
       map.renderShareBox,
       map
     )
@@ -615,6 +615,8 @@ L.U.DataLayersControl = L.Control.extend({
   openPanel: function () {
     if (!this.map.editEnabled) return
     const container = L.DomUtil.create('ul', 'umap-browse-datalayers')
+    const title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Manage layers')
     this.map.eachDataLayerReverse(function (datalayer) {
       this.addDataLayer(container, datalayer, true)
     }, this)
@@ -1076,6 +1078,9 @@ L.U.Map.include({
 
   renderShareBox: function () {
     const container = L.DomUtil.create('div', 'umap-share')
+    const title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Share, download and embed this map')
+
     const embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map'))
     const iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container)
     const urlTitle = L.DomUtil.add('h4', '', container, L._('Direct link'))
@@ -1171,7 +1176,6 @@ L.U.Map.include({
     )
     this.ui.openPanel({ data: { html: container } })
   },
-
 })
 
 L.U.TileLayerControl = L.Control.extend({
@@ -1198,11 +1202,15 @@ L.U.TileLayerControl = L.Control.extend({
   },
 
   openSwitcher: function (options) {
-    this._tilelayers_container = L.DomUtil.create(
-      'ul',
-      'umap-tilelayer-switcher-container'
-    )
+    const container = L.DomUtil.create('div', 'umap-tilelayer-switcher-container')
+    const title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Change tilelayers')
+    this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
+    this.map.ui.openPanel({
+      data: { html: container },
+      className: options.className,
+    })
   },
 
   buildList: function (options) {
@@ -1214,10 +1222,6 @@ L.U.TileLayerControl = L.Control.extend({
         return
       this.addTileLayerElement(tilelayer, options)
     }, this)
-    this.map.ui.openPanel({
-      data: { html: this._tilelayers_container },
-      className: options.className,
-    })
   },
 
   addTileLayerElement: function (tilelayer, options) {
@@ -1369,7 +1373,7 @@ L.U.SearchControl = L.Control.extend({
     L.DomUtil.createButton(
       '',
       container,
-      L._('Search a place name'),
+      L._('Search location'),
       (e) => {
         L.DomEvent.stop(e)
         this.openPanel(map)
@@ -1385,7 +1389,7 @@ L.U.SearchControl = L.Control.extend({
       noResultLabel: L._('No results'),
     }
     if (map.options.photonUrl) options.url = map.options.photonUrl
-    const container = L.DomUtil.create('div', '')
+    const container = L.DomUtil.create('div', 'umap-search')
 
     const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Search location')

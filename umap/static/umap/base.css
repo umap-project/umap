@@ -529,7 +529,8 @@ i.info {
 .umap-layer-properties-container,
 .umap-browse-data,
 .umap-facet-search,
-.umap-browse-datalayers {
+.umap-browse-datalayers,
+.umap-tilelayer-switcher-container {
     padding: 0 10px;
 }
 .umap-field-datalist {
