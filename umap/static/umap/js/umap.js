@@ -251,7 +251,7 @@ L.U.Map.include({
       this.renderEditToolbar()
     }
     this.initShortcuts()
-    this.onceDatalayersLoaded(function () {
+    this.onceDataLoaded(function () {
       if (L.Util.queryString('share')) this.renderShareBox()
       else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
       else if (this.options.onLoadPanel === 'caption') this.displayCaption()
