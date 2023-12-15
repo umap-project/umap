@@ -698,6 +698,11 @@ input[type=hidden].blur + [type="button"] {
 #umap-ui-container .toolbox {
     padding: 5px 10px;
     overflow: hidden;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 10px;
+    justify-content: flex-start;
+    gap: 5px;
 }
 #umap-ui-container .toolbox li {
     color: #2e3436;
@@ -720,10 +725,6 @@ input[type=hidden].blur + [type="button"] {
 #umap-ui-container.dark .toolbox li:hover {
     color: #eeeeec;
     background-color: #353c3e;
-}
-#umap-ui-container .toolbox li + li {
-    margin-right: 5px;
-    margin-left: 5px;
 }
 .dark input, .dark textarea {
     background-color: #232729;
