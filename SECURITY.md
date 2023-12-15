@@ -2,4 +2,4 @@
 
 ## Reporting a Vulnerability
 
-You spoted a security issue? Please contact directly @yohanboniface or @davidbgk about it.
+You spotted a security issue? Please send a mail to security@umap-project.org.
