@@ -1017,7 +1017,6 @@ L.U.Map.include({
     'displayPopupFooter',
     'onLoadPanel',
     'defaultView',
-    'tilelayersControl',
     'name',
     'description',
     'licence',
