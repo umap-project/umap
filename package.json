@@ -46,6 +46,7 @@
     "leaflet-fullscreen": "1.0.2",
     "leaflet-hash": "0.2.1",
     "leaflet-i18n": "0.3.3",
+    "leaflet-iconlayers": "^0.2.0",
     "leaflet-loading": "0.1.24",
     "leaflet-measurable": "0.1.0",
     "leaflet-minimap": "^3.6.1",

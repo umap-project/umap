@@ -60,8 +60,8 @@ L.U.Map.include({
     'measure',
     'editinosm',
     'datalayers',
-    'tilelayers',
     'star',
+    'tilelayers',
   ],
 
   initialize: function (el, geojson) {
@@ -326,7 +326,7 @@ L.U.Map.include({
     })
     this._controls.search = new L.U.SearchControl()
     this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
-    this._controls.tilelayers = new L.U.TileLayerControl(this)
+    this._controls.tilelayersChooser = new L.U.TileLayerChooser(this)
     this._controls.star = new L.U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
@@ -345,6 +345,8 @@ L.U.Map.include({
     this.browser = new L.U.Browser(this)
     this.importer = new L.U.Importer(this)
     this.drop = new L.U.DropControl(this)
+    this._controls.tilelayers = new L.U.TileLayerControl(this)
+
     this.renderControls()
   },
 
@@ -581,17 +583,15 @@ L.U.Map.include({
 
   initTileLayers: function () {
     this.tilelayers = []
-    for (const i in this.options.tilelayers) {
-      if (this.options.tilelayers.hasOwnProperty(i)) {
-        this.tilelayers.push(this.createTileLayer(this.options.tilelayers[i]))
-        if (
-          this.options.tilelayer &&
-          this.options.tilelayer.url_template ===
-            this.options.tilelayers[i].url_template
-        ) {
-          // Keep control over the displayed attribution for non custom tilelayers
-          this.options.tilelayer.attribution = this.options.tilelayers[i].attribution
-        }
+    for (const props of this.options.tilelayers) {
+      let layer = this.createTileLayer(props)
+      this.tilelayers.push(layer)
+      if (
+        this.options.tilelayer &&
+        this.options.tilelayer.url_template === props.url_template
+      ) {
+        // Keep control over the displayed attribution for non custom tilelayers
+        this.options.tilelayer.attribution = props.attribution
       }
     }
     if (
@@ -816,8 +816,8 @@ L.U.Map.include({
         self.options.tilelayer = tilelayer.toJSON()
         self.isDirty = true
       }
-    if (this._controls.tilelayers)
-      this._controls.tilelayers.openSwitcher({ callback: callback, className: 'dark' })
+    if (this._controls.tilelayersChooser)
+      this._controls.tilelayersChooser.openSwitcher({ callback: callback, className: 'dark' })
   },
 
   manageDatalayers: function () {

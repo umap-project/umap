@@ -1178,7 +1178,22 @@ L.U.Map.include({
   },
 })
 
-L.U.TileLayerControl = L.Control.extend({
+L.U.TileLayerControl = L.Control.IconLayers.extend({
+  initialize: function (map, options) {
+    const layers = []
+    for (const layer of map.tilelayers) {
+      layers.push({
+        title: layer.options.name,
+        layer: layer,
+        icon: L.Util.template(layer.options.url_template, map.demoTileInfos),
+      })
+    }
+    L.Control.IconLayers.prototype.initialize.call(this, layers, {position: 'topleft'})
+  }
+})
+
+
+L.U.TileLayerChooser = L.Control.extend({
   options: {
     position: 'topleft',
   },
