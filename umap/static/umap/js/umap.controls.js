@@ -1250,8 +1250,10 @@ L.U.AttributionControl = L.Control.Attribution.extend({
   },
 
   _update: function () {
+    // Layer is no more on the map
+    if (!this._map) return
     L.Control.Attribution.prototype._update.call(this)
-    // Use our how container, so we can hide/show on small screens
+    // Use our own container, so we can hide/show on small screens
     const credits = this._container.innerHTML
     this._container.innerHTML = ''
     const container = L.DomUtil.add(
