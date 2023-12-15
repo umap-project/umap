@@ -646,16 +646,9 @@ L.U.Map.include({
     this.setOverlay()
   },
 
-  eachTileLayer: function (method, context) {
-    const urls = []
-    const call = (layer) => {
-      const url = layer.options.url_template
-      if (urls.indexOf(url) !== -1) return
-      method.call(context, layer)
-      urls.push(url)
-    }
-    if (this.customTilelayer) call(this.customTilelayer)
-    this.tilelayers.forEach(call)
+  eachTileLayer: function (callback, context) {
+    if (this.customTilelayer) callback.call(context, this.customTilelayer)
+    this.tilelayers.forEach((layer) => callback.call(context, layer))
   },
 
   setOverlay: function () {
