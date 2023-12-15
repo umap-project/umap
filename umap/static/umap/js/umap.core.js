@@ -484,11 +484,14 @@ L.U.Help = L.Class.extend({
 
   displayLabel: function (action, withKbdTag=true) {
     let {shortcut, label} = this.SHORTCUTS[action]
+    const modifier = this.isMacOS ? 'Cmd' : 'Ctrl'
+    shortcut = shortcut.replace('Modifier', modifier)
     if (withKbdTag) {
       shortcut = shortcut.split('+').map((el) => `<kbd>${el}</kbd>`).join('+')
+      label += ` ${shortcut}`
+    } else {
+      label += ` (${shortcut})`
     }
-    const modifier = this.isMacOS ? 'Cmd' : 'Ctrl'
-    label += ` ${shortcut.replace('Modifier', modifier)}`
     return label
   },
 
