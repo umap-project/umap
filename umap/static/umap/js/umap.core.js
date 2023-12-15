@@ -434,6 +434,67 @@ L.U.Keys = {
 }
 
 L.U.Help = L.Class.extend({
+
+  SHORTCUTS: {
+    DRAW_MARKER: {
+      shortcut:'Modifier+M',
+      label: L._('Draw a marker')
+    },
+    DRAW_LINE: {
+      shortcut:'Modifier+L',
+      label: L._('Draw a polyline')
+    },
+    DRAW_POLYGON: {
+      shortcut:'Modifier+P',
+      label: L._('Draw a polygon')
+    },
+    TOGGLE_EDIT: {
+      shortcut:'Modifier+E',
+      label: L._('Toggle edit mode')
+    },
+    STOP_EDIT: {
+      shortcut:'Modifier+E',
+      label: L._('Stop editing')
+    },
+    SAVE_MAP: {
+      shortcut:'Modifier+S',
+      label: L._('Save map')
+    },
+    IMPORT_PANEL: {
+      shortcut:'Modifier+I',
+      label: L._('Import data')
+    },
+    SEARCH: {
+      shortcut:'Modifier+F',
+      label: L._('Search location')
+    },
+    CANCEL: {
+      shortcut:'Modifier+Z',
+      label: L._('Cancel edits')
+    },
+    PREVIEW: {
+      shortcut:'Modifier+E',
+      label: L._('Back to preview')
+    },
+    SAVE: {
+      shortcut:'Modifier+S',
+      label: L._('Save current edits')
+    },
+  },
+
+  displayLabel: function (action, withKbdTag=true) {
+    let {shortcut, label} = this.SHORTCUTS[action]
+    const modifier = this.isMacOS ? 'Cmd' : 'Ctrl'
+    shortcut = shortcut.replace('Modifier', modifier)
+    if (withKbdTag) {
+      shortcut = shortcut.split('+').map((el) => `<kbd>${el}</kbd>`).join('+')
+      label += ` ${shortcut}`
+    } else {
+      label += ` (${shortcut})`
+    }
+    return label
+  },
+
   initialize: function (map) {
     this.map = map
     this.box = L.DomUtil.create(
@@ -452,6 +513,7 @@ L.U.Help = L.Class.extend({
     const label = L.DomUtil.create('span', '', closeButton)
     label.title = label.textContent = L._('Close')
     this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
+    this.isMacOS = /mac/i.test(navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform)
   },
 
   onKeyDown: function (e) {

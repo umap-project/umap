@@ -162,6 +162,9 @@ L.U.Map.include({
     this.features_index = {}
     this.facets = {}
 
+    // Needed for actions labels
+    this.help = new L.U.Help(this)
+
     if (this.options.hash) this.addHash()
     this.initTileLayers(this.options.tilelayers)
     // Needs tilelayer to exist for minimap
@@ -235,7 +238,6 @@ L.U.Map.include({
       }
     }
 
-    this.help = new L.U.Help(this)
     this.slideshow = new L.U.Slideshow(this, this.options.slideshow)
     this.permissions = new L.U.MapPermissions(this)
     this.initCaptionBar()
@@ -1884,27 +1886,27 @@ L.U.Map.include({
       if (this.editEnabled) {
         if (!this.isDirty) {
           items.push({
-            text: `${L._('Stop editing')} (<kbd>Ctrl+E</kbd>)`,
+            text: this.help.displayLabel('STOP_EDIT'),
             callback: this.disableEdit,
           })
         }
         if (this.options.enableMarkerDraw) {
           items.push({
-            text: `${L._('Draw a marker')} (<kbd>Ctrl+M</kbd>)`,
+            text: this.help.displayLabel('DRAW_MARKER'),
             callback: this.startMarker,
             context: this,
           })
         }
         if (this.options.enablePolylineDraw) {
           items.push({
-            text: `${L._('Draw a polygon')} (<kbd>Ctrl+P</kbd>)`,
+            text: this.help.displayLabel('DRAW_POLYGON'),
             callback: this.startPolygon,
             context: this,
           })
         }
         if (this.options.enablePolygonDraw) {
           items.push({
-            text: `${L._('Draw a line')} (<kbd>Ctrl+L</kbd>)`,
+            text: this.help.displayLabel('DRAW_LINE'),
             callback: this.startPolyline,
             context: this,
           })
@@ -1918,7 +1920,7 @@ L.U.Map.include({
         })
       } else {
         items.push({
-          text: `${L._('Start editing')} (<kbd>Ctrl+E</kbd>)`,
+          text: this.help.displayLabel('TOGGLE_EDIT'),
           callback: this.enableEdit,
         })
       }
@@ -1939,7 +1941,7 @@ L.U.Map.include({
         callback: this.displayCaption,
       },
       {
-        text: L._('Search location'),
+        text: this.help.displayLabel('SEARCH'),
         callback: this.search,
       }
     )
