@@ -1189,7 +1189,8 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
         icon: L.Util.template(layer.options.url_template, map.demoTileInfos),
       })
     })
-    L.Control.IconLayers.prototype.initialize.call(this, layers.slice(0, 10), {
+    const maxShown = 10
+    L.Control.IconLayers.prototype.initialize.call(this, layers.slice(0, maxShown), {
       position: 'topleft',
       manageLayers: false
     })
