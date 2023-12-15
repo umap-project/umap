@@ -254,7 +254,7 @@ L.U.Map.include({
     }
     this.initShortcuts()
     this.onceDataLoaded(function () {
-      if (L.Util.queryString('share')) this.renderShareBox()
+      if (L.Util.queryString('share')) this.share.open()
       else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
       else if (this.options.onLoadPanel === 'caption') this.displayCaption()
       else if (
@@ -347,6 +347,7 @@ L.U.Map.include({
     this.browser = new L.U.Browser(this)
     this.importer = new L.U.Importer(this)
     this.drop = new L.U.DropControl(this)
+    this.share = new L.U.Share(this)
     this._controls.tilelayers = new L.U.TileLayerControl(this)
     this._controls.tilelayers.setLayers()
 
@@ -844,28 +845,6 @@ L.U.Map.include({
     this.eachDataLayer((datalayer) => {
       if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
     })
-  },
-
-  format: function (mode) {
-    const type = this.EXPORT_TYPES[mode]
-    const content = type.formatter(this)
-    let name = this.options.name || 'data'
-    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    const filename = name + type.ext
-    return { content, filetype: type.filetype, filename }
-  },
-
-  download: function (mode) {
-    const { content, filetype, filename } = this.format(mode)
-    const blob = new Blob([content], { type: filetype })
-    window.URL = window.URL || window.webkitURL
-    const el = document.createElement('a')
-    el.download = filename
-    el.href = window.URL.createObjectURL(blob)
-    el.style.display = 'none'
-    document.body.appendChild(el)
-    el.click()
-    document.body.removeChild(el)
   },
 
   processFileToImport: function (file, layer, type) {
@@ -1699,9 +1678,9 @@ L.U.Map.include({
     L.DomUtil.createButton(
       'button umap-download',
       advancedButtons,
-      L._('Open download panel'),
-      this.renderShareBox,
-      this
+      L._('Open share & download panel'),
+      this.share.open,
+      this.share
     )
   },
 

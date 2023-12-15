@@ -20,7 +20,7 @@ describe('L.U.Map.Export', function () {
 
   describe('#formatters()', function () {
     it('should export to geojson', function () {
-      const { content, filetype, filename } = this.map.format('geojson')
+      const { content, filetype, filename } = this.map.share.format('geojson')
       assert.equal(filetype, 'application/json')
       assert.equal(filename, 'name_of_the_map.geojson')
       assert.deepEqual(JSON.parse(content), {
@@ -86,7 +86,7 @@ describe('L.U.Map.Export', function () {
     })
 
     it('should export to gpx', function () {
-      const { content, filetype, filename } = this.map.format('gpx')
+      const { content, filetype, filename } = this.map.share.format('gpx')
       assert.equal(filetype, 'application/gpx+xml')
       assert.equal(filename, 'name_of_the_map.gpx')
       const expected =
@@ -95,7 +95,7 @@ describe('L.U.Map.Export', function () {
     })
 
     it('should export to kml', function () {
-      const { content, filetype, filename } = this.map.format('kml')
+      const { content, filetype, filename } = this.map.share.format('kml')
       assert.equal(filetype, 'application/vnd.google-earth.kml+xml')
       assert.equal(filename, 'name_of_the_map.kml')
       const expected =
