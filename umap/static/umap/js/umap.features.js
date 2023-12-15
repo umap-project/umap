@@ -1144,18 +1144,9 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getInteractionOptions: function () {
-    const options = [
-      [
-        'properties._umap_options.interactive',
-        {
-          handler: 'Switch',
-          label: L._('Allow interactions'),
-          helpEntries: 'interactive',
-          inheritable: true,
-        },
-      ],
-    ]
-    return options.concat(L.U.FeatureMixin.getInteractionOptions())
+    const options = L.U.FeatureMixin.getInteractionOptions()
+    options.push('properties._umap_options.interactive')
+    return options
   },
 
   getMeasure: function (shape) {
