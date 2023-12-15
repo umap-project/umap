@@ -28,5 +28,6 @@ mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.l
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.js umap/static/umap/vendors/dompurify/
 mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
 mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-statistics/dist/simple-statistics.min.js umap/static/umap/vendors/simple-statistics/
+mkdir -p umap/static/umap/vendors/iconlayers/ && cp node_modules/leaflet-iconlayers/dist/* umap/static/umap/vendors/iconlayers/
 
 echo 'Done!'

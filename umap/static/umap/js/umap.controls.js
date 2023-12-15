@@ -1178,7 +1178,28 @@ L.U.Map.include({
   },
 })
 
-L.U.TileLayerControl = L.Control.extend({
+/* Used in view mode to define the current tilelayer */
+L.U.TileLayerControl = L.Control.IconLayers.extend({
+  initialize: function (map, options) {
+    const layers = []
+    map.eachTileLayer((layer) => {
+      layers.push({
+        title: layer.options.name,
+        layer: layer,
+        icon: L.Util.template(layer.options.url_template, map.demoTileInfos),
+      })
+    })
+    const maxShown = 10
+    L.Control.IconLayers.prototype.initialize.call(this, layers.slice(0, maxShown), {
+      position: 'topleft',
+      manageLayers: false
+    })
+    this.on('activelayerchange', (e) => map.selectTileLayer(e.layer))
+  },
+})
+
+/* Used in edit mode to define the default tilelayer */
+L.U.TileLayerChooser = L.Control.extend({
   options: {
     position: 'topleft',
   },

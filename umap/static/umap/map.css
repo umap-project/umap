@@ -161,6 +161,29 @@
     background-image: url('./img/16.svg');
     background-position: 0px 0px;
 }
+.leaflet-iconLayers-layer {
+    width: 38px;
+    height: 38px;
+    box-shadow: none;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+}
+.leaflet-iconLayers-layerTitleContainer {
+    display: none;
+    left: 0;
+    overflow: hidden;
+}
+.leaflet-iconLayers-layerTitle {
+    text-align: center;
+    display: inline-block;
+}
+.leaflet-iconLayers:hover .leaflet-iconLayers-layer {
+    width: 80px;
+    height: 80px;
+}
+.leaflet-iconLayers:hover .leaflet-iconLayers-layerTitleContainer {
+    display: initial;
+}
 
 
 
