@@ -73,10 +73,8 @@ vendors:
 	npm run vendors
 installjs:
 	npm install
-testjsfx:
-	firefox umap/static/umap/test/index.html
 testjs: node_modules
-	@./node_modules/mocha-phantomjs/bin/mocha-phantomjs --view 1024x768 umap/static/umap/test/index.html
+	@echo "See the tests at http://localhost:8001/umap/static/umap/test/" && python -m http.server 8001
 tx_push:
 	tx push -s
 tx_pull:
