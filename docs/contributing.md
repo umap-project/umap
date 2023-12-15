@@ -29,19 +29,52 @@ To be sure to install all the dev dependencies, and have everything working loca
 make develop
 ```
 
+#### JavaScript
+
+For JavaScript, here is the tooling we use:
+
+- Format your code with [Prettier](https://prettier.io/)
+- Be sure to configure your editor to insert new lines at the end of files.
+
 ### Hack!
 
 You can now do your changes in a specific branch, and when you're ready you can open a pull-request for us to review.
 
-### Run tests
+### Running tests
 
 Multiple tests suites are in use in the project.
 
-| Test suite             | Location                  | Command                 |
-| ----------             | --------                  | -------                 |
-| Python unit tests      | `umap/tests/`  | `pytest . --ignore umap/tests/integration` |
-| Javascript unit tests  | `umap/static/test`        | `make testjs`|
-| Integration tests      | `umap/tests/integration`  | `pytest umap/tests/integration` |
+
+#### Python unit tests
+
+```bash
+pytest . --ignore umap/tests/integration
+```
+
+By default, the tests are run in parallel to reduce the time taken to run them. You can run them in serial mode by using the `-n1` option.
+
+If you only want to run one test, you can add `-k specific-test-name` to the command line.
+
+#### Integration tests
+
+```bash
+pytest umap/tests/integration
+```
+
+The tests are using [Playwright](https://playwright.dev), which spawns a headless browser and runs the tests on it.
+If the tests are failing, it might be useful to step trough the tests in the browser. This will let you go step by step with a debugger, so you can see what is happening on a real browser.
+
+```bash
+PWDEBUG=1 pytest --headed -n1 -k specific-test-name
+```
+
+#### JS tests
+
+```bash
+make testjs
+```
+
+These tests are located in `umap/static/test`, and we are currently using a mocha test runner.
 
 All the tests are run when you're creating a pull request, to avoid regressions.
 
