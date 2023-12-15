@@ -171,6 +171,7 @@
 .leaflet-iconLayers-layerTitleContainer {
     display: none;
     left: 0;
+    overflow: hidden;
 }
 .leaflet-iconLayers-layerTitle {
     text-align: center;
