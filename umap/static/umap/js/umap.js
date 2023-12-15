@@ -648,19 +648,14 @@ L.U.Map.include({
 
   eachTileLayer: function (method, context) {
     const urls = []
-    for (const i in this.tilelayers) {
-      if (this.tilelayers.hasOwnProperty(i)) {
-        method.call(context, this.tilelayers[i])
-        urls.push(this.tilelayers[i]._url)
-      }
+    const call = (layer) => {
+      const url = layer.options.url_template
+      if (urls.indexOf(url) !== -1) return
+      method.call(context, layer)
+      urls.push(url)
     }
-    if (
-      this.customTilelayer &&
-      Array.prototype.indexOf &&
-      urls.indexOf(this.customTilelayer._url) === -1
-    ) {
-      method.call(context || this, this.customTilelayer)
-    }
+    if (this.customTilelayer) call(this.customTilelayer)
+    this.tilelayers.forEach(call)
   },
 
   setOverlay: function () {
