@@ -959,6 +959,18 @@ L.U.PathMixin = {
     bounds = bounds || this.map.getBounds()
     return bounds.overlaps(this.getBounds())
   },
+
+  zoomTo: function (e) {
+    // Use bounds instead of centroid for paths.
+    e = e || {}
+    const easing = e.easing !== undefined ? e.easing : this.map.options.easing
+    if (easing) {
+      this.map.flyToBounds(this.getBounds(), this.getBestZoom())
+    } else {
+      this.map.fitBounds(this.getBounds(), this.getBestZoom() || this.map.getZoom())
+    }
+    if (e.callback) e.callback.call(this)
+  },
 }
 
 L.U.Polyline = L.Polyline.extend({

@@ -34,7 +34,7 @@ def test_umap_export(map, live_server, datalayer, page):
                 "features": [
                     {
                         "geometry": {
-                            "coordinates": [13.68896484375, 48.55297816440071],
+                            "coordinates": [14.68896484375, 48.55297816440071],
                             "type": "Point",
                         },
                         "properties": {
@@ -85,5 +85,5 @@ def test_csv_export(map, live_server, datalayer, page):
     assert (
         path.read_text()
         == """name,description,Latitude,Longitude
-Here,Da place anonymous again 755,48.55297816440071,13.68896484375"""
+Here,Da place anonymous again 755,48.55297816440071,14.68896484375"""
     )
