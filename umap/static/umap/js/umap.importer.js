@@ -39,14 +39,11 @@ L.U.Importer = L.Class.extend({
     this.form = template.content.firstElementChild.cloneNode(true)
     this.presetSelect = this.form.querySelector('[name="preset-select"]')
     this.fileInput = this.form.querySelector('[name="file-input"]')
-    this.urlInput = this.form.querySelector('[name="url-input"]')
-    this.rawInput = this.form.querySelector('[name="raw-input"]')
     this.typeLabel = this.form.querySelector('#type-label')
     const helpButton = this.typeLabel.querySelector('button')
     this.map.help.button(this.typeLabel, 'importFormats', '', helpButton)
     this.formatSelect = this.form.querySelector('[name="format"]')
     this.layerSelect = this.form.querySelector('[name="datalayer"]')
-    this.clearFlag = this.form.querySelector('[name="clear"]')
     this.submitInput = this.form.querySelector('[name="submit-input"]')
     this._buildDatalayerOptions(this.layerSelect)
     this._buildPresetsOptions(this.presetSelect)
@@ -83,14 +80,17 @@ L.U.Importer = L.Class.extend({
   },
 
   submit: function () {
-    let type = this.formatSelect.value
+    const urlInputValue = this.form.querySelector('[name="url-input"]').value
+    const rawInputValue = this.form.querySelector('[name="raw-input"]').value
+    const clearFlag = this.form.querySelector('[name="clear"]')
+    const type = this.formatSelect.value
     const layerId = this.layerSelect[this.layerSelect.selectedIndex].value
     let layer
     if (type === 'umap') {
       this.map.once('postsync', this.map._setDefaultCenter)
     }
     if (layerId) layer = this.map.datalayers[layerId]
-    if (layer && this.clearFlag.checked) layer.empty()
+    if (layer && clearFlag.checked) layer.empty()
     if (this.fileInput.files.length) {
       for (const file of this.fileInput.files) {
         this.map.processFileToImport(file, layer, type)
@@ -101,17 +101,17 @@ L.U.Importer = L.Class.extend({
           content: L._('Please choose a format'),
           level: 'error',
         })
-      if (this.rawInput.value && type === 'umap') {
+      if (rawInputValue && type === 'umap') {
         try {
-          this.map.importRaw(this.rawInput.value, type)
+          this.map.importRaw(rawInputValue, type)
         } catch (e) {
           this.ui.alert({ content: L._('Invalid umap data'), level: 'error' })
           console.error(e)
         }
       } else {
         if (!layer) layer = this.map.createDataLayer()
-        if (this.rawInput.value) layer.importRaw(this.rawInput.value, type)
-        else if (this.urlInput.value) layer.importFromUrl(this.urlInput.value, type)
+        if (rawInputValue) layer.importRaw(rawInputValue, type)
+        else if (urlInputValue) layer.importFromUrl(urlInputValue, type)
         else if (this.presetSelect.selectedIndex > 0)
           layer.importFromUrl(
             this.presetSelect[this.presetSelect.selectedIndex].value,
