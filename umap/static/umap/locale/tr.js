@@ -147,7 +147,6 @@ const locale = {
     "Download": "İndir",
     "Download data": "Veriyi indir",
     "Drag to reorder": "Yeniden sıralamak için sürükle",
-    "Draw a line": "Bir çizgi çiz",
     "Draw a marker": "Bir işaretleyici çiz",
     "Draw a polygon": "Bir çokgen çiz",
     "Draw a polyline": "Çoklu çizgi çiz",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Düzenle",
     "Edit feature's layer": "Özellikler katmanını düzenle",
     "Edit map properties": "Harita özelliklerini düzenle",
-    "Edit map settings": "Harita ayarlarını düzenle",
     "Edit properties in a table": "Özellikleri bir tabloda düzenle",
     "Edit this feature": "Bu özelliği düzenle",
-    "Embed and share this map": "Bu haritayı yerleştir ve paylaş",
     "Embed the map": "Haritayı yerleştir",
     "Empty": "Boşalt",
     "Error in the tilelayer URL": "Katman URL'sinde hata",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Kontrolleri gizle",
     "Home": "Ana sayfa",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)",
-    "If false, the polygon will act as a part of the underlying map.": "Yanlış ise, çokgen altta yatan haritanın bir parçası olarak hareket edecektir.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Şimdiki düzenlemeleri kaydet",
     "Save this center and zoom": "Bu merkezi kaydet ve yakınlaştır",
     "Save this location as new feature": "Bu konumu yeni özellik olarak kaydet",
-    "Search a place name": "Yer adı ara",
     "Search location": "Konum ara",
     "See all": "Hepsini gör",
     "See data layers": "Veri katmanlarını gör",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Kısa anahtar",
     "Split line": "Çizgiyi böl",
     "Start a hole here": "Burada bir delik aç",
-    "Start editing": "Düzenlemeye başla",
     "Start slideshow": "Slayt gösterisini başlat",
     "Stop editing": "Düzenlemeyi durdur",
     "Stop slideshow": "Slayt gösterisini durdur",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

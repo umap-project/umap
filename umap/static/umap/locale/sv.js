@@ -147,7 +147,6 @@ const locale = {
     "Download": "Ladda ned",
     "Download data": "Ladda ned data",
     "Drag to reorder": "Dra för att sortera om",
-    "Draw a line": "Rita en linje",
     "Draw a marker": "Rita en markör",
     "Draw a polygon": "Rita en polygon",
     "Draw a polyline": "Rita en multilinje",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Redigera",
     "Edit feature's layer": "Redigera objektets lager",
     "Edit map properties": "Redigera kartans egenskaper",
-    "Edit map settings": "Redigera kartans inställningar",
     "Edit properties in a table": "Redigera attribut i en tabell",
     "Edit this feature": "Redigera objektet",
-    "Embed and share this map": "Bädda in och dela den här kartan",
     "Embed the map": "Bädda in kartan",
     "Empty": "Töm",
     "Error in the tilelayer URL": "Fel i webbadressen för bakgrundskartan (tile-lagret)",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Dölj verktygsfälten",
     "Home": "Hem",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Hur mycket ska polygoner och multilinjer förenklas vid olika zoom-nivåer? (Mer = bättre prestanda och mjukare utseende, Mindre = mer exakt)",
-    "If false, the polygon will act as a part of the underlying map.": "Om falskt, visas polygonen som en del av bakgrundskartan.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe med specifik höjd (i pixlar): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe med specifik höjd och bredd (i pixlar): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe (inbäddad ram): {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Spara nuvarande ändringar",
     "Save this center and zoom": "Spara aktuell vy och zoomnivå",
     "Save this location as new feature": "Spara denna plats som nytt kartobjekt",
-    "Search a place name": "Sök efter ett platsnamn",
     "Search location": "Sök plats",
     "See all": "Se alla",
     "See data layers": "Visa datalager",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Sorteringsnyckel",
     "Split line": "Dela upp linje",
     "Start a hole here": "Infoga ett hål här",
-    "Start editing": "Börja redigera",
     "Start slideshow": "Starta bildspel",
     "Stop editing": "Avsluta redigering",
     "Stop slideshow": "Stoppa bildspel",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

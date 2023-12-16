@@ -147,7 +147,6 @@ const locale = {
     "Download": "Download",
     "Download data": "Download dei dati",
     "Drag to reorder": "Trascina per riordinare",
-    "Draw a line": "Disegna una linea",
     "Draw a marker": "Aggiungi un marcatore",
     "Draw a polygon": "Disegna un poligono",
     "Draw a polyline": "Disegna una polilinea",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Modifica",
     "Edit feature's layer": "Modifica gli oggetti del layer",
     "Edit map properties": "Modifica le proprietà della mappa",
-    "Edit map settings": "Modifica le impostazioni della mappa",
     "Edit properties in a table": "Modifica le proprietà in una tabella",
     "Edit this feature": "Modifica quest'oggetto",
-    "Embed and share this map": "Includi e condividi questa mappa",
     "Embed the map": "Includi la mappa",
     "Empty": "Vuoto",
     "Error in the tilelayer URL": "Errore nell'URL nel servizio di tile",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Nascondi controlli",
     "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Quanto vuoi semplificare la polilinea per ogni zoom (più = maggiori performance a aspetto più semplificato, meno = maggior dettaglio)",
-    "If false, the polygon will act as a part of the underlying map.": "Se falso, il poligono agirà come parte della mappa sottostante.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe con altezza (in px) personalizzata: {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe con altezza e larghezza personalizzata (in px): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Salva le modifiche effettuate",
     "Save this center and zoom": "Salva il centro e lo zoom",
     "Save this location as new feature": "Salva questa posizione come nuovo oggetto",
-    "Search a place name": "Cerca il nome di un luogo",
     "Search location": "Cerca un luogo",
     "See all": "Vedi tutto",
     "See data layers": "Vedi i layer di dati",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Campo di ordinamento",
     "Split line": "Dividi linea",
     "Start a hole here": "Comincia un buco qui",
-    "Start editing": "Avvia modifica",
     "Start slideshow": "Avvia presentazione",
     "Stop editing": "Ferma la modifica",
     "Stop slideshow": "Ferma presentazione",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("it", locale)
 L.setLocale("it")

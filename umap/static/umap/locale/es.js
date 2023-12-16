@@ -147,7 +147,6 @@ const locale = {
     "Download": "Descargar",
     "Download data": "Descargar datos",
     "Drag to reorder": "Arrastrar para reordenar",
-    "Draw a line": "Dibuja una línea",
     "Draw a marker": "Dibuja un marcador",
     "Draw a polygon": "Dibuja un polígono",
     "Draw a polyline": "Dibuja una polilínea",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Editar",
     "Edit feature's layer": "Editar la capa del elemento",
     "Edit map properties": "Editar propiedades del mapa",
-    "Edit map settings": "Editar ajustes del mapa",
     "Edit properties in a table": "Editar propiedades en una tabla",
     "Edit this feature": "Editar este elemento",
-    "Embed and share this map": "Embeber y compartir este mapa",
     "Embed the map": "Embeber el mapa",
     "Empty": "Vaciar",
     "Error in the tilelayer URL": "Error en la URL del la capa de teselas",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Ocultar controles",
     "Home": "Inicio",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Cuánto simplificar la polilínea en cada nivel de acercamiento (más = mejor rendimiento y aspecto más suave, menos = más preciso)",
-    "If false, the polygon will act as a part of the underlying map.": "Si falso, el polígono actuará como una parte del mapa subyacente.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe con altura personalizada (en píxeles): {{{http://iframe.url.com|altura}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe con alto y ancho (en px) personalizado: {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Guardar las ediciones actuales",
     "Save this center and zoom": "Guardar este centrado y acercamiento",
     "Save this location as new feature": "Guardar esta ubicación como nuevo elemento",
-    "Search a place name": "Buscar el nombre de un lugar",
     "Search location": "Buscar ubicación",
     "See all": "Ver todo",
     "See data layers": "Ver capas de datos",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Orden de la clave",
     "Split line": "Linea de división",
     "Start a hole here": "Iniciar un agujero aquí",
-    "Start editing": "Comenzar a editar",
     "Start slideshow": "Iniciar presentación de diapositivas",
     "Stop editing": "Parar de editar",
     "Stop slideshow": "Parar presentación de diapositivas",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

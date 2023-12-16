@@ -147,7 +147,6 @@ const locale = {
     "Download": "הורדה",
     "Download data": "נתונים שהתקבלו",
     "Drag to reorder": "יש לגרור כדי לסדר מחדש",
-    "Draw a line": "ציור קו",
     "Draw a marker": "ציור סמן",
     "Draw a polygon": "ציור מצולע",
     "Draw a polyline": "ציור קו שבור",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "עריכה",
     "Edit feature's layer": "עריכת שכבת התכונה",
     "Edit map properties": "עריכת מאפייני מפה",
-    "Edit map settings": "עריכת הגדרות מפה",
     "Edit properties in a table": "עריכת מאפיינים בטבלה",
     "Edit this feature": "עריכת תכונה זו",
-    "Embed and share this map": "הטמעה ושיתוף מפה זו",
     "Embed the map": "הטמעת המפה",
     "Empty": "לרוקן",
     "Error in the tilelayer URL": "שגיאה בכתובת שכבת האריחים",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "הסתרת פקדים",
     "Home": "בית",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "כמה לפשט את הקו השבור בכל רמת תקריב (יותר = ביצועים משופרים ומראה חלק יותר, פחות = דיוק גבוה יותר)",
-    "If false, the polygon will act as a part of the underlying map.": "אם שקר, המצולע יתנהג כחלק מהמפה שמתחת.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "מסגרת פנימית עם גובה מותאם (בפיקסלים): {{{http://iframe.url.com|גובה}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "מסגרת פנימית עם גובה ורוחב מותאמים (בפיקסלים): {{{http://iframe.url.com|גובה*רוחב}}}",
     "Iframe: {{{http://iframe.url.com}}}": "מסגרת פנימית: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "לשמור את העריכות הנוכחיות",
     "Save this center and zoom": "לשמור את המרכז הזה ולהתקרב",
     "Save this location as new feature": "לשמור את המיקום הזה כתכונה חדשה",
-    "Search a place name": "חיפוש שם מקום",
     "Search location": "חיפוש מיקום",
     "See all": "להציג הכול",
     "See data layers": "להציג שכבות נתונים",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "מפתח סידור",
     "Split line": "פיצול קו",
     "Start a hole here": "להתחיל חור מכאן",
-    "Start editing": "התחלת עריכה",
     "Start slideshow": "התחלת מצגת",
     "Stop editing": "הפסקת עריכה",
     "Stop slideshow": "הפסקת מצגת",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

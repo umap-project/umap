@@ -147,7 +147,6 @@ const locale = {
     "Download": "Download",
     "Download data": "Изтегляне на данни",
     "Drag to reorder": "Drag to reorder",
-    "Draw a line": "Начертайте линия",
     "Draw a marker": "Начертайте маркер",
     "Draw a polygon": "Начертайте полигон",
     "Draw a polyline": "Начертайте полилиния",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Редактиране",
     "Edit feature's layer": "Редактиране функцията на слоя",
     "Edit map properties": "Редактирай свойствата на картата",
-    "Edit map settings": "Редактиране на настройките на картата",
     "Edit properties in a table": "Edit properties in a table",
     "Edit this feature": "Редактирайте тази характеристика",
-    "Embed and share this map": "Вграждане и споделяне тази карта",
     "Embed the map": "Вграждане на карта",
     "Empty": "Празно",
     "Error in the tilelayer URL": "Грешка в URL адреса на слоя",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Скрий контролите",
     "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Колко да опрости полилинията на всяко ниво увеличение (повече = по-добра производителност и по-гладко на вид, по-малко = по-точно)",
-    "If false, the polygon will act as a part of the underlying map.": "If false, the polygon will act as a part of the underlying map.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Запиши текущите редакции",
     "Save this center and zoom": "Запази този център и размер",
     "Save this location as new feature": "Save this location as new feature",
-    "Search a place name": "Search a place name",
     "Search location": "Search location",
     "See all": "See all",
     "See data layers": "See data layers",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Sort key",
     "Split line": "Split line",
     "Start a hole here": "Start a hole here",
-    "Start editing": "Започнете редактиране",
     "Start slideshow": "Start slideshow",
     "Stop editing": "Спри редактирането",
     "Stop slideshow": "Stop slideshow",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("bg", locale)
 L.setLocale("bg")

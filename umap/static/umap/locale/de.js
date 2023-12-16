@@ -147,7 +147,6 @@ const locale = {
     "Download": "Herunterladen",
     "Download data": "Daten herunterladen",
     "Drag to reorder": "Ziehen zum Neuanordnen",
-    "Draw a line": "Eine Linie zeichnen",
     "Draw a marker": "Einen Marker zeichnen",
     "Draw a polygon": "Eine Fläche zeichnen",
     "Draw a polyline": "Eine Linie zeichnen",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Bearbeiten",
     "Edit feature's layer": "Elementebene bearbeiten",
     "Edit map properties": "Karteneigenschaften bearbeiten",
-    "Edit map settings": "Karteneinstellungen bearbeiten",
     "Edit properties in a table": "Merkmale in einer Tabelle bearbeiten",
     "Edit this feature": "Dieses Element bearbeiten",
-    "Embed and share this map": "Teile und binde diese Karte ein.",
     "Embed the map": "Karte einbinden",
     "Empty": "Leeren",
     "Error in the tilelayer URL": "Fehler in der Kachelebenen-URL",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Schaltflächen ausblenden",
     "Home": "Startseite",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Wie stark Linien mit jeder Zoomstufe vereinfacht werden (mehr = bessere Performance und glatteres Aussehen, weniger = präziser)",
-    "If false, the polygon will act as a part of the underlying map.": "Wenn auf Nein gesetzt, dann verhält sich die Fläche als Teil der hinterlegten Karte.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe mit benutzerdefinierter Höhe (in Pixel): {{{http://iframe.url.com|Höhe}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe mit benutzerdefinierter Höhe und Breite (in Pixel): {{{http://iframe.url.com|Höhe*Breite}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Aktuelle Änderungen speichern",
     "Save this center and zoom": "Aktuelle Position und Zoomstufe speichern",
     "Save this location as new feature": "Diesen Ort als neues Element speichern",
-    "Search a place name": "Einen Ortsnamen suchen",
     "Search location": "Ort suchen",
     "See all": "Alle anzeigen",
     "See data layers": "Datenebenen ansehen",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Sortierschlüssel",
     "Split line": "Linie teilen",
     "Start a hole here": "Hier ein Loch beginnen",
-    "Start editing": "Mit der Bearbeitung beginnen",
     "Start slideshow": "Diashow starten",
     "Stop editing": "Bearbeitung beenden",
     "Stop slideshow": "Diashow beenden",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("de", locale)
 L.setLocale("de")

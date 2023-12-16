@@ -147,7 +147,6 @@ const locale = {
     "Download": "Звантажити",
     "Download data": "Звантажити дані",
     "Drag to reorder": "Перетягніть, щоб змінити порядок",
-    "Draw a line": "Креслити лінію",
     "Draw a marker": "Додати позначку",
     "Draw a polygon": "Накреслити полігон",
     "Draw a polyline": "Накреслити ламану",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Редагувати",
     "Edit feature's layer": "Змінити шар об’єкту",
     "Edit map properties": "Змінити параметри мапи",
-    "Edit map settings": "Змінити налаштування мапи",
     "Edit properties in a table": "Редагувати параметри в таблиці",
     "Edit this feature": "Редагувати цей об’єкт",
-    "Embed and share this map": "Вбудувати мапу та поділитися нею",
     "Embed the map": "Вбудувати мапу",
     "Empty": "Очистити",
     "Error in the tilelayer URL": "Помилка в посиланні на шар мапи",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Прибрати елементи керування",
     "Home": "Головна",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Наскільки сильно спрощувати лінії на кожному масштабі (більше значення — більша швидкість, але виглядає гірше; менше значення — більш точне зображення)",
-    "If false, the polygon will act as a part of the underlying map.": "Якщо ні, тоді полігон буде виглядати як частина мапи",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe із зазначенням висоти (в пікселях): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe з власними висотою та шириною (у пікселях): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Зберегти поточні правки",
     "Save this center and zoom": "Зберегти такі центрування та масштаб",
     "Save this location as new feature": "Зберегти місце розташування як новий об’єкт",
-    "Search a place name": "Шукати назву місця",
     "Search location": "Пошук місця",
     "See all": "Переглянути усе",
     "See data layers": "Подивитися шари даних",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Ключ сортування",
     "Split line": "Розрізати лінію",
     "Start a hole here": "Почати отвір звідси",
-    "Start editing": "Почати редагування",
     "Start slideshow": "Почати слайдшоу",
     "Stop editing": "Зупинити редагування",
     "Stop slideshow": "Зупинити слайдшоу",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

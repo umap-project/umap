@@ -147,7 +147,6 @@ const locale = {
     "Download": "Pobieranie",
     "Download data": "Pobierz dane",
     "Drag to reorder": "Przeciągnij, by zmienić kolejność",
-    "Draw a line": "Rysuj linię",
     "Draw a marker": "Dodaj znacznik",
     "Draw a polygon": "Rysuj obszar",
     "Draw a polyline": "Rysuj linię",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Edytuj",
     "Edit feature's layer": "Edytuj warstwę z obiektami",
     "Edit map properties": "Edytuj właściwości mapy",
-    "Edit map settings": "Edytuj ustawienia mapy",
     "Edit properties in a table": "Edytuj właściwości w tabeli",
     "Edit this feature": "Edytuj ten obiekt",
-    "Embed and share this map": "Osadź i udostępnij tę mapę",
     "Embed the map": "Osadź mapę na stronie",
     "Empty": "Wyczyść",
     "Error in the tilelayer URL": "Błąd w adresie URL podkładu",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Ukryj przyciski",
     "Home": "Strona główna",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Jak bardzo uprościć obszar na każdym poziomie przybliżenia (więcej = większa wydajność i gładki wygląd, mniej = większa dokładność)",
-    "If false, the polygon will act as a part of the underlying map.": "Jeżeli fałsz, wielokąt będzie zachowywał się jak część mapy zasadniczej.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Ramka z podaną wysokością (w pikselach) {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Ramka z podaną wysokością i szerokością (w pikselach): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Ramka: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Zapisz obecne edycje",
     "Save this center and zoom": "Zapisz obecną pozycję i przybliżenie",
     "Save this location as new feature": "Zapisz to miejsce jako nowy obiekt",
-    "Search a place name": "Szukaj nazwy miejsca",
     "Search location": "Znajdź miejsce",
     "See all": "Pokaż wszystko",
     "See data layers": "Zobacz wszystkie warstwy danych",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Klucz sortowania",
     "Split line": "Podziel linię",
     "Start a hole here": "Zacznij dziurę tutaj",
-    "Start editing": "Rozpocznij edycję",
     "Start slideshow": "Rozpocznij pokaz",
     "Stop editing": "Zakończ edycję",
     "Stop slideshow": "Zakończ pokaz",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("pl", locale)
 L.setLocale("pl")

@@ -147,7 +147,6 @@ const locale = {
     "Download": "Stažení",
     "Download data": "Stáhnout data",
     "Drag to reorder": "Přetáhni pro přeskupení",
-    "Draw a line": "Nakreslit jednoduchou čáru",
     "Draw a marker": "Umístit značku místa",
     "Draw a polygon": "Vyznačit oblast",
     "Draw a polyline": "Nakreslit čáru",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Upravit",
     "Edit feature's layer": "Upravit vrstvu objektu",
     "Edit map properties": "Nastavení mapy",
-    "Edit map settings": "Nastavení mapy",
     "Edit properties in a table": "Upravit vlastnosti v tabulce",
     "Edit this feature": "Upravit tento objekt",
-    "Embed and share this map": "Sdílet mapu nebo ji vložit do jiného webu",
     "Embed the map": "Vložit mapu do jiného webu",
     "Empty": "Vyprázdnit",
     "Error in the tilelayer URL": "Chyba v URL vrstvy dlaždic",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Skrýt ovládací prvky",
     "Home": "Domů",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Jak moc zahlazovat a zjednodušovat při oddálení (větší = rychlejší odezva a plynulejší vzhled, menší = přesnější)",
-    "If false, the polygon will act as a part of the underlying map.": "Pokud je vypnuto, polygon se bude chovat jako součást mapového podkladu.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe s vlastní výškou (v px): {{{http://iframe.url.com|výška}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe s vlastní výškou a šířkou (in px): {{{http://iframe.url.com|výška*šířka}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Ulož nedávné změny",
     "Save this center and zoom": "Ulož tuto pozici mapy a její přiblížení",
     "Save this location as new feature": "Uložit tuto pozici jako nový objekt",
-    "Search a place name": "Vyhledejte název místa",
     "Search location": "Vyhledat místo na mapě",
     "See all": "Zobraz vše",
     "See data layers": "Zobrazit datové vrstvy",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Řadící klávesa",
     "Split line": "Rozdělit čáru",
     "Start a hole here": "Začít tady díru",
-    "Start editing": "Začít editaci",
     "Start slideshow": "Spustit prezentaci",
     "Stop editing": "Přerušit úpravy",
     "Stop slideshow": "Zastavit prezentaci",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

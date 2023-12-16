@@ -147,7 +147,6 @@ const locale = {
     "Download": "Download",
     "Download data": "Lataa tietoja",
     "Drag to reorder": "Drag to reorder",
-    "Draw a line": "Piirrä viiva",
     "Draw a marker": "Piirrä karttamerkki",
     "Draw a polygon": "Piirrä monikulmio",
     "Draw a polyline": "Piirrä monisegmenttinen viiva",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Muokkaa",
     "Edit feature's layer": "Muokkaa piirteen kerrosta",
     "Edit map properties": "Muokkaa kartan ominaisuuksia",
-    "Edit map settings": "Muokkaa kartta-asetuksia",
     "Edit properties in a table": "Muokkaa ominaisuuksia taulukossa",
     "Edit this feature": "Muokkaa tätä piirrettä",
-    "Embed and share this map": "Jaa tämä kartta tai käytä sitä muualla",
     "Embed the map": "Liitä kartta",
     "Empty": "Tyhjä",
     "Error in the tilelayer URL": "Virhe karttalaattojen URL:ssä",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Piilota ohjaimet",
     "Home": "Alku",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Kuinka paljon viivaa yleistetäänkullakin zoomaustasolla (enemmän = parempi suorituskyky, vähemmän = suurempi tarkkuus)",
-    "If false, the polygon will act as a part of the underlying map.": "If false, the polygon will act as a part of the underlying map.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe määrätyn korkuisena (pikseleinä): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Tallenna tämänhetkiset muokkaukset",
     "Save this center and zoom": "Tallenna tämä kartan keskitys ja zoomaustaso",
     "Save this location as new feature": "Save this location as new feature",
-    "Search a place name": "Search a place name",
     "Search location": "Search location",
     "See all": "Näytä kaikki",
     "See data layers": "See data layers",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Sort key",
     "Split line": "Pilko/katkaise viiva",
     "Start a hole here": "Aloita reikä tässä",
-    "Start editing": "Aloita muokkaus",
     "Start slideshow": "Aloita kuvaesitys",
     "Stop editing": "Lopeta muokkaus",
     "Stop slideshow": "Lopeta kuvaesitys",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("fi", locale)
 L.setLocale("fi")

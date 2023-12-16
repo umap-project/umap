@@ -147,7 +147,6 @@ const locale = {
     "Download": "Преузимање",
     "Download data": "Преузимање података",
     "Drag to reorder": "Превуците за промену редоследа",
-    "Draw a line": "Цртање линије",
     "Draw a marker": "Цртање ознаке",
     "Draw a polygon": "Цртање површине",
     "Draw a polyline": "Цртање изломљене линије",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Уређивање",
     "Edit feature's layer": "Уређивање елемента одабраног лејера",
     "Edit map properties": "Уређивање мапе",
-    "Edit map settings": "Уређивање више опција мапе",
     "Edit properties in a table": "Edit properties in a table",
     "Edit this feature": "Уређивање елемента",
-    "Embed and share this map": "Embed and share this map",
     "Embed the map": "Embed the map",
     "Empty": "Empty",
     "Error in the tilelayer URL": "Error in the tilelayer URL",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Сакриј контроле",
     "Home": "Почетна страна",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)",
-    "If false, the polygon will act as a part of the underlying map.": "If false, the polygon will act as a part of the underlying map.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Сачувај тренутна подешавања",
     "Save this center and zoom": "Сачувај подешавања центра и увећања",
     "Save this location as new feature": "Сачувај локацију као нови елемент",
-    "Search a place name": "Претражи локацију",
     "Search location": "Претражи локацију",
     "See all": "Види све",
     "See data layers": "Прикажи унесене податке",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Sort key",
     "Split line": "Split line",
     "Start a hole here": "Start a hole here",
-    "Start editing": "Започни уређивање",
     "Start slideshow": "Start slideshow",
     "Stop editing": "Заустави уређивања",
     "Stop slideshow": "Stop slideshow",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("sr", locale)
 L.setLocale("sr")

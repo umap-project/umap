@@ -147,7 +147,6 @@ const locale = {
     "Download": "Prenos",
     "Download data": "Prejmi podatke",
     "Drag to reorder": "Potegni za prerazvrstitev",
-    "Draw a line": "Nariši črto",
     "Draw a marker": "Nariši označbo",
     "Draw a polygon": "Nariši mnogokotnik",
     "Draw a polyline": "Nariši črto v več koleni",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "Uredi",
     "Edit feature's layer": "Uredi plast predmeta",
     "Edit map properties": "Uredi lastnosti zemljevida",
-    "Edit map settings": "Uredi nastavitve zemljevida",
     "Edit properties in a table": "Uredi lastnosti v razpredelnici",
     "Edit this feature": "Uredi predmet",
-    "Embed and share this map": "Vstavi in objavi zemljevid",
     "Embed the map": "Vstavi zemljevid",
     "Empty": "Prazno",
     "Error in the tilelayer URL": "Napaka v naslovu URL plasti",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "Skrij orodja",
     "Home": "Začetna stran",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Kako močno naj bodo poenostavljene prte na posamezni ravni približanja (močno = boljše delovanje in prijetnejši videz ali malo = bolj natančen prikaz)",
-    "If false, the polygon will act as a part of the underlying map.": "Neizbrana možnost določa, da bo mnogokotnik obravnavan kot del zemljevida.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Predmet Iframe z višino po meri (v točkah): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Predmet Iframe z višino in širino po meri (v točkah): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "Shrani urejanje",
     "Save this center and zoom": "Shrani središče in približaj",
     "Save this location as new feature": "Shrani mesto kot nov predmet",
-    "Search a place name": "Search a place name",
     "Search location": "Preišči mesto",
     "See all": "Pokaži vse",
     "See data layers": "See data layers",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Razvrščanje",
     "Split line": "Ločitvena črta",
     "Start a hole here": "Začni z vrisovanjem luknje",
-    "Start editing": "Začni z urejanjem",
     "Start slideshow": "Začni s predstavitvijo",
     "Stop editing": "Končaj z urejanjem",
     "Stop slideshow": "Zaustavi predstavitev",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("sl", locale)
 L.setLocale("sl")

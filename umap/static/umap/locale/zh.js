@@ -147,7 +147,6 @@ const locale = {
     "Download": "Download",
     "Download data": "下载数据",
     "Drag to reorder": "Drag to reorder",
-    "Draw a line": "画线",
     "Draw a marker": "画标记",
     "Draw a polygon": "画多边形",
     "Draw a polyline": "画线",
@@ -156,10 +155,8 @@ const locale = {
     "Edit": "编辑",
     "Edit feature's layer": "编辑要素图层",
     "Edit map properties": "编辑地图属性",
-    "Edit map settings": "编辑地图设置",
     "Edit properties in a table": "在表格中编辑属性",
     "Edit this feature": "编辑该要素",
-    "Embed and share this map": "嵌入与分享地图",
     "Embed the map": "嵌入地图",
     "Empty": "空",
     "Error in the tilelayer URL": "瓦片图层URL错误",
@@ -177,7 +174,6 @@ const locale = {
     "Hide controls": "隐藏控件",
     "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)",
-    "If false, the polygon will act as a part of the underlying map.": "If false, the polygon will act as a part of the underlying map.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}",
     "Iframe: {{{http://iframe.url.com}}}": "Iframe: {{{http://iframe.url.com}}}",
@@ -241,7 +237,6 @@ const locale = {
     "Save current edits": "保存当前编辑内容",
     "Save this center and zoom": "保存地图中心与比例尺",
     "Save this location as new feature": "Save this location as new feature",
-    "Search a place name": "Search a place name",
     "Search location": "Search location",
     "See all": "查看全部",
     "See data layers": "See data layers",
@@ -256,7 +251,6 @@ const locale = {
     "Sort key": "Sort key",
     "Split line": "打断线",
     "Start a hole here": "Start a hole here",
-    "Start editing": "开始编辑",
     "Start slideshow": "开始幻灯秀",
     "Stop editing": "结束编辑",
     "Stop slideshow": "结束幻灯秀",
@@ -433,7 +427,11 @@ const locale = {
     "Generic": "Generic",
     "Symbol": "Symbol",
     "Type char or paste emoji": "Type char or paste emoji",
-    "URL": "URL"
+    "URL": "URL",
+    "If false, the polygon or line will act as a part of the underlying map.": "If false, the polygon or line will act as a part of the underlying map.",
+    "Save map": "Save map",
+    "Share, download and embed this map": "Share, download and embed this map",
+    "Toggle edit mode": "Toggle edit mode"
 }
 L.registerLocale("zh", locale)
 L.setLocale("zh")
