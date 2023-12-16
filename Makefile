@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := help
 
+JS_TEST_URL := http://localhost:8001/umap/static/umap/test/index.html
+
 .PHONY: install
 install: ## Install the dependencies
 	python3 -m pip install --upgrade pip
@@ -74,7 +76,19 @@ vendors:
 installjs:
 	npm install
 testjs: node_modules
-	@echo "See the tests at http://localhost:8001/umap/static/umap/test/" && python -m http.server 8001
+	@{ \
+		trap 'kill $$PID; exit' INT; \
+		python -m http.server 8001 & \
+		PID=$$!; \
+		sleep 1; \
+		echo "Opening $(JS_TEST_URL)"; \
+		if command -v python -m webbrowser > /dev/null 2>&1; then \
+			python -m webbrowser "$(JS_TEST_URL)"; \
+		else \
+			echo "Please open $(JS_TEST_URL) in your web browser"; \
+		fi; \
+		wait $$PID; \
+	}
 tx_push:
 	tx push -s
 tx_pull:

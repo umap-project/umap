@@ -16,7 +16,7 @@ from .managers import PublicManager
 # Did not find a clean way to do this in Django
 # - creating a Proxy model would mean replacing get_user_model by this proxy model
 #   in every template
-# - extending User model woulc mean a non trivial migration
+# - extending User model would mean a non trivial migration
 def display_name(self):
     return settings.USER_DISPLAY_NAME.format(**self.__dict__)
 
