@@ -529,7 +529,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.tabs = L.DomUtil.create('div', 'pictogram-tabs', this.parentNode)
     this.body = L.DomUtil.create('div', 'umap-pictogram-body', this.parentNode)
     this.footer = L.DomUtil.create('div', '', this.parentNode)
-    this.udpatePreview()
+    this.updatePreview()
     this.on('define', this.onDefine)
   },
 
@@ -550,7 +550,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         this.tabs.innerHTML = ''
         this.footer.innerHTML = ''
         if (this.isDefault()) this.undefine(e)
-        else this.udpatePreview()
+        else this.updatePreview()
       },
       this
     )
@@ -610,7 +610,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     return this.isPath() || this.isRemoteUrl()
   },
 
-  udpatePreview: function () {
+  updatePreview: function () {
     this.buttons.innerHTML = ''
     if (this.isDefault()) return
     if (!L.Util.hasVar(this.value())) {
@@ -666,7 +666,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.unselectAll(this.body)
     this.sync()
     this.body.innerHTML = ''
-    this.udpatePreview()
+    this.updatePreview()
   },
 
   addCategory: function (category, items) {
