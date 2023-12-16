@@ -2,7 +2,10 @@ L.U.BaseAction = L.ToolbarAction.extend({
   initialize: function (map) {
     this.map = map
     if (this.options.label) {
-      this.options.tooltip = this.map.help.displayLabel(this.options.label, withKbdTag=false)
+      this.options.tooltip = this.map.help.displayLabel(
+        this.options.label,
+        (withKbdTag = false)
+      )
     }
     this.options.toolbarIcon = {
       className: this.options.className,
@@ -18,7 +21,7 @@ L.U.ImportAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'upload-data dark',
-    label: 'IMPORT_PANEL'
+    label: 'IMPORT_PANEL',
   },
 
   addHooks: function () {
@@ -87,7 +90,7 @@ L.U.DrawMarkerAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-marker dark',
-    label: 'DRAW_MARKER'
+    label: 'DRAW_MARKER',
   },
 
   addHooks: function () {
@@ -99,7 +102,7 @@ L.U.DrawPolylineAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polyline dark',
-    label: 'DRAW_LINE'
+    label: 'DRAW_LINE',
   },
 
   addHooks: function () {
@@ -111,7 +114,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polygon dark',
-    label: 'DRAW_POLYGON'
+    label: 'DRAW_POLYGON',
   },
 
   addHooks: function () {
