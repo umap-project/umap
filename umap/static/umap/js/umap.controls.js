@@ -1187,20 +1187,27 @@ L.U.Map.include({
 /* Used in view mode to define the current tilelayer */
 L.U.TileLayerControl = L.Control.IconLayers.extend({
   initialize: function (map, options) {
-    const layers = []
-    map.eachTileLayer((layer) => {
-      layers.push({
-        title: layer.options.name,
-        layer: layer,
-        icon: L.Util.template(layer.options.url_template, map.demoTileInfos),
-      })
-    })
-    const maxShown = 10
-    L.Control.IconLayers.prototype.initialize.call(this, layers.slice(0, maxShown), {
+    this.map = map
+    L.Control.IconLayers.prototype.initialize.call(this, {
       position: 'topleft',
-      manageLayers: false
+      manageLayers: false,
     })
     this.on('activelayerchange', (e) => map.selectTileLayer(e.layer))
+  },
+
+  setLayers: function (layers) {
+    if (!layers) {
+      layers = []
+      this.map.eachTileLayer((layer) => {
+        layers.push({
+          title: layer.options.name,
+          layer: layer,
+          icon: L.Util.template(layer.options.url_template, this.map.demoTileInfos),
+        })
+      })
+    }
+    const maxShown = 10
+    L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, maxShown))
   },
 })
 
@@ -1264,6 +1271,7 @@ L.U.TileLayerChooser = L.Control.extend({
       'click',
       function () {
         this.map.selectTileLayer(tilelayer)
+        this.map._controls.tilelayers.setLayers()
         if (options && options.callback) options.callback(tilelayer)
       },
       this
