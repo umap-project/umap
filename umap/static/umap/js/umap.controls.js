@@ -1208,7 +1208,9 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
     }
     const maxShown = 10
     L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, maxShown))
+    if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
   },
+
 })
 
 /* Used in edit mode to define the default tilelayer */
