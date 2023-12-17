@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.12.0 - 2023-12-17
+
+### New features
+* Optimistic conflicts resolution mecanism by @almet in #772
+* Use Leaflet.IconLayers as tilelayers switcher by @yohanboniface in #1469
+* Use map style options to style minimap bbox rectangle by @yohanboniface in #1443
+* Make it easier to open file dialog by @yohanboniface in #1445
+* Use bounds instead of center when zooming to Polyline/Polygon by @yohanboniface in #1465
+* Finish drawing line/polygon instead of cancelling when pressing Escape by @yohanboniface in #1444
+* Allow to control the `interactive` option from the layer by @yohanboniface in #1446
+* Replace "Ctrl" by "Cmd" under macOS and style the "kbd" tag in keyboard shortcuts labels by @yohanboniface in #1449
+
+### Bug fixes
+* Fix slideshow buttons not show when facets are active by @yohanboniface in #1435
+* Always use fullwidth table editor by @yohanboniface in #1438
+* fix: no data in facet filters when set as default panel by @k-3st3ban in #1447
+* Make sure DataLayer._dataloaded is set only once all data is imported by @yohanboniface in #1458
+* Fix toolbox overflow with facets’ search by @davidbgk in #1468
+* Do not call `AttributionControl._update` for removed tile layer by @yohanboniface in #1466
+
+### Documentation
+* Mention more keyboard shortcuts by @yohanboniface in #1437
+* [docs] Update the documentation by @almet in #1440
+* [chore] fix docs requirements by @almet in #1450
+* Better changelog rendering by @davidbgk in #1453
+* [docs] Update security contact information by @almet in #1470
+* [docs] Add some testing information by @almet in #1471
+
+### Internal Changes
+* Log error when loading tilelayer by @yohanboniface in #1442
+* [ci] Add a separate target for docs by @almet in #1451
+* Unify tooltip and headline and add the corresponding icon by @jschleic in #1455
+* Use real tile URL in tests by @yohanboniface in #1467
+* chore: fix a typo in `umap.forms.js` by @almet in #1473
+
+
+
 ## 1.11.1 - 2023-11-27
 
 * Reset increasing icon text size by @yohanboniface in #1434
