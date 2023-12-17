@@ -166,7 +166,7 @@ L.U.Map.include({
     this.help = new L.U.Help(this)
 
     if (this.options.hash) this.addHash()
-    this.initTileLayers(this.options.tilelayers)
+    this.initTileLayers()
     // Needs tilelayer to exist for minimap
     this.initControls()
     // Needs locate control and hash to exist
@@ -348,6 +348,7 @@ L.U.Map.include({
     this.importer = new L.U.Importer(this)
     this.drop = new L.U.DropControl(this)
     this._controls.tilelayers = new L.U.TileLayerControl(this)
+    this._controls.tilelayers.setLayers()
 
     this.renderControls()
   },
@@ -606,6 +607,7 @@ L.U.Map.include({
     } else {
       this.selectTileLayer(this.tilelayers[0])
     }
+    if (this._controls) this._controls.tilelayers.setLayers()
   },
 
   createTileLayer: function (tilelayer) {
@@ -649,8 +651,18 @@ L.U.Map.include({
   },
 
   eachTileLayer: function (callback, context) {
-    if (this.customTilelayer) callback.call(context, this.customTilelayer)
-    this.tilelayers.forEach((layer) => callback.call(context, layer))
+    const urls = []
+    const callOne = (layer) => {
+      // Prevent adding a duplicate background,
+      // while adding selected/custom on top of the list
+      const url = layer.options.url_template
+      if (urls.indexOf(url) !== -1) return
+      callback.call(context, layer)
+      urls.push(url)
+    }
+    if (this.selected_tilelayer) callOne(this.selected_tilelayer)
+    if (this.customTilelayer) callOne(this.customTilelayer)
+    this.tilelayers.forEach(callOne)
   },
 
   setOverlay: function () {

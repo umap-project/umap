@@ -2,7 +2,10 @@ L.U.BaseAction = L.ToolbarAction.extend({
   initialize: function (map) {
     this.map = map
     if (this.options.label) {
-      this.options.tooltip = this.map.help.displayLabel(this.options.label, withKbdTag=false)
+      this.options.tooltip = this.map.help.displayLabel(
+        this.options.label,
+        (withKbdTag = false)
+      )
     }
     this.options.toolbarIcon = {
       className: this.options.className,
@@ -18,7 +21,7 @@ L.U.ImportAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'upload-data dark',
-    label: 'IMPORT_PANEL'
+    label: 'IMPORT_PANEL',
   },
 
   addHooks: function () {
@@ -87,7 +90,7 @@ L.U.DrawMarkerAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-marker dark',
-    label: 'DRAW_MARKER'
+    label: 'DRAW_MARKER',
   },
 
   addHooks: function () {
@@ -99,7 +102,7 @@ L.U.DrawPolylineAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polyline dark',
-    label: 'DRAW_LINE'
+    label: 'DRAW_LINE',
   },
 
   addHooks: function () {
@@ -111,7 +114,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polygon dark',
-    label: 'DRAW_POLYGON'
+    label: 'DRAW_POLYGON',
   },
 
   addHooks: function () {
@@ -1184,21 +1187,30 @@ L.U.Map.include({
 /* Used in view mode to define the current tilelayer */
 L.U.TileLayerControl = L.Control.IconLayers.extend({
   initialize: function (map, options) {
-    const layers = []
-    map.eachTileLayer((layer) => {
-      layers.push({
-        title: layer.options.name,
-        layer: layer,
-        icon: L.Util.template(layer.options.url_template, map.demoTileInfos),
-      })
-    })
-    const maxShown = 10
-    L.Control.IconLayers.prototype.initialize.call(this, layers.slice(0, maxShown), {
+    this.map = map
+    L.Control.IconLayers.prototype.initialize.call(this, {
       position: 'topleft',
-      manageLayers: false
+      manageLayers: false,
     })
     this.on('activelayerchange', (e) => map.selectTileLayer(e.layer))
   },
+
+  setLayers: function (layers) {
+    if (!layers) {
+      layers = []
+      this.map.eachTileLayer((layer) => {
+        layers.push({
+          title: layer.options.name,
+          layer: layer,
+          icon: L.Util.template(layer.options.url_template, this.map.demoTileInfos),
+        })
+      })
+    }
+    const maxShown = 10
+    L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, maxShown))
+    if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
+  },
+
 })
 
 /* Used in edit mode to define the default tilelayer */
@@ -1261,6 +1273,7 @@ L.U.TileLayerChooser = L.Control.extend({
       'click',
       function () {
         this.map.selectTileLayer(tilelayer)
+        this.map._controls.tilelayers.setLayers()
         if (options && options.callback) options.callback(tilelayer)
       },
       this
