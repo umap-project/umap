@@ -172,6 +172,8 @@
     display: none;
     left: 0;
     overflow: hidden;
+    min-height: 1.5rem;
+    height: 1.5rem;
 }
 .leaflet-iconLayers-layerTitle {
     text-align: center;
@@ -183,6 +185,9 @@
 }
 .leaflet-iconLayers:hover .leaflet-iconLayers-layerTitleContainer {
     display: initial;
+}
+.leaflet-iconLayers-layerCell:hover .leaflet-iconLayers-layerTitleContainer {
+    height: initial;
 }
 
 
