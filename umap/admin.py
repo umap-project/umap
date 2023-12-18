@@ -17,8 +17,17 @@ class MapAdmin(admin.GISModelAdmin):
     list_filter = ("share_status",)
 
 
+class PictogramAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "category",
+    )
+    list_editable = ("category",)
+    list_filter = ("category",)
+
+
 admin.site.register(Map, MapAdmin)
 admin.site.register(DataLayer)
-admin.site.register(Pictogram)
+admin.site.register(Pictogram, PictogramAdmin)
 admin.site.register(TileLayer, TileLayerAdmin)
 admin.site.register(Licence)
