@@ -409,7 +409,7 @@ L.Control.Embed = L.Control.extend({
     const shareButton = L.DomUtil.createButton(
       '',
       container,
-      L._('Share, download and embed this map'),
+      L._('Share and download'),
       map.share.open,
       map.share
     )
