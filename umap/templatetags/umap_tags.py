@@ -4,9 +4,6 @@ from copy import copy
 from django import template
 from django.conf import settings
 
-from ..models import DataLayer, TileLayer
-from ..views import _urls_for_js
-
 register = template.Library()
 
 
@@ -22,30 +19,7 @@ def umap_js(locale=None):
 
 @register.inclusion_tag("umap/map_fragment.html")
 def map_fragment(map_instance, **kwargs):
-    layers = DataLayer.objects.filter(map=map_instance)
-    datalayer_data = [c.metadata() for c in layers]
-    map_settings = map_instance.settings
-    if "properties" not in map_settings:
-        map_settings["properties"] = {}
-    map_settings["properties"].update(
-        {
-            "tilelayers": [TileLayer.get_default().json],
-            "datalayers": datalayer_data,
-            "urls": _urls_for_js(),
-            "STATIC_URL": settings.STATIC_URL,
-            "editMode": "disabled",
-            "hash": False,
-            "attributionControl": False,
-            "scrollWheelZoom": False,
-            "umapAttributionControl": False,
-            "noControl": True,
-            "umap_id": map_instance.pk,
-            "onLoadPanel": "none",
-            "captionBar": False,
-            "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,
-            "slideshow": {},
-        }
-    )
+    map_settings = map_instance.preview_settings
     map_settings["properties"].update(kwargs)
     prefix = kwargs.pop("prefix", None) or "map"
     page = kwargs.pop("page", None) or ""

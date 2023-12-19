@@ -1,3 +1,4 @@
+import json
 import os
 import time
 
@@ -192,6 +193,40 @@ class Map(NamedModel):
 
     objects = models.Manager()
     public = PublicManager()
+
+    @property
+    def unique_id(self):
+        return f"map_{self.pk}"
+
+    @property
+    def preview_settings(self):
+        from .views import _urls_for_js
+
+        layers = self.datalayer_set.all()
+        datalayer_data = [c.metadata() for c in layers]
+        map_settings = self.settings
+        if "properties" not in map_settings:
+            map_settings["properties"] = {}
+        map_settings["properties"].update(
+            {
+                "tilelayers": [TileLayer.get_default().json],
+                "datalayers": datalayer_data,
+                "urls": _urls_for_js(),
+                "STATIC_URL": settings.STATIC_URL,
+                "editMode": "disabled",
+                "hash": False,
+                "attributionControl": False,
+                "scrollWheelZoom": False,
+                "umapAttributionControl": False,
+                "noControl": True,
+                "umap_id": self.pk,
+                "onLoadPanel": "none",
+                "captionBar": False,
+                "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,
+                "slideshow": {},
+            }
+        )
+        return map_settings
 
     def get_absolute_url(self):
         return reverse("map", kwargs={"slug": self.slug or "map", "map_id": self.pk})
