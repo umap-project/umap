@@ -1,7 +1,24 @@
 import gzip
 import os
 
+from django.conf import settings
 from django.urls import URLPattern, URLResolver, get_resolver
+
+
+def _urls_for_js(urls=None):
+    """
+    Return templated URLs prepared for javascript.
+    """
+    if urls is None:
+        # prevent circular import
+        from .urls import i18n_urls, urlpatterns
+
+        urls = [
+            url.name for url in urlpatterns + i18n_urls if getattr(url, "name", None)
+        ]
+    urls = dict(zip(urls, [get_uri_template(url) for url in urls]))
+    urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
+    return urls
 
 
 def get_uri_template(urlname, args=None, prefix=""):

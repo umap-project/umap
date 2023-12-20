@@ -1,4 +1,3 @@
-import json
 import os
 import time
 
@@ -12,6 +11,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from .managers import PublicManager
+from .utils import _urls_for_js
 
 
 # Did not find a clean way to do this in Django
@@ -196,8 +196,6 @@ class Map(NamedModel):
 
     @property
     def preview_settings(self):
-        from .views import _urls_for_js
-
         layers = self.datalayer_set.all()
         datalayer_data = [c.metadata() for c in layers]
         map_settings = self.settings
