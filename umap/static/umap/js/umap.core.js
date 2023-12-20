@@ -383,8 +383,8 @@ L.DomUtil.after = (target, el) => {
 }
 
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
-L.DomUtil.TextColorFromBackgroundColor = (el) => {
-  return L.DomUtil.contrastedColor(el) ? '#ffffff' : '#000000'
+L.DomUtil.TextColorFromBackgroundColor = (el, bgcolor) => {
+  return L.DomUtil.contrastedColor(el, bgcolor) ? '#ffffff' : '#000000'
 }
 const _CACHE_CONSTRAST = {}
 L.DomUtil.contrastedColor = (el, bgcolor) => {

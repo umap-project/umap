@@ -1266,6 +1266,31 @@ a.add-datalayer:hover,
 .umap-popup a:hover {
     text-decoration: underline;
 }
+.popup-title {
+    display: flex;
+    align-items: center;
+}
+.popup-title img {
+    margin: 0 5px;
+}
+a[href^='mailto']::before {
+  content: '🖃 ';
+}
+a[href^='tel']::before {
+  content: '🕿 ';
+}
+address span {
+    padding-right: 5px;
+}
+.osm-link {
+    margin-top: 10px;
+    text-align: right;
+    font-style: italic;
+}
+span.popup-icon {
+    padding: 5px;
+}
+
 
 /* ************* */
 /* Marker's Icon */

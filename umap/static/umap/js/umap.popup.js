@@ -259,16 +259,62 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
 
   getName: function () {
     const props = this.feature.properties
-    if (L.locale && props[`name:${L.locale}`]) return props[`name:${L.locale}`];
+    if (L.locale && props[`name:${L.locale}`]) return props[`name:${L.locale}`]
     return props.name
   },
 
   renderBody: function () {
     const props = this.feature.properties
-    let kind = props.shop || props.amenity || props.craft
     const container = L.DomUtil.add('div')
-    const kindEl = L.DomUtil.add('h4', '', container, kind)
-    L.DomUtil.add('h3', 'popup-title', container, this.getName())
+    const title = L.DomUtil.add('h3', 'popup-title', container)
+    const color = this.feature.getDynamicOption('color')
+    title.style.backgroundColor = color
+    const iconUrl = this.feature.getDynamicOption('iconUrl')
+    let img
+    if (L.Util.isPath(iconUrl) || L.Util.isRemoteUrl(iconUrl) || L.Util.isDataImage(iconUrl)) {
+      img = L.DomUtil.add('img', 'popup-icon', title)
+      img.src = iconUrl
+    } else {
+      img = L.DomUtil.add('span', 'popup-icon', title)
+      img.textContent = iconUrl
+    }
+    if (L.DomUtil.contrastedColor(title, color)) {
+      if (L.Util.isPath(iconUrl) && iconUrl.endsWith('.svg')) {
+        img.style.filter = 'invert(1)'
+      }
+      title.style.color = 'white'
+    }
+    L.DomUtil.add('span', '', title, this.getName())
+    const street = props['addr:street']
+    if (street) {
+      const row = L.DomUtil.add('address', 'address', container)
+      const number = props['addr:housenumber']
+      if (number) {
+        // Poor way to deal with international forms of writting addresses
+        L.DomUtil.add('span', '', row, `${L._("No.")}: ${number}`)
+        L.DomUtil.add('span', '', row, `${L._("Street")}: ${street}`)
+      } else {
+        L.DomUtil.add('span', '', row, street)
+      }
+    }
+    if (props.website) {
+      L.DomUtil.element('a', {href: props.website, textContent: props.website}, container)
+    }
+    const phone = props.phone || props['contact:phone']
+    if (phone) {
+      L.DomUtil.add('div', '', container, L.DomUtil.element('a', {href: `tel:${phone}`, textContent: phone}))
+    }
+    if (props.mobile) {
+      L.DomUtil.add('div', '', container, L.DomUtil.element('a', {href: `tel:${props.mobile}`, textContent: props.mobile}))
+    }
+    const email = props.email || props['contact:email']
+    if (email) {
+      L.DomUtil.add('div', '', container, L.DomUtil.element('a', {href: `mailto:${email}`, textContent: email}))
+    }
+    const id = props['@id']
+    if (id) {
+      L.DomUtil.add('div', 'osm-link', container, L.DomUtil.element('a', {href: `https://www.openstreetmap.org/${id}`, textContent: L._('See on OpenStreetMap')}))
+    }
     return container
   },
 })
