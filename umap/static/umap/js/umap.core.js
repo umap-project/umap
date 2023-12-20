@@ -260,6 +260,18 @@ L.Util.hasVar = (value) => {
   return typeof value === 'string' && value.indexOf('{') != -1
 }
 
+L.Util.isPath = function (value) {
+  return value && value.length && value.startsWith('/')
+}
+
+L.Util.isRemoteUrl = function (value) {
+  return value && value.length && value.startsWith('http')
+}
+
+L.Util.isDataImage = function (value) {
+  return value && value.length && value.startsWith('data:image')
+}
+
 L.Util.copyToClipboard = function (textToCopy) {
   // https://stackoverflow.com/a/65996386
   // Navigator clipboard api needs a secure context (https)
