@@ -195,10 +195,6 @@ class Map(NamedModel):
     public = PublicManager()
 
     @property
-    def unique_id(self):
-        return f"map_{self.pk}"
-
-    @property
     def preview_settings(self):
         from .views import _urls_for_js
 

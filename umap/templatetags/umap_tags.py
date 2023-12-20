@@ -60,3 +60,9 @@ def ipdb(what):
 
     ipdb.set_trace()
     return ""
+
+
+@register.filter
+def addstr(arg1, arg2):
+    # Necessity: https://stackoverflow.com/a/23783666
+    return str(arg1) + str(arg2)

@@ -13,31 +13,33 @@
   {% endif %}
   <tbody>
     {% for map_inst in maps %}
-      {{ map_inst.preview_settings|json_script:map_inst.unique_id }}
-      <tr>
-        <td>
-          <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
-          <button class="map-opener" data-map-id="{{ map_inst.unique_id }}">{% blocktrans %}Preview{% endblocktrans %}</button>
-          <dialog>
-            <form method="dialog">
-              <div id="{{ map_inst.unique_id }}_target" class="map_fragment"></div>
-              <p class="close-dialog">
-                <button type="submit">Close</button>
-              </p>
-            </form>
-          </dialog>
-        </td>
-        <td>{{ map_inst.get_share_status_display }} / {{ map_inst.get_edit_status_display }}</td>
-        <td>{{ map_inst.modified_at }}</td>
-        <td>
-          <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
-        </td>
-        <td>
-          <a href="{{ map_inst.get_absolute_url }}?share">{% translate "Share" %}</a> |
-          <a href="{{ map_inst.get_absolute_url }}?edit">{% translate "Edit" %}</a> |
-          <a href="{% url 'map_download' map_inst.pk %}">{% translate "Download" %}</a>
-        </td>
-      </tr>
+      {% with unique_id="map_"|addstr:map_inst.pk %}
+        {{ map_inst.preview_settings|json_script:unique_id }}
+        <tr>
+          <td>
+            <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
+            <button class="map-opener" data-map-id="{{ unique_id }}">{% blocktrans %}Preview{% endblocktrans %}</button>
+            <dialog>
+              <form method="dialog">
+                <div id="{{ unique_id }}_target" class="map_fragment"></div>
+                <p class="close-dialog">
+                  <button type="submit">Close</button>
+                </p>
+              </form>
+            </dialog>
+          </td>
+          <td>{{ map_inst.get_share_status_display }} / {{ map_inst.get_edit_status_display }}</td>
+          <td>{{ map_inst.modified_at }}</td>
+          <td>
+            <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
+          </td>
+          <td>
+            <a href="{{ map_inst.get_absolute_url }}?share">{% translate "Share" %}</a> |
+            <a href="{{ map_inst.get_absolute_url }}?edit">{% translate "Edit" %}</a> |
+            <a href="{% url 'map_download' map_inst.pk %}">{% translate "Download" %}</a>
+          </td>
+        </tr>
+      {% endwith %}
     {% endfor %}
   </tbody>
 </table>
