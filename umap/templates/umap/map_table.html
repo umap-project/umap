@@ -49,33 +49,3 @@
        class="button more_button neutral">{% trans "More" %}</a>
   </div>
 {% endif %}
-
-<style type="text/css">
-  dialog {
-    width: 90vw;
-    height: 90vh;
-  }
-  .close-dialog {
-    text-align: center;
-  }
-  table.maps .map_fragment {
-    display: block;
-    width: 100%;
-    height: 80vh;
-  }
-  dialog::backdrop {
-    background: #fff5;
-    backdrop-filter: blur(4px);
-  }
-</style>
-
-<script type="text/javascript">
-  for (const mapOpener of document.querySelectorAll("button.map-opener")) {
-    mapOpener.addEventListener('click', (event) => {
-      event.target.nextElementSibling.showModal()
-      const mapId = event.target.dataset.mapId
-      const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
-      const map = new L.U.Map(`${mapId}_target`, previewSettings)
-    })
-  }
-</script>

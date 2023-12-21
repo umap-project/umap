@@ -23,3 +23,19 @@
     </div>
   </div>
 {% endblock maincontent %}
+
+{% block bottom_js %}
+  {{ block.super }}
+  <script type="text/javascript">
+    !(function () {
+      for (const mapOpener of document.querySelectorAll("button.map-opener")) {
+        mapOpener.addEventListener('click', (event) => {
+          event.target.nextElementSibling.showModal()
+          const mapId = event.target.dataset.mapId
+          const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
+          const map = new L.U.Map(`${mapId}_target`, previewSettings)
+        })
+      }
+    })()
+  </script>
+{% endblock bottom_js %}

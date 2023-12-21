@@ -296,9 +296,9 @@ table.maps {
     width: 100%;
 }
 table.maps .map_fragment {
-    height: 100px;
+    display: block;
+    height: 80vh;
     width: 100%;
-    min-width: 200px;
 }
 table.maps tbody tr:nth-child(odd) {
     background-color: #f4f4f4;
@@ -308,6 +308,21 @@ table.maps td {
 }
 table.maps thead tr {
     line-height: 2em;
+}
+
+/* **************************** */
+/*           Dialog             */
+/* **************************** */
+dialog {
+    width: 90vw;
+    height: 90vh;
+}
+dialog::backdrop {
+    background: #fff5;
+    backdrop-filter: blur(4px);
+}
+.close-dialog {
+    text-align: center;
 }
 
 
