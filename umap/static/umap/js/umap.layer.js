@@ -1116,6 +1116,8 @@ L.U.DataLayer = L.Evented.extend({
     this.map.updateDatalayersControl()
     this.fire('erase')
     this._leaflet_events_bk = this._leaflet_events
+    this.map.off('moveend', this.onMoveEnd, this)
+    this.map.off('zoomend', this.onZoomEnd, this)
     this.off()
     this.clear()
     delete this._loaded
