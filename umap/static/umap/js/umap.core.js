@@ -176,6 +176,8 @@ L.Util.greedyTemplate = (str, data, ignore) => {
     return value
   }
 
+  if (typeof str !== 'string') return ''
+
   return str.replace(
     /\{ *([^\{\}/\-]+)(?:\|("[^"]*"))? *\}/g,
     (str, key, staticFallback) => {
