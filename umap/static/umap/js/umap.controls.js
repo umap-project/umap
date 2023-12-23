@@ -1210,7 +1210,6 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
     L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, maxShown))
     if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
   },
-
 })
 
 /* Used in edit mode to define the default tilelayer */
@@ -1582,11 +1581,15 @@ L.U.Editable = L.Editable.extend({
       'editable:drawing:start editable:drawing:click editable:drawing:move',
       this.drawingTooltip
     )
-    this.on('editable:drawing:end', this.closeTooltip)
+    this.on('editable:drawing:end', (e) => {
+      this.closeTooltip()
+      // Leaflet.Editable will delete the drawn shape if invalid
+      // (eg. line has only one drawn point)
+      // So let's check if the layer has no more shape
+      if (!e.layer.hasGeom()) e.layer.del()
+    })
     // Layer for items added by users
     this.on('editable:drawing:cancel', (e) => {
-      if (e.layer._latlngs && e.layer._latlngs.length < e.layer.editor.MIN_VERTEX)
-        e.layer.del()
       if (e.layer instanceof L.U.Marker) e.layer.del()
     })
     this.on('editable:drawing:commit', function (e) {

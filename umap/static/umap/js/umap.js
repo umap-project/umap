@@ -577,7 +577,9 @@ L.U.Map.include({
         this.help.show('edit')
       }
       if (e.keyCode === L.U.Keys.ESC) {
-        if (this.editEnabled) this.editTools.commitDrawing()
+        if (this.editEnabled && this.editTools.drawing()) {
+          this.editTools.stopDrawing()
+        }
         if (this.measureTools.enabled()) this.measureTools.stopDrawing()
       }
     }
