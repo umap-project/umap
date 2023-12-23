@@ -332,6 +332,125 @@ describe('L.U.DataLayer', function () {
     })
   })
 
+  describe('#smart-options()', function () {
+    let poly, marker
+    before(function () {
+      this.datalayer.eachLayer(function (layer) {
+        if (!poly && layer instanceof L.Polygon) {
+          poly = layer
+        }
+        if (!marker && layer instanceof L.Marker) {
+          marker = layer
+        }
+      })
+    })
+
+    it('should parse color variable', function () {
+      let icon = qs('div.umap-div-icon .icon_container')
+      poly.properties.mycolor = 'DarkGoldenRod'
+      marker.properties.mycolor = 'DarkRed'
+      marker.properties._umap_options.color = undefined
+      assert.notOk(qs('path[fill="DarkGoldenRod"]'))
+      assert.equal(icon.style.backgroundColor, 'olivedrab')
+      this.datalayer.options.color = '{mycolor}'
+      this.datalayer.options.fillColor = '{mycolor}'
+      this.datalayer.indexProperties(poly)
+      this.datalayer.indexProperties(marker)
+      this.datalayer.redraw()
+      icon = qs('div.umap-div-icon .icon_container')
+      assert.equal(icon.style.backgroundColor, 'darkred')
+      assert.ok(qs('path[fill="DarkGoldenRod"]'))
+    })
+  })
+
+  describe('#facet-search()', function () {
+    before(function () {
+      this.server.respondWith(
+        /\/datalayer\/63\/\?.*/,
+        JSON.stringify(RESPONSES.datalayer63_GET)
+      )
+      this.map.options.facetKey = 'name'
+      this.map.createDataLayer(RESPONSES.datalayer63_GET._umap_options)
+      this.server.respond()
+    })
+    it('should not impact non browsable layer', function () {
+      assert.ok(qs('path[fill="SteelBlue"]'))
+    })
+    it('should allow advanced filter', function () {
+      this.map.openFacet()
+      assert.ok(qs('div.umap-facet-search'))
+      // This one if from the normal datalayer
+      // it's name is "test", so it should be hidden
+      // by the filter
+      assert.ok(qs('path[fill="none"]'))
+      happen.click(qs('input[data-value="name poly"]'))
+      assert.notOk(qs('path[fill="none"]'))
+      // This one comes from a non browsable layer
+      // so it should not be affected by the filter
+      assert.ok(qs('path[fill="SteelBlue"]'))
+      happen.click(qs('input[data-value="name poly"]')) // Undo
+    })
+    it('should allow to control facet label', function () {
+      this.map.options.facetKey = 'name|Nom'
+      this.map.openFacet()
+      assert.ok(qs('div.umap-facet-search h5'))
+      assert.equal(qs('div.umap-facet-search h5').textContent, 'Nom')
+    })
+  })
+  describe('#zoomEnd', function () {
+    it('should honour the fromZoom option', function () {
+      this.map.setZoom(6, { animate: false })
+      assert.ok(qs('path[fill="none"]'))
+      this.datalayer.options.fromZoom = 6
+      this.map.setZoom(5, { animate: false })
+      assert.notOk(qs('path[fill="none"]'))
+      this.map.setZoom(6, { animate: false })
+      assert.ok(qs('path[fill="none"]'))
+    })
+
+    it('should honour the toZoom option', function () {
+      this.map.setZoom(6, { animate: false })
+      assert.ok(qs('path[fill="none"]'))
+      this.datalayer.options.toZoom = 6
+      this.map.setZoom(7, { animate: false })
+      assert.notOk(qs('path[fill="none"]'))
+      this.map.setZoom(6, { animate: false })
+      assert.ok(qs('path[fill="none"]'))
+    })
+  })
+
+  describe('#displayOnLoad', function () {
+    beforeEach(function () {
+      this.server.respondWith(
+        /\/datalayer\/64\/\?.*/,
+        JSON.stringify(RESPONSES.datalayer64_GET)
+      )
+      this.datalayer = this.map.createDataLayer(RESPONSES.datalayer64_GET._umap_options)
+      // Force fetching the data, so to deal here with fake server
+      this.datalayer.fetchData()
+      this.server.respond()
+      this.map.setZoom(10, { animate: false })
+    })
+
+    afterEach(function () {
+      this.datalayer._delete()
+    })
+
+    it('should not display layer at load', function () {
+      assert.notOk(qs('path[fill="AliceBlue"]'))
+    })
+
+    it('should display on click', function () {
+      happen.click(qs(`[data-id='${L.stamp(this.datalayer)}'] .layer-toggle`))
+      assert.ok(qs('path[fill="AliceBlue"]'))
+    })
+
+    it('should not display on zoom', function () {
+      this.map.setZoom(9, { animate: false })
+      assert.notOk(qs('path[fill="AliceBlue"]'))
+    })
+  })
+
   describe('#delete()', function () {
     var deleteLink,
       deletePath = '/map/99/datalayer/delete/62/'
@@ -371,126 +490,6 @@ describe('L.U.DataLayer', function () {
     it('should be visible again on edit cancel', function () {
       clickCancel()
       assert.ok(qs('div.icon_container'))
-    })
-  })
-  describe('#smart-options()', function () {
-    let poly, marker
-    before(function () {
-      this.datalayer.eachLayer(function (layer) {
-        if (!poly && layer instanceof L.Polygon) {
-          poly = layer
-        }
-        if (!marker && layer instanceof L.Marker) {
-          marker = layer
-        }
-      })
-    })
-
-    it('should parse color variable', function () {
-      let icon = qs('div.umap-div-icon .icon_container')
-      poly.properties.mycolor = 'DarkGoldenRod'
-      marker.properties.mycolor = 'DarkRed'
-      marker.properties._umap_options.color = undefined
-      assert.notOk(qs('path[fill="DarkGoldenRod"]'))
-      assert.equal(icon.style.backgroundColor, 'olivedrab')
-      this.datalayer.options.color = '{mycolor}'
-      this.datalayer.options.fillColor = '{mycolor}'
-      this.datalayer.indexProperties(poly)
-      this.datalayer.indexProperties(marker)
-      this.datalayer.redraw()
-      icon = qs('div.umap-div-icon .icon_container')
-      assert.equal(icon.style.backgroundColor, 'darkred')
-      assert.ok(qs('path[fill="DarkGoldenRod"]'))
-    })
-  })
-
-  describe("#displayOnLoad", function () {
-
-    beforeEach(function () {
-      this.server.respondWith(
-        /\/datalayer\/64\/\?.*/,
-        JSON.stringify(RESPONSES.datalayer64_GET)
-      )
-      this.datalayer = this.map.createDataLayer(RESPONSES.datalayer64_GET._umap_options)
-      // Force fetching the data, so to deal here with fake server
-      this.datalayer.fetchData()
-      this.server.respond()
-      this.map.setZoom(10, {animate: false})
-    });
-
-    afterEach(function () {
-      this.datalayer._delete()
-    })
-
-    it("should not display layer at load", function () {
-      assert.notOk(qs('path[fill="AliceBlue"]'))
-    })
-
-    it("should display on click", function () {
-      happen.click(qs(`[data-id='${L.stamp(this.datalayer)}'] .layer-toggle`))
-      assert.ok(qs('path[fill="AliceBlue"]'))
-    })
-
-    it("should not display on zoom", function () {
-      this.map.setZoom(9, {animate: false})
-      assert.notOk(qs('path[fill="AliceBlue"]'))
-    })
-
-  })
-
-  describe('#facet-search()', function () {
-    before(function () {
-      this.server.respondWith(
-        /\/datalayer\/63\/\?.*/,
-        JSON.stringify(RESPONSES.datalayer63_GET)
-      )
-      this.map.options.facetKey = 'name'
-      this.map.createDataLayer(RESPONSES.datalayer63_GET._umap_options)
-      this.server.respond()
-    })
-    it('should not impact non browsable layer', function () {
-      assert.ok(qs('path[fill="SteelBlue"]'))
-    })
-    it('should allow advanced filter', function () {
-      this.map.openFacet()
-      assert.ok(qs('div.umap-facet-search'))
-      // This one if from the normal datalayer
-      // it's name is "test", so it should be hidden
-      // by the filter
-      assert.ok(qs('path[fill="none"]'))
-      happen.click(qs('input[data-value="name poly"]'))
-      assert.notOk(qs('path[fill="none"]'))
-      // This one comes from a non browsable layer
-      // so it should not be affected by the filter
-      assert.ok(qs('path[fill="SteelBlue"]'))
-      happen.click(qs('input[data-value="name poly"]')) // Undo
-    })
-    it('should allow to control facet label', function () {
-      this.map.options.facetKey = 'name|Nom'
-      this.map.openFacet()
-      assert.ok(qs('div.umap-facet-search h5'))
-      assert.equal(qs('div.umap-facet-search h5').textContent, 'Nom')
-    })
-  })
-  describe('#zoomEnd', function () {
-    it('should honour the fromZoom option', function () {
-      this.map.setZoom(6, {animate: false})
-      assert.ok(qs('path[fill="none"]'))
-      this.datalayer.options.fromZoom = 6
-      this.map.setZoom(5, {animate: false})
-      assert.notOk(qs('path[fill="none"]'))
-      this.map.setZoom(6, {animate: false})
-      assert.ok(qs('path[fill="none"]'))
-    })
-
-    it('should honour the toZoom option', function () {
-      this.map.setZoom(6, {animate: false})
-      assert.ok(qs('path[fill="none"]'))
-      this.datalayer.options.toZoom = 6
-      this.map.setZoom(7, {animate: false})
-      assert.notOk(qs('path[fill="none"]'))
-      this.map.setZoom(6, {animate: false})
-      assert.ok(qs('path[fill="none"]'))
     })
   })
 })
