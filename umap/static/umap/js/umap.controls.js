@@ -1353,6 +1353,7 @@ L.U.StarControl = L.Control.extend({
 
 L.U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
+    this.options.placeholder = L._('Type a place name or coordinates')
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
     this.options.url = map.options.urls.search
     if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
