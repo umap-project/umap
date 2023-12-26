@@ -3,16 +3,16 @@
 ## 1.12.1 - 2023-12-23
 
 ### New features
-* Allow to edit pictogram categories from admin list by @yohanboniface in https://github.com/umap-project/umap/pull/1477
+* Allow to edit pictogram categories from admin list by @yohanboniface in #1477
 
 ### Bug  fixes
-* Increase iconlayers titles on hover by @yohanboniface in https://github.com/umap-project/umap/pull/1476
-* Remove zoom/moeveend events when deleting datalayer by @yohanboniface in https://github.com/umap-project/umap/pull/1484
-* Better way of handling escape while drawing by @yohanboniface in https://github.com/umap-project/umap/pull/1483
-* Do not fail on greedyTemplate when description is an object by @yohanboniface in https://github.com/umap-project/umap/pull/1482
+* Increase iconlayers titles on hover by @yohanboniface in #1476
+* Remove zoom/moeveend events when deleting datalayer by @yohanboniface in #1484
+* Better way of handling escape while drawing by @yohanboniface in #1483
+* Do not fail on greedyTemplate when description is an object by @yohanboniface in #1482
 
 ### Internal changes
-* build: Update makefile testjs to open the browser by @almet in https://github.com/umap-project/umap/pull/1472
+* build: Update makefile testjs to open the browser by @almet in #1472
 
 ## 1.12.0 - 2023-12-17
 
