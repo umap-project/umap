@@ -270,17 +270,17 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
     const color = this.feature.getDynamicOption('color')
     title.style.backgroundColor = color
     const iconUrl = this.feature.getDynamicOption('iconUrl')
-    let img
+    let icon
     if (L.Util.isPath(iconUrl) || L.Util.isRemoteUrl(iconUrl) || L.Util.isDataImage(iconUrl)) {
-      img = L.DomUtil.add('img', 'popup-icon', title)
-      img.src = iconUrl
+      icon = L.DomUtil.add('img', 'popup-icon', title)
+      icon.src = iconUrl
     } else {
-      img = L.DomUtil.add('span', 'popup-icon', title)
-      img.textContent = iconUrl
+      icon = L.DomUtil.add('span', 'popup-icon', title)
+      icon.textContent = iconUrl
     }
     if (L.DomUtil.contrastedColor(title, color)) {
       if (L.Util.isPath(iconUrl) && iconUrl.endsWith('.svg')) {
-        img.style.filter = 'invert(1)'
+        icon.style.filter = 'invert(1)'
       }
       title.style.color = 'white'
     }
