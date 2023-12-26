@@ -271,7 +271,11 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
     title.style.backgroundColor = color
     const iconUrl = this.feature.getDynamicOption('iconUrl')
     let icon
-    if (L.Util.isPath(iconUrl) || L.Util.isRemoteUrl(iconUrl) || L.Util.isDataImage(iconUrl)) {
+    if (
+      L.Util.isPath(iconUrl) ||
+      L.Util.isRemoteUrl(iconUrl) ||
+      L.Util.isDataImage(iconUrl)
+    ) {
       icon = L.DomUtil.add('img', 'popup-icon', title)
       icon.src = iconUrl
     } else {
@@ -291,29 +295,59 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
       const number = props['addr:housenumber']
       if (number) {
         // Poor way to deal with international forms of writting addresses
-        L.DomUtil.add('span', '', row, `${L._("No.")}: ${number}`)
-        L.DomUtil.add('span', '', row, `${L._("Street")}: ${street}`)
+        L.DomUtil.add('span', '', row, `${L._('No.')}: ${number}`)
+        L.DomUtil.add('span', '', row, `${L._('Street')}: ${street}`)
       } else {
         L.DomUtil.add('span', '', row, street)
       }
     }
     if (props.website) {
-      L.DomUtil.element('a', {href: props.website, textContent: props.website}, container)
+      L.DomUtil.element(
+        'a',
+        { href: props.website, textContent: props.website },
+        container
+      )
     }
     const phone = props.phone || props['contact:phone']
     if (phone) {
-      L.DomUtil.add('div', '', container, L.DomUtil.element('a', {href: `tel:${phone}`, textContent: phone}))
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', { href: `tel:${phone}`, textContent: phone })
+      )
     }
     if (props.mobile) {
-      L.DomUtil.add('div', '', container, L.DomUtil.element('a', {href: `tel:${props.mobile}`, textContent: props.mobile}))
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', {
+          href: `tel:${props.mobile}`,
+          textContent: props.mobile,
+        })
+      )
     }
     const email = props.email || props['contact:email']
     if (email) {
-      L.DomUtil.add('div', '', container, L.DomUtil.element('a', {href: `mailto:${email}`, textContent: email}))
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', { href: `mailto:${email}`, textContent: email })
+      )
     }
     const id = props['@id']
     if (id) {
-      L.DomUtil.add('div', 'osm-link', container, L.DomUtil.element('a', {href: `https://www.openstreetmap.org/${id}`, textContent: L._('See on OpenStreetMap')}))
+      L.DomUtil.add(
+        'div',
+        'osm-link',
+        container,
+        L.DomUtil.element('a', {
+          href: `https://www.openstreetmap.org/${id}`,
+          textContent: L._('See on OpenStreetMap'),
+        })
+      )
     }
     return container
   },
