@@ -62,7 +62,7 @@ from .forms import (
     UserProfileForm,
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
-from .utils import ConflictError, get_uri_template, gzip_file, is_ajax, merge_features
+from .utils import ConflictError, _urls_for_js, gzip_file, is_ajax, merge_features
 
 User = get_user_model()
 
