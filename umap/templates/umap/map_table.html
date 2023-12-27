@@ -1,16 +1,15 @@
 {% load umap_tags i18n %}
 <table class="maps">
-  {% if not is_ajax %}
-    <thead>
-      <tr>
-        <th>{% blocktrans %}Name{% endblocktrans %}</th>
-        <th>{% blocktrans %}Who can see / edit{% endblocktrans %}</th>
-        <th>{% blocktrans %}Last save{% endblocktrans %}</th>
-        <th>{% blocktrans %}Owner{% endblocktrans %}</th>
-        <th>{% blocktrans %}Actions{% endblocktrans %}</th>
-      </tr>
-    </thead>
-  {% endif %}
+  <thead>
+    <tr>
+      <th>{% blocktrans %}Name{% endblocktrans %}</th>
+      <th>{% blocktrans %}Preview{% endblocktrans %}</th>
+      <th>{% blocktrans %}Who can see / edit{% endblocktrans %}</th>
+      <th>{% blocktrans %}Last save{% endblocktrans %}</th>
+      <th>{% blocktrans %}Owner{% endblocktrans %}</th>
+      <th>{% blocktrans %}Actions{% endblocktrans %}</th>
+    </tr>
+  </thead>
   <tbody>
     {% for map_inst in maps %}
       {% with unique_id="map_"|addstr:map_inst.pk %}
@@ -18,12 +17,14 @@
         <tr>
           <td>
             <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
-            <button class="map-opener" data-map-id="{{ unique_id }}">{% blocktrans %}Preview{% endblocktrans %}</button>
+          </td>
+          <td>
+            <button class="button map-opener" data-map-id="{{ unique_id }}">{% blocktranslate %}Open preview{% endblocktranslate %}</button>
             <dialog>
               <form method="dialog">
                 <div id="{{ unique_id }}_target" class="map_fragment"></div>
                 <p class="close-dialog">
-                  <button type="submit">Close</button>
+                  <button class="button" type="submit">Close</button>
                 </p>
               </form>
             </dialog>
@@ -43,9 +44,26 @@
     {% endfor %}
   </tbody>
 </table>
-{% if maps.has_next %}
-  <div class="col wide">
-    <a href="?{% paginate_querystring maps.next_page_number %}"
-       class="button more_button neutral">{% trans "More" %}</a>
-  </div>
-{% endif %}
+<div class="pagination">
+  {% if maps.has_previous %}
+    <a href="?p=1{% if q %}&q={{ q }}{% endif %}">&laquo; {% translate "first" %}</a>
+    <a href="?p={{ maps.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">&lsaquo; {% translate "previous" %}</a>
+  {% else %}
+    <span></span>
+    <span></span>
+  {% endif %}
+
+  <span class="current">
+    {% blocktranslate with maps_number=maps.number num_pages=maps.paginator.num_pages %}
+      Page {{ maps_number }} of {{ num_pages }}
+    {% endblocktranslate %}
+  </span>
+
+  {% if maps.has_next %}
+    <a href="?p={{ maps.next_page_number }}{% if q %}&q={{ q }}{% endif %}">{% translate "next" %} &rsaquo;</a>
+    <a href="?p={{ maps.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}">{% translate "last" %} &raquo;</a>
+  {% else %}
+    <span></span>
+    <span></span>
+  {% endif %}
+</div>

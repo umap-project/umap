@@ -270,7 +270,12 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
     def get_context_data(self, **kwargs):
         kwargs.update(
-            {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)}
+            {
+                "q": self.request.GET.get("q"),
+                "maps": self.paginate(
+                    self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER
+                ),
+            }
         )
         return super().get_context_data(**kwargs)
 

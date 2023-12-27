@@ -7,7 +7,7 @@
   {% trans "Search my maps" as placeholder %}
   <div class="col wide">
     <h2 class="section tabs">
-      {% trans "My Dashboard" %} | <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
+      <a class="selected" href="{% url 'user_dashboard' %}">{% trans "My Dashboard" %}</a> | <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
     </h2>
     {% include "umap/search_bar.html" with action=request.get_full_path placeholder=placeholder %}
   </div>
