@@ -1236,7 +1236,7 @@ U.Map = L.Map.extend({
         {
           handler: 'Input',
           helpEntries: 'facetKey',
-          placeholder: L._('Example: key1,key2,key3'),
+          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
           label: L._('Facet keys'),
         },
       ],
@@ -1848,7 +1848,10 @@ U.Map = L.Map.extend({
   getFacetKeys: function () {
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
       const els = curr.split('|')
-      acc[els[0]] = els[1] || els[0]
+      acc[els[0]] = {
+	"label": els[1] || els[0],
+	"type":  els[2] || "checkbox"
+      }
       return acc
     }, {})
   },
