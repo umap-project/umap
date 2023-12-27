@@ -46,11 +46,13 @@
 </table>
 <div class="pagination">
   {% if maps.has_previous %}
-    <a href="?p=1{% if q %}&q={{ q }}{% endif %}">&laquo; {% translate "first" %}</a>
-    <a href="?p={{ maps.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">&lsaquo; {% translate "previous" %}</a>
+    <a href="?p=1{% if q %}&q={{ q }}{% endif %}">« {% translate "first" %}</a>
+    <a href="?p={{ maps.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">‹ {% translate "previous" %}</a>
   {% else %}
+    {# djlint:off #}
     <span></span>
     <span></span>
+    {# djlint:on #}
   {% endif %}
 
   <span class="current">
@@ -60,10 +62,12 @@
   </span>
 
   {% if maps.has_next %}
-    <a href="?p={{ maps.next_page_number }}{% if q %}&q={{ q }}{% endif %}">{% translate "next" %} &rsaquo;</a>
-    <a href="?p={{ maps.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}">{% translate "last" %} &raquo;</a>
+    <a href="?p={{ maps.next_page_number }}{% if q %}&q={{ q }}{% endif %}">{% translate "next" %} ›</a>
+    <a href="?p={{ maps.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}">{% translate "last" %} »</a>
   {% else %}
+    {# djlint:off #}
     <span></span>
     <span></span>
+    {# djlint:on #}
   {% endif %}
 </div>
