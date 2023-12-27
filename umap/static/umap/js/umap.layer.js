@@ -235,13 +235,18 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   postUpdate: function (e) {
-    if (e.helper.field === 'options.choropleth.breaks') {
+    const field = e.helper.field,
+      builder = e.helper.builder
+    // If user touches the breaks, then force manual mode
+    if (field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
-      e.helper.builder.helpers['options.choropleth.mode'].fetch()
+      builder.helpers['options.choropleth.mode'].fetch()
     }
     this.computeBreaks()
-    if (e.helper.field !== 'options.choropleth.breaks') {
-      e.helper.builder.helpers['options.choropleth.breaks'].fetch()
+    // If user changes the mode or the number of classes,
+    // then update the breaks input value
+    if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
+      builder.helpers['options.choropleth.breaks'].fetch()
     }
   },
 
