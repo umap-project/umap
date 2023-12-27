@@ -785,11 +785,11 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   },
 })
 
-L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
+L.FormBuilder.FacetSearchCheckbox = L.FormBuilder.Element.extend({
   build: function () {
     this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
     this.ul = L.DomUtil.create('ul', '', this.container)
-    const choices = this.options.choices
+    const choices = this.options.criteria["choices"]
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
   },
@@ -804,7 +804,7 @@ L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
       label = L.DomUtil.create('label', '', property_li)
     input.type = 'checkbox'
     input.id = `checkbox_${this.name}_${value}`
-    input.checked = this.get().includes(value)
+    input.checked = this.get()['choices'].includes(value)
     input.dataset.value = value
     label.htmlFor = `checkbox_${this.name}_${value}`
     label.innerHTML = value
@@ -812,9 +812,58 @@ L.FormBuilder.FacetSearch = L.FormBuilder.Element.extend({
   },
 
   toJS: function () {
-    return [...this.ul.querySelectorAll('input:checked')].map((i) => i.dataset.value)
+    return {
+      'type': 'checkbox',
+      'choices': [...this.ul.querySelectorAll('input:checked')].map((i) => i.dataset.value)
+    }
   },
 })
+
+L.FormBuilder.FacetSearchDate = L.FormBuilder.Element.extend({
+  build: function () {
+    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode);
+    const min = this.options.criteria['min'];
+    const max = this.options.criteria['max'];
+
+    // Create labels for min and max inputs
+    this.minLabel = L.DomUtil.create('label', '', this.container);
+    this.minLabel.innerHTML = 'Start';
+    this.minLabel.htmlFor = `date_${this.name}_min`;
+
+    this.minInput = L.DomUtil.create('input', '', this.container);
+    this.minInput.type = 'datetime-local';
+    this.minInput.step = '0.001';
+    this.minInput.id = `date_${this.name}_min`;
+    this.minInput.valueAsNumber = (min.valueOf() - min.getTimezoneOffset() * 60000);;
+    this.minInput.dataset.value = min;
+
+    this.maxLabel = L.DomUtil.create('label', '', this.container);
+    this.maxLabel.innerHTML = 'End';
+    this.maxLabel.htmlFor = `date_${this.name}_max`;
+
+    this.maxInput = L.DomUtil.create('input', '', this.container);
+    this.maxInput.type = 'datetime-local';
+    this.maxInput.step = '0.001';
+    this.maxInput.id = `date_${this.name}_max`;
+    this.maxInput.valueAsNumber = (max.valueOf() - max.getTimezoneOffset() * 60000);;
+    this.maxInput.dataset.value = max;
+
+    L.DomEvent.on(this.minInput, 'change', (e) => this.sync());
+    L.DomEvent.on(this.maxInput, 'change', (e) => this.sync());
+  },
+
+  buildLabel: function () {
+    this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label)
+  },
+
+  toJS: function () {
+    return {
+      'type': 'date',
+      'min': this.minInput.value,
+      'max': this.maxInput.value,
+    };
+  },
+});
 
 L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   default: 'null',

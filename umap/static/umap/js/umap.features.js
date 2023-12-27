@@ -483,12 +483,30 @@ L.U.FeatureMixin = {
     return false
   },
 
+  parseDateField: function (value) {
+    if (parseFloat(value).toString() === value.toString()) {
+      value = parseFloat(value);
+      if (value < 10000000000) {
+        value = value * 1000;
+      }
+    }
+    return new Date(value);
+  },
+
   matchFacets: function () {
     const facets = this.map.facets
-    for (const [property, expected] of Object.entries(facets)) {
-      if (expected.length) {
-        let value = this.properties[property]
-        if (!value || !expected.includes(value)) return false
+    for (const [property, criteria] of Object.entries(facets)) {
+      let value = this.properties[property]
+      const type = criteria["type"]
+      if (type === "date") {
+	const min = new Date(criteria["min"])
+	const max = new Date(criteria["max"])
+	value = this.parseDateField(value)
+        if (!!min && (!value || min > value)) return false
+	if (!!max && (!value || max < value)) return false
+      } else {
+	const choices = criteria["choices"]
+        if (choices.length && (!value || !choices.includes(value))) return false
       }
     }
     return true

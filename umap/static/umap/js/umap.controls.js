@@ -741,22 +741,50 @@ L.U.Map.include({
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),
       title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
-      keys = Object.keys(this.getFacetKeys())
+      facetKeys = this.getFacetKeys(),
+      keys = Object.keys(facetKeys)
 
-    const knownValues = {}
+    const facetCriteria = {}
 
     keys.forEach((key) => {
-      knownValues[key] = []
-      if (!this.facets[key]) this.facets[key] = []
+      if (facetKeys[key]["type"] === "date") {
+        if (!facetCriteria[key]) facetCriteria[key] = {
+	  "min": undefined,
+	  "max": undefined
+	}
+        if (!this.facets[key]) this.facets[key] = {
+          "type": facetKeys[key]["type"],
+	  "min": undefined,
+	  "max": undefined
+        }
+      } else {
+        if (!facetCriteria[key]) facetCriteria[key] = {
+	  "choices": []
+	}
+        if (!this.facets[key]) this.facets[key] = {
+          "type": facetKeys[key]["type"],
+          "choices": []
+        }
+      }
     })
 
     this.eachBrowsableDataLayer((datalayer) => {
       datalayer.eachFeature((feature) => {
         keys.forEach((key) => {
           let value = feature.properties[key]
-          if (typeof value !== 'undefined' && !knownValues[key].includes(value)) {
-            knownValues[key].push(value)
-          }
+          if (facetKeys[key]["type"] === "date") {
+	    value = feature.parseDateField(value)
+	    if (!!value && (!facetCriteria[key]["min"] || facetCriteria[key]["min"] > value)) {
+	      facetCriteria[key]["min"] = value
+	    }
+	    if (!!value && (!facetCriteria[key]["max"] || facetCriteria[key]["max"] < value)) {
+	      facetCriteria[key]["max"] = value
+	    }
+	  } else {
+	    if (!!value && !facetCriteria[key]["choices"].includes(value)) {
+              facetCriteria[key]["choices"].push(value)
+            }
+	  }
         })
       })
     })
@@ -772,12 +800,12 @@ L.U.Map.include({
         this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
     }
 
-    const fields = keys.map((current) => [
-      `facets.${current}`,
+    const fields = keys.map((key) => [
+      `facets.${key}`,
       {
-        handler: 'FacetSearch',
-        choices: knownValues[current],
-        label: this.getFacetKeys()[current],
+	handler: facetKeys[key]["type"] === "date" ? 'FacetSearchDate' : 'FacetSearchCheckbox',
+        criteria: facetCriteria[key],
+        label: facetKeys[key]["label"]
       },
     ])
     const builder = new L.U.FormBuilder(this, fields, {
