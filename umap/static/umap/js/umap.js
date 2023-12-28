@@ -1849,8 +1849,8 @@ U.Map = L.Map.extend({
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
       const els = curr.split('|')
       acc[els[0]] = {
-	"label": els[1] || els[0],
-	"type":  els[2] || "checkbox"
+        "label": els[1] || els[0],
+        "type":  els[2] || "checkbox"
       }
       return acc
     }, {})

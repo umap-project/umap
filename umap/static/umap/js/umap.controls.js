@@ -671,18 +671,18 @@ const ControlsMixin = {
     keys.forEach((key) => {
       if (facetKeys[key]["type"] === "date") {
         if (!facetCriteria[key]) facetCriteria[key] = {
-	  "min": undefined,
-	  "max": undefined
-	}
+          "min": undefined,
+          "max": undefined
+        }
         if (!this.facets[key]) this.facets[key] = {
           "type": facetKeys[key]["type"],
-	  "min": undefined,
-	  "max": undefined
+          "min": undefined,
+          "max": undefined
         }
       } else {
         if (!facetCriteria[key]) facetCriteria[key] = {
-	  "choices": []
-	}
+          "choices": []
+        }
         if (!this.facets[key]) this.facets[key] = {
           "type": facetKeys[key]["type"],
           "choices": []
@@ -695,18 +695,18 @@ const ControlsMixin = {
         keys.forEach((key) => {
           let value = feature.properties[key]
           if (facetKeys[key]["type"] === "date") {
-	    value = feature.parseDateField(value)
-	    if (!!value && (!facetCriteria[key]["min"] || facetCriteria[key]["min"] > value)) {
-	      facetCriteria[key]["min"] = value
-	    }
-	    if (!!value && (!facetCriteria[key]["max"] || facetCriteria[key]["max"] < value)) {
-	      facetCriteria[key]["max"] = value
-	    }
-	  } else {
-	    if (!!value && !facetCriteria[key]["choices"].includes(value)) {
+            value = feature.parseDateField(value)
+            if (!!value && (!facetCriteria[key]["min"] || facetCriteria[key]["min"] > value)) {
+              facetCriteria[key]["min"] = value
+            }
+            if (!!value && (!facetCriteria[key]["max"] || facetCriteria[key]["max"] < value)) {
+              facetCriteria[key]["max"] = value
+            }
+          } else {
+            if (!!value && !facetCriteria[key]["choices"].includes(value)) {
               facetCriteria[key]["choices"].push(value)
             }
-	  }
+          }
         })
       })
     })
@@ -725,7 +725,7 @@ const ControlsMixin = {
     const fields = keys.map((key) => [
       `facets.${key}`,
       {
-	handler: facetKeys[key]["type"] === "date" ? 'FacetSearchDate' : 'FacetSearchCheckbox',
+        handler: facetKeys[key]["type"] === "date" ? 'FacetSearchDate' : 'FacetSearchCheckbox',
         criteria: facetCriteria[key],
         label: facetKeys[key]["label"]
       },
