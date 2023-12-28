@@ -499,13 +499,13 @@ L.U.FeatureMixin = {
       let value = this.properties[property]
       const type = criteria["type"]
       if (type === "date") {
-	const min = new Date(criteria["min"])
-	const max = new Date(criteria["max"])
-	value = this.parseDateField(value)
+        const min = new Date(criteria["min"])
+        const max = new Date(criteria["max"])
+        value = this.parseDateField(value)
         if (!!min && (!value || min > value)) return false
-	if (!!max && (!value || max < value)) return false
+        if (!!max && (!value || max < value)) return false
       } else {
-	const choices = criteria["choices"]
+        const choices = criteria["choices"]
         if (choices.length && (!value || !choices.includes(value))) return false
       }
     }
