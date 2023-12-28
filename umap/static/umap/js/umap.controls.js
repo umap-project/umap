@@ -1199,11 +1199,21 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
     if (!layers) {
       layers = []
       this.map.eachTileLayer((layer) => {
-        layers.push({
-          title: layer.options.name,
-          layer: layer,
-          icon: L.Util.template(layer.options.url_template, this.map.demoTileInfos),
-        })
+        try {
+          // We'd like to use layer.getTileUrl, but this method will only work
+          // when the tilelayer is actually added to the map (needs this._tileZoom
+          // to be defined)
+          // Fixme when https://github.com/Leaflet/Leaflet/pull/9201 is released
+          const icon = L.Util.template(layer.options.url_template, this.map.demoTileInfos)
+          layers.push({
+            title: layer.options.name,
+            layer: layer,
+            icon: icon,
+          })
+        } catch (e) {
+          // Skip this tilelayer
+          console.error(e)
+        }
       })
     }
     const maxShown = 10

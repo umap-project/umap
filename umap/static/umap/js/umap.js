@@ -29,7 +29,12 @@ L.Map.mergeOptions({
   name: '',
   description: '',
   displayPopupFooter: false,
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, r: '' },
+  // When a TileLayer is in TMS mode, it needs -y instead of y.
+  // This is usually handled by the TileLayer instance itself, but
+  // we cannot rely on this because of the y is overriden by Leaflet
+  // See https://github.com/Leaflet/Leaflet/pull/9201
+  // And let's remove this -y when this PR is merged and released.
+  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
