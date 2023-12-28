@@ -346,7 +346,7 @@ const locale = {
     "{area}&#8239;mi&sup2;": "{area} mi&sup2;",
     "{area}&#8239;yd&sup2;": "{area} yd&sup2;",
     "{distance}&#8239;NM": "{distance} NM",
-    "{distance}&#8239;km": "{afstand} km",
+    "{distance}&#8239;km": "{distance} km",
     "{distance}&#8239;m": "{distance} m",
     "{distance}&#8239;miles": "{distance} miles",
     "{distance}&#8239;yd": "{distance} yd",
