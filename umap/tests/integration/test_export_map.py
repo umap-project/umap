@@ -9,7 +9,7 @@ pytestmark = pytest.mark.django_db
 
 def test_umap_export(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
-    link = page.get_by_role("link", name="Download full backup")
+    link = page.get_by_role("link", name="full backup")
     expect(link).to_be_visible()
     with page.expect_download() as download_info:
         link.click()

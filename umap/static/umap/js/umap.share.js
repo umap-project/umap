@@ -55,7 +55,12 @@ L.U.Share = L.Class.extend({
       () => navigator.clipboard.writeText(this.mapUrl.value),
       this
     )
-    const mapUrlLabel = L.DomUtil.add('label', '', this.container, L._('Link to view the map'))
+    const mapUrlLabel = L.DomUtil.add(
+      'label',
+      '',
+      this.container,
+      L._('Link to view the map')
+    )
     this.mapUrl = L.DomUtil.create('input', 'umap-share-url', mapUrlLabel)
     this.mapUrl.type = 'text'
     this.mapUrl.readOnly = true
@@ -80,27 +85,32 @@ L.U.Share = L.Class.extend({
     L.DomUtil.create('hr', '', this.container)
 
     L.DomUtil.add('h4', '', this.container, L._('Download'))
-    L.DomUtil.add('small', 'label', this.container, L._('Only visible layers'))
+    L.DomUtil.add('small', 'label', this.container, L._("Only visible layers' data"))
     for (const key in this.EXPORT_TYPES) {
       if (this.EXPORT_TYPES.hasOwnProperty(key)) {
         L.DomUtil.createButton(
           'download-file',
           this.container,
-          this.EXPORT_TYPES[key].name || key + ' data',
+          this.EXPORT_TYPES[key].name || key,
           () => this.download(key),
           this
         )
       }
     }
     L.DomUtil.create('div', 'vspace', this.container)
-    L.DomUtil.add('small', 'label', this.container, L._('All data and settings of the map'))
+    L.DomUtil.add(
+      'small',
+      'label',
+      this.container,
+      L._('All data and settings of the map')
+    )
     const downloadUrl = L.Util.template(this.map.options.urls.map_download, {
       map_id: this.map.options.umap_id,
     })
     const link = L.DomUtil.createLink(
       'download-backup',
       this.container,
-      L._('Download full backup'),
+      L._('full backup'),
       downloadUrl
     )
     let name = this.map.options.name || 'data'

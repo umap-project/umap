@@ -227,8 +227,7 @@ button.flat,
     font-size: 10px;
     border-radius: 0 2px;
 }
-.content .helptext,
-#umap-ui-container .help-text {
+.content .helptext {
     background-color: #eee;
     color: #000;
 }
@@ -410,7 +409,6 @@ input.switch:checked ~ label:after {
 .umap-multiplechoice.by5 {
     grid-template-columns: 1fr 1fr 1fr;
 }
-.button-bar.by4,
 .umap-multiplechoice.by4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
