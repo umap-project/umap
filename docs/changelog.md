@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.12.2 - 2023-12-29
+
+### Bug  fixes
+* Fix preview of TMS TileLayer by @yohanboniface in https://github.com/umap-project/umap/pull/1492
+* Add a small box-shadow to tilelayer preview by @yohanboniface in https://github.com/umap-project/umap/pull/1493
+
+
 ## 1.12.1 - 2023-12-23
 
 ### New features
