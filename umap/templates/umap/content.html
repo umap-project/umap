@@ -38,53 +38,55 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
-    !(function () {
-      const ui = new L.U.UI(document.querySelector('header'))
-      const xhr = new L.U.Xhr(ui)
-      const login = document.querySelector('a.login')
-      if (login) {
-        L.DomEvent.on(login, 'click', function (e) {
-          L.DomEvent.stop(e)
-          xhr.login({
-            login_required: this.getAttribute('href'),
-            redirect: '/',
+    window.addEventListener('load', (event) => {
+      !(function () {
+        const ui = new L.U.UI(document.querySelector('header'))
+        const xhr = new L.U.Xhr(ui)
+        const login = document.querySelector('a.login')
+        if (login) {
+          L.DomEvent.on(login, 'click', function (e) {
+            L.DomEvent.stop(e)
+            xhr.login({
+              login_required: this.getAttribute('href'),
+              redirect: '/',
+            })
           })
-        })
-      }
-      const logout = document.querySelector('a.logout')
-      if (logout) {
-        L.DomEvent.on(logout, 'click', function (e) {
+        }
+        const logout = document.querySelector('a.logout')
+        if (logout) {
+          L.DomEvent.on(logout, 'click', function (e) {
+            L.DomEvent.stop(e)
+            xhr.logout(this.getAttribute('href'))
+          })
+        }
+        const getMore = function (e) {
           L.DomEvent.stop(e)
-          xhr.logout(this.getAttribute('href'))
-        })
-      }
-      const getMore = function (e) {
-        L.DomEvent.stop(e)
-        xhr._ajax({
-          uri: this.href,
-          verb: 'GET',
-          callback: function (data) {
-            const container = this.parentNode
-            container.innerHTML = data
-            Array.prototype.forEach.call(
-              container.querySelectorAll('script'),
-              function (item) {
-                eval(item.firstChild.textContent)
+          xhr._ajax({
+            uri: this.href,
+            verb: 'GET',
+            callback: function (data) {
+              const container = this.parentNode
+              container.innerHTML = data
+              Array.prototype.forEach.call(
+                container.querySelectorAll('script'),
+                function (item) {
+                  eval(item.firstChild.textContent)
+                }
+              )
+              const more = document.querySelector('.more_button')
+              if (more) {
+                L.DomEvent.on(more, 'click', getMore, more)
               }
-            )
-            const more = document.querySelector('.more_button')
-            if (more) {
-              L.DomEvent.on(more, 'click', getMore, more)
-            }
-          },
-          context: this,
-        })
-      }
-      const more = document.querySelector('.more_button')
-      if (more) {
-        L.DomEvent.on(more, 'click', getMore, more)
-      }
-    })(this)
+            },
+            context: this,
+          })
+        }
+        const more = document.querySelector('.more_button')
+        if (more) {
+          L.DomEvent.on(more, 'click', getMore, more)
+        }
+      })(this)
+      })
   </script>
 {% endblock bottom_js %}
 {% block footer %}
