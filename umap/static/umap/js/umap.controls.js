@@ -632,12 +632,14 @@ L.U.DataLayersControl = L.Control.extend({
       function (e) {
         const layer = this.map.datalayers[e.src.dataset.id],
           other = this.map.datalayers[e.dst.dataset.id],
-          minIndex = Math.min(e.initialIndex, e.finalIndex)
+          minIndex = Math.min(layer.getRank(), other.getRank()),
+          maxIndex = Math.max(layer.getRank(), other.getRank())
         if (e.finalIndex === 0) layer.bringToTop()
         else if (e.finalIndex > e.initialIndex) layer.insertBefore(other)
         else layer.insertAfter(other)
         this.map.eachDataLayerReverse((datalayer) => {
-          if (datalayer.getRank() >= minIndex) datalayer.isDirty = true
+          if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
+            datalayer.isDirty = true
         })
         this.map.indexDatalayers()
       },
