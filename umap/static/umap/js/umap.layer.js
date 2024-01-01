@@ -116,6 +116,123 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 })
 
+L.U.Layer.Bubble = L.FeatureGroup.extend({
+  _type: 'Bubble',
+  includes: [L.U.Layer],
+  canBrowse: true,
+
+  initialize: function (datalayer) {
+    this.datalayer = datalayer
+    if (!L.Util.isObject(this.datalayer.options.bubbles)) {
+      this.datalayer.options.bubbles = {
+        minSize: 1,
+        maxSize: 30
+      }
+    }
+    L.FeatureGroup.prototype.initialize.call(this)
+    this.datalayer.onceDataLoaded(() => {
+      this.redraw()
+      this.datalayer.on('datachanged', this.redraw, this)
+    })
+  },
+
+  redraw: function () {
+    this.computeMinMax()
+    if (this._map) {
+      this.eachLayer((circle) => {
+        circle.setRadius(this.computeRadius(circle.options.value))
+        this._map.addLayer(circle)
+      })
+    }
+  },
+
+  computeRadius: function (value) {
+    const minSize = this.datalayer.options.bubbles.minSize || 1,
+      maxSize = this.datalayer.options.bubbles.maxSize || 30
+    return minSize + ((maxSize - minSize) / (this.options.max - this.options.min)) * Math.sqrt(value)
+  },
+
+  _getValue: function (feature) {
+    const key = this.datalayer.options.bubbles.property || 'value'
+    return +feature.properties[key] // TODO: should we catch values non castable to int ?
+  },
+
+  computeMinMax: function () {
+    const values = []
+    this.datalayer.eachLayer((layer) => {
+      let value = this._getValue(layer)
+      if (!isNaN(value)) values.push(Math.sqrt(value))
+    })
+    if (!values.length) {
+      this.options.min = 0
+      this.options.max = 0
+      return
+    }
+    this.options.min = Math.min(...values)
+    this.options.max = Math.max(...values)
+  },
+
+  addLayer: function (layer) {
+    // Do not add yet the layer to the map
+    // wait for datachanged event, so we can compute breaks once
+    const value = this._getValue(layer)
+    if (isNaN(value)) return this
+    const circle = L.circleMarker(layer.getCenter(), {
+      value: value,
+      radius: this.computeRadius(value),
+      weight: this.datalayer.getOption('weight'),
+      color: this.datalayer.getOption('color'),
+      fillColor: this.datalayer.getOption('fillColor'),
+    })
+    let id = this.getLayerId(circle)
+    this._layers[id] = circle
+    // Needed for the popup to open on the map
+    layer._map = this._map
+    circle.on('click', layer.view, layer)
+    return this
+  },
+
+  onAdd: function (map) {
+    this.computeMinMax()
+    L.FeatureGroup.prototype.onAdd.call(this, map)
+  },
+
+  getEditableOptions: function () {
+    return [
+      [
+        'options.bubbles.property',
+        {
+          handler: 'Select',
+          selectOptions: this.datalayer._propertiesIndex,
+          label: L._('Bubbles map property value'),
+        },
+      ],
+      [
+        'options.bubbles.minSize',
+        {
+          handler: 'Range',
+          min: 1,
+          max: 10,
+          step: 1,
+          label: L._('Mininum size of the bubble'),
+          helpText: L._('A size in pixel'),
+        },
+      ],
+      [
+        'options.bubbles.maxSize',
+        {
+          handler: 'Range',
+          min: 30,
+          max: 100,
+          step: 5,
+          label: L._('Maximum size of the bubble'),
+          helpText: L._('A size in pixel'),
+        },
+      ],
+    ]
+  },
+})
+
 L.U.Layer.Choropleth = L.FeatureGroup.extend({
   _type: 'Choropleth',
   includes: [L.U.Layer],
