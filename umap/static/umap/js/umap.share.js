@@ -48,38 +48,18 @@ L.U.Share = L.Class.extend({
     this.title = L.DomUtil.create('h3', '', this.container)
     this.title.textContent = L._('Share and download')
 
-    L.DomUtil.createButton(
-      'button copy-button',
+    L.DomUtil.createCopiableInput(
       this.container,
-      L._('copy'),
-      () => navigator.clipboard.writeText(this.mapUrl.value),
-      this
+      L._('Link to view the map'),
+      window.location.protocol + L.Util.getBaseUrl()
     )
-    const mapUrlLabel = L.DomUtil.add(
-      'label',
-      '',
-      this.container,
-      L._('Link to view the map')
-    )
-    this.mapUrl = L.DomUtil.create('input', 'umap-share-url', mapUrlLabel)
-    this.mapUrl.type = 'text'
-    this.mapUrl.readOnly = true
-    this.mapUrl.value = window.location.protocol + L.Util.getBaseUrl()
 
     if (this.map.options.shortUrl) {
-      L.DomUtil.createButton(
-        'button copy-button',
+      L.DomUtil.createCopiableInput(
         this.container,
-        L._('copy'),
-        () => navigator.clipboard.writeText(this.shortUrl.value),
-        this
+        L._('Short link'),
+        this.map.options.shortUrl
       )
-      const shortUrlLabel = L.DomUtil.create('label', '', this.container)
-      shortUrlLabel.textContent = L._('Short link')
-      this.shortUrl = L.DomUtil.create('input', 'umap-share-url', shortUrlLabel)
-      this.shortUrl.type = 'text'
-      this.shortUrl.readOnly = true
-      this.shortUrl.value = this.map.options.shortUrl
     }
 
     L.DomUtil.create('hr', '', this.container)
@@ -121,9 +101,12 @@ L.U.Share = L.Class.extend({
     const embedTitle = L.DomUtil.add('h4', '', this.container, L._('Embed the map'))
     const iframe = L.DomUtil.create('textarea', 'umap-share-iframe', this.container)
     const urlTitle = L.DomUtil.add('h4', '', this.container, L._('Direct link'))
-    const shortUrlLabel = L.DomUtil.create('label', '', this.container)
-    shortUrlLabel.textContent = L._('Share this link to open a customized map view')
-    const exportUrl = L.DomUtil.create('input', 'umap-share-url', this.container)
+    const exportUrl = L.DomUtil.createCopiableInput(
+      this.container,
+      L._('Share this link to open a customized map view'),
+      ''
+    )
+
     exportUrl.type = 'text'
     const UIFields = [
       ['dimensions.width', { handler: 'Input', label: L._('width') }],

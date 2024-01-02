@@ -456,8 +456,7 @@ input.switch:checked ~ label:after {
 }
 .umap-field-iconUrl .action-button,
 .inheritable .define,
-.inheritable .undefine,
-.copy-button {
+.inheritable .undefine {
     float: right;
     width: initial;
     min-height: 18px;
@@ -651,6 +650,24 @@ input.blur {
 input[type=hidden].blur + .button,
 input[type=hidden].blur + [type="button"] {
     display: none;
+}
+.copiable-input {
+    display: flex;
+    align-items: end;
+}
+.copiable-input input {
+    border-radius: initial;
+}
+.copiable-input button {
+    background-repeat: no-repeat;
+    background-image: url('./img/16.svg');
+    background-position: -45px -140px;
+    display: inline;
+    padding: 0 10px;
+    height: 32px;
+    width: 32px;
+    border: 1px solid #202425;
+    border-radius: initial;
 }
 
 /* *********** */

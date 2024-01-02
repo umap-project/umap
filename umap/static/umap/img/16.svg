@@ -16,7 +16,6 @@
   </rdf:RDF>
  </metadata>
  <g id="layer1" transform="translate(0 -812.36)">
-  <text id="text4457" x="5.7867966" y="897.80786" fill="#000000" font-family="sans-serif" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan id="tspan4459" x="5.7867966" y="897.80786" font-family="sans-serif" font-size="40px" style="line-height:1.25"> </tspan></text>
   <g id="help" transform="translate(-23.256 -119.39)">
    <circle id="path3014" transform="matrix(1.0714 0 0 1.0714 26.684 934.11)" cx="8" cy="9" r="7" fill="none" stroke="#4d4d4d" stroke-width=".93333"/>
    <g id="text3784" transform="translate(27.256 -100.61)" fill="#4d4d4d">
@@ -178,5 +177,6 @@
    <path id="path8303-6" d="m42.545 974.91c0 0.80333-0.65122 1.4546-1.4545 1.4546h-10.182c-0.80332 0-1.4545-0.65122-1.4545-1.4546h13.091z" fill="#464646" stroke-width=".72727"/>
    <path id="path16669" d="m36 963.88v8.3163" fill="none" marker-end="url(#Arrow1)" stroke="#464646" stroke-width="1.5"/>
   </g>
+  <path id="copy" d="m58.25 962.61v3.5h4v4h3.5v-7.5zm-4 4v7.5h7.5v-7.5z" fill="#4d4d4d" style="paint-order:fill markers stroke"/>
  </g>
 </svg>
