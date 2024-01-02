@@ -454,60 +454,62 @@ L.U.Keys = {
 }
 
 L.U.Help = L.Class.extend({
-
   SHORTCUTS: {
     DRAW_MARKER: {
-      shortcut:'Modifier+M',
-      label: L._('Draw a marker')
+      shortcut: 'Modifier+M',
+      label: L._('Draw a marker'),
     },
     DRAW_LINE: {
-      shortcut:'Modifier+L',
-      label: L._('Draw a polyline')
+      shortcut: 'Modifier+L',
+      label: L._('Draw a polyline'),
     },
     DRAW_POLYGON: {
-      shortcut:'Modifier+P',
-      label: L._('Draw a polygon')
+      shortcut: 'Modifier+P',
+      label: L._('Draw a polygon'),
     },
     TOGGLE_EDIT: {
-      shortcut:'Modifier+E',
-      label: L._('Toggle edit mode')
+      shortcut: 'Modifier+E',
+      label: L._('Toggle edit mode'),
     },
     STOP_EDIT: {
-      shortcut:'Modifier+E',
-      label: L._('Stop editing')
+      shortcut: 'Modifier+E',
+      label: L._('Stop editing'),
     },
     SAVE_MAP: {
-      shortcut:'Modifier+S',
-      label: L._('Save map')
+      shortcut: 'Modifier+S',
+      label: L._('Save map'),
     },
     IMPORT_PANEL: {
-      shortcut:'Modifier+I',
-      label: L._('Import data')
+      shortcut: 'Modifier+I',
+      label: L._('Import data'),
     },
     SEARCH: {
-      shortcut:'Modifier+F',
-      label: L._('Search location')
+      shortcut: 'Modifier+F',
+      label: L._('Search location'),
     },
     CANCEL: {
-      shortcut:'Modifier+Z',
-      label: L._('Cancel edits')
+      shortcut: 'Modifier+Z',
+      label: L._('Cancel edits'),
     },
     PREVIEW: {
-      shortcut:'Modifier+E',
-      label: L._('Back to preview')
+      shortcut: 'Modifier+E',
+      label: L._('Back to preview'),
     },
     SAVE: {
-      shortcut:'Modifier+S',
-      label: L._('Save current edits')
+      shortcut: 'Modifier+S',
+      label: L._('Save current edits'),
     },
   },
 
-  displayLabel: function (action, withKbdTag=true) {
-    let {shortcut, label} = this.SHORTCUTS[action]
+  displayLabel: function (action, withKbdTag = true) {
+    let { shortcut, label } = this.SHORTCUTS[action]
     const modifier = this.isMacOS ? 'Cmd' : 'Ctrl'
     shortcut = shortcut.replace('Modifier', modifier)
     if (withKbdTag) {
-      shortcut = shortcut.split('+').map((el) => `<kbd>${el}</kbd>`).join('+')
+      shortcut = shortcut
+        .split('+')
+        .map((el) => `<kbd>${el}</kbd>`)
+        .join('+')
       label += ` ${shortcut}`
     } else {
       label += ` (${shortcut})`
@@ -533,7 +535,9 @@ L.U.Help = L.Class.extend({
     const label = L.DomUtil.create('span', '', closeButton)
     label.title = label.textContent = L._('Close')
     this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
-    this.isMacOS = /mac/i.test(navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform)
+    this.isMacOS = /mac/i.test(
+      navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform
+    )
   },
 
   onKeyDown: function (e) {
@@ -726,7 +730,9 @@ L.U.Help = L.Class.extend({
   facetKey: L._(
     'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)'
   ),
-  interactive: L._('If false, the polygon or line will act as a part of the underlying map.'),
+  interactive: L._(
+    'If false, the polygon or line will act as a part of the underlying map.'
+  ),
   outlink: L._('Define link to open in a new window on polygon click.'),
   dynamicRemoteData: L._('Fetch data each time map view changes.'),
   proxyRemoteData: L._("To use if remote server doesn't allow cross domain (slower)"),
