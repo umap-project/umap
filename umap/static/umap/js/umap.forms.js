@@ -822,26 +822,35 @@ L.FormBuilder.FacetSearchCheckbox = L.FormBuilder.Element.extend({
 L.FormBuilder.FacetSearchDate = L.FormBuilder.Element.extend({
   build: function () {
     this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode);
+    this.table = L.DomUtil.create('table', '', this.container);
+
     const min = this.options.criteria['min'];
     const max = this.options.criteria['max'];
 
-    // Create labels for min and max inputs
-    this.minLabel = L.DomUtil.create('label', '', this.container);
-    this.minLabel.innerHTML = 'Start';
+    this.minTr = L.DomUtil.create('tr', '', this.table);
+
+    this.minTdLabel = L.DomUtil.create('td', '', this.minTr);
+    this.minLabel = L.DomUtil.create('label', '', this.minTdLabel);
+    this.minLabel.innerHTML = 'From';
     this.minLabel.htmlFor = `date_${this.name}_min`;
 
-    this.minInput = L.DomUtil.create('input', '', this.container);
+    this.minTdInput = L.DomUtil.create('td', '', this.minTr);
+    this.minInput = L.DomUtil.create('input', '', this.minTdInput);
     this.minInput.type = 'datetime-local';
     this.minInput.step = '0.001';
     this.minInput.id = `date_${this.name}_min`;
     this.minInput.valueAsNumber = (min.valueOf() - min.getTimezoneOffset() * 60000);;
     this.minInput.dataset.value = min;
 
-    this.maxLabel = L.DomUtil.create('label', '', this.container);
-    this.maxLabel.innerHTML = 'End';
+    this.maxTr = L.DomUtil.create('tr', '', this.table);
+
+    this.maxTdLabel = L.DomUtil.create('td', '', this.maxTr);
+    this.maxLabel = L.DomUtil.create('label', '', this.maxTdLabel);
+    this.maxLabel.innerHTML = 'Until';
     this.maxLabel.htmlFor = `date_${this.name}_max`;
 
-    this.maxInput = L.DomUtil.create('input', '', this.container);
+    this.maxTdInput = L.DomUtil.create('td', '', this.maxTr);
+    this.maxInput = L.DomUtil.create('input', '', this.maxTdInput);
     this.maxInput.type = 'datetime-local';
     this.maxInput.step = '0.001';
     this.maxInput.id = `date_${this.name}_max`;
