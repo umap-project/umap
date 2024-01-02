@@ -553,7 +553,7 @@ U.Help = L.Class.extend({
   slugKey: L._('The name of the property to use as feature unique identifier.'),
   filterKey: L._('Comma separated list of properties to use when filtering features'),
   facetKey: L._(
-    'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control data type, add it after another | (eg.: mykey|My Key|enum,otherkey|Other Key|date)'
+    'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control data type, add it after another | (eg.: mykey|My Key|enum,otherkey|Other Key|date). Allowed values for the data type are date and enum (default).'
   ),
   interactive: L._(
     'If false, the polygon or line will act as a part of the underlying map.'
