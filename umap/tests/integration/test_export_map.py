@@ -9,7 +9,7 @@ pytestmark = pytest.mark.django_db
 
 def test_umap_export(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
-    link = page.get_by_role("link", name="Download full data")
+    link = page.get_by_role("link", name="full backup")
     expect(link).to_be_visible()
     with page.expect_download() as download_info:
         link.click()
@@ -73,9 +73,8 @@ def test_umap_export(map, live_server, datalayer, page):
 
 def test_csv_export(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
-    button = page.get_by_role("button", name="Download data")
+    button = page.get_by_role("button", name="csv")
     expect(button).to_be_visible()
-    page.locator('select[name="format"]').select_option("csv")
     with page.expect_download() as download_info:
         button.click()
     download = download_info.value

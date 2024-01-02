@@ -239,6 +239,39 @@ ul.photon-autocomplete {
 
 
 
+/* ***************************** */
+/*    Share and download panel   */
+/* ***************************** */
+.download-file {
+    height: 1.2em;
+    min-height: 1.2em;
+    padding: 0;
+    text-align: left;
+    vertical-align: bottom;
+}
+.download-file:before,
+.download-backup:before {
+    height: 24px;
+    width: 24px;
+    background-repeat: no-repeat;
+    background-image: url('./img/16.svg');
+    background-size: auto auto;
+    background-position: -4px -145px;
+    content: " ";
+    vertical-align: bottom;
+    display: inline-block;
+}
+.download-backup:before {
+    background-position: -27px -144px;
+}
+.leaflet-container .download-backup {
+    color: black;
+    display: block;
+}
+.vspace {
+    height: 32px;
+}
+
 /* *********** */
 /*    Draw     */
 /* *********** */

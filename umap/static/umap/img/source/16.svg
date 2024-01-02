@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="144"
+   width="168"
    height="168"
    id="svg2"
    version="1.1"
@@ -20,6 +20,26 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs4">
+    <marker
+       style="overflow:visible"
+       id="Arrow1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Arrow1"
+       markerWidth="4.0606604"
+       markerHeight="6.7071066"
+       viewBox="0 0 4.0606602 6.7071068"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:butt"
+         d="M 3,-3 0,0 3,3"
+         id="path5057"
+         transform="rotate(180,0.125,0)"
+         sodipodi:nodetypes="ccc" />
+    </marker>
     <mask
        id="mask0_181_11898"
        maskUnits="userSpaceOnUse"
@@ -40,9 +60,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.5893817"
-     inkscape:cx="68.418802"
-     inkscape:cy="100.88505"
+     inkscape:zoom="3.2451829"
+     inkscape:cx="57.469796"
+     inkscape:cy="94.601755"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -127,7 +147,7 @@
        inkscape:label=""
        inkscape:color="rgb(0,134,229)" />
     <sodipodi:guide
-       position="120,96"
+       position="120,168"
        orientation="-1,0"
        id="guide4869"
        inkscape:label=""
@@ -145,6 +165,13 @@
        inkscape:label=""
        inkscape:locked="false"
        inkscape:color="rgb(0,134,229)" />
+    <sodipodi:guide
+       position="144,168"
+       orientation="-1,0"
+       id="guide10571"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -851,6 +878,35 @@
          fill="#464646"
          id="path2378"
          style="stroke-width:0.264583" />
+    </g>
+    <path
+       id="arrow-down"
+       d="m 156,875.36218 6,-6 h -12 z"
+       fill="#f2f2f2"
+       fill-rule="evenodd"
+       style="fill:#4d4d4d;fill-opacity:1" />
+    <path
+       id="arrow-right"
+       d="m 159,896.36218 -6,-6 v 12 z"
+       fill="#f2f2f2"
+       fill-rule="evenodd"
+       style="fill:#4d4d4d;fill-opacity:1" />
+    <path
+       d="m 14.181818,962.11797 v 2.60785 h 2.607845 z m 2.909091,4.06239 h -2.909091 c -0.803323,0 -1.454545,-0.65122 -1.454545,-1.45454 v -2.90909 H 6.9090909 v 13.0909 H 17.090909 Z M 6.9090909,960.36218 h 7.5739741 l 4.06239,4.06239 v 10.48306 c 0,0.80333 -0.651223,1.45455 -1.454546,1.45455 H 6.9090909 c -0.8033233,0 -1.4545455,-0.65122 -1.4545455,-1.45455 v -13.0909 c 0,-0.80333 0.6512222,-1.45455 1.4545455,-1.45455 z m 4.3636361,9.88057 v -3.33512 h 1.454546 v 3.33512 l 0.940285,-0.94029 1.02852,1.02853 L 12,973.02706 9.3039222,970.33099 10.332441,969.30246 Z"
+       fill-rule="evenodd"
+       id="downloadfile"
+       style="fill:#464646;fill-opacity:1;stroke-width:0.727273" />
+    <g
+       id="downloadbackup">
+      <path
+         style="fill:#464646;fill-opacity:1;stroke-width:0.727273"
+         d="m 42.545455,974.90763 c 0,0.80333 -0.651223,1.45455 -1.454546,1.45455 H 30.909091 c -0.803323,0 -1.454546,-0.65122 -1.454546,-1.45455 2.557093,0 9.805435,0 13.09091,0 z"
+         id="path8303-6" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#464646;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1)"
+         d="m 36,963.87832 v 8.3163"
+         id="path16669"
+         sodipodi:nodetypes="cc" />
     </g>
   </g>
 </svg>

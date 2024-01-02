@@ -409,9 +409,9 @@ L.Control.Embed = L.Control.extend({
     const shareButton = L.DomUtil.createButton(
       '',
       container,
-      L._('Share, download and embed this map'),
-      map.renderShareBox,
-      map
+      L._('Share and download'),
+      map.share.open,
+      map.share
     )
     L.DomEvent.on(shareButton, 'dblclick', L.DomEvent.stopPropagation)
     return container
@@ -896,46 +896,6 @@ L.U.Map.include({
     this.ui.openPanel({ data: { html: container }, actions: actions })
   },
 
-  EXPORT_TYPES: {
-    geojson: {
-      formatter: function (map) {
-        return JSON.stringify(map.toGeoJSON(), null, 2)
-      },
-      ext: '.geojson',
-      filetype: 'application/json',
-    },
-    gpx: {
-      formatter: function (map) {
-        return togpx(map.toGeoJSON())
-      },
-      ext: '.gpx',
-      filetype: 'application/gpx+xml',
-    },
-    kml: {
-      formatter: function (map) {
-        return tokml(map.toGeoJSON())
-      },
-      ext: '.kml',
-      filetype: 'application/vnd.google-earth.kml+xml',
-    },
-    csv: {
-      formatter: function (map) {
-        const table = []
-        map.eachFeature((feature) => {
-          const row = feature.toGeoJSON()['properties'],
-            center = feature.getCenter()
-          delete row['_umap_options']
-          row['Latitude'] = center.lat
-          row['Longitude'] = center.lng
-          table.push(row)
-        })
-        return csv2geojson.dsv.csvFormat(table)
-      },
-      ext: '.csv',
-      filetype: 'text/csv',
-    },
-  },
-
   renderEditToolbar: function () {
     const container = L.DomUtil.create(
       'div',
@@ -1082,107 +1042,6 @@ L.U.Map.include({
       },
       this
     )
-  },
-
-  renderShareBox: function () {
-    const container = L.DomUtil.create('div', 'umap-share')
-    const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Share, download and embed this map')
-
-    const embedTitle = L.DomUtil.add('h4', '', container, L._('Embed the map'))
-    const iframe = L.DomUtil.create('textarea', 'umap-share-iframe', container)
-    const urlTitle = L.DomUtil.add('h4', '', container, L._('Direct link'))
-    const exportUrl = L.DomUtil.create('input', 'umap-share-url', container)
-    let option
-    exportUrl.type = 'text'
-    const UIFields = [
-      ['dimensions.width', { handler: 'Input', label: L._('width') }],
-      ['dimensions.height', { handler: 'Input', label: L._('height') }],
-      [
-        'options.includeFullScreenLink',
-        { handler: 'Switch', label: L._('Include full screen link?') },
-      ],
-      [
-        'options.currentView',
-        { handler: 'Switch', label: L._('Current view instead of default map view?') },
-      ],
-      [
-        'options.keepCurrentDatalayers',
-        { handler: 'Switch', label: L._('Keep current visible layers') },
-      ],
-      [
-        'options.viewCurrentFeature',
-        { handler: 'Switch', label: L._('Open current feature on load') },
-      ],
-      'queryString.moreControl',
-      'queryString.scrollWheelZoom',
-      'queryString.miniMap',
-      'queryString.scaleControl',
-      'queryString.onLoadPanel',
-      'queryString.captionBar',
-      'queryString.captionMenus',
-    ]
-    for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
-      UIFields.push(`queryString.${this.HIDDABLE_CONTROLS[i]}Control`)
-    }
-    const iframeExporter = new L.U.IframeExporter(this)
-    const buildIframeCode = () => {
-      iframe.innerHTML = iframeExporter.build()
-      exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
-    }
-    buildIframeCode()
-    const builder = new L.U.FormBuilder(iframeExporter, UIFields, {
-      callback: buildIframeCode,
-    })
-    const iframeOptions = L.DomUtil.createFieldset(container, L._('Export options'))
-    iframeOptions.appendChild(builder.build())
-    if (this.options.shortUrl) {
-      L.DomUtil.create('hr', '', container)
-      L.DomUtil.add('h4', '', container, L._('Short URL'))
-      const shortUrl = L.DomUtil.create('input', 'umap-short-url', container)
-      shortUrl.type = 'text'
-      shortUrl.value = this.options.shortUrl
-    }
-    L.DomUtil.create('hr', '', container)
-    L.DomUtil.add('h4', '', container, L._('Backup data'))
-    const downloadUrl = L.Util.template(this.options.urls.map_download, {
-      map_id: this.options.umap_id,
-    })
-    const link = L.DomUtil.createLink(
-      'button',
-      container,
-      L._('Download full data'),
-      downloadUrl
-    )
-    let name = this.options.name || 'data'
-    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    link.setAttribute('download', `${name}.umap`)
-    L.DomUtil.create('hr', '', container)
-    L.DomUtil.add('h4', '', container, L._('Download data'))
-    const typeInput = L.DomUtil.create('select', '', container)
-    typeInput.name = 'format'
-    const exportCaveat = L.DomUtil.add(
-      'small',
-      'help-text',
-      container,
-      L._('Only visible features will be downloaded.')
-    )
-    for (const key in this.EXPORT_TYPES) {
-      if (this.EXPORT_TYPES.hasOwnProperty(key)) {
-        option = L.DomUtil.create('option', '', typeInput)
-        option.value = key
-        option.textContent = this.EXPORT_TYPES[key].name || key
-        if (this.EXPORT_TYPES[key].selected) option.selected = true
-      }
-    }
-    L.DomUtil.createButton(
-      'button',
-      container,
-      L._('Download data'),
-      () => this.download(typeInput.value),
-      this
-    )
-    this.ui.openPanel({ data: { html: container } })
   },
 })
 
@@ -1512,77 +1371,6 @@ L.U.ContextMenu = L.Map.ContextMenu.extend({
     this._container.innerHTML = ''
     this._createItems(e)
     L.Map.ContextMenu.prototype._showAtPoint.call(this, pt, e)
-  },
-})
-
-L.U.IframeExporter = L.Evented.extend({
-  options: {
-    includeFullScreenLink: true,
-    currentView: false,
-    keepCurrentDatalayers: false,
-    viewCurrentFeature: false,
-  },
-
-  queryString: {
-    scaleControl: false,
-    miniMap: false,
-    scrollWheelZoom: false,
-    zoomControl: true,
-    editMode: 'disabled',
-    moreControl: true,
-    searchControl: null,
-    tilelayersControl: null,
-    embedControl: null,
-    datalayersControl: true,
-    onLoadPanel: 'none',
-    captionBar: false,
-    captionMenus: true,
-  },
-
-  dimensions: {
-    width: '100%',
-    height: '300px',
-  },
-
-  initialize: function (map) {
-    this.map = map
-    this.baseUrl = L.Util.getBaseUrl()
-    // Use map default, not generic default
-    this.queryString.onLoadPanel = this.map.options.onLoadPanel
-  },
-
-  getMap: function () {
-    return this.map
-  },
-
-  buildUrl: function (options) {
-    const datalayers = []
-    if (this.options.viewCurrentFeature && this.map.currentFeature) {
-      this.queryString.feature = this.map.currentFeature.getSlug()
-    }
-    if (this.options.keepCurrentDatalayers) {
-      this.map.eachDataLayer((datalayer) => {
-        if (datalayer.isVisible() && datalayer.umap_id) {
-          datalayers.push(datalayer.umap_id)
-        }
-      })
-      this.queryString.datalayers = datalayers.join(',')
-    } else {
-      delete this.queryString.datalayers
-    }
-    const currentView = this.options.currentView ? window.location.hash : ''
-    const queryString = L.extend({}, this.queryString, options)
-    return `${this.baseUrl}?${L.Util.buildQueryString(queryString)}${currentView}`
-  },
-
-  build: function () {
-    const iframeUrl = this.buildUrl()
-    let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
-    if (this.options.includeFullScreenLink) {
-      const fullUrl = this.buildUrl({ scrollWheelZoom: true })
-      code += `<p><a href="${fullUrl}">${L._('See full screen')}</a></p>`
-    }
-    return code
   },
 })
 
