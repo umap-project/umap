@@ -695,7 +695,7 @@ const ControlsMixin = {
         keys.forEach((key) => {
           let value = feature.properties[key]
           if (facetKeys[key]["type"] === "date") {
-            value = feature.parseDateField(value)
+            value = L.Util.parseDateField(value)
             if (!!value && (!facetCriteria[key]["min"] || facetCriteria[key]["min"] > value)) {
               facetCriteria[key]["min"] = value
             }

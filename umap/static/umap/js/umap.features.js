@@ -492,16 +492,6 @@ U.FeatureMixin = {
     return false
   },
 
-  parseDateField: function (value) {
-    if (parseFloat(value).toString() === value.toString()) {
-      value = parseFloat(value);
-      if (value < 10000000000) {
-        value = value * 1000;
-      }
-    }
-    return new Date(value);
-  },
-
   matchFacets: function () {
     const facets = this.map.facets
     for (const [property, criteria] of Object.entries(facets)) {
@@ -510,7 +500,7 @@ U.FeatureMixin = {
       if (type === "date") {
         const min = new Date(criteria["min"])
         const max = new Date(criteria["max"])
-        value = this.parseDateField(value)
+        value = L.Util.parseDateField(value)
         if (!!min && (!value || min > value)) return false
         if (!!max && (!value || max < value)) return false
       } else {
