@@ -346,6 +346,24 @@ L.DomUtil.createLink = (className, container, content, url, target, title) => {
   return el
 }
 
+L.DomUtil.createCopiableInput = (parent, label, value) => {
+  const wrapper = L.DomUtil.add('div', 'copiable-input', parent)
+  const labelEl = L.DomUtil.add('label', '', wrapper, label)
+  const input = L.DomUtil.add('input', '', labelEl)
+  input.type = 'text'
+  input.readOnly = true
+  input.value = value
+  const button = L.DomUtil.createButton(
+    '',
+    wrapper,
+    '',
+    () => L.Util.copyToClipboard(input.value),
+    this
+  )
+  button.title = L._('copy')
+  return input
+}
+
 L.DomUtil.classIf = (el, className, bool) => {
   if (bool) L.DomUtil.addClass(el, className)
   else L.DomUtil.removeClass(el, className)
