@@ -67,63 +67,15 @@ L.Util.setNullableBooleanFromQueryString = function (options, name) {
   }
 }
 
-// the Date() constructor can handle various inputs to create a date
-// - value: epoch (unix timestamp) in milliseconds
-// - dateString: ISO 8601 formatted (YYYY-MM-DDTHH:mm:ss.sssZ)
-// - dateObject: JS date object
-// - multiple parameters for different date fields (year, month, ...)
-//
-// a mix of those options shall be supported without the user having
-// to specify the exact format, since umap is based on json the type
-// of the feature property value can only be
-// - string, number or boolean
-// - object or array
-// - null
-//
-// therefore, the following inputs shall be covered
-// - epoch (unix timestamp) in milliseconds as number
-// - epoch (unix timestamp) in seconds as number
-// - epoch (unix timestamp) in milliseconds as string
-// - epoch (unix timestamp) in seconds as string
-// - date in ISO 8601 format as string
-//
-// this function tries to guess the format of the feature property value
-// and adjust it a little before passing it to Date() constructor
-//
 L.Util.parseDateField = function (value) {
   if (value != null && parseFloat(value).toString() === value.toString()) {
-    // if the string representation of the feature property value is
-    // the same with and without being parsed as a float, the value is
-    // a number (either of type number or string)
-    //
-    // numbers are assumed to be epochs (unix timestamps) but so far
-    // it is unclear whether it is in seconds, milliseconds or nanoseconds
-    //
-    // without user input it can never be determined with certainty, but
-    // by making some assumptions and sacrificing some small date ranges,
-    // it is possible to work around that
-    //
     value = parseFloat(value);
     if (Math.abs(value) < 10000000000) {
-      // if the absolute value of that number is smaller than 10000000000,
-      // it is assumed to be in seconds and must be multiplied by 1000
-      //
       value = value * 1000;
     } else if (Math.abs(value) > 10000000000000) {
-      // if the absolute value of that number is bigger than 10000000000000,
-      // it is assumed to be in nanoseconds and must be divided by 1000
-      //
       value = value / 1000;
     }
-    // in all other cases the number is assumed to be in milliseconds
   }
-  // in all other cases the value is passed to the Date() constructor
-  // without modification and the constructor will try to make something out of it
-  //
-  // this can either result in something proper (e.g. string containing dateString),
-  // something wrong (e.g. boolean) or an invalid date (e.g. object, array, null,
-  // string not containing dateString)
-  //
   return new Date(value);
 }
 
