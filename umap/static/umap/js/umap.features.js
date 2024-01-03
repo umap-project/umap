@@ -496,8 +496,8 @@ U.FeatureMixin = {
     const facets = this.map.facets
     for (const [property, criteria] of Object.entries(facets)) {
       let value = this.properties[property]
-      const type = criteria["type"]
-      if (type === "date") {
+      const dataType = criteria["dataType"]
+      if (dataType === "date") {
         const min = new Date(criteria["min"])
         const max = new Date(criteria["max"])
         value = L.Util.parseDateField(value)

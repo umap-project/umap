@@ -1236,7 +1236,7 @@ U.Map = L.Map.extend({
         {
           handler: 'Input',
           helpEntries: 'facetKey',
-          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|enum'),
+          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|enum|checkbox'),
           label: L._('Facet keys'),
         },
       ],
@@ -1846,12 +1846,25 @@ U.Map = L.Map.extend({
   },
 
   getFacetKeys: function () {
+    const allowedTypes = {
+      "enum": ["checkbox", "radio"],
+      "date": ["datetime-local"],
+    }
+    console.log(this.options.facetKey)
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
       const els = curr.split('|')
       acc[els[0]] = {
         "label": els[1] || els[0],
-        "type":  els[2] || "enum"
+        "dataType": (
+          (els[2] in allowedTypes) ? els[2] :
+          Object.keys(allowedTypes)[0]
+	)
       }
+      acc[els[0]]["inputType"] = (
+        allowedTypes[acc[els[0]]["dataType"]].includes(els[3]) ? els[3] :
+        allowedTypes[acc[els[0]]["dataType"]][0]
+      )
+      console.log(acc)
       return acc
     }, {})
   },
