@@ -1224,9 +1224,47 @@ L.U.StarControl = L.Control.extend({
 
 L.U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
+    this.options.placeholder = L._('Type a place name or coordinates')
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
     this.options.url = map.options.urls.search
     if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
+    this.reverse = new L.PhotonReverse({
+      handleResults: (geojson) => {
+        this.handleResultsWithReverse(geojson)
+      },
+    })
+  },
+
+  handleResultsWithReverse: function (geojson) {
+    const latlng = this.reverse.latlng
+    geojson.features.unshift({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
+      properties: {
+        name: L._('Go to "{coords}"', { coords: `${latlng.lat} ${latlng.lng}` }),
+      },
+    })
+
+    this.handleResults(geojson)
+  },
+
+  search: function () {
+    const pattern = /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
+    if (pattern.test(this.input.value)) {
+      this.hide()
+      const { lat, lng } = pattern.exec(this.input.value).groups
+      const latlng = L.latLng(lat, lng)
+      if (latlng.isValid()) {
+        this.reverse.doReverse(latlng)
+      } else {
+        this.map.ui.alert({ content: 'Invalid latitude or longitude', mode: 'error' })
+      }
+      return
+    }
+    // Only numbers, abort.
+    if (/^[\d .,]*$/.test(this.input.value)) return
+    // Do normal search
+    L.PhotonSearch.prototype.search.call(this)
   },
 
   onBlur: function (e) {
