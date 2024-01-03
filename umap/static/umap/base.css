@@ -256,6 +256,10 @@ input[type="checkbox"] + label {
     display: inline;
     padding: 0 14px;
 }
+input[type="radio"] + label {
+    display: inline;
+    padding: 0 14px;
+}
 select + .error,
 input + .error {
     display: block;

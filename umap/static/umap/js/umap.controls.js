@@ -747,22 +747,26 @@ L.U.Map.include({
     const facetCriteria = {}
 
     keys.forEach((key) => {
-      if (facetKeys[key]["type"] === "date") {
+      if (facetKeys[key]["dataType"] === "date") {
         if (!facetCriteria[key]) facetCriteria[key] = {
+          "dataType": facetKeys[key]["dataType"],
+          "inputType": facetKeys[key]["inputType"],
           "min": undefined,
           "max": undefined
         }
         if (!this.facets[key]) this.facets[key] = {
-          "type": facetKeys[key]["type"],
+          "dataType": facetKeys[key]["dataType"],
           "min": undefined,
           "max": undefined
         }
       } else {
         if (!facetCriteria[key]) facetCriteria[key] = {
+          "dataType": facetKeys[key]["dataType"],
+          "inputType": facetKeys[key]["inputType"],
           "choices": []
         }
         if (!this.facets[key]) this.facets[key] = {
-          "type": facetKeys[key]["type"],
+          "dataType": facetKeys[key]["dataType"],
           "choices": []
         }
       }
@@ -772,7 +776,7 @@ L.U.Map.include({
       datalayer.eachFeature((feature) => {
         keys.forEach((key) => {
           let value = feature.properties[key]
-          if (facetKeys[key]["type"] === "date") {
+          if (facetKeys[key]["dataType"] === "date") {
             value = L.Util.parseDateField(value)
             if (!!value && (!facetCriteria[key]["min"] || facetCriteria[key]["min"] > value)) {
               facetCriteria[key]["min"] = value
@@ -803,7 +807,7 @@ L.U.Map.include({
     const fields = keys.map((key) => [
       `facets.${key}`,
       {
-        handler: facetKeys[key]["type"] === "date" ? 'FacetSearchDate' : 'FacetSearchCheckbox',
+        handler: facetCriteria[key]["inputType"] === "datetime-local" ? 'FacetSearchDate' : 'FacetSearchCheckbox',
         criteria: facetCriteria[key],
         label: facetKeys[key]["label"]
       },
