@@ -64,8 +64,10 @@ L.U.UI = L.Evented.extend({
   },
 
   closePanel: function () {
-    L.DomUtil.removeClass(this.parent, 'umap-ui')
-    this.fire('panel:closed')
+    if (L.DomUtil.hasClass(this.parent, 'umap-ui')) {
+      L.DomUtil.removeClass(this.parent, 'umap-ui')
+      this.fire('panel:closed')
+    }
   },
 
   alert: function (e) {
