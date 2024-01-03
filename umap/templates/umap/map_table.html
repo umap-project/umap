@@ -19,7 +19,7 @@
             <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
           </td>
           <td>
-            <button class="button map-opener" data-map-id="{{ unique_id }}">{% blocktranslate %}Open preview{% endblocktranslate %}</button>
+            <button class="button map-opener neutral" data-map-id="{{ unique_id }}">{% blocktranslate %}Open preview{% endblocktranslate %}</button>
             <dialog>
               <form method="dialog">
                 <div id="{{ unique_id }}_target" class="map_fragment"></div>
