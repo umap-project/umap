@@ -134,6 +134,9 @@ h2.section {
     padding-top: 28px;
 }
 h2.tabs a {
+    color: #666;
+}
+h2.tabs a:not(.selected) {
     font-weight: normal;
     color: #666;
 }
@@ -296,9 +299,9 @@ table.maps {
     width: 100%;
 }
 table.maps .map_fragment {
-    height: 100px;
+    display: block;
+    height: 80vh;
     width: 100%;
-    min-width: 200px;
 }
 table.maps tbody tr:nth-child(odd) {
     background-color: #f4f4f4;
@@ -308,6 +311,42 @@ table.maps td {
 }
 table.maps thead tr {
     line-height: 2em;
+}
+table.maps .button {
+    margin-bottom: 2px;
+    padding:4px 6px;
+    height: 36px;
+    line-height: 23px;
+}
+
+/* **************************** */
+/*           Dialog             */
+/* **************************** */
+dialog {
+    width: 90vw;
+    height: 90vh;
+}
+dialog::backdrop {
+    background: #fff5;
+    backdrop-filter: blur(4px);
+}
+.close-dialog {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+/* ********************************* */
+/*         Pagination                */
+/* ********************************* */
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 1rem;
+    border-top: 1px solid gray;
+}
+.pagination > * {
+    padding: 1rem;
 }
 
 

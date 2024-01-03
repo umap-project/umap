@@ -62,7 +62,7 @@ from .forms import (
     UserProfileForm,
 )
 from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
-from .utils import ConflictError, get_uri_template, gzip_file, is_ajax, merge_features
+from .utils import ConflictError, _urls_for_js, gzip_file, is_ajax, merge_features
 
 User = get_user_model()
 
@@ -270,7 +270,12 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
     def get_context_data(self, **kwargs):
         kwargs.update(
-            {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)}
+            {
+                "q": self.request.GET.get("q"),
+                "maps": self.paginate(
+                    self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER
+                ),
+            }
         )
         return super().get_context_data(**kwargs)
 
@@ -388,22 +393,6 @@ ajax_proxy = AjaxProxy.as_view()
 # ############## #
 #     Utils      #
 # ############## #
-
-
-def _urls_for_js(urls=None):
-    """
-    Return templated URLs prepared for javascript.
-    """
-    if urls is None:
-        # prevent circular import
-        from .urls import i18n_urls, urlpatterns
-
-        urls = [
-            url.name for url in urlpatterns + i18n_urls if getattr(url, "name", None)
-        ]
-    urls = dict(zip(urls, [get_uri_template(url) for url in urls]))
-    urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
-    return urls
 
 
 def simple_json_response(**kwargs):
