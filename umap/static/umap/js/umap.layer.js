@@ -9,7 +9,7 @@ L.U.Layer = {
     return []
   },
 
-  postUpdate: function () {},
+  onEdit: function () {},
 
   hasDataVisible: function () {
     return !!Object.keys(this._layers).length
@@ -104,13 +104,13 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
     ]
   },
 
-  postUpdate: function (e) {
-    if (e.helper.field === 'options.cluster.radius') {
+  onEdit: function (field, builder) {
+    if (field === 'options.cluster.radius') {
       // No way to reset radius of an already instanciated MarkerClusterGroup...
       this.datalayer.resetLayer(true)
       return
     }
-    if (e.helper.field === 'options.color') {
+    if (field === 'options.color') {
       this.options.polygonOptions.color = this.datalayer.getColor()
     }
   },
@@ -234,9 +234,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     L.FeatureGroup.prototype.onAdd.call(this, map)
   },
 
-  postUpdate: function (e) {
-    const field = e.helper.field,
-      builder = e.helper.builder
+  onEdit: function (field, builder) {
     // If user touches the breaks, then force manual mode
     if (field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
@@ -387,12 +385,12 @@ L.U.Layer.Heat = L.HeatLayer.extend({
     ]
   },
 
-  postUpdate: function (e) {
-    if (e.helper.field === 'options.heat.intensityProperty') {
+  onEdit: function (field, builder) {
+    if (field === 'options.heat.intensityProperty') {
       this.datalayer.resetLayer(true) // We need to repopulate the latlngs
       return
     }
-    if (e.helper.field === 'options.heat.radius') {
+    if (field === 'options.heat.radius') {
       this.options.radius = this.datalayer.options.heat.radius
     }
     this._updateOptions()
@@ -1204,11 +1202,12 @@ L.U.DataLayer = L.Evented.extend({
     ]
 
     const redrawCallback = function (e) {
+      const field = e.helper.field,
+        builder = e.helper.builder
       this.hide()
-      this.layer.postUpdate(e)
+      this.layer.onEdit(field, builder)
       this.show()
     }
-
     builder = new L.U.FormBuilder(this, shapeOptions, {
       id: 'datalayer-advanced-properties',
       callback: redrawCallback,
