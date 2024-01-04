@@ -669,26 +669,25 @@ const ControlsMixin = {
     const facetCriteria = {}
 
     keys.forEach((key) => {
-      if (facetKeys[key]["dataType"] === "date") {
+      const inputType = facetKeys[key]["inputType"]
+      if (["date", "datetime-local", "number"].includes(inputType)) {
         if (!facetCriteria[key]) facetCriteria[key] = {
-          "dataType": facetKeys[key]["dataType"],
           "inputType": facetKeys[key]["inputType"],
           "min": undefined,
           "max": undefined
         }
         if (!this.facets[key]) this.facets[key] = {
-          "dataType": facetKeys[key]["dataType"],
+          "inputType": facetKeys[key]["inputType"],
           "min": undefined,
           "max": undefined
         }
       } else {
         if (!facetCriteria[key]) facetCriteria[key] = {
-          "dataType": facetKeys[key]["dataType"],
           "inputType": facetKeys[key]["inputType"],
           "choices": []
         }
         if (!this.facets[key]) this.facets[key] = {
-          "dataType": facetKeys[key]["dataType"],
+          "inputType": facetKeys[key]["inputType"],
           "choices": []
         }
       }
@@ -698,15 +697,20 @@ const ControlsMixin = {
       datalayer.eachFeature((feature) => {
         keys.forEach((key) => {
           let value = feature.properties[key]
-          if (facetKeys[key]["dataType"] === "date") {
-            value = L.Util.parseDateField(value)
-            if (!!value && (!facetCriteria[key]["min"] || facetCriteria[key]["min"] > value)) {
+          const inputType = facetKeys[key]["inputType"]
+          if (["date", "datetime-local", "number"].includes(inputType)) {
+            value = (value != null ? value : undefined)
+            if (["date", "datetime-local"].includes(inputType)) value = new Date(value);
+            if (["number"].includes(inputType)) value = parseFloat(value);
+            if (!isNaN(value) && (isNaN(facetCriteria[key]["min"]) || facetCriteria[key]["min"] > value)) {
               facetCriteria[key]["min"] = value
             }
-            if (!!value && (!facetCriteria[key]["max"] || facetCriteria[key]["max"] < value)) {
+            if (!isNaN(value) && (isNaN(facetCriteria[key]["max"]) || facetCriteria[key]["max"] < value)) {
               facetCriteria[key]["max"] = value
             }
           } else {
+            value = String(value)
+            value = (value.length ? value : "empty string")
             if (!!value && !facetCriteria[key]["choices"].includes(value)) {
               facetCriteria[key]["choices"].push(value)
             }
@@ -725,11 +729,10 @@ const ControlsMixin = {
       if (!found)
         this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
     }
-
     const fields = keys.map((key) => [
       `facets.${key}`,
       {
-        handler: facetCriteria[key]["inputType"] === "datetime-local" ? 'FacetSearchDate' : 'FacetSearchCheckbox',
+        handler: ["date", "datetime-local", "number"].includes(facetCriteria[key]["inputType"]) ? 'FacetSearchMinMax' : 'FacetSearchChoices',
         criteria: facetCriteria[key],
         label: facetKeys[key]["label"]
       },

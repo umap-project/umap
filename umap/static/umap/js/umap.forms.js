@@ -744,11 +744,10 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   },
 })
 
-L.FormBuilder.FacetSearchCheckbox = L.FormBuilder.Element.extend({
+L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
   build: function () {
     this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
     this.ul = L.DomUtil.create('ul', '', this.container)
-    this.dataType = this.options.criteria["dataType"]
     this.inputType = this.options.criteria["inputType"]
 
     const choices = this.options.criteria["choices"]
@@ -778,54 +777,87 @@ L.FormBuilder.FacetSearchCheckbox = L.FormBuilder.Element.extend({
 
   toJS: function () {
     return {
-      'dataType': this.dataType,
+      'inputType': this.inputType,
       'choices': [...this.ul.querySelectorAll('input:checked')].map((i) => i.dataset.value)
     }
   },
 })
 
-L.FormBuilder.FacetSearchDate = L.FormBuilder.Element.extend({
+L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
   build: function () {
-    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode);
-    this.table = L.DomUtil.create('table', '', this.container);
-    this.dataType = this.options.criteria["dataType"];
-    this.inputType = this.options.criteria["inputType"];
+    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
+    this.table = L.DomUtil.create('table', '', this.container)
+    this.inputType = this.options.criteria["inputType"]
 
-    const min = this.options.criteria['min'];
-    const max = this.options.criteria['max'];
+    const min = this.options.criteria['min']
+    const max = this.options.criteria['max']
 
-    this.minTr = L.DomUtil.create('tr', '', this.table);
+    this.minTr = L.DomUtil.create('tr', '', this.table)
 
-    this.minTdLabel = L.DomUtil.create('td', '', this.minTr);
-    this.minLabel = L.DomUtil.create('label', '', this.minTdLabel);
-    this.minLabel.innerHTML = 'From';
-    this.minLabel.htmlFor = `${this.inputType}_${this.name}_min`;
+    this.minTdLabel = L.DomUtil.create('td', '', this.minTr)
+    this.minLabel = L.DomUtil.create('label', '', this.minTdLabel)
+    this.minLabel.innerHTML = 'Min'
+    this.minLabel.htmlFor = `${this.inputType}_${this.name}_min`
 
-    this.minTdInput = L.DomUtil.create('td', '', this.minTr);
-    this.minInput = L.DomUtil.create('input', '', this.minTdInput);
-    this.minInput.type = this.inputType;
-    this.minInput.step = '0.001';
-    this.minInput.id = `${this.inputType}_${this.name}_min`;
-    this.minInput.valueAsNumber = (min.valueOf() - min.getTimezoneOffset() * 60000);;
-    this.minInput.dataset.value = min;
+    this.minTdInput = L.DomUtil.create('td', '', this.minTr)
+    this.minInput = L.DomUtil.create('input', '', this.minTdInput)
+    this.minInput.type = this.inputType
+    this.minInput.id = `${this.inputType}_${this.name}_min`
+    this.minInput.step = '1'
+    if (min != null) {
+      this.minInput.valueAsNumber = min.valueOf()
+      this.minInput.dataset.value = min
+    }
 
-    this.maxTr = L.DomUtil.create('tr', '', this.table);
+    this.maxTr = L.DomUtil.create('tr', '', this.table)
 
-    this.maxTdLabel = L.DomUtil.create('td', '', this.maxTr);
-    this.maxLabel = L.DomUtil.create('label', '', this.maxTdLabel);
-    this.maxLabel.innerHTML = 'Until';
-    this.maxLabel.htmlFor = `${this.inputType}_${this.name}_max`;
+    this.maxTdLabel = L.DomUtil.create('td', '', this.maxTr)
+    this.maxLabel = L.DomUtil.create('label', '', this.maxTdLabel)
+    this.maxLabel.innerHTML = 'Max'
+    this.maxLabel.htmlFor = `${this.inputType}_${this.name}_max`
 
-    this.maxTdInput = L.DomUtil.create('td', '', this.maxTr);
-    this.maxInput = L.DomUtil.create('input', '', this.maxTdInput);
-    this.maxInput.type = this.inputType;
-    this.maxInput.step = '0.001';
-    this.maxInput.id = `${this.inputType}_${this.name}_max`;
-    this.maxInput.valueAsNumber = (max.valueOf() - max.getTimezoneOffset() * 60000);;
-    this.maxInput.dataset.value = max;
+    this.maxTdInput = L.DomUtil.create('td', '', this.maxTr)
+    this.maxInput = L.DomUtil.create('input', '', this.maxTdInput)
+    this.maxInput.type = this.inputType
+    this.maxInput.id = `${this.inputType}_${this.name}_max`
+    this.maxInput.step = '1'
+    if (max != null) {
+      this.maxInput.valueAsNumber = max.valueOf()
+      this.maxInput.dataset.value = max
+    }
 
-    L.DomEvent.on(this.minInput, 'change', (e) => this.sync());
-    L.DomEvent.on(this.maxInput, 'change', (e) => this.sync());
+    if (["date", "datetime-local"].includes(this.inputType)) {
+      this.minLabel.innerHTML = 'From'
+      this.maxLabel.innerHTML = 'Until'
+      if (min != null) {
+        this.minInput.valueAsNumber = (min.valueOf() - min.getTimezoneOffset() * 60000)
+      }
+      if (max != null) {
+        this.maxInput.valueAsNumber = (max.valueOf() - max.getTimezoneOffset() * 60000)
+      }
+    }
+
+    if (["datetime-local"].includes(this.inputType)) {
+      this.minInput.step = '0.001'
+      this.maxInput.step = '0.001'
+    }
+
+    if (["number"].includes(this.inputType)) {
+      if (min != null && max != null) {
+        // calculate step from significant digits of min and max values
+        let minStep = String(min).replace(/^\d+?(0*)((\.)(\d*?)0*|)$/, "1$1$3$4").split('.')
+        let maxStep = String(max).replace(/^\d+?(0*)((\.)(\d*?)0*|)$/, "1$1$3$4").split('.')
+        minStep = parseFloat((minStep[1] || "").replace(/\d/g, "0").replace(/^0/, "0.0").replace(/0$/, "1") || (minStep[0] || "").replace(/0$/, "") || "1")
+        maxStep = parseFloat((maxStep[1] || "").replace(/\d/g, "0").replace(/^0/, "0.0").replace(/0$/, "1") || (maxStep[0] || "").replace(/0$/, "") || "1")
+
+        const step = Math.min(minStep, maxStep)
+        this.minInput.step = String(step)
+        this.maxInput.step = String(step)
+      }
+    }
+
+    L.DomEvent.on(this.minInput, 'change', (e) => this.sync())
+    L.DomEvent.on(this.maxInput, 'change', (e) => this.sync())
   },
 
   buildLabel: function () {
@@ -834,7 +866,7 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.Element.extend({
 
   toJS: function () {
     return {
-      'dataType': this.dataType,
+      'inputType': this.inputType,
       'min': this.minInput.value,
       'max': this.maxInput.value,
     };
