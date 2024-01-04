@@ -1364,7 +1364,7 @@ L.U.Map.include({
         {
           handler: 'Input',
           helpEntries: 'facetKey',
-          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|enum|checkbox'),
+          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
           label: L._('Facet keys'),
         },
       ],
