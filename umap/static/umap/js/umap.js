@@ -2031,25 +2031,22 @@ L.U.Map.include({
   },
 
   getFacetKeys: function () {
-    const allowedTypes = {
-      "enum": ["checkbox", "radio"],
-      "date": ["datetime-local"],
+    const allowedInputTypes = {
+      "checkbox": "checkbox",
+      "radio": "radio",
+      "number": "number",
+      "date": "date",
+      "datetime": "datetime-local",
     }
-    console.log(this.options.facetKey)
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
       const els = curr.split('|')
       acc[els[0]] = {
         "label": els[1] || els[0],
-        "dataType": (
-          (els[2] in allowedTypes) ? els[2] :
-          Object.keys(allowedTypes)[0]
+        "inputType": (
+          (els[2] in allowedInputTypes) ? allowedInputTypes[els[2]] :
+          Object.values(allowedInputTypes)[0]
 	)
       }
-      acc[els[0]]["inputType"] = (
-        allowedTypes[acc[els[0]]["dataType"]].includes(els[3]) ? els[3] :
-        allowedTypes[acc[els[0]]["dataType"]][0]
-      )
-      console.log(acc)
       return acc
     }, {})
   },
