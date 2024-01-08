@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.1 - 2024-01-08
+
+### Bug fix
+* fix: icon element is undefined when clustered by @yohanboniface in #1512
+
 ## 1.13.0 - 2024-01-08
 
 ### New features
