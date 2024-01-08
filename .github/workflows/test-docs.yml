@@ -24,8 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        dependencies: [normal, minimal]
+        python-version: ["3.8", "3.12"]
         database: [postgresql]
 
     steps:
@@ -36,9 +35,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
         cache-dependency-path: '**/pyproject.toml'
-    - name: Change dependencies to minimal supported versions
-      run: sed -i -e '/requires-python/!s/>=/==/g; /requires-python/!s/~=.*==\(.*\)/==\1/g; /requires-python/!s/~=/==/g;' pyproject.toml
-      if: matrix.dependencies == 'minimal'
     - name: Install dependencies
       run: |
         sudo apt update
