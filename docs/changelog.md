@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.13.0 - 2024-01-08
+
+### New features
+* Preview map only on click in user’s dashboard by @davidbgk in #1478
+* feat(browser): add counter in datalayer headline by @yohanboniface in #1509
+* Allow to type a latlng in the search box by @yohanboniface in #1480
+* Add a popup template to showcase OpenStreetMap data by @yohanboniface in #1479
+* Refactor Share & Download UI for better usability by @jschleic in #1454
+* Move layer specific settings to a dedicated fieldset by @yohanboniface in #1499
+
+### Bug fixes
+* fix dirty flags when re-ordering layers by @jschleic in #1497
+* Be more explicit on changed fields when updating choropleth form by @yohanboniface in #1490
+
+### Documentation
+* docs: Update the links in the README, remove the badges by @almet in #1501
+
+### Internal Changes
+* Create dependabot.yml by @almet in #1502
+
+
 ## 1.12.2 - 2023-12-29
 
 ### Bug  fixes
@@ -12,7 +33,7 @@
 ### New features
 * Allow to edit pictogram categories from admin list by @yohanboniface in #1477
 
-### Bug  fixes
+### Bug fixes
 * Increase iconlayers titles on hover by @yohanboniface in #1476
 * Remove zoom/moeveend events when deleting datalayer by @yohanboniface in #1484
 * Better way of handling escape while drawing by @yohanboniface in #1483
