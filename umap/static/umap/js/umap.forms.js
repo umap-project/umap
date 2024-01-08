@@ -597,13 +597,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.body.innerHTML = ''
   },
 
-  isImg: function () {
-    const value = this.value()
-    return (
-      L.Util.isPath(value) || L.Util.isRemoteUrl(value) || L.Util.isDataImage(value)
-    )
-  },
-
   updatePreview: function () {
     this.buttons.innerHTML = ''
     if (this.isDefault()) return
@@ -611,13 +604,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
       L.DomEvent.on(box, 'click', this.onDefine, this)
-      if (this.isImg()) {
-        const img = L.DomUtil.create('img', '', box)
-        img.src = this.value()
-      } else {
-        const el = L.DomUtil.create('span', '', box)
-        el.textContent = this.value()
-      }
+      const icon = L.U.Icon.makeIconElement(this.value(), box)
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
@@ -717,7 +704,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   showCharsTab: function () {
     this.openTab('chars')
-    const value = !this.isImg() ? this.value() : null
+    const value = !L.U.Icon.isImg(this.value()) ? this.value() : null
     const input = this.buildInput(this.body, value)
     input.placeholder = L._('Type char or paste emoji')
     input.type = 'text'

@@ -13,7 +13,7 @@ L.U.Browser = L.Class.extend({
       zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
       edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
       del = L.DomUtil.create('i', 'show-on-edit feature-delete', feature_li),
-      color = L.DomUtil.create('i', 'feature-color', feature_li),
+      colorBox = L.DomUtil.create('i', 'feature-color', feature_li),
       title = L.DomUtil.create('span', 'feature-title', feature_li),
       symbol = feature._getIconUrl
         ? L.U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
@@ -22,8 +22,12 @@ L.U.Browser = L.Class.extend({
     edit.title = L._('Edit this feature')
     del.title = L._('Delete this feature')
     title.textContent = feature.getDisplayName() || '—'
-    color.style.backgroundColor = feature.getOption('color')
-    if (symbol) color.style.backgroundImage = `url(${symbol})`
+    const bgcolor = feature.getOption('color')
+    colorBox.style.backgroundColor = bgcolor
+    if (symbol && symbol !== this.map.options.default_iconUrl) {
+      const icon = L.U.Icon.makeIconElement(symbol, colorBox)
+      L.U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
+    }
     L.DomEvent.on(
       zoom_to,
       'click',

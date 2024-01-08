@@ -270,24 +270,9 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
     const color = this.feature.getDynamicOption('color')
     title.style.backgroundColor = color
     const iconUrl = this.feature.getDynamicOption('iconUrl')
-    let icon
-    if (
-      L.Util.isPath(iconUrl) ||
-      L.Util.isRemoteUrl(iconUrl) ||
-      L.Util.isDataImage(iconUrl)
-    ) {
-      icon = L.DomUtil.add('img', 'popup-icon', title)
-      icon.src = iconUrl
-    } else {
-      icon = L.DomUtil.add('span', 'popup-icon', title)
-      icon.textContent = iconUrl
-    }
-    if (L.DomUtil.contrastedColor(title, color)) {
-      if (L.Util.isPath(iconUrl) && iconUrl.endsWith('.svg')) {
-        icon.style.filter = 'invert(1)'
-      }
-      title.style.color = 'white'
-    }
+    let icon = L.U.Icon.makeIconElement(iconUrl, title)
+    L.U.Icon.setIconContrast(icon, title, iconUrl, color)
+    if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'
     L.DomUtil.add('span', '', title, this.getName())
     const street = props['addr:street']
     if (street) {

@@ -1010,29 +1010,36 @@ a.add-datalayer:hover,
     background-color: #f8f8f3;
 }
 .umap-browse-features .feature-color {
-    box-shadow: 0 0 4px 0 black inset;
-    background-size: 70% 70%;
-    border: 4px solid #f8f8f3;
+    box-shadow: 0 0 2px 0 black inset;
     cursor: inherit;
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
-    background-position: center;
+    background: none;
     display: inline-block;
     padding: 0;
     width: 24px;
+    text-align: center;
+    margin-left: 5px;
+}
+.umap-browse-features .feature-color img {
+    width: 24px;
+}
+.umap-browse-features .feature-color span {
+    font-style: normal;
+    font-weight: bold;
 }
 .umap-browse-features .polygon .feature-color,
 .umap-browse-features .polyline .feature-color {
-    box-shadow: 0 0 4px 0 black inset;
+    box-shadow: 0 0 2px 0 black inset;
     background-image: url('./img/24.svg');
     background-size: 500%;
 }
 .umap-browse-features .polyline .feature-color {
-    background-position: -48px -16px;
+    background-position: -72px -23px;
 }
 .umap-browse-features .polygon .feature-color {
-    background-position: -32px -16px;
+    background-position: -48px -25px;
 }
 .show-on-edit {
     display: none!important;
@@ -1379,7 +1386,6 @@ span.popup-icon {
 .umap-div-icon .icon_container span,
 .umap-drop-icon .icon_container span {
     vertical-align: middle;
-    color: white;
     font-weight: bold;
 }
 .umap-circle-icon {
