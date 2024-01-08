@@ -208,15 +208,16 @@ L.U.Icon.makeIconElement = function (src, parent) {
   return icon
 }
 
-L.U.Icon.setIconContrast = function (el, parent, src, bgcolor) {
+L.U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
   /*
-   * el: the element we'll adapt the style, it can be an image or text
+   * icon: the element we'll adapt the style, it can be an image or text
    * parent: the element we'll consider to decide whether to adapt the style,
    * by looking at its background color
    * src: the raw "icon" value, can be an URL, a path, text, emoticon, etc.
    * bgcolor: the background color, used for caching and in case we cannot guess the
    * parent background color
-   */
+  */
+  if (!icon) return
 
   if (L.DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
@@ -224,10 +225,10 @@ L.U.Icon.setIconContrast = function (el, parent, src, bgcolor) {
     if (L.Util.isPath(src) && src.endsWith('.svg')) {
       // Must be called after icon container is added to the DOM
       // An image
-      el.style.filter = 'invert(1)'
-    } else if (!el.src) {
+      icon.style.filter = 'invert(1)'
+    } else if (!icon.src) {
       // Text icon
-      el.style.color = 'white'
+      icon.style.color = 'white'
     }
   }
 }
