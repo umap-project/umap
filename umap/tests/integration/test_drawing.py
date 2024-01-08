@@ -6,7 +6,7 @@ def test_draw_polyline(page, live_server, tilelayer):
 
     # Click on the Draw a line button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline (Ctrl+L)"
+        "Draw a polyline"
     )
     create_line.click()
 
@@ -40,7 +40,7 @@ def test_clicking_esc_should_finish_line(page, live_server, tilelayer):
 
     # Click on the Draw a line button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline (Ctrl+L)"
+        "Draw a polyline"
     )
     create_line.click()
 
@@ -74,7 +74,7 @@ def test_clicking_esc_should_delete_line_if_empty(page, live_server, tilelayer):
 
     # Click on the Draw a line button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline (Ctrl+L)"
+        "Draw a polyline"
     )
     create_line.click()
 
@@ -101,7 +101,7 @@ def test_clicking_esc_should_delete_line_if_invalid(page, live_server, tilelayer
 
     # Click on the Draw a line button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline (Ctrl+L)"
+        "Draw a polyline"
     )
     create_line.click()
 
@@ -126,7 +126,7 @@ def test_draw_polygon(page, live_server, tilelayer):
 
     # Click on the Draw a polygon button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon (Ctrl+P)"
+        "Draw a polygon"
     )
     create_line.click()
 
@@ -160,7 +160,7 @@ def test_clicking_esc_should_finish_polygon(page, live_server, tilelayer):
 
     # Click on the Draw a polygon button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon (Ctrl+P)"
+        "Draw a polygon"
     )
     create_line.click()
 
@@ -194,7 +194,7 @@ def test_clicking_esc_should_delete_polygon_if_empty(page, live_server, tilelaye
 
     # Click on the Draw a polygon button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon (Ctrl+P)"
+        "Draw a polygon"
     )
     create_line.click()
 
@@ -217,7 +217,7 @@ def test_clicking_esc_should_delete_polygon_if_invalid(page, live_server, tilela
 
     # Click on the Draw a polygon button on a new map.
     create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon (Ctrl+P)"
+        "Draw a polygon"
     )
     create_line.click()
 

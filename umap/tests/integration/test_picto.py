@@ -1,3 +1,4 @@
+import platform
 from pathlib import Path
 
 import pytest
@@ -80,7 +81,8 @@ def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
     # Should have default img
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
     # Edit datalayer
-    marker.click(modifiers=["Control", "Shift"])
+    modifier = "Meta" if platform.system() == "Darwin" else "Control"
+    marker.click(modifiers=[modifier, "Shift"])
     settings = page.get_by_text("Layer properties")
     expect(settings).to_be_visible()
     shape_settings = page.get_by_text("Shape properties")
