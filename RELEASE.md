@@ -1,5 +1,8 @@
 # How to make a release
 
+1. Run tests:
+    - `make test`
+    - `make testjs`
 1. I18N
     - `make messages` look for new strings within the code
     - `make tx_push` to publish new strings [to transifex](https://app.transifex.com/openstreetmap/umap/dashboard/)
