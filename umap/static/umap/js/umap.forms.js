@@ -377,12 +377,15 @@ L.FormBuilder.PopupContent = L.FormBuilder.Select.extend({
 })
 
 L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['Default', L._('Default')],
-    ['Cluster', L._('Clustered')],
-    ['Heat', L._('Heatmap')],
-    ['Choropleth', L._('Choropleth')],
-  ],
+  getOptions: function () {
+    const layer_classes = [
+      L.U.Layer.Default,
+      L.U.Layer.Cluster,
+      L.U.Layer.Heat,
+      L.U.Layer.Choropleth,
+    ]
+    return layer_classes.map((class_) => [class_.TYPE, class_.NAME])
+  },
 })
 
 L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({

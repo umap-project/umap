@@ -1,6 +1,16 @@
 L.U.Layer = {
   canBrowse: true,
 
+  getType: function () {
+    const proto = Object.getPrototypeOf(this)
+    return proto.constructor.TYPE
+  },
+
+  getName: function () {
+    const proto = Object.getPrototypeOf(this)
+    return proto.constructor.NAME
+  },
+
   getFeatures: function () {
     return this._layers
   },
@@ -17,7 +27,10 @@ L.U.Layer = {
 }
 
 L.U.Layer.Default = L.FeatureGroup.extend({
-  _type: 'Default',
+  statics: {
+    NAME: L._('Default'),
+    TYPE: 'Default',
+  },
   includes: [L.U.Layer],
 
   initialize: function (datalayer) {
@@ -39,7 +52,10 @@ L.U.MarkerCluster = L.MarkerCluster.extend({
 })
 
 L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
-  _type: 'Cluster',
+  statics: {
+    NAME: L._('Clustered'),
+    TYPE: 'Cluster',
+  },
   includes: [L.U.Layer],
 
   initialize: function (datalayer) {
@@ -117,7 +133,10 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
 })
 
 L.U.Layer.Choropleth = L.FeatureGroup.extend({
-  _type: 'Choropleth',
+  statics: {
+    NAME: L._('Choropleth'),
+    TYPE: 'Choropleth',
+  },
   includes: [L.U.Layer],
   canBrowse: true,
   // Have defaults that better suit the choropleth mode.
@@ -320,7 +339,10 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
 })
 
 L.U.Layer.Heat = L.HeatLayer.extend({
-  _type: 'Heat',
+  statics: {
+    NAME: L._('Heatmap'),
+    TYPE: 'Heat',
+  },
   includes: [L.U.Layer],
   canBrowse: false,
 
@@ -615,7 +637,7 @@ L.U.DataLayer = L.Evented.extend({
     // Only reset if type is defined (undefined is the default) and different from current type
     if (
       this.layer &&
-      (!this.options.type || this.options.type === this.layer._type) &&
+      (!this.options.type || this.options.type === this.layer.getType()) &&
       !force
     ) {
       return
@@ -1188,6 +1210,28 @@ L.U.DataLayer = L.Evented.extend({
     })
     container.appendChild(builder.build())
 
+    const redrawCallback = function (e) {
+      const field = e.helper.field,
+        builder = e.helper.builder
+      this.hide()
+      this.layer.onEdit(field, builder)
+      this.show()
+    }
+
+    const layerOptions = this.layer.getEditableOptions()
+
+    if (layerOptions.length) {
+      builder = new L.U.FormBuilder(this, layerOptions, {
+        id: 'datalayer-layer-properties',
+        callback: redrawCallback,
+      })
+      const layerProperties = L.DomUtil.createFieldset(
+        container,
+        `${this.layer.getName()}: ${L._('settings')}`
+      )
+      layerProperties.appendChild(builder.build())
+    }
+
     let shapeOptions = [
       'options.color',
       'options.iconClass',
@@ -1201,13 +1245,6 @@ L.U.DataLayer = L.Evented.extend({
       'options.fillOpacity',
     ]
 
-    const redrawCallback = function (e) {
-      const field = e.helper.field,
-        builder = e.helper.builder
-      this.hide()
-      this.layer.onEdit(field, builder)
-      this.show()
-    }
     builder = new L.U.FormBuilder(this, shapeOptions, {
       id: 'datalayer-advanced-properties',
       callback: redrawCallback,
@@ -1223,8 +1260,6 @@ L.U.DataLayer = L.Evented.extend({
       'options.toZoom',
       'options.labelKey',
     ]
-
-    optionsFields = optionsFields.concat(this.layer.getEditableOptions())
 
     builder = new L.U.FormBuilder(this, optionsFields, {
       id: 'datalayer-advanced-properties',
