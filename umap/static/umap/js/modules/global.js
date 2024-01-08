@@ -1,5 +1,8 @@
 import * as L from '../../vendors/leaflet/leaflet-src.esm.js'
+import URLs from './urls.js'
+// Import modules and export them to the global scope.
+// For the not yet module-compatible JS out there.
 
-// Exposes the modules to the window global scope, it's expected by leaflet plugins
-// in a writeable form.
+// Copy the leaflet module, it's expected by leaflet plugins to be writeable.
 window.L = { ...L }
+window.umap = { URLs }

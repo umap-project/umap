@@ -2,7 +2,7 @@
 <div id="map"></div>
 <!-- djlint:off -->
 <script defer type="text/javascript">
-  window.addEventListener('load', (event) => {
+  window.addEventListener('DOMContentLoaded', (event) => {
     let MAP = new L.U.Map("map", {{ map_settings|notag|safe }});
   });
 </script>

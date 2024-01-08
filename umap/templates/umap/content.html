@@ -38,7 +38,7 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
-    window.addEventListener('load', (event => {
+    window.addEventListener('DOMContentLoaded', (event => {
       
     !(function () {
       const ui = new L.U.UI(document.querySelector('header'))

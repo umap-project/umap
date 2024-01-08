@@ -3,7 +3,7 @@
 <!-- djlint:off -->
 <script type="text/javascript">
   // Wait for JS modules to be loaded
-  window.addEventListener('load', (event) => {
+  window.addEventListener('DOMContentLoaded', (event) => {
     new L.U.Map("{{ unique_id }}", {{ map_settings|notag|safe }})
   });
 </script>
