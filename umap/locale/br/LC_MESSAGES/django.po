@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 06:55+0000\n"
+"POT-Creation-Date: 2024-01-08 12:33+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2023\n"
 "Language-Team: Breton (http://app.transifex.com/openstreetmap/umap/language/br/)\n"
@@ -28,115 +28,115 @@ msgstr "N'haller he c'hemmañ nemet gant ul liamm aozañ kuzh"
 msgid "Everyone can edit"
 msgstr "An holl a c'hall kemmañ"
 
-#: forms.py:69 models.py:318
+#: forms.py:69 models.py:349
 msgid "Inherit"
 msgstr "Dre ziouer"
 
-#: middleware.py:14
+#: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "Al lec'hienn zo da lenn hepken rak emeur ouzh he c'hempenn"
 
-#: models.py:48
+#: models.py:49
 msgid "name"
 msgstr "anv"
 
-#: models.py:79
+#: models.py:80
 msgid "details"
 msgstr "munudoù"
 
-#: models.py:80
+#: models.py:81
 msgid "Link to a page where the licence is detailed."
 msgstr "Liamm war-zu ur bajenn a zispleg an aotre-implijout."
 
-#: models.py:90
+#: models.py:91
 msgid "URL template using OSM tile format"
 msgstr "Patrom URL a implij furmad teol OSM"
 
-#: models.py:96
+#: models.py:97
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:142 models.py:319
+#: models.py:143 models.py:350
 msgid "Everyone"
 msgstr "An holl"
 
-#: models.py:143 models.py:149 models.py:320
+#: models.py:144 models.py:150 models.py:351
 msgid "Editors only"
 msgstr "Aozerien nemetken"
 
-#: models.py:144 models.py:321
+#: models.py:145 models.py:352
 msgid "Owner only"
 msgstr "Ar perc'henner hepken"
 
-#: models.py:147
+#: models.py:148
 msgid "Everyone (public)"
 msgstr "An holl (publik)"
 
-#: models.py:148
+#: models.py:149
 msgid "Anyone with link"
 msgstr "Piv bennak en deus ul liamm"
 
-#: models.py:150
+#: models.py:151
 msgid "Blocked"
 msgstr "Stanket"
 
-#: models.py:153 models.py:325
+#: models.py:154 models.py:356
 msgid "description"
 msgstr "deskrivadur"
 
-#: models.py:154
+#: models.py:155
 msgid "center"
 msgstr "kreizañ"
 
-#: models.py:155
+#: models.py:156
 msgid "zoom"
 msgstr "zoumañ"
 
-#: models.py:157
+#: models.py:158
 msgid "locate"
 msgstr "lec'hiañ"
 
-#: models.py:157
+#: models.py:158
 msgid "Locate user on load?"
 msgstr "Lec'hiañ an implijer en ur gargañ?"
 
-#: models.py:161
+#: models.py:162
 msgid "Choose the map licence."
 msgstr "Dibabit aotre-implijout ar gartenn."
 
-#: models.py:162
+#: models.py:163
 msgid "licence"
 msgstr "aotre"
 
-#: models.py:173
+#: models.py:174
 msgid "owner"
 msgstr "perc'henner"
 
-#: models.py:177
+#: models.py:178
 msgid "editors"
 msgstr "aozerien"
 
-#: models.py:182 models.py:339
+#: models.py:183 models.py:370
 msgid "edit status"
 msgstr "statud aozañ"
 
-#: models.py:187
+#: models.py:188
 msgid "share status"
 msgstr "digor da biv?"
 
-#: models.py:190 models.py:334
+#: models.py:191 models.py:365
 msgid "settings"
 msgstr "arventennoù"
 
-#: models.py:269
+#: models.py:298
 msgid "Clone of"
 msgstr "Eilenn eus"
 
-#: models.py:329
+#: models.py:360
 msgid "display on load"
 msgstr "diskwel pa vez karget"
 
-#: models.py:330
+#: models.py:361
 msgid "Display this layer on load."
 msgstr "Diskwel ar gwiskad-mañ pa vez karget"
 
@@ -293,49 +293,77 @@ msgstr "Bezit awenet en ur furchal kartennoù"
 msgid "You are logged in. Continuing..."
 msgstr "Kevreet oc'h. Gortozit ur pennadig..."
 
-#: templates/umap/map_list.html:9 views.py:303
+#: templates/umap/map_list.html:9 views.py:296
 msgid "by"
 msgstr "gant"
 
-#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Muioc'h"
 
-#: templates/umap/map_table.html:6
-msgid "Map"
-msgstr "Kartenn"
-
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:5
 msgid "Name"
 msgstr "Anv"
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:6
+msgid "Preview"
+msgstr ""
+
+#: templates/umap/map_table.html:7
 msgid "Who can see / edit"
 msgstr "Piv a c'hall gwelet / aozañ"
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:8
 msgid "Last save"
 msgstr "Enrollet da ziwezhañ"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:9
 msgid "Owner"
 msgstr "Perc'henner"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:10
 msgid "Actions"
 msgstr "Oberoù"
 
-#: templates/umap/map_table.html:28
+#: templates/umap/map_table.html:22
+msgid "Open preview"
+msgstr ""
+
+#: templates/umap/map_table.html:38
 msgid "Share"
 msgstr "Rannañ"
 
-#: templates/umap/map_table.html:29
+#: templates/umap/map_table.html:39
 msgid "Edit"
 msgstr "Aozañ"
 
-#: templates/umap/map_table.html:30
+#: templates/umap/map_table.html:40
 msgid "Download"
 msgstr "Pellgargañ"
+
+#: templates/umap/map_table.html:49
+msgid "first"
+msgstr ""
+
+#: templates/umap/map_table.html:50
+msgid "previous"
+msgstr ""
+
+#: templates/umap/map_table.html:59
+#, python-format
+msgid ""
+"\n"
+"      Page %(maps_number)s of %(num_pages)s\n"
+"    "
+msgstr ""
+
+#: templates/umap/map_table.html:65
+msgid "next"
+msgstr ""
+
+#: templates/umap/map_table.html:66
+msgid "last"
+msgstr ""
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
@@ -437,52 +465,52 @@ msgstr "Ma frofil"
 msgid "You have no map yet."
 msgstr "N'ho peus kartenn ebet c'hoazh."
 
-#: views.py:308
+#: views.py:301
 msgid "View the map"
 msgstr "Diskouez ar gartenn"
 
-#: views.py:659
+#: views.py:660
 msgid "Map has been updated!"
 msgstr "Hizivaet eo bet ar gartenn!"
 
-#: views.py:684
+#: views.py:685
 msgid "Map editors updated with success!"
 msgstr "Aozerien ar gartenn bet hizivaet gant berzh!"
 
-#: views.py:722
+#: views.py:723
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Al liamm uMap evit aozañ ho kartenn: %(map_name)s"
 
-#: views.py:725
+#: views.py:726
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Setu ho liamm aozañ kuzh: %(link)s"
 
-#: views.py:731
+#: views.py:732
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Postel kaset da %(email)s"
 
-#: views.py:742
+#: views.py:743
 msgid "Only its owner can delete the map."
 msgstr "N'eus nemet perc'henner ar gartenn a c'hall he dilemel."
 
-#: views.py:765
+#: views.py:766
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Eilet eo bet ho kartenn! M'ho peus c'hoant d'he c'hemmañ diwar un urzhiataer all, implijit al liamm-mañ: %(anonymous_url)s"
 
-#: views.py:770
+#: views.py:771
 msgid "Congratulations, your map has been cloned!"
 msgstr "Eilet eo bet ho kartenn gant berzh!"
 
-#: views.py:959
+#: views.py:1007
 msgid "Layer successfully deleted."
 msgstr "Gwiskad dilamet gant berzh."
 
-#: views.py:981
+#: views.py:1029
 msgid "Permissions updated with success!"
 msgstr "Aotreoù hizivaet gant berzh!"

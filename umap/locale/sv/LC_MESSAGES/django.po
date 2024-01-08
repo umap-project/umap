@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-22 16:21+0000\n"
+"POT-Creation-Date: 2024-01-08 12:33+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: carlbacker, 2020,2023\n"
 "Language-Team: Swedish (http://app.transifex.com/openstreetmap/umap/language/sv/)\n"
@@ -29,115 +29,115 @@ msgstr "Redigering är bara tillåten med privat redigeringslänk"
 msgid "Everyone can edit"
 msgstr "Alla kan redigera"
 
-#: forms.py:69 models.py:317
+#: forms.py:69 models.py:349
 msgid "Inherit"
 msgstr ""
 
-#: middleware.py:14
+#: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "Webbplatsen är skrivskyddad för underhållsarbete."
 
-#: models.py:48
+#: models.py:49
 msgid "name"
 msgstr "namn"
 
-#: models.py:79
+#: models.py:80
 msgid "details"
 msgstr "detaljer"
 
-#: models.py:80
+#: models.py:81
 msgid "Link to a page where the licence is detailed."
 msgstr "Länk till sida med detaljerad licens information."
 
-#: models.py:90
+#: models.py:91
 msgid "URL template using OSM tile format"
 msgstr "URL-mall med OSM:s tile-format"
 
-#: models.py:96
+#: models.py:97
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordningen för tile-lager i redigeringsrutan"
 
-#: models.py:142 models.py:318
+#: models.py:143 models.py:350
 msgid "Everyone"
 msgstr "Alla"
 
-#: models.py:143 models.py:149 models.py:319
+#: models.py:144 models.py:150 models.py:351
 msgid "Editors only"
 msgstr "Enbart redaktörer"
 
-#: models.py:144 models.py:320
+#: models.py:145 models.py:352
 msgid "Owner only"
 msgstr "Enbart ägaren "
 
-#: models.py:147
+#: models.py:148
 msgid "Everyone (public)"
 msgstr "Alla (publik)"
 
-#: models.py:148
+#: models.py:149
 msgid "Anyone with link"
 msgstr "Alla med en länk"
 
-#: models.py:150
+#: models.py:151
 msgid "Blocked"
 msgstr "Låst"
 
-#: models.py:153 models.py:324
+#: models.py:154 models.py:356
 msgid "description"
 msgstr "beskrivning"
 
-#: models.py:154
+#: models.py:155
 msgid "center"
 msgstr "centrera"
 
-#: models.py:155
+#: models.py:156
 msgid "zoom"
 msgstr "zooma"
 
-#: models.py:157
+#: models.py:158
 msgid "locate"
 msgstr "lokalisera"
 
-#: models.py:157
+#: models.py:158
 msgid "Locate user on load?"
 msgstr "Lokalisera användaren vid uppstart?"
 
-#: models.py:161
+#: models.py:162
 msgid "Choose the map licence."
 msgstr "Välj licens för kartan."
 
-#: models.py:162
+#: models.py:163
 msgid "licence"
 msgstr "licens"
 
-#: models.py:172
+#: models.py:174
 msgid "owner"
 msgstr "ägare"
 
-#: models.py:176
+#: models.py:178
 msgid "editors"
 msgstr "redaktörer"
 
-#: models.py:181 models.py:338
+#: models.py:183 models.py:370
 msgid "edit status"
 msgstr "redigeringsstatus"
 
-#: models.py:186
+#: models.py:188
 msgid "share status"
 msgstr "delningsstatus"
 
-#: models.py:189 models.py:333
+#: models.py:191 models.py:365
 msgid "settings"
 msgstr "inställningar"
 
-#: models.py:268
+#: models.py:298
 msgid "Clone of"
 msgstr "Kopia av"
 
-#: models.py:328
+#: models.py:360
 msgid "display on load"
 msgstr "visa vid uppstart"
 
-#: models.py:329
+#: models.py:361
 msgid "Display this layer on load."
 msgstr "Visa detta lager från start."
 
@@ -294,49 +294,77 @@ msgstr "Inspireras av andra kartor"
 msgid "You are logged in. Continuing..."
 msgstr "Du är nu inloggad. Fortsätter..."
 
-#: templates/umap/map_list.html:9 views.py:303
+#: templates/umap/map_list.html:9 views.py:296
 msgid "by"
 msgstr "av"
 
-#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Mer"
 
-#: templates/umap/map_table.html:6
-msgid "Map"
-msgstr "Karta"
-
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:5
 msgid "Name"
 msgstr "Namn"
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:6
+msgid "Preview"
+msgstr ""
+
+#: templates/umap/map_table.html:7
 msgid "Who can see / edit"
 msgstr "Vem kan se/redigera"
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:8
 msgid "Last save"
 msgstr "Senast sparad "
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:9
 msgid "Owner"
 msgstr "Ägare"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:10
 msgid "Actions"
 msgstr "Åtgärder"
 
-#: templates/umap/map_table.html:28
+#: templates/umap/map_table.html:22
+msgid "Open preview"
+msgstr ""
+
+#: templates/umap/map_table.html:38
 msgid "Share"
 msgstr "Dela"
 
-#: templates/umap/map_table.html:29
+#: templates/umap/map_table.html:39
 msgid "Edit"
 msgstr "Redigera"
 
-#: templates/umap/map_table.html:30
+#: templates/umap/map_table.html:40
 msgid "Download"
 msgstr "Ladda ned"
+
+#: templates/umap/map_table.html:49
+msgid "first"
+msgstr ""
+
+#: templates/umap/map_table.html:50
+msgid "previous"
+msgstr ""
+
+#: templates/umap/map_table.html:59
+#, python-format
+msgid ""
+"\n"
+"      Page %(maps_number)s of %(num_pages)s\n"
+"    "
+msgstr ""
+
+#: templates/umap/map_table.html:65
+msgid "next"
+msgstr ""
+
+#: templates/umap/map_table.html:66
+msgid "last"
+msgstr ""
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
@@ -435,52 +463,52 @@ msgstr ""
 msgid "You have no map yet."
 msgstr "Du har ingen karta än. "
 
-#: views.py:308
+#: views.py:301
 msgid "View the map"
 msgstr "Se kartan"
 
-#: views.py:658
+#: views.py:660
 msgid "Map has been updated!"
 msgstr "Kartan har uppdaterats!"
 
-#: views.py:683
+#: views.py:685
 msgid "Map editors updated with success!"
 msgstr "Kartans redaktörer har uppdaterats!"
 
-#: views.py:721
+#: views.py:723
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Redigeringslänken för din uMap-karta: %(map_name)s"
 
-#: views.py:724
+#: views.py:726
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Här är din hemliga redigeringslänk: %(link)s"
 
-#: views.py:730
+#: views.py:732
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Ett mejl har skickats till %(email)s"
 
-#: views.py:741
+#: views.py:743
 msgid "Only its owner can delete the map."
 msgstr "Bara ägaren kan radera kartan."
 
-#: views.py:764
+#: views.py:766
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Din karta har kopierats! Om du vill redigera den här kartan från en annan dator, använd denna länk: %(anonymous_url)s"
 
-#: views.py:769
+#: views.py:771
 msgid "Congratulations, your map has been cloned!"
 msgstr "Grattis, din karta har kopierats!"
 
-#: views.py:958
+#: views.py:1007
 msgid "Layer successfully deleted."
 msgstr "Lagret har raderats."
 
-#: views.py:980
+#: views.py:1029
 msgid "Permissions updated with success!"
 msgstr ""

@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 06:55+0000\n"
+"POT-Creation-Date: 2024-01-08 12:33+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Francesco Piero Paolicelli <piersoft2@gmail.com>, 2023\n"
 "Language-Team: Italian (http://app.transifex.com/openstreetmap/umap/language/it/)\n"
@@ -38,115 +38,115 @@ msgstr "Modificabile solo con il link segreto"
 msgid "Everyone can edit"
 msgstr "Chiunque può modificare"
 
-#: forms.py:69 models.py:318
+#: forms.py:69 models.py:349
 msgid "Inherit"
 msgstr "Inherit"
 
-#: middleware.py:14
+#: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "Il sito in sola lettura per manutenzione"
 
-#: models.py:48
+#: models.py:49
 msgid "name"
 msgstr "nome"
 
-#: models.py:79
+#: models.py:80
 msgid "details"
 msgstr "dettagli"
 
-#: models.py:80
+#: models.py:81
 msgid "Link to a page where the licence is detailed."
 msgstr "Link alla pagina con i dettagli della licenza"
 
-#: models.py:90
+#: models.py:91
 msgid "URL template using OSM tile format"
 msgstr "Modello dell'URL usando il formato delle tile OSM"
 
-#: models.py:96
+#: models.py:97
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordine degli sfondi (tilelayers) nel box di modifica"
 
-#: models.py:142 models.py:319
+#: models.py:143 models.py:350
 msgid "Everyone"
 msgstr "Chiunque"
 
-#: models.py:143 models.py:149 models.py:320
+#: models.py:144 models.py:150 models.py:351
 msgid "Editors only"
 msgstr "Solamente chi contribuisce"
 
-#: models.py:144 models.py:321
+#: models.py:145 models.py:352
 msgid "Owner only"
 msgstr "Solo chi ha la proprietà"
 
-#: models.py:147
+#: models.py:148
 msgid "Everyone (public)"
 msgstr "Chiunque (pubblico)"
 
-#: models.py:148
+#: models.py:149
 msgid "Anyone with link"
 msgstr "Chiunque abbia il link"
 
-#: models.py:150
+#: models.py:151
 msgid "Blocked"
 msgstr "Bloccata"
 
-#: models.py:153 models.py:325
+#: models.py:154 models.py:356
 msgid "description"
 msgstr "descrizione"
 
-#: models.py:154
+#: models.py:155
 msgid "center"
 msgstr "centra"
 
-#: models.py:155
+#: models.py:156
 msgid "zoom"
 msgstr "zoom"
 
-#: models.py:157
+#: models.py:158
 msgid "locate"
 msgstr "localizza"
 
-#: models.py:157
+#: models.py:158
 msgid "Locate user on load?"
 msgstr "Geolocalizzare l'utente al caricamento?"
 
-#: models.py:161
+#: models.py:162
 msgid "Choose the map licence."
 msgstr "Scegliere una licenza per la mappa."
 
-#: models.py:162
+#: models.py:163
 msgid "licence"
 msgstr "licenza"
 
-#: models.py:173
+#: models.py:174
 msgid "owner"
 msgstr "proprietario"
 
-#: models.py:177
+#: models.py:178
 msgid "editors"
 msgstr "contributore"
 
-#: models.py:182 models.py:339
+#: models.py:183 models.py:370
 msgid "edit status"
 msgstr "stato della modifica"
 
-#: models.py:187
+#: models.py:188
 msgid "share status"
 msgstr "stato condivisione"
 
-#: models.py:190 models.py:334
+#: models.py:191 models.py:365
 msgid "settings"
 msgstr "impostazioni"
 
-#: models.py:269
+#: models.py:298
 msgid "Clone of"
 msgstr "Duplicata da "
 
-#: models.py:329
+#: models.py:360
 msgid "display on load"
 msgstr "mostra al caricamento"
 
-#: models.py:330
+#: models.py:361
 msgid "Display this layer on load."
 msgstr "Visualizza questo layer al caricamento."
 
@@ -303,49 +303,77 @@ msgstr "Prendi ispirazione, visualizza mappe"
 msgid "You are logged in. Continuing..."
 msgstr "Utente loggato. Continuare..."
 
-#: templates/umap/map_list.html:9 views.py:303
+#: templates/umap/map_list.html:9 views.py:296
 msgid "by"
 msgstr "di"
 
-#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Altre mappe"
 
-#: templates/umap/map_table.html:6
-msgid "Map"
-msgstr "Mappa"
-
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:5
 msgid "Name"
 msgstr "Nome"
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:6
+msgid "Preview"
+msgstr ""
+
+#: templates/umap/map_table.html:7
 msgid "Who can see / edit"
 msgstr "Chi può vedere / modificare"
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:8
 msgid "Last save"
 msgstr "Ultimo salvataggio"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:9
 msgid "Owner"
 msgstr "Proprietario"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:10
 msgid "Actions"
 msgstr "Azioni"
 
-#: templates/umap/map_table.html:28
+#: templates/umap/map_table.html:22
+msgid "Open preview"
+msgstr ""
+
+#: templates/umap/map_table.html:38
 msgid "Share"
 msgstr "Condividi"
 
-#: templates/umap/map_table.html:29
+#: templates/umap/map_table.html:39
 msgid "Edit"
 msgstr "Modifica"
 
-#: templates/umap/map_table.html:30
+#: templates/umap/map_table.html:40
 msgid "Download"
 msgstr "Download"
+
+#: templates/umap/map_table.html:49
+msgid "first"
+msgstr ""
+
+#: templates/umap/map_table.html:50
+msgid "previous"
+msgstr ""
+
+#: templates/umap/map_table.html:59
+#, python-format
+msgid ""
+"\n"
+"      Page %(maps_number)s of %(num_pages)s\n"
+"    "
+msgstr ""
+
+#: templates/umap/map_table.html:65
+msgid "next"
+msgstr ""
+
+#: templates/umap/map_table.html:66
+msgid "last"
+msgstr ""
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
@@ -445,52 +473,52 @@ msgstr "Mio profilo"
 msgid "You have no map yet."
 msgstr "Non hai ancora alcuna mappa."
 
-#: views.py:308
+#: views.py:301
 msgid "View the map"
 msgstr "Visualizza la mappa"
 
-#: views.py:659
+#: views.py:660
 msgid "Map has been updated!"
 msgstr "La mappa è stata aggiornata!"
 
-#: views.py:684
+#: views.py:685
 msgid "Map editors updated with success!"
 msgstr "Aggiornato l'elenco degli editor abilitati alla modifica della mappa!"
 
-#: views.py:722
+#: views.py:723
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Link uMap per la modifica della tua mappa: %(map_name)s"
 
-#: views.py:725
+#: views.py:726
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Qui il tuo link segreto: %(link)s"
 
-#: views.py:731
+#: views.py:732
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Email inviata a %(email)s"
 
-#: views.py:742
+#: views.py:743
 msgid "Only its owner can delete the map."
 msgstr "Solo il proprietario può eliminare la mappa."
 
-#: views.py:765
+#: views.py:766
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "La mappa è stata clonata! Per modificarla usando un altro computer, si deve utilizzare questo link: %(anonymous_url)s"
 
-#: views.py:770
+#: views.py:771
 msgid "Congratulations, your map has been cloned!"
 msgstr "Perfetto, la tua mappa è stata clonata!"
 
-#: views.py:959
+#: views.py:1007
 msgid "Layer successfully deleted."
 msgstr "Layer eliminato correttamente"
 
-#: views.py:981
+#: views.py:1029
 msgid "Permissions updated with success!"
 msgstr "Autorizzazioni aggiornate con successo!"
