@@ -67,15 +67,8 @@ L.U.Icon.Default = L.U.Icon.extend({
 
   onAdd: function () {
     const src = this._getIconUrl('icon')
-    // Decide whether to switch svg to white or not, but do it
-    // only for internal SVG, as invert could do weird things
-    if (src.startsWith('/') && src.endsWith('.svg')) {
-      const bgcolor = this._getColor()
-      // Must be called after icon container is added to the DOM
-      if (L.DomUtil.contrastedColor(this.elements.container, bgcolor)) {
-        this.elements.img.style.filter = 'invert(1)'
-      }
-    }
+    const bgcolor = this._getColor()
+    L.U.Icon.setIconContrast(this.elements.icon, this.elements.container, src, bgcolor)
   },
 
   createIcon: function () {
@@ -89,18 +82,7 @@ L.U.Icon.Default = L.U.Icon.extend({
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
     const src = this._getIconUrl('icon')
     if (src) {
-      // An url.
-      if (
-        src.startsWith('http') ||
-        src.startsWith('/') ||
-        src.startsWith('data:image')
-      ) {
-        this.elements.img = L.DomUtil.create('img', null, this.elements.container)
-        this.elements.img.src = src
-      } else {
-        this.elements.span = L.DomUtil.create('span', null, this.elements.container)
-        this.elements.span.textContent = src
-      }
+      this.elements.icon = L.U.Icon.makeIconElement(src, this.elements.container)
     }
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
@@ -208,3 +190,44 @@ L.U.Icon.Cluster = L.DivIcon.extend({
     return color || L.DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
   },
 })
+
+L.U.Icon.isImg = function (src) {
+  return L.Util.isPath(src) || L.Util.isRemoteUrl(src) || L.Util.isDataImage(src)
+}
+
+L.U.Icon.makeIconElement = function (src, parent) {
+  let icon
+  if (L.U.Icon.isImg(src)) {
+    icon = L.DomUtil.create('img')
+    icon.src = src
+  } else {
+    icon = L.DomUtil.create('span')
+    icon.textContent = src
+  }
+  parent.appendChild(icon)
+  return icon
+}
+
+L.U.Icon.setIconContrast = function (el, parent, src, bgcolor) {
+  /*
+   * el: the element we'll adapt the style, it can be an image or text
+   * parent: the element we'll consider to decide whether to adapt the style,
+   * by looking at its background color
+   * src: the raw "icon" value, can be an URL, a path, text, emoticon, etc.
+   * bgcolor: the background color, used for caching and in case we cannot guess the
+   * parent background color
+   */
+
+  if (L.DomUtil.contrastedColor(parent, bgcolor)) {
+    // Decide whether to switch svg to white or not, but do it
+    // only for internal SVG, as invert could do weird things
+    if (L.Util.isPath(src) && src.endsWith('.svg')) {
+      // Must be called after icon container is added to the DOM
+      // An image
+      el.style.filter = 'invert(1)'
+    } else if (!el.src) {
+      // Text icon
+      el.style.color = 'white'
+    }
+  }
+}

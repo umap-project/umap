@@ -262,6 +262,18 @@ L.Util.hasVar = (value) => {
   return typeof value === 'string' && value.indexOf('{') != -1
 }
 
+L.Util.isPath = function (value) {
+  return value && value.length && value.startsWith('/')
+}
+
+L.Util.isRemoteUrl = function (value) {
+  return value && value.length && value.startsWith('http')
+}
+
+L.Util.isDataImage = function (value) {
+  return value && value.length && value.startsWith('data:image')
+}
+
 L.Util.copyToClipboard = function (textToCopy) {
   // https://stackoverflow.com/a/65996386
   // Navigator clipboard api needs a secure context (https)
@@ -391,8 +403,8 @@ L.DomUtil.after = (target, el) => {
 }
 
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
-L.DomUtil.TextColorFromBackgroundColor = (el) => {
-  return L.DomUtil.contrastedColor(el) ? '#ffffff' : '#000000'
+L.DomUtil.TextColorFromBackgroundColor = (el, bgcolor) => {
+  return L.DomUtil.contrastedColor(el, bgcolor) ? '#ffffff' : '#000000'
 }
 const _CACHE_CONSTRAST = {}
 L.DomUtil.contrastedColor = (el, bgcolor) => {

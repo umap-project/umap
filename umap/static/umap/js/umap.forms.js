@@ -372,6 +372,7 @@ L.FormBuilder.PopupContent = L.FormBuilder.Select.extend({
     ['Table', L._('Table')],
     ['GeoRSSImage', L._('GeoRSS (title + image)')],
     ['GeoRSSLink', L._('GeoRSS (only link)')],
+    ['OSM', L._('OpenStreetMap')],
   ],
 })
 
@@ -538,8 +539,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.footer.innerHTML = ''
     this.buildTabs()
     const value = this.value()
-    if (!value || value.startsWith('/')) this.showSymbolsTab()
-    else if (value.startsWith('http')) this.showURLTab()
+    if (!value || L.Util.isPath(value)) this.showSymbolsTab()
+    else if (L.Util.isRemoteUrl(value) || L.Util.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
     const closeButton = L.DomUtil.createButton(
       'button action-button',
@@ -596,20 +597,6 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.body.innerHTML = ''
   },
 
-  isPath: function () {
-    const value = this.value()
-    return value && value.length && value.startsWith('/')
-  },
-
-  isRemoteUrl: function () {
-    const value = this.value()
-    return value && value.length && value.startsWith('http')
-  },
-
-  isImg: function () {
-    return this.isPath() || this.isRemoteUrl()
-  },
-
   updatePreview: function () {
     this.buttons.innerHTML = ''
     if (this.isDefault()) return
@@ -617,13 +604,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
       L.DomEvent.on(box, 'click', this.onDefine, this)
-      if (this.isImg()) {
-        const img = L.DomUtil.create('img', '', box)
-        img.src = this.value()
-      } else {
-        const el = L.DomUtil.create('span', '', box)
-        el.textContent = this.value()
-      }
+      const icon = L.U.Icon.makeIconElement(this.value(), box)
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
@@ -723,7 +704,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   showCharsTab: function () {
     this.openTab('chars')
-    const value = !this.isImg() ? this.value() : null
+    const value = !L.U.Icon.isImg(this.value()) ? this.value() : null
     const input = this.buildInput(this.body, value)
     input.placeholder = L._('Type char or paste emoji')
     input.type = 'text'
@@ -731,7 +712,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   showURLTab: function () {
     this.openTab('url')
-    const value = this.isRemoteUrl() ? this.value() : null
+    const value =
+      L.Util.isRemoteUrl(this.value()) || L.Util.isDataImage(this.value())
+        ? this.value()
+        : null
     const input = this.buildInput(this.body, value)
     input.placeholder = L._('Add image URL')
     input.type = 'url'

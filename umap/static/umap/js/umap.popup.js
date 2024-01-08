@@ -251,3 +251,90 @@ L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
     return a
   },
 })
+
+L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
+  options: {
+    className: 'umap-openstreetmap',
+  },
+
+  getName: function () {
+    const props = this.feature.properties
+    if (L.locale && props[`name:${L.locale}`]) return props[`name:${L.locale}`]
+    return props.name
+  },
+
+  renderBody: function () {
+    const props = this.feature.properties
+    const container = L.DomUtil.add('div')
+    const title = L.DomUtil.add('h3', 'popup-title', container)
+    const color = this.feature.getDynamicOption('color')
+    title.style.backgroundColor = color
+    const iconUrl = this.feature.getDynamicOption('iconUrl')
+    let icon = L.U.Icon.makeIconElement(iconUrl, title)
+    L.DomUtil.addClass(icon, 'icon')
+    L.U.Icon.setIconContrast(icon, title, iconUrl, color)
+    if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'
+    L.DomUtil.add('span', '', title, this.getName())
+    const street = props['addr:street']
+    if (street) {
+      const row = L.DomUtil.add('address', 'address', container)
+      const number = props['addr:housenumber']
+      if (number) {
+        // Poor way to deal with international forms of writting addresses
+        L.DomUtil.add('span', '', row, `${L._('No.')}: ${number}`)
+        L.DomUtil.add('span', '', row, `${L._('Street')}: ${street}`)
+      } else {
+        L.DomUtil.add('span', '', row, street)
+      }
+    }
+    if (props.website) {
+      L.DomUtil.element(
+        'a',
+        { href: props.website, textContent: props.website },
+        container
+      )
+    }
+    const phone = props.phone || props['contact:phone']
+    if (phone) {
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', { href: `tel:${phone}`, textContent: phone })
+      )
+    }
+    if (props.mobile) {
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', {
+          href: `tel:${props.mobile}`,
+          textContent: props.mobile,
+        })
+      )
+    }
+    const email = props.email || props['contact:email']
+    if (email) {
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', { href: `mailto:${email}`, textContent: email })
+      )
+    }
+    const id = props['@id']
+    if (id) {
+      L.DomUtil.add(
+        'div',
+        'osm-link',
+        container,
+        L.DomUtil.element('a', {
+          href: `https://www.openstreetmap.org/${id}`,
+          textContent: L._('See on OpenStreetMap'),
+        })
+      )
+    }
+    return container
+  },
+})
