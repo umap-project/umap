@@ -1086,10 +1086,13 @@ a.add-datalayer:hover,
 .umap-edit-enabled .show-on-edit.block {
     display: block!important;
 }
-
 .umap-browse-description {
     font-size: 0.9em;
     margin-bottom: 14px;
+}
+.datalayer-counter {
+    float: right;
+    margin-right: 5px;
 }
 
 

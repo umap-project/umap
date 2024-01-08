@@ -1482,6 +1482,10 @@ L.U.DataLayer = L.Evented.extend({
     return !!this.options.browsable && this.canBrowse() && this.isVisible()
   },
 
+  count: function () {
+    return this._index.length
+  },
+
   hasData: function () {
     return !!this._index.length
   },
