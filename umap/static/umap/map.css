@@ -1277,8 +1277,8 @@ a.add-datalayer:hover,
     display: flex;
     align-items: center;
 }
-.popup-title img {
-    margin: 0 5px;
+.popup-title .icon {
+    margin: 5px;
 }
 a[href^='mailto']::before {
   content: '🖃 ';

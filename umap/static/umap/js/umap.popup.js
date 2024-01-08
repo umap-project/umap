@@ -271,6 +271,7 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
     title.style.backgroundColor = color
     const iconUrl = this.feature.getDynamicOption('iconUrl')
     let icon = L.U.Icon.makeIconElement(iconUrl, title)
+    L.DomUtil.addClass(icon, 'icon')
     L.U.Icon.setIconContrast(icon, title, iconUrl, color)
     if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'
     L.DomUtil.add('span', '', title, this.getName())
