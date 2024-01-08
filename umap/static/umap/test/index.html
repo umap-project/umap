@@ -3,7 +3,7 @@
   <head>
     <title>Umap front Tests</title>
     <meta charset="utf-8" />
-    <script type="module" src="{{ STATIC_URL }}umap/js/modules/vendors.js" defer></script>
+    <script type="module" src="../js/modules/global.js" defer></script>
     <script src="../vendors/editable/Path.Drag.js" defer></script>
     <script src="../vendors/editable/Leaflet.Editable.js" defer></script>
     <script src="../vendors/hash/leaflet-hash.js" defer></script>
@@ -26,6 +26,7 @@
     <script src="../vendors/dompurify/purify.js" defer></script>
     <script src="../vendors/togpx/togpx.js" defer></script>
     <script src="../vendors/tokml/tokml.js" defer></script>
+    <script src="../vendors/iconlayers/iconLayers.js" defer></script>
     <script src="../vendors/simple-statistics/simple-statistics.min.js" defer></script>
     <script src="../vendors/colorbrewer/colorbrewer.js" defer></script>
     <script type="module" src="../js/modules/index.js" defer></script>
@@ -77,21 +78,21 @@
       })
       chai.config.includeStack = true
     </script>
-    <script src="./_pre.js"></script>
-    <script src="./Map.js"></script>
-    <script src="./Map.Init.js"></script>
-    <script src="./Map.Export.js"></script>
-    <script src="./DataLayer.js"></script>
-    <script src="./TableEditor.js"></script>
-    <script src="./Feature.js"></script>
-    <script src="./Marker.js"></script>
-    <script src="./Polyline.js"></script>
-    <script src="./Polygon.js"></script>
-    <script src="./Util.js"></script>
-    <script src="./Controls.js"></script>
-    <script src="./Permissions.js"></script>
-    <script src="./Choropleth.js"></script>
-    <script type="module" src="./URLs.js"></script>
+    <script src="./_pre.js" defer></script>
+    <script src="./Map.js" defer></script>
+    <script src="./Map.Init.js" defer></script>
+    <script src="./Map.Export.js" defer></script>
+    <script src="./DataLayer.js" defer></script>
+    <script src="./TableEditor.js" defer></script>
+    <script src="./Feature.js" defer></script>
+    <script src="./Marker.js" defer></script>
+    <script src="./Polyline.js" defer></script>
+    <script src="./Polygon.js" defer></script>
+    <script src="./Util.js" defer></script>
+    <script src="./Controls.js" defer></script>
+    <script src="./Permissions.js" defer></script>
+    <script src="./Choropleth.js" defer></script>
+    <script type="module" src="./URLs.js" defer></script>
     <style type="text/css">
         #mocha {
             position: absolute;

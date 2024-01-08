@@ -1,4 +1,4 @@
-import { Util } from './vendors.js'
+import { Util } from '../../vendors/leaflet/leaflet-src.esm.js'
 
 export default class URLs {
   constructor(serverUrls) {

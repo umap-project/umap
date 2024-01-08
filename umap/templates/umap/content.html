@@ -37,9 +37,8 @@
 {% endblock content %}
 {% block bottom_js %}
   {{ block.super }}
-
   <script type="text/javascript">
-    window.addEventListener('DOMContentLoaded', (event => {
+    window.addEventListener('load', (event => {
       
     !(function () {
       const ui = new L.U.UI(document.querySelector('header'))
@@ -89,9 +88,9 @@
       }
     })(this)
     }
-    }))
+    ))
   </script>
-  {% endblock bottom_js %}
+{% endblock bottom_js %}
 {% block footer %}
   {{ block.super }}
   {% include "umap/content_footer.html" %}
