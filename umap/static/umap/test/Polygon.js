@@ -216,7 +216,7 @@ describe('L.U.Polygon', function () {
         assert.notOk(qst('Transfer shape to edited feature'))
       })
 
-      it('should allow to transfer shape when another polygon is edited', function (done) {
+      it('should allow to transfer shape when another polygon is edited', function () {
         this.datalayer.empty()
         var layer = new L.U.Polygon(
           this.map,
@@ -231,7 +231,7 @@ describe('L.U.Polygon', function () {
         ).addTo(this.datalayer)
         happen.once(other._path, { type: 'contextmenu' })
         assert.equal(qst('Transfer shape to edited feature'), 1)
-        done()
+        layer.remove()
       })
     })
   })

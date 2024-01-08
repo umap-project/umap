@@ -175,6 +175,8 @@ describe('L.U.Polyline', function () {
         other.edit()
         happen.once(layer._path, { type: 'contextmenu' })
         assert.equal(qst('Transfer shape to edited feature'), 1)
+        other.remove()
+        layer.remove()
       })
 
       it('should allow to merge lines when multi', function () {
