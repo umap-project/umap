@@ -24,7 +24,7 @@
 
 ### OSMfr
 
-Makefile on @yohanboniface computer. TODO: share it :)
+The process is manual for now, Yohan has one Makefile on his computer.
 
 ### ANCT
 
