@@ -1,4 +1,6 @@
 import json
+import zipfile
+from io import BytesIO
 
 import pytest
 from django.contrib.auth import get_user_model
@@ -8,7 +10,7 @@ from django.urls import reverse
 
 from umap.models import DataLayer, Map, Star
 
-from .base import login_required
+from .base import MapFactory, UserFactory, login_required
 
 pytestmark = pytest.mark.django_db
 User = get_user_model()
@@ -654,6 +656,64 @@ def test_download(client, map, datalayer):
             "type": "FeatureCollection",
         },
     ]
+
+
+def test_download_multiple_maps(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    another_map = MapFactory(
+        owner=map.owner, name="Another map", share_status=Map.PUBLIC
+    )
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 2
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{another_map.id}.umap"
+        assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
+        with f.open(f.infolist()[1]) as umap_file:
+            umapjson = json.loads(umap_file.read().decode())
+            assert list(umapjson.keys()) == [
+                "type",
+                "geometry",
+                "properties",
+                "uri",
+                "layers",
+            ]
+            assert umapjson["type"] == "umap"
+            assert umapjson["uri"] == f"http://testserver/en/map/test-map_{map.id}"
+
+
+def test_download_multiple_maps_unauthorized(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    user1 = UserFactory(username="user1")
+    another_map = MapFactory(owner=user1, name="Another map", share_status=Map.PUBLIC)
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 1
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{map.id}.umap"
+
+
+def test_download_multiple_maps_editor(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    user1 = UserFactory(username="user1")
+    another_map = MapFactory(owner=user1, name="Another map", share_status=Map.PUBLIC)
+    another_map.editors.add(map.owner)
+    another_map.save()
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 2
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{another_map.id}.umap"
+        assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
 
 
 @pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED])

@@ -37,7 +37,8 @@
           <td>
             <a href="{{ map_inst.get_absolute_url }}?share">{% translate "Share" %}</a> |
             <a href="{{ map_inst.get_absolute_url }}?edit">{% translate "Edit" %}</a> |
-            <a href="{% url 'map_download' map_inst.pk %}">{% translate "Download" %}</a>
+            <a href="{% url 'map_download' map_inst.pk %}">{% translate "Download" %}</a> |
+            <a href="{% url 'map_delete' map_inst.pk %}">{% translate "Delete" %}</a>
           </td>
         </tr>
       {% endwith %}
@@ -45,37 +46,75 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="4"></td>
-      <td colspan="2">
-        <a href="{% url 'user_download' %}?p={{ request.GET.p }}" class="button">{% translate "Download all these maps" %}</a>
+      <td colspan="5"></td>
+      <td>
+        <a href="{% url 'user_download' %}?{% spaceless %}
+        {% for map_inst in maps %}map_id={{ map_inst.pk }}{% if not forloop.last %}&{% endif %}{% endfor %}
+        {% endspaceless %}" class="button"
+          >{% blocktranslate count counter=maps.object_list|length %}
+            Download this map
+            {% plural %}
+            Download these {{ counter }} maps
+          {% endblocktranslate %}
+        </a>
       </td>
     </tr>
   </tfoot>
 </table>
-<div class="pagination">
-  {% if maps.has_previous %}
-    <a href="?p=1{% if q %}&q={{ q }}{% endif %}">« {% translate "first" %}</a>
-    <a href="?p={{ maps.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">‹ {% translate "previous" %}</a>
-  {% else %}
-    {# djlint:off #}
-    <span></span>
-    <span></span>
-    {# djlint:on #}
-  {% endif %}
+{% if maps.has_other_pages %}
+  <div class="pagination">
+    {% if maps.has_previous %}
+      <a href="?p=1{% if q %}&q={{ q }}{% endif %}">« {% translate "first" %}</a>
+      <a href="?p={{ maps.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">‹ {% translate "previous" %}</a>
+    {% else %}
+      {# djlint:off #}
+      <span></span>
+      <span></span>
+      {# djlint:on #}
+    {% endif %}
 
-  <span class="current">
-    {% blocktranslate with maps_number=maps.number num_pages=maps.paginator.num_pages %}
-      Page {{ maps_number }} of {{ num_pages }}
-    {% endblocktranslate %}
-  </span>
+    <span class="current">
+      {% blocktranslate with maps_number=maps.number num_pages=maps.paginator.num_pages %}
+        Page {{ maps_number }} of {{ num_pages }}
+      {% endblocktranslate %}
+    </span>
 
-  {% if maps.has_next %}
-    <a href="?p={{ maps.next_page_number }}{% if q %}&q={{ q }}{% endif %}">{% translate "next" %} ›</a>
-    <a href="?p={{ maps.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}">{% translate "last" %} »</a>
-  {% else %}
-    {# djlint:off #}
-    <span></span>
-    <span></span>
-    {# djlint:on #}
-  {% endif %}
-</div>
+    {% if maps.has_next %}
+      <a href="?p={{ maps.next_page_number }}{% if q %}&q={{ q }}{% endif %}">{% translate "next" %} ›</a>
+      <a href="?p={{ maps.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}">{% translate "last" %} »</a>
+    {% else %}
+      {# djlint:off #}
+      <span></span>
+      <span></span>
+      {# djlint:on #}
+    {% endif %}
+  </div>
+{% endif %}
+<script type="text/javascript">
+  !(function () {
+    for (const deleteLink of document.querySelectorAll("table.maps a[href$='delete/']")) {
+      deleteLink.addEventListener('click', (event) => {
+        event.preventDefault()
+        const token = document.cookie.replace(
+          /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
+          '$1'
+        )
+        if (confirm(L._('Are you sure you want to delete this map?'))) {
+          fetch(deleteLink.href, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': token
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                window.location.reload()
+              }
+              throw response
+            })
+            .catch((error) => console.debug(error))
+        }
+      })
+    }
+  })()
+</script>

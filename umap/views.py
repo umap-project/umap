@@ -290,46 +290,31 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
-        kwargs.update(
-            {
-                "q": self.request.GET.get("q"),
-                "maps": self.paginate(
-                    self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER
-                ),
-            }
-        )
+        page = self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)
+        kwargs.update({"q": self.request.GET.get("q"), "maps": page})
         return super().get_context_data(**kwargs)
 
 
 user_dashboard = UserDashboard.as_view()
 
 
-class UserDownload(PaginatorMixin, DetailView, SearchMixin):
+class UserDownload(DetailView, SearchMixin):
     model = User
-
-    def is_owner(self):
-        return self.request.user == self.object
-
-    @property
-    def per_page(self):
-        if self.is_owner():
-            return settings.UMAP_MAPS_PER_PAGE_OWNER
-        return settings.UMAP_MAPS_PER_PAGE
 
     def get_object(self):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = self.get_search_queryset() or Map.objects.all()
+        qs = Map.objects.filter(id__in=self.request.GET.getlist("map_id"))
         qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
         return qs.order_by("-modified_at")
 
     def render_to_response(self, context, *args, **kwargs):
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-            for map_ in self.paginate(self.get_maps()):
-                map_geojson = map_.generate_geojson(self.request)
-                geojson_file = io.StringIO(json.dumps(map_geojson))
+            for map_ in self.get_maps():
+                umapjson = map_.generate_umapjson(self.request)
+                geojson_file = io.StringIO(json.dumps(umapjson))
                 file_name = f"umap_backup_{map_.slug}_{map_.pk}.umap"
                 zip_file.writestr(file_name, geojson_file.getvalue())
 
@@ -674,8 +659,8 @@ class MapDownload(DetailView):
         return reverse("map_download", args=(self.object.pk,))
 
     def render_to_response(self, context, *args, **kwargs):
-        geojson = self.object.generate_geojson(self.request)
-        response = simple_json_response(**geojson)
+        umapjson = self.object.generate_umapjson(self.request)
+        response = simple_json_response(**umapjson)
         response[
             "Content-Disposition"
         ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
