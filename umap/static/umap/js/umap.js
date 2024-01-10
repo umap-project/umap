@@ -34,7 +34,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -830,7 +830,10 @@ L.U.Map.include({
         self.isDirty = true
       }
     if (this._controls.tilelayersChooser)
-      this._controls.tilelayersChooser.openSwitcher({ callback: callback, className: 'dark' })
+      this._controls.tilelayersChooser.openSwitcher({
+        callback: callback,
+        className: 'dark',
+      })
   },
 
   manageDatalayers: function () {

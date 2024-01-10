@@ -1065,7 +1065,10 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
           // when the tilelayer is actually added to the map (needs this._tileZoom
           // to be defined)
           // Fixme when https://github.com/Leaflet/Leaflet/pull/9201 is released
-          const icon = L.Util.template(layer.options.url_template, this.map.demoTileInfos)
+          const icon = L.Util.template(
+            layer.options.url_template,
+            this.map.demoTileInfos
+          )
           layers.push({
             title: layer.options.name,
             layer: layer,
@@ -1431,10 +1434,12 @@ L.U.Editable = L.Editable.extend({
       if (e.layer instanceof L.U.Marker) e.layer.del()
     })
     this.on('editable:drawing:commit', function (e) {
+      console.log('sync: polyline ready', e.layer)
       e.layer.isDirty = true
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
     })
     this.on('editable:editing', (e) => {
+      console.log('sync: polyline moved', e.layer)
       const layer = e.layer
       layer.isDirty = true
       if (layer._tooltip && layer.isTooltipOpen()) {
@@ -1462,6 +1467,7 @@ L.U.Editable = L.Editable.extend({
   },
 
   createMarker: function (latlng) {
+    console.log('sync: create marker', latlng)
     return new L.U.Marker(this.map, latlng, this._getDefaultProperties())
   },
 

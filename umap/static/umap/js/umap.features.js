@@ -1,3 +1,5 @@
+const generateId = window.umap.utils.generateId
+
 L.U.FeatureMixin = {
   staticOptions: { mainColor: 'color' },
 
@@ -9,9 +11,21 @@ L.U.FeatureMixin = {
     // DataLayer the marker belongs to
     this.datalayer = options.datalayer || null
     this.properties = { _umap_options: {} }
+    let geojson_id
     if (options.geojson) {
       this.populate(options.geojson)
+      geojson_id = options.geojson.id
     }
+
+    // Each feature needs an unique ID
+    if (this._checkId(geojson_id)) {
+      this.id = geojson_id
+    } else {
+      this.id = generateId()
+    }
+
+    console.log('id', this.id)
+
     let isDirty = false
     const self = this
     try {
@@ -222,6 +236,7 @@ L.U.FeatureMixin = {
   },
 
   del: function () {
+    console.log('sync: feature deleted', this)
     this.isDirty = true
     this.map.closePopup()
     if (this.datalayer) {
@@ -246,6 +261,11 @@ L.U.FeatureMixin = {
     // while editing the feature
     key = key.replace('.', '_')
     return [key, value]
+  },
+
+  // Ensures the id meets our requirements
+  _checkId: function (string) {
+    return typeof string !== 'undefined'
   },
 
   populate: function (feature) {
@@ -344,7 +364,9 @@ L.U.FeatureMixin = {
   toGeoJSON: function () {
     const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
+    geojson.id = this.id
     delete geojson.properties._storage_options
+    console.log(geojson)
     return geojson
   },
 
@@ -510,6 +532,7 @@ L.U.FeatureMixin = {
   },
 
   clone: function () {
+    console.log('sync: clone feature')
     const layer = this.datalayer.geojsonToFeatures(this.toGeoJSON())
     layer.isDirty = true
     layer.edit()
@@ -560,6 +583,7 @@ L.U.Marker = L.Marker.extend({
     this.on(
       'dragend',
       function (e) {
+        console.log('sync: marker latlng updated', this._latlng)
         this.isDirty = true
         this.edit(e)
       },
