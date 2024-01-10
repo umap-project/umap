@@ -72,6 +72,9 @@ Do you want users to be able to create an account directly on your uMap instance
 
 Can be set through env var: `ENABLE_ACCOUNT_LOGIN=1`
 
+User accounts can be managed via the Diango admin page (`{SITE_URL}/admin`).
+The required superuser must be created on the command line with this command: `umap createsuperuser`.
+
 #### FROM_EMAIL
 
 See `EMAIL_BACKEND`.
