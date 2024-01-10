@@ -1,3 +1,5 @@
+// Rendering only
+
 L.U.Layer = {
   canBrowse: true,
 
