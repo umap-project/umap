@@ -1,4 +1,4 @@
 {% load umap_tags %}
-<umap-fragment data-settings='{{ map_settings|notag|safe }}'>
+<umap-fragment data-settings='{{ map_settings|escape }}'>
   <div id="{{ unique_id }}" class="map_fragment"></div>
 </umap-fragment>
