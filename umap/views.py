@@ -18,21 +18,23 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
-from django.db.models import Q
 from django.http import (
+    Http404,
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
     HttpResponsePermanentRedirect,
     HttpResponseRedirect,
+    HttpResponseServerError,
 )
 from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import resolve, reverse, reverse_lazy
 from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
 from django.utils.timezone import make_aware
@@ -526,6 +528,16 @@ class PermissionsMixin:
 
 
 class MapView(MapDetailMixin, PermissionsMixin, DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["oembed_absolute_uri"] = self.request.build_absolute_uri(
+            reverse("map_oembed")
+        )
+        context["absolute_uri"] = self.request.build_absolute_uri(
+            self.object.get_absolute_url()
+        )
+        return context
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         canonical = self.get_canonical_url()
@@ -605,6 +617,52 @@ class MapDownload(DetailView):
             "Content-Disposition"
         ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
         return response
+
+
+class MapOEmbed(View):
+    def get(self, request, *args, **kwargs):
+        data = {"type": "rich", "version": "1.0"}
+        format_ = request.GET.get("format", "json")
+        if format_ != "json":
+            response = HttpResponseServerError("Only `json` format is implemented.")
+            response.status_code = 501
+            return response
+
+        url = request.GET.get("url")
+        if not url:
+            raise Http404("Missing `url` parameter.")
+
+        parsed_url = urlparse(url)
+        netloc = parsed_url.netloc
+        allowed_hosts = settings.ALLOWED_HOSTS
+        if parsed_url.hostname not in allowed_hosts and allowed_hosts != ["*"]:
+            raise Http404("Host not allowed.")
+
+        url_path = parsed_url.path
+        view, args, kwargs = resolve(url_path)
+        if "slug" not in kwargs or "map_id" not in kwargs:
+            raise Http404("Invalid URL path.")
+
+        map_ = Map.objects.get(id=kwargs["map_id"], slug=kwargs["slug"])
+
+        if map_.share_status != Map.PUBLIC:
+            raise PermissionDenied("This map is not public.")
+
+        map_url = map_.get_absolute_url()
+        label = _("See full screen")
+        height = 300
+        data["height"] = height
+        width = 800
+        data["width"] = width
+        # TODISCUSS: do we keep width=100% by default for the iframe?
+        html = (
+            f'<iframe width="100%" height="{height}px" '
+            f'frameborder="0" allowfullscreen allow="geolocation" '
+            f'src="//{netloc}{map_url}"></iframe>'
+            f'<p><a href="//{netloc}{map_url}">{label}</a></p>'
+        )
+        data["html"] = html
+        return simple_json_response(**data)
 
 
 class MapViewGeoJSON(MapView):

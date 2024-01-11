@@ -41,6 +41,7 @@ urlpatterns = [
     ),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     re_path(r"^agnocomplete/", include("agnocomplete.urls")),
+    re_path(r"^map/oembed/", views.MapOEmbed.as_view(), name="map_oembed"),
     re_path(
         r"^map/(?P<map_id>\d+)/download/",
         can_view_map(views.MapDownload.as_view()),
