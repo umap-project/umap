@@ -1,10 +1,4 @@
 {% load umap_tags %}
-<div id="{{ unique_id }}" class="map_fragment"></div>
-<!-- djlint:off -->
-<script type="text/javascript">
-  // Wait for JS modules to be loaded
-  window.addEventListener('DOMContentLoaded', (event) => {
-    new L.U.Map("{{ unique_id }}", {{ map_settings|notag|safe }})
-  });
-</script>
-<!-- djlint:on -->
+<umap-fragment data-settings='{{ map_settings|notag|safe }}'>
+  <div id="{{ unique_id }}" class="map_fragment"></div>
+</umap-fragment>

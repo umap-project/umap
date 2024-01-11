@@ -68,12 +68,6 @@
           callback: function (data) {
             const container = this.parentNode
             container.innerHTML = data
-            Array.prototype.forEach.call(
-              container.querySelectorAll('script:not([type="application/json"])'),
-              function (item) {
-                eval(item.firstChild.textContent)
-              }
-            )
             const more = document.querySelector('.more_button')
             if (more) {
               L.DomEvent.on(more, 'click', getMore, more)
