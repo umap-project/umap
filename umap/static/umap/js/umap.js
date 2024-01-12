@@ -34,7 +34,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -68,6 +68,122 @@ L.U.Map.include({
     'star',
     'tilelayers',
   ],
+
+  //Used by the L.U.DataRendererMixin
+  propertiesRenderers: {
+    // Controls
+    'name': ['renderEditToolbar', 'renderControls'],
+    'color': ['renderVisibleDataLayers'],
+    'moreControl': ['renderControls', 'initCaptionBar'],
+    'scrollWheelZoom': ['renderControls', 'initCaptionBar'],
+    'miniMap': ['renderControls', 'initCaptionBar'],
+    'scaleControl': ['renderControls', 'initCaptionBar'],
+    'onLoadPanel': ['renderControls', 'initCaptionBar'],
+    'defaultView': ['renderControls', 'initCaptionBar'],
+    'displayPopupFooter': ['renderControls', 'initCaptionBar'],
+    'captionBar': ['renderControls', 'initCaptionBar'],
+    'captionMenus': ['renderControls', 'initCaptionBar'],
+    'zoomControl': ['renderControls', 'initCaptionBar'],
+    'searchControl': ['renderControls', 'initCaptionBar'],
+    'fullscreenControl': ['renderControls', 'initCaptionBar'],
+    'embedControl': ['renderControls', 'initCaptionBar'],
+    'locateControl': ['renderControls', 'initCaptionBar'],
+    'measureControl': ['renderControls', 'initCaptionBar'],
+    'editinosmControl': ['renderControls', 'initCaptionBar'],
+    'datalayersControl': ['renderControls', 'initCaptionBar'],
+    'starControl': ['renderControls', 'initCaptionBar'],
+    'tilelayersControl': ['renderControls', 'initCaptionBar'],
+
+    // Shape properties
+    'color': ['renderVisibleDataLayers', 'renderControls'],
+    'iconClass': ['renderVisibleDataLayers', 'renderControls'],
+    'iconUrl': ['renderVisibleDataLayers', 'renderControls'],
+    'iconOpacity': ['renderVisibleDataLayers', 'renderControls'],
+    'opacity': ['renderVisibleDataLayers', 'renderControls'],
+    'weight': ['renderVisibleDataLayers', 'renderControls'],
+    'fill': ['renderVisibleDataLayers', 'renderControls'],
+    'fillColor': ['renderVisibleDataLayers', 'renderControls'],
+    'fillOpacity': ['renderVisibleDataLayers', 'renderControls'],
+    'smoothFactor': ['renderVisibleDataLayers', 'renderControls'],
+    'dashArray': ['renderVisibleDataLayers', 'renderControls'],
+
+    // Default properties
+    'zoomTo': ['initCaptionBar'],
+    'easing': ['initCaptionBar'],
+    'labelKey': ['initCaptionBar'],
+    'sortKey': ['initCaptionBar', 'reindexEachDataLayer'],
+    'filterKey': ['initCaptionBar'],
+    'facetKey': ['initCaptionBar'],
+    'slugKey': ['initCaptionBar'],
+
+    // Interaction properties
+    'popupShape': [],
+    'popupTemplate': [],
+    'popupContentTemplate': [],
+    'showLabel': ['renderVisibleDataLayers'],
+    'labelDirection': ['renderVisibleDataLayers'],
+    'labelInteractive': ['renderVisibleDataLayers'],
+    'outlinkTarget': [],
+
+    // Tile layer
+    'tilelayer.name': ['initTileLayer'],
+    'tilelayer.url_template': ['initTileLayer'],
+    'tilelayer.maxZoom': ['initTileLayer'],
+    'tilelayer.minZoom': ['initTileLayer'],
+    'tilelayer.attribution': ['initTileLayer'],
+    'tilelayer.tms': ['initTileLayer'],
+
+    // Overlay
+    'overlay.url_template': ['initTileLayer'],
+    'overlay.maxZoom': ['initTileLayer'],
+    'overlay.minZoom': ['initTileLayer'],
+    'overlay.attribution': ['initTileLayer'],
+    'overlay.opacity': ['initTileLayer'],
+    'overlay.tms': ['initTileLayer'],
+
+    // Bounds
+    'limitBounds.south': ['handleLimitBounds'],
+    'limitBounds.west': ['handleLimitBounds'],
+    'limitBounds.north': ['handleLimitBounds'],
+    'limitBounds.east': ['handleLimitBounds'],
+
+    // Slideshow
+    'slideshow.active': ['renderControls'],
+    'slideshow.delay': ['renderControls'],
+    'slideshow.easing': ['renderControls'],
+    'slideshow.autoplay': ['renderControls'],
+
+    // Credits
+    'licence': ['renderControls'],
+    'shortCredit': ['renderControls'],
+    'longCredit': ['renderControls'],
+    'permanentCredit': ['renderControls'],
+    'permanentCreditBackground': ['renderControls'],
+  },
+
+  reindexEachDataLayer: function () {
+    this.eachDataLayer((datalayer) => datalayer.reindex())
+  },
+
+  renderVisibleDataLayers: function () {
+    this.eachVisibleDataLayer((datalayer) => {
+      datalayer.redraw()
+    })
+  },
+
+  broadcastChanges: function (data) {
+    // Send changes over the wire
+    console.log(data)
+  },
+
+  updateInternalData: function () {
+    this.options.name = 'CRDTS, yeah'
+    this.options.color = 'Fushia'
+  },
+
+  getCRDT: function () {
+    return this._main_crdt.getMap('map')
+  },
 
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
@@ -292,6 +408,7 @@ L.U.Map.include({
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
+    this._main_crdt = new YJS.Doc()
   },
 
   initControls: function () {
@@ -830,7 +947,10 @@ L.U.Map.include({
         self.isDirty = true
       }
     if (this._controls.tilelayersChooser)
-      this._controls.tilelayersChooser.openSwitcher({ callback: callback, className: 'dark' })
+      this._controls.tilelayersChooser.openSwitcher({
+        callback: callback,
+        className: 'dark',
+      })
   },
 
   manageDatalayers: function () {
@@ -1260,13 +1380,7 @@ L.U.Map.include({
       'options.captionBar',
       'options.captionMenus',
     ])
-    builder = new L.U.FormBuilder(this, UIFields, {
-      callback: function () {
-        this.renderControls()
-        this.initCaptionBar()
-      },
-      callbackContext: this,
-    })
+    builder = new L.U.FormBuilder(this, UIFields)
     const controlsOptions = L.DomUtil.createFieldset(
       container,
       L._('User interface options')
@@ -1289,14 +1403,7 @@ L.U.Map.include({
       'options.dashArray',
     ]
 
-    builder = new L.U.FormBuilder(this, shapeOptions, {
-      callback: function (e) {
-        if (this._controls.miniMap) this.renderControls()
-        this.eachVisibleDataLayer((datalayer) => {
-          datalayer.redraw()
-        })
-      },
-    })
+    builder = new L.U.FormBuilder(this, shapeOptions)
     const defaultShapeProperties = L.DomUtil.createFieldset(
       container,
       L._('Default shape properties')
@@ -1349,14 +1456,7 @@ L.U.Map.include({
       ],
     ]
 
-    builder = new L.U.FormBuilder(this, optionsFields, {
-      callback: function (e) {
-        this.initCaptionBar()
-        if (e.helper.field === 'options.sortKey') {
-          this.eachDataLayer((datalayer) => datalayer.reindex())
-        }
-      },
-    })
+    builder = new L.U.FormBuilder(this, optionsFields)
     const defaultProperties = L.DomUtil.createFieldset(
       container,
       L._('Default properties')
@@ -1374,20 +1474,7 @@ L.U.Map.include({
       'options.labelInteractive',
       'options.outlinkTarget',
     ]
-    builder = new L.U.FormBuilder(this, popupFields, {
-      callback: function (e) {
-        if (
-          e.helper.field === 'options.popupTemplate' ||
-          e.helper.field === 'options.popupContentTemplate' ||
-          e.helper.field === 'options.popupShape' ||
-          e.helper.field === 'options.outlinkTarget'
-        )
-          return
-        this.eachVisibleDataLayer((datalayer) => {
-          datalayer.redraw()
-        })
-      },
-    })
+    builder = new L.U.FormBuilder(this, popupFields)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Default interaction options')
@@ -1441,10 +1528,7 @@ L.U.Map.include({
       container,
       L._('Custom background')
     )
-    builder = new L.U.FormBuilder(this, tilelayerFields, {
-      callback: this.initTileLayers,
-      callbackContext: this,
-    })
+    builder = new L.U.FormBuilder(this, tilelayerFields)
     customTilelayer.appendChild(builder.build())
   },
 
@@ -1492,10 +1576,7 @@ L.U.Map.include({
       ['options.overlay.tms', { handler: 'Switch', label: L._('TMS format') }],
     ]
     const overlay = L.DomUtil.createFieldset(container, L._('Custom overlay'))
-    builder = new L.U.FormBuilder(this, overlayFields, {
-      callback: this.initTileLayers,
-      callbackContext: this,
-    })
+    builder = new L.U.FormBuilder(this, overlayFields)
     overlay.appendChild(builder.build())
   },
 
@@ -1522,10 +1603,7 @@ L.U.Map.include({
         { handler: 'BlurFloatInput', placeholder: L._('max East') },
       ],
     ]
-    const boundsBuilder = new L.U.FormBuilder(this, boundsFields, {
-      callback: this.handleLimitBounds,
-      callbackContext: this,
-    })
+    const boundsBuilder = new L.U.FormBuilder(this, boundsFields)
     limitBounds.appendChild(boundsBuilder.build())
     const boundsButtons = L.DomUtil.create('div', 'button-bar half', limitBounds)
     L.DomUtil.createButton(
@@ -1584,13 +1662,9 @@ L.U.Map.include({
         { handler: 'Switch', label: L._('Autostart when map is loaded') },
       ],
     ]
-    const slideshowHandler = function () {
+
+    const slideshowBuilder = new L.U.FormBuilder(this, slideshowFields, function () {
       this.slideshow.setOptions(this.options.slideshow)
-      this.renderControls()
-    }
-    const slideshowBuilder = new L.U.FormBuilder(this, slideshowFields, {
-      callback: slideshowHandler,
-      callbackContext: this,
     })
     slideshow.appendChild(slideshowBuilder.build())
   },
@@ -1628,10 +1702,7 @@ L.U.Map.include({
         { handler: 'Switch', label: L._('Permanent credits background') },
       ],
     ]
-    const creditsBuilder = new L.U.FormBuilder(this, creditsFields, {
-      callback: this.renderControls,
-      callbackContext: this,
-    })
+    const creditsBuilder = new L.U.FormBuilder(this, creditsFields)
     credits.appendChild(creditsBuilder.build())
   },
 

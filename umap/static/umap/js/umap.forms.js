@@ -1259,6 +1259,12 @@ L.U.FormBuilder = L.FormBuilder.extend({
   setter: function (field, value) {
     L.FormBuilder.prototype.setter.call(this, field, value)
     if (this.options.makeDirty !== false) this.obj.isDirty = true
+
+    // FIXME: for now remove the options prefix
+    field = field.replace('options.', '')
+    if (this.obj.crdt) this.obj.crdt.set(field, value)
+
+    this.obj.onPropertiesUpdated([field])
   },
 
   finish: function () {
