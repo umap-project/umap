@@ -38,6 +38,8 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', (event => {
+      
     !(function () {
       const ui = new L.U.UI(document.querySelector('header'))
       const xhr = new L.U.Xhr(ui)
@@ -66,12 +68,6 @@
           callback: function (data) {
             const container = this.parentNode
             container.innerHTML = data
-            Array.prototype.forEach.call(
-              container.querySelectorAll('script:not([type="application/json"])'),
-              function (item) {
-                eval(item.firstChild.textContent)
-              }
-            )
             const more = document.querySelector('.more_button')
             if (more) {
               L.DomEvent.on(more, 'click', getMore, more)
@@ -85,6 +81,8 @@
         L.DomEvent.on(more, 'click', getMore, more)
       }
     })(this)
+    }
+    ))
   </script>
 {% endblock bottom_js %}
 {% block footer %}
