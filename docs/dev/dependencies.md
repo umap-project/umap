@@ -18,5 +18,6 @@ The installed libs needs to be:
 
 - Added to the `package.json`
 - Added in the `scripts/vendorsjs.sh` script
-- Loaded in the HTML templates.
+- Made available with `make vendors`
+- Added in the HTML templates (if you need them)
 
