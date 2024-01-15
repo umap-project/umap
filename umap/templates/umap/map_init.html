@@ -2,8 +2,9 @@
 <div id="map"></div>
 <!-- djlint:off -->
 <script defer type="text/javascript">
+  let MAP
   window.addEventListener('DOMContentLoaded', (event) => {
-    let MAP = new L.U.Map("map", {{ map_settings|notag|safe }});
+    MAP = new L.U.Map("map", {{ map_settings|notag|safe }});
   });
 </script>
 <!-- djlint:on -->
