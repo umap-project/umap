@@ -29,9 +29,6 @@ DATABASES = {
     }
 }
 
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = True
-
 LANGUAGE_CODE = "en"
 
 # Set to False if login into django account should not be possible. You can

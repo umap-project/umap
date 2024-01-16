@@ -10,6 +10,7 @@ site/*
 node_modules
 umap.conf
 data
+static
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
