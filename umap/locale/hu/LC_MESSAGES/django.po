@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023
+# Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2024
 # Peter Velosy <peter.velosy@gmail.com>, 2017
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-08 12:33+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023\n"
+"Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2024\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -306,7 +306,7 @@ msgstr "Név"
 
 #: templates/umap/map_table.html:6
 msgid "Preview"
-msgstr ""
+msgstr "Előnézet"
 
 #: templates/umap/map_table.html:7
 msgid "Who can see / edit"
@@ -326,27 +326,27 @@ msgstr "Műveletek"
 
 #: templates/umap/map_table.html:22
 msgid "Open preview"
-msgstr ""
+msgstr "Előnézet"
 
 #: templates/umap/map_table.html:38
 msgid "Share"
-msgstr "Megosztás"
+msgstr "Megoszt"
 
 #: templates/umap/map_table.html:39
 msgid "Edit"
-msgstr "Szerkesztés"
+msgstr "Szerk."
 
 #: templates/umap/map_table.html:40
 msgid "Download"
-msgstr "Letöltés"
+msgstr "Letölt"
 
 #: templates/umap/map_table.html:49
 msgid "first"
-msgstr ""
+msgstr "első"
 
 #: templates/umap/map_table.html:50
 msgid "previous"
-msgstr ""
+msgstr "előző"
 
 #: templates/umap/map_table.html:59
 #, python-format
@@ -354,15 +354,15 @@ msgid ""
 "\n"
 "      Page %(maps_number)s of %(num_pages)s\n"
 "    "
-msgstr ""
+msgstr "\n      %(maps_number)s / %(num_pages)s oldal\n    "
 
 #: templates/umap/map_table.html:65
 msgid "next"
-msgstr ""
+msgstr "következő"
 
 #: templates/umap/map_table.html:66
 msgid "last"
-msgstr ""
+msgstr "utolsó"
 
 #: templates/umap/navigation.html:15
 msgid "Starred maps"
