@@ -22,7 +22,6 @@ from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
-from django.db.models import Q
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
