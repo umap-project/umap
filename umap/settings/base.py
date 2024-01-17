@@ -119,7 +119,6 @@ INSTALLED_APPS = (
     "django.contrib.gis",
     "django_probes",
     "umap",
-    "compressor",
     "social_django",
     # See https://github.com/peopledoc/django-agnocomplete/commit/26eda2dfa4a2f8a805ca2ea19a0c504b9d773a1c
     # Django does not find the app config in the default place, so the app is not loaded
@@ -163,9 +162,16 @@ MEDIA_ROOT = os.path.join("uploads")
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
 ]
 STATICFILES_DIRS = []  # May be extended when using UMAP_CUSTOM_STATICS
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "umap.utils.UmapManifestStaticFilesStorage",
+    },
+}
 
 # =============================================================================
 # Templates
@@ -262,9 +268,6 @@ LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 # =============================================================================
 # Third party app settings
 # =============================================================================
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
-
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 

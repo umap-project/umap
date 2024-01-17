@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load umap_tags compress i18n %}
+{% load umap_tags i18n %}
 {% block head_title %}
   {{ map.name }} - {{ SITE_NAME }}
 {% endblock head_title %}
@@ -7,9 +7,7 @@
   map_detail
 {% endblock body_class %}
 {% block extra_head %}
-  {% compress css %}
-    {% umap_css %}
-  {% endcompress %}
+  {% umap_css %}
   {% umap_js locale=locale %}
   {% if object.share_status != object.PUBLIC %}<meta name="robots" content="noindex">{% endif %}
 {% endblock extra_head %}

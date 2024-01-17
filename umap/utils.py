@@ -2,6 +2,7 @@ import gzip
 import os
 
 from django.conf import settings
+from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from django.urls import URLPattern, URLResolver, get_resolver
 
 
@@ -162,3 +163,53 @@ def merge_features(reference: list, latest: list, incoming: list):
         merged.append(item)
 
     return merged
+
+
+class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
+    support_js_module_import_aggregation = True
+
+    # We remove `;` at the end of all regexps to match our prettier config.
+    _js_module_import_aggregation_patterns = (
+        "*.js",
+        (
+            (
+                (
+                    r"""(?P<matched>import(?s:(?P<import>[\s\{].*?))"""
+                    r"""\s*from\s*['"](?P<url>[\.\/].*?)["']\s*)"""
+                ),
+                'import%(import)s from "%(url)s"\n',
+            ),
+            (
+                (
+                    r"""(?P<matched>export(?s:(?P<exports>[\s\{].*?))"""
+                    r"""\s*from\s*["'](?P<url>[\.\/].*?)["']\s*)"""
+                ),
+                'export%(exports)s from "%(url)s"\n',
+            ),
+            (
+                r"""(?P<matched>import\s*['"](?P<url>[\.\/].*?)["']\s*)""",
+                'import"%(url)s"\n',
+            ),
+            (
+                r"""(?P<matched>import\(["'](?P<url>.*?)["']\))""",
+                """import("%(url)s")""",
+            ),
+        ),
+    )
+
+    # https://github.com/django/django/blob/0fcee1676c7f14bb08e2cc662898dee56d9cf207↩
+    # /django/contrib/staticfiles/storage.py#L78C5-L105C6
+    patterns = (
+        (
+            "*.css",
+            (
+                r"""(?P<matched>url\(['"]{0,1}\s*(?P<url>.*?)["']{0,1}\))""",
+                (
+                    r"""(?P<matched>@import\s*["']\s*(?P<url>.*?)["'])""",
+                    """@import url("%(url)s")""",
+                ),
+                # Remove CSS source map rewriting
+            ),
+        ),
+        # Remove JS source map rewriting
+    )
