@@ -28,7 +28,7 @@
 <script src="{% static 'umap/vendors/colorbrewer/colorbrewer.js' %}" defer></script>
 <script src="{% static 'umap/vendors/simple-statistics/simple-statistics.min.js' %}" defer></script>
 {% if locale %}
-    {% with 'umap/locale/'|add:locale|add:'.js' as path %}
+    {% with "umap/locale/"|add:locale|add:".js" as path %}
         <script src="{% static path %}" defer></script>
     {% endwith %}
 {% endif %}
