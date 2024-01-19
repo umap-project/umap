@@ -61,17 +61,11 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
             if processed_path.endswith(".js"):
                 path = Path(settings.STATIC_ROOT) / processed_path
                 initial = path.read_text()
-                path_map = path.with_suffix(f"{path.suffix}.map")
                 minified = jsmin(initial)
-                minified += f"\n//# sourceMappingURL={path_map.name}"
                 path.write_text(minified)
-                path_map.write_text(initial)
             if processed_path.endswith(".css"):
                 path = Path(settings.STATIC_ROOT) / processed_path
                 initial = path.read_text()
-                path_map = path.with_suffix(f"{path.suffix}.map")
                 minified = cssmin(initial)
-                minified += f"\n//# sourceMappingURL={path_map.name}"
                 path.write_text(minified)
-                path_map.write_text(initial)
             yield original_path, processed_path, True
