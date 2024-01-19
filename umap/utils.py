@@ -1,9 +1,12 @@
 import gzip
 import os
+from pathlib import Path
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from django.urls import URLPattern, URLResolver, get_resolver
+from rcssmin import cssmin
+from rjsmin import jsmin
 
 
 def _urls_for_js(urls=None):
@@ -213,3 +216,16 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
         ),
         # Remove JS source map rewriting
     )
+
+    def post_process(self, paths, **options):
+        collected = super().post_process(paths, **options)
+        for original_path, processed_path, processed in collected:
+            if processed_path.endswith(".js"):
+                path = Path(settings.STATIC_ROOT) / processed_path
+                minified = jsmin(path.read_text())
+                path.write_text(minified)
+            if processed_path.endswith(".css"):
+                path = Path(settings.STATIC_ROOT) / processed_path
+                minified = cssmin(path.read_text())
+                path.write_text(minified)
+            yield original_path, processed_path, True
