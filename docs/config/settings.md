@@ -24,21 +24,6 @@ The hosts that uMap expects.
 
 Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 
-#### COMPRESS_ENABLED
-#### COMPRESS_STORAGE
-
-To activate the compression of the static files, you can set this flag to `True`.
-
-You can then run the following command to compress the assets:
-
-```bash
-umap compress
-```
-
-Optionally add `COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"`
-and add `gzip_static on` directive to Nginx `/static` location, so Nginx will
-serve pregenerated files instead of compressing them on the fly.
-
 #### DEBUG
 
 Set it to `True` for easier debugging in case of error.

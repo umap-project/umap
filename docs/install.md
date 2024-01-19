@@ -143,9 +143,8 @@ Here are the commands you'll need to run to create the tables, collect the stati
 # Create the database tables
 umap migrate
 
-# Collect and compress static files
+# Collect static files
 umap collectstatic
-umap compress
 
 # Create a super user
 umap createsuperuser
@@ -167,5 +166,4 @@ Usually, for upgrading, you need those steps:
 pip install umap-project --upgrade
 umap migrate
 umap collectstatic
-umap compress
 ```
