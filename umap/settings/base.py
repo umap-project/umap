@@ -169,7 +169,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "umap.utils.UmapManifestStaticFilesStorage",
+        "BACKEND": "umap.storage.UmapManifestStaticFilesStorage",
     },
 }
 
