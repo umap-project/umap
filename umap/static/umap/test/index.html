@@ -4,31 +4,34 @@
     <title>Umap front Tests</title>
     <meta charset="utf-8" />
     <script type="module" src="../js/modules/global.js" defer></script>
+
     <script src="../vendors/editable/Path.Drag.js" defer></script>
     <script src="../vendors/editable/Leaflet.Editable.js" defer></script>
     <script src="../vendors/hash/leaflet-hash.js" defer></script>
     <script src="../vendors/i18n/Leaflet.i18n.js" defer></script>
     <script src="../vendors/editinosm/Leaflet.EditInOSM.js" defer></script>
-    <script src="../vendors/minimap/Control.MiniMap.js" defer></script>
+    <script src="../vendors/minimap/Control.MiniMap.min.js" defer></script>
     <script src="../vendors/csv2geojson/csv2geojson.js" defer></script>
-    <script src="../vendors/togeojson/togeojson.js" defer></script>
+    <script src="../vendors/togeojson/togeojson.umd.js" defer></script>
     <script src="../vendors/osmtogeojson/osmtogeojson.js" defer></script>
-    <script src="../vendors/contextmenu/leaflet.contextmenu.js" defer></script>
     <script src="../vendors/loading/Control.Loading.js" defer></script>
-    <script src="../vendors/markercluster/leaflet.markercluster-src.js" defer></script>
+    <script src="../vendors/markercluster/leaflet.markercluster.js" defer></script>
+    <script src="../vendors/contextmenu/leaflet.contextmenu.min.js" defer></script>
     <script src="../vendors/photon/leaflet.photon.js" defer></script>
+    <script src="../vendors/georsstogeojson/GeoRSSToGeoJSON.js" defer></script>
     <script src="../vendors/heat/leaflet-heat.js" defer></script>
-    <script src="../vendors/fullscreen/Leaflet.fullscreen.js" defer></script>
-    <script src="../vendors/toolbar/leaflet.toolbar-src.js" defer></script>
+    <script src="../vendors/fullscreen/Leaflet.fullscreen.min.js" defer></script>
+    <script src="../vendors/toolbar/leaflet.toolbar.js" defer></script>
     <script src="../vendors/formbuilder/Leaflet.FormBuilder.js" defer></script>
     <script src="../vendors/measurable/Leaflet.Measurable.js" defer></script>
-    <script src="../vendors/locatecontrol/L.Control.Locate.js" defer></script>
-    <script src="../vendors/dompurify/purify.js" defer></script>
     <script src="../vendors/togpx/togpx.js" defer></script>
-    <script src="../vendors/tokml/tokml.js" defer></script>
     <script src="../vendors/iconlayers/iconLayers.js" defer></script>
-    <script src="../vendors/simple-statistics/simple-statistics.min.js" defer></script>
+    <script src="../vendors/tokml/tokml.js" defer></script>
+    <script src="../vendors/locatecontrol/L.Control.Locate.min.js" defer></script>
+    <script src="../vendors/dompurify/purify.min.js" defer></script>
     <script src="../vendors/colorbrewer/colorbrewer.js" defer></script>
+    <script src="../vendors/simple-statistics/simple-statistics.min.js" defer></script>
+
     <script src="../js/umap.core.js" defer></script>
     <script src="../js/umap.autocomplete.js" defer></script>
     <script src="../js/umap.popup.js" defer></script>
@@ -36,34 +39,38 @@
     <script src="../js/umap.forms.js" defer></script>
     <script src="../js/umap.icon.js" defer></script>
     <script src="../js/umap.features.js" defer></script>
+    <script src="../js/umap.permissions.js" defer></script>
+    <script src="../js/umap.datalayer.permissions.js" defer></script>
     <script src="../js/umap.layer.js" defer></script>
     <script src="../js/umap.controls.js" defer></script>
     <script src="../js/umap.slideshow.js" defer></script>
     <script src="../js/umap.tableeditor.js" defer></script>
-    <script src="../js/umap.permissions.js" defer></script>
-    <script src="../js/umap.datalayer.permissions.js" defer></script>
     <script src="../js/umap.browser.js" defer></script>
     <script src="../js/umap.importer.js" defer></script>
     <script src="../js/umap.share.js" defer></script>
     <script src="../js/umap.js" defer></script>
     <script src="../js/umap.ui.js" defer></script>
+    <script src="../js/components/fragment.js" defer></script>
+
     <link rel="stylesheet" href="../vendors/leaflet/leaflet.css" />
-    <link rel="stylesheet" href="../vendors/minimap/Control.MiniMap.css" />
-    <link rel="stylesheet" href="../vendors/editinosm/Leaflet.EditInOSM.css" />
     <link rel="stylesheet" href="../vendors/markercluster/MarkerCluster.css" />
-    <link rel="stylesheet"
-          href="../vendors/markercluster/MarkerCluster.Default.css" />
-    <link rel="stylesheet"
-          href="../vendors/contextmenu/leaflet.contextmenu.css" />
+    <link rel="stylesheet" href="../vendors/markercluster/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="../vendors/editinosm/Leaflet.EditInOSM.css" />
+    <link rel="stylesheet" href="../vendors/minimap/Control.MiniMap.min.css" />
+    <link rel="stylesheet" href="../vendors/contextmenu/leaflet.contextmenu.min.css" />
     <link rel="stylesheet" href="../vendors/toolbar/leaflet.toolbar.css" />
     <link rel="stylesheet" href="../vendors/measurable/Leaflet.Measurable.css" />
+    <link rel="stylesheet" href="../vendors/fullscreen/leaflet.fullscreen.css" />
+    <link rel="stylesheet" href="../vendors/locatecontrol/L.Control.Locate.min.css" />
     <link rel="stylesheet" href="../vendors/iconlayers/iconLayers.css" />
+
     <link rel="stylesheet" href="../../umap/font.css" />
     <link rel="stylesheet" href="../../umap/base.css" />
     <link rel="stylesheet" href="../../umap/content.css" />
     <link rel="stylesheet" href="../../umap/nav.css" />
     <link rel="stylesheet" href="../../umap/map.css" />
     <link rel="stylesheet" href="../../umap/theme.css" />
+
     <script src="../../../../node_modules/sinon/pkg/sinon.js"></script>
     <script src="../../../../node_modules/mocha/mocha.js"></script>
     <script src="../../../../node_modules/chai/chai.js"></script>

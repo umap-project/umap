@@ -38,34 +38,19 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
         ),
     )
 
-    # https://github.com/django/django/blob/0fcee1676c7f14bb08e2cc662898dee56d9cf207↩
-    # /django/contrib/staticfiles/storage.py#L78C5-L105C6
-    patterns = (
-        (
-            "*.css",
-            (
-                r"""(?P<matched>url\(['"]{0,1}\s*(?P<url>.*?)["']{0,1}\))""",
-                (
-                    r"""(?P<matched>@import\s*["']\s*(?P<url>.*?)["'])""",
-                    """@import url("%(url)s")""",
-                ),
-                # Remove CSS source map rewriting
-            ),
-        ),
-        # Remove JS source map rewriting
-    )
-
     def post_process(self, paths, **options):
         collected = super().post_process(paths, **options)
         for original_path, processed_path, processed in collected:
             if processed_path.endswith(".js"):
                 path = Path(settings.STATIC_ROOT) / processed_path
                 initial = path.read_text()
-                minified = jsmin(initial)
-                path.write_text(minified)
+                if "sourceMappingURL" not in initial:  # Already minified.
+                    minified = jsmin(initial)
+                    path.write_text(minified)
             if processed_path.endswith(".css"):
                 path = Path(settings.STATIC_ROOT) / processed_path
                 initial = path.read_text()
-                minified = cssmin(initial)
-                path.write_text(minified)
+                if "sourceMappingURL" not in initial:  # Already minified.
+                    minified = cssmin(initial)
+                    path.write_text(minified)
             yield original_path, processed_path, True
