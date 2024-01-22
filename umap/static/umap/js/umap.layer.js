@@ -194,6 +194,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     let mode = this.datalayer.options.choropleth.mode,
       classes = +this.datalayer.options.choropleth.classes || 5,
       breaks
+    classes = Math.min(classes, values.length)
     if (mode === 'manual') {
       const manualBreaks = this.datalayer.options.choropleth.breaks
       if (manualBreaks) {
