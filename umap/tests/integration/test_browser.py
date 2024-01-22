@@ -13,12 +13,12 @@ DATALAYER_DATA = {
     "features": [
         {
             "type": "Feature",
-            "properties": {"name": "one point in france"},
+            "properties": {"name": "one point in france", "foo": "point"},
             "geometry": {"type": "Point", "coordinates": [3.339844, 46.920255]},
         },
         {
             "type": "Feature",
-            "properties": {"name": "one polygon in greenland"},
+            "properties": {"name": "one polygon in greenland", "foo": "polygon"},
             "geometry": {
                 "type": "Polygon",
                 "coordinates": [
@@ -34,7 +34,7 @@ DATALAYER_DATA = {
         },
         {
             "type": "Feature",
-            "properties": {"name": "one line in new zeland"},
+            "properties": {"name": "one line in new zeland", "foo": "line"},
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -72,14 +72,28 @@ def test_data_browser_should_be_open(live_server, page, bootstrap, map):
 def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator(".leaflet-overlay-pane path")
     expect(markers).to_have_count(1)
-    el = page.locator("input[name='filter']")
-    expect(el).to_be_visible()
-    el.type("poly")
+    expect(paths).to_have_count(2)
+    filter_ = page.locator("input[name='filter']")
+    expect(filter_).to_be_visible()
+    filter_.type("poly")
     expect(page.get_by_text("one point in france")).to_be_hidden()
     expect(page.get_by_text("one line in new zeland")).to_be_hidden()
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()
     expect(markers).to_have_count(0)  # Hidden by filter
+    expect(paths).to_have_count(1)  # Only polygon
+    # Empty the filter
+    filter_.fill("")
+    filter_.blur()
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    filter_.type("point")
+    expect(page.get_by_text("one point in france")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(page.get_by_text("one polygon in greenland")).to_be_hidden()
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(0)
 
 
 def test_data_browser_can_show_only_visible_features(live_server, page, bootstrap, map):
@@ -131,3 +145,25 @@ def test_data_browser_bbox_limit_should_be_dynamic(live_server, page, bootstrap,
     expect(page.get_by_text("one point in france")).to_be_visible()
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()
     expect(page.get_by_text("one line in new zeland")).to_be_hidden()
+
+
+def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
+    # Include a variable
+    map.settings["properties"]["labelKey"] = "{name} ({foo})"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_text("one point in france (point)")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland (line)")).to_be_visible()
+    expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_visible()
+    filter_ = page.locator("input[name='filter']")
+    expect(filter_).to_be_visible()
+    filter_.type("foobar")  # Hide all
+    expect(page.get_by_text("one point in france (point)")).to_be_hidden()
+    expect(page.get_by_text("one line in new zeland (line)")).to_be_hidden()
+    expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_hidden()
+    # Empty back the filter
+    filter_.fill("")
+    filter_.blur()
+    expect(page.get_by_text("one point in france (point)")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland (line)")).to_be_visible()
+    expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_visible()
