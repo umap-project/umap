@@ -7,6 +7,11 @@
   map_detail
 {% endblock body_class %}
 {% block extra_head %}
+  {% if preconnect_domains %}
+    {% for domain in preconnect_domains %}
+      <link rel="preconnect" href="{{ domain }}" />
+    {% endfor %}
+  {% endif %}
   {% umap_css %}
   {% umap_js locale=locale %}
   {% if object.share_status != object.PUBLIC %}<meta name="robots" content="noindex">{% endif %}
