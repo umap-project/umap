@@ -9,6 +9,11 @@
     bottom: 0;
     left: 0;
     right: 0;
+    /*
+    * Same as leaflet background, to work around screen blincking
+    * between DOM is loaded and JS is read to render the map.
+    */
+    background-color: #ddd;
 }
 
 
