@@ -51,19 +51,14 @@ L.U.DataLayerPermissions = L.Class.extend({
       pk: this.datalayer.umap_id,
     })
   },
-  save: function () {
+  save: async function () {
     if (!this.isDirty) return this.datalayer.map.continueSaving()
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
-    this.datalayer.map.post(this.getUrl(), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        this.commit()
-        this.isDirty = false
-        this.datalayer.map.continueSaving()
-      },
-    })
+    await this.datalayer.map.server.post(this.getUrl(), {}, formData)
+    this.commit()
+    this.isDirty = false
+    this.datalayer.map.continueSaving()
   },
 
   commit: function () {

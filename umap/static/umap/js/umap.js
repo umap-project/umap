@@ -98,9 +98,12 @@ L.U.Map.include({
     this.urls = new window.umap.URLs(this.options.urls)
 
     this.ui = new L.U.UI(this._container)
-    this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloading', (e) => this.fire('dataloading', e))
-    this.xhr.on('dataload', (e) => this.fire('dataload', e))
+    this.server = new window.umap.ServerRequest(this.ui)
+    this.server.on('dataloading', (e) => this.fire('dataloading', e))
+    this.server.on('dataload', (e) => this.fire('dataload', e))
+    this.request = new window.umap.Request(this.ui)
+    this.request.on('dataloading', (e) => this.fire('dataloading', e))
+    this.request.on('dataload', (e) => this.fire('dataload', e))
 
     this.initLoader()
     this.name = this.options.name
@@ -1083,7 +1086,7 @@ L.U.Map.include({
     return properties
   },
 
-  saveSelf: function () {
+  saveSelf: async function () {
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
@@ -1093,64 +1096,60 @@ L.U.Map.include({
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
-    this.post(this.urls.get('map_save', { map_id: this.options.umap_id }), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        let duration = 3000,
-          alert = { content: L._('Map has been saved!'), level: 'info' }
-        if (!this.options.umap_id) {
-          alert.content = L._('Congratulations, your map has been created!')
-          this.options.umap_id = data.id
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
-          if (
-            data.permissions &&
-            data.permissions.anonymous_edit_url &&
-            this.options.urls.map_send_edit_link
-          ) {
-            alert.duration = Infinity
-            alert.content =
-              L._(
-                'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
-              ) + `<br>${data.permissions.anonymous_edit_url}`
+    const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
+    const [data, response] = await this.server.post(uri, {}, formData)
+    let duration = 3000,
+      alert = { content: L._('Map has been saved!'), level: 'info' }
+    if (!this.options.umap_id) {
+      alert.content = L._('Congratulations, your map has been created!')
+      this.options.umap_id = data.id
+      this.permissions.setOptions(data.permissions)
+      this.permissions.commit()
+      if (
+        data.permissions &&
+        data.permissions.anonymous_edit_url &&
+        this.options.urls.map_send_edit_link
+      ) {
+        alert.duration = Infinity
+        alert.content =
+          L._(
+            'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
+          ) + `<br>${data.permissions.anonymous_edit_url}`
 
-            alert.actions = [
-              {
-                label: L._('Send me the link'),
-                input: L._('Email'),
-                callback: this.sendEditLink,
-                callbackContext: this,
-              },
-              {
-                label: L._('Copy link'),
-                callback: () => {
-                  L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-                  this.ui.alert({
-                    content: L._('Secret edit link copied to clipboard!'),
-                    level: 'info',
-                  })
-                },
-                callbackContext: this,
-              },
-            ]
-          }
-        } else if (!this.permissions.isDirty) {
-          // Do not override local changes to permissions,
-          // but update in case some other editors changed them in the meantime.
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
-        }
-        // Update URL in case the name has changed.
-        if (history && history.pushState)
-          history.pushState({}, this.options.name, data.url)
-        else window.location = data.url
-        alert.content = data.info || alert.content
-        this.once('saved', () => this.ui.alert(alert))
-        this.ui.closePanel()
-        this.permissions.save()
-      },
-    })
+        alert.actions = [
+          {
+            label: L._('Send me the link'),
+            input: L._('Email'),
+            callback: this.sendEditLink,
+            callbackContext: this,
+          },
+          {
+            label: L._('Copy link'),
+            callback: () => {
+              L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
+              this.ui.alert({
+                content: L._('Secret edit link copied to clipboard!'),
+                level: 'info',
+              })
+            },
+            callbackContext: this,
+          },
+        ]
+      }
+    } else if (!this.permissions.isDirty) {
+      // Do not override local changes to permissions,
+      // but update in case some other editors changed them in the meantime.
+      this.permissions.setOptions(data.permissions)
+      this.permissions.commit()
+    }
+    // Update URL in case the name has changed.
+    if (history && history.pushState)
+      history.pushState({}, this.options.name, data.url)
+    else window.location = data.url
+    alert.content = data.info || alert.content
+    this.once('saved', () => this.ui.alert(alert))
+    this.ui.closePanel()
+    this.permissions.save()
   },
 
   save: function () {
@@ -1818,23 +1817,6 @@ L.U.Map.include({
   initLoader: function () {
     this.loader = new L.Control.Loading()
     this.loader.onAdd(this)
-  },
-
-  post: function (url, options) {
-    options = options || {}
-    options.listener = this
-    this.xhr.post(url, options)
-  },
-
-  get: function (url, options) {
-    options = options || {}
-    options.listener = this
-    this.xhr.get(url, options)
-  },
-
-  ajax: function (options) {
-    options.listener = this
-    this.xhr._ajax(options)
   },
 
   initContextMenu: function () {

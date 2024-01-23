@@ -685,7 +685,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     return !this.value() || this.value() === this.obj.getMap().options.default_iconUrl
   },
 
-  showSymbolsTab: function () {
+  showSymbolsTab: async function () {
     this.openTab('symbols')
     this.searchInput = L.DomUtil.create('input', '', this.body)
     this.searchInput.type = 'search'
@@ -695,13 +695,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (this.pictogram_list) {
       this.buildSymbolsList()
     } else {
-      this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
-        callback: (data) => {
-          this.pictogram_list = data.pictogram_list
-          this.buildSymbolsList()
-        },
-        context: this,
-      })
+      const [{ pictogram_list }, response] = await this.builder.map.server.get(
+        this.builder.map.options.urls.pictogram_list_json
+      )
+      this.pictogram_list = pictogram_list
+      this.buildSymbolsList()
     }
   },
 
