@@ -695,11 +695,13 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (this.pictogram_list) {
       this.buildSymbolsList()
     } else {
-      const [{ pictogram_list }, response] = await this.builder.map.server.get(
+      const [{ pictogram_list }, response, error] = await this.builder.map.server.get(
         this.builder.map.options.urls.pictogram_list_json
       )
-      this.pictogram_list = pictogram_list
-      this.buildSymbolsList()
+      if (!error) {
+        this.pictogram_list = pictogram_list
+        this.buildSymbolsList()
+      }
     }
   },
 

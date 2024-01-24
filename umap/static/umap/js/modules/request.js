@@ -17,15 +17,15 @@ const BaseRequest = Evented.extend({
     } catch (error) {
       this._onError(error)
       this.fire('dataload', { id: id })
-      return
+      return null
     }
     if (!response.ok) {
-      this.onNok(response.status, await response.text())
+      this.fire('dataload', { id: id })
+      return this.onNok(response.status, response)
     }
     // TODO
     // - error handling
     // - UI connection / events
-    // - preflight mode in CORS ?
 
     this.fire('dataload', { id: id })
     return response
@@ -44,7 +44,9 @@ const BaseRequest = Evented.extend({
     this.onError(error)
   },
   onError: function (error) {},
-  onNok: function (status) {},
+  onNok: function (status, reponse) {
+    return response
+  },
 })
 
 export const Request = BaseRequest.extend({
@@ -55,8 +57,9 @@ export const Request = BaseRequest.extend({
     console.error(error)
     this.ui.alert({ content: L._('Problem in the response'), level: 'error' })
   },
-  onNok: function (status, message) {
+  onNok: function (status, response) {
     this.onError(message)
+    return response
   },
 })
 
@@ -81,26 +84,30 @@ export const ServerRequest = Request.extend({
       headers['X-CSRFToken'] = token
     }
     const response = await Request.prototype.post.call(this, uri, headers, data)
-    return await this._handle_json_response(response)
+    return await this._as_json(response)
   },
 
   get: async function (uri, headers) {
     const response = await Request.prototype.get.call(this, uri, headers)
-    return await this._handle_json_response(response)
+    return await this._as_json(response)
   },
 
-  _handle_json_response: async function (response) {
+  _as_json: async function (response) {
+    if (!response) return [{}, null, new Error("Undefined error")]
     try {
       const data = await response.json()
-      this._handle_server_instructions(data)
-      return [data, response]
+      if (this._handle_server_instructions(data) !== false) {
+        return [{}, null]
+      }
+      return [data, response, null]
     } catch (error) {
       this._onError(error)
+      return [{}, null, error]
     }
   },
 
   _handle_server_instructions: function (data) {
-    // In some case, the response contains instructions
+    // Generic cases, let's deal with them once
     if (data.redirect) {
       const newPath = data.redirect
       if (window.location.pathname == newPath) {
@@ -122,6 +129,9 @@ export const ServerRequest = Request.extend({
         this.fire('login')
         win.close()
       }
+    } else {
+      // Nothing to do, we can let the response proceed
+      return false
     }
   },
 

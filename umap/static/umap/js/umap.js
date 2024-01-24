@@ -34,7 +34,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -838,7 +838,10 @@ L.U.Map.include({
         self.isDirty = true
       }
     if (this._controls.tilelayersChooser)
-      this._controls.tilelayersChooser.openSwitcher({ callback: callback, className: 'dark' })
+      this._controls.tilelayersChooser.openSwitcher({
+        callback: callback,
+        className: 'dark',
+      })
   },
 
   manageDatalayers: function () {
@@ -1097,59 +1100,61 @@ L.U.Map.include({
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
     const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
-    const [data, response] = await this.server.post(uri, {}, formData)
-    let duration = 3000,
-      alert = { content: L._('Map has been saved!'), level: 'info' }
-    if (!this.options.umap_id) {
-      alert.content = L._('Congratulations, your map has been created!')
-      this.options.umap_id = data.id
-      this.permissions.setOptions(data.permissions)
-      this.permissions.commit()
-      if (
-        data.permissions &&
-        data.permissions.anonymous_edit_url &&
-        this.options.urls.map_send_edit_link
-      ) {
-        alert.duration = Infinity
-        alert.content =
-          L._(
-            'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
-          ) + `<br>${data.permissions.anonymous_edit_url}`
+    const [data, response, error] = await this.server.post(uri, {}, formData)
+    if (!error) {
+      let duration = 3000,
+        alert = { content: L._('Map has been saved!'), level: 'info' }
+      if (!this.options.umap_id) {
+        alert.content = L._('Congratulations, your map has been created!')
+        this.options.umap_id = data.id
+        this.permissions.setOptions(data.permissions)
+        this.permissions.commit()
+        if (
+          data.permissions &&
+          data.permissions.anonymous_edit_url &&
+          this.options.urls.map_send_edit_link
+        ) {
+          alert.duration = Infinity
+          alert.content =
+            L._(
+              'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
+            ) + `<br>${data.permissions.anonymous_edit_url}`
 
-        alert.actions = [
-          {
-            label: L._('Send me the link'),
-            input: L._('Email'),
-            callback: this.sendEditLink,
-            callbackContext: this,
-          },
-          {
-            label: L._('Copy link'),
-            callback: () => {
-              L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-              this.ui.alert({
-                content: L._('Secret edit link copied to clipboard!'),
-                level: 'info',
-              })
+          alert.actions = [
+            {
+              label: L._('Send me the link'),
+              input: L._('Email'),
+              callback: this.sendEditLink,
+              callbackContext: this,
             },
-            callbackContext: this,
-          },
-        ]
+            {
+              label: L._('Copy link'),
+              callback: () => {
+                L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
+                this.ui.alert({
+                  content: L._('Secret edit link copied to clipboard!'),
+                  level: 'info',
+                })
+              },
+              callbackContext: this,
+            },
+          ]
+        }
+      } else if (!this.permissions.isDirty) {
+        // Do not override local changes to permissions,
+        // but update in case some other editors changed them in the meantime.
+        this.permissions.setOptions(data.permissions)
+        this.permissions.commit()
       }
-    } else if (!this.permissions.isDirty) {
-      // Do not override local changes to permissions,
-      // but update in case some other editors changed them in the meantime.
-      this.permissions.setOptions(data.permissions)
-      this.permissions.commit()
+      // Update URL in case the name has changed.
+      if (history && history.pushState)
+        history.pushState({}, this.options.name, data.url)
+      else window.location = data.url
+      alert.content = data.info || alert.content
+      this.once('saved', () => this.ui.alert(alert))
+      this.ui.closePanel()
+      this.permissions.save()
     }
-    // Update URL in case the name has changed.
-    if (history && history.pushState)
-      history.pushState({}, this.options.name, data.url)
-    else window.location = data.url
-    alert.content = data.info || alert.content
-    this.once('saved', () => this.ui.alert(alert))
-    this.ui.closePanel()
-    this.permissions.save()
   },
 
   save: function () {

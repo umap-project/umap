@@ -132,13 +132,15 @@ L.U.MapPermissions = L.Class.extend({
   },
 
   attach: async function () {
-    await this.map.server.post(this.getAttachUrl())
-    this.options.owner = this.map.options.user
-    this.map.ui.alert({
-      content: L._('Map has been attached to your account'),
-      level: 'info',
-    })
-    this.map.ui.closePanel()
+    const [data, response, error] = await this.map.server.post(this.getAttachUrl())
+    if (!error) {
+      this.options.owner = this.map.options.user
+      this.map.ui.alert({
+        content: L._('Map has been attached to your account'),
+        level: 'info',
+      })
+      this.map.ui.closePanel()
+    }
   },
 
   save: async function () {
@@ -155,11 +157,17 @@ L.U.MapPermissions = L.Class.extend({
       formData.append('owner', this.options.owner && this.options.owner.id)
       formData.append('share_status', this.options.share_status)
     }
-    await this.map.server.post(this.getUrl(), {}, formData)
-    this.commit()
-    this.isDirty = false
-    this.map.continueSaving()
-    this.map.fire('postsync')
+    const [data, response, error] = await this.map.server.post(
+      this.getUrl(),
+      {},
+      formData
+    )
+    if (!error) {
+      this.commit()
+      this.isDirty = false
+      this.map.continueSaving()
+      this.map.fire('postsync')
+    }
   },
 
   getUrl: function () {
