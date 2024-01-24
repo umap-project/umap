@@ -740,23 +740,18 @@ L.U.DataLayer = L.Evented.extend({
     return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
   },
 
-  fetchRemoteData: function (force) {
+  fetchRemoteData: async function (force) {
     if (!this.isRemoteLayer()) return
     if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy)
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
-    this.map.ajax({
-      uri: url,
-      verb: 'GET',
-      callback: (raw) => {
-        this.clear()
-        this.rawToGeoJSON(raw, this.options.remoteData.format, (geojson) =>
-          this.fromGeoJSON(geojson)
-        )
-      },
-    })
+    const response = await this.map.request.get(url)
+    this.clear()
+    this.rawToGeoJSON(await response.text(), this.options.remoteData.format, (geojson) =>
+      this.fromGeoJSON(geojson)
+    )
   },
 
   onceLoaded: function (callback, context) {
