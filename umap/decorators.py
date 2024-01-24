@@ -60,17 +60,3 @@ def can_view_map(view_func):
         return view_func(request, *args, **kwargs)
 
     return wrapper
-
-
-def jsonize_view(view_func):
-    @wraps(view_func)
-    def wrapper(request, *args, **kwargs):
-        response = view_func(request, *args, **kwargs)
-        response_kwargs = {}
-        if hasattr(response, "rendered_content"):
-            response_kwargs["html"] = response.rendered_content
-        if response.has_header("location"):
-            response_kwargs["redirect"] = response["location"]
-        return simple_json_response(**response_kwargs)
-
-    return wrapper

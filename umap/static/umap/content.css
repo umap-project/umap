@@ -37,6 +37,21 @@ input:-moz-placeholder, :-moz-placeholder {
 /* **************** */
 /*    Login icons   */
 /* **************** */
+body.login {
+    width:  320px;
+    margin: auto;
+    text-align: center;
+}
+body.login header {
+    display: flex;
+    justify-content: center;
+}
+.login-grid {
+    display: grid;
+    justify-content: space-between;
+    grid-gap: 5px;
+    grid-template-columns: repeat(auto-fill,92px);
+}
 .login-grid li,
 .login-grid a {
     display: inline-block;

@@ -73,12 +73,12 @@ export const ServerRequest = Request.extend({
       headers['X-CSRFToken'] = token
     }
     const response = await Request.prototype.post.call(this, uri, headers, data)
-    return this._handle_json_response(response)
+    return await this._handle_json_response(response)
   },
 
   get: async function (uri, headers) {
     const response = await Request.prototype.get.call(this, uri, headers)
-    return this._handle_json_response(response)
+    return await this._handle_json_response(response)
   },
 
   _handle_json_response: async function (response) {
@@ -105,10 +105,15 @@ export const ServerRequest = Request.extend({
       this.ui.closePanel()
     } else if (data.error) {
       this.ui.alert({ content: data.error, level: 'error' })
-    } else if (data.html) {
-      const ui_options = { data }
-      let listen_options
-      this.ui.openPanel(ui_options)
+    } else if (data.login_required) {
+      // TODO: stop flow and run request again when user
+      // is logged in
+      const win = window.open(data.login_required)
+      window.umap_proceed = () => {
+        console.log('logged in')
+        this.fire('login')
+        win.close()
+      }
     }
   },
 

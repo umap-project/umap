@@ -1,9 +1,7 @@
 {% load i18n %}
 <nav class="umap-nav">
   <section>
-    <h1>
-      <a href="{% url "home" %}">{{ title }}</a>
-    </h1>
+    {% include "umap/branding.html" %}
   </section>
   <section>
     <ul>
