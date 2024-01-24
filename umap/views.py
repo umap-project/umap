@@ -108,6 +108,12 @@ class PaginatorMixin:
             return [self.list_template_name]
         return super().get_template_names()
 
+    def get(self, *args, **kwargs):
+        response = super().get(*args, **kwargs)
+        if is_ajax(self.request):
+            return simple_json_response(html=response.rendered_content)
+        return response
+
 
 class PublicMapsMixin(object):
     def get_public_maps(self):

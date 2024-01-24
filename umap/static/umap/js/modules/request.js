@@ -63,6 +63,14 @@ export const Request = BaseRequest.extend({
 // Adds uMap specifics to requests handling
 // like logging, CSRF, etc.
 export const ServerRequest = Request.extend({
+  _fetch: async function (method, uri, headers, data) {
+    // Add a flag so backend can know we are in ajax and adapt the response
+    // See is_ajax in utils.py
+    headers = headers || {}
+    headers['X-Requested-With'] = 'XMLHttpRequest'
+    return await Request.prototype._fetch.call(this, method, uri, headers, data)
+  },
+
   post: async function (uri, headers, data) {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
