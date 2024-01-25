@@ -156,7 +156,7 @@ def merge_features(reference: list, latest: list, incoming: list):
 
     # Reapply the changes on top of the latest.
     for item in removed:
-        merged.delete(item)
+        merged.remove(item)
 
     for item in added:
         merged.append(item)
