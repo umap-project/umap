@@ -33,11 +33,11 @@ def test_adding_elements():
 
 
 def test_adding_one_removing_one():
-    assert merge_features(["A", "B"], ["A", "C"], ["A", "B", "D"]) == [
-        "A",
-        "C",
-        "D",
-    ]
+    assert merge_features(["A", "B"], ["A", "C"], ["A", "B", "D"]) == ["A", "C", "D"]
+
+
+def test_removing_one():
+    assert merge_features(["A", "B"], ["A", "B", "C"], ["A", "D"]) == ["A", "C", "D"]
 
 
 def test_removing_same_element():
