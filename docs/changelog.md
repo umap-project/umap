@@ -1,9 +1,17 @@
 # Changelog
 
+## 1.13.2 - 2024-01-25
+
+### Bug fixes
+
+- prevent datalayer to resetting to an old version on save (#1558)
+- replace list.delete call by the proper remove method (#1559)
+
+
 ## 1.13.1 - 2024-01-08
 
 ### Bug fix
-* fix: icon element is undefined when clustered by @yohanboniface in #1512
+* icon element is undefined when clustered by @yohanboniface in #1512
 
 ## 1.13.0 - 2024-01-08
 
