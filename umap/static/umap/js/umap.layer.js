@@ -676,7 +676,7 @@ L.U.DataLayer = L.Evented.extend({
     this._loading = true
     const [geojson, response, error] = await this.map.server.get(this._dataUrl())
     if (!error) {
-      this._last_modified = response.headers['Last-Modified']
+      this._last_modified = response.headers.get('last-modified')
       // FIXME: for now this property is set dynamically from backend
       // And thus it's not in the geojson file in the server
       // So do not let all options to be reset
@@ -1557,21 +1557,45 @@ L.U.DataLayer = L.Evented.extend({
     const headers = this._last_modified
       ? { 'If-Unmodified-Since': this._last_modified }
       : {}
-    const [data, response, error] = await this.map.server.post(
-      saveUrl,
-      headers,
-      formData
-    )
+    await this._trySave(saveUrl, headers, formData)
+    this._geojson = geojson
+  },
+
+  _trySave: async function (url, headers, formData) {
+    const [data, response, error] = await this.map.server.post(url, headers, formData)
     if (!error) {
+      if (response.status === 412) {
+        const msg = L._(
+          'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
+        )
+        const actions = [
+          {
+            label: L._('Save anyway'),
+            callback: async () => {
+              // Save again,
+              // but do not pass If-Unmodified-Since this time
+              await this._trySave(url, {}, formData)
+            },
+          },
+          {
+            label: L._('Cancel'),
+          },
+        ]
+        this.ui.alert({
+          content: msg,
+          level: 'error',
+          duration: 100000,
+          actions: actions,
+        })
+      }
       // Response contains geojson only if save has conflicted and conflicts have
-      // been resolved. So we need to reload to get extra data (saved from someone else)
+      // been resolved. So we need to reload to get extra data (added by someone else)
       if (data.geojson) {
         this.clear()
         this.fromGeoJSON(data.geojson)
         delete data.geojson
       }
-      this._geojson = geojson
-      this._last_modified = response.headers['Last-Modified']
+      this._last_modified = response.headers.get('last-modified')
       this.setUmapId(data.id)
       this.updateOptions(data)
       this.backupOptions()

@@ -1,6 +1,22 @@
 // Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
 import { Evented, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 
+export class HTTPError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = this.constructor.name
+  }
+}
+
+export class NokError extends Error {
+  constructor(response) {
+    super(response.status)
+    this.response = response
+    this.status = response.status
+    this.name = this.constructor.name
+  }
+}
+
 const BaseRequest = Evented.extend({
   _fetch: async function (method, uri, headers, data) {
     const id = Math.random()
@@ -15,13 +31,13 @@ const BaseRequest = Evented.extend({
         body: data,
       })
     } catch (error) {
-      this._onError(error)
+      console.error(error)
       this.fire('dataload', { id: id })
-      return null
+      throw new HTTPError(error.message)
     }
     if (!response.ok) {
       this.fire('dataload', { id: id })
-      return this.onNok(response.status, response)
+      throw new NokError(response.status)
     }
     // TODO
     // - error handling
@@ -29,6 +45,32 @@ const BaseRequest = Evented.extend({
 
     this.fire('dataload', { id: id })
     return response
+  },
+})
+
+// Basic class to issue request
+// It returns a response, or null in case of error
+// In case of error, an alert is sent, but non 20X status are not handled
+// The consumer must check the response status by hand
+export const Request = BaseRequest.extend({
+  initialize: function (ui) {
+    this.ui = ui
+  },
+
+  _fetch: async function (method, uri, headers, data) {
+    try {
+      const response = await BaseRequest.prototype._fetch.call(
+        this,
+        method,
+        uri,
+        headers,
+        data
+      )
+      return response
+    } catch (error) {
+      if (error instanceof NokError) return this._onNok(error)
+      return this._onError(error)
+    }
   },
 
   get: async function (uri, headers) {
@@ -40,31 +82,21 @@ const BaseRequest = Evented.extend({
   },
 
   _onError: function (error) {
-    console.error(error)
-    this.onError(error)
-  },
-  onError: function (error) {},
-  onNok: function (status, reponse) {
-    return response
-  },
-})
-
-export const Request = BaseRequest.extend({
-  initialize: function (ui) {
-    this.ui = ui
-  },
-  onError: function (error) {
-    console.error(error)
     this.ui.alert({ content: L._('Problem in the response'), level: 'error' })
   },
-  onNok: function (status, response) {
-    this.onError(message)
-    return response
+
+  _onNok: function (error) {
+    this._onError(error)
+    return error.response
   },
+
 })
 
 // Adds uMap specifics to requests handling
 // like logging, CSRF, etc.
+// It expects only json responses.
+// Returns an array of three elements: [data, response, error]
+// The consumer must check the error to proceed or not with using the data or response
 export const ServerRequest = Request.extend({
   _fetch: async function (method, uri, headers, data) {
     // Add a flag so backend can know we are in ajax and adapt the response
@@ -93,77 +125,33 @@ export const ServerRequest = Request.extend({
   },
 
   _as_json: async function (response) {
-    if (!response) return [{}, null, new Error("Undefined error")]
+    if (Array.isArray(response)) return response
     try {
       const data = await response.json()
-      if (this._handle_server_instructions(data) !== false) {
-        return [{}, null]
+      if (data.info) {
+        this.ui.alert({ content: data.info, level: 'info' })
+        this.ui.closePanel()
+      } else if (data.error) {
+        this.ui.alert({ content: data.error, level: 'error' })
+        return this._onError(new Error(data.error))
       }
       return [data, response, null]
     } catch (error) {
-      this._onError(error)
-      return [{}, null, error]
+      return this._onError(error)
     }
   },
 
-  _handle_server_instructions: function (data) {
-    // Generic cases, let's deal with them once
-    if (data.redirect) {
-      const newPath = data.redirect
-      if (window.location.pathname == newPath) {
-        window.location.reload() // Keep the hash, so the current view
-      } else {
-        window.location = newPath
-      }
-    } else if (data.info) {
-      this.ui.alert({ content: data.info, level: 'info' })
-      this.ui.closePanel()
-    } else if (data.error) {
-      this.ui.alert({ content: data.error, level: 'error' })
-    } else if (data.login_required) {
-      // TODO: stop flow and run request again when user
-      // is logged in
-      const win = window.open(data.login_required)
-      window.umap_proceed = () => {
-        console.log('logged in')
-        this.fire('login')
-        win.close()
-      }
-    } else {
-      // Nothing to do, we can let the response proceed
-      return false
-    }
+  _onError: function (error) {
+    return [{}, null, error]
   },
 
-  onNok: function (status, message) {
-    if (status === 403) {
+  _onNok: function (error) {
+    if (error.status === 403) {
       this.ui.alert({
         content: message || L._('Action not allowed :('),
         level: 'error',
       })
-    } else if (status === 412) {
-      const msg = L._(
-        'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
-      )
-      const actions = [
-        {
-          label: L._('Save anyway'),
-          callback: function () {
-            // TODO
-            delete settings.headers['If-Match']
-            this._fetch(settings)
-          },
-        },
-        {
-          label: L._('Cancel'),
-        },
-      ]
-      this.ui.alert({
-        content: msg,
-        level: 'error',
-        duration: 100000,
-        actions: actions,
-      })
     }
+    return [{}, error.response, error]
   },
 })

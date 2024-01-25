@@ -1797,19 +1797,21 @@ L.U.Map.include({
     return this.editTools.startPolygon()
   },
 
-  del: function () {
+  del: async function () {
     if (confirm(L._('Are you sure you want to delete this map?'))) {
       const url = this.urls.get('map_delete', { map_id: this.options.umap_id })
-      this.post(url)
+      const [data, response, error] = await this.server.post(url)
+      if (data.redirect) window.location = data.redirect
     }
   },
 
-  clone: function () {
+  clone: async function () {
     if (
       confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
     ) {
       const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
-      this.post(url)
+      const [data, response, error] = await this.server.post(url)
+      if (data.redirect) window.location = data.redirect
     }
   },
 

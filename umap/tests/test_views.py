@@ -305,16 +305,6 @@ def test_user_dashboard_display_user_maps_distinct(client, map):
 
 
 @pytest.mark.django_db
-def test_logout_should_return_json_in_ajax(client, user, settings):
-    client.login(username=user.username, password="123123")
-    response = client.get(
-        reverse("logout"), headers={"X_REQUESTED_WITH": "XMLHttpRequest"}
-    )
-    data = json.loads(response.content.decode())
-    assert data["redirect"] == "/"
-
-
-@pytest.mark.django_db
 def test_logout_should_return_redirect(client, user, settings):
     client.login(username=user.username, password="123123")
     response = client.get(reverse("logout"))

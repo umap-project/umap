@@ -830,10 +830,8 @@ class MapDelete(DeleteView):
 
     def form_valid(self, form):
         self.object = self.get_object()
-        if self.object.owner and self.request.user != self.object.owner:
+        if not self.object.can_delete(self.request.user, self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
-        if not self.object.owner and not self.object.is_anonymous_owner(self.request):
-            return HttpResponseForbidden()
         self.object.delete()
         return simple_json_response(redirect="/")
 
@@ -1178,8 +1176,6 @@ def webmanifest(request):
 
 def logout(request):
     do_logout(request)
-    if is_ajax(request):
-        return simple_json_response(redirect="/")
     return HttpResponseRedirect("/")
 
 
