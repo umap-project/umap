@@ -1572,6 +1572,7 @@ L.U.DataLayer = L.Evented.extend({
         if (data.geojson) {
           this.clear()
           this.fromGeoJSON(data.geojson)
+          delete data.geojson
         }
         this._geojson = geojson
         this._last_modified = response.getResponseHeader('Last-Modified')
