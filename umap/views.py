@@ -335,7 +335,6 @@ showcase = MapsShowCase.as_view()
 
 def validate_url(request):
     assert request.method == "GET"
-    assert is_ajax(request)
     url = request.GET.get("url")
     assert url
     try:

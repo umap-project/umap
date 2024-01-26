@@ -747,15 +747,18 @@ L.U.DataLayer = L.Evented.extend({
     if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
-    if (this.options.remoteData.proxy)
+    if (this.options.remoteData.proxy) {
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
+    }
     const response = await this.map.request.get(url)
-    this.clear()
-    this.rawToGeoJSON(
-      await response.text(),
-      this.options.remoteData.format,
-      (geojson) => this.fromGeoJSON(geojson)
-    )
+    if (response && response.ok) {
+      this.clear()
+      this.rawToGeoJSON(
+        await response.text(),
+        this.options.remoteData.format,
+        (geojson) => this.fromGeoJSON(geojson)
+      )
+    }
   },
 
   onceLoaded: function (callback, context) {
@@ -1060,7 +1063,9 @@ L.U.DataLayer = L.Evented.extend({
   importFromUrl: async function (uri, type) {
     uri = this.map.localizeUrl(uri)
     const response = await this.map.request.get(uri)
-    this.importRaw(await response.text(), type)
+    if (response && response.ok) {
+      this.importRaw(await response.text(), type)
+    }
   },
 
   getColor: function () {
