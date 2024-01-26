@@ -41,12 +41,14 @@
       const server = new window.umap.ServerRequest(ui)
       const getMore = async function (e) {
         L.DomEvent.stop(e)
-        const [{html}, response] = await server.get(this.href)
-        const container = this.parentNode
-        container.innerHTML = html
-        const more = document.querySelector('.more_button')
-        if (more) {
-          L.DomEvent.on(more, 'click', getMore, more)
+        const [{html}, response, error] = await server.get(this.href)
+        if (!error) {
+          const container = this.parentNode
+          container.innerHTML = html
+          const more = document.querySelector('.more_button')
+          if (more) {
+            L.DomEvent.on(more, 'click', getMore, more)
+          }
         }
       }
       const more = document.querySelector('.more_button')
