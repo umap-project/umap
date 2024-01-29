@@ -1,8 +1,13 @@
+import re
+from time import sleep
+
 from playwright.sync_api import expect
 
 from umap.models import DataLayer
 
 from ..base import DataLayerFactory, MapFactory
+
+DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 
 def test_collaborative_editing_create_markers(context, live_server, tilelayer):
@@ -31,11 +36,17 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
     map_el_p1.click(position={"x": 200, "y": 200})
     expect(marker_pane_p1).to_have_count(1)
 
-    save_p1.click()
+    with page_one.expect_response(DATALAYER_UPDATE):
+        save_p1.click()
+        # Prefent two layers to be saved on the same second, as we compare them based
+        # on time in case of conflict. FIXME do not use time for comparison.
+        sleep(1)
     assert DataLayer.objects.get(pk=datalayer.pk).settings == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
+        "editMode": "advanced",
+        "inCaption": True,
     }
 
     # Now navigate to this map from another tab
@@ -60,7 +71,9 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
     map_el_p2.click(position={"x": 220, "y": 220})
     expect(marker_pane_p2).to_have_count(2)
 
-    save_p2.click()
+    with page_two.expect_response(DATALAYER_UPDATE):
+        save_p2.click()
+        sleep(1)
     # No change after the save
     expect(marker_pane_p2).to_have_count(2)
     assert DataLayer.objects.get(pk=datalayer.pk).settings == {
@@ -75,7 +88,8 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
     create_marker_p1.click()
     map_el_p1.click(position={"x": 150, "y": 150})
     expect(marker_pane_p1).to_have_count(2)
-    save_p1.click()
+    with page_one.expect_response(DATALAYER_UPDATE):
+        save_p1.click()
     # Should now get the other marker too
     expect(marker_pane_p1).to_have_count(3)
     assert DataLayer.objects.get(pk=datalayer.pk).settings == {
@@ -92,7 +106,9 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
     create_marker_p1.click()
     map_el_p1.click(position={"x": 180, "y": 150})
     expect(marker_pane_p1).to_have_count(4)
-    save_p1.click()
+    with page_one.expect_response(DATALAYER_UPDATE):
+        save_p1.click()
+        sleep(1)
     # Should now get the other marker too
     assert DataLayer.objects.get(pk=datalayer.pk).settings == {
         "browsable": True,
@@ -110,7 +126,9 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
     create_marker_p2.click()
     map_el_p2.click(position={"x": 250, "y": 150})
     expect(marker_pane_p2).to_have_count(3)
-    save_p2.click()
+    with page_two.expect_response(DATALAYER_UPDATE):
+        save_p2.click()
+        sleep(1)
     # Should now get the other markers too
     assert DataLayer.objects.get(pk=datalayer.pk).settings == {
         "browsable": True,
