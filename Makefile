@@ -20,9 +20,10 @@ format: ## Format the code and templates files
 
 .PHONY: lint
 lint: ## Lint the code and template files
+	npx eslint umap/static/umap/ &&\
 	djlint umap/templates --lint &&\
 	isort --check --profile black umap/ &&\
-    ruff format --check --target-version=py38 umap/ &&\
+	ruff format --check --target-version=py38 umap/ &&\
 	vermin --no-tips --violations -t=3.8- umap/
 
 docs: ## Compile the docs

@@ -7,7 +7,6 @@
         "after": true,
         "it": true,
         "sinon": true,
-        "qs": true,
         "enableEdit": true,
         "disableEdit": true,
         "changeInputValue": true,

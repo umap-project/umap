@@ -548,6 +548,7 @@ L.U.Help = L.Class.extend({
     label.title = label.textContent = L._('Close')
     this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
     this.isMacOS = /mac/i.test(
+      // eslint-disable-next-line compat/compat -- Fallback available.
       navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform
     )
   },
