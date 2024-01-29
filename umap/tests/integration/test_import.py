@@ -11,8 +11,9 @@ def test_umap_import_from_file(live_server, datalayer, page):
     button = page.get_by_title("Import data")
     expect(button).to_be_visible()
     button.click()
+    file_input = page.locator("input[type='file']")
     with page.expect_file_chooser() as fc_info:
-        page.locator("input[type='file']").click()
+        file_input.click()
     file_chooser = fc_info.value
     path = Path(__file__).parent.parent / "fixtures/display_on_load.umap"
     file_chooser.set_files(path)
@@ -23,6 +24,10 @@ def test_umap_import_from_file(live_server, datalayer, page):
     expect(layers).to_have_count(3)
     nonloaded = page.locator(".umap-browse-datalayers li.off")
     expect(nonloaded).to_have_count(1)
+    assert file_input.input_value()
+    # Close the import panel
+    page.keyboard.press("Escape")
+    assert not file_input.input_value()
 
 
 def test_umap_import_geojson_from_textarea(live_server, datalayer, page):

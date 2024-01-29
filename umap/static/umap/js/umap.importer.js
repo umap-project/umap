@@ -16,6 +16,7 @@ L.U.Importer = L.Class.extend({
       { type: 'file', multiple: 'multiple', autofocus: true },
       this.fileBox
     )
+    this.map.ui.once('panel:closed', () => (this.fileInput.value = null))
     this.urlInput = L.DomUtil.element(
       'input',
       { type: 'text', placeholder: L._('Provide an URL here') },
