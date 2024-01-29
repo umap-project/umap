@@ -30,7 +30,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "Django==4.2",
+  "Django==5.0.1",
   "django-agnocomplete==2.2.0",
   "django-environ==0.10.0",
   "django-probes==1.7.0",
