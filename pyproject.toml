@@ -39,7 +39,7 @@ dependencies = [
   "requests==2.31.0",
   "rcssmin==1.1.2",
   "rjsmin==1.2.2",
-  "social-auth-core==4.4.2",
+  "social-auth-core==4.5.2",
   "social-auth-app-django==5.2.0",
 ]
 
