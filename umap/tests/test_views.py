@@ -1,6 +1,6 @@
 import json
 import socket
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 import pytest
 from django.conf import settings

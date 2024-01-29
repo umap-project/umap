@@ -275,7 +275,7 @@ def test_owner_cannot_access_map_with_share_status_blocked(client, map):
     assert response.status_code == 403
 
 
-def test_non_editor_cannot_access_map_if_share_status_private(client, map, user):  # noqa
+def test_non_editor_cannot_access_map_if_share_status_private(client, map, user):
     url = reverse("map", args=(map.slug, map.pk))
     map.share_status = map.PRIVATE
     map.save()
@@ -346,14 +346,14 @@ def test_anonymous_create(cookieclient, post_data):
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):  # noqa
+def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):
     url = reverse("map_update", kwargs={"map_id": anonymap.pk})
     response = client.post(url, post_data)
     assert response.status_code == 403
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_data):  # noqa
+def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_data):
     url = reverse("map_update", kwargs={"map_id": anonymap.pk})
     # POST only mendatory fields
     name = "new map name"
@@ -420,7 +420,7 @@ def test_bad_anonymous_edit_url_should_return_403(cookieclient, anonymap):
 @pytest.mark.usefixtures("allow_anonymous")
 def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(
     client, anonymap, user
-):  # noqa
+):
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
     anonymap.edit_status = anonymap.OWNER
@@ -434,7 +434,7 @@ def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonymap):  # noqa
+def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonymap):
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
     anonymap.edit_status = anonymap.ANONYMOUS
@@ -675,3 +675,63 @@ def test_download_my_map(client, map, datalayer):
     # Test response is a json
     j = json.loads(response.content.decode())
     assert j["type"] == "umap"
+
+
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED, Map.OPEN])
+def test_oembed_shared_status_map(client, map, datalayer, share_status):
+    map.share_status = share_status
+    map.save()
+    url = f"{reverse('map_oembed')}?url=http://testserver{map.get_absolute_url()}"
+    response = client.get(url)
+    assert response.status_code == 403
+
+
+def test_oembed_no_url_map(client, map, datalayer):
+    url = reverse("map_oembed")
+    response = client.get(url)
+    assert response.status_code == 404
+
+
+def test_oembed_wrong_format_map(client, map, datalayer):
+    url = (
+        f"{reverse('map_oembed')}"
+        f"?url=http://testserver{map.get_absolute_url()}&format=xml"
+    )
+    response = client.get(url)
+    assert response.status_code == 501
+
+
+def test_oembed_wrong_domain_map(client, map, datalayer):
+    url = f"{reverse('map_oembed')}?url=http://BADserver{map.get_absolute_url()}"
+    response = client.get(url)
+    assert response.status_code == 404
+
+
+def test_oembed_map(client, map, datalayer):
+    url = f"{reverse('map_oembed')}?url=http://testserver{map.get_absolute_url()}"
+    response = client.get(url)
+    assert response.status_code == 200
+    j = json.loads(response.content.decode())
+    assert j["type"] == "rich"
+    assert j["version"] == "1.0"
+    assert j["width"] == 800
+    assert j["height"] == 300
+    assert j["html"] == (
+        '<iframe width="100%" height="300px" frameborder="0" allowfullscreen '
+        f'allow="geolocation" src="//testserver/en/map/test-map_{map.id}"></iframe>'
+        f'<p><a href="//testserver/en/map/test-map_{map.id}">See full screen</a></p>'
+    )
+
+
+def test_oembed_link(client, map, datalayer):
+    response = client.get(map.get_absolute_url())
+    assert response.status_code == 200
+    assert (
+        '<link rel="alternate" type="application/json+oembed"'
+        in response.content.decode()
+    )
+    assert (
+        'href="http://testserver/map/oembed/'
+        f'?url=http%3A//testserver/en/map/test-map_{map.id}&format=json"'
+    ) in response.content.decode()
+    assert 'title="test map oEmbed URL" />' in response.content.decode()
