@@ -16,14 +16,14 @@ develop: ## Install the test and dev dependencies
 format: ## Format the code and templates files
 	djlint umap/templates --reformat &&\
 	isort --profile black . &&\
-	ruff format --target-version=py38 .
+	ruff format --target-version=py310 .
 
 .PHONY: lint
 lint: ## Lint the code and template files
 	djlint umap/templates --lint &&\
 	isort --check --profile black umap/ &&\
-    ruff format --check --target-version=py38 umap/ &&\
-	vermin --no-tips --violations -t=3.8- umap/
+    ruff format --check --target-version=py310 umap/ &&\
+	vermin --no-tips --violations -t=3.10- umap/
 
 docs: ## Compile the docs
 	mkdocs build

@@ -2,31 +2,30 @@ os: linux
 language: python
 dist: focal
 python:
-- "3.6"
-- "3.7"
-- "3.8"
-- "3.9"
+  - '3.10'
+  - '3.11'
+  - '3.12'
 services:
   - postgresql
 addons:
   apt:
     packages:
-    - libgdal-dev
-    - postgresql-12-postgis-3
+      - libgdal-dev
+      - postgresql-12-postgis-3
 env:
   global:
-  - PGPORT=5432
-  - UMAP_SETTINGS=umap/tests/settings.py
+    - PGPORT=5432
+    - UMAP_SETTINGS=umap/tests/settings.py
 install:
-- make develop
+  - make develop
 script: make test
 notifications:
   irc:
     channels:
-    - "irc.libera.chat#umap"
+      - 'irc.libera.chat#umap'
     on_success: change
     on_failure: always
   email: false
 branches:
   only:
-  - master
+    - master

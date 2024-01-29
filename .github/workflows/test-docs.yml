@@ -2,9 +2,9 @@ name: Test & Docs
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   tests:
@@ -24,57 +24,57 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.12"]
+        python-version: ['3.10', '3.12']
         database: [postgresql]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
-        cache-dependency-path: '**/pyproject.toml'
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install libgdal-dev
-        python -m pip install --upgrade pip
-        make develop installjs vendors
-    - name: run tests
-      run: make test
-      env:
-        DJANGO_SETTINGS_MODULE: 'umap.tests.settings'
-        UMAP_SETTINGS: 'umap/tests/settings.py'
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: '**/pyproject.toml'
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install libgdal-dev
+          python -m pip install --upgrade pip
+          make develop installjs vendors
+      - name: run tests
+        run: make test
+        env:
+          DJANGO_SETTINGS_MODULE: 'umap.tests.settings'
+          UMAP_SETTINGS: 'umap/tests/settings.py'
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-    - name: Install dependencies
-      run: |
-        python3 -m pip install -e .[test,dev]
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install -e .[test,dev]
 
-    - name: Run Lint
-      run: make lint
-      
-    - name: Run Docs
-      run: make docs
+      - name: Run Lint
+        run: make lint
+
+      - name: Run Docs
+        run: make docs
 
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-    - name: Install dependencies
-      run: |
-        python3 -m pip install -r docs/requirements.txt
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install -r docs/requirements.txt
 
-    - name: Run Docs
-      run: mkdocs build
+      - name: Run Docs
+        run: mkdocs build
