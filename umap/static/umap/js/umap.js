@@ -122,6 +122,11 @@ L.U.Map.include({
         `${this.HIDDABLE_CONTROLS[i]}Control`
       )
     }
+    // Specific case for datalayersControl
+    // which accept "expanded" value, on top of true/false/null
+    if (L.Util.queryString('datalayersControl') === 'expanded') {
+      L.Util.setFromQueryString(this.options, 'datalayersControl')
+    }
     this.datalayersOnLoad = L.Util.queryString('datalayers')
     this.options.onLoadPanel = L.Util.queryString(
       'onLoadPanel',
