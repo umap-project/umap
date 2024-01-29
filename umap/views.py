@@ -121,13 +121,26 @@ class PublicMapsMixin(object):
         maps = qs.order_by("-modified_at")
         return maps
 
+    def get_highlighted_maps(self):
+        staff = User.objects.filter(is_staff=True)
+        stars = Star.objects.filter(by__in=staff).values("map")
+        qs = Map.public.filter(pk__in=stars)
+        maps = qs.order_by("-modified_at")
+        return maps
+
 
 class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
     template_name = "umap/home.html"
     list_template_name = "umap/map_list.html"
 
     def get_context_data(self, **kwargs):
-        maps = self.get_public_maps()
+        if settings.UMAP_HOME_FEED is None:
+            maps = []
+        elif settings.UMAP_HOME_FEED == "highlighted":
+            maps = self.get_highlighted_maps()
+        else:
+            maps = self.get_public_maps()
+        maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
@@ -142,8 +155,6 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
                 showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
             except Map.DoesNotExist:
                 pass
-
-        maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
         return {
             "maps": maps,

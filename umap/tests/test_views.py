@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.timezone import make_aware
 
 from umap import VERSION
+from umap.models import Map, Star
 from umap.views import validate_url
 
 from .base import MapFactory, UserFactory
@@ -391,3 +392,51 @@ def test_webmanifest(client):
             },
         ]
     }
+
+
+@pytest.mark.django_db
+def test_home_feed(client, settings, user, tilelayer):
+    settings.UMAP_HOME_FEED = "latest"
+    staff = UserFactory(username="Staff", is_staff=True)
+    starred = MapFactory(
+        owner=user, name="A public map starred by staff", share_status=Map.PUBLIC
+    )
+    MapFactory(
+        owner=user, name="A public map not starred by staff", share_status=Map.PUBLIC
+    )
+    non_staff = MapFactory(
+        owner=user, name="A public map starred by non staff", share_status=Map.PUBLIC
+    )
+    private = MapFactory(
+        owner=user, name="A private map starred by staff", share_status=Map.PRIVATE
+    )
+    reserved = MapFactory(
+        owner=user, name="A reserved map starred by staff", share_status=Map.OPEN
+    )
+    Star.objects.create(by=staff, map=starred)
+    Star.objects.create(by=staff, map=private)
+    Star.objects.create(by=staff, map=reserved)
+    Star.objects.create(by=user, map=non_staff)
+    response = client.get(reverse("home"))
+    content = response.content.decode()
+    assert "A public map starred by staff" in content
+    assert "A public map not starred by staff" in content
+    assert "A public map starred by non staff" in content
+    assert "A private map starred by staff" not in content
+    assert "A reserved map starred by staff" not in content
+    settings.UMAP_HOME_FEED = "highlighted"
+    response = client.get(reverse("home"))
+    content = response.content.decode()
+    assert "A public map starred by staff" in content
+    assert "A public map not starred by staff" not in content
+    assert "A public map starred by non staff" not in content
+    assert "A private map starred by staff" not in content
+    assert "A reserved map starred by staff" not in content
+    settings.UMAP_HOME_FEED = None
+    response = client.get(reverse("home"))
+    content = response.content.decode()
+    assert "A public map starred by staff" not in content
+    assert "A public map not starred by staff" not in content
+    assert "A public map starred by non staff" not in content
+    assert "A private map starred by staff" not in content
+    assert "A reserved map starred by staff" not in content

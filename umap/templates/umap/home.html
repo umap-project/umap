@@ -10,7 +10,9 @@
     </div>
   {% endif %}
   <div class="wrapper">
-    <h2 class="section">{% blocktrans %}Get inspired, browse maps{% endblocktrans %}</h2>
-    <div class="map_list row">{% include "umap/map_list.html" %}</div>
+    {% if maps %}
+      <h2 class="section">{% blocktrans %}Get inspired, browse maps{% endblocktrans %}</h2>
+      <div class="map_list row">{% include "umap/map_list.html" %}</div>
+    {% endif %}
   </div>
 {% endblock maincontent %}
