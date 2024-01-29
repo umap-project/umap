@@ -1,4 +1,6 @@
-# How to make a release
+# Releases
+
+## How to make a release
 
 1. Run tests:
     - `make test`
@@ -20,12 +22,35 @@
 9. `make publish`
 10. `make docker`
 
-## Deploying instances
+### Deploying instances
 
-### OSMfr
+#### OSMfr
 
 The process is manual for now, Yohan has one Makefile on his computer.
 
-### ANCT
+#### ANCT
 
 Update the [Dockerfile](https://gitlab.com/incubateur-territoires/startups/donnees-et-territoires/umap-dsfr-moncomptepro/-/blob/main/Dockerfile?ref_type=heads) with correct version and put a tag `YYYY.MM.DD` in order to deploy it to production.
+
+
+## When to make a release
+
+We aim to support [Baseline](https://developer.mozilla.org/en-US/blog/baseline-evolution-on-mdn/) “Widely available” (implemented in major browsers within the last 30 months).
+
+### Major (2.Y.Z)
+
+* when we bump Django to a major version
+* when we change how we store data (both in database and filesystem)
+
+### Minor (X.3.Z)
+
+* when we add new features
+* when we improve an existing feature
+* when we improve the usability
+* when we change templates
+
+If it's not a major nor a patch, it's a minor.
+
+### Patch (X.Y.12)
+
+* when there are bugfixes
