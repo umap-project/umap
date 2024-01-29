@@ -46,7 +46,7 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
+    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
     edit_settings = page.get_by_title("Edit map properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
@@ -66,7 +66,7 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     symbols.click()
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
     undefine.click()
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
+    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
 
 
 def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
@@ -147,7 +147,7 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
+    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
     edit_settings = page.get_by_title("Edit map properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()

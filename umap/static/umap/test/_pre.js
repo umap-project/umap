@@ -132,7 +132,7 @@ function initMap(options) {
         map_update_permissions: '/map/{map_id}/update/permissions/',
         map_download: '/map/{map_id}/download/',
       },
-      default_iconUrl: '../src/img/marker.png',
+      default_iconUrl: '../src/img/marker.svg',
       zoom: 6,
       share_statuses: [
         [1, 'Tout le monde (public)'],
