@@ -435,6 +435,21 @@ class MapDetailMixin:
     model = Map
     pk_url_kwarg = "map_id"
 
+    def set_preconnect(self, properties, context):
+        # Try to extract the tilelayer domain, in order to but a preconnect meta.
+        url_template = properties.get("tilelayer", {}).get("url_template")
+        # Not explicit tilelayer set, take the first of the list, which will be
+        # used by frontend too.
+        if not url_template:
+            tilelayers = properties.get("tilelayers")
+            if tilelayers:
+                url_template = tilelayers[0].get("url_template")
+        if url_template:
+            domain = urlparse(url_template).netloc
+            # Do not try to preconnect on domains with variables
+            if domain and "{" not in domain:
+                context["preconnect_domains"] = [f"//{domain}"]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -487,6 +502,7 @@ class MapDetailMixin:
         map_settings["properties"].update(properties)
         map_settings["properties"]["datalayers"] = self.get_datalayers()
         context["map_settings"] = json.dumps(map_settings, indent=settings.DEBUG)
+        self.set_preconnect(map_settings["properties"], context)
         return context
 
     def get_datalayers(self):

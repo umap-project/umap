@@ -19,7 +19,7 @@ def post_data():
     return {
         "name": "name",
         "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',  # noqa
-        "settings": '{"type":"Feature","geometry":{"type":"Point","coordinates":[5.0592041015625,52.05924589011585]},"properties":{"tilelayer":{"maxZoom":20,"url_template":"http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png","minZoom":0,"attribution":"HOT and friends"},"licence":"","description":"","name":"test enrhûmé","tilelayersControl":true,"displayDataBrowserOnLoad":false,"displayPopupFooter":true,"displayCaptionOnLoad":false,"miniMap":true,"moreControl":true,"scaleControl":true,"zoomControl":true,"datalayersControl":true,"zoom":8}}',  # noqa
+        "settings": '{"type":"Feature","geometry":{"type":"Point","coordinates":[5.0592041015625,52.05924589011585]},"properties":{"tilelayer":{"maxZoom":20,"url_template":"http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png","minZoom":0,"attribution":"HOT and friends"},"licence":"","description":"","name":"test enrhûmé","tilelayersControl":true,"displayDataBrowserOnLoad":false,"displayPopupFooter":true,"displayCaptionOnLoad":false,"miniMap":true,"moreControl":true,"scaleControl":true,"zoomControl":true,"datalayersControl":true,"zoom":8}}',  # noqa
     }
 
 
@@ -624,7 +624,7 @@ def test_download(client, map, datalayer):
             "attribution": "© OSM Contributors",
             "maxZoom": 18,
             "minZoom": 0,
-            "url_template": "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+            "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
         },
         "tilelayersControl": True,
         "zoom": 7,
