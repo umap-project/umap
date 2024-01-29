@@ -1192,7 +1192,7 @@ L.U.AttributionControl = L.Control.Attribution.extend({
         '',
         container,
         ` — ${L._('Powered by uMap')}`,
-        'https://github.com/umap-project/umap/'
+        'https://umap-project.org/'
       )
     }
     L.DomUtil.createLink('attribution-toggle', this._container, '')
