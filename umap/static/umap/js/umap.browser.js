@@ -110,13 +110,13 @@ L.U.Browser = L.Class.extend({
     const formContainer = L.DomUtil.create('div', '', container)
     const dataContainer = L.DomUtil.create('div', 'umap-browse-features', container)
 
-    const appendAll = () => {
+    const rebuildHTML = () => {
       dataContainer.innerHTML = ''
       this.map.eachBrowsableDataLayer((datalayer) => {
         this.addDatalayer(datalayer, dataContainer)
       })
     }
-    const resetLayers = () => {
+    const redrawDataLayers = () => {
       this.map.eachBrowsableDataLayer((datalayer) => {
         datalayer.resetLayer(true)
       })
@@ -129,16 +129,16 @@ L.U.Browser = L.Class.extend({
       makeDirty: false,
       callback: (e) => {
         if (e.helper.field === 'options.inBbox') {
-          if (this.options.inBbox) this.map.on('moveend', appendAll)
-          else this.map.off('moveend', appendAll)
+          if (this.options.inBbox) this.map.on('moveend', rebuildHTML)
+          else this.map.off('moveend', rebuildHTML)
         }
-        appendAll()
-        resetLayers()
+        redrawDataLayers()
+        rebuildHTML()
       },
     })
     formContainer.appendChild(builder.build())
 
-    appendAll()
+    rebuildHTML()
 
     this.map.ui.openPanel({
       data: { html: container },
