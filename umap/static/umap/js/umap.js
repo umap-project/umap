@@ -55,6 +55,7 @@ L.Map.mergeOptions({
   featuresHaveOwner: false,
 })
 
+L.U.Map.include(L.U.DataRendererMixin)
 L.U.Map.include({
   HIDDABLE_CONTROLS: [
     'zoom',
@@ -171,18 +172,40 @@ L.U.Map.include({
     })
   },
 
-  broadcastChanges: function (data) {
-    // Send changes over the wire
-    console.log(data)
-  },
-
-  updateInternalData: function () {
-    this.options.name = 'CRDTS, yeah'
-    this.options.color = 'Fushia'
+  initializeCRDT: function(data){
+    this.crdt = this.getCRDT()
+    this.populateCRDT(data)
   },
 
   getCRDT: function () {
-    return this._main_crdt.getMap('map')
+    return this._main_crdt.obj
+  },
+
+  populateCRDT: function (data) {
+    
+    let object = {}
+    for (const [key, value] of  Object.entries(data)){
+      // For now ignore embedded types
+      switch (typeof(value)){
+        case 'string':
+        case 'number':
+        case 'boolean':
+          object[key] = s.val(value)
+        default:
+      }
+    }
+    this._main_crdt.api.root({
+      zoom: val
+    })
+    console.log(this._main_crdt.view());
+
+    // for (const [key, value] of Object.entries(data)) {
+    //   this.crdt.set(key, value)
+    // }
+  },
+
+  updateCRDT: function(field, value){
+    this._main_crdt.obj.set(field, value)
   },
 
   initialize: function (el, geojson) {
@@ -408,7 +431,12 @@ L.U.Map.include({
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
-    this._main_crdt = new YJS.Doc()
+
+    // Sync with other party
+    // The dispatcher takes remote messages and route them to the proper handler
+    let receiver = new umap.MessagesReceiver(this)
+    let transport = new umap.WebSocketTransport(receiver)
+    this.broadcast = new umap.MessagesSender("map", transport)
   },
 
   initControls: function () {

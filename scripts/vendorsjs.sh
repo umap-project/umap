@@ -29,5 +29,6 @@ mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dis
 mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
 mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-statistics/dist/simple-statistics.min.js umap/static/umap/vendors/simple-statistics/
 mkdir -p umap/static/umap/vendors/iconlayers/ && cp node_modules/leaflet-iconlayers/dist/* umap/static/umap/vendors/iconlayers/
+mkdir -p umap/static/umap/vendors/y-websocket/ && cp -r node_modules/y-websocket/dist/y-websocket.cjs umap/static/umap/vendors/y-websocket/y-websocket.js
 
 echo 'Done!'

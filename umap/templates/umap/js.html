@@ -41,6 +41,7 @@
 {% if locale %}<script src="{{ STATIC_URL }}umap/locale/{{ locale }}.js" defer></script>{% endif %}
 {% compress js %}
         <script src="{{ STATIC_URL }}umap/js/umap.core.js" defer></script>
+        <script src="{{ STATIC_URL }}umap/js/umap.data.js" defer></script>
         <script src="{{ STATIC_URL }}umap/js/umap.autocomplete.js" defer></script>
         <script src="{{ STATIC_URL }}umap/js/umap.popup.js" defer></script>
         <script src="{{ STATIC_URL }}umap/js/umap.xhr.js" defer></script>

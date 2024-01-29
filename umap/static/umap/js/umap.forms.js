@@ -1260,11 +1260,14 @@ L.U.FormBuilder = L.FormBuilder.extend({
     L.FormBuilder.prototype.setter.call(this, field, value)
     if (this.options.makeDirty !== false) this.obj.isDirty = true
 
-    // FIXME: for now remove the options prefix
+    // FIXME: for now remove the options prefix if it's present.
     field = field.replace('options.', '')
-    if (this.obj.crdt) this.obj.crdt.set(field, value)
+    console.log("formbuilder object updated", this.obj)
 
-    this.obj.onPropertiesUpdated([field])
+    // FIXME: maybe name this "obj.updateProperty" / "obj.updateData",
+    // and let it trigger the rendering to expose less surface.
+    this.obj.broadcast.set(field, value)
+    this.obj.renderProperties([field])
   },
 
   finish: function () {

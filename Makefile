@@ -25,6 +25,13 @@ lint: ## Lint the code and template files
     ruff format --check --target-version=py38 . &&\
 	vermin --no-tips --violations -t=3.8- .
 
+yjs:
+	npx webpack --entry ./localyjs.js && rm -fr umap/static/umap/vendors/yjs && mkdir umap/static/umap/vendors/yjs && mv dist/main.js umap/static/umap/vendors/yjs/yjs.js
+yws:
+	npx webpack --entry ./localyws.js && rm -fr umap/static/umap/vendors/yws && mkdir umap/static/umap/vendors/yws && mv dist/main.js umap/static/umap/vendors/yws/yws.js
+serve:
+	umap runserver
+
 docs: ## Compile the docs
 	mkdocs build
 
