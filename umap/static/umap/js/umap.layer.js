@@ -926,7 +926,7 @@ L.U.DataLayer = L.Evented.extend({
               })
             }
             this.map.ui.alert({ content: message, level: 'error', duration: 10000 })
-            console.log(err)
+            console.error(err)
           }
           if (result && result.features.length) {
             callback(result)
@@ -1570,8 +1570,8 @@ L.U.DataLayer = L.Evented.extend({
 
   _trySave: async function (url, headers, formData) {
     const [data, response, error] = await this.map.server.post(url, headers, formData)
-    if (!error) {
-      if (response.status === 412) {
+    if (error) {
+      if (response && response.status === 412) {
         const msg = L._(
           'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
         )
@@ -1588,13 +1588,14 @@ L.U.DataLayer = L.Evented.extend({
             label: L._('Cancel'),
           },
         ]
-        this.ui.alert({
+        this.map.ui.alert({
           content: msg,
           level: 'error',
           duration: 100000,
           actions: actions,
         })
       }
+    } else {
       // Response contains geojson only if save has conflicted and conflicts have
       // been resolved. So we need to reload to get extra data (added by someone else)
       if (data.geojson) {
