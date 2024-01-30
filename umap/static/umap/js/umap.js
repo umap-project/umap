@@ -186,7 +186,7 @@ L.U.Map.include({
     // Needs locate control and hash to exist
     this.initCenter()
     this.handleLimitBounds()
-    this.initDatalayers()
+    this.initDataLayers()
 
     if (this.options.displayCaptionOnLoad) {
       // Retrocompat
@@ -239,8 +239,6 @@ L.U.Map.include({
       this._default_extent = true
       this.options.name = L._('Untitled map')
       this.options.editMode = 'advanced'
-      const datalayer = this.createDataLayer()
-      datalayer.connectToMap()
       this.enableEdit()
       let dataUrl = L.Util.queryString('dataUrl', null)
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
@@ -276,8 +274,6 @@ L.U.Map.include({
         this.options.onLoadPanel === 'datafilters'
       )
         this.openFacet()
-    })
-    this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) {
@@ -422,56 +418,22 @@ L.U.Map.include({
     if (this.options.scaleControl) this._controls.scale.addTo(this)
   },
 
-  initDatalayers: function () {
-    for (let j = 0; j < this.options.datalayers.length; j++) {
-      this.createDataLayer(this.options.datalayers[j])
+  initDataLayers: async function (datalayers) {
+    datalayers = datalayers || this.options.datalayers
+    for (const options of datalayers) {
+      this.createDataLayer(options)
     }
-    this.loadDatalayers()
+    await this.loadDataLayers()
   },
 
-  loadDatalayers: function (force) {
-    const total = this.datalayers_index.length
-    // toload => datalayer metadata remaining to load (synchronous)
-    // dataToload => datalayer data remaining to load (asynchronous)
-    let toload = total,
-      dataToload = total
-    let datalayer
-    const loaded = () => {
-      this.datalayersLoaded = true
-      this.fire('datalayersloaded')
+  loadDataLayers: async function () {
+    this.datalayersLoaded = true
+    this.fire('datalayersloaded')
+    for (const datalayer of Object.values(this.datalayers)) {
+      if (datalayer.showAtLoad()) await datalayer.show()
     }
-    const decrementToLoad = () => {
-      toload--
-      if (toload === 0) loaded()
-    }
-    const dataLoaded = () => {
-      this.dataLoaded = true
-      this.fire('dataloaded')
-    }
-    const decrementDataToLoad = () => {
-      dataToload--
-      if (dataToload === 0) dataLoaded()
-    }
-    this.eachDataLayer(function (datalayer) {
-      if (force && !datalayer.hasDataLoaded()) {
-        datalayer.show()
-      }
-      if (datalayer.showAtLoad() || force) {
-        datalayer.onceLoaded(decrementToLoad)
-      } else {
-        decrementToLoad()
-      }
-      if (datalayer.showAtLoad() || force) {
-        datalayer.onceDataLoaded(decrementDataToLoad)
-      } else {
-        decrementDataToLoad({ sourceTarget: datalayer })
-      }
-    })
-    if (total === 0) {
-      // no datalayer
-      loaded()
-      dataLoaded()
-    }
+    this.dataloaded = true
+    this.fire('dataloaded')
   },
 
   indexDatalayers: function () {
@@ -504,7 +466,7 @@ L.U.Map.include({
 
   onceDataLoaded: function (callback, context) {
     // Once datalayers **data** have been loaded
-    if (this.dataLoaded) {
+    if (this.dataloaded) {
       callback.call(context || this, this)
     } else {
       this.once('dataloaded', callback, context)

@@ -581,8 +581,10 @@ L.U.DataLayer = L.Evented.extend({
     this.backupOptions()
     this.connectToMap()
     this.permissions = new L.U.DataLayerPermissions(this)
-    if (this.showAtLoad()) this.show()
-    if (!this.umap_id) this.isDirty = true
+    if (!this.umap_id) {
+      if (this.showAtLoad()) this.show()
+      this.isDirty = true
+    }
 
     this.onceLoaded(function () {
       this.map.on('moveend', this.onMoveEnd, this)
@@ -1431,9 +1433,9 @@ L.U.DataLayer = L.Evented.extend({
     return features
   },
 
-  show: function () {
-    if (!this.isLoaded()) this.fetchData()
+  show: async function () {
     this.map.addLayer(this.layer)
+    if (!this.isLoaded()) await this.fetchData()
     this.fire('show')
   },
 
