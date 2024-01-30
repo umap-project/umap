@@ -41,12 +41,38 @@ def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
     expect(meta).to_have_count(0)
 
 
+def test_default_view_without_datalayer_should_use_default_center(
+    map, live_server, datalayer, page
+):
+    datalayer.settings["displayOnLoad"] = False
+    datalayer.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    # Hash is defined, so map is initialized
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
+    layers = page.locator(".umap-browse-datalayers li")
+    expect(layers).to_have_count(1)
+
+
 def test_default_view_latest_without_datalayer_should_use_default_center(
     map, live_server, datalayer, page
 ):
     datalayer.settings["displayOnLoad"] = False
     datalayer.save()
     map.settings["properties"]["defaultView"] = "latest"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    # Hash is defined, so map is initialized
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
+    layers = page.locator(".umap-browse-datalayers li")
+    expect(layers).to_have_count(1)
+
+
+def test_default_view_data_without_datalayer_should_use_default_center(
+    map, live_server, datalayer, page
+):
+    datalayer.settings["displayOnLoad"] = False
+    datalayer.save()
+    map.settings["properties"]["defaultView"] = "data"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     # Hash is defined, so map is initialized
@@ -193,3 +219,12 @@ def test_basic_choropleth_map(map, live_server, page):
     # Bretagne, Pays de la Loire, AURA
     paths = page.locator("path[fill='#eff3ff']")
     expect(paths).to_have_count(3)
+
+
+def test_minimap_on_load(map, live_server, datalayer, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-minimap")).to_be_hidden()
+    map.settings["properties"]["miniMap"] = True
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-minimap")).to_be_visible()
