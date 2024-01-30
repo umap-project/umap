@@ -75,6 +75,10 @@
     <script src="../../../../node_modules/chai/chai.js"></script>
     <script src="../../../../node_modules/happen/happen.js"></script>
     <link rel="stylesheet" href="../../../../node_modules/mocha/mocha.css" />
+    <script type="module">
+      import fetchMock from '../../../../node_modules/fetch-mock/esm/client.js';
+      window.fetchMock = fetchMock
+    </script>
     <script type="text/javascript">
       mocha.setup({
         ui: 'bdd',

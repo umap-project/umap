@@ -1,21 +1,25 @@
 describe('L.U.FeatureMixin', function () {
-  before(function () {
-    this.server = sinon.fakeServer.create()
-    this.server.respondWith(
+  let map, datalayer
+  before(async () => {
+    await fetchMock.mock(
       /\/datalayer\/62\/\?.*/,
       JSON.stringify(RESPONSES.datalayer62_GET)
     )
-    this.map = initMap({ umap_id: 99 })
-    this.datalayer = this.map.getDataLayerByUmapId(62)
-    this.server.respond()
+    this.options = {
+      umap_id: 99,
+    }
+    MAP = map = initMap({ umap_id: 99 })
+    const datalayer_options = defaultDatalayerData()
+    await map.initDataLayers([datalayer_options])
+    datalayer = map.getDataLayerByUmapId(62)
   })
   after(function () {
-    this.server.restore()
+    fetchMock.restore()
     resetMap()
   })
 
   describe('#edit()', function () {
-    var link
+    let link
 
     it('should have datalayer features created', function () {
       assert.equal(
@@ -45,7 +49,7 @@ describe('L.U.FeatureMixin', function () {
 
     it('should take into account styles changes made in the datalayer', function () {
       happen.click(
-        qs('#browse_data_toggle_' + L.stamp(this.datalayer) + ' .layer-edit')
+        qs('#browse_data_toggle_' + L.stamp(datalayer) + ' .layer-edit')
       )
       var colorInput = qs('form#datalayer-advanced-properties input[name=color]')
       changeInputValue(colorInput, 'DarkRed')
@@ -101,7 +105,7 @@ describe('L.U.FeatureMixin', function () {
 
     it('should not override already set style on features', function () {
       happen.click(
-        qs('#browse_data_toggle_' + L.stamp(this.datalayer) + ' .layer-edit')
+        qs('#browse_data_toggle_' + L.stamp(datalayer) + ' .layer-edit')
       )
       changeInputValue(qs('#umap-ui-container form input[name=color]'), 'Chocolate')
       assert.notOk(qs('path[fill="DarkBlue"]'))
@@ -120,22 +124,22 @@ describe('L.U.FeatureMixin', function () {
 
     it('should set map.editedFeature on edit', function () {
       enableEdit()
-      assert.notOk(this.map.editedFeature)
+      assert.notOk(map.editedFeature)
       happen.click(qs('path[fill="DarkBlue"]'))
       happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
-      assert.ok(this.map.editedFeature)
+      assert.ok(map.editedFeature)
       disableEdit()
     })
 
     it('should reset map.editedFeature on panel open', function (done) {
       enableEdit()
-      assert.notOk(this.map.editedFeature)
+      assert.notOk(map.editedFeature)
       happen.click(qs('path[fill="DarkBlue"]'))
       happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
-      assert.ok(this.map.editedFeature)
-      this.map.displayCaption()
+      assert.ok(map.editedFeature)
+      map.displayCaption()
       window.setTimeout(function () {
-        assert.notOk(this.map.editedFeature)
+        assert.notOk(map.editedFeature)
         disableEdit()
         done()
       }, 1001) // CSS transition time.
@@ -155,7 +159,7 @@ describe('L.U.FeatureMixin', function () {
       })
     }
     it('should generate a valid geojson', function () {
-      setFeatures(this.datalayer)
+      setFeatures(datalayer)
       assert.ok(poly)
       assert.deepEqual(poly.toGeoJSON().geometry, {
         type: 'Polygon',
@@ -176,7 +180,7 @@ describe('L.U.FeatureMixin', function () {
     })
 
     it('should remove empty _umap_options from exported geojson', function () {
-      setFeatures(this.datalayer)
+      setFeatures(datalayer)
       assert.ok(poly)
       assert.deepEqual(poly.toGeoJSON().properties, { name: 'name poly' })
       assert.ok(marker)
@@ -190,7 +194,7 @@ describe('L.U.FeatureMixin', function () {
   describe('#openPopup()', function () {
     let poly
     before(function () {
-      this.datalayer.eachLayer(function (layer) {
+      datalayer.eachLayer(function (layer) {
         if (!poly && layer instanceof L.Polygon) {
           poly = layer
         }
@@ -233,8 +237,8 @@ describe('L.U.FeatureMixin', function () {
     })
 
     it('should still highlight marker after hide() and show()', function () {
-      this.datalayer.hide()
-      this.datalayer.show()
+      datalayer.hide()
+      datalayer.show()
       happen.click(qs('div.leaflet-marker-icon'))
       assert.ok(qs('.umap-icon-active'))
     })
@@ -254,9 +258,9 @@ describe('L.U.FeatureMixin', function () {
 
   describe('#tooltip', function () {
     it('should have a tooltip when active and allow variables', function () {
-      this.map.options.showLabel = true
-      this.map.options.labelKey = 'Foo {name}'
-      this.datalayer.redraw()
+      map.options.showLabel = true
+      map.options.labelKey = 'Foo {name}'
+      datalayer.redraw()
       assert.equal(
         qs('.leaflet-tooltip-pane .leaflet-tooltip').textContent,
         'Foo name poly'
@@ -266,7 +270,7 @@ describe('L.U.FeatureMixin', function () {
 
   describe('#properties()', function () {
     it('should rename property', function () {
-      var poly = this.datalayer._lineToLayer({}, [
+      var poly = datalayer._lineToLayer({}, [
         [0, 0],
         [0, 1],
         [0, 2],
@@ -278,7 +282,7 @@ describe('L.U.FeatureMixin', function () {
     })
 
     it('should not create property when renaming', function () {
-      var poly = this.datalayer._lineToLayer({}, [
+      var poly = datalayer._lineToLayer({}, [
         [0, 0],
         [0, 1],
         [0, 2],
@@ -289,7 +293,7 @@ describe('L.U.FeatureMixin', function () {
     })
 
     it('should delete property', function () {
-      var poly = this.datalayer._lineToLayer({}, [
+      var poly = datalayer._lineToLayer({}, [
         [0, 0],
         [0, 1],
         [0, 2],
@@ -305,7 +309,7 @@ describe('L.U.FeatureMixin', function () {
     var poly
 
     it('should filter on properties', function () {
-      poly = this.datalayer._lineToLayer({}, [
+      poly = datalayer._lineToLayer({}, [
         [0, 0],
         [0, 1],
         [0, 2],
@@ -337,7 +341,7 @@ describe('L.U.FeatureMixin', function () {
         return true
       }
 
-      this.datalayer.eachLayer(function (layer) {
+      datalayer.eachLayer(function (layer) {
         if (!poly && layer instanceof L.Polygon) {
           poly = layer
         }
@@ -351,7 +355,7 @@ describe('L.U.FeatureMixin', function () {
     it('should allow to delete from data browser', function () {
       enableEdit()
       assert.ok(qs('path[fill="DarkBlue"]'))
-      this.map.openBrowser()
+      map.openBrowser()
       happen.click(qs('.feature-delete'))
       assert.notOk(qs('path[fill="DarkBlue"]'))
       clickCancel()

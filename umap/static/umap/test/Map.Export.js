@@ -1,26 +1,26 @@
 describe('L.U.Map.Export', function () {
-  before(function () {
-    this.server = sinon.fakeServer.create()
-    this.server.respondWith(
+  let map
+  before(async () => {
+    await fetchMock.mock(
       /\/datalayer\/62\/\?.*/,
       JSON.stringify(RESPONSES.datalayer62_GET)
     )
     this.options = {
       umap_id: 99,
     }
-    this.map = initMap({ umap_id: 99 })
-    this.server.respond()
-    this.datalayer = this.map.getDataLayerByUmapId(62)
+    map = initMap({ umap_id: 99 })
+    const datalayer_options = defaultDatalayerData()
+    await map.initDataLayers([datalayer_options])
   })
   after(function () {
-    this.server.restore()
+    fetchMock.restore()
     clickCancel()
     resetMap()
   })
 
   describe('#formatters()', function () {
     it('should export to geojson', function () {
-      const { content, filetype, filename } = this.map.share.format('geojson')
+      const { content, filetype, filename } = map.share.format('geojson')
       assert.equal(filetype, 'application/json')
       assert.equal(filename, 'name_of_the_map.geojson')
       assert.deepEqual(JSON.parse(content), {
@@ -86,7 +86,7 @@ describe('L.U.Map.Export', function () {
     })
 
     it('should export to gpx', function () {
-      const { content, filetype, filename } = this.map.share.format('gpx')
+      const { content, filetype, filename } = map.share.format('gpx')
       assert.equal(filetype, 'application/gpx+xml')
       assert.equal(filename, 'name_of_the_map.gpx')
       const expected =
@@ -95,7 +95,7 @@ describe('L.U.Map.Export', function () {
     })
 
     it('should export to kml', function () {
-      const { content, filetype, filename } = this.map.share.format('kml')
+      const { content, filetype, filename } = map.share.format('kml')
       assert.equal(filetype, 'application/vnd.google-earth.kml+xml')
       assert.equal(filename, 'name_of_the_map.kml')
       const expected =

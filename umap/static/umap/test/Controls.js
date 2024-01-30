@@ -1,23 +1,27 @@
-describe('L.U.Controls', function () {
-  before(function () {
-    this.server = sinon.fakeServer.create()
-    this.server.respondWith(
+describe('L.U.Controls', () => {
+  let map, datalayer
+  before(async () => {
+    await fetchMock.mock(
       /\/datalayer\/62\/\?.*/,
       JSON.stringify(RESPONSES.datalayer62_GET)
     )
-    this.map = initMap({ umap_id: 99 })
-    this.server.respond()
-    this.datalayer = this.map.getDataLayerByUmapId(62)
+    this.options = {
+      umap_id: 99,
+    }
+    MAP = map = initMap({ umap_id: 99 })
+    const datalayer_options = defaultDatalayerData()
+    await map.initDataLayers([datalayer_options])
+    datalayer = map.getDataLayerByUmapId(62)
   })
-  after(function () {
-    this.server.restore()
+  after(() => {
+    fetchMock.restore()
     resetMap()
   })
 
-  describe('#databrowser()', function () {
+  describe('#databrowser()', () => {
     let poly, marker, line
-    before(function () {
-      this.datalayer.eachLayer(function (layer) {
+    before(() => {
+      datalayer.eachLayer(function (layer) {
         if (!poly && layer instanceof L.Polygon) {
           poly = layer
         } else if (!line && layer instanceof L.Polyline) {
@@ -28,27 +32,27 @@ describe('L.U.Controls', function () {
       })
     })
 
-    it('should be opened at datalayer button click', function () {
+    it('should be opened at datalayer button click', () => {
       var button = qs('.umap-browse-actions .umap-browse-link')
       assert.ok(button)
       happen.click(button)
       assert.ok(qs('#umap-ui-container .umap-browse-data'))
     })
 
-    it('should contain datalayer section', function () {
+    it('should contain datalayer section', () => {
       assert.ok(qs('#browse_data_datalayer_62'))
     })
 
-    it("should contain datalayer's features list", function () {
+    it("should contain datalayer's features list", () => {
       assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
     })
 
-    it('should sort feature in natural order', function () {
+    it('should sort feature in natural order', () => {
       poly.properties.name = '9. a poly'
       marker.properties.name = '1. a marker'
       line.properties.name = '100. a line'
-      this.datalayer.reindex()
-      this.map.openBrowser()
+      datalayer.reindex()
+      map.openBrowser()
       const els = qsa('.umap-browse-features li')
       assert.equal(els.length, 3)
       assert.equal(els[0].textContent, '1. a marker')
@@ -56,9 +60,9 @@ describe('L.U.Controls', function () {
       assert.equal(els[2].textContent, '100. a line')
     })
 
-    it("should redraw datalayer's features list at feature delete", function () {
+    it("should redraw datalayer's features list at feature delete", () => {
       var oldConfirm = window.confirm
-      window.confirm = function () {
+      window.confirm = () => {
         return true
       }
       enableEdit()
@@ -68,21 +72,21 @@ describe('L.U.Controls', function () {
       window.confirm = oldConfirm
     })
 
-    it("should redraw datalayer's features list on edit cancel", function () {
+    it("should redraw datalayer's features list on edit cancel", () => {
       clickCancel()
       happen.click(qs('.umap-browse-actions .umap-browse-link'))
       assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
     })
   })
 
-  describe('#exportPanel()', function () {
-    it('should be opened at datalayer button click', function () {
+  describe('#exportPanel()', () => {
+    it('should be opened at datalayer button click', () => {
       let button = qs('.leaflet-control-embed button')
       assert.ok(button)
       happen.click(button)
       assert.ok(qs('#umap-ui-container .umap-share'))
     })
-    it('should update iframe link', function () {
+    it('should update iframe link', () => {
       let textarea = qs('.umap-share-iframe')
       assert.ok(textarea)
       console.log(textarea.textContent)

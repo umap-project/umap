@@ -213,7 +213,6 @@ function initMap(options) {
       },
     },
   }
-  default_options.properties.datalayers.push(defaultDatalayerData())
   options = options || {}
   options.properties = L.extend({}, default_options.properties, options)
   options.geometry = {
@@ -384,10 +383,6 @@ var RESPONSES = {
       },
     ],
   },
-}
-
-sinon.fakeServer.flush = function () {
-  this.responses = []
 }
 
 var kml_example =
