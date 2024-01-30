@@ -1,14 +1,17 @@
 // Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
 import { Evented, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 
-export class HTTPError extends Error {
+
+export class RequestError extends Error {}
+
+export class HTTPError extends RequestError {
   constructor(message) {
     super(message)
     this.name = this.constructor.name
   }
 }
 
-export class NOKError extends Error {
+export class NOKError extends RequestError {
   constructor(response) {
     super(response.status)
     this.response = response
