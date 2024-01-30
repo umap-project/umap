@@ -797,6 +797,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   setOptions: function (options) {
+    delete options.geojson
     this.options = L.Util.CopyJSON(L.U.DataLayer.prototype.options) // Start from fresh.
     this.updateOptions(options)
   },
