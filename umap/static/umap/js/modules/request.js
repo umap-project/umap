@@ -8,7 +8,7 @@ export class HTTPError extends Error {
   }
 }
 
-export class NokError extends Error {
+export class NOKError extends Error {
   constructor(response) {
     super(response.status)
     this.response = response
@@ -37,7 +37,7 @@ const BaseRequest = Evented.extend({
     }
     if (!response.ok) {
       this.fire('dataload', { id: id })
-      throw new NokError(response.status)
+      throw new NOKError(response)
     }
     // TODO
     // - error handling
@@ -68,7 +68,7 @@ export const Request = BaseRequest.extend({
       )
       return response
     } catch (error) {
-      if (error instanceof NokError) return this._onNok(error)
+      if (error instanceof NOKError) return this._onNOK(error)
       return this._onError(error)
     }
   },
@@ -85,7 +85,7 @@ export const Request = BaseRequest.extend({
     this.ui.alert({ content: L._('Problem in the response'), level: 'error' })
   },
 
-  _onNok: function (error) {
+  _onNOK: function (error) {
     this._onError(error)
     return error.response
   },
@@ -145,7 +145,7 @@ export const ServerRequest = Request.extend({
     return [{}, null, error]
   },
 
-  _onNok: function (error) {
+  _onNOK: function (error) {
     if (error.status === 403) {
       this.ui.alert({
         content: message || L._('Action not allowed :('),
