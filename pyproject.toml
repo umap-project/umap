@@ -15,7 +15,7 @@ maintainers = [
 ]
 homepage = "https://github.com/umap-project/umap"
 keywords = ["django", "leaflet", "geodjango", "openstreetmap", "map"]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
@@ -23,14 +23,12 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "Django==4.2",
+  "Django==5.0.1",
   "django-agnocomplete==2.2.0",
   "django-environ==0.10.0",
   "django-probes==1.7.0",
