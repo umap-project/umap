@@ -333,35 +333,6 @@ describe('L.U.FeatureMixin', function () {
     })
   })
 
-  describe('#quick-delete()', function () {
-    let poly, _confirm
-    before(function () {
-      _confirm = window.confirm
-      window.confirm = function (text) {
-        return true
-      }
-
-      datalayer.eachLayer(function (layer) {
-        if (!poly && layer instanceof L.Polygon) {
-          poly = layer
-        }
-      })
-    })
-
-    after(function () {
-      window.confirm = _confirm
-    })
-
-    it('should allow to delete from data browser', function () {
-      enableEdit()
-      assert.ok(qs('path[fill="DarkBlue"]'))
-      map.openBrowser()
-      happen.click(qs('.feature-delete'))
-      assert.notOk(qs('path[fill="DarkBlue"]'))
-      clickCancel()
-    })
-  })
-
   describe('#changeDataLayer()', function () {
     it('should change style on datalayer select change', function () {
       enableEdit()

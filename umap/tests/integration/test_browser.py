@@ -1,7 +1,10 @@
+from copy import deepcopy
 from time import sleep
 
 import pytest
 from playwright.sync_api import expect
+
+from umap.models import Map
 
 from ..base import DataLayerFactory
 
@@ -170,3 +173,46 @@ def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
     expect(page.get_by_text("one point in france (point)")).to_be_visible()
     expect(page.get_by_text("one line in new zeland (line)")).to_be_visible()
     expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_visible()
+
+
+def test_can_open_databrowser_from_layers_list(live_server, map, page, bootstrap):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.get_by_title("See data layers").click()
+    page.get_by_role("button", name="Browse data").click()
+    browser = page.locator(".umap-browse-data")
+    expect(browser).to_be_visible()
+    expect(browser.get_by_text("test datalayer")).to_be_visible()
+    expect(browser.get_by_text("one point in france")).to_be_visible()
+    expect(browser.get_by_text("one line in new zeland")).to_be_visible()
+    expect(browser.get_by_text("one polygon in greenland")).to_be_visible()
+
+
+def test_should_sort_features_in_natural_order(live_server, map, page):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    datalayer_data = deepcopy(DATALAYER_DATA)
+    datalayer_data["features"][0]["properties"]["name"] = "9. a marker"
+    datalayer_data["features"][1]["properties"]["name"] = "1. a poly"
+    datalayer_data["features"][2]["properties"]["name"] = "100. a line"
+    DataLayerFactory(map=map, data=datalayer_data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    features = page.locator(".umap-browse-data li")
+    expect(features).to_have_count(3)
+    expect(features.nth(0)).to_have_text("1. a poly")
+    expect(features.nth(1)).to_have_text("9. a marker")
+    expect(features.nth(2)).to_have_text("100. a line")
+
+
+def test_should_redraw_list_on_feature_delete(live_server, map, page, bootstrap):
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    # Enable edit
+    page.get_by_role("button", name="Edit").click()
+    buttons = page.locator(".umap-browse-data li .feature-delete")
+    expect(buttons).to_have_count(3)
+    page.on("dialog", lambda dialog: dialog.accept())
+    buttons.nth(0).click()
+    expect(buttons).to_have_count(2)
+    page.get_by_role("button", name="Cancel edits").click()
+    expect(buttons).to_have_count(3)

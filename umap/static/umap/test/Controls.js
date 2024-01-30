@@ -18,67 +18,6 @@ describe('L.U.Controls', () => {
     resetMap()
   })
 
-  describe('#databrowser()', () => {
-    let poly, marker, line
-    before(() => {
-      datalayer.eachLayer(function (layer) {
-        if (!poly && layer instanceof L.Polygon) {
-          poly = layer
-        } else if (!line && layer instanceof L.Polyline) {
-          line = layer
-        } else if (!marker && layer instanceof L.Marker) {
-          marker = layer
-        }
-      })
-    })
-
-    it('should be opened at datalayer button click', () => {
-      var button = qs('.umap-browse-actions .umap-browse-link')
-      assert.ok(button)
-      happen.click(button)
-      assert.ok(qs('#umap-ui-container .umap-browse-data'))
-    })
-
-    it('should contain datalayer section', () => {
-      assert.ok(qs('#browse_data_datalayer_62'))
-    })
-
-    it("should contain datalayer's features list", () => {
-      assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
-    })
-
-    it('should sort feature in natural order', () => {
-      poly.properties.name = '9. a poly'
-      marker.properties.name = '1. a marker'
-      line.properties.name = '100. a line'
-      datalayer.reindex()
-      map.openBrowser()
-      const els = qsa('.umap-browse-features li')
-      assert.equal(els.length, 3)
-      assert.equal(els[0].textContent, '1. a marker')
-      assert.equal(els[1].textContent, '9. a poly')
-      assert.equal(els[2].textContent, '100. a line')
-    })
-
-    it("should redraw datalayer's features list at feature delete", () => {
-      var oldConfirm = window.confirm
-      window.confirm = () => {
-        return true
-      }
-      enableEdit()
-      happen.once(qs('path[fill="DarkBlue"]'), { type: 'contextmenu' })
-      happen.click(qs('.leaflet-contextmenu .umap-delete'))
-      assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 2)
-      window.confirm = oldConfirm
-    })
-
-    it("should redraw datalayer's features list on edit cancel", () => {
-      clickCancel()
-      happen.click(qs('.umap-browse-actions .umap-browse-link'))
-      assert.equal(qsa('#browse_data_datalayer_62 ul li').length, 3)
-    })
-  })
-
   describe('#exportPanel()', () => {
     it('should be opened at datalayer button click', () => {
       let button = qs('.leaflet-control-embed button')
