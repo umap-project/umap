@@ -1,6 +1,15 @@
 L.U.FeatureMixin = {
   staticOptions: { mainColor: 'color' },
 
+  sync: function(properties){
+    if ('latlng' in properties)
+      this._latlng
+  },
+
+  renderProperties: function(properties){
+
+  },
+
   initialize: function (map, latlng, options) {
     this.map = map
     if (typeof options === 'undefined') {
@@ -562,6 +571,7 @@ L.U.Marker = L.Marker.extend({
       function (e) {
         this.isDirty = true
         this.edit(e)
+        this.sync(["latlng"])
       },
       this
     )
