@@ -1322,10 +1322,10 @@ a.add-datalayer:hover,
     margin: 5px;
 }
 a[href^='mailto']::before {
-  content: '🖃 ';
+  content: '✉︎ ';
 }
 a[href^='tel']::before {
-  content: '🕿 ';
+  content: '☎︎ ';
 }
 address span {
     padding-right: 5px;

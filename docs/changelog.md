@@ -42,7 +42,7 @@
 - `umap/templates/umap/map_table.html`
 - `umap/templates/umap/user_dashboard.html`
 
-[See the diff](https://github.com/umap-project/umap/compare/1.12.2...1.13.0#diff-1311890945256dbddf0e59928c2e9d4f59fd6bcc6b1fd33719ef35f03e5168b4).
+[See the diff](https://github.com/umap-project/umap/compare/1.12.2...1.13.0#files_bucket).
 
 ## 1.12.2 - 2023-12-29
 

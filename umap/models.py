@@ -216,7 +216,7 @@ class Map(NamedModel):
                 "umap_id": self.pk,
                 "onLoadPanel": "none",
                 "captionBar": False,
-                "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,
+                "default_iconUrl": "%sumap/img/marker.svg" % settings.STATIC_URL,
                 "slideshow": {},
             }
         )

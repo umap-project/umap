@@ -18,20 +18,23 @@ from django.contrib.auth import logout as do_logout
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
 from django.http import (
+    Http404,
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
     HttpResponsePermanentRedirect,
     HttpResponseRedirect,
+    HttpResponseServerError,
 )
 from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import resolve, reverse, reverse_lazy
 from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
 from django.utils.timezone import make_aware
@@ -118,13 +121,26 @@ class PublicMapsMixin(object):
         maps = qs.order_by("-modified_at")
         return maps
 
+    def get_highlighted_maps(self):
+        staff = User.objects.filter(is_staff=True)
+        stars = Star.objects.filter(by__in=staff).values("map")
+        qs = Map.public.filter(pk__in=stars)
+        maps = qs.order_by("-modified_at")
+        return maps
+
 
 class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
     template_name = "umap/home.html"
     list_template_name = "umap/map_list.html"
 
     def get_context_data(self, **kwargs):
-        maps = self.get_public_maps()
+        if settings.UMAP_HOME_FEED is None:
+            maps = []
+        elif settings.UMAP_HOME_FEED == "highlighted":
+            maps = self.get_highlighted_maps()
+        else:
+            maps = self.get_public_maps()
+        maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
         demo_map = None
         if hasattr(settings, "UMAP_DEMO_PK"):
@@ -139,8 +155,6 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
                 showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
             except Map.DoesNotExist:
                 pass
-
-        maps = self.paginate(maps, settings.UMAP_MAPS_PER_PAGE)
 
         return {
             "maps": maps,
@@ -421,6 +435,21 @@ class MapDetailMixin:
     model = Map
     pk_url_kwarg = "map_id"
 
+    def set_preconnect(self, properties, context):
+        # Try to extract the tilelayer domain, in order to but a preconnect meta.
+        url_template = properties.get("tilelayer", {}).get("url_template")
+        # Not explicit tilelayer set, take the first of the list, which will be
+        # used by frontend too.
+        if not url_template:
+            tilelayers = properties.get("tilelayers")
+            if tilelayers:
+                url_template = tilelayers[0].get("url_template")
+        if url_template:
+            domain = urlparse(url_template).netloc
+            # Do not try to preconnect on domains with variables
+            if domain and "{" not in domain:
+                context["preconnect_domains"] = [f"//{domain}"]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -428,7 +457,7 @@ class MapDetailMixin:
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
             "editMode": self.edit_mode,
-            "default_iconUrl": "%sumap/img/marker.png" % settings.STATIC_URL,  # noqa
+            "default_iconUrl": "%sumap/img/marker.svg" % settings.STATIC_URL,  # noqa
             "umap_id": self.get_umap_id(),
             "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
@@ -473,6 +502,7 @@ class MapDetailMixin:
         map_settings["properties"].update(properties)
         map_settings["properties"]["datalayers"] = self.get_datalayers()
         context["map_settings"] = json.dumps(map_settings, indent=settings.DEBUG)
+        self.set_preconnect(map_settings["properties"], context)
         return context
 
     def get_datalayers(self):
@@ -525,6 +555,16 @@ class PermissionsMixin:
 
 
 class MapView(MapDetailMixin, PermissionsMixin, DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["oembed_absolute_uri"] = self.request.build_absolute_uri(
+            reverse("map_oembed")
+        )
+        context["absolute_uri"] = self.request.build_absolute_uri(
+            self.object.get_absolute_url()
+        )
+        return context
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         canonical = self.get_canonical_url()
@@ -604,6 +644,52 @@ class MapDownload(DetailView):
             "Content-Disposition"
         ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
         return response
+
+
+class MapOEmbed(View):
+    def get(self, request, *args, **kwargs):
+        data = {"type": "rich", "version": "1.0"}
+        format_ = request.GET.get("format", "json")
+        if format_ != "json":
+            response = HttpResponseServerError("Only `json` format is implemented.")
+            response.status_code = 501
+            return response
+
+        url = request.GET.get("url")
+        if not url:
+            raise Http404("Missing `url` parameter.")
+
+        parsed_url = urlparse(url)
+        netloc = parsed_url.netloc
+        allowed_hosts = settings.ALLOWED_HOSTS
+        if parsed_url.hostname not in allowed_hosts and allowed_hosts != ["*"]:
+            raise Http404("Host not allowed.")
+
+        url_path = parsed_url.path
+        view, args, kwargs = resolve(url_path)
+        if "slug" not in kwargs or "map_id" not in kwargs:
+            raise Http404("Invalid URL path.")
+
+        map_ = Map.objects.get(id=kwargs["map_id"], slug=kwargs["slug"])
+
+        if map_.share_status != Map.PUBLIC:
+            raise PermissionDenied("This map is not public.")
+
+        map_url = map_.get_absolute_url()
+        label = _("See full screen")
+        height = 300
+        data["height"] = height
+        width = 800
+        data["width"] = width
+        # TODISCUSS: do we keep width=100% by default for the iframe?
+        html = (
+            f'<iframe width="100%" height="{height}px" '
+            f'frameborder="0" allowfullscreen allow="geolocation" '
+            f'src="//{netloc}{map_url}"></iframe>'
+            f'<p><a href="//{netloc}{map_url}">{label}</a></p>'
+        )
+        data["html"] = html
+        return simple_json_response(**data)
 
 
 class MapViewGeoJSON(MapView):

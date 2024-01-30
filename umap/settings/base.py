@@ -255,6 +255,7 @@ DATABASES = {"default": env.db(default="postgis://localhost:5432/umap")}
 UMAP_DEFAULT_SHARE_STATUS = None
 UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
+UMAP_HOME_FEED = "latest"
 
 UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True

@@ -12,6 +12,35 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
+def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    meta = page.locator('link[rel="preconnect"]')
+    expect(meta).to_have_count(1)
+    expect(meta).to_have_attribute("href", "//a.tile.openstreetmap.fr")
+    # Add custom tilelayer
+    map.settings["properties"]["tilelayer"] = {
+        "name": "OSM Piano FR",
+        "maxZoom": 20,
+        "minZoom": 0,
+        "attribution": "test",
+        "url_template": "https://a.piano.tiles.quaidorsay.fr/fr{r}/{z}/{x}/{y}.png",
+    }
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(meta).to_have_attribute("href", "//a.piano.tiles.quaidorsay.fr")
+    # Add custom tilelayer with variable in domain, should create a preconnect
+    map.settings["properties"]["tilelayer"] = {
+        "name": "OSM Piano FR",
+        "maxZoom": 20,
+        "minZoom": 0,
+        "attribution": "test",
+        "url_template": "https://{s}.piano.tiles.quaidorsay.fr/fr{r}/{z}/{x}/{y}.png",
+    }
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(meta).to_have_count(0)
+
+
 def test_default_view_latest_without_datalayer_should_use_default_center(
     map, live_server, datalayer, page
 ):
