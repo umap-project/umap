@@ -71,6 +71,7 @@ def test_data_browser_should_be_open(live_server, page, bootstrap, map):
 
 def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator(".leaflet-overlay-pane path")
     expect(markers).to_have_count(1)
@@ -78,6 +79,8 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     filter_ = page.locator("input[name='filter']")
     expect(filter_).to_be_visible()
     filter_.type("poly")
+    expect(page.get_by_title("Features in this layer: 1/3")).to_be_visible()
+    expect(page.get_by_title("Features in this layer: 1/3")).to_have_text("1/3")
     expect(page.get_by_text("one point in france")).to_be_hidden()
     expect(page.get_by_text("one line in new zeland")).to_be_hidden()
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()

@@ -62,8 +62,6 @@ L.U.Browser = L.Class.extend({
     container.id = `browse_data_datalayer_${datalayer.umap_id}`
     datalayer.renderToolbox(headline)
     L.DomUtil.add('span', '', headline, datalayer.options.name)
-    const counter = L.DomUtil.add('span', 'datalayer-counter', headline, datalayer.count())
-    counter.title = L._('{count} features in this layer', {count: datalayer.count()})
     const ul = L.DomUtil.create('ul', '', container)
     L.DomUtil.classIf(container, 'off', !datalayer.isVisible())
 
@@ -82,6 +80,11 @@ L.U.Browser = L.Class.extend({
     }
 
     build()
+    let total = datalayer.count(),
+      current = ul.querySelectorAll('li').length,
+      count = total == current ? total : `${current}/${total}`
+    const counter = L.DomUtil.add('span', 'datalayer-counter', headline, count)
+    counter.title = L._('Features in this layer: {count}', {count: count})
     datalayer.on('datachanged', build)
     datalayer.map.ui.once('panel:closed', () => {
       datalayer.off('datachanged', build)
