@@ -1,7 +1,6 @@
 // Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
 import { Evented, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 
-
 export class RequestError extends Error {}
 
 export class HTTPError extends RequestError {
@@ -20,10 +19,8 @@ export class NOKError extends RequestError {
   }
 }
 
-const BaseRequest = Evented.extend({
-  _fetch: async function (method, uri, headers, data) {
-    const id = Math.random()
-    this.fire('dataloading', { id: id })
+class BaseRequest {
+  async _fetch(method, uri, headers, data) {
     let response
 
     try {
@@ -35,32 +32,29 @@ const BaseRequest = Evented.extend({
       })
     } catch (error) {
       console.error(error)
-      this.fire('dataload', { id: id })
       throw new HTTPError(error.message)
     }
     if (!response.ok) {
-      this.fire('dataload', { id: id })
       throw new NOKError(response)
     }
-    // TODO
-    // - error handling
-    // - UI connection / events
 
-    this.fire('dataload', { id: id })
     return response
-  },
-})
+  }
+}
 
 // Basic class to issue request
 // It returns a response, or null in case of error
 // In case of error, an alert is sent, but non 20X status are not handled
 // The consumer must check the response status by hand
-export const Request = BaseRequest.extend({
-  initialize: function (ui) {
+export class Request extends BaseRequest {
+  constructor(ui) {
+    super()
     this.ui = ui
-  },
+  }
 
-  _fetch: async function (method, uri, headers, data) {
+  async _fetch(method, uri, headers, data) {
+    const id = Math.random()
+    this.ui.fire('dataloading', { id: id })
     try {
       const response = await BaseRequest.prototype._fetch.call(
         this,
@@ -73,43 +67,44 @@ export const Request = BaseRequest.extend({
     } catch (error) {
       if (error instanceof NOKError) return this._onNOK(error)
       return this._onError(error)
+    } finally {
+      this.ui.fire('dataload', { id: id })
     }
-  },
+  }
 
-  get: async function (uri, headers) {
+  async get(uri, headers) {
     return await this._fetch('GET', uri, headers)
-  },
+  }
 
-  post: async function (uri, headers, data) {
+  async post(uri, headers, data) {
     return await this._fetch('POST', uri, headers, data)
-  },
+  }
 
-  _onError: function (error) {
+  _onError(error) {
     this.ui.alert({ content: L._('Problem in the response'), level: 'error' })
-  },
+  }
 
-  _onNOK: function (error) {
+  _onNOK(error) {
     this._onError(error)
     return error.response
-  },
-
-})
+  }
+}
 
 // Adds uMap specifics to requests handling
 // like logging, CSRF, etc.
 // It expects only json responses.
 // Returns an array of three elements: [data, response, error]
 // The consumer must check the error to proceed or not with using the data or response
-export const ServerRequest = Request.extend({
-  _fetch: async function (method, uri, headers, data) {
+export class ServerRequest extends Request {
+  async _fetch(method, uri, headers, data) {
     // Add a flag so backend can know we are in ajax and adapt the response
     // See is_ajax in utils.py
     headers = headers || {}
     headers['X-Requested-With'] = 'XMLHttpRequest'
     return await Request.prototype._fetch.call(this, method, uri, headers, data)
-  },
+  }
 
-  post: async function (uri, headers, data) {
+  async post(uri, headers, data) {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
       '$1'
@@ -120,14 +115,14 @@ export const ServerRequest = Request.extend({
     }
     const response = await Request.prototype.post.call(this, uri, headers, data)
     return await this._as_json(response)
-  },
+  }
 
-  get: async function (uri, headers) {
+  async get(uri, headers) {
     const response = await Request.prototype.get.call(this, uri, headers)
     return await this._as_json(response)
-  },
+  }
 
-  _as_json: async function (response) {
+  async _as_json(response) {
     if (Array.isArray(response)) return response
     try {
       const data = await response.json()
@@ -142,13 +137,13 @@ export const ServerRequest = Request.extend({
     } catch (error) {
       return this._onError(error)
     }
-  },
+  }
 
-  _onError: function (error) {
+  _onError(error) {
     return [{}, null, error]
-  },
+  }
 
-  _onNOK: function (error) {
+  _onNOK(error) {
     if (error.status === 403) {
       this.ui.alert({
         content: message || L._('Action not allowed :('),
@@ -156,5 +151,5 @@ export const ServerRequest = Request.extend({
       })
     }
     return [{}, error.response, error]
-  },
-})
+  }
+}

@@ -98,12 +98,10 @@ L.U.Map.include({
     this.urls = new window.umap.URLs(this.options.urls)
 
     this.ui = new L.U.UI(this._container)
+    this.ui.on('dataloading', (e) => this.fire('dataloading', e))
+    this.ui.on('dataload', (e) => this.fire('dataload', e))
     this.server = new window.umap.ServerRequest(this.ui)
-    this.server.on('dataloading', (e) => this.fire('dataloading', e))
-    this.server.on('dataload', (e) => this.fire('dataload', e))
     this.request = new window.umap.Request(this.ui)
-    this.request.on('dataloading', (e) => this.fire('dataloading', e))
-    this.request.on('dataload', (e) => this.fire('dataload', e))
 
     this.initLoader()
     this.name = this.options.name
