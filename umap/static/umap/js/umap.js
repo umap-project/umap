@@ -233,18 +233,35 @@ L.U.Map.include({
 
     // Creation mode
     if (!this.options.umap_id) {
-      this.isDirty = true
+      if (!this.options.preview) {
+        this.isDirty = true
+        this.enableEdit()
+      }
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      this.options.editMode = 'advanced'
-      this.enableEdit()
+      let style = L.Util.queryString('style', null)
+      if (style) {
+        style = decodeURIComponent(style)
+        try {
+          style = JSON.parse(style)
+          L.Util.setOptions(this, style)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+      let data = L.Util.queryString('data', null)
       let dataUrl = L.Util.queryString('dataUrl', null)
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
       if (dataUrl) {
         dataUrl = decodeURIComponent(dataUrl)
         dataUrl = this.localizeUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
+        const datalayer = this.createDataLayer()
         datalayer.importFromUrl(dataUrl, dataFormat)
+      } else if (data) {
+        data = decodeURIComponent(data)
+        const datalayer = this.createDataLayer()
+        datalayer.importRaw(data, dataFormat)
       }
     }
 
@@ -290,7 +307,7 @@ L.U.Map.include({
       }
     })
 
-    window.onbeforeunload = () => this.isDirty || null
+    window.onbeforeunload = () => this.editEnabled && this.isDirty || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
