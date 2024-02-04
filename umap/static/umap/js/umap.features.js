@@ -794,8 +794,10 @@ L.U.PathMixin = {
   },
 
   _redraw: function () {
-    this.setStyle()
-    this.resetTooltip()
+    if (this.datalayer && this.datalayer.isVisible()) {
+      this.setStyle()
+      this.resetTooltip()
+    }
   },
 
   onAdd: function (map) {
