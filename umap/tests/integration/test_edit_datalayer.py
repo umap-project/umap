@@ -9,9 +9,10 @@ def test_should_have_fieldset_for_layer_type_properties(page, live_server, tilel
     expect(button).to_be_visible()
     button.click()
 
-    edit = page.locator("#umap-ui-container").get_by_title("Edit", exact=True)
-    expect(edit).to_be_visible()
-    edit.click()
+    # Create a layer
+    page.get_by_title("Manage layers").click()
+    page.get_by_role("button", name="Add a layer").click()
+    page.locator("input[name=name]").fill("Layer 1")
 
     select = page.locator("#umap-ui-container .umap-field-type select")
     expect(select).to_be_visible()

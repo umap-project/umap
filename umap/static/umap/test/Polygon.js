@@ -1,14 +1,14 @@
 describe('L.U.Polygon', function () {
-  var p2ll, map
+  var p2ll, map, datalayer
 
   before(function () {
-    this.map = map = initMap({ umap_id: 99 })
+    map = initMap({ umap_id: 99 })
     enableEdit()
     p2ll = function (x, y) {
       return map.containerPointToLatLng([x, y])
     }
-    this.datalayer = this.map.createDataLayer()
-    this.datalayer.connectToMap()
+    datalayer = map.createDataLayer()
+    datalayer.connectToMap()
   })
 
   after(function () {
@@ -17,32 +17,32 @@ describe('L.U.Polygon', function () {
   })
 
   afterEach(function () {
-    this.datalayer.empty()
+    datalayer.empty()
   })
 
   describe('#isMulti()', function () {
     it('should return false for basic Polygon', function () {
       var layer = new L.U.Polygon(
-        this.map,
+        map,
         [
           [1, 2],
           [3, 4],
           [5, 6],
         ],
-        { datalayer: this.datalayer }
+        { datalayer: datalayer }
       )
       assert.notOk(layer.isMulti())
     })
 
     it('should return false for nested basic Polygon', function () {
       var latlngs = [[[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]]],
-        layer = new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer })
+        layer = new L.U.Polygon(map, latlngs, { datalayer: datalayer })
       assert.notOk(layer.isMulti())
     })
 
     it('should return false for simple Polygon with hole', function () {
       var layer = new L.U.Polygon(
-        this.map,
+        map,
         [
           [
             [1, 2],
@@ -55,7 +55,7 @@ describe('L.U.Polygon', function () {
             [11, 12],
           ],
         ],
-        { datalayer: this.datalayer }
+        { datalayer: datalayer }
       )
       assert.notOk(layer.isMulti())
     })
@@ -77,7 +77,7 @@ describe('L.U.Polygon', function () {
           ],
         ],
       ]
-      var layer = new L.U.Polygon(this.map, latLngs, { datalayer: this.datalayer })
+      var layer = new L.U.Polygon(map, latLngs, { datalayer: datalayer })
       assert.ok(layer.isMulti())
     })
 
@@ -103,7 +103,7 @@ describe('L.U.Polygon', function () {
           ],
         ],
       ]
-      var layer = new L.U.Polygon(this.map, latLngs, { datalayer: this.datalayer })
+      var layer = new L.U.Polygon(map, latLngs, { datalayer: datalayer })
       assert.ok(layer.isMulti())
     })
   })
@@ -120,27 +120,27 @@ describe('L.U.Polygon', function () {
             [[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]],
             [[p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]],
           ],
-          layer = new L.U.Polygon(this.map, latlngs, {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+          layer = new L.U.Polygon(map, latlngs, {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
         assert.equal(qst('Remove shape from the multi'), 1)
       })
 
       it('should not allow to remove shape when not multi', function () {
         var latlngs = [[[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]]],
-          layer = new L.U.Polygon(this.map, latlngs, {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+          layer = new L.U.Polygon(map, latlngs, {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
         assert.notOk(qst('Remove shape from the multi'))
       })
 
       it('should not allow to isolate shape when not multi', function () {
         var latlngs = [[[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]]],
-          layer = new L.U.Polygon(this.map, latlngs, {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+          layer = new L.U.Polygon(map, latlngs, {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
         assert.notOk(qst('Extract shape to separate feature'))
       })
@@ -150,9 +150,9 @@ describe('L.U.Polygon', function () {
             [[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]],
             [[p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]],
           ],
-          layer = new L.U.Polygon(this.map, latlngs, {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+          layer = new L.U.Polygon(map, latlngs, {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
         assert.ok(qst('Extract shape to separate feature'))
       })
@@ -162,9 +162,9 @@ describe('L.U.Polygon', function () {
             [[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]],
             [[p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]],
           ],
-          layer = new L.U.Polygon(this.map, latlngs, {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+          layer = new L.U.Polygon(map, latlngs, {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
         assert.notOk(qst('Transform to lines'))
       })
@@ -176,26 +176,26 @@ describe('L.U.Polygon', function () {
               [p2ll(120, 150), p2ll(150, 180), p2ll(180, 120)],
             ],
           ],
-          layer = new L.U.Polygon(this.map, latlngs, {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+          layer = new L.U.Polygon(map, latlngs, {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
         assert.notOk(qst('Transform to lines'))
       })
 
       it('should allow to transform to lines when not multi', function () {
         var latlngs = [[[p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)]]]
-        new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer }).addTo(
-          this.datalayer
+        new L.U.Polygon(map, latlngs, { datalayer: datalayer }).addTo(
+          datalayer
         )
         happen.at('contextmenu', 150, 150)
         assert.equal(qst('Transform to lines'), 1)
       })
 
       it('should not allow to transfer shape when not editedFeature', function () {
-        new L.U.Polygon(this.map, [p2ll(100, 150), p2ll(100, 200), p2ll(200, 150)], {
-          datalayer: this.datalayer,
-        }).addTo(this.datalayer)
+        new L.U.Polygon(map, [p2ll(100, 150), p2ll(100, 200), p2ll(200, 150)], {
+          datalayer: datalayer,
+        }).addTo(datalayer)
         happen.at('contextmenu', 110, 160)
         assert.equal(qst('Delete this feature'), 1) // Make sure we have right clicked on the polygon.
         assert.notOk(qst('Transfer shape to edited feature'))
@@ -203,13 +203,13 @@ describe('L.U.Polygon', function () {
 
       it('should not allow to transfer shape when editedFeature is not a polygon', function () {
         var layer = new L.U.Polygon(
-            this.map,
+            map,
             [p2ll(100, 150), p2ll(100, 200), p2ll(200, 150)],
-            { datalayer: this.datalayer }
-          ).addTo(this.datalayer),
-          other = new L.U.Polyline(this.map, [p2ll(200, 250), p2ll(200, 300)], {
-            datalayer: this.datalayer,
-          }).addTo(this.datalayer)
+            { datalayer: datalayer }
+          ).addTo(datalayer),
+          other = new L.U.Polyline(map, [p2ll(200, 250), p2ll(200, 300)], {
+            datalayer: datalayer,
+          }).addTo(datalayer)
         other.edit()
         happen.once(layer._path, { type: 'contextmenu' })
         assert.equal(qst('Delete this feature'), 1) // Make sure we have right clicked on the polygon.
@@ -217,18 +217,18 @@ describe('L.U.Polygon', function () {
       })
 
       it('should allow to transfer shape when another polygon is edited', function () {
-        this.datalayer.empty()
+        datalayer.empty()
         var layer = new L.U.Polygon(
-          this.map,
+          map,
           [p2ll(200, 300), p2ll(300, 200), p2ll(200, 100)],
-          { datalayer: this.datalayer }
-        ).addTo(this.datalayer)
+          { datalayer: datalayer }
+        ).addTo(datalayer)
         layer.edit() // This moves the map to put "other" at the center.
         var other = new L.U.Polygon(
-          this.map,
+          map,
           [p2ll(100, 150), p2ll(100, 200), p2ll(200, 150)],
-          { datalayer: this.datalayer }
-        ).addTo(this.datalayer)
+          { datalayer: datalayer }
+        ).addTo(datalayer)
         happen.once(other._path, { type: 'contextmenu' })
         assert.equal(qst('Transfer shape to edited feature'), 1)
         layer.remove()
@@ -242,19 +242,19 @@ describe('L.U.Polygon', function () {
     })
 
     it('"add shape" control should be visible when editing a Polygon', function () {
-      var layer = new L.U.Polygon(this.map, [p2ll(100, 100), p2ll(100, 200)], {
-        datalayer: this.datalayer,
-      }).addTo(this.datalayer)
+      var layer = new L.U.Polygon(map, [p2ll(100, 100), p2ll(100, 200)], {
+        datalayer: datalayer,
+      }).addTo(datalayer)
       layer.edit()
       assert.ok(qs('.umap-draw-polygon-multi'))
     })
 
     it('"add shape" control should extend the same multi', function () {
       var layer = new L.U.Polygon(
-        this.map,
+        map,
         [p2ll(100, 150), p2ll(150, 200), p2ll(200, 100)],
-        { datalayer: this.datalayer }
-      ).addTo(this.datalayer)
+        { datalayer: datalayer }
+      ).addTo(datalayer)
       layer.edit()
       assert.notOk(layer.isMulti())
       happen.click(qs('.umap-draw-polygon-multi'))
@@ -264,26 +264,26 @@ describe('L.U.Polygon', function () {
       happen.at('click', 350, 300)
       happen.at('click', 350, 300)
       assert.ok(layer.isMulti())
-      assert.equal(this.datalayer._index.length, 1)
+      assert.equal(datalayer._index.length, 1)
     })
   })
 
   describe('#transferShape', function () {
     it('should transfer simple polygon shape to another polygon', function () {
       var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-        layer = new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer }).addTo(
-          this.datalayer
+        layer = new L.U.Polygon(map, latlngs, { datalayer: datalayer }).addTo(
+          datalayer
         ),
         other = new L.U.Polygon(
-          this.map,
+          map,
           [p2ll(200, 350), p2ll(200, 300), p2ll(300, 200)],
-          { datalayer: this.datalayer }
-        ).addTo(this.datalayer)
-      assert.ok(this.map.hasLayer(layer))
+          { datalayer: datalayer }
+        ).addTo(datalayer)
+      assert.ok(map.hasLayer(layer))
       layer.transferShape(p2ll(150, 150), other)
       assert.equal(other._latlngs.length, 2)
       assert.deepEqual(other._latlngs[1][0], latlngs)
-      assert.notOk(this.map.hasLayer(layer))
+      assert.notOk(map.hasLayer(layer))
     })
 
     it('should transfer multipolygon shape to another polygon', function () {
@@ -294,19 +294,19 @@ describe('L.U.Polygon', function () {
           ],
           [[p2ll(200, 300), p2ll(300, 200)]],
         ],
-        layer = new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer }).addTo(
-          this.datalayer
+        layer = new L.U.Polygon(map, latlngs, { datalayer: datalayer }).addTo(
+          datalayer
         ),
         other = new L.U.Polygon(
-          this.map,
+          map,
           [p2ll(200, 350), p2ll(200, 300), p2ll(300, 200)],
-          { datalayer: this.datalayer }
-        ).addTo(this.datalayer)
-      assert.ok(this.map.hasLayer(layer))
+          { datalayer: datalayer }
+        ).addTo(datalayer)
+      assert.ok(map.hasLayer(layer))
       layer.transferShape(p2ll(150, 150), other)
       assert.equal(other._latlngs.length, 2)
       assert.deepEqual(other._latlngs[1][0], latlngs[0][0])
-      assert.ok(this.map.hasLayer(layer))
+      assert.ok(map.hasLayer(layer))
       assert.equal(layer._latlngs.length, 1)
     })
   })
@@ -314,14 +314,14 @@ describe('L.U.Polygon', function () {
   describe('#isolateShape', function () {
     it('should not allow to isolate simple polygon', function () {
       var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-        layer = new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer }).addTo(
-          this.datalayer
+        layer = new L.U.Polygon(map, latlngs, { datalayer: datalayer }).addTo(
+          datalayer
         )
-      assert.equal(this.datalayer._index.length, 1)
-      assert.ok(this.map.hasLayer(layer))
+      assert.equal(datalayer._index.length, 1)
+      assert.ok(map.hasLayer(layer))
       layer.isolateShape(p2ll(150, 150))
       assert.equal(layer._latlngs[0].length, 3)
-      assert.equal(this.datalayer._index.length, 1)
+      assert.equal(datalayer._index.length, 1)
     })
 
     it('should isolate multipolygon shape', function () {
@@ -332,17 +332,17 @@ describe('L.U.Polygon', function () {
           ],
           [[p2ll(200, 300), p2ll(300, 200)]],
         ],
-        layer = new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer }).addTo(
-          this.datalayer
+        layer = new L.U.Polygon(map, latlngs, { datalayer: datalayer }).addTo(
+          datalayer
         )
-      assert.equal(this.datalayer._index.length, 1)
-      assert.ok(this.map.hasLayer(layer))
+      assert.equal(datalayer._index.length, 1)
+      assert.ok(map.hasLayer(layer))
       var other = layer.isolateShape(p2ll(150, 150))
-      assert.equal(this.datalayer._index.length, 2)
+      assert.equal(datalayer._index.length, 2)
       assert.equal(other._latlngs.length, 2)
       assert.deepEqual(other._latlngs[0], latlngs[0][0])
-      assert.ok(this.map.hasLayer(layer))
-      assert.ok(this.map.hasLayer(other))
+      assert.ok(map.hasLayer(layer))
+      assert.ok(map.hasLayer(other))
       assert.equal(layer._latlngs.length, 1)
       other.remove()
     })
@@ -351,13 +351,13 @@ describe('L.U.Polygon', function () {
   describe('#clone', function () {
     it('should clone polygon', function () {
       var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-        layer = new L.U.Polygon(this.map, latlngs, { datalayer: this.datalayer }).addTo(
-          this.datalayer
+        layer = new L.U.Polygon(map, latlngs, { datalayer: datalayer }).addTo(
+          datalayer
         )
-      assert.equal(this.datalayer._index.length, 1)
+      assert.equal(datalayer._index.length, 1)
       other = layer.clone()
-      assert.ok(this.map.hasLayer(other))
-      assert.equal(this.datalayer._index.length, 2)
+      assert.ok(map.hasLayer(other))
+      assert.equal(datalayer._index.length, 2)
       // Must not be the same reference
       assert.notEqual(layer._latlngs, other._latlngs)
       assert.equal(L.Util.formatNum(layer._latlngs[0][0].lat), other._latlngs[0][0].lat)

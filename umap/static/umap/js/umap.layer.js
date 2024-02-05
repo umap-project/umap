@@ -581,8 +581,10 @@ L.U.DataLayer = L.Evented.extend({
     this.backupOptions()
     this.connectToMap()
     this.permissions = new L.U.DataLayerPermissions(this)
-    if (this.showAtLoad()) this.show()
-    if (!this.umap_id) this.isDirty = true
+    if (!this.umap_id) {
+      if (this.showAtLoad()) this.show()
+      this.isDirty = true
+    }
 
     this.onceLoaded(function () {
       this.map.on('moveend', this.onMoveEnd, this)
@@ -670,30 +672,28 @@ L.U.DataLayer = L.Evented.extend({
     return this
   },
 
-  fetchData: function () {
+  fetchData: async function () {
     if (!this.umap_id) return
     if (this._loading) return
     this._loading = true
-    this.map.get(this._dataUrl(), {
-      callback: function (geojson, response) {
-        this._last_modified = response.getResponseHeader('Last-Modified')
-        // FIXME: for now this property is set dynamically from backend
-        // And thus it's not in the geojson file in the server
-        // So do not let all options to be reset
-        // Fix is a proper migration so all datalayers settings are
-        // in DB, and we remove it from geojson flat files.
-        if (geojson._umap_options) {
-          geojson._umap_options.editMode = this.options.editMode
-        }
-        // In case of maps pre 1.0 still around
-        if (geojson._storage) geojson._storage.editMode = this.options.editMode
-        this.fromUmapGeoJSON(geojson)
-        this.backupOptions()
-        this.fire('loaded')
-        this._loading = false
-      },
-      context: this,
-    })
+    const [geojson, response, error] = await this.map.server.get(this._dataUrl())
+    if (!error) {
+      this._last_modified = response.headers.get('last-modified')
+      // FIXME: for now this property is set dynamically from backend
+      // And thus it's not in the geojson file in the server
+      // So do not let all options to be reset
+      // Fix is a proper migration so all datalayers settings are
+      // in DB, and we remove it from geojson flat files.
+      if (geojson._umap_options) {
+        geojson._umap_options.editMode = this.options.editMode
+      }
+      // In case of maps pre 1.0 still around
+      if (geojson._storage) geojson._storage.editMode = this.options.editMode
+      this.fromUmapGeoJSON(geojson)
+      this.backupOptions()
+      this.fire('loaded')
+      this._loading = false
+    }
   },
 
   fromGeoJSON: function (geojson) {
@@ -744,23 +744,23 @@ L.U.DataLayer = L.Evented.extend({
     return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
   },
 
-  fetchRemoteData: function (force) {
+  fetchRemoteData: async function (force) {
     if (!this.isRemoteLayer()) return
     if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
-    if (this.options.remoteData.proxy)
+    if (this.options.remoteData.proxy) {
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
-    this.map.ajax({
-      uri: url,
-      verb: 'GET',
-      callback: (raw) => {
-        this.clear()
-        this.rawToGeoJSON(raw, this.options.remoteData.format, (geojson) =>
-          this.fromGeoJSON(geojson)
-        )
-      },
-    })
+    }
+    const response = await this.map.request.get(url)
+    if (response && response.ok) {
+      this.clear()
+      this.rawToGeoJSON(
+        await response.text(),
+        this.options.remoteData.format,
+        (geojson) => this.fromGeoJSON(geojson)
+      )
+    }
   },
 
   onceLoaded: function (callback, context) {
@@ -926,7 +926,7 @@ L.U.DataLayer = L.Evented.extend({
               })
             }
             this.map.ui.alert({ content: message, level: 'error', duration: 10000 })
-            console.log(err)
+            console.error(err)
           }
           if (result && result.features.length) {
             callback(result)
@@ -1062,13 +1062,12 @@ L.U.DataLayer = L.Evented.extend({
     reader.onload = (e) => this.importRaw(e.target.result, type)
   },
 
-  importFromUrl: function (url, type) {
-    url = this.map.localizeUrl(url)
-    this.map.xhr._ajax({
-      verb: 'GET',
-      uri: url,
-      callback: (data) => this.importRaw(data, type),
-    })
+  importFromUrl: async function (uri, type) {
+    uri = this.map.localizeUrl(uri)
+    const response = await this.map.request.get(uri)
+    if (response && response.ok) {
+      this.importRaw(await response.text(), type)
+    }
   },
 
   getColor: function () {
@@ -1385,8 +1384,8 @@ L.U.DataLayer = L.Evented.extend({
     }
   },
 
-  buildVersionsFieldset: function (container) {
-    const appendVersion = function (data) {
+  buildVersionsFieldset: async function (container) {
+    const appendVersion = (data) => {
       const date = new Date(parseInt(data.at, 10))
       const content = `${date.toLocaleString(L.lang)} (${parseInt(data.size) / 1000}Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
@@ -1402,34 +1401,30 @@ L.U.DataLayer = L.Evented.extend({
     }
 
     const versionsContainer = L.DomUtil.createFieldset(container, L._('Versions'), {
-      callback: function () {
-        this.map.xhr.get(this.getVersionsUrl(), {
-          callback: function (data) {
-            for (let i = 0; i < data.versions.length; i++) {
-              appendVersion.call(this, data.versions[i])
-            }
-          },
-          context: this,
-        })
+      callback: async function () {
+        const [{ versions }, response, error] = await this.map.server.get(
+          this.getVersionsUrl()
+        )
+        if (!error) versions.forEach(appendVersion)
       },
       context: this,
     })
   },
 
-  restore: function (version) {
+  restore: async function (version) {
     if (!this.map.editEnabled) return
     if (!confirm(L._('Are you sure you want to restore this version?'))) return
-    this.map.xhr.get(this.getVersionUrl(version), {
-      callback: function (geojson) {
-        if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
-        if (geojson._umap_options) this.setOptions(geojson._umap_options)
-        this.empty()
-        if (this.isRemoteLayer()) this.fetchRemoteData()
-        else this.addData(geojson)
-        this.isDirty = true
-      },
-      context: this,
-    })
+    const [geojson, response, error] = await this.map.server.get(
+      this.getVersionUrl(version)
+    )
+    if (!error) {
+      if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
+      if (geojson._umap_options) this.setOptions(geojson._umap_options)
+      this.empty()
+      if (this.isRemoteLayer()) this.fetchRemoteData()
+      else this.addData(geojson)
+      this.isDirty = true
+    }
   },
 
   featuresToGeoJSON: function () {
@@ -1438,9 +1433,9 @@ L.U.DataLayer = L.Evented.extend({
     return features
   },
 
-  show: function () {
-    if (!this.isLoaded()) this.fetchData()
+  show: async function () {
     this.map.addLayer(this.layer)
+    if (!this.isLoaded()) await this.fetchData()
     this.fire('show')
   },
 
@@ -1548,7 +1543,7 @@ L.U.DataLayer = L.Evented.extend({
     return this.isReadOnly() || this.isRemoteLayer()
   },
 
-  save: function () {
+  save: async function () {
     if (this.isDeleted) return this.saveDelete()
     if (!this.isLoaded()) {
       return
@@ -1566,44 +1561,66 @@ L.U.DataLayer = L.Evented.extend({
       map_id: this.map.options.umap_id,
       pk: this.umap_id,
     })
-    this.map.post(saveUrl, {
-      data: formData,
-      callback: function (data, response) {
-        // Response contains geojson only if save has conflicted and conflicts have
-        // been resolved. So we need to reload to get extra data (saved from someone else)
-        if (data.geojson) {
-          this.clear()
-          this.fromGeoJSON(data.geojson)
-          delete data.geojson
-        }
-        this._geojson = geojson
-        this._last_modified = response.getResponseHeader('Last-Modified')
-        this.setUmapId(data.id)
-        this.updateOptions(data)
-        this.backupOptions()
-        this.connectToMap()
-        this._loaded = true
-        this.redraw() // Needed for reordering features
-        this.isDirty = false
-        this.permissions.save()
-      },
-      context: this,
-      headers: this._last_modified
-        ? { 'If-Unmodified-Since': this._last_modified }
-        : {},
-    })
+    const headers = this._last_modified
+      ? { 'If-Unmodified-Since': this._last_modified }
+      : {}
+    await this._trySave(saveUrl, headers, formData)
+    this._geojson = geojson
   },
 
-  saveDelete: function () {
-    const callback = function () {
+  _trySave: async function (url, headers, formData) {
+    const [data, response, error] = await this.map.server.post(url, headers, formData)
+    if (error) {
+      if (response && response.status === 412) {
+        const msg = L._(
+          'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
+        )
+        const actions = [
+          {
+            label: L._('Save anyway'),
+            callback: async () => {
+              // Save again,
+              // but do not pass If-Unmodified-Since this time
+              await this._trySave(url, {}, formData)
+            },
+          },
+          {
+            label: L._('Cancel'),
+          },
+        ]
+        this.map.ui.alert({
+          content: msg,
+          level: 'error',
+          duration: 100000,
+          actions: actions,
+        })
+      }
+    } else {
+      // Response contains geojson only if save has conflicted and conflicts have
+      // been resolved. So we need to reload to get extra data (added by someone else)
+      if (data.geojson) {
+        this.clear()
+        this.fromGeoJSON(data.geojson)
+        delete data.geojson
+      }
+      this._last_modified = response.headers.get('last-modified')
+      this.setUmapId(data.id)
+      this.updateOptions(data)
+      this.backupOptions()
+      this.connectToMap()
+      this._loaded = true
+      this.redraw() // Needed for reordering features
       this.isDirty = false
-      this.map.continueSaving()
+      this.permissions.save()
     }
-    if (!this.umap_id) return callback.call(this)
-    this.map.xhr.post(this.getDeleteUrl(), {
-      callback: callback,
-      context: this,
-    })
+  },
+
+  saveDelete: async function () {
+    if (this.umap_id) {
+      await this.map.server.post(this.getDeleteUrl())
+    }
+    this.isDirty = false
+    this.map.continueSaving()
   },
 
   getMap: function () {

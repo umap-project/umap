@@ -36,51 +36,26 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="text/javascript">
-    window.addEventListener('DOMContentLoaded', (event => {
-      
-    !(function () {
+    window.addEventListener('DOMContentLoaded', event => {
       const ui = new L.U.UI(document.querySelector('header'))
-      const xhr = new L.U.Xhr(ui)
-      const login = document.querySelector('a.login')
-      if (login) {
-        L.DomEvent.on(login, 'click', function (e) {
-          L.DomEvent.stop(e)
-          xhr.login({
-            login_required: this.getAttribute('href'),
-            redirect: '/',
-          })
-        })
-      }
-      const logout = document.querySelector('a.logout')
-      if (logout) {
-        L.DomEvent.on(logout, 'click', function (e) {
-          L.DomEvent.stop(e)
-          xhr.logout(this.getAttribute('href'))
-        })
-      }
-      const getMore = function (e) {
+      const server = new window.umap.ServerRequest(ui)
+      const getMore = async function (e) {
         L.DomEvent.stop(e)
-        xhr._ajax({
-          uri: this.href,
-          verb: 'GET',
-          callback: function (data) {
-            const container = this.parentNode
-            container.innerHTML = data
-            const more = document.querySelector('.more_button')
-            if (more) {
-              L.DomEvent.on(more, 'click', getMore, more)
-            }
-          },
-          context: this,
-        })
+        const [{html}, response, error] = await server.get(this.href)
+        if (!error) {
+          const container = this.parentNode
+          container.innerHTML = html
+          const more = document.querySelector('.more_button')
+          if (more) {
+            L.DomEvent.on(more, 'click', getMore, more)
+          }
+        }
       }
       const more = document.querySelector('.more_button')
       if (more) {
         L.DomEvent.on(more, 'click', getMore, more)
       }
-    })(this)
-    }
-    ))
+    })
   </script>
 {% endblock bottom_js %}
 {% block footer %}

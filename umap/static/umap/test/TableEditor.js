@@ -1,50 +1,54 @@
-describe('L.TableEditor', function () {
-  var path = '/map/99/datalayer/edit/62/'
+describe('L.TableEditor', () => {
+  let path = '/map/99/datalayer/edit/62/',
+    datalayer
 
-  before(function () {
-    this.server = sinon.fakeServer.create()
-    this.server.respondWith(
+  before(async  () => {
+    await fetchMock.mock(
       /\/datalayer\/62\/\?.*/,
       JSON.stringify(RESPONSES.datalayer62_GET)
     )
-    this.map = initMap({ umap_id: 99 })
-    this.datalayer = this.map.getDataLayerByUmapId(62)
-    this.server.respond()
+    this.options = {
+      umap_id: 99,
+    }
+    map = initMap({ umap_id: 99 })
+    const datalayer_options = defaultDatalayerData()
+    await map.initDataLayers([datalayer_options])
+    datalayer = map.getDataLayerByUmapId(62)
     enableEdit()
   })
-  after(function () {
+  after(() => {
+    fetchMock.restore()
     clickCancel()
-    this.server.restore()
     resetMap()
   })
 
-  describe('#open()', function () {
+  describe('#open()', () => {
     var button
 
-    it('should exist table click on edit mode', function () {
+    it('should exist table click on edit mode', () => {
       button = qs(
-        '#browse_data_toggle_' + L.stamp(this.datalayer) + ' .layer-table-edit'
+        '#browse_data_toggle_' + L.stamp(datalayer) + ' .layer-table-edit'
       )
       expect(button).to.be.ok
     })
 
-    it('should open table button click', function () {
+    it('should open table button click', () => {
       happen.click(button)
       expect(qs('#umap-ui-container div.table')).to.be.ok
       expect(qsa('#umap-ui-container div.table form').length).to.eql(3) // One per feature.
       expect(qsa('#umap-ui-container div.table input').length).to.eql(3) // One per feature and per property.
     })
   })
-  describe('#properties()', function () {
+  describe('#properties()', () => {
     var feature
 
-    before(function () {
-      var firstIndex = this.datalayer._index[0]
-      feature = this.datalayer._layers[firstIndex]
+    before(() => {
+      var firstIndex = datalayer._index[0]
+      feature = datalayer._layers[firstIndex]
     })
 
-    it('should create new property column', function () {
-      var newPrompt = function () {
+    it('should create new property column', () => {
+      var newPrompt = () => {
         return 'newprop'
       }
       var oldPrompt = window.prompt
@@ -56,7 +60,7 @@ describe('L.TableEditor', function () {
       window.prompt = oldPrompt
     })
 
-    it('should populate feature property on fill', function () {
+    it('should populate feature property on fill', () => {
       var input = qs(
         'form#umap-feature-properties_' + L.stamp(feature) + ' input[name=newprop]'
       )
@@ -64,8 +68,8 @@ describe('L.TableEditor', function () {
       expect(feature.properties.newprop).to.eql('the value')
     })
 
-    it('should update property name on update click', function () {
-      var newPrompt = function () {
+    it('should update property name on update click', () => {
+      var newPrompt = () => {
         return 'newname'
       }
       var oldPrompt = window.prompt
@@ -79,9 +83,9 @@ describe('L.TableEditor', function () {
       window.prompt = oldPrompt
     })
 
-    it('should update property on delete click', function () {
+    it('should update property on delete click', () => {
       var oldConfirm,
-        newConfirm = function () {
+        newConfirm = () => {
           return true
         }
       oldConfirm = window.confirm

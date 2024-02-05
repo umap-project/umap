@@ -13,7 +13,7 @@ L.U.AutoComplete = L.Class.extend({
   initialize: function (el, options) {
     this.el = el
     const ui = new L.U.UI(document.querySelector('header'))
-    this.xhr = new L.U.Xhr(ui)
+    this.server = new window.umap.ServerRequest(ui)
     L.setOptions(this, options)
     let CURRENT = null
     try {
@@ -158,21 +158,19 @@ L.U.AutoComplete = L.Class.extend({
     }
   },
 
-  search: function () {
-    const val = this.input.value
+  search: async function () {
+    let val = this.input.value
     if (val.length < this.options.minChar) {
       this.clear()
       return
     }
     if (`${val}` === `${this.CACHE}`) return
     else this.CACHE = val
-    this._do_search(
-      val,
-      function (data) {
-        this.handleResults(data.data)
-      },
-      this
+    val = val.toLowerCase()
+    const [{ data }, response] = await this.server.get(
+      `/agnocomplete/AutocompleteUser/?q=${encodeURIComponent(val)}`
     )
+    this.handleResults(data)
   },
 
   createResult: function (item) {
@@ -271,14 +269,6 @@ L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
       value: option.value,
       label: option.innerHTML,
     }
-  },
-
-  _do_search: function (val, callback, context) {
-    val = val.toLowerCase()
-    this.xhr.get(`/agnocomplete/AutocompleteUser/?q=${encodeURIComponent(val)}`, {
-      callback: callback,
-      context: context || this,
-    })
   },
 })
 

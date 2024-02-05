@@ -108,6 +108,12 @@ class PaginatorMixin:
             return [self.list_template_name]
         return super().get_template_names()
 
+    def get(self, *args, **kwargs):
+        response = super().get(*args, **kwargs)
+        if is_ajax(self.request):
+            return simple_json_response(html=response.rendered_content)
+        return response
+
 
 class PublicMapsMixin(object):
     def get_public_maps(self):
@@ -329,7 +335,6 @@ showcase = MapsShowCase.as_view()
 
 def validate_url(request):
     assert request.method == "GET"
-    assert is_ajax(request)
     url = request.GET.get("url")
     assert url
     try:
@@ -824,10 +829,8 @@ class MapDelete(DeleteView):
 
     def form_valid(self, form):
         self.object = self.get_object()
-        if self.object.owner and self.request.user != self.object.owner:
+        if not self.object.can_delete(self.request.user, self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
-        if not self.object.owner and not self.object.is_anonymous_owner(self.request):
-            return HttpResponseForbidden()
         self.object.delete()
         return simple_json_response(redirect="/")
 
@@ -1172,8 +1175,6 @@ def webmanifest(request):
 
 def logout(request):
     do_logout(request)
-    if is_ajax(request):
-        return simple_json_response(redirect="/")
     return HttpResponseRedirect("/")
 
 

@@ -176,24 +176,26 @@ const POLYGONS = {
   ],
 }
 
-describe('L.U.Choropleth', function () {
+describe('L.U.Choropleth', () => {
   let path = '/map/99/datalayer/edit/62/',
     poly1,
     poly4,
-    poly9
+    poly9,
+    map,
+    datalayer
 
-  before(function () {
-    this.server = sinon.fakeServer.create()
-    this.server.respondWith(/\/datalayer\/62\/\?.*/, JSON.stringify(POLYGONS))
-    this.map = initMap({ umap_id: 99 })
-    this.datalayer = this.map.getDataLayerByUmapId(62)
-    this.server.respond()
-    this.datalayer.options.type = 'Choropleth'
-    this.datalayer.options.choropleth = {
+  before(async () => {
+    fetchMock.mock(/\/datalayer\/62\/\?.*/, JSON.stringify(POLYGONS))
+    map = initMap({ umap_id: 99 })
+    const datalayer_options = defaultDatalayerData()
+    await map.initDataLayers([datalayer_options])
+    datalayer = map.getDataLayerByUmapId(62)
+    datalayer.options.type = 'Choropleth'
+    datalayer.options.choropleth = {
       property: 'value',
     }
     enableEdit()
-    this.datalayer.eachLayer(function (layer) {
+    datalayer.eachLayer(function (layer) {
       if (layer.properties.name === 'number 1') {
         poly1 = layer
       } else if (layer.properties.name === 'number 4') {
@@ -203,38 +205,38 @@ describe('L.U.Choropleth', function () {
       }
     })
   })
-  after(function () {
-    this.server.restore()
+  after(() => {
+    fetchMock.restore()
     resetMap()
   })
 
-  describe('#init()', function () {
-    it('datalayer should have 9 features', function () {
-      assert.equal(this.datalayer._index.length, 9)
+  describe('#init()', () => {
+    it('datalayer should have 9 features', () => {
+      assert.equal(datalayer._index.length, 9)
     })
   })
-  describe('#compute()', function () {
-    it('choropleth should compute default colors', function () {
-      this.datalayer.resetLayer(true)
+  describe('#compute()', () => {
+    it('choropleth should compute default colors', () => {
+      datalayer.resetLayer(true)
       assert.deepEqual(
-        this.datalayer.layer.options.breaks,
+        datalayer.layer.options.breaks,
         [45, 673, 3829, 4900, 9898, 9898]
       )
       assert.equal(poly1._path.attributes.fill.value, '#eff3ff')
       assert.equal(poly4._path.attributes.fill.value, '#bdd7e7')
       assert.equal(poly9._path.attributes.fill.value, '#3182bd')
     })
-    it('can change brewer scheme', function () {
-      this.datalayer.options.choropleth.brewer = 'Reds'
-      this.datalayer.resetLayer(true)
+    it('can change brewer scheme', () => {
+      datalayer.options.choropleth.brewer = 'Reds'
+      datalayer.resetLayer(true)
       assert.equal(poly1._path.attributes.fill.value, '#fee5d9')
       assert.equal(poly4._path.attributes.fill.value, '#fcae91')
       assert.equal(poly9._path.attributes.fill.value, '#de2d26')
     })
-    it('choropleth should allow to change steps', function () {
-      this.datalayer.options.choropleth.brewer = 'Blues'
-      this.datalayer.options.choropleth.classes = 6
-      this.datalayer.resetLayer(true)
+    it('choropleth should allow to change steps', () => {
+      datalayer.options.choropleth.brewer = 'Blues'
+      datalayer.options.choropleth.classes = 6
+      datalayer.resetLayer(true)
       assert.equal(poly1._path.attributes.fill.value, '#eff3ff')
       assert.equal(poly4._path.attributes.fill.value, '#c6dbef')
       assert.equal(poly9._path.attributes.fill.value, '#3182bd')

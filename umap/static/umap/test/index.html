@@ -35,7 +35,6 @@
     <script src="../js/umap.core.js" defer></script>
     <script src="../js/umap.autocomplete.js" defer></script>
     <script src="../js/umap.popup.js" defer></script>
-    <script src="../js/umap.xhr.js" defer></script>
     <script src="../js/umap.forms.js" defer></script>
     <script src="../js/umap.icon.js" defer></script>
     <script src="../js/umap.features.js" defer></script>
@@ -76,6 +75,10 @@
     <script src="../../../../node_modules/chai/chai.js"></script>
     <script src="../../../../node_modules/happen/happen.js"></script>
     <link rel="stylesheet" href="../../../../node_modules/mocha/mocha.css" />
+    <script type="module">
+      import fetchMock from '../../../../node_modules/fetch-mock/esm/client.js';
+      window.fetchMock = fetchMock
+    </script>
     <script type="text/javascript">
       mocha.setup({
         ui: 'bdd',
@@ -86,7 +89,6 @@
     </script>
     <script src="./_pre.js" defer></script>
     <script src="./Map.js" defer></script>
-    <script src="./Map.Init.js" defer></script>
     <script src="./Map.Export.js" defer></script>
     <script src="./DataLayer.js" defer></script>
     <script src="./TableEditor.js" defer></script>
@@ -95,7 +97,6 @@
     <script src="./Polyline.js" defer></script>
     <script src="./Polygon.js" defer></script>
     <script src="./Util.js" defer></script>
-    <script src="./Controls.js" defer></script>
     <script src="./Permissions.js" defer></script>
     <script src="./Choropleth.js" defer></script>
     <script type="module" src="./URLs.js" defer></script>

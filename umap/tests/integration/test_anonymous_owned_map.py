@@ -1,5 +1,4 @@
 import re
-from time import sleep
 
 import pytest
 from django.core.signing import get_cookie_signer
@@ -126,10 +125,14 @@ def test_anonymous_can_add_marker_on_editable_layer(
 
 def test_can_change_perms_after_create(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/en/map/new")
+    # Create a layer
+    page.get_by_title("Manage layers").click()
+    page.get_by_role("button", name="Add a layer").click()
+    page.locator("input[name=name]").fill("Layer 1")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go back
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        save.click()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()

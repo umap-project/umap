@@ -242,6 +242,13 @@ class Map(NamedModel):
             has_anonymous_cookie = False
         return has_anonymous_cookie
 
+    def can_delete(self, user=None, request=None):
+        if self.owner and user != self.owner:
+            return False
+        if not self.owner and not self.is_anonymous_owner(request):
+            return False
+        return True
+
     def can_edit(self, user=None, request=None):
         """
         Define if a user can edit or not the instance, according to his account

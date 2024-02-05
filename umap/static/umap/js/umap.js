@@ -34,7 +34,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -98,9 +98,10 @@ L.U.Map.include({
     this.urls = new window.umap.URLs(this.options.urls)
 
     this.ui = new L.U.UI(this._container)
-    this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloading', (e) => this.fire('dataloading', e))
-    this.xhr.on('dataload', (e) => this.fire('dataload', e))
+    this.ui.on('dataloading', (e) => this.fire('dataloading', e))
+    this.ui.on('dataload', (e) => this.fire('dataload', e))
+    this.server = new window.umap.ServerRequest(this.ui)
+    this.request = new window.umap.Request(this.ui)
 
     this.initLoader()
     this.name = this.options.name
@@ -183,7 +184,7 @@ L.U.Map.include({
     // Needs locate control and hash to exist
     this.initCenter()
     this.handleLimitBounds()
-    this.initDatalayers()
+    this.initDataLayers()
 
     if (this.options.displayCaptionOnLoad) {
       // Retrocompat
@@ -236,8 +237,6 @@ L.U.Map.include({
       this._default_extent = true
       this.options.name = L._('Untitled map')
       this.options.editMode = 'advanced'
-      const datalayer = this.createDataLayer()
-      datalayer.connectToMap()
       this.enableEdit()
       let dataUrl = L.Util.queryString('dataUrl', null)
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
@@ -273,8 +272,6 @@ L.U.Map.include({
         this.options.onLoadPanel === 'datafilters'
       )
         this.openFacet()
-    })
-    this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) {
@@ -419,56 +416,22 @@ L.U.Map.include({
     if (this.options.scaleControl) this._controls.scale.addTo(this)
   },
 
-  initDatalayers: function () {
-    for (let j = 0; j < this.options.datalayers.length; j++) {
-      this.createDataLayer(this.options.datalayers[j])
+  initDataLayers: async function (datalayers) {
+    datalayers = datalayers || this.options.datalayers
+    for (const options of datalayers) {
+      this.createDataLayer(options)
     }
-    this.loadDatalayers()
+    await this.loadDataLayers()
   },
 
-  loadDatalayers: function (force) {
-    const total = this.datalayers_index.length
-    // toload => datalayer metadata remaining to load (synchronous)
-    // dataToload => datalayer data remaining to load (asynchronous)
-    let toload = total,
-      dataToload = total
-    let datalayer
-    const loaded = () => {
-      this.datalayersLoaded = true
-      this.fire('datalayersloaded')
+  loadDataLayers: async function () {
+    this.datalayersLoaded = true
+    this.fire('datalayersloaded')
+    for (const datalayer of Object.values(this.datalayers)) {
+      if (datalayer.showAtLoad()) await datalayer.show()
     }
-    const decrementToLoad = () => {
-      toload--
-      if (toload === 0) loaded()
-    }
-    const dataLoaded = () => {
-      this.dataLoaded = true
-      this.fire('dataloaded')
-    }
-    const decrementDataToLoad = () => {
-      dataToload--
-      if (dataToload === 0) dataLoaded()
-    }
-    this.eachDataLayer(function (datalayer) {
-      if (force && !datalayer.hasDataLoaded()) {
-        datalayer.show()
-      }
-      if (datalayer.showAtLoad() || force) {
-        datalayer.onceLoaded(decrementToLoad)
-      } else {
-        decrementToLoad()
-      }
-      if (datalayer.showAtLoad() || force) {
-        datalayer.onceDataLoaded(decrementDataToLoad)
-      } else {
-        decrementDataToLoad({ sourceTarget: datalayer })
-      }
-    })
-    if (total === 0) {
-      // no datalayer
-      loaded()
-      dataLoaded()
-    }
+    this.dataloaded = true
+    this.fire('dataloaded')
   },
 
   indexDatalayers: function () {
@@ -501,7 +464,7 @@ L.U.Map.include({
 
   onceDataLoaded: function (callback, context) {
     // Once datalayers **data** have been loaded
-    if (this.dataLoaded) {
+    if (this.dataloaded) {
       callback.call(context || this, this)
     } else {
       this.once('dataloaded', callback, context)
@@ -835,7 +798,10 @@ L.U.Map.include({
         self.isDirty = true
       }
     if (this._controls.tilelayersChooser)
-      this._controls.tilelayersChooser.openSwitcher({ callback: callback, className: 'dark' })
+      this._controls.tilelayersChooser.openSwitcher({
+        callback: callback,
+        className: 'dark',
+      })
   },
 
   manageDatalayers: function () {
@@ -1083,7 +1049,7 @@ L.U.Map.include({
     return properties
   },
 
-  saveSelf: function () {
+  saveSelf: async function () {
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
@@ -1093,64 +1059,62 @@ L.U.Map.include({
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
-    this.post(this.urls.get('map_save', { map_id: this.options.umap_id }), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        let duration = 3000,
-          alert = { content: L._('Map has been saved!'), level: 'info' }
-        if (!this.options.umap_id) {
-          alert.content = L._('Congratulations, your map has been created!')
-          this.options.umap_id = data.id
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
-          if (
-            data.permissions &&
-            data.permissions.anonymous_edit_url &&
-            this.options.urls.map_send_edit_link
-          ) {
-            alert.duration = Infinity
-            alert.content =
-              L._(
-                'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
-              ) + `<br>${data.permissions.anonymous_edit_url}`
+    const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
+    const [data, response, error] = await this.server.post(uri, {}, formData)
+    if (!error) {
+      let duration = 3000,
+        alert = { content: L._('Map has been saved!'), level: 'info' }
+      if (!this.options.umap_id) {
+        alert.content = L._('Congratulations, your map has been created!')
+        this.options.umap_id = data.id
+        this.permissions.setOptions(data.permissions)
+        this.permissions.commit()
+        if (
+          data.permissions &&
+          data.permissions.anonymous_edit_url &&
+          this.options.urls.map_send_edit_link
+        ) {
+          alert.duration = Infinity
+          alert.content =
+            L._(
+              'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
+            ) + `<br>${data.permissions.anonymous_edit_url}`
 
-            alert.actions = [
-              {
-                label: L._('Send me the link'),
-                input: L._('Email'),
-                callback: this.sendEditLink,
-                callbackContext: this,
+          alert.actions = [
+            {
+              label: L._('Send me the link'),
+              input: L._('Email'),
+              callback: this.sendEditLink,
+              callbackContext: this,
+            },
+            {
+              label: L._('Copy link'),
+              callback: () => {
+                L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
+                this.ui.alert({
+                  content: L._('Secret edit link copied to clipboard!'),
+                  level: 'info',
+                })
               },
-              {
-                label: L._('Copy link'),
-                callback: () => {
-                  L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-                  this.ui.alert({
-                    content: L._('Secret edit link copied to clipboard!'),
-                    level: 'info',
-                  })
-                },
-                callbackContext: this,
-              },
-            ]
-          }
-        } else if (!this.permissions.isDirty) {
-          // Do not override local changes to permissions,
-          // but update in case some other editors changed them in the meantime.
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
+              callbackContext: this,
+            },
+          ]
         }
-        // Update URL in case the name has changed.
-        if (history && history.pushState)
-          history.pushState({}, this.options.name, data.url)
-        else window.location = data.url
-        alert.content = data.info || alert.content
-        this.once('saved', () => this.ui.alert(alert))
-        this.ui.closePanel()
-        this.permissions.save()
-      },
-    })
+      } else if (!this.permissions.isDirty) {
+        // Do not override local changes to permissions,
+        // but update in case some other editors changed them in the meantime.
+        this.permissions.setOptions(data.permissions)
+        this.permissions.commit()
+      }
+      // Update URL in case the name has changed.
+      if (history && history.pushState)
+        history.pushState({}, this.options.name, data.url)
+      else window.location = data.url
+      alert.content = data.info || alert.content
+      this.once('saved', () => this.ui.alert(alert))
+      this.ui.closePanel()
+      this.permissions.save()
+    }
   },
 
   save: function () {
@@ -1793,19 +1757,21 @@ L.U.Map.include({
     return this.editTools.startPolygon()
   },
 
-  del: function () {
+  del: async function () {
     if (confirm(L._('Are you sure you want to delete this map?'))) {
       const url = this.urls.get('map_delete', { map_id: this.options.umap_id })
-      this.post(url)
+      const [data, response, error] = await this.server.post(url)
+      if (data.redirect) window.location = data.redirect
     }
   },
 
-  clone: function () {
+  clone: async function () {
     if (
       confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
     ) {
       const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
-      this.post(url)
+      const [data, response, error] = await this.server.post(url)
+      if (data.redirect) window.location = data.redirect
     }
   },
 
@@ -1818,23 +1784,6 @@ L.U.Map.include({
   initLoader: function () {
     this.loader = new L.Control.Loading()
     this.loader.onAdd(this)
-  },
-
-  post: function (url, options) {
-    options = options || {}
-    options.listener = this
-    this.xhr.post(url, options)
-  },
-
-  get: function (url, options) {
-    options = options || {}
-    options.listener = this
-    this.xhr.get(url, options)
-  },
-
-  ajax: function (options) {
-    options.listener = this
-    this.xhr._ajax(options)
   },
 
   initContextMenu: function () {

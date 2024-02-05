@@ -21,7 +21,7 @@ def test_umap_import_from_file(live_server, datalayer, page):
     expect(button).to_be_visible()
     button.click()
     layers = page.locator(".umap-browse-datalayers li")
-    expect(layers).to_have_count(3)
+    expect(layers).to_have_count(2)
     nonloaded = page.locator(".umap-browse-datalayers li.off")
     expect(nonloaded).to_have_count(1)
     assert file_input.input_value()
@@ -37,7 +37,7 @@ def test_umap_import_geojson_from_textarea(live_server, datalayer, page):
     paths = page.locator("path")
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
-    expect(layers).to_have_count(1)
+    expect(layers).to_have_count(0)
     button = page.get_by_title("Import data")
     expect(button).to_be_visible()
     button.click()
@@ -48,7 +48,7 @@ def test_umap_import_geojson_from_textarea(live_server, datalayer, page):
     button = page.get_by_role("button", name="Import", exact=True)
     expect(button).to_be_visible()
     button.click()
-    # No layer has been created
+    # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
     expect(paths).to_have_count(3)
