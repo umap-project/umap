@@ -563,11 +563,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   buildTabs: function () {
     this.tabs.innerHTML = ''
     const symbol = L.DomUtil.add(
-        'button',
-        'flat tab-symbols',
-        this.tabs,
-        L._('Symbol')
-      ),
+      'button',
+      'flat tab-symbols',
+      this.tabs,
+      L._('Symbol')
+    ),
       char = L.DomUtil.add(
         'button',
         'flat tab-chars',
@@ -1260,13 +1260,22 @@ L.U.FormBuilder = L.FormBuilder.extend({
     L.FormBuilder.prototype.setter.call(this, field, value)
     if (this.options.makeDirty !== false) this.obj.isDirty = true
 
-    // FIXME: for now remove the options prefix if it's present.
-    field = field.replace('options.', '')
-    console.log("formbuilder object updated", this.obj)
+    // These two methods are part of the protocol a synced object
+    // needs to answer to.
+    // XXX Maybe there is a better way to do this (using Mixins? properties?)
+    let syncEngine = this.obj.getSyncEngine()
+    let subject = this.obj.getSyncSubject()
 
-    // FIXME: maybe name this "obj.updateProperty" / "obj.updateData",
-    // and let it trigger the rendering to expose less surface.
-    this.obj.broadcast.set(field, value)
+    let metadata = {}
+    if (this.obj.getSyncMetadata) {
+      metadata = this.obj.getSyncMetadata()
+    }
+    syncEngine.update(subject, metadata, field, value)
+
+    // XXX Change this, it's just for it to be easier to handle
+    // in the map definition
+    // Remove the "options" prefix for now
+    field = field.replace('options.', '')
     this.obj.renderProperties([field])
   },
 

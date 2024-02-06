@@ -149,7 +149,7 @@ L.U.BaseFeatureAction = L.ToolbarAction.extend({
     this.postInit()
   },
 
-  postInit: function () {},
+  postInit: function () { },
 
   hideToolbar: function () {
     this.map.removeLayer(this.toolbar)
@@ -463,9 +463,9 @@ L.U.PermanentCreditsControl = L.Control.extend({
 
   onAdd: function () {
     const paragraphContainer = L.DomUtil.create(
-        'div',
-        'umap-permanent-credits-container'
-      ),
+      'div',
+      'umap-permanent-credits-container'
+    ),
       creditsParagraph = L.DomUtil.create('p', '', paragraphContainer)
 
     this.paragraphContainer = paragraphContainer
@@ -506,9 +506,9 @@ L.U.DataLayersControl = L.Control.extend({
 
   _initLayout: function (map) {
     const container = (this._container = L.DomUtil.create(
-        'div',
-        'leaflet-control-browse umap-control'
-      )),
+      'div',
+      'leaflet-control-browse umap-control'
+    )),
       actions = L.DomUtil.create('div', 'umap-browse-actions', container)
     this._datalayers_container = L.DomUtil.create(
       'ul',
@@ -1433,6 +1433,7 @@ L.U.Editable = L.Editable.extend({
     this.on('editable:drawing:commit', function (e) {
       e.layer.isDirty = true
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
+      e.layer.onCommit()
     })
     this.on('editable:editing', (e) => {
       const layer = e.layer

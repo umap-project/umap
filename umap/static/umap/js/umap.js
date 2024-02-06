@@ -172,40 +172,12 @@ L.U.Map.include({
     })
   },
 
-  initializeCRDT: function(data){
-    this.crdt = this.getCRDT()
-    this.populateCRDT(data)
+  getSyncSubject: function () {
+    return "map"
   },
 
-  getCRDT: function () {
-    return this._main_crdt.obj
-  },
-
-  populateCRDT: function (data) {
-    
-    let object = {}
-    for (const [key, value] of  Object.entries(data)){
-      // For now ignore embedded types
-      switch (typeof(value)){
-        case 'string':
-        case 'number':
-        case 'boolean':
-          object[key] = s.val(value)
-        default:
-      }
-    }
-    this._main_crdt.api.root({
-      zoom: val
-    })
-    console.log(this._main_crdt.view());
-
-    // for (const [key, value] of Object.entries(data)) {
-    //   this.crdt.set(key, value)
-    // }
-  },
-
-  updateCRDT: function(field, value){
-    this._main_crdt.obj.set(field, value)
+  getSyncEngine: function () {
+    return this.syncEngine
   },
 
   initialize: function (el, geojson) {
@@ -432,11 +404,7 @@ L.U.Map.include({
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
 
-    // Sync with other party
-    // The dispatcher takes remote messages and route them to the proper handler
-    let receiver = new umap.MessagesReceiver(this)
-    let transport = new umap.WebSocketTransport(receiver)
-    this.broadcast = new umap.MessagesSender("map", transport)
+    this.syncEngine = new umap.SyncEngine(this)
   },
 
   initControls: function () {
@@ -512,7 +480,7 @@ L.U.Map.include({
       document.body,
       'umap-caption-bar-enabled',
       this.options.captionBar ||
-        (this.options.slideshow && this.options.slideshow.active)
+      (this.options.slideshow && this.options.slideshow.active)
     )
     L.DomUtil.classIf(
       document.body,
@@ -1826,10 +1794,10 @@ L.U.Map.include({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-        'div',
-        'umap-caption-bar',
-        this._controlContainer
-      ),
+      'div',
+      'umap-caption-bar',
+      this._controlContainer
+    ),
       name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)

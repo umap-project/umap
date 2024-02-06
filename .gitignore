@@ -21,3 +21,4 @@ dist/
 *.egg-info/
 playwright/.auth/
 test-results/
+venv

@@ -15,8 +15,8 @@ async def join_and_listen(websocket):
             # recompute the peers-list at the time of message-sending.
             # doing so beforehand would miss new connections
             peers = CONNECTIONS - {websocket}
-            print(message)
-            print(peers)
+            print("message", message)
+            print("peers", peers)
             websockets.broadcast(peers, message)
     finally:
         CONNECTIONS.remove(websocket)
@@ -27,10 +27,11 @@ async def handler(websocket):
     event = json.loads(message)
 
     # The first event should always be 'join'
-    assert event["type"] == "join"
+    assert event["kind"] == "join"
     await join_and_listen(websocket)
 
 async def main():
+    print("WS server started, will relay messages")
     async with serve(handler, "localhost", 8001):
         await asyncio.Future()  # run forever
 

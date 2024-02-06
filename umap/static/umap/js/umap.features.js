@@ -1,16 +1,63 @@
+const generateId = umap.utils.generateId
+
 L.U.FeatureMixin = {
   staticOptions: { mainColor: 'color' },
 
-  sync: function(properties){
-    if ('latlng' in properties)
-      this._latlng
+  getSyncSubject: function () {
+    return "feature"
   },
 
-  renderProperties: function(properties){
-
+  featureType: function () {
+    return this.getClassName()
   },
 
-  initialize: function (map, latlng, options) {
+  getSyncMetadata: function () {
+    return {
+      id: this.id,
+      layerId: this.datalayer?.id || null,
+      featureType: this.featureType()
+    }
+  },
+
+  getSyncEngine: function () {
+    return this.map.syncEngine
+  },
+
+  onCommit: function () {
+    console.log("onCommit")
+    this.map.syncEngine.create(
+      this.getSyncSubject(),
+      this.getSyncMetadata(),
+      {
+        'latlng': this._latlng
+      })
+  },
+
+  updateProperties: function (properties) {
+    let subject = this.getSyncSubject()
+    let metadata = this.getSyncMetadata()
+
+    if ('latlng'.includes(properties)) {
+      this.map.syncEngine.update(subject, metadata, 'latlng', this._latlng)
+    }
+  },
+
+  syncDelete: function () {
+    let subject = this.getSyncSubject()
+    let metadata = this.getSyncMetadata()
+    this.map.syncEngine.delete(subject, metadata)
+  },
+
+  renderProperties: function (properties) {
+    console.log("renderProperties", this.id, this.latlng)
+    this._redraw()
+  },
+
+  _checkId: function (string) {
+    return typeof string !== 'undefined'
+  },
+
+  initialize: function (map, latlng, options, id) {
     this.map = map
     if (typeof options === 'undefined') {
       options = {}
@@ -18,9 +65,25 @@ L.U.FeatureMixin = {
     // DataLayer the marker belongs to
     this.datalayer = options.datalayer || null
     this.properties = { _umap_options: {} }
-    if (options.geojson) {
-      this.populate(options.geojson)
+
+    if (id) {
+      this.id = id
     }
+    else {
+      let geojson_id
+      if (options.geojson) {
+        this.populate(options.geojson)
+        geojson_id = options.geojson.id
+      }
+
+      // Each feature needs an unique ID
+      if (this._checkId(geojson_id)) {
+        this.id = geojson_id
+      } else {
+        this.id = generateId()
+      }
+    }
+
     let isDirty = false
     const self = this
     try {
@@ -46,7 +109,7 @@ L.U.FeatureMixin = {
     this.parentClass.prototype.initialize.call(this, latlng, options)
   },
 
-  preInit: function () {},
+  preInit: function () { },
 
   isReadOnly: function () {
     return this.datalayer && this.datalayer.isDataReadOnly()
@@ -59,9 +122,8 @@ L.U.FeatureMixin = {
   getPermalink: function () {
     const slug = this.getSlug()
     if (slug)
-      return `${L.Util.getBaseUrl()}?${L.Util.buildQueryString({ feature: slug })}${
-        window.location.hash
-      }`
+      return `${L.Util.getBaseUrl()}?${L.Util.buildQueryString({ feature: slug })}${window.location.hash
+        }`
   },
 
   view: function (e) {
@@ -194,7 +256,7 @@ L.U.FeatureMixin = {
     ]
   },
 
-  endEdit: function () {},
+  endEdit: function () { },
 
   getDisplayName: function (fallback) {
     if (fallback === undefined) fallback = this.datalayer.options.name
@@ -230,12 +292,15 @@ L.U.FeatureMixin = {
     return false
   },
 
-  del: function () {
+  del: function (fromSync) {
     this.isDirty = true
     this.map.closePopup()
     if (this.datalayer) {
       this.datalayer.removeLayer(this)
       this.disconnectFromDataLayer(this.datalayer)
+
+      // Only call sync methods if we're not coming from there.
+      if (!fromSync) this.syncDelete()
     }
   },
 
@@ -353,6 +418,7 @@ L.U.FeatureMixin = {
   toGeoJSON: function () {
     const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
+    geojson.id = this.id
     delete geojson.properties._storage_options
     return geojson
   },
@@ -571,7 +637,7 @@ L.U.Marker = L.Marker.extend({
       function (e) {
         this.isDirty = true
         this.edit(e)
-        this.sync(["latlng"])
+        this.updateProperties(["latlng"])
       },
       this
     )
@@ -715,7 +781,7 @@ L.U.Marker = L.Marker.extend({
   zoomTo: function (e) {
     if (this.datalayer.isClustered() && !this._icon) {
       // callback is mandatory for zoomToShowLayer
-      this.datalayer.layer.zoomToShowLayer(this, e.callback || (() => {}))
+      this.datalayer.layer.zoomToShowLayer(this, e.callback || (() => { }))
     } else {
       L.U.FeatureMixin.zoomTo.call(this, e)
     }
@@ -809,6 +875,7 @@ L.U.PathMixin = {
   },
 
   onAdd: function (map) {
+    console.log("onAdd called")
     this._container = null
     this.setStyle()
     // Show tooltip again when Leaflet.label allow static label on path.

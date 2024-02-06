@@ -19,7 +19,7 @@ L.U.Layer = {
     return []
   },
 
-  onEdit: function () {},
+  onEdit: function () { },
 
   hasDataVisible: function () {
     return !!Object.keys(this._layers).length
@@ -461,8 +461,8 @@ L.U.Layer.Heat = L.HeatLayer.extend({
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
-          ? +this._latlngs[i][2]
-          : 1
+            ? +this._latlngs[i][2]
+            : 1
 
       grid[y] = grid[y] || []
       cell = grid[y][x]
@@ -1479,6 +1479,17 @@ L.U.DataLayer = L.Evented.extend({
 
   canBrowse: function () {
     return this.layer && this.layer.canBrowse
+  },
+
+  // XXX Add an index
+  // For now, iterate on all the features.
+  getFeatureById: function (id) {
+    for (const i in this._layers) {
+      let feature = this._layers[i]
+      if (feature.id == id) {
+        return feature
+      }
+    }
   },
 
   getFeatureByIndex: function (index) {
