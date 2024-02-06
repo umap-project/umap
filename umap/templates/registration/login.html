@@ -2,6 +2,7 @@
 {% load umap_tags i18n %}
 {% block extra_head %}
   {% umap_css %}
+  {{ block.super }}
 {% endblock extra_head %}
 {% block body_class %}
   login
