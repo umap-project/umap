@@ -860,7 +860,10 @@ class MapClone(PermissionsMixin, View):
             return HttpResponseForbidden()
         owner = self.request.user if self.request.user.is_authenticated else None
         self.object = kwargs["map_inst"].clone(owner=owner)
-        response = simple_json_response(redirect=self.object.get_absolute_url())
+        if is_ajax(self.request):
+            response = simple_json_response(redirect=self.object.get_absolute_url())
+        else:
+            response = HttpResponseRedirect(self.object.get_absolute_url())
         if not self.request.user.is_authenticated:
             key, value = self.object.signed_cookie_elements
             response.set_signed_cookie(

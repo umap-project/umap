@@ -4,7 +4,8 @@
     <tr>
       <th>{% blocktrans %}Name{% endblocktrans %}</th>
       <th>{% blocktrans %}Preview{% endblocktrans %}</th>
-      <th>{% blocktrans %}Who can see / edit{% endblocktrans %}</th>
+      <th>{% blocktrans %}Who can see{% endblocktrans %}</th>
+      <th>{% blocktrans %}Who can edit{% endblocktrans %}</th>
       <th>{% blocktrans %}Last save{% endblocktrans %}</th>
       <th>{% blocktrans %}Owner{% endblocktrans %}</th>
       <th>{% blocktrans %}Actions{% endblocktrans %}</th>
@@ -13,12 +14,12 @@
   <tbody>
     {% for map_inst in maps %}
       {% with unique_id="map_"|addstr:map_inst.pk %}
-        {{ map_inst.preview_settings|json_script:unique_id }}
         <tr>
           <td>
             <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
           </td>
           <td>
+            {{ map_inst.preview_settings|json_script:unique_id }}
             <button class="button map-opener neutral" data-map-id="{{ unique_id }}">{% blocktranslate %}Open preview{% endblocktranslate %}</button>
             <dialog>
               <form method="dialog">
@@ -29,7 +30,8 @@
               </form>
             </dialog>
           </td>
-          <td>{{ map_inst.get_share_status_display }} / {{ map_inst.get_edit_status_display }}</td>
+          <td>{{ map_inst.get_share_status_display }}</td>
+          <td>{{ map_inst.get_edit_status_display }}</td>
           <td>{{ map_inst.modified_at }}</td>
           <td>
             <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
@@ -38,28 +40,16 @@
             <a href="{{ map_inst.get_absolute_url }}?share">{% translate "Share" %}</a> |
             <a href="{{ map_inst.get_absolute_url }}?edit">{% translate "Edit" %}</a> |
             <a href="{% url 'map_download' map_inst.pk %}">{% translate "Download" %}</a> |
+            <form action="{% url 'map_clone' map_inst.pk %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="{% trans "Clone" %}" />
+            </form> |
             <a href="{% url 'map_delete' map_inst.pk %}">{% translate "Delete" %}</a>
           </td>
         </tr>
       {% endwith %}
     {% endfor %}
   </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="5"></td>
-      <td>
-        <a href="{% url 'user_download' %}?{% spaceless %}
-        {% for map_inst in maps %}map_id={{ map_inst.pk }}{% if not forloop.last %}&{% endif %}{% endfor %}
-        {% endspaceless %}" class="button"
-          >{% blocktranslate count counter=maps.object_list|length %}
-            Download this map
-            {% plural %}
-            Download these {{ counter }} maps
-          {% endblocktranslate %}
-        </a>
-      </td>
-    </tr>
-  </tfoot>
 </table>
 {% if maps.has_other_pages %}
   <div class="pagination">
@@ -88,6 +78,16 @@
       <span></span>
       {# djlint:on #}
     {% endif %}
+    <span>
+      {% blocktranslate with per_page=maps.paginator.per_page %}
+      Lines per page: {{ per_page }}
+      {% endblocktranslate %}
+    </span>
+    <span>
+      {% blocktranslate with count=maps.paginator.count %}
+      {{ count }} maps
+      {% endblocktranslate %}
+    </span>
   </div>
 {% endif %}
 <script type="text/javascript">

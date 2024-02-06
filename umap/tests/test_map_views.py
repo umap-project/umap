@@ -158,9 +158,23 @@ def test_clone_map_should_create_a_new_instance(client, map):
     url = reverse("map_clone", kwargs={"map_id": map.pk})
     client.login(username=map.owner.username, password="123123")
     response = client.post(url)
+    assert response.status_code == 302
+    assert Map.objects.count() == 2
+    clone = Map.objects.latest("pk")
+    assert response["Location"] == clone.get_absolute_url()
+    assert clone.pk != map.pk
+    assert clone.name == "Clone of " + map.name
+
+
+def test_clone_map_should_be_possible_via_ajax(client, map):
+    assert Map.objects.count() == 1
+    url = reverse("map_clone", kwargs={"map_id": map.pk})
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, headers={"X-Requested-With": "XMLHttpRequest"})
     assert response.status_code == 200
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
+    assert response.json() == {"redirect": clone.get_absolute_url()}
     assert clone.pk != map.pk
     assert clone.name == "Clone of " + map.name
 
@@ -191,7 +205,7 @@ def test_clone_should_set_cloner_as_owner(client, map, user):
     map.save()
     client.login(username=user.username, password="123123")
     response = client.post(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
     assert clone.pk != map.pk
@@ -442,9 +456,10 @@ def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonym
     anonymap.edit_status = anonymap.ANONYMOUS
     anonymap.save()
     response = client.post(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
+    assert response["Location"] == clone.get_absolute_url()
     assert clone.pk != anonymap.pk
     assert clone.name == "Clone of " + anonymap.name
     assert clone.owner is None

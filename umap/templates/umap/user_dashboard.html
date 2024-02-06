@@ -5,17 +5,36 @@
 {% endblock head_title %}
 {% block maincontent %}
   {% trans "Search my maps" as placeholder %}
-  <div class="col wide">
+  <div class="row">
     <h2 class="section tabs">
       <a class="selected" href="{% url 'user_dashboard' %}"
       >{% blocktranslate with count=maps.paginator.count %}My Maps ({{ count }}){% endblocktranslate %}
-      </a> | <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
+      </a>
+      <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
     </h2>
-    {% include "umap/search_bar.html" with action=request.get_full_path placeholder=placeholder %}
   </div>
   <div class="wrapper">
     <div class="row">
-      {% if maps %}
+      <div class="table-header">
+        <form action="{{ request.get_full_path }}" method="get">
+          <span>
+            <label for="q">{% blocktranslate %}Map’s title{% endblocktranslate %}</label>
+            <input id="q" name="q" type="search"
+                   value="{{ request.GET.q|default:"" }}" />
+          </span>
+          <input type="submit" value="{% trans "Search" %}" />
+        </form>
+        {% if maps.object_list|length > 1 %}
+          <a href="{% url 'user_download' %}?{% spaceless %}
+          {% for map_inst in maps %}map_id={{ map_inst.pk }}{% if not forloop.last %}&{% endif %}{% endfor %}
+          {% endspaceless %}" class="button button-download"
+            >{% blocktranslate with count=maps.object_list|length %}
+              Download {{ count }} maps
+            {% endblocktranslate %}
+          </a>
+        {% endif %}
+      </div>
+      {% if maps or request.GET.q %}
         {% include "umap/map_table.html" %}
       {% else %}
         <div>
