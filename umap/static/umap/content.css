@@ -418,8 +418,7 @@ table.maps thead {
 table.maps a:not(.icon-link) {
     text-decoration: underline;
 }
-table.maps button.map-opener,
-table.maps button.map-clone {
+table.maps button.map-icon {
     padding: 0;
     border: none;
     background: transparent;

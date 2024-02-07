@@ -12,6 +12,6 @@ def test_owner_can_delete_map_after_confirmation(map, live_server, login):
     delete_button = page.get_by_title("Delete")
     expect(delete_button).to_be_visible()
     page.on("dialog", lambda dialog: dialog.accept())
-    with page.expect_response(f"/en/map/{map.pk}/update/delete/"):
+    with page.expect_navigation():
         delete_button.click()
     assert Map.objects.all().count() == 0

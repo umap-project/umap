@@ -848,7 +848,11 @@ class MapDelete(DeleteView):
         if not self.object.can_delete(self.request.user, self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
         self.object.delete()
-        return simple_json_response(redirect="/")
+        home_url = reverse("home")
+        if is_ajax(self.request):
+            return simple_json_response(redirect=home_url)
+        else:
+            return HttpResponseRedirect(form.data.get("next") or home_url)
 
 
 class MapClone(PermissionsMixin, View):

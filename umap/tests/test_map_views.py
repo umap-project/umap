@@ -109,7 +109,9 @@ def test_update(client, map, post_data):
 def test_delete(client, map, datalayer):
     url = reverse("map_delete", args=(map.pk,))
     client.login(username=map.owner.username, password="123123")
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 200
     assert not Map.objects.filter(pk=map.pk).exists()
     assert not DataLayer.objects.filter(pk=datalayer.pk).exists()
@@ -312,7 +314,9 @@ def test_only_owner_can_delete(client, map, user):
     map.editors.add(user)
     url = reverse("map_delete", kwargs={"map_id": map.pk})
     client.login(username=user.username, password="123123")
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 403
 
 
@@ -384,7 +388,9 @@ def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_d
 @pytest.mark.usefixtures("allow_anonymous")
 def test_anonymous_delete(cookieclient, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
-    response = cookieclient.post(url, {}, follow=True)
+    response = cookieclient.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 200
     assert not Map.objects.filter(pk=anonymap.pk).count()
     # Test response is a json
@@ -395,7 +401,9 @@ def test_anonymous_delete(cookieclient, anonymap):
 @pytest.mark.usefixtures("allow_anonymous")
 def test_no_cookie_cant_delete(client, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 403
 
 
