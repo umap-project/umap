@@ -96,6 +96,7 @@ i18n_urls += decorated_patterns(
 )
 i18n_urls += decorated_patterns(
     [ensure_csrf_cookie],
+    re_path(r"^map/$", views.MapPreview.as_view(), name="map_preview"),
     re_path(r"^map/new/$", views.MapNew.as_view(), name="map_new"),
 )
 i18n_urls += decorated_patterns(

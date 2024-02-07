@@ -455,8 +455,7 @@ class MapDetailMixin:
             if domain and "{" not in domain:
                 context["preconnect_domains"] = [f"//{domain}"]
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_map_properties(self):
         user = self.request.user
         properties = {
             "urls": _urls_for_js(),
@@ -486,6 +485,17 @@ class MapDetailMixin:
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
 
+        if not user.is_anonymous:
+            properties["user"] = {
+                "id": user.pk,
+                "name": str(user),
+                "url": reverse("user_dashboard"),
+            }
+        return properties
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        properties = self.get_map_properties()
         if settings.USE_I18N:
             lang = settings.LANGUAGE_CODE
             # Check attr in case the middleware is not active
@@ -495,19 +505,13 @@ class MapDetailMixin:
             locale = to_locale(lang)
             properties["locale"] = locale
             context["locale"] = locale
-        if not user.is_anonymous:
-            properties["user"] = {
-                "id": user.pk,
-                "name": str(user),
-                "url": reverse("user_dashboard"),
-            }
-        map_settings = self.get_geojson()
-        if "properties" not in map_settings:
-            map_settings["properties"] = {}
-        map_settings["properties"].update(properties)
-        map_settings["properties"]["datalayers"] = self.get_datalayers()
-        context["map_settings"] = json.dumps(map_settings, indent=settings.DEBUG)
-        self.set_preconnect(map_settings["properties"], context)
+        geojson = self.get_geojson()
+        if "properties" not in geojson:
+            geojson["properties"] = {}
+        geojson["properties"].update(properties)
+        geojson["properties"]["datalayers"] = self.get_datalayers()
+        context["map_settings"] = json.dumps(geojson, indent=settings.DEBUG)
+        self.set_preconnect(geojson["properties"], context)
         return context
 
     def get_datalayers(self):
@@ -707,6 +711,15 @@ class MapViewGeoJSON(MapView):
 
 class MapNew(MapDetailMixin, TemplateView):
     template_name = "umap/map_detail.html"
+
+
+class MapPreview(MapDetailMixin, TemplateView):
+    template_name = "umap/map_detail.html"
+
+    def get_map_properties(self):
+        properties = super().get_map_properties()
+        properties["preview"] = True
+        return properties
 
 
 class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):

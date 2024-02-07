@@ -69,6 +69,65 @@ L.U.Map.include({
     'tilelayers',
   ],
 
+  editableOptions: {
+    'zoom': undefined,
+    'scrollWheelZoom': Boolean,
+    'scaleControl': Boolean,
+    'moreControl': Boolean,
+    'miniMap': Boolean,
+    'displayPopupFooter': undefined,
+    'onLoadPanel': String,
+    'defaultView': String,
+    'name': String,
+    'description': String,
+    'licence': undefined,
+    'tilelayer': undefined,
+    'overlay': undefined,
+    'limitBounds': undefined,
+    'color': String,
+    'iconClass': String,
+    'iconUrl': String,
+    'smoothFactor': undefined,
+    'iconOpacity': undefined,
+    'opacity': undefined,
+    'weight': undefined,
+    'fill': undefined,
+    'fillColor': undefined,
+    'fillOpacity': undefined,
+    'dashArray': undefined,
+    'popupShape': String,
+    'popupTemplate': String,
+    'popupContentTemplate': String,
+    'zoomTo': undefined,
+    'captionBar': Boolean,
+    'captionMenus': Boolean,
+    'slideshow': undefined,
+    'sortKey': undefined,
+    'labelKey': undefined,
+    'filterKey': undefined,
+    'facetKey': undefined,
+    'slugKey': undefined,
+    'showLabel': undefined,
+    'labelDirection': undefined,
+    'labelInteractive': undefined,
+    'outlinkTarget': undefined,
+    'shortCredit': undefined,
+    'longCredit': undefined,
+    'permanentCredit': undefined,
+    'permanentCreditBackground': undefined,
+    'zoomControl': 'NullableBoolean',
+    'datalayersControl': 'NullableBoolean',
+    'searchControl': 'NullableBoolean',
+    'locateControl': 'NullableBoolean',
+    'fullscreenControl': 'NullableBoolean',
+    'editinosmControl': 'NullableBoolean',
+    'embedControl': 'NullableBoolean',
+    'measureControl': 'NullableBoolean',
+    'tilelayersControl': 'NullableBoolean',
+    'starControl': 'NullableBoolean',
+    'easing': undefined,
+  },
+
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
@@ -89,7 +148,7 @@ L.U.Map.include({
         ? geojson.properties.fullscreenControl
         : true
     geojson.properties.fullscreenControl = false
-    L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom')
+    this.setOptionsFromQueryString(geojson.properties)
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
 
@@ -109,32 +168,10 @@ L.U.Map.include({
     this.demoTileInfos = this.options.demoTileInfos
     this.options.zoomControl = zoomControl
     this.options.fullscreenControl = fullscreenControl
-    L.Util.setBooleanFromQueryString(this.options, 'moreControl')
-    L.Util.setBooleanFromQueryString(this.options, 'scaleControl')
-    L.Util.setBooleanFromQueryString(this.options, 'miniMap')
-    L.Util.setFromQueryString(this.options, 'editMode')
-    L.Util.setBooleanFromQueryString(this.options, 'displayDataBrowserOnLoad')
-    L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
-    L.Util.setBooleanFromQueryString(this.options, 'captionBar')
-    L.Util.setBooleanFromQueryString(this.options, 'captionMenus')
-    for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
-      L.Util.setNullableBooleanFromQueryString(
-        this.options,
-        `${this.HIDDABLE_CONTROLS[i]}Control`
-      )
-    }
-    // Specific case for datalayersControl
-    // which accept "expanded" value, on top of true/false/null
-    if (L.Util.queryString('datalayersControl') === 'expanded') {
-      L.Util.setFromQueryString(this.options, 'datalayersControl')
-    }
     this.datalayersOnLoad = L.Util.queryString('datalayers')
-    this.options.onLoadPanel = L.Util.queryString(
-      'onLoadPanel',
-      this.options.onLoadPanel
-    )
-    if (this.datalayersOnLoad)
+    if (this.datalayersOnLoad) {
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
+    }
 
     if (L.Browser.ielt9) this.options.editMode = 'disabled' // TODO include ie9
 
@@ -233,18 +270,25 @@ L.U.Map.include({
 
     // Creation mode
     if (!this.options.umap_id) {
-      this.isDirty = true
+      if (!this.options.preview) {
+        this.isDirty = true
+        this.enableEdit()
+      }
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      this.options.editMode = 'advanced'
-      this.enableEdit()
+      let data = L.Util.queryString('data', null)
       let dataUrl = L.Util.queryString('dataUrl', null)
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
       if (dataUrl) {
         dataUrl = decodeURIComponent(dataUrl)
         dataUrl = this.localizeUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
+        const datalayer = this.createDataLayer()
         datalayer.importFromUrl(dataUrl, dataFormat)
+      } else if (data) {
+        data = decodeURIComponent(data)
+        const datalayer = this.createDataLayer()
+        datalayer.importRaw(data, dataFormat)
       }
     }
 
@@ -290,10 +334,35 @@ L.U.Map.include({
       }
     })
 
-    window.onbeforeunload = () => this.isDirty || null
+    window.onbeforeunload = () => this.editEnabled && this.isDirty || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
+  },
+
+  setOptionsFromQueryString: function (options) {
+    // This is not an editable option
+    L.Util.setFromQueryString(options, 'editMode')
+    // FIXME retrocompat
+    L.Util.setBooleanFromQueryString(options, 'displayDataBrowserOnLoad')
+    L.Util.setBooleanFromQueryString(options, 'displayCaptionOnLoad')
+    for (const [key, type] of Object.entries(this.editableOptions)) {
+      switch (type) {
+        case Boolean:
+          L.Util.setBooleanFromQueryString(options, key)
+          break
+        case 'NullableBoolean':
+          L.Util.setNullableBooleanFromQueryString(options, key)
+          break
+        case String:
+          L.Util.setFromQueryString(options, key)
+      }
+    }
+    // Specific case for datalayersControl
+    // which accepts "expanded" value, on top of true/false/null
+    if (L.Util.queryString('datalayersControl') === 'expanded') {
+      L.Util.setFromQueryString(options, 'datalayersControl')
+    }
   },
 
   initControls: function () {
@@ -852,8 +921,7 @@ L.U.Map.include({
 
     let mustReindex = false
 
-    for (let i = 0; i < this.editableOptions.length; i++) {
-      const option = this.editableOptions[i]
+    for (const option of Object.keys(this.editableOptions)) {
       if (typeof importedData.properties[option] !== 'undefined') {
         this.options[option] = importedData.properties[option]
         if (option === 'sortKey') mustReindex = true
@@ -980,70 +1048,11 @@ L.U.Map.include({
     else this.fire('saved')
   },
 
-  editableOptions: [
-    'zoom',
-    'scrollWheelZoom',
-    'scaleControl',
-    'moreControl',
-    'miniMap',
-    'displayPopupFooter',
-    'onLoadPanel',
-    'defaultView',
-    'name',
-    'description',
-    'licence',
-    'tilelayer',
-    'overlay',
-    'limitBounds',
-    'color',
-    'iconClass',
-    'iconUrl',
-    'smoothFactor',
-    'iconOpacity',
-    'opacity',
-    'weight',
-    'fill',
-    'fillColor',
-    'fillOpacity',
-    'dashArray',
-    'popupShape',
-    'popupTemplate',
-    'popupContentTemplate',
-    'zoomTo',
-    'captionBar',
-    'captionMenus',
-    'slideshow',
-    'sortKey',
-    'labelKey',
-    'filterKey',
-    'facetKey',
-    'slugKey',
-    'showLabel',
-    'labelDirection',
-    'labelInteractive',
-    'outlinkTarget',
-    'shortCredit',
-    'longCredit',
-    'permanentCredit',
-    'permanentCreditBackground',
-    'zoomControl',
-    'datalayersControl',
-    'searchControl',
-    'locateControl',
-    'fullscreenControl',
-    'editinosmControl',
-    'embedControl',
-    'measureControl',
-    'tilelayersControl',
-    'starControl',
-    'easing',
-  ],
-
   exportOptions: function () {
     const properties = {}
-    for (let i = this.editableOptions.length - 1; i >= 0; i--) {
-      if (typeof this.options[this.editableOptions[i]] !== 'undefined') {
-        properties[this.editableOptions[i]] = this.options[this.editableOptions[i]]
+    for (const option of Object.keys(this.editableOptions)) {
+      if (typeof this.options[option] !== 'undefined') {
+        properties[option] = this.options[option]
       }
     }
     return properties

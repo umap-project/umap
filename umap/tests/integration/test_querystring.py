@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from playwright.sync_api import expect
 
@@ -37,3 +39,14 @@ def test_datalayers_control(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?datalayersControl=expanded")
     expect(control).to_be_hidden()
     expect(box).to_be_visible()
+
+
+def test_can_deactivate_wheel_from_query_string(map, live_server, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page).to_have_url(re.compile(r".*#7/.+"))
+    page.mouse.wheel(0, 1)
+    expect(page).to_have_url(re.compile(r".*#6/.+"))
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?scrollWheelZoom=false")
+    expect(page).to_have_url(re.compile(r".*#7/.+"))
+    page.mouse.wheel(0, 1)
+    expect(page).to_have_url(re.compile(r".*#7/.+"))
