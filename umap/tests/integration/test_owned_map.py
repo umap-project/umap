@@ -1,4 +1,4 @@
-from time import sleep
+import re
 
 import pytest
 from playwright.sync_api import expect
@@ -20,7 +20,6 @@ def login(context, settings, live_server):
         page.get_by_placeholder("Username").fill(user.username)
         page.get_by_placeholder("Password").fill("123123")
         page.locator('#login_form input[type="submit"]').click()
-        sleep(1)  # Time for ajax login POST to proceed
         return page
 
     return do_login
@@ -183,8 +182,8 @@ def test_create(tilelayer, live_server, login, user):
     expect(marker).to_have_count(1)
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go back
+    with page.expect_response(re.compile(r".*/datalayer/create/")):
+        save.click()
     expect(marker).to_have_count(1)
 
 
@@ -197,8 +196,8 @@ def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     page.locator("input[name=name]").fill("Layer 1")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go back
+    with page.expect_response(re.compile(r".*/map/create/")):
+        save.click()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
@@ -232,7 +231,7 @@ def test_can_change_owner(map, live_server, login, user):
     input.press("Tab")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go
+    with page.expect_response(re.compile(r".*/update/permissions/.*")):
+        save.click()
     modified = Map.objects.get(pk=map.pk)
     assert modified.owner == user
