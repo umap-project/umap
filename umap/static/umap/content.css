@@ -313,6 +313,55 @@ ul.umap-autocomplete {
 /* **************************** */
 /*           Dashboard          */
 /* **************************** */
+/* https://kittygiraudel.com/2020/12/03/a11y-advent-hiding-content/ */
+.sr-only {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important;
+}
+/* https://kittygiraudel.com/2020/12/06/a11y-advent-skip-to-content/ */
+.sr-only.sr-only--focusable:focus,
+.sr-only.sr-only--focusable:active {
+  clip: auto !important;
+  -webkit-clip-path: auto !important;
+  clip-path: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  width: auto !important;
+  white-space: normal !important;
+}
+.icon-dashboard {
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+    margin: 3px;
+}
+.icon-view {
+    background-image: url('./img/icon-view.svg');
+}
+.icon-share {
+    background-image: url('./img/icon-share.svg');
+}
+.icon-edit {
+    background-image: url('./img/icon-edit.svg');
+}
+.icon-download {
+    background-image: url('./img/icon-download.svg');
+}
+.icon-duplicate {
+    background-image: url('./img/icon-duplicate.svg');
+}
+.icon-delete {
+    background-image: url('./img/icon-delete.svg');
+}
 .table-header {
     display: flex;
     justify-content: space-between;
@@ -366,8 +415,14 @@ table.maps a,
 table.maps thead {
     color: #263B58;
 }
-table.maps a {
+table.maps a:not(.icon-link) {
     text-decoration: underline;
+}
+table.maps button.map-opener,
+table.maps button.map-clone {
+    padding: 0;
+    border: none;
+    background: transparent;
 }
 table.maps form {
     display: inline;

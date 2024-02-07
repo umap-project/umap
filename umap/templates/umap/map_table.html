@@ -20,7 +20,11 @@
           </td>
           <td>
             {{ map_inst.preview_settings|json_script:unique_id }}
-            <button class="button map-opener neutral" data-map-id="{{ unique_id }}">{% blocktranslate %}Open preview{% endblocktranslate %}</button>
+            <button class="map-opener" data-map-id="{{ unique_id }}"
+              title="{% translate "Open preview" %}">
+              <span class="icon-dashboard icon-view"></span>
+              <span class="sr-only">{% translate "Open preview" %}</span>
+            </button>
             <dialog>
               <form method="dialog">
                 <div id="{{ unique_id }}_target" class="map_fragment"></div>
@@ -37,14 +41,34 @@
             <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
           </td>
           <td>
-            <a href="{{ map_inst.get_absolute_url }}?share">{% translate "Share" %}</a> |
-            <a href="{{ map_inst.get_absolute_url }}?edit">{% translate "Edit" %}</a> |
-            <a href="{% url 'map_download' map_inst.pk %}">{% translate "Download" %}</a> |
+            <a href="{{ map_inst.get_absolute_url }}?share" class="icon-link"
+              title="{% translate "Share" %}">
+              <span class="icon-dashboard icon-share"></span>
+              <span class="sr-only">{% translate "Share" %}</span>
+            </a>
+            <a href="{{ map_inst.get_absolute_url }}?edit" class="icon-link"
+              title="{% translate "Edit" %}">
+              <span class="icon-dashboard icon-edit"></span>
+              <span class="sr-only">{% translate "Edit" %}</span>
+            </a>
+            <a href="{% url 'map_download' map_inst.pk %}" class="icon-link"
+              title="{% translate "Download" %}">
+              <span class="icon-dashboard icon-download"></span>
+              <span class="sr-only">{% translate "Download" %}</span>
+            </a>
             <form action="{% url 'map_clone' map_inst.pk %}" method="post">
               {% csrf_token %}
-              <input type="submit" value="{% trans "Clone" %}" />
-            </form> |
-            <a href="{% url 'map_delete' map_inst.pk %}">{% translate "Delete" %}</a>
+              <button class="map-clone" type="submit"
+                title="{% translate "Clone" %}">
+                <span class="icon-dashboard icon-duplicate"></span>
+                <span class="sr-only">{% translate "Clone" %}</span>
+              </button>
+            </form>
+            <a href="{% url 'map_delete' map_inst.pk %}" class="icon-link"
+              title="{% translate "Delete" %}">
+              <span class="icon-dashboard icon-delete"></span>
+              <span class="sr-only">{% translate "Delete" %}</span>
+            </a>
           </td>
         </tr>
       {% endwith %}

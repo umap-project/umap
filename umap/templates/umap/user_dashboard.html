@@ -52,8 +52,9 @@
       const CACHE = {}
       for (const mapOpener of document.querySelectorAll("button.map-opener")) {
         mapOpener.addEventListener('click', (event) => {
-          event.target.nextElementSibling.showModal()
-          const mapId = event.target.dataset.mapId
+          const button = event.target.closest('button')
+          button.nextElementSibling.showModal()
+          const mapId = button.dataset.mapId
           if (!document.querySelector(`#${mapId}_target`).hasChildNodes()) {
             const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
             const map = new L.U.Map(`${mapId}_target`, previewSettings)
