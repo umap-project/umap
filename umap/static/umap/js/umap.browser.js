@@ -22,7 +22,7 @@ L.U.Browser = L.Class.extend({
     edit.title = L._('Edit this feature')
     del.title = L._('Delete this feature')
     title.textContent = feature.getDisplayName() || '—'
-    const bgcolor = feature.getOption('color')
+    const bgcolor = feature.getDynamicOption('color')
     colorBox.style.backgroundColor = bgcolor
     if (symbol && symbol !== this.map.options.default_iconUrl) {
       const icon = L.U.Icon.makeIconElement(symbol, colorBox)
