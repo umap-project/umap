@@ -228,3 +228,22 @@ def test_should_show_header_for_display_on_load_false(
     browser = page.locator(".umap-browse-data")
     expect(browser).to_be_visible()
     expect(browser.get_by_text("This layer is not loaded")).to_be_visible()
+
+
+def test_should_use_color_variable(live_server, map, page):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.settings["properties"]["color"] = "{mycolor}"
+    map.save()
+    datalayer_data = deepcopy(DATALAYER_DATA)
+    datalayer_data["features"][0]["properties"]["mycolor"] = "DarkRed"
+    datalayer_data["features"][2]["properties"]["mycolor"] = "DarkGreen"
+    DataLayerFactory(map=map, data=datalayer_data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    features = page.locator(".umap-browse-data li .feature-color")
+    expect(features).to_have_count(3)
+    # DarkGreen
+    expect(features.nth(0)).to_have_css("background-color", "rgb(0, 100, 0)")
+    # DarkRed
+    expect(features.nth(1)).to_have_css("background-color", "rgb(139, 0, 0)")
+    # DarkBlue (default color)
+    expect(features.nth(2)).to_have_css("background-color", "rgb(0, 0, 139)")
