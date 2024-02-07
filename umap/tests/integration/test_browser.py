@@ -216,3 +216,15 @@ def test_should_redraw_list_on_feature_delete(live_server, map, page, bootstrap)
     expect(buttons).to_have_count(2)
     page.get_by_role("button", name="Cancel edits").click()
     expect(buttons).to_have_count(3)
+
+
+def test_should_show_header_for_display_on_load_false(
+    live_server, page, bootstrap, map, datalayer
+):
+    datalayer.settings["displayOnLoad"] = False
+    datalayer.settings["name"] = "This layer is not loaded"
+    datalayer.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    browser = page.locator(".umap-browse-data")
+    expect(browser).to_be_visible()
+    expect(browser.get_by_text("This layer is not loaded")).to_be_visible()

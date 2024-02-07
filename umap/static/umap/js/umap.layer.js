@@ -1,5 +1,5 @@
 L.U.Layer = {
-  canBrowse: true,
+  browsable: true,
 
   getType: function () {
     const proto = Object.getPrototypeOf(this)
@@ -138,7 +138,6 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     TYPE: 'Choropleth',
   },
   includes: [L.U.Layer],
-  canBrowse: true,
   // Have defaults that better suit the choropleth mode.
   defaults: {
     color: 'white',
@@ -345,7 +344,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
     TYPE: 'Heat',
   },
   includes: [L.U.Layer],
-  canBrowse: false,
+  browsable: false,
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -664,7 +663,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   eachFeature: function (method, context) {
-    if (this.layer && this.layer.canBrowse) {
+    if (this.isBrowsable()) {
       for (let i = 0; i < this._index.length; i++) {
         method.call(context || this, this._layers[this._index[i]])
       }
@@ -1458,8 +1457,22 @@ L.U.DataLayer = L.Evented.extend({
     if (bounds.isValid()) this.map.fitBounds(bounds)
   },
 
+  // Is this layer type browsable in theorie
+  isBrowsable: function () {
+    return this.layer && this.layer.browsable
+  },
+
+  // Is this layer browsable in theorie
+  // AND the user allows it
   allowBrowse: function () {
-    return !!this.options.browsable && this.canBrowse() && this.isVisible()
+    return !!this.options.browsable && this.isBrowsable()
+  },
+
+  // Is this layer browsable in theorie
+  // AND the user allows it
+  // AND it makes actually sense (is visible, it has data…)
+  canBrowse: function () {
+    return this.allowBrowse() && this.isVisible() && this.hasData()
   },
 
   count: function () {
@@ -1472,10 +1485,6 @@ L.U.DataLayer = L.Evented.extend({
 
   isVisible: function () {
     return this.layer && this.map.hasLayer(this.layer)
-  },
-
-  canBrowse: function () {
-    return this.layer && this.layer.canBrowse
   },
 
   getFeatureByIndex: function (index) {
@@ -1506,7 +1515,7 @@ L.U.DataLayer = L.Evented.extend({
     let next
     const index = this.map.datalayers_index
     while (((id = index[++id] ? id : 0), (next = index[id]))) {
-      if (next === this || (next.allowBrowse() && next.hasData())) break
+      if (next === this || next.canBrowse()) break
     }
     return next
   },
@@ -1516,7 +1525,7 @@ L.U.DataLayer = L.Evented.extend({
     let prev
     const index = this.map.datalayers_index
     while (((id = index[--id] ? id : index.length - 1), (prev = index[id]))) {
-      if (prev === this || (prev.allowBrowse() && prev.hasData())) break
+      if (prev === this || prev.canBrowse()) break
     }
     return prev
   },

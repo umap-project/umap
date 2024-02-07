@@ -405,7 +405,7 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&
-        datalayer.canBrowse()
+        datalayer.isBrowsable()
       ) {
         options.push([L.stamp(datalayer), datalayer.getName()])
       }

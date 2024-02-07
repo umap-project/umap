@@ -1189,13 +1189,13 @@ L.U.Map.include({
     if (
       datalayer &&
       !datalayer.isDataReadOnly() &&
-      datalayer.canBrowse() &&
+      datalayer.isBrowsable() &&
       datalayer.isVisible()
     ) {
       return datalayer
     }
     datalayer = this.findDataLayer((datalayer) => {
-      if (!datalayer.isDataReadOnly() && datalayer.canBrowse()) {
+      if (!datalayer.isDataReadOnly() && datalayer.isBrowsable()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
       }
@@ -1203,7 +1203,7 @@ L.U.Map.include({
     if (datalayer) return datalayer
     if (fallback) {
       // No datalayer visible, let's force one
-      this.addLayer(fallback.layer)
+      fallback.show()
       return fallback
     }
     return this.createDataLayer()
