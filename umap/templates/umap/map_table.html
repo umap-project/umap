@@ -114,29 +114,18 @@
     </span>
   </div>
 {% endif %}
-<script type="text/javascript">
+<script type="module">
   !(function () {
     for (const deleteLink of document.querySelectorAll("table.maps a[href$='delete/']")) {
-      deleteLink.addEventListener('click', (event) => {
+      deleteLink.addEventListener('click', async (event) => {
         event.preventDefault()
-        const token = document.cookie.replace(
-          /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
-          '$1'
-        )
+        const ui = new L.U.UI(document.querySelector('header'))
+        const server = new window.umap.ServerRequest(ui)
         if (confirm(L._('Are you sure you want to delete this map?'))) {
-          fetch(deleteLink.href, {
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': token
-            },
-          })
-            .then((response) => {
-              if (response.ok) {
-                window.location.reload()
-              }
-              throw response
-            })
-            .catch((error) => console.debug(error))
+          const [data, response, error] = await server.post(deleteLink.href)
+          if (response.ok) {
+            window.location.reload()
+          }
         }
       })
     }
