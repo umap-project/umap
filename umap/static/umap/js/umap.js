@@ -276,16 +276,6 @@ L.U.Map.include({
       }
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      let style = L.Util.queryString('style', null)
-      if (style) {
-        style = decodeURIComponent(style)
-        try {
-          style = JSON.parse(style)
-          L.Util.setOptions(this, style)
-        } catch (error) {
-          console.error(error)
-        }
-      }
       let data = L.Util.queryString('data', null)
       let dataUrl = L.Util.queryString('dataUrl', null)
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
