@@ -13,6 +13,7 @@
     {% endfor %}
   {% endif %}
   {% umap_css %}
+  {{ block.super }}
   {% umap_js locale=locale %}
   {% if object.share_status != object.PUBLIC %}<meta name="robots" content="noindex">{% endif %}
   <link rel="alternate" type="application/json+oembed"
