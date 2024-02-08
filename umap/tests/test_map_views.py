@@ -1,4 +1,6 @@
 import json
+import zipfile
+from io import BytesIO
 
 import pytest
 from django.contrib.auth import get_user_model
@@ -8,7 +10,7 @@ from django.urls import reverse
 
 from umap.models import DataLayer, Map, Star
 
-from .base import login_required
+from .base import MapFactory, UserFactory, login_required
 
 pytestmark = pytest.mark.django_db
 User = get_user_model()
@@ -107,7 +109,9 @@ def test_update(client, map, post_data):
 def test_delete(client, map, datalayer):
     url = reverse("map_delete", args=(map.pk,))
     client.login(username=map.owner.username, password="123123")
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 200
     assert not Map.objects.filter(pk=map.pk).exists()
     assert not DataLayer.objects.filter(pk=datalayer.pk).exists()
@@ -156,9 +160,23 @@ def test_clone_map_should_create_a_new_instance(client, map):
     url = reverse("map_clone", kwargs={"map_id": map.pk})
     client.login(username=map.owner.username, password="123123")
     response = client.post(url)
+    assert response.status_code == 302
+    assert Map.objects.count() == 2
+    clone = Map.objects.latest("pk")
+    assert response["Location"] == clone.get_absolute_url()
+    assert clone.pk != map.pk
+    assert clone.name == "Clone of " + map.name
+
+
+def test_clone_map_should_be_possible_via_ajax(client, map):
+    assert Map.objects.count() == 1
+    url = reverse("map_clone", kwargs={"map_id": map.pk})
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, headers={"X-Requested-With": "XMLHttpRequest"})
     assert response.status_code == 200
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
+    assert response.json() == {"redirect": clone.get_absolute_url()}
     assert clone.pk != map.pk
     assert clone.name == "Clone of " + map.name
 
@@ -189,7 +207,7 @@ def test_clone_should_set_cloner_as_owner(client, map, user):
     map.save()
     client.login(username=user.username, password="123123")
     response = client.post(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
     assert clone.pk != map.pk
@@ -296,7 +314,9 @@ def test_only_owner_can_delete(client, map, user):
     map.editors.add(user)
     url = reverse("map_delete", kwargs={"map_id": map.pk})
     client.login(username=user.username, password="123123")
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 403
 
 
@@ -368,7 +388,9 @@ def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_d
 @pytest.mark.usefixtures("allow_anonymous")
 def test_anonymous_delete(cookieclient, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
-    response = cookieclient.post(url, {}, follow=True)
+    response = cookieclient.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 200
     assert not Map.objects.filter(pk=anonymap.pk).count()
     # Test response is a json
@@ -379,7 +401,9 @@ def test_anonymous_delete(cookieclient, anonymap):
 @pytest.mark.usefixtures("allow_anonymous")
 def test_no_cookie_cant_delete(client, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 403
 
 
@@ -440,9 +464,10 @@ def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonym
     anonymap.edit_status = anonymap.ANONYMOUS
     anonymap.save()
     response = client.post(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
+    assert response["Location"] == clone.get_absolute_url()
     assert clone.pk != anonymap.pk
     assert clone.name == "Clone of " + anonymap.name
     assert clone.owner is None
@@ -654,6 +679,64 @@ def test_download(client, map, datalayer):
             "type": "FeatureCollection",
         },
     ]
+
+
+def test_download_multiple_maps(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    another_map = MapFactory(
+        owner=map.owner, name="Another map", share_status=Map.PUBLIC
+    )
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 2
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{another_map.id}.umap"
+        assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
+        with f.open(f.infolist()[1]) as umap_file:
+            umapjson = json.loads(umap_file.read().decode())
+            assert list(umapjson.keys()) == [
+                "type",
+                "geometry",
+                "properties",
+                "uri",
+                "layers",
+            ]
+            assert umapjson["type"] == "umap"
+            assert umapjson["uri"] == f"http://testserver/en/map/test-map_{map.id}"
+
+
+def test_download_multiple_maps_unauthorized(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    user1 = UserFactory(username="user1")
+    another_map = MapFactory(owner=user1, name="Another map", share_status=Map.PUBLIC)
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 1
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{map.id}.umap"
+
+
+def test_download_multiple_maps_editor(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    user1 = UserFactory(username="user1")
+    another_map = MapFactory(owner=user1, name="Another map", share_status=Map.PUBLIC)
+    another_map.editors.add(map.owner)
+    another_map.save()
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 2
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{another_map.id}.umap"
+        assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
 
 
 @pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED])

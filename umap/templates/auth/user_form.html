@@ -1,9 +1,10 @@
 {% extends "umap/content.html" %}
 {% load i18n %}
 {% block maincontent %}
-  <div class="col wide">
+  <div class="row">
     <h2 class="section tabs">
-      <a href="{% url "user_dashboard" %}">{% trans "My Dashboard" %}</a> | <a class="selected" href="{% url 'user_profile' %}">{% trans "My Profile" %}</a>
+      <a href="{% url "user_dashboard" %}">{% trans "My Maps" %}</a>
+      <a class="selected" href="{% url 'user_profile' %}">{% trans "My Profile" %}</a>
     </h2>
   </div>
   <div class="wrapper">

@@ -1,8 +1,10 @@
+import io
 import json
 import mimetypes
 import os
 import re
 import socket
+import zipfile
 from datetime import datetime, timedelta
 from http.client import InvalidURL
 from io import BytesIO
@@ -288,18 +290,42 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
-        kwargs.update(
-            {
-                "q": self.request.GET.get("q"),
-                "maps": self.paginate(
-                    self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER
-                ),
-            }
-        )
+        page = self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)
+        kwargs.update({"q": self.request.GET.get("q"), "maps": page})
         return super().get_context_data(**kwargs)
 
 
 user_dashboard = UserDashboard.as_view()
+
+
+class UserDownload(DetailView, SearchMixin):
+    model = User
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_maps(self):
+        qs = Map.objects.filter(id__in=self.request.GET.getlist("map_id"))
+        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
+        return qs.order_by("-modified_at")
+
+    def render_to_response(self, context, *args, **kwargs):
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+            for map_ in self.get_maps():
+                umapjson = map_.generate_umapjson(self.request)
+                geojson_file = io.StringIO(json.dumps(umapjson))
+                file_name = f"umap_backup_{map_.slug}_{map_.pk}.umap"
+                zip_file.writestr(file_name, geojson_file.getvalue())
+
+        response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="umap_backup_complete.zip"'
+        return response
+
+
+user_download = UserDownload.as_view()
 
 
 class MapsShowCase(View):
@@ -637,18 +663,8 @@ class MapDownload(DetailView):
         return reverse("map_download", args=(self.object.pk,))
 
     def render_to_response(self, context, *args, **kwargs):
-        geojson = self.object.settings
-        geojson["type"] = "umap"
-        geojson["uri"] = self.request.build_absolute_uri(self.object.get_absolute_url())
-        datalayers = []
-        for datalayer in self.object.datalayer_set.all():
-            with open(datalayer.geojson.path, "rb") as f:
-                layer = json.loads(f.read())
-            if datalayer.settings:
-                layer["_umap_options"] = datalayer.settings
-            datalayers.append(layer)
-        geojson["layers"] = datalayers
-        response = simple_json_response(**geojson)
+        umapjson = self.object.generate_umapjson(self.request)
+        response = simple_json_response(**umapjson)
         response[
             "Content-Disposition"
         ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
@@ -845,7 +861,11 @@ class MapDelete(DeleteView):
         if not self.object.can_delete(self.request.user, self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
         self.object.delete()
-        return simple_json_response(redirect="/")
+        home_url = reverse("home")
+        if is_ajax(self.request):
+            return simple_json_response(redirect=home_url)
+        else:
+            return HttpResponseRedirect(form.data.get("next") or home_url)
 
 
 class MapClone(PermissionsMixin, View):
@@ -857,7 +877,10 @@ class MapClone(PermissionsMixin, View):
             return HttpResponseForbidden()
         owner = self.request.user if self.request.user.is_authenticated else None
         self.object = kwargs["map_inst"].clone(owner=owner)
-        response = simple_json_response(redirect=self.object.get_absolute_url())
+        if is_ajax(self.request):
+            response = simple_json_response(redirect=self.object.get_absolute_url())
+        else:
+            response = HttpResponseRedirect(self.object.get_absolute_url())
         if not self.request.user.is_authenticated:
             key, value = self.object.signed_cookie_elements
             response.set_signed_cookie(
