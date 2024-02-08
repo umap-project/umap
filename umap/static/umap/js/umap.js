@@ -55,20 +55,8 @@ L.Map.mergeOptions({
   featuresHaveOwner: false,
 })
 
-L.U.Map.include({
-  HIDDABLE_CONTROLS: [
-    'zoom',
-    'search',
-    'fullscreen',
-    'embed',
-    'locate',
-    'measure',
-    'editinosm',
-    'datalayers',
-    'star',
-    'tilelayers',
-  ],
-
+L.U.Map = L.Map.extend({
+  includes: [ControlsMixin],
   editableOptions: {
     'zoom': undefined,
     'scrollWheelZoom': Boolean,
@@ -154,13 +142,13 @@ L.U.Map.include({
 
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
-    this.urls = new window.umap.URLs(this.options.urls)
+    this.urls = new L.U.URLs(this.options.urls)
 
     this.ui = new L.U.UI(this._container)
     this.ui.on('dataloading', (e) => this.fire('dataloading', e))
     this.ui.on('dataload', (e) => this.fire('dataload', e))
-    this.server = new window.umap.ServerRequest(this.ui)
-    this.request = new window.umap.Request(this.ui)
+    this.server = new L.U.ServerRequest(this.ui)
+    this.request = new L.U.Request(this.ui)
 
     this.initLoader()
     this.name = this.options.name

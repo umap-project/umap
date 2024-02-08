@@ -1,9 +1,3 @@
-/* Poor man pub/sub handler, enough for now */
-
-L.UmapSingleton = L.Evented.extend({})
-L.U = new L.UmapSingleton()
-L.U.Map = L.Map.extend({})
-
 /*
  * Utils
  */

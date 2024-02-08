@@ -13,7 +13,7 @@ L.U.AutoComplete = L.Class.extend({
   initialize: function (el, options) {
     this.el = el
     const ui = new L.U.UI(document.querySelector('header'))
-    this.server = new window.umap.ServerRequest(ui)
+    this.server = new L.U.ServerRequest(ui)
     L.setOptions(this, options)
     let CURRENT = null
     try {

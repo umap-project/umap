@@ -739,7 +739,19 @@ L.U.DataLayer.addInitHook(function () {
   if (this.isVisible()) this.propagateShow()
 })
 
-L.U.Map.include({
+const ControlsMixin = {
+  HIDDABLE_CONTROLS: [
+    'zoom',
+    'search',
+    'fullscreen',
+    'embed',
+    'locate',
+    'measure',
+    'editinosm',
+    'datalayers',
+    'star',
+    'tilelayers',
+  ],
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),
       title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
@@ -1043,7 +1055,7 @@ L.U.Map.include({
       this
     )
   },
-})
+}
 
 /* Used in view mode to define the current tilelayer */
 L.U.TileLayerControl = L.Control.IconLayers.extend({
@@ -1065,7 +1077,10 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
           // when the tilelayer is actually added to the map (needs this._tileZoom
           // to be defined)
           // Fixme when https://github.com/Leaflet/Leaflet/pull/9201 is released
-          const icon = L.Util.template(layer.options.url_template, this.map.demoTileInfos)
+          const icon = L.Util.template(
+            layer.options.url_template,
+            this.map.demoTileInfos
+          )
           layers.push({
             title: layer.options.name,
             layer: layer,
