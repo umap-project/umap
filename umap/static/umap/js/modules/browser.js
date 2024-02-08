@@ -1,24 +1,26 @@
-L.U.Browser = L.Class.extend({
-  options: {
-    filter: '',
-    inBbox: false,
-  },
+// Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
+import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 
-  initialize: function (map) {
+export default class Browser {
+  constructor(map) {
     this.map = map
     this.map.on('moveend', this.onMoveEnd, this)
-  },
+    this.options = {
+      filter: '',
+      inBbox: false,
+    }
+  }
 
-  addFeature: function (feature, parent) {
+  addFeature(feature, parent) {
     const filter = this.options.filter
     if (filter && !feature.matchFilter(filter, this.filterKeys)) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
-    const feature_li = L.DomUtil.create('li', `${feature.getClassName()} feature`),
-      zoom_to = L.DomUtil.create('i', 'feature-zoom_to', feature_li),
-      edit = L.DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
-      del = L.DomUtil.create('i', 'show-on-edit feature-delete', feature_li),
-      colorBox = L.DomUtil.create('i', 'feature-color', feature_li),
-      title = L.DomUtil.create('span', 'feature-title', feature_li),
+    const feature_li = DomUtil.create('li', `${feature.getClassName()} feature`),
+      zoom_to = DomUtil.create('i', 'feature-zoom_to', feature_li),
+      edit = DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
+      del = DomUtil.create('i', 'show-on-edit feature-delete', feature_li),
+      colorBox = DomUtil.create('i', 'feature-color', feature_li),
+      title = DomUtil.create('span', 'feature-title', feature_li),
       symbol = feature._getIconUrl
         ? L.U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
         : null
@@ -32,7 +34,7 @@ L.U.Browser = L.Class.extend({
       const icon = L.U.Icon.makeIconElement(symbol, colorBox)
       L.U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
     }
-    L.DomEvent.on(
+    DomEvent.on(
       zoom_to,
       'click',
       function (e) {
@@ -41,7 +43,7 @@ L.U.Browser = L.Class.extend({
       },
       feature
     )
-    L.DomEvent.on(
+    DomEvent.on(
       title,
       'click',
       function (e) {
@@ -50,44 +52,44 @@ L.U.Browser = L.Class.extend({
       },
       feature
     )
-    L.DomEvent.on(edit, 'click', feature.edit, feature)
-    L.DomEvent.on(del, 'click', feature.confirmDelete, feature)
+    DomEvent.on(edit, 'click', feature.edit, feature)
+    DomEvent.on(del, 'click', feature.confirmDelete, feature)
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
-    L.DomEvent.disableClickPropagation(feature_li)
+    DomEvent.disableClickPropagation(feature_li)
     parent.appendChild(feature_li)
-  },
+  }
 
-  datalayerId: function (datalayer) {
+  datalayerId(datalayer) {
     return `browse_data_datalayer_${L.stamp(datalayer)}`
-  },
+  }
 
-  onDataLayerChanged: function (e) {
+  onDataLayerChanged(e) {
     this.updateDatalayer(e.target)
-  },
+  }
 
-  addDataLayer: function (datalayer, parent) {
-    const container = L.DomUtil.create('div', datalayer.getHidableClass(), parent),
-      headline = L.DomUtil.create('h5', '', container),
-      counter = L.DomUtil.create('span', 'datalayer-counter', headline)
+  addDataLayer(datalayer, parent) {
+    const container = DomUtil.create('div', datalayer.getHidableClass(), parent),
+      headline = DomUtil.create('h5', '', container),
+      counter = DomUtil.create('span', 'datalayer-counter', headline)
     container.id = this.datalayerId(datalayer)
     datalayer.renderToolbox(headline)
-    L.DomUtil.add('span', '', headline, datalayer.options.name)
-    const ul = L.DomUtil.create('ul', '', container)
+    DomUtil.add('span', '', headline, datalayer.options.name)
+    const ul = DomUtil.create('ul', '', container)
     this.updateDatalayer(datalayer)
     datalayer.on('datachanged', this.onDataLayerChanged, this)
     this.map.ui.once('panel:closed', () => {
       datalayer.off('datachanged', this.onDataLayerChanged, this)
     })
-  },
+  }
 
-  updateDatalayer: function (datalayer) {
+  updateDatalayer(datalayer) {
     // Compute once, but use it for each feature later.
     this.bounds = this.map.getBounds()
-    const parent = L.DomUtil.get(this.datalayerId(datalayer))
+    const parent = DomUtil.get(this.datalayerId(datalayer))
     // Panel is not open
     if (!parent) return
-    L.DomUtil.classIf(parent, 'off', !datalayer.isVisible())
+    DomUtil.classIf(parent, 'off', !datalayer.isVisible())
     const container = parent.querySelector('ul'),
       counter = parent.querySelector('.datalayer-counter')
     container.innerHTML = ''
@@ -98,16 +100,16 @@ L.U.Browser = L.Class.extend({
       count = total == current ? total : `${current}/${total}`
     counter.textContent = count
     counter.title = L._('Features in this layer: {count}', { count: count })
-  },
+  }
 
-  onFormChange: function () {
+  onFormChange() {
     this.map.eachBrowsableDataLayer((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
     })
-  },
+  }
 
-  onMoveEnd: function () {
+  onMoveEnd() {
     const isBrowserOpen = !!document.querySelector('.umap-browse-data')
     if (!isBrowserOpen) return
     const isListDynamic = this.options.inBbox
@@ -115,25 +117,25 @@ L.U.Browser = L.Class.extend({
       if (!isListDynamic && !datalayer.hasDynamicData()) return
       this.updateDatalayer(datalayer)
     })
-  },
+  }
 
-  open: function () {
+  open() {
     // Get once but use it for each feature later
     this.filterKeys = this.map.getFilterKeys()
-    const container = L.DomUtil.create('div', 'umap-browse-data')
+    const container = DomUtil.create('div', 'umap-browse-data')
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
-    L.DomEvent.disableClickPropagation(container)
+    DomEvent.disableClickPropagation(container)
 
-    const title = L.DomUtil.add(
+    const title = DomUtil.add(
       'h3',
       'umap-browse-title',
       container,
       this.map.options.name
     )
 
-    const formContainer = L.DomUtil.create('div', '', container)
-    const dataContainer = L.DomUtil.create('div', 'umap-browse-features', container)
+    const formContainer = DomUtil.create('div', '', container)
+    const dataContainer = DomUtil.create('div', 'umap-browse-features', container)
 
     const fields = [
       ['options.filter', { handler: 'Input', placeholder: L._('Filter') }],
@@ -153,5 +155,5 @@ L.U.Browser = L.Class.extend({
     this.map.eachBrowsableDataLayer((datalayer) => {
       this.addDataLayer(datalayer, dataContainer)
     })
-  },
-})
+  }
+}

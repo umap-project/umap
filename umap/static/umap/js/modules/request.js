@@ -1,5 +1,5 @@
 // Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
-import { Evented, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 
 export class RequestError extends Error {}
 
