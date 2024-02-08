@@ -38,8 +38,8 @@
   {{ block.super }}
   <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', event => {
-      const ui = new L.U.UI(document.querySelector('header'))
-      const server = new L.U.ServerRequest(ui)
+      const ui = new U.UI(document.querySelector('header'))
+      const server = new U.ServerRequest(ui)
       const getMore = async function (e) {
         L.DomEvent.stop(e)
         const [{html}, response, error] = await server.get(this.href)

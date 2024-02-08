@@ -1,7 +1,7 @@
 /*
  * Modals
  */
-L.U.UI = L.Evented.extend({
+U.UI = L.Evented.extend({
   ALERTS: Array(),
   ALERT_ID: null,
   TOOLTIP_ID: null,

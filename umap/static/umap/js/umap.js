@@ -55,7 +55,7 @@ L.Map.mergeOptions({
   featuresHaveOwner: false,
 })
 
-L.U.Map = L.Map.extend({
+U.Map = L.Map.extend({
   includes: [ControlsMixin],
   editableOptions: {
     'zoom': undefined,
@@ -142,13 +142,13 @@ L.U.Map = L.Map.extend({
 
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
-    this.urls = new L.U.URLs(this.options.urls)
+    this.urls = new U.URLs(this.options.urls)
 
-    this.ui = new L.U.UI(this._container)
+    this.ui = new U.UI(this._container)
     this.ui.on('dataloading', (e) => this.fire('dataloading', e))
     this.ui.on('dataload', (e) => this.fire('dataload', e))
-    this.server = new L.U.ServerRequest(this.ui)
-    this.request = new L.U.Request(this.ui)
+    this.server = new U.ServerRequest(this.ui)
+    this.request = new U.Request(this.ui)
 
     this.initLoader()
     this.name = this.options.name
@@ -200,7 +200,7 @@ L.U.Map = L.Map.extend({
     this.facets = {}
 
     // Needed for actions labels
-    this.help = new L.U.Help(this)
+    this.help = new U.Help(this)
 
     if (this.options.hash) this.addHash()
     this.initTileLayers()
@@ -280,11 +280,11 @@ L.U.Map = L.Map.extend({
       }
     }
 
-    this.slideshow = new L.U.Slideshow(this, this.options.slideshow)
-    this.permissions = new L.U.MapPermissions(this)
+    this.slideshow = new U.Slideshow(this, this.options.slideshow)
+    this.permissions = new U.MapPermissions(this)
     this.initCaptionBar()
     if (this.hasEditMode()) {
-      this.editTools = new L.U.Editable(this)
+      this.editTools = new U.Editable(this)
       this.ui.on(
         'panel:closed panel:open',
         function () {
@@ -358,25 +358,25 @@ L.U.Map = L.Map.extend({
     this._controls = {}
 
     if (this.hasEditMode() && !this.options.noControl) {
-      new L.U.EditControl(this).addTo(this)
+      new U.EditControl(this).addTo(this)
 
-      new L.U.DrawToolbar({ map: this }).addTo(this)
+      new U.DrawToolbar({ map: this }).addTo(this)
 
       const editActions = [
-        L.U.ImportAction,
-        L.U.EditPropertiesAction,
-        L.U.ManageDatalayersAction,
-        L.U.ChangeTileLayerAction,
-        L.U.UpdateExtentAction,
-        L.U.UpdatePermsAction,
+        U.ImportAction,
+        U.EditPropertiesAction,
+        U.ManageDatalayersAction,
+        U.ChangeTileLayerAction,
+        U.UpdateExtentAction,
+        U.UpdatePermsAction,
       ]
-      new L.U.SettingsToolbar({ actions: editActions }).addTo(this)
+      new U.SettingsToolbar({ actions: editActions }).addTo(this)
     }
     this._controls.zoom = new L.Control.Zoom({
       zoomInTitle: L._('Zoom in'),
       zoomOutTitle: L._('Zoom out'),
     })
-    this._controls.datalayers = new L.U.DataLayersControl(this)
+    this._controls.datalayers = new U.DataLayersControl(this)
     this._controls.locate = L.control.locate({
       strings: {
         title: L._('Center map on your location'),
@@ -393,10 +393,10 @@ L.U.Map = L.Map.extend({
     this._controls.fullscreen = new L.Control.Fullscreen({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
     })
-    this._controls.search = new L.U.SearchControl()
+    this._controls.search = new U.SearchControl()
     this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
-    this._controls.tilelayersChooser = new L.U.TileLayerChooser(this)
-    this._controls.star = new L.U.StarControl(this)
+    this._controls.tilelayersChooser = new U.TileLayerChooser(this)
+    this._controls.star = new U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -406,16 +406,16 @@ L.U.Map = L.Map.extend({
       },
     })
     this._controls.measure = new L.MeasureControl().initHandler(this)
-    this._controls.more = new L.U.MoreControls()
+    this._controls.more = new U.MoreControls()
     this._controls.scale = L.control.scale()
-    this._controls.permanentCredit = new L.U.PermanentCreditsControl(this)
+    this._controls.permanentCredit = new U.PermanentCreditsControl(this)
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
-    this.browser = new window.umap.Browser(this)
-    this.importer = new L.U.Importer(this)
-    this.drop = new L.U.DropControl(this)
-    this.share = new L.U.Share(this)
-    this._controls.tilelayers = new L.U.TileLayerControl(this)
+    this.browser = new U.Browser(this)
+    this.importer = new U.Importer(this)
+    this.drop = new U.DropControl(this)
+    this.share = new U.Share(this)
+    this._controls.tilelayers = new U.TileLayerControl(this)
     this._controls.tilelayers.setLayers()
 
     this.renderControls()
@@ -438,7 +438,7 @@ L.U.Map = L.Map.extend({
     }
     if (this.options.noControl) return
 
-    this._controls.attribution = new L.U.AttributionControl().addTo(this)
+    this._controls.attribution = new U.AttributionControl().addTo(this)
     if (this.options.miniMap && !this.options.noControl) {
       this.whenReady(function () {
         if (this.selected_tilelayer) {
@@ -552,10 +552,10 @@ L.U.Map = L.Map.extend({
         modifierKey = e.ctrlKey || e.metaKey
 
       /* Generic shortcuts */
-      if (key === L.U.Keys.F && modifierKey) {
+      if (key === U.Keys.F && modifierKey) {
         L.DomEvent.stop(e)
         this.search()
-      } else if (e.keyCode === L.U.Keys.ESC) {
+      } else if (e.keyCode === U.Keys.ESC) {
         if (this.help.visible()) this.help.hide()
         else this.ui.closePanel()
       }
@@ -563,11 +563,11 @@ L.U.Map = L.Map.extend({
       if (!this.hasEditMode()) return
 
       /* Edit mode only shortcuts */
-      if (key === L.U.Keys.E && modifierKey && !this.editEnabled) {
+      if (key === U.Keys.E && modifierKey && !this.editEnabled) {
         L.DomEvent.stop(e)
         this.enableEdit()
       } else if (
-        key === L.U.Keys.E &&
+        key === U.Keys.E &&
         modifierKey &&
         this.editEnabled &&
         !this.isDirty
@@ -576,41 +576,41 @@ L.U.Map = L.Map.extend({
         this.disableEdit()
         this.ui.closePanel()
       }
-      if (key === L.U.Keys.S && modifierKey) {
+      if (key === U.Keys.S && modifierKey) {
         L.DomEvent.stop(e)
         if (this.isDirty) {
           this.save()
         }
       }
-      if (key === L.U.Keys.Z && modifierKey && this.isDirty) {
+      if (key === U.Keys.Z && modifierKey && this.isDirty) {
         L.DomEvent.stop(e)
         this.askForReset()
       }
-      if (key === L.U.Keys.M && modifierKey && this.editEnabled) {
+      if (key === U.Keys.M && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startMarker()
       }
-      if (key === L.U.Keys.P && modifierKey && this.editEnabled) {
+      if (key === U.Keys.P && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startPolygon()
       }
-      if (key === L.U.Keys.L && modifierKey && this.editEnabled) {
+      if (key === U.Keys.L && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startPolyline()
       }
-      if (key === L.U.Keys.I && modifierKey && this.editEnabled) {
+      if (key === U.Keys.I && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.importer.open()
       }
-      if (key === L.U.Keys.O && modifierKey && this.editEnabled) {
+      if (key === U.Keys.O && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.importer.openFiles()
       }
-      if (key === L.U.Keys.H && modifierKey && this.editEnabled) {
+      if (key === U.Keys.H && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.help.show('edit')
       }
-      if (e.keyCode === L.U.Keys.ESC) {
+      if (e.keyCode === U.Keys.ESC) {
         if (this.editEnabled && this.editTools.drawing()) {
           this.editTools.stopDrawing()
         }
@@ -821,7 +821,7 @@ L.U.Map = L.Map.extend({
     datalayer = datalayer || {
       name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
     }
-    return new L.U.DataLayer(this, datalayer)
+    return new U.DataLayer(this, datalayer)
   },
 
   getDefaultOption: function (option) {
@@ -1226,7 +1226,7 @@ L.U.Map = L.Map.extend({
       'options.captionBar',
       'options.captionMenus',
     ])
-    builder = new L.U.FormBuilder(this, UIFields, {
+    builder = new U.FormBuilder(this, UIFields, {
       callback: function () {
         this.renderControls()
         this.initCaptionBar()
@@ -1255,7 +1255,7 @@ L.U.Map = L.Map.extend({
       'options.dashArray',
     ]
 
-    builder = new L.U.FormBuilder(this, shapeOptions, {
+    builder = new U.FormBuilder(this, shapeOptions, {
       callback: function (e) {
         if (this._controls.miniMap) this.renderControls()
         this.eachVisibleDataLayer((datalayer) => {
@@ -1315,7 +1315,7 @@ L.U.Map = L.Map.extend({
       ],
     ]
 
-    builder = new L.U.FormBuilder(this, optionsFields, {
+    builder = new U.FormBuilder(this, optionsFields, {
       callback: function (e) {
         this.initCaptionBar()
         if (e.helper.field === 'options.sortKey') {
@@ -1340,7 +1340,7 @@ L.U.Map = L.Map.extend({
       'options.labelInteractive',
       'options.outlinkTarget',
     ]
-    builder = new L.U.FormBuilder(this, popupFields, {
+    builder = new U.FormBuilder(this, popupFields, {
       callback: function (e) {
         if (
           e.helper.field === 'options.popupTemplate' ||
@@ -1407,7 +1407,7 @@ L.U.Map = L.Map.extend({
       container,
       L._('Custom background')
     )
-    builder = new L.U.FormBuilder(this, tilelayerFields, {
+    builder = new U.FormBuilder(this, tilelayerFields, {
       callback: this.initTileLayers,
       callbackContext: this,
     })
@@ -1458,7 +1458,7 @@ L.U.Map = L.Map.extend({
       ['options.overlay.tms', { handler: 'Switch', label: L._('TMS format') }],
     ]
     const overlay = L.DomUtil.createFieldset(container, L._('Custom overlay'))
-    builder = new L.U.FormBuilder(this, overlayFields, {
+    builder = new U.FormBuilder(this, overlayFields, {
       callback: this.initTileLayers,
       callbackContext: this,
     })
@@ -1488,7 +1488,7 @@ L.U.Map = L.Map.extend({
         { handler: 'BlurFloatInput', placeholder: L._('max East') },
       ],
     ]
-    const boundsBuilder = new L.U.FormBuilder(this, boundsFields, {
+    const boundsBuilder = new U.FormBuilder(this, boundsFields, {
       callback: this.handleLimitBounds,
       callbackContext: this,
     })
@@ -1554,7 +1554,7 @@ L.U.Map = L.Map.extend({
       this.slideshow.setOptions(this.options.slideshow)
       this.renderControls()
     }
-    const slideshowBuilder = new L.U.FormBuilder(this, slideshowFields, {
+    const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
       callback: slideshowHandler,
       callbackContext: this,
     })
@@ -1594,7 +1594,7 @@ L.U.Map = L.Map.extend({
         { handler: 'Switch', label: L._('Permanent credits background') },
       ],
     ]
-    const creditsBuilder = new L.U.FormBuilder(this, creditsFields, {
+    const creditsBuilder = new U.FormBuilder(this, creditsFields, {
       callback: this.renderControls,
       callbackContext: this,
     })
@@ -1650,7 +1650,7 @@ L.U.Map = L.Map.extend({
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map properties')
-    const builder = new L.U.FormBuilder(this, metadataFields)
+    const builder = new U.FormBuilder(this, metadataFields)
     const form = builder.build()
     container.appendChild(form)
     this._editControls(container)
@@ -1784,7 +1784,7 @@ L.U.Map = L.Map.extend({
   },
 
   initContextMenu: function () {
-    this.contextmenu = new L.U.ContextMenu(this)
+    this.contextmenu = new U.ContextMenu(this)
     this.contextmenu.enable()
   },
 

@@ -176,7 +176,7 @@ const POLYGONS = {
   ],
 }
 
-describe('L.U.Choropleth', () => {
+describe('U.Choropleth', () => {
   let path = '/map/99/datalayer/edit/62/',
     poly1,
     poly4,

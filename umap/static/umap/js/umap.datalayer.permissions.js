@@ -1,4 +1,4 @@
-L.U.DataLayerPermissions = L.Class.extend({
+U.DataLayerPermissions = L.Class.extend({
   options: {
     edit_status: null,
   },
@@ -38,7 +38,7 @@ L.U.DataLayerPermissions = L.Class.extend({
           },
         ],
       ],
-      builder = new L.U.FormBuilder(this, fields, {
+      builder = new U.FormBuilder(this, fields, {
         className: 'umap-form datalayer-permissions',
       }),
       form = builder.build()

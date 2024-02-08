@@ -1,4 +1,4 @@
-L.U.Icon = L.DivIcon.extend({
+U.Icon = L.DivIcon.extend({
   initialize: function (map, options) {
     this.map = map
     const default_options = {
@@ -42,7 +42,7 @@ L.U.Icon = L.DivIcon.extend({
   onAdd: function () {},
 })
 
-L.U.Icon.Default = L.U.Icon.extend({
+U.Icon.Default = U.Icon.extend({
   default_options: {
     iconAnchor: new L.Point(16, 40),
     popupAnchor: new L.Point(0, -40),
@@ -52,11 +52,11 @@ L.U.Icon.Default = L.U.Icon.extend({
 
   initialize: function (map, options) {
     options = L.Util.extend({}, this.default_options, options)
-    L.U.Icon.prototype.initialize.call(this, map, options)
+    U.Icon.prototype.initialize.call(this, map, options)
   },
 
   _setIconStyles: function (img, name) {
-    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor(),
       opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
@@ -68,7 +68,7 @@ L.U.Icon.Default = L.U.Icon.extend({
   onAdd: function () {
     const src = this._getIconUrl('icon')
     const bgcolor = this._getColor()
-    L.U.Icon.setIconContrast(this.elements.icon, this.elements.container, src, bgcolor)
+    U.Icon.setIconContrast(this.elements.icon, this.elements.container, src, bgcolor)
   },
 
   createIcon: function () {
@@ -82,14 +82,14 @@ L.U.Icon.Default = L.U.Icon.extend({
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
     const src = this._getIconUrl('icon')
     if (src) {
-      this.elements.icon = L.U.Icon.makeIconElement(src, this.elements.container)
+      this.elements.icon = U.Icon.makeIconElement(src, this.elements.container)
     }
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
 })
 
-L.U.Icon.Circle = L.U.Icon.extend({
+U.Icon.Circle = U.Icon.extend({
   initialize: function (map, options) {
     const default_options = {
       popupAnchor: new L.Point(0, -6),
@@ -97,11 +97,11 @@ L.U.Icon.Circle = L.U.Icon.extend({
       className: 'umap-circle-icon',
     }
     options = L.Util.extend({}, default_options, options)
-    L.U.Icon.prototype.initialize.call(this, map, options)
+    U.Icon.prototype.initialize.call(this, map, options)
   },
 
   _setIconStyles: function (img, name) {
-    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    U.Icon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
     this.elements.main.style.opacity = this._getOpacity()
   },
@@ -115,7 +115,7 @@ L.U.Icon.Circle = L.U.Icon.extend({
   },
 })
 
-L.U.Icon.Drop = L.U.Icon.Default.extend({
+U.Icon.Drop = U.Icon.Default.extend({
   default_options: {
     iconAnchor: new L.Point(16, 42),
     popupAnchor: new L.Point(0, -42),
@@ -124,7 +124,7 @@ L.U.Icon.Drop = L.U.Icon.Default.extend({
   },
 })
 
-L.U.Icon.Ball = L.U.Icon.Default.extend({
+U.Icon.Ball = U.Icon.Default.extend({
   default_options: {
     iconAnchor: new L.Point(8, 30),
     popupAnchor: new L.Point(0, -28),
@@ -146,7 +146,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 
   _setIconStyles: function (img, name) {
-    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor('color')
     let background
     if (L.Browser.ielt9) {
@@ -161,7 +161,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 })
 
-L.U.Icon.Cluster = L.DivIcon.extend({
+U.Icon.Cluster = L.DivIcon.extend({
   options: {
     iconSize: [40, 40],
   },
@@ -191,13 +191,13 @@ L.U.Icon.Cluster = L.DivIcon.extend({
   },
 })
 
-L.U.Icon.isImg = function (src) {
+U.Icon.isImg = function (src) {
   return L.Util.isPath(src) || L.Util.isRemoteUrl(src) || L.Util.isDataImage(src)
 }
 
-L.U.Icon.makeIconElement = function (src, parent) {
+U.Icon.makeIconElement = function (src, parent) {
   let icon
-  if (L.U.Icon.isImg(src)) {
+  if (U.Icon.isImg(src)) {
     icon = L.DomUtil.create('img')
     icon.src = src
   } else {
@@ -208,7 +208,7 @@ L.U.Icon.makeIconElement = function (src, parent) {
   return icon
 }
 
-L.U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
+U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
   /*
    * icon: the element we'll adapt the style, it can be an image or text
    * parent: the element we'll consider to decide whether to adapt the style,

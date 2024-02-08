@@ -1,6 +1,6 @@
 class UmapFragment extends HTMLElement {
   connectedCallback() {
-    new L.U.Map(this.firstElementChild.id, JSON.parse(this.dataset.settings))
+    new U.Map(this.firstElementChild.id, JSON.parse(this.dataset.settings))
   }
 }
 

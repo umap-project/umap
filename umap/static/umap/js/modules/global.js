@@ -7,4 +7,4 @@ import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './req
 
 // Copy the leaflet module, it's expected by leaflet plugins to be writeable.
 window.L = { ...L }
-window.L.U = { URLs, Request, ServerRequest, RequestError, HTTPError, NOKError, Browser }
+window.U = { URLs, Request, ServerRequest, RequestError, HTTPError, NOKError, Browser }

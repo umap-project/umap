@@ -1,6 +1,6 @@
 /* Shapes  */
 
-L.U.Popup = L.Popup.extend({
+U.Popup = L.Popup.extend({
   options: {
     parseTemplate: true,
   },
@@ -15,7 +15,7 @@ L.U.Popup = L.Popup.extend({
 
   format: function () {
     const mode = this.feature.getOption('popupTemplate') || 'Default',
-      klass = L.U.PopupTemplate[mode] || L.U.PopupTemplate.Default
+      klass = U.PopupTemplate[mode] || U.PopupTemplate.Default
     this.content = new klass(this.feature, this.container)
     this.content.render()
     const els = this.container.querySelectorAll('img,iframe')
@@ -42,14 +42,14 @@ L.U.Popup = L.Popup.extend({
   },
 })
 
-L.U.Popup.Large = L.U.Popup.extend({
+U.Popup.Large = U.Popup.extend({
   options: {
     maxWidth: 500,
     className: 'umap-popup-large',
   },
 })
 
-L.U.Popup.Panel = L.U.Popup.extend({
+U.Popup.Panel = U.Popup.extend({
   options: {
     zoomAnimation: false,
   },
@@ -97,13 +97,13 @@ L.U.Popup.Panel = L.U.Popup.extend({
   _updatePosition: function () {},
   _adjustPan: function () {},
 })
-L.U.Popup.SimplePanel = L.U.Popup.Panel // Retrocompat.
+U.Popup.SimplePanel = U.Popup.Panel // Retrocompat.
 
 /* Content templates */
 
-L.U.PopupTemplate = {}
+U.PopupTemplate = {}
 
-L.U.PopupTemplate.Default = L.Class.extend({
+U.PopupTemplate.Default = L.Class.extend({
   initialize: function (feature, container) {
     this.feature = feature
     this.container = container
@@ -176,7 +176,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
   },
 })
 
-L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
+U.PopupTemplate.BaseWithTitle = U.PopupTemplate.Default.extend({
   renderTitle: function () {
     let title
     if (this.feature.getDisplayName()) {
@@ -187,7 +187,7 @@ L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
   },
 })
 
-L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
+U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
   formatRow: function (key, value) {
     if (value.indexOf('http') === 0) {
       value = `<a href="${value}" target="_blank">${value}</a>`
@@ -213,7 +213,7 @@ L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
   },
 })
 
-L.U.PopupTemplate.GeoRSSImage = L.U.PopupTemplate.BaseWithTitle.extend({
+U.PopupTemplate.GeoRSSImage = U.PopupTemplate.BaseWithTitle.extend({
   options: {
     minWidth: 300,
     maxWidth: 500,
@@ -237,7 +237,7 @@ L.U.PopupTemplate.GeoRSSImage = L.U.PopupTemplate.BaseWithTitle.extend({
   },
 })
 
-L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
+U.PopupTemplate.GeoRSSLink = U.PopupTemplate.Default.extend({
   options: {
     className: 'umap-georss-link',
   },
@@ -252,7 +252,7 @@ L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
   },
 })
 
-L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
+U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
   options: {
     className: 'umap-openstreetmap',
   },
@@ -270,9 +270,9 @@ L.U.PopupTemplate.OSM = L.U.PopupTemplate.Default.extend({
     const color = this.feature.getDynamicOption('color')
     title.style.backgroundColor = color
     const iconUrl = this.feature.getDynamicOption('iconUrl')
-    let icon = L.U.Icon.makeIconElement(iconUrl, title)
+    let icon = U.Icon.makeIconElement(iconUrl, title)
     L.DomUtil.addClass(icon, 'icon')
-    L.U.Icon.setIconContrast(icon, title, iconUrl, color)
+    U.Icon.setIconContrast(icon, title, iconUrl, color)
     if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'
     L.DomUtil.add('span', '', title, this.getName())
     const street = props['addr:street']

@@ -1,4 +1,4 @@
-describe('L.U.Polyline', function () {
+describe('U.Polyline', function () {
   var p2ll, map
 
   before(function () {
@@ -22,7 +22,7 @@ describe('L.U.Polyline', function () {
 
   describe('#isMulti()', function () {
     it('should return false for basic Polyline', function () {
-      var layer = new L.U.Polyline(
+      var layer = new U.Polyline(
         this.map,
         [
           [1, 2],
@@ -35,7 +35,7 @@ describe('L.U.Polyline', function () {
     })
 
     it('should return false for nested basic Polyline', function () {
-      var layer = new L.U.Polyline(
+      var layer = new U.Polyline(
         this.map,
         [
           [
@@ -66,7 +66,7 @@ describe('L.U.Polyline', function () {
           ],
         ],
       ]
-      var layer = new L.U.Polyline(this.map, latLngs, { datalayer: this.datalayer })
+      var layer = new U.Polyline(this.map, latLngs, { datalayer: this.datalayer })
       assert.ok(layer.isMulti())
     })
   })
@@ -83,7 +83,7 @@ describe('L.U.Polyline', function () {
             [p2ll(100, 100), p2ll(100, 200)],
             [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)],
           ],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -92,7 +92,7 @@ describe('L.U.Polyline', function () {
 
       it('should not allow to remove shape when not multi', function () {
         var latlngs = [[p2ll(100, 100), p2ll(100, 200)]],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -101,7 +101,7 @@ describe('L.U.Polyline', function () {
 
       it('should not allow to isolate shape when not multi', function () {
         var latlngs = [[p2ll(100, 100), p2ll(100, 200)]],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -113,7 +113,7 @@ describe('L.U.Polyline', function () {
             [p2ll(100, 150), p2ll(100, 200)],
             [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)],
           ],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -125,7 +125,7 @@ describe('L.U.Polyline', function () {
             [p2ll(100, 150), p2ll(100, 200)],
             [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)],
           ],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -134,7 +134,7 @@ describe('L.U.Polyline', function () {
 
       it('should allow to transform to polygon when not multi', function () {
         var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -142,7 +142,7 @@ describe('L.U.Polyline', function () {
       })
 
       it('should not allow to transfer shape when not editedFeature', function () {
-        var layer = new L.U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {
+        var layer = new U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -150,10 +150,10 @@ describe('L.U.Polyline', function () {
       })
 
       it('should not allow to transfer shape when editedFeature is not a line', function () {
-        var layer = new L.U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {
+        var layer = new U.Polyline(this.map, [p2ll(100, 150), p2ll(100, 200)], {
             datalayer: this.datalayer,
           }).addTo(this.datalayer),
-          other = new L.U.Polygon(
+          other = new U.Polygon(
             this.map,
             [p2ll(200, 300), p2ll(300, 200), p2ll(200, 100)],
             { datalayer: this.datalayer }
@@ -164,12 +164,12 @@ describe('L.U.Polyline', function () {
       })
 
       it('should allow to transfer shape when another line is edited', function () {
-        var layer = new L.U.Polyline(
+        var layer = new U.Polyline(
             this.map,
             [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
             { datalayer: this.datalayer }
           ).addTo(this.datalayer),
-          other = new L.U.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {
+          other = new U.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         other.edit()
@@ -184,7 +184,7 @@ describe('L.U.Polyline', function () {
             [p2ll(100, 100), p2ll(100, 200)],
             [p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)],
           ],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -193,7 +193,7 @@ describe('L.U.Polyline', function () {
 
       it('should not allow to merge lines when not multi', function () {
         var latlngs = [[p2ll(100, 100), p2ll(100, 200)]],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         happen.once(layer._path, { type: 'contextmenu' })
@@ -202,7 +202,7 @@ describe('L.U.Polyline', function () {
 
       it('should allow to split lines when clicking on vertex', function () {
         var latlngs = [[p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         layer.enableEdit()
@@ -212,7 +212,7 @@ describe('L.U.Polyline', function () {
 
       it('should not allow to split lines when clicking on first vertex', function () {
         var latlngs = [[p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         layer.enableEdit()
@@ -223,7 +223,7 @@ describe('L.U.Polyline', function () {
 
       it('should not allow to split lines when clicking on last vertex', function () {
         var latlngs = [[p2ll(300, 350), p2ll(350, 400), p2ll(400, 300)]],
-          layer = new L.U.Polyline(this.map, latlngs, {
+          layer = new U.Polyline(this.map, latlngs, {
             datalayer: this.datalayer,
           }).addTo(this.datalayer)
         layer.enableEdit()
@@ -240,7 +240,7 @@ describe('L.U.Polyline', function () {
     })
 
     it('"add shape" control should be visible when editing a Polyline', function () {
-      var layer = new L.U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {
+      var layer = new U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {
         datalayer: this.datalayer,
       }).addTo(this.datalayer)
       layer.edit()
@@ -248,7 +248,7 @@ describe('L.U.Polyline', function () {
     })
 
     it('"add shape" control should extend the same multi', function () {
-      var layer = new L.U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {
+      var layer = new U.Polyline(this.map, [p2ll(100, 100), p2ll(100, 200)], {
         datalayer: this.datalayer,
       }).addTo(this.datalayer)
       layer.edit()
@@ -267,10 +267,10 @@ describe('L.U.Polyline', function () {
   describe('#transferShape', function () {
     it('should transfer simple line shape to another line', function () {
       var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer),
-        other = new L.U.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {
+        other = new U.Polyline(this.map, [p2ll(200, 300), p2ll(300, 200)], {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       assert.ok(this.map.hasLayer(layer))
@@ -285,10 +285,10 @@ describe('L.U.Polyline', function () {
           [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
           [p2ll(200, 300), p2ll(300, 200)],
         ],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer),
-        other = new L.U.Polyline(this.map, [p2ll(250, 300), p2ll(350, 200)], {
+        other = new U.Polyline(this.map, [p2ll(250, 300), p2ll(350, 200)], {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       assert.ok(this.map.hasLayer(layer))
@@ -312,7 +312,7 @@ describe('L.U.Polyline', function () {
             [0, 2],
           ],
         ],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       layer.mergeShapes()
@@ -336,7 +336,7 @@ describe('L.U.Polyline', function () {
             [0, 1],
           ],
         ],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       layer.mergeShapes()
@@ -352,7 +352,7 @@ describe('L.U.Polyline', function () {
   describe('#isolateShape', function () {
     it('should not allow to isolate simple line', function () {
       var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       assert.equal(this.datalayer._index.length, 1)
@@ -367,7 +367,7 @@ describe('L.U.Polyline', function () {
           [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
           [[p2ll(200, 300), p2ll(300, 200)]],
         ],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       assert.equal(this.datalayer._index.length, 1)
@@ -386,7 +386,7 @@ describe('L.U.Polyline', function () {
   describe('#clone', function () {
     it('should clone polyline', function () {
       var latlngs = [p2ll(100, 150), p2ll(100, 200), p2ll(200, 100)],
-        layer = new L.U.Polyline(this.map, latlngs, {
+        layer = new U.Polyline(this.map, latlngs, {
           datalayer: this.datalayer,
         }).addTo(this.datalayer)
       assert.equal(this.datalayer._index.length, 1)

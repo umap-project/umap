@@ -1,4 +1,4 @@
-L.U.BaseAction = L.ToolbarAction.extend({
+U.BaseAction = L.ToolbarAction.extend({
   initialize: function (map) {
     this.map = map
     if (this.options.label) {
@@ -17,7 +17,7 @@ L.U.BaseAction = L.ToolbarAction.extend({
   },
 })
 
-L.U.ImportAction = L.U.BaseAction.extend({
+U.ImportAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'upload-data dark',
@@ -29,7 +29,7 @@ L.U.ImportAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.EditPropertiesAction = L.U.BaseAction.extend({
+U.EditPropertiesAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'update-map-settings dark',
@@ -41,7 +41,7 @@ L.U.EditPropertiesAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.ChangeTileLayerAction = L.U.BaseAction.extend({
+U.ChangeTileLayerAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'dark update-map-tilelayers',
@@ -53,7 +53,7 @@ L.U.ChangeTileLayerAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.ManageDatalayersAction = L.U.BaseAction.extend({
+U.ManageDatalayersAction = U.BaseAction.extend({
   options: {
     className: 'dark manage-datalayers',
     tooltip: L._('Manage layers'),
@@ -64,7 +64,7 @@ L.U.ManageDatalayersAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.UpdateExtentAction = L.U.BaseAction.extend({
+U.UpdateExtentAction = U.BaseAction.extend({
   options: {
     className: 'update-map-extent dark',
     tooltip: L._('Save this center and zoom'),
@@ -75,7 +75,7 @@ L.U.UpdateExtentAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.UpdatePermsAction = L.U.BaseAction.extend({
+U.UpdatePermsAction = U.BaseAction.extend({
   options: {
     className: 'update-map-permissions dark',
     tooltip: L._('Update permissions and editors'),
@@ -86,7 +86,7 @@ L.U.UpdatePermsAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.DrawMarkerAction = L.U.BaseAction.extend({
+U.DrawMarkerAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-marker dark',
@@ -98,7 +98,7 @@ L.U.DrawMarkerAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.DrawPolylineAction = L.U.BaseAction.extend({
+U.DrawPolylineAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polyline dark',
@@ -110,7 +110,7 @@ L.U.DrawPolylineAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.DrawPolygonAction = L.U.BaseAction.extend({
+U.DrawPolygonAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-draw-polygon dark',
@@ -122,7 +122,7 @@ L.U.DrawPolygonAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.AddPolylineShapeAction = L.U.BaseAction.extend({
+U.AddPolylineShapeAction = U.BaseAction.extend({
   options: {
     className: 'umap-draw-polyline-multi dark',
     tooltip: L._('Add a line to the current multi'),
@@ -133,14 +133,14 @@ L.U.AddPolylineShapeAction = L.U.BaseAction.extend({
   },
 })
 
-L.U.AddPolygonShapeAction = L.U.AddPolylineShapeAction.extend({
+U.AddPolygonShapeAction = U.AddPolylineShapeAction.extend({
   options: {
     className: 'umap-draw-polygon-multi dark',
     tooltip: L._('Add a polygon to the current multi'),
   },
 })
 
-L.U.BaseFeatureAction = L.ToolbarAction.extend({
+U.BaseFeatureAction = L.ToolbarAction.extend({
   initialize: function (map, feature, latlng) {
     this.map = map
     this.feature = feature
@@ -161,7 +161,7 @@ L.U.BaseFeatureAction = L.ToolbarAction.extend({
   },
 })
 
-L.U.CreateHoleAction = L.U.BaseFeatureAction.extend({
+U.CreateHoleAction = U.BaseFeatureAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-new-hole',
@@ -174,7 +174,7 @@ L.U.CreateHoleAction = L.U.BaseFeatureAction.extend({
   },
 })
 
-L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
+U.ToggleEditAction = U.BaseFeatureAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-toggle-edit',
@@ -188,7 +188,7 @@ L.U.ToggleEditAction = L.U.BaseFeatureAction.extend({
   },
 })
 
-L.U.DeleteFeatureAction = L.U.BaseFeatureAction.extend({
+U.DeleteFeatureAction = U.BaseFeatureAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-delete-all',
@@ -206,7 +206,7 @@ L.U.DeleteFeatureAction = L.U.BaseFeatureAction.extend({
   },
 })
 
-L.U.DeleteShapeAction = L.U.BaseFeatureAction.extend({
+U.DeleteShapeAction = U.BaseFeatureAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-delete-one-of-multi',
@@ -219,7 +219,7 @@ L.U.DeleteShapeAction = L.U.BaseFeatureAction.extend({
   },
 })
 
-L.U.ExtractShapeFromMultiAction = L.U.BaseFeatureAction.extend({
+U.ExtractShapeFromMultiAction = U.BaseFeatureAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-extract-shape-from-multi',
@@ -232,14 +232,14 @@ L.U.ExtractShapeFromMultiAction = L.U.BaseFeatureAction.extend({
   },
 })
 
-L.U.BaseVertexAction = L.U.BaseFeatureAction.extend({
+U.BaseVertexAction = U.BaseFeatureAction.extend({
   initialize: function (map, feature, latlng, vertex) {
     this.vertex = vertex
-    L.U.BaseFeatureAction.prototype.initialize.call(this, map, feature, latlng)
+    U.BaseFeatureAction.prototype.initialize.call(this, map, feature, latlng)
   },
 })
 
-L.U.DeleteVertexAction = L.U.BaseVertexAction.extend({
+U.DeleteVertexAction = U.BaseVertexAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-delete-vertex',
@@ -252,7 +252,7 @@ L.U.DeleteVertexAction = L.U.BaseVertexAction.extend({
   },
 })
 
-L.U.SplitLineAction = L.U.BaseVertexAction.extend({
+U.SplitLineAction = U.BaseVertexAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-split-line',
@@ -265,7 +265,7 @@ L.U.SplitLineAction = L.U.BaseVertexAction.extend({
   },
 })
 
-L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
+U.ContinueLineAction = U.BaseVertexAction.extend({
   options: {
     toolbarIcon: {
       className: 'umap-continue-line',
@@ -279,13 +279,13 @@ L.U.ContinueLineAction = L.U.BaseVertexAction.extend({
 })
 
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
-L.U.SettingsToolbar = L.Toolbar.Control.extend({
+U.SettingsToolbar = L.Toolbar.Control.extend({
   addTo: function (map) {
     if (map.options.editMode !== 'advanced') return
     L.Toolbar.Control.prototype.addTo.call(this, map)
   },
 })
-L.U.DrawToolbar = L.Toolbar.Control.extend({
+U.DrawToolbar = L.Toolbar.Control.extend({
   initialize: function (options) {
     L.Toolbar.Control.prototype.initialize.call(this, options)
     this.map = this.options.map
@@ -295,18 +295,18 @@ L.U.DrawToolbar = L.Toolbar.Control.extend({
   appendToContainer: function (container) {
     this.options.actions = []
     if (this.map.options.enableMarkerDraw) {
-      this.options.actions.push(L.U.DrawMarkerAction)
+      this.options.actions.push(U.DrawMarkerAction)
     }
     if (this.map.options.enablePolylineDraw) {
-      this.options.actions.push(L.U.DrawPolylineAction)
-      if (this.map.editedFeature && this.map.editedFeature instanceof L.U.Polyline) {
-        this.options.actions.push(L.U.AddPolylineShapeAction)
+      this.options.actions.push(U.DrawPolylineAction)
+      if (this.map.editedFeature && this.map.editedFeature instanceof U.Polyline) {
+        this.options.actions.push(U.AddPolylineShapeAction)
       }
     }
     if (this.map.options.enablePolygonDraw) {
-      this.options.actions.push(L.U.DrawPolygonAction)
-      if (this.map.editedFeature && this.map.editedFeature instanceof L.U.Polygon) {
-        this.options.actions.push(L.U.AddPolygonShapeAction)
+      this.options.actions.push(U.DrawPolygonAction)
+      if (this.map.editedFeature && this.map.editedFeature instanceof U.Polygon) {
+        this.options.actions.push(U.AddPolygonShapeAction)
       }
     }
     L.Toolbar.Control.prototype.appendToContainer.call(this, container)
@@ -319,7 +319,7 @@ L.U.DrawToolbar = L.Toolbar.Control.extend({
   },
 })
 
-L.U.DropControl = L.Class.extend({
+U.DropControl = L.Class.extend({
   initialize: function (map) {
     this.map = map
     this.dropzone = map._container
@@ -365,7 +365,7 @@ L.U.DropControl = L.Class.extend({
   },
 })
 
-L.U.EditControl = L.Control.extend({
+U.EditControl = L.Control.extend({
   options: {
     position: 'topright',
   },
@@ -418,7 +418,7 @@ L.Control.Embed = L.Control.extend({
   },
 })
 
-L.U.MoreControls = L.Control.extend({
+U.MoreControls = L.Control.extend({
   options: {
     position: 'topleft',
   },
@@ -451,7 +451,7 @@ L.U.MoreControls = L.Control.extend({
   },
 })
 
-L.U.PermanentCreditsControl = L.Control.extend({
+U.PermanentCreditsControl = L.Control.extend({
   options: {
     position: 'bottomleft',
   },
@@ -488,7 +488,7 @@ L.U.PermanentCreditsControl = L.Control.extend({
   },
 })
 
-L.U.DataLayersControl = L.Control.extend({
+U.DataLayersControl = L.Control.extend({
   options: {
     position: 'topleft',
   },
@@ -626,7 +626,7 @@ L.U.DataLayersControl = L.Control.extend({
     this.map.eachDataLayerReverse(function (datalayer) {
       this.addDataLayer(container, datalayer, true)
     }, this)
-    const orderable = new L.U.Orderable(container)
+    const orderable = new U.Orderable(container)
     orderable.on(
       'drop',
       function (e) {
@@ -659,7 +659,7 @@ L.U.DataLayersControl = L.Control.extend({
   },
 })
 
-L.U.DataLayer.include({
+U.DataLayer.include({
   renderLegend: function (container) {
     if (this.layer.renderLegend) return this.layer.renderLegend(container)
     const color = L.DomUtil.create('span', 'datalayer-color', container)
@@ -733,7 +733,7 @@ L.U.DataLayer.include({
   },
 })
 
-L.U.DataLayer.addInitHook(function () {
+U.DataLayer.addInitHook(function () {
   this.on('hide', this.propagateHide)
   this.on('show', this.propagateShow)
   if (this.isVisible()) this.propagateShow()
@@ -794,7 +794,7 @@ const ControlsMixin = {
         label: this.getFacetKeys()[current],
       },
     ])
-    const builder = new L.U.FormBuilder(this, fields, {
+    const builder = new U.FormBuilder(this, fields, {
       makeDirty: false,
       callback: filterFeatures,
       callbackContext: this,
@@ -1058,7 +1058,7 @@ const ControlsMixin = {
 }
 
 /* Used in view mode to define the current tilelayer */
-L.U.TileLayerControl = L.Control.IconLayers.extend({
+U.TileLayerControl = L.Control.IconLayers.extend({
   initialize: function (map, options) {
     this.map = map
     L.Control.IconLayers.prototype.initialize.call(this, {
@@ -1099,7 +1099,7 @@ L.U.TileLayerControl = L.Control.IconLayers.extend({
 })
 
 /* Used in edit mode to define the default tilelayer */
-L.U.TileLayerChooser = L.Control.extend({
+U.TileLayerChooser = L.Control.extend({
   options: {
     position: 'topleft',
   },
@@ -1166,7 +1166,7 @@ L.U.TileLayerChooser = L.Control.extend({
   },
 })
 
-L.U.AttributionControl = L.Control.Attribution.extend({
+U.AttributionControl = L.Control.Attribution.extend({
   options: {
     prefix: '',
   },
@@ -1214,7 +1214,7 @@ L.U.AttributionControl = L.Control.Attribution.extend({
   },
 })
 
-L.U.StarControl = L.Control.extend({
+U.StarControl = L.Control.extend({
   options: {
     position: 'topleft',
   },
@@ -1237,7 +1237,7 @@ L.U.StarControl = L.Control.extend({
   },
 })
 
-L.U.Search = L.PhotonSearch.extend({
+U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
     this.options.placeholder = L._('Type a place name or coordinates')
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
@@ -1324,7 +1324,7 @@ L.U.Search = L.PhotonSearch.extend({
   },
 })
 
-L.U.SearchControl = L.Control.extend({
+U.SearchControl = L.Control.extend({
   options: {
     position: 'topleft',
   },
@@ -1357,7 +1357,7 @@ L.U.SearchControl = L.Control.extend({
     title.textContent = L._('Search location')
     const input = L.DomUtil.create('input', 'photon-input', container)
     const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
-    this.search = new L.U.Search(map, input, options)
+    this.search = new U.Search(map, input, options)
     const id = Math.random()
     this.search.on('ajax:send', () => {
       map.fire('dataloading', { id: id })
@@ -1413,7 +1413,7 @@ L.Control.Loading.include({
 /*
  * Make it dynamic
  */
-L.U.ContextMenu = L.Map.ContextMenu.extend({
+U.ContextMenu = L.Map.ContextMenu.extend({
   _createItems: function (e) {
     this._map.setContextMenuItems(e)
     L.Map.ContextMenu.prototype._createItems.call(this)
@@ -1427,7 +1427,7 @@ L.U.ContextMenu = L.Map.ContextMenu.extend({
   },
 })
 
-L.U.Editable = L.Editable.extend({
+U.Editable = L.Editable.extend({
   initialize: function (map, options) {
     L.Editable.prototype.initialize.call(this, map, options)
     this.on(
@@ -1443,7 +1443,7 @@ L.U.Editable = L.Editable.extend({
     })
     // Layer for items added by users
     this.on('editable:drawing:cancel', (e) => {
-      if (e.layer instanceof L.U.Marker) e.layer.del()
+      if (e.layer instanceof U.Marker) e.layer.del()
     })
     this.on('editable:drawing:commit', function (e) {
       e.layer.isDirty = true
@@ -1469,15 +1469,15 @@ L.U.Editable = L.Editable.extend({
   },
 
   createPolyline: function (latlngs) {
-    return new L.U.Polyline(this.map, latlngs, this._getDefaultProperties())
+    return new U.Polyline(this.map, latlngs, this._getDefaultProperties())
   },
 
   createPolygon: function (latlngs) {
-    return new L.U.Polygon(this.map, latlngs, this._getDefaultProperties())
+    return new U.Polygon(this.map, latlngs, this._getDefaultProperties())
   },
 
   createMarker: function (latlng) {
-    return new L.U.Marker(this.map, latlng, this._getDefaultProperties())
+    return new U.Marker(this.map, latlng, this._getDefaultProperties())
   },
 
   _getDefaultProperties: function () {

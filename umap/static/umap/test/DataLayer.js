@@ -1,4 +1,4 @@
-describe('L.U.DataLayer', () => {
+describe('U.DataLayer', () => {
   let path = '/map/99/datalayer/update/62/',
     map,
     datalayer

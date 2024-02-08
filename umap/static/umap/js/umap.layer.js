@@ -1,4 +1,4 @@
-L.U.Layer = {
+U.Layer = {
   browsable: true,
 
   getType: function () {
@@ -26,12 +26,12 @@ L.U.Layer = {
   },
 }
 
-L.U.Layer.Default = L.FeatureGroup.extend({
+U.Layer.Default = L.FeatureGroup.extend({
   statics: {
     NAME: L._('Default'),
     TYPE: 'Default',
   },
-  includes: [L.U.Layer],
+  includes: [U.Layer],
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -39,7 +39,7 @@ L.U.Layer.Default = L.FeatureGroup.extend({
   },
 })
 
-L.U.MarkerCluster = L.MarkerCluster.extend({
+U.MarkerCluster = L.MarkerCluster.extend({
   // Custom class so we can call computeTextColor
   // when element is already on the DOM.
 
@@ -51,12 +51,12 @@ L.U.MarkerCluster = L.MarkerCluster.extend({
   },
 })
 
-L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
+U.Layer.Cluster = L.MarkerClusterGroup.extend({
   statics: {
     NAME: L._('Clustered'),
     TYPE: 'Cluster',
   },
-  includes: [L.U.Layer],
+  includes: [U.Layer],
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -65,14 +65,14 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
         color: this.datalayer.getColor(),
       },
       iconCreateFunction: function (cluster) {
-        return new L.U.Icon.Cluster(datalayer, cluster)
+        return new U.Icon.Cluster(datalayer, cluster)
       },
     }
     if (this.datalayer.options.cluster && this.datalayer.options.cluster.radius) {
       options.maxClusterRadius = this.datalayer.options.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
-    this._markerCluster = L.U.MarkerCluster
+    this._markerCluster = U.MarkerCluster
     this._layers = []
   },
 
@@ -132,12 +132,12 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 })
 
-L.U.Layer.Choropleth = L.FeatureGroup.extend({
+U.Layer.Choropleth = L.FeatureGroup.extend({
   statics: {
     NAME: L._('Choropleth'),
     TYPE: 'Choropleth',
   },
-  includes: [L.U.Layer],
+  includes: [U.Layer],
   // Have defaults that better suit the choropleth mode.
   defaults: {
     color: 'white',
@@ -338,12 +338,12 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 })
 
-L.U.Layer.Heat = L.HeatLayer.extend({
+U.Layer.Heat = L.HeatLayer.extend({
   statics: {
     NAME: L._('Heatmap'),
     TYPE: 'Heat',
   },
-  includes: [L.U.Layer],
+  includes: [U.Layer],
   browsable: false,
 
   initialize: function (datalayer) {
@@ -505,7 +505,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
   },
 })
 
-L.U.DataLayer = L.Evented.extend({
+U.DataLayer = L.Evented.extend({
   options: {
     displayOnLoad: true,
     inCaption: true,
@@ -579,7 +579,7 @@ L.U.DataLayer = L.Evented.extend({
     }
     this.backupOptions()
     this.connectToMap()
-    this.permissions = new L.U.DataLayerPermissions(this)
+    this.permissions = new U.DataLayerPermissions(this)
     if (!this.umap_id) {
       if (this.showAtLoad()) this.show()
       this.isDirty = true
@@ -648,7 +648,7 @@ L.U.DataLayer = L.Evented.extend({
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
     if (visible) this.map.removeLayer(this.layer)
-    const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
+    const Class = U.Layer[this.options.type] || U.Layer.Default
     this.layer = new Class(this)
     this.eachLayer(this.showFeature)
     if (visible) this.show()
@@ -801,7 +801,7 @@ L.U.DataLayer = L.Evented.extend({
 
   setOptions: function (options) {
     delete options.geojson
-    this.options = L.Util.CopyJSON(L.U.DataLayer.prototype.options) // Start from fresh.
+    this.options = L.Util.CopyJSON(U.DataLayer.prototype.options) // Start from fresh.
     this.updateOptions(options)
   },
 
@@ -1027,11 +1027,11 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   _pointToLayer: function (geojson, latlng) {
-    return new L.U.Marker(this.map, latlng, { geojson: geojson, datalayer: this })
+    return new U.Marker(this.map, latlng, { geojson: geojson, datalayer: this })
   },
 
   _lineToLayer: function (geojson, latlngs) {
-    return new L.U.Polyline(this.map, latlngs, {
+    return new U.Polyline(this.map, latlngs, {
       geojson: geojson,
       datalayer: this,
       color: null,
@@ -1043,7 +1043,7 @@ L.U.DataLayer = L.Evented.extend({
     // for (let i = latlngs.length - 1; i > 0; i--) {
     //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
     // }
-    return new L.U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
+    return new U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
   },
 
   importRaw: function (raw, type) {
@@ -1186,7 +1186,7 @@ L.U.DataLayer = L.Evented.extend({
         ],
       ]
     const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
-    let builder = new L.U.FormBuilder(this, metadataFields, {
+    let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
         this.map.updateDatalayersControl()
         if (e.helper.field === 'options.type') {
@@ -1208,7 +1208,7 @@ L.U.DataLayer = L.Evented.extend({
     const layerOptions = this.layer.getEditableOptions()
 
     if (layerOptions.length) {
-      builder = new L.U.FormBuilder(this, layerOptions, {
+      builder = new U.FormBuilder(this, layerOptions, {
         id: 'datalayer-layer-properties',
         callback: redrawCallback,
       })
@@ -1232,7 +1232,7 @@ L.U.DataLayer = L.Evented.extend({
       'options.fillOpacity',
     ]
 
-    builder = new L.U.FormBuilder(this, shapeOptions, {
+    builder = new U.FormBuilder(this, shapeOptions, {
       id: 'datalayer-advanced-properties',
       callback: redrawCallback,
     })
@@ -1248,7 +1248,7 @@ L.U.DataLayer = L.Evented.extend({
       'options.labelKey',
     ]
 
-    builder = new L.U.FormBuilder(this, optionsFields, {
+    builder = new U.FormBuilder(this, optionsFields, {
       id: 'datalayer-advanced-properties',
       callback: redrawCallback,
     })
@@ -1268,7 +1268,7 @@ L.U.DataLayer = L.Evented.extend({
       'options.outlinkTarget',
       'options.interactive',
     ]
-    builder = new L.U.FormBuilder(this, popupFields, { callback: redrawCallback })
+    builder = new U.FormBuilder(this, popupFields, { callback: redrawCallback })
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Interaction options')
@@ -1314,7 +1314,7 @@ L.U.DataLayer = L.Evented.extend({
     }
 
     const remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'))
-    builder = new L.U.FormBuilder(this, remoteDataFields)
+    builder = new U.FormBuilder(this, remoteDataFields)
     remoteDataContainer.appendChild(builder.build())
     L.DomUtil.createButton(
       'button umap-verify',
@@ -1646,7 +1646,7 @@ L.U.DataLayer = L.Evented.extend({
 
   tableEdit: function () {
     if (this.isRemoteLayer() || !this.isVisible()) return
-    const editor = new L.U.TableEditor(this)
+    const editor = new U.TableEditor(this)
     editor.edit()
   },
 })

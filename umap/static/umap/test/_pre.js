@@ -219,7 +219,7 @@ function initMap(options) {
     type: 'Point',
     coordinates: [5.0592041015625, 52.05924589011585],
   }
-  return new L.U.Map('map', options)
+  return new U.Map('map', options)
 }
 
 var RESPONSES = {

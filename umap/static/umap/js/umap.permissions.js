@@ -1,6 +1,6 @@
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
-L.U.MapPermissions = L.Class.extend({
+U.MapPermissions = L.Class.extend({
   options: {
     owner: null,
     editors: [],
@@ -105,7 +105,7 @@ L.U.MapPermissions = L.Class.extend({
       ])
     }
     title.textContent = L._('Update permissions')
-    const builder = new L.U.FormBuilder(this, fields)
+    const builder = new U.FormBuilder(this, fields)
     const form = builder.build()
     container.appendChild(form)
     if (this.isAnonymousMap() && this.map.options.user) {

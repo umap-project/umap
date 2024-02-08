@@ -1,4 +1,4 @@
-L.U.Importer = L.Class.extend({
+U.Importer = L.Class.extend({
   TYPES: ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap'],
   initialize: function (map) {
     this.map = map
