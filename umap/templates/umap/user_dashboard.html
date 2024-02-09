@@ -18,11 +18,12 @@
       <div class="table-header">
         <form action="{{ request.get_full_path }}" method="get">
           <span>
-            <label for="q">{% blocktranslate %}Map’s title{% endblocktranslate %}</label>
+            <label class="sr-only" for="q">{% translate "Map’s title" %}</label>
             <input id="q" name="q" type="search"
+                   placeholder="{% translate 'Map’s title' %}"
                    value="{{ request.GET.q|default:"" }}" />
           </span>
-          <input type="submit" value="{% trans "Search" %}" />
+          <input type="submit" value="{% trans "Search my maps" %}" />
         </form>
         {% if maps.object_list|length > 1 %}
           <a href="{% url 'user_download' %}?{% spaceless %}

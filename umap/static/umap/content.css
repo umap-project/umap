@@ -164,6 +164,7 @@ h2.tabs a:not(.selected) {
     font-weight: normal;
     color: #263B58;
     text-decoration: none;
+    margin-right: 0;
 }
 h2.tabs a:hover {
     text-decoration: underline;
@@ -375,9 +376,22 @@ ul.umap-autocomplete {
     align-items: flex-end;
     margin-bottom: 1rem;
 }
+@media all and (max-width: 640px) {
+    .table-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+}
 .table-header form {
     display: flex;
     align-items: flex-end;
+}
+@media all and (max-width: 640px) {
+    .table-header form {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 .table-header form input {
     border: 2px solid #263B58;
