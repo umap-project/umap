@@ -210,7 +210,7 @@ input[type="submit"],
     font-weight: bold;
 }
 .wrapper input[type="submit"]:hover {
-    background-color: #689191;
+    background-color: #35537c;
 }
 .wrapper .neutral, .wrapper input[type="submit"].neutral {
     background-color: #ddd;
@@ -487,6 +487,9 @@ ul.umap-autocomplete {
     padding:4px 6px;
     height: 36px;
     line-height: 26px;
+}
+.table-wrapper table button {
+    cursor: pointer;
 }
 
 /* **************************** */
