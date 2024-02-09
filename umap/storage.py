@@ -41,6 +41,8 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
     def post_process(self, paths, **options):
         collected = super().post_process(paths, **options)
         for original_path, processed_path, processed in collected:
+            if not processed_path:
+                print("Unused or missing file?", original_path)
             if processed_path.endswith(".js"):
                 path = Path(settings.STATIC_ROOT) / processed_path
                 initial = path.read_text()
