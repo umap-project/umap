@@ -10,4 +10,4 @@ uMap lets you create maps with OpenStreetMap layers in a minute, and embed them 
 
 - 🤗 Get started and [follow the installation guide](install.md).
 - 🤩 Want to contribute? [Read the contributing guidelines](contributing.md).
-- 🤔 Curious about umap internals? [Check the architecture overview](architecture/overview.md).
+- 🤔 Curious about umap internals? [Check the architecture overview](dev/overview.md).
