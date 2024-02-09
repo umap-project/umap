@@ -401,32 +401,39 @@ ul.umap-autocomplete {
     line-height: inherit;
     height: 2.5rem;
 }
-
-table.maps {
+.table-wrapper {
+    overflow-x: scroll;
+}
+.table-wrapper table {
     width: 100%;
+    min-width: 600px;
     border-collapse: collapse;
 }
-table.maps .map_fragment {
+.table-wrapper table .map_fragment {
     display: block;
     height: 80vh;
     width: 100%;
 }
-table.maps a,
-table.maps thead {
+.table-wrapper table a,
+.table-wrapper table thead {
     color: #263B58;
 }
-table.maps a:not(.icon-link) {
+.table-wrapper table thead th:last-of-type {
+    min-width: 240px;
+}
+
+.table-wrapper table a:not(.icon-link) {
     text-decoration: underline;
 }
-table.maps button.map-icon {
+.table-wrapper table button.map-icon {
     padding: 0;
     border: none;
     background: transparent;
 }
-table.maps form {
+.table-wrapper table form {
     display: inline;
 }
-table.maps input[type="submit"] {
+.table-wrapper table input[type="submit"] {
     display: inline;
     background-color: transparent;
     color: #263B58;
@@ -436,22 +443,22 @@ table.maps input[type="submit"] {
     margin: 0;
     line-height: inherit;
 }
-table.maps tbody tr {
+.table-wrapper table tbody tr {
     border-bottom: 1px solid #BDC7D4;
 }
-table.maps tbody tr td {
+.table-wrapper table tbody tr td {
     padding: 5px 4px;
 }
-table.maps tbody tr:nth-child(odd) {
+.table-wrapper table tbody tr:nth-child(odd) {
     background-color: #f4f4f4;
 }
-table.maps td {
+.table-wrapper table td {
     text-align: center;
 }
-table.maps thead tr {
+.table-wrapper table thead tr {
     line-height: 2em;
 }
-table.maps .button {
+.table-wrapper table .button {
     margin-bottom: 2px;
     padding:4px 6px;
     height: 36px;

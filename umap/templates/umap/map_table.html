@@ -1,85 +1,87 @@
 {% load umap_tags i18n %}
-<table class="maps">
-  <thead>
-    <tr>
-      <th>{% blocktrans %}Name{% endblocktrans %}</th>
-      <th>{% blocktrans %}Preview{% endblocktrans %}</th>
-      <th>{% blocktrans %}Who can see{% endblocktrans %}</th>
-      <th>{% blocktrans %}Who can edit{% endblocktrans %}</th>
-      <th>{% blocktrans %}Last save{% endblocktrans %}</th>
-      <th>{% blocktrans %}Owner{% endblocktrans %}</th>
-      <th>{% blocktrans %}Actions{% endblocktrans %}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for map_inst in maps %}
-      {% with unique_id="map_"|addstr:map_inst.pk %}
-        <tr>
-          <td>
-            <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
-          </td>
-          <td>
-            {{ map_inst.preview_settings|json_script:unique_id }}
-            <button class="map-icon map-opener" data-map-id="{{ unique_id }}"
-              title="{% translate "Open preview" %}">
-              <span class="icon-dashboard icon-view"></span>
-              <span class="sr-only">{% translate "Open preview" %}</span>
-            </button>
-            <dialog>
-              <form method="dialog">
-                <div id="{{ unique_id }}_target" class="map_fragment"></div>
-                <p class="close-dialog">
-                  <button class="button" type="submit">Close</button>
-                </p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>{% blocktrans %}Name{% endblocktrans %}</th>
+        <th>{% blocktrans %}Preview{% endblocktrans %}</th>
+        <th>{% blocktrans %}Who can see{% endblocktrans %}</th>
+        <th>{% blocktrans %}Who can edit{% endblocktrans %}</th>
+        <th>{% blocktrans %}Last save{% endblocktrans %}</th>
+        <th>{% blocktrans %}Owner{% endblocktrans %}</th>
+        <th>{% blocktrans %}Actions{% endblocktrans %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for map_inst in maps %}
+        {% with unique_id="map_"|addstr:map_inst.pk %}
+          <tr>
+            <td>
+              <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
+            </td>
+            <td>
+              {{ map_inst.preview_settings|json_script:unique_id }}
+              <button class="map-icon map-opener" data-map-id="{{ unique_id }}"
+                title="{% translate "Open preview" %}">
+                <span class="icon-dashboard icon-view"></span>
+                <span class="sr-only">{% translate "Open preview" %}</span>
+              </button>
+              <dialog>
+                <form method="dialog">
+                  <div id="{{ unique_id }}_target" class="map_fragment"></div>
+                  <p class="close-dialog">
+                    <button class="button" type="submit">Close</button>
+                  </p>
+                </form>
+              </dialog>
+            </td>
+            <td>{{ map_inst.get_share_status_display }}</td>
+            <td>{{ map_inst.get_edit_status_display }}</td>
+            <td>{{ map_inst.modified_at }}</td>
+            <td>
+              <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
+            </td>
+            <td>
+              <a href="{{ map_inst.get_absolute_url }}?share" class="icon-link"
+                title="{% translate "Share" %}">
+                <span class="icon-dashboard icon-share"></span>
+                <span class="sr-only">{% translate "Share" %}</span>
+              </a>
+              <a href="{{ map_inst.get_absolute_url }}?edit" class="icon-link"
+                title="{% translate "Edit" %}">
+                <span class="icon-dashboard icon-edit"></span>
+                <span class="sr-only">{% translate "Edit" %}</span>
+              </a>
+              <a href="{% url 'map_download' map_inst.pk %}" class="icon-link"
+                title="{% translate "Download" %}">
+                <span class="icon-dashboard icon-download"></span>
+                <span class="sr-only">{% translate "Download" %}</span>
+              </a>
+              <form action="{% url 'map_clone' map_inst.pk %}" method="post">
+                {% csrf_token %}
+                <button class="map-icon" type="submit"
+                  title="{% translate "Clone" %}">
+                  <span class="icon-dashboard icon-duplicate"></span>
+                  <span class="sr-only">{% translate "Clone" %}</span>
+                </button>
               </form>
-            </dialog>
-          </td>
-          <td>{{ map_inst.get_share_status_display }}</td>
-          <td>{{ map_inst.get_edit_status_display }}</td>
-          <td>{{ map_inst.modified_at }}</td>
-          <td>
-            <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
-          </td>
-          <td>
-            <a href="{{ map_inst.get_absolute_url }}?share" class="icon-link"
-              title="{% translate "Share" %}">
-              <span class="icon-dashboard icon-share"></span>
-              <span class="sr-only">{% translate "Share" %}</span>
-            </a>
-            <a href="{{ map_inst.get_absolute_url }}?edit" class="icon-link"
-              title="{% translate "Edit" %}">
-              <span class="icon-dashboard icon-edit"></span>
-              <span class="sr-only">{% translate "Edit" %}</span>
-            </a>
-            <a href="{% url 'map_download' map_inst.pk %}" class="icon-link"
-              title="{% translate "Download" %}">
-              <span class="icon-dashboard icon-download"></span>
-              <span class="sr-only">{% translate "Download" %}</span>
-            </a>
-            <form action="{% url 'map_clone' map_inst.pk %}" method="post">
-              {% csrf_token %}
-              <button class="map-icon" type="submit"
-                title="{% translate "Clone" %}">
-                <span class="icon-dashboard icon-duplicate"></span>
-                <span class="sr-only">{% translate "Clone" %}</span>
-              </button>
-            </form>
-            <form action="{% url 'map_delete' map_inst.pk %}"
-              method="post" class="map-delete">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{% url 'user_dashboard' %}">
-              <button class="map-icon" type="submit"
-                title="{% translate "Delete" %}">
-                <span class="icon-dashboard icon-delete"></span>
-                <span class="sr-only">{% translate "Delete" %}</span>
-              </button>
-            </form>
-          </td>
-        </tr>
-      {% endwith %}
-    {% endfor %}
-  </tbody>
-</table>
+              <form action="{% url 'map_delete' map_inst.pk %}"
+                method="post" class="map-delete">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'user_dashboard' %}">
+                <button class="map-icon" type="submit"
+                  title="{% translate "Delete" %}">
+                  <span class="icon-dashboard icon-delete"></span>
+                  <span class="sr-only">{% translate "Delete" %}</span>
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% if maps.has_other_pages %}
   <div class="pagination">
     {% if maps.has_previous %}
