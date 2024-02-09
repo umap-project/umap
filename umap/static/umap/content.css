@@ -144,13 +144,20 @@ body.login header {
 }
 h2.section {
     text-transform: uppercase;
+    color: #666;
+    text-align: center;
+}
+h2.tabs {
+    text-transform: uppercase;
     color: #263B58;
+    text-align: left;
     padding-top: 28px;
 }
 h2.tabs a {
     color: #263B58;
     text-decoration: underline;
     text-decoration-thickness: 3px;
+    text-decoration-skip-ink: none;
     margin-right: 2rem;
 }
 h2.tabs a:not(.selected) {
