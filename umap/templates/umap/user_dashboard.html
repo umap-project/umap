@@ -28,7 +28,7 @@
           <a href="{% url 'user_download' %}?{% spaceless %}
           {% for map_inst in maps %}map_id={{ map_inst.pk }}{% if not forloop.last %}&{% endif %}{% endfor %}
           {% endspaceless %}" class="button button-download"
-            >{% blocktranslate with count=maps.object_list|length %}
+            >{% blocktranslate with count=maps.object_list|length trimmed %}
               Download {{ count }} maps
             {% endblocktranslate %}
           </a>

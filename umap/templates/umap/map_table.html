@@ -95,7 +95,7 @@
     {% endif %}
 
     <span class="current">
-      {% blocktranslate with maps_number=maps.number num_pages=maps.paginator.num_pages %}
+      {% blocktranslate with maps_number=maps.number num_pages=maps.paginator.num_pages trimmed %}
         Page {{ maps_number }} of {{ num_pages }}
       {% endblocktranslate %}
     </span>
@@ -110,12 +110,12 @@
       {# djlint:on #}
     {% endif %}
     <span>
-      {% blocktranslate with per_page=maps.paginator.per_page %}
+      {% blocktranslate with per_page=maps.paginator.per_page trimmed %}
       Lines per page: {{ per_page }}
       {% endblocktranslate %}
     </span>
     <span>
-      {% blocktranslate with count=maps.paginator.count %}
+      {% blocktranslate with count=maps.paginator.count trimmed %}
       {{ count }} maps
       {% endblocktranslate %}
     </span>
