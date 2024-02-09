@@ -1,9 +1,3 @@
-/* Poor man pub/sub handler, enough for now */
-
-L.UmapSingleton = L.Evented.extend({})
-L.U = new L.UmapSingleton()
-L.U.Map = L.Map.extend({})
-
 /*
  * Utils
  */
@@ -441,7 +435,7 @@ L.DomEvent.once = (el, types, fn, context) => {
 /*
  * Global events
  */
-L.U.Keys = {
+U.Keys = {
   LEFT: 37,
   UP: 38,
   RIGHT: 39,
@@ -465,7 +459,7 @@ L.U.Keys = {
   Z: 90,
 }
 
-L.U.Help = L.Class.extend({
+U.Help = L.Class.extend({
   SHORTCUTS: {
     DRAW_MARKER: {
       shortcut: 'Modifier+M',
@@ -754,7 +748,7 @@ L.U.Help = L.Class.extend({
   ),
 })
 
-L.U.Orderable = L.Evented.extend({
+U.Orderable = L.Evented.extend({
   options: {
     selector: 'li',
     color: '#374E75',

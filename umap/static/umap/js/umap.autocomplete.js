@@ -1,4 +1,4 @@
-L.U.AutoComplete = L.Class.extend({
+U.AutoComplete = L.Class.extend({
   options: {
     placeholder: 'Start typing...',
     emptyMessage: 'No result',
@@ -12,8 +12,8 @@ L.U.AutoComplete = L.Class.extend({
 
   initialize: function (el, options) {
     this.el = el
-    const ui = new L.U.UI(document.querySelector('header'))
-    this.server = new window.umap.ServerRequest(ui)
+    const ui = new U.UI(document.querySelector('header'))
+    this.server = new U.ServerRequest(ui)
     L.setOptions(this, options)
     let CURRENT = null
     try {
@@ -69,19 +69,19 @@ L.U.AutoComplete = L.Class.extend({
 
   onKeyDown: function (e) {
     switch (e.keyCode) {
-      case L.U.Keys.TAB:
+      case U.Keys.TAB:
         if (this.CURRENT !== null) this.setChoice()
         L.DomEvent.stop(e)
         break
-      case L.U.Keys.ENTER:
+      case U.Keys.ENTER:
         L.DomEvent.stop(e)
         this.setChoice()
         break
-      case L.U.Keys.ESC:
+      case U.Keys.ESC:
         L.DomEvent.stop(e)
         this.hide()
         break
-      case L.U.Keys.DOWN:
+      case U.Keys.DOWN:
         if (this.RESULTS.length > 0) {
           if (this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) {
             // what if one result?
@@ -93,7 +93,7 @@ L.U.AutoComplete = L.Class.extend({
           }
         }
         break
-      case L.U.Keys.UP:
+      case U.Keys.UP:
         if (this.CURRENT !== null) {
           L.DomEvent.stop(e)
         }
@@ -112,16 +112,16 @@ L.U.AutoComplete = L.Class.extend({
 
   onKeyUp: function (e) {
     const special = [
-      L.U.Keys.TAB,
-      L.U.Keys.ENTER,
-      L.U.Keys.LEFT,
-      L.U.Keys.RIGHT,
-      L.U.Keys.DOWN,
-      L.U.Keys.UP,
-      L.U.Keys.APPLE,
-      L.U.Keys.SHIFT,
-      L.U.Keys.ALT,
-      L.U.Keys.CTRL,
+      U.Keys.TAB,
+      U.Keys.ENTER,
+      U.Keys.LEFT,
+      U.Keys.RIGHT,
+      U.Keys.DOWN,
+      U.Keys.UP,
+      U.Keys.APPLE,
+      U.Keys.SHIFT,
+      U.Keys.ALT,
+      U.Keys.CTRL,
     ]
     if (special.indexOf(e.keyCode) === -1) {
       this.search()
@@ -255,9 +255,9 @@ L.U.AutoComplete = L.Class.extend({
   },
 })
 
-L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
+U.AutoComplete.Ajax = U.AutoComplete.extend({
   initialize: function (el, options) {
-    L.U.AutoComplete.prototype.initialize.call(this, el, options)
+    U.AutoComplete.prototype.initialize.call(this, el, options)
     if (!this.el) return this
     this.createInput()
     this.createContainer()
@@ -272,7 +272,7 @@ L.U.AutoComplete.Ajax = L.U.AutoComplete.extend({
   },
 })
 
-L.U.AutoComplete.Ajax.SelectMultiple = L.U.AutoComplete.Ajax.extend({
+U.AutoComplete.Ajax.SelectMultiple = U.AutoComplete.Ajax.extend({
   initSelectedContainer: function () {
     return L.DomUtil.after(
       this.input,
@@ -298,7 +298,7 @@ L.U.AutoComplete.Ajax.SelectMultiple = L.U.AutoComplete.Ajax.extend({
   },
 })
 
-L.U.AutoComplete.Ajax.Select = L.U.AutoComplete.Ajax.extend({
+U.AutoComplete.Ajax.Select = U.AutoComplete.Ajax.extend({
   initSelectedContainer: function () {
     return L.DomUtil.after(
       this.input,

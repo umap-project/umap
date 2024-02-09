@@ -1,4 +1,4 @@
-L.U.Share = L.Class.extend({
+U.Share = L.Class.extend({
   EXPORT_TYPES: {
     geojson: {
       formatter: function (map) {
@@ -138,13 +138,13 @@ L.U.Share = L.Class.extend({
     for (let i = 0; i < this.map.HIDDABLE_CONTROLS.length; i++) {
       UIFields.push(`queryString.${this.map.HIDDABLE_CONTROLS[i]}Control`)
     }
-    const iframeExporter = new L.U.IframeExporter(this.map)
+    const iframeExporter = new U.IframeExporter(this.map)
     const buildIframeCode = () => {
       iframe.innerHTML = iframeExporter.build()
       exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
     }
     buildIframeCode()
-    const builder = new L.U.FormBuilder(iframeExporter, UIFields, {
+    const builder = new U.FormBuilder(iframeExporter, UIFields, {
       callback: buildIframeCode,
     })
     const iframeOptions = L.DomUtil.createFieldset(
@@ -182,7 +182,7 @@ L.U.Share = L.Class.extend({
   },
 })
 
-L.U.IframeExporter = L.Evented.extend({
+U.IframeExporter = L.Evented.extend({
   options: {
     includeFullScreenLink: true,
     currentView: false,

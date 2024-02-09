@@ -1,4 +1,4 @@
-L.U.FeatureMixin = {
+U.FeatureMixin = {
   staticOptions: { mainColor: 'color' },
 
   initialize: function (map, latlng, options) {
@@ -94,7 +94,7 @@ L.U.FeatureMixin = {
       L._('Feature properties')
     )
 
-    let builder = new L.U.FormBuilder(this, ['datalayer'], {
+    let builder = new U.FormBuilder(this, ['datalayer'], {
       callback: function () {
         this.edit(e)
       }, // removeLayer step will close the edit panel, let's reopen it
@@ -113,7 +113,7 @@ L.U.FeatureMixin = {
     // We always want name and description for now (properties management to come)
     properties.unshift('properties.description')
     properties.unshift('properties.name')
-    builder = new L.U.FormBuilder(this, properties, {
+    builder = new U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
       callback: this._redraw, // In case we have dynamic options…
     })
@@ -144,7 +144,7 @@ L.U.FeatureMixin = {
 
   appendEditFieldsets: function (container) {
     const optionsFields = this.getShapeOptions()
-    let builder = new L.U.FormBuilder(this, optionsFields, {
+    let builder = new U.FormBuilder(this, optionsFields, {
       id: 'umap-feature-shape-properties',
       callback: this._redraw,
     })
@@ -152,7 +152,7 @@ L.U.FeatureMixin = {
     shapeProperties.appendChild(builder.build())
 
     const advancedOptions = this.getAdvancedOptions()
-    builder = new L.U.FormBuilder(this, advancedOptions, {
+    builder = new U.FormBuilder(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
       callback: this._redraw,
     })
@@ -163,7 +163,7 @@ L.U.FeatureMixin = {
     advancedProperties.appendChild(builder.build())
 
     const interactionOptions = this.getInteractionOptions()
-    builder = new L.U.FormBuilder(this, interactionOptions, {
+    builder = new U.FormBuilder(this, interactionOptions, {
       callback: this._redraw,
     })
     const popupFieldset = L.DomUtil.createFieldset(
@@ -205,7 +205,7 @@ L.U.FeatureMixin = {
 
   getPopupClass: function () {
     const old = this.getOption('popupTemplate') // Retrocompat.
-    return L.U.Popup[this.getOption('popupShape') || old] || L.U.Popup
+    return U.Popup[this.getOption('popupShape') || old] || U.Popup
   },
 
   attachPopup: function () {
@@ -382,7 +382,7 @@ L.U.FeatureMixin = {
   },
 
   getInplaceToolbarActions: function (e) {
-    return [L.U.ToggleEditAction, L.U.DeleteFeatureAction]
+    return [U.ToggleEditAction, U.DeleteFeatureAction]
   },
 
   _showContextMenu: function (e) {
@@ -502,7 +502,7 @@ L.U.FeatureMixin = {
   },
 
   getVertexActions: function () {
-    return [L.U.DeleteVertexAction]
+    return [U.DeleteVertexAction]
   },
 
   isMulti: function () {
@@ -539,9 +539,9 @@ L.U.FeatureMixin = {
   },
 }
 
-L.U.Marker = L.Marker.extend({
+U.Marker = L.Marker.extend({
   parentClass: L.Marker,
-  includes: [L.U.FeatureMixin],
+  includes: [U.FeatureMixin],
 
   preInit: function () {
     this.setIcon(this.getIcon())
@@ -556,7 +556,7 @@ L.U.Marker = L.Marker.extend({
   },
 
   addInteractions: function () {
-    L.U.FeatureMixin.addInteractions.call(this)
+    U.FeatureMixin.addInteractions.call(this)
     this.on(
       'dragend',
       function (e) {
@@ -639,7 +639,7 @@ L.U.Marker = L.Marker.extend({
 
   disconnectFromDataLayer: function (datalayer) {
     this.options.icon.datalayer = null
-    L.U.FeatureMixin.disconnectFromDataLayer.call(this, datalayer)
+    U.FeatureMixin.disconnectFromDataLayer.call(this, datalayer)
   },
 
   _getIconUrl: function (name) {
@@ -652,7 +652,7 @@ L.U.Marker = L.Marker.extend({
   },
 
   getIcon: function () {
-    const Class = L.U.Icon[this.getIconClass()] || L.U.Icon.Default
+    const Class = U.Icon[this.getIconClass()] || U.Icon.Default
     return new Class(this.map, { feature: this })
   },
 
@@ -678,12 +678,12 @@ L.U.Marker = L.Marker.extend({
   },
 
   appendEditFieldsets: function (container) {
-    L.U.FeatureMixin.appendEditFieldsets.call(this, container)
+    U.FeatureMixin.appendEditFieldsets.call(this, container)
     const coordinatesOptions = [
       ['_latlng.lat', { handler: 'FloatInput', label: L._('Latitude') }],
       ['_latlng.lng', { handler: 'FloatInput', label: L._('Longitude') }],
     ]
-    const builder = new L.U.FormBuilder(this, coordinatesOptions, {
+    const builder = new U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
         if (!this._latlng.isValid()) {
           this.map.ui.alert({
@@ -707,7 +707,7 @@ L.U.Marker = L.Marker.extend({
       // callback is mandatory for zoomToShowLayer
       this.datalayer.layer.zoomToShowLayer(this, e.callback || (() => {}))
     } else {
-      L.U.FeatureMixin.zoomTo.call(this, e)
+      U.FeatureMixin.zoomTo.call(this, e)
     }
   },
 
@@ -721,13 +721,13 @@ L.U.Marker = L.Marker.extend({
   },
 })
 
-L.U.PathMixin = {
+U.PathMixin = {
   hasGeom: function () {
     return !this.isEmpty()
   },
 
   connectToDataLayer: function (datalayer) {
-    L.U.FeatureMixin.connectToDataLayer.call(this, datalayer)
+    U.FeatureMixin.connectToDataLayer.call(this, datalayer)
     // We keep markers on their own layer on top of the paths.
     this.options.pane = this.datalayer.pane
   },
@@ -735,7 +735,7 @@ L.U.PathMixin = {
   edit: function (e) {
     if (this.map.editEnabled) {
       if (!this.editEnabled()) this.enableEdit()
-      L.U.FeatureMixin.edit.call(this, e)
+      U.FeatureMixin.edit.call(this, e)
     }
   },
 
@@ -816,7 +816,7 @@ L.U.PathMixin = {
     // this.map.off('showmeasure', this.showMeasureTooltip, this);
     // this.map.off('hidemeasure', this.removeTooltip, this);
     if (this.editing && this.editing.enabled()) this.editing.removeHooks()
-    L.U.FeatureMixin.onRemove.call(this, map)
+    U.FeatureMixin.onRemove.call(this, map)
   },
 
   getBestZoom: function () {
@@ -825,7 +825,7 @@ L.U.PathMixin = {
 
   endEdit: function () {
     this.disableEdit()
-    L.U.FeatureMixin.endEdit.call(this)
+    U.FeatureMixin.endEdit.call(this)
   },
 
   highlightPath: function () {
@@ -845,7 +845,7 @@ L.U.PathMixin = {
   },
 
   addInteractions: function () {
-    L.U.FeatureMixin.addInteractions.call(this)
+    U.FeatureMixin.addInteractions.call(this)
     this.on('mouseover', this._onMouseOver)
     this.on('edit', this.makeDirty)
     this.on('drag editable:drag', this._onDrag)
@@ -871,7 +871,7 @@ L.U.PathMixin = {
     this.disableEdit()
     if (!shape) return
     const properties = this.cloneProperties()
-    const other = new (this instanceof L.U.Polyline ? L.U.Polyline : L.U.Polygon)(
+    const other = new (this instanceof U.Polyline ? U.Polyline : U.Polygon)(
       this.map,
       shape,
       { geojson: { properties: properties } }
@@ -882,7 +882,7 @@ L.U.PathMixin = {
   },
 
   getContextMenuItems: function (e) {
-    let items = L.U.FeatureMixin.getContextMenuItems.call(this, e)
+    let items = U.FeatureMixin.getContextMenuItems.call(this, e)
     items.push({
       text: L._('Display measure'),
       callback: function () {
@@ -922,7 +922,7 @@ L.U.PathMixin = {
   },
 
   getContextMenuEditItems: function (e) {
-    const items = L.U.FeatureMixin.getContextMenuEditItems.call(this, e)
+    const items = U.FeatureMixin.getContextMenuEditItems.call(this, e)
     if (
       this.map.editedFeature &&
       this.isSameClass(this.map.editedFeature) &&
@@ -949,10 +949,10 @@ L.U.PathMixin = {
   },
 
   getInplaceToolbarActions: function (e) {
-    const items = L.U.FeatureMixin.getInplaceToolbarActions.call(this, e)
+    const items = U.FeatureMixin.getInplaceToolbarActions.call(this, e)
     if (this.isMulti()) {
-      items.push(L.U.DeleteShapeAction)
-      items.push(L.U.ExtractShapeFromMultiAction)
+      items.push(U.DeleteShapeAction)
+      items.push(U.ExtractShapeFromMultiAction)
     }
     return items
   },
@@ -975,9 +975,9 @@ L.U.PathMixin = {
   },
 }
 
-L.U.Polyline = L.Polyline.extend({
+U.Polyline = L.Polyline.extend({
   parentClass: L.Polyline,
-  includes: [L.U.FeatureMixin, L.U.PathMixin],
+  includes: [U.FeatureMixin, U.PathMixin],
 
   staticOptions: {
     stroke: true,
@@ -986,7 +986,7 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   isSameClass: function (other) {
-    return other instanceof L.U.Polyline
+    return other instanceof U.Polyline
   },
 
   getClassName: function () {
@@ -999,7 +999,7 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getContextMenuEditItems: function (e) {
-    const items = L.U.PathMixin.getContextMenuEditItems.call(this, e)
+    const items = U.PathMixin.getContextMenuEditItems.call(this, e)
     const vertexClicked = e.vertex
     let index
     if (!this.isMulti()) {
@@ -1029,7 +1029,7 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getContextMenuMultiItems: function (e) {
-    const items = L.U.PathMixin.getContextMenuMultiItems.call(this, e)
+    const items = U.PathMixin.getContextMenuMultiItems.call(this, e)
     items.push({
       text: L._('Merge lines'),
       callback: this.mergeShapes,
@@ -1050,7 +1050,7 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getAdvancedEditActions: function (container) {
-    L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
+    U.FeatureMixin.getAdvancedEditActions.call(this, container)
     const toPolygon = L.DomUtil.createButton(
       'button umap-to-polygon',
       container,
@@ -1110,24 +1110,24 @@ L.U.Polyline = L.Polyline.extend({
   },
 
   getVertexActions: function (e) {
-    const actions = L.U.FeatureMixin.getVertexActions.call(this, e),
+    const actions = U.FeatureMixin.getVertexActions.call(this, e),
       index = e.vertex.getIndex()
     if (index === 0 || index === e.vertex.getLastIndex())
-      actions.push(L.U.ContinueLineAction)
-    else actions.push(L.U.SplitLineAction)
+      actions.push(U.ContinueLineAction)
+    else actions.push(U.SplitLineAction)
     return actions
   },
 })
 
-L.U.Polygon = L.Polygon.extend({
+U.Polygon = L.Polygon.extend({
   parentClass: L.Polygon,
-  includes: [L.U.FeatureMixin, L.U.PathMixin],
+  includes: [U.FeatureMixin, U.PathMixin],
   staticOptions: {
     mainColor: 'fillColor',
   },
 
   isSameClass: function (other) {
-    return other instanceof L.U.Polygon
+    return other instanceof U.Polygon
   },
 
   getClassName: function () {
@@ -1135,7 +1135,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getShapeOptions: function () {
-    const options = L.U.PathMixin.getShapeOptions()
+    const options = U.PathMixin.getShapeOptions()
     options.push(
       'properties._umap_options.stroke',
       'properties._umap_options.fill',
@@ -1146,7 +1146,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getInteractionOptions: function () {
-    const options = L.U.FeatureMixin.getInteractionOptions()
+    const options = U.FeatureMixin.getInteractionOptions()
     options.push('properties._umap_options.interactive')
     return options
   },
@@ -1157,7 +1157,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getContextMenuEditItems: function (e) {
-    const items = L.U.PathMixin.getContextMenuEditItems.call(this, e),
+    const items = U.PathMixin.getContextMenuEditItems.call(this, e),
       shape = this.shapeAt(e.latlng)
     // No multi and no holes.
     if (shape && !this.isMulti() && (L.LineUtil.isFlat(shape) || shape.length === 1)) {
@@ -1191,7 +1191,7 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getAdvancedEditActions: function (container) {
-    L.U.FeatureMixin.getAdvancedEditActions.call(this, container)
+    U.FeatureMixin.getAdvancedEditActions.call(this, container)
     const toPolyline = L.DomUtil.createButton(
       'button umap-to-polyline',
       container,
@@ -1211,8 +1211,8 @@ L.U.Polygon = L.Polygon.extend({
   },
 
   getInplaceToolbarActions: function (e) {
-    const items = L.U.PathMixin.getInplaceToolbarActions.call(this, e)
-    items.push(L.U.CreateHoleAction)
+    const items = U.PathMixin.getInplaceToolbarActions.call(this, e)
+    items.push(U.CreateHoleAction)
     return items
   },
 })

@@ -1,4 +1,4 @@
-describe('L.U.Marker', () => {
+describe('U.Marker', () => {
   let map, datalayer
   before(async () => {
     const datalayer_response = JSON.parse(JSON.stringify(RESPONSES.datalayer62_GET)) // Copy.
@@ -86,7 +86,7 @@ describe('L.U.Marker', () => {
 
   describe('#clone', () => {
     it('should clone marker', () => {
-      var layer = new L.U.Marker(map, [10, 20], {
+      var layer = new U.Marker(map, [10, 20], {
         datalayer: datalayer,
       }).addTo(datalayer)
       assert.equal(datalayer._index.length, 4)
@@ -102,7 +102,7 @@ describe('L.U.Marker', () => {
 
   describe('#edit()', function (done) {
     it('should allow changing coordinates manually', () => {
-      var layer = new L.U.Marker(map, [10, 20], {
+      var layer = new U.Marker(map, [10, 20], {
         datalayer: datalayer,
       }).addTo(datalayer)
       enableEdit()
@@ -112,7 +112,7 @@ describe('L.U.Marker', () => {
     })
 
     it('should not allow invalid latitude nor longitude', () => {
-      var layer = new L.U.Marker(map, [10, 20], {
+      var layer = new U.Marker(map, [10, 20], {
         datalayer: datalayer,
       }).addTo(datalayer)
       enableEdit()

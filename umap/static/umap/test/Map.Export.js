@@ -1,4 +1,4 @@
-describe('L.U.Map.Export', function () {
+describe('U.Map.Export', function () {
   let map
   before(async () => {
     await fetchMock.mock(

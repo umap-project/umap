@@ -1,4 +1,4 @@
-describe('L.U.Map', () => {
+describe('U.Map', () => {
   let map, datalayer
   before(async () => {
     await fetchMock.mock(

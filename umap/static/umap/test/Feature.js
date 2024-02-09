@@ -1,4 +1,4 @@
-describe('L.U.FeatureMixin', function () {
+describe('U.FeatureMixin', function () {
   let map, datalayer
   before(async () => {
     await fetchMock.mock(

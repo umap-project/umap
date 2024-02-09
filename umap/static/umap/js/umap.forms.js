@@ -379,10 +379,10 @@ L.FormBuilder.PopupContent = L.FormBuilder.Select.extend({
 L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
   getOptions: function () {
     const layer_classes = [
-      L.U.Layer.Default,
-      L.U.Layer.Cluster,
-      L.U.Layer.Heat,
-      L.U.Layer.Choropleth,
+      U.Layer.Default,
+      U.Layer.Cluster,
+      U.Layer.Heat,
+      U.Layer.Choropleth,
     ]
     return layer_classes.map((class_) => [class_.TYPE, class_.NAME])
   },
@@ -607,7 +607,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
       L.DomEvent.on(box, 'click', this.onDefine, this)
-      const icon = L.U.Icon.makeIconElement(this.value(), box)
+      const icon = U.Icon.makeIconElement(this.value(), box)
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
@@ -707,7 +707,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   showCharsTab: function () {
     this.openTab('chars')
-    const value = !L.U.Icon.isImg(this.value()) ? this.value() : null
+    const value = !U.Icon.isImg(this.value()) ? this.value() : null
     const input = this.buildInput(this.body, value)
     input.placeholder = L._('Type char or paste emoji')
     input.type = 'text'
@@ -960,7 +960,7 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
       className: 'edit-owner',
       on_select: L.bind(this.onSelect, this),
     }
-    this.autocomplete = new L.U.AutoComplete.Ajax.Select(this.parentNode, options)
+    this.autocomplete = new U.AutoComplete.Ajax.Select(this.parentNode, options)
     const owner = this.toHTML()
     if (owner)
       this.autocomplete.displaySelected({
@@ -989,7 +989,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
       on_select: L.bind(this.onSelect, this),
       on_unselect: L.bind(this.onUnselect, this),
     }
-    this.autocomplete = new L.U.AutoComplete.Ajax.SelectMultiple(
+    this.autocomplete = new U.AutoComplete.Ajax.SelectMultiple(
       this.parentNode,
       options
     )
@@ -1023,7 +1023,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   },
 })
 
-L.U.FormBuilder = L.FormBuilder.extend({
+U.FormBuilder = L.FormBuilder.extend({
   options: {
     className: 'umap-form',
   },
@@ -1114,7 +1114,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
       handler: 'IconUrl',
       label: L._('Icon symbol'),
       inheritable: true,
-      helpText: L.U.Help.formatIconSymbol,
+      helpText: U.Help.formatIconSymbol,
     },
     popupShape: { handler: 'PopupShape', label: L._('Popup shape'), inheritable: true },
     popupTemplate: {

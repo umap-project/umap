@@ -1,4 +1,4 @@
-L.U.TableEditor = L.Class.extend({
+U.TableEditor = L.Class.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     this.table = L.DomUtil.create('div', 'table')
@@ -54,7 +54,7 @@ L.U.TableEditor = L.Class.extend({
   },
 
   renderRow: function (feature) {
-    const builder = new L.U.FormBuilder(feature, this.field_properties, {
+    const builder = new U.FormBuilder(feature, this.field_properties, {
       id: `umap-feature-properties_${L.stamp(feature)}`,
       className: 'trow',
       callback: feature.resetTooltip,

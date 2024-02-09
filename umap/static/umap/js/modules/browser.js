@@ -22,7 +22,7 @@ export default class Browser {
       colorBox = DomUtil.create('i', 'feature-color', feature_li),
       title = DomUtil.create('span', 'feature-title', feature_li),
       symbol = feature._getIconUrl
-        ? L.U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
+        ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
         : null
     zoom_to.title = L._('Bring feature to center')
     edit.title = L._('Edit this feature')
@@ -31,8 +31,8 @@ export default class Browser {
     const bgcolor = feature.getDynamicOption('color')
     colorBox.style.backgroundColor = bgcolor
     if (symbol && symbol !== this.map.options.default_iconUrl) {
-      const icon = L.U.Icon.makeIconElement(symbol, colorBox)
-      L.U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
+      const icon = U.Icon.makeIconElement(symbol, colorBox)
+      U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
     }
     DomEvent.on(
       zoom_to,
@@ -141,7 +141,7 @@ export default class Browser {
       ['options.filter', { handler: 'Input', placeholder: L._('Filter') }],
       ['options.inBbox', { handler: 'Switch', label: L._('Current map view') }],
     ]
-    const builder = new L.U.FormBuilder(this, fields, {
+    const builder = new U.FormBuilder(this, fields, {
       makeDirty: false,
       callback: () => this.onFormChange(),
     })
