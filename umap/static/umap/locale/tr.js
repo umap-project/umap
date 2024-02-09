@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**kalınlaştırma için iki yıldız**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Hakkında",
-    "Action not allowed :(": "Eyleme izin verilmiyor :(",
     "Activate slideshow mode": "Slayt gösterisi modunu etkinleştir",
     "Add a layer": "Bir katman ekle",
     "Add a line to the current multi": "Mevcut çokluya bir satır ekle",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Gelişmiş özellikler",
     "All properties are imported.": "Tüm özellikler içe aktarılır.",
     "Allow interactions": "Etkileşimlere izin ver",
-    "An error occured": "Bir hata oluştu",
     "Are you sure you want to cancel your changes?": "Değişikliklerinizi iptal etmek istediğinizden emin misiniz?",
     "Are you sure you want to clone this map and all its datalayers?": "Bu haritayı ve tüm veri katmanlarını klonlamak istediğinizden emin misiniz?",
     "Are you sure you want to delete the feature?": "Bu nesneyi silmek istediğinizden emin misiniz?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Haritayı yerleştir",
     "Empty": "Boşalt",
     "Error in the tilelayer URL": "Katman URL'sinde hata",
-    "Error while fetching {url}": "{url} getirilirken hata oluştu",
     "Exit Fullscreen": "Tam ekrandan çık",
     "Extract shape to separate feature": "Özelliği ayırmak için şekli ayıklayın",
     "Fetch data each time map view changes.": "Harita görünümü her değiştiğinde verileri alın.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Lütfen bir biçim seçin",
     "Please enter the name of the property": "Lütfen bu özelliğin adını girin",
     "Please enter the new name of this property": "Lütfen bu özelliğin yeni adını girin",
-    "Problem in the response": "Yanıtta sorun",
-    "Problem in the response format": "Yanıt biçiminde sorun",
     "Properties imported:": "İçe aktarılan özellikler:",
     "Provide an URL here": "Buraya bir URL girin",
     "Proxy request": "Proxy isteği",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

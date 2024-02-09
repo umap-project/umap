@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**dvije zvijezdice za podebljano**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Više o",
-    "Action not allowed :(": "Akcija nije dozvoljena :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "Dodaj sloj",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Napredne postavke",
     "All properties are imported.": "Sve postavke su uvezene.",
     "Allow interactions": "Allow interactions",
-    "An error occured": "Desila se greška",
     "Are you sure you want to cancel your changes?": "Are you sure you want to cancel your changes?",
     "Are you sure you want to clone this map and all its datalayers?": "Are you sure you want to clone this map and all its datalayers?",
     "Are you sure you want to delete the feature?": "Jeste li sigurni da želite obrisati ovaj element?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Ugradi kartu",
     "Empty": "Empty",
     "Error in the tilelayer URL": "Error in the tilelayer URL",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Please choose a format",
     "Please enter the name of the property": "Please enter the name of the property",
     "Please enter the new name of this property": "Please enter the new name of this property",
-    "Problem in the response": "Problem in the response",
-    "Problem in the response format": "Problem u prepoznavanju formata",
     "Properties imported:": "Properties imported:",
     "Provide an URL here": "Ovdje upišite URL",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("hr", locale)
 L.setLocale("hr")

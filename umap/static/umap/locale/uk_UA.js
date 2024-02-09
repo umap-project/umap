@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**подвійні зірочки — жирний**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Розділені комами числа, що представляють шаблон довжини штрихів та проміжків пунктирної лінії. Напр.: \"5, 10,15\".",
     "About": "Про це",
-    "Action not allowed :(": "Дія недоступна :(",
     "Activate slideshow mode": "Активувати режим слайдшоу",
     "Add a layer": "Додати шар",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Розширенні параметри",
     "All properties are imported.": "Усі параметри імпортовано.",
     "Allow interactions": "Дозволити взаємодію",
-    "An error occured": "Виникла помилка",
     "Are you sure you want to cancel your changes?": "Ви впевнені, що хочете скасувати зроблені зміни?",
     "Are you sure you want to clone this map and all its datalayers?": "Ви впевнені, що бажаєте скопіювати цю мапу з її усіма даними",
     "Are you sure you want to delete the feature?": "Ви впевнені, що хочете вилучити об’єкт?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Вбудувати мапу",
     "Empty": "Очистити",
     "Error in the tilelayer URL": "Помилка в посиланні на шар мапи",
-    "Error while fetching {url}": "Помилка при отриманні {url}",
     "Exit Fullscreen": "Вийти з повноекранного режиму",
     "Extract shape to separate feature": "Виокремити полігон в окремий об’єкт",
     "Fetch data each time map view changes.": "Запитувати нові дані під час кожного оновлення мапи.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Будь ласка, виберіть формат",
     "Please enter the name of the property": "Будь ласка, введіть назву параметра",
     "Please enter the new name of this property": "Будь ласка, введіть нову назву параметра",
-    "Problem in the response": "Проблема з відповіддю",
-    "Problem in the response format": "Формат відповіді не розпізнано",
     "Properties imported:": "Імпортовані параметри:",
     "Provide an URL here": "Вкажіть посилання тут",
     "Proxy request": "Запит проксі",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

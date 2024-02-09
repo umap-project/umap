@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**két csillag: félkövér**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Vesszővel tagolt számsor, amely meghatározza a szaggatott vonalak mintázatát. Például 5,10,15 Ha nem világos, próbálkozz!",
     "About": "Térkép névjegye",
-    "Action not allowed :(": "Nem engedélyezett művelet :(",
     "Activate slideshow mode": "Diavetítésmód aktiválása",
     "Add a layer": "Réteg hozzáadása",
     "Add a line to the current multi": "Vonal hozzáadása a jelenlegi alakzatcsoporthoz",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Speciális tulajdonságok",
     "All properties are imported.": "Minden tulajdonság importálva lett.",
     "Allow interactions": "Interakció engedélyezése",
-    "An error occured": "Hiba történt",
     "Are you sure you want to cancel your changes?": "Biztosan elveti a módosításait?",
     "Are you sure you want to clone this map and all its datalayers?": "Biztosan klónozza a térképet és az összes adatrétegét?",
     "Are you sure you want to delete the feature?": "Biztosan törölni szeretné ezt az objektumot?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Térkép beágyazása",
     "Empty": "Kiürítés",
     "Error in the tilelayer URL": "Hiba a mozaikréteg URL-jében",
-    "Error while fetching {url}": "Hiba történt e webcím beolvasásakor: {url}",
     "Exit Fullscreen": "Kilépés a teljes képernyős nézetből",
     "Extract shape to separate feature": "Alakzat kiemelése objektum széválasztásához",
     "Fetch data each time map view changes.": "Adatok beolvasása a térkép nézetének minden egyes változásánál.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Válassza ki a formátumot",
     "Please enter the name of the property": "Adja meg a tulajdonság nevét",
     "Please enter the new name of this property": "Adja meg a tulajdonság új nevét",
-    "Problem in the response": "Hiba a válaszban",
-    "Problem in the response format": "Hiba a válasz formátumában",
     "Properties imported:": "Importált tulajdonságok:",
     "Provide an URL here": "Itt adjon meg egy URL-t",
     "Proxy request": "Proxykérés",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Szűrési tényezők",
     "Facet search": "Szűrés",
     "Feature properties": "Objektum tulajdonságai",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Hiba történt az URL elérésekor (hálózati probléma vagy külső weboldalak használata elleni CORS-védelem): {url}",
     "Latest feature": "Legutóbbi objektum",
     "No results for these facets": "Erre a szűrésre nincs eredmény",
     "Saved center and zoom": "Elmentett középpont és nagyítás",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "másolás",
     "full backup": "teljes biztonsági másolat",
     "settings": "beállítások",
-    "{count} features in this layer": "{count} objektum van ezen a rétegen"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**div steredennig evit tevaat**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Diwar-benn",
-    "Action not allowed :(": "N'oc'h ket aotreet d'ober-se :(",
     "Activate slideshow mode": "Gweredekaat ar mod diaporama",
     "Add a layer": "Ouzhpennañ ur gwiskad",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Perzhioù araokaet",
     "All properties are imported.": "Enporzhiet eo bet an holl berzhioù.",
     "Allow interactions": "Aotren an etreoberiadennoù",
-    "An error occured": "Ur fazi ez eus bet",
     "Are you sure you want to cancel your changes?": "Ha sur oc'h e faot deoc'h nullañ ho kemmoù?",
     "Are you sure you want to clone this map and all its datalayers?": "Ha sur oc'h e faot deoc'h arredaoliñ ar gartenn-mañ hag hec'h holl wiskadoù roadennoù?",
     "Are you sure you want to delete the feature?": "Ha sur oc'h e faot deoc'h dilemel an elfenn-mañ?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Enframmañ ar gartenn",
     "Empty": "Goullonderiñ",
     "Error in the tilelayer URL": "Ur fazi zo en URL foñs ar gartenn",
-    "Error while fetching {url}": "Ur fazi ez eus bet en ur c'hervel an URL {url}",
     "Exit Fullscreen": "Kuitaat ar mod skramm a-bezh",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Diuzit ur furmad mar plij",
     "Please enter the name of the property": "Enankit anv ar perzh mar plij",
     "Please enter the new name of this property": "Enankit anv nevez ar perzh-mañ mar plij",
-    "Problem in the response": "Kudenn e respont ar servijer",
-    "Problem in the response format": "Kudenn gant furmadiñ ar respont",
     "Properties imported:": "Perzhioù enporzhiet:",
     "Provide an URL here": "Pourchas un URL amañ",
     "Proxy request": "Reked proksi",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Perzhioù an elfenn",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Elfenn diwezhañ",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Kreiz ha zoum enrollet",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "eilañ",
     "full backup": "gwarez klok",
     "settings": "arventennoù",
-    "{count} features in this layer": "{count} a berzhioù er gwiskad-mañ"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("br", locale)
 L.setLocale("br")

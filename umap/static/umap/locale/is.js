@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**tvöföld stjarna/margföldun fyrir feitletrað**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Kommu-aðgreindur listi með tölum sem skilgreina strikamynstur. Til dæmis: \"5, 10, 15\".",
     "About": "Um hugbúnaðinn",
-    "Action not allowed :(": "Þessi aðgerð er ekki leyfð :(",
     "Activate slideshow mode": "Virkja skyggnusýningarham",
     "Add a layer": "Bæta við lagi",
     "Add a line to the current multi": "Bæta línu við fyrirliggjandi hóp",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Ítarlegir eiginleikar",
     "All properties are imported.": "Öll eigindi voru flutt inn.",
     "Allow interactions": "Leyfa gagnvirkni",
-    "An error occured": "Villa kom upp",
     "Are you sure you want to cancel your changes?": "Ertu viss um að þú viljir hætta við breytingarnar þínar?",
     "Are you sure you want to clone this map and all its datalayers?": "Ertu viss um að þú viljir klóna þetta kort og öll gagnalög þess?",
     "Are you sure you want to delete the feature?": "Ertu viss um að þú viljir eyða fitjunni?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Setja landakortið inn á vefsíðu",
     "Empty": "Tómt",
     "Error in the tilelayer URL": "Villa í slóð kortatíglalags",
-    "Error while fetching {url}": "Villa við að sækja {url}",
     "Exit Fullscreen": "Hætta í skjáfylli",
     "Extract shape to separate feature": "Flytja lögun í aðskilda fitju",
     "Fetch data each time map view changes.": "Sækja gögn í hvert skipti sem kortasýn breytist",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Veldu snið",
     "Please enter the name of the property": "Settu inn heiti á eigindið",
     "Please enter the new name of this property": "Settu inn nýja heitið á þetta eigindi",
-    "Problem in the response": "Vandamál í svarinu",
-    "Problem in the response format": "Vandamál með snið svarsins",
     "Properties imported:": "Innflutt eigindi:",
     "Provide an URL here": "Gefðu hér upp URL-slóð",
     "Proxy request": "Beiðni frá milliþjóni",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

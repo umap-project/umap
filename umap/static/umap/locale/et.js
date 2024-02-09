@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**kaks tärni paksu kirja jaoks**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Komaga eraldatud numbriloend, mis määrab katkendjoone mustri, nt \"5, 10, 15\".",
     "About": "Teave",
-    "Action not allowed :(": "Tegevus pole lubatud :(",
     "Activate slideshow mode": "Aktiveeri slaidiesitluse režiim",
     "Add a layer": "Lisa kiht",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Täiendavad omadused",
     "All properties are imported.": "Kõik omadused imporditi.",
     "Allow interactions": "Luba interaktsioonid",
-    "An error occured": "Ilmnes viga",
     "Are you sure you want to cancel your changes?": "Oled sa kindel, et soovid muudatustest loobuda?",
     "Are you sure you want to clone this map and all its datalayers?": "Oled sa kindel, et soovid kopeerida seda kaarti ja kõiki selle andmekihte?",
     "Are you sure you want to delete the feature?": "Oled sa kindel, et soovid seda elementi kustutada?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Manusta kaart",
     "Empty": "Tühjenda",
     "Error in the tilelayer URL": "Vigane tausta URL",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Välju täisekraanist",
     "Extract shape to separate feature": "Ekstrakti kujund eraldi elemendiks",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Vali palun vorming",
     "Please enter the name of the property": "Sisesta palun omaduse nimi",
     "Please enter the new name of this property": "Sisesta palun selle omaduse uus nimi",
-    "Problem in the response": "Problem in the response",
-    "Problem in the response format": "Problem in the response format",
     "Properties imported:": "Imporditud omadused:",
     "Provide an URL here": "Lisage siia URL",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("et", locale)
 L.setLocale("et")

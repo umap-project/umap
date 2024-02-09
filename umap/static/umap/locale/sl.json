@@ -78,7 +78,6 @@
     "**double star for bold**": "**dvojna zvezdica za krepko pisavo**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Z vejilo ločen seznam števil, ki določajo vzorec poteze. Na primer »5, 10, 15«.",
     "About": "O zemljevidu",
-    "Action not allowed :(": "Dejanje ni dovoljeno :(",
     "Activate slideshow mode": "Omogoči predstavitveni način",
     "Add a layer": "Dodaj plast",
     "Add a line to the current multi": "Dodaj črto k trenutnemu večtočkovnemu predmetu",
@@ -88,7 +87,6 @@
     "Advanced properties": "Napredne nastavitve",
     "All properties are imported.": "Vse lastnosti so uvožene.",
     "Allow interactions": "Dovoli interakcije",
-    "An error occured": "Prišlo je do napake",
     "Are you sure you want to cancel your changes?": "Ali ste prepričani, da želite preklicati spremembe?",
     "Are you sure you want to clone this map and all its datalayers?": "Ali ste prepričani, da želite klonirati ta zemljevid in vse njegove podatkovne plasti?",
     "Are you sure you want to delete the feature?": "Ali ste prepričani, da želite izbrisati to možnost?",
@@ -159,7 +157,6 @@
     "Embed the map": "Vstavi zemljevid",
     "Empty": "Prazno",
     "Error in the tilelayer URL": "Napaka v naslovu URL plasti",
-    "Error while fetching {url}": "Napaka pridobivanja naslova URL {url}",
     "Exit Fullscreen": "Končaj celozaslonski način",
     "Extract shape to separate feature": "Izloči obliko v ločen predmet",
     "Fetch data each time map view changes.": "Pridobi podatke vsakič, ko se spremeni pogled zemljevida.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Izbrati je treba zapis",
     "Please enter the name of the property": "Ime lastnosti",
     "Please enter the new name of this property": "Novo ime lastnosti",
-    "Problem in the response": "Napaka v odzivu",
-    "Problem in the response format": "Napaka v zapisu odziva",
     "Properties imported:": "Lastnosti so uvožene:",
     "Provide an URL here": "Vpis naslova URL",
     "Proxy request": "Zahteva posredniškega strežnika",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

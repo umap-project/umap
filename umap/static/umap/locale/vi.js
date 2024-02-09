@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**double star for bold**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Về",
-    "Action not allowed :(": "Hoạt động này không được phép",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "Thêm một layer",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Thuộc tính nâng cao",
     "All properties are imported.": "All properties are imported.",
     "Allow interactions": "Allow interactions",
-    "An error occured": "Có lỗi",
     "Are you sure you want to cancel your changes?": "Bạn có chắc muốn hủy các thay đổi?",
     "Are you sure you want to clone this map and all its datalayers?": "Bạn có chắc muốn sao chép bản đồ này và các layer dữ liệu đi kèm với nó?",
     "Are you sure you want to delete the feature?": "Bạn có chắc muốn xóa đối tượng này?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Embed the map",
     "Empty": "Empty",
     "Error in the tilelayer URL": "Error in the tilelayer URL",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Hãy chọn một định dạng",
     "Please enter the name of the property": "Please enter the name of the property",
     "Please enter the new name of this property": "Please enter the new name of this property",
-    "Problem in the response": "Problem in the response",
-    "Problem in the response format": "Problem in the response format",
     "Properties imported:": "Properties imported:",
     "Provide an URL here": "Provide an URL here",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("vi", locale)
 L.setLocale("vi")

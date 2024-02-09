@@ -78,7 +78,6 @@
     "**double star for bold**": "**double astérisque pour gras**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Liste de nombres séparés par une virgule, définissant les tirets et espaces. Ex.: \"5, 10, 15\".",
     "About": "À propos",
-    "Action not allowed :(": "Action non autorisée :(",
     "Activate slideshow mode": "Activer le mode diaporama",
     "Add a layer": "Ajouter un calque",
     "Add a line to the current multi": "Ajouter une ligne au groupe courant",
@@ -88,7 +87,6 @@
     "Advanced properties": "Propriétés avancées",
     "All properties are imported.": "Toutes les propriétés sont importées.",
     "Allow interactions": "Autoriser les interactions",
-    "An error occured": "Une erreur est survenue",
     "Are you sure you want to cancel your changes?": "Êtes-vous sûr de vouloir annuler vos modifications ?",
     "Are you sure you want to clone this map and all its datalayers?": "Êtes-vous sûr de vouloir cloner cette carte et ses calques de données?",
     "Are you sure you want to delete the feature?": "Êtes-vous sûr de vouloir supprimer cet élément?",
@@ -159,7 +157,6 @@
     "Embed the map": "Intégrer la carte dans une iframe",
     "Empty": "Vider",
     "Error in the tilelayer URL": "Erreur dans l'URL du fond de carte",
-    "Error while fetching {url}": "Erreur en appelant l'URL {url}",
     "Exit Fullscreen": "Quitter le plein écran",
     "Extract shape to separate feature": "Extraire la forme",
     "Fetch data each time map view changes.": "Récupère les données à chaque fois que la vue de la carte change.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Merci de choisir un format",
     "Please enter the name of the property": "Merci d'entrer le nom de la propriété",
     "Please enter the new name of this property": "Veuillez entrer le nouveau nom de la propriété",
-    "Problem in the response": "Problème dans la réponse du serveur",
-    "Problem in the response format": "Problème dans le format de la réponse",
     "Properties imported:": "Propriétés importées :",
     "Provide an URL here": "Renseigner une URL",
     "Proxy request": "Avec proxy",
@@ -377,7 +372,6 @@
     "Facet keys": "Clés pour les facettes",
     "Facet search": "Recherche par facette",
     "Feature properties": "Propriétés de l'élément",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Problème au chargement de cette URL (problème réseau ou protection CORS): {url}",
     "Latest feature": "Dernier élément",
     "No results for these facets": "Aucun résultat pour ces facettes",
     "Saved center and zoom": "Centre et zoom enregistrés",
@@ -441,5 +435,5 @@
     "copy": "copier",
     "full backup": "sauvegarde complète",
     "settings": "paramètres",
-    "{count} features in this layer": "{count} éléments sur ce calque"
+    "Features in this layer: {count}": "Éléments dans ce calque: {count}"
 }

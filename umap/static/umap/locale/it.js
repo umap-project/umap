@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**due asterischi per il testo marcato**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Una lista di numeri separati da virgola che definisce lo schema del tratto e del trattino. Es.: \"5, 10, 15\".",
     "About": "Informazioni",
-    "Action not allowed :(": "Azione non permessa :(",
     "Activate slideshow mode": "Attiva la modalità presentazione",
     "Add a layer": "Aggiungi un layer",
     "Add a line to the current multi": "Aggiungi una linea a quelle correnti",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Proprietà avanzate",
     "All properties are imported.": "Tutte le proprietà sono state importate.",
     "Allow interactions": "Permetti interazioni",
-    "An error occured": "Si è verificato un errore",
     "Are you sure you want to cancel your changes?": "Vuoi realmente annullare le modifiche fatte?",
     "Are you sure you want to clone this map and all its datalayers?": "Confermi di duplicare questa mappa e tutti i suoi livelli?",
     "Are you sure you want to delete the feature?": "Si è sicuri di voler cancellare questo oggetto?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Includi la mappa",
     "Empty": "Vuoto",
     "Error in the tilelayer URL": "Errore nell'URL nel servizio di tile",
-    "Error while fetching {url}": "Errore nel nel recupero da {url}",
     "Exit Fullscreen": "Esci da Schermo intero",
     "Extract shape to separate feature": "Dividi la geometria in oggetti separati",
     "Fetch data each time map view changes.": "Recupera i dati ad ogni cambio della visualizzazione della mappa.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Scegliere un formato",
     "Please enter the name of the property": "Inserire il nome della proprietà",
     "Please enter the new name of this property": "Inserire il nuovo nome per questa proprietà",
-    "Problem in the response": "Problema nella risposta",
-    "Problem in the response format": "Problema nel formato della risposta",
     "Properties imported:": "Proprietà importate:",
     "Provide an URL here": "Aggiungi una URL qui",
     "Proxy request": "Richiesta proxy",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Campi delle faccette",
     "Facet search": "Faccetta di ricerca",
     "Feature properties": "Proprietà dell'oggetto",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Problema nel raggiungimento dell'URL (problema di rete o protezione CORS): {url}",
     "Latest feature": "Ultimo oggetto",
     "No results for these facets": "Nessun risultato trovato per queste faccette",
     "Saved center and zoom": "Centro e zoom salvati",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("it", locale)
 L.setLocale("it")

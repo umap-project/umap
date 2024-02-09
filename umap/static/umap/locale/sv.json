@@ -78,7 +78,6 @@
     "**double star for bold**": "**dubbla stjärntecken för fetstil**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "En kommaseparerad lista med nummer som definierar mönstret för den streckade linjen. Ex: \"5, 10, 15\"",
     "About": "Om kartan",
-    "Action not allowed :(": "Åtgärden är inte tillåten :(",
     "Activate slideshow mode": "Aktivera bildspelsläge",
     "Add a layer": "Lägg till lager",
     "Add a line to the current multi": "Lägg till en linje till aktuell multi",
@@ -88,7 +87,6 @@
     "Advanced properties": "Avancerade egenskaper",
     "All properties are imported.": "Alla attribut importeras.",
     "Allow interactions": "Tillåt interaktion",
-    "An error occured": "Ett fel inträffade",
     "Are you sure you want to cancel your changes?": "Är du säker på att du vill avbryta dina ändringar?",
     "Are you sure you want to clone this map and all its datalayers?": "Är du säker på att du vill skapa en kopia av kartan och alla datalager?",
     "Are you sure you want to delete the feature?": "Är du säker på att du vill radera objektet?",
@@ -159,7 +157,6 @@
     "Embed the map": "Bädda in kartan",
     "Empty": "Töm",
     "Error in the tilelayer URL": "Fel i webbadressen för bakgrundskartan (tile-lagret)",
-    "Error while fetching {url}": "Fel vid hämtning av {url}",
     "Exit Fullscreen": "Lämna helskärmsläge",
     "Extract shape to separate feature": "Extrahera figuren till separat objekt",
     "Fetch data each time map view changes.": "Hämta data varje gång kartvisningen ändras.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Välj ett format",
     "Please enter the name of the property": "Ange namnet på egenskapen",
     "Please enter the new name of this property": "Ange det nya namnet för den här egenskapen",
-    "Problem in the response": "Servern svarade med ett fel",
-    "Problem in the response format": "Fel format i serversvaret",
     "Properties imported:": "Attribut som importeras:",
     "Provide an URL here": "Ange en webbadress",
     "Proxy request": "Proxyförfrågan",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

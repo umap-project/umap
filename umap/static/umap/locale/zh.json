@@ -78,7 +78,6 @@
     "**double star for bold**": "**两个星号表示粗体**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "关于",
-    "Action not allowed :(": "操作不允许",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "增加图层",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@
     "Advanced properties": "高级属性",
     "All properties are imported.": "属性已导入。",
     "Allow interactions": "Allow interactions",
-    "An error occured": "发生错误",
     "Are you sure you want to cancel your changes?": "是否确定取消改变？",
     "Are you sure you want to clone this map and all its datalayers?": "是否确定复制这个地图及其所有数据图层?",
     "Are you sure you want to delete the feature?": "是否确定删除该要素？",
@@ -159,7 +157,6 @@
     "Embed the map": "嵌入地图",
     "Empty": "空",
     "Error in the tilelayer URL": "瓦片图层URL错误",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@
     "Please choose a format": "请选择一种格式",
     "Please enter the name of the property": "请输入属性名称",
     "Please enter the new name of this property": "请输入属性的新名称",
-    "Problem in the response": "响应错误",
-    "Problem in the response format": "响应内容格式问题",
     "Properties imported:": "Properties imported:",
     "Provide an URL here": "提供URL",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

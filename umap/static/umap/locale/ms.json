@@ -78,7 +78,6 @@
     "**double star for bold**": "**bintang berganda untuk tulisan tebal**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Senarai berpisahkan koma bagi nombor yang menentukan corak sengkang lejang. Cth.: \"5, 10, 15\".",
     "About": "Perihalan",
-    "Action not allowed :(": "Tindakan tidak dibenarkan :(",
     "Activate slideshow mode": "Aktifkan mod persembahan slaid",
     "Add a layer": "Tambah lapisan",
     "Add a line to the current multi": "Tambah garisan ke multi semasa",
@@ -88,7 +87,6 @@
     "Advanced properties": "Ciri-ciri lanjutan",
     "All properties are imported.": "Semua ciri-ciri telah diimport.",
     "Allow interactions": "Benarkan interaksi",
-    "An error occured": "Telah berlakunya ralat",
     "Are you sure you want to cancel your changes?": "Adakah anda ingin membatalkan perubahan anda?",
     "Are you sure you want to clone this map and all its datalayers?": "Adakah anda ingin klon peta ini serta semua lapisan datanya?",
     "Are you sure you want to delete the feature?": "Adakah anda ingin memadamkan sifat-sifat dipilih?",
@@ -159,7 +157,6 @@
     "Embed the map": "Benamkan peta",
     "Empty": "Kosongkan",
     "Error in the tilelayer URL": "Ralat dalam URL lapisan jubin",
-    "Error while fetching {url}": "Ralat ketika mengambil {url}",
     "Exit Fullscreen": "Keluar Skrin Penuh",
     "Extract shape to separate feature": "Sarikan bentuk untuk memisahkan sifat",
     "Fetch data each time map view changes.": "Ambil data setiap kali pandangan peta berubah.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Sila pilih format",
     "Please enter the name of the property": "Sila masukkan nama ciri-ciri",
     "Please enter the new name of this property": "Sila masukkan nama baharu bagi ciri-ciri ini",
-    "Problem in the response": "Masalah dalam tindak balas",
-    "Problem in the response format": "Masalah dalam format tindak balas",
     "Properties imported:": "Ciri-ciri diimport:",
     "Provide an URL here": "Sediakan URL di sini",
     "Proxy request": "Permintaan proksi",
@@ -377,7 +372,6 @@
     "Facet keys": "Kekunci faset",
     "Facet search": "Gelintaran faset",
     "Feature properties": "Ciri-ciri sifat",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Ada isu ketika mencapai URL tersebut (masalah rangkaian atau perlindungan CORS): {url}",
     "Latest feature": "Sifat terbaru",
     "No results for these facets": "Tiada hasil bagi faset ini",
     "Saved center and zoom": "Kedudukan tengah dan zum telah disimpan",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

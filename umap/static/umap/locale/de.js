@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**Zwei Sterne für Fett**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Eine kommagetrente Zahlenfolge, die die Linienart (Strichmuster) der Kontur definiert, z. B.: \"5, 10, 15\".",
     "About": "Über",
-    "Action not allowed :(": "Aktion nicht erlaubt :(",
     "Activate slideshow mode": "Diashowmodus aktivieren",
     "Add a layer": "Ebene hinzufügen",
     "Add a line to the current multi": "Linie zur vorhandene Gruppe hinzufügen",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Erweiterte Eigenschaften",
     "All properties are imported.": "Alle Merkmale wurden importiert.",
     "Allow interactions": "Interaktionen erlauben",
-    "An error occured": "Es ist ein Fehler aufgetreten.",
     "Are you sure you want to cancel your changes?": "Willst du deine Änderungen wirklich abbrechen?",
     "Are you sure you want to clone this map and all its datalayers?": "Möchtest du die Karte und ihre Datenebenen wirklich duplizieren?",
     "Are you sure you want to delete the feature?": "Möchtest du dieses Element wirklich löschen?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Karte einbinden",
     "Empty": "Leeren",
     "Error in the tilelayer URL": "Fehler in der Kachelebenen-URL",
-    "Error while fetching {url}": "Fehler beim Abrufen von {url}",
     "Exit Fullscreen": "Vollbild beenden",
     "Extract shape to separate feature": "Form als separates Element extrahieren",
     "Fetch data each time map view changes.": "Daten jedes Mal abrufen, wenn sich die Kartenansicht ändert.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Bitte wähle ein Format",
     "Please enter the name of the property": "Bitte gib den Namen des Merkmals ein",
     "Please enter the new name of this property": "Bitte gib den neuen Namen des Merkmals ein",
-    "Problem in the response": "Fehlerhafte Serverantwort",
-    "Problem in the response format": "Ungültiges Format der Serverantwort",
     "Properties imported:": "Importierte Merkmale:",
     "Provide an URL here": "Hier eine URL angeben",
     "Proxy request": "Proxyanforderung",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "kopieren",
     "full backup": "Komplettes Backup",
     "settings": "Einstellungen",
-    "{count} features in this layer": "{count} Elemente in dieser Ebene"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("de", locale)
 L.setLocale("de")

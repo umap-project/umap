@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**굵게 표시**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "줄표의 패턴을 정의하기 위한 숫자열. 쉼표로 구분합니다. 예시: \"5, 10, 15\".",
     "About": "정보",
-    "Action not allowed :(": "허용되지 않은 동작입니다 :(",
     "Activate slideshow mode": "슬라이드 쇼 모드 활성화",
     "Add a layer": "레이어 추가",
     "Add a line to the current multi": "현재 무늬에 선 추가",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "고급 속성",
     "All properties are imported.": "모든 속성이 삽입되었습니다.",
     "Allow interactions": "상호 작용 허용",
-    "An error occured": "오류가 발생했습니다",
     "Are you sure you want to cancel your changes?": "정말 변경한 것들을 저장하지 않으시겠습니까?",
     "Are you sure you want to clone this map and all its datalayers?": "정말 이 지도와 모든 데이터 레이어를 복제하시겠습니까?",
     "Are you sure you want to delete the feature?": "정말 이 지물을 삭제하시겠습니까?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Embed the map",
     "Empty": "Empty",
     "Error in the tilelayer URL": "Error in the tilelayer URL",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Please choose a format",
     "Please enter the name of the property": "Please enter the name of the property",
     "Please enter the new name of this property": "Please enter the new name of this property",
-    "Problem in the response": "Problem in the response",
-    "Problem in the response format": "Problem in the response format",
     "Properties imported:": "Properties imported:",
     "Provide an URL here": "Provide an URL here",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")

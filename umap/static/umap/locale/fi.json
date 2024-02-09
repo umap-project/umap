@@ -78,7 +78,6 @@
     "**double star for bold**": "**tuplatähti lihavoi**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Tietoja",
-    "Action not allowed :(": "Toimenpide ei ole sallittu :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "Lisää kerros",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@
     "Advanced properties": "Lisäominaisuudet",
     "All properties are imported.": "Kaikki omainaisuudet tuodaan.",
     "Allow interactions": "Allow interactions",
-    "An error occured": "Hups! Virhe on tapahtunut...",
     "Are you sure you want to cancel your changes?": "Oletko _ihan_ varma, että haluat peruuttaa muutoksesi?",
     "Are you sure you want to clone this map and all its datalayers?": "Oletko varma että haluat kloonata tämän kartan ja kaikki sen data-kerrokset?",
     "Are you sure you want to delete the feature?": "Oletko varma että haluat poistaa piirteen?",
@@ -159,7 +157,6 @@
     "Embed the map": "Liitä kartta",
     "Empty": "Tyhjä",
     "Error in the tilelayer URL": "Virhe karttalaattojen URL:ssä",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Irroita muoto erilliseksi piirteeksi.",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Valitse formaatti",
     "Please enter the name of the property": "Kirjoita ominaisuuden nimi",
     "Please enter the new name of this property": "Kirjoita ominaisuuden uusi nimi",
-    "Problem in the response": "Ongelma vastauksessa",
-    "Problem in the response format": "Ongelma vastauksen muodossa",
     "Properties imported:": "Tuodut ominaisuudet:",
     "Provide an URL here": "Syötä verkko-osoite tänne",
     "Proxy request": "Välityspalvelinpyyntö",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

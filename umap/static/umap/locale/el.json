@@ -78,7 +78,6 @@
     "**double star for bold**": "**διπλό αστερίσκο για έντονα**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Μια λίστα αριθμών διαχωρισμένων με κόμμα που καθορίζει το μοτίβο της παύλας. Π.χ.: \"5, 10, 15\".",
     "About": "Σχετικά",
-    "Action not allowed :(": "Μη επιτρεπόμενη ενέργεια :(",
     "Activate slideshow mode": "Ενεργοποίηση λειτουργίας παρουσίασης",
     "Add a layer": "Προσθήκη επιπέδου",
     "Add a line to the current multi": "Προσθήκη γραμμής στο παρόν πολυδεδομένο",
@@ -88,7 +87,6 @@
     "Advanced properties": "Εξειδικευμένες ιδιότητες",
     "All properties are imported.": "Όλες οι ιδιότητες έχουν εισαχθεί",
     "Allow interactions": "Επιτρέπονται αλληλεπιδράσεις",
-    "An error occured": "Παρουσιάστηκε σφάλμα",
     "Are you sure you want to cancel your changes?": "Θέλετε σίγουρα να ακυρώσετε τις αλλαγές σας;",
     "Are you sure you want to clone this map and all its datalayers?": "Θέλετε σίγουρα να κλωνοποιηθεί αυτός ο χάρτης και όλα τα επίπεδα δεδομένων του;",
     "Are you sure you want to delete the feature?": "Θέλετε σίγουρα να διαγράφει αυτό το στοιχείο;",
@@ -159,7 +157,6 @@
     "Embed the map": "Ένθεση του χάρτη",
     "Empty": "Κενό",
     "Error in the tilelayer URL": "Σφάλμα συνδέσμου υποβάθρου",
-    "Error while fetching {url}": "Σφάλμα κατά την ανάκτηση {url}",
     "Exit Fullscreen": "Κλείσιμο πλήρους οθόνης",
     "Extract shape to separate feature": "Εξαγωγή σχήματος σε ξεχωριστό στοιχείο",
     "Fetch data each time map view changes.": "Ανάκτηση δεδομένων κάθε φορά που αλλάζει η προβολή του χάρτη.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Παρακαλώ επιλέξτε μια μορφοποίηση",
     "Please enter the name of the property": "Παρακαλώ εισαγάγετε το όνομα της ιδιότητας",
     "Please enter the new name of this property": "Παρακαλώ εισαγάγετε το νέο όνομα αυτής της ιδιότητας",
-    "Problem in the response": "Πρόβλημα στην απόκριση",
-    "Problem in the response format": "Πρόβλημα στη μορφοποίηση απόκρισης",
     "Properties imported:": "Ιδιότητες που έχουν εισαχθεί:",
     "Provide an URL here": "Δώστε έναν σύνδεσμο εδώ",
     "Proxy request": "Αίτημα απομακρυσμένου διαμεσολαβητή",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

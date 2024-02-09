@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "** ሁለት ኮኮብ ለማወፈር **",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "ስለ",
-    "Action not allowed :(": "አይፈቀድም :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "ሌየር ጨምር",
     "Add a line to the current multi": "ላሁኑ ብዝሀ መስመር ጨምር",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "ተጨማሪ ባህርያት",
     "All properties are imported.": "ሁሉም ባህርያት መጥተዋል",
     "Allow interactions": "Allow interactions",
-    "An error occured": "ስህተት ተፈጥሯል",
     "Are you sure you want to cancel your changes?": "እርግጠኛ ነዎት ያሻሻሉትም ማስቀመጥ አይፈልጉም?",
     "Are you sure you want to clone this map and all its datalayers?": "እርግጠኛ ነዎት ይህንን ካርታ እና ሁሉንም የመረጃ ገጾች ማባዛት ይፈልጋሉ?",
     "Are you sure you want to delete the feature?": "እርግጠኛ ነዎት ይህንን ተግባሩን መሰረዝ ይፈልጋሉ?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "ካርታውን አካትት",
     "Empty": "ባዶ",
     "Error in the tilelayer URL": "በታይልሌየሩ የድረ-ገፅ መገኛ ላይ ስህተት ተፈጥሯል",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "ፊቸሩን ለመለየት ቅርፁን ነጥለህ አውጣ",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "እባክዎ ፎርማት ይምረጡ",
     "Please enter the name of the property": "እባክዎ የባህርይውን ስም ያስገቡ",
     "Please enter the new name of this property": "እባክዎን አዲሱን የባህርይውን ስም ያስገቡ",
-    "Problem in the response": "በምላሹ ላይ ችግር ተፈጥሯል",
-    "Problem in the response format": "በምላሹ ፎርማት ላይ ችግር ተፈጥሯል",
     "Properties imported:": "ባህርያት መጥተዋል",
     "Provide an URL here": "የድረገፁን መገኛ አድራሻ ያስገቡ",
     "Proxy request": "የፕሮክሲ ጥያቄ",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("am_ET", locale)
 L.setLocale("am_ET")

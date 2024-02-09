@@ -78,7 +78,6 @@
     "**double star for bold**": "**dviguba žvaigždutė paryškintam tekstui**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Apie",
-    "Action not allowed :(": "Veiksmas nėra leidžiamas :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "Pridėti sluoksnį",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@
     "Advanced properties": "Sudėtingesni nustatymai",
     "All properties are imported.": "Visi objektai importuoti.",
     "Allow interactions": "Allow interactions",
-    "An error occured": "Įvyko klaida",
     "Are you sure you want to cancel your changes?": "Ar tikrai nori atšaukti savo pakeitimus?",
     "Are you sure you want to clone this map and all its datalayers?": "Ar tikrai norite nukopijuoti šį žemėlapį ir visus jo duomenų sluoksnius?",
     "Are you sure you want to delete the feature?": "Ar tikrai norite ištrinti šį objektą?",
@@ -159,7 +157,6 @@
     "Embed the map": "Įsikelti šį žemėlapį",
     "Empty": "Tuščias",
     "Error in the tilelayer URL": "Klaida tile-sluoksnio URL",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Pasirinkite formatą",
     "Please enter the name of the property": "Įveskite, prašom, savybės pavadinimą",
     "Please enter the new name of this property": "Įveskite, prašom, naują savybės pavadinimą",
-    "Problem in the response": "Klaida atsakyme",
-    "Problem in the response format": "Klaida atsakymo formate",
     "Properties imported:": "Importuoti objektai:",
     "Provide an URL here": "Įvęskite adresą",
     "Proxy request": "Proxy užklausa",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

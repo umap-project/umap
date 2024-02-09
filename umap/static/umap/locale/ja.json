@@ -78,7 +78,6 @@
     "**double star for bold**": "**アスタリスク2つで太字**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "カンマで数字を区切り、ストロークの破線パターンを指定。 例: \"5, 10, 15\"",
     "About": "概要",
-    "Action not allowed :(": "そのアクションは禁止されています :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "レイヤ追加",
     "Add a line to the current multi": "現在のマルチにラインを追加",
@@ -88,7 +87,6 @@
     "Advanced properties": "拡張プロパティ",
     "All properties are imported.": "すべてのプロパティがインポートされました。",
     "Allow interactions": "インタラクションを許可",
-    "An error occured": "エラーが発生しました",
     "Are you sure you want to cancel your changes?": "本当に編集内容を破棄しますか？",
     "Are you sure you want to clone this map and all its datalayers?": "すべてのデータレイヤを含むマップ全体を複製してよいですか？",
     "Are you sure you want to delete the feature?": "地物を削除してよいですか？",
@@ -159,7 +157,6 @@
     "Embed the map": "マップ埋め込み",
     "Empty": "内容なし",
     "Error in the tilelayer URL": "タイルレイヤのURLに誤りがあります",
-    "Error while fetching {url}": "{url} の取得エラー",
     "Exit Fullscreen": "フルスクリーン表示を解除",
     "Extract shape to separate feature": "シェイプを複数の地物に変換",
     "Fetch data each time map view changes.": "地図表示が変更されたらデータを再取得する",
@@ -219,8 +216,6 @@
     "Please choose a format": "フォーマットを指定してください",
     "Please enter the name of the property": "プロパティの名称を入力してください",
     "Please enter the new name of this property": "このプロパティに新しい名称を付与してください",
-    "Problem in the response": "レスポンスに問題があります",
-    "Problem in the response format": "レスポンス形式に問題があります",
     "Properties imported:": "インポートされたプロパティ:",
     "Provide an URL here": "URLを入力してください",
     "Proxy request": "プロキシリクエスト",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

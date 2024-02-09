@@ -78,7 +78,6 @@
     "**double star for bold**": "**dobbel stjerne for fet skrift**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "En komma-separert liste over nummer som definerer den stiplede linja. Eks.: \"5, 10, 15\".",
     "About": "Om",
-    "Action not allowed :(": "Handlingen er ikke tillatt :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "Legg til et lag",
     "Add a line to the current multi": "Legg en linje til gjeldende multi",
@@ -88,7 +87,6 @@
     "Advanced properties": "Avanserte egenskaper",
     "All properties are imported.": "Alle egenskaper er importert",
     "Allow interactions": "Tillat interaksjoner",
-    "An error occured": "En feil oppsto",
     "Are you sure you want to cancel your changes?": "Er du sikker på at du vil du forkaste endringene dine?",
     "Are you sure you want to clone this map and all its datalayers?": "Er du sikker på at du vil klone dette kartet og alle tilhørende datalag?",
     "Are you sure you want to delete the feature?": "Er du sikker på at du vil slette dette objektet?",
@@ -159,7 +157,6 @@
     "Embed the map": "Bygg inn kartet",
     "Empty": "Tøm",
     "Error in the tilelayer URL": "Feil i flislag-URLen",
-    "Error while fetching {url}": "Feil under henting av {url}",
     "Exit Fullscreen": "Gå ut av fullskjerm",
     "Extract shape to separate feature": "Hent ut form til eget objekt",
     "Fetch data each time map view changes.": "Hent data hver gang kartvisningen endres.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Please choose a format",
     "Please enter the name of the property": "Please enter the name of the property",
     "Please enter the new name of this property": "Please enter the new name of this property",
-    "Problem in the response": "Problem in the response",
-    "Problem in the response format": "Problem in the response format",
     "Properties imported:": "Properties imported:",
     "Provide an URL here": "Provide an URL here",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

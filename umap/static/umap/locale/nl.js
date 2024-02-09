@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "** Twee sterretjes voor vet **",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Een lijst getallen, gescheiden door komma's, die het streepjespatroon definiëren. Vb: \"5, 10, 15\".",
     "About": "Over",
-    "Action not allowed :(": "Handeling niet toegestaan :(",
     "Activate slideshow mode": "Activeer slidshow modus",
     "Add a layer": "Laag toevoegen",
     "Add a line to the current multi": "Voeg een lijn toe aan de huidige multilijn",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Geavanceerde eigenschappen",
     "All properties are imported.": "Alle eigenschappen zijn geïmporteerd",
     "Allow interactions": "Sta interactie toe",
-    "An error occured": "Er is een fout opgetreden",
     "Are you sure you want to cancel your changes?": "Weet je zeker dat je je wijzigingen wil annuleren?",
     "Are you sure you want to clone this map and all its datalayers?": "Weet je zeker dat je deze kaart en alle gegevenslagen wil klonen?",
     "Are you sure you want to delete the feature?": "Weet je zeker dat je het object wil verwijderen?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Kaart inbedden",
     "Empty": "Leeg",
     "Error in the tilelayer URL": "Er is een fout opgetreden met de achtergrondtegels",
-    "Error while fetching {url}": "Fout bij ophalen {url}",
     "Exit Fullscreen": "Verlaat volledig scherm",
     "Extract shape to separate feature": "Verplaats deze vorm naar een eigen object",
     "Fetch data each time map view changes.": "Haal data op elke keer het kaartaanzicht verandert",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Kies een formaat",
     "Please enter the name of the property": "Vul de naam in van de eigenschap",
     "Please enter the new name of this property": "Vul de nieuwe naam in van de eigenschap",
-    "Problem in the response": "Probleem met het antwoord gekregen van de server",
-    "Problem in the response format": "Probleem met het formaat van het antwoord van de server",
     "Properties imported:": "Geïmporteerde eigenschappen:",
     "Provide an URL here": "Geef hier een URL-adres op",
     "Proxy request": "Proxy request",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

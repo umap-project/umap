@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**vše mezi dvěma hvězdičkami je tučně**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Čárkami oddělený seznam čísel, který popisuje vzorek přerušované čáry. Např. «5, 10, 15».",
     "About": "O mapě",
-    "Action not allowed :(": "Akce nepovolena :(",
     "Activate slideshow mode": "Aktivovat prezentační mód",
     "Add a layer": "Přidat vrstvu",
     "Add a line to the current multi": "Přidat čáru k současnému multi",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Pokročilé vlastnosti",
     "All properties are imported.": "Všechny vlastnosti jsou importovány.",
     "Allow interactions": "Povolit interakce",
-    "An error occured": "Došlo k chybě",
     "Are you sure you want to cancel your changes?": "Jste si jisti že chcete stornovat vaše úpravy?",
     "Are you sure you want to clone this map and all its datalayers?": "Určitě chcete vytvořit kopii celé této mapy a všech jejich vrstev?",
     "Are you sure you want to delete the feature?": "Určitě chcete vymazat tento objekt?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Vložit mapu do jiného webu",
     "Empty": "Vyprázdnit",
     "Error in the tilelayer URL": "Chyba v URL vrstvy dlaždic",
-    "Error while fetching {url}": "Chyba při načítání {url}",
     "Exit Fullscreen": "Ukončit režim celé obrazovky",
     "Extract shape to separate feature": "Vyjmout tvar do samostatného objektu",
     "Fetch data each time map view changes.": "Získat data při každé změně zobrazení mapy.",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Zvolte formát",
     "Please enter the name of the property": "Zadejte prosím název vlastnosti",
     "Please enter the new name of this property": "Zadejte prosím nový název této vlastnosti",
-    "Problem in the response": "Problém při odpovědi",
-    "Problem in the response format": "Problém ve formátu odpovědi",
     "Properties imported:": "Importované vlastnosti:",
     "Provide an URL here": "Sem vložte odkaz",
     "Proxy request": "Požadavky přes proxy",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Aspekty klíče",
     "Facet search": "hledání aspektů",
     "Feature properties": "Vlastnosti funkce",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Problém s dosažením této adresy URL (síťový problém nebo ochrana CORS): {url}",
     "Latest feature": "Nejnovější funkce",
     "No results for these facets": "Žádné výsledky pro tyto aspekty",
     "Saved center and zoom": "Uložený střed a zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

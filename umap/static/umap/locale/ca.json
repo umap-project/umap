@@ -78,7 +78,6 @@
     "**double star for bold**": "**doble asteric per a negreta**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Quant a",
-    "Action not allowed :(": "Acció no permesa :(",
     "Activate slideshow mode": "Activate slideshow mode",
     "Add a layer": "Afegeix una capa",
     "Add a line to the current multi": "Add a line to the current multi",
@@ -88,7 +87,6 @@
     "Advanced properties": "Propietats avançades",
     "All properties are imported.": "S'han importat totes les propietats",
     "Allow interactions": "Allow interactions",
-    "An error occured": "S'ha produït un error",
     "Are you sure you want to cancel your changes?": "Esteu segur de voler cancel·lar els canvis?",
     "Are you sure you want to clone this map and all its datalayers?": "Esteu segur de voler clonar aquest mapa i totes les capes de dades?",
     "Are you sure you want to delete the feature?": "Segur que voleu suprimir la característica?",
@@ -159,7 +157,6 @@
     "Embed the map": "Incrusta el mapa",
     "Empty": "Buit",
     "Error in the tilelayer URL": "Hi ha un error en l'URL de la cap de tessel·les",
-    "Error while fetching {url}": "Error while fetching {url}",
     "Exit Fullscreen": "Exit Fullscreen",
     "Extract shape to separate feature": "Extract shape to separate feature",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Please choose a format",
     "Please enter the name of the property": "Introduïu el nom de la propietat",
     "Please enter the new name of this property": "Introduïu el nom d'aquesta propietat",
-    "Problem in the response": "Hi ha un problema en la resposta",
-    "Problem in the response format": "Hi ha un problema en el format de resposta",
     "Properties imported:": "Propietats importades:",
     "Provide an URL here": "Proporcioneu un URL aquí",
     "Proxy request": "Petició proxy",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

@@ -78,7 +78,6 @@ const locale = {
     "**double star for bold**": "**двойные звёздочки — полужирный**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Список значений, определяющих штрихи линии. Напр. «5, 10, 15».",
     "About": "Подробней",
-    "Action not allowed :(": "Действие недоступно :(",
     "Activate slideshow mode": "Включить режим слайдшоу",
     "Add a layer": "Добавить слой",
     "Add a line to the current multi": "Добавить линию к текущему мультиполигону",
@@ -88,7 +87,6 @@ const locale = {
     "Advanced properties": "Дополнительные свойства",
     "All properties are imported.": "Все свойства импортированы.",
     "Allow interactions": "Разрешить взаимодействие",
-    "An error occured": "Произошла ошибка",
     "Are you sure you want to cancel your changes?": "Вы уверены, что хотите отменить сделанные изменения?",
     "Are you sure you want to clone this map and all its datalayers?": "Вы уверены, что хотите скопировать эту карту и все её слои данных?",
     "Are you sure you want to delete the feature?": "Вы уверены, что хотите удалить объект?",
@@ -159,7 +157,6 @@ const locale = {
     "Embed the map": "Встроить карту",
     "Empty": "Очистить",
     "Error in the tilelayer URL": "Ошибка в ссылке на слой карты",
-    "Error while fetching {url}": "Ошибка при обработке {url}",
     "Exit Fullscreen": "Выйти из полноэкранного режима",
     "Extract shape to separate feature": "Извлечь фигуру в отдельный объект",
     "Fetch data each time map view changes.": "Запрашивать данные при каждом изменении отображения карты",
@@ -219,8 +216,6 @@ const locale = {
     "Please choose a format": "Пожалуйста, выберите формат",
     "Please enter the name of the property": "Введите название свойства",
     "Please enter the new name of this property": "Введите новое название свойства",
-    "Problem in the response": "Проблема с ответом",
-    "Problem in the response format": "Формат ответа не распознан",
     "Properties imported:": "Импортированы свойства:",
     "Provide an URL here": "Укажите ссылку здесь",
     "Proxy request": "Проксировать запрос",
@@ -377,7 +372,6 @@ const locale = {
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,7 +435,7 @@ const locale = {
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
 L.registerLocale("ru", locale)
 L.setLocale("ru")

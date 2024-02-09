@@ -78,7 +78,6 @@
     "**double star for bold**": "**כוכבית כפולה להדגשה**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "רשימה מופרדת בפסיקים של מספרים שמגדירים את תבנית הלוכסנים והמקפים. למשל: „5, 10, 15”.",
     "About": "על אודות",
-    "Action not allowed :(": "הפעולה אסורה :(",
     "Activate slideshow mode": "הפעלת מצב מצגת",
     "Add a layer": "הוספת שכבה",
     "Add a line to the current multi": "הוספת קו לרב המצולעים הנוכחי",
@@ -88,7 +87,6 @@
     "Advanced properties": "מאפיינים מתקדמים",
     "All properties are imported.": "כל המאפיינים ייובאו.",
     "Allow interactions": "לאפשר אינטראקציות",
-    "An error occured": "אירעה שגיאה",
     "Are you sure you want to cancel your changes?": "לבטל את השינויים שלך?",
     "Are you sure you want to clone this map and all its datalayers?": "לשכפל את המפה הזאת ואת כל שכבות הנתונים שלה?",
     "Are you sure you want to delete the feature?": "למחוק את התכונה הזו?",
@@ -159,7 +157,6 @@
     "Embed the map": "הטמעת המפה",
     "Empty": "לרוקן",
     "Error in the tilelayer URL": "שגיאה בכתובת שכבת האריחים",
-    "Error while fetching {url}": "שגיאה בקבלת {url}",
     "Exit Fullscreen": "יציאה ממסך מלא",
     "Extract shape to separate feature": "יש לחלץ צורה כדי להפריד תכונה",
     "Fetch data each time map view changes.": "לקבל נתונים בכל פעם שתצוגת המפה משתנה.",
@@ -219,8 +216,6 @@
     "Please choose a format": "נא לבחור תבנית",
     "Please enter the name of the property": "נא למלא את שם המאפיין",
     "Please enter the new name of this property": "נא למלא את השם החדש של המאפיין הזה",
-    "Problem in the response": "בעיה בתגובה",
-    "Problem in the response format": "בעיה במבנה התגובה",
     "Properties imported:": "יובאו מאפיינים:",
     "Provide an URL here": "נא לספק כאן כתובת",
     "Proxy request": "בקשת מתווך",
@@ -377,7 +372,6 @@
     "Facet keys": "Facet keys",
     "Facet search": "Facet search",
     "Feature properties": "Feature properties",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Issue reaching that URL (network problem or CORS protection): {url}",
     "Latest feature": "Latest feature",
     "No results for these facets": "No results for these facets",
     "Saved center and zoom": "Saved center and zoom",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }

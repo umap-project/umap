@@ -78,7 +78,6 @@
     "**double star for bold**": "**dos asteriscos para negrita**",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Una lista de números separados por comas que define el patrón de trazos. Por ejemplo: \"5, 10, 15\".",
     "About": "Acerca de",
-    "Action not allowed :(": "Acción no permitida :(",
     "Activate slideshow mode": "Activar el modo presentación de diapositivas",
     "Add a layer": "Añadir una capa",
     "Add a line to the current multi": "Añadir una línea para el multi elemento actual",
@@ -88,7 +87,6 @@
     "Advanced properties": "Propiedades avanzadas",
     "All properties are imported.": "Todas las propiedades están importadas.",
     "Allow interactions": "Permitir interacciones",
-    "An error occured": "Ocurrió un error",
     "Are you sure you want to cancel your changes?": "¿Está seguro que quiere cancelar sus cambios?",
     "Are you sure you want to clone this map and all its datalayers?": "¿Está seguro que quiere clonar este mapa y todas sus capas de datos?",
     "Are you sure you want to delete the feature?": "¿Está seguro que quiere borrar el elemento?",
@@ -159,7 +157,6 @@
     "Embed the map": "Embeber el mapa",
     "Empty": "Vaciar",
     "Error in the tilelayer URL": "Error en la URL del la capa de teselas",
-    "Error while fetching {url}": "Error al traer {url}",
     "Exit Fullscreen": "Salir de la pantalla completa",
     "Extract shape to separate feature": "Extraer la figura a un elemento separado",
     "Fetch data each time map view changes.": "Traer datos cada vez que la vista del mapa cambie.",
@@ -219,8 +216,6 @@
     "Please choose a format": "Elija un formato",
     "Please enter the name of the property": "Introduzca el nombre de la propiedad",
     "Please enter the new name of this property": "Introduzca el nuevo nombre de esta propiedad",
-    "Problem in the response": "Problema en la respuesta",
-    "Problem in the response format": "Problema con el formato de respuesta",
     "Properties imported:": "Propiedades importadas:",
     "Provide an URL here": "Proporcione una URL aquí",
     "Proxy request": "Petición proxy",
@@ -377,7 +372,6 @@
     "Facet keys": "Claves de facetas",
     "Facet search": "Búsqueda de faceta",
     "Feature properties": "Propiedades de las funciones",
-    "Issue reaching that URL (network problem or CORS protection): {url}": "Problema para llegar a esa URL (problema de red o protección CORS): {url}",
     "Latest feature": "Última novedad",
     "No results for these facets": "No hay resultados para estas facetas",
     "Saved center and zoom": "Centro y zoom guardados",
@@ -441,5 +435,5 @@
     "copy": "copy",
     "full backup": "full backup",
     "settings": "settings",
-    "{count} features in this layer": "{count} features in this layer"
+    "Features in this layer: {count}": "Features in this layer: {count}"
 }
