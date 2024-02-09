@@ -20,7 +20,7 @@
           <span>
             <label class="sr-only" for="q">{% translate "Map’s title" %}</label>
             <input id="q" name="q" type="search"
-                   placeholder="{% translate 'Map’s title' %}"
+                   placeholder="{% translate "Map’s title" %}"
                    value="{{ request.GET.q|default:"" }}" />
           </span>
           <input type="submit" value="{% trans "Search my maps" %}" />
