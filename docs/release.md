@@ -1,5 +1,12 @@
 # Releases
 
+!!! info "Changelog"
+
+    This document describes how we release uMap.
+
+    If you are looking for the releases changelog, [please go there](changelog.md).
+
+
 ## How to make a release
 
 1. Run tests:
@@ -26,7 +33,17 @@
 
 #### OSMfr
 
-The process is manual for now, Yohan has one Makefile on his computer.
+We use a custom flat Makefile, versioned [here](https://github.com/umap-project/umap-deploy).
+
+To deploy a new version on the [dev](https://dev.umap-project.org) server:
+
+- edit the `.env.dev` file and change the version number
+- run this command `FLAVOUR=dev make deploy`
+
+To deploy a new version on OSM France servers:
+
+- edit the `.env.osmfr` file and change the version number
+- run this command `FLAVOUR=osmfr make deploy`
 
 #### ANCT
 
