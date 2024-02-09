@@ -679,6 +679,9 @@ input[type=hidden].blur + [type="button"] {
     overflow-x: hidden;
 }
 #umap-ui-container {
+    /* Added for playwright to consider the element as non visible  */
+    /* as being out of the visible viewport is not enough  */
+    visibility: hidden;
     position: absolute;
     bottom: 0;
     padding: 0 10px;
@@ -970,6 +973,7 @@ input:invalid {
     }
     .umap-ui #umap-ui-container {
         right: 0;
+        visibility: visible;
     }
 }
 @media all and (orientation:portrait) {
@@ -982,6 +986,7 @@ input:invalid {
     }
     .umap-ui #umap-ui-container {
         right: 0;
+        visibility: visible;
     }
     .umap-ui .leaflet-right {
         right: 0;

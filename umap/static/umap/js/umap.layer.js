@@ -743,9 +743,13 @@ L.U.DataLayer = L.Evented.extend({
     return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
   },
 
+  hasDynamicData: function () {
+    return !!(this.options.remoteData && this.options.remoteData.dynamic)
+  },
+
   fetchRemoteData: async function (force) {
     if (!this.isRemoteLayer()) return
-    if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
+    if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy) {

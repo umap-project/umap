@@ -423,7 +423,7 @@ L.U.Map.include({
     this._controls.permanentCredit = new L.U.PermanentCreditsControl(this)
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
-    this.browser = new L.U.Browser(this)
+    this.browser = new window.umap.Browser(this)
     this.importer = new L.U.Importer(this)
     this.drop = new L.U.DropControl(this)
     this.share = new L.U.Share(this)

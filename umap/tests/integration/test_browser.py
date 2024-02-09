@@ -153,6 +153,50 @@ def test_data_browser_bbox_limit_should_be_dynamic(live_server, page, bootstrap,
     expect(page.get_by_text("one line in new zeland")).to_be_hidden()
 
 
+def test_data_browser_bbox_filter_should_be_persistent(
+    live_server, page, bootstrap, map
+):
+    # Zoom on Europe
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
+    el = page.get_by_text("Current map view")
+    expect(el).to_be_visible()
+    el.click()
+    browser = page.locator("#umap-ui-container")
+    expect(browser.get_by_text("one point in france")).to_be_visible()
+    expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
+    # Close and reopen the browser to make sure this settings is persistent
+    close = browser.get_by_text("Close")
+    close.click()
+    expect(browser).to_be_hidden()
+    sleep(0.5)
+    expect(browser.get_by_text("one point in france")).to_be_hidden()
+    expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
+    page.get_by_title("See data layers").click()
+    page.get_by_role("button", name="Browse data").click()
+    expect(browser.get_by_text("one point in france")).to_be_visible()
+    expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
+
+
+def test_data_browser_bbox_filtered_is_clickable(live_server, page, bootstrap, map):
+    popup = page.locator(".leaflet-popup")
+    # Zoom on Europe
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
+    el = page.get_by_text("Current map view")
+    expect(el).to_be_visible()
+    el.click()
+    browser = page.locator("#umap-ui-container")
+    expect(browser.get_by_text("one point in france")).to_be_visible()
+    expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
+    expect(popup).to_be_hidden()
+    browser.get_by_text("one point in france").click()
+    expect(popup).to_be_visible()
+    expect(popup.get_by_text("one point in france")).to_be_visible()
+
+
 def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
     # Include a variable
     map.settings["properties"]["labelKey"] = "{name} ({foo})"
