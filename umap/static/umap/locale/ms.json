@@ -97,7 +97,6 @@
     "Attach the map to my account": "Lampirkan peta ke akaun saya",
     "Auto": "Auto",
     "Autostart when map is loaded": "Automula apabila peta dimuatkan",
-    "Bring feature to center": "Bawa sifat ke tengah",
     "Browse data": "Layari data",
     "Cancel edits": "Batalkan suntingan",
     "Center map on your location": "Ketengahkan peta ke kedudukan anda",
@@ -386,8 +385,6 @@
     "Datalayers": "Lapisan data",
     "Secret edit link:": "Pautan suntingan rahsia:",
     "Who can edit \"{layer}\"": "Siapa boleh sunting \"{layer}\"",
-    "Current map view": "Paparan peta semasa",
-    "Filter": "Tapis",
     "Choropleth": "Koroplet",
     "Choropleth breakpoints": "Titik putus koroplet",
     "Choropleth classes": "Kelas koroplet",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }

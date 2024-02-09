@@ -97,7 +97,6 @@
     "Attach the map to my account": "Die Karte meinem Benutzerkonto zuordnen",
     "Auto": "Automatisch",
     "Autostart when map is loaded": "Automatischer Start, wenn Karte geladen ist",
-    "Bring feature to center": "Auf Element zentrieren",
     "Browse data": "Daten anzeigen",
     "Cancel edits": "Bearbeitungen abbrechen",
     "Center map on your location": "Die Karte auf deinen Standort ausrichten",
@@ -386,8 +385,6 @@
     "Datalayers": "Datenebenen",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Aktueller Kartenausschnitt",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "kopieren",
     "full backup": "Komplettes Backup",
-    "settings": "Einstellungen",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "Einstellungen"
 }

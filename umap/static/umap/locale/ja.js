@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "マップを自分のアカウントに関連付ける",
     "Auto": "自動",
     "Autostart when map is loaded": "マップ読み込み時に自動で開始",
-    "Bring feature to center": "この地物を中心に表示",
     "Browse data": "データ内容表示",
     "Cancel edits": "編集を破棄",
     "Center map on your location": "閲覧者の位置をマップの中心に設定",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

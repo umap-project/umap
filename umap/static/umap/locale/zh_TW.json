@@ -97,7 +97,6 @@
     "Attach the map to my account": "將地圖加入到我的帳號",
     "Auto": "自動",
     "Autostart when map is loaded": "當讀取地圖時自動啟動",
-    "Bring feature to center": "將圖徵置中",
     "Browse data": "瀏覽資料",
     "Cancel edits": "取消編輯",
     "Center map on your location": "將您的位置設為地圖中心",
@@ -386,8 +385,6 @@
     "Datalayers": "資料圖層",
     "Secret edit link:": "祕密編輯連結：",
     "Who can edit \"{layer}\"": "誰有權限編輯 \"{layer}\"",
-    "Current map view": "目前地圖檢視",
-    "Filter": "篩選",
     "Choropleth": "等時線圖",
     "Choropleth breakpoints": "等時線圖點",
     "Choropleth classes": "等時線圖類型",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "輸入地點名稱或是座標",
     "copy": "複製",
     "full backup": " 完全備份",
-    "settings": "設定",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "設定"
 }

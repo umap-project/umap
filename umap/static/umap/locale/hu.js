@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "Térkép csatolása a fiókomhoz",
     "Auto": "Automatikus",
     "Autostart when map is loaded": "Automatikus indulás a térkép betöltése után",
-    "Bring feature to center": "Objektum középre hozása",
     "Browse data": "Adatok böngészése",
     "Cancel edits": "Szerkesztések elvetése",
     "Center map on your location": "A térkép közepének igazítása a saját pozícióhoz",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Adatrétegek",
     "Secret edit link:": "Titkos szerkesztési link:",
     "Who can edit \"{layer}\"": "Ki szerkesztheti ezt a réteget: {layer}?",
-    "Current map view": "Jelenlegi térképnézet",
-    "Filter": "Szűrő",
     "Choropleth": "Kartogram",
     "Choropleth breakpoints": "Kartogram töréspontjai",
     "Choropleth classes": "Kartogram kategóriái",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Helynév vagy koordináták megadása",
     "copy": "másolás",
     "full backup": "teljes biztonsági másolat",
-    "settings": "beállítások",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "beállítások"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

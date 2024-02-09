@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "Attach the map to my account",
     "Auto": "Automatická",
     "Autostart when map is loaded": "Aut. spustenie pri načítaní mapy",
-    "Bring feature to center": "Vycentruj mapu na objekt",
     "Browse data": "Prezerať údaje",
     "Cancel edits": "Zrušiť zmeny",
     "Center map on your location": "Vycentrovať mapu na vašu polohu",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

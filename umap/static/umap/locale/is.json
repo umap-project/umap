@@ -97,7 +97,6 @@
     "Attach the map to my account": "Tengja kortið við notandaaðganginn minn",
     "Auto": "Sjálfvirkt",
     "Autostart when map is loaded": "Sjálfræsa þegar korti er hlaðið inn",
-    "Bring feature to center": "Færa fitju að miðju",
     "Browse data": "Skoða gögn",
     "Cancel edits": "Hætta við breytingar",
     "Center map on your location": "Miðjusetja kortið á staðsetningu þína",
@@ -386,8 +385,6 @@
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }

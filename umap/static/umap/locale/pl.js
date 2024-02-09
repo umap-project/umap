@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "Dołącz mapę do mojego konta",
     "Auto": "Auto",
     "Autostart when map is loaded": "Autostart po załadowaniu mapy",
-    "Bring feature to center": "Przenieś obiekt do środka",
     "Browse data": "Przeglądaj dane",
     "Cancel edits": "Anuluj edycje",
     "Center map on your location": "Wyśrodkuj mapę na twojej lokalizacji",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Warstwy danych",
     "Secret edit link:": "Sekretny odnośnik edycji:",
     "Who can edit \"{layer}\"": "Kto może edytować \"{layer}\"",
-    "Current map view": "Bieżący widok mapy",
-    "Filter": "Filtr",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("pl", locale)
 L.setLocale("pl")

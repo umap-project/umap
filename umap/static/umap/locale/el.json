@@ -97,7 +97,6 @@
     "Attach the map to my account": "Σύνδεση του χάρτη με τον λογαριασμό μου",
     "Auto": "Αυτόματα",
     "Autostart when map is loaded": "Αυτόματη έναρξη με την φόρτωση του χάρτη",
-    "Bring feature to center": "Κεντράρισμα του στοιχείου",
     "Browse data": "Περιήγηση δεδομένων",
     "Cancel edits": "Ακύρωση επεξεργασίας",
     "Center map on your location": "Κεντράρισμα του χάρτη στην τοποθεσία σας",
@@ -386,8 +385,6 @@
     "Datalayers": "Επίπεδα δεδομένων",
     "Secret edit link:": "Μυστικός σύνδεσμος επεξεργασίας:",
     "Who can edit \"{layer}\"": "Ποιος μπορεί να επεξεργαστεί \"{layer}\"",
-    "Current map view": "Τρέχουσα προβολή χάρτη",
-    "Filter": "Φίλτρο",
     "Choropleth": "Χωροπληθής χάρτης",
     "Choropleth breakpoints": "Χωροπληθή σημεία διακοπής",
     "Choropleth classes": "Χωροπληθείς κατηγορίες",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }

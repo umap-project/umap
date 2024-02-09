@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:19+0000\n"
+"POT-Creation-Date: 2024-02-09 17:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -254,7 +254,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
 #: templates/umap/about_summary.html:48 templates/umap/navigation.html:40
-#: templates/umap/user_dashboard.html:41
+#: templates/umap/user_dashboard.html:42
 msgid "Create a map"
 msgstr ""
 
@@ -465,11 +465,11 @@ msgstr ""
 msgid "Search maps"
 msgstr ""
 
-#: templates/umap/search_bar.html:14 templates/umap/user_dashboard.html:25
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:7
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:26
 msgid "Search my maps"
 msgstr ""
 
@@ -482,16 +482,16 @@ msgstr ""
 msgid "My profile"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:21
+#: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
 msgid "Map’s title"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:31
+#: templates/umap/user_dashboard.html:32
 #, python-format
 msgid "Download %(count)s maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:41
+#: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
 msgstr ""
 

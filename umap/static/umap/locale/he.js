@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "הצמדת מפה לחשבון שלי",
     "Auto": "אוטומטית",
     "Autostart when map is loaded": "להתחיל אוטומטית עם טעינת המפה",
-    "Bring feature to center": "הבאת התכונה למרכז",
     "Browse data": "עיון בנתונים",
     "Cancel edits": "ביטול עריכות",
     "Center map on your location": "מרכוז המפה על המיקום שלך",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

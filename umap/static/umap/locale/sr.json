@@ -97,7 +97,6 @@
     "Attach the map to my account": "Закачи мапу на мој налог.",
     "Auto": "Аутоматски",
     "Autostart when map is loaded": "Аутоматски покрени када се мапа учита",
-    "Bring feature to center": "Центрирај елемент",
     "Browse data": "Претражи податке",
     "Cancel edits": "Откажи промене",
     "Center map on your location": "Центрирај мапу на основу локације",
@@ -386,8 +385,6 @@
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }

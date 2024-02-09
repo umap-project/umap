@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "Připojte mapu k mému účtu",
     "Auto": "Automatická",
     "Autostart when map is loaded": "Spustit po načtení mapy",
-    "Bring feature to center": "Centruj mapu na objektu",
     "Browse data": "Prohlížet data",
     "Cancel edits": "Stornovat úpravy",
     "Center map on your location": "Přemístit se na mapě na vaši polohu",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Datové vrstvy",
     "Secret edit link:": "Tajný odkaz na úpravy:",
     "Who can edit \"{layer}\"": "Kdo může upravovat \"{layer}\"",
-    "Current map view": "Aktuální zobrazení mapy",
-    "Filter": "Filtr",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth třídy",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

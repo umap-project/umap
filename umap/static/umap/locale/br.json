@@ -97,7 +97,6 @@
     "Attach the map to my account": "Stagañ ar gartenn d'am c'hont",
     "Auto": "Emgefre",
     "Autostart when map is loaded": "Loc'hañ pa vez karget ar gartenn",
-    "Bring feature to center": "Kreizañ ar gartenn war an elfenn-mañ",
     "Browse data": "Furchal ar roadennoù",
     "Cancel edits": "Nullañ ar c'hemmoù",
     "Center map on your location": "Kreizañ ar gartenn war al lec'h m'emaoc'h",
@@ -386,8 +385,6 @@
     "Datalayers": "Gwiskadoù",
     "Secret edit link:": "Liamm aozañ kuzh:",
     "Who can edit \"{layer}\"": "Piv a c'hall aozañ \"{layer}\"",
-    "Current map view": "Listenn an objedoù a c'haller gwelet",
-    "Filter": "Silañ",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Skrivit anv ul lec'h pe daveennoù",
     "copy": "eilañ",
     "full backup": "gwarez klok",
-    "settings": "arventennoù",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "arventennoù"
 }

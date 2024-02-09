@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "Voeg de kaart toe aan mijn account",
     "Auto": "Auto",
     "Autostart when map is loaded": "Autostart als kaart wordt geladen",
-    "Bring feature to center": "Object in het midden zetten",
     "Browse data": "Gegevens doorbladeren",
     "Cancel edits": "Bewerkingen annuleren",
     "Center map on your location": "Centreer kaart op je locatie",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

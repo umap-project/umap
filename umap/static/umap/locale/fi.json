@@ -97,7 +97,6 @@
     "Attach the map to my account": "Attach the map to my account",
     "Auto": "Automaattinen",
     "Autostart when map is loaded": "Autostart when map is loaded",
-    "Bring feature to center": "Tuo piirre keskelle",
     "Browse data": "Selaa tietoja",
     "Cancel edits": "Peruuta muokkaukset",
     "Center map on your location": "Keskitä kartta sijaintiisi",
@@ -386,8 +385,6 @@
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,6 +431,5 @@
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }

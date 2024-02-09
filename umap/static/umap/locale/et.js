@@ -97,7 +97,6 @@ const locale = {
     "Attach the map to my account": "Manusta kaart minu kontole",
     "Auto": "Auto",
     "Autostart when map is loaded": "Automaatne käivitus kaardi laadimisel",
-    "Bring feature to center": "Sea element keskpunktiks",
     "Browse data": "Andmete sirvimine",
     "Cancel edits": "Loobu muudatustest",
     "Center map on your location": "Sea oma asukoht keskpunktiks",
@@ -386,8 +385,6 @@ const locale = {
     "Datalayers": "Datalayers",
     "Secret edit link:": "Secret edit link:",
     "Who can edit \"{layer}\"": "Who can edit \"{layer}\"",
-    "Current map view": "Current map view",
-    "Filter": "Filter",
     "Choropleth": "Choropleth",
     "Choropleth breakpoints": "Choropleth breakpoints",
     "Choropleth classes": "Choropleth classes",
@@ -434,8 +431,7 @@ const locale = {
     "Type a place name or coordinates": "Type a place name or coordinates",
     "copy": "copy",
     "full backup": "full backup",
-    "settings": "settings",
-    "Features in this layer: {count}": "Features in this layer: {count}"
+    "settings": "settings"
 }
 L.registerLocale("et", locale)
 L.setLocale("et")
