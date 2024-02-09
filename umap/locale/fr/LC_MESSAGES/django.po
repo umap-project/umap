@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 10:52+0000\n"
+"POT-Creation-Date: 2024-02-09 15:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2024\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -313,97 +313,88 @@ msgstr "par"
 msgid "More"
 msgstr "Plus"
 
-#: templates/umap/map_table.html:5
+#: templates/umap/map_table.html:6
 msgid "Name"
 msgstr "Nom"
 
-#: templates/umap/map_table.html:6
+#: templates/umap/map_table.html:7
 msgid "Preview"
 msgstr "Aperçu"
 
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:8
 msgid "Who can see"
 msgstr "Qui peut voir"
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:9
 msgid "Who can edit"
 msgstr "Qui peut modifier"
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:10
 msgid "Last save"
 msgstr "Dernière modification"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:11
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:12
 msgid "Actions"
 msgstr "Actions"
 
-#: templates/umap/map_table.html:24 templates/umap/map_table.html:26
+#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
 msgid "Open preview"
 msgstr "Ouvrir l'aperçu"
 
-#: templates/umap/map_table.html:45 templates/umap/map_table.html:47
+#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
 msgid "Share"
 msgstr "Partager"
 
-#: templates/umap/map_table.html:50 templates/umap/map_table.html:52
+#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/umap/map_table.html:55 templates/umap/map_table.html:57
+#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
 msgid "Download"
 msgstr "Télécharger"
 
-#: templates/umap/map_table.html:62 templates/umap/map_table.html:64
+#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
 msgstr "Cloner"
 
-#: templates/umap/map_table.html:72 templates/umap/map_table.html:74
+#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
 msgstr "Supprimer"
 
-#: templates/umap/map_table.html:86
+#: templates/umap/map_table.html:88
 msgid "first"
 msgstr "début"
 
-#: templates/umap/map_table.html:87
+#: templates/umap/map_table.html:89
 msgid "previous"
 msgstr "précédente"
 
-#: templates/umap/map_table.html:96
+#: templates/umap/map_table.html:98
 #, python-format
-msgid ""
-"\n"
-"        Page %(maps_number)s of %(num_pages)s\n"
-"      "
-msgstr "\n        Page %(maps_number)s de %(num_pages)s\n      "
+msgid "Page %(maps_number)s of %(num_pages)s"
+msgstr "Page %(maps_number)s de %(num_pages)s"
 
-#: templates/umap/map_table.html:102
+#: templates/umap/map_table.html:104
 msgid "next"
 msgstr "suivante"
 
-#: templates/umap/map_table.html:103
+#: templates/umap/map_table.html:105
 msgid "last"
 msgstr "fin"
 
-#: templates/umap/map_table.html:111
+#: templates/umap/map_table.html:113
 #, python-format
-msgid ""
-"\n"
-"      Lines per page: %(per_page)s\n"
-"      "
-msgstr "\nLignes par page: %(per_page)s"
+msgid "Lines per page: %(per_page)s"
+msgstr "Lignes par page: %(per_page)s"
 
-#: templates/umap/map_table.html:116
+#: templates/umap/map_table.html:118
 #, python-format
-msgid ""
-"\n"
-"      %(count)s maps\n"
-"      "
-msgstr "\n%(count)s cartes\n      "
+msgid "%(count)s maps"
+msgstr "%(count)s cartes"
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
 msgid "My Dashboard"
@@ -510,15 +501,12 @@ msgstr "Mon profil"
 
 #: templates/umap/user_dashboard.html:21
 msgid "Map’s title"
-msgstr ""
+msgstr "Titre de la carte"
 
 #: templates/umap/user_dashboard.html:31
 #, python-format
-msgid ""
-"\n"
-"              Download %(count)s maps\n"
-"            "
-msgstr "\n              Télécharger %(count)s cartes\n            "
+msgid "Download %(count)s maps"
+msgstr "Télécharger %(count)s cartes"
 
 #: templates/umap/user_dashboard.html:41
 msgid "You have no map yet."

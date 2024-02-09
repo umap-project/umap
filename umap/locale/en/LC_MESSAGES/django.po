@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 10:52+0000\n"
+"POT-Creation-Date: 2024-02-09 15:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -297,96 +297,87 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: templates/umap/map_table.html:5
+#: templates/umap/map_table.html:6
 msgid "Name"
 msgstr ""
 
-#: templates/umap/map_table.html:6
+#: templates/umap/map_table.html:7
 msgid "Preview"
 msgstr ""
 
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:8
 msgid "Who can see"
 msgstr ""
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:9
 msgid "Who can edit"
 msgstr ""
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:10
 msgid "Last save"
 msgstr ""
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:11
 msgid "Owner"
 msgstr ""
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:12
 msgid "Actions"
 msgstr ""
 
-#: templates/umap/map_table.html:24 templates/umap/map_table.html:26
+#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
 msgid "Open preview"
 msgstr ""
 
-#: templates/umap/map_table.html:45 templates/umap/map_table.html:47
+#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
 msgid "Share"
 msgstr ""
 
-#: templates/umap/map_table.html:50 templates/umap/map_table.html:52
+#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
 msgid "Edit"
 msgstr ""
 
-#: templates/umap/map_table.html:55 templates/umap/map_table.html:57
+#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
 msgid "Download"
 msgstr ""
 
-#: templates/umap/map_table.html:62 templates/umap/map_table.html:64
+#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
 msgstr ""
 
-#: templates/umap/map_table.html:72 templates/umap/map_table.html:74
+#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
 msgstr ""
 
-#: templates/umap/map_table.html:86
+#: templates/umap/map_table.html:88
 msgid "first"
 msgstr ""
 
-#: templates/umap/map_table.html:87
+#: templates/umap/map_table.html:89
 msgid "previous"
 msgstr ""
 
-#: templates/umap/map_table.html:96
+#: templates/umap/map_table.html:98
 #, python-format
-msgid ""
-"\n"
-"        Page %(maps_number)s of %(num_pages)s\n"
-"      "
+msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr ""
 
-#: templates/umap/map_table.html:102
+#: templates/umap/map_table.html:104
 msgid "next"
 msgstr ""
 
-#: templates/umap/map_table.html:103
+#: templates/umap/map_table.html:105
 msgid "last"
 msgstr ""
 
-#: templates/umap/map_table.html:111
+#: templates/umap/map_table.html:113
 #, python-format
-msgid ""
-"\n"
-"      Lines per page: %(per_page)s\n"
-"      "
+msgid "Lines per page: %(per_page)s"
 msgstr ""
 
-#: templates/umap/map_table.html:116
+#: templates/umap/map_table.html:118
 #, python-format
-msgid ""
-"\n"
-"      %(count)s maps\n"
-"      "
+msgid "%(count)s maps"
 msgstr ""
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
@@ -497,10 +488,7 @@ msgstr ""
 
 #: templates/umap/user_dashboard.html:31
 #, python-format
-msgid ""
-"\n"
-"              Download %(count)s maps\n"
-"            "
+msgid "Download %(count)s maps"
 msgstr ""
 
 #: templates/umap/user_dashboard.html:41
