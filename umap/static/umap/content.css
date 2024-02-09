@@ -203,8 +203,11 @@ body.content #umap-ui-container {
 
 input[type="submit"],
 .button {
-    background-color: #79c1c0;
-    color: #323737;
+    background-color: #B9F5D2;
+    color: #263B58;
+}
+.button-primary {
+    font-weight: bold;
 }
 .wrapper input[type="submit"]:hover {
     background-color: #689191;

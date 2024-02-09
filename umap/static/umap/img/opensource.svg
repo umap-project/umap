@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <path d="M128 64A64 64 0 1 1 0 64a64 64 0 1 1 128 0z" fill="#323e56"/>
+  <path d="M128 64A64 64 0 1 1 0 64a64 64 0 1 1 128 0z" fill="#263B58"/>
   <g transform="matrix(1.014 0 0 1.014 -4.3 -933.4)">
-    <circle transform="matrix(.08 0 0 .08 28.3 944.2)" r="440" cy="490" cx="490" fill="none" stroke="#79c1c0" stroke-width="100"/>
+    <circle transform="matrix(.08 0 0 .08 28.3 944.2)" r="440" cy="490" cx="490" fill="none" stroke="#B9F5D2" stroke-width="100"/>
     <path d="M67 961.3c-10.4 0-19 7.3-21.3 17h10.4a12 12 0 1 1 0 10H45.7a21.9 21.9 0 1 0 21.3-27z" fill="#fff"/>
   </g>
 </svg>
