@@ -49,7 +49,7 @@ docker: ## Create a new Docker image and publish it
 	docker push umap/umap:${VERSION}
 
 .PHONY: build
-build: test compilemessages  ## Build the Python package before release
+build: ## Build the Python package before release
 	@hatch build --clean
 
 .PHONY: publish
