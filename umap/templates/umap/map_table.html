@@ -123,7 +123,7 @@
 {% endif %}
 <script>
   !(function () {
-    for (const deleteForm of document.querySelectorAll('table.maps form.map-delete')) {
+    for (const deleteForm of document.querySelectorAll('form.map-delete')) {
       deleteForm.addEventListener('submit', (event) => {
         if (!confirm(L._('Are you sure you want to delete this map?'))) {
           event.preventDefault()
