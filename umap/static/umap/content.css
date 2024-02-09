@@ -399,7 +399,7 @@ ul.umap-autocomplete {
     padding: .5rem 1rem;
     margin-bottom: 0;
     line-height: inherit;
-    height: 2.5rem;
+    height: 40px;
 }
 .table-header form input[type="search"] {
     width: 30ch;
@@ -419,8 +419,8 @@ ul.umap-autocomplete {
     font-weight: bold;
     background-color: initial;
     margin-bottom: 0;
-    line-height: inherit;
-    height: 2.5rem;
+    line-height: 24px;
+    height: 40px;
 }
 .table-wrapper {
     overflow-x: scroll;
