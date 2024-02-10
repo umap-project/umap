@@ -1,0 +1,9 @@
+:root {
+    /* In use for primary buttons. */
+    --color-darkBlue: #263B58;
+    --color-waterMint: #B9F5D2;
+
+    /* In use for secondary buttons. */
+    --color-lightGray: #ddd;
+    --color-darkGray: #323737;
+}
