@@ -10,7 +10,7 @@ from http.client import InvalidURL
 from io import BytesIO
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, quote_plus, urlparse
 from urllib.request import Request, build_opener
 
 from django.conf import settings
@@ -595,8 +595,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         context["oembed_absolute_uri"] = self.request.build_absolute_uri(
             reverse("map_oembed")
         )
-        context["absolute_uri"] = self.request.build_absolute_uri(
-            self.object.get_absolute_url()
+        context["quoted_absolute_uri"] = quote_plus(
+            self.request.build_absolute_uri(self.object.get_absolute_url())
         )
         return context
 

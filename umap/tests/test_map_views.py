@@ -815,6 +815,6 @@ def test_oembed_link(client, map, datalayer):
     )
     assert (
         'href="http://testserver/map/oembed/'
-        f'?url=http%3A//testserver/en/map/test-map_{map.id}&format=json"'
+        f'?url=http%3A%2F%2Ftestserver%2Fen%2Fmap%2Ftest-map_{map.id}&format=json"'
     ) in response.content.decode()
     assert 'title="test map oEmbed URL" />' in response.content.decode()
