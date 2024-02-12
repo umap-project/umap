@@ -24,7 +24,7 @@ def test_javascript_have_been_loaded(
 ):
     settings.STORAGES["staticfiles"][
         "BACKEND"
-    ] = "umap.storage.UmapManifestStaticFilesStorage"
+    ] = "umap.storage.UmapManifestStaticFilesStorageNotStrict"
     datalayer.settings["displayOnLoad"] = False
     datalayer.save()
     map.settings["properties"]["defaultView"] = "latest"

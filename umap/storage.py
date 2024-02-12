@@ -56,3 +56,7 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
                     minified = cssmin(initial)
                     path.write_text(minified)
             yield original_path, processed_path, True
+
+
+class UmapManifestStaticFilesStorageNotStrict(UmapManifestStaticFilesStorage):
+    manifest_strict = False
