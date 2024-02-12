@@ -1,5 +1,5 @@
 import { WebSocketTransport } from "./websocket.js"
-import { MapUpdater, FeatureUpdater } from "./updaters.js"
+import { MapUpdater, MarkerUpdater, PolygonUpdater, PolylineUpdater } from "./updaters.js"
 
 export class SyncEngine {
     constructor(map) {
@@ -7,7 +7,7 @@ export class SyncEngine {
         this.transport = new WebSocketTransport(this.receiver)
         this.sender = new MessagesSender(this.transport)
 
-        this.create = this.sender.create.bind(this.sender)
+        this.upsert = this.sender.upsert.bind(this.sender)
         this.update = this.sender.update.bind(this.sender)
         this.delete = this.sender.delete.bind(this.sender)
     }
@@ -18,21 +18,33 @@ export class MessagesDispatcher {
         this.map = map
         this.updaters = {
             map: new MapUpdater(this.map),
-            feature: new FeatureUpdater(this.map)
+            marker: new MarkerUpdater(this.map),
+            polyline: new PolylineUpdater(this.map),
+            polygon: new PolygonUpdater(this.map),
         }
     }
 
-    getUpdater(subject) {
-        if (["map", "feature"].includes(subject)) {
-            return this.updaters[subject]
+    getUpdater(subject, metadata) {
+        switch (subject) {
+            case 'feature':
+                const featureTypeExists = Object.keys(this.updaters).includes(metadata.featureType)
+                if (featureTypeExists) {
+                    const updater = this.updaters[metadata.featureType]
+                    console.log(`found updater ${metadata.featureType}, ${updater}`)
+                    return updater
+                }
+            case 'map':
+                return this.updaters[subject]
+            default:
+                throw new Error(`Unknown updater ${subject}, ${metadata}`)
         }
-        throw new Error(`Unknown updater ${subject}`)
+
     }
 
     dispatch({ kind, payload }) {
         console.log(kind, payload)
         if (kind == "sync-protocol") {
-            let updater = this.getUpdater(payload.subject)
+            let updater = this.getUpdater(payload.subject, payload.metadata)
             updater.applyMessage(payload)
         }
     }
@@ -55,8 +67,8 @@ export class MessagesSender {
         this._transport.send("sync-protocol", message)
     }
 
-    create(subject, metadata, value) {
-        this.send({ verb: "create", subject, metadata, value })
+    upsert(subject, metadata, value) {
+        this.send({ verb: "upsert", subject, metadata, value })
     }
 
     update(subject, metadata, key, value) {

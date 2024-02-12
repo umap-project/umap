@@ -25,12 +25,22 @@ L.U.FeatureMixin = {
 
   onCommit: function () {
     console.log("onCommit")
-    this.map.syncEngine.create(
+    // We cannot make a difference between a creation
+    // and an edition, so we use the "upsert" verb.
+
+    // The updater will lookup for already existing objects with the given ID
+    // before creating a new one.
+
+    this.map.syncEngine.upsert(
       this.getSyncSubject(),
       this.getSyncMetadata(),
-      {
-        'latlng': this._latlng
-      })
+      { 'geometry': this.getGeometry() })
+
+  },
+
+  // Sync-related methods
+  getGeometry: function () {
+    return this.toGeoJSON().geometry
   },
 
   updateProperties: function (properties) {
@@ -38,7 +48,7 @@ L.U.FeatureMixin = {
     let metadata = this.getSyncMetadata()
 
     if ('latlng'.includes(properties)) {
-      this.map.syncEngine.update(subject, metadata, 'latlng', this._latlng)
+      this.map.syncEngine.update(subject, metadata, 'geometry', this.getGeometry())
     }
   },
 
@@ -798,6 +808,26 @@ L.U.Marker = L.Marker.extend({
 })
 
 L.U.PathMixin = {
+
+  /*  getGeometry: function () {
+     // Clean the latlngs to avoid private properties to be carried away
+     console.log("getLatlngs", this.getLatLngs())
+     // latlngs can be an array of latlng, but also arrays of arrays.
+     // Remove the extra object properties
+     let _cleanLatLngs = function (item) {
+       if ('lat' in item) {
+         let { lat, lng } = item
+         return { lat, lng }
+       }
+       return item.map(_cleanLatLngs)
+     }
+     const cleaned_latlngs = this.getLatLngs()//.map(_cleanLatLngs)
+     console.log("cleaned latlngs", cleaned_latlngs)
+     return {
+       'latlngs': cleaned_latlngs
+     }
+   }, */
+
   hasGeom: function () {
     return !this.isEmpty()
   },

@@ -961,8 +961,6 @@ L.U.DataLayer = L.Evented.extend({
     const features = geojson instanceof Array ? geojson : geojson.features
     let i
     let len
-    let latlng
-    let latlngs
 
     if (features) {
       L.Util.sortFeatures(features, this.map.getOption('sortKey'))
@@ -971,12 +969,23 @@ L.U.DataLayer = L.Evented.extend({
       }
       return this
     }
-
     const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
+
+    let feature = this.geometryToFeature({ geometry, geojson })
+    if (feature) {
+      this.addLayer(feature)
+      return feature
+    }
+  },
+
+  geometryToFeature: function ({ geometry, geojson = null, id = null, feature = null } = {}) {
     if (!geometry) return // null geometry is valid geojson.
     const coords = geometry.coordinates
-    let layer
-    let tmp
+    let latlngs
+    let latlng
+
+    // Create a default geojson if none is provided
+    geojson ??= { type: "Feature", geometry: geometry }
 
     switch (geometry.type) {
       case 'Point':
@@ -986,8 +995,11 @@ L.U.DataLayer = L.Evented.extend({
           console.error('Invalid latlng object from', coords)
           break
         }
-        layer = this._pointToLayer(geojson, latlng)
-        break
+        if (feature) {
+          feature.setLatLng(latlng)
+          return feature
+        }
+        return this._pointToLayer(geojson, latlng, id)
 
       case 'MultiLineString':
       case 'LineString':
@@ -996,14 +1008,21 @@ L.U.DataLayer = L.Evented.extend({
           geometry.type === 'LineString' ? 0 : 1
         )
         if (!latlngs.length) break
-        layer = this._lineToLayer(geojson, latlngs)
-        break
+        if (feature) {
+          feature.setLatLngs(latlngs)
+          return feature
+        }
+        return this._lineToLayer(geojson, latlngs, id)
 
       case 'MultiPolygon':
       case 'Polygon':
         latlngs = L.GeoJSON.coordsToLatLngs(coords, geometry.type === 'Polygon' ? 1 : 2)
-        layer = this._polygonToLayer(geojson, latlngs)
-        break
+        if (feature) {
+          feature.setLatLngs(latlngs)
+          return feature
+        }
+        return this._polygonToLayer(geojson, latlngs, id)
+
       case 'GeometryCollection':
         return this.geojsonToFeatures(geometry.geometries)
 
@@ -1015,30 +1034,26 @@ L.U.DataLayer = L.Evented.extend({
           level: 'error',
         })
     }
-    if (layer) {
-      this.addLayer(layer)
-      return layer
-    }
   },
 
-  _pointToLayer: function (geojson, latlng) {
-    return new L.U.Marker(this.map, latlng, { geojson: geojson, datalayer: this })
+  _pointToLayer: function (geojson, latlng, id) {
+    return new L.U.Marker(this.map, latlng, { geojson: geojson, datalayer: this }, id)
   },
 
-  _lineToLayer: function (geojson, latlngs) {
+  _lineToLayer: function (geojson, latlngs, id) {
     return new L.U.Polyline(this.map, latlngs, {
       geojson: geojson,
       datalayer: this,
       color: null,
-    })
+    }, id)
   },
 
-  _polygonToLayer: function (geojson, latlngs) {
+  _polygonToLayer: function (geojson, latlngs, id) {
     // Ensure no empty hole
     // for (let i = latlngs.length - 1; i > 0; i--) {
     //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
     // }
-    return new L.U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
+    return new L.U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this }, id)
   },
 
   importRaw: function (raw, type) {
