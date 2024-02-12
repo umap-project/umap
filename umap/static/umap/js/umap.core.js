@@ -410,7 +410,8 @@ L.DomUtil.contrastedColor = (el, bgcolor) => {
   rgb = L.DomUtil.RGBRegex.exec(rgb)
   if (!rgb || rgb.length !== 4) return out
   rgb = parseInt(rgb[1], 10) + parseInt(rgb[2], 10) + parseInt(rgb[3], 10)
-  if (rgb < (255 * 3) / 2) out = 1
+  const threshold = 140
+  if (rgb < threshold * 3) out = 1
   if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out
 }
