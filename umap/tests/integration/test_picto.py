@@ -94,7 +94,7 @@ def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
     expect(undefine).to_be_hidden()
     define.click()
     symbols = page.locator(".umap-pictogram-choice")
-    expect(symbols).to_have_count(2)
+    expect(symbols).to_have_count(3)
     search = page.locator(".umap-pictogram-body input")
     search.type("circle")
     expect(symbols).to_have_count(1)
@@ -128,7 +128,7 @@ def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
     expect(undefine).to_be_hidden()
     define.click()
     symbols = page.locator(".umap-pictogram-choice")
-    expect(symbols).to_have_count(2)
+    expect(symbols).to_have_count(3)  # Include "Last used" picto
     search = page.locator(".umap-pictogram-body input")
     search.type("circle")
     expect(symbols).to_have_count(1)
@@ -157,6 +157,10 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     define = page.locator(".umap-field-iconUrl .define")
     expect(define).to_be_visible()
     define.click()
+    expect(page.get_by_text("Used in this map")).to_be_hidden()
+    # Only default symbols
+    symbols = page.locator(".umap-pictogram-choice")
+    expect(symbols).to_have_count(2)
     url_tab = page.get_by_role("button", name="URL")
     input_el = page.get_by_placeholder("Add image URL")
     expect(input_el).to_be_hidden()
@@ -177,6 +181,11 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     modify.click()
     # Should be on URL tab
     expect(input_el).to_be_visible()
+    # Symbol should be visible in symbols b
+    symbols_tab = page.get_by_role("button", name="Symbol")
+    symbols_tab.click()
+    expect(page.get_by_text("Used in this map")).to_be_visible()
+    expect(symbols).to_have_count(3)
 
 
 def test_can_use_char_as_picto(map, live_server, page, pictos):

@@ -1,4 +1,7 @@
 U.Icon = L.DivIcon.extend({
+  statics: {
+    LAST_USED: [],
+  },
   initialize: function (map, options) {
     this.map = map
     const default_options = {
@@ -14,11 +17,22 @@ U.Icon = L.DivIcon.extend({
     }
   },
 
+  _setLastUsed: function (url) {
+    if (L.Util.hasVar(url)) return
+    if (url === this.map.options.default_iconUrl) return
+    if (U.Icon.LAST_USED.indexOf(url) === -1) {
+      U.Icon.LAST_USED.push(url)
+    }
+  },
+
   _getIconUrl: function (name) {
     let url
-    if (this.feature && this.feature._getIconUrl(name))
+    if (this.feature && this.feature._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
-    else url = this.options[`${name}Url`]
+      this._setLastUsed(url)
+    } else {
+      url = this.options[`${name}Url`]
+    }
     return this.formatUrl(url, this.feature)
   },
 
@@ -216,7 +230,7 @@ U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
    * src: the raw "icon" value, can be an URL, a path, text, emoticon, etc.
    * bgcolor: the background color, used for caching and in case we cannot guess the
    * parent background color
-  */
+   */
   if (!icon) return
 
   if (L.DomUtil.contrastedColor(parent, bgcolor)) {
