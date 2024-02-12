@@ -1458,7 +1458,10 @@ U.DataLayer = L.Evented.extend({
   zoomTo: function () {
     if (!this.isVisible()) return
     const bounds = this.layer.getBounds()
-    if (bounds.isValid()) this.map.fitBounds(bounds)
+    if (bounds.isValid()) {
+      const options = {maxZoom: this.getOption("zoomTo")}
+      this.map.fitBounds(bounds, options)
+    }
   },
 
   // Is this layer type browsable in theorie
