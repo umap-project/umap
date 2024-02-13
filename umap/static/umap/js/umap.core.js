@@ -396,10 +396,28 @@ L.DomUtil.after = (target, el) => {
   return el
 }
 
+// From https://gist.github.com/Accudio/b9cb16e0e3df858cef0d31e38f1fe46f
+// convert colour in range 0-255 to the modifier used within luminance calculation
+L.DomUtil.colourMod = (colour) => {
+  const sRGB = colour / 255
+  let mod = Math.pow((sRGB + 0.055) / 1.055, 2.4)
+  if (sRGB < 0.03928) mod = sRGB / 12.92
+  return mod
+}
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
 L.DomUtil.TextColorFromBackgroundColor = (el, bgcolor) => {
   return L.DomUtil.contrastedColor(el, bgcolor) ? '#ffffff' : '#000000'
 }
+L.DomUtil.contrastWCAG21 = (rgb) => {
+  const [r, g, b] = rgb
+  // luminance of inputted colour
+  const lum = 0.2126 * L.DomUtil.colourMod(r) + 0.7152 * L.DomUtil.colourMod(g) + 0.0722 * L.DomUtil.colourMod(b)
+  // white has a luminance of 1
+  const whiteLum = 1
+  const contrast = (whiteLum + 0.05) / (lum + 0.05)
+  return contrast > 3 ? 1 : 0
+}
+
 const _CACHE_CONSTRAST = {}
 L.DomUtil.contrastedColor = (el, bgcolor) => {
   // Return 0 for black and 1 for white
@@ -409,8 +427,8 @@ L.DomUtil.contrastedColor = (el, bgcolor) => {
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
   if (!rgb || rgb.length !== 4) return out
-  rgb = parseInt(rgb[1], 10) + parseInt(rgb[2], 10) + parseInt(rgb[3], 10)
-  if (rgb < (255 * 3) / 2) out = 1
+  rgb = [parseInt(rgb[1], 10), parseInt(rgb[2], 10), parseInt(rgb[3], 10)]
+  out = L.DomUtil.contrastWCAG21(rgb)
   if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out
 }
