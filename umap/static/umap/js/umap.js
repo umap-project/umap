@@ -58,62 +58,62 @@ L.Map.mergeOptions({
 U.Map = L.Map.extend({
   includes: [ControlsMixin],
   editableOptions: {
-    'zoom': undefined,
-    'scrollWheelZoom': Boolean,
-    'scaleControl': Boolean,
-    'moreControl': Boolean,
-    'miniMap': Boolean,
-    'displayPopupFooter': undefined,
-    'onLoadPanel': String,
-    'defaultView': String,
-    'name': String,
-    'description': String,
-    'licence': undefined,
-    'tilelayer': undefined,
-    'overlay': undefined,
-    'limitBounds': undefined,
-    'color': String,
-    'iconClass': String,
-    'iconUrl': String,
-    'smoothFactor': undefined,
-    'iconOpacity': undefined,
-    'opacity': undefined,
-    'weight': undefined,
-    'fill': undefined,
-    'fillColor': undefined,
-    'fillOpacity': undefined,
-    'dashArray': undefined,
-    'popupShape': String,
-    'popupTemplate': String,
-    'popupContentTemplate': String,
-    'zoomTo': undefined,
-    'captionBar': Boolean,
-    'captionMenus': Boolean,
-    'slideshow': undefined,
-    'sortKey': undefined,
-    'labelKey': undefined,
-    'filterKey': undefined,
-    'facetKey': undefined,
-    'slugKey': undefined,
-    'showLabel': undefined,
-    'labelDirection': undefined,
-    'labelInteractive': undefined,
-    'outlinkTarget': undefined,
-    'shortCredit': undefined,
-    'longCredit': undefined,
-    'permanentCredit': undefined,
-    'permanentCreditBackground': undefined,
-    'zoomControl': 'NullableBoolean',
-    'datalayersControl': 'NullableBoolean',
-    'searchControl': 'NullableBoolean',
-    'locateControl': 'NullableBoolean',
-    'fullscreenControl': 'NullableBoolean',
-    'editinosmControl': 'NullableBoolean',
-    'embedControl': 'NullableBoolean',
-    'measureControl': 'NullableBoolean',
-    'tilelayersControl': 'NullableBoolean',
-    'starControl': 'NullableBoolean',
-    'easing': undefined,
+    zoom: undefined,
+    scrollWheelZoom: Boolean,
+    scaleControl: Boolean,
+    moreControl: Boolean,
+    miniMap: Boolean,
+    displayPopupFooter: undefined,
+    onLoadPanel: String,
+    defaultView: String,
+    name: String,
+    description: String,
+    licence: undefined,
+    tilelayer: undefined,
+    overlay: undefined,
+    limitBounds: undefined,
+    color: String,
+    iconClass: String,
+    iconUrl: String,
+    smoothFactor: undefined,
+    iconOpacity: undefined,
+    opacity: undefined,
+    weight: undefined,
+    fill: undefined,
+    fillColor: undefined,
+    fillOpacity: undefined,
+    dashArray: undefined,
+    popupShape: String,
+    popupTemplate: String,
+    popupContentTemplate: String,
+    zoomTo: undefined,
+    captionBar: Boolean,
+    captionMenus: Boolean,
+    slideshow: undefined,
+    sortKey: undefined,
+    labelKey: undefined,
+    filterKey: undefined,
+    facetKey: undefined,
+    slugKey: undefined,
+    showLabel: undefined,
+    labelDirection: undefined,
+    labelInteractive: undefined,
+    outlinkTarget: undefined,
+    shortCredit: undefined,
+    longCredit: undefined,
+    permanentCredit: undefined,
+    permanentCreditBackground: undefined,
+    zoomControl: 'NullableBoolean',
+    datalayersControl: 'NullableBoolean',
+    searchControl: 'NullableBoolean',
+    locateControl: 'NullableBoolean',
+    fullscreenControl: 'NullableBoolean',
+    editinosmControl: 'NullableBoolean',
+    embedControl: 'NullableBoolean',
+    measureControl: 'NullableBoolean',
+    tilelayersControl: 'NullableBoolean',
+    starControl: 'NullableBoolean',
+    easing: undefined,
   },
 
   initialize: function (el, geojson) {
@@ -322,7 +322,7 @@ U.Map = L.Map.extend({
       }
     })
 
-    window.onbeforeunload = () => this.editEnabled && this.isDirty || null
+    window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
@@ -566,12 +566,7 @@ U.Map = L.Map.extend({
       if (key === U.Keys.E && modifierKey && !this.editEnabled) {
         L.DomEvent.stop(e)
         this.enableEdit()
-      } else if (
-        key === U.Keys.E &&
-        modifierKey &&
-        this.editEnabled &&
-        !this.isDirty
-      ) {
+      } else if (key === U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
         L.DomEvent.stop(e)
         this.disableEdit()
         this.ui.closePanel()
