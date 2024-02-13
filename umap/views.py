@@ -695,7 +695,7 @@ class MapOEmbed(View):
         if "slug" not in kwargs or "map_id" not in kwargs:
             raise Http404("Invalid URL path.")
 
-        map_ = Map.objects.get(id=kwargs["map_id"], slug=kwargs["slug"])
+        map_ = get_object_or_404(Map, id=kwargs["map_id"])
 
         if map_.share_status != Map.PUBLIC:
             raise PermissionDenied("This map is not public.")

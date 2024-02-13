@@ -775,6 +775,15 @@ def test_oembed_no_url_map(client, map, datalayer):
     assert response.status_code == 404
 
 
+def test_oembed_unknown_url_map(client, map, datalayer):
+    map_url = f"http://testserver{map.get_absolute_url()}"
+    # We change to an unknown id prefix to keep URL structure.
+    map_url = map_url.replace("map_", "_111")
+    url = f"{reverse('map_oembed')}?url={map_url}"
+    response = client.get(url)
+    assert response.status_code == 404
+
+
 def test_oembed_wrong_format_map(client, map, datalayer):
     url = (
         f"{reverse('map_oembed')}"
