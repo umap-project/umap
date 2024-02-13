@@ -66,6 +66,7 @@ footer .i18n_switch {
 .umap-nav .button:hover {
     text-decoration: none;
     min-width: 150px;
+    margin-left: 1rem;
 }
 
 @media only screen and (min-width: 500px) {
