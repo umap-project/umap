@@ -776,7 +776,6 @@ class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=self.get_permissions(),
-            info=_("Map has been updated!"),
         )
 
 
