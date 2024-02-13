@@ -546,7 +546,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (!error) this.pictogram_list = pictogram_list
     this.buildTabs()
     const value = this.value()
-    if (!value || L.Util.isPath(value)) this.showSymbolsTab()
+    if (U.Icon.RECENT.length) this.showRecentTab()
+    else if (!value || L.Util.isPath(value)) this.showSymbolsTab()
     else if (L.Util.isRemoteUrl(value) || L.Util.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
     const closeButton = L.DomUtil.createButton(
@@ -566,6 +567,20 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   buildTabs: function () {
     this.tabs.innerHTML = ''
+    if (U.Icon.RECENT.length) {
+      const recent = L.DomUtil.add(
+        'button',
+        'flat tab-recent',
+        this.tabs,
+        L._('Recent')
+      )
+      L.DomEvent.on(recent, 'click', L.DomEvent.stop).on(
+        recent,
+        'click',
+        this.showRecentTab,
+        this
+      )
+    }
     const symbol = L.DomUtil.add(
         'button',
         'flat tab-symbols',
@@ -656,24 +671,15 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.updatePreview()
   },
 
-  addCategory: function (category, items) {
+  addCategory: function (items, name) {
     const parent = L.DomUtil.create('div', 'umap-pictogram-category'),
-      title = L.DomUtil.add('h6', '', parent, category),
       grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+    if (name) L.DomUtil.add('h6', '', parent, name)
     let status = false
     for (let item of items) {
       status = this.addIconPreview(item, grid) || status
     }
     if (status) this.grid.appendChild(parent)
-  },
-
-  showLastUsed: function () {
-    if (U.Icon.LAST_USED.length) {
-      const items = U.Icon.LAST_USED.map((src) => ({
-        src,
-      }))
-      this.addCategory(L._('Used in this map'), items)
-    }
   },
 
   buildSymbolsList: function () {
@@ -688,23 +694,41 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const sorted = Object.entries(categories).toSorted(([a], [b]) =>
       L.Util.naturalSort(a, b)
     )
-    this.showLastUsed()
-    for (let [category, items] of sorted) {
-      this.addCategory(category, items)
+    for (let [name, items] of sorted) {
+      this.addCategory(items, name)
     }
+  },
+
+  buildRecentList: function () {
+    this.grid.innerHTML = ''
+    const items = U.Icon.RECENT.map((src) => ({
+      src,
+    }))
+    this.addCategory(items)
   },
 
   isDefault: function () {
     return !this.value() || this.value() === U.DEFAULT_ICON_URL
   },
 
-  showSymbolsTab: async function () {
-    this.openTab('symbols')
+  addGrid: function (onSearch) {
     this.searchInput = L.DomUtil.create('input', '', this.body)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
     this.grid = L.DomUtil.create('div', '', this.body)
-    L.DomEvent.on(this.searchInput, 'input', this.buildSymbolsList, this)
+    L.DomEvent.on(this.searchInput, 'input', onSearch, this)
+  },
+
+  showRecentTab: function () {
+    if (!U.Icon.RECENT.length) return
+    this.openTab('recent')
+    this.addGrid(this.buildRecentList)
+    this.buildRecentList()
+  },
+
+  showSymbolsTab: function () {
+    this.openTab('symbols')
+    this.addGrid(this.buildSymbolsList)
     this.buildSymbolsList()
   },
 

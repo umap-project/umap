@@ -1,6 +1,6 @@
 U.Icon = L.DivIcon.extend({
   statics: {
-    LAST_USED: [],
+    RECENT: [],
   },
   initialize: function (map, options) {
     this.map = map
@@ -17,11 +17,11 @@ U.Icon = L.DivIcon.extend({
     }
   },
 
-  _setLastUsed: function (url) {
+  _setRecent: function (url) {
     if (L.Util.hasVar(url)) return
-    if (url === this.map.options.default_iconUrl) return
-    if (U.Icon.LAST_USED.indexOf(url) === -1) {
-      U.Icon.LAST_USED.push(url)
+    if (url === U.DEFAULT_ICON_URL) return
+    if (U.Icon.RECENT.indexOf(url) === -1) {
+      U.Icon.RECENT.push(url)
     }
   },
 
@@ -29,7 +29,7 @@ U.Icon = L.DivIcon.extend({
     let url
     if (this.feature && this.feature._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
-      this._setLastUsed(url)
+      this._setRecent(url)
     } else {
       url = this.options[`${name}Url`]
     }
