@@ -16,9 +16,9 @@
       {% for map_inst in maps %}
         {% with unique_id="map_"|addstr:map_inst.pk %}
           <tr>
-            <td>
+            <th scope="row">
               <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
-            </td>
+            </th>
             <td>
               {{ map_inst.preview_settings|json_script:unique_id }}
               <button class="map-icon map-opener" data-map-id="{{ unique_id }}"
@@ -82,8 +82,8 @@
     </tbody>
   </table>
 </div>
-{% if maps.has_other_pages %}
-  <div class="pagination">
+<div class="pagination">
+  {% if maps.has_other_pages %}
     {% if maps.has_previous %}
       <a href="?p=1{% if q %}&q={{ q }}{% endif %}">« {% translate "first" %}</a>
       <a href="?p={{ maps.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">‹ {% translate "previous" %}</a>
@@ -119,8 +119,8 @@
       {{ count }} maps
       {% endblocktranslate %}
     </span>
-  </div>
-{% endif %}
+  {% endif %}
+</div>
 <script>
   !(function () {
     for (const deleteForm of document.querySelectorAll('form.map-delete')) {

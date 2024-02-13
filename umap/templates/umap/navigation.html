@@ -33,11 +33,11 @@
           <a href="{% url "logout" %}" class="logout">{% trans "Log out" %}</a>
         </li>
       {% endif %}
+      {% if not UMAP_READONLY %}
+        <li>
+          <a href="{% url "map_new" %}" class="button button-primary">{% trans "Create a map" %}</a>
+        </li>
+      {% endif %}
     </ul>
-  </section>
-  <section>
-    {% if not UMAP_READONLY %}
-      <a href="{% url "map_new" %}" class="button button-primary">{% trans "Create a map" %}</a>
-    {% endif %}
   </section>
 </nav>

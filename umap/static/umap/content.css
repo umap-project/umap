@@ -158,6 +158,7 @@ h2.tabs a {
     text-decoration: underline;
     text-decoration-thickness: 3px;
     text-decoration-skip-ink: none;
+    text-underline-offset: 7px;
     margin-right: 2rem;
 }
 h2.tabs a:not(.selected) {
@@ -439,8 +440,15 @@ ul.umap-autocomplete {
     width: 100%;
 }
 .table-wrapper table a,
-.table-wrapper table thead {
+.table-wrapper table thead tr th,
+.table-wrapper table th[scope="row"] {
     color: #263B58;
+    text-align: left;
+    padding-left: 2px;
+}
+.table-wrapper table thead tr th {
+    line-height: 1.2;
+    padding: 10px 5px;
 }
 .table-wrapper table thead th:last-of-type {
     min-width: 240px;
@@ -475,9 +483,6 @@ ul.umap-autocomplete {
 }
 .table-wrapper table tbody tr:nth-child(odd) {
     background-color: #f4f4f4;
-}
-.table-wrapper table td {
-    text-align: center;
 }
 .table-wrapper table thead tr {
     line-height: 2em;
@@ -515,6 +520,7 @@ dialog::backdrop {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    margin-bottom: 3rem;
 }
 .pagination > * {
     padding: 1rem;
