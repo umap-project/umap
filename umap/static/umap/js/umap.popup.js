@@ -96,6 +96,7 @@ U.Popup.Panel = U.Popup.extend({
   _updateLayout: function () {},
   _updatePosition: function () {},
   _adjustPan: function () {},
+  _animateZoom: function () {},
 })
 U.Popup.SimplePanel = U.Popup.Panel // Retrocompat.
 
