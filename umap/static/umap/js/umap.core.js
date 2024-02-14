@@ -27,6 +27,10 @@ L.Util.setBooleanFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
 }
+L.Util.setNumberFromQueryString = (options, name) => {
+  const value = +L.Util.queryString(name)
+  if (!isNaN(value)) options[name] = value
+}
 L.Util.setNullableBooleanFromQueryString = (options, name) => {
   let value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {

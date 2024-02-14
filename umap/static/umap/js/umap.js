@@ -86,16 +86,16 @@ U.Map = L.Map.extend({
     popupShape: String,
     popupTemplate: String,
     popupContentTemplate: String,
-    zoomTo: undefined,
+    zoomTo: Number,
     captionBar: Boolean,
     captionMenus: Boolean,
     slideshow: undefined,
     sortKey: undefined,
-    labelKey: undefined,
+    labelKey: String,
     filterKey: undefined,
     facetKey: undefined,
     slugKey: undefined,
-    showLabel: undefined,
+    showLabel: 'NullableBoolean',
     labelDirection: undefined,
     labelInteractive: undefined,
     outlinkTarget: undefined,
@@ -342,8 +342,12 @@ U.Map = L.Map.extend({
         case 'NullableBoolean':
           L.Util.setNullableBooleanFromQueryString(options, key)
           break
+        case Number:
+          L.Util.setNumberFromQueryString(options, key)
+          break
         case String:
           L.Util.setFromQueryString(options, key)
+          break
       }
     }
     // Specific case for datalayersControl
