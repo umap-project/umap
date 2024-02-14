@@ -37,7 +37,7 @@ dependencies = [
   "requests==2.31.0",
   "rcssmin==1.1.2",
   "rjsmin==1.2.2",
-  "social-auth-core==4.5.2",
+  "social-auth-core==4.5.3",
   "social-auth-app-django==5.4.0",
 ]
 
@@ -64,6 +64,9 @@ docker = [
   "uwsgi==2.0.23",
 ]
 
+[project.scripts]
+umap = "umap.bin:main"
+
 [tool.hatch.build]
 artifacts = [
   # Required because part of .gitignore (and thus excluded by hatch).
@@ -78,8 +81,8 @@ include = [
 [tool.hatch.build.targets.wheel]
 packages = ["umap"]
 
-[project.scripts]
-umap = "umap.bin:main"
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.version]
 path = "umap/__init__.py"

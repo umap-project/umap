@@ -77,7 +77,8 @@ body.login header {
 .login-grid .login-twitter-oauth2 {
     background-image: url("./twitter.png");
 }
-.login-grid .login-openstreetmap {
+.login-grid .login-openstreetmap,
+.login-grid .login-openstreetmap-oauth2 {
     background-image: url("./openstreetmap.png");
 }
 

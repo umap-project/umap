@@ -262,8 +262,8 @@ Can be set to `X-Accel-Redirect` to enable the [NGINX X-Accel](https://www.nginx
 
 See the NGINX documentation in addition.
 
-#### SOCIAL_AUTH_OPENSTREETMAP_KEY, SOCIAL_AUTH_OPENSTREETMAP_SECRET
+#### SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY, SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET
 
-If you use OpenStreetMap as OAuth provider, use those settings.
+If you use OpenStreetMap as OAuth 2 provider, you can use those settings.
 
 Otherwise, use any valid [python-social-auth configuration](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html).

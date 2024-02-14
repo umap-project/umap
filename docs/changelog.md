@@ -4,10 +4,11 @@
 
 This release is inauguring a new era in versionning uMap: in the future, we'll take care of better documenting breaking changes, so expect more major releases from now on. More details on [how we version](https://docs.umap-project.org/en/master/release/#when-to-make-a-release).
 
-The two main changes are:
+The main changes are:
 
 * on the front-end side, we now use native ESM modules, so this may break on old browsers (see our [ESlint configuration](https://github.com/umap-project/umap/blob/a0634e5f55179fb52f7c00e39236b6339a7714b9/package.json#L68))
 * on the back-end, we upgraded to Django 5.x, which drops support for Python 3.8 and Python 3.9.
+* the OpenStreetMap OAuth1 client is not supported anymore
 
 More details below!
 
@@ -16,6 +17,16 @@ More details below!
 * updrade to Django 5.x, which drops support for python < 3.10
 * remove `django-compressor`, so `umap compress` is not a valid command anymore (compress is now done in the `collectstatic` process itself) (#1544, #1539)
 * remove support for settings starting with `LEAFLET_STORAGE_` (deprecated since 1.0.0)
+* remove support for deprecated OpenStreetMap OAuth1 backend in favour of OAuth2
+
+#### Migrate to OpenStreetMap OAuth2
+
+* create a new app on OSM.org: https://www.openstreetmap.org/oauth2/applications/
+* add the key and secret in your settings (or as env vars):
+    * `SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY=xxxx`
+    * `SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET=xxxx`
+* run the migration command, that will migrate all accounts from OAuth1 to Oauth2:
+  `umap migrate`
 
 ### New features
 
