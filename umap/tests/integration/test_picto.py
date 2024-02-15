@@ -58,6 +58,8 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
+    # No picto defined yet, so recent should not be visible
+    expect(page.get_by_text("Recent")).to_be_hidden()
     symbols = page.locator(".umap-pictogram-choice")
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
@@ -93,7 +95,13 @@ def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
+    # Map has an icon defined, so it shold open on Recent tab
     symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
+    symbol_tab = page.get_by_role("button", name="Symbol")
+    expect(symbol_tab).to_be_visible()
+    symbol_tab.click()
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
     search.type("circle")
@@ -127,7 +135,13 @@ def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
+    # Map has an icon defined, so it shold open on Recent tab
     symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
+    symbol_tab = page.get_by_role("button", name="Symbol")
+    expect(symbol_tab).to_be_visible()
+    symbol_tab.click()
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
     search.type("circle")
@@ -175,8 +189,10 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     modify = page.locator(".umap-field-iconUrl").get_by_text("Change")
     expect(modify).to_be_visible()
     modify.click()
-    # Should be on URL tab
-    expect(input_el).to_be_visible()
+    # Should be on Recent tab
+    symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
 
 
 def test_can_use_char_as_picto(map, live_server, page, pictos):
@@ -216,4 +232,6 @@ def test_can_use_char_as_picto(map, live_server, page, pictos):
     expect(preview).to_be_visible()
     preview.click()
     # Should be on URL tab
-    expect(input_el).to_be_visible()
+    symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
