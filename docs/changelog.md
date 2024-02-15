@@ -9,6 +9,7 @@ The main changes are:
 * on the front-end side, we now use native ESM modules, so this may break on old browsers (see our [ESlint configuration](https://github.com/umap-project/umap/blob/a0634e5f55179fb52f7c00e39236b6339a7714b9/package.json#L68))
 * on the back-end, we upgraded to Django 5.x, which drops support for Python 3.8 and Python 3.9.
 * the OpenStreetMap OAuth1 client is not supported anymore
+* licence switch from WTFPL to AGPLv3: having an OSI valid licence was a request from our partners and sponsors (#1605)
 
 More details below!
 
@@ -38,6 +39,7 @@ More details below!
 * Use SVG for default icon (circle) (#1562)
 * introduce `UMAP_HOME_FEED` to control which maps are shown on the home page (#1531)
 * better algorithm (WCAG 21 based) to manage text and picto contrast (#1593)
+* show last used pictograms in a separate tab (#1595)
 
 ### Bug fixes
 
@@ -54,6 +56,8 @@ More details below!
 * Messages coming from Django where never displayed in map view (#1588)
 * Browser `inBbox` setting was not persistent  (#1586)
 * Popup was not opening on click on browser when `inBbox` was active (#1586)
+* reset table editor properties after creating a new one (#1610)
+* do not try to animate the panel (#1608)
 
 ### Internal changes
 
