@@ -682,7 +682,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   isDefault: function () {
-    return !this.value() || this.value() === this.obj.getMap().options.default_iconUrl
+    return !this.value() || this.value() === U.DEFAULT_ICON_URL
   },
 
   showSymbolsTab: async function () {

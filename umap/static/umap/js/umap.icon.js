@@ -222,7 +222,7 @@ U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
   if (L.DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
     // only for internal SVG, as invert could do weird things
-    if (L.Util.isPath(src) && src.endsWith('.svg')) {
+    if (L.Util.isPath(src) && src.endsWith('.svg') && src !== U.DEFAULT_ICON_URL) {
       // Must be called after icon container is added to the DOM
       // An image
       icon.style.filter = 'invert(1)'

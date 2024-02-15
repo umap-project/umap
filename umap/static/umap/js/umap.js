@@ -139,6 +139,7 @@ U.Map = L.Map.extend({
     this.setOptionsFromQueryString(geojson.properties)
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
+    U.DEFAULT_ICON_URL = this.options.default_iconUrl
 
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
