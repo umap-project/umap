@@ -437,7 +437,8 @@ const locale = {
     "Current map view": "Current map view",
     "Features in this layer: {count}": "Features in this layer: {count}",
     "Filter": "Filter",
-    "Problem in the response": "Problem in the response"
+    "Problem in the response": "Problem in the response",
+    "Recent": "Recent"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")

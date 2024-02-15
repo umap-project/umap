@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 10:52+0000\n"
+"POT-Creation-Date: 2024-02-15 13:53+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2024\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
@@ -255,8 +255,8 @@ msgstr "Ágyazza be és ossza meg a térképét"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "És mindezt <a href=\"%(repo_url)s\">nyílt forráskóddal</a>!"
 
-#: templates/umap/about_summary.html:48 templates/umap/navigation.html:40
-#: templates/umap/user_dashboard.html:41
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:38
+#: templates/umap/user_dashboard.html:42
 msgid "Create a map"
 msgstr "Térkép készítése"
 
@@ -299,96 +299,87 @@ msgstr "– készítette:"
 msgid "More"
 msgstr "Még több"
 
-#: templates/umap/map_table.html:5
+#: templates/umap/map_table.html:6
 msgid "Name"
 msgstr "Név"
 
-#: templates/umap/map_table.html:6
+#: templates/umap/map_table.html:7
 msgid "Preview"
 msgstr "Előnézet"
 
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:8
 msgid "Who can see"
 msgstr ""
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:9
 msgid "Who can edit"
 msgstr ""
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:10
 msgid "Last save"
 msgstr "Utolsó mentés"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:11
 msgid "Owner"
 msgstr "Tulajdonos"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:12
 msgid "Actions"
 msgstr "Műveletek"
 
-#: templates/umap/map_table.html:24 templates/umap/map_table.html:26
+#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
 msgid "Open preview"
 msgstr "Előnézet"
 
-#: templates/umap/map_table.html:45 templates/umap/map_table.html:47
+#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
 msgid "Share"
 msgstr "Megoszt"
 
-#: templates/umap/map_table.html:50 templates/umap/map_table.html:52
+#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
 msgid "Edit"
 msgstr "Szerk."
 
-#: templates/umap/map_table.html:55 templates/umap/map_table.html:57
+#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
 msgid "Download"
 msgstr "Letölt"
 
-#: templates/umap/map_table.html:62 templates/umap/map_table.html:64
+#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
 msgstr ""
 
-#: templates/umap/map_table.html:72 templates/umap/map_table.html:74
+#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
 msgstr ""
 
-#: templates/umap/map_table.html:86
+#: templates/umap/map_table.html:88
 msgid "first"
 msgstr "első"
 
-#: templates/umap/map_table.html:87
+#: templates/umap/map_table.html:89
 msgid "previous"
 msgstr "előző"
 
-#: templates/umap/map_table.html:96
+#: templates/umap/map_table.html:98
 #, python-format
-msgid ""
-"\n"
-"        Page %(maps_number)s of %(num_pages)s\n"
-"      "
+msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr ""
 
-#: templates/umap/map_table.html:102
+#: templates/umap/map_table.html:104
 msgid "next"
 msgstr "következő"
 
-#: templates/umap/map_table.html:103
+#: templates/umap/map_table.html:105
 msgid "last"
 msgstr "utolsó"
 
-#: templates/umap/map_table.html:111
+#: templates/umap/map_table.html:113
 #, python-format
-msgid ""
-"\n"
-"      Lines per page: %(per_page)s\n"
-"      "
+msgid "Lines per page: %(per_page)s"
 msgstr ""
 
-#: templates/umap/map_table.html:116
+#: templates/umap/map_table.html:118
 #, python-format
-msgid ""
-"\n"
-"      %(count)s maps\n"
-"      "
+msgid "%(count)s maps"
 msgstr ""
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
@@ -476,11 +467,11 @@ msgstr "Legutóbb létrehozott térképek"
 msgid "Search maps"
 msgstr "Térképek keresése"
 
-#: templates/umap/search_bar.html:14 templates/umap/user_dashboard.html:25
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr "Keresés"
 
-#: templates/umap/user_dashboard.html:7
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:26
 msgid "Search my maps"
 msgstr "Saját térkép keresése"
 
@@ -493,19 +484,16 @@ msgstr ""
 msgid "My profile"
 msgstr "Saját profil"
 
-#: templates/umap/user_dashboard.html:21
+#: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
 msgid "Map’s title"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:31
+#: templates/umap/user_dashboard.html:32
 #, python-format
-msgid ""
-"\n"
-"              Download %(count)s maps\n"
-"            "
+msgid "Download %(count)s maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:41
+#: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
 msgstr "Önnek még nincs térképe."
 
@@ -517,48 +505,44 @@ msgstr "Térkép megtekintése"
 msgid "See full screen"
 msgstr ""
 
-#: views.py:779
-msgid "Map has been updated!"
-msgstr "A térkép frissült."
-
-#: views.py:804
+#: views.py:803
 msgid "Map editors updated with success!"
 msgstr "A térképszerkesztők sikeresen frissültek."
 
-#: views.py:842
+#: views.py:841
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "A térképéhez tartozó uMap szerkesztési link: %(map_name)s"
 
-#: views.py:845
+#: views.py:844
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Az Ön titkos szerkesztési linkje: %(link)s"
 
-#: views.py:851
+#: views.py:850
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail elküldve ide: %(email)s"
 
-#: views.py:862
+#: views.py:861
 msgid "Only its owner can delete the map."
 msgstr "A térképet csak a tulajdonosa törölheti."
 
-#: views.py:890
+#: views.py:889
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Elkészült a térképe másolata. Ha egy másik számítógépről szeretné szerkeszteni, ezt a linket használja: %(anonymous_url)s"
 
-#: views.py:895
+#: views.py:894
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulálunk, elkészült a térképe másolata!"
 
-#: views.py:1131
+#: views.py:1130
 msgid "Layer successfully deleted."
 msgstr "A réteg sikeresen törlődött."
 
-#: views.py:1153
+#: views.py:1152
 msgid "Permissions updated with success!"
 msgstr "Az engedélyek sikeresen frissültek!"
