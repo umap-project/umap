@@ -46,7 +46,6 @@ U.TableEditor = L.Class.extend({
       })
       this.datalayer.deindexProperty(property)
       this.datalayer.indexProperty(newName)
-      this.resetProperties()
       this.edit()
     }
     L.DomEvent.on(del, 'click', doDelete, this)
@@ -63,6 +62,7 @@ U.TableEditor = L.Class.extend({
   },
 
   compileProperties: function () {
+    this.resetProperties()
     if (this.properties.length === 0) this.properties = ['name']
     // description is a forced textarea, don't edit it in a text input, or you lose cariage returns
     if (this.properties.indexOf('description') !== -1)
