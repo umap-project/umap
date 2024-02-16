@@ -842,7 +842,7 @@ class SendEditLink(FormLessEditMixin, FormView):
                 % {"map_name": self.object.name}
             ),
             _("Here is your secret edit link: %(link)s" % {"link": link}),
-            settings.FROM_EMAIL,
+            settings.DEFAULT_FROM_EMAIL,
             [email],
             fail_silently=False,
         )

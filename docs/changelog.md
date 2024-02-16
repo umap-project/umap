@@ -19,6 +19,7 @@ More details below!
 * remove `django-compressor`, so `umap compress` is not a valid command anymore (compress is now done in the `collectstatic` process itself) (#1544, #1539)
 * remove support for settings starting with `LEAFLET_STORAGE_` (deprecated since 1.0.0)
 * remove support for deprecated OpenStreetMap OAuth1 backend in favour of OAuth2
+* `FROM_EMAIL` setting is replaced by `DEFAULT_FROM_EMAIL`, which is [Django standard](https://docs.djangoproject.com/en/5.0/ref/settings/#default-from-email)
 
 #### Migrate to OpenStreetMap OAuth2
 
