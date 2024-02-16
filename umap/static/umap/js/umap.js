@@ -401,7 +401,7 @@ U.Map = L.Map.extend({
     this._controls.search = new U.SearchControl()
     this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
-    this._controls.star = new U.StarControl(this)
+    if (this.options.user) this._controls.star = new U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -468,6 +468,7 @@ U.Map = L.Map.extend({
       status = this.options[`${name}Control`]
       if (status === false) continue
       control = this._controls[name]
+      if (!control) continue
       control.addTo(this)
       if (status === undefined || status === null)
         L.DomUtil.addClass(control._container, 'display-on-more')
@@ -1142,24 +1143,22 @@ U.Map = L.Map.extend({
     })
   },
 
-  star: function () {
+  star: async function () {
     if (!this.options.umap_id)
       return this.ui.alert({
         content: L._('Please save the map first'),
         level: 'error',
       })
     const url = this.urls.get('map_star', { map_id: this.options.umap_id })
-    this.post(url, {
-      context: this,
-      callback: function (data) {
-        this.options.starred = data.starred
-        let msg = data.starred
-          ? L._('Map has been starred')
-          : L._('Map has been unstarred')
-        this.ui.alert({ content: msg, level: 'info' })
-        this.renderControls()
-      },
-    })
+    const [data, response, error] = await this.server.post(url)
+    if (!error) {
+      this.options.starred = data.starred
+      let msg = data.starred
+        ? L._('Map has been starred')
+        : L._('Map has been unstarred')
+      this.ui.alert({ content: msg, level: 'info' })
+      this.renderControls()
+    }
   },
 
   geometry: function () {
