@@ -39,7 +39,7 @@ documentation.
 In general, you'll need to add something like this in your local settings:
 
 ```python title="local_settings.py"
-FROM_EMAIL = "youradmin@email.org"
+DEFAULT_FROM_EMAIL = "youradmin@email.org"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.provider.org"
 EMAIL_PORT = 456
@@ -60,7 +60,7 @@ Can be set through env var: `ENABLE_ACCOUNT_LOGIN=1`
 User accounts can be managed via the Django admin page (`{SITE_URL}/admin`).
 The required superuser must be created on the command line with this command: `umap createsuperuser`.
 
-#### FROM_EMAIL
+#### DEFAULT_FROM_EMAIL
 
 See `EMAIL_BACKEND`.
 
