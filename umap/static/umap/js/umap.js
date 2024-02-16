@@ -1129,7 +1129,7 @@ U.Map = L.Map.extend({
     }
   },
 
-  sendEditLink: function () {
+  sendEditLink: async function () {
     const input = this.ui._alert.querySelector('input')
     const email = input.value
 
@@ -1137,9 +1137,7 @@ U.Map = L.Map.extend({
     formData.append('email', email)
 
     const url = this.urls.get('map_send_edit_link', { map_id: this.options.umap_id })
-    this.post(url, {
-      data: formData,
-    })
+    await this.server.post(url, {}, formData)
   },
 
   star: function () {
