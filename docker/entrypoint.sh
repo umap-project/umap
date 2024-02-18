@@ -9,7 +9,5 @@ umap wait_for_database
 umap migrate
 # then collect static files
 umap collectstatic --noinput
-# compress static files
-umap compress
 # run uWSGI
 exec uwsgi --ini docker/uwsgi.ini

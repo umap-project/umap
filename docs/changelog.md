@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 - 2024-02-18
+
+* Do not use the `compress` command anymore for the Docker image (#1620)
+
 ## 2.0.0 - 2024-02-16
 
 This release is inauguring a new era in versionning uMap: in the future, we'll take care of better documenting breaking changes, so expect more major releases from now on. More details on [how we version](https://docs.umap-project.org/en/master/release/#when-to-make-a-release).
