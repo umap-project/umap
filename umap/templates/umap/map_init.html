@@ -2,9 +2,16 @@
 <div id="map"></div>
 <!-- djlint:off -->
 <script defer type="text/javascript">
-  let MAP
   window.addEventListener('DOMContentLoaded', (event) => {
-    MAP = new U.Map("map", {{ map_settings|notag|safe }});
-  });
+    U.MAP = new U.Map("map", {{ map_settings|notag|safe }})
+    {% for m in messages %}
+      {# We have just one, but we need to loop, as for messages API #}
+      U.MAP.ui.alert({
+        content: "{{ m }}",
+        level: "{{ m.tags }}",
+        duration: 100000
+      })
+    {% endfor %}
+  })
 </script>
 <!-- djlint:on -->
