@@ -53,7 +53,8 @@ export class DatalayerUpdater extends BaseUpdater {
         const datalayer = this.getLayerFromID(metadata.id)
         console.log(datalayer, key, value)
         this.updateObjectValue(datalayer, key, value)
-        datalayer.renderProperties([key])
+        const property = key.replace("options.", "")
+        datalayer.renderProperties([property])
     }
 }
 

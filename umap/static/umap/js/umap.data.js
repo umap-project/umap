@@ -14,7 +14,7 @@ L.U.DataRendererMixin = {
    * 
    * @param list properties : properties that have been updated.
    */
-  renderProperties: function (properties, builder) {
+  renderProperties: function (properties) {
     let renderers = new Set()
     for (const prop of properties) {
       const propRenderers = this.propertiesRenderers[prop]
@@ -36,7 +36,9 @@ L.U.DataRendererMixin = {
     }
 
     for (const renderer of renderers) {
-      this[renderer](properties, builder)
+      if (renderer in this) {
+        this[renderer](properties)
+      }
     }
 
   },

@@ -257,13 +257,13 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     // If user touches the breaks, then force manual mode
     if (field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
-      builder.helpers['options.choropleth.mode'].fetch()
+      if (builder) builder.helpers['options.choropleth.mode'].fetch()
     }
     this.computeBreaks()
     // If user changes the mode or the number of classes,
     // then update the breaks input value
     if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
-      builder.helpers['options.choropleth.breaks'].fetch()
+      if (builder) builder.helpers['options.choropleth.breaks'].fetch()
     }
   },
 
