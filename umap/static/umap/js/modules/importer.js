@@ -1,74 +1,10 @@
 export default class Importer {
   constructor(map) {
     this.map = map
-    this.presets = map.options.importPresets
-  }
-
-  #buildDatalayerOptions(layerSelect) {
-    let option
-    this.map.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        const id = L.stamp(datalayer)
-        option = L.DomUtil.add('option', '', layerSelect, datalayer.options.name)
-        option.value = id
-      }
-    })
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Import in a new layer') },
-      layerSelect
-    )
-  }
-
-  #buildPresetsOptions(presetSelect) {
-    if (this.presets.length) {
-      const presetBox = this.form.querySelector('#preset-box')
-      presetBox.removeAttribute('hidden')
-      const noPreset = L.DomUtil.create('option', '', presetSelect)
-      noPreset.value = noPreset.textContent = L._('Choose a preset')
-      for (const preset of this.presets) {
-        option = L.DomUtil.create('option', '', presetSelect)
-        option.value = preset.url
-        option.textContent = preset.label
-      }
-    }
-  }
-
-  build() {
-    const template = document.querySelector('#umap-upload')
-    this.form = template.content.firstElementChild.cloneNode(true)
-    this.presetSelect = this.form.querySelector('[name="preset-select"]')
-    this.fileInput = this.form.querySelector('[name="file-input"]')
-    this.map.ui.once('panel:closed', () => (this.fileInput.value = null))
-    this.typeLabel = this.form.querySelector('#type-label')
-    const helpButton = this.typeLabel.querySelector('button')
-    this.map.help.button(this.typeLabel, 'importFormats', '', helpButton)
-    this.formatSelect = this.form.querySelector('[name="format"]')
-    this.layerSelect = this.form.querySelector('[name="datalayer"]')
-    this.submitInput = this.form.querySelector('[name="submit-input"]')
-    this.#buildDatalayerOptions(this.layerSelect)
-    this.#buildPresetsOptions(this.presetSelect)
-
-    this.submitInput.addEventListener('click', this.submit.bind(this))
-    this.fileInput.addEventListener('change', (e) => {
-      let type = ''
-      let newType
-      for (const file of e.target.files) {
-        newType = L.Util.detectFileType(file)
-        if (!type && newType) {
-          type = newType
-        }
-        if (type && newType !== type) {
-          type = ''
-          break
-        }
-      }
-      this.formatSelect.value = type
-    })
   }
 
   open() {
-    if (!this.form) this.build()
+    if (!this.form) this._build()
     this.map.ui.openPanel({
       data: { html: this.form },
       className: 'dark',
@@ -80,7 +16,90 @@ export default class Importer {
     this.fileInput.showPicker()
   }
 
-  submit() {
+  _build() {
+    const template = document.querySelector('#umap-upload')
+    this.form = template.content.firstElementChild.cloneNode(true)
+
+    this.typeLabel = this.form.querySelector('#type-label')
+    const helpButton = this.typeLabel.querySelector('button')
+    this.map.help.button(this.typeLabel, 'importFormats', '', helpButton)
+
+    this.layerSelect = this.form.querySelector('[name="datalayer"]')
+    this._buildDatalayerOptions(this.layerSelect)
+    this.presetSelect = this.form.querySelector('[name="preset-select"]')
+    this._buildPresetsOptions(this.presetSelect)
+
+    this.fileInput = this.form.querySelector('[name="file-input"]')
+    this.formatSelect = this.form.querySelector('[name="format"]')
+
+    this._connectedCallback()
+  }
+
+  _buildDatalayerOptions(layerSelect) {
+    const options = []
+    this.map.eachDataLayerReverse((datalayer) => {
+      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
+        options.push(
+          `<option value="${L.stamp(datalayer)}">${datalayer.options.name}</option>`
+        )
+      }
+    })
+    options.push(`<option value="">${L._('Import in a new layer')}</option>`)
+    layerSelect.innerHTML = options.join('')
+  }
+
+  _buildPresetsOptions(presetSelect) {
+    const presets = this.map.options.importPresets
+    if (!presets.length) return
+    const options = []
+    presetSelect.parentElement.removeAttribute('hidden')
+    options.push(
+      `<option value="${L._('Choose a preset')}">${L._('Choose a preset')}</option>`
+    )
+    for (const preset of presets) {
+      options.push(`<option value="${preset.url}">${preset.label}</option>`)
+    }
+    presetSelect.innerHTML = options.join('')
+  }
+
+  _connectedCallback() {
+    const controller = new AbortController()
+    const signal = controller.signal
+    this.form
+      .querySelector('[name="submit-input"]')
+      .addEventListener('click', this._submit.bind(this), { signal })
+
+    this.fileInput.addEventListener(
+      'change',
+      (e) => {
+        let type = ''
+        let newType
+        for (const file of e.target.files) {
+          newType = L.Util.detectFileType(file)
+          if (!type && newType) {
+            type = newType
+          }
+          if (type && newType !== type) {
+            type = ''
+            break
+          }
+        }
+        this.formatSelect.value = type
+      },
+      { signal }
+    )
+
+    this.map.ui.once(
+      'panel:closed',
+      () => {
+        this.fileInput.value = null
+        controller.abort()
+      },
+      { signal }
+    )
+  }
+
+  _submit() {
     const urlInputValue = this.form.querySelector('[name="url-input"]').value
     const rawInputValue = this.form.querySelector('[name="raw-input"]').value
     const clearFlag = this.form.querySelector('[name="clear"]')
