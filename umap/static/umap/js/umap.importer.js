@@ -1,4 +1,4 @@
-L.U.Importer = L.Class.extend({
+U.Importer = L.Class.extend({
   initialize: function (map) {
     this.map = map
     this.presets = map.options.importPresets
@@ -27,7 +27,7 @@ L.U.Importer = L.Class.extend({
       const noPreset = L.DomUtil.create('option', '', element)
       noPreset.value = noPreset.textContent = L._('Choose a preset')
       for (const preset of this.presets) {
-        option = L.DomUtil.create('option', '', presetSelect)
+        option = L.DomUtil.create('option', '', this.presetSelect)
         option.value = preset.url
         option.textContent = preset.label
       }
@@ -39,6 +39,7 @@ L.U.Importer = L.Class.extend({
     this.form = template.content.firstElementChild.cloneNode(true)
     this.presetSelect = this.form.querySelector('[name="preset-select"]')
     this.fileInput = this.form.querySelector('[name="file-input"]')
+    this.map.ui.once('panel:closed', () => (this.fileInput.value = null))
     this.typeLabel = this.form.querySelector('#type-label')
     const helpButton = this.typeLabel.querySelector('button')
     this.map.help.button(this.typeLabel, 'importFormats', '', helpButton)
