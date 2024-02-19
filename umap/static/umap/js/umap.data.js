@@ -12,17 +12,33 @@ L.U.DataRendererMixin = {
   /**
    * Rerender the interface for the properties passed as an argument.
    * 
-   * @param list updatedProperties : properties that have been updated.
+   * @param list properties : properties that have been updated.
    */
-  renderProperties: function (updatedProperties) {
+  renderProperties: function (properties, builder) {
     let renderers = new Set()
-    for (const prop of updatedProperties) {
+    for (const prop of properties) {
       const propRenderers = this.propertiesRenderers[prop]
       if (propRenderers) {
-        for (const renderer of propRenderers) renderers.add(renderer)
+        for (const renderer of propRenderers) {
+          renderers.add(renderer)
+        }
       }
     }
-    for (const renderer of renderers) this[renderer]()
+
+    // If no renderer has been found, use the default one.
+    const hasDefault = Object.keys(this.propertiesRenderers).includes('default')
+    const defaultRenderers = this.propertiesRenderers['default']
+
+    if (hasDefault && renderers.size == 0) {
+      for (const renderer of defaultRenderers) {
+        renderers.add(renderer)
+      }
+    }
+
+    for (const renderer of renderers) {
+      this[renderer](properties, builder)
+    }
+
   },
 
 }

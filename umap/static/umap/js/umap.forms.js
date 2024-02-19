@@ -1276,7 +1276,7 @@ L.U.FormBuilder = L.FormBuilder.extend({
     // in the map definition
     // Remove the "options" prefix for now
     field = field.replace('options.', '')
-    this.obj.renderProperties([field])
+    this.obj.renderProperties([field], this)
   },
 
   finish: function () {

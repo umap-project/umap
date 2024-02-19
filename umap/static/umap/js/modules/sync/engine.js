@@ -1,5 +1,5 @@
 import { WebSocketTransport } from "./websocket.js"
-import { MapUpdater, MarkerUpdater, PolygonUpdater, PolylineUpdater } from "./updaters.js"
+import { MapUpdater, MarkerUpdater, PolygonUpdater, PolylineUpdater, DatalayerUpdater } from "./updaters.js"
 
 export class SyncEngine {
     constructor(map) {
@@ -21,6 +21,7 @@ export class MessagesDispatcher {
             marker: new MarkerUpdater(this.map),
             polyline: new PolylineUpdater(this.map),
             polygon: new PolygonUpdater(this.map),
+            datalayer: new DatalayerUpdater(this.map),
         }
     }
 
@@ -34,6 +35,7 @@ export class MessagesDispatcher {
                     return updater
                 }
             case 'map':
+            case 'datalayer':
                 return this.updaters[subject]
             default:
                 throw new Error(`Unknown updater ${subject}, ${metadata}`)

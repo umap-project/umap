@@ -513,6 +513,78 @@ L.U.DataLayer = L.Evented.extend({
     editMode: 'advanced',
   },
 
+  propertiesRenderers: {
+    'name': ['updateDatalayersControl'],
+    'description': ['updateDatalayersControl'],
+    'type': ['resetLayer', 'updateDatalayersControl'],
+    'displayOnLoad': ['updateDatalayersControl'],
+    'browsable': ['updateDatalayersControl'],
+    'inCaption': ['updateDatalayersControl'],
+
+    // Shape options
+    'color': ['redrawCallback'],
+    'iconClass': ['redrawCallback'],
+    'iconUrl': ['redrawCallback'],
+    'iconOpacity': ['redrawCallback'],
+    'opacity': ['redrawCallback'],
+    'stroke': ['redrawCallback'],
+    'weight': ['redrawCallback'],
+    'fill': ['redrawCallback'],
+    'fillColor': ['redrawCallback'],
+    'fillOpacity': ['redrawCallback'],
+
+    // Options fields
+    'smoothFactor': ['redrawCallback'],
+    'dashArray': ['redrawCallback'],
+    'zoomTo': ['redrawCallback'],
+    'fromZoom': ['redrawCallback'],
+    'toZoom': ['redrawCallback'],
+    'labelKey': ['redrawCallback'],
+
+    // Popup fields
+    'popupShape': ['redrawCallback'],
+    'popupTemplate': ['redrawCallback'],
+    'popupContentTemplate': ['redrawCallback'],
+    'showLabel': ['redrawCallback'],
+    'labelDirection': ['redrawCallback'],
+    'labelInteractive': ['redrawCallback'],
+    'outlinkTarget': ['redrawCallback'],
+    'interactive': ['redrawCallback'],
+
+    // Remote Data fields
+    'remoteData.url': ['fetchRemoteData'],
+    'remoteData.format': ['fetchRemoteData'],
+    'fromZoom': ['fetchRemoteData'],
+    'toZoom': ['fetchRemoteData'],
+    'remoteData.dynamic': ['fetchRemoteData'],
+    'remoteData.licence': ['fetchRemoteData'],
+    'remoteData.proxy': ['fetchRemoteData'],
+    'remoteData.ttl': ['fetchRemoteData'],
+
+    'default': ['redrawCallback']
+
+  },
+
+  updateDataLayersControl() {
+    this.map.updateDatalayersControl()
+  },
+
+  redrawCallback: function (properties, builder) {
+    this.hide()
+    for (let property of properties) {
+      this.layer.onEdit(property, builder)
+    }
+    this.show()
+  },
+
+  getSyncEngine: function () {
+    return this.map.syncEngine
+  },
+
+  getSyncSubject: function () {
+    return "datalayer"
+  },
+
   initialize: function (map, data) {
     this.map = map
     this._index = Array()
@@ -1197,31 +1269,13 @@ L.U.DataLayer = L.Evented.extend({
         ],
       ]
     const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
-    let builder = new L.U.FormBuilder(this, metadataFields, {
-      callback: function (e) {
-        this.map.updateDatalayersControl()
-        if (e.helper.field === 'options.type') {
-          this.resetLayer()
-          this.edit()
-        }
-      },
-    })
+    let builder = new L.U.FormBuilder(this, metadataFields)
     container.appendChild(builder.build())
-
-    const redrawCallback = function (e) {
-      const field = e.helper.field,
-        builder = e.helper.builder
-      this.hide()
-      this.layer.onEdit(field, builder)
-      this.show()
-    }
-
     const layerOptions = this.layer.getEditableOptions()
 
     if (layerOptions.length) {
       builder = new L.U.FormBuilder(this, layerOptions, {
-        id: 'datalayer-layer-properties',
-        callback: redrawCallback,
+        id: 'datalayer-layer-properties'
       })
       const layerProperties = L.DomUtil.createFieldset(
         container,
@@ -1244,8 +1298,7 @@ L.U.DataLayer = L.Evented.extend({
     ]
 
     builder = new L.U.FormBuilder(this, shapeOptions, {
-      id: 'datalayer-advanced-properties',
-      callback: redrawCallback,
+      id: 'datalayer-advanced-properties'
     })
     const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
@@ -1261,7 +1314,6 @@ L.U.DataLayer = L.Evented.extend({
 
     builder = new L.U.FormBuilder(this, optionsFields, {
       id: 'datalayer-advanced-properties',
-      callback: redrawCallback,
     })
     const advancedProperties = L.DomUtil.createFieldset(
       container,
@@ -1279,7 +1331,7 @@ L.U.DataLayer = L.Evented.extend({
       'options.outlinkTarget',
       'options.interactive',
     ]
-    builder = new L.U.FormBuilder(this, popupFields, { callback: redrawCallback })
+    builder = new L.U.FormBuilder(this, popupFields)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Interaction options')
@@ -1643,6 +1695,8 @@ L.U.DataLayer = L.Evented.extend({
     editor.edit()
   },
 })
+
+L.U.DataLayer.include(L.U.DataRendererMixin)
 
 L.TileLayer.include({
   toJSON: function () {

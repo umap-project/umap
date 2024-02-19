@@ -4,6 +4,10 @@
  */
 
 class BaseUpdater {
+    constructor(map) {
+        this.map = map
+    }
+
     updateObjectValue(obj, key, value) {
         // XXX refactor so it's cleaner
         let path = key.split('.')
@@ -22,6 +26,12 @@ class BaseUpdater {
         }
     }
 
+    getLayerFromID(layerId) {
+        if (layerId)
+            return this.map.getDataLayerByUmapId(layerId)
+        return this.map.defaultEditDataLayer()
+    }
+
     applyMessage(message) {
         let { verb } = message
         return this[verb](message)
@@ -29,15 +39,21 @@ class BaseUpdater {
 }
 
 export class MapUpdater extends BaseUpdater {
-    constructor(map) {
-        super()
-        this.map = map
-    }
 
     update({ key, value }) {
         console.log(key, value)
         this.updateObjectValue(this.map, key, value)
         this.map.renderProperties([key.replace("options.", "")])
+    }
+}
+
+export class DatalayerUpdater extends BaseUpdater {
+
+    update({ key, metadata, value }) {
+        const datalayer = this.getLayerFromID(metadata.id)
+        console.log(datalayer, key, value)
+        this.updateObjectValue(datalayer, key, value)
+        datalayer.renderProperties([key])
     }
 }
 
@@ -50,17 +66,6 @@ export class MapUpdater extends BaseUpdater {
  * - `featureArgument`: an object with the properties to pass to the class when bulding it.
  **/
 class FeatureUpdater extends BaseUpdater {
-
-    constructor(map) {
-        super()
-        this.map = map
-    }
-
-    getLayerFromID(layerId) {
-        if (layerId)
-            return this.map.getDataLayerByUmapId(layerId)
-        return this.map.defaultEditDataLayer()
-    }
 
     getFeatureFromMetadata({ id, layerId }) {
         const datalayer = this.getLayerFromID(layerId)
