@@ -1,41 +1,41 @@
-U.Importer = L.Class.extend({
-  initialize: function (map) {
+export default class Importer {
+  constructor(map) {
     this.map = map
     this.presets = map.options.importPresets
-  },
+  }
 
-  _buildDatalayerOptions: function (element) {
+  #buildDatalayerOptions(layerSelect) {
     let option
     this.map.eachDataLayerReverse((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
         const id = L.stamp(datalayer)
-        option = L.DomUtil.add('option', '', element, datalayer.options.name)
+        option = L.DomUtil.add('option', '', layerSelect, datalayer.options.name)
         option.value = id
       }
     })
     L.DomUtil.element(
       'option',
       { value: '', textContent: L._('Import in a new layer') },
-      element
+      layerSelect
     )
-  },
+  }
 
-  _buildPresetsOptions: function (element) {
+  #buildPresetsOptions(presetSelect) {
     if (this.presets.length) {
       const presetBox = this.form.querySelector('#preset-box')
       presetBox.removeAttribute('hidden')
-      const noPreset = L.DomUtil.create('option', '', element)
+      const noPreset = L.DomUtil.create('option', '', presetSelect)
       noPreset.value = noPreset.textContent = L._('Choose a preset')
       for (const preset of this.presets) {
-        option = L.DomUtil.create('option', '', this.presetSelect)
+        option = L.DomUtil.create('option', '', presetSelect)
         option.value = preset.url
         option.textContent = preset.label
       }
     }
-  },
+  }
 
-  build: function () {
-    template = document.querySelector('#umap-upload')
+  build() {
+    const template = document.querySelector('#umap-upload')
     this.form = template.content.firstElementChild.cloneNode(true)
     this.presetSelect = this.form.querySelector('[name="preset-select"]')
     this.fileInput = this.form.querySelector('[name="file-input"]')
@@ -46,8 +46,8 @@ U.Importer = L.Class.extend({
     this.formatSelect = this.form.querySelector('[name="format"]')
     this.layerSelect = this.form.querySelector('[name="datalayer"]')
     this.submitInput = this.form.querySelector('[name="submit-input"]')
-    this._buildDatalayerOptions(this.layerSelect)
-    this._buildPresetsOptions(this.presetSelect)
+    this.#buildDatalayerOptions(this.layerSelect)
+    this.#buildPresetsOptions(this.presetSelect)
 
     this.submitInput.addEventListener('click', this.submit.bind(this))
     this.fileInput.addEventListener('change', (e) => {
@@ -65,22 +65,22 @@ U.Importer = L.Class.extend({
       }
       this.formatSelect.value = type
     })
-  },
+  }
 
-  open: function () {
+  open() {
     if (!this.form) this.build()
     this.map.ui.openPanel({
       data: { html: this.form },
       className: 'dark',
     })
-  },
+  }
 
-  openFiles: function () {
+  openFiles() {
     this.open()
     this.fileInput.showPicker()
-  },
+  }
 
-  submit: function () {
+  submit() {
     const urlInputValue = this.form.querySelector('[name="url-input"]').value
     const rawInputValue = this.form.querySelector('[name="raw-input"]').value
     const clearFlag = this.form.querySelector('[name="clear"]')
@@ -120,5 +120,5 @@ U.Importer = L.Class.extend({
           )
       }
     }
-  },
-})
+  }
+}
