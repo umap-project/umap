@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -373,7 +374,7 @@ class DataLayer(NamedModel):
         (EDITORS, _("Editors only")),
         (OWNER, _("Owner only")),
     )
-
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
