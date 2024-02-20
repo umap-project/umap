@@ -27,9 +27,9 @@ Here are the important concepts and files:
 - `umap.permissions.js` handles the permissions of the map. There is a different file handling the permissions of the datalayer:
 - `umap.datalayer.permissions.js`.
 
-## Map (`L.U.Map`)
+## Map (`U.Map`)
 
-`L.U.Map` is the class that's called by the server templates (in `map_init.html` and `map_fragment.html` used when we display lists of maps, like the homepage).
+`U.Map` is the class that's called by the server templates (in `map_init.html` and `map_fragment.html` used when we display lists of maps, like the homepage).
 
 It contains references to datalayers, and to the controls (the buttons that appears on the map)
 
@@ -42,15 +42,15 @@ A map contains references to:
 - controls
 - datalayers
 
-## DataLayers (`L.U.Datalayer`)
+## DataLayers (`U.Datalayer`)
 
 The datalayers contains data, and a layer (a way to represent them).
 
 Each data layer contains a "layer", to know what type of layer it is. It's one of:
 
-- Choropleth (`L.U.Layer.Choropleth`)
-- Cluster (`L.U.Layer.Cluster`)
-- Heat (`L.U.Layer.Heat`)
+- Choropleth (`U.Layer.Choropleth`)
+- Cluster (`U.Layer.Cluster`)
+- Heat (`U.Layer.Heat`)
 
 When the data layers are initialized, they can have two states:
 - `loaded`: the object is loaded in memory. At this stage we have access to all the datalayer's metada (name, type, id)
