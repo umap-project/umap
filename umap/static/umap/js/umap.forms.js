@@ -672,9 +672,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addCategory: function (items, name) {
-    const parent = L.DomUtil.create('div', 'umap-pictogram-category'),
-      grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+    const parent = L.DomUtil.create('div', 'umap-pictogram-category')
     if (name) L.DomUtil.add('h6', '', parent, name)
+    const grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
     let status = false
     for (let item of items) {
       status = this.addIconPreview(item, grid) || status
