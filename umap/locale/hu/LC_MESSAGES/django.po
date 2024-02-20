@@ -155,7 +155,7 @@ msgstr "%(current_user)s felhasználónak nincs térképe."
 
 #: templates/auth/user_form.html:6
 msgid "My Maps"
-msgstr ""
+msgstr "Térképeim"
 
 #: templates/auth/user_form.html:7
 msgid "My Profile"
@@ -309,11 +309,11 @@ msgstr "Előnézet"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see"
-msgstr ""
+msgstr "Ki láthatja?"
 
 #: templates/umap/map_table.html:9
 msgid "Who can edit"
-msgstr ""
+msgstr "Ki szerkesztheti?"
 
 #: templates/umap/map_table.html:10
 msgid "Last save"
@@ -345,11 +345,11 @@ msgstr "Letölt"
 
 #: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
-msgstr ""
+msgstr "Másolat készítése"
 
 #: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
-msgstr ""
+msgstr "Törlés"
 
 #: templates/umap/map_table.html:88
 msgid "first"
@@ -362,7 +362,7 @@ msgstr "előző"
 #: templates/umap/map_table.html:98
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
-msgstr ""
+msgstr "%(maps_number)s / %(num_pages)s oldal"
 
 #: templates/umap/map_table.html:104
 msgid "next"
@@ -375,12 +375,12 @@ msgstr "utolsó"
 #: templates/umap/map_table.html:113
 #, python-format
 msgid "Lines per page: %(per_page)s"
-msgstr ""
+msgstr "Sorok oldalanként: %(per_page)s"
 
 #: templates/umap/map_table.html:118
 #, python-format
 msgid "%(count)s maps"
-msgstr ""
+msgstr "%(count)s térkép"
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
 msgid "My Dashboard"
@@ -478,7 +478,7 @@ msgstr "Saját térkép keresése"
 #: templates/umap/user_dashboard.html:11
 #, python-format
 msgid "My Maps (%(count)s)"
-msgstr ""
+msgstr "Térképeim (%(count)s)"
 
 #: templates/umap/user_dashboard.html:13
 msgid "My profile"
@@ -486,12 +486,12 @@ msgstr "Saját profil"
 
 #: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
 msgid "Map’s title"
-msgstr ""
+msgstr "Térkép címe"
 
 #: templates/umap/user_dashboard.html:32
 #, python-format
 msgid "Download %(count)s maps"
-msgstr ""
+msgstr "%(count)s térkép letöltése"
 
 #: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
@@ -503,7 +503,7 @@ msgstr "Térkép megtekintése"
 
 #: views.py:704
 msgid "See full screen"
-msgstr ""
+msgstr "Teljes képernyős nézet megtekintése"
 
 #: views.py:803
 msgid "Map editors updated with success!"
