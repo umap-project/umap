@@ -5,8 +5,6 @@ import pytest
 from django.core.cache import cache
 from django.core.signing import get_cookie_signer
 
-from umap.models import Map
-
 from .base import (
     DataLayerFactory,
     LicenceFactory,
