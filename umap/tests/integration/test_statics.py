@@ -1,6 +1,7 @@
 import re
 import shutil
 import tempfile
+from copy import deepcopy
 
 import pytest
 from django.core.management import call_command
@@ -12,6 +13,11 @@ from playwright.sync_api import expect
 def staticfiles(settings):
     static_root = tempfile.mkdtemp(prefix="test_static")
     settings.STATIC_ROOT = static_root
+    # Make sure settings are properly reset after the test
+    settings.STORAGES = deepcopy(settings.STORAGES)
+    settings.STORAGES["staticfiles"][
+        "BACKEND"
+    ] = "umap.storage.UmapManifestStaticFilesStorage"
     try:
         call_command("collectstatic", "--noinput")
         yield
@@ -22,9 +28,6 @@ def staticfiles(settings):
 def test_javascript_have_been_loaded(
     map, live_server, datalayer, page, settings, staticfiles
 ):
-    settings.STORAGES["staticfiles"][
-        "BACKEND"
-    ] = "umap.storage.UmapManifestStaticFilesStorage"
     datalayer.settings["displayOnLoad"] = False
     datalayer.save()
     map.settings["properties"]["defaultView"] = "latest"
