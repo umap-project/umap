@@ -206,6 +206,7 @@ Link to show on the header under the "Feedback and help" label.
 #### UMAP_HOME_FEED
 
 Which feed to display on the home page. Three valid values:
+
 - `"latest"`, which shows the latest maps (default)
 - `"highlighted"`, which shows the maps that have been starred by a staff member
 - `None`, which does not show any map on the home page
