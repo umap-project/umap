@@ -928,7 +928,7 @@ U.DataLayer = L.Evented.extend({
                 message: err[0].message,
               })
             }
-            this.map.ui.alert({ content: message, level: 'error', duration: 10000 })
+            this.map.alerts.add(message, 'error', 10000)
             console.error(err)
           }
           if (result && result.features.length) {
@@ -955,7 +955,7 @@ U.DataLayer = L.Evented.extend({
         const gj = JSON.parse(c)
         callback(gj)
       } catch (err) {
-        this.map.ui.alert({ content: `Invalid JSON file: ${err}` })
+        this.map.alerts.add(L._('Invalid JSON file: {error}', { error: err }), 'error')
         return
       }
     }
@@ -1013,12 +1013,12 @@ U.DataLayer = L.Evented.extend({
         return this.geojsonToFeatures(geometry.geometries)
 
       default:
-        this.map.ui.alert({
-          content: L._('Skipping unknown geometry.type: {type}', {
+        this.map.alerts.add(
+          L._('Skipping unknown geometry.type: {type}', {
             type: geometry.type || 'undefined',
           }),
-          level: 'error',
-        })
+          'error'
+        )
     }
     if (layer) {
       this.addLayer(layer)
@@ -1459,7 +1459,7 @@ U.DataLayer = L.Evented.extend({
     if (!this.isVisible()) return
     const bounds = this.layer.getBounds()
     if (bounds.isValid()) {
-      const options = {maxZoom: this.getOption("zoomTo")}
+      const options = { maxZoom: this.getOption('zoomTo') }
       this.map.fitBounds(bounds, options)
     }
   },

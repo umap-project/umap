@@ -1,5 +1,6 @@
 import * as L from '../../vendors/leaflet/leaflet-src.esm.js'
 import URLs from './urls.js'
+import Alerts from './alerts.js'
 import Browser from './browser.js'
 import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './request.js'
 // Import modules and export them to the global scope.
@@ -7,4 +8,13 @@ import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './req
 
 // Copy the leaflet module, it's expected by leaflet plugins to be writeable.
 window.L = { ...L }
-window.U = { URLs, Request, ServerRequest, RequestError, HTTPError, NOKError, Browser }
+window.U = {
+  Alerts,
+  URLs,
+  Request,
+  ServerRequest,
+  RequestError,
+  HTTPError,
+  NOKError,
+  Browser,
+}

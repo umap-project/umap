@@ -53,10 +53,7 @@ U.MapPermissions = L.Class.extend({
   edit: function () {
     if (this.map.options.editMode !== 'advanced') return
     if (!this.map.options.umap_id)
-      return this.map.ui.alert({
-        content: L._('Please save the map first'),
-        level: 'info',
-      })
+      return this.map.alerts.add(L._('Please save the map first'))
     const container = L.DomUtil.create('div', 'permissions-panel'),
       fields = [],
       title = L.DomUtil.create('h3', '', container)
@@ -135,10 +132,7 @@ U.MapPermissions = L.Class.extend({
     const [data, response, error] = await this.map.server.post(this.getAttachUrl())
     if (!error) {
       this.options.owner = this.map.options.user
-      this.map.ui.alert({
-        content: L._('Map has been attached to your account'),
-        level: 'info',
-      })
+      this.map.alerts.add(L._('Map has been attached to your account'))
       this.map.ui.closePanel()
     }
   },

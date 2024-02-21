@@ -140,16 +140,15 @@ U.Importer = L.Class.extend({
         this.map.processFileToImport(file, layer, type)
       }
     } else {
-      if (!type)
-        return this.map.ui.alert({
-          content: L._('Please choose a format'),
-          level: 'error',
-        })
+      if (!type) {
+        this.map.alerts.add(L._('Please choose a format'), 'error')
+        return
+      }
       if (this.rawInput.value && type === 'umap') {
         try {
           this.map.importRaw(this.rawInput.value, type)
         } catch (e) {
-          this.ui.alert({ content: L._('Invalid umap data'), level: 'error' })
+          this.alerts.add(L._('Invalid umap data'), 'error')
           console.error(e)
         }
       } else {
