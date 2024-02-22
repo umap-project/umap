@@ -375,6 +375,7 @@ class DataLayer(NamedModel):
         (OWNER, _("Owner only")),
     )
     uuid = models.UUIDField(unique=True, primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)

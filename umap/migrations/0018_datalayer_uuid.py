@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.uuid4, editable=False, null=True),
         ),
         migrations.RunPython(gen_uuid, reverse_code=migrations.RunPython.noop),
-        migrations.AlterField("datalayer", name="id", field=models.CharField(max_length=100, null=True)),
+        migrations.RunSQL("ALTER TABLE umap_datalayer DROP CONSTRAINT umap_datalayer_pkey"),
+        # migrations.RemoveConstraint("datalayer", "id"),
+        migrations.AlterField("datalayer", name="id", field=models.IntegerField(null=True, blank=True)),
         migrations.AlterField(
             model_name="datalayer",
             name="uuid",
