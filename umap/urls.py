@@ -85,7 +85,7 @@ i18n_urls += decorated_patterns(
         name="datalayer_versions",
     ),
     re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>" + uuid + r" )/(?P<name>[_\w]+.geojson)$",
+        r"^datalayer/(?P<map_id>\d+)/(?P<pk>" + uuid + r")/(?P<name>" + uuid + r"[_\w]+.geojson)$",
         views.DataLayerVersion.as_view(),
         name="datalayer_version",
     ),

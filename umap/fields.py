@@ -1,6 +1,7 @@
 import json
 
 import six
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.encoding import smart_str
 
@@ -14,7 +15,7 @@ class DictField(models.TextField):
         if not value:
             value = {}
         if not isinstance(value, six.string_types):
-            value = json.dumps(value)
+            value = json.dumps(value, cls=DjangoJSONEncoder)
         return value
 
     def from_db_value(self, value, expression, connection):

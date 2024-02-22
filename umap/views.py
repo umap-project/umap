@@ -23,6 +23,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.serializers.json import DjangoJSONEncoder
 from django.core.signing import BadSignature, Signer
 from django.core.validators import URLValidator, ValidationError
 from django.http import (
@@ -314,7 +315,7 @@ class UserDownload(DetailView, SearchMixin):
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
             for map_ in self.get_maps():
                 umapjson = map_.generate_umapjson(self.request)
-                geojson_file = io.StringIO(json.dumps(umapjson))
+                geojson_file = io.StringIO(json.dumps(umapjson, cls=DjangoJSONEncoder))
                 file_name = f"umap_backup_{map_.slug}_{map_.pk}.umap"
                 zip_file.writestr(file_name, geojson_file.getvalue())
 
@@ -353,7 +354,7 @@ class MapsShowCase(View):
             }
 
         geojson = {"type": "FeatureCollection", "features": [make(m) for m in maps]}
-        return HttpResponse(smart_bytes(json.dumps(geojson)))
+        return HttpResponse(smart_bytes(json.dumps(geojson, cls=DjangoJSONEncoder)))
 
 
 showcase = MapsShowCase.as_view()
@@ -440,7 +441,7 @@ ajax_proxy = AjaxProxy.as_view()
 
 
 def simple_json_response(**kwargs):
-    return HttpResponse(json.dumps(kwargs), content_type="application/json")
+    return HttpResponse(json.dumps(kwargs, cls=DjangoJSONEncoder), content_type="application/json")
 
 
 # ############## #
@@ -536,7 +537,7 @@ class MapDetailMixin:
             geojson["properties"] = {}
         geojson["properties"].update(properties)
         geojson["properties"]["datalayers"] = self.get_datalayers()
-        context["map_settings"] = json.dumps(geojson, indent=settings.DEBUG)
+        context["map_settings"] = json.dumps(geojson, indent=settings.DEBUG, cls=DjangoJSONEncoder)
         self.set_preconnect(geojson["properties"], context)
         return context
 
@@ -1100,7 +1101,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
             # Replace the uploaded file by the merged version.
             self.request.FILES["geojson"].file = BytesIO(
-                json.dumps(merged).encode("utf-8")
+                json.dumps(merged, cls=DjangoJSONEncoder).encode("utf-8")
             )
 
             # Mark the data to be reloaded by form_valid

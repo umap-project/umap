@@ -111,7 +111,7 @@ def test_update(client, datalayer, map, post_data):
     # Test response is a json
     j = json.loads(response.content.decode())
     assert "id" in j
-    assert datalayer.pk == j["id"]
+    assert str(datalayer.pk) == j["id"]
     assert j["browsable"] is True
     assert Path(modified_datalayer.geojson.path).exists()
 
