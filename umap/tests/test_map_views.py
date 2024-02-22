@@ -818,10 +818,10 @@ def test_oembed_map(client, map, datalayer):
 def test_oembed_link(client, map, datalayer):
     response = client.get(map.get_absolute_url())
     assert response.status_code == 200
+
     assert (
-        '<link rel="alternate" type="application/json+oembed"'
-        in response.content.decode()
-    )
+        '<link rel="alternate"\n        type="application/json+oembed"'
+    ) in response.content.decode()
     assert (
         'href="http://testserver/map/oembed/'
         f'?url=http%3A%2F%2Ftestserver%2Fen%2Fmap%2Ftest-map_{map.id}&format=json"'

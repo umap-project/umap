@@ -8,45 +8,45 @@
   login
 {% endblock body_class %}
 {% block content %}
-<section>
-  <header class="umap-nav">
-    {% include "umap/branding.html" %}
-  </header>
-  {% if ENABLE_ACCOUNT_LOGIN %}
-    <h2>{% trans "Please log in with your account" %}</h2>
-    <div>
-      {% if form.non_field_errors %}
-        <ul class="form-errors">
-          {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+  <section>
+    <header class="umap-nav">
+      {% include "umap/branding.html" %}
+    </header>
+    {% if ENABLE_ACCOUNT_LOGIN %}
+      <h2>{% trans "Please log in with your account" %}</h2>
+      <div>
+        {% if form.non_field_errors %}
+          <ul class="form-errors">
+            {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+        <form id="login_form" action="{% url "login" %}" method="post">
+          {% csrf_token %}
+          {{ form.username.errors }}
+          <input type="text"
+                 name="username"
+                 placeholder="{% trans "Username" %}"
+                 autofocus />
+          {{ form.password.errors }}
+          <input type="password" name="password" placeholder="{% trans "Password" %}" />
+          <input type="submit" value="{% trans "Login" %}" />
+        </form>
+      </div>
+    {% endif %}
+    {% if backends.backends|length %}
+      <h2>{% trans "Please choose a provider" %}</h2>
+      <div>
+        <ul class="login-grid block-grid">
+          {% for name in backends.backends %}
+            <li>
+              <a rel="nofollow"
+                 href="{% url "social:begin" name %}"
+                 class="umap-login-popup login-{{ name }}"
+                 title="{{ name|title }}"></a>
+            </li>
+          {% endfor %}
         </ul>
-      {% endif %}
-      <form id="login_form" action="{% url "login" %}" method="post">
-        {% csrf_token %}
-        {{ form.username.errors }}
-        <input type="text"
-               name="username"
-               placeholder="{% trans "Username" %}"
-               autofocus />
-        {{ form.password.errors }}
-        <input type="password" name="password" placeholder="{% trans "Password" %}" />
-        <input type="submit" value="{% trans "Login" %}" />
-      </form>
-    </div>
-  {% endif %}
-  {% if backends.backends|length %}
-    <h2>{% trans "Please choose a provider" %}</h2>
-    <div>
-      <ul class="login-grid block-grid">
-        {% for name in backends.backends %}
-          <li>
-            <a rel="nofollow"
-               href="{% url "social:begin" name %}"
-               class="umap-login-popup login-{{ name }}"
-               title="{{ name|title }}"></a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endif %}
-</section>
+      </div>
+    {% endif %}
+  </section>
 {% endblock content %}
