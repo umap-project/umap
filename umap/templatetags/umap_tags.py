@@ -3,6 +3,7 @@ from copy import copy
 
 from django import template
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 
 register = template.Library()
 
@@ -25,7 +26,7 @@ def map_fragment(map_instance, **kwargs):
     page = kwargs.pop("page", None) or ""
     unique_id = prefix + str(page) + "_" + str(map_instance.pk)
     return {
-        "map_settings": json.dumps(map_settings),
+        "map_settings": json.dumps(map_settings, cls=DjangoJSONEncoder),
         "map": map_instance,
         "unique_id": unique_id,
     }

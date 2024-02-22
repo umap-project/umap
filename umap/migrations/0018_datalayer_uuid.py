@@ -25,10 +25,11 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.uuid4, editable=False, null=True),
         ),
         migrations.RunPython(gen_uuid, reverse_code=migrations.RunPython.noop),
-        migrations.AlterField("datalayer", name="id", field=models.CharField(max_length=100)),
+        migrations.AlterField("datalayer", name="id", field=models.CharField(max_length=100, null=True)),
         migrations.AlterField(
             model_name="datalayer",
             name="uuid",
             field=models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True),
         ),
+        # migrations.RemoveConstraint("datalayer", "")
     ]
