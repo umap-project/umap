@@ -21,8 +21,9 @@
             </th>
             <td>
               {{ map_inst.preview_settings|json_script:unique_id }}
-              <button class="map-icon map-opener" data-map-id="{{ unique_id }}"
-                title="{% translate "Open preview" %}">
+              <button class="map-icon map-opener"
+                      data-map-id="{{ unique_id }}"
+                      title="{% translate "Open preview" %}">
                 <span class="icon-dashboard icon-view"></span>
                 <span class="sr-only">{% translate "Open preview" %}</span>
               </button>
@@ -42,35 +43,37 @@
               <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
             </td>
             <td>
-              <a href="{{ map_inst.get_absolute_url }}?share" class="icon-link"
-                title="{% translate "Share" %}">
+              <a href="{{ map_inst.get_absolute_url }}?share"
+                 class="icon-link"
+                 title="{% translate "Share" %}">
                 <span class="icon-dashboard icon-share"></span>
                 <span class="sr-only">{% translate "Share" %}</span>
               </a>
-              <a href="{{ map_inst.get_absolute_url }}?edit" class="icon-link"
-                title="{% translate "Edit" %}">
+              <a href="{{ map_inst.get_absolute_url }}?edit"
+                 class="icon-link"
+                 title="{% translate "Edit" %}">
                 <span class="icon-dashboard icon-edit"></span>
                 <span class="sr-only">{% translate "Edit" %}</span>
               </a>
-              <a href="{% url 'map_download' map_inst.pk %}" class="icon-link"
-                title="{% translate "Download" %}">
+              <a href="{% url 'map_download' map_inst.pk %}"
+                 class="icon-link"
+                 title="{% translate "Download" %}">
                 <span class="icon-dashboard icon-download"></span>
                 <span class="sr-only">{% translate "Download" %}</span>
               </a>
               <form action="{% url 'map_clone' map_inst.pk %}" method="post">
                 {% csrf_token %}
-                <button class="map-icon" type="submit"
-                  title="{% translate "Clone" %}">
+                <button class="map-icon" type="submit" title="{% translate "Clone" %}">
                   <span class="icon-dashboard icon-duplicate"></span>
                   <span class="sr-only">{% translate "Clone" %}</span>
                 </button>
               </form>
               <form action="{% url 'map_delete' map_inst.pk %}"
-                method="post" class="map-delete">
+                    method="post"
+                    class="map-delete">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{% url 'user_dashboard' %}">
-                <button class="map-icon" type="submit"
-                  title="{% translate "Delete" %}">
+                <button class="map-icon" type="submit" title="{% translate "Delete" %}">
                   <span class="icon-dashboard icon-delete"></span>
                   <span class="sr-only">{% translate "Delete" %}</span>
                 </button>
@@ -93,13 +96,11 @@
       <span></span>
       {# djlint:on #}
     {% endif %}
-
     <span class="current">
       {% blocktranslate with maps_number=maps.number num_pages=maps.paginator.num_pages trimmed %}
         Page {{ maps_number }} of {{ num_pages }}
       {% endblocktranslate %}
     </span>
-
     {% if maps.has_next %}
       <a href="?p={{ maps.next_page_number }}{% if q %}&q={{ q }}{% endif %}">{% translate "next" %} ›</a>
       <a href="?p={{ maps.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}">{% translate "last" %} »</a>
@@ -111,12 +112,12 @@
     {% endif %}
     <span>
       {% blocktranslate with per_page=maps.paginator.per_page trimmed %}
-      Lines per page: {{ per_page }}
+        Lines per page: {{ per_page }}
       {% endblocktranslate %}
     </span>
     <span>
       {% blocktranslate with count=maps.paginator.count trimmed %}
-      {{ count }} maps
+        {{ count }} maps
       {% endblocktranslate %}
     </span>
   {% endif %}
