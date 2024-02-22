@@ -9,8 +9,17 @@ U.FeatureMixin = {
     // DataLayer the marker belongs to
     this.datalayer = options.datalayer || null
     this.properties = { _umap_options: {} }
+    let geojson_id
     if (options.geojson) {
       this.populate(options.geojson)
+      geojson_id = options.geojson.id
+    }
+
+    // Each feature needs an unique identifier
+    if (this._checkId(geojson_id)) {
+      this.id = geojson_id
+    } else {
+      this.id = U.Utils.generateId()
     }
     let isDirty = false
     const self = this
@@ -35,6 +44,9 @@ U.FeatureMixin = {
     this.preInit()
     this.addInteractions()
     this.parentClass.prototype.initialize.call(this, latlng, options)
+  },
+  _checkId: function () {
+    return typeof string !== 'undefined'
   },
 
   preInit: function () {},
@@ -344,6 +356,7 @@ U.FeatureMixin = {
   toGeoJSON: function () {
     const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
+    geojson.id = this.id
     delete geojson.properties._storage_options
     return geojson
   },
