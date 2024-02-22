@@ -45,7 +45,7 @@ U.FeatureMixin = {
     this.addInteractions()
     this.parentClass.prototype.initialize.call(this, latlng, options)
   },
-  _checkId: function () {
+  _checkId: function (string) {
     return typeof string !== 'undefined'
   },
 
