@@ -374,7 +374,9 @@ class DataLayer(NamedModel):
         (EDITORS, _("Editors only")),
         (OWNER, _("Owner only")),
     )
-    uuid = models.UUIDField(unique=True, primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        unique=True, primary_key=True, default=uuid.uuid4, editable=False
+    )
     id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))

@@ -12,7 +12,6 @@ def gen_uuid(apps, schema_editor):
         row.save(update_fields=["uuid"])
 
 
-
 class Migration(migrations.Migration):
     dependencies = [
         ("umap", "0017_migrate_to_openstreetmap_oauth2"),
@@ -25,13 +24,19 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.uuid4, editable=False, null=True),
         ),
         migrations.RunPython(gen_uuid, reverse_code=migrations.RunPython.noop),
-        migrations.RunSQL("ALTER TABLE umap_datalayer DROP CONSTRAINT umap_datalayer_pkey"),
+        migrations.RunSQL(
+            "ALTER TABLE umap_datalayer DROP CONSTRAINT umap_datalayer_pkey"
+        ),
         # migrations.RemoveConstraint("datalayer", "id"),
-        migrations.AlterField("datalayer", name="id", field=models.IntegerField(null=True, blank=True)),
+        migrations.AlterField(
+            "datalayer", name="id", field=models.IntegerField(null=True, blank=True)
+        ),
         migrations.AlterField(
             model_name="datalayer",
             name="uuid",
-            field=models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True),
+            field=models.UUIDField(
+                default=uuid.uuid4, editable=False, unique=True, primary_key=True
+            ),
         ),
         # migrations.RemoveConstraint("datalayer", "")
     ]

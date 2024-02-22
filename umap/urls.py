@@ -165,7 +165,8 @@ if settings.DEFAULT_FROM_EMAIL:
         )
     )
 datalayer_urls = [
-    path("map/<int:map_id>/datalayer/update/<uuid:pk>/",
+    path(
+        "map/<int:map_id>/datalayer/update/<uuid:pk>/",
         views.DataLayerUpdate.as_view(),
         name="datalayer_update",
     ),

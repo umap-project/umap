@@ -441,7 +441,9 @@ ajax_proxy = AjaxProxy.as_view()
 
 
 def simple_json_response(**kwargs):
-    return HttpResponse(json.dumps(kwargs, cls=DjangoJSONEncoder), content_type="application/json")
+    return HttpResponse(
+        json.dumps(kwargs, cls=DjangoJSONEncoder), content_type="application/json"
+    )
 
 
 # ############## #
@@ -537,7 +539,9 @@ class MapDetailMixin:
             geojson["properties"] = {}
         geojson["properties"].update(properties)
         geojson["properties"]["datalayers"] = self.get_datalayers()
-        context["map_settings"] = json.dumps(geojson, indent=settings.DEBUG, cls=DjangoJSONEncoder)
+        context["map_settings"] = json.dumps(
+            geojson, indent=settings.DEBUG, cls=DjangoJSONEncoder
+        )
         self.set_preconnect(geojson["properties"], context)
         return context
 
