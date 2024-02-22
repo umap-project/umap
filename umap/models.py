@@ -374,7 +374,7 @@ class DataLayer(NamedModel):
         (EDITORS, _("Editors only")),
         (OWNER, _("Owner only")),
     )
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(unique=True, primary_key=True, default=uuid.uuid4, editable=False)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
@@ -437,6 +437,7 @@ class DataLayer(NamedModel):
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
+        new._state.adding = True
         new.pk = None
         if map_inst:
             new.map = map_inst
