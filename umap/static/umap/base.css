@@ -31,7 +31,7 @@ hr {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    border-color: #ddd;
+    border-color: var(--color-lightGray);
     border-image: none;
     border-style: solid;
     border-width: 1px 0 0;
@@ -223,7 +223,7 @@ button.flat,
     padding: 7px 7px;
     margin-bottom: 14px;
     background: #393F3F;
-    color: #ddd;
+    color: var(--color-lightGray);
     font-size: 10px;
     border-radius: 0 2px;
 }
@@ -264,7 +264,7 @@ input + .error {
     padding: 7px 7px;
     margin-top: -14px;
     margin-bottom: 14px;
-    background: #ddd;
+    background: var(--color-lightGray);
     color: #fff;
     background-color: #cc0000;
     font-size: 11px;
@@ -685,7 +685,7 @@ input[type=hidden].blur + [type="button"] {
     position: absolute;
     bottom: 0;
     padding: 0 10px;
-    border-left: 1px solid #ddd;
+    border-left: 1px solid var(--color-lightGray);
     overflow-x: auto;
     z-index: 1010;
     background-color: #fff;
@@ -698,7 +698,7 @@ input[type=hidden].blur + [type="button"] {
 }
 #umap-ui-container.dark {
     border-left: 1px solid #222;
-    background-color: #323737;
+    background-color: var(--color-darkGray);
     color: #efefef;
 }
 #umap-ui-container.fullwidth {
@@ -913,7 +913,7 @@ input:invalid {
     color: #eeeeec;
     padding: 0 7px;
     line-height: 32px;
-    background-color: #323737;
+    background-color: var(--color-darkGray);
 }
 .dark .umap-close-link:hover {
     background-color: #2e3436;

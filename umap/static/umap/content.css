@@ -205,8 +205,8 @@ body.content #umap-ui-container {
 
 input[type="submit"],
 .button {
-    background-color: var(--color-waterMint);
-    color: var(--color-darkBlue);
+    background-color: var(--button-primary-background);
+    color: var(--button-primary-color);
 }
 .button-primary {
     font-weight: bold;
@@ -215,8 +215,8 @@ input[type="submit"],
     background-color: #35537c;
 }
 .wrapper .neutral, .wrapper input[type="submit"].neutral {
-    background-color: var(--color-lightGray);
-    color: var(--color-darkGray);
+    background-color: var(--button-neutral-background);
+    color: var(--button-neutral-color);
 }
 .wrapper.somber {
     background-color: #2E3641;

@@ -13,7 +13,7 @@
     * Same as leaflet background, to work around screen blincking
     * between DOM is loaded and JS is read to render the map.
     */
-    background-color: #ddd;
+    background-color: var(--color-lightGray);
 }
 
 
@@ -293,7 +293,7 @@ ul.photon-autocomplete {
     margin-top: 0;
     vertical-align: top;
     border-bottom: none;
-    background-color: #323737;
+    background-color: var(--color-darkGray);
     border-right: 1px solid #eee;
     background-repeat: no-repeat;
     background-image: url('./img/24.svg');
@@ -446,7 +446,7 @@ ul.photon-autocomplete {
     max-width: 100vw;
     padding: 40px 20px;
     border: 1px solid #222;
-    background-color: #323737;
+    background-color: var(--color-darkGray);
     color: #efefef;
     font-size: 0.8em;
     visibility: hidden;
@@ -464,7 +464,7 @@ ul.photon-autocomplete {
     background-position: -4px -4px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
-    background-color: #323737 !important;
+    background-color: var(--color-darkGray) !important;
     vertical-align: middle;
     text-indent: -9999px;
     min-height: inherit;
@@ -518,7 +518,7 @@ ul.photon-autocomplete {
     color: #fff;
     font-size: 1.2em;
     border: none;
-    background-color: #323737;
+    background-color: var(--color-darkGray);
     width: auto;
     margin-bottom: 0;
 }
@@ -625,7 +625,7 @@ ul.photon-autocomplete {
     left: 0;
     right: 0;
     height: 46px;
-    background-color: #323737;
+    background-color: var(--color-darkGray);
     padding: 0 10px;
     text-align: left;
     line-height: 36px;
@@ -728,7 +728,7 @@ ul.photon-autocomplete {
     text-align: left;
     line-height: 46px;
     cursor: auto;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--color-lightGray);
     opacity: 0.93;
     z-index: 1000;
 }
@@ -884,10 +884,10 @@ ul.photon-autocomplete {
 }
 .leaflet-inplace-toolbar a {
     background-image: url('./img/16-white.svg');
-    background-color: #323737!important;
+    background-color: var(--color-darkGray)!important;
 }
 .leaflet-toolbar-tip {
-    background-color: #323737;
+    background-color: var(--color-darkGray);
 }
 .leaflet-inplace-toolbar a:hover {
     background-color: #353c3e!important;

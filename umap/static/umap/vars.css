@@ -1,9 +1,13 @@
 :root {
-    /* In use for primary buttons. */
-    --color-darkBlue: #263B58;
+    /* Colors. */
     --color-waterMint: #B9F5D2;
-
-    /* In use for secondary buttons. */
+    --color-darkBlue: #263B58;
     --color-lightGray: #ddd;
     --color-darkGray: #323737;
+
+    /* Buttons. */
+    --button-primary-background: var(--color-waterMint);
+    --button-primary-color: var(--color-darkBlue);
+    --button-neutral-background: var(--color-lightGray);
+    --button-neutral-color: var(--color-darkGray);
 }
