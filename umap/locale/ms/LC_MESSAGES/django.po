@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 10:52+0000\n"
+"POT-Creation-Date: 2024-02-15 13:53+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023\n"
 "Language-Team: Malay (http://app.transifex.com/openstreetmap/umap/language/ms/)\n"
@@ -255,8 +255,8 @@ msgstr "Benam dan kongsi peta anda"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Dan ia <a href=\"%(repo_url)s\">bersumber terbuka</a>!"
 
-#: templates/umap/about_summary.html:48 templates/umap/navigation.html:40
-#: templates/umap/user_dashboard.html:41
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:38
+#: templates/umap/user_dashboard.html:42
 msgid "Create a map"
 msgstr "Cipta peta"
 
@@ -299,96 +299,87 @@ msgstr "oleh"
 msgid "More"
 msgstr "Lebih lagi"
 
-#: templates/umap/map_table.html:5
+#: templates/umap/map_table.html:6
 msgid "Name"
 msgstr "Nama"
 
-#: templates/umap/map_table.html:6
+#: templates/umap/map_table.html:7
 msgid "Preview"
 msgstr ""
 
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:8
 msgid "Who can see"
 msgstr ""
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:9
 msgid "Who can edit"
 msgstr ""
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:10
 msgid "Last save"
 msgstr "Simpan kali terakhir"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:11
 msgid "Owner"
 msgstr "Pemilik"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:12
 msgid "Actions"
 msgstr "Tindakan"
 
-#: templates/umap/map_table.html:24 templates/umap/map_table.html:26
+#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
 msgid "Open preview"
 msgstr ""
 
-#: templates/umap/map_table.html:45 templates/umap/map_table.html:47
+#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
 msgid "Share"
 msgstr "Kongsi"
 
-#: templates/umap/map_table.html:50 templates/umap/map_table.html:52
+#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
 msgid "Edit"
 msgstr "Sunting"
 
-#: templates/umap/map_table.html:55 templates/umap/map_table.html:57
+#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
 msgid "Download"
 msgstr "Muat turun"
 
-#: templates/umap/map_table.html:62 templates/umap/map_table.html:64
+#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
 msgstr ""
 
-#: templates/umap/map_table.html:72 templates/umap/map_table.html:74
+#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
 msgstr ""
 
-#: templates/umap/map_table.html:86
+#: templates/umap/map_table.html:88
 msgid "first"
 msgstr ""
 
-#: templates/umap/map_table.html:87
+#: templates/umap/map_table.html:89
 msgid "previous"
 msgstr ""
 
-#: templates/umap/map_table.html:96
+#: templates/umap/map_table.html:98
 #, python-format
-msgid ""
-"\n"
-"        Page %(maps_number)s of %(num_pages)s\n"
-"      "
+msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr ""
 
-#: templates/umap/map_table.html:102
+#: templates/umap/map_table.html:104
 msgid "next"
 msgstr ""
 
-#: templates/umap/map_table.html:103
+#: templates/umap/map_table.html:105
 msgid "last"
 msgstr ""
 
-#: templates/umap/map_table.html:111
+#: templates/umap/map_table.html:113
 #, python-format
-msgid ""
-"\n"
-"      Lines per page: %(per_page)s\n"
-"      "
+msgid "Lines per page: %(per_page)s"
 msgstr ""
 
-#: templates/umap/map_table.html:116
+#: templates/umap/map_table.html:118
 #, python-format
-msgid ""
-"\n"
-"      %(count)s maps\n"
-"      "
+msgid "%(count)s maps"
 msgstr ""
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
@@ -475,11 +466,11 @@ msgstr "Peta dicipta baru-baru ini"
 msgid "Search maps"
 msgstr "Cari peta"
 
-#: templates/umap/search_bar.html:14 templates/umap/user_dashboard.html:25
+#: templates/umap/search_bar.html:14
 msgid "Search"
 msgstr "Cari"
 
-#: templates/umap/user_dashboard.html:7
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:26
 msgid "Search my maps"
 msgstr "Gelintar peta saya"
 
@@ -492,19 +483,16 @@ msgstr ""
 msgid "My profile"
 msgstr "Profil saya"
 
-#: templates/umap/user_dashboard.html:21
+#: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
 msgid "Map’s title"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:31
+#: templates/umap/user_dashboard.html:32
 #, python-format
-msgid ""
-"\n"
-"              Download %(count)s maps\n"
-"            "
+msgid "Download %(count)s maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:41
+#: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
 msgstr "Anda belum ada peta."
 
@@ -516,48 +504,44 @@ msgstr "Lihat peta"
 msgid "See full screen"
 msgstr ""
 
-#: views.py:779
-msgid "Map has been updated!"
-msgstr "Peta telah dikemas kini!"
-
-#: views.py:804
+#: views.py:803
 msgid "Map editors updated with success!"
 msgstr "Penyunting peta telah dikemas kini dengan jayanya!"
 
-#: views.py:842
+#: views.py:841
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Pautan suntingan uMap untuk peta anda: %(map_name)s"
 
-#: views.py:845
+#: views.py:844
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Ini pautan suntingan rahsia anda: %(link)s"
 
-#: views.py:851
+#: views.py:850
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mel telah dihantar ke %(email)s"
 
-#: views.py:862
+#: views.py:861
 msgid "Only its owner can delete the map."
 msgstr "Hanya pemiliknya sahaja mampu memadamkan peta."
 
-#: views.py:890
+#: views.py:889
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Peta anda telah diklon! Jika anda ingin menyunting peta ini dari komputer lain, sila gunakan pautan ini: %(anonymous_url)s"
 
-#: views.py:895
+#: views.py:894
 msgid "Congratulations, your map has been cloned!"
 msgstr "Tahniah, peta anda telah berjaya diklon!"
 
-#: views.py:1131
+#: views.py:1130
 msgid "Layer successfully deleted."
 msgstr "Lapisan telah berjaya dipadamkan."
 
-#: views.py:1153
+#: views.py:1152
 msgid "Permissions updated with success!"
 msgstr "Kebenaran telah dikemas kini dengan jayanya!"

@@ -431,7 +431,14 @@ const locale = {
     "Type a place name or coordinates": "Entrer un lieu ou des coordonnées",
     "copy": "copier",
     "full backup": "sauvegarde complète",
-    "settings": "paramètres"
+    "settings": "paramètres",
+    "Action not allowed :(": "Action non autorisée :(",
+    "Bring feature to center": "Centrer la carte sur cet élément",
+    "Current map view": "Lister seulement les éléments visibles",
+    "Features in this layer: {count}": "Éléments dans ce calque: {count}",
+    "Filter": "Filtrer",
+    "Problem in the response": "Problème dans la réponse du serveur",
+    "Recent": "Récents"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

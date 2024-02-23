@@ -537,12 +537,17 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.on('define', this.onDefine)
   },
 
-  onDefine: function () {
+  onDefine: async function () {
     this.buttons.innerHTML = ''
     this.footer.innerHTML = ''
+    const [{ pictogram_list }, response, error] = await this.builder.map.server.get(
+      this.builder.map.options.urls.pictogram_list_json
+    )
+    if (!error) this.pictogram_list = pictogram_list
     this.buildTabs()
     const value = this.value()
-    if (!value || L.Util.isPath(value)) this.showSymbolsTab()
+    if (U.Icon.RECENT.length) this.showRecentTab()
+    else if (!value || L.Util.isPath(value)) this.showSymbolsTab()
     else if (L.Util.isRemoteUrl(value) || L.Util.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
     const closeButton = L.DomUtil.createButton(
@@ -562,6 +567,20 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   buildTabs: function () {
     this.tabs.innerHTML = ''
+    if (U.Icon.RECENT.length) {
+      const recent = L.DomUtil.add(
+        'button',
+        'flat tab-recent',
+        this.tabs,
+        L._('Recent')
+      )
+      L.DomEvent.on(recent, 'click', L.DomEvent.stop).on(
+        recent,
+        'click',
+        this.showRecentTab,
+        this
+      )
+    }
     const symbol = L.DomUtil.add(
         'button',
         'flat tab-symbols',
@@ -624,12 +643,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       search = L.Util.normalize(this.searchInput.value),
       title = pictogram.attribution
         ? `${pictogram.name} — © ${pictogram.attribution}`
-        : pictogram.name
+        : pictogram.name || pictogram.src
     if (search && L.Util.normalize(title).indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass,
-      container = L.DomUtil.create('div', className, parent),
-      img = L.DomUtil.create('img', '', container)
-    img.src = value
+      container = L.DomUtil.create('div', className, parent)
+    U.Icon.makeIconElement(value, container)
     container.title = title
     L.DomEvent.on(
       container,
@@ -653,10 +671,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.updatePreview()
   },
 
-  addCategory: function (category, items) {
-    const parent = L.DomUtil.create('div', 'umap-pictogram-category'),
-      title = L.DomUtil.add('h6', '', parent, category),
-      grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+  addCategory: function (items, name) {
+    const parent = L.DomUtil.create('div', 'umap-pictogram-category')
+    if (name) L.DomUtil.add('h6', '', parent, name)
+    const grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
     let status = false
     for (let item of items) {
       status = this.addIconPreview(item, grid) || status
@@ -676,33 +694,42 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const sorted = Object.entries(categories).toSorted(([a], [b]) =>
       L.Util.naturalSort(a, b)
     )
-    for (let [category, items] of sorted) {
-      this.addCategory(category, items)
+    for (let [name, items] of sorted) {
+      this.addCategory(items, name)
     }
   },
 
-  isDefault: function () {
-    return !this.value() || this.value() === this.obj.getMap().options.default_iconUrl
+  buildRecentList: function () {
+    this.grid.innerHTML = ''
+    const items = U.Icon.RECENT.map((src) => ({
+      src,
+    }))
+    this.addCategory(items)
   },
 
-  showSymbolsTab: async function () {
-    this.openTab('symbols')
+  isDefault: function () {
+    return !this.value() || this.value() === U.DEFAULT_ICON_URL
+  },
+
+  addGrid: function (onSearch) {
     this.searchInput = L.DomUtil.create('input', '', this.body)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
     this.grid = L.DomUtil.create('div', '', this.body)
-    L.DomEvent.on(this.searchInput, 'input', this.buildSymbolsList, this)
-    if (this.pictogram_list) {
-      this.buildSymbolsList()
-    } else {
-      const [{ pictogram_list }, response, error] = await this.builder.map.server.get(
-        this.builder.map.options.urls.pictogram_list_json
-      )
-      if (!error) {
-        this.pictogram_list = pictogram_list
-        this.buildSymbolsList()
-      }
-    }
+    L.DomEvent.on(this.searchInput, 'input', onSearch, this)
+  },
+
+  showRecentTab: function () {
+    if (!U.Icon.RECENT.length) return
+    this.openTab('recent')
+    this.addGrid(this.buildRecentList)
+    this.buildRecentList()
+  },
+
+  showSymbolsTab: function () {
+    this.openTab('symbols')
+    this.addGrid(this.buildSymbolsList)
+    this.buildSymbolsList()
   },
 
   showCharsTab: function () {
@@ -989,10 +1016,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
       on_select: L.bind(this.onSelect, this),
       on_unselect: L.bind(this.onUnselect, this),
     }
-    this.autocomplete = new U.AutoComplete.Ajax.SelectMultiple(
-      this.parentNode,
-      options
-    )
+    this.autocomplete = new U.AutoComplete.Ajax.SelectMultiple(this.parentNode, options)
     this._values = this.toHTML()
     if (this._values)
       for (let i = 0; i < this._values.length; i++)

@@ -58,62 +58,62 @@ L.Map.mergeOptions({
 U.Map = L.Map.extend({
   includes: [ControlsMixin],
   editableOptions: {
-    'zoom': undefined,
-    'scrollWheelZoom': Boolean,
-    'scaleControl': Boolean,
-    'moreControl': Boolean,
-    'miniMap': Boolean,
-    'displayPopupFooter': undefined,
-    'onLoadPanel': String,
-    'defaultView': String,
-    'name': String,
-    'description': String,
-    'licence': undefined,
-    'tilelayer': undefined,
-    'overlay': undefined,
-    'limitBounds': undefined,
-    'color': String,
-    'iconClass': String,
-    'iconUrl': String,
-    'smoothFactor': undefined,
-    'iconOpacity': undefined,
-    'opacity': undefined,
-    'weight': undefined,
-    'fill': undefined,
-    'fillColor': undefined,
-    'fillOpacity': undefined,
-    'dashArray': undefined,
-    'popupShape': String,
-    'popupTemplate': String,
-    'popupContentTemplate': String,
-    'zoomTo': undefined,
-    'captionBar': Boolean,
-    'captionMenus': Boolean,
-    'slideshow': undefined,
-    'sortKey': undefined,
-    'labelKey': undefined,
-    'filterKey': undefined,
-    'facetKey': undefined,
-    'slugKey': undefined,
-    'showLabel': undefined,
-    'labelDirection': undefined,
-    'labelInteractive': undefined,
-    'outlinkTarget': undefined,
-    'shortCredit': undefined,
-    'longCredit': undefined,
-    'permanentCredit': undefined,
-    'permanentCreditBackground': undefined,
-    'zoomControl': 'NullableBoolean',
-    'datalayersControl': 'NullableBoolean',
-    'searchControl': 'NullableBoolean',
-    'locateControl': 'NullableBoolean',
-    'fullscreenControl': 'NullableBoolean',
-    'editinosmControl': 'NullableBoolean',
-    'embedControl': 'NullableBoolean',
-    'measureControl': 'NullableBoolean',
-    'tilelayersControl': 'NullableBoolean',
-    'starControl': 'NullableBoolean',
-    'easing': undefined,
+    zoom: undefined,
+    scrollWheelZoom: Boolean,
+    scaleControl: Boolean,
+    moreControl: Boolean,
+    miniMap: Boolean,
+    displayPopupFooter: undefined,
+    onLoadPanel: String,
+    defaultView: String,
+    name: String,
+    description: String,
+    licence: undefined,
+    tilelayer: undefined,
+    overlay: undefined,
+    limitBounds: undefined,
+    color: String,
+    iconClass: String,
+    iconUrl: String,
+    smoothFactor: undefined,
+    iconOpacity: undefined,
+    opacity: undefined,
+    weight: undefined,
+    fill: undefined,
+    fillColor: undefined,
+    fillOpacity: undefined,
+    dashArray: undefined,
+    popupShape: String,
+    popupTemplate: String,
+    popupContentTemplate: String,
+    zoomTo: Number,
+    captionBar: Boolean,
+    captionMenus: Boolean,
+    slideshow: undefined,
+    sortKey: undefined,
+    labelKey: String,
+    filterKey: undefined,
+    facetKey: undefined,
+    slugKey: undefined,
+    showLabel: 'NullableBoolean',
+    labelDirection: undefined,
+    labelInteractive: undefined,
+    outlinkTarget: undefined,
+    shortCredit: undefined,
+    longCredit: undefined,
+    permanentCredit: undefined,
+    permanentCreditBackground: undefined,
+    zoomControl: 'NullableBoolean',
+    datalayersControl: 'NullableBoolean',
+    searchControl: 'NullableBoolean',
+    locateControl: 'NullableBoolean',
+    fullscreenControl: 'NullableBoolean',
+    editinosmControl: 'NullableBoolean',
+    embedControl: 'NullableBoolean',
+    measureControl: 'NullableBoolean',
+    tilelayersControl: 'NullableBoolean',
+    starControl: 'NullableBoolean',
+    easing: undefined,
   },
 
   initialize: function (el, geojson) {
@@ -139,6 +139,7 @@ U.Map = L.Map.extend({
     this.setOptionsFromQueryString(geojson.properties)
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
+    U.DEFAULT_ICON_URL = this.options.default_iconUrl
 
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
@@ -322,7 +323,7 @@ U.Map = L.Map.extend({
       }
     })
 
-    window.onbeforeunload = () => this.editEnabled && this.isDirty || null
+    window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
@@ -342,8 +343,12 @@ U.Map = L.Map.extend({
         case 'NullableBoolean':
           L.Util.setNullableBooleanFromQueryString(options, key)
           break
+        case Number:
+          L.Util.setNumberFromQueryString(options, key)
+          break
         case String:
           L.Util.setFromQueryString(options, key)
+          break
       }
     }
     // Specific case for datalayersControl
@@ -396,7 +401,7 @@ U.Map = L.Map.extend({
     this._controls.search = new U.SearchControl()
     this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
-    this._controls.star = new U.StarControl(this)
+    if (this.options.user) this._controls.star = new U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -463,6 +468,7 @@ U.Map = L.Map.extend({
       status = this.options[`${name}Control`]
       if (status === false) continue
       control = this._controls[name]
+      if (!control) continue
       control.addTo(this)
       if (status === undefined || status === null)
         L.DomUtil.addClass(control._container, 'display-on-more')
@@ -566,12 +572,7 @@ U.Map = L.Map.extend({
       if (key === U.Keys.E && modifierKey && !this.editEnabled) {
         L.DomEvent.stop(e)
         this.enableEdit()
-      } else if (
-        key === U.Keys.E &&
-        modifierKey &&
-        this.editEnabled &&
-        !this.isDirty
-      ) {
+      } else if (key === U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
         L.DomEvent.stop(e)
         this.disableEdit()
         this.ui.closePanel()
@@ -1129,7 +1130,7 @@ U.Map = L.Map.extend({
     }
   },
 
-  sendEditLink: function () {
+  sendEditLink: async function () {
     const input = this.ui._alert.querySelector('input')
     const email = input.value
 
@@ -1137,29 +1138,25 @@ U.Map = L.Map.extend({
     formData.append('email', email)
 
     const url = this.urls.get('map_send_edit_link', { map_id: this.options.umap_id })
-    this.post(url, {
-      data: formData,
-    })
+    await this.server.post(url, {}, formData)
   },
 
-  star: function () {
+  star: async function () {
     if (!this.options.umap_id)
       return this.ui.alert({
         content: L._('Please save the map first'),
         level: 'error',
       })
     const url = this.urls.get('map_star', { map_id: this.options.umap_id })
-    this.post(url, {
-      context: this,
-      callback: function (data) {
-        this.options.starred = data.starred
-        let msg = data.starred
-          ? L._('Map has been starred')
-          : L._('Map has been unstarred')
-        this.ui.alert({ content: msg, level: 'info' })
-        this.renderControls()
-      },
-    })
+    const [data, response, error] = await this.server.post(url)
+    if (!error) {
+      this.options.starred = data.starred
+      let msg = data.starred
+        ? L._('Map has been starred')
+        : L._('Map has been unstarred')
+      this.ui.alert({ content: msg, level: 'info' })
+      this.renderControls()
+    }
   },
 
   geometry: function () {

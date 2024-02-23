@@ -39,7 +39,7 @@ documentation.
 In general, you'll need to add something like this in your local settings:
 
 ```python title="local_settings.py"
-FROM_EMAIL = "youradmin@email.org"
+DEFAULT_FROM_EMAIL = "youradmin@email.org"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.provider.org"
 EMAIL_PORT = 456
@@ -60,7 +60,7 @@ Can be set through env var: `ENABLE_ACCOUNT_LOGIN=1`
 User accounts can be managed via the Django admin page (`{SITE_URL}/admin`).
 The required superuser must be created on the command line with this command: `umap createsuperuser`.
 
-#### FROM_EMAIL
+#### DEFAULT_FROM_EMAIL
 
 See `EMAIL_BACKEND`.
 
@@ -206,6 +206,7 @@ Link to show on the header under the "Feedback and help" label.
 #### UMAP_HOME_FEED
 
 Which feed to display on the home page. Three valid values:
+
 - `"latest"`, which shows the latest maps (default)
 - `"highlighted"`, which shows the maps that have been starred by a staff member
 - `None`, which does not show any map on the home page
@@ -262,8 +263,8 @@ Can be set to `X-Accel-Redirect` to enable the [NGINX X-Accel](https://www.nginx
 
 See the NGINX documentation in addition.
 
-#### SOCIAL_AUTH_OPENSTREETMAP_KEY, SOCIAL_AUTH_OPENSTREETMAP_SECRET
+#### SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY, SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET
 
-If you use OpenStreetMap as OAuth provider, use those settings.
+If you use OpenStreetMap as OAuth 2 provider, you can use those settings.
 
 Otherwise, use any valid [python-social-auth configuration](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html).

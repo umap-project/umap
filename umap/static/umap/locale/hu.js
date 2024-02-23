@@ -431,7 +431,14 @@ const locale = {
     "Type a place name or coordinates": "Helynév vagy koordináták megadása",
     "copy": "másolás",
     "full backup": "teljes biztonsági másolat",
-    "settings": "beállítások"
+    "settings": "beállítások",
+    "Action not allowed :(": "Nem engedélyezett művelet :(",
+    "Bring feature to center": "Objektum középre hozása",
+    "Current map view": "Jelenlegi térképnézet",
+    "Features in this layer: {count}": "Objektumok ezen a rétegen: {count}",
+    "Filter": "Szűrő",
+    "Problem in the response": "Hiba a válaszban",
+    "Recent": "Legutóbbi"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

@@ -10,7 +10,7 @@ from http.client import InvalidURL
 from io import BytesIO
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, quote_plus, urlparse
 from urllib.request import Request, build_opener
 
 from django.conf import settings
@@ -595,8 +595,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         context["oembed_absolute_uri"] = self.request.build_absolute_uri(
             reverse("map_oembed")
         )
-        context["absolute_uri"] = self.request.build_absolute_uri(
-            self.object.get_absolute_url()
+        context["quoted_absolute_uri"] = quote_plus(
+            self.request.build_absolute_uri(self.object.get_absolute_url())
         )
         return context
 
@@ -695,7 +695,7 @@ class MapOEmbed(View):
         if "slug" not in kwargs or "map_id" not in kwargs:
             raise Http404("Invalid URL path.")
 
-        map_ = Map.objects.get(id=kwargs["map_id"], slug=kwargs["slug"])
+        map_ = get_object_or_404(Map, id=kwargs["map_id"])
 
         if map_.share_status != Map.PUBLIC:
             raise PermissionDenied("This map is not public.")
@@ -776,7 +776,6 @@ class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=self.get_permissions(),
-            info=_("Map has been updated!"),
         )
 
 
@@ -843,7 +842,7 @@ class SendEditLink(FormLessEditMixin, FormView):
                 % {"map_name": self.object.name}
             ),
             _("Here is your secret edit link: %(link)s" % {"link": link}),
-            settings.FROM_EMAIL,
+            settings.DEFAULT_FROM_EMAIL,
             [email],
             fail_silently=False,
         )

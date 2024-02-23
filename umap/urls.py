@@ -156,7 +156,7 @@ map_urls = [
         name="datalayer_permissions",
     ),
 ]
-if settings.FROM_EMAIL:
+if settings.DEFAULT_FROM_EMAIL:
     map_urls.append(
         re_path(
             r"^map/(?P<map_id>[\d]+)/send-edit-link/$",

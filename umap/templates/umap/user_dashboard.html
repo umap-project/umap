@@ -58,7 +58,7 @@
           const mapId = button.dataset.mapId
           if (!document.querySelector(`#${mapId}_target`).hasChildNodes()) {
             const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
-            const map = new L.U.Map(`${mapId}_target`, previewSettings)
+            const map = new U.Map(`${mapId}_target`, previewSettings)
             CACHE[mapId] = map
           } else {
             CACHE[mapId].invalidateSize()

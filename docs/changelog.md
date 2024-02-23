@@ -1,68 +1,93 @@
 # Changelog
 
-## 2.0.0 - soon
+## 2.0.1 - 2024-02-18
+
+* Do not use the `compress` command anymore for the Docker image (#1620)
+
+## 2.0.0 - 2024-02-16
 
 This release is inauguring a new era in versionning uMap: in the future, we'll take care of better documenting breaking changes, so expect more major releases from now on. More details on [how we version](https://docs.umap-project.org/en/master/release/#when-to-make-a-release).
 
-The two main changes are:
-- on the front-end side, we now use native ESM modules, so this may break on old browsers (see our [ESlint configuration](https://github.com/umap-project/umap/blob/a0634e5f55179fb52f7c00e39236b6339a7714b9/package.json#L68))
-- on the back-end, we upgraded to Django 5.x, which drops support for Python 3.8 and Python 3.9.
+The main changes are:
+
+* on the front-end side, we now use native ESM modules, so this may break on old browsers (see our [ESlint configuration](https://github.com/umap-project/umap/blob/a0634e5f55179fb52f7c00e39236b6339a7714b9/package.json#L68))
+* on the back-end, we upgraded to Django 5.x, which drops support for Python 3.8 and Python 3.9.
+* the OpenStreetMap OAuth1 client is not supported anymore (now deprecated by OpenStreetMap.org)
+* license switched from WTFPL to AGPLv3: having an OSI valid licence was a request from our partners and sponsors (#1605)
 
 More details below!
 
 ### Breaking changes
 
-- updrade to Django 5.x, which drops support for python < 3.10
-- remove `django-compressor`, so `umap compress` is not a valid command anymore (compress is now done in the `collectstatic` process itself) (#1544, #1539)
-- remove support for settings starting with `LEAFLET_STORAGE_` (deprecated since 1.0.0)
+* updrade to Django 5.x drops support for Python < 3.10
+* `django-compressor` has been removed, so `umap compress` is not a valid command anymore (compress is now done in the `collectstatic` process itself) (#1544, #1539)
+* removed support for settings starting with `LEAFLET_STORAGE_` (deprecated since 1.0.0)
+* removed support for deprecated OpenStreetMap OAuth1 backend in favour of OAuth2 (see below)
+* `FROM_EMAIL` setting is replaced by `DEFAULT_FROM_EMAIL`, which is [Django standard](https://docs.djangoproject.com/en/5.0/ref/settings/#default-from-email)
+
+#### Migrate to OpenStreetMap OAuth2
+
+* create a new app on OSM.org: https://www.openstreetmap.org/oauth2/applications/
+* add the key and secret in your settings (or as env vars):
+    * `SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY=xxxx`
+    * `SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET=xxxx`
+* if you changed `AUTHENTICATION_BACKENDS`, you need to now use `"social_core.backends.openstreetmap_oauth2.OpenStreetMapOAuth2"`
+* run the migration command, that will migrate all accounts from OAuth1 to Oauth2:
+  `umap migrate`
 
 ### New features
 
-- Ability to clone, delete and download all maps from user’s dashboard (#1430)
-- Add experimental "map preview" in `/map/` endpoint (#1573)
-- Adapt browser counter to the currently displayed features (#1572)
-- Set preconnect link for tilelayer (#1552)
-- Create an oEmbed endpoint for maps `/map/oembed/` (#1526)
-- Use SVG for default icon (circle) (#1562)
-- introduce `UMAP_HOME_FEED` to control which maps are shown on the home page (#1531)
+* Ability to clone, delete and download all maps from user’s dashboard (#1430)
+* Add experimental "map preview" in `/map/` endpoint (#1573)
+* Adapt features counter in the databrowser to the currently displayed features (#1572)
+* Create an oEmbed endpoint for maps `/map/oembed/` (#1526)
+* introduce `UMAP_HOME_FEED` to control which maps are shown on the home page (#1531)
+* better algorithm (WCAG 21 based) to manage text and picto contrast (#1593)
+* show last used pictograms in a separate tab (#1595)
 
 ### Bug fixes
 
-- Uuse variable for color in browser if any (#1584)
-- Non loaded layers should still be visible in legend and data browser (#1581)
-- Do not try to reset tooltip of feature not on map (#1576)
-- Empty file input when closing the importer panel (#1535)
-- Honour datalayersControl=expanded in querystring (#1538)
-- Fix icons for mailto and tel (#1547)
-- Do not ask more classes than available values in choropleth mode (#1550)
-- Build browser once features are on the map, not before (#1551)
-- Replace `list.delete` call by the proper `remove` method
-- Prevent datalayer to resetting to an old version on save (#1558)
-- Messages coming from Django where never displayed in map view (#1588)
-- Browser `inBbox` setting was not persistent  (#1586)
-- Popup was not opening on click on browser when `inBbox` was active (#1586)
+* Use variable for color in browser if any (#1584)
+* Non loaded layers should still be visible in legend and data browser (#1581)
+* Do not try to reset tooltip of feature not on map (#1576)
+* Empty file input when closing the importer panel (#1535)
+* Honour datalayersControl=expanded in querystring (#1538)
+* Fix icons for mailto and tel (#1547)
+* Do not ask more classes than available values in choropleth mode (#1550)
+* Build browser once features are on the map, not before (#1551)
+* Replace `list.delete` call by the proper `remove` method
+* Prevent datalayer to resetting to an old version on save (#1558)
+* Messages coming from Django where never displayed in map view (#1588)
+* Browser `inBbox` setting was not persistent  (#1586)
+* Popup was not opening on click on browser when `inBbox` was active (#1586)
+* reset table editor properties after creating a new one (#1610)
+* do not try to animate the panel (#1608)
 
 ### Internal changes
 
-- Move XHR management to a module and use fetch (#1555)
-- Use https://umap-project.org link in map footer (#1541)
-- Add support for JS modules (+module for URLs handling) (#1463)
-- Pin versions in pyproject.toml (#1514)
-- Set a umap-fragment web component for lists (#1516)
-- Load Leaflet as a module
-- Replaced `L.U` global by `U`
+* Move XHR management to a module and use fetch (#1555)
+* Use https://umap-project.org link in map footer (#1541)
+* Add support for JS modules (+module for URLs handling) (#1463)
+* Pin versions in pyproject.toml (#1514)
+* Set a umap-fragment web component for lists (#1516)
+* Load Leaflet as a module
+* Replaced `L.U` global by `U`
+* Use SVG for default icon (circle) (#1562)
+* Set preconnect link for tilelayer (#1552)
 
 ### Documentation
 
-- Define an explicit release stragegy (#1567)
+* Define an explicit release stragegy (#1567)
 
 ### Changed templates
 
-- added `header.html` to add extra code in `<head>`
-- added `branding.html` with site logo
-- `registration/login.html`, which is not loaded in ajax anymore (and include `branding.html`)
-- `umap/content.html` the JS call to load more have changed
-- `umap/navigation.html`: it now includes `branding.html`
+* added `header.html` to add extra code in `<head>`
+* added `branding.html` with site logo
+* `registration/login.html`, which is not loaded in ajax anymore (and include `branding.html`)
+* `umap/content.html` the JS call to load more have changed
+* `umap/navigation.html`: it now includes `branding.html`
+* `umap/map_table.html`: total revamp
+* `umap/user_dashboard.html`: improved table header (search + download all) + inline JS changed
 
 ## 1.13.2 - 2024-01-25
 

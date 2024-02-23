@@ -150,3 +150,22 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+
+
+def test_alert_message_after_create(tilelayer, live_server, page):
+    page.goto(f"{live_server.url}/en/map/new")
+    save = page.get_by_role("button", name="Save")
+    expect(save).to_be_visible()
+    alert = page.locator(".umap-alert")
+    expect(alert).to_be_hidden()
+    with page.expect_response(re.compile(r".*/map/create/")):
+        save.click()
+    expect(alert).to_be_visible()
+    expect(
+        alert.get_by_text(
+            "Your map has been created! As you are not logged in, here is your secret "
+            "link to edit the map, please keep it safe:"
+        )
+    ).to_be_visible()
+    expect(alert.get_by_role("button", name="Copy")).to_be_visible()
+    expect(alert.get_by_role("button", name="Send me the link")).to_be_visible()

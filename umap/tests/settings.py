@@ -3,7 +3,7 @@ import os
 from umap.settings.base import *  # pylint: disable=W0614,W0401
 
 SECRET_KEY = "justfortests"
-FROM_EMAIL = "test@test.org"
+DEFAULT_FROM_EMAIL = "test@test.org"
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 STORAGES["staticfiles"][
     "BACKEND"

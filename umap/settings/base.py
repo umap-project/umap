@@ -128,9 +128,9 @@ INSTALLED_APPS = (
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-FROM_EMAIL = None
+DEFAULT_FROM_EMAIL = None
 # https://docs.djangoproject.com/en/4.2/releases/4.1/#forms
-FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer"
+FORM_RENDERER = "django.forms.renderers.DjangoTemplates"
 
 # =============================================================================
 # Calculation of directories relative to the project module location
@@ -274,11 +274,15 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 
 AUTHENTICATION_BACKENDS = ()
 
-SOCIAL_AUTH_OPENSTREETMAP_KEY = env("SOCIAL_AUTH_OPENSTREETMAP_KEY", default="")
-SOCIAL_AUTH_OPENSTREETMAP_SECRET = env("SOCIAL_AUTH_OPENSTREETMAP_SECRET", default="")
-if SOCIAL_AUTH_OPENSTREETMAP_KEY and SOCIAL_AUTH_OPENSTREETMAP_SECRET:
+SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY = env(
+    "SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY", default=""
+)
+SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET = env(
+    "SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET", default=""
+)
+if SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY and SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET:
     AUTHENTICATION_BACKENDS += (
-        "social_core.backends.openstreetmap.OpenStreetMapOAuth",
+        "social_core.backends.openstreetmap_oauth2.OpenStreetMapOAuth2",
     )
 
 AUTHENTICATION_BACKENDS += ("django.contrib.auth.backends.ModelBackend",)

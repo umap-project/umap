@@ -1,4 +1,7 @@
 U.Icon = L.DivIcon.extend({
+  statics: {
+    RECENT: [],
+  },
   initialize: function (map, options) {
     this.map = map
     const default_options = {
@@ -14,11 +17,22 @@ U.Icon = L.DivIcon.extend({
     }
   },
 
+  _setRecent: function (url) {
+    if (L.Util.hasVar(url)) return
+    if (url === U.DEFAULT_ICON_URL) return
+    if (U.Icon.RECENT.indexOf(url) === -1) {
+      U.Icon.RECENT.push(url)
+    }
+  },
+
   _getIconUrl: function (name) {
     let url
-    if (this.feature && this.feature._getIconUrl(name))
+    if (this.feature && this.feature._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
-    else url = this.options[`${name}Url`]
+      this._setRecent(url)
+    } else {
+      url = this.options[`${name}Url`]
+    }
     return this.formatUrl(url, this.feature)
   },
 
@@ -216,13 +230,13 @@ U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
    * src: the raw "icon" value, can be an URL, a path, text, emoticon, etc.
    * bgcolor: the background color, used for caching and in case we cannot guess the
    * parent background color
-  */
+   */
   if (!icon) return
 
   if (L.DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
     // only for internal SVG, as invert could do weird things
-    if (L.Util.isPath(src) && src.endsWith('.svg')) {
+    if (L.Util.isPath(src) && src.endsWith('.svg') && src !== U.DEFAULT_ICON_URL) {
       // Must be called after icon container is added to the DOM
       // An image
       icon.style.filter = 'invert(1)'
