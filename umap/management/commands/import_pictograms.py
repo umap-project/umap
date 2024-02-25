@@ -62,6 +62,6 @@ class Command(BaseCommand):
                 if path.name != self.path.name:  # Subfolders only
                     picto.category = path.name
                 picto.attribution = self.attribution
-                with (path / filename).open("rb") as f:
+                with (filename).open("rb") as f:
                     picto.pictogram.save(filename.name, File(f), save=True)
                 self.stdout.write(f"✔ Imported pictogram {filename}.")
