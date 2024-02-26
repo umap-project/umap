@@ -449,7 +449,10 @@ class DataLayer(NamedModel):
         return new
 
     def is_valid_version(self, name):
-        return name.startswith("%s_" % self.pk) and name.endswith(".geojson")
+        valid_prefixes = [name.startswith("%s_" % self.pk)]
+        if self.id:
+            valid_prefixes.append(name.startswith("%s_" % self.id))
+        return any(valid_prefixes) and name.endswith(".geojson")
 
     def version_metadata(self, name):
         els = name.split(".")[0].split("_")
