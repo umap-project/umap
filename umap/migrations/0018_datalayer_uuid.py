@@ -5,32 +5,38 @@ import uuid
 from django.db import migrations, models
 
 
-def gen_uuid(apps, schema_editor):
-    DataLayer = apps.get_model("umap", "DataLayer")
-    for row in DataLayer.objects.all():
-        row.uuid = uuid.uuid4()
-        row.save(update_fields=["uuid"])
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ("umap", "0017_migrate_to_openstreetmap_oauth2"),
     ]
 
     operations = [
+        # Add the new uuid field
         migrations.AddField(
             model_name="datalayer",
             name="uuid",
             field=models.UUIDField(default=uuid.uuid4, editable=False, null=True),
         ),
-        migrations.RunPython(gen_uuid, reverse_code=migrations.RunPython.noop),
+        # Generate UUIDs for existing records
+        migrations.RunSQL("UPDATE umap_datalayer SET uuid = gen_random_uuid()"),
+        # Remove the primary key constraint
         migrations.RunSQL(
-            "ALTER TABLE umap_datalayer DROP CONSTRAINT umap_datalayer_pkey"
+            """
+            DO $$
+            BEGIN
+                EXECUTE 'ALTER TABLE umap_datalayer DROP CONSTRAINT ' || (
+                    SELECT indexname
+                    FROM pg_indexes
+                    WHERE tablename = 'umap_datalayer' AND indexname LIKE '%pkey'
+                );
+            END $$;
+            """
         ),
-        # migrations.RemoveConstraint("datalayer", "id"),
+        # Drop the "id" primary key…
         migrations.AlterField(
             "datalayer", name="id", field=models.IntegerField(null=True, blank=True)
         ),
+        # … to put it back on the "uuid"
         migrations.AlterField(
             model_name="datalayer",
             name="uuid",
@@ -38,5 +44,4 @@ class Migration(migrations.Migration):
                 default=uuid.uuid4, editable=False, unique=True, primary_key=True
             ),
         ),
-        # migrations.RemoveConstraint("datalayer", "")
     ]
