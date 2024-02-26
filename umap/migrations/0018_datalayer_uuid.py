@@ -15,7 +15,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="datalayer",
             name="uuid",
-            field=models.UUIDField(default=uuid.uuid4, editable=False, null=True),
+            field=models.UUIDField(
+                default=uuid.uuid4, editable=False, null=True, serialize=False
+            ),
         ),
         # Generate UUIDs for existing records
         migrations.RunSQL("UPDATE umap_datalayer SET uuid = gen_random_uuid()"),
@@ -41,7 +43,11 @@ class Migration(migrations.Migration):
             model_name="datalayer",
             name="uuid",
             field=models.UUIDField(
-                default=uuid.uuid4, editable=False, unique=True, primary_key=True
+                default=uuid.uuid4,
+                editable=False,
+                unique=True,
+                primary_key=True,
+                serialize=False,
             ),
         ),
     ]
