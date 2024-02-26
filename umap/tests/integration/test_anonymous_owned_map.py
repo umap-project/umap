@@ -1,10 +1,12 @@
 import re
+from smtplib import SMTPException
+from unittest.mock import patch
 
 import pytest
 from django.core.signing import get_cookie_signer
 from playwright.sync_api import expect
 
-from umap.models import DataLayer
+from umap.models import DataLayer, Map
 
 from ..base import DataLayerFactory
 
@@ -152,7 +154,9 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
     expect(option).to_have_text("Inherit")
 
 
-def test_alert_message_after_create(tilelayer, live_server, page):
+def test_alert_message_after_create(
+    tilelayer, live_server, page, monkeypatch, settings
+):
     page.goto(f"{live_server.url}/en/map/new")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
@@ -160,6 +164,7 @@ def test_alert_message_after_create(tilelayer, live_server, page):
     expect(alert).to_be_hidden()
     with page.expect_response(re.compile(r".*/map/create/")):
         save.click()
+    new_map = Map.objects.last()
     expect(alert).to_be_visible()
     expect(
         alert.get_by_text(
@@ -169,3 +174,28 @@ def test_alert_message_after_create(tilelayer, live_server, page):
     ).to_be_visible()
     expect(alert.get_by_role("button", name="Copy")).to_be_visible()
     expect(alert.get_by_role("button", name="Send me the link")).to_be_visible()
+    alert.get_by_placeholder("Email").fill("foo@bar.com")
+    with patch("umap.views.send_mail") as patched:
+        with page.expect_response(re.compile("/en/map/.*/send-edit-link/")):
+            alert.get_by_role("button", name="Send me the link").click()
+        assert patched.called
+        patched.assert_called_with(
+            "The uMap edit link for your map: Untitled map",
+            f"Here is your secret edit link: {new_map.get_anonymous_edit_url()}",
+            "test@test.org",
+            ["foo@bar.com"],
+            fail_silently=False,
+        )
+
+
+def test_email_sending_error_are_catched(tilelayer, page, live_server):
+    page.goto(f"{live_server.url}/en/map/new")
+    alert = page.locator(".umap-alert")
+    with page.expect_response(re.compile(r".*/map/create/")):
+        page.get_by_role("button", name="Save").click()
+    alert.get_by_placeholder("Email").fill("foo@bar.com")
+    with patch("umap.views.send_mail", side_effect=SMTPException) as patched:
+        with page.expect_response(re.compile("/en/map/.*/send-edit-link/")):
+            alert.get_by_role("button", name="Send me the link").click()
+        assert patched.called
+        expect(alert.get_by_text("Can't send email to foo@bar.com")).to_be_visible()

@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from http.client import InvalidURL
 from io import BytesIO
 from pathlib import Path
+from smtplib import SMTPException
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, quote_plus, urlparse
 from urllib.request import Request, build_opener
@@ -836,16 +837,19 @@ class SendEditLink(FormLessEditMixin, FormView):
             return HttpResponseBadRequest("Invalid")
         link = self.object.get_anonymous_edit_url()
 
-        send_mail(
-            _(
-                "The uMap edit link for your map: %(map_name)s"
-                % {"map_name": self.object.name}
-            ),
-            _("Here is your secret edit link: %(link)s" % {"link": link}),
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
-            fail_silently=False,
+        subject = _(
+            "The uMap edit link for your map: %(map_name)s"
+            % {"map_name": self.object.name}
         )
+        body = _("Here is your secret edit link: %(link)s" % {"link": link})
+        try:
+            send_mail(
+                subject, body, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False
+            )
+        except SMTPException:
+            return simple_json_response(
+                error=_("Can't send email to %(email)s" % {"email": email})
+            )
         return simple_json_response(
             info=_("Email sent to %(email)s" % {"email": email})
         )
