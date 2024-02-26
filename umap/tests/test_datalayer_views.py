@@ -240,14 +240,16 @@ def test_versions_can_return_old_format(client, datalayer, map, settings):
     )
 
     # store with the id prefix (rather than the uuid)
-    old_format_version = "%s/%s_1440918637.geojson" % (root, datalayer.id)
-    datalayer.geojson.storage.save(old_format_version, ContentFile("{}"))
+    old_format_version = "%s_1440918637.geojson" % datalayer.id
+    datalayer.geojson.storage.save(
+        ("%s/" % root) + old_format_version, ContentFile("{}")
+    )
 
     url = reverse("datalayer_versions", args=(map.pk, datalayer.pk))
     versions = json.loads(client.get(url).content.decode())
     assert len(versions["versions"]) == 4
     version = {
-        "name": "%s_1440918637.geojson" % datalayer.id,
+        "name": old_format_version,
         "size": 2,
         "at": "1440918637",
     }
