@@ -4,6 +4,16 @@ import uuid
 
 from django.db import migrations, models
 
+drop_index = """DO $$
+BEGIN
+    EXECUTE 'ALTER TABLE umap_datalayer DROP CONSTRAINT ' || (
+        SELECT indexname
+        FROM pg_indexes
+        WHERE tablename = 'umap_datalayer' AND indexname LIKE '%pk'
+    );
+END $$;
+"""
+
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -20,20 +30,12 @@ class Migration(migrations.Migration):
             ),
         ),
         # Generate UUIDs for existing records
-        migrations.RunSQL("UPDATE umap_datalayer SET uuid = gen_random_uuid()"),
-        # Remove the primary key constraint
         migrations.RunSQL(
-            """
-            DO $$
-            BEGIN
-                EXECUTE 'ALTER TABLE umap_datalayer DROP CONSTRAINT ' || (
-                    SELECT indexname
-                    FROM pg_indexes
-                    WHERE tablename = 'umap_datalayer' AND indexname LIKE '%pkey'
-                );
-            END $$;
-            """
+            "UPDATE umap_datalayer SET uuid = gen_random_uuid()",
+            reverse_sql=migrations.RunSQL.noop,
         ),
+        # Remove the primary key constraint
+        migrations.RunSQL(drop_index, reverse_sql=migrations.RunSQL.noop),
         # Drop the "id" primary key…
         migrations.AlterField(
             "datalayer", name="id", field=models.IntegerField(null=True, blank=True)
@@ -50,4 +52,5 @@ class Migration(migrations.Migration):
                 serialize=False,
             ),
         ),
+        migrations.RunSQL(migrations.RunSQL.noop, reverse_sql=drop_index),
     ]
