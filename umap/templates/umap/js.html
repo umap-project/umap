@@ -2,6 +2,12 @@
 <script type="module"
         src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
         defer></script>
+<script type="module" src="{% static 'umap/js/modules/leaflet-configure.js' %}" defer></script>
+{% if locale %}
+  {% with "umap/locale/"|add:locale|add:".js" as path %}
+    <script src="{% static path %}" defer></script>
+  {% endwith %}
+{% endif %}
 <script type="module" src="{% static 'umap/js/modules/global.js' %}" defer></script>
 <script src="{% static 'umap/vendors/editable/Path.Drag.js' %}" defer></script>
 <script src="{% static 'umap/vendors/editable/Leaflet.Editable.js' %}" defer></script>
@@ -39,11 +45,7 @@
 <script src="{% static 'umap/vendors/colorbrewer/colorbrewer.js' %}" defer></script>
 <script src="{% static 'umap/vendors/simple-statistics/simple-statistics.min.js' %}"
         defer></script>
-{% if locale %}
-  {% with "umap/locale/"|add:locale|add:".js" as path %}
-    <script src="{% static path %}" defer></script>
-  {% endwith %}
-{% endif %}
+
 <script src="{% static 'umap/js/umap.core.js' %}" defer></script>
 <script src="{% static 'umap/js/umap.autocomplete.js' %}" defer></script>
 <script src="{% static 'umap/js/umap.popup.js' %}" defer></script>
