@@ -50,3 +50,17 @@ def test_can_deactivate_wheel_from_query_string(map, live_server, page):
     expect(page).to_have_url(re.compile(r".*#7/.+"))
     page.mouse.wheel(0, 1)
     expect(page).to_have_url(re.compile(r".*#7/.+"))
+
+
+def test_zoom_control(map, live_server, datalayer, page):
+    control = page.locator(".leaflet-control-zoom")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(control).to_be_visible()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?zoomControl=false")
+    expect(control).to_be_hidden()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?zoomControl=true")
+    expect(control).to_be_visible()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?zoomControl=null")
+    expect(control).to_be_hidden()
+    page.get_by_title("More controls").click()
+    expect(control).to_be_visible()
