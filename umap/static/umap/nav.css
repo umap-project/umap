@@ -36,7 +36,7 @@ footer .i18n_switch {
     flex-direction: column;
 }
 .umap-nav a {
-    color: #263B58;
+    color: var(--color-darkBlue);
     padding: .4rem;
 }
 .umap-nav a:hover {

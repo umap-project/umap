@@ -1,0 +1,13 @@
+:root {
+    /* Colors. */
+    --color-waterMint: #B9F5D2;
+    --color-darkBlue: #263B58;
+    --color-lightGray: #ddd;
+    --color-darkGray: #323737;
+
+    /* Buttons. */
+    --button-primary-background: var(--color-waterMint);
+    --button-primary-color: var(--color-darkBlue);
+    --button-neutral-background: var(--color-lightGray);
+    --button-neutral-color: var(--color-darkGray);
+}

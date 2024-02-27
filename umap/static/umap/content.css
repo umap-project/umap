@@ -150,12 +150,12 @@ h2.section {
 }
 h2.tabs {
     text-transform: uppercase;
-    color: #263B58;
+    color: var(--color-darkBlue);
     text-align: left;
     padding-top: 28px;
 }
 h2.tabs a {
-    color: #263B58;
+    color: var(--color-darkBlue);
     text-decoration: underline;
     text-decoration-thickness: 3px;
     text-decoration-skip-ink: none;
@@ -164,7 +164,7 @@ h2.tabs a {
 }
 h2.tabs a:not(.selected) {
     font-weight: normal;
-    color: #263B58;
+    color: var(--color-darkBlue);
     text-decoration: none;
     margin-right: 0;
 }
@@ -205,8 +205,8 @@ body.content #umap-ui-container {
 
 input[type="submit"],
 .button {
-    background-color: #B9F5D2;
-    color: #263B58;
+    background-color: var(--button-primary-background);
+    color: var(--button-primary-color);
 }
 .button-primary {
     font-weight: bold;
@@ -215,8 +215,8 @@ input[type="submit"],
     background-color: #35537c;
 }
 .wrapper .neutral, .wrapper input[type="submit"].neutral {
-    background-color: #ddd;
-    color: #323737;
+    background-color: var(--button-neutral-background);
+    color: var(--button-neutral-color);
 }
 .wrapper.somber {
     background-color: #2E3641;
@@ -399,7 +399,7 @@ ul.umap-autocomplete {
     }
 }
 .table-header form input {
-    border: 2px solid #263B58;
+    border: 2px solid var(--color-darkBlue);
     border-radius: 0;
     padding: .5rem 1rem;
     margin-bottom: 0;
@@ -410,7 +410,7 @@ ul.umap-autocomplete {
     width: 30ch;
 }
 .table-header form input[type="submit"] {
-    background-color: #263B58;
+    background-color: var(--color-darkBlue);
     color: white;
     font-weight: bold;
 }
@@ -419,8 +419,8 @@ ul.umap-autocomplete {
     width: inherit;
     display: inline;
     padding: .5rem 1rem;
-    border: 2px solid #263B58;
-    color: #263B58;
+    border: 2px solid var(--color-darkBlue);
+    color: var(--color-darkBlue);
     font-weight: bold;
     background-color: initial;
     margin-bottom: 0;
@@ -443,7 +443,7 @@ ul.umap-autocomplete {
 .table-wrapper table a,
 .table-wrapper table thead tr th,
 .table-wrapper table th[scope="row"] {
-    color: #263B58;
+    color: var(--color-darkBlue);
     text-align: left;
     padding-left: 2px;
 }
@@ -469,7 +469,7 @@ ul.umap-autocomplete {
 .table-wrapper table input[type="submit"] {
     display: inline;
     background-color: transparent;
-    color: #263B58;
+    color: var(--color-darkBlue);
     padding: 0;
     width: inherit;
     height: 1rem;
@@ -527,7 +527,7 @@ dialog::backdrop {
     padding: 1rem;
 }
 .pagination a {
-    color: #263B58;
+    color: var(--color-darkBlue);
     text-decoration: underline;
 }
 
