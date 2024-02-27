@@ -1276,6 +1276,9 @@ U.FormBuilder = L.FormBuilder.extend({
 
   initialize: function (obj, fields, options) {
     this.map = obj.map || obj.getMap()
+    for (const [key, schema] of Object.entries(U.SCHEMA)) {
+      this.defaultOptions[key] = this.defaultOptions[key] || schema
+    }
     L.FormBuilder.prototype.initialize.call(this, obj, fields, options)
     this.on('finish', this.finish)
   },

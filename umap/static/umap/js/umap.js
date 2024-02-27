@@ -57,64 +57,6 @@ L.Map.mergeOptions({
 
 U.Map = L.Map.extend({
   includes: [ControlsMixin],
-  editableOptions: {
-    zoom: undefined,
-    scrollWheelZoom: Boolean,
-    scaleControl: Boolean,
-    moreControl: Boolean,
-    miniMap: Boolean,
-    displayPopupFooter: undefined,
-    onLoadPanel: String,
-    defaultView: String,
-    name: String,
-    description: String,
-    licence: undefined,
-    tilelayer: undefined,
-    overlay: undefined,
-    limitBounds: undefined,
-    color: String,
-    iconClass: String,
-    iconUrl: String,
-    smoothFactor: undefined,
-    iconOpacity: undefined,
-    opacity: undefined,
-    weight: undefined,
-    fill: undefined,
-    fillColor: undefined,
-    fillOpacity: undefined,
-    dashArray: undefined,
-    popupShape: String,
-    popupTemplate: String,
-    popupContentTemplate: String,
-    zoomTo: Number,
-    captionBar: Boolean,
-    captionMenus: Boolean,
-    slideshow: undefined,
-    sortKey: undefined,
-    labelKey: String,
-    filterKey: undefined,
-    facetKey: undefined,
-    slugKey: undefined,
-    showLabel: 'NullableBoolean',
-    labelDirection: undefined,
-    labelInteractive: undefined,
-    outlinkTarget: undefined,
-    shortCredit: undefined,
-    longCredit: undefined,
-    permanentCredit: undefined,
-    permanentCreditBackground: undefined,
-    zoomControl: 'NullableBoolean',
-    datalayersControl: 'NullableBoolean',
-    searchControl: 'NullableBoolean',
-    locateControl: 'NullableBoolean',
-    fullscreenControl: 'NullableBoolean',
-    editinosmControl: 'NullableBoolean',
-    embedControl: 'NullableBoolean',
-    measureControl: 'NullableBoolean',
-    tilelayersControl: 'NullableBoolean',
-    starControl: 'NullableBoolean',
-    easing: undefined,
-  },
 
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
@@ -329,7 +271,7 @@ U.Map = L.Map.extend({
     // FIXME retrocompat
     L.Util.setBooleanFromQueryString(options, 'displayDataBrowserOnLoad')
     L.Util.setBooleanFromQueryString(options, 'displayCaptionOnLoad')
-    for (const [key, type] of Object.entries(this.editableOptions)) {
+    for (const [key, { type }] of Object.entries(U.SCHEMA)) {
       switch (type) {
         case Boolean:
           L.Util.setBooleanFromQueryString(options, key)
@@ -904,7 +846,7 @@ U.Map = L.Map.extend({
 
     let mustReindex = false
 
-    for (const option of Object.keys(this.editableOptions)) {
+    for (const option of Object.keys(U.SCHEMA)) {
       if (typeof importedData.properties[option] !== 'undefined') {
         this.options[option] = importedData.properties[option]
         if (option === 'sortKey') mustReindex = true
@@ -1033,7 +975,7 @@ U.Map = L.Map.extend({
 
   exportOptions: function () {
     const properties = {}
-    for (const option of Object.keys(this.editableOptions)) {
+    for (const option of Object.keys(U.SCHEMA)) {
       if (typeof this.options[option] !== 'undefined') {
         properties[option] = this.options[option]
       }
