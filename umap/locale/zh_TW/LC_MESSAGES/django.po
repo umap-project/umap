@@ -161,7 +161,7 @@ msgstr "%(current_user)s 沒有任何地圖。"
 
 #: templates/auth/user_form.html:6
 msgid "My Maps"
-msgstr ""
+msgstr "我的地圖"
 
 #: templates/auth/user_form.html:7
 msgid "My Profile"
@@ -315,11 +315,11 @@ msgstr "預纜"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see"
-msgstr ""
+msgstr "誰可以檢視"
 
 #: templates/umap/map_table.html:9
 msgid "Who can edit"
-msgstr ""
+msgstr "誰可以編輯"
 
 #: templates/umap/map_table.html:10
 msgid "Last save"
@@ -351,11 +351,11 @@ msgstr "下載"
 
 #: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
-msgstr ""
+msgstr "複製"
 
 #: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
-msgstr ""
+msgstr "刪除"
 
 #: templates/umap/map_table.html:88
 msgid "first"
@@ -368,7 +368,7 @@ msgstr "先前"
 #: templates/umap/map_table.html:98
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
-msgstr ""
+msgstr "%(num_pages)s頁的%(maps_number)s"
 
 #: templates/umap/map_table.html:104
 msgid "next"
@@ -381,12 +381,12 @@ msgstr "最後"
 #: templates/umap/map_table.html:113
 #, python-format
 msgid "Lines per page: %(per_page)s"
-msgstr ""
+msgstr "每頁行數：%(per_page)s"
 
 #: templates/umap/map_table.html:118
 #, python-format
 msgid "%(count)s maps"
-msgstr ""
+msgstr "%(count)s地圖"
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
 msgid "My Dashboard"
@@ -483,7 +483,7 @@ msgstr "搜尋我的地圖"
 #: templates/umap/user_dashboard.html:11
 #, python-format
 msgid "My Maps (%(count)s)"
-msgstr ""
+msgstr "我的地圖 (%(count)s)"
 
 #: templates/umap/user_dashboard.html:13
 msgid "My profile"
@@ -491,12 +491,12 @@ msgstr "我的個人檔案"
 
 #: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
 msgid "Map’s title"
-msgstr ""
+msgstr "地圖標題"
 
 #: templates/umap/user_dashboard.html:32
 #, python-format
 msgid "Download %(count)s maps"
-msgstr ""
+msgstr "下載%(count)s地圖"
 
 #: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
@@ -508,7 +508,7 @@ msgstr "檢視地圖"
 
 #: views.py:704
 msgid "See full screen"
-msgstr ""
+msgstr "檢視全螢幕"
 
 #: views.py:803
 msgid "Map editors updated with success!"

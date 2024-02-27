@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023
+# Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023-2024
 # Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-15 13:53+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023\n"
+"Last-Translator: Yaya - Nurul Azeera Hidayah @ Muhammad Nur Hidayat Yasuyoshi (MNH48) <admin@mnh48.moe>, 2021,2023-2024\n"
 "Language-Team: Malay (http://app.transifex.com/openstreetmap/umap/language/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -155,7 +155,7 @@ msgstr "%(current_user)s tidak mempunyai peta."
 
 #: templates/auth/user_form.html:6
 msgid "My Maps"
-msgstr ""
+msgstr "Peta Saya"
 
 #: templates/auth/user_form.html:7
 msgid "My Profile"
@@ -305,15 +305,15 @@ msgstr "Nama"
 
 #: templates/umap/map_table.html:7
 msgid "Preview"
-msgstr ""
+msgstr "Pralihat"
 
 #: templates/umap/map_table.html:8
 msgid "Who can see"
-msgstr ""
+msgstr "Siapa boleh lihat"
 
 #: templates/umap/map_table.html:9
 msgid "Who can edit"
-msgstr ""
+msgstr "Siapa boleh sunting"
 
 #: templates/umap/map_table.html:10
 msgid "Last save"
@@ -329,7 +329,7 @@ msgstr "Tindakan"
 
 #: templates/umap/map_table.html:25 templates/umap/map_table.html:27
 msgid "Open preview"
-msgstr ""
+msgstr "Buka pralihat"
 
 #: templates/umap/map_table.html:46 templates/umap/map_table.html:48
 msgid "Share"
@@ -345,42 +345,42 @@ msgstr "Muat turun"
 
 #: templates/umap/map_table.html:63 templates/umap/map_table.html:65
 msgid "Clone"
-msgstr ""
+msgstr "Klon"
 
 #: templates/umap/map_table.html:73 templates/umap/map_table.html:75
 msgid "Delete"
-msgstr ""
+msgstr "Padam"
 
 #: templates/umap/map_table.html:88
 msgid "first"
-msgstr ""
+msgstr "pertama"
 
 #: templates/umap/map_table.html:89
 msgid "previous"
-msgstr ""
+msgstr "sebelumnya"
 
 #: templates/umap/map_table.html:98
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
-msgstr ""
+msgstr "Halaman %(maps_number)s daripada %(num_pages)s"
 
 #: templates/umap/map_table.html:104
 msgid "next"
-msgstr ""
+msgstr "seterusnya"
 
 #: templates/umap/map_table.html:105
 msgid "last"
-msgstr ""
+msgstr "terakhir"
 
 #: templates/umap/map_table.html:113
 #, python-format
 msgid "Lines per page: %(per_page)s"
-msgstr ""
+msgstr "Baris per halaman: %(per_page)s"
 
 #: templates/umap/map_table.html:118
 #, python-format
 msgid "%(count)s maps"
-msgstr ""
+msgstr "%(count)s peta"
 
 #: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
 msgid "My Dashboard"
@@ -477,7 +477,7 @@ msgstr "Gelintar peta saya"
 #: templates/umap/user_dashboard.html:11
 #, python-format
 msgid "My Maps (%(count)s)"
-msgstr ""
+msgstr "Peta Saya (%(count)s)"
 
 #: templates/umap/user_dashboard.html:13
 msgid "My profile"
@@ -485,12 +485,12 @@ msgstr "Profil saya"
 
 #: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
 msgid "Map’s title"
-msgstr ""
+msgstr "Tajuk peta"
 
 #: templates/umap/user_dashboard.html:32
 #, python-format
 msgid "Download %(count)s maps"
-msgstr ""
+msgstr "Muat turun %(count)s peta"
 
 #: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
@@ -502,7 +502,7 @@ msgstr "Lihat peta"
 
 #: views.py:704
 msgid "See full screen"
-msgstr ""
+msgstr "Lihat skrin penuh"
 
 #: views.py:803
 msgid "Map editors updated with success!"

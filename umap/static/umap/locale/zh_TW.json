@@ -431,5 +431,12 @@
     "Type a place name or coordinates": "輸入地點名稱或是座標",
     "copy": "複製",
     "full backup": " 完全備份",
-    "settings": "設定"
+    "settings": "設定",
+    "Action not allowed :(": "未被允許的動作 :(",
+    "Bring feature to center": "置中圖徵",
+    "Current map view": "目前地圖檢視",
+    "Features in this layer: {count}": "這個圖層的圖徵數：{count}",
+    "Filter": "篩選器",
+    "Problem in the response": "回應的問題",
+    "Recent": "目前"
 }
