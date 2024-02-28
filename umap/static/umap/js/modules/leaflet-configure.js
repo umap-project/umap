@@ -4,3 +4,4 @@ import * as L from '../../vendors/leaflet/leaflet-src.esm.js'
 import * as i18n from './i18n.js'
 
 window.L = { ...L, ...i18n }
+window.L._ = i18n.translate

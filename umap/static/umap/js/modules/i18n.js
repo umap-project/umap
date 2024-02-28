@@ -1,7 +1,7 @@
 // Comes from https://github.com/Leaflet/Leaflet/pull/9281
 import { Util } from '../../vendors/leaflet/leaflet-src.esm.js'
 
-const locales = {}
+export const locales = {}
 
 // @property locale: String
 // The current locale code, that will be used when translating strings.
@@ -19,7 +19,7 @@ export function setLocale(code) {
 }
 // @function translate(string: String, data?: Object): String
 // Actually try to translate the `string`, with optionnal variable passed in `data`.
-export function translate(string, data) {
+export function translate(string, data = {}) {
   if (locale && locales[locale] && locales[locale][string] !== undefined) {
     string = locales[locale][string]
   }
