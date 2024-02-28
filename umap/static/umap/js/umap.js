@@ -271,13 +271,11 @@ U.Map = L.Map.extend({
     // FIXME retrocompat
     L.Util.setBooleanFromQueryString(options, 'displayDataBrowserOnLoad')
     L.Util.setBooleanFromQueryString(options, 'displayCaptionOnLoad')
-    for (const [key, { type }] of Object.entries(U.SCHEMA)) {
-      switch (type) {
+    for (const [key, schema] of Object.entries(U.SCHEMA)) {
+      switch (schema.type) {
         case Boolean:
-          L.Util.setBooleanFromQueryString(options, key)
-          break
-        case 'NullableBoolean':
-          L.Util.setNullableBooleanFromQueryString(options, key)
+          if (schema.nullable) L.Util.setNullableBooleanFromQueryString(options, key)
+          else L.Util.setBooleanFromQueryString(options, key)
           break
         case Number:
           L.Util.setNumberFromQueryString(options, key)
@@ -1497,35 +1495,11 @@ U.Map = L.Map.extend({
   _editCredits: function (container) {
     const credits = L.DomUtil.createFieldset(container, L._('Credits'))
     const creditsFields = [
-      ['options.licence', { handler: 'LicenceChooser', label: L._('licence') }],
-      [
-        'options.shortCredit',
-        {
-          handler: 'Input',
-          label: L._('Short credits'),
-          helpEntries: ['shortCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.longCredit',
-        {
-          handler: 'Textarea',
-          label: L._('Long credits'),
-          helpEntries: ['longCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.permanentCredit',
-        {
-          handler: 'Textarea',
-          label: L._('Permanent credits'),
-          helpEntries: ['permanentCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.permanentCreditBackground',
-        { handler: 'Switch', label: L._('Permanent credits background') },
-      ],
+      'options.licence',
+      'options.shortCredit',
+      'options.longCredit',
+      'options.permanentCredit',
+      'options.permanentCreditBackground',
     ]
     const creditsBuilder = new U.FormBuilder(this, creditsFields, {
       callback: this.renderControls,
