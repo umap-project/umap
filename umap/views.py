@@ -1076,7 +1076,9 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
         try:
             merged_features = merge_features(
-                reference["features"], latest["features"], entrant["features"]
+                reference.get("features", []),
+                latest.get("features", []),
+                entrant.get("features", []),
             )
             latest["features"] = merged_features
             return latest
