@@ -488,7 +488,7 @@ class MapDetailMixin:
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
             "editMode": self.edit_mode,
-            "default_iconUrl": "%sumap/img/marker.svg" % settings.STATIC_URL,  # noqa
+            "schema": Map.schema,
             "umap_id": self.get_umap_id(),
             "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),

@@ -1184,25 +1184,22 @@ U.AttributionControl = L.Control.Attribution.extend({
       this._container,
       credits
     )
-    if (this._map.options.shortCredit) {
-      L.DomUtil.add(
-        'span',
-        '',
-        container,
-        ` — ${L.Util.toHTML(this._map.options.shortCredit)}`
-      )
+    const shortCredit = this._map.getOption('shortCredit'),
+      captionMenus = this._map.getOption('captionMenus')
+    if (shortCredit) {
+      L.DomUtil.add('span', '', container, ` — ${L.Util.toHTML(shortCredit)}`)
     }
-    if (this._map.options.captionMenus) {
+    if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
         .on(link, 'click', this._map.displayCaption, this._map)
         .on(link, 'dblclick', L.DomEvent.stop)
     }
-    if (window.top === window.self && this._map.options.captionMenus) {
+    if (window.top === window.self && captionMenus) {
       // We are not in iframe mode
       L.DomUtil.createLink('', container, ` — ${L._('Home')}`, '/')
     }
-    if (this._map.options.captionMenus) {
+    if (captionMenus) {
       L.DomUtil.createLink(
         '',
         container,

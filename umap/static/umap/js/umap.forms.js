@@ -653,7 +653,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   isDefault: function () {
-    return !this.value() || this.value() === U.DEFAULT_ICON_URL
+    return !this.value() || this.value() === U.SCHEMA.iconUrl.default
   },
 
   addGrid: function (onSearch) {

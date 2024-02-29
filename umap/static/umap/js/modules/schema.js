@@ -11,18 +11,22 @@ export const SCHEMA = {
   scaleControl: {
     type: Boolean,
     label: translate('Do you want to display the scale control?'),
+    default: true,
   },
   moreControl: {
     type: Boolean,
     label: translate('Do you want to display the «more» control?'),
+    default: true,
   },
   miniMap: {
     type: Boolean,
     label: translate('Do you want to display a minimap?'),
+    default: false,
   },
   displayPopupFooter: {
     type: Boolean,
     label: translate('Do you want to display popup footer?'),
+    default: false,
   },
   onLoadPanel: {
     type: String,
@@ -74,6 +78,7 @@ export const SCHEMA = {
     label: translate('color'),
     helpEntries: 'colorValue',
     inheritable: true,
+    default: 'DarkBlue',
   },
   iconClass: {
     type: String,
@@ -85,6 +90,7 @@ export const SCHEMA = {
       ['Drop', translate('Drop')],
       ['Ball', translate('Ball')],
     ],
+    default: 'Default',
   },
   iconUrl: {
     type: String,
@@ -101,6 +107,7 @@ export const SCHEMA = {
     label: translate('Simplify'),
     helpEntries: 'smoothFactor',
     inheritable: true,
+    default: 1.0,
   },
   iconOpacity: {
     type: Number,
@@ -109,6 +116,7 @@ export const SCHEMA = {
     step: 0.1,
     label: translate('icon opacity'),
     inheritable: true,
+    default: 1,
   },
   opacity: {
     type: Number,
@@ -117,6 +125,7 @@ export const SCHEMA = {
     step: 0.1,
     label: translate('opacity'),
     inheritable: true,
+    default: 0.5,
   },
   weight: {
     type: Number,
@@ -125,12 +134,14 @@ export const SCHEMA = {
     step: 1,
     label: translate('weight'),
     inheritable: true,
+    default: 3,
   },
   fill: {
     type: Boolean,
     label: translate('fill'),
     helpEntries: 'fill',
     inheritable: true,
+    default: true,
   },
   fillColor: {
     type: String,
@@ -146,6 +157,7 @@ export const SCHEMA = {
     step: 0.1,
     label: translate('fill opacity'),
     inheritable: true,
+    default: 0.3,
   },
   dashArray: {
     type: String,
@@ -183,6 +195,7 @@ export const SCHEMA = {
     helpEntries: ['dynamicProperties', 'textFormatting'],
     placeholder: '# {name}',
     inheritable: true,
+    default: '# {name}\n{description}',
   },
   zoomTo: {
     type: Number,
@@ -194,10 +207,12 @@ export const SCHEMA = {
   captionBar: {
     type: Boolean,
     label: translate('Do you want to display a caption bar?'),
+    default: false,
   },
   captionMenus: {
     type: Boolean,
     label: translate('Do you want to display caption menus?'),
+    default: true,
   },
   slideshow: {
     type: Object,
@@ -239,6 +254,7 @@ export const SCHEMA = {
       ['top', translate('On the top')],
       ['bottom', translate('On the bottom')],
     ],
+    default: 'auto',
   },
   labelInteractive: {
     type: Boolean,
@@ -274,22 +290,26 @@ export const SCHEMA = {
   permanentCreditBackground: {
     type: Boolean,
     label: translate('Permanent credits background'),
+    default: true,
   },
   zoomControl: {
     type: Boolean,
     nullable: true,
     label: translate('Display the zoom control'),
+    default: true,
   },
   datalayersControl: {
     type: Boolean,
     nullable: true,
     handler: 'DataLayersControl',
     label: translate('Display the data layers control'),
+    default: true,
   },
   searchControl: {
     type: Boolean,
     nullable: true,
     label: translate('Display the search control'),
+    default: true,
   },
   locateControl: {
     type: Boolean,
@@ -300,16 +320,19 @@ export const SCHEMA = {
     type: Boolean,
     nullable: true,
     label: translate('Display the fullscreen control'),
+    default: true,
   },
   editinosmControl: {
     type: Boolean,
     nullable: true,
     label: translate('Display the control to open OpenStreetMap editor'),
+    default: null,
   },
   embedControl: {
     type: Boolean,
     nullable: true,
     label: translate('Display the embed control'),
+    default: true,
   },
   measureControl: {
     type: Boolean,
@@ -328,12 +351,14 @@ export const SCHEMA = {
   },
   easing: {
     type: Boolean,
+    default: false,
   },
   interactive: {
     type: Boolean,
     label: translate('Allow interactions'),
     helpEntries: 'interactive',
     inheritable: true,
+    default: true,
   },
   fromZoom: {
     type: Number,
@@ -350,6 +375,7 @@ export const SCHEMA = {
     label: translate('stroke'),
     helpEntries: 'stroke',
     inheritable: true,
+    default: true,
   },
   outlink: {
     label: translate('Link to…'),
