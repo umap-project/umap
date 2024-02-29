@@ -999,7 +999,10 @@ U.FormBuilder = L.FormBuilder.extend({
           if (schema.step) schema.handler = 'Range'
           else schema.handler = 'IntInput'
         } else if (schema.choices) {
-          if (schema.choices.length <= 5) {
+          const text_length = schema.choices.reduce((acc, [value, label]) => acc + label.length, 0)
+          // Try to be smart and use MultiChoice only
+          // for choices where labels are shorts…
+          if (text_length < 40) {
             schema.handler = 'MultiChoice'
           } else {
             schema.handler = 'Select'
