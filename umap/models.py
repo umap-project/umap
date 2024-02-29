@@ -377,7 +377,7 @@ class DataLayer(NamedModel):
     uuid = models.UUIDField(
         unique=True, primary_key=True, default=uuid.uuid4, editable=False
     )
-    id = models.IntegerField(null=True, blank=True)
+    old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
@@ -450,8 +450,8 @@ class DataLayer(NamedModel):
 
     def is_valid_version(self, name):
         valid_prefixes = [name.startswith("%s_" % self.pk)]
-        if self.id:
-            valid_prefixes.append(name.startswith("%s_" % self.id))
+        if self.old_id:
+            valid_prefixes.append(name.startswith("%s_" % self.old_id))
         return any(valid_prefixes) and name.endswith(".geojson")
 
     def version_metadata(self, name):

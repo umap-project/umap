@@ -9,7 +9,7 @@ BEGIN
     EXECUTE 'ALTER TABLE umap_datalayer DROP CONSTRAINT ' || (
         SELECT indexname
         FROM pg_indexes
-        WHERE tablename = 'umap_datalayer' AND indexname LIKE '%pk'
+        WHERE tablename = 'umap_datalayer' AND indexname LIKE '%pk%'
     );
 END $$;
 """
@@ -40,6 +40,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             "datalayer", name="id", field=models.IntegerField(null=True, blank=True)
         ),
+        # Rename "id" to "old id"
+        migrations.RenameField(
+            model_name="datalayer", old_name="id", new_name="old_id"
+        ),
         # … to put it back on the "uuid"
         migrations.AlterField(
             model_name="datalayer",
@@ -52,5 +56,7 @@ class Migration(migrations.Migration):
                 serialize=False,
             ),
         ),
+        # When applying the migration backwards, we need to drop the pk index
+        # Before addding a new one.
         migrations.RunSQL(migrations.RunSQL.noop, reverse_sql=drop_index),
     ]

@@ -229,7 +229,7 @@ def test_versions_can_return_old_format(client, datalayer, map, settings):
     map.share_status = Map.PUBLIC
     map.save()
     root = datalayer.storage_root()
-    datalayer.id = 123  # old datalayer id (now replaced by uuid)
+    datalayer.old_id = 123  # old datalayer id (now replaced by uuid)
     datalayer.save()
 
     datalayer.geojson.storage.save(
@@ -240,7 +240,7 @@ def test_versions_can_return_old_format(client, datalayer, map, settings):
     )
 
     # store with the id prefix (rather than the uuid)
-    old_format_version = "%s_1440918637.geojson" % datalayer.id
+    old_format_version = "%s_1440918637.geojson" % datalayer.old_id
     datalayer.geojson.storage.save(
         ("%s/" % root) + old_format_version, ContentFile("{}")
     )

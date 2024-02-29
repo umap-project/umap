@@ -27,7 +27,7 @@ def migrate_datalayers(apps, schema_editor):
             remote_id = match.group("datalayer_id")
             map_id = match.group("map_id")
             try:
-                remote_uuid = DataLayer.objects.get(id=remote_id).uuid
+                remote_uuid = DataLayer.objects.get(old_id=remote_id).uuid
             except DataLayer.DoesNotExist:
                 pass
             else:
