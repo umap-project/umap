@@ -16,7 +16,7 @@ U.FeatureMixin = {
     }
 
     // Each feature needs an unique identifier
-    if (this._checkId(geojson_id)) {
+    if (U.Utils.checkId(geojson_id)) {
       this.id = geojson_id
     } else {
       this.id = U.Utils.generateId()
@@ -44,9 +44,6 @@ U.FeatureMixin = {
     this.preInit()
     this.addInteractions()
     this.parentClass.prototype.initialize.call(this, latlng, options)
-  },
-  _checkId: function (string) {
-    return typeof string !== 'undefined'
   },
 
   preInit: function () {},

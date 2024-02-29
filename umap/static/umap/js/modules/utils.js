@@ -11,3 +11,14 @@
 export function generateId() {
   return btoa(Math.random().toString()).substring(10, 15)
 }
+
+/**
+ * Ensure the ID matches the expected format.
+ *
+ * @param {string} string
+ * @returns {boolean}
+ */
+export function checkId(string) {
+  if (typeof string !== 'string') return false
+  return /^[A-Za-z0-9]{5}$/.test(string)
+}
