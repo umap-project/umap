@@ -73,3 +73,11 @@ def test_map_preview_can_change_styling_from_querystring(page, live_server, tile
     markers = page.locator(".leaflet-marker-icon .icon_container")
     expect(markers).to_have_count(1)
     expect(markers).to_have_css("background-color", "rgb(139, 0, 0)")
+
+
+def test_can_open_feature_on_load(page, live_server, tilelayer):
+    page.goto(
+        f"{live_server.url}/map/?data={quote(json.dumps(GEOJSON))}&feature=Niagara Falls"
+    )
+    # Popup is open.
+    expect(page.get_by_text("Niagara Falls")).to_be_visible()
