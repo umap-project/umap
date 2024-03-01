@@ -977,37 +977,44 @@ U.FormBuilder = L.FormBuilder.extend({
     className: 'umap-form',
   },
 
-  defaultOptions: {
-    color: { handler: 'ColorPicker' },
-    fillColor: { handler: 'ColorPicker' },
-    iconUrl: { handler: 'IconUrl' },
-    datalayer: { handler: 'DataLayerSwitcher' },
-    datalayersControl: { handler: 'DataLayersControl' },
-    licence: { handler: 'LicenceChooser' },
-  },
-
   computeDefaultOptions: function () {
     for (let [key, schema] of Object.entries(U.SCHEMA)) {
-      schema = L.Util.extend({}, schema, this.defaultOptions[key])
-      if (!schema.handler) {
-        if (schema.type === Boolean) {
-          if (schema.nullable) schema.handler = 'NullableChoices'
-          else schema.handler = 'Switch'
-        } else if (schema.type === 'Text') {
-          schema.handler = 'Textarea'
-        } else if (schema.type === Number) {
-          if (schema.step) schema.handler = 'Range'
-          else schema.handler = 'IntInput'
-        } else if (schema.choices) {
-          const text_length = schema.choices.reduce((acc, [value, label]) => acc + label.length, 0)
-          // Try to be smart and use MultiChoice only
-          // for choices where labels are shorts…
-          if (text_length < 40) {
-            schema.handler = 'MultiChoice'
-          } else {
-            schema.handler = 'Select'
-            schema.selectOptions = schema.choices
-          }
+      if (schema.type === Boolean) {
+        if (schema.nullable) schema.handler = 'NullableChoices'
+        else schema.handler = 'Switch'
+      } else if (schema.type === 'Text') {
+        schema.handler = 'Textarea'
+      } else if (schema.type === Number) {
+        if (schema.step) schema.handler = 'Range'
+        else schema.handler = 'IntInput'
+      } else if (schema.choices) {
+        const text_length = schema.choices.reduce(
+          (acc, [value, label]) => acc + label.length,
+          0
+        )
+        // Try to be smart and use MultiChoice only
+        // for choices where labels are shorts…
+        if (text_length < 40) {
+          schema.handler = 'MultiChoice'
+        } else {
+          schema.handler = 'Select'
+          schema.selectOptions = schema.choices
+        }
+      } else {
+        switch (key) {
+          case 'color':
+          case 'fillColor':
+            schema.handler = 'ColorPicker'
+            break
+          case 'iconUrl':
+            schema.handler = 'IconUrl'
+            break
+          case 'datalayersControl':
+            schema.handler = 'DataLayersControl'
+            break
+          case 'licence':
+            schema.handler = 'LicenceChooser'
+            break
         }
       }
       // FormBuilder use this key for the input type itself

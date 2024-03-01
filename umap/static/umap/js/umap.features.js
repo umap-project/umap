@@ -103,11 +103,15 @@ U.FeatureMixin = {
       L._('Feature properties')
     )
 
-    let builder = new U.FormBuilder(this, ['datalayer'], {
-      callback: function () {
-        this.edit(e)
-      }, // removeLayer step will close the edit panel, let's reopen it
-    })
+    let builder = new U.FormBuilder(
+      this,
+      [['datalayer', { handler: 'DataLayerSwitcher' }]],
+      {
+        callback: function () {
+          this.edit(e)
+        }, // removeLayer step will close the edit panel, let's reopen it
+      }
+    )
     container.appendChild(builder.build())
 
     const properties = []
