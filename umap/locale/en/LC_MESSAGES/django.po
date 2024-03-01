@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 13:53+0000\n"
+"POT-Creation-Date: 2024-03-01 16:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -289,7 +289,7 @@ msgstr ""
 msgid "You are logged in. Continuing..."
 msgstr ""
 
-#: templates/umap/map_list.html:9 views.py:341
+#: templates/umap/map_list.html:9 views.py:342
 msgid "by"
 msgstr ""
 
@@ -325,57 +325,57 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
+#: templates/umap/map_table.html:26 templates/umap/map_table.html:28
 msgid "Open preview"
 msgstr ""
 
-#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
+#: templates/umap/map_table.html:48 templates/umap/map_table.html:50
 msgid "Share"
 msgstr ""
 
-#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
+#: templates/umap/map_table.html:54 templates/umap/map_table.html:56
 msgid "Edit"
 msgstr ""
 
-#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
+#: templates/umap/map_table.html:60 templates/umap/map_table.html:62
 msgid "Download"
 msgstr ""
 
-#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
+#: templates/umap/map_table.html:66 templates/umap/map_table.html:68
 msgid "Clone"
 msgstr ""
 
-#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
+#: templates/umap/map_table.html:76 templates/umap/map_table.html:78
 msgid "Delete"
 msgstr ""
 
-#: templates/umap/map_table.html:88
+#: templates/umap/map_table.html:91
 msgid "first"
 msgstr ""
 
-#: templates/umap/map_table.html:89
+#: templates/umap/map_table.html:92
 msgid "previous"
 msgstr ""
 
-#: templates/umap/map_table.html:98
+#: templates/umap/map_table.html:100
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr ""
 
-#: templates/umap/map_table.html:104
+#: templates/umap/map_table.html:105
 msgid "next"
 msgstr ""
 
-#: templates/umap/map_table.html:105
+#: templates/umap/map_table.html:106
 msgid "last"
 msgstr ""
 
-#: templates/umap/map_table.html:113
+#: templates/umap/map_table.html:114
 #, python-format
 msgid "Lines per page: %(per_page)s"
 msgstr ""
 
-#: templates/umap/map_table.html:118
+#: templates/umap/map_table.html:119
 #, python-format
 msgid "%(count)s maps"
 msgstr ""
@@ -469,20 +469,20 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:26
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:27
 msgid "Search my maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:11
+#: templates/umap/user_dashboard.html:10
 #, python-format
 msgid "My Maps (%(count)s)"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:13
+#: templates/umap/user_dashboard.html:12
 msgid "My profile"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
+#: templates/umap/user_dashboard.html:20 templates/umap/user_dashboard.html:24
 msgid "Map’s title"
 msgstr ""
 
@@ -495,15 +495,15 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:346
+#: views.py:347
 msgid "View the map"
 msgstr ""
 
-#: views.py:704
+#: views.py:705
 msgid "See full screen"
 msgstr ""
 
-#: views.py:803
+#: views.py:804
 msgid "Map editors updated with success!"
 msgstr ""
 
@@ -517,30 +517,35 @@ msgstr ""
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:850
+#: views.py:851
+#, python-format
+msgid "Can't send email to %(email)s"
+msgstr ""
+
+#: views.py:854
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:861
+#: views.py:865
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:889
+#: views.py:893
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:894
+#: views.py:898
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1130
+#: views.py:1136
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1152
+#: views.py:1158
 msgid "Permissions updated with success!"
 msgstr ""
