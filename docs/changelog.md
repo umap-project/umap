@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.3 - 2024-03-01
+
+### Bug fixes
+* fix: picto category title was added after the related pictograms by @yohanboniface in #1637
+* fix: path was doubled when importing pictograms from command line by @datendelphin in #1653
+* fix: zoomControl rendered twice by @yohanboniface in #1645
+* fix: allow empty datalayers reference on merges. by @almet in #1665
+* fix: make sure to reset feature query string parameter by @yohanboniface in #1667
+* fix: read id and @id as osm id in osm template by @yohanboniface in #1668
+* fix: catch SMTPException when sending secret edit link by @yohanboniface in #1658
+
+### Internal changes
+* chore: raise error if any in storage post_process by @yohanboniface in #1624
+* chore: generate messages following map creation by @davidbgk in #1631
+* chore: attempt to fix randomly failing test by @yohanboniface in #1639
+* chore: Use CSS variables by @davidbgk in #1589
+
+### Documentation
+* docs: add a note for Docker install and SECRET_KEY by @davidbgk in #1633
+* docs: update namespace of uMap objects by @davidbgk in #1632
+
+## 2.0.2 - 2024-02-19
+
+* fix: run collectstatic first in Docker entrypoint
+
 ## 2.0.1 - 2024-02-18
 
 * Do not use the `compress` command anymore for the Docker image (#1620)
