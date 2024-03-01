@@ -324,7 +324,7 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
         L.DomUtil.element('a', { href: `mailto:${email}`, textContent: email })
       )
     }
-    const id = props['@id']
+    const id = props['@id'] || props['id']
     if (id) {
       L.DomUtil.add(
         'div',
