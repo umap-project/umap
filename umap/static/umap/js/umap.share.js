@@ -226,6 +226,8 @@ U.IframeExporter = L.Evented.extend({
     const datalayers = []
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
+    } else {
+      delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
       this.map.eachDataLayer((datalayer) => {
