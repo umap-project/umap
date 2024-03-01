@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.4 - 2024-03-01
+
+* fix zoom and fullscreen not shown by default
+
 ## 2.0.3 - 2024-03-01
 
 ### Bug fixes

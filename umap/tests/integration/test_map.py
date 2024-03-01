@@ -228,3 +228,12 @@ def test_minimap_on_load(map, live_server, datalayer, page):
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-minimap")).to_be_visible()
+
+
+def test_zoom_control_on_load(map, live_server, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-zoom")).to_be_visible()
+    map.settings["properties"]["zoomControl"] = False
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-zoom")).to_be_hidden()

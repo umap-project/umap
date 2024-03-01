@@ -149,8 +149,8 @@ U.Map = L.Map.extend({
     this.name = this.options.name
     this.description = this.options.description
     this.demoTileInfos = this.options.demoTileInfos
-    this.options.zoomControl = zoomControl
-    this.options.fullscreenControl = fullscreenControl
+    this.options.zoomControl = zoomControl !== undefined ? zoomControl : true
+    this.options.fullscreenControl = fullscreenControl !== undefined ? fullscreenControl : true
     this.datalayersOnLoad = L.Util.queryString('datalayers')
     if (this.datalayersOnLoad) {
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
