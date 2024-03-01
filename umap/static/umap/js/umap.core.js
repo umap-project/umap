@@ -415,7 +415,10 @@ L.DomUtil.TextColorFromBackgroundColor = (el, bgcolor) => {
 L.DomUtil.contrastWCAG21 = (rgb) => {
   const [r, g, b] = rgb
   // luminance of inputted colour
-  const lum = 0.2126 * L.DomUtil.colourMod(r) + 0.7152 * L.DomUtil.colourMod(g) + 0.0722 * L.DomUtil.colourMod(b)
+  const lum =
+    0.2126 * L.DomUtil.colourMod(r) +
+    0.7152 * L.DomUtil.colourMod(g) +
+    0.0722 * L.DomUtil.colourMod(b)
   // white has a luminance of 1
   const whiteLum = 1
   const contrast = (whiteLum + 0.05) / (lum + 0.05)
@@ -729,9 +732,6 @@ U.Help = L.Class.extend({
   formatURL: `${L._(
     'Supported variables that will be dynamically replaced'
   )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}..., locale, lang`,
-  formatIconSymbol: L._(
-    'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/{name}.png", the {name} variable will be replaced by the "name" value of each marker.'
-  ),
   colorValue: L._('Must be a valid CSS value (eg.: DarkBlue or #123456)'),
   smoothFactor: L._(
     'How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)'
@@ -741,7 +741,7 @@ U.Help = L.Class.extend({
   ),
   zoomTo: L._('Zoom level for automatic zooms'),
   labelKey: L._(
-    'The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "{name} in {place}")'
+    'The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "&lcub;name} in &lcub;place}")'
   ),
   stroke: L._('Whether to display or not polygons paths.'),
   fill: L._('Whether to fill polygons with color.'),

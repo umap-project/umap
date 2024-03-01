@@ -97,7 +97,9 @@ export const SCHEMA = {
     handler: 'IconUrl',
     label: translate('Icon symbol'),
     inheritable: true,
-    helpText: 'formatIconSymbol',
+    // helpText: translate(
+    //   'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/&lcub;name}.png", the &lcub;name} variable will be replaced by the "name" value of each marker.'
+    // ),
   },
   smoothFactor: {
     type: Number,
