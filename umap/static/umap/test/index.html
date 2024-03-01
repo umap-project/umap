@@ -123,21 +123,23 @@
     <div id="mocha"></div>
     <div id="map"></div>
     <script>
-      var runner = (window.mochaPhantomJS || window.mocha).run(function (failures) {
-        if (window.location.search.indexOf('debug') === -1)
-          qs('#mocha').style.display = 'block'
-        console.log(failures)
-      })
-      if (window.location.search.indexOf('debug') !== -1) {
-        runner.on('fail', function (test, err) {
-          console.log(test.title, test.err)
-          console.log(test.err.expected, test.err.actual)
-          console.log(test.err.stack)
+      window.addEventListener('DOMContentLoaded', () => {
+        var runner = (window.mochaPhantomJS || window.mocha).run(function (failures) {
+          if (window.location.search.indexOf('debug') === -1)
+            qs('#mocha').style.display = 'block'
+          console.log(failures)
         })
-        sinon.log = function (message) {
-          console.log(message)
+        if (window.location.search.indexOf('debug') !== -1) {
+          runner.on('fail', function (test, err) {
+            console.log(test.title, test.err)
+            console.log(test.err.expected, test.err.actual)
+            console.log(test.err.stack)
+          })
+          sinon.log = function (message) {
+            console.log(message)
+          }
         }
-      }
+      })
     </script>
   </body>
 </html>
