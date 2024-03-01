@@ -782,8 +782,7 @@ const ControlsMixin = {
         if (datalayer.hasDataVisible()) found = true
       })
       // TODO: display a results counter in the panel instead.
-      if (!found)
-        this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
+      if (!found) this.alerts.add(L._('No results for these facets'))
     }
 
     const fields = keys.map((current) => [
@@ -1272,7 +1271,7 @@ U.Search = L.PhotonSearch.extend({
       if (latlng.isValid()) {
         this.reverse.doReverse(latlng)
       } else {
-        this.map.ui.alert({ content: 'Invalid latitude or longitude', mode: 'error' })
+        this.map.alerts.add(L._('Invalid latitude or longitude'), 'error')
       }
       return
     }

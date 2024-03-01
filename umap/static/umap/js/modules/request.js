@@ -1,5 +1,6 @@
 // Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
 import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import Alert from './alerts.js'
 
 export class RequestError extends Error {}
 
@@ -50,6 +51,7 @@ export class Request extends BaseRequest {
   constructor(ui) {
     super()
     this.ui = ui
+    this.alerts = new Alert()
   }
 
   async _fetch(method, uri, headers, data) {
@@ -81,7 +83,7 @@ export class Request extends BaseRequest {
   }
 
   _onError(error) {
-    this.ui.alert({ content: L._('Problem in the response'), level: 'error' })
+    this.alerts.add(L._('Problem in the response'), 'error')
   }
 
   _onNOK(error) {
@@ -127,10 +129,10 @@ export class ServerRequest extends Request {
     try {
       const data = await response.json()
       if (data.info) {
-        this.ui.alert({ content: data.info, level: 'info' })
+        this.alerts.add(data.info)
         this.ui.closePanel()
       } else if (data.error) {
-        this.ui.alert({ content: data.error, level: 'error' })
+        this.alerts.add(data.error, 'error')
         return this._onError(new Error(data.error))
       }
       return [data, response, null]
@@ -145,10 +147,7 @@ export class ServerRequest extends Request {
 
   _onNOK(error) {
     if (error.status === 403) {
-      this.ui.alert({
-        content: message || L._('Action not allowed :('),
-        level: 'error',
-      })
+      this.alerts.add(message || L._('Action not allowed :('), 'error')
     }
     return [{}, error.response, error]
   }
