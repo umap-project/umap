@@ -820,7 +820,7 @@ L.U.Map.include({
         },
       ]
     })
-    const builder = new L.U.FormBuilder(this, fields, {
+    const builder = new U.FormBuilder(this, fields, {
       makeDirty: false,
       callback: filterFeatures,
       callbackContext: this,
