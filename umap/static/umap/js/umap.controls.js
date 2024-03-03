@@ -710,7 +710,7 @@ const ControlsMixin = {
             }
           } else {
             value = String(value)
-            value = (value.length ? value : "empty string")
+            value = (value.length ? value : L._("empty string"))
             if (!!value && !facetCriteria[key]["choices"].includes(value)) {
               facetCriteria[key]["choices"].push(value)
             }
@@ -729,15 +729,20 @@ const ControlsMixin = {
       if (!found)
         this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
     }
-    const fields = keys.map((key) => [
-      `facets.${key}`,
-      {
-        handler: ["date", "datetime-local", "number"].includes(facetCriteria[key]["inputType"]) ? 'FacetSearchMinMax' : 'FacetSearchChoices',
-        criteria: facetCriteria[key],
-        label: facetKeys[key]["label"]
-      },
-    ])
-    const builder = new U.FormBuilder(this, fields, {
+    const fields = keys.map((key) => {
+      let criteria = facetCriteria[key]
+      let handler = ["date", "datetime-local", "number"].includes(criteria["inputType"]) ? 'FacetSearchMinMax' : 'FacetSearchChoices'
+      let label = facetKeys[key]["label"]
+      return [
+        `facets.${key}`,
+        {
+          criteria: criteria,
+          handler: handler,
+          label: label
+        },
+      ]
+    })
+    const builder = new L.U.FormBuilder(this, fields, {
       makeDirty: false,
       callback: filterFeatures,
       callbackContext: this,

@@ -516,7 +516,7 @@ U.FeatureMixin = {
       } else {
         const choices = criteria["choices"]
         value = String(value)
-        value = (value.length ? value : "empty string")
+        value = (value.length ? value : L._("empty string"))
         if (choices.length && (!value || !choices.includes(value))) return false
       }
     }
