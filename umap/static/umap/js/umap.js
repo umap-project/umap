@@ -1291,7 +1291,7 @@ U.Map = L.Map.extend({
         {
           handler: 'Input',
           helpEntries: 'facetKey',
-          placeholder: L._('Example: key1,key2,key3'),
+          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
           label: L._('Facet keys'),
         },
       ],
@@ -1935,9 +1935,22 @@ U.Map = L.Map.extend({
   },
 
   getFacetKeys: function () {
+    const allowedInputTypes = {
+      "checkbox": "checkbox",
+      "radio": "radio",
+      "number": "number",
+      "date": "date",
+      "datetime": "datetime-local",
+    }
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
       const els = curr.split('|')
-      acc[els[0]] = els[1] || els[0]
+      acc[els[0]] = {
+        "label": els[1] || els[0],
+        "inputType": (
+          (els[2] in allowedInputTypes) ? allowedInputTypes[els[2]] :
+          Object.values(allowedInputTypes)[0]
+	)
+      }
       return acc
     }, {})
   },

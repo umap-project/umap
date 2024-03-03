@@ -485,10 +485,30 @@ U.FeatureMixin = {
 
   matchFacets: function () {
     const facets = this.map.facets
-    for (const [property, expected] of Object.entries(facets)) {
-      if (expected.length) {
-        let value = this.properties[property]
-        if (!value || !expected.includes(value)) return false
+    for (const [property, criteria] of Object.entries(facets)) {
+      let value = this.properties[property]
+      const inputType = criteria["inputType"]
+      if (["date", "datetime-local", "number"].includes(inputType)) {
+        let min = criteria["min"]
+        let max = criteria["max"]
+        value = (value != null ? value : undefined)
+        if (["date", "datetime-local"].includes(inputType)) {
+          min = new Date(min)
+          max = new Date(max)
+          value = new Date(value)
+        }
+        if (["number"].includes(inputType)) {
+          min = parseFloat(min)
+          max = parseFloat(max)
+          value = parseFloat(value)
+        }
+        if (!isNaN(min) && !isNaN(value) && min > value) return false
+        if (!isNaN(max) && !isNaN(value) && max < value) return false
+      } else {
+        const choices = criteria["choices"]
+        value = String(value)
+        value = (value.length ? value : "empty string")
+        if (choices.length && (!value || !choices.includes(value))) return false
       }
     }
     return true

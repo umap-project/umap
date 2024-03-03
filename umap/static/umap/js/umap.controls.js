@@ -755,21 +755,57 @@ const ControlsMixin = {
   _openFacet: function () {
     const container = L.DomUtil.create('div', 'umap-facet-search'),
       title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
-      keys = Object.keys(this.getFacetKeys())
+      facetKeys = this.getFacetKeys(),
+      keys = Object.keys(facetKeys)
 
-    const knownValues = {}
+    const facetCriteria = {}
 
     keys.forEach((key) => {
-      knownValues[key] = []
-      if (!this.facets[key]) this.facets[key] = []
+      const inputType = facetKeys[key]["inputType"]
+      if (["date", "datetime-local", "number"].includes(inputType)) {
+        if (!facetCriteria[key]) facetCriteria[key] = {
+          "inputType": facetKeys[key]["inputType"],
+          "min": undefined,
+          "max": undefined
+        }
+        if (!this.facets[key]) this.facets[key] = {
+          "inputType": facetKeys[key]["inputType"],
+          "min": undefined,
+          "max": undefined
+        }
+      } else {
+        if (!facetCriteria[key]) facetCriteria[key] = {
+          "inputType": facetKeys[key]["inputType"],
+          "choices": []
+        }
+        if (!this.facets[key]) this.facets[key] = {
+          "inputType": facetKeys[key]["inputType"],
+          "choices": []
+        }
+      }
     })
 
     this.eachBrowsableDataLayer((datalayer) => {
       datalayer.eachFeature((feature) => {
         keys.forEach((key) => {
           let value = feature.properties[key]
-          if (typeof value !== 'undefined' && !knownValues[key].includes(value)) {
-            knownValues[key].push(value)
+          const inputType = facetKeys[key]["inputType"]
+          if (["date", "datetime-local", "number"].includes(inputType)) {
+            value = (value != null ? value : undefined)
+            if (["date", "datetime-local"].includes(inputType)) value = new Date(value);
+            if (["number"].includes(inputType)) value = parseFloat(value);
+            if (!isNaN(value) && (isNaN(facetCriteria[key]["min"]) || facetCriteria[key]["min"] > value)) {
+              facetCriteria[key]["min"] = value
+            }
+            if (!isNaN(value) && (isNaN(facetCriteria[key]["max"]) || facetCriteria[key]["max"] < value)) {
+              facetCriteria[key]["max"] = value
+            }
+          } else {
+            value = String(value)
+            value = (value.length ? value : "empty string")
+            if (!!value && !facetCriteria[key]["choices"].includes(value)) {
+              facetCriteria[key]["choices"].push(value)
+            }
           }
         })
       })
@@ -785,13 +821,12 @@ const ControlsMixin = {
       if (!found)
         this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
     }
-
-    const fields = keys.map((current) => [
-      `facets.${current}`,
+    const fields = keys.map((key) => [
+      `facets.${key}`,
       {
-        handler: 'FacetSearch',
-        choices: knownValues[current],
-        label: this.getFacetKeys()[current],
+        handler: ["date", "datetime-local", "number"].includes(facetCriteria[key]["inputType"]) ? 'FacetSearchMinMax' : 'FacetSearchChoices',
+        criteria: facetCriteria[key],
+        label: facetKeys[key]["label"]
       },
     ])
     const builder = new U.FormBuilder(this, fields, {
