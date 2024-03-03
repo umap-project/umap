@@ -296,6 +296,13 @@ L.Util.normalize = function (s) {
     .replace(/[\u0300-\u036f]/g, '')
 }
 
+L.Util.calculateStepFromNumber = function (n) {
+  // calculate step for number input field from significant digits of number
+  let step = String(n).replace(/^\d+?(0*)((\.)(\d*?)0*|)$/, "1$1$3$4").split('.')
+  step = parseFloat((step[1] || "").replace(/\d/g, "0").replace(/^0/, "0.0").replace(/0$/, "1") || (step[0] || "").replace(/0$/, "") || "1")
+  return step
+}
+
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
   if (content) {

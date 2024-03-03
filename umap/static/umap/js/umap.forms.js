@@ -837,7 +837,7 @@ L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
 
     this.minTdLabel = L.DomUtil.create('td', '', this.minTr)
     this.minLabel = L.DomUtil.create('label', '', this.minTdLabel)
-    this.minLabel.innerHTML = 'Min'
+    this.minLabel.innerHTML = L._('Min')
     this.minLabel.htmlFor = `${this.inputType}_${this.name}_min`
 
     this.minTdInput = L.DomUtil.create('td', '', this.minTr)
@@ -854,7 +854,7 @@ L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
 
     this.maxTdLabel = L.DomUtil.create('td', '', this.maxTr)
     this.maxLabel = L.DomUtil.create('label', '', this.maxTdLabel)
-    this.maxLabel.innerHTML = 'Max'
+    this.maxLabel.innerHTML = L._('Max')
     this.maxLabel.htmlFor = `${this.inputType}_${this.name}_max`
 
     this.maxTdInput = L.DomUtil.create('td', '', this.maxTr)
@@ -868,8 +868,8 @@ L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
     }
 
     if (["date", "datetime-local"].includes(this.inputType)) {
-      this.minLabel.innerHTML = 'From'
-      this.maxLabel.innerHTML = 'Until'
+      this.minLabel.innerHTML = L._('From')
+      this.maxLabel.innerHTML = L._('Until')
       if (min != null) {
         this.minInput.valueAsNumber = (min.valueOf() - min.getTimezoneOffset() * 60000)
       }
@@ -886,12 +886,7 @@ L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
     if (["number"].includes(this.inputType)) {
       if (min != null && max != null) {
         // calculate step from significant digits of min and max values
-        let minStep = String(min).replace(/^\d+?(0*)((\.)(\d*?)0*|)$/, "1$1$3$4").split('.')
-        let maxStep = String(max).replace(/^\d+?(0*)((\.)(\d*?)0*|)$/, "1$1$3$4").split('.')
-        minStep = parseFloat((minStep[1] || "").replace(/\d/g, "0").replace(/^0/, "0.0").replace(/0$/, "1") || (minStep[0] || "").replace(/0$/, "") || "1")
-        maxStep = parseFloat((maxStep[1] || "").replace(/\d/g, "0").replace(/^0/, "0.0").replace(/0$/, "1") || (maxStep[0] || "").replace(/0$/, "") || "1")
-
-        const step = Math.min(minStep, maxStep)
+        const step = Math.min(L.Util.calculateStepFromNumber(min), L.Util.calculateStepFromNumber(max))
         this.minInput.step = String(step)
         this.maxInput.step = String(step)
       }
