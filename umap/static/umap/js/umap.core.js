@@ -741,7 +741,7 @@ U.Help = L.Class.extend({
   ),
   zoomTo: L._('Zoom level for automatic zooms'),
   labelKey: L._(
-    'The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "&lcub;name} in &lcub;place}")'
+    'The name of the property to use as feature label (eg.: "nom"). You can also use properties inside brackets to use more than one or mix with static content (eg.: "&lcub;name&rcub; in &lcub;place&rcub;")'
   ),
   stroke: L._('Whether to display or not polygons paths.'),
   fill: L._('Whether to fill polygons with color.'),

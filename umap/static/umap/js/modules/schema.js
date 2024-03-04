@@ -98,7 +98,7 @@ export const SCHEMA = {
     label: translate('Icon symbol'),
     inheritable: true,
     // helpText: translate(
-    //   'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/&lcub;name}.png", the &lcub;name} variable will be replaced by the "name" value of each marker.'
+    //   'Symbol can be either a unicode character or an URL. You can use feature properties as variables: ex.: with "http://myserver.org/images/&lcub;name&rcub;.png", the &lcub;name&rcub; variable will be replaced by the "name" value of each marker.'
     // ),
   },
   smoothFactor: {
