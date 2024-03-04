@@ -218,7 +218,7 @@ class Map(NamedModel):
                 "umap_id": self.pk,
                 "onLoadPanel": "none",
                 "captionBar": False,
-                "schema": self.schema,
+                "schema": self.extra_schema,
                 "slideshow": {},
             }
         )
@@ -330,15 +330,12 @@ class Map(NamedModel):
         return new
 
     @classproperty
-    def schema(self):
-        schema = settings.UMAP_SCHEMA
-        schema.setdefault(
-            "iconUrl",
-            {
+    def extra_schema(self):
+        return {
+            "iconUrl": {
                 "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
-            },
-        )
-        return schema
+            }
+        }
 
 
 class Pictogram(NamedModel):
