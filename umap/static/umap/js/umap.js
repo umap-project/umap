@@ -2,33 +2,12 @@ L.Map.mergeOptions({
   overlay: null,
   datalayers: [],
   hash: true,
-  default_color: 'DarkBlue',
-  default_smoothFactor: 1.0,
-  default_opacity: 0.5,
-  default_fillOpacity: 0.3,
-  default_stroke: true,
-  default_fill: true,
-  default_weight: 3,
-  default_iconOpacity: 1,
-  default_iconClass: 'Default',
-  default_popupContentTemplate: '# {name}\n{description}',
-  default_interactive: true,
-  default_labelDirection: 'auto',
   maxZoomLimit: 24,
   attributionControl: false,
   editMode: 'advanced',
-  embedControl: true,
-  zoomControl: true,
-  datalayersControl: true,
-  searchControl: true,
-  editInOSMControl: false,
-  editInOSMControlOptions: false,
-  scaleControl: true,
   noControl: false, // Do not render any control.
-  miniMap: false,
   name: '',
   description: '',
-  displayPopupFooter: false,
   // When a TileLayer is in TMS mode, it needs -y instead of y.
   // This is usually handled by the TileLayer instance itself, but
   // we cannot rely on this because of the y is overriden by Leaflet
@@ -44,77 +23,14 @@ L.Map.mergeOptions({
   importPresets: [
     // {url: 'http://localhost:8019/en/datalayer/1502/', label: 'Simplified World Countries', format: 'geojson'}
   ],
-  moreControl: true,
-  captionBar: false,
-  captionMenus: true,
   slideshow: {},
   clickable: true,
-  easing: false,
   permissions: {},
-  permanentCreditBackground: true,
   featuresHaveOwner: false,
 })
 
 U.Map = L.Map.extend({
   includes: [ControlsMixin],
-  editableOptions: {
-    zoom: undefined,
-    scrollWheelZoom: Boolean,
-    scaleControl: Boolean,
-    moreControl: Boolean,
-    miniMap: Boolean,
-    displayPopupFooter: undefined,
-    onLoadPanel: String,
-    defaultView: String,
-    name: String,
-    description: String,
-    licence: undefined,
-    tilelayer: undefined,
-    overlay: undefined,
-    limitBounds: undefined,
-    color: String,
-    iconClass: String,
-    iconUrl: String,
-    smoothFactor: undefined,
-    iconOpacity: undefined,
-    opacity: undefined,
-    weight: undefined,
-    fill: undefined,
-    fillColor: undefined,
-    fillOpacity: undefined,
-    dashArray: undefined,
-    popupShape: String,
-    popupTemplate: String,
-    popupContentTemplate: String,
-    zoomTo: Number,
-    captionBar: Boolean,
-    captionMenus: Boolean,
-    slideshow: undefined,
-    sortKey: undefined,
-    labelKey: String,
-    filterKey: undefined,
-    facetKey: undefined,
-    slugKey: undefined,
-    showLabel: 'NullableBoolean',
-    labelDirection: undefined,
-    labelInteractive: undefined,
-    outlinkTarget: undefined,
-    shortCredit: undefined,
-    longCredit: undefined,
-    permanentCredit: undefined,
-    permanentCreditBackground: undefined,
-    zoomControl: 'NullableBoolean',
-    datalayersControl: 'NullableBoolean',
-    searchControl: 'NullableBoolean',
-    locateControl: 'NullableBoolean',
-    fullscreenControl: 'NullableBoolean',
-    editinosmControl: 'NullableBoolean',
-    embedControl: 'NullableBoolean',
-    measureControl: 'NullableBoolean',
-    tilelayersControl: 'NullableBoolean',
-    starControl: 'NullableBoolean',
-    easing: undefined,
-  },
 
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
@@ -133,7 +49,8 @@ U.Map = L.Map.extend({
     geojson.properties.fullscreenControl = false
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
-    U.DEFAULT_ICON_URL = this.options.default_iconUrl
+
+    if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
 
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
@@ -329,13 +246,11 @@ U.Map = L.Map.extend({
     // FIXME retrocompat
     L.Util.setBooleanFromQueryString(options, 'displayDataBrowserOnLoad')
     L.Util.setBooleanFromQueryString(options, 'displayCaptionOnLoad')
-    for (const [key, type] of Object.entries(this.editableOptions)) {
-      switch (type) {
+    for (const [key, schema] of Object.entries(U.SCHEMA)) {
+      switch (schema.type) {
         case Boolean:
-          L.Util.setBooleanFromQueryString(options, key)
-          break
-        case 'NullableBoolean':
-          L.Util.setNullableBooleanFromQueryString(options, key)
+          if (schema.nullable) L.Util.setNullableBooleanFromQueryString(options, key)
+          else L.Util.setBooleanFromQueryString(options, key)
           break
         case Number:
           L.Util.setNumberFromQueryString(options, key)
@@ -350,6 +265,12 @@ U.Map = L.Map.extend({
     if (L.Util.queryString('datalayersControl') === 'expanded') {
       L.Util.setFromQueryString(options, 'datalayersControl')
     }
+  },
+
+  overrideSchema: function (schema) {
+   for (const [key, extra] of Object.entries(schema)) {
+     U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
+   }
   },
 
   initControls: function () {
@@ -393,7 +314,7 @@ U.Map = L.Map.extend({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
     })
     this._controls.search = new U.SearchControl()
-    this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
+    this._controls.embed = new L.Control.Embed(this)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
     if (this.options.user) this._controls.star = new U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
@@ -459,7 +380,7 @@ U.Map = L.Map.extend({
     let name, status, control
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
-      status = this.options[`${name}Control`]
+      status = this.getOption(`${name}Control`)
       if (status === false) continue
       control = this._controls[name]
       if (!control) continue
@@ -468,9 +389,9 @@ U.Map = L.Map.extend({
         L.DomUtil.addClass(control._container, 'display-on-more')
       else L.DomUtil.removeClass(control._container, 'display-on-more')
     }
-    if (this.options.permanentCredit) this._controls.permanentCredit.addTo(this)
-    if (this.options.moreControl) this._controls.more.addTo(this)
-    if (this.options.scaleControl) this._controls.scale.addTo(this)
+    if (this.getOption('permanentCredit')) this._controls.permanentCredit.addTo(this)
+    if (this.getOption('moreControl')) this._controls.more.addTo(this)
+    if (this.getOption('scaleControl')) this._controls.scale.addTo(this)
   },
 
   initDataLayers: async function (datalayers) {
@@ -820,7 +741,7 @@ U.Map = L.Map.extend({
   },
 
   getDefaultOption: function (option) {
-    return this.options[`default_${option}`]
+    return U.SCHEMA[option] && U.SCHEMA[option].default
   },
 
   getOption: function (option) {
@@ -904,7 +825,7 @@ U.Map = L.Map.extend({
 
     let mustReindex = false
 
-    for (const option of Object.keys(this.editableOptions)) {
+    for (const option of Object.keys(U.SCHEMA)) {
       if (typeof importedData.properties[option] !== 'undefined') {
         this.options[option] = importedData.properties[option]
         if (option === 'sortKey') mustReindex = true
@@ -1033,7 +954,7 @@ U.Map = L.Map.extend({
 
   exportOptions: function () {
     const properties = {}
-    for (const option of Object.keys(this.editableOptions)) {
+    for (const option of Object.keys(U.SCHEMA)) {
       if (typeof this.options[option] !== 'undefined') {
         properties[option] = this.options[option]
       }
@@ -1555,35 +1476,11 @@ U.Map = L.Map.extend({
   _editCredits: function (container) {
     const credits = L.DomUtil.createFieldset(container, L._('Credits'))
     const creditsFields = [
-      ['options.licence', { handler: 'LicenceChooser', label: L._('licence') }],
-      [
-        'options.shortCredit',
-        {
-          handler: 'Input',
-          label: L._('Short credits'),
-          helpEntries: ['shortCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.longCredit',
-        {
-          handler: 'Textarea',
-          label: L._('Long credits'),
-          helpEntries: ['longCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.permanentCredit',
-        {
-          handler: 'Textarea',
-          label: L._('Permanent credits'),
-          helpEntries: ['permanentCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.permanentCreditBackground',
-        { handler: 'Switch', label: L._('Permanent credits background') },
-      ],
+      'options.licence',
+      'options.shortCredit',
+      'options.longCredit',
+      'options.permanentCredit',
+      'options.permanentCreditBackground',
     ]
     const creditsBuilder = new U.FormBuilder(this, creditsFields, {
       callback: this.renderControls,
@@ -1691,7 +1588,7 @@ U.Map = L.Map.extend({
       name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
-    if (this.options.captionMenus) {
+    if (this.getOption('captionMenus')) {
       L.DomUtil.createButton(
         'umap-about-link flat',
         container,

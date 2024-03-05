@@ -10,6 +10,7 @@ from django.core.files.base import File
 from django.core.signing import Signer
 from django.template.defaultfilters import slugify
 from django.urls import reverse
+from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
 from .managers import PublicManager
@@ -218,7 +219,7 @@ class Map(NamedModel):
                 "umap_id": self.pk,
                 "onLoadPanel": "none",
                 "captionBar": False,
-                "default_iconUrl": "%sumap/img/marker.svg" % settings.STATIC_URL,
+                "schema": self.extra_schema,
                 "slideshow": {},
             }
         )
@@ -328,6 +329,14 @@ class Map(NamedModel):
         for datalayer in self.datalayer_set.all():
             datalayer.clone(map_inst=new)
         return new
+
+    @classproperty
+    def extra_schema(self):
+        return {
+            "iconUrl": {
+                "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
+            }
+        }
 
 
 class Pictogram(NamedModel):

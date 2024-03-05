@@ -215,7 +215,7 @@ U.IframeExporter = L.Evented.extend({
     this.map = map
     this.baseUrl = L.Util.getBaseUrl()
     // Use map default, not generic default
-    this.queryString.onLoadPanel = this.map.options.onLoadPanel
+    this.queryString.onLoadPanel = this.map.getOption('onLoadPanel')
   },
 
   getMap: function () {

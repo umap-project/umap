@@ -30,7 +30,7 @@ export default class Browser {
     title.textContent = feature.getDisplayName() || '—'
     const bgcolor = feature.getDynamicOption('color')
     colorBox.style.backgroundColor = bgcolor
-    if (symbol && symbol !== this.map.options.default_iconUrl) {
+    if (symbol && symbol !== U.SCHEMA.iconUrl.default) {
       const icon = U.Icon.makeIconElement(symbol, colorBox)
       U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
     }
@@ -131,7 +131,7 @@ export default class Browser {
       'h3',
       'umap-browse-title',
       container,
-      this.map.options.name
+      this.map.getOption('name')
     )
 
     const formContainer = DomUtil.create('div', '', container)

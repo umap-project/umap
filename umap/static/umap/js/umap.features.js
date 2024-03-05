@@ -53,7 +53,7 @@ U.FeatureMixin = {
   },
 
   getSlug: function () {
-    return this.properties[this.map.options.slugKey || 'name'] || ''
+    return this.properties[this.map.getOption('slugKey') || 'name'] || ''
   },
 
   getPermalink: function () {
@@ -103,11 +103,15 @@ U.FeatureMixin = {
       L._('Feature properties')
     )
 
-    let builder = new U.FormBuilder(this, ['datalayer'], {
-      callback: function () {
-        this.edit(e)
-      }, // removeLayer step will close the edit panel, let's reopen it
-    })
+    let builder = new U.FormBuilder(
+      this,
+      [['datalayer', { handler: 'DataLayerSwitcher' }]],
+      {
+        callback: function () {
+          this.edit(e)
+        }, // removeLayer step will close the edit panel, let's reopen it
+      }
+    )
     container.appendChild(builder.build())
 
     const properties = []
@@ -209,7 +213,7 @@ U.FeatureMixin = {
     if (L.Browser.ielt9) return false
     if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic)
       return false
-    return this.map.options.displayPopupFooter
+    return this.map.getOption('displayPopupFooter')
   },
 
   getPopupClass: function () {
@@ -309,7 +313,7 @@ U.FeatureMixin = {
 
   zoomTo: function (e) {
     e = e || {}
-    const easing = e.easing !== undefined ? e.easing : this.map.options.easing
+    const easing = e.easing !== undefined ? e.easing : this.map.getOption('easing')
     if (easing) {
       this.map.flyTo(this.getCenter(), this.getBestZoom())
     } else {
@@ -975,7 +979,7 @@ U.PathMixin = {
   zoomTo: function (e) {
     // Use bounds instead of centroid for paths.
     e = e || {}
-    const easing = e.easing !== undefined ? e.easing : this.map.options.easing
+    const easing = e.easing !== undefined ? e.easing : this.map.getOption('easing')
     if (easing) {
       this.map.flyToBounds(this.getBounds(), this.getBestZoom())
     } else {

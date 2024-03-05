@@ -210,7 +210,8 @@ def test_can_change_owner(map, live_server, login, user):
     close = page.locator(".umap-field-owner .close")
     close.click()
     input = page.locator("input.edit-owner")
-    input.type(user.username)
+    with page.expect_response(re.compile(r".*/agnocomplete/.*")):
+        input.type(user.username)
     input.press("Tab")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
