@@ -1,4 +1,5 @@
 """Base settings shared by all environments"""
+
 # Import global settings to make it easier to extend settings.
 from email.utils import parseaddr
 

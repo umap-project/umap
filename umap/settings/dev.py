@@ -1,4 +1,5 @@
 """Settings for Development Server"""
+
 from umap.settings.base import *  # pylint: disable=W0614,W0401
 
 DEBUG = True

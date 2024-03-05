@@ -320,9 +320,9 @@ class UserDownload(DetailView, SearchMixin):
                 zip_file.writestr(file_name, geojson_file.getvalue())
 
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
-        response[
-            "Content-Disposition"
-        ] = 'attachment; filename="umap_backup_complete.zip"'
+        response["Content-Disposition"] = (
+            'attachment; filename="umap_backup_complete.zip"'
+        )
         return response
 
 
@@ -666,9 +666,9 @@ class MapDownload(DetailView):
     def render_to_response(self, context, *args, **kwargs):
         umapjson = self.object.generate_umapjson(self.request)
         response = simple_json_response(**umapjson)
-        response[
-            "Content-Disposition"
-        ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
+        response["Content-Disposition"] = (
+            f'attachment; filename="umap_backup_{self.object.slug}.umap"'
+        )
         return response
 
 

@@ -15,9 +15,9 @@ def staticfiles(settings):
     settings.STATIC_ROOT = static_root
     # Make sure settings are properly reset after the test
     settings.STORAGES = deepcopy(settings.STORAGES)
-    settings.STORAGES["staticfiles"][
-        "BACKEND"
-    ] = "umap.storage.UmapManifestStaticFilesStorage"
+    settings.STORAGES["staticfiles"]["BACKEND"] = (
+        "umap.storage.UmapManifestStaticFilesStorage"
+    )
     try:
         call_command("collectstatic", "--noinput")
         yield
