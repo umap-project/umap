@@ -1,9 +1,9 @@
-import json
 from copy import copy
 
 from django import template
 from django.conf import settings
-from django.core.serializers.json import DjangoJSONEncoder
+
+from umap.utils import json_dumps
 
 register = template.Library()
 
@@ -26,7 +26,7 @@ def map_fragment(map_instance, **kwargs):
     page = kwargs.pop("page", None) or ""
     unique_id = prefix + str(page) + "_" + str(map_instance.pk)
     return {
-        "map_settings": json.dumps(map_settings, cls=DjangoJSONEncoder),
+        "map_settings": json_dumps(map_settings),
         "map": map_instance,
         "unique_id": unique_id,
     }

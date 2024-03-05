@@ -1,7 +1,9 @@
 import gzip
+import json
 import os
 
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from django.urls import URLPattern, URLResolver, get_resolver
 
 
@@ -162,3 +164,8 @@ def merge_features(reference: list, latest: list, incoming: list):
         merged.append(item)
 
     return merged
+
+
+def json_dumps(obj, **kwargs):
+    """Utility using the Django JSON Encoder when dumping objects"""
+    return json.dumps(obj, cls=DjangoJSONEncoder, **kwargs)
