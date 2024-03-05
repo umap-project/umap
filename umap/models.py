@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -373,7 +374,10 @@ class DataLayer(NamedModel):
         (EDITORS, _("Editors only")),
         (OWNER, _("Owner only")),
     )
-
+    uuid = models.UUIDField(
+        unique=True, primary_key=True, default=uuid.uuid4, editable=False
+    )
+    old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
@@ -436,6 +440,7 @@ class DataLayer(NamedModel):
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
+        new._state.adding = True
         new.pk = None
         if map_inst:
             new.map = map_inst
@@ -444,7 +449,10 @@ class DataLayer(NamedModel):
         return new
 
     def is_valid_version(self, name):
-        return name.startswith("%s_" % self.pk) and name.endswith(".geojson")
+        valid_prefixes = [name.startswith("%s_" % self.pk)]
+        if self.old_id:
+            valid_prefixes.append(name.startswith("%s_" % self.old_id))
+        return any(valid_prefixes) and name.endswith(".geojson")
 
     def version_metadata(self, name):
         els = name.split(".")[0].split("_")

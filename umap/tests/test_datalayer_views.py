@@ -111,7 +111,7 @@ def test_update(client, datalayer, map, post_data):
     # Test response is a json
     j = json.loads(response.content.decode())
     assert "id" in j
-    assert datalayer.pk == j["id"]
+    assert str(datalayer.pk) == j["id"]
     assert j["browsable"] is True
     assert Path(modified_datalayer.geojson.path).exists()
 
@@ -223,6 +223,41 @@ def test_versions_should_return_versions(client, datalayer, map, settings):
         "at": "1440918637",
     }
     assert version in versions["versions"]
+
+
+def test_versions_can_return_old_format(client, datalayer, map, settings):
+    map.share_status = Map.PUBLIC
+    map.save()
+    root = datalayer.storage_root()
+    datalayer.old_id = 123  # old datalayer id (now replaced by uuid)
+    datalayer.save()
+
+    datalayer.geojson.storage.save(
+        "%s/%s_1440924889.geojson" % (root, datalayer.pk), ContentFile("{}")
+    )
+    datalayer.geojson.storage.save(
+        "%s/%s_1440923687.geojson" % (root, datalayer.pk), ContentFile("{}")
+    )
+
+    # store with the id prefix (rather than the uuid)
+    old_format_version = "%s_1440918637.geojson" % datalayer.old_id
+    datalayer.geojson.storage.save(
+        ("%s/" % root) + old_format_version, ContentFile("{}")
+    )
+
+    url = reverse("datalayer_versions", args=(map.pk, datalayer.pk))
+    versions = json.loads(client.get(url).content.decode())
+    assert len(versions["versions"]) == 4
+    version = {
+        "name": old_format_version,
+        "size": 2,
+        "at": "1440918637",
+    }
+    assert version in versions["versions"]
+
+    client.get(
+        reverse("datalayer_version", args=(map.pk, datalayer.pk, old_format_version))
+    )
 
 
 def test_version_should_return_one_version_geojson(client, datalayer, map):

@@ -72,18 +72,18 @@ i18n_urls = [
 ]
 i18n_urls += decorated_patterns(
     [can_view_map, cache_control(must_revalidate=True)],
-    re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/$",
+    path(
+        "datalayer/<int:map_id>/<uuid:pk>/",
         views.DataLayerView.as_view(),
         name="datalayer_view",
     ),
-    re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/versions/$",
+    path(
+        "datalayer/<int:map_id>/<uuid:pk>/versions/",
         views.DataLayerVersions.as_view(),
         name="datalayer_versions",
     ),
-    re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/(?P<name>[_\w]+.geojson)$",
+    path(
+        "datalayer/<int:map_id>/<uuid:pk>/<str:name>",
         views.DataLayerVersion.as_view(),
         name="datalayer_version",
     ),
@@ -145,13 +145,13 @@ map_urls = [
         views.DataLayerCreate.as_view(),
         name="datalayer_create",
     ),
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/delete/(?P<pk>\d+)/$",
+    path(
+        "map/<int:map_id>/datalayer/delete/<uuid:pk>/",
         views.DataLayerDelete.as_view(),
         name="datalayer_delete",
     ),
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/permissions/(?P<pk>\d+)/$",
+    path(
+        "map/<int:map_id>/datalayer/permissions/<uuid:pk>/",
         views.UpdateDataLayerPermissions.as_view(),
         name="datalayer_permissions",
     ),
@@ -165,8 +165,8 @@ if settings.DEFAULT_FROM_EMAIL:
         )
     )
 datalayer_urls = [
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/update/(?P<pk>\d+)/$",
+    path(
+        "map/<int:map_id>/datalayer/update/<uuid:pk>/",
         views.DataLayerUpdate.as_view(),
         name="datalayer_update",
     ),

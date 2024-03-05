@@ -98,7 +98,7 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
         "name": "test datalayer",
         "inCaption": True,
         "editMode": "advanced",
-        "id": datalayer.pk,
+        "id": str(datalayer.pk),
         "permissions": {"edit_status": 1},
     }
 
@@ -116,7 +116,7 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
         "name": "test datalayer",
         "inCaption": True,
         "editMode": "advanced",
-        "id": datalayer.pk,
+        "id": str(datalayer.pk),
         "permissions": {"edit_status": 1},
     }
     expect(marker_pane_p1).to_have_count(4)
@@ -136,7 +136,7 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
         "name": "test datalayer",
         "inCaption": True,
         "editMode": "advanced",
-        "id": datalayer.pk,
+        "id": str(datalayer.pk),
         "permissions": {"edit_status": 1},
     }
     expect(marker_pane_p2).to_have_count(5)
