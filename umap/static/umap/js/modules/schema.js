@@ -302,9 +302,12 @@ export const SCHEMA = {
   },
   datalayersControl: {
     type: Boolean,
-    nullable: true,
-    handler: 'DataLayersControl',
     label: translate('Display the data layers control'),
+    default: true,
+  },
+  captionControl: {
+    type: Boolean,
+    label: translate('Display the caption control'),
     default: true,
   },
   searchControl: {

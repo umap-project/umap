@@ -975,6 +975,13 @@ input:invalid {
         right: 0;
         visibility: visible;
     }
+    #umap-ui-container.condensed {
+        margin-top: 10px;
+        margin-right: 10px;
+        max-height: 300px;
+        width: 390px;
+        border-radius: 10px;
+    }
 }
 @media all and (orientation:portrait) {
     #umap-ui-container {

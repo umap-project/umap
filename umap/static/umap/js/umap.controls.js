@@ -53,17 +53,6 @@ U.ChangeTileLayerAction = U.BaseAction.extend({
   },
 })
 
-U.ManageDatalayersAction = U.BaseAction.extend({
-  options: {
-    className: 'dark manage-datalayers',
-    tooltip: L._('Manage layers'),
-  },
-
-  addHooks: function () {
-    this.map.manageDatalayers()
-  },
-})
-
 U.UpdateExtentAction = U.BaseAction.extend({
   options: {
     className: 'update-map-extent dark',
@@ -488,174 +477,48 @@ U.PermanentCreditsControl = L.Control.extend({
   },
 })
 
-U.DataLayersControl = L.Control.extend({
-  options: {
-    position: 'topleft',
-  },
-
-  labels: {
-    zoomToLayer: L._('Zoom to layer extent'),
-    toggleLayer: L._('Show/hide layer'),
-    editLayer: L._('Edit'),
-  },
-
+L.Control.Button = L.Control.extend({
   initialize: function (map, options) {
     this.map = map
     L.Control.prototype.initialize.call(this, options)
   },
 
-  _initLayout: function (map) {
-    const container = (this._container = L.DomUtil.create(
-        'div',
-        'leaflet-control-browse umap-control'
-      )),
-      actions = L.DomUtil.create('div', 'umap-browse-actions', container)
-    this._datalayers_container = L.DomUtil.create(
-      'ul',
-      'umap-browse-datalayers',
-      actions
-    )
-
-    L.DomUtil.createButton(
-      'umap-browse-link',
-      actions,
-      L._('Browse data'),
-      map.openBrowser,
-      map
-    )
-
-    const toggleButton = L.DomUtil.createButton(
-      'umap-browse-toggle',
+  onAdd: function (map) {
+    const container = L.DomUtil.create('div', `${this.options.className} umap-control`)
+    const button = L.DomUtil.createButton(
+      '',
       container,
-      L._('See data layers')
+      this.options.title,
+      this.onClick,
+      this
     )
-    L.DomEvent.on(toggleButton, 'click', L.DomEvent.stop)
-
-    map.whenReady(function () {
-      this.update()
-    }, this)
-
-    if (L.Browser.pointer) {
-      L.DomEvent.disableClickPropagation(container)
-      L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation)
-      L.DomEvent.on(container, 'MozMousePixelScroll', L.DomEvent.stopPropagation)
-    }
-    if (!L.Browser.touch) {
-      L.DomEvent.on(
-        container,
-        {
-          mouseenter: this.expand,
-          mouseleave: this.collapse,
-        },
-        this
-      )
-    } else {
-      L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation)
-      L.DomEvent.on(toggleButton, 'click', L.DomEvent.stop).on(
-        toggleButton,
-        'click',
-        this.expand,
-        this
-      )
-      map.on('click', this.collapse, this)
-    }
-
+    L.DomEvent.on(button, 'dblclick', L.DomEvent.stopPropagation)
     return container
   },
+})
 
-  onAdd: function (map) {
-    if (!this._container) this._initLayout(map)
-    if (map.options.datalayersControl === 'expanded') this.expand()
-    return this._container
+U.DataLayersControl = L.Control.Button.extend({
+  options: {
+    position: 'topright',
+    className: 'leaflet-control-browse',
+    title: L._('Show datalayers'),
   },
 
-  onRemove: function (map) {
-    this.collapse()
+  onClick: function () {
+    this.map.openBrowser()
+  },
+})
+
+U.CaptionControl = L.Control.Button.extend({
+  options: {
+    position: 'topright',
+    className: 'leaflet-control-caption',
+    title: L._('About'),
   },
 
-  update: function () {
-    if (this._datalayers_container && this._map) {
-      this._datalayers_container.innerHTML = ''
-      this.map.eachDataLayerReverse(function (datalayer) {
-        this.addDataLayer(this._datalayers_container, datalayer)
-      }, this)
-    }
-  },
-
-  expand: function () {
-    L.DomUtil.addClass(this._container, 'expanded')
-  },
-
-  collapse: function () {
-    if (this.map.options.datalayersControl === 'expanded') return
-    L.DomUtil.removeClass(this._container, 'expanded')
-  },
-
-  addDataLayer: function (container, datalayer, draggable) {
-    const datalayerLi = L.DomUtil.create('li', '', container)
-    if (draggable)
-      L.DomUtil.element(
-        'i',
-        { className: 'drag-handle', title: L._('Drag to reorder') },
-        datalayerLi
-      )
-    datalayer.renderToolbox(datalayerLi)
-    const title = L.DomUtil.add(
-      'span',
-      'layer-title',
-      datalayerLi,
-      datalayer.options.name
-    )
-
-    datalayerLi.id = `browse_data_toggle_${L.stamp(datalayer)}`
-    L.DomUtil.classIf(datalayerLi, 'off', !datalayer.isVisible())
-
-    title.textContent = datalayer.options.name
-  },
-
-  newDataLayer: function () {
-    const datalayer = this.map.createDataLayer({})
-    datalayer.edit()
-  },
-
-  openPanel: function () {
-    if (!this.map.editEnabled) return
-    const container = L.DomUtil.create('ul', 'umap-browse-datalayers')
-    const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Manage layers')
-    this.map.eachDataLayerReverse(function (datalayer) {
-      this.addDataLayer(container, datalayer, true)
-    }, this)
-    const orderable = new U.Orderable(container)
-    orderable.on(
-      'drop',
-      function (e) {
-        const layer = this.map.datalayers[e.src.dataset.id],
-          other = this.map.datalayers[e.dst.dataset.id],
-          minIndex = Math.min(layer.getRank(), other.getRank()),
-          maxIndex = Math.max(layer.getRank(), other.getRank())
-        if (e.finalIndex === 0) layer.bringToTop()
-        else if (e.finalIndex > e.initialIndex) layer.insertBefore(other)
-        else layer.insertAfter(other)
-        this.map.eachDataLayerReverse((datalayer) => {
-          if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
-            datalayer.isDirty = true
-        })
-        this.map.indexDatalayers()
-      },
-      this
-    )
-
-    const bar = L.DomUtil.create('div', 'button-bar', container)
-    L.DomUtil.createButton(
-      'show-on-edit block add-datalayer button',
-      bar,
-      L._('Add a layer'),
-      this.newDataLayer,
-      this
-    )
-
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+  onClick: function () {
+    if (this.map.editEnabled) this.map.editCaption()
+    else this.map.displayCaption()
   },
 })
 
@@ -667,6 +530,11 @@ U.DataLayer.include({
   },
 
   renderToolbox: function (container) {
+    L.DomUtil.element(
+      'i',
+      { className: 'drag-handle', title: L._('Drag to reorder') },
+      container
+    )
     const toggle = L.DomUtil.create('i', 'layer-toggle', container),
       zoomTo = L.DomUtil.create('i', 'layer-zoom_to', container),
       edit = L.DomUtil.create('i', 'layer-edit show-on-edit', container),
@@ -698,7 +566,6 @@ U.DataLayer.include({
     L.DomEvent.on(zoomTo, 'click', this.zoomTo, this)
     L.DomUtil.addClass(container, this.getHidableClass())
     L.DomUtil.classIf(container, 'off', !this.isVisible())
-    container.dataset.id = L.stamp(this)
   },
 
   getHidableElements: function () {
@@ -748,7 +615,6 @@ const ControlsMixin = {
     'locate',
     'measure',
     'editinosm',
-    'datalayers',
     'star',
     'tilelayers',
   ],

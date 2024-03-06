@@ -841,23 +841,21 @@ ul.photon-autocomplete {
 /*   Datalayers Control              */
 /* ********************************* */
 
-.leaflet-control-browse .umap-browse-toggle {
+.leaflet-control-caption [type="button"],
+.leaflet-control-browse [type="button"] {
     background-image: url('./img/24.svg');
-    width: 36px;
-    height: 36px;
-    background-position: -36px -72px;
+    width: 40px;
+    height: 40px;
+    background-position: -34px -70px;
     background-size: 180px;
 }
-.leaflet-control-browse .umap-browse-actions {
-    background-color: #fff;
-    padding: 10px;
-    display: none;
-    line-height: 24px;
-    border-radius: 2px;
+.leaflet-control-caption [type="button"] {
+    background-position: -70px -70px;
 }
-.leaflet-control-browse .umap-browse-datalayers {
-    max-height: 15em;
-    overflow-y: auto;
+.umap-edit-enabled .leaflet-control-caption [type="button"],
+.umap-edit-enabled .leaflet-control-browse [type="button"] {
+    background-image: url('./img/24-white.svg');
+    background-color: var(--color-darkGray);
 }
 .search-result-tools i,
 .leaflet-inplace-toolbar a,
@@ -876,11 +874,20 @@ ul.photon-autocomplete {
 .dark .umap-browse-datalayers i {
     background-image: url('./img/16-white.svg');
 }
-.umap-browse-datalayers li[draggable] .drag-handle {
-    float: right;
+.umap-browse-features ul {
+    display: none;
+}
+.show-list ul {
+    display: initial;
+}
+[draggable] .drag-handle {
+    display: none;
+}
+.umap-edit-enabled [draggable] .drag-handle {
     background-position: -72px -72px;
     margin-right: 5px;
     cursor: move;
+    display: initial;
 }
 .leaflet-inplace-toolbar a {
     background-image: url('./img/16-white.svg');
@@ -891,9 +898,6 @@ ul.photon-autocomplete {
 }
 .leaflet-inplace-toolbar a:hover {
     background-color: #353c3e!important;
-}
-.leaflet-control-browse .umap-browse-datalayers .off i {
-    cursor: inherit;
 }
 .layer-toggle {
     background-position: -49px -31px;
@@ -958,8 +962,7 @@ ul.photon-autocomplete {
 .umap-extract-shape-from-multi{
     background-position: -119px 2px;
 }
-.umap-browse-features .feature-title,
-.leaflet-control-browse .umap-browse-actions .layer-title {
+.umap-browse-features .feature-title {
     width: inherit;
     cursor: inherit;
     padding-left: 6px;
@@ -968,32 +971,7 @@ ul.photon-autocomplete {
     font-size: 12px;
     cursor: pointer;
 }
-.leaflet-control-browse .umap-browse-actions .off .layer-title {
-    color: rgb(179, 179, 179);
-}
-.leaflet-control-browse.expanded > a,
-.leaflet-control-browse.expanded > button {
-    display: none;
-}
-.leaflet-control-browse.expanded .umap-browse-actions {
-    display: block;
-}
-.leaflet-control-browse .umap-browse-link {
-    background-image: none;
-    background-color: rgb(68, 68, 68);
-    color: white;
-    display: block;
-    height: 24px;
-    line-height: 24px;
-    margin-top: 14px;
-    padding: 0 5px;
-    text-align: right;
-    min-width: 160px;
-    width: 100%;
-    border-radius: 2px;
-}
-a.add-datalayer:before,
-.leaflet-control-browse .umap-browse-link:before {
+a.add-datalayer:before {
     background-image: url('./img/16.svg');
     background-repeat: no-repeat;
     background-position: -45px -96px;
@@ -1006,8 +984,7 @@ a.add-datalayer:before,
 a.add-datalayer:before {
     background-position: -20px -20px;
 }
-a.add-datalayer:hover,
-.leaflet-control-browse .umap-browse-link:hover {
+a.add-datalayer:hover {
     background-color: rgb(99, 99, 99);
 }
 .umap-browse-data .off .feature {
@@ -1031,8 +1008,12 @@ a.add-datalayer:hover,
     padding-left: 5px;
     height: 30px;
     line-height: 30px;
-    background-color: #eeeee0;
+    background-color: var(--color-lightGray);
     color: #666;
+}
+.dark .umap-browse-features h5 {
+    background-color: initial;
+    color: white;
 }
 .umap-browse-features h5 span {
     margin-left: 10px;
@@ -1095,9 +1076,16 @@ a.add-datalayer:hover,
     font-size: 0.9em;
     margin-bottom: 14px;
 }
-.datalayer-counter {
+.datalayer-toggle-list {
     float: right;
     margin-right: 5px;
+    background-position: -145px -70px;
+}
+.show-list .datalayer-toggle-list {
+    background-position: -145px -45px;
+}
+.datalayer-name {
+    cursor: pointer;
 }
 
 
