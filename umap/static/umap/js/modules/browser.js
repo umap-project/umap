@@ -122,9 +122,12 @@ export default class Browser {
     })
   }
 
+  isOpen () {
+    return !!document.querySelector('.umap-browser')
+  }
+
   onMoveEnd() {
-    const isBrowserOpen = !!document.querySelector('.umap-browse-data')
-    if (!isBrowserOpen) return
+    if (!this.isOpen()) return
     const isListDynamic = this.options.inBbox
     this.map.eachBrowsableDataLayer((datalayer) => {
       if (!isListDynamic && !datalayer.hasDynamicData()) return
@@ -184,10 +187,12 @@ export default class Browser {
   }
 
   onEnableEdit () {
+    if (!this.isOpen()) return
     this.map.ui._panel.classList.add('dark')
   }
 
   onDisableEdit () {
+    if (!this.isOpen()) return
     this.map.ui._panel.classList.remove('dark')
   }
 }
