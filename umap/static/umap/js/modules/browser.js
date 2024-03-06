@@ -73,6 +73,7 @@ export default class Browser {
 
   addDataLayer(datalayer, parent) {
     let className = `orderable datalayer ${datalayer.getHidableClass()}`
+    if (this.map.ui.PANEL_MODE !== 'condensed') className += ' show-list'
     const container = DomUtil.create(
         'div',
         className,

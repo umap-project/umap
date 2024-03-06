@@ -67,7 +67,8 @@ U.Map = L.Map.extend({
     this.description = this.options.description
     this.demoTileInfos = this.options.demoTileInfos
     this.options.zoomControl = zoomControl !== undefined ? zoomControl : true
-    this.options.fullscreenControl = fullscreenControl !== undefined ? fullscreenControl : true
+    this.options.fullscreenControl =
+      fullscreenControl !== undefined ? fullscreenControl : true
     this.datalayersOnLoad = L.Util.queryString('datalayers')
     if (this.datalayersOnLoad) {
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
@@ -138,7 +139,7 @@ U.Map = L.Map.extend({
       delete this.options.displayDataBrowserOnLoad
     }
     if (this.options.datalayersControl === 'expanded') {
-      this.options.onLoadPanel = 'databrowser'
+      this.options.onLoadPanel = 'datalayers'
     }
 
     this.ui.on(
@@ -211,14 +212,19 @@ U.Map = L.Map.extend({
     }
     this.initShortcuts()
     this.onceDataLoaded(function () {
-      if (L.Util.queryString('share')) this.share.open()
-      else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
-      else if (this.options.onLoadPanel === 'caption') this.displayCaption()
-      else if (
-        this.options.onLoadPanel === 'facet' ||
-        this.options.onLoadPanel === 'datafilters'
-      )
+      if (L.Util.queryString('share')) {
+        this.share.open()
+      } else if (this.options.onLoadPanel === 'databrowser') {
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'datalayers') {
+        this.ui.PANEL_MODE = 'condensed'
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'caption') {
+        this.ui.PANEL_MODE = 'condensed'
+        this.displayCaption()
+      } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
         this.openFacet()
+      }
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) {
@@ -266,14 +272,14 @@ U.Map = L.Map.extend({
     // Specific case for datalayersControl
     // which accepts "expanded" value, on top of true/false/null
     if (L.Util.queryString('datalayersControl') === 'expanded') {
-      options.datalayersControl = 'expanded'
+      options.onLoadPanel = 'datalayers'
     }
   },
 
   overrideSchema: function (schema) {
-   for (const [key, extra] of Object.entries(schema)) {
-     U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
-   }
+    for (const [key, extra] of Object.entries(schema)) {
+      U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
+    }
   },
 
   initControls: function () {
@@ -1540,14 +1546,13 @@ U.Map = L.Map.extend({
     })
     credits.appendChild(creditsBuilder.build())
     this.ui.openPanel({ data: { html: container }, className: 'dark' })
-
   },
 
   edit: function () {
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container')
-      title = L.DomUtil.create('h3', '', container)
+    const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map properties')
     this._editControls(container)
     this._editShapeProperties(container)
