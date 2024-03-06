@@ -140,6 +140,9 @@ U.Map = L.Map.extend({
       }
       delete this.options.displayDataBrowserOnLoad
     }
+    if (this.options.datalayersControl === 'expanded') {
+      this.options.onLoadPanel = 'databrowser'
+    }
 
     this.ui.on(
       'panel:closed',
@@ -302,7 +305,7 @@ U.Map = L.Map.extend({
     // Specific case for datalayersControl
     // which accepts "expanded" value, on top of true/false/null
     if (L.Util.queryString('datalayersControl') === 'expanded') {
-      L.Util.setFromQueryString(options, 'datalayersControl')
+      options.datalayersControl = 'expanded'
     }
   },
 
@@ -326,7 +329,6 @@ U.Map = L.Map.extend({
       const editActions = [
         U.ImportAction,
         U.EditPropertiesAction,
-        U.ManageDatalayersAction,
         U.ChangeTileLayerAction,
         U.UpdateExtentAction,
         U.UpdatePermsAction,
@@ -338,6 +340,7 @@ U.Map = L.Map.extend({
       zoomOutTitle: L._('Zoom out'),
     })
     this._controls.datalayers = new U.DataLayersControl(this)
+    this._controls.caption = new U.CaptionControl(this)
     this._controls.locate = new U.Locate(this, {
       strings: {
         title: L._('Center map on your location'),
@@ -427,6 +430,8 @@ U.Map = L.Map.extend({
         L.DomUtil.addClass(control._container, 'display-on-more')
       else L.DomUtil.removeClass(control._container, 'display-on-more')
     }
+    if (this.getOption('datalayersControl')) this._controls.datalayers.addTo(this)
+    if (this.getOption('captionControl')) this._controls.caption.addTo(this)
     if (this.getOption('permanentCredit')) this._controls.permanentCredit.addTo(this)
     if (this.getOption('moreControl')) this._controls.more.addTo(this)
     if (this.getOption('scaleControl')) this._controls.scale.addTo(this)
@@ -460,7 +465,6 @@ U.Map = L.Map.extend({
       if (!pane.dataset || !pane.dataset.id) continue
       this.datalayers_index.push(this.datalayers[pane.dataset.id])
     }
-    this.updateDatalayersControl()
   },
 
   ensurePanesOrder: function () {
@@ -487,10 +491,6 @@ U.Map = L.Map.extend({
       this.once('dataloaded', callback, context)
     }
     return this
-  },
-
-  updateDatalayersControl: function () {
-    if (this._controls.datalayers) this._controls.datalayers.update()
   },
 
   backupOptions: function () {
@@ -951,7 +951,6 @@ U.Map = L.Map.extend({
     })
     this.ensurePanesOrder()
     this.dirty_datalayers = []
-    this.updateDatalayersControl()
     this.initTileLayers()
     this.isDirty = false
   },
@@ -1157,6 +1156,7 @@ U.Map = L.Map.extend({
       UIFields.push(`options.${this.HIDDABLE_CONTROLS[i]}Control`)
     }
     UIFields = UIFields.concat([
+      'options.datalayersControl',
       'options.moreControl',
       'options.scrollWheelZoom',
       'options.miniMap',
@@ -1459,19 +1459,6 @@ U.Map = L.Map.extend({
     slideshow.appendChild(slideshowBuilder.build())
   },
 
-  _editCredits: function (container) {
-    const credits = L.DomUtil.createFieldset(container, L._('Credits'))
-    const creditsFields = [
-      'options.licence',
-      'options.shortCredit',
-      'options.longCredit',
-      'options.permanentCredit',
-      'options.permanentCreditBackground',
-    ]
-    const creditsBuilder = new U.FormBuilder(this, creditsFields)
-    credits.appendChild(creditsBuilder.build())
-  },
-
   _advancedActions: function (container) {
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
@@ -1514,18 +1501,39 @@ U.Map = L.Map.extend({
     )
   },
 
-  edit: function () {
+  editCaption: function () {
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Edit map properties')
+    title.textContent = L._('Edit map details')
     const builder = new U.FormBuilder(this, metadataFields, {
       className: 'map-metadata',
     })
     const form = builder.build()
     container.appendChild(form)
+
+    const credits = L.DomUtil.createFieldset(container, L._('Credits'))
+    const creditsFields = [
+      'options.licence',
+      'options.shortCredit',
+      'options.longCredit',
+      'options.permanentCredit',
+      'options.permanentCreditBackground',
+    ]
+    const creditsBuilder = new U.FormBuilder(this, creditsFields)
+    credits.appendChild(creditsBuilder.build())
+    this.ui.openPanel({ data: { html: container }, className: 'dark' })
+
+  },
+
+  edit: function () {
+    if (!this.editEnabled) return
+    if (this.options.editMode !== 'advanced') return
+    const container = L.DomUtil.create('div', 'umap-edit-container')
+      title = L.DomUtil.create('h3', '', container)
+    title.textContent = L._('Edit map properties')
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)
@@ -1534,7 +1542,6 @@ U.Map = L.Map.extend({
     this._editOverlay(container)
     this._editBounds(container)
     this._editSlideshow(container)
-    this._editCredits(container)
     this._advancedActions(container)
 
     this.ui.openPanel({ data: { html: container }, className: 'dark' })

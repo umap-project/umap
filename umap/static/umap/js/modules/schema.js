@@ -372,6 +372,11 @@ export const SCHEMA = {
     impacts: ['ui'],
     label: translate('Allow scroll wheel zoom?'),
   },
+  captionControl: {
+    type: Boolean,
+    label: translate('Display the caption control'),
+    default: true,
+  },
   searchControl: {
     type: Boolean,
     impacts: ['ui'],

@@ -845,7 +845,6 @@ U.DataLayer = L.Evented.extend({
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
         this.map.datalayers_index.push(this)
     }
-    this.map.updateDatalayersControl()
   },
 
   _dataUrl: function () {
@@ -1153,7 +1152,6 @@ U.DataLayer = L.Evented.extend({
     delete this.map.datalayers[L.stamp(this)]
     this.map.datalayers_index.splice(this.getRank(), 1)
     this.parentPane.removeChild(this.pane)
-    this.map.updateDatalayersControl()
     this.fire('erase')
     this._leaflet_events_bk = this._leaflet_events
     this.map.off('moveend', this.onMoveEnd, this)

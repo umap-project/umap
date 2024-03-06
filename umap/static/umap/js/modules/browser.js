@@ -1,10 +1,13 @@
-// Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
 import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
+import Orderable from './orderable.js'
+import {translate} from './i18n.js'
 
 export default class Browser {
   constructor(map) {
     this.map = map
     this.map.on('moveend', this.onMoveEnd, this)
+    this.map.on('edit:enabled', this.onEnableEdit, this)
+    this.map.on('edit:disabled', this.onDisableEdit, this)
     this.options = {
       filter: '',
       inBbox: false,
@@ -24,9 +27,9 @@ export default class Browser {
       symbol = feature._getIconUrl
         ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
         : null
-    zoom_to.title = L._('Bring feature to center')
-    edit.title = L._('Edit this feature')
-    del.title = L._('Delete this feature')
+    zoom_to.title = translate('Bring feature to center')
+    edit.title = translate('Edit this feature')
+    del.title = translate('Delete this feature')
     title.textContent = feature.getDisplayName() || '—'
     const bgcolor = feature.getDynamicOption('color')
     colorBox.style.backgroundColor = bgcolor
@@ -69,18 +72,20 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, parent) {
-    const container = DomUtil.create('div', datalayer.getHidableClass(), parent),
-      headline = DomUtil.create('h5', '', container),
-      counter = DomUtil.create('span', 'datalayer-counter', headline)
+    const container = DomUtil.create(
+        'div',
+        `orderable ${datalayer.getHidableClass()}`,
+        parent
+      ),
+      headline = DomUtil.create('h5', '', container)
     container.id = this.datalayerId(datalayer)
-    datalayer.renderToolbox(headline)
-    DomUtil.add('span', '', headline, datalayer.options.name)
     const ul = DomUtil.create('ul', '', container)
     this.updateDatalayer(datalayer)
     datalayer.on('datachanged', this.onDataLayerChanged, this)
     this.map.ui.once('panel:closed', () => {
       datalayer.off('datachanged', this.onDataLayerChanged, this)
     })
+    container.dataset.id = L.stamp(datalayer)
   }
 
   updateDatalayer(datalayer) {
@@ -90,16 +95,22 @@ export default class Browser {
     // Panel is not open
     if (!parent) return
     DomUtil.classIf(parent, 'off', !datalayer.isVisible())
-    const container = parent.querySelector('ul'),
-      counter = parent.querySelector('.datalayer-counter')
+    const container = parent.querySelector('ul')
+    const headline = parent.querySelector('h5')
+    const toggleList = () => parent.classList.toggle('show-list')
+    headline.innerHTML = ''
+    const toggle = DomUtil.create('i', 'datalayer-toggle-list', headline)
+    DomEvent.on(toggle, 'click', toggleList)
+    datalayer.renderToolbox(headline)
+    const name = DomUtil.create('span', 'datalayer-name', headline)
+    DomEvent.on(name, 'click', toggleList)
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
 
     let total = datalayer.count(),
       current = container.querySelectorAll('li').length,
       count = total == current ? total : `${current}/${total}`
-    counter.textContent = count
-    counter.title = L._('Features in this layer: {count}', { count: count })
+    name.textContent = `${datalayer.options.name} (${count})`
   }
 
   onFormChange() {
@@ -127,19 +138,14 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
 
-    const title = DomUtil.add(
-      'h3',
-      'umap-browse-title',
-      container,
-      this.map.getOption('name')
-    )
+    const title = DomUtil.add('h3', 'umap-browse-title', container, translate('Browse data'))
 
     const formContainer = DomUtil.create('div', '', container)
     const dataContainer = DomUtil.create('div', 'umap-browse-features', container)
 
     const fields = [
-      ['options.filter', { handler: 'Input', placeholder: L._('Filter') }],
-      ['options.inBbox', { handler: 'Switch', label: L._('Current map view') }],
+      ['options.filter', { handler: 'Input', placeholder: translate('Filter') }],
+      ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
     const builder = new U.FormBuilder(this, fields, {
       makeDirty: false,
@@ -150,10 +156,36 @@ export default class Browser {
     this.map.ui.openPanel({
       data: { html: container },
       actions: [this.map._aboutLink()],
+      className: 'condensed'
     })
 
     this.map.eachBrowsableDataLayer((datalayer) => {
       this.addDataLayer(datalayer, dataContainer)
     })
+    // After datalayers have been added.
+    const orderable = new Orderable(dataContainer, L.bind(this.onReorder, this))
+  }
+
+  onReorder(src, dst, initialIndex, finalIndex) {
+    const layer = this.map.datalayers[src.dataset.id],
+      other = this.map.datalayers[dst.dataset.id],
+      minIndex = Math.min(layer.getRank(), other.getRank()),
+      maxIndex = Math.max(layer.getRank(), other.getRank())
+    if (finalIndex === 0) layer.bringToTop()
+    else if (finalIndex > initialIndex) layer.insertBefore(other)
+    else layer.insertAfter(other)
+    this.map.eachDataLayerReverse((datalayer) => {
+      if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
+        datalayer.isDirty = true
+    })
+    this.map.indexDatalayers()
+  }
+
+  onEnableEdit () {
+    this.map.ui._panel.classList.add('dark')
+  }
+
+  onDisableEdit () {
+    this.map.ui._panel.classList.remove('dark')
   }
 }
