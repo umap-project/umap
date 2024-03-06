@@ -757,21 +757,7 @@ const ControlsMixin = {
       `,
       urls
     )
-    const browser = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-list', browser)
-    const labelBrowser = L.DomUtil.create('span', '', browser)
-    labelBrowser.textContent = labelBrowser.title = L._('Browse data')
-    L.DomEvent.on(browser, 'click', this.openBrowser, this)
-    const actions = [browser]
-    if (this.options.facetKey) {
-      const filter = L.DomUtil.create('li', '')
-      L.DomUtil.create('i', 'umap-icon-16 umap-add', filter)
-      const labelFilter = L.DomUtil.create('span', '', filter)
-      labelFilter.textContent = labelFilter.title = L._('Facet search')
-      L.DomEvent.on(filter, 'click', this.openFacet, this)
-      actions.push(filter)
-    }
-    this.ui.openPanel({ data: { html: container }, actions: actions })
+    this.ui.openPanel({ data: { html: container } })
   },
 
   renderEditToolbar: function () {
