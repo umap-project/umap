@@ -41,6 +41,10 @@ U.UI = L.Evented.extend({
     L.DomUtil.add('i', 'umap-close-icon', closeLink)
     const label = L.DomUtil.create('span', '', closeLink)
     label.title = label.textContent = L._('Close')
+    const resizeLink = L.DomUtil.create('li', 'umap-resize-link', actionsContainer)
+    L.DomUtil.add('i', 'umap-resize-icon', resizeLink)
+    const resizeLabel = L.DomUtil.create('span', '', resizeLink)
+    resizeLabel.title = resizeLabel.textContent = L._('Toggle size')
     if (e.actions) {
       for (let i = 0; i < e.actions.length; i++) {
         actionsContainer.appendChild(e.actions[i])
@@ -62,6 +66,11 @@ U.UI = L.Evented.extend({
       L.DomUtil.addClass(this.parent, 'umap-ui')
     }
     L.DomEvent.on(closeLink, 'click', this.closePanel, this)
+    L.DomEvent.on(resizeLink, 'click', this.resizePanel, this)
+  },
+
+  resizePanel: function () {
+    this._panel.classList.toggle('condensed')
   },
 
   closePanel: function () {
