@@ -273,6 +273,7 @@ export const SCHEMA = {
       ['none', translate('None')],
       ['caption', translate('Caption')],
       ['databrowser', translate('Data browser')],
+      ['datalayers', translate('Layers')],
       ['facet', translate('Facet search')],
     ],
     default: 'none',

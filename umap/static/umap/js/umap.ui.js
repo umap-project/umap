@@ -5,6 +5,7 @@ U.UI = L.Evented.extend({
   ALERTS: Array(),
   ALERT_ID: null,
   TOOLTIP_ID: null,
+  PANEL_MODE: 'expanded',
 
   initialize: function (parent) {
     this.parent = parent
@@ -22,7 +23,7 @@ U.UI = L.Evented.extend({
   },
 
   resetPanelClassName: function () {
-    this._panel.className = 'with-transition'
+    this._panel.className = `with-transition ${this.PANEL_MODE}`
   },
 
   openPanel: function (e) {
