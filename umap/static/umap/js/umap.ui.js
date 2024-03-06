@@ -14,7 +14,7 @@ U.UI = L.Evented.extend({
     L.DomEvent.on(this.container, 'wheel', L.DomEvent.stopPropagation)
     L.DomEvent.on(this.container, 'MozMousePixelScroll', L.DomEvent.stopPropagation)
     this._panel = L.DomUtil.create('div', '', this.container)
-    this._panel.id = 'umap-ui-container'
+    this._panel.id = 'umap-panel'
     this._alert = L.DomUtil.create('div', 'with-transition', this.container)
     this._alert.id = 'umap-alert-container'
     this._tooltip = L.DomUtil.create('div', '', this.container)

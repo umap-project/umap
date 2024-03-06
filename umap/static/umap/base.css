@@ -547,7 +547,6 @@ i.info {
 .umap-layer-properties-container,
 .umap-browse-data,
 .umap-facet-search,
-.umap-browse-datalayers,
 .umap-tilelayer-switcher-container {
     padding: 0 10px;
 }
@@ -678,13 +677,13 @@ input[type=hidden].blur + [type="button"] {
 .leaflet-ui-container {
     overflow-x: hidden;
 }
-#umap-ui-container {
+#umap-panel {
     /* Added for playwright to consider the element as non visible  */
     /* as being out of the visible viewport is not enough  */
     visibility: hidden;
     position: absolute;
     bottom: 0;
-    padding: 0 10px;
+    padding: 10px;
     border-left: 1px solid var(--color-lightGray);
     overflow-x: auto;
     z-index: 1010;
@@ -692,23 +691,19 @@ input[type=hidden].blur + [type="button"] {
     opacity: 0.98;
     cursor: initial;
 }
-#umap-ui-container.login-panel {
-    position: fixed;  /* Should not scroll when used in content pages (like home page) */
-    z-index: 1011;  /* Above a map panel if any */
-}
-#umap-ui-container.dark {
+#umap-panel.dark {
     border-left: 1px solid #222;
     background-color: var(--color-darkGray);
     color: #efefef;
 }
-#umap-ui-container.fullwidth {
+#umap-panel.fullwidth {
     width: 100%;
     right: -100%;
     z-index: 10000;
     padding-left: 0;
     padding-right: 0;
 }
-.umap-caption-bar-enabled #umap-ui-container {
+.umap-caption-bar-enabled #umap-panel {
     bottom: 46px;
 }
 .leaflet-top,
@@ -718,25 +713,25 @@ input[type=hidden].blur + [type="button"] {
 .umap-ui .leaflet-right {
     right: 400px;
 }
-#umap-ui-container,
+#umap-panel,
 #umap-alert-container,
 #umap-tooltip-container {
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
 }
-#umap-ui-container .umap-popup-content img {
+#umap-panel .umap-popup-content img {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
     max-width: 99% !important;
 }
-#umap-ui-container .umap-popup-content {
+#umap-panel .umap-popup-content {
     max-height: inherit;
 }
-#umap-ui-container .body {
+#umap-panel .body {
     clear: both;
     height: calc(100% - 54px); /* Minus size of toolbox */
 }
-#umap-ui-container .toolbox {
+#umap-panel .toolbox {
     padding: 5px 10px;
     overflow: hidden;
     display: flex;
@@ -745,7 +740,7 @@ input[type=hidden].blur + [type="button"] {
     justify-content: flex-start;
     gap: 5px;
 }
-#umap-ui-container .toolbox li {
+#umap-panel .toolbox li {
     color: #2e3436;
     line-height: 32px;
     cursor: pointer;
@@ -755,15 +750,15 @@ input[type=hidden].blur + [type="button"] {
     border: 1px solid #b6b6b3;
     border-radius: 2px;
 }
-#umap-ui-container.dark .toolbox li {
+#umap-panel.dark .toolbox li {
     color: #d3dfeb;
     border: 1px solid #202425;
 }
-#umap-ui-container .toolbox li:hover {
+#umap-panel .toolbox li:hover {
     color: #2e3436;
     background-color: #d4d4d2;
 }
-#umap-ui-container.dark .toolbox li:hover {
+#umap-panel.dark .toolbox li:hover {
     color: #eeeeec;
     background-color: #353c3e;
 }
@@ -897,6 +892,7 @@ input:invalid {
 /* *********** */
 /* Close link  */
 /* *********** */
+.umap-resize-icon,
 .umap-close-icon {
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
@@ -905,6 +901,10 @@ input:invalid {
     padding: 0 10px;
     vertical-align: middle;
 }
+.umap-resize-icon {
+    background-position: -76px -150px;
+}
+.dark .umap-resize-icon,
 .dark .umap-close-icon {
     background-image: url('./img/16-white.svg');
 }
@@ -963,35 +963,36 @@ input:invalid {
 /*    Mobile   */
 /* *********** */
 @media all and (orientation:landscape) {
-    .umap-edit-enabled #umap-ui-container {
+    .umap-edit-enabled #umap-panel {
         top: 46px;
     }
-    #umap-ui-container {
+    #umap-panel {
         width: 400px;
         right: -400px;
         top:  0;
     }
-    .umap-ui #umap-ui-container {
+    .umap-ui #umap-panel {
         right: 0;
         visibility: visible;
     }
-    #umap-ui-container.condensed {
+    #umap-panel.condensed {
         margin-top: 10px;
         margin-right: 10px;
-        max-height: 300px;
+        max-height: 500px;
+        bottom: initial;
         width: 390px;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 }
 @media all and (orientation:portrait) {
-    #umap-ui-container {
+    #umap-panel {
         height: 50%;
         max-height: 400px;
         width: 100%;
         bottom: 0;
         right: -100%;
     }
-    .umap-ui #umap-ui-container {
+    .umap-ui #umap-panel {
         right: 0;
         visibility: visible;
     }

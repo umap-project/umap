@@ -500,7 +500,7 @@ L.Control.Button = L.Control.extend({
 U.DataLayersControl = L.Control.Button.extend({
   options: {
     position: 'topright',
-    className: 'leaflet-control-browse',
+    className: 'umap-control-browse',
     title: L._('Show datalayers'),
   },
 
@@ -512,7 +512,7 @@ U.DataLayersControl = L.Control.Button.extend({
 U.CaptionControl = L.Control.Button.extend({
   options: {
     position: 'topright',
-    className: 'leaflet-control-caption',
+    className: 'umap-control-caption',
     title: L._('About'),
   },
 
