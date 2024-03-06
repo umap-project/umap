@@ -317,7 +317,6 @@ ul.photon-autocomplete {
     background-position: -36px -72px;
 }
 .permissions-panel h3:before,
-.umap-browse-datalayers h3:before,
 .umap-edit-container h3:before,
 .umap-feature-properties:before,
 .umap-layer-properties-container h3:before,
@@ -836,59 +835,6 @@ ul.photon-autocomplete {
 }
 
 
-
-/* ********************************* */
-/*   Datalayers Control              */
-/* ********************************* */
-
-.leaflet-control-caption [type="button"],
-.leaflet-control-browse [type="button"] {
-    background-image: url('./img/24.svg');
-    width: 40px;
-    height: 40px;
-    background-position: -34px -70px;
-    background-size: 180px;
-}
-.leaflet-control-caption [type="button"] {
-    background-position: -70px -70px;
-}
-.umap-edit-enabled .leaflet-control-caption [type="button"],
-.umap-edit-enabled .leaflet-control-browse [type="button"] {
-    background-image: url('./img/24-white.svg');
-    background-color: var(--color-darkGray);
-}
-.search-result-tools i,
-.leaflet-inplace-toolbar a,
-.umap-browse-features i,
-.umap-caption i,
-.umap-browse-datalayers i {
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    display: inline;
-    padding: 0 10px;
-    cursor: pointer;
-    height: 24px;
-    line-height: 24px;
-    vertical-align: middle;
-}
-.dark .umap-browse-datalayers i {
-    background-image: url('./img/16-white.svg');
-}
-.umap-browse-features ul {
-    display: none;
-}
-.show-list ul {
-    display: initial;
-}
-[draggable] .drag-handle {
-    display: none;
-}
-.umap-edit-enabled [draggable] .drag-handle {
-    background-position: -72px -72px;
-    margin-right: 5px;
-    cursor: move;
-    display: initial;
-}
 .leaflet-inplace-toolbar a {
     background-image: url('./img/16-white.svg');
     background-color: var(--color-darkGray)!important;
@@ -962,12 +908,12 @@ ul.photon-autocomplete {
 .umap-extract-shape-from-multi{
     background-position: -119px 2px;
 }
-.umap-browse-features .feature-title {
+.umap-browser .feature-title {
     width: inherit;
     cursor: inherit;
     padding-left: 6px;
 }
-.umap-browse-features .feature-title {
+.umap-browser .feature-title {
     font-size: 12px;
     cursor: pointer;
 }
@@ -987,79 +933,6 @@ a.add-datalayer:before {
 a.add-datalayer:hover {
     background-color: rgb(99, 99, 99);
 }
-.umap-browse-data .off .feature {
-    display: none;
-}
-
-
-/* ********************************* */
-/*   Features browser panel          */
-/* ********************************* */
-
-.umap-facet-search .formbox,
-.umap-browse-features > div {
-    border: 1px solid #d3d3d3;
-    margin-bottom: 14px;
-    border-radius: 2px;
-}
-.umap-browse-features h5, .umap-facet-search h5 {
-    margin-bottom: 0;
-    overflow: hidden;
-    padding-left: 5px;
-    height: 30px;
-    line-height: 30px;
-    background-color: var(--color-lightGray);
-    color: #666;
-}
-.dark .umap-browse-features h5 {
-    background-color: initial;
-    color: white;
-}
-.umap-browse-features h5 span {
-    margin-left: 10px;
-}
-.umap-browse-features li, .umap-facet-search li {
-    padding: 2px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.umap-facet-search li:nth-child(even),
-.umap-browse-features li:nth-child(even) {
-    background-color: #f8f8f3;
-}
-.umap-browse-features .feature-color {
-    box-shadow: 0 0 2px 0 black inset;
-    cursor: inherit;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing: border-box;
-    background: none;
-    display: inline-block;
-    padding: 0;
-    width: 24px;
-    text-align: center;
-    margin-left: 5px;
-}
-.umap-browse-features .feature-color img {
-    width: 24px;
-}
-.umap-browse-features .feature-color span {
-    font-style: normal;
-    font-weight: bold;
-}
-.umap-browse-features .polygon .feature-color,
-.umap-browse-features .polyline .feature-color {
-    box-shadow: 0 0 2px 0 black inset;
-    background-image: url('./img/24.svg');
-    background-size: 500%;
-}
-.umap-browse-features .polyline .feature-color {
-    background-position: -72px -23px;
-}
-.umap-browse-features .polygon .feature-color {
-    background-position: -48px -25px;
-}
 .show-on-edit {
     display: none!important;
 }
@@ -1072,16 +945,140 @@ a.add-datalayer:hover {
 .umap-edit-enabled .show-on-edit.block {
     display: block!important;
 }
-.umap-browse-description {
-    font-size: 0.9em;
-    margin-bottom: 14px;
+
+
+/* ********************************* */
+/*   Browser panel          */
+/* ********************************* */
+.umap-control-caption [type="button"],
+.umap-control-browse [type="button"] {
+    background-image: url('./img/24.svg');
+    width: 40px;
+    height: 40px;
+    background-position: -34px -70px;
+    background-size: 180px;
 }
-.datalayer-toggle-list {
+.umap-control-caption [type="button"] {
+    background-position: -70px -70px;
+}
+.umap-edit-enabled .umap-control-caption [type="button"],
+.umap-edit-enabled .umap-control-browse [type="button"] {
+    background-image: url('./img/24-white.svg');
+    background-color: var(--color-darkGray);
+}
+.search-result-tools i,
+.leaflet-inplace-toolbar a,
+.umap-browser i,
+.umap-caption i {
+    background-repeat: no-repeat;
+    background-image: url('./img/16.svg');
+    display: inline;
+    padding: 0 10px;
+    cursor: pointer;
+    height: 24px;
+    line-height: 24px;
+    vertical-align: middle;
+}
+.umap-browser.dark .datalayer i {
+    background-image: url('./img/16-white.svg');
+}
+.umap-browser ul {
+    display: none;
+}
+.show-list ul {
+    display: block;
+}
+i.drag-handle {
+    display: none;
+    background-position: -72px -73px;
+    cursor: move;
+    margin-right: 10px;
+}
+.umap-edit-enabled [draggable] .drag-handle {
+    display: inline-block;
+}
+
+.umap-browser .off .feature {
+    display: none;
+}
+.umap-facet-search .formbox,
+.umap-browser .datalayer {
+    margin-bottom: 2px;
+    border-radius: 2px;
+}
+.umap-browser .datalayer ul {
+    border: 1px solid #d3d3d3;
+}
+.umap-browser.dark .datalayer ul {
+    border: 1px solid #2c3233;
+}
+.umap-browser h5, .umap-facet-search h5 {
+    margin-bottom: 0;
+    overflow: hidden;
+    padding-left: 5px;
+    height: 30px;
+    line-height: 30px;
+    background-color: var(--color-lightGray);
+    color: #666;
+}
+.umap-browser.dark h5 {
+    background-color: #2c3233;
+    color: white;
+}
+.umap-browser h5 span {
+    margin-left: 10px;
+}
+.umap-browser li, .umap-facet-search li {
+    padding: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.umap-facet-search li:nth-child(even),
+.umap-browser .datalayer li:nth-child(even) {
+    background-color: #efefef;
+}
+.umap-browser.dark .datalayer li:nth-child(even) {
+    background-color: #2c3233;
+}
+.umap-browser .datalayer i.feature-color {
+    box-shadow: 0 0 2px 0 black inset;
+    cursor: inherit;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing: border-box;
+    background: none;
+    display: inline-block;
+    padding: 0;
+    width: 24px;
+    text-align: center;
+    margin-left: 5px;
+}
+.umap-browser .datalayer .feature-color img {
+    width: 24px;
+}
+.umap-browser .datalayer .feature-color span {
+    font-style: normal;
+    font-weight: bold;
+}
+.umap-browser .polygon .feature-color,
+.umap-browser .polyline .feature-color {
+    box-shadow: 0 0 2px 0 black inset;
+    background-image: url('./img/24.svg');
+    background-size: 500%;
+}
+.umap-browser .polyline .feature-color {
+    background-position: -72px -23px;
+}
+.umap-browser .polygon .feature-color {
+    background-position: -48px -25px;
+}
+.umap-browser .datalayer-toggle-list {
     float: right;
     margin-right: 5px;
     background-position: -145px -70px;
 }
-.show-list .datalayer-toggle-list {
+.umap-browser .show-list .datalayer-toggle-list {
     background-position: -145px -45px;
 }
 .datalayer-name {
@@ -1092,11 +1089,11 @@ a.add-datalayer:hover {
 /* ********************************* */
 /*          Table Editor             */
 /* ********************************* */
-#umap-ui-container.umap-table-editor {
+#umap-panel.umap-table-editor {
     padding-left: 0;
     padding-right: 0;
 }
-#umap-ui-container.umap-table-editor .toolbox li {
+#umap-panel.umap-table-editor .toolbox li {
     float: left;
 }
 

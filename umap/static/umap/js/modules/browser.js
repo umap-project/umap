@@ -72,9 +72,10 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, parent) {
+    let className = `orderable datalayer ${datalayer.getHidableClass()}`
     const container = DomUtil.create(
         'div',
-        `orderable ${datalayer.getHidableClass()}`,
+        className,
         parent
       ),
       headline = DomUtil.create('h5', '', container)
@@ -133,15 +134,14 @@ export default class Browser {
   open() {
     // Get once but use it for each feature later
     this.filterKeys = this.map.getFilterKeys()
-    const container = DomUtil.create('div', 'umap-browse-data')
+    const container = DomUtil.create('div')
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
 
-    const title = DomUtil.add('h3', 'umap-browse-title', container, translate('Browse data'))
-
+    const title = DomUtil.add('h3', '', container, translate('Browse data'))
     const formContainer = DomUtil.create('div', '', container)
-    const dataContainer = DomUtil.create('div', 'umap-browse-features', container)
+    const dataContainer = DomUtil.create('div', '', container)
 
     const fields = [
       ['options.filter', { handler: 'Input', placeholder: translate('Filter') }],
@@ -153,10 +153,11 @@ export default class Browser {
     })
     formContainer.appendChild(builder.build())
 
+    let className = 'umap-browser'
+    if (this.map.editEnabled) className += ' dark'
     this.map.ui.openPanel({
       data: { html: container },
-      actions: [this.map._aboutLink()],
-      className: 'condensed'
+      className: className
     })
 
     this.map.eachBrowsableDataLayer((datalayer) => {

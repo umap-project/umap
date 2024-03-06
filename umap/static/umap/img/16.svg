@@ -178,5 +178,7 @@
    <path id="path16669" d="m36 963.88v8.3163" fill="none" marker-end="url(#Arrow1)" stroke="#464646" stroke-width="1.5"/>
   </g>
   <path id="copy" d="m58.25 962.61v3.5h4v4h3.5v-7.5zm-4 4v7.5h7.5v-7.5z" fill="#4d4d4d" style="paint-order:fill markers stroke"/>
+  <path id="path3" d="m80.25 967.36v4.75h4.75v-1.5h-3.25v-3.25z" color="#000000" fill="#4d4d4d" fill-rule="evenodd" style="-inkscape-stroke:none"/>
+  <path id="path4" d="m83 964.61v1.5h3.25v3.25h1.5v-4.75z" color="#000000" fill="#4d4d4d" fill-rule="evenodd" style="-inkscape-stroke:none"/>
  </g>
 </svg>

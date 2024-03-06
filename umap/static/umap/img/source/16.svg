@@ -10,7 +10,7 @@
       <path d="M 16.0401,2.3158 H 2.005 v 14.0351 h 14.0351 z" fill="#ffffff" id="path2351" />
     </mask>
   </defs>
-  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="17.305658" inkscape:cx="54.779771" inkscape:cy="162.69245" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="30.569587" inkscape:cx="81.895121" inkscape:cy="155.43226" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
     <inkscape:grid type="xygrid" id="grid3004" empspacing="4" visible="true" enabled="true" snapvisiblegridlinesonly="true" originx="0" originy="0" spacingy="1" spacingx="1" units="px" />
     <sodipodi:guide orientation="-1,0" position="24,168" id="guide3084" inkscape:locked="false" inkscape:label="" inkscape:color="rgb(0,134,229)" />
     <sodipodi:guide orientation="0,1" position="0,120" id="guide3086" inkscape:locked="false" inkscape:label="" inkscape:color="rgb(0,134,229)" />
@@ -197,5 +197,7 @@
       <path style="fill:none;fill-rule:evenodd;stroke:#464646;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1)" d="m 36,963.87832 v 8.3163" id="path16669" sodipodi:nodetypes="cc" />
     </g>
     <path id="copy" style="fill:#4d4d4d;paint-order:fill markers stroke" d="m 58.25,962.61218 v 3.5 h 4 v 4 h 3.5 v -7.5 z m -4,4 v 7.5 h 7.5 v -7.5 z" />
+    <path style="color:#000000;fill:#4d4d4d;fill-rule:evenodd;-inkscape-stroke:none" d="m 80.25,967.36133 v 4.75 h 4.75 v -1.5 h -3.25 v -3.25 z" id="path3" />
+    <path style="color:#000000;fill:#4d4d4d;fill-rule:evenodd;-inkscape-stroke:none" d="m 83,964.61133 v 1.5 h 3.25 v 3.25 h 1.5 v -4.75 z" id="path4" />
   </g>
 </svg>
