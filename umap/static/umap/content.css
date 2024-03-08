@@ -17,19 +17,19 @@ input:-moz-placeholder, :-moz-placeholder {
    color: #a5a5a5;
 }
 
-#umap-ui-container textarea {
+#umap-panel textarea {
     height: 100px;
     margin-bottom: 14px;
 }
-#umap-ui-container select {
+#umap-panel select {
     margin-bottom: 10px;
 }
 
-#umap-ui-container.warning .button {
+#umap-panel.warning .button {
     background-color: #c60f13;
     border: 1px solid #7f0a0c;
 }
-#umap-ui-container.warning .button:hover {
+#umap-panel.warning .button:hover {
     background-color: #970b0e;
 }
 
@@ -194,7 +194,7 @@ h2.tabs a:hover {
     color: #efefef;
     text-decoration: underline;
 }
-body.content #umap-ui-container {
+body.content #umap-panel {
     background-color: #fff;
 }
 

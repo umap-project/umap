@@ -12,16 +12,15 @@ def test_should_have_fieldset_for_layer_type_properties(page, live_server, tilel
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Open DataLayers list
-    button = page.get_by_title("Manage Layers")
+    button = page.get_by_title("See layers")
     expect(button).to_be_visible()
     button.click()
 
     # Create a layer
-    page.get_by_title("Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
 
-    select = page.locator("#umap-ui-container .umap-field-type select")
+    select = page.locator("#umap-panel .umap-field-type select")
     expect(select).to_be_visible()
 
     choropleth_header = page.get_by_text("Choropleth: settings")

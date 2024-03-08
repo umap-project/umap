@@ -24,10 +24,6 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     button = page.get_by_role("button", name="Import", exact=True)
     expect(button).to_be_visible()
     button.click()
-    layers = page.locator(".umap-browse-datalayers li")
-    expect(layers).to_have_count(2)
-    nonloaded = page.locator(".umap-browse-datalayers li.off")
-    expect(nonloaded).to_have_count(1)
     assert file_input.input_value()
     # Close the import panel
     page.keyboard.press("Escape")
@@ -35,6 +31,11 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     expect(page.locator(".umap-main-edit-toolbox .map-name")).to_have_text(
         "Carte sans nom"
     )
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
+    expect(layers).to_have_count(2)
+    nonloaded = page.locator(".umap-browser .datalayer.off")
+    expect(nonloaded).to_have_count(1)
 
 
 def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
@@ -67,7 +68,7 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
 
 def test_import_geojson_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator("path")
     expect(markers).to_have_count(0)
@@ -84,6 +85,7 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
     expect(button).to_be_visible()
     button.click()
     # A layer has been created
+    page.get_by_title("See layers").click()
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
     expect(paths).to_have_count(3)

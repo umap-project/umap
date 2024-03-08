@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Diesen Ort als neues Element speichern",
     "Search location": "Ort suchen",
     "See all": "Alle anzeigen",
-    "See data layers": "Datenebenen ansehen",
+    "See layers": "Datenebenen ansehen",
     "See full screen": "Vollbildanzeige",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Setze es auf Nein, um diese Ebene in der Diashow, im Datenbrowser, in der Popup-Navigation,... auszublenden.",
     "Shape properties": "Formeigenschaften",

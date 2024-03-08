@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "この場所を新しい地物として保存",
     "Search location": "地名で検索",
     "See all": "すべて表示",
-    "See data layers": "データレイヤを見る",
+    "See layers": "データレイヤを見る",
     "See full screen": "フルスクリーン表示",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…",
     "Shape properties": "シェイプ表示プロパティ",

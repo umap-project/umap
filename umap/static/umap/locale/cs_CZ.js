@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Uložit tuto pozici jako nový objekt",
     "Search location": "Vyhledat místo na mapě",
     "See all": "Zobraz vše",
-    "See data layers": "Zobrazit datové vrstvy",
+    "See layers": "Zobrazit datové vrstvy",
     "See full screen": "Na celou obrazovku",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Nastavte na false pro ukrytí této vrstvy z prezentace, prohlížeče dat, vyskakovací navigace...",
     "Shape properties": "Vlastností tvaru",
