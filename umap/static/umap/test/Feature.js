@@ -80,7 +80,7 @@ describe('U.FeatureMixin', function () {
     })
 
     it('should give precedence to feature style over datalayer styles', function () {
-      var input = qs('#umap-ui-container form input[name="color"]')
+      var input = qs('#umap-panel form input[name="color"]')
       assert.ok(input)
       changeInputValue(input, 'DarkGreen')
       assert.notOk(qs('path[fill="DarkRed"]'))
@@ -107,7 +107,7 @@ describe('U.FeatureMixin', function () {
       happen.click(
         qs('#browse_data_toggle_' + L.stamp(datalayer) + ' .layer-edit')
       )
-      changeInputValue(qs('#umap-ui-container form input[name=color]'), 'Chocolate')
+      changeInputValue(qs('#umap-panel form input[name=color]'), 'Chocolate')
       assert.notOk(qs('path[fill="DarkBlue"]'))
       assert.notOk(qs('path[fill="DarkRed"]'))
       assert.notOk(qs('path[fill="Chocolate"]'))
@@ -337,7 +337,7 @@ describe('U.FeatureMixin', function () {
     it('should change style on datalayer select change', function () {
       enableEdit()
       happen.click(qs('.manage-datalayers'))
-      happen.click(qs('#umap-ui-container .add-datalayer'))
+      happen.click(qs('#umap-panel .add-datalayer'))
       changeInputValue(qs('form.umap-form input[name="name"]'), 'New layer')
       changeInputValue(
         qs('form#datalayer-advanced-properties input[name=color]'),

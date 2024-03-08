@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Сохранить это местоположение как новый объект",
     "Search location": "Поиск местоположения",
     "See all": "Посмотреть все",
-    "See data layers": "Посмотреть слои данных",
+    "See layers": "Посмотреть слои данных",
     "See full screen": "Смотреть в полноэкранном режиме",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Сбросьте, чтобы скрыть слой из слайдшоу, просмотра данных и всплывающей навигации...",
     "Shape properties": "Свойства фигуры",

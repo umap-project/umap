@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Сачувај локацију као нови елемент",
     "Search location": "Претражи локацију",
     "See all": "Види све",
-    "See data layers": "Прикажи унесене податке",
+    "See layers": "Прикажи унесене податке",
     "See full screen": "Увећана слика",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…",
     "Shape properties": "Својства облика",

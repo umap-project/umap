@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Enregistrer ce lieu comme élément de la carte",
     "Search location": "Chercher un lieu",
     "See all": "Tout voir",
-    "See data layers": "Voir les calques",
+    "See layers": "Voir les calques",
     "See full screen": "Voir en plein écran",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Désactiver pour masquer ce calque du diaporama, du navigateur de données…",
     "Shape properties": "Propriétés de la forme",

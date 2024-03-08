@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Enrollañ al lec'h-mañ evel un elfenn nevez",
     "Search location": "Klask ul lec'h",
     "See all": "Gwelet pep tra",
-    "See data layers": "Diskouez ar gwiskadoù",
+    "See layers": "Diskouez ar gwiskadoù",
     "See full screen": "Gwelet e skramm a-bezh",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Diweredekaat evit kuzhat ar gwiskad-mañ ouzh an diaporama, ar merdeer roadennoù...",
     "Shape properties": "Perzhioù ar furm",

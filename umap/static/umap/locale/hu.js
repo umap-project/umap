@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "E hely mentése új objektumként",
     "Search location": "Hely keresése",
     "See all": "Összes megtekintése",
-    "See data layers": "Adatrétegek megtekintése",
+    "See layers": "Adatrétegek megtekintése",
     "See full screen": "Teljes képernyős nézet megtekintése",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Állítsa hamisra, hogy elrejtse ezt a réteget a diavetítésből, az adatböngészőből, az előugró navigációból stb.",
     "Shape properties": "Alakzat tulajdonságai",

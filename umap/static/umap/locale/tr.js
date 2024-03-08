@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Bu konumu yeni özellik olarak kaydet",
     "Search location": "Konum ara",
     "See all": "Hepsini gör",
-    "See data layers": "Veri katmanlarını gör",
+    "See layers": "Veri katmanlarını gör",
     "See full screen": "Tam ekranda gör",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Bu katmanı slayt gösterisinden, veri tarayıcısından, pop-up gezinmeden gizlemek için yanlış olarak ayarlayın ...",
     "Shape properties": "Şekil özellikleri",

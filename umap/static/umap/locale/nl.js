@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Sla deze locatie op als nieuw object",
     "Search location": "Zoek locatie",
     "See all": "Toon alles",
-    "See data layers": "Bekijk datalagen",
+    "See layers": "Bekijk datalagen",
     "See full screen": "Op volledig scherm weergeven",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Zet op onwaar ('false') om deze laag te verbergen in de slideshow, data verkenner, popup navigatie, ...",
     "Shape properties": "Eigenschappen van de vorm",

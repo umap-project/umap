@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "לשמור את המיקום הזה כתכונה חדשה",
     "Search location": "חיפוש מיקום",
     "See all": "להציג הכול",
-    "See data layers": "להציג שכבות נתונים",
+    "See layers": "להציג שכבות נתונים",
     "See full screen": "הצגת מסך מלא",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "יש להגדיר לשקר כדי להסתיר את השכבה הזאת מהמצגת, דפדפן הנתונים, הניווט המוקפץ…",
     "Shape properties": "מאפייני צורה",

@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "این مکان را به عنوان ویژگی جدید ذخیره کنید",
     "Search location": "مکان را جستجو کنید",
     "See all": "همه را ببین",
-    "See data layers": "لایه های داده را مشاهده کنید",
+    "See layers": "لایه های داده را مشاهده کنید",
     "See full screen": "تمام صفحه را مشاهده کنید",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "آن را روی غلط/false تنظیم کنید تا این لایه از نمایش اسلاید، مرورگر داده، ناوبری بازشو پنهان شود…",
     "Shape properties": "ویژگی های شکل",

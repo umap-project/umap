@@ -105,6 +105,7 @@ export default class Browser {
     DomEvent.on(toggle, 'click', toggleList)
     datalayer.renderToolbox(headline)
     const name = DomUtil.create('span', 'datalayer-name', headline)
+    name.textContent = datalayer.options.name
     DomEvent.on(name, 'click', toggleList)
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
@@ -112,7 +113,9 @@ export default class Browser {
     let total = datalayer.count(),
       current = container.querySelectorAll('li').length,
       count = total == current ? total : `${current}/${total}`
-    name.textContent = `${datalayer.options.name} (${count})`
+    const counter = DomUtil.create('span', 'datalayer-counter', headline)
+    counter.textContent = `(${count})`
+    counter.title = translate(`Features in this layer: ${count}`)
   }
 
   onFormChange() {
@@ -167,9 +170,22 @@ export default class Browser {
     this.map.eachBrowsableDataLayer((datalayer) => {
       this.addDataLayer(datalayer, dataContainer)
     })
+    L.DomUtil.createButton(
+      'show-on-edit block add-datalayer button',
+      container,
+      L._('Add a layer'),
+      this.newDataLayer,
+      this
+    )
     // After datalayers have been added.
     const orderable = new Orderable(dataContainer, L.bind(this.onReorder, this))
   }
+
+  newDataLayer () {
+    const datalayer = this.map.createDataLayer({})
+    datalayer.edit()
+  }
+
 
   onReorder(src, dst, initialIndex, finalIndex) {
     const layer = this.map.datalayers[src.dataset.id],

@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Vista þessa staðsetningu sem nýja fitju",
     "Search location": "Leita að staðsetningu",
     "See all": "Sjá allt",
-    "See data layers": "Skoða gagnalög",
+    "See layers": "Skoða gagnalög",
     "See full screen": "Fylla skjáinn",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Settu þetta sem ósatt til að fela þetta lag úr skyggnusýningu, gagnavafranum, sprettleiðsögn…",
     "Shape properties": "Eiginleikar lögunar",

@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Gem denne placering som et nyt objekt",
     "Search location": "Søg efter placering",
     "See all": "Se alle",
-    "See data layers": "Se datalag",
+    "See layers": "Se datalag",
     "See full screen": "Se i fuld skærm",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Sæt den til false, for at skjule dette lag fra slideshowet, databrowseren, popupnavigeringen…",
     "Shape properties": "Figuregenskaber",

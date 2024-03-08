@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "將地點存為新的圖徵",
     "Search location": "搜尋地點",
     "See all": "觀看完整內容",
-    "See data layers": "檢視資料圖層",
+    "See layers": "檢視資料圖層",
     "See full screen": "觀看全螢幕",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "設定為假時，在幻燈片時、資料檢視器和彈出式導航中可將此圖層隱藏...",
     "Shape properties": "形狀屬性",

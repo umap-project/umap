@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Αποθήκευση αυτής της τοποθεσίας ως νέο στοιχείο",
     "Search location": "Αναζήτηση τοποθεσίας",
     "See all": "Εμφάνιση όλων",
-    "See data layers": "Εμφάνιση επιπέδων δεδομένων",
+    "See layers": "Εμφάνιση επιπέδων δεδομένων",
     "See full screen": "Εμφάνιση πλήρους οθόνης",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Απενεργοποίηση εάν επιθυμείτε την απόκρυψη του επιπέδου κατά την προβολή των διαφανειών, την περιήγηση δεδομένων, την αναδυόμενη πλοήγηση...",
     "Shape properties": "Ιδιότητες σχήματος",

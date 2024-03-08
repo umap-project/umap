@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Зберегти місце розташування як новий об’єкт",
     "Search location": "Пошук місця",
     "See all": "Переглянути усе",
-    "See data layers": "Подивитися шари даних",
+    "See layers": "Подивитися шари даних",
     "See full screen": "Дивитися в повноекранному режимі",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Встановіть false, щоб приховати шар в слайдшоу, в перегляді даних та навігації…",
     "Shape properties": "Параметри полігона",

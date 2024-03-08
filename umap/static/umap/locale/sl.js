@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Shrani mesto kot nov predmet",
     "Search location": "Preišči mesto",
     "See all": "Pokaži vse",
-    "See data layers": "See data layers",
+    "See layers": "See layers",
     "See full screen": "Pokaži v celozaslonskem načinu",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Neizbrana možnost skrije plast med predstavitvijo,  v pregledovalniku podatkov, ...",
     "Shape properties": "Lastnosti oblike",

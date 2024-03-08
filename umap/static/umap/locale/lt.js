@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Save this location as new feature",
     "Search location": "Search location",
     "See all": "Išsaugoti viską",
-    "See data layers": "See data layers",
+    "See layers": "See layers",
     "See full screen": "Peržiūrėti per visą ekraną",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…",
     "Shape properties": "Shape properties",
