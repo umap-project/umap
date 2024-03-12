@@ -38,10 +38,10 @@ U.UI = L.Evented.extend({
       body.appendChild(e.data.html)
     else body.innerHTML = e.data.html
     const closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer)
-    L.DomUtil.add('i', 'umap-close-icon', closeLink)
+    L.DomUtil.add('i', 'umap-icon-16 umap-close-icon', closeLink)
     closeLink.title = L._('Close')
     const resizeLink = L.DomUtil.create('li', 'umap-resize-link', actionsContainer)
-    L.DomUtil.add('i', 'umap-resize-icon', resizeLink)
+    L.DomUtil.add('i', 'umap-icon-16 umap-resize-icon', resizeLink)
     resizeLink.title = L._('Toggle size')
     if (e.actions) {
       for (let i = 0; i < e.actions.length; i++) {
