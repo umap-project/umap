@@ -683,7 +683,6 @@ input[type=hidden].blur + [type="button"] {
     visibility: hidden;
     position: absolute;
     bottom: 0;
-    padding: 10px;
     border-left: 1px solid var(--color-lightGray);
     overflow-x: auto;
     z-index: 1010;
@@ -729,7 +728,8 @@ input[type=hidden].blur + [type="button"] {
 }
 #umap-panel .body {
     clear: both;
-    height: calc(100% - 54px); /* Minus size of toolbox */
+    height: calc(100% - 32px); /* Minus size of toolbox */
+    padding: 10px;
 }
 #umap-panel .toolbox {
     padding: 5px 10px;
@@ -739,27 +739,30 @@ input[type=hidden].blur + [type="button"] {
     font-size: 10px;
     justify-content: flex-start;
     gap: 5px;
+    background-color: var(--color-lightGray);
+    border-bottom: 1px solid #bbb;
+    line-height: 2.2em;
+}
+#umap-panel.dark .toolbox {
+    background-color: var(--color-darkGray);
+    border-bottom: 1px solid #232729;
 }
 #umap-panel .toolbox li {
-    color: #2e3436;
-    line-height: 32px;
     cursor: pointer;
-    float: right;
     display: inline;
-    padding: 0 7px;
+    padding: 0 2px;
     border: 1px solid #b6b6b3;
     border-radius: 2px;
 }
+#umap-panel.dark .toolbox
 #umap-panel.dark .toolbox li {
     color: #d3dfeb;
     border: 1px solid #202425;
 }
 #umap-panel .toolbox li:hover {
-    color: #2e3436;
     background-color: #d4d4d2;
 }
 #umap-panel.dark .toolbox li:hover {
-    color: #eeeeec;
     background-color: #353c3e;
 }
 .dark input, .dark textarea {
@@ -896,27 +899,18 @@ input:invalid {
 .umap-close-icon {
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
-    background-position: -28px -6px;
+    background-position: -26px -6px;
     display: inline;
     padding: 0 10px;
     vertical-align: middle;
+    line-height: 24px;
 }
 .umap-resize-icon {
-    background-position: -76px -150px;
+    background-position: -74px -150px;
 }
 .dark .umap-resize-icon,
 .dark .umap-close-icon {
     background-image: url('./img/16-white.svg');
-}
-.dark .umap-close-link {
-    border: 1px solid #202425;
-    color: #eeeeec;
-    padding: 0 7px;
-    line-height: 32px;
-    background-color: var(--color-darkGray);
-}
-.dark .umap-close-link:hover {
-    background-color: #2e3436;
 }
 #umap-alert-container .umap-close-link {
     color: #fff;

@@ -16,7 +16,7 @@
       <path d="M 16.0401,2.3158 H 2.005 v 14.0351 h 14.0351 z" fill="#ffffff" id="path1259" />
     </mask>
   </defs>
-  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="15.215528" inkscape:cx="90.466791" inkscape:cy="146.59366" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="42.508098" inkscape:cx="85.854229" inkscape:cy="153.8648" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
     <inkscape:grid type="xygrid" id="grid3004" empspacing="4" visible="true" enabled="true" snapvisiblegridlinesonly="true" originx="0" originy="0" spacingy="1" spacingx="1" units="px" />
     <sodipodi:guide orientation="-1,0" position="24,168" id="guide3084" inkscape:locked="false" inkscape:label="" inkscape:color="rgb(0,134,229)" />
     <sodipodi:guide orientation="0,1" position="0,96" id="guide3086" inkscape:locked="false" inkscape:label="" inkscape:color="rgb(0,134,229)" />
@@ -208,7 +208,9 @@
       </g>
       <path d="m 24.352274,6.3088036 h 0.03307 V 6.2757306 2.7293857 2.6963127 h -0.03307 -3.713451 -0.03307 v 0.033073 3.5463449 0.033073 h 0.03307 z M 20.373578,2.1497393 h 4.24394 c 0.06157,0 0.120624,0.024461 0.164174,0.068002 0.04355,0.043541 0.068,0.102595 0.068,0.1641723 v 4.2439399 c 0,0.061569 -0.02445,0.1206236 -0.068,0.164174 -0.04355,0.04355 -0.102605,0.067998 -0.164174,0.067998 h -4.24394 c -0.06158,0 -0.120631,-0.024447 -0.164172,-0.067998 -0.04354,-0.04355 -0.068,-0.1026054 -0.068,-0.164174 V 2.3819136 c 0,-0.061577 0.02446,-0.1206315 0.068,-0.1641723 0.04354,-0.043541 0.102595,-0.068002 0.164172,-0.068002 z" fill="#f2f2f2" stroke="#999999" stroke-width="0.0657188" id="path1286" />
     </g>
-    <path style="color:#000000;fill:#f2f2f2;fill-rule:evenodd;stroke:#999999;stroke-opacity:1;fill-opacity:1;stroke-width:0.25;stroke-dasharray:none" d="m 80,967.11218 v 4.75 h 4.75 v -1.5 h -3.25 v -3.25 z" id="path3-5" />
-    <path style="color:#000000;fill:#f2f2f2;fill-rule:evenodd;stroke:#999999;stroke-opacity:1;fill-opacity:1;stroke-width:0.25;stroke-dasharray:none" d="m 82.75,964.36218 v 1.5 h 3.25 v 3.25 h 1.5 v -4.75 z" id="path4-3" />
+    <g id="g3">
+      <path style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-dasharray:none;stroke-opacity:1" d="m 88.000002,967.3622 v 5 h -5 v -1.57895 h 3.421052 v -3.42105 z" id="path3-5" />
+      <path style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-dasharray:none;stroke-opacity:1" d="m 85.000002,964.3622 v 1.57895 h -3.421053 v 3.42105 h -1.578947 v -5 z" id="path4-3" />
+    </g>
   </g>
 </svg>

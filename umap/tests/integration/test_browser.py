@@ -164,7 +164,7 @@ def test_data_browser_bbox_filter_should_be_persistent(
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
     # Close and reopen the browser to make sure this settings is persistent
-    close = browser.get_by_text("Close")
+    close = browser.get_by_title("Close")
     close.click()
     expect(browser).to_be_hidden()
     sleep(0.5)
