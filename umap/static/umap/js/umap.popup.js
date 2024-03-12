@@ -56,9 +56,9 @@ U.Popup.Panel = U.Popup.extend({
 
   allButton: function () {
     const button = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-list', button)
+    L.DomUtil.create('i', 'umap-icon-16 umap-back', button)
     const label = L.DomUtil.create('span', '', button)
-    label.textContent = label.title = L._('See all')
+    button.title = L._('See all')
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     L.DomEvent.disableClickPropagation(button)

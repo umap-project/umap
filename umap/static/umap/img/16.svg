@@ -178,7 +178,8 @@
    <path id="path16669" d="m36 963.88v8.3163" fill="none" marker-end="url(#Arrow1)" stroke="#464646" stroke-width="1.5"/>
   </g>
   <path id="copy" d="m58.25 962.61v3.5h4v4h3.5v-7.5zm-4 4v7.5h7.5v-7.5z" fill="#4d4d4d" style="paint-order:fill markers stroke"/>
-  <path id="path3" d="m80.25 967.36v4.75h4.75v-1.5h-3.25v-3.25z" color="#000000" fill="#4d4d4d" fill-rule="evenodd" style="-inkscape-stroke:none"/>
-  <path id="path4" d="m83 964.61v1.5h3.25v3.25h1.5v-4.75z" color="#000000" fill="#4d4d4d" fill-rule="evenodd" style="-inkscape-stroke:none"/>
+  <path id="path3" d="m88 967.36v5h-5v-1.579h3.4211v-3.421z" color="#000000" fill="#4d4d4d" fill-rule="evenodd" style="-inkscape-stroke:none"/>
+  <path id="path4" d="m85 964.36v1.579h-3.4211v3.421h-1.5789v-5z" color="#000000" fill="#4d4d4d" fill-rule="evenodd" style="-inkscape-stroke:none"/>
+  <path id="path1" d="m134 964.36-4 4 4.2888 3.9769" fill="none" stroke="#4d4d4d" stroke-width="2"/>
  </g>
 </svg>

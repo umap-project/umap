@@ -532,7 +532,7 @@ U.DataLayer.include({
   renderToolbox: function (container) {
     L.DomUtil.element(
       'i',
-      { className: 'drag-handle', title: L._('Drag to reorder') },
+      { className: 'drag-handle show-on-edit', title: L._('Drag to reorder') },
       container
     )
     const toggle = L.DomUtil.create('i', 'layer-toggle', container),
@@ -667,16 +667,7 @@ const ControlsMixin = {
     })
     container.appendChild(builder.build())
 
-    this.ui.openPanel({ data: { html: container }, actions: [this._aboutLink()] })
-  },
-
-  _aboutLink: function () {
-    const link = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-caption', link)
-    const label = L.DomUtil.create('span', '', link)
-    label.textContent = label.title = L._('About')
-    L.DomEvent.on(link, 'click', this.displayCaption, this)
-    return link
+    this.ui.openPanel({ data: { html: container } })
   },
 
   displayCaption: function () {
