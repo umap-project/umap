@@ -68,7 +68,15 @@ U.UI = L.Evented.extend({
   },
 
   resizePanel: function () {
-    this._panel.classList.toggle('condensed')
+    if (this.PANEL_MODE === 'expanded') {
+      this.PANEL_MODE = 'condensed'
+      this._panel.classList.remove('expanded')
+      this._panel.classList.add('condensed')
+    } else {
+      this.PANEL_MODE = 'expanded'
+      this._panel.classList.remove('condensed')
+      this._panel.classList.add('expanded')
+    }
   },
 
   closePanel: function () {
