@@ -26,6 +26,31 @@ export function checkId(string) {
 }
 
 /**
+ * Compute the impacts for a given list of fields.
+ * 
+ * Return a set containing the impacts.
+ * 
+ * @param {fields} list[fields]
+ * @returns Set[string]
+ */
+export function getImpactsFromSchema(fields) {
+  return fields
+    .map((field) => {
+      // remove the option prefix for fields
+      // And only keep the first part in case of a subfield
+      // (e.g "options.limitBounds.foobar" will just return "limitBounds")
+      return field.replace('options.', '').split('.')[0]
+    })
+    .reduce((acc, field) => {
+      // retrieve the "impacts" field from the schema
+      // and merge them together using sets
+      const impacts = U.SCHEMA[field]?.impacts || []
+      impacts.forEach((impact) => acc.add(impact))
+      return acc
+    }, new Set())
+}
+
+/**
  * Import DOM purify, and initialize it.
  *
  * If the context is a node server, uses jsdom to provide
@@ -303,5 +328,5 @@ export function template(str, data) {
       value = value(data)
     }
     return value
-  })
+  }
 }

@@ -69,6 +69,7 @@ U.Map = L.Map.extend({
     this.options.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.options.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
+
     this.datalayersFromQueryString = L.Util.queryString('datalayers')
     if (this.datalayersFromQueryString) {
       this.datalayersFromQueryString = this.datalayersFromQueryString
@@ -242,6 +243,42 @@ U.Map = L.Map.extend({
     this.on('click contextmenu.show', this.closeInplaceToolbar)
   },
 
+  render: function (fields) {
+    let impacts = U.Utils.getImpactsFromSchema(fields)
+
+    for (let impact of impacts) {
+      switch (impact) {
+        case 'ui':
+          this.initCaptionBar()
+          this.renderEditToolbar()
+          this.renderControls()
+          break
+        case 'data':
+          this.redrawVisibleDataLayers()
+          break
+        case 'datalayer-index':
+          this.reindexDataLayers()
+          break
+        case 'background':
+          this.initTileLayers()
+          break
+        case 'bounds':
+          this.handleLimitBounds()
+          break
+      }
+    }
+  },
+
+  reindexDataLayers: function () {
+    this.eachDataLayer((datalayer) => datalayer.reindex())
+  },
+
+  redrawVisibleDataLayers: function () {
+    this.eachVisibleDataLayer((datalayer) => {
+      datalayer.redraw()
+    })
+  },
+
   setOptionsFromQueryString: function (options) {
     // This is not an editable option
     L.Util.setFromQueryString(options, 'editMode')
@@ -269,6 +306,8 @@ U.Map = L.Map.extend({
     }
   },
 
+  // Merge the given schema with the default one
+  // Missing keys inside the schema are merged with the default ones.
   overrideSchema: function (schema) {
     for (const [key, extra] of Object.entries(schema)) {
       U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
@@ -1128,13 +1167,7 @@ U.Map = L.Map.extend({
       'options.captionBar',
       'options.captionMenus',
     ])
-    builder = new U.FormBuilder(this, UIFields, {
-      callback: function () {
-        this.renderControls()
-        this.initCaptionBar()
-      },
-      callbackContext: this,
-    })
+    builder = new U.FormBuilder(this, UIFields)
     const controlsOptions = L.DomUtil.createFieldset(
       container,
       L._('User interface options')
@@ -1157,14 +1190,7 @@ U.Map = L.Map.extend({
       'options.dashArray',
     ]
 
-    builder = new U.FormBuilder(this, shapeOptions, {
-      callback: function (e) {
-        if (this._controls.miniMap) this.renderControls()
-        this.eachVisibleDataLayer((datalayer) => {
-          datalayer.redraw()
-        })
-      },
-    })
+    builder = new U.FormBuilder(this, shapeOptions)
     const defaultShapeProperties = L.DomUtil.createFieldset(
       container,
       L._('Default shape properties')
@@ -1217,14 +1243,7 @@ U.Map = L.Map.extend({
       ],
     ]
 
-    builder = new U.FormBuilder(this, optionsFields, {
-      callback: function (e) {
-        this.initCaptionBar()
-        if (e.helper.field === 'options.sortKey') {
-          this.eachDataLayer((datalayer) => datalayer.reindex())
-        }
-      },
-    })
+    builder = new U.FormBuilder(this, optionsFields)
     const defaultProperties = L.DomUtil.createFieldset(
       container,
       L._('Default properties')
@@ -1242,20 +1261,7 @@ U.Map = L.Map.extend({
       'options.labelInteractive',
       'options.outlinkTarget',
     ]
-    builder = new U.FormBuilder(this, popupFields, {
-      callback: function (e) {
-        if (
-          e.helper.field === 'options.popupTemplate' ||
-          e.helper.field === 'options.popupContentTemplate' ||
-          e.helper.field === 'options.popupShape' ||
-          e.helper.field === 'options.outlinkTarget'
-        )
-          return
-        this.eachVisibleDataLayer((datalayer) => {
-          datalayer.redraw()
-        })
-      },
-    })
+    builder = new U.FormBuilder(this, popupFields)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Default interaction options')
@@ -1309,10 +1315,7 @@ U.Map = L.Map.extend({
       container,
       L._('Custom background')
     )
-    builder = new U.FormBuilder(this, tilelayerFields, {
-      callback: this.initTileLayers,
-      callbackContext: this,
-    })
+    builder = new U.FormBuilder(this, tilelayerFields)
     customTilelayer.appendChild(builder.build())
   },
 
@@ -1360,10 +1363,7 @@ U.Map = L.Map.extend({
       ['options.overlay.tms', { handler: 'Switch', label: L._('TMS format') }],
     ]
     const overlay = L.DomUtil.createFieldset(container, L._('Custom overlay'))
-    builder = new U.FormBuilder(this, overlayFields, {
-      callback: this.initTileLayers,
-      callbackContext: this,
-    })
+    builder = new U.FormBuilder(this, overlayFields)
     overlay.appendChild(builder.build())
   },
 
@@ -1390,10 +1390,7 @@ U.Map = L.Map.extend({
         { handler: 'BlurFloatInput', placeholder: L._('max East') },
       ],
     ]
-    const boundsBuilder = new U.FormBuilder(this, boundsFields, {
-      callback: this.handleLimitBounds,
-      callbackContext: this,
-    })
+    const boundsBuilder = new U.FormBuilder(this, boundsFields)
     limitBounds.appendChild(boundsBuilder.build())
     const boundsButtons = L.DomUtil.create('div', 'button-bar half', limitBounds)
     L.DomUtil.createButton(
@@ -1454,7 +1451,6 @@ U.Map = L.Map.extend({
     ]
     const slideshowHandler = function () {
       this.slideshow.setOptions(this.options.slideshow)
-      this.renderControls()
     }
     const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
       callback: slideshowHandler,
@@ -1472,10 +1468,7 @@ U.Map = L.Map.extend({
       'options.permanentCredit',
       'options.permanentCreditBackground',
     ]
-    const creditsBuilder = new U.FormBuilder(this, creditsFields, {
-      callback: this.renderControls,
-      callbackContext: this,
-    })
+    const creditsBuilder = new U.FormBuilder(this, creditsFields)
     credits.appendChild(creditsBuilder.build())
   },
 

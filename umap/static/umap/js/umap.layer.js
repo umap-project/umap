@@ -254,16 +254,18 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   onEdit: function (field, builder) {
+    // Only compute the breaks if we're dealing with choropleth
+    if (!field.startsWith('options.choropleth')) return
     // If user touches the breaks, then force manual mode
     if (field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
-      builder.helpers['options.choropleth.mode'].fetch()
+      if (builder) builder.helpers['options.choropleth.mode'].fetch()
     }
     this.computeBreaks()
     // If user changes the mode or the number of classes,
     // then update the breaks input value
     if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
-      builder.helpers['options.choropleth.breaks'].fetch()
+      if (builder) builder.helpers['options.choropleth.breaks'].fetch()
     }
   },
 
@@ -592,6 +594,31 @@ U.DataLayer = L.Evented.extend({
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
+  },
+
+  render: function (fields, builder) {
+    let impacts = U.Utils.getImpactsFromSchema(fields)
+
+    for (let impact of impacts) {
+      switch (impact) {
+        case 'ui':
+          this.map.updateDatalayersControl()
+          break
+        case 'data':
+          if (fields.includes('options.type')) {
+            this.resetLayer()
+          }
+          this.hide()
+          fields.forEach((field) => {
+            this.layer.onEdit(field, builder)
+          })
+          this.show()
+          break
+        case 'remote-data':
+          this.fetchRemoteData()
+          break
+      }
+    }
   },
 
   onMoveEnd: function (e) {
@@ -1189,29 +1216,18 @@ U.DataLayer = L.Evented.extend({
     const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
-        this.map.updateDatalayersControl()
         if (e.helper.field === 'options.type') {
-          this.resetLayer()
           this.edit()
         }
       },
     })
     container.appendChild(builder.build())
 
-    const redrawCallback = function (e) {
-      const field = e.helper.field,
-        builder = e.helper.builder
-      this.hide()
-      this.layer.onEdit(field, builder)
-      this.show()
-    }
-
     const layerOptions = this.layer.getEditableOptions()
 
     if (layerOptions.length) {
       builder = new U.FormBuilder(this, layerOptions, {
         id: 'datalayer-layer-properties',
-        callback: redrawCallback,
       })
       const layerProperties = L.DomUtil.createFieldset(
         container,
@@ -1235,7 +1251,6 @@ U.DataLayer = L.Evented.extend({
 
     builder = new U.FormBuilder(this, shapeOptions, {
       id: 'datalayer-advanced-properties',
-      callback: redrawCallback,
     })
     const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
@@ -1251,7 +1266,6 @@ U.DataLayer = L.Evented.extend({
 
     builder = new U.FormBuilder(this, optionsFields, {
       id: 'datalayer-advanced-properties',
-      callback: redrawCallback,
     })
     const advancedProperties = L.DomUtil.createFieldset(
       container,
@@ -1269,7 +1283,7 @@ U.DataLayer = L.Evented.extend({
       'options.outlinkTarget',
       'options.interactive',
     ]
-    builder = new U.FormBuilder(this, popupFields, { callback: redrawCallback })
+    builder = new U.FormBuilder(this, popupFields)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Interaction options')
