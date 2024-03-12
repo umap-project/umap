@@ -16,7 +16,7 @@
       <path d="M 16.0401,2.3158 H 2.005 v 14.0351 h 14.0351 z" fill="#ffffff" id="path1259" />
     </mask>
   </defs>
-  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="42.508098" inkscape:cx="85.854229" inkscape:cy="153.8648" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="14.240598" inkscape:cx="120.88678" inkscape:cy="138.30177" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
     <inkscape:grid type="xygrid" id="grid3004" empspacing="4" visible="true" enabled="true" snapvisiblegridlinesonly="true" originx="0" originy="0" spacingy="1" spacingx="1" units="px" />
     <sodipodi:guide orientation="-1,0" position="24,168" id="guide3084" inkscape:locked="false" inkscape:label="" inkscape:color="rgb(0,134,229)" />
     <sodipodi:guide orientation="0,1" position="0,96" id="guide3086" inkscape:locked="false" inkscape:label="" inkscape:color="rgb(0,134,229)" />
@@ -212,5 +212,6 @@
       <path style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-dasharray:none;stroke-opacity:1" d="m 88.000002,967.3622 v 5 h -5 v -1.57895 h 3.421052 v -3.42105 z" id="path3-5" />
       <path style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-dasharray:none;stroke-opacity:1" d="m 85.000002,964.3622 v 1.57895 h -3.421053 v 3.42105 h -1.578947 v -5 z" id="path4-3" />
     </g>
+    <path style="color:#000000;fill:#f2f2f2;fill-rule:evenodd;fill-opacity:1;stroke:#999999;stroke-opacity:1;stroke-width:0.25;stroke-dasharray:none" d="m 133.73437,963.36133 -4.73437,4.73437 5.05078,4.6836 1.35938,-1.4668 -3.52735,-3.26953 3.26563,-3.26563 z" id="path1-67" />
   </g>
 </svg>
