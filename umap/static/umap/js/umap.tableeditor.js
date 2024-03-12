@@ -113,7 +113,7 @@ U.TableEditor = L.Class.extend({
     this.datalayer.map.ui.openPanel({
       data: { html: this.table },
       className: 'umap-table-editor fullwidth dark',
-      actions: [addButton],
+      actions: [addButton, U.Browser.backButton(this.datalayer.map)],
     })
     this.datalayer.map.fire('dataload', { id: id })
   },

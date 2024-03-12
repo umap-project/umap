@@ -219,4 +219,17 @@ export default class Browser {
     if (!this.isOpen()) return
     this.map.ui._panel.classList.remove('dark')
   }
+
+  static backButton (map) {
+    const button = L.DomUtil.create('li', '')
+    L.DomUtil.create('i', 'umap-icon-16 umap-back', button)
+    const label = L.DomUtil.create('span', '', button)
+    button.title = L._('Back to browser')
+    // Fixme: remove me when this is merged and released
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    L.DomEvent.disableClickPropagation(button)
+    L.DomEvent.on(button, 'click', map.openBrowser, map)
+    return button
+  }
+
 }

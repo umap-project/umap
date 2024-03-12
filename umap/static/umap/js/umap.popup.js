@@ -54,22 +54,10 @@ U.Popup.Panel = U.Popup.extend({
     zoomAnimation: false,
   },
 
-  allButton: function () {
-    const button = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-back', button)
-    const label = L.DomUtil.create('span', '', button)
-    button.title = L._('See all')
-    // Fixme: remove me when this is merged and released
-    // https://github.com/Leaflet/Leaflet/pull/9052
-    L.DomEvent.disableClickPropagation(button)
-    L.DomEvent.on(button, 'click', this.feature.map.openBrowser, this.feature.map)
-    return button
-  },
-
   onAdd: function (map) {
     map.ui.openPanel({
       data: { html: this._content },
-      actions: [this.allButton()],
+      actions: [U.Browser.backButton(map)],
     })
 
     // fire events as in base class Popup.js:onAdd

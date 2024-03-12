@@ -1379,7 +1379,11 @@ U.DataLayer = L.Evented.extend({
         '_blank'
       )
     }
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.map.ui.openPanel({
+      data: { html: container },
+      className: 'dark',
+      actions: [U.Browser.backButton(this.map)],
+    })
   },
 
   getOwnOption: function (option) {
