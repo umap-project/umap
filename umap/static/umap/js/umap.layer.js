@@ -688,7 +688,7 @@ U.DataLayer = L.Evented.extend({
       }
       // In case of maps pre 1.0 still around
       if (geojson._storage) geojson._storage.editMode = this.options.editMode
-      this.fromUmapGeoJSON(geojson)
+      await this.fromUmapGeoJSON(geojson)
       this.backupOptions()
       this.fire('loaded')
       this._loading = false
@@ -703,10 +703,10 @@ U.DataLayer = L.Evented.extend({
     this.fire('datachanged')
   },
 
-  fromUmapGeoJSON: function (geojson) {
+  fromUmapGeoJSON: async function (geojson) {
     if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
-    if (this.isRemoteLayer()) this.fetchRemoteData()
+    if (this.isRemoteLayer()) await this.fetchRemoteData()
     else this.fromGeoJSON(geojson)
     this._loaded = true
   },
