@@ -101,7 +101,7 @@ export default class Browser {
     const headline = parent.querySelector('h5')
     const toggleList = () => parent.classList.toggle('show-list')
     headline.innerHTML = ''
-    const toggle = DomUtil.create('i', 'datalayer-toggle-list', headline)
+    const toggle = DomUtil.create('i', 'umap-icon-16 datalayer-toggle-list', headline)
     DomEvent.on(toggle, 'click', toggleList)
     datalayer.renderToolbox(headline)
     const name = DomUtil.create('span', 'datalayer-name', headline)
