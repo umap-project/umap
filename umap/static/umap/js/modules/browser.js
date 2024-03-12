@@ -19,10 +19,10 @@ export default class Browser {
     if (filter && !feature.matchFilter(filter, this.filterKeys)) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
     const feature_li = DomUtil.create('li', `${feature.getClassName()} feature`),
-      zoom_to = DomUtil.create('i', 'feature-zoom_to', feature_li),
-      edit = DomUtil.create('i', 'show-on-edit feature-edit', feature_li),
-      del = DomUtil.create('i', 'show-on-edit feature-delete', feature_li),
-      colorBox = DomUtil.create('i', 'feature-color', feature_li),
+      zoom_to = DomUtil.create('i', 'umap-icon-16 feature-zoom_to', feature_li),
+      edit = DomUtil.create('i', 'umap-icon-16 show-on-edit feature-edit', feature_li),
+      del = DomUtil.create('i', 'umap-icon-16 show-on-edit feature-delete', feature_li),
+      colorBox = DomUtil.create('i', 'umap-icon-16 feature-color', feature_li),
       title = DomUtil.create('span', 'feature-title', feature_li),
       symbol = feature._getIconUrl
         ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
@@ -160,23 +160,31 @@ export default class Browser {
     })
     formContainer.appendChild(builder.build())
 
+    const addButton = L.DomUtil.create('li', 'add-datalayer show-on-edit')
+    L.DomUtil.create('i', 'umap-icon-16 umap-add', addButton)
+    const label = L.DomUtil.create('span', '', addButton)
+    label.textContent = label.title = L._('Add a layer')
+    const addProperty = function () {
+      const newName = prompt(L._('Please enter the name of the property'))
+      if (!newName || !this.validateName(newName)) return
+      this.datalayer.indexProperty(newName)
+      this.edit()
+    }
+    L.DomEvent.on(addButton, 'click', this.newDataLayer, this)
+
+
     let className = 'umap-browser'
     if (this.map.editEnabled) className += ' dark'
     this.map.ui.openPanel({
       data: { html: container },
-      className: className
+      className: className,
+      actions: [addButton]
     })
 
     this.map.eachBrowsableDataLayer((datalayer) => {
       this.addDataLayer(datalayer, dataContainer)
     })
-    L.DomUtil.createButton(
-      'show-on-edit block add-datalayer button',
-      container,
-      L._('Add a layer'),
-      this.newDataLayer,
-      this
-    )
+
     // After datalayers have been added.
     const orderable = new Orderable(dataContainer, L.bind(this.onReorder, this))
   }

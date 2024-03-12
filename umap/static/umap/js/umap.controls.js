@@ -532,14 +532,14 @@ U.DataLayer.include({
   renderToolbox: function (container) {
     L.DomUtil.element(
       'i',
-      { className: 'drag-handle show-on-edit', title: L._('Drag to reorder') },
+      { className: 'umap-icon-16 drag-handle show-on-edit', title: L._('Drag to reorder') },
       container
     )
-    const toggle = L.DomUtil.create('i', 'layer-toggle', container),
-      zoomTo = L.DomUtil.create('i', 'layer-zoom_to', container),
-      edit = L.DomUtil.create('i', 'layer-edit show-on-edit', container),
-      table = L.DomUtil.create('i', 'layer-table-edit show-on-edit', container),
-      remove = L.DomUtil.create('i', 'layer-delete show-on-edit', container)
+    const toggle = L.DomUtil.create('i', 'umap-icon-16 layer-toggle', container),
+      zoomTo = L.DomUtil.create('i', 'umap-icon-16 layer-zoom_to', container),
+      edit = L.DomUtil.create('i', 'umap-icon-16 layer-edit show-on-edit', container),
+      table = L.DomUtil.create('i', 'umap-icon-16 layer-table-edit show-on-edit', container),
+      remove = L.DomUtil.create('i', 'umap-icon-16 layer-delete show-on-edit', container)
     zoomTo.title = L._('Zoom to layer extent')
     toggle.title = L._('Show/hide layer')
     edit.title = L._('Edit')
