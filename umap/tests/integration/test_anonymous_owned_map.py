@@ -132,7 +132,7 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/en/map/new")
     # Create a layer
     page.get_by_title("See layers").click()
-    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_title("Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
