@@ -615,7 +615,9 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             if request.META.get("QUERY_STRING"):
                 canonical = "?".join([canonical, request.META["QUERY_STRING"]])
             return HttpResponsePermanentRedirect(canonical)
-        return super(MapView, self).get(request, *args, **kwargs)
+        response = super(MapView, self).get(request, *args, **kwargs)
+        response["Access-Control-Allow-Origin"] = "*"
+        return response
 
     def get_canonical_url(self):
         return self.object.get_absolute_url()
@@ -724,7 +726,9 @@ class MapOEmbed(View):
             f'<p><a href="//{netloc}{map_url}">{label}</a></p>'
         )
         data["html"] = html
-        return simple_json_response(**data)
+        response = simple_json_response(**data)
+        response["Access-Control-Allow-Origin"] = "*"
+        return response
 
 
 class MapViewGeoJSON(MapView):
