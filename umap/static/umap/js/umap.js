@@ -329,16 +329,19 @@ U.Map = L.Map.extend({
     if (this.hasEditMode() && !this.options.noControl) {
       new U.EditControl(this).addTo(this)
 
-      new U.DrawToolbar({ map: this }).addTo(this)
-
       const editActions = [
-        U.ImportAction,
+        U.EditCaptionAction,
         U.EditPropertiesAction,
         U.ChangeTileLayerAction,
         U.UpdateExtentAction,
         U.UpdatePermsAction,
       ]
-      new U.SettingsToolbar({ actions: editActions }).addTo(this)
+      if (this.options.editMode === 'advanced') {
+        new U.SettingsToolbar({ actions: editActions }).addTo(this)
+        new U.ImportToolbar({ actions: [U.ImportAction] }).addTo(this)
+      }
+
+      new U.DrawToolbar({ map: this }).addTo(this)
     }
     this._controls.zoom = new L.Control.Zoom({
       zoomInTitle: L._('Zoom in'),
@@ -1537,7 +1540,7 @@ U.Map = L.Map.extend({
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container')
     const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Edit map properties')
+    title.textContent = L._('Map advanced properties')
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)

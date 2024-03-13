@@ -274,10 +274,12 @@ input[type="file"] + .error {
     margin-top: 0;
 }
 .fieldset {
-    border: 1px solid #222;
     margin-bottom: 5px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+}
+.dark .fieldset {
+    border: 1px solid #222;
 }
 .fieldset .fields {
     visibility: hidden;
@@ -296,7 +298,7 @@ input[type="file"] + .error {
     text-align: left;
     display: block;
     cursor: pointer;
-    background-color: #eee;
+    background-color: var(--color-lightGray);
     height: 30px;
     line-height: 30px;
     margin: 0;
@@ -976,6 +978,7 @@ input:invalid {
         bottom: initial;
         width: 390px;
         border-radius: 5px;
+        border: 1px solid var(--color-lightGray);
     }
 }
 @media all and (orientation:portrait) {

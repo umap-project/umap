@@ -287,8 +287,8 @@ ul.photon-autocomplete {
 .leaflet-control-toolbar > li > .leaflet-toolbar-icon,
 .umap-toolbar a,
 .umap-toolbar a:hover {
-    height: 40px;
-    width: 40px;
+    height: 36px;
+    width: 36px;
     display: none;
     margin-top: 0;
     vertical-align: top;
@@ -922,21 +922,20 @@ ul.photon-autocomplete {
 .umap-edit-enabled .show-on-edit.block {
     display: block!important;
 }
+.umap-edit-enabled .hide-on-edit {
+    display: none!important;
+}
 
 
 /* ********************************* */
 /*   Browser panel          */
 /* ********************************* */
-.umap-control-caption [type="button"],
 .umap-control-browse [type="button"] {
-    background-image: url('./img/24.svg');
-    width: 40px;
-    height: 40px;
-    background-position: -34px -70px;
-    background-size: 180px;
+    background-position: -36px -72px;
 }
+a.umap-control-caption,
 .umap-control-caption [type="button"] {
-    background-position: -70px -70px;
+    background-position: -72px -72px;
 }
 .umap-edit-enabled .umap-control-caption [type="button"],
 .umap-edit-enabled .umap-control-browse [type="button"] {
@@ -981,7 +980,7 @@ i.drag-handle {
     border: 1px solid #d3d3d3;
 }
 .umap-browser.dark .datalayer ul {
-    border: 1px solid #2c3233;
+    border: 1px solid #232729;
 }
 .umap-browser h5, .umap-facet-search h5 {
     margin-bottom: 0;
@@ -993,7 +992,7 @@ i.drag-handle {
     color: #666;
 }
 .umap-browser.dark h5 {
-    background-color: #2c3233;
+    background-color: #232729;
     color: white;
 }
 .umap-browser h5 span {
@@ -1024,6 +1023,9 @@ i.drag-handle {
     width: 24px;
     text-align: center;
     margin-left: 5px;
+}
+.umap-browser.dark .datalayer i.feature-color {
+    box-shadow: 0 0 2px 0 #999 inset;
 }
 .umap-browser .datalayer .feature-color img {
     width: 24px;
