@@ -148,6 +148,13 @@ def test_should_not_consider_the_query_string_for_canonical_check(client, map):
     assert response.status_code == 200
 
 
+def test_map_headers(client, map):
+    url = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.headers["Access-Control-Allow-Origin"] == "*"
+
+
 def test_short_url_should_redirect_to_canonical(client, map):
     url = reverse("map_short_url", kwargs={"pk": map.pk})
     canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
@@ -804,6 +811,7 @@ def test_oembed_map(client, map, datalayer):
     url = f"{reverse('map_oembed')}?url=http://testserver{map.get_absolute_url()}"
     response = client.get(url)
     assert response.status_code == 200
+    assert response.headers["Access-Control-Allow-Origin"] == "*"
     j = json.loads(response.content.decode())
     assert j["type"] == "rich"
     assert j["version"] == "1.0"
