@@ -29,11 +29,23 @@ U.ImportAction = U.BaseAction.extend({
   },
 })
 
+U.EditCaptionAction = U.BaseAction.extend({
+  options: {
+    helpMenu: true,
+    className: 'umap-control-caption dark',
+    tooltip: L._('Edit map name and caption'),
+  },
+
+  addHooks: function () {
+    this.map.editCaption()
+  },
+})
+
 U.EditPropertiesAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'update-map-settings dark',
-    tooltip: L._('Edit map properties'),
+    tooltip: L._('Map advanced properties'),
   },
 
   addHooks: function () {
@@ -268,12 +280,8 @@ U.ContinueLineAction = U.BaseVertexAction.extend({
 })
 
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
-U.SettingsToolbar = L.Toolbar.Control.extend({
-  addTo: function (map) {
-    if (map.options.editMode !== 'advanced') return
-    L.Toolbar.Control.prototype.addTo.call(this, map)
-  },
-})
+U.ImportToolbar = L.Toolbar.Control.extend({})
+U.SettingsToolbar = L.Toolbar.Control.extend({})
 U.DrawToolbar = L.Toolbar.Control.extend({
   initialize: function (options) {
     L.Toolbar.Control.prototype.initialize.call(this, options)
@@ -512,13 +520,12 @@ U.DataLayersControl = L.Control.Button.extend({
 U.CaptionControl = L.Control.Button.extend({
   options: {
     position: 'topright',
-    className: 'umap-control-caption',
+    className: 'umap-control-caption hide-on-edit',
     title: L._('About'),
   },
 
   onClick: function () {
-    if (this.map.editEnabled) this.map.editCaption()
-    else this.map.displayCaption()
+    this.map.displayCaption()
   },
 })
 
@@ -532,14 +539,25 @@ U.DataLayer.include({
   renderToolbox: function (container) {
     L.DomUtil.element(
       'i',
-      { className: 'umap-icon-16 drag-handle show-on-edit', title: L._('Drag to reorder') },
+      {
+        className: 'umap-icon-16 drag-handle show-on-edit',
+        title: L._('Drag to reorder'),
+      },
       container
     )
     const toggle = L.DomUtil.create('i', 'umap-icon-16 layer-toggle', container),
       zoomTo = L.DomUtil.create('i', 'umap-icon-16 layer-zoom_to', container),
       edit = L.DomUtil.create('i', 'umap-icon-16 layer-edit show-on-edit', container),
-      table = L.DomUtil.create('i', 'umap-icon-16 layer-table-edit show-on-edit', container),
-      remove = L.DomUtil.create('i', 'umap-icon-16 layer-delete show-on-edit', container)
+      table = L.DomUtil.create(
+        'i',
+        'umap-icon-16 layer-table-edit show-on-edit',
+        container
+      ),
+      remove = L.DomUtil.create(
+        'i',
+        'umap-icon-16 layer-delete show-on-edit',
+        container
+      )
     zoomTo.title = L._('Zoom to layer extent')
     toggle.title = L._('Show/hide layer')
     edit.title = L._('Edit')
