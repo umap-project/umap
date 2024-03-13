@@ -5,7 +5,7 @@ U.UI = L.Evented.extend({
   ALERTS: Array(),
   ALERT_ID: null,
   TOOLTIP_ID: null,
-  PANEL_MODE: 'expanded',
+  PANEL_MODE: 'condensed',
 
   initialize: function (parent) {
     this.parent = parent
