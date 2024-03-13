@@ -38,11 +38,11 @@ from django.http import (
 from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
 from django.urls import resolve, reverse, reverse_lazy
+from django.utils import translation
 from django.utils.encoding import smart_bytes
 from django.utils.http import http_date
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
-from django.utils.translation import to_locale
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_GET
 from django.views.generic import DetailView, TemplateView, View
@@ -536,7 +536,7 @@ class MapDetailMixin:
             if hasattr(self.request, "LANGUAGE_CODE"):
                 lang = self.request.LANGUAGE_CODE
             properties["lang"] = lang
-            locale = to_locale(lang)
+            locale = translation.to_locale(lang)
             properties["locale"] = locale
             context["locale"] = locale
         geojson = self.get_geojson()
@@ -699,6 +699,8 @@ class MapOEmbed(View):
             raise Http404("Host not allowed.")
 
         url_path = parsed_url.path
+        lang = translation.get_language_from_path(url_path)
+        translation.activate(lang)
         view, args, kwargs = resolve(url_path)
         if "slug" not in kwargs or "map_id" not in kwargs:
             raise Http404("Invalid URL path.")

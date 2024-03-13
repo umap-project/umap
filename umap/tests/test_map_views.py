@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.signing import Signer
 from django.urls import reverse
+from django.utils import translation
 
 from umap.models import DataLayer, Map, Star
 
@@ -813,6 +814,17 @@ def test_oembed_map(client, map, datalayer):
         f'allow="geolocation" src="//testserver/en/map/test-map_{map.id}"></iframe>'
         f'<p><a href="//testserver/en/map/test-map_{map.id}">See full screen</a></p>'
     )
+
+
+def test_oembed_map_with_non_default_language(client, map, datalayer):
+    translation.activate("en")
+    path = map.get_absolute_url()
+    assert path.startswith("/en/")
+    path = path.replace("/en/", "/fr/")
+    url = f"{reverse('map_oembed')}?url=http://testserver{path}"
+    response = client.get(url)
+    assert response.status_code == 200
+    translation.activate("en")
 
 
 def test_oembed_link(client, map, datalayer):
