@@ -1548,15 +1548,14 @@ U.Map = L.Map.extend({
       callbackContext: this,
     })
     credits.appendChild(creditsBuilder.build())
-    this.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.editPanel.open({ data: { html: container } })
   },
 
   edit: function () {
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
-    const container = L.DomUtil.create('div', 'umap-edit-container')
-    const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Map advanced properties')
+    const container = L.DomUtil.create('div')
+    L.DomUtil.createTitle(container, L._('Map advanced properties'), 'settings')
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)

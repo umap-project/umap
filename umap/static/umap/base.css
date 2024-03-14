@@ -897,23 +897,6 @@ input:invalid {
 /* *********** */
 /* Close link  */
 /* *********** */
-.umap-resize-icon,
-.umap-close-icon {
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    background-position: -26px -6px;
-    display: inline;
-    padding: 0 10px;
-    vertical-align: middle;
-    line-height: 24px;
-}
-.umap-resize-icon {
-    background-position: -74px -150px;
-}
-.dark .umap-resize-icon,
-.dark .umap-close-icon {
-    background-image: url('./img/16-white.svg');
-}
 #umap-alert-container .umap-close-link {
     color: #fff;
     float: right;

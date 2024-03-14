@@ -27,7 +27,7 @@ describe('L.TableEditor', () => {
 
     it('should exist table click on edit mode', () => {
       button = qs(
-        '#browse_data_toggle_' + L.stamp(datalayer) + ' .layer-table-edit'
+        '#browse_data_toggle_' + L.stamp(datalayer) + ' .icon-table'
       )
       expect(button).to.be.ok
     })

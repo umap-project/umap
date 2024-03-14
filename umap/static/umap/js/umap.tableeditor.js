@@ -100,7 +100,7 @@ U.TableEditor = L.Class.extend({
     this.body.innerHTML = ''
     this.datalayer.eachLayer(this.renderRow, this)
     const addButton = L.DomUtil.create('li', 'add-property')
-    L.DomUtil.create('i', 'umap-icon-16 umap-add', addButton)
+    L.DomUtil.create('i', 'icon icon-16 icon-add', addButton)
     const label = L.DomUtil.create('span', '', addButton)
     label.textContent = label.title = L._('Add a new property')
     const addProperty = function () {

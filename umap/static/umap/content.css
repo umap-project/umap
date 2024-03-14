@@ -357,22 +357,22 @@ ul.umap-autocomplete {
     width: 36px;
     margin: 3px;
 }
-.icon-view {
+.content .icon-view {
     background-image: url('./img/icon-view.svg');
 }
-.icon-share {
+.content .icon-share {
     background-image: url('./img/icon-share.svg');
 }
-.icon-edit {
+.content .icon-edit {
     background-image: url('./img/icon-edit.svg');
 }
-.icon-download {
+.content .icon-download {
     background-image: url('./img/icon-download.svg');
 }
-.icon-duplicate {
+.content .icon-duplicate {
     background-image: url('./img/icon-duplicate.svg');
 }
-.icon-delete {
+.content .icon-delete {
     background-image: url('./img/icon-delete.svg');
 }
 .table-header {

@@ -44,9 +44,8 @@ U.Share = L.Class.extend({
   },
 
   build: function () {
-    this.container = L.DomUtil.create('div', 'umap-share')
-    this.title = L.DomUtil.create('h3', '', this.container)
-    this.title.textContent = L._('Share and download')
+    this.container = L.DomUtil.create('div', '')
+    this.title = L.DomUtil.createTitle(this.container, L._('Share and download'), 'share')
 
     L.DomUtil.createCopiableInput(
       this.container,
