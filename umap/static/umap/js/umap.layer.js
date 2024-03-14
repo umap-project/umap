@@ -1211,7 +1211,7 @@ U.DataLayer = L.Evented.extend({
           },
         ],
       ]
-    const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
+    L.DomUtil.createTitle(container, L._('Layer properties'), 'layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
         if (e.helper.field === 'options.type') {

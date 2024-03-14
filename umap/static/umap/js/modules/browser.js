@@ -19,10 +19,10 @@ export default class Browser {
     if (filter && !feature.matchFilter(filter, this.filterKeys)) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
     const feature_li = DomUtil.create('li', `${feature.getClassName()} feature`),
-      zoom_to = DomUtil.create('i', 'umap-icon-16 feature-zoom_to', feature_li),
-      edit = DomUtil.create('i', 'umap-icon-16 show-on-edit feature-edit', feature_li),
-      del = DomUtil.create('i', 'umap-icon-16 show-on-edit feature-delete', feature_li),
-      colorBox = DomUtil.create('i', 'umap-icon-16 feature-color', feature_li),
+      zoom_to = DomUtil.create('i', 'icon icon-16 icon-zoom', feature_li),
+      edit = DomUtil.create('i', 'icon icon-16 show-on-edit icon-edit', feature_li),
+      del = DomUtil.create('i', 'icon icon-16 show-on-edit icon-delete', feature_li),
+      colorBox = DomUtil.create('i', 'icon icon-16 feature-color', feature_li),
       title = DomUtil.create('span', 'feature-title', feature_li),
       symbol = feature._getIconUrl
         ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
@@ -101,7 +101,7 @@ export default class Browser {
     const headline = parent.querySelector('h5')
     const toggleList = () => parent.classList.toggle('show-list')
     headline.innerHTML = ''
-    const toggle = DomUtil.create('i', 'umap-icon-16 datalayer-toggle-list', headline)
+    const toggle = DomUtil.create('i', 'icon icon-16 datalayer-toggle-list', headline)
     DomEvent.on(toggle, 'click', toggleList)
     datalayer.renderToolbox(headline)
     const name = DomUtil.create('span', 'datalayer-name', headline)
@@ -146,7 +146,7 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
 
-    const title = DomUtil.add('h3', '', container, translate('Browse data'))
+    DomUtil.createTitle(container, translate('Browse data'), 'layers')
     const formContainer = DomUtil.create('div', '', container)
     const dataContainer = DomUtil.create('div', '', container)
 

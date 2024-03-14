@@ -117,6 +117,17 @@ L.DomUtil.createLink = (className, container, content, url, target, title) => {
   return el
 }
 
+L.DomUtil.createIcon = (parent, name) => {
+  L.DomUtil.create('i', `icon icon-16 icon-${name}`, parent)
+}
+
+L.DomUtil.createTitle = (parent, text, icon, tag = 'h3') => {
+  const title = L.DomUtil.create(tag, '', parent)
+  L.DomUtil.createIcon(title, icon)
+  L.DomUtil.add('span', '', title, text)
+  return title
+}
+
 L.DomUtil.createCopiableInput = (parent, label, value) => {
   const wrapper = L.DomUtil.add('div', 'copiable-input', parent)
   const labelEl = L.DomUtil.add('label', '', wrapper, label)

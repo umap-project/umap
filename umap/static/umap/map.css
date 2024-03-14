@@ -316,58 +316,6 @@ ul.photon-autocomplete {
 .manage-datalayers {
     background-position: -36px -72px;
 }
-.permissions-panel h3:before,
-.umap-edit-container h3:before,
-.umap-feature-properties:before,
-.umap-layer-properties-container h3:before,
-.umap-search h3:before,
-.umap-share h3:before,
-.umap-tilelayer-switcher-container h3:before,
-.umap-upload h3:before {
-    height: 24px;
-    width: 24px;
-    background-repeat: no-repeat;
-    background-image: url('./img/16-white.svg');
-    background-size: auto auto;
-    background-position: -98px -117px;
-    content: " ";
-    vertical-align: bottom;
-    display: inline-block;
-}
-.umap-edit-container h3:before {
-    background-position: -27px -93px;
-}
-.permissions-panel h3:before {
-    background-position: -144px -117px;
-}
-.umap-upload h3:before {
-    background-position: -144px -93px;
-}
-.umap-search h3:before {
-    background-image: url('./img/16.svg');
-    background-position: -27px -117px;
-}
-.umap-share h3:before {
-    background-image: url('./img/16.svg');
-    background-position: -4px -119px;
-}
-.dark .umap-tilelayer-switcher-container h3:before {
-    background-image: url('./img/16-white.svg');
-    background-position: -98px -141px;
-}
-.umap-tilelayer-switcher-container h3:before {
-    background-image: url('./img/16.svg');
-    background-position: -98px -141px;
-}
-.umap-feature-properties.marker:before {
-    background-position: -72px -117px;
-}
-.umap-feature-properties.polyline:before {
-    background-position: 0 -117px;
-}
-.umap-feature-properties.polygon:before {
-    background-position: -24px -117px;
-}
 .umap-toolbar .update-map-permissions,
 .update-map-permissions {
     background-position: -36px -36px;
@@ -844,15 +792,6 @@ ul.photon-autocomplete {
 .off .layer-toggle {
     background-position: -73px -31px;
 }
-.feature-zoom_to {
-    background-position: -1px -54px;
-}
-.layer-zoom_to {
-    background-position: -1px -54px;
-}
-.layer-table-edit {
-    background-position: -50px -1px;
-}
 .feature-delete,
 .layer-delete {
     background-position: -122px -49px;
@@ -864,16 +803,9 @@ ul.photon-autocomplete {
 .umap-toggle-edit {
     background-position: -44px -48px;
 }
-.readonly .layer-table-edit,
-.off .layer-table-edit {
-    background-position: -74px -1px;
-}
 .readonly .layer-edit,
 .off .layer-edit {
     background-position: -50px -73px;
-}
-.off .layer-zoom_to {
-    background-position: -25px -54px;
 }
 .readonly .layer-delete,
 .off .layer-delete {
@@ -961,11 +893,6 @@ a.umap-control-caption,
 }
 .show-list ul {
     display: block;
-}
-i.drag-handle {
-    background-position: -72px -73px;
-    cursor: move;
-    margin-right: 10px;
 }
 
 .umap-browser .off .feature {
@@ -1120,40 +1047,6 @@ i.drag-handle {
 }
 .umap-table-editor .thead .tcell:hover span {
     display: none;
-}
-.remotelayer .layer-table-edit {
-    display: none !important;
-}
-
-/* ********************************* */
-/*              Icons                */
-/* ********************************* */
-.umap-icon-16 {
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    display: inline;
-    height: 24px;
-    line-height: 24px;
-    padding: 0 10px;
-    vertical-align: middle;
-}
-.dark .umap-icon-16 {
-    background-image: url('./img/16-white.svg');
-}
-.umap-add {
-    background-position: -26px -30px;
-}
-.umap-list {
-    background-position: -28px -99px;
-}
-.umap-back {
-    background-position: -122px -150px;
-}
-.umap-list-white {
-    background-position: -92px -168px;
-}
-.umap-caption {
-    background-position: -99px -28px;
 }
 
 /* ********************************* */

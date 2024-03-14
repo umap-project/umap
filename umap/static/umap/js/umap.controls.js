@@ -537,27 +537,11 @@ U.DataLayer.include({
   },
 
   renderToolbox: function (container) {
-    L.DomUtil.element(
-      'i',
-      {
-        className: 'umap-icon-16 drag-handle show-on-edit',
-        title: L._('Drag to reorder'),
-      },
-      container
-    )
-    const toggle = L.DomUtil.create('i', 'umap-icon-16 layer-toggle', container),
-      zoomTo = L.DomUtil.create('i', 'umap-icon-16 layer-zoom_to', container),
-      edit = L.DomUtil.create('i', 'umap-icon-16 layer-edit show-on-edit', container),
-      table = L.DomUtil.create(
-        'i',
-        'umap-icon-16 layer-table-edit show-on-edit',
-        container
-      ),
-      remove = L.DomUtil.create(
-        'i',
-        'umap-icon-16 layer-delete show-on-edit',
-        container
-      )
+    const toggle = L.DomUtil.create('i', 'icon icon-16 icon-eye', container),
+      zoomTo = L.DomUtil.create('i', 'icon icon-16 icon-zoom', container),
+      edit = L.DomUtil.create('i', 'icon icon-16 icon-edit show-on-edit', container),
+      table = L.DomUtil.create('i', 'icon icon-16 icon-table show-on-edit', container),
+      remove = L.DomUtil.create('i', 'icon icon-16 icon-delete show-on-edit', container)
     zoomTo.title = L._('Zoom to layer extent')
     toggle.title = L._('Show/hide layer')
     edit.title = L._('Edit')
@@ -690,8 +674,7 @@ const ControlsMixin = {
 
   displayCaption: function () {
     const container = L.DomUtil.create('div', 'umap-caption')
-    let title = L.DomUtil.create('h3', '', container)
-    title.textContent = this.options.name
+    L.DomUtil.createTitle(container, this.options.name, 'caption')
     this.permissions.addOwnerLink('h5', container)
     if (this.options.description) {
       const description = L.DomUtil.create('div', 'umap-map-description', container)
@@ -985,8 +968,7 @@ U.TileLayerChooser = L.Control.extend({
 
   openSwitcher: function (options) {
     const container = L.DomUtil.create('div', 'umap-tilelayer-switcher-container')
-    const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Change tilelayers')
+    L.DomUtil.createTitle(container, L._('Change tilelayers'), 'tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
     this.map.ui.openPanel({
@@ -1179,8 +1161,8 @@ U.Search = L.PhotonSearch.extend({
   formatResult: function (feature, el) {
     const self = this
     const tools = L.DomUtil.create('span', 'search-result-tools', el),
-      zoom = L.DomUtil.create('i', 'feature-zoom_to', tools),
-      edit = L.DomUtil.create('i', 'feature-edit show-on-edit', tools)
+      zoom = L.DomUtil.create('i', 'icon icon-16 icon-zoom', tools),
+      edit = L.DomUtil.create('i', 'icon icon-16 icon-edit show-on-edit', tools)
     zoom.title = L._('Zoom to this place')
     edit.title = L._('Save this location as new feature')
     // We need to use "mousedown" because Leaflet.Photon listen to mousedown
