@@ -303,6 +303,7 @@ export const SCHEMA = {
   },
   datalayersControl: {
     type: Boolean,
+    nullable: true,
     label: translate('Display the data layers control'),
     default: true,
   },

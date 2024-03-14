@@ -56,6 +56,8 @@ U.Map = L.Map.extend({
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
     this.urls = new U.URLs(this.options.urls)
 
+    this.panel = new U.Panel(this._container)
+    if (this.hasEditMode()) this.editPanel = new U.EditPanel(this._container)
     this.ui = new U.UI(this._container)
     this.ui.on('dataloading', (e) => this.fire('dataloading', e))
     this.ui.on('dataload', (e) => this.fire('dataload', e))
@@ -290,15 +292,16 @@ U.Map = L.Map.extend({
       new U.EditControl(this).addTo(this)
 
       const editActions = [
+        U.EditLayersAction,
         U.EditCaptionAction,
         U.EditPropertiesAction,
         U.ChangeTileLayerAction,
         U.UpdateExtentAction,
         U.UpdatePermsAction,
+        U.ImportAction,
       ]
       if (this.options.editMode === 'advanced') {
         new U.SettingsToolbar({ actions: editActions }).addTo(this)
-        new U.ImportToolbar({ actions: [U.ImportAction] }).addTo(this)
       }
 
       new U.DrawToolbar({ map: this }).addTo(this)
@@ -401,8 +404,6 @@ U.Map = L.Map.extend({
         L.DomUtil.addClass(control._container, 'display-on-more')
       else L.DomUtil.removeClass(control._container, 'display-on-more')
     }
-    if (this.getOption('datalayersControl')) this._controls.datalayers.addTo(this)
-    if (this.getOption('captionControl')) this._controls.caption.addTo(this)
     if (this.getOption('permanentCredit')) this._controls.permanentCredit.addTo(this)
     if (this.getOption('moreControl')) this._controls.more.addTo(this)
     if (this.getOption('scaleControl')) this._controls.scale.addTo(this)
@@ -749,6 +750,11 @@ U.Map = L.Map.extend({
     return new U.DataLayer(this, datalayer)
   },
 
+  newDataLayer: function () {
+    const datalayer = this.createDataLayer({})
+    datalayer.edit()
+  },
+
   getDefaultOption: function (option) {
     return U.SCHEMA[option] && U.SCHEMA[option].default
   },
@@ -784,10 +790,6 @@ U.Map = L.Map.extend({
         callback: callback,
         className: 'dark',
       })
-  },
-
-  manageDatalayers: function () {
-    if (this._controls.datalayers) this._controls.datalayers.openPanel()
   },
 
   toGeoJSON: function () {
@@ -1033,7 +1035,7 @@ U.Map = L.Map.extend({
       else window.location = data.url
       alert.content = data.info || alert.content
       this.once('saved', () => this.ui.alert(alert))
-      this.ui.closePanel()
+      this.editPanel.close()
       this.permissions.save()
     }
   },
@@ -1136,7 +1138,6 @@ U.Map = L.Map.extend({
       UIFields.push(`options.${this.HIDDABLE_CONTROLS[i]}Control`)
     }
     UIFields = UIFields.concat([
-      'options.datalayersControl',
       'options.moreControl',
       'options.scrollWheelZoom',
       'options.miniMap',
@@ -1566,7 +1567,7 @@ U.Map = L.Map.extend({
     this._editSlideshow(container)
     this._advancedActions(container)
 
-    this.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.editPanel.open({ data: { html: container }, className: 'dark' })
   },
 
   enableEdit: function () {
@@ -1838,7 +1839,7 @@ U.Map = L.Map.extend({
   },
 
   search: function () {
-    if (this._controls.search) this._controls.search.openPanel(this)
+    if (this._controls.search) this._controls.search.open()
   },
 
   getFilterKeys: function () {

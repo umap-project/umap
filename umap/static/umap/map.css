@@ -862,6 +862,7 @@ ul.photon-autocomplete {
 /* ********************************* */
 /*   Browser panel          */
 /* ********************************* */
+a.umap-control-browse,
 .umap-control-browse [type="button"] {
     background-position: -36px -72px;
 }
@@ -869,12 +870,6 @@ a.umap-control-caption,
 .umap-control-caption [type="button"] {
     background-position: -72px -72px;
 }
-.umap-edit-enabled .umap-control-caption [type="button"],
-.umap-edit-enabled .umap-control-browse [type="button"] {
-    background-image: url('./img/24-white.svg');
-    background-color: var(--color-darkGray);
-}
-.search-result-tools i,
 .leaflet-inplace-toolbar a {
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');

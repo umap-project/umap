@@ -544,7 +544,6 @@ i.info {
 .permissions-panel,
 .umap-upload,
 .umap-share,
-.umap-edit-container,
 .umap-datalayer-container,
 .umap-layer-properties-container,
 .umap-browse-data,
@@ -710,9 +709,6 @@ input[type=hidden].blur + [type="button"] {
 .leaflet-top,
 .leaflet-right {
     transition: all .7s;
-}
-.umap-ui .leaflet-right {
-    right: 400px;
 }
 #umap-panel,
 #umap-alert-container,
@@ -941,44 +937,7 @@ input:invalid {
 /* *********** */
 /*    Mobile   */
 /* *********** */
-@media all and (orientation:landscape) {
-    .umap-edit-enabled #umap-panel {
-        top: 46px;
-    }
-    #umap-panel {
-        width: 400px;
-        right: -400px;
-        top:  0;
-    }
-    .umap-ui #umap-panel {
-        right: 0;
-        visibility: visible;
-    }
-    #umap-panel.condensed {
-        margin-top: 10px;
-        margin-right: 10px;
-        max-height: 500px;
-        bottom: initial;
-        width: 390px;
-        border-radius: 5px;
-        border: 1px solid var(--color-lightGray);
-    }
-}
 @media all and (orientation:portrait) {
-    #umap-panel {
-        height: 50%;
-        max-height: 400px;
-        width: 100%;
-        bottom: 0;
-        right: -100%;
-    }
-    .umap-ui #umap-panel {
-        right: 0;
-        visibility: visible;
-    }
-    .umap-ui .leaflet-right {
-        right: 0;
-    }
     #umap-alert-container {
         width: 100%;
         left: 0;
