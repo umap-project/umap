@@ -407,26 +407,6 @@ U.EditControl = L.Control.extend({
   },
 })
 
-/* Share control */
-L.Control.Embed = L.Control.extend({
-  options: {
-    position: 'topleft',
-  },
-
-  onAdd: function (map) {
-    const container = L.DomUtil.create('div', 'leaflet-control-embed umap-control')
-    const shareButton = L.DomUtil.createButton(
-      '',
-      container,
-      L._('Share and download'),
-      map.share.open,
-      map.share
-    )
-    L.DomEvent.on(shareButton, 'dblclick', L.DomEvent.stopPropagation)
-    return container
-  },
-})
-
 U.MoreControls = L.Control.extend({
   options: {
     position: 'topleft',
@@ -503,8 +483,12 @@ L.Control.Button = L.Control.extend({
     L.Control.prototype.initialize.call(this, options)
   },
 
+  getClassName: function () {
+    return this.options.className
+  },
+
   onAdd: function (map) {
-    const container = L.DomUtil.create('div', `${this.options.className} umap-control`)
+    const container = L.DomUtil.create('div', `${this.getClassName()} umap-control`)
     const button = L.DomUtil.createButton(
       '',
       container,
@@ -538,6 +522,34 @@ U.CaptionControl = L.Control.Button.extend({
 
   onClick: function () {
     this.map.displayCaption()
+  },
+})
+
+U.StarControl = L.Control.Button.extend({
+  options: {
+    position: 'topleft',
+    title: L._('Star this map'),
+  },
+
+  getClassName: function () {
+    const status = this.map.options.starred ? ' starred' : ''
+    return `leaflet-control-star umap-control${status}`
+  },
+
+  onClick: function () {
+    this.map.star()
+  },
+})
+
+L.Control.Embed = L.Control.Button.extend({
+  options: {
+    position: 'topleft',
+    title: L._('Share and download'),
+    className: 'leaflet-control-embed umap-control',
+  },
+
+  onClick: function () {
+    this.map.share.open()
   },
 })
 
@@ -1108,29 +1120,6 @@ U.AttributionControl = L.Control.Attribution.extend({
       )
     }
     L.DomUtil.createLink('attribution-toggle', this._container, '')
-  },
-})
-
-U.StarControl = L.Control.extend({
-  options: {
-    position: 'topleft',
-  },
-
-  onAdd: function (map) {
-    const status = map.options.starred ? ' starred' : ''
-    const container = L.DomUtil.create(
-      'div',
-      `leaflet-control-star umap-control${status}`
-    )
-    const starMapButton = L.DomUtil.createButton(
-      '',
-      container,
-      L._('Star this map'),
-      map.star,
-      map
-    )
-    L.DomEvent.on(starMapButton, 'dblclick', L.DomEvent.stopPropagation)
-    return container
   },
 })
 
