@@ -155,7 +155,7 @@ U.Share = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.map.ui.openPanel({ data: { html: this.container } })
+    this.map.panel.open({ data: { html: this.container } })
   },
 
   format: function (mode) {

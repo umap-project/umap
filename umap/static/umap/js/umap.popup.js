@@ -55,7 +55,7 @@ U.Popup.Panel = U.Popup.extend({
   },
 
   onAdd: function (map) {
-    map.ui.openPanel({
+    map.panel.open({
       data: { html: this._content },
       actions: [U.Browser.backButton(map)],
     })
@@ -71,7 +71,7 @@ U.Popup.Panel = U.Popup.extend({
   },
 
   onRemove: function (map) {
-    map.ui.closePanel()
+    map.panel.close()
 
     // fire events as in base class Popup.js:onRemove
     map.fire('popupclose', { popup: this })

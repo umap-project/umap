@@ -1,13 +1,10 @@
 import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
-import Orderable from './orderable.js'
-import {translate} from './i18n.js'
+import { translate } from './i18n.js'
 
 export default class Browser {
   constructor(map) {
     this.map = map
     this.map.on('moveend', this.onMoveEnd, this)
-    this.map.on('edit:enabled', this.onEnableEdit, this)
-    this.map.on('edit:disabled', this.onDisableEdit, this)
     this.options = {
       filter: '',
       inBbox: false,
@@ -72,13 +69,9 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, parent) {
-    let className = `orderable datalayer ${datalayer.getHidableClass()}`
-    if (this.map.ui.PANEL_MODE !== 'condensed') className += ' show-list'
-    const container = DomUtil.create(
-        'div',
-        className,
-        parent
-      ),
+    let className = `datalayer ${datalayer.getHidableClass()}`
+    if (this.map.panel.MODE !== 'condensed') className += ' show-list'
+    const container = DomUtil.create('div', className, parent),
       headline = DomUtil.create('h5', '', container)
     container.id = this.datalayerId(datalayer)
     const ul = DomUtil.create('ul', '', container)
@@ -87,7 +80,6 @@ export default class Browser {
     this.map.ui.once('panel:closed', () => {
       datalayer.off('datachanged', this.onDataLayerChanged, this)
     })
-    container.dataset.id = L.stamp(datalayer)
   }
 
   updateDatalayer(datalayer) {
@@ -125,7 +117,7 @@ export default class Browser {
     })
   }
 
-  isOpen () {
+  isOpen() {
     return !!document.querySelector('.umap-browser')
   }
 
@@ -160,70 +152,19 @@ export default class Browser {
     })
     formContainer.appendChild(builder.build())
 
-    const addButton = L.DomUtil.create('li', 'add-datalayer show-on-edit')
-    L.DomUtil.create('i', 'umap-icon-16 umap-add', addButton)
-    const label = L.DomUtil.create('span', '', addButton)
-    label.textContent = label.title = L._('Add a layer')
-    const addProperty = function () {
-      const newName = prompt(L._('Please enter the name of the property'))
-      if (!newName || !this.validateName(newName)) return
-      this.datalayer.indexProperty(newName)
-      this.edit()
-    }
-    L.DomEvent.on(addButton, 'click', this.newDataLayer, this)
-
-
-    let className = 'umap-browser'
-    if (this.map.editEnabled) className += ' dark'
-    this.map.ui.openPanel({
+    this.map.panel.open({
       data: { html: container },
-      className: className,
-      actions: [addButton]
+      className: 'umap-browser',
     })
 
     this.map.eachBrowsableDataLayer((datalayer) => {
       this.addDataLayer(datalayer, dataContainer)
     })
-
-    // After datalayers have been added.
-    const orderable = new Orderable(dataContainer, L.bind(this.onReorder, this))
   }
 
-  newDataLayer () {
-    const datalayer = this.map.createDataLayer({})
-    datalayer.edit()
-  }
-
-
-  onReorder(src, dst, initialIndex, finalIndex) {
-    const layer = this.map.datalayers[src.dataset.id],
-      other = this.map.datalayers[dst.dataset.id],
-      minIndex = Math.min(layer.getRank(), other.getRank()),
-      maxIndex = Math.max(layer.getRank(), other.getRank())
-    if (finalIndex === 0) layer.bringToTop()
-    else if (finalIndex > initialIndex) layer.insertBefore(other)
-    else layer.insertAfter(other)
-    this.map.eachDataLayerReverse((datalayer) => {
-      if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
-        datalayer.isDirty = true
-    })
-    this.map.indexDatalayers()
-  }
-
-  onEnableEdit () {
-    if (!this.isOpen()) return
-    this.map.ui._panel.classList.add('dark')
-  }
-
-  onDisableEdit () {
-    if (!this.isOpen()) return
-    this.map.ui._panel.classList.remove('dark')
-  }
-
-  static backButton (map) {
+  static backButton(map) {
     const button = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-back', button)
-    const label = L.DomUtil.create('span', '', button)
+    L.DomUtil.create('i', 'icon icon-16 icon-back', button)
     button.title = L._('Back to browser')
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
@@ -231,5 +172,4 @@ export default class Browser {
     L.DomEvent.on(button, 'click', map.openBrowser, map)
     return button
   }
-
 }

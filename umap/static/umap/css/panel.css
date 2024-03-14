@@ -1,0 +1,120 @@
+.panel {
+    /* Added for playwright to consider the element as non visible  */
+    /* as being out of the visible viewport is not enough  */
+    visibility: hidden;
+    position: absolute;
+    bottom: 20px;
+    overflow-x: auto;
+    z-index: 1010;
+    background-color: #fff;
+    opacity: 0.98;
+    cursor: initial;
+    border-radius: 5px;
+    border: 1px solid var(--color-lightGray);
+}
+.panel.dark {
+    border-left: 1px solid #222;
+    background-color: var(--color-darkGray);
+    color: #efefef;
+}
+.panel.fullwidth {
+    width: 100%;
+    right: -100%;
+    z-index: 10000;
+    padding-left: 0;
+    padding-right: 0;
+}
+.umap-caption-bar-enabled .panel {
+    bottom: 46px;
+}
+.panel {
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing: border-box;
+}
+.panel .umap-popup-content img {
+    /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
+    max-width: 99% !important;
+}
+.panel .umap-popup-content {
+    max-height: inherit;
+}
+.panel .body {
+    clear: both;
+    height: calc(100% - 32px); /* Minus size of toolbox */
+    padding: 10px;
+}
+.panel .toolbox {
+    padding: 5px 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 10px;
+    justify-content: flex-start;
+    gap: 5px;
+    line-height: 2.2em;
+}
+.panel.dark .toolbox {
+    background-color: var(--color-darkGray);
+    border-bottom: 1px solid #232729;
+}
+.panel .toolbox li {
+    cursor: pointer;
+    display: inline;
+    padding: 0 2px;
+    border: 1px solid #b6b6b3;
+    border-radius: 2px;
+}
+.panel.dark .toolbox
+.panel.dark .toolbox li {
+    color: #d3dfeb;
+    border: 1px solid #202425;
+}
+.panel .toolbox li:hover {
+    background-color: #d4d4d2;
+}
+.panel.dark .toolbox li:hover {
+    background-color: #353c3e;
+}
+@media all and (orientation:landscape) {
+    .panel {
+        top: 0;
+        margin-top: 10px;
+        width: 390px;
+    }
+    .panel.condensed {
+        max-height: 500px;
+        bottom: initial;
+    }
+    .panel.right {
+        margin-right: 10px;
+        right: -400px;
+    }
+    .panel.left {
+        left: -400px;
+    }
+    .panel.left.on {
+        left: 60px;
+        visibility: visible;
+    }
+    .panel.right.on {
+        right: 40px;
+        visibility: visible;
+    }
+    .umap-edit-enabled .panel {
+        top: 46px;
+    }
+}
+@media all and (orientation:portrait) {
+    .panel {
+        height: 50%;
+        max-height: 400px;
+        width: 100%;
+        bottom: 0;
+        right: -100%;
+    }
+    .panel.on {
+        right: 0;
+        visibility: visible;
+    }
+}

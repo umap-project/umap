@@ -29,6 +29,18 @@ U.ImportAction = U.BaseAction.extend({
   },
 })
 
+U.EditLayersAction = U.BaseAction.extend({
+  options: {
+    helpMenu: true,
+    className: 'umap-control-browse dark',
+    tooltip: L._('See layers'),
+  },
+
+  addHooks: function () {
+    this.map.editDatalayers()
+  },
+})
+
 U.EditCaptionAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
@@ -280,7 +292,6 @@ U.ContinueLineAction = U.BaseVertexAction.extend({
 })
 
 // Leaflet.Toolbar doesn't allow twice same toolbar class…
-U.ImportToolbar = L.Toolbar.Control.extend({})
 U.SettingsToolbar = L.Toolbar.Control.extend({})
 U.DrawToolbar = L.Toolbar.Control.extend({
   initialize: function (options) {
@@ -315,6 +326,7 @@ U.DrawToolbar = L.Toolbar.Control.extend({
     this.appendToContainer(container)
   },
 })
+
 
 U.DropControl = L.Class.extend({
   initialize: function (map) {
@@ -507,7 +519,7 @@ L.Control.Button = L.Control.extend({
 
 U.DataLayersControl = L.Control.Button.extend({
   options: {
-    position: 'topright',
+    position: 'topleft',
     className: 'umap-control-browse',
     title: L._('See layers'),
   },
@@ -519,8 +531,8 @@ U.DataLayersControl = L.Control.Button.extend({
 
 U.CaptionControl = L.Control.Button.extend({
   options: {
-    position: 'topright',
-    className: 'umap-control-caption hide-on-edit',
+    position: 'topleft',
+    className: 'umap-control-caption',
     title: L._('About'),
   },
 
@@ -614,6 +626,8 @@ const ControlsMixin = {
     'search',
     'fullscreen',
     'embed',
+    'datalayers',
+    'caption',
     'locate',
     'measure',
     'editinosm',
@@ -669,7 +683,7 @@ const ControlsMixin = {
     })
     container.appendChild(builder.build())
 
-    this.ui.openPanel({ data: { html: container } })
+    this.panel.open({ data: { html: container } })
   },
 
   displayCaption: function () {
@@ -749,7 +763,7 @@ const ControlsMixin = {
       `,
       urls
     )
-    this.ui.openPanel({ data: { html: container } })
+    this.panel.open({ data: { html: container } })
   },
 
   renderEditToolbar: function () {
@@ -899,6 +913,49 @@ const ControlsMixin = {
       this
     )
   },
+
+  editDatalayers: function () {
+    if (!this.editEnabled) return
+    const container = L.DomUtil.create('div')
+    L.DomUtil.createTitle(container, L._('Manage layers'), 'layers')
+    const ul = L.DomUtil.create('ul', '', container)
+    this.eachDataLayerReverse((datalayer) => {
+      const row = L.DomUtil.create('li', 'orderable', ul)
+      const dragHandle = L.DomUtil.create('i', 'icon icon-16 icon-drag', row)
+      dragHandle.title = L._('Drag to reorder')
+      datalayer.renderToolbox(row)
+      const title = L.DomUtil.add('span', '', row, datalayer.options.name)
+      L.DomUtil.classIf(row, 'off', !datalayer.isVisible())
+      title.textContent = datalayer.options.name
+      row.dataset.id = L.stamp(datalayer)
+    })
+    const onReorder = (src, dst, initialIndex, finalIndex) => {
+      const layer = this.datalayers[src.dataset.id],
+        other = this.datalayers[dst.dataset.id],
+        minIndex = Math.min(layer.getRank(), other.getRank()),
+        maxIndex = Math.max(layer.getRank(), other.getRank())
+      if (finalIndex === 0) layer.bringToTop()
+      else if (finalIndex > initialIndex) layer.insertBefore(other)
+      else layer.insertAfter(other)
+      this.eachDataLayerReverse((datalayer) => {
+        if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
+          datalayer.isDirty = true
+      })
+      this.indexDatalayers()
+    }
+    const orderable = new U.Orderable(ul, onReorder)
+
+    const bar = L.DomUtil.create('div', 'button-bar', container)
+    L.DomUtil.createButton(
+      'show-on-edit block add-datalayer button',
+      bar,
+      L._('Add a layer'),
+      this.newDataLayer,
+      this
+    )
+
+    this.editPanel.open({ data: { html: container } })
+  },
 }
 
 /* Used in view mode to define the current tilelayer */
@@ -971,7 +1028,7 @@ U.TileLayerChooser = L.Control.extend({
     L.DomUtil.createTitle(container, L._('Change tilelayers'), 'tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
-    this.map.ui.openPanel({
+    this.map.editPanel.open({
       data: { html: container },
       className: options.className,
     })
@@ -1201,6 +1258,7 @@ U.SearchControl = L.Control.extend({
   },
 
   onAdd: function (map) {
+    this.map = map
     const container = L.DomUtil.create('div', 'leaflet-control-search umap-control')
     L.DomEvent.disableClickPropagation(container)
     L.DomUtil.createButton(
@@ -1209,38 +1267,37 @@ U.SearchControl = L.Control.extend({
       L._('Search location'),
       (e) => {
         L.DomEvent.stop(e)
-        this.openPanel(map)
+        this.open()
       },
       this
     )
     return container
   },
 
-  openPanel: function (map) {
+  open: function () {
     const options = {
       limit: 10,
       noResultLabel: L._('No results'),
     }
-    if (map.options.photonUrl) options.url = map.options.photonUrl
-    const container = L.DomUtil.create('div', 'umap-search')
+    if (this.map.options.photonUrl) options.url = this.map.options.photonUrl
+    const container = L.DomUtil.create('div', '')
 
-    const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Search location')
+    L.DomUtil.createTitle(container, L._('Search location'), 'search')
     const input = L.DomUtil.create('input', 'photon-input', container)
     const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
-    this.search = new U.Search(map, input, options)
+    this.search = new U.Search(this.map, input, options)
     const id = Math.random()
     this.search.on('ajax:send', () => {
-      map.fire('dataloading', { id: id })
+      this.map.fire('dataloading', { id: id })
     })
     this.search.on('ajax:return', () => {
-      map.fire('dataload', { id: id })
+      this.map.fire('dataload', { id: id })
     })
     this.search.resultsContainer = resultsContainer
-    map.ui.once('panel:ready', () => {
+    this.map.ui.once('panel:ready', () => {
       input.focus()
     })
-    map.ui.openPanel({ data: { html: container } })
+    this.map.panel.open({ data: { html: container } })
   },
 })
 

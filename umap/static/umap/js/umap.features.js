@@ -132,11 +132,7 @@ U.FeatureMixin = {
     this.appendEditFieldsets(container)
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     this.getAdvancedEditActions(advancedActions)
-    this.map.ui.openPanel({
-      data: { html: container },
-      className: 'dark',
-      actions: [U.Browser.backButton(this.map)],
-    })
+    this.map.editPanel.open({ data: { html: container } })
     this.map.editedFeature = this
     if (!this.isOnScreen()) this.zoomTo(e)
   },

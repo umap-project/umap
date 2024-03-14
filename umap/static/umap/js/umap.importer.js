@@ -117,7 +117,7 @@ U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.map.ui.openPanel({ data: { html: this.container }, className: 'dark' })
+    this.map.editPanel.open({ data: { html: this.container } })
   },
 
   openFiles: function () {
