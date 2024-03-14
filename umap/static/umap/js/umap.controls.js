@@ -1237,6 +1237,7 @@ U.StarControl = L.Control.extend({
 U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
     this.options.placeholder = L._('Type a place name or coordinates')
+    this.options.location_bias_scale = 0.5
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
     this.options.url = map.options.urls.search
     if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
@@ -1276,6 +1277,7 @@ U.Search = L.PhotonSearch.extend({
     // Only numbers, abort.
     if (/^[\d .,]*$/.test(this.input.value)) return
     // Do normal search
+    this.options.includePosition = this.map.getZoom() > 10
     L.PhotonSearch.prototype.search.call(this)
   },
 
