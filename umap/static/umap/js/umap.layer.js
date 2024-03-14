@@ -677,7 +677,7 @@ U.DataLayer = L.Evented.extend({
     this._loading = true
     const [geojson, response, error] = await this.map.server.get(this._dataUrl())
     if (!error) {
-      this._last_modified = response.headers.get('last-modified')
+      this._reference_version = response.headers.get('X-Datalayer-Version')
       // FIXME: for now this property is set dynamically from backend
       // And thus it's not in the geojson file in the server
       // So do not let all options to be reset
@@ -1459,7 +1459,7 @@ U.DataLayer = L.Evented.extend({
     if (!this.isVisible()) return
     const bounds = this.layer.getBounds()
     if (bounds.isValid()) {
-      const options = {maxZoom: this.getOption("zoomTo")}
+      const options = { maxZoom: this.getOption('zoomTo') }
       this.map.fitBounds(bounds, options)
     }
   },
@@ -1577,8 +1577,8 @@ U.DataLayer = L.Evented.extend({
       map_id: this.map.options.umap_id,
       pk: this.umap_id,
     })
-    const headers = this._last_modified
-      ? { 'If-Unmodified-Since': this._last_modified }
+    const headers = this._reference_version
+      ? { 'X-Datalayer-Reference': this._reference_version }
       : {}
     await this._trySave(saveUrl, headers, formData)
     this._geojson = geojson
@@ -1596,7 +1596,7 @@ U.DataLayer = L.Evented.extend({
             label: L._('Save anyway'),
             callback: async () => {
               // Save again,
-              // but do not pass If-Unmodified-Since this time
+              // but do not pass the reference version this time
               await this._trySave(url, {}, formData)
             },
           },
@@ -1619,7 +1619,7 @@ U.DataLayer = L.Evented.extend({
         this.fromGeoJSON(data.geojson)
         delete data.geojson
       }
-      this._last_modified = response.headers.get('last-modified')
+      this._reference_version = response.headers.get('X-Datalayer-Version')
       this.setUmapId(data.id)
       this.updateOptions(data)
       this.backupOptions()

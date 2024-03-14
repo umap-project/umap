@@ -975,20 +975,20 @@ class GZipMixin(object):
 
     @property
     def path(self):
-        return self.object.geojson.path
+        return Path(self.object.geojson.path)
 
     @property
     def gzip_path(self):
         return Path(f"{self.path}{self.EXT}")
 
-    def compute_last_modified(self, path):
-        stat = os.stat(path)
-        return http_date(stat.st_mtime)
+    def read_version(self, path):
+        # Remove optional .gz, then .geojson, then return the trailing version from path.
+        return str(path.with_suffix("").with_suffix("")).split("_")[-1]
 
     @property
-    def last_modified(self):
+    def version(self):
         # Prior to 1.3.0 we did not set gzip mtime as geojson mtime,
-        # but we switched from If-Match header to IF-Unmodified-Since
+        # but we switched from If-Match header to If-Unmodified-Since
         # and when users accepts gzip their last modified value is the gzip
         # (when umap is served by nginx and X-Accel-Redirect)
         # one, so we need to compare with that value in that case.
@@ -998,7 +998,7 @@ class GZipMixin(object):
             if self.accepts_gzip and self.gzip_path.exists()
             else self.path
         )
-        return self.compute_last_modified(path)
+        return self.read_version(path)
 
     @property
     def accepts_gzip(self):
@@ -1029,7 +1029,7 @@ class DataLayerView(GZipMixin, BaseDetailView):
             with open(path, "rb") as f:
                 # Should not be used in production!
                 response = HttpResponse(f.read(), content_type="application/geo+json")
-            response["Last-Modified"] = self.last_modified
+            response["X-Datalayer-Version"] = self.version
             response["Content-Length"] = statobj.st_size
         return response
 
@@ -1037,9 +1037,8 @@ class DataLayerView(GZipMixin, BaseDetailView):
 class DataLayerVersion(DataLayerView):
     @property
     def path(self):
-        return "{root}/{path}".format(
-            root=settings.MEDIA_ROOT,
-            path=self.object.get_version_path(self.kwargs["name"]),
+        return Path(settings.MEDIA_ROOT) / self.object.get_version_path(
+            self.kwargs["name"]
         )
 
 
@@ -1050,11 +1049,11 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
     def form_valid(self, form):
         form.instance.map = self.kwargs["map_inst"]
         self.object = form.save()
-        # Simple response with only metadatas (including new id)
+        # Simple response with only metadata (including new id)
         response = simple_json_response(
             **self.object.metadata(self.request.user, self.request)
         )
-        response["Last-Modified"] = self.last_modified
+        response["X-Datalayer-Version"] = self.version
         return response
 
 
@@ -1062,30 +1061,29 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
     model = DataLayer
     form_class = DataLayerForm
 
-    def has_been_modified_since(self, if_unmodified_since):
-        return if_unmodified_since and self.last_modified != if_unmodified_since
+    def has_changes_since(self, incoming_version):
+        return incoming_version and self.version != incoming_version
 
-    def merge(self, if_unmodified_since):
+    def merge(self, reference_version):
         """
-        Attempt to apply the incoming changes to the document the client was using, and
-        then merge it with the last document we have on storage.
+        Attempt to apply the incoming changes to the reference, and then merge it
+        with the last document we have on storage.
 
         Returns either None (if the merge failed) or the merged python GeoJSON object.
         """
 
-        # Use If-Modified-Since to find the correct version in our storage.
+        # Use the provided info to find the correct version in our storage.
         for name in self.object.get_versions():
-            path = os.path.join(settings.MEDIA_ROOT, self.object.get_version_path(name))
-            if if_unmodified_since == self.compute_last_modified(path):
+            path = Path(settings.MEDIA_ROOT) / self.object.get_version_path(name)
+            if reference_version == self.read_version(path):
                 with open(path) as f:
                     reference = json.loads(f.read())
                 break
         else:
             # If the document is not found, we can't merge.
             return None
-
         # New data received in the request.
-        entrant = json.loads(self.request.FILES["geojson"].read())
+        incoming = json.loads(self.request.FILES["geojson"].read())
 
         # Latest known version of the data.
         with open(self.path) as f:
@@ -1095,7 +1093,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
             merged_features = merge_features(
                 reference.get("features", []),
                 latest.get("features", []),
-                entrant.get("features", []),
+                incoming.get("features", []),
             )
             latest["features"] = merged_features
             return latest
@@ -1110,10 +1108,9 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         if not self.object.can_edit(user=self.request.user, request=self.request):
             return HttpResponseForbidden()
 
-        ius_header = self.request.META.get("HTTP_IF_UNMODIFIED_SINCE")
-
-        if self.has_been_modified_since(ius_header):
-            merged = self.merge(ius_header)
+        reference_version = self.request.headers.get("X-Datalayer-Reference")
+        if self.has_changes_since(reference_version):
+            merged = self.merge(reference_version)
             if not merged:
                 return HttpResponse(status=412)
 
@@ -1133,8 +1130,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
             data["geojson"] = json.loads(self.object.geojson.read().decode())
             self.request.session["needs_reload"] = False
         response = simple_json_response(**data)
-
-        response["Last-Modified"] = self.last_modified
+        response["X-Datalayer-Version"] = self.version
         return response
 
 
