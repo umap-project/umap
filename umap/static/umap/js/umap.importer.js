@@ -20,7 +20,6 @@ U.Importer = L.Class.extend({
       { type: 'file', multiple: 'multiple', autofocus: true },
       this.fileBox
     )
-    this.map.ui.once('panel:closed', () => (this.fileInput.value = null))
     this.urlInput = L.DomUtil.element(
       'input',
       { type: 'text', placeholder: L._('Provide an URL here') },
@@ -121,7 +120,10 @@ U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.map.editPanel.open({ data: { html: this.container } })
+    const onLoad = this.map.editPanel.open({ data: { html: this.container } })
+    onLoad.then(() => {
+      this.fileInput.value = null
+    })
   },
 
   openFiles: function () {

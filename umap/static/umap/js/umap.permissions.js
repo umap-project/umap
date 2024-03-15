@@ -137,7 +137,7 @@ U.MapPermissions = L.Class.extend({
         content: L._('Map has been attached to your account'),
         level: 'info',
       })
-      this.map.ui.closePanel()
+      this.map.editPanel.close()
     }
   },
 

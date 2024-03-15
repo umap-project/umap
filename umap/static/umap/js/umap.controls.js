@@ -33,7 +33,7 @@ U.EditLayersAction = U.BaseAction.extend({
   options: {
     helpMenu: true,
     className: 'umap-control-browse dark',
-    tooltip: L._('See layers'),
+    tooltip: L._('Manage layers'),
   },
 
   addHooks: function () {
@@ -1252,7 +1252,7 @@ U.Search = L.PhotonSearch.extend({
 
   onSelected: function (feature) {
     this.zoomToFeature(feature)
-    this.map.ui.closePanel()
+    this.map.panel.close()
   },
 })
 

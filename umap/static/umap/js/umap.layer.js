@@ -1347,7 +1347,7 @@ U.DataLayer = L.Evented.extend({
       L._('Delete'),
       function () {
         this._delete()
-        this.map.ui.closePanel()
+        this.map.editPanel.close()
       },
       this
     )

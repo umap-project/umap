@@ -179,7 +179,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     marker = page.locator(".leaflet-marker-icon")
     expect(marker).to_have_count(0)
     add_marker.click()
-    map_el.click(position={"x": 100, "y": 100})
+    map_el.click(position={"x": 500, "y": 100})
     expect(marker).to_have_count(1)
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
@@ -196,9 +196,9 @@ def test_can_hide_datalayer_from_caption(openmap, live_server, datalayer, page):
     toggle.click()
     layers = page.locator(".umap-caption .datalayer-legend")
     expect(layers).to_have_count(1)
-    found = page.locator("#umap-panel").get_by_text(datalayer.name)
+    found = page.locator(".panel.left.on").get_by_text(datalayer.name)
     expect(found).to_be_visible()
-    hidden = page.locator("#umap-panel").get_by_text(other.name)
+    hidden = page.locator(".panel.left.on").get_by_text(other.name)
     expect(hidden).to_be_hidden()
 
 

@@ -222,12 +222,13 @@ U.Map = L.Map.extend({
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
+        this.panel.MODE = 'expanded'
         this.openBrowser()
       } else if (this.options.onLoadPanel === 'datalayers') {
-        this.ui.PANEL_MODE = 'condensed'
+        this.panel.MODE = 'condensed'
         this.openBrowser()
       } else if (this.options.onLoadPanel === 'caption') {
-        this.ui.PANEL_MODE = 'condensed'
+        this.panel.MODE = 'condensed'
         this.displayCaption()
       } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
         this.openFacet()
@@ -528,8 +529,13 @@ U.Map = L.Map.extend({
         L.DomEvent.stop(e)
         this.search()
       } else if (e.keyCode === U.Keys.ESC) {
-        if (this.help.visible()) this.help.hide()
-        else this.ui.closePanel()
+        if (this.help.visible()) {
+          this.help.hide()
+        } else {
+          this.panel.close()
+          this.editPanel.close()
+          this.fullPanel.close()
+        }
       }
 
       if (!this.hasEditMode()) return
@@ -1629,8 +1635,7 @@ U.Map = L.Map.extend({
   askForReset: function (e) {
     if (!confirm(L._('Are you sure you want to cancel your changes?'))) return
     this.reset()
-    this.disableEdit(e)
-    this.ui.closePanel()
+    this.disableEdit()
   },
 
   startMarker: function () {

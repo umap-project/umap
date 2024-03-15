@@ -171,7 +171,7 @@ def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
     input_el.blur()
     expect(marker).to_have_attribute("src", "https://foo.bar/img.jpg")
     # Now close and reopen the form, it should still be the URL tab
-    close = page.locator("#umap-panel .toolbox").get_by_title("Close")
+    close = page.locator(".panel.right.on .toolbox").get_by_title("Close")
     expect(close).to_be_visible()
     close.click()
     edit_settings.click()
@@ -210,7 +210,7 @@ def test_can_use_char_as_picto(openmap, live_server, page, pictos):
     expect(marker).to_have_count(1)
     expect(marker).to_have_text("♩")
     # Now close and reopen the form, it should still be the URL tab
-    close = page.locator("#umap-panel .toolbox").get_by_title("Close")
+    close = page.locator(".panel.right.on .toolbox").get_by_title("Close")
     expect(close).to_be_visible()
     close.click()
     edit_settings.click()

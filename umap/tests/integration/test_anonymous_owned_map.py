@@ -114,12 +114,13 @@ def test_anonymous_can_add_marker_on_editable_layer(
     marker = page.locator(".leaflet-marker-icon")
     map_el = page.locator("#map")
     expect(marker).to_have_count(2)
-    expect(map_el).not_to_have_class(re.compile("umap-ui"))
+    panel = page.locator('.panel.right.on')
+    expect(panel).to_be_hidden()
     add_marker.click()
     map_el.click(position={"x": 100, "y": 100})
     expect(marker).to_have_count(3)
     # Edit panel is open
-    expect(map_el).to_have_class(re.compile("umap-ui"))
+    expect(panel).to_be_visible()
     datalayer_select = page.locator("select[name='datalayer']")
     expect(datalayer_select).to_be_visible()
     options = page.locator("select[name='datalayer'] option")
@@ -131,7 +132,7 @@ def test_anonymous_can_add_marker_on_editable_layer(
 def test_can_change_perms_after_create(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/en/map/new")
     # Create a layer
-    page.get_by_title("See layers").click()
+    page.get_by_title("Manage layers").click()
     page.get_by_title("Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
     save = page.get_by_role("button", name="Save")
