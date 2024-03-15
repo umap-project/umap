@@ -63,7 +63,7 @@ export default class Browser {
 
   addDataLayer(datalayer, parent) {
     let className = `datalayer ${datalayer.getHidableClass()}`
-    if (this.map.panel.MODE !== 'condensed') className += ' show-list'
+    if (this.map.panel.mode !== 'condensed') className += ' show-list'
     const container = DomUtil.create('div', className, parent),
       headline = DomUtil.create('h5', '', container)
     container.id = this.datalayerId(datalayer)
