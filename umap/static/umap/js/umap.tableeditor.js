@@ -94,7 +94,6 @@ U.TableEditor = L.Class.extend({
 
   edit: function () {
     const id = 'tableeditor:edit'
-    this.datalayer.map.fire('dataloading', { id: id })
     this.compileProperties()
     this.renderHeaders()
     this.body.innerHTML = ''
@@ -110,11 +109,10 @@ U.TableEditor = L.Class.extend({
       this.edit()
     }
     L.DomEvent.on(addButton, 'click', addProperty, this)
-    this.datalayer.map.ui.openPanel({
+    this.datalayer.map.fullPanel.open({
       data: { html: this.table },
-      className: 'umap-table-editor fullwidth dark',
+      className: 'umap-table-editor',
       actions: [addButton, U.Browser.backButton(this.datalayer.map)],
     })
-    this.datalayer.map.fire('dataload', { id: id })
   },
 })

@@ -911,7 +911,9 @@ a.umap-control-caption,
     height: 30px;
     line-height: 30px;
     background-color: var(--color-lightGray);
-    color: #666;
+}
+.umap-browser .off h5 {
+    color: #b3b3b3;
 }
 .umap-browser.dark h5 {
     background-color: #232729;
@@ -984,10 +986,6 @@ a.umap-control-caption,
 /* ********************************* */
 /*          Table Editor             */
 /* ********************************* */
-#umap-panel.umap-table-editor {
-    padding-left: 0;
-    padding-right: 0;
-}
 
 .umap-table-editor .table {
     display: table;

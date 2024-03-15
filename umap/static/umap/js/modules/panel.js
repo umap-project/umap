@@ -79,3 +79,8 @@ export class Panel {
 export class EditPanel extends Panel {
   CLASSNAME = 'right dark'
 }
+
+export class FullPanel extends Panel {
+  CLASSNAME = 'full dark'
+  MODE = 'expanded'
+}
