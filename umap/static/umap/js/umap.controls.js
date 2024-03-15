@@ -327,7 +327,6 @@ U.DrawToolbar = L.Toolbar.Control.extend({
   },
 })
 
-
 U.DropControl = L.Class.extend({
   initialize: function (map) {
     this.map = map
