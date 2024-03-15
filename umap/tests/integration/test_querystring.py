@@ -29,8 +29,9 @@ def test_datalayers_control(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?datalayersControl=false")
     expect(control).to_be_hidden()
     expect(browser).to_be_hidden()
+    # Retrocompat
     page.goto(f"{live_server.url}{map.get_absolute_url()}?datalayersControl=expanded")
-    expect(control).to_be_hidden()
+    expect(control).to_be_visible()
     expect(browser).to_be_visible()
 
 

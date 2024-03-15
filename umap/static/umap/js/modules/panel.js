@@ -5,7 +5,6 @@ export class Panel {
   MODE = 'condensed'
   CLASSNAME = 'left'
 
-
   constructor(parent) {
     this.parent = parent
     this.container = DomUtil.create('div', '', this.parent)
@@ -16,7 +15,6 @@ export class Panel {
   }
 
   open(e) {
-    //this.fire('panel:open')
     this.container.className = `with-transition panel ${this.CLASSNAME} ${this.MODE}`
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'toolbox', this.container)
@@ -36,22 +34,18 @@ export class Panel {
       }
     }
     if (e.className) DomUtil.addClass(body, e.className)
-    if (DomUtil.hasClass(this.container, 'on')) {
-      // Already open.
-      //this.fire('panel:ready')
-    } else {
-      DomEvent.once(
-        this.container,
-        'transitionend',
-        function (e) {
-          //this.fire('panel:ready')
-        },
-        this
-      )
-      DomUtil.addClass(this.container, 'on')
-    }
+    const promise = new Promise((resolve, reject) => {
+      if (DomUtil.hasClass(this.container, 'on')) {
+        // Already open.
+        resolve()
+      } else {
+        DomEvent.once(this.container, 'transitionend', resolve)
+        DomUtil.addClass(this.container, 'on')
+      }
+    })
     DomEvent.on(closeLink, 'click', this.close, this)
     DomEvent.on(resizeLink, 'click', this.resize, this)
+    return promise
   }
 
   resize() {
@@ -69,7 +63,6 @@ export class Panel {
   close() {
     if (DomUtil.hasClass(this.container, 'on')) {
       DomUtil.removeClass(this.container, 'on')
-      //this.fire('panel:closed')
     }
   }
 }

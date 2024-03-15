@@ -34,9 +34,9 @@ describe('L.TableEditor', () => {
 
     it('should open table button click', () => {
       happen.click(button)
-      expect(qs('#umap-panel div.table')).to.be.ok
-      expect(qsa('#umap-panel div.table form').length).to.eql(3) // One per feature.
-      expect(qsa('#umap-panel div.table input').length).to.eql(3) // One per feature and per property.
+      expect(qs('.panel.full.on div.table')).to.be.ok
+      expect(qsa('.panel.full.on div.table form').length).to.eql(3) // One per feature.
+      expect(qsa('.panel.full.on div.table input').length).to.eql(3) // One per feature and per property.
     })
   })
   describe('#properties()', () => {
@@ -53,10 +53,10 @@ describe('L.TableEditor', () => {
       }
       var oldPrompt = window.prompt
       window.prompt = newPrompt
-      var button = qs('#umap-panel .add-property')
+      var button = qs('.panel.full.on .add-property')
       expect(button).to.be.ok
       happen.click(button)
-      expect(qsa('#umap-panel div.table input').length).to.eql(6) // One per feature and per property.
+      expect(qsa('.panel.full.on div.table input').length).to.eql(6) // One per feature and per property.
       window.prompt = oldPrompt
     })
 
@@ -74,10 +74,10 @@ describe('L.TableEditor', () => {
       }
       var oldPrompt = window.prompt
       window.prompt = newPrompt
-      var button = qs('#umap-panel div.thead div.tcell:last-of-type .umap-edit')
+      var button = qs('.panel.full.on div.thead div.tcell:last-of-type .umap-edit')
       expect(button).to.be.ok
       happen.click(button)
-      expect(qsa('#umap-panel div.table input').length).to.eql(6)
+      expect(qsa('.panel.full.on div.table input').length).to.eql(6)
       expect(feature.properties.newprop).to.be.undefined
       expect(feature.properties.newname).to.eql('the value')
       window.prompt = oldPrompt
@@ -91,12 +91,12 @@ describe('L.TableEditor', () => {
       oldConfirm = window.confirm
       window.confirm = newConfirm
       var button = qs(
-        '#umap-panel div.thead div.tcell:last-of-type .umap-delete'
+        '.panel.full.on div.thead div.tcell:last-of-type .umap-delete'
       )
       expect(button).to.be.ok
       happen.click(button)
       FEATURE = feature
-      expect(qsa('#umap-panel div.table input').length).to.eql(3)
+      expect(qsa('.panel.full.on div.table input').length).to.eql(3)
       expect(feature.properties.newname).to.be.undefined
       window.confirm = oldConfirm
     })

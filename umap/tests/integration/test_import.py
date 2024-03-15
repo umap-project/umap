@@ -1,3 +1,4 @@
+from time import sleep
 from pathlib import Path
 
 import pytest
@@ -8,9 +9,7 @@ pytestmark = pytest.mark.django_db
 
 def test_umap_import_from_file(live_server, datalayer, page):
     page.goto(f"{live_server.url}/map/new/")
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
     file_input = page.locator("input[type='file']")
     with page.expect_file_chooser() as fc_info:
         file_input.click()
@@ -23,6 +22,9 @@ def test_umap_import_from_file(live_server, datalayer, page):
     assert file_input.input_value()
     # Close the import panel
     page.keyboard.press("Escape")
+    # Reopen
+    page.get_by_title("Import data").click()
+    sleep(1)  # Wait for CSS transition to happen
     assert not file_input.input_value()
     page.get_by_title("See layers").click()
     layers = page.locator(".umap-browser .datalayer")

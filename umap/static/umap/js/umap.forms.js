@@ -1033,6 +1033,6 @@ U.FormBuilder = L.FormBuilder.extend({
   },
 
   finish: function () {
-    this.map.ui.closePanel()
+    this.map.editPanel.close()
   },
 })
