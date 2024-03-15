@@ -337,6 +337,7 @@ ul.umap-autocomplete {
     height: 36px;
     width: 36px;
     margin: 3px;
+    background-position: initial;
 }
 .content .icon-view {
     background-image: url('./img/icon-view.svg');
