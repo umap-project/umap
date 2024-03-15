@@ -134,7 +134,7 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
 
-    DomUtil.createTitle(container, translate('Browse data'), 'layers')
+    DomUtil.createTitle(container, translate('Browse data'), 'icon-layers')
     const formContainer = DomUtil.create('div', '', container)
     this.dataContainer = DomUtil.create('div', '', container)
 

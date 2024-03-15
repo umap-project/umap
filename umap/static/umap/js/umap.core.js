@@ -128,7 +128,7 @@ L.DomUtil.createIcon = (parent, className, title, size = 16) => {
 L.DomUtil.createButtonIcon = (parent, className, title, size = 16) => {
   return L.DomUtil.element(
     'button',
-    { className: `icon icon-${size} ${className}`, title: title },
+    { className: `icon icon-${size} ${className}`, title: title || '' },
     parent
   )
 }
