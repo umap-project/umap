@@ -660,7 +660,7 @@ ul.photon-autocomplete {
     display: inline-block; /* Prevents underline on hover. */
 }
 .umap-edit-enabled .leaflet-top {
-    top: 48px;
+    top: 46px;
 }
 .umap-caption-bar-enabled .umap-caption-bar {
     display: block;
@@ -935,7 +935,7 @@ a.umap-control-caption,
 .umap-browser.dark .datalayer li:nth-child(even) {
     background-color: #2c3233;
 }
-.umap-browser .datalayer i.feature-color {
+.umap-browser .datalayer .feature-color {
     box-shadow: 0 0 2px 0 black inset;
     cursor: inherit;
     -moz-box-sizing:border-box;
@@ -948,7 +948,7 @@ a.umap-control-caption,
     text-align: center;
     margin-left: 5px;
 }
-.umap-browser.dark .datalayer i.feature-color {
+.umap-browser.dark .datalayer .feature-color {
     box-shadow: 0 0 2px 0 #999 inset;
 }
 .umap-browser .datalayer .feature-color img {

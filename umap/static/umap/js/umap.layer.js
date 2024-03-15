@@ -594,6 +594,7 @@ U.DataLayer = L.Evented.extend({
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
+    this.on('datachanged', this.map.onDataLayersChanged, this.map)
   },
 
   render: function (fields, builder) {
@@ -845,6 +846,7 @@ U.DataLayer = L.Evented.extend({
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
         this.map.datalayers_index.push(this)
     }
+    this.map.onDataLayersChanged()
   },
 
   _dataUrl: function () {
@@ -1152,6 +1154,8 @@ U.DataLayer = L.Evented.extend({
     delete this.map.datalayers[L.stamp(this)]
     this.map.datalayers_index.splice(this.getRank(), 1)
     this.parentPane.removeChild(this.pane)
+    this.map.onDataLayersChanged()
+    this.off('datachanged', this.map.onDataLayersChanged, this.map)
     this.fire('erase')
     this._leaflet_events_bk = this._leaflet_events
     this.map.off('moveend', this.onMoveEnd, this)
@@ -1214,6 +1218,7 @@ U.DataLayer = L.Evented.extend({
     L.DomUtil.createTitle(container, L._('Layer properties'), 'icon-layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
+        this.map.onDataLayersChanged()
         if (e.helper.field === 'options.type') {
           this.edit()
         }

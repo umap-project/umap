@@ -5,8 +5,9 @@ export class Panel {
   MODE = 'condensed'
   CLASSNAME = 'left'
 
-  constructor(parent) {
-    this.parent = parent
+  constructor(map) {
+    this.parent = map._container
+    this.map = map
     this.container = DomUtil.create('div', '', this.parent)
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
@@ -35,13 +36,8 @@ export class Panel {
     }
     if (e.className) DomUtil.addClass(body, e.className)
     const promise = new Promise((resolve, reject) => {
-      if (DomUtil.hasClass(this.container, 'on')) {
-        // Already open.
-        resolve()
-      } else {
-        DomEvent.once(this.container, 'transitionend', resolve)
-        DomUtil.addClass(this.container, 'on')
-      }
+      DomUtil.addClass(this.container, 'on')
+      resolve()
     })
     DomEvent.on(closeLink, 'click', this.close, this)
     DomEvent.on(resizeLink, 'click', this.resize, this)
@@ -63,6 +59,8 @@ export class Panel {
   close() {
     if (DomUtil.hasClass(this.container, 'on')) {
       DomUtil.removeClass(this.container, 'on')
+      this.map.invalidateSize({ pan: false })
+      this.map.editedFeature = null
     }
   }
 }
