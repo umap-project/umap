@@ -598,7 +598,7 @@ U.DataLayer.include({
           if (!this.isVisible()) return
           if (!confirm(L._('Are you sure you want to delete this layer?'))) return
           this._delete()
-          this.map.ui.closePanel()
+          this.map.editPanel.close()
         },
         this
       )
@@ -898,10 +898,7 @@ const ControlsMixin = {
       'leaflet-control-edit-disable',
       rightContainer,
       L.DomUtil.add('span', '', null, L._('View')),
-      function (e) {
-        this.disableEdit(e)
-        this.ui.closePanel()
-      },
+      this.disableEdit,
       this
     )
     L.DomEvent.on(
