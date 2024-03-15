@@ -1,4 +1,4 @@
-import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomUtil, DomEvent, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 
 export default class Browser {
@@ -16,14 +16,26 @@ export default class Browser {
     if (filter && !feature.matchFilter(filter, this.filterKeys)) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
     const row = DomUtil.create('li', `${feature.getClassName()} feature`)
-    const zoom_to = DomUtil.createButtonIcon(row, 'icon-zoom', translate('Bring feature to center'))
-    const edit = DomUtil.createButtonIcon(row, 'show-on-edit icon-edit', translate('Edit this feature'))
-    const del = DomUtil.createButtonIcon(row, 'show-on-edit icon-delete', translate('Delete this feature'))
+    const zoom_to = DomUtil.createButtonIcon(
+      row,
+      'icon-zoom',
+      translate('Bring feature to center')
+    )
+    const edit = DomUtil.createButtonIcon(
+      row,
+      'show-on-edit icon-edit',
+      translate('Edit this feature')
+    )
+    const del = DomUtil.createButtonIcon(
+      row,
+      'show-on-edit icon-delete',
+      translate('Delete this feature')
+    )
     const colorBox = DomUtil.create('i', 'icon icon-16 feature-color', row)
     const title = DomUtil.create('span', 'feature-title', row)
     const symbol = feature._getIconUrl
-        ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
-        : null
+      ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
+      : null
     title.textContent = feature.getDisplayName() || '—'
     const bgcolor = feature.getDynamicOption('color')
     colorBox.style.backgroundColor = bgcolor
@@ -31,24 +43,11 @@ export default class Browser {
       const icon = U.Icon.makeIconElement(symbol, colorBox)
       U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
     }
-    DomEvent.on(
-      zoom_to,
-      'click',
-      function (e) {
-        e.callback = L.bind(this.view, this)
-        this.zoomTo(e)
-      },
-      feature
-    )
-    DomEvent.on(
-      title,
-      'click',
-      function (e) {
-        e.callback = L.bind(this.view, this)
-        this.zoomTo(e)
-      },
-      feature
-    )
+    const viewFeature = (e) => {
+      feature.zoomTo({...e, callback: feature.view})
+    }
+    DomEvent.on(zoom_to, 'click', viewFeature)
+    DomEvent.on(title, 'click', viewFeature)
     DomEvent.on(edit, 'click', feature.edit, feature)
     DomEvent.on(del, 'click', feature.confirmDelete, feature)
     // HOTFIX. Remove when this is released:
@@ -58,7 +57,7 @@ export default class Browser {
   }
 
   datalayerId(datalayer) {
-    return `browse_data_datalayer_${L.stamp(datalayer)}`
+    return `browse_data_datalayer_${stamp(datalayer)}`
   }
 
   addDataLayer(datalayer, parent) {
@@ -158,13 +157,13 @@ export default class Browser {
   }
 
   static backButton(map) {
-    const button = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'icon icon-16 icon-back', button)
-    button.title = L._('Back to browser')
+    const button = DomUtil.create('li', '')
+    DomUtil.create('i', 'icon icon-16 icon-back', button)
+    button.title = translate('Back to browser')
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
-    L.DomEvent.disableClickPropagation(button)
-    L.DomEvent.on(button, 'click', map.openBrowser, map)
+    DomEvent.disableClickPropagation(button)
+    DomEvent.on(button, 'click', map.openBrowser, map)
     return button
   }
 }
