@@ -15,7 +15,7 @@ export const SCHEMA = {
   },
   moreControl: {
     type: Boolean,
-    label: translate('Do you want to display the «more» control?'),
+    label: translate('Do you want to display the "more" control?'),
     default: true,
   },
   miniMap: {
@@ -35,7 +35,7 @@ export const SCHEMA = {
       ['none', translate('None')],
       ['caption', translate('Caption')],
       ['databrowser', translate('Data browser')],
-      ['datalayers', translate('Layers')],
+      ['datalayers', translate('Layers’ list')],
       ['facet', translate('Facet search')],
     ],
     default: 'none',
