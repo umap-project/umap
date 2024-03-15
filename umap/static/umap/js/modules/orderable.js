@@ -35,7 +35,7 @@ export default class Orderable {
     // e.target is the source node.
     const realSrc = document.elementFromPoint(e.clientX, e.clientY);
     // Only allow drag from the handle
-    if (!realSrc.classList.contains('drag-handle')) {
+    if (!realSrc.classList.contains('icon-drag')) {
       e.preventDefault()
       return
     }
