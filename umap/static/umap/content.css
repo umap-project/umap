@@ -17,22 +17,6 @@ input:-moz-placeholder, :-moz-placeholder {
    color: #a5a5a5;
 }
 
-#umap-panel textarea {
-    height: 100px;
-    margin-bottom: 14px;
-}
-#umap-panel select {
-    margin-bottom: 10px;
-}
-
-#umap-panel.warning .button {
-    background-color: #c60f13;
-    border: 1px solid #7f0a0c;
-}
-#umap-panel.warning .button:hover {
-    background-color: #970b0e;
-}
-
 
 /* **************** */
 /*    Login icons   */
@@ -193,9 +177,6 @@ h2.tabs a:hover {
 .demo-instance-warning a {
     color: #efefef;
     text-decoration: underline;
-}
-body.content #umap-panel {
-    background-color: #fff;
 }
 
 
