@@ -163,6 +163,8 @@ input[type="checkbox"] {
 textarea {
     height: inherit;
     padding: 7px;
+    min-height: 15rem;
+    min-height: 6rlh;
 }
 select {
     border: 1px solid #222;
