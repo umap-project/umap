@@ -375,6 +375,7 @@ export const SCHEMA = {
   },
   captionControl: {
     type: Boolean,
+    nullable: true,
     label: translate('Display the caption control'),
     default: true,
   },
