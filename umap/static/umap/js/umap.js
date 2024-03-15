@@ -56,10 +56,10 @@ U.Map = L.Map.extend({
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
     this.urls = new U.URLs(this.options.urls)
 
-    this.panel = new U.Panel(this._container)
+    this.panel = new U.Panel(this)
     if (this.hasEditMode()) {
-      this.editPanel = new U.EditPanel(this._container)
-      this.fullPanel = new U.FullPanel(this._container)
+      this.editPanel = new U.EditPanel(this)
+      this.fullPanel = new U.FullPanel(this)
     }
     this.ui = new U.UI(this._container)
     this.ui.on('dataloading', (e) => this.fire('dataloading', e))
@@ -147,14 +147,6 @@ U.Map = L.Map.extend({
       this.options.onLoadPanel = 'datalayers'
     }
 
-    this.ui.on(
-      'panel:closed',
-      function () {
-        this.invalidateSize({ pan: false })
-      },
-      this
-    )
-
     let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
@@ -206,13 +198,6 @@ U.Map = L.Map.extend({
     this.initCaptionBar()
     if (this.hasEditMode()) {
       this.editTools = new U.Editable(this)
-      this.ui.on(
-        'panel:closed panel:open',
-        function () {
-          this.editedFeature = null
-        },
-        this
-      )
       this.renderEditToolbar()
     }
     this.initShortcuts()
@@ -440,6 +425,11 @@ U.Map = L.Map.extend({
       if (!pane.dataset || !pane.dataset.id) continue
       this.datalayers_index.push(this.datalayers[pane.dataset.id])
     }
+    this.onDataLayersChanged()
+  },
+
+  onDataLayersChanged: function () {
+    if (this.browser) this.browser.update()
   },
 
   ensurePanesOrder: function () {
@@ -945,6 +935,7 @@ U.Map = L.Map.extend({
     this.dirty_datalayers = []
     this.initTileLayers()
     this.isDirty = false
+    this.onDataLayersChanged()
   },
 
   checkDirty: function () {

@@ -61,10 +61,6 @@ export default class Browser {
     return `browse_data_datalayer_${L.stamp(datalayer)}`
   }
 
-  onDataLayerChanged(e) {
-    this.updateDatalayer(e.target)
-  }
-
   addDataLayer(datalayer, parent) {
     let className = `datalayer ${datalayer.getHidableClass()}`
     if (this.map.panel.MODE !== 'condensed') className += ' show-list'
@@ -73,10 +69,6 @@ export default class Browser {
     container.id = this.datalayerId(datalayer)
     const ul = DomUtil.create('ul', '', container)
     this.updateDatalayer(datalayer)
-    datalayer.on('datachanged', this.onDataLayerChanged, this)
-    this.map.ui.once('panel:closed', () => {
-      datalayer.off('datachanged', this.onDataLayerChanged, this)
-    })
   }
 
   updateDatalayer(datalayer) {
@@ -127,6 +119,14 @@ export default class Browser {
     })
   }
 
+  update() {
+    if (!this.isOpen()) return
+    this.dataContainer.innerHTML = ''
+    this.map.eachBrowsableDataLayer((datalayer) => {
+      this.addDataLayer(datalayer, this.dataContainer)
+    })
+  }
+
   open() {
     // Get once but use it for each feature later
     this.filterKeys = this.map.getFilterKeys()
@@ -137,7 +137,7 @@ export default class Browser {
 
     DomUtil.createTitle(container, translate('Browse data'), 'layers')
     const formContainer = DomUtil.create('div', '', container)
-    const dataContainer = DomUtil.create('div', '', container)
+    this.dataContainer = DomUtil.create('div', '', container)
 
     const fields = [
       ['options.filter', { handler: 'Input', placeholder: translate('Filter') }],
@@ -154,9 +154,7 @@ export default class Browser {
       className: 'umap-browser',
     })
 
-    this.map.eachBrowsableDataLayer((datalayer) => {
-      this.addDataLayer(datalayer, dataContainer)
-    })
+    this.update()
   }
 
   static backButton(map) {
