@@ -3,7 +3,7 @@ import { translate } from './i18n.js'
 
 export class Panel {
   constructor(map) {
-    this.parent = map._container
+    this.parent = map._controlContainer
     this.map = map
     this.container = DomUtil.create('div', '', this.parent)
     this.mode = 'condensed'

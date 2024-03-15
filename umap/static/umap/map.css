@@ -32,13 +32,13 @@
 }
 .leaflet-control-fullscreen a:hover,
 .leaflet-control-fullscreen a {
-    height: 36px;
-    width: 36px;
+    height: var(--control-size);
+    width: var(--control-size);
     background-size: 36px 68px;
 }
 .leaflet-touch .leaflet-control-fullscreen a {
-    height: 36px;
-    width: 36px;
+    height: var(--control-size);
+    width: var(--control-size);
     background-position: 0px 0px;
 }
 .leaflet-touch.leaflet-fullscreen-on .leaflet-control-fullscreen a,
@@ -52,9 +52,9 @@
     background-position: 50% 50%;
     background-repeat: no-repeat;
     display: block;
-    height: 36px;
-    width: 36px;
-    line-height: 36px;
+    height: var(--control-size);
+    width: var(--control-size);
+    line-height: var(--control-size);
     background-image: url('./img/24.svg');
     text-indent: -9999px;
     margin-bottom: 0;
@@ -144,8 +144,8 @@
     color: #fff;
     background-image: none;
     border-radius: 20px;
-    height: 36px;
-    line-height: 36px;
+    height: var(--control-size);
+    line-height: var(--control-size);
     display: block;
 }
 .leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
@@ -287,8 +287,8 @@ ul.photon-autocomplete {
 .leaflet-control-toolbar > li > .leaflet-toolbar-icon,
 .umap-toolbar a,
 .umap-toolbar a:hover {
-    height: 36px;
-    width: 36px;
+    height: var(--control-size);
+    width: var(--control-size);
     display: none;
     margin-top: 0;
     vertical-align: top;
@@ -435,8 +435,8 @@ ul.photon-autocomplete {
     clear: both;
 }
 .umap-edit-actions li {
-    height: 36px;
-    line-height: 36px;
+    height: var(--control-size);
+    line-height: var(--control-size);
     cursor: pointer;
     margin-bottom: 5px;
     border-radius: 2px;
@@ -446,8 +446,8 @@ ul.photon-autocomplete {
     background-image: url('./img/24-white.svg');
     background-repeat: no-repeat;
     display: table-cell;
-    width: 36px;
-    height: 36px;
+    width: var(--control-size);
+    height: var(--control-size);
 }
 .umap-edit-actions li span {
     display: table-cell;
@@ -575,7 +575,7 @@ ul.photon-autocomplete {
     background-color: var(--color-darkGray);
     padding: 0 10px;
     text-align: left;
-    line-height: 36px;
+    line-height: var(--control-size);
     cursor: auto;
     border-bottom: 1px solid #222;
     z-index: 1000;
@@ -1503,9 +1503,9 @@ span.popup-icon {
 /* *************************** */
 
 .leaflet-control-zoom a, .leaflet-control-zoom a:hover {
-    height: 36px;
-    width: 36px;
-    line-height: 36px;
+    height: var(--control-size);
+    width: var(--control-size);
+    line-height: var(--control-size);
 }
 .leaflet-container .leaflet-control-zoom {
     margin-left: 10px;
@@ -1596,9 +1596,9 @@ span.popup-icon {
     border-width: 1px;
 }
 .leaflet-touch .leaflet-bar a {
-    width: 36px;
-    height: 36px;
-    line-height: 34px;
+    width: var(--control-size);
+    height: var(--control-size);
+    line-height: var(--control-size);
 }
 /* Links are blue by default  */
 .leaflet-container a {

@@ -10,4 +10,12 @@
     --button-primary-color: var(--color-darkBlue);
     --button-neutral-background: var(--color-lightGray);
     --button-neutral-color: var(--color-darkGray);
+
+    /* Sizes and spaces */
+    --panel-gutter: 10px;
+    --panel-header-height: 36px;
+    --panel-width: 400px;
+    --header-height: 46px;
+    --footer-height: 46px;
+    --control-size: 36px;
 }
