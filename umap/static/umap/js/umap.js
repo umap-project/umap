@@ -320,10 +320,11 @@ U.Map = L.Map.extend({
     if (this.hasEditMode() && !this.options.noControl) {
       new U.EditControl(this).addTo(this)
 
+      new U.DrawToolbar({ map: this }).addTo(this)
       const editActions = [
-        U.EditLayersAction,
         U.EditCaptionAction,
         U.EditPropertiesAction,
+        U.EditLayersAction,
         U.ChangeTileLayerAction,
         U.UpdateExtentAction,
         U.UpdatePermsAction,
@@ -333,7 +334,6 @@ U.Map = L.Map.extend({
         new U.SettingsToolbar({ actions: editActions }).addTo(this)
       }
 
-      new U.DrawToolbar({ map: this }).addTo(this)
     }
     this._controls.zoom = new L.Control.Zoom({
       zoomInTitle: L._('Zoom in'),
