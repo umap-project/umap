@@ -21,6 +21,9 @@ a {
     text-decoration: none;
     color: SeaGreen;
 }
+button {
+    cursor: pointer;
+}
 hr {
     clear: both;
     width: 100%;
@@ -530,7 +533,7 @@ i.info {
     background-position: -150px -78px;
 }
 .umap-delete:before {
-    background-position: -40px -8px;
+    background-position: -32px -8px;
 }
 .umap-edit:before {
     background-position: -6px -6px;

@@ -59,7 +59,7 @@ U.MapPermissions = L.Class.extend({
       })
     const container = L.DomUtil.create('div', 'permissions-panel')
     const fields = []
-    L.DomUtil.createTitle(container, L._('Update permissions'), 'key')
+    L.DomUtil.createTitle(container, L._('Update permissions'), 'icon-key')
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
         const helpText = `${L._('Secret edit link:')}<br>${this.options.anonymous_edit_url

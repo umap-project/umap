@@ -15,18 +15,15 @@ export default class Browser {
     const filter = this.options.filter
     if (filter && !feature.matchFilter(filter, this.filterKeys)) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
-    const feature_li = DomUtil.create('li', `${feature.getClassName()} feature`),
-      zoom_to = DomUtil.create('i', 'icon icon-16 icon-zoom', feature_li),
-      edit = DomUtil.create('i', 'icon icon-16 show-on-edit icon-edit', feature_li),
-      del = DomUtil.create('i', 'icon icon-16 show-on-edit icon-delete', feature_li),
-      colorBox = DomUtil.create('i', 'icon icon-16 feature-color', feature_li),
-      title = DomUtil.create('span', 'feature-title', feature_li),
-      symbol = feature._getIconUrl
+    const row = DomUtil.create('li', `${feature.getClassName()} feature`)
+    const zoom_to = DomUtil.createButtonIcon(row, 'icon-zoom', translate('Bring feature to center'))
+    const edit = DomUtil.createButtonIcon(row, 'show-on-edit icon-edit', translate('Edit this feature'))
+    const del = DomUtil.createButtonIcon(row, 'show-on-edit icon-delete', translate('Delete this feature'))
+    const colorBox = DomUtil.create('i', 'icon icon-16 feature-color', row)
+    const title = DomUtil.create('span', 'feature-title', row)
+    const symbol = feature._getIconUrl
         ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
         : null
-    zoom_to.title = translate('Bring feature to center')
-    edit.title = translate('Edit this feature')
-    del.title = translate('Delete this feature')
     title.textContent = feature.getDisplayName() || '—'
     const bgcolor = feature.getDynamicOption('color')
     colorBox.style.backgroundColor = bgcolor
@@ -56,8 +53,8 @@ export default class Browser {
     DomEvent.on(del, 'click', feature.confirmDelete, feature)
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
-    DomEvent.disableClickPropagation(feature_li)
-    parent.appendChild(feature_li)
+    DomEvent.disableClickPropagation(row)
+    parent.appendChild(row)
   }
 
   datalayerId(datalayer) {

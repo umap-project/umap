@@ -1211,7 +1211,7 @@ U.DataLayer = L.Evented.extend({
           },
         ],
       ]
-    L.DomUtil.createTitle(container, L._('Layer properties'), 'layers')
+    L.DomUtil.createTitle(container, L._('Layer properties'), 'icon-layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
         if (e.helper.field === 'options.type') {

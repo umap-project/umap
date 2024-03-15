@@ -561,16 +561,31 @@ U.DataLayer.include({
   },
 
   renderToolbox: function (container) {
-    const toggle = L.DomUtil.create('i', 'icon icon-16 icon-eye', container),
-      zoomTo = L.DomUtil.create('i', 'icon icon-16 icon-zoom', container),
-      edit = L.DomUtil.create('i', 'icon icon-16 icon-edit show-on-edit', container),
-      table = L.DomUtil.create('i', 'icon icon-16 icon-table show-on-edit', container),
-      remove = L.DomUtil.create('i', 'icon icon-16 icon-delete show-on-edit', container)
-    zoomTo.title = L._('Zoom to layer extent')
-    toggle.title = L._('Show/hide layer')
-    edit.title = L._('Edit')
-    table.title = L._('Edit properties in a table')
-    remove.title = L._('Delete layer')
+    const toggle = L.DomUtil.createButtonIcon(
+      container,
+      'icon-eye',
+      L._('Show/hide layer')
+    )
+    const zoomTo = L.DomUtil.createButtonIcon(
+      container,
+      'icon-zoom',
+      L._('Zoom to layer extent')
+    )
+    const edit = L.DomUtil.createButtonIcon(
+      container,
+      'icon-edit show-on-edit',
+      L._('Edit')
+    )
+    const table = L.DomUtil.createButtonIcon(
+      container,
+      'icon-table show-on-edit',
+      L._('Edit properties in a table')
+    )
+    const remove = L.DomUtil.createButtonIcon(
+      container,
+      'icon-delete show-on-edit',
+      L._('Delete layer')
+    )
     if (this.isReadOnly()) {
       L.DomUtil.addClass(container, 'readonly')
     } else {
@@ -700,7 +715,7 @@ const ControlsMixin = {
 
   displayCaption: function () {
     const container = L.DomUtil.create('div', 'umap-caption')
-    L.DomUtil.createTitle(container, this.options.name, 'caption')
+    L.DomUtil.createTitle(container, this.options.name, 'icon-caption')
     this.permissions.addOwnerLink('h5', container)
     if (this.options.description) {
       const description = L.DomUtil.create('div', 'umap-map-description', container)
@@ -929,12 +944,11 @@ const ControlsMixin = {
   editDatalayers: function () {
     if (!this.editEnabled) return
     const container = L.DomUtil.create('div')
-    L.DomUtil.createTitle(container, L._('Manage layers'), 'layers')
+    L.DomUtil.createTitle(container, L._('Manage layers'), 'icon-layers')
     const ul = L.DomUtil.create('ul', '', container)
     this.eachDataLayerReverse((datalayer) => {
       const row = L.DomUtil.create('li', 'orderable', ul)
-      const dragHandle = L.DomUtil.create('i', 'icon icon-16 icon-drag', row)
-      dragHandle.title = L._('Drag to reorder')
+      L.DomUtil.createIcon(row, 'icon-drag', L._('Drag to reorder'))
       datalayer.renderToolbox(row)
       const title = L.DomUtil.add('span', '', row, datalayer.options.name)
       L.DomUtil.classIf(row, 'off', !datalayer.isVisible())
@@ -1037,7 +1051,7 @@ U.TileLayerChooser = L.Control.extend({
 
   openSwitcher: function (options) {
     const container = L.DomUtil.create('div', 'umap-tilelayer-switcher-container')
-    L.DomUtil.createTitle(container, L._('Change tilelayers'), 'tilelayer')
+    L.DomUtil.createTitle(container, L._('Change tilelayers'), 'icon-tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
     this.map.editPanel.open({
@@ -1205,21 +1219,26 @@ U.Search = L.PhotonSearch.extend({
   },
 
   formatResult: function (feature, el) {
-    const self = this
-    const tools = L.DomUtil.create('span', 'search-result-tools', el),
-      zoom = L.DomUtil.create('i', 'icon icon-16 icon-zoom', tools),
-      edit = L.DomUtil.create('i', 'icon icon-16 icon-edit show-on-edit', tools)
-    zoom.title = L._('Zoom to this place')
-    edit.title = L._('Save this location as new feature')
+    const tools = L.DomUtil.create('span', 'search-result-tools', el)
+    const zoom = L.DomUtil.createButtonIcon(
+      tools,
+      'icon-zoom',
+      L._('Zoom to this place')
+    )
+    const edit = L.DomUtil.createButtonIcon(
+      tools,
+      'icon-edit',
+      L._('Save this location as new feature')
+    )
     // We need to use "mousedown" because Leaflet.Photon listen to mousedown
     // on el.
     L.DomEvent.on(zoom, 'mousedown', (e) => {
       L.DomEvent.stop(e)
-      self.zoomToFeature(feature)
+      this.zoomToFeature(feature)
     })
     L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
-      const datalayer = self.map.defaultEditDataLayer()
+      const datalayer = this.map.defaultEditDataLayer()
       const layer = datalayer.geojsonToFeatures(feature)
       layer.isDirty = true
       layer.edit()
@@ -1271,7 +1290,7 @@ U.SearchControl = L.Control.extend({
     if (this.map.options.photonUrl) options.url = this.map.options.photonUrl
     const container = L.DomUtil.create('div', '')
 
-    L.DomUtil.createTitle(container, L._('Search location'), 'search')
+    L.DomUtil.createTitle(container, L._('Search location'), 'icon-search')
     const input = L.DomUtil.create('input', 'photon-input', container)
     const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
     this.search = new U.Search(this.map, input, options)

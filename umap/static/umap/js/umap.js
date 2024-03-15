@@ -1540,7 +1540,7 @@ U.Map = L.Map.extend({
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div')
-    L.DomUtil.createTitle(container, L._('Map advanced properties'), 'settings')
+    L.DomUtil.createTitle(container, L._('Map advanced properties'), 'icon-settings')
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)

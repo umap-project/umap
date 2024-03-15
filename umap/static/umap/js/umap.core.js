@@ -117,13 +117,25 @@ L.DomUtil.createLink = (className, container, content, url, target, title) => {
   return el
 }
 
-L.DomUtil.createIcon = (parent, name) => {
-  L.DomUtil.create('i', `icon icon-16 icon-${name}`, parent)
+L.DomUtil.createIcon = (parent, className, title, size = 16) => {
+  return L.DomUtil.element(
+    'i',
+    { className: `icon icon-${size} ${className}`, title: title },
+    parent
+  )
 }
 
-L.DomUtil.createTitle = (parent, text, icon, tag = 'h3') => {
+L.DomUtil.createButtonIcon = (parent, className, title, size = 16) => {
+  return L.DomUtil.element(
+    'button',
+    { className: `icon icon-${size} ${className}`, title: title },
+    parent
+  )
+}
+
+L.DomUtil.createTitle = (parent, text, className, tag = 'h3') => {
   const title = L.DomUtil.create(tag, '', parent)
-  L.DomUtil.createIcon(title, icon)
+  L.DomUtil.createIcon(title, className)
   L.DomUtil.add('span', '', title, text)
   return title
 }
