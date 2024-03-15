@@ -57,7 +57,10 @@ U.Map = L.Map.extend({
     this.urls = new U.URLs(this.options.urls)
 
     this.panel = new U.Panel(this._container)
-    if (this.hasEditMode()) this.editPanel = new U.EditPanel(this._container)
+    if (this.hasEditMode()) {
+      this.editPanel = new U.EditPanel(this._container)
+      this.fullPanel = new U.FullPanel(this._container)
+    }
     this.ui = new U.UI(this._container)
     this.ui.on('dataloading', (e) => this.fire('dataloading', e))
     this.ui.on('dataload', (e) => this.fire('dataload', e))

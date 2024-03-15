@@ -3,7 +3,7 @@
     /* as being out of the visible viewport is not enough  */
     visibility: hidden;
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     overflow-x: auto;
     z-index: 1010;
     background-color: #fff;
@@ -17,12 +17,15 @@
     background-color: var(--color-darkGray);
     color: #efefef;
 }
-.panel.fullwidth {
-    width: 100%;
+.panel.full {
+    width: initial;
     right: -100%;
     z-index: 10000;
-    padding-left: 0;
-    padding-right: 0;
+}
+.panel.full.on {
+    visibility: visible;
+    right: 10px;
+    left: 10px;
 }
 .umap-caption-bar-enabled .panel {
     bottom: 46px;
@@ -43,6 +46,7 @@
     clear: both;
     height: calc(100% - 32px); /* Minus size of toolbox */
     padding: 10px;
+    padding-top: 32px;
 }
 .panel .toolbox {
     padding: 5px 10px;
@@ -53,10 +57,14 @@
     justify-content: flex-start;
     gap: 5px;
     line-height: 2.2em;
+    background-color: #fff;
+    position: fixed;
 }
 .panel.dark .toolbox {
     background-color: var(--color-darkGray);
-    border-bottom: 1px solid #232729;
+}
+.panel.full .toolbox {
+    width: calc(100% - 112px);
 }
 .panel .toolbox li {
     cursor: pointer;
@@ -80,7 +88,11 @@
     .panel {
         top: 0;
         margin-top: 10px;
-        width: 390px;
+        width: 400px;
+    }
+    .panel .toolbox {
+        /* It overflows otherwise, dunno why */
+        width: 398px;
     }
     .panel.condensed {
         max-height: 500px;
@@ -113,8 +125,15 @@
         bottom: 0;
         right: -100%;
     }
+    .panel.left {
+        left: -100%;
+    }
+    .panel .toolbox {
+        width: 100%;
+    }
     .panel.on {
         right: 0;
+        left: 0;
         visibility: visible;
     }
 }
