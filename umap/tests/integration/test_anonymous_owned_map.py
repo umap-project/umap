@@ -114,7 +114,7 @@ def test_anonymous_can_add_marker_on_editable_layer(
     marker = page.locator(".leaflet-marker-icon")
     map_el = page.locator("#map")
     expect(marker).to_have_count(2)
-    panel = page.locator('.panel.right.on')
+    panel = page.locator(".panel.right.on")
     expect(panel).to_be_hidden()
     add_marker.click()
     map_el.click(position={"x": 100, "y": 100})
