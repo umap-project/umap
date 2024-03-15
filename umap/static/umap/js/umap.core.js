@@ -120,7 +120,7 @@ L.DomUtil.createLink = (className, container, content, url, target, title) => {
 L.DomUtil.createIcon = (parent, className, title, size = 16) => {
   return L.DomUtil.element(
     'i',
-    { className: `icon icon-${size} ${className}`, title: title },
+    { className: `icon icon-${size} ${className}`, title: title || '' },
     parent
   )
 }

@@ -58,13 +58,11 @@
     gap: 5px;
     line-height: 2.2em;
     background-color: #fff;
-    position: fixed;
+    position: sticky;
+    top: 0;
 }
 .panel.dark .toolbox {
     background-color: var(--color-darkGray);
-}
-.panel.full .toolbox {
-    width: calc(100% - 112px);
 }
 .panel .toolbox li {
     cursor: pointer;
@@ -92,10 +90,6 @@
         top: 0;
         margin-top: 10px;
         width: 400px;
-    }
-    .panel .toolbox {
-        /* It overflows otherwise, dunno why */
-        width: 398px;
     }
     .panel.condensed {
         max-height: 500px;
@@ -130,9 +124,6 @@
     }
     .panel.left {
         left: -100%;
-    }
-    .panel .toolbox {
-        width: 100%;
     }
     .panel.on {
         right: 0;
