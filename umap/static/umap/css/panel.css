@@ -84,6 +84,9 @@
 .panel.dark .toolbox li:hover {
     background-color: #353c3e;
 }
+.panel h3 {
+    line-height: 3;
+}
 @media all and (orientation:landscape) {
     .panel {
         top: 0;
