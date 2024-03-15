@@ -1,5 +1,5 @@
-from time import sleep
 from pathlib import Path
+from time import sleep
 
 import pytest
 from playwright.sync_api import expect
