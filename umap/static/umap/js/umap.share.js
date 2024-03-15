@@ -45,7 +45,11 @@ U.Share = L.Class.extend({
 
   build: function () {
     this.container = L.DomUtil.create('div', '')
-    this.title = L.DomUtil.createTitle(this.container, L._('Share and download'), 'share')
+    this.title = L.DomUtil.createTitle(
+      this.container,
+      L._('Share and download'),
+      'icon-share'
+    )
 
     L.DomUtil.createCopiableInput(
       this.container,
