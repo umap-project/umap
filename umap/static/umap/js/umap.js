@@ -541,7 +541,6 @@ U.Map = L.Map.extend({
       } else if (key === U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
         L.DomEvent.stop(e)
         this.disableEdit()
-        this.ui.closePanel()
       }
       if (key === U.Keys.S && modifierKey) {
         L.DomEvent.stop(e)
@@ -1571,6 +1570,8 @@ U.Map = L.Map.extend({
     this.editedFeature = null
     this.editEnabled = false
     this.fire('edit:disabled')
+    this.editPanel.close()
+    this.fullPanel.close()
   },
 
   hasEditMode: function () {
