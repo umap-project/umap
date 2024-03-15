@@ -3,7 +3,7 @@
     /* as being out of the visible viewport is not enough  */
     visibility: hidden;
     position: absolute;
-    bottom: 10px;
+    bottom: var(--panel-gutter);
     overflow-x: auto;
     z-index: 1010;
     background-color: #fff;
@@ -20,19 +20,20 @@
 .panel.full {
     width: initial;
     right: -100%;
-    z-index: 10000;
+    z-index: 1030;
 }
 .panel.full.on {
     visibility: visible;
-    right: 10px;
-    left: 10px;
+    right: var(--panel-gutter);
+    left: var(--panel-gutter);
+    top: var(--header-height);
+    height: initial;
+    max-height: initial;
 }
 .umap-caption-bar-enabled .panel {
-    bottom: 46px;
+    bottom: var(--footer-height);
 }
 .panel {
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
     box-sizing: border-box;
 }
 .panel .umap-popup-content img {
@@ -43,10 +44,8 @@
     max-height: inherit;
 }
 .panel .body {
-    clear: both;
-    height: calc(100% - 32px); /* Minus size of toolbox */
-    padding: 10px;
-    padding-top: 32px;
+    height: calc(100% - var(--panel-header-height)); /* Minus size of toolbox */
+    padding: var(--panel-gutter);
 }
 .panel .toolbox {
     padding: 5px 10px;
@@ -60,6 +59,7 @@
     background-color: #fff;
     position: sticky;
     top: 0;
+    height: var(--panel-header-height);
 }
 .panel.dark .toolbox {
     background-color: var(--color-darkGray);
@@ -88,30 +88,29 @@
 @media all and (orientation:landscape) {
     .panel {
         top: 0;
-        margin-top: 10px;
-        width: 400px;
+        margin-top: var(--panel-gutter);
+        width: var(--panel-width);
     }
     .panel.condensed {
         max-height: 500px;
         bottom: initial;
     }
     .panel.right {
-        margin-right: 10px;
-        right: -400px;
+        right: calc(0px - var(--panel-width));
     }
     .panel.left {
-        left: -400px;
+        left: calc(0px - var(--panel-width));
     }
     .panel.left.on {
-        left: 60px;
+        left: calc(var(--panel-gutter) * 2 + var(--control-size));
         visibility: visible;
     }
     .panel.right.on {
-        right: 40px;
+        right: calc(var(--panel-gutter) * 2 + var(--control-size));
         visibility: visible;
     }
     .umap-edit-enabled .panel {
-        top: 46px;
+        top: var(--header-height);
     }
 }
 @media all and (orientation:portrait) {
@@ -129,5 +128,8 @@
         right: 0;
         left: 0;
         visibility: visible;
+    }
+    .panel li.umap-resize-link {
+        display: none;
     }
 }
