@@ -207,13 +207,13 @@ U.Map = L.Map.extend({
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
-        this.panel.MODE = 'expanded'
+        this.panel.mode = 'expanded'
         this.openBrowser()
       } else if (this.options.onLoadPanel === 'datalayers') {
-        this.panel.MODE = 'condensed'
+        this.panel.mode = 'condensed'
         this.openBrowser()
       } else if (this.options.onLoadPanel === 'caption') {
-        this.panel.MODE = 'condensed'
+        this.panel.mode = 'condensed'
         this.displayCaption()
       } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
         this.openFacet()

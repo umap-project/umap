@@ -2,13 +2,12 @@ import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 
 export class Panel {
-  MODE = 'condensed'
-  CLASSNAME = 'left'
-
   constructor(map) {
     this.parent = map._container
     this.map = map
     this.container = DomUtil.create('div', '', this.parent)
+    this.mode = 'condensed'
+    this.classname = 'left'
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
     DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
@@ -16,7 +15,7 @@ export class Panel {
   }
 
   open(e) {
-    this.container.className = `with-transition panel ${this.CLASSNAME} ${this.MODE}`
+    this.container.className = `with-transition panel ${this.classname} ${this.mode}`
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'toolbox', this.container)
     const body = DomUtil.create('div', 'body', this.container)
@@ -45,12 +44,12 @@ export class Panel {
   }
 
   resize() {
-    if (this.MODE === 'expanded') {
-      this.MODE = 'condensed'
+    if (this.mode === 'expanded') {
+      this.mode = 'condensed'
       this.container.classList.remove('expanded')
       this.container.classList.add('condensed')
     } else {
-      this.MODE = 'expanded'
+      this.mode = 'expanded'
       this.container.classList.remove('condensed')
       this.container.classList.add('expanded')
     }
@@ -66,10 +65,16 @@ export class Panel {
 }
 
 export class EditPanel extends Panel {
-  CLASSNAME = 'right dark'
+  constructor(map) {
+    super(map)
+    this.classname = 'right dark'
+  }
 }
 
 export class FullPanel extends Panel {
-  CLASSNAME = 'full dark'
-  MODE = 'expanded'
+  constructor(map) {
+    super(map)
+    this.classname = 'full dark'
+    this.mode = 'expanded'
+  }
 }
