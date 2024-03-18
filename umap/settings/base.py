@@ -16,7 +16,7 @@ env = environ.Env()
 INTERNAL_IPS = env.list("INTERNAL_IPS", default=["127.0.0.1"])
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 ADMINS = tuple(parseaddr(email) for email in env.list("ADMINS", default=[]))
-
+ASGI_APPLICATION = "umap.asgi.application"
 
 DEBUG = env.bool("DEBUG", default=False)
 
@@ -110,6 +110,7 @@ LANGUAGES = (
 SECRET_KEY = env("SECRET_KEY", default=None)
 
 INSTALLED_APPS = (
+    "daphne",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
