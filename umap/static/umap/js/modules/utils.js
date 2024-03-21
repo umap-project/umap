@@ -28,13 +28,14 @@ export function checkId(string) {
 /**
  * Compute the impacts for a given list of fields.
  * 
- * Return a set containing the impacts.
+ * Return an array of unique impacts.
  * 
  * @param {fields} list[fields]
- * @returns Set[string]
+ * @returns Array[string]
  */
-export function getImpactsFromSchema(fields) {
-  return fields
+export function getImpactsFromSchema(fields, schema) {
+  schema = schema || U.SCHEMA
+  let impacted = fields
     .map((field) => {
       // remove the option prefix for fields
       // And only keep the first part in case of a subfield
@@ -44,10 +45,12 @@ export function getImpactsFromSchema(fields) {
     .reduce((acc, field) => {
       // retrieve the "impacts" field from the schema
       // and merge them together using sets
-      const impacts = U.SCHEMA[field]?.impacts || []
+      const impacts = schema[field]?.impacts || []
       impacts.forEach((impact) => acc.add(impact))
       return acc
     }, new Set())
+
+  return Array.from(impacted)
 }
 
 /**
