@@ -126,7 +126,7 @@ describe('U.DataLayer', () => {
     })
 
     it('should have a new layer button', () => {
-      newLayerButton = qs('#umap-ui-container .add-datalayer')
+      newLayerButton = qs('.panel.right.on .add-datalayer')
       assert.ok(newLayerButton)
     })
 

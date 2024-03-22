@@ -1009,9 +1009,6 @@ U.FormBuilder = L.FormBuilder.extend({
           case 'iconUrl':
             schema.handler = 'IconUrl'
             break
-          case 'datalayersControl':
-            schema.handler = 'DataLayersControl'
-            break
           case 'licence':
             schema.handler = 'LicenceChooser'
             break
@@ -1036,6 +1033,6 @@ U.FormBuilder = L.FormBuilder.extend({
   },
 
   finish: function () {
-    this.map.ui.closePanel()
+    this.map.editPanel.close()
   },
 })
