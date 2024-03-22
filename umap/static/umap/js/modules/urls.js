@@ -1,4 +1,19 @@
-import { Util } from '../../vendors/leaflet/leaflet-src.esm.js'
+// Vendorized from leaflet.utils
+// https://github.com/Leaflet/Leaflet/blob/108c6717b70f57c63645498f9bd66b6677758786/src/core/Util.js#L132-L151
+var templateRe = /\{ *([\w_ -]+) *\}/g
+
+function template(str, data) {
+  return str.replace(templateRe, function (str, key) {
+    var value = data[key]
+
+    if (value === undefined) {
+      throw new Error('No value provided for variable ' + str)
+    } else if (typeof value === 'function') {
+      value = value(data)
+    }
+    return value
+  })
+}
 
 export default class URLs {
   constructor(serverUrls) {
@@ -9,7 +24,7 @@ export default class URLs {
     if (typeof this[urlName] === 'function') return this[urlName](params)
 
     if (this.urls.hasOwnProperty(urlName)) {
-      return Util.template(this.urls[urlName], params)
+      return template(this.urls[urlName], params)
     } else {
       throw `Unable to find a URL for route ${urlName}`
     }
