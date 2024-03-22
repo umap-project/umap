@@ -299,7 +299,7 @@ def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, boo
     paths = page.locator(".leaflet-overlay-pane path")
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
-    toggle = page.locator('#umap-ui-container').get_by_title("Show/hide layer")
+    toggle = page.locator("#umap-ui-container").get_by_title("Show/hide layer")
     toggle.click()
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
@@ -310,7 +310,7 @@ def test_should_have_edit_buttons_in_edit_mode(live_server, map, page, bootstrap
     map.edit_status = Map.ANONYMOUS
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    browser = page.locator('#umap-ui-container')
+    browser = page.locator("#umap-ui-container")
     edit_layer = browser.get_by_title("Edit", exact=True)
     in_table = browser.get_by_title("Edit properties in a table")
     delete_layer = browser.get_by_title("Delete layer")
