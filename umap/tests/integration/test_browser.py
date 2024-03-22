@@ -291,3 +291,43 @@ def test_should_use_color_variable(live_server, map, page):
     expect(features.nth(1)).to_have_css("background-color", "rgb(139, 0, 0)")
     # DarkBlue (default color)
     expect(features.nth(2)).to_have_css("background-color", "rgb(0, 0, 139)")
+
+
+def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, bootstrap):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator(".leaflet-overlay-pane path")
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    toggle = page.locator('#umap-ui-container').get_by_title("Show/hide layer")
+    toggle.click()
+    expect(markers).to_have_count(0)
+    expect(paths).to_have_count(0)
+
+
+def test_should_have_edit_buttons_in_edit_mode(live_server, map, page, bootstrap):
+    # Faster than doing a login
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    browser = page.locator('#umap-ui-container')
+    edit_layer = browser.get_by_title("Edit", exact=True)
+    in_table = browser.get_by_title("Edit properties in a table")
+    delete_layer = browser.get_by_title("Delete layer")
+    edit_feature = browser.get_by_title("Edit this feature")
+    delete_feature = browser.get_by_title("Delete this feature")
+    expect(edit_layer).to_be_hidden()
+    expect(in_table).to_be_hidden()
+    expect(delete_layer).to_be_hidden()
+    # Does not work
+    # to_have_count does not seem to case about the elements being visible or not
+    # and to_be_hidden is not happy if the selector resolve to more than on element
+    # expect(edit_feature).to_have_count(0)
+    # expect(delete_feature).to_be_hidden()
+    # Switch to edit mode
+    page.get_by_role("button", name="Edit").click()
+    expect(edit_layer).to_be_visible()
+    expect(in_table).to_be_visible()
+    expect(delete_layer).to_be_visible()
+    expect(edit_feature).to_have_count(3)
+    expect(delete_feature).to_have_count(3)
