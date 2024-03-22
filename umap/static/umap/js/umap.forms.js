@@ -1032,7 +1032,10 @@ U.FormBuilder = L.FormBuilder.extend({
 
   setter: function (field, value) {
     L.FormBuilder.prototype.setter.call(this, field, value)
-    if (this.options.makeDirty !== false) this.obj.isDirty = true
+    if (this.options.makeDirty !== false) {
+      this.obj.isDirty = true
+      if ('render' in this.obj) this.obj.render([field], this)
+    }
   },
 
   finish: function () {
