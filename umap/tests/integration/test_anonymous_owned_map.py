@@ -92,6 +92,9 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+    # Those fields should not be present in anonymous maps
+    expect(owner_session.locator(".umap-field-share_status select")).to_be_hidden()
+    expect(owner_session.locator(".umap-field-owner")).to_be_hidden()
 
 
 def test_anonymous_can_add_marker_on_editable_layer(
