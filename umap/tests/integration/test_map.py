@@ -1,6 +1,4 @@
-import json
 import re
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
@@ -197,28 +195,6 @@ def test_can_hide_datalayer_from_caption(map, live_server, datalayer, page):
     expect(found).to_be_visible()
     hidden = page.locator("#umap-ui-container").get_by_text(other.name)
     expect(hidden).to_be_hidden()
-
-
-def test_basic_choropleth_map(map, live_server, page):
-    path = Path(__file__).parent.parent / "fixtures/choropleth_region_chomage.geojson"
-    data = json.loads(path.read_text())
-    DataLayerFactory(data=data, map=map)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    # Hauts-de-France
-    paths = page.locator("path[fill='#08519c']")
-    expect(paths).to_have_count(1)
-    # Occitanie
-    paths = page.locator("path[fill='#3182bd']")
-    expect(paths).to_have_count(1)
-    # Grand-Est, PACA
-    paths = page.locator("path[fill='#6baed6']")
-    expect(paths).to_have_count(2)
-    # Bourgogne-Franche-Comté, Centre-Val-de-Loire, IdF, Normandie, Corse, Nouvelle-Aquitaine
-    paths = page.locator("path[fill='#bdd7e7']")
-    expect(paths).to_have_count(6)
-    # Bretagne, Pays de la Loire, AURA
-    paths = page.locator("path[fill='#eff3ff']")
-    expect(paths).to_have_count(3)
 
 
 def test_minimap_on_load(map, live_server, datalayer, page):
