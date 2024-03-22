@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.0 - Soon
+
+### Bug fixes
+
+* deal with i18n in oembed URLs #1688
+* set CORS-related header for oEmbed and map views #1689
+* only use location bias in search for close zoom #1690
+
+### Internal changes
+
+* replace datalayer ids with uuids #1630
+* replace Last-Modified with custom headers #1666
+
+
 ## 2.0.4 - 2024-03-01
 
 * fix zoom and fullscreen not shown by default
