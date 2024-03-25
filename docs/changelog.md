@@ -1,12 +1,13 @@
 # Changelog
 
-## 2.1.0 - Soon
+## 2.1.0 - 2024-03-25
 
 ### Bug fixes
 
 * deal with i18n in oembed URLs #1688
 * set CORS-related header for oEmbed and map views #1689
 * only use location bias in search for close zoom #1690
+* catch click event on "See all" buttons #1705
 
 ### Internal changes
 
