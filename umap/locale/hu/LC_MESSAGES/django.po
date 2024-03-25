@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-01 16:51+0000\n"
+"POT-Creation-Date: 2024-03-25 12:41+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2024\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
@@ -27,7 +27,7 @@ msgstr "Kizárólag titkos szerkesztési linkkel szerkeszthető"
 msgid "Everyone can edit"
 msgstr "Bárki szerkesztheti"
 
-#: forms.py:69 models.py:371
+#: forms.py:69 models.py:381
 msgid "Inherit"
 msgstr "Öröklés"
 
@@ -35,107 +35,107 @@ msgstr "Öröklés"
 msgid "Site is readonly for maintenance"
 msgstr "Karbantartás miatt a webhely csak olvasható"
 
-#: models.py:50
+#: models.py:52
 msgid "name"
 msgstr "név"
 
-#: models.py:81
+#: models.py:83
 msgid "details"
 msgstr "részletek"
 
-#: models.py:82
+#: models.py:84
 msgid "Link to a page where the licence is detailed."
 msgstr "Link egy részletes licencinformációkat tartalmazó lapra."
 
-#: models.py:92
+#: models.py:94
 msgid "URL template using OSM tile format"
 msgstr "OSM-csempeformátumot használó URL-sablon"
 
-#: models.py:98
+#: models.py:100
 msgid "Order of the tilelayers in the edit box"
 msgstr "Csemperétegek sorrendje a szerkesztődobozban"
 
-#: models.py:144 models.py:372
+#: models.py:146 models.py:382
 msgid "Everyone"
 msgstr "Mindenki"
 
-#: models.py:145 models.py:151 models.py:373
+#: models.py:147 models.py:153 models.py:383
 msgid "Editors only"
 msgstr "Csak a szerkesztők"
 
-#: models.py:146 models.py:374
+#: models.py:148 models.py:384
 msgid "Owner only"
 msgstr "Csak a tulajdonos"
 
-#: models.py:149
+#: models.py:151
 msgid "Everyone (public)"
 msgstr "Mindenki (nyilvános)"
 
-#: models.py:150
+#: models.py:152
 msgid "Anyone with link"
 msgstr "A link birtokában bárki"
 
-#: models.py:152
+#: models.py:154
 msgid "Blocked"
 msgstr "Blokkolva"
 
-#: models.py:155 models.py:378
+#: models.py:157 models.py:391
 msgid "description"
 msgstr "leírás"
 
-#: models.py:156
+#: models.py:158
 msgid "center"
 msgstr "középpont"
 
-#: models.py:157
+#: models.py:159
 msgid "zoom"
 msgstr "nagyítás"
 
-#: models.py:159
+#: models.py:161
 msgid "locate"
 msgstr "helymeghatározás"
 
-#: models.py:159
+#: models.py:161
 msgid "Locate user on load?"
 msgstr "Bekérje a felhasználó pozícióját betöltéskor?"
 
-#: models.py:163
+#: models.py:165
 msgid "Choose the map licence."
 msgstr "Térképlicenc kiválasztása"
 
-#: models.py:164
+#: models.py:166
 msgid "licence"
 msgstr "licenc"
 
-#: models.py:175
+#: models.py:177
 msgid "owner"
 msgstr "tulajdonos"
 
-#: models.py:179
+#: models.py:181
 msgid "editors"
 msgstr "szerkesztők"
 
-#: models.py:184 models.py:392
+#: models.py:186 models.py:405
 msgid "edit status"
 msgstr "szerkeszthetőség"
 
-#: models.py:189
+#: models.py:191
 msgid "share status"
 msgstr "megoszthatóság"
 
-#: models.py:192 models.py:387
+#: models.py:194 models.py:400
 msgid "settings"
 msgstr "beállítások"
 
-#: models.py:320
+#: models.py:322
 msgid "Clone of"
 msgstr "Másolat erről: "
 
-#: models.py:382
+#: models.py:395
 msgid "display on load"
 msgstr "megjelenítés betöltéskor"
 
-#: models.py:383
+#: models.py:396
 msgid "Display this layer on load."
 msgstr "Réteg megjelenítése betöltéskor"
 
@@ -291,7 +291,7 @@ msgstr "Szerezzen ihletet, böngésszen a térképek között!"
 msgid "You are logged in. Continuing..."
 msgstr "Be van jelentkezve. Továbblépés…"
 
-#: templates/umap/map_list.html:9 views.py:342
+#: templates/umap/map_list.html:9 views.py:349
 msgid "by"
 msgstr "– készítette:"
 
@@ -497,57 +497,57 @@ msgstr "%(count)s térkép letöltése"
 msgid "You have no map yet."
 msgstr "Önnek még nincs térképe."
 
-#: views.py:347
+#: views.py:354
 msgid "View the map"
 msgstr "Térkép megtekintése"
 
-#: views.py:705
+#: views.py:716
 msgid "See full screen"
 msgstr "Teljes képernyős nézet megtekintése"
 
-#: views.py:804
+#: views.py:817
 msgid "Map editors updated with success!"
 msgstr "A térképszerkesztők sikeresen frissültek."
 
-#: views.py:841
+#: views.py:854
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "A térképéhez tartozó uMap szerkesztési link: %(map_name)s"
 
-#: views.py:844
+#: views.py:857
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Az Ön titkos szerkesztési linkje: %(link)s"
 
-#: views.py:851
+#: views.py:864
 #, python-format
 msgid "Can't send email to %(email)s"
-msgstr ""
+msgstr "Nem sikerül e-mailt küldeni ide: %(email)s"
 
-#: views.py:854
+#: views.py:867
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail elküldve ide: %(email)s"
 
-#: views.py:865
+#: views.py:878
 msgid "Only its owner can delete the map."
 msgstr "A térképet csak a tulajdonosa törölheti."
 
-#: views.py:893
+#: views.py:906
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Elkészült a térképe másolata. Ha egy másik számítógépről szeretné szerkeszteni, ezt a linket használja: %(anonymous_url)s"
 
-#: views.py:898
+#: views.py:911
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulálunk, elkészült a térképe másolata!"
 
-#: views.py:1136
+#: views.py:1145
 msgid "Layer successfully deleted."
 msgstr "A réteg sikeresen törlődött."
 
-#: views.py:1158
+#: views.py:1167
 msgid "Permissions updated with success!"
 msgstr "Az engedélyek sikeresen frissültek!"
