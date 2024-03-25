@@ -888,7 +888,9 @@ U.PathMixin = {
     const other = new (this instanceof U.Polyline ? U.Polyline : U.Polygon)(
       this.map,
       shape,
-      { geojson: { properties: properties } }
+      {
+        geojson: { properties },
+      }
     )
     this.datalayer.addLayer(other)
     other.edit()

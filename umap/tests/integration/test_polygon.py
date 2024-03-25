@@ -167,7 +167,7 @@ def test_can_draw_multi(live_server, page, tilelayer):
     expect(multi_button).to_be_hidden()
     polygons.first.click(button="right", position={"x": 10, "y": 10})
     expect(page.get_by_role("link", name="Transform to lines")).to_be_hidden()
-    expect(page.get_by_role("link", name="Remove shape from multi")).to_be_hidden()
+    expect(page.get_by_role("link", name="Remove shape from the multi")).to_be_visible()
 
 
 def test_can_draw_hole(page, live_server, tilelayer):
@@ -237,7 +237,7 @@ def test_can_transfer_shape_from_simple_polygon(live_server, page, tilelayer):
     expect(polygons).to_have_count(1)
 
 
-def test_can_transfer_shape(live_server, page, tilelayer):
+def test_can_extract_shape(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
     polygons = page.locator(".leaflet-overlay-pane path")
     expect(polygons).to_have_count(0)
@@ -314,7 +314,8 @@ def test_cannot_transfer_shape_to_marker(live_server, page, tilelayer):
     expect(extract_button).to_be_hidden()
 
 
-def test_can_clone_polygon(live_server, page, tilelayer):
+def test_can_clone_polygon(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")
     polygons = page.locator(".leaflet-overlay-pane path")
     expect(polygons).to_have_count(0)
@@ -330,6 +331,10 @@ def test_can_clone_polygon(live_server, page, tilelayer):
     polygons.first.click(button="right")
     page.get_by_role("link", name="Clone this feature").click()
     expect(polygons).to_have_count(2)
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 2
+    assert data["features"][0]["geometry"]["type"] == "Polygon"
+    assert data["features"][0]["geometry"] == data["features"][1]["geometry"]
 
 
 def test_can_transform_polygon_to_line(live_server, page, tilelayer, settings):
