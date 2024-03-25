@@ -44,6 +44,16 @@ def test_get_with_public_mode(client, settings, datalayer, map):
     assert j["type"] == "FeatureCollection"
 
 
+def test_get_with_x_accel_redirect(client, settings, datalayer, map):
+    settings.UMAP_XSENDFILE_HEADER = "X-Accel-Redirect"
+    url = reverse("datalayer_view", args=(map.pk, datalayer.pk))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert "X-Accel-Redirect" in response.headers
+    assert response["X-Accel-Redirect"].startswith("/internal/datalayer/")
+    assert response["X-Accel-Redirect"].endswith(".geojson")
+
+
 def test_get_with_open_mode(client, settings, datalayer, map):
     map.share_status = Map.PUBLIC
     map.save()

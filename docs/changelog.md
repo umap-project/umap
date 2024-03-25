@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 - 2024-03-25
+
+- fix Path.replace called instead of str.replace
+
 ## 2.1.0 - 2024-03-25
 
 ### Bug fixes

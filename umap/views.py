@@ -1020,8 +1020,8 @@ class DataLayerView(GZipMixin, BaseDetailView):
 
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
-            path = path.replace(settings.MEDIA_ROOT, "/internal")
-            response[settings.UMAP_XSENDFILE_HEADER] = path
+            internal_path = str(path).replace(settings.MEDIA_ROOT, "/internal")
+            response[settings.UMAP_XSENDFILE_HEADER] = internal_path
         else:
             # Do not use in production
             # (no gzip/cache-control/If-Modified-Since/If-None-Match)
