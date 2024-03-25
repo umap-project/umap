@@ -1,4 +1,5 @@
 import json
+import operator
 import os
 import time
 import uuid
@@ -471,17 +472,14 @@ class DataLayer(NamedModel):
             "size": self.geojson.storage.size(self.get_version_path(name)),
         }
 
-    def get_versions(self):
+    @property
+    def versions(self):
         root = self.storage_root()
         names = self.geojson.storage.listdir(root)[1]
         names = [name for name in names if self.is_valid_version(name)]
-        names.sort(reverse=True)  # Recent first.
-        return names
-
-    @property
-    def versions(self):
-        names = self.get_versions()
-        return [self.version_metadata(name) for name in names]
+        versions = [self.version_metadata(name) for name in names]
+        versions.sort(reverse=True, key=operator.itemgetter("at"))
+        return versions
 
     def get_version(self, name):
         path = self.get_version_path(name)
@@ -493,8 +491,13 @@ class DataLayer(NamedModel):
 
     def purge_old_versions(self):
         root = self.storage_root()
-        names = self.get_versions()[settings.UMAP_KEEP_VERSIONS :]
-        for name in names:
+        versions = self.versions[settings.UMAP_KEEP_VERSIONS :]
+        for version in versions:
+            name = version["name"]
+            # Should not be in the list, but ensure to not delete the file
+            # currently used in database
+            if self.geojson.name.endswith(name):
+                continue
             try:
                 self.geojson.storage.delete(os.path.join(root, name))
             except FileNotFoundError:
@@ -503,8 +506,12 @@ class DataLayer(NamedModel):
     def purge_gzip(self):
         root = self.storage_root()
         names = self.geojson.storage.listdir(root)[1]
+        prefixes = [f"{self.pk}_"]
+        if self.old_id:
+            prefixes.append(f"{self.old_id}_")
+        prefixes = tuple(prefixes)
         for name in names:
-            if name.startswith(f"{self.pk}_") and name.endswith(".gz"):
+            if name.startswith(prefixes) and name.endswith(".gz"):
                 self.geojson.storage.delete(os.path.join(root, name))
 
     def can_edit(self, user=None, request=None):

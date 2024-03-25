@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import pytest
 from django.core.files.base import ContentFile
@@ -60,30 +61,43 @@ def test_clone_should_clone_geojson_too(datalayer):
     assert clone.geojson.path != datalayer.geojson.path
 
 
-def test_should_remove_old_versions_on_save(datalayer, map, settings):
+def test_should_remove_old_versions_on_save(map, settings):
+    datalayer = DataLayerFactory(uuid="0f1161c0-c07f-4ba4-86c5-8d8981d8a813", old_id=17)
     settings.UMAP_KEEP_VERSIONS = 3
-    root = datalayer.storage_root()
+    root = Path(datalayer.storage_root())
     before = len(datalayer.geojson.storage.listdir(root)[1])
-    newer = f"{root}/{datalayer.pk}_1440924889.geojson"
-    medium = f"{root}/{datalayer.pk}_1440923687.geojson"
-    older = f"{root}/{datalayer.pk}_1440918637.geojson"
-    other = f"{root}/123456_1440918637.geojson"
-    for path in [medium, newer, older, other]:
-        datalayer.geojson.storage.save(path, ContentFile("{}"))
-        datalayer.geojson.storage.save(path + ".gz", ContentFile("{}"))
-    assert len(datalayer.geojson.storage.listdir(root)[1]) == 8 + before
+    newer = f"{datalayer.pk}_1440924889.geojson"
+    medium = f"{datalayer.pk}_1440923687.geojson"
+    older = f"{datalayer.pk}_1440918637.geojson"
+    with_old_id = f"{datalayer.old_id}_1440918537.geojson"
+    other = "123456_1440918637.geojson"
+    for path in [medium, newer, older, with_old_id, other]:
+        datalayer.geojson.storage.save(root / path, ContentFile("{}"))
+        datalayer.geojson.storage.save(root / f"{path}.gz", ContentFile("{}"))
+    assert len(datalayer.geojson.storage.listdir(root)[1]) == 10 + before
+    files = datalayer.geojson.storage.listdir(root)[1]
+    # Those files should be present before save, which will purge them
+    assert older in files
+    assert older + ".gz" in files
+    assert with_old_id in files
+    assert with_old_id + ".gz" in files
     datalayer.save()
     files = datalayer.geojson.storage.listdir(root)[1]
     # Flat + gz files, but not latest gz, which is created at first datalayer read.
+    # older and with_old_id should have been removed
     assert len(files) == 5
-    assert os.path.basename(newer) in files
-    assert os.path.basename(medium) in files
-    assert os.path.basename(datalayer.geojson.path) in files
+    assert newer in files
+    assert medium in files
+    assert Path(datalayer.geojson.path).name in files
     # File from another datalayer, purge should have impacted it.
-    assert os.path.basename(other) in files
-    assert os.path.basename(other + ".gz") in files
-    assert os.path.basename(older) not in files
-    assert os.path.basename(older + ".gz") not in files
+    assert other in files
+    assert other + ".gz" in files
+    assert older not in files
+    assert older + ".gz" not in files
+    assert with_old_id not in files
+    assert with_old_id + ".gz" not in files
+    names = [v["name"] for v in datalayer.versions]
+    assert names == [Path(datalayer.geojson.name).name, newer, medium]
 
 
 def test_anonymous_cannot_edit_in_editors_mode(datalayer):

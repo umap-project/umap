@@ -1073,7 +1073,8 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         """
 
         # Use the provided info to find the correct version in our storage.
-        for name in self.object.get_versions():
+        for version in self.object.versions:
+            name = version["name"]
             path = Path(settings.MEDIA_ROOT) / self.object.get_version_path(name)
             if reference_version == self.read_version(path):
                 with open(path) as f:
