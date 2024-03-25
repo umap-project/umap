@@ -146,7 +146,7 @@ export class ServerRequest extends Request {
   _onNOK(error) {
     if (error.status === 403) {
       this.ui.alert({
-        content: message || L._('Action not allowed :('),
+        content: error.message || L._('Action not allowed :('),
         level: 'error',
       })
     }
