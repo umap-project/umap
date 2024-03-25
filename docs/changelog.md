@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.2 - 2024-03-25
+
+- fix datalayer data file removed on save by mistake (this happened after
+  switching to UUID, when a datalayer had more than UMAP_KEEP_VERSIONS, due to
+  a sorting issue on purge old files after save)
+
 ## 2.1.1 - 2024-03-25
 
 - fix Path.replace called instead of str.replace
