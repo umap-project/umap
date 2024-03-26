@@ -974,6 +974,8 @@ U.Map = L.Map.extend({
     formData.append('settings', JSON.stringify(geojson))
     const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
     const [data, response, error] = await this.server.post(uri, {}, formData)
+    // FIXME: login_required response will not be an error, so it will not
+    // stop code while it should
     if (!error) {
       let duration = 3000,
         alert = { content: L._('Map has been saved!'), level: 'info' }

@@ -1,6 +1,11 @@
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def set_timeout(context):
+    context.set_default_timeout(5000)
+
+
 @pytest.fixture
 def login(context, settings, live_server):
     def do_login(user):
