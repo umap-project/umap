@@ -69,12 +69,12 @@ U.Map = L.Map.extend({
     this.options.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.options.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
-    this.datalayersOnLoad = L.Util.queryString('datalayers')
-    if (this.datalayersOnLoad) {
-      this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
+    this.datalayersFromQueryString = L.Util.queryString('datalayers')
+    if (this.datalayersFromQueryString) {
+      this.datalayersFromQueryString = this.datalayersFromQueryString
+        .toString()
+        .split(',')
     }
-
-    if (L.Browser.ielt9) this.options.editMode = 'disabled' // TODO include ie9
 
     let editedFeature = null
     const self = this
@@ -1527,7 +1527,9 @@ U.Map = L.Map.extend({
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map properties')
-    const builder = new U.FormBuilder(this, metadataFields, {className: 'map-metadata'})
+    const builder = new U.FormBuilder(this, metadataFields, {
+      className: 'map-metadata',
+    })
     const form = builder.build()
     container.appendChild(form)
     this._editControls(container)
