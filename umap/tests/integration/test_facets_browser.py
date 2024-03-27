@@ -46,6 +46,30 @@ DATALAYER_DATA2 = {
 }
 
 
+DATALAYER_DATA3 = {
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {"name": "a polygon"},
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [2.12, 49.57],
+                        [1.08, 49.02],
+                        [2.51, 47.55],
+                        [3.19, 48.77],
+                        [2.12, 49.57],
+                    ]
+                ],
+            },
+        },
+    ],
+    "_umap_options": {"name": "Calque 2", "browsable": False},
+}
+
+
 @pytest.fixture
 def bootstrap(map, live_server):
     map.settings["properties"]["onLoadPanel"] = "facet"
@@ -54,11 +78,15 @@ def bootstrap(map, live_server):
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    DataLayerFactory(map=map, data=DATALAYER_DATA3)
 
 
 def test_simple_facet_search(live_server, page, bootstrap, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     panel = page.locator(".umap-facet-search")
+    # From a non browsable datalayer, should not be impacted
+    paths = page.locator(".leaflet-overlay-pane path")
+    expect(paths).to_be_visible
     expect(panel).to_be_visible()
     # Facet name
     expect(page.get_by_text("My type")).to_be_visible()
@@ -67,6 +95,7 @@ def test_simple_facet_search(live_server, page, bootstrap, map):
     odd = page.get_by_text("odd")
     expect(oven).to_be_visible()
     expect(odd).to_be_visible()
+    expect(paths).to_be_visible
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(4)
     # Tooltips
@@ -81,6 +110,8 @@ def test_simple_facet_search(live_server, page, bootstrap, map):
     expect(page.get_by_text("Point 4")).to_be_hidden()
     expect(page.get_by_text("Point 1")).to_be_visible()
     expect(page.get_by_text("Point 3")).to_be_visible()
+    expect(paths).to_be_visible
     # Now let's filter
     odd.click()
     expect(markers).to_have_count(4)
+    expect(paths).to_be_visible

@@ -1,9 +1,11 @@
+import json
 import re
+from pathlib import Path
 from time import sleep
 
 from playwright.sync_api import expect
 
-from umap.models import DataLayer
+from umap.models import DataLayer, Map
 
 from ..base import DataLayerFactory, MapFactory
 
@@ -265,3 +267,33 @@ def test_same_second_edit_doesnt_conflict(context, live_server, tilelayer):
         "id": str(datalayer.pk),
         "permissions": {"edit_status": 1},
     }
+
+
+def test_should_display_alert_on_conflict(context, live_server, datalayer, map):
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+
+    # Open the map on two pages.
+    page_one = context.new_page()
+    page_one.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page_two = context.new_page()
+    page_two.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    page_one.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page_one.locator('input[name="name"]').fill("new name")
+    with page_one.expect_response(re.compile(r".*/datalayer/update/.*")):
+        page_one.get_by_role("button", name="Save").click()
+
+    page_two.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page_two.locator('input[name="name"]').fill("custom name")
+    with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
+        page_two.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.last()
+    data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"]["name"] == "new name"
+    expect(page_two.get_by_text("Woops! Someone else seems to")).to_be_visible()
+    with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
+        page_two.get_by_role("button", name="Save anyway").click()
+    saved = DataLayer.objects.last()
+    data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"]["name"] == "custom name"
