@@ -146,6 +146,18 @@ def test_default_view_latest_with_polygon(map, live_server, page):
     expect(layers).to_have_count(1)
 
 
+def test_default_view_locate(browser, live_server, map):
+    context = browser.new_context(
+        geolocation={"longitude": 8.52967, "latitude": 39.16267},
+        permissions=["geolocation"],
+    )
+    map.settings["properties"]["defaultView"] = "locate"
+    map.save()
+    page = context.new_page()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page).to_have_url(re.compile(r".*#18/39\.16267/8\.52967"))
+
+
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     openmap, live_server, datalayer, page
 ):
