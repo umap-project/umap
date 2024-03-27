@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.3 - 2024-03-27
+
+* refactor initCenter and controls ordering by @yohanboniface in #1716
+* honour old_id in datalayers= query string parameter by @yohanboniface in #1717
+
 ## 2.1.2 - 2024-03-25
 
 - fix datalayer data file removed on save by mistake (this happened after
