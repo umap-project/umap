@@ -4,8 +4,6 @@ from time import sleep
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import Map
-
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
@@ -247,10 +245,8 @@ def test_should_sort_features_in_natural_order(live_server, map, page):
     expect(features.nth(2)).to_have_text("100. a line")
 
 
-def test_should_redraw_list_on_feature_delete(live_server, map, page, bootstrap):
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootstrap):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     # Enable edit
     page.get_by_role("button", name="Edit").click()
     buttons = page.locator(".umap-browse-data li .feature-delete")
@@ -305,11 +301,8 @@ def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, boo
     expect(paths).to_have_count(0)
 
 
-def test_should_have_edit_buttons_in_edit_mode(live_server, map, page, bootstrap):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+def test_should_have_edit_buttons_in_edit_mode(live_server, openmap, page, bootstrap):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     browser = page.locator("#umap-ui-container")
     edit_layer = browser.get_by_title("Edit", exact=True)
     in_table = browser.get_by_title("Edit properties in a table")

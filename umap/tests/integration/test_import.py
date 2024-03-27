@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import DataLayer, Map
+from umap.models import DataLayer
 
 pytestmark = pytest.mark.django_db
 
@@ -175,11 +175,8 @@ def test_import_csv_from_textarea(tilelayer, live_server, page):
     expect(markers).to_have_count(2)
 
 
-def test_can_import_in_existing_datalayer(live_server, datalayer, page, map):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     layers = page.locator(".umap-browse-datalayers li")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(1)
@@ -196,11 +193,8 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, map):
     expect(markers).to_have_count(3)
 
 
-def test_can_replace_datalayer_data(live_server, datalayer, page, map):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     layers = page.locator(".umap-browse-datalayers li")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(1)
@@ -218,11 +212,8 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, map):
     expect(markers).to_have_count(2)
 
 
-def test_can_import_in_new_datalayer(live_server, datalayer, page, map):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     layers = page.locator(".umap-browse-datalayers li")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(1)

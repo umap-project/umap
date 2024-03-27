@@ -5,7 +5,7 @@ import pytest
 from django.core.files.base import ContentFile
 from playwright.sync_api import expect
 
-from umap.models import Map, Pictogram
+from umap.models import Pictogram
 
 from ..base import DataLayerFactory
 
@@ -37,12 +37,9 @@ def pictos():
     Pictogram(name="circle", pictogram=ContentFile(path.read_text(), path.name)).save()
 
 
-def test_can_change_picto_at_map_level(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
@@ -71,13 +68,11 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
 
 
-def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos):
+    openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
@@ -112,13 +107,11 @@ def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
 
 
-def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
+    openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
@@ -152,12 +145,9 @@ def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
 
 
-def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
@@ -195,12 +185,9 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     expect(symbols).to_have_count(1)
 
 
-def test_can_use_char_as_picto(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_use_char_as_picto(openmap, live_server, page, pictos):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon span")
     # Should have default img, so not a span
     expect(marker).to_have_count(0)

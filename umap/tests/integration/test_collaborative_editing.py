@@ -269,15 +269,12 @@ def test_same_second_edit_doesnt_conflict(context, live_server, tilelayer):
     }
 
 
-def test_should_display_alert_on_conflict(context, live_server, datalayer, map):
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-
+def test_should_display_alert_on_conflict(context, live_server, datalayer, openmap):
     # Open the map on two pages.
     page_one = context.new_page()
-    page_one.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page_one.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page_two = context.new_page()
-    page_two.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page_two.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
 
     page_one.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     page_one.locator('input[name="name"]').fill("new name")

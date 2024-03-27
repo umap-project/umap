@@ -2,7 +2,7 @@ import re
 
 from playwright.sync_api import expect
 
-from umap.models import DataLayer, Map
+from umap.models import DataLayer
 
 from ..base import DataLayerFactory
 
@@ -53,12 +53,9 @@ def test_should_have_fieldset_for_layer_type_properties(page, live_server, tilel
 
 
 def test_cancel_deleting_datalayer_should_restore(
-    live_server, map, login, datalayer, page
+    live_server, openmap, datalayer, page
 ):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     layers = page.locator(".umap-browse-datalayers li")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
@@ -77,11 +74,8 @@ def test_cancel_deleting_datalayer_should_restore(
     ).to_be_visible()
 
 
-def test_can_clone_datalayer(live_server, map, login, datalayer, page):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     layers = page.locator(".umap-browse-datalayers li")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
@@ -94,7 +88,7 @@ def test_can_clone_datalayer(live_server, map, login, datalayer, page):
     expect(markers).to_have_count(2)
 
 
-def test_can_change_icon_class(live_server, map, page):
+def test_can_change_icon_class(live_server, openmap, page):
     # Faster than doing a login
     data = {
         "type": "FeatureCollection",
@@ -106,10 +100,8 @@ def test_can_change_icon_class(live_server, map, page):
             },
         ],
     }
-    DataLayerFactory(map=map, data=data)
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    DataLayerFactory(map=openmap, data=data)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     expect(page.locator(".umap-div-icon")).to_be_visible()
     page.get_by_role("link", name="Manage layers").click()
     expect(page.locator(".umap-circle-icon")).to_be_hidden()
@@ -121,11 +113,9 @@ def test_can_change_icon_class(live_server, map, page):
     expect(page.locator(".umap-div-icon")).to_be_hidden()
 
 
-def test_can_change_name(live_server, map, page, datalayer):
-    map.edit_status = Map.ANONYMOUS
-    map.save()
+def test_can_change_name(live_server, openmap, page, datalayer):
     page.goto(
-        f"{live_server.url}{map.get_absolute_url()}?edit&datalayersControl=expanded"
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&datalayersControl=expanded"
     )
     page.get_by_role("link", name="Manage layers").click()
     page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
@@ -142,11 +132,9 @@ def test_can_change_name(live_server, map, page, datalayer):
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
 
 
-def test_can_create_new_datalayer(live_server, map, page, datalayer):
-    map.edit_status = Map.ANONYMOUS
-    map.save()
+def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     page.goto(
-        f"{live_server.url}{map.get_absolute_url()}?edit&datalayersControl=expanded"
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&datalayersControl=expanded"
     )
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
@@ -174,10 +162,8 @@ def test_can_create_new_datalayer(live_server, map, page, datalayer):
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
 
 
-def test_can_restore_version(live_server, map, page, datalayer):
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_restore_version(live_server, openmap, page, datalayer):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".leaflet-marker-icon")
     expect(marker).to_have_class(re.compile(".*umap-ball-icon.*"))
     marker.click(modifiers=["Shift"])
