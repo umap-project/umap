@@ -67,7 +67,8 @@ U.Map = L.Map.extend({
     this.description = this.options.description
     this.demoTileInfos = this.options.demoTileInfos
     this.options.zoomControl = zoomControl !== undefined ? zoomControl : true
-    this.options.fullscreenControl = fullscreenControl !== undefined ? fullscreenControl : true
+    this.options.fullscreenControl =
+      fullscreenControl !== undefined ? fullscreenControl : true
     this.datalayersOnLoad = L.Util.queryString('datalayers')
     if (this.datalayersOnLoad) {
       this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
@@ -114,12 +115,12 @@ U.Map = L.Map.extend({
     // Needed for actions labels
     this.help = new U.Help(this)
 
-    if (this.options.hash) this.addHash()
-    this.initTileLayers()
-    // Needs tilelayer to exist for minimap
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
+    this.initTileLayers()
+    // Needs tilelayer to exist for minimap
+    this.renderControls()
     this.handleLimitBounds()
     this.initDataLayers()
 
@@ -268,9 +269,9 @@ U.Map = L.Map.extend({
   },
 
   overrideSchema: function (schema) {
-   for (const [key, extra] of Object.entries(schema)) {
-     U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
-   }
+    for (const [key, extra] of Object.entries(schema)) {
+      U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
+    }
   },
 
   initControls: function () {
@@ -297,7 +298,7 @@ U.Map = L.Map.extend({
       zoomOutTitle: L._('Zoom out'),
     })
     this._controls.datalayers = new U.DataLayersControl(this)
-    this._controls.locate = L.control.locate({
+    this._controls.locate = new U.Locate(this, {
       strings: {
         title: L._('Center map on your location'),
       },
@@ -336,9 +337,6 @@ U.Map = L.Map.extend({
     this.drop = new U.DropControl(this)
     this.share = new U.Share(this)
     this._controls.tilelayers = new U.TileLayerControl(this)
-    this._controls.tilelayers.setLayers()
-
-    this.renderControls()
   },
 
   renderControls: function () {
@@ -353,13 +351,13 @@ U.Map = L.Map.extend({
       'umap-slideshow-enabled',
       this.options.slideshow && this.options.slideshow.active
     )
-    for (const i in this._controls) {
-      this.removeControl(this._controls[i])
+    for (const control of Object.values(this._controls)) {
+      this.removeControl(control)
     }
     if (this.options.noControl) return
 
     this._controls.attribution = new U.AttributionControl().addTo(this)
-    if (this.options.miniMap && !this.options.noControl) {
+    if (this.options.miniMap) {
       this.whenReady(function () {
         if (this.selected_tilelayer) {
           this._controls.miniMap = new L.Control.MiniMap(this.selected_tilelayer, {
@@ -392,6 +390,7 @@ U.Map = L.Map.extend({
     if (this.getOption('permanentCredit')) this._controls.permanentCredit.addTo(this)
     if (this.getOption('moreControl')) this._controls.more.addTo(this)
     if (this.getOption('scaleControl')) this._controls.scale.addTo(this)
+    this._controls.tilelayers.setLayers()
   },
 
   initDataLayers: async function (datalayers) {
@@ -652,26 +651,18 @@ U.Map = L.Map.extend({
   },
 
   initCenter: function () {
+    this._setDefaultCenter()
+    if (this.options.hash) this.addHash()
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      // When using locate as default map view AND activating easing
-      // Leaflet.locate will ask the map view to compute transition to user
-      // position, so in this case we do need a default center, so let's
-      // set it anyway
-      this._setDefaultCenter()
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
-      this.onceDataLoaded(() => {
-        if (!this.fitDataBounds()) return this._setDefaultCenter()
-      })
+      this.onceDataLoaded(this.fitDataBounds)
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
-        if (!this.hasData()) {
-          this._setDefaultCenter()
-          return
-        }
+        if (!this.hasData()) return
         const datalayer = this.firstVisibleDatalayer()
         let feature
         if (datalayer) {
@@ -681,11 +672,7 @@ U.Map = L.Map.extend({
             return
           }
         }
-        // Fallback, no datalayer or no feature found
-        this._setDefaultCenter()
       })
-    } else {
-      this._setDefaultCenter()
     }
   },
 

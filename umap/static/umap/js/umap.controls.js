@@ -1234,6 +1234,35 @@ U.StarControl = L.Control.extend({
   },
 })
 
+/*
+ * Take control over L.Control.Locate to be able to
+ * call start() before adding the control (and thus the button) to the map.
+ */
+U.Locate = L.Control.Locate.extend({
+  initialize: function (map, options) {
+    // When calling start(), it will try to add a location marker
+    // on the layer, which is normally added in the addTo/onAdd method
+    this._layer = this.options.layer = new L.LayerGroup()
+    // When calling start(), it will call _activate(), which then adds
+    // location related event listeners on the map
+    this.map = map
+    L.Control.Locate.prototype.initialize.call(this, options)
+  },
+
+  onAdd: function (map) {
+    const active = this._active
+    const container = L.Control.Locate.prototype.onAdd.call(this, map)
+    this._active = active
+    return container
+  },
+
+  _activate: function () {
+    this._map = this.map
+    L.Control.Locate.prototype._activate.call(this)
+    this._map = null
+  }
+})
+
 U.Search = L.PhotonSearch.extend({
   initialize: function (map, input, options) {
     this.options.placeholder = L._('Type a place name or coordinates')
