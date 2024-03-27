@@ -106,3 +106,25 @@ def test_should_honour_color_variable(live_server, map, page):
     expect(page.locator(".leaflet-overlay-pane path[fill='tomato']"))
     markers = page.locator(".leaflet-marker-icon .icon_container")
     expect(markers).to_have_css("background-color", "rgb(240, 248, 255)")
+
+
+def test_datalayers_in_query_string(live_server, datalayer, map, page):
+    with_old_id = DataLayerFactory(old_id=134, map=map, name="with old id")
+    set_options(with_old_id, name="with old id")
+    visible = page.locator(".leaflet-control-browse li:not(.off) span")
+    hidden = page.locator(".leaflet-control-browse li.off span")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(visible).to_have_count(2)
+    expect(hidden).to_have_count(0)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?datalayers={datalayer.pk}")
+    expect(visible).to_have_count(1)
+    expect(visible).to_have_text(datalayer.name)
+    expect(hidden).to_have_count(1)
+    expect(hidden).to_have_text(with_old_id.name)
+    page.goto(
+        f"{live_server.url}{map.get_absolute_url()}?datalayers={with_old_id.old_id}"
+    )
+    expect(visible).to_have_count(1)
+    expect(visible).to_have_text(with_old_id.name)
+    expect(hidden).to_have_count(1)
+    expect(hidden).to_have_text(datalayer.name)

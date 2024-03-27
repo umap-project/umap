@@ -609,12 +609,13 @@ U.DataLayer = L.Evented.extend({
   },
 
   autoLoaded: function () {
-    return (
-      (this.map.datalayersOnLoad &&
-        this.umap_id &&
-        this.map.datalayersOnLoad.indexOf(this.umap_id.toString()) !== -1) ||
-      (!this.map.datalayersOnLoad && this.options.displayOnLoad)
-    )
+    if (!this.map.datalayersFromQueryString) return this.options.displayOnLoad
+    const datalayerIds = this.map.datalayersFromQueryString
+    let loadMe = datalayerIds.includes(this.umap_id.toString())
+    if (this.options.old_id) {
+      loadMe = loadMe || datalayerIds.includes(this.options.old_id.toString())
+    }
+    return loadMe
   },
 
   insertBefore: function (other) {

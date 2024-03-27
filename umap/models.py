@@ -443,6 +443,8 @@ class DataLayer(NamedModel):
             "name": self.name,
             "displayOnLoad": self.display_on_load,
         }
+        if self.old_id:
+            obj["old_id"] = self.old_id
         obj["id"] = self.pk
         obj["permissions"] = {"edit_status": self.edit_status}
         obj["editMode"] = "advanced" if self.can_edit(user, request) else "disabled"
