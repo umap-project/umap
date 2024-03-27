@@ -39,11 +39,10 @@ U.Importer = L.Class.extend({
       this.container,
       L._('Choose the layer to import in')
     )
-    this.clearLabel = L.DomUtil.add(
+    this.clearLabel = L.DomUtil.element(
       'label',
-      '',
-      this.container,
-      L._('Replace layer content')
+      { textContent: L._('Replace layer content'), for: 'datalayer-clear-check' },
+      this.container
     )
     this.submitInput = L.DomUtil.element(
       'input',
@@ -59,7 +58,7 @@ U.Importer = L.Class.extend({
     )
     this.clearFlag = L.DomUtil.element(
       'input',
-      { type: 'checkbox', name: 'clear' },
+      { type: 'checkbox', name: 'clear', id: 'datalayer-clear-check' },
       this.clearLabel
     )
     let option

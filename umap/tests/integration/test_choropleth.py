@@ -4,8 +4,6 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import Map
-
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
@@ -28,19 +26,15 @@ def test_basic_choropleth_map_with_default_color(map, live_server, page):
     expect(page.locator("path[fill='#eff3ff']")).to_have_count(3)
 
 
-def test_basic_choropleth_map_with_custom_brewer(map, live_server, page):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-
+def test_basic_choropleth_map_with_custom_brewer(openmap, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/choropleth_region_chomage.geojson"
     data = json.loads(path.read_text())
 
     # Change brewer at load
     data["_umap_options"]["choropleth"]["brewer"] = "Reds"
-    DataLayerFactory(data=data, map=map)
+    DataLayerFactory(data=data, map=openmap)
 
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     # Hauts-de-France
     expect(page.locator("path[fill='#a50f15']")).to_have_count(1)
     # Occitanie
@@ -71,19 +65,15 @@ def test_basic_choropleth_map_with_custom_brewer(map, live_server, page):
     expect(page.locator("path[fill='#edf8e9']")).to_have_count(3)
 
 
-def test_basic_choropleth_map_with_custom_classes(map, live_server, page):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-
+def test_basic_choropleth_map_with_custom_classes(openmap, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/choropleth_region_chomage.geojson"
     data = json.loads(path.read_text())
 
     # Change brewer at load
     data["_umap_options"]["choropleth"]["classes"] = 6
-    DataLayerFactory(data=data, map=map)
+    DataLayerFactory(data=data, map=openmap)
 
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
 
     # Hauts-de-France
     expect(page.locator("path[fill='#08519c']")).to_have_count(1)

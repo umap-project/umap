@@ -1540,7 +1540,7 @@ U.Map = L.Map.extend({
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map properties')
-    const builder = new U.FormBuilder(this, metadataFields)
+    const builder = new U.FormBuilder(this, metadataFields, {className: 'map-metadata'})
     const form = builder.build()
     container.appendChild(form)
     this._editControls(container)

@@ -231,3 +231,21 @@ def test_can_change_owner(map, live_server, login, user):
         save.click()
     modified = Map.objects.get(pk=map.pk)
     assert modified.owner == user
+
+
+def test_can_delete_datalayer(live_server, map, login, datalayer):
+    page = login(map.owner)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    layers = page.locator(".umap-browse-datalayers li")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    page.get_by_role("link", name="Manage layers").click()
+    page.once("dialog", lambda dialog: dialog.accept())
+    page.locator("#umap-ui-container").get_by_title("Delete layer").click()
+    with page.expect_response(re.compile(r".*/datalayer/delete/.*")):
+        page.get_by_role("button", name="Save").click()
+    expect(markers).to_have_count(0)
+    # FIXME does not work, resolve to 1 element, even if this command is empty:
+    # document.querySelectorAll(".umap-browse-datalayers li")
+    # expect(layers).to_have_count(0)

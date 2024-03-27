@@ -5,6 +5,8 @@ import pytest
 from django.core.cache import cache
 from django.core.signing import get_cookie_signer
 
+from umap.models import Map
+
 from .base import (
     DataLayerFactory,
     LicenceFactory,
@@ -46,6 +48,13 @@ def licence():
 def map(licence, tilelayer):
     user = UserFactory(username="Gabriel", password="123123")
     return MapFactory(owner=user, licence=licence)
+
+
+@pytest.fixture
+def openmap(map):
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    return map
 
 
 @pytest.fixture

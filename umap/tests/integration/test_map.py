@@ -3,8 +3,6 @@ import re
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import Map
-
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
@@ -149,18 +147,15 @@ def test_default_view_latest_with_polygon(map, live_server, page):
 
 
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
-    map, live_server, datalayer, page
+    openmap, live_server, datalayer, page
 ):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
     datalayer.settings["remoteData"] = {
         "url": "https://overpass-api.de/api/interpreter?data=[out:xml];node[harbour=yes]({south},{west},{north},{east});out body;",
         "format": "osm",
         "from": "10",
     }
     datalayer.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     toggle = page.get_by_role("button", name="See data layers")
     expect(toggle).to_be_visible()
     toggle.click()
@@ -179,13 +174,10 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     expect(layers).to_have_count(2)
 
 
-def test_can_hide_datalayer_from_caption(map, live_server, datalayer, page):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
+def test_can_hide_datalayer_from_caption(openmap, live_server, datalayer, page):
     # Add another DataLayer
-    other = DataLayerFactory(map=map, name="Hidden", settings={"inCaption": False})
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    other = DataLayerFactory(map=openmap, name="Hidden", settings={"inCaption": False})
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     toggle = page.get_by_text("About").first
     expect(toggle).to_be_visible()
     toggle.click()
