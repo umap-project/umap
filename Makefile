@@ -1,7 +1,5 @@
 .DEFAULT_GOAL := help
 
-JS_TEST_URL := http://localhost:8001/umap/static/umap/test/index.html
-
 .PHONY: install
 install: ## Install the dependencies
 	python3 -m pip install --upgrade pip
@@ -57,7 +55,9 @@ publish: ## Publish the Python package to Pypi
 	@hatch publish
 	make clean
 
-test:
+test: testpy testjs
+
+testpy:
 	pytest -xv umap/tests/
 
 test-integration:
@@ -77,19 +77,7 @@ vendors:
 installjs:
 	npm install
 testjs: node_modules
-	@{ \
-		trap 'kill $$PID; exit' INT; \
-		python -m http.server 8001 & \
-		PID=$$!; \
-		sleep 1; \
-		echo "Opening $(JS_TEST_URL)"; \
-		if command -v python -m webbrowser > /dev/null 2>&1; then \
-			python -m webbrowser "$(JS_TEST_URL)"; \
-		else \
-			echo "Please open $(JS_TEST_URL) in your web browser"; \
-		fi; \
-		wait $$PID; \
-	}
+	node_modules/mocha/bin/mocha.js umap/static/umap/unittests/
 tx_push:
 	tx push -s
 tx_pull:
