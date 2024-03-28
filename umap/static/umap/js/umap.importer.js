@@ -102,7 +102,7 @@ U.Importer = L.Class.extend({
         let type = '',
           newType
         for (let i = 0; i < e.target.files.length; i++) {
-          newType = L.Util.detectFileType(e.target.files[i])
+          newType = U.Utils.detectFileType(e.target.files[i])
           if (!type && newType) type = newType
           if (type && newType !== type) {
             type = ''

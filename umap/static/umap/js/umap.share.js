@@ -51,7 +51,7 @@ U.Share = L.Class.extend({
     L.DomUtil.createCopiableInput(
       this.container,
       L._('Link to view the map'),
-      window.location.protocol + L.Util.getBaseUrl()
+      window.location.protocol + U.Utils.getBaseUrl()
     )
 
     if (this.map.options.shortUrl) {
@@ -84,7 +84,7 @@ U.Share = L.Class.extend({
       this.container,
       L._('All data and settings of the map')
     )
-    const downloadUrl = L.Util.template(this.map.options.urls.map_download, {
+    const downloadUrl = U.Utils.template(this.map.options.urls.map_download, {
       map_id: this.map.options.umap_id,
     })
     const link = L.DomUtil.createLink(
@@ -213,7 +213,7 @@ U.IframeExporter = L.Evented.extend({
 
   initialize: function (map) {
     this.map = map
-    this.baseUrl = L.Util.getBaseUrl()
+    this.baseUrl = U.Utils.getBaseUrl()
     // Use map default, not generic default
     this.queryString.onLoadPanel = this.map.getOption('onLoadPanel')
   },
@@ -241,7 +241,7 @@ U.IframeExporter = L.Evented.extend({
     }
     const currentView = this.options.currentView ? window.location.hash : ''
     const queryString = L.extend({}, this.queryString, options)
-    return `${this.baseUrl}?${L.Util.buildQueryString(queryString)}${currentView}`
+    return `${this.baseUrl}?${U.Utils.buildQueryString(queryString)}${currentView}`
   },
 
   build: function () {

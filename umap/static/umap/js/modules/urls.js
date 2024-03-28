@@ -1,19 +1,4 @@
-// Vendorized from leaflet.utils
-// https://github.com/Leaflet/Leaflet/blob/108c6717b70f57c63645498f9bd66b6677758786/src/core/Util.js#L132-L151
-var templateRe = /\{ *([\w_ -]+) *\}/g
-
-function template(str, data) {
-  return str.replace(templateRe, function (str, key) {
-    var value = data[key]
-
-    if (value === undefined) {
-      throw new Error('No value provided for variable ' + str)
-    } else if (typeof value === 'function') {
-      value = value(data)
-    }
-    return value
-  })
-}
+import { template } from "./utils.js"
 
 export default class URLs {
   constructor(serverUrls) {

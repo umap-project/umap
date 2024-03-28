@@ -124,12 +124,12 @@ U.PopupTemplate.Default = L.Class.extend({
     let center
     properties = this.feature.extendedProperties()
     // Resolve properties inside description
-    properties.description = L.Util.greedyTemplate(
+    properties.description = U.Utils.greedyTemplate(
       this.feature.properties.description || '',
       properties
     )
-    content = L.Util.greedyTemplate(template, properties)
-    content = L.Util.toHTML(content, { target: target })
+    content = U.Utils.greedyTemplate(template, properties)
+    content = U.Utils.toHTML(content, { target: target })
     container.innerHTML = content
     return container
   },
@@ -211,7 +211,7 @@ U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
     for (const key in this.feature.properties) {
       if (typeof this.feature.properties[key] === 'object' || key === 'name') continue
       // TODO, manage links (url, mailto, wikipedia...)
-      this.addRow(table, key, L.Util.escapeHTML(this.feature.properties[key]).trim())
+      this.addRow(table, key, U.Utils.escapeHTML(this.feature.properties[key]).trim())
     }
     return table
   },
