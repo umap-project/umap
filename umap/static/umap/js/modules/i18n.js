@@ -17,6 +17,13 @@ export function registerLocale(code, locale) {
 export function setLocale(code) {
   locale = code
 }
+
+// Until we have a proper way to load `locale` directly from this module,
+// without copying to window.L we need to have a getter
+export function getLocale() {
+  return locale
+}
+
 // @function translate(string: String, data?: Object): String
 // Actually try to translate the `string`, with optionnal variable passed in `data`.
 export function translate(string, data = {}) {

@@ -533,7 +533,8 @@ U.FeatureMixin = {
   extendedProperties: function () {
     // Include context properties
     properties = this.map.getGeoContext()
-    if (L.locale) properties.locale = L.locale
+    const locale = L.getLocale()
+    if (locale) properties.locale = locale
     if (L.lang) properties.lang = L.lang
     properties.rank = this.getRank() + 1
     if (this.hasGeom()) {

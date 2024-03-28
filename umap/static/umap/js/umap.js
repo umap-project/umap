@@ -1767,7 +1767,7 @@ U.Map = L.Map.extend({
     const url = this.urls.get('routing', {
       lat: e.latlng.lat,
       lng: e.latlng.lng,
-      locale: L.locale,
+      locale: L.getLocale(),
       zoom: this.getZoom(),
     })
     if (url) window.open(url)
