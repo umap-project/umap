@@ -263,7 +263,8 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
 
   getName: function () {
     const props = this.feature.properties
-    if (L.locale && props[`name:${L.locale}`]) return props[`name:${L.locale}`]
+    const locale = L.getLocale()
+    if (locale && props[`name:${locale}`]) return props[`name:${locale}`]
     return props.name
   },
 
