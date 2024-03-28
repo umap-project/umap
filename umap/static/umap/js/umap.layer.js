@@ -97,7 +97,7 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 
   getEditableOptions: function () {
-    if (!L.Util.isObject(this.datalayer.options.cluster)) {
+    if (!U.Utils.isObject(this.datalayer.options.cluster)) {
       this.datalayer.options.cluster = {}
     }
     return [
@@ -155,7 +155,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    if (!L.Util.isObject(this.datalayer.options.choropleth)) {
+    if (!U.Utils.isObject(this.datalayer.options.choropleth)) {
       this.datalayer.options.choropleth = {}
     }
     L.FeatureGroup.prototype.initialize.call(
@@ -381,7 +381,7 @@ U.Layer.Heat = L.HeatLayer.extend({
   },
 
   getEditableOptions: function () {
-    if (!L.Util.isObject(this.datalayer.options.heat)) {
+    if (!U.Utils.isObject(this.datalayer.options.heat)) {
       this.datalayer.options.heat = {}
     }
     return [
@@ -461,8 +461,8 @@ U.Layer.Heat = L.HeatLayer.extend({
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
-          ? +this._latlngs[i][2]
-          : 1
+            ? +this._latlngs[i][2]
+            : 1
 
       grid[y] = grid[y] || []
       cell = grid[y][x]
@@ -724,16 +724,16 @@ U.DataLayer = L.Evented.extend({
   },
 
   backupData: function () {
-    this._geojson_bk = L.Util.CopyJSON(this._geojson)
+    this._geojson_bk = U.Utils.CopyJSON(this._geojson)
   },
 
   reindex: function () {
     const features = []
     this.eachFeature((feature) => features.push(feature))
-    L.Util.sortFeatures(features, this.map.getOption('sortKey'))
+    U.Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
     this._index = []
     for (let i = 0; i < features.length; i++) {
-      this._index.push(L.Util.stamp(features[i]))
+      this._index.push(U.Utils.stamp(features[i]))
     }
   },
 
@@ -793,16 +793,16 @@ U.DataLayer = L.Evented.extend({
   },
 
   backupOptions: function () {
-    this._backupOptions = L.Util.CopyJSON(this.options)
+    this._backupOptions = U.Utils.CopyJSON(this.options)
   },
 
   resetOptions: function () {
-    this.options = L.Util.CopyJSON(this._backupOptions)
+    this.options = U.Utils.CopyJSON(this._backupOptions)
   },
 
   setOptions: function (options) {
     delete options.geojson
-    this.options = L.Util.CopyJSON(U.DataLayer.prototype.options) // Start from fresh.
+    this.options = U.Utils.CopyJSON(U.DataLayer.prototype.options) // Start from fresh.
     this.updateOptions(options)
   },
 
@@ -824,7 +824,7 @@ U.DataLayer = L.Evented.extend({
   _dataUrl: function () {
     const template = this.map.options.urls.datalayer_view
 
-    let url = L.Util.template(template, {
+    let url = U.Utils.template(template, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
     })
@@ -971,7 +971,7 @@ U.DataLayer = L.Evented.extend({
     let latlngs
 
     if (features) {
-      L.Util.sortFeatures(features, this.map.getOption('sortKey'))
+      U.Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
       for (i = 0, len = features.length; i < len; i++) {
         this.geojsonToFeatures(features[i])
       }
@@ -1061,7 +1061,7 @@ U.DataLayer = L.Evented.extend({
 
   importFromFile: function (f, type) {
     const reader = new FileReader()
-    type = type || L.Util.detectFileType(f)
+    type = type || U.Utils.detectFileType(f)
     reader.readAsText(f)
     reader.onload = (e) => this.importRaw(e.target.result, type)
   },
@@ -1079,21 +1079,21 @@ U.DataLayer = L.Evented.extend({
   },
 
   getDeleteUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_delete, {
+    return U.Utils.template(this.map.options.urls.datalayer_delete, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
     })
   },
 
   getVersionsUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_versions, {
+    return U.Utils.template(this.map.options.urls.datalayer_versions, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
     })
   },
 
   getVersionUrl: function (name) {
-    return L.Util.template(this.map.options.urls.datalayer_version, {
+    return U.Utils.template(this.map.options.urls.datalayer_version, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
       name: name,
@@ -1112,10 +1112,10 @@ U.DataLayer = L.Evented.extend({
   },
 
   clone: function () {
-    const options = L.Util.CopyJSON(this.options)
+    const options = U.Utils.CopyJSON(this.options)
     options.name = L._('Clone of {name}', { name: this.options.name })
     delete options.id
-    const geojson = L.Util.CopyJSON(this._geojson),
+    const geojson = U.Utils.CopyJSON(this._geojson),
       datalayer = this.map.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
@@ -1276,7 +1276,7 @@ U.DataLayer = L.Evented.extend({
     )
     popupFieldset.appendChild(builder.build())
 
-    if (!L.Util.isObject(this.options.remoteData)) {
+    if (!U.Utils.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
     }
     const remoteDataFields = [
@@ -1371,7 +1371,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   getOwnOption: function (option) {
-    if (L.Util.usableOption(this.options, option)) return this.options[option]
+    if (U.Utils.usableOption(this.options, option)) return this.options[option]
   },
 
   getOption: function (option, feature) {
@@ -1668,6 +1668,6 @@ L.TileLayer.include({
   },
 
   getAttribution: function () {
-    return L.Util.toHTML(this.options.attribution)
+    return U.Utils.toHTML(this.options.attribution)
   },
 })

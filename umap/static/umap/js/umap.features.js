@@ -59,7 +59,7 @@ U.FeatureMixin = {
   getPermalink: function () {
     const slug = this.getSlug()
     if (slug)
-      return `${L.Util.getBaseUrl()}?${L.Util.buildQueryString({ feature: slug })}${
+      return `${U.Utils.getBaseUrl()}?${U.Utils.buildQueryString({ feature: slug })}${
         window.location.hash
       }`
   },
@@ -204,7 +204,8 @@ U.FeatureMixin = {
     if (fallback === undefined) fallback = this.datalayer.options.name
     const key = this.getOption('labelKey') || 'name'
     // Variables mode.
-    if (L.Util.hasVar(key)) return L.Util.greedyTemplate(key, this.extendedProperties())
+    if (U.Utils.hasVar(key))
+      return U.Utils.greedyTemplate(key, this.extendedProperties())
     // Simple mode.
     return this.properties[key] || this.properties.title || fallback
   },
@@ -291,7 +292,7 @@ U.FeatureMixin = {
     let value = fallback
     if (typeof this.staticOptions[option] !== 'undefined') {
       value = this.staticOptions[option]
-    } else if (L.Util.usableOption(this.properties._umap_options, option)) {
+    } else if (U.Utils.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
       value = this.datalayer.getOption(option, this)
@@ -304,9 +305,9 @@ U.FeatureMixin = {
   getDynamicOption: function (option, fallback) {
     let value = this.getOption(option, fallback)
     // There is a variable inside.
-    if (L.Util.hasVar(value)) {
-      value = L.Util.greedyTemplate(value, this.properties, true)
-      if (L.Util.hasVar(value)) value = this.map.getDefaultOption(option)
+    if (U.Utils.hasVar(value)) {
+      value = U.Utils.greedyTemplate(value, this.properties, true)
+      if (U.Utils.hasVar(value)) value = this.map.getDefaultOption(option)
     }
     return value
   },
@@ -485,7 +486,7 @@ U.FeatureMixin = {
     options.permanent = showLabel === true
     this.unbindTooltip()
     if ((showLabel === true || showLabel === null) && displayName)
-      this.bindTooltip(L.Util.escapeHTML(displayName), options)
+      this.bindTooltip(U.Utils.escapeHTML(displayName), options)
   },
 
   matchFilter: function (filter, keys) {
@@ -1059,7 +1060,7 @@ U.Polyline = L.Polyline.extend({
     const geojson = this.toGeoJSON()
     geojson.geometry.type = 'Polygon'
     geojson.geometry.coordinates = [
-      L.Util.flattenCoordinates(geojson.geometry.coordinates),
+      U.Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
     const polygon = this.datalayer.geojsonToFeatures(geojson)
     polygon.edit()
@@ -1199,7 +1200,7 @@ U.Polygon = L.Polygon.extend({
   toPolyline: function () {
     const geojson = this.toGeoJSON()
     geojson.geometry.type = 'LineString'
-    geojson.geometry.coordinates = L.Util.flattenCoordinates(
+    geojson.geometry.coordinates = U.Utils.flattenCoordinates(
       geojson.geometry.coordinates
     )
     const polyline = this.datalayer.geojsonToFeatures(geojson)

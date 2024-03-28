@@ -62,9 +62,8 @@ U.MapPermissions = L.Class.extend({
       title = L.DomUtil.create('h3', '', container)
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
-        const helpText = `${L._('Secret edit link:')}<br>${
-          this.options.anonymous_edit_url
-        }`
+        const helpText = `${L._('Secret edit link:')}<br>${this.options.anonymous_edit_url
+          }`
         L.DomUtil.add('p', 'help-text', container, helpText)
         fields.push([
           'options.edit_status',
@@ -171,13 +170,13 @@ U.MapPermissions = L.Class.extend({
   },
 
   getUrl: function () {
-    return L.Util.template(this.map.options.urls.map_update_permissions, {
+    return U.Utils.template(this.map.options.urls.map_update_permissions, {
       map_id: this.map.options.umap_id,
     })
   },
 
   getAttachUrl: function () {
-    return L.Util.template(this.map.options.urls.map_attach_owner, {
+    return U.Utils.template(this.map.options.urls.map_attach_owner, {
       map_id: this.map.options.umap_id,
     })
   },

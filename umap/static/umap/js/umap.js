@@ -76,6 +76,7 @@ U.Map = L.Map.extend({
         .split(',')
     }
 
+
     let editedFeature = null
     const self = this
     try {
@@ -344,7 +345,7 @@ U.Map = L.Map.extend({
       document.body,
       'umap-caption-bar-enabled',
       this.options.captionBar ||
-        (this.options.slideshow && this.options.slideshow.active)
+      (this.options.slideshow && this.options.slideshow.active)
     )
     L.DomUtil.classIf(
       document.body,
@@ -732,7 +733,7 @@ U.Map = L.Map.extend({
   },
 
   getOption: function (option) {
-    if (L.Util.usableOption(this.options, option)) return this.options[option]
+    if (U.Utils.usableOption(this.options, option)) return this.options[option]
     return this.getDefaultOption(option)
   },
 
@@ -789,7 +790,7 @@ U.Map = L.Map.extend({
   },
 
   processFileToImport: function (file, layer, type) {
-    type = type || L.Util.detectFileType(file)
+    type = type || U.Utils.detectFileType(file)
     if (!type) {
       this.ui.alert({
         content: L._('Unable to detect format of file {filename}', {
@@ -992,7 +993,7 @@ U.Map = L.Map.extend({
             {
               label: L._('Copy link'),
               callback: () => {
-                L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
+                U.Utils.copyToClipboard(data.permissions.anonymous_edit_url)
                 this.ui.alert({
                   content: L._('Secret edit link copied to clipboard!'),
                   level: 'info',
@@ -1263,7 +1264,7 @@ U.Map = L.Map.extend({
   },
 
   _editTilelayer: function (container) {
-    if (!L.Util.isObject(this.options.tilelayer)) {
+    if (!U.Utils.isObject(this.options.tilelayer)) {
       this.options.tilelayer = {}
     }
     const tilelayerFields = [
@@ -1316,7 +1317,7 @@ U.Map = L.Map.extend({
   },
 
   _editOverlay: function (container) {
-    if (!L.Util.isObject(this.options.overlay)) {
+    if (!U.Utils.isObject(this.options.overlay)) {
       this.options.overlay = {}
     }
     const overlayFields = [
@@ -1367,7 +1368,7 @@ U.Map = L.Map.extend({
   },
 
   _editBounds: function (container) {
-    if (!L.Util.isObject(this.options.limitBounds)) {
+    if (!U.Utils.isObject(this.options.limitBounds)) {
       this.options.limitBounds = {}
     }
     const limitBounds = L.DomUtil.createFieldset(container, L._('Limit bounds'))
@@ -1401,10 +1402,10 @@ U.Map = L.Map.extend({
       L._('Use current bounds'),
       function () {
         const bounds = this.getBounds()
-        this.options.limitBounds.south = L.Util.formatNum(bounds.getSouth())
-        this.options.limitBounds.west = L.Util.formatNum(bounds.getWest())
-        this.options.limitBounds.north = L.Util.formatNum(bounds.getNorth())
-        this.options.limitBounds.east = L.Util.formatNum(bounds.getEast())
+        this.options.limitBounds.south = U.Utils.formatNum(bounds.getSouth())
+        this.options.limitBounds.west = U.Utils.formatNum(bounds.getWest())
+        this.options.limitBounds.north = U.Utils.formatNum(bounds.getNorth())
+        this.options.limitBounds.east = U.Utils.formatNum(bounds.getEast())
         boundsBuilder.fetchAll()
         this.isDirty = true
         this.handleLimitBounds()
@@ -1572,10 +1573,10 @@ U.Map = L.Map.extend({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-        'div',
-        'umap-caption-bar',
-        this._controlContainer
-      ),
+      'div',
+      'umap-caption-bar',
+      this._controlContainer
+    ),
       name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
@@ -1796,12 +1797,12 @@ U.Map = L.Map.extend({
   },
 
   localizeUrl: function (url) {
-    return L.Util.greedyTemplate(url, this.getGeoContext(), true)
+    return U.Utils.greedyTemplate(url, this.getGeoContext(), true)
   },
 
   proxyUrl: function (url, ttl) {
     if (this.options.urls.ajax_proxy) {
-      url = L.Util.greedyTemplate(this.options.urls.ajax_proxy, {
+      url = U.Utils.greedyTemplate(this.options.urls.ajax_proxy, {
         url: encodeURIComponent(url),
         ttl: ttl,
       })

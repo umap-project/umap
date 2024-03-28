@@ -1,7 +1,7 @@
 import URLs from './urls.js'
 import Browser from './browser.js'
 import * as Utils from './utils.js'
-import {SCHEMA} from './schema.js'
+import { SCHEMA } from './schema.js'
 import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './request.js'
 
 // Import modules and export them to the global scope.

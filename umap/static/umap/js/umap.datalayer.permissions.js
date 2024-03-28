@@ -46,7 +46,7 @@ U.DataLayerPermissions = L.Class.extend({
   },
 
   getUrl: function () {
-    return L.Util.template(this.datalayer.map.options.urls.datalayer_permissions, {
+    return U.Utils.template(this.datalayer.map.options.urls.datalayer_permissions, {
       map_id: this.datalayer.map.options.umap_id,
       pk: this.datalayer.umap_id,
     })

@@ -476,7 +476,7 @@ U.PermanentCreditsControl = L.Control.extend({
   },
 
   setCredits: function () {
-    this.paragraphContainer.innerHTML = L.Util.toHTML(this.map.options.permanentCredit)
+    this.paragraphContainer.innerHTML = U.Utils.toHTML(this.map.options.permanentCredit)
   },
 
   setBackground: function () {
@@ -820,7 +820,7 @@ const ControlsMixin = {
     this.permissions.addOwnerLink('h5', container)
     if (this.options.description) {
       const description = L.DomUtil.create('div', 'umap-map-description', container)
-      description.innerHTML = L.Util.toHTML(this.options.description)
+      description.innerHTML = U.Utils.toHTML(this.options.description)
     }
     const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
     this.eachVisibleDataLayer((datalayer) => {
@@ -832,7 +832,7 @@ const ControlsMixin = {
       datalayer.onceLoaded(function () {
         datalayer.renderLegend(legend)
         if (datalayer.options.description) {
-          description.innerHTML = L.Util.toHTML(datalayer.options.description)
+          description.innerHTML = U.Utils.toHTML(datalayer.options.description)
         }
       })
       datalayer.renderToolbox(headline)
@@ -846,7 +846,7 @@ const ControlsMixin = {
         'p',
         '',
         credits,
-        L.Util.toHTML(this.options.longCredit || this.options.shortCredit)
+        U.Utils.toHTML(this.options.longCredit || this.options.shortCredit)
       )
     }
     if (this.options.licence) {
@@ -1077,7 +1077,7 @@ U.TileLayerControl = L.Control.IconLayers.extend({
           // when the tilelayer is actually added to the map (needs this._tileZoom
           // to be defined)
           // Fixme when https://github.com/Leaflet/Leaflet/pull/9201 is released
-          const icon = L.Util.template(
+          const icon = U.Utils.template(
             layer.options.url_template,
             this.map.demoTileInfos
           )
@@ -1150,7 +1150,7 @@ U.TileLayerChooser = L.Control.extend({
       el = L.DomUtil.create('li', selectedClass, this._tilelayers_container),
       img = L.DomUtil.create('img', '', el),
       name = L.DomUtil.create('div', '', el)
-    img.src = L.Util.template(tilelayer.options.url_template, this.map.demoTileInfos)
+    img.src = U.Utils.template(tilelayer.options.url_template, this.map.demoTileInfos)
     img.loading = 'lazy'
     name.textContent = tilelayer.options.name
     L.DomEvent.on(
@@ -1187,7 +1187,7 @@ U.AttributionControl = L.Control.Attribution.extend({
     const shortCredit = this._map.getOption('shortCredit'),
       captionMenus = this._map.getOption('captionMenus')
     if (shortCredit) {
-      L.DomUtil.add('span', '', container, ` — ${L.Util.toHTML(shortCredit)}`)
+      L.DomUtil.add('span', '', container, ` — ${U.Utils.toHTML(shortCredit)}`)
     }
     if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)

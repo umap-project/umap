@@ -18,7 +18,7 @@ U.Icon = L.DivIcon.extend({
   },
 
   _setRecent: function (url) {
-    if (L.Util.hasVar(url)) return
+    if (U.Utils.hasVar(url)) return
     if (url === U.SCHEMA.iconUrl.default) return
     if (U.Icon.RECENT.indexOf(url) === -1) {
       U.Icon.RECENT.push(url)
@@ -50,7 +50,10 @@ U.Icon = L.DivIcon.extend({
   },
 
   formatUrl: function (url, feature) {
-    return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
+    return U.Utils.greedyTemplate(
+      url || '',
+      feature ? feature.extendedProperties() : {}
+    )
   },
 
   onAdd: function () {},
@@ -206,7 +209,7 @@ U.Icon.Cluster = L.DivIcon.extend({
 })
 
 U.Icon.isImg = function (src) {
-  return L.Util.isPath(src) || L.Util.isRemoteUrl(src) || L.Util.isDataImage(src)
+  return U.Utils.isPath(src) || U.Utils.isRemoteUrl(src) || U.Utils.isDataImage(src)
 }
 
 U.Icon.makeIconElement = function (src, parent) {
@@ -236,7 +239,11 @@ U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
   if (L.DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
     // only for internal SVG, as invert could do weird things
-    if (L.Util.isPath(src) && src.endsWith('.svg') && src !== U.SCHEMA.iconUrl.default) {
+    if (
+      U.Utils.isPath(src) &&
+      src.endsWith('.svg') &&
+      src !== U.SCHEMA.iconUrl.default
+    ) {
       // Must be called after icon container is added to the DOM
       // An image
       icon.style.filter = 'invert(1)'

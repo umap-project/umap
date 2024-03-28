@@ -492,8 +492,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.buildTabs()
     const value = this.value()
     if (U.Icon.RECENT.length) this.showRecentTab()
-    else if (!value || L.Util.isPath(value)) this.showSymbolsTab()
-    else if (L.Util.isRemoteUrl(value) || L.Util.isDataImage(value)) this.showURLTab()
+    else if (!value || U.Utils.isPath(value)) this.showSymbolsTab()
+    else if (U.Utils.isRemoteUrl(value) || U.Utils.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
     const closeButton = L.DomUtil.createButton(
       'button action-button',
@@ -567,7 +567,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   updatePreview: function () {
     this.buttons.innerHTML = ''
     if (this.isDefault()) return
-    if (!L.Util.hasVar(this.value())) {
+    if (!U.Utils.hasVar(this.value())) {
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
       L.DomEvent.on(box, 'click', this.onDefine, this)
@@ -585,11 +585,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   addIconPreview: function (pictogram, parent) {
     const baseClass = 'umap-pictogram-choice',
       value = pictogram.src,
-      search = L.Util.normalize(this.searchInput.value),
+      search = U.Utils.normalize(this.searchInput.value),
       title = pictogram.attribution
         ? `${pictogram.name} — © ${pictogram.attribution}`
         : pictogram.name || pictogram.src
-    if (search && L.Util.normalize(title).indexOf(search) === -1) return
+    if (search && U.Utils.normalize(title).indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass,
       container = L.DomUtil.create('div', className, parent)
     U.Icon.makeIconElement(value, container)
@@ -637,7 +637,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       categories[category].push(props)
     }
     const sorted = Object.entries(categories).toSorted(([a], [b]) =>
-      L.Util.naturalSort(a, b)
+      U.Utils.naturalSort(a, b, L.lang)
     )
     for (let [name, items] of sorted) {
       this.addCategory(items, name)
@@ -688,7 +688,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   showURLTab: function () {
     this.openTab('url')
     const value =
-      L.Util.isRemoteUrl(this.value()) || L.Util.isDataImage(this.value())
+      U.Utils.isRemoteUrl(this.value()) || U.Utils.isDataImage(this.value())
         ? this.value()
         : null
     const input = this.buildInput(this.body, value)
