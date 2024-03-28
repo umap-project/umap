@@ -42,8 +42,13 @@ You can now do your changes in a specific branch, and when you're ready you can 
 
 ### Running tests
 
-Multiple tests suites are in use in the project.
+Multiple tests suites are in use in the project. You can run all the tests by using:
 
+```
+make test 
+```
+
+This will run JavaScript and Python unittests + Playwright integration tests
 
 #### Python unit tests
 
@@ -54,6 +59,8 @@ pytest . --ignore umap/tests/integration
 By default, the tests are run in parallel to reduce the time taken to run them. You can run them in serial mode by using the `-n1` option.
 
 If you only want to run one test, you can add `-k specific-test-name` to the command line.
+
+All the tests are run when you're creating a pull request, to avoid regressions.
 
 #### Integration tests
 
@@ -75,8 +82,6 @@ make testjs
 ```
 
 These tests are located in `umap/static/test`, and we are currently using a mocha test runner.
-
-All the tests are run when you're creating a pull request, to avoid regressions.
 
 ### Merging rules
 
