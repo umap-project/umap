@@ -1,3 +1,4 @@
+import platform
 import re
 
 from playwright.sync_api import expect
@@ -178,3 +179,10 @@ def test_can_restore_version(live_server, openmap, page, datalayer):
     page.once("dialog", lambda dialog: dialog.accept())
     page.get_by_role("button", name="Restore this version").last.click()
     expect(marker).to_have_class(re.compile(".*umap-ball-icon.*"))
+
+
+def test_can_edit_layer_on_ctrl_shift_click(live_server, openmap, page, datalayer):
+    modifier = "Meta" if platform.system() == "Darwin" else "Control"
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
+    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
