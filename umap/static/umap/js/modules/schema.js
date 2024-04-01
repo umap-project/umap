@@ -30,6 +30,14 @@ export const SCHEMA = {
     inheritable: true,
     default: 'DarkBlue',
   },
+  choropleth: {
+    type: Object,
+    impacts: ['data'],
+  },
+  cluster: {
+    type: Object,
+    impacts: ['data'],
+  },
   dashArray: {
     impacts: ['data'],
     type: String,
@@ -128,6 +136,10 @@ export const SCHEMA = {
     nullable: true,
     label: translate('Display the fullscreen control'),
     default: true,
+  },
+  heat: {
+    type: Object,
+    impacts: ['data'],
   },
   iconClass: {
     impacts: ['data'],
