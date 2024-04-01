@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha'
 
 import pkg from 'chai'
-const { expect, assert } = pkg
+const { expect } = pkg
 
 import URLs from '../js/modules/urls.js'
 

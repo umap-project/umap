@@ -331,5 +331,5 @@ export function template(str, data) {
       value = value(data)
     }
     return value
-  }
+  })
 }
