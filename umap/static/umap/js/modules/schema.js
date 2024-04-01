@@ -5,25 +5,25 @@ import { translate } from './i18n.js'
 
 export const SCHEMA = {
   browsable: {
-    type: Boolean,
     impacts: ['ui'],
+    type: Boolean,
   },
   captionBar: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Do you want to display a caption bar?'),
     default: false,
     impacts: [],
   },
   captionMenus: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Do you want to display caption menus?'),
     default: true,
   },
   color: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     handler: 'ColorPicker',
     label: translate('color'),
     helpEntries: 'colorValue',
@@ -39,23 +39,23 @@ export const SCHEMA = {
     impacts: ['data'],
   },
   dashArray: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     label: translate('dash array'),
     helpEntries: 'dashArray',
     inheritable: true,
   },
   datalayersControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     handler: 'DataLayersControl',
     label: translate('Display the data layers control'),
     default: true,
   },
   defaultView: {
-    impacts: [], // no need to update the ui, only useful when loading the map
     type: String,
+    impacts: [], // no need to update the ui, only useful when loading the map
     label: translate('Default view'),
     choices: [
       ['center', translate('Saved center and zoom')],
@@ -66,9 +66,9 @@ export const SCHEMA = {
     default: 'center',
   },
   description: {
-    label: translate('description'),
-    impacts: ['ui'],
     type: 'Text',
+    impacts: ['ui'],
+    label: translate('description'),
     helpEntries: 'textFormatting',
   },
   displayOnLoad: {
@@ -83,39 +83,39 @@ export const SCHEMA = {
   },
   easing: { impacts: [], type: Boolean, default: false },
   editinosmControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the control to open OpenStreetMap editor'),
     default: null,
   },
   embedControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the embed control'),
     default: true,
   },
   facetKey: { impacts: ['ui'], type: String },
   fill: {
-    impacts: ['data'],
     type: Boolean,
+    impacts: ['data'],
     label: translate('fill'),
     helpEntries: 'fill',
     inheritable: true,
     default: true,
   },
   fillColor: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     handler: 'ColorPicker',
     label: translate('fill color'),
     helpEntries: 'fillColor',
     inheritable: true,
   },
   fillOpacity: {
-    impacts: ['data'],
     type: Number,
+    impacts: ['data'],
     min: 0.1,
     max: 1,
     step: 0.1,
@@ -125,14 +125,14 @@ export const SCHEMA = {
   },
   filterKey: { impacts: [], type: String },
   fromZoom: {
-    impacts: [], // not needed
     type: Number,
+    impacts: [], // not needed
     label: translate('From zoom'),
     helpText: translate('Optional.'),
   },
   fullscreenControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the fullscreen control'),
     default: true,
@@ -142,8 +142,8 @@ export const SCHEMA = {
     impacts: ['data'],
   },
   iconClass: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     label: translate('Icon shape'),
     inheritable: true,
     choices: [
@@ -155,8 +155,8 @@ export const SCHEMA = {
     default: 'Default',
   },
   iconOpacity: {
-    impacts: ['data'],
     type: Number,
+    impacts: ['data'],
     min: 0.1,
     max: 1,
     step: 0.1,
@@ -165,8 +165,8 @@ export const SCHEMA = {
     default: 1,
   },
   iconUrl: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     handler: 'IconUrl',
     label: translate('Icon symbol'),
     inheritable: true,
@@ -177,16 +177,16 @@ export const SCHEMA = {
   },
 
   interactive: {
-    impacts: ['data'],
     type: Boolean,
+    impacts: ['data'],
     label: translate('Allow interactions'),
     helpEntries: 'interactive',
     inheritable: true,
     default: true,
   },
   labelDirection: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     label: translate('Label direction'),
     inheritable: true,
     choices: [
@@ -199,14 +199,14 @@ export const SCHEMA = {
     default: 'auto',
   },
   labelInteractive: {
-    impacts: ['data'],
     type: Boolean,
+    impacts: ['data'],
     label: translate('Labels are clickable'),
     inheritable: true,
   },
   labelKey: {
-    impacts: ['data'],
     type: String,
+    impacts: ['data'],
     helpEntries: 'labelKey',
     placeholder: translate('Default: name'),
     label: translate('Label key'),
@@ -215,20 +215,20 @@ export const SCHEMA = {
   licence: { impacts: ['ui'], type: String, label: translate('licence') },
   limitBounds: { impacts: ['limit-bounds'], type: Object },
   locateControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the locate control'),
   },
   longCredit: {
-    impacts: ['ui'],
     type: 'Text',
+    impacts: ['ui'],
     label: translate('Long credits'),
     helpEntries: ['longCredit', 'textFormatting'],
   },
   measureControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the measure control'),
   },
@@ -239,14 +239,14 @@ export const SCHEMA = {
     default: false,
   },
   moreControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Do you want to display the «more» control?'),
     default: true,
   },
   name: {
-    impacts: ['ui', 'data'],
     type: String,
+    impacts: ['ui', 'data'],
     label: translate('name'),
   },
   onLoadPanel: {
@@ -262,8 +262,8 @@ export const SCHEMA = {
     default: 'none',
   },
   opacity: {
-    impacts: ['data'],
     type: Number,
+    impacts: ['data'],
     min: 0.1,
     max: 1,
     step: 0.1,
@@ -279,8 +279,8 @@ export const SCHEMA = {
     inheritable: true,
   },
   outlinkTarget: {
-    impacts: [],
     type: String,
+    impacts: [],
     label: translate('Open link in…'),
     inheritable: true,
     default: 'blank',
@@ -292,20 +292,20 @@ export const SCHEMA = {
   },
   overlay: { impacts: ['background'], type: Object },
   permanentCredit: {
-    impacts: ['ui'],
     type: 'Text',
+    impacts: ['ui'],
     label: translate('Permanent credits'),
     helpEntries: ['permanentCredit', 'textFormatting'],
   },
   permanentCreditBackground: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Permanent credits background'),
     default: true,
   },
   popupContentTemplate: {
-    impacts: [], // not needed
     type: 'Text',
+    impacts: [], // not needed
     label: translate('Popup content template'),
     helpEntries: ['dynamicProperties', 'textFormatting'],
     placeholder: '# {name}',
@@ -313,8 +313,8 @@ export const SCHEMA = {
     default: '# {name}\n{description}',
   },
   popupShape: {
-    impacts: [], // not needed
     type: String,
+    impacts: [], // not needed
     label: translate('Popup shape'),
     inheritable: true,
     choices: [
@@ -325,8 +325,8 @@ export const SCHEMA = {
     default: 'Default',
   },
   popupTemplate: {
-    impacts: [], // not needed
     type: String,
+    impacts: [], // not needed
     label: translate('Popup content style'),
     inheritable: true,
     choices: [
@@ -349,36 +349,42 @@ export const SCHEMA = {
     default: true,
   },
   scrollWheelZoom: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Allow scroll wheel zoom?'),
   },
   searchControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the search control'),
     default: true,
   },
   shortCredit: {
-    impacts: ['ui'],
     type: String,
+    impacts: ['ui'],
     label: translate('Short credits'),
     helpEntries: ['shortCredit', 'textFormatting'],
   },
   showLabel: {
-    impacts: ['data'],
     type: Boolean,
+    impacts: ['data'],
     nullable: true,
     label: translate('Display label'),
     inheritable: true,
     default: false,
   },
-  slideshow: { impacts: ['ui'], type: Object },
-  slugKey: { impacts: [], type: String },
+  slideshow: {
+    type: Object,
+    impacts: ['ui'],
+  },
+  slugKey: {
+    type: String,
+    impacts: [],
+  },
   smoothFactor: {
-    impacts: ['data'],
     type: Number,
+    impacts: ['data'],
     min: 0,
     max: 10,
     step: 0.5,
@@ -389,23 +395,26 @@ export const SCHEMA = {
   },
   sortKey: { impacts: ['data', 'datalayer-index'], type: String },
   starControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the star map button'),
   },
   stroke: {
-    impacts: ['data'],
     type: Boolean,
+    impacts: ['data'],
     label: translate('stroke'),
     helpEntries: 'stroke',
     inheritable: true,
     default: true,
   },
-  tilelayer: { impacts: ['background'], type: Object },
+  tilelayer: {
+    type: Object,
+    impacts: ['background'],
+  },
   tilelayersControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the tile layers control'),
   },
@@ -420,8 +429,8 @@ export const SCHEMA = {
     impacts: ['data'],
   },
   weight: {
-    impacts: ['data'],
     type: Number,
+    impacts: ['data'],
     min: 1,
     max: 20,
     step: 1,
@@ -430,19 +439,19 @@ export const SCHEMA = {
     default: 3,
   },
   zoom: {
-    impacts: [], // default zoom, doesn't need to be updated
     type: Number,
+    impacts: [], // default zoom, doesn't need to be updated
   },
   zoomControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     nullable: true,
     label: translate('Display the zoom control'),
     default: true,
   },
   zoomTo: {
-    impacts: [], // not need to update the view
     type: Number,
+    impacts: [], // not need to update the view
     placeholder: translate('Inherit'),
     helpEntries: 'zoomTo',
     label: translate('Default zoom level'),
