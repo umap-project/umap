@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha'
 import * as Utils from '../js/modules/utils.js'
 import pkg from 'chai'
-const { assert } = pkg
+const { assert, expect } = pkg
 
 // Export JSDOM to the global namespace, to be able to check for its presence
 // in the actual implementation. Avoiding monkeypatching the implementations here.
@@ -454,15 +454,13 @@ describe('Utils', function () {
   })
 
   describe('#normalize()', function () {
-    if (
-      ('should remove accents',
-        function () {
-          // French é
-          assert.equal(Utils.normalize('aéroport'), 'aeroport')
-          // American é
-          assert.equal(Utils.normalize('aéroport'), 'aeroport')
-        })
-    );
+    it('should remove accents',
+      function () {
+        // French é
+        assert.equal(Utils.normalize('aéroport'), 'aeroport')
+        // American é
+        assert.equal(Utils.normalize('aéroport'), 'aeroport')
+      })
   })
 
   describe('#sortFeatures()', function () {
@@ -536,6 +534,60 @@ describe('Utils', function () {
       // ensure the two aren't the same object
       assert.notEqual(returned, originalJSON)
       assert.deepEqual(returned, { "some": "json" })
+    })
+  })
+
+  describe('#getImpactsFromSchema()', function () {
+    let getImpactsFromSchema = Utils.getImpactsFromSchema
+    it('should return an array', function () {
+      expect(getImpactsFromSchema(['foo'], {})).to.be.an('array')
+      expect(getImpactsFromSchema(['foo'], { foo: {} })).to.be.an('array')
+      expect(getImpactsFromSchema(['foo'], { foo: { impacts: [] } })).to.be.an('array')
+      expect(getImpactsFromSchema(['foo'], { foo: { impacts: ['A'] } })).to.be.an(
+        'array'
+      )
+    })
+
+    it('should return a list of unique impacted values', function () {
+      let schema = {
+        foo: { impacts: ['A'] },
+        bar: { impacts: ['A', 'B'] },
+        baz: { impacts: ['B', 'C'] },
+      }
+
+      assert.deepEqual(getImpactsFromSchema(['foo'], schema), ['A'])
+      assert.deepEqual(getImpactsFromSchema(['foo', 'bar'], schema), ['A', 'B'])
+      assert.deepEqual(getImpactsFromSchema(['foo', 'bar', 'baz'], schema), [
+        'A',
+        'B',
+        'C',
+      ])
+    })
+    it('should return an empty list if nothing is found', function () {
+      let schema = {
+        foo: { impacts: ['A'] },
+        bar: { impacts: ['A', 'B'] },
+        baz: { impacts: ['B', 'C'] },
+      }
+
+      assert.deepEqual(getImpactsFromSchema(['bad'], schema), [])
+    })
+
+    it('should return an empty list if the schema key does not exist', function () {
+      let schema = {
+        foo: { impacts: ['A'] },
+      }
+
+      assert.deepEqual(getImpactsFromSchema(['bad'], schema), [])
+    })
+    it('should work if the "impacts" key is not defined', function () {
+      let schema = {
+        foo: {},
+        bar: { impacts: ['A'] },
+        baz: { impacts: ['B'] },
+      }
+
+      assert.deepEqual(getImpactsFromSchema(['foo', 'bar', 'baz'], schema), ['A', 'B'])
     })
   })
 })
