@@ -527,11 +527,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       )
     }
     const symbol = L.DomUtil.add(
-        'button',
-        'flat tab-symbols',
-        this.tabs,
-        L._('Symbol')
-      ),
+      'button',
+      'flat tab-symbols',
+      this.tabs,
+      L._('Symbol')
+    ),
       char = L.DomUtil.add(
         'button',
         'flat tab-chars',
