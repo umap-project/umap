@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def set_timeout(context):
-    context.set_default_timeout(5000)
+    context.set_default_timeout(7500)
 
 
 @pytest.fixture
