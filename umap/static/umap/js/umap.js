@@ -1399,10 +1399,10 @@ U.Map = L.Map.extend({
       L._('Use current bounds'),
       function () {
         const bounds = this.getBounds()
-        this.options.limitBounds.south = U.Utils.formatNum(bounds.getSouth())
-        this.options.limitBounds.west = U.Utils.formatNum(bounds.getWest())
-        this.options.limitBounds.north = U.Utils.formatNum(bounds.getNorth())
-        this.options.limitBounds.east = U.Utils.formatNum(bounds.getEast())
+        this.options.limitBounds.south = L.Util.formatNum(bounds.getSouth())
+        this.options.limitBounds.west = L.Util.formatNum(bounds.getWest())
+        this.options.limitBounds.north = L.Util.formatNum(bounds.getNorth())
+        this.options.limitBounds.east = L.Util.formatNum(bounds.getEast())
         boundsBuilder.fetchAll()
         this.isDirty = true
         this.handleLimitBounds()
