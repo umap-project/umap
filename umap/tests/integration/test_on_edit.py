@@ -128,7 +128,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
                         "type": "Point",
                         "coordinates": [13.7, 48.4],
                     },
-                    "properties": {"name": "Y Second", "key": "3d Point"},
+                    "properties": {"name": "Y Second", "key": "2d Point"},
                 },
                 {
                     "type": "Feature",
@@ -136,7 +136,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
                         "type": "Point",
                         "coordinates": [13.5, 48.6],
                     },
-                    "properties": {"name": "X Third", "key": "2d Point"},
+                    "properties": {"name": "X Third", "key": "3rd Point"},
                 },
             ],
         },
@@ -175,7 +175,6 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     page.locator("div:nth-child(4) > div:nth-child(2) > .button").first.click()
 
     # Features should be sorted by key  (First, Second, Third)
-    page.get_by_role("button", name="See data layers").click()
     page.get_by_role("button", name="Browse data").click()
 
     first_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(0)

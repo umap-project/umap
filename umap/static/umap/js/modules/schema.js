@@ -393,7 +393,10 @@ export const SCHEMA = {
     inheritable: true,
     default: 1.0,
   },
-  sortKey: { impacts: ['data', 'datalayer-index'], type: String },
+  sortKey: {
+    type: String,
+    impacts: ['datalayer-index', 'data'],
+  },
   starControl: {
     type: Boolean,
     impacts: ['ui'],
