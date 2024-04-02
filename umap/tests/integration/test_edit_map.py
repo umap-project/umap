@@ -10,6 +10,6 @@ def test_can_edit_name(page, live_server, tilelayer):
     name_input.click()
     name_input.press("Control+a")
     name_input.fill("New map name")
-    expect(page.locator(".umap-main-edit-toolbox .map-name")).to_have_text(
+    expect(page.locator(".umap-main-edit-toolbox .map-name").nth(0)).to_have_text(
         "New map name"
     )
