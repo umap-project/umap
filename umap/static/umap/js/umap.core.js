@@ -128,7 +128,7 @@ L.DomUtil.createCopiableInput = (parent, label, value) => {
     '',
     wrapper,
     '',
-    () => U.Utils.copyToClipboard(input.value),
+    () => L.Util.copyToClipboard(input.value),
     this
   )
   button.title = L._('copy')

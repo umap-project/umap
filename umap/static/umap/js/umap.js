@@ -1032,7 +1032,7 @@ U.Map = L.Map.extend({
             {
               label: L._('Copy link'),
               callback: () => {
-                U.Utils.copyToClipboard(data.permissions.anonymous_edit_url)
+                L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
                 this.ui.alert({
                   content: L._('Secret edit link copied to clipboard!'),
                   level: 'info',

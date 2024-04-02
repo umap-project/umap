@@ -200,6 +200,19 @@ export function usableOption(options, option) {
   return options[option] !== undefined && options[option] !== ''
 }
 
+/**
+ * Processes a template string by replacing placeholders with corresponding
+ * data values.
+ *
+ * Supports dot notation for nested objects and optional static fallbacks.
+ * If a value is not found, the placeholder is replaced with an empty string
+ * or left unchanged when 'ignore' is true.
+ *
+ * @param {string} str - The template string with placeholders.
+ * @param {Object} data - The data object from which to pull replacement values.
+ * @param {boolean} [ignore=false] - If true, leaves placeholders unchanged when no value is found.
+ * @returns {string} The processed string with placeholders replaced.
+ */
 export function greedyTemplate(str, data, ignore) {
   function getValue(data, path) {
     let value = data
@@ -310,6 +323,16 @@ export function isDataImage(value) {
   return value && value.length && value.startsWith('data:image')
 }
 
+/**
+ * Normalizes the input string by converting to lowercase
+ * and removing diacritics.
+ *
+ * If the input is nullish, it defaults to an empty string.
+ *
+ * @param {string} s - The string to be normalized.
+ * @returns {string} - The normalized string with lowercase
+ *                     characters and no diacritics.
+ */
 export function normalize(s) {
   return (s || '')
     .toLowerCase()
