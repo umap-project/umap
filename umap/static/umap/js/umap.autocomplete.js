@@ -153,7 +153,7 @@ U.AutoComplete = L.Class.extend({
       this.displaySelected(choice)
       this.hide()
       if (this.options.callback) {
-        U.Utils.bind(this.options.callback, this)(choice)
+        L.Util.bind(this.options.callback, this)(choice)
       }
     }
   },

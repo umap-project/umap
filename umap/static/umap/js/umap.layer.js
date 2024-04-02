@@ -760,7 +760,7 @@ U.DataLayer = L.Evented.extend({
     U.Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
     this._index = []
     for (let i = 0; i < features.length; i++) {
-      this._index.push(U.Utils.stamp(features[i]))
+      this._index.push(L.Util.stamp(features[i]))
     }
   },
 
