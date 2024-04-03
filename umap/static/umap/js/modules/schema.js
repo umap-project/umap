@@ -13,7 +13,6 @@ export const SCHEMA = {
     impacts: ['ui'],
     label: translate('Do you want to display a caption bar?'),
     default: false,
-    impacts: [],
   },
   captionMenus: {
     type: Boolean,
@@ -81,7 +80,11 @@ export const SCHEMA = {
     label: translate('Do you want to display popup footer?'),
     default: false,
   },
-  easing: { impacts: [], type: Boolean, default: false },
+  easing: {
+    type: Boolean,
+    impacts: [],
+    default: false
+  },
   editinosmControl: {
     type: Boolean,
     impacts: ['ui'],
@@ -96,7 +99,10 @@ export const SCHEMA = {
     label: translate('Display the embed control'),
     default: true,
   },
-  facetKey: { impacts: ['ui'], type: String },
+  facetKey: {
+    type: String,
+    impacts: ['ui'],
+  },
   fill: {
     type: Boolean,
     impacts: ['data'],
@@ -123,7 +129,10 @@ export const SCHEMA = {
     inheritable: true,
     default: 0.3,
   },
-  filterKey: { impacts: [], type: String },
+  filterKey: {
+    type: String,
+    impacts: [],
+  },
   fromZoom: {
     type: Number,
     impacts: [], // not needed
@@ -212,8 +221,15 @@ export const SCHEMA = {
     label: translate('Label key'),
     inheritable: true,
   },
-  licence: { impacts: ['ui'], type: String, label: translate('licence') },
-  limitBounds: { impacts: ['limit-bounds'], type: Object },
+  licence: {
+    type: String,
+    impacts: ['ui'],
+    label: translate('licence'),
+  },
+  limitBounds: {
+    type: Object,
+    impacts: ['limit-bounds'],
+  },
   locateControl: {
     type: Boolean,
     impacts: ['ui'],
@@ -233,8 +249,8 @@ export const SCHEMA = {
     label: translate('Display the measure control'),
   },
   miniMap: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Do you want to display a minimap?'),
     default: false,
   },
@@ -250,8 +266,8 @@ export const SCHEMA = {
     label: translate('name'),
   },
   onLoadPanel: {
-    impacts: [], // This is what happens during the map instantiation
     type: String,
+    impacts: [], // This is what happens during the map instantiation
     label: translate('Do you want to display a panel on load?'),
     choices: [
       ['none', translate('None')],
@@ -290,7 +306,10 @@ export const SCHEMA = {
       ['parent', translate('parent window')],
     ],
   },
-  overlay: { impacts: ['background'], type: Object },
+  overlay: {
+    type: Object,
+    impacts: ['background'],
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
@@ -343,8 +362,8 @@ export const SCHEMA = {
     impacts: ['remote-data'],
   },
   scaleControl: {
-    impacts: ['ui'],
     type: Boolean,
+    impacts: ['ui'],
     label: translate('Do you want to display the scale control?'),
     default: true,
   },
