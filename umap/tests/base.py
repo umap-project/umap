@@ -134,7 +134,7 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
 
 
 def login_required(response):
-    assert response.status_code == 200
+    assert response.status_code == 401
     j = json.loads(response.content.decode())
     assert "login_required" in j
     redirect_url = reverse("login")

@@ -76,7 +76,6 @@ U.Map = L.Map.extend({
         .split(',')
     }
 
-
     let editedFeature = null
     const self = this
     try {
@@ -345,7 +344,7 @@ U.Map = L.Map.extend({
       document.body,
       'umap-caption-bar-enabled',
       this.options.captionBar ||
-      (this.options.slideshow && this.options.slideshow.active)
+        (this.options.slideshow && this.options.slideshow.active)
     )
     L.DomUtil.classIf(
       document.body,
@@ -962,8 +961,10 @@ U.Map = L.Map.extend({
     formData.append('settings', JSON.stringify(geojson))
     const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
     const [data, response, error] = await this.server.post(uri, {}, formData)
-    // FIXME: login_required response will not be an error, so it will not
-    // stop code while it should
+    if (error && response.status === 401) {
+      const data = await response.json()
+      window.location = data.login_required
+    }
     if (!error) {
       let duration = 3000,
         alert = { content: L._('Map has been saved!'), level: 'info' }
@@ -1573,10 +1574,10 @@ U.Map = L.Map.extend({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-      'div',
-      'umap-caption-bar',
-      this._controlContainer
-    ),
+        'div',
+        'umap-caption-bar',
+        this._controlContainer
+      ),
       name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
