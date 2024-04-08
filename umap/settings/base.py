@@ -289,6 +289,11 @@ if SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY and SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SEC
 
 AUTHENTICATION_BACKENDS += ("django.contrib.auth.backends.ModelBackend",)
 
+# Websockets configuration
+AUTHENTICATION_BACKENDS += ("sesame.backends.ModelBackend",)
+
+SESAME_MAX_AGE = 30
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
