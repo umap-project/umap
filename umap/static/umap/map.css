@@ -294,7 +294,6 @@ ul.photon-autocomplete {
     vertical-align: top;
     border-bottom: none;
     background-color: var(--color-darkGray);
-    border-right: 1px solid #eee;
     background-repeat: no-repeat;
     background-image: url('./img/24.svg');
     background-size: auto auto;
