@@ -677,7 +677,7 @@ input[type=hidden].blur + [type="button"] {
 .copiable-input button {
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
-    background-position: -45px -140px;
+    background-position: -141px -140px;
     display: inline;
     padding: 0 10px;
     height: 32px;

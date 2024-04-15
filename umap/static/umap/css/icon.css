@@ -74,7 +74,10 @@
     background-position: 0 -119px;
 }
 .icon-resize {
-    background-position: -74px -145px;
+    background-position: -74px -144px;
+}
+.expanded .icon-resize {
+    background-position: -50px -144px;
 }
 .icon-search {
     background-position: -27px -120px;
