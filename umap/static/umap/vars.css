@@ -13,6 +13,7 @@
 
     /* Sizes and spaces */
     --panel-gutter: 10px;
+    --panel-bottom: 40px;
     --panel-header-height: 36px;
     --panel-width: 400px;
     --header-height: 46px;
