@@ -2,17 +2,13 @@ import json
 import re
 from pathlib import Path
 
-from playwright.sync_api import expect
-
 from umap.models import DataLayer
 
 
 def test_table_editor(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title(
-        "Edit properties in a table"
-    ).click()
+    page.locator(".panel").get_by_title("Edit properties in a table").click()
     page.once("dialog", lambda dialog: dialog.accept(prompt_text="newprop"))
     page.get_by_text("Add a new property").click()
     page.locator('input[name="newprop"]').fill("newvalue")

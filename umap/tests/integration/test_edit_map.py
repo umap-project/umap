@@ -10,7 +10,7 @@ from ..base import DataLayerFactory
 def test_can_edit_name(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
-    page.get_by_title("Edit map properties").click()
+    page.get_by_title("Edit map name and caption").click()
     name_input = page.locator('.map-metadata input[name="name"]')
     expect(name_input).to_be_visible()
     name_input.click()

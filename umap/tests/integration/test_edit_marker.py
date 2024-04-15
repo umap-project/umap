@@ -44,7 +44,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
 
     # Change colour at layer level
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
+    page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_role("heading", name="Shape properties").click()
     page.locator(".umap-field-color .define").click()
     expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
@@ -66,7 +66,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
 
     # Now change again at layer level again, it should not change the marker color
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
+    page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_role("heading", name="Shape properties").click()
     page.locator(".umap-field-color input").click()
     page.get_by_title("DarkViolet").first.click()
