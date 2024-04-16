@@ -43,3 +43,6 @@ if path:
                     globals()["STATICFILES_DIRS"].insert(0, value)
                 else:
                     globals()[key] = value
+
+# Expose these settings for consumption by e.g. django.settings.configure.
+settings_as_dict = {k: v for k, v in globals().items() if k.isupper()}
