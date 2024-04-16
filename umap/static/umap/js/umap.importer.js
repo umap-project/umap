@@ -64,19 +64,6 @@ U.Importer = L.Class.extend({
       { type: 'checkbox', name: 'clear', id: 'datalayer-clear-check' },
       this.clearLabel
     )
-    let option
-    this.map.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        const id = L.stamp(datalayer)
-        option = L.DomUtil.add('option', '', this.layerInput, datalayer.options.name)
-        option.value = id
-      }
-    })
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Import in a new layer') },
-      this.layerInput
-    )
     L.DomUtil.element(
       'option',
       { value: '', textContent: L._('Choose the data format') },
@@ -123,6 +110,20 @@ U.Importer = L.Class.extend({
     const onLoad = this.map.editPanel.open({ data: { html: this.container } })
     onLoad.then(() => {
       this.fileInput.value = null
+      this.layerInput.innerHTML = ''
+      let option
+      this.map.eachDataLayerReverse((datalayer) => {
+        if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
+          const id = L.stamp(datalayer)
+          option = L.DomUtil.add('option', '', this.layerInput, datalayer.options.name)
+          option.value = id
+        }
+      })
+      L.DomUtil.element(
+        'option',
+        { value: '', textContent: L._('Import in a new layer') },
+        this.layerInput
+      )
     })
   },
 

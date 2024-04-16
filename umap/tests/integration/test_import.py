@@ -11,6 +11,26 @@ from umap.models import DataLayer
 pytestmark = pytest.mark.django_db
 
 
+def test_layers_list_is_updated(live_server, tilelayer, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    # Should work
+    page.get_by_label("Choose the layer to import").select_option(
+        label="Import in a new layer"
+    )
+    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Add a layer").click()
+    page.locator('input[name="name"]').click()
+    page.locator('input[name="name"]').fill("foobar")
+    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    # Should still work
+    page.get_by_label("Choose the layer to import").select_option(
+        label="Import in a new layer"
+    )
+    # Now layer should be visible in the options
+    page.get_by_label("Choose the layer to import").select_option(label="foobar")
+
+
 def test_umap_import_from_file(live_server, tilelayer, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Import data").click()
