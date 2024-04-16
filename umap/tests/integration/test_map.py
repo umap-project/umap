@@ -85,6 +85,7 @@ def test_default_view_latest_with_marker(map, live_server, datalayer, page):
     expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
     layers = page.locator(".umap-browser .datalayer h5")
     expect(layers).to_have_count(1)
+    expect(page.locator(".leaflet-popup")).to_be_visible()
 
 
 def test_default_view_latest_with_line(map, live_server, page):

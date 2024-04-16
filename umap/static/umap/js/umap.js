@@ -82,7 +82,6 @@ U.Map = L.Map.extend({
         .split(',')
     }
 
-
     let editedFeature = null
     const self = this
     try {
@@ -334,7 +333,6 @@ U.Map = L.Map.extend({
       if (this.options.editMode === 'advanced') {
         new U.SettingsToolbar({ actions: editActions }).addTo(this)
       }
-
     }
     this._controls.zoom = new L.Control.Zoom({
       zoomInTitle: L._('Zoom in'),
@@ -388,7 +386,7 @@ U.Map = L.Map.extend({
       document.body,
       'umap-caption-bar-enabled',
       this.options.captionBar ||
-      (this.options.slideshow && this.options.slideshow.active)
+        (this.options.slideshow && this.options.slideshow.active)
     )
     L.DomUtil.classIf(
       document.body,
@@ -716,7 +714,7 @@ U.Map = L.Map.extend({
         if (datalayer) {
           const feature = datalayer.getFeatureByIndex(-1)
           if (feature) {
-            feature.zoomTo()
+            feature.zoomTo({ callback: this.options.noControl ? null : feature.view })
             return
           }
         }
@@ -1582,10 +1580,10 @@ U.Map = L.Map.extend({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-      'div',
-      'umap-caption-bar',
-      this._controlContainer
-    ),
+        'div',
+        'umap-caption-bar',
+        this._controlContainer
+      ),
       name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
