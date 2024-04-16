@@ -21,6 +21,7 @@ nav:
       - Nginx: deploy/nginx.md
   - Support:
       - FAQ: support/faq.md
+      - Errors: support/errors.md
   - Changelog: changelog.md
 theme:
   name: material
@@ -76,3 +77,4 @@ plugins:
           nav_translations:
             Home: Accueil
             Support: Aide
+            Errors: Erreurs
