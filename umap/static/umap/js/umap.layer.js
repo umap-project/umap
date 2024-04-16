@@ -603,7 +603,7 @@ U.DataLayer = L.Evented.extend({
     for (let impact of impacts) {
       switch (impact) {
         case 'ui':
-          this.map.updateDatalayersControl()
+          this.map.onDataLayersChanged()
           break
         case 'data':
           if (fields.includes('options.type')) {

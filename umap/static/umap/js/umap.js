@@ -270,6 +270,7 @@ U.Map = L.Map.extend({
 
   reindexDataLayers: function () {
     this.eachDataLayer((datalayer) => datalayer.reindex())
+    this.onDataLayersChanged()
   },
 
   redrawVisibleDataLayers: function () {
