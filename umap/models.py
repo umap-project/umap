@@ -253,7 +253,7 @@ class Map(NamedModel):
 
     def is_anonymous_owner(self, request):
         if not request or self.owner:
-            # edit cookies are only valid while map hasn't owner
+            # edit cookies are only valid while the map doesn't have owner
             return False
         key, value = self.signed_cookie_elements
         try:
