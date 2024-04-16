@@ -44,6 +44,11 @@ def tilelayer_preview(tilelayer):
 
 
 @register.filter
+def can_delete_map(map, request):
+    return map.can_delete(request.user, request)
+
+
+@register.filter
 def notag(s):
     return s.replace("<", "&lt;")
 
