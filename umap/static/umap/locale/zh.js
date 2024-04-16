@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Save this location as new feature",
     "Search location": "Search location",
     "See all": "查看全部",
-    "See data layers": "See data layers",
+    "See layers": "See layers",
     "See full screen": "全屏",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…",
     "Shape properties": "Shape properties",

@@ -128,7 +128,6 @@ export class ServerRequest extends Request {
       const data = await response.json()
       if (data.info) {
         this.ui.alert({ content: data.info, level: 'info' })
-        this.ui.closePanel()
       } else if (data.error) {
         this.ui.alert({ content: data.error, level: 'error' })
         return this._onError(new Error(data.error))

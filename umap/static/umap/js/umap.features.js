@@ -96,12 +96,7 @@ U.FeatureMixin = {
   edit: function (e) {
     if (!this.map.editEnabled || this.isReadOnly()) return
     const container = L.DomUtil.create('div', 'umap-feature-container')
-    L.DomUtil.add(
-      'h3',
-      `umap-feature-properties ${this.getClassName()}`,
-      container,
-      L._('Feature properties')
-    )
+    L.DomUtil.createTitle(container, L._('Feature properties'), this.getClassName())
 
     let builder = new U.FormBuilder(
       this,
@@ -131,13 +126,13 @@ U.FeatureMixin = {
       callback: this._redraw, // In case we have dynamic options…
     })
     container.appendChild(builder.build())
-    this.map.ui.once('panel:ready', () => {
-      builder.helpers['properties.name'].input.focus()
-    })
     this.appendEditFieldsets(container)
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     this.getAdvancedEditActions(advancedActions)
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+    const onLoad = this.map.editPanel.open({ data: { html: container } })
+    onLoad.then(() => {
+      builder.helpers['properties.name'].input.focus()
+    })
     this.map.editedFeature = this
     if (!this.isOnScreen()) this.zoomTo(e)
   },
@@ -149,7 +144,7 @@ U.FeatureMixin = {
       L._('Delete'),
       function (e) {
         L.DomEvent.stop(e)
-        if (this.confirmDelete()) this.map.ui.closePanel()
+        if (this.confirmDelete()) this.map.editPanel.close()
       },
       this
     )
@@ -467,7 +462,7 @@ U.FeatureMixin = {
     this.parentClass.prototype.onRemove.call(this, map)
     if (this.map.editedFeature === this) {
       this.endEdit()
-      this.map.ui.closePanel()
+      this.map.editPanel.close()
     }
   },
 
@@ -759,7 +754,7 @@ U.PathMixin = {
     if (this.map.editEnabled) {
       if (this.editEnabled()) {
         this.endEdit()
-        this.map.ui.closePanel()
+        this.map.editPanel.close()
       } else {
         this.edit(e)
       }

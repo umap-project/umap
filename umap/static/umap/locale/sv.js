@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Spara denna plats som nytt kartobjekt",
     "Search location": "Sök plats",
     "See all": "Se alla",
-    "See data layers": "Visa datalager",
+    "See layers": "Visa datalager",
     "See full screen": "Öppna i fullskärm",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Slå av för att dölja lagret från bilspelsvisning, databläddrare, popup-navigering etc",
     "Shape properties": "Formategenskaper",

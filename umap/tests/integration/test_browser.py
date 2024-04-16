@@ -63,7 +63,7 @@ def bootstrap(map, live_server):
 
 def test_data_browser_should_be_open(live_server, page, bootstrap, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    el = page.locator(".umap-browse-data")
+    el = page.locator(".umap-browser")
     expect(el).to_be_visible()
     expect(page.get_by_text("one point in france")).to_be_visible()
     expect(page.get_by_text("one line in new zeland")).to_be_visible()
@@ -81,7 +81,7 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     expect(filter_).to_be_visible()
     filter_.type("poly")
     expect(page.get_by_title("Features in this layer: 1/3")).to_be_visible()
-    expect(page.get_by_title("Features in this layer: 1/3")).to_have_text("1/3")
+    expect(page.get_by_title("Features in this layer: 1/3")).to_have_text("(1/3)")
     expect(page.get_by_text("one point in france")).to_be_hidden()
     expect(page.get_by_text("one line in new zeland")).to_be_hidden()
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()
@@ -159,20 +159,19 @@ def test_data_browser_bbox_filter_should_be_persistent(
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
-    browser = page.locator("#umap-ui-container")
+    browser = page.locator(".panel.left.on")
     expect(browser.get_by_text("one point in france")).to_be_visible()
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
     # Close and reopen the browser to make sure this settings is persistent
-    close = browser.get_by_text("Close")
+    close = browser.get_by_title("Close")
     close.click()
     expect(browser).to_be_hidden()
     sleep(0.5)
     expect(browser.get_by_text("one point in france")).to_be_hidden()
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
-    page.get_by_title("See data layers").click()
-    page.get_by_role("button", name="Browse data").click()
+    page.get_by_title("See layers").click()
     expect(browser.get_by_text("one point in france")).to_be_visible()
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
@@ -185,7 +184,7 @@ def test_data_browser_bbox_filtered_is_clickable(live_server, page, bootstrap, m
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
-    browser = page.locator("#umap-ui-container")
+    browser = page.locator(".panel.left.on")
     expect(browser.get_by_text("one point in france")).to_be_visible()
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
@@ -217,18 +216,6 @@ def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
     expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_visible()
 
 
-def test_can_open_databrowser_from_layers_list(live_server, map, page, bootstrap):
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    page.get_by_title("See data layers").click()
-    page.get_by_role("button", name="Browse data").click()
-    browser = page.locator(".umap-browse-data")
-    expect(browser).to_be_visible()
-    expect(browser.get_by_text("test datalayer")).to_be_visible()
-    expect(browser.get_by_text("one point in france")).to_be_visible()
-    expect(browser.get_by_text("one line in new zeland")).to_be_visible()
-    expect(browser.get_by_text("one polygon in greenland")).to_be_visible()
-
-
 def test_should_sort_features_in_natural_order(live_server, map, page):
     map.settings["properties"]["onLoadPanel"] = "databrowser"
     map.save()
@@ -238,7 +225,7 @@ def test_should_sort_features_in_natural_order(live_server, map, page):
     datalayer_data["features"][2]["properties"]["name"] = "100. a line"
     DataLayerFactory(map=map, data=datalayer_data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    features = page.locator(".umap-browse-data li")
+    features = page.locator(".umap-browser .datalayer li")
     expect(features).to_have_count(3)
     expect(features.nth(0)).to_have_text("1. a poly")
     expect(features.nth(1)).to_have_text("9. a marker")
@@ -249,7 +236,7 @@ def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootst
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     # Enable edit
     page.get_by_role("button", name="Edit").click()
-    buttons = page.locator(".umap-browse-data li .feature-delete")
+    buttons = page.locator(".umap-browser .datalayer li .icon-delete")
     expect(buttons).to_have_count(3)
     page.on("dialog", lambda dialog: dialog.accept())
     buttons.nth(0).click()
@@ -265,7 +252,7 @@ def test_should_show_header_for_display_on_load_false(
     datalayer.settings["name"] = "This layer is not loaded"
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    browser = page.locator(".umap-browse-data")
+    browser = page.locator(".umap-browser")
     expect(browser).to_be_visible()
     expect(browser.get_by_text("This layer is not loaded")).to_be_visible()
 
@@ -279,7 +266,7 @@ def test_should_use_color_variable(live_server, map, page):
     datalayer_data["features"][2]["properties"]["mycolor"] = "DarkGreen"
     DataLayerFactory(map=map, data=datalayer_data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    features = page.locator(".umap-browse-data li .feature-color")
+    features = page.locator(".umap-browser .datalayer li .feature-color")
     expect(features).to_have_count(3)
     # DarkGreen
     expect(features.nth(0)).to_have_css("background-color", "rgb(0, 100, 0)")
@@ -295,7 +282,7 @@ def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, boo
     paths = page.locator(".leaflet-overlay-pane path")
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
-    toggle = page.locator("#umap-ui-container").get_by_title("Show/hide layer")
+    toggle = page.locator(".umap-browser").get_by_title("Show/hide layer")
     toggle.click()
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
@@ -303,7 +290,7 @@ def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, boo
 
 def test_should_have_edit_buttons_in_edit_mode(live_server, openmap, page, bootstrap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
-    browser = page.locator("#umap-ui-container")
+    browser = page.locator(".umap-browser")
     edit_layer = browser.get_by_title("Edit", exact=True)
     in_table = browser.get_by_title("Edit properties in a table")
     delete_layer = browser.get_by_title("Delete layer")

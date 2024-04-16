@@ -44,7 +44,7 @@ def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
     expect(marker).to_have_count(1)
     # Should have default img
     expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -152,7 +152,7 @@ def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
     expect(marker).to_have_count(1)
     # Should have default img
     expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -171,7 +171,7 @@ def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
     input_el.blur()
     expect(marker).to_have_attribute("src", "https://foo.bar/img.jpg")
     # Now close and reopen the form, it should still be the URL tab
-    close = page.locator("#umap-ui-container .toolbox").get_by_title("Close")
+    close = page.locator(".panel.right.on .toolbox").get_by_title("Close")
     expect(close).to_be_visible()
     close.click()
     edit_settings.click()
@@ -191,7 +191,7 @@ def test_can_use_char_as_picto(openmap, live_server, page, pictos):
     marker = page.locator(".umap-div-icon span")
     # Should have default img, so not a span
     expect(marker).to_have_count(0)
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -210,7 +210,7 @@ def test_can_use_char_as_picto(openmap, live_server, page, pictos):
     expect(marker).to_have_count(1)
     expect(marker).to_have_text("♩")
     # Now close and reopen the form, it should still be the URL tab
-    close = page.locator("#umap-ui-container .toolbox").get_by_title("Close")
+    close = page.locator(".panel.right.on .toolbox").get_by_title("Close")
     expect(close).to_be_visible()
     close.click()
     edit_settings.click()

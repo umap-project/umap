@@ -42,5 +42,6 @@ def test_javascript_have_been_loaded(
     # Should be in French, so hashed locale file has been loaded correctly
     button = page.get_by_text("Voir les calques")
     expect(button).to_be_visible()
-    layers = page.locator(".umap-browse-datalayers li")
+    button.click()
+    layers = page.locator(".umap-browser .datalayer")
     expect(layers).to_have_count(1)

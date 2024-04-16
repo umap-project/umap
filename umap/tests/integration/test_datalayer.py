@@ -20,14 +20,14 @@ def set_options(datalayer, **options):
 
 def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
     set_options(datalayer, displayOnLoad=False)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
-    layers_off = page.locator(".umap-browse-datalayers li.off")
+    layers_off = page.locator(".umap-browser .datalayer.off")
     expect(layers).to_have_count(1)
     expect(layers_off).to_have_count(1)
-    page.get_by_role("button", name="See data layers").click()
+    page.get_by_role("button", name="See layers").click()
     page.get_by_label("Zoom in").click()
     expect(markers).to_be_hidden()
     page.get_by_title("Show/hide layer").click()
@@ -109,10 +109,12 @@ def test_should_honour_color_variable(live_server, map, page):
 
 
 def test_datalayers_in_query_string(live_server, datalayer, map, page):
+    map.settings["properties"]["onLoadPanel"] = "datalayers"
+    map.save()
     with_old_id = DataLayerFactory(old_id=134, map=map, name="with old id")
     set_options(with_old_id, name="with old id")
-    visible = page.locator(".leaflet-control-browse li:not(.off) span")
-    hidden = page.locator(".leaflet-control-browse li.off span")
+    visible = page.locator(".umap-browser .datalayer:not(.off) .datalayer-name")
+    hidden = page.locator(".umap-browser .datalayer.off .datalayer-name")
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(visible).to_have_count(2)
     expect(hidden).to_have_count(0)

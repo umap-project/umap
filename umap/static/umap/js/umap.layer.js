@@ -594,6 +594,7 @@ U.DataLayer = L.Evented.extend({
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
+    this.on('datachanged', this.map.onDataLayersChanged, this.map)
   },
 
   render: function (fields, builder) {
@@ -602,7 +603,7 @@ U.DataLayer = L.Evented.extend({
     for (let impact of impacts) {
       switch (impact) {
         case 'ui':
-          this.map.updateDatalayersControl()
+          this.map.onDataLayersChanged()
           break
         case 'data':
           if (fields.includes('options.type')) {
@@ -845,7 +846,7 @@ U.DataLayer = L.Evented.extend({
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
         this.map.datalayers_index.push(this)
     }
-    this.map.updateDatalayersControl()
+    this.map.onDataLayersChanged()
   },
 
   _dataUrl: function () {
@@ -1153,7 +1154,8 @@ U.DataLayer = L.Evented.extend({
     delete this.map.datalayers[L.stamp(this)]
     this.map.datalayers_index.splice(this.getRank(), 1)
     this.parentPane.removeChild(this.pane)
-    this.map.updateDatalayersControl()
+    this.map.onDataLayersChanged()
+    this.off('datachanged', this.map.onDataLayersChanged, this.map)
     this.fire('erase')
     this._leaflet_events_bk = this._leaflet_events
     this.map.off('moveend', this.onMoveEnd, this)
@@ -1213,9 +1215,10 @@ U.DataLayer = L.Evented.extend({
           },
         ],
       ]
-    const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
+    L.DomUtil.createTitle(container, L._('Layer properties'), 'icon-layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
+        this.map.onDataLayersChanged()
         if (e.helper.field === 'options.type') {
           this.edit()
         }
@@ -1349,7 +1352,7 @@ U.DataLayer = L.Evented.extend({
       L._('Delete'),
       function () {
         this._delete()
-        this.map.ui.closePanel()
+        this.map.editPanel.close()
       },
       this
     )
@@ -1381,7 +1384,10 @@ U.DataLayer = L.Evented.extend({
         '_blank'
       )
     }
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.map.editPanel.open({
+      data: { html: container },
+      actions: [U.Browser.backButton(this.map)],
+    })
   },
 
   getOwnOption: function (option) {

@@ -273,6 +273,7 @@ export const SCHEMA = {
       ['none', translate('None')],
       ['caption', translate('Caption')],
       ['databrowser', translate('Data browser')],
+      ['datalayers', translate('Layers')],
       ['facet', translate('Facet search')],
     ],
     default: 'none',
@@ -371,6 +372,12 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
     label: translate('Allow scroll wheel zoom?'),
+  },
+  captionControl: {
+    type: Boolean,
+    nullable: true,
+    label: translate('Display the caption control'),
+    default: true,
   },
   searchControl: {
     type: Boolean,

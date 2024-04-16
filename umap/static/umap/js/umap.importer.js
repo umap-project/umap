@@ -7,7 +7,11 @@ U.Importer = L.Class.extend({
 
   build: function () {
     this.container = L.DomUtil.create('div', 'umap-upload')
-    this.title = L.DomUtil.add('h3', '', this.container, L._('Import data'))
+    this.title = L.DomUtil.createTitle(
+      this.container,
+      L._('Import data'),
+      'icon-upload'
+    )
     this.presetBox = L.DomUtil.create('div', 'formbox', this.container)
     this.presetSelect = L.DomUtil.create('select', '', this.presetBox)
     this.fileBox = L.DomUtil.create('div', 'formbox', this.container)
@@ -16,7 +20,6 @@ U.Importer = L.Class.extend({
       { type: 'file', multiple: 'multiple', autofocus: true },
       this.fileBox
     )
-    this.map.ui.once('panel:closed', () => (this.fileInput.value = null))
     this.urlInput = L.DomUtil.element(
       'input',
       { type: 'text', placeholder: L._('Provide an URL here') },
@@ -117,7 +120,10 @@ U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.map.ui.openPanel({ data: { html: this.container }, className: 'dark' })
+    const onLoad = this.map.editPanel.open({ data: { html: this.container } })
+    onLoad.then(() => {
+      this.fileInput.value = null
+    })
   },
 
   openFiles: function () {

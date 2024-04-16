@@ -1,6 +1,7 @@
 import json
 import re
 from pathlib import Path
+from time import sleep
 
 import pytest
 from playwright.sync_api import expect
@@ -12,9 +13,7 @@ pytestmark = pytest.mark.django_db
 
 def test_umap_import_from_file(live_server, tilelayer, page):
     page.goto(f"{live_server.url}/map/new/")
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
     file_input = page.locator("input[type='file']")
     with page.expect_file_chooser() as fc_info:
         file_input.click()
@@ -24,34 +23,38 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     button = page.get_by_role("button", name="Import", exact=True)
     expect(button).to_be_visible()
     button.click()
-    layers = page.locator(".umap-browse-datalayers li")
-    expect(layers).to_have_count(2)
-    nonloaded = page.locator(".umap-browse-datalayers li.off")
-    expect(nonloaded).to_have_count(1)
     assert file_input.input_value()
     # Close the import panel
     page.keyboard.press("Escape")
+    # Reopen
+    page.get_by_title("Import data").click()
+    sleep(1)  # Wait for CSS transition to happen
     assert not file_input.input_value()
     expect(page.locator(".umap-main-edit-toolbox .map-name")).to_have_text(
         "Carte sans nom"
     )
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
+    expect(layers).to_have_count(2)
+    nonloaded = page.locator(".umap-browser .datalayer.off")
+    expect(nonloaded).to_have_count(1)
 
 
 def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/map/new/")
+    page.get_by_role("button", name="See layers").click()
     page.get_by_title("Import data").click()
     textarea = page.locator(".umap-upload textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.umap"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("umap")
     page.get_by_role("button", name="Import", exact=True).click()
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer")
     expect(layers).to_have_count(2)
     expect(page.locator(".umap-main-edit-toolbox .map-name")).to_have_text(
         "Imported map"
     )
-    page.get_by_role("button", name="See data layers").click()
     expect(page.get_by_text("Tunnels")).to_be_visible()
     expect(page.get_by_text("Cities")).to_be_visible()
     expect(page.locator(".leaflet-control-minimap")).to_be_visible()
@@ -67,7 +70,8 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
 
 def test_import_geojson_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator("path")
     expect(markers).to_have_count(0)
@@ -91,7 +95,8 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
 
 def test_import_kml_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator("path")
     expect(markers).to_have_count(0)
@@ -115,7 +120,8 @@ def test_import_kml_from_textarea(tilelayer, live_server, page):
 
 def test_import_gpx_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator("path")
     expect(markers).to_have_count(0)
@@ -139,7 +145,8 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page):
 
 def test_import_osm_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -158,7 +165,8 @@ def test_import_osm_from_textarea(tilelayer, live_server, page):
 
 def test_import_csv_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -177,7 +185,8 @@ def test_import_csv_from_textarea(tilelayer, live_server, page):
 
 def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(1)
     expect(layers).to_have_count(1)
@@ -195,7 +204,8 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
 
 def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(1)
     expect(layers).to_have_count(1)
@@ -214,7 +224,8 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
 
 def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(1)
     expect(layers).to_have_count(1)
@@ -317,7 +328,8 @@ def test_import_geometry_collection(live_server, page, tilelayer):
         ],
     }
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator("path")
     expect(markers).to_have_count(0)
@@ -352,7 +364,8 @@ def test_import_multipolygon(live_server, page, tilelayer):
         },
     }
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     paths = page.locator("path")
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -383,7 +396,8 @@ def test_import_multipolyline(live_server, page, tilelayer):
         ],
     }
     page.goto(f"{live_server.url}/map/new/")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     paths = page.locator("path")
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)

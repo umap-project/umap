@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Gardar esta ubicación coma novo elemento",
     "Search location": "Procurar localización",
     "See all": "Ollar todo",
-    "See data layers": "Ollar capas de datos",
+    "See layers": "Ollar capas de datos",
     "See full screen": "Ollar pantalla completa",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Axústeo a falso para agochar esta capa da presentación ('slideshow'), o navegador de datos, a navegación da xanela emerxente...",
     "Shape properties": "Propiedades da forma",

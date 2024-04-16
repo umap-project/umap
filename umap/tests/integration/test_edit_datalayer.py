@@ -12,16 +12,13 @@ def test_should_have_fieldset_for_layer_type_properties(page, live_server, tilel
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Open DataLayers list
-    button = page.get_by_title("Manage Layers")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Manage layers").click()
 
     # Create a layer
-    page.get_by_title("Manage layers").click()
-    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_title("Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
 
-    select = page.locator("#umap-ui-container .umap-field-type select")
+    select = page.locator(".panel.on .umap-field-type select")
     expect(select).to_be_visible()
 
     choropleth_header = page.get_by_text("Choropleth: settings")
@@ -57,32 +54,32 @@ def test_cancel_deleting_datalayer_should_restore(
     live_server, openmap, datalayer, page
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
     page.get_by_role("link", name="Manage layers").click()
     page.once("dialog", lambda dialog: dialog.accept())
-    page.locator("#umap-ui-container").get_by_title("Delete layer").click()
+    page.locator(".panel.right").get_by_title("Delete layer").click()
     expect(markers).to_have_count(0)
-    page.get_by_role("button", name="See data layers").click()
+    page.get_by_role("button", name="See layers").click()
     expect(page.get_by_text("test datalayer")).to_be_hidden()
     page.once("dialog", lambda dialog: dialog.accept())
     page.get_by_role("button", name="Cancel edits").click()
     expect(markers).to_have_count(1)
-    expect(
-        page.locator(".leaflet-control-browse").get_by_text("test datalayer")
-    ).to_be_visible()
+    expect(page.locator(".umap-browser").get_by_text("test datalayer")).to_be_visible()
 
 
 def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    layers = page.locator(".umap-browse-datalayers li")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
+    page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_role("heading", name="Advanced actions").click()
     page.get_by_role("button", name="Clone").click()
     expect(layers).to_have_count(2)
@@ -106,7 +103,7 @@ def test_can_change_icon_class(live_server, openmap, page):
     expect(page.locator(".umap-div-icon")).to_be_visible()
     page.get_by_role("link", name="Manage layers").click()
     expect(page.locator(".umap-circle-icon")).to_be_hidden()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
+    page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_role("heading", name="Shape properties").click()
     page.locator(".umap-field-iconClass a.define").click()
     page.get_by_text("Circle").click()
@@ -119,12 +116,12 @@ def test_can_change_name(live_server, openmap, page, datalayer):
         f"{live_server.url}{openmap.get_absolute_url()}?edit&datalayersControl=expanded"
     )
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
+    page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').press("Control+a")
     page.locator('input[name="name"]').fill("new name")
-    expect(page.locator(".leaflet-control-browse li span")).to_contain_text("new name")
+    expect(page.locator(".umap-browser .datalayer")).to_contain_text("new name")
     expect(page.locator(".umap-is-dirty")).to_be_visible()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
@@ -150,7 +147,7 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
     # Edit again, it should not create a new datalayer
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).first.click()
+    page.locator(".panel.right").get_by_title("Edit", exact=True).first.click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("my new layer with a new name")
     expect(page.get_by_text("my new layer with a new name")).to_be_visible()
@@ -174,7 +171,7 @@ def test_can_restore_version(live_server, openmap, page, datalayer):
         page.get_by_role("button", name="Save").click()
     expect(marker).to_have_class(re.compile(".*umap-div-icon.*"))
     page.get_by_role("link", name="Manage layers").click()
-    page.locator("#umap-ui-container").get_by_title("Edit", exact=True).click()
+    page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_role("heading", name="Versions").click()
     page.once("dialog", lambda dialog: dialog.accept())
     page.get_by_role("button", name="Restore this version").last.click()

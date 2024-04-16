@@ -1,0 +1,140 @@
+.panel {
+    /* Added for playwright to consider the element as non visible  */
+    /* as being out of the visible viewport is not enough  */
+    visibility: hidden;
+    position: absolute;
+    bottom: var(--panel-bottom);
+    overflow-x: auto;
+    z-index: 1010;
+    background-color: #fff;
+    opacity: 0.98;
+    cursor: initial;
+    border-radius: 5px;
+    border: 1px solid var(--color-lightGray);
+}
+.panel.dark {
+    border: 1px solid #222;
+    background-color: var(--color-darkGray);
+    color: #efefef;
+}
+.panel.full {
+    width: initial;
+    right: -100%;
+    z-index: 1030;
+}
+.panel.full.on {
+    visibility: visible;
+    right: var(--panel-gutter);
+    left: var(--panel-gutter);
+    top: var(--header-height);
+    height: initial;
+    max-height: initial;
+}
+.umap-caption-bar-enabled .panel {
+    bottom: calc(var(--footer-height) + var(--panel-bottom));
+}
+.panel {
+    box-sizing: border-box;
+}
+.panel .umap-popup-content img {
+    /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
+    max-width: 99% !important;
+}
+.panel .umap-popup-content {
+    max-height: inherit;
+}
+.panel .body {
+    height: calc(100% - var(--panel-header-height)); /* Minus size of toolbox */
+    padding: var(--panel-gutter);
+}
+.panel .toolbox {
+    padding: 5px 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 10px;
+    justify-content: flex-start;
+    gap: 5px;
+    line-height: 2.2em;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    height: var(--panel-header-height);
+}
+.panel.dark .toolbox {
+    background-color: var(--color-darkGray);
+}
+.panel .toolbox li {
+    cursor: pointer;
+    display: inline;
+    padding: 0 2px;
+    border: 1px solid #b6b6b3;
+    border-radius: 2px;
+}
+.panel.dark .toolbox
+.panel.dark .toolbox li {
+    color: #d3dfeb;
+    border: 1px solid #202425;
+}
+.panel .toolbox li:hover {
+    background-color: #d4d4d2;
+}
+.panel.dark .toolbox li:hover {
+    background-color: #353c3e;
+}
+.panel h3 {
+    line-height: 3;
+}
+@media all and (orientation:landscape) {
+    .panel {
+        top: 0;
+        margin-top: var(--panel-gutter);
+        width: var(--panel-width);
+    }
+    .panel.condensed {
+        max-height: 500px;
+        bottom: initial;
+    }
+    .panel.right {
+        right: calc(0px - var(--panel-width));
+    }
+    .panel.left {
+        left: calc(0px - var(--panel-width));
+    }
+    .panel.left.on {
+        left: calc(var(--panel-gutter) * 2 + var(--control-size));
+        visibility: visible;
+    }
+    .panel.right.on {
+        right: calc(var(--panel-gutter) * 2 + var(--control-size));
+        visibility: visible;
+    }
+    .umap-edit-enabled .panel {
+        top: var(--header-height);
+    }
+}
+@media all and (orientation:portrait) {
+    .panel {
+        height: 50%;
+        max-height: 400px;
+        width: 100%;
+        bottom: 0;
+        right: -100%;
+    }
+    .panel.left {
+        left: -100%;
+    }
+    .panel.on {
+        right: 0;
+        left: 0;
+        visibility: visible;
+    }
+    .panel li.umap-resize-link {
+        display: none;
+    }
+    .umap-caption-bar-enabled .panel {
+        bottom: var(--footer-height);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}

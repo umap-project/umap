@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Save this location as new feature",
     "Search location": "Search location",
     "See all": "Näytä kaikki",
-    "See data layers": "See data layers",
+    "See layers": "See layers",
     "See full screen": "Katso koko näytöllä",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…",
     "Shape properties": "Piirteen ominaisuudet",

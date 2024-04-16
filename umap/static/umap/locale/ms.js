@@ -230,7 +230,7 @@ const locale = {
     "Save this location as new feature": "Simpan kedudukan ini sebagai sifat baharu",
     "Search location": "Kedudukan carian",
     "See all": "Lihat semua",
-    "See data layers": "Lihat lapisan data",
+    "See layers": "Lihat lapisan data",
     "See full screen": "Lihat skrin penuh",
     "Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…": "Tetapkan ke 'false' untuk menyembunyikan lapisan ini daripada persembahan slaid, pelayar data, navigasi timbul…",
     "Shape properties": "Ciri-ciri bentuk",

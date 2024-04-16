@@ -56,6 +56,11 @@ U.Map = L.Map.extend({
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
     this.urls = new U.URLs(this.options.urls)
 
+    this.panel = new U.Panel(this)
+    if (this.hasEditMode()) {
+      this.editPanel = new U.EditPanel(this)
+      this.fullPanel = new U.FullPanel(this)
+    }
     this.ui = new U.UI(this._container)
     this.ui.on('dataloading', (e) => this.fire('dataloading', e))
     this.ui.on('dataload', (e) => this.fire('dataload', e))
@@ -140,14 +145,9 @@ U.Map = L.Map.extend({
       }
       delete this.options.displayDataBrowserOnLoad
     }
-
-    this.ui.on(
-      'panel:closed',
-      function () {
-        this.invalidateSize({ pan: false })
-      },
-      this
-    )
+    if (this.options.datalayersControl === 'expanded') {
+      this.options.onLoadPanel = 'datalayers'
+    }
 
     let isDirty = false // self status
     try {
@@ -200,25 +200,24 @@ U.Map = L.Map.extend({
     this.initCaptionBar()
     if (this.hasEditMode()) {
       this.editTools = new U.Editable(this)
-      this.ui.on(
-        'panel:closed panel:open',
-        function () {
-          this.editedFeature = null
-        },
-        this
-      )
       this.renderEditToolbar()
     }
     this.initShortcuts()
     this.onceDataLoaded(function () {
-      if (L.Util.queryString('share')) this.share.open()
-      else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
-      else if (this.options.onLoadPanel === 'caption') this.displayCaption()
-      else if (
-        this.options.onLoadPanel === 'facet' ||
-        this.options.onLoadPanel === 'datafilters'
-      )
+      if (L.Util.queryString('share')) {
+        this.share.open()
+      } else if (this.options.onLoadPanel === 'databrowser') {
+        this.panel.mode = 'expanded'
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'datalayers') {
+        this.panel.mode = 'condensed'
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'caption') {
+        this.panel.mode = 'condensed'
+        this.displayCaption()
+      } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
         this.openFacet()
+      }
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) {
@@ -271,6 +270,7 @@ U.Map = L.Map.extend({
 
   reindexDataLayers: function () {
     this.eachDataLayer((datalayer) => datalayer.reindex())
+    this.onDataLayersChanged()
   },
 
   redrawVisibleDataLayers: function () {
@@ -302,7 +302,7 @@ U.Map = L.Map.extend({
     // Specific case for datalayersControl
     // which accepts "expanded" value, on top of true/false/null
     if (L.Util.queryString('datalayersControl') === 'expanded') {
-      L.Util.setFromQueryString(options, 'datalayersControl')
+      options.onLoadPanel = 'datalayers'
     }
   },
 
@@ -322,22 +322,26 @@ U.Map = L.Map.extend({
       new U.EditControl(this).addTo(this)
 
       new U.DrawToolbar({ map: this }).addTo(this)
-
       const editActions = [
-        U.ImportAction,
+        U.EditCaptionAction,
         U.EditPropertiesAction,
-        U.ManageDatalayersAction,
+        U.EditLayersAction,
         U.ChangeTileLayerAction,
         U.UpdateExtentAction,
         U.UpdatePermsAction,
+        U.ImportAction,
       ]
-      new U.SettingsToolbar({ actions: editActions }).addTo(this)
+      if (this.options.editMode === 'advanced') {
+        new U.SettingsToolbar({ actions: editActions }).addTo(this)
+      }
+
     }
     this._controls.zoom = new L.Control.Zoom({
       zoomInTitle: L._('Zoom in'),
       zoomOutTitle: L._('Zoom out'),
     })
     this._controls.datalayers = new U.DataLayersControl(this)
+    this._controls.caption = new U.CaptionControl(this)
     this._controls.locate = new U.Locate(this, {
       strings: {
         title: L._('Center map on your location'),
@@ -460,7 +464,11 @@ U.Map = L.Map.extend({
       if (!pane.dataset || !pane.dataset.id) continue
       this.datalayers_index.push(this.datalayers[pane.dataset.id])
     }
-    this.updateDatalayersControl()
+    this.onDataLayersChanged()
+  },
+
+  onDataLayersChanged: function () {
+    if (this.browser) this.browser.update()
   },
 
   ensurePanesOrder: function () {
@@ -489,10 +497,6 @@ U.Map = L.Map.extend({
     return this
   },
 
-  updateDatalayersControl: function () {
-    if (this._controls.datalayers) this._controls.datalayers.update()
-  },
-
   backupOptions: function () {
     this._backupOptions = L.extend({}, this.options)
     this._backupOptions.tilelayer = L.extend({}, this.options.tilelayer)
@@ -516,8 +520,13 @@ U.Map = L.Map.extend({
         L.DomEvent.stop(e)
         this.search()
       } else if (e.keyCode === U.Keys.ESC) {
-        if (this.help.visible()) this.help.hide()
-        else this.ui.closePanel()
+        if (this.help.visible()) {
+          this.help.hide()
+        } else {
+          this.panel.close()
+          this.editPanel.close()
+          this.fullPanel.close()
+        }
       }
 
       if (!this.hasEditMode()) return
@@ -529,7 +538,6 @@ U.Map = L.Map.extend({
       } else if (key === U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
         L.DomEvent.stop(e)
         this.disableEdit()
-        this.ui.closePanel()
       }
       if (key === U.Keys.S && modifierKey) {
         L.DomEvent.stop(e)
@@ -767,6 +775,11 @@ U.Map = L.Map.extend({
     return new U.DataLayer(this, datalayer)
   },
 
+  newDataLayer: function () {
+    const datalayer = this.createDataLayer({})
+    datalayer.edit()
+  },
+
   getDefaultOption: function (option) {
     return U.SCHEMA[option] && U.SCHEMA[option].default
   },
@@ -802,10 +815,6 @@ U.Map = L.Map.extend({
         callback: callback,
         className: 'dark',
       })
-  },
-
-  manageDatalayers: function () {
-    if (this._controls.datalayers) this._controls.datalayers.openPanel()
   },
 
   toGeoJSON: function () {
@@ -951,9 +960,9 @@ U.Map = L.Map.extend({
     })
     this.ensurePanesOrder()
     this.dirty_datalayers = []
-    this.updateDatalayersControl()
     this.initTileLayers()
     this.isDirty = false
+    this.onDataLayersChanged()
   },
 
   checkDirty: function () {
@@ -1054,7 +1063,7 @@ U.Map = L.Map.extend({
       else window.location = data.url
       alert.content = data.info || alert.content
       this.once('saved', () => this.ui.alert(alert))
-      this.ui.closePanel()
+      this.editPanel.close()
       this.permissions.save()
     }
   },
@@ -1459,19 +1468,6 @@ U.Map = L.Map.extend({
     slideshow.appendChild(slideshowBuilder.build())
   },
 
-  _editCredits: function (container) {
-    const credits = L.DomUtil.createFieldset(container, L._('Credits'))
-    const creditsFields = [
-      'options.licence',
-      'options.shortCredit',
-      'options.longCredit',
-      'options.permanentCredit',
-      'options.permanentCreditBackground',
-    ]
-    const creditsBuilder = new U.FormBuilder(this, creditsFields)
-    credits.appendChild(creditsBuilder.build())
-  },
-
   _advancedActions: function (container) {
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
@@ -1514,18 +1510,37 @@ U.Map = L.Map.extend({
     )
   },
 
-  edit: function () {
+  editCaption: function () {
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Edit map properties')
+    title.textContent = L._('Edit map details')
     const builder = new U.FormBuilder(this, metadataFields, {
       className: 'map-metadata',
     })
     const form = builder.build()
     container.appendChild(form)
+
+    const credits = L.DomUtil.createFieldset(container, L._('Credits'))
+    const creditsFields = [
+      'options.licence',
+      'options.shortCredit',
+      'options.longCredit',
+      'options.permanentCredit',
+      'options.permanentCreditBackground',
+    ]
+    const creditsBuilder = new U.FormBuilder(this, creditsFields)
+    credits.appendChild(creditsBuilder.build())
+    this.editPanel.open({ data: { html: container } })
+  },
+
+  edit: function () {
+    if (!this.editEnabled) return
+    if (this.options.editMode !== 'advanced') return
+    const container = L.DomUtil.create('div')
+    L.DomUtil.createTitle(container, L._('Map advanced properties'), 'icon-settings')
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)
@@ -1534,10 +1549,9 @@ U.Map = L.Map.extend({
     this._editOverlay(container)
     this._editBounds(container)
     this._editSlideshow(container)
-    this._editCredits(container)
     this._advancedActions(container)
 
-    this.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.editPanel.open({ data: { html: container }, className: 'dark' })
   },
 
   enableEdit: function () {
@@ -1554,6 +1568,8 @@ U.Map = L.Map.extend({
     this.editedFeature = null
     this.editEnabled = false
     this.fire('edit:disabled')
+    this.editPanel.close()
+    this.fullPanel.close()
   },
 
   hasEditMode: function () {
@@ -1611,8 +1627,7 @@ U.Map = L.Map.extend({
   askForReset: function (e) {
     if (!confirm(L._('Are you sure you want to cancel your changes?'))) return
     this.reset()
-    this.disableEdit(e)
-    this.ui.closePanel()
+    this.disableEdit()
   },
 
   startMarker: function () {
@@ -1809,7 +1824,7 @@ U.Map = L.Map.extend({
   },
 
   search: function () {
-    if (this._controls.search) this._controls.search.openPanel(this)
+    if (this._controls.search) this._controls.search.open()
   },
 
   getFilterKeys: function () {

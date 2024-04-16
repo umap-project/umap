@@ -10,7 +10,7 @@ from ..base import DataLayerFactory
 def test_can_edit_name(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
-    page.get_by_title("Edit map properties").click()
+    page.get_by_title("Edit map name and caption").click()
     name_input = page.locator('.map-metadata input[name="name"]')
     expect(name_input).to_be_visible()
     name_input.click()
@@ -24,7 +24,7 @@ def test_can_edit_name(page, live_server, tilelayer):
 def test_map_name_impacts_ui(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
-    gear_icon = page.get_by_title("Edit map properties")
+    gear_icon = page.get_by_title("Edit map name and caption")
     expect(gear_icon).to_be_visible()
     gear_icon.click()
 
@@ -39,7 +39,7 @@ def test_map_name_impacts_ui(live_server, page, tilelayer):
 def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
-    gear_icon = page.get_by_title("Edit map properties")
+    gear_icon = page.get_by_title("Map advanced properties")
     expect(gear_icon).to_be_visible()
     gear_icon.click()
 
@@ -67,7 +67,7 @@ def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):
 def test_map_color_impacts_data(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
-    gear_icon = page.get_by_title("Edit map properties")
+    gear_icon = page.get_by_title("Map advanced properties")
     expect(gear_icon).to_be_visible()
     gear_icon.click()
 
@@ -97,7 +97,7 @@ def test_map_color_impacts_data(live_server, page, tilelayer):
 def test_limitbounds_impacts_ui(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
-    gear_icon = page.get_by_title("Edit map properties")
+    gear_icon = page.get_by_title("Map advanced properties")
     expect(gear_icon).to_be_visible()
     gear_icon.click()
 
@@ -163,37 +163,33 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
     # By default, features are sorted by name  (Third, Second, First)
-    page.get_by_role("button", name="See data layers").click()
-    page.get_by_role("button", name="Browse data").click()
+    page.get_by_role("button", name="See layers").click()
+    page.get_by_role("heading", name="Show/hide layer").locator("i").click()
 
-    first_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(0)
-    second_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(1)
-    third_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(2)
+    first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
+    second_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(1)
+    third_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(2)
     assert "X Third" == first_listed_feature.text_content()
     assert "Y Second" == second_listed_feature.text_content()
     assert "Z First" == third_listed_feature.text_content()
 
     # Change the default sortkey to be "key"
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Edit map properties").click()
+    page.get_by_role("link", name="Map advanced properties").click()
     page.get_by_role("heading", name="Default properties").click()
 
     # Click "define"
-    page.locator(
-        "div:nth-child(5) > .fields > .umap-form > div:nth-child(4) > .header > a:nth-child(2)"
-    ).click()
+    page.locator(".panel .umap-field-sortKey .define").click()
     page.locator('input[name="sortKey"]').click()
     page.locator('input[name="sortKey"]').fill("key")
 
     # Click the checkmark to apply the changes
-    page.locator("div:nth-child(4) > div:nth-child(2) > .button").first.click()
+    page.locator(".panel .umap-field-sortKey .blur-button").click()
 
     # Features should be sorted by key  (First, Second, Third)
-    page.get_by_role("button", name="Browse data").click()
-
-    first_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(0)
-    second_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(1)
-    third_listed_feature = page.locator("#browse_data_datalayer_123 > ul > li").nth(2)
+    first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
+    second_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(1)
+    third_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(2)
     assert "Z First" == first_listed_feature.text_content()
     assert "Y Second" == second_listed_feature.text_content()
     assert "X Third" == third_listed_feature.text_content()

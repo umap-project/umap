@@ -17,22 +17,6 @@ input:-moz-placeholder, :-moz-placeholder {
    color: #a5a5a5;
 }
 
-#umap-ui-container textarea {
-    height: 100px;
-    margin-bottom: 14px;
-}
-#umap-ui-container select {
-    margin-bottom: 10px;
-}
-
-#umap-ui-container.warning .button {
-    background-color: #c60f13;
-    border: 1px solid #7f0a0c;
-}
-#umap-ui-container.warning .button:hover {
-    background-color: #970b0e;
-}
-
 
 /* **************** */
 /*    Login icons   */
@@ -194,9 +178,6 @@ h2.tabs a:hover {
     color: #efefef;
     text-decoration: underline;
 }
-body.content #umap-ui-container {
-    background-color: #fff;
-}
 
 
 /* **************************** */
@@ -356,23 +337,24 @@ ul.umap-autocomplete {
     height: 36px;
     width: 36px;
     margin: 3px;
+    background-position: initial;
 }
-.icon-view {
+.content .icon-view {
     background-image: url('./img/icon-view.svg');
 }
-.icon-share {
+.content .icon-share {
     background-image: url('./img/icon-share.svg');
 }
-.icon-edit {
+.content .icon-edit {
     background-image: url('./img/icon-edit.svg');
 }
-.icon-download {
+.content .icon-download {
     background-image: url('./img/icon-download.svg');
 }
-.icon-duplicate {
+.content .icon-duplicate {
     background-image: url('./img/icon-duplicate.svg');
 }
-.icon-delete {
+.content .icon-delete {
     background-image: url('./img/icon-delete.svg');
 }
 .table-header {

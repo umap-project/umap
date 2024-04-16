@@ -57,9 +57,9 @@ U.MapPermissions = L.Class.extend({
         content: L._('Please save the map first'),
         level: 'info',
       })
-    const container = L.DomUtil.create('div', 'permissions-panel'),
-      fields = [],
-      title = L.DomUtil.create('h3', '', container)
+    const container = L.DomUtil.create('div', 'permissions-panel')
+    const fields = []
+    L.DomUtil.createTitle(container, L._('Update permissions'), 'icon-key')
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
         const helpText = `${L._('Secret edit link:')}<br>${this.options.anonymous_edit_url
@@ -103,7 +103,6 @@ U.MapPermissions = L.Class.extend({
         { handler: 'ManageEditors', label: L._("Map's editors") },
       ])
     }
-    title.textContent = L._('Update permissions')
     const builder = new U.FormBuilder(this, fields)
     const form = builder.build()
     container.appendChild(form)
@@ -127,7 +126,7 @@ U.MapPermissions = L.Class.extend({
     this.map.eachDataLayer((datalayer) => {
       datalayer.permissions.edit(container)
     })
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.map.editPanel.open({ data: { html: container }, className: 'dark' })
   },
 
   attach: async function () {
@@ -138,7 +137,7 @@ U.MapPermissions = L.Class.extend({
         content: L._('Map has been attached to your account'),
         level: 'info',
       })
-      this.map.ui.closePanel()
+      this.map.editPanel.close()
     }
   },
 
