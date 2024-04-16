@@ -68,6 +68,7 @@
                   <span class="sr-only">{% translate "Clone" %}</span>
                 </button>
               </form>
+              {% if map_inst|can_delete_map:request %}
               <form action="{% url 'map_delete' map_inst.pk %}"
                     method="post"
                     class="map-delete">
@@ -78,6 +79,7 @@
                   <span class="sr-only">{% translate "Delete" %}</span>
                 </button>
               </form>
+              {% endif %}
             </td>
           </tr>
         {% endwith %}
