@@ -340,15 +340,6 @@ L.FormBuilder.TextColorPicker = L.FormBuilder.ColorPicker.extend({
   ],
 })
 
-L.FormBuilder.IconClassSwitcher = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['Default', L._('Default')],
-    ['Circle', L._('Circle')],
-    ['Drop', L._('Drop')],
-    ['Ball', L._('Ball')],
-  ],
-})
-
 L.FormBuilder.ProxyTTLSelect = L.FormBuilder.Select.extend({
   selectOptions: [
     [undefined, L._('No cache')],
@@ -358,30 +349,16 @@ L.FormBuilder.ProxyTTLSelect = L.FormBuilder.Select.extend({
   ],
 })
 
-L.FormBuilder.PopupShape = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['Default', L._('Popup')],
-    ['Large', L._('Popup (large)')],
-    ['Panel', L._('Side panel')],
-  ],
-})
-
-L.FormBuilder.PopupContent = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['Default', L._('Default')],
-    ['Table', L._('Table')],
-    ['GeoRSSImage', L._('GeoRSS (title + image)')],
-    ['GeoRSSLink', L._('GeoRSS (only link)')],
-  ],
-})
-
 L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['Default', L._('Default')],
-    ['Cluster', L._('Clustered')],
-    ['Heat', L._('Heatmap')],
-    ['Choropleth', L._('Choropleth')],
-  ],
+  getOptions: function () {
+    const layer_classes = [
+      U.Layer.Default,
+      U.Layer.Cluster,
+      U.Layer.Heat,
+      U.Layer.Choropleth,
+    ]
+    return layer_classes.map((class_) => [class_.TYPE, class_.NAME])
+  },
 })
 
 L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
@@ -401,7 +378,7 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&
-        datalayer.canBrowse()
+        datalayer.isBrowsable()
       ) {
         options.push([L.stamp(datalayer), datalayer.getName()])
       }
@@ -423,24 +400,6 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   },
 })
 
-L.FormBuilder.DefaultView = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['center', L._('Saved center and zoom')],
-    ['data', L._('Fit all data')],
-    ['latest', L._('Latest feature')],
-    ['locate', L._('User location')],
-  ],
-})
-
-L.FormBuilder.OnLoadPanel = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['none', L._('None')],
-    ['caption', L._('Caption')],
-    ['databrowser', L._('Data browser')],
-    ['facet', L._('Facet search')],
-  ],
-})
-
 L.FormBuilder.DataFormat = L.FormBuilder.Select.extend({
   selectOptions: [
     [undefined, L._('Choose the data format')],
@@ -450,16 +409,6 @@ L.FormBuilder.DataFormat = L.FormBuilder.Select.extend({
     ['gpx', 'gpx'],
     ['kml', 'kml'],
     ['georss', 'georss'],
-  ],
-})
-
-L.FormBuilder.LabelDirection = L.FormBuilder.Select.extend({
-  selectOptions: [
-    ['auto', L._('Automatic')],
-    ['left', L._('On the left')],
-    ['right', L._('On the right')],
-    ['top', L._('On the top')],
-    ['bottom', L._('On the bottom')],
   ],
 })
 
@@ -533,13 +482,18 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.on('define', this.onDefine)
   },
 
-  onDefine: function () {
+  onDefine: async function () {
     this.buttons.innerHTML = ''
     this.footer.innerHTML = ''
+    const [{ pictogram_list }, response, error] = await this.builder.map.server.get(
+      this.builder.map.options.urls.pictogram_list_json
+    )
+    if (!error) this.pictogram_list = pictogram_list
     this.buildTabs()
     const value = this.value()
-    if (!value || value.startsWith('/')) this.showSymbolsTab()
-    else if (value.startsWith('http')) this.showURLTab()
+    if (U.Icon.RECENT.length) this.showRecentTab()
+    else if (!value || U.Utils.isPath(value)) this.showSymbolsTab()
+    else if (U.Utils.isRemoteUrl(value) || U.Utils.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
     const closeButton = L.DomUtil.createButton(
       'button action-button',
@@ -558,12 +512,26 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   buildTabs: function () {
     this.tabs.innerHTML = ''
-    const symbol = L.DomUtil.add(
+    if (U.Icon.RECENT.length) {
+      const recent = L.DomUtil.add(
         'button',
-        'flat tab-symbols',
+        'flat tab-recent',
         this.tabs,
-        L._('Symbol')
-      ),
+        L._('Recent')
+      )
+      L.DomEvent.on(recent, 'click', L.DomEvent.stop).on(
+        recent,
+        'click',
+        this.showRecentTab,
+        this
+      )
+    }
+    const symbol = L.DomUtil.add(
+      'button',
+      'flat tab-symbols',
+      this.tabs,
+      L._('Symbol')
+    ),
       char = L.DomUtil.add(
         'button',
         'flat tab-chars',
@@ -596,34 +564,14 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.body.innerHTML = ''
   },
 
-  isPath: function () {
-    const value = this.value()
-    return value && value.length && value.startsWith('/')
-  },
-
-  isRemoteUrl: function () {
-    const value = this.value()
-    return value && value.length && value.startsWith('http')
-  },
-
-  isImg: function () {
-    return this.isPath() || this.isRemoteUrl()
-  },
-
   updatePreview: function () {
     this.buttons.innerHTML = ''
     if (this.isDefault()) return
-    if (!L.Util.hasVar(this.value())) {
+    if (!U.Utils.hasVar(this.value())) {
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
       L.DomEvent.on(box, 'click', this.onDefine, this)
-      if (this.isImg()) {
-        const img = L.DomUtil.create('img', '', box)
-        img.src = this.value()
-      } else {
-        const el = L.DomUtil.create('span', '', box)
-        el.textContent = this.value()
-      }
+      const icon = U.Icon.makeIconElement(this.value(), box)
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
@@ -637,15 +585,14 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   addIconPreview: function (pictogram, parent) {
     const baseClass = 'umap-pictogram-choice',
       value = pictogram.src,
-      search = L.Util.normalize(this.searchInput.value),
+      search = U.Utils.normalize(this.searchInput.value),
       title = pictogram.attribution
         ? `${pictogram.name} — © ${pictogram.attribution}`
-        : pictogram.name
-    if (search && L.Util.normalize(title).indexOf(search) === -1) return
+        : pictogram.name || pictogram.src
+    if (search && U.Utils.normalize(title).indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass,
-      container = L.DomUtil.create('div', className, parent),
-      img = L.DomUtil.create('img', '', container)
-    img.src = value
+      container = L.DomUtil.create('div', className, parent)
+    U.Icon.makeIconElement(value, container)
     container.title = title
     L.DomEvent.on(
       container,
@@ -669,10 +616,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     this.updatePreview()
   },
 
-  addCategory: function (category, items) {
-    const parent = L.DomUtil.create('div', 'umap-pictogram-category'),
-      title = L.DomUtil.add('h6', '', parent, category),
-      grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
+  addCategory: function (items, name) {
+    const parent = L.DomUtil.create('div', 'umap-pictogram-category')
+    if (name) L.DomUtil.add('h6', '', parent, name)
+    const grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
     let status = false
     for (let item of items) {
       status = this.addIconPreview(item, grid) || status
@@ -690,40 +637,49 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       categories[category].push(props)
     }
     const sorted = Object.entries(categories).toSorted(([a], [b]) =>
-      L.Util.naturalSort(a, b)
+      U.Utils.naturalSort(a, b, L.lang)
     )
-    for (let [category, items] of sorted) {
-      this.addCategory(category, items)
+    for (let [name, items] of sorted) {
+      this.addCategory(items, name)
     }
   },
 
-  isDefault: function () {
-    return !this.value() || this.value() === this.obj.getMap().options.default_iconUrl
+  buildRecentList: function () {
+    this.grid.innerHTML = ''
+    const items = U.Icon.RECENT.map((src) => ({
+      src,
+    }))
+    this.addCategory(items)
   },
 
-  showSymbolsTab: function () {
-    this.openTab('symbols')
+  isDefault: function () {
+    return !this.value() || this.value() === U.SCHEMA.iconUrl.default
+  },
+
+  addGrid: function (onSearch) {
     this.searchInput = L.DomUtil.create('input', '', this.body)
     this.searchInput.type = 'search'
     this.searchInput.placeholder = L._('Search')
     this.grid = L.DomUtil.create('div', '', this.body)
-    L.DomEvent.on(this.searchInput, 'input', this.buildSymbolsList, this)
-    if (this.pictogram_list) {
-      this.buildSymbolsList()
-    } else {
-      this.builder.map.get(this.builder.map.options.urls.pictogram_list_json, {
-        callback: (data) => {
-          this.pictogram_list = data.pictogram_list
-          this.buildSymbolsList()
-        },
-        context: this,
-      })
-    }
+    L.DomEvent.on(this.searchInput, 'input', onSearch, this)
+  },
+
+  showRecentTab: function () {
+    if (!U.Icon.RECENT.length) return
+    this.openTab('recent')
+    this.addGrid(this.buildRecentList)
+    this.buildRecentList()
+  },
+
+  showSymbolsTab: function () {
+    this.openTab('symbols')
+    this.addGrid(this.buildSymbolsList)
+    this.buildSymbolsList()
   },
 
   showCharsTab: function () {
     this.openTab('chars')
-    const value = !this.isImg() ? this.value() : null
+    const value = !U.Icon.isImg(this.value()) ? this.value() : null
     const input = this.buildInput(this.body, value)
     input.placeholder = L._('Type char or paste emoji')
     input.type = 'text'
@@ -731,7 +687,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   showURLTab: function () {
     this.openTab('url')
-    const value = this.isRemoteUrl() ? this.value() : null
+    const value =
+      U.Utils.isRemoteUrl(this.value()) || U.Utils.isDataImage(this.value())
+        ? this.value()
+        : null
     const input = this.buildInput(this.body, value)
     input.placeholder = L._('Add image URL')
     input.type = 'url'
@@ -984,7 +943,7 @@ L.FormBuilder.TernaryChoices = L.FormBuilder.MultiChoice.extend({
   },
 })
 
-L.FormBuilder.ControlChoice = L.FormBuilder.TernaryChoices.extend({
+L.FormBuilder.NullableChoices = L.FormBuilder.TernaryChoices.extend({
   choices: [
     [true, L._('always')],
     [false, L._('never')],
@@ -992,17 +951,7 @@ L.FormBuilder.ControlChoice = L.FormBuilder.TernaryChoices.extend({
   ],
 })
 
-L.FormBuilder.LabelChoice = L.FormBuilder.TernaryChoices.extend({
-  default: false,
-
-  choices: [
-    [true, L._('always')],
-    [false, L._('never')],
-    ['null', L._('on hover')],
-  ],
-})
-
-L.FormBuilder.DataLayersControl = L.FormBuilder.ControlChoice.extend({
+L.FormBuilder.DataLayersControl = L.FormBuilder.TernaryChoices.extend({
   choices: [
     [true, L._('collapsed')],
     ['expanded', L._('expanded')],
@@ -1013,19 +962,9 @@ L.FormBuilder.DataLayersControl = L.FormBuilder.ControlChoice.extend({
   toJS: function () {
     let value = this.value()
     if (value !== 'expanded')
-      value = L.FormBuilder.ControlChoice.prototype.toJS.call(this)
+      value = L.FormBuilder.TernaryChoices.prototype.toJS.call(this)
     return value
   },
-})
-
-L.FormBuilder.OutlinkTarget = L.FormBuilder.MultiChoice.extend({
-  default: 'blank',
-
-  choices: [
-    ['blank', L._('new window')],
-    ['self', L._('iframe')],
-    ['parent', L._('parent window')],
-  ],
 })
 
 L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
@@ -1066,7 +1005,7 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
       className: 'edit-owner',
       on_select: L.bind(this.onSelect, this),
     }
-    this.autocomplete = new L.U.AutoComplete.Ajax.Select(this.parentNode, options)
+    this.autocomplete = new U.AutoComplete.Ajax.Select(this.parentNode, options)
     const owner = this.toHTML()
     if (owner)
       this.autocomplete.displaySelected({
@@ -1095,10 +1034,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
       on_select: L.bind(this.onSelect, this),
       on_unselect: L.bind(this.onUnselect, this),
     }
-    this.autocomplete = new L.U.AutoComplete.Ajax.SelectMultiple(
-      this.parentNode,
-      options
-    )
+    this.autocomplete = new U.AutoComplete.Ajax.SelectMultiple(this.parentNode, options)
     this._values = this.toHTML()
     if (this._values)
       for (let i = 0; i < this._values.length; i++)
@@ -1129,245 +1065,70 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   },
 })
 
-L.U.FormBuilder = L.FormBuilder.extend({
+U.FormBuilder = L.FormBuilder.extend({
   options: {
     className: 'umap-form',
   },
 
-  defaultOptions: {
-    name: { label: L._('name') },
-    description: {
-      label: L._('description'),
-      handler: 'Textarea',
-      helpEntries: 'textFormatting',
-    },
-    color: {
-      handler: 'ColorPicker',
-      label: L._('color'),
-      helpEntries: 'colorValue',
-      inheritable: true,
-    },
-    iconOpacity: {
-      handler: 'Range',
-      min: 0.1,
-      max: 1,
-      step: 0.1,
-      label: L._('icon opacity'),
-      inheritable: true,
-    },
-    opacity: {
-      handler: 'Range',
-      min: 0.1,
-      max: 1,
-      step: 0.1,
-      label: L._('opacity'),
-      inheritable: true,
-    },
-    stroke: {
-      handler: 'Switch',
-      label: L._('stroke'),
-      helpEntries: 'stroke',
-      inheritable: true,
-    },
-    weight: {
-      handler: 'Range',
-      min: 1,
-      max: 20,
-      step: 1,
-      label: L._('weight'),
-      inheritable: true,
-    },
-    fill: {
-      handler: 'Switch',
-      label: L._('fill'),
-      helpEntries: 'fill',
-      inheritable: true,
-    },
-    fillColor: {
-      handler: 'ColorPicker',
-      label: L._('fill color'),
-      helpEntries: 'fillColor',
-      inheritable: true,
-    },
-    fillOpacity: {
-      handler: 'Range',
-      min: 0.1,
-      max: 1,
-      step: 0.1,
-      label: L._('fill opacity'),
-      inheritable: true,
-    },
-    smoothFactor: {
-      handler: 'Range',
-      min: 0,
-      max: 10,
-      step: 0.5,
-      label: L._('Simplify'),
-      helpEntries: 'smoothFactor',
-      inheritable: true,
-    },
-    dashArray: {
-      label: L._('dash array'),
-      helpEntries: 'dashArray',
-      inheritable: true,
-    },
-    iconClass: {
-      handler: 'IconClassSwitcher',
-      label: L._('Icon shape'),
-      inheritable: true,
-    },
-    iconUrl: {
-      handler: 'IconUrl',
-      label: L._('Icon symbol'),
-      inheritable: true,
-      helpText: L.U.Help.formatIconSymbol,
-    },
-    popupShape: { handler: 'PopupShape', label: L._('Popup shape'), inheritable: true },
-    popupTemplate: {
-      handler: 'PopupContent',
-      label: L._('Popup content style'),
-      inheritable: true,
-    },
-    popupContentTemplate: {
-      label: L._('Popup content template'),
-      handler: 'Textarea',
-      helpEntries: ['dynamicProperties', 'textFormatting'],
-      placeholder: '# {name}',
-      inheritable: true,
-    },
-    datalayer: {
-      handler: 'DataLayerSwitcher',
-      label: L._('Choose the layer of the feature'),
-    },
-    moreControl: {
-      handler: 'Switch',
-      label: L._('Do you want to display the «more» control?'),
-    },
-    scrollWheelZoom: { handler: 'Switch', label: L._('Allow scroll wheel zoom?') },
-    miniMap: { handler: 'Switch', label: L._('Do you want to display a minimap?') },
-    scaleControl: {
-      handler: 'Switch',
-      label: L._('Do you want to display the scale control?'),
-    },
-    onLoadPanel: {
-      handler: 'OnLoadPanel',
-      label: L._('Do you want to display a panel on load?'),
-    },
-    defaultView: {
-      handler: 'DefaultView',
-      label: L._('Default view'),
-    },
-    displayPopupFooter: {
-      handler: 'Switch',
-      label: L._('Do you want to display popup footer?'),
-    },
-    captionBar: {
-      handler: 'Switch',
-      label: L._('Do you want to display a caption bar?'),
-    },
-    captionMenus: {
-      handler: 'Switch',
-      label: L._('Do you want to display caption menus?'),
-    },
-    zoomTo: {
-      handler: 'IntInput',
-      placeholder: L._('Inherit'),
-      helpEntries: 'zoomTo',
-      label: L._('Default zoom level'),
-      inheritable: true,
-    },
-    showLabel: {
-      handler: 'LabelChoice',
-      label: L._('Display label'),
-      inheritable: true,
-    },
-    labelDirection: {
-      handler: 'LabelDirection',
-      label: L._('Label direction'),
-      inheritable: true,
-    },
-    labelInteractive: {
-      handler: 'Switch',
-      label: L._('Labels are clickable'),
-      inheritable: true,
-    },
-    outlink: {
-      label: L._('Link to…'),
-      helpEntries: 'outlink',
-      placeholder: 'http://...',
-      inheritable: true,
-    },
-    outlinkTarget: {
-      handler: 'OutlinkTarget',
-      label: L._('Open link in…'),
-      inheritable: true,
-    },
-    labelKey: {
-      helpEntries: 'labelKey',
-      placeholder: L._('Default: name'),
-      label: L._('Label key'),
-      inheritable: true,
-    },
-    zoomControl: { handler: 'ControlChoice', label: L._('Display the zoom control') },
-    searchControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the search control'),
-    },
-    fullscreenControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the fullscreen control'),
-    },
-    embedControl: { handler: 'ControlChoice', label: L._('Display the embed control') },
-    locateControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the locate control'),
-    },
-    measureControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the measure control'),
-    },
-    tilelayersControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the tile layers control'),
-    },
-    editinosmControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the control to open OpenStreetMap editor'),
-    },
-    datalayersControl: {
-      handler: 'DataLayersControl',
-      label: L._('Display the data layers control'),
-    },
-    starControl: {
-      handler: 'ControlChoice',
-      label: L._('Display the star map button'),
-    },
-    fromZoom: {
-      handler: 'IntInput',
-      label: L._('From zoom'),
-      helpText: L._('Optional.'),
-    },
-    toZoom: { handler: 'IntInput', label: L._('To zoom'), helpText: L._('Optional.') },
-    interactive: {
-      handler: 'Switch',
-      label: L._('Allow interactions'),
-      helpEntries: 'interactive',
-      inheritable: true,
-    },
+  computeDefaultOptions: function () {
+    for (let [key, schema] of Object.entries(U.SCHEMA)) {
+      if (schema.type === Boolean) {
+        if (schema.nullable) schema.handler = 'NullableChoices'
+        else schema.handler = 'Switch'
+      } else if (schema.type === 'Text') {
+        schema.handler = 'Textarea'
+      } else if (schema.type === Number) {
+        if (schema.step) schema.handler = 'Range'
+        else schema.handler = 'IntInput'
+      } else if (schema.choices) {
+        const text_length = schema.choices.reduce(
+          (acc, [value, label]) => acc + label.length,
+          0
+        )
+        // Try to be smart and use MultiChoice only
+        // for choices where labels are shorts…
+        if (text_length < 40) {
+          schema.handler = 'MultiChoice'
+        } else {
+          schema.handler = 'Select'
+          schema.selectOptions = schema.choices
+        }
+      } else {
+        switch (key) {
+          case 'color':
+          case 'fillColor':
+            schema.handler = 'ColorPicker'
+            break
+          case 'iconUrl':
+            schema.handler = 'IconUrl'
+            break
+          case 'licence':
+            schema.handler = 'LicenceChooser'
+            break
+        }
+      }
+      // FormBuilder use this key for the input type itself
+      delete schema.type
+      this.defaultOptions[key] = schema
+    }
   },
 
   initialize: function (obj, fields, options) {
     this.map = obj.map || obj.getMap()
+    this.computeDefaultOptions()
     L.FormBuilder.prototype.initialize.call(this, obj, fields, options)
     this.on('finish', this.finish)
   },
 
   setter: function (field, value) {
     L.FormBuilder.prototype.setter.call(this, field, value)
-    if (this.options.makeDirty !== false) this.obj.isDirty = true
+    if (this.options.makeDirty !== false) {
+      this.obj.isDirty = true
+      if ('render' in this.obj) this.obj.render([field], this)
+    }
   },
 
   finish: function () {
-    this.map.ui.closePanel()
+    this.map.editPanel.close()
   },
 })

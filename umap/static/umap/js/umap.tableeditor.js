@@ -1,4 +1,4 @@
-L.U.TableEditor = L.Class.extend({
+U.TableEditor = L.Class.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     this.table = L.DomUtil.create('div', 'table')
@@ -46,7 +46,6 @@ L.U.TableEditor = L.Class.extend({
       })
       this.datalayer.deindexProperty(property)
       this.datalayer.indexProperty(newName)
-      this.resetProperties()
       this.edit()
     }
     L.DomEvent.on(del, 'click', doDelete, this)
@@ -54,7 +53,7 @@ L.U.TableEditor = L.Class.extend({
   },
 
   renderRow: function (feature) {
-    const builder = new L.U.FormBuilder(feature, this.field_properties, {
+    const builder = new U.FormBuilder(feature, this.field_properties, {
       id: `umap-feature-properties_${L.stamp(feature)}`,
       className: 'trow',
       callback: feature.resetTooltip,
@@ -63,6 +62,7 @@ L.U.TableEditor = L.Class.extend({
   },
 
   compileProperties: function () {
+    this.resetProperties()
     if (this.properties.length === 0) this.properties = ['name']
     // description is a forced textarea, don't edit it in a text input, or you lose cariage returns
     if (this.properties.indexOf('description') !== -1)
@@ -94,13 +94,12 @@ L.U.TableEditor = L.Class.extend({
 
   edit: function () {
     const id = 'tableeditor:edit'
-    this.datalayer.map.fire('dataloading', { id: id })
     this.compileProperties()
     this.renderHeaders()
     this.body.innerHTML = ''
     this.datalayer.eachLayer(this.renderRow, this)
     const addButton = L.DomUtil.create('li', 'add-property')
-    L.DomUtil.create('i', 'umap-icon-16 umap-add', addButton)
+    L.DomUtil.createIcon(addButton, 'icon-add')
     const label = L.DomUtil.create('span', '', addButton)
     label.textContent = label.title = L._('Add a new property')
     const addProperty = function () {
@@ -110,11 +109,10 @@ L.U.TableEditor = L.Class.extend({
       this.edit()
     }
     L.DomEvent.on(addButton, 'click', addProperty, this)
-    this.datalayer.map.ui.openPanel({
+    this.datalayer.map.fullPanel.open({
       data: { html: this.table },
-      className: 'umap-table-editor fullwidth dark',
+      className: 'umap-table-editor',
       actions: [addButton],
     })
-    this.datalayer.map.fire('dataload', { id: id })
   },
 })

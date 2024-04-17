@@ -1,5 +1,15 @@
-L.U.Layer = {
-  canBrowse: true,
+U.Layer = {
+  browsable: true,
+
+  getType: function () {
+    const proto = Object.getPrototypeOf(this)
+    return proto.constructor.TYPE
+  },
+
+  getName: function () {
+    const proto = Object.getPrototypeOf(this)
+    return proto.constructor.NAME
+  },
 
   getFeatures: function () {
     return this._layers
@@ -9,16 +19,19 @@ L.U.Layer = {
     return []
   },
 
-  postUpdate: function () {},
+  onEdit: function () {},
 
   hasDataVisible: function () {
     return !!Object.keys(this._layers).length
   },
 }
 
-L.U.Layer.Default = L.FeatureGroup.extend({
-  _type: 'Default',
-  includes: [L.U.Layer],
+U.Layer.Default = L.FeatureGroup.extend({
+  statics: {
+    NAME: L._('Default'),
+    TYPE: 'Default',
+  },
+  includes: [U.Layer],
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -26,7 +39,7 @@ L.U.Layer.Default = L.FeatureGroup.extend({
   },
 })
 
-L.U.MarkerCluster = L.MarkerCluster.extend({
+U.MarkerCluster = L.MarkerCluster.extend({
   // Custom class so we can call computeTextColor
   // when element is already on the DOM.
 
@@ -38,9 +51,12 @@ L.U.MarkerCluster = L.MarkerCluster.extend({
   },
 })
 
-L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
-  _type: 'Cluster',
-  includes: [L.U.Layer],
+U.Layer.Cluster = L.MarkerClusterGroup.extend({
+  statics: {
+    NAME: L._('Clustered'),
+    TYPE: 'Cluster',
+  },
+  includes: [U.Layer],
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -49,14 +65,14 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
         color: this.datalayer.getColor(),
       },
       iconCreateFunction: function (cluster) {
-        return new L.U.Icon.Cluster(datalayer, cluster)
+        return new U.Icon.Cluster(datalayer, cluster)
       },
     }
     if (this.datalayer.options.cluster && this.datalayer.options.cluster.radius) {
       options.maxClusterRadius = this.datalayer.options.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
-    this._markerCluster = L.U.MarkerCluster
+    this._markerCluster = U.MarkerCluster
     this._layers = []
   },
 
@@ -81,7 +97,7 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 
   getEditableOptions: function () {
-    if (!L.Util.isObject(this.datalayer.options.cluster)) {
+    if (!U.Utils.isObject(this.datalayer.options.cluster)) {
       this.datalayer.options.cluster = {}
     }
     return [
@@ -104,22 +120,24 @@ L.U.Layer.Cluster = L.MarkerClusterGroup.extend({
     ]
   },
 
-  postUpdate: function (e) {
-    if (e.helper.field === 'options.cluster.radius') {
+  onEdit: function (field, builder) {
+    if (field === 'options.cluster.radius') {
       // No way to reset radius of an already instanciated MarkerClusterGroup...
       this.datalayer.resetLayer(true)
       return
     }
-    if (e.helper.field === 'options.color') {
+    if (field === 'options.color') {
       this.options.polygonOptions.color = this.datalayer.getColor()
     }
   },
 })
 
-L.U.Layer.Choropleth = L.FeatureGroup.extend({
-  _type: 'Choropleth',
-  includes: [L.U.Layer],
-  canBrowse: true,
+U.Layer.Choropleth = L.FeatureGroup.extend({
+  statics: {
+    NAME: L._('Choropleth'),
+    TYPE: 'Choropleth',
+  },
+  includes: [U.Layer],
   // Have defaults that better suit the choropleth mode.
   defaults: {
     color: 'white',
@@ -137,7 +155,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    if (!L.Util.isObject(this.datalayer.options.choropleth)) {
+    if (!U.Utils.isObject(this.datalayer.options.choropleth)) {
       this.datalayer.options.choropleth = {}
     }
     L.FeatureGroup.prototype.initialize.call(
@@ -175,6 +193,7 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     let mode = this.datalayer.options.choropleth.mode,
       classes = +this.datalayer.options.choropleth.classes || 5,
       breaks
+    classes = Math.min(classes, values.length)
     if (mode === 'manual') {
       const manualBreaks = this.datalayer.options.choropleth.breaks
       if (manualBreaks) {
@@ -234,14 +253,19 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
     L.FeatureGroup.prototype.onAdd.call(this, map)
   },
 
-  postUpdate: function (e) {
-    if (e.helper.field === 'options.choropleth.breaks') {
+  onEdit: function (field, builder) {
+    // Only compute the breaks if we're dealing with choropleth
+    if (!field.startsWith('options.choropleth')) return
+    // If user touches the breaks, then force manual mode
+    if (field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
-      e.helper.builder.helpers['options.choropleth.mode'].fetch()
+      if (builder) builder.helpers['options.choropleth.mode'].fetch()
     }
     this.computeBreaks()
-    if (e.helper.field !== 'options.choropleth.breaks') {
-      e.helper.builder.helpers['options.choropleth.breaks'].fetch()
+    // If user changes the mode or the number of classes,
+    // then update the breaks input value
+    if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
+      if (builder) builder.helpers['options.choropleth.breaks'].fetch()
     }
   },
 
@@ -316,10 +340,13 @@ L.U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 })
 
-L.U.Layer.Heat = L.HeatLayer.extend({
-  _type: 'Heat',
-  includes: [L.U.Layer],
-  canBrowse: false,
+U.Layer.Heat = L.HeatLayer.extend({
+  statics: {
+    NAME: L._('Heatmap'),
+    TYPE: 'Heat',
+  },
+  includes: [U.Layer],
+  browsable: false,
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
@@ -356,7 +383,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
   },
 
   getEditableOptions: function () {
-    if (!L.Util.isObject(this.datalayer.options.heat)) {
+    if (!U.Utils.isObject(this.datalayer.options.heat)) {
       this.datalayer.options.heat = {}
     }
     return [
@@ -382,12 +409,12 @@ L.U.Layer.Heat = L.HeatLayer.extend({
     ]
   },
 
-  postUpdate: function (e) {
-    if (e.helper.field === 'options.heat.intensityProperty') {
+  onEdit: function (field, builder) {
+    if (field === 'options.heat.intensityProperty') {
       this.datalayer.resetLayer(true) // We need to repopulate the latlngs
       return
     }
-    if (e.helper.field === 'options.heat.radius') {
+    if (field === 'options.heat.radius') {
       this.options.radius = this.datalayer.options.heat.radius
     }
     this._updateOptions()
@@ -436,8 +463,8 @@ L.U.Layer.Heat = L.HeatLayer.extend({
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
-          ? +this._latlngs[i][2]
-          : 1
+            ? +this._latlngs[i][2]
+            : 1
 
       grid[y] = grid[y] || []
       cell = grid[y][x]
@@ -480,7 +507,7 @@ L.U.Layer.Heat = L.HeatLayer.extend({
   },
 })
 
-L.U.DataLayer = L.Evented.extend({
+U.DataLayer = L.Evented.extend({
   options: {
     displayOnLoad: true,
     inCaption: true,
@@ -554,9 +581,11 @@ L.U.DataLayer = L.Evented.extend({
     }
     this.backupOptions()
     this.connectToMap()
-    this.permissions = new L.U.DataLayerPermissions(this)
-    if (this.showAtLoad()) this.show()
-    if (!this.umap_id) this.isDirty = true
+    this.permissions = new U.DataLayerPermissions(this)
+    if (!this.umap_id) {
+      if (this.showAtLoad()) this.show()
+      this.isDirty = true
+    }
 
     this.onceLoaded(function () {
       this.map.on('moveend', this.onMoveEnd, this)
@@ -565,6 +594,32 @@ L.U.DataLayer = L.Evented.extend({
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
+    this.on('datachanged', this.map.onDataLayersChanged, this.map)
+  },
+
+  render: function (fields, builder) {
+    let impacts = U.Utils.getImpactsFromSchema(fields)
+
+    for (let impact of impacts) {
+      switch (impact) {
+        case 'ui':
+          this.map.onDataLayersChanged()
+          break
+        case 'data':
+          if (fields.includes('options.type')) {
+            this.resetLayer()
+          }
+          this.hide()
+          fields.forEach((field) => {
+            this.layer.onEdit(field, builder)
+          })
+          this.show()
+          break
+        case 'remote-data':
+          this.fetchRemoteData()
+          break
+      }
+    }
   },
 
   onMoveEnd: function (e) {
@@ -582,12 +637,13 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   autoLoaded: function () {
-    return (
-      (this.map.datalayersOnLoad &&
-        this.umap_id &&
-        this.map.datalayersOnLoad.indexOf(this.umap_id.toString()) !== -1) ||
-      (!this.map.datalayersOnLoad && this.options.displayOnLoad)
-    )
+    if (!this.map.datalayersFromQueryString) return this.options.displayOnLoad
+    const datalayerIds = this.map.datalayersFromQueryString
+    let loadMe = datalayerIds.includes(this.umap_id.toString())
+    if (this.options.old_id) {
+      loadMe = loadMe || datalayerIds.includes(this.options.old_id.toString())
+    }
+    return loadMe
   },
 
   insertBefore: function (other) {
@@ -612,7 +668,7 @@ L.U.DataLayer = L.Evented.extend({
     // Only reset if type is defined (undefined is the default) and different from current type
     if (
       this.layer &&
-      (!this.options.type || this.options.type === this.layer._type) &&
+      (!this.options.type || this.options.type === this.layer.getType()) &&
       !force
     ) {
       return
@@ -621,7 +677,7 @@ L.U.DataLayer = L.Evented.extend({
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
     if (visible) this.map.removeLayer(this.layer)
-    const Class = L.U.Layer[this.options.type] || L.U.Layer.Default
+    const Class = U.Layer[this.options.type] || U.Layer.Default
     this.layer = new Class(this)
     this.eachLayer(this.showFeature)
     if (visible) this.show()
@@ -636,7 +692,7 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   eachFeature: function (method, context) {
-    if (this.layer && this.layer.canBrowse) {
+    if (this.isBrowsable()) {
       for (let i = 0; i < this._index.length; i++) {
         method.call(context || this, this._layers[this._index[i]])
       }
@@ -644,30 +700,28 @@ L.U.DataLayer = L.Evented.extend({
     return this
   },
 
-  fetchData: function () {
+  fetchData: async function () {
     if (!this.umap_id) return
     if (this._loading) return
     this._loading = true
-    this.map.get(this._dataUrl(), {
-      callback: function (geojson, response) {
-        this._last_modified = response.getResponseHeader('Last-Modified')
-        // FIXME: for now this property is set dynamically from backend
-        // And thus it's not in the geojson file in the server
-        // So do not let all options to be reset
-        // Fix is a proper migration so all datalayers settings are
-        // in DB, and we remove it from geojson flat files.
-        if (geojson._umap_options) {
-          geojson._umap_options.editMode = this.options.editMode
-        }
-        // In case of maps pre 1.0 still around
-        if (geojson._storage) geojson._storage.editMode = this.options.editMode
-        this.fromUmapGeoJSON(geojson)
-        this.backupOptions()
-        this.fire('loaded')
-        this._loading = false
-      },
-      context: this,
-    })
+    const [geojson, response, error] = await this.map.server.get(this._dataUrl())
+    if (!error) {
+      this._reference_version = response.headers.get('X-Datalayer-Version')
+      // FIXME: for now this property is set dynamically from backend
+      // And thus it's not in the geojson file in the server
+      // So do not let all options to be reset
+      // Fix is a proper migration so all datalayers settings are
+      // in DB, and we remove it from geojson flat files.
+      if (geojson._umap_options) {
+        geojson._umap_options.editMode = this.options.editMode
+      }
+      // In case of maps pre 1.0 still around
+      if (geojson._storage) geojson._storage.editMode = this.options.editMode
+      await this.fromUmapGeoJSON(geojson)
+      this.backupOptions()
+      this.fire('loaded')
+      this._loading = false
+    }
   },
 
   fromGeoJSON: function (geojson) {
@@ -678,10 +732,10 @@ L.U.DataLayer = L.Evented.extend({
     this.fire('datachanged')
   },
 
-  fromUmapGeoJSON: function (geojson) {
+  fromUmapGeoJSON: async function (geojson) {
     if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
-    if (this.isRemoteLayer()) this.fetchRemoteData()
+    if (this.isRemoteLayer()) await this.fetchRemoteData()
     else this.fromGeoJSON(geojson)
     this._loaded = true
   },
@@ -698,13 +752,13 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   backupData: function () {
-    this._geojson_bk = L.Util.CopyJSON(this._geojson)
+    this._geojson_bk = U.Utils.CopyJSON(this._geojson)
   },
 
   reindex: function () {
     const features = []
     this.eachFeature((feature) => features.push(feature))
-    L.Util.sortFeatures(features, this.map.getOption('sortKey'))
+    U.Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
     this._index = []
     for (let i = 0; i < features.length; i++) {
       this._index.push(L.Util.stamp(features[i]))
@@ -718,23 +772,27 @@ L.U.DataLayer = L.Evented.extend({
     return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
   },
 
-  fetchRemoteData: function (force) {
+  hasDynamicData: function () {
+    return !!(this.options.remoteData && this.options.remoteData.dynamic)
+  },
+
+  fetchRemoteData: async function (force) {
     if (!this.isRemoteLayer()) return
-    if (!this.options.remoteData.dynamic && this.hasDataLoaded() && !force) return
+    if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
     let url = this.map.localizeUrl(this.options.remoteData.url)
-    if (this.options.remoteData.proxy)
+    if (this.options.remoteData.proxy) {
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
-    this.map.ajax({
-      uri: url,
-      verb: 'GET',
-      callback: (raw) => {
-        this.clear()
-        this.rawToGeoJSON(raw, this.options.remoteData.format, (geojson) =>
-          this.fromGeoJSON(geojson)
-        )
-      },
-    })
+    }
+    const response = await this.map.request.get(url)
+    if (response && response.ok) {
+      this.clear()
+      this.rawToGeoJSON(
+        await response.text(),
+        this.options.remoteData.format,
+        (geojson) => this.fromGeoJSON(geojson)
+      )
+    }
   },
 
   onceLoaded: function (callback, context) {
@@ -763,15 +821,16 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   backupOptions: function () {
-    this._backupOptions = L.Util.CopyJSON(this.options)
+    this._backupOptions = U.Utils.CopyJSON(this.options)
   },
 
   resetOptions: function () {
-    this.options = L.Util.CopyJSON(this._backupOptions)
+    this.options = U.Utils.CopyJSON(this._backupOptions)
   },
 
   setOptions: function (options) {
-    this.options = L.Util.CopyJSON(L.U.DataLayer.prototype.options) // Start from fresh.
+    delete options.geojson
+    this.options = U.Utils.CopyJSON(U.DataLayer.prototype.options) // Start from fresh.
     this.updateOptions(options)
   },
 
@@ -787,13 +846,13 @@ L.U.DataLayer = L.Evented.extend({
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
         this.map.datalayers_index.push(this)
     }
-    this.map.updateDatalayersControl()
+    this.map.onDataLayersChanged()
   },
 
   _dataUrl: function () {
     const template = this.map.options.urls.datalayer_view
 
-    let url = L.Util.template(template, {
+    let url = U.Utils.template(template, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
     })
@@ -899,7 +958,7 @@ L.U.DataLayer = L.Evented.extend({
               })
             }
             this.map.ui.alert({ content: message, level: 'error', duration: 10000 })
-            console.log(err)
+            console.error(err)
           }
           if (result && result.features.length) {
             callback(result)
@@ -940,7 +999,7 @@ L.U.DataLayer = L.Evented.extend({
     let latlngs
 
     if (features) {
-      L.Util.sortFeatures(features, this.map.getOption('sortKey'))
+      U.Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
       for (i = 0, len = features.length; i < len; i++) {
         this.geojsonToFeatures(features[i])
       }
@@ -997,11 +1056,11 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   _pointToLayer: function (geojson, latlng) {
-    return new L.U.Marker(this.map, latlng, { geojson: geojson, datalayer: this })
+    return new U.Marker(this.map, latlng, { geojson: geojson, datalayer: this })
   },
 
   _lineToLayer: function (geojson, latlngs) {
-    return new L.U.Polyline(this.map, latlngs, {
+    return new U.Polyline(this.map, latlngs, {
       geojson: geojson,
       datalayer: this,
       color: null,
@@ -1013,7 +1072,7 @@ L.U.DataLayer = L.Evented.extend({
     // for (let i = latlngs.length - 1; i > 0; i--) {
     //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
     // }
-    return new L.U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
+    return new U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
   },
 
   importRaw: function (raw, type) {
@@ -1030,35 +1089,17 @@ L.U.DataLayer = L.Evented.extend({
 
   importFromFile: function (f, type) {
     const reader = new FileReader()
-    type = type || L.Util.detectFileType(f)
+    type = type || U.Utils.detectFileType(f)
     reader.readAsText(f)
     reader.onload = (e) => this.importRaw(e.target.result, type)
   },
 
-  importFromUrl: function (url, type) {
-    url = this.map.localizeUrl(url)
-    this.map.xhr._ajax({
-      verb: 'GET',
-      uri: url,
-      callback: (data) => this.importRaw(data, type),
-    })
-  },
-
-  getEditUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_update, {
-      map_id: this.map.options.umap_id,
-      pk: this.umap_id,
-    })
-  },
-
-  getCreateUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_create, {
-      map_id: this.map.options.umap_id,
-    })
-  },
-
-  getSaveUrl: function () {
-    return (this.umap_id && this.getEditUrl()) || this.getCreateUrl()
+  importFromUrl: async function (uri, type) {
+    uri = this.map.localizeUrl(uri)
+    const response = await this.map.request.get(uri)
+    if (response && response.ok) {
+      this.importRaw(await response.text(), type)
+    }
   },
 
   getColor: function () {
@@ -1066,21 +1107,21 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   getDeleteUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_delete, {
+    return U.Utils.template(this.map.options.urls.datalayer_delete, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
     })
   },
 
   getVersionsUrl: function () {
-    return L.Util.template(this.map.options.urls.datalayer_versions, {
+    return U.Utils.template(this.map.options.urls.datalayer_versions, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
     })
   },
 
   getVersionUrl: function (name) {
-    return L.Util.template(this.map.options.urls.datalayer_version, {
+    return U.Utils.template(this.map.options.urls.datalayer_version, {
       pk: this.umap_id,
       map_id: this.map.options.umap_id,
       name: name,
@@ -1099,10 +1140,10 @@ L.U.DataLayer = L.Evented.extend({
   },
 
   clone: function () {
-    const options = L.Util.CopyJSON(this.options)
+    const options = U.Utils.CopyJSON(this.options)
     options.name = L._('Clone of {name}', { name: this.options.name })
     delete options.id
-    const geojson = L.Util.CopyJSON(this._geojson),
+    const geojson = U.Utils.CopyJSON(this._geojson),
       datalayer = this.map.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
@@ -1113,7 +1154,8 @@ L.U.DataLayer = L.Evented.extend({
     delete this.map.datalayers[L.stamp(this)]
     this.map.datalayers_index.splice(this.getRank(), 1)
     this.parentPane.removeChild(this.pane)
-    this.map.updateDatalayersControl()
+    this.map.onDataLayersChanged()
+    this.off('datachanged', this.map.onDataLayersChanged, this.map)
     this.fire('erase')
     this._leaflet_events_bk = this._leaflet_events
     this.map.off('moveend', this.onMoveEnd, this)
@@ -1173,17 +1215,29 @@ L.U.DataLayer = L.Evented.extend({
           },
         ],
       ]
-    const title = L.DomUtil.add('h3', '', container, L._('Layer properties'))
-    let builder = new L.U.FormBuilder(this, metadataFields, {
+    L.DomUtil.createTitle(container, L._('Layer properties'), 'icon-layers')
+    let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
-        this.map.updateDatalayersControl()
+        this.map.onDataLayersChanged()
         if (e.helper.field === 'options.type') {
-          this.resetLayer()
           this.edit()
         }
       },
     })
     container.appendChild(builder.build())
+
+    const layerOptions = this.layer.getEditableOptions()
+
+    if (layerOptions.length) {
+      builder = new U.FormBuilder(this, layerOptions, {
+        id: 'datalayer-layer-properties',
+      })
+      const layerProperties = L.DomUtil.createFieldset(
+        container,
+        `${this.layer.getName()}: ${L._('settings')}`
+      )
+      layerProperties.appendChild(builder.build())
+    }
 
     let shapeOptions = [
       'options.color',
@@ -1198,15 +1252,8 @@ L.U.DataLayer = L.Evented.extend({
       'options.fillOpacity',
     ]
 
-    const redrawCallback = function (e) {
-      this.hide()
-      this.layer.postUpdate(e)
-      this.show()
-    }
-
-    builder = new L.U.FormBuilder(this, shapeOptions, {
+    builder = new U.FormBuilder(this, shapeOptions, {
       id: 'datalayer-advanced-properties',
-      callback: redrawCallback,
     })
     const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
@@ -1220,11 +1267,8 @@ L.U.DataLayer = L.Evented.extend({
       'options.labelKey',
     ]
 
-    optionsFields = optionsFields.concat(this.layer.getEditableOptions())
-
-    builder = new L.U.FormBuilder(this, optionsFields, {
+    builder = new U.FormBuilder(this, optionsFields, {
       id: 'datalayer-advanced-properties',
-      callback: redrawCallback,
     })
     const advancedProperties = L.DomUtil.createFieldset(
       container,
@@ -1242,14 +1286,14 @@ L.U.DataLayer = L.Evented.extend({
       'options.outlinkTarget',
       'options.interactive',
     ]
-    builder = new L.U.FormBuilder(this, popupFields, { callback: redrawCallback })
+    builder = new U.FormBuilder(this, popupFields)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Interaction options')
     )
     popupFieldset.appendChild(builder.build())
 
-    if (!L.Util.isObject(this.options.remoteData)) {
+    if (!U.Utils.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
     }
     const remoteDataFields = [
@@ -1288,7 +1332,7 @@ L.U.DataLayer = L.Evented.extend({
     }
 
     const remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'))
-    builder = new L.U.FormBuilder(this, remoteDataFields)
+    builder = new U.FormBuilder(this, remoteDataFields)
     remoteDataContainer.appendChild(builder.build())
     L.DomUtil.createButton(
       'button umap-verify',
@@ -1308,7 +1352,7 @@ L.U.DataLayer = L.Evented.extend({
       L._('Delete'),
       function () {
         this._delete()
-        this.map.ui.closePanel()
+        this.map.editPanel.close()
       },
       this
     )
@@ -1340,11 +1384,14 @@ L.U.DataLayer = L.Evented.extend({
         '_blank'
       )
     }
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.map.editPanel.open({
+      data: { html: container },
+      actions: [U.Browser.backButton(this.map)],
+    })
   },
 
   getOwnOption: function (option) {
-    if (L.Util.usableOption(this.options, option)) return this.options[option]
+    if (U.Utils.usableOption(this.options, option)) return this.options[option]
   },
 
   getOption: function (option, feature) {
@@ -1361,8 +1408,8 @@ L.U.DataLayer = L.Evented.extend({
     }
   },
 
-  buildVersionsFieldset: function (container) {
-    const appendVersion = function (data) {
+  buildVersionsFieldset: async function (container) {
+    const appendVersion = (data) => {
       const date = new Date(parseInt(data.at, 10))
       const content = `${date.toLocaleString(L.lang)} (${parseInt(data.size) / 1000}Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
@@ -1378,34 +1425,30 @@ L.U.DataLayer = L.Evented.extend({
     }
 
     const versionsContainer = L.DomUtil.createFieldset(container, L._('Versions'), {
-      callback: function () {
-        this.map.xhr.get(this.getVersionsUrl(), {
-          callback: function (data) {
-            for (let i = 0; i < data.versions.length; i++) {
-              appendVersion.call(this, data.versions[i])
-            }
-          },
-          context: this,
-        })
+      callback: async function () {
+        const [{ versions }, response, error] = await this.map.server.get(
+          this.getVersionsUrl()
+        )
+        if (!error) versions.forEach(appendVersion)
       },
       context: this,
     })
   },
 
-  restore: function (version) {
+  restore: async function (version) {
     if (!this.map.editEnabled) return
     if (!confirm(L._('Are you sure you want to restore this version?'))) return
-    this.map.xhr.get(this.getVersionUrl(version), {
-      callback: function (geojson) {
-        if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
-        if (geojson._umap_options) this.setOptions(geojson._umap_options)
-        this.empty()
-        if (this.isRemoteLayer()) this.fetchRemoteData()
-        else this.addData(geojson)
-        this.isDirty = true
-      },
-      context: this,
-    })
+    const [geojson, response, error] = await this.map.server.get(
+      this.getVersionUrl(version)
+    )
+    if (!error) {
+      if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
+      if (geojson._umap_options) this.setOptions(geojson._umap_options)
+      this.empty()
+      if (this.isRemoteLayer()) this.fetchRemoteData()
+      else this.addData(geojson)
+      this.isDirty = true
+    }
   },
 
   featuresToGeoJSON: function () {
@@ -1414,9 +1457,9 @@ L.U.DataLayer = L.Evented.extend({
     return features
   },
 
-  show: function () {
-    if (!this.isLoaded()) this.fetchData()
+  show: async function () {
     this.map.addLayer(this.layer)
+    if (!this.isLoaded()) await this.fetchData()
     this.fire('show')
   },
 
@@ -1436,11 +1479,32 @@ L.U.DataLayer = L.Evented.extend({
   zoomTo: function () {
     if (!this.isVisible()) return
     const bounds = this.layer.getBounds()
-    if (bounds.isValid()) this.map.fitBounds(bounds)
+    if (bounds.isValid()) {
+      const options = { maxZoom: this.getOption('zoomTo') }
+      this.map.fitBounds(bounds, options)
+    }
   },
 
+  // Is this layer type browsable in theorie
+  isBrowsable: function () {
+    return this.layer && this.layer.browsable
+  },
+
+  // Is this layer browsable in theorie
+  // AND the user allows it
   allowBrowse: function () {
-    return !!this.options.browsable && this.canBrowse() && this.isVisible()
+    return !!this.options.browsable && this.isBrowsable()
+  },
+
+  // Is this layer browsable in theorie
+  // AND the user allows it
+  // AND it makes actually sense (is visible, it has data…)
+  canBrowse: function () {
+    return this.allowBrowse() && this.isVisible() && this.hasData()
+  },
+
+  count: function () {
+    return this._index.length
   },
 
   hasData: function () {
@@ -1449,10 +1513,6 @@ L.U.DataLayer = L.Evented.extend({
 
   isVisible: function () {
     return this.layer && this.map.hasLayer(this.layer)
-  },
-
-  canBrowse: function () {
-    return this.layer && this.layer.canBrowse
   },
 
   getFeatureByIndex: function (index) {
@@ -1483,7 +1543,7 @@ L.U.DataLayer = L.Evented.extend({
     let next
     const index = this.map.datalayers_index
     while (((id = index[++id] ? id : 0), (next = index[id]))) {
-      if (next === this || (next.allowBrowse() && next.hasData())) break
+      if (next === this || next.canBrowse()) break
     }
     return next
   },
@@ -1493,7 +1553,7 @@ L.U.DataLayer = L.Evented.extend({
     let prev
     const index = this.map.datalayers_index
     while (((id = index[--id] ? id : index.length - 1), (prev = index[id]))) {
-      if (prev === this || (prev.allowBrowse() && prev.hasData())) break
+      if (prev === this || prev.canBrowse()) break
     }
     return prev
   },
@@ -1520,7 +1580,7 @@ L.U.DataLayer = L.Evented.extend({
     return this.isReadOnly() || this.isRemoteLayer()
   },
 
-  save: function () {
+  save: async function () {
     if (this.isDeleted) return this.saveDelete()
     if (!this.isLoaded()) {
       return
@@ -1534,43 +1594,70 @@ L.U.DataLayer = L.Evented.extend({
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    this.map.post(this.getSaveUrl(), {
-      data: formData,
-      callback: function (data, response) {
-        // Response contains geojson only if save has conflicted and conflicts have
-        // been resolved. So we need to reload to get extra data (saved from someone else)
-        if (data.geojson) {
-          this.clear()
-          this.fromGeoJSON(data.geojson)
-        }
-        this._geojson = geojson
-        this._last_modified = response.getResponseHeader('Last-Modified')
-        this.setUmapId(data.id)
-        this.updateOptions(data)
-        this.backupOptions()
-        this.connectToMap()
-        this._loaded = true
-        this.redraw() // Needed for reordering features
-        this.isDirty = false
-        this.permissions.save()
-      },
-      context: this,
-      headers: this._last_modified
-        ? { 'If-Unmodified-Since': this._last_modified }
-        : {},
+    const saveUrl = this.map.urls.get('datalayer_save', {
+      map_id: this.map.options.umap_id,
+      pk: this.umap_id,
     })
+    const headers = this._reference_version
+      ? { 'X-Datalayer-Reference': this._reference_version }
+      : {}
+    await this._trySave(saveUrl, headers, formData)
+    this._geojson = geojson
   },
 
-  saveDelete: function () {
-    const callback = function () {
+  _trySave: async function (url, headers, formData) {
+    const [data, response, error] = await this.map.server.post(url, headers, formData)
+    if (error) {
+      if (response && response.status === 412) {
+        const msg = L._(
+          'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
+        )
+        const actions = [
+          {
+            label: L._('Save anyway'),
+            callback: async () => {
+              // Save again,
+              // but do not pass the reference version this time
+              await this._trySave(url, {}, formData)
+            },
+          },
+          {
+            label: L._('Cancel'),
+          },
+        ]
+        this.map.ui.alert({
+          content: msg,
+          level: 'error',
+          duration: 100000,
+          actions: actions,
+        })
+      }
+    } else {
+      // Response contains geojson only if save has conflicted and conflicts have
+      // been resolved. So we need to reload to get extra data (added by someone else)
+      if (data.geojson) {
+        this.clear()
+        this.fromGeoJSON(data.geojson)
+        delete data.geojson
+      }
+      this._reference_version = response.headers.get('X-Datalayer-Version')
+      this.setUmapId(data.id)
+      this.updateOptions(data)
+      this.backupOptions()
+      this.connectToMap()
+      this._loaded = true
+      this.redraw() // Needed for reordering features
       this.isDirty = false
-      this.map.continueSaving()
+      this.permissions.save()
     }
-    if (!this.umap_id) return callback.call(this)
-    this.map.xhr.post(this.getDeleteUrl(), {
-      callback: callback,
-      context: this,
-    })
+  },
+
+  saveDelete: async function () {
+    if (this.umap_id) {
+      await this.map.server.post(this.getDeleteUrl())
+    }
+    this.isDirty = false
+    this.map.continueSaving()
   },
 
   getMap: function () {
@@ -1583,7 +1670,7 @@ L.U.DataLayer = L.Evented.extend({
 
   tableEdit: function () {
     if (this.isRemoteLayer() || !this.isVisible()) return
-    const editor = new L.U.TableEditor(this)
+    const editor = new U.TableEditor(this)
     editor.edit()
   },
 })
@@ -1601,6 +1688,6 @@ L.TileLayer.include({
   },
 
   getAttribution: function () {
-    return L.Util.toHTML(this.options.attribution)
+    return U.Utils.toHTML(this.options.attribution)
   },
 })

@@ -16,16 +16,16 @@
 # spf, 2019
 # Syl Martin, 2023
 # Philippe Verdy, 2017
-# yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023
+# yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2024
 # YOHAN BONIFACE <yb@enix.org>, 2012
 # yohanboniface <yohanboniface@free.fr>, 2014,2016
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 06:55+0000\n"
+"POT-Creation-Date: 2024-03-01 16:51+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Syl Martin, 2023\n"
+"Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2024\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,115 +41,115 @@ msgstr "Modifiable seulement avec le lien de modification secret"
 msgid "Everyone can edit"
 msgstr "Tout le monde peut modifier"
 
-#: forms.py:69 models.py:318
+#: forms.py:69 models.py:371
 msgid "Inherit"
 msgstr "Par défaut"
 
-#: middleware.py:14
+#: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "Le site est en lecture seule pour maintenance."
 
-#: models.py:48
+#: models.py:50
 msgid "name"
 msgstr "nom"
 
-#: models.py:79
+#: models.py:81
 msgid "details"
 msgstr "détails"
 
-#: models.py:80
+#: models.py:82
 msgid "Link to a page where the licence is detailed."
 msgstr "Lien vers une page détaillant la licence."
 
-#: models.py:90
+#: models.py:92
 msgid "URL template using OSM tile format"
 msgstr "Modèle d'URL au format des tuiles OSM"
 
-#: models.py:96
+#: models.py:98
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordre des calques de tuiles dans le panneau de modification"
 
-#: models.py:142 models.py:319
+#: models.py:144 models.py:372
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: models.py:143 models.py:149 models.py:320
+#: models.py:145 models.py:151 models.py:373
 msgid "Editors only"
 msgstr "Éditeurs uniquement"
 
-#: models.py:144 models.py:321
+#: models.py:146 models.py:374
 msgid "Owner only"
 msgstr "Propriétaire uniquement"
 
-#: models.py:147
+#: models.py:149
 msgid "Everyone (public)"
 msgstr "Tout le monde (public)"
 
-#: models.py:148
+#: models.py:150
 msgid "Anyone with link"
 msgstr "Quiconque a le lien"
 
-#: models.py:150
+#: models.py:152
 msgid "Blocked"
 msgstr "Bloquée"
 
-#: models.py:153 models.py:325
+#: models.py:155 models.py:378
 msgid "description"
 msgstr "description"
 
-#: models.py:154
+#: models.py:156
 msgid "center"
 msgstr "centre"
 
-#: models.py:155
+#: models.py:157
 msgid "zoom"
 msgstr "zoom"
 
-#: models.py:157
+#: models.py:159
 msgid "locate"
 msgstr "géolocaliser"
 
-#: models.py:157
+#: models.py:159
 msgid "Locate user on load?"
 msgstr "Géolocaliser l'utilisateur au chargement ?"
 
-#: models.py:161
+#: models.py:163
 msgid "Choose the map licence."
 msgstr "Choisir une licence pour la carte"
 
-#: models.py:162
+#: models.py:164
 msgid "licence"
 msgstr "licence"
 
-#: models.py:173
+#: models.py:175
 msgid "owner"
 msgstr "créateur"
 
-#: models.py:177
+#: models.py:179
 msgid "editors"
 msgstr "éditeurs"
 
-#: models.py:182 models.py:339
+#: models.py:184 models.py:392
 msgid "edit status"
 msgstr "statut de modification"
 
-#: models.py:187
+#: models.py:189
 msgid "share status"
 msgstr "qui a accès"
 
-#: models.py:190 models.py:334
+#: models.py:192 models.py:387
 msgid "settings"
 msgstr "réglages"
 
-#: models.py:269
+#: models.py:320
 msgid "Clone of"
 msgstr "Clone de"
 
-#: models.py:329
+#: models.py:382
 msgid "display on load"
 msgstr "afficher au chargement."
 
-#: models.py:330
+#: models.py:383
 msgid "Display this layer on load."
 msgstr "Afficher ce calque au chargement."
 
@@ -167,28 +167,27 @@ msgstr "Consulter les cartes de %(current_user)s"
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s n'a aucune carte."
 
-#: templates/auth/user_form.html:6 templates/umap/navigation.html:12
-#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
-msgid "My Dashboard"
-msgstr "Mon espace"
-
 #: templates/auth/user_form.html:6
+msgid "My Maps"
+msgstr "Mes cartes"
+
+#: templates/auth/user_form.html:7
 msgid "My Profile"
 msgstr "Mon profil"
 
-#: templates/auth/user_form.html:19
+#: templates/auth/user_form.html:20
 msgid "Save"
 msgstr "Enregistrer"
 
-#: templates/auth/user_form.html:24
+#: templates/auth/user_form.html:25
 msgid "Your current providers"
 msgstr "Vos fournisseurs associés"
 
-#: templates/auth/user_form.html:30
+#: templates/auth/user_form.html:31
 msgid "Connect to another provider"
 msgstr "Associer un autre fournisseur"
 
-#: templates/auth/user_form.html:32
+#: templates/auth/user_form.html:33
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
@@ -210,23 +209,23 @@ msgid ""
 "them in your site."
 msgstr "uMap permet de créer des cartes personnalisées sur des fonds OpenStreetMap en un instant et les afficher dans votre site."
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:16
 msgid "Please log in with your account"
 msgstr "Identifiez-vous"
 
-#: templates/registration/login.html:15
+#: templates/registration/login.html:28
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: templates/registration/login.html:18
+#: templates/registration/login.html:31
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/registration/login.html:19
+#: templates/registration/login.html:32
 msgid "Login"
 msgstr "Connexion"
 
-#: templates/registration/login.html:24
+#: templates/registration/login.html:37
 msgid "Please choose a provider"
 msgstr "Merci de choisir un fournisseur"
 
@@ -270,8 +269,8 @@ msgstr "Exporter et partager votre carte"
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Et c'est <a href=\"%(repo_url)s\">open source</a>!"
 
-#: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:38
+#: templates/umap/user_dashboard.html:42
 msgid "Create a map"
 msgstr "Créer une carte"
 
@@ -279,13 +278,13 @@ msgstr "Créer une carte"
 msgid "Play with the demo"
 msgstr "Tester la démo"
 
-#: templates/umap/content.html:23
+#: templates/umap/content.html:22
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
 msgstr "uMap est actuellement en mode lecture seule, aucune création ou modification n'est possible."
 
-#: templates/umap/content.html:31
+#: templates/umap/content.html:30
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -298,7 +297,7 @@ msgstr "Il s'agit d'un site de démonstration, utilisé pour les tests et valida
 msgid "Map of the uMaps"
 msgstr "La carte des uMaps"
 
-#: templates/umap/home.html:13
+#: templates/umap/home.html:14
 msgid "Get inspired, browse maps"
 msgstr "Naviguer dans les cartes"
 
@@ -306,75 +305,126 @@ msgstr "Naviguer dans les cartes"
 msgid "You are logged in. Continuing..."
 msgstr "Vous êtes maintenant identifié. Merci de patienter..."
 
-#: templates/umap/map_list.html:9 views.py:303
+#: templates/umap/map_list.html:9 views.py:342
 msgid "by"
 msgstr "par"
 
-#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Plus"
 
 #: templates/umap/map_table.html:6
-msgid "Map"
-msgstr "Carte"
-
-#: templates/umap/map_table.html:7
 msgid "Name"
 msgstr "Nom"
 
+#: templates/umap/map_table.html:7
+msgid "Preview"
+msgstr "Aperçu"
+
 #: templates/umap/map_table.html:8
-msgid "Who can see / edit"
-msgstr "Qui peut voir / modifier"
+msgid "Who can see"
+msgstr "Qui peut voir"
 
 #: templates/umap/map_table.html:9
+msgid "Who can edit"
+msgstr "Qui peut modifier"
+
+#: templates/umap/map_table.html:10
 msgid "Last save"
 msgstr "Dernière modification"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:11
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:12
 msgid "Actions"
 msgstr "Actions"
 
-#: templates/umap/map_table.html:28
+#: templates/umap/map_table.html:26 templates/umap/map_table.html:28
+msgid "Open preview"
+msgstr "Ouvrir l'aperçu"
+
+#: templates/umap/map_table.html:48 templates/umap/map_table.html:50
 msgid "Share"
 msgstr "Partager"
 
-#: templates/umap/map_table.html:29
+#: templates/umap/map_table.html:54 templates/umap/map_table.html:56
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/umap/map_table.html:30
+#: templates/umap/map_table.html:60 templates/umap/map_table.html:62
 msgid "Download"
 msgstr "Télécharger"
 
-#: templates/umap/navigation.html:15
+#: templates/umap/map_table.html:66 templates/umap/map_table.html:68
+msgid "Clone"
+msgstr "Cloner"
+
+#: templates/umap/map_table.html:76 templates/umap/map_table.html:78
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/umap/map_table.html:91
+msgid "first"
+msgstr "début"
+
+#: templates/umap/map_table.html:92
+msgid "previous"
+msgstr "précédente"
+
+#: templates/umap/map_table.html:100
+#, python-format
+msgid "Page %(maps_number)s of %(num_pages)s"
+msgstr "Page %(maps_number)s de %(num_pages)s"
+
+#: templates/umap/map_table.html:105
+msgid "next"
+msgstr "suivante"
+
+#: templates/umap/map_table.html:106
+msgid "last"
+msgstr "fin"
+
+#: templates/umap/map_table.html:114
+#, python-format
+msgid "Lines per page: %(per_page)s"
+msgstr "Lignes par page: %(per_page)s"
+
+#: templates/umap/map_table.html:119
+#, python-format
+msgid "%(count)s maps"
+msgstr "%(count)s cartes"
+
+#: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
+msgid "My Dashboard"
+msgstr "Mon espace"
+
+#: templates/umap/navigation.html:13
 msgid "Starred maps"
 msgstr "Favoris"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:17
 msgid "Log in"
 msgstr "Connexion"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:17
 msgid "Sign in"
 msgstr "Créer un compte"
 
-#: templates/umap/navigation.html:23
+#: templates/umap/navigation.html:21
 msgid "About"
 msgstr "À propos"
 
-#: templates/umap/navigation.html:26
+#: templates/umap/navigation.html:24
 msgid "Help"
 msgstr "Aide"
 
-#: templates/umap/navigation.html:31
+#: templates/umap/navigation.html:29
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: templates/umap/navigation.html:35
+#: templates/umap/navigation.html:33
 msgid "Log out"
 msgstr "Déconnexion"
 
@@ -436,64 +486,83 @@ msgstr "Chercher des cartes"
 msgid "Search"
 msgstr "Chercher"
 
-#: templates/umap/user_dashboard.html:7
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:27
 msgid "Search my maps"
 msgstr "Chercher dans mes cartes"
 
 #: templates/umap/user_dashboard.html:10
+#, python-format
+msgid "My Maps (%(count)s)"
+msgstr "Mes cartes (%(count)s)"
+
+#: templates/umap/user_dashboard.html:12
 msgid "My profile"
 msgstr "Mon profil"
 
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/user_dashboard.html:20 templates/umap/user_dashboard.html:24
+msgid "Map’s title"
+msgstr "Titre de la carte"
+
+#: templates/umap/user_dashboard.html:32
+#, python-format
+msgid "Download %(count)s maps"
+msgstr "Télécharger %(count)s cartes"
+
+#: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
 msgstr "Vous n'avez pas encore de carte."
 
-#: views.py:308
+#: views.py:347
 msgid "View the map"
 msgstr "Voir la carte"
 
-#: views.py:659
-msgid "Map has been updated!"
-msgstr "La carte a été mise à jour !"
+#: views.py:705
+msgid "See full screen"
+msgstr "Plein écran"
 
-#: views.py:684
+#: views.py:804
 msgid "Map editors updated with success!"
 msgstr "Éditeurs de la carte mis à jour !"
 
-#: views.py:722
+#: views.py:841
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "La lien d'édition uMap pour votre carte %(map_name)s"
 
-#: views.py:725
+#: views.py:844
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Voici votre lien d'édition secret: %(link)s"
 
-#: views.py:731
+#: views.py:851
+#, python-format
+msgid "Can't send email to %(email)s"
+msgstr "Impossible d'envoyer un courriel vers %(email)s"
+
+#: views.py:854
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Courriel envoyé à %(email)s"
 
-#: views.py:742
+#: views.py:865
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:765
+#: views.py:893
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:770
+#: views.py:898
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:959
+#: views.py:1136
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
 
-#: views.py:981
+#: views.py:1158
 msgid "Permissions updated with success!"
 msgstr "Les permissions ont bien été modifiées !"

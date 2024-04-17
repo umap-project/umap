@@ -1,11 +1,12 @@
 import re
-from time import sleep
+from smtplib import SMTPException
+from unittest.mock import patch
 
 import pytest
 from django.core.signing import get_cookie_signer
 from playwright.sync_api import expect
 
-from umap.models import DataLayer
+from umap.models import DataLayer, Map
 
 from ..base import DataLayerFactory
 
@@ -33,7 +34,7 @@ def test_map_load_with_owner(anonymap, live_server, owner_session):
     expect(save).to_be_visible()
     add_marker = owner_session.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    edit_settings = owner_session.get_by_title("Edit map properties")
+    edit_settings = owner_session.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_permissions = owner_session.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
@@ -64,7 +65,7 @@ def test_map_load_with_anonymous_but_editable_layer(
     expect(save).to_be_visible()
     add_marker = page.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_hidden()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_hidden()
@@ -91,6 +92,9 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+    # Those fields should not be present in anonymous maps
+    expect(owner_session.locator(".umap-field-share_status select")).to_be_hidden()
+    expect(owner_session.locator(".umap-field-owner")).to_be_hidden()
 
 
 def test_anonymous_can_add_marker_on_editable_layer(
@@ -110,12 +114,13 @@ def test_anonymous_can_add_marker_on_editable_layer(
     marker = page.locator(".leaflet-marker-icon")
     map_el = page.locator("#map")
     expect(marker).to_have_count(2)
-    expect(map_el).not_to_have_class(re.compile("umap-ui"))
+    panel = page.locator(".panel.right.on")
+    expect(panel).to_be_hidden()
     add_marker.click()
     map_el.click(position={"x": 100, "y": 100})
     expect(marker).to_have_count(3)
     # Edit panel is open
-    expect(map_el).to_have_class(re.compile("umap-ui"))
+    expect(panel).to_be_visible()
     datalayer_select = page.locator("select[name='datalayer']")
     expect(datalayer_select).to_be_visible()
     options = page.locator("select[name='datalayer'] option")
@@ -126,10 +131,14 @@ def test_anonymous_can_add_marker_on_editable_layer(
 
 def test_can_change_perms_after_create(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/en/map/new")
+    # Create a layer
+    page.get_by_title("Manage layers").click()
+    page.get_by_title("Add a layer").click()
+    page.locator("input[name=name]").fill("Layer 1")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go back
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        save.click()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
@@ -147,3 +156,50 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+
+
+def test_alert_message_after_create(
+    tilelayer, live_server, page, monkeypatch, settings
+):
+    page.goto(f"{live_server.url}/en/map/new")
+    save = page.get_by_role("button", name="Save")
+    expect(save).to_be_visible()
+    alert = page.locator(".umap-alert")
+    expect(alert).to_be_hidden()
+    with page.expect_response(re.compile(r".*/map/create/")):
+        save.click()
+    new_map = Map.objects.last()
+    expect(alert).to_be_visible()
+    expect(
+        alert.get_by_text(
+            "Your map has been created! As you are not logged in, here is your secret "
+            "link to edit the map, please keep it safe:"
+        )
+    ).to_be_visible()
+    expect(alert.get_by_role("button", name="Copy")).to_be_visible()
+    expect(alert.get_by_role("button", name="Send me the link")).to_be_visible()
+    alert.get_by_placeholder("Email").fill("foo@bar.com")
+    with patch("umap.views.send_mail") as patched:
+        with page.expect_response(re.compile("/en/map/.*/send-edit-link/")):
+            alert.get_by_role("button", name="Send me the link").click()
+        assert patched.called
+        patched.assert_called_with(
+            "The uMap edit link for your map: Untitled map",
+            f"Here is your secret edit link: {new_map.get_anonymous_edit_url()}",
+            "test@test.org",
+            ["foo@bar.com"],
+            fail_silently=False,
+        )
+
+
+def test_email_sending_error_are_catched(tilelayer, page, live_server):
+    page.goto(f"{live_server.url}/en/map/new")
+    alert = page.locator(".umap-alert")
+    with page.expect_response(re.compile(r".*/map/create/")):
+        page.get_by_role("button", name="Save").click()
+    alert.get_by_placeholder("Email").fill("foo@bar.com")
+    with patch("umap.views.send_mail", side_effect=SMTPException) as patched:
+        with page.expect_response(re.compile("/en/map/.*/send-edit-link/")):
+            alert.get_by_role("button", name="Send me the link").click()
+        assert patched.called
+        expect(alert.get_by_text("Can't send email to foo@bar.com")).to_be_visible()

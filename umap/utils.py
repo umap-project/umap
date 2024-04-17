@@ -1,7 +1,26 @@
 import gzip
+import json
 import os
 
+from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from django.urls import URLPattern, URLResolver, get_resolver
+
+
+def _urls_for_js(urls=None):
+    """
+    Return templated URLs prepared for javascript.
+    """
+    if urls is None:
+        # prevent circular import
+        from .urls import i18n_urls, urlpatterns
+
+        urls = [
+            url.name for url in urlpatterns + i18n_urls if getattr(url, "name", None)
+        ]
+    urls = dict(zip(urls, [get_uri_template(url) for url in urls]))
+    urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
+    return urls
 
 
 def get_uri_template(urlname, args=None, prefix=""):
@@ -139,9 +158,14 @@ def merge_features(reference: list, latest: list, incoming: list):
 
     # Reapply the changes on top of the latest.
     for item in removed:
-        merged.delete(item)
+        merged.remove(item)
 
     for item in added:
         merged.append(item)
 
     return merged
+
+
+def json_dumps(obj, **kwargs):
+    """Utility using the Django JSON Encoder when dumping objects"""
+    return json.dumps(obj, cls=DjangoJSONEncoder, **kwargs)

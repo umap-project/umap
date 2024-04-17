@@ -1,7 +1,5 @@
 .DEFAULT_GOAL := help
 
-JS_TEST_URL := http://localhost:8001/umap/static/umap/test/index.html
-
 .PHONY: install
 install: ## Install the dependencies
 	python3 -m pip install --upgrade pip
@@ -14,16 +12,17 @@ develop: ## Install the test and dev dependencies
 
 .PHONY: format
 format: ## Format the code and templates files
-	djlint umap/templates --reformat &&\
-	isort --profile black . &&\
-	ruff format --target-version=py38 .
+	-djlint umap/templates --reformat
+	-isort --profile black umap/
+	-ruff format --target-version=py310 umap/
 
 .PHONY: lint
 lint: ## Lint the code and template files
-	djlint umap/templates --lint &&\
-	isort --check --profile black . &&\
-    ruff format --check --target-version=py38 . &&\
-	vermin --no-tips --violations -t=3.8- .
+	npx eslint umap/static/umap/
+	djlint umap/templates --lint
+	isort --check --profile black umap/
+	ruff format --check --target-version=py310 umap/
+	vermin --no-tips --violations -t=3.10- umap/
 
 docs: ## Compile the docs
 	mkdocs build
@@ -48,7 +47,7 @@ docker: ## Create a new Docker image and publish it
 	docker push umap/umap:${VERSION}
 
 .PHONY: build
-build: test compilemessages  ## Build the Python package before release
+build: ## Build the Python package before release
 	@hatch build --clean
 
 .PHONY: publish
@@ -56,7 +55,9 @@ publish: ## Publish the Python package to Pypi
 	@hatch publish
 	make clean
 
-test:
+test: testpy testjs
+
+testpy:
 	pytest -xv umap/tests/
 
 test-integration:
@@ -70,25 +71,13 @@ compilemessages:
 	umap generate_js_locale
 messages:
 	cd umap && umap makemessages -l en
-	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values
+	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values --expressions=_,translate
 vendors:
 	npm run vendors
 installjs:
 	npm install
 testjs: node_modules
-	@{ \
-		trap 'kill $$PID; exit' INT; \
-		python -m http.server 8001 & \
-		PID=$$!; \
-		sleep 1; \
-		echo "Opening $(JS_TEST_URL)"; \
-		if command -v python -m webbrowser > /dev/null 2>&1; then \
-			python -m webbrowser "$(JS_TEST_URL)"; \
-		else \
-			echo "Please open $(JS_TEST_URL) in your web browser"; \
-		fi; \
-		wait $$PID; \
-	}
+	node_modules/mocha/bin/mocha.js umap/static/umap/unittests/
 tx_push:
 	tx push -s
 tx_pull:

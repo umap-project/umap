@@ -1,15 +1,52 @@
-import json
 import re
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import Map
-
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
+
+
+def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    meta = page.locator('link[rel="preconnect"]')
+    expect(meta).to_have_count(1)
+    expect(meta).to_have_attribute("href", "//a.tile.openstreetmap.fr")
+    # Add custom tilelayer
+    map.settings["properties"]["tilelayer"] = {
+        "name": "OSM Piano FR",
+        "maxZoom": 20,
+        "minZoom": 0,
+        "attribution": "test",
+        "url_template": "https://a.piano.tiles.quaidorsay.fr/fr{r}/{z}/{x}/{y}.png",
+    }
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(meta).to_have_attribute("href", "//a.piano.tiles.quaidorsay.fr")
+    # Add custom tilelayer with variable in domain, should create a preconnect
+    map.settings["properties"]["tilelayer"] = {
+        "name": "OSM Piano FR",
+        "maxZoom": 20,
+        "minZoom": 0,
+        "attribution": "test",
+        "url_template": "https://{s}.piano.tiles.quaidorsay.fr/fr{r}/{z}/{x}/{y}.png",
+    }
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(meta).to_have_count(0)
+
+
+def test_default_view_without_datalayer_should_use_default_center(
+    map, live_server, datalayer, page
+):
+    datalayer.settings["displayOnLoad"] = False
+    datalayer.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
+    # Hash is defined, so map is initialized
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
+    layers = page.locator(".umap-browser .datalayer h5")
+    expect(layers).to_have_count(1)
 
 
 def test_default_view_latest_without_datalayer_should_use_default_center(
@@ -19,20 +56,34 @@ def test_default_view_latest_without_datalayer_should_use_default_center(
     datalayer.save()
     map.settings["properties"]["defaultView"] = "latest"
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
     expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer h5")
+    expect(layers).to_have_count(1)
+
+
+def test_default_view_data_without_datalayer_should_use_default_center(
+    map, live_server, datalayer, page
+):
+    datalayer.settings["displayOnLoad"] = False
+    datalayer.save()
+    map.settings["properties"]["defaultView"] = "data"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
+    # Hash is defined, so map is initialized
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
+    layers = page.locator(".umap-browser .datalayer h5")
     expect(layers).to_have_count(1)
 
 
 def test_default_view_latest_with_marker(map, live_server, datalayer, page):
     map.settings["properties"]["defaultView"] = "latest"
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
     expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer h5")
     expect(layers).to_have_count(1)
 
 
@@ -58,9 +109,9 @@ def test_default_view_latest_with_line(map, live_server, page):
     DataLayerFactory(map=map, data=data)
     map.settings["properties"]["defaultView"] = "latest"
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer h5")
     expect(layers).to_have_count(1)
 
 
@@ -89,29 +140,38 @@ def test_default_view_latest_with_polygon(map, live_server, page):
     DataLayerFactory(map=map, data=data)
     map.settings["properties"]["defaultView"] = "latest"
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer h5")
     expect(layers).to_have_count(1)
 
 
-def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
-    map, live_server, datalayer, page
-):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
+def test_default_view_locate(browser, live_server, map):
+    context = browser.new_context(
+        geolocation={"longitude": 8.52967, "latitude": 39.16267},
+        permissions=["geolocation"],
+    )
+    map.settings["properties"]["defaultView"] = "locate"
     map.save()
+    page = context.new_page()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page).to_have_url(re.compile(r".*#18/39\.16267/8\.52967"))
+
+
+def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
+    openmap, live_server, datalayer, page
+):
     datalayer.settings["remoteData"] = {
         "url": "https://overpass-api.de/api/interpreter?data=[out:xml];node[harbour=yes]({south},{west},{north},{east});out body;",
         "format": "osm",
         "from": "10",
     }
     datalayer.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    toggle = page.get_by_role("button", name="See data layers")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    toggle = page.get_by_role("button", name="See layers")
     expect(toggle).to_be_visible()
     toggle.click()
-    layers = page.locator(".umap-browse-datalayers li")
+    layers = page.locator(".umap-browser .datalayer h5")
     expect(layers).to_have_count(1)
     map_el = page.locator("#map")
     add_marker = page.get_by_title("Draw a marker")
@@ -119,48 +179,42 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     marker = page.locator(".leaflet-marker-icon")
     expect(marker).to_have_count(0)
     add_marker.click()
-    map_el.click(position={"x": 100, "y": 100})
+    map_el.click(position={"x": 500, "y": 100})
     expect(marker).to_have_count(1)
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
+    page.get_by_title("See layers").click()
     expect(layers).to_have_count(2)
 
 
-def test_can_hide_datalayer_from_caption(map, live_server, datalayer, page):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
+def test_can_hide_datalayer_from_caption(openmap, live_server, datalayer, page):
     # Add another DataLayer
-    other = DataLayerFactory(map=map, name="Hidden", settings={"inCaption": False})
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    other = DataLayerFactory(map=openmap, name="Hidden", settings={"inCaption": False})
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     toggle = page.get_by_text("About").first
     expect(toggle).to_be_visible()
     toggle.click()
     layers = page.locator(".umap-caption .datalayer-legend")
     expect(layers).to_have_count(1)
-    found = page.locator("#umap-ui-container").get_by_text(datalayer.name)
+    found = page.locator(".panel.left.on").get_by_text(datalayer.name)
     expect(found).to_be_visible()
-    hidden = page.locator("#umap-ui-container").get_by_text(other.name)
+    hidden = page.locator(".panel.left.on").get_by_text(other.name)
     expect(hidden).to_be_hidden()
 
 
-def test_basic_choropleth_map(map, live_server, page):
-    path = Path(__file__).parent.parent / "fixtures/choropleth_region_chomage.geojson"
-    data = json.loads(path.read_text())
-    DataLayerFactory(data=data, map=map)
+def test_minimap_on_load(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    # Hauts-de-France
-    paths = page.locator("path[fill='#08519c']")
-    expect(paths).to_have_count(1)
-    # Occitanie
-    paths = page.locator("path[fill='#3182bd']")
-    expect(paths).to_have_count(1)
-    # Grand-Est, PACA
-    paths = page.locator("path[fill='#6baed6']")
-    expect(paths).to_have_count(2)
-    # Bourgogne-Franche-Comté, Centre-Val-de-Loire, IdF, Normandie, Corse, Nouvelle-Aquitaine
-    paths = page.locator("path[fill='#bdd7e7']")
-    expect(paths).to_have_count(6)
-    # Bretagne, Pays de la Loire, AURA
-    paths = page.locator("path[fill='#eff3ff']")
-    expect(paths).to_have_count(3)
+    expect(page.locator(".leaflet-control-minimap")).to_be_hidden()
+    map.settings["properties"]["miniMap"] = True
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-minimap")).to_be_visible()
+
+
+def test_zoom_control_on_load(map, live_server, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-zoom")).to_be_visible()
+    map.settings["properties"]["zoomControl"] = False
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".leaflet-control-zoom")).to_be_hidden()

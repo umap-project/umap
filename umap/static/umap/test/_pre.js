@@ -132,7 +132,7 @@ function initMap(options) {
         map_update_permissions: '/map/{map_id}/update/permissions/',
         map_download: '/map/{map_id}/download/',
       },
-      default_iconUrl: '../src/img/marker.png',
+      default_iconUrl: '../src/img/marker.svg',
       zoom: 6,
       share_statuses: [
         [1, 'Tout le monde (public)'],
@@ -213,14 +213,13 @@ function initMap(options) {
       },
     },
   }
-  default_options.properties.datalayers.push(defaultDatalayerData())
   options = options || {}
   options.properties = L.extend({}, default_options.properties, options)
   options.geometry = {
     type: 'Point',
     coordinates: [5.0592041015625, 52.05924589011585],
   }
-  return new L.U.Map('map', options)
+  return new U.Map('map', options)
 }
 
 var RESPONSES = {
@@ -384,10 +383,6 @@ var RESPONSES = {
       },
     ],
   },
-}
-
-sinon.fakeServer.flush = function () {
-  this.responses = []
 }
 
 var kml_example =

@@ -15,7 +15,6 @@ from . import views
 from .decorators import (
     can_edit_map,
     can_view_map,
-    jsonize_view,
     login_required_if_not_anonymous_allowed,
 )
 from .utils import decorated_patterns
@@ -41,6 +40,7 @@ urlpatterns = [
     ),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     re_path(r"^agnocomplete/", include("agnocomplete.urls")),
+    re_path(r"^map/oembed/", views.MapOEmbed.as_view(), name="map_oembed"),
     re_path(
         r"^map/(?P<map_id>\d+)/download/",
         can_view_map(views.MapDownload.as_view()),
@@ -49,7 +49,7 @@ urlpatterns = [
 ]
 
 i18n_urls = [
-    re_path(r"^login/$", jsonize_view(auth_views.LoginView.as_view()), name="login"),
+    re_path(r"^login/$", auth_views.LoginView.as_view(), name="login"),
     re_path(
         r"^login/popup/end/$", views.LoginPopupEnd.as_view(), name="login_popup_end"
     ),
@@ -72,18 +72,18 @@ i18n_urls = [
 ]
 i18n_urls += decorated_patterns(
     [can_view_map, cache_control(must_revalidate=True)],
-    re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/$",
+    path(
+        "datalayer/<int:map_id>/<uuid:pk>/",
         views.DataLayerView.as_view(),
         name="datalayer_view",
     ),
-    re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/versions/$",
+    path(
+        "datalayer/<int:map_id>/<uuid:pk>/versions/",
         views.DataLayerVersions.as_view(),
         name="datalayer_versions",
     ),
-    re_path(
-        r"^datalayer/(?P<map_id>\d+)/(?P<pk>[\d]+)/(?P<name>[_\w]+.geojson)$",
+    path(
+        "datalayer/<int:map_id>/<uuid:pk>/<str:name>",
         views.DataLayerVersion.as_view(),
         name="datalayer_version",
     ),
@@ -96,6 +96,7 @@ i18n_urls += decorated_patterns(
 )
 i18n_urls += decorated_patterns(
     [ensure_csrf_cookie],
+    re_path(r"^map/$", views.MapPreview.as_view(), name="map_preview"),
     re_path(r"^map/new/$", views.MapNew.as_view(), name="map_new"),
 )
 i18n_urls += decorated_patterns(
@@ -109,16 +110,9 @@ i18n_urls += decorated_patterns(
         views.ToggleMapStarStatus.as_view(),
         name="map_star",
     ),
-    re_path(
-        r"^me$",
-        views.user_dashboard,
-        name="user_dashboard",
-    ),
-    re_path(
-        r"^me/profile$",
-        views.user_profile,
-        name="user_profile",
-    ),
+    re_path(r"^me$", views.user_dashboard, name="user_dashboard"),
+    re_path(r"^me/profile$", views.user_profile, name="user_profile"),
+    re_path(r"^me/download$", views.user_download, name="user_download"),
 )
 map_urls = [
     re_path(
@@ -151,18 +145,18 @@ map_urls = [
         views.DataLayerCreate.as_view(),
         name="datalayer_create",
     ),
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/delete/(?P<pk>\d+)/$",
+    path(
+        "map/<int:map_id>/datalayer/delete/<uuid:pk>/",
         views.DataLayerDelete.as_view(),
         name="datalayer_delete",
     ),
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/permissions/(?P<pk>\d+)/$",
+    path(
+        "map/<int:map_id>/datalayer/permissions/<uuid:pk>/",
         views.UpdateDataLayerPermissions.as_view(),
         name="datalayer_permissions",
     ),
 ]
-if settings.FROM_EMAIL:
+if settings.DEFAULT_FROM_EMAIL:
     map_urls.append(
         re_path(
             r"^map/(?P<map_id>[\d]+)/send-edit-link/$",
@@ -171,8 +165,8 @@ if settings.FROM_EMAIL:
         )
     )
 datalayer_urls = [
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/update/(?P<pk>\d+)/$",
+    path(
+        "map/<int:map_id>/datalayer/update/<uuid:pk>/",
         views.DataLayerUpdate.as_view(),
         name="datalayer_update",
     ),

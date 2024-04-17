@@ -1,14 +1,17 @@
 import json
+import zipfile
+from io import BytesIO
 
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.signing import Signer
 from django.urls import reverse
+from django.utils import translation
 
 from umap.models import DataLayer, Map, Star
 
-from .base import login_required
+from .base import MapFactory, UserFactory, login_required
 
 pytestmark = pytest.mark.django_db
 User = get_user_model()
@@ -19,7 +22,7 @@ def post_data():
     return {
         "name": "name",
         "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',  # noqa
-        "settings": '{"type":"Feature","geometry":{"type":"Point","coordinates":[5.0592041015625,52.05924589011585]},"properties":{"tilelayer":{"maxZoom":20,"url_template":"http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png","minZoom":0,"attribution":"HOT and friends"},"licence":"","description":"","name":"test enrhûmé","tilelayersControl":true,"displayDataBrowserOnLoad":false,"displayPopupFooter":true,"displayCaptionOnLoad":false,"miniMap":true,"moreControl":true,"scaleControl":true,"zoomControl":true,"datalayersControl":true,"zoom":8}}',  # noqa
+        "settings": '{"type":"Feature","geometry":{"type":"Point","coordinates":[5.0592041015625,52.05924589011585]},"properties":{"tilelayer":{"maxZoom":20,"url_template":"http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png","minZoom":0,"attribution":"HOT and friends"},"licence":"","description":"","name":"test enrhûmé","tilelayersControl":true,"displayDataBrowserOnLoad":false,"displayPopupFooter":true,"displayCaptionOnLoad":false,"miniMap":true,"moreControl":true,"scaleControl":true,"zoomControl":true,"datalayersControl":true,"zoom":8}}',  # noqa
     }
 
 
@@ -107,7 +110,9 @@ def test_update(client, map, post_data):
 def test_delete(client, map, datalayer):
     url = reverse("map_delete", args=(map.pk,))
     client.login(username=map.owner.username, password="123123")
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 200
     assert not Map.objects.filter(pk=map.pk).exists()
     assert not DataLayer.objects.filter(pk=datalayer.pk).exists()
@@ -143,6 +148,13 @@ def test_should_not_consider_the_query_string_for_canonical_check(client, map):
     assert response.status_code == 200
 
 
+def test_map_headers(client, map):
+    url = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.headers["Access-Control-Allow-Origin"] == "*"
+
+
 def test_short_url_should_redirect_to_canonical(client, map):
     url = reverse("map_short_url", kwargs={"pk": map.pk})
     canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
@@ -156,9 +168,23 @@ def test_clone_map_should_create_a_new_instance(client, map):
     url = reverse("map_clone", kwargs={"map_id": map.pk})
     client.login(username=map.owner.username, password="123123")
     response = client.post(url)
+    assert response.status_code == 302
+    assert Map.objects.count() == 2
+    clone = Map.objects.latest("pk")
+    assert response["Location"] == clone.get_absolute_url()
+    assert clone.pk != map.pk
+    assert clone.name == "Clone of " + map.name
+
+
+def test_clone_map_should_be_possible_via_ajax(client, map):
+    assert Map.objects.count() == 1
+    url = reverse("map_clone", kwargs={"map_id": map.pk})
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, headers={"X-Requested-With": "XMLHttpRequest"})
     assert response.status_code == 200
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
+    assert response.json() == {"redirect": clone.get_absolute_url()}
     assert clone.pk != map.pk
     assert clone.name == "Clone of " + map.name
 
@@ -189,7 +215,7 @@ def test_clone_should_set_cloner_as_owner(client, map, user):
     map.save()
     client.login(username=user.username, password="123123")
     response = client.post(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
     assert clone.pk != map.pk
@@ -275,7 +301,7 @@ def test_owner_cannot_access_map_with_share_status_blocked(client, map):
     assert response.status_code == 403
 
 
-def test_non_editor_cannot_access_map_if_share_status_private(client, map, user):  # noqa
+def test_non_editor_cannot_access_map_if_share_status_private(client, map, user):
     url = reverse("map", args=(map.slug, map.pk))
     map.share_status = map.PRIVATE
     map.save()
@@ -296,7 +322,9 @@ def test_only_owner_can_delete(client, map, user):
     map.editors.add(user)
     url = reverse("map_delete", kwargs={"map_id": map.pk})
     client.login(username=user.username, password="123123")
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 403
 
 
@@ -346,14 +374,14 @@ def test_anonymous_create(cookieclient, post_data):
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):  # noqa
+def test_anonymous_update_without_cookie_fails(client, anonymap, post_data):
     url = reverse("map_update", kwargs={"map_id": anonymap.pk})
     response = client.post(url, post_data)
     assert response.status_code == 403
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_data):  # noqa
+def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_data):
     url = reverse("map_update", kwargs={"map_id": anonymap.pk})
     # POST only mendatory fields
     name = "new map name"
@@ -368,7 +396,9 @@ def test_anonymous_update_with_cookie_should_work(cookieclient, anonymap, post_d
 @pytest.mark.usefixtures("allow_anonymous")
 def test_anonymous_delete(cookieclient, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
-    response = cookieclient.post(url, {}, follow=True)
+    response = cookieclient.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 200
     assert not Map.objects.filter(pk=anonymap.pk).count()
     # Test response is a json
@@ -379,7 +409,9 @@ def test_anonymous_delete(cookieclient, anonymap):
 @pytest.mark.usefixtures("allow_anonymous")
 def test_no_cookie_cant_delete(client, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
-    response = client.post(url, {}, follow=True)
+    response = client.post(
+        url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
+    )
     assert response.status_code == 403
 
 
@@ -420,7 +452,7 @@ def test_bad_anonymous_edit_url_should_return_403(cookieclient, anonymap):
 @pytest.mark.usefixtures("allow_anonymous")
 def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(
     client, anonymap, user
-):  # noqa
+):
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
     anonymap.edit_status = anonymap.OWNER
@@ -434,15 +466,16 @@ def test_clone_anonymous_map_should_not_be_possible_if_user_is_not_allowed(
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonymap):  # noqa
+def test_clone_map_should_be_possible_if_edit_status_is_anonymous(client, anonymap):
     assert Map.objects.count() == 1
     url = reverse("map_clone", kwargs={"map_id": anonymap.pk})
     anonymap.edit_status = anonymap.ANONYMOUS
     anonymap.save()
     response = client.post(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert Map.objects.count() == 2
     clone = Map.objects.latest("pk")
+    assert response["Location"] == clone.get_absolute_url()
     assert clone.pk != anonymap.pk
     assert clone.name == "Clone of " + anonymap.name
     assert clone.owner is None
@@ -624,7 +657,7 @@ def test_download(client, map, datalayer):
             "attribution": "© OSM Contributors",
             "maxZoom": 18,
             "minZoom": 0,
-            "url_template": "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+            "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
         },
         "tilelayersControl": True,
         "zoom": 7,
@@ -656,6 +689,64 @@ def test_download(client, map, datalayer):
     ]
 
 
+def test_download_multiple_maps(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    another_map = MapFactory(
+        owner=map.owner, name="Another map", share_status=Map.PUBLIC
+    )
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 2
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{another_map.id}.umap"
+        assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
+        with f.open(f.infolist()[1]) as umap_file:
+            umapjson = json.loads(umap_file.read().decode())
+            assert list(umapjson.keys()) == [
+                "type",
+                "geometry",
+                "properties",
+                "uri",
+                "layers",
+            ]
+            assert umapjson["type"] == "umap"
+            assert umapjson["uri"] == f"http://testserver/en/map/test-map_{map.id}"
+
+
+def test_download_multiple_maps_unauthorized(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    user1 = UserFactory(username="user1")
+    another_map = MapFactory(owner=user1, name="Another map", share_status=Map.PUBLIC)
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 1
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{map.id}.umap"
+
+
+def test_download_multiple_maps_editor(client, map, datalayer):
+    map.share_status = Map.PRIVATE
+    map.save()
+    user1 = UserFactory(username="user1")
+    another_map = MapFactory(owner=user1, name="Another map", share_status=Map.PUBLIC)
+    another_map.editors.add(map.owner)
+    another_map.save()
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("user_download")
+    response = client.get(f"{url}?map_id={map.id}&map_id={another_map.id}")
+    assert response.status_code == 200
+    with zipfile.ZipFile(file=BytesIO(response.content), mode="r") as f:
+        assert len(f.infolist()) == 2
+        assert f.infolist()[0].filename == f"umap_backup_test-map_{another_map.id}.umap"
+        assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
+
+
 @pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED])
 def test_download_shared_status_map(client, map, datalayer, share_status):
     map.share_status = share_status
@@ -675,3 +766,97 @@ def test_download_my_map(client, map, datalayer):
     # Test response is a json
     j = json.loads(response.content.decode())
     assert j["type"] == "umap"
+
+
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED, Map.OPEN])
+def test_oembed_shared_status_map(client, map, datalayer, share_status):
+    map.share_status = share_status
+    map.save()
+    url = f"{reverse('map_oembed')}?url=http://testserver{map.get_absolute_url()}"
+    response = client.get(url)
+    assert response.status_code == 403
+
+
+def test_oembed_no_url_map(client, map, datalayer):
+    url = reverse("map_oembed")
+    response = client.get(url)
+    assert response.status_code == 404
+
+
+def test_oembed_unknown_url_map(client, map, datalayer):
+    map_url = f"http://testserver{map.get_absolute_url()}"
+    # We change to an unknown id prefix to keep URL structure.
+    map_url = map_url.replace("map_", "_111")
+    url = f"{reverse('map_oembed')}?url={map_url}"
+    response = client.get(url)
+    assert response.status_code == 404
+
+
+def test_oembed_wrong_format_map(client, map, datalayer):
+    url = (
+        f"{reverse('map_oembed')}"
+        f"?url=http://testserver{map.get_absolute_url()}&format=xml"
+    )
+    response = client.get(url)
+    assert response.status_code == 501
+
+
+def test_oembed_wrong_domain_map(client, map, datalayer):
+    url = f"{reverse('map_oembed')}?url=http://BADserver{map.get_absolute_url()}"
+    response = client.get(url)
+    assert response.status_code == 404
+
+
+def test_oembed_map(client, map, datalayer):
+    url = f"{reverse('map_oembed')}?url=http://testserver{map.get_absolute_url()}"
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.headers["Access-Control-Allow-Origin"] == "*"
+    j = json.loads(response.content.decode())
+    assert j["type"] == "rich"
+    assert j["version"] == "1.0"
+    assert j["width"] == 800
+    assert j["height"] == 300
+    assert j["html"] == (
+        '<iframe width="100%" height="300px" frameborder="0" allowfullscreen '
+        f'allow="geolocation" src="//testserver/en/map/test-map_{map.id}"></iframe>'
+        f'<p><a href="//testserver/en/map/test-map_{map.id}">See full screen</a></p>'
+    )
+
+
+def test_oembed_map_with_non_default_language(client, map, datalayer):
+    translation.activate("en")
+    path = map.get_absolute_url()
+    assert path.startswith("/en/")
+    path = path.replace("/en/", "/fr/")
+    url = f"{reverse('map_oembed')}?url=http://testserver{path}"
+    response = client.get(url)
+    assert response.status_code == 200
+    translation.activate("en")
+
+
+def test_oembed_link(client, map, datalayer):
+    response = client.get(map.get_absolute_url())
+    assert response.status_code == 200
+
+    assert (
+        '<link rel="alternate"\n        type="application/json+oembed"'
+    ) in response.content.decode()
+    assert (
+        'href="http://testserver/map/oembed/'
+        f'?url=http%3A%2F%2Ftestserver%2Fen%2Fmap%2Ftest-map_{map.id}&format=json"'
+    ) in response.content.decode()
+    assert 'title="test map oEmbed URL" />' in response.content.decode()
+
+
+def test_ogp_links(client, map, datalayer):
+    response = client.get(map.get_absolute_url())
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert (
+        f'<meta property="og:url" content="http://umap.org{map.get_absolute_url()}" />'
+        in content
+    )
+    assert f'<meta property="og:title" content="{map.name}" />' in content
+    assert f'<meta property="og:description" content="{map.description}" />' in content
+    assert '<meta property="og:site_name" content="uMap" />' in content

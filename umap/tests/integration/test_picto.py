@@ -1,10 +1,11 @@
+import platform
 from pathlib import Path
 
 import pytest
 from django.core.files.base import ContentFile
 from playwright.sync_api import expect
 
-from umap.models import Map, Pictogram
+from umap.models import Pictogram
 
 from ..base import DataLayerFactory
 
@@ -36,17 +37,14 @@ def pictos():
     Pictogram(name="circle", pictogram=ContentFile(path.read_text(), path.name)).save()
 
 
-def test_can_change_picto_at_map_level(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
-    edit_settings = page.get_by_title("Edit map properties")
+    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -57,6 +55,8 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
+    # No picto defined yet, so recent should not be visible
+    expect(page.get_by_text("Recent")).to_be_hidden()
     symbols = page.locator(".umap-pictogram-choice")
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
@@ -65,22 +65,21 @@ def test_can_change_picto_at_map_level(map, live_server, page, pictos):
     symbols.click()
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
     undefine.click()
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
+    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
 
 
-def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos):
+    openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
     # Edit datalayer
-    marker.click(modifiers=["Control", "Shift"])
+    modifier = "Meta" if platform.system() == "Darwin" else "Control"
+    marker.click(modifiers=[modifier, "Shift"])
     settings = page.get_by_text("Layer properties")
     expect(settings).to_be_visible()
     shape_settings = page.get_by_text("Shape properties")
@@ -91,7 +90,13 @@ def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
+    # Map has an icon defined, so it shold open on Recent tab
     symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
+    symbol_tab = page.get_by_role("button", name="Symbol")
+    expect(symbol_tab).to_be_visible()
+    symbol_tab.click()
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
     search.type("circle")
@@ -102,13 +107,11 @@ def test_can_change_picto_at_datalayer_level(map, live_server, page, pictos):
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
 
 
-def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
+    openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
@@ -125,7 +128,13 @@ def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
+    # Map has an icon defined, so it shold open on Recent tab
     symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
+    symbol_tab = page.get_by_role("button", name="Symbol")
+    expect(symbol_tab).to_be_visible()
+    symbol_tab.click()
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
     search.type("circle")
@@ -136,17 +145,14 @@ def test_can_change_picto_at_marker_level(map, live_server, page, pictos):
     expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
 
 
-def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon img")
     expect(marker).to_have_count(1)
     # Should have default img
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.png")
-    edit_settings = page.get_by_title("Edit map properties")
+    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -165,7 +171,7 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     input_el.blur()
     expect(marker).to_have_attribute("src", "https://foo.bar/img.jpg")
     # Now close and reopen the form, it should still be the URL tab
-    close = page.locator("#umap-ui-container .toolbox").get_by_title("Close")
+    close = page.locator(".panel.right.on .toolbox").get_by_title("Close")
     expect(close).to_be_visible()
     close.click()
     edit_settings.click()
@@ -173,20 +179,19 @@ def test_can_use_remote_url_as_picto(map, live_server, page, pictos):
     modify = page.locator(".umap-field-iconUrl").get_by_text("Change")
     expect(modify).to_be_visible()
     modify.click()
-    # Should be on URL tab
-    expect(input_el).to_be_visible()
+    # Should be on Recent tab
+    symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)
 
 
-def test_can_use_char_as_picto(map, live_server, page, pictos):
-    # Faster than doing a login
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-    DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+def test_can_use_char_as_picto(openmap, live_server, page, pictos):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".umap-div-icon span")
     # Should have default img, so not a span
     expect(marker).to_have_count(0)
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
     shape_settings = page.get_by_text("Default shape properties")
@@ -205,7 +210,7 @@ def test_can_use_char_as_picto(map, live_server, page, pictos):
     expect(marker).to_have_count(1)
     expect(marker).to_have_text("♩")
     # Now close and reopen the form, it should still be the URL tab
-    close = page.locator("#umap-ui-container .toolbox").get_by_title("Close")
+    close = page.locator(".panel.right.on .toolbox").get_by_title("Close")
     expect(close).to_be_visible()
     close.click()
     edit_settings.click()
@@ -214,4 +219,6 @@ def test_can_use_char_as_picto(map, live_server, page, pictos):
     expect(preview).to_be_visible()
     preview.click()
     # Should be on URL tab
-    expect(input_el).to_be_visible()
+    symbols = page.locator(".umap-pictogram-choice")
+    expect(page.get_by_text("Recent")).to_be_visible()
+    expect(symbols).to_have_count(1)

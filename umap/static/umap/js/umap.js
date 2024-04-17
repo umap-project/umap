@@ -2,34 +2,18 @@ L.Map.mergeOptions({
   overlay: null,
   datalayers: [],
   hash: true,
-  default_color: 'DarkBlue',
-  default_smoothFactor: 1.0,
-  default_opacity: 0.5,
-  default_fillOpacity: 0.3,
-  default_stroke: true,
-  default_fill: true,
-  default_weight: 3,
-  default_iconOpacity: 1,
-  default_iconClass: 'Default',
-  default_popupContentTemplate: '# {name}\n{description}',
-  default_interactive: true,
-  default_labelDirection: 'auto',
   maxZoomLimit: 24,
   attributionControl: false,
   editMode: 'advanced',
-  embedControl: true,
-  zoomControl: true,
-  datalayersControl: true,
-  searchControl: true,
-  editInOSMControl: false,
-  editInOSMControlOptions: false,
-  scaleControl: true,
   noControl: false, // Do not render any control.
-  miniMap: false,
   name: '',
   description: '',
-  displayPopupFooter: false,
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, r: '' },
+  // When a TileLayer is in TMS mode, it needs -y instead of y.
+  // This is usually handled by the TileLayer instance itself, but
+  // we cannot rely on this because of the y is overriden by Leaflet
+  // See https://github.com/Leaflet/Leaflet/pull/9201
+  // And let's remove this -y when this PR is merged and released.
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -39,30 +23,14 @@ L.Map.mergeOptions({
   importPresets: [
     // {url: 'http://localhost:8019/en/datalayer/1502/', label: 'Simplified World Countries', format: 'geojson'}
   ],
-  moreControl: true,
-  captionBar: false,
-  captionMenus: true,
   slideshow: {},
   clickable: true,
-  easing: false,
   permissions: {},
-  permanentCreditBackground: true,
   featuresHaveOwner: false,
 })
 
-L.U.Map.include({
-  HIDDABLE_CONTROLS: [
-    'zoom',
-    'search',
-    'fullscreen',
-    'embed',
-    'locate',
-    'measure',
-    'editinosm',
-    'datalayers',
-    'star',
-    'tilelayers',
-  ],
+U.Map = L.Map.extend({
+  includes: [ControlsMixin],
 
   initialize: function (el, geojson) {
     // Locale name (pt_PT, en_US…)
@@ -73,58 +41,47 @@ L.U.Map.include({
     // To be used in javascript APIs
     if (geojson.properties.lang) L.lang = geojson.properties.lang
 
-    // Don't let default autocreation of controls
-    const zoomControl =
-      typeof geojson.properties.zoomControl !== 'undefined'
-        ? geojson.properties.zoomControl
-        : true
+    this.setOptionsFromQueryString(geojson.properties)
+    // Prevent default creation of controls
+    const zoomControl = geojson.properties.zoomControl
+    const fullscreenControl = geojson.properties.fullscreenControl
     geojson.properties.zoomControl = false
-    const fullscreenControl =
-      typeof geojson.properties.fullscreenControl !== 'undefined'
-        ? geojson.properties.fullscreenControl
-        : true
     geojson.properties.fullscreenControl = false
-    L.Util.setBooleanFromQueryString(geojson.properties, 'scrollWheelZoom')
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
 
+    if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
+
     // After calling parent initialize, as we are doing initCenter our-selves
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+    this.urls = new U.URLs(this.options.urls)
 
-    this.ui = new L.U.UI(this._container)
-    this.xhr = new L.U.Xhr(this.ui)
-    this.xhr.on('dataloading', (e) => this.fire('dataloading', e))
-    this.xhr.on('dataload', (e) => this.fire('dataload', e))
+    this.panel = new U.Panel(this)
+    if (this.hasEditMode()) {
+      this.editPanel = new U.EditPanel(this)
+      this.fullPanel = new U.FullPanel(this)
+    }
+    this.ui = new U.UI(this._container)
+    this.ui.on('dataloading', (e) => this.fire('dataloading', e))
+    this.ui.on('dataload', (e) => this.fire('dataload', e))
+    this.server = new U.ServerRequest(this.ui)
+    this.request = new U.Request(this.ui)
 
     this.initLoader()
     this.name = this.options.name
     this.description = this.options.description
     this.demoTileInfos = this.options.demoTileInfos
-    this.options.zoomControl = zoomControl
-    this.options.fullscreenControl = fullscreenControl
-    L.Util.setBooleanFromQueryString(this.options, 'moreControl')
-    L.Util.setBooleanFromQueryString(this.options, 'scaleControl')
-    L.Util.setBooleanFromQueryString(this.options, 'miniMap')
-    L.Util.setFromQueryString(this.options, 'editMode')
-    L.Util.setBooleanFromQueryString(this.options, 'displayDataBrowserOnLoad')
-    L.Util.setBooleanFromQueryString(this.options, 'displayCaptionOnLoad')
-    L.Util.setBooleanFromQueryString(this.options, 'captionBar')
-    L.Util.setBooleanFromQueryString(this.options, 'captionMenus')
-    for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
-      L.Util.setNullableBooleanFromQueryString(
-        this.options,
-        `${this.HIDDABLE_CONTROLS[i]}Control`
-      )
-    }
-    this.datalayersOnLoad = L.Util.queryString('datalayers')
-    this.options.onLoadPanel = L.Util.queryString(
-      'onLoadPanel',
-      this.options.onLoadPanel
-    )
-    if (this.datalayersOnLoad)
-      this.datalayersOnLoad = this.datalayersOnLoad.toString().split(',')
+    this.options.zoomControl = zoomControl !== undefined ? zoomControl : true
+    this.options.fullscreenControl =
+      fullscreenControl !== undefined ? fullscreenControl : true
 
-    if (L.Browser.ielt9) this.options.editMode = 'disabled' // TODO include ie9
+    this.datalayersFromQueryString = L.Util.queryString('datalayers')
+    if (this.datalayersFromQueryString) {
+      this.datalayersFromQueryString = this.datalayersFromQueryString
+        .toString()
+        .split(',')
+    }
+
 
     let editedFeature = null
     const self = this
@@ -163,16 +120,16 @@ L.U.Map.include({
     this.facets = {}
 
     // Needed for actions labels
-    this.help = new L.U.Help(this)
+    this.help = new U.Help(this)
 
-    if (this.options.hash) this.addHash()
-    this.initTileLayers()
-    // Needs tilelayer to exist for minimap
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
+    this.initTileLayers()
+    // Needs tilelayer to exist for minimap
+    this.renderControls()
     this.handleLimitBounds()
-    this.initDatalayers()
+    this.initDataLayers()
 
     if (this.options.displayCaptionOnLoad) {
       // Retrocompat
@@ -188,14 +145,9 @@ L.U.Map.include({
       }
       delete this.options.displayDataBrowserOnLoad
     }
-
-    this.ui.on(
-      'panel:closed',
-      function () {
-        this.invalidateSize({ pan: false })
-      },
-      this
-    )
+    if (this.options.datalayersControl === 'expanded') {
+      this.options.onLoadPanel = 'datalayers'
+    }
 
     let isDirty = false // self status
     try {
@@ -221,49 +173,51 @@ L.U.Map.include({
 
     // Creation mode
     if (!this.options.umap_id) {
-      this.isDirty = true
+      if (!this.options.preview) {
+        this.isDirty = true
+        this.enableEdit()
+      }
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      this.options.editMode = 'advanced'
-      const datalayer = this.createDataLayer()
-      datalayer.connectToMap()
-      this.enableEdit()
+      let data = L.Util.queryString('data', null)
       let dataUrl = L.Util.queryString('dataUrl', null)
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
       if (dataUrl) {
         dataUrl = decodeURIComponent(dataUrl)
         dataUrl = this.localizeUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
+        const datalayer = this.createDataLayer()
         datalayer.importFromUrl(dataUrl, dataFormat)
+      } else if (data) {
+        data = decodeURIComponent(data)
+        const datalayer = this.createDataLayer()
+        datalayer.importRaw(data, dataFormat)
       }
     }
 
-    this.slideshow = new L.U.Slideshow(this, this.options.slideshow)
-    this.permissions = new L.U.MapPermissions(this)
+    this.slideshow = new U.Slideshow(this, this.options.slideshow)
+    this.permissions = new U.MapPermissions(this)
     this.initCaptionBar()
     if (this.hasEditMode()) {
-      this.editTools = new L.U.Editable(this)
-      this.ui.on(
-        'panel:closed panel:open',
-        function () {
-          this.editedFeature = null
-        },
-        this
-      )
+      this.editTools = new U.Editable(this)
       this.renderEditToolbar()
     }
     this.initShortcuts()
     this.onceDataLoaded(function () {
-      if (L.Util.queryString('share')) this.renderShareBox()
-      else if (this.options.onLoadPanel === 'databrowser') this.openBrowser()
-      else if (this.options.onLoadPanel === 'caption') this.displayCaption()
-      else if (
-        this.options.onLoadPanel === 'facet' ||
-        this.options.onLoadPanel === 'datafilters'
-      )
+      if (L.Util.queryString('share')) {
+        this.share.open()
+      } else if (this.options.onLoadPanel === 'databrowser') {
+        this.panel.mode = 'expanded'
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'datalayers') {
+        this.panel.mode = 'condensed'
+        this.openBrowser()
+      } else if (this.options.onLoadPanel === 'caption') {
+        this.panel.mode = 'condensed'
+        this.displayCaption()
+      } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
         this.openFacet()
-    })
-    this.onceDataLoaded(function () {
+      }
       const slug = L.Util.queryString('feature')
       if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) {
@@ -274,16 +228,90 @@ L.U.Map.include({
         url.searchParams.delete('edit')
         history.pushState({}, '', url)
       }
-      if (L.Util.queryString('download'))
-        window.location = L.Util.template(this.options.urls.map_download, {
+      if (L.Util.queryString('download')) {
+        const download_url = this.urls.get('map_download', {
           map_id: this.options.umap_id,
         })
+        window.location = download_url
+      }
     })
 
-    window.onbeforeunload = () => this.isDirty || null
+    window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
+  },
+
+  render: function (fields) {
+    let impacts = U.Utils.getImpactsFromSchema(fields)
+
+    for (let impact of impacts) {
+      switch (impact) {
+        case 'ui':
+          this.initCaptionBar()
+          this.renderEditToolbar()
+          this.renderControls()
+          break
+        case 'data':
+          this.redrawVisibleDataLayers()
+          break
+        case 'datalayer-index':
+          this.reindexDataLayers()
+          break
+        case 'background':
+          this.initTileLayers()
+          break
+        case 'bounds':
+          this.handleLimitBounds()
+          break
+      }
+    }
+  },
+
+  reindexDataLayers: function () {
+    this.eachDataLayer((datalayer) => datalayer.reindex())
+    this.onDataLayersChanged()
+  },
+
+  redrawVisibleDataLayers: function () {
+    this.eachVisibleDataLayer((datalayer) => {
+      datalayer.redraw()
+    })
+  },
+
+  setOptionsFromQueryString: function (options) {
+    // This is not an editable option
+    L.Util.setFromQueryString(options, 'editMode')
+    // FIXME retrocompat
+    L.Util.setBooleanFromQueryString(options, 'displayDataBrowserOnLoad')
+    L.Util.setBooleanFromQueryString(options, 'displayCaptionOnLoad')
+    for (const [key, schema] of Object.entries(U.SCHEMA)) {
+      switch (schema.type) {
+        case Boolean:
+          if (schema.nullable) L.Util.setNullableBooleanFromQueryString(options, key)
+          else L.Util.setBooleanFromQueryString(options, key)
+          break
+        case Number:
+          L.Util.setNumberFromQueryString(options, key)
+          break
+        case String:
+          L.Util.setFromQueryString(options, key)
+          break
+      }
+    }
+    // Specific case for datalayersControl
+    // which accepts "expanded" value, on top of true/false/null
+    if (L.Util.queryString('datalayersControl') === 'expanded') {
+      options.onLoadPanel = 'datalayers'
+    }
+  },
+
+  // Merge the given schema with the default one
+  // Missing keys inside the schema are merged with the default ones.
+  overrideSchema: function (schema) {
+    for (const [key, extra] of Object.entries(schema)) {
+      U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
+    }
   },
 
   initControls: function () {
@@ -291,26 +319,30 @@ L.U.Map.include({
     this._controls = {}
 
     if (this.hasEditMode() && !this.options.noControl) {
-      new L.U.EditControl(this).addTo(this)
+      new U.EditControl(this).addTo(this)
 
-      new L.U.DrawToolbar({ map: this }).addTo(this)
-
+      new U.DrawToolbar({ map: this }).addTo(this)
       const editActions = [
-        L.U.ImportAction,
-        L.U.EditPropertiesAction,
-        L.U.ManageDatalayersAction,
-        L.U.ChangeTileLayerAction,
-        L.U.UpdateExtentAction,
-        L.U.UpdatePermsAction,
+        U.EditCaptionAction,
+        U.EditPropertiesAction,
+        U.EditLayersAction,
+        U.ChangeTileLayerAction,
+        U.UpdateExtentAction,
+        U.UpdatePermsAction,
+        U.ImportAction,
       ]
-      new L.U.SettingsToolbar({ actions: editActions }).addTo(this)
+      if (this.options.editMode === 'advanced') {
+        new U.SettingsToolbar({ actions: editActions }).addTo(this)
+      }
+
     }
     this._controls.zoom = new L.Control.Zoom({
       zoomInTitle: L._('Zoom in'),
       zoomOutTitle: L._('Zoom out'),
     })
-    this._controls.datalayers = new L.U.DataLayersControl(this)
-    this._controls.locate = L.control.locate({
+    this._controls.datalayers = new U.DataLayersControl(this)
+    this._controls.caption = new U.CaptionControl(this)
+    this._controls.locate = new U.Locate(this, {
       strings: {
         title: L._('Center map on your location'),
       },
@@ -326,10 +358,10 @@ L.U.Map.include({
     this._controls.fullscreen = new L.Control.Fullscreen({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
     })
-    this._controls.search = new L.U.SearchControl()
-    this._controls.embed = new L.Control.Embed(this, this.options.embedOptions)
-    this._controls.tilelayersChooser = new L.U.TileLayerChooser(this)
-    this._controls.star = new L.U.StarControl(this)
+    this._controls.search = new U.SearchControl()
+    this._controls.embed = new L.Control.Embed(this)
+    this._controls.tilelayersChooser = new U.TileLayerChooser(this)
+    if (this.options.user) this._controls.star = new U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -339,18 +371,16 @@ L.U.Map.include({
       },
     })
     this._controls.measure = new L.MeasureControl().initHandler(this)
-    this._controls.more = new L.U.MoreControls()
+    this._controls.more = new U.MoreControls()
     this._controls.scale = L.control.scale()
-    this._controls.permanentCredit = new L.U.PermanentCreditsControl(this)
+    this._controls.permanentCredit = new U.PermanentCreditsControl(this)
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
-    this.browser = new L.U.Browser(this)
-    this.importer = new L.U.Importer(this)
-    this.drop = new L.U.DropControl(this)
-    this._controls.tilelayers = new L.U.TileLayerControl(this)
-    this._controls.tilelayers.setLayers()
-
-    this.renderControls()
+    this.browser = new U.Browser(this)
+    this.importer = new U.Importer(this)
+    this.drop = new U.DropControl(this)
+    this.share = new U.Share(this)
+    this._controls.tilelayers = new U.TileLayerControl(this)
   },
 
   renderControls: function () {
@@ -358,20 +388,20 @@ L.U.Map.include({
       document.body,
       'umap-caption-bar-enabled',
       this.options.captionBar ||
-        (this.options.slideshow && this.options.slideshow.active)
+      (this.options.slideshow && this.options.slideshow.active)
     )
     L.DomUtil.classIf(
       document.body,
       'umap-slideshow-enabled',
       this.options.slideshow && this.options.slideshow.active
     )
-    for (const i in this._controls) {
-      this.removeControl(this._controls[i])
+    for (const control of Object.values(this._controls)) {
+      this.removeControl(control)
     }
     if (this.options.noControl) return
 
-    this._controls.attribution = new L.U.AttributionControl().addTo(this)
-    if (this.options.miniMap && !this.options.noControl) {
+    this._controls.attribution = new U.AttributionControl().addTo(this)
+    if (this.options.miniMap) {
       this.whenReady(function () {
         if (this.selected_tilelayer) {
           this._controls.miniMap = new L.Control.MiniMap(this.selected_tilelayer, {
@@ -392,69 +422,37 @@ L.U.Map.include({
     let name, status, control
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
-      status = this.options[`${name}Control`]
+      status = this.getOption(`${name}Control`)
       if (status === false) continue
       control = this._controls[name]
+      if (!control) continue
       control.addTo(this)
       if (status === undefined || status === null)
         L.DomUtil.addClass(control._container, 'display-on-more')
       else L.DomUtil.removeClass(control._container, 'display-on-more')
     }
-    if (this.options.permanentCredit) this._controls.permanentCredit.addTo(this)
-    if (this.options.moreControl) this._controls.more.addTo(this)
-    if (this.options.scaleControl) this._controls.scale.addTo(this)
+    if (this.getOption('permanentCredit')) this._controls.permanentCredit.addTo(this)
+    if (this.getOption('moreControl')) this._controls.more.addTo(this)
+    if (this.getOption('scaleControl')) this._controls.scale.addTo(this)
+    this._controls.tilelayers.setLayers()
   },
 
-  initDatalayers: function () {
-    for (let j = 0; j < this.options.datalayers.length; j++) {
-      this.createDataLayer(this.options.datalayers[j])
+  initDataLayers: async function (datalayers) {
+    datalayers = datalayers || this.options.datalayers
+    for (const options of datalayers) {
+      this.createDataLayer(options)
     }
-    this.loadDatalayers()
+    await this.loadDataLayers()
   },
 
-  loadDatalayers: function (force) {
-    const total = this.datalayers_index.length
-    // toload => datalayer metadata remaining to load (synchronous)
-    // dataToload => datalayer data remaining to load (asynchronous)
-    let toload = total,
-      dataToload = total
-    let datalayer
-    const loaded = () => {
-      this.datalayersLoaded = true
-      this.fire('datalayersloaded')
+  loadDataLayers: async function () {
+    this.datalayersLoaded = true
+    this.fire('datalayersloaded')
+    for (const datalayer of Object.values(this.datalayers)) {
+      if (datalayer.showAtLoad()) await datalayer.show()
     }
-    const decrementToLoad = () => {
-      toload--
-      if (toload === 0) loaded()
-    }
-    const dataLoaded = () => {
-      this.dataLoaded = true
-      this.fire('dataloaded')
-    }
-    const decrementDataToLoad = () => {
-      dataToload--
-      if (dataToload === 0) dataLoaded()
-    }
-    this.eachDataLayer(function (datalayer) {
-      if (force && !datalayer.hasDataLoaded()) {
-        datalayer.show()
-      }
-      if (datalayer.showAtLoad() || force) {
-        datalayer.onceLoaded(decrementToLoad)
-      } else {
-        decrementToLoad()
-      }
-      if (datalayer.showAtLoad() || force) {
-        datalayer.onceDataLoaded(decrementDataToLoad)
-      } else {
-        decrementDataToLoad({ sourceTarget: datalayer })
-      }
-    })
-    if (total === 0) {
-      // no datalayer
-      loaded()
-      dataLoaded()
-    }
+    this.dataloaded = true
+    this.fire('dataloaded')
   },
 
   indexDatalayers: function () {
@@ -466,7 +464,11 @@ L.U.Map.include({
       if (!pane.dataset || !pane.dataset.id) continue
       this.datalayers_index.push(this.datalayers[pane.dataset.id])
     }
-    this.updateDatalayersControl()
+    this.onDataLayersChanged()
+  },
+
+  onDataLayersChanged: function () {
+    if (this.browser) this.browser.update()
   },
 
   ensurePanesOrder: function () {
@@ -487,16 +489,12 @@ L.U.Map.include({
 
   onceDataLoaded: function (callback, context) {
     // Once datalayers **data** have been loaded
-    if (this.dataLoaded) {
+    if (this.dataloaded) {
       callback.call(context || this, this)
     } else {
       this.once('dataloaded', callback, context)
     }
     return this
-  },
-
-  updateDatalayersControl: function () {
-    if (this._controls.datalayers) this._controls.datalayers.update()
   },
 
   backupOptions: function () {
@@ -518,65 +516,64 @@ L.U.Map.include({
         modifierKey = e.ctrlKey || e.metaKey
 
       /* Generic shortcuts */
-      if (key === L.U.Keys.F && modifierKey) {
+      if (key === U.Keys.F && modifierKey) {
         L.DomEvent.stop(e)
         this.search()
-      } else if (e.keyCode === L.U.Keys.ESC) {
-        if (this.help.visible()) this.help.hide()
-        else this.ui.closePanel()
+      } else if (e.keyCode === U.Keys.ESC) {
+        if (this.help.visible()) {
+          this.help.hide()
+        } else {
+          this.panel.close()
+          this.editPanel?.close()
+          this.fullPanel?.close()
+        }
       }
 
       if (!this.hasEditMode()) return
 
       /* Edit mode only shortcuts */
-      if (key === L.U.Keys.E && modifierKey && !this.editEnabled) {
+      if (key === U.Keys.E && modifierKey && !this.editEnabled) {
         L.DomEvent.stop(e)
         this.enableEdit()
-      } else if (
-        key === L.U.Keys.E &&
-        modifierKey &&
-        this.editEnabled &&
-        !this.isDirty
-      ) {
+      } else if (key === U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
         L.DomEvent.stop(e)
         this.disableEdit()
-        this.ui.closePanel()
       }
-      if (key === L.U.Keys.S && modifierKey) {
+      if (key === U.Keys.S && modifierKey) {
         L.DomEvent.stop(e)
         if (this.isDirty) {
           this.save()
         }
       }
-      if (key === L.U.Keys.Z && modifierKey && this.isDirty) {
+      if (key === U.Keys.Z && modifierKey && this.isDirty) {
         L.DomEvent.stop(e)
         this.askForReset()
       }
-      if (key === L.U.Keys.M && modifierKey && this.editEnabled) {
+      if (key === U.Keys.M && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startMarker()
       }
-      if (key === L.U.Keys.P && modifierKey && this.editEnabled) {
+      if (key === U.Keys.P && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startPolygon()
       }
-      if (key === L.U.Keys.L && modifierKey && this.editEnabled) {
+      if (key === U.Keys.L && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startPolyline()
       }
-      if (key === L.U.Keys.I && modifierKey && this.editEnabled) {
+      if (key === U.Keys.I && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.importer.open()
       }
-      if (key === L.U.Keys.O && modifierKey && this.editEnabled) {
+      if (key === U.Keys.O && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.importer.openFiles()
       }
-      if (key === L.U.Keys.H && modifierKey && this.editEnabled) {
+      if (key === U.Keys.H && modifierKey && this.editEnabled) {
         L.DomEvent.stop(e)
         this.help.show('edit')
       }
-      if (e.keyCode === L.U.Keys.ESC) {
+      if (e.keyCode === U.Keys.ESC) {
         if (this.editEnabled && this.editTools.drawing()) {
           this.editTools.stopDrawing()
         }
@@ -702,26 +699,18 @@ L.U.Map.include({
   },
 
   initCenter: function () {
+    this._setDefaultCenter()
+    if (this.options.hash) this.addHash()
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      // When using locate as default map view AND activating easing
-      // Leaflet.locate will ask the map view to compute transition to user
-      // position, so in this case we do need a default center, so let's
-      // set it anyway
-      this._setDefaultCenter()
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
-      this.onceDataLoaded(() => {
-        if (!this.fitDataBounds()) return this._setDefaultCenter()
-      })
+      this.onceDataLoaded(this.fitDataBounds)
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
-        if (!this.hasData()) {
-          this._setDefaultCenter()
-          return
-        }
+        if (!this.hasData()) return
         const datalayer = this.firstVisibleDatalayer()
         let feature
         if (datalayer) {
@@ -731,11 +720,7 @@ L.U.Map.include({
             return
           }
         }
-        // Fallback, no datalayer or no feature found
-        this._setDefaultCenter()
       })
-    } else {
-      this._setDefaultCenter()
     }
   },
 
@@ -787,15 +772,20 @@ L.U.Map.include({
     datalayer = datalayer || {
       name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
     }
-    return new L.U.DataLayer(this, datalayer)
+    return new U.DataLayer(this, datalayer)
+  },
+
+  newDataLayer: function () {
+    const datalayer = this.createDataLayer({})
+    datalayer.edit()
   },
 
   getDefaultOption: function (option) {
-    return this.options[`default_${option}`]
+    return U.SCHEMA[option] && U.SCHEMA[option].default
   },
 
   getOption: function (option) {
-    if (L.Util.usableOption(this.options, option)) return this.options[option]
+    if (U.Utils.usableOption(this.options, option)) return this.options[option]
     return this.getDefaultOption(option)
   },
 
@@ -821,11 +811,10 @@ L.U.Map.include({
         self.isDirty = true
       }
     if (this._controls.tilelayersChooser)
-      this._controls.tilelayersChooser.openSwitcher({ callback: callback, className: 'dark' })
-  },
-
-  manageDatalayers: function () {
-    if (this._controls.datalayers) this._controls.datalayers.openPanel()
+      this._controls.tilelayersChooser.openSwitcher({
+        callback: callback,
+        className: 'dark',
+      })
   },
 
   toGeoJSON: function () {
@@ -848,30 +837,8 @@ L.U.Map.include({
     })
   },
 
-  format: function (mode) {
-    const type = this.EXPORT_TYPES[mode]
-    const content = type.formatter(this)
-    let name = this.options.name || 'data'
-    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    const filename = name + type.ext
-    return { content, filetype: type.filetype, filename }
-  },
-
-  download: function (mode) {
-    const { content, filetype, filename } = this.format(mode)
-    const blob = new Blob([content], { type: filetype })
-    window.URL = window.URL || window.webkitURL
-    const el = document.createElement('a')
-    el.download = filename
-    el.href = window.URL.createObjectURL(blob)
-    el.style.display = 'none'
-    document.body.appendChild(el)
-    el.click()
-    document.body.removeChild(el)
-  },
-
   processFileToImport: function (file, layer, type) {
-    type = type || L.Util.detectFileType(file)
+    type = type || U.Utils.detectFileType(file)
     if (!type) {
       this.ui.alert({
         content: L._('Unable to detect format of file {filename}', {
@@ -894,8 +861,7 @@ L.U.Map.include({
 
     let mustReindex = false
 
-    for (let i = 0; i < this.editableOptions.length; i++) {
-      const option = this.editableOptions[i]
+    for (const option of Object.keys(U.SCHEMA)) {
       if (typeof importedData.properties[option] !== 'undefined') {
         this.options[option] = importedData.properties[option]
         if (option === 'sortKey') mustReindex = true
@@ -994,9 +960,9 @@ L.U.Map.include({
     })
     this.ensurePanesOrder()
     this.dirty_datalayers = []
-    this.updateDatalayersControl()
     this.initTileLayers()
     this.isDirty = false
+    this.onDataLayersChanged()
   },
 
   checkDirty: function () {
@@ -1022,76 +988,17 @@ L.U.Map.include({
     else this.fire('saved')
   },
 
-  editableOptions: [
-    'zoom',
-    'scrollWheelZoom',
-    'scaleControl',
-    'moreControl',
-    'miniMap',
-    'displayPopupFooter',
-    'onLoadPanel',
-    'defaultView',
-    'name',
-    'description',
-    'licence',
-    'tilelayer',
-    'overlay',
-    'limitBounds',
-    'color',
-    'iconClass',
-    'iconUrl',
-    'smoothFactor',
-    'iconOpacity',
-    'opacity',
-    'weight',
-    'fill',
-    'fillColor',
-    'fillOpacity',
-    'dashArray',
-    'popupShape',
-    'popupTemplate',
-    'popupContentTemplate',
-    'zoomTo',
-    'captionBar',
-    'captionMenus',
-    'slideshow',
-    'sortKey',
-    'labelKey',
-    'filterKey',
-    'facetKey',
-    'slugKey',
-    'showLabel',
-    'labelDirection',
-    'labelInteractive',
-    'outlinkTarget',
-    'shortCredit',
-    'longCredit',
-    'permanentCredit',
-    'permanentCreditBackground',
-    'zoomControl',
-    'datalayersControl',
-    'searchControl',
-    'locateControl',
-    'fullscreenControl',
-    'editinosmControl',
-    'embedControl',
-    'measureControl',
-    'tilelayersControl',
-    'starControl',
-    'easing',
-  ],
-
   exportOptions: function () {
     const properties = {}
-    for (let i = this.editableOptions.length - 1; i >= 0; i--) {
-      if (typeof this.options[this.editableOptions[i]] !== 'undefined') {
-        properties[this.editableOptions[i]] = this.options[this.editableOptions[i]]
+    for (const option of Object.keys(U.SCHEMA)) {
+      if (typeof this.options[option] !== 'undefined') {
+        properties[option] = this.options[option]
       }
     }
     return properties
   },
 
-  saveSelf: function () {
+  saveSelf: async function () {
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
@@ -1101,64 +1008,64 @@ L.U.Map.include({
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
-    this.post(this.getSaveUrl(), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        let duration = 3000,
-          alert = { content: L._('Map has been saved!'), level: 'info' }
-        if (!this.options.umap_id) {
-          alert.content = L._('Congratulations, your map has been created!')
-          this.options.umap_id = data.id
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
-          if (
-            data.permissions &&
-            data.permissions.anonymous_edit_url &&
-            this.options.urls.map_send_edit_link
-          ) {
-            alert.duration = Infinity
-            alert.content =
-              L._(
-                'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
-              ) + `<br>${data.permissions.anonymous_edit_url}`
+    const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
+    const [data, response, error] = await this.server.post(uri, {}, formData)
+    // FIXME: login_required response will not be an error, so it will not
+    // stop code while it should
+    if (!error) {
+      let duration = 3000,
+        alert = { content: L._('Map has been saved!'), level: 'info' }
+      if (!this.options.umap_id) {
+        alert.content = L._('Congratulations, your map has been created!')
+        this.options.umap_id = data.id
+        this.permissions.setOptions(data.permissions)
+        this.permissions.commit()
+        if (
+          data.permissions &&
+          data.permissions.anonymous_edit_url &&
+          this.options.urls.map_send_edit_link
+        ) {
+          alert.duration = Infinity
+          alert.content =
+            L._(
+              'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
+            ) + `<br>${data.permissions.anonymous_edit_url}`
 
-            alert.actions = [
-              {
-                label: L._('Send me the link'),
-                input: L._('Email'),
-                callback: this.sendEditLink,
-                callbackContext: this,
+          alert.actions = [
+            {
+              label: L._('Send me the link'),
+              input: L._('Email'),
+              callback: this.sendEditLink,
+              callbackContext: this,
+            },
+            {
+              label: L._('Copy link'),
+              callback: () => {
+                L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
+                this.ui.alert({
+                  content: L._('Secret edit link copied to clipboard!'),
+                  level: 'info',
+                })
               },
-              {
-                label: L._('Copy link'),
-                callback: () => {
-                  L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-                  this.ui.alert({
-                    content: L._('Secret edit link copied to clipboard!'),
-                    level: 'info',
-                  })
-                },
-                callbackContext: this,
-              },
-            ]
-          }
-        } else if (!this.permissions.isDirty) {
-          // Do not override local changes to permissions,
-          // but update in case some other editors changed them in the meantime.
-          this.permissions.setOptions(data.permissions)
-          this.permissions.commit()
+              callbackContext: this,
+            },
+          ]
         }
-        // Update URL in case the name has changed.
-        if (history && history.pushState)
-          history.pushState({}, this.options.name, data.url)
-        else window.location = data.url
-        alert.content = data.info || alert.content
-        this.once('saved', () => this.ui.alert(alert))
-        this.ui.closePanel()
-        this.permissions.save()
-      },
-    })
+      } else if (!this.permissions.isDirty) {
+        // Do not override local changes to permissions,
+        // but update in case some other editors changed them in the meantime.
+        this.permissions.setOptions(data.permissions)
+        this.permissions.commit()
+      }
+      // Update URL in case the name has changed.
+      if (history && history.pushState)
+        history.pushState({}, this.options.name, data.url)
+      else window.location = data.url
+      alert.content = data.info || alert.content
+      this.once('saved', () => this.ui.alert(alert))
+      this.editPanel.close()
+      this.permissions.save()
+    }
   },
 
   save: function () {
@@ -1176,54 +1083,33 @@ L.U.Map.include({
     }
   },
 
-  sendEditLink: function () {
-    const url = L.Util.template(this.options.urls.map_send_edit_link, {
-        map_id: this.options.umap_id,
-      }),
-      input = this.ui._alert.querySelector('input'),
-      email = input.value
+  sendEditLink: async function () {
+    const input = this.ui._alert.querySelector('input')
+    const email = input.value
 
     const formData = new FormData()
     formData.append('email', email)
-    this.post(url, {
-      data: formData,
-    })
+
+    const url = this.urls.get('map_send_edit_link', { map_id: this.options.umap_id })
+    await this.server.post(url, {}, formData)
   },
 
-  getEditUrl: function () {
-    return L.Util.template(this.options.urls.map_update, {
-      map_id: this.options.umap_id,
-    })
-  },
-
-  getCreateUrl: function () {
-    return L.Util.template(this.options.urls.map_create)
-  },
-
-  getSaveUrl: function () {
-    return (this.options.umap_id && this.getEditUrl()) || this.getCreateUrl()
-  },
-
-  star: function () {
+  star: async function () {
     if (!this.options.umap_id)
       return this.ui.alert({
         content: L._('Please save the map first'),
         level: 'error',
       })
-    let url = L.Util.template(this.options.urls.map_star, {
-      map_id: this.options.umap_id,
-    })
-    this.post(url, {
-      context: this,
-      callback: function (data) {
-        this.options.starred = data.starred
-        let msg = data.starred
-          ? L._('Map has been starred')
-          : L._('Map has been unstarred')
-        this.ui.alert({ content: msg, level: 'info' })
-        this.renderControls()
-      },
-    })
+    const url = this.urls.get('map_star', { map_id: this.options.umap_id })
+    const [data, response, error] = await this.server.post(url)
+    if (!error) {
+      this.options.starred = data.starred
+      let msg = data.starred
+        ? L._('Map has been starred')
+        : L._('Map has been unstarred')
+      this.ui.alert({ content: msg, level: 'info' })
+      this.renderControls()
+    }
   },
 
   geometry: function () {
@@ -1250,13 +1136,13 @@ L.U.Map.include({
     if (
       datalayer &&
       !datalayer.isDataReadOnly() &&
-      datalayer.canBrowse() &&
+      datalayer.isBrowsable() &&
       datalayer.isVisible()
     ) {
       return datalayer
     }
     datalayer = this.findDataLayer((datalayer) => {
-      if (!datalayer.isDataReadOnly() && datalayer.canBrowse()) {
+      if (!datalayer.isDataReadOnly() && datalayer.isBrowsable()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
       }
@@ -1264,7 +1150,7 @@ L.U.Map.include({
     if (datalayer) return datalayer
     if (fallback) {
       // No datalayer visible, let's force one
-      this.addLayer(fallback.layer)
+      fallback.show()
       return fallback
     }
     return this.createDataLayer()
@@ -1290,13 +1176,7 @@ L.U.Map.include({
       'options.captionBar',
       'options.captionMenus',
     ])
-    builder = new L.U.FormBuilder(this, UIFields, {
-      callback: function () {
-        this.renderControls()
-        this.initCaptionBar()
-      },
-      callbackContext: this,
-    })
+    builder = new U.FormBuilder(this, UIFields)
     const controlsOptions = L.DomUtil.createFieldset(
       container,
       L._('User interface options')
@@ -1319,14 +1199,7 @@ L.U.Map.include({
       'options.dashArray',
     ]
 
-    builder = new L.U.FormBuilder(this, shapeOptions, {
-      callback: function (e) {
-        if (this._controls.miniMap) this.renderControls()
-        this.eachVisibleDataLayer((datalayer) => {
-          datalayer.redraw()
-        })
-      },
-    })
+    builder = new U.FormBuilder(this, shapeOptions)
     const defaultShapeProperties = L.DomUtil.createFieldset(
       container,
       L._('Default shape properties')
@@ -1379,14 +1252,7 @@ L.U.Map.include({
       ],
     ]
 
-    builder = new L.U.FormBuilder(this, optionsFields, {
-      callback: function (e) {
-        this.initCaptionBar()
-        if (e.helper.field === 'options.sortKey') {
-          this.eachDataLayer((datalayer) => datalayer.reindex())
-        }
-      },
-    })
+    builder = new U.FormBuilder(this, optionsFields)
     const defaultProperties = L.DomUtil.createFieldset(
       container,
       L._('Default properties')
@@ -1404,20 +1270,7 @@ L.U.Map.include({
       'options.labelInteractive',
       'options.outlinkTarget',
     ]
-    builder = new L.U.FormBuilder(this, popupFields, {
-      callback: function (e) {
-        if (
-          e.helper.field === 'options.popupTemplate' ||
-          e.helper.field === 'options.popupContentTemplate' ||
-          e.helper.field === 'options.popupShape' ||
-          e.helper.field === 'options.outlinkTarget'
-        )
-          return
-        this.eachVisibleDataLayer((datalayer) => {
-          datalayer.redraw()
-        })
-      },
-    })
+    builder = new U.FormBuilder(this, popupFields)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Default interaction options')
@@ -1426,7 +1279,7 @@ L.U.Map.include({
   },
 
   _editTilelayer: function (container) {
-    if (!L.Util.isObject(this.options.tilelayer)) {
+    if (!U.Utils.isObject(this.options.tilelayer)) {
       this.options.tilelayer = {}
     }
     const tilelayerFields = [
@@ -1471,15 +1324,12 @@ L.U.Map.include({
       container,
       L._('Custom background')
     )
-    builder = new L.U.FormBuilder(this, tilelayerFields, {
-      callback: this.initTileLayers,
-      callbackContext: this,
-    })
+    builder = new U.FormBuilder(this, tilelayerFields)
     customTilelayer.appendChild(builder.build())
   },
 
   _editOverlay: function (container) {
-    if (!L.Util.isObject(this.options.overlay)) {
+    if (!U.Utils.isObject(this.options.overlay)) {
       this.options.overlay = {}
     }
     const overlayFields = [
@@ -1522,15 +1372,12 @@ L.U.Map.include({
       ['options.overlay.tms', { handler: 'Switch', label: L._('TMS format') }],
     ]
     const overlay = L.DomUtil.createFieldset(container, L._('Custom overlay'))
-    builder = new L.U.FormBuilder(this, overlayFields, {
-      callback: this.initTileLayers,
-      callbackContext: this,
-    })
+    builder = new U.FormBuilder(this, overlayFields)
     overlay.appendChild(builder.build())
   },
 
   _editBounds: function (container) {
-    if (!L.Util.isObject(this.options.limitBounds)) {
+    if (!U.Utils.isObject(this.options.limitBounds)) {
       this.options.limitBounds = {}
     }
     const limitBounds = L.DomUtil.createFieldset(container, L._('Limit bounds'))
@@ -1552,10 +1399,7 @@ L.U.Map.include({
         { handler: 'BlurFloatInput', placeholder: L._('max East') },
       ],
     ]
-    const boundsBuilder = new L.U.FormBuilder(this, boundsFields, {
-      callback: this.handleLimitBounds,
-      callbackContext: this,
-    })
+    const boundsBuilder = new U.FormBuilder(this, boundsFields)
     limitBounds.appendChild(boundsBuilder.build())
     const boundsButtons = L.DomUtil.create('div', 'button-bar half', limitBounds)
     L.DomUtil.createButton(
@@ -1616,53 +1460,12 @@ L.U.Map.include({
     ]
     const slideshowHandler = function () {
       this.slideshow.setOptions(this.options.slideshow)
-      this.renderControls()
     }
-    const slideshowBuilder = new L.U.FormBuilder(this, slideshowFields, {
+    const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
       callback: slideshowHandler,
       callbackContext: this,
     })
     slideshow.appendChild(slideshowBuilder.build())
-  },
-
-  _editCredits: function (container) {
-    const credits = L.DomUtil.createFieldset(container, L._('Credits'))
-    const creditsFields = [
-      ['options.licence', { handler: 'LicenceChooser', label: L._('licence') }],
-      [
-        'options.shortCredit',
-        {
-          handler: 'Input',
-          label: L._('Short credits'),
-          helpEntries: ['shortCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.longCredit',
-        {
-          handler: 'Textarea',
-          label: L._('Long credits'),
-          helpEntries: ['longCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.permanentCredit',
-        {
-          handler: 'Textarea',
-          label: L._('Permanent credits'),
-          helpEntries: ['permanentCredit', 'textFormatting'],
-        },
-      ],
-      [
-        'options.permanentCreditBackground',
-        { handler: 'Switch', label: L._('Permanent credits background') },
-      ],
-    ]
-    const creditsBuilder = new L.U.FormBuilder(this, creditsFields, {
-      callback: this.renderControls,
-      callbackContext: this,
-    })
-    credits.appendChild(creditsBuilder.build())
   },
 
   _advancedActions: function (container) {
@@ -1701,22 +1504,43 @@ L.U.Map.include({
     L.DomUtil.createButton(
       'button umap-download',
       advancedButtons,
-      L._('Open download panel'),
-      this.renderShareBox,
-      this
+      L._('Open share & download panel'),
+      this.share.open,
+      this.share
     )
   },
 
-  edit: function () {
+  editCaption: function () {
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
       metadataFields = ['options.name', 'options.description'],
       title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Edit map properties')
-    const builder = new L.U.FormBuilder(this, metadataFields)
+    title.textContent = L._('Edit map details')
+    const builder = new U.FormBuilder(this, metadataFields, {
+      className: 'map-metadata',
+    })
     const form = builder.build()
     container.appendChild(form)
+
+    const credits = L.DomUtil.createFieldset(container, L._('Credits'))
+    const creditsFields = [
+      'options.licence',
+      'options.shortCredit',
+      'options.longCredit',
+      'options.permanentCredit',
+      'options.permanentCreditBackground',
+    ]
+    const creditsBuilder = new U.FormBuilder(this, creditsFields)
+    credits.appendChild(creditsBuilder.build())
+    this.editPanel.open({ data: { html: container } })
+  },
+
+  edit: function () {
+    if (!this.editEnabled) return
+    if (this.options.editMode !== 'advanced') return
+    const container = L.DomUtil.create('div')
+    L.DomUtil.createTitle(container, L._('Map advanced properties'), 'icon-settings')
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)
@@ -1725,10 +1549,9 @@ L.U.Map.include({
     this._editOverlay(container)
     this._editBounds(container)
     this._editSlideshow(container)
-    this._editCredits(container)
     this._advancedActions(container)
 
-    this.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.editPanel.open({ data: { html: container }, className: 'dark' })
   },
 
   enableEdit: function () {
@@ -1745,6 +1568,8 @@ L.U.Map.include({
     this.editedFeature = null
     this.editEnabled = false
     this.fire('edit:disabled')
+    this.editPanel.close()
+    this.fullPanel.close()
   },
 
   hasEditMode: function () {
@@ -1757,14 +1582,14 @@ L.U.Map.include({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-        'div',
-        'umap-caption-bar',
-        this._controlContainer
-      ),
+      'div',
+      'umap-caption-bar',
+      this._controlContainer
+    ),
       name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
-    if (this.options.captionMenus) {
+    if (this.getOption('captionMenus')) {
       L.DomUtil.createButton(
         'umap-about-link flat',
         container,
@@ -1802,8 +1627,7 @@ L.U.Map.include({
   askForReset: function (e) {
     if (!confirm(L._('Are you sure you want to cancel your changes?'))) return
     this.reset()
-    this.disableEdit(e)
-    this.ui.closePanel()
+    this.disableEdit()
   },
 
   startMarker: function () {
@@ -1818,23 +1642,21 @@ L.U.Map.include({
     return this.editTools.startPolygon()
   },
 
-  del: function () {
+  del: async function () {
     if (confirm(L._('Are you sure you want to delete this map?'))) {
-      const url = L.Util.template(this.options.urls.map_delete, {
-        map_id: this.options.umap_id,
-      })
-      this.post(url)
+      const url = this.urls.get('map_delete', { map_id: this.options.umap_id })
+      const [data, response, error] = await this.server.post(url)
+      if (data.redirect) window.location = data.redirect
     }
   },
 
-  clone: function () {
+  clone: async function () {
     if (
       confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
     ) {
-      const url = L.Util.template(this.options.urls.map_clone, {
-        map_id: this.options.umap_id,
-      })
-      this.post(url)
+      const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
+      const [data, response, error] = await this.server.post(url)
+      if (data.redirect) window.location = data.redirect
     }
   },
 
@@ -1849,25 +1671,8 @@ L.U.Map.include({
     this.loader.onAdd(this)
   },
 
-  post: function (url, options) {
-    options = options || {}
-    options.listener = this
-    this.xhr.post(url, options)
-  },
-
-  get: function (url, options) {
-    options = options || {}
-    options.listener = this
-    this.xhr.get(url, options)
-  },
-
-  ajax: function (options) {
-    options.listener = this
-    this.xhr._ajax(options)
-  },
-
   initContextMenu: function () {
-    this.contextmenu = new L.U.ContextMenu(this)
+    this.contextmenu = new U.ContextMenu(this)
     this.contextmenu.enable()
   },
 
@@ -1964,21 +1769,32 @@ L.U.Map.include({
         callback: this.openExternalRouting,
       })
     }
+    if (this.options.urls.edit_in_osm) {
+      items.push('-', {
+        text: L._('Edit in OpenStreetMap'),
+        callback: this.editInOSM,
+      })
+    }
     this.options.contextmenuItems = items
   },
 
+  editInOSM: function (e) {
+    const url = this.urls.get('edit_in_osm', {
+      lat: e.latlng.lat,
+      lng: e.latlng.lng,
+      zoom: Math.max(this.getZoom(), 16),
+    })
+    if (url) window.open(url)
+  },
+
   openExternalRouting: function (e) {
-    const url = this.options.urls.routing
-    if (url) {
-      const params = {
-        lat: e.latlng.lat,
-        lng: e.latlng.lng,
-        locale: L.locale,
-        zoom: this.getZoom(),
-      }
-      window.open(L.Util.template(url, params))
-    }
-    return
+    const url = this.urls.get('routing', {
+      lat: e.latlng.lat,
+      lng: e.latlng.lng,
+      locale: L.getLocale(),
+      zoom: this.getZoom(),
+    })
+    if (url) window.open(url)
   },
 
   getMap: function () {
@@ -2004,12 +1820,12 @@ L.U.Map.include({
   },
 
   localizeUrl: function (url) {
-    return L.Util.greedyTemplate(url, this.getGeoContext(), true)
+    return U.Utils.greedyTemplate(url, this.getGeoContext(), true)
   },
 
   proxyUrl: function (url, ttl) {
     if (this.options.urls.ajax_proxy) {
-      url = L.Util.greedyTemplate(this.options.urls.ajax_proxy, {
+      url = U.Utils.greedyTemplate(this.options.urls.ajax_proxy, {
         url: encodeURIComponent(url),
         ttl: ttl,
       })
@@ -2023,7 +1839,7 @@ L.U.Map.include({
   },
 
   search: function () {
-    if (this._controls.search) this._controls.search.openPanel(this)
+    if (this._controls.search) this._controls.search.open()
   },
 
   getFilterKeys: function () {

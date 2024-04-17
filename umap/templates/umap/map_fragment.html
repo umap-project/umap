@@ -1,7 +1,4 @@
 {% load umap_tags %}
+<umap-fragment data-settings='{{ map_settings|escape }}'>
 <div id="{{ unique_id }}" class="map_fragment"></div>
-<!-- djlint:off -->
-<script type="text/javascript">
-  new L.U.Map("{{ unique_id }}", {{ map_settings|notag|safe }})
-</script>
-<!-- djlint:on -->
+</umap-fragment>

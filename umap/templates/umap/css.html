@@ -1,28 +1,32 @@
+{% load static %}
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/leaflet/leaflet.css" />
+      href="{% static 'umap/vendors/leaflet/leaflet.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/markercluster/MarkerCluster.css" />
+      href="{% static 'umap/vendors/markercluster/MarkerCluster.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/markercluster/MarkerCluster.Default.css" />
+      href="{% static 'umap/vendors/markercluster/MarkerCluster.Default.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/editinosm/Leaflet.EditInOSM.css" />
+      href="{% static 'umap/vendors/editinosm/Leaflet.EditInOSM.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/minimap/Control.MiniMap.css" />
+      href="{% static 'umap/vendors/minimap/Control.MiniMap.min.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/contextmenu/leaflet.contextmenu.css" />
+      href="{% static 'umap/vendors/contextmenu/leaflet.contextmenu.min.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/toolbar/leaflet.toolbar.css" />
+      href="{% static 'umap/vendors/toolbar/leaflet.toolbar.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/measurable/Leaflet.Measurable.css" />
+      href="{% static 'umap/vendors/measurable/Leaflet.Measurable.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/fullscreen/leaflet.fullscreen.css" />
+      href="{% static 'umap/vendors/fullscreen/leaflet.fullscreen.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/locatecontrol/L.Control.Locate.css" />
+      href="{% static 'umap/vendors/locatecontrol/L.Control.Locate.min.css' %}" />
 <link rel="stylesheet"
-      href="{{ STATIC_URL }}umap/vendors/iconlayers/iconLayers.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}umap/font.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}umap/base.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}umap/content.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}umap/nav.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}umap/map.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}umap/theme.css">
+      href="{% static 'umap/vendors/iconlayers/iconLayers.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/vars.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/font.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/css/icon.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/base.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/content.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/nav.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/map.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/css/panel.css' %}" />
+<link rel="stylesheet" href="{% static 'umap/theme.css' %}" />

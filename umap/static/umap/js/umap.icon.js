@@ -1,4 +1,7 @@
-L.U.Icon = L.DivIcon.extend({
+U.Icon = L.DivIcon.extend({
+  statics: {
+    RECENT: [],
+  },
   initialize: function (map, options) {
     this.map = map
     const default_options = {
@@ -14,11 +17,22 @@ L.U.Icon = L.DivIcon.extend({
     }
   },
 
+  _setRecent: function (url) {
+    if (U.Utils.hasVar(url)) return
+    if (url === U.SCHEMA.iconUrl.default) return
+    if (U.Icon.RECENT.indexOf(url) === -1) {
+      U.Icon.RECENT.push(url)
+    }
+  },
+
   _getIconUrl: function (name) {
     let url
-    if (this.feature && this.feature._getIconUrl(name))
+    if (this.feature && this.feature._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
-    else url = this.options[`${name}Url`]
+      this._setRecent(url)
+    } else {
+      url = this.options[`${name}Url`]
+    }
     return this.formatUrl(url, this.feature)
   },
 
@@ -36,13 +50,16 @@ L.U.Icon = L.DivIcon.extend({
   },
 
   formatUrl: function (url, feature) {
-    return L.Util.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
+    return U.Utils.greedyTemplate(
+      url || '',
+      feature ? feature.extendedProperties() : {}
+    )
   },
 
   onAdd: function () {},
 })
 
-L.U.Icon.Default = L.U.Icon.extend({
+U.Icon.Default = U.Icon.extend({
   default_options: {
     iconAnchor: new L.Point(16, 40),
     popupAnchor: new L.Point(0, -40),
@@ -52,11 +69,11 @@ L.U.Icon.Default = L.U.Icon.extend({
 
   initialize: function (map, options) {
     options = L.Util.extend({}, this.default_options, options)
-    L.U.Icon.prototype.initialize.call(this, map, options)
+    U.Icon.prototype.initialize.call(this, map, options)
   },
 
   _setIconStyles: function (img, name) {
-    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor(),
       opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
@@ -67,15 +84,8 @@ L.U.Icon.Default = L.U.Icon.extend({
 
   onAdd: function () {
     const src = this._getIconUrl('icon')
-    // Decide whether to switch svg to white or not, but do it
-    // only for internal SVG, as invert could do weird things
-    if (src.startsWith('/') && src.endsWith('.svg')) {
-      const bgcolor = this._getColor()
-      // Must be called after icon container is added to the DOM
-      if (L.DomUtil.contrastedColor(this.elements.container, bgcolor)) {
-        this.elements.img.style.filter = 'invert(1)'
-      }
-    }
+    const bgcolor = this._getColor()
+    U.Icon.setIconContrast(this.elements.icon, this.elements.container, src, bgcolor)
   },
 
   createIcon: function () {
@@ -89,25 +99,14 @@ L.U.Icon.Default = L.U.Icon.extend({
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
     const src = this._getIconUrl('icon')
     if (src) {
-      // An url.
-      if (
-        src.startsWith('http') ||
-        src.startsWith('/') ||
-        src.startsWith('data:image')
-      ) {
-        this.elements.img = L.DomUtil.create('img', null, this.elements.container)
-        this.elements.img.src = src
-      } else {
-        this.elements.span = L.DomUtil.create('span', null, this.elements.container)
-        this.elements.span.textContent = src
-      }
+      this.elements.icon = U.Icon.makeIconElement(src, this.elements.container)
     }
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
 })
 
-L.U.Icon.Circle = L.U.Icon.extend({
+U.Icon.Circle = U.Icon.extend({
   initialize: function (map, options) {
     const default_options = {
       popupAnchor: new L.Point(0, -6),
@@ -115,11 +114,11 @@ L.U.Icon.Circle = L.U.Icon.extend({
       className: 'umap-circle-icon',
     }
     options = L.Util.extend({}, default_options, options)
-    L.U.Icon.prototype.initialize.call(this, map, options)
+    U.Icon.prototype.initialize.call(this, map, options)
   },
 
   _setIconStyles: function (img, name) {
-    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    U.Icon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
     this.elements.main.style.opacity = this._getOpacity()
   },
@@ -133,7 +132,7 @@ L.U.Icon.Circle = L.U.Icon.extend({
   },
 })
 
-L.U.Icon.Drop = L.U.Icon.Default.extend({
+U.Icon.Drop = U.Icon.Default.extend({
   default_options: {
     iconAnchor: new L.Point(16, 42),
     popupAnchor: new L.Point(0, -42),
@@ -142,7 +141,7 @@ L.U.Icon.Drop = L.U.Icon.Default.extend({
   },
 })
 
-L.U.Icon.Ball = L.U.Icon.Default.extend({
+U.Icon.Ball = U.Icon.Default.extend({
   default_options: {
     iconAnchor: new L.Point(8, 30),
     popupAnchor: new L.Point(0, -28),
@@ -164,7 +163,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 
   _setIconStyles: function (img, name) {
-    L.U.Icon.prototype._setIconStyles.call(this, img, name)
+    U.Icon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor('color')
     let background
     if (L.Browser.ielt9) {
@@ -179,7 +178,7 @@ L.U.Icon.Ball = L.U.Icon.Default.extend({
   },
 })
 
-L.U.Icon.Cluster = L.DivIcon.extend({
+U.Icon.Cluster = L.DivIcon.extend({
   options: {
     iconSize: [40, 40],
   },
@@ -208,3 +207,49 @@ L.U.Icon.Cluster = L.DivIcon.extend({
     return color || L.DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
   },
 })
+
+U.Icon.isImg = function (src) {
+  return U.Utils.isPath(src) || U.Utils.isRemoteUrl(src) || U.Utils.isDataImage(src)
+}
+
+U.Icon.makeIconElement = function (src, parent) {
+  let icon
+  if (U.Icon.isImg(src)) {
+    icon = L.DomUtil.create('img')
+    icon.src = src
+  } else {
+    icon = L.DomUtil.create('span')
+    icon.textContent = src
+  }
+  parent.appendChild(icon)
+  return icon
+}
+
+U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
+  /*
+   * icon: the element we'll adapt the style, it can be an image or text
+   * parent: the element we'll consider to decide whether to adapt the style,
+   * by looking at its background color
+   * src: the raw "icon" value, can be an URL, a path, text, emoticon, etc.
+   * bgcolor: the background color, used for caching and in case we cannot guess the
+   * parent background color
+   */
+  if (!icon) return
+
+  if (L.DomUtil.contrastedColor(parent, bgcolor)) {
+    // Decide whether to switch svg to white or not, but do it
+    // only for internal SVG, as invert could do weird things
+    if (
+      U.Utils.isPath(src) &&
+      src.endsWith('.svg') &&
+      src !== U.SCHEMA.iconUrl.default
+    ) {
+      // Must be called after icon container is added to the DOM
+      // An image
+      icon.style.filter = 'invert(1)'
+    } else if (!icon.src) {
+      // Text icon
+      icon.style.color = 'white'
+    }
+  }
+}

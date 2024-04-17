@@ -1,50 +1,64 @@
-{% load compress %}
-{% compress js %}
-  <script src="{{ STATIC_URL }}umap/vendors/leaflet/leaflet-src.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/editable/Path.Drag.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/editable/Leaflet.Editable.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/hash/leaflet-hash.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/i18n/Leaflet.i18n.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/editinosm/Leaflet.EditInOSM.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/minimap/Control.MiniMap.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/csv2geojson/csv2geojson.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/togeojson/togeojson.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/osmtogeojson/osmtogeojson.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/loading/Control.Loading.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/markercluster/leaflet.markercluster-src.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/contextmenu/leaflet.contextmenu.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/photon/leaflet.photon.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/georsstogeojson/GeoRSSToGeoJSON.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/heat/leaflet-heat.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/fullscreen/Leaflet.fullscreen.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/toolbar/leaflet.toolbar-src.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/formbuilder/Leaflet.FormBuilder.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/measurable/Leaflet.Measurable.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/iconlayers/iconLayers.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/togpx/togpx.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/tokml/tokml.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/locatecontrol/L.Control.Locate.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/dompurify/purify.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/colorbrewer/colorbrewer.js"></script>
-  <script src="{{ STATIC_URL }}umap/vendors/simple-statistics/simple-statistics.min.js"></script>
-{% endcompress %}
-{% if locale %}<script src="{{ STATIC_URL }}umap/locale/{{ locale }}.js"></script>{% endif %}
-{% compress js %}
-  <script src="{{ STATIC_URL }}umap/js/umap.core.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.autocomplete.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.popup.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.xhr.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.forms.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.icon.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.features.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.permissions.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.datalayer.permissions.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.layer.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.controls.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.slideshow.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.tableeditor.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.browser.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.importer.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.js"></script>
-  <script src="{{ STATIC_URL }}umap/js/umap.ui.js"></script>
-{% endcompress %}
+{% load static %}
+<script type="module"
+        src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
+        defer></script>
+<script type="module"
+        src="{% static 'umap/js/modules/leaflet-configure.js' %}"
+        defer></script>
+{% if locale %}
+  {% with "umap/locale/"|add:locale|add:".js" as path %}
+    <script src="{% static path %}" defer></script>
+  {% endwith %}
+{% endif %}
+<script type="module" src="{% static 'umap/js/modules/global.js' %}" defer></script>
+<script src="{% static 'umap/vendors/editable/Path.Drag.js' %}" defer></script>
+<script src="{% static 'umap/vendors/editable/Leaflet.Editable.js' %}" defer></script>
+<script src="{% static 'umap/vendors/hash/leaflet-hash.js' %}" defer></script>
+<script src="{% static 'umap/vendors/editinosm/Leaflet.EditInOSM.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/minimap/Control.MiniMap.min.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/csv2geojson/csv2geojson.js' %}" defer></script>
+<script src="{% static 'umap/vendors/togeojson/togeojson.umd.js' %}" defer></script>
+<script src="{% static 'umap/vendors/osmtogeojson/osmtogeojson.js' %}" defer></script>
+<script src="{% static 'umap/vendors/loading/Control.Loading.js' %}" defer></script>
+<script src="{% static 'umap/vendors/markercluster/leaflet.markercluster.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/contextmenu/leaflet.contextmenu.min.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/photon/leaflet.photon.js' %}" defer></script>
+<script src="{% static 'umap/vendors/georsstogeojson/GeoRSSToGeoJSON.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/heat/leaflet-heat.js' %}" defer></script>
+<script src="{% static 'umap/vendors/fullscreen/Leaflet.fullscreen.min.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/toolbar/leaflet.toolbar.js' %}" defer></script>
+<script src="{% static 'umap/vendors/formbuilder/Leaflet.FormBuilder.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/measurable/Leaflet.Measurable.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/togpx/togpx.js' %}" defer></script>
+<script src="{% static 'umap/vendors/iconlayers/iconLayers.js' %}" defer></script>
+<script src="{% static 'umap/vendors/tokml/tokml.js' %}" defer></script>
+<script src="{% static 'umap/vendors/locatecontrol/L.Control.Locate.min.js' %}"
+        defer></script>
+<script src="{% static 'umap/vendors/colorbrewer/colorbrewer.js' %}" defer></script>
+<script src="{% static 'umap/vendors/simple-statistics/simple-statistics.min.js' %}"
+        defer></script>
+<script src="{% static 'umap/js/umap.core.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.autocomplete.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.popup.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.forms.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.icon.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.features.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.permissions.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.datalayer.permissions.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.layer.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.controls.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.slideshow.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.tableeditor.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.importer.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.share.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.js' %}" defer></script>
+<script src="{% static 'umap/js/umap.ui.js' %}" defer></script>
+<script src="{% static 'umap/js/components/fragment.js' %}" defer></script>

@@ -1,4 +1,4 @@
-L.U.Importer = L.Class.extend({
+U.Importer = L.Class.extend({
   TYPES: ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap'],
   initialize: function (map) {
     this.map = map
@@ -7,7 +7,11 @@ L.U.Importer = L.Class.extend({
 
   build: function () {
     this.container = L.DomUtil.create('div', 'umap-upload')
-    this.title = L.DomUtil.add('h3', '', this.container, L._('Import data'))
+    this.title = L.DomUtil.createTitle(
+      this.container,
+      L._('Import data'),
+      'icon-upload'
+    )
     this.presetBox = L.DomUtil.create('div', 'formbox', this.container)
     this.presetSelect = L.DomUtil.create('select', '', this.presetBox)
     this.fileBox = L.DomUtil.create('div', 'formbox', this.container)
@@ -38,11 +42,10 @@ L.U.Importer = L.Class.extend({
       this.container,
       L._('Choose the layer to import in')
     )
-    this.clearLabel = L.DomUtil.add(
+    this.clearLabel = L.DomUtil.element(
       'label',
-      '',
-      this.container,
-      L._('Replace layer content')
+      { textContent: L._('Replace layer content'), for: 'datalayer-clear-check' },
+      this.container
     )
     this.submitInput = L.DomUtil.element(
       'input',
@@ -58,21 +61,8 @@ L.U.Importer = L.Class.extend({
     )
     this.clearFlag = L.DomUtil.element(
       'input',
-      { type: 'checkbox', name: 'clear' },
+      { type: 'checkbox', name: 'clear', id: 'datalayer-clear-check' },
       this.clearLabel
-    )
-    let option
-    this.map.eachDataLayerReverse((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        const id = L.stamp(datalayer)
-        option = L.DomUtil.add('option', '', this.layerInput, datalayer.options.name)
-        option.value = id
-      }
-    })
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Import in a new layer') },
-      this.layerInput
     )
     L.DomUtil.element(
       'option',
@@ -102,7 +92,7 @@ L.U.Importer = L.Class.extend({
         let type = '',
           newType
         for (let i = 0; i < e.target.files.length; i++) {
-          newType = L.Util.detectFileType(e.target.files[i])
+          newType = U.Utils.detectFileType(e.target.files[i])
           if (!type && newType) type = newType
           if (type && newType !== type) {
             type = ''
@@ -117,7 +107,24 @@ L.U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    this.map.ui.openPanel({ data: { html: this.container }, className: 'dark' })
+    const onLoad = this.map.editPanel.open({ data: { html: this.container } })
+    onLoad.then(() => {
+      this.fileInput.value = null
+      this.layerInput.innerHTML = ''
+      let option
+      this.map.eachDataLayerReverse((datalayer) => {
+        if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
+          const id = L.stamp(datalayer)
+          option = L.DomUtil.add('option', '', this.layerInput, datalayer.options.name)
+          option.value = id
+        }
+      })
+      L.DomUtil.element(
+        'option',
+        { value: '', textContent: L._('Import in a new layer') },
+        this.layerInput
+      )
+    })
   },
 
   openFiles: function () {

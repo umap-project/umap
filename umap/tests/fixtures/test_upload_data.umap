@@ -1,0 +1,171 @@
+{
+    "type": "umap",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [
+            3.0528,
+            50.6269
+        ]
+    },
+    "properties": {
+        "umap_id": 666,
+        "longCredit": "the illustrious mapmaker",
+        "shortCredit": "the mapmaker",
+        "slideshow": {},
+        "captionBar": true,
+        "dashArray": "5,5",
+        "fillOpacity": "0.5",
+        "fillColor": "Crimson",
+        "fill": true,
+        "weight": "2",
+        "opacity": "0.9",
+        "smoothFactor": "1",
+        "iconClass": "Drop",
+        "color": "Red",
+        "limitBounds": {},
+        "tilelayer": {
+            "maxZoom": 20,
+            "url_template": "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+            "minZoom": 0,
+            "attribution": "map data © [[https://osm.org/copyright|OpenStreetMap contributors]] under ODbL  - Tiles © HOT",
+            "name": "OSM Humanitarian (OSM-FR)"
+        },
+        "licence": {
+            "url": "",
+            "name": "No licence set"
+        },
+        "description": "Map description",
+        "name": "Imported map",
+        "tilelayersControl": true,
+        "onLoadPanel": "caption",
+        "displayPopupFooter": true,
+        "miniMap": true,
+        "moreControl": true,
+        "scaleControl": true,
+        "zoomControl": true,
+        "scrollWheelZoom": true,
+        "datalayersControl": true,
+        "zoom": 6
+    },
+    "layers": [
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    4.2939,
+                                    50.8893
+                                ],
+                                [
+                                    4.2441,
+                                    50.8196
+                                ],
+                                [
+                                    4.3869,
+                                    50.7642
+                                ],
+                                [
+                                    4.4813,
+                                    50.7929
+                                ],
+                                [
+                                    4.413,
+                                    50.9119
+                                ],
+                                [
+                                    4.2939,
+                                    50.8893
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "name": "Bruxelles",
+                        "description": "polygon"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            3.0528,
+                            50.6269
+                        ]
+                    },
+                    "properties": {
+                        "_umap_options": {
+                            "color": "Orange"
+                        },
+                        "name": "Lille",
+                        "description": "une ville"
+                    }
+                }
+            ],
+            "_umap_options": {
+                "displayOnLoad": true,
+                "name": "Cities",
+                "id": 108,
+                "remoteData": {},
+                "description": "A layer with some cities",
+                "color": "Navy",
+                "iconClass": "Drop",
+                "smoothFactor": "1",
+                "dashArray": "5,1",
+                "fillOpacity": "0.5",
+                "fillColor": "Blue",
+                "fill": true
+            }
+        },
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            [
+                                1.7715,
+                                50.9255
+                            ],
+                            [
+                                1.6589,
+                                50.9696
+                            ],
+                            [
+                                1.4941,
+                                51.0128
+                            ],
+                            [
+                                1.4199,
+                                51.0638
+                            ],
+                            [
+                                1.2881,
+                                51.1104
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "_umap_options": {
+                            "weight": "4"
+                        },
+                        "name": "tunnel sous la Manche"
+                    }
+                }
+            ],
+            "_umap_options": {
+                "displayOnLoad": true,
+                "name": "Tunnels",
+                "id": 109,
+                "remoteData": {}
+            }
+        }
+    ]
+}

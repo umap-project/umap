@@ -1,0 +1,112 @@
+/* Applied on i and button elements  */
+.icon {
+    background-repeat: no-repeat;
+    display: inline-block;
+    padding: 0 10px;
+    vertical-align: middle;
+    /* Reste default style, in case we apply this class on a button element  */
+    border: none;
+    background-color: initial;
+}
+.icon-16 {
+    background-image: url('../img/16.svg');
+    height: 24px;
+    line-height: 24px;
+}
+.icon + span {
+    margin-left: 10px;
+}
+.dark .icon-16 {
+    background-image: url('../img/16-white.svg');
+}
+.icon-add {
+    background-position: -26px -24px;
+}
+.icon-back {
+    background-position: -122px -144px;
+}
+.icon-caption {
+    background-position: -98px -24px;
+}
+.icon-close {
+    background-position: -26px 0px;
+}
+.icon-delete {
+    background-position: -121px -49px;
+}
+.readonly .icon-delete,
+.off .icon-delete {
+    background-position: -121px -122px;
+}
+.icon-drag {
+    background-position: -72px -73px;
+    cursor: move;
+    float: right;
+}
+.icon-eye {
+    background-position: -49px -26px;
+}
+.off .icon-eye {
+    background-position: -73px -26px;
+}
+.icon-edit {
+    background-position: -51px -49px;
+}
+.off .icon-edit {
+    background-position: -51px -73px;
+}
+.icon-key {
+    background-position: -144px -121px;
+}
+.icon-layers {
+    background-position: -96px -120px;
+}
+.icon-list {
+    background-position: -28px -99px;
+}
+.icon-marker {
+    background-position: -72px -120px;
+}
+.icon-polygon {
+    background-position: -24px -119px;
+}
+.icon-polyline {
+    background-position: 0 -119px;
+}
+.icon-resize {
+    background-position: -74px -144px;
+}
+.expanded .icon-resize {
+    background-position: -50px -144px;
+}
+.icon-search {
+    background-position: -27px -120px;
+}
+.icon-settings {
+    background-position: -23px -97px;
+}
+.icon-share {
+    background-position: 0px -120px;
+}
+.icon-table {
+    background-position: -50px -1px;
+}
+.readonly .icon-table,
+.off .icon-table {
+    background-position: -74px -1px;
+}
+.remotelayer .icon-table {
+    display: none !important;
+}
+.icon-tilelayer {
+    background-position: -98px -141px;
+}
+.icon-upload {
+    background-position: -144px -97px;
+}
+.icon-zoom {
+    background-position: -1px -49px;
+}
+.off .icon-zoom {
+    background-position: -25px -49px;
+}

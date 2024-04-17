@@ -35,13 +35,23 @@ def test_get_with_public_mode(client, settings, datalayer, map):
     url = reverse("datalayer_view", args=(map.pk, datalayer.pk))
     response = client.get(url)
     assert response.status_code == 200
-    assert response["Last-Modified"] is not None
+    assert response["X-Datalayer-Version"] is not None
     assert response["Cache-Control"] is not None
     assert "Content-Encoding" not in response
     j = json.loads(response.content.decode())
     assert "_umap_options" in j
     assert "features" in j
     assert j["type"] == "FeatureCollection"
+
+
+def test_get_with_x_accel_redirect(client, settings, datalayer, map):
+    settings.UMAP_XSENDFILE_HEADER = "X-Accel-Redirect"
+    url = reverse("datalayer_view", args=(map.pk, datalayer.pk))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert "X-Accel-Redirect" in response.headers
+    assert response["X-Accel-Redirect"].startswith("/internal/datalayer/")
+    assert response["X-Accel-Redirect"].endswith(".geojson")
 
 
 def test_get_with_open_mode(client, settings, datalayer, map):
@@ -111,7 +121,7 @@ def test_update(client, datalayer, map, post_data):
     # Test response is a json
     j = json.loads(response.content.decode())
     assert "id" in j
-    assert datalayer.pk == j["id"]
+    assert str(datalayer.pk) == j["id"]
     assert j["browsable"] is True
     assert Path(modified_datalayer.geojson.path).exists()
 
@@ -154,48 +164,50 @@ def test_should_not_be_possible_to_delete_with_wrong_map_id_in_url(
     assert DataLayer.objects.filter(pk=datalayer.pk).exists()
 
 
-def test_optimistic_concurrency_control_with_good_last_modified(
+def test_optimistic_concurrency_control_with_good_version(
     client, datalayer, map, post_data
 ):
     map.share_status = Map.PUBLIC
     map.save()
-    # Get Last-Modified
+    # Get reference version
     url = reverse("datalayer_view", args=(map.pk, datalayer.pk))
     response = client.get(url)
-    last_modified = response["Last-Modified"]
+    reference_version = response["X-Datalayer-Version"]
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password="123123")
     name = "new name"
     post_data["name"] = "new name"
     response = client.post(
-        url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=last_modified
+        url, post_data, follow=True, HTTP_X_DATALAYER_REFERENCE=reference_version
     )
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name == name
 
 
-def test_optimistic_concurrency_control_with_bad_last_modified(
+def test_optimistic_concurrency_control_with_bad_version(
     client, datalayer, map, post_data
 ):
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password="123123")
     name = "new name"
     post_data["name"] = name
-    response = client.post(url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE="xxx")
+    response = client.post(
+        url, post_data, follow=True, HTTP_X_DATALAYER_REFERENCE="xxx"
+    )
     assert response.status_code == 412
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name != name
 
 
-def test_optimistic_concurrency_control_with_empty_last_modified(
+def test_optimistic_concurrency_control_with_empty_version(
     client, datalayer, map, post_data
 ):
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password="123123")
     name = "new name"
     post_data["name"] = name
-    response = client.post(url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=None)
+    response = client.post(url, post_data, follow=True, X_DATALAYER_REFERENCE=None)
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     assert modified_datalayer.name == name
@@ -223,6 +235,41 @@ def test_versions_should_return_versions(client, datalayer, map, settings):
         "at": "1440918637",
     }
     assert version in versions["versions"]
+
+
+def test_versions_can_return_old_format(client, datalayer, map, settings):
+    map.share_status = Map.PUBLIC
+    map.save()
+    root = datalayer.storage_root()
+    datalayer.old_id = 123  # old datalayer id (now replaced by uuid)
+    datalayer.save()
+
+    datalayer.geojson.storage.save(
+        "%s/%s_1440924889.geojson" % (root, datalayer.pk), ContentFile("{}")
+    )
+    datalayer.geojson.storage.save(
+        "%s/%s_1440923687.geojson" % (root, datalayer.pk), ContentFile("{}")
+    )
+
+    # store with the id prefix (rather than the uuid)
+    old_format_version = "%s_1440918637.geojson" % datalayer.old_id
+    datalayer.geojson.storage.save(
+        ("%s/" % root) + old_format_version, ContentFile("{}")
+    )
+
+    url = reverse("datalayer_versions", args=(map.pk, datalayer.pk))
+    versions = json.loads(client.get(url).content.decode())
+    assert len(versions["versions"]) == 4
+    version = {
+        "name": old_format_version,
+        "size": 2,
+        "at": "1440918637",
+    }
+    assert version in versions["versions"]
+
+    client.get(
+        reverse("datalayer_version", args=(map.pk, datalayer.pk, old_format_version))
+    )
 
 
 def test_version_should_return_one_version_geojson(client, datalayer, map):
@@ -444,7 +491,7 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
     assert response.status_code == 200
 
     response = client.get(reverse("datalayer_view", args=(map.pk, datalayer.pk)))
-    reference_timestamp = response["Last-Modified"]
+    reference_version = response.headers.get("X-Datalayer-Version")
 
     # Client 1 adds "Point 5, 6" to the existing data
     client1_feature = {
@@ -454,14 +501,16 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
     }
     client1_data = deepcopy(reference_data)
     client1_data["features"].append(client1_feature)
-    # Sleep to change the current timestamp (used in the If-Unmodified-Since header)
-    time.sleep(1)
+
     post_data["geojson"] = SimpleUploadedFile(
         "foo.json",
         json.dumps(client1_data).encode("utf-8"),
     )
     response = client.post(
-        url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=reference_timestamp
+        url,
+        post_data,
+        follow=True,
+        headers={"X-Datalayer-Reference": reference_version},
     )
     assert response.status_code == 200
 
@@ -479,7 +528,10 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
         json.dumps(client2_data).encode("utf-8"),
     )
     response = client.post(
-        url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=reference_timestamp
+        url,
+        post_data,
+        follow=True,
+        headers={"X-Datalayer-Reference": reference_version},
     )
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
@@ -513,20 +565,22 @@ def test_optimistic_merge_conflicting_change_raises(
     assert response.status_code == 200
 
     response = client.get(reverse("datalayer_view", args=(map.pk, datalayer.pk)))
-    reference_timestamp = response["Last-Modified"]
+
+    reference_version = response.headers.get("X-Datalayer-Version")
 
     # First client changes the first feature.
     client1_data = deepcopy(reference_data)
     client1_data["features"][0]["geometry"] = {"type": "Point", "coordinates": [5, 6]}
 
-    # Sleep to change the current timestamp (used in the If-Unmodified-Since header)
-    time.sleep(1)
     post_data["geojson"] = SimpleUploadedFile(
         "foo.json",
         json.dumps(client1_data).encode("utf-8"),
     )
     response = client.post(
-        url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=reference_timestamp
+        url,
+        post_data,
+        follow=True,
+        headers={"X-Datalayer-Reference": reference_version},
     )
     assert response.status_code == 200
 
@@ -539,7 +593,10 @@ def test_optimistic_merge_conflicting_change_raises(
         json.dumps(client2_data).encode("utf-8"),
     )
     response = client.post(
-        url, post_data, follow=True, HTTP_IF_UNMODIFIED_SINCE=reference_timestamp
+        url,
+        post_data,
+        follow=True,
+        headers={"X-Datalayer-Reference": reference_version},
     )
     assert response.status_code == 412
 

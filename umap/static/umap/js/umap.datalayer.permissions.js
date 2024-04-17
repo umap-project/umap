@@ -1,4 +1,4 @@
-L.U.DataLayerPermissions = L.Class.extend({
+U.DataLayerPermissions = L.Class.extend({
   options: {
     edit_status: null,
   },
@@ -38,7 +38,7 @@ L.U.DataLayerPermissions = L.Class.extend({
           },
         ],
       ],
-      builder = new L.U.FormBuilder(this, fields, {
+      builder = new U.FormBuilder(this, fields, {
         className: 'umap-form datalayer-permissions',
       }),
       form = builder.build()
@@ -46,24 +46,25 @@ L.U.DataLayerPermissions = L.Class.extend({
   },
 
   getUrl: function () {
-    return L.Util.template(this.datalayer.map.options.urls.datalayer_permissions, {
+    return U.Utils.template(this.datalayer.map.options.urls.datalayer_permissions, {
       map_id: this.datalayer.map.options.umap_id,
       pk: this.datalayer.umap_id,
     })
   },
-  save: function () {
+  save: async function () {
     if (!this.isDirty) return this.datalayer.map.continueSaving()
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
-    this.datalayer.map.post(this.getUrl(), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        this.commit()
-        this.isDirty = false
-        this.datalayer.map.continueSaving()
-      },
-    })
+    const [data, response, error] = await this.datalayer.map.server.post(
+      this.getUrl(),
+      {},
+      formData
+    )
+    if (!error) {
+      this.commit()
+      this.isDirty = false
+      this.datalayer.map.continueSaving()
+    }
   },
 
   commit: function () {

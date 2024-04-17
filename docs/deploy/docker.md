@@ -15,7 +15,7 @@ services:
 
   app:
     # Check https://hub.docker.com/r/umap/umap/tags to find the latest version
-    image: umap/umap:1.3.7
+    image: umap/umap:2.0.2
     ports:
       # modify the external port (8001, on the left) if desired, but make sure it matches SITE_URL, below
       - "8001:8000"
@@ -35,4 +35,10 @@ services:
 volumes:
   umap_userdata:
   umap_db:
+```
+
+Note that you’ll have to set a [`SECRET_KEY`](https://docs.djangoproject.com/en/5.0/ref/settings/#secret-key) environment variable that must be secret and unique. One way to generate it is through the `secrets` module from Python:
+
+```sh
+$ python3 -c 'import secrets; print(secrets.token_hex(100))'
 ```

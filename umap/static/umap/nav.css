@@ -36,7 +36,7 @@ footer .i18n_switch {
     flex-direction: column;
 }
 .umap-nav a {
-    color: #3A4259;
+    color: var(--color-darkBlue);
     padding: .4rem;
 }
 .umap-nav a:hover {
@@ -57,6 +57,7 @@ footer .i18n_switch {
 }
 .umap-nav ul {
     text-align: center;
+    font-weight: bold;
 }
 .umap-nav ul li {
     line-height: 2.5rem;
@@ -65,6 +66,7 @@ footer .i18n_switch {
 .umap-nav .button:hover {
     text-decoration: none;
     min-width: 150px;
+    margin-left: 1rem;
 }
 
 @media only screen and (min-width: 500px) {

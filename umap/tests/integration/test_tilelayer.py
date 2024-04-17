@@ -101,9 +101,9 @@ def test_map_should_display_custom_tilelayer(map, live_server, tilelayers, page)
     url_pattern = re.compile(
         r"https://[abc]{1}.basemaps.cartocdn.com/rastertiles/voyager/\d+/\d+/\d+.png"
     )
-    map.settings["properties"]["tilelayer"][
-        "url_template"
-    ] = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+    map.settings["properties"]["tilelayer"]["url_template"] = (
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+    )
     map.settings["properties"]["tilelayersControl"] = True
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")

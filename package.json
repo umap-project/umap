@@ -2,21 +2,25 @@
   "name": "umap",
   "version": "1.0.0-alpha.1",
   "description": "Manage map and features with Leaflet and expose them for backend storage through an API.",
+  "type": "module",
   "directories": {
     "test": "test"
   },
   "devDependencies": {
     "chai": "^3.3.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-compat": "^4.2.0",
+    "fetch-mock": "^9.11.0",
     "happen": "~0.1.3",
     "lebab": "^3.2.1",
-    "mocha": "^10.2.0",
+    "mocha": "^10.3.0",
     "optimist": "~0.4.0",
     "prettier": "^2.8.8",
     "sinon": "^15.1.0",
     "uglify-js": "~3.17.4"
   },
   "scripts": {
-    "test": "firefox test/index.html",
+    "test": "node_modules/mocha/bin/mocha.js",
     "vendors": "scripts/vendorsjs.sh"
   },
   "repository": {
@@ -27,7 +31,7 @@
     "leaflet"
   ],
   "author": "Yohan Boniface",
-  "license": "WTFPL",
+  "license": "AGPLv3",
   "bugs": {
     "url": "https://github.com/umap-project/Leaflet.Storage/issues"
   },
@@ -36,8 +40,9 @@
     "@tmcw/togeojson": "^5.8.0",
     "colorbrewer": "^1.5.6",
     "csv2geojson": "5.1.1",
-    "dompurify": "^3.0.3",
+    "dompurify": "^3.0.11",
     "georsstogeojson": "^0.1.0",
+    "jsdom": "^24.0.0",
     "leaflet": "1.9.4",
     "leaflet-contextmenu": "^1.4.0",
     "leaflet-editable": "^1.2.0",
@@ -45,7 +50,7 @@
     "leaflet-formbuilder": "0.2.9",
     "leaflet-fullscreen": "1.0.2",
     "leaflet-hash": "0.2.1",
-    "leaflet-i18n": "0.3.3",
+    "leaflet-i18n": "0.3.5",
     "leaflet-iconlayers": "^0.2.0",
     "leaflet-loading": "0.1.24",
     "leaflet-measurable": "0.1.0",
@@ -55,10 +60,13 @@
     "leaflet.locatecontrol": "^0.79.0",
     "leaflet.markercluster": "^1.5.3",
     "leaflet.path.drag": "0.0.6",
-    "leaflet.photon": "0.8.0",
+    "leaflet.photon": "0.9.1",
     "osmtogeojson": "^3.0.0-beta.3",
     "simple-statistics": "^7.8.3",
     "togpx": "^0.5.4",
     "tokml": "0.4.0"
-  }
+  },
+  "browserslist": [
+    "> 0.5%, last 2 versions, Firefox ESR, not dead, not op_mini all"
+  ]
 }

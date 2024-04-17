@@ -100,3 +100,15 @@ There are three settings you can play with to control that:
     # primary key and not expose the username (which may be private or may change too
     # often for URL persistance)
     USER_URL_FIELD = "username"
+
+
+## Custom header and/or footer scripts
+
+You can populate the content of you own `umap/header.html` and `umap/footer.html`
+templates with `<script>` elements, it might be useful for instance 
+for analytics (footer) or bug reporting like Sentry (header).
+
+By default, these files are empty.
+You must define you own paths for extra templates following
+[Django’s documentation for this particular setting](https://docs.djangoproject.com/en/4.2/ref/settings/#templates).
+

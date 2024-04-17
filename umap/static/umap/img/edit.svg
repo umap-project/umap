@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <path d="M128 64A64 64 0 1 1 0 64a64 64 0 0 1 128 0z" fill="#323e56"/>
-  <path d="M94.3 17.3 86 25.5l16.4 16.3 8.1-8.2z" fill="#79c1c0"/>
+  <path d="M128 64A64 64 0 1 1 0 64a64 64 0 0 1 128 0z" fill="#263B58"/>
+  <path d="M94.3 17.3 86 25.5l16.4 16.3 8.1-8.2z" fill="#B9F5D2"/>
   <path d="m82 29.5-44.9 45 16.3 16.3 45-45z" fill="#fff"/>
-  <path d="M37.1 74.5 24.8 103l28.6-12.3z" fill="#79c1c0"/>
+  <path d="M37.1 74.5 24.8 103l28.6-12.3z" fill="#B9F5D2"/>
   <text xml:space="preserve" style="line-height:125%" x="-37.8" y="977.1" font-size="157.6" font-weight="400" letter-spacing="0" word-spacing="0" font-family="Sans" transform="translate(0 -924.4)"/>
 </svg>

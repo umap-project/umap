@@ -1,5 +1,8 @@
+import json
+import operator
 import os
 import time
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -8,9 +11,11 @@ from django.core.files.base import File
 from django.core.signing import Signer
 from django.template.defaultfilters import slugify
 from django.urls import reverse
+from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
 from .managers import PublicManager
+from .utils import _urls_for_js
 
 
 # Did not find a clean way to do this in Django
@@ -87,7 +92,7 @@ class Licence(NamedModel):
 
 class TileLayer(NamedModel):
     url_template = models.CharField(
-        max_length=200, help_text=_("URL template using OSM tile format")
+        max_length=400, help_text=_("URL template using OSM tile format")
     )
     minZoom = models.IntegerField(default=0)
     maxZoom = models.IntegerField(default=18)
@@ -193,6 +198,48 @@ class Map(NamedModel):
     objects = models.Manager()
     public = PublicManager()
 
+    @property
+    def preview_settings(self):
+        layers = self.datalayer_set.all()
+        datalayer_data = [c.metadata() for c in layers]
+        map_settings = self.settings
+        if "properties" not in map_settings:
+            map_settings["properties"] = {}
+        map_settings["properties"].update(
+            {
+                "tilelayers": [TileLayer.get_default().json],
+                "datalayers": datalayer_data,
+                "urls": _urls_for_js(),
+                "STATIC_URL": settings.STATIC_URL,
+                "editMode": "disabled",
+                "hash": False,
+                "attributionControl": False,
+                "scrollWheelZoom": False,
+                "umapAttributionControl": False,
+                "noControl": True,
+                "umap_id": self.pk,
+                "onLoadPanel": "none",
+                "captionBar": False,
+                "schema": self.extra_schema,
+                "slideshow": {},
+            }
+        )
+        return map_settings
+
+    def generate_umapjson(self, request):
+        umapjson = self.settings
+        umapjson["type"] = "umap"
+        umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
+        datalayers = []
+        for datalayer in self.datalayer_set.all():
+            with open(datalayer.geojson.path, "rb") as f:
+                layer = json.loads(f.read())
+            if datalayer.settings:
+                layer["_umap_options"] = datalayer.settings
+            datalayers.append(layer)
+        umapjson["layers"] = datalayers
+        return umapjson
+
     def get_absolute_url(self):
         return reverse("map", kwargs={"slug": self.slug or "map", "map_id": self.pk})
 
@@ -212,6 +259,13 @@ class Map(NamedModel):
         except ValueError:
             has_anonymous_cookie = False
         return has_anonymous_cookie
+
+    def can_delete(self, user=None, request=None):
+        if self.owner and user != self.owner:
+            return False
+        if not self.owner and not self.is_anonymous_owner(request):
+            return False
+        return True
 
     def can_edit(self, user=None, request=None):
         """
@@ -277,6 +331,14 @@ class Map(NamedModel):
             datalayer.clone(map_inst=new)
         return new
 
+    @classproperty
+    def extra_schema(self):
+        return {
+            "iconUrl": {
+                "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
+            }
+        }
+
 
 class Pictogram(NamedModel):
     """
@@ -322,7 +384,10 @@ class DataLayer(NamedModel):
         (EDITORS, _("Editors only")),
         (OWNER, _("Owner only")),
     )
-
+    uuid = models.UUIDField(
+        unique=True, primary_key=True, default=uuid.uuid4, editable=False
+    )
+    old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
@@ -378,6 +443,8 @@ class DataLayer(NamedModel):
             "name": self.name,
             "displayOnLoad": self.display_on_load,
         }
+        if self.old_id:
+            obj["old_id"] = self.old_id
         obj["id"] = self.pk
         obj["permissions"] = {"edit_status": self.edit_status}
         obj["editMode"] = "advanced" if self.can_edit(user, request) else "disabled"
@@ -385,6 +452,7 @@ class DataLayer(NamedModel):
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
+        new._state.adding = True
         new.pk = None
         if map_inst:
             new.map = map_inst
@@ -393,7 +461,10 @@ class DataLayer(NamedModel):
         return new
 
     def is_valid_version(self, name):
-        return name.startswith("%s_" % self.pk) and name.endswith(".geojson")
+        valid_prefixes = [name.startswith("%s_" % self.pk)]
+        if self.old_id:
+            valid_prefixes.append(name.startswith("%s_" % self.old_id))
+        return any(valid_prefixes) and name.endswith(".geojson")
 
     def version_metadata(self, name):
         els = name.split(".")[0].split("_")
@@ -403,17 +474,14 @@ class DataLayer(NamedModel):
             "size": self.geojson.storage.size(self.get_version_path(name)),
         }
 
-    def get_versions(self):
+    @property
+    def versions(self):
         root = self.storage_root()
         names = self.geojson.storage.listdir(root)[1]
         names = [name for name in names if self.is_valid_version(name)]
-        names.sort(reverse=True)  # Recent first.
-        return names
-
-    @property
-    def versions(self):
-        names = self.get_versions()
-        return [self.version_metadata(name) for name in names]
+        versions = [self.version_metadata(name) for name in names]
+        versions.sort(reverse=True, key=operator.itemgetter("at"))
+        return versions
 
     def get_version(self, name):
         path = self.get_version_path(name)
@@ -425,8 +493,13 @@ class DataLayer(NamedModel):
 
     def purge_old_versions(self):
         root = self.storage_root()
-        names = self.get_versions()[settings.UMAP_KEEP_VERSIONS :]
-        for name in names:
+        versions = self.versions[settings.UMAP_KEEP_VERSIONS :]
+        for version in versions:
+            name = version["name"]
+            # Should not be in the list, but ensure to not delete the file
+            # currently used in database
+            if self.geojson.name.endswith(name):
+                continue
             try:
                 self.geojson.storage.delete(os.path.join(root, name))
             except FileNotFoundError:
@@ -435,8 +508,12 @@ class DataLayer(NamedModel):
     def purge_gzip(self):
         root = self.storage_root()
         names = self.geojson.storage.listdir(root)[1]
+        prefixes = [f"{self.pk}_"]
+        if self.old_id:
+            prefixes.append(f"{self.old_id}_")
+        prefixes = tuple(prefixes)
         for name in names:
-            if name.startswith(f"{self.pk}_") and name.endswith(".gz"):
+            if name.startswith(prefixes) and name.endswith(".gz"):
                 self.geojson.storage.delete(os.path.join(root, name))
 
     def can_edit(self, user=None, request=None):

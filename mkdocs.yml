@@ -6,9 +6,11 @@ nav:
   - How-tos:
       - Getting started: install.md
       - Contribute: contributing.md
-  - Architecture:
-      - Overview: architecture/overview.md
-      - Frontend: architecture/frontend.md
+      - Release: release.md
+  - Development:
+      - Overview: dev/overview.md
+      - Frontend: dev/frontend.md
+      - Dependencies: dev/dependencies.md
   - Configuration:
       - Settings: config/settings.md
       - Customize: config/customize.md

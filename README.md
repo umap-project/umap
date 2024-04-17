@@ -1,16 +1,9 @@
-
 # uMap project
-
-[![Requirements Status](https://requires.io/github/umap-project/umap/requirements.svg?branch=master)](https://requires.io/github/umap-project/umap/requirements/?branch=master)
-[![Join the chat at https://gitter.im/umap-project/umap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/umap-project/umap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Documentation Status](https://readthedocs.org/projects/umap-project/badge/?version=latest)](http://umap-project.readthedocs.io/en/master/?badge=latest)[![Build Status](https://travis-ci.org/umap-project/umap.svg?branch=master)](https://travis-ci.org/umap-project/umap)
-
-## About
 
 uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site.
 *Because we think that the more OSM will be used, the more OSM will be improved.*
 Built on top of Django and Leaflet.
 
-
-## Installation and configuration
-
-See [developer documentation](https://umap-project.readthedocs.io/en/master/install/).
+- Have a look at [our website](https://umap-project.org) for an introduction
+- See [our docs](https://docs.umap-project.org/) for technical information
+- Come [chat with us on matrix.org](https://app.element.io/#/room/#umap:matrix.org), or join [the mailing-list](https://lists.openstreetmap.org/listinfo/umap)

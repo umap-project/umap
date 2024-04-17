@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-22 16:21+0000\n"
+"POT-Creation-Date: 2024-02-15 13:53+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Jim Kats <jim-kats@hotmail.com>, 2022-2023\n"
+"Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023\n"
 "Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,115 +31,115 @@ msgstr "Επεξεργάσιμο μόνο με μυστικό σύνδεσμο"
 msgid "Everyone can edit"
 msgstr "Όλοι"
 
-#: forms.py:69 models.py:317
+#: forms.py:69 models.py:371
 msgid "Inherit"
-msgstr ""
+msgstr "Κληρονομώ"
 
-#: middleware.py:14
+#: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "Λόγω συντήρησης, ο ιστότοπος είναι μόνο για ανάγνωση"
 
-#: models.py:48
+#: models.py:50
 msgid "name"
 msgstr "όνομα"
 
-#: models.py:79
+#: models.py:81
 msgid "details"
 msgstr "λεπτομέρειες"
 
-#: models.py:80
+#: models.py:82
 msgid "Link to a page where the licence is detailed."
 msgstr "Σύνδεσμος σελίδας Αναλυτικής Άδειας Χρήσης."
 
-#: models.py:90
+#: models.py:92
 msgid "URL template using OSM tile format"
 msgstr "Πρότυπο URL που χρησιμοποιεί μορφοποίηση πλακιδίων OSM"
 
-#: models.py:96
+#: models.py:98
 msgid "Order of the tilelayers in the edit box"
 msgstr "Σειρά των υπόβαθρων στο πλαίσιο επεξεργασίας"
 
-#: models.py:142 models.py:318
+#: models.py:144 models.py:372
 msgid "Everyone"
 msgstr "Οποιοσδήποτε"
 
-#: models.py:143 models.py:149 models.py:319
+#: models.py:145 models.py:151 models.py:373
 msgid "Editors only"
 msgstr "Μόνο οι συντάκτες"
 
-#: models.py:144 models.py:320
+#: models.py:146 models.py:374
 msgid "Owner only"
 msgstr "Μόνο ο κάτοχος"
 
-#: models.py:147
+#: models.py:149
 msgid "Everyone (public)"
 msgstr "Όλοι (δημόσιος)"
 
-#: models.py:148
+#: models.py:150
 msgid "Anyone with link"
 msgstr "Οποιοδήποτε με τον σύνδεσμο"
 
-#: models.py:150
+#: models.py:152
 msgid "Blocked"
 msgstr "Αποκλεισμένος"
 
-#: models.py:153 models.py:324
+#: models.py:155 models.py:378
 msgid "description"
 msgstr "περιγραφή"
 
-#: models.py:154
+#: models.py:156
 msgid "center"
 msgstr "κέντρο"
 
-#: models.py:155
+#: models.py:157
 msgid "zoom"
 msgstr "εστίαση"
 
-#: models.py:157
+#: models.py:159
 msgid "locate"
 msgstr "εντοπισμός θέσης"
 
-#: models.py:157
+#: models.py:159
 msgid "Locate user on load?"
 msgstr "Εντοπισμός θέσης χρήστη κατά την φόρτωση;"
 
-#: models.py:161
+#: models.py:163
 msgid "Choose the map licence."
 msgstr "Επιλογή άδειας χρήσης του χάρτη."
 
-#: models.py:162
+#: models.py:164
 msgid "licence"
 msgstr "άδεια"
 
-#: models.py:172
+#: models.py:175
 msgid "owner"
 msgstr "ιδιοκτήτης"
 
-#: models.py:176
+#: models.py:179
 msgid "editors"
 msgstr "συντάκτες"
 
-#: models.py:181 models.py:338
+#: models.py:184 models.py:392
 msgid "edit status"
 msgstr "κατάσταση επεξεργασίας"
 
-#: models.py:186
+#: models.py:189
 msgid "share status"
 msgstr "κατάσταση διαμοιρασμού"
 
-#: models.py:189 models.py:333
+#: models.py:192 models.py:387
 msgid "settings"
 msgstr "ρυθμίσεις"
 
-#: models.py:268
+#: models.py:320
 msgid "Clone of"
 msgstr "Κλώνος του"
 
-#: models.py:328
+#: models.py:382
 msgid "display on load"
 msgstr "εμφάνιση κατά τη φόρτωση"
 
-#: models.py:329
+#: models.py:383
 msgid "Display this layer on load."
 msgstr "Εμφάνιση αυτού του επιπέδου κατά την φόρτωση."
 
@@ -157,32 +157,31 @@ msgstr "Περιήγηση στους χάρτες του χρήστη %(current
 msgid "%(current_user)s has no maps."
 msgstr "Ο %(current_user)s χρήστης δεν έχει χάρτες."
 
-#: templates/auth/user_form.html:6 templates/umap/navigation.html:12
-#: templates/umap/user_dashboard.html:4 templates/umap/user_dashboard.html:10
-msgid "My Dashboard"
-msgstr "Το ταμπλό μου"
-
 #: templates/auth/user_form.html:6
+msgid "My Maps"
+msgstr ""
+
+#: templates/auth/user_form.html:7
 msgid "My Profile"
 msgstr "Το προφίλ μου"
 
-#: templates/auth/user_form.html:19
+#: templates/auth/user_form.html:20
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: templates/auth/user_form.html:24
+#: templates/auth/user_form.html:25
 msgid "Your current providers"
 msgstr "Οι τρέχοντες πάροχοι σας"
 
-#: templates/auth/user_form.html:30
+#: templates/auth/user_form.html:31
 msgid "Connect to another provider"
 msgstr "Σύνδεση σε άλλον πάροχο"
 
-#: templates/auth/user_form.html:32
+#: templates/auth/user_form.html:33
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
-msgstr "Είναι καλή συνήθεια να συνδέετε το λογαριασμό σας σε περισσότερους από έναν παρόχους, σε περίπτωση όπου ένας πάροχος δεν είναι διαθέσιμος, προσωρινά ή και μόνιμα."
+msgstr "Είναι καλή συνήθεια να συνδέετε το λογαριασμό σας σε περισσότερους από έναν παρόχους, σε περίπτωση που ένας πάροχος δεν είναι διαθέσιμος, προσωρινά ή και μόνιμα."
 
 #: templates/auth/user_stars.html:5
 #, python-format
@@ -200,23 +199,23 @@ msgid ""
 "them in your site."
 msgstr "Το uMap σου επιτρέπει να δημιουργήσεις στο λεπτό χάρτες με στρώσεις OpenStreetMap και να τους ενσωματώσεις στον ιστότοπό σου."
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:16
 msgid "Please log in with your account"
 msgstr "Παρακαλώ συνδεθείτε με τον λογαριασμό σας"
 
-#: templates/registration/login.html:15
+#: templates/registration/login.html:28
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: templates/registration/login.html:18
+#: templates/registration/login.html:31
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
-#: templates/registration/login.html:19
+#: templates/registration/login.html:32
 msgid "Login"
 msgstr "Σύνδεση"
 
-#: templates/registration/login.html:24
+#: templates/registration/login.html:37
 msgid "Please choose a provider"
 msgstr "Παρακαλώ επιλέξτε έναν πάροχο"
 
@@ -260,8 +259,8 @@ msgstr "Ενσωματώστε και διαμοιραστείτε τον χάρ
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Και είναι <a href=\"%(repo_url)s\">ανοικτού κώδικα</a>!"
 
-#: templates/umap/about_summary.html:48 templates/umap/navigation.html:42
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/about_summary.html:48 templates/umap/navigation.html:38
+#: templates/umap/user_dashboard.html:42
 msgid "Create a map"
 msgstr "Δημιουργία χάρτη"
 
@@ -269,13 +268,13 @@ msgstr "Δημιουργία χάρτη"
 msgid "Play with the demo"
 msgstr "Δοκιμή με την έκδοση επίδειξης"
 
-#: templates/umap/content.html:23
+#: templates/umap/content.html:22
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
 msgstr "Αυτό το στιγμιότυπο του uMap βρίσκεται για την ώρα σε λειτουργία μόνο για ανάγνωση, δεν επιτρέπεται καμία δημιουργία/επεξεργασία."
 
-#: templates/umap/content.html:31
+#: templates/umap/content.html:30
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -288,7 +287,7 @@ msgstr "Αυτή είναι μια έκδοση επίδειξης, που χρ�
 msgid "Map of the uMaps"
 msgstr "Χάρτης των uMaps"
 
-#: templates/umap/home.html:13
+#: templates/umap/home.html:14
 msgid "Get inspired, browse maps"
 msgstr "Περιηγήσου και αναζήτησε την έμπνευση στους χάρτες!"
 
@@ -296,75 +295,126 @@ msgstr "Περιηγήσου και αναζήτησε την έμπνευση �
 msgid "You are logged in. Continuing..."
 msgstr "Είστε συνδεδεμένοι. Συνέχεια..."
 
-#: templates/umap/map_list.html:9 views.py:303
+#: templates/umap/map_list.html:9 views.py:341
 msgid "by"
 msgstr "από"
 
-#: templates/umap/map_list.html:17 templates/umap/map_table.html:39
+#: templates/umap/map_list.html:17
 msgid "More"
 msgstr "Περισσότερα"
 
 #: templates/umap/map_table.html:6
-msgid "Map"
-msgstr "Χάρτης"
-
-#: templates/umap/map_table.html:7
 msgid "Name"
 msgstr "Όνομα"
 
+#: templates/umap/map_table.html:7
+msgid "Preview"
+msgstr ""
+
 #: templates/umap/map_table.html:8
-msgid "Who can see / edit"
-msgstr "Ποιος μπορεί να τον δει / επεξεργαστεί"
+msgid "Who can see"
+msgstr ""
 
 #: templates/umap/map_table.html:9
+msgid "Who can edit"
+msgstr ""
+
+#: templates/umap/map_table.html:10
 msgid "Last save"
 msgstr "Τελευταία αποθήκευση"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:11
 msgid "Owner"
 msgstr "Κάτοχος"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:12
 msgid "Actions"
 msgstr "Ενέργειες"
 
-#: templates/umap/map_table.html:28
+#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
+msgid "Open preview"
+msgstr ""
+
+#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
 msgid "Share"
 msgstr "Διαμοιρασμός"
 
-#: templates/umap/map_table.html:29
+#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: templates/umap/map_table.html:30
+#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
 msgid "Download"
 msgstr "Λήψη"
 
-#: templates/umap/navigation.html:15
+#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
+msgid "Clone"
+msgstr ""
+
+#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
+msgid "Delete"
+msgstr ""
+
+#: templates/umap/map_table.html:88
+msgid "first"
+msgstr ""
+
+#: templates/umap/map_table.html:89
+msgid "previous"
+msgstr ""
+
+#: templates/umap/map_table.html:98
+#, python-format
+msgid "Page %(maps_number)s of %(num_pages)s"
+msgstr ""
+
+#: templates/umap/map_table.html:104
+msgid "next"
+msgstr ""
+
+#: templates/umap/map_table.html:105
+msgid "last"
+msgstr ""
+
+#: templates/umap/map_table.html:113
+#, python-format
+msgid "Lines per page: %(per_page)s"
+msgstr ""
+
+#: templates/umap/map_table.html:118
+#, python-format
+msgid "%(count)s maps"
+msgstr ""
+
+#: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
+msgid "My Dashboard"
+msgstr "Το ταμπλό μου"
+
+#: templates/umap/navigation.html:13
 msgid "Starred maps"
 msgstr "Χάρτες με αστέρι"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:17
 msgid "Log in"
 msgstr "Σύνδεση"
 
-#: templates/umap/navigation.html:19
+#: templates/umap/navigation.html:17
 msgid "Sign in"
 msgstr "Εγγραφή"
 
-#: templates/umap/navigation.html:23
+#: templates/umap/navigation.html:21
 msgid "About"
 msgstr "Σχετικά"
 
-#: templates/umap/navigation.html:26
+#: templates/umap/navigation.html:24
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: templates/umap/navigation.html:31
+#: templates/umap/navigation.html:29
 msgid "Change password"
 msgstr "Αλλαγή κωδικού πρόσβασης"
 
-#: templates/umap/navigation.html:35
+#: templates/umap/navigation.html:33
 msgid "Log out"
 msgstr "Αποσύνδεση"
 
@@ -425,64 +475,78 @@ msgstr "Αναζήτηση χαρτών"
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: templates/umap/user_dashboard.html:7
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:26
 msgid "Search my maps"
 msgstr "Αναζήτηση στους χάρτες μου"
 
-#: templates/umap/user_dashboard.html:10
+#: templates/umap/user_dashboard.html:11
+#, python-format
+msgid "My Maps (%(count)s)"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:13
 msgid "My profile"
 msgstr "Το προφίλ μου"
 
-#: templates/umap/user_dashboard.html:20
+#: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
+msgid "Map’s title"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:32
+#, python-format
+msgid "Download %(count)s maps"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:42
 msgid "You have no map yet."
 msgstr "Δεν έχετε ακόμη χάρτη."
 
-#: views.py:308
+#: views.py:346
 msgid "View the map"
 msgstr "Προβολή του χάρτη"
 
-#: views.py:658
-msgid "Map has been updated!"
-msgstr "Ο χάρτης ενημερώθηκε!"
+#: views.py:704
+msgid "See full screen"
+msgstr ""
 
-#: views.py:683
+#: views.py:803
 msgid "Map editors updated with success!"
 msgstr "Η ενημέρωση των συντακτών χάρτη ήταν επιτυχής!"
 
-#: views.py:721
+#: views.py:841
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Ο uMap σύνδεσμος επεξεργασίας του χάρτη σας: %(map_name)s"
 
-#: views.py:724
+#: views.py:844
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Εδώ είναι ο μυστικός σύνδεσμος επεξεργασίας: %(link)s"
 
-#: views.py:730
+#: views.py:850
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Μήνυμα email στάλθηκε στο %(email)s"
 
-#: views.py:741
+#: views.py:861
 msgid "Only its owner can delete the map."
 msgstr "Μονό ο ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη."
 
-#: views.py:764
+#: views.py:889
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Ο χάρτης κλωνοποιήθηκε! Αν θέλετε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
-#: views.py:769
+#: views.py:894
 msgid "Congratulations, your map has been cloned!"
 msgstr "Συγχαρητήρια ο χάρτης σας κλωνοποιήθηκε!"
 
-#: views.py:958
+#: views.py:1130
 msgid "Layer successfully deleted."
 msgstr "Το επίπεδο διαγράφηκε με επιτυχία."
 
-#: views.py:980
+#: views.py:1152
 msgid "Permissions updated with success!"
-msgstr ""
+msgstr "Τα δικαιώματα ενημερώθηκαν με επιτυχία!"

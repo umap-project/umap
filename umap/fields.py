@@ -4,6 +4,8 @@ import six
 from django.db import models
 from django.utils.encoding import smart_str
 
+from .utils import json_dumps
+
 
 class DictField(models.TextField):
     """
@@ -14,7 +16,7 @@ class DictField(models.TextField):
         if not value:
             value = {}
         if not isinstance(value, six.string_types):
-            value = json.dumps(value)
+            value = json_dumps(value)
         return value
 
     def from_db_value(self, value, expression, connection):

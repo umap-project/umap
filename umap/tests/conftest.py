@@ -51,6 +51,13 @@ def map(licence, tilelayer):
 
 
 @pytest.fixture
+def openmap(map):
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    return map
+
+
+@pytest.fixture
 def anonymap(map):
     map.owner = None
     map.save()

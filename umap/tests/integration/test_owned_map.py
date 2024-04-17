@@ -1,4 +1,4 @@
-from time import sleep
+import re
 
 import pytest
 from playwright.sync_api import expect
@@ -6,24 +6,6 @@ from playwright.sync_api import expect
 from umap.models import DataLayer, Map
 
 pytestmark = pytest.mark.django_db
-
-
-@pytest.fixture
-def login(context, settings, live_server):
-    def do_login(user):
-        # TODO use storage state to do login only once per session
-        # https://playwright.dev/python/docs/auth
-        settings.ENABLE_ACCOUNT_LOGIN = True
-        page = context.new_page()
-        page.goto(f"{live_server.url}/en/")
-        page.locator(".login").click()
-        page.get_by_placeholder("Username").fill(user.username)
-        page.get_by_placeholder("Password").fill("123123")
-        page.locator('#login_form input[type="submit"]').click()
-        sleep(1)  # Time for ajax login POST to proceed
-        return page
-
-    return do_login
 
 
 def test_map_update_with_owner(map, live_server, login):
@@ -40,7 +22,7 @@ def test_map_update_with_owner(map, live_server, login):
     expect(save).to_be_visible()
     add_marker = page.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
@@ -67,7 +49,7 @@ def test_map_update_with_anonymous_but_editable_datalayer(
     enable.click()
     add_marker = page.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_hidden()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_hidden()
@@ -115,7 +97,7 @@ def test_map_update_with_editor(map, live_server, login, user):
     expect(save).to_be_visible()
     add_marker = page.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    edit_settings = page.get_by_title("Edit map properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
@@ -144,7 +126,7 @@ def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
 def test_owner_has_delete_map_button(map, live_server, login):
     page = login(map.owner)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    settings = page.get_by_title("Edit map properties")
+    settings = page.get_by_title("Map advanced properties")
     expect(settings).to_be_visible()
     settings.click()
     advanced = page.get_by_text("Advanced actions")
@@ -152,6 +134,18 @@ def test_owner_has_delete_map_button(map, live_server, login):
     advanced.click()
     delete = page.get_by_role("button", name="Delete", exact=True)
     expect(delete).to_be_visible()
+    dialog_shown = False
+
+    def handle_dialog(dialog):
+        dialog.accept()
+        nonlocal dialog_shown
+        dialog_shown = True
+
+    page.on("dialog", handle_dialog)
+    with page.expect_navigation():
+        delete.click()
+    assert dialog_shown
+    assert Map.objects.all().count() == 0
 
 
 def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
@@ -160,7 +154,7 @@ def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
     map.save()
     page = login(user)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    settings = page.get_by_title("Edit map properties")
+    settings = page.get_by_title("Map advanced properties")
     expect(settings).to_be_visible()
     settings.click()
     advanced = page.get_by_text("Advanced actions")
@@ -183,18 +177,22 @@ def test_create(tilelayer, live_server, login, user):
     expect(marker).to_have_count(1)
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go back
+    with page.expect_response(re.compile(r".*/datalayer/create/")):
+        save.click()
     expect(marker).to_have_count(1)
 
 
 def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     page = login(user)
     page.goto(f"{live_server.url}/en/map/new")
+    # Create a layer
+    page.get_by_title("Manage layers").click()
+    page.get_by_title("Add a layer").click()
+    page.locator("input[name=name]").fill("Layer 1")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go back
+    with page.expect_response(re.compile(r".*/map/create/")):
+        save.click()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
@@ -224,11 +222,30 @@ def test_can_change_owner(map, live_server, login, user):
     close = page.locator(".umap-field-owner .close")
     close.click()
     input = page.locator("input.edit-owner")
-    input.type(user.username)
+    with page.expect_response(re.compile(r".*/agnocomplete/.*")):
+        input.type(user.username)
     input.press("Tab")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    save.click()
-    sleep(1)  # Let save ajax go
+    with page.expect_response(re.compile(r".*/update/permissions/.*")):
+        save.click()
     modified = Map.objects.get(pk=map.pk)
     assert modified.owner == user
+
+
+def test_can_delete_datalayer(live_server, map, login, datalayer):
+    page = login(map.owner)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    page.get_by_role("link", name="Manage layers").click()
+    page.once("dialog", lambda dialog: dialog.accept())
+    page.locator(".panel.right").get_by_title("Delete layer").click()
+    with page.expect_response(re.compile(r".*/datalayer/delete/.*")):
+        page.get_by_role("button", name="Save").click()
+    expect(markers).to_have_count(0)
+    # FIXME does not work, resolve to 1 element, even if this command is empty:
+    expect(layers).to_have_count(0)

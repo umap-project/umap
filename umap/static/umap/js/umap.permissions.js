@@ -1,6 +1,6 @@
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
-L.U.MapPermissions = L.Class.extend({
+U.MapPermissions = L.Class.extend({
   options: {
     owner: null,
     editors: [],
@@ -57,14 +57,13 @@ L.U.MapPermissions = L.Class.extend({
         content: L._('Please save the map first'),
         level: 'info',
       })
-    const container = L.DomUtil.create('div', 'permissions-panel'),
-      fields = [],
-      title = L.DomUtil.create('h3', '', container)
+    const container = L.DomUtil.create('div', 'permissions-panel')
+    const fields = []
+    L.DomUtil.createTitle(container, L._('Update permissions'), 'icon-key')
     if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
-        const helpText = `${L._('Secret edit link:')}<br>${
-          this.options.anonymous_edit_url
-        }`
+        const helpText = `${L._('Secret edit link:')}<br>${this.options.anonymous_edit_url
+          }`
         L.DomUtil.add('p', 'help-text', container, helpText)
         fields.push([
           'options.edit_status',
@@ -104,8 +103,7 @@ L.U.MapPermissions = L.Class.extend({
         { handler: 'ManageEditors', label: L._("Map's editors") },
       ])
     }
-    title.textContent = L._('Update permissions')
-    const builder = new L.U.FormBuilder(this, fields)
+    const builder = new U.FormBuilder(this, fields)
     const form = builder.build()
     container.appendChild(form)
     if (this.isAnonymousMap() && this.map.options.user) {
@@ -128,24 +126,22 @@ L.U.MapPermissions = L.Class.extend({
     this.map.eachDataLayer((datalayer) => {
       datalayer.permissions.edit(container)
     })
-    this.map.ui.openPanel({ data: { html: container }, className: 'dark' })
+    this.map.editPanel.open({ data: { html: container }, className: 'dark' })
   },
 
-  attach: function () {
-    this.map.post(this.getAttachUrl(), {
-      callback: function () {
-        this.options.owner = this.map.options.user
-        this.map.ui.alert({
-          content: L._('Map has been attached to your account'),
-          level: 'info',
-        })
-        this.map.ui.closePanel()
-      },
-      context: this,
-    })
+  attach: async function () {
+    const [data, response, error] = await this.map.server.post(this.getAttachUrl())
+    if (!error) {
+      this.options.owner = this.map.options.user
+      this.map.ui.alert({
+        content: L._('Map has been attached to your account'),
+        level: 'info',
+      })
+      this.map.editPanel.close()
+    }
   },
 
-  save: function () {
+  save: async function () {
     if (!this.isDirty) return this.map.continueSaving()
     const formData = new FormData()
     if (!this.isAnonymousMap() && this.options.editors) {
@@ -159,26 +155,27 @@ L.U.MapPermissions = L.Class.extend({
       formData.append('owner', this.options.owner && this.options.owner.id)
       formData.append('share_status', this.options.share_status)
     }
-    this.map.post(this.getUrl(), {
-      data: formData,
-      context: this,
-      callback: function (data) {
-        this.commit()
-        this.isDirty = false
-        this.map.continueSaving()
-        this.map.fire('postsync')
-      },
-    })
+    const [data, response, error] = await this.map.server.post(
+      this.getUrl(),
+      {},
+      formData
+    )
+    if (!error) {
+      this.commit()
+      this.isDirty = false
+      this.map.continueSaving()
+      this.map.fire('postsync')
+    }
   },
 
   getUrl: function () {
-    return L.Util.template(this.map.options.urls.map_update_permissions, {
+    return U.Utils.template(this.map.options.urls.map_update_permissions, {
       map_id: this.map.options.umap_id,
     })
   },
 
   getAttachUrl: function () {
-    return L.Util.template(this.map.options.urls.map_attach_owner, {
+    return U.Utils.template(this.map.options.urls.map_attach_owner, {
       map_id: this.map.options.umap_id,
     })
   },

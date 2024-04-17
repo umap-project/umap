@@ -1,7 +1,7 @@
 /*
  * Modals
  */
-L.U.UI = L.Evented.extend({
+U.UI = L.Evented.extend({
   ALERTS: Array(),
   ALERT_ID: null,
   TOOLTIP_ID: null,
@@ -13,59 +13,10 @@ L.U.UI = L.Evented.extend({
     L.DomEvent.on(this.container, 'contextmenu', L.DomEvent.stopPropagation) // Do not activate our custom context menu.
     L.DomEvent.on(this.container, 'wheel', L.DomEvent.stopPropagation)
     L.DomEvent.on(this.container, 'MozMousePixelScroll', L.DomEvent.stopPropagation)
-    this._panel = L.DomUtil.create('div', '', this.container)
-    this._panel.id = 'umap-ui-container'
     this._alert = L.DomUtil.create('div', 'with-transition', this.container)
     this._alert.id = 'umap-alert-container'
     this._tooltip = L.DomUtil.create('div', '', this.container)
     this._tooltip.id = 'umap-tooltip-container'
-  },
-
-  resetPanelClassName: function () {
-    this._panel.className = 'with-transition'
-  },
-
-  openPanel: function (e) {
-    this.fire('panel:open')
-    // We reset all because we can't know which class has been added
-    // by previous ui processes...
-    this.resetPanelClassName()
-    this._panel.innerHTML = ''
-    const actionsContainer = L.DomUtil.create('ul', 'toolbox', this._panel)
-    const body = L.DomUtil.create('div', 'body', this._panel)
-    if (e.data.html.nodeType && e.data.html.nodeType === 1)
-      body.appendChild(e.data.html)
-    else body.innerHTML = e.data.html
-    const closeLink = L.DomUtil.create('li', 'umap-close-link', actionsContainer)
-    L.DomUtil.add('i', 'umap-close-icon', closeLink)
-    const label = L.DomUtil.create('span', '', closeLink)
-    label.title = label.textContent = L._('Close')
-    if (e.actions) {
-      for (let i = 0; i < e.actions.length; i++) {
-        actionsContainer.appendChild(e.actions[i])
-      }
-    }
-    if (e.className) L.DomUtil.addClass(this._panel, e.className)
-    if (L.DomUtil.hasClass(this.parent, 'umap-ui')) {
-      // Already open.
-      this.fire('panel:ready')
-    } else {
-      L.DomEvent.once(
-        this._panel,
-        'transitionend',
-        function (e) {
-          this.fire('panel:ready')
-        },
-        this
-      )
-      L.DomUtil.addClass(this.parent, 'umap-ui')
-    }
-    L.DomEvent.on(closeLink, 'click', this.closePanel, this)
-  },
-
-  closePanel: function () {
-    L.DomUtil.removeClass(this.parent, 'umap-ui')
-    this.fire('panel:closed')
   },
 
   alert: function (e) {

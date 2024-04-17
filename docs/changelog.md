@@ -1,11 +1,210 @@
 # Changelog
 
+## 2.1.3 - 2024-03-27
+
+* refactor initCenter and controls ordering by @yohanboniface in #1716
+* honour old_id in datalayers= query string parameter by @yohanboniface in #1717
+
+## 2.1.2 - 2024-03-25
+
+- fix datalayer data file removed on save by mistake (this happened after
+  switching to UUID, when a datalayer had more than UMAP_KEEP_VERSIONS, due to
+  a sorting issue on purge old files after save)
+
+## 2.1.1 - 2024-03-25
+
+- fix Path.replace called instead of str.replace
+
+## 2.1.0 - 2024-03-25
+
+### Bug fixes
+
+* deal with i18n in oembed URLs #1688
+* set CORS-related header for oEmbed and map views #1689
+* only use location bias in search for close zoom #1690
+* catch click event on "See all" buttons #1705
+
+### Internal changes
+
+* replace datalayer ids with uuids #1630
+* replace Last-Modified with custom headers #1666
+
+
+## 2.0.4 - 2024-03-01
+
+* fix zoom and fullscreen not shown by default
+
+## 2.0.3 - 2024-03-01
+
+### Bug fixes
+* fix: picto category title was added after the related pictograms by @yohanboniface in #1637
+* fix: path was doubled when importing pictograms from command line by @datendelphin in #1653
+* fix: zoomControl rendered twice by @yohanboniface in #1645
+* fix: allow empty datalayers reference on merges. by @almet in #1665
+* fix: make sure to reset feature query string parameter by @yohanboniface in #1667
+* fix: read id and @id as osm id in osm template by @yohanboniface in #1668
+* fix: catch SMTPException when sending secret edit link by @yohanboniface in #1658
+
+### Internal changes
+* chore: raise error if any in storage post_process by @yohanboniface in #1624
+* chore: generate messages following map creation by @davidbgk in #1631
+* chore: attempt to fix randomly failing test by @yohanboniface in #1639
+* chore: Use CSS variables by @davidbgk in #1589
+
+### Documentation
+* docs: add a note for Docker install and SECRET_KEY by @davidbgk in #1633
+* docs: update namespace of uMap objects by @davidbgk in #1632
+
+## 2.0.2 - 2024-02-19
+
+* fix: run collectstatic first in Docker entrypoint
+
+## 2.0.1 - 2024-02-18
+
+* Do not use the `compress` command anymore for the Docker image (#1620)
+
+## 2.0.0 - 2024-02-16
+
+This release is inauguring a new era in versionning uMap: in the future, we'll take care of better documenting breaking changes, so expect more major releases from now on. More details on [how we version](https://docs.umap-project.org/en/master/release/#when-to-make-a-release).
+
+The main changes are:
+
+* on the front-end side, we now use native ESM modules, so this may break on old browsers (see our [ESlint configuration](https://github.com/umap-project/umap/blob/a0634e5f55179fb52f7c00e39236b6339a7714b9/package.json#L68))
+* on the back-end, we upgraded to Django 5.x, which drops support for Python 3.8 and Python 3.9.
+* the OpenStreetMap OAuth1 client is not supported anymore (now deprecated by OpenStreetMap.org)
+* license switched from WTFPL to AGPLv3: having an OSI valid licence was a request from our partners and sponsors (#1605)
+
+More details below!
+
+### Breaking changes
+
+* updrade to Django 5.x drops support for Python < 3.10
+* `django-compressor` has been removed, so `umap compress` is not a valid command anymore (compress is now done in the `collectstatic` process itself) (#1544, #1539)
+* removed support for settings starting with `LEAFLET_STORAGE_` (deprecated since 1.0.0)
+* removed support for deprecated OpenStreetMap OAuth1 backend in favour of OAuth2 (see below)
+* `FROM_EMAIL` setting is replaced by `DEFAULT_FROM_EMAIL`, which is [Django standard](https://docs.djangoproject.com/en/5.0/ref/settings/#default-from-email)
+
+#### Migrate to OpenStreetMap OAuth2
+
+* create a new app on OSM.org: https://www.openstreetmap.org/oauth2/applications/
+* add the key and secret in your settings (or as env vars):
+    * `SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY=xxxx`
+    * `SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET=xxxx`
+* if you changed `AUTHENTICATION_BACKENDS`, you need to now use `"social_core.backends.openstreetmap_oauth2.OpenStreetMapOAuth2"`
+* run the migration command, that will migrate all accounts from OAuth1 to Oauth2:
+  `umap migrate`
+
+### New features
+
+* Ability to clone, delete and download all maps from user’s dashboard (#1430)
+* Add experimental "map preview" in `/map/` endpoint (#1573)
+* Adapt features counter in the databrowser to the currently displayed features (#1572)
+* Create an oEmbed endpoint for maps `/map/oembed/` (#1526)
+* introduce `UMAP_HOME_FEED` to control which maps are shown on the home page (#1531)
+* better algorithm (WCAG 21 based) to manage text and picto contrast (#1593)
+* show last used pictograms in a separate tab (#1595)
+
+### Bug fixes
+
+* Use variable for color in browser if any (#1584)
+* Non loaded layers should still be visible in legend and data browser (#1581)
+* Do not try to reset tooltip of feature not on map (#1576)
+* Empty file input when closing the importer panel (#1535)
+* Honour datalayersControl=expanded in querystring (#1538)
+* Fix icons for mailto and tel (#1547)
+* Do not ask more classes than available values in choropleth mode (#1550)
+* Build browser once features are on the map, not before (#1551)
+* Replace `list.delete` call by the proper `remove` method
+* Prevent datalayer to resetting to an old version on save (#1558)
+* Messages coming from Django where never displayed in map view (#1588)
+* Browser `inBbox` setting was not persistent  (#1586)
+* Popup was not opening on click on browser when `inBbox` was active (#1586)
+* reset table editor properties after creating a new one (#1610)
+* do not try to animate the panel (#1608)
+
+### Internal changes
+
+* Move XHR management to a module and use fetch (#1555)
+* Use https://umap-project.org link in map footer (#1541)
+* Add support for JS modules (+module for URLs handling) (#1463)
+* Pin versions in pyproject.toml (#1514)
+* Set a umap-fragment web component for lists (#1516)
+* Load Leaflet as a module
+* Replaced `L.U` global by `U`
+* Use SVG for default icon (circle) (#1562)
+* Set preconnect link for tilelayer (#1552)
+
+### Documentation
+
+* Define an explicit release stragegy (#1567)
+
+### Changed templates
+
+* added `header.html` to add extra code in `<head>`
+* added `branding.html` with site logo
+* `registration/login.html`, which is not loaded in ajax anymore (and include `branding.html`)
+* `umap/content.html` the JS call to load more have changed
+* `umap/navigation.html`: it now includes `branding.html`
+* `umap/map_table.html`: total revamp
+* `umap/user_dashboard.html`: improved table header (search + download all) + inline JS changed
+
+## 1.13.2 - 2024-01-25
+
+### Bug fixes
+
+- prevent datalayer to resetting to an old version on save (#1558)
+- replace list.delete call by the proper remove method (#1559)
+
+
+## 1.13.1 - 2024-01-08
+
+### Bug fix
+* icon element is undefined when clustered by @yohanboniface in #1512
+
+## 1.13.0 - 2024-01-08
+
+### New features
+* Preview map only on click in user’s dashboard by @davidbgk in #1478
+* feat(browser): add counter in datalayer headline by @yohanboniface in #1509
+* Allow to type a latlng in the search box by @yohanboniface in #1480
+* Add a popup template to showcase OpenStreetMap data by @yohanboniface in #1479
+* Refactor Share & Download UI for better usability by @jschleic in #1454
+* Move layer specific settings to a dedicated fieldset by @yohanboniface in #1499
+
+### Bug fixes
+* fix dirty flags when re-ordering layers by @jschleic in #1497
+* Be more explicit on changed fields when updating choropleth form by @yohanboniface in #1490
+
+### Documentation
+* docs: Update the links in the README, remove the badges by @almet in #1501
+
+### Internal Changes
+* Create dependabot.yml by @almet in #1502
+
+### Updated templates
+
+- `umap/templates/auth/user_form.html`
+- `umap/templates/umap/content.html`
+- `umap/templates/umap/js.html`
+- `umap/templates/umap/map_list.html`
+- `umap/templates/umap/map_table.html`
+- `umap/templates/umap/user_dashboard.html`
+
+[See the diff](https://github.com/umap-project/umap/compare/1.12.2...1.13.0#files_bucket).
+
+## 1.12.2 - 2023-12-29
+
+### Bug  fixes
+* Fix preview of TMS TileLayer by @yohanboniface in #1492
+* Add a small box-shadow to tilelayer preview by @yohanboniface in #1493
+
+
 ## 1.12.1 - 2023-12-23
 
 ### New features
 * Allow to edit pictogram categories from admin list by @yohanboniface in #1477
 
-### Bug  fixes
+### Bug fixes
 * Increase iconlayers titles on hover by @yohanboniface in #1476
 * Remove zoom/moeveend events when deleting datalayer by @yohanboniface in #1484
 * Better way of handling escape while drawing by @yohanboniface in #1483

@@ -1,4 +1,5 @@
 """Base settings shared by all environments"""
+
 # Import global settings to make it easier to extend settings.
 from email.utils import parseaddr
 
@@ -119,7 +120,6 @@ INSTALLED_APPS = (
     "django.contrib.gis",
     "django_probes",
     "umap",
-    "compressor",
     "social_django",
     # See https://github.com/peopledoc/django-agnocomplete/commit/26eda2dfa4a2f8a805ca2ea19a0c504b9d773a1c
     # Django does not find the app config in the default place, so the app is not loaded
@@ -129,9 +129,9 @@ INSTALLED_APPS = (
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-FROM_EMAIL = None
+DEFAULT_FROM_EMAIL = None
 # https://docs.djangoproject.com/en/4.2/releases/4.1/#forms
-FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer"
+FORM_RENDERER = "django.forms.renderers.DjangoTemplates"
 
 # =============================================================================
 # Calculation of directories relative to the project module location
@@ -163,9 +163,16 @@ MEDIA_ROOT = os.path.join("uploads")
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
 ]
 STATICFILES_DIRS = []  # May be extended when using UMAP_CUSTOM_STATICS
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "umap.storage.UmapManifestStaticFilesStorage",
+    },
+}
 
 # =============================================================================
 # Templates
@@ -232,6 +239,7 @@ UMAP_EXTRA_URLS = {
     "routing": "http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}",  # noqa
     "ajax_proxy": "/ajax-proxy/?url={url}&ttl={ttl}",
     "search": "https://photon.komoot.io/api/?",
+    "edit_in_osm": "https://www.openstreetmap.org/edit#map={zoom}/{lat}/{lng}",
 }
 UMAP_KEEP_VERSIONS = env.int("UMAP_KEEP_VERSIONS", default=10)
 SITE_URL = env("SITE_URL", default="http://umap.org")
@@ -249,6 +257,7 @@ DATABASES = {"default": env.db(default="postgis://localhost:5432/umap")}
 UMAP_DEFAULT_SHARE_STATUS = None
 UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
+UMAP_HOME_FEED = "latest"
 
 UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True
@@ -262,19 +271,20 @@ LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 # =============================================================================
 # Third party app settings
 # =============================================================================
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
-
 LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 
 AUTHENTICATION_BACKENDS = ()
 
-SOCIAL_AUTH_OPENSTREETMAP_KEY = env("SOCIAL_AUTH_OPENSTREETMAP_KEY", default="")
-SOCIAL_AUTH_OPENSTREETMAP_SECRET = env("SOCIAL_AUTH_OPENSTREETMAP_SECRET", default="")
-if SOCIAL_AUTH_OPENSTREETMAP_KEY and SOCIAL_AUTH_OPENSTREETMAP_SECRET:
+SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY = env(
+    "SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY", default=""
+)
+SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET = env(
+    "SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET", default=""
+)
+if SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY and SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET:
     AUTHENTICATION_BACKENDS += (
-        "social_core.backends.openstreetmap.OpenStreetMapOAuth",
+        "social_core.backends.openstreetmap_oauth2.OpenStreetMapOAuth2",
     )
 
 AUTHENTICATION_BACKENDS += ("django.contrib.auth.backends.ModelBackend",)

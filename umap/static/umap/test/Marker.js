@@ -1,20 +1,24 @@
-describe('L.U.Marker', function () {
-  before(function () {
-    this.server = sinon.fakeServer.create()
-    var datalayer_response = JSON.parse(JSON.stringify(RESPONSES.datalayer62_GET)) // Copy.
+describe('U.Marker', () => {
+  let map, datalayer
+  before(async () => {
+    const datalayer_response = JSON.parse(JSON.stringify(RESPONSES.datalayer62_GET)) // Copy.
     datalayer_response._umap_options.iconClass = 'Drop'
-    this.server.respondWith(/\/datalayer\/62\/\?.*/, JSON.stringify(datalayer_response))
-    this.map = initMap({ umap_id: 99 })
-    this.datalayer = this.map.getDataLayerByUmapId(62)
-    this.server.respond()
+    await fetchMock.mock(/\/datalayer\/62\/\?.*/, datalayer_response)
+    this.options = {
+      umap_id: 99,
+    }
+    MAP = map = initMap({ umap_id: 99 })
+    const datalayer_options = defaultDatalayerData()
+    await map.initDataLayers([datalayer_options])
+    datalayer = map.getDataLayerByUmapId(62)
   })
-  after(function () {
-    this.server.restore()
+  after(() => {
+    fetchMock.restore()
     resetMap()
   })
 
-  describe('#iconClassChange()', function () {
-    it('should change icon class', function () {
+  describe('#iconClassChange()', () => {
+    it('should change icon class', () => {
       enableEdit()
       happen.click(qs('div.umap-drop-icon'))
       happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
@@ -35,8 +39,8 @@ describe('L.U.Marker', function () {
     })
   })
 
-  describe('#iconSymbolChange()', function () {
-    it('should change icon symbol', function () {
+  describe('#iconSymbolChange()', () => {
+    it('should change icon symbol', () => {
       enableEdit()
       happen.click(qs('div.umap-drop-icon'))
       happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
@@ -58,8 +62,8 @@ describe('L.U.Marker', function () {
     })
   })
 
-  describe('#iconClassChange()', function () {
-    it('should change icon class', function () {
+  describe('#iconClassChange()', () => {
+    it('should change icon class', () => {
       enableEdit()
       happen.click(qs('div.umap-drop-icon'))
       happen.click(qs('ul.leaflet-inplace-toolbar a.umap-toggle-edit'))
@@ -80,15 +84,15 @@ describe('L.U.Marker', function () {
     })
   })
 
-  describe('#clone', function () {
-    it('should clone marker', function () {
-      var layer = new L.U.Marker(this.map, [10, 20], {
-        datalayer: this.datalayer,
-      }).addTo(this.datalayer)
-      assert.equal(this.datalayer._index.length, 4)
+  describe('#clone', () => {
+    it('should clone marker', () => {
+      var layer = new U.Marker(map, [10, 20], {
+        datalayer: datalayer,
+      }).addTo(datalayer)
+      assert.equal(datalayer._index.length, 4)
       other = layer.clone()
-      assert.ok(this.map.hasLayer(other))
-      assert.equal(this.datalayer._index.length, 5)
+      assert.ok(map.hasLayer(other))
+      assert.equal(datalayer._index.length, 5)
       // Must not be the same reference
       assert.notEqual(layer._latlng, other._latlng)
       assert.equal(L.Util.formatNum(layer._latlng.lat), other._latlng.lat)
@@ -97,20 +101,20 @@ describe('L.U.Marker', function () {
   })
 
   describe('#edit()', function (done) {
-    it('should allow changing coordinates manually', function () {
-      var layer = new L.U.Marker(this.map, [10, 20], {
-        datalayer: this.datalayer,
-      }).addTo(this.datalayer)
+    it('should allow changing coordinates manually', () => {
+      var layer = new U.Marker(map, [10, 20], {
+        datalayer: datalayer,
+      }).addTo(datalayer)
       enableEdit()
       layer.edit()
       changeInputValue(qs('form.umap-form input[name="lat"]'), '54.43')
       assert.equal(layer._latlng.lat, 54.43)
     })
 
-    it('should not allow invalid latitude nor longitude', function () {
-      var layer = new L.U.Marker(this.map, [10, 20], {
-        datalayer: this.datalayer,
-      }).addTo(this.datalayer)
+    it('should not allow invalid latitude nor longitude', () => {
+      var layer = new U.Marker(map, [10, 20], {
+        datalayer: datalayer,
+      }).addTo(datalayer)
       enableEdit()
       layer.edit()
       changeInputValue(qs('form.umap-form input[name="lat"]'), '5443')

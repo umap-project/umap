@@ -1,6 +1,6 @@
 /* Shapes  */
 
-L.U.Popup = L.Popup.extend({
+U.Popup = L.Popup.extend({
   options: {
     parseTemplate: true,
   },
@@ -15,7 +15,7 @@ L.U.Popup = L.Popup.extend({
 
   format: function () {
     const mode = this.feature.getOption('popupTemplate') || 'Default',
-      klass = L.U.PopupTemplate[mode] || L.U.PopupTemplate.Default
+      klass = U.PopupTemplate[mode] || U.PopupTemplate.Default
     this.content = new klass(this.feature, this.container)
     this.content.render()
     const els = this.container.querySelectorAll('img,iframe')
@@ -42,31 +42,22 @@ L.U.Popup = L.Popup.extend({
   },
 })
 
-L.U.Popup.Large = L.U.Popup.extend({
+U.Popup.Large = U.Popup.extend({
   options: {
     maxWidth: 500,
     className: 'umap-popup-large',
   },
 })
 
-L.U.Popup.Panel = L.U.Popup.extend({
+U.Popup.Panel = U.Popup.extend({
   options: {
     zoomAnimation: false,
   },
 
-  allButton: function () {
-    const button = L.DomUtil.create('li', '')
-    L.DomUtil.create('i', 'umap-icon-16 umap-list', button)
-    const label = L.DomUtil.create('span', '', button)
-    label.textContent = label.title = L._('See all')
-    L.DomEvent.on(button, 'click', this.feature.map.openBrowser, this.feature.map)
-    return button
-  },
-
   onAdd: function (map) {
-    map.ui.openPanel({
+    map.panel.open({
       data: { html: this._content },
-      actions: [this.allButton()],
+      actions: [U.Browser.backButton(map)],
     })
 
     // fire events as in base class Popup.js:onAdd
@@ -80,7 +71,7 @@ L.U.Popup.Panel = L.U.Popup.extend({
   },
 
   onRemove: function (map) {
-    map.ui.closePanel()
+    map.panel.close()
 
     // fire events as in base class Popup.js:onRemove
     map.fire('popupclose', { popup: this })
@@ -96,14 +87,15 @@ L.U.Popup.Panel = L.U.Popup.extend({
   _updateLayout: function () {},
   _updatePosition: function () {},
   _adjustPan: function () {},
+  _animateZoom: function () {},
 })
-L.U.Popup.SimplePanel = L.U.Popup.Panel // Retrocompat.
+U.Popup.SimplePanel = U.Popup.Panel // Retrocompat.
 
 /* Content templates */
 
-L.U.PopupTemplate = {}
+U.PopupTemplate = {}
 
-L.U.PopupTemplate.Default = L.Class.extend({
+U.PopupTemplate.Default = L.Class.extend({
   initialize: function (feature, container) {
     this.feature = feature
     this.container = container
@@ -120,12 +112,12 @@ L.U.PopupTemplate.Default = L.Class.extend({
     let center
     properties = this.feature.extendedProperties()
     // Resolve properties inside description
-    properties.description = L.Util.greedyTemplate(
+    properties.description = U.Utils.greedyTemplate(
       this.feature.properties.description || '',
       properties
     )
-    content = L.Util.greedyTemplate(template, properties)
-    content = L.Util.toHTML(content, { target: target })
+    content = U.Utils.greedyTemplate(template, properties)
+    content = U.Utils.toHTML(content, { target: target })
     container.innerHTML = content
     return container
   },
@@ -176,7 +168,7 @@ L.U.PopupTemplate.Default = L.Class.extend({
   },
 })
 
-L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
+U.PopupTemplate.BaseWithTitle = U.PopupTemplate.Default.extend({
   renderTitle: function () {
     let title
     if (this.feature.getDisplayName()) {
@@ -187,7 +179,7 @@ L.U.PopupTemplate.BaseWithTitle = L.U.PopupTemplate.Default.extend({
   },
 })
 
-L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
+U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
   formatRow: function (key, value) {
     if (value.indexOf('http') === 0) {
       value = `<a href="${value}" target="_blank">${value}</a>`
@@ -207,13 +199,13 @@ L.U.PopupTemplate.Table = L.U.PopupTemplate.BaseWithTitle.extend({
     for (const key in this.feature.properties) {
       if (typeof this.feature.properties[key] === 'object' || key === 'name') continue
       // TODO, manage links (url, mailto, wikipedia...)
-      this.addRow(table, key, L.Util.escapeHTML(this.feature.properties[key]).trim())
+      this.addRow(table, key, U.Utils.escapeHTML(this.feature.properties[key]).trim())
     }
     return table
   },
 })
 
-L.U.PopupTemplate.GeoRSSImage = L.U.PopupTemplate.BaseWithTitle.extend({
+U.PopupTemplate.GeoRSSImage = U.PopupTemplate.BaseWithTitle.extend({
   options: {
     minWidth: 300,
     maxWidth: 500,
@@ -237,7 +229,7 @@ L.U.PopupTemplate.GeoRSSImage = L.U.PopupTemplate.BaseWithTitle.extend({
   },
 })
 
-L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
+U.PopupTemplate.GeoRSSLink = U.PopupTemplate.Default.extend({
   options: {
     className: 'umap-georss-link',
   },
@@ -249,5 +241,93 @@ L.U.PopupTemplate.GeoRSSLink = L.U.PopupTemplate.Default.extend({
     a.target = '_blank'
     a.appendChild(title)
     return a
+  },
+})
+
+U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
+  options: {
+    className: 'umap-openstreetmap',
+  },
+
+  getName: function () {
+    const props = this.feature.properties
+    const locale = L.getLocale()
+    if (locale && props[`name:${locale}`]) return props[`name:${locale}`]
+    return props.name
+  },
+
+  renderBody: function () {
+    const props = this.feature.properties
+    const container = L.DomUtil.add('div')
+    const title = L.DomUtil.add('h3', 'popup-title', container)
+    const color = this.feature.getDynamicOption('color')
+    title.style.backgroundColor = color
+    const iconUrl = this.feature.getDynamicOption('iconUrl')
+    let icon = U.Icon.makeIconElement(iconUrl, title)
+    L.DomUtil.addClass(icon, 'icon')
+    U.Icon.setIconContrast(icon, title, iconUrl, color)
+    if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'
+    L.DomUtil.add('span', '', title, this.getName())
+    const street = props['addr:street']
+    if (street) {
+      const row = L.DomUtil.add('address', 'address', container)
+      const number = props['addr:housenumber']
+      if (number) {
+        // Poor way to deal with international forms of writting addresses
+        L.DomUtil.add('span', '', row, `${L._('No.')}: ${number}`)
+        L.DomUtil.add('span', '', row, `${L._('Street')}: ${street}`)
+      } else {
+        L.DomUtil.add('span', '', row, street)
+      }
+    }
+    if (props.website) {
+      L.DomUtil.element(
+        'a',
+        { href: props.website, textContent: props.website },
+        container
+      )
+    }
+    const phone = props.phone || props['contact:phone']
+    if (phone) {
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', { href: `tel:${phone}`, textContent: phone })
+      )
+    }
+    if (props.mobile) {
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', {
+          href: `tel:${props.mobile}`,
+          textContent: props.mobile,
+        })
+      )
+    }
+    const email = props.email || props['contact:email']
+    if (email) {
+      L.DomUtil.add(
+        'div',
+        '',
+        container,
+        L.DomUtil.element('a', { href: `mailto:${email}`, textContent: email })
+      )
+    }
+    const id = props['@id'] || props['id']
+    if (id) {
+      L.DomUtil.add(
+        'div',
+        'osm-link',
+        container,
+        L.DomUtil.element('a', {
+          href: `https://www.openstreetmap.org/${id}`,
+          textContent: L._('See on OpenStreetMap'),
+        })
+      )
+    }
+    return container
   },
 })

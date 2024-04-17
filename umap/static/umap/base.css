@@ -21,6 +21,9 @@ a {
     text-decoration: none;
     color: SeaGreen;
 }
+button {
+    cursor: pointer;
+}
 hr {
     clear: both;
     width: 100%;
@@ -31,7 +34,7 @@ hr {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    border-color: #ddd;
+    border-color: var(--color-lightGray);
     border-image: none;
     border-style: solid;
     border-width: 1px 0 0;
@@ -160,15 +163,19 @@ input[type="checkbox"] {
 textarea {
     height: inherit;
     padding: 7px;
+    min-height: 15rem;
+    min-height: 6rlh;
 }
 select {
+    border: 1px solid #222;
     width: 100%;
     height: 28px;
     line-height: 28px;
-    color: #efefef;
-    border: 1px solid #222;
-    background-color: #393F3F;
     margin-top: 5px;
+}
+.dark select {
+    color: #efefef;
+    background-color: #393F3F;
 }
 select[multiple="multiple"] {
     height: auto;
@@ -221,7 +228,7 @@ button.flat,
     padding: 7px 7px;
     margin-bottom: 14px;
     background: #393F3F;
-    color: #ddd;
+    color: var(--color-lightGray);
     font-size: 10px;
     border-radius: 0 2px;
 }
@@ -266,7 +273,7 @@ input + .error {
     padding: 7px 7px;
     margin-top: -14px;
     margin-bottom: 14px;
-    background: #ddd;
+    background: var(--color-lightGray);
     color: #fff;
     background-color: #cc0000;
     font-size: 11px;
@@ -275,11 +282,22 @@ input + .error {
 input[type="file"] + .error {
     margin-top: 0;
 }
+input:invalid {
+    border-color: red;
+    background-color: darkred;
+}
+.dark input, .dark textarea {
+    background-color: #232729;
+    border-color: #1b1f20;
+    color: #efefef;
+}
 .fieldset {
-    border: 1px solid #222;
     margin-bottom: 5px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+}
+.dark .fieldset {
+    border: 1px solid #222;
 }
 .fieldset .fields {
     visibility: hidden;
@@ -298,15 +316,18 @@ input[type="file"] + .error {
     text-align: left;
     display: block;
     cursor: pointer;
-    background-color: #232729;
+    background-color: var(--color-lightGray);
     height: 30px;
     line-height: 30px;
-    color: #fff;
     margin: 0;
     font-family: fira_sans;
     font-weight: normal;
     font-size: 1.2em;
     padding: 0 5px;
+}
+.dark .fieldset.toggle .legend {
+    background-color: #232729;
+    color: #fff;
 }
 .fieldset.toggle .legend:before {
     background-repeat: no-repeat;
@@ -315,10 +336,13 @@ input[type="file"] + .error {
     width: 24px;
     line-height: 24px;
     display: inline-block;
-    background-image: url('./img/16-white.svg');
+    background-image: url('./img/16.svg');
     vertical-align: bottom;
     content: " ";
     background-position: -144px -76px;
+}
+.dark .fieldset.toggle .legend:before {
+    background-image: url('./img/16-white.svg');
 }
 .fieldset.toggle.on .legend:before {
     background-position: -144px -51px;
@@ -524,7 +548,7 @@ i.info {
     background-position: -150px -78px;
 }
 .umap-delete:before {
-    background-position: -40px -8px;
+    background-position: -32px -8px;
 }
 .umap-edit:before {
     background-position: -6px -6px;
@@ -538,12 +562,10 @@ i.info {
 .permissions-panel,
 .umap-upload,
 .umap-share,
-.umap-edit-container,
 .umap-datalayer-container,
 .umap-layer-properties-container,
 .umap-browse-data,
 .umap-facet-search,
-.umap-browse-datalayers,
 .umap-tilelayer-switcher-container {
     padding: 0 10px;
 }
@@ -588,6 +610,8 @@ i.info {
     text-align: center;
     margin-bottom: 5px;
     display: block;
+    color: black;
+    font-weight: bold;
 }
 .umap-pictogram-choice img {
     vertical-align: middle;
@@ -647,6 +671,24 @@ input[type=hidden].blur + .button,
 input[type=hidden].blur + [type="button"] {
     display: none;
 }
+.copiable-input {
+    display: flex;
+    align-items: end;
+}
+.copiable-input input {
+    border-radius: initial;
+}
+.copiable-input button {
+    background-repeat: no-repeat;
+    background-image: url('./img/16.svg');
+    background-position: -141px -140px;
+    display: inline;
+    padding: 0 10px;
+    height: 32px;
+    width: 32px;
+    border: 1px solid #202425;
+    border-radius: initial;
+}
 
 /* *********** */
 /*    Panel    */
@@ -654,101 +696,9 @@ input[type=hidden].blur + [type="button"] {
 .leaflet-ui-container {
     overflow-x: hidden;
 }
-#umap-ui-container {
-    position: absolute;
-    bottom: 0;
-    padding: 0 10px;
-    border-left: 1px solid #ddd;
-    overflow-x: auto;
-    z-index: 1010;
-    background-color: #fff;
-    opacity: 0.98;
-    cursor: initial;
-}
-#umap-ui-container.login-panel {
-    position: fixed;  /* Should not scroll when used in content pages (like home page) */
-    z-index: 1011;  /* Above a map panel if any */
-}
-#umap-ui-container.dark {
-    border-left: 1px solid #222;
-    background-color: #323737;
-    color: #efefef;
-}
-#umap-ui-container.fullwidth {
-    width: 100%;
-    right: -100%;
-    z-index: 10000;
-    padding-left: 0;
-    padding-right: 0;
-}
-.umap-caption-bar-enabled #umap-ui-container {
-    bottom: 46px;
-}
 .leaflet-top,
 .leaflet-right {
     transition: all .7s;
-}
-.umap-ui .leaflet-right {
-    right: 400px;
-}
-#umap-ui-container,
-#umap-alert-container,
-#umap-tooltip-container {
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing: border-box;
-}
-#umap-ui-container .umap-popup-content img {
-    /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
-    max-width: 99% !important;
-}
-#umap-ui-container .umap-popup-content {
-    max-height: inherit;
-}
-#umap-ui-container .body {
-    clear: both;
-    height: calc(100% - 54px); /* Minus size of toolbox */
-}
-#umap-ui-container .toolbox {
-    padding: 5px 10px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row-reverse;
-    font-size: 10px;
-    justify-content: flex-start;
-    gap: 5px;
-}
-#umap-ui-container .toolbox li {
-    color: #2e3436;
-    line-height: 32px;
-    cursor: pointer;
-    float: right;
-    display: inline;
-    padding: 0 7px;
-    border: 1px solid #b6b6b3;
-    border-radius: 2px;
-}
-#umap-ui-container.dark .toolbox li {
-    color: #d3dfeb;
-    border: 1px solid #202425;
-}
-#umap-ui-container .toolbox li:hover {
-    color: #2e3436;
-    background-color: #d4d4d2;
-}
-#umap-ui-container.dark .toolbox li:hover {
-    color: #eeeeec;
-    background-color: #353c3e;
-}
-.dark input, .dark textarea {
-    background-color: #232729;
-    border-color: #1b1f20;
-    /*box-shadow: inset 0 0 0 1px #215d9c;*/
-    color: #efefef;
-}
-input:invalid {
-    border-color: red;
-    background-color: darkred;
 }
 
 
@@ -870,27 +820,6 @@ input:invalid {
 /* *********** */
 /* Close link  */
 /* *********** */
-.umap-close-icon {
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    background-position: -28px -6px;
-    display: inline;
-    padding: 0 10px;
-    vertical-align: middle;
-}
-.dark .umap-close-icon {
-    background-image: url('./img/16-white.svg');
-}
-.dark .umap-close-link {
-    border: 1px solid #202425;
-    color: #eeeeec;
-    padding: 0 7px;
-    line-height: 32px;
-    background-color: #323737;
-}
-.dark .umap-close-link:hover {
-    background-color: #2e3436;
-}
 #umap-alert-container .umap-close-link {
     color: #fff;
     float: right;
@@ -935,33 +864,7 @@ input:invalid {
 /* *********** */
 /*    Mobile   */
 /* *********** */
-@media all and (orientation:landscape) {
-    .umap-edit-enabled #umap-ui-container {
-        top: 46px;
-    }
-    #umap-ui-container {
-        width: 400px;
-        right: -400px;
-        top:  0;
-    }
-    .umap-ui #umap-ui-container {
-        right: 0;
-    }
-}
 @media all and (orientation:portrait) {
-    #umap-ui-container {
-        height: 50%;
-        max-height: 400px;
-        width: 100%;
-        bottom: 0;
-        right: -100%;
-    }
-    .umap-ui #umap-ui-container {
-        right: 0;
-    }
-    .umap-ui .leaflet-right {
-        right: 0;
-    }
     #umap-alert-container {
         width: 100%;
         left: 0;
