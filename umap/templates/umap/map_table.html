@@ -69,16 +69,16 @@
                 </button>
               </form>
               {% if map_inst|can_delete_map:request %}
-              <form action="{% url 'map_delete' map_inst.pk %}"
-                    method="post"
-                    class="map-delete">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{% url 'user_dashboard' %}">
-                <button class="map-icon" type="submit" title="{% translate "Delete" %}">
-                  <span class="icon-dashboard icon-delete"></span>
-                  <span class="sr-only">{% translate "Delete" %}</span>
-                </button>
-              </form>
+                <form action="{% url 'map_delete' map_inst.pk %}"
+                      method="post"
+                      class="map-delete">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{% url 'user_dashboard' %}">
+                  <button class="map-icon" type="submit" title="{% translate "Delete" %}">
+                    <span class="icon-dashboard icon-delete"></span>
+                    <span class="sr-only">{% translate "Delete" %}</span>
+                  </button>
+                </form>
               {% endif %}
             </td>
           </tr>
