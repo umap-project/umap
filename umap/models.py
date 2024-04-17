@@ -92,7 +92,7 @@ class Licence(NamedModel):
 
 class TileLayer(NamedModel):
     url_template = models.CharField(
-        max_length=200, help_text=_("URL template using OSM tile format")
+        max_length=400, help_text=_("URL template using OSM tile format")
     )
     minZoom = models.IntegerField(default=0)
     maxZoom = models.IntegerField(default=18)
