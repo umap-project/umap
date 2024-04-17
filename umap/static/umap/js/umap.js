@@ -524,8 +524,8 @@ U.Map = L.Map.extend({
           this.help.hide()
         } else {
           this.panel.close()
-          this.editPanel.close()
-          this.fullPanel.close()
+          this.editPanel?.close()
+          this.fullPanel?.close()
         }
       }
 
