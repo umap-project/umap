@@ -307,16 +307,15 @@ U.FeatureMixin = {
     return value
   },
 
-  zoomTo: function (e) {
-    e = e || {}
-    const easing = e.easing !== undefined ? e.easing : this.map.getOption('easing')
+  zoomTo: function ({ easing, latlng, callback } = {}) {
+    if (easing === undefined) easing = this.map.getOption('easing')
+    if (callback) this.map.once('moveend', callback.call(this))
     if (easing) {
       this.map.flyTo(this.getCenter(), this.getBestZoom())
     } else {
-      const latlng = e.latlng || this.getCenter()
+      latlng = latlng || this.getCenter()
       this.map.setView(latlng, this.getBestZoom() || this.map.getZoom())
     }
-    if (e.callback) e.callback.call(this)
   },
 
   getBestZoom: function () {
