@@ -847,3 +847,16 @@ def test_oembed_link(client, map, datalayer):
         f'?url=http%3A%2F%2Ftestserver%2Fen%2Fmap%2Ftest-map_{map.id}&format=json"'
     ) in response.content.decode()
     assert 'title="test map oEmbed URL" />' in response.content.decode()
+
+
+def test_ogp_links(client, map, datalayer):
+    response = client.get(map.get_absolute_url())
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert (
+        f'<meta property="og:url" content="http://umap.org{map.get_absolute_url()}" />'
+        in content
+    )
+    assert f'<meta property="og:title" content="{map.name}" />' in content
+    assert f'<meta property="og:description" content="{map.description}" />' in content
+    assert '<meta property="og:site_name" content="uMap" />' in content
