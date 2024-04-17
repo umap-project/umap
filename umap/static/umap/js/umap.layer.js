@@ -845,8 +845,8 @@ U.DataLayer = L.Evented.extend({
       this.map.datalayers[id] = this
       if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
         this.map.datalayers_index.push(this)
+      this.map.onDataLayersChanged()
     }
-    this.map.onDataLayersChanged()
   },
 
   _dataUrl: function () {
