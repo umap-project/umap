@@ -116,7 +116,6 @@ U.Map = L.Map.extend({
     this.datalayers_index = []
     this.dirty_datalayers = []
     this.features_index = {}
-    this.facets = {}
 
     // Needed for actions labels
     this.help = new U.Help(this)
@@ -377,6 +376,7 @@ U.Map = L.Map.extend({
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
     this.browser = new U.Browser(this)
+    this.facets = new U.Facets(this)
     this.importer = new U.Importer(this)
     this.drop = new U.DropControl(this)
     this.share = new U.Share(this)
@@ -1844,20 +1844,6 @@ U.Map = L.Map.extend({
 
   getFilterKeys: function () {
     return (this.options.filterKey || this.options.sortKey || 'name').split(',')
-  },
-
-  getFacetKeys: function () {
-    const defaultType = 'checkbox'
-    const allowedTypes = [defaultType, 'radio', 'number', 'date', 'datetime']
-    return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
-      let [key, label, type] = curr.split('|')
-      type = allowedTypes.includes(type) ? type : defaultType
-      acc[key] = {
-        label: label || key,
-        type: type,
-      }
-      return acc
-    }, {})
   },
 
   getLayersBounds: function () {

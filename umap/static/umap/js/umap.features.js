@@ -493,7 +493,7 @@ U.FeatureMixin = {
   },
 
   matchFacets: function () {
-    const facets = this.map.facets
+    const facets = this.map.facets.selected
     for (const [property, criteria] of Object.entries(facets)) {
       let value = this.properties[property]
       const type = criteria["type"]
@@ -515,8 +515,7 @@ U.FeatureMixin = {
         if (!isNaN(max) && !isNaN(value) && max < value) return false
       } else {
         const choices = criteria["choices"]
-        value = String(value)
-        value = (value.length ? value : L._("empty string"))
+        value = String(value || '') || L._("<empty value>")
         if (choices?.length && (!value || !choices.includes(value))) return false
       }
     }

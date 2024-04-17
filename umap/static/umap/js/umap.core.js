@@ -73,7 +73,7 @@ L.DomUtil.add = (tagName, className, container, content) => {
     if (content.nodeType && content.nodeType === 1) {
       el.appendChild(content)
     } else {
-      el.innerHTML = content
+      el.textContent = content
     }
   }
   return el
