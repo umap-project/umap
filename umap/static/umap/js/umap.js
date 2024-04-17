@@ -197,13 +197,16 @@ U.Map = L.Map.extend({
 
     this.slideshow = new U.Slideshow(this, this.options.slideshow)
     this.permissions = new U.MapPermissions(this)
-    this.initCaptionBar()
     if (this.hasEditMode()) {
       this.editTools = new U.Editable(this)
       this.renderEditToolbar()
     }
     this.initShortcuts()
     this.onceDataLoaded(function () {
+      const slug = L.Util.queryString('feature')
+      if (slug && this.features_index[slug]) this.features_index[slug].view()
+      if (this.options.noControl) return
+      this.initCaptionBar()
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
@@ -218,8 +221,6 @@ U.Map = L.Map.extend({
       } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
         this.openFacet()
       }
-      const slug = L.Util.queryString('feature')
-      if (slug && this.features_index[slug]) this.features_index[slug].view()
       if (L.Util.queryString('edit')) {
         if (this.hasEditMode()) this.enableEdit()
         // Sometimes users share the ?edit link by mistake, let's remove

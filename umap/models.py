@@ -213,13 +213,9 @@ class Map(NamedModel):
                 "STATIC_URL": settings.STATIC_URL,
                 "editMode": "disabled",
                 "hash": False,
-                "attributionControl": False,
                 "scrollWheelZoom": False,
-                "umapAttributionControl": False,
                 "noControl": True,
                 "umap_id": self.pk,
-                "onLoadPanel": "none",
-                "captionBar": False,
                 "schema": self.extra_schema,
                 "slideshow": {},
             }
