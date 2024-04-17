@@ -239,6 +239,7 @@ UMAP_EXTRA_URLS = {
     "routing": "http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}",  # noqa
     "ajax_proxy": "/ajax-proxy/?url={url}&ttl={ttl}",
     "search": "https://photon.komoot.io/api/?",
+    "edit_in_osm": "https://www.openstreetmap.org/edit#map={zoom}/{lat}/{lng}",
 }
 UMAP_KEEP_VERSIONS = env.int("UMAP_KEEP_VERSIONS", default=10)
 SITE_URL = env("SITE_URL", default="http://umap.org")

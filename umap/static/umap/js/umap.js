@@ -1769,7 +1769,22 @@ U.Map = L.Map.extend({
         callback: this.openExternalRouting,
       })
     }
+    if (this.options.urls.edit_in_osm) {
+      items.push('-', {
+        text: L._('Edit in OpenStreetMap'),
+        callback: this.editInOSM,
+      })
+    }
     this.options.contextmenuItems = items
+  },
+
+  editInOSM: function (e) {
+    const url = this.urls.get('edit_in_osm', {
+      lat: e.latlng.lat,
+      lng: e.latlng.lng,
+      zoom: Math.max(this.getZoom(), 16),
+    })
+    if (url) window.open(url)
   },
 
   openExternalRouting: function (e) {
