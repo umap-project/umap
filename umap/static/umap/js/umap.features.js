@@ -493,30 +493,25 @@ U.FeatureMixin = {
   },
 
   matchFacets: function () {
-    const facets = this.map.facets.selected
-    for (const [property, criteria] of Object.entries(facets)) {
-      let value = this.properties[property]
-      const type = criteria["type"]
-      if (["date", "datetime", "number"].includes(type)) {
-        let min = criteria["min"]
-        let max = criteria["max"]
-        value = (value != null ? value : undefined)
-        if (["date", "datetime"].includes(type)) {
-          min = new Date(min)
-          max = new Date(max)
-          value = new Date(value)
-        }
-        if (["number"].includes(type)) {
-          min = parseFloat(min)
-          max = parseFloat(max)
-          value = parseFloat(value)
-        }
-        if (!isNaN(min) && !isNaN(value) && min > value) return false
-        if (!isNaN(max) && !isNaN(value) && max < value) return false
-      } else {
-        const choices = criteria["choices"]
-        value = String(value || '') || L._("<empty value>")
-        if (choices?.length && (!value || !choices.includes(value))) return false
+    const selected = this.map.facets.selected
+    for (let [name, { type, min, max, choices }] of Object.entries(selected)) {
+      let value = this.properties[name]
+      switch (type) {
+        case 'date':
+        case 'datetime':
+        case 'number':
+          const caster = type === 'number' ? parseFloat : (v) => new Date(v)
+          value = value != null ? value : undefined
+          min = caster(min)
+          max = caster(max)
+          value = caster(value)
+          if (!isNaN(min) && !isNaN(value) && min > value) return false
+          if (!isNaN(max) && !isNaN(value) && max < value) return false
+          break
+        default:
+          value = String(value || '') || L._('<empty value>')
+          if (choices?.length && (!value || !choices.includes(value))) return false
+          break
       }
     }
     return true
