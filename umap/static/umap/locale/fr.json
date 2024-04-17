@@ -152,7 +152,6 @@
     "Dynamic properties": "Propriétés dynamiques",
     "Dynamic": "Dynamique",
     "Edit feature's layer": "Éditer le calque de l'élément",
-    "Edit map properties": "Éditer les propriétés de la carte",
     "Edit properties in a table": "Éditer dans un tableau",
     "Edit the title of the map": "Modifier le titre de la carte",
     "Edit this feature": "Éditer cet élément",
@@ -173,7 +172,6 @@
     "Facet search": "Recherche par facette",
     "Feature identifier key": "Clé unique d'un élément",
     "Feature properties": "Propriétés de l'élément",
-    "Features in this layer: {count}": "Éléments dans ce calque: {count}",
     "Fetch data each time map view changes.": "Récupère les données à chaque fois que la vue de la carte change.",
     "fill color": "couleur de remplissage",
     "fill opacity": "opacité du remplissage",
@@ -334,7 +332,6 @@
     "Search": "Chercher",
     "Secret edit link copied to clipboard!": "Lien d'édition secret copié dans le presse-papier!",
     "Secret edit link:": "Lien d'édition secret :",
-    "See all": "Tout voir",
     "See layers": "Voir les calques",
     "See full screen": "Voir en plein écran",
     "See on OpenStreetMap": "Voir sur OpenStreetMap",
@@ -435,5 +432,12 @@
     "{distance}&#8239;m": "{distance} m",
     "{distance}&#8239;miles": "{distance} miles",
     "{distance}&#8239;NM": "{distance} MN",
-    "{distance}&#8239;yd": "{distance} yd"
+    "{distance}&#8239;yd": "{distance} yd",
+    "Edit map name and caption": "Modifier le nom et la légende",
+    "Map advanced properties": "Propriétés avancées de la carte",
+    "Edit map details": "Modifier les propriétés de la carte",
+    "Back to browser": "Retour au navigateur",
+    "Toggle size": "Basculer la hauteur",
+    "Layers": "Calques",
+    "Display the caption control": "Afficher le bouton d'ouverture de la légende"
 }

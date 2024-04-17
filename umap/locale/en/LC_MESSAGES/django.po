@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-25 12:41+0000\n"
+"POT-Creation-Date: 2024-04-17 07:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Everyone can edit"
 msgstr ""
 
-#: forms.py:69 models.py:381
+#: forms.py:69 models.py:382
 msgid "Inherit"
 msgstr ""
 
@@ -33,107 +33,107 @@ msgstr ""
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: models.py:52
+#: models.py:53
 msgid "name"
 msgstr ""
 
-#: models.py:83
+#: models.py:84
 msgid "details"
 msgstr ""
 
-#: models.py:84
+#: models.py:85
 msgid "Link to a page where the licence is detailed."
 msgstr ""
 
-#: models.py:94
+#: models.py:95
 msgid "URL template using OSM tile format"
 msgstr ""
 
-#: models.py:100
+#: models.py:101
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:146 models.py:382
+#: models.py:147 models.py:383
 msgid "Everyone"
 msgstr ""
 
-#: models.py:147 models.py:153 models.py:383
+#: models.py:148 models.py:154 models.py:384
 msgid "Editors only"
 msgstr ""
 
-#: models.py:148 models.py:384
+#: models.py:149 models.py:385
 msgid "Owner only"
 msgstr ""
 
-#: models.py:151
+#: models.py:152
 msgid "Everyone (public)"
 msgstr ""
 
-#: models.py:152
+#: models.py:153
 msgid "Anyone with link"
 msgstr ""
 
-#: models.py:154
+#: models.py:155
 msgid "Blocked"
 msgstr ""
 
-#: models.py:157 models.py:391
+#: models.py:158 models.py:392
 msgid "description"
 msgstr ""
 
-#: models.py:158
+#: models.py:159
 msgid "center"
 msgstr ""
 
-#: models.py:159
+#: models.py:160
 msgid "zoom"
 msgstr ""
 
-#: models.py:161
+#: models.py:162
 msgid "locate"
 msgstr ""
 
-#: models.py:161
+#: models.py:162
 msgid "Locate user on load?"
 msgstr ""
 
-#: models.py:165
+#: models.py:166
 msgid "Choose the map licence."
 msgstr ""
 
-#: models.py:166
+#: models.py:167
 msgid "licence"
 msgstr ""
 
-#: models.py:177
+#: models.py:178
 msgid "owner"
 msgstr ""
 
-#: models.py:181
+#: models.py:182
 msgid "editors"
 msgstr ""
 
-#: models.py:186 models.py:405
+#: models.py:187 models.py:406
 msgid "edit status"
 msgstr ""
 
-#: models.py:191
+#: models.py:192
 msgid "share status"
 msgstr ""
 
-#: models.py:194 models.py:400
+#: models.py:195 models.py:401
 msgid "settings"
 msgstr ""
 
-#: models.py:322
+#: models.py:323
 msgid "Clone of"
 msgstr ""
 
-#: models.py:395
+#: models.py:396
 msgid "display on load"
 msgstr ""
 
-#: models.py:396
+#: models.py:397
 msgid "Display this layer on load."
 msgstr ""
 
@@ -345,37 +345,37 @@ msgstr ""
 msgid "Clone"
 msgstr ""
 
-#: templates/umap/map_table.html:76 templates/umap/map_table.html:78
+#: templates/umap/map_table.html:77 templates/umap/map_table.html:79
 msgid "Delete"
 msgstr ""
 
-#: templates/umap/map_table.html:91
+#: templates/umap/map_table.html:93
 msgid "first"
 msgstr ""
 
-#: templates/umap/map_table.html:92
+#: templates/umap/map_table.html:94
 msgid "previous"
 msgstr ""
 
-#: templates/umap/map_table.html:100
+#: templates/umap/map_table.html:102
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr ""
 
-#: templates/umap/map_table.html:105
+#: templates/umap/map_table.html:107
 msgid "next"
 msgstr ""
 
-#: templates/umap/map_table.html:106
+#: templates/umap/map_table.html:108
 msgid "last"
 msgstr ""
 
-#: templates/umap/map_table.html:114
+#: templates/umap/map_table.html:116
 #, python-format
 msgid "Lines per page: %(per_page)s"
 msgstr ""
 
-#: templates/umap/map_table.html:119
+#: templates/umap/map_table.html:121
 #, python-format
 msgid "%(count)s maps"
 msgstr ""
@@ -542,10 +542,10 @@ msgstr ""
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1145
+#: views.py:1146
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1167
+#: views.py:1168
 msgid "Permissions updated with success!"
 msgstr ""

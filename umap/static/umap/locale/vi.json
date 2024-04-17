@@ -152,7 +152,6 @@
     "Dynamic properties": "Dynamic properties",
     "Dynamic": "Động",
     "Edit feature's layer": "Chỉnh sửa lớp",
-    "Edit map properties": "Chỉnh sửa thuộc tính bản đồ",
     "Edit properties in a table": "Edit properties in a table",
     "Edit the title of the map": "Edit the title of the map",
     "Edit this feature": "Sửa chức năng này",
@@ -173,7 +172,6 @@
     "Facet search": "Facet search",
     "Feature identifier key": "Feature identifier key",
     "Feature properties": "Feature properties",
-    "Features in this layer: {count}": "Features in this layer: {count}",
     "Fetch data each time map view changes.": "Fetch data each time map view changes.",
     "fill color": "fill color",
     "fill opacity": "fill opacity",
@@ -334,7 +332,6 @@
     "Search": "Search",
     "Secret edit link copied to clipboard!": "Secret edit link copied to clipboard!",
     "Secret edit link:": "Secret edit link:",
-    "See all": "See all",
     "See layers": "See layers",
     "See full screen": "See full screen",
     "See on OpenStreetMap": "See on OpenStreetMap",
@@ -435,5 +432,12 @@
     "{distance}&#8239;m": "{distance} m",
     "{distance}&#8239;miles": "{distance} miles",
     "{distance}&#8239;NM": "{distance} NM",
-    "{distance}&#8239;yd": "{distance} yd"
+    "{distance}&#8239;yd": "{distance} yd",
+    "Edit map name and caption": "Edit map name and caption",
+    "Map advanced properties": "Map advanced properties",
+    "Edit map details": "Edit map details",
+    "Back to browser": "Back to browser",
+    "Toggle size": "Toggle size",
+    "Layers": "Layers",
+    "Display the caption control": "Display the caption control"
 }
