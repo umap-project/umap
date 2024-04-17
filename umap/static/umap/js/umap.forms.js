@@ -527,11 +527,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       )
     }
     const symbol = L.DomUtil.add(
-      'button',
-      'flat tab-symbols',
-      this.tabs,
-      L._('Symbol')
-    ),
+        'button',
+        'flat tab-symbols',
+        this.tabs,
+        L._('Symbol')
+      ),
       char = L.DomUtil.add(
         'button',
         'flat tab-chars',
@@ -746,109 +746,87 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
 
 L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
   build: function () {
-    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
+    this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
+    this.container.appendChild(this.label)
     this.ul = L.DomUtil.create('ul', '', this.container)
-    this.inputType = this.options.criteria["inputType"]
+    this.type = this.options.criteria['type']
 
-    const choices = this.options.criteria["choices"]
+    const choices = this.options.criteria['choices']
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
   },
 
   buildLabel: function () {
-    this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label)
+    this.label = L.DomUtil.element('legend', {textContent: this.options.label})
   },
 
   buildLi: function (value) {
-    const property_li = L.DomUtil.create('li', '', this.ul),
-      input = L.DomUtil.create('input', '', property_li),
-      label = L.DomUtil.create('label', '', property_li)
+    const property_li = L.DomUtil.create('li', '', this.ul)
+    const label = L.DomUtil.add('label', '', property_li)
+    const input = L.DomUtil.create('input', '', label)
+    L.DomUtil.add('span', '', label, value)
 
-    input.type = this.inputType
-    input.name = `${this.inputType}_${this.name}`
-    input.id = `${this.inputType}_${this.name}_${value}`
+    input.type = this.type
+    input.name = `${this.type}_${this.name}`
     input.checked = this.get()['choices'].includes(value)
     input.dataset.value = value
-    label.htmlFor = `${this.inputType}_${this.name}_${value}`
-    label.innerHTML = value
 
     L.DomEvent.on(input, 'change', (e) => this.sync())
   },
 
   toJS: function () {
     return {
-      'inputType': this.inputType,
-      'choices': [...this.ul.querySelectorAll('input:checked')].map((i) => i.dataset.value)
+      type: this.type,
+      choices: [...this.ul.querySelectorAll('input:checked')].map(
+        (i) => i.dataset.value
+      ),
     }
   },
 })
 
-L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
+L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
+  getInputType: function (type) {
+    return type
+  },
+
+  getLabels: function () {
+    return [L._('Min'), L._('Max')]
+  },
+
+  castValue: function (value) {
+    return value.valueOf()
+  },
+
   build: function () {
-    this.container = L.DomUtil.create('div', 'umap-facet', this.parentNode)
-    this.table = L.DomUtil.create('table', '', this.container)
-    this.inputType = this.options.criteria["inputType"]
+    this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
+    this.container.appendChild(this.label)
+    const {min, max, type} = this.options.criteria
+    this.type = type
+    this.inputType = this.getInputType(this.type)
 
-    const min = this.options.criteria['min']
-    const max = this.options.criteria['max']
+    const [minLabel, maxLabel] = this.getLabels()
 
-    this.minTr = L.DomUtil.create('tr', '', this.table)
+    this.minLabel = L.DomUtil.create('label', '', this.container)
+    this.minLabel.innerHTML = minLabel
 
-    this.minTdLabel = L.DomUtil.create('td', '', this.minTr)
-    this.minLabel = L.DomUtil.create('label', '', this.minTdLabel)
-    this.minLabel.innerHTML = L._('Min')
-    this.minLabel.htmlFor = `${this.inputType}_${this.name}_min`
-
-    this.minTdInput = L.DomUtil.create('td', '', this.minTr)
-    this.minInput = L.DomUtil.create('input', '', this.minTdInput)
+    this.minInput = L.DomUtil.create('input', '', this.minLabel)
     this.minInput.type = this.inputType
-    this.minInput.id = `${this.inputType}_${this.name}_min`
-    this.minInput.step = '1'
+    this.minInput.step = 'any'
     if (min != null) {
-      this.minInput.valueAsNumber = min.valueOf()
+      this.minInput.valueAsNumber = this.castValue(min)
       this.minInput.dataset.value = min
     }
 
-    this.maxTr = L.DomUtil.create('tr', '', this.table)
 
-    this.maxTdLabel = L.DomUtil.create('td', '', this.maxTr)
-    this.maxLabel = L.DomUtil.create('label', '', this.maxTdLabel)
-    this.maxLabel.innerHTML = L._('Max')
-    this.maxLabel.htmlFor = `${this.inputType}_${this.name}_max`
+    this.maxLabel = L.DomUtil.create('label', '', this.container)
+    this.maxLabel.innerHTML = maxLabel
 
-    this.maxTdInput = L.DomUtil.create('td', '', this.maxTr)
-    this.maxInput = L.DomUtil.create('input', '', this.maxTdInput)
+    this.maxInput = L.DomUtil.create('input', '', this.maxLabel)
     this.maxInput.type = this.inputType
-    this.maxInput.id = `${this.inputType}_${this.name}_max`
-    this.maxInput.step = '1'
+    this.maxInput.step = 'any'
     if (max != null) {
-      this.maxInput.valueAsNumber = max.valueOf()
+      this.maxInput.valueAsNumber = this.castValue(max)
       this.maxInput.dataset.value = max
-    }
-
-    if (["date", "datetime-local"].includes(this.inputType)) {
-      this.minLabel.innerHTML = L._('From')
-      this.maxLabel.innerHTML = L._('Until')
-      if (min != null) {
-        this.minInput.valueAsNumber = (min.valueOf() - min.getTimezoneOffset() * 60000)
-      }
-      if (max != null) {
-        this.maxInput.valueAsNumber = (max.valueOf() - max.getTimezoneOffset() * 60000)
-      }
-    }
-
-    if (["datetime-local"].includes(this.inputType)) {
-      this.minInput.step = '0.001'
-      this.maxInput.step = '0.001'
-    }
-
-    if (["number"].includes(this.inputType)) {
-      if (min != null && max != null) {
-        // calculate step from significant digits of min and max values
-        const step = Math.min(L.Util.calculateStepFromNumber(min), L.Util.calculateStepFromNumber(max))
-        this.minInput.step = String(step)
-        this.maxInput.step = String(step)
-      }
     }
 
     L.DomEvent.on(this.minInput, 'change', (e) => this.sync())
@@ -856,17 +834,34 @@ L.FormBuilder.FacetSearchMinMax = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-    this.label = L.DomUtil.add('h5', '', this.parentNode, this.options.label)
+    this.label = L.DomUtil.element('legend', {textContent: this.options.label})
   },
 
   toJS: function () {
     return {
-      'inputType': this.inputType,
-      'min': this.minInput.value,
-      'max': this.maxInput.value,
-    };
+      type: this.type,
+      min: this.minInput.value,
+      max: this.maxInput.value,
+    }
   },
-});
+})
+
+L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({})
+
+L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
+  castValue: function (value) {
+    return value.valueOf() - value.getTimezoneOffset() * 60000
+  },
+  getLabels: function () {
+    return [L._('From'), L._('Until')]
+  },
+})
+
+L.FormBuilder.FacetSearchDateTime = L.FormBuilder.FacetSearchDate.extend({
+  getInputType: function (type) {
+    return 'datetime-local'
+  },
+})
 
 L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   default: 'null',

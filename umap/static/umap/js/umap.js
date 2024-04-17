@@ -218,6 +218,7 @@ U.Map = L.Map.extend({
         this.panel.mode = 'condensed'
         this.displayCaption()
       } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
+        this.panel.mode = 'expanded'
         this.openFacet()
       }
       if (L.Util.queryString('edit')) {
@@ -1846,21 +1847,14 @@ U.Map = L.Map.extend({
   },
 
   getFacetKeys: function () {
-    const allowedInputTypes = {
-      "checkbox": "checkbox",
-      "radio": "radio",
-      "number": "number",
-      "date": "date",
-      "datetime": "datetime-local",
-    }
+    const defaultType = 'checkbox'
+    const allowedTypes = [defaultType, 'radio', 'number', 'date', 'datetime']
     return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
-      const els = curr.split('|')
-      acc[els[0]] = {
-        "label": els[1] || els[0],
-        "inputType": (
-          (els[2] in allowedInputTypes) ? allowedInputTypes[els[2]] :
-          Object.values(allowedInputTypes)[0]
-	)
+      let [key, label, type] = curr.split('|')
+      type = allowedTypes.includes(type) ? type : defaultType
+      acc[key] = {
+        label: label || key,
+        type: type,
       }
       return acc
     }, {})

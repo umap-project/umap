@@ -669,27 +669,31 @@ const ControlsMixin = {
     const facetCriteria = {}
 
     keys.forEach((key) => {
-      const inputType = facetKeys[key]["inputType"]
-      if (["date", "datetime-local", "number"].includes(inputType)) {
-        if (!facetCriteria[key]) facetCriteria[key] = {
-          "inputType": facetKeys[key]["inputType"],
-          "min": undefined,
-          "max": undefined
-        }
-        if (!this.facets[key]) this.facets[key] = {
-          "inputType": facetKeys[key]["inputType"],
-          "min": undefined,
-          "max": undefined
-        }
+      const type = facetKeys[key]['type']
+      if (['date', 'datetime', 'number'].includes(type)) {
+        if (!facetCriteria[key])
+          facetCriteria[key] = {
+            type: facetKeys[key]['type'],
+            min: undefined,
+            max: undefined,
+          }
+        if (!this.facets[key])
+          this.facets[key] = {
+            type: facetKeys[key]['type'],
+            min: undefined,
+            max: undefined,
+          }
       } else {
-        if (!facetCriteria[key]) facetCriteria[key] = {
-          "inputType": facetKeys[key]["inputType"],
-          "choices": []
-        }
-        if (!this.facets[key]) this.facets[key] = {
-          "inputType": facetKeys[key]["inputType"],
-          "choices": []
-        }
+        if (!facetCriteria[key])
+          facetCriteria[key] = {
+            type: facetKeys[key]['type'],
+            choices: [],
+          }
+        if (!this.facets[key])
+          this.facets[key] = {
+            type: facetKeys[key]['type'],
+            choices: [],
+          }
       }
     })
 
@@ -697,22 +701,28 @@ const ControlsMixin = {
       datalayer.eachFeature((feature) => {
         keys.forEach((key) => {
           let value = feature.properties[key]
-          const inputType = facetKeys[key]["inputType"]
-          if (["date", "datetime-local", "number"].includes(inputType)) {
-            value = (value != null ? value : undefined)
-            if (["date", "datetime-local"].includes(inputType)) value = new Date(value);
-            if (["number"].includes(inputType)) value = parseFloat(value);
-            if (!isNaN(value) && (isNaN(facetCriteria[key]["min"]) || facetCriteria[key]["min"] > value)) {
-              facetCriteria[key]["min"] = value
+          const type = facetKeys[key]['type']
+          if (['date', 'datetime', 'number'].includes(type)) {
+            value = value != null ? value : undefined
+            if (['date', 'datetime'].includes(type)) value = new Date(value)
+            if (['number'].includes(type)) value = parseFloat(value)
+            if (
+              !isNaN(value) &&
+              (isNaN(facetCriteria[key]['min']) || facetCriteria[key]['min'] > value)
+            ) {
+              facetCriteria[key]['min'] = value
             }
-            if (!isNaN(value) && (isNaN(facetCriteria[key]["max"]) || facetCriteria[key]["max"] < value)) {
-              facetCriteria[key]["max"] = value
+            if (
+              !isNaN(value) &&
+              (isNaN(facetCriteria[key]['max']) || facetCriteria[key]['max'] < value)
+            ) {
+              facetCriteria[key]['max'] = value
             }
           } else {
             value = String(value)
-            value = (value.length ? value : L._("empty string"))
-            if (!!value && !facetCriteria[key]["choices"].includes(value)) {
-              facetCriteria[key]["choices"].push(value)
+            value = value.length ? value : L._('empty string')
+            if (!!value && !facetCriteria[key]['choices'].includes(value)) {
+              facetCriteria[key]['choices'].push(value)
             }
           }
         })
@@ -726,19 +736,31 @@ const ControlsMixin = {
         if (datalayer.hasDataVisible()) found = true
       })
       // TODO: display a results counter in the panel instead.
-      if (!found)
+      if (!found) {
         this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
+      }
     }
     const fields = keys.map((key) => {
       let criteria = facetCriteria[key]
-      let handler = ["date", "datetime-local", "number"].includes(criteria["inputType"]) ? 'FacetSearchMinMax' : 'FacetSearchChoices'
-      let label = facetKeys[key]["label"]
+      let handler = 'FacetSearchChoices'
+      switch (criteria['type']) {
+        case 'number':
+          handler = 'FacetSearchNumber'
+          break
+        case 'date':
+          handler = 'FacetSearchDate'
+          break
+        case 'datetime':
+          handler = 'FacetSearchDateTime'
+          break
+      }
+      let label = facetKeys[key]['label']
       return [
         `facets.${key}`,
         {
           criteria: criteria,
           handler: handler,
-          label: label
+          label: label,
         },
       ]
     })

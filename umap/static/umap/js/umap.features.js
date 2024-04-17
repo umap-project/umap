@@ -496,17 +496,17 @@ U.FeatureMixin = {
     const facets = this.map.facets
     for (const [property, criteria] of Object.entries(facets)) {
       let value = this.properties[property]
-      const inputType = criteria["inputType"]
-      if (["date", "datetime-local", "number"].includes(inputType)) {
+      const type = criteria["type"]
+      if (["date", "datetime", "number"].includes(type)) {
         let min = criteria["min"]
         let max = criteria["max"]
         value = (value != null ? value : undefined)
-        if (["date", "datetime-local"].includes(inputType)) {
+        if (["date", "datetime"].includes(type)) {
           min = new Date(min)
           max = new Date(max)
           value = new Date(value)
         }
-        if (["number"].includes(inputType)) {
+        if (["number"].includes(type)) {
           min = parseFloat(min)
           max = parseFloat(max)
           value = parseFloat(value)
@@ -517,7 +517,7 @@ U.FeatureMixin = {
         const choices = criteria["choices"]
         value = String(value)
         value = (value.length ? value : L._("empty string"))
-        if (choices.length && (!value || !choices.includes(value))) return false
+        if (choices?.length && (!value || !choices.includes(value))) return false
       }
     }
     return true
