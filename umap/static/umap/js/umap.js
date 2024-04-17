@@ -1006,6 +1006,7 @@ U.Map = L.Map.extend({
     }
     const formData = new FormData()
     formData.append('name', this.options.name)
+    formData.append('description', this.options.description)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
     const uri = this.urls.get('map_save', { map_id: this.options.umap_id })

@@ -102,7 +102,7 @@ class MapSettingsForm(forms.ModelForm):
         return self.cleaned_data["center"]
 
     class Meta:
-        fields = ("settings", "name", "center", "slug")
+        fields = ("settings", "name", "description", "center", "slug")
         model = Map
 
 
