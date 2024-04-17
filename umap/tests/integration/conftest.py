@@ -1,9 +1,11 @@
+import os
+
 import pytest
 
 
 @pytest.fixture(autouse=True)
 def set_timeout(context):
-    context.set_default_timeout(7500)
+    context.set_default_timeout(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500))
 
 
 @pytest.fixture
