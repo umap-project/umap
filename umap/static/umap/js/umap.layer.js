@@ -1385,7 +1385,7 @@ U.DataLayer = L.Evented.extend({
       )
     }
     this.map.editPanel.open({
-      data: { html: container },
+      content: container,
       actions: [U.Browser.backButton(this.map)],
     })
   },

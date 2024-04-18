@@ -110,7 +110,7 @@ U.TableEditor = L.Class.extend({
     }
     L.DomEvent.on(addButton, 'click', addProperty, this)
     this.datalayer.map.fullPanel.open({
-      data: { html: this.table },
+      content: this.table,
       className: 'umap-table-editor',
       actions: [addButton],
     })

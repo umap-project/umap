@@ -56,7 +56,7 @@ U.Popup.Panel = U.Popup.extend({
 
   onAdd: function (map) {
     map.panel.open({
-      data: { html: this._content },
+      content: this._content,
       actions: [U.Browser.backButton(map)],
     })
 

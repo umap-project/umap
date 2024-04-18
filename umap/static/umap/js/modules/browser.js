@@ -149,7 +149,7 @@ export default class Browser {
     formContainer.appendChild(builder.build())
 
     this.map.panel.open({
-      data: { html: container },
+      content: container,
       className: 'umap-browser',
     })
 

@@ -14,26 +14,22 @@ export class Panel {
     DomEvent.on(this.container, 'MozMousePixelScroll', DomEvent.stopPropagation)
   }
 
-  open(e) {
+  open({ content, className, actions = [] } = {}) {
     this.container.className = `with-transition panel ${this.classname} ${this.mode}`
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'toolbox', this.container)
     const body = DomUtil.create('div', 'body', this.container)
-    if (e.data.html.nodeType && e.data.html.nodeType === 1)
-      body.appendChild(e.data.html)
-    else body.innerHTML = e.data.html
+    body.appendChild(content)
     const closeLink = DomUtil.create('li', 'umap-close-link', actionsContainer)
     DomUtil.add('i', 'icon icon-16 icon-close', closeLink)
     closeLink.title = translate('Close')
     const resizeLink = DomUtil.create('li', 'umap-resize-link', actionsContainer)
     DomUtil.add('i', 'icon icon-16 icon-resize', resizeLink)
     resizeLink.title = translate('Toggle size')
-    if (e.actions) {
-      for (let i = 0; i < e.actions.length; i++) {
-        actionsContainer.appendChild(e.actions[i])
-      }
+    for (let action of actions) {
+      actionsContainer.appendChild(action)
     }
-    if (e.className) DomUtil.addClass(body, e.className)
+    if (className) DomUtil.addClass(body, className)
     const promise = new Promise((resolve, reject) => {
       DomUtil.addClass(this.container, 'on')
       resolve()

@@ -126,7 +126,7 @@ U.MapPermissions = L.Class.extend({
     this.map.eachDataLayer((datalayer) => {
       datalayer.permissions.edit(container)
     })
-    this.map.editPanel.open({ data: { html: container }, className: 'dark' })
+    this.map.editPanel.open({ content: container, className: 'dark' })
   },
 
   attach: async function () {

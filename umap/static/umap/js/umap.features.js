@@ -129,7 +129,7 @@ U.FeatureMixin = {
     this.appendEditFieldsets(container)
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     this.getAdvancedEditActions(advancedActions)
-    const onLoad = this.map.editPanel.open({ data: { html: container } })
+    const onLoad = this.map.editPanel.open({ content: container })
     onLoad.then(() => {
       builder.helpers['properties.name'].input.focus()
     })
