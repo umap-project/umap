@@ -817,7 +817,7 @@ const ControlsMixin = {
       L.DomUtil.createLink(
         'umap-user',
         rightContainer,
-        L._(`My Dashboard <span>({username})</span>`, {
+        L._(`My Dashboard ({username})`, {
           username: this.options.user.name,
         }),
         this.options.user.url
