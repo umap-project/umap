@@ -59,7 +59,7 @@ DATALAYER_DATA2 = {
                 "mytype": "odd",
                 "name": "Point 3",
                 "mynumber": 14,
-                "mydate": "2024/04/04 10:19:17",
+                "mydate": "2024-04-04T10:19:17.000Z",
             },
             "geometry": {"type": "Point", "coordinates": [4.372559, 47.945786]},
         },

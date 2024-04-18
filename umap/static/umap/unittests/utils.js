@@ -590,4 +590,21 @@ describe('Utils', function () {
       assert.deepEqual(getImpactsFromSchema(['foo', 'bar', 'baz'], schema), ['A', 'B'])
     })
   })
+  describe('parseNaiveDate', () => {
+    it('should parse a date', () => {
+      assert.equal(Utils.parseNaiveDate("2024/03/04").toISOString(), "2024-03-04T00:00:00.000Z")
+    })
+    it('should parse a datetime', () => {
+      assert.equal(Utils.parseNaiveDate("2024/03/04 12:13:14").toISOString(), "2024-03-04T00:00:00.000Z")
+    })
+    it('should parse an iso datetime', () => {
+      assert.equal(Utils.parseNaiveDate("2024-03-04T00:00:00.000Z").toISOString(), "2024-03-04T00:00:00.000Z")
+    })
+    it('should parse a GMT time', () => {
+      assert.equal(Utils.parseNaiveDate("04 Mar 2024 00:12:00 GMT").toISOString(), "2024-03-04T00:00:00.000Z")
+    })
+    it('should parse a GMT time with explicit timezone', () => {
+      assert.equal(Utils.parseNaiveDate("Thu, 04 Mar 2024 00:00:00 GMT+0300").toISOString(), "2024-03-03T00:00:00.000Z")
+    })
+  })
 })

@@ -1,5 +1,6 @@
 import { DomUtil, DomEvent, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import * as Utils from './utils.js'
 
 export default class Facets {
   constructor(map) {
@@ -133,18 +134,15 @@ export default class Facets {
   }
 
   getParser(type) {
-    switch(type) {
+    switch (type) {
       case 'number':
         return parseFloat
       case 'datetime':
         return (v) => new Date(v)
       case 'date':
-        return (v) => new Date(new Date(v).toDateString()) // Without time
+        return Utils.parseNaiveDate
       default:
         return (v) => String(v || '')
-
     }
   }
-
-
 }

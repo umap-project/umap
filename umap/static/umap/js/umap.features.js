@@ -504,7 +504,6 @@ U.FeatureMixin = {
         case 'number':
           min = parser(min)
           max = parser(max)
-          value = parser(value)
           if (!isNaN(min) && !isNaN(value) && min > value) return false
           if (!isNaN(max) && !isNaN(value) && max < value) return false
           break
