@@ -25,11 +25,12 @@ export default class Facets {
         names.forEach((name) => {
           let value = feature.properties[name]
           const type = defined[name]['type']
+          const parser = this.getParser(type)
+          value = parser(value)
           switch (type) {
             case 'date':
             case 'datetime':
             case 'number':
-              value = type === 'number' ? parseFloat(value) : new Date(value)
               if (!isNaN(value)) {
                 if (isNaN(properties[name].min) || properties[name].min > value) {
                   properties[name].min = value
@@ -40,7 +41,7 @@ export default class Facets {
               }
               break
             default:
-              value = String(value || '') || L._('<empty value>')
+              value = value || L._('<empty value>')
               if (!properties[name].choices.includes(value)) {
                 properties[name].choices.push(value)
               }
@@ -130,4 +131,20 @@ export default class Facets {
       return acc
     }, {})
   }
+
+  getParser(type) {
+    switch(type) {
+      case 'number':
+        return parseFloat
+      case 'datetime':
+        return (v) => new Date(v)
+      case 'date':
+        return (v) => new Date(new Date(v).toDateString()) // Without time
+      default:
+        return (v) => String(v || '')
+
+    }
+  }
+
+
 }
