@@ -496,15 +496,18 @@ U.FeatureMixin = {
     const selected = this.map.facets.selected
     for (let [name, { type, min, max, choices }] of Object.entries(selected)) {
       let value = this.properties[name]
+      let parser
       switch (type) {
         case 'date':
         case 'datetime':
         case 'number':
-          const caster = type === 'number' ? parseFloat : (v) => new Date(v)
+          if (type === 'number') parser = parseFloat
+          else if (type == 'datetime') parser = (v) => new Date(v)
+          else parser = (v) => new Date(new Date(v).toDateString()) // Without time
           value = value != null ? value : undefined
-          min = caster(min)
-          max = caster(max)
-          value = caster(value)
+          min = parser(min)
+          max = parser(max)
+          value = parser(value)
           if (!isNaN(min) && !isNaN(value) && min > value) return false
           if (!isNaN(max) && !isNaN(value) && max < value) return false
           break
