@@ -106,10 +106,13 @@ U.Map = L.Map.extend({
       this.options.slideshow &&
       this.options.slideshow.delay &&
       this.options.slideshow.active === undefined
-    )
+    ) {
       this.options.slideshow.active = true
-    if (this.options.advancedFilterKey)
+    }
+    if (this.options.advancedFilterKey) {
       this.options.facetKey = this.options.advancedFilterKey
+      delete this.options.advancedFilterKey
+    }
 
     // Global storage for retrieving datalayers and features
     this.datalayers = {}
@@ -251,6 +254,7 @@ U.Map = L.Map.extend({
           this.initCaptionBar()
           this.renderEditToolbar()
           this.renderControls()
+          this.facets.redraw()
           break
         case 'data':
           this.redrawVisibleDataLayers()
@@ -1235,7 +1239,7 @@ U.Map = L.Map.extend({
       [
         'options.facetKey',
         {
-          handler: 'Input',
+          handler: 'BlurInput',
           helpEntries: 'facetKey',
           placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
           label: L._('Facet keys'),

@@ -51,6 +51,14 @@ export default class Facets {
     return properties
   }
 
+  redraw() {
+    if (this.isOpen()) this.open()
+  }
+
+  isOpen() {
+    return !!document.querySelector('.umap-facet-search')
+  }
+
   open() {
     const container = L.DomUtil.create('div', 'umap-facet-search')
     const title = L.DomUtil.add(
