@@ -17,9 +17,7 @@ DATALAYER_DATA1 = {
                 "mytype": "even",
                 "name": "Point 2",
                 "mynumber": 10,
-                # Same day/month value to work around Javascript/browser
-                # crazyness date format
-                "mydate": "2024/04/04 12:19:17",
+                "mydate": "2024/04/14 12:19:17",
             },
             "geometry": {"type": "Point", "coordinates": [0.065918, 48.385442]},
         },
@@ -29,7 +27,7 @@ DATALAYER_DATA1 = {
                 "mytype": "odd",
                 "name": "Point 1",
                 "mynumber": 12,
-                "mydate": "2024/03/03 12:20:20",
+                "mydate": "2024/03/13 12:20:20",
             },
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
@@ -49,7 +47,7 @@ DATALAYER_DATA2 = {
                 "mytype": "even",
                 "name": "Point 4",
                 "mynumber": 10,
-                "mydate": "2024/08/08 13:14:15",
+                "mydate": "2024/08/18 13:14:15",
             },
             "geometry": {"type": "Point", "coordinates": [0.856934, 45.290347]},
         },
@@ -59,7 +57,7 @@ DATALAYER_DATA2 = {
                 "mytype": "odd",
                 "name": "Point 3",
                 "mynumber": 14,
-                "mydate": "2024-04-04T10:19:17.000Z",
+                "mydate": "2024-04-14T10:19:17.000Z",
             },
             "geometry": {"type": "Point", "coordinates": [4.372559, 47.945786]},
         },
@@ -167,12 +165,11 @@ def test_date_facet_search(live_server, page, map):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(4)
     expect(page.get_by_text("Date Filter")).to_be_visible()
-    expect(page.get_by_label("From")).to_have_value("2024-03-03")
-    expect(page.get_by_label("Until")).to_have_value("2024-08-08")
-    # Change     the month (crazy US date format in Chromium ran by Playwright in my OS)
-    page.get_by_label("From").press("ArrowUp")
+    expect(page.get_by_label("From")).to_have_value("2024-03-13")
+    expect(page.get_by_label("Until")).to_have_value("2024-08-18")
+    page.get_by_label("From").fill("2024-03-14")
     expect(markers).to_have_count(3)
-    page.get_by_label("Until").press("ArrowDown")
+    page.get_by_label("Until").fill("2024-08-17")
     expect(markers).to_have_count(2)
 
 
