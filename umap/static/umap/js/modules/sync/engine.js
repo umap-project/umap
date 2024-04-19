@@ -53,7 +53,7 @@ export class MessagesDispatcher {
 
   dispatch({ kind, payload }) {
     console.log(kind, payload)
-    if (kind == 'sync-protocol') {
+    if (kind == 'operation') {
       let updater = this.getUpdater(payload.subject, payload.metadata)
       updater.applyMessage(payload)
     }
@@ -74,7 +74,7 @@ export class MessagesSender {
   }
 
   send(message) {
-    this._transport.send('sync-protocol', message)
+    this._transport.send('operation', message)
   }
 
   upsert(subject, metadata, value) {

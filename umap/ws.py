@@ -2,7 +2,7 @@
 
 import asyncio
 from collections import defaultdict
-from typing import Literal
+from typing import Literal, Optional
 
 import django
 import websockets
@@ -32,11 +32,15 @@ class JoinMessage(BaseModel):
     token: str
 
 
+# FIXME better define the different messages
+# to ensure only relying valid ones.
 class OperationMessage(BaseModel):
     kind: str = "operation"
+    verb: str = Literal["upsert", "update", "delete"]
     subject: str = Literal["map", "layer", "feature"]
     metadata: dict
-    data: dict
+    key: str
+    value: Optional[str]
 
 
 async def join_and_listen(
