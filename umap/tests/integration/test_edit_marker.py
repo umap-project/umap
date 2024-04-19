@@ -82,6 +82,19 @@ def test_should_open_an_edit_toolbar_on_click(live_server, openmap, page, bootst
     expect(page.get_by_role("link", name="Delete this feature")).to_be_visible()
 
 
+def test_should_update_open_popup_on_edit(live_server, openmap, page, bootstrap):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
+    expect(page.locator(".umap-icon-active")).to_be_hidden()
+    page.locator(".leaflet-marker-icon").click()
+    expect(page.locator(".leaflet-popup-content-wrapper")).to_be_visible()
+    expect(page.get_by_role("heading", name="test marker")).to_be_visible()
+    expect(page.get_by_text("Some description")).to_be_visible()
+    page.get_by_role("button", name="Edit").click()
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page.locator('input[name="name"]').fill("test marker edited")
+    expect(page.get_by_role("heading", name="test marker edited")).to_be_visible()
+
+
 def test_should_follow_datalayer_style_when_changing_datalayer(
     live_server, openmap, page
 ):

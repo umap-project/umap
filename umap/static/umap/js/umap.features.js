@@ -65,9 +65,8 @@ U.FeatureMixin = {
   },
 
   view: function (e) {
-    if (this.map.editEnabled) return
-    const outlink = this.getOption('outlink'),
-      target = this.getOption('outlinkTarget')
+    const outlink = this.getOption('outlink')
+    const target = this.getOption('outlinkTarget')
     if (outlink) {
       switch (target) {
         case 'self':
@@ -77,19 +76,31 @@ U.FeatureMixin = {
           window.top.location = outlink
           break
         default:
-          const win = window.open(this.properties._umap_options.outlink)
+          window.open(this.properties._umap_options.outlink)
       }
       return
     }
     // TODO deal with an event instead?
-    if (this.map.slideshow) this.map.slideshow.current = this
+    if (this.map.slideshow) {
+      this.map.slideshow.current = this
+    }
     this.map.currentFeature = this
     this.attachPopup()
-    this.openPopup((e && e.latlng) || this.getCenter())
+    this.openPopup(e?.latlng || this.getCenter())
+  },
+
+  render: function (fields) {
+    const impactData = fields.some((field) => {
+      return field.startsWith('properties.')
+    })
+    if (impactData) {
+      if (this.map.currentFeature === this) {
+        this.view()
+      }
+    }
   },
 
   openPopup: function () {
-    if (this.map.editEnabled) return
     this.parentClass.prototype.openPopup.apply(this, arguments)
   },
 
