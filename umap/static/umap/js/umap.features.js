@@ -1,6 +1,44 @@
 U.FeatureMixin = {
   staticOptions: { mainColor: 'color' },
 
+  getSyncMetadata: function () {
+    return {
+      subject: 'feature',
+      metadata: {
+        id: this.id,
+        layerId: this.datalayer?.id || null,
+        featureType: this.getClassName(),
+      },
+    }
+  },
+
+  getSyncEngine: function () {
+    // FIXME use a get property / defineProperty
+    return this.map.sync
+  },
+
+  onCommit: function () {
+    this.map.sync.upsert(this.getSyncSubject(), this.getSyncMetadata(), {
+      geometry: this.getGeometry(),
+    })
+  },
+
+  getGeometry: function () {
+    return this.toGeoJSON().geometry
+  },
+
+  syncUpdatedProperties: function (properties) {
+    if ('latlng'.includes(properties)) {
+      const { subject, metadata } = this.getSyncMetadata()
+      this.map.sync.update(subject, metadata, 'geometry', this.getGeometry())
+    }
+  },
+
+  syncDelete: function () {
+    let { subject, metadata } = this.getSyncMetadata()
+    this.map.sync.delete(subject, metadata)
+  },
+
   initialize: function (map, latlng, options) {
     this.map = map
     if (typeof options === 'undefined') {
@@ -241,12 +279,15 @@ U.FeatureMixin = {
     return false
   },
 
-  del: function () {
+  del: function (fromSync) {
     this.isDirty = true
     this.map.closePopup()
     if (this.datalayer) {
       this.datalayer.removeLayer(this)
       this.disconnectFromDataLayer(this.datalayer)
+
+      // Do not relay the event if we received it.
+      if (!fromSync) this.syncDelete()
     }
   },
 
@@ -602,6 +643,7 @@ U.Marker = L.Marker.extend({
       function (e) {
         this.isDirty = true
         this.edit(e)
+        this.syncUpdatedProperties(['latlng'])
       },
       this
     )
