@@ -107,7 +107,7 @@ U.Importer = L.Class.extend({
 
   open: function () {
     if (!this.container) this.build()
-    const onLoad = this.map.editPanel.open({ data: { html: this.container } })
+    const onLoad = this.map.editPanel.open({ content: this.container })
     onLoad.then(() => {
       this.fileInput.value = null
       this.layerInput.innerHTML = ''

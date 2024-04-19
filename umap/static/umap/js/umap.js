@@ -1532,7 +1532,7 @@ U.Map = L.Map.extend({
     ]
     const creditsBuilder = new U.FormBuilder(this, creditsFields)
     credits.appendChild(creditsBuilder.build())
-    this.editPanel.open({ data: { html: container } })
+    this.editPanel.open({ content: container })
   },
 
   edit: function () {
@@ -1550,7 +1550,7 @@ U.Map = L.Map.extend({
     this._editSlideshow(container)
     this._advancedActions(container)
 
-    this.editPanel.open({ data: { html: container }, className: 'dark' })
+    this.editPanel.open({ content: container, className: 'dark' })
   },
 
   enableEdit: function () {

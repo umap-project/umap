@@ -709,7 +709,7 @@ const ControlsMixin = {
     })
     container.appendChild(builder.build())
 
-    this.panel.open({ data: { html: container } })
+    this.panel.open({ content: container })
   },
 
   displayCaption: function () {
@@ -789,7 +789,7 @@ const ControlsMixin = {
       `,
       urls
     )
-    this.panel.open({ data: { html: container } })
+    this.panel.open({ content: container })
   },
 
   renderEditToolbar: function () {
@@ -976,7 +976,7 @@ const ControlsMixin = {
       this
     )
 
-    this.editPanel.open({ data: { html: container } })
+    this.editPanel.open({ content: container })
   },
 }
 
@@ -1051,7 +1051,7 @@ U.TileLayerChooser = L.Control.extend({
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
     this.map.editPanel.open({
-      data: { html: container },
+      content: container,
       className: options.className,
     })
   },
@@ -1159,7 +1159,7 @@ U.Locate = L.Control.Locate.extend({
     this._map = this.map
     L.Control.Locate.prototype._activate.call(this)
     this._map = null
-  }
+  },
 })
 
 U.Search = L.PhotonSearch.extend({
@@ -1298,7 +1298,7 @@ U.SearchControl = L.Control.extend({
       this.map.fire('dataload', { id: id })
     })
     this.search.resultsContainer = resultsContainer
-    this.map.panel.open({ data: { html: container } }).then(input.focus)
+    this.map.panel.open({ content: container }).then(input.focus)
   },
 })
 
