@@ -155,6 +155,11 @@ map_urls = [
         views.UpdateDataLayerPermissions.as_view(),
         name="datalayer_permissions",
     ),
+    path(
+        "map/<int:map_id>/ws-token/",
+        views.get_websocket_auth_token,
+        name="map_websocket_auth_token",
+    ),
 ]
 if settings.DEFAULT_FROM_EMAIL:
     map_urls.append(
