@@ -5,7 +5,13 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def set_timeout(context):
-    context.set_default_timeout(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500))
+    context.set_default_timeout(int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500)))
+
+
+@pytest.fixture(autouse=True)
+def mock_osm_tiles(page):
+    if not bool(os.environ.get("PLAYWRIGHT_USE_TILES", False)):
+        page.route("*/**/osmfr/**", lambda route: route.fulfill())
 
 
 @pytest.fixture
