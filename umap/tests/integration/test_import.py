@@ -431,3 +431,19 @@ def test_import_multipolyline(live_server, page, tilelayer):
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(paths).to_have_count(1)
+
+
+def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("See layers").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    page.get_by_title("Import data").click()
+    textarea = page.locator(".umap-upload textarea")
+    textarea.fill("a,b,c\n12.23,48.34,mypoint\n12.23,48.34,mypoint2")
+    page.locator('select[name="format"]').select_option("csv")
+    page.get_by_role("button", name="Import", exact=True).click()
+    # FIXME do not create a layer
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(0)
+    expect(page.locator(".umap-alert")).to_be_visible()

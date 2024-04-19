@@ -463,8 +463,8 @@ U.Layer.Heat = L.HeatLayer.extend({
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
-            ? +this._latlngs[i][2]
-            : 1
+          ? +this._latlngs[i][2]
+          : 1
 
       grid[y] = grid[y] || []
       cell = grid[y][x]
@@ -947,6 +947,17 @@ U.DataLayer = L.Evented.extend({
           includeLatLon: false,
         },
         (err, result) => {
+          // csv2geojson fallback to null geometries when it cannot determine
+          // lat or lon columns. This is valid geojson, but unwanted from a user
+          // point of view.
+          if (result && result.features.length) {
+            if (result.features[0].geometry === null) {
+              err = {
+                type: 'Error',
+                message: L._('Cannot determine latitude and longitude columns.'),
+              }
+            }
+          }
           if (err) {
             let message
             if (err.type === 'Error') {
