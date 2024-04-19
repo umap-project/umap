@@ -1003,8 +1003,6 @@ U.DataLayer = L.Evented.extend({
     const features = geojson instanceof Array ? geojson : geojson.features
     let i
     let len
-    let latlng
-    let latlngs
 
     if (features) {
       U.Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
@@ -1015,10 +1013,42 @@ U.DataLayer = L.Evented.extend({
     }
 
     const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
+
+    let feature = this.geometryToFeature({ geometry, geojson })
+    if (feature) {
+      this.addLayer(feature)
+      return feature
+    }
+  },
+
+  /**
+   * Create or update Leaflet features from GeoJSON geometries.
+   *
+   * If no `feature` is provided, a new feature will be created.
+   * If `feature` is provided, it will be updated with the passed geometry.
+   *
+   * GeoJSON and Leaflet use incompatible formats to encode coordinates.
+   * This method takes care of the convertion.
+   *
+   * @param geometry    GeoJSON geometry field
+   * @param geojson     Enclosing GeoJSON. If none is provided, a new one will
+   *                    be created
+   * @param id          Id of the feature
+   * @param feature     Leaflet feature that should be updated with the new geometry
+   * @returns           Leaflet feature.
+   */
+  geometryToFeature: function ({
+    geometry,
+    geojson = null,
+    id = null,
+    feature = null,
+  } = {}) {
     if (!geometry) return // null geometry is valid geojson.
     const coords = geometry.coordinates
-    let layer
-    let tmp
+    let latlng, latlngs
+
+    // Create a default geojson if none is provided
+    geojson ??= { type: 'Feature', geometry: geometry }
 
     switch (geometry.type) {
       case 'Point':
@@ -1028,8 +1058,11 @@ U.DataLayer = L.Evented.extend({
           console.error('Invalid latlng object from', coords)
           break
         }
-        layer = this._pointToLayer(geojson, latlng)
-        break
+        if (feature) {
+          feature.setLatLng(latlng)
+          return feature
+        }
+        return this._pointToLayer(geojson, latlng, id)
 
       case 'MultiLineString':
       case 'LineString':
@@ -1038,14 +1071,20 @@ U.DataLayer = L.Evented.extend({
           geometry.type === 'LineString' ? 0 : 1
         )
         if (!latlngs.length) break
-        layer = this._lineToLayer(geojson, latlngs)
-        break
+        if (feature) {
+          feature.setLatLngs(latlngs)
+          return feature
+        }
+        return this._lineToLayer(geojson, latlngs, id)
 
       case 'MultiPolygon':
       case 'Polygon':
         latlngs = L.GeoJSON.coordsToLatLngs(coords, geometry.type === 'Polygon' ? 1 : 2)
-        layer = this._polygonToLayer(geojson, latlngs)
-        break
+        if (feature) {
+          feature.setLatLngs(latlngs)
+          return feature
+        }
+        return this._polygonToLayer(geojson, latlngs, id)
       case 'GeometryCollection':
         return this.geojsonToFeatures(geometry.geometries)
 
@@ -1057,14 +1096,10 @@ U.DataLayer = L.Evented.extend({
           level: 'error',
         })
     }
-    if (layer) {
-      this.addLayer(layer)
-      return layer
-    }
   },
 
-  _pointToLayer: function (geojson, latlng) {
-    return new U.Marker(this.map, latlng, { geojson: geojson, datalayer: this })
+  _pointToLayer: function (geojson, latlng, id) {
+    return new U.Marker(this.map, latlng, { geojson: geojson, datalayer: this }, id)
   },
 
   _lineToLayer: function (geojson, latlngs) {
@@ -1535,6 +1570,17 @@ U.DataLayer = L.Evented.extend({
     if (index === -1) index = this._index.length - 1
     const id = this._index[index]
     return this._layers[id]
+  },
+
+  // TODO Add an index
+  // For now, iterate on all the features.
+  getFeatureById: function (id) {
+    for (const i in this._layers) {
+      let feature = this._layers[i]
+      if (feature.id == id) {
+        return feature
+      }
+    }
   },
 
   getNextFeature: function (feature) {

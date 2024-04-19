@@ -18,7 +18,8 @@ U.FeatureMixin = {
   },
 
   onCommit: function () {
-    this.map.sync.upsert(this.getSyncSubject(), this.getSyncMetadata(), {
+    const { subject, metadata } = this.getSyncMetadata()
+    this.map.sync.upsert(subject, metadata, {
       geometry: this.getGeometry(),
     })
   },
@@ -39,7 +40,7 @@ U.FeatureMixin = {
     this.map.sync.delete(subject, metadata)
   },
 
-  initialize: function (map, latlng, options) {
+  initialize: function (map, latlng, options, id) {
     this.map = map
     if (typeof options === 'undefined') {
       options = {}
@@ -47,17 +48,21 @@ U.FeatureMixin = {
     // DataLayer the marker belongs to
     this.datalayer = options.datalayer || null
     this.properties = { _umap_options: {} }
-    let geojson_id
-    if (options.geojson) {
-      this.populate(options.geojson)
-      geojson_id = options.geojson.id
-    }
-
-    // Each feature needs an unique identifier
-    if (U.Utils.checkId(geojson_id)) {
-      this.id = geojson_id
+    if (id) {
+      this.id = id
     } else {
-      this.id = U.Utils.generateId()
+      let geojson_id
+      if (options.geojson) {
+        this.populate(options.geojson)
+        geojson_id = options.geojson.id
+      }
+
+      // Each feature needs an unique identifier
+      if (U.Utils.checkId(geojson_id)) {
+        this.id = geojson_id
+      } else {
+        this.id = U.Utils.generateId()
+      }
     }
     let isDirty = false
     const self = this
@@ -136,6 +141,7 @@ U.FeatureMixin = {
         this.view()
       }
     }
+    this._redraw()
   },
 
   openPopup: function () {
