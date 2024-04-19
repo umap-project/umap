@@ -493,11 +493,24 @@ U.FeatureMixin = {
   },
 
   matchFacets: function () {
-    const facets = this.map.facets
-    for (const [property, expected] of Object.entries(facets)) {
-      if (expected.length) {
-        let value = this.properties[property]
-        if (!value || !expected.includes(value)) return false
+    const selected = this.map.facets.selected
+    for (let [name, { type, min, max, choices }] of Object.entries(selected)) {
+      let value = this.properties[name]
+      let parser = this.map.facets.getParser(type)
+      value = parser(value)
+      switch (type) {
+        case 'date':
+        case 'datetime':
+        case 'number':
+          min = parser(min)
+          max = parser(max)
+          if (!isNaN(min) && !isNaN(value) && min > value) return false
+          if (!isNaN(max) && !isNaN(value) && max < value) return false
+          break
+        default:
+          value = value || L._('<empty value>')
+          if (choices?.length && !choices.includes(value)) return false
+          break
       }
     }
     return true

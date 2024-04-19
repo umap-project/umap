@@ -661,55 +661,7 @@ const ControlsMixin = {
     'tilelayers',
   ],
   _openFacet: function () {
-    const container = L.DomUtil.create('div', 'umap-facet-search'),
-      title = L.DomUtil.add('h3', 'umap-filter-title', container, L._('Facet search')),
-      keys = Object.keys(this.getFacetKeys())
-
-    const knownValues = {}
-
-    keys.forEach((key) => {
-      knownValues[key] = []
-      if (!this.facets[key]) this.facets[key] = []
-    })
-
-    this.eachBrowsableDataLayer((datalayer) => {
-      datalayer.eachFeature((feature) => {
-        keys.forEach((key) => {
-          let value = feature.properties[key]
-          if (typeof value !== 'undefined' && !knownValues[key].includes(value)) {
-            knownValues[key].push(value)
-          }
-        })
-      })
-    })
-
-    const filterFeatures = function () {
-      let found = false
-      this.eachBrowsableDataLayer((datalayer) => {
-        datalayer.resetLayer(true)
-        if (datalayer.hasDataVisible()) found = true
-      })
-      // TODO: display a results counter in the panel instead.
-      if (!found)
-        this.ui.alert({ content: L._('No results for these facets'), level: 'info' })
-    }
-
-    const fields = keys.map((current) => [
-      `facets.${current}`,
-      {
-        handler: 'FacetSearch',
-        choices: knownValues[current],
-        label: this.getFacetKeys()[current],
-      },
-    ])
-    const builder = new U.FormBuilder(this, fields, {
-      makeDirty: false,
-      callback: filterFeatures,
-      callbackContext: this,
-    })
-    container.appendChild(builder.build())
-
-    this.panel.open({ content: container })
+    this.facets.open()
   },
 
   displayCaption: function () {
@@ -865,7 +817,7 @@ const ControlsMixin = {
       L.DomUtil.createLink(
         'umap-user',
         rightContainer,
-        L._(`My Dashboard <span>({username})</span>`, {
+        L._(`My Dashboard ({username})`, {
           username: this.options.user.name,
         }),
         this.options.user.url

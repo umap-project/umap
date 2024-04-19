@@ -927,7 +927,6 @@ a.umap-control-caption,
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.umap-facet-search li:nth-child(even),
 .umap-browser .datalayer li:nth-child(even) {
     background-color: #efefef;
 }

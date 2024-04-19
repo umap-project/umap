@@ -106,17 +106,19 @@ U.Map = L.Map.extend({
       this.options.slideshow &&
       this.options.slideshow.delay &&
       this.options.slideshow.active === undefined
-    )
+    ) {
       this.options.slideshow.active = true
-    if (this.options.advancedFilterKey)
+    }
+    if (this.options.advancedFilterKey) {
       this.options.facetKey = this.options.advancedFilterKey
+      delete this.options.advancedFilterKey
+    }
 
     // Global storage for retrieving datalayers and features
     this.datalayers = {}
     this.datalayers_index = []
     this.dirty_datalayers = []
     this.features_index = {}
-    this.facets = {}
 
     // Needed for actions labels
     this.help = new U.Help(this)
@@ -218,6 +220,7 @@ U.Map = L.Map.extend({
         this.panel.mode = 'condensed'
         this.displayCaption()
       } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
+        this.panel.mode = 'expanded'
         this.openFacet()
       }
       if (L.Util.queryString('edit')) {
@@ -251,6 +254,7 @@ U.Map = L.Map.extend({
           this.initCaptionBar()
           this.renderEditToolbar()
           this.renderControls()
+          this.facets.redraw()
           break
         case 'data':
           this.redrawVisibleDataLayers()
@@ -376,6 +380,7 @@ U.Map = L.Map.extend({
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
     this.browser = new U.Browser(this)
+    this.facets = new U.Facets(this)
     this.importer = new U.Importer(this)
     this.drop = new U.DropControl(this)
     this.share = new U.Share(this)
@@ -1234,9 +1239,9 @@ U.Map = L.Map.extend({
       [
         'options.facetKey',
         {
-          handler: 'Input',
+          handler: 'BlurInput',
           helpEntries: 'facetKey',
-          placeholder: L._('Example: key1,key2,key3'),
+          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
           label: L._('Facet keys'),
         },
       ],
@@ -1843,14 +1848,6 @@ U.Map = L.Map.extend({
 
   getFilterKeys: function () {
     return (this.options.filterKey || this.options.sortKey || 'name').split(',')
-  },
-
-  getFacetKeys: function () {
-    return (this.options.facetKey || '').split(',').reduce((acc, curr) => {
-      const els = curr.split('|')
-      acc[els[0]] = els[1] || els[0]
-      return acc
-    }, {})
   },
 
   getLayersBounds: function () {

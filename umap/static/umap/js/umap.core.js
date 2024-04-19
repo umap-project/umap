@@ -73,7 +73,7 @@ L.DomUtil.add = (tagName, className, container, content) => {
     if (content.nodeType && content.nodeType === 1) {
       el.appendChild(content)
     } else {
-      el.innerHTML = content
+      el.textContent = content
     }
   }
   return el
@@ -541,7 +541,7 @@ U.Help = L.Class.extend({
   slugKey: L._('The name of the property to use as feature unique identifier.'),
   filterKey: L._('Comma separated list of properties to use when filtering features'),
   facetKey: L._(
-    'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)'
+    'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
   ),
   interactive: L._(
     'If false, the polygon or line will act as a part of the underlying map.'

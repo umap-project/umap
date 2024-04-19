@@ -27,9 +27,9 @@ export function checkId(string) {
 
 /**
  * Compute the impacts for a given list of fields.
- * 
+ *
  * Return an array of unique impacts.
- * 
+ *
  * @param {fields} list[fields]
  * @returns Array[string]
  */
@@ -355,4 +355,10 @@ export function template(str, data) {
     }
     return value
   })
+}
+
+export function parseNaiveDate(value) {
+    const naive = new Date(value)
+    // Let's pretend naive date are UTC, and remove time…
+    return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
 }
