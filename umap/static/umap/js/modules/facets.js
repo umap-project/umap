@@ -103,8 +103,7 @@ export default class Facets {
       ]
     })
 
-    const builder = new U.FormBuilder(this, fields, {
-      makeDirty: false,
+    const builder = new L.FormBuilder(this, fields, {
       callback: filterFeatures,
       callbackContext: this,
     })

@@ -142,8 +142,7 @@ export default class Browser {
       ['options.filter', { handler: 'Input', placeholder: translate('Filter') }],
       ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
-    const builder = new U.FormBuilder(this, fields, {
-      makeDirty: false,
+    const builder = new L.FormBuilder(this, fields, {
       callback: () => this.onFormChange(),
     })
     formContainer.appendChild(builder.build())
