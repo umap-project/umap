@@ -6,6 +6,9 @@ import pytest
 @pytest.fixture(autouse=True)
 def set_timeout(context):
     context.set_default_timeout(int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500)))
+    context.set_default_navigation_timeout(
+        int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500))
+    )
 
 
 @pytest.fixture(autouse=True)
