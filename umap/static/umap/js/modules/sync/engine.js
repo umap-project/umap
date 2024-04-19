@@ -51,7 +51,7 @@ export class MessagesDispatcher {
     }
   }
 
-  dispatch({ kind, payload }) {
+  dispatch({ kind, ...payload }) {
     console.log(kind, payload)
     if (kind == 'operation') {
       let updater = this.getUpdater(payload.subject, payload.metadata)
