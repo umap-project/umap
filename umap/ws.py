@@ -8,7 +8,7 @@ import django
 import websockets
 from django.conf import settings
 from django.core.signing import TimestampSigner
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from websockets import WebSocketClientProtocol
 from websockets.server import serve
 
@@ -32,6 +32,15 @@ class JoinMessage(BaseModel):
     token: str
 
 
+class Geometry(BaseModel):
+    type: Literal["Point",]
+    coordinates: list
+
+
+class GeometryValue(BaseModel):
+    geometry: Geometry
+
+
 # FIXME better define the different messages
 # to ensure only relying valid ones.
 class OperationMessage(BaseModel):
@@ -39,8 +48,8 @@ class OperationMessage(BaseModel):
     verb: str = Literal["upsert", "update", "delete"]
     subject: str = Literal["map", "layer", "feature"]
     metadata: Optional[dict] = None
-    key: str
-    value: Optional[str]
+    key: Optional[str] = None
+    value: Optional[str | bool | int | GeometryValue]
 
 
 async def join_and_listen(
@@ -58,9 +67,12 @@ async def join_and_listen(
             # recompute the peers-list at the time of message-sending.
             # as doing so beforehand would miss new connections
             peers = CONNECTIONS[map_id] - {websocket}
-
             # Only relay valid "operation" messages
-            OperationMessage.model_validate_json(raw_message)
+            try:
+                OperationMessage.model_validate_json(raw_message)
+            except ValidationError as e:
+                print(raw_message, e)
+
             websockets.broadcast(peers, raw_message)
     finally:
         CONNECTIONS[map_id].remove(websocket)
