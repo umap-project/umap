@@ -1263,6 +1263,7 @@ U.Editable = L.Editable.extend({
     this.on('editable:drawing:commit', function (e) {
       e.layer.isDirty = true
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
+      e.layer.onCommit()
     })
     this.on('editable:editing', (e) => {
       const layer = e.layer
