@@ -38,7 +38,7 @@ class OperationMessage(BaseModel):
     kind: str = "operation"
     verb: str = Literal["upsert", "update", "delete"]
     subject: str = Literal["map", "layer", "feature"]
-    metadata: dict
+    metadata: Optional[dict] = None
     key: str
     value: Optional[str]
 
