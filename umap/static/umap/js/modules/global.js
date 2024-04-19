@@ -13,31 +13,34 @@ import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
 import Orderable from './orderable.js'
 import Importer from './importer.js'
 import Help from './help.js'
+import { SyncEngine } from './sync/engine.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
 
+// By alphabetic order
 window.U = {
-  URLs,
-  Request,
-  ServerRequest,
-  RequestError,
-  HTTPError,
-  NOKError,
-  Browser,
-  Facets,
-  Panel,
   Alert,
-  Dialog,
-  Tooltip,
-  EditPanel,
-  FullPanel,
-  Utils,
-  SCHEMA,
-  Importer,
-  Orderable,
-  Caption,
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
+  Browser,
+  Caption,
+  Dialog,
+  EditPanel,
+  Facets,
+  FullPanel,
   Help,
+  HTTPError,
+  Importer,
+  NOKError,
+  Orderable,
+  Panel,
+  Request,
+  RequestError,
+  SCHEMA,
+  ServerRequest,
+  SyncEngine,
+  Tooltip,
+  URLs,
+  Utils,
 }

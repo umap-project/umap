@@ -248,6 +248,17 @@ U.Map = L.Map.extend({
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
+
+    Promise.resolve(this.getSyncEngine())
+  },
+
+  getSyncEngine: async function () {
+    // Get the authentication token from the server
+    // And pass it to the sync engine.
+    const [response, _, error] = await this.server.get('/map/2/ws-token/')
+    if (!error) {
+      this.sync = new U.SyncEngine(this, 'ws://localhost:8001', response.token)
+    }
   },
 
   render: function (fields) {
