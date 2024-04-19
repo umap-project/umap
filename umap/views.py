@@ -24,7 +24,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.core.signing import BadSignature, Signer
+from django.core.signing import BadSignature, Signer, TimestampSigner
 from django.core.validators import URLValidator, ValidationError
 from django.http import (
     Http404,
@@ -40,7 +40,6 @@ from django.shortcuts import get_object_or_404
 from django.urls import resolve, reverse, reverse_lazy
 from django.utils import translation
 from django.utils.encoding import smart_bytes
-from django.utils.http import http_date
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_control
@@ -327,9 +326,9 @@ class UserDownload(DetailView, SearchMixin):
                 zip_file.writestr(file_name, geojson_file.getvalue())
 
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
-        response["Content-Disposition"] = (
-            'attachment; filename="umap_backup_complete.zip"'
-        )
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="umap_backup_complete.zip"'
         return response
 
 
@@ -675,9 +674,9 @@ class MapDownload(DetailView):
     def render_to_response(self, context, *args, **kwargs):
         umapjson = self.object.generate_umapjson(self.request)
         response = simple_json_response(**umapjson)
-        response["Content-Disposition"] = (
-            f'attachment; filename="umap_backup_{self.object.slug}.umap"'
-        )
+        response[
+            "Content-Disposition"
+        ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
         return response
 
 
@@ -776,6 +775,36 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
                 key=key, value=value, max_age=ANONYMOUS_COOKIE_MAX_AGE
             )
         return response
+
+
+def get_websocket_auth_token(request, map_id, map_inst):
+    """Return an signed authentication token for the currently
+    connected user, allowing edits for this map over WebSocket.
+
+    If the user is anonymous, return a signed token with the map id.
+
+    The returned token is a signed object with the following keys:
+    - user: user primary key OR "anonymous"
+    - map_id: the map id
+    - permissions: a list of allowed permissions for this user and this map
+    """
+    map_object: Map = Map.objects.get(pk=map_id)
+
+    if map_object.can_edit(request.user, request):
+        permissions = ["edit"]
+        if map_object.can_delete(request.user, request):
+            permissions.append("owner")
+
+        if request.user.is_authenticated:
+            user = request.user.pk
+        else:
+            user = "anonymous"
+        signed_token = TimestampSigner().sign_object(
+            {"user": user, "map_id": map_id, "permissions": permissions}
+        )
+        return simple_json_response(token=signed_token)
+    else:
+        return HttpResponseForbidden
 
 
 class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):

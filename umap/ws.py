@@ -7,8 +7,9 @@ from typing import Literal
 import django
 import websockets
 from django.conf import settings
+from django.core.signing import TimestampSigner
 from pydantic import BaseModel
-from pydantic.types import UUID4
+from websockets import WebSocketClientProtocol
 from websockets.server import serve
 
 # This needs to run before the django-specific imports
@@ -29,7 +30,6 @@ CONNECTIONS = defaultdict(set)
 class JoinMessage(BaseModel):
     kind: str = "join"
     token: str
-    map_id: UUID4
 
 
 class OperationMessage(BaseModel):
@@ -39,11 +39,15 @@ class OperationMessage(BaseModel):
     data: dict
 
 
-async def join_and_listen(map_id, websocket):
+async def join_and_listen(
+    map_id: int, permissions: list, user: str | int, websocket: WebSocketClientProtocol
+):
     """Join a "room" whith other connected peers.
 
     New messages will be broadcasted to other connected peers.
     """
+    print(f"{user} joined room #{map_id}")
+    # FIXME: Persist permissions and user info.
     CONNECTIONS[map_id].add(websocket)
     try:
         async for raw_message in websocket:
@@ -67,12 +71,13 @@ async def handler(websocket):
 
     # The first event should always be 'join'
     message: JoinMessage = JoinMessage.model_validate_json(raw_message)
+    signed = TimestampSigner().unsign_object(message.token, max_age=30)
+    user, map_id, permissions = signed.values()
 
-    user: User = await asyncio.to_thread(get_user, message.token)
-    map_obj: Map = await asyncio.to_thread(Map.objects.get, message.map_id)
-
-    if map_obj.can_edit(user):
-        await join_and_listen(message.map_id, websocket)
+    # We trust the signed info from the server to give access
+    # If the user can edit the map, let her in
+    if "edit" in signed["permissions"]:
+        await join_and_listen(map_id, permissions, user, websocket)
 
 
 async def main():
