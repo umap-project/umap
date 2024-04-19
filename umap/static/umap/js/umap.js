@@ -211,11 +211,9 @@ U.Map = L.Map.extend({
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
-        this.panel.mode = 'expanded'
-        this.openBrowser()
+        this.openBrowser('expanded')
       } else if (this.options.onLoadPanel === 'datalayers') {
-        this.panel.mode = 'condensed'
-        this.openBrowser()
+        this.openBrowser('condensed')
       } else if (this.options.onLoadPanel === 'caption') {
         this.panel.mode = 'condensed'
         this.displayCaption()
@@ -909,7 +907,8 @@ U.Map = L.Map.extend({
     }
   },
 
-  openBrowser: function () {
+  openBrowser: function (mode) {
+    if (mode) this.panel.mode = mode
     this.onceDatalayersLoaded(function () {
       this.browser.open()
     })
@@ -1605,8 +1604,7 @@ U.Map = L.Map.extend({
         'umap-open-browser-link flat',
         container,
         L._('Browse data'),
-        this.openBrowser,
-        this
+        () => this.openBrowser('expanded')
       )
       if (this.options.facetKey) {
         L.DomUtil.createButton(
@@ -1747,10 +1745,17 @@ U.Map = L.Map.extend({
         })
       }
     }
-    items.push('-', {
-      text: L._('Browse data'),
-      callback: this.openBrowser,
-    })
+    items.push(
+      '-',
+      {
+        text: L._('See layers'),
+        callback: () => this.openBrowser('condensed'),
+      },
+      {
+        text: L._('Browse data'),
+        callback: () => this.openBrowser('expanded'),
+      }
+    )
     if (this.options.facetKey) {
       items.push({
         text: L._('Facet search'),
