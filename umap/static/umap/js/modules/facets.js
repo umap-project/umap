@@ -42,7 +42,7 @@ export default class Facets {
               }
               break
             default:
-              value = value || L._('<empty value>')
+              value = value || translate('<empty value>')
               if (!properties[name].choices.includes(value)) {
                 properties[name].choices.push(value)
               }
@@ -67,7 +67,7 @@ export default class Facets {
       'h3',
       'umap-filter-title',
       container,
-      L._('Facet search')
+      translate('Facet search')
     )
     const defined = this.getDefined()
     const names = Object.keys(defined)
@@ -82,7 +82,7 @@ export default class Facets {
       // TODO: display a results counter in the panel instead.
       if (!found) {
         this.map.ui.alert({
-          content: L._('No results for these facets'),
+          content: translate('No results for these facets'),
           level: 'info',
         })
       }
