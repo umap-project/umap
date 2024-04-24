@@ -58,7 +58,7 @@ publish: ## Publish the Python package to Pypi
 test: testpy testjs
 
 testpy:
-	pytest -xv umap/tests/
+	pytest -vv umap/tests/
 
 test-integration:
 	pytest -xv umap/tests/integration/
