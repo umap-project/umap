@@ -82,7 +82,6 @@ const locale = {
     "collapsed": "összecsukva",
     "color": "szín",
     "Comma separated list of numbers, including min and max values.": "Vesszővel tagolt számsor, közte a legkisebb és a legnagyobb értékek.",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "A szűréshez használandó tulajdonságok vesszővel tagolt listája (pl.: kulcs,másikkulcs). A felirat beállításához adja hozzá a felirat szövegét a „|” jel után (pl.: kulcs|Első jellemző,másikkulcs|Második jellemző)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "A jellemzők sorba rendezéséhez használandó tulajdonságok vesszővel tagolt sora. A sorba rendezés megfordításához tegyen mínusz jelet (-) elé. Például: kulcs,-másikkulcs.",
     "Comma separated list of properties to use when filtering features": "Tulajdonságok vesszővel tagolt sora, amely objektumok szűrésére használható",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Vesszővel, pontosvesszővel vagy tabulátorral tagolt értékek a WGS84 referenciarendszer szerint. Csak a pontok pozíciója importálódik. Az import során az oszlopfejlécekben, a címsor kezdetén található „lat” és „long” említések vétetenek figyelembe; kis- vagy nagybetű nem számít. Az összes többi oszlop tulajdonságként importálódik.",
@@ -164,7 +163,6 @@ const locale = {
     "Equidistant": "Azonos távolságok",
     "Error in the overlay URL": "Hiba a fedőréteg URL-jében",
     "Error in the tilelayer URL": "Hiba a mozaikréteg URL-jében",
-    "Example: key1,key2,key3": "Example: key1,key2,key3",
     "Exit Fullscreen": "Kilépés a teljes képernyős nézetből",
     "expanded": "kiterjesztett",
     "Extract shape to separate feature": "Alakzat kiemelése objektum széválasztásához",
@@ -439,7 +437,16 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

@@ -82,7 +82,6 @@ const locale = {
     "collapsed": "collapsed",
     "color": "ከለር",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Comma separated list of properties to use when filtering features": "ፊቸሮችን በሚያጣሩበት ጊዜ ሊጠቀሙ የሚችሏቸው በኮማ የተከፋፈሉ የባህርያት ዝርዝር",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "በኮማ፣ታብ፣ግማሽኮለን የተከፋፈሉ ውጤቶች። SRSWG84 ተመላክቷል። የነጥብ ጂኦሜትሪዎች ብቻ መጥተዋል። የማምጣት ሂደቱ የኮለምን ሄደሮችን በማሰስ «ላቲትዩድ» እና «ሎንጊትዩድ» የሚሉትን ቃላት መኖር ከመጀመሪያው በመነሳት ያጣራል። ሁሉም ኮለምኖች እንደባህርይ መጥተዋል።",
@@ -164,7 +163,6 @@ const locale = {
     "Equidistant": "Equidistant",
     "Error in the overlay URL": "Error in the overlay URL",
     "Error in the tilelayer URL": "በታይልሌየሩ የድረ-ገፅ መገኛ ላይ ስህተት ተፈጥሯል",
-    "Example: key1,key2,key3": "Example: key1,key2,key3",
     "Exit Fullscreen": "Exit Fullscreen",
     "expanded": "expanded",
     "Extract shape to separate feature": "ፊቸሩን ለመለየት ቅርፁን ነጥለህ አውጣ",
@@ -439,7 +437,16 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }
 L.registerLocale("am_ET", locale)
 L.setLocale("am_ET")

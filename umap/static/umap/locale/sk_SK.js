@@ -82,7 +82,6 @@ const locale = {
     "collapsed": "zbalené",
     "color": "farba",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Comma separated list of properties to use when filtering features": "Čiarkami oddelený zoznam vlastností pre filtrovanie objektov",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Hodnoty oddelené čiarkou, tabulátorom, alebo bodkočiarkou. Predpokladá sa SRS WGS84 a sú importované iba polohy bodov. Import hľadá záhlavie stĺpcov začínajúcich na \"lat\" a \"lon\" a tie považuje za súradnice (na veľkosti písmien nezáleži). Ostatné stĺpce sú importované ako vlastnosti.",
@@ -164,7 +163,6 @@ const locale = {
     "Equidistant": "Equidistant",
     "Error in the overlay URL": "Error in the overlay URL",
     "Error in the tilelayer URL": "Chyba URL dlaždicovej vrstvy",
-    "Example: key1,key2,key3": "Example: key1,key2,key3",
     "Exit Fullscreen": "Ukončiť režim celej obrazovky",
     "expanded": "rozbalené",
     "Extract shape to separate feature": "Vyňať tvar do samostatného objektu",
@@ -439,7 +437,16 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

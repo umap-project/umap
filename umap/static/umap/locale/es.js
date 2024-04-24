@@ -82,7 +82,6 @@ const locale = {
     "collapsed": "contraído",
     "color": "color",
     "Comma separated list of numbers, including min and max values.": "Lista de números separados por comas, incluidos los valores mínimo y máximo.",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Lista separada por comas de las propiedades a utilizar para la búsqueda de facetas (ej.: miclave,otraclave). Para controlar la etiqueta, añádala después de | (ej.: mykey|Mi Clave,otherkey|Otra Clave)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Lista separada por comas de las propiedades que se utilizarán para ordenar las características. Para invertir la ordenación, anteponga un signo menos (-). Ej. miclave,-otraclave.",
     "Comma separated list of properties to use when filtering features": "Lista separada por comas de las propiedades a utilizar al filtrar los elementos",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Valores separados por coma, tabulador o punto y coma. SRS WGS84 está implícito. Solo se importan las geometrías de los puntos. La importación buscará en los encabezados de las columnas cualquier mención de «lat» y «lon» al principio del encabezado, sin distinción de mayúsculas y minúsculas. Todas las demás columnas se importan como propiedades.",
@@ -164,7 +163,6 @@ const locale = {
     "Equidistant": "Equidistante",
     "Error in the overlay URL": "Error en la URL de la superposición",
     "Error in the tilelayer URL": "Error en la URL del la capa de teselas",
-    "Example: key1,key2,key3": "Example: key1,key2,key3",
     "Exit Fullscreen": "Salir de la pantalla completa",
     "expanded": "expandido",
     "Extract shape to separate feature": "Extraer la figura a un elemento separado",
@@ -439,7 +437,16 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

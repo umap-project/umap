@@ -82,7 +82,6 @@
     "collapsed": "sbalené",
     "color": "barva",
     "Comma separated list of numbers, including min and max values.": "Seznam čísel oddělených čárkou, včetně minimálních a maximálních hodnot.",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Seznam vlastností oddělených čárkou, které se mají použít pro hledání aspektů (např.: mykey,otherkey). Chcete-li změnit popisek, přidejte jej za | (např.: mykey|Můj klíč,otherkey|Jiný klíč)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Čárkami oddělený seznam vlastností, které se mají použít pro třídění prvků. Chcete-li řazení obrátit, vložte před něj znaménko mínus (-). Např. mykey,-otherkey.",
     "Comma separated list of properties to use when filtering features": "Čárkami oddělený seznam vlastností pro filtrování objektů",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Hodnoty oddělené čárkou, tabulátorem, nebo středníkem. předpokládá se SRS WGS84 a jsou importovány jen polohy bodů. Import hledá záhlaví sloupců začínající na \"lat\" nebo \"lon\" a ty považuje za souřadnice (na velikosti písmen nesejde). Ostatní sloupce jsou importovány jako vlastnosti.",
@@ -164,7 +163,6 @@
     "Equidistant": "Stejně vzdálené",
     "Error in the overlay URL": "Chyba u URL překryvu dlaždic",
     "Error in the tilelayer URL": "Chyba v URL vrstvy dlaždic",
-    "Example: key1,key2,key3": "Příklad: key1,key2,key3",
     "Exit Fullscreen": "Ukončit režim celé obrazovky",
     "expanded": "rozbalené",
     "Extract shape to separate feature": "Vyjmout tvar do samostatného objektu",
@@ -439,5 +437,14 @@
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }

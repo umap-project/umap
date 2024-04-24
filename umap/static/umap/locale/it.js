@@ -82,7 +82,6 @@ const locale = {
     "collapsed": "contratto",
     "color": "colore",
     "Comma separated list of numbers, including min and max values.": "Lista dei numeri separati da virgola, che includono i valori minimi e massimi",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Elenco separato da virgole di proprietà da utilizzare per la ricerca a faccette (es.: miocampo,altrocampo). Per personalizzare l'etichetta va messo un | subito dopo  (es.: miocampo|Il mio campo, altrocampo|Altro campo)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Elenco di proprietà separate da virgole da utilizzare per l'ordinamento degli oggetti. Per invertire l'ordinamento, inserire prima un segno meno (-). Per esempio. miocampo-altrocampo.",
     "Comma separated list of properties to use when filtering features": "Lista di proprietà separate da virgola da utilizzare per filtrare gli oggetti",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Valori separati da virgola, tabulatore o punto e virgola. Il sistema di riferimento spaziale implementato è WGS84. Vengono importati solo punti. La funzione di importazione va a cercare nell'intestazione le colonne  «lat» e «lon» indifferentemente se scritte in maiuscolo o minuscolo. Tutte le altre colonne sono importate come proprietà.",
@@ -164,7 +163,6 @@ const locale = {
     "Equidistant": "Equidistante",
     "Error in the overlay URL": "Errore nell'URL della sovrapposizione",
     "Error in the tilelayer URL": "Errore nell'URL nel servizio di tile",
-    "Example: key1,key2,key3": "Esempio: campo1,campo2,campo3",
     "Exit Fullscreen": "Esci da Schermo intero",
     "expanded": "espanso",
     "Extract shape to separate feature": "Dividi la geometria in oggetti separati",
@@ -439,7 +437,16 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }
 L.registerLocale("it", locale)
 L.setLocale("it")

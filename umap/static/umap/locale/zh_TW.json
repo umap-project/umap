@@ -82,7 +82,6 @@
     "collapsed": "收起",
     "color": "色彩",
     "Comma separated list of numbers, including min and max values.": "用逗號分隔數字，包括最小與最大值。",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "逗號分隔屬性清單會用在方面搜尋 (例如：mykey,otherkey)。要控制標籤，則是之後新增 (例如：mykey|My Key,otherkey|Other Key)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "用逗號分隔屬性清單來排序圖徵。要保存排序，在槊面加上減號 (-1)，例如 mykey,-otherkey。",
     "Comma separated list of properties to use when filtering features": "以逗號分開列出篩選時要使用的屬性",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "使用逗號、定位鍵或是分號分隔的地理數據。預設座標系為 SRS WGS84。只會匯入地理座標點。匯入時抓取 «lat» 與 «lon» 開頭的欄位資料，不分大小寫。其他欄位則歸入屬性資料。",
@@ -164,7 +163,6 @@
     "Equidistant": "等距",
     "Error in the overlay URL": "套疊網址錯誤",
     "Error in the tilelayer URL": "地圖磚圖層 URL 錯誤",
-    "Example: key1,key2,key3": "Example: key1,key2,key3",
     "Exit Fullscreen": "結束全螢幕模式",
     "expanded": "展開",
     "Extract shape to separate feature": "由外形分離出圖徵",
@@ -439,5 +437,14 @@
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }

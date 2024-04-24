@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-17 07:41+0000\n"
+"POT-Creation-Date: 2024-04-24 19:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Everyone can edit"
 msgstr ""
 
-#: forms.py:69 models.py:382
+#: forms.py:69 models.py:384
 msgid "Inherit"
 msgstr ""
 
@@ -53,15 +53,15 @@ msgstr ""
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:147 models.py:383
+#: models.py:147 models.py:385
 msgid "Everyone"
 msgstr ""
 
-#: models.py:148 models.py:154 models.py:384
+#: models.py:148 models.py:154 models.py:386
 msgid "Editors only"
 msgstr ""
 
-#: models.py:149 models.py:385
+#: models.py:149 models.py:387
 msgid "Owner only"
 msgstr ""
 
@@ -77,63 +77,63 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:158 models.py:392
-msgid "description"
-msgstr ""
-
-#: models.py:159
+#: models.py:158
 msgid "center"
 msgstr ""
 
-#: models.py:160
+#: models.py:159
 msgid "zoom"
 msgstr ""
 
-#: models.py:162
+#: models.py:161
 msgid "locate"
 msgstr ""
 
-#: models.py:162
+#: models.py:161
 msgid "Locate user on load?"
 msgstr ""
 
-#: models.py:166
+#: models.py:165
 msgid "Choose the map licence."
 msgstr ""
 
-#: models.py:167
+#: models.py:166
 msgid "licence"
 msgstr ""
 
-#: models.py:178
+#: models.py:177
 msgid "owner"
 msgstr ""
 
-#: models.py:182
+#: models.py:181
 msgid "editors"
 msgstr ""
 
-#: models.py:187 models.py:406
+#: models.py:186 models.py:408
 msgid "edit status"
 msgstr ""
 
-#: models.py:192
+#: models.py:191
 msgid "share status"
 msgstr ""
 
-#: models.py:195 models.py:401
+#: models.py:194 models.py:403
 msgid "settings"
 msgstr ""
 
-#: models.py:323
+#: models.py:325
 msgid "Clone of"
 msgstr ""
 
-#: models.py:396
+#: models.py:394
+msgid "description"
+msgstr ""
+
+#: models.py:398
 msgid "display on load"
 msgstr ""
 
-#: models.py:397
+#: models.py:399
 msgid "Display this layer on load."
 msgstr ""
 

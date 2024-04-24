@@ -82,7 +82,6 @@ const locale = {
     "collapsed": "ボタン",
     "color": "色",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
-    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key)",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
     "Comma separated list of properties to use when filtering features": "地物をフィルタする際に利用する、カンマで区切ったプロパティのリスト",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "カンマ、タブ、セミコロンなどで区切られた値。SRSはWGS84が適用されます。ポイントのジオメトリのみがインポート対象です。インポートを行なう際は、カラムの先頭行を対象に «lat» と «lon» という文字列が検索されます。検索は行の最初から順に行われ、大文字と小文字は区別されません。その他のすべてのカラムは、プロパティとしてインポートされます。",
@@ -164,7 +163,6 @@ const locale = {
     "Equidistant": "Equidistant",
     "Error in the overlay URL": "Error in the overlay URL",
     "Error in the tilelayer URL": "タイルレイヤのURLに誤りがあります",
-    "Example: key1,key2,key3": "Example: key1,key2,key3",
     "Exit Fullscreen": "フルスクリーン表示を解除",
     "expanded": "リスト",
     "Extract shape to separate feature": "シェイプを複数の地物に変換",
@@ -439,7 +437,16 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Toggle size",
     "Layers": "Layers",
-    "Display the caption control": "Display the caption control"
+    "Display the caption control": "Display the caption control",
+    "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.": "Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.",
+    "<empty value>": "<empty value>",
+    "Min": "Min",
+    "Max": "Max",
+    "From": "From",
+    "Until": "Until",
+    "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
+    "Edit in OpenStreetMap": "Edit in OpenStreetMap",
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")
