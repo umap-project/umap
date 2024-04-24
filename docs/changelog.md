@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.2b0 - 2024-04-24
+
+### Bug fixes
+* fix: hide delete button for editors in dashboard by @yohanboniface in #1748
+* fix: update layers list in import panel by @yohanboniface in #1749
+* fix: increase TileLayer.url_template size by @yohanboniface in #1761
+* feat: add link in contextmenu to edit map in OSM by @yohanboniface in #1756
+
+### New features / UX improvements
+* feat: merge "datalayer browser" and "data browser" by @yohanboniface in #1687
+* feat: add minimal OpenGraph links by @yohanboniface in #1758
+* feat: open popup when default view is set to latest by @yohanboniface in #1750
+* feat: display a message when importer cannot find lat/lng columns by @yohanboniface in #1753
+* feat: remove Map.description by @yohanboniface in #1772
+* Date and number support for facets by @flammermann in #1763
+
+### Internal changes
+* Remove js tests by @yohanboniface in #1719
+* [chore] move umap utils to a module by @almet in #1718
+* chore: bump the timeout for integration tests by @davidbgk in #1728
+* refactor: Separate ui rendering from data updates by @almet in #1692
+* chore: allow to set playwright timeout from env var by @yohanboniface in #1762
+* Mock OSM tiles requests in Playwright for speed by @davidbgk in #1765
+
+
 ## 2.1.3 - 2024-03-27
 
 * refactor initCenter and controls ordering by @yohanboniface in #1716
