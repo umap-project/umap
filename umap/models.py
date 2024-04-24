@@ -155,7 +155,6 @@ class Map(NamedModel):
         (BLOCKED, _("Blocked")),
     )
     slug = models.SlugField(db_index=True)
-    description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     center = models.PointField(geography=True, verbose_name=_("center"))
     zoom = models.IntegerField(default=7, verbose_name=_("zoom"))
     locate = models.BooleanField(
@@ -197,6 +196,13 @@ class Map(NamedModel):
 
     objects = models.Manager()
     public = PublicManager()
+
+    @property
+    def description(self):
+        try:
+            return self.settings["properties"]["description"]
+        except KeyError:
+            return ""
 
     @property
     def preview_settings(self):
