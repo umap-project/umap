@@ -83,19 +83,11 @@ class Rule {
     this.map.editPanel.open({ content: container })
   }
 
-  renderToolbox(container) {
-    const toggle = L.DomUtil.createButtonIcon(
-      container,
-      'icon-eye',
-      L._('Show/hide layer')
-    )
-    const edit = L.DomUtil.createButtonIcon(
-      container,
-      'icon-edit show-on-edit',
-      L._('Edit')
-    )
+  renderToolbox(row) {
+    const toggle = L.DomUtil.createButtonIcon(row, 'icon-eye', L._('Show/hide layer'))
+    const edit = L.DomUtil.createButtonIcon(row, 'icon-edit show-on-edit', L._('Edit'))
     const remove = L.DomUtil.createButtonIcon(
-      container,
+      row,
       'icon-delete show-on-edit',
       L._('Delete layer')
     )
@@ -110,7 +102,9 @@ class Rule {
       },
       this
     )
-    DomUtil.add('span', '', container, this.condition || translate('empty rule'))
+    DomUtil.add('span', '', row, this.condition || translate('empty rule'))
+    L.DomUtil.createIcon(row, 'icon-drag', L._('Drag to reorder'))
+    row.dataset.id = stamp(this)
     //L.DomEvent.on(toggle, 'click', this.toggle, this)
   }
 
@@ -134,17 +128,38 @@ export default class Rules {
     }
   }
 
+  onReorder(src, dst, initialIndex, finalIndex) {
+    const moved = this.rules.find((rule) => stamp(rule) == src.dataset.id)
+    const reference = this.rules.find((rule) => stamp(rule) == dst.dataset.id)
+    const movedIdx = this.rules.indexOf(moved)
+    let referenceIdx = this.rules.indexOf(reference)
+    const minIndex = Math.min(movedIdx, referenceIdx)
+    const maxIndex = Math.max(movedIdx, referenceIdx)
+    moved._delete() // Remove from array
+    referenceIdx = this.rules.indexOf(reference)
+    let newIdx
+    if (finalIndex === 0) newIdx = 0
+    else if (finalIndex > initialIndex) newIdx = referenceIdx
+    else newIdx = referenceIdx + 1
+    this.rules.splice(newIdx, 0, moved)
+    moved.isDirty = true
+    this.map.render(['rules'])
+  }
+
   edit(container) {
     const body = L.DomUtil.createFieldset(
       container,
       translate('Conditional style rules')
     )
     if (this.rules.length) {
-      const list = DomUtil.create('ul', '', body)
+      const ul = DomUtil.create('ul', '', body)
       for (const rule of this.rules) {
-        rule.renderToolbox(DomUtil.create('li', '', list))
+        rule.renderToolbox(DomUtil.create('li', 'orderable', ul))
       }
+
+      const orderable = new U.Orderable(ul, this.onReorder.bind(this))
     }
+
     L.DomUtil.createButton('umap-add', body, translate('Add rule'), this.addRule, this)
   }
 
