@@ -69,6 +69,7 @@ export default class Facets {
       container,
       translate('Facet search')
     )
+    this.map.browser.tabsMenu(container, 'facets')
     const defined = this.getDefined()
     const names = Object.keys(defined)
     const facetProperties = this.compute(names, defined)

@@ -475,7 +475,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   build: function () {
     L.FormBuilder.BlurInput.prototype.build.call(this)
     this.buttons = L.DomUtil.create('div', '', this.parentNode)
-    this.tabs = L.DomUtil.create('div', 'pictogram-tabs', this.parentNode)
+    this.tabs = L.DomUtil.create('div', 'flat-tabs', this.parentNode)
     this.body = L.DomUtil.create('div', 'umap-pictogram-body', this.parentNode)
     this.footer = L.DomUtil.create('div', '', this.parentNode)
     this.updatePreview()

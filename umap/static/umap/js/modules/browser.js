@@ -44,7 +44,7 @@ export default class Browser {
       U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
     }
     const viewFeature = (e) => {
-      feature.zoomTo({...e, callback: feature.view})
+      feature.zoomTo({ ...e, callback: feature.view })
     }
     DomEvent.on(zoom_to, 'click', viewFeature)
     DomEvent.on(title, 'click', viewFeature)
@@ -135,6 +135,7 @@ export default class Browser {
     DomEvent.disableClickPropagation(container)
 
     DomUtil.createTitle(container, translate('Browse data'), 'icon-layers')
+    this.tabsMenu(container, 'browse')
     const formContainer = DomUtil.create('div', '', container)
     this.dataContainer = DomUtil.create('div', '', container)
 
@@ -164,5 +165,19 @@ export default class Browser {
     DomEvent.disableClickPropagation(button)
     DomEvent.on(button, 'click', map.openBrowser, map)
     return button
+  }
+
+  tabsMenu(container, active) {
+    const tabs = L.DomUtil.create('div', 'flat-tabs', container)
+    const browse = L.DomUtil.add('button', 'flat tab-browse', tabs, L._('Data'))
+    DomEvent.on(browse, 'click', this.open, this)
+    if (this.map.options.facetKey) {
+      const facets = L.DomUtil.add('button', 'flat tab-facets', tabs, L._('Filters'))
+      DomEvent.on(facets, 'click', this.map.facets.open, this.map.facets)
+    }
+    const info = L.DomUtil.add('button', 'flat tab-info', tabs, L._('About'))
+    DomEvent.on(info, 'click', this.map.displayCaption, this.map)
+    let el = tabs.querySelector(`.tab-${active}`)
+    L.DomUtil.addClass(el, 'on')
   }
 }

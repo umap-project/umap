@@ -580,20 +580,25 @@ i.info {
     margin-top: -8px;
     padding: 0 5px;
 }
-.pictogram-tabs {
+.flat-tabs {
     display: flex;
     justify-content: space-around;
     font-size: 1.2em;
     padding-bottom: 20px;
 }
-.pictogram-tabs button {
+.flat-tabs button {
     padding: 10px;
-    color: #fff;
     text-decoration: none;
     cursor: pointer;
 }
-.pictogram-tabs .on {
+.flat-tabs .on {
     font-weight: bold;
+    border-bottom: 1px solid #444;
+}
+.dark .flat-tabs button {
+    color: #fff;
+}
+.dark .flat-tabs .on {
     border-bottom: 1px solid #fff;
 }
 .umap-pictogram-category h6 {
