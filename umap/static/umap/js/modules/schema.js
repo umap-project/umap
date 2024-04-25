@@ -386,6 +386,10 @@ export const SCHEMA = {
     type: Object,
     impacts: ['remote-data'],
   },
+  rules: {
+    type: Object,
+    impacts: ['data'],
+  },
   scaleControl: {
     type: Boolean,
     impacts: ['ui'],
