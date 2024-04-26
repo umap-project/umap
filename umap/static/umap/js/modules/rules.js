@@ -5,9 +5,7 @@ import { translate } from './i18n.js'
 class Rule {
   constructor(map, condition = '', options = {}) {
     this.map = map
-    this.condition = condition
     this.active = true
-    this.parse()
     this.options = options
     let isDirty = false
     Object.defineProperty(this, 'isDirty', {
@@ -21,6 +19,17 @@ class Rule {
         }
       },
     })
+    let _condition
+    Object.defineProperty(this, 'condition', {
+      get: () => {
+        return _condition
+      },
+      set: (value) => {
+        _condition = value
+        this.parse()
+      },
+    })
+    this.condition = condition
   }
 
   render(fields) {
