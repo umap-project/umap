@@ -73,7 +73,7 @@ DATALAYER_DATA2 = {
 }
 
 
-def test_simple_simple_equal_rule_at_load(live_server, page, map):
+def test_simple_equal_rule_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
         {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
     ]
@@ -87,7 +87,7 @@ def test_simple_simple_equal_rule_at_load(live_server, page, map):
     assert colors.count("rgb(240, 248, 255)") == 2
 
 
-def test_simple_simple_not_equal_rule_at_load(live_server, page, map):
+def test_simple_not_equal_rule_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
         {"condition": "mytype!=even", "options": {"color": "aliceblue"}}
     ]
@@ -99,6 +99,48 @@ def test_simple_simple_not_equal_rule_at_load(live_server, page, map):
     expect(markers).to_have_count(4)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 2
+
+
+def test_gt_rule_with_number_at_load(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "mynumber>10", "options": {"color": "aliceblue"}}
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    expect(markers).to_have_count(4)
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 2
+
+
+def test_lt_rule_with_number_at_load(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "mynumber<14", "options": {"color": "aliceblue"}}
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    expect(markers).to_have_count(4)
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 3
+
+
+def test_lt_rule_with_float_at_load(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "mynumber<12.3", "options": {"color": "aliceblue"}}
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    expect(markers).to_have_count(4)
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 3
 
 
 def test_can_create_new_rule(live_server, page, openmap):

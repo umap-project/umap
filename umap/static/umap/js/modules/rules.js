@@ -36,23 +36,52 @@ class Rule {
     this.map.render(fields)
   }
 
+  equal(other) {
+    return this.expected === other
+  }
+
+  not_equal(other) {
+    return this.expected != other
+  }
+
+  gt(other) {
+    return other > this.expected
+  }
+
+  lt(other) {
+    return other < this.expected
+  }
+
+  OPERATORS = [
+    ['>', this.gt],
+    ['<', this.lt],
+    // When sent by Django
+    ['&lt;', this.lt],
+    ['!=', this.not_equal],
+    ['=', this.equal],
+  ]
+
   parse() {
     let vars = []
-    if (this.condition.includes('!=')) {
-      this.operator = (our, other) => our != other
-      vars = this.condition.split('!=')
-    } else if (this.condition.includes('=')) {
-      this.operator = (our, other) => our === other
-      vars = this.condition.split('=')
+    this.cast = (v) => v
+    this.operator = undefined
+    for (const [sign, func] of this.OPERATORS) {
+      if (this.condition.includes(sign)) {
+        this.operator = func
+        vars = this.condition.split(sign)
+        break
+      }
     }
-    if (vars.length != 2) this.operator = undefined
+    if (vars.length != 2) return
     this.key = vars[0]
     this.expected = vars[1]
+    if (!isNaN(this.expected)) this.cast = parseFloat
+    this.expected = this.cast(this.expected)
   }
 
   match(props) {
     if (!this.operator || !this.active) return false
-    return this.operator(this.expected, props[this.key])
+    return this.operator(this.cast(props[this.key]))
   }
 
   getMap() {
@@ -170,10 +199,7 @@ export default class Rules {
   }
 
   edit(container) {
-    const body = DomUtil.createFieldset(
-      container,
-      translate('Conditional style rules')
-    )
+    const body = DomUtil.createFieldset(container, translate('Conditional style rules'))
     if (this.rules.length) {
       const ul = DomUtil.create('ul', '', body)
       for (const rule of this.rules) {
