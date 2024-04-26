@@ -6,6 +6,7 @@ class Rule {
   constructor(map, condition = '', options = {}) {
     this.map = map
     this.condition = condition
+    this.active = true
     this.parse()
     this.options = options
     let isDirty = false
@@ -41,7 +42,7 @@ class Rule {
   }
 
   match(props) {
-    if (!this.operator) return false
+    if (!this.operator || !this.active) return false
     return this.operator(this.expected, props[this.key])
   }
 
@@ -84,6 +85,7 @@ class Rule {
   }
 
   renderToolbox(row) {
+    row.classList.toggle('off', !this.active)
     const toggle = DomUtil.createButtonIcon(
       row,
       'icon-eye',
@@ -113,7 +115,11 @@ class Rule {
     DomUtil.add('span', '', row, this.condition || translate('empty rule'))
     DomUtil.createIcon(row, 'icon-drag', translate('Drag to reorder'))
     row.dataset.id = stamp(this)
-    //L.DomEvent.on(toggle, 'click', this.toggle, this)
+    DomEvent.on(toggle, 'click', () => {
+      this.active = !this.active
+      row.classList.toggle('off', !this.active)
+      this.map.render(['rules'])
+    })
   }
 
   _delete() {
