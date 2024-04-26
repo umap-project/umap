@@ -59,7 +59,7 @@ class Rule {
         'condition',
         {
           handler: 'BlurInput',
-          label: L._('Condition'),
+          label: translate('Condition'),
           placeholder: translate('key=value or key!=value'),
         },
       ],
@@ -77,33 +77,41 @@ class Rule {
     ]
     const container = DomUtil.create('div')
     const builder = new U.FormBuilder(this, options)
-    const defaultShapeProperties = L.DomUtil.add('div', '', container)
+    const defaultShapeProperties = DomUtil.add('div', '', container)
     defaultShapeProperties.appendChild(builder.build())
 
     this.map.editPanel.open({ content: container })
   }
 
   renderToolbox(row) {
-    const toggle = L.DomUtil.createButtonIcon(row, 'icon-eye', L._('Show/hide layer'))
-    const edit = L.DomUtil.createButtonIcon(row, 'icon-edit show-on-edit', L._('Edit'))
-    const remove = L.DomUtil.createButtonIcon(
+    const toggle = DomUtil.createButtonIcon(
+      row,
+      'icon-eye',
+      translate('Show/hide layer')
+    )
+    const edit = DomUtil.createButtonIcon(
+      row,
+      'icon-edit show-on-edit',
+      translate('Edit')
+    )
+    const remove = DomUtil.createButtonIcon(
       row,
       'icon-delete show-on-edit',
-      L._('Delete layer')
+      translate('Delete layer')
     )
-    L.DomEvent.on(edit, 'click', this.edit, this)
-    L.DomEvent.on(
+    DomEvent.on(edit, 'click', this.edit, this)
+    DomEvent.on(
       remove,
       'click',
       function () {
-        if (!confirm(L._('Are you sure you want to delete this rule?'))) return
+        if (!confirm(translate('Are you sure you want to delete this rule?'))) return
         this._delete()
         this.map.editPanel.close()
       },
       this
     )
     DomUtil.add('span', '', row, this.condition || translate('empty rule'))
-    L.DomUtil.createIcon(row, 'icon-drag', L._('Drag to reorder'))
+    DomUtil.createIcon(row, 'icon-drag', translate('Drag to reorder'))
     row.dataset.id = stamp(this)
     //L.DomEvent.on(toggle, 'click', this.toggle, this)
   }
@@ -147,7 +155,7 @@ export default class Rules {
   }
 
   edit(container) {
-    const body = L.DomUtil.createFieldset(
+    const body = DomUtil.createFieldset(
       container,
       translate('Conditional style rules')
     )
@@ -160,7 +168,7 @@ export default class Rules {
       const orderable = new U.Orderable(ul, this.onReorder.bind(this))
     }
 
-    L.DomUtil.createButton('umap-add', body, translate('Add rule'), this.addRule, this)
+    DomUtil.createButton('umap-add', body, translate('Add rule'), this.addRule, this)
   }
 
   addRule() {
