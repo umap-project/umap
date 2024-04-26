@@ -1395,9 +1395,17 @@ U.DataLayer = L.Evented.extend({
         '_blank'
       )
     }
+    const button = L.DomUtil.create('li', '')
+    L.DomUtil.create('i', 'icon icon-16 icon-back', button)
+    button.title = L._('Back to layers')
+    // Fixme: remove me when this is merged and released
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    L.DomEvent.disableClickPropagation(button)
+    L.DomEvent.on(button, 'click', this.map.editDatalayers, this.map)
+
     this.map.editPanel.open({
       content: container,
-      actions: [U.Browser.backButton(this.map)],
+      actions: [button],
     })
   },
 
