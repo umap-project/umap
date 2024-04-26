@@ -19,9 +19,6 @@ nav:
   - Deployment:
       - Docker: deploy/docker.md
       - Nginx: deploy/nginx.md
-  - Support:
-      - FAQ: support/faq.md
-      - Errors: support/errors.md
   - Changelog: changelog.md
 theme:
   name: material
@@ -62,20 +59,3 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
       combine_header_slug: true
-  - attr_list
-plugins:
-  - i18n:
-      docs_structure: folder
-      languages:
-        - locale: en
-          default: true
-          name: English
-          build: true
-        - locale: fr
-          name: Français
-          build: true
-          site_name: Documentation uMap
-          nav_translations:
-            Home: Accueil
-            Support: Aide
-            Errors: Erreurs
