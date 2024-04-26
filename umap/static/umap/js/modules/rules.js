@@ -76,6 +76,7 @@ class Rule {
     this.key = vars[0]
     this.expected = vars[1]
     if (!isNaN(this.expected)) this.cast = parseFloat
+    else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
     this.expected = this.cast(this.expected)
   }
 

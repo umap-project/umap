@@ -22,6 +22,7 @@ DATALAYER_DATA1 = {
                 "mytype": "even",
                 "name": "Point 2",
                 "mynumber": 10,
+                "myboolean": True,
                 "mydate": "2024/04/14 12:19:17",
             },
             "geometry": {"type": "Point", "coordinates": [0.065918, 48.385442]},
@@ -32,6 +33,7 @@ DATALAYER_DATA1 = {
                 "mytype": "odd",
                 "name": "Point 1",
                 "mynumber": 12,
+                "myboolean": False,
                 "mydate": "2024/03/13 12:20:20",
             },
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
@@ -52,6 +54,7 @@ DATALAYER_DATA2 = {
                 "mytype": "even",
                 "name": "Point 4",
                 "mynumber": 10,
+                "myboolean": "true",
                 "mydate": "2024/08/18 13:14:15",
             },
             "geometry": {"type": "Point", "coordinates": [0.856934, 45.290347]},
@@ -141,6 +144,20 @@ def test_lt_rule_with_float_at_load(live_server, page, map):
     expect(markers).to_have_count(4)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
+
+
+def test_equal_rule_with_boolean_at_load(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "myboolean=true", "options": {"color": "aliceblue"}}
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    expect(markers).to_have_count(4)
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 2
 
 
 def test_can_create_new_rule(live_server, page, openmap):
