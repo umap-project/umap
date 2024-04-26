@@ -62,6 +62,7 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
       combine_header_slug: true
+  - attr_list
 plugins:
   - i18n:
       docs_structure: folder
