@@ -48,7 +48,7 @@ export class MapUpdater extends BaseUpdater {
 export class DatalayerUpdater extends BaseUpdater {
   update({ key, metadata, value }) {
     const datalayer = this.getLayerFromID(metadata.id)
-    console.log(datalayer, key, value)
+    console.log('datalayer', datalayer, key, value)
     this.updateObjectValue(datalayer, key, value)
     datalayer.render([key])
   }
