@@ -74,6 +74,10 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
     this._markerCluster = U.MarkerCluster
     this._layers = []
+
+    if (!U.Utils.isObject(this.datalayer.options.cluster)) {
+      this.datalayer.options.cluster = {}
+    }
   },
 
   onRemove: function (map) {
@@ -97,9 +101,6 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 
   getEditableOptions: function () {
-    if (!U.Utils.isObject(this.datalayer.options.cluster)) {
-      this.datalayer.options.cluster = {}
-    }
     return [
       [
         'options.cluster.radius',
@@ -351,6 +352,9 @@ U.Layer.Heat = L.HeatLayer.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.options.heat)
+    if (!U.Utils.isObject(this.datalayer.options.heat)) {
+      this.datalayer.options.heat = {}
+    }
   },
 
   addLayer: function (layer) {
@@ -383,9 +387,6 @@ U.Layer.Heat = L.HeatLayer.extend({
   },
 
   getEditableOptions: function () {
-    if (!U.Utils.isObject(this.datalayer.options.heat)) {
-      this.datalayer.options.heat = {}
-    }
     return [
       [
         'options.heat.radius',
