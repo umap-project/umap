@@ -3,7 +3,6 @@ import * as Utils from './utils.js'
 import { translate } from './i18n.js'
 
 class Rule {
-  _condition = null
 
   get condition() {
     return this._condition
@@ -14,7 +13,6 @@ class Rule {
     this.parse()
   }
 
-  _isDirty = false
 
   get isDirty() {
     return this._isDirty
@@ -26,6 +24,18 @@ class Rule {
   }
 
   constructor(map, condition = '', options = {}) {
+    // TODO make this public properties when browser coverage is ok
+    // cf https://caniuse.com/?search=public%20class%20field
+    this._condition = null
+    this._isDirty = false
+    this.OPERATORS = [
+      ['>', this.gt],
+      ['<', this.lt],
+      // When sent by Django
+      ['&lt;', this.lt],
+      ['!=', this.not_equal],
+      ['=', this.equal],
+    ]
     this.map = map
     this.active = true
     this.options = options
@@ -51,15 +61,6 @@ class Rule {
   lt(other) {
     return other < this.expected
   }
-
-  OPERATORS = [
-    ['>', this.gt],
-    ['<', this.lt],
-    // When sent by Django
-    ['&lt;', this.lt],
-    ['!=', this.not_equal],
-    ['=', this.equal],
-  ]
 
   parse() {
     let vars = []
