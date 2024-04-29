@@ -3,6 +3,7 @@ U.FeatureMixin = {
 
   getSyncMetadata: function () {
     return {
+      engine: this.map.sync,
       subject: 'feature',
       metadata: {
         id: this.id,
@@ -12,14 +13,9 @@ U.FeatureMixin = {
     }
   },
 
-  getSyncEngine: function () {
-    // FIXME use a get property / defineProperty
-    return this.map.sync
-  },
-
   onCommit: function () {
-    const { subject, metadata } = this.getSyncMetadata()
-    this.map.sync.upsert(subject, metadata, {
+    const { subject, metadata, engine } = this.getSyncMetadata()
+    engine.upsert(subject, metadata, {
       geometry: this.getGeometry(),
     })
   },
@@ -30,14 +26,14 @@ U.FeatureMixin = {
 
   syncUpdatedProperties: function (properties) {
     if ('latlng'.includes(properties)) {
-      const { subject, metadata } = this.getSyncMetadata()
-      this.map.sync.update(subject, metadata, 'geometry', this.getGeometry())
+      const { subject, metadata, engine } = this.getSyncMetadata()
+      engine.update(subject, metadata, 'geometry', this.getGeometry())
     }
   },
 
   syncDelete: function () {
-    let { subject, metadata } = this.getSyncMetadata()
-    this.map.sync.delete(subject, metadata)
+    let { subject, metadata, engine } = this.getSyncMetadata()
+    engine.delete(subject, metadata)
   },
 
   initialize: function (map, latlng, options, id) {

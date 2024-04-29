@@ -33,7 +33,7 @@ class JoinMessage(BaseModel):
 
 
 class Geometry(BaseModel):
-    type: Literal["Point",]
+    type: Literal["Point", "Polygon"]
     coordinates: list
 
 
@@ -43,13 +43,15 @@ class GeometryValue(BaseModel):
 
 # FIXME better define the different messages
 # to ensure only relying valid ones.
+# This would mean having different kind of validation types
+# based on the kind and verb.
 class OperationMessage(BaseModel):
     kind: str = "operation"
     verb: str = Literal["upsert", "update", "delete"]
     subject: str = Literal["map", "layer", "feature"]
     metadata: Optional[dict] = None
     key: Optional[str] = None
-    value: Optional[str | bool | int | GeometryValue]
+    value: Optional[str | bool | int | GeometryValue] = None
 
 
 async def join_and_listen(
@@ -90,8 +92,7 @@ async def handler(websocket):
     signed = TimestampSigner().unsign_object(message.token, max_age=30)
     user, map_id, permissions = signed.values()
 
-    # We trust the signed info from the server to give access
-    # If the user can edit the map, let her in
+    # Check if permissions for this map have been granted by the server
     if "edit" in signed["permissions"]:
         await join_and_listen(map_id, permissions, user, websocket)
 
