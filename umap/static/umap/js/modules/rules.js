@@ -3,32 +3,32 @@ import * as Utils from './utils.js'
 import { translate } from './i18n.js'
 
 class Rule {
+  #condition = null
+
+  get condition() {
+    return this.#condition
+  }
+
+  set condition(value) {
+    this.#condition = value
+    this.parse()
+  }
+
+  #isDirty = false
+
+  get isDirty() {
+    return this.#isDirty
+  }
+
+  set isDirty(status) {
+    this.#isDirty = status
+    if (status) this.map.isDirty = status
+  }
+
   constructor(map, condition = '', options = {}) {
     this.map = map
     this.active = true
     this.options = options
-    let isDirty = false
-    Object.defineProperty(this, 'isDirty', {
-      get: () => {
-        return isDirty
-      },
-      set: (status) => {
-        isDirty = status
-        if (status) {
-          this.map.isDirty = status
-        }
-      },
-    })
-    let _condition
-    Object.defineProperty(this, 'condition', {
-      get: () => {
-        return _condition
-      },
-      set: (value) => {
-        _condition = value
-        this.parse()
-      },
-    })
     this.condition = condition
   }
 
