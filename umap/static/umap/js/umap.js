@@ -262,12 +262,9 @@ U.Map = L.Map.extend({
 
   getSyncMetadata: function () {
     return {
+      engine: this.sync,
       subject: 'map',
     }
-  },
-
-  getSyncEngine: function () {
-    return this.sync
   },
 
   render: function (fields) {

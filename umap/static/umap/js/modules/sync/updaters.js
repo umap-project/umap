@@ -41,7 +41,7 @@ export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
     console.log(key, value)
     this.updateObjectValue(this.map, key, value)
-    this.map.render([key.replace('options.', '')])
+    this.map.render([key])
   }
 }
 
@@ -50,8 +50,7 @@ export class DatalayerUpdater extends BaseUpdater {
     const datalayer = this.getLayerFromID(metadata.id)
     console.log(datalayer, key, value)
     this.updateObjectValue(datalayer, key, value)
-    const property = key.replace('options.', '')
-    datalayer.render([property])
+    datalayer.render([key])
   }
 }
 

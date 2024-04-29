@@ -597,6 +597,16 @@ U.DataLayer = L.Evented.extend({
     this.on('datachanged', this.map.onDataLayersChanged, this.map)
   },
 
+  getSyncMetadata: function () {
+    return {
+      engine: this.map.sync,
+      subject: 'datalayer',
+      metadata: {
+        id: this.umap_id, // XXX: should we specify it's the layerID here?
+      },
+    }
+  },
+
   render: function (fields, builder) {
     let impacts = U.Utils.getImpactsFromSchema(fields)
 
