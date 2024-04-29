@@ -824,13 +824,9 @@ U.Map = L.Map.extend({
     return U.SCHEMA[option] && U.SCHEMA[option].default
   },
 
-  getRuleOption: function (option, feature) {
-    return this.rules.getOption(option, feature)
-  },
-
   getOption: function (option, feature) {
     if (feature) {
-      const value = this.getRuleOption(option, feature)
+      const value = this.rules.getOption(option, feature)
       if (value !== undefined) return value
     }
     if (U.Utils.usableOption(this.options, option)) return this.options[option]
