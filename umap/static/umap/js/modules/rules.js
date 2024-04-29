@@ -3,25 +3,25 @@ import * as Utils from './utils.js'
 import { translate } from './i18n.js'
 
 class Rule {
-  #condition = null
+  _condition = null
 
   get condition() {
-    return this.#condition
+    return this._condition
   }
 
   set condition(value) {
-    this.#condition = value
+    this._condition = value
     this.parse()
   }
 
-  #isDirty = false
+  _isDirty = false
 
   get isDirty() {
-    return this.#isDirty
+    return this._isDirty
   }
 
   set isDirty(status) {
-    this.#isDirty = status
+    this._isDirty = status
     if (status) this.map.isDirty = status
   }
 
