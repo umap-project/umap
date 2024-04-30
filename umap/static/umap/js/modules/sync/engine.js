@@ -8,15 +8,30 @@ import {
 } from './updaters.js'
 
 export class SyncEngine {
-  constructor(map, webSocketURI, authToken) {
+  constructor(map) {
     this.map = map
     this.receiver = new MessagesDispatcher(this.map)
+
+    this._initialize()
+  }
+  _initialize() {
+    this.transport = undefined
+    const noop = () => undefined
+    // by default, all operations do nothing, until the engine is started.
+    this.upsert = this.update = this.delete = noop
+  }
+
+  start(webSocketURI, authToken) {
     this.transport = new WebSocketTransport(webSocketURI, authToken, this.receiver)
     this.sender = new MessagesSender(this.transport)
-
     this.upsert = this.sender.upsert.bind(this.sender)
     this.update = this.sender.update.bind(this.sender)
     this.delete = this.sender.delete.bind(this.sender)
+  }
+
+  stop() {
+    if (this.transport) this.transport.close()
+    this._initialize()
   }
 }
 

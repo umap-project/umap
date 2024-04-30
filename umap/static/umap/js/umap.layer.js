@@ -60,6 +60,9 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
+    if (!U.Utils.isObject(this.datalayer.options.cluster)) {
+      this.datalayer.options.cluster = {}
+    }
     const options = {
       polygonOptions: {
         color: this.datalayer.getColor(),
@@ -74,10 +77,6 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
     this._markerCluster = U.MarkerCluster
     this._layers = []
-
-    if (!U.Utils.isObject(this.datalayer.options.cluster)) {
-      this.datalayer.options.cluster = {}
-    }
   },
 
   onRemove: function (map) {

@@ -19,4 +19,8 @@ export class WebSocketTransport {
     let encoded = JSON.stringify(message)
     this.websocket.send(encoded)
   }
+
+  close() {
+    this.websocket.close()
+  }
 }

@@ -109,6 +109,7 @@ U.MapPermissions = L.Class.extend({
         { handler: 'ManageEditors', label: L._("Map's editors") },
       ])
     }
+
     const builder = new U.FormBuilder(this, fields)
     const form = builder.build()
     container.appendChild(form)
