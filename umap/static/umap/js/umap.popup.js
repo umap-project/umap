@@ -190,7 +190,7 @@ U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
   addRow: function (container, key, value) {
     const tr = L.DomUtil.create('tr', '', container)
     L.DomUtil.add('th', '', tr, key)
-    L.DomUtil.add('td', '', tr, this.formatRow(key, value))
+    L.DomUtil.element('td', { innerHTML: this.formatRow(key, value) }, tr)
   },
 
   renderBody: function () {

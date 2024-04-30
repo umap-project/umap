@@ -669,20 +669,29 @@ const ControlsMixin = {
     L.DomUtil.createTitle(container, this.options.name, 'icon-caption')
     this.permissions.addOwnerLink('h5', container)
     if (this.options.description) {
-      const description = L.DomUtil.create('div', 'umap-map-description', container)
-      description.innerHTML = U.Utils.toHTML(this.options.description)
+      const description = L.DomUtil.element(
+        'div',
+        {
+          className: 'umap-map-description',
+          safeHTML: U.Utils.toHTML(this.options.description),
+        },
+        container
+      )
     }
     const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
     this.eachVisibleDataLayer((datalayer) => {
       if (!datalayer.options.inCaption) return
       const p = L.DomUtil.create('p', 'datalayer-legend', datalayerContainer),
         legend = L.DomUtil.create('span', '', p),
-        headline = L.DomUtil.create('strong', '', p),
-        description = L.DomUtil.create('span', '', p)
+        headline = L.DomUtil.create('strong', '', p)
       datalayer.onceLoaded(function () {
         datalayer.renderLegend(legend)
         if (datalayer.options.description) {
-          description.innerHTML = U.Utils.toHTML(datalayer.options.description)
+          L.DomUtil.element(
+            'span',
+            { safeHTML: U.Utils.toHTML(datalayer.options.description) },
+            p
+          )
         }
       })
       datalayer.renderToolbox(headline)
@@ -692,11 +701,12 @@ const ControlsMixin = {
       credits = L.DomUtil.createFieldset(creditsContainer, L._('Credits'))
     title = L.DomUtil.add('h5', '', credits, L._('User content credits'))
     if (this.options.shortCredit || this.options.longCredit) {
-      L.DomUtil.add(
+      L.DomUtil.element(
         'p',
-        '',
-        credits,
-        U.Utils.toHTML(this.options.longCredit || this.options.shortCredit)
+        {
+          safeHTML: U.Utils.toHTML(this.options.longCredit || this.options.shortCredit),
+        },
+        credits
       )
     }
     if (this.options.licence) {
@@ -718,21 +728,26 @@ const ControlsMixin = {
     L.DomUtil.create('hr', '', credits)
     title = L.DomUtil.create('h5', '', credits)
     title.textContent = L._('Map background credits')
-    const tilelayerCredit = L.DomUtil.create('p', '', credits),
-      name = L.DomUtil.create('strong', '', tilelayerCredit),
-      attribution = L.DomUtil.create('span', '', tilelayerCredit)
-    name.textContent = `${this.selected_tilelayer.options.name} `
-    attribution.innerHTML = this.selected_tilelayer.getAttribution()
+    const tilelayerCredit = L.DomUtil.create('p', '', credits)
+    L.DomUtil.element(
+      'strong',
+      { textContent: `${this.selected_tilelayer.options.name} ` },
+      tilelayerCredit
+    )
+    L.DomUtil.element(
+      'span',
+      { safeHTML: this.selected_tilelayer.getAttribution() },
+      tilelayerCredit
+    )
     L.DomUtil.create('hr', '', credits)
-    const umapCredit = L.DomUtil.create('p', '', credits),
-      urls = {
-        leaflet: 'http://leafletjs.com',
-        django: 'https://www.djangoproject.com',
-        umap: 'http://wiki.openstreetmap.org/wiki/UMap',
-        changelog: 'https://umap-project.readthedocs.io/en/master/changelog/',
-        version: this.options.umap_version,
-      }
-    umapCredit.innerHTML = L._(
+    const urls = {
+      leaflet: 'http://leafletjs.com',
+      django: 'https://www.djangoproject.com',
+      umap: 'http://wiki.openstreetmap.org/wiki/UMap',
+      changelog: 'https://umap-project.readthedocs.io/en/master/changelog/',
+      version: this.options.umap_version,
+    }
+    const creditHTML = L._(
       `
       Powered by <a href="{leaflet}">Leaflet</a> and
       <a href="{django}">Django</a>,
@@ -741,6 +756,7 @@ const ControlsMixin = {
       `,
       urls
     )
+    L.DomUtil.element('p', { innerHTML: creditHTML }, credits)
     this.panel.open({ content: container })
   },
 
@@ -1052,16 +1068,16 @@ U.AttributionControl = L.Control.Attribution.extend({
     // Use our own container, so we can hide/show on small screens
     const credits = this._container.innerHTML
     this._container.innerHTML = ''
-    const container = L.DomUtil.add(
-      'div',
-      'attribution-container',
-      this._container,
-      credits
-    )
+    const container = L.DomUtil.create('div', 'attribution-container', this._container)
+    container.innerHTML = credits
     const shortCredit = this._map.getOption('shortCredit'),
       captionMenus = this._map.getOption('captionMenus')
     if (shortCredit) {
-      L.DomUtil.add('span', '', container, ` — ${U.Utils.toHTML(shortCredit)}`)
+      L.DomUtil.element(
+        'span',
+        { safeHTML: ` — ${U.Utils.toHTML(shortCredit)}` },
+        container
+      )
     }
     if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)

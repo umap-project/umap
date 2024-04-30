@@ -757,12 +757,12 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-    this.label = L.DomUtil.element('legend', {textContent: this.options.label})
+    this.label = L.DomUtil.element('legend', { textContent: this.options.label })
   },
 
   buildLi: function (value) {
     const property_li = L.DomUtil.create('li', '', this.ul)
-    const label = L.DomUtil.add('label', '', property_li)
+    const label = L.DomUtil.create('label', '', property_li)
     const input = L.DomUtil.create('input', '', label)
     L.DomUtil.add('span', '', label, value)
 
@@ -800,14 +800,14 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
   build: function () {
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
-    const {min, max, type} = this.options.criteria
+    const { min, max, type } = this.options.criteria
     this.type = type
     this.inputType = this.getInputType(this.type)
 
     const [minLabel, maxLabel] = this.getLabels()
 
     this.minLabel = L.DomUtil.create('label', '', this.container)
-    this.minLabel.innerHTML = minLabel
+    this.minLabel.textContent = minLabel
 
     this.minInput = L.DomUtil.create('input', '', this.minLabel)
     this.minInput.type = this.inputType
@@ -817,9 +817,8 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
       this.minInput.dataset.value = min
     }
 
-
     this.maxLabel = L.DomUtil.create('label', '', this.container)
-    this.maxLabel.innerHTML = maxLabel
+    this.maxLabel.textContent = maxLabel
 
     this.maxInput = L.DomUtil.create('input', '', this.maxLabel)
     this.maxInput.type = this.inputType
@@ -834,7 +833,7 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-    this.label = L.DomUtil.element('legend', {textContent: this.options.label})
+    this.label = L.DomUtil.element('legend', { textContent: this.options.label })
   },
 
   toJS: function () {
@@ -974,22 +973,25 @@ L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
   },
 
   buildHelpText: function () {
-    const datalist = L.DomUtil.create(
-      'datalist',
-      'umap-field-datalist',
-      this.getHelpTextParent()
-    )
-    datalist.id = `range-${this.options.label || this.name}`
-    this.input.setAttribute('list', datalist.id)
     let options = ''
-    const step = this.options.step || 1,
-      digits = step < 1 ? 1 : 0
+    const step = this.options.step || 1
+    const digits = step < 1 ? 1 : 0
+    const id = `range-${this.options.label || this.name}`
     for (let i = this.options.min; i <= this.options.max; i += this.options.step) {
       options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(
         digits
       )}"></option>`
     }
-    datalist.innerHTML = options
+    const datalist = L.DomUtil.element(
+      'datalist',
+      {
+        className: 'umap-field-datalist',
+        safeHTML: options,
+        id: id,
+      },
+      this.getHelpTextParent()
+    )
+    this.input.setAttribute('list', id)
     L.FormBuilder.Input.prototype.buildHelpText.call(this)
   },
 })

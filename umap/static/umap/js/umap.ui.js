@@ -51,13 +51,13 @@ U.UI = L.Evented.extend({
       close,
       this
     )
-    L.DomUtil.add('i', 'umap-close-icon', closeButton)
+    L.DomUtil.create('i', 'umap-close-icon', closeButton)
     const label = L.DomUtil.create('span', '', closeButton)
     label.title = label.textContent = L._('Close')
-    L.DomUtil.add('div', '', this._alert, e.content)
+    L.DomUtil.element('div', {innerHTML: e.content}, this._alert)
     if (e.actions) {
       let action, el, input
-      const form = L.DomUtil.add('div', 'umap-alert-actions', this._alert)
+      const form = L.DomUtil.create('div', 'umap-alert-actions', this._alert)
       for (let i = 0; i < e.actions.length; i++) {
         action = e.actions[i]
         if (action.input) {
@@ -97,7 +97,7 @@ U.UI = L.Evented.extend({
         this.anchorTooltipAbsolute()
       }
       L.DomUtil.addClass(this.parent, 'umap-tooltip')
-      this._tooltip.innerHTML = opts.content
+      this._tooltip.innerHTML = U.Utils.escapeHTML(opts.content)
     }
     this.TOOLTIP_ID = window.setTimeout(L.bind(showIt, this), opts.delay || 0)
     const id = this.TOOLTIP_ID

@@ -73,7 +73,7 @@ L.DomUtil.add = (tagName, className, container, content) => {
     if (content.nodeType && content.nodeType === 1) {
       el.appendChild(content)
     } else {
-      el.innerHTML = content
+      el.textContent = content
     }
   }
   return el
@@ -165,6 +165,11 @@ L.DomUtil.classIf = (el, className, bool) => {
 
 L.DomUtil.element = (what, attrs, parent) => {
   const el = document.createElement(what)
+  if (attrs.innerHTML) {
+    attrs.innerHTML = U.Utils.escapeHTML(attrs.innerHTML)
+  } else if (attrs.safeHTML) {
+    attrs.innerHTML = attrs.safeHTML
+  }
   for (const attr in attrs) {
     el[attr] = attrs[attr]
   }
