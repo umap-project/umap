@@ -584,7 +584,8 @@ i.info {
     display: flex;
     justify-content: space-around;
     font-size: 1.2em;
-    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
 }
 .flat-tabs button {
     padding: 10px;
@@ -593,7 +594,7 @@ i.info {
 }
 .flat-tabs .on {
     font-weight: bold;
-    border-bottom: 1px solid #444;
+    border-bottom: 2px solid #444;
 }
 .dark .flat-tabs button {
     color: #fff;
