@@ -326,9 +326,9 @@ class UserDownload(DetailView, SearchMixin):
                 zip_file.writestr(file_name, geojson_file.getvalue())
 
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
-        response[
-            "Content-Disposition"
-        ] = 'attachment; filename="umap_backup_complete.zip"'
+        response["Content-Disposition"] = (
+            'attachment; filename="umap_backup_complete.zip"'
+        )
         return response
 
 
@@ -503,6 +503,8 @@ class MapDetailMixin:
             ],
             "umap_version": VERSION,
             "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
+            "websocketEnabled": settings.WEBSOCKET_ENABLED,
+            "websocketURI": settings.WEBSOCKET_URI,
         }
         created = bool(getattr(self, "object", None))
         if (created and self.object.owner) or (not created and not user.is_anonymous):
@@ -623,8 +625,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
 
     def get_datalayers(self):
         return [
-            l.metadata(self.request.user, self.request)
-            for l in self.object.datalayer_set.all()
+            dl.metadata(self.request.user, self.request)
+            for dl in self.object.datalayer_set.all()
         ]
 
     @property
@@ -674,9 +676,9 @@ class MapDownload(DetailView):
     def render_to_response(self, context, *args, **kwargs):
         umapjson = self.object.generate_umapjson(self.request)
         response = simple_json_response(**umapjson)
-        response[
-            "Content-Disposition"
-        ] = f'attachment; filename="umap_backup_{self.object.slug}.umap"'
+        response["Content-Disposition"] = (
+            f'attachment; filename="umap_backup_{self.object.slug}.umap"'
+        )
         return response
 
 
