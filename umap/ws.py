@@ -51,7 +51,7 @@ class OperationMessage(BaseModel):
     subject: str = Literal["map", "layer", "feature"]
     metadata: Optional[dict] = None
     key: Optional[str] = None
-    value: Optional[str | bool | int | GeometryValue] = None
+    value: Optional[str | bool | int | GeometryValue | Geometry] = None
 
 
 async def join_and_listen(

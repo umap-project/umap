@@ -1,8 +1,9 @@
 import { translate } from './i18n.js'
 
 // Possible impacts
-// ['ui', 'data', 'limit-bounds', 'datalayer-index', 'remote-data', 'background']
+// ['ui', 'data', 'limit-bounds', 'datalayer-index', 'remote-data', 'background' 'sync']
 
+// This is sorted alphabetically
 export const SCHEMA = {
   browsable: {
     impacts: ['ui'],
@@ -13,6 +14,12 @@ export const SCHEMA = {
     impacts: ['ui'],
     label: translate('Do you want to display a caption bar?'),
     default: false,
+  },
+  captionControl: {
+    type: Boolean,
+    nullable: true,
+    label: translate('Display the caption control'),
+    default: true,
   },
   captionMenus: {
     type: Boolean,
@@ -184,7 +191,6 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
   },
-
   interactive: {
     type: Boolean,
     impacts: ['data'],
@@ -373,12 +379,6 @@ export const SCHEMA = {
     impacts: ['ui'],
     label: translate('Allow scroll wheel zoom?'),
   },
-  captionControl: {
-    type: Boolean,
-    nullable: true,
-    label: translate('Display the caption control'),
-    default: true,
-  },
   searchControl: {
     type: Boolean,
     impacts: ['ui'],
@@ -436,6 +436,13 @@ export const SCHEMA = {
     helpEntries: 'stroke',
     inheritable: true,
     default: true,
+  },
+  syncEnabled: {
+    type: Boolean,
+    impacts: ['sync', 'ui'],
+    label: translate('Enable real-time collaboration'),
+    helpEntries: 'sync',
+    default: false,
   },
   tilelayer: {
     type: Object,

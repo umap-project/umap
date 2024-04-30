@@ -248,19 +248,25 @@ U.Map = L.Map.extend({
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
+    this.sync = new U.SyncEngine(this)
 
     Promise.resolve(this.initSyncEngine())
   },
 
   initSyncEngine: async function () {
-    // Get the authentication token from the server
-    // And pass it to the sync engine.
-    // FIXME: use `this.urls`
-    const [response, _, error] = await this.server.get(
-      `/map/${this.options.umap_id}/ws-token/`
-    )
-    if (!error) {
-      this.sync = new U.SyncEngine(this, 'ws://localhost:8001', response.token)
+    console.log('this.options.syncEnabled', this.options.syncEnabled)
+    if (this.options.syncEnabled != true) {
+      this.sync.stop()
+    } else {
+      // Get the authentication token from the server
+      // And pass it to the sync engine.
+      // FIXME: use `this.urls`
+      const [response, _, error] = await this.server.get(
+        `/map/${this.options.umap_id}/ws-token/`
+      )
+      if (!error) {
+        this.sync.start('ws://localhost:8001', response.token)
+      }
     }
   },
 
@@ -294,6 +300,8 @@ U.Map = L.Map.extend({
         case 'bounds':
           this.handleLimitBounds()
           break
+        case 'sync':
+          this.initSyncEngine()
       }
     }
   },
@@ -1036,7 +1044,7 @@ U.Map = L.Map.extend({
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
     const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
-    const [data, response, error] = await this.server.post(uri, {}, formData)
+    const [data, _, error] = await this.server.post(uri, {}, formData)
     // FIXME: login_required response will not be an error, so it will not
     // stop code while it should
     if (!error) {
@@ -1538,7 +1546,7 @@ U.Map = L.Map.extend({
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
     const container = L.DomUtil.create('div', 'umap-edit-container'),
-      metadataFields = ['options.name', 'options.description'],
+      metadataFields = ['options.name', 'options.description', 'options.syncEnabled'],
       title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map details')
     const builder = new U.FormBuilder(this, metadataFields, {
