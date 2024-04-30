@@ -306,3 +306,10 @@ LOGGING = {
         },
     },
 }
+
+# WebSocket configuration
+
+WEBSOCKET_ENABLED = False
+WEBSOCKET_HOST = "localhost"
+WEBSOCKET_PORT = 8001
+WEBSOCKET_URI = "ws://localhost:8001"

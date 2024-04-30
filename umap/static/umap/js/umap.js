@@ -254,6 +254,7 @@ U.Map = L.Map.extend({
   },
 
   initSyncEngine: async function () {
+    if (this.options.websocketEnabled == false) return
     console.log('this.options.syncEnabled', this.options.syncEnabled)
     if (this.options.syncEnabled != true) {
       this.sync.stop()
@@ -265,7 +266,7 @@ U.Map = L.Map.extend({
         `/map/${this.options.umap_id}/ws-token/`
       )
       if (!error) {
-        this.sync.start('ws://localhost:8001', response.token)
+        this.sync.start(this.options.websocketURI, response.token)
       }
     }
   },
@@ -1545,9 +1546,14 @@ U.Map = L.Map.extend({
   editCaption: function () {
     if (!this.editEnabled) return
     if (this.options.editMode !== 'advanced') return
-    const container = L.DomUtil.create('div', 'umap-edit-container'),
-      metadataFields = ['options.name', 'options.description', 'options.syncEnabled'],
-      title = L.DomUtil.create('h3', '', container)
+    const container = L.DomUtil.create('div', 'umap-edit-container')
+    const metadataFields = ['options.name', 'options.description']
+
+    if (this.options.websocketEnabled) {
+      metadataFields.push('options.syncEnabled')
+    }
+
+    const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map details')
     const builder = new U.FormBuilder(this, metadataFields, {
       className: 'map-metadata',

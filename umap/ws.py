@@ -98,8 +98,16 @@ async def handler(websocket):
 
 
 async def main():
-    print("WebSocket server waiting for connections")
-    async with serve(handler, "localhost", 8001):
+    if not settings.WEBSOCKET_ENABLED:
+        print("WEBSOCKET_ENABLED should be set to True to run the WebSocket Server")
+        exit(1)
+
+    async with serve(handler, settings.WEBSOCKET_HOST, settings.WEBSOCKET_PORT):
+        print(
+            (
+                f"Waiting for connections on {settings.WEBSOCKET_HOST}:{settings.WEBSOCKET_PORT}"
+            )
+        )
         await asyncio.Future()  # run forever
 
 
