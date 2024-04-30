@@ -667,8 +667,8 @@ const ControlsMixin = {
   displayCaption: function () {
     const container = L.DomUtil.create('div', 'umap-caption')
     L.DomUtil.createTitle(container, this.options.name, 'icon-caption')
-    this.browser.tabsMenu(container, 'info')
     this.permissions.addOwnerLink('h5', container)
+    this.browser.tabsMenu(container, 'info')
     if (this.options.description) {
       const description = L.DomUtil.element({
         tagName: 'div',
