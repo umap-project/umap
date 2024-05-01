@@ -392,7 +392,7 @@ U.EditControl = L.Control.extend({
       'mouseover',
       function () {
         map.ui.tooltip({
-          content: `${L._('Switch to edit mode')} (<kbd>Ctrl+E</kbd>)`,
+          content: map.help.displayLabel('TOGGLE_EDIT'),
           anchor: enableEditing,
           position: 'bottom',
           delay: 750,
