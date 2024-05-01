@@ -203,3 +203,24 @@ def test_email_sending_error_are_catched(tilelayer, page, live_server):
             alert.get_by_role("button", name="Send me the link").click()
         assert patched.called
         expect(alert.get_by_text("Can't send email to foo@bar.com")).to_be_visible()
+
+
+@pytest.mark.skip(reason="Changing DEFAULT_FROM_EMAIL at runtime has no effect")
+def test_alert_message_after_create_show_link_even_without_mail(
+    tilelayer, live_server, page, monkeypatch, settings
+):
+    # Disable email
+    settings.DEFAULT_FROM_EMAIL = None
+    page.goto(f"{live_server.url}/en/map/new")
+    with page.expect_response(re.compile(r".*/map/create/")):
+        page.get_by_role("button", name="Save").click()
+    alert = page.locator(".umap-alert")
+    expect(alert).to_be_visible()
+    expect(
+        alert.get_by_text(
+            "Your map has been created! As you are not logged in, here is your secret "
+            "link to edit the map, please keep it safe:"
+        )
+    ).to_be_visible()
+    expect(alert.get_by_role("button", name="Copy")).to_be_visible()
+    expect(alert.get_by_role("button", name="Send me the link")).to_be_hidden()
