@@ -35,27 +35,25 @@ U.AutoComplete = L.Class.extend({
   },
 
   createInput: function () {
-    this.input = L.DomUtil.element(
-      'input',
-      {
-        type: 'text',
-        placeholder: this.options.placeholder,
-        autocomplete: 'off',
-        className: this.options.className,
-      },
-      this.el
-    )
+    this.input = L.DomUtil.element({
+      tagName: 'input',
+      type: 'text',
+      parent: this.el,
+      placeholder: this.options.placeholder,
+      autocomplete: 'off',
+      className: this.options.className,
+    })
     L.DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
     L.DomEvent.on(this.input, 'keyup', this.onKeyUp, this)
     L.DomEvent.on(this.input, 'blur', this.onBlur, this)
   },
 
   createContainer: function () {
-    this.container = L.DomUtil.element(
-      'ul',
-      { className: 'umap-autocomplete' },
-      document.body
-    )
+    this.container = L.DomUtil.element({
+      tagName: 'ul',
+      parent: document.body,
+      className: 'umap-autocomplete',
+    })
   },
 
   resizeContainer: function () {
@@ -174,8 +172,11 @@ U.AutoComplete = L.Class.extend({
   },
 
   createResult: function (item) {
-    const el = L.DomUtil.element('li', {}, this.container)
-    el.textContent = item.label
+    const el = L.DomUtil.element({
+      tagName: 'li',
+      parent: this.container,
+      textContent: item.label,
+    })
     const result = {
       item: item,
       el: el,
@@ -276,15 +277,22 @@ U.AutoComplete.Ajax.SelectMultiple = U.AutoComplete.Ajax.extend({
   initSelectedContainer: function () {
     return L.DomUtil.after(
       this.input,
-      L.DomUtil.element('ul', { className: 'umap-multiresult' })
+      L.DomUtil.element({ tagName: 'ul', className: 'umap-multiresult' })
     )
   },
 
   displaySelected: function (result) {
-    const result_el = L.DomUtil.element('li', {}, this.selected_container)
+    const result_el = L.DomUtil.element({
+      tagName: 'li',
+      parent: this.selected_container,
+    })
     result_el.textContent = result.item.label
-    const close = L.DomUtil.element('span', { className: 'close' }, result_el)
-    close.textContent = '×'
+    const close = L.DomUtil.element({
+      tagName: 'span',
+      parent: result_el,
+      className: 'close',
+      textContent: '×',
+    })
     L.DomEvent.on(
       close,
       'click',
@@ -302,15 +310,22 @@ U.AutoComplete.Ajax.Select = U.AutoComplete.Ajax.extend({
   initSelectedContainer: function () {
     return L.DomUtil.after(
       this.input,
-      L.DomUtil.element('div', { className: 'umap-singleresult' })
+      L.DomUtil.element({ tagName: 'div', className: 'umap-singleresult' })
     )
   },
 
   displaySelected: function (result) {
-    const result_el = L.DomUtil.element('div', {}, this.selected_container)
+    const result_el = L.DomUtil.element({
+      tagName: 'div',
+      parent: this.selected_container,
+    })
     result_el.textContent = result.item.label
-    const close = L.DomUtil.element('span', { className: 'close' }, result_el)
-    close.textContent = '×'
+    const close = L.DomUtil.element({
+      tagName: 'span',
+      parent: result_el,
+      className: 'close',
+      textContent: '×',
+    })
     this.input.style.display = 'none'
     L.DomEvent.on(
       close,

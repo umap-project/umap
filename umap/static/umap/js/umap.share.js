@@ -143,7 +143,7 @@ U.Share = L.Class.extend({
     }
     const iframeExporter = new U.IframeExporter(this.map)
     const buildIframeCode = () => {
-      iframe.innerHTML = iframeExporter.build()
+      iframe.textContent = iframeExporter.build()
       exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
     }
     buildIframeCode()

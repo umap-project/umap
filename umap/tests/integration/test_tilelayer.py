@@ -112,3 +112,13 @@ def test_map_should_display_custom_tilelayer(map, live_server, tilelayers, page)
     iconTiles = page.locator(".leaflet-iconLayers .leaflet-iconLayers-layer")
     # The second of the list should be the current
     expect(iconTiles.nth(1)).to_have_css("background-image", url_pattern)
+
+
+def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
+    map.settings["properties"]["tilelayer"]["attribution"] = (
+        "&copy; [[http://www.openstreetmap.org/copyright|OpenStreetMap]] contributors"
+    )
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_text("© OpenStreetMap contributors")).to_be_visible()
+    expect(page.get_by_role("link", name="OpenStreetMap")).to_be_visible()

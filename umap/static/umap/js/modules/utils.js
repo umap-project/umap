@@ -70,7 +70,6 @@ export default function getPurify() {
 export function escapeHTML(s) {
   s = s ? s.toString() : ''
   s = getPurify().sanitize(s, {
-    USE_PROFILES: { html: true },
     ADD_TAGS: ['iframe'],
     ALLOWED_TAGS: [
       'h3',
@@ -86,9 +85,10 @@ export function escapeHTML(s) {
       'iframe',
       'img',
       'br',
+      'span',
     ],
     ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'frameborder', 'scrolling'],
-    ALLOWED_ATTR: ['href', 'src', 'width', 'height'],
+    ALLOWED_ATTR: ['href', 'src', 'width', 'height', 'style'],
     // Added: `geo:` URL scheme as defined in RFC5870:
     // https://www.rfc-editor.org/rfc/rfc5870.html
     // The base RegExp comes from:

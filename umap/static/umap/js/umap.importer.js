@@ -15,21 +15,24 @@ U.Importer = L.Class.extend({
     this.presetBox = L.DomUtil.create('div', 'formbox', this.container)
     this.presetSelect = L.DomUtil.create('select', '', this.presetBox)
     this.fileBox = L.DomUtil.create('div', 'formbox', this.container)
-    this.fileInput = L.DomUtil.element(
-      'input',
-      { type: 'file', multiple: 'multiple', autofocus: true },
-      this.fileBox
-    )
-    this.urlInput = L.DomUtil.element(
-      'input',
-      { type: 'text', placeholder: L._('Provide an URL here') },
-      this.container
-    )
-    this.rawInput = L.DomUtil.element(
-      'textarea',
-      { placeholder: L._('Paste your data here') },
-      this.container
-    )
+    this.fileInput = L.DomUtil.element({
+      tagName: 'input',
+      type: 'file',
+      parent: this.fileBox,
+      multiple: 'multiple',
+      autofocus: true,
+    })
+    this.urlInput = L.DomUtil.element({
+      tagName: 'input',
+      type: 'text',
+      parent: this.container,
+      placeholder: L._('Provide an URL here'),
+    })
+    this.rawInput = L.DomUtil.element({
+      tagName: 'textarea',
+      parent: this.container,
+      placeholder: L._('Paste your data here'),
+    })
     this.typeLabel = L.DomUtil.add(
       'label',
       '',
@@ -42,33 +45,43 @@ U.Importer = L.Class.extend({
       this.container,
       L._('Choose the layer to import in')
     )
-    this.clearLabel = L.DomUtil.element(
-      'label',
-      { textContent: L._('Replace layer content'), for: 'datalayer-clear-check' },
-      this.container
-    )
-    this.submitInput = L.DomUtil.element(
-      'input',
-      { type: 'button', value: L._('Import'), className: 'button' },
-      this.container
-    )
+    this.clearLabel = L.DomUtil.element({
+      tagName: 'label',
+      parent: this.container,
+      textContent: L._('Replace layer content'),
+      for: 'datalayer-clear-check',
+    })
+    this.submitInput = L.DomUtil.element({
+      tagName: 'input',
+      type: 'button',
+      parent: this.container,
+      value: L._('Import'),
+      className: 'button',
+    })
     this.map.help.button(this.typeLabel, 'importFormats')
-    this.typeInput = L.DomUtil.element('select', { name: 'format' }, this.typeLabel)
-    this.layerInput = L.DomUtil.element(
-      'select',
-      { name: 'datalayer' },
-      this.layerLabel
-    )
-    this.clearFlag = L.DomUtil.element(
-      'input',
-      { type: 'checkbox', name: 'clear', id: 'datalayer-clear-check' },
-      this.clearLabel
-    )
-    L.DomUtil.element(
-      'option',
-      { value: '', textContent: L._('Choose the data format') },
-      this.typeInput
-    )
+    this.typeInput = L.DomUtil.element({
+      tagName: 'select',
+      name: 'format',
+      parent: this.typeLabel,
+    })
+    this.layerInput = L.DomUtil.element({
+      tagName: 'select',
+      name: 'datalayer',
+      parent: this.layerLabel,
+    })
+    this.clearFlag = L.DomUtil.element({
+      tagName: 'input',
+      type: 'checkbox',
+      name: 'clear',
+      id: 'datalayer-clear-check',
+      parent: this.clearLabel,
+    })
+    L.DomUtil.element({
+      tagName: 'option',
+      value: '',
+      textContent: L._('Choose the data format'),
+      parent: this.typeInput,
+    })
     for (let i = 0; i < this.TYPES.length; i++) {
       option = L.DomUtil.create('option', '', this.typeInput)
       option.value = option.textContent = this.TYPES[i]
@@ -119,11 +132,12 @@ U.Importer = L.Class.extend({
           option.value = id
         }
       })
-      L.DomUtil.element(
-        'option',
-        { value: '', textContent: L._('Import in a new layer') },
-        this.layerInput
-      )
+      L.DomUtil.element({
+        tagName: 'option',
+        value: '',
+        textContent: L._('Import in a new layer'),
+        parent: this.layerInput,
+      })
     })
   },
 

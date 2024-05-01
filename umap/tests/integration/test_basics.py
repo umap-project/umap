@@ -45,3 +45,24 @@ def test_create_map_with_cursor(page, live_server, tilelayer):
             "z-index: 200;"
         ),
     )
+
+
+def test_cannot_put_script_tag_in_datalayer_name_or_description(
+    openmap, live_server, page, tilelayer
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
+    page.get_by_role("button", name="Edit").click()
+    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Add a layer").click()
+    page.locator('input[name="name"]').click()
+    page.locator('input[name="name"]').fill('<script>alert("attack")</script>')
+    page.locator(".umap-field-description textarea").click()
+    page.locator(".umap-field-description textarea").fill(
+        '<p>before <script>alert("attack")</script> after</p>'
+    )
+    page.get_by_role("button", name="Save").click()
+    page.get_by_role("button", name="About").click()
+    # Title should contain raw HTML (we are using textContent)
+    expect(page.get_by_text('<script>alert("attack")</script>')).to_be_visible()
+    # Description should contain escaped HTML
+    expect(page.get_by_text("before after")).to_be_visible()
