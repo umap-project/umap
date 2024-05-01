@@ -754,13 +754,7 @@ const ControlsMixin = {
     const rightContainer = L.DomUtil.create('div', 'umap-right-edit-toolbox', container)
     const logo = L.DomUtil.create('div', 'logo', leftContainer)
     L.DomUtil.createLink('', logo, 'uMap', '/', null, L._('Go to the homepage'))
-    const nameButton = L.DomUtil.createButton(
-      'map-name',
-      leftContainer,
-      '',
-      this.edit,
-      this
-    )
+    const nameButton = L.DomUtil.createButton('map-name', leftContainer, '')
     L.DomEvent.on(
       nameButton,
       'mouseover',
@@ -809,7 +803,7 @@ const ControlsMixin = {
     update()
     this.once('saved', L.bind(update, this))
     if (this.options.editMode === 'advanced') {
-      L.DomEvent.on(nameButton, 'click', this.edit, this)
+      L.DomEvent.on(nameButton, 'click', this.editCaption, this)
       L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
     this.on('postsync', L.bind(update, this))

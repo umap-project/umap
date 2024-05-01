@@ -21,6 +21,13 @@ def test_can_edit_name(page, live_server, tilelayer):
     )
 
 
+def test_can_edit_name_on_click_on_toolbar(page, live_server, tilelayer):
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.locator(".map-name").click()
+    name_input = page.locator('.map-metadata input[name="name"]')
+    expect(name_input).to_be_visible()
+
+
 def test_map_name_impacts_ui(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
