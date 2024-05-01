@@ -118,19 +118,21 @@ L.DomUtil.createLink = (className, container, content, url, target, title) => {
 }
 
 L.DomUtil.createIcon = (parent, className, title, size = 16) => {
-  return L.DomUtil.element(
-    'i',
-    { className: `icon icon-${size} ${className}`, title: title || '' },
-    parent
-  )
+  return L.DomUtil.element({
+    tagName: 'i',
+    parent: parent,
+    className: `icon icon-${size} ${className}`,
+    title: title || '',
+  })
 }
 
 L.DomUtil.createButtonIcon = (parent, className, title, size = 16) => {
-  return L.DomUtil.element(
-    'button',
-    { className: `icon icon-${size} ${className}`, title: title || '' },
-    parent
-  )
+  return L.DomUtil.element({
+    tagName: 'button',
+    parent: parent,
+    className: `icon icon-${size} ${className}`,
+    title: title || '',
+  })
 }
 
 L.DomUtil.createTitle = (parent, text, className, tag = 'h3') => {
@@ -163,8 +165,8 @@ L.DomUtil.classIf = (el, className, bool) => {
   else L.DomUtil.removeClass(el, className)
 }
 
-L.DomUtil.element = (what, attrs, parent) => {
-  const el = document.createElement(what)
+L.DomUtil.element = ({ tagName, parent, ...attrs }) => {
+  const el = document.createElement(tagName)
   if (attrs.innerHTML) {
     attrs.innerHTML = U.Utils.escapeHTML(attrs.innerHTML)
   } else if (attrs.safeHTML) {

@@ -669,14 +669,12 @@ const ControlsMixin = {
     L.DomUtil.createTitle(container, this.options.name, 'icon-caption')
     this.permissions.addOwnerLink('h5', container)
     if (this.options.description) {
-      const description = L.DomUtil.element(
-        'div',
-        {
-          className: 'umap-map-description',
-          safeHTML: U.Utils.toHTML(this.options.description),
-        },
-        container
-      )
+      const description = L.DomUtil.element({
+        tagName: 'div',
+        className: 'umap-map-description',
+        safeHTML: U.Utils.toHTML(this.options.description),
+        parent: container,
+      })
     }
     const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
     this.eachVisibleDataLayer((datalayer) => {
@@ -687,11 +685,11 @@ const ControlsMixin = {
       datalayer.onceLoaded(function () {
         datalayer.renderLegend(legend)
         if (datalayer.options.description) {
-          L.DomUtil.element(
-            'span',
-            { safeHTML: U.Utils.toHTML(datalayer.options.description) },
-            p
-          )
+          L.DomUtil.element({
+            tagName: 'span',
+            parent: p,
+            safeHTML: U.Utils.toHTML(datalayer.options.description),
+          })
         }
       })
       datalayer.renderToolbox(headline)
@@ -701,13 +699,11 @@ const ControlsMixin = {
       credits = L.DomUtil.createFieldset(creditsContainer, L._('Credits'))
     title = L.DomUtil.add('h5', '', credits, L._('User content credits'))
     if (this.options.shortCredit || this.options.longCredit) {
-      L.DomUtil.element(
-        'p',
-        {
-          safeHTML: U.Utils.toHTML(this.options.longCredit || this.options.shortCredit),
-        },
-        credits
-      )
+      L.DomUtil.element({
+        tagName: 'p',
+        parent: credits,
+        safeHTML: U.Utils.toHTML(this.options.longCredit || this.options.shortCredit),
+      })
     }
     if (this.options.licence) {
       const licence = L.DomUtil.add(
@@ -729,16 +725,16 @@ const ControlsMixin = {
     title = L.DomUtil.create('h5', '', credits)
     title.textContent = L._('Map background credits')
     const tilelayerCredit = L.DomUtil.create('p', '', credits)
-    L.DomUtil.element(
-      'strong',
-      { textContent: `${this.selected_tilelayer.options.name} ` },
-      tilelayerCredit
-    )
-    L.DomUtil.element(
-      'span',
-      { safeHTML: this.selected_tilelayer.getAttribution() },
-      tilelayerCredit
-    )
+    L.DomUtil.element({
+      tagName: 'strong',
+      parent: tilelayerCredit,
+      textContent: `${this.selected_tilelayer.options.name} `,
+    })
+    L.DomUtil.element({
+      tagName: 'span',
+      parent: tilelayerCredit,
+      safeHTML: this.selected_tilelayer.getAttribution(),
+    })
     L.DomUtil.create('hr', '', credits)
     const urls = {
       leaflet: 'http://leafletjs.com',
@@ -756,7 +752,7 @@ const ControlsMixin = {
       `,
       urls
     )
-    L.DomUtil.element('p', { innerHTML: creditHTML }, credits)
+    L.DomUtil.element({ tagName: 'p', innerHTML: creditHTML, parent: credits })
     this.panel.open({ content: container })
   },
 
@@ -1073,11 +1069,11 @@ U.AttributionControl = L.Control.Attribution.extend({
     const shortCredit = this._map.getOption('shortCredit'),
       captionMenus = this._map.getOption('captionMenus')
     if (shortCredit) {
-      L.DomUtil.element(
-        'span',
-        { safeHTML: ` — ${U.Utils.toHTML(shortCredit)}` },
-        container
-      )
+      L.DomUtil.element({
+        tagName: 'span',
+        parent: container,
+        safeHTML: ` — ${U.Utils.toHTML(shortCredit)}`,
+      })
     }
     if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)

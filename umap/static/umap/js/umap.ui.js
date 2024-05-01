@@ -54,18 +54,19 @@ U.UI = L.Evented.extend({
     L.DomUtil.create('i', 'umap-close-icon', closeButton)
     const label = L.DomUtil.create('span', '', closeButton)
     label.title = label.textContent = L._('Close')
-    L.DomUtil.element('div', {innerHTML: e.content}, this._alert)
+    L.DomUtil.element({ tagName: 'div', innerHTML: e.content, parent: this._alert })
     if (e.actions) {
       let action, el, input
       const form = L.DomUtil.create('div', 'umap-alert-actions', this._alert)
       for (let i = 0; i < e.actions.length; i++) {
         action = e.actions[i]
         if (action.input) {
-          input = L.DomUtil.element(
-            'input',
-            { className: 'umap-alert-input', placeholder: action.input },
-            form
-          )
+          input = L.DomUtil.element({
+            tagName: 'input',
+            parent: form,
+            className: 'umap-alert-input',
+            placeholder: action.input,
+          })
         }
         el = L.DomUtil.createButton(
           'umap-action',

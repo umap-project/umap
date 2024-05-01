@@ -757,7 +757,10 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-    this.label = L.DomUtil.element('legend', { textContent: this.options.label })
+    this.label = L.DomUtil.element({
+      tagName: 'legend',
+      textContent: this.options.label,
+    })
   },
 
   buildLi: function (value) {
@@ -833,7 +836,10 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
   },
 
   buildLabel: function () {
-    this.label = L.DomUtil.element('legend', { textContent: this.options.label })
+    this.label = L.DomUtil.element({
+      tagName: 'legend',
+      textContent: this.options.label,
+    })
   },
 
   toJS: function () {
@@ -982,15 +988,13 @@ L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
         digits
       )}"></option>`
     }
-    const datalist = L.DomUtil.element(
-      'datalist',
-      {
-        className: 'umap-field-datalist',
-        safeHTML: options,
-        id: id,
-      },
-      this.getHelpTextParent()
-    )
+    const datalist = L.DomUtil.element({
+      tagName: 'datalist',
+      parent: this.getHelpTextParent(),
+      className: 'umap-field-datalist',
+      safeHTML: options,
+      id: id,
+    })
     this.input.setAttribute('list', id)
     L.FormBuilder.Input.prototype.buildHelpText.call(this)
   },

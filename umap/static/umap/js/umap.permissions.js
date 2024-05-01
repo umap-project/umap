@@ -65,11 +65,12 @@ U.MapPermissions = L.Class.extend({
         const helpText = `${L._('Secret edit link:')}<br>${
           this.options.anonymous_edit_url
         }`
-        L.DomUtil.element(
-          'p',
-          { className: 'help-text', innerHTML: helpText },
-          container
-        )
+        L.DomUtil.element({
+          tagName: 'p',
+          className: 'help-text',
+          innerHTML: helpText,
+          parent: container,
+        })
         fields.push([
           'options.edit_status',
           {

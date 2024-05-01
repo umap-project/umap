@@ -190,7 +190,11 @@ U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
   addRow: function (container, key, value) {
     const tr = L.DomUtil.create('tr', '', container)
     L.DomUtil.add('th', '', tr, key)
-    L.DomUtil.element('td', { innerHTML: this.formatRow(key, value) }, tr)
+    L.DomUtil.element({
+      tagName: 'td',
+      parent: tr,
+      innerHTML: this.formatRow(key, value),
+    })
   },
 
   renderBody: function () {
@@ -281,11 +285,12 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
       }
     }
     if (props.website) {
-      L.DomUtil.element(
-        'a',
-        { href: props.website, textContent: props.website },
-        container
-      )
+      L.DomUtil.element({
+        tagName: 'a',
+        parent: container,
+        href: props.website,
+        textContent: props.website,
+      })
     }
     const phone = props.phone || props['contact:phone']
     if (phone) {
@@ -293,7 +298,7 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
         'div',
         '',
         container,
-        L.DomUtil.element('a', { href: `tel:${phone}`, textContent: phone })
+        L.DomUtil.element({ tagName: 'a', href: `tel:${phone}`, textContent: phone })
       )
     }
     if (props.mobile) {
@@ -301,7 +306,8 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
         'div',
         '',
         container,
-        L.DomUtil.element('a', {
+        L.DomUtil.element({
+          tagName: 'a',
           href: `tel:${props.mobile}`,
           textContent: props.mobile,
         })
@@ -322,7 +328,8 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
         'div',
         'osm-link',
         container,
-        L.DomUtil.element('a', {
+        L.DomUtil.element({
+          tagName: 'a',
           href: `https://www.openstreetmap.org/${id}`,
           textContent: L._('See on OpenStreetMap'),
         })
