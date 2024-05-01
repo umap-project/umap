@@ -1,4 +1,4 @@
-import {default as DOMPurifyInitializer} from '../../vendors/dompurify/purify.es.mjs'
+import { default as DOMPurifyInitializer } from '../../vendors/dompurify/purify.es.js'
 import { JSDOM } from 'jsdom'
 
 console.log(DOMPurifyInitializer)
