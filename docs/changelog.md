@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.1 -  2024-05-01
+
+### Bug fixes
+
+* no .mjs extension for JS modules by @davidbgk in #1786
+
+
 ## 2.2.0 -  2024-05-01
 
 ### New features and improvements
