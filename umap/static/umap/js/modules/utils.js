@@ -1,4 +1,4 @@
-import { default as DOMPurifyInitializer } from '../../vendors/dompurify/purify.es.mjs'
+import { default as DOMPurifyInitializer } from '../../vendors/dompurify/purify.es.js'
 
 /**
  * Generate a pseudo-unique identifier (5 chars long, mixed-case alphanumeric)
@@ -358,7 +358,7 @@ export function template(str, data) {
 }
 
 export function parseNaiveDate(value) {
-    const naive = new Date(value)
-    // Let's pretend naive date are UTC, and remove time…
-    return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
+  const naive = new Date(value)
+  // Let's pretend naive date are UTC, and remove time…
+  return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
 }
