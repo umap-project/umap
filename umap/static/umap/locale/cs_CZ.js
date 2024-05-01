@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Čárkami oddělený seznam vlastností pro filtrování objektů",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Hodnoty oddělené čárkou, tabulátorem, nebo středníkem. předpokládá se SRS WGS84 a jsou importovány jen polohy bodů. Import hledá záhlaví sloupců začínající na \"lat\" nebo \"lon\" a ty považuje za souřadnice (na velikosti písmen nesejde). Ostatní sloupce jsou importovány jako vlastnosti.",
     "Congratulations, your map has been created!": "Gratulujeme, vaše mapa byla vytvořena!",
-    "Continue line (Ctrl+Click)": "Pokračovat v čáře (Ctrl+Klik)",
     "Continue line": "Pokračovat v čáře",
     "Coordinates": "Souřadnice",
     "Copy link": "Kopírovat odkaz",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "linka",
     "Supported scheme": "Podporované schéma",
     "Supported variables that will be dynamically replaced": "Podporované proměnné, které budou automaticky nahrazeny",
-    "Switch to edit mode": "Přepnout do režimu úprav",
     "Symbol": "Symbol",
     "Table": "Tabulka",
     "Text color for the cluster label": "Barva textu popisku shluku",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

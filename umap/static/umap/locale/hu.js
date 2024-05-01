@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Tulajdonságok vesszővel tagolt sora, amely objektumok szűrésére használható",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Vesszővel, pontosvesszővel vagy tabulátorral tagolt értékek a WGS84 referenciarendszer szerint. Csak a pontok pozíciója importálódik. Az import során az oszlopfejlécekben, a címsor kezdetén található „lat” és „long” említések vétetenek figyelembe; kis- vagy nagybetű nem számít. Az összes többi oszlop tulajdonságként importálódik.",
     "Congratulations, your map has been created!": "Gratulálunk, a térképe elkészült!",
-    "Continue line (Ctrl+Click)": "Vonal folytatása (Ctrl+Kattintás)",
     "Continue line": "Vonal folytatása",
     "Coordinates": "Koordináták",
     "Copy link": "Link másolása",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "körvonal",
     "Supported scheme": "Támogatott séma",
     "Supported variables that will be dynamically replaced": "Támogatott változók, amelyek dinamikusan behelyettesítődnek",
-    "Switch to edit mode": "Átkapcsolás szerkesztési módra",
     "Symbol": "Jelkép",
     "Table": "Táblázat",
     "Text color for the cluster label": "Csoportcímke szövegének színe",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

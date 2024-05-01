@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Lista di proprietà separate da virgola da utilizzare per filtrare gli oggetti",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Valori separati da virgola, tabulatore o punto e virgola. Il sistema di riferimento spaziale implementato è WGS84. Vengono importati solo punti. La funzione di importazione va a cercare nell'intestazione le colonne  «lat» e «lon» indifferentemente se scritte in maiuscolo o minuscolo. Tutte le altre colonne sono importate come proprietà.",
     "Congratulations, your map has been created!": "Complimenti, la tua mappa è stata creata!!!",
-    "Continue line (Ctrl+Click)": "Continua linea (Ctrl+Click)",
     "Continue line": "Linea continua",
     "Coordinates": "Coordinate",
     "Copy link": "Copia link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "tratto",
     "Supported scheme": "Schema supportato",
     "Supported variables that will be dynamically replaced": "Variabili supportate che verranno cambiate dinamicamente",
-    "Switch to edit mode": "Passa alla modalità modifica",
     "Symbol": "Simbolo",
     "Table": "Tabella",
     "Text color for the cluster label": "Colore di testo per l'etichetta del raggruppamento",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("it", locale)
 L.setLocale("it")

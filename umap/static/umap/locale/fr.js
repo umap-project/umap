@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Propriétés à utiliser pour filtrer les éléments (séparées par des virgules)",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Virgule, tabulation ou point-virgule pour séparer des valeurs. SRS WGS84 est implicite. Seuls les points géométriques sont importés. L'importation se référera au titre dans les entêtes de colonnes de «lat» et «lon» au début de l'en-tête, et est insensible à la casse. Toutes les autres colonnes sont importées en tant que propriétés.",
     "Congratulations, your map has been created!": "Félicitations, votre carte a bien été créée !",
-    "Continue line (Ctrl+Click)": "Continue la ligne (Ctrl+Clic)",
     "Continue line": "Continuer la ligne",
     "Coordinates": "Coordonnées",
     "Copy link": "Copier le lien",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "trait",
     "Supported scheme": "Schéma supporté",
     "Supported variables that will be dynamically replaced": "Variables qui seront automatiquement remplacées",
-    "Switch to edit mode": "Basculer en mode édition",
     "Symbol": "Symbole",
     "Table": "Tableau",
     "Text color for the cluster label": "Couleur du texte du cluster",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "À",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Exemple: cle1,cle2|Label 2,Label 3|checkbox",
     "Edit in OpenStreetMap": "Modifier dans OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Impossible de détecter les colonnes latitude et longitude."
+    "Cannot determine latitude and longitude columns.": "Impossible de détecter les colonnes latitude et longitude.",
+    "Back to layers": "Voir les calques",
+    "Data": "Données",
+    "Filters": "Filtres"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Список параметрів, розділених комами, для використання при фільтрації",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Як роздільник використовуються коми, табуляції і крапки з комою.  Застосовується датум WGS84. Імпорт переглядає заголовок на наявність полів «lat» та «lon», регістр не має значення.  Усі інші поля імпортуються як параметри.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Продовжити лінію (Ctrl+клацання)",
     "Continue line": "Продовжити лінію",
     "Coordinates": "Координати",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "штрихи",
     "Supported scheme": "Підтримувана схема",
     "Supported variables that will be dynamically replaced": "Підтримувані змінні для автоматичної заміни",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Таблиця",
     "Text color for the cluster label": "Колір тексту для позначок кластера",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

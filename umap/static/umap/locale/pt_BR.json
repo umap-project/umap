@@ -86,7 +86,6 @@
     "Comma separated list of properties to use when filtering features": "Lista separada por vírgulas de propriedades a usar ao filtrar elementos",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Valores separados por vírgula, tabulação ou ponto-e-vírgula. É implícito o sistema de referência espacial WGS84. Apenas são importadas as geometrias de ponto. A importação irá ver se aparece no cabeçalho das colunas «lat» e «lon», ignorando diferença de maiúsculas e minúsculas. Todas a outras colunas são importadas como propriedades.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Continuar linnha (Ctrl+Clique)",
     "Continue line": "Continuar linha",
     "Coordinates": "Coordenadas",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@
     "stroke": "traço",
     "Supported scheme": "Esquema suportado",
     "Supported variables that will be dynamically replaced": "Variáveis suportadas que serão substituídas de forma dinâmica",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Tabela",
     "Text color for the cluster label": "Cor do texto para a etiqueta do aglomerado",
@@ -446,5 +444,8 @@
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }

@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Pilkkueroteltu lista käytettävistä ominaisuuksista piirteitä suodatettaessa.",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Pilkku-, tabulaattori- tai puolipiste-erotettuja arvoja. Koordinaattijärjestemänä WGS84. Vain pistegeometriat tuodaan uMapiin. Tietue-tuonti etsii «lat»- ja «lon»-alkavia sarakeotsikoita. Kaikki muut sarakkeet tuodaan ominaisuustietoina.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Jatka viivaa (Ctrl+Klikkaus)",
     "Continue line": "Jatka viivaa",
     "Coordinates": "Koordinaatit",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "sivallus",
     "Supported scheme": "Tuettu muoto",
     "Supported variables that will be dynamically replaced": "Tuetut muuttujat, jotka korvataan dynaamisesti",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Taulukko",
     "Text color for the cluster label": "Tekstin väri klusterietiketissä",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("fi", locale)
 L.setLocale("fi")

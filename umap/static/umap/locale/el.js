@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Λίστα ιδιοτήτων διαχωρισμένων με κόμμα για χρήση κατά το φιλτράρισμα των στοιχείων",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Τιμές διαχωρισμένες με κόμμα, tab ή άνω τελεία. Εννοείται και η μορφή SRS WGS84. Εισάγονται μόνο γεωμετρίες σημείων. Η διαδικασία εισαγωγής ελέγχει τις επικεφαλίδες των στηλών για τις ενδείξεις «lat» και «lon» στην αρχή της επικεφαλίδας και κάνει διάκριση πεζών - κεφαλαίων γραμμάτων. Όλες οι άλλες στήλες εισάγονται ως ιδιότητες.",
     "Congratulations, your map has been created!": "Συγχαρητήρια, ο χάρτης σας δημιουργήθηκε!",
-    "Continue line (Ctrl+Click)": "Συνέχεια γραμμής (Ctrl+Click)",
     "Continue line": "Συνέχεια γραμμής",
     "Coordinates": "Συντεταγμένες",
     "Copy link": "Αντιγραφή συνδέσμου",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "Πινέλο",
     "Supported scheme": "Υποστηριζόμενο σχέδιο",
     "Supported variables that will be dynamically replaced": "Υποστηριζόμενες μεταβλητές που θα αντικατασταθούν δυναμικά",
-    "Switch to edit mode": "Εναλλαγή σε λειτουργία επεξεργασίας",
     "Symbol": "Σύμβολο",
     "Table": "Πίνακας",
     "Text color for the cluster label": "Χρώμα κειμένου για την ετικέτα συμπλέγματος",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

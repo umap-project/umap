@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "لیستی از خواص جدا شده با کاما برای فیلتر کردن ویژگی ها",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "مقادیر جدا شده با کاما، برگه یا نیمه کولون. SRS WGS84 ضمنی است. فقط هندسه نقطه وارد می شود. واردات به سربرگهای ستون برای ذکر هرگونه عبارت «lat» و «lon» در ابتدای سرصفحه، بدون حساس به حروف، نگاه می کند. همه ستون های دیگر به عنوان ویژگی وارد می شوند.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "ادامه خط (Ctrl+Click)",
     "Continue line": "ادامه خط",
     "Coordinates": "مختصات",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "سکته",
     "Supported scheme": "طرح پشتیبانی شده",
     "Supported variables that will be dynamically replaced": "متغیرهای پشتیبانی شده که به صورت پویا جایگزین می شوند",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "جدول",
     "Text color for the cluster label": "رنگ متن برای برچسب خوشه",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

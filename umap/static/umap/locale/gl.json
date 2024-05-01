@@ -86,7 +86,6 @@
     "Comma separated list of properties to use when filtering features": "Listaxe de propiedades separado por comas para empregar a filtraxe de elementos",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Liña continua (Ctrl+Clic)",
     "Continue line": "Liña continua",
     "Coordinates": "Coordenadas",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@
     "stroke": "trazo",
     "Supported scheme": "Esquema suportado",
     "Supported variables that will be dynamically replaced": "Variábeis suportadas que serán substituídas de xeito dinámico",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Táboa",
     "Text color for the cluster label": "Cor do texto para a etiqueta clúster",
@@ -446,5 +444,8 @@
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }

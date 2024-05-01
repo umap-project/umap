@@ -86,7 +86,6 @@
     "Comma separated list of properties to use when filtering features": "Kableliu atskirtas savybių sąrašas naudojamas objektų filtrui",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Kableliu, tab'u arba kabliataškiu atskirtos reikšmės. SRS WGS84 yra palaikomas. Tik taškai yra importuoti. Importuojant bus patikrintos stulpelių antraštės ieškant pavadinimų \"lat\" ir \"lon\". Visi kiti stulpeliai bus įtraukti kaip papildomi atributai.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Tęsti liniją (Ctrl+Klavišas)",
     "Continue line": "Continue line",
     "Coordinates": "Koordinatės",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@
     "stroke": "brūkšnys",
     "Supported scheme": "Palaikoma struktūra",
     "Supported variables that will be dynamically replaced": "Palaikomi kintamieji bus automatiškai perrašyti",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Lentelė",
     "Text color for the cluster label": "Teksto spalva klasterio pavadinimui",
@@ -446,5 +444,8 @@
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }

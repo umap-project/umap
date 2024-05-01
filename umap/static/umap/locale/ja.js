@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "地物をフィルタする際に利用する、カンマで区切ったプロパティのリスト",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "カンマ、タブ、セミコロンなどで区切られた値。SRSはWGS84が適用されます。ポイントのジオメトリのみがインポート対象です。インポートを行なう際は、カラムの先頭行を対象に «lat» と «lon» という文字列が検索されます。検索は行の最初から順に行われ、大文字と小文字は区別されません。その他のすべてのカラムは、プロパティとしてインポートされます。",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "ラインを延長(Ctrl+クリック)",
     "Continue line": "ラインを延長",
     "Coordinates": "位置情報",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "ストローク",
     "Supported scheme": "対応スキーマ",
     "Supported variables that will be dynamically replaced": "対応する動的な変数",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "テーブル",
     "Text color for the cluster label": "クラスタラベルのテキスト色",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

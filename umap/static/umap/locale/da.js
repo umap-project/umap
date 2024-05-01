@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Kommasepareret egenskabsliste til brug ved objektfiltrering.",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Komma, tabulering eller semikolon adskiller værdier. SRS WGS84 er underforstået. Kun punktgeometri importeres. Importen vil kigge efter kolonner, der indeholder varianter af \"lat\" eller \"lon\" i begyndelsen af overskriften, uden at tage hensyn til små og store bogstaver. Alle andre kolonner importeres som egenskaber.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Fortsæt linje (Ctrl+Klik)",
     "Continue line": "Fortsæt linje",
     "Coordinates": "Koordinater",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "strøg",
     "Supported scheme": "Understøttet skema",
     "Supported variables that will be dynamically replaced": "Understøttede variabler som vil blive dynamisk erstattet",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Tabel",
     "Text color for the cluster label": "Tekstfarve for klyngelabel",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

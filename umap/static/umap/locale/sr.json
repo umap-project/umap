@@ -86,7 +86,6 @@
     "Comma separated list of properties to use when filtering features": "Својства која су одвојена зарезима која се користе за филтрирање функција",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Вредности одвојене зарезима, табом или новим редом. Подразумева се SRS WGS84. Увозе се само тачке геометрије. Увоз ће погледати заглавља ступаца за било које спомињање «лат» и «лон» на почетку заглавља, осетљив на велика и мала слова. Све друге колоне се увозе као својства.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "Наставите линију(Ctrl+Click)",
     "Continue line": "Наставите линију",
     "Coordinates": "Координате",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@
     "stroke": "линија",
     "Supported scheme": "Supported scheme",
     "Supported variables that will be dynamically replaced": "Supported variables that will be dynamically replaced",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "Табела",
     "Text color for the cluster label": "Text color for the cluster label",
@@ -446,5 +444,8 @@
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }

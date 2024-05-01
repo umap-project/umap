@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "Komma-gescheiden lijst van eigenschappen die gebruikt worden om te filteren",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Komma-, tabulator- of puntkomma-gescheiden waardes, SRS WGS84 wordt verondersteld. Enkel puntgeometrieën worden geïmporteerd. Bij het importeren wordt gekeken naar kolomkoppen die met «lat» of «lon» beginnen. Alle andere kolommen worden als eigenschappen geïmporteerd",
     "Congratulations, your map has been created!": "Proficiat, je kaart is aangemaakt!",
-    "Continue line (Ctrl+Click)": "Ga door met deze lijn (Ctrl+Klik)",
     "Continue line": "Ga door met deze lijn",
     "Coordinates": "Coördinaten",
     "Copy link": "Kopieer de link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "omlijnde vlakken",
     "Supported scheme": "Toegestaan datamodel",
     "Supported variables that will be dynamically replaced": "Toegestane variabele die dynamisch vervangen zullen worden",
-    "Switch to edit mode": "Activeer de bewerkmodus",
     "Symbol": "Symbool",
     "Table": "Tabel",
     "Text color for the cluster label": "Kleur van de text voor het label van de cluster",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

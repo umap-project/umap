@@ -86,7 +86,6 @@ const locale = {
     "Comma separated list of properties to use when filtering features": "רשימת מאפיינים מופרדת בפסיקים לשימוש בעת סינון תכונות",
     "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "ערכים מופרדים בפסיקים, טאבים או נקודה פסיק. עם רמיזה ל־SRS WGS84. רק גואמטריית נקודות מייובאת. הייבוא יסתכל על כותרות העמודות לאיתור אזכורים של „lat” (קו רוחב) ו־„lon” (קו אורך) בתחילת הכותרת, לא משנה אותיות קטנות/גדולות. כל שאר העמודות ייובאו כמאפיינים.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
-    "Continue line (Ctrl+Click)": "להמשיך את הקו ‪(Ctrl+לחיצה)",
     "Continue line": "להמשיך את הקו",
     "Coordinates": "נקודות ציון",
     "Copy link": "Copy link",
@@ -360,7 +359,6 @@ const locale = {
     "stroke": "לוכסן",
     "Supported scheme": "סכמה נתמכת",
     "Supported variables that will be dynamically replaced": "משתנים נתמכים שיוחלפו באופן דינמי",
-    "Switch to edit mode": "Switch to edit mode",
     "Symbol": "Symbol",
     "Table": "טבלה",
     "Text color for the cluster label": "צבע טקסט לתווית הקבוצה",
@@ -446,7 +444,10 @@ const locale = {
     "Until": "Until",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Example: key1,key2|Label 2,key3|Label 3|checkbox",
     "Edit in OpenStreetMap": "Edit in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns."
+    "Cannot determine latitude and longitude columns.": "Cannot determine latitude and longitude columns.",
+    "Back to layers": "Back to layers",
+    "Data": "Data",
+    "Filters": "Filters"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")
