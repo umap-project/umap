@@ -1,6 +1,36 @@
 # Changelog
 
-## 2.0.2b0 - 2024-04-24
+## 2.2.0 -  2024-05-01
+
+### New features and improvements
+* add minimal OpenGraph links by @yohanboniface in #1758
+* merge "datalayer browser" and "data browser" by @yohanboniface in #1687
+* add link in contextmenu to edit map in OSM by @yohanboniface in #1756
+* open popup when default view is set to latest by @yohanboniface in #1750
+* display a message when importer cannot find lat/lng columns by @yohanboniface in #1753
+* Date and number support for facets by @flammermann in #1763
+
+### Bug fixes
+* hide delete button for editors in dashboard by @yohanboniface in #1748
+* increase TileLayer.url_template size by @yohanboniface in #1761
+* update layers list in import panel by @yohanboniface in #1749
+* deal with the modifier key under macOS by @davidbgk in #1785
+* redraw popup on marker’s modifications by @davidbgk in #1766
+* make sure to display anonymous edit link even if email is not configured by @yohanboniface in #1784
+
+### Internal changes
+* refactor: Separate ui rendering from data updates by @almet in #1692
+* allow to set playwright timeout from env var by @yohanboniface in #1762
+* Remove js tests by @yohanboniface in #1719
+* move umap utils to a module by @almet in #1718
+* change Panel.open signature by @yohanboniface in #1764
+* Mock OSM tiles requests in Playwright for speed by @davidbgk in #1765
+* remove Map.description by @yohanboniface in #1772
+
+
+**Full Changelog**: https://github.com/umap-project/umap/compare/2.1.3...2.2.0
+
+## 2.2.0b0 - 2024-04-24
 
 ### Bug fixes
 * fix: hide delete button for editors in dashboard by @yohanboniface in #1748
