@@ -321,6 +321,14 @@ U.Help = L.Class.extend({
       shortcut: 'Modifier+S',
       label: L._('Save current edits'),
     },
+    EDIT_FEATURE_LAYER: {
+      shortcut: 'Modifier+⇧+Click',
+      label: L._("Edit feature's layer"),
+    },
+    CONTINUE_LINE: {
+      shortcut: 'Modifier+Click',
+      label: L._('Continue line'),
+    },
   },
 
   displayLabel: function (action, withKbdTag = true) {

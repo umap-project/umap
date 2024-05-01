@@ -1,4 +1,5 @@
 import json
+import platform
 import re
 from pathlib import Path
 from time import sleep
@@ -13,7 +14,8 @@ pytestmark = pytest.mark.django_db
 
 def test_layers_list_is_updated(live_server, tilelayer, page):
     page.goto(f"{live_server.url}/map/new/")
-    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    modifier = "Cmd" if platform.system() == "Darwin" else "Ctrl"
+    page.get_by_role("link", name=f"Import data ({modifier}+I)").click()
     # Should work
     page.get_by_label("Choose the layer to import").select_option(
         label="Import in a new layer"
@@ -22,7 +24,7 @@ def test_layers_list_is_updated(live_server, tilelayer, page):
     page.get_by_role("button", name="Add a layer").click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("foobar")
-    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("link", name=f"Import data ({modifier}+I)").click()
     # Should still work
     page.get_by_label("Choose the layer to import").select_option(
         label="Import in a new layer"

@@ -448,7 +448,7 @@ U.FeatureMixin = {
     }
     items = items.concat(
       {
-        text: L._("Edit feature's layer") + ' (Ctrl+⇧+Click)',
+        text: this.map.help.displayLabel('EDIT_FEATURE_LAYER'),
         callback: this.datalayer.edit,
         context: this.datalayer,
         iconCls: 'umap-edit',
@@ -1055,7 +1055,7 @@ U.Polyline = L.Polyline.extend({
         })
       } else if (index === 0 || index === e.vertex.getLastIndex()) {
         items.push({
-          text: L._('Continue line (Ctrl+Click)'),
+          text: this.map.help.displayLabel('CONTINUE_LINE'),
           callback: e.vertex.continue,
           context: e.vertex.continue,
         })
