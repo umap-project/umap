@@ -158,6 +158,12 @@
     margin-bottom: 5px!important;
     padding: 0.5rem;
 }
+.credits-container h5 {
+    margin-bottom: 5px;
+}
+.credits-container p {
+    margin-top: 5px;
+}
 .attribution-toggle {
     display: none;
     width: 24px;

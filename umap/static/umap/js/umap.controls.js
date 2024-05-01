@@ -722,7 +722,6 @@ const ControlsMixin = {
     } else {
       L.DomUtil.add('p', '', credits, L._('No licence has been set'))
     }
-    L.DomUtil.create('hr', '', credits)
     title = L.DomUtil.create('h5', '', credits)
     title.textContent = L._('Map background credits')
     const tilelayerCredit = L.DomUtil.create('p', '', credits)
@@ -736,7 +735,6 @@ const ControlsMixin = {
       parent: tilelayerCredit,
       safeHTML: this.selected_tilelayer.getAttribution(),
     })
-    L.DomUtil.create('hr', '', credits)
     const urls = {
       leaflet: 'http://leafletjs.com',
       django: 'https://www.djangoproject.com',
