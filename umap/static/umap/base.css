@@ -585,20 +585,23 @@ i.info {
     justify-content: space-around;
     font-size: 1.2em;
     margin-bottom: 20px;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #bebebe;
 }
 .flat-tabs button {
     padding: 10px;
     text-decoration: none;
     cursor: pointer;
+    border-bottom: 1px solid transparent;
 }
+.flat-tabs button:hover,
 .flat-tabs .on {
     font-weight: bold;
-    border-bottom: 2px solid #444;
+    border-bottom: 1px solid #444;
 }
 .dark .flat-tabs button {
     color: #fff;
 }
+.dark .flat-tabs button:hover,
 .dark .flat-tabs .on {
     border-bottom: 1px solid #fff;
 }
