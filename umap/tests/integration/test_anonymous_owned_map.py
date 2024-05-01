@@ -205,6 +205,7 @@ def test_email_sending_error_are_catched(tilelayer, page, live_server):
         expect(alert.get_by_text("Can't send email to foo@bar.com")).to_be_visible()
 
 
+@pytest.mark.skip(reason="Changing DEFAULT_FROM_EMAIL at runtime has no effect")
 def test_alert_message_after_create_show_link_even_without_mail(
     tilelayer, live_server, page, monkeypatch, settings
 ):
