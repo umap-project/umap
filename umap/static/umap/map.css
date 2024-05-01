@@ -158,6 +158,12 @@
     margin-bottom: 5px!important;
     padding: 0.5rem;
 }
+.credits-container h5 {
+    margin-bottom: 5px;
+}
+.credits-container p {
+    margin-top: 5px;
+}
 .attribution-toggle {
     display: none;
     width: 24px;
@@ -979,7 +985,12 @@ a.umap-control-caption,
 .datalayer-name {
     cursor: pointer;
 }
-
+.umap-caption h3 {
+    margin-bottom: 0;
+}
+.umap-caption .umap-map-owner {
+    padding-left: 31px;
+}
 
 /* ********************************* */
 /*          Table Editor             */
