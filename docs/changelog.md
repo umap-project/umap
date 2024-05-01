@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.2 -  2024-05-01
+
+### Bug fixes
+
+* vendorize the .map too for dompurify by @davidbgk in #1787
+
+
 ## 2.2.1 -  2024-05-01
 
 ### Bug fixes
