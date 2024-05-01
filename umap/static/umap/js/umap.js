@@ -1023,11 +1023,7 @@ U.Map = L.Map.extend({
         this.options.umap_id = data.id
         this.permissions.setOptions(data.permissions)
         this.permissions.commit()
-        if (
-          data.permissions &&
-          data.permissions.anonymous_edit_url &&
-          this.options.urls.map_send_edit_link
-        ) {
+        if (data.permissions && data.permissions.anonymous_edit_url) {
           alert.duration = Infinity
           alert.content =
             L._(
@@ -1035,12 +1031,6 @@ U.Map = L.Map.extend({
             ) + `<br>${data.permissions.anonymous_edit_url}`
 
           alert.actions = [
-            {
-              label: L._('Send me the link'),
-              input: L._('Email'),
-              callback: this.sendEditLink,
-              callbackContext: this,
-            },
             {
               label: L._('Copy link'),
               callback: () => {
@@ -1053,6 +1043,14 @@ U.Map = L.Map.extend({
               callbackContext: this,
             },
           ]
+          if (this.options.urls.map_send_edit_link) {
+            alert.actions.push({
+              label: L._('Send me the link'),
+              input: L._('Email'),
+              callback: this.sendEditLink,
+              callbackContext: this,
+            })
+          }
         }
       } else if (!this.permissions.isDirty) {
         // Do not override local changes to permissions,
