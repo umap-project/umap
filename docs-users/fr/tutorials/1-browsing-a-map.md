@@ -16,7 +16,6 @@ manipuler. La carte uMap représentée ci-dessous est disponible
 
 ![anatomie_carte_umap_2021.jpg](../../static/tutoriels/1-je-consulte-une-carte-umap/anatomie_carte_umap_2021.jpg)
 
-------------------------------------------------------------------------
 
 À droite de la carte et selon le choix de son auteur peut être affiché
 un des deux panneaux suivants :
@@ -117,7 +116,7 @@ dépend de la manière dont vous souhaitez partager la carte :
     page Web : il suffit de copier le code HTML et de l’insérer dans
     celui de votre page Web. Cette possibilité est explorée en détails
     dans le tutoriel
-    [Je publie ma carte et en contrôle l’accès](/tutoriels/7-je-publie-ma-carte-et-en-controle-lacces/).
+    [Je publie ma carte et en contrôle l’accès](7-publishing-and-permissions.md).
 -   **Télécharger les données** permet d’obtenir les données visibles
     sur la carte, dans différents formats. Cela peut vous permettre
     d’utiliser ces données avec un autre outil.
@@ -137,7 +136,6 @@ d’afficher sur la carte la popup décrivant cet élément. Le texte de
 saisie au-dessus de la liste permet de rechercher un élément, en ne
 montrant que ceux dont le nom contient le texte saisi.
 
-------------------------------------------------------------------------
 
 ## Faisons le point
 

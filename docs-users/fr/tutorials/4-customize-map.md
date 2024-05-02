@@ -60,7 +60,7 @@ carte peut vous aider à en choisir un plutôt qu’un autre, par exemple :
 -   les fonds **Outdoors**, **Landscape** ou **OpenTopoMap** montrent le
     relief : judicieux pour une carte de randonnée
 -   **OpenCycleMap** montre les grands itinéraires cyclistes, comme les
-    EuroVélo (Côte Atlantique, Loire à Vélo...)
+    EuroVélo (Côte Atlantique, Loire à Vélo…)
 -   **Positron**, **Toner** et **OSM-Monochrome** sont en noir et blanc
     : vos marqueurs, lignes et polygones seront plus visibles
 -   le style **HOTOSM**, créé par le [groupe

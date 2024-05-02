@@ -191,7 +191,7 @@ savons la retrouver facilement. Nous avons vu comment créer, *styliser*
 et modifier points et lignes. Nous n’avons pas traité ici des polygones,
 qui représentent des surfaces. Certaines fonctionnalités propres aux
 polygones méritent d’être détaillées, ce que nous ferons dans le
-tutoriel [Le cas des polygones](/tutoriels/8-le-cas-des-polygones/).
+tutoriel [Le cas des polygones](8-polygons.md).
 
 Pour le moment voyons comment nous pouvons davantage [personnaliser
 notre carte](4-customize-map.md).
