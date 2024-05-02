@@ -1,14 +1,15 @@
 import os
 
 import pytest
+from playwright.sync_api import expect
 
 
 @pytest.fixture(autouse=True)
 def set_timeout(context):
-    context.set_default_timeout(int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500)))
-    context.set_default_navigation_timeout(
-        int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500))
-    )
+    timeout = int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500))
+    context.set_default_timeout(timeout)
+    context.set_default_navigation_timeout(timeout)
+    expect.set_options(timeout=timeout)
 
 
 @pytest.fixture(autouse=True)
