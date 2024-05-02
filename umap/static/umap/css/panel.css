@@ -90,6 +90,7 @@
         top: 0;
         margin-top: var(--panel-gutter);
         width: var(--panel-width);
+        max-width: calc(100% - var(--panel-gutter) * 2 - var(--control-size))
     }
     .panel.condensed {
         max-height: 500px;
