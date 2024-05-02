@@ -20,7 +20,7 @@ une de vos cartes se fait en trois opérations simples :
 3.  cliquez sur le nom de la carte, affiché **sous l’aperçu** de la
     carte
 
-![umap_edit.png](../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit.png)
+![umap_edit.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit.png)
 
 La carte s’affiche alors en mode
 consultation. Cliquez sur le crayon en haut à droite de la carte pour
@@ -48,7 +48,7 @@ que plusieurs fonds de carte
 sont disponibles dans uMap. Lorsque vous éditez une carte vous pouvez
 choisir le fond de carte qui sera utilisé à l’affichage de la carte.
 
-![umap_edit_background.png](../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit_background.png)Cliquez sur
+![umap_edit_background.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit_background.png)Cliquez sur
 le pictogramme `Changer le fond de carte` : un panneau à droite montre
 une vingtaine de fonds de cartes. Il vous suffit de cliquer sur l’un
 d’eux : faites votre choix et n’oubliez pas d’enregistrer la
@@ -89,7 +89,7 @@ utilisateurs qui consulteront votre carte. Vous pouvez par exemple
 ajouter une mini-carte de situation ou une barre de légende, ou encore
 décider quels boutons seront affichés.
 
-![umap_edit_props.png](../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit_props.png)
+![umap_edit_props.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit_props.png)
 
 Pour cela, ouvrez dans
 le menu **Éditer les paramètres** l’onglet **Options d’interfaces**.
@@ -103,7 +103,7 @@ boutons sur la gauche de la carte, de contrôler leur visibilité :
     l’utilisateur
 -   **jamais** signifie que le bouton ne sera pas disponible
 -   **caché** signifie que le bouton n’est accessible qu’après un clic
-    sur le bouton ![umap_plus.png](../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_plus.png). Les boutons
+    sur le bouton ![umap_plus.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_plus.png). Les boutons
     cachés ne seront bien sûr accessibles que si l’option
     `Voulez-vous afficher le bouton "Plus" ?` (plus bas sur le tableau
     de bord) est activée.
@@ -111,7 +111,7 @@ boutons sur la gauche de la carte, de contrôler leur visibilité :
 La partie basse du tableau de bord ne concerne pas ces boutons mais
 d’autres éléments venant *habiller* la carte :
 
-![umap_properties_bottom.jpg](../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_properties_bottom.jpg)
+![umap_properties_bottom.jpg](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_properties_bottom.jpg)
 
 Quelques remarques :
 
@@ -122,7 +122,7 @@ Quelques remarques :
 -   les boutons de navigation en bas des popups permettent de faire
     défiler les éléments de la carte
 
-![umap_share.png](../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_share.png)
+![umap_share.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_share.png)
 
 Notez que ces
 options - et quelques autres - sont également disponibles en **Options

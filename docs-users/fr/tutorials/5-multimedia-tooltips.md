@@ -26,7 +26,6 @@ Mettre en forme une infobulle nécessite d’utiliser une syntaxe décrite
 en cliquant sur le point d’interrogation visible à droite de l’intitulé
 **description**, reprise ci-contre.
 
-------------------------------------------------------------------------
 
 ### 1. Mettre en forme le texte d’une infobulle
 
@@ -83,7 +82,6 @@ verticale (AltGr + 6 sur un clavier français) et du texte :
 
 Cette forme est particulièrement utile pour les adresses longues.
 
-------------------------------------------------------------------------
 
 ### 3. Insérer une image
 

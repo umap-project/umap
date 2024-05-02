@@ -37,7 +37,7 @@ moment de vous inscrire sur le site www.openstreetmap.org : cliquez
 instructions - une adresse mail vous sera demandée ([plus
 d’infos](http://openstreetmap.fr/inscription-openstreetmap)).
 
-![umap_header.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_header.png)
+![umap_header.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_header.png)
 
 Cliquez sur **Connexion /
 Créer un compte** puis sur le pictogramme correspondant au compte que
@@ -48,7 +48,7 @@ cet accès. Vous retrouvez alors la page d’accueil de uMap, sur laquelle
 le lien de connexion a laissé la place à un lien **Mes cartes** vous
 permettant d’accéder à l’ensemble des cartes créées avec ce compte.
 
-![umap_connect.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_connect.png)
+![umap_connect.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_connect.png)
 
 Notez l’URL de la barre d’adresse quand vous consultez votre catalogue
 de cartes : celle-ci contient le nom de votre compte - par exemple
@@ -67,7 +67,7 @@ emprise et ajoutons un marqueur à [l’emplacement du
 camping](http://www.openstreetmap.org/?mlat=48.2387&mlon=-4.5434#map=16/48.2387/-4.5434).
 Nous avons vu dans [le tutoriel précédent](2-first-map.md) comment effectuer ces opérations.
 
-![umap_marqueur_props.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_marqueur_props.png)
+![umap_marqueur_props.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_marqueur_props.png)
 
 Ce gros marqueur bleu n’est pas très explicite pour figurer un camping.
 Remédions à cela. Dans le panneau latéral visible lorsqu’un marqueur est
@@ -87,11 +87,11 @@ l’apparence du marqueur :
 
 Voici le marqueur obtenu avec les propriétés ci-contre :
 
-![umap_camping.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_camping.png)
+![umap_camping.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_camping.png)
 
 #### Modifier un marqueur
 
-![umap_modifier_marqueur.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_modifier_marqueur.png)
+![umap_modifier_marqueur.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_modifier_marqueur.png)
 
 Pour modifier un marqueur de la carte, plusieurs possibilités s’offrent à vous :
 
@@ -107,7 +107,7 @@ Le premier jour de vacances nous allons en kayak de mer jusqu’à la
 Pointe de Dinan à l’ouest de la plage de Goulien. Traçons l’itinéraire
 suivi.
 
-![umap_edit_line.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_edit_line.png)
+![umap_edit_line.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_edit_line.png)
 
 Le bouton **Dessiner une ligne** permet de tracer, point par point,
 une ligne constiutée de
@@ -131,11 +131,11 @@ ou modifier son tracé sur la carte :
 -   **couper la ligne** en deux : Clic droit sur un point puis choisir
     l’option `Scinder la ligne`
 
-![umap_ligne.jpg](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_ligne.jpg)
+![umap_ligne.jpg](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_ligne.jpg)
 
 #### Propriétés d’une ligne
 
-![umap_ligne_props.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_ligne_props.png)
+![umap_ligne_props.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_ligne_props.png)
 
 Les propriétés d’une
 ligne permettent de définir sa couleur et d’autres paramètres
@@ -160,11 +160,11 @@ Les **propriétés avancées** permettent de :
 
 Voici le style de trait obtenu avec les propriétés ci-contre :
 
-![umap_ligne_tirets.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_ligne_tirets.png)
+![umap_ligne_tirets.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_ligne_tirets.png)
 
 ### 4. Ajouter des étiquettes
 
-![etiquettes.png](../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/etiquettes.png)
+![etiquettes.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/etiquettes.png)
 
 Pour aider l’identification des
 différents éléments de notre carte, nous pouvons leur associer une
@@ -182,7 +182,6 @@ l’affichage d’une étiquette associée à chaque élément :
     si l’utilisateur clique sur l’étiquette, et non seulement en cas de
     clic sur la *géométrie* de l’élément.
 
-------------------------------------------------------------------------
 
 ## Faisons le point
 
@@ -193,8 +192,8 @@ qui représentent des surfaces. Certaines fonctionnalités propres aux
 polygones méritent d’être détaillées, ce que nous ferons dans le
 tutoriel [Le cas des polygones](8-polygons.md).
 
-Pour le moment voyons comment nous pouvons davantage [personnaliser
-notre carte](4-customize-map.md).
+Pour le moment voyons comment nous pouvons davantage
+[personnaliser notre carte](4-customize-map.md).
 
 ??? info "Licence"
 

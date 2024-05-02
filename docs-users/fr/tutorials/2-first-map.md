@@ -15,7 +15,7 @@ Rendez-vous sur le site <http://umap.openstreetmap.fr/> et cliquez sur
 le bouton **Créer une carte**. Apparaît alors sur votre navigateur une
 carte qui se présente ainsi :
 
-![umap_edition.jpg](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edition.jpg)
+![umap_edition.jpg](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edition.jpg)
 
 Nous retrouvons à gauche les boutons disponibles lors de la
 [consultation d’une carte](1-browsing-a-map.md).
@@ -31,9 +31,9 @@ dans le *mode édition* :
 
 ### 2. Nommer la carte
 
-![umap_set_name.png](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_set_name.png)
+![umap_set_name.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_set_name.png)
 
-![umap_edit_props.png](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_props.png)
+![umap_edit_props.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_props.png)
 
 Une carte doit porter
 un nom qui renseigne sur ce que représente la carte. Pour définir le nom
@@ -53,7 +53,7 @@ Maintenant sauvegardez la carte avec le bouton **Enregistrer** : un
 texte en anglais est affiché en haut de la carte, comme celui
 ci-dessous.
 
-![umap_create_anonymous.png](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_create_anonymous.png)
+![umap_create_anonymous.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_create_anonymous.png)
 
 Ce texte explique que vous venez de créer une carte **anonyme** et vous
 donne un lien (une URL) pour pouvoir modifier la carte. En effet la
@@ -69,7 +69,7 @@ nécessaire de conserver de lien secret.
 Commencez par déplacer et zoomer la carte pour visualiser l’endroit
 précis de votre domicile, lieu de vacances ou de travail.
 
-![umap_edit_marker.png](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_marker.png)
+![umap_edit_marker.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_marker.png)
 
 Cliquez ensuite sur
 le bouton **Ajouter un marqueur**. Le curseur prend la forme d’un signe
@@ -77,7 +77,7 @@ le bouton **Ajouter un marqueur**. Le curseur prend la forme d’un signe
 le bouton gauche de la souris : un *marqueur bleu* et carré est créé à
 cet endroit et un panneau apparaît à droite.
 
-![umap_marqueur.jpg](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_marqueur.jpg)
+![umap_marqueur.jpg](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_marqueur.jpg)
 
 Ce panneau vous permet
 d’associer un nom et une description au marqueur :
@@ -114,7 +114,7 @@ l’emprise, déplacez et zoomez la carte afin d’afficher l’emprise
 souhaitée puis cliquez sur le bouton **Enregistrer le zoom et le centre
 actuels**.
 
-![umap_edit_extent.png](../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_extent.png)
+![umap_edit_extent.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_extent.png)
 
 !!! note
     uMap enregistre en réalité le centre et le niveau de
