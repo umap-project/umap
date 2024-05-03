@@ -84,6 +84,7 @@ L.DomUtil.createFieldset = (container, legend, options) => {
   const fieldset = L.DomUtil.create('div', 'fieldset toggle', container)
   const legendEl = L.DomUtil.add('h5', 'legend style_options_toggle', fieldset, legend)
   const fieldsEl = L.DomUtil.add('div', 'fields with-transition', fieldset)
+  L.DomUtil.classIf(fieldset, 'on', options.on)
   L.DomEvent.on(legendEl, 'click', function () {
     if (L.DomUtil.hasClass(fieldset, 'on')) {
       L.DomUtil.removeClass(fieldset, 'on')

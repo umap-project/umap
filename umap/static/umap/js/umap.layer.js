@@ -875,10 +875,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   showFeature: function (feature) {
-    const filterKeys = this.map.getFilterKeys(),
-      filter = this.map.browser.options.filter
-    if (filter && !feature.matchFilter(filter, filterKeys)) return
-    if (!feature.matchFacets()) return
+    if (feature.isFiltered()) return
     this.layer.addLayer(feature)
   },
 

@@ -888,10 +888,10 @@ a.umap-control-caption,
 .umap-browser .datalayer i {
     cursor: pointer;
 }
-.umap-browser ul {
+.umap-browser .datalayer ul {
     display: none;
 }
-.show-list ul {
+.umap-browser .show-list ul {
     display: block;
 }
 

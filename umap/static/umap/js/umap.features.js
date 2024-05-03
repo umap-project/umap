@@ -494,6 +494,14 @@ U.FeatureMixin = {
       this.bindTooltip(U.Utils.escapeHTML(displayName), options)
   },
 
+  isFiltered: function () {
+    const filterKeys = this.map.getFilterKeys(),
+      filter = this.map.browser.options.filter
+    if (filter && !this.matchFilter(filter, filterKeys)) return true
+    if (!this.matchFacets()) return true
+    return false
+  },
+
   matchFilter: function (filter, keys) {
     filter = filter.toLowerCase()
     for (let i = 0, value; i < keys.length; i++) {

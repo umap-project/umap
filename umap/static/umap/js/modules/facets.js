@@ -53,23 +53,8 @@ export default class Facets {
     return properties
   }
 
-  redraw() {
-    if (this.isOpen()) this.open()
-  }
+  build() {
 
-  isOpen() {
-    return !!document.querySelector('.umap-facet-search')
-  }
-
-  open() {
-    const container = L.DomUtil.create('div', 'umap-facet-search')
-    const title = L.DomUtil.add(
-      'h3',
-      'umap-filter-title',
-      container,
-      translate('Facet search')
-    )
-    this.map.browser.tabsMenu(container, 'facets')
     const defined = this.getDefined()
     const names = Object.keys(defined)
     const facetProperties = this.compute(names, defined)
@@ -114,13 +99,7 @@ export default class Facets {
       ]
     })
 
-    const builder = new L.FormBuilder(this, fields, {
-      callback: filterFeatures,
-      callbackContext: this,
-    })
-    container.appendChild(builder.build())
-
-    this.map.panel.open({ content: container })
+    return fields
   }
 
   getDefined() {

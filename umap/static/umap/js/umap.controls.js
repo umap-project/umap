@@ -660,9 +660,6 @@ const ControlsMixin = {
     'star',
     'tilelayers',
   ],
-  _openFacet: function () {
-    this.facets.open()
-  },
 
   displayCaption: function () {
     const container = L.DomUtil.create('div', 'umap-caption')
