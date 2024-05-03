@@ -290,61 +290,33 @@ input:invalid {
     border-color: #1b1f20;
     color: #efefef;
 }
-.fieldset {
+details {
     margin-bottom: 5px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
-.dark .fieldset {
+.dark details {
     border: 1px solid #222;
 }
-.fieldset .fields {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear;
-    height: 0;
+details fieldset {
     overflow: hidden;
+    border: 1px solid var(--color-lightGray);
+    margin: 0;
+    padding-top: 10px;
 }
-.fieldset.toggle.on .fields {
-    visibility: visible;
-    opacity: 1;
-    height: initial;
-    padding: 10px;
-}
-.fieldset.toggle .legend {
-    text-align: left;
-    display: block;
+details summary {
     cursor: pointer;
     background-color: var(--color-lightGray);
-    height: 30px;
     line-height: 30px;
-    margin: 0;
-    font-family: fira_sans;
-    font-weight: normal;
     font-size: 1.2em;
     padding: 0 5px;
 }
-.dark .fieldset.toggle .legend {
+.dark details summary {
     background-color: #232729;
     color: #fff;
 }
-.fieldset.toggle .legend:before {
-    background-repeat: no-repeat;
-    text-indent: 24px;
-    height: 24px;
-    width: 24px;
-    line-height: 24px;
-    display: inline-block;
-    background-image: url('./img/16.svg');
-    vertical-align: bottom;
-    content: " ";
-    background-position: -144px -76px;
-}
-.dark .fieldset.toggle .legend:before {
-    background-image: url('./img/16-white.svg');
-}
-.fieldset.toggle.on .legend:before {
-    background-position: -144px -51px;
+.dark details fieldset {
+    border: 1px solid var(--color-darkGray);
 }
 fieldset legend {
     font-size: 1.1rem;

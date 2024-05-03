@@ -4,6 +4,9 @@
     --color-darkBlue: #263B58;
     --color-lightGray: #ddd;
     --color-darkGray: #323737;
+    --color-light: white;
+
+    --background-color: var(--color-light);
 
     /* Buttons. */
     --button-primary-background: var(--color-waterMint);
@@ -19,4 +22,7 @@
     --header-height: 46px;
     --footer-height: 46px;
     --control-size: 36px;
+}
+.dark {
+    --background-color: var(--color-darkGray);
 }

@@ -81,19 +81,13 @@ L.DomUtil.add = (tagName, className, container, content) => {
 
 L.DomUtil.createFieldset = (container, legend, options) => {
   options = options || {}
-  const fieldset = L.DomUtil.create('div', 'fieldset toggle', container)
-  const legendEl = L.DomUtil.add('h5', 'legend style_options_toggle', fieldset, legend)
-  const fieldsEl = L.DomUtil.add('div', 'fields with-transition', fieldset)
-  L.DomUtil.classIf(fieldset, 'on', options.on)
-  L.DomEvent.on(legendEl, 'click', function () {
-    if (L.DomUtil.hasClass(fieldset, 'on')) {
-      L.DomUtil.removeClass(fieldset, 'on')
-    } else {
-      L.DomUtil.addClass(fieldset, 'on')
-      if (options.callback) options.callback.call(options.context || this)
-    }
-  })
-  return fieldsEl
+  const details = L.DomUtil.create('details', options.className || '', container)
+  const summary = L.DomUtil.add('summary', '', details)
+  if (options.icon) L.DomUtil.createIcon(summary, options.icon)
+  L.DomUtil.add('span', '', summary, legend)
+  const fieldset = L.DomUtil.add('fieldset', '', details)
+  details.open = options.on === true
+  return fieldset
 }
 
 L.DomUtil.createButton = (className, container, content, callback, context) => {
