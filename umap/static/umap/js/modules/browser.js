@@ -153,7 +153,6 @@ export default class Browser {
     DomEvent.disableClickPropagation(container)
 
     DomUtil.createTitle(container, translate('Browse data'), 'icon-layers')
-    this.tabsMenu(container, 'browse')
     const formContainer = DomUtil.createFieldset(container, L._('Filters'), {
       on: this.mode === 'filters',
     })
@@ -195,15 +194,5 @@ export default class Browser {
     DomEvent.disableClickPropagation(button)
     DomEvent.on(button, 'click', map.openBrowser, map)
     return button
-  }
-
-  tabsMenu(container, active) {
-    const tabs = L.DomUtil.create('div', 'flat-tabs', container)
-    const browse = L.DomUtil.add('button', 'flat tab-browse', tabs, L._('Data'))
-    DomEvent.on(browse, 'click', this.open, this)
-    const info = L.DomUtil.add('button', 'flat tab-info', tabs, L._('About'))
-    DomEvent.on(info, 'click', this.map.displayCaption, this.map)
-    let el = tabs.querySelector(`.tab-${active}`)
-    L.DomUtil.addClass(el, 'on')
   }
 }
