@@ -155,6 +155,8 @@ export default class Browser {
     DomUtil.createTitle(container, translate('Browse data'), 'icon-layers')
     const formContainer = DomUtil.createFieldset(container, L._('Filters'), {
       on: this.mode === 'filters',
+      className: 'fieldset filters toggle',
+      icon: 'icon-filters',
     })
     this.dataContainer = DomUtil.create('div', '', container)
 
