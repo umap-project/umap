@@ -14,7 +14,7 @@ principaux éléments de la carte, et les opérations disponibles pour la
 manipuler. La carte uMap représentée ci-dessous est disponible
 [ici](http://umap.openstreetmap.fr/fr/map/festival-des-3-continents_26381).
 
-![anatomie_carte_umap_2021.jpg](../../static/tutoriels/1-je-consulte-une-carte-umap/anatomie_carte_umap_2021.jpg)
+![Description des différents éléments d’une carte](../../static/tutoriels/1-je-consulte-une-carte-umap/anatomie_carte_umap_2021.jpg)
 
 
 À droite de la carte et selon le choix de son auteur peut être affiché
@@ -52,7 +52,15 @@ calques, ou couches. Cela permet de structurer une carte, pour qu’elle
 soit plus claire et plus facile à maintenir. L’utilisateur peut choisir
 d’afficher ou cacher chaque calque individuellement.
 
-![umap_calques.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_calques.png)
+<shot-scraper
+    data-output="static/tutoriels/control-browse.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône du sélecteur de calque(s)."
+    data-selector=".umap-control-browse"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    >Icône du sélecteur de calque(s).</shot-scraper>
 
 Le sélecteur de calques est
 l’icône visible en haut à gauche de la carte sous les boutons de zoom.
@@ -60,54 +68,126 @@ Lorsque vous positionnez la souris sur ce bouton, la liste des calques
 apparaît, vous pouvez alors afficher ou cacher chaque calque, ou encore
 centrer la carte sur le contenu d’un calque.
 
-![umap_sélecteur_calques.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_sélecteur_calques.png)
+![Une description des différentes parties d’un sélecteur de calques](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_sélecteur_calques.png)
 
-Dans cet exemple le calque "Stations Bicloo" est caché : cliquer sur
-l’oeil de ce calque permet de l’afficher.
+Dans cet exemple le calque « Stations Bicloo » est caché :
+cliquer sur l’oeil de ce calque permet de l’afficher.
 La liste des calques, avec éventuellement un descriptif de chaque
 calque, est aussi visible dans la légende de la carte.
 
 ### 3. Le bouton Plus
 
-![umap_plus.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_plus.png)
 
-Sous le sélecteur de carte est
-visible un bouton portant le texte "Plus". Un clic sur ce bouton fait
-apparaître une série de boutons.
+<shot-scraper
+    data-output="static/tutoriels/control-more.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône pour afficher plus d’options."
+    data-width="46"
+    data-height="33"
+    data-selector=".umap-control-more"
+    data-padding="5"
+    >Icône pour afficher plus d’options.</shot-scraper>
 
--   ![umap_search.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_search.png) permet de chercher une
-    localité et de centrer la carte dessus : saisissez le nom d’une
-    commune et tapez sur `Entrée`.
--   ![umap_full_screen.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_full_screen.png) place le
-    navigateur en mode plein écran, que l’on peut quitter avec le même
-    bouton ou avec la touche `Échap` du clavier.
--   ![umap_share.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_share.png) permet de partager la carte
-    ou d’en exporter les données. Un panneau à droite de la carte est
-    affiché, il est expliqué ci-dessous.
--   ![umap_geoloc.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_geoloc.png) permet de vous géolocaliser
-    (1), c’est-à-dire centrer la carte sur votre position
-    actuelle.
-    { .annotate }
+Sous le sélecteur de carte est visible un bouton portant le texte « Plus ».
+Un clic sur ce bouton fait apparaître une autre série de boutons.
 
-    1.  La géolocalisation exige de demander l’autorisation de l’utilisateur, votre navigateur Web peut donc vous demander d’accepter ou activer la géolocalisation
+<shot-scraper
+    data-output="static/tutoriels/control-search.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône du sélecteur de recherche."
+    data-selector=".leaflet-control-search"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    >Permet de chercher une localité et de centrer la carte dessus :
+    saisissez le nom d’une commune et tapez sur `Entrée`</shot-scraper>
 
--   ![umap_layers.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_layers.png) affiche à droite plusieurs
-    fonds de carte : cliquer sur l’un d’eux change le fond de la carte.
--   ![umap_edit_osm.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_edit_osm.png) est utile pour
-    améliorer la carte OpenStreetMap - ce qui sort de l’objet de ce
-    tutoriel.
--   ![umap_measure.png](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_measure.png) est un outil de mesure.
+<shot-scraper
+    data-output="static/tutoriels/control-fullscreen.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône de la mise en plein écran."
+    data-selector=".leaflet-control-fullscreen"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    >Place le navigateur en mode plein écran, que l’on peut quitter avec le même
+    bouton ou avec la touche `Échap` du clavier.</shot-scraper>
+
+<shot-scraper
+    data-output="static/tutoriels/control-embed.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône du partage et de l’intégration."
+    data-selector=".leaflet-control-embed"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    >Permet de partager la carte ou d’en exporter les données.
+    Un panneau à droite de la carte est affiché, il est expliqué ci-dessous.</shot-scraper>
+
+<shot-scraper
+    data-output="static/tutoriels/control-locate.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône de la géolocalisation."
+    data-selector=".leaflet-control-locate"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    data-javascript="document.querySelector('.umap-control-more').click()"
+    >
+    Permet de vous géolocaliser, c’est-à-dire centrer la carte sur votre position
+    actuelle. La géolocalisation exige de demander l’autorisation de l’utilisateur,
+    votre navigateur Web peut donc vous demander d’accepter ou activer la géolocalisation.
+</shot-scraper>
+
+<shot-scraper
+    data-output="static/tutoriels/measure-control.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône de mesure."
+    data-selector=".leaflet-measure-control"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    data-javascript="document.querySelector('.umap-control-more').click()"
+    >
+    Est un outil de mesure.
     Activer cet outil a deux effets : d’une part il affiche la longueur
     des éléments linéaires de la carte et l’aire des éléments
-    surfaciques ; d’autre part il vous permet de tracer sur la carte une
+    surfaciques ; d’autre part il vous permet de tracer sur la carte une
     ligne dont la longueur est affichée. Cliquez à nouveau sur le bouton
     pour désactiver cet outil.
+</shot-scraper>
+
+<shot-scraper
+    data-output="static/tutoriels/control-edit-in-osm.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône pour éditer les données OpenStreetMap."
+    data-selector=".leaflet-control-edit-in-osm"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    data-javascript="document.querySelector('.umap-control-more').click()"
+    >
+    Est utile pour améliorer la carte OpenStreetMap - ce qui sort de l’objet de ce tutoriel.
+</shot-scraper>
+
+<shot-scraper
+    data-output="static/tutoriels/control-icon-layers.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône de changement de fond de carte."
+    data-selector=".leaflet-iconLayers"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    data-javascript="document.querySelector('.umap-control-more').click()"
+    >
+    Affiche plusieurs fonds de carte au survol :
+    cliquer sur l’un d’eux change le fond de la carte.</shot-scraper>
 
 
 #### Partager la carte
 
 Le panneau de partage de la carte offre trois possibilités. Votre choix
-dépend de la manière dont vous souhaitez partager la carte :
+dépend de la manière dont vous souhaitez partager la carte :
 
 -   **URL courte** permet de copier une URL abrégée - équivalente à
     l’URL de la carte - que vous pouvez par exemple envoyer dans un
