@@ -88,7 +88,7 @@ export function escapeHTML(s) {
       'span',
     ],
     ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'frameborder', 'scrolling'],
-    ALLOWED_ATTR: ['href', 'src', 'width', 'height', 'style'],
+    ALLOWED_ATTR: ['href', 'src', 'width', 'height', 'style', 'dir', 'title'],
     // Added: `geo:` URL scheme as defined in RFC5870:
     // https://www.rfc-editor.org/rfc/rfc5870.html
     // The base RegExp comes from:
