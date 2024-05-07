@@ -26,7 +26,7 @@ class BaseUpdater {
     }
   }
 
-  getLayerFromID(layerId) {
+  getDataLayerFromID(layerId) {
     if (layerId) return this.map.getDataLayerByUmapId(layerId)
     return this.map.defaultEditDataLayer()
   }
@@ -47,7 +47,7 @@ export class MapUpdater extends BaseUpdater {
 
 export class DataLayerUpdater extends BaseUpdater {
   update({ key, metadata, value }) {
-    const datalayer = this.getLayerFromID(metadata.id)
+    const datalayer = this.getDataLayerFromID(metadata.id)
     console.log('datalayer', datalayer, key, value)
     this.updateObjectValue(datalayer, key, value)
     datalayer.render([key])
@@ -64,7 +64,7 @@ export class DataLayerUpdater extends BaseUpdater {
  **/
 class FeatureUpdater extends BaseUpdater {
   getFeatureFromMetadata({ id, layerId }) {
-    const datalayer = this.getLayerFromID(layerId)
+    const datalayer = this.getDataLayerFromID(layerId)
     return datalayer.getFeatureById(id)
   }
 
@@ -78,7 +78,7 @@ class FeatureUpdater extends BaseUpdater {
 
   upsert({ metadata, value }) {
     let { id, layerId } = metadata
-    const datalayer = this.getLayerFromID(layerId)
+    const datalayer = this.getDataLayerFromID(layerId)
     let feature = this.getFeatureFromMetadata(metadata, value)
     feature = datalayer.geometryToFeature({ geometry: value.geometry, id, feature })
     feature.addTo(datalayer)
@@ -89,7 +89,7 @@ class FeatureUpdater extends BaseUpdater {
 
     switch (key) {
       case 'geometry':
-        const datalayer = this.getLayerFromID(metadata.layerId)
+        const datalayer = this.getDataLayerFromID(metadata.layerId)
         datalayer.geometryToFeature({ geometry: value, id: metadata.id, feature })
       default:
         this.updateObjectValue(feature, key, value)
