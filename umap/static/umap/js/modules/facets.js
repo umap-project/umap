@@ -10,15 +10,18 @@ export default class Facets {
 
   compute(names, defined) {
     const properties = {}
+    let selected
 
     names.forEach((name) => {
       const type = defined[name]['type']
       properties[name] = { type: type }
-      this.selected[name] = { type: type }
+      selected = this.selected[name] || {}
+      selected.type = type
       if (!['date', 'datetime', 'number'].includes(type)) {
         properties[name].choices = []
-        this.selected[name].choices = []
+        selected.choices = selected.choices || []
       }
+      this.selected[name] = selected
     })
 
     this.map.eachBrowsableDataLayer((datalayer) => {
