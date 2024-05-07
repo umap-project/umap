@@ -13,8 +13,6 @@ export default class Browser {
   }
 
   set mode(value) {
-    // Force only if mode is known, otherwise keep current mode.
-    if (!value) return
     // Store the mode so we can respect it when we redraw
     if (['data', 'filters'].includes(value)) this.map.panel.mode = 'expanded'
     else if (value === 'layers') this.map.panel.mode = 'condensed'
@@ -144,7 +142,8 @@ export default class Browser {
   }
 
   open(mode) {
-    this.mode = mode
+    // Force only if mode is known, otherwise keep current mode.
+    if (mode) this.mode = mode
     // Get once but use it for each feature later
     this.filterKeys = this.map.getFilterKeys()
     const container = DomUtil.create('div')
