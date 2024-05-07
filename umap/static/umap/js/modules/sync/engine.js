@@ -4,7 +4,7 @@ import {
   MarkerUpdater,
   PolygonUpdater,
   PolylineUpdater,
-  DatalayerUpdater,
+  DataLayerUpdater,
 } from './updaters.js'
 
 export class SyncEngine {
@@ -43,7 +43,7 @@ export class MessagesDispatcher {
       marker: new MarkerUpdater(this.map),
       polyline: new PolylineUpdater(this.map),
       polygon: new PolygonUpdater(this.map),
-      datalayer: new DatalayerUpdater(this.map),
+      datalayer: new DataLayerUpdater(this.map),
     }
   }
 
