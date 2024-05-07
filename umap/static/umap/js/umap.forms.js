@@ -744,7 +744,17 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   },
 })
 
-L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
+L.FormBuilder.FacetSearchBase = L.FormBuilder.Element.extend({
+
+  buildLabel: function () {
+    this.label = L.DomUtil.element({
+      tagName: 'legend',
+      textContent: this.options.label,
+    })
+  }
+
+})
+L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
   build: function () {
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
@@ -754,13 +764,6 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
     const choices = this.options.criteria['choices']
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
-  },
-
-  buildLabel: function () {
-    this.label = L.DomUtil.element({
-      tagName: 'legend',
-      textContent: this.options.label,
-    })
   },
 
   buildLi: function (value) {
@@ -787,7 +790,7 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
   },
 })
 
-L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
+L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
   getInputType: function (type) {
     return type
   },
@@ -823,6 +826,7 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
       this.minInput.valueAsNumber = this.prepareForHTML(currentMin)
       this.minInput.dataset.value = min
     }
+    this.minInput.dataset.modified = this.isMinModified()
 
     this.maxLabel = L.DomUtil.create('label', '', this.container)
     this.maxLabel.textContent = maxLabel
@@ -834,28 +838,30 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
       this.maxInput.valueAsNumber = this.prepareForHTML(currentMax)
       this.maxInput.dataset.value = max
     }
+    this.maxInput.dataset.modified = this.isMaxModified()
 
     L.DomEvent.on(this.minInput, 'change', (e) => this.sync())
     L.DomEvent.on(this.maxInput, 'change', (e) => this.sync())
   },
 
-  buildLabel: function () {
-    this.label = L.DomUtil.element({
-      tagName: 'legend',
-      textContent: this.options.label,
-    })
+  sync: function () {
+    L.FormBuilder.Element.prototype.sync.call(this)
+    this.minInput.dataset.modified = this.isMinModified()
+    this.maxInput.dataset.modified = this.isMaxModified()
   },
 
   isMinModified: function () {
-    return this.minInput.value !== this.minInput.dataset.value
+    return (
+      this.prepareForHTML(this.prepareForJS(this.minInput.value)) !==
+      this.prepareForHTML(this.prepareForJS(this.minInput.dataset.value))
+    )
   },
 
   isMaxModified: function () {
-    return this.maxInput.value !== this.maxInput.dataset.value
-  },
-
-  isModified: function () {
-    return this.isMinModified() || this.isMaxModified()
+    return (
+      this.prepareForHTML(this.prepareForJS(this.maxInput.value)) !==
+      this.prepareForHTML(this.prepareForJS(this.maxInput.dataset.value))
+    )
   },
 
   toJS: function () {
@@ -863,18 +869,26 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
       type: this.type,
     }
     if (this.minInput.value !== '' && this.isMinModified()) {
-      opts.min = new Date(this.minInput.value)
+      opts.min = this.prepareForJS(this.minInput.value)
     }
     if (this.maxInput.value !== '' && this.isMaxModified()) {
-      opts.max = new Date(this.maxInput.value)
+      opts.max = this.prepareForJS(this.maxInput.value)
     }
     return opts
   },
 })
 
-L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({})
+L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({
+  prepareForJS: function (value) {
+    return new Number(value)
+  },
+})
 
 L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
+  prepareForJS: function (value) {
+    return new Date(value)
+  },
+
   prepareForHTML: function (value) {
     // Deal with timezone
     return value.valueOf() - value.getTimezoneOffset() * 60000
