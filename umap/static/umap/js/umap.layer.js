@@ -1112,20 +1112,25 @@ U.DataLayer = L.Evented.extend({
     return new U.Marker(this.map, latlng, { geojson: geojson, datalayer: this }, id)
   },
 
-  _lineToLayer: function (geojson, latlngs) {
-    return new U.Polyline(this.map, latlngs, {
-      geojson: geojson,
-      datalayer: this,
-      color: null,
-    })
+  _lineToLayer: function (geojson, latlngs, id) {
+    return new U.Polyline(
+      this.map,
+      latlngs,
+      {
+        geojson: geojson,
+        datalayer: this,
+        color: null,
+      },
+      id
+    )
   },
 
-  _polygonToLayer: function (geojson, latlngs) {
+  _polygonToLayer: function (geojson, latlngs, id) {
     // Ensure no empty hole
     // for (let i = latlngs.length - 1; i > 0; i--) {
     //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
     // }
-    return new U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this })
+    return new U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this }, id)
   },
 
   importRaw: function (raw, type) {
@@ -1585,9 +1590,10 @@ U.DataLayer = L.Evented.extend({
   // TODO Add an index
   // For now, iterate on all the features.
   getFeatureById: function (id) {
+    console.log('looking for feature with id ', id)
     for (const i in this._layers) {
       let feature = this._layers[i]
-      if (feature.id == id) {
+      if (feature.id === id) {
         return feature
       }
     }
