@@ -114,6 +114,8 @@ export default class Browser {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
     })
+    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
+    U.Utils.toggleBadge('.umap-control-browse', this.hasFilters())
   }
 
   redraw() {
@@ -122,6 +124,10 @@ export default class Browser {
 
   isOpen() {
     return !!document.querySelector('.umap-browser')
+  }
+
+  hasFilters() {
+    return !!this.options.filter || this.map.facets.isActive()
   }
 
   onMoveEnd() {
@@ -157,6 +163,8 @@ export default class Browser {
       className: 'filters',
       icon: 'icon-filters',
     })
+    this.filtersTitle = container.querySelector('summary')
+    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
     this.dataContainer = DomUtil.create('div', '', container)
 
     let fields = [

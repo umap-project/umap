@@ -362,3 +362,11 @@ export function parseNaiveDate(value) {
   // Let's pretend naive date are UTC, and remove time…
   return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
 }
+
+export function toggleBadge(element, value) {
+  if (!element.nodeType) element = document.querySelector(element)
+  if (!element) return
+  // True means simple badge, without content
+  if (value) element.dataset.badge = value === true ? ' ' : value
+  else delete element.dataset.badge
+}

@@ -56,8 +56,16 @@ export default class Facets {
     return properties
   }
 
-  build() {
+  isActive() {
+    for (let { type, min, max, choices } of Object.values(this.selected)) {
+      if (min !== undefined || max != undefined || choices?.length) {
+        return true
+      }
+    }
+    return false
+  }
 
+  build() {
     const defined = this.getDefined()
     const names = Object.keys(defined)
     const facetProperties = this.compute(names, defined)

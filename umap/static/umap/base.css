@@ -323,6 +323,27 @@ fieldset legend {
     padding: 0 5px;
 }
 
+[data-badge] {
+    position: relative;
+}
+[data-badge]:after {
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    min-width: 8px;
+    min-height: 8px;
+    line-height: 8px;
+    padding: 2px;
+    font-weight: bold;
+    background-color: var(--color-flashyGreen);
+    color: var(--color-darkBlue);
+    text-align: center;
+    font-size: .75rem;
+    border-radius: 50%;
+    content: attr(data-badge);
+    border: solid .5px var(--color-darkBlue);
+}
+
 /* Switch */
 input.switch:empty {
     display: none;
