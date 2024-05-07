@@ -5,9 +5,12 @@
     --color-lightGray: #ddd;
     --color-darkGray: #323737;
     --color-light: white;
-    --color-flashyGreen: #b9f5d2;
+    --color-limeGreen: #b9f5d2;
+    --color-brightCyan: #46ece6;
+    --color-lightCyan: #d4fbf9;
 
     --background-color: var(--color-light);
+    --color-accent: var(--color-brightCyan);
 
     /* Buttons. */
     --button-primary-background: var(--color-waterMint);
