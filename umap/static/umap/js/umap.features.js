@@ -521,8 +521,6 @@ U.FeatureMixin = {
         case 'date':
         case 'datetime':
         case 'number':
-          min = parser(min)
-          max = parser(max)
           if (!isNaN(min) && !isNaN(value) && min > value) return false
           if (!isNaN(max) && !isNaN(value) && max < value) return false
           break

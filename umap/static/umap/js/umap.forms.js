@@ -796,7 +796,7 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     return [L._('Min'), L._('Max')]
   },
 
-  castValue: function (value) {
+  prepareForHTML: function (value) {
     return value.valueOf()
   },
 
@@ -804,6 +804,10 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
     const { min, max, type } = this.options.criteria
+    const { min: modifiedMin, max: modifiedMax } = this.get()
+
+    const currentMin = modifiedMin !== undefined ? modifiedMin : min
+    const currentMax = modifiedMax !== undefined ? modifiedMax : max
     this.type = type
     this.inputType = this.getInputType(this.type)
 
@@ -816,7 +820,7 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     this.minInput.type = this.inputType
     this.minInput.step = 'any'
     if (min != null) {
-      this.minInput.valueAsNumber = this.castValue(min)
+      this.minInput.valueAsNumber = this.prepareForHTML(currentMin)
       this.minInput.dataset.value = min
     }
 
@@ -827,7 +831,7 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     this.maxInput.type = this.inputType
     this.maxInput.step = 'any'
     if (max != null) {
-      this.maxInput.valueAsNumber = this.castValue(max)
+      this.maxInput.valueAsNumber = this.prepareForHTML(currentMax)
       this.maxInput.dataset.value = max
     }
 
@@ -842,21 +846,27 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     })
   },
 
+  isMinModified: function () {
+    return this.minInput.value !== this.minInput.dataset.value
+  },
+
+  isMaxModified: function () {
+    return this.maxInput.value !== this.maxInput.dataset.value
+  },
+
+  isModified: function () {
+    return this.isMinModified() || this.isMaxModified()
+  },
+
   toJS: function () {
     const opts = {
       type: this.type,
     }
-    if (
-      this.minInput.value !== '' &&
-      this.minInput.value !== this.minInput.dataset.value
-    ) {
-      opts.min = this.minInput.value
+    if (this.minInput.value !== '' && this.isMinModified()) {
+      opts.min = new Date(this.minInput.value)
     }
-    if (
-      this.maxInput.value !== '' &&
-      this.maxInput.value !== this.maxInput.dataset.value
-    ) {
-      opts.max = this.maxInput.value
+    if (this.maxInput.value !== '' && this.isMaxModified()) {
+      opts.max = new Date(this.maxInput.value)
     }
     return opts
   },
@@ -865,7 +875,8 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
 L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({})
 
 L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
-  castValue: function (value) {
+  prepareForHTML: function (value) {
+    // Deal with timezone
     return value.valueOf() - value.getTimezoneOffset() * 60000
   },
   getLabels: function () {
