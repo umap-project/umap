@@ -70,21 +70,6 @@ export default class Facets {
     const names = Object.keys(defined)
     const facetProperties = this.compute(names, defined)
 
-    const filterFeatures = function () {
-      let found = false
-      this.map.eachBrowsableDataLayer((datalayer) => {
-        datalayer.resetLayer(true)
-        if (datalayer.hasDataVisible()) found = true
-      })
-      // TODO: display a results counter in the panel instead.
-      if (!found) {
-        this.map.ui.alert({
-          content: translate('No results for these facets'),
-          level: 'info',
-        })
-      }
-    }
-
     const fields = names.map((name) => {
       let criteria = facetProperties[name]
       let handler = 'FacetSearchChoices'
