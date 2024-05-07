@@ -794,7 +794,7 @@ def get_websocket_auth_token(request, map_id, map_inst):
 
     if map_object.can_edit(request.user, request):
         permissions = ["edit"]
-        if map_object.can_delete(request.user, request):
+        if map_object.is_owner(request.user, request):
             permissions.append("owner")
 
         if request.user.is_authenticated:
