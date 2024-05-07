@@ -83,7 +83,7 @@ export const SCHEMA = {
   easing: {
     type: Boolean,
     impacts: [],
-    default: false
+    default: false,
   },
   editinosmControl: {
     type: Boolean,

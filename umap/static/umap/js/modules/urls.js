@@ -1,4 +1,4 @@
-import { template } from "./utils.js"
+import { template } from './utils.js'
 
 export default class URLs {
   constructor(serverUrls) {

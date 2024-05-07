@@ -878,12 +878,11 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   },
 
   fetch: function () {
-    let value = (this.backup = this.toHTML())
-    if (!this.container.querySelector(`input[type="radio"][value="${value}"]`))
-      value =
-        typeof this.options.default !== 'undefined'
-          ? this.options.default
-          : this.default
+    this.backup = this.toHTML()
+    let value = this.backup
+    if (!this.container.querySelector(`input[type="radio"][value="${value}"]`)) {
+      value = this.options.default !== undefined ? this.options.default : this.default
+    }
     this.container.querySelector(`input[type="radio"][value="${value}"]`).checked = true
   },
 

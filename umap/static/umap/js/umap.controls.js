@@ -196,8 +196,11 @@ U.ToggleEditAction = U.BaseFeatureAction.extend({
   },
 
   onClick: function (e) {
-    if (this.feature._toggleEditing) this.feature._toggleEditing(e) // Path
-    else this.feature.edit(e) // Marker
+    if (this.feature._toggleEditing) {
+      this.feature._toggleEditing(e) // Path
+    } else  {
+      this.feature.edit(e) // Marker
+    }
   },
 })
 
