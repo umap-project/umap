@@ -495,8 +495,8 @@ U.FeatureMixin = {
   },
 
   isFiltered: function () {
-    const filterKeys = this.map.getFilterKeys(),
-      filter = this.map.browser.options.filter
+    const filterKeys = this.map.getFilterKeys()
+    const filter = this.map.browser.options.filter
     if (filter && !this.matchFilter(filter, filterKeys)) return true
     if (!this.matchFacets()) return true
     return false
