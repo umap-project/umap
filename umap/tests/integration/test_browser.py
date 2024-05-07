@@ -77,7 +77,7 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     paths = page.locator(".leaflet-overlay-pane path")
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     filter_ = page.locator("input[name='filter']")
     expect(filter_).to_be_visible()
     filter_.type("poly")
@@ -104,7 +104,7 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
 def test_data_browser_can_show_only_visible_features(live_server, page, bootstrap, map):
     # Zoom on France
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
@@ -116,7 +116,7 @@ def test_data_browser_can_show_only_visible_features(live_server, page, bootstra
 def test_data_browser_can_mix_filter_and_bbox(live_server, page, bootstrap, map):
     # Zoom on north west
     page.goto(f"{live_server.url}{map.get_absolute_url()}#4/61.98/-2.68")
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
@@ -134,7 +134,7 @@ def test_data_browser_can_mix_filter_and_bbox(live_server, page, bootstrap, map)
 def test_data_browser_bbox_limit_should_be_dynamic(live_server, page, bootstrap, map):
     # Zoom on Europe
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
@@ -160,7 +160,7 @@ def test_data_browser_bbox_filter_should_be_persistent(
 ):
     # Zoom on Europe
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
@@ -186,7 +186,7 @@ def test_data_browser_bbox_filtered_is_clickable(live_server, page, bootstrap, m
     popup = page.locator(".leaflet-popup")
     # Zoom on Europe
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     el = page.get_by_text("Current map view")
     expect(el).to_be_visible()
     el.click()
@@ -208,7 +208,7 @@ def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
     expect(page.get_by_text("one point in france (point)")).to_be_visible()
     expect(page.get_by_text("one line in new zeland (line)")).to_be_visible()
     expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_visible()
-    page.get_by_role("heading", name="filters").click()
+    page.locator(".filters summary").click()
     filter_ = page.locator("input[name='filter']")
     expect(filter_).to_be_visible()
     filter_.type("foobar")  # Hide all

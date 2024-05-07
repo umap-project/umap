@@ -58,7 +58,7 @@ def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):
     expect(zoom_out).to_be_visible()
 
     # Hide them
-    page.get_by_role("heading", name="User interface options").click()
+    page.get_by_text("User interface options").click()
     hide_zoom_controls = (
         page.locator("div")
         .filter(has_text=re.compile(r"^Display the zoom control"))
@@ -90,7 +90,7 @@ def test_map_color_impacts_data(live_server, page, tilelayer):
     expect(marker_pane_p1).to_have_count(1)
 
     # Change the default color
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.get_by_title("Lime", exact=True).click()
 
@@ -108,7 +108,7 @@ def test_limitbounds_impacts_ui(live_server, page, tilelayer):
     expect(gear_icon).to_be_visible()
     gear_icon.click()
 
-    page.get_by_role("heading", name="Limit bounds").click()
+    page.get_by_text("Limit bounds").click()
     default_zoom_url = f"{live_server.url}/en/map/new/#5/51.110/7.053"
     page.goto(default_zoom_url)
     page.get_by_role("button", name="Use current bounds").click()
@@ -183,7 +183,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     # Change the default sortkey to be "key"
     page.get_by_role("button", name="Edit").click()
     page.get_by_role("link", name="Map advanced properties").click()
-    page.get_by_role("heading", name="Default properties").click()
+    page.get_by_text("Default properties").click()
 
     # Click "define"
     page.locator(".panel .umap-field-sortKey .define").click()

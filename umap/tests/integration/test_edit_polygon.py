@@ -50,7 +50,7 @@ def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
-    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
+    expect(page.get_by_text("Layer properties")).to_be_visible()
 
 
 def test_marker_style_should_have_precedence(live_server, openmap, page, bootstrap):
@@ -59,7 +59,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     # Change colour at layer level
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color .define").click()
     expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(1)
     page.get_by_title("DarkRed").first.click()
@@ -67,7 +67,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
 
     # Now change at polygon level, it should take precedence
     page.locator("path").click(modifiers=["Shift"])
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.get_by_title("GoldenRod", exact=True).first.click()
     expect(page.locator(".leaflet-overlay-pane path[fill='GoldenRod']")).to_have_count(
@@ -77,7 +77,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     # Now change again at layer level again, it should not change the marker color
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color input").click()
     page.get_by_title("DarkViolet").first.click()
     expect(page.locator(".leaflet-overlay-pane path[fill='GoldenRod']")).to_have_count(
@@ -99,7 +99,7 @@ def test_can_remove_stroke(live_server, openmap, page, bootstrap):
     )
     page.locator("path").click()
     page.get_by_role("link", name="Toggle edit mode").click()
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator(".umap-field-stroke .define").first.click()
     page.locator(".umap-field-stroke label").first.click()
     expect(page.locator(".leaflet-overlay-pane path[stroke='DarkBlue']")).to_have_count(
@@ -111,7 +111,7 @@ def test_can_remove_stroke(live_server, openmap, page, bootstrap):
 def test_should_reset_style_on_cancel(live_server, openmap, page, bootstrap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator("path").click(modifiers=["Shift"])
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.get_by_title("GoldenRod", exact=True).first.click()
     expect(page.locator(".leaflet-overlay-pane path[fill='GoldenRod']")).to_have_count(

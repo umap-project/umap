@@ -87,6 +87,11 @@ L.DomUtil.createFieldset = (container, legend, options) => {
   L.DomUtil.add('span', '', summary, legend)
   const fieldset = L.DomUtil.add('fieldset', '', details)
   details.open = options.on === true
+  if (options.callback) {
+    L.DomEvent.on(details, 'toggle', () => {
+      if (details.open) options.callback.call(options.context || this)
+    })
+  }
   return fieldset
 }
 

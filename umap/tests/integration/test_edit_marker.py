@@ -36,7 +36,7 @@ def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
-    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
+    expect(page.get_by_text("Layer properties")).to_be_visible()
 
 
 def test_marker_style_should_have_precedence(live_server, openmap, page, bootstrap):
@@ -45,7 +45,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     # Change colour at layer level
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color .define").click()
     expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
         "background-color", "rgb(0, 0, 139)"
@@ -57,7 +57,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
 
     # Now change at marker level, it should take precedence
     page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.get_by_title("GoldenRod", exact=True).click()
     expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
@@ -67,7 +67,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     # Now change again at layer level again, it should not change the marker color
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
-    page.get_by_role("heading", name="Shape properties").click()
+    page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color input").click()
     page.get_by_title("DarkViolet").first.click()
     expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
@@ -87,12 +87,12 @@ def test_should_update_open_popup_on_edit(live_server, openmap, page, bootstrap)
     expect(page.locator(".umap-icon-active")).to_be_hidden()
     page.locator(".leaflet-marker-icon").click()
     expect(page.locator(".leaflet-popup-content-wrapper")).to_be_visible()
-    expect(page.get_by_role("heading", name="test marker")).to_be_visible()
+    expect(page.get_by_text("test marker")).to_be_visible()
     expect(page.get_by_text("Some description")).to_be_visible()
     page.get_by_role("button", name="Edit").click()
     page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     page.locator('input[name="name"]').fill("test marker edited")
-    expect(page.get_by_role("heading", name="test marker edited")).to_be_visible()
+    expect(page.get_by_text("test marker edited")).to_be_visible()
 
 
 def test_should_follow_datalayer_style_when_changing_datalayer(
