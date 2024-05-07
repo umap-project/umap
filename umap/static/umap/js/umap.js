@@ -249,8 +249,6 @@ U.Map = L.Map.extend({
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
     this.sync = new U.SyncEngine(this)
-
-    this.initSyncEngine()
   },
 
   initSyncEngine: async function () {
@@ -1602,6 +1600,7 @@ U.Map = L.Map.extend({
     this.editEnabled = true
     this.drop.enable()
     this.fire('edit:enabled')
+    this.initSyncEngine()
   },
 
   disableEdit: function () {
@@ -1613,6 +1612,7 @@ U.Map = L.Map.extend({
     this.fire('edit:disabled')
     this.editPanel.close()
     this.fullPanel.close()
+    this.sync.stop()
   },
 
   hasEditMode: function () {
