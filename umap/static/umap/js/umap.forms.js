@@ -843,11 +843,22 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
   },
 
   toJS: function () {
-    return {
+    const opts = {
       type: this.type,
-      min: this.minInput.value,
-      max: this.maxInput.value,
     }
+    if (
+      this.minInput.value !== '' &&
+      this.minInput.value !== this.minInput.dataset.value
+    ) {
+      opts.min = this.minInput.value
+    }
+    if (
+      this.maxInput.value !== '' &&
+      this.maxInput.value !== this.maxInput.dataset.value
+    ) {
+      opts.max = this.maxInput.value
+    }
+    return opts
   },
 })
 
