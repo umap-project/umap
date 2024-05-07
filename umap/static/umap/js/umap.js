@@ -246,7 +246,7 @@ U.Map = L.Map.extend({
     this.on('click contextmenu.show', this.closeInplaceToolbar)
     this.sync = new U.SyncEngine(this)
 
-    Promise.resolve(this.initSyncEngine())
+    this.initSyncEngine()
   },
 
   initSyncEngine: async function () {
@@ -1498,6 +1498,12 @@ U.Map = L.Map.extend({
     slideshow.appendChild(slideshowBuilder.build())
   },
 
+  _editSync: function (container) {
+    const sync = L.DomUtil.createFieldset(container, L._('Real-time collaboration'))
+    const builder = new U.FormBuilder(this, ['options.syncEnabled'])
+    sync.appendChild(builder.build())
+  },
+
   _advancedActions: function (container) {
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
@@ -1546,10 +1552,6 @@ U.Map = L.Map.extend({
     const container = L.DomUtil.create('div', 'umap-edit-container')
     const metadataFields = ['options.name', 'options.description']
 
-    if (this.options.websocketEnabled) {
-      metadataFields.push('options.syncEnabled')
-    }
-
     const title = L.DomUtil.create('h3', '', container)
     title.textContent = L._('Edit map details')
     const builder = new U.FormBuilder(this, metadataFields, {
@@ -1584,6 +1586,9 @@ U.Map = L.Map.extend({
     this._editOverlay(container)
     this._editBounds(container)
     this._editSlideshow(container)
+    if (this.options.websocketEnabled) {
+      this._editSync(container)
+    }
     this._advancedActions(container)
 
     this.editPanel.open({ content: container, className: 'dark' })

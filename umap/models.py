@@ -251,6 +251,11 @@ class Map(NamedModel):
         path = reverse("map_anonymous_edit_url", kwargs={"signature": signature})
         return settings.SITE_URL + path
 
+    def is_owner(self, user=None, request=None):
+        if user and self.owner == user:
+            return True
+        return self.is_anonymous_owner(request)
+
     def is_anonymous_owner(self, request):
         if not request or self.owner:
             # edit cookies are only valid while the map doesn't have owner

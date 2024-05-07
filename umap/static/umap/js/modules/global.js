@@ -22,7 +22,6 @@ window.U = {
   NOKError,
   Orderable,
   Panel,
-  Panel,
   Request,
   RequestError,
   SCHEMA,
