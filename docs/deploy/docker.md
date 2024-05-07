@@ -27,7 +27,8 @@ services:
     volumes:
       - umap_userdata:/srv/umap/uploads
       # FIX the path on the left, below, to your location 
-      # OPTIONAL, you can comment the line below out
+      # OPTIONAL, you can comment the line below out for default
+      # values to apply
       - /home/ubuntu/umap.conf:/etc/umap/umap.conf
     restart: always
     depends_on:
@@ -44,4 +45,7 @@ Note that you’ll have to set a [`SECRET_KEY`](https://docs.djangoproject.com/e
 $ python3 -c 'import secrets; print(secrets.token_hex(100))'
 ```
 
-User accounts can be managed via the Django admin page ({SITE_URL}/admin). The required superuser must be created on the container command line with this command: umap createsuperuser.
+User accounts can be managed via the Django admin page ({SITE_URL}/admin). The required superuser must be created on the container command line with this command:
+```bash
+umap createsuperuser
+```
