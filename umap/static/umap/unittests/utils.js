@@ -185,6 +185,13 @@ describe('Utils', function () {
       assert.equal(Utils.escapeHTML('<a href="geo:1,2"></a>'), '<a href="geo:1,2"></a>')
     })
 
+    it('should not escape dir and title attributes', function () {
+      assert.equal(
+        Utils.escapeHTML('<a title="Title" dir="rtl"></a>'),
+        '<a dir="rtl" title="Title"></a>'
+      )
+    })
+
     it('should not fail with int value', function () {
       assert.equal(Utils.escapeHTML(25), '25')
     })
