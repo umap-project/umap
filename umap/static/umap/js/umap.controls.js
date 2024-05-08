@@ -1246,16 +1246,11 @@ U.Editable = L.Editable.extend({
     this.on('editable:drawing:cancel', (e) => {
       console.log('editable:drawing:cancel')
       if (e.layer instanceof U.Marker) e.layer.del()
-      else {
-        // the user might just exit with escape
-        e.layer.onCommit()
-      }
     })
     this.on('editable:drawing:commit', function (e) {
       console.log('editable:drawing:commit')
       e.layer.isDirty = true
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
-      e.layer.onCommit()
     })
     this.on('editable:editing', (e) => {
       console.log('editable:editing')
