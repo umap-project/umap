@@ -130,8 +130,9 @@
         left: 0;
         visibility: visible;
     }
-    .panel li.umap-resize-link {
-        display: none;
+    .panel.expanded {
+        height: 100%;
+        max-height: 100%;
     }
     .umap-caption-bar-enabled .panel {
         bottom: var(--footer-height);
