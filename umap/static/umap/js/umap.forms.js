@@ -822,6 +822,8 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
     this.minInput = L.DomUtil.create('input', '', this.minLabel)
     this.minInput.type = this.inputType
     this.minInput.step = 'any'
+    this.minInput.min = this.prepareForHTML(min)
+    this.minInput.max = this.prepareForHTML(max)
     if (min != null) {
       this.minInput.dataset.value = min
       // Use setAttribute so to restore to this value when resetting
@@ -836,6 +838,8 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
     this.maxInput = L.DomUtil.create('input', '', this.maxLabel)
     this.maxInput.type = this.inputType
     this.maxInput.step = 'any'
+    this.maxInput.min = this.prepareForHTML(min)
+    this.maxInput.max = this.prepareForHTML(max)
     if (max != null) {
       this.maxInput.dataset.value = max
       this.maxInput.setAttribute('value', this.prepareForHTML(max))
