@@ -16,7 +16,7 @@ export class SyncEngine {
   }
   _initialize() {
     this.transport = undefined
-    const noop = () => undefined
+    const noop = () => {}
     // by default, all operations do nothing, until the engine is started.
     this.upsert = this.update = this.delete = noop
   }

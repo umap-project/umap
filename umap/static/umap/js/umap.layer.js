@@ -179,12 +179,18 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
     return +feature.properties[key] // TODO: should we catch values non castable to int ?
   },
 
-  computeBreaks: function () {
+  getValues: function () {
     const values = []
     this.datalayer.eachLayer((layer) => {
       let value = this._getValue(layer)
       if (!isNaN(value)) values.push(value)
     })
+    return values
+  },
+
+  computeBreaks: function () {
+    const values = this.getValues()
+
     if (!values.length) {
       this.options.breaks = []
       this.options.colors = []
@@ -609,6 +615,7 @@ U.DataLayer = L.Evented.extend({
 
   render: function (fields, builder) {
     let impacts = U.Utils.getImpactsFromSchema(fields)
+    console.log('impacts', impacts)
 
     for (let impact of impacts) {
       switch (impact) {
@@ -623,6 +630,7 @@ U.DataLayer = L.Evented.extend({
           fields.forEach((field) => {
             this.layer.onEdit(field, builder)
           })
+          this.redraw()
           this.show()
           break
         case 'remote-data':
@@ -1026,7 +1034,7 @@ U.DataLayer = L.Evented.extend({
       for (i = 0, len = features.length; i < len; i++) {
         this.geojsonToFeatures(features[i])
       }
-      return this
+      return this // Why returning "this" ?
     }
 
     const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
@@ -1034,6 +1042,7 @@ U.DataLayer = L.Evented.extend({
     let feature = this.geometryToFeature({ geometry, geojson })
     if (feature) {
       this.addLayer(feature)
+      feature.onCommit()
       return feature
     }
   },
@@ -1597,13 +1606,7 @@ U.DataLayer = L.Evented.extend({
   // TODO Add an index
   // For now, iterate on all the features.
   getFeatureById: function (id) {
-    console.log('looking for feature with id ', id)
-    for (const i in this._layers) {
-      let feature = this._layers[i]
-      if (feature.id === id) {
-        return feature
-      }
-    }
+    return Object.values(this._layers).find((feature) => feature.id === id)
   },
 
   getNextFeature: function (feature) {
