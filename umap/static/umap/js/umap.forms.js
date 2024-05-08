@@ -825,11 +825,14 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
     this.minInput.min = this.prepareForHTML(min)
     this.minInput.max = this.prepareForHTML(max)
     if (min != null) {
-      this.minInput.dataset.value = min
-      // Use setAttribute so to restore to this value when resetting
-      // form.
+      // The value stored using setAttribute is not modified by
+      // user input, and will be used as initial value when calling
+      // form.reset(), and can also be retrieve later on by using
+      // getAttributing, to compare with current value and know
+      // if this value has been modified by the user
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reset
       this.minInput.setAttribute('value', this.prepareForHTML(min))
+      this.minInput.value = this.prepareForHTML(currentMin)
     }
 
     this.maxLabel = L.DomUtil.create('label', '', this.container)
@@ -841,8 +844,9 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
     this.maxInput.min = this.prepareForHTML(min)
     this.maxInput.max = this.prepareForHTML(max)
     if (max != null) {
-      this.maxInput.dataset.value = max
+      // Cf comment above about setAttribute vs value
       this.maxInput.setAttribute('value', this.prepareForHTML(max))
+      this.maxInput.value = this.prepareForHTML(currentMax)
     }
     this.toggleStatus()
 
@@ -861,17 +865,15 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
   },
 
   isMinModified: function () {
-    return (
-      this.prepareForHTML(this.prepareForJS(this.minInput.value)) !==
-      this.prepareForHTML(this.prepareForJS(this.minInput.dataset.value))
-    )
+    const default_ = this.minInput.getAttribute("value")
+    const current = this.minInput.value
+    return current != default_
   },
 
   isMaxModified: function () {
-    return (
-      this.prepareForHTML(this.prepareForJS(this.maxInput.value)) !==
-      this.prepareForHTML(this.prepareForJS(this.maxInput.dataset.value))
-    )
+    const default_ = this.maxInput.getAttribute("value")
+    const current = this.maxInput.value
+    return current != default_
   },
 
   toJS: function () {
