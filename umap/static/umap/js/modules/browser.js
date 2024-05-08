@@ -127,7 +127,7 @@ export default class Browser {
   }
 
   isOpen() {
-    return !!document.querySelector('.umap-browser')
+    return !!document.querySelector('.on .umap-browser')
   }
 
   hasFilters() {
