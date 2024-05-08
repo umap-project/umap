@@ -556,9 +556,9 @@ U.Help = L.Class.extend({
     'Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'
   ),
   slugKey: L._('The name of the property to use as feature unique identifier.'),
-  filterKey: L._('Comma separated list of properties to use when filtering features'),
+  filterKey: L._('Comma separated list of properties to use when filtering features by text input'),
   facetKey: L._(
-    'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
+    'Comma separated list of properties to use for filters (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
   ),
   interactive: L._(
     'If false, the polygon or line will act as a part of the underlying map.'

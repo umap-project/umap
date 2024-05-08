@@ -1222,7 +1222,7 @@ U.Map = L.Map.extend({
           handler: 'Input',
           helpEntries: 'filterKey',
           placeholder: L._('Default: name'),
-          label: L._('Filter keys'),
+          label: L._('Search keys'),
           inheritable: true,
         },
       ],
@@ -1232,7 +1232,7 @@ U.Map = L.Map.extend({
           handler: 'BlurInput',
           helpEntries: 'facetKey',
           placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
-          label: L._('Facet keys'),
+          label: L._('Filters keys'),
         },
       ],
       [
@@ -1601,7 +1601,7 @@ U.Map = L.Map.extend({
         L.DomUtil.createButton(
           'umap-open-filter-link flat',
           container,
-          L._('Select data'),
+          L._('Filter data'),
           () => this.openBrowser('filters')
         )
       }
