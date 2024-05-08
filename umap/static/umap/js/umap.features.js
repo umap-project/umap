@@ -15,9 +15,7 @@ U.FeatureMixin = {
 
   onCommit: function () {
     const { subject, metadata, engine } = this.getSyncMetadata()
-    engine.upsert(subject, metadata, {
-      geometry: this.getGeometry(),
-    })
+    engine.upsert(subject, metadata, this.toGeoJSON())
   },
 
   getGeometry: function () {
@@ -25,6 +23,7 @@ U.FeatureMixin = {
   },
 
   syncUpdatedProperties: function (properties) {
+    // When updating latlng, sync the whole geometry
     if ('latlng'.includes(properties)) {
       const { subject, metadata, engine } = this.getSyncMetadata()
       engine.update(subject, metadata, 'geometry', this.getGeometry())
@@ -44,12 +43,16 @@ U.FeatureMixin = {
     // DataLayer the marker belongs to
     this.datalayer = options.datalayer || null
     this.properties = { _umap_options: {} }
+
+    if (options.geojson) {
+      this.populate(options.geojson)
+    }
+
     if (id) {
       this.id = id
     } else {
       let geojson_id
       if (options.geojson) {
-        this.populate(options.geojson)
         geojson_id = options.geojson.id
       }
 
@@ -189,7 +192,7 @@ U.FeatureMixin = {
   },
 
   getAdvancedEditActions: function (container) {
-    const deleteButton = L.DomUtil.createButton(
+    L.DomUtil.createButton(
       'button umap-delete',
       container,
       L._('Delete'),
@@ -939,6 +942,7 @@ U.PathMixin = {
 
   _onDrag: function () {
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
+    this.syncUpdatedProperties(['latlng'])
   },
 
   transferShape: function (at, to) {
@@ -1130,6 +1134,9 @@ U.Polyline = L.Polyline.extend({
     geojson.geometry.coordinates = [
       U.Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
+
+    delete geojson.id // delete the copied id, a new one will be generated.
+
     const polygon = this.datalayer.geojsonToFeatures(geojson)
     polygon.edit()
     this.del()
@@ -1137,7 +1144,7 @@ U.Polyline = L.Polyline.extend({
 
   getAdvancedEditActions: function (container) {
     U.FeatureMixin.getAdvancedEditActions.call(this, container)
-    const toPolygon = L.DomUtil.createButton(
+    L.DomUtil.createButton(
       'button umap-to-polygon',
       container,
       L._('Transform to polygon'),

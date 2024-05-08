@@ -806,7 +806,9 @@ def get_websocket_auth_token(request, map_id, map_inst):
         )
         return simple_json_response(token=signed_token)
     else:
-        return HttpResponseForbidden
+        return HttpResponseForbidden(
+            _("You cannot edit this map with your current permissions.")
+        )
 
 
 class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):

@@ -68,25 +68,29 @@ class FeatureUpdater extends BaseUpdater {
     return datalayer.getFeatureById(id)
   }
 
-  // XXX Not sure about the naming. It's returning latlng OR latlngS
-  getGeometry({ type, coordinates }) {
-    if (type == 'Point') {
-      return L.GeoJSON.coordsToLatLng(coordinates)
-    }
-    return L.GeoJSON.coordsToLatLngs(coordinates)
-  }
-
+  // Create or update an object at a specific position
   upsert({ metadata, value }) {
     let { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
     let feature = this.getFeatureFromMetadata(metadata, value)
-    feature = datalayer.geometryToFeature({ geometry: value.geometry, id, feature })
+    if (feature === undefined) {
+      console.log(`Unable to find feature with id = ${metadata.id}. Creating a new one`)
+    }
+    feature = datalayer.geometryToFeature({
+      geometry: value.geometry,
+      geojson: value,
+      id,
+      feature,
+    })
     feature.addTo(datalayer)
   }
 
+  // Update a property of an object
   update({ key, metadata, value }) {
     let feature = this.getFeatureFromMetadata(metadata)
-
+    if (feature === undefined) {
+      console.error(`Unable to find feature with id = ${metadata.id}.`)
+    }
     switch (key) {
       case 'geometry':
         const datalayer = this.getDataLayerFromID(metadata.layerId)
