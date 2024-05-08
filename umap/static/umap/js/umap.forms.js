@@ -823,10 +823,12 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
     this.minInput.type = this.inputType
     this.minInput.step = 'any'
     if (min != null) {
-      this.minInput.valueAsNumber = this.prepareForHTML(currentMin)
       this.minInput.dataset.value = min
+      // Use setAttribute so to restore to this value when resetting
+      // form.
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reset
+      this.minInput.setAttribute('value', this.prepareForHTML(min))
     }
-    this.minInput.dataset.modified = this.isMinModified()
 
     this.maxLabel = L.DomUtil.create('label', '', this.container)
     this.maxLabel.textContent = maxLabel
@@ -835,19 +837,23 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
     this.maxInput.type = this.inputType
     this.maxInput.step = 'any'
     if (max != null) {
-      this.maxInput.valueAsNumber = this.prepareForHTML(currentMax)
       this.maxInput.dataset.value = max
+      this.maxInput.setAttribute('value', this.prepareForHTML(max))
     }
-    this.maxInput.dataset.modified = this.isMaxModified()
+    this.toggleStatus()
 
-    L.DomEvent.on(this.minInput, 'change', (e) => this.sync())
-    L.DomEvent.on(this.maxInput, 'change', (e) => this.sync())
+    L.DomEvent.on(this.minInput, 'change', () => this.sync())
+    L.DomEvent.on(this.maxInput, 'change', () => this.sync())
+  },
+
+  toggleStatus: function () {
+    this.minInput.dataset.modified = this.isMinModified()
+    this.maxInput.dataset.modified = this.isMaxModified()
   },
 
   sync: function () {
     L.FormBuilder.Element.prototype.sync.call(this)
-    this.minInput.dataset.modified = this.isMinModified()
-    this.maxInput.dataset.modified = this.isMaxModified()
+    this.toggleStatus()
   },
 
   isMinModified: function () {
@@ -889,10 +895,16 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
     return new Date(value)
   },
 
-  prepareForHTML: function (value) {
-    // Deal with timezone
-    return value.valueOf() - value.getTimezoneOffset() * 60000
+  toLocaleDateTime: function (dt) {
+    return new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000)
   },
+
+  prepareForHTML: function (value) {
+    // Value must be in local time
+    if (isNaN(value)) return
+    return this.toLocaleDateTime(value).toISOString().substr(0, 10)
+  },
+
   getLabels: function () {
     return [L._('From'), L._('Until')]
   },
@@ -901,6 +913,12 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
 L.FormBuilder.FacetSearchDateTime = L.FormBuilder.FacetSearchDate.extend({
   getInputType: function (type) {
     return 'datetime-local'
+  },
+
+  prepareForHTML: function (value) {
+    // Value must be in local time
+    if (isNaN(value)) return
+    return this.toLocaleDateTime(value).toISOString().slice(0, -1)
   },
 })
 

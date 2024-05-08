@@ -79,6 +79,9 @@
 .icon-resize {
     background-position: -74px -144px;
 }
+.icon-restore {
+    background-position: -121px -74px;
+}
 .expanded .icon-resize {
     background-position: -50px -144px;
 }

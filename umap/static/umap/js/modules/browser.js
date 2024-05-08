@@ -109,13 +109,17 @@ export default class Browser {
     counter.title = translate(`Features in this layer: ${count}`)
   }
 
+  toggleBadge() {
+    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
+    U.Utils.toggleBadge('.umap-control-browse', this.hasFilters())
+  }
+
   onFormChange() {
     this.map.eachBrowsableDataLayer((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
     })
-    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
-    U.Utils.toggleBadge('.umap-control-browse', this.hasFilters())
+    this.toggleBadge()
   }
 
   redraw() {
@@ -164,7 +168,7 @@ export default class Browser {
       icon: 'icon-filters',
     })
     this.filtersTitle = container.querySelector('summary')
-    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
+    this.toggleBadge()
     this.dataContainer = DomUtil.create('div', '', container)
 
     let fields = [
@@ -177,14 +181,27 @@ export default class Browser {
     const builder = new L.FormBuilder(this, fields, {
       callback: () => this.onFormChange(),
     })
+    let filtersBuilder
     formContainer.appendChild(builder.build())
+    DomEvent.on(builder.form, 'reset', () => {
+      window.setTimeout(builder.syncAll.bind(builder))
+    })
     if (this.map.options.facetKey) {
       fields = this.map.facets.build()
-      const builder = new L.FormBuilder(this.map.facets, fields, {
+      filtersBuilder = new L.FormBuilder(this.map.facets, fields, {
         callback: () => this.onFormChange(),
       })
-      formContainer.appendChild(builder.build())
+      DomEvent.on(filtersBuilder.form, 'reset', () => {
+        window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
+      })
+      formContainer.appendChild(filtersBuilder.build())
     }
+    const reset = DomUtil.createButton('flat', formContainer, '', () => {
+      builder.form.reset()
+      if (filtersBuilder) filtersBuilder.form.reset()
+    })
+    DomUtil.createIcon(reset, 'icon-restore')
+    DomUtil.element({ tagName: 'span', parent: reset, textContent: translate('Reset all') })
 
     this.map.panel.open({
       content: container,
