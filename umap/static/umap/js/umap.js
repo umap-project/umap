@@ -149,6 +149,9 @@ U.Map = L.Map.extend({
     if (this.options.datalayersControl === 'expanded') {
       this.options.onLoadPanel = 'datalayers'
     }
+    if (this.options.onLoadPanel === 'facet') {
+      this.options.onLoadPanel = 'datafilters'
+    }
 
     let isDirty = false // self status
     try {
@@ -214,12 +217,12 @@ U.Map = L.Map.extend({
         this.openBrowser('data')
       } else if (this.options.onLoadPanel === 'datalayers') {
         this.openBrowser('layers')
+      } else if (this.options.onLoadPanel === 'datafilters') {
+        this.panel.mode = 'expanded'
+        this.openBrowser('filters')
       } else if (this.options.onLoadPanel === 'caption') {
         this.panel.mode = 'condensed'
         this.displayCaption()
-      } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
-        this.panel.mode = 'expanded'
-        this.openBrowser('filters')
       }
       if (L.Util.queryString('edit')) {
         if (this.hasEditMode()) this.enableEdit()
