@@ -33,7 +33,7 @@ class JoinMessage(BaseModel):
 
 
 class Geometry(BaseModel):
-    type: Literal["Point", "Polygon"]
+    type: Literal["Point", "Polygon", "LineString"]
     coordinates: list
 
 
@@ -70,11 +70,12 @@ async def join_and_listen(
             # as doing so beforehand would miss new connections
             peers = CONNECTIONS[map_id] - {websocket}
             # Only relay valid "operation" messages
-            try:
-                OperationMessage.model_validate_json(raw_message)
-            except ValidationError as e:
-                print(raw_message, e)
+            # try:
+            #    OperationMessage.model_validate_json(raw_message)
+            # except ValidationError as e:
+            print(raw_message)
 
+            # For now, broadcast anyway
             websockets.broadcast(peers, raw_message)
     finally:
         CONNECTIONS[map_id].remove(websocket)

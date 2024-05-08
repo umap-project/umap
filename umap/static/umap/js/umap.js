@@ -257,6 +257,9 @@ U.Map = L.Map.extend({
     if (this.options.syncEnabled != true) {
       this.sync.stop()
     } else {
+      // FIXME: Do this directly in the sync engine, which should check if the engine
+      // is already started or not.
+
       // Get the authentication token from the server
       // And pass it to the sync engine.
       // FIXME: use `this.urls`
