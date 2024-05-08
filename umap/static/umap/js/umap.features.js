@@ -652,6 +652,7 @@ U.Marker = L.Marker.extend({
       },
       this
     )
+    this.on('editable:drawing:end', this.onCommit)
     if (!this.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
@@ -933,6 +934,7 @@ U.PathMixin = {
 
   addInteractions: function () {
     U.FeatureMixin.addInteractions.call(this)
+    this.on('editable:disable', this.onCommit)
     this.on('mouseover', this._onMouseOver)
     this.on('edit', this.makeDirty)
     this.on('drag editable:drag', this._onDrag)
@@ -942,7 +944,6 @@ U.PathMixin = {
 
   _onDrag: function () {
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
-    this.syncUpdatedProperties(['latlng'])
   },
 
   transferShape: function (at, to) {
