@@ -619,7 +619,6 @@ U.DataLayer = L.Evented.extend({
 
   render: function (fields, builder) {
     let impacts = U.Utils.getImpactsFromSchema(fields)
-    console.log('impacts', impacts)
 
     for (let impact of impacts) {
       switch (impact) {

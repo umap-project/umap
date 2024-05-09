@@ -14,6 +14,9 @@ U.FeatureMixin = {
   },
 
   onCommit: function () {
+    // When the layer is a remote layer, we don't want to sync the creation of the
+    // points via the websocket, as the other peers will get them themselves.
+    if (this.datalayer.isRemoteLayer()) return
     const { subject, metadata, engine } = this.getSyncMetadata()
     engine.upsert(subject, metadata, this.toGeoJSON())
   },
