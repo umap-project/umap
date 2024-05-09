@@ -198,7 +198,7 @@ U.ToggleEditAction = U.BaseFeatureAction.extend({
   onClick: function (e) {
     if (this.feature._toggleEditing) {
       this.feature._toggleEditing(e) // Path
-    } else  {
+    } else {
       this.feature.edit(e) // Marker
     }
   },
@@ -1319,10 +1319,7 @@ U.ContextMenu = L.Map.ContextMenu.extend({
 U.Editable = L.Editable.extend({
   initialize: function (map, options) {
     L.Editable.prototype.initialize.call(this, map, options)
-    this.on(
-      'editable:drawing:start editable:drawing:click editable:drawing:move',
-      this.drawingTooltip
-    )
+    this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     this.on('editable:drawing:end', (e) => {
       this.closeTooltip()
       // Leaflet.Editable will delete the drawn shape if invalid
