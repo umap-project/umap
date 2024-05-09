@@ -8,7 +8,7 @@ import django
 import websockets
 from django.conf import settings
 from django.core.signing import TimestampSigner
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 from websockets import WebSocketClientProtocol
 from websockets.server import serve
 
@@ -19,7 +19,6 @@ from umap.settings import settings_as_dict
 settings.configure(**settings_as_dict)
 django.setup()
 
-from sesame.utils import get_user  # NOQA
 from umap.models import Map, User  # NOQA
 
 # Contains the list of websocket connections handled by this process.
