@@ -1445,6 +1445,14 @@ U.Map = L.Map.extend({
         this.options.limitBounds.north = L.Util.formatNum(bounds.getNorth())
         this.options.limitBounds.east = L.Util.formatNum(bounds.getEast())
         boundsBuilder.fetchAll()
+
+        const { subject, metadata, engine } = this.getSyncMetadata()
+        engine.update(
+          subject,
+          metadata,
+          'options.limitBounds',
+          this.options.limitBounds
+        )
         this.isDirty = true
         this.handleLimitBounds()
       },
