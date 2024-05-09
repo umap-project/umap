@@ -1326,6 +1326,7 @@ U.Editable = L.Editable.extend({
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
       if (!e.layer.hasGeom()) e.layer.del()
+      else e.layer.edit()
     })
     // Layer for items added by users
     this.on('editable:drawing:cancel', (e) => {

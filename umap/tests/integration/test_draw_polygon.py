@@ -83,6 +83,8 @@ def test_clicking_esc_should_finish_polygon(page, live_server, tilelayer):
     page.keyboard.press("Escape")
     expect(lines).to_have_count(1)
     expect(guide).to_have_count(0)
+    # Should have opened edit form panel
+    expect(page.locator(".panel").get_by_text("Feature properties")).to_be_visible()
 
 
 def test_clicking_esc_should_delete_polygon_if_empty(page, live_server, tilelayer):
@@ -106,6 +108,8 @@ def test_clicking_esc_should_delete_polygon_if_empty(page, live_server, tilelaye
     page.keyboard.press("Escape")
     expect(lines).to_have_count(0)
     expect(guide).to_have_count(0)
+    # Should not have opened edit form panel
+    expect(page.locator(".panel").get_by_text("Feature properties")).to_be_hidden()
 
 
 def test_clicking_esc_should_delete_polygon_if_invalid(page, live_server, tilelayer):
@@ -137,6 +141,8 @@ def test_clicking_esc_should_delete_polygon_if_invalid(page, live_server, tilela
     page.keyboard.press("Escape")
     expect(lines).to_have_count(0)
     expect(guide).to_have_count(0)
+    # Should not have opened edit form panel
+    expect(page.locator(".panel").get_by_text("Feature properties")).to_be_hidden()
 
 
 def test_can_draw_multi(live_server, page, tilelayer):
