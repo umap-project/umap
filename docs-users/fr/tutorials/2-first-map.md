@@ -12,56 +12,95 @@ lieux (domicile, vacances, travail, etc.). Procédons par étapes.
 ### 1. Le mode édition
 
 Rendez-vous sur le site <http://umap.openstreetmap.fr/> et cliquez sur
-le bouton **Créer une carte**. Apparaît alors sur votre navigateur une
-carte qui se présente ainsi :
+le bouton **Créer une carte** suivant :
+
+<shot-scraper
+    data-output="static/tutoriels/create-map.png"
+    data-url="https://umap.openstreetmap.fr/fr/"
+    data-alt="Bouton de création d’une carte depuis l’accueil."
+    data-width="176"
+    data-height="119"
+    data-selector=".button.button-primary"
+    data-padding="5"
+    >Bouton de création d’une carte depuis l’accueil.</shot-scraper>
+
+
+Apparaît alors sur votre navigateur une carte qui se présente ainsi :
 
 ![umap_edition.jpg](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edition.jpg)
 
 Nous retrouvons à gauche les boutons disponibles lors de la
 [consultation d’une carte](1-browsing-a-map.md).
+
 Plusieurs éléments visibles au-dessus et à droite de la carte sont
 visibles uniquement lorsque l’on crée ou modifie une carte, c’est-à-dire
 dans le *mode édition* :
 
 -   le **nom de la carte** en haut à gauche
--   les boutons **Annuler** et **Enregistrer** en haut à droite
+-   les boutons **Annuler les modifications** et **Enregistrer** en haut à droite
 -   à droite une série de 3 boutons permettant d’ajouter des éléments à
-    la carte : marqueurs, lignes et polygones
--   en-dessous une série de 6 boutons permettant de configurer la carte
+    la carte : marqueurs, lignes et polygones
+-   en-dessous une série de 7 boutons permettant de configurer la carte
 
 ### 2. Nommer la carte
 
-![umap_set_name.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_set_name.png)
+Une carte doit porter un nom qui renseigne sur ce que représente la carte.
+Pour définir le nom de la carte, cliquez sur le bouton
+**Modifier le nom ou la légende** ou plus simplement sur `Carte sans nom` dans
+le bandeau d’entête :
 
-![umap_edit_props.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_props.png)
-
-Une carte doit porter
-un nom qui renseigne sur ce que représente la carte. Pour définir le nom
-de la carte, cliquez sur le bouton **Éditer les paramètres**.
+<shot-scraper
+    data-output="static/tutoriels/modify-name.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton d’édition du nom de la carte."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.umap-control-caption"
+    data-padding="5"
+    >Bouton d’édition du nom de la carte.</shot-scraper>
 
 Un panneau apparaît sur la droite de la carte, il contient en haut un
 champ de saisie pour le **nom** de la carte, qui contient le texte
-`Carte sans nom` : placez le curseur dans ce champ, supprimez le texte
+`Carte sans nom` : placez le curseur dans ce champ, supprimez le texte
 existant et saisissez le nom de votre carte, par exemple `Mon domicile`.
+
+<shot-scraper
+    data-output="static/tutoriels/modify-name-panel.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Panneau d’édition du nom de la carte."
+    data-width="410"
+    data-height="382"
+    data-selector=".panel.right"
+    data-padding="5"
+    data-javascript="document.querySelector('button.map-name').click()"
+    >Panneau d’édition du nom de la carte.</shot-scraper>
 
 Notez que le nom en haut à gauche de la carte est immédiatement modifié.
 Vous pouvez également saisir un texte plus long dans le champ
 **description**, qui apparaîtra dans le panneau de légende - nous y
 reviendrons.
 
-Maintenant sauvegardez la carte avec le bouton **Enregistrer** : un
-texte en anglais est affiché en haut de la carte, comme celui
-ci-dessous.
+Maintenant, sauvegardez la carte avec le bouton **Enregistrer** : un
+texte est affiché en haut de la carte, comme celui ci-dessous :
 
-![umap_create_anonymous.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_create_anonymous.png)
+<shot-scraper
+    data-output="static/tutoriels/create-map-alert.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Message d’alerte contenant le lien d’édition."
+    data-width="790"
+    data-height="226"
+    data-selector="#umap-alert-container"
+    data-wait-for="document.querySelector('#umap-alert-container .umap-alert-actions')"
+    data-javascript="document.querySelector('button.leaflet-control-edit-save').click()"
+    >Message d’alerte contenant le lien d’édition.</shot-scraper>
 
 Ce texte explique que vous venez de créer une carte **anonyme** et vous
 donne un lien (une URL) pour pouvoir modifier la carte. En effet la
 carte que vous avez créée n’est associée à aucun compte, et **uMap**
 considère que seules les personnes ayant ce *lien secret* peuvent la
 modifier. Vous devez donc conserver ce lien si vous souhaitez pouvoir
-modifier la carte. Nous verrons dans [le prochain tutoriel](3-create-account.md) comment
-créer son catalogue de cartes en utilisant un compte, il n’est alors pas
+modifier la carte. Nous verrons dans [le prochain tutoriel](3-create-account.md)
+comment créer son catalogue de cartes en utilisant un compte, il n’est alors pas
 nécessaire de conserver de lien secret.
 
 ### 3. Ajouter un marqueur
@@ -69,10 +108,19 @@ nécessaire de conserver de lien secret.
 Commencez par déplacer et zoomer la carte pour visualiser l’endroit
 précis de votre domicile, lieu de vacances ou de travail.
 
-![umap_edit_marker.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_marker.png)
+Cliquez ensuite sur le bouton **Ajouter un marqueur**.
 
-Cliquez ensuite sur
-le bouton **Ajouter un marqueur**. Le curseur prend la forme d’un signe
+<shot-scraper
+    data-output="static/tutoriels/draw-marker.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton d’ajout de marqueur."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.umap-draw-marker"
+    data-padding="5"
+    >Bouton d’ajout de marqueur.</shot-scraper>
+
+Le curseur prend la forme d’un signe
 `+` : déplacez le sur le lieu que vous voulez *marquer* et cliquez avec
 le bouton gauche de la souris : un *marqueur bleu* et carré est créé à
 cet endroit et un panneau apparaît à droite.
@@ -114,7 +162,15 @@ l’emprise, déplacez et zoomez la carte afin d’afficher l’emprise
 souhaitée puis cliquez sur le bouton **Enregistrer le zoom et le centre
 actuels**.
 
-![umap_edit_extent.png](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edit_extent.png)
+<shot-scraper
+    data-output="static/tutoriels/register-zoom.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton d’enregistrement du zoom et du centre actuels."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.update-map-extent"
+    data-padding="5"
+    >Bouton d’enregistrement du zoom et du centre actuels.</shot-scraper>
 
 !!! note
     uMap enregistre en réalité le centre et le niveau de
@@ -140,8 +196,8 @@ vérifier son nom et sa description.
 **Félicitations !** Vous avez créé votre première carte uMap. Vous
 pouvez la diffuser à votre entourage en copiant son URL dans la barre
 d’adresse du navigateur, ou en copiant son **URL courte** disponible
-dans le menu **Partager** vu dans le tutoriel [Je consulte une carte
-uMap](1-browsing-a-map.md).
+dans le menu **Partager** vu dans le tutoriel
+[Naviguer dans une carte](1-browsing-a-map.md).
 
 ## Faisons le point
 

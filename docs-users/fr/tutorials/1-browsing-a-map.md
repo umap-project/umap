@@ -77,7 +77,6 @@ calque, est aussi visible dans la légende de la carte.
 
 ### 3. Le bouton Plus
 
-
 <shot-scraper
     data-output="static/tutoriels/control-more.png"
     data-url="https://umap.openstreetmap.fr/en/map/new/"

@@ -107,11 +107,19 @@ Le premier jour de vacances nous allons en kayak de mer jusqu’à la
 Pointe de Dinan à l’ouest de la plage de Goulien. Traçons l’itinéraire
 suivi.
 
-![umap_edit_line.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_edit_line.png)
+<shot-scraper
+    data-output="static/tutoriels/draw-polyline.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton de dessin d’une ligne."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.umap-draw-polyline"
+    data-padding="5"
+    >Bouton de dessin d’une ligne.</shot-scraper>
 
 Le bouton **Dessiner une ligne** permet de tracer, point par point,
-une ligne constiutée de
-plusieurs segments. Cliquez à nouveau sur le dernier point tracé pour
+une ligne constiutée de plusieurs segments.
+Cliquez à nouveau sur le dernier point tracé pour
 terminer la ligne : apparaît alors à droite un panneau permettant de
 donner un nom et une description à la ligne, comme pour les marqueurs.
 

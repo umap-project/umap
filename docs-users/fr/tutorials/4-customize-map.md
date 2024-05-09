@@ -11,19 +11,24 @@
 Vous souhaitez modifier une carte pour l’améliorer ou la mettre à jour.
 Si vous avez redémarré votre navigateur et à fortiori votre ordinateur,
 la première chose à faire est de retrouver la carte ! Si vous avez créé
-cette carte avec votre compte comme nous l’avons vu dans le tutoriel
-[J’utilise un compte et crée une belle carte](3-create-account.md)), afficher
+cette carte avec votre compte, comme nous l’avons vu dans le tutoriel
+[Créer un compte](3-create-account.md), afficher
 une de vos cartes se fait en trois opérations simples :
 
 1.  connectez-vous à votre compte umap
 2.  affichez votre catalogue de cartes
-3.  cliquez sur le nom de la carte, affiché **sous l’aperçu** de la
-    carte
+3.  cliquez sur le nom de la carte
 
-![umap_edit.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit.png)
+<figure>
+    <img alt="Bouton d’édition de la carte."
+         src="../../../static/tutoriels/edit-map.png"
+         width="110"
+         height="44">
+    <figcaption>Bouton d’édition de la carte.</figcaption>
+</figure>
 
-La carte s’affiche alors en mode
-consultation. Cliquez sur le crayon en haut à droite de la carte pour
+La carte s’affiche alors en mode consultation.
+Cliquez sur le bouton avec le crayon en haut à droite de la carte pour
 passer en mode édition : vous pouvez dès lors modifier la carte.
 N’oubliez pas de sauvegarder la carte une fois les modifications
 terminées.
@@ -43,13 +48,22 @@ cliquant sur **Accueil** tout en bas à droite de la carte.
 
 ### 2. Changer le fond de carte
 
-Nous avons vu dans le tutoriel [Je consulte une carte uMap](1-browsing-a-map.md)
-que plusieurs fonds de carte
-sont disponibles dans uMap. Lorsque vous éditez une carte vous pouvez
+Nous avons vu dans le tutoriel [Naviguer dans une carte](1-browsing-a-map.md)
+que plusieurs fonds de carte sont disponibles dans uMap.
+Lorsque vous éditez une carte vous pouvez
 choisir le fond de carte qui sera utilisé à l’affichage de la carte.
 
-![umap_edit_background.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit_background.png)Cliquez sur
-le pictogramme `Changer le fond de carte` : un panneau à droite montre
+<shot-scraper
+    data-output="static/tutoriels/map-tilelayers.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton de choix de fond de carte."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.update-map-tilelayers"
+    data-padding="5"
+    >Bouton de choix de fond de carte.</shot-scraper>
+
+Cliquez sur le pictogramme `Changer le fond de carte` : un panneau à droite montre
 une vingtaine de fonds de cartes. Il vous suffit de cliquer sur l’un
 d’eux : faites votre choix et n’oubliez pas d’enregistrer la
 modification.
@@ -89,10 +103,18 @@ utilisateurs qui consulteront votre carte. Vous pouvez par exemple
 ajouter une mini-carte de situation ou une barre de légende, ou encore
 décider quels boutons seront affichés.
 
-![umap_edit_props.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_edit_props.png)
+<shot-scraper
+    data-output="static/tutoriels/map-settings.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton des options de la carte."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.update-map-settings"
+    data-padding="5"
+    >Bouton des options de la carte.</shot-scraper>
 
 Pour cela, ouvrez dans
-le menu **Éditer les paramètres** l’onglet **Options d’interfaces**.
+le menu **Propriétés avancées de la carte** l’onglet **Options d’interfaces**.
 Vous pouvez activer ou désactiver une dizaine d’options dont voici la
 signification.
 
@@ -103,10 +125,20 @@ boutons sur la gauche de la carte, de contrôler leur visibilité :
     l’utilisateur
 -   **jamais** signifie que le bouton ne sera pas disponible
 -   **caché** signifie que le bouton n’est accessible qu’après un clic
-    sur le bouton ![umap_plus.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_plus.png). Les boutons
-    cachés ne seront bien sûr accessibles que si l’option
-    `Voulez-vous afficher le bouton "Plus" ?` (plus bas sur le tableau
-    de bord) est activée.
+    sur le bouton « Plus ».
+    Les boutons cachés ne seront bien sûr accessibles que si l’option
+    `Voulez-vous afficher le bouton « Plus » ?`
+    (plus bas sur le tableau de bord) est activée.
+
+<shot-scraper
+    data-output="static/tutoriels/control-more.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône pour afficher plus d’options."
+    data-width="46"
+    data-height="33"
+    data-selector=".umap-control-more"
+    data-padding="5"
+    >Exemple de bouton « Plus ».</shot-scraper>
 
 La partie basse du tableau de bord ne concerne pas ces boutons mais
 d’autres éléments venant *habiller* la carte :
@@ -122,13 +154,6 @@ Quelques remarques :
 -   les boutons de navigation en bas des popups permettent de faire
     défiler les éléments de la carte
 
-![umap_share.png](../../static/tutoriels/4-je-modifie-et-personnalise-ma-carte/umap_share.png)
-
-Notez que ces
-options - et quelques autres - sont également disponibles en **Options
-d’export de l’iframe** du menu **Exporter et partager carte**, où elles
-permettent de contrôler les mêmes options d’interface lorsque la carte
-est intégrée dans une page Web.
 
 ### 4. Copier ou supprimer une carte
 
