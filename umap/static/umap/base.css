@@ -159,6 +159,51 @@ input[type="range"] {
 input[type="checkbox"] {
     margin: 0 5px;
     vertical-align: middle;
+    appearance: none;
+}
+input[type="checkbox"]:after {
+    display: inline-block;
+    content: ' ';
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--color-lightGray);
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 1rem;
+}
+input[type=checkbox]:checked:after {
+    background-color: var(--color-lightCyan);
+    content: '✓';
+}
+label input[type="radio"] {
+    appearance: none;
+    margin-right: 10px;
+}
+input[type="radio"]:after {
+    display: inline-block;
+    content: ' ';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid var(--color-lightGray);
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 1rem;
+    vertical-align: bottom;
+}
+label input[type="radio"]:checked:after {
+    background-color: var(--color-lightCyan);
+    content: '•';
+    font-size: 3rem;
+    line-height: 1.1rem;
+    color: var(--color-darkGray);
+}
+
+input[data-modified=true] {
+    background-color: var(--color-lightCyan);
+    border: 1px solid var(--color-darkGray);
 }
 textarea {
     height: inherit;
@@ -263,9 +308,6 @@ input[type="checkbox"] + label {
     display: inline;
     padding: 0 14px;
 }
-label input[type="radio"] {
-    margin-right: 10px;
-}
 select + .error,
 input + .error {
     display: block;
@@ -290,65 +332,57 @@ input:invalid {
     border-color: #1b1f20;
     color: #efefef;
 }
-.fieldset {
+details {
     margin-bottom: 5px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
-.dark .fieldset {
+.dark details {
     border: 1px solid #222;
 }
-.fieldset .fields {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear;
-    height: 0;
+details fieldset {
     overflow: hidden;
+    border: 1px solid var(--color-lightGray);
+    margin: 0;
+    padding-top: 10px;
 }
-.fieldset.toggle.on .fields {
-    visibility: visible;
-    opacity: 1;
-    height: initial;
-    padding: 10px;
-}
-.fieldset.toggle .legend {
-    text-align: left;
-    display: block;
+details summary {
     cursor: pointer;
     background-color: var(--color-lightGray);
-    height: 30px;
     line-height: 30px;
-    margin: 0;
-    font-family: fira_sans;
-    font-weight: normal;
     font-size: 1.2em;
     padding: 0 5px;
 }
-.dark .fieldset.toggle .legend {
+.dark details summary {
     background-color: #232729;
     color: #fff;
 }
-.fieldset.toggle .legend:before {
-    background-repeat: no-repeat;
-    text-indent: 24px;
-    height: 24px;
-    width: 24px;
-    line-height: 24px;
-    display: inline-block;
-    background-image: url('./img/16.svg');
-    vertical-align: bottom;
-    content: " ";
-    background-position: -144px -76px;
-}
-.dark .fieldset.toggle .legend:before {
-    background-image: url('./img/16-white.svg');
-}
-.fieldset.toggle.on .legend:before {
-    background-position: -144px -51px;
+.dark details fieldset {
+    border: 1px solid var(--color-darkGray);
 }
 fieldset legend {
     font-size: 1.1rem;
     padding: 0 5px;
+}
+
+[data-badge] {
+    position: relative;
+}
+[data-badge]:after {
+    position: absolute;
+    right: -6px;
+    top: -6px;
+    min-width: 8px;
+    min-height: 8px;
+    line-height: 8px;
+    padding: 2px;
+    font-weight: bold;
+    background-color: var(--color-accent);
+    color: var(--color-darkBlue);
+    text-align: center;
+    font-size: .75rem;
+    border-radius: 50%;
+    content: attr(data-badge);
 }
 
 /* Switch */
@@ -408,11 +442,16 @@ input.switch:checked:empty ~ label:after {
 }
 .dark input.switch:checked ~ label:before,
 input.switch:checked ~ label:before {
-    background-color: #215d9c;
+    background-color: var(--color-lightCyan);
+    border: 1px solid var(--color-lightGray);
+    color: var(--color-darkGray);
     content: "ON";
     text-indent: 0.7em;
     text-align: left;
     font-weight: bold;
+.dark input.switch:checked ~ label:before {
+    border: none;
+}
 }
 input.switch:checked ~ label:after {
     margin-left: 3em;
@@ -458,9 +497,9 @@ input.switch:checked ~ label:after {
     background-color: #2c3233;
 }
 .umap-multiplechoice input[type='radio']:checked + label {
-    background-color: #215d9c;
+    background-color: var(--color-lightCyan);
     box-shadow: inset 0 0 6px 0px #2c3233;
-    color: #ededed;
+    color: var(--color-darkGray);
 }
 .inheritable .header,
 .inheritable {

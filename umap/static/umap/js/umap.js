@@ -149,6 +149,9 @@ U.Map = L.Map.extend({
     if (this.options.datalayersControl === 'expanded') {
       this.options.onLoadPanel = 'datalayers'
     }
+    if (this.options.onLoadPanel === 'facet') {
+      this.options.onLoadPanel = 'datafilters'
+    }
 
     let isDirty = false // self status
     try {
@@ -211,15 +214,15 @@ U.Map = L.Map.extend({
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
-        this.openBrowser('expanded')
+        this.openBrowser('data')
       } else if (this.options.onLoadPanel === 'datalayers') {
-        this.openBrowser('condensed')
+        this.openBrowser('layers')
+      } else if (this.options.onLoadPanel === 'datafilters') {
+        this.panel.mode = 'expanded'
+        this.openBrowser('filters')
       } else if (this.options.onLoadPanel === 'caption') {
         this.panel.mode = 'condensed'
         this.displayCaption()
-      } else if (['facet', 'datafilters'].includes(this.options.onLoadPanel)) {
-        this.panel.mode = 'expanded'
-        this.openFacet()
       }
       if (L.Util.queryString('edit')) {
         if (this.hasEditMode()) this.enableEdit()
@@ -252,7 +255,7 @@ U.Map = L.Map.extend({
           this.initCaptionBar()
           this.renderEditToolbar()
           this.renderControls()
-          this.facets.redraw()
+          this.browser.redraw()
           break
         case 'data':
           this.redrawVisibleDataLayers()
@@ -908,15 +911,8 @@ U.Map = L.Map.extend({
   },
 
   openBrowser: function (mode) {
-    if (mode) this.panel.mode = mode
     this.onceDatalayersLoaded(function () {
-      this.browser.open()
-    })
-  },
-
-  openFacet: function () {
-    this.onceDataLoaded(function () {
-      this._openFacet()
+      this.browser.open(mode)
     })
   },
 
@@ -1229,7 +1225,7 @@ U.Map = L.Map.extend({
           handler: 'Input',
           helpEntries: 'filterKey',
           placeholder: L._('Default: name'),
-          label: L._('Filter keys'),
+          label: L._('Search keys'),
           inheritable: true,
         },
       ],
@@ -1239,7 +1235,7 @@ U.Map = L.Map.extend({
           handler: 'BlurInput',
           helpEntries: 'facetKey',
           placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
-          label: L._('Facet keys'),
+          label: L._('Filters keys'),
         },
       ],
       [
@@ -1602,15 +1598,14 @@ U.Map = L.Map.extend({
         'umap-open-browser-link flat',
         container,
         L._('Browse data'),
-        () => this.openBrowser('expanded')
+        () => this.openBrowser('data')
       )
       if (this.options.facetKey) {
         L.DomUtil.createButton(
           'umap-open-filter-link flat',
           container,
-          L._('Select data'),
-          this.openFacet,
-          this
+          L._('Filter data'),
+          () => this.openBrowser('filters')
         )
       }
     }
@@ -1747,17 +1742,17 @@ U.Map = L.Map.extend({
       '-',
       {
         text: L._('See layers'),
-        callback: () => this.openBrowser('condensed'),
+        callback: () => this.openBrowser('layers'),
       },
       {
         text: L._('Browse data'),
-        callback: () => this.openBrowser('expanded'),
+        callback: () => this.openBrowser('data'),
       }
     )
     if (this.options.facetKey) {
       items.push({
-        text: L._('Facet search'),
-        callback: this.openFacet,
+        text: L._('Filter data'),
+        callback: () => this.openBrowser('filters'),
       })
     }
     items.push(

@@ -272,9 +272,9 @@ export const SCHEMA = {
     choices: [
       ['none', translate('None')],
       ['caption', translate('Caption')],
-      ['databrowser', translate('Data browser')],
-      ['datalayers', translate('Layers')],
-      ['facet', translate('Facet search')],
+      ['databrowser', translate('Browser in data mode')],
+      ['datalayers', translate('Browser in layers mode')],
+      ['datafilters', translate('Browser in filters mode')],
     ],
     default: 'none',
   },

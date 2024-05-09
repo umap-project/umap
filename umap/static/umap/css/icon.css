@@ -55,6 +55,9 @@
 .off .icon-edit {
     background-position: -51px -73px;
 }
+.icon-filters {
+    background-position: -4px -24px;
+}
 .icon-key {
     background-position: -144px -121px;
 }
@@ -75,6 +78,9 @@
 }
 .icon-resize {
     background-position: -74px -144px;
+}
+.icon-restore {
+    background-position: -121px -74px;
 }
 .expanded .icon-resize {
     background-position: -50px -144px;

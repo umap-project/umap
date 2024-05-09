@@ -6,7 +6,7 @@
     bottom: var(--panel-bottom);
     overflow-x: auto;
     z-index: 1010;
-    background-color: #fff;
+    background-color: var(--background-color);
     opacity: 0.98;
     cursor: initial;
     border-radius: 5px;
@@ -14,7 +14,6 @@
 }
 .panel.dark {
     border: 1px solid #222;
-    background-color: var(--color-darkGray);
     color: #efefef;
 }
 .panel.full {

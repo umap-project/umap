@@ -93,7 +93,7 @@ DATALAYER_DATA3 = {
 
 
 def test_simple_facet_search(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "facet"
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["facetKey"] = "mytype|My type,mynumber|My Number|number"
     map.settings["properties"]["showLabel"] = True
     map.save()
@@ -101,7 +101,7 @@ def test_simple_facet_search(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     DataLayerFactory(map=map, data=DATALAYER_DATA3)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    panel = page.locator(".umap-facet-search")
+    panel = page.locator(".umap-browser")
     # From a non browsable datalayer, should not be impacted
     paths = page.locator(".leaflet-overlay-pane path")
     expect(paths).to_be_visible()
@@ -117,17 +117,28 @@ def test_simple_facet_search(live_server, page, map):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(4)
     # Tooltips
-    expect(page.get_by_text("Point 1")).to_be_visible()
-    expect(page.get_by_text("Point 2")).to_be_visible()
-    expect(page.get_by_text("Point 3")).to_be_visible()
-    expect(page.get_by_text("Point 4")).to_be_visible()
+    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
+    expect(page.get_by_role("tooltip", name="Point 2")).to_be_visible()
+    expect(page.get_by_role("tooltip", name="Point 3")).to_be_visible()
+    expect(page.get_by_role("tooltip", name="Point 4")).to_be_visible()
+
+    # Datalist
+    expect(panel.get_by_text("Point 1")).to_be_visible()
+    expect(panel.get_by_text("Point 2")).to_be_visible()
+    expect(panel.get_by_text("Point 3")).to_be_visible()
+    expect(panel.get_by_text("Point 4")).to_be_visible()
+
     # Now let's filter
     odd.click()
     expect(markers).to_have_count(2)
-    expect(page.get_by_text("Point 2")).to_be_hidden()
-    expect(page.get_by_text("Point 4")).to_be_hidden()
-    expect(page.get_by_text("Point 1")).to_be_visible()
-    expect(page.get_by_text("Point 3")).to_be_visible()
+    expect(page.get_by_role("tooltip", name="Point 2")).to_be_hidden()
+    expect(page.get_by_role("tooltip", name="Point 4")).to_be_hidden()
+    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
+    expect(page.get_by_role("tooltip", name="Point 3")).to_be_visible()
+    expect(panel.get_by_text("Point 2")).to_be_hidden()
+    expect(panel.get_by_text("Point 4")).to_be_hidden()
+    expect(panel.get_by_text("Point 1")).to_be_visible()
+    expect(panel.get_by_text("Point 3")).to_be_visible()
     expect(paths).to_be_visible
     # Now let's filter
     odd.click()
@@ -156,7 +167,7 @@ def test_simple_facet_search(live_server, page, map):
 
 
 def test_date_facet_search(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "facet"
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["facetKey"] = "mydate|Date filter|date"
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -174,7 +185,7 @@ def test_date_facet_search(live_server, page, map):
 
 
 def test_choice_with_empty_value(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "facet"
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["facetKey"] = "mytype|My type"
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
@@ -191,7 +202,7 @@ def test_choice_with_empty_value(live_server, page, map):
 
 
 def test_number_with_zero_value(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "facet"
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["facetKey"] = "mynumber|Filter|number"
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
@@ -205,3 +216,61 @@ def test_number_with_zero_value(live_server, page, map):
     page.keyboard.press("Tab")  # Move out of the input, so the "change" event is sent
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(3)
+
+
+def test_facets_search_are_persistent_when_closing_panel(live_server, page, map):
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
+    map.settings["properties"]["facetKey"] = "mytype|My type,mynumber|My Number|number"
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    panel = page.locator(".umap-browser")
+
+    # Facet values
+    odd = page.get_by_label("odd")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(4)
+
+    # Datalist in the browser
+    expect(panel.get_by_text("Point 1")).to_be_visible()
+    expect(panel.get_by_text("Point 2")).to_be_visible()
+    expect(panel.get_by_text("Point 3")).to_be_visible()
+    expect(panel.get_by_text("Point 4")).to_be_visible()
+
+    # Now let's filter
+    odd.click()
+    expect(page.locator("summary")).to_have_attribute("data-badge", " ")
+    expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
+    expect(markers).to_have_count(2)
+    expect(panel.get_by_text("Point 2")).to_be_hidden()
+    expect(panel.get_by_text("Point 4")).to_be_hidden()
+    expect(panel.get_by_text("Point 1")).to_be_visible()
+    expect(panel.get_by_text("Point 3")).to_be_visible()
+
+    # Let's filter using the number facet
+    expect(panel.get_by_label("Min")).to_have_value("10")
+    expect(panel.get_by_label("Max")).to_have_value("14")
+    page.get_by_label("Min").fill("13")
+    page.keyboard.press("Tab")  # Move out of the input, so the "change" event is sent
+    expect(panel.get_by_label("Min")).to_have_attribute("data-modified", "true")
+    expect(markers).to_have_count(1)
+    expect(panel.get_by_text("Point 2")).to_be_hidden()
+    expect(panel.get_by_text("Point 4")).to_be_hidden()
+    expect(panel.get_by_text("Point 1")).to_be_hidden()
+    expect(panel.get_by_text("Point 3")).to_be_visible()
+
+    # Close panel
+    expect(panel.locator("summary")).to_have_attribute("data-badge", " ")
+    expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
+    page.get_by_role("listitem", name="Close").click()
+    page.get_by_role("button", name="See layers").click()
+    expect(panel.get_by_label("Min")).to_have_value("13")
+    expect(panel.get_by_label("Min")).to_have_attribute("data-modified", "true")
+    expect(panel.get_by_label("odd")).to_be_checked()
+
+    # Datalist in the browser should be inchanged
+    expect(panel.get_by_text("Point 2")).to_be_hidden()
+    expect(panel.get_by_text("Point 4")).to_be_hidden()
+    expect(panel.get_by_text("Point 1")).to_be_hidden()
+    expect(panel.get_by_text("Point 3")).to_be_visible()

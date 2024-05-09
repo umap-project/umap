@@ -744,7 +744,17 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   },
 })
 
-L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
+L.FormBuilder.FacetSearchBase = L.FormBuilder.Element.extend({
+
+  buildLabel: function () {
+    this.label = L.DomUtil.element({
+      tagName: 'legend',
+      textContent: this.options.label,
+    })
+  }
+
+})
+L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
   build: function () {
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
@@ -754,13 +764,6 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
     const choices = this.options.criteria['choices']
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
-  },
-
-  buildLabel: function () {
-    this.label = L.DomUtil.element({
-      tagName: 'legend',
-      textContent: this.options.label,
-    })
   },
 
   buildLi: function (value) {
@@ -787,7 +790,7 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.Element.extend({
   },
 })
 
-L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
+L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
   getInputType: function (type) {
     return type
   },
@@ -796,7 +799,7 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     return [L._('Min'), L._('Max')]
   },
 
-  castValue: function (value) {
+  prepareForHTML: function (value) {
     return value.valueOf()
   },
 
@@ -804,6 +807,10 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
     const { min, max, type } = this.options.criteria
+    const { min: modifiedMin, max: modifiedMax } = this.get()
+
+    const currentMin = modifiedMin !== undefined ? modifiedMin : min
+    const currentMax = modifiedMax !== undefined ? modifiedMax : max
     this.type = type
     this.inputType = this.getInputType(this.type)
 
@@ -815,9 +822,17 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     this.minInput = L.DomUtil.create('input', '', this.minLabel)
     this.minInput.type = this.inputType
     this.minInput.step = 'any'
+    this.minInput.min = this.prepareForHTML(min)
+    this.minInput.max = this.prepareForHTML(max)
     if (min != null) {
-      this.minInput.valueAsNumber = this.castValue(min)
-      this.minInput.dataset.value = min
+      // The value stored using setAttribute is not modified by
+      // user input, and will be used as initial value when calling
+      // form.reset(), and can also be retrieve later on by using
+      // getAttributing, to compare with current value and know
+      // if this value has been modified by the user
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reset
+      this.minInput.setAttribute('value', this.prepareForHTML(min))
+      this.minInput.value = this.prepareForHTML(currentMin)
     }
 
     this.maxLabel = L.DomUtil.create('label', '', this.container)
@@ -826,37 +841,76 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.Element.extend({
     this.maxInput = L.DomUtil.create('input', '', this.maxLabel)
     this.maxInput.type = this.inputType
     this.maxInput.step = 'any'
+    this.maxInput.min = this.prepareForHTML(min)
+    this.maxInput.max = this.prepareForHTML(max)
     if (max != null) {
-      this.maxInput.valueAsNumber = this.castValue(max)
-      this.maxInput.dataset.value = max
+      // Cf comment above about setAttribute vs value
+      this.maxInput.setAttribute('value', this.prepareForHTML(max))
+      this.maxInput.value = this.prepareForHTML(currentMax)
     }
+    this.toggleStatus()
 
-    L.DomEvent.on(this.minInput, 'change', (e) => this.sync())
-    L.DomEvent.on(this.maxInput, 'change', (e) => this.sync())
+    L.DomEvent.on(this.minInput, 'change', () => this.sync())
+    L.DomEvent.on(this.maxInput, 'change', () => this.sync())
   },
 
-  buildLabel: function () {
-    this.label = L.DomUtil.element({
-      tagName: 'legend',
-      textContent: this.options.label,
-    })
+  toggleStatus: function () {
+    this.minInput.dataset.modified = this.isMinModified()
+    this.maxInput.dataset.modified = this.isMaxModified()
+  },
+
+  sync: function () {
+    L.FormBuilder.Element.prototype.sync.call(this)
+    this.toggleStatus()
+  },
+
+  isMinModified: function () {
+    const default_ = this.minInput.getAttribute("value")
+    const current = this.minInput.value
+    return current != default_
+  },
+
+  isMaxModified: function () {
+    const default_ = this.maxInput.getAttribute("value")
+    const current = this.maxInput.value
+    return current != default_
   },
 
   toJS: function () {
-    return {
+    const opts = {
       type: this.type,
-      min: this.minInput.value,
-      max: this.maxInput.value,
     }
+    if (this.minInput.value !== '' && this.isMinModified()) {
+      opts.min = this.prepareForJS(this.minInput.value)
+    }
+    if (this.maxInput.value !== '' && this.isMaxModified()) {
+      opts.max = this.prepareForJS(this.maxInput.value)
+    }
+    return opts
   },
 })
 
-L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({})
+L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({
+  prepareForJS: function (value) {
+    return new Number(value)
+  },
+})
 
 L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
-  castValue: function (value) {
-    return value.valueOf() - value.getTimezoneOffset() * 60000
+  prepareForJS: function (value) {
+    return new Date(value)
   },
+
+  toLocaleDateTime: function (dt) {
+    return new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000)
+  },
+
+  prepareForHTML: function (value) {
+    // Value must be in local time
+    if (isNaN(value)) return
+    return this.toLocaleDateTime(value).toISOString().substr(0, 10)
+  },
+
   getLabels: function () {
     return [L._('From'), L._('Until')]
   },
@@ -865,6 +919,12 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
 L.FormBuilder.FacetSearchDateTime = L.FormBuilder.FacetSearchDate.extend({
   getInputType: function (type) {
     return 'datetime-local'
+  },
+
+  prepareForHTML: function (value) {
+    // Value must be in local time
+    if (isNaN(value)) return
+    return this.toLocaleDateTime(value).toISOString().slice(0, -1)
   },
 })
 

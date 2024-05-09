@@ -499,8 +499,11 @@ L.Control.Button = L.Control.extend({
       this
     )
     L.DomEvent.on(button, 'dblclick', L.DomEvent.stopPropagation)
+    this.afterAdd(container)
     return container
   },
+
+  afterAdd: function (container) {},
 })
 
 U.DataLayersControl = L.Control.Button.extend({
@@ -508,6 +511,10 @@ U.DataLayersControl = L.Control.Button.extend({
     position: 'topleft',
     className: 'umap-control-browse',
     title: L._('See layers'),
+  },
+
+  afterAdd: function (container) {
+    U.Utils.toggleBadge(container, this.map.browser.hasFilters())
   },
 
   onClick: function () {
@@ -663,15 +670,11 @@ const ControlsMixin = {
     'star',
     'tilelayers',
   ],
-  _openFacet: function () {
-    this.facets.open()
-  },
 
   displayCaption: function () {
     const container = L.DomUtil.create('div', 'umap-caption')
     L.DomUtil.createTitle(container, this.options.name, 'icon-caption')
     this.permissions.addOwnerLink('h5', container)
-    this.browser.tabsMenu(container, 'info')
     if (this.options.description) {
       const description = L.DomUtil.element({
         tagName: 'div',

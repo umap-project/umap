@@ -888,10 +888,10 @@ a.umap-control-caption,
 .umap-browser .datalayer i {
     cursor: pointer;
 }
-.umap-browser ul {
+.umap-browser .datalayer ul {
     display: none;
 }
-.show-list ul {
+.umap-browser .show-list ul {
     display: block;
 }
 
@@ -981,6 +981,21 @@ a.umap-control-caption,
 }
 .umap-browser .show-list .datalayer-toggle-list {
     background-position: -145px -45px;
+}
+.umap-browser .filters summary {
+    background: none;
+    border: 1px solid var(--color-lightGray);
+    width: fit-content;
+    padding: 0 10px;
+    margin-bottom: var(--block-margin);
+}
+.umap-browser .filters summary {
+    list-style: none;
+    display: inline-block;
+}
+.umap-browser details[open].filters summary {
+    margin-bottom: -1px;
+    border-bottom: 1px solid var(--background-color);
 }
 .datalayer-name {
     cursor: pointer;

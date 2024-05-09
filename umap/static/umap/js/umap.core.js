@@ -81,18 +81,18 @@ L.DomUtil.add = (tagName, className, container, content) => {
 
 L.DomUtil.createFieldset = (container, legend, options) => {
   options = options || {}
-  const fieldset = L.DomUtil.create('div', 'fieldset toggle', container)
-  const legendEl = L.DomUtil.add('h5', 'legend style_options_toggle', fieldset, legend)
-  const fieldsEl = L.DomUtil.add('div', 'fields with-transition', fieldset)
-  L.DomEvent.on(legendEl, 'click', function () {
-    if (L.DomUtil.hasClass(fieldset, 'on')) {
-      L.DomUtil.removeClass(fieldset, 'on')
-    } else {
-      L.DomUtil.addClass(fieldset, 'on')
-      if (options.callback) options.callback.call(options.context || this)
-    }
-  })
-  return fieldsEl
+  const details = L.DomUtil.create('details', options.className || '', container)
+  const summary = L.DomUtil.add('summary', '', details)
+  if (options.icon) L.DomUtil.createIcon(summary, options.icon)
+  L.DomUtil.add('span', '', summary, legend)
+  const fieldset = L.DomUtil.add('fieldset', '', details)
+  details.open = options.on === true
+  if (options.callback) {
+    L.DomEvent.on(details, 'toggle', () => {
+      if (details.open) options.callback.call(options.context || this)
+    })
+  }
+  return fieldset
 }
 
 L.DomUtil.createButton = (className, container, content, callback, context) => {
@@ -556,9 +556,9 @@ U.Help = L.Class.extend({
     'Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.'
   ),
   slugKey: L._('The name of the property to use as feature unique identifier.'),
-  filterKey: L._('Comma separated list of properties to use when filtering features'),
+  filterKey: L._('Comma separated list of properties to use when filtering features by text input'),
   facetKey: L._(
-    'Comma separated list of properties to use for facet search (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
+    'Comma separated list of properties to use for filters (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
   ),
   interactive: L._(
     'If false, the polygon or line will act as a part of the underlying map.'

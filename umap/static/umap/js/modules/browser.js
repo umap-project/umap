@@ -9,11 +9,22 @@ export default class Browser {
       filter: '',
       inBbox: false,
     }
+    this._mode = 'layers'
+  }
+
+  set mode(value) {
+    // Store the mode so we can respect it when we redraw
+    if (['data', 'filters'].includes(value)) this.map.panel.mode = 'expanded'
+    else if (value === 'layers') this.map.panel.mode = 'condensed'
+    this._mode = value
+  }
+
+  get mode() {
+    return this._mode
   }
 
   addFeature(feature, parent) {
-    const filter = this.options.filter
-    if (filter && !feature.matchFilter(filter, this.filterKeys)) return
+    if (feature.isFiltered()) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
     const row = DomUtil.create('li', `${feature.getClassName()} feature`)
     const zoom_to = DomUtil.createButtonIcon(
@@ -98,15 +109,29 @@ export default class Browser {
     counter.title = translate(`Features in this layer: ${count}`)
   }
 
+  toggleBadge() {
+    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
+    U.Utils.toggleBadge('.umap-control-browse', this.hasFilters())
+  }
+
   onFormChange() {
     this.map.eachBrowsableDataLayer((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
     })
+    this.toggleBadge()
+  }
+
+  redraw() {
+    if (this.isOpen()) this.open()
   }
 
   isOpen() {
-    return !!document.querySelector('.umap-browser')
+    return !!document.querySelector('.on .umap-browser')
+  }
+
+  hasFilters() {
+    return !!this.options.filter || this.map.facets.isActive()
   }
 
   onMoveEnd() {
@@ -126,7 +151,9 @@ export default class Browser {
     })
   }
 
-  open() {
+  open(mode) {
+    // Force only if mode is known, otherwise keep current mode.
+    if (mode) this.mode = mode
     // Get once but use it for each feature later
     this.filterKeys = this.map.getFilterKeys()
     const container = DomUtil.create('div')
@@ -135,18 +162,46 @@ export default class Browser {
     DomEvent.disableClickPropagation(container)
 
     DomUtil.createTitle(container, translate('Browse data'), 'icon-layers')
-    this.tabsMenu(container, 'browse')
-    const formContainer = DomUtil.create('div', '', container)
+    const formContainer = DomUtil.createFieldset(container, L._('Filters'), {
+      on: this.mode === 'filters',
+      className: 'filters',
+      icon: 'icon-filters',
+    })
+    this.filtersTitle = container.querySelector('summary')
+    this.toggleBadge()
     this.dataContainer = DomUtil.create('div', '', container)
 
-    const fields = [
-      ['options.filter', { handler: 'Input', placeholder: translate('Filter') }],
+    let fields = [
+      [
+        'options.filter',
+        { handler: 'Input', placeholder: translate('Search map features…') },
+      ],
       ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
     const builder = new L.FormBuilder(this, fields, {
       callback: () => this.onFormChange(),
     })
+    let filtersBuilder
     formContainer.appendChild(builder.build())
+    DomEvent.on(builder.form, 'reset', () => {
+      window.setTimeout(builder.syncAll.bind(builder))
+    })
+    if (this.map.options.facetKey) {
+      fields = this.map.facets.build()
+      filtersBuilder = new L.FormBuilder(this.map.facets, fields, {
+        callback: () => this.onFormChange(),
+      })
+      DomEvent.on(filtersBuilder.form, 'reset', () => {
+        window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
+      })
+      formContainer.appendChild(filtersBuilder.build())
+    }
+    const reset = DomUtil.createButton('flat', formContainer, '', () => {
+      builder.form.reset()
+      if (filtersBuilder) filtersBuilder.form.reset()
+    })
+    DomUtil.createIcon(reset, 'icon-restore')
+    DomUtil.element({ tagName: 'span', parent: reset, textContent: translate('Reset all') })
 
     this.map.panel.open({
       content: container,
@@ -165,19 +220,5 @@ export default class Browser {
     DomEvent.disableClickPropagation(button)
     DomEvent.on(button, 'click', map.openBrowser, map)
     return button
-  }
-
-  tabsMenu(container, active) {
-    const tabs = L.DomUtil.create('div', 'flat-tabs', container)
-    const browse = L.DomUtil.add('button', 'flat tab-browse', tabs, L._('Data'))
-    DomEvent.on(browse, 'click', this.open, this)
-    if (this.map.options.facetKey) {
-      const facets = L.DomUtil.add('button', 'flat tab-facets', tabs, L._('Filters'))
-      DomEvent.on(facets, 'click', this.map.facets.open, this.map.facets)
-    }
-    const info = L.DomUtil.add('button', 'flat tab-info', tabs, L._('About'))
-    DomEvent.on(info, 'click', this.map.displayCaption, this.map)
-    let el = tabs.querySelector(`.tab-${active}`)
-    L.DomUtil.addClass(el, 'on')
   }
 }

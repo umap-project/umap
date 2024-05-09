@@ -50,7 +50,7 @@ def test_basic_choropleth_map_with_custom_brewer(openmap, live_server, page):
     page.get_by_role("button", name="Edit").click()
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
-    page.get_by_role("heading", name="Choropleth: settings").click()
+    page.get_by_text("Choropleth: settings").click()
     page.locator('select[name="brewer"]').select_option("Greens")
 
     # Hauts-de-France

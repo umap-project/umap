@@ -10,15 +10,18 @@ export default class Facets {
 
   compute(names, defined) {
     const properties = {}
+    let selected
 
     names.forEach((name) => {
       const type = defined[name]['type']
       properties[name] = { type: type }
-      this.selected[name] = { type: type }
+      selected = this.selected[name] || {}
+      selected.type = type
       if (!['date', 'datetime', 'number'].includes(type)) {
         properties[name].choices = []
-        this.selected[name].choices = []
+        selected.choices = selected.choices || []
       }
+      this.selected[name] = selected
     })
 
     this.map.eachBrowsableDataLayer((datalayer) => {
@@ -53,41 +56,19 @@ export default class Facets {
     return properties
   }
 
-  redraw() {
-    if (this.isOpen()) this.open()
+  isActive() {
+    for (let { type, min, max, choices } of Object.values(this.selected)) {
+      if (min !== undefined || max != undefined || choices?.length) {
+        return true
+      }
+    }
+    return false
   }
 
-  isOpen() {
-    return !!document.querySelector('.umap-facet-search')
-  }
-
-  open() {
-    const container = L.DomUtil.create('div', 'umap-facet-search')
-    const title = L.DomUtil.add(
-      'h3',
-      'umap-filter-title',
-      container,
-      translate('Facet search')
-    )
-    this.map.browser.tabsMenu(container, 'facets')
+  build() {
     const defined = this.getDefined()
     const names = Object.keys(defined)
     const facetProperties = this.compute(names, defined)
-
-    const filterFeatures = function () {
-      let found = false
-      this.map.eachBrowsableDataLayer((datalayer) => {
-        datalayer.resetLayer(true)
-        if (datalayer.hasDataVisible()) found = true
-      })
-      // TODO: display a results counter in the panel instead.
-      if (!found) {
-        this.map.ui.alert({
-          content: translate('No results for these facets'),
-          level: 'info',
-        })
-      }
-    }
 
     const fields = names.map((name) => {
       let criteria = facetProperties[name]
@@ -114,13 +95,7 @@ export default class Facets {
       ]
     })
 
-    const builder = new L.FormBuilder(this, fields, {
-      callback: filterFeatures,
-      callbackContext: this,
-    })
-    container.appendChild(builder.build())
-
-    this.map.panel.open({ content: container })
+    return fields
   }
 
   getDefined() {
