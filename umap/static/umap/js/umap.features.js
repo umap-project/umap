@@ -595,7 +595,10 @@ U.FeatureMixin = {
   },
 
   clone: function () {
-    const layer = this.datalayer.geojsonToFeatures(this.toGeoJSON())
+    const geoJSON = this.toGeoJSON()
+    delete geoJSON.id
+    delete geoJSON.properties.id
+    const layer = this.datalayer.geojsonToFeatures(geoJSON)
     layer.isDirty = true
     layer.edit()
     return layer
@@ -652,7 +655,7 @@ U.Marker = L.Marker.extend({
       },
       this
     )
-    this.on('editable:drawing:end', this.onCommit)
+    this.on('editable:drawing:commit', this.onCommit)
     if (!this.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
@@ -1275,6 +1278,8 @@ U.Polygon = L.Polygon.extend({
 
   toPolyline: function () {
     const geojson = this.toGeoJSON()
+    delete geojson.id
+    delete geojson.properties.id
     geojson.geometry.type = 'LineString'
     geojson.geometry.coordinates = U.Utils.flattenCoordinates(
       geojson.geometry.coordinates
