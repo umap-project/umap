@@ -68,7 +68,6 @@ export function propertyBelongsTo(property, subject, schema) {
     property = property.replace('properties.', '').replace('_umap_options.', '')
   }
   property = property.replace('options.', '')
-  console.log(property)
   const splits = property.split('.')
   const nested = splits.length > 1
   if (nested) property = splits[0]
