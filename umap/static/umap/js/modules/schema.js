@@ -191,6 +191,11 @@ export const SCHEMA = {
     label: translate('Display the fullscreen control'),
     default: true,
   },
+  geometry: {
+    type: Object,
+    impacts: ['data'],
+    belongsTo: ['feature'],
+  },
   heat: {
     type: Object,
     impacts: ['data'],
