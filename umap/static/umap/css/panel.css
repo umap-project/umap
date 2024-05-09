@@ -139,4 +139,8 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
+    .umap-caption-bar-enabled .panel.expanded {
+        height: calc(100% - var(--footer-height));
+        max-height: calc(100% - var(--footer-height));
+    }
 }
