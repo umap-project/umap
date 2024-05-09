@@ -153,6 +153,7 @@ U.Map = L.Map.extend({
       this.options.onLoadPanel = 'datafilters'
     }
 
+    this.sync = new U.SyncEngine(this)
     let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
@@ -251,7 +252,6 @@ U.Map = L.Map.extend({
     this.backup()
     this.initContextMenu()
     this.on('click contextmenu.show', this.closeInplaceToolbar)
-    this.sync = new U.SyncEngine(this)
   },
 
   initSyncEngine: async function () {
