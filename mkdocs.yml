@@ -1,8 +1,9 @@
-site_name: uMap docs
+site_name: uMap documentation
 site_description: uMap lets you create maps with OpenStreetMap layers in a minute and embed them in your site
 repo_name: umap-project/umap
 repo_url: https://github.com/umap-project/umap
 nav:
+  - Home: index.md
   - How-tos:
       - Getting started: install.md
       - Contribute: contributing.md
@@ -42,6 +43,8 @@ theme:
 extra_css:
   - stylesheets/extra.css
 markdown_extensions:
+  - toc:
+      permalink: ⚓︎
   - pymdownx.magiclink:
       normalize_issue_symbols: true
       repo_url_shorthand: true
