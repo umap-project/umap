@@ -469,8 +469,8 @@ U.Layer.Heat = L.HeatLayer.extend({
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
-            ? +this._latlngs[i][2]
-            : 1
+          ? +this._latlngs[i][2]
+          : 1
 
       grid[y] = grid[y] || []
       cell = grid[y][x]
@@ -576,6 +576,10 @@ U.DataLayer = L.Evented.extend({
     }
     this.setUmapId(data.id)
     this.setOptions(data)
+
+    if (!U.Utils.isObject(this.options.remoteData)) {
+      this.options.remoteData = {}
+    }
     // Retrocompat
     if (this.options.remoteData && this.options.remoteData.from) {
       this.options.fromZoom = this.options.remoteData.from
@@ -1367,9 +1371,6 @@ U.DataLayer = L.Evented.extend({
     )
     popupFieldset.appendChild(builder.build())
 
-    if (!U.Utils.isObject(this.options.remoteData)) {
-      this.options.remoteData = {}
-    }
     const remoteDataFields = [
       [
         'options.remoteData.url',
