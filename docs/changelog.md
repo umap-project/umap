@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.3.0 - 2024-05-09
+
+### New features
+* integrate facets into browser filters by @yohanboniface in #1794
+
+### Bug fixes
+* add max-width to panel in landscape mode by @yohanboniface in #1789
+* allow `dir` and `title` attributes by @davidbgk in #1801
+* allow panel expanded mode in mobile by @yohanboniface in #1790
+* do not try to render drawinTooltip on drawing start by @yohanboniface in #1805
+* really focus on search input after showing the panel by @yohanboniface in #1807
+* open edit panel when pressing ESC while drawing, if valid by @yohanboniface in #1804
+
+### Internal changes
+* First step for documentation translations by @davidbgk in #1747, new documentation
+  available at https://discover.umap-project.org
+
 ## 2.2.2 -  2024-05-01
 
 ### Bug fixes
