@@ -208,6 +208,9 @@ U.Map = L.Map.extend({
     if (!U.Utils.isObject(this.options.overlay)) {
       this.options.overlay = {}
     }
+    if (!U.Utils.isObject(this.options.tilelayer)) {
+      this.options.tilelayer = {}
+    }
 
     this.initShortcuts()
     this.onceDataLoaded(function () {
@@ -1314,9 +1317,6 @@ U.Map = L.Map.extend({
   },
 
   _editTilelayer: function (container) {
-    if (!U.Utils.isObject(this.options.tilelayer)) {
-      this.options.tilelayer = {}
-    }
     const tilelayerFields = [
       [
         'options.tilelayer.name',

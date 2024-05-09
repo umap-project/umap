@@ -663,6 +663,16 @@ describe('Utils', function () {
         true
       )
     })
+
+    it('Should accept options.tilelayer.url_template', function () {
+      let schema = {
+        tilelayer: { type: Object, belongsTo: ['map'] },
+      }
+      assert.deepEqual(
+        Utils.propertyBelongsTo('options.tilelayer.url_template', 'map', schema),
+        true
+      )
+    })
   })
 
   describe('#parseNaiveDate', () => {
