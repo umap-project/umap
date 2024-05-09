@@ -1,3 +1,5 @@
+import { propertyBelongsTo } from '../utils.js'
+
 /**
  * This file contains the updaters: classes that are able to convert messages
  * received from another party (or the server) to changes on the map.
@@ -31,9 +33,16 @@ class BaseUpdater {
     return this.map.defaultEditDataLayer()
   }
 
-  applyMessage(message) {
-    let { verb } = message
-    return this[verb](message)
+  applyMessage(payload) {
+    let { verb, subject } = payload
+
+    if (verb == 'update') {
+      if (!propertyBelongsTo(payload.key, subject)) {
+        console.error('Invalid message received', payload)
+        return // Do not apply the message
+      }
+    }
+    return this[verb](payload)
   }
 }
 
