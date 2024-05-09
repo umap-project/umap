@@ -309,7 +309,7 @@ LOGGING = {
 
 # WebSocket configuration
 
-WEBSOCKET_ENABLED = False
-WEBSOCKET_HOST = "localhost"
-WEBSOCKET_PORT = 8001
-WEBSOCKET_URI = "ws://localhost:8001"
+WEBSOCKET_ENABLED = env.bool("WEBSOCKET_ENABLED", default=False)
+WEBSOCKET_HOST = env("WEBSOCKET_HOST", default="localhost")
+WEBSOCKET_PORT = env.int("WEBSOCKET_PORT", default=8001)
+WEBSOCKET_URI = env("WEBSOCKET_URI", default="ws://localhost:8001")
