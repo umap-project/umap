@@ -1258,7 +1258,7 @@ U.SearchControl = L.Control.extend({
       this.map.fire('dataload', { id: id })
     })
     this.search.resultsContainer = resultsContainer
-    this.map.panel.open({ content: container }).then(input.focus)
+    this.map.panel.open({ content: container }).then(input.focus())
   },
 })
 
