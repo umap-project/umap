@@ -207,6 +207,10 @@ U.Map = L.Map.extend({
       this.editTools = new U.Editable(this)
       this.renderEditToolbar()
     }
+    if (!U.Utils.isObject(this.options.overlay)) {
+      this.options.overlay = {}
+    }
+
     this.initShortcuts()
     this.onceDataLoaded(function () {
       const slug = L.Util.queryString('feature')
@@ -1363,9 +1367,6 @@ U.Map = L.Map.extend({
   },
 
   _editOverlay: function (container) {
-    if (!U.Utils.isObject(this.options.overlay)) {
-      this.options.overlay = {}
-    }
     const overlayFields = [
       [
         'options.overlay.url_template',
