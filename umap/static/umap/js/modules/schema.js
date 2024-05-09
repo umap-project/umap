@@ -99,26 +99,26 @@ export const SCHEMA = {
   description: {
     type: 'Text',
     impacts: ['ui'],
-    belongsTo: ['map', 'datalayer'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('description'),
     helpEntries: 'textFormatting',
   },
   displayOnLoad: {
     type: Boolean,
     impacts: [],
-    belongsTo: ['datalayer'], // XXX ?
+    belongsTo: ['datalayer'],
   },
   displayPopupFooter: {
     type: Boolean,
     impacts: ['ui'],
-    belongsTo: ['map'], // XXX ?
+    belongsTo: ['map'],
     label: translate('Do you want to display popup footer?'),
     default: false,
   },
   easing: {
     type: Boolean,
     impacts: [],
-    belongsTo: ['feature'], // XXX ?
+    belongsTo: ['map', 'datalayer', 'feature'],
     default: false,
   },
   editinosmControl: {
@@ -140,7 +140,7 @@ export const SCHEMA = {
   facetKey: {
     type: String,
     impacts: ['ui'],
-    belongsTo: ['datalayer'],
+    belongsTo: ['map', 'datalayer'],
   },
   fill: {
     type: Boolean,
@@ -174,12 +174,12 @@ export const SCHEMA = {
   filterKey: {
     type: String,
     impacts: [],
-    belongsTo: ['map', 'datalayer', 'feature'], // XXX ?
+    belongsTo: ['map', 'datalayer', 'feature'],
   },
   fromZoom: {
     type: Number,
     impacts: [], // not needed
-    belongsTo: ['map'], // XXX ?
+    belongsTo: ['map', 'datalayer'],
     label: translate('From zoom'),
     helpText: translate('Optional.'),
   },
@@ -232,7 +232,7 @@ export const SCHEMA = {
   inCaption: {
     type: Boolean,
     impacts: ['ui'],
-    belongsTo: [], // XXX ?
+    belongsTo: ['datalayer'],
   },
   interactive: {
     type: Boolean,
@@ -268,7 +268,7 @@ export const SCHEMA = {
   labelKey: {
     type: String,
     impacts: ['data'],
-    belongsTo: ['map', 'datalayer', 'feature'], // XXX ?
+    belongsTo: ['map', 'datalayer', 'feature'],
     helpEntries: 'labelKey',
     placeholder: translate('Default: name'),
     label: translate('Label key'),
@@ -277,7 +277,7 @@ export const SCHEMA = {
   licence: {
     type: String,
     impacts: ['ui'],
-    belongsTo: ['map', 'datalayer'], // XXX ?
+    belongsTo: ['map', 'datalayer'],
     label: translate('licence'),
   },
   limitBounds: {
@@ -354,7 +354,7 @@ export const SCHEMA = {
   outlink: {
     type: String,
     impacts: ['data'],
-    belongsTo: ['feature'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Link to…'),
     helpEntries: 'outlink',
     placeholder: 'http://...',
@@ -363,7 +363,7 @@ export const SCHEMA = {
   outlinkTarget: {
     type: String,
     impacts: ['data'],
-    belongsTo: ['feature'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Open link in…'),
     inheritable: true,
     default: 'blank',
@@ -405,7 +405,7 @@ export const SCHEMA = {
   popupShape: {
     type: String,
     impacts: [], // not needed
-    belongsTo: ['map', 'datalayer', 'feature'], // XXX ?
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Popup shape'),
     inheritable: true,
     choices: [
@@ -418,7 +418,7 @@ export const SCHEMA = {
   popupTemplate: {
     type: String,
     impacts: [], // not needed
-    belongsTo: ['map', 'datalayer', 'feature'], // XXX ?
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Popup content style'),
     inheritable: true,
     choices: [
@@ -480,7 +480,7 @@ export const SCHEMA = {
   slugKey: {
     type: String,
     impacts: [],
-    belongsTo: ['map', 'datalayer', 'feature'], // XXX ?
+    belongsTo: ['map', 'datalayer', 'feature'],
   },
   smoothFactor: {
     type: Number,
@@ -538,19 +538,19 @@ export const SCHEMA = {
   toZoom: {
     type: Number,
     impacts: [], // not needed
-    belongsTo: ['map'],
+    belongsTo: ['map', 'datalayer'],
     label: translate('To zoom'),
     helpText: translate('Optional.'),
   },
   type: {
     type: 'String',
     impacts: ['data'],
-    belongsTo: [], // XXX ?
+    belongsTo: ['datalayer'],
   },
   weight: {
     type: Number,
     impacts: ['data'],
-    belongsTo: ['feature'], // XXX ?,
+    belongsTo: ['map', 'datalayer', 'feature'],
     min: 1,
     max: 20,
     step: 1,
@@ -574,10 +574,15 @@ export const SCHEMA = {
   zoomTo: {
     type: Number,
     impacts: [], // not need to update the view
-    belongsTo: ['map'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     placeholder: translate('Inherit'),
     helpEntries: 'zoomTo',
     label: translate('Default zoom level'),
     inheritable: true,
+  },
+  _latlng: {
+    type: Object,
+    impacts: ['data'],
+    belongsTo: ['feature'],
   },
 }

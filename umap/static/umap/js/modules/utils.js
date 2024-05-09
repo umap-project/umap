@@ -30,7 +30,8 @@ export function checkId(string) {
  *
  * Return an array of unique impacts.
  *
- * @param {fields} list[fields]
+ * @param {fields}  list[fields]
+ * @param object schema object. If ommited, global U.SCHEMA will be used.
  * @returns Array[string]
  */
 export function getImpactsFromSchema(fields, schema) {
@@ -51,6 +52,31 @@ export function getImpactsFromSchema(fields, schema) {
     }, new Set())
 
   return Array.from(impacted)
+}
+
+/**
+ * Checks the given property belongs to the given subject, according to the schema.
+ *
+ * @param srtring property
+ * @param string subject
+ * @param object schema object. If ommited, global U.SCHEMA will be used.
+ * @returns Bool
+ */
+export function propertyBelongsTo(property, subject, schema) {
+  schema = schema || U.SCHEMA
+  if (subject === 'feature') {
+    property = property.replace('properties.', '').replace('_umap_options.', '')
+  }
+  property = property.replace('options.', '')
+  console.log(property)
+  const splits = property.split('.')
+  const nested = splits.length > 1
+  if (nested) property = splits[0]
+  if (!Object.keys(schema).includes(property)) return false
+  if (nested) {
+    if (schema[property].type !== Object) return false
+  }
+  return schema[property].belongsTo.includes(subject)
 }
 
 /**

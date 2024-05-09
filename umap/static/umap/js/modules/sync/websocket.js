@@ -9,7 +9,6 @@ export class WebSocketTransport {
   }
 
   onMessage(wsMessage) {
-    // XXX validate incoming data.
     this.receiver.dispatch(JSON.parse(wsMessage.data))
   }
 
