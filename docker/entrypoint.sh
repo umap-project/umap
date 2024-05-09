@@ -10,4 +10,6 @@ umap wait_for_database
 # then migrate the database
 umap migrate
 # run uWSGI
-exec uwsgi --ini docker/uwsgi.ini
+exec uwsgi --ini docker/uwsgi.ini &
+# run websockets
+exec /venv/bin/python /venv/lib/python3.11/site-packages/umap/ws.py
