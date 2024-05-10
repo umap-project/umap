@@ -1762,17 +1762,17 @@ U.Map = L.Map.extend({
     items.push(
       '-',
       {
-        text: L._('See layers'),
+        text: L._('Browser: layers'),
         callback: () => this.openBrowser('layers'),
       },
       {
-        text: L._('Browse data'),
+        text: L._('Browser: data'),
         callback: () => this.openBrowser('data'),
       }
     )
     if (this.options.facetKey) {
       items.push({
-        text: L._('Filter data'),
+        text: L._('Browser: filters'),
         callback: () => this.openBrowser('filters'),
       })
     }
