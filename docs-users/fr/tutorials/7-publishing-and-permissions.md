@@ -9,17 +9,25 @@
 ### 1. Insérer une carte dans une page HTML
 
 Nous avons vu dans le tutoriel
-[Je consulte une carte uMap](1-browsing-a-map.md) que
+[Naviguer dans une carte](1-browsing-a-map.md) que
 le menu de partage permet d’*embarquer une carte en iframe*, sans donner
 plus de détail. Voyons comment cela se passe.
 
-![umap_share.png](../../static/tutoriels/7-je-publie-ma-carte-et-en-controle-lacces/umap_share.png)
+<shot-scraper
+    data-output="static/tutoriels/control-embed.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône du partage et de l’intégration."
+    data-selector=".leaflet-control-embed"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    >Permet de partager la carte ou d’en exporter les données.</shot-scraper>
 
 Une **iframe** est une balise du langage informatique HTML qui permet
 d’intégrer (embarquer) le contenu d’une page Web dans une autre page
 Web. C’est en fait très simple et nous avons déjà utilisé ce mécanisme
 pour intégrer une vidéo dans le tutoriel
-[Je crée des infobulles multimédia](5-multimedia-tooltips.md).
+[Infobulles multimedia](5-multimedia-tooltips.md).
 
 ![export-iframe.png](../../static/tutoriels/7-je-publie-ma-carte-et-en-controle-lacces/export-iframe.png)
 
@@ -93,7 +101,7 @@ nous ne souhaitons pas intégrer le sélecteur de calques.
 L’onglet **Options d’export de l’iframe** permet de contrôler tout cela.
 Certaines de ces options correspondent aux **Options d’interface** vu
 dans le tutoriel
-[Je modifie et personnalise ma carte](4-customize-map.md). Il suffit
+[Personnaliser sa carte](4-customize-map.md). Il suffit
 d’activer ces options pour que le *code d’import de l’iframe* soit
 modifié. Une fois les options choisies, copiez ce code puis intégrez-le
 dans celui votre page Web.
@@ -142,14 +150,45 @@ calques.
 
 ### 4. Définir qui peut voir ou modifier la carte
 
-![umap_edit_rights.png](../../static/tutoriels/7-je-publie-ma-carte-et-en-controle-lacces/umap_edit_rights.png)
+<shot-scraper
+    data-output="static/tutoriels/map-permissions.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton de gestion des permissions."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.update-map-permissions"
+    data-padding="5"
+    >Bouton de gestion des permissions.</shot-scraper>
+
 
 Le bouton **Changer
 les permissions et les éditeurs** donne accès au panneau **Permissions
 de la carte**. Celui-ci vous permet de contrôler, pour chaque carte, qui
 peut la voir et qui peut la modifier.
 
-![permissions.png](../../static/tutoriels/7-je-publie-ma-carte-et-en-controle-lacces/permissions.png)
+<shot-scraper
+    data-output="static/tutoriels/map-permissions-panel.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Panneau des permissions."
+    data-caption="Panneau des permissions."
+    data-width="410"
+    data-height="414"
+    data-selector=".panel.right"
+    data-padding="5"
+    data-wait-for="document.querySelector('.panel.right')"
+    data-javascript="
+        new Promise((takeShot) => {
+            document.querySelector('.leaflet-control-edit-save').click();
+            document.querySelector('#umap-alert-container').style.display='none';
+            setTimeout(() => {
+                document.querySelector('.leaflet-toolbar-icon.update-map-permissions').click();
+                setTimeout(() => {
+                    takeShot();
+                }, 1000);
+            }, 1000);
+        });
+    "
+    >Panneau des permissions.</shot-scraper>
 
 Lorsque vous créez une carte celle-ci est visible dans votre *catalogue*
 de cartes, dont l’adresse est

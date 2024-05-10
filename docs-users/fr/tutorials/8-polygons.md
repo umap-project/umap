@@ -22,12 +22,20 @@ Revenons à la carte de nos vacances à Crozon. Un jour de beau temps nous
 louons un dériveur et naviguons dans la zone définie par le club
 nautique. Ajoutons cette zone à la carte.
 
-![umap_edit_polygon.png](../../static/tutoriels/8-le-cas-des-polygones/umap_edit_polygon.png)
+<shot-scraper
+    data-output="static/tutoriels/draw-polygon.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton de dessin de polygones."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.umap-draw-polygon"
+    data-padding="5"
+    >Bouton de dessin de polygones.</shot-scraper>
 
 Le bouton
 **Dessiner un polygone** permet de tracer le périmètre d’un polygone
 point par point, et de le terminer en cliquant à nouveau sur le dernier
-point comme pour le tracé d’une ligne. Une différence toutefois : dès le
+point comme pour le tracé d’une ligne. Une différence toutefois : dès le
 troisième point l’intérieur du polygone est coloré.
 
 #### Propriétés d’un polygone
@@ -154,7 +162,15 @@ l’extension est `.geojson`.
 
 #### b. Importer les contours de quartier dans une carte
 
-![umap_edit_import.png](../../static/tutoriels/8-le-cas-des-polygones/umap_edit_import.png)
+<shot-scraper
+    data-output="static/tutoriels/upload-data.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton d’import de données."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.upload-data"
+    data-padding="5"
+    >Bouton d’import de données.</shot-scraper>
 
 Dans une nouvelle
 carte, cliquez sur **Importer des données**. Dans le panneau qui appraît
@@ -180,15 +196,16 @@ l’utilisateur de déplacer la carte au-delà de ces limites.
 
 Récupérez le code de l’iframe, comme nous l’avons vu dans le
 [tutoriel précédent](7-publishing-and-permissions.md),
-en prenant soin de désactiver toutes les options d’interaction : boutons
-de zoom, zoom avec la molette, bouton « Plus » etc.
+en prenant soin de désactiver toutes les options d’interaction :
+boutons de zoom, zoom avec la molette, bouton « Plus », etc.
 
 Copiez ce **code iframe** dans votre page Web, et le tour est joué !
 
 !!! note
     Lorsque vous modifiez la carte, vous devez recharger
     entièrement la page contenant l’iframe pour vider le cache du
-    navigateur, par exemple en utilisant **Ctrl+F5** sur Firefox.
+    navigateur, par exemple en utilisant <kbd>Ctrl</kbd>+<kbd>F5</kbd>
+    sur Firefox.
 
 
 ## Faisons le point

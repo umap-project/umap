@@ -147,9 +147,18 @@ Cliquez sur
 **Importer des données** pour afficher le panneau du même nom, puis
 sélectionnez le fichier précédemment géocodé.
 
-![importer_des_donnees.png](../../static/tutoriels/9-je-cree-une-carte-a-partir-dun-tableur/importer_des_donnees.png)
+<shot-scraper
+    data-output="static/tutoriels/upload-data.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton d’import de données."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.upload-data"
+    data-padding="5"
+    >Bouton d’import de données.</shot-scraper>
 
-![umap_edit_import.png](../../static/tutoriels/9-je-cree-une-carte-a-partir-dun-tableur/umap_edit_import.png)
+
+![importer_des_donnees.png](../../static/tutoriels/9-je-cree-une-carte-a-partir-dun-tableur/importer_des_donnees.png)
 
 Vérifiez que uMap a bien reconnu **CSV** pour le format des données, et
 choisissez de les importer dans un **nouveau calque**.
@@ -264,7 +273,15 @@ est possible de voir l’ensemble des données de la carte sous la forme
 d’une liste. Cette liste peut aussi filtrée par l’utilisateur, à partir
 d’un mot par exemple.
 
-![umap_edit_props.png](../../static/tutoriels/9-je-cree-une-carte-a-partir-dun-tableur/umap_edit_props.png)
+<shot-scraper
+    data-output="static/tutoriels/map-settings.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Bouton des options de la carte."
+    data-width="46"
+    data-height="47"
+    data-selector=".leaflet-toolbar-icon.update-map-settings"
+    data-padding="5"
+    >Bouton des options de la carte.</shot-scraper>
 
 Pour permettre aux
 utilisateurs de filtrer les données il convient de préciser à uMap à

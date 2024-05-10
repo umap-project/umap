@@ -7,10 +7,31 @@
 
 ## Procédons par étapes
 
-![aide-miseenforme.png](../../static/tutoriels/5-je-cree-des-infobulles-multimedia/aide-miseenforme.png)
+<shot-scraper
+    data-output="static/tutoriels/help-box.png"
+    data-url="https://umap.openstreetmap.fr/fr/map/new/"
+    data-alt="Panneau d’aide au formatage."
+    data-caption="Panneau d’aide au formatage."
+    data-selector=".umap-help-box"
+    data-width="510"
+    data-height="326"
+    data-padding="5"
+    data-javascript="
+        new Promise((takeShot) => {
+            document.querySelector('.leaflet-toolbar-icon.umap-control-caption').click();
+            setTimeout(() => {
+                document.querySelector('.umap-field-description .umap-help-button').click();
+                setTimeout(() => {
+                    takeShot();
+                }, 1000);
+            }, 1000);
+        });
+    "
+    >Panneau d’aide au formatage.</shot-scraper>
+
 
 Nous avons vu dans
-le tutoriel [Je consulte une carte uMap](1-browsing-a-map.md)
+le tutoriel [Naviguer dans une carte](1-browsing-a-map.md)
 comment associer un nom et
 une description à un élément de la carte. Ce nom et cette description
 sont affichés dans une infobulle (*popup* en anglais) qui apparaît
