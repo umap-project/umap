@@ -5,7 +5,7 @@ from time import sleep
 
 from playwright.sync_api import expect
 
-from umap.models import DataLayer, Map
+from umap.models import DataLayer
 
 from ..base import DataLayerFactory, MapFactory
 

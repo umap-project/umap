@@ -1375,6 +1375,12 @@ U.DataLayer = L.Evented.extend({
     )
     popupFieldset.appendChild(builder.build())
 
+    // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
+    // but apparently it's needed.
+    if (!U.Utils.isObject(this.options.remoteData)) {
+      this.options.remoteData = {}
+    }
+
     const remoteDataFields = [
       [
         'options.remoteData.url',
