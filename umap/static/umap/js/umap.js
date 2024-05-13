@@ -33,6 +33,7 @@ U.Map = L.Map.extend({
   includes: [ControlsMixin],
 
   initialize: function (el, geojson) {
+    this.sync = new U.SyncEngine(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
     if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
@@ -153,7 +154,6 @@ U.Map = L.Map.extend({
       this.options.onLoadPanel = 'datafilters'
     }
 
-    this.sync = new U.SyncEngine(this)
     let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
