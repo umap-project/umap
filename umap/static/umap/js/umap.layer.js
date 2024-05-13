@@ -608,8 +608,7 @@ U.DataLayer = L.Evented.extend({
 
     if (sync !== false) {
       const { engine, subject, metadata } = this.getSyncMetadata()
-      const geoJSON = this.umapGeoJSON()
-      engine.upsert(subject, metadata, geoJSON)
+      engine.upsert(subject, metadata, this.options)
     }
   },
 
