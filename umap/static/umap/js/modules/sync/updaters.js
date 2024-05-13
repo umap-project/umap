@@ -74,7 +74,7 @@ export class DataLayerUpdater extends BaseUpdater {
  * - `featureClass`: the name of the class to create the feature
  * - `featureArgument`: an object with the properties to pass to the class when bulding it.
  **/
-class FeatureUpdater extends BaseUpdater {
+export class FeatureUpdater extends BaseUpdater {
   getFeatureFromMetadata({ id, layerId }) {
     const datalayer = this.getDataLayerFromID(layerId)
     return datalayer.getFeatureById(id)
@@ -122,25 +122,3 @@ class FeatureUpdater extends BaseUpdater {
     if (feature) feature.del()
   }
 }
-
-class PathUpdater extends FeatureUpdater {}
-
-class MarkerUpdater extends FeatureUpdater {
-  featureType = 'marker'
-  featureClass = U.Marker
-  featureArgument = 'latlng'
-}
-
-class PolygonUpdater extends PathUpdater {
-  featureType = 'polygon'
-  featureClass = U.Polygon
-  featureArgument = 'latlngs'
-}
-
-class PolylineUpdater extends PathUpdater {
-  featureType = 'polyline'
-  featureClass = U.Polyline
-  featureArgument = 'latlngs'
-}
-
-export { MarkerUpdater, PolygonUpdater, PolylineUpdater }
