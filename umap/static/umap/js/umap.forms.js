@@ -1186,8 +1186,10 @@ U.FormBuilder = L.FormBuilder.extend({
     L.FormBuilder.prototype.setter.call(this, field, value)
     this.obj.isDirty = true
     if ('render' in this.obj) this.obj.render([field], this)
-    const { subject, metadata, engine } = this.obj.getSyncMetadata()
-    if (engine) engine.update(subject, metadata, field, value)
+    if ('getSyncMetadata' in this.obj) {
+      const { subject, metadata, engine } = this.obj.getSyncMetadata()
+      if (engine) engine.update(subject, metadata, field, value)
+    }
   },
 
   finish: function () {
