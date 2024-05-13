@@ -1082,7 +1082,7 @@ U.DataLayer = L.Evented.extend({
     let latlng, latlngs
 
     // Create a default geojson if none is provided
-    geojson ??= { type: 'Feature', geometry: geometry }
+    if (geojson === undefined) geojson = { type: 'Feature', geometry: geometry }
 
     switch (geometry.type) {
       case 'Point':

@@ -1,11 +1,5 @@
 import { WebSocketTransport } from './websocket.js'
-import {
-  MapUpdater,
-  MarkerUpdater,
-  PolygonUpdater,
-  PolylineUpdater,
-  DataLayerUpdater,
-} from './updaters.js'
+import { MapUpdater, DataLayerUpdater, FeatureUpdater } from './updaters.js'
 
 export class SyncEngine {
   constructor(map) {
@@ -40,28 +34,16 @@ export class MessagesDispatcher {
     this.map = map
     this.updaters = {
       map: new MapUpdater(this.map),
-      marker: new MarkerUpdater(this.map),
-      polyline: new PolylineUpdater(this.map),
-      polygon: new PolygonUpdater(this.map),
+      feature: new FeatureUpdater(this.map),
       datalayer: new DataLayerUpdater(this.map),
     }
   }
 
   getUpdater(subject, metadata) {
-    switch (subject) {
-      case 'feature':
-        const featureTypeExists = Object.keys(this.updaters).includes(
-          metadata.featureType
-        )
-        if (featureTypeExists) {
-          return this.updaters[metadata.featureType]
-        }
-      case 'map':
-      case 'datalayer':
-        return this.updaters[subject]
-      default:
-        throw new Error(`Unknown updater ${subject}, ${metadata}`)
+    if (Object.keys(this.updaters).includes(subject)) {
+      return this.updaters[subject]
     }
+    throw new Error(`Unknown updater ${subject}, ${metadata}`)
   }
 
   dispatch({ kind, ...payload }) {
