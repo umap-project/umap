@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import pytest
 from django.conf import settings
 from django.contrib.auth import get_user, get_user_model
+from django.core.signing import TimestampSigner
 from django.test import RequestFactory
 from django.urls import reverse
 from django.utils.timezone import make_aware
@@ -430,3 +431,55 @@ def test_home_feed(client, settings, user, tilelayer):
     assert "A public map starred by non staff" not in content
     assert "A private map starred by staff" not in content
     assert "A reserved map starred by staff" not in content
+
+
+@pytest.mark.django_db
+def test_websocket_token_returns_login_required_if_not_connected(client, user, map):
+    token_url = reverse("map_websocket_auth_token", kwargs={"map_id": map.id})
+    resp = client.get(token_url)
+    assert "login_required" in resp.json()
+
+
+@pytest.mark.django_db
+def test_websocket_token_returns_403_if_unauthorized(client, user, user2, map):
+    client.login(username=map.owner.username, password="123123")
+    map.owner = user2
+    map.save()
+
+    token_url = reverse("map_websocket_auth_token", kwargs={"map_id": map.id})
+    resp = client.get(token_url)
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_websocker_token_is_generated_for_anonymous(client, user, user2, map):
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+
+    token_url = reverse("map_websocket_auth_token", kwargs={"map_id": map.id})
+    resp = client.get(token_url)
+    token = resp.json().get("token")
+    assert TimestampSigner().unsign_object(token, max_age=30)
+
+
+@pytest.mark.django_db
+def test_websocket_token_returns_a_valid_token_when_authorized(client, user, map):
+    client.login(username=map.owner.username, password="123123")
+    token_url = reverse("map_websocket_auth_token", kwargs={"map_id": map.id})
+    resp = client.get(token_url)
+    assert resp.status_code == 200
+    token = resp.json().get("token")
+    assert TimestampSigner().unsign_object(token, max_age=30)
+
+
+@pytest.mark.django_db
+def test_websocket_token_is_generated_for_editors(client, user, user2, map):
+    map.edit_status = Map.EDITORS
+    map.editors.add(user2)
+    map.save()
+
+    assert client.login(username=user2.username, password="456456")
+    token_url = reverse("map_websocket_auth_token", kwargs={"map_id": map.id})
+    resp = client.get(token_url)
+    token = resp.json().get("token")
+    assert TimestampSigner().unsign_object(token, max_age=30)
