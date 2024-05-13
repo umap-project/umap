@@ -521,7 +521,7 @@ U.DataLayer = L.Evented.extend({
     editMode: 'advanced',
   },
 
-  initialize: function (map, data) {
+  initialize: function (map, data, sync) {
     this.map = map
     this._index = Array()
     this._layers = {}
@@ -605,6 +605,12 @@ U.DataLayer = L.Evented.extend({
     // be in the "forced visibility" mode
     if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
     this.on('datachanged', this.map.onDataLayersChanged, this.map)
+
+    if (sync !== false) {
+      const { engine, subject, metadata } = this.getSyncMetadata()
+      const geoJSON = this.umapGeoJSON()
+      engine.upsert(subject, metadata, geoJSON)
+    }
   },
 
   getSyncMetadata: function () {
@@ -612,7 +618,7 @@ U.DataLayer = L.Evented.extend({
       engine: this.map.sync,
       subject: 'datalayer',
       metadata: {
-        id: this.umap_id, // XXX: should we specify it's the layerID here?
+        id: this.umap_id,
       },
     }
   },
