@@ -48,16 +48,19 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    console.log(key, value)
     this.updateObjectValue(this.map, key, value)
     this.map.render([key])
   }
 }
 
 export class DataLayerUpdater extends BaseUpdater {
+  upsert({ key, metadata, value }) {
+    // Inserts does not happen (we use multiple updates instead).
+    this.map.createDataLayer(value, false)
+  }
+
   update({ key, metadata, value }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
-    console.log('datalayer', datalayer, key, value)
     this.updateObjectValue(datalayer, key, value)
     datalayer.render([key])
   }

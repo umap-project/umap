@@ -812,11 +812,11 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (datalayer) {
+  createDataLayer: function (datalayer, sync) {
     datalayer = datalayer || {
       name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
     }
-    return new U.DataLayer(this, datalayer)
+    return new U.DataLayer(this, datalayer, sync)
   },
 
   newDataLayer: function () {

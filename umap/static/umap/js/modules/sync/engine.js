@@ -54,9 +54,7 @@ export class MessagesDispatcher {
           metadata.featureType
         )
         if (featureTypeExists) {
-          const updater = this.updaters[metadata.featureType]
-          console.log(`found updater ${metadata.featureType}, ${updater}`)
-          return updater
+          return this.updaters[metadata.featureType]
         }
       case 'map':
       case 'datalayer':
@@ -67,7 +65,7 @@ export class MessagesDispatcher {
   }
 
   dispatch({ kind, ...payload }) {
-    console.log(kind, payload)
+    console.log('received message', kind, payload)
     if (kind == 'operation') {
       let updater = this.getUpdater(payload.subject, payload.metadata)
       updater.applyMessage(payload)
