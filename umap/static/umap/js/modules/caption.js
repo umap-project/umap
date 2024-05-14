@@ -31,7 +31,7 @@ export default class Caption {
     const p = DomUtil.create('p', 'datalayer-legend', container),
       legend = DomUtil.create('span', '', p),
       headline = DomUtil.create('strong', '', p)
-    datalayer.onceLoaded(function () {
+    datalayer.onceLoaded(() => {
       datalayer.renderLegend(legend)
       if (datalayer.options.description) {
         DomUtil.element({
@@ -89,8 +89,8 @@ export default class Caption {
     const urls = {
       leaflet: 'http://leafletjs.com',
       django: 'https://www.djangoproject.com',
-      umap: 'http://wiki.openstreetmap.org/wiki/UMap',
-      changelog: 'https://umap-project.readthedocs.io/en/master/changelog/',
+      umap: 'https://umap-project.org/',
+      changelog: 'https://docs.umap-project.org/en/master/changelog/',
       version: this.map.options.umap_version,
     }
     const creditHTML = translate(

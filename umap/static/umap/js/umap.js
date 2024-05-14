@@ -912,15 +912,11 @@ U.Map = L.Map.extend({
   },
 
   openBrowser: function (mode) {
-    this.onceDatalayersLoaded(function () {
-      this.browser.open(mode)
-    })
+    this.onceDatalayersLoaded(() => this.browser.open(mode))
   },
 
   openCaption: function () {
-    this.onceDatalayersLoaded(function () {
-      this.caption.open()
-    })
+    this.onceDatalayersLoaded(() => this.caption.open())
   },
 
   eachDataLayer: function (method, context) {
