@@ -62,6 +62,7 @@ test = [
   "pytest-django==4.8.0",
   "pytest-playwright==0.5.0",
   "pytest-xdist>=3.5.0,<4",
+  "pytest-xprocess>=1.0.1",
 ]
 docker = [
   "uwsgi==2.0.26",

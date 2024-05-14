@@ -24,3 +24,8 @@ if os.environ.get("GITHUB_ACTIONS", False) == "true":
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.MD5PasswordHasher",
 ]
+
+
+WEBSOCKET_ENABLED = True
+WEBSOCKET_PORT = "8010"
+WEBSOCKET_URI = "ws://localhost:8010"
