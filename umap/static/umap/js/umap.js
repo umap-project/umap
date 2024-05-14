@@ -222,7 +222,7 @@ U.Map = L.Map.extend({
         this.openBrowser('filters')
       } else if (this.options.onLoadPanel === 'caption') {
         this.panel.mode = 'condensed'
-        this.displayCaption()
+        this.openCaption()
       }
       if (L.Util.queryString('edit')) {
         if (this.hasEditMode()) this.enableEdit()
@@ -382,6 +382,7 @@ U.Map = L.Map.extend({
     else this.scrollWheelZoom.disable()
     this.browser = new U.Browser(this)
     this.facets = new U.Facets(this)
+    this.caption = new U.Caption(this)
     this.importer = new U.Importer(this)
     this.drop = new U.DropControl(this)
     this.share = new U.Share(this)
@@ -913,6 +914,12 @@ U.Map = L.Map.extend({
   openBrowser: function (mode) {
     this.onceDatalayersLoaded(function () {
       this.browser.open(mode)
+    })
+  },
+
+  openCaption: function () {
+    this.onceDatalayersLoaded(function () {
+      this.caption.open()
     })
   },
 
@@ -1591,7 +1598,7 @@ U.Map = L.Map.extend({
         'umap-about-link flat',
         container,
         L._('About'),
-        this.displayCaption,
+        this.openCaption,
         this
       )
       L.DomUtil.createButton(
@@ -1758,7 +1765,7 @@ U.Map = L.Map.extend({
     items.push(
       {
         text: L._('About'),
-        callback: this.displayCaption,
+        callback: this.openCaption,
       },
       {
         text: this.help.displayLabel('SEARCH'),

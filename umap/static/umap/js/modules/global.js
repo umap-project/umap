@@ -1,6 +1,7 @@
 import URLs from './urls.js'
 import Browser from './browser.js'
 import Facets from './facets.js'
+import Caption from './caption.js'
 import { Panel, EditPanel, FullPanel } from './panel.js'
 import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
@@ -25,4 +26,5 @@ window.U = {
   Utils,
   SCHEMA,
   Orderable,
+  Caption,
 }
