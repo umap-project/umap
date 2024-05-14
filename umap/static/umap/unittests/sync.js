@@ -1,13 +1,52 @@
 import { describe, it } from 'mocha'
+import sinon from 'sinon'
 
 import pkg from 'chai'
 const { expect } = pkg
 
-import {
-  MapUpdater,
-  DataLayerUpdater,
-  FeatureUpdater,
-} from '../js/modules/sync/updaters.js'
+import { MapUpdater } from '../js/modules/sync/updaters.js'
+import { MessagesDispatcher, SyncEngine } from '../js/modules/sync/engine.js'
+
+describe('SyncEngine', () => {
+  it('should initialize methods even before start', function () {
+    const engine = new SyncEngine({})
+    engine.upsert()
+    engine.update()
+    engine.delete()
+  })
+})
+
+describe('MessageDispatcher', () => {
+  describe('#dispatch', function () {
+    it('should raise an error on unknown updater', function () {
+      const dispatcher = new MessagesDispatcher({})
+      expect(() => {
+        dispatcher.dispatch({
+          kind: 'operation',
+          subject: 'unknown',
+          metadata: {},
+        })
+      }).to.throw(Error)
+    })
+    it('should produce an error on malformated messages', function () {
+      const dispatcher = new MessagesDispatcher({})
+      expect(() => {
+        dispatcher.dispatch({
+          yeah: 'yeah',
+          payload: { foo: 'bar' },
+        })
+      }).to.throw(Error)
+    })
+    it('should raise an unknown operations', function () {
+      const dispatcher = new MessagesDispatcher({})
+      expect(() => {
+        dispatcher.dispatch({
+          kind: 'something-else',
+        })
+      }).to.throw(Error)
+    })
+  })
+})
 
 describe('Updaters', () => {
   describe('BaseUpdater', function () {
