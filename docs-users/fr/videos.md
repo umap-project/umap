@@ -12,6 +12,8 @@
 
 <iframe title="Exemples cartes uMap" width="560" height="315" src="https://peertube.openstreetmap.fr/videos/embed/3e8a55d3-761e-48bd-a871-86e65f137e9e" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>
 
+---
+
 ## Tutoriel - Umap, croquis et carte interactive (bases sans création de compte)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-gR4IN1meOY?si=g_wLc3ZI67yJ-wrK" title="Tutoriel - Umap, croquis et carte interactive (bases sans création de compte)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -19,5 +21,25 @@
 ## Tutoriel - Umap / Openstreetmap (carte enrichie)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/j7o96lUxN6o?si=IcczSafYOedaMAwX" title="Tutoriel - Umap / Openstreetmap (carte enrichie)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+---
+
+## Mieux visualiser une balade pédagogique ?
+
+Cette vidéo va vous faire découvrir des fonctionnalités de base, tel que le déplacement sur la carte, le zoom, les filtres pour le choix de certaines balades et ainsi améliorer la lisibilité de la carte :
+
+<video controls src="http://balades-pedagogiques.org/wp-content/uploads/2023/11/Mieux-visualiser-les-balades-1.mp4"></video>
+
+Vidéo proposée par [balades-pedagogiques.org](http://balades-pedagogiques.org/?page_id=14).
+
+## Comment se repérer et mesurer des distances ?
+
+Cette vidéo va vous faire découvrir les fonctionnalités permettant la recherche d&rsquo;un lieu et de mesurer une distance sur la carte :
+
+<video controls src="http://balades-pedagogiques.org/wp-content/uploads/2023/11/Se-reperer-et-mesurer-des-distances.mp4"></video>
+
+Vidéo proposée par [balades-pedagogiques.org](http://balades-pedagogiques.org/?page_id=14).
+
+---
 
 [Suggérer d’autres vidéos ?](https://github.com/umap-project/umap/issues/new/choose){ .md-button }

@@ -9,8 +9,8 @@
 ### 1. Créer un calque
 
 Reprenons la [carte du Festival des 3 continents](http://u.osmfr.org/m/26381/)
-vu dans le tutoriel [Je consulte une carte uMap](1-browsing-a-map.md). Les
-données de cette carte sont organisées en plusieurs calques :
+vu dans le tutoriel [Naviguer dans une carte](1-browsing-a-map.md). Les
+données de cette carte sont organisées en plusieurs calques :
 
 -   les cinémas : marqueurs jaunes
 -   les autres lieux du festival : marqueurs bruns
@@ -25,14 +25,20 @@ calque peut être décrit dans le panneau latéral de la carte. Organiser
 les éléments d’une carte est donc pratique pour consulter la carte, nous
 verrons aussi que cela permet de faciliter sa création.
 
-![umap_edit_layers.png](../../static/tutoriels/6-je-structure-ma-carte-avec-des-calques/umap_edit_layers.png)
+<shot-scraper
+    data-output="static/tutoriels/control-browse.png"
+    data-url="https://umap.openstreetmap.fr/en/map/new/"
+    data-alt="Icône du sélecteur de calque(s)."
+    data-selector=".umap-control-browse"
+    data-width="48"
+    data-height="48"
+    data-padding="5"
+    >Icône du sélecteur de calque(s).</shot-scraper>
 
-Le menu **Gérer les
-calques**, disponible en mode édition, affiche la liste des calques
+Le menu **Gérer les calques**, disponible en mode édition, affiche la liste des calques
 existants et permet de créer un nouveau calque. Cliquez ensuite sur
-**Ajouter un calque**, apparaît alors le panneau **Propriétés de la
-couche** du nouveau calque (*calque* ou *couche*, les deux termes sont
-équivalents).
+**Ajouter un calque**, apparaît alors le panneau **Propriétés du calque**
+du nouveau calque.
 
 ![](../../static/tutoriels/6-je-structure-ma-carte-avec-des-calques/umap_layer_props_top.png)
 
@@ -112,8 +118,7 @@ panneau de gestion des calques cliquez sur le crayon pour éditer les
 propriétés du calque. Les onglets **Propriétés de la forme** et
 **Propriétés avancées** vous permettent de définir les styles par défaut
 du calque. Vous retrouvez les mêmes propriétés que celles utilisées dans
-le tutoriel
-[J’utilise un compte et crée une belle carte](3-create-account.md).
+le tutoriel [Créer un compte](3-create-account.md).
 
 ![umap_legende.png](../../static/tutoriels/6-je-structure-ma-carte-avec-des-calques/umap_legende.png)
 
@@ -142,7 +147,7 @@ glisser-déposer. L’ordre ainsi défini est celui que l’on retrouve dans
 le sélecteur de calques et dans la liste des calques du panneau À
 Propos.
 
-L’oeil permet de cacher/afficher un calque et la loupe de zoomer sur son
+L’œil permet de cacher/afficher un calque et la loupe de zoomer sur son
 contenu, comme pour le sélecteur de calques. Nous verrons plus loin
 l’utilité d’**Éditer dans un tableau** le contenu du calque. **Supprimer
 le calque** vous demandera de confirmer l’opération, cette opération
