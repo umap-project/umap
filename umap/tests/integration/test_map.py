@@ -188,21 +188,6 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     expect(layers).to_have_count(2)
 
 
-def test_can_hide_datalayer_from_caption(openmap, live_server, datalayer, page):
-    # Add another DataLayer
-    other = DataLayerFactory(map=openmap, name="Hidden", settings={"inCaption": False})
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
-    toggle = page.get_by_text("About").first
-    expect(toggle).to_be_visible()
-    toggle.click()
-    layers = page.locator(".umap-caption .datalayer-legend")
-    expect(layers).to_have_count(1)
-    found = page.locator(".panel.left.on").get_by_text(datalayer.name)
-    expect(found).to_be_visible()
-    hidden = page.locator(".panel.left.on").get_by_text(other.name)
-    expect(hidden).to_be_hidden()
-
-
 def test_minimap_on_load(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-minimap")).to_be_hidden()

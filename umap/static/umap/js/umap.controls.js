@@ -530,7 +530,7 @@ U.CaptionControl = L.Control.Button.extend({
   },
 
   onClick: function () {
-    this.map.displayCaption()
+    this.map.openCaption()
   },
 })
 
@@ -670,96 +670,6 @@ const ControlsMixin = {
     'star',
     'tilelayers',
   ],
-
-  displayCaption: function () {
-    const container = L.DomUtil.create('div', 'umap-caption')
-    L.DomUtil.createTitle(container, this.options.name, 'icon-caption')
-    this.permissions.addOwnerLink('h5', container)
-    if (this.options.description) {
-      const description = L.DomUtil.element({
-        tagName: 'div',
-        className: 'umap-map-description',
-        safeHTML: U.Utils.toHTML(this.options.description),
-        parent: container,
-      })
-    }
-    const datalayerContainer = L.DomUtil.create('div', 'datalayer-container', container)
-    this.eachVisibleDataLayer((datalayer) => {
-      if (!datalayer.options.inCaption) return
-      const p = L.DomUtil.create('p', 'datalayer-legend', datalayerContainer),
-        legend = L.DomUtil.create('span', '', p),
-        headline = L.DomUtil.create('strong', '', p)
-      datalayer.onceLoaded(function () {
-        datalayer.renderLegend(legend)
-        if (datalayer.options.description) {
-          L.DomUtil.element({
-            tagName: 'span',
-            parent: p,
-            safeHTML: U.Utils.toHTML(datalayer.options.description),
-          })
-        }
-      })
-      datalayer.renderToolbox(headline)
-      L.DomUtil.add('span', '', headline, `${datalayer.options.name} `)
-    })
-    const creditsContainer = L.DomUtil.create('div', 'credits-container', container),
-      credits = L.DomUtil.createFieldset(creditsContainer, L._('Credits'))
-    title = L.DomUtil.add('h5', '', credits, L._('User content credits'))
-    if (this.options.shortCredit || this.options.longCredit) {
-      L.DomUtil.element({
-        tagName: 'p',
-        parent: credits,
-        safeHTML: U.Utils.toHTML(this.options.longCredit || this.options.shortCredit),
-      })
-    }
-    if (this.options.licence) {
-      const licence = L.DomUtil.add(
-        'p',
-        '',
-        credits,
-        `${L._('Map user content has been published under licence')} `
-      )
-      L.DomUtil.createLink(
-        '',
-        licence,
-        this.options.licence.name,
-        this.options.licence.url
-      )
-    } else {
-      L.DomUtil.add('p', '', credits, L._('No licence has been set'))
-    }
-    title = L.DomUtil.create('h5', '', credits)
-    title.textContent = L._('Map background credits')
-    const tilelayerCredit = L.DomUtil.create('p', '', credits)
-    L.DomUtil.element({
-      tagName: 'strong',
-      parent: tilelayerCredit,
-      textContent: `${this.selected_tilelayer.options.name} `,
-    })
-    L.DomUtil.element({
-      tagName: 'span',
-      parent: tilelayerCredit,
-      safeHTML: this.selected_tilelayer.getAttribution(),
-    })
-    const urls = {
-      leaflet: 'http://leafletjs.com',
-      django: 'https://www.djangoproject.com',
-      umap: 'http://wiki.openstreetmap.org/wiki/UMap',
-      changelog: 'https://umap-project.readthedocs.io/en/master/changelog/',
-      version: this.options.umap_version,
-    }
-    const creditHTML = L._(
-      `
-      Powered by <a href="{leaflet}">Leaflet</a> and
-      <a href="{django}">Django</a>,
-      glued by <a href="{umap}">uMap project</a>
-      (version <a href="{changelog}">{version}</a>).
-      `,
-      urls
-    )
-    L.DomUtil.element({ tagName: 'p', innerHTML: creditHTML, parent: credits })
-    this.panel.open({ content: container })
-  },
 
   renderEditToolbar: function () {
     const container = L.DomUtil.create(
@@ -1077,7 +987,7 @@ U.AttributionControl = L.Control.Attribution.extend({
     if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
-        .on(link, 'click', this._map.displayCaption, this._map)
+        .on(link, 'click', this._map.openCaption, this._map)
         .on(link, 'dblclick', L.DomEvent.stop)
     }
     if (window.top === window.self && captionMenus) {
