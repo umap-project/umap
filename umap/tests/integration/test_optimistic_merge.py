@@ -12,9 +12,9 @@ from ..base import DataLayerFactory, MapFactory
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 
-def test_collaborative_editing_create_markers(context, live_server, tilelayer):
+def test_created_markers_are_merged(context, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
-    map = MapFactory(name="collaborative editing")
+    map = MapFactory(name="server-side merge")
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Now navigate to this map and create marker
@@ -146,7 +146,7 @@ def test_collaborative_editing_create_markers(context, live_server, tilelayer):
 
 def test_empty_datalayers_can_be_merged(context, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
-    map = MapFactory(name="collaborative editing")
+    map = MapFactory(name="server-side merge")
     DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Open two tabs at the same time, on the same empty map
@@ -202,7 +202,7 @@ def test_empty_datalayers_can_be_merged(context, live_server, tilelayer):
 
 def test_same_second_edit_doesnt_conflict(context, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
-    map = MapFactory(name="collaborative editing")
+    map = MapFactory(name="server-side merge")
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Open the created map on two pages.
