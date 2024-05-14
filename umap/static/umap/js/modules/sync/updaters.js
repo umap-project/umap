@@ -11,20 +11,23 @@ class BaseUpdater {
   }
 
   updateObjectValue(obj, key, value) {
-    // XXX refactor so it's cleaner
-    let path = key.split('.')
-    let what
-    for (var i = 0, l = path.length; i < l; i++) {
-      what = path[i]
-      if (what === path[l - 1]) {
-        if (typeof value === 'undefined') {
-          delete obj[what]
-        } else {
-          obj[what] = value
-        }
-      } else {
-        obj = obj[what]
-      }
+    const parts = key.split('.')
+    const lastKey = parts.pop()
+
+    // Reduce the current list of attributes,
+    // to find the object to set the property onto
+    const objectToSet = parts.reduce((currentObj, part) => {
+      if (part in currentObj) return currentObj[part]
+    }, obj)
+
+    // In case the given path doesn't exist, bail out
+    if (objectToSet === undefined) return
+
+    // Set the value (or delete it)
+    if (typeof value === 'undefined') {
+      delete objectToSet[lastKey]
+    } else {
+      objectToSet[lastKey] = value
     }
   }
 
@@ -54,7 +57,7 @@ export class MapUpdater extends BaseUpdater {
 }
 
 export class DataLayerUpdater extends BaseUpdater {
-  upsert({ key, metadata, value }) {
+  upsert({ value }) {
     // Inserts does not happen (we use multiple updates instead).
     this.map.createDataLayer(value, false)
   }
