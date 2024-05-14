@@ -168,7 +168,7 @@ def test_can_create_new_rule(live_server, page, openmap):
     expect(markers).to_have_count(4)
     page.get_by_role("button", name="Edit").click()
     page.get_by_role("link", name="Map advanced properties").click()
-    page.get_by_role("heading", name="Conditional style rules").click()
+    page.get_by_text("Conditional style rules").click()
     page.get_by_role("button", name="Add rule").click()
     page.locator("input[name=condition]").click()
     page.locator("input[name=condition]").fill("mytype=odd")
@@ -192,7 +192,7 @@ def test_can_deactive_rule_from_list(live_server, page, openmap):
     assert colors.count("rgb(240, 248, 255)") == 2
     page.get_by_role("button", name="Edit").click()
     page.get_by_role("link", name="Map advanced properties").click()
-    page.get_by_role("heading", name="Conditional style rules").click()
+    page.get_by_text("Conditional style rules").click()
     page.get_by_role("button", name="Show/hide layer").click()
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 0
