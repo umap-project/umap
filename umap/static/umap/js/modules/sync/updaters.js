@@ -20,7 +20,7 @@ class BaseUpdater {
       if (part in currentObj) return currentObj[part]
     }, obj)
 
-    // In case the given path doesn't exist, bail out
+    // In case the given path doesn't exist, stop here
     if (objectToSet === undefined) return
 
     // Set the value (or delete it)
