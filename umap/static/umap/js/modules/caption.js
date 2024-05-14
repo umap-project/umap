@@ -20,7 +20,7 @@ export default class Caption {
       })
     }
     const datalayerContainer = DomUtil.create('div', 'datalayer-container', container)
-    this.map.eachVisibleDataLayer((datalayer) => this.addDataLayer(datalayer, datalayerContainer))
+    this.map.eachDataLayer((datalayer) => this.addDataLayer(datalayer, datalayerContainer))
     const creditsContainer = DomUtil.create('div', 'credits-container', container)
     this.addCredits(creditsContainer)
     this.map.panel.open({ content: container })
