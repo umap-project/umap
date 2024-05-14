@@ -47,10 +47,11 @@ export class MessagesDispatcher {
   }
 
   dispatch({ kind, ...payload }) {
-    console.log('received message', kind, payload)
     if (kind == 'operation') {
       let updater = this.getUpdater(payload.subject, payload.metadata)
       updater.applyMessage(payload)
+    } else {
+      throw new Error(`Unknown dispatch kind: ${kind}`)
     }
   }
 }
