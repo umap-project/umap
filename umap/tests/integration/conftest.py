@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
+from xprocess import ProcessStarter
 
 
 @pytest.fixture(autouse=True)
@@ -33,3 +35,20 @@ def login(context, settings, live_server):
         return page
 
     return do_login
+
+
+@pytest.fixture(scope="session")
+def websocket_server(xprocess):
+    class Starter(ProcessStarter):
+        settings_path = (
+            (Path(__file__).parent.parent / "settings.py").absolute().as_posix()
+        )
+        os.environ["UMAP_SETTINGS"] = settings_path
+        pattern = "Waiting for connections*"
+        args = ["python", "-m", "umap.ws"]
+        timeout = 5
+
+    logfile = xprocess.ensure("websocket_server", Starter)
+    print(logfile)
+    yield
+    xprocess.getinfo("websocket_server").terminate()
