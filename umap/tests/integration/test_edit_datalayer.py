@@ -54,7 +54,7 @@ def test_cancel_deleting_datalayer_should_restore(
     live_server, openmap, datalayer, page
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_title("See layers").click()
+    page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
@@ -63,7 +63,7 @@ def test_cancel_deleting_datalayer_should_restore(
     page.once("dialog", lambda dialog: dialog.accept())
     page.locator(".panel.right").get_by_title("Delete layer").click()
     expect(markers).to_have_count(0)
-    page.get_by_role("button", name="See layers").click()
+    page.get_by_role("button", name="Open browser").click()
     expect(page.get_by_text("test datalayer")).to_be_hidden()
     page.once("dialog", lambda dialog: dialog.accept())
     page.get_by_role("button", name="Cancel edits").click()
@@ -73,7 +73,7 @@ def test_cancel_deleting_datalayer_should_restore(
 
 def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_title("See layers").click()
+    page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)

@@ -27,7 +27,7 @@ def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
     layers_off = page.locator(".umap-browser .datalayer.off")
     expect(layers).to_have_count(1)
     expect(layers_off).to_have_count(1)
-    page.get_by_role("button", name="See layers").click()
+    page.get_by_role("button", name="Open browser").click()
     page.get_by_label("Zoom in").click()
     expect(markers).to_be_hidden()
     page.get_by_title("Show/hide layer").click()

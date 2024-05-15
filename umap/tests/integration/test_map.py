@@ -169,7 +169,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     }
     datalayer.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    toggle = page.get_by_role("button", name="See layers")
+    toggle = page.get_by_role("button", name="Open browser")
     expect(toggle).to_be_visible()
     toggle.click()
     layers = page.locator(".umap-browser .datalayer h5")
@@ -184,7 +184,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     expect(marker).to_have_count(1)
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
-    page.get_by_title("See layers").click()
+    page.get_by_title("Open browser").click()
     expect(layers).to_have_count(2)
 
 

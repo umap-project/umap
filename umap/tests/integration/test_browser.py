@@ -178,7 +178,7 @@ def test_data_browser_bbox_filter_should_be_persistent(
     expect(browser.get_by_text("one point in france")).to_be_hidden()
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()
-    page.get_by_title("See layers").click()
+    page.get_by_title("Open browser").click()
     expect(browser.get_by_text("one point in france")).to_be_visible()
     expect(browser.get_by_text("one line in new zeland")).to_be_hidden()
     expect(browser.get_by_text("one polygon in greenland")).to_be_hidden()

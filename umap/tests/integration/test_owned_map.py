@@ -236,7 +236,7 @@ def test_can_change_owner(map, live_server, login, user):
 def test_can_delete_datalayer(live_server, map, login, datalayer):
     page = login(map.owner)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    page.get_by_title("See layers").click()
+    page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)

@@ -150,7 +150,7 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
 
-    DomUtil.createTitle(container, translate('Browse data'), 'icon-layers')
+    DomUtil.createTitle(container, translate('Browser'), 'icon-layers')
     const formContainer = DomUtil.createFieldset(container, L._('Filters'), {
       on: this.mode === 'filters',
       className: 'filters',

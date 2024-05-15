@@ -510,7 +510,7 @@ U.DataLayersControl = L.Control.Button.extend({
   options: {
     position: 'topleft',
     className: 'umap-control-browse',
-    title: L._('See layers'),
+    title: L._('Open browser'),
   },
 
   afterAdd: function (container) {

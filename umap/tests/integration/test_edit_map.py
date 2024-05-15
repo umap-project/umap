@@ -170,7 +170,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
     # By default, features are sorted by name  (Third, Second, First)
-    page.get_by_role("button", name="See layers").click()
+    page.get_by_role("button", name="Open browser").click()
     page.get_by_role("heading", name="Show/hide layer").locator("i").click()
 
     first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
