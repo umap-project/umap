@@ -1234,7 +1234,6 @@ U.Editable = L.Editable.extend({
     L.Editable.prototype.initialize.call(this, map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     this.on('editable:drawing:end', (e) => {
-      console.log('editable:drawing:end')
       this.closeTooltip()
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
@@ -1244,16 +1243,13 @@ U.Editable = L.Editable.extend({
     })
     // Layer for items added by users
     this.on('editable:drawing:cancel', (e) => {
-      console.log('editable:drawing:cancel')
       if (e.layer instanceof U.Marker) e.layer.del()
     })
     this.on('editable:drawing:commit', function (e) {
-      console.log('editable:drawing:commit')
       e.layer.isDirty = true
       if (this.map.editedFeature !== e.layer) e.layer.edit(e)
     })
     this.on('editable:editing', (e) => {
-      console.log('editable:editing')
       const layer = e.layer
       layer.isDirty = true
       if (layer._tooltip && layer.isTooltipOpen()) {
@@ -1262,13 +1258,11 @@ U.Editable = L.Editable.extend({
       }
     })
     this.on('editable:vertex:ctrlclick', (e) => {
-      console.log('editable:vertex:ctrlclick')
       const index = e.vertex.getIndex()
       if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue))
         e.vertex.continue()
     })
     this.on('editable:vertex:altclick', (e) => {
-      console.log('editable:vertex:altclick')
       if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) e.vertex.delete()
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
@@ -1356,7 +1350,6 @@ U.Editable = L.Editable.extend({
   },
 
   onVertexRawClick: function (e) {
-    console.log('editable:vertex:rawclick')
     e.layer.onVertexRawClick(e)
     L.DomEvent.stop(e)
     e.cancel()
