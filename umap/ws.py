@@ -8,7 +8,7 @@ import django
 import websockets
 from django.conf import settings
 from django.core.signing import TimestampSigner
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from websockets import WebSocketClientProtocol
 from websockets.server import serve
 
@@ -31,26 +31,13 @@ class JoinMessage(BaseModel):
     token: str
 
 
-class Geometry(BaseModel):
-    type: Literal["Point", "Polygon", "LineString"]
-    coordinates: list
-
-
-class GeometryValue(BaseModel):
-    geometry: Geometry
-
-
-# FIXME better define the different messages
-# to ensure only relying valid ones.
-# This would mean having different kind of validation types
-# based on the kind and verb.
 class OperationMessage(BaseModel):
     kind: str = "operation"
     verb: str = Literal["upsert", "update", "delete"]
     subject: str = Literal["map", "layer", "feature"]
     metadata: Optional[dict] = None
     key: Optional[str] = None
-    value: Optional[str | bool | int | GeometryValue | Geometry] = None
+    value: Optional[str | dict | list]
 
 
 async def join_and_listen(
@@ -61,7 +48,6 @@ async def join_and_listen(
     New messages will be broadcasted to other connected peers.
     """
     print(f"{user} joined room #{map_id}")
-    # FIXME: Persist permissions and user info.
     CONNECTIONS[map_id].add(websocket)
     try:
         async for raw_message in websocket:
@@ -69,13 +55,11 @@ async def join_and_listen(
             # as doing so beforehand would miss new connections
             peers = CONNECTIONS[map_id] - {websocket}
             # Only relay valid "operation" messages
-            # try:
-            #    OperationMessage.model_validate_json(raw_message)
-            # except ValidationError as e:
-            print(raw_message)
-
-            # For now, broadcast anyway
-            websockets.broadcast(peers, raw_message)
+            try:
+                OperationMessage.model_validate_json(raw_message)
+                websockets.broadcast(peers, raw_message)
+            except ValidationError:
+                print(raw_message)
     finally:
         CONNECTIONS[map_id].remove(websocket)
 
