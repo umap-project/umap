@@ -260,18 +260,10 @@ U.Map = L.Map.extend({
     if (this.options.syncEnabled != true) {
       this.sync.stop()
     } else {
-      // FIXME: Do this directly in the sync engine, which should check if the engine
-      // is already started or not.
-
-      // Get the authentication token from the server
-      // And pass it to the sync engine.
-      // FIXME: use `this.urls`
-      const [response, _, error] = await this.server.get(
-        `/map/${this.options.umap_id}/ws-token/`
-      )
-      if (!error) {
-        this.sync.start(this.options.websocketURI, response.token)
-      }
+      const ws_token_uri = this.urls.get('map_websocket_auth_token', {
+        map_id: this.options.umap_id,
+      })
+      await this.sync.authenticate(ws_token_uri, this.server)
     }
   },
 

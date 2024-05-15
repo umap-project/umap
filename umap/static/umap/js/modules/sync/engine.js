@@ -5,7 +5,6 @@ export class SyncEngine {
   constructor(map) {
     this.map = map
     this.receiver = new MessagesDispatcher(this.map)
-
     this._initialize()
   }
   _initialize() {
@@ -13,6 +12,13 @@ export class SyncEngine {
     const noop = () => {}
     // by default, all operations do nothing, until the engine is started.
     this.upsert = this.update = this.delete = noop
+  }
+
+  async authenticate(tokenURI, server) {
+    const [response, _, error] = await this.server.get(tokenURI)
+    if (!error) {
+      this.sync.start(tokenURI, response.token)
+    }
   }
 
   start(webSocketURI, authToken) {
