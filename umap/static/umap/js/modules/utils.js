@@ -65,6 +65,7 @@ export function getImpactsFromSchema(fields, schema) {
 export function propertyBelongsTo(property, subject, schema) {
   schema = schema || U.SCHEMA
   if (subject === 'feature') {
+    // FIXME allow properties.whatever
     property = property.replace('properties.', '').replace('_umap_options.', '')
   }
   property = property.replace('options.', '')
