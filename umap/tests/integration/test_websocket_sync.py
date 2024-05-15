@@ -118,11 +118,11 @@ def test_websocket_connection_can_sync_polygons(
     a_polygon_bbox_t1 = a_polygon.bounding_box()
     assert b_polygon_bbox_t1 == a_polygon_bbox_t1
 
-    peerB.locator("path").click()
+    b_polygon.click()
     peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
 
     edited_vertex = peerB.locator("div:nth-child(6)").first
-    edited_vertex.drag_to(b_map_el, target_position={"x": 250, "y": 250})
+    edited_vertex.drag_to(b_map_el, target_position={"x": 233, "y": 126})
     peerB.keyboard.press("Escape")
 
     b_polygon_bbox_t2 = b_polygon.bounding_box()
@@ -130,3 +130,22 @@ def test_websocket_connection_can_sync_polygons(
 
     assert b_polygon_bbox_t2 != b_polygon_bbox_t1
     assert b_polygon_bbox_t2 == a_polygon_bbox_t2
+
+    # Move the polygon on peer B and check it moved also on peer A
+    b_polygon.click()
+    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+
+    b_polygon.drag_to(b_map_el, target_position={"x": 400, "y": 400})
+    peerB.keyboard.press("Escape")
+    b_polygon_bbox_t3 = b_polygon.bounding_box()
+    a_polygon_bbox_t3 = a_polygon.bounding_box()
+
+    assert b_polygon_bbox_t3 != b_polygon_bbox_t2
+    assert b_polygon_bbox_t3 == a_polygon_bbox_t3
+
+    # Delete a polygon from peer A and check it's been deleted on peer B
+    a_polygon.click(button="right")
+    peerA.on("dialog", lambda dialog: dialog.accept())
+    peerA.get_by_role("link", name="Delete this feature").click()
+    expect(a_polygons).to_have_count(0)
+    expect(b_polygons).to_have_count(0)
