@@ -69,7 +69,7 @@ export const SCHEMA = {
   dashArray: {
     type: String,
     impacts: ['data'],
-    belongsTo: ['map', 'datalayer'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('dash array'),
     helpEntries: 'dashArray',
     inheritable: true,
