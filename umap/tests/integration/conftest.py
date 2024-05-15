@@ -37,16 +37,18 @@ def login(context, settings, live_server):
     return do_login
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def websocket_server(xprocess):
     class Starter(ProcessStarter):
         settings_path = (
             (Path(__file__).parent.parent / "settings.py").absolute().as_posix()
         )
         os.environ["UMAP_SETTINGS"] = settings_path
+        # env = {"UMAP_SETTINGS": settings_path}
         pattern = "Waiting for connections*"
         args = ["python", "-m", "umap.ws"]
-        timeout = 5
+        timeout = 3
+        terminate_on_interrupt = True
 
     logfile = xprocess.ensure("websocket_server", Starter)
     print(logfile)
