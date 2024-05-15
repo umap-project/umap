@@ -47,10 +47,9 @@ def websocket_server(xprocess):
         # env = {"UMAP_SETTINGS": settings_path}
         pattern = "Waiting for connections*"
         args = ["python", "-m", "umap.ws"]
-        timeout = 3
+        timeout = 1
         terminate_on_interrupt = True
 
-    logfile = xprocess.ensure("websocket_server", Starter)
-    print(logfile)
+    xprocess.ensure("websocket_server", Starter)
     yield
     xprocess.getinfo("websocket_server").terminate()
