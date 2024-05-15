@@ -286,16 +286,14 @@ U.FeatureMixin = {
     }
     return false
   },
-
-  del: function (fromSync) {
+  del: function (sync) {
     this.isDirty = true
     this.map.closePopup()
     if (this.datalayer) {
       this.datalayer.removeLayer(this)
       this.disconnectFromDataLayer(this.datalayer)
 
-      // Do not relay the event if we received it.
-      if (!fromSync) this.syncDelete()
+      if (sync !== false) this.syncDelete()
     }
   },
 
