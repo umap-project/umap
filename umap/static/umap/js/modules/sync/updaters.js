@@ -122,6 +122,6 @@ export class FeatureUpdater extends BaseUpdater {
     // XXX Distinguish between properties getting deleted
     // and the wole feature getting deleted
     let feature = this.getFeatureFromMetadata(metadata)
-    if (feature) feature.del()
+    if (feature) feature.del(false)
   }
 }
