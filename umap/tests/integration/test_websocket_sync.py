@@ -180,3 +180,31 @@ def test_websocket_connection_can_sync_map_properties(
     ).locator("label").nth(2).click()
 
     expect(peerA.locator(".leaflet-control-zoom")).to_be_hidden()
+
+
+def test_websocket_connection_can_sync_datalayer_properties(
+    context, live_server, websocket_server, tilelayer
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    DataLayerFactory(map=map, data={})
+
+    # Create two tabs
+    peerA = context.new_page()
+    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB = context.new_page()
+    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    # Layer addition, name and type are synced
+    peerA.get_by_role("link", name="Manage layers").click()
+    peerA.get_by_role("button", name="Add a layer").click()
+    peerA.locator('input[name="name"]').click()
+    peerA.locator('input[name="name"]').fill("synced layer!")
+    peerA.get_by_role("combobox").select_option("Choropleth")
+    peerA.locator("body").press("Escape")
+
+    peerB.get_by_role("link", name="Manage layers").click()
+    peerB.get_by_role("button", name="Edit").first.click()
+    expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
+    expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
