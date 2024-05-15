@@ -149,3 +149,34 @@ def test_websocket_connection_can_sync_polygons(
     peerA.get_by_role("link", name="Delete this feature").click()
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
+
+
+def test_websocket_connection_can_sync_map_properties(
+    context, live_server, websocket_server, tilelayer
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    DataLayerFactory(map=map, data={})
+
+    # Create two tabs
+    peerA = context.new_page()
+    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB = context.new_page()
+    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    # Name change is synced
+    peerA.get_by_role("link", name="Edit map name and caption").click()
+    peerA.locator('input[name="name"]').click()
+    peerA.locator('input[name="name"]').fill("it syncs!")
+
+    expect(peerB.locator(".map-name").last).to_have_text("it syncs!")
+
+    # Zoom control is synced
+    peerB.get_by_role("link", name="Map advanced properties").click()
+    peerB.locator("summary").filter(has_text="User interface options").click()
+    peerB.locator("div").filter(
+        has_text=re.compile(r"^Display the zoom control")
+    ).locator("label").nth(2).click()
+
+    expect(peerA.locator(".leaflet-control-zoom")).to_be_hidden()
