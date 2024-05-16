@@ -55,6 +55,31 @@ export function getImpactsFromSchema(fields, schema) {
 }
 
 /**
+ * Checks the given property belongs to the given subject, according to the schema.
+ *
+ * @param srtring property
+ * @param string subject
+ * @param object schema object. If ommited, global U.SCHEMA will be used.
+ * @returns Bool
+ */
+export function propertyBelongsTo(property, subject, schema) {
+  schema = schema || U.SCHEMA
+  if (subject === 'feature') {
+    // FIXME allow properties.whatever
+    property = property.replace('properties.', '').replace('_umap_options.', '')
+  }
+  property = property.replace('options.', '')
+  const splits = property.split('.')
+  const nested = splits.length > 1
+  if (nested) property = splits[0]
+  if (!Object.keys(schema).includes(property)) return false
+  if (nested) {
+    if (schema[property].type !== Object) return false
+  }
+  return schema[property].belongsTo.includes(subject)
+}
+
+/**
  * Import DOM purify, and initialize it.
  *
  * If the context is a node server, uses jsdom to provide

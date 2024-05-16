@@ -597,6 +597,84 @@ describe('Utils', function () {
     })
   })
 
+  describe('#propertyBelongsTo', () => {
+    it('should return false on unexisting property', function () {
+      let schema = {}
+      assert.deepEqual(Utils.propertyBelongsTo('foo', 'map', schema), false)
+    })
+    it('should return false if subject is not listed', function () {
+      let schema = {
+        foo: { belongsTo: ['feature'] },
+      }
+      assert.deepEqual(Utils.propertyBelongsTo('foo', 'map', schema), false)
+    })
+    it('should return true if subject is listed', function () {
+      let schema = {
+        foo: { belongsTo: ['map'] },
+      }
+      assert.deepEqual(Utils.propertyBelongsTo('foo', 'map', schema), true)
+    })
+    it('should remove the `options.` prefix before checking', function () {
+      let schema = {
+        foo: { belongsTo: ['map'] },
+      }
+      assert.deepEqual(Utils.propertyBelongsTo('options.foo', 'map', schema), true)
+    })
+
+    it('Accepts setting properties on objects', function () {
+      let schema = {
+        foo: {
+          type: Object,
+          belongsTo: ['map'],
+        },
+      }
+      assert.deepEqual(Utils.propertyBelongsTo('options.foo.name', 'map', schema), true)
+    })
+
+    it('Rejects setting properties on non-objects', function () {
+      let schema = {
+        foo: {
+          type: String,
+          belongsTo: ['map'],
+        },
+      }
+      assert.deepEqual(
+        Utils.propertyBelongsTo('options.foo.name', 'map', schema),
+        false
+      )
+    })
+
+    it('when subject = feature, should filter the `properties.`', function () {
+      let schema = {
+        foo: { belongsTo: ['feature'] },
+      }
+      assert.deepEqual(
+        Utils.propertyBelongsTo('properties.foo', 'feature', schema),
+        true
+      )
+    })
+
+    it('On features, should filter the `_umap_options.`', function () {
+      let schema = {
+        foo: { belongsTo: ['feature'] },
+      }
+      assert.deepEqual(
+        Utils.propertyBelongsTo('properties._umap_options.foo', 'feature', schema),
+        true
+      )
+    })
+
+    it('Should accept options.tilelayer.url_template', function () {
+      let schema = {
+        tilelayer: { type: Object, belongsTo: ['map'] },
+      }
+      assert.deepEqual(
+        Utils.propertyBelongsTo('options.tilelayer.url_template', 'map', schema),
+        true
+      )
+    })
+  })
+
   describe('#parseNaiveDate', () => {
     it('should parse a date', () => {
       assert.equal(

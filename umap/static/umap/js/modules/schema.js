@@ -11,6 +11,8 @@ import { translate } from './i18n.js'
  * - `impacts`:     A list of impacts than happen when this property is updated, among
  *                  'ui', 'data', 'limit-bounds', 'datalayer-index', 'remote-data',
  *                  'background' 'sync'.
+ * - `belongsTo`:   A list of conceptual objects this property belongs to, among
+ *                  'map', 'feature', 'datalayer'.
  *
  * - Extra keys are being passed to the FormBuilder automatically.
  */
@@ -20,16 +22,19 @@ export const SCHEMA = {
   browsable: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['datalayer'],
   },
   captionBar: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Do you want to display a caption bar?'),
     default: false,
   },
   captionControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the caption control'),
     default: true,
@@ -37,12 +42,14 @@ export const SCHEMA = {
   captionMenus: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Do you want to display caption menus?'),
     default: true,
   },
   color: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     handler: 'ColorPicker',
     label: translate('color'),
     helpEntries: 'colorValue',
@@ -52,14 +59,17 @@ export const SCHEMA = {
   choropleth: {
     type: Object,
     impacts: ['data'],
+    belongsTo: ['datalayer'],
   },
   cluster: {
     type: Object,
     impacts: ['data'],
+    belongsTo: ['datalayer'],
   },
   dashArray: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('dash array'),
     helpEntries: 'dashArray',
     inheritable: true,
@@ -67,6 +77,7 @@ export const SCHEMA = {
   datalayersControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     handler: 'DataLayersControl',
     label: translate('Display the data layers control'),
@@ -75,6 +86,7 @@ export const SCHEMA = {
   defaultView: {
     type: String,
     impacts: [], // no need to update the ui, only useful when loading the map
+    belongsTo: ['map'],
     label: translate('Default view'),
     choices: [
       ['center', translate('Saved center and zoom')],
@@ -87,27 +99,32 @@ export const SCHEMA = {
   description: {
     type: 'Text',
     impacts: ['ui'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('description'),
     helpEntries: 'textFormatting',
   },
   displayOnLoad: {
     type: Boolean,
     impacts: [],
+    belongsTo: ['datalayer'],
   },
   displayPopupFooter: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Do you want to display popup footer?'),
     default: false,
   },
   easing: {
     type: Boolean,
     impacts: [],
+    belongsTo: ['map', 'datalayer', 'feature'],
     default: false,
   },
   editinosmControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the control to open OpenStreetMap editor'),
     default: null,
@@ -115,6 +132,7 @@ export const SCHEMA = {
   embedControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the embed control'),
     default: true,
@@ -122,10 +140,12 @@ export const SCHEMA = {
   facetKey: {
     type: String,
     impacts: ['ui'],
+    belongsTo: ['map', 'datalayer'],
   },
   fill: {
     type: Boolean,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('fill'),
     helpEntries: 'fill',
     inheritable: true,
@@ -134,6 +154,7 @@ export const SCHEMA = {
   fillColor: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     handler: 'ColorPicker',
     label: translate('fill color'),
     helpEntries: 'fillColor',
@@ -142,6 +163,7 @@ export const SCHEMA = {
   fillOpacity: {
     type: Number,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     min: 0.1,
     max: 1,
     step: 0.1,
@@ -152,16 +174,19 @@ export const SCHEMA = {
   filterKey: {
     type: String,
     impacts: [],
+    belongsTo: ['map', 'datalayer', 'feature'],
   },
   fromZoom: {
     type: Number,
     impacts: [], // not needed
+    belongsTo: ['map', 'datalayer'],
     label: translate('From zoom'),
     helpText: translate('Optional.'),
   },
   fullscreenControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the fullscreen control'),
     default: true,
@@ -169,14 +194,17 @@ export const SCHEMA = {
   geometry: {
     type: Object,
     impacts: ['data'],
+    belongsTo: ['feature'],
   },
   heat: {
     type: Object,
     impacts: ['data'],
+    belongsTo: ['datalayer'],
   },
   iconClass: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Icon shape'),
     inheritable: true,
     choices: [
@@ -190,6 +218,7 @@ export const SCHEMA = {
   iconOpacity: {
     type: Number,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     min: 0.1,
     max: 1,
     step: 0.1,
@@ -200,6 +229,7 @@ export const SCHEMA = {
   iconUrl: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     handler: 'IconUrl',
     label: translate('Icon symbol'),
     inheritable: true,
@@ -207,10 +237,12 @@ export const SCHEMA = {
   inCaption: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['datalayer'],
   },
   interactive: {
     type: Boolean,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Allow interactions'),
     helpEntries: 'interactive',
     inheritable: true,
@@ -219,6 +251,7 @@ export const SCHEMA = {
   labelDirection: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Label direction'),
     inheritable: true,
     choices: [
@@ -233,12 +266,14 @@ export const SCHEMA = {
   labelInteractive: {
     type: Boolean,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Labels are clickable'),
     inheritable: true,
   },
   labelKey: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     helpEntries: 'labelKey',
     placeholder: translate('Default: name'),
     label: translate('Label key'),
@@ -247,50 +282,59 @@ export const SCHEMA = {
   licence: {
     type: String,
     impacts: ['ui'],
+    belongsTo: ['map', 'datalayer'],
     label: translate('licence'),
   },
   limitBounds: {
     type: Object,
     impacts: ['limit-bounds'],
+    belongsTo: ['map'],
   },
   locateControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the locate control'),
   },
   longCredit: {
     type: 'Text',
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Long credits'),
     helpEntries: ['longCredit', 'textFormatting'],
   },
   measureControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the measure control'),
   },
   miniMap: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Do you want to display a minimap?'),
     default: false,
   },
   moreControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Do you want to display the «more» control?'),
     default: true,
   },
   name: {
     type: String,
     impacts: ['ui', 'data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('name'),
   },
   onLoadPanel: {
     type: String,
     impacts: [], // This is what happens during the map instantiation
+    belongsTo: ['map'],
     label: translate('Do you want to display a panel on load?'),
     choices: [
       ['none', translate('None')],
@@ -304,6 +348,7 @@ export const SCHEMA = {
   opacity: {
     type: Number,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     min: 0.1,
     max: 1,
     step: 0.1,
@@ -314,6 +359,7 @@ export const SCHEMA = {
   outlink: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Link to…'),
     helpEntries: 'outlink',
     placeholder: 'http://...',
@@ -322,6 +368,7 @@ export const SCHEMA = {
   outlinkTarget: {
     type: String,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Open link in…'),
     inheritable: true,
     default: 'blank',
@@ -334,22 +381,26 @@ export const SCHEMA = {
   overlay: {
     type: Object,
     impacts: ['background'],
+    belongsTo: ['map'],
   },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Permanent credits'),
     helpEntries: ['permanentCredit', 'textFormatting'],
   },
   permanentCreditBackground: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Permanent credits background'),
     default: true,
   },
   popupContentTemplate: {
     type: 'Text',
     impacts: [], // not needed
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Popup content template'),
     helpEntries: ['dynamicProperties', 'textFormatting'],
     placeholder: '# {name}',
@@ -359,6 +410,7 @@ export const SCHEMA = {
   popupShape: {
     type: String,
     impacts: [], // not needed
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Popup shape'),
     inheritable: true,
     choices: [
@@ -371,6 +423,7 @@ export const SCHEMA = {
   popupTemplate: {
     type: String,
     impacts: [], // not needed
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('Popup content style'),
     inheritable: true,
     choices: [
@@ -385,21 +438,25 @@ export const SCHEMA = {
   remoteData: {
     type: Object,
     impacts: ['remote-data'],
+    belongsTo: ['datalayer'],
   },
   scaleControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Do you want to display the scale control?'),
     default: true,
   },
   scrollWheelZoom: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Allow scroll wheel zoom?'),
   },
   searchControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the search control'),
     default: true,
@@ -407,28 +464,33 @@ export const SCHEMA = {
   shortCredit: {
     type: String,
     impacts: ['ui'],
+    belongsTo: ['map'],
     label: translate('Short credits'),
     helpEntries: ['shortCredit', 'textFormatting'],
   },
   showLabel: {
     type: Boolean,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     nullable: true,
     label: translate('Display label'),
     inheritable: true,
     default: false,
   },
   slideshow: {
+    belongsTo: ['map'],
     type: Object,
     impacts: ['ui'],
   },
   slugKey: {
     type: String,
     impacts: [],
+    belongsTo: ['map', 'datalayer', 'feature'],
   },
   smoothFactor: {
     type: Number,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     min: 0,
     max: 10,
     step: 0.5,
@@ -440,16 +502,19 @@ export const SCHEMA = {
   sortKey: {
     type: String,
     impacts: ['datalayer-index', 'data'],
+    belongsTo: ['map', 'datalayer'],
   },
   starControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the star map button'),
   },
   stroke: {
     type: Boolean,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     label: translate('stroke'),
     helpEntries: 'stroke',
     inheritable: true,
@@ -458,6 +523,7 @@ export const SCHEMA = {
   syncEnabled: {
     type: Boolean,
     impacts: ['sync', 'ui'],
+    belongsTo: ['map'],
     label: translate('Enable real-time collaboration'),
     helpEntries: 'sync',
     default: false,
@@ -465,26 +531,31 @@ export const SCHEMA = {
   tilelayer: {
     type: Object,
     impacts: ['background'],
+    belongsTo: ['map'],
   },
   tilelayersControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the tile layers control'),
   },
   toZoom: {
     type: Number,
     impacts: [], // not needed
+    belongsTo: ['map', 'datalayer'],
     label: translate('To zoom'),
     helpText: translate('Optional.'),
   },
   type: {
     type: 'String',
     impacts: ['data'],
+    belongsTo: ['datalayer'],
   },
   weight: {
     type: Number,
     impacts: ['data'],
+    belongsTo: ['map', 'datalayer', 'feature'],
     min: 1,
     max: 20,
     step: 1,
@@ -495,10 +566,12 @@ export const SCHEMA = {
   zoom: {
     type: Number,
     impacts: [], // default zoom, doesn't need to be updated
+    belongsTo: ['map'],
   },
   zoomControl: {
     type: Boolean,
     impacts: ['ui'],
+    belongsTo: ['map'],
     nullable: true,
     label: translate('Display the zoom control'),
     default: true,
@@ -506,6 +579,7 @@ export const SCHEMA = {
   zoomTo: {
     type: Number,
     impacts: [], // not need to update the view
+    belongsTo: ['map', 'datalayer', 'feature'],
     placeholder: translate('Inherit'),
     helpEntries: 'zoomTo',
     label: translate('Default zoom level'),
@@ -514,5 +588,6 @@ export const SCHEMA = {
   _latlng: {
     type: Object,
     impacts: ['data'],
+    belongsTo: ['feature'],
   },
 }
