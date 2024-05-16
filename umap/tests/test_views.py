@@ -452,7 +452,7 @@ def test_websocket_token_returns_403_if_unauthorized(client, user, user2, map):
 
 
 @pytest.mark.django_db
-def test_websocker_token_is_generated_for_anonymous(client, user, user2, map):
+def test_websocket_token_is_generated_for_anonymous(client, user, user2, map):
     map.edit_status = Map.ANONYMOUS
     map.save()
 
