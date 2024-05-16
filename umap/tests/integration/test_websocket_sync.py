@@ -37,6 +37,15 @@ def test_websocket_connection_can_sync_markers(
     a_map_el.click(position={"x": 220, "y": 220})
     expect(a_marker_pane).to_have_count(1)
     expect(b_marker_pane).to_have_count(1)
+    peerA.locator("body").type("Synced name")
+    peerA.locator("body").press("Escape")
+
+    peerB.locator(".leaflet-marker-icon").first.click()
+    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    expect(peerB.locator('input[name="name"]')).to_have_value("Synced name")
+
+    a_first_marker = peerA.locator("div:nth-child(4) > div:nth-child(2)").first
+    b_first_marker = peerB.locator("div:nth-child(4) > div:nth-child(2)").first
 
     # Add a second marker from peer B
     b_create_marker = peerB.get_by_title("Draw a marker")
@@ -47,10 +56,6 @@ def test_websocket_connection_can_sync_markers(
     b_map_el.click(position={"x": 225, "y": 225})
     expect(a_marker_pane).to_have_count(2)
     expect(b_marker_pane).to_have_count(2)
-
-    # FIXME: find a better locator for markers
-    b_first_marker = peerB.locator("div:nth-child(4) > div:nth-child(2)").first
-    a_first_marker = peerA.locator("div:nth-child(4) > div:nth-child(2)").first
 
     # Drag a marker on peer B and check that it moved on peer A
     a_first_marker.bounding_box() == b_first_marker.bounding_box()
@@ -149,12 +154,6 @@ def test_websocket_connection_can_sync_polygons(
     peerA.get_by_role("link", name="Delete this feature").click()
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
-    # Add properties / option and check
-    # Map: everything is in properties (in geojson, but in options in the JS)
-    # Datalayer: everything is in options, but stored in `_umap_options` on the datalayer object
-    # Features: properties are not limited (that's data). Everything is in properties.
-    #           In properties there is _umap_option, to store everythign that's not user data.
-    # FIXME Save and check
 
 
 def test_websocket_connection_can_sync_map_properties(
