@@ -1,3 +1,4 @@
+import re
 from copy import deepcopy
 
 import pytest
@@ -62,3 +63,31 @@ def test_should_display_tooltip_with_variable(live_server, map, page, bootstrap)
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_text("Foo test marker")).to_be_visible()
+
+
+def test_should_open_popup_panel_on_click(live_server, map, page, bootstrap):
+    map.settings["properties"]["popupShape"] = "Panel"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    panel = page.locator(".panel.left.on")
+    expect(panel).to_be_hidden()
+    page.locator(".leaflet-marker-icon").click()
+    expect(panel).to_be_visible()
+    expect(panel).to_have_class(re.compile(".*expanded.*"))
+    expect(panel.get_by_role("heading", name="test marker")).to_be_visible()
+    expect(panel.get_by_text("Some description")).to_be_visible()
+    # Close popup
+    page.locator("#map").click()
+    expect(panel).to_be_hidden()
+
+
+def test_can_force_popup_panel_mode(live_server, map, page, bootstrap):
+    map.settings["properties"]["popupShape"] = "Panel"
+    map.settings["properties"]["defaultPanelMode"] = "condensed"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    panel = page.locator(".panel.left.on")
+    expect(panel).to_be_hidden()
+    page.locator(".leaflet-marker-icon").click()
+    expect(panel).to_be_visible()
+    expect(panel).to_have_class(re.compile(".*condensed.*"))

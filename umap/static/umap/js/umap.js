@@ -56,7 +56,7 @@ U.Map = L.Map.extend({
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
     this.urls = new U.URLs(this.options.urls)
 
-    this.panel = new U.Panel(this)
+    this.panel = new U.Panel(this, this.options.defaultPanelMode)
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
@@ -214,14 +214,16 @@ U.Map = L.Map.extend({
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
+        this.panel.setDefaultMode('expanded')
         this.openBrowser('data')
       } else if (this.options.onLoadPanel === 'datalayers') {
+        this.panel.setDefaultMode('condensed')
         this.openBrowser('layers')
       } else if (this.options.onLoadPanel === 'datafilters') {
-        this.panel.mode = 'expanded'
+        this.panel.setDefaultMode('expanded')
         this.openBrowser('filters')
       } else if (this.options.onLoadPanel === 'caption') {
-        this.panel.mode = 'condensed'
+        this.panel.setDefaultMode('condensed')
         this.openCaption()
       }
       if (L.Util.queryString('edit')) {
@@ -1172,6 +1174,7 @@ U.Map = L.Map.extend({
       'options.scaleControl',
       'options.onLoadPanel',
       'options.defaultView',
+      'options.defaultPanelMode',
       'options.displayPopupFooter',
       'options.captionBar',
       'options.captionMenus',

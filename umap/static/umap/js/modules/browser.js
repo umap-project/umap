@@ -9,18 +9,7 @@ export default class Browser {
       filter: '',
       inBbox: false,
     }
-    this._mode = 'layers'
-  }
-
-  set mode(value) {
-    // Store the mode so we can respect it when we redraw
-    if (['data', 'filters'].includes(value)) this.map.panel.mode = 'expanded'
-    else if (value === 'layers') this.map.panel.mode = 'condensed'
-    this._mode = value
-  }
-
-  get mode() {
-    return this._mode
+    this.mode = 'layers'
   }
 
   addFeature(feature, parent) {

@@ -1,4 +1,5 @@
 import copy
+import re
 
 import pytest
 from playwright.sync_api import expect
@@ -101,7 +102,9 @@ def test_simple_facet_search(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     DataLayerFactory(map=map, data=DATALAYER_DATA3)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    panel = page.locator(".umap-browser")
+    panel = page.locator(".panel.left.on")
+    expect(panel).to_have_class(re.compile(".*expanded.*"))
+    expect(panel.locator(".umap-browser")).to_be_visible()
     # From a non browsable datalayer, should not be impacted
     paths = page.locator(".leaflet-overlay-pane path")
     expect(paths).to_be_visible()

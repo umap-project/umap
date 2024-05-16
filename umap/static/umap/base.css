@@ -465,6 +465,7 @@ input.switch:checked ~ label:after {
 .button-bar {
     grid-gap: 7px;
 }
+.umap-multiplechoice.by2,
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
 }
