@@ -149,6 +149,12 @@ def test_websocket_connection_can_sync_polygons(
     peerA.get_by_role("link", name="Delete this feature").click()
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
+    # Add properties / option and check
+    # Map: everything is in properties (in geojson, but in options in the JS)
+    # Datalayer: everything is in options, but stored in `_umap_options` on the datalayer object
+    # Features: properties are not limited (that's data). Everything is in properties.
+    #           In properties there is _umap_option, to store everythign that's not user data.
+    # FIXME Save and check
 
 
 def test_websocket_connection_can_sync_map_properties(
