@@ -218,7 +218,6 @@ U.Map = L.Map.extend({
       } else if (this.options.onLoadPanel === 'datalayers') {
         this.openBrowser('layers')
       } else if (this.options.onLoadPanel === 'datafilters') {
-        this.panel.mode = 'expanded'
         this.openBrowser('filters')
       } else if (this.options.onLoadPanel === 'caption') {
         this.panel.mode = 'condensed'

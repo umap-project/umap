@@ -341,6 +341,7 @@ export const SCHEMA = {
       ['Default', translate('Popup')],
       ['Large', translate('Popup (large)')],
       ['Panel', translate('Side panel')],
+      ['SmallPanel', translate('Small side panel')],
     ],
     default: 'Default',
   },

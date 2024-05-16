@@ -14,7 +14,8 @@ export class Panel {
     DomEvent.on(this.container, 'MozMousePixelScroll', DomEvent.stopPropagation)
   }
 
-  open({ content, className, actions = [] } = {}) {
+  open({ content, className, actions = [], mode = null } = {}) {
+    if (mode) this.mode = mode
     this.container.className = `with-transition panel ${this.classname} ${this.mode}`
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'toolbox', this.container)

@@ -52,12 +52,14 @@ U.Popup.Large = U.Popup.extend({
 U.Popup.Panel = U.Popup.extend({
   options: {
     zoomAnimation: false,
+    mode: 'expanded',
   },
 
   onAdd: function (map) {
     map.panel.open({
       content: this._content,
       actions: [U.Browser.backButton(map)],
+      mode: this.options.mode,
     })
 
     // fire events as in base class Popup.js:onAdd
@@ -90,7 +92,12 @@ U.Popup.Panel = U.Popup.extend({
   _animateZoom: function () {},
 })
 U.Popup.SimplePanel = U.Popup.Panel // Retrocompat.
-
+U.Popup.SmallPanel = U.Popup.Panel.extend({
+  options: {
+    zoomAnimation: false,
+    mode: 'condensed',
+  },
+})
 /* Content templates */
 
 U.PopupTemplate = {}
