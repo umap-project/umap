@@ -268,3 +268,37 @@ See the NGINX documentation in addition.
 If you use OpenStreetMap as OAuth 2 provider, you can use those settings.
 
 Otherwise, use any valid [python-social-auth configuration](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html).
+
+#### WEBSOCKET_ENABLED
+
+A websocket server is packaged with uMap, and can be turned-on to activate "real-time collaboration".
+In practice, you would need to run the websocket server and specify a set of settings.
+
+Turning this setting to `True` **will make a switch available** on each map, to enable "real-time collaboration".
+
+You can run the websocket server with this command:
+
+```bash
+python -m umap.ws
+```
+
+Configuration example:
+
+```python
+WEBSOCKET_ENABLED = True
+WEBSOCKET_HOST = "localhost"
+WEBSOCKET_PORT = 8002
+WEBSOCKET_URI = "ws://localhost:8002"
+```
+
+These settings can also be set with the (same names) environment variables.
+
+#### WEBSOCKET_HOST
+#### WEBSOCKET_PORT
+
+The host and port for the websocket server.
+
+#### WEBSOCKET_URI
+
+The connection string that will be used by the client to connect to the websocket server.
+Use `wss://host:port` if the server is behind TLS, and `ws://host:port` otherwise.
