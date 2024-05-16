@@ -201,7 +201,11 @@ export default class Browser {
       if (filtersBuilder) filtersBuilder.form.reset()
     })
     DomUtil.createIcon(reset, 'icon-restore')
-    DomUtil.element({ tagName: 'span', parent: reset, textContent: translate('Reset all') })
+    DomUtil.element({
+      tagName: 'span',
+      parent: reset,
+      textContent: translate('Reset all'),
+    })
 
     this.map.panel.open({
       content: container,

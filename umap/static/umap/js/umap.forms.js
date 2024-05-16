@@ -745,14 +745,12 @@ L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
 })
 
 L.FormBuilder.FacetSearchBase = L.FormBuilder.Element.extend({
-
   buildLabel: function () {
     this.label = L.DomUtil.element({
       tagName: 'legend',
       textContent: this.options.label,
     })
-  }
-
+  },
 })
 L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
   build: function () {
@@ -865,13 +863,13 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
   },
 
   isMinModified: function () {
-    const default_ = this.minInput.getAttribute("value")
+    const default_ = this.minInput.getAttribute('value')
     const current = this.minInput.value
     return current != default_
   },
 
   isMaxModified: function () {
-    const default_ = this.maxInput.getAttribute("value")
+    const default_ = this.maxInput.getAttribute('value')
     const current = this.maxInput.value
     return current != default_
   },
