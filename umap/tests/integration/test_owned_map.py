@@ -249,8 +249,3 @@ def test_can_delete_datalayer(live_server, map, login, datalayer):
     expect(markers).to_have_count(0)
     # FIXME does not work, resolve to 1 element, even if this command is empty:
     expect(layers).to_have_count(0)
-
-
-def test_something(live_server, map, login, user):
-    page = login(user)
-    page.goto(f"{live_server.url}/map/{map.id}/ws-token")
