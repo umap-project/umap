@@ -1740,6 +1740,10 @@ U.DataLayer = L.Evented.extend({
         delete data.geojson
       }
       this._reference_version = response.headers.get('X-Datalayer-Version')
+
+      const { engine, subject, metadata } = this.getSyncMetadata()
+      engine.update(subject, metadata, '_reference_version', this._reference_version)
+
       this.setUmapId(data.id)
       this.updateOptions(data)
       this.backupOptions()
