@@ -608,7 +608,7 @@ def test_cannot_send_link_on_owned_map(client, map):
     assert len(mail.outbox) == 0
     url = reverse("map_send_edit_link", args=(map.pk,))
     resp = client.post(url, {"email": "foo@bar.org"})
-    assert resp.status_code == 200
+    assert resp.status_code == 401
     assert json.loads(resp.content.decode()) == {"login_required": "/en/login/"}
     assert len(mail.outbox) == 0
 

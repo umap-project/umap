@@ -19,7 +19,9 @@ def login_required_if_not_anonymous_allowed(view_func):
             not getattr(settings, "UMAP_ALLOW_ANONYMOUS", False)
             and not request.user.is_authenticated
         ):
-            return simple_json_response(login_required=str(LOGIN_URL))
+            response = simple_json_response(login_required=str(LOGIN_URL))
+            response.status_code = 401
+            return response
         return view_func(request, *args, **kwargs)
 
     return wrapper
@@ -39,7 +41,9 @@ def can_edit_map(view_func):
             can_edit = map_inst.can_edit(user=user, request=request)
             if not can_edit:
                 if map_inst.owner and not user.is_authenticated:
-                    return simple_json_response(login_required=str(LOGIN_URL))
+                    response = simple_json_response(login_required=str(LOGIN_URL))
+                    response.status_code = 401
+                    return response
                 return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
 
