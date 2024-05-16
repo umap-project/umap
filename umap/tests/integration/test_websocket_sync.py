@@ -213,3 +213,65 @@ def test_websocket_connection_can_sync_datalayer_properties(
     peerB.get_by_role("button", name="Edit").first.click()
     expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
     expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
+
+
+def test_websocket_connection_can_sync_cloned_polygons(
+    context, live_server, websocket_server, tilelayer
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    DataLayerFactory(map=map, data={})
+
+    # Create two tabs
+    peerA = context.new_page()
+    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB = context.new_page()
+    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    b_map_el = peerB.locator("#map")
+
+    # Click on the Draw a polygon button on a new map.
+    create_line = peerA.locator(".leaflet-control-toolbar ").get_by_title(
+        "Draw a polygon"
+    )
+    create_line.click()
+
+    a_polygons = peerA.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
+    b_polygons = peerB.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
+    expect(a_polygons).to_have_count(0)
+    expect(b_polygons).to_have_count(0)
+
+    # Click on the map, it will create a polygon.
+    map = peerA.locator("#map")
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 200, "y": 100})
+
+    # Escaping the edition syncs
+    peerA.keyboard.press("Escape")
+    expect(a_polygons).to_have_count(1)
+    expect(b_polygons).to_have_count(1)
+
+    # Save from peer A
+    peerA.get_by_role("button", name="Save").click()
+
+    b_polygon = peerB.locator("path")
+
+    # Clone on peer B and save
+    b_polygon.click(button="right")
+    peerB.get_by_role("link", name="Clone this feature").click()
+
+    expect(peerB.locator("path")).to_have_count(2)
+
+    peerB.locator("path").nth(1).drag_to(b_map_el, target_position={"x": 400, "y": 400})
+    peerB.locator("path").nth(1).click()
+    peerB.locator("summary").filter(has_text="Shape properties").click()
+    peerB.locator(".header > a:nth-child(2)").first.click()
+    peerB.get_by_title("Orchid", exact=True).first.click()
+    peerB.locator("#map").press("Escape")
+    peerB.get_by_role("button", name="Save").click()
+
+    expect(peerB.locator("path")).to_have_count(2)
