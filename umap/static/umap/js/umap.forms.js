@@ -941,7 +941,11 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
     if (!this.container.querySelector(`input[type="radio"][value="${value}"]`)) {
       value = this.options.default !== undefined ? this.options.default : this.default
     }
-    this.container.querySelector(`input[type="radio"][value="${value}"]`).checked = true
+    const choices = this.getChoices().map(([value, label]) => value)
+    if (choices.includes(value)) {
+      this.container.querySelector(`input[type="radio"][value="${value}"]`).checked =
+        true
+    }
   },
 
   value: function () {

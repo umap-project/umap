@@ -214,14 +214,16 @@ U.Map = L.Map.extend({
       if (L.Util.queryString('share')) {
         this.share.open()
       } else if (this.options.onLoadPanel === 'databrowser') {
+        this.panel.setDefaultMode('expanded')
         this.openBrowser('data')
       } else if (this.options.onLoadPanel === 'datalayers') {
+        this.panel.setDefaultMode('condensed')
         this.openBrowser('layers')
       } else if (this.options.onLoadPanel === 'datafilters') {
-        this.panel.mode = 'expanded'
+        this.panel.setDefaultMode('expanded')
         this.openBrowser('filters')
       } else if (this.options.onLoadPanel === 'caption') {
-        this.panel.mode = 'condensed'
+        this.panel.setDefaultMode('condensed')
         this.openCaption()
       }
       if (L.Util.queryString('edit')) {

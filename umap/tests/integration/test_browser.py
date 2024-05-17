@@ -1,3 +1,4 @@
+import re
 from copy import deepcopy
 from time import sleep
 
@@ -63,8 +64,9 @@ def bootstrap(map, live_server):
 
 def test_data_browser_should_be_open(live_server, page, bootstrap, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    el = page.locator(".umap-browser")
-    expect(el).to_be_visible()
+    panel = page.locator(".panel.left.on")
+    expect(panel).to_have_class(re.compile(".*expanded.*"))
+    expect(panel.locator(".umap-browser")).to_be_visible()
     expect(page.get_by_text("one point in france")).to_be_visible()
     expect(page.get_by_text("one line in new zeland")).to_be_visible()
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()

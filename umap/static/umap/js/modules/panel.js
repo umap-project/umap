@@ -6,7 +6,9 @@ export class Panel {
     this.parent = map._controlContainer
     this.map = map
     this.container = DomUtil.create('div', '', this.parent)
-    this.mode = 'condensed'
+    // This will be set once according to the panel configurated at load
+    // or by using panels as popups
+    this.mode = null
     this.classname = 'left'
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
@@ -14,8 +16,12 @@ export class Panel {
     DomEvent.on(this.container, 'MozMousePixelScroll', DomEvent.stopPropagation)
   }
 
+  setDefaultMode(mode) {
+    if (!this.mode) this.mode = mode
+  }
+
   open({ content, className, actions = [] } = {}) {
-    this.container.className = `with-transition panel ${this.classname} ${this.mode}`
+    this.container.className = `with-transition panel ${this.classname} ${this.mode || ''}`
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'toolbox', this.container)
     const body = DomUtil.create('div', 'body', this.container)
@@ -40,14 +46,14 @@ export class Panel {
   }
 
   resize() {
-    if (this.mode === 'expanded') {
-      this.mode = 'condensed'
-      this.container.classList.remove('expanded')
-      this.container.classList.add('condensed')
-    } else {
+    if (this.mode === 'condensed') {
       this.mode = 'expanded'
       this.container.classList.remove('condensed')
       this.container.classList.add('expanded')
+    } else {
+      this.mode = 'condensed'
+      this.container.classList.remove('expanded')
+      this.container.classList.add('condensed')
     }
   }
 
