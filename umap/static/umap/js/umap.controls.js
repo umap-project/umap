@@ -1038,8 +1038,17 @@ U.Locate = L.Control.Locate.extend({
   _activate: function () {
     this._map = this.map
     L.Control.Locate.prototype._activate.call(this)
-    this._map = null
   },
+
+  remove: function () {
+    // Prevent to call remove if the control is not really added to the map
+    // This occurs because we do create the control and call its activate
+    // method before adding the control button itself to the map, in the
+    // case where the map defaultView is set to "location"
+    if (!this._container || !this._container.parentNode) return
+    return L.Control.Locate.prototype.remove.call(this)
+  },
+
 })
 
 U.Search = L.PhotonSearch.extend({
