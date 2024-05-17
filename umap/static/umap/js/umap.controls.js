@@ -607,7 +607,6 @@ U.DataLayer.include({
           if (!this.isVisible()) return
           if (!confirm(L._('Are you sure you want to delete this layer?'))) return
           this._delete()
-          this.map.editPanel.close()
         },
         this
       )
@@ -624,6 +623,13 @@ U.DataLayer.include({
 
   getHidableClass: function () {
     return `show_with_datalayer_${L.stamp(this)}`
+  },
+
+  propagateDelete: function () {
+    const els = this.getHidableElements()
+    for (const el of els) {
+      L.DomUtil.remove(el)
+    }
   },
 
   propagateRemote: function () {
@@ -653,6 +659,7 @@ U.DataLayer.include({
 U.DataLayer.addInitHook(function () {
   this.on('hide', this.propagateHide)
   this.on('show', this.propagateShow)
+  this.on('erase', this.propagateDelete)
   if (this.isVisible()) this.propagateShow()
 })
 

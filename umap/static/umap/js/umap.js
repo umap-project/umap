@@ -475,6 +475,7 @@ U.Map = L.Map.extend({
 
   onDataLayersChanged: function () {
     if (this.browser) this.browser.update()
+    this.caption.refresh()
   },
 
   ensurePanesOrder: function () {
