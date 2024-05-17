@@ -390,17 +390,10 @@ U.Map = L.Map.extend({
   },
 
   renderControls: function () {
-    L.DomUtil.classIf(
-      document.body,
-      'umap-caption-bar-enabled',
-      this.options.captionBar ||
-        (this.options.slideshow && this.options.slideshow.active)
-    )
-    L.DomUtil.classIf(
-      document.body,
-      'umap-slideshow-enabled',
-      this.options.slideshow && this.options.slideshow.active
-    )
+    const hasSlideshow = Boolean(this.options.slideshow && this.options.slideshow.active)
+    const barEnabled = this.options.captionBar || hasSlideshow
+    document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
+    document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
     for (const control of Object.values(this._controls)) {
       this.removeControl(control)
     }
@@ -968,7 +961,7 @@ U.Map = L.Map.extend({
   },
 
   checkDirty: function () {
-    L.DomUtil.classIf(this._container, 'umap-is-dirty', this.isDirty)
+    this._container.classList.toggle('umap-is-dirty', this.isDirty)
   },
 
   addDirtyDatalayer: function (datalayer) {
