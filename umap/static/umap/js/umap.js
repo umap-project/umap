@@ -511,11 +511,11 @@ U.Map = L.Map.extend({
 
   initShortcuts: function () {
     const globalShortcuts = function (e) {
-      const key = e.keyCode,
-        modifierKey = e.ctrlKey || e.metaKey
+      const key = e.keyCode
+      const hasModifier = (e.ctrlKey || e.metaKey) && !e.shiftKey
 
       /* Generic shortcuts */
-      if (key === U.Keys.F && modifierKey) {
+      if (key === U.Keys.F && hasModifier) {
         L.DomEvent.stop(e)
         this.search()
       } else if (e.keyCode === U.Keys.ESC) {
@@ -531,44 +531,44 @@ U.Map = L.Map.extend({
       if (!this.hasEditMode()) return
 
       /* Edit mode only shortcuts */
-      if (key === U.Keys.E && modifierKey && !this.editEnabled) {
+      if (key === U.Keys.E && hasModifier && !this.editEnabled) {
         L.DomEvent.stop(e)
         this.enableEdit()
-      } else if (key === U.Keys.E && modifierKey && this.editEnabled && !this.isDirty) {
+      } else if (key === U.Keys.E && hasModifier && this.editEnabled && !this.isDirty) {
         L.DomEvent.stop(e)
         this.disableEdit()
       }
-      if (key === U.Keys.S && modifierKey) {
+      if (key === U.Keys.S && hasModifier) {
         L.DomEvent.stop(e)
         if (this.isDirty) {
           this.save()
         }
       }
-      if (key === U.Keys.Z && modifierKey && this.isDirty) {
+      if (key === U.Keys.Z && hasModifier && this.isDirty) {
         L.DomEvent.stop(e)
         this.askForReset()
       }
-      if (key === U.Keys.M && modifierKey && this.editEnabled) {
+      if (key === U.Keys.M && hasModifier && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startMarker()
       }
-      if (key === U.Keys.P && modifierKey && this.editEnabled) {
+      if (key === U.Keys.P && hasModifier && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startPolygon()
       }
-      if (key === U.Keys.L && modifierKey && this.editEnabled) {
+      if (key === U.Keys.L && hasModifier && this.editEnabled) {
         L.DomEvent.stop(e)
         this.editTools.startPolyline()
       }
-      if (key === U.Keys.I && modifierKey && this.editEnabled) {
+      if (key === U.Keys.I && hasModifier && this.editEnabled) {
         L.DomEvent.stop(e)
         this.importer.open()
       }
-      if (key === U.Keys.O && modifierKey && this.editEnabled) {
+      if (key === U.Keys.O && hasModifier && this.editEnabled) {
         L.DomEvent.stop(e)
         this.importer.openFiles()
       }
-      if (key === U.Keys.H && modifierKey && this.editEnabled) {
+      if (key === U.Keys.H && hasModifier && this.editEnabled) {
         L.DomEvent.stop(e)
         this.help.show('edit')
       }
