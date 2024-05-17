@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.3.1 - 2024-05-17
+
+## Bug fixes
+* display all layers in caption by @yohanboniface in #1821
+* do not autoclose panel blindly after map save by @yohanboniface in #1833
+* do not consider shortcuts if shift is also pressed by @yohanboniface in #1834
+* do not close blindly editPanel when deleting a layer by @yohanboniface in #1832
+* error when clicking on the geolocate button by @yohanboniface in #1823
+* use accent color for switch and multichoices on dark background by @yohanboniface in #1822
+* only set panel mode once, and then keep user choice by @yohanboniface in #1829
+* always display data in browser unless in "layers" mode by @yohanboniface in #1837
+
+## Internal changes
+* chore: replace DomUtil.classIf by classList.toggle by @yohanboniface in #1835
+
+## Documentation
+* Tutorials review and improvements by @davidbgk in #1810
+* Expanded docker.md documentation by @CampaniaGuy in #1802
+
+
 ## 2.3.0 - 2024-05-09
 
 ### New features
