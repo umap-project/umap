@@ -162,11 +162,6 @@ L.DomUtil.createCopiableInput = (parent, label, value) => {
   return input
 }
 
-L.DomUtil.classIf = (el, className, bool) => {
-  if (bool) L.DomUtil.addClass(el, className)
-  else L.DomUtil.removeClass(el, className)
-}
-
 L.DomUtil.element = ({ tagName, parent, ...attrs }) => {
   const el = document.createElement(tagName)
   if (attrs.innerHTML) {

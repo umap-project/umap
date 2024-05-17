@@ -614,8 +614,8 @@ U.DataLayer.include({
     }
     L.DomEvent.on(toggle, 'click', this.toggle, this)
     L.DomEvent.on(zoomTo, 'click', this.zoomTo, this)
-    L.DomUtil.addClass(container, this.getHidableClass())
-    L.DomUtil.classIf(container, 'off', !this.isVisible())
+    container.classList.add(this.getHidableClass())
+    container.classList.toggle('off', !this.isVisible())
   },
 
   getHidableElements: function () {
@@ -628,8 +628,8 @@ U.DataLayer.include({
 
   propagateRemote: function () {
     const els = this.getHidableElements()
-    for (let i = 0; i < els.length; i++) {
-      L.DomUtil.classIf(els[i], 'remotelayer', this.isRemoteLayer())
+    for (const el of els) {
+      el.classList.toggle('remotelayer', this.isRemoteLayer())
     }
   },
 
@@ -820,7 +820,7 @@ const ControlsMixin = {
       L.DomUtil.createIcon(row, 'icon-drag', L._('Drag to reorder'))
       datalayer.renderToolbox(row)
       const title = L.DomUtil.add('span', '', row, datalayer.options.name)
-      L.DomUtil.classIf(row, 'off', !datalayer.isVisible())
+      row.classList.toggle('off', !datalayer.isVisible())
       title.textContent = datalayer.options.name
       row.dataset.id = L.stamp(datalayer)
     })

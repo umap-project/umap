@@ -87,7 +87,7 @@ export default class Browser {
     const parent = DomUtil.get(this.datalayerId(datalayer))
     // Panel is not open
     if (!parent) return
-    DomUtil.classIf(parent, 'off', !datalayer.isVisible())
+    parent.classList.toggle('off', !datalayer.isVisible())
     const container = parent.querySelector('ul')
     const headline = parent.querySelector('h5')
     const toggleList = () => parent.classList.toggle('show-list')

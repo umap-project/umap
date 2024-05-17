@@ -863,7 +863,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   isRemoteLayer: function () {
-    return !!(
+    return Boolean(
       this.options.remoteData &&
       this.options.remoteData.url &&
       this.options.remoteData.format
@@ -1528,7 +1528,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   isVisible: function () {
-    return this.layer && this.map.hasLayer(this.layer)
+    return Boolean(this.layer && this.map.hasLayer(this.layer))
   },
 
   getFeatureByIndex: function (index) {
