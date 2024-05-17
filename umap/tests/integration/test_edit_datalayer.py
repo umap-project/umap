@@ -183,3 +183,32 @@ def test_can_edit_layer_on_ctrl_shift_click(live_server, openmap, page, datalaye
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
     expect(page.get_by_text("Layer properties")).to_be_visible()
+
+
+def test_deleting_datalayer_should_remove_from_browser_and_layers_list(
+    live_server, openmap, datalayer, page
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    panel = page.locator(".panel.left")
+    edit_panel = page.locator(".panel.right")
+    page.get_by_title("See layers").click()
+    page.get_by_role("link", name="Manage layers").click()
+    expect(panel.get_by_text("test datalayer")).to_be_visible()
+    expect(edit_panel.get_by_text("test datalayer")).to_be_visible()
+    page.once("dialog", lambda dialog: dialog.accept())
+    page.locator(".panel.right").get_by_title("Delete layer").click()
+    expect(panel.get_by_text("test datalayer")).to_be_hidden()
+    expect(edit_panel.get_by_text("test datalayer")).to_be_hidden()
+
+
+def test_deleting_datalayer_should_remove_from_caption(
+    live_server, openmap, datalayer, page
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    panel = page.locator(".panel.left")
+    page.get_by_role("button", name="About").click()
+    page.get_by_role("link", name="Manage layers").click()
+    expect(panel.get_by_text("test datalayer")).to_be_visible()
+    page.once("dialog", lambda dialog: dialog.accept())
+    page.locator(".panel.right").get_by_title("Delete layer").click()
+    expect(panel.get_by_text("test datalayer")).to_be_hidden()

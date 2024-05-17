@@ -7,6 +7,15 @@ export default class Caption {
     this.map = map
   }
 
+  isOpen() {
+    return Boolean(document.querySelector('.on .umap-caption'))
+  }
+
+  refresh() {
+    if (!this.isOpen()) return
+    this.open()
+  }
+
   open() {
     const container = DomUtil.create('div', 'umap-caption')
     DomUtil.createTitle(container, this.map.options.name, 'icon-caption')
