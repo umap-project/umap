@@ -72,14 +72,6 @@ def test_data_browser_should_be_open(live_server, page, bootstrap, map):
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()
 
 
-def test_can_force_panel_mode(live_server, page, bootstrap, map):
-    map.settings["properties"]["defaultPanelMode"] = "condensed"
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    panel = page.locator(".panel.left.on")
-    expect(panel).to_have_class(re.compile(".*condensed.*"))
-
-
 def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()

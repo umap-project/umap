@@ -25,12 +25,3 @@ def test_caption(live_server, page, map):
         panel.locator(".datalayer-legend .off").get_by_text(non_loaded.name)
     ).to_be_visible()
     expect(panel.locator(".datalayer-legend").get_by_text(hidden.name)).to_be_hidden()
-
-
-def test_can_force_panel_mode(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "caption"
-    map.settings["properties"]["defaultPanelMode"] = "expanded"
-    map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    panel = page.locator(".panel.left.on")
-    expect(panel).to_have_class(re.compile(".*expanded.*"))

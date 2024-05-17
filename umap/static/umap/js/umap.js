@@ -56,7 +56,7 @@ U.Map = L.Map.extend({
     if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
     this.urls = new U.URLs(this.options.urls)
 
-    this.panel = new U.Panel(this, this.options.defaultPanelMode)
+    this.panel = new U.Panel(this)
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
@@ -1174,7 +1174,6 @@ U.Map = L.Map.extend({
       'options.scaleControl',
       'options.onLoadPanel',
       'options.defaultView',
-      'options.defaultPanelMode',
       'options.displayPopupFooter',
       'options.captionBar',
       'options.captionMenus',

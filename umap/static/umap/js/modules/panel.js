@@ -2,11 +2,13 @@ import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 
 export class Panel {
-  constructor(map, mode = null) {
+  constructor(map) {
     this.parent = map._controlContainer
     this.map = map
     this.container = DomUtil.create('div', '', this.parent)
-    this.mode = mode
+    // This will be set once according to the panel configurated at load
+    // or by using panels as popups
+    this.mode = null
     this.classname = 'left'
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.

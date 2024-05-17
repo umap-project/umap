@@ -52,14 +52,6 @@ export const SCHEMA = {
     label: translate('Display the data layers control'),
     default: true,
   },
-  defaultPanelMode: {
-    type: String,
-    label: translate('Default panel mode'),
-    choices: [
-      ['condensed', translate('Condensed')],
-      ['expanded', translate('Expanded')],
-    ],
-  },
   defaultView: {
     type: String,
     impacts: [], // no need to update the ui, only useful when loading the map
