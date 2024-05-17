@@ -1063,7 +1063,6 @@ U.Map = L.Map.extend({
       else window.location = data.url
       alert.content = data.info || alert.content
       this.once('saved', () => this.ui.alert(alert))
-      this.editPanel.close()
       this.permissions.save()
     }
   },
