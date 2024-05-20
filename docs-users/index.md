@@ -2,11 +2,11 @@
 
 uMap lets you create maps with OpenStreetMap layers in a minute, and embed them in your site.
 
-- 📺 Check out [videos](videos.md).
+- 🤓 Check out [videos](videos.md) and [articles](articles.md).
 - 🤔 Explore [questions/answers from FAQ](support/faq.md).
 - 🤕 Browse [potential errors and their details](support/errors.md).
 
-!!! info "User docs"
+!!! info "Are you a developer?"
 
     This documentation is intended for users.
 
