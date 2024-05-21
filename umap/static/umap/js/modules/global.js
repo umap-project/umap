@@ -9,6 +9,7 @@ import Tooltip from './ui/tooltip.js'
 import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
 import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './request.js'
+import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
 import Orderable from './orderable.js'
 
 // Import modules and export them to the global scope.
@@ -33,4 +34,6 @@ window.U = {
   SCHEMA,
   Orderable,
   Caption,
+  AjaxAutocomplete,
+  AjaxAutocompleteMultiple,
 }
