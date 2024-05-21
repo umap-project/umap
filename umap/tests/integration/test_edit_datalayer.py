@@ -191,7 +191,7 @@ def test_deleting_datalayer_should_remove_from_browser_and_layers_list(
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     panel = page.locator(".panel.left")
     edit_panel = page.locator(".panel.right")
-    page.get_by_title("See layers").click()
+    page.get_by_title("Open browser").click()
     page.get_by_role("link", name="Manage layers").click()
     expect(panel.get_by_text("test datalayer")).to_be_visible()
     expect(edit_panel.get_by_text("test datalayer")).to_be_visible()

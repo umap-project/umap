@@ -1611,7 +1611,7 @@ U.Map = L.Map.extend({
       L.DomUtil.createButton(
         'umap-about-link flat',
         container,
-        L._('About'),
+        L._('Open caption'),
         this.openCaption,
         this
       )
@@ -1762,23 +1762,23 @@ U.Map = L.Map.extend({
     items.push(
       '-',
       {
-        text: L._('Browser: layers'),
+        text: L._('Open browser'),
         callback: () => this.openBrowser('layers'),
       },
       {
-        text: L._('Browser: data'),
+        text: L._('Browse data'),
         callback: () => this.openBrowser('data'),
       }
     )
     if (this.options.facetKey) {
       items.push({
-        text: L._('Browser: filters'),
+        text: L._('Filter data'),
         callback: () => this.openBrowser('filters'),
       })
     }
     items.push(
       {
-        text: L._('About'),
+        text: L._('Open caption'),
         callback: this.openCaption,
       },
       {
