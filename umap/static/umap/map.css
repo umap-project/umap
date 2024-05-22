@@ -99,10 +99,10 @@
     box-shadow: 0 0 4px 0 black inset;
 }
 .leaflet-control-star [type="button"] {
-    background-position: -108px -144px;
+    background-position: -144px -144px;
 }
 .leaflet-control-star.starred [type="button"] {
-    background-position: -144px -144px;
+    background-position: -108px -144px;
 }
 .leaflet-control-search [type="button"] {
     background-position: -36px -108px;
