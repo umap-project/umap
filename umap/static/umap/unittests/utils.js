@@ -192,6 +192,24 @@ describe('Utils', function () {
       )
     })
 
+    it('should not escape video tag with dedicated attributes', function () {
+      assert.equal(
+        Utils.escapeHTML(
+          '<video width="100%" height="281" controls><source type="video/mp4" src="movie.mp4"></video>'
+        ),
+        '<video controls="" height="281" width="100%"><source src="movie.mp4" type="video/mp4"></video>'
+      )
+    })
+
+    it('should not escape audio tag with dedicated attributes', function () {
+      assert.equal(
+        Utils.escapeHTML(
+          '<audio controls><source type="audio/ogg" src="horse.ogg"></audio>'
+        ),
+        '<audio controls=""><source src="horse.ogg" type="audio/ogg"></audio>'
+      )
+    })
+
     it('should not fail with int value', function () {
       assert.equal(Utils.escapeHTML(25), '25')
     })
@@ -461,13 +479,12 @@ describe('Utils', function () {
   })
 
   describe('#normalize()', function () {
-    it('should remove accents',
-      function () {
-        // French é
-        assert.equal(Utils.normalize('aéroport'), 'aeroport')
-        // American é
-        assert.equal(Utils.normalize('aéroport'), 'aeroport')
-      })
+    it('should remove accents', function () {
+      // French é
+      assert.equal(Utils.normalize('aéroport'), 'aeroport')
+      // American é
+      assert.equal(Utils.normalize('aéroport'), 'aeroport')
+    })
   })
 
   describe('#sortFeatures()', function () {
@@ -530,17 +547,17 @@ describe('Utils', function () {
     })
   })
 
-  describe("#copyJSON", function () {
+  describe('#copyJSON', function () {
     it('should actually copy the JSON', function () {
-      let originalJSON = { "some": "json" }
+      let originalJSON = { some: 'json' }
       let returned = Utils.CopyJSON(originalJSON)
 
       // Change the original JSON
-      originalJSON["anotherKey"] = "value"
+      originalJSON['anotherKey'] = 'value'
 
       // ensure the two aren't the same object
       assert.notEqual(returned, originalJSON)
-      assert.deepEqual(returned, { "some": "json" })
+      assert.deepEqual(returned, { some: 'json' })
     })
   })
 
@@ -599,19 +616,34 @@ describe('Utils', function () {
   })
   describe('parseNaiveDate', () => {
     it('should parse a date', () => {
-      assert.equal(Utils.parseNaiveDate("2024/03/04").toISOString(), "2024-03-04T00:00:00.000Z")
+      assert.equal(
+        Utils.parseNaiveDate('2024/03/04').toISOString(),
+        '2024-03-04T00:00:00.000Z'
+      )
     })
     it('should parse a datetime', () => {
-      assert.equal(Utils.parseNaiveDate("2024/03/04 12:13:14").toISOString(), "2024-03-04T00:00:00.000Z")
+      assert.equal(
+        Utils.parseNaiveDate('2024/03/04 12:13:14').toISOString(),
+        '2024-03-04T00:00:00.000Z'
+      )
     })
     it('should parse an iso datetime', () => {
-      assert.equal(Utils.parseNaiveDate("2024-03-04T00:00:00.000Z").toISOString(), "2024-03-04T00:00:00.000Z")
+      assert.equal(
+        Utils.parseNaiveDate('2024-03-04T00:00:00.000Z').toISOString(),
+        '2024-03-04T00:00:00.000Z'
+      )
     })
     it('should parse a GMT time', () => {
-      assert.equal(Utils.parseNaiveDate("04 Mar 2024 00:12:00 GMT").toISOString(), "2024-03-04T00:00:00.000Z")
+      assert.equal(
+        Utils.parseNaiveDate('04 Mar 2024 00:12:00 GMT').toISOString(),
+        '2024-03-04T00:00:00.000Z'
+      )
     })
     it('should parse a GMT time with explicit timezone', () => {
-      assert.equal(Utils.parseNaiveDate("Thu, 04 Mar 2024 00:00:00 GMT+0300").toISOString(), "2024-03-03T00:00:00.000Z")
+      assert.equal(
+        Utils.parseNaiveDate('Thu, 04 Mar 2024 00:00:00 GMT+0300').toISOString(),
+        '2024-03-03T00:00:00.000Z'
+      )
     })
   })
 })
