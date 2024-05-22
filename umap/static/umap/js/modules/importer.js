@@ -37,7 +37,17 @@ export default class Importer {
       parent: this.container,
       placeholder: translate('Paste your data here'),
     })
-    this.typeLabel = DomUtil.add(
+    DomUtil.element({
+      tagName: 'h4',
+      parent: this.container,
+      textContent: translate('Import from:'),
+    })
+    const plugins = L.DomUtil.element({tagName: 'div', className: 'umap-multiplechoice by2', parent: this.container})
+    for (const plugin of this.map.plugins) {
+      const {name, callback} = plugin.addImporter()
+      L.DomUtil.createButton('flat', plugins, name, () => callback.bind(plugin)(this))
+    }
+    this.typeLabel = L.DomUtil.add(
       'label',
       '',
       this.container,

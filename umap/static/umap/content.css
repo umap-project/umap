@@ -248,7 +248,7 @@ input[type="submit"],
 ul.umap-autocomplete {
     position: absolute;
     background-color: white;
-    z-index: 1010;
+    z-index: 10100;
     box-shadow: 0 4px 9px #999999;
 }
 .umap-autocomplete li {
