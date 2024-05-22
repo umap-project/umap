@@ -4,6 +4,7 @@ import Facets from './facets.js'
 import Caption from './caption.js'
 import { Panel, EditPanel, FullPanel } from './ui/panel.js'
 import Alert from './ui/alert.js'
+import Dialog from './ui/dialog.js'
 import Tooltip from './ui/tooltip.js'
 import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
@@ -24,6 +25,7 @@ window.U = {
   Facets,
   Panel,
   Alert,
+  Dialog,
   Tooltip,
   EditPanel,
   FullPanel,

@@ -28,7 +28,7 @@ def test_owner_can_delete_map_after_confirmation(map, live_server, login):
 def test_dashboard_map_preview(map, live_server, datalayer, login):
     page = login(map.owner)
     page.goto(f"{live_server.url}/en/me")
-    dialog = page.locator("dialog")
+    dialog = page.get_by_role("dialog")
     expect(dialog).to_be_hidden()
     button = page.get_by_role("button", name="Open preview")
     expect(button).to_be_visible()

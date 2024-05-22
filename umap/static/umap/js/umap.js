@@ -59,6 +59,7 @@ U.Map = L.Map.extend({
     this.panel = new U.Panel(this)
     this.alert = new U.Alert(this._controlContainer)
     this.tooltip = new U.Tooltip(this._controlContainer)
+    this.dialog = new U.Dialog(this._controlContainer)
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
@@ -525,8 +526,8 @@ U.Map = L.Map.extend({
         L.DomEvent.stop(e)
         this.search()
       } else if (e.keyCode === U.Keys.ESC) {
-        if (this.help.visible()) {
-          this.help.hide()
+        if (this.dialog.visible) {
+          this.dialog.close()
         } else {
           this.panel.close()
           this.editPanel?.close()

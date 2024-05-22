@@ -346,22 +346,6 @@ U.Help = L.Class.extend({
 
   initialize: function (map) {
     this.map = map
-    this.box = L.DomUtil.create(
-      'div',
-      'umap-help-box with-transition dark',
-      document.body
-    )
-    const closeButton = L.DomUtil.createButton(
-      'umap-close-link',
-      this.box,
-      '',
-      this.hide,
-      this
-    )
-    L.DomUtil.add('i', 'umap-close-icon', closeButton)
-    const label = L.DomUtil.create('span', '', closeButton)
-    label.title = label.textContent = L._('Close')
-    this.content = L.DomUtil.create('div', 'umap-help-content', this.box)
     this.isMacOS = /mac/i.test(
       // eslint-disable-next-line compat/compat -- Fallback available.
       navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform
@@ -377,20 +361,12 @@ U.Help = L.Class.extend({
   },
 
   show: function () {
-    this.content.innerHTML = ''
+    const container = L.DomUtil.add('div')
     for (let i = 0, name; i < arguments.length; i++) {
       name = arguments[i]
-      L.DomUtil.add('div', 'umap-help-entry', this.content, this.resolve(name))
+      L.DomUtil.add('div', 'umap-help-entry', container, this.resolve(name))
     }
-    L.DomUtil.addClass(document.body, 'umap-help-on')
-  },
-
-  hide: function () {
-    L.DomUtil.removeClass(document.body, 'umap-help-on')
-  },
-
-  visible: function () {
-    return L.DomUtil.hasClass(document.body, 'umap-help-on')
+    this.map.dialog.open({ content: container, className: 'dark' })
   },
 
   resolve: function (name) {
@@ -424,16 +400,15 @@ U.Help = L.Class.extend({
   },
 
   edit: function () {
-    const container = L.DomUtil.create('div', ''),
-      self = this,
-      title = L.DomUtil.create('h3', '', container),
-      actionsContainer = L.DomUtil.create('ul', 'umap-edit-actions', container)
+    const container = L.DomUtil.create('div', '')
+    const title = L.DomUtil.create('h3', '', container)
+    const actionsContainer = L.DomUtil.create('ul', 'umap-edit-actions', container)
     const addAction = (action) => {
       const actionContainer = L.DomUtil.add('li', '', actionsContainer)
       L.DomUtil.add('i', action.options.className, actionContainer),
         L.DomUtil.add('span', '', actionContainer, action.options.tooltip)
       L.DomEvent.on(actionContainer, 'click', action.addHooks, action)
-      L.DomEvent.on(actionContainer, 'click', self.hide, self)
+      L.DomEvent.on(actionContainer, 'click', this.map.dialog.close, this.map.dialog)
     }
     title.textContent = L._('Where do we go from here?')
     for (const id in this.map.helpMenuActions) {

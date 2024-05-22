@@ -12,7 +12,7 @@
     data-url="https://umap.openstreetmap.fr/fr/map/new/"
     data-alt="Panneau d’aide au formatage."
     data-caption="Panneau d’aide au formatage."
-    data-selector=".umap-help-box"
+    data-selector=".umap-dialog"
     data-width="510"
     data-height="326"
     data-padding="5"
