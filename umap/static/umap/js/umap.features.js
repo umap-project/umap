@@ -878,9 +878,9 @@ U.PathMixin = {
 
   _onMouseOver: function () {
     if (this.map.measureTools && this.map.measureTools.enabled()) {
-      this.map.ui.tooltip({ content: this.getMeasure(), anchor: this })
+      this.map.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this.map.editEnabled && !this.map.editedFeature) {
-      this.map.ui.tooltip({ content: L._('Click to edit'), anchor: this })
+      this.map.tooltip.open({ content: L._('Click to edit'), anchor: this })
     }
   },
 

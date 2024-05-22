@@ -58,11 +58,11 @@ U.Map = L.Map.extend({
 
     this.panel = new U.Panel(this)
     this.alert = new U.Alert(this._controlContainer)
+    this.tooltip = new U.Tooltip(this._controlContainer)
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
     }
-    this.ui = new U.UI(this._container)
     L.DomEvent.on(document.body, 'dataloading', (e) => this.fire('dataloading', e))
     L.DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
     this.server = new U.ServerRequest(this.alert)
