@@ -84,11 +84,21 @@ export function escapeHTML(s) {
       'div',
       'iframe',
       'img',
+      'audio',
+      'video',
+      'source',
       'br',
       'span',
     ],
-    ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'frameborder', 'scrolling'],
-    ALLOWED_ATTR: ['href', 'src', 'width', 'height', 'style', 'dir', 'title'],
+    ADD_ATTR: [
+      'target',
+      'allow',
+      'allowfullscreen',
+      'frameborder',
+      'scrolling',
+      'controls',
+    ],
+    ALLOWED_ATTR: ['href', 'src', 'width', 'height', 'style', 'dir', 'title', 'type'],
     // Added: `geo:` URL scheme as defined in RFC5870:
     // https://www.rfc-editor.org/rfc/rfc5870.html
     // The base RegExp comes from:
