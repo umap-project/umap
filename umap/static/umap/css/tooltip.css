@@ -1,0 +1,59 @@
+#umap-tooltip-container {
+    line-height: 20px;
+    padding: 5px 10px;
+    width: auto;
+    position: absolute;
+    box-shadow: 0 1px 7px #999999;
+    display: none;
+    background-color: rgba(40, 40, 40, 0.8);
+    color: #eeeeec;
+    font-size: 0.8em;
+    border-radius: 2px;
+    z-index: 1011;
+    font-weight: normal;
+    max-width: 300px;
+}
+.umap-tooltip #umap-tooltip-container {
+    display: block;
+}
+#umap-tooltip-container.tooltip-top:after {
+    top: 100%;
+    left: calc(50% - 11px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: rgba(30, 30, 30, 0.8);
+    border-width: 11px;
+    margin-left: calc(-50% + 21px);
+}
+#umap-tooltip-container.tooltip-bottom:before {
+    top: -22px;
+    left: calc(50% - 11px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: rgba(30, 30, 30, 0.7);
+    border-width: 11px;
+    transform: rotate(180deg);
+}
+#umap-tooltip-container.tooltip.tooltip-left:after {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #333;
+    border-width: 11px;
+    margin-top: -10px;
+}
+

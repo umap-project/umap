@@ -164,7 +164,7 @@ def test_alert_message_after_create(
     page.goto(f"{live_server.url}/en/map/new")
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    alert = page.locator(".umap-alert")
+    alert = page.locator("#umap-alert-container")
     expect(alert).to_be_hidden()
     with page.expect_response(re.compile(r".*/map/create/")):
         save.click()
@@ -194,7 +194,7 @@ def test_alert_message_after_create(
 
 def test_email_sending_error_are_catched(tilelayer, page, live_server):
     page.goto(f"{live_server.url}/en/map/new")
-    alert = page.locator(".umap-alert")
+    alert = page.locator("#umap-alert-container")
     with page.expect_response(re.compile(r".*/map/create/")):
         page.get_by_role("button", name="Save").click()
     alert.get_by_placeholder("Email").fill("foo@bar.com")
@@ -214,7 +214,7 @@ def test_alert_message_after_create_show_link_even_without_mail(
     page.goto(f"{live_server.url}/en/map/new")
     with page.expect_response(re.compile(r".*/map/create/")):
         page.get_by_role("button", name="Save").click()
-    alert = page.locator(".umap-alert")
+    alert = page.locator("#umap-alert-container")
     expect(alert).to_be_visible()
     expect(
         alert.get_by_text(

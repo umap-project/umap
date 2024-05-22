@@ -865,8 +865,8 @@ U.DataLayer = L.Evented.extend({
   isRemoteLayer: function () {
     return Boolean(
       this.options.remoteData &&
-      this.options.remoteData.url &&
-      this.options.remoteData.format
+        this.options.remoteData.url &&
+        this.options.remoteData.format
     )
   },
 
@@ -965,7 +965,7 @@ U.DataLayer = L.Evented.extend({
                 message: err[0].message,
               })
             }
-            this.map.ui.alert({ content: message, level: 'error', duration: 10000 })
+            this.map.alert.open({ content: message, level: 'error', duration: 10000 })
             console.error(err)
           }
           if (result && result.features.length) {
@@ -992,7 +992,7 @@ U.DataLayer = L.Evented.extend({
         const gj = JSON.parse(c)
         callback(gj)
       } catch (err) {
-        this.map.ui.alert({ content: `Invalid JSON file: ${err}` })
+        this.map.alert.open({ content: `Invalid JSON file: ${err}` })
         return
       }
     }
@@ -1050,7 +1050,7 @@ U.DataLayer = L.Evented.extend({
         return this.geojsonToFeatures(geometry.geometries)
 
       default:
-        this.map.ui.alert({
+        this.map.alert.open({
           content: L._('Skipping unknown geometry.type: {type}', {
             type: geometry.type || 'undefined',
           }),
@@ -1641,7 +1641,7 @@ U.DataLayer = L.Evented.extend({
             label: L._('Cancel'),
           },
         ]
-        this.map.ui.alert({
+        this.map.alert.open({
           content: msg,
           level: 'error',
           duration: 100000,

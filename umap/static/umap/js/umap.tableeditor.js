@@ -83,7 +83,7 @@ U.TableEditor = L.Class.extend({
 
   validateName: function (name) {
     if (name.indexOf('.') !== -1) {
-      this.datalayer.map.ui.alert({
+      this.datalayer.map.alert.open({
         content: L._('Invalide property name: {name}', { name: name }),
         level: 'error',
       })

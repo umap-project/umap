@@ -394,7 +394,7 @@ U.EditControl = L.Control.extend({
       enableEditing,
       'mouseover',
       function () {
-        map.ui.tooltip({
+        map.tooltip.open({
           content: map.help.displayLabel('TOGGLE_EDIT'),
           anchor: enableEditing,
           position: 'bottom',
@@ -693,7 +693,7 @@ const ControlsMixin = {
       nameButton,
       'mouseover',
       function () {
-        this.ui.tooltip({
+        this.tooltip.open({
           content: L._('Edit the title of the map'),
           anchor: nameButton,
           position: 'bottom',
@@ -714,7 +714,7 @@ const ControlsMixin = {
       shareStatusButton,
       'mouseover',
       function () {
-        this.ui.tooltip({
+        this.tooltip.open({
           content: L._('Update who can see and edit the map'),
           anchor: shareStatusButton,
           position: 'bottom',
@@ -763,7 +763,7 @@ const ControlsMixin = {
       controlEditCancel,
       'mouseover',
       function () {
-        this.ui.tooltip({
+        this.tooltip.open({
           content: this.help.displayLabel('CANCEL'),
           anchor: controlEditCancel,
           position: 'bottom',
@@ -784,7 +784,7 @@ const ControlsMixin = {
       controlEditDisable,
       'mouseover',
       function () {
-        this.ui.tooltip({
+        this.tooltip.open({
           content: this.help.displayLabel('PREVIEW'),
           anchor: controlEditDisable,
           position: 'bottom',
@@ -805,7 +805,7 @@ const ControlsMixin = {
       controlEditSave,
       'mouseover',
       function () {
-        this.ui.tooltip({
+        this.tooltip.open({
           content: this.help.displayLabel('SAVE'),
           anchor: controlEditSave,
           position: 'bottom',
@@ -1048,7 +1048,6 @@ U.Locate = L.Control.Locate.extend({
     if (!this._container || !this._container.parentNode) return
     return L.Control.Locate.prototype.remove.call(this)
   },
-
 })
 
 U.Search = L.PhotonSearch.extend({
@@ -1087,7 +1086,7 @@ U.Search = L.PhotonSearch.extend({
       if (latlng.isValid()) {
         this.reverse.doReverse(latlng)
       } else {
-        this.map.ui.alert({ content: 'Invalid latitude or longitude', mode: 'error' })
+        this.map.alert.open({ content: 'Invalid latitude or longitude', mode: 'error' })
       }
       return
     }
@@ -1250,7 +1249,7 @@ U.Editable = L.Editable.extend({
     L.Editable.prototype.initialize.call(this, map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     this.on('editable:drawing:end', (e) => {
-      this.closeTooltip()
+      this.map.tooltip.close()
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
@@ -1314,7 +1313,7 @@ U.Editable = L.Editable.extend({
 
   drawingTooltip: function (e) {
     if (e.layer instanceof L.Marker && e.type == 'editable:drawing:start') {
-      this.map.ui.tooltip({ content: L._('Click to add a marker') })
+      this.map.tooltip.open({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {
       // only continue with Polylines and Polygons
@@ -1357,7 +1356,7 @@ U.Editable = L.Editable.extend({
       }
     }
     if (content) {
-      this.map.ui.tooltip({ content: content })
+      this.map.tooltip.open({ content: content })
     }
   },
 

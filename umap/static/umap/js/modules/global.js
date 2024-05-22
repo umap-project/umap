@@ -2,7 +2,10 @@ import URLs from './urls.js'
 import Browser from './browser.js'
 import Facets from './facets.js'
 import Caption from './caption.js'
-import { Panel, EditPanel, FullPanel } from './panel.js'
+import { Panel, EditPanel, FullPanel } from './ui/panel.js'
+import Alert from './ui/alert.js'
+import Dialog from './ui/dialog.js'
+import Tooltip from './ui/tooltip.js'
 import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
 import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './request.js'
@@ -21,6 +24,9 @@ window.U = {
   Browser,
   Facets,
   Panel,
+  Alert,
+  Dialog,
+  Tooltip,
   EditPanel,
   FullPanel,
   Utils,

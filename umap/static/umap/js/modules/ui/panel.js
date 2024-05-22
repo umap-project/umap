@@ -1,5 +1,5 @@
-import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from './i18n.js'
+import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { translate } from '../i18n.js'
 
 export class Panel {
   constructor(map) {

@@ -390,24 +390,6 @@ ul.photon-autocomplete {
 /* ********************************* */
 /*     Help Lightbox                 */
 /* ********************************* */
-.umap-help-box {
-    z-index: 10001;
-    position: absolute;
-    margin: 0 calc(50% - 500px/2);
-    width: 500px;
-    max-width: 100vw;
-    padding: 40px 20px;
-    border: 1px solid #222;
-    background-color: var(--color-darkGray);
-    color: #efefef;
-    font-size: 0.8em;
-    visibility: hidden;
-    top: -100%;
-}
-.umap-help-box .umap-close-link {
-    float: right;
-    width: 100px;
-}
 .umap-help-button {
     display: inline-block;
     width: 16px;
@@ -426,10 +408,6 @@ ul.photon-autocomplete {
 .dark .umap-help-button {
     background-image: url('./img/16-white.svg');
  }
-.umap-help-on .umap-help-box {
-    visibility: visible;
-    top: 100px;
-}
 .umap-help-entry + .umap-help-entry {
     margin-top: 10px;
     border-top: 1px solid #aaa;

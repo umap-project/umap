@@ -78,7 +78,7 @@ L.FormBuilder.Element.include({
           info,
           'mouseover',
           function () {
-            this.builder.map.ui.tooltip({
+            this.builder.map.tooltip.open({
               anchor: info,
               content: this.options.helpTooltip,
               position: 'top',

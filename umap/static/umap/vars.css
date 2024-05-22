@@ -11,6 +11,7 @@
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);
+    --text-color: black;
 
     /* Buttons. */
     --button-primary-background: var(--color-waterMint);
@@ -29,4 +30,5 @@
 }
 .dark {
     --background-color: var(--color-darkGray);
+    --text-color: #efefef;
 }

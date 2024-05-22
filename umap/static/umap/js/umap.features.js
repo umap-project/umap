@@ -726,7 +726,7 @@ U.Marker = L.Marker.extend({
     const builder = new U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
         if (!this._latlng.isValid()) {
-          this.map.ui.alert({
+          this.map.alert.open({
             content: L._('Invalid latitude or longitude'),
             level: 'error',
           })
@@ -878,9 +878,9 @@ U.PathMixin = {
 
   _onMouseOver: function () {
     if (this.map.measureTools && this.map.measureTools.enabled()) {
-      this.map.ui.tooltip({ content: this.getMeasure(), anchor: this })
+      this.map.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this.map.editEnabled && !this.map.editedFeature) {
-      this.map.ui.tooltip({ content: L._('Click to edit'), anchor: this })
+      this.map.tooltip.open({ content: L._('Click to edit'), anchor: this })
     }
   },
 
@@ -928,7 +928,7 @@ U.PathMixin = {
     items.push({
       text: L._('Display measure'),
       callback: function () {
-        this.map.ui.alert({ content: this.getMeasure(), level: 'info' })
+        this.map.alert.open({ content: this.getMeasure(), level: 'info' })
       },
       context: this,
     })

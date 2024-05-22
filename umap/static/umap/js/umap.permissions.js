@@ -53,7 +53,7 @@ U.MapPermissions = L.Class.extend({
   edit: function () {
     if (this.map.options.editMode !== 'advanced') return
     if (!this.map.options.umap_id)
-      return this.map.ui.alert({
+      return this.map.alert.open({
         content: L._('Please save the map first'),
         level: 'info',
       })
@@ -139,7 +139,7 @@ U.MapPermissions = L.Class.extend({
     const [data, response, error] = await this.map.server.post(this.getAttachUrl())
     if (!error) {
       this.options.owner = this.map.options.user
-      this.map.ui.alert({
+      this.map.alert.open({
         content: L._('Map has been attached to your account'),
         level: 'info',
       })
