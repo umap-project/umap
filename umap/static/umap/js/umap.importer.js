@@ -161,7 +161,7 @@ U.Importer = L.Class.extend({
       }
     } else {
       if (!type)
-        return this.map.ui.alert({
+        return this.map.alert.open({
           content: L._('Please choose a format'),
           level: 'error',
         })
@@ -169,7 +169,7 @@ U.Importer = L.Class.extend({
         try {
           this.map.importRaw(this.rawInput.value, type)
         } catch (e) {
-          this.ui.alert({ content: L._('Invalid umap data'), level: 'error' })
+          this.alert.open({ content: L._('Invalid umap data'), level: 'error' })
           console.error(e)
         }
       } else {

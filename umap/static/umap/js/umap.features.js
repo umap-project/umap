@@ -726,7 +726,7 @@ U.Marker = L.Marker.extend({
     const builder = new U.FormBuilder(this, coordinatesOptions, {
       callback: function () {
         if (!this._latlng.isValid()) {
-          this.map.ui.alert({
+          this.map.alert.open({
             content: L._('Invalid latitude or longitude'),
             level: 'error',
           })
@@ -928,7 +928,7 @@ U.PathMixin = {
     items.push({
       text: L._('Display measure'),
       callback: function () {
-        this.map.ui.alert({ content: this.getMeasure(), level: 'info' })
+        this.map.alert.open({ content: this.getMeasure(), level: 'info' })
       },
       context: this,
     })

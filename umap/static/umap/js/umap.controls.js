@@ -1048,7 +1048,6 @@ U.Locate = L.Control.Locate.extend({
     if (!this._container || !this._container.parentNode) return
     return L.Control.Locate.prototype.remove.call(this)
   },
-
 })
 
 U.Search = L.PhotonSearch.extend({
@@ -1087,7 +1086,7 @@ U.Search = L.PhotonSearch.extend({
       if (latlng.isValid()) {
         this.reverse.doReverse(latlng)
       } else {
-        this.map.ui.alert({ content: 'Invalid latitude or longitude', mode: 'error' })
+        this.map.alert.open({ content: 'Invalid latitude or longitude', mode: 'error' })
       }
       return
     }

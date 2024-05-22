@@ -47,14 +47,18 @@ class BaseRequest {
 // In case of error, an alert is sent, but non 20X status are not handled
 // The consumer must check the response status by hand
 export class Request extends BaseRequest {
-  constructor(ui) {
+  constructor(alert) {
     super()
-    this.ui = ui
+    this.alert = alert
+  }
+
+  fire(name, params) {
+    document.body.dispatchEvent(new CustomEvent(name, params))
   }
 
   async _fetch(method, uri, headers, data) {
     const id = Math.random()
-    this.ui.fire('dataloading', { id: id })
+    this.fire('dataloading', { id: id })
     try {
       const response = await BaseRequest.prototype._fetch.call(
         this,
@@ -68,7 +72,7 @@ export class Request extends BaseRequest {
       if (error instanceof NOKError) return this._onNOK(error)
       return this._onError(error)
     } finally {
-      this.ui.fire('dataload', { id: id })
+      this.fire('dataload', { id: id })
     }
   }
 
@@ -81,7 +85,7 @@ export class Request extends BaseRequest {
   }
 
   _onError(error) {
-    this.ui.alert({ content: L._('Problem in the response'), level: 'error' })
+    this.alert.open({ content: L._('Problem in the response'), level: 'error' })
   }
 
   _onNOK(error) {
@@ -127,9 +131,9 @@ export class ServerRequest extends Request {
     try {
       const data = await response.json()
       if (data.info) {
-        this.ui.alert({ content: data.info, level: 'info' })
+        this.alert.open({ content: data.info, level: 'info' })
       } else if (data.error) {
-        this.ui.alert({ content: data.error, level: 'error' })
+        this.alert.open({ content: data.error, level: 'error' })
         return this._onError(new Error(data.error))
       }
       return [data, response, null]
@@ -144,7 +148,7 @@ export class ServerRequest extends Request {
 
   _onNOK(error) {
     if (error.status === 403) {
-      this.ui.alert({
+      this.alert.open({
         content: error.message || L._('Action not allowed :('),
         level: 'error',
       })

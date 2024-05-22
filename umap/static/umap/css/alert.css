@@ -1,0 +1,75 @@
+#umap-alert-container {
+    min-height: 46px;
+    line-height: 46px;
+    padding-left: 10px;
+    width: calc(100% - 500px);
+    position: absolute;
+    top: -46px;
+    left: 250px;  /* Keep save/cancel button accessible. */
+    right: 250px;
+    box-shadow: 0 1px 7px #999999;
+    visibility: hidden;
+    background: none repeat scroll 0 0 rgba(20, 22, 23, 0.8);
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.8em;
+    z-index: 1012;
+    border-radius: 2px;
+}
+#umap-alert-container.error {
+    background-color: #c60f13;
+}
+.umap-alert #umap-alert-container {
+    visibility: visible;
+    top: 23px;
+}
+#umap-alert-container .umap-action {
+    margin-left: 10px;
+    background-color: #fff;
+    color: #000;
+    padding: 5px;
+    border-radius: 4px;
+}
+#umap-alert-container .umap-action:hover {
+    color: #000;
+}
+#umap-alert-container .error .umap-action {
+    background-color: #666;
+    color: #eee;
+}
+#umap-alert-container .error .umap-action:hover {
+    color: #fff;
+}
+#umap-alert-container input {
+    padding: 5px;
+    border-radius: 4px;
+    width: 100%;
+}
+#umap-alert-container .umap-close-link {
+    color: #fff;
+    float: right;
+    padding-right: 10px;
+    width: 100px;
+    line-height: 1;
+    margin: .5rem;
+    background-color: #202425;
+    font-size: .7rem;
+}
+#umap-alert-container .umap-close-icon {
+    background-position: -74px -55px;
+}
+#umap-alert-container .umap-alert-actions {
+    display: flex;
+    margin: 1rem;
+}
+#umap-alert-container .umap-alert-actions .umap-action {
+    margin-bottom: 0;
+}
+
+@media all and (orientation:portrait) {
+    #umap-alert-container {
+        width: 100%;
+        left: 0;
+        right: 0;
+    }
+}

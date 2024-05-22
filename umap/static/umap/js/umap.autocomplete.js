@@ -12,8 +12,8 @@ U.AutoComplete = L.Class.extend({
 
   initialize: function (el, options) {
     this.el = el
-    const ui = new U.UI(document.querySelector('header'))
-    this.server = new U.ServerRequest(ui)
+    const alert = new U.Alert(document.querySelector('header'))
+    this.server = new U.ServerRequest(alert)
     L.setOptions(this, options)
     let CURRENT = null
     try {

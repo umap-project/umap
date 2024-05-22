@@ -2,8 +2,6 @@
  * Modals
  */
 U.UI = L.Evented.extend({
-  ALERTS: Array(),
-  ALERT_ID: null,
   TOOLTIP_ID: null,
 
   initialize: function (parent) {
@@ -13,77 +11,8 @@ U.UI = L.Evented.extend({
     L.DomEvent.on(this.container, 'contextmenu', L.DomEvent.stopPropagation) // Do not activate our custom context menu.
     L.DomEvent.on(this.container, 'wheel', L.DomEvent.stopPropagation)
     L.DomEvent.on(this.container, 'MozMousePixelScroll', L.DomEvent.stopPropagation)
-    this._alert = L.DomUtil.create('div', 'with-transition', this.container)
-    this._alert.id = 'umap-alert-container'
     this._tooltip = L.DomUtil.create('div', '', this.container)
     this._tooltip.id = 'umap-tooltip-container'
-  },
-
-  alert: function (e) {
-    if (L.DomUtil.hasClass(this.parent, 'umap-alert')) this.ALERTS.push(e)
-    else this.popAlert(e)
-  },
-
-  popAlert: function (e) {
-    if (!e) {
-      if (this.ALERTS.length) e = this.ALERTS.pop()
-      else return
-    }
-    let timeoutID
-    const level_class = e.level && e.level == 'info' ? 'info' : 'error'
-    this._alert.innerHTML = ''
-    L.DomUtil.addClass(this.parent, 'umap-alert')
-    L.DomUtil.addClass(this._alert, level_class)
-    const close = () => {
-      if (timeoutID && timeoutID !== this.ALERT_ID) {
-        return
-      } // Another alert has been forced
-      this._alert.innerHTML = ''
-      L.DomUtil.removeClass(this.parent, 'umap-alert')
-      L.DomUtil.removeClass(this._alert, level_class)
-      if (timeoutID) window.clearTimeout(timeoutID)
-      this.popAlert()
-    }
-    const closeButton = L.DomUtil.createButton(
-      'umap-close-link',
-      this._alert,
-      '',
-      close,
-      this
-    )
-    L.DomUtil.create('i', 'umap-close-icon', closeButton)
-    const label = L.DomUtil.create('span', '', closeButton)
-    label.title = label.textContent = L._('Close')
-    L.DomUtil.element({ tagName: 'div', innerHTML: e.content, parent: this._alert })
-    if (e.actions) {
-      let action, el, input
-      const form = L.DomUtil.create('div', 'umap-alert-actions', this._alert)
-      for (let i = 0; i < e.actions.length; i++) {
-        action = e.actions[i]
-        if (action.input) {
-          input = L.DomUtil.element({
-            tagName: 'input',
-            parent: form,
-            className: 'umap-alert-input',
-            placeholder: action.input,
-          })
-        }
-        el = L.DomUtil.createButton(
-          'umap-action',
-          form,
-          action.label,
-          action.callback,
-          action.callbackContext || this.map
-        )
-        L.DomEvent.on(el, 'click', close, this)
-      }
-    }
-    if (e.duration !== Infinity) {
-      this.ALERT_ID = timeoutID = window.setTimeout(
-        L.bind(close, this),
-        e.duration || 3000
-      )
-    }
   },
 
   tooltip: function (opts) {

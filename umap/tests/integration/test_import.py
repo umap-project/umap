@@ -448,4 +448,4 @@ def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     # FIXME do not create a layer
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(0)
-    expect(page.locator(".umap-alert")).to_be_visible()
+    expect(page.locator("#umap-alert-container")).to_be_visible()

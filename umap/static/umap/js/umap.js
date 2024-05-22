@@ -57,15 +57,16 @@ U.Map = L.Map.extend({
     this.urls = new U.URLs(this.options.urls)
 
     this.panel = new U.Panel(this)
+    this.alert = new U.Alert(this._controlContainer)
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
     }
     this.ui = new U.UI(this._container)
-    this.ui.on('dataloading', (e) => this.fire('dataloading', e))
-    this.ui.on('dataload', (e) => this.fire('dataload', e))
-    this.server = new U.ServerRequest(this.ui)
-    this.request = new U.Request(this.ui)
+    L.DomEvent.on(document.body, 'dataloading', (e) => this.fire('dataloading', e))
+    L.DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
+    this.server = new U.ServerRequest(this.alert)
+    this.request = new U.Request(this.alert)
 
     this.initLoader()
     this.name = this.options.name
@@ -359,7 +360,7 @@ U.Map = L.Map.extend({
       icon: 'umap-fake-class',
       iconLoading: 'umap-fake-class',
       flyTo: this.options.easing,
-      onLocationError: (err) => this.ui.alert({ content: err.message }),
+      onLocationError: (err) => this.alert.open({ content: err.message }),
     })
     this._controls.fullscreen = new L.Control.Fullscreen({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
@@ -392,7 +393,9 @@ U.Map = L.Map.extend({
   },
 
   renderControls: function () {
-    const hasSlideshow = Boolean(this.options.slideshow && this.options.slideshow.active)
+    const hasSlideshow = Boolean(
+      this.options.slideshow && this.options.slideshow.active
+    )
     const barEnabled = this.options.captionBar || hasSlideshow
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
     document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
@@ -641,7 +644,7 @@ U.Map = L.Map.extend({
     } catch (e) {
       console.error(e)
       this.removeLayer(tilelayer)
-      this.ui.alert({
+      this.alert.open({
         content: `${L._('Error in the tilelayer URL')}: ${tilelayer._url}`,
         level: 'error',
       })
@@ -676,7 +679,7 @@ U.Map = L.Map.extend({
     } catch (e) {
       this.removeLayer(overlay)
       console.error(e)
-      this.ui.alert({
+      this.alert.open({
         content: `${L._('Error in the overlay URL')}: ${overlay._url}`,
         level: 'error',
       })
@@ -799,7 +802,7 @@ U.Map = L.Map.extend({
     if (this.options.umap_id) {
       // We do not want an extra message during the map creation
       // to avoid the double notification/alert.
-      this.ui.alert({
+      this.alert.open({
         content: L._('The zoom and center have been modified.'),
         level: 'info',
       })
@@ -842,7 +845,7 @@ U.Map = L.Map.extend({
   processFileToImport: function (file, layer, type) {
     type = type || U.Utils.detectFileType(file)
     if (!type) {
-      this.ui.alert({
+      this.alert.open({
         content: L._('Unable to detect format of file {filename}', {
           filename: file.name,
         }),
@@ -899,7 +902,7 @@ U.Map = L.Map.extend({
         self.importRaw(rawData)
       } catch (e) {
         console.error('Error importing data', e)
-        self.ui.alert({
+        self.alert.open({
           content: L._('Invalid umap data in {filename}', { filename: file.name }),
           level: 'error',
         })
@@ -1030,7 +1033,7 @@ U.Map = L.Map.extend({
               label: L._('Copy link'),
               callback: () => {
                 L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-                this.ui.alert({
+                this.alert.open({
                   content: L._('Secret edit link copied to clipboard!'),
                   level: 'info',
                 })
@@ -1058,7 +1061,7 @@ U.Map = L.Map.extend({
         history.pushState({}, this.options.name, data.url)
       else window.location = data.url
       alert.content = data.info || alert.content
-      this.once('saved', () => this.ui.alert(alert))
+      this.once('saved', () => this.alert.open(alert))
       this.permissions.save()
     }
   },
@@ -1079,7 +1082,7 @@ U.Map = L.Map.extend({
   },
 
   sendEditLink: async function () {
-    const input = this.ui._alert.querySelector('input')
+    const input = this.alert.container.querySelector('input')
     const email = input.value
 
     const formData = new FormData()
@@ -1091,7 +1094,7 @@ U.Map = L.Map.extend({
 
   star: async function () {
     if (!this.options.umap_id)
-      return this.ui.alert({
+      return this.alert.open({
         content: L._('Please save the map first'),
         level: 'error',
       })
@@ -1102,7 +1105,7 @@ U.Map = L.Map.extend({
       let msg = data.starred
         ? L._('Map has been starred')
         : L._('Map has been unstarred')
-      this.ui.alert({ content: msg, level: 'info' })
+      this.alert.open({ content: msg, level: 'info' })
       this.renderControls()
     }
   },
