@@ -248,7 +248,7 @@ export class BaseAjax extends BaseAutocomplete {
     if (val === this.cache) return
     else this.cache = val
     val = val.toLowerCase()
-    const url = Util.template(this.URL, {q: encodeURIComponent(val)})
+    const url = Util.template(this.URL, { q: encodeURIComponent(val) })
     this.handleResults(await this._search(url))
   }
 
@@ -257,7 +257,6 @@ export class BaseAjax extends BaseAutocomplete {
     if (response && response.ok) {
       return await response.json()
     }
-
   }
 }
 
