@@ -11,6 +11,7 @@ import { SCHEMA } from './schema.js'
 import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './request.js'
 import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
 import Orderable from './orderable.js'
+import Importer from './importer.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -32,6 +33,7 @@ window.U = {
   FullPanel,
   Utils,
   SCHEMA,
+  Importer,
   Orderable,
   Caption,
   AjaxAutocomplete,

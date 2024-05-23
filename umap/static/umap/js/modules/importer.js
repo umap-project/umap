@@ -1,104 +1,107 @@
-U.Importer = L.Class.extend({
-  TYPES: ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap'],
-  initialize: function (map) {
+import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { translate } from './i18n.js'
+
+export default class Importer {
+  constructor(map) {
     this.map = map
     this.presets = map.options.importPresets
-  },
+    this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
+  }
 
-  build: function () {
-    this.container = L.DomUtil.create('div', 'umap-upload')
-    this.title = L.DomUtil.createTitle(
+  build() {
+    this.container = DomUtil.create('div', 'umap-upload')
+    this.title = DomUtil.createTitle(
       this.container,
-      L._('Import data'),
+      translate('Import data'),
       'icon-upload'
     )
-    this.presetBox = L.DomUtil.create('div', 'formbox', this.container)
-    this.presetSelect = L.DomUtil.create('select', '', this.presetBox)
-    this.fileBox = L.DomUtil.create('div', 'formbox', this.container)
-    this.fileInput = L.DomUtil.element({
+    this.presetBox = DomUtil.create('div', 'formbox', this.container)
+    this.presetSelect = DomUtil.create('select', '', this.presetBox)
+    this.fileBox = DomUtil.create('div', 'formbox', this.container)
+    this.fileInput = DomUtil.element({
       tagName: 'input',
       type: 'file',
       parent: this.fileBox,
       multiple: 'multiple',
       autofocus: true,
     })
-    this.urlInput = L.DomUtil.element({
+    this.urlInput = DomUtil.element({
       tagName: 'input',
       type: 'text',
       parent: this.container,
-      placeholder: L._('Provide an URL here'),
+      placeholder: translate('Provide an URL here'),
     })
-    this.rawInput = L.DomUtil.element({
+    this.rawInput = DomUtil.element({
       tagName: 'textarea',
       parent: this.container,
-      placeholder: L._('Paste your data here'),
+      placeholder: translate('Paste your data here'),
     })
-    this.typeLabel = L.DomUtil.add(
+    this.typeLabel = DomUtil.add(
       'label',
       '',
       this.container,
-      L._('Choose the format of the data to import')
+      translate('Choose the format of the data to import')
     )
-    this.layerLabel = L.DomUtil.add(
+    this.layerLabel = DomUtil.add(
       'label',
       '',
       this.container,
-      L._('Choose the layer to import in')
+      translate('Choose the layer to import in')
     )
-    this.clearLabel = L.DomUtil.element({
+    this.clearLabel = DomUtil.element({
       tagName: 'label',
       parent: this.container,
-      textContent: L._('Replace layer content'),
+      textContent: translate('Replace layer content'),
       for: 'datalayer-clear-check',
     })
-    this.submitInput = L.DomUtil.element({
+    this.submitInput = DomUtil.element({
       tagName: 'input',
       type: 'button',
       parent: this.container,
-      value: L._('Import'),
+      value: translate('Import'),
       className: 'button',
     })
     this.map.help.button(this.typeLabel, 'importFormats')
-    this.typeInput = L.DomUtil.element({
+    this.typeInput = DomUtil.element({
       tagName: 'select',
       name: 'format',
       parent: this.typeLabel,
     })
-    this.layerInput = L.DomUtil.element({
+    this.layerInput = DomUtil.element({
       tagName: 'select',
       name: 'datalayer',
       parent: this.layerLabel,
     })
-    this.clearFlag = L.DomUtil.element({
+    this.clearFlag = DomUtil.element({
       tagName: 'input',
       type: 'checkbox',
       name: 'clear',
       id: 'datalayer-clear-check',
       parent: this.clearLabel,
     })
-    L.DomUtil.element({
+    DomUtil.element({
       tagName: 'option',
       value: '',
-      textContent: L._('Choose the data format'),
+      textContent: translate('Choose the data format'),
       parent: this.typeInput,
     })
-    for (let i = 0; i < this.TYPES.length; i++) {
-      option = L.DomUtil.create('option', '', this.typeInput)
-      option.value = option.textContent = this.TYPES[i]
+    for (const type of this.TYPES) {
+      const option = DomUtil.create('option', '', this.typeInput)
+      option.value = option.textContent = type
     }
     if (this.presets.length) {
-      const noPreset = L.DomUtil.create('option', '', this.presetSelect)
-      noPreset.value = noPreset.textContent = L._('Choose a preset')
-      for (let j = 0; j < this.presets.length; j++) {
-        option = L.DomUtil.create('option', '', presetSelect)
-        option.value = this.presets[j].url
-        option.textContent = this.presets[j].label
+      const noPreset = DomUtil.create('option', '', this.presetSelect)
+      noPreset.value = noPreset.textContent = translate('Choose a preset')
+      for (const preset of this.presets) {
+        option = DomUtil.create('option', '', presetSelect)
+        option.value = preset.url
+        option.textContent = preset.label
       }
     } else {
       this.presetBox.style.display = 'none'
     }
-    L.DomEvent.on(this.submitInput, 'click', this.submit, this)
-    L.DomEvent.on(
+    DomEvent.on(this.submitInput, 'click', this.submit, this)
+    DomEvent.on(
       this.fileInput,
       'change',
       (e) => {
@@ -116,9 +119,9 @@ U.Importer = L.Class.extend({
       },
       this
     )
-  },
+  }
 
-  open: function () {
+  open() {
     if (!this.container) this.build()
     const onLoad = this.map.editPanel.open({ content: this.container })
     onLoad.then(() => {
@@ -128,25 +131,25 @@ U.Importer = L.Class.extend({
       this.map.eachDataLayerReverse((datalayer) => {
         if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
           const id = L.stamp(datalayer)
-          option = L.DomUtil.add('option', '', this.layerInput, datalayer.options.name)
+          option = DomUtil.add('option', '', this.layerInput, datalayer.options.name)
           option.value = id
         }
       })
-      L.DomUtil.element({
+      DomUtil.element({
         tagName: 'option',
         value: '',
-        textContent: L._('Import in a new layer'),
+        textContent: translate('Import in a new layer'),
         parent: this.layerInput,
       })
     })
-  },
+  }
 
-  openFiles: function () {
+  openFiles() {
     this.open()
     this.fileInput.showPicker()
-  },
+  }
 
-  submit: function () {
+  submit() {
     let type = this.typeInput.value
     const layerId = this.layerInput[this.layerInput.selectedIndex].value
     let layer
@@ -162,14 +165,14 @@ U.Importer = L.Class.extend({
     } else {
       if (!type)
         return this.map.alert.open({
-          content: L._('Please choose a format'),
+          content: translate('Please choose a format'),
           level: 'error',
         })
       if (this.rawInput.value && type === 'umap') {
         try {
           this.map.importRaw(this.rawInput.value, type)
         } catch (e) {
-          this.alert.open({ content: L._('Invalid umap data'), level: 'error' })
+          this.alert.open({ content: translate('Invalid umap data'), level: 'error' })
           console.error(e)
         }
       } else {
@@ -183,5 +186,5 @@ U.Importer = L.Class.extend({
           )
       }
     }
-  },
-})
+  }
+}
