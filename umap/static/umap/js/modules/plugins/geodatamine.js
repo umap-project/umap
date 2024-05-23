@@ -1,39 +1,18 @@
 import { DomUtil, DomEvent, stamp } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
-import { AjaxAutocomplete } from '../autocomplete.js'
+import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { Request } from '../request.js'
 import Alert from '../ui/alert.js'
 import Dialog from '../ui/dialog.js'
 
-class Autocomplete extends AjaxAutocomplete {
-  constructor(request, el, options) {
-    super(el, options)
-    this.request = request
-  }
+class Autocomplete extends SingleMixin(BaseAjax) {
+  URL = 'https://geodatamine.fr/boundaries/search?text={q}'
 
   createResult(item) {
     return super.createResult({
       value: item.id,
       label: `${item.name} (${item.ref})`,
     })
-  }
-
-  async search() {
-    let val = this.input.value
-    if (val.length < this.options.minChar) {
-      this.clear()
-      return
-    }
-    if (`${val}` === `${this.cache}`) return
-    else this.cache = val
-    val = val.toLowerCase()
-    const response = await this.request.get(
-      `https://geodatamine.fr/boundaries/search?text=${encodeURIComponent(val)}`
-    )
-    if (response && response.ok) {
-      const data = await response.json()
-      this.handleResults(data)
-    }
   }
 }
 
@@ -83,7 +62,7 @@ export class Plugin {
       className: 'edit-owner',
       on_select: (choice) => this.onSelect(choice),
     }
-    this.autocomplete = new Autocomplete(this.request, container, options)
+    this.autocomplete = new Autocomplete(container, options)
     const confirm = () => {
       importer.urlInput.value = `${this.baseUrl}/data/${select.value}/${this.options.boundary}?format=geojson`
       importer.typeInput.value = 'geojson'
