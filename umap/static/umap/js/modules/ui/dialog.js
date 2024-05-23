@@ -4,11 +4,7 @@ import { translate } from '../i18n.js'
 export default class Dialog {
   constructor(parent) {
     this.parent = parent
-    this.container = DomUtil.create(
-      'dialog',
-      'umap-dialog',
-      this.parent
-    )
+    this.container = DomUtil.create('dialog', 'umap-dialog', this.parent)
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
     DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
@@ -23,7 +19,7 @@ export default class Dialog {
     this.container.close()
   }
 
-  open({className, content, modal} = {}) {
+  open({ className, content, modal } = {}) {
     this.container.innerHTML = ''
     if (modal) this.container.showModal()
     else this.container.show()
