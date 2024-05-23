@@ -69,9 +69,6 @@ U.Map = L.Map.extend({
     L.DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
     this.server = new U.ServerRequest()
     this.request = new U.Request()
-    this.plugins = []
-    new U.GeoDataMine(this)
-    new U.Communes(this)
 
     this.initLoader()
     this.name = this.options.name
@@ -353,10 +350,6 @@ U.Map = L.Map.extend({
     for (const [key, extra] of Object.entries(schema)) {
       U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
     }
-  },
-
-  registerPlugin: function (plugin) {
-    this.plugins.push(plugin)
   },
 
   initControls: function () {

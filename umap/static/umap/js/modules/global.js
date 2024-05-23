@@ -18,8 +18,6 @@ import {
   uMapAlertCreation as AlertCreation,
   uMapAlertConflict as AlertConflict,
 } from '../components/alerts/alert.js'
-import { Plugin as GeoDataMine } from './plugins/geodatamine.js'
-import { Plugin as Communes } from './plugins/communes.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -51,6 +49,4 @@ window.U = {
   Tooltip,
   URLs,
   Utils,
-  GeoDataMine,
-  Communes,
 }

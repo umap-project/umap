@@ -1,12 +1,17 @@
 import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import Dialog from './ui/dialog.js'
+import { Importer as GeoDataMine } from './importers/geodatamine.js'
+import { Importer as Communes } from './importers/communes.js'
 
 export default class Importer {
   constructor(map) {
     this.map = map
     this.presets = map.options.importPresets
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
+    this.PLUGINS = [new GeoDataMine(map), new Communes(map)]
+    this.dialog = new Dialog(this.map._controlContainer)
   }
 
   build() {
@@ -47,9 +52,10 @@ export default class Importer {
       className: 'umap-multiplechoice by2',
       parent: this.container,
     })
-    for (const plugin of this.map.plugins) {
-      const { name, callback } = plugin.addImporter()
-      L.DomUtil.createButton('flat', plugins, name, () => callback.bind(plugin)(this))
+    for (const plugin of this.PLUGINS) {
+      L.DomUtil.createButton('flat', plugins, plugin.name, () =>
+        plugin.open.bind(plugin)(this)
+      )
     }
     this.typeLabel = L.DomUtil.add(
       'label',
