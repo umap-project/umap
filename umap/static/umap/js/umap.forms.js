@@ -1067,7 +1067,7 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
       className: 'edit-owner',
       on_select: L.bind(this.onSelect, this),
     }
-    this.autocomplete = new U.AutoComplete.Ajax.Select(this.parentNode, options)
+    this.autocomplete = new U.AjaxAutocomplete(this.parentNode, options)
     const owner = this.toHTML()
     if (owner)
       this.autocomplete.displaySelected({
@@ -1096,7 +1096,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
       on_select: L.bind(this.onSelect, this),
       on_unselect: L.bind(this.onUnselect, this),
     }
-    this.autocomplete = new U.AutoComplete.Ajax.SelectMultiple(this.parentNode, options)
+    this.autocomplete = new U.AjaxAutocompleteMultiple(this.parentNode, options)
     this._values = this.toHTML()
     if (this._values)
       for (let i = 0; i < this._values.length; i++)
