@@ -25,7 +25,9 @@
     --panel-header-height: 36px;
     --panel-width: 400px;
     --header-height: 46px;
+    --current-header-height: 0px;
     --footer-height: 46px;
+    --current-footer-height: 0px;
     --control-size: 36px;
 }
 .dark {
