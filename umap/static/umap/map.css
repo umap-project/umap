@@ -18,6 +18,24 @@
 
 
 /* *********** */
+/* Structure   */
+/* *********** */
+
+.umap-edit-enabled {
+    --current-header-height: var(--header-height);
+}
+.umap-caption-bar-enabled {
+    --current-footer-height: var(--footer-height);
+}
+.leaflet-top {
+    top: var(--current-header-height);
+}
+.leaflet-bottom {
+    bottom: var(--current-footer-height);
+}
+
+
+/* *********** */
 /* Controls    */
 /* *********** */
 
@@ -617,9 +635,6 @@ ul.photon-autocomplete {
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
 }
-.umap-edit-enabled .umap-caption-bar {
-    display: none;
-}
 .umap-caption-bar h3,
 .umap-main-edit-toolbox h3 {
     display: inline;
@@ -642,12 +657,9 @@ ul.photon-autocomplete {
     padding-left: 20px;
     display: inline-block; /* Prevents underline on hover. */
 }
-.umap-edit-enabled .leaflet-top {
-    top: 46px;
-}
 .umap-caption-bar-enabled .umap-caption-bar {
     display: block;
-    height: 46px;
+    height: var(--header-height);
     background-color: #fff;
     width: 100%;
     position: absolute;
@@ -656,14 +668,11 @@ ul.photon-autocomplete {
     right: 0;
     padding: 0 0 0 5px;
     text-align: left;
-    line-height: 46px;
+    line-height: 100%;
     cursor: auto;
     border-top: 1px solid var(--color-lightGray);
     opacity: 0.93;
     z-index: 1000;
-}
-.umap-caption-bar-enabled .leaflet-bottom {
-    bottom: 46px;
 }
 .umap-help {
     font-style: italic;

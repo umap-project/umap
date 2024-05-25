@@ -12,6 +12,8 @@
     cursor: initial;
     border-radius: 5px;
     border: 1px solid var(--color-lightGray);
+    bottom: calc(var(--current-footer-height) + var(--panel-bottom));
+    box-sizing: border-box;
 }
 .panel.dark {
     border: 1px solid #222;
@@ -25,15 +27,8 @@
     visibility: visible;
     right: var(--panel-gutter);
     left: var(--panel-gutter);
-    top: var(--header-height);
     height: initial;
     max-height: initial;
-}
-.umap-caption-bar-enabled .panel {
-    bottom: calc(var(--footer-height) + var(--panel-bottom));
-}
-.panel {
-    box-sizing: border-box;
 }
 .panel .umap-popup-content img {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
@@ -86,13 +81,13 @@
 }
 @media all and (orientation:landscape) {
     .panel {
-        top: 0;
+        top: var(--current-header-height);
         margin-top: var(--panel-gutter);
         width: var(--panel-width);
         max-width: calc(100% - var(--panel-gutter) * 2 - var(--control-size))
     }
     .panel.condensed {
-        max-height: 500px;
+        max-height: calc(min(500px, 100% - var(--current-header-height) - var(--current-footer-height) - var(--panel-gutter) * 2));
         bottom: initial;
     }
     .panel.right {
@@ -109,16 +104,13 @@
         right: calc(var(--panel-gutter) * 2 + var(--control-size));
         visibility: visible;
     }
-    .umap-edit-enabled .panel {
-        top: var(--header-height);
-    }
 }
 @media all and (orientation:portrait) {
     .panel {
         height: 50%;
         max-height: 400px;
         width: 100%;
-        bottom: 0;
+        bottom: var(--current-footer-height);
         right: -100%;
     }
     .panel.left {
@@ -130,16 +122,11 @@
         visibility: visible;
     }
     .panel.expanded {
-        height: 100%;
-        max-height: 100%;
+        height: calc(100% - var(--current-footer-height));
+        max-height: calc(100% - var(--current-footer-height));
     }
     .umap-caption-bar-enabled .panel {
-        bottom: var(--footer-height);
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-    }
-    .umap-caption-bar-enabled .panel.expanded {
-        height: calc(100% - var(--footer-height));
-        max-height: calc(100% - var(--footer-height));
     }
 }
