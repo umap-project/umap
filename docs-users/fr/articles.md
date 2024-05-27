@@ -1,12 +1,20 @@
 # Articles
 
+## [Carte des arbres remarquables, la suite…](https://insidemap.eu/carte-des-arbres-remarquables-la-suite/) (2024-05-25)
+
+> Depuis la première version de la carte en mars 2019, les données ont pu changer et les fonctionnalités d’uMap ont évolué. Voilà l’occasion de refaire la carte et d’explorer d’autres approches. Bien entendu les fonctionnalités de diaporama sont toujours actives sur la carte d’origine.
+>
+> <mark>Les données sur les arbres remarquables sont à disposition sur le portail gouvernemental data.gouv.fr.</mark> Pour automatiser leur import, il est intéressant de choisir le lien…
+
+[Article complet →](https://insidemap.eu/carte-des-arbres-remarquables-la-suite/){ .md-button }
+
 ## [Tutoriel : cartographier votre commune, ses voies et ses adresses, avec uMap](https://adresse.data.gouv.fr/blog/utilisez-umap-pour-visualiser-vos-adresses) (2024-05-13)
 
 > Il peut parfois s’avérer utile, dans le cadre d’un travail préparatoire ou pour une présentation, de créer une carte personnalisée de sa commune. À cet effet, <mark>l’ANCT met à disposition un outil, libre et open-source, à destination des agents publics pour créer des cartes en ligne</mark>, uMap.
 >
 > Cet outil, par ailleurs accessible sur d’autres instances pour le grand public ([uMap OSMFr](https://umap.openstreetmap.fr/) et [FramaCarte](https://framacarte.org/)), se distingue par sa grande polyvalence et ses fonctionnalités avancées de personnalisation. L’instance [uMap ANCT](https://umap.incubateur.anct.gouv.fr/) vise à mieux intégrer cet outil avec les autres outils des agents, à développer des fonctionnalités spécifiques et des configurations sur mesure, ainsi que faciliter un support dédié.
 
-[Article complet →](https://www.cafepedagogique.net/2024/03/29/herve-baronnet-libres-balades-pedagogiques/){ .md-button }
+[Article complet →](https://adresse.data.gouv.fr/blog/utilisez-umap-pour-visualiser-vos-adresses){ .md-button }
 
 ## [Hervé Baronnet : Libres balades pédagogiques](https://www.cafepedagogique.net/2024/03/29/herve-baronnet-libres-balades-pedagogiques/) (2024-03-29)
 
