@@ -77,7 +77,7 @@
     background-color: #353c3e;
 }
 .panel h3 {
-    line-height: 3;
+    line-height: 120%;
 }
 @media all and (orientation:landscape) {
     .panel {
