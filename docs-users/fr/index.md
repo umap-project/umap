@@ -2,7 +2,7 @@
 
 uMap vous offre la possibilité de concevoir rapidement des cartes personnalisées avec des fonds OpenStreetMap (OSM) et de les intégrer facilement à votre site.
 
-- 📺 Regarder les [vidéos](videos.md).
+- 📺 Regarder les [vidéos](videos.md) et les [articles](articles.md).
 - 🤓 Consulter les tutoriels selon votre niveau.
 - 🤔 Explorer les [les questions/réponses de la FAQ](support/faq.md).
 - 🤕 Parcourir [la liste des erreurs possibles](support/errors.md).
