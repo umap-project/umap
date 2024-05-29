@@ -112,26 +112,23 @@ export function escapeHTML(s) {
 export function toHTML(r, options) {
   if (!r) return ''
   const target = (options && options.target) || 'blank'
-  let ii
 
-  // detect newline format
-  const newline = r.indexOf('\r\n') != -1 ? '\r\n' : r.indexOf('\n') != -1 ? '\n' : ''
+  // unordered lists
+  r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
+  r = r.replace(/^\* (.*)/gm, '<ul><li>$1</li></ul>')
+  for (let ii = 0; ii < 3; ii++) {
+    r = r.replace(new RegExp(`</ul>(\r\n|\r|\n)<ul>`, 'g'), '')
+  }
 
   // headings and hr
-  r = r.replace(/^### (.*)/gm, '<h5>$1</h5>')
-  r = r.replace(/^## (.*)/gm, '<h4>$1</h4>')
-  r = r.replace(/^# (.*)/gm, '<h3>$1</h3>')
+  r = r.replace(/^### (.*)(\r\n|\r|\n)?/gm, '<h5>$1</h5>')
+  r = r.replace(/^## (.*)(\r\n|\r|\n)?/gm, '<h4>$1</h4>')
+  r = r.replace(/^# (.*)(\r\n|\r|\n)?/gm, '<h3>$1</h3>')
   r = r.replace(/^---/gm, '<hr>')
 
   // bold, italics
   r = r.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
   r = r.replace(/\*(.*?)\*/g, '<em>$1</em>')
-
-  // unordered lists
-  r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
-  r = r.replace(/^\* (.*)/gm, '<ul><li>$1</li></ul>')
-  for (ii = 0; ii < 3; ii++)
-    r = r.replace(new RegExp(`</ul>${newline}<ul>`, 'g'), newline)
 
   // links
   r = r.replace(/(\[\[http)/g, '[[h_t_t_p') // Escape for avoiding clash between [[http://xxx]] and http://xxx
@@ -172,9 +169,6 @@ export function toHTML(r, options) {
 
   //Unescape http
   r = r.replace(/(h_t_t_p)/g, 'http')
-
-  // Preserver line breaks
-  if (newline) r = r.replace(new RegExp(`${newline}(?=[^]+)`, 'g'), `<br>${newline}`)
 
   r = escapeHTML(r)
 

@@ -1563,9 +1563,11 @@ span.popup-icon {
 .umap-popup-container {
     flex-grow: 1;
     word-break: break-word;
+    white-space: pre-line;
+    margin-bottom: 10px;
 }
-.leaflet-popup-content h3 {
-    margin-bottom: 0;
+.umap-popup-container ul {
+    list-style-type: disc;
 }
 .leaflet-control-toolbar,
 .leaflet-bar {

@@ -13,12 +13,12 @@ describe('Utils', function () {
     it('should handle title', function () {
       assert.equal(Utils.toHTML('# A title'), '<h3>A title</h3>')
     })
+    it('should handle title followed by text', function () {
+      assert.equal(Utils.toHTML('# A title\nSome text.'), '<h3>A title</h3>Some text.')
+    })
 
     it('should handle title in the middle of the content', function () {
-      assert.equal(
-        Utils.toHTML('A phrase\n## A title'),
-        'A phrase<br>\n<h4>A title</h4>'
-      )
+      assert.equal(Utils.toHTML('A phrase\n## A title'), 'A phrase\n<h4>A title</h4>')
     })
 
     it('should handle hr', function () {
@@ -31,18 +31,6 @@ describe('Utils', function () {
 
     it('should handle italic', function () {
       assert.equal(Utils.toHTML('Some *italic*'), 'Some <em>italic</em>')
-    })
-
-    it('should handle newlines', function () {
-      assert.equal(Utils.toHTML('two\nlines'), 'two<br>\nlines')
-    })
-
-    it('should not change last newline', function () {
-      assert.equal(Utils.toHTML('two\nlines\n'), 'two<br>\nlines\n')
-    })
-
-    it('should handle two successive newlines', function () {
-      assert.equal(Utils.toHTML('two\n\nlines\n'), 'two<br>\n<br>\nlines\n')
     })
 
     it('should handle links without formatting', function () {
@@ -90,7 +78,7 @@ describe('Utils', function () {
     it('should handle simple link followed by a carriage return', function () {
       assert.equal(
         Utils.toHTML('A simple link http://osm.org\nAnother line'),
-        'A simple link <a href="http://osm.org" target="_blank">http://osm.org</a><br>\nAnother line'
+        'A simple link <a href="http://osm.org" target="_blank">http://osm.org</a>\nAnother line'
       )
     })
 
@@ -172,6 +160,27 @@ describe('Utils', function () {
       assert.equal(
         Utils.toHTML('A phrase with a [[http://iframeurl.com?to=http://another.com]].'),
         'A phrase with a <a href="http://iframeurl.com?to=http://another.com" target="_blank">http://iframeurl.com?to=http://another.com</a>.'
+      )
+    })
+
+    it('simple bullet points', function () {
+      assert.equal(
+        Utils.toHTML('* First point\n* Second point\n* Last point'),
+        '<ul><li>First point</li><li>Second point</li><li>Last point</li></ul>'
+      )
+    })
+
+    it('bullet points with bold and italic', function () {
+      assert.equal(
+        Utils.toHTML('* First *point*\n* Second **point**\n* Last [[https://here.org|point]]'),
+        '<ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a href="https://here.org" target="_blank">point</a></li></ul>'
+      )
+    })
+
+    it('title followed by bullet points', function () {
+      assert.equal(
+        Utils.toHTML('## Some title\n* First *point*\n* Second **point**\n* Last [[https://here.org|point]]'),
+        '<h4>Some title</h4><ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a href="https://here.org" target="_blank">point</a></li></ul>'
       )
     })
   })
