@@ -16,6 +16,14 @@
 .icon + span {
     margin-left: 10px;
 }
+.icon-block {
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+.icon-block + span {
+    margin-left: 0;
+}
 .dark .icon-16 {
     background-image: url('../img/16-white.svg');
 }

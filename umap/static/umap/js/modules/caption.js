@@ -18,7 +18,7 @@ export default class Caption {
 
   open() {
     const container = DomUtil.create('div', 'umap-caption')
-    DomUtil.createTitle(container, this.map.options.name, 'icon-caption')
+    DomUtil.createTitle(container, this.map.options.name, 'icon-caption icon-block')
     this.map.permissions.addOwnerLink('h5', container)
     if (this.map.options.description) {
       const description = DomUtil.element({
