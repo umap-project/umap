@@ -933,7 +933,14 @@ U.DataLayer = L.Evented.extend({
   },
 
   rawToGeoJSON: function (c, type, callback) {
-    const toDom = (x) => new DOMParser().parseFromString(x, 'text/xml')
+    const toDom = (x) => {
+      const doc = new DOMParser().parseFromString(x, 'text/xml')
+      const errorNode = doc.querySelector('parsererror')
+      if (errorNode) {
+        this.map.alert.open({ content: L._('Cannot parse data'), level: 'error' })
+      }
+      return doc
+    }
 
     // TODO add a duck typing guessType
     if (type === 'csv') {
