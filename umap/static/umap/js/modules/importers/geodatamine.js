@@ -1,13 +1,22 @@
 import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 
+const BOUNDARY_TYPES = {
+  admin_6: 'département',
+  admin_7: 'pays (loi Voynet)',
+  admin_8: 'commune',
+  admin_9: 'quartier, hameau, arrondissement',
+  political: 'canton',
+  local_authority: 'EPCI',
+}
+
 class Autocomplete extends SingleMixin(BaseAjax) {
   URL = 'https://geodatamine.fr/boundaries/search?text={q}'
 
   createResult(item) {
     return super.createResult({
       value: item.id,
-      label: `${item.name} (${item.ref})`,
+      label: `${item.name} (${BOUNDARY_TYPES[item.type]} — ${item.ref})`,
     })
   }
 }
