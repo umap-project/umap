@@ -475,10 +475,13 @@ input.switch:checked ~ label:after {
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
 }
+.button-bar.by3,
+.button-bar.by5,
 .umap-multiplechoice.by3,
 .umap-multiplechoice.by5 {
     grid-template-columns: 1fr 1fr 1fr;
 }
+.button-bar.by4,
 .umap-multiplechoice.by4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }

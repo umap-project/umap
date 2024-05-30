@@ -4,13 +4,13 @@ import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import Dialog from './ui/dialog.js'
 import { Importer as GeoDataMine } from './importers/geodatamine.js'
 import { Importer as Communes } from './importers/communes.js'
+import { Importer as Presets } from './importers/presets.js'
 
 export default class Importer {
   constructor(map) {
     this.map = map
-    this.presets = map.options.importPresets
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
-    this.PLUGINS = [new GeoDataMine(map), new Communes(map)]
+    this.PLUGINS = [new GeoDataMine(map), new Communes(map), new Presets(map)]
     this.dialog = new Dialog(this.map._controlContainer)
   }
 
@@ -21,8 +21,6 @@ export default class Importer {
       translate('Import data'),
       'icon-upload'
     )
-    this.presetBox = DomUtil.create('div', 'formbox', this.container)
-    this.presetSelect = DomUtil.create('select', '', this.presetBox)
     this.fileBox = DomUtil.create('div', 'formbox', this.container)
     this.fileInput = DomUtil.element({
       tagName: 'input',
@@ -49,7 +47,7 @@ export default class Importer {
     })
     const plugins = L.DomUtil.element({
       tagName: 'div',
-      className: 'umap-multiplechoice by2',
+      className: 'button-bar by4',
       parent: this.container,
     })
     for (const plugin of this.PLUGINS) {
@@ -109,17 +107,6 @@ export default class Importer {
     for (const type of this.TYPES) {
       const option = DomUtil.create('option', '', this.typeInput)
       option.value = option.textContent = type
-    }
-    if (this.presets.length) {
-      const noPreset = DomUtil.create('option', '', this.presetSelect)
-      noPreset.value = noPreset.textContent = translate('Choose a preset')
-      for (const preset of this.presets) {
-        option = DomUtil.create('option', '', presetSelect)
-        option.value = preset.url
-        option.textContent = preset.label
-      }
-    } else {
-      this.presetBox.style.display = 'none'
     }
     DomEvent.on(this.submitInput, 'click', this.submit, this)
     DomEvent.on(
@@ -198,11 +185,6 @@ export default class Importer {
         if (!layer) layer = this.map.createDataLayer()
         if (this.rawInput.value) layer.importRaw(this.rawInput.value, type)
         else if (this.urlInput.value) layer.importFromUrl(this.urlInput.value, type)
-        else if (this.presetSelect.selectedIndex > 0)
-          layer.importFromUrl(
-            this.presetSelect[this.presetSelect.selectedIndex].value,
-            type
-          )
       }
     }
   }

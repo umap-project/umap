@@ -20,7 +20,11 @@ export class Importer {
   async open(importer) {
     const container = DomUtil.create('div')
     DomUtil.createTitle(container, this.name)
-    DomUtil.element({tagName: 'p', parent: container, textContent: 'Importer les contours d\'une commune française.'})
+    DomUtil.element({
+      tagName: 'p',
+      parent: container,
+      textContent: "Importer les contours d'une commune française.",
+    })
     const options = {
       on_select: (choice) => {
         importer.urlInput.value = `https://geo.api.gouv.fr/communes?code=${choice.item.value}&format=geojson&geometry=contour`
