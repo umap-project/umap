@@ -27,8 +27,8 @@ export class Importer {
     })
     const options = {
       on_select: (choice) => {
-        importer.urlInput.value = `https://geo.api.gouv.fr/communes?code=${choice.item.value}&format=geojson&geometry=contour`
-        importer.typeInput.value = 'geojson'
+        importer.url = `https://geo.api.gouv.fr/communes?code=${choice.item.value}&format=geojson&geometry=contour`
+        importer.format = 'geojson'
         importer.dialog.close()
       },
     }

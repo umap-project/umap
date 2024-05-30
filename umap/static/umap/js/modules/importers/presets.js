@@ -24,8 +24,8 @@ export class Importer {
     }
     const confirm = () => {
       if (select.value) {
-        importer.urlInput.value = select.value
-        importer.typeInput.value = select.options[select.selectedIndex].dataset.format
+        importer.url = select.value
+        importer.format = select.options[select.selectedIndex].dataset.format
       }
       importer.dialog.close()
     }

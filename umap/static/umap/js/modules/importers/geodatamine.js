@@ -45,8 +45,8 @@ export class Importer {
       on_select: (choice) => (this.options.boundary = choice.item.value),
     })
     const confirm = () => {
-      importer.urlInput.value = `${this.baseUrl}/data/${select.value}/${this.options.boundary}?format=geojson`
-      importer.typeInput.value = 'geojson'
+      importer.url = `${this.baseUrl}/data/${select.value}/${this.options.boundary}?format=geojson`
+      importer.format = 'geojson'
       importer.dialog.close()
     }
     L.DomUtil.createButton('', container, 'OK', confirm)
