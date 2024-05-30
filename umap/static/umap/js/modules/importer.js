@@ -2,9 +2,8 @@ import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import Dialog from './ui/dialog.js'
-import { Importer as GeoDataMine } from './importers/geodatamine.js'
-import { Importer as Communes } from './importers/communes.js'
-import { Importer as Presets } from './importers/presets.js'
+
+const AVAILABLE_PLUGINS = ['geodatamine', 'communesfr', 'presets']
 
 const TEMPLATE = `
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
@@ -41,8 +40,19 @@ export default class Importer {
   constructor(map) {
     this.map = map
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
-    this.PLUGINS = [new GeoDataMine(map), new Communes(map), new Presets(map)]
+    this.PLUGINS = []
+    this.loadPlugins()
     this.dialog = new Dialog(this.map._controlContainer)
+  }
+
+  loadPlugins() {
+    for (const key of AVAILABLE_PLUGINS) {
+      if (key in this.map.options.plugins) {
+        import(`./importers/${key}.js`).then((mod) => {
+          this.PLUGINS.push(new mod.Importer(this.map, this.map.options.plugins[key]))
+        })
+      }
+    }
   }
 
   qs(query) {
@@ -85,13 +95,17 @@ export default class Importer {
   build() {
     this.container = DomUtil.create('div', 'umap-upload')
     this.container.innerHTML = TEMPLATE
-    for (const plugin of this.PLUGINS) {
-      L.DomUtil.createButton(
-        'flat',
-        this.container.querySelector('#plugins'),
-        plugin.name,
-        () => plugin.open(this)
-      )
+    if (this.PLUGINS.length) {
+      for (const plugin of this.PLUGINS) {
+        L.DomUtil.createButton(
+          'flat',
+          this.container.querySelector('#plugins'),
+          plugin.name,
+          () => plugin.open(this)
+        )
+      }
+    } else {
+      this.qs('.plugins').style.display = 'none'
     }
     for (const type of this.TYPES) {
       DomUtil.element({

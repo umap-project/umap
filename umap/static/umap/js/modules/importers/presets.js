@@ -2,9 +2,9 @@ import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 
 export class Importer {
-  constructor(map) {
+  constructor(map, options) {
     this.name = 'Presets'
-    this.presets = map.options.importPresets
+    this.choices = options?.choices
   }
 
   async open(importer) {
@@ -16,7 +16,7 @@ export class Importer {
       value: '',
       textContent: translate('Choose a preset'),
     })
-    for (const preset of this.presets) {
+    for (const preset of this.choices) {
       const option = DomUtil.create('option', '', select)
       option.value = preset.url
       option.textContent = preset.label
