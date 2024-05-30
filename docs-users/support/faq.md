@@ -1,6 +1,6 @@
 # Frequently Asked Questions (FAQ)
 
-## Which syntax is allowed in description fields?
+## Which syntax is allowed in description fields? {: #text-formatting }
 
 * `*single star for italic*` → *single star for italic*
 * `**double star for bold**` → **double star for bold**
@@ -38,3 +38,11 @@ In MacOS, `Ctrl` is replaced by `Cmd`.
 * `Shift+click` on a feature → edit this feature
 * `Ctrl+Shift+click` on a feature → edit this feature layer
 
+## Which syntax is allowed in conditional rules? {: #conditional-rules }
+
+* `mycolumn=odd` → will match features whose column `mycolumn` equal `odd`
+* `mycolumn!=odd` → will match features whose column `mycolumn` is missing or different from `odd`
+* `mycolumn>12` → will match features whose column `mycolumn` is greater than `12` (as number)
+* `mycolumn<12.34` → will match features whose column `mycolumn` is lower than `12.34` (as number)
+
+When the condition match, the associated style will be applied to corresponding feature.

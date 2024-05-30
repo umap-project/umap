@@ -1,6 +1,6 @@
 # Questions Fréquemment Posées (FAQ)
 
-## Quelle syntaxe est acceptée dans les champs de description ?
+## Quelle syntaxe est acceptée dans les champs de description ?  {: #text-formatting }
 
 * `*simple astérisque pour italique*` → *simple astérisque pour italique*
 * `**double astérisque pour gras**` → **double astérisque pour gras**
@@ -37,3 +37,13 @@ Sur MacOS, utliser `Cmd` à la place de `Ctrl`.
 * `Ctrl+-` → dézoome
 * `Shift+click` sur un élément → ouvre le panneau d'édition de cet élément
 * `Ctrl+Shift+click` sur un élément → ouvre le panneau d'édition du calque de cet élément
+
+## Quelle syntaxe est acceptée dans les règles de formattage conditionnel ? {: #conditional-rules }
+
+* `macolonne=impair` → cible les éléments dont la colonne  `macolonne` vaut `impair`
+* `macolonne!=impair` → cible les éléments dont la colonne `macolonne` est absente ou dont la valeur est différente de `impair`
+* `macolonne>12` → cible les éléments dont la colonne `macolonne` est supérieur au nombre `12`
+* `macolonne<12.34` → cible les éléments dont la colonne `macolonne` est inférieure au nombre `12.34`
+
+Quand la condition est vraie pour un élément donné, le style associé sera appliqué.
+
