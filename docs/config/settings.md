@@ -279,11 +279,14 @@ Setting `WEBSOCKET_ENABLED` to `True` will **not** enable real-time
 collaboration on all the maps served by the server. Instead, a switch will be
 available in the "advanced properties" of the map.
 
-The websocket server can be run with the following command:
+The websocket server can be started with the following command:
 
 ```bash
-python -m umap.ws
+umap run_websocket_server
 ```
+
+And can take optional settings `--host` and `--port` (default values are defined in
+the settings).
 
 Configuration example:
 
