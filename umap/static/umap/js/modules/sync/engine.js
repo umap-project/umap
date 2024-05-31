@@ -4,7 +4,7 @@ import { MapUpdater, DataLayerUpdater, FeatureUpdater } from './updaters.js'
 export class SyncEngine {
   constructor(map) {
     this.map = map
-    this.receiver = new MessagesDispatcher(this.map)
+    this.dispatcher = new MessagesDispatcher(this.map)
     this._initialize()
   }
   _initialize() {
@@ -22,7 +22,7 @@ export class SyncEngine {
   }
 
   start(webSocketURI, authToken) {
-    this.transport = new WebSocketTransport(webSocketURI, authToken, this.receiver)
+    this.transport = new WebSocketTransport(webSocketURI, authToken, this.dispatcher)
     this.sender = new MessagesSender(this.transport)
     this.upsert = this.sender.upsert.bind(this.sender)
     this.update = this.sender.update.bind(this.sender)

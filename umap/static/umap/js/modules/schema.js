@@ -313,7 +313,7 @@ export const SCHEMA = {
   },
   outlink: {
     type: String,
-    impacts: ['data'],
+    impacts: [],
     label: translate('Link to…'),
     helpEntries: 'outlink',
     placeholder: 'http://...',
@@ -321,7 +321,7 @@ export const SCHEMA = {
   },
   outlinkTarget: {
     type: String,
-    impacts: ['data'],
+    impacts: [],
     label: translate('Open link in…'),
     inheritable: true,
     default: 'blank',
@@ -511,6 +511,7 @@ export const SCHEMA = {
     label: translate('Default zoom level'),
     inheritable: true,
   },
+  // FIXME This is an internal Leaflet property, we might want to do this differently.
   _latlng: {
     type: Object,
     impacts: ['data'],

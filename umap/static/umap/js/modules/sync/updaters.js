@@ -51,6 +51,7 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Inserts does not happen (we use multiple updates instead).
     this.map.createDataLayer(value, false)
+    this.map.render()
   }
 
   update({ key, metadata, value }) {
@@ -60,14 +61,6 @@ export class DataLayerUpdater extends BaseUpdater {
   }
 }
 
-/**
- * This is an abstract base class
- * And needs to be subclassed to be used.
- *
- * The child classes need to expose:
- * - `featureClass`: the name of the class to create the feature
- * - `featureArgument`: an object with the properties to pass to the class when bulding it.
- **/
 export class FeatureUpdater extends BaseUpdater {
   getFeatureFromMetadata({ id, layerId }) {
     const datalayer = this.getDataLayerFromID(layerId)
@@ -79,16 +72,14 @@ export class FeatureUpdater extends BaseUpdater {
     let { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
     let feature = this.getFeatureFromMetadata(metadata, value)
-    if (feature === undefined) {
-      console.log(`Unable to find feature with id = ${metadata.id}. Creating a new one`)
-    }
+
     feature = datalayer.geometryToFeature({
       geometry: value.geometry,
       geojson: value,
       id,
       feature,
     })
-    feature.addTo(datalayer)
+    datalayer.addLayer(feature)
   }
 
   // Update a property of an object
@@ -103,9 +94,9 @@ export class FeatureUpdater extends BaseUpdater {
         datalayer.geometryToFeature({ geometry: value, id: metadata.id, feature })
       default:
         this.updateObjectValue(feature, key, value)
+        feature.datalayer.indexProperties(feature)
     }
 
-    feature.datalayer.indexProperties(feature)
     feature.render([key])
   }
 
