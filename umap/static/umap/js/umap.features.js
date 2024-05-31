@@ -25,14 +25,6 @@ U.FeatureMixin = {
     return this.toGeoJSON().geometry
   },
 
-  syncUpdatedProperties: function (properties) {
-    // When updating latlng, sync the whole geometry
-    if (properties.includes('latlng')) {
-      const { subject, metadata, engine } = this.getSyncMetadata()
-      engine.update(subject, metadata, 'geometry', this.getGeometry())
-    }
-  },
-
   syncDelete: function () {
     let { subject, metadata, engine } = this.getSyncMetadata()
     engine.delete(subject, metadata)
@@ -652,7 +644,8 @@ U.Marker = L.Marker.extend({
       function (e) {
         this.isDirty = true
         this.edit(e)
-        this.syncUpdatedProperties(['latlng'])
+        const { subject, metadata, engine } = this.getSyncMetadata()
+        engine.update(subject, metadata, 'geometry', this.getGeometry())
       },
       this
     )
