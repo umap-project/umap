@@ -808,7 +808,12 @@ U.Map = L.Map.extend({
     datalayer = datalayer || {
       name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
     }
-    return new U.DataLayer(this, datalayer, sync)
+    const dl = new U.DataLayer(this, datalayer, sync)
+
+    if (sync !== false) {
+      dl.sync.upsert(dl.options)
+    }
+    return dl
   },
 
   newDataLayer: function () {

@@ -51,7 +51,7 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Inserts does not happen (we use multiple updates instead).
     this.map.createDataLayer(value, false)
-    this.map.render()
+    this.map.render([])
   }
 
   update({ key, metadata, value }) {
