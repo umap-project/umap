@@ -1,10 +1,13 @@
 """Base settings shared by all environments"""
 
 # Import global settings to make it easier to extend settings.
+import os
 from email.utils import parseaddr
 
 import environ
 from django.conf.locale import LANG_INFO
+
+import umap as project_module
 
 env = environ.Env()
 
@@ -137,9 +140,6 @@ FORM_RENDERER = "django.forms.renderers.DjangoTemplates"
 # Calculation of directories relative to the project module location
 # =============================================================================
 
-import os
-
-import umap as project_module
 
 PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))
 
@@ -310,6 +310,6 @@ LOGGING = {
 # WebSocket configuration
 
 WEBSOCKET_ENABLED = env.bool("WEBSOCKET_ENABLED", default=False)
-WEBSOCKET_HOST = env("WEBSOCKET_HOST", default="localhost")
-WEBSOCKET_PORT = env.int("WEBSOCKET_PORT", default=8001)
-WEBSOCKET_URI = env("WEBSOCKET_URI", default="ws://localhost:8001")
+WEBSOCKET_BACK_HOST = env("WEBSOCKET_BACK_HOST", default="localhost")
+WEBSOCKET_BACK_PORT = env.int("WEBSOCKET_BACK_PORT", default=8001)
+WEBSOCKET_FRONT_URI = env("WEBSOCKET_FRONT_URI", default="ws://localhost:8001")

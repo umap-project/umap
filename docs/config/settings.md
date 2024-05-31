@@ -271,12 +271,15 @@ Otherwise, use any valid [python-social-auth configuration](https://python-socia
 
 #### WEBSOCKET_ENABLED
 
-A websocket server is packaged with uMap, and can be turned-on to activate "real-time collaboration".
-In practice, you would need to run the websocket server and specify a set of settings.
+A WebSocket server is packaged with uMap, and can be turned-on to activate
+"real-time collaboration". In practice, in order to enable it, a few settings
+are exposed.
 
-Turning this setting to `True` **will make a switch available** on each map, to enable "real-time collaboration".
+Setting `WEBSOCKET_ENABLED` to `True` will **not** enable real-time
+collaboration on all the maps served by the server. Instead, a switch will be
+available in the "advanced properties" of the map.
 
-You can run the websocket server with this command:
+The websocket server can be run with the following command:
 
 ```bash
 python -m umap.ws
@@ -286,19 +289,31 @@ Configuration example:
 
 ```python
 WEBSOCKET_ENABLED = True
-WEBSOCKET_HOST = "localhost"
-WEBSOCKET_PORT = 8002
-WEBSOCKET_URI = "ws://localhost:8002"
+WEBSOCKET_BACK_HOST = "localhost"
+WEBSOCKET_BACK_PORT = 8002
+WEBSOCKET_FRONT_URI = "ws://localhost:8002"
 ```
 
 These settings can also be set with the (same names) environment variables.
 
-#### WEBSOCKET_HOST
-#### WEBSOCKET_PORT
+#### WEBSOCKET_BACK_HOST
+#### WEBSOCKET_BACK_PORT
 
-The host and port for the websocket server.
+The internal host and port the websocket server will connect to.
 
-#### WEBSOCKET_URI
+#### WEBSOCKET_FRONT_URI
 
-The connection string that will be used by the client to connect to the websocket server.
-Use `wss://host:port` if the server is behind TLS, and `ws://host:port` otherwise.
+The connection string that will be used by the client to connect to the
+websocket server. In practice, as it's useful to put the WebSocket server behind
+TLS encryption, the values defined by `WEBSOCKET_FRONT_URI` are different than
+the values defined by `WEBSOCKET_BACK_PORT` and `WEBSOCKET_BACK_HOST`.
+
+This value is comprised of three parts:
+
+```
+protocol://host:port
+```
+
+- `protocol`: can either be `ws` for plain unencrypted WebSockets, or `wss` when using TLS encryption.
+- `host`: is the address where the connection will be sent. It should be public facing.
+- `port`: is the port that is open on the host.
