@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from umap import ws
+from umap import websocket_server
 
 
 class Command(BaseCommand):
@@ -20,4 +20,4 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        ws.run(options["host"], options["port"])
+        websocket_server.run(options["host"], options["port"])
