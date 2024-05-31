@@ -259,7 +259,7 @@ UMAP_DEFAULT_SHARE_STATUS = None
 UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
 UMAP_HOME_FEED = "latest"
-UMAP_EXPERIMENTAL_PLUGINS = {
+UMAP_EXPERIMENTAL_IMPORTERS = {
     # "geodatamine": {},
     # "communesfr": {},
     # "presets": {

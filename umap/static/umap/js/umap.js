@@ -20,9 +20,6 @@ L.Map.mergeOptions({
   enablePolygonDraw: true,
   enablePolylineDraw: true,
   limitBounds: {},
-  importPresets: [
-    // {url: 'http://localhost:8019/en/datalayer/1502/', label: 'Simplified World Countries', format: 'geojson'}
-  ],
   slideshow: {},
   clickable: true,
   permissions: {},

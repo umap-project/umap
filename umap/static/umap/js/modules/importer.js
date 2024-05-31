@@ -3,7 +3,7 @@ import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import Dialog from './ui/dialog.js'
 
-const AVAILABLE_PLUGINS = ['geodatamine', 'communesfr', 'presets']
+const AVAILABLE_IMPORTERS = ['geodatamine', 'communesfr', 'presets']
 
 const TEMPLATE = `
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
@@ -12,9 +12,9 @@ const TEMPLATE = `
       <input type="url" placeholder="${translate('Provide an URL here')}" />
       <textarea placeholder="${translate('Paste your data here')}"></textarea>
     </div>
-    <div class="plugins">
+    <div class="importers">
       <h4>${translate('Import from:')}</h4>
-      <div class="button-bar by4" id="plugins">
+      <div class="button-bar by4" id="importers">
       </div>
     </div>
     <label data-help="importFormats">
@@ -40,16 +40,18 @@ export default class Importer {
   constructor(map) {
     this.map = map
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
-    this.PLUGINS = []
-    this.loadPlugins()
+    this.IMPORTERS = []
+    this.loadImporterss()
     this.dialog = new Dialog(this.map._controlContainer)
   }
 
-  loadPlugins() {
-    for (const key of AVAILABLE_PLUGINS) {
-      if (key in this.map.options.plugins) {
+  loadImporterss() {
+    for (const key of AVAILABLE_IMPORTERS) {
+      if (key in this.map.options.importers) {
         import(`./importers/${key}.js`).then((mod) => {
-          this.PLUGINS.push(new mod.Importer(this.map, this.map.options.plugins[key]))
+          this.IMPORTERS.push(
+            new mod.Importer(this.map, this.map.options.importers[key])
+          )
         })
       }
     }
@@ -95,17 +97,17 @@ export default class Importer {
   build() {
     this.container = DomUtil.create('div', 'umap-upload')
     this.container.innerHTML = TEMPLATE
-    if (this.PLUGINS.length) {
-      for (const plugin of this.PLUGINS) {
+    if (this.IMPORTERS.length) {
+      for (const plugin of this.IMPORTERS) {
         L.DomUtil.createButton(
           'flat',
-          this.container.querySelector('#plugins'),
+          this.container.querySelector('#importers'),
           plugin.name,
           () => plugin.open(this)
         )
       }
     } else {
-      this.qs('.plugins').style.display = 'none'
+      this.qs('.importers').style.display = 'none'
     }
     for (const type of this.TYPES) {
       DomUtil.element({
