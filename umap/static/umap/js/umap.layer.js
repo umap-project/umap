@@ -1031,6 +1031,9 @@ U.DataLayer = L.Evented.extend({
     }
   },
 
+  // The choice of the name is not ours, because it is required by Leaflet.
+  // It is misleading, as the returned objects are uMap objects, and not
+  // GeoJSON features.
   geojsonToFeatures: function (geojson) {
     if (!geojson) return
     const features = geojson instanceof Array ? geojson : geojson.features
@@ -1047,7 +1050,7 @@ U.DataLayer = L.Evented.extend({
 
     const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
 
-    let feature = this.geometryToFeature({ geometry, geojson })
+    let feature = this.geoJSONToLeaflet({ geometry, geojson })
     if (feature) {
       this.addLayer(feature)
       feature.onCommit()
@@ -1071,7 +1074,7 @@ U.DataLayer = L.Evented.extend({
    * @param feature     Leaflet feature that should be updated with the new geometry
    * @returns           Leaflet feature.
    */
-  geometryToFeature: function ({
+  geoJSONToLeaflet: function ({
     geometry,
     geojson = null,
     id = null,
