@@ -83,15 +83,20 @@ async def handler(websocket):
 
 async def main():
     if not settings.WEBSOCKET_ENABLED:
-        print("WEBSOCKET_ENABLED should be set to True to run the WebSocket Server")
+        msg = (
+            "WEBSOCKET_ENABLED should be set to True to run the WebSocket Server. "
+            "See the documentation at "
+            "https://docs.umap-project.org/en/stable/config/settings/#websocket_enabled "
+            "for more information."
+        )
+        print(msg)
         exit(1)
 
-    async with serve(handler, settings.WEBSOCKET_HOST, settings.WEBSOCKET_PORT):
-        print(
-            (
-                f"Waiting for connections on {settings.WEBSOCKET_HOST}:{settings.WEBSOCKET_PORT}"
-            )
-        )
+    host = settings.WEBSOCKET_BACK_HOST
+    port = settings.WEBSOCKET_BACK_PORT
+
+    async with serve(handler, host, port):
+        print(f"Waiting for connections on {host}:{port}")
         await asyncio.Future()  # run forever
 
 
