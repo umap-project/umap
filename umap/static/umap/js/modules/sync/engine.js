@@ -33,6 +33,35 @@ export class SyncEngine {
     if (this.transport) this.transport.close()
     this._initialize()
   }
+
+  /**
+   * Create a proxy for this sync engine.
+   *
+   * The proxy will automatically call `object.getSyncMetadata` and inject the returned
+   * `subject` and `metadata`` to the `upsert`, `update` and `delete` calls.
+   *
+   * The proxy can be used as follows:
+   *
+   * ```
+   * const proxy = sync.proxy(object)
+   * proxy.update('key', 'value')
+   *```
+   */
+  proxy(object) {
+    const handler = {
+      get(target, prop) {
+        // Only proxy these methods
+        if (['upsert', 'update', 'delete'].includes(prop)) {
+          const { subject, metadata } = object.getSyncMetadata()
+          // Reflect.get is calling the original method.
+          // .bind is adding the parameters automatically
+          return Reflect.get(...arguments).bind(target, subject, metadata)
+        }
+        return Reflect.get(...arguments)
+      },
+    }
+    return new Proxy(this, handler)
+  }
 }
 
 export class MessagesDispatcher {
@@ -63,7 +92,7 @@ export class MessagesDispatcher {
 }
 
 /**
- * Sends the message to the other party (using the specified transport):
+ * Send messages to other connected peers, using the specified transport.
  *
  * - `subject` is the type of object this is referering to (map, feature, layer)
  * - `metadata` contains information about the object we're refering to (id, layerId for instance)

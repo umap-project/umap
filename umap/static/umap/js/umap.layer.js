@@ -521,8 +521,9 @@ U.DataLayer = L.Evented.extend({
     editMode: 'advanced',
   },
 
-  initialize: function (map, data, sync) {
+  initialize: function (map, data) {
     this.map = map
+    this.sync = map.sync_engine.proxy(this)
     this._index = Array()
     this._layers = {}
     this._geojson = null
@@ -614,7 +615,6 @@ U.DataLayer = L.Evented.extend({
 
   getSyncMetadata: function () {
     return {
-      engine: this.map.sync,
       subject: 'datalayer',
       metadata: {
         id: this.umap_id,
@@ -1740,9 +1740,7 @@ U.DataLayer = L.Evented.extend({
         delete data.geojson
       }
       this._reference_version = response.headers.get('X-Datalayer-Version')
-
-      const { engine, subject, metadata } = this.getSyncMetadata()
-      engine.update(subject, metadata, '_reference_version', this._reference_version)
+      this.sync.update('_reference_version', this._reference_version)
 
       this.setUmapId(data.id)
       this.updateOptions(data)
