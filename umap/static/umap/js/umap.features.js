@@ -27,7 +27,7 @@ U.FeatureMixin = {
 
   syncUpdatedProperties: function (properties) {
     // When updating latlng, sync the whole geometry
-    if ('latlng'.includes(properties)) {
+    if (properties.includes('latlng')) {
       const { subject, metadata, engine } = this.getSyncMetadata()
       engine.update(subject, metadata, 'geometry', this.getGeometry())
     }
