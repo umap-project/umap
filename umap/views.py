@@ -792,23 +792,18 @@ def get_websocket_auth_token(request, map_id, map_inst):
     """
     map_object: Map = Map.objects.get(pk=map_id)
 
-    if map_object.can_edit(request.user, request):
-        permissions = ["edit"]
-        if map_object.is_owner(request.user, request):
-            permissions.append("owner")
+    permissions = ["edit"]
+    if map_object.is_owner(request.user, request):
+        permissions.append("owner")
 
-        if request.user.is_authenticated:
-            user = request.user.pk
-        else:
-            user = "anonymous"
-        signed_token = TimestampSigner().sign_object(
-            {"user": user, "map_id": map_id, "permissions": permissions}
-        )
-        return simple_json_response(token=signed_token)
+    if request.user.is_authenticated:
+        user = request.user.pk
     else:
-        return HttpResponseForbidden(
-            _("You cannot edit this map with your current permissions.")
-        )
+        user = "anonymous"
+    signed_token = TimestampSigner().sign_object(
+        {"user": user, "map_id": map_id, "permissions": permissions}
+    )
+    return simple_json_response(token=signed_token)
 
 
 class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
