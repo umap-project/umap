@@ -172,7 +172,6 @@ U.FeatureMixin = {
     properties.unshift('properties.name')
     builder = new U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
-      callback: this._redraw, // In case we have dynamic options…
     })
     container.appendChild(builder.build())
     this.appendEditFieldsets(container)
@@ -203,7 +202,6 @@ U.FeatureMixin = {
     const optionsFields = this.getShapeOptions()
     let builder = new U.FormBuilder(this, optionsFields, {
       id: 'umap-feature-shape-properties',
-      callback: this._redraw,
     })
     const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
@@ -211,7 +209,6 @@ U.FeatureMixin = {
     const advancedOptions = this.getAdvancedOptions()
     builder = new U.FormBuilder(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
-      callback: this._redraw,
     })
     const advancedProperties = L.DomUtil.createFieldset(
       container,
@@ -220,9 +217,7 @@ U.FeatureMixin = {
     advancedProperties.appendChild(builder.build())
 
     const interactionOptions = this.getInteractionOptions()
-    builder = new U.FormBuilder(this, interactionOptions, {
-      callback: this._redraw,
-    })
+    builder = new U.FormBuilder(this, interactionOptions)
     const popupFieldset = L.DomUtil.createFieldset(
       container,
       L._('Interaction options')
@@ -778,7 +773,6 @@ U.Marker = L.Marker.extend({
           builder.resetField('_latlng.lat')
           builder.resetField('_latlng.lng')
         }
-        this._redraw()
         this.zoomTo({ easing: false })
       },
       callbackContext: this,
