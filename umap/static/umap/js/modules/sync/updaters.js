@@ -73,7 +73,7 @@ export class FeatureUpdater extends BaseUpdater {
     const datalayer = this.getDataLayerFromID(layerId)
     let feature = this.getFeatureFromMetadata(metadata, value)
 
-    feature = datalayer.geometryToFeature({
+    feature = datalayer.geoJSONToLeaflet({
       geometry: value.geometry,
       geojson: value,
       id,
@@ -91,7 +91,7 @@ export class FeatureUpdater extends BaseUpdater {
     switch (key) {
       case 'geometry':
         const datalayer = this.getDataLayerFromID(metadata.layerId)
-        datalayer.geometryToFeature({ geometry: value, id: metadata.id, feature })
+        datalayer.geoJSONToLeaflet({ geometry: value, id: metadata.id, feature })
       default:
         this.updateObjectValue(feature, key, value)
         feature.datalayer.indexProperties(feature)
