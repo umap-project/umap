@@ -4,20 +4,12 @@ import asyncio
 from collections import defaultdict
 from typing import Literal, Optional
 
-import django
 import websockets
 from django.conf import settings
 from django.core.signing import TimestampSigner
 from pydantic import BaseModel, ValidationError
 from websockets import WebSocketClientProtocol
 from websockets.server import serve
-
-# This needs to run before the django-specific imports
-# See https://docs.djangoproject.com/en/5.0/topics/settings/#calling-django-setup-is-required-for-standalone-django-usage
-from umap.settings import settings_as_dict
-
-settings.configure(**settings_as_dict)
-django.setup()
 
 from umap.models import Map, User  # NOQA
 
@@ -81,7 +73,7 @@ async def handler(websocket):
         await join_and_listen(map_id, permissions, user, websocket)
 
 
-async def main():
+def run(host, port):
     if not settings.WEBSOCKET_ENABLED:
         msg = (
             "WEBSOCKET_ENABLED should be set to True to run the WebSocket Server. "
@@ -92,12 +84,9 @@ async def main():
         print(msg)
         exit(1)
 
-    host = settings.WEBSOCKET_BACK_HOST
-    port = settings.WEBSOCKET_BACK_PORT
+    async def _serve():
+        async with serve(handler, host, port):
+            print(f"Waiting for connections on {host}:{port}")
+            await asyncio.Future()  # run forever
 
-    async with serve(handler, host, port):
-        print(f"Waiting for connections on {host}:{port}")
-        await asyncio.Future()  # run forever
-
-
-asyncio.run(main())
+    asyncio.run(_serve())
