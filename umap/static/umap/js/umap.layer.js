@@ -606,18 +606,13 @@ U.DataLayer = L.Evented.extend({
     // be in the "forced visibility" mode
     if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
     this.on('datachanged', this.map.onDataLayersChanged, this.map)
-
-    if (sync !== false) {
-      const { engine, subject, metadata } = this.getSyncMetadata()
-      engine.upsert(subject, metadata, this.options)
-    }
   },
 
   getSyncMetadata: function () {
     return {
       subject: 'datalayer',
       metadata: {
-        id: this.umap_id,
+        id: this.umap_id || null,
       },
     }
   },
