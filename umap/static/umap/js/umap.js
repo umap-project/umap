@@ -33,7 +33,8 @@ U.Map = L.Map.extend({
   includes: [ControlsMixin],
 
   initialize: function (el, geojson) {
-    this.sync = new U.SyncEngine(this)
+    this.sync_engine = new U.SyncEngine(this)
+    this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
     if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
@@ -1440,13 +1441,7 @@ U.Map = L.Map.extend({
         this.options.limitBounds.east = L.Util.formatNum(bounds.getEast())
         boundsBuilder.fetchAll()
 
-        const { subject, metadata, engine } = this.getSyncMetadata()
-        engine.update(
-          subject,
-          metadata,
-          'options.limitBounds',
-          this.options.limitBounds
-        )
+        this.sync.update(this, 'options.limitBounds', this.options.limitBounds)
         this.isDirty = true
         this.handleLimitBounds()
       },

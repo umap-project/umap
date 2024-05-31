@@ -3,7 +3,6 @@ U.FeatureMixin = {
 
   getSyncMetadata: function () {
     return {
-      engine: this.map.sync,
       subject: 'feature',
       metadata: {
         id: this.id,
@@ -17,8 +16,7 @@ U.FeatureMixin = {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer.isRemoteLayer()) return
-    const { subject, metadata, engine } = this.getSyncMetadata()
-    engine.upsert(subject, metadata, this.toGeoJSON())
+    this.sync.upsert(this.toGeoJSON())
   },
 
   getGeometry: function () {
@@ -26,12 +24,13 @@ U.FeatureMixin = {
   },
 
   syncDelete: function () {
-    let { subject, metadata, engine } = this.getSyncMetadata()
-    engine.delete(subject, metadata)
+    this.sync.delete()
   },
 
   initialize: function (map, latlng, options, id) {
     this.map = map
+    this.sync = map.sync_engine.proxy(this)
+
     if (typeof options === 'undefined') {
       options = {}
     }
@@ -639,8 +638,7 @@ U.Marker = L.Marker.extend({
       function (e) {
         this.isDirty = true
         this.edit(e)
-        const { subject, metadata, engine } = this.getSyncMetadata()
-        engine.update(subject, metadata, 'geometry', this.getGeometry())
+        this.sync.update('geometry', this.getGeometry())
       },
       this
     )
