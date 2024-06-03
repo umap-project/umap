@@ -62,7 +62,7 @@ test = [
   "pytest-xdist>=3.5.0,<4",
 ]
 docker = [
-  "uwsgi==2.0.25.1",
+  "uwsgi==2.0.26",
 ]
 
 [project.scripts]
