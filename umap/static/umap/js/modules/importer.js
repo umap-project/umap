@@ -39,11 +39,11 @@ export default class Importer {
     this.map = map
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
-    this.loadImporterss()
+    this.loadImporters()
     this.dialog = new Dialog(this.map._controlContainer)
   }
 
-  loadImporterss() {
+  loadImporters() {
     for (const key of Object.keys(this.map.options.importers || {})) {
       import(`./importers/${key}.js`).then((mod) => {
         this.IMPORTERS.push(new mod.Importer(this.map, this.map.options.importers[key]))
