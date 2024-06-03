@@ -25,7 +25,7 @@
 [role="dialog"] > div {
     margin: 0 auto;
 }
-[role="dialog"] [data-close] {
+[role="dialog"] [data-close].umap-close-link {
     color: #fff;
     max-width: 42px;
     line-height: initial;
@@ -34,7 +34,7 @@
     background-color: #202425;
     font-size: 0.7rem;
 }
-[role="dialog"] [data-close] .icon + span {
+[role="dialog"] [data-close].umap-close-link .icon + span {
     margin-left: 0;
 }
 #link-wrapper form {
@@ -42,4 +42,20 @@
 }
 #link-wrapper form input[type='button'] {
     max-width: 100px;
+}
+#choice-wrapper form {
+    display: flex;
+    justify-content: space-between;
+}
+@media only screen and (max-width:770px) {
+    #choice-wrapper form {
+        flex-direction: column;
+    }
+}
+#choice-wrapper form > * {
+    max-width: 300px;
+}
+umap-alert-choice a {
+    color: white;
+    text-decoration: underline;
 }

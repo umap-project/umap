@@ -1707,11 +1707,11 @@ U.DataLayer = L.Evented.extend({
       if (response && response.status === 412) {
         U.AlertChoice.error(
           L._(
-            'Woops! Someone else seems to have edited the data. ' +
-              'You can save anyway, but this will erase the changes made by others.'
+            'Whoops! Other contributor(s) changed some of the same map elements as you. ' +
+              'This situation is tricky, you have to choose carefully which version is pertinent.'
           )
         )
-        document.addEventListener('umap:alert-choice-confirm', async (event) => {
+        document.addEventListener('umap:alert-choice-override', async (event) => {
           await this._trySave(url, {}, formData)
         })
       }

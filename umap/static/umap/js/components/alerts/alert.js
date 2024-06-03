@@ -129,7 +129,7 @@ class uMapAlertChoice extends uMapAlert {
     const event = new CustomEvent('umap:alert-choice', {
       bubbles: true,
       cancelable: true,
-      detail: { message, duration },
+      detail: { level: 'error', message, duration },
     })
     document.dispatchEvent(event)
   }
@@ -140,17 +140,25 @@ class uMapAlertChoice extends uMapAlert {
   }
 
   _displayChoiceAlert(detail) {
-    const { level = 'error', duration = 5000, message = '' } = detail
+    const { level = 'info', duration = 5000, message = '' } = detail
     uMapAlert.prototype._displayAlert.call(this, { level, duration, message })
-    const button = this.choiceWrapper.querySelector('input[type="submit"]')
-    button.addEventListener('click', (event) => {
+    const form = this.choiceWrapper.querySelector('form')
+    form.addEventListener('submit', (event) => {
       event.preventDefault()
-      document.dispatchEvent(
-        new CustomEvent('umap:alert-choice-confirm', {
-          bubbles: true,
-          cancelable: true,
-        })
-      )
+      switch (event.submitter.id) {
+        case 'your-changes':
+          document.dispatchEvent(
+            new CustomEvent('umap:alert-choice-override', {
+              bubbles: true,
+              cancelable: true,
+            })
+          )
+          break
+        case 'their-changes':
+          window.location.reload()
+          break
+      }
+      this._hide()
     })
   }
 

@@ -1110,7 +1110,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
                     reference = json.loads(f.read())
                 break
         else:
-            # If the document is not found, we can't merge.
+            # If the reference document is not found, we can't merge.
             return None
         # New data received in the request.
         incoming = json.loads(self.request.FILES["geojson"].read())

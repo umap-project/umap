@@ -20,14 +20,14 @@
     <div>
       <p role="alert"></p>
       <div id="link-wrapper">
-        <form class="umap-alert-actions">
+        <form>
           <input type="url" name="url">
           <input type="button" value="{% translate "Copy link" %}">
         </form>
       </div>
       <div id="form-wrapper" hidden>
         <p>{% translate "You can also receive that URL by email:" %}</p>
-        <form class="umap-alert-actions">
+        <form>
           <input type="email" name="email" class="umap-alert-input" required>
           <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
         </form>
@@ -42,15 +42,12 @@
 <umap-alert-choice hidden>
   <div role="dialog">
     <div>
-      <p role="alert">
-        {% blocktranslate %}
-          Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.
-        {% endblocktranslate %}
-      </p>
+      <p role="alert"></p>
       <div id="choice-wrapper">
-        <form class="umap-alert-actions">
-          <button type="button" data-close>{% translate "Cancel" %}</button>
-          <input type="submit" value="{% translate "Save anyway" %}">
+        <form>
+          <a href="" onclick="document.url" target="_blank">{% translate "See their edits in another tab" %}</a>
+          <input id="your-changes" type="submit" value="{% translate "Keep your changes and loose theirs" %}">
+          <input id="their-changes" type="submit" value="{% translate "Keep their changes and loose yours" %}">
         </form>
       </div>
     </div>

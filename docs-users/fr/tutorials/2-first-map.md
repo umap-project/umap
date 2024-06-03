@@ -90,7 +90,7 @@ texte est affiché en haut de la carte, comme celui ci-dessous :
     data-width="790"
     data-height="226"
     data-selector="#umap-alert-container"
-    data-wait-for="document.querySelector('#umap-alert-container .umap-alert-actions')"
+    data-wait-for="document.querySelector('#umap-alert-container .TODO')"
     data-javascript="document.querySelector('button.leaflet-control-edit-save').click()"
     >Message d’alerte contenant le lien d’édition.</shot-scraper>
 
