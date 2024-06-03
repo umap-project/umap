@@ -29,7 +29,7 @@ export default class Caption {
       })
     }
     const datalayerContainer = DomUtil.create('div', 'datalayer-container', container)
-    this.map.eachDataLayer((datalayer) =>
+    this.map.eachDataLayerReverse((datalayer) =>
       this.addDataLayer(datalayer, datalayerContainer)
     )
     const creditsContainer = DomUtil.create('div', 'credits-container', container)
