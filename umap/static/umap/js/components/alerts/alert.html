@@ -1,0 +1,72 @@
+{% load i18n static %}
+
+<style type="text/css">
+  @import "{% static 'umap/js/components/alerts/alert.css' %}";
+</style>
+
+<umap-alert hidden>
+  <div role="dialog">
+    <div>
+      <p role="alert"></p>
+    </div>
+    <button class="umap-close-link dark button" aria-label="{% translate "Close" %}" data-close>
+      <i class="icon icon-16 icon-close"></i>
+    </button>
+  </div>
+</umap-alert>
+
+<umap-alert-creation hidden>
+  <div role="dialog">
+    <div>
+      <p role="alert"></p>
+      <div id="link-wrapper">
+        <form class="umap-alert-actions">
+          <input type="url" name="url">
+          <input type="button" value="{% translate "Copy link" %}">
+        </form>
+      </div>
+      <div id="form-wrapper" hidden>
+        <p>{% translate "You can also receive that URL by email:" %}</p>
+        <form class="umap-alert-actions">
+          <input type="email" name="email" class="umap-alert-input" required>
+          <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
+        </form>
+      </div>
+    </div>
+    <button class="umap-close-link dark button" aria-label="{% translate "Close" %}" data-close>
+      <i class="icon icon-16 icon-close"></i>
+    </button>
+  </div>
+</umap-alert-creation>
+
+<umap-alert-choice hidden>
+  <div role="dialog">
+    <div>
+      <p role="alert">
+        {% blocktranslate %}
+          Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.
+        {% endblocktranslate %}
+      </p>
+      <div id="choice-wrapper">
+        <form class="umap-alert-actions">
+          <button type="button" data-close>{% translate "Cancel" %}</button>
+          <input type="submit" value="{% translate "Save anyway" %}">
+        </form>
+      </div>
+    </div>
+    <button class="umap-close-link dark button" aria-label="{% translate "Close" %}" data-close>
+      <i class="icon icon-16 icon-close"></i>
+    </button>
+  </div>
+</umap-alert-choice>
+
+<script type="module">
+  import {
+    uMapAlert,
+    uMapAlertCreation,
+    uMapAlertChoice
+  } from '{% static 'umap/js/components/alerts/alert.js' %}'
+  customElements.define('umap-alert', uMapAlert)
+  customElements.define('umap-alert-creation', uMapAlertCreation)
+  customElements.define('umap-alert-choice', uMapAlertChoice)
+</script>

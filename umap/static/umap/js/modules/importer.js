@@ -163,16 +163,12 @@ export default class Importer {
         this.map.processFileToImport(file, layer, type)
       }
     } else {
-      if (!type)
-        return this.map.alert.open({
-          content: translate('Please choose a format'),
-          level: 'error',
-        })
+      if (!type) return U.Alert.error(L._('Please choose a format'))
       if (this.rawInput.value && type === 'umap') {
         try {
           this.map.importRaw(this.rawInput.value, type)
         } catch (e) {
-          this.alert.open({ content: translate('Invalid umap data'), level: 'error' })
+          U.Alert.error(L._('Invalid umap data'))
           console.error(e)
         }
       } else {

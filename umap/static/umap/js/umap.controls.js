@@ -1086,7 +1086,7 @@ U.Search = L.PhotonSearch.extend({
       if (latlng.isValid()) {
         this.reverse.doReverse(latlng)
       } else {
-        this.map.alert.open({ content: 'Invalid latitude or longitude', mode: 'error' })
+        U.Alert.error(L._('Invalid latitude or longitude'))
       }
       return
     }

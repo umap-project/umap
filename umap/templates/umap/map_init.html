@@ -1,17 +1,11 @@
 {% load umap_tags %}
+
+{% include "umap/messages.html" %}
 <div id="map"></div>
 <!-- djlint:off -->
 <script defer type="text/javascript">
   window.addEventListener('DOMContentLoaded', (event) => {
     U.MAP = new U.Map("map", {{ map_settings|notag|safe }})
-    {% for m in messages %}
-      {# We have just one, but we need to loop, as for messages API #}
-      U.MAP.alert.open({
-        content: "{{ m }}",
-        level: "{{ m.tags }}",
-        duration: 100000
-      })
-    {% endfor %}
   })
 </script>
 <!-- djlint:on -->

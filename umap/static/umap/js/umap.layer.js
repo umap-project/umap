@@ -958,7 +958,7 @@ U.DataLayer = L.Evented.extend({
       const doc = new DOMParser().parseFromString(x, 'text/xml')
       const errorNode = doc.querySelector('parsererror')
       if (errorNode) {
-        this.map.alert.open({ content: L._('Cannot parse data'), level: 'error' })
+        U.Alert.error(L._('Cannot parse data'))
       }
       return doc
     }
@@ -993,7 +993,7 @@ U.DataLayer = L.Evented.extend({
                 message: err[0].message,
               })
             }
-            this.map.alert.open({ content: message, level: 'error', duration: 10000 })
+            U.Alert.error(message, 10000)
             console.error(err)
           }
           if (result && result.features.length) {
@@ -1020,7 +1020,7 @@ U.DataLayer = L.Evented.extend({
         const gj = JSON.parse(c)
         callback(gj)
       } catch (err) {
-        this.map.alert.open({ content: `Invalid JSON file: ${err}` })
+        U.Alert.error(`Invalid JSON file: ${err}`)
         return
       }
     }
@@ -1121,12 +1121,11 @@ U.DataLayer = L.Evented.extend({
         return this.geojsonToFeatures(geometry.geometries)
 
       default:
-        this.map.alert.open({
-          content: L._('Skipping unknown geometry.type: {type}', {
+        U.Alert.error(
+          L._('Skipping unknown geometry.type: {type}', {
             type: geometry.type || 'undefined',
-          }),
-          level: 'error',
-        })
+          })
+        )
     }
   },
 
@@ -1706,27 +1705,14 @@ U.DataLayer = L.Evented.extend({
     const [data, response, error] = await this.map.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
-        const msg = L._(
-          'Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.'
+        U.AlertChoice.error(
+          L._(
+            'Woops! Someone else seems to have edited the data. ' +
+              'You can save anyway, but this will erase the changes made by others.'
+          )
         )
-        const actions = [
-          {
-            label: L._('Save anyway'),
-            callback: async () => {
-              // Save again,
-              // but do not pass the reference version this time
-              await this._trySave(url, {}, formData)
-            },
-          },
-          {
-            label: L._('Cancel'),
-          },
-        ]
-        this.map.alert.open({
-          content: msg,
-          level: 'error',
-          duration: 100000,
-          actions: actions,
+        document.addEventListener('umap:alert-choice-confirm', async (event) => {
+          await this._trySave(url, {}, formData)
         })
       }
     } else {

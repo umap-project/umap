@@ -1,7 +1,6 @@
 import { DomUtil, DomEvent, setOptions } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { ServerRequest } from './request.js'
-import Alert from './ui/alert.js'
 
 export class BaseAutocomplete {
   constructor(el, options) {
@@ -220,8 +219,7 @@ export class BaseAutocomplete {
 class BaseAjax extends BaseAutocomplete {
   constructor(el, options) {
     super(el, options)
-    const alert = new Alert(document.querySelector('header'))
-    this.server = new ServerRequest(alert)
+    this.server = new ServerRequest()
   }
   optionToResult(option) {
     return {

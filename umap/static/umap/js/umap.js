@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
+  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -59,7 +59,6 @@ U.Map = L.Map.extend({
     this.urls = new U.URLs(this.options.urls)
 
     this.panel = new U.Panel(this)
-    this.alert = new U.Alert(this._controlContainer)
     this.tooltip = new U.Tooltip(this._controlContainer)
     this.dialog = new U.Dialog(this._controlContainer)
     if (this.hasEditMode()) {
@@ -68,8 +67,8 @@ U.Map = L.Map.extend({
     }
     L.DomEvent.on(document.body, 'dataloading', (e) => this.fire('dataloading', e))
     L.DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
-    this.server = new U.ServerRequest(this.alert)
-    this.request = new U.Request(this.alert)
+    this.server = new U.ServerRequest()
+    this.request = new U.Request()
 
     this.initLoader()
     this.name = this.options.name
@@ -391,7 +390,7 @@ U.Map = L.Map.extend({
       icon: 'umap-fake-class',
       iconLoading: 'umap-fake-class',
       flyTo: this.options.easing,
-      onLocationError: (err) => this.alert.open({ content: err.message }),
+      onLocationError: (err) => U.Alert.error(err.message),
     })
     this._controls.fullscreen = new L.Control.Fullscreen({
       title: { false: L._('View Fullscreen'), true: L._('Exit Fullscreen') },
@@ -680,10 +679,7 @@ U.Map = L.Map.extend({
     } catch (e) {
       console.error(e)
       this.removeLayer(tilelayer)
-      this.alert.open({
-        content: `${L._('Error in the tilelayer URL')}: ${tilelayer._url}`,
-        level: 'error',
-      })
+      U.Alert.error(`${L._('Error in the tilelayer URL')}: ${tilelayer._url}`)
       // Users can put tilelayer URLs by hand, and if they add wrong {variable},
       // Leaflet throw an error, and then the map is no more editable
     }
@@ -715,10 +711,7 @@ U.Map = L.Map.extend({
     } catch (e) {
       this.removeLayer(overlay)
       console.error(e)
-      this.alert.open({
-        content: `${L._('Error in the overlay URL')}: ${overlay._url}`,
-        level: 'error',
-      })
+      U.Alert.error(`${L._('Error in the overlay URL')}: ${overlay._url}`)
     }
   },
 
@@ -843,10 +836,7 @@ U.Map = L.Map.extend({
     if (this.options.umap_id) {
       // We do not want an extra message during the map creation
       // to avoid the double notification/alert.
-      this.alert.open({
-        content: L._('The zoom and center have been modified.'),
-        level: 'info',
-      })
+      U.Alert.info(L._('The zoom and center have been modified.'))
     }
   },
 
@@ -886,12 +876,11 @@ U.Map = L.Map.extend({
   processFileToImport: function (file, layer, type) {
     type = type || U.Utils.detectFileType(file)
     if (!type) {
-      this.alert.open({
-        content: L._('Unable to detect format of file {filename}', {
+      U.Alert.error(
+        L._('Unable to detect format of file {filename}', {
           filename: file.name,
-        }),
-        level: 'error',
-      })
+        })
+      )
       return
     }
     if (type === 'umap') {
@@ -947,10 +936,7 @@ U.Map = L.Map.extend({
         self.importRaw(rawData)
       } catch (e) {
         console.error('Error importing data', e)
-        self.alert.open({
-          content: L._('Invalid umap data in {filename}', { filename: file.name }),
-          level: 'error',
-        })
+        U.Alert.error(L._('Invalid umap data in {filename}', { filename: file.name }))
       }
     }
   },
@@ -1058,57 +1044,54 @@ U.Map = L.Map.extend({
     const [data, _, error] = await this.server.post(uri, {}, formData)
     // FIXME: login_required response will not be an error, so it will not
     // stop code while it should
-    if (!error) {
-      let duration = 3000,
-        alert = { content: L._('Map has been saved!'), level: 'info' }
-      if (!this.options.umap_id) {
-        alert.content = L._('Congratulations, your map has been created!')
-        this.options.umap_id = data.id
-        this.permissions.setOptions(data.permissions)
-        this.permissions.commit()
-        if (data.permissions && data.permissions.anonymous_edit_url) {
-          alert.duration = Infinity
-          alert.content =
-            L._(
-              'Your map has been created! As you are not logged in, here is your secret link to edit the map, please keep it safe:'
-            ) + `<br>${data.permissions.anonymous_edit_url}`
+    if (error) {
+      return
+    }
 
-          alert.actions = [
-            {
-              label: L._('Copy link'),
-              callback: () => {
-                L.Util.copyToClipboard(data.permissions.anonymous_edit_url)
-                this.alert.open({
-                  content: L._('Secret edit link copied to clipboard!'),
-                  level: 'info',
-                })
-              },
-              callbackContext: this,
-            },
-          ]
-          if (this.options.urls.map_send_edit_link) {
-            alert.actions.push({
-              label: L._('Send me the link'),
-              input: L._('Email'),
-              callback: this.sendEditLink,
-              callbackContext: this,
-            })
-          }
-        }
-      } else if (!this.permissions.isDirty) {
+    if (!this.options.umap_id) {
+      this.options.umap_id = data.id
+      this.permissions.setOptions(data.permissions)
+      this.permissions.commit()
+      if (data?.permissions?.anonymous_edit_url) {
+        const send_edit_link_url =
+          this.options.urls.map_send_edit_link &&
+          this.urls.get('map_send_edit_link', {
+            map_id: this.options.umap_id,
+          })
+        this.once('saved', () => {
+          U.AlertCreation.info(
+            L._(
+              'Your map has been created! As you are not logged in, ' +
+                'here is your secret link to edit the map, please keep it safe:'
+            ),
+            Number.Infinity,
+            data.permissions.anonymous_edit_url,
+            send_edit_link_url
+          )
+        })
+      } else {
+        this.once('saved', () => {
+          U.Alert.info(L._('Congratulations, your map has been created!'))
+        })
+      }
+    } else {
+      if (!this.permissions.isDirty) {
         // Do not override local changes to permissions,
         // but update in case some other editors changed them in the meantime.
         this.permissions.setOptions(data.permissions)
         this.permissions.commit()
       }
-      // Update URL in case the name has changed.
-      if (history && history.pushState)
-        history.pushState({}, this.options.name, data.url)
-      else window.location = data.url
-      alert.content = data.info || alert.content
-      this.once('saved', () => this.alert.open(alert))
-      this.permissions.save()
+      this.once('saved', () => {
+        U.Alert.info(data.info || L._('Map has been saved!'))
+      })
     }
+    // Update URL in case the name has changed.
+    if (history?.pushState) {
+      history.pushState({}, this.options.name, data.url)
+    } else {
+      window.location = data.url
+    }
+    this.permissions.save()
   },
 
   save: function () {
@@ -1126,33 +1109,20 @@ U.Map = L.Map.extend({
     }
   },
 
-  sendEditLink: async function () {
-    const input = this.alert.container.querySelector('input')
-    const email = input.value
-
-    const formData = new FormData()
-    formData.append('email', email)
-
-    const url = this.urls.get('map_send_edit_link', { map_id: this.options.umap_id })
-    await this.server.post(url, {}, formData)
-  },
-
   star: async function () {
-    if (!this.options.umap_id)
-      return this.alert.open({
-        content: L._('Please save the map first'),
-        level: 'error',
-      })
+    if (!this.options.umap_id) {
+      return U.Alert.error(L._('Please save the map first'))
+    }
     const url = this.urls.get('map_star', { map_id: this.options.umap_id })
     const [data, response, error] = await this.server.post(url)
-    if (!error) {
-      this.options.starred = data.starred
-      let msg = data.starred
-        ? L._('Map has been starred')
-        : L._('Map has been unstarred')
-      this.alert.open({ content: msg, level: 'info' })
-      this.renderControls()
+    if (error) {
+      return
     }
+    this.options.starred = data.starred
+    U.Alert.info(
+      data.starred ? L._('Map has been starred') : L._('Map has been unstarred')
+    )
+    this.renderControls()
   },
 
   geometry: function () {

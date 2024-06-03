@@ -1,0 +1,45 @@
+[role="dialog"] {
+    box-sizing: border-box;
+    min-height: 46px;
+    line-height: 46px;
+    padding: var(--panel-gutter);
+    position: absolute;
+    box-shadow: 0 1px 7px #999999;
+    background: none repeat scroll 0 0 rgba(20, 22, 23, 0.8);
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.8em;
+    z-index: 1012;
+    border-radius: 2px;
+    margin-top: calc(var(--header-height) + var(--panel-gutter));
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    left: 50%;
+    transform: translate(-50%, 0);
+    min-width: 80%;
+}
+[role="dialog"][data-level='error'] {
+    background-color: #c60f13;
+}
+[role="dialog"] > div {
+    margin: 0 auto;
+}
+[role="dialog"] [data-close] {
+    color: #fff;
+    max-width: 42px;
+    line-height: initial;
+    margin: 0;
+    margin-left: var(--panel-gutter);
+    background-color: #202425;
+    font-size: 0.7rem;
+}
+[role="dialog"] [data-close] .icon + span {
+    margin-left: 0;
+}
+#link-wrapper form {
+    display: flex;
+}
+#link-wrapper form input[type='button'] {
+    max-width: 100px;
+}
