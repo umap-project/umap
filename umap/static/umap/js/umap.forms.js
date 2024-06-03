@@ -340,15 +340,6 @@ L.FormBuilder.TextColorPicker = L.FormBuilder.ColorPicker.extend({
   ],
 })
 
-L.FormBuilder.ProxyTTLSelect = L.FormBuilder.Select.extend({
-  selectOptions: [
-    [undefined, L._('No cache')],
-    ['300', L._('5 min')],
-    ['3600', L._('1 hour')],
-    ['86400', L._('1 day')],
-  ],
-})
-
 L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
   getOptions: function () {
     const layer_classes = [
