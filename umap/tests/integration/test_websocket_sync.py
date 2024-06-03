@@ -1,5 +1,6 @@
 import re
 
+import pytest
 from playwright.sync_api import expect
 
 from umap.models import Map
@@ -9,6 +10,7 @@ from ..base import DataLayerFactory, MapFactory
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 
+@pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_markers(
     context, live_server, websocket_server, tilelayer
 ):
@@ -73,6 +75,7 @@ def test_websocket_connection_can_sync_markers(
     expect(b_marker_pane).to_have_count(1)
 
 
+@pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_polygons(
     context, live_server, websocket_server, tilelayer
 ):
@@ -156,6 +159,7 @@ def test_websocket_connection_can_sync_polygons(
     expect(b_polygons).to_have_count(0)
 
 
+@pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_map_properties(
     context, live_server, websocket_server, tilelayer
 ):
@@ -187,6 +191,7 @@ def test_websocket_connection_can_sync_map_properties(
     expect(peerA.locator(".leaflet-control-zoom")).to_be_hidden()
 
 
+@pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_datalayer_properties(
     context, live_server, websocket_server, tilelayer
 ):
@@ -215,6 +220,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
     expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
 
 
+@pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_cloned_polygons(
     context, live_server, websocket_server, tilelayer
 ):

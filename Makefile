@@ -58,10 +58,10 @@ publish: ## Publish the Python package to Pypi
 test: testpy testjs
 
 testpy:
-	pytest -vv umap/tests/
+	pytest -vv umap/tests/ --dist=loadgroup
 
 test-integration:
-	pytest -xv umap/tests/integration/
+	pytest -xv umap/tests/integration/ --dist=loadgroup
 
 clean:
 	rm -f dist/*
