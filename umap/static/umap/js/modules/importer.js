@@ -3,8 +3,6 @@ import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import Dialog from './ui/dialog.js'
 
-const AVAILABLE_IMPORTERS = ['geodatamine', 'communesfr', 'presets']
-
 const TEMPLATE = `
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
     <div class="formbox">
@@ -46,14 +44,10 @@ export default class Importer {
   }
 
   loadImporterss() {
-    for (const key of AVAILABLE_IMPORTERS) {
-      if (key in this.map.options.importers) {
-        import(`./importers/${key}.js`).then((mod) => {
-          this.IMPORTERS.push(
-            new mod.Importer(this.map, this.map.options.importers[key])
-          )
-        })
-      }
+    for (const key of Object.keys(this.map.options.importers || {})) {
+      import(`./importers/${key}.js`).then((mod) => {
+        this.IMPORTERS.push(new mod.Importer(this.map, this.map.options.importers[key]))
+      })
     }
   }
 
