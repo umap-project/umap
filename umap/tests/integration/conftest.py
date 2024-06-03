@@ -1,9 +1,10 @@
 import os
+import subprocess
+import time
 from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
-from xprocess import ProcessStarter
 
 
 @pytest.fixture(autouse=True)
@@ -37,19 +38,23 @@ def login(context, settings, live_server):
     return do_login
 
 
-@pytest.fixture()
-def websocket_server(xprocess):
-    class Starter(ProcessStarter):
-        settings_path = (
-            (Path(__file__).parent.parent / "settings.py").absolute().as_posix()
-        )
-        os.environ["UMAP_SETTINGS"] = settings_path
-        # env = {"UMAP_SETTINGS": settings_path}
-        pattern = "Waiting for connections*"
-        args = ["python", "-m", "umap.ws"]
-        timeout = 1
-        terminate_on_interrupt = True
+@pytest.fixture
+def websocket_server():
+    # Find the test-settings, and put them in the current environment
+    settings_path = (Path(__file__).parent.parent / "settings.py").absolute().as_posix()
+    os.environ["UMAP_SETTINGS"] = settings_path
 
-    xprocess.ensure("websocket_server", Starter)
-    yield
-    xprocess.getinfo("websocket_server").terminate()
+    ds_proc = subprocess.Popen(
+        [
+            "umap",
+            "run_websocket_server",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    time.sleep(2)
+    # Ensure it started properly before yielding
+    assert not ds_proc.poll(), ds_proc.stdout.read().decode("utf-8")
+    yield ds_proc
+    # Shut it down at the end of the pytest session
+    ds_proc.terminate()
