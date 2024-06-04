@@ -2,28 +2,26 @@ import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import Dialog from './ui/dialog.js'
+import { SCHEMA } from './schema.js'
 
 const TEMPLATE = `
-    <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
+    <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Add data')}</span></h3>
+    <label class="counter">${translate('Choose data')}</label>
     <div class="formbox">
-      <input type="file" multiple autofocus />
-      <input type="url" placeholder="${translate('Provide an URL here')}" />
-      <textarea placeholder="${translate('Paste your data here')}"></textarea>
+      <input type="file" multiple autofocus onchange />
+      <input type="url" placeholder="${translate('Provide an URL here')}" onchange />
+      <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
     </div>
     <div class="importers">
-      <h4>${translate('Import from:')}</h4>
+      <h5>${translate('Import helpers:')}</h5>
       <div class="button-bar by4" id="importers">
       </div>
     </div>
-    <label data-help="importFormats">
-      ${translate('Choose the format of the data to import')}
-      <select name="format">
-        <option>${translate('Choose the data format')}</option>
-      </select>
+    <label class="counter">${translate('Choose the data format')}
+      <select name="format" onchange></select>
     </label>
     <div class="destination">
-      <label>
-        ${translate('Choose the layer to import in')}
+      <label class="counter">${translate('Choose the layer to import in')}
         <select name="layer-id"></select>
       </label>
       <label>
@@ -31,7 +29,10 @@ const TEMPLATE = `
         <input type="checkbox" name="clear" />
       </label>
     </div>
-    <input type="button" class="button" name="import" value="${translate('Import')}" />
+    <label class="counter">${translate('Choose import mode')}</label>
+    <input type="button" class="button" name="copy" value="${translate('Copy into the layer')}" />
+    <input hidden type="button" class="button" name="link" value="${translate('Link to the layer as remote data')}" />
+    <input hidden type="button" class="button" name="full" value="${translate('Import full map data')}" />
     `
 
 export default class Importer {
@@ -60,7 +61,8 @@ export default class Importer {
   }
 
   set url(value) {
-    return (this.qs('[type=url]').value = value)
+    this.qs('[type=url]').value = value
+    this.onChange()
   }
 
   get format() {
@@ -68,7 +70,8 @@ export default class Importer {
   }
 
   set format(value) {
-    return (this.qs('[name=format]').value = value)
+    this.qs('[name=format]').value = value
+    this.onChange()
   }
 
   get files() {
@@ -85,7 +88,7 @@ export default class Importer {
 
   get layer() {
     const layerId = this.qs('[name=layer-id]').value
-    if (layerId) return this.map.datalayers[layerId]
+    return this.map.datalayers[layerId] || this.map.createDataLayer()
   }
 
   build() {
@@ -100,8 +103,7 @@ export default class Importer {
           () => plugin.open(this)
         )
       }
-    } else {
-      this.qs('.importers').style.display = 'none'
+      this.qs('.importers').toggleAttribute('hidden', true)
     }
     for (const type of this.TYPES) {
       DomUtil.element({
@@ -111,8 +113,20 @@ export default class Importer {
         textContent: type,
       })
     }
-    DomEvent.on(this.qs('[name=import]'), 'click', this.submit, this)
+    DomEvent.on(this.qs('[name=copy]'), 'click', this.copy, this)
+    DomEvent.on(this.qs('[name=link]'), 'click', this.link, this)
+    DomEvent.on(this.qs('[name=full]'), 'click', this.full, this)
     DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
+    for (const element of this.container.querySelectorAll('[onchange]')) {
+      DomEvent.on(element, 'change', this.onChange, this)
+    }
+  }
+
+  onChange() {
+    this.qs('[name=link]').toggleAttribute('hidden', !this.url || this.format === 'umap')
+    this.qs('[name=full]').toggleAttribute('hidden', this.format !== 'umap')
+    this.qs('[name=copy]').toggleAttribute('hidden', this.format === 'umap')
+    this.qs('.destination').toggleAttribute('hidden', this.format === 'umap')
   }
 
   onFileChange(e) {
@@ -131,6 +145,8 @@ export default class Importer {
 
   onLoad() {
     this.qs('[type=file]').value = null
+    this.url = null
+    this.format = undefined
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
     this.map.eachDataLayerReverse((datalayer) => {
@@ -162,31 +178,60 @@ export default class Importer {
     this.fileInput.showPicker()
   }
 
-  submit() {
-    let layer = this.layer
-    if (this.format === 'umap') {
-      this.map.once('postsync', this.map._setDefaultCenter)
+  full() {
+    if (this.format !== 'umap') return
+    this.map.once('postsync', this.map._setDefaultCenter)
+    try {
+      if (this.files.length) {
+        for (const file of this.files) {
+          this.map.processFileToImport(file, null, 'umap')
+        }
+      } else if (this.raw) {
+        this.map.importRaw(this.raw)
+      } else if (this.url) {
+        this.map.importFromUrl(this.url, this.format)
+      }
+    } catch (e) {
+      this.map.alert.open({ content: translate('Invalid umap data'), level: 'error' })
+      console.error(e)
     }
-    if (layer && this.clear) layer.empty()
+  }
+
+  link() {
+    if (!this.url) return
+    if (!this.format) {
+      Alert.error(translate('Please choose a format'))
+      return
+    }
+    let layer = this.layer
+    layer.options.remoteData = {
+      url: this.url,
+      format: this.format,
+    }
+    if (this.map.options.urls.ajax_proxy) {
+      layer.options.remoteData.proxy = true
+      layer.options.remoteData.ttl = SCHEMA.ttl.default
+    }
+    layer.fetchRemoteData(true)
+  }
+
+  copy() {
+    // Format may be guessed from file later.
+    // Usefull in case of multiple files with different formats.
+    if (!this.format && !this.files.length) {
+      Alert.error(translate('Please choose a format'))
+      return
+    }
+    let layer = this.layer
+    if (this.clear) layer.empty()
     if (this.files.length) {
       for (const file of this.files) {
         this.map.processFileToImport(file, layer, this.format)
       }
-    } else {
-      if (!this.format)
-        return Alert.error(translate('Please choose a format'))
-      if (this.raw && this.format === 'umap') {
-        try {
-          this.map.importRaw(this.raw, this.format)
-        } catch (e) {
-          Alert.error(L._('Invalid umap data'))
-          console.error(e)
-        }
-      } else {
-        if (!layer) layer = this.map.createDataLayer()
-        if (this.raw) layer.importRaw(this.raw, this.format)
-        else if (this.url) layer.importFromUrl(this.url, this.format)
-      }
+    } else if (this.raw) {
+      layer.importRaw(this.raw, this.format)
+    } else if (this.url) {
+      layer.importFromUrl(this.url, this.format)
     }
   }
 }

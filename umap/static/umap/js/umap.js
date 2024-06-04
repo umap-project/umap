@@ -888,6 +888,13 @@ U.Map = L.Map.extend({
     }
   },
 
+  importFromUrl: async function (uri) {
+    const response = await this.request.get(uri)
+    if (response && response.ok) {
+      this.importRaw(await response.text())
+    }
+  },
+
   importRaw: function (rawData) {
     const importedData = JSON.parse(rawData)
 

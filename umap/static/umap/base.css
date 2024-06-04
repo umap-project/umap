@@ -389,6 +389,9 @@ fieldset legend {
     border-radius: 50%;
     content: attr(data-badge);
 }
+[hidden] {
+    display: none;
+}
 
 /* Switch */
 input.switch:empty {
