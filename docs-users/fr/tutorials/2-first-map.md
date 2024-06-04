@@ -89,9 +89,7 @@ texte est affiché en haut de la carte, comme celui ci-dessous :
     data-alt="Message d’alerte contenant le lien d’édition."
     data-width="790"
     data-height="226"
-    data-selector="#umap-alert-container"
-    data-wait-for="document.querySelector('#umap-alert-container .TODO')"
-    data-javascript="document.querySelector('button.leaflet-control-edit-save').click()"
+    data-selector='umap-alert-creation [role="dialog"]'
     >Message d’alerte contenant le lien d’édition.</shot-scraper>
 
 Ce texte explique que vous venez de créer une carte **anonyme** et vous
