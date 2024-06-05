@@ -12,6 +12,7 @@ import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './req
 import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
 import Orderable from './orderable.js'
 import Importer from './importer.js'
+import Help from './help.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -38,4 +39,5 @@ window.U = {
   Caption,
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
+  Help,
 }
