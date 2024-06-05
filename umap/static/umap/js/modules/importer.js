@@ -6,33 +6,41 @@ import { SCHEMA } from './schema.js'
 
 const TEMPLATE = `
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Add data')}</span></h3>
-    <label class="counter">${translate('Choose data')}</label>
-    <div class="formbox">
+    <fieldset class="formbox">
+      <legend class="counter">${translate('Choose data')}</legend>
       <input type="file" multiple autofocus onchange />
       <input type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
-    </div>
-    <div class="importers">
-      <h5>${translate('Import helpers:')}</h5>
-      <div class="button-bar by4" id="importers">
+      <div class="importers">
+        <h5>${translate('Import helpers:')}</h5>
+        <div class="button-bar by4" id="importers">
+        </div>
       </div>
-    </div>
-    <label class="counter">${translate('Choose the data format')}
+    </fieldset>
+    <fieldset class="formbox">
+      <legend class="counter">${translate('Choose the data format')}</legend>
       <select name="format" onchange></select>
-    </label>
-    <div class="destination">
-      <label class="counter">${translate('Choose the layer to import in')}
-        <select name="layer-id"></select>
+    </fieldset>
+    <fieldset class="destination formbox">
+      <legend class="counter">${translate('Choose the layer to import in')}</legend>
+      <select name="layer-id"></select>
+      <label>
+        <input type="checkbox" name="clear" />
+        ${translate('Replace layer content')}
+      </label>
+    </fieldset>
+    <fieldset class="import-mode formbox">
+      <legend class="counter">${translate('Choose import mode')}</legend>
+      <label>
+        <input type="radio" name="action" value="copy" />
+        ${translate('Copy into the layer')}
       </label>
       <label>
-        ${translate('Replace layer content')}
-        <input type="checkbox" name="clear" />
+        <input type="radio" name="action" value="link" />
+        ${translate('Link to the layer as remote data')}
       </label>
-    </div>
-    <label class="counter">${translate('Choose import mode')}</label>
-    <input type="button" class="button" name="copy" value="${translate('Copy into the layer')}" />
-    <input hidden type="button" class="button" name="link" value="${translate('Link to the layer as remote data')}" />
-    <input hidden type="button" class="button" name="full" value="${translate('Import full map data')}" />
+    </fieldset>
+    <input type="button" class="button" name="submit" value="${translate('Add data')}" />
     `
 
 export default class Importer {
@@ -86,6 +94,10 @@ export default class Importer {
     return Boolean(this.qs('[name=clear]').checked)
   }
 
+  get action() {
+    return this.qs('[name=action]:checked').value
+  }
+
   get layer() {
     const layerId = this.qs('[name=layer-id]').value
     return this.map.datalayers[layerId] || this.map.createDataLayer()
@@ -113,9 +125,7 @@ export default class Importer {
         textContent: type,
       })
     }
-    DomEvent.on(this.qs('[name=copy]'), 'click', this.copy, this)
-    DomEvent.on(this.qs('[name=link]'), 'click', this.link, this)
-    DomEvent.on(this.qs('[name=full]'), 'click', this.full, this)
+    DomEvent.on(this.qs('[name=submit]'), 'click', this.submit, this)
     DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
     for (const element of this.container.querySelectorAll('[onchange]')) {
       DomEvent.on(element, 'change', this.onChange, this)
@@ -123,13 +133,8 @@ export default class Importer {
   }
 
   onChange() {
-    this.qs('[name=link]').toggleAttribute(
-      'hidden',
-      !this.url || this.format === 'umap'
-    )
-    this.qs('[name=full]').toggleAttribute('hidden', this.format !== 'umap')
-    this.qs('[name=copy]').toggleAttribute('hidden', this.format === 'umap')
     this.qs('.destination').toggleAttribute('hidden', this.format === 'umap')
+    this.qs('.import-mode').toggleAttribute('hidden', this.format === 'umap' || !this.url)
   }
 
   onFileChange(e) {
@@ -181,8 +186,13 @@ export default class Importer {
     this.fileInput.showPicker()
   }
 
+  submit() {
+    if (this.format === 'umap') this.full()
+    else if (!this.url) this.copy()
+    else if (this.action) this[this.action]()
+  }
+
   full() {
-    if (this.format !== 'umap') return
     this.map.once('postsync', this.map._setDefaultCenter)
     try {
       if (this.files.length) {

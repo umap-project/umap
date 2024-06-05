@@ -300,6 +300,10 @@ input + .help-text {
 .formbox select {
     width: calc(100% - 14px);
 }
+fieldset.formbox {
+    border: none;
+    border-top: 1px solid var(--color-lightGray);
+}
 label {
     display: block;
     font-size: 12px;
