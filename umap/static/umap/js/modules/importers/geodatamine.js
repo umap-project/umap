@@ -21,8 +21,6 @@ const TEMPLATE = `
 `
 
 class Autocomplete extends SingleMixin(BaseAjax) {
-  URL = 'https://geodatamine.fr/boundaries/search?text={q}'
-
   createResult(item) {
     return super.createResult({
       value: item.id,
@@ -58,6 +56,7 @@ export class Importer {
     }
     const asPoint = container.querySelector('[name=aspoint]')
     this.autocomplete = new Autocomplete(container, {
+      url: `${this.baseUrl}/boundaries/search?text={q}`,
       on_select: (choice) => {
         boundary = choice.item.value
       },

@@ -222,10 +222,14 @@ export class BaseAutocomplete {
 }
 
 export class BaseAjax extends BaseAutocomplete {
-  URL = '/foobar/?q={q}'
   constructor(el, options) {
     super(el, options)
+    this.setUrl()
     this.initRequest()
+  }
+
+  setUrl() {
+    this.url = this.options?.url
   }
 
   initRequest() {
@@ -248,7 +252,7 @@ export class BaseAjax extends BaseAutocomplete {
     if (val === this.cache) return
     else this.cache = val
     val = val.toLowerCase()
-    const url = Util.template(this.URL, { q: encodeURIComponent(val) })
+    const url = Util.template(this.url, { q: encodeURIComponent(val) })
     this.handleResults(await this._search(url))
   }
 
@@ -261,7 +265,10 @@ export class BaseAjax extends BaseAutocomplete {
 }
 
 class BaseServerAjax extends BaseAjax {
-  URL = '/agnocomplete/AutocompleteUser/?q={q}'
+  setUrl() {
+    this.url = '/agnocomplete/AutocompleteUser/?q={q}'
+  }
+
   initRequest() {
     this.server = new ServerRequest()
   }
