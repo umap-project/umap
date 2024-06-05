@@ -245,33 +245,6 @@ L.DomEvent.once = (el, types, fn, context) => {
   return L.DomEvent.on(el, types, fn, context).on(el, types, handler, context)
 }
 
-/*
- * Global events
- */
-U.Keys = {
-  LEFT: 37,
-  UP: 38,
-  RIGHT: 39,
-  DOWN: 40,
-  TAB: 9,
-  ENTER: 13,
-  ESC: 27,
-  APPLE: 91,
-  SHIFT: 16,
-  ALT: 17,
-  CTRL: 18,
-  E: 69,
-  F: 70,
-  H: 72,
-  I: 73,
-  L: 76,
-  M: 77,
-  O: 79,
-  P: 80,
-  S: 83,
-  Z: 90,
-}
-
 L.LatLng.prototype.isValid = function () {
   return (
     isFinite(this.lat) &&

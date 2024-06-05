@@ -20,6 +20,10 @@ export class Panel {
     if (!this.mode) this.mode = mode
   }
 
+  isOpen() {
+    return this.container.classList.contains("on")
+  }
+
   open({ content, className, actions = [] } = {}) {
     this.container.className = `with-transition panel ${this.classname} ${this.mode || ''}`
     this.container.innerHTML = ''

@@ -518,73 +518,81 @@ U.Map = L.Map.extend({
 
   initShortcuts: function () {
     const globalShortcuts = function (e) {
-      const key = e.keyCode
-      const hasModifier = (e.ctrlKey || e.metaKey) && !e.shiftKey
 
-      /* Generic shortcuts */
-      if (key === U.Keys.F && hasModifier) {
-        L.DomEvent.stop(e)
-        this.search()
-      } else if (e.keyCode === U.Keys.ESC) {
+     if (e.key === 'Escape') {
         if (this.dialog.visible) {
           this.dialog.close()
-        } else {
-          this.panel.close()
+        } else if (this.editEnabled && this.editTools.drawing()) {
+          this.editTools.stopDrawing()
+        } else if (this.measureTools.enabled()) {
+          this.measureTools.stopDrawing()
+        } else if (this.editPanel?.isOpen()) {
           this.editPanel?.close()
+        } else if (this.fullPanel?.isOpen()) {
           this.fullPanel?.close()
+        } else if (this.panel.isOpen()) {
+          this.panel.close()
         }
       }
 
-      if (!this.hasEditMode()) return
+      // From now on, only ctrl/meta shortcut
+      if (!(e.ctrlKey || e.metaKey) || e.shiftKey) return
+
+     if (e.key === 'f') {
+        L.DomEvent.stop(e)
+        this.search()
+      }
 
       /* Edit mode only shortcuts */
-      if (key === U.Keys.E && hasModifier && !this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.enableEdit()
-      } else if (key === U.Keys.E && hasModifier && this.editEnabled && !this.isDirty) {
-        L.DomEvent.stop(e)
-        this.disableEdit()
-      }
-      if (key === U.Keys.S && hasModifier) {
-        L.DomEvent.stop(e)
-        if (this.isDirty) {
-          this.save()
+      if (!this.hasEditMode()) return
+
+
+
+      // Edit mode Off
+      if (!this.editEnabled) {
+        switch (e.key) {
+          case 'e':
+            L.DomEvent.stop(e)
+            this.enableEdit()
+            break
         }
+        return
       }
-      if (key === U.Keys.Z && hasModifier && this.isDirty) {
-        L.DomEvent.stop(e)
-        this.askForReset()
+
+      // Edit mode on
+      let used = true
+      switch (e.key) {
+        case 'e':
+          if (!this.isDirty) this.disableEdit()
+          break
+        case 's':
+          if (this.isDirty) this.save()
+          break
+        case 'z':
+          if (this.isDirty) this.askForReset()
+          break
+        case 'm':
+          this.editTools.startMarker()
+          break
+        case 'p':
+          this.editTools.startPolygon()
+          break
+        case 'l':
+          this.editTools.startPolyline()
+          break
+        case 'i':
+          this.importer.open()
+          break
+        case 'o':
+          this.importer.openFiles()
+          break
+        case 'h':
+          this.help.show('edit')
+          break
+        default:
+          used = false
       }
-      if (key === U.Keys.M && hasModifier && this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.editTools.startMarker()
-      }
-      if (key === U.Keys.P && hasModifier && this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.editTools.startPolygon()
-      }
-      if (key === U.Keys.L && hasModifier && this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.editTools.startPolyline()
-      }
-      if (key === U.Keys.I && hasModifier && this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.importer.open()
-      }
-      if (key === U.Keys.O && hasModifier && this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.importer.openFiles()
-      }
-      if (key === U.Keys.H && hasModifier && this.editEnabled) {
-        L.DomEvent.stop(e)
-        this.help.show('edit')
-      }
-      if (e.keyCode === U.Keys.ESC) {
-        if (this.editEnabled && this.editTools.drawing()) {
-          this.editTools.stopDrawing()
-        }
-        if (this.measureTools.enabled()) this.measureTools.stopDrawing()
-      }
+      if (used) L.DomEvent.stop(e)
     }
     L.DomEvent.addListener(document, 'keydown', globalShortcuts, this)
   },
