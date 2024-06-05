@@ -262,6 +262,7 @@ ul.umap-autocomplete {
 }
 .umap-singleresult {
     margin-bottom: 10px;
+    clear: both;
 }
 .umap-singleresult div,
 .umap-multiresult li {

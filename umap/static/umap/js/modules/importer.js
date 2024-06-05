@@ -103,7 +103,7 @@ export default class Importer {
           () => plugin.open(this)
         )
       }
-      this.qs('.importers').toggleAttribute('hidden', true)
+      this.qs('.importers').toggleAttribute('hidden', false)
     }
     for (const type of this.TYPES) {
       DomUtil.element({
@@ -123,7 +123,10 @@ export default class Importer {
   }
 
   onChange() {
-    this.qs('[name=link]').toggleAttribute('hidden', !this.url || this.format === 'umap')
+    this.qs('[name=link]').toggleAttribute(
+      'hidden',
+      !this.url || this.format === 'umap'
+    )
     this.qs('[name=full]').toggleAttribute('hidden', this.format !== 'umap')
     this.qs('[name=copy]').toggleAttribute('hidden', this.format === 'umap')
     this.qs('.destination').toggleAttribute('hidden', this.format === 'umap')

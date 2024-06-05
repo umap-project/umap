@@ -1,5 +1,6 @@
 import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
+import { translate } from '../i18n.js'
 
 const BOUNDARY_TYPES = {
   admin_6: 'département',
@@ -9,6 +10,15 @@ const BOUNDARY_TYPES = {
   political: 'canton',
   local_authority: 'EPCI',
 }
+
+const TEMPLATE = `
+  <h3>GeoDataMine</h3>
+  <select name="theme"></select>
+  <label>
+    <input type="checkbox" name="aspoint" />
+    ${translate('Convert all geometries to points')}
+  </label>
+`
 
 class Autocomplete extends SingleMixin(BaseAjax) {
   URL = 'https://geodatamine.fr/boundaries/search?text={q}'
@@ -25,18 +35,14 @@ export class Importer {
   constructor() {
     this.name = 'GeoDataMine'
     this.baseUrl = 'https://geodatamine.fr'
-    this.options = {
-      theme: null,
-      boundary: null,
-      aspoint: false,
-    }
   }
 
   async open(importer) {
+    let boundary = null
     const container = DomUtil.create('div')
-    DomUtil.createTitle(container, this.name)
+    container.innerHTML = TEMPLATE
     const response = await importer.map.request.get(`${this.baseUrl}/themes`)
-    const select = DomUtil.element({ tagName: 'select', parent: container })
+    const select = container.querySelector('select')
     if (response && response.ok) {
       const { themes } = await response.json()
       for (const theme of themes) {
@@ -50,11 +56,14 @@ export class Importer {
     } else {
       console.error(response)
     }
+    const asPoint = container.querySelector('[name=aspoint]')
     this.autocomplete = new Autocomplete(container, {
-      on_select: (choice) => (this.options.boundary = choice.item.value),
+      on_select: (choice) => {
+        boundary = choice.item.value
+      },
     })
     const confirm = () => {
-      importer.url = `${this.baseUrl}/data/${select.value}/${this.options.boundary}?format=geojson`
+      importer.url = `${this.baseUrl}/data/${select.value}/${boundary}?format=geojson&aspoint=${asPoint.checked}`
       importer.format = 'geojson'
       importer.dialog.close()
     }
