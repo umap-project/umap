@@ -191,7 +191,7 @@
     "icon opacity": "Opacité de l'icône",
     "Icon shape": "Forme de l'icône",
     "Icon symbol": "Image de l'icône",
-    "If false, the polygon or line will act as a part of the underlying map.": "Désactiver pour que le polygone ou la ligne ne réagisse plus aux intéractions",
+    "If false, the polygon or line will act as a part of the underlying map.": "Désactiver pour que le polygone ou la ligne ne réagisse plus aux interactions.",
     "Iframe with custom height (in px): {{{http://iframe.url.com|height}}}": "Iframe avec hauteur (en pixels): {{{http://iframe.url.com|hauteur}}}",
     "Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}": "Iframe avec hauteur et largeur (en px) : {{{http://iframe.url.com|height*width}}}",
     "iframe": "iframe",
