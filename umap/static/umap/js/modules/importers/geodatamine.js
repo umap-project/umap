@@ -30,7 +30,7 @@ class Autocomplete extends SingleMixin(BaseAjax) {
 }
 
 export class Importer {
-  constructor(options) {
+  constructor(map, options) {
     this.name = 'GeoDataMine'
     this.baseUrl = options?.url || 'https://geodatamine.fr'
   }

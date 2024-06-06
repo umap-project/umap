@@ -219,7 +219,7 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("csv")
     page.locator('select[name="layer-id"]').select_option(datalayer.name)
-    expect(page.locator('input[name=layer-name]')).to_be_hidden()
+    expect(page.locator("input[name=layer-name]")).to_be_hidden()
     page.get_by_role("button", name="Add data", exact=True).click()
     # No layer has been created
     expect(layers).to_have_count(1)
@@ -524,3 +524,17 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('input[name="url"]')).to_have_value("")
+
+
+def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
+    settings.UMAP_EXPERIMENTAL_IMPORTERS = {
+        "overpass": {"url": "https://my.overpass.io/interpreter"}
+    }
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("button", name="Overpass").click()
+    page.get_by_placeholder("amenity=drinking_water").fill("building")
+    page.get_by_role("button", name="OK").click()
+    expect(page.get_by_placeholder("Provide an URL here")).to_have_value(
+        "https://my.overpass.io/interpreter?data=[out:json];nwr[building]({south},{west},{north},{east});out geom;"
+    )

@@ -3,6 +3,7 @@ import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import Dialog from './ui/dialog.js'
 import { SCHEMA } from './schema.js'
+import * as Utils from './utils.js'
 
 const TEMPLATE = `
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Add data')}</span></h3>
