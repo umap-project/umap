@@ -218,6 +218,8 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("csv")
+    page.locator('select[name="layer-id"]').select_option(datalayer.name)
+    expect(page.locator('input[name=layer-name]')).to_be_hidden()
     page.get_by_role("button", name="Add data", exact=True).click()
     # No layer has been created
     expect(layers).to_have_count(1)
@@ -237,6 +239,7 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("csv")
+    page.locator('select[name="layer-id"]').select_option(datalayer.name)
     page.get_by_label("Replace layer content").check()
     page.get_by_role("button", name="Add data", exact=True).click()
     # No layer has been created
@@ -258,10 +261,12 @@ def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
     textarea.fill(path.read_text())
     page.locator("select[name=format]").select_option("csv")
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")
+    page.locator("[name=layer-name]").fill("My new layer name")
     page.get_by_role("button", name="Add data", exact=True).click()
     # A new layer has been created
     expect(layers).to_have_count(2)
     expect(markers).to_have_count(3)
+    expect(page.get_by_text("My new layer name")).to_be_visible()
 
 
 def test_should_remove_dot_in_property_names(live_server, page, settings, tilelayer):
@@ -504,7 +509,7 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
             }
         )
 
-    # Intercept the route to the proxy
+    # Intercept the route
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()

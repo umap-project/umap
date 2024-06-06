@@ -37,6 +37,7 @@ export class Importer {
 
   async open(importer) {
     let boundary = null
+    let boundaryName = null
     const container = DomUtil.create('div')
     container.innerHTML = TEMPLATE
     const response = await importer.map.request.get(`${this.baseUrl}/themes`)
@@ -59,11 +60,13 @@ export class Importer {
       url: `${this.baseUrl}/boundaries/search?text={q}`,
       on_select: (choice) => {
         boundary = choice.item.value
+        boundaryName = choice.item.label
       },
     })
     const confirm = () => {
       importer.url = `${this.baseUrl}/data/${select.value}/${boundary}?format=geojson&aspoint=${asPoint.checked}`
       importer.format = 'geojson'
+      importer.layerName = `${boundaryName} — ${select.options[select.selectedIndex].textContent}`
       importer.dialog.close()
     }
     L.DomUtil.createButton('', container, 'OK', confirm)

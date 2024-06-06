@@ -21,15 +21,16 @@ const TEMPLATE = `
       <legend class="counter" data-help="importFormats">${translate('Choose the data format')}</legend>
       <select name="format" onchange></select>
     </fieldset>
-    <fieldset class="destination formbox">
+    <fieldset id="destination" class="formbox">
       <legend class="counter">${translate('Choose the layer to import in')}</legend>
-      <select name="layer-id"></select>
-      <label>
+      <select name="layer-id" onchange></select>
+      <label id="clear">
         <input type="checkbox" name="clear" />
         ${translate('Replace layer content')}
       </label>
+      <input type="text" name="layer-name" placeholder="${translate('Layer name')}" />
     </fieldset>
-    <fieldset class="import-mode formbox">
+    <fieldset id="import-mode" class="formbox">
       <legend class="counter" data-help="importMode">${translate('Choose import mode')}</legend>
       <label>
         <input type="radio" name="action" value="copy" />
@@ -98,9 +99,25 @@ export default class Importer {
     return this.qs('[name=action]:checked').value
   }
 
+  get layerId() {
+    return this.qs('[name=layer-id]').value
+  }
+
+  set layerId(value) {
+    this.qs('[name=layer-id]').value = value
+  }
+
+  get layerName() {
+    return this.qs('[name=layer-name]').value
+  }
+
+  set layerName(name) {
+    this.qs('[name=layer-name]').value = name
+    this.onChange()
+  }
+
   get layer() {
-    const layerId = this.qs('[name=layer-id]').value
-    return this.map.datalayers[layerId] || this.map.createDataLayer()
+    return this.map.datalayers[this.layerId] || this.map.createDataLayer({name: this.layerName})
   }
 
   build() {
@@ -134,11 +151,13 @@ export default class Importer {
   }
 
   onChange() {
-    this.qs('.destination').toggleAttribute('hidden', this.format === 'umap')
-    this.qs('.import-mode').toggleAttribute(
+    this.qs('#destination').toggleAttribute('hidden', this.format === 'umap')
+    this.qs('#import-mode').toggleAttribute(
       'hidden',
       this.format === 'umap' || !this.url
     )
+    this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
+    this.qs('#clear').toggleAttribute('hidden', !Boolean(this.layerId))
   }
 
   onFileChange(e) {
@@ -159,6 +178,7 @@ export default class Importer {
     this.qs('[type=file]').value = null
     this.url = null
     this.format = undefined
+    this.layerName = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
     this.map.eachDataLayerReverse((datalayer) => {
@@ -176,6 +196,7 @@ export default class Importer {
       value: '',
       textContent: translate('Import in a new layer'),
       parent: layerSelect,
+      selected: true
     })
   }
 

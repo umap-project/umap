@@ -397,7 +397,7 @@ fieldset legend {
     content: attr(data-badge);
 }
 [hidden] {
-    display: none;
+    display: none!important;
 }
 
 /* Switch */

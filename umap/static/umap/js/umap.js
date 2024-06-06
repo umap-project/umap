@@ -799,16 +799,14 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (datalayer, sync) {
-    datalayer = datalayer || {
-      name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
-    }
-    const dl = new U.DataLayer(this, datalayer, sync)
+  createDataLayer: function (options = {}, sync) {
+    options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
+    const datalayer = new U.DataLayer(this, options, sync)
 
     if (sync !== false) {
-      dl.sync.upsert(dl.options)
+      datalayer.sync.upsert(datalayer.options)
     }
-    return dl
+    return datalayer
   },
 
   newDataLayer: function () {
