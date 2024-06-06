@@ -18,7 +18,7 @@ const TEMPLATE = `
       </div>
     </fieldset>
     <fieldset class="formbox">
-      <legend class="counter">${translate('Choose the data format')}</legend>
+      <legend class="counter" data-help="importFormats">${translate('Choose the data format')}</legend>
       <select name="format" onchange></select>
     </fieldset>
     <fieldset class="destination formbox">
@@ -30,7 +30,7 @@ const TEMPLATE = `
       </label>
     </fieldset>
     <fieldset class="import-mode formbox">
-      <legend class="counter">${translate('Choose import mode')}</legend>
+      <legend class="counter" data-help="importMode">${translate('Choose import mode')}</legend>
       <label>
         <input type="radio" name="action" value="copy" />
         ${translate('Copy into the layer')}
@@ -125,6 +125,7 @@ export default class Importer {
         textContent: type,
       })
     }
+    this.map.help.parse(this.container)
     DomEvent.on(this.qs('[name=submit]'), 'click', this.submit, this)
     DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
     for (const element of this.container.querySelectorAll('[onchange]')) {
@@ -134,7 +135,10 @@ export default class Importer {
 
   onChange() {
     this.qs('.destination').toggleAttribute('hidden', this.format === 'umap')
-    this.qs('.import-mode').toggleAttribute('hidden', this.format === 'umap' || !this.url)
+    this.qs('.import-mode').toggleAttribute(
+      'hidden',
+      this.format === 'umap' || !this.url
+    )
   }
 
   onFileChange(e) {

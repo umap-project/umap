@@ -100,30 +100,33 @@ const ENTRIES = {
   browsable: translate(
     'Set it to false to hide this layer from the slideshow, the data browser, the popup navigation…'
   ),
+  importMode: translate(
+    'When providing an URL, uMap can copy the remote data in a layer, or add this URL as remote source of the layer. In that case, data will always be fetched from that URL, and thus be up to date, but it will not be possible to edit it inside uMap.'
+  ),
   importFormats: `
   <div>
-    <h3>GeoJSON</h3>
-    <p>${translate('All properties are imported.')}</p>
-    <h3>GPX</h3>
-    <p>${translate('Properties imported:')}name, desc</p>
-    <h3>KML</h3>
-    <p>${translate('Properties imported:')}name, description</p>
-    <h3>CSV</h3>
-    <p>${translate('Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.')}</p>
-    <h3>uMap</h3>
-    <p>${translate('Imports all umap data, including layers and settings.')}</p>
+    <dt>GeoJSON</dt>
+    <dd>${translate('All properties are imported.')}</dd>
+    <dt>GPX</dt>
+    <dd>${translate('Properties imported:')}name, desc</dd>
+    <dt>KML</dt>
+    <dd>${translate('Properties imported:')}name, description</dd>
+    <dt>CSV</dt>
+    <dd>${translate('Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.')}</dd>
+    <dt>uMap</dt>
+    <dd>${translate('Imports all umap data, including layers and settings.')}</dd>
   </div>
   `,
   dynamicProperties: `
   <div>
-    <h3>${translate('Dynamic properties')}</h3>
+    <h4>${translate('Dynamic properties')}</h4>
     <p>${translate('Use placeholders with feature properties between brackets, eg. &#123;name&#125;, they will be dynamically replaced by the corresponding values.')}</p>
   </div>
   `,
 
   textFormatting: `
   <div>
-    <h3>${translate('Text formatting')}</h3>
+    <h4>${translate('Text formatting')}</h4>
     <ul>
       <li>${translate('*single star for italic*')}</li>
       <li>${translate('**double star for bold**')}</li>
@@ -170,6 +173,7 @@ export default class Help {
 
   show(entries) {
     const container = DomUtil.add('div')
+    DomUtil.createTitle(container, translate('Help'))
     // Special dynamic case. Do we still think this dialog is usefull ?
     if (entries == 'edit') {
       DomUtil.element({
@@ -209,9 +213,15 @@ export default class Help {
     return button
   }
 
+  parse(container) {
+    for (const element of container.querySelectorAll('[data-help]')) {
+      this.button(element, element.dataset.help.split(','))
+    }
+  }
+
   _buildEditEntry() {
     const container = DomUtil.create('div', '')
-    const title = DomUtil.create('h3', '', container)
+    const title = DomUtil.create('h4', '', container)
     const actionsContainer = DomUtil.create('ul', 'umap-edit-actions', container)
     const addAction = (action) => {
       const actionContainer = DomUtil.add('li', '', actionsContainer)
