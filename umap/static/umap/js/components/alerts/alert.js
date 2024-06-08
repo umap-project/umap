@@ -1,43 +1,57 @@
-class uMapAlert extends HTMLElement {
+import { uMapElement } from '../base.js'
+
+class uMapAlert extends uMapElement {
+  static get observedAttributes() {
+    return ['open']
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    switch (name) {
+      case 'open':
+        newValue === 'open' ? this._show() : this._hide()
+        break
+    }
+  }
+
   static info(message, duration = 5000) {
-    const event = new CustomEvent('umap:alert', {
-      bubbles: true,
-      cancelable: true,
-      detail: { message, duration },
-    })
-    document.dispatchEvent(event)
+    uMapAlert.emit('alert', { message, duration })
   }
 
   // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
   static error(message, duration = Infinity) {
-    const event = new CustomEvent('umap:alert', {
-      bubbles: true,
-      cancelable: true,
-      detail: { level: 'error', message, duration },
-    })
-    document.dispatchEvent(event)
+    uMapAlert.emit('alert', { level: 'error', message, duration })
   }
 
   constructor() {
     super()
+    this._hide()
     this.container = this.querySelector('[role="dialog"]')
     this.element = this.container.querySelector('[role="alert"]')
   }
 
   _hide() {
     this.setAttribute('hidden', 'hidden')
+    this.removeAttribute('open')
   }
 
   _show() {
     this.removeAttribute('hidden')
   }
 
-  _displayAlert(detail) {
-    const { level = 'info', duration = 5000, message = '' } = detail
+  _handleClose() {
+    this.addEventListener('click', (event) => {
+      if (event.target.closest('[data-close]')) {
+        this._hide()
+      }
+    })
+  }
+
+  onAlert(event) {
+    const { level = 'info', duration = 5000, message = '' } = event.detail
     this.container.dataset.level = level
     this.container.dataset.duration = duration
     this.element.textContent = message
-    this._show()
+    this.setAttribute('open', 'open')
     if (Number.isFinite(duration)) {
       setTimeout(() => {
         this._hide()
@@ -46,14 +60,8 @@ class uMapAlert extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('click', (event) => {
-      if (event.target.closest('[data-close]')) {
-        this._hide()
-      }
-    })
-    document.addEventListener('umap:alert', (event) => {
-      this._displayAlert(event.detail)
-    })
+    this._handleClose()
+    this.listen('alert')
   }
 }
 
@@ -65,12 +73,7 @@ class uMapAlertCreation extends uMapAlert {
     editLink = undefined,
     sendLink = undefined
   ) {
-    const event = new CustomEvent('umap:alert-creation', {
-      bubbles: true,
-      cancelable: true,
-      detail: { message, duration, editLink, sendLink },
-    })
-    document.dispatchEvent(event)
+    uMapAlertCreation.emit('alertCreation', { message, duration, editLink, sendLink })
   }
 
   constructor() {
@@ -79,15 +82,15 @@ class uMapAlertCreation extends uMapAlert {
     this.formWrapper = this.container.querySelector('#form-wrapper')
   }
 
-  _displayCreationAlert(detail) {
+  onAlertCreation(event) {
     const {
       level = 'info',
       duration = 5000,
       message = '',
       editLink = undefined,
       sendLink = undefined,
-    } = detail
-    uMapAlert.prototype._displayAlert.call(this, { level, duration, message })
+    } = event.detail
+    uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
     this.linkWrapper.querySelector('input[type="url"]').value = editLink
     const button = this.linkWrapper.querySelector('input[type="button"]')
     button.addEventListener('click', (event) => {
@@ -102,21 +105,15 @@ class uMapAlertCreation extends uMapAlert {
         event.preventDefault()
         const formData = new FormData(form)
         const server = new U.ServerRequest()
-        this._hide()
+        this.removeAttribute('open')
         await server.post(sendLink, {}, formData)
       })
     }
   }
 
   connectedCallback() {
-    this.addEventListener('click', (event) => {
-      if (event.target.closest('[data-close]')) {
-        this._hide()
-      }
-    })
-    document.addEventListener('umap:alert-creation', (event) => {
-      this._displayCreationAlert(event.detail)
-    })
+    this._handleClose()
+    this.listen('alertCreation')
   }
 }
 
@@ -126,12 +123,7 @@ class uMapAlertChoice extends uMapAlert {
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
     duration = Infinity
   ) {
-    const event = new CustomEvent('umap:alert-choice', {
-      bubbles: true,
-      cancelable: true,
-      detail: { level: 'error', message, duration },
-    })
-    document.dispatchEvent(event)
+    uMapAlertChoice.emit('alertChoice', { level: 'error', message, duration })
   }
 
   constructor() {
@@ -139,38 +131,27 @@ class uMapAlertChoice extends uMapAlert {
     this.choiceWrapper = this.container.querySelector('#choice-wrapper')
   }
 
-  _displayChoiceAlert(detail) {
-    const { level = 'info', duration = 5000, message = '' } = detail
-    uMapAlert.prototype._displayAlert.call(this, { level, duration, message })
+  onAlertChoice(event) {
+    const { level = 'info', duration = 5000, message = '' } = event.detail
+    uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
     const form = this.choiceWrapper.querySelector('form')
     form.addEventListener('submit', (event) => {
       event.preventDefault()
       switch (event.submitter.id) {
         case 'your-changes':
-          document.dispatchEvent(
-            new CustomEvent('umap:alert-choice-override', {
-              bubbles: true,
-              cancelable: true,
-            })
-          )
+          uMapAlertChoice.emit('alertChoiceOverride')
           break
         case 'their-changes':
           window.location.reload()
           break
       }
-      this._hide()
+      this.removeAttribute('open')
     })
   }
 
   connectedCallback() {
-    this.addEventListener('click', (event) => {
-      if (event.target.closest('[data-close]')) {
-        this._hide()
-      }
-    })
-    document.addEventListener('umap:alert-choice', (event) => {
-      this._displayChoiceAlert(event.detail)
-    })
+    this._handleClose()
+    this.listen('alertChoice')
   }
 }
 

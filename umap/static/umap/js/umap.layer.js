@@ -1711,7 +1711,7 @@ U.DataLayer = L.Evented.extend({
               'This situation is tricky, you have to choose carefully which version is pertinent.'
           )
         )
-        document.addEventListener('umap:alert-choice-override', async (event) => {
+        document.addEventListener('alertChoiceOverride', async (event) => {
           await this._trySave(url, {}, formData)
         })
       }
