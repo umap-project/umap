@@ -5,7 +5,7 @@ import { translate } from '../i18n.js'
 const TEMPLATE = `
   <h3>Overpass</h3>
   <label>
-    ${translate('Selector')}
+    <span data-help="overpassImporter">${translate('Expression')}</span>
     <input type="text" placeholder="amenity=drinking_water" name="tags" />
   </label>
   <label>
@@ -34,6 +34,7 @@ class Autocomplete extends SingleMixin(BaseAjax) {
 
 export class Importer {
   constructor(map, options) {
+    this.map = map
     this.name = 'Overpass'
     this.baseUrl = options?.url || 'https://overpass-api.de/api/interpreter'
   }
@@ -53,6 +54,7 @@ export class Importer {
         boundaryName = choice.item.label
       },
     })
+    this.map.help.parse(container)
 
     const confirm = () => {
       const outMode = container.querySelector('[name=out-mode]').value
