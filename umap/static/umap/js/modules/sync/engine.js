@@ -3,15 +3,12 @@ import { MapUpdater, DataLayerUpdater, FeatureUpdater } from './updaters.js'
 
 export class SyncEngine {
   constructor(map) {
-    this.map = map
-    this.dispatcher = new MessagesDispatcher(this.map)
-    this._initialize()
-  }
-  _initialize() {
+    this.updaters = {
+      map: new MapUpdater(map),
+      feature: new FeatureUpdater(map),
+      datalayer: new DataLayerUpdater(map),
+    }
     this.transport = undefined
-    const noop = () => {}
-    // by default, all operations do nothing, until the engine is started.
-    this.upsert = this.update = this.delete = noop
   }
 
   async authenticate(tokenURI, webSocketURI, server) {
@@ -22,16 +19,47 @@ export class SyncEngine {
   }
 
   start(webSocketURI, authToken) {
-    this.transport = new WebSocketTransport(webSocketURI, authToken, this.dispatcher)
-    this.sender = new MessagesSender(this.transport)
-    this.upsert = this.sender.upsert.bind(this.sender)
-    this.update = this.sender.update.bind(this.sender)
-    this.delete = this.sender.delete.bind(this.sender)
+    this.transport = new WebSocketTransport(webSocketURI, authToken, this)
   }
 
   stop() {
     if (this.transport) this.transport.close()
-    this._initialize()
+    this.transport = undefined
+  }
+
+  _getUpdater(subject, metadata) {
+    if (Object.keys(this.updaters).includes(subject)) {
+      return this.updaters[subject]
+    }
+    throw new Error(`Unknown updater ${subject}, ${metadata}`)
+  }
+
+  // This method is called by the transport layer on new messages
+  receive({ kind, ...payload }) {
+    if (kind == 'operation') {
+      let updater = this._getUpdater(payload.subject, payload.metadata)
+      updater.applyMessage(payload)
+    } else {
+      throw new Error(`Unknown dispatch kind: ${kind}`)
+    }
+  }
+
+  _send(message) {
+    if (this.transport) {
+      this.transport.send('operation', message)
+    }
+  }
+
+  upsert(subject, metadata, value) {
+    this._send({ verb: 'upsert', subject, metadata, value })
+  }
+
+  update(subject, metadata, key, value) {
+    this._send({ verb: 'update', subject, metadata, key, value })
+  }
+
+  delete(subject, metadata, key) {
+    this._send({ verb: 'delete', subject, metadata, key })
   }
 
   /**
@@ -61,62 +89,5 @@ export class SyncEngine {
       },
     }
     return new Proxy(this, handler)
-  }
-}
-
-export class MessagesDispatcher {
-  constructor(map) {
-    this.map = map
-    this.updaters = {
-      map: new MapUpdater(this.map),
-      feature: new FeatureUpdater(this.map),
-      datalayer: new DataLayerUpdater(this.map),
-    }
-  }
-
-  getUpdater(subject, metadata) {
-    if (Object.keys(this.updaters).includes(subject)) {
-      return this.updaters[subject]
-    }
-    throw new Error(`Unknown updater ${subject}, ${metadata}`)
-  }
-
-  dispatch({ kind, ...payload }) {
-    if (kind == 'operation') {
-      let updater = this.getUpdater(payload.subject, payload.metadata)
-      updater.applyMessage(payload)
-    } else {
-      throw new Error(`Unknown dispatch kind: ${kind}`)
-    }
-  }
-}
-
-/**
- * Send messages to other connected peers, using the specified transport.
- *
- * - `subject` is the type of object this is referering to (map, feature, layer)
- * - `metadata` contains information about the object we're refering to (id, layerId for instance)
- * - `key` and
- * - `value` are the keys and values that are being modified.
- */
-export class MessagesSender {
-  constructor(transport) {
-    this._transport = transport
-  }
-
-  send(message) {
-    this._transport.send('operation', message)
-  }
-
-  upsert(subject, metadata, value) {
-    this.send({ verb: 'upsert', subject, metadata, value })
-  }
-
-  update(subject, metadata, key, value) {
-    this.send({ verb: 'update', subject, metadata, key, value })
-  }
-
-  delete(subject, metadata, key) {
-    this.send({ verb: 'delete', subject, metadata, key })
   }
 }
