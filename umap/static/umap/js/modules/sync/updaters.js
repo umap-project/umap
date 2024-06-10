@@ -15,7 +15,7 @@ class BaseUpdater {
     // Reduce the current list of attributes,
     // to find the object to set the property onto
     const objectToSet = parts.reduce((currentObj, part) => {
-      if (part in currentObj) return currentObj[part]
+      if (currentObj !== undefined && part in currentObj) return currentObj[part]
     }, obj)
 
     // In case the given path doesn't exist, stop here

@@ -9,7 +9,7 @@ export class WebSocketTransport {
   }
 
   onMessage(wsMessage) {
-    this.receiver.dispatch(JSON.parse(wsMessage.data))
+    this.receiver.receive(JSON.parse(wsMessage.data))
   }
 
   send(kind, payload) {
