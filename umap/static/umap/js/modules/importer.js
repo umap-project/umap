@@ -118,7 +118,10 @@ export default class Importer {
   }
 
   get layer() {
-    return this.map.datalayers[this.layerId] || this.map.createDataLayer({name: this.layerName})
+    return (
+      this.map.datalayers[this.layerId] ||
+      this.map.createDataLayer({ name: this.layerName })
+    )
   }
 
   build() {
@@ -197,7 +200,7 @@ export default class Importer {
       value: '',
       textContent: translate('Import in a new layer'),
       parent: layerSelect,
-      selected: true
+      selected: true,
     })
   }
 

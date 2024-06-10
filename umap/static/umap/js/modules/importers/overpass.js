@@ -45,7 +45,9 @@ export class Importer {
     container.innerHTML = TEMPLATE
     this.autocomplete = new Autocomplete(container.querySelector('#area'), {
       url: 'https://photon.komoot.io/api?q={q}&osm_tag=place',
-      placeholder: translate('Type area name, or let empty to load data in current map view'),
+      placeholder: translate(
+        'Type area name, or let empty to load data in current map view'
+      ),
       on_select: (choice) => {
         boundary = choice.item.value
         boundaryName = choice.item.label
