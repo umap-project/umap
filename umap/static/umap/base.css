@@ -150,7 +150,8 @@ input[type="url"], textarea {
     font-family: inherit;
     font-size: 14px;
     height: 32px;
-    margin: 0 0 14px;
+    margin: 0;
+    margin-bottom: var(--box-margin);
     padding: 7px;
     width: 100%;
 }
@@ -220,6 +221,7 @@ select {
     height: 28px;
     line-height: 28px;
     margin-top: 5px;
+    margin-bottom: var(--box-margin);
 }
 .dark select {
     color: #efefef;
