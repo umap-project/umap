@@ -128,7 +128,7 @@ export default class Importer {
     this.container = DomUtil.create('div', 'umap-upload')
     this.container.innerHTML = TEMPLATE
     if (this.IMPORTERS.length) {
-      for (const plugin of this.IMPORTERS) {
+      for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
         L.DomUtil.createButton(
           plugin.id,
           this.container.querySelector('#importers'),

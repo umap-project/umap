@@ -10,7 +10,7 @@ export class Importer {
 
   async open(importer) {
     const container = DomUtil.create('div', 'formbox')
-    DomUtil.element({tagName: 'h3', textContent: this.name, parent: container})
+    DomUtil.element({ tagName: 'h3', textContent: this.name, parent: container })
     const select = DomUtil.create('select', '', container)
     const noPreset = DomUtil.element({
       tagName: 'option',

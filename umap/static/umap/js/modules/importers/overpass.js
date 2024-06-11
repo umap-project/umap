@@ -60,7 +60,9 @@ export class Importer {
     const confirm = () => {
       let tags = container.querySelector('[name=tags]').value
       if (!tags) {
-        this.map.alert.open({content: translate('Please define an expression for the query first')})
+        this.map.alert.open({
+          content: translate('Please define an expression for the query first'),
+        })
         return
       }
       const outMode = container.querySelector('[name=out-mode]').value

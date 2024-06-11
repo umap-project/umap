@@ -74,7 +74,9 @@ export class Importer {
     })
     const confirm = () => {
       if (!boundary || !select.value) {
-        this.map.alert.open({content: translate('Please choose a theme and a boundary first.')})
+        this.map.alert.open({
+          content: translate('Please choose a theme and a boundary first.'),
+        })
         return
       }
       importer.url = `${this.baseUrl}/data/${select.value}/${boundary}?format=geojson&aspoint=${asPoint.checked}`

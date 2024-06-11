@@ -10,7 +10,6 @@ class Autocomplete extends SingleMixin(BaseAjax) {
   }
 }
 
-
 export class Importer {
   constructor(map, options) {
     this.name = options.name || 'Communes'
