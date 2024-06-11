@@ -21,7 +21,7 @@ export class Panel {
   }
 
   isOpen() {
-    return this.container.classList.contains("on")
+    return this.container.classList.contains('on')
   }
 
   open({ content, className, actions = [] } = {}) {

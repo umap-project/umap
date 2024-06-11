@@ -469,8 +469,8 @@ U.Layer.Heat = L.HeatLayer.extend({
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
-          ? +this._latlngs[i][2]
-          : 1
+            ? +this._latlngs[i][2]
+            : 1
 
       grid[y] = grid[y] || []
       cell = grid[y][x]

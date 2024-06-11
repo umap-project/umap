@@ -548,8 +548,7 @@ U.Map = L.Map.extend({
 
   initShortcuts: function () {
     const globalShortcuts = function (e) {
-
-     if (e.key === 'Escape') {
+      if (e.key === 'Escape') {
         if (this.dialog.visible) {
           this.dialog.close()
         } else if (this.editEnabled && this.editTools.drawing()) {
@@ -568,15 +567,13 @@ U.Map = L.Map.extend({
       // From now on, only ctrl/meta shortcut
       if (!(e.ctrlKey || e.metaKey) || e.shiftKey) return
 
-     if (e.key === 'f') {
+      if (e.key === 'f') {
         L.DomEvent.stop(e)
         this.search()
       }
 
       /* Edit mode only shortcuts */
       if (!this.hasEditMode()) return
-
-
 
       // Edit mode Off
       if (!this.editEnabled) {
