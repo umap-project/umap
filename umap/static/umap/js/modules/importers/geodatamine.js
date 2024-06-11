@@ -1,4 +1,4 @@
-import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 
@@ -13,11 +13,17 @@ const BOUNDARY_TYPES = {
 
 const TEMPLATE = `
   <h3>GeoDataMine</h3>
-  <select name="theme"></select>
+  <p>${translate('GeoDataMine: thematic data from OpenStreetMap')}.</p>
+  <select name="theme">
+    <option value="">${translate('Choose a theme')}</option>
+  </select>
   <label>
     <input type="checkbox" name="aspoint" />
-    ${translate('Convert all geometries to points')}
+    ${translate('Symplify all geometries to points')}
   </label>
+  <label id="boundary">
+  </label>
+  <button class="button">${translate('Choose this data')}</button>
 `
 
 class Autocomplete extends SingleMixin(BaseAjax) {
@@ -30,8 +36,9 @@ class Autocomplete extends SingleMixin(BaseAjax) {
 }
 
 export class Importer {
-  constructor(map, options) {
-    this.name = 'GeoDataMine'
+  constructor(map, options = {}) {
+    this.map = map
+    this.name = options.name || 'GeoDataMine'
     this.baseUrl = options?.url || 'https://geodatamine.fr'
   }
 
@@ -56,7 +63,8 @@ export class Importer {
       console.error(response)
     }
     const asPoint = container.querySelector('[name=aspoint]')
-    this.autocomplete = new Autocomplete(container, {
+    this.autocomplete = new Autocomplete(container.querySelector('#boundary'), {
+      placeholder: translate('Search admin boundary'),
       url: `${this.baseUrl}/boundaries/search?text={q}`,
       on_select: (choice) => {
         boundary = choice.item.value
@@ -64,12 +72,16 @@ export class Importer {
       },
     })
     const confirm = () => {
+      if (!boundary || !select.value) {
+        this.map.alert.open({content: translate('Please choose a theme and a boundary first.')})
+        return
+      }
       importer.url = `${this.baseUrl}/data/${select.value}/${boundary}?format=geojson&aspoint=${asPoint.checked}`
       importer.format = 'geojson'
       importer.layerName = `${boundaryName} — ${select.options[select.selectedIndex].textContent}`
       importer.dialog.close()
     }
-    L.DomUtil.createButton('', container, 'OK', confirm)
+    DomEvent.on(container.querySelector('button'), 'click', confirm)
 
     importer.dialog.open({
       content: container,

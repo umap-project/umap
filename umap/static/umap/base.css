@@ -315,6 +315,9 @@ label {
     line-height: 21px;
     width: 100%;
 }
+label + label {
+    margin-top: var(--box-space);
+}
 .content label {
     font-weight: bold;
 }
