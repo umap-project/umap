@@ -34,6 +34,8 @@ export default class Dialog {
     if (modal) this.container.showModal()
     else this.container.show()
     if (className) {
+      // Reset
+      this.container.className = 'umap-dialog'
       this.container.classList.add(...className.split(' '))
     }
     const buttonsContainer = DomUtil.create('ul', 'buttons', this.container)

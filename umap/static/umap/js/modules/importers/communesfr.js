@@ -38,7 +38,7 @@ export class Importer {
 
     importer.dialog.open({
       content: container,
-      className: `${this.id} dark`,
+      className: `${this.id} importer dark`,
     })
   }
 }

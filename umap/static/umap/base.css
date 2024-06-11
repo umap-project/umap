@@ -147,7 +147,13 @@ dt {
     margin-right: auto;
     float: none;
 }
-
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-container > * {
+    text-align: center;
+}
 
 /* *********** */
 /*    forms    */
@@ -791,37 +797,6 @@ input[type=hidden].blur + [type="button"] {
 .leaflet-top,
 .leaflet-right {
     transition: all .7s;
-}
-
-
-/* *********** */
-/*  Importers  */
-/* *********** */
-#importers button {
-    background: none;
-    font-size: 1.2rem;
-    border: none;
-}
-#importers button:before {
-    background-image: url(./img/importers/random.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    content: '';
-    width: 100%;
-    height: 50px;
-    display: block;
-}
-#importers .geodatamine:before {
-    background-image: url(./img/importers/geodatamine.svg);
-}
-#importers .communesfr:before {
-    background-image: url(./img/importers/communesfr.svg);
-}
-#importers .overpass:before {
-    background-image: url(./img/importers/overpass.svg);
-}
-#importers .datasets:before {
-    background-image: url(./img/importers/datasets.svg);
 }
 
 
