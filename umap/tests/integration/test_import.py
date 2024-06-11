@@ -527,7 +527,7 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
 
 
 def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
-    settings.UMAP_EXPERIMENTAL_IMPORTERS = {
+    settings.UMAP_IMPORTERS = {
         "overpass": {"url": "https://my.overpass.io/interpreter"}
     }
     page.goto(f"{live_server.url}/map/new/")

@@ -505,7 +505,7 @@ class MapDetailMixin:
             "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
             "websocketEnabled": settings.WEBSOCKET_ENABLED,
             "websocketURI": settings.WEBSOCKET_FRONT_URI,
-            "importers": settings.UMAP_EXPERIMENTAL_IMPORTERS,
+            "importers": settings.UMAP_IMPORTERS,
         }
         created = bool(getattr(self, "object", None))
         if (created and self.object.owner) or (not created and not user.is_anonymous):

@@ -259,17 +259,7 @@ UMAP_DEFAULT_SHARE_STATUS = None
 UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
 UMAP_HOME_FEED = "latest"
-UMAP_EXPERIMENTAL_IMPORTERS = {
-    # "overpass": {"url": "https://overpass-api.de/api/interpreter"},
-    # "geodatamine": {},
-    # "communesfr": {},
-    # "presets": {
-    #     "choices": [
-    #         {"label": "Régions", "url": "https://france-geojson.gregoiredavid.fr/repo/regions.geojson", "format": "geojson"},
-    #         {"label": "Départements", "url": "https://france-geojson.gregoiredavid.fr/repo/departements.geojson", "format": "geojson"},
-    #     ]
-    # }
-}
+UMAP_IMPORTERS = {}
 
 UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True
