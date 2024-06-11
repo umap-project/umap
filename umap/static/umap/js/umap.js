@@ -547,6 +547,8 @@ U.Map = L.Map.extend({
       if (e.key === 'Escape') {
         if (this.dialog.visible) {
           this.dialog.close()
+        } else if (this.importer.dialog.visible) {
+          this.importer.dialog.close()
         } else if (this.editEnabled && this.editTools.drawing()) {
           this.editTools.stopDrawing()
         } else if (this.measureTools.enabled()) {
