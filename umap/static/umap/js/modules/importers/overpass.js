@@ -35,7 +35,7 @@ class Autocomplete extends SingleMixin(BaseAjax) {
 export class Importer {
   constructor(map, options) {
     this.map = map
-    this.name = 'Overpass'
+    this.name = options.name || 'Overpass'
     this.baseUrl = options?.url || 'https://overpass-api.de/api/interpreter'
   }
 
@@ -57,8 +57,12 @@ export class Importer {
     this.map.help.parse(container)
 
     const confirm = () => {
-      const outMode = container.querySelector('[name=out-mode]').value
       let tags = container.querySelector('[name=tags]').value
+      if (!tags) {
+        this.map.alert.open({content: translate('Please define an expression for the query first')})
+        return
+      }
+      const outMode = container.querySelector('[name=out-mode]').value
       if (!tags.startsWith('[')) tags = `[${tags}]`
       let area = '{south},{west},{north},{east}'
       if (boundary) area = `area:${boundary}`
@@ -68,7 +72,7 @@ export class Importer {
       importer.format = 'osm'
       importer.dialog.close()
     }
-    L.DomUtil.createButton('', container, 'OK', confirm)
+    L.DomUtil.createButton('', container, translate('Choose this data'), confirm)
 
     importer.dialog.open({
       content: container,

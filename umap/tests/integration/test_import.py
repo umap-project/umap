@@ -534,7 +534,7 @@ def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
     page.get_by_role("link", name="Import data (Ctrl+I)").click()
     page.get_by_role("button", name="Overpass").click()
     page.get_by_placeholder("amenity=drinking_water").fill("building")
-    page.get_by_role("button", name="OK").click()
+    page.get_by_role("button", name="Choose this data").click()
     expect(page.get_by_placeholder("Provide an URL here")).to_have_value(
         "https://my.overpass.io/interpreter?data=[out:json];nwr[building]({south},{west},{north},{east});out geom;"
     )
