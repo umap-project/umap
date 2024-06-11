@@ -987,9 +987,6 @@ a.umap-control-caption,
 .datalayer-name {
     cursor: pointer;
 }
-.umap-caption h3 {
-    margin-bottom: 0;
-}
 .umap-caption .umap-map-owner {
     padding-left: 31px;
 }

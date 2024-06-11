@@ -60,6 +60,21 @@ kbd {
   display: inline-block;
   white-space: nowrap;
 }
+h3 {
+    font-size: 1.2rem;
+}
+h4 {
+    font-size: 1.1rem;
+}
+hgroup > * {
+    margin-bottom: 0;
+}
+hgroup {
+    margin-bottom: var(--box-space);
+}
+hgroup > :not(:first-child):last-child {
+    font-weight: normal;
+}
 
 /*
 * List
