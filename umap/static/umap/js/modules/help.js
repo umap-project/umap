@@ -151,9 +151,9 @@ const ENTRIES = {
     <ul>
       <li>${translate('key (eg. building)')}</li>
       <li>${translate('!key (eg. !name)')}</li>
-      <li>${translate('key=value (eg. building=yes')}</li>
-      <li>${translate('key!=value (eg. building!=yes')}</li>
-      <li>${translate('key~value (eg. name~Grisy')}</li>
+      <li>${translate('key=value (eg. building=yes)')}</li>
+      <li>${translate('key!=value (eg. building!=yes)')}</li>
+      <li>${translate('key~value (eg. name~Grisy)')}</li>
       <li>${translate('key="value|value2" (eg. name="Paris|Berlin")')}</li>
     </ul>
     <div>${translate('More info about Overpass syntax')}: <a href="https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide">https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide</a></div>

@@ -780,6 +780,37 @@ input[type=hidden].blur + [type="button"] {
 
 
 /* *********** */
+/*  Importers  */
+/* *********** */
+#importers button {
+    background: none;
+    font-size: 1.2rem;
+    border: none;
+}
+#importers button:before {
+    background-image: url(./img/importers/random.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    content: '';
+    width: 100%;
+    height: 50px;
+    display: block;
+}
+#importers .geodatamine:before {
+    background-image: url(./img/importers/geodatamine.svg);
+}
+#importers .communesfr:before {
+    background-image: url(./img/importers/communesfr.svg);
+}
+#importers .overpass:before {
+    background-image: url(./img/importers/overpass.svg);
+}
+#importers .datasets:before {
+    background-image: url(./img/importers/datasets.svg);
+}
+
+
+/* *********** */
 /*   Various   */
 /* *********** */
 

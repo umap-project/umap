@@ -40,6 +40,7 @@ export class Importer {
     this.map = map
     this.name = options.name || 'GeoDataMine'
     this.baseUrl = options?.url || 'https://geodatamine.fr'
+    this.id = 'geodatamine'
   }
 
   async open(importer) {
@@ -85,7 +86,7 @@ export class Importer {
 
     importer.dialog.open({
       content: container,
-      className: 'geodatamine dark',
+      className: `${this.id} dark`,
     })
   }
 }

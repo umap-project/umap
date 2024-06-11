@@ -37,6 +37,7 @@ export class Importer {
     this.map = map
     this.name = options.name || 'Overpass'
     this.baseUrl = options?.url || 'https://overpass-api.de/api/interpreter'
+    this.id = 'overpass'
   }
 
   async open(importer) {
@@ -76,7 +77,7 @@ export class Importer {
 
     importer.dialog.open({
       content: container,
-      className: 'overpass dark',
+      className: `${this.id} dark`,
     })
   }
 }

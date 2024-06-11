@@ -14,6 +14,7 @@ class Autocomplete extends SingleMixin(BaseAjax) {
 export class Importer {
   constructor(map, options) {
     this.name = options.name || 'Communes'
+    this.id = 'communesfr'
   }
 
   async open(importer) {
@@ -38,7 +39,7 @@ export class Importer {
 
     importer.dialog.open({
       content: container,
-      className: 'communes dark',
+      className: `${this.id} dark`,
     })
   }
 }

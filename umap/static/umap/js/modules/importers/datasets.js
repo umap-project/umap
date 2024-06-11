@@ -5,6 +5,7 @@ export class Importer {
   constructor(map, options) {
     this.name = options.name || 'Datasets'
     this.choices = options?.choices
+    this.id = 'datasets'
   }
 
   async open(importer) {
@@ -34,7 +35,7 @@ export class Importer {
 
     importer.dialog.open({
       content: container,
-      className: 'datasets dark',
+      className: `${this.id} dark`,
     })
   }
 }

@@ -13,7 +13,7 @@ const TEMPLATE = `
       <input type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
       <div class="importers">
-        <h5>${translate('Import helpers:')}</h5>
+        <h4>${translate('Import helpers:')}</h4>
         <div class="button-bar by4" id="importers">
         </div>
       </div>
@@ -130,7 +130,7 @@ export default class Importer {
     if (this.IMPORTERS.length) {
       for (const plugin of this.IMPORTERS) {
         L.DomUtil.createButton(
-          'flat',
+          plugin.id,
           this.container.querySelector('#importers'),
           plugin.name,
           () => plugin.open(this)
