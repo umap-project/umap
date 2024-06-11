@@ -260,6 +260,7 @@ UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
 UMAP_HOME_FEED = "latest"
 UMAP_EXPERIMENTAL_IMPORTERS = {
+    # "overpass": {"url": "https://overpass-api.de/api/interpreter"},
     # "geodatamine": {},
     # "communesfr": {},
     # "presets": {

@@ -3,24 +3,25 @@ import { translate } from '../i18n.js'
 
 export class Importer {
   constructor(map, options) {
-    this.name = 'Presets'
+    this.name = options.name || 'Datasets'
     this.choices = options?.choices
   }
 
   async open(importer) {
     const container = DomUtil.create('div', 'formbox')
+    DomUtil.element({tagName: 'h3', textContent: this.name, parent: container})
     const select = DomUtil.create('select', '', container)
     const noPreset = DomUtil.element({
       tagName: 'option',
       parent: select,
       value: '',
-      textContent: translate('Choose a preset'),
+      textContent: translate('Choose a dataset'),
     })
-    for (const preset of this.choices) {
+    for (const dataset of this.choices) {
       const option = DomUtil.create('option', '', select)
-      option.value = preset.url
-      option.textContent = preset.label
-      option.dataset.format = preset.format || 'geojson'
+      option.value = dataset.url
+      option.textContent = dataset.label
+      option.dataset.format = dataset.format || 'geojson'
     }
     const confirm = () => {
       if (select.value) {
@@ -29,11 +30,11 @@ export class Importer {
       }
       importer.dialog.close()
     }
-    L.DomUtil.createButton('', container, 'OK', confirm)
+    L.DomUtil.createButton('', container, translate('Choose this dataset'), confirm)
 
     importer.dialog.open({
       content: container,
-      className: 'presets dark',
+      className: 'datasets dark',
     })
   }
 }

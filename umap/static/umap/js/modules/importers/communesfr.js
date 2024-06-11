@@ -10,9 +10,10 @@ class Autocomplete extends SingleMixin(BaseAjax) {
   }
 }
 
+
 export class Importer {
-  constructor() {
-    this.name = 'Communes'
+  constructor(map, options) {
+    this.name = options.name || 'Communes'
   }
 
   async open(importer) {
@@ -24,6 +25,7 @@ export class Importer {
       textContent: "Importer les contours d'une commune française.",
     })
     const options = {
+      placeholder: 'Commune…',
       url: 'https://geo.api.gouv.fr/communes?nom={q}&limit=5',
       on_select: (choice) => {
         importer.url = `https://geo.api.gouv.fr/communes?code=${choice.item.value}&format=geojson&geometry=contour`
