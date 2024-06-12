@@ -1,4 +1,5 @@
 import { translate } from '../../modules/i18n.js'
+import { ServerRequest } from '../../modules/request.js'
 import { uMapElement } from '../base.js'
 
 class uMapAlert extends uMapElement {
@@ -105,7 +106,7 @@ class uMapAlertCreation extends uMapAlert {
       form.addEventListener('submit', async (event) => {
         event.preventDefault()
         const formData = new FormData(form)
-        const server = new U.ServerRequest()
+        const server = new ServerRequest()
         this.removeAttribute('open')
         await server.post(sendLink, {}, formData)
       })
