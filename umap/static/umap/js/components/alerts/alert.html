@@ -22,20 +22,26 @@
 <template id="umap-alert-creation-template">
   <div role="dialog" class="dark window">
     <div>
+      <h3>{% translate "Save the edit link" %}</h3>
       <p role="alert"></p>
       <div id="link-wrapper">
         <form>
-          <input type="url" name="url">
-          <input type="button" value="{% translate "Copy link" %}">
+          <fieldset role="group">
+            <input type="url" name="url">
+            <input type="button" value="{% translate "Copy link" %}">
+          </fieldset>
         </form>
       </div>
       <div id="form-wrapper" hidden>
         <p>{% translate "You can also receive that URL by email:" %}</p>
         <form>
-          <input type="email" name="email" class="umap-alert-input" required>
-          <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
+          <fieldset role="group">
+            <input type="email" name="email" required>
+            <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
+          </fieldset>
         </form>
       </div>
+      <p><em>{% translate "Pro-tip: to easily find back your maps," %} <a href="{% url "login" %}" target="_blank">{% translate "create an account" %}</a></em></p>
     </div>
     <ul class="buttons">
       <li>

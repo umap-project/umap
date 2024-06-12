@@ -1,6 +1,5 @@
 .window .buttons {
     padding: 5px 10px;
-    overflow: hidden;
     display: flex;
     flex-direction: row-reverse;
     font-size: 10px;
