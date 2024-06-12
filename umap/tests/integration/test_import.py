@@ -50,7 +50,7 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     expect(
         page.get_by_role("button", name="Link to the layer as remote data", exact=True)
     ).to_be_hidden()
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     assert file_input.input_value()
     # Close the import panel
     page.keyboard.press("Escape")
@@ -77,7 +77,7 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.umap"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("umap")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     layers = page.locator(".umap-browser .datalayer")
     expect(layers).to_have_count(2)
     expect(page.locator(".umap-main-edit-toolbox .map-name")).to_have_text(
@@ -112,7 +112,7 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.json"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("geojson")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
@@ -135,7 +135,7 @@ def test_import_kml_from_textarea(tilelayer, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.kml"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("kml")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
@@ -158,7 +158,7 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.gpx"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("gpx")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
@@ -179,7 +179,7 @@ def test_import_osm_from_textarea(tilelayer, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data_osm.json"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("osm")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
@@ -199,7 +199,7 @@ def test_import_csv_from_textarea(tilelayer, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
     page.locator('select[name="format"]').select_option("csv")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
@@ -220,7 +220,7 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
     page.locator('select[name="format"]').select_option("csv")
     page.locator('select[name="layer-id"]').select_option(datalayer.name)
     expect(page.locator("input[name=layer-name]")).to_be_hidden()
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # No layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(3)
@@ -241,7 +241,7 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
     page.locator('select[name="format"]').select_option("csv")
     page.locator('select[name="layer-id"]').select_option(datalayer.name)
     page.get_by_label("Replace layer content").check()
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # No layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
@@ -262,7 +262,7 @@ def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
     page.locator("select[name=format]").select_option("csv")
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")
     page.locator("[name=layer-name]").fill("My new layer name")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A new layer has been created
     expect(layers).to_have_count(2)
     expect(markers).to_have_count(3)
@@ -305,7 +305,7 @@ def test_should_remove_dot_in_property_names(live_server, page, settings, tilela
     textarea = page.locator(".umap-upload textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
     datalayer = DataLayer.objects.last()
@@ -366,7 +366,7 @@ def test_import_geometry_collection(live_server, page, tilelayer):
     textarea = page.locator(".umap-upload textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
@@ -400,7 +400,7 @@ def test_import_multipolygon(live_server, page, tilelayer):
     textarea = page.locator(".umap-upload textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(paths).to_have_count(1)
@@ -432,7 +432,7 @@ def test_import_multipolyline(live_server, page, tilelayer):
     textarea = page.locator(".umap-upload textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(paths).to_have_count(1)
@@ -447,7 +447,7 @@ def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     textarea = page.locator(".umap-upload textarea")
     textarea.fill("a,b,c\n12.23,48.34,mypoint\n12.23,48.34,mypoint2")
     page.locator('select[name="format"]').select_option("csv")
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     # FIXME do not create a layer
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(0)
@@ -481,7 +481,7 @@ def test_create_remote_data(page, live_server, tilelayer):
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Link to the layer as remote data").click()
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
@@ -518,7 +518,7 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Copy into the layer").click()
-    page.get_by_role("button", name="Add data", exact=True).click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()

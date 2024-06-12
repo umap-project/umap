@@ -6,7 +6,7 @@ import { SCHEMA } from './schema.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `
-    <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Add data')}</span></h3>
+    <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
     <fieldset class="formbox">
       <legend class="counter">${translate('Choose data')}</legend>
       <input type="file" multiple autofocus onchange />
@@ -42,7 +42,7 @@ const TEMPLATE = `
         ${translate('Link to the layer as remote data')}
       </label>
     </fieldset>
-    <input type="button" class="button" name="submit" value="${translate('Add data')}" />
+    <input type="button" class="button" name="submit" value="${translate('Import data')}" />
     `
 
 export default class Importer {
