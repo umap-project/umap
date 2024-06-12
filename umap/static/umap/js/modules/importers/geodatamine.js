@@ -1,6 +1,7 @@
 import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
 
 const BOUNDARY_TYPES = {
   admin_6: 'département',
@@ -52,6 +53,7 @@ export class Importer {
     const select = container.querySelector('select')
     if (response && response.ok) {
       const { themes } = await response.json()
+      themes.sort((a, b) => Utils.naturalSort(a['name:fr'], b ['name:fr']))
       for (const theme of themes) {
         DomUtil.element({
           tagName: 'option',
