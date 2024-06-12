@@ -19,11 +19,11 @@ const TEMPLATE = `
       </div>
     </fieldset>
     <fieldset class="formbox">
-      <legend class="counter" data-help="importFormats">${translate('Choose the data format')}</legend>
+      <legend class="counter" data-help="importFormats">${translate('Choose the format')}</legend>
       <select name="format" onchange></select>
     </fieldset>
     <fieldset id="destination" class="formbox">
-      <legend class="counter">${translate('Choose the layer to import in')}</legend>
+      <legend class="counter">${translate('Choose the layer')}</legend>
       <select name="layer-id" onchange></select>
       <label id="clear">
         <input type="checkbox" name="clear" />
