@@ -119,29 +119,29 @@ class uMapAlertCreation extends uMapAlert {
   }
 }
 
-class uMapAlertChoice extends uMapAlert {
+class uMapAlertConflict extends uMapAlert {
   static error(
     message,
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
     duration = Infinity
   ) {
-    uMapAlertChoice.emit('alertChoice', { level: 'error', message, duration })
+    uMapAlertConflict.emit('alertConflict', { level: 'error', message, duration })
   }
 
   constructor() {
     super()
-    this.choiceWrapper = this.container.querySelector('#choice-wrapper')
+    this.conflictWrapper = this.container.querySelector('#conflict-wrapper')
   }
 
-  onAlertChoice(event) {
+  onAlertConflict(event) {
     const { level = 'info', duration = 5000, message = '' } = event.detail
     uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
-    const form = this.choiceWrapper.querySelector('form')
+    const form = this.conflictWrapper.querySelector('form')
     form.addEventListener('submit', (event) => {
       event.preventDefault()
       switch (event.submitter.id) {
         case 'your-changes':
-          uMapAlertChoice.emit('alertChoiceOverride')
+          uMapAlertConflict.emit('alertConflictOverride')
           break
         case 'their-changes':
           window.location.reload()
@@ -153,8 +153,8 @@ class uMapAlertChoice extends uMapAlert {
 
   connectedCallback() {
     this._handleClose()
-    this.listen('alertChoice')
+    this.listen('alertConflict')
   }
 }
 
-export { uMapAlert, uMapAlertCreation, uMapAlertChoice }
+export { uMapAlert, uMapAlertCreation, uMapAlertConflict }

@@ -8,6 +8,7 @@
     --color-limeGreen: #b9f5d2;
     --color-brightCyan: #46ece6;
     --color-lightCyan: #d4fbf9;
+    --color-red: #c60f13;
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);

@@ -300,7 +300,7 @@ ul.umap-autocomplete {
 }
 
 .messages .error {
-    background-color: #c60f13;
+    background-color: var(--color-red);
 }
 
 

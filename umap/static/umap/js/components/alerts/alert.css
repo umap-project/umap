@@ -20,7 +20,7 @@
     min-width: 80%;
 }
 [role="dialog"][data-level="error"] {
-    background-color: #c60f13;
+    background-color: var(--color-red);
 }
 [role="dialog"] a {
     text-decoration: underline;
@@ -93,23 +93,25 @@
 #link-wrapper {
     margin-bottom: 1rem;
 }
-#choice-wrapper form {
+#conflict-wrapper form {
     display: flex;
     justify-content: space-around;
 }
-#choice-wrapper form [type="submit"] {
+#conflict-wrapper form [type="submit"] {
     width: initial;
     background: inherit;
     color: var(--color-light);
+    border: 1px solid var(--color-red);
+    font-weight: bold;
 }
-#choice-wrapper form [type="submit"]:hover {
+#conflict-wrapper form [type="submit"]:hover {
     width: initial;
     background: darkred;
     color: var(--color-light);
     border: 1px solid var(--color-light);
 }
 @media only screen and (max-width:770px) {
-    #choice-wrapper form {
+    #conflict-wrapper form {
         flex-direction: column;
         text-align: center;
     }

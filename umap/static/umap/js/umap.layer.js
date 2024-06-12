@@ -1707,13 +1707,13 @@ U.DataLayer = L.Evented.extend({
     const [data, response, error] = await this.map.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
-        U.AlertChoice.error(
+        U.AlertConflict.error(
           L._(
             'Whoops! Other contributor(s) changed some of the same map elements as you. ' +
               'This situation is tricky, you have to choose carefully which version is pertinent.'
           )
         )
-        document.addEventListener('alertChoiceOverride', async (event) => {
+        document.addEventListener('alertConflictOverride', async (event) => {
           await this._trySave(url, {}, formData)
         })
       }

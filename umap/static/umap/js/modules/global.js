@@ -16,7 +16,7 @@ import { SyncEngine } from './sync/engine.js'
 import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
-  uMapAlertChoice as AlertChoice,
+  uMapAlertConflict as AlertConflict,
 } from '../components/alerts/alert.js'
 
 // Import modules and export them to the global scope.
@@ -26,7 +26,7 @@ import {
 window.U = {
   Alert,
   AlertCreation,
-  AlertChoice,
+  AlertConflict,
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
   Browser,
