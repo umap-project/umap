@@ -97,7 +97,9 @@ donne un lien (une URL) pour pouvoir modifier la carte. En effet la
 carte que vous avez créée n’est associée à aucun compte, et **uMap**
 considère que seules les personnes ayant ce *lien secret* peuvent la
 modifier. Vous devez donc conserver ce lien si vous souhaitez pouvoir
-modifier la carte. Nous verrons dans [le prochain tutoriel](3-create-account.md)
+modifier la carte ou saisir votre adresse de courriel pour le recevoir.
+
+Nous verrons dans [le prochain tutoriel](3-create-account.md)
 comment créer son catalogue de cartes en utilisant un compte, il n’est alors pas
 nécessaire de conserver de lien secret.
 
