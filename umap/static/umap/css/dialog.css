@@ -10,6 +10,7 @@
     background-color: var(--background-color);
     color: var(--text-color);
     border-radius: 5px;
+    overflow-y: auto;
 }
 .umap-dialog .umap-close-link {
     float: right;
