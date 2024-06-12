@@ -1713,7 +1713,7 @@ U.DataLayer = L.Evented.extend({
               'This situation is tricky, you have to choose carefully which version is pertinent.'
           )
         )
-        document.addEventListener('alertConflictOverride', async (event) => {
+        document.addEventListener('umap:alertConflictOverride', async (event) => {
           await this._trySave(url, {}, formData)
         })
       }
