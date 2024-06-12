@@ -20,13 +20,14 @@
     --button-neutral-color: var(--color-darkGray);
 
     /* Sizes and spaces */
+    --gutter: 8px;
     --panel-gutter: 10px;
     --panel-bottom: 40px;
     --panel-header-height: 36px;
     --panel-width: 400px;
     --header-height: 46px;
     --current-header-height: 0px;
-    --footer-height: 46px;
+    --footer-height: 28px;
     --current-footer-height: 0px;
     --control-size: 36px;
 }

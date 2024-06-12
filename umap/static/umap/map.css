@@ -659,14 +659,14 @@ ul.photon-autocomplete {
 }
 .umap-caption-bar-enabled .umap-caption-bar {
     display: block;
-    height: var(--header-height);
+    height: var(--footer-height);
     background-color: #fff;
     width: 100%;
     position: absolute;
     left: 0;
     bottom: 0;
     right: 0;
-    padding: 0 0 0 5px;
+    padding: var(--gutter);
     text-align: left;
     line-height: 100%;
     cursor: auto;

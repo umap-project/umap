@@ -266,6 +266,11 @@ button.flat,
     min-height: inherit;
     width: initial;
     display: initial;
+    line-height: inherit;
+}
+button.flat:hover,
+[type="button"].flat:hover,
+.dark [type="button"].flat:hover {
     text-decoration: underline;
 }
 .help-text, .helptext {

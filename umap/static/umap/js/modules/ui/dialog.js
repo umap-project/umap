@@ -4,7 +4,7 @@ import { translate } from '../i18n.js'
 export default class Dialog {
   constructor(parent) {
     this.parent = parent
-    this.container = DomUtil.create('dialog', 'umap-dialog', this.parent)
+    this.container = DomUtil.create('dialog', 'umap-dialog window', this.parent)
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
     DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
@@ -26,15 +26,14 @@ export default class Dialog {
     if (className) {
       this.container.classList.add(className)
     }
-    const closeButton = DomUtil.createButton(
-      'umap-close-link',
-      this.container,
-      '',
-      () => this.container.close()
+    const buttonsContainer = DomUtil.create('ul', 'buttons', this.container)
+    const closeButton = DomUtil.createButtonIcon(
+      DomUtil.create('li', '', buttonsContainer),
+      'icon-close',
+      translate('Close')
     )
-    DomUtil.createIcon(closeButton, 'icon-close')
-    const label = DomUtil.create('span', '', closeButton)
-    label.title = label.textContent = translate('Close')
+    DomEvent.on(closeButton, 'click', this.close, this)
+    this.container.appendChild(buttonsContainer)
     this.container.appendChild(content)
   }
 }

@@ -1,3 +1,4 @@
+import { translate } from '../../modules/i18n.js'
 import { uMapElement } from '../base.js'
 
 class uMapAlert extends uMapElement {
@@ -96,7 +97,7 @@ class uMapAlertCreation extends uMapAlert {
     button.addEventListener('click', (event) => {
       event.preventDefault()
       L.Util.copyToClipboard(editLink)
-      event.target.value = L._('✅ Copied!')
+      event.target.value = translate('✅ Copied!')
     })
     if (sendLink) {
       this.formWrapper.removeAttribute('hidden')

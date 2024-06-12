@@ -5,20 +5,22 @@
 </style>
 
 <template id="umap-alert-template">
-  <div role="dialog">
+  <div role="dialog" class="dark window">
     <div>
       <p role="alert"></p>
     </div>
-    <button class="umap-close-link dark button" aria-label="{% translate "Close" %}" data-close>
-      <i class="icon icon-16 icon-close"></i>
-    </button>
+    <ul class="buttons">
+      <li>
+        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <umap-alert></umap-alert>
 
 <template id="umap-alert-creation-template">
-  <div role="dialog">
+  <div role="dialog" class="dark window">
     <div>
       <p role="alert"></p>
       <div id="link-wrapper">
@@ -35,16 +37,18 @@
         </form>
       </div>
     </div>
-    <button class="umap-close-link dark button" aria-label="{% translate "Close" %}" data-close>
-      <i class="icon icon-16 icon-close"></i>
-    </button>
+    <ul class="buttons">
+      <li>
+        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <umap-alert-creation></umap-alert-creation>
 
 <template id="umap-alert-choice-template">
-  <div role="dialog">
+  <div role="dialog" class="dark window">
     <div>
       <p role="alert"></p>
       <div id="choice-wrapper">
@@ -55,9 +59,11 @@
         </form>
       </div>
     </div>
-    <button class="umap-close-link dark button" aria-label="{% translate "Close" %}" data-close>
-      <i class="icon icon-16 icon-close"></i>
-    </button>
+    <ul class="buttons">
+      <li>
+        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+      </li>
+    </ul>
   </div>
 </template>
 

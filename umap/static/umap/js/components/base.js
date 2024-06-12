@@ -1,8 +1,8 @@
-export class uMapElement extends HTMLElement {
-  static EVENT_PREFIX = 'umap'
+const EVENT_PREFIX = 'umap'
 
+export class uMapElement extends HTMLElement {
   static emit(type, detail = {}) {
-    const event = new CustomEvent(`${uMapElement.EVENT_PREFIX}:${type}`, {
+    const event = new CustomEvent(`${EVENT_PREFIX}:${type}`, {
       bubbles: true,
       cancelable: true,
       detail: detail,
@@ -36,14 +36,14 @@ export class uMapElement extends HTMLElement {
   handleEvent(event) {
     event.preventDefault()
     // From `umap:alert` to `alert`.
-    const eventName = event.type.replace(`${uMapElement.EVENT_PREFIX}:`, '')
+    const eventName = event.type.replace(`${EVENT_PREFIX}:`, '')
     // From `alert` event type to `onAlert` call against that class.
     this[`on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`](event)
   }
 
   listen(eventName) {
     // Using `this` as a listener will call `handleEvent` under the hood.
-    document.addEventListener(`${uMapElement.EVENT_PREFIX}:${eventName}`, this)
+    document.addEventListener(`${EVENT_PREFIX}:${eventName}`, this)
   }
 }
 
