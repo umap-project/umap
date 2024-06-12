@@ -1,5 +1,6 @@
 import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 export default class Importer {
   constructor(map) {
@@ -163,12 +164,14 @@ export default class Importer {
         this.map.processFileToImport(file, layer, type)
       }
     } else {
-      if (!type) return U.Alert.error(L._('Please choose a format'))
+      if (!type) {
+        return Alert.error(L._('Please choose a format'))
+      }
       if (this.rawInput.value && type === 'umap') {
         try {
           this.map.importRaw(this.rawInput.value, type)
         } catch (e) {
-          U.Alert.error(L._('Invalid umap data'))
+          Alert.error(L._('Invalid umap data'))
           console.error(e)
         }
       } else {

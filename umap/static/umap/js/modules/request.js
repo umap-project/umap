@@ -1,4 +1,5 @@
 import { translate } from './i18n.js'
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 export class RequestError extends Error {}
 
@@ -79,7 +80,7 @@ export class Request extends BaseRequest {
   }
 
   _onError(error) {
-    U.Alert.error(translate('Problem in the response'))
+    Alert.error(translate('Problem in the response'))
   }
 
   _onNOK(error) {
@@ -125,9 +126,9 @@ export class ServerRequest extends Request {
     try {
       const data = await response.json()
       if (data.info) {
-        U.Alert.info(data.info)
+        Alert.info(data.info)
       } else if (data.error) {
-        U.Alert.error(data.error)
+        Alert.error(data.error)
         return this._onError(new Error(data.error))
       }
       return [data, response, null]
@@ -142,7 +143,7 @@ export class ServerRequest extends Request {
 
   _onNOK(error) {
     if (error.status === 403) {
-      U.Alert.error(error.message || translate('Action not allowed :('))
+      Alert.error(error.message || translate('Action not allowed :('))
     }
     return [{}, error.response, error]
   }
