@@ -192,12 +192,13 @@ input[type="checkbox"]:after {
     border: 1px solid var(--color-lightGray);
     cursor: pointer;
     text-align: center;
-    font-size: 1.3rem;
-    line-height: 1rem;
+    font-size: 1rem;
+    line-height: 0.8rem;
 }
 input[type=checkbox]:checked:after {
     background-color: var(--color-lightCyan);
     content: '✓';
+    color: var(--color-darkGray);
 }
 label input[type="radio"] {
     appearance: none;
@@ -220,8 +221,9 @@ label input[type="radio"]:checked:after {
     background-color: var(--color-lightCyan);
     content: '•';
     font-size: 3rem;
-    line-height: 1.1rem;
+    line-height: 0.8rem;
     color: var(--color-darkGray);
+    text-indent: -1px;
 }
 
 input[data-modified=true] {
