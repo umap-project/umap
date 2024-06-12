@@ -828,16 +828,16 @@ U.Map = L.Map.extend({
     return this.getDefaultOption(option)
   },
 
-  updateExtent: function () {
+  setCenterAndZoom: function () {
+    this._setCenterAndZoom()
+    U.Alert.info(L._('The zoom and center have been modified.'))
+  },
+
+  _setCenterAndZoom: function () {
     this.options.center = this.getCenter()
     this.options.zoom = this.getZoom()
     this.isDirty = true
     this._default_extent = false
-    if (this.options.umap_id) {
-      // We do not want an extra message during the map creation
-      // to avoid the double notification/alert.
-      U.Alert.info(L._('The zoom and center have been modified.'))
-    }
   },
 
   updateTileLayers: function () {
@@ -1096,7 +1096,7 @@ U.Map = L.Map.extend({
 
   save: function () {
     if (!this.isDirty) return
-    if (this._default_extent) this.updateExtent()
+    if (this._default_extent) this._setCenterAndZoom()
     this.backup()
     this.once('saved', () => {
       this.isDirty = false

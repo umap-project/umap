@@ -84,7 +84,7 @@ U.UpdateExtentAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.updateExtent()
+    this.map.setCenterAndZoom()
   },
 })
 
