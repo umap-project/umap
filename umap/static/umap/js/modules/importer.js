@@ -235,7 +235,7 @@ export default class Importer {
         this.map.importFromUrl(this.url, this.format)
       }
     } catch (e) {
-      this.map.alert.open({ content: translate('Invalid umap data'), level: 'error' })
+      Alert.error(translate('Invalid umap data'))
       console.error(e)
     }
   }

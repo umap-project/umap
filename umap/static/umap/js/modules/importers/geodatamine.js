@@ -2,6 +2,7 @@ import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
+import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 
 const BOUNDARY_TYPES = {
   admin_6: 'département',
@@ -76,9 +77,7 @@ export class Importer {
     })
     const confirm = () => {
       if (!boundary || !select.value) {
-        this.map.alert.open({
-          content: translate('Please choose a theme and a boundary first.'),
-        })
+        Alert.error(translate('Please choose a theme and a boundary first.'))
         return
       }
       importer.url = `${this.baseUrl}/data/${select.value}/${boundary}?format=geojson&aspoint=${asPoint.checked}`

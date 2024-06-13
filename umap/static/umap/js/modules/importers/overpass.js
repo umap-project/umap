@@ -1,6 +1,7 @@
 import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
+import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 
 const TEMPLATE = `
   <h3>Overpass</h3>
@@ -60,9 +61,7 @@ export class Importer {
     const confirm = () => {
       let tags = container.querySelector('[name=tags]').value
       if (!tags) {
-        this.map.alert.open({
-          content: translate('Please define an expression for the query first'),
-        })
+        Alert.error(translate('Please define an expression for the query first'))
         return
       }
       const outMode = container.querySelector('[name=out-mode]').value
