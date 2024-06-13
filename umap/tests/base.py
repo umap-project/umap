@@ -127,6 +127,8 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
         data.setdefault("_umap_options", {})
         kwargs["settings"]["name"] = kwargs["name"]
         data["_umap_options"]["name"] = kwargs["name"]
+        data.setdefault("type", "FeatureCollection")
+        data.setdefault("features", [])
         kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")
         return kwargs
 
