@@ -7,6 +7,11 @@ import pytest
 from playwright.sync_api import expect
 
 
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {**browser_context_args, "locale": "en-GB"}
+
+
 @pytest.fixture(autouse=True)
 def set_timeout(context):
     timeout = int(os.environ.get("PLAYWRIGHT_TIMEOUT", 7500))
