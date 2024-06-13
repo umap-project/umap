@@ -194,14 +194,15 @@ def test_alert_message_after_create(
 
 def test_email_sending_error_are_catched(tilelayer, page, live_server):
     page.goto(f"{live_server.url}/en/map/new")
-    alert = page.locator('umap-alert-creation div[role="dialog"]')
+    alert_creation = page.locator('umap-alert-creation div[role="dialog"]')
     with page.expect_response(re.compile(r".*/map/create/")):
         page.get_by_role("button", name="Save").click()
-    alert.get_by_placeholder("Email").fill("foo@bar.com")
+    alert_creation.get_by_placeholder("Email").fill("foo@bar.com")
     with patch("umap.views.send_mail", side_effect=SMTPException) as patched:
         with page.expect_response(re.compile("/en/map/.*/send-edit-link/")):
-            alert.get_by_role("input", name="Send me the link").click()
+            alert_creation.get_by_role("button", name="Send me the link").click()
         assert patched.called
+        alert = page.locator('umap-alert div[role="dialog"]')
         expect(alert.get_by_text("Can't send email to foo@bar.com")).to_be_visible()
 
 

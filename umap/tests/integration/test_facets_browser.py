@@ -228,7 +228,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    panel = page.locator(".umap-browser")
+    panel = page.locator(".panel.left")
 
     # Facet values
     odd = page.get_by_label("odd")
