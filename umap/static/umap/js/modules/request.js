@@ -1,5 +1,5 @@
-// Uses `L._`` from Leaflet.i18n which we cannot import as a module yet
-import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { translate } from './i18n.js'
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 export class RequestError extends Error {}
 
@@ -47,11 +47,6 @@ class BaseRequest {
 // In case of error, an alert is sent, but non 20X status are not handled
 // The consumer must check the response status by hand
 export class Request extends BaseRequest {
-  constructor(alert) {
-    super()
-    this.alert = alert
-  }
-
   fire(name, params) {
     document.body.dispatchEvent(new CustomEvent(name, params))
   }
@@ -85,7 +80,7 @@ export class Request extends BaseRequest {
   }
 
   _onError(error) {
-    this.alert.open({ content: L._('Problem in the response'), level: 'error' })
+    Alert.error(translate('Problem in the response'))
   }
 
   _onNOK(error) {
@@ -131,9 +126,9 @@ export class ServerRequest extends Request {
     try {
       const data = await response.json()
       if (data.info) {
-        this.alert.open({ content: data.info, level: 'info' })
+        Alert.info(data.info)
       } else if (data.error) {
-        this.alert.open({ content: data.error, level: 'error' })
+        Alert.error(data.error)
         return this._onError(new Error(data.error))
       }
       return [data, response, null]
@@ -148,10 +143,7 @@ export class ServerRequest extends Request {
 
   _onNOK(error) {
     if (error.status === 403) {
-      this.alert.open({
-        content: error.message || L._('Action not allowed :('),
-        level: 'error',
-      })
+      Alert.error(error.message || translate('Action not allowed :('))
     }
     return [{}, error.response, error]
   }

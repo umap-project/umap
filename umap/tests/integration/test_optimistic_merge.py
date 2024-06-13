@@ -288,9 +288,9 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     saved = DataLayer.objects.last()
     data = json.loads(Path(saved.geojson.path).read_text())
     assert data["features"][0]["properties"]["name"] == "new name"
-    expect(page_two.get_by_text("Woops! Someone else seems to")).to_be_visible()
+    expect(page_two.get_by_text("Whoops! Other contributor(s) changed")).to_be_visible()
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
-        page_two.get_by_role("button", name="Save anyway").click()
+        page_two.get_by_text("Keep your changes and loose theirs").click()
     saved = DataLayer.objects.last()
     data = json.loads(Path(saved.geojson.path).read_text())
     assert data["features"][0]["properties"]["name"] == "custom name"

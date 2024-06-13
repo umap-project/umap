@@ -228,7 +228,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    panel = page.locator(".umap-browser")
+    panel = page.locator(".panel.left")
 
     # Facet values
     odd = page.get_by_label("odd")
@@ -266,7 +266,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     # Close panel
     expect(panel.locator("summary")).to_have_attribute("data-badge", " ")
     expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
-    page.get_by_role("listitem", name="Close").click()
+    panel.get_by_role("button", name="Close").click()
     page.get_by_role("button", name="See layers").click()
     expect(panel.get_by_label("Min")).to_have_value("13")
     expect(panel.get_by_label("Min")).to_have_attribute("data-modified", "true")

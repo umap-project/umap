@@ -1,0 +1,35 @@
+.window .buttons {
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 10px;
+    justify-content: flex-start;
+    gap: 5px;
+    line-height: 2.2em;
+    background-color: inherit;
+    position: sticky;
+    top: 0;
+    height: var(--panel-header-height);
+}
+.window .buttons li {
+    cursor: pointer;
+    display: inline;
+    padding: 0 2px;
+    border: 1px solid #b6b6b3;
+    border-radius: 2px;
+}
+.window.dark .buttons
+.window.dark .buttons li {
+    color: #d3dfeb;
+    border: 1px solid #202425;
+}
+.window.dark[data-level="error"] .buttons li:hover,
+.window.dark[data-level="error"] .buttons li button:hover {
+    background-color: darkred;
+}
+.window .buttons li:hover {
+    background-color: #d4d4d2;
+}
+.window.dark .buttons li:hover {
+    background-color: #353c3e;
+}

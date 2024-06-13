@@ -25,7 +25,7 @@
 }
 .panel.full.on {
     visibility: visible;
-    right: var(--panel-gutter);
+    right: calc(var(--panel-gutter) * 2 + var(--control-size));
     left: var(--panel-gutter);
     height: initial;
     max-height: initial;
@@ -40,41 +40,6 @@
 .panel .body {
     height: calc(100% - var(--panel-header-height)); /* Minus size of toolbox */
     padding: var(--panel-gutter);
-}
-.panel .toolbox {
-    padding: 5px 10px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row-reverse;
-    font-size: 10px;
-    justify-content: flex-start;
-    gap: 5px;
-    line-height: 2.2em;
-    background-color: #fff;
-    position: sticky;
-    top: 0;
-    height: var(--panel-header-height);
-}
-.panel.dark .toolbox {
-    background-color: var(--color-darkGray);
-}
-.panel .toolbox li {
-    cursor: pointer;
-    display: inline;
-    padding: 0 2px;
-    border: 1px solid #b6b6b3;
-    border-radius: 2px;
-}
-.panel.dark .toolbox
-.panel.dark .toolbox li {
-    color: #d3dfeb;
-    border: 1px solid #202425;
-}
-.panel .toolbox li:hover {
-    background-color: #d4d4d2;
-}
-.panel.dark .toolbox li:hover {
-    background-color: #353c3e;
 }
 .panel h3 {
     line-height: 120%;

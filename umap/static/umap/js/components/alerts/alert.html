@@ -1,0 +1,88 @@
+{% load i18n static %}
+
+<style type="text/css">
+  @import "{% static 'umap/js/components/alerts/alert.css' %}";
+</style>
+
+<template id="umap-alert-template">
+  <div role="dialog" class="dark window">
+    <div>
+      <p role="alert"></p>
+    </div>
+    <ul class="buttons">
+      <li>
+        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<umap-alert></umap-alert>
+
+<template id="umap-alert-creation-template">
+  <div role="dialog" class="dark window">
+    <div>
+      <h3>{% translate "Save the edit link" %}</h3>
+      <p role="alert"></p>
+      <div id="link-wrapper">
+        <form>
+          <fieldset role="group">
+            <input type="url" name="url">
+            <input type="button" value="{% translate "Copy link" %}">
+          </fieldset>
+        </form>
+      </div>
+      <div id="form-wrapper" hidden>
+        <p>{% translate "You can also receive that URL by email:" %}</p>
+        <form>
+          <fieldset role="group">
+            <input type="email" name="email" placeholder="{% translate "Email" %}" required>
+            <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
+          </fieldset>
+        </form>
+      </div>
+      <p><em>{% translate "Pro-tip: to easily find back your maps," %} <a href="{% url "login" %}" target="_blank">{% translate "create an account" %}</a></em></p>
+    </div>
+    <ul class="buttons">
+      <li>
+        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<umap-alert-creation></umap-alert-creation>
+
+<template id="umap-alert-conflict-template">
+  <div role="dialog" class="dark window">
+    <div>
+      <p role="alert"></p>
+      <div id="conflict-wrapper">
+        <form>
+          <a href="#" onclick="document.url" target="_blank">{% translate "See their edits in another tab" %}</a>
+          <input id="your-changes" type="submit" value="{% translate "Keep your changes and loose theirs" %}">
+          <input id="their-changes" type="submit" value="{% translate "Keep their changes and loose yours" %}">
+        </form>
+      </div>
+    </div>
+    <ul class="buttons">
+      <li>
+        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<umap-alert-conflict></umap-alert-conflict>
+
+<script type="module">
+  import { register } from '{% static 'umap/js/components/base.js' %}'
+  import {
+    uMapAlert,
+    uMapAlertCreation,
+    uMapAlertConflict
+  } from '{% static 'umap/js/components/alerts/alert.js' %}'
+  register(uMapAlert, 'umap-alert')
+  register(uMapAlertCreation, 'umap-alert-creation')
+  register(uMapAlertConflict, 'umap-alert-conflict')
+</script>

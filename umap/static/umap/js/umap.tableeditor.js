@@ -83,10 +83,7 @@ U.TableEditor = L.Class.extend({
 
   validateName: function (name) {
     if (name.indexOf('.') !== -1) {
-      this.datalayer.map.alert.open({
-        content: L._('Invalide property name: {name}', { name: name }),
-        level: 'error',
-      })
+      U.Alert.error(L._('Invalide property name: {name}', { name: name }))
       return false
     }
     return true
@@ -98,10 +95,13 @@ U.TableEditor = L.Class.extend({
     this.renderHeaders()
     this.body.innerHTML = ''
     this.datalayer.eachLayer(this.renderRow, this)
-    const addButton = L.DomUtil.create('li', 'add-property')
-    L.DomUtil.createIcon(addButton, 'icon-add')
-    const label = L.DomUtil.create('span', '', addButton)
-    label.textContent = label.title = L._('Add a new property')
+    const addButton = L.DomUtil.createButton(
+      'flat',
+      undefined,
+      L._('Add a new property')
+    )
+    const iconElement = L.DomUtil.createIcon(addButton, 'icon-add')
+    addButton.insertBefore(iconElement, addButton.firstChild)
     const addProperty = function () {
       const newName = prompt(L._('Please enter the name of the property'))
       if (!newName || !this.validateName(newName)) return

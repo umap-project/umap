@@ -25,27 +25,34 @@ export class Panel {
   }
 
   open({ content, className, actions = [] } = {}) {
-    this.container.className = `with-transition panel ${this.classname} ${this.mode || ''}`
+    this.container.className = `with-transition panel window ${this.classname} ${
+      this.mode || ''
+    }`
     this.container.innerHTML = ''
-    const actionsContainer = DomUtil.create('ul', 'toolbox', this.container)
+    const actionsContainer = DomUtil.create('ul', 'buttons', this.container)
     const body = DomUtil.create('div', 'body', this.container)
     body.appendChild(content)
-    const closeLink = DomUtil.create('li', 'umap-close-link', actionsContainer)
-    DomUtil.add('i', 'icon icon-16 icon-close', closeLink)
-    closeLink.title = translate('Close')
-    const resizeLink = DomUtil.create('li', 'umap-resize-link', actionsContainer)
-    DomUtil.add('i', 'icon icon-16 icon-resize', resizeLink)
-    resizeLink.title = translate('Toggle size')
-    for (let action of actions) {
-      actionsContainer.appendChild(action)
+    const closeButton = DomUtil.createButtonIcon(
+      DomUtil.create('li', '', actionsContainer),
+      'icon-close',
+      translate('Close')
+    )
+    const resizeButton = DomUtil.createButtonIcon(
+      DomUtil.create('li', '', actionsContainer),
+      'icon-resize',
+      translate('Toggle size')
+    )
+    for (const action of actions) {
+      const element = DomUtil.element({ tagName: 'li', parent: actionsContainer })
+      element.appendChild(action)
     }
     if (className) DomUtil.addClass(body, className)
     const promise = new Promise((resolve, reject) => {
       DomUtil.addClass(this.container, 'on')
       resolve()
     })
-    DomEvent.on(closeLink, 'click', this.close, this)
-    DomEvent.on(resizeLink, 'click', this.resize, this)
+    DomEvent.on(closeButton, 'click', this.close, this)
+    DomEvent.on(resizeButton, 'click', this.resize, this)
     return promise
   }
 
