@@ -9,7 +9,7 @@ from playwright.sync_api import expect
 
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
-    return {**browser_context_args, "locale": "en-GB"}
+    return {**browser_context_args, "locale": "en-GB", "timezone_id": "Europe/Paris"}
 
 
 @pytest.fixture(autouse=True)

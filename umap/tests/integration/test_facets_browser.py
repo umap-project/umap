@@ -266,7 +266,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     # Close panel
     expect(panel.locator("summary")).to_have_attribute("data-badge", " ")
     expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
-    page.get_by_role("listitem", name="Close").click()
+    panel.get_by_role("button", name="Close").click()
     page.get_by_role("button", name="See layers").click()
     expect(panel.get_by_label("Min")).to_have_value("13")
     expect(panel.get_by_label("Min")).to_have_attribute("data-modified", "true")
