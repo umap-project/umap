@@ -879,11 +879,10 @@ class SendEditLink(FormLessEditMixin, FormView):
             return HttpResponseBadRequest("Invalid")
         link = self.object.get_anonymous_edit_url()
 
-        subject = _(
-            "The uMap edit link for your map: %(map_name)s"
-            % {"map_name": self.object.name}
-        )
-        body = _("Here is your secret edit link: %(link)s" % {"link": link})
+        subject = _("The uMap edit link for your map: %(map_name)s") % {
+            "map_name": self.object.name
+        }
+        body = _("Here is your secret edit link: %(link)s") % {"link": link}
         try:
             send_mail(
                 subject, body, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False
@@ -893,7 +892,7 @@ class SendEditLink(FormLessEditMixin, FormView):
                 error=_("Can't send email to %(email)s" % {"email": email})
             )
         return simple_json_response(
-            info=_("Email sent to %(email)s" % {"email": email})
+            info=_("Email sent to %(email)s") % {"email": email}
         )
 
 
