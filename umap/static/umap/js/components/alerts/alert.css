@@ -2,7 +2,7 @@
     box-sizing: border-box;
     min-height: 46px;
     line-height: 46px;
-    padding: var(--panel-gutter);
+    padding: var(--box-padding);
     position: absolute;
     box-shadow: 0 1px 7px #999999;
     background: var(--color-darkGray);
@@ -17,7 +17,8 @@
     align-items: flex-start;
     left: 50%;
     transform: translate(-50%, 0);
-    min-width: 80%;
+    max-width: calc(100% - var(--panel-gutter) * 2);
+    width: max-content;
 }
 [role="dialog"] > div {
     margin: 0 auto;

@@ -33,8 +33,15 @@
     --current-footer-height: 0px;
     --control-size: 36px;
     --border-radius: 4px;
+    --box-padding: 20px;
 }
 .dark {
     --background-color: var(--color-darkGray);
     --text-color: #efefef;
+}
+
+@media only screen and (max-width:770px) {
+    :root {
+        --box-padding: 10px;
+    }
 }
