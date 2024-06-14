@@ -1407,10 +1407,7 @@ U.DataLayer = L.Evented.extend({
           helpEntries: 'proxyRemoteData',
         },
       ])
-      remoteDataFields.push([
-        'options.remoteData.ttl',
-        { handler: 'ProxyTTLSelect', label: L._('Cache proxied request') },
-      ])
+      remoteDataFields.push('options.remoteData.ttl')
     }
 
     const remoteDataContainer = L.DomUtil.createFieldset(container, L._('Remote data'))

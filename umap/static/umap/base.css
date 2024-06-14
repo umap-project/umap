@@ -60,6 +60,21 @@ kbd {
   display: inline-block;
   white-space: nowrap;
 }
+h3 {
+    font-size: 1.2rem;
+}
+h4 {
+    font-size: 1.1rem;
+}
+hgroup > * {
+    margin-bottom: 0;
+}
+hgroup {
+    margin-bottom: var(--box-space);
+}
+hgroup > :not(:first-child):last-child {
+    font-weight: normal;
+}
 
 /*
 * List
@@ -68,6 +83,9 @@ ul {
     list-style-image:none;
     list-style-position:inside;
     list-style-type:none;
+}
+dt {
+    font-weight: bold;
 }
 
 /* ************************************************* */
@@ -129,14 +147,20 @@ ul {
     margin-right: auto;
     float: none;
 }
-
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-container > * {
+    text-align: center;
+}
 
 /* *********** */
 /*    forms    */
 /* *********** */
 input[type="text"], input[type="password"], input[type="date"],
 input[type="datetime-local"], input[type="email"], input[type="number"],
-input[type="search"], input[type="tel"], input[type="time"],
+input[type="search"], input[type="tel"], input[type="time"], input[type="file"],
 input[type="url"], textarea {
     background-color: white;
     border: 1px solid #CCCCCC;
@@ -145,9 +169,8 @@ input[type="url"], textarea {
     color: rgba(0, 0, 0, 0.75);
     display: block;
     font-family: inherit;
-    font-size: 14px;
-    height: 32px;
-    margin: 0 0 14px;
+    margin: 0;
+    margin-bottom: var(--box-margin);
     padding: 7px;
     width: 100%;
 }
@@ -169,12 +192,13 @@ input[type="checkbox"]:after {
     border: 1px solid var(--color-lightGray);
     cursor: pointer;
     text-align: center;
-    font-size: 1.3rem;
-    line-height: 1rem;
+    font-size: 1rem;
+    line-height: 0.8rem;
 }
 input[type=checkbox]:checked:after {
     background-color: var(--color-lightCyan);
     content: '✓';
+    color: var(--color-darkGray);
 }
 label input[type="radio"] {
     appearance: none;
@@ -197,8 +221,9 @@ label input[type="radio"]:checked:after {
     background-color: var(--color-lightCyan);
     content: '•';
     font-size: 3rem;
-    line-height: 1.1rem;
+    line-height: 0.8rem;
     color: var(--color-darkGray);
+    text-indent: -1px;
 }
 
 input[data-modified=true] {
@@ -217,6 +242,7 @@ select {
     height: 28px;
     line-height: 28px;
     margin-top: 5px;
+    margin-bottom: var(--box-margin);
 }
 .dark select {
     color: #efefef;
@@ -291,7 +317,6 @@ input + .help-text {
 }
 .formbox {
     min-height: 36px;
-    line-height: 28px;
     margin-bottom: 14px;
 }
 .formbox.with-switch {
@@ -300,11 +325,18 @@ input + .help-text {
 .formbox select {
     width: calc(100% - 14px);
 }
+fieldset.formbox {
+    border: none;
+    border-top: 1px solid var(--color-lightGray);
+}
 label {
     display: block;
     font-size: 12px;
     line-height: 21px;
     width: 100%;
+}
+label + label {
+    margin-top: var(--box-space);
 }
 .content label {
     font-weight: bold;
@@ -366,7 +398,7 @@ details summary {
     border: 1px solid var(--color-darkGray);
 }
 fieldset legend {
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 0 5px;
 }
 
@@ -388,6 +420,9 @@ fieldset legend {
     font-size: .75rem;
     border-radius: 50%;
     content: attr(data-badge);
+}
+[hidden] {
+    display: none!important;
 }
 
 /* Switch */
@@ -475,10 +510,13 @@ input.switch:checked ~ label:after {
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
 }
+.button-bar.by3,
+.button-bar.by5,
 .umap-multiplechoice.by3,
 .umap-multiplechoice.by5 {
     grid-template-columns: 1fr 1fr 1fr;
 }
+.button-bar.by4,
 .umap-multiplechoice.by4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }

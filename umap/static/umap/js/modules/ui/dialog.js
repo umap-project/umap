@@ -19,12 +19,24 @@ export default class Dialog {
     this.container.close()
   }
 
+  currentZIndex() {
+    return Math.max(
+      ...Array.from(document.querySelectorAll('dialog')).map(
+        (el) => window.getComputedStyle(el).getPropertyValue('z-index') || 0
+      )
+    )
+  }
+
   open({ className, content, modal } = {}) {
     this.container.innerHTML = ''
+    const currentZIndex = this.currentZIndex()
+    if (currentZIndex) this.container.style.zIndex = currentZIndex + 1
     if (modal) this.container.showModal()
     else this.container.show()
     if (className) {
-      this.container.classList.add(className)
+      // Reset
+      this.container.className = 'umap-dialog'
+      this.container.classList.add(...className.split(' '))
     }
     const buttonsContainer = DomUtil.create('ul', 'buttons', this.container)
     const closeButton = DomUtil.createButtonIcon(

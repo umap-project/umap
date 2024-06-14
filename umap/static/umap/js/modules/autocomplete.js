@@ -1,6 +1,11 @@
-import { DomUtil, DomEvent, setOptions } from '../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  DomUtil,
+  DomEvent,
+  setOptions,
+  Util,
+} from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
-import { ServerRequest } from './request.js'
+import { Request, ServerRequest } from './request.js'
 
 export class BaseAutocomplete {
   constructor(el, options) {
@@ -216,11 +221,21 @@ export class BaseAutocomplete {
   }
 }
 
-class BaseAjax extends BaseAutocomplete {
+export class BaseAjax extends BaseAutocomplete {
   constructor(el, options) {
     super(el, options)
-    this.server = new ServerRequest()
+    this.setUrl()
+    this.initRequest()
   }
+
+  setUrl() {
+    this.url = this.options?.url
+  }
+
+  initRequest() {
+    this.request = new Request()
+  }
+
   optionToResult(option) {
     return {
       value: option.value,
@@ -237,71 +252,96 @@ class BaseAjax extends BaseAutocomplete {
     if (val === this.cache) return
     else this.cache = val
     val = val.toLowerCase()
-    const [{ data }, response] = await this.server.get(
-      `/agnocomplete/AutocompleteUser/?q=${encodeURIComponent(val)}`
-    )
-    this.handleResults(data)
+    const url = Util.template(this.url, { q: encodeURIComponent(val) })
+    this.handleResults(await this._search(url))
+  }
+
+  async _search(url) {
+    const response = await this.request.get(url)
+    if (response && response.ok) {
+      return await response.json()
+    }
   }
 }
 
-export class AjaxAutocompleteMultiple extends BaseAjax {
-  initSelectedContainer() {
-    return DomUtil.after(
-      this.input,
-      DomUtil.element({ tagName: 'ul', className: 'umap-multiresult' })
-    )
+class BaseServerAjax extends BaseAjax {
+  setUrl() {
+    this.url = '/agnocomplete/AutocompleteUser/?q={q}'
   }
 
-  displaySelected(result) {
-    const result_el = DomUtil.element({
-      tagName: 'li',
-      parent: this.selectedContainer,
-    })
-    result_el.textContent = result.item.label
-    const close = DomUtil.element({
-      tagName: 'span',
-      parent: result_el,
-      className: 'close',
-      textContent: '×',
-    })
-    DomEvent.on(close, 'click', () => {
-      this.selectedContainer.removeChild(result_el)
-      this.options.on_unselect(result)
-    })
-    this.hide()
+  initRequest() {
+    this.server = new ServerRequest()
+  }
+  async _search(url) {
+    const [{ data }, response] = await this.server.get(url)
+    return data
   }
 }
 
-export class AjaxAutocomplete extends BaseAjax {
-  initSelectedContainer() {
-    return DomUtil.after(
-      this.input,
-      DomUtil.element({ tagName: 'div', className: 'umap-singleresult' })
-    )
+export const SingleMixin = (Base) =>
+  class extends Base {
+    initSelectedContainer() {
+      return DomUtil.after(
+        this.input,
+        DomUtil.element({ tagName: 'div', className: 'umap-singleresult' })
+      )
+    }
+
+    displaySelected(result) {
+      const result_el = DomUtil.element({
+        tagName: 'div',
+        parent: this.selectedContainer,
+      })
+      result_el.textContent = result.item.label
+      const close = DomUtil.element({
+        tagName: 'span',
+        parent: result_el,
+        className: 'close',
+        textContent: '×',
+      })
+      this.input.style.display = 'none'
+      DomEvent.on(
+        close,
+        'click',
+        function () {
+          this.selectedContainer.innerHTML = ''
+          this.input.style.display = 'block'
+        },
+        this
+      )
+      this.hide()
+    }
   }
 
-  displaySelected(result) {
-    const result_el = DomUtil.element({
-      tagName: 'div',
-      parent: this.selectedContainer,
-    })
-    result_el.textContent = result.item.label
-    const close = DomUtil.element({
-      tagName: 'span',
-      parent: result_el,
-      className: 'close',
-      textContent: '×',
-    })
-    this.input.style.display = 'none'
-    DomEvent.on(
-      close,
-      'click',
-      function () {
-        this.selectedContainer.innerHTML = ''
-        this.input.style.display = 'block'
-      },
-      this
-    )
-    this.hide()
+export const MultipleMixin = (Base) =>
+  class extends Base {
+    initSelectedContainer() {
+      return DomUtil.after(
+        this.input,
+        DomUtil.element({ tagName: 'ul', className: 'umap-multiresult' })
+      )
+    }
+
+    displaySelected(result) {
+      const result_el = DomUtil.element({
+        tagName: 'li',
+        parent: this.selectedContainer,
+      })
+      result_el.textContent = result.item.label
+      const close = DomUtil.element({
+        tagName: 'span',
+        parent: result_el,
+        className: 'close',
+        textContent: '×',
+      })
+      DomEvent.on(close, 'click', () => {
+        this.selectedContainer.removeChild(result_el)
+        this.options.on_unselect(result)
+      })
+      this.hide()
+    }
   }
-}
+
+export class AjaxAutocompleteMultiple extends MultipleMixin(BaseServerAjax) {}
+
+export class AjaxAutocomplete extends SingleMixin(BaseServerAjax) {}

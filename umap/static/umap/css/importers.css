@@ -1,0 +1,44 @@
+.importers ul [type=button] {
+    background: none;
+    font-size: 1rem;
+    border: none;
+    width: initial;
+    display: inline-block;
+}
+.importer h3:before {
+    background-image: url(../img/importers/random.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    content: '';
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    margin-right: 10px;
+    background-size: 100%;
+    vertical-align: -10px;
+}
+.importers ul [type=button]:before {
+    background-image: url(../img/importers/random.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    content: '';
+    width: 100%;
+    height: 50px;
+    display: block;
+}
+.importer.geodatamine h3:before,
+.importers ul .geodatamine:before {
+    background-image: url(../img/importers/geodatamine.svg);
+}
+.importer.communesfr h3:before,
+.importers ul .communesfr:before {
+    background-image: url(../img/importers/communesfr.svg);
+}
+.importer.overpass h3:before,
+.importers ul .overpass:before {
+    background-image: url(../img/importers/overpass.svg);
+}
+.importer.datasets h3:before,
+.importers ul .datasets:before {
+    background-image: url(../img/importers/datasets.svg);
+}

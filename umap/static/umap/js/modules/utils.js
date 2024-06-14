@@ -90,6 +90,8 @@ export function escapeHTML(s) {
       'source',
       'br',
       'span',
+      'dt',
+      'dd',
     ],
     ADD_ATTR: [
       'target',

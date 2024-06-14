@@ -20,9 +20,6 @@ L.Map.mergeOptions({
   enablePolygonDraw: true,
   enablePolylineDraw: true,
   limitBounds: {},
-  importPresets: [
-    // {url: 'http://localhost:8019/en/datalayer/1502/', label: 'Simplified World Countries', format: 'geojson'}
-  ],
   slideshow: {},
   clickable: true,
   permissions: {},
@@ -551,6 +548,8 @@ U.Map = L.Map.extend({
       if (e.key === 'Escape') {
         if (this.dialog.visible) {
           this.dialog.close()
+        } else if (this.importer.dialog.visible) {
+          this.importer.dialog.close()
         } else if (this.editEnabled && this.editTools.drawing()) {
           this.editTools.stopDrawing()
         } else if (this.measureTools.enabled()) {
@@ -803,16 +802,14 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (datalayer, sync) {
-    datalayer = datalayer || {
-      name: `${L._('Layer')} ${this.datalayers_index.length + 1}`,
-    }
-    const dl = new U.DataLayer(this, datalayer, sync)
+  createDataLayer: function (options = {}, sync) {
+    options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
+    const datalayer = new U.DataLayer(this, options, sync)
 
     if (sync !== false) {
-      dl.sync.upsert(dl.options)
+      datalayer.sync.upsert(datalayer.options)
     }
-    return dl
+    return datalayer
   },
 
   newDataLayer: function () {
@@ -893,6 +890,13 @@ U.Map = L.Map.extend({
     } else {
       if (!layer) layer = this.createDataLayer({ name: file.name })
       layer.importFromFile(file, type)
+    }
+  },
+
+  importFromUrl: async function (uri) {
+    const response = await this.request.get(uri)
+    if (response && response.ok) {
+      this.importRaw(await response.text())
     }
   },
 

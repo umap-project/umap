@@ -211,6 +211,46 @@ Which feed to display on the home page. Three valid values:
 - `"highlighted"`, which shows the maps that have been starred by a staff member
 - `None`, which does not show any map on the home page
 
+#### UMAP_IMPORTERS
+
+Activate preset importers to connect uMap with external sources.
+
+Must be a dict in the form: `{"importer_name": {"option1": "value"}}`.
+
+Only the key is mandatory to activate an importer (eg. `{"overpass": {}}`).
+
+Example:
+
+```
+UMAP_IMPORTERS = {
+    "geodatamine": {"name": "my custom name"},
+    "overpass": {"url": "https://overpass-api.de/api/interpreter"},
+    "communesfr": {"name": "Communes françaises"},
+    "datasets": {
+        "choices": [
+            {
+                "label": "Régions",
+                "url": "https://domain.org/path/to/file.geojson",
+                "format": "geojson",
+            },
+            {
+                "label": "Départements",
+                "url": "https://domain.org/path/to/other/file.csv",
+                "format": "csv",
+            },
+        ]
+    },
+}
+
+```
+
+Available importers:
+
+- `overpass`: very lite form to build a URL retrieving data from Overpass API.
+- `geodatamine`: allow to interact with [GéoDataMine](https://geodatamine.fr/) API
+- `communesfr`: download French communes boundaries, from https://geo.api.gouv.fr/
+- `datasets`: define URLs you want to promote to users, with a `name` and a `format`
+
 #### UMAP_MAPS_PER_PAGE
 
 How many maps to show in maps list, like search or home page.
