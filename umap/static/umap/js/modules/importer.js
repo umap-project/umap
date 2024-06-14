@@ -12,14 +12,16 @@ const TEMPLATE = `
       <input type="file" multiple autofocus onchange />
       <input type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
-      <div class="importers">
+      <div class="importers" hidden>
         <h4>${translate('Import helpers:')}</h4>
         <ul class="grid-container">
         </ul>
       </div>
     </fieldset>
     <fieldset class="formbox">
-      <legend class="counter" data-help="importFormats">${translate('Choose the format')}</legend>
+      <legend class="counter" data-help="importFormats">${translate(
+        'Choose the format'
+      )}</legend>
       <select name="format" onchange></select>
     </fieldset>
     <fieldset id="destination" class="formbox">
@@ -147,7 +149,7 @@ export default class Importer {
       for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
         L.DomUtil.createButton(
           plugin.id,
-          DomUtil.element({tagName: 'li', parent}),
+          DomUtil.element({ tagName: 'li', parent }),
           plugin.name,
           () => plugin.open(this)
         )
