@@ -1,5 +1,8 @@
 {% extends "umap/content.html" %}
 {% load i18n %}
+{% block messages %}
+  {# We don't want maps from the results list to display errors in the main page. #}
+{% endblock messages %}
 {% block maincontent %}
   {% include "umap/search_bar.html" %}
   <div class="wrapper">
