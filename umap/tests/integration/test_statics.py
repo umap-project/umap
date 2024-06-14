@@ -40,7 +40,8 @@ def test_javascript_have_been_loaded(
     expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
     expect(page).to_have_url(re.compile(r".*/fr/"))
     # Should be in French, so hashed locale file has been loaded correctly
-    button = page.get_by_role("button", name="Voir les calques")
+    # FIXME when labels are chosen and translations pulled from transifex
+    button = page.get_by_role("button", name="Open browser")
     expect(button).to_be_visible()
     button.click()
     layers = page.locator(".umap-browser .datalayer")

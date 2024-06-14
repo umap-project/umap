@@ -510,7 +510,7 @@ U.DataLayersControl = L.Control.Button.extend({
   options: {
     position: 'topleft',
     className: 'umap-control-browse',
-    title: L._('See layers'),
+    title: L._('Open browser'),
   },
 
   afterAdd: function (container) {
@@ -992,7 +992,7 @@ U.AttributionControl = L.Control.Attribution.extend({
       })
     }
     if (captionMenus) {
-      const link = L.DomUtil.add('a', '', container, ` — ${L._('About')}`)
+      const link = L.DomUtil.add('a', '', container, ` — ${L._('Open caption')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
         .on(link, 'click', this._map.openCaption, this._map)
         .on(link, 'dblclick', L.DomEvent.stop)

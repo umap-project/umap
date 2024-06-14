@@ -1611,7 +1611,7 @@ U.Map = L.Map.extend({
       L.DomUtil.createButton(
         'umap-about-link flat',
         container,
-        L._('About'),
+        L._('Open caption'),
         this.openCaption,
         this
       )
@@ -1762,7 +1762,7 @@ U.Map = L.Map.extend({
     items.push(
       '-',
       {
-        text: L._('See layers'),
+        text: L._('Open browser'),
         callback: () => this.openBrowser('layers'),
       },
       {
@@ -1778,7 +1778,7 @@ U.Map = L.Map.extend({
     }
     items.push(
       {
-        text: L._('About'),
+        text: L._('Open caption'),
         callback: this.openCaption,
       },
       {
