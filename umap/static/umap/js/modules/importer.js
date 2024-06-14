@@ -55,10 +55,25 @@ export default class Importer {
   }
 
   loadImporters() {
-    for (const key of Object.keys(this.map.options.importers || {})) {
-      import(`./importers/${key}.js`).then((mod) => {
-        this.IMPORTERS.push(new mod.Importer(this.map, this.map.options.importers[key]))
-      })
+    for (const [name, config] of Object.entries(this.map.options.importers || {})) {
+      const register = (mod) => {
+        this.IMPORTERS.push(new mod.Importer(this.map, config))
+      }
+      // We need to have explicit static paths for Django's collectstatic with hashes.
+      switch (name) {
+        case 'geodatamine':
+          import('./importers/geodatamine.js').then(register)
+          break
+        case 'communesfr':
+          import('./importers/communesfr.js').then(register)
+          break
+        case 'overpass':
+          import('./importers/overpass.js').then(register)
+          break
+        case 'datasets':
+          import('./importers/datasets.js').then(register)
+          break
+      }
     }
   }
 
