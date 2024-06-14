@@ -57,6 +57,10 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  condition: {
+    type: String,
+    impacts: ['data'],
+  },
   dashArray: {
     type: String,
     impacts: ['data'],
@@ -385,6 +389,10 @@ export const SCHEMA = {
   remoteData: {
     type: Object,
     impacts: ['remote-data'],
+  },
+  rules: {
+    type: Object,
+    impacts: ['data'],
   },
   scaleControl: {
     type: Boolean,

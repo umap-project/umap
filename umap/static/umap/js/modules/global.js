@@ -5,6 +5,7 @@ import Caption from './caption.js'
 import { Panel, EditPanel, FullPanel } from './ui/panel.js'
 import Dialog from './ui/dialog.js'
 import Tooltip from './ui/tooltip.js'
+import Rules from './rules.js'
 import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
 import { Request, ServerRequest, RequestError, HTTPError, NOKError } from './request.js'
@@ -43,6 +44,7 @@ window.U = {
   Panel,
   Request,
   RequestError,
+  Rules,
   SCHEMA,
   ServerRequest,
   SyncEngine,

@@ -1496,7 +1496,7 @@ U.DataLayer = L.Evented.extend({
     } else if (this.layer && this.layer.defaults && this.layer.defaults[option]) {
       return this.layer.defaults[option]
     } else {
-      return this.map.getOption(option)
+      return this.map.getOption(option, feature)
     }
   },
 
