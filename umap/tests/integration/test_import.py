@@ -486,7 +486,7 @@ def test_create_remote_data(page, live_server, tilelayer):
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
-    expect(page.locator('input[name="url"]')).to_have_value(
+    expect(page.locator('.panel input[name="url"]')).to_have_value(
         "https://remote.org/data.json"
     )
 
@@ -523,7 +523,7 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
-    expect(page.locator('input[name="url"]')).to_have_value("")
+    expect(page.locator('.panel input[name="url"]')).to_have_value("")
 
 
 def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
