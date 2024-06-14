@@ -1,5 +1,4 @@
 import { translate } from '../../modules/i18n.js'
-import { ServerRequest } from '../../modules/request.js'
 import { uMapElement } from '../base.js'
 
 class uMapAlert extends uMapElement {
@@ -77,9 +76,14 @@ class uMapAlertCreation extends uMapAlert {
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
     duration = Infinity,
     editLink = undefined,
-    sendLink = undefined
+    sendCallback = undefined
   ) {
-    uMapAlertCreation.emit('alertCreation', { message, duration, editLink, sendLink })
+    uMapAlertCreation.emit('alertCreation', {
+      message,
+      duration,
+      editLink,
+      sendCallback,
+    })
   }
 
   constructor() {
@@ -94,7 +98,7 @@ class uMapAlertCreation extends uMapAlert {
       duration = 5000,
       message = '',
       editLink = undefined,
-      sendLink = undefined,
+      sendCallback = undefined,
     } = event.detail
     uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
     this.linkWrapper.querySelector('input[type="url"]').value = editLink
@@ -104,15 +108,14 @@ class uMapAlertCreation extends uMapAlert {
       L.Util.copyToClipboard(editLink)
       event.target.value = translate('✅ Copied!')
     })
-    if (sendLink) {
+    if (sendCallback) {
       this.formWrapper.removeAttribute('hidden')
       const form = this.formWrapper.querySelector('form')
       form.addEventListener('submit', async (event) => {
         event.preventDefault()
         const formData = new FormData(form)
-        const server = new ServerRequest()
+        sendCallback(formData)
         this.removeAttribute('open')
-        await server.post(sendLink, {}, formData)
       })
     }
   }
@@ -124,12 +127,8 @@ class uMapAlertCreation extends uMapAlert {
 }
 
 class uMapAlertConflict extends uMapAlert {
-  static error(
-    message,
-    // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
-    duration = Infinity
-  ) {
-    uMapAlertConflict.emit('alertConflict', { level: 'error', message, duration })
+  static error(message, forceCallback) {
+    uMapAlertConflict.emit('alertConflict', { level: 'error', message, forceCallback })
   }
 
   constructor() {
@@ -138,14 +137,20 @@ class uMapAlertConflict extends uMapAlert {
   }
 
   onAlertConflict(event) {
-    const { level = 'info', duration = 5000, message = '' } = event.detail
+    // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
+    const {
+      level = 'info',
+      duration = Infinity,
+      message = '',
+      forceCallback = undefined,
+    } = event.detail
     uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
     const form = this.conflictWrapper.querySelector('form')
     form.addEventListener('submit', (event) => {
       event.preventDefault()
       switch (event.submitter.id) {
         case 'your-changes':
-          uMapAlertConflict.emit('alertConflictOverride')
+          forceCallback()
           break
         case 'their-changes':
           window.location.reload()

@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -1063,17 +1063,14 @@ U.Map = L.Map.extend({
       this.permissions.setOptions(data.permissions)
       this.permissions.commit()
       if (data?.permissions?.anonymous_edit_url) {
-        const send_edit_link_url =
-          this.options.urls.map_send_edit_link &&
-          this.urls.get('map_send_edit_link', {
-            map_id: this.options.umap_id,
-          })
         this.once('saved', () => {
           U.AlertCreation.info(
             L._('Your map has been created with an anonymous account!'),
             Number.Infinity,
             data.permissions.anonymous_edit_url,
-            send_edit_link_url
+            this.options.urls.map_send_edit_link
+              ? this.sendEditLinkEmail.bind(this)
+              : null
           )
         })
       } else {
@@ -1886,5 +1883,14 @@ U.Map = L.Map.extend({
       if (d.isVisible()) bounds.extend(d.layer.getBounds())
     })
     return bounds
+  },
+
+  sendEditLinkEmail: async function (formData) {
+    const sendLink =
+      this.options.urls.map_send_edit_link &&
+      this.urls.get('map_send_edit_link', {
+        map_id: this.options.umap_id,
+      })
+    await this.server.post(sendLink, {}, formData)
   },
 })

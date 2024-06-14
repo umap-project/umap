@@ -1708,11 +1708,11 @@ U.DataLayer = L.Evented.extend({
           L._(
             'Whoops! Other contributor(s) changed some of the same map elements as you. ' +
               'This situation is tricky, you have to choose carefully which version is pertinent.'
-          )
+          ),
+          async () => {
+            await this._trySave(url, {}, formData)
+          }
         )
-        document.addEventListener('umap:alertConflictOverride', async (event) => {
-          await this._trySave(url, {}, formData)
-        })
       }
     } else {
       // Response contains geojson only if save has conflicted and conflicts have
