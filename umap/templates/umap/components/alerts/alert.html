@@ -23,10 +23,11 @@
   <div role="dialog" class="dark window">
     <div>
       <h3 role="alert"></h3>
-      <p><em>{% translate "Pro-tip: to easily find back your maps," %} <a href="{% url "login" %}" target="_blank">{% translate "create an account" %}</a> {% translate " or " %} <a href="{% url "login" %}" target="_blank">{% translate "log in" %}</a>.</em></p>
+      {% url "login" as login_url %}
+      <p><em>{% blocktranslate %}Pro-tip: to easily find back your maps, <a href="{{ login_url }}" target="_blank">create an account</a> or <a href="{{ login_url }}" target="_blank">log in</a>.{% endblocktranslate %}</em></p>
       <div id="link-wrapper">
         <form>
-          <label for="url">Here is your secret link to edit the map, please keep it safe:</label>
+          <label for="url">{% translate "Here is your secret link to edit the map, please keep it safe:" %}</label>
           <fieldset role="group">
             <input type="url" name="url" id="url">
             <input type="button" value="{% translate "Copy link" %}">
