@@ -22,26 +22,26 @@
 <template id="umap-alert-creation-template">
   <div role="dialog" class="dark window">
     <div>
-      <h3>{% translate "Save the edit link" %}</h3>
-      <p role="alert"></p>
+      <h3 role="alert"></h3>
+      <p><em>{% translate "Pro-tip: to easily find back your maps," %} <a href="{% url "login" %}" target="_blank">{% translate "create an account" %}</a> {% translate " or " %} <a href="{% url "login" %}" target="_blank">{% translate "log in" %}</a>.</em></p>
       <div id="link-wrapper">
         <form>
+          <label for="url">Here is your secret link to edit the map, please keep it safe:</label>
           <fieldset role="group">
-            <input type="url" name="url">
+            <input type="url" name="url" id="url">
             <input type="button" value="{% translate "Copy link" %}">
           </fieldset>
         </form>
       </div>
       <div id="form-wrapper" hidden>
-        <p>{% translate "You can also receive that URL by email:" %}</p>
         <form>
+          <label for="email">{% translate "Enter your email address to receive the secret link:" %}</label>
           <fieldset role="group">
-            <input type="email" name="email" placeholder="{% translate "Email" %}" required>
+            <input type="email" name="email" id="email" placeholder="{% translate "Email" %}" required>
             <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
           </fieldset>
         </form>
       </div>
-      <p><em>{% translate "Pro-tip: to easily find back your maps," %} <a href="{% url "login" %}" target="_blank">{% translate "create an account" %}</a></em></p>
     </div>
     <ul class="buttons">
       <li>

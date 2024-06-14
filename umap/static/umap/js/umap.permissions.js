@@ -138,7 +138,7 @@ U.MapPermissions = L.Class.extend({
     const [data, response, error] = await this.map.server.post(this.getAttachUrl())
     if (!error) {
       this.options.owner = this.map.options.user
-      U.Alert.info(L._('Map has been attached to your account'))
+      U.Alert.success(L._('Map has been attached to your account'))
       this.map.editPanel.close()
     }
   },

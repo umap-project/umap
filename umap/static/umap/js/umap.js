@@ -830,7 +830,7 @@ U.Map = L.Map.extend({
 
   setCenterAndZoom: function () {
     this._setCenterAndZoom()
-    U.Alert.info(L._('The zoom and center have been modified.'))
+    U.Alert.success(L._('The zoom and center have been modified.'))
   },
 
   _setCenterAndZoom: function () {
@@ -1060,10 +1060,7 @@ U.Map = L.Map.extend({
           })
         this.once('saved', () => {
           U.AlertCreation.info(
-            L._(
-              'Your map has been created! As you are not logged in, ' +
-                'here is your secret link to edit the map, please keep it safe:'
-            ),
+            L._('Your map has been created with an anonymous account!'),
             Number.Infinity,
             data.permissions.anonymous_edit_url,
             send_edit_link_url
@@ -1071,7 +1068,7 @@ U.Map = L.Map.extend({
         })
       } else {
         this.once('saved', () => {
-          U.Alert.info(L._('Congratulations, your map has been created!'))
+          U.Alert.success(L._('Congratulations, your map has been created!'))
         })
       }
     } else {
@@ -1082,7 +1079,7 @@ U.Map = L.Map.extend({
         this.permissions.commit()
       }
       this.once('saved', () => {
-        U.Alert.info(data.info || L._('Map has been saved!'))
+        U.Alert.success(data.info || L._('Map has been saved!'))
       })
     }
     // Update URL in case the name has changed.
@@ -1119,7 +1116,7 @@ U.Map = L.Map.extend({
       return
     }
     this.options.starred = data.starred
-    U.Alert.info(
+    U.Alert.success(
       data.starred ? L._('Map has been starred') : L._('Map has been unstarred')
     )
     this.renderControls()

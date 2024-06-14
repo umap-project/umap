@@ -9,6 +9,7 @@
     --color-brightCyan: #46ece6;
     --color-lightCyan: #d4fbf9;
     --color-red: #c60f13;
+    --color-darkRed: #5b2a2a;
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);

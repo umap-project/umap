@@ -19,6 +19,10 @@ class uMapAlert extends uMapElement {
     uMapAlert.emit('alert', { message, duration })
   }
 
+  static success(message, duration = 5000) {
+    uMapAlert.emit('alert', { level: 'success', message, duration })
+  }
+
   // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
   static error(message, duration = Infinity) {
     uMapAlert.emit('alert', { level: 'error', message, duration })
