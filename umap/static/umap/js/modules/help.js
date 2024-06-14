@@ -176,7 +176,6 @@ export default class Help {
         tagName: 'div',
         className: 'umap-help-entry',
         parent: container,
-        innerHTML: ENTRIES[name],
       }).appendChild(this._buildEditEntry())
     } else {
       for (const name of entries) {
