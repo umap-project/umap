@@ -171,10 +171,7 @@ def test_alert_message_after_create(
     new_map = Map.objects.last()
     expect(alert).to_be_visible()
     expect(
-        alert.get_by_text(
-            "Your map has been created! As you are not logged in, here is your secret "
-            "link to edit the map, please keep it safe:"
-        )
+        alert.get_by_text("Your map has been created with an anonymous account!")
     ).to_be_visible()
     expect(alert.get_by_role("button", name="Copy")).to_be_visible()
     expect(alert.get_by_role("button", name="Send me the link")).to_be_visible()
@@ -218,10 +215,7 @@ def test_alert_message_after_create_show_link_even_without_mail(
     alert = page.locator('umap-alert-creation div[role="dialog"]')
     expect(alert).to_be_visible()
     expect(
-        alert.get_by_text(
-            "Your map has been created! As you are not logged in, here is your secret "
-            "link to edit the map, please keep it safe:"
-        )
+        alert.get_by_text("Your map has been created with an anonymous account!")
     ).to_be_visible()
     expect(alert.get_by_role("button", name="Copy")).to_be_visible()
     expect(alert.get_by_role("button", name="Send me the link")).to_be_hidden()
