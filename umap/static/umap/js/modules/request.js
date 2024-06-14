@@ -144,6 +144,8 @@ export class ServerRequest extends Request {
   _onNOK(error) {
     if (error.status === 403) {
       Alert.error(error.message || translate('Action not allowed :('))
+    } else {
+      super._onError(error)
     }
     return [{}, error.response, error]
   }
