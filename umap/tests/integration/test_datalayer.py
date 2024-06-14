@@ -57,6 +57,7 @@ def test_should_honour_toZoom(live_server, map, datalayer, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
+    page.wait_for_timeout(500)
     expect(markers).to_be_visible()
     page.get_by_label("Zoom out").click()
     expect(markers).to_be_visible()
