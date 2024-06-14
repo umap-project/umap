@@ -144,7 +144,7 @@ U.FeatureMixin = {
   edit: function (e) {
     if (!this.map.editEnabled || this.isReadOnly()) return
     const container = L.DomUtil.create('div', 'umap-feature-container')
-    L.DomUtil.createTitle(container, L._('Feature properties'), this.getClassName())
+    L.DomUtil.createTitle(container, L._('Feature properties'), `icon-${this.getClassName()}`)
 
     let builder = new U.FormBuilder(
       this,
