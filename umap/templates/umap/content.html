@@ -12,7 +12,9 @@
   <header class="wrapper row">
     {% include "umap/navigation.html" with title=SITE_NAME %}
   </header>
-  {% include "umap/messages.html" with title=SITE_NAME %}
+  {% block messages %}
+    {% include "umap/messages.html" with title=SITE_NAME %}
+  {% endblock messages %}
 {% endblock header %}
 {% block content %}
   {% if UMAP_READONLY %}

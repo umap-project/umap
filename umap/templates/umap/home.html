@@ -1,5 +1,8 @@
 {% extends "umap/content.html" %}
 {% load umap_tags i18n %}
+{% block messages %}
+  {# We don't want maps in the list to display errors. #}
+{% endblock messages %}
 {% block maincontent %}
   {% include "umap/search_bar.html" %}
   {% include "umap/about_summary.html" %}
