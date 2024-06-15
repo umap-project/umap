@@ -203,27 +203,24 @@ input[type=checkbox]:checked:after {
 label input[type="radio"] {
     appearance: none;
     margin-right: 10px;
+    background: var(--color-darkGray);
 }
 input[type="radio"]:after {
     display: inline-block;
-    content: ' ';
-    width: 12px;
-    height: 12px;
+    content: '⦾';
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    border: 1px solid var(--color-lightGray);
     cursor: pointer;
     text-align: center;
-    font-size: 1.3rem;
-    line-height: 1rem;
     vertical-align: bottom;
+    font-size: 1.2rem;
+    line-height: 0.7;
 }
 label input[type="radio"]:checked:after {
     background-color: var(--color-lightCyan);
-    content: '•';
-    font-size: 3rem;
-    line-height: 0.8rem;
     color: var(--color-darkGray);
-    text-indent: -1px;
+    content: '⦿';
 }
 
 input[data-modified=true] {

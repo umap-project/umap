@@ -12,14 +12,16 @@ const TEMPLATE = `
       <input type="file" multiple autofocus onchange />
       <input type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
-      <div class="importers">
+      <div class="importers" hidden>
         <h4>${translate('Import helpers:')}</h4>
         <ul class="grid-container">
         </ul>
       </div>
     </fieldset>
     <fieldset class="formbox">
-      <legend class="counter" data-help="importFormats">${translate('Choose the format')}</legend>
+      <legend class="counter" data-help="importFormats">${translate(
+        'Choose the format'
+      )}</legend>
       <select name="format" onchange></select>
     </fieldset>
     <fieldset id="destination" class="formbox">
@@ -55,10 +57,25 @@ export default class Importer {
   }
 
   loadImporters() {
-    for (const key of Object.keys(this.map.options.importers || {})) {
-      import(`./importers/${key}.js`).then((mod) => {
-        this.IMPORTERS.push(new mod.Importer(this.map, this.map.options.importers[key]))
-      })
+    for (const [name, config] of Object.entries(this.map.options.importers || {})) {
+      const register = (mod) => {
+        this.IMPORTERS.push(new mod.Importer(this.map, config))
+      }
+      // We need to have explicit static paths for Django's collectstatic with hashes.
+      switch (name) {
+        case 'geodatamine':
+          import('./importers/geodatamine.js').then(register)
+          break
+        case 'communesfr':
+          import('./importers/communesfr.js').then(register)
+          break
+        case 'overpass':
+          import('./importers/overpass.js').then(register)
+          break
+        case 'datasets':
+          import('./importers/datasets.js').then(register)
+          break
+      }
     }
   }
 
@@ -132,7 +149,7 @@ export default class Importer {
       for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
         L.DomUtil.createButton(
           plugin.id,
-          DomUtil.element({tagName: 'li', parent}),
+          DomUtil.element({ tagName: 'li', parent }),
           plugin.name,
           () => plugin.open(this)
         )
