@@ -1359,7 +1359,7 @@ def logout(request):
 
 class LoginPopupEnd(TemplateView):
     """
-    End of a loggin process in popup.
+    End of a login process in popup.
     Basically close the popup.
     """
 

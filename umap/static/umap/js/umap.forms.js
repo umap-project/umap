@@ -1133,7 +1133,7 @@ U.FormBuilder = L.FormBuilder.extend({
         else schema.handler = 'IntInput'
       } else if (schema.choices) {
         const text_length = schema.choices.reduce(
-          (acc, [value, label]) => acc + label.length,
+          (acc, [_, label]) => acc + label.length,
           0
         )
         // Try to be smart and use MultiChoice only
