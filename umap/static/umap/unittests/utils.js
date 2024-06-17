@@ -779,4 +779,27 @@ describe('Utils', () => {
       )
     })
   })
+
+  describe('#isObject', () => {
+    it('should return true for objects', () => {
+      assert.equal(Utils.isObject({}), true)
+      assert.equal(Utils.isObject({ foo: 'bar' }), true)
+    })
+
+    it('should return false for Array', () => {
+      assert.equal(Utils.isObject([]), false)
+    })
+
+    it('should return false on null', () => {
+      assert.equal(Utils.isObject(null), false)
+    })
+
+    it('should return false on undefined', () => {
+      assert.equal(Utils.isObject(undefined), false)
+    })
+
+    it('should return false on string', () => {
+      assert.equal(Utils.isObject(''), false)
+    })
+  })
 })

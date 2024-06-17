@@ -178,7 +178,7 @@ export function toHTML(r, options) {
 }
 
 export function isObject(what) {
-  return typeof what === 'object' && what !== null
+  return typeof what === 'object' && what !== null && !Array.isArray(what)
 }
 
 export function CopyJSON(geojson) {
@@ -405,4 +405,8 @@ export class WithTemplate {
     this.elements = elements
     return this.element
   }
+}
+
+export function deepEqual(object1, object2){
+  return JSON.stringify(object1) === JSON.stringify(object2)
 }

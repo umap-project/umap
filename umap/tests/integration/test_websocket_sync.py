@@ -281,3 +281,65 @@ def test_websocket_connection_can_sync_cloned_polygons(
     peerB.get_by_role("button", name="Save").click()
 
     expect(peerB.locator("path")).to_have_count(2)
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_websocket_connection_can_sync_late_joining_peer(
+    new_page, live_server, websocket_server, tilelayer
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    DataLayerFactory(map=map, data={})
+
+    # Create first peer (A) and have it join immediately
+    peerA = new_page("Page A")
+    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    # Add a marker from peer A
+    a_create_marker = peerA.get_by_title("Draw a marker")
+    expect(a_create_marker).to_be_visible()
+    a_create_marker.click()
+
+    a_map_el = peerA.locator("#map")
+    a_map_el.click(position={"x": 220, "y": 220})
+    peerA.locator("body").type("First marker")
+    peerA.locator("body").press("Escape")
+
+    # Add a polygon from peer A
+    create_polygon = peerA.locator(".leaflet-control-toolbar ").get_by_title(
+        "Draw a polygon"
+    )
+    create_polygon.click()
+
+    a_map_el.click(position={"x": 200, "y": 200})
+    a_map_el.click(position={"x": 100, "y": 200})
+    a_map_el.click(position={"x": 100, "y": 100})
+    a_map_el.click(position={"x": 200, "y": 100})
+    a_map_el.click(position={"x": 200, "y": 100})
+    peerA.keyboard.press("Escape")
+
+    # Now create peer B and have it join
+    peerB = new_page("Page B")
+    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    # Check if peer B has received all the updates
+    b_marker_pane = peerB.locator(".leaflet-marker-pane > div")
+    b_polygons = peerB.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
+
+    expect(b_marker_pane).to_have_count(1)
+    expect(b_polygons).to_have_count(1)
+
+    # Verify marker properties
+    peerB.locator(".leaflet-marker-icon").first.click()
+    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    expect(peerB.locator('input[name="name"]')).to_have_value("First marker")
+
+    # Verify polygon exists (we've already checked the count)
+    b_polygon = peerB.locator("path")
+    expect(b_polygon).to_be_visible()
+
+    # Optional: Verify polygon properties if you have any specific ones set
+
+    # Clean up: close edit mode
+    peerB.locator("body").press("Escape")

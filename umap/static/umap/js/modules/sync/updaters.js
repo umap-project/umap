@@ -1,6 +1,6 @@
 /**
- * This file contains the updaters: classes that are able to convert messages
- * received from another party (or the server) to changes on the map.
+ * Updaters are classes able to convert messages
+ * received from other peers (or from the server) to changes on the map.
  */
 
 class BaseUpdater {
@@ -76,7 +76,7 @@ export class FeatureUpdater extends BaseUpdater {
     if (feature) {
       feature.geometry = value.geometry
     } else {
-      datalayer.makeFeature(value)
+      datalayer.makeFeature(value, false)
     }
   }
 
@@ -85,9 +85,9 @@ export class FeatureUpdater extends BaseUpdater {
     const feature = this.getFeatureFromMetadata(metadata)
     if (feature === undefined) {
       console.error(`Unable to find feature with id = ${metadata.id}.`)
+      return
     }
     if (key === 'geometry') {
-      const datalayer = this.getDataLayerFromID(metadata.layerId)
       const feature = this.getFeatureFromMetadata(metadata, value)
       feature.geometry = value
     } else {
