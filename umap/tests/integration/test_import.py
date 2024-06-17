@@ -538,3 +538,50 @@ def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
     expect(page.get_by_placeholder("Provide an URL here")).to_have_value(
         "https://my.overpass.io/interpreter?data=[out:json];nwr[building]({south},{west},{north},{east});out geom;"
     )
+
+
+def test_import_from_datasets(page, live_server, tilelayer, settings):
+    settings.UMAP_IMPORTERS = {
+        "datasets": {
+            "choices": [
+                {
+                    "url": "https://remote.org/data.json",
+                    "label": "Good data",
+                    "format": "geojson",
+                }
+            ]
+        }
+    }
+
+    def handle(route):
+        route.fulfill(
+            json={
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [4.3375, 51.2707],
+                        },
+                    }
+                ],
+            }
+        )
+
+    # Intercept the route
+    page.route("https://remote.org/data.json", handle)
+    page.goto(f"{live_server.url}/map/new/")
+    expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
+    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("button", name="Datasets").click()
+    page.get_by_role("dialog").get_by_role("combobox").select_option(
+        "https://remote.org/data.json"
+    )
+    page.get_by_role("button", name="Choose this dataset").click()
+    page.get_by_label("Copy into the layer").check()
+    page.get_by_role("button", name="Import data").click()
+    expect(page.locator(".leaflet-marker-icon")).to_be_visible()
+    page.get_by_role("button", name="Open browser").click()
+    expect(page.locator("h5").get_by_text("Good data")).to_be_visible()
