@@ -230,7 +230,7 @@ export default class Importer {
 
   openFiles() {
     this.open()
-    this.fileInput.showPicker()
+    this.qs('[type=file]').showPicker()
   }
 
   submit() {
