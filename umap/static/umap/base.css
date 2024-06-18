@@ -395,7 +395,7 @@ details summary {
     border: 1px solid var(--color-darkGray);
 }
 fieldset legend {
-    font-size: 1rem;
+    font-size: .9rem;
     padding: 0 5px;
 }
 

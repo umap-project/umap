@@ -1,6 +1,13 @@
+.importers h3 {
+  font-size: 1rem;
+}
+.importers h4 {
+  font-size: .9rem;
+}
+
 .importers ul [type=button] {
     background: none;
-    font-size: 1rem;
+    font-size: 0.75rem;
     border: none;
     width: initial;
     display: inline-block;
