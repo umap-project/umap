@@ -28,6 +28,7 @@ export class Importer {
       if (select.value) {
         importer.url = select.value
         importer.format = select.options[select.selectedIndex].dataset.format
+        importer.layerName = select.options[select.selectedIndex].textContent
       }
       importer.dialog.close()
     }
