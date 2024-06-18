@@ -200,28 +200,6 @@ input[type=checkbox]:checked:after {
     content: '✓';
     color: var(--color-darkGray);
 }
-label input[type="radio"] {
-    appearance: none;
-    margin-right: 10px;
-    background: var(--color-darkGray);
-}
-input[type="radio"]:after {
-    display: inline-block;
-    content: '⦾';
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    cursor: pointer;
-    text-align: center;
-    vertical-align: bottom;
-    font-size: 1.2rem;
-    line-height: 0.7;
-}
-label input[type="radio"]:checked:after {
-    background-color: var(--color-lightCyan);
-    color: var(--color-darkGray);
-    content: '⦿';
-}
 
 input[data-modified=true] {
     background-color: var(--color-lightCyan);
