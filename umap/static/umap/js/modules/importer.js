@@ -234,9 +234,17 @@ export default class Importer {
   }
 
   submit() {
-    if (this.format === 'umap') this.full()
-    else if (!this.url) this.copy()
-    else if (this.action) this[this.action]()
+    let hasErrors = false
+    if (this.format === 'umap') {
+      hasErrors = !this.full()
+    } else if (!this.url) {
+      hasErrors = !this.copy()
+    } else if (this.action) {
+      hasErrors = !this[this.action]()
+    }
+    if (!hasErrors) {
+      Alert.info(translate('Data successfully imported!'))
+    }
   }
 
   full() {
@@ -254,16 +262,19 @@ export default class Importer {
     } catch (e) {
       Alert.error(translate('Invalid umap data'))
       console.error(e)
+      return false
     }
   }
 
   link() {
-    if (!this.url) return
+    if (!this.url) {
+      return false
+    }
     if (!this.format) {
       Alert.error(translate('Please choose a format'))
-      return
+      return false
     }
-    let layer = this.layer
+    const layer = this.layer
     layer.options.remoteData = {
       url: this.url,
       format: this.format,
@@ -280,9 +291,9 @@ export default class Importer {
     // Usefull in case of multiple files with different formats.
     if (!this.format && !this.files.length) {
       Alert.error(translate('Please choose a format'))
-      return
+      return false
     }
-    let layer = this.layer
+    const layer = this.layer
     if (this.clear) layer.empty()
     if (this.files.length) {
       for (const file of this.files) {
