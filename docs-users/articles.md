@@ -1,7 +1,7 @@
 # Articles
 
 
-## [https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive/section/915d4bf3-33a0-4e46-b542-3ad767aeed2f](https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive/section/915d4bf3-33a0-4e46-b542-3ad767aeed2f)
+## [Mapping the CUNY Digital History Archive](https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive/section/915d4bf3-33a0-4e46-b542-3ad767aeed2f)
 
 > This article discusses the implementation of the Learning CUNY History project, designed as an open education praxis for teaching and learning. It’s an example of a project-based assignment for undergraduate students and has evolved to explore the impact of integrating digital archives and digital mapping as instructional-digital tools. The project activates the CUNY Digital History Archive as a method of developing students’ digital literacy skills and investigates the potential to facilitate students’ learning. The archive is activated through student investigations and writings related to archival materials. Students then map the items as an interactive semester assignment. The project is described as occurring over three phases, and compares different digital mapping platforms. <mark>Ultimately, after careful consideration since its pilot phase, the project utilizes Open Street Map and uMap.</mark>
 

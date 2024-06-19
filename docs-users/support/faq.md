@@ -13,7 +13,7 @@
 
 ## What are the available keyboard shortcuts? {: #keyboard-shortcuts}
 
-In MacOS, `Ctrl` is replaced by `Cmd`.
+With macOS, replace `Ctrl` by `Cmd`.
 
 ### Globals
 
@@ -45,4 +45,4 @@ In MacOS, `Ctrl` is replaced by `Cmd`.
 * `mycolumn>12` → will match features whose column `mycolumn` is greater than `12` (as number)
 * `mycolumn<12.34` → will match features whose column `mycolumn` is lower than `12.34` (as number)
 
-When the condition match, the associated style will be applied to corresponding feature.
+When the condition match, the associated style will be applied to the corresponding feature.

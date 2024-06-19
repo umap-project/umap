@@ -13,7 +13,7 @@
 
 ## Quels sont les raccourcis clavier? {: #keyboard-shortcuts}
 
-Sur MacOS, utliser `Cmd` à la place de `Ctrl`.
+Sur macOS, utliser `Cmd` à la place de `Ctrl`.
 
 ### Génériques
 
@@ -25,18 +25,18 @@ Sur MacOS, utliser `Cmd` à la place de `Ctrl`.
 
 ### En mode édition
 
-* `Ctrl+E` → retour à l'aperçu
+* `Ctrl+E` → retour à l’aperçu
 * `Ctrl+S` → sauvegarde la carte
 * `Ctrl+Z` → annule tous les changements depuis la dernière sauvegarde
 * `Ctrl+M` → ajouter un nouveau marqueur
 * `Ctrl+P` → commence un nouveau polygone
 * `Ctrl+L` → commence une nouvelle ligne
-* `Ctrl+I` → ouvre le panneau d'import de données
-* `Ctrl+O` → ouvre le panneau d'import et le navigateur de fichiers
+* `Ctrl+I` → ouvre le panneau d’import de données
+* `Ctrl+O` → ouvre le panneau d’import et le navigateur de fichiers
 * `Ctrl++` → zoom
 * `Ctrl+-` → dézoome
-* `Shift+click` sur un élément → ouvre le panneau d'édition de cet élément
-* `Ctrl+Shift+click` sur un élément → ouvre le panneau d'édition du calque de cet élément
+* `Shift+click` sur un élément → ouvre le panneau d’édition de cet élément
+* `Ctrl+Shift+click` sur un élément → ouvre le panneau d’édition du calque de cet élément
 
 ## Quelle syntaxe est acceptée dans les règles de formattage conditionnel ? {: #conditional-rules }
 
