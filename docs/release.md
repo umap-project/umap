@@ -58,6 +58,7 @@ We aim to support [Baseline](https://developer.mozilla.org/en-US/blog/baseline-e
 
 * when we bump Django to a major version
 * when we change how we store data (both in database and filesystem)
+* when we change the deployment system requirements
 
 ### Minor (X.3.Z)
 
