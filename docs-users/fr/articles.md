@@ -1,5 +1,11 @@
 # Articles
 
+## [Partager l’information & mieux prévenir le risque inondation avec uMap](https://umap.incubateur.anct.gouv.fr/blog/partager-linformation-mieux-prevenir-le-risque-inondation-avec-umap/) (2024-06-10)
+
+> Dans les montagnes des Hautes-Pyrénées, les gaves connaissent régulièrement des crues torrentielles, avec comme conséquence des risques majeurs dans les vallées. <mark>Voici la présentation d’un projet global qui associe communication et analyse technique sur un outil cartographique basé sur uMap.</mark> Le syndicat mixte du Pays de Lourdes et des Vallées des Gaves propose un portail d’information consacré à la mémoire des inondations pour sensibiliser les maires et la population des Vallées des Gaves. Benoît Thouary, chargé d’études au service prévention des inondations, géographe de formation spécialisé en prévention des risques naturels, présente cette approche très complète, adossée à des archives multimédias et à une base de données.
+
+[Article complet →](https://umap.incubateur.anct.gouv.fr/blog/partager-linformation-mieux-prevenir-le-risque-inondation-avec-umap/){ .md-button }
+
 ## [Carte des arbres remarquables, la suite…](https://insidemap.eu/carte-des-arbres-remarquables-la-suite/) (2024-05-25)
 
 > Depuis la première version de la carte en mars 2019, les données ont pu changer et les fonctionnalités d’uMap ont évolué. Voilà l’occasion de refaire la carte et d’explorer d’autres approches. Bien entendu les fonctionnalités de diaporama sont toujours actives sur la carte d’origine.
