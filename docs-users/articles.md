@@ -1,11 +1,20 @@
 # Articles
 
 
-## [Mapping the CUNY Digital History Archive](https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive/section/915d4bf3-33a0-4e46-b542-3ad767aeed2f)
+## [Adding collaboration on uMap, fourth update](https://blog.notmyidea.org/adding-collaboration-on-umap-fourth-update.html) (2024-06-20)
+
+> The main branch of uMap now ships a web socket server, enabling local changes to be replicated to other peers.
+>
+> Here is short video capturing how the import of <mark>some data can be synced between two browsers</mark>.
+
+[Full article →](https://blog.notmyidea.org/adding-collaboration-on-umap-fourth-update.html){ .md-button }
+
+
+## [Mapping the CUNY Digital History Archive](https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive) (2024-05)
 
 > This article discusses the implementation of the Learning CUNY History project, designed as an open education praxis for teaching and learning. It’s an example of a project-based assignment for undergraduate students and has evolved to explore the impact of integrating digital archives and digital mapping as instructional-digital tools. The project activates the CUNY Digital History Archive as a method of developing students’ digital literacy skills and investigates the potential to facilitate students’ learning. The archive is activated through student investigations and writings related to archival materials. Students then map the items as an interactive semester assignment. The project is described as occurring over three phases, and compares different digital mapping platforms. <mark>Ultimately, after careful consideration since its pilot phase, the project utilizes Open Street Map and uMap.</mark>
 
-[Full article →](https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive/section/915d4bf3-33a0-4e46-b542-3ad767aeed2f){ .md-button }
+[Full article →](https://cuny.manifoldapp.org/read/mapping-the-cuny-digital-history-archive){ .md-button }
 
 
 ## [uMap 2 and beyond 🚀](https://www.openstreetmap.org/user/David%20Larlet/diary/403560) (2024-02-23)
