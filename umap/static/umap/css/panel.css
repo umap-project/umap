@@ -52,7 +52,6 @@
 .panel .counter {
     display: block;
     margin-top: var(--panel-gutter);
-    font-weight: bold;
 }
 @media all and (orientation:landscape) {
     .panel {
