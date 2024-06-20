@@ -22,3 +22,6 @@ dist/
 *.egg-info/
 playwright/.auth/
 test-results/
+
+### Transifex ###
+tx
