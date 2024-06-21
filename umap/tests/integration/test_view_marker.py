@@ -39,8 +39,8 @@ def test_should_open_popup_on_click(live_server, map, page, bootstrap):
     expect(page.locator(".leaflet-popup-content-wrapper")).to_be_visible()
     expect(page.get_by_role("heading", name="test marker")).to_be_visible()
     expect(page.get_by_text("Some description")).to_be_visible()
-    # Close popup
-    page.locator("#map").click()
+    # Close popup, clicking on the map, but outside of the popup.
+    page.locator("#map").click(position={"x": 50, "y": 50})
     expect(page.locator(".umap-icon-active")).to_be_hidden()
 
 
