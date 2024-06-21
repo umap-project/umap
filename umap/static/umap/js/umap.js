@@ -1,5 +1,5 @@
 L.Map.mergeOptions({
-  overlay: null,
+  overlay: {},
   datalayers: [],
   hash: true,
   maxZoomLimit: 24,
@@ -204,12 +204,6 @@ U.Map = L.Map.extend({
     if (this.hasEditMode()) {
       this.editTools = new U.Editable(this)
       this.renderEditToolbar()
-    }
-    if (!U.Utils.isObject(this.options.overlay)) {
-      this.options.overlay = {}
-    }
-    if (!U.Utils.isObject(this.options.tilelayer)) {
-      this.options.tilelayer = {}
     }
 
     this.initShortcuts()
@@ -1296,6 +1290,9 @@ U.Map = L.Map.extend({
   },
 
   _editTilelayer: function (container) {
+    if (!U.Utils.isObject(this.options.tilelayer)) {
+      this.options.tilelayer = {}
+    }
     const tilelayerFields = [
       [
         'options.tilelayer.name',
@@ -1343,6 +1340,9 @@ U.Map = L.Map.extend({
   },
 
   _editOverlay: function (container) {
+    if (!U.Utils.isObject(this.options.overlay)) {
+      this.options.overlay = {}
+    }
     const overlayFields = [
       [
         'options.overlay.url_template',
