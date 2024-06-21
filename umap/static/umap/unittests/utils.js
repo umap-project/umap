@@ -11,14 +11,14 @@ global.JSDOM = JSDOM
 describe('Utils', function () {
   describe('#toHTML()', function () {
     it('should handle title', function () {
-      assert.equal(Utils.toHTML('# A title'), '<h3>A title</h3>')
+      assert.equal(Utils.toHTML('# A title'), '<h4>A title</h4>')
     })
     it('should handle title followed by text', function () {
-      assert.equal(Utils.toHTML('# A title\nSome text.'), '<h3>A title</h3>Some text.')
+      assert.equal(Utils.toHTML('# A title\nSome text.'), '<h4>A title</h4>Some text.')
     })
 
     it('should handle title in the middle of the content', function () {
-      assert.equal(Utils.toHTML('A phrase\n## A title'), 'A phrase\n<h4>A title</h4>')
+      assert.equal(Utils.toHTML('A phrase\n## A title'), 'A phrase\n<h5>A title</h5>')
     })
 
     it('should handle hr', function () {
@@ -43,7 +43,7 @@ describe('Utils', function () {
     it('should handle simple link in title', function () {
       assert.equal(
         Utils.toHTML('# http://osm.org'),
-        '<h3><a href="http://osm.org" target="_blank">http://osm.org</a></h3>'
+        '<h4><a href="http://osm.org" target="_blank">http://osm.org</a></h4>'
       )
     })
 
@@ -180,7 +180,7 @@ describe('Utils', function () {
     it('title followed by bullet points', function () {
       assert.equal(
         Utils.toHTML('## Some title\n* First *point*\n* Second **point**\n* Last [[https://here.org|point]]'),
-        '<h4>Some title</h4><ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a href="https://here.org" target="_blank">point</a></li></ul>'
+        '<h5>Some title</h5><ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a href="https://here.org" target="_blank">point</a></li></ul>'
       )
     })
   })

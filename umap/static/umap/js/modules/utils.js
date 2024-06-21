@@ -124,9 +124,9 @@ export function toHTML(r, options) {
   }
 
   // headings and hr
-  r = r.replace(/^### (.*)(\r\n|\r|\n)?/gm, '<h5>$1</h5>')
-  r = r.replace(/^## (.*)(\r\n|\r|\n)?/gm, '<h4>$1</h4>')
-  r = r.replace(/^# (.*)(\r\n|\r|\n)?/gm, '<h3>$1</h3>')
+  r = r.replace(/^### (.*)(\r\n|\r|\n)?/gm, '<h6>$1</h6>')
+  r = r.replace(/^## (.*)(\r\n|\r|\n)?/gm, '<h5>$1</h5>')
+  r = r.replace(/^# (.*)(\r\n|\r|\n)?/gm, '<h4>$1</h4>')
   r = r.replace(/^---/gm, '<hr>')
 
   // bold, italics
