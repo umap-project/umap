@@ -1757,6 +1757,16 @@ U.DataLayer = L.Evented.extend({
     const editor = new U.TableEditor(this)
     editor.edit()
   },
+
+  getFilterKeys: function () {
+    // This keys will be used to filter feature from the browser text input.
+    // By default, it will we use the "name" property, which is also the one used as label in the features list.
+    // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
+    if (this.map.options.filterKey) return this.map.options.filterKey
+    else if (this.options.labelKey) return this.options.labelKey
+    else if (this.map.options.sortKey) return this.map.options.sortKey
+    else return 'name'
+  },
 })
 
 L.TileLayer.include({

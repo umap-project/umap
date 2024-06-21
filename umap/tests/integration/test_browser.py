@@ -15,12 +15,16 @@ DATALAYER_DATA = {
     "features": [
         {
             "type": "Feature",
-            "properties": {"name": "one point in france", "foo": "point"},
+            "properties": {"name": "one point in france", "foo": "point", "bar": "one"},
             "geometry": {"type": "Point", "coordinates": [3.339844, 46.920255]},
         },
         {
             "type": "Feature",
-            "properties": {"name": "one polygon in greenland", "foo": "polygon"},
+            "properties": {
+                "name": "one polygon in greenland",
+                "foo": "polygon",
+                "bar": "two",
+            },
             "geometry": {
                 "type": "Polygon",
                 "coordinates": [
@@ -36,7 +40,11 @@ DATALAYER_DATA = {
         },
         {
             "type": "Feature",
-            "properties": {"name": "one line in new zeland", "foo": "line"},
+            "properties": {
+                "name": "one line in new zeland",
+                "foo": "line",
+                "bar": "three",
+            },
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -101,6 +109,71 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     expect(page.get_by_text("one polygon in greenland")).to_be_hidden()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(0)
+
+
+def test_filter_uses_layer_setting_if_any(live_server, page, bootstrap, map):
+    datalayer = map.datalayer_set.first()
+    datalayer.settings["labelKey"] = "foo"
+    datalayer.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator(".leaflet-overlay-pane path")
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    expect(page.get_by_text("point")).to_be_visible()
+    expect(page.get_by_text("polygon")).to_be_visible()
+    expect(page.get_by_text("line")).to_be_visible()
+    page.locator(".filters summary").click()
+    filter_ = page.locator("input[name='filter']")
+    expect(filter_).to_be_visible()
+    filter_.type("po")
+    expect(page.get_by_title("Features in this layer: 2/3")).to_be_visible()
+    expect(page.get_by_title("Features in this layer: 2/3")).to_have_text("(2/3)")
+    expect(page.get_by_text("line")).to_be_hidden()
+    expect(page.get_by_text("point")).to_be_visible()
+    expect(page.get_by_text("polygon")).to_be_visible()
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(1)  # Only polygon
+    # Empty the filter
+    filter_.fill("")
+    filter_.blur()
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    filter_.type("point")
+    expect(page.get_by_text("point")).to_be_visible()
+    expect(page.get_by_text("line")).to_be_hidden()
+    expect(page.get_by_text("polygon")).to_be_hidden()
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(0)
+
+
+def test_filter_works_with_variable_in_labelKey(live_server, page, map):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    data = deepcopy(DATALAYER_DATA)
+    data["_umap_options"]["labelKey"] = "{name} ({bar})"
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator(".leaflet-overlay-pane path")
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    expect(page.get_by_text("one point in france (one)")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland (three)")).to_be_visible()
+    expect(page.get_by_text("one polygon in greenland (two)")).to_be_visible()
+    page.locator(".filters summary").click()
+    filter_ = page.locator("input[name='filter']")
+    expect(filter_).to_be_visible()
+    filter_.type("two")
+    expect(page.get_by_title("Features in this layer: 1/3")).to_be_visible()
+    expect(page.get_by_title("Features in this layer: 1/3")).to_have_text("(1/3)")
+    expect(page.get_by_text("one polygon in greenland (two)")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland (three)")).to_be_hidden()
+    expect(page.get_by_text("one point in france (one)")).to_be_hidden()
+    expect(markers).to_have_count(0)
+    expect(paths).to_have_count(1)  # Only polygon
 
 
 def test_data_browser_can_show_only_visible_features(live_server, page, bootstrap, map):
