@@ -203,9 +203,11 @@ export default class Browser {
   }
 
   static backButton(map) {
-    const button = DomUtil.create('li', '')
-    DomUtil.create('i', 'icon icon-16 icon-back', button)
-    button.title = translate('Back to browser')
+    const button = DomUtil.createButtonIcon(
+      DomUtil.create('li', '', undefined),
+      'icon-back',
+      translate('Back to browser')
+    )
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(button)
