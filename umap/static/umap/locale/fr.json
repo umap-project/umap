@@ -481,5 +481,6 @@
     "Only geometry centers": "Seulement les centres",
     "Search area": "Chercher un coin",
     "Type area name, or let empty to load data in current map view": "Entrer le nom d'un périmètre géographique, ou laisser vide pour utiliser la vue courante de la carte",
-    "Please define an expression for the query first": "Définir une expression pour la requête"
+    "Please define an expression for the query first": "Définir une expression pour la requête",
+    "Data successfully imported!": "Les données ont été importées!"
 }
