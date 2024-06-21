@@ -678,7 +678,9 @@ ul.photon-autocomplete {
     font-style: italic;
 }
 .umap-slideshow-toolbox {
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
     display: none;
 }
 .umap-slideshow-enabled .umap-slideshow-toolbox {
@@ -690,9 +692,9 @@ ul.photon-autocomplete {
     font-size: 1.5em;
     background-color: #464646;
     color: #fff;
-    height: 46px;
-    width: 70px;
-    line-height: 46px;
+    width: calc(var(--footer-height) * 2);
+    height: var(--footer-height);
+    line-height: var(--footer-height);
     vertical-align: middle;
     text-align: center;
 }
@@ -704,24 +706,24 @@ ul.photon-autocomplete {
 }
 .umap-slideshow-active .umap-slideshow-toolbox .play,
 .umap-slideshow-toolbox .play {
-    width: 100px;
+    width: calc(var(--footer-height) * 3);
     text-align: left;
     padding-left: 20px;
 }
 .umap-slideshow-toolbox .play:after {
-    content: ' ▶';
+    content: '⏯︎';
 }
 .umap-slideshow-active .umap-slideshow-toolbox .play:after {
-    content: ' ❚❚';
+    content: '⏸︎';
 }
 .umap-slideshow-toolbox .stop:before {
-    content: '■';
+    content: '⏹';
 }
 .umap-slideshow-toolbox .next:before {
-    content: '➡';
+    content: '⏵︎';
 }
 .umap-slideshow-toolbox .prev:before {
-    content: '⬅';
+    content: '⏴︎';
 }
 .umap-slideshow-toolbox .play div {
     height: 20px;
@@ -1127,6 +1129,7 @@ a.umap-control-caption,
 }
 
 .umap-popup-footer {
+    position: relative;
     background-color: rgb(68, 68, 68);
     color: white;
     display: table;
