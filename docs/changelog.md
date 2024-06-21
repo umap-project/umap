@@ -1,8 +1,48 @@
 # Changelog
 
+## 2.4.0 - 2024-06-21
+
+### New features
+* importers for custom external sources by @yohanboniface in #1857
+* very minimal experimental conditional style rules by @yohanboniface in #1776
+* display an alert if the import is successful by @davidbgk in #1916
+
+### Bug fixes
+* invert star icons when map is starred or not by @davidbgk in #1852
+* allow audio and video tags (+attributes) in HTML by @davidbgk in #1851
+* panel condensed height should never be bigger than screen by @yohanboniface in #1859
+* caption title rendering on multiple lines by @yohanboniface in #1864
+* refactor new line management in popups by @yohanboniface in #1865
+* show message in case of xml parsing error by @yohanboniface in #1867
+* support old storage options when importing a umap file by @yohanboniface in #1868
+* display layer in naturel order in caption by @yohanboniface in #1875
+* use correct icon class in edit feature panel by @yohanboniface in #1894
+* display an alert on any request error by @yohanboniface in #1895
+* add icon to "edit map details" panel title by @yohanboniface in #1925
+* do not set overlay=null as default by @yohanboniface in #1920
+* use layer labelKey if any when filtering features by @yohanboniface in #1921
+* increase popup min-width by @yohanboniface in #1924
+* give precedence to feature in query string over onLoadPanel by @yohanboniface in #1930
+
+### Internal changes
+* use web components to display alerts + a11y roles by @davidbgk in #1876
+* allow real-time collaboration by @almet in #1754 (code merged in master, but feature not yet active)
+* move ui to dedicated modules by @yohanboniface in #1847
+* move autocomplete to modules/ by @yohanboniface in #1846
+* move importer to modules/ by @yohanboniface in #1856
+* move help to a separate module by @yohanboniface in #1881
+* remove U.Keys, and refactor global shorcuts by @yohanboniface in #1883
+* better browser labels by @yohanboniface in #1809
+* smaller headings in descriptions by @yohanboniface in #1922
+* change heading CSS size by @yohanboniface in #1929
+* remove custom styles for radio inputs by @davidbgk in #1914
+
+### Documentation
+* docs: aggregate articles in English and French by @davidbgk in #1838
+
 ## 2.3.1 - 2024-05-17
 
-## Bug fixes
+### Bug fixes
 * display all layers in caption by @yohanboniface in #1821
 * do not autoclose panel blindly after map save by @yohanboniface in #1833
 * do not consider shortcuts if shift is also pressed by @yohanboniface in #1834
@@ -12,10 +52,10 @@
 * only set panel mode once, and then keep user choice by @yohanboniface in #1829
 * always display data in browser unless in "layers" mode by @yohanboniface in #1837
 
-## Internal changes
+### Internal changes
 * chore: replace DomUtil.classIf by classList.toggle by @yohanboniface in #1835
 
-## Documentation
+### Documentation
 * Tutorials review and improvements by @davidbgk in #1810
 * Expanded docker.md documentation by @CampaniaGuy in #1802
 
