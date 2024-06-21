@@ -1522,7 +1522,7 @@ span.popup-icon {
     z-index: 1001;
 }
 .leaflet-popup-content {
-    min-width: 100px;
+    min-width: 200px;
     line-height: inherit;
 }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
