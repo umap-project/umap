@@ -24,7 +24,7 @@ export default class Caption {
     if (this.map.options.description) {
       const description = DomUtil.element({
         tagName: 'div',
-        className: 'umap-map-description',
+        className: 'umap-map-description text',
         safeHTML: Utils.toHTML(this.map.options.description),
         parent: container,
       })
