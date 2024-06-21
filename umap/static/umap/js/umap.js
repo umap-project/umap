@@ -207,41 +207,7 @@ U.Map = L.Map.extend({
     }
 
     this.initShortcuts()
-    this.onceDataLoaded(function () {
-      const slug = L.Util.queryString('feature')
-      if (slug && this.features_index[slug]) this.features_index[slug].view()
-      if (this.options.noControl) return
-      this.initCaptionBar()
-      if (L.Util.queryString('share')) {
-        this.share.open()
-      } else if (this.options.onLoadPanel === 'databrowser') {
-        this.panel.setDefaultMode('expanded')
-        this.openBrowser('data')
-      } else if (this.options.onLoadPanel === 'datalayers') {
-        this.panel.setDefaultMode('condensed')
-        this.openBrowser('layers')
-      } else if (this.options.onLoadPanel === 'datafilters') {
-        this.panel.setDefaultMode('expanded')
-        this.openBrowser('filters')
-      } else if (this.options.onLoadPanel === 'caption') {
-        this.panel.setDefaultMode('condensed')
-        this.openCaption()
-      }
-      if (L.Util.queryString('edit')) {
-        if (this.hasEditMode()) this.enableEdit()
-        // Sometimes users share the ?edit link by mistake, let's remove
-        // this search parameter from URL to prevent this
-        const url = new URL(window.location)
-        url.searchParams.delete('edit')
-        history.pushState({}, '', url)
-      }
-      if (L.Util.queryString('download')) {
-        const download_url = this.urls.get('map_download', {
-          map_id: this.options.umap_id,
-        })
-        window.location = download_url
-      }
-    })
+    this.onceDataLoaded(this.setViewFromQueryString)
 
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
@@ -332,6 +298,44 @@ U.Map = L.Map.extend({
     // which accepts "expanded" value, on top of true/false/null
     if (L.Util.queryString('datalayersControl') === 'expanded') {
       options.onLoadPanel = 'datalayers'
+    }
+  },
+
+  setViewFromQueryString: function () {
+    if (this.options.noControl) return
+    this.initCaptionBar()
+    if (L.Util.queryString('share')) {
+      this.share.open()
+    } else if (this.options.onLoadPanel === 'databrowser') {
+      this.panel.setDefaultMode('expanded')
+      this.openBrowser('data')
+    } else if (this.options.onLoadPanel === 'datalayers') {
+      this.panel.setDefaultMode('condensed')
+      this.openBrowser('layers')
+    } else if (this.options.onLoadPanel === 'datafilters') {
+      this.panel.setDefaultMode('expanded')
+      this.openBrowser('filters')
+    } else if (this.options.onLoadPanel === 'caption') {
+      this.panel.setDefaultMode('condensed')
+      this.openCaption()
+    }
+    // Comes after default panels, so if it opens in a panel it will
+    // take precedence.
+    const slug = L.Util.queryString('feature')
+    if (slug && this.features_index[slug]) this.features_index[slug].view()
+    if (L.Util.queryString('edit')) {
+      if (this.hasEditMode()) this.enableEdit()
+      // Sometimes users share the ?edit link by mistake, let's remove
+      // this search parameter from URL to prevent this
+      const url = new URL(window.location)
+      url.searchParams.delete('edit')
+      history.pushState({}, '', url)
+    }
+    if (L.Util.queryString('download')) {
+      const download_url = this.urls.get('map_download', {
+        map_id: this.options.umap_id,
+      })
+      window.location = download_url
     }
   },
 

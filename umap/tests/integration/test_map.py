@@ -204,3 +204,32 @@ def test_zoom_control_on_load(map, live_server, page):
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-zoom")).to_be_hidden()
+
+
+def test_feature_in_query_string_has_precedence_over_onloadpanel(
+    map, live_server, page
+):
+    map.settings["properties"]["onLoadPanel"] = "caption"
+    map.name = "This is my map"
+    map.save()
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "FooBar"},
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [2.12, 49.57],
+                },
+            }
+        ],
+        "_umap_options": {"popupShape": "Panel"},
+    }
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?feature=FooBar")
+    expect(page.get_by_role("heading", name="FooBar")).to_be_visible()
+    expect(page.get_by_role("heading", name="This is my map")).to_be_hidden()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_role("heading", name="FooBar")).to_be_hidden()
+    expect(page.get_by_role("heading", name="This is my map")).to_be_visible()
