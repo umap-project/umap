@@ -35,6 +35,7 @@
     --border-radius: 4px;
     --box-padding: 20px;
     --box-margin: 14px;
+    --text-margin: 7px;
 }
 .dark {
     --background-color: var(--color-darkGray);

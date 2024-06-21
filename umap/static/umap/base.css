@@ -185,8 +185,11 @@ input[type="range"] {
     margin-bottom: 5px;
     width: 100%;
 }
+input[type="radio"] {
+    margin-right: var(--text-margin);
+}
 input[type="checkbox"] {
-    margin: 0 5px;
+    margin: 0 var(--text-margin);
     vertical-align: middle;
     appearance: none;
 }
