@@ -778,6 +778,11 @@ input[type=hidden].blur + [type="button"] {
 /*   Various   */
 /* *********** */
 
+.text {
+    word-break: break-word;
+    white-space: pre-line;
+}
+
 .umap-dragover:before {
     content:  ' ';
     background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs">%3Cpath d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/>%3C/svg>');

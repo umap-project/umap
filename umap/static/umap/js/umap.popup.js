@@ -107,7 +107,7 @@ U.PopupTemplate.Default = L.Class.extend({
   renderBody: function () {
     const template = this.feature.getOption('popupContentTemplate')
     const target = this.feature.getOption('outlinkTarget')
-    const container = L.DomUtil.create('div', 'umap-popup-container')
+    const container = L.DomUtil.create('div', 'umap-popup-container text')
     let content = ''
     let properties
     let center
