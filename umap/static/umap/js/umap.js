@@ -1872,10 +1872,6 @@ U.Map = L.Map.extend({
     if (this._controls.search) this._controls.search.open()
   },
 
-  getFilterKeys: function () {
-    return (this.options.filterKey || this.options.sortKey || 'name').split(',')
-  },
-
   getLayersBounds: function () {
     const bounds = new L.latLngBounds()
     this.eachBrowsableDataLayer((d) => {

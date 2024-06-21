@@ -144,7 +144,11 @@ U.FeatureMixin = {
   edit: function (e) {
     if (!this.map.editEnabled || this.isReadOnly()) return
     const container = L.DomUtil.create('div', 'umap-feature-container')
-    L.DomUtil.createTitle(container, L._('Feature properties'), `icon-${this.getClassName()}`)
+    L.DomUtil.createTitle(
+      container,
+      L._('Feature properties'),
+      `icon-${this.getClassName()}`
+    )
 
     let builder = new U.FormBuilder(
       this,
@@ -528,7 +532,7 @@ U.FeatureMixin = {
   },
 
   isFiltered: function () {
-    const filterKeys = this.map.getFilterKeys()
+    const filterKeys = this.datalayer.getFilterKeys()
     const filter = this.map.browser.options.filter
     if (filter && !this.matchFilter(filter, filterKeys)) return true
     if (!this.matchFacets()) return true
@@ -537,6 +541,10 @@ U.FeatureMixin = {
 
   matchFilter: function (filter, keys) {
     filter = filter.toLowerCase()
+    if (U.Utils.hasVar(keys)) {
+      return this.getDisplayName().toLowerCase().indexOf(filter) !== -1
+    }
+    keys = keys.split(',')
     for (let i = 0, value; i < keys.length; i++) {
       value = (this.properties[keys[i]] || '') + ''
       if (value.toLowerCase().indexOf(filter) !== -1) return true
@@ -598,7 +606,7 @@ U.FeatureMixin = {
     if (locale) properties.locale = locale
     if (L.lang) properties.lang = L.lang
     properties.rank = this.getRank() + 1
-    if (this.hasGeom()) {
+    if (this._map && this.hasGeom()) {
       center = this.getCenter()
       properties.lat = center.lat
       properties.lon = center.lng

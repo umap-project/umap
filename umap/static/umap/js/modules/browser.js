@@ -143,8 +143,6 @@ export default class Browser {
   open(mode) {
     // Force only if mode is known, otherwise keep current mode.
     if (mode) this.mode = mode
-    // Get once but use it for each feature later
-    this.filterKeys = this.map.getFilterKeys()
     const container = DomUtil.create('div')
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
