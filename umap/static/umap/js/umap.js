@@ -1535,8 +1535,7 @@ U.Map = L.Map.extend({
     const container = L.DomUtil.create('div', 'umap-edit-container')
     const metadataFields = ['options.name', 'options.description']
 
-    const title = L.DomUtil.create('h3', '', container)
-    title.textContent = L._('Edit map details')
+    L.DomUtil.createTitle(container, L._('Edit map details'), 'icon-caption')
     const builder = new U.FormBuilder(this, metadataFields, {
       className: 'map-metadata',
     })
