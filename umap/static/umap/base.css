@@ -70,7 +70,7 @@ hgroup > * {
     margin-bottom: 0;
 }
 hgroup {
-    margin-bottom: var(--box-space);
+    margin-bottom: var(--box-margin);
 }
 hgroup > :not(:first-child):last-child {
     font-weight: normal;
@@ -311,7 +311,7 @@ label {
     width: 100%;
 }
 label + label {
-    margin-top: var(--box-space);
+    margin-top: var(--box-margin);
 }
 .content label {
     font-weight: bold;
