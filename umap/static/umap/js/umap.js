@@ -465,7 +465,8 @@ U.Map = L.Map.extend({
   initDataLayers: async function (datalayers) {
     datalayers = datalayers || this.options.datalayers
     for (const options of datalayers) {
-      this.createDataLayer(options)
+      // `false` to not propagate syncing elements served from uMap
+      this.createDataLayer(options, false)
     }
     await this.loadDataLayers()
   },

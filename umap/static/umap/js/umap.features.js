@@ -23,7 +23,7 @@ U.FeatureMixin = {
     // event triggered to cause a sync event, as it would reintroduce
     // deleted features.
     // The `._marked_for_deletion` private property is here to track this status.
-    if (this._marked_for_deletion == true) {
+    if (this._marked_for_deletion === true) {
       this._marked_for_deletion = false
       return
     }
@@ -37,7 +37,7 @@ U.FeatureMixin = {
   initialize: function (map, latlng, options, id) {
     this.map = map
     this.sync = map.sync_engine.proxy(this)
-    this._mark_for_deletion = false
+    this._marked_for_deletion = false
 
     if (typeof options === 'undefined') {
       options = {}
