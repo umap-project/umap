@@ -169,7 +169,7 @@ h2.tabs a:hover {
     background-color: #c0392b;
     color: #efefef;
     margin-top: 0;
-    padding: 1em;
+    padding: var(--gutter);
 }
 .demo-instance-warning .row {
     margin-top: 0;
