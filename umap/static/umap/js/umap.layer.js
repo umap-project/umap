@@ -745,8 +745,8 @@ U.DataLayer = L.Evented.extend({
     }
   },
 
-  fromGeoJSON: function (geojson) {
-    this.addData(geojson)
+  fromGeoJSON: function (geojson, sync = true) {
+    this.addData(geojson, sync)
     this._geojson = geojson
     this._dataloaded = true
     this.fire('dataloaded')
@@ -757,7 +757,7 @@ U.DataLayer = L.Evented.extend({
     if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
     if (this.isRemoteLayer()) await this.fetchRemoteData()
-    else this.fromGeoJSON(geojson)
+    else this.fromGeoJSON(geojson, false)
     this._loaded = true
   },
 
@@ -939,11 +939,11 @@ U.DataLayer = L.Evented.extend({
     if (idx !== -1) this._propertiesIndex.splice(idx, 1)
   },
 
-  addData: function (geojson) {
+  addData: function (geojson, sync) {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      this.geojsonToFeatures(geojson)
+      this.geojsonToFeatures(geojson, sync)
     } catch (err) {
       console.log('Error with DataLayer', this.umap_id)
       console.error(err)
@@ -1030,7 +1030,7 @@ U.DataLayer = L.Evented.extend({
   // The choice of the name is not ours, because it is required by Leaflet.
   // It is misleading, as the returned objects are uMap objects, and not
   // GeoJSON features.
-  geojsonToFeatures: function (geojson) {
+  geojsonToFeatures: function (geojson, sync) {
     if (!geojson) return
     const features = geojson instanceof Array ? geojson : geojson.features
     let i
@@ -1049,7 +1049,7 @@ U.DataLayer = L.Evented.extend({
     let feature = this.geoJSONToLeaflet({ geometry, geojson })
     if (feature) {
       this.addLayer(feature)
-      feature.onCommit()
+      if (sync) feature.onCommit()
       return feature
     }
   },
