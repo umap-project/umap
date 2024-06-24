@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1 - 2024-06-24
+
+* fix path disappearing when changing its datalayer by @yohanboniface in #1933
+
 ## 2.4.0 - 2024-06-21
 
 ### New features
