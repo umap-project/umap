@@ -911,8 +911,9 @@ U.DataLayer = L.Evented.extend({
     if (this.hasDataLoaded()) this.fire('datachanged')
   },
 
-  removeLayer: function (feature) {
+  removeLayer: function (feature, sync) {
     const id = L.stamp(feature)
+    if (sync !== false) feature.sync.delete()
     this.layer.removeLayer(feature)
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
