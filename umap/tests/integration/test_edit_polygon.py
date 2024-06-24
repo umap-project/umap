@@ -120,3 +120,14 @@ def test_should_reset_style_on_cancel(live_server, openmap, page, bootstrap):
     page.once("dialog", lambda dialog: dialog.accept())
     page.get_by_role("button", name="Cancel edits").click()
     expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(1)
+
+
+def test_can_change_datalayer(live_server, openmap, page, bootstrap):
+    other = DataLayerFactory(
+        name="Layer 2", map=openmap, settings={"color": "GoldenRod"}
+    )
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    expect(page.locator("path[fill='DarkBlue']")).to_have_count(1)
+    page.locator("path").click(modifiers=["Shift"])
+    page.get_by_role("combobox").select_option(other.name)
+    expect(page.locator("path[fill='GoldenRod']")).to_have_count(1)

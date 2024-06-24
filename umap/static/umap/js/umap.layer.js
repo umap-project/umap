@@ -913,10 +913,10 @@ U.DataLayer = L.Evented.extend({
 
   removeLayer: function (feature) {
     const id = L.stamp(feature)
+    this.layer.removeLayer(feature)
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
     delete this._layers[id]
-    this.layer.removeLayer(feature)
     delete this.map.features_index[feature.getSlug()]
     if (this.hasDataLoaded()) this.fire('datachanged')
   },
