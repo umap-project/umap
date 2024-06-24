@@ -6,7 +6,7 @@ U.FeatureMixin = {
       subject: 'feature',
       metadata: {
         id: this.id,
-        layerId: this.datalayer?.id || null,
+        layerId: this.datalayer?.umap_id || null,
         featureType: this.getClassName(),
       },
     }
