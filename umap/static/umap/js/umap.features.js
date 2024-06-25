@@ -58,19 +58,16 @@ U.FeatureMixin = {
       }
     }
     let isDirty = false
-    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
-        get: function () {
-          return isDirty
-        },
-        set: function (status) {
+        get: () => isDirty,
+        set: (status) => {
           if (!isDirty && status) {
-            self.fire('isdirty')
+            this.fire('isdirty')
           }
           isDirty = status
-          if (self.datalayer) {
-            self.datalayer.isDirty = status
+          if (this.datalayer) {
+            this.datalayer.isDirty = status
           }
         },
       })
@@ -82,7 +79,7 @@ U.FeatureMixin = {
     this.parentClass.prototype.initialize.call(this, latlng, options)
   },
 
-  preInit: function () {},
+  preInit: () => {},
 
   isReadOnly: function () {
     return this.datalayer && this.datalayer.isDataReadOnly()
@@ -228,19 +225,17 @@ U.FeatureMixin = {
     popupFieldset.appendChild(builder.build())
   },
 
-  getInteractionOptions: function () {
-    return [
-      'properties._umap_options.popupShape',
-      'properties._umap_options.popupTemplate',
-      'properties._umap_options.showLabel',
-      'properties._umap_options.labelDirection',
-      'properties._umap_options.labelInteractive',
-      'properties._umap_options.outlink',
-      'properties._umap_options.outlinkTarget',
-    ]
-  },
+  getInteractionOptions: () => [
+    'properties._umap_options.popupShape',
+    'properties._umap_options.popupTemplate',
+    'properties._umap_options.showLabel',
+    'properties._umap_options.labelDirection',
+    'properties._umap_options.labelInteractive',
+    'properties._umap_options.outlink',
+    'properties._umap_options.outlinkTarget',
+  ],
 
-  endEdit: function () {},
+  endEdit: () => {},
 
   getDisplayName: function (fallback) {
     if (fallback === undefined) fallback = this.datalayer.options.name
@@ -298,7 +293,7 @@ U.FeatureMixin = {
     }
   },
 
-  cleanProperty: function ([key, value]) {
+  cleanProperty: ([key, value]) => {
     // dot in key will break the dot based property access
     // while editing the feature
     key = key.replace('.', '_')
@@ -434,13 +429,9 @@ U.FeatureMixin = {
     L.DomEvent.stop(e)
   },
 
-  getPopupToolbarAnchor: function () {
-    return [0, 0]
-  },
+  getPopupToolbarAnchor: () => [0, 0],
 
-  getInplaceToolbarActions: function (e) {
-    return [U.ToggleEditAction, U.DeleteFeatureAction]
-  },
+  getInplaceToolbarActions: (e) => [U.ToggleEditAction, U.DeleteFeatureAction],
 
   _showContextMenu: function (e) {
     L.DomEvent.stop(e)
@@ -463,7 +454,7 @@ U.FeatureMixin = {
     if (permalink)
       items.push({
         text: L._('Permalink'),
-        callback: function () {
+        callback: () => {
           window.open(permalink)
         },
       })
@@ -554,9 +545,9 @@ U.FeatureMixin = {
 
   matchFacets: function () {
     const selected = this.map.facets.selected
-    for (let [name, { type, min, max, choices }] of Object.entries(selected)) {
+    for (const [name, { type, min, max, choices }] of Object.entries(selected)) {
       let value = this.properties[name]
-      let parser = this.map.facets.getParser(type)
+      const parser = this.map.facets.getParser(type)
       value = parser(value)
       switch (type) {
         case 'date':
@@ -581,13 +572,9 @@ U.FeatureMixin = {
     }).addTo(this.map, this, e.latlng, e.vertex)
   },
 
-  getVertexActions: function () {
-    return [U.DeleteVertexAction]
-  },
+  getVertexActions: () => [U.DeleteVertexAction],
 
-  isMulti: function () {
-    return false
-  },
+  isMulti: () => false,
 
   clone: function () {
     const geoJSON = this.toGeoJSON()
@@ -746,22 +733,16 @@ U.Marker = L.Marker.extend({
     return this._latlng
   },
 
-  getClassName: function () {
-    return 'marker'
-  },
+  getClassName: () => 'marker',
 
-  getShapeOptions: function () {
-    return [
-      'properties._umap_options.color',
-      'properties._umap_options.iconClass',
-      'properties._umap_options.iconUrl',
-      'properties._umap_options.iconOpacity',
-    ]
-  },
+  getShapeOptions: () => [
+    'properties._umap_options.color',
+    'properties._umap_options.iconClass',
+    'properties._umap_options.iconUrl',
+    'properties._umap_options.iconOpacity',
+  ],
 
-  getAdvancedOptions: function () {
-    return ['properties._umap_options.zoomTo']
-  },
+  getAdvancedOptions: () => ['properties._umap_options.zoomTo'],
 
   appendEditFieldsets: function (container) {
     U.FeatureMixin.appendEditFieldsets.call(this, container)
@@ -847,21 +828,17 @@ U.PathMixin = {
     'interactive',
   ],
 
-  getShapeOptions: function () {
-    return [
-      'properties._umap_options.color',
-      'properties._umap_options.opacity',
-      'properties._umap_options.weight',
-    ]
-  },
+  getShapeOptions: () => [
+    'properties._umap_options.color',
+    'properties._umap_options.opacity',
+    'properties._umap_options.weight',
+  ],
 
-  getAdvancedOptions: function () {
-    return [
-      'properties._umap_options.smoothFactor',
-      'properties._umap_options.dashArray',
-      'properties._umap_options.zoomTo',
-    ]
-  },
+  getAdvancedOptions: () => [
+    'properties._umap_options.smoothFactor',
+    'properties._umap_options.dashArray',
+    'properties._umap_options.zoomTo',
+  ],
 
   setStyle: function (options) {
     options = options || {}
@@ -1070,13 +1047,9 @@ U.Polyline = L.Polyline.extend({
     mainColor: 'color',
   },
 
-  isSameClass: function (other) {
-    return other instanceof U.Polyline
-  },
+  isSameClass: (other) => other instanceof U.Polyline,
 
-  getClassName: function () {
-    return 'polyline'
-  },
+  getClassName: () => 'polyline',
 
   getMeasure: function (shape) {
     const length = L.GeoUtil.lineLength(this.map, shape || this._defaultShape())
@@ -1214,15 +1187,11 @@ U.Polygon = L.Polygon.extend({
     mainColor: 'fillColor',
   },
 
-  isSameClass: function (other) {
-    return other instanceof U.Polygon
-  },
+  isSameClass: (other) => other instanceof U.Polygon,
 
-  getClassName: function () {
-    return 'polygon'
-  },
+  getClassName: () => 'polygon',
 
-  getShapeOptions: function () {
+  getShapeOptions: () => {
     const options = U.PathMixin.getShapeOptions()
     options.push(
       'properties._umap_options.stroke',
@@ -1233,7 +1202,7 @@ U.Polygon = L.Polygon.extend({
     return options
   },
 
-  getInteractionOptions: function () {
+  getInteractionOptions: () => {
     const options = U.FeatureMixin.getInteractionOptions()
     options.push('properties._umap_options.interactive')
     return options

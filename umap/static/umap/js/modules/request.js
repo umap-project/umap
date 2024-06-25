@@ -1,5 +1,5 @@
-import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { translate } from './i18n.js'
 
 export class RequestError extends Error {}
 

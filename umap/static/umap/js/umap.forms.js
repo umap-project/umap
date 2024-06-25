@@ -296,10 +296,9 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
   },
 
   onBlur: function () {
-    const self = this,
-      closePicker = () => {
-        self.container.style.display = 'none'
-      }
+    const closePicker = () => {
+      this.container.style.display = 'none'
+    }
     // We must leave time for the click to be listened.
     window.setTimeout(closePicker, 100)
   },
@@ -341,7 +340,7 @@ L.FormBuilder.TextColorPicker = L.FormBuilder.ColorPicker.extend({
 })
 
 L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
-  getOptions: function () {
+  getOptions: () => {
     const layer_classes = [
       U.Layer.Default,
       U.Layer.Cluster,
@@ -353,7 +352,7 @@ L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
 })
 
 L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
-  getOptions: function () {
+  getOptions: () => {
     const options = []
     for (let i = 1; i < 30; i++) {
       options.push([i * 1000, L._('{delay} seconds', { delay: i })])
@@ -459,9 +458,7 @@ L.FormBuilder.BlurInput.include({
 })
 
 L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
-  type: function () {
-    return 'hidden'
-  },
+  type: () => 'hidden',
 
   build: function () {
     L.FormBuilder.BlurInput.prototype.build.call(this)
@@ -547,10 +544,10 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   openTab: function (name) {
     const els = this.tabs.querySelectorAll('button')
-    for (let el of els) {
+    for (const el of els) {
       L.DomUtil.removeClass(el, 'on')
     }
-    let el = this.tabs.querySelector(`.tab-${name}`)
+    const el = this.tabs.querySelector(`.tab-${name}`)
     L.DomUtil.addClass(el, 'on')
     this.body.innerHTML = ''
   },
@@ -612,7 +609,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (name) L.DomUtil.add('h6', '', parent, name)
     const grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
     let status = false
-    for (let item of items) {
+    for (const item of items) {
       status = this.addIconPreview(item, grid) || status
     }
     if (status) this.grid.appendChild(parent)
@@ -630,7 +627,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const sorted = Object.entries(categories).toSorted(([a], [b]) =>
       U.Utils.naturalSort(a, b, L.lang)
     )
-    for (let [name, items] of sorted) {
+    for (const [name, items] of sorted) {
       this.addCategory(items, name)
     }
   },
@@ -701,7 +698,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     return input
   },
 
-  unselectAll: function (container) {
+  unselectAll: (container) => {
     const els = container.querySelectorAll('div.selected')
     for (const el in els) {
       if (els.hasOwnProperty(el)) L.DomUtil.removeClass(els[el], 'selected')
@@ -710,9 +707,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 })
 
 L.FormBuilder.Url = L.FormBuilder.Input.extend({
-  type: function () {
-    return 'url'
-  },
+  type: () => 'url',
 })
 
 L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
@@ -780,17 +775,11 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
 })
 
 L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
-  getInputType: function (type) {
-    return type
-  },
+  getInputType: (type) => type,
 
-  getLabels: function () {
-    return [L._('Min'), L._('Max')]
-  },
+  getLabels: () => [L._('Min'), L._('Max')],
 
-  prepareForHTML: function (value) {
-    return value.valueOf()
-  },
+  prepareForHTML: (value) => value.valueOf(),
 
   build: function () {
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
@@ -880,19 +869,13 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
 })
 
 L.FormBuilder.FacetSearchNumber = L.FormBuilder.MinMaxBase.extend({
-  prepareForJS: function (value) {
-    return new Number(value)
-  },
+  prepareForJS: (value) => new Number(value),
 })
 
 L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
-  prepareForJS: function (value) {
-    return new Date(value)
-  },
+  prepareForJS: (value) => new Date(value),
 
-  toLocaleDateTime: function (dt) {
-    return new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000)
-  },
+  toLocaleDateTime: (dt) => new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000),
 
   prepareForHTML: function (value) {
     // Value must be in local time
@@ -900,15 +883,11 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
     return this.toLocaleDateTime(value).toISOString().substr(0, 10)
   },
 
-  getLabels: function () {
-    return [L._('From'), L._('Until')]
-  },
+  getLabels: () => [L._('From'), L._('Until')],
 })
 
 L.FormBuilder.FacetSearchDateTime = L.FormBuilder.FacetSearchDate.extend({
-  getInputType: function (type) {
-    return 'datetime-local'
-  },
+  getInputType: (type) => 'datetime-local',
 
   prepareForHTML: function (value) {
     // Value must be in local time
@@ -1020,9 +999,7 @@ L.FormBuilder.DataLayersControl = L.FormBuilder.TernaryChoices.extend({
 })
 
 L.FormBuilder.Range = L.FormBuilder.FloatInput.extend({
-  type: function () {
-    return 'range'
-  },
+  type: () => 'range',
 
   value: function () {
     return L.DomUtil.hasClass(this.wrapper, 'undefined')
@@ -1124,7 +1101,7 @@ U.FormBuilder = L.FormBuilder.extend({
   },
 
   computeDefaultOptions: function () {
-    for (let [key, schema] of Object.entries(U.SCHEMA)) {
+    for (const [key, schema] of Object.entries(U.SCHEMA)) {
       if (schema.type === Boolean) {
         if (schema.nullable) schema.handler = 'NullableChoices'
         else schema.handler = 'Switch'

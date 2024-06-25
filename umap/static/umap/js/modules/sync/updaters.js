@@ -35,7 +35,7 @@ class BaseUpdater {
   }
 
   applyMessage(payload) {
-    let { verb } = payload
+    const { verb } = payload
     return this[verb](payload)
   }
 }
@@ -69,7 +69,7 @@ export class FeatureUpdater extends BaseUpdater {
 
   // Create or update an object at a specific position
   upsert({ metadata, value }) {
-    let { id, layerId } = metadata
+    const { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
     let feature = this.getFeatureFromMetadata(metadata, value)
 
@@ -84,7 +84,7 @@ export class FeatureUpdater extends BaseUpdater {
 
   // Update a property of an object
   update({ key, metadata, value }) {
-    let feature = this.getFeatureFromMetadata(metadata)
+    const feature = this.getFeatureFromMetadata(metadata)
     if (feature === undefined) {
       console.error(`Unable to find feature with id = ${metadata.id}.`)
     }
@@ -103,7 +103,7 @@ export class FeatureUpdater extends BaseUpdater {
   delete({ metadata }) {
     // XXX Distinguish between properties getting deleted
     // and the wole feature getting deleted
-    let feature = this.getFeatureFromMetadata(metadata)
+    const feature = this.getFeatureFromMetadata(metadata)
     if (feature) feature.del(false)
   }
 }

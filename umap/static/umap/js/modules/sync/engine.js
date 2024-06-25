@@ -1,5 +1,5 @@
+import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
-import { MapUpdater, DataLayerUpdater, FeatureUpdater } from './updaters.js'
 
 export class SyncEngine {
   constructor(map) {
@@ -37,7 +37,7 @@ export class SyncEngine {
   // This method is called by the transport layer on new messages
   receive({ kind, ...payload }) {
     if (kind == 'operation') {
-      let updater = this._getUpdater(payload.subject, payload.metadata)
+      const updater = this._getUpdater(payload.subject, payload.metadata)
       updater.applyMessage(payload)
     } else {
       throw new Error(`Unknown dispatch kind: ${kind}`)

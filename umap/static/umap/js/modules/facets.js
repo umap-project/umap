@@ -1,4 +1,4 @@
-import { DomUtil, DomEvent, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 
@@ -57,7 +57,7 @@ export default class Facets {
   }
 
   isActive() {
-    for (let { type, min, max, choices } of Object.values(this.selected)) {
+    for (const { type, min, max, choices } of Object.values(this.selected)) {
       if (min !== undefined || max != undefined || choices?.length) {
         return true
       }
@@ -71,7 +71,7 @@ export default class Facets {
     const facetProperties = this.compute(names, defined)
 
     const fields = names.map((name) => {
-      let criteria = facetProperties[name]
+      const criteria = facetProperties[name]
       let handler = 'FacetSearchChoices'
       switch (criteria['type']) {
         case 'number':
@@ -84,7 +84,7 @@ export default class Facets {
           handler = 'FacetSearchDateTime'
           break
       }
-      let label = defined[name]['label']
+      const label = defined[name]['label']
       return [
         `selected.${name}`,
         {
@@ -112,7 +112,7 @@ export default class Facets {
   getParser(type) {
     switch (type) {
       case 'number':
-        return parseFloat
+        return Number.parseFloat
       case 'datetime':
         return (v) => new Date(v)
       case 'date':

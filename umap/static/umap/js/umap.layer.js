@@ -15,11 +15,9 @@ U.Layer = {
     return this._layers
   },
 
-  getEditableOptions: function () {
-    return []
-  },
+  getEditableOptions: () => [],
 
-  onEdit: function () {},
+  onEdit: () => {},
 
   hasDataVisible: function () {
     return !!Object.keys(this._layers).length
@@ -67,9 +65,7 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
       polygonOptions: {
         color: this.datalayer.getColor(),
       },
-      iconCreateFunction: function (cluster) {
-        return new U.Icon.Cluster(datalayer, cluster)
-      },
+      iconCreateFunction: (cluster) => new U.Icon.Cluster(datalayer, cluster),
     }
     if (this.datalayer.options.cluster && this.datalayer.options.cluster.radius) {
       options.maxClusterRadius = this.datalayer.options.cluster.radius
@@ -99,26 +95,24 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
     return L.MarkerClusterGroup.prototype.removeLayer.call(this, layer)
   },
 
-  getEditableOptions: function () {
-    return [
-      [
-        'options.cluster.radius',
-        {
-          handler: 'BlurIntInput',
-          placeholder: L._('Clustering radius'),
-          helpText: L._('Override clustering radius (default 80)'),
-        },
-      ],
-      [
-        'options.cluster.textColor',
-        {
-          handler: 'TextColorPicker',
-          placeholder: L._('Auto'),
-          helpText: L._('Text color for the cluster label'),
-        },
-      ],
-    ]
-  },
+  getEditableOptions: () => [
+    [
+      'options.cluster.radius',
+      {
+        handler: 'BlurIntInput',
+        placeholder: L._('Clustering radius'),
+        helpText: L._('Override clustering radius (default 80)'),
+      },
+    ],
+    [
+      'options.cluster.textColor',
+      {
+        handler: 'TextColorPicker',
+        placeholder: L._('Auto'),
+        helpText: L._('Text color for the cluster label'),
+      },
+    ],
+  ],
 
   onEdit: function (field, builder) {
     if (field === 'options.cluster.radius') {
@@ -182,7 +176,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
   getValues: function () {
     const values = []
     this.datalayer.eachLayer((layer) => {
-      let value = this._getValue(layer)
+      const value = this._getValue(layer)
       if (!isNaN(value)) values.push(value)
     })
     return values
@@ -370,7 +364,7 @@ U.Layer.Heat = L.HeatLayer.extend({
         this.datalayer.options.heat &&
         this.datalayer.options.heat.intensityProperty
       ) {
-        alt = parseFloat(
+        alt = Number.parseFloat(
           layer.properties[this.datalayer.options.heat.intensityProperty || 0]
         )
         latlng = new L.LatLng(latlng.lat, latlng.lng, alt)
@@ -383,37 +377,33 @@ U.Layer.Heat = L.HeatLayer.extend({
     this.setLatLngs([])
   },
 
-  getFeatures: function () {
-    return {}
-  },
+  getFeatures: () => ({}),
 
   getBounds: function () {
     return L.latLngBounds(this._latlngs)
   },
 
-  getEditableOptions: function () {
-    return [
-      [
-        'options.heat.radius',
-        {
-          handler: 'Range',
-          min: 10,
-          max: 100,
-          step: 5,
-          label: L._('Heatmap radius'),
-          helpText: L._('Override heatmap radius (default 25)'),
-        },
-      ],
-      [
-        'options.heat.intensityProperty',
-        {
-          handler: 'BlurInput',
-          placeholder: L._('Heatmap intensity property'),
-          helpText: L._('Optional intensity property for heatmap'),
-        },
-      ],
-    ]
-  },
+  getEditableOptions: () => [
+    [
+      'options.heat.radius',
+      {
+        handler: 'Range',
+        min: 10,
+        max: 100,
+        step: 5,
+        label: L._('Heatmap radius'),
+        helpText: L._('Override heatmap radius (default 25)'),
+      },
+    ],
+    [
+      'options.heat.intensityProperty',
+      {
+        handler: 'BlurInput',
+        placeholder: L._('Heatmap intensity property'),
+        helpText: L._('Optional intensity property for heatmap'),
+      },
+    ],
+  ],
 
   onEdit: function (field, builder) {
     if (field === 'options.heat.intensityProperty') {
@@ -538,23 +528,20 @@ U.DataLayer = L.Evented.extend({
 
     let isDirty = false
     let isDeleted = false
-    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
-        get: function () {
-          return isDirty
-        },
-        set: function (status) {
-          if (!isDirty && status) self.fire('dirty')
+        get: () => isDirty,
+        set: (status) => {
+          if (!isDirty && status) this.fire('dirty')
           isDirty = status
           if (status) {
-            self.map.addDirtyDatalayer(self)
+            this.map.addDirtyDatalayer(this)
             // A layer can be made dirty by indirect action (like dragging layers)
             // we need to have it loaded before saving it.
-            if (!self.isLoaded()) self.fetchData()
+            if (!this.isLoaded()) this.fetchData()
           } else {
-            self.map.removeDirtyDatalayer(self)
-            self.isDeleted = false
+            this.map.removeDirtyDatalayer(this)
+            this.isDeleted = false
           }
         },
       })
@@ -563,13 +550,11 @@ U.DataLayer = L.Evented.extend({
     }
     try {
       Object.defineProperty(this, 'isDeleted', {
-        get: function () {
-          return isDeleted
-        },
-        set: function (status) {
-          if (!isDeleted && status) self.fire('deleted')
+        get: () => isDeleted,
+        set: (status) => {
+          if (!isDeleted && status) this.fire('deleted')
           isDeleted = status
-          if (status) self.isDirty = status
+          if (status) this.isDirty = status
         },
       })
     } catch (e) {
@@ -618,9 +603,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   render: function (fields, builder) {
-    let impacts = U.Utils.getImpactsFromSchema(fields)
+    const impacts = U.Utils.getImpactsFromSchema(fields)
 
-    for (let impact of impacts) {
+    for (const impact of impacts) {
       switch (impact) {
         case 'ui':
           this.map.onDataLayersChanged()
@@ -787,8 +772,8 @@ U.DataLayer = L.Evented.extend({
   },
 
   showAtZoom: function () {
-    const from = parseInt(this.options.fromZoom, 10),
-      to = parseInt(this.options.toZoom, 10),
+    const from = Number.parseInt(this.options.fromZoom, 10),
+      to = Number.parseInt(this.options.toZoom, 10),
       zoom = this.map.getZoom()
     return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
   },
@@ -953,7 +938,7 @@ U.DataLayer = L.Evented.extend({
     this.rawToGeoJSON(c, type, (geojson) => this.addData(geojson))
   },
 
-  rawToGeoJSON: function (c, type, callback) {
+  rawToGeoJSON: (c, type, callback) => {
     const toDom = (x) => {
       const doc = new DOMParser().parseFromString(x, 'text/xml')
       const errorNode = doc.querySelector('parsererror')
@@ -1045,7 +1030,7 @@ U.DataLayer = L.Evented.extend({
 
     const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
 
-    let feature = this.geoJSONToLeaflet({ geometry, geojson })
+    const feature = this.geoJSONToLeaflet({ geometry, geojson })
     if (feature) {
       this.addLayer(feature)
       feature.onCommit()
@@ -1318,7 +1303,7 @@ U.DataLayer = L.Evented.extend({
       layerProperties.appendChild(builder.build())
     }
 
-    let shapeOptions = [
+    const shapeOptions = [
       'options.color',
       'options.iconClass',
       'options.iconUrl',
@@ -1337,7 +1322,7 @@ U.DataLayer = L.Evented.extend({
     const shapeProperties = L.DomUtil.createFieldset(container, L._('Shape properties'))
     shapeProperties.appendChild(builder.build())
 
-    let optionsFields = [
+    const optionsFields = [
       'options.smoothFactor',
       'options.dashArray',
       'options.zoomTo',
@@ -1499,8 +1484,8 @@ U.DataLayer = L.Evented.extend({
 
   buildVersionsFieldset: async function (container) {
     const appendVersion = (data) => {
-      const date = new Date(parseInt(data.at, 10))
-      const content = `${date.toLocaleString(L.lang)} (${parseInt(data.size) / 1000}Kb)`
+      const date = new Date(Number.parseInt(data.at, 10))
+      const content = `${date.toLocaleString(L.lang)} (${Number.parseInt(data.size) / 1000}Kb)`
       const el = L.DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
       const button = L.DomUtil.createButton(
         '',

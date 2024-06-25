@@ -84,11 +84,11 @@ U.Popup.Panel = U.Popup.extend({
     }
   },
 
-  update: function () {},
-  _updateLayout: function () {},
-  _updatePosition: function () {},
-  _adjustPan: function () {},
-  _animateZoom: function () {},
+  update: () => {},
+  _updateLayout: () => {},
+  _updatePosition: () => {},
+  _adjustPan: () => {},
+  _animateZoom: () => {},
 })
 U.Popup.SimplePanel = U.Popup.Panel // Retrocompat.
 
@@ -102,7 +102,7 @@ U.PopupTemplate.Default = L.Class.extend({
     this.container = container
   },
 
-  renderTitle: function () {},
+  renderTitle: () => {},
 
   renderBody: function () {
     const template = this.feature.getOption('popupContentTemplate')
@@ -181,7 +181,7 @@ U.PopupTemplate.BaseWithTitle = U.PopupTemplate.Default.extend({
 })
 
 U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
-  formatRow: function (key, value) {
+  formatRow: (key, value) => {
     if (value.indexOf('http') === 0) {
       value = `<a href="${value}" target="_blank">${value}</a>`
     }
@@ -268,7 +268,7 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
     const color = this.feature.getDynamicOption('color')
     title.style.backgroundColor = color
     const iconUrl = this.feature.getDynamicOption('iconUrl')
-    let icon = U.Icon.makeIconElement(iconUrl, title)
+    const icon = U.Icon.makeIconElement(iconUrl, title)
     L.DomUtil.addClass(icon, 'icon')
     U.Icon.setIconContrast(icon, title, iconUrl, color)
     if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'

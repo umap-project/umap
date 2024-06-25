@@ -7,15 +7,12 @@ U.DataLayerPermissions = L.Class.extend({
     this.options = L.Util.setOptions(this, datalayer.options.permissions)
     this.datalayer = datalayer
     let isDirty = false
-    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
-        get: function () {
-          return isDirty
-        },
-        set: function (status) {
+        get: () => isDirty,
+        set: (status) => {
           isDirty = status
-          if (status) self.datalayer.isDirty = status
+          if (status) this.datalayer.isDirty = status
         },
       })
     } catch (e) {

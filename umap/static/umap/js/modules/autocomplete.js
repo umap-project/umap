@@ -1,8 +1,8 @@
 import {
-  DomUtil,
   DomEvent,
-  setOptions,
+  DomUtil,
   Util,
+  setOptions,
 } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Request, ServerRequest } from './request.js'

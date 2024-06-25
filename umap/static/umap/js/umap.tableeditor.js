@@ -81,7 +81,7 @@ U.TableEditor = L.Class.extend({
     this.properties = this.datalayer._propertiesIndex
   },
 
-  validateName: function (name) {
+  validateName: (name) => {
     if (name.indexOf('.') !== -1) {
       U.Alert.error(L._('Invalide property name: {name}', { name: name }))
       return false

@@ -36,7 +36,7 @@ export function checkId(string) {
  */
 export function getImpactsFromSchema(fields, schema) {
   schema = schema || U.SCHEMA
-  let impacted = fields
+  const impacted = fields
     .map((field) => {
       // remove the option prefix for fields
       // And only keep the first part in case of a subfield
@@ -120,7 +120,7 @@ export function toHTML(r, options) {
   r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
   r = r.replace(/^\* (.*)/gm, '<ul><li>$1</li></ul>')
   for (let ii = 0; ii < 3; ii++) {
-    r = r.replace(new RegExp(`</ul>(\r\n|\r|\n)<ul>`, 'g'), '')
+    r = r.replace(/<\/ul>(\r\n|\r|\n)<ul>/g, '')
   }
 
   // headings and hr
@@ -352,7 +352,7 @@ export function normalize(s) {
 var templateRe = /\{ *([\w_ -]+) *\}/g
 
 export function template(str, data) {
-  return str.replace(templateRe, function (str, key) {
+  return str.replace(templateRe, (str, key) => {
     var value = data[key]
 
     if (value === undefined) {
