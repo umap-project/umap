@@ -400,7 +400,7 @@ U.FeatureMixin = {
     const properties = L.extend({}, this.properties)
     properties._umap_options = L.extend({}, properties._umap_options)
     if (Object.keys && Object.keys(properties._umap_options).length === 0) {
-      properties._umap_options // It can make a difference on big data sets = undefined // It can make a difference on big data sets
+      properties._umap_options = undefined // It can make a difference on big data sets
     }
     return properties
   },
@@ -1178,7 +1178,7 @@ U.Polyline = L.Polyline.extend({
       U.Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
 
-    geojson.id // delete the copied id, a new one will be generated. = undefined // delete the copied id, a new one will be generated.
+    geojson.id = undefined // delete the copied id, a new one will be generated.
 
     const polygon = this.datalayer.geojsonToFeatures(geojson)
     polygon.edit()
