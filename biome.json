@@ -13,7 +13,7 @@
     "enabled": true,
     "rules": {
       "style": {
-        "useBlockStatements": "warn",
+        "useBlockStatements": "off",
         "noShoutyConstants": "warn"
       }
     }

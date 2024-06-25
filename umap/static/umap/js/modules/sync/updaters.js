@@ -89,9 +89,10 @@ export class FeatureUpdater extends BaseUpdater {
       console.error(`Unable to find feature with id = ${metadata.id}.`)
     }
     switch (key) {
-      case 'geometry':
+      case 'geometry': {
         const datalayer = this.getDataLayerFromID(metadata.layerId)
         datalayer.geoJSONToLeaflet({ geometry: value, id: metadata.id, feature })
+      }
       default:
         this.updateObjectValue(feature, key, value)
         feature.datalayer.indexProperties(feature)

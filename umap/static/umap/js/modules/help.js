@@ -191,7 +191,7 @@ export default class Help {
     const container = DomUtil.add('div')
     DomUtil.createTitle(container, translate('Help'))
     // Special dynamic case. Do we still think this dialog is usefull ?
-    if (entries == 'edit') {
+    if (entries === 'edit') {
       DomUtil.element({
         tagName: 'div',
         className: 'umap-help-entry',

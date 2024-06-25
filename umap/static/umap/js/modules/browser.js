@@ -63,8 +63,8 @@ export default class Browser {
   addDataLayer(datalayer, parent) {
     let className = `datalayer ${datalayer.getHidableClass()}`
     if (this.mode !== 'layers') className += ' show-list'
-    const container = DomUtil.create('div', className, parent),
-      headline = DomUtil.create('h5', '', container)
+    const container = DomUtil.create('div', className, parent)
+    const headline = DomUtil.create('h5', '', container)
     container.id = this.datalayerId(datalayer)
     const ul = DomUtil.create('ul', '', container)
     this.updateDatalayer(datalayer)
@@ -90,9 +90,9 @@ export default class Browser {
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
 
-    const total = datalayer.count(),
-      current = container.querySelectorAll('li').length,
-      count = total == current ? total : `${current}/${total}`
+    const total = datalayer.count()
+    const current = container.querySelectorAll('li').length
+    const count = total === current ? total : `${current}/${total}`
     const counter = DomUtil.create('span', 'datalayer-counter', headline)
     counter.textContent = `(${count})`
     counter.title = translate(`Features in this layer: ${count}`)

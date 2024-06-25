@@ -63,9 +63,8 @@ export function getImpactsFromSchema(fields, schema) {
 export default function getPurify() {
   if (typeof window === 'undefined') {
     return DOMPurifyInitializer(new global.JSDOM('').window)
-  } else {
-    return DOMPurifyInitializer(window)
   }
+  return DOMPurifyInitializer(window)
 }
 
 export function escapeHTML(s) {
@@ -114,7 +113,7 @@ export function escapeHTML(s) {
 
 export function toHTML(r, options) {
   if (!r) return ''
-  const target = (options && options.target) || 'blank'
+  const target = options?.target || 'blank'
 
   // unordered lists
   r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
@@ -271,8 +270,8 @@ export function sortFeatures(features, sortKey, lang) {
   const sortKeys = (sortKey || 'name').split(',')
 
   const sort = (a, b, i) => {
-    let sortKey = sortKeys[i],
-      reverse = 1
+    let sortKey = sortKeys[i]
+    let reverse = 1
     if (sortKey[0] === '-') {
       reverse = -1
       sortKey = sortKey.substring(1)
@@ -315,19 +314,19 @@ export function getBaseUrl() {
 }
 
 export function hasVar(value) {
-  return typeof value === 'string' && value.indexOf('{') != -1
+  return typeof value === 'string' && value.indexOf('{') !== -1
 }
 
 export function isPath(value) {
-  return value && value.length && value.startsWith('/')
+  return value?.length && value.startsWith('/')
 }
 
 export function isRemoteUrl(value) {
-  return value && value.length && value.startsWith('http')
+  return value?.length && value.startsWith('http')
 }
 
 export function isDataImage(value) {
-  return value && value.length && value.startsWith('data:image')
+  return value?.length && value.startsWith('data:image')
 }
 
 /**
@@ -349,15 +348,16 @@ export function normalize(s) {
 
 // Vendorized from leaflet.utils
 // https://github.com/Leaflet/Leaflet/blob/108c6717b70f57c63645498f9bd66b6677758786/src/core/Util.js#L132-L151
-var templateRe = /\{ *([\w_ -]+) *\}/g
+const templateRe = /\{ *([\w_ -]+) *\}/g
 
 export function template(str, data) {
   return str.replace(templateRe, (str, key) => {
-    var value = data[key]
+    let value = data[key]
 
     if (value === undefined) {
-      throw new Error('No value provided for variable ' + str)
-    } else if (typeof value === 'function') {
+      throw new Error(`No value provided for variable ${str}`)
+    }
+    if (typeof value === 'function') {
       value = value(data)
     }
     return value

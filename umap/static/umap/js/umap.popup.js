@@ -14,8 +14,8 @@ U.Popup = L.Popup.extend({
   },
 
   format: function () {
-    const mode = this.feature.getOption('popupTemplate') || 'Default',
-      klass = U.PopupTemplate[mode] || U.PopupTemplate.Default
+    const mode = this.feature.getOption('popupTemplate') || 'Default'
+    const klass = U.PopupTemplate[mode] || U.PopupTemplate.Default
     this.content = new klass(this.feature, this.container)
     this.content.render()
     const els = this.container.querySelectorAll('img,iframe')
@@ -125,12 +125,12 @@ U.PopupTemplate.Default = L.Class.extend({
 
   renderFooter: function () {
     if (this.feature.hasPopupFooter()) {
-      const footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container),
-        previousLi = L.DomUtil.create('li', 'previous', footer),
-        zoomLi = L.DomUtil.create('li', 'zoom', footer),
-        nextLi = L.DomUtil.create('li', 'next', footer),
-        next = this.feature.getNext(),
-        prev = this.feature.getPrevious()
+      const footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container)
+      const previousLi = L.DomUtil.create('li', 'previous', footer)
+      const zoomLi = L.DomUtil.create('li', 'zoom', footer)
+      const nextLi = L.DomUtil.create('li', 'next', footer)
+      const next = this.feature.getNext()
+      const prev = this.feature.getPrevious()
       // Fixme: remove me when this is merged and released
       // https://github.com/Leaflet/Leaflet/pull/9052
       L.DomEvent.disableClickPropagation(footer)
@@ -240,8 +240,8 @@ U.PopupTemplate.GeoRSSLink = U.PopupTemplate.Default.extend({
   },
 
   renderBody: function () {
-    const title = this.renderTitle(this),
-      a = L.DomUtil.add('a')
+    const title = this.renderTitle(this)
+    const a = L.DomUtil.add('a')
     a.href = this.feature.properties.link
     a.target = '_blank'
     a.appendChild(title)
@@ -323,7 +323,7 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
         L.DomUtil.element('a', { href: `mailto:${email}`, textContent: email })
       )
     }
-    const id = props['@id'] || props['id']
+    const id = props['@id'] || props.id
     if (id) {
       L.DomUtil.add(
         'div',

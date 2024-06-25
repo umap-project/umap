@@ -42,10 +42,10 @@ export default class Tooltip {
   anchorAbsolute() {
     this.container.className = ''
     const left =
-        this.parent.offsetLeft +
-        this.parent.clientWidth / 2 -
-        this.container.clientWidth / 2,
-      top = this.parent.offsetTop + 75
+      this.parent.offsetLeft +
+      this.parent.clientWidth / 2 -
+      this.container.clientWidth / 2
+    const top = this.parent.offsetTop + 75
     this.setPosition({ top: top, left: left })
   }
 

@@ -12,7 +12,7 @@ U.Icon = L.DivIcon.extend({
     options = L.Util.extend({}, default_options, options)
     L.Icon.prototype.initialize.call(this, options)
     this.feature = this.options.feature
-    if (this.feature && this.feature.isReadOnly()) {
+    if (this.feature?.isReadOnly()) {
       this.options.className += ' readonly'
     }
   },
@@ -27,7 +27,7 @@ U.Icon = L.DivIcon.extend({
 
   _getIconUrl: function (name) {
     let url
-    if (this.feature && this.feature._getIconUrl(name)) {
+    if (this.feature?._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
       this._setRecent(url)
     } else {
@@ -70,8 +70,8 @@ U.Icon.Default = U.Icon.extend({
 
   _setIconStyles: function (img, name) {
     U.Icon.prototype._setIconStyles.call(this, img, name)
-    const color = this._getColor(),
-      opacity = this._getOpacity()
+    const color = this._getColor()
+    const opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
     this.elements.container.style.opacity = opacity
@@ -185,10 +185,10 @@ U.Icon.Cluster = L.DivIcon.extend({
   },
 
   createIcon: function () {
-    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster'),
-      div = L.DomUtil.create('div', '', container),
-      span = L.DomUtil.create('span', '', div),
-      backgroundColor = this.datalayer.getColor()
+    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster')
+    const div = L.DomUtil.create('div', '', container)
+    const span = L.DomUtil.create('span', '', div)
+    const backgroundColor = this.datalayer.getColor()
     span.textContent = this.cluster.getChildCount()
     div.style.backgroundColor = backgroundColor
     return container
@@ -197,7 +197,7 @@ U.Icon.Cluster = L.DivIcon.extend({
   computeTextColor: function (el) {
     let color
     const backgroundColor = this.datalayer.getColor()
-    if (this.datalayer.options.cluster && this.datalayer.options.cluster.textColor) {
+    if (this.datalayer.options.cluster?.textColor) {
       color = this.datalayer.options.cluster.textColor
     }
     return color || L.DomUtil.TextColorFromBackgroundColor(el, backgroundColor)

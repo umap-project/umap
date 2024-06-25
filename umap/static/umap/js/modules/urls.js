@@ -10,9 +10,8 @@ export default class URLs {
 
     if (this.urls.hasOwnProperty(urlName)) {
       return template(this.urls[urlName], params)
-    } else {
-      throw `Unable to find a URL for route ${urlName}`
     }
+    throw `Unable to find a URL for route ${urlName}`
   }
 
   // Update if map_id is passed, create otherwise.

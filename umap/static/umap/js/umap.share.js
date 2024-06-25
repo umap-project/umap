@@ -19,11 +19,11 @@ U.Share = L.Class.extend({
       formatter: (map) => {
         const table = []
         map.eachFeature((feature) => {
-          const row = feature.toGeoJSON()['properties'],
-            center = feature.getCenter()
-          delete row['_umap_options']
-          row['Latitude'] = center.lat
-          row['Longitude'] = center.lng
+          const row = feature.toGeoJSON().properties
+          const center = feature.getCenter()
+          row._umap_options = undefined
+          row.Latitude = center.lat
+          row.Longitude = center.lng
           table.push(row)
         })
         return csv2geojson.dsv.csvFormat(table)
@@ -224,7 +224,7 @@ U.IframeExporter = L.Evented.extend({
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
     } else {
-      delete this.queryString.feature
+      this.queryString.feature = undefined
     }
     if (this.options.keepCurrentDatalayers) {
       this.map.eachDataLayer((datalayer) => {
@@ -234,7 +234,7 @@ U.IframeExporter = L.Evented.extend({
       })
       this.queryString.datalayers = datalayers.join(',')
     } else {
-      delete this.queryString.datalayers
+      this.queryString.datalayers = undefined
     }
     const currentView = this.options.currentView ? window.location.hash : ''
     const queryString = L.extend({}, this.queryString, options)

@@ -6,7 +6,6 @@ console.log(DOMPurifyInitializer)
 export default function getPurify() {
   if (typeof window === 'undefined') {
     return DOMPurifyInitializer(new JSDOM('').window)
-  } else {
-    return DOMPurifyInitializer(window)
   }
+  return DOMPurifyInitializer(window)
 }

@@ -49,7 +49,7 @@ class Rule {
   }
 
   not_equal(other) {
-    return this.expected != other
+    return this.expected !== other
   }
 
   gt(other) {
@@ -71,10 +71,10 @@ class Rule {
         break
       }
     }
-    if (vars.length != 2) return
+    if (vars.length !== 2) return
     this.key = vars[0]
     this.expected = vars[1]
-    if (!isNaN(this.expected)) this.cast = Number.parseFloat
+    if (!Number.isNaN(this.expected)) this.cast = Number.parseFloat
     else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
     this.expected = this.cast(this.expected)
   }
@@ -161,7 +161,7 @@ class Rule {
   }
 
   _delete() {
-    this.map.rules.rules = this.map.rules.rules.filter((rule) => rule != this)
+    this.map.rules.rules = this.map.rules.rules.filter((rule) => rule !== this)
   }
 }
 
@@ -181,8 +181,8 @@ export default class Rules {
   }
 
   onReorder(src, dst, initialIndex, finalIndex) {
-    const moved = this.rules.find((rule) => stamp(rule) == src.dataset.id)
-    const reference = this.rules.find((rule) => stamp(rule) == dst.dataset.id)
+    const moved = this.rules.find((rule) => stamp(rule) === src.dataset.id)
+    const reference = this.rules.find((rule) => stamp(rule) === dst.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
     let referenceIdx = this.rules.indexOf(reference)
     const minIndex = Math.min(movedIdx, referenceIdx)
