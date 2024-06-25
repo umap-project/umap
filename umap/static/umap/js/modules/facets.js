@@ -36,16 +36,16 @@ export default class Facets {
             case 'datetime':
             case 'number':
               if (!Number.isNaN(value)) {
-                if (
-                  Number.isNaN(properties[name].min) ||
-                  properties[name].min > value
-                ) {
+                // Special cases where we want to be lousy when checking isNaN without
+                // coercing to a Number first because we handle multiple types.
+                // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+                // Reference/Global_Objects/Number/isNaN
+                // biome-ignore lint/suspicious/noGlobalIsNan: see above.
+                if (isNaN(properties[name].min) || properties[name].min > value) {
                   properties[name].min = value
                 }
-                if (
-                  Number.isNaN(properties[name].max) ||
-                  properties[name].max < value
-                ) {
+                // biome-ignore lint/suspicious/noGlobalIsNan: see above.
+                if (isNaN(properties[name].max) || properties[name].max < value) {
                   properties[name].max = value
                 }
               }
