@@ -1,4 +1,4 @@
-import { DomUtil, DomEvent, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 
 export default class Browser {
@@ -90,7 +90,7 @@ export default class Browser {
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
 
-    let total = datalayer.count(),
+    const total = datalayer.count(),
       current = container.querySelectorAll('li').length,
       count = total == current ? total : `${current}/${total}`
     const counter = DomUtil.create('span', 'datalayer-counter', headline)

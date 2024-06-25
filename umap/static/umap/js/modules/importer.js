@@ -1,8 +1,8 @@
-import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from './i18n.js'
+import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
-import Dialog from './ui/dialog.js'
+import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
+import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `

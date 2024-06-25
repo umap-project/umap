@@ -1,9 +1,8 @@
-import { DomUtil, DomEvent, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
-import * as Utils from './utils.js'
+import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import * as Utils from './utils.js'
 
 class Rule {
-
   get condition() {
     return this._condition
   }
@@ -12,7 +11,6 @@ class Rule {
     this._condition = value
     this.parse()
   }
-
 
   get isDirty() {
     return this._isDirty
@@ -76,7 +74,7 @@ class Rule {
     if (vars.length != 2) return
     this.key = vars[0]
     this.expected = vars[1]
-    if (!isNaN(this.expected)) this.cast = parseFloat
+    if (!isNaN(this.expected)) this.cast = Number.parseFloat
     else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
     this.expected = this.cast(this.expected)
   }

@@ -12,16 +12,13 @@ U.MapPermissions = L.Class.extend({
     this.setOptions(map.options.permissions)
     this.map = map
     let isDirty = false
-    const self = this
     try {
       Object.defineProperty(this, 'isDirty', {
-        get: function () {
-          return isDirty
-        },
-        set: function (status) {
+        get: () => isDirty,
+        set: (status) => {
           isDirty = status
           if (status) {
-            self.map.isDirty = status
+            this.map.isDirty = status
           }
         },
       })

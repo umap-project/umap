@@ -15,7 +15,7 @@ export class WebSocketTransport {
   send(kind, payload) {
     const message = { ...payload }
     message.kind = kind
-    let encoded = JSON.stringify(message)
+    const encoded = JSON.stringify(message)
     this.websocket.send(encoded)
   }
 

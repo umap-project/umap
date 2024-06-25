@@ -83,18 +83,15 @@ U.Map = L.Map.extend({
     }
 
     let editedFeature = null
-    const self = this
     try {
       Object.defineProperty(this, 'editedFeature', {
-        get: function () {
-          return editedFeature
-        },
-        set: function (feature) {
+        get: () => editedFeature,
+        set: (feature) => {
           if (editedFeature && editedFeature !== feature) {
             editedFeature.endEdit()
           }
           editedFeature = feature
-          self.fire('seteditedfeature')
+          this.fire('seteditedfeature')
         },
       })
     } catch (e) {
@@ -156,9 +153,7 @@ U.Map = L.Map.extend({
     let isDirty = false // self status
     try {
       Object.defineProperty(this, 'isDirty', {
-        get: function () {
-          return isDirty
-        },
+        get: () => isDirty,
         set: function (status) {
           isDirty = status
           this.checkDirty()
@@ -235,9 +230,9 @@ U.Map = L.Map.extend({
   },
 
   render: function (fields) {
-    let impacts = U.Utils.getImpactsFromSchema(fields)
+    const impacts = U.Utils.getImpactsFromSchema(fields)
 
-    for (let impact of impacts) {
+    for (const impact of impacts) {
       switch (impact) {
         case 'ui':
           this.initCaptionBar()
@@ -274,7 +269,7 @@ U.Map = L.Map.extend({
     })
   },
 
-  setOptionsFromQueryString: function (options) {
+  setOptionsFromQueryString: (options) => {
     // This is not an editable option
     L.Util.setFromQueryString(options, 'editMode')
     // FIXME retrocompat
@@ -341,7 +336,7 @@ U.Map = L.Map.extend({
 
   // Merge the given schema with the default one
   // Missing keys inside the schema are merged with the default ones.
-  overrideSchema: function (schema) {
+  overrideSchema: (schema) => {
     for (const [key, extra] of Object.entries(schema)) {
       U.SCHEMA[key] = L.extend({}, U.SCHEMA[key], extra)
     }
@@ -624,7 +619,7 @@ U.Map = L.Map.extend({
   initTileLayers: function () {
     this.tilelayers = []
     for (const props of this.options.tilelayers) {
-      let layer = this.createTileLayer(props)
+      const layer = this.createTileLayer(props)
       this.tilelayers.push(layer)
       if (
         this.options.tilelayer &&
@@ -647,9 +642,7 @@ U.Map = L.Map.extend({
     if (this._controls) this._controls.tilelayers.setLayers()
   },
 
-  createTileLayer: function (tilelayer) {
-    return new L.TileLayer(tilelayer.url_template, tilelayer)
-  },
+  createTileLayer: (tilelayer) => new L.TileLayer(tilelayer.url_template, tilelayer),
 
   selectTileLayer: function (tilelayer) {
     if (tilelayer === this.selected_tilelayer) {
@@ -756,7 +749,7 @@ U.Map = L.Map.extend({
     }
   },
 
-  latLng: function (a, b, c) {
+  latLng: (a, b, c) => {
     // manage geojson case and call original method
     if (!(a instanceof L.LatLng) && a.coordinates) {
       // Guess it's a geojson
@@ -766,10 +759,10 @@ U.Map = L.Map.extend({
   },
 
   handleLimitBounds: function () {
-    const south = parseFloat(this.options.limitBounds.south),
-      west = parseFloat(this.options.limitBounds.west),
-      north = parseFloat(this.options.limitBounds.north),
-      east = parseFloat(this.options.limitBounds.east)
+    const south = Number.parseFloat(this.options.limitBounds.south),
+      west = Number.parseFloat(this.options.limitBounds.west),
+      north = Number.parseFloat(this.options.limitBounds.north),
+      east = Number.parseFloat(this.options.limitBounds.east)
     if (!isNaN(south) && !isNaN(west) && !isNaN(north) && !isNaN(east)) {
       const bounds = L.latLngBounds([
         [south, west],
@@ -815,9 +808,7 @@ U.Map = L.Map.extend({
     datalayer.edit()
   },
 
-  getDefaultOption: function (option) {
-    return U.SCHEMA[option] && U.SCHEMA[option].default
-  },
+  getDefaultOption: (option) => U.SCHEMA[option] && U.SCHEMA[option].default,
 
   getOption: function (option, feature) {
     if (feature) {
@@ -841,11 +832,10 @@ U.Map = L.Map.extend({
   },
 
   updateTileLayers: function () {
-    const self = this,
-      callback = (tilelayer) => {
-        self.options.tilelayer = tilelayer.toJSON()
-        self.isDirty = true
-      }
+    const callback = (tilelayer) => {
+      this.options.tilelayer = tilelayer.toJSON()
+      this.isDirty = true
+    }
     if (this._controls.tilelayersChooser)
       this._controls.tilelayersChooser.openSwitcher({
         callback: callback,
@@ -911,14 +901,13 @@ U.Map = L.Map.extend({
     }
 
     if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
-    const self = this
     importedData.layers.forEach((geojson) => {
       if (!geojson._umap_options && geojson._storage) {
         geojson._umap_options = geojson._storage
         delete geojson._storage
       }
       delete geojson._umap_options?.id // Never trust an id at this stage
-      const dataLayer = self.createDataLayer(geojson._umap_options)
+      const dataLayer = this.createDataLayer(geojson._umap_options)
       dataLayer.fromUmapGeoJSON(geojson)
     })
 
@@ -936,11 +925,10 @@ U.Map = L.Map.extend({
   importFromFile: function (file) {
     const reader = new FileReader()
     reader.readAsText(file)
-    const self = this
     reader.onload = (e) => {
       const rawData = e.target.result
       try {
-        self.importRaw(rawData)
+        this.importRaw(rawData)
       } catch (e) {
         console.error('Error importing data', e)
         U.Alert.error(L._('Invalid umap data in {filename}', { filename: file.name }))

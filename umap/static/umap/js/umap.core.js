@@ -1,4 +1,4 @@
-L.Util.copyToClipboard = function (textToCopy) {
+L.Util.copyToClipboard = (textToCopy) => {
   // https://stackoverflow.com/a/65996386
   // Navigator clipboard api needs a secure context (https)
   if (navigator.clipboard && window.isSecureContext) {
@@ -25,7 +25,7 @@ L.Util.copyToClipboard = function (textToCopy) {
   }
 }
 
-L.Util.queryString = function (name, fallback) {
+L.Util.queryString = (name, fallback) => {
   const decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
   const qs = window.location.search.slice(1).split('&'),
     qa = {}
@@ -37,27 +37,27 @@ L.Util.queryString = function (name, fallback) {
   return qa[name] || fallback
 }
 
-L.Util.booleanFromQueryString = function (name) {
+L.Util.booleanFromQueryString = (name) => {
   const value = L.Util.queryString(name)
   return value === '1' || value === 'true'
 }
 
-L.Util.setFromQueryString = function (options, name) {
+L.Util.setFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value
 }
 
-L.Util.setBooleanFromQueryString = function (options, name) {
+L.Util.setBooleanFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
   if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
 }
 
-L.Util.setNumberFromQueryString = function (options, name) {
+L.Util.setNumberFromQueryString = (options, name) => {
   const value = +L.Util.queryString(name)
   if (!isNaN(value)) options[name] = value
 }
 
-L.Util.setNullableBooleanFromQueryString = function (options, name) {
+L.Util.setNullableBooleanFromQueryString = (options, name) => {
   let value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {
     if (value === 'null') value = null
@@ -222,7 +222,11 @@ L.DomUtil.contrastedColor = (el, bgcolor) => {
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
   if (!rgb || rgb.length !== 4) return out
-  rgb = [parseInt(rgb[1], 10), parseInt(rgb[2], 10), parseInt(rgb[3], 10)]
+  rgb = [
+    Number.parseInt(rgb[1], 10),
+    Number.parseInt(rgb[2], 10),
+    Number.parseInt(rgb[3], 10),
+  ]
   out = L.DomUtil.contrastWCAG21(rgb)
   if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out

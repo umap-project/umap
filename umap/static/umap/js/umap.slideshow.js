@@ -15,8 +15,6 @@ U.Slideshow = L.Class.extend({
 
     // current feature
     let current = null
-
-    const self = this
     try {
       Object.defineProperty(this, 'current', {
         get: function () {
@@ -26,7 +24,7 @@ U.Slideshow = L.Class.extend({
           }
           return current
         },
-        set: function (feature) {
+        set: (feature) => {
           current = feature
         },
       })
@@ -35,9 +33,9 @@ U.Slideshow = L.Class.extend({
     }
     try {
       Object.defineProperty(this, 'next', {
-        get: function () {
+        get: () => {
           if (!current) {
-            return self.current
+            return this.current
           }
           return current.getNext()
         },
@@ -69,7 +67,7 @@ U.Slideshow = L.Class.extend({
   },
 
   timeSpinner: function () {
-    const time = parseInt(this.options.delay, 10)
+    const time = Number.parseInt(this.options.delay, 10)
     if (!time) return
     const css = `rotation ${time / 1000}s infinite linear`,
       spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
@@ -81,7 +79,7 @@ U.Slideshow = L.Class.extend({
     }
   },
 
-  resetSpinners: function () {
+  resetSpinners: () => {
     // Make that animnation is coordinated with user actions
     const spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
 

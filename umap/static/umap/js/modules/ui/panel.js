@@ -1,4 +1,4 @@
-import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 
 export class Panel {

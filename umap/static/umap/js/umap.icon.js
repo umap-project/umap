@@ -17,7 +17,7 @@ U.Icon = L.DivIcon.extend({
     }
   },
 
-  _setRecent: function (url) {
+  _setRecent: (url) => {
     if (U.Utils.hasVar(url)) return
     if (url === U.SCHEMA.iconUrl.default) return
     if (U.Icon.RECENT.indexOf(url) === -1) {
@@ -49,14 +49,10 @@ U.Icon = L.DivIcon.extend({
     return this.map.getDefaultOption('iconOpacity')
   },
 
-  formatUrl: function (url, feature) {
-    return U.Utils.greedyTemplate(
-      url || '',
-      feature ? feature.extendedProperties() : {}
-    )
-  },
+  formatUrl: (url, feature) =>
+    U.Utils.greedyTemplate(url || '', feature ? feature.extendedProperties() : {}),
 
-  onAdd: function () {},
+  onAdd: () => {},
 })
 
 U.Icon.Default = U.Icon.extend({
@@ -208,11 +204,10 @@ U.Icon.Cluster = L.DivIcon.extend({
   },
 })
 
-U.Icon.isImg = function (src) {
-  return U.Utils.isPath(src) || U.Utils.isRemoteUrl(src) || U.Utils.isDataImage(src)
-}
+U.Icon.isImg = (src) =>
+  U.Utils.isPath(src) || U.Utils.isRemoteUrl(src) || U.Utils.isDataImage(src)
 
-U.Icon.makeIconElement = function (src, parent) {
+U.Icon.makeIconElement = (src, parent) => {
   let icon
   if (U.Icon.isImg(src)) {
     icon = L.DomUtil.create('img')
@@ -225,7 +220,7 @@ U.Icon.makeIconElement = function (src, parent) {
   return icon
 }
 
-U.Icon.setIconContrast = function (icon, parent, src, bgcolor) {
+U.Icon.setIconContrast = (icon, parent, src, bgcolor) => {
   /*
    * icon: the element we'll adapt the style, it can be an image or text
    * parent: the element we'll consider to decide whether to adapt the style,

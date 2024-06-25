@@ -162,7 +162,7 @@ U.BaseFeatureAction = L.ToolbarAction.extend({
     this.postInit()
   },
 
-  postInit: function () {},
+  postInit: () => {},
 
   hideToolbar: function () {
     this.map.removeLayer(this.toolbar)
@@ -356,7 +356,7 @@ U.DropControl = L.Class.extend({
     this.dropzone.classList.add('umap-dragover')
   },
 
-  dragover: function (e) {
+  dragover: (e) => {
     L.DomEvent.stop(e)
   },
 
@@ -393,7 +393,7 @@ U.EditControl = L.Control.extend({
     L.DomEvent.on(
       enableEditing,
       'mouseover',
-      function () {
+      () => {
         map.tooltip.open({
           content: map.help.displayLabel('TOGGLE_EDIT'),
           anchor: enableEditing,
@@ -503,7 +503,7 @@ L.Control.Button = L.Control.extend({
     return container
   },
 
-  afterAdd: function (container) {},
+  afterAdd: (container) => {},
 })
 
 U.DataLayersControl = L.Control.Button.extend({
@@ -1205,9 +1205,7 @@ L.Control.MiniMap.include({
     this._miniMap.addLayer(this._layer)
   },
 
-  _cloneLayer: function (layer) {
-    return new L.TileLayer(layer._url, L.Util.extend({}, layer.options))
-  },
+  _cloneLayer: (layer) => new L.TileLayer(layer._url, L.Util.extend({}, layer.options)),
 })
 
 L.Control.Loading.include({
@@ -1364,7 +1362,7 @@ U.Editable = L.Editable.extend({
     this.map.ui.closeTooltip()
   },
 
-  onVertexRawClick: function (e) {
+  onVertexRawClick: (e) => {
     e.layer.onVertexRawClick(e)
     L.DomEvent.stop(e)
     e.cancel()

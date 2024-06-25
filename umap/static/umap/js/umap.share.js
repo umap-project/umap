@@ -1,28 +1,22 @@
 U.Share = L.Class.extend({
   EXPORT_TYPES: {
     geojson: {
-      formatter: function (map) {
-        return JSON.stringify(map.toGeoJSON(), null, 2)
-      },
+      formatter: (map) => JSON.stringify(map.toGeoJSON(), null, 2),
       ext: '.geojson',
       filetype: 'application/json',
     },
     gpx: {
-      formatter: function (map) {
-        return togpx(map.toGeoJSON())
-      },
+      formatter: (map) => togpx(map.toGeoJSON()),
       ext: '.gpx',
       filetype: 'application/gpx+xml',
     },
     kml: {
-      formatter: function (map) {
-        return tokml(map.toGeoJSON())
-      },
+      formatter: (map) => tokml(map.toGeoJSON()),
       ext: '.kml',
       filetype: 'application/vnd.google-earth.kml+xml',
     },
     csv: {
-      formatter: function (map) {
+      formatter: (map) => {
         const table = []
         map.eachFeature((feature) => {
           const row = feature.toGeoJSON()['properties'],

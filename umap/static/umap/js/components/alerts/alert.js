@@ -140,7 +140,7 @@ class uMapAlertConflict extends uMapAlert {
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
     const {
       level = 'info',
-      duration = Infinity,
+      duration = Number.POSITIVE_INFINITY,
       message = '',
       forceCallback = undefined,
     } = event.detail

@@ -1,7 +1,7 @@
 import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 
 const TEMPLATE = `
   <h3>Overpass</h3>
@@ -68,7 +68,7 @@ export class Importer {
       if (!tags.startsWith('[')) tags = `[${tags}]`
       let area = '{south},{west},{north},{east}'
       if (boundary) area = `area:${boundary}`
-      let query = `[out:json];nwr${tags}(${area});out ${outMode};`
+      const query = `[out:json];nwr${tags}(${area});out ${outMode};`
       importer.url = `${this.baseUrl}?data=${query}`
       if (boundary) importer.layerName = boundaryName
       importer.format = 'osm'
