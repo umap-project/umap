@@ -790,7 +790,7 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (options, sync) {
+  createDataLayer: function (options = {}, sync = true) {
     options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
     const datalayer = new U.DataLayer(this, options, sync)
 
