@@ -9,7 +9,6 @@
     font-weight: bold;
     color: #fff;
     font-size: 0.8em;
-    z-index: 1012;
     border-radius: 2px;
     margin-top: calc(var(--header-height) + var(--panel-gutter));
     display: flex;
@@ -19,6 +18,7 @@
     transform: translate(-50%, 0);
     max-width: calc(100% - var(--panel-gutter) * 2);
     width: max-content;
+    z-index: var(--zindex-alert);
 }
 [role="dialog"] > div {
     margin: 0 auto;

@@ -1,5 +1,5 @@
 .umap-dialog {
-    z-index: 10001;
+    z-index: var(--zindex-dialog);
     margin: auto;
     margin-top: 100px;
     width: 40vw;

@@ -5,7 +5,7 @@
     position: absolute;
     bottom: var(--panel-bottom);
     overflow-x: auto;
-    z-index: 1010;
+    z-index: var(--zindex-panels);
     background-color: var(--background-color);
     color: var(--text-color);
     opacity: 0.98;
@@ -22,7 +22,7 @@
 .panel.full {
     width: initial;
     right: -100%;
-    z-index: 1030;
+    z-index: calc(var(--zindex-panels) + 1);
 }
 .panel.full.on {
     visibility: visible;
