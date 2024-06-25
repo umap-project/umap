@@ -64,7 +64,9 @@ export class Request extends BaseRequest {
       )
       return response
     } catch (error) {
-      if (error instanceof NOKError) return this._onNOK(error)
+      if (error instanceof NOKError) {
+        return this._onNOK(error)
+      }
       return this._onError(error)
     } finally {
       this.fire('dataload', { id: id })
@@ -122,7 +124,9 @@ export class ServerRequest extends Request {
   }
 
   async _as_json(response) {
-    if (Array.isArray(response)) return response
+    if (Array.isArray(response)) {
+      return response
+    }
     try {
       const data = await response.json()
       if (data.info) {

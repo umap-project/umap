@@ -12,8 +12,9 @@ U.BaseAction = L.ToolbarAction.extend({
       tooltip: this.options.tooltip,
     }
     L.ToolbarAction.prototype.initialize.call(this)
-    if (this.options.helpMenu && !this.map.helpMenuActions[this.options.className])
+    if (this.options.helpMenu && !this.map.helpMenuActions[this.options.className]) {
       this.map.helpMenuActions[this.options.className] = this
+    }
   },
 })
 
@@ -213,8 +214,9 @@ U.DeleteFeatureAction = U.BaseFeatureAction.extend({
   },
 
   postInit: function () {
-    if (!this.feature.isMulti())
+    if (!this.feature.isMulti()) {
       this.options.toolbarIcon.className = 'umap-delete-one-of-one'
+    }
   },
 
   onClick: function (e) {
@@ -434,11 +436,14 @@ U.MoreControls = L.Control.extend({
   },
 
   toggle: function () {
-    const pos = this.getPosition(),
-      corner = this._map._controlCorners[pos],
-      className = 'umap-more-controls'
-    if (L.DomUtil.hasClass(corner, className)) L.DomUtil.removeClass(corner, className)
-    else L.DomUtil.addClass(corner, className)
+    const pos = this.getPosition()
+    const corner = this._map._controlCorners[pos]
+    const className = 'umap-more-controls'
+    if (L.DomUtil.hasClass(corner, className)) {
+      L.DomUtil.removeClass(corner, className)
+    } else {
+      L.DomUtil.addClass(corner, className)
+    }
   },
 })
 
@@ -454,10 +459,10 @@ U.PermanentCreditsControl = L.Control.extend({
 
   onAdd: function () {
     const paragraphContainer = L.DomUtil.create(
-        'div',
-        'umap-permanent-credits-container'
-      ),
-      creditsParagraph = L.DomUtil.create('p', '', paragraphContainer)
+      'div',
+      'umap-permanent-credits-container'
+    )
+    const creditsParagraph = L.DomUtil.create('p', '', paragraphContainer)
 
     this.paragraphContainer = paragraphContainer
     this.setCredits()
@@ -564,7 +569,9 @@ L.Control.Embed = L.Control.Button.extend({
 
 U.DataLayer.include({
   renderLegend: function (container) {
-    if (this.layer.renderLegend) return this.layer.renderLegend(container)
+    if (this.layer.renderLegend) {
+      return this.layer.renderLegend(container)
+    }
     const color = L.DomUtil.create('span', 'datalayer-color', container)
     color.style.backgroundColor = this.getColor()
   },
@@ -604,8 +611,12 @@ U.DataLayer.include({
         remove,
         'click',
         function () {
-          if (!this.isVisible()) return
-          if (!confirm(L._('Are you sure you want to delete this layer?'))) return
+          if (!this.isVisible()) {
+            return
+          }
+          if (!confirm(L._('Are you sure you want to delete this layer?'))) {
+            return
+          }
           this._delete()
         },
         this
@@ -660,7 +671,9 @@ U.DataLayer.addInitHook(function () {
   this.on('hide', this.propagateHide)
   this.on('show', this.propagateShow)
   this.on('erase', this.propagateDelete)
-  if (this.isVisible()) this.propagateShow()
+  if (this.isVisible()) {
+    this.propagateShow()
+  }
 })
 
 const ControlsMixin = {
@@ -745,7 +758,7 @@ const ControlsMixin = {
       L.DomUtil.createLink(
         'umap-user',
         rightContainer,
-        L._(`My Dashboard ({username})`, {
+        L._('My Dashboard ({username})', {
           username: this.options.user.name,
         }),
         this.options.user.url
@@ -818,7 +831,9 @@ const ControlsMixin = {
   },
 
   editDatalayers: function () {
-    if (!this.editEnabled) return
+    if (!this.editEnabled) {
+      return
+    }
     const container = L.DomUtil.create('div')
     L.DomUtil.createTitle(container, L._('Manage layers'), 'icon-layers')
     const ul = L.DomUtil.create('ul', '', container)
@@ -832,16 +847,21 @@ const ControlsMixin = {
       row.dataset.id = L.stamp(datalayer)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const layer = this.datalayers[src.dataset.id],
-        other = this.datalayers[dst.dataset.id],
-        minIndex = Math.min(layer.getRank(), other.getRank()),
-        maxIndex = Math.max(layer.getRank(), other.getRank())
-      if (finalIndex === 0) layer.bringToTop()
-      else if (finalIndex > initialIndex) layer.insertBefore(other)
-      else layer.insertAfter(other)
+      const layer = this.datalayers[src.dataset.id]
+      const other = this.datalayers[dst.dataset.id]
+      const minIndex = Math.min(layer.getRank(), other.getRank())
+      const maxIndex = Math.max(layer.getRank(), other.getRank())
+      if (finalIndex === 0) {
+        layer.bringToTop()
+      } else if (finalIndex > initialIndex) {
+        layer.insertBefore(other)
+      } else {
+        layer.insertAfter(other)
+      }
       this.eachDataLayerReverse((datalayer) => {
-        if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
+        if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex) {
           datalayer.isDirty = true
+        }
       })
       this.indexDatalayers()
     }
@@ -897,7 +917,9 @@ U.TileLayerControl = L.Control.IconLayers.extend({
     }
     const maxShown = 10
     L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, maxShown))
-    if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
+    if (this.map.selected_tilelayer) {
+      this.setActiveLayer(this.map.selected_tilelayer)
+    }
   },
 })
 
@@ -941,17 +963,18 @@ U.TileLayerChooser = L.Control.extend({
       if (
         window.location.protocol === 'https:' &&
         tilelayer.options.url_template.indexOf('http:') === 0
-      )
+      ) {
         return
+      }
       this.addTileLayerElement(tilelayer, options)
     }, this)
   },
 
   addTileLayerElement: function (tilelayer, options) {
-    const selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : '',
-      el = L.DomUtil.create('li', selectedClass, this._tilelayers_container),
-      img = L.DomUtil.create('img', '', el),
-      name = L.DomUtil.create('div', '', el)
+    const selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : ''
+    const el = L.DomUtil.create('li', selectedClass, this._tilelayers_container)
+    const img = L.DomUtil.create('img', '', el)
+    const name = L.DomUtil.create('div', '', el)
     img.src = U.Utils.template(tilelayer.options.url_template, this.map.demoTileInfos)
     img.loading = 'lazy'
     name.textContent = tilelayer.options.name
@@ -961,7 +984,9 @@ U.TileLayerChooser = L.Control.extend({
       function () {
         this.map.selectTileLayer(tilelayer)
         this.map._controls.tilelayers.setLayers()
-        if (options && options.callback) options.callback(tilelayer)
+        if (options?.callback) {
+          options.callback(tilelayer)
+        }
       },
       this
     )
@@ -975,15 +1000,17 @@ U.AttributionControl = L.Control.Attribution.extend({
 
   _update: function () {
     // Layer is no more on the map
-    if (!this._map) return
+    if (!this._map) {
+      return
+    }
     L.Control.Attribution.prototype._update.call(this)
     // Use our own container, so we can hide/show on small screens
     const credits = this._container.innerHTML
     this._container.innerHTML = ''
     const container = L.DomUtil.create('div', 'attribution-container', this._container)
     container.innerHTML = credits
-    const shortCredit = this._map.getOption('shortCredit'),
-      captionMenus = this._map.getOption('captionMenus')
+    const shortCredit = this._map.getOption('shortCredit')
+    const captionMenus = this._map.getOption('captionMenus')
     if (shortCredit) {
       L.DomUtil.element({
         tagName: 'span',
@@ -1045,7 +1072,9 @@ U.Locate = L.Control.Locate.extend({
     // This occurs because we do create the control and call its activate
     // method before adding the control button itself to the map, in the
     // case where the map defaultView is set to "location"
-    if (!this._container || !this._container.parentNode) return
+    if (!this._container || !this._container.parentNode) {
+      return
+    }
     return L.Control.Locate.prototype.remove.call(this)
   },
 })
@@ -1056,7 +1085,9 @@ U.Search = L.PhotonSearch.extend({
     this.options.location_bias_scale = 0.5
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
     this.options.url = map.options.urls.search
-    if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
+    if (map.options.maxBounds) {
+      this.options.bbox = map.options.maxBounds.toBBoxString()
+    }
     this.reverse = new L.PhotonReverse({
       handleResults: (geojson) => {
         this.handleResultsWithReverse(geojson)
@@ -1091,7 +1122,9 @@ U.Search = L.PhotonSearch.extend({
       return
     }
     // Only numbers, abort.
-    if (/^[\d .,]*$/.test(this.input.value)) return
+    if (/^[\d .,]*$/.test(this.input.value)) {
+      return
+    }
     // Do normal search
     this.options.includePosition = this.map.getZoom() > 10
     L.PhotonSearch.prototype.search.call(this)
@@ -1171,7 +1204,9 @@ U.SearchControl = L.Control.extend({
       limit: 10,
       noResultLabel: L._('No results'),
     }
-    if (this.map.options.photonUrl) options.url = this.map.options.photonUrl
+    if (this.map.options.photonUrl) {
+      options.url = this.map.options.photonUrl
+    }
     const container = L.DomUtil.create('div', '')
 
     L.DomUtil.createTitle(container, L._('Search location'), 'icon-search')
@@ -1251,16 +1286,23 @@ U.Editable = L.Editable.extend({
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
-      if (!e.layer.hasGeom()) e.layer.del()
-      else e.layer.edit()
+      if (!e.layer.hasGeom()) {
+        e.layer.del()
+      } else {
+        e.layer.edit()
+      }
     })
     // Layer for items added by users
     this.on('editable:drawing:cancel', (e) => {
-      if (e.layer instanceof U.Marker) e.layer.del()
+      if (e.layer instanceof U.Marker) {
+        e.layer.del()
+      }
     })
     this.on('editable:drawing:commit', function (e) {
       e.layer.isDirty = true
-      if (this.map.editedFeature !== e.layer) e.layer.edit(e)
+      if (this.map.editedFeature !== e.layer) {
+        e.layer.edit(e)
+      }
     })
     this.on('editable:editing', (e) => {
       const layer = e.layer
@@ -1272,11 +1314,14 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:vertex:ctrlclick', (e) => {
       const index = e.vertex.getIndex()
-      if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue))
+      if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue)) {
         e.vertex.continue()
+      }
     })
     this.on('editable:vertex:altclick', (e) => {
-      if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) e.vertex.delete()
+      if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) {
+        e.vertex.delete()
+      }
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
   },
@@ -1310,7 +1355,7 @@ U.Editable = L.Editable.extend({
   },
 
   drawingTooltip: function (e) {
-    if (e.layer instanceof L.Marker && e.type == 'editable:drawing:start') {
+    if (e.layer instanceof L.Marker && e.type === 'editable:drawing:start') {
       this.map.tooltip.open({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {

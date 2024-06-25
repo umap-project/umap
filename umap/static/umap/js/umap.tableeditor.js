@@ -15,10 +15,10 @@ U.TableEditor = L.Class.extend({
   },
 
   renderHeader: function (property) {
-    const container = L.DomUtil.create('div', 'tcell', this.header),
-      title = L.DomUtil.add('span', '', container, property),
-      del = L.DomUtil.create('i', 'umap-delete', container),
-      rename = L.DomUtil.create('i', 'umap-edit', container)
+    const container = L.DomUtil.create('div', 'tcell', this.header)
+    const title = L.DomUtil.add('span', '', container, property)
+    const del = L.DomUtil.create('i', 'umap-delete', container)
+    const rename = L.DomUtil.create('i', 'umap-edit', container)
     del.title = L._('Delete this property on all the features')
     rename.title = L._('Rename this property on all the features')
     const doDelete = function () {
@@ -40,7 +40,9 @@ U.TableEditor = L.Class.extend({
         L._('Please enter the new name of this property'),
         property
       )
-      if (!newName || !this.validateName(newName)) return
+      if (!newName || !this.validateName(newName)) {
+        return
+      }
       this.datalayer.eachLayer((feature) => {
         feature.renameProperty(property, newName)
       })
@@ -63,10 +65,13 @@ U.TableEditor = L.Class.extend({
 
   compileProperties: function () {
     this.resetProperties()
-    if (this.properties.length === 0) this.properties = ['name']
+    if (this.properties.length === 0) {
+      this.properties = ['name']
+    }
     // description is a forced textarea, don't edit it in a text input, or you lose cariage returns
-    if (this.properties.indexOf('description') !== -1)
+    if (this.properties.indexOf('description') !== -1) {
       this.properties.splice(this.properties.indexOf('description'), 1)
+    }
     this.properties.sort()
     this.field_properties = []
     for (let i = 0; i < this.properties.length; i++) {
@@ -104,7 +109,9 @@ U.TableEditor = L.Class.extend({
     addButton.insertBefore(iconElement, addButton.firstChild)
     const addProperty = function () {
       const newName = prompt(L._('Please enter the name of the property'))
-      if (!newName || !this.validateName(newName)) return
+      if (!newName || !this.validateName(newName)) {
+        return
+      }
       this.datalayer.indexProperty(newName)
       this.edit()
     }

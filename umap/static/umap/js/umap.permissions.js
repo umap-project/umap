@@ -35,7 +35,7 @@ U.MapPermissions = L.Class.extend({
     return (
       this.map.options.user &&
       this.map.options.permissions.owner &&
-      this.map.options.user.id == this.map.options.permissions.owner.id
+      this.map.options.user.id === this.map.options.permissions.owner.id
     )
   },
 
@@ -48,7 +48,9 @@ U.MapPermissions = L.Class.extend({
   },
 
   edit: function () {
-    if (this.map.options.editMode !== 'advanced') return
+    if (this.map.options.editMode !== 'advanced') {
+      return
+    }
     if (!this.map.options.umap_id) {
       return U.Alert.info(L._('Please save the map first'))
     }
@@ -141,17 +143,21 @@ U.MapPermissions = L.Class.extend({
   },
 
   save: async function () {
-    if (!this.isDirty) return this.map.continueSaving()
+    if (!this.isDirty) {
+      return this.map.continueSaving()
+    }
     const formData = new FormData()
     if (!this.isAnonymousMap() && this.options.editors) {
       const editors = this.options.editors.map((u) => u.id)
-      for (let i = 0; i < this.options.editors.length; i++)
+      for (let i = 0; i < this.options.editors.length; i++) {
         formData.append('editors', this.options.editors[i].id)
+      }
     }
-    if (this.isOwner() || this.isAnonymousMap())
+    if (this.isOwner() || this.isAnonymousMap()) {
       formData.append('edit_status', this.options.edit_status)
+    }
     if (this.isOwner()) {
-      formData.append('owner', this.options.owner && this.options.owner.id)
+      formData.append('owner', this.options.owner?.id)
       formData.append('share_status', this.options.share_status)
     }
     const [data, response, error] = await this.map.server.post(
@@ -180,7 +186,7 @@ U.MapPermissions = L.Class.extend({
   },
 
   addOwnerLink: function (element, container) {
-    if (this.options.owner && this.options.owner.name && this.options.owner.url) {
+    if (this.options.owner?.name && this.options.owner.url) {
       const ownerContainer = L.DomUtil.add(
         element,
         'umap-map-owner',

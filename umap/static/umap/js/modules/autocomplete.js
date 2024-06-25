@@ -71,7 +71,9 @@ export class BaseAutocomplete {
   onKeyDown(e) {
     switch (e.key) {
       case 'Tab':
-        if (this.current !== null) this.setChoice()
+        if (this.current !== null) {
+          this.setChoice()
+        }
         DomEvent.stop(e)
         break
       case 'Enter':
@@ -195,8 +197,11 @@ export class BaseAutocomplete {
 
   highlight() {
     this.results.forEach((result, index) => {
-      if (index === this.current) DomUtil.addClass(result.el, 'on')
-      else DomUtil.removeClass(result.el, 'on')
+      if (index === this.current) {
+        DomUtil.addClass(result.el, 'on')
+      } else {
+        DomUtil.removeClass(result.el, 'on')
+      }
     })
   }
 
@@ -249,8 +254,10 @@ export class BaseAjax extends BaseAutocomplete {
       this.clear()
       return
     }
-    if (val === this.cache) return
-    else this.cache = val
+    if (val === this.cache) {
+      return
+    }
+    this.cache = val
     val = val.toLowerCase()
     const url = Util.template(this.url, { q: encodeURIComponent(val) })
     this.handleResults(await this._search(url))
@@ -258,7 +265,7 @@ export class BaseAjax extends BaseAutocomplete {
 
   async _search(url) {
     const response = await this.request.get(url)
-    if (response && response.ok) {
+    if (response?.ok) {
       return await response.json()
     }
   }

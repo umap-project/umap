@@ -14,8 +14,8 @@ U.Popup = L.Popup.extend({
   },
 
   format: function () {
-    const mode = this.feature.getOption('popupTemplate') || 'Default',
-      klass = U.PopupTemplate[mode] || U.PopupTemplate.Default
+    const mode = this.feature.getOption('popupTemplate') || 'Default'
+    const klass = U.PopupTemplate[mode] || U.PopupTemplate.Default
     this.content = new klass(this.feature, this.container)
     this.content.render()
     const els = this.container.querySelectorAll('img,iframe')
@@ -125,29 +125,35 @@ U.PopupTemplate.Default = L.Class.extend({
 
   renderFooter: function () {
     if (this.feature.hasPopupFooter()) {
-      const footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container),
-        previousLi = L.DomUtil.create('li', 'previous', footer),
-        zoomLi = L.DomUtil.create('li', 'zoom', footer),
-        nextLi = L.DomUtil.create('li', 'next', footer),
-        next = this.feature.getNext(),
-        prev = this.feature.getPrevious()
+      const footer = L.DomUtil.create('ul', 'umap-popup-footer', this.container)
+      const previousLi = L.DomUtil.create('li', 'previous', footer)
+      const zoomLi = L.DomUtil.create('li', 'zoom', footer)
+      const nextLi = L.DomUtil.create('li', 'next', footer)
+      const next = this.feature.getNext()
+      const prev = this.feature.getPrevious()
       // Fixme: remove me when this is merged and released
       // https://github.com/Leaflet/Leaflet/pull/9052
       L.DomEvent.disableClickPropagation(footer)
-      if (next)
+      if (next) {
         nextLi.title = L._('Go to «{feature}»', {
           feature: next.properties.name || L._('next'),
         })
-      if (prev)
+      }
+      if (prev) {
         previousLi.title = L._('Go to «{feature}»', {
           feature: prev.properties.name || L._('previous'),
         })
+      }
       zoomLi.title = L._('Zoom to this feature')
       L.DomEvent.on(nextLi, 'click', () => {
-        if (next) next.zoomTo({ callback: next.view })
+        if (next) {
+          next.zoomTo({ callback: next.view })
+        }
       })
       L.DomEvent.on(previousLi, 'click', () => {
-        if (prev) prev.zoomTo({ callback: prev.view })
+        if (prev) {
+          prev.zoomTo({ callback: prev.view })
+        }
       })
       L.DomEvent.on(
         zoomLi,
@@ -162,9 +168,13 @@ U.PopupTemplate.Default = L.Class.extend({
 
   render: function () {
     const title = this.renderTitle()
-    if (title) this.container.appendChild(title)
+    if (title) {
+      this.container.appendChild(title)
+    }
     const body = this.renderBody()
-    if (body) L.DomUtil.add('div', 'umap-popup-content', this.container, body)
+    if (body) {
+      L.DomUtil.add('div', 'umap-popup-content', this.container, body)
+    }
     this.renderFooter()
   },
 })
@@ -202,7 +212,9 @@ U.PopupTemplate.Table = U.PopupTemplate.BaseWithTitle.extend({
     const table = L.DomUtil.create('table')
 
     for (const key in this.feature.properties) {
-      if (typeof this.feature.properties[key] === 'object' || key === 'name') continue
+      if (typeof this.feature.properties[key] === 'object' || key === 'name') {
+        continue
+      }
       // TODO, manage links (url, mailto, wikipedia...)
       this.addRow(table, key, U.Utils.escapeHTML(this.feature.properties[key]).trim())
     }
@@ -240,8 +252,8 @@ U.PopupTemplate.GeoRSSLink = U.PopupTemplate.Default.extend({
   },
 
   renderBody: function () {
-    const title = this.renderTitle(this),
-      a = L.DomUtil.add('a')
+    const title = this.renderTitle(this)
+    const a = L.DomUtil.add('a')
     a.href = this.feature.properties.link
     a.target = '_blank'
     a.appendChild(title)
@@ -257,7 +269,9 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
   getName: function () {
     const props = this.feature.properties
     const locale = L.getLocale()
-    if (locale && props[`name:${locale}`]) return props[`name:${locale}`]
+    if (locale && props[`name:${locale}`]) {
+      return props[`name:${locale}`]
+    }
     return props.name
   },
 
@@ -271,7 +285,9 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
     const icon = U.Icon.makeIconElement(iconUrl, title)
     L.DomUtil.addClass(icon, 'icon')
     U.Icon.setIconContrast(icon, title, iconUrl, color)
-    if (L.DomUtil.contrastedColor(title, color)) title.style.color = 'white'
+    if (L.DomUtil.contrastedColor(title, color)) {
+      title.style.color = 'white'
+    }
     L.DomUtil.add('span', '', title, this.getName())
     const street = props['addr:street']
     if (street) {
@@ -323,7 +339,7 @@ U.PopupTemplate.OSM = U.PopupTemplate.Default.extend({
         L.DomUtil.element('a', { href: `mailto:${email}`, textContent: email })
       )
     }
-    const id = props['@id'] || props['id']
+    const id = props['@id'] || props.id
     if (id) {
       L.DomUtil.add(
         'div',

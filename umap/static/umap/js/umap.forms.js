@@ -60,9 +60,11 @@ L.FormBuilder.Element.include({
   },
 
   get: function (own) {
-    if (!this.options.inheritable || own) return this.builder.getter(this.field)
-    const path = this.field.split('.'),
-      key = path[path.length - 1]
+    if (!this.options.inheritable || own) {
+      return this.builder.getter(this.field)
+    }
+    const path = this.field.split('.')
+    const key = path[path.length - 1]
     return this.obj.getOption(key)
   },
 
@@ -70,9 +72,9 @@ L.FormBuilder.Element.include({
     if (this.options.label) {
       this.label = L.DomUtil.create('label', '', this.getLabelParent())
       this.label.textContent = this.label.title = this.options.label
-      if (this.options.helpEntries)
+      if (this.options.helpEntries) {
         this.builder.map.help.button(this.label, this.options.helpEntries)
-      else if (this.options.helpTooltip) {
+      } else if (this.options.helpTooltip) {
         const info = L.DomUtil.create('i', 'info', this.label)
         L.DomEvent.on(
           info,
@@ -97,7 +99,9 @@ L.FormBuilder.Select.include({
   },
 
   getDefault: function () {
-    if (this.options.inheritable) return undefined
+    if (this.options.inheritable) {
+      return undefined
+    }
     return this.getOptions()[0][0]
   },
 })
@@ -309,8 +313,11 @@ L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
   },
 
   spreadColor: function () {
-    if (this.input.value) this.input.style.backgroundColor = this.input.value
-    else this.input.style.backgroundColor = 'inherit'
+    if (this.input.value) {
+      this.input.style.backgroundColor = this.input.value
+    } else {
+      this.input.style.backgroundColor = 'inherit'
+    }
   },
 
   addColor: function (colorName) {
@@ -476,13 +483,20 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     const [{ pictogram_list }, response, error] = await this.builder.map.server.get(
       this.builder.map.options.urls.pictogram_list_json
     )
-    if (!error) this.pictogram_list = pictogram_list
+    if (!error) {
+      this.pictogram_list = pictogram_list
+    }
     this.buildTabs()
     const value = this.value()
-    if (U.Icon.RECENT.length) this.showRecentTab()
-    else if (!value || U.Utils.isPath(value)) this.showSymbolsTab()
-    else if (U.Utils.isRemoteUrl(value) || U.Utils.isDataImage(value)) this.showURLTab()
-    else this.showCharsTab()
+    if (U.Icon.RECENT.length) {
+      this.showRecentTab()
+    } else if (!value || U.Utils.isPath(value)) {
+      this.showSymbolsTab()
+    } else if (U.Utils.isRemoteUrl(value) || U.Utils.isDataImage(value)) {
+      this.showURLTab()
+    } else {
+      this.showCharsTab()
+    }
     const closeButton = L.DomUtil.createButton(
       'button action-button',
       this.footer,
@@ -491,8 +505,11 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         this.body.innerHTML = ''
         this.tabs.innerHTML = ''
         this.footer.innerHTML = ''
-        if (this.isDefault()) this.undefine(e)
-        else this.updatePreview()
+        if (this.isDefault()) {
+          this.undefine(e)
+        } else {
+          this.updatePreview()
+        }
       },
       this
     )
@@ -514,18 +531,13 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         this
       )
     }
-    const symbol = L.DomUtil.add(
-        'button',
-        'flat tab-symbols',
-        this.tabs,
-        L._('Symbol')
-      ),
-      char = L.DomUtil.add(
-        'button',
-        'flat tab-chars',
-        this.tabs,
-        L._('Emoji & Character')
-      )
+    const symbol = L.DomUtil.add('button', 'flat tab-symbols', this.tabs, L._('Symbol'))
+    const char = L.DomUtil.add(
+      'button',
+      'flat tab-chars',
+      this.tabs,
+      L._('Emoji & Character')
+    )
     url = L.DomUtil.add('button', 'flat tab-url', this.tabs, L._('URL'))
     L.DomEvent.on(symbol, 'click', L.DomEvent.stop).on(
       symbol,
@@ -554,7 +566,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   updatePreview: function () {
     this.buttons.innerHTML = ''
-    if (this.isDefault()) return
+    if (this.isDefault()) {
+      return
+    }
     if (!U.Utils.hasVar(this.value())) {
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
@@ -571,15 +585,17 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addIconPreview: function (pictogram, parent) {
-    const baseClass = 'umap-pictogram-choice',
-      value = pictogram.src,
-      search = U.Utils.normalize(this.searchInput.value),
-      title = pictogram.attribution
-        ? `${pictogram.name} — © ${pictogram.attribution}`
-        : pictogram.name || pictogram.src
-    if (search && U.Utils.normalize(title).indexOf(search) === -1) return
-    const className = value === this.value() ? `${baseClass} selected` : baseClass,
-      container = L.DomUtil.create('div', className, parent)
+    const baseClass = 'umap-pictogram-choice'
+    const value = pictogram.src
+    const search = U.Utils.normalize(this.searchInput.value)
+    const title = pictogram.attribution
+      ? `${pictogram.name} — © ${pictogram.attribution}`
+      : pictogram.name || pictogram.src
+    if (search && U.Utils.normalize(title).indexOf(search) === -1) {
+      return
+    }
+    const className = value === this.value() ? `${baseClass} selected` : baseClass
+    const container = L.DomUtil.create('div', className, parent)
     U.Icon.makeIconElement(value, container)
     container.title = title
     L.DomEvent.on(
@@ -606,13 +622,17 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
 
   addCategory: function (items, name) {
     const parent = L.DomUtil.create('div', 'umap-pictogram-category')
-    if (name) L.DomUtil.add('h6', '', parent, name)
+    if (name) {
+      L.DomUtil.add('h6', '', parent, name)
+    }
     const grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
     let status = false
     for (const item of items) {
       status = this.addIconPreview(item, grid) || status
     }
-    if (status) this.grid.appendChild(parent)
+    if (status) {
+      this.grid.appendChild(parent)
+    }
   },
 
   buildSymbolsList: function () {
@@ -653,7 +673,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   showRecentTab: function () {
-    if (!U.Icon.RECENT.length) return
+    if (!U.Icon.RECENT.length) {
+      return
+    }
     this.openTab('recent')
     this.addGrid(this.buildRecentList)
     this.buildRecentList()
@@ -687,11 +709,15 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   buildInput: function (parent, value) {
     const input = L.DomUtil.create('input', 'blur', parent)
     const button = L.DomUtil.create('span', 'button blur-button', parent)
-    if (value) input.value = value
+    if (value) {
+      input.value = value
+    }
     L.DomEvent.on(input, 'blur', () => {
       // Do not clear this.input when focus-blur
       // empty input
-      if (input.value === value) return
+      if (input.value === value) {
+        return
+      }
       this.input.value = input.value
       this.sync()
     })
@@ -701,7 +727,9 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   unselectAll: (container) => {
     const els = container.querySelectorAll('div.selected')
     for (const el in els) {
-      if (els.hasOwnProperty(el)) L.DomUtil.removeClass(els[el], 'selected')
+      if (els.hasOwnProperty(el)) {
+        L.DomUtil.removeClass(els[el], 'selected')
+      }
     }
   },
 })
@@ -713,15 +741,19 @@ L.FormBuilder.Url = L.FormBuilder.Input.extend({
 L.FormBuilder.Switch = L.FormBuilder.CheckBox.extend({
   getParentNode: function () {
     L.FormBuilder.CheckBox.prototype.getParentNode.call(this)
-    if (this.options.inheritable) return this.quickContainer
+    if (this.options.inheritable) {
+      return this.quickContainer
+    }
     return this.extendedContainer
   },
 
   build: function () {
     L.FormBuilder.CheckBox.prototype.build.apply(this)
-    if (this.options.inheritable)
+    if (this.options.inheritable) {
       this.label = L.DomUtil.create('label', '', this.input.parentNode)
-    else this.input.parentNode.appendChild(this.label)
+    } else {
+      this.input.parentNode.appendChild(this.label)
+    }
     L.DomUtil.addClass(this.input.parentNode, 'with-switch')
     const id = `${this.builder.options.id || Date.now()}.${this.name}`
     this.label.setAttribute('for', id)
@@ -743,9 +775,9 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
     this.ul = L.DomUtil.create('ul', '', this.container)
-    this.type = this.options.criteria['type']
+    this.type = this.options.criteria.type
 
-    const choices = this.options.criteria['choices']
+    const choices = this.options.criteria.choices
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
   },
@@ -758,7 +790,7 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
 
     input.type = this.type
     input.name = `${this.type}_${this.name}`
-    input.checked = this.get()['choices'].includes(value)
+    input.checked = this.get().choices.includes(value)
     input.dataset.value = value
 
     L.DomEvent.on(input, 'change', (e) => this.sync())
@@ -845,13 +877,13 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
   isMinModified: function () {
     const default_ = this.minInput.getAttribute('value')
     const current = this.minInput.value
-    return current != default_
+    return current !== default_
   },
 
   isMaxModified: function () {
     const default_ = this.maxInput.getAttribute('value')
     const current = this.maxInput.value
-    return current != default_
+    return current !== default_
   },
 
   toJS: function () {
@@ -879,7 +911,9 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
 
   prepareForHTML: function (value) {
     // Value must be in local time
-    if (isNaN(value)) return
+    if (Number.isNaN(value)) {
+      return
+    }
     return this.toLocaleDateTime(value).toISOString().substr(0, 10)
   },
 
@@ -891,7 +925,9 @@ L.FormBuilder.FacetSearchDateTime = L.FormBuilder.FacetSearchDate.extend({
 
   prepareForHTML: function (value) {
     // Value must be in local time
-    if (isNaN(value)) return
+    if (Number.isNaN(value)) {
+      return
+    }
     return this.toLocaleDateTime(value).toISOString().slice(0, -1)
   },
 })
@@ -902,7 +938,9 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
 
   clear: function () {
     const checked = this.container.querySelector('input[type="radio"]:checked')
-    if (checked) checked.checked = false
+    if (checked) {
+      checked.checked = false
+    }
   },
 
   fetch: function () {
@@ -920,7 +958,9 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
 
   value: function () {
     const checked = this.container.querySelector('input[type="radio"]:checked')
-    if (checked) return checked.value
+    if (checked) {
+      return checked.value
+    }
   },
 
   getChoices: function () {
@@ -992,8 +1032,9 @@ L.FormBuilder.DataLayersControl = L.FormBuilder.TernaryChoices.extend({
 
   toJS: function () {
     let value = this.value()
-    if (value !== 'expanded')
+    if (value !== 'expanded') {
       value = L.FormBuilder.TernaryChoices.prototype.toJS.call(this)
+    }
     return value
   },
 })
@@ -1037,10 +1078,11 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
     }
     this.autocomplete = new U.AjaxAutocomplete(this.parentNode, options)
     const owner = this.toHTML()
-    if (owner)
+    if (owner) {
       this.autocomplete.displaySelected({
         item: { value: owner.id, label: owner.name },
       })
+    }
   },
 
   value: function () {
@@ -1066,11 +1108,13 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
     }
     this.autocomplete = new U.AjaxAutocompleteMultiple(this.parentNode, options)
     this._values = this.toHTML()
-    if (this._values)
-      for (let i = 0; i < this._values.length; i++)
+    if (this._values) {
+      for (let i = 0; i < this._values.length; i++) {
         this.autocomplete.displaySelected({
           item: { value: this._values[i].id, label: this._values[i].name },
         })
+      }
+    }
   },
 
   value: function () {
@@ -1103,13 +1147,19 @@ U.FormBuilder = L.FormBuilder.extend({
   computeDefaultOptions: function () {
     for (const [key, schema] of Object.entries(U.SCHEMA)) {
       if (schema.type === Boolean) {
-        if (schema.nullable) schema.handler = 'NullableChoices'
-        else schema.handler = 'Switch'
+        if (schema.nullable) {
+          schema.handler = 'NullableChoices'
+        } else {
+          schema.handler = 'Switch'
+        }
       } else if (schema.type === 'Text') {
         schema.handler = 'Textarea'
       } else if (schema.type === Number) {
-        if (schema.step) schema.handler = 'Range'
-        else schema.handler = 'IntInput'
+        if (schema.step) {
+          schema.handler = 'Range'
+        } else {
+          schema.handler = 'IntInput'
+        }
       } else if (schema.choices) {
         const text_length = schema.choices.reduce(
           (acc, [value, label]) => acc + label.length,
@@ -1138,7 +1188,7 @@ U.FormBuilder = L.FormBuilder.extend({
         }
       }
       // FormBuilder use this key for the input type itself
-      delete schema.type
+      schema.type = undefined
       this.defaultOptions[key] = schema
     }
   },

@@ -42,10 +42,10 @@ export default class Tooltip {
   anchorAbsolute() {
     this.container.className = ''
     const left =
-        this.parent.offsetLeft +
-        this.parent.clientWidth / 2 -
-        this.container.clientWidth / 2,
-      top = this.parent.offsetTop + 75
+      this.parent.offsetLeft +
+      this.parent.clientWidth / 2 -
+      this.container.clientWidth / 2
+    const top = this.parent.offsetTop + 75
     this.setPosition({ top: top, left: left })
   }
 
@@ -80,7 +80,9 @@ export default class Tooltip {
     // Clear timetout even if a new tooltip has been added
     // in the meantime. Eg. after a mouseout from the anchor.
     window.clearTimeout(id)
-    if (id && id !== this.TOOLTIP_ID) return
+    if (id && id !== this.TOOLTIP_ID) {
+      return
+    }
     this.container.className = ''
     this.container.innerHTML = ''
     this.setPosition({})
@@ -92,14 +94,26 @@ export default class Tooltip {
   }
 
   setPosition(coords) {
-    if (coords.left) this.container.style.left = `${coords.left}px`
-    else this.container.style.left = 'initial'
-    if (coords.right) this.container.style.right = `${coords.right}px`
-    else this.container.style.right = 'initial'
-    if (coords.top) this.container.style.top = `${coords.top}px`
-    else this.container.style.top = 'initial'
-    if (coords.bottom) this.container.style.bottom = `${coords.bottom}px`
-    else this.container.style.bottom = 'initial'
+    if (coords.left) {
+      this.container.style.left = `${coords.left}px`
+    } else {
+      this.container.style.left = 'initial'
+    }
+    if (coords.right) {
+      this.container.style.right = `${coords.right}px`
+    } else {
+      this.container.style.right = 'initial'
+    }
+    if (coords.top) {
+      this.container.style.top = `${coords.top}px`
+    } else {
+      this.container.style.top = 'initial'
+    }
+    if (coords.bottom) {
+      this.container.style.bottom = `${coords.bottom}px`
+    } else {
+      this.container.style.bottom = 'initial'
+    }
   }
 
   getDocHeight() {

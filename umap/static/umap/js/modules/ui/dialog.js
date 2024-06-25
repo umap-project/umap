@@ -31,9 +31,14 @@ export default class Dialog {
   open({ className, content, modal } = {}) {
     this.container.innerHTML = ''
     const currentZIndex = this.currentZIndex()
-    if (currentZIndex) this.container.style.zIndex = currentZIndex + 1
-    if (modal) this.container.showModal()
-    else this.container.show()
+    if (currentZIndex) {
+      this.container.style.zIndex = currentZIndex + 1
+    }
+    if (modal) {
+      this.container.showModal()
+    } else {
+      this.container.show()
+    }
     if (className) {
       // Reset
       this.container.className = this.className

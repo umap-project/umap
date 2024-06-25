@@ -12,7 +12,9 @@ export default class Caption {
   }
 
   refresh() {
-    if (!this.isOpen()) return
+    if (!this.isOpen()) {
+      return
+    }
     this.open()
   }
 
@@ -39,10 +41,12 @@ export default class Caption {
   }
 
   addDataLayer(datalayer, container) {
-    if (!datalayer.options.inCaption) return
-    const p = DomUtil.create('p', 'datalayer-legend', container),
-      legend = DomUtil.create('span', '', p),
-      headline = DomUtil.create('strong', '', p)
+    if (!datalayer.options.inCaption) {
+      return
+    }
+    const p = DomUtil.create('p', 'datalayer-legend', container)
+    const legend = DomUtil.create('span', '', p)
+    const headline = DomUtil.create('strong', '', p)
     datalayer.onceLoaded(() => {
       datalayer.renderLegend(legend)
       if (datalayer.options.description) {

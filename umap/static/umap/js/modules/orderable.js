@@ -7,7 +7,9 @@ export default class Orderable {
     this.src = null
     this.dst = null
     this.els = this.parent.querySelectorAll(selector)
-    for (let i = 0; i < this.els.length; i++) this.makeDraggable(this.els[i])
+    for (let i = 0; i < this.els.length; i++) {
+      this.makeDraggable(this.els[i])
+    }
   }
 
   makeDraggable(node) {
@@ -26,7 +28,9 @@ export default class Orderable {
 
   findTarget(node) {
     while (node) {
-      if (this.nodeIndex(node) !== -1) return node
+      if (this.nodeIndex(node) !== -1) {
+        return node
+      }
       node = node.parentNode
     }
   }
@@ -48,7 +52,9 @@ export default class Orderable {
 
   onDragOver(e) {
     DomEvent.stop(e)
-    if (e.preventDefault) e.preventDefault() // Necessary. Allows us to drop.
+    if (e.preventDefault) {
+      e.preventDefault() // Necessary. Allows us to drop.
+    }
     e.dataTransfer.dropEffect = 'move'
     return false
   }
@@ -57,12 +63,17 @@ export default class Orderable {
     DomEvent.stop(e)
     // e.target is the current hover target.
     const dst = this.findTarget(e.target)
-    if (!dst || dst === this.src) return
+    if (!dst || dst === this.src) {
+      return
+    }
     this.dst = dst
-    const targetIndex = this.nodeIndex(this.dst),
-      srcIndex = this.nodeIndex(this.src)
-    if (targetIndex > srcIndex) this.parent.insertBefore(this.dst, this.src)
-    else this.parent.insertBefore(this.src, this.dst)
+    const targetIndex = this.nodeIndex(this.dst)
+    const srcIndex = this.nodeIndex(this.src)
+    if (targetIndex > srcIndex) {
+      this.parent.insertBefore(this.dst, this.src)
+    } else {
+      this.parent.insertBefore(this.src, this.dst)
+    }
   }
 
   onDragLeave(e) {
@@ -71,8 +82,12 @@ export default class Orderable {
 
   onDrop(e) {
     // e.target is current target element.
-    if (e.stopPropagation) e.stopPropagation() // Stops the browser from redirecting.
-    if (!this.dst) return
+    if (e.stopPropagation) {
+      e.stopPropagation() // Stops the browser from redirecting.
+    }
+    if (!this.dst) {
+      return
+    }
     this.onCommit(this.src, this.dst, this.initialIndex, this.nodeIndex(this.src))
     return false
   }

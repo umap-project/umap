@@ -21,7 +21,9 @@ export function generateId() {
  * @returns {boolean}
  */
 export function checkId(string) {
-  if (typeof string !== 'string') return false
+  if (typeof string !== 'string') {
+    return false
+  }
   return /^[A-Za-z0-9]{5}$/.test(string)
 }
 
@@ -63,9 +65,8 @@ export function getImpactsFromSchema(fields, schema) {
 export default function getPurify() {
   if (typeof window === 'undefined') {
     return DOMPurifyInitializer(new global.JSDOM('').window)
-  } else {
-    return DOMPurifyInitializer(window)
   }
+  return DOMPurifyInitializer(window)
 }
 
 export function escapeHTML(s) {
@@ -113,8 +114,10 @@ export function escapeHTML(s) {
 }
 
 export function toHTML(r, options) {
-  if (!r) return ''
-  const target = (options && options.target) || 'blank'
+  if (!r) {
+    return ''
+  }
+  const target = options?.target || 'blank'
 
   // unordered lists
   r = r.replace(/^\*\* (.*)/gm, '<ul><ul><li>$1</li></ul></ul>')
@@ -194,13 +197,21 @@ export function detectFileType(f) {
   if (f.type === 'application/vnd.google-earth.kml+xml' || ext('.kml')) {
     return 'kml'
   }
-  if (ext('.gpx')) return 'gpx'
-  if (ext('.geojson') || ext('.json')) return 'geojson'
+  if (ext('.gpx')) {
+    return 'gpx'
+  }
+  if (ext('.geojson') || ext('.json')) {
+    return 'geojson'
+  }
   if (f.type === 'text/csv' || ext('.csv') || ext('.tsv') || ext('.dsv')) {
     return 'csv'
   }
-  if (ext('.xml') || ext('.osm')) return 'osm'
-  if (ext('.umap')) return 'umap'
+  if (ext('.xml') || ext('.osm')) {
+    return 'osm'
+  }
+  if (ext('.umap')) {
+    return 'umap'
+  }
 }
 
 export function usableOption(options, option) {
@@ -225,12 +236,16 @@ export function greedyTemplate(str, data, ignore) {
     let value = data
     for (let i = 0; i < path.length; i++) {
       value = value[path[i]]
-      if (value === undefined) break
+      if (value === undefined) {
+        break
+      }
     }
     return value
   }
 
-  if (typeof str !== 'string') return ''
+  if (typeof str !== 'string') {
+    return ''
+  }
 
   return str.replace(
     /\{ *([^\{\}/\-]+)(?:\|("[^"]*"))? *\}/g,
@@ -243,14 +258,21 @@ export function greedyTemplate(str, data, ignore) {
       }
       for (let i = 0; i < vars.length; i++) {
         path = vars[i]
-        if (path.startsWith('"') && path.endsWith('"'))
+        if (path.startsWith('"') && path.endsWith('"')) {
           value = path.substring(1, path.length - 1) // static default value.
-        else value = getValue(data, path.split('.'))
-        if (value !== undefined) break
+        } else {
+          value = getValue(data, path.split('.'))
+        }
+        if (value !== undefined) {
+          break
+        }
       }
       if (value === undefined) {
-        if (ignore) value = str
-        else value = ''
+        if (ignore) {
+          value = str
+        } else {
+          value = ''
+        }
       }
       return value
     }
@@ -271,8 +293,8 @@ export function sortFeatures(features, sortKey, lang) {
   const sortKeys = (sortKey || 'name').split(',')
 
   const sort = (a, b, i) => {
-    let sortKey = sortKeys[i],
-      reverse = 1
+    let sortKey = sortKeys[i]
+    let reverse = 1
     if (sortKey[0] === '-') {
       reverse = -1
       sortKey = sortKey.substring(1)
@@ -280,10 +302,16 @@ export function sortFeatures(features, sortKey, lang) {
     let score
     const valA = a.properties[sortKey] || ''
     const valB = b.properties[sortKey] || ''
-    if (!valA) score = -1
-    else if (!valB) score = 1
-    else score = naturalSort(valA, valB, lang)
-    if (score === 0 && sortKeys[i + 1]) return sort(a, b, i + 1)
+    if (!valA) {
+      score = -1
+    } else if (!valB) {
+      score = 1
+    } else {
+      score = naturalSort(valA, valB, lang)
+    }
+    if (score === 0 && sortKeys[i + 1]) {
+      return sort(a, b, i + 1)
+    }
     return score * reverse
   }
 
@@ -298,7 +326,9 @@ export function sortFeatures(features, sortKey, lang) {
 }
 
 export function flattenCoordinates(coords) {
-  while (coords[0] && typeof coords[0][0] !== 'number') coords = coords[0]
+  while (coords[0] && typeof coords[0][0] !== 'number') {
+    coords = coords[0]
+  }
   return coords
 }
 
@@ -315,19 +345,19 @@ export function getBaseUrl() {
 }
 
 export function hasVar(value) {
-  return typeof value === 'string' && value.indexOf('{') != -1
+  return typeof value === 'string' && value.indexOf('{') !== -1
 }
 
 export function isPath(value) {
-  return value && value.length && value.startsWith('/')
+  return value?.length && value.startsWith('/')
 }
 
 export function isRemoteUrl(value) {
-  return value && value.length && value.startsWith('http')
+  return value?.length && value.startsWith('http')
 }
 
 export function isDataImage(value) {
-  return value && value.length && value.startsWith('data:image')
+  return value?.length && value.startsWith('data:image')
 }
 
 /**
@@ -349,15 +379,16 @@ export function normalize(s) {
 
 // Vendorized from leaflet.utils
 // https://github.com/Leaflet/Leaflet/blob/108c6717b70f57c63645498f9bd66b6677758786/src/core/Util.js#L132-L151
-var templateRe = /\{ *([\w_ -]+) *\}/g
+const templateRe = /\{ *([\w_ -]+) *\}/g
 
 export function template(str, data) {
   return str.replace(templateRe, (str, key) => {
-    var value = data[key]
+    let value = data[key]
 
     if (value === undefined) {
-      throw new Error('No value provided for variable ' + str)
-    } else if (typeof value === 'function') {
+      throw new Error(`No value provided for variable ${str}`)
+    }
+    if (typeof value === 'function') {
       value = value(data)
     }
     return value
@@ -371,9 +402,16 @@ export function parseNaiveDate(value) {
 }
 
 export function toggleBadge(element, value) {
-  if (!element.nodeType) element = document.querySelector(element)
-  if (!element) return
+  if (!element.nodeType) {
+    element = document.querySelector(element)
+  }
+  if (!element) {
+    return
+  }
   // True means simple badge, without content
-  if (value) element.dataset.badge = value === true ? ' ' : value
-  else delete element.dataset.badge
+  if (value) {
+    element.dataset.badge = value === true ? ' ' : value
+  } else {
+    delete element.dataset.badge
+  }
 }

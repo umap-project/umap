@@ -17,7 +17,9 @@ export class Panel {
   }
 
   setDefaultMode(mode) {
-    if (!this.mode) this.mode = mode
+    if (!this.mode) {
+      this.mode = mode
+    }
   }
 
   isOpen() {
@@ -46,7 +48,9 @@ export class Panel {
       const element = DomUtil.element({ tagName: 'li', parent: actionsContainer })
       element.appendChild(action)
     }
-    if (className) DomUtil.addClass(body, className)
+    if (className) {
+      DomUtil.addClass(body, className)
+    }
     const promise = new Promise((resolve, reject) => {
       DomUtil.addClass(this.container, 'on')
       resolve()

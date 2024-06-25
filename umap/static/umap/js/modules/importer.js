@@ -179,15 +179,17 @@ export default class Importer {
       this.format === 'umap' || !this.url
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
-    this.qs('#clear').toggleAttribute('hidden', !Boolean(this.layerId))
+    this.qs('#clear').toggleAttribute('hidden', !this.layerId)
   }
 
   onFileChange(e) {
-    let type = '',
-      newType
+    let type = ''
+    let newType
     for (const file of e.target.files) {
       newType = U.Utils.detectFileType(file)
-      if (!type && newType) type = newType
+      if (!type && newType) {
+        type = newType
+      }
       if (type && newType !== type) {
         type = ''
         break
@@ -223,7 +225,9 @@ export default class Importer {
   }
 
   open() {
-    if (!this.container) this.build()
+    if (!this.container) {
+      this.build()
+    }
     const onLoad = this.map.editPanel.open({ content: this.container })
     onLoad.then(() => this.onLoad())
   }
@@ -294,7 +298,9 @@ export default class Importer {
       return false
     }
     const layer = this.layer
-    if (this.clear) layer.empty()
+    if (this.clear) {
+      layer.empty()
+    }
     if (this.files.length) {
       for (const file of this.files) {
         this.map.processFileToImport(file, layer, this.format)

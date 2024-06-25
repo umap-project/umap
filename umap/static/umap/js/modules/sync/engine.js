@@ -23,7 +23,9 @@ export class SyncEngine {
   }
 
   stop() {
-    if (this.transport) this.transport.close()
+    if (this.transport) {
+      this.transport.close()
+    }
     this.transport = undefined
   }
 
@@ -36,7 +38,7 @@ export class SyncEngine {
 
   // This method is called by the transport layer on new messages
   receive({ kind, ...payload }) {
-    if (kind == 'operation') {
+    if (kind === 'operation') {
       const updater = this._getUpdater(payload.subject, payload.metadata)
       updater.applyMessage(payload)
     } else {

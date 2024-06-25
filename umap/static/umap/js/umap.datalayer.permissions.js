@@ -12,7 +12,9 @@ U.DataLayerPermissions = L.Class.extend({
         get: () => isDirty,
         set: (status) => {
           isDirty = status
-          if (status) this.datalayer.isDirty = status
+          if (status) {
+            this.datalayer.isDirty = status
+          }
         },
       })
     } catch (e) {
@@ -26,19 +28,19 @@ U.DataLayerPermissions = L.Class.extend({
 
   edit: function (container) {
     const fields = [
-        [
-          'options.edit_status',
-          {
-            handler: 'IntSelect',
-            label: L._('Who can edit "{layer}"', { layer: this.datalayer.getName() }),
-            selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
-          },
-        ],
+      [
+        'options.edit_status',
+        {
+          handler: 'IntSelect',
+          label: L._('Who can edit "{layer}"', { layer: this.datalayer.getName() }),
+          selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
+        },
       ],
-      builder = new U.FormBuilder(this, fields, {
-        className: 'umap-form datalayer-permissions',
-      }),
-      form = builder.build()
+    ]
+    const builder = new U.FormBuilder(this, fields, {
+      className: 'umap-form datalayer-permissions',
+    })
+    const form = builder.build()
     container.appendChild(form)
   },
 
@@ -49,7 +51,9 @@ U.DataLayerPermissions = L.Class.extend({
     })
   },
   save: async function () {
-    if (!this.isDirty) return this.datalayer.map.continueSaving()
+    if (!this.isDirty) {
+      return this.datalayer.map.continueSaving()
+    }
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
     const [data, response, error] = await this.datalayer.map.server.post(

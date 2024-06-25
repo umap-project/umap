@@ -15,7 +15,9 @@ U.FeatureMixin = {
   onCommit: function () {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
-    if (this.datalayer.isRemoteLayer()) return
+    if (this.datalayer.isRemoteLayer()) {
+      return
+    }
     this.sync.upsert(this.toGeoJSON())
   },
 
@@ -82,7 +84,7 @@ U.FeatureMixin = {
   preInit: () => {},
 
   isReadOnly: function () {
-    return this.datalayer && this.datalayer.isDataReadOnly()
+    return this.datalayer?.isDataReadOnly()
   },
 
   getSlug: function () {
@@ -91,10 +93,11 @@ U.FeatureMixin = {
 
   getPermalink: function () {
     const slug = this.getSlug()
-    if (slug)
+    if (slug) {
       return `${U.Utils.getBaseUrl()}?${U.Utils.buildQueryString({ feature: slug })}${
         window.location.hash
       }`
+    }
   },
 
   view: function (e) {
@@ -139,7 +142,9 @@ U.FeatureMixin = {
   },
 
   edit: function (e) {
-    if (!this.map.editEnabled || this.isReadOnly()) return
+    if (!this.map.editEnabled || this.isReadOnly()) {
+      return
+    }
     const container = L.DomUtil.create('div', 'umap-feature-container')
     L.DomUtil.createTitle(
       container,
@@ -182,7 +187,9 @@ U.FeatureMixin = {
       builder.helpers['properties.name'].input.focus()
     })
     this.map.editedFeature = this
-    if (!this.isOnScreen()) this.zoomTo(e)
+    if (!this.isOnScreen()) {
+      this.zoomTo(e)
+    }
   },
 
   getAdvancedEditActions: function (container) {
@@ -192,7 +199,9 @@ U.FeatureMixin = {
       L._('Delete'),
       function (e) {
         L.DomEvent.stop(e)
-        if (this.confirmDelete()) this.map.editPanel.close()
+        if (this.confirmDelete()) {
+          this.map.editPanel.close()
+        }
       },
       this
     )
@@ -238,19 +247,25 @@ U.FeatureMixin = {
   endEdit: () => {},
 
   getDisplayName: function (fallback) {
-    if (fallback === undefined) fallback = this.datalayer.options.name
+    if (fallback === undefined) {
+      fallback = this.datalayer.options.name
+    }
     const key = this.getOption('labelKey') || 'name'
     // Variables mode.
-    if (U.Utils.hasVar(key))
+    if (U.Utils.hasVar(key)) {
       return U.Utils.greedyTemplate(key, this.extendedProperties())
+    }
     // Simple mode.
     return this.properties[key] || this.properties.title || fallback
   },
 
   hasPopupFooter: function () {
-    if (L.Browser.ielt9) return false
-    if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic)
+    if (L.Browser.ielt9) {
       return false
+    }
+    if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic) {
+      return false
+    }
     return this.map.getOption('displayPopupFooter')
   },
 
@@ -278,7 +293,9 @@ U.FeatureMixin = {
       this.datalayer.removeLayer(this)
       this.disconnectFromDataLayer(this.datalayer)
 
-      if (sync !== false) this.syncDelete()
+      if (sync !== false) {
+        this.syncDelete()
+      }
     }
   },
 
@@ -312,7 +329,7 @@ U.FeatureMixin = {
     // Retrocompat
     if (this.properties._umap_options.clickable === false) {
       this.properties._umap_options.interactive = false
-      delete this.properties._umap_options.clickable
+      this.properties._umap_options.clickable = undefined
     }
   },
 
@@ -345,14 +362,20 @@ U.FeatureMixin = {
     // There is a variable inside.
     if (U.Utils.hasVar(value)) {
       value = U.Utils.greedyTemplate(value, this.properties, true)
-      if (U.Utils.hasVar(value)) value = this.map.getDefaultOption(option)
+      if (U.Utils.hasVar(value)) {
+        value = this.map.getDefaultOption(option)
+      }
     }
     return value
   },
 
   zoomTo: function ({ easing, latlng, callback } = {}) {
-    if (easing === undefined) easing = this.map.getOption('easing')
-    if (callback) this.map.once('moveend', callback.call(this))
+    if (easing === undefined) {
+      easing = this.map.getOption('easing')
+    }
+    if (callback) {
+      this.map.once('moveend', callback.call(this))
+    }
     if (easing) {
       this.map.flyTo(this.getCenter(), this.getBestZoom())
     } else {
@@ -377,7 +400,7 @@ U.FeatureMixin = {
     const properties = L.extend({}, this.properties)
     properties._umap_options = L.extend({}, properties._umap_options)
     if (Object.keys && Object.keys(properties._umap_options).length === 0) {
-      delete properties._umap_options // It can make a difference on big data sets
+      properties._umap_options // It can make a difference on big data sets = undefined // It can make a difference on big data sets
     }
     return properties
   },
@@ -396,7 +419,7 @@ U.FeatureMixin = {
     const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
     geojson.id = this.id
-    delete geojson.properties._storage_options
+    geojson.properties._storage_options = undefined
     return geojson
   },
 
@@ -406,7 +429,9 @@ U.FeatureMixin = {
   },
 
   _onClick: function (e) {
-    if (this.map.measureTools && this.map.measureTools.enabled()) return
+    if (this.map.measureTools?.enabled()) {
+      return
+    }
     this._popupHandlersAdded = true // Prevent leaflet from managing event
     if (!this.map.editEnabled) {
       this.view(e)
@@ -415,8 +440,11 @@ U.FeatureMixin = {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
           this.datalayer.edit(e)
         } else {
-          if (this._toggleEditing) this._toggleEditing(e)
-          else this.edit(e)
+          if (this._toggleEditing) {
+            this._toggleEditing(e)
+          } else {
+            this.edit(e)
+          }
         }
       } else {
         new L.Toolbar.Popup(e.latlng, {
@@ -451,13 +479,14 @@ U.FeatureMixin = {
   getContextMenuItems: function (e) {
     const permalink = this.getPermalink()
     let items = []
-    if (permalink)
+    if (permalink) {
       items.push({
         text: L._('Permalink'),
         callback: () => {
           window.open(permalink)
         },
       })
+    }
     if (this.map.editEnabled && !this.isReadOnly()) {
       items = items.concat(this.getContextMenuEditItems(e))
     }
@@ -468,7 +497,7 @@ U.FeatureMixin = {
     let items = ['-']
     if (this.map.editedFeature !== this) {
       items.push({
-        text: L._('Edit this feature') + ' (⇧+Click)',
+        text: `${L._('Edit this feature')} (⇧+Click)`,
         callback: this.edit,
         context: this,
         iconCls: 'umap-edit',
@@ -505,7 +534,9 @@ U.FeatureMixin = {
   },
 
   resetTooltip: function () {
-    if (!this.hasGeom()) return
+    if (!this.hasGeom()) {
+      return
+    }
     const displayName = this.getDisplayName(null)
     let showLabel = this.getOption('showLabel')
     const oldLabelHover = this.getOption('labelHover')
@@ -515,18 +546,25 @@ U.FeatureMixin = {
       interactive: this.getOption('labelInteractive'),
     }
 
-    if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
+    if (oldLabelHover && showLabel) {
+      showLabel = null // Retrocompat.
+    }
     options.permanent = showLabel === true
     this.unbindTooltip()
-    if ((showLabel === true || showLabel === null) && displayName)
+    if ((showLabel === true || showLabel === null) && displayName) {
       this.bindTooltip(U.Utils.escapeHTML(displayName), options)
+    }
   },
 
   isFiltered: function () {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this.map.browser.options.filter
-    if (filter && !this.matchFilter(filter, filterKeys)) return true
-    if (!this.matchFacets()) return true
+    if (filter && !this.matchFilter(filter, filterKeys)) {
+      return true
+    }
+    if (!this.matchFacets()) {
+      return true
+    }
     return false
   },
 
@@ -537,8 +575,10 @@ U.FeatureMixin = {
     }
     keys = keys.split(',')
     for (let i = 0, value; i < keys.length; i++) {
-      value = (this.properties[keys[i]] || '') + ''
-      if (value.toLowerCase().indexOf(filter) !== -1) return true
+      value = `${this.properties[keys[i]] || ''}`
+      if (value.toLowerCase().indexOf(filter) !== -1) {
+        return true
+      }
     }
     return false
   },
@@ -553,12 +593,18 @@ U.FeatureMixin = {
         case 'date':
         case 'datetime':
         case 'number':
-          if (!isNaN(min) && !isNaN(value) && min > value) return false
-          if (!isNaN(max) && !isNaN(value) && max < value) return false
+          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) {
+            return false
+          }
+          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) {
+            return false
+          }
           break
         default:
           value = value || L._('<empty value>')
-          if (choices?.length && !choices.includes(value)) return false
+          if (choices?.length && !choices.includes(value)) {
+            return false
+          }
           break
       }
     }
@@ -578,8 +624,8 @@ U.FeatureMixin = {
 
   clone: function () {
     const geoJSON = this.toGeoJSON()
-    delete geoJSON.id
-    delete geoJSON.properties.id
+    geoJSON.id = undefined
+    geoJSON.properties.id = undefined
     const layer = this.datalayer.geojsonToFeatures(geoJSON)
     layer.isDirty = true
     layer.edit()
@@ -590,8 +636,12 @@ U.FeatureMixin = {
     // Include context properties
     properties = this.map.getGeoContext()
     const locale = L.getLocale()
-    if (locale) properties.locale = locale
-    if (L.lang) properties.lang = L.lang
+    if (locale) {
+      properties.locale = locale
+    }
+    if (L.lang) {
+      properties.lang = L.lang
+    }
     properties.rank = this.getRank() + 1
     if (this._map && this.hasGeom()) {
       center = this.getCenter()
@@ -638,7 +688,9 @@ U.Marker = L.Marker.extend({
       this
     )
     this.on('editable:drawing:commit', this.onCommit)
-    if (!this.isReadOnly()) this.on('mouseover', this._enableDragging)
+    if (!this.isReadOnly()) {
+      this.on('mouseover', this._enableDragging)
+    }
     this.on('mouseout', this._onMouseOut)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
     this.on('popupopen', this.highlight)
@@ -650,11 +702,7 @@ U.Marker = L.Marker.extend({
   },
 
   _onMouseOut: function () {
-    if (
-      this.dragging &&
-      this.dragging._draggable &&
-      !this.dragging._draggable._moving
-    ) {
+    if (this.dragging?._draggable && !this.dragging._draggable._moving) {
       // Do not disable if the mouse went out while dragging
       this._disableDragging()
     }
@@ -663,7 +711,9 @@ U.Marker = L.Marker.extend({
   _enableDragging: function () {
     // TODO: start dragging after 1 second on mouse down
     if (this.map.editEnabled) {
-      if (!this.editEnabled()) this.enableEdit()
+      if (!this.editEnabled()) {
+        this.enableEdit()
+      }
       // Enabling dragging on the marker override the Draggable._OnDown
       // event, which, as it stopPropagation, refrain the call of
       // _onDown with map-pane element, which is responsible to
@@ -675,14 +725,16 @@ U.Marker = L.Marker.extend({
 
   _disableDragging: function () {
     if (this.map.editEnabled) {
-      if (this.editor && this.editor.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
+      if (this.editor?.drawing) {
+        return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
+      }
       // do not listen to them
       this.disableEdit()
     }
   },
 
   _redraw: function () {
-    if (this.datalayer && this.datalayer.isVisible()) {
+    if (this.datalayer?.isVisible()) {
       this._initIcon()
       this.update()
     }
@@ -697,8 +749,8 @@ U.Marker = L.Marker.extend({
   },
 
   _getTooltipAnchor: function () {
-    const anchor = this.options.icon.options.tooltipAnchor.clone(),
-      direction = this.getOption('labelDirection')
+    const anchor = this.options.icon.options.tooltipAnchor.clone()
+    const direction = this.getOption('labelDirection')
     if (direction === 'left') {
       anchor.x *= -1
     } else if (direction === 'bottom') {
@@ -716,7 +768,9 @@ U.Marker = L.Marker.extend({
   },
 
   _getIconUrl: function (name) {
-    if (typeof name === 'undefined') name = 'icon'
+    if (typeof name === 'undefined') {
+      name = 'icon'
+    }
     return this.getOption(`${name}Url`)
   },
 
@@ -797,7 +851,9 @@ U.PathMixin = {
 
   edit: function (e) {
     if (this.map.editEnabled) {
-      if (!this.editEnabled()) this.enableEdit()
+      if (!this.editEnabled()) {
+        this.enableEdit()
+      }
       U.FeatureMixin.edit.call(this, e)
     }
   },
@@ -847,13 +903,16 @@ U.PathMixin = {
       option = this.styleOptions[idx]
       options[option] = this.getDynamicOption(option)
     }
-    if (options.interactive) this.options.pointerEvents = 'visiblePainted'
-    else this.options.pointerEvents = 'stroke'
+    if (options.interactive) {
+      this.options.pointerEvents = 'visiblePainted'
+    } else {
+      this.options.pointerEvents = 'stroke'
+    }
     this.parentClass.prototype.setStyle.call(this, options)
   },
 
   _redraw: function () {
-    if (this.datalayer && this.datalayer.isVisible()) {
+    if (this.datalayer?.isVisible()) {
       this.setStyle()
       this.resetTooltip()
     }
@@ -867,14 +926,18 @@ U.PathMixin = {
     // this.map.on('showmeasure', this.showMeasureTooltip, this);
     // this.map.on('hidemeasure', this.removeTooltip, this);
     this.parentClass.prototype.onAdd.call(this, map)
-    if (this.editing && this.editing.enabled()) this.editing.addHooks()
+    if (this.editing?.enabled()) {
+      this.editing.addHooks()
+    }
     this.resetTooltip()
   },
 
   onRemove: function (map) {
     // this.map.off('showmeasure', this.showMeasureTooltip, this);
     // this.map.off('hidemeasure', this.removeTooltip, this);
-    if (this.editing && this.editing.enabled()) this.editing.removeHooks()
+    if (this.editing?.enabled()) {
+      this.editing.removeHooks()
+    }
     U.FeatureMixin.onRemove.call(this, map)
   },
 
@@ -896,7 +959,7 @@ U.PathMixin = {
   },
 
   _onMouseOver: function () {
-    if (this.map.measureTools && this.map.measureTools.enabled()) {
+    if (this.map.measureTools?.enabled()) {
       this.map.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this.map.editEnabled && !this.map.editedFeature) {
       this.map.tooltip.open({ content: L._('Click to edit'), anchor: this })
@@ -914,22 +977,32 @@ U.PathMixin = {
   },
 
   _onDrag: function () {
-    if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
+    if (this._tooltip) {
+      this._tooltip.setLatLng(this.getCenter())
+    }
   },
 
   transferShape: function (at, to) {
     const shape = this.enableEdit().deleteShapeAt(at)
     this.disableEdit()
-    if (!shape) return
+    if (!shape) {
+      return
+    }
     to.enableEdit().appendShape(shape)
-    if (!this._latlngs.length || !this._latlngs[0].length) this.del()
+    if (!this._latlngs.length || !this._latlngs[0].length) {
+      this.del()
+    }
   },
 
   isolateShape: function (at) {
-    if (!this.isMulti()) return
+    if (!this.isMulti()) {
+      return
+    }
     const shape = this.enableEdit().deleteShapeAt(at)
     this.disableEdit()
-    if (!shape) return
+    if (!shape) {
+      return
+    }
     const properties = this.cloneProperties()
     const other = new (this instanceof U.Polyline ? U.Polyline : U.Polygon)(
       this.map,
@@ -1033,7 +1106,9 @@ U.PathMixin = {
     } else {
       this.map.fitBounds(this.getBounds(), this.getBestZoom() || this.map.getZoom())
     }
-    if (e.callback) e.callback.call(this)
+    if (e.callback) {
+      e.callback.call(this)
+    }
   },
 }
 
@@ -1103,7 +1178,7 @@ U.Polyline = L.Polyline.extend({
       U.Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
 
-    delete geojson.id // delete the copied id, a new one will be generated.
+    geojson.id // delete the copied id, a new one will be generated. = undefined // delete the copied id, a new one will be generated.
 
     const polygon = this.datalayer.geojsonToFeatures(geojson)
     polygon.edit()
@@ -1142,11 +1217,11 @@ U.Polyline = L.Polyline.extend({
       from.reverse()
       toMerge = [from, to]
     }
-    const a = toMerge[0],
-      b = toMerge[1],
-      p1 = this.map.latLngToContainerPoint(a[a.length - 1]),
-      p2 = this.map.latLngToContainerPoint(b[0]),
-      tolerance = 5 // px on screen
+    const a = toMerge[0]
+    const b = toMerge[1]
+    const p1 = this.map.latLngToContainerPoint(a[a.length - 1])
+    const p2 = this.map.latLngToContainerPoint(b[0])
+    const tolerance = 5 // px on screen
     if (Math.abs(p1.x - p2.x) <= tolerance && Math.abs(p1.y - p2.y) <= tolerance) {
       a.pop()
     }
@@ -1154,14 +1229,20 @@ U.Polyline = L.Polyline.extend({
   },
 
   mergeShapes: function () {
-    if (!this.isMulti()) return
+    if (!this.isMulti()) {
+      return
+    }
     const latlngs = this.getLatLngs()
-    if (!latlngs.length) return
+    if (!latlngs.length) {
+      return
+    }
     while (latlngs.length > 1) {
       latlngs.splice(0, 2, this._mergeShapes(latlngs[1], latlngs[0]))
     }
     this.setLatLngs(latlngs[0])
-    if (!this.editEnabled()) this.edit()
+    if (!this.editEnabled()) {
+      this.edit()
+    }
     this.editor.reset()
     this.isDirty = true
   },
@@ -1171,11 +1252,13 @@ U.Polyline = L.Polyline.extend({
   },
 
   getVertexActions: function (e) {
-    const actions = U.FeatureMixin.getVertexActions.call(this, e),
-      index = e.vertex.getIndex()
-    if (index === 0 || index === e.vertex.getLastIndex())
+    const actions = U.FeatureMixin.getVertexActions.call(this, e)
+    const index = e.vertex.getIndex()
+    if (index === 0 || index === e.vertex.getLastIndex()) {
       actions.push(U.ContinueLineAction)
-    else actions.push(U.SplitLineAction)
+    } else {
+      actions.push(U.SplitLineAction)
+    }
     return actions
   },
 })
@@ -1214,8 +1297,8 @@ U.Polygon = L.Polygon.extend({
   },
 
   getContextMenuEditItems: function (e) {
-    const items = U.PathMixin.getContextMenuEditItems.call(this, e),
-      shape = this.shapeAt(e.latlng)
+    const items = U.PathMixin.getContextMenuEditItems.call(this, e)
+    const shape = this.shapeAt(e.latlng)
     // No multi and no holes.
     if (shape && !this.isMulti() && (L.LineUtil.isFlat(shape) || shape.length === 1)) {
       items.push({
@@ -1238,8 +1321,8 @@ U.Polygon = L.Polygon.extend({
 
   toPolyline: function () {
     const geojson = this.toGeoJSON()
-    delete geojson.id
-    delete geojson.properties.id
+    geojson.id = undefined
+    geojson.properties.id = undefined
     geojson.geometry.type = 'LineString'
     geojson.geometry.coordinates = U.Utils.flattenCoordinates(
       geojson.geometry.coordinates

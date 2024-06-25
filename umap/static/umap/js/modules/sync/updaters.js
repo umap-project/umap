@@ -15,11 +15,15 @@ class BaseUpdater {
     // Reduce the current list of attributes,
     // to find the object to set the property onto
     const objectToSet = parts.reduce((currentObj, part) => {
-      if (currentObj !== undefined && part in currentObj) return currentObj[part]
+      if (currentObj !== undefined && part in currentObj) {
+        return currentObj[part]
+      }
     }, obj)
 
     // In case the given path doesn't exist, stop here
-    if (objectToSet === undefined) return
+    if (objectToSet === undefined) {
+      return
+    }
 
     // Set the value (or delete it)
     if (typeof value === 'undefined') {
@@ -30,7 +34,9 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId) {
-    if (layerId) return this.map.getDataLayerByUmapId(layerId)
+    if (layerId) {
+      return this.map.getDataLayerByUmapId(layerId)
+    }
     return this.map.defaultEditDataLayer()
   }
 
@@ -89,9 +95,10 @@ export class FeatureUpdater extends BaseUpdater {
       console.error(`Unable to find feature with id = ${metadata.id}.`)
     }
     switch (key) {
-      case 'geometry':
+      case 'geometry': {
         const datalayer = this.getDataLayerFromID(metadata.layerId)
         datalayer.geoJSONToLeaflet({ geometry: value, id: metadata.id, feature })
+      }
       default:
         this.updateObjectValue(feature, key, value)
         feature.datalayer.indexProperties(feature)
@@ -104,6 +111,8 @@ export class FeatureUpdater extends BaseUpdater {
     // XXX Distinguish between properties getting deleted
     // and the wole feature getting deleted
     const feature = this.getFeatureFromMetadata(metadata)
-    if (feature) feature.del(false)
+    if (feature) {
+      feature.del(false)
+    }
   }
 }

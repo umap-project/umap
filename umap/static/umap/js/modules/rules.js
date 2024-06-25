@@ -18,7 +18,9 @@ class Rule {
 
   set isDirty(status) {
     this._isDirty = status
-    if (status) this.map.isDirty = status
+    if (status) {
+      this.map.isDirty = status
+    }
   }
 
   constructor(map, condition = '', options = {}) {
@@ -49,7 +51,7 @@ class Rule {
   }
 
   not_equal(other) {
-    return this.expected != other
+    return this.expected !== other
   }
 
   gt(other) {
@@ -71,16 +73,23 @@ class Rule {
         break
       }
     }
-    if (vars.length != 2) return
+    if (vars.length !== 2) {
+      return
+    }
     this.key = vars[0]
     this.expected = vars[1]
-    if (!isNaN(this.expected)) this.cast = Number.parseFloat
-    else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
+    if (!Number.isNaN(this.expected)) {
+      this.cast = Number.parseFloat
+    } else if (['true', 'false'].includes(this.expected)) {
+      this.cast = (v) => !!v
+    }
     this.expected = this.cast(this.expected)
   }
 
   match(props) {
-    if (!this.operator || !this.active) return false
+    if (!this.operator || !this.active) {
+      return false
+    }
     return this.operator(this.cast(props[this.key]))
   }
 
@@ -144,7 +153,9 @@ class Rule {
       remove,
       'click',
       function () {
-        if (!confirm(translate('Are you sure you want to delete this rule?'))) return
+        if (!confirm(translate('Are you sure you want to delete this rule?'))) {
+          return
+        }
         this._delete()
         this.map.editPanel.close()
       },
@@ -161,7 +172,7 @@ class Rule {
   }
 
   _delete() {
-    this.map.rules.rules = this.map.rules.rules.filter((rule) => rule != this)
+    this.map.rules.rules = this.map.rules.rules.filter((rule) => rule !== this)
   }
 }
 
@@ -173,16 +184,20 @@ export default class Rules {
   }
 
   loadRules() {
-    if (!this.map.options.rules?.length) return
+    if (!this.map.options.rules?.length) {
+      return
+    }
     for (const { condition, options } of this.map.options.rules) {
-      if (!condition) continue
+      if (!condition) {
+        continue
+      }
       this.rules.push(new Rule(this.map, condition, options))
     }
   }
 
   onReorder(src, dst, initialIndex, finalIndex) {
-    const moved = this.rules.find((rule) => stamp(rule) == src.dataset.id)
-    const reference = this.rules.find((rule) => stamp(rule) == dst.dataset.id)
+    const moved = this.rules.find((rule) => stamp(rule) === src.dataset.id)
+    const reference = this.rules.find((rule) => stamp(rule) === dst.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
     let referenceIdx = this.rules.indexOf(reference)
     const minIndex = Math.min(movedIdx, referenceIdx)
@@ -190,9 +205,13 @@ export default class Rules {
     moved._delete() // Remove from array
     referenceIdx = this.rules.indexOf(reference)
     let newIdx
-    if (finalIndex === 0) newIdx = 0
-    else if (finalIndex > initialIndex) newIdx = referenceIdx
-    else newIdx = referenceIdx + 1
+    if (finalIndex === 0) {
+      newIdx = 0
+    } else if (finalIndex > initialIndex) {
+      newIdx = referenceIdx
+    } else {
+      newIdx = referenceIdx + 1
+    }
     this.rules.splice(newIdx, 0, moved)
     moved.isDirty = true
     this.map.render(['rules'])
@@ -231,7 +250,9 @@ export default class Rules {
   getOption(option, feature) {
     for (const rule of this.rules) {
       if (rule.match(feature.properties)) {
-        if (Utils.usableOption(rule.options, option)) return rule.options[option]
+        if (Utils.usableOption(rule.options, option)) {
+          return rule.options[option]
+        }
         break
       }
     }

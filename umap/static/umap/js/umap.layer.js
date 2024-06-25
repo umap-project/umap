@@ -67,7 +67,7 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
       },
       iconCreateFunction: (cluster) => new U.Icon.Cluster(datalayer, cluster),
     }
-    if (this.datalayer.options.cluster && this.datalayer.options.cluster.radius) {
+    if (this.datalayer.options.cluster?.radius) {
       options.maxClusterRadius = this.datalayer.options.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
@@ -165,7 +165,9 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
 
   redraw: function () {
     this.computeBreaks()
-    if (this._map) this.eachLayer(this._map.addLayer, this._map)
+    if (this._map) {
+      this.eachLayer(this._map.addLayer, this._map)
+    }
   },
 
   _getValue: function (feature) {
@@ -177,7 +179,9 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
     const values = []
     this.datalayer.eachLayer((layer) => {
       const value = this._getValue(layer)
-      if (!isNaN(value)) values.push(value)
+      if (!Number.isNaN(value)) {
+        values.push(value)
+      }
     })
     return values
   },
@@ -190,9 +194,9 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    let mode = this.datalayer.options.choropleth.mode,
-      classes = +this.datalayer.options.choropleth.classes || 5,
-      breaks
+    const mode = this.datalayer.options.choropleth.mode
+    let classes = +this.datalayer.options.choropleth.classes || 5
+    let breaks
     classes = Math.min(classes, values.length)
     if (mode === 'manual') {
       const manualBreaks = this.datalayer.options.choropleth.breaks
@@ -200,7 +204,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
         breaks = manualBreaks
           .split(',')
           .map((b) => +b)
-          .filter((b) => !isNaN(b))
+          .filter((b) => !Number.isNaN(b))
       }
     } else if (mode === 'equidistant') {
       breaks = ss.equalIntervalBreaks(values, classes)
@@ -219,12 +223,16 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
       .join(',')
     const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     let colorScheme = this.datalayer.options.choropleth.brewer
-    if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
+    if (!colorbrewer[colorScheme]) {
+      colorScheme = 'Blues'
+    }
     this.options.colors = colorbrewer[colorScheme][this.options.breaks.length - 1] || []
   },
 
   getColor: function (feature) {
-    if (!feature) return // FIXME shold not happen
+    if (!feature) {
+      return // FIXME shold not happen
+    }
     const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
     for (let i = 1; i < this.options.breaks.length; i++) {
@@ -243,7 +251,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
   addLayer: function (layer) {
     // Do not add yet the layer to the map
     // wait for datachanged event, so we want compute breaks once
-    var id = this.getLayerId(layer)
+    const id = this.getLayerId(layer)
     this._layers[id] = layer
     return this
   },
@@ -255,17 +263,23 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the breaks if we're dealing with choropleth
-    if (!field.startsWith('options.choropleth')) return
+    if (!field.startsWith('options.choropleth')) {
+      return
+    }
     // If user touches the breaks, then force manual mode
     if (field === 'options.choropleth.breaks') {
       this.datalayer.options.choropleth.mode = 'manual'
-      if (builder) builder.helpers['options.choropleth.mode'].fetch()
+      if (builder) {
+        builder.helpers['options.choropleth.mode'].fetch()
+      }
     }
     this.computeBreaks()
     // If user changes the mode or the number of classes,
     // then update the breaks input value
     if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
-      if (builder) builder.helpers['options.choropleth.breaks'].fetch()
+      if (builder) {
+        builder.helpers['options.choropleth.breaks'].fetch()
+      }
     }
   },
 
@@ -326,7 +340,9 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
 
   renderLegend: function (container) {
     const parent = L.DomUtil.create('ul', '', container)
-    let li, color, label
+    let li
+    let color
+    let label
 
     this.options.breaks.slice(0, -1).forEach((limit, index) => {
       li = L.DomUtil.create('li', '', parent)
@@ -358,12 +374,9 @@ U.Layer.Heat = L.HeatLayer.extend({
 
   addLayer: function (layer) {
     if (layer instanceof L.Marker) {
-      let latlng = layer.getLatLng(),
-        alt
-      if (
-        this.datalayer.options.heat &&
-        this.datalayer.options.heat.intensityProperty
-      ) {
+      let latlng = layer.getLatLng()
+      let alt
+      if (this.datalayer.options.heat?.intensityProperty) {
         alt = Number.parseFloat(
           layer.properties[this.datalayer.options.heat.intensityProperty || 0]
         )
@@ -420,7 +433,9 @@ U.Layer.Heat = L.HeatLayer.extend({
     // setlalngs call _redraw through setAnimFrame, thus async, so this
     // can ends with race condition if we remove the layer very faslty after.
     // TODO: PR in upstream Leaflet.heat
-    if (!this._map) return
+    if (!this._map) {
+      return
+    }
     L.HeatLayer.prototype.redraw.call(this)
   },
 
@@ -430,23 +445,23 @@ U.Layer.Heat = L.HeatLayer.extend({
     if (!this._map) {
       return
     }
-    var data = [],
-      r = this._heat._r,
-      size = this._map.getSize(),
-      bounds = new L.Bounds(L.point([-r, -r]), size.add([r, r])),
-      cellSize = r / 2,
-      grid = [],
-      panePos = this._map._getMapPanePos(),
-      offsetX = panePos.x % cellSize,
-      offsetY = panePos.y % cellSize,
-      i,
-      len,
-      p,
-      cell,
-      x,
-      y,
-      j,
-      len2
+    const data = []
+    const r = this._heat._r
+    const size = this._map.getSize()
+    const bounds = new L.Bounds(L.point([-r, -r]), size.add([r, r]))
+    const cellSize = r / 2
+    const grid = []
+    const panePos = this._map._getMapPanePos()
+    const offsetX = panePos.x % cellSize
+    const offsetY = panePos.y % cellSize
+    let i
+    let len
+    let p
+    let cell
+    let x
+    let y
+    let j
+    let len2
 
     this._max = 1
 
@@ -455,7 +470,7 @@ U.Layer.Heat = L.HeatLayer.extend({
       x = Math.floor((p.x - offsetX) / cellSize) + 2
       y = Math.floor((p.y - offsetY) / cellSize) + 2
 
-      var alt =
+      const alt =
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
@@ -532,13 +547,17 @@ U.DataLayer = L.Evented.extend({
       Object.defineProperty(this, 'isDirty', {
         get: () => isDirty,
         set: (status) => {
-          if (!isDirty && status) this.fire('dirty')
+          if (!isDirty && status) {
+            this.fire('dirty')
+          }
           isDirty = status
           if (status) {
             this.map.addDirtyDatalayer(this)
             // A layer can be made dirty by indirect action (like dragging layers)
             // we need to have it loaded before saving it.
-            if (!this.isLoaded()) this.fetchData()
+            if (!this.isLoaded()) {
+              this.fetchData()
+            }
           } else {
             this.map.removeDirtyDatalayer(this)
             this.isDeleted = false
@@ -552,9 +571,13 @@ U.DataLayer = L.Evented.extend({
       Object.defineProperty(this, 'isDeleted', {
         get: () => isDeleted,
         set: (status) => {
-          if (!isDeleted && status) this.fire('deleted')
+          if (!isDeleted && status) {
+            this.fire('deleted')
+          }
           isDeleted = status
-          if (status) this.isDirty = status
+          if (status) {
+            this.isDirty = status
+          }
         },
       })
     } catch (e) {
@@ -567,19 +590,21 @@ U.DataLayer = L.Evented.extend({
       this.options.remoteData = {}
     }
     // Retrocompat
-    if (this.options.remoteData && this.options.remoteData.from) {
+    if (this.options.remoteData?.from) {
       this.options.fromZoom = this.options.remoteData.from
-      delete this.options.remoteData.from
+      this.options.remoteData.from = undefined
     }
-    if (this.options.remoteData && this.options.remoteData.to) {
+    if (this.options.remoteData?.to) {
       this.options.toZoom = this.options.remoteData.to
-      delete this.options.remoteData.to
+      this.options.remoteData.to = undefined
     }
     this.backupOptions()
     this.connectToMap()
     this.permissions = new U.DataLayerPermissions(this)
     if (!this.umap_id) {
-      if (this.showAtLoad()) this.show()
+      if (this.showAtLoad()) {
+        this.show()
+      }
       this.isDirty = true
     }
 
@@ -589,7 +614,9 @@ U.DataLayer = L.Evented.extend({
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
-    if (this.autoLoaded()) this.map.on('zoomend', this.onZoomEnd, this)
+    if (this.autoLoaded()) {
+      this.map.on('zoomend', this.onZoomEnd, this)
+    }
     this.on('datachanged', this.map.onDataLayersChanged, this.map)
   },
 
@@ -629,13 +656,21 @@ U.DataLayer = L.Evented.extend({
   },
 
   onMoveEnd: function (e) {
-    if (this.isRemoteLayer() && this.showAtZoom()) this.fetchRemoteData()
+    if (this.isRemoteLayer() && this.showAtZoom()) {
+      this.fetchRemoteData()
+    }
   },
 
   onZoomEnd: function (e) {
-    if (this._forcedVisibility) return
-    if (!this.showAtZoom() && this.isVisible()) this.hide()
-    if (this.showAtZoom() && !this.isVisible()) this.show()
+    if (this._forcedVisibility) {
+      return
+    }
+    if (!this.showAtZoom() && this.isVisible()) {
+      this.hide()
+    }
+    if (this.showAtZoom() && !this.isVisible()) {
+      this.show()
+    }
   },
 
   showAtLoad: function () {
@@ -643,7 +678,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   autoLoaded: function () {
-    if (!this.map.datalayersFromQueryString) return this.options.displayOnLoad
+    if (!this.map.datalayersFromQueryString) {
+      return this.options.displayOnLoad
+    }
     const datalayerIds = this.map.datalayersFromQueryString
     let loadMe = datalayerIds.includes(this.umap_id.toString())
     if (this.options.old_id) {
@@ -653,12 +690,16 @@ U.DataLayer = L.Evented.extend({
   },
 
   insertBefore: function (other) {
-    if (!other) return
+    if (!other) {
+      return
+    }
     this.parentPane.insertBefore(this.pane, other.pane)
   },
 
   insertAfter: function (other) {
-    if (!other) return
+    if (!other) {
+      return
+    }
     this.parentPane.insertBefore(this.pane, other.pane.nextSibling)
   },
 
@@ -680,13 +721,19 @@ U.DataLayer = L.Evented.extend({
       return
     }
     const visible = this.isVisible()
-    if (this.layer) this.layer.clearLayers()
+    if (this.layer) {
+      this.layer.clearLayers()
+    }
     // delete this.layer?
-    if (visible) this.map.removeLayer(this.layer)
+    if (visible) {
+      this.map.removeLayer(this.layer)
+    }
     const Class = U.Layer[this.options.type] || U.Layer.Default
     this.layer = new Class(this)
     this.eachLayer(this.showFeature)
-    if (visible) this.show()
+    if (visible) {
+      this.show()
+    }
     this.propagateRemote()
   },
 
@@ -707,8 +754,12 @@ U.DataLayer = L.Evented.extend({
   },
 
   fetchData: async function () {
-    if (!this.umap_id) return
-    if (this._loading) return
+    if (!this.umap_id) {
+      return
+    }
+    if (this._loading) {
+      return
+    }
     this._loading = true
     const [geojson, response, error] = await this.map.server.get(this._dataUrl())
     if (!error) {
@@ -722,7 +773,9 @@ U.DataLayer = L.Evented.extend({
         geojson._umap_options.editMode = this.options.editMode
       }
       // In case of maps pre 1.0 still around
-      if (geojson._storage) geojson._storage.editMode = this.options.editMode
+      if (geojson._storage) {
+        geojson._storage.editMode = this.options.editMode
+      }
       await this.fromUmapGeoJSON(geojson)
       this.backupOptions()
       this.fire('loaded')
@@ -739,10 +792,17 @@ U.DataLayer = L.Evented.extend({
   },
 
   fromUmapGeoJSON: async function (geojson) {
-    if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
-    if (geojson._umap_options) this.setOptions(geojson._umap_options)
-    if (this.isRemoteLayer()) await this.fetchRemoteData()
-    else this.fromGeoJSON(geojson)
+    if (geojson._storage) {
+      geojson._umap_options = geojson._storage // Retrocompat
+    }
+    if (geojson._umap_options) {
+      this.setOptions(geojson._umap_options)
+    }
+    if (this.isRemoteLayer()) {
+      await this.fetchRemoteData()
+    } else {
+      this.fromGeoJSON(geojson)
+    }
     this._loaded = true
   },
 
@@ -772,26 +832,32 @@ U.DataLayer = L.Evented.extend({
   },
 
   showAtZoom: function () {
-    const from = Number.parseInt(this.options.fromZoom, 10),
-      to = Number.parseInt(this.options.toZoom, 10),
-      zoom = this.map.getZoom()
-    return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
+    const from = Number.parseInt(this.options.fromZoom, 10)
+    const to = Number.parseInt(this.options.toZoom, 10)
+    const zoom = this.map.getZoom()
+    return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   },
 
   hasDynamicData: function () {
-    return !!(this.options.remoteData && this.options.remoteData.dynamic)
+    return !!this.options.remoteData?.dynamic
   },
 
   fetchRemoteData: async function (force) {
-    if (!this.isRemoteLayer()) return
-    if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
-    if (!this.isVisible()) return
+    if (!this.isRemoteLayer()) {
+      return
+    }
+    if (!this.hasDynamicData() && this.hasDataLoaded() && !force) {
+      return
+    }
+    if (!this.isVisible()) {
+      return
+    }
     let url = this.map.localizeUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy) {
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
     }
     const response = await this.map.request.get(url)
-    if (response && response.ok) {
+    if (response?.ok) {
       this.clear()
       this.rawToGeoJSON(
         await response.text(),
@@ -802,14 +868,20 @@ U.DataLayer = L.Evented.extend({
   },
 
   onceLoaded: function (callback, context) {
-    if (this.isLoaded()) callback.call(context || this, this)
-    else this.once('loaded', callback, context)
+    if (this.isLoaded()) {
+      callback.call(context || this, this)
+    } else {
+      this.once('loaded', callback, context)
+    }
     return this
   },
 
   onceDataLoaded: function (callback, context) {
-    if (this.hasDataLoaded()) callback.call(context || this, this)
-    else this.once('dataloaded', callback, context)
+    if (this.hasDataLoaded()) {
+      callback.call(context || this, this)
+    } else {
+      this.once('dataloaded', callback, context)
+    }
     return this
   },
 
@@ -823,7 +895,9 @@ U.DataLayer = L.Evented.extend({
 
   setUmapId: function (id) {
     // Datalayer is null when listening creation form
-    if (!this.umap_id && id) this.umap_id = id
+    if (!this.umap_id && id) {
+      this.umap_id = id
+    }
   },
 
   backupOptions: function () {
@@ -835,7 +909,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   setOptions: function (options) {
-    delete options.geojson
+    options.geojson = undefined
     this.options = U.Utils.CopyJSON(U.DataLayer.prototype.options) // Start from fresh.
     this.updateOptions(options)
   },
@@ -849,8 +923,9 @@ U.DataLayer = L.Evented.extend({
     const id = L.stamp(this)
     if (!this.map.datalayers[id]) {
       this.map.datalayers[id] = this
-      if (L.Util.indexOf(this.map.datalayers_index, this) === -1)
+      if (L.Util.indexOf(this.map.datalayers_index, this) === -1) {
         this.map.datalayers_index.push(this)
+      }
       this.map.onDataLayersChanged()
     }
   },
@@ -864,16 +939,14 @@ U.DataLayer = L.Evented.extend({
     })
 
     // No browser cache for owners/editors.
-    if (this.map.hasEditMode()) url = `${url}?${Date.now()}`
+    if (this.map.hasEditMode()) {
+      url = `${url}?${Date.now()}`
+    }
     return url
   },
 
   isRemoteLayer: function () {
-    return Boolean(
-      this.options.remoteData &&
-        this.options.remoteData.url &&
-        this.options.remoteData.format
-    )
+    return Boolean(this.options.remoteData?.url && this.options.remoteData.format)
   },
 
   isClustered: function () {
@@ -881,7 +954,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   showFeature: function (feature) {
-    if (feature.isFiltered()) return
+    if (feature.isFiltered()) {
+      return
+    }
     this.layer.addLayer(feature)
   },
 
@@ -893,7 +968,9 @@ U.DataLayer = L.Evented.extend({
     this.indexProperties(feature)
     this.map.features_index[feature.getSlug()] = feature
     this.showFeature(feature)
-    if (this.hasDataLoaded()) this.fire('datachanged')
+    if (this.hasDataLoaded()) {
+      this.fire('datachanged')
+    }
   },
 
   removeLayer: function (feature) {
@@ -903,24 +980,37 @@ U.DataLayer = L.Evented.extend({
     this._index.splice(this._index.indexOf(id), 1)
     delete this._layers[id]
     delete this.map.features_index[feature.getSlug()]
-    if (this.hasDataLoaded()) this.fire('datachanged')
+    if (this.hasDataLoaded()) {
+      this.fire('datachanged')
+    }
   },
 
   indexProperties: function (feature) {
-    for (const i in feature.properties)
-      if (typeof feature.properties[i] !== 'object') this.indexProperty(i)
+    for (const i in feature.properties) {
+      if (typeof feature.properties[i] !== 'object') {
+        this.indexProperty(i)
+      }
+    }
   },
 
   indexProperty: function (name) {
-    if (!name) return
-    if (name.indexOf('_') === 0) return
-    if (L.Util.indexOf(this._propertiesIndex, name) !== -1) return
+    if (!name) {
+      return
+    }
+    if (name.indexOf('_') === 0) {
+      return
+    }
+    if (L.Util.indexOf(this._propertiesIndex, name) !== -1) {
+      return
+    }
     this._propertiesIndex.push(name)
   },
 
   deindexProperty: function (name) {
     const idx = this._propertiesIndex.indexOf(name)
-    if (idx !== -1) this._propertiesIndex.splice(idx, 1)
+    if (idx !== -1) {
+      this._propertiesIndex.splice(idx, 1)
+    }
   },
 
   addData: function (geojson) {
@@ -960,7 +1050,7 @@ U.DataLayer = L.Evented.extend({
           // csv2geojson fallback to null geometries when it cannot determine
           // lat or lon columns. This is valid geojson, but unwanted from a user
           // point of view.
-          if (result && result.features.length) {
+          if (result?.features.length) {
             if (result.features[0].geometry === null) {
               err = {
                 type: 'Error',
@@ -981,7 +1071,7 @@ U.DataLayer = L.Evented.extend({
             U.Alert.error(message, 10000)
             console.error(err)
           }
-          if (result && result.features.length) {
+          if (result?.features.length) {
             callback(result)
           }
         }
@@ -1015,8 +1105,10 @@ U.DataLayer = L.Evented.extend({
   // It is misleading, as the returned objects are uMap objects, and not
   // GeoJSON features.
   geojsonToFeatures: function (geojson) {
-    if (!geojson) return
-    const features = geojson instanceof Array ? geojson : geojson.features
+    if (!geojson) {
+      return
+    }
+    const features = Array.isArray(geojson) ? geojson : geojson.features
     let i
     let len
 
@@ -1060,12 +1152,17 @@ U.DataLayer = L.Evented.extend({
     id = null,
     feature = null,
   } = {}) {
-    if (!geometry) return // null geometry is valid geojson.
+    if (!geometry) {
+      return // null geometry is valid geojson.
+    }
     const coords = geometry.coordinates
-    let latlng, latlngs
+    let latlng
+    let latlngs
 
     // Create a default geojson if none is provided
-    if (geojson === undefined) geojson = { type: 'Feature', geometry: geometry }
+    if (geojson === undefined) {
+      geojson = { type: 'Feature', geometry: geometry }
+    }
 
     switch (geometry.type) {
       case 'Point':
@@ -1087,7 +1184,9 @@ U.DataLayer = L.Evented.extend({
           coords,
           geometry.type === 'LineString' ? 0 : 1
         )
-        if (!latlngs.length) break
+        if (!latlngs.length) {
+          break
+        }
         if (feature) {
           feature.setLatLngs(latlngs)
           return feature
@@ -1161,7 +1260,7 @@ U.DataLayer = L.Evented.extend({
   importFromUrl: async function (uri, type) {
     uri = this.map.localizeUrl(uri)
     const response = await this.map.request.get(uri)
-    if (response && response.ok) {
+    if (response?.ok) {
       this.importRaw(await response.text(), type)
     }
   },
@@ -1198,7 +1297,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   empty: function () {
-    if (this.isRemoteLayer()) return
+    if (this.isRemoteLayer()) {
+      return
+    }
     this.clear()
     this.isDirty = true
   },
@@ -1206,9 +1307,9 @@ U.DataLayer = L.Evented.extend({
   clone: function () {
     const options = U.Utils.CopyJSON(this.options)
     options.name = L._('Clone of {name}', { name: this.options.name })
-    delete options.id
-    const geojson = U.Utils.CopyJSON(this._geojson),
-      datalayer = this.map.createDataLayer(options)
+    options.id = undefined
+    const geojson = U.Utils.CopyJSON(this._geojson)
+    const datalayer = this.map.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
   },
@@ -1226,12 +1327,14 @@ U.DataLayer = L.Evented.extend({
     this.map.off('zoomend', this.onZoomEnd, this)
     this.off()
     this.clear()
-    delete this._loaded
-    delete this._dataloaded
+    this._loaded = undefined
+    this._dataloaded = undefined
   },
 
   reset: function () {
-    if (!this.umap_id) this.erase()
+    if (!this.umap_id) {
+      this.erase()
+    }
 
     this.resetOptions()
     this.parentPane.appendChild(this.pane)
@@ -1240,15 +1343,20 @@ U.DataLayer = L.Evented.extend({
     }
     this.clear()
     this.hide()
-    if (this.isRemoteLayer()) this.fetchRemoteData()
-    else if (this._geojson_bk) this.fromGeoJSON(this._geojson_bk)
+    if (this.isRemoteLayer()) {
+      this.fetchRemoteData()
+    } else if (this._geojson_bk) {
+      this.fromGeoJSON(this._geojson_bk)
+    }
     this._loaded = true
     this.show()
     this.isDirty = false
   },
 
   redraw: function () {
-    if (!this.isVisible()) return
+    if (!this.isVisible()) {
+      return
+    }
     this.hide()
     this.show()
   },
@@ -1257,28 +1365,28 @@ U.DataLayer = L.Evented.extend({
     if (!this.map.editEnabled || !this.isLoaded()) {
       return
     }
-    const container = L.DomUtil.create('div', 'umap-layer-properties-container'),
-      metadataFields = [
-        'options.name',
-        'options.description',
-        ['options.type', { handler: 'LayerTypeChooser', label: L._('Type of layer') }],
-        ['options.displayOnLoad', { label: L._('Display on load'), handler: 'Switch' }],
-        [
-          'options.browsable',
-          {
-            label: L._('Data is browsable'),
-            handler: 'Switch',
-            helpEntries: 'browsable',
-          },
-        ],
-        [
-          'options.inCaption',
-          {
-            label: L._('Show this layer in the caption'),
-            handler: 'Switch',
-          },
-        ],
-      ]
+    const container = L.DomUtil.create('div', 'umap-layer-properties-container')
+    const metadataFields = [
+      'options.name',
+      'options.description',
+      ['options.type', { handler: 'LayerTypeChooser', label: L._('Type of layer') }],
+      ['options.displayOnLoad', { label: L._('Display on load'), handler: 'Switch' }],
+      [
+        'options.browsable',
+        {
+          label: L._('Data is browsable'),
+          handler: 'Switch',
+          helpEntries: 'browsable',
+        },
+      ],
+      [
+        'options.inCaption',
+        {
+          label: L._('Show this layer in the caption'),
+          handler: 'Switch',
+        },
+      ],
+    ]
     L.DomUtil.createTitle(container, L._('Layer properties'), 'icon-layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
@@ -1406,7 +1514,9 @@ U.DataLayer = L.Evented.extend({
       this
     )
 
-    if (this.map.options.urls.datalayer_versions) this.buildVersionsFieldset(container)
+    if (this.map.options.urls.datalayer_versions) {
+      this.buildVersionsFieldset(container)
+    }
 
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
@@ -1465,21 +1575,25 @@ U.DataLayer = L.Evented.extend({
   },
 
   getOwnOption: function (option) {
-    if (U.Utils.usableOption(this.options, option)) return this.options[option]
+    if (U.Utils.usableOption(this.options, option)) {
+      return this.options[option]
+    }
   },
 
   getOption: function (option, feature) {
-    if (this.layer && this.layer.getOption) {
+    if (this.layer?.getOption) {
       const value = this.layer.getOption(option, feature)
-      if (typeof value !== 'undefined') return value
+      if (typeof value !== 'undefined') {
+        return value
+      }
     }
     if (typeof this.getOwnOption(option) !== 'undefined') {
       return this.getOwnOption(option)
-    } else if (this.layer && this.layer.defaults && this.layer.defaults[option]) {
-      return this.layer.defaults[option]
-    } else {
-      return this.map.getOption(option, feature)
     }
+    if (this.layer?.defaults?.[option]) {
+      return this.layer.defaults[option]
+    }
+    return this.map.getOption(option, feature)
   },
 
   buildVersionsFieldset: async function (container) {
@@ -1503,24 +1617,37 @@ U.DataLayer = L.Evented.extend({
         const [{ versions }, response, error] = await this.map.server.get(
           this.getVersionsUrl()
         )
-        if (!error) versions.forEach(appendVersion)
+        if (!error) {
+          versions.forEach(appendVersion)
+        }
       },
       context: this,
     })
   },
 
   restore: async function (version) {
-    if (!this.map.editEnabled) return
-    if (!confirm(L._('Are you sure you want to restore this version?'))) return
+    if (!this.map.editEnabled) {
+      return
+    }
+    if (!confirm(L._('Are you sure you want to restore this version?'))) {
+      return
+    }
     const [geojson, response, error] = await this.map.server.get(
       this.getVersionUrl(version)
     )
     if (!error) {
-      if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
-      if (geojson._umap_options) this.setOptions(geojson._umap_options)
+      if (geojson._storage) {
+        geojson._umap_options = geojson._storage // Retrocompat.
+      }
+      if (geojson._umap_options) {
+        this.setOptions(geojson._umap_options)
+      }
       this.empty()
-      if (this.isRemoteLayer()) this.fetchRemoteData()
-      else this.addData(geojson)
+      if (this.isRemoteLayer()) {
+        this.fetchRemoteData()
+      } else {
+        this.addData(geojson)
+      }
       this.isDirty = true
     }
   },
@@ -1533,7 +1660,9 @@ U.DataLayer = L.Evented.extend({
 
   show: async function () {
     this.map.addLayer(this.layer)
-    if (!this.isLoaded()) await this.fetchData()
+    if (!this.isLoaded()) {
+      await this.fetchData()
+    }
     this.fire('show')
   },
 
@@ -1546,12 +1675,17 @@ U.DataLayer = L.Evented.extend({
     // From now on, do not try to how/hide
     // automatically this layer.
     this._forcedVisibility = true
-    if (!this.isVisible()) this.show()
-    else this.hide()
+    if (!this.isVisible()) {
+      this.show()
+    } else {
+      this.hide()
+    }
   },
 
   zoomTo: function () {
-    if (!this.isVisible()) return
+    if (!this.isVisible()) {
+      return
+    }
     const bounds = this.layer.getBounds()
     if (bounds.isValid()) {
       const options = { maxZoom: this.getOption('zoomTo') }
@@ -1561,7 +1695,7 @@ U.DataLayer = L.Evented.extend({
 
   // Is this layer type browsable in theorie
   isBrowsable: function () {
-    return this.layer && this.layer.browsable
+    return this.layer?.browsable
   },
 
   // Is this layer browsable in theorie
@@ -1590,7 +1724,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   getFeatureByIndex: function (index) {
-    if (index === -1) index = this._index.length - 1
+    if (index === -1) {
+      index = this._index.length - 1
+    }
     const id = this._index[index]
     return this._layers[id]
   },
@@ -1623,7 +1759,9 @@ U.DataLayer = L.Evented.extend({
     let next
     const index = this.map.datalayers_index
     while (((id = index[++id] ? id : 0), (next = index[id]))) {
-      if (next === this || next.canBrowse()) break
+      if (next === this || next.canBrowse()) {
+        break
+      }
     }
     return next
   },
@@ -1633,7 +1771,9 @@ U.DataLayer = L.Evented.extend({
     let prev
     const index = this.map.datalayers_index
     while (((id = index[--id] ? id : index.length - 1), (prev = index[id]))) {
-      if (prev === this || prev.canBrowse()) break
+      if (prev === this || prev.canBrowse()) {
+        break
+      }
     }
     return prev
   },
@@ -1661,7 +1801,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   save: async function () {
-    if (this.isDeleted) return this.saveDelete()
+    if (this.isDeleted) {
+      return this.saveDelete()
+    }
     if (!this.isLoaded()) {
       return
     }
@@ -1705,7 +1847,7 @@ U.DataLayer = L.Evented.extend({
       if (data.geojson) {
         this.clear()
         this.fromGeoJSON(data.geojson)
-        delete data.geojson
+        data.geojson = undefined
       }
       this._reference_version = response.headers.get('X-Datalayer-Version')
       this.sync.update('_reference_version', this._reference_version)
@@ -1738,7 +1880,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   tableEdit: function () {
-    if (this.isRemoteLayer() || !this.isVisible()) return
+    if (this.isRemoteLayer() || !this.isVisible()) {
+      return
+    }
     const editor = new U.TableEditor(this)
     editor.edit()
   },
@@ -1747,10 +1891,16 @@ U.DataLayer = L.Evented.extend({
     // This keys will be used to filter feature from the browser text input.
     // By default, it will we use the "name" property, which is also the one used as label in the features list.
     // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
-    if (this.map.options.filterKey) return this.map.options.filterKey
-    else if (this.options.labelKey) return this.options.labelKey
-    else if (this.map.options.sortKey) return this.map.options.sortKey
-    else return 'name'
+    if (this.map.options.filterKey) {
+      return this.map.options.filterKey
+    }
+    if (this.options.labelKey) {
+      return this.options.labelKey
+    }
+    if (this.map.options.sortKey) {
+      return this.map.options.sortKey
+    }
+    return 'name'
   },
 })
 

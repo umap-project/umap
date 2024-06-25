@@ -34,11 +34,15 @@ U.Map = L.Map.extend({
     this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
-    if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
+    if (geojson.properties.locale) {
+      L.setLocale(geojson.properties.locale)
+    }
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs
-    if (geojson.properties.lang) L.lang = geojson.properties.lang
+    if (geojson.properties.lang) {
+      L.lang = geojson.properties.lang
+    }
 
     this.setOptionsFromQueryString(geojson.properties)
     // Prevent default creation of controls
@@ -49,10 +53,14 @@ U.Map = L.Map.extend({
 
     L.Map.prototype.initialize.call(this, el, geojson.properties)
 
-    if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
+    if (geojson.properties.schema) {
+      this.overrideSchema(geojson.properties.schema)
+    }
 
     // After calling parent initialize, as we are doing initCenter our-selves
-    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+    if (geojson.geometry) {
+      this.options.center = this.latLng(geojson.geometry)
+    }
     this.urls = new U.URLs(this.options.urls)
 
     this.panel = new U.Panel(this)
@@ -99,16 +107,12 @@ U.Map = L.Map.extend({
     }
 
     // Retrocompat
-    if (
-      this.options.slideshow &&
-      this.options.slideshow.delay &&
-      this.options.slideshow.active === undefined
-    ) {
+    if (this.options.slideshow?.delay && this.options.slideshow.active === undefined) {
       this.options.slideshow.active = true
     }
     if (this.options.advancedFilterKey) {
       this.options.facetKey = this.options.advancedFilterKey
-      delete this.options.advancedFilterKey
+      this.options.advancedFilterKey = undefined
     }
 
     // Global storage for retrieving datalayers and features
@@ -134,14 +138,14 @@ U.Map = L.Map.extend({
       if (!this.options.onLoadPanel) {
         this.options.onLoadPanel = 'caption'
       }
-      delete this.options.displayCaptionOnLoad
+      this.options.displayCaptionOnLoad = undefined
     }
     if (this.options.displayDataBrowserOnLoad) {
       // Retrocompat
       if (!this.options.onLoadPanel) {
         this.options.onLoadPanel = 'databrowser'
       }
-      delete this.options.displayDataBrowserOnLoad
+      this.options.displayDataBrowserOnLoad = undefined
     }
     if (this.options.datalayersControl === 'expanded') {
       this.options.onLoadPanel = 'datalayers'
@@ -165,7 +169,9 @@ U.Map = L.Map.extend({
     this.on(
       'baselayerchange',
       function (e) {
-        if (this._controls.miniMap) this._controls.miniMap.onMainMapBaseLayerChange(e)
+        if (this._controls.miniMap) {
+          this._controls.miniMap.onMainMapBaseLayerChange(e)
+        }
       },
       this
     )
@@ -211,8 +217,10 @@ U.Map = L.Map.extend({
   },
 
   initSyncEngine: async function () {
-    if (this.options.websocketEnabled == false) return
-    if (this.options.syncEnabled != true) {
+    if (this.options.websocketEnabled === false) {
+      return
+    }
+    if (this.options.syncEnabled !== true) {
       this.sync.stop()
     } else {
       const ws_token_uri = this.urls.get('map_websocket_auth_token', {
@@ -278,8 +286,11 @@ U.Map = L.Map.extend({
     for (const [key, schema] of Object.entries(U.SCHEMA)) {
       switch (schema.type) {
         case Boolean:
-          if (schema.nullable) L.Util.setNullableBooleanFromQueryString(options, key)
-          else L.Util.setBooleanFromQueryString(options, key)
+          if (schema.nullable) {
+            L.Util.setNullableBooleanFromQueryString(options, key)
+          } else {
+            L.Util.setBooleanFromQueryString(options, key)
+          }
           break
         case Number:
           L.Util.setNumberFromQueryString(options, key)
@@ -297,7 +308,9 @@ U.Map = L.Map.extend({
   },
 
   setViewFromQueryString: function () {
-    if (this.options.noControl) return
+    if (this.options.noControl) {
+      return
+    }
     this.initCaptionBar()
     if (L.Util.queryString('share')) {
       this.share.open()
@@ -317,9 +330,13 @@ U.Map = L.Map.extend({
     // Comes after default panels, so if it opens in a panel it will
     // take precedence.
     const slug = L.Util.queryString('feature')
-    if (slug && this.features_index[slug]) this.features_index[slug].view()
+    if (slug && this.features_index[slug]) {
+      this.features_index[slug].view()
+    }
     if (L.Util.queryString('edit')) {
-      if (this.hasEditMode()) this.enableEdit()
+      if (this.hasEditMode()) {
+        this.enableEdit()
+      }
       // Sometimes users share the ?edit link by mistake, let's remove
       // this search parameter from URL to prevent this
       const url = new URL(window.location)
@@ -388,7 +405,9 @@ U.Map = L.Map.extend({
     this._controls.search = new U.SearchControl()
     this._controls.embed = new L.Control.Embed(this)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
-    if (this.options.user) this._controls.star = new U.StarControl(this)
+    if (this.options.user) {
+      this._controls.star = new U.StarControl(this)
+    }
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -401,8 +420,11 @@ U.Map = L.Map.extend({
     this._controls.more = new U.MoreControls()
     this._controls.scale = L.control.scale()
     this._controls.permanentCredit = new U.PermanentCreditsControl(this)
-    if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
-    else this.scrollWheelZoom.disable()
+    if (this.options.scrollWheelZoom) {
+      this.scrollWheelZoom.enable()
+    } else {
+      this.scrollWheelZoom.disable()
+    }
     this.browser = new U.Browser(this)
     this.facets = new U.Facets(this)
     this.caption = new U.Caption(this)
@@ -414,16 +436,16 @@ U.Map = L.Map.extend({
   },
 
   renderControls: function () {
-    const hasSlideshow = Boolean(
-      this.options.slideshow && this.options.slideshow.active
-    )
+    const hasSlideshow = Boolean(this.options.slideshow?.active)
     const barEnabled = this.options.captionBar || hasSlideshow
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
     document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
     for (const control of Object.values(this._controls)) {
       this.removeControl(control)
     }
-    if (this.options.noControl) return
+    if (this.options.noControl) {
+      return
+    }
 
     this._controls.attribution = new U.AttributionControl().addTo(this)
     if (this.options.miniMap) {
@@ -444,21 +466,35 @@ U.Map = L.Map.extend({
         }
       })
     }
-    let name, status, control
+    let name
+    let status
+    let control
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
       status = this.getOption(`${name}Control`)
-      if (status === false) continue
+      if (status === false) {
+        continue
+      }
       control = this._controls[name]
-      if (!control) continue
+      if (!control) {
+        continue
+      }
       control.addTo(this)
-      if (status === undefined || status === null)
+      if (status === undefined || status === null) {
         L.DomUtil.addClass(control._container, 'display-on-more')
-      else L.DomUtil.removeClass(control._container, 'display-on-more')
+      } else {
+        L.DomUtil.removeClass(control._container, 'display-on-more')
+      }
     }
-    if (this.getOption('permanentCredit')) this._controls.permanentCredit.addTo(this)
-    if (this.getOption('moreControl')) this._controls.more.addTo(this)
-    if (this.getOption('scaleControl')) this._controls.scale.addTo(this)
+    if (this.getOption('permanentCredit')) {
+      this._controls.permanentCredit.addTo(this)
+    }
+    if (this.getOption('moreControl')) {
+      this._controls.more.addTo(this)
+    }
+    if (this.getOption('scaleControl')) {
+      this._controls.scale.addTo(this)
+    }
     this._controls.tilelayers.setLayers()
   },
 
@@ -474,7 +510,9 @@ U.Map = L.Map.extend({
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
     for (const datalayer of Object.values(this.datalayers)) {
-      if (datalayer.showAtLoad()) await datalayer.show()
+      if (datalayer.showAtLoad()) {
+        await datalayer.show()
+      }
     }
     this.dataloaded = true
     this.fire('dataloaded')
@@ -486,14 +524,18 @@ U.Map = L.Map.extend({
     this.datalayers_index = []
     for (let i = 0; i < panes.children.length; i++) {
       pane = panes.children[i]
-      if (!pane.dataset || !pane.dataset.id) continue
+      if (!pane.dataset || !pane.dataset.id) {
+        continue
+      }
       this.datalayers_index.push(this.datalayers[pane.dataset.id])
     }
     this.onDataLayersChanged()
   },
 
   onDataLayersChanged: function () {
-    if (this.browser) this.browser.update()
+    if (this.browser) {
+      this.browser.update()
+    }
     this.caption.refresh()
   },
 
@@ -557,7 +599,9 @@ U.Map = L.Map.extend({
       }
 
       // From now on, only ctrl/meta shortcut
-      if (!(e.ctrlKey || e.metaKey) || e.shiftKey) return
+      if (!(e.ctrlKey || e.metaKey) || e.shiftKey) {
+        return
+      }
 
       if (e.key === 'f') {
         L.DomEvent.stop(e)
@@ -565,7 +609,9 @@ U.Map = L.Map.extend({
       }
 
       /* Edit mode only shortcuts */
-      if (!this.hasEditMode()) return
+      if (!this.hasEditMode()) {
+        return
+      }
 
       // Edit mode Off
       if (!this.editEnabled) {
@@ -582,13 +628,19 @@ U.Map = L.Map.extend({
       let used = true
       switch (e.key) {
         case 'e':
-          if (!this.isDirty) this.disableEdit()
+          if (!this.isDirty) {
+            this.disableEdit()
+          }
           break
         case 's':
-          if (this.isDirty) this.save()
+          if (this.isDirty) {
+            this.save()
+          }
           break
         case 'z':
-          if (this.isDirty) this.askForReset()
+          if (this.isDirty) {
+            this.askForReset()
+          }
           break
         case 'm':
           this.editTools.startMarker()
@@ -611,7 +663,9 @@ U.Map = L.Map.extend({
         default:
           used = false
       }
-      if (used) L.DomEvent.stop(e)
+      if (used) {
+        L.DomEvent.stop(e)
+      }
     }
     L.DomEvent.addListener(document, 'keydown', globalShortcuts, this)
   },
@@ -629,17 +683,15 @@ U.Map = L.Map.extend({
         this.options.tilelayer.attribution = props.attribution
       }
     }
-    if (
-      this.options.tilelayer &&
-      this.options.tilelayer.url_template &&
-      this.options.tilelayer.attribution
-    ) {
+    if (this.options.tilelayer?.url_template && this.options.tilelayer.attribution) {
       this.customTilelayer = this.createTileLayer(this.options.tilelayer)
       this.selectTileLayer(this.customTilelayer)
     } else {
       this.selectTileLayer(this.tilelayers[0])
     }
-    if (this._controls) this._controls.tilelayers.setLayers()
+    if (this._controls) {
+      this._controls.tilelayers.setLayers()
+    }
   },
 
   createTileLayer: (tilelayer) => new L.TileLayer(tilelayer.url_template, tilelayer),
@@ -656,13 +708,13 @@ U.Map = L.Map.extend({
       }
       this.selected_tilelayer = tilelayer
       if (
-        !isNaN(this.selected_tilelayer.options.minZoom) &&
+        !Number.isNaN(this.selected_tilelayer.options.minZoom) &&
         this.getZoom() < this.selected_tilelayer.options.minZoom
       ) {
         this.setZoom(this.selected_tilelayer.options.minZoom)
       }
       if (
-        !isNaN(this.selected_tilelayer.options.maxZoom) &&
+        !Number.isNaN(this.selected_tilelayer.options.maxZoom) &&
         this.getZoom() > this.selected_tilelayer.options.maxZoom
       ) {
         this.setZoom(this.selected_tilelayer.options.maxZoom)
@@ -683,21 +735,31 @@ U.Map = L.Map.extend({
       // Prevent adding a duplicate background,
       // while adding selected/custom on top of the list
       const url = layer.options.url_template
-      if (urls.indexOf(url) !== -1) return
+      if (urls.indexOf(url) !== -1) {
+        return
+      }
       callback.call(context, layer)
       urls.push(url)
     }
-    if (this.selected_tilelayer) callOne(this.selected_tilelayer)
-    if (this.customTilelayer) callOne(this.customTilelayer)
+    if (this.selected_tilelayer) {
+      callOne(this.selected_tilelayer)
+    }
+    if (this.customTilelayer) {
+      callOne(this.customTilelayer)
+    }
     this.tilelayers.forEach(callOne)
   },
 
   setOverlay: function () {
-    if (!this.options.overlay || !this.options.overlay.url_template) return
+    if (!this.options.overlay || !this.options.overlay.url_template) {
+      return
+    }
     const overlay = this.createTileLayer(this.options.overlay)
     try {
       this.addLayer(overlay)
-      if (this.overlay) this.removeLayer(this.overlay)
+      if (this.overlay) {
+        this.removeLayer(this.overlay)
+      }
       this.overlay = overlay
     } catch (e) {
       this.removeLayer(overlay)
@@ -713,19 +775,25 @@ U.Map = L.Map.extend({
 
   hasData: function () {
     for (const datalayer of this.datalayers_index) {
-      if (datalayer.hasData()) return true
+      if (datalayer.hasData()) {
+        return true
+      }
     }
   },
 
   fitDataBounds: function () {
     const bounds = this.getLayersBounds()
-    if (!this.hasData() || !bounds.isValid()) return false
+    if (!this.hasData() || !bounds.isValid()) {
+      return false
+    }
     this.fitBounds(bounds)
   },
 
   initCenter: function () {
     this._setDefaultCenter()
-    if (this.options.hash) this.addHash()
+    if (this.options.hash) {
+      this.addHash()
+    }
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
@@ -735,7 +803,9 @@ U.Map = L.Map.extend({
       this.onceDataLoaded(this.fitDataBounds)
     } else if (this.options.defaultView === 'latest') {
       this.onceDataLoaded(() => {
-        if (!this.hasData()) return
+        if (!this.hasData()) {
+          return
+        }
         const datalayer = this.firstVisibleDatalayer()
         let feature
         if (datalayer) {
@@ -759,11 +829,16 @@ U.Map = L.Map.extend({
   },
 
   handleLimitBounds: function () {
-    const south = Number.parseFloat(this.options.limitBounds.south),
-      west = Number.parseFloat(this.options.limitBounds.west),
-      north = Number.parseFloat(this.options.limitBounds.north),
-      east = Number.parseFloat(this.options.limitBounds.east)
-    if (!isNaN(south) && !isNaN(west) && !isNaN(north) && !isNaN(east)) {
+    const south = Number.parseFloat(this.options.limitBounds.south)
+    const west = Number.parseFloat(this.options.limitBounds.west)
+    const north = Number.parseFloat(this.options.limitBounds.north)
+    const east = Number.parseFloat(this.options.limitBounds.east)
+    if (
+      !Number.isNaN(south) &&
+      !Number.isNaN(west) &&
+      !Number.isNaN(north) &&
+      !Number.isNaN(east)
+    ) {
       const bounds = L.latLngBounds([
         [south, west],
         [north, east],
@@ -793,7 +868,7 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (options = {}, sync) {
+  createDataLayer: function (options, sync) {
     options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
     const datalayer = new U.DataLayer(this, options, sync)
 
@@ -808,14 +883,18 @@ U.Map = L.Map.extend({
     datalayer.edit()
   },
 
-  getDefaultOption: (option) => U.SCHEMA[option] && U.SCHEMA[option].default,
+  getDefaultOption: (option) => U.SCHEMA[option]?.default,
 
   getOption: function (option, feature) {
     if (feature) {
       const value = this.rules.getOption(option, feature)
-      if (value !== undefined) return value
+      if (value !== undefined) {
+        return value
+      }
     }
-    if (U.Utils.usableOption(this.options, option)) return this.options[option]
+    if (U.Utils.usableOption(this.options, option)) {
+      return this.options[option]
+    }
     return this.getDefaultOption(option)
   },
 
@@ -836,11 +915,12 @@ U.Map = L.Map.extend({
       this.options.tilelayer = tilelayer.toJSON()
       this.isDirty = true
     }
-    if (this._controls.tilelayersChooser)
+    if (this._controls.tilelayersChooser) {
       this._controls.tilelayersChooser.openSwitcher({
         callback: callback,
         className: 'dark',
       })
+    }
   },
 
   toGeoJSON: function () {
@@ -859,7 +939,9 @@ U.Map = L.Map.extend({
 
   eachFeature: function (callback, context) {
     this.eachDataLayer((datalayer) => {
-      if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
+      if (datalayer.isVisible()) {
+        datalayer.eachFeature(callback, context)
+      }
     })
   },
 
@@ -876,14 +958,16 @@ U.Map = L.Map.extend({
     if (type === 'umap') {
       this.importFromFile(file, 'umap')
     } else {
-      if (!layer) layer = this.createDataLayer({ name: file.name })
+      if (!layer) {
+        layer = this.createDataLayer({ name: file.name })
+      }
       layer.importFromFile(file, type)
     }
   },
 
   importFromUrl: async function (uri) {
     const response = await this.request.get(uri)
-    if (response && response.ok) {
+    if (response?.ok) {
       this.importRaw(await response.text())
     }
   },
@@ -896,15 +980,19 @@ U.Map = L.Map.extend({
     for (const option of Object.keys(U.SCHEMA)) {
       if (typeof importedData.properties[option] !== 'undefined') {
         this.options[option] = importedData.properties[option]
-        if (option === 'sortKey') mustReindex = true
+        if (option === 'sortKey') {
+          mustReindex = true
+        }
       }
     }
 
-    if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
+    if (importedData.geometry) {
+      this.options.center = this.latLng(importedData.geometry)
+    }
     importedData.layers.forEach((geojson) => {
       if (!geojson._umap_options && geojson._storage) {
         geojson._umap_options = geojson._storage
-        delete geojson._storage
+        geojson._storage = undefined
       }
       delete geojson._umap_options?.id // Never trust an id at this stage
       const dataLayer = this.createDataLayer(geojson._umap_options)
@@ -915,7 +1003,9 @@ U.Map = L.Map.extend({
     this.renderControls()
     this.handleLimitBounds()
     this.eachDataLayer((datalayer) => {
-      if (mustReindex) datalayer.reindex()
+      if (mustReindex) {
+        datalayer.reindex()
+      }
       datalayer.redraw()
     })
     this.fire('postsync')
@@ -952,7 +1042,9 @@ U.Map = L.Map.extend({
 
   eachDataLayerReverse: function (method, context, filter) {
     for (let i = this.datalayers_index.length - 1; i >= 0; i--) {
-      if (filter && !filter.call(context, this.datalayers_index[i])) continue
+      if (filter && !filter.call(context, this.datalayers_index[i])) {
+        continue
+      }
       method.call(context, this.datalayers_index[i])
     }
   },
@@ -967,8 +1059,9 @@ U.Map = L.Map.extend({
 
   findDataLayer: function (method, context) {
     for (let i = this.datalayers_index.length - 1; i >= 0; i--) {
-      if (method.call(context, this.datalayers_index[i]))
+      if (method.call(context, this.datalayers_index[i])) {
         return this.datalayers_index[i]
+      }
     }
   },
 
@@ -978,11 +1071,15 @@ U.Map = L.Map.extend({
   },
 
   reset: function () {
-    if (this.editTools) this.editTools.stopDrawing()
+    if (this.editTools) {
+      this.editTools.stopDrawing()
+    }
     this.resetOptions()
     this.datalayers_index = [].concat(this._datalayers_index_bk)
     this.dirty_datalayers.slice().forEach((datalayer) => {
-      if (datalayer.isDeleted) datalayer.connectToMap()
+      if (datalayer.isDeleted) {
+        datalayer.connectToMap()
+      }
       datalayer.reset()
     })
     this.ensurePanesOrder()
@@ -1011,8 +1108,11 @@ U.Map = L.Map.extend({
   },
 
   continueSaving: function () {
-    if (this.dirty_datalayers.length) this.dirty_datalayers[0].save()
-    else this.fire('saved')
+    if (this.dirty_datalayers.length) {
+      this.dirty_datalayers[0].save()
+    } else {
+      this.fire('saved')
+    }
   },
 
   exportOptions: function () {
@@ -1085,8 +1185,12 @@ U.Map = L.Map.extend({
   },
 
   save: function () {
-    if (!this.isDirty) return
-    if (this._default_extent) this._setCenterAndZoom()
+    if (!this.isDirty) {
+      return
+    }
+    if (this._default_extent) {
+      this._setCenterAndZoom()
+    }
     this.backup()
     this.once('saved', () => {
       this.isDirty = false
@@ -1126,7 +1230,9 @@ U.Map = L.Map.extend({
 
   firstVisibleDatalayer: function () {
     return this.findDataLayer((datalayer) => {
-      if (datalayer.isVisible()) return true
+      if (datalayer.isVisible()) {
+        return true
+      }
     })
   },
 
@@ -1134,7 +1240,8 @@ U.Map = L.Map.extend({
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
   defaultEditDataLayer: function () {
-    let datalayer, fallback
+    let datalayer
+    let fallback
     datalayer = this.lastUsedDataLayer
     if (
       datalayer &&
@@ -1147,10 +1254,14 @@ U.Map = L.Map.extend({
     datalayer = this.findDataLayer((datalayer) => {
       if (!datalayer.isDataReadOnly() && datalayer.isBrowsable()) {
         fallback = datalayer
-        if (datalayer.isVisible()) return true
+        if (datalayer.isVisible()) {
+          return true
+        }
       }
     })
-    if (datalayer) return datalayer
+    if (datalayer) {
+      return datalayer
+    }
     if (fallback) {
       // No datalayer visible, let's force one
       fallback.show()
@@ -1160,7 +1271,7 @@ U.Map = L.Map.extend({
   },
 
   getDataLayerByUmapId: function (umap_id) {
-    return this.findDataLayer((d) => d.umap_id == umap_id)
+    return this.findDataLayer((d) => d.umap_id === umap_id)
   },
 
   _editControls: function (container) {
@@ -1340,7 +1451,6 @@ U.Map = L.Map.extend({
         'options.overlay.url_template',
         {
           handler: 'BlurInput',
-          helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
           helpText: L._('Background overlay url'),
           type: 'url',
@@ -1522,8 +1632,12 @@ U.Map = L.Map.extend({
   },
 
   editCaption: function () {
-    if (!this.editEnabled) return
-    if (this.options.editMode !== 'advanced') return
+    if (!this.editEnabled) {
+      return
+    }
+    if (this.options.editMode !== 'advanced') {
+      return
+    }
     const container = L.DomUtil.create('div', 'umap-edit-container')
     const metadataFields = ['options.name', 'options.description']
 
@@ -1548,8 +1662,12 @@ U.Map = L.Map.extend({
   },
 
   edit: function () {
-    if (!this.editEnabled) return
-    if (this.options.editMode !== 'advanced') return
+    if (!this.editEnabled) {
+      return
+    }
+    if (this.options.editMode !== 'advanced') {
+      return
+    }
     const container = L.DomUtil.create('div')
     L.DomUtil.createTitle(container, L._('Map advanced properties'), 'icon-settings')
     this._editControls(container)
@@ -1578,7 +1696,9 @@ U.Map = L.Map.extend({
   },
 
   disableEdit: function () {
-    if (this.isDirty) return
+    if (this.isDirty) {
+      return
+    }
     this.drop.disable()
     L.DomUtil.removeClass(document.body, 'umap-edit-enabled')
     this.editedFeature = null
@@ -1599,11 +1719,11 @@ U.Map = L.Map.extend({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-        'div',
-        'umap-caption-bar',
-        this._controlContainer
-      ),
-      name = L.DomUtil.create('h3', '', container)
+      'div',
+      'umap-caption-bar',
+      this._controlContainer
+    )
+    const name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
     if (this.getOption('captionMenus')) {
@@ -1640,7 +1760,9 @@ U.Map = L.Map.extend({
   },
 
   askForReset: function (e) {
-    if (!confirm(L._('Are you sure you want to cancel your changes?'))) return
+    if (!confirm(L._('Are you sure you want to cancel your changes?'))) {
+      return
+    }
     this.reset()
     this.disableEdit()
   },
@@ -1661,7 +1783,9 @@ U.Map = L.Map.extend({
     if (confirm(L._('Are you sure you want to delete this map?'))) {
       const url = this.urls.get('map_delete', { map_id: this.options.umap_id })
       const [data, response, error] = await this.server.post(url)
-      if (data.redirect) window.location = data.redirect
+      if (data.redirect) {
+        window.location = data.redirect
+      }
     }
   },
 
@@ -1671,7 +1795,9 @@ U.Map = L.Map.extend({
     ) {
       const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
       const [data, response, error] = await this.server.post(url)
-      if (data.redirect) window.location = data.redirect
+      if (data.redirect) {
+        window.location = data.redirect
+      }
     }
   },
 
@@ -1715,7 +1841,7 @@ U.Map = L.Map.extend({
         },
       })
     }
-    if (e && e.relatedTarget) {
+    if (e?.relatedTarget) {
       if (e.relatedTarget.getContextMenuItems) {
         items = items.concat(e.relatedTarget.getContextMenuItems(e))
       }
@@ -1812,7 +1938,9 @@ U.Map = L.Map.extend({
       lng: e.latlng.lng,
       zoom: Math.max(this.getZoom(), 16),
     })
-    if (url) window.open(url)
+    if (url) {
+      window.open(url)
+    }
   },
 
   openExternalRouting: function (e) {
@@ -1822,7 +1950,9 @@ U.Map = L.Map.extend({
       locale: L.getLocale(),
       zoom: this.getZoom(),
     })
-    if (url) window.open(url)
+    if (url) {
+      window.open(url)
+    }
   },
 
   getMap: function () {
@@ -1863,17 +1993,23 @@ U.Map = L.Map.extend({
 
   closeInplaceToolbar: function () {
     const toolbar = this._toolbars[L.Toolbar.Popup._toolbar_class_id]
-    if (toolbar) toolbar.remove()
+    if (toolbar) {
+      toolbar.remove()
+    }
   },
 
   search: function () {
-    if (this._controls.search) this._controls.search.open()
+    if (this._controls.search) {
+      this._controls.search.open()
+    }
   },
 
   getLayersBounds: function () {
     const bounds = new L.latLngBounds()
     this.eachBrowsableDataLayer((d) => {
-      if (d.isVisible()) bounds.extend(d.layer.getBounds())
+      if (d.isVisible()) {
+        bounds.extend(d.layer.getBounds())
+      }
     })
     return bounds
   },

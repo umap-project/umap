@@ -65,12 +65,18 @@ export class Importer {
         return
       }
       const outMode = container.querySelector('[name=out-mode]').value
-      if (!tags.startsWith('[')) tags = `[${tags}]`
+      if (!tags.startsWith('[')) {
+        tags = `[${tags}]`
+      }
       let area = '{south},{west},{north},{east}'
-      if (boundary) area = `area:${boundary}`
+      if (boundary) {
+        area = `area:${boundary}`
+      }
       const query = `[out:json];nwr${tags}(${area});out ${outMode};`
       importer.url = `${this.baseUrl}?data=${query}`
-      if (boundary) importer.layerName = boundaryName
+      if (boundary) {
+        importer.layerName = boundaryName
+      }
       importer.format = 'osm'
       importer.dialog.close()
     }

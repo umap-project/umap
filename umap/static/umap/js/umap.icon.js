@@ -12,14 +12,18 @@ U.Icon = L.DivIcon.extend({
     options = L.Util.extend({}, default_options, options)
     L.Icon.prototype.initialize.call(this, options)
     this.feature = this.options.feature
-    if (this.feature && this.feature.isReadOnly()) {
+    if (this.feature?.isReadOnly()) {
       this.options.className += ' readonly'
     }
   },
 
   _setRecent: (url) => {
-    if (U.Utils.hasVar(url)) return
-    if (url === U.SCHEMA.iconUrl.default) return
+    if (U.Utils.hasVar(url)) {
+      return
+    }
+    if (url === U.SCHEMA.iconUrl.default) {
+      return
+    }
     if (U.Icon.RECENT.indexOf(url) === -1) {
       U.Icon.RECENT.push(url)
     }
@@ -27,7 +31,7 @@ U.Icon = L.DivIcon.extend({
 
   _getIconUrl: function (name) {
     let url
-    if (this.feature && this.feature._getIconUrl(name)) {
+    if (this.feature?._getIconUrl(name)) {
       url = this.feature._getIconUrl(name)
       this._setRecent(url)
     } else {
@@ -38,14 +42,20 @@ U.Icon = L.DivIcon.extend({
 
   _getColor: function () {
     let color
-    if (this.feature) color = this.feature.getDynamicOption('color')
-    else if (this.options.color) color = this.options.color
-    else color = this.map.getDefaultOption('color')
+    if (this.feature) {
+      color = this.feature.getDynamicOption('color')
+    } else if (this.options.color) {
+      color = this.options.color
+    } else {
+      color = this.map.getDefaultOption('color')
+    }
     return color
   },
 
   _getOpacity: function () {
-    if (this.feature) return this.feature.getOption('iconOpacity')
+    if (this.feature) {
+      return this.feature.getOption('iconOpacity')
+    }
     return this.map.getDefaultOption('iconOpacity')
   },
 
@@ -70,8 +80,8 @@ U.Icon.Default = U.Icon.extend({
 
   _setIconStyles: function (img, name) {
     U.Icon.prototype._setIconStyles.call(this, img, name)
-    const color = this._getColor(),
-      opacity = this._getOpacity()
+    const color = this._getColor()
+    const opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
     this.elements.arrow.style.borderTopColor = color
     this.elements.container.style.opacity = opacity
@@ -185,10 +195,10 @@ U.Icon.Cluster = L.DivIcon.extend({
   },
 
   createIcon: function () {
-    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster'),
-      div = L.DomUtil.create('div', '', container),
-      span = L.DomUtil.create('span', '', div),
-      backgroundColor = this.datalayer.getColor()
+    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster')
+    const div = L.DomUtil.create('div', '', container)
+    const span = L.DomUtil.create('span', '', div)
+    const backgroundColor = this.datalayer.getColor()
     span.textContent = this.cluster.getChildCount()
     div.style.backgroundColor = backgroundColor
     return container
@@ -197,7 +207,7 @@ U.Icon.Cluster = L.DivIcon.extend({
   computeTextColor: function (el) {
     let color
     const backgroundColor = this.datalayer.getColor()
-    if (this.datalayer.options.cluster && this.datalayer.options.cluster.textColor) {
+    if (this.datalayer.options.cluster?.textColor) {
       color = this.datalayer.options.cluster.textColor
     }
     return color || L.DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
@@ -229,7 +239,9 @@ U.Icon.setIconContrast = (icon, parent, src, bgcolor) => {
    * bgcolor: the background color, used for caching and in case we cannot guess the
    * parent background color
    */
-  if (!icon) return
+  if (!icon) {
+    return
+  }
 
   if (L.DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it

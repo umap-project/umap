@@ -27,11 +27,13 @@ L.Util.copyToClipboard = (textToCopy) => {
 
 L.Util.queryString = (name, fallback) => {
   const decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
-  const qs = window.location.search.slice(1).split('&'),
-    qa = {}
+  const qs = window.location.search.slice(1).split('&')
+  const qa = {}
   for (const i in qs) {
     const key = qs[i].split('=')
-    if (!key) continue
+    if (!key) {
+      continue
+    }
     qa[decode(key[0])] = key[1] ? decode(key[1]) : 1
   }
   return qa[name] || fallback
@@ -44,25 +46,35 @@ L.Util.booleanFromQueryString = (name) => {
 
 L.Util.setFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value
+  if (typeof value !== 'undefined') {
+    options[name] = value
+  }
 }
 
 L.Util.setBooleanFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
+  if (typeof value !== 'undefined') {
+    options[name] = value === '1' || value === 'true'
+  }
 }
 
 L.Util.setNumberFromQueryString = (options, name) => {
   const value = +L.Util.queryString(name)
-  if (!isNaN(value)) options[name] = value
+  if (!Number.isNaN(value)) {
+    options[name] = value
+  }
 }
 
 L.Util.setNullableBooleanFromQueryString = (options, name) => {
   let value = L.Util.queryString(name)
   if (typeof value !== 'undefined') {
-    if (value === 'null') value = null
-    else if (value === '0' || value === 'false') value = false
-    else value = true
+    if (value === 'null') {
+      value = null
+    } else if (value === '0' || value === 'false') {
+      value = false
+    } else {
+      value = true
+    }
     options[name] = value
   }
 }
@@ -83,13 +95,17 @@ L.DomUtil.createFieldset = (container, legend, options) => {
   options = options || {}
   const details = L.DomUtil.create('details', options.className || '', container)
   const summary = L.DomUtil.add('summary', '', details)
-  if (options.icon) L.DomUtil.createIcon(summary, options.icon)
+  if (options.icon) {
+    L.DomUtil.createIcon(summary, options.icon)
+  }
   L.DomUtil.add('span', '', summary, legend)
   const fieldset = L.DomUtil.add('fieldset', '', details)
   details.open = options.on === true
   if (options.callback) {
     L.DomEvent.on(details, 'toggle', () => {
-      if (details.open) options.callback.call(options.context || this)
+      if (details.open) {
+        options.callback.call(options.context || this)
+      }
     })
   }
   return fieldset
@@ -139,7 +155,9 @@ L.DomUtil.createButtonIcon = (parent, className, title, size = 16) => {
 
 L.DomUtil.createTitle = (parent, text, className, tag = 'h3') => {
   const title = L.DomUtil.create(tag, '', parent)
-  if (className) L.DomUtil.createIcon(title, className)
+  if (className) {
+    L.DomUtil.createIcon(title, className)
+  }
   L.DomUtil.add('span', '', title, text)
   return title
 }
@@ -192,8 +210,10 @@ L.DomUtil.after = (target, el) => {
 // convert colour in range 0-255 to the modifier used within luminance calculation
 L.DomUtil.colourMod = (colour) => {
   const sRGB = colour / 255
-  let mod = Math.pow((sRGB + 0.055) / 1.055, 2.4)
-  if (sRGB < 0.03928) mod = sRGB / 12.92
+  let mod = ((sRGB + 0.055) / 1.055) ** 2.4
+  if (sRGB < 0.03928) {
+    mod = sRGB / 12.92
+  }
   return mod
 }
 L.DomUtil.RGBRegex = /rgb *\( *([0-9]{1,3}) *, *([0-9]{1,3}) *, *([0-9]{1,3}) *\)/
@@ -217,18 +237,24 @@ const _CACHE_CONSTRAST = {}
 L.DomUtil.contrastedColor = (el, bgcolor) => {
   // Return 0 for black and 1 for white
   // bgcolor is a human color, it can be a any keyword (purple…)
-  if (typeof _CACHE_CONSTRAST[bgcolor] !== 'undefined') return _CACHE_CONSTRAST[bgcolor]
+  if (typeof _CACHE_CONSTRAST[bgcolor] !== 'undefined') {
+    return _CACHE_CONSTRAST[bgcolor]
+  }
   let out = 0
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
-  if (!rgb || rgb.length !== 4) return out
+  if (!rgb || rgb.length !== 4) {
+    return out
+  }
   rgb = [
     Number.parseInt(rgb[1], 10),
     Number.parseInt(rgb[2], 10),
     Number.parseInt(rgb[3], 10),
   ]
   out = L.DomUtil.contrastWCAG21(rgb)
-  if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
+  if (bgcolor) {
+    _CACHE_CONSTRAST[bgcolor] = out
+  }
   return out
 }
 L.DomEvent.once = (el, types, fn, context) => {
@@ -251,9 +277,9 @@ L.DomEvent.once = (el, types, fn, context) => {
 
 L.LatLng.prototype.isValid = function () {
   return (
-    isFinite(this.lat) &&
+    Number.isFinite(this.lat) &&
     Math.abs(this.lat) <= 90 &&
-    isFinite(this.lng) &&
+    Number.isFinite(this.lng) &&
     Math.abs(this.lng) <= 180
   )
 }
