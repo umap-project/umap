@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
+  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -1505,8 +1505,15 @@ U.Map = L.Map.extend({
       L.DomUtil.createButton(
         'button umap-empty',
         advancedButtons,
-        L._('Empty'),
-        this.empty,
+        L._('Clear data'),
+        this.emptyDataLayers,
+        this
+      )
+      L.DomUtil.createButton(
+        'button umap-empty',
+        advancedButtons,
+        L._('Remove layers'),
+        this.removeDataLayers,
         this
       )
     }
@@ -1515,13 +1522,6 @@ U.Map = L.Map.extend({
       advancedButtons,
       L._('Clone this map'),
       this.clone,
-      this
-    )
-    L.DomUtil.createButton(
-      'button umap-empty',
-      advancedButtons,
-      L._('Delete all layers'),
-      this.empty,
       this
     )
     L.DomUtil.createButton(
@@ -1687,9 +1687,15 @@ U.Map = L.Map.extend({
     }
   },
 
-  empty: function () {
+  removeDataLayers: function () {
     this.eachDataLayerReverse((datalayer) => {
       datalayer._delete()
+    })
+  },
+
+  emptyDataLayers: function () {
+    this.eachDataLayerReverse((datalayer) => {
+      datalayer.empty()
     })
   },
 
