@@ -9,7 +9,7 @@ from rjsmin import jsmin
 class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
     support_js_module_import_aggregation = True
 
-    # We remove `;` at the end of all regexps to match our prettier config.
+    # We remove `;` at the end of all regexps to match our biome config.
     _js_module_import_aggregation_patterns = (
         "*.js",
         (
