@@ -86,8 +86,8 @@ tx_pull:
 jsdir = umap/static/umap/js/
 filepath = "${jsdir}*.js"
 .PHONY: pretty
-pretty: ## Apply PrettierJS to all JS files (or specified `filepath`)
-	./node_modules/prettier/bin-prettier.js --write ${filepath}
+pretty: ## Apply Biome to all JS files (or specified `jsdir`)
+	./node_modules/@biomejs/biome/bin/biome check --write ${jsdir}
 
 .PHONY: lebab
 lebab: ## Convert JS `filepath` to modern syntax with Lebab, then prettify

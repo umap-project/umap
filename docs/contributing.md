@@ -33,7 +33,7 @@ make develop
 
 For JavaScript, here is the tooling we use:
 
-- Format your code with [Prettier](https://prettier.io/)
+- Format your code with [Biome](https://biomejs.dev/)
 - Be sure to configure your editor to insert new lines at the end of files.
 
 ### Hack!
