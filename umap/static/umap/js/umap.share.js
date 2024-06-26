@@ -21,7 +21,8 @@ U.Share = L.Class.extend({
         map.eachFeature((feature) => {
           const row = feature.toGeoJSON().properties
           const center = feature.getCenter()
-          row._umap_options = undefined
+          // biome-ignore lint/performance/noDelete: we do not want the key at all.
+          delete row._umap_options
           row.Latitude = center.lat
           row.Longitude = center.lng
           table.push(row)

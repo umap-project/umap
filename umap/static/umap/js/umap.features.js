@@ -396,7 +396,8 @@ U.FeatureMixin = {
     const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
     geojson.id = this.id
-    geojson.properties._storage_options = undefined
+    // biome-ignore lint/performance/noDelete: we do not want the key at all.
+    delete geojson.properties._storage_options
     return geojson
   },
 
