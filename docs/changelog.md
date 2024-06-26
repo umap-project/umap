@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.4.2 - 2024-06-26
+
+### New features
+* handle multiple dataUrl parameters on map load by @davidbgk in #1943
+
+### Bug fixes
+* fix ajax proxy broken when using overpass URL that includes spaces
+* Distinction between clearing data vs. layers by @davidbgk in #1938
+* better spacing for the alert box, when activated by @almet in #1935
+* rationalize z-indexes in CSS by @davidbgk in #1942
+* Multiple sync-related fixes by @almet in #1936
+
+### Internal changes
+* setup Biome to replace Prettier by @davidbgk in #1939
+* apply Biome safe changes by @davidbgk in #1940
+* apply Biome unsafe changes by @davidbgk in #1944
+
 ## 2.4.1 - 2024-06-24
 
 * fix path disappearing when changing its datalayer by @yohanboniface in #1933
