@@ -116,6 +116,8 @@ U.Map = L.Map.extend({
     // Needed for actions labels
     this.help = new U.Help(this)
 
+    this.formatter = new U.Formatter(this)
+
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()

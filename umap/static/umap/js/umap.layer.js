@@ -792,11 +792,9 @@ U.DataLayer = L.Evented.extend({
     const response = await this.map.request.get(url)
     if (response?.ok) {
       this.clear()
-      this.rawToGeoJSON(
-        await response.text(),
-        this.options.remoteData.format,
-        (geojson) => this.fromGeoJSON(geojson)
-      )
+      await this.map.formatter
+        .parse(await response.text(), this.options.remoteData.format)
+        .then((geojson) => this.fromGeoJSON(geojson))
     }
   },
 
@@ -930,83 +928,6 @@ U.DataLayer = L.Evented.extend({
     }
   },
 
-  addRawData: function (c, type) {
-    this.rawToGeoJSON(c, type, (geojson) => this.addData(geojson))
-  },
-
-  rawToGeoJSON: (c, type, callback) => {
-    const toDom = (x) => {
-      const doc = new DOMParser().parseFromString(x, 'text/xml')
-      const errorNode = doc.querySelector('parsererror')
-      if (errorNode) {
-        U.Alert.error(L._('Cannot parse data'))
-      }
-      return doc
-    }
-
-    // TODO add a duck typing guessType
-    if (type === 'csv') {
-      csv2geojson.csv2geojson(
-        c,
-        {
-          delimiter: 'auto',
-          includeLatLon: false,
-        },
-        (err, result) => {
-          // csv2geojson fallback to null geometries when it cannot determine
-          // lat or lon columns. This is valid geojson, but unwanted from a user
-          // point of view.
-          if (result?.features.length) {
-            if (result.features[0].geometry === null) {
-              err = {
-                type: 'Error',
-                message: L._('Cannot determine latitude and longitude columns.'),
-              }
-            }
-          }
-          if (err) {
-            let message
-            if (err.type === 'Error') {
-              message = err.message
-            } else {
-              message = L._('{count} errors during import: {message}', {
-                count: err.length,
-                message: err[0].message,
-              })
-            }
-            U.Alert.error(message, 10000)
-            console.error(err)
-          }
-          if (result?.features.length) {
-            callback(result)
-          }
-        }
-      )
-    } else if (type === 'gpx') {
-      callback(toGeoJSON.gpx(toDom(c)))
-    } else if (type === 'georss') {
-      callback(GeoRSSToGeoJSON(toDom(c)))
-    } else if (type === 'kml') {
-      callback(toGeoJSON.kml(toDom(c)))
-    } else if (type === 'osm') {
-      let d
-      try {
-        d = JSON.parse(c)
-      } catch (e) {
-        d = toDom(c)
-      }
-      callback(osmtogeojson(d, { flatProperties: true }))
-    } else if (type === 'geojson') {
-      try {
-        const gj = JSON.parse(c)
-        callback(gj)
-      } catch (err) {
-        U.Alert.error(`Invalid JSON file: ${err}`)
-        return
-      }
-    }
-  },
-
   // The choice of the name is not ours, because it is required by Leaflet.
   // It is misleading, as the returned objects are uMap objects, and not
   // GeoJSON features.
@@ -1136,10 +1057,12 @@ U.DataLayer = L.Evented.extend({
     return new U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this }, id)
   },
 
-  importRaw: function (raw, type) {
-    this.addRawData(raw, type)
+  importRaw: async function (raw, format) {
+    await this.map.formatter
+      .parse(raw, format)
+      .then((geojson) => this.addData(geojson))
+      .then(() => this.zoomTo())
     this.isDirty = true
-    this.zoomTo()
   },
 
   importFromFiles: function (files, type) {

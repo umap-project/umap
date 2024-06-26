@@ -37,6 +37,8 @@
   },
   "homepage": "http://wiki.openstreetmap.org/wiki/UMap",
   "dependencies": {
+    "@dwayneparton/geojson-to-gpx": "^0.2.0",
+    "@placemarkio/tokml": "^0.3.3",
     "@tmcw/togeojson": "^5.8.0",
     "colorbrewer": "^1.5.6",
     "csv2geojson": "5.1.1",
@@ -62,9 +64,7 @@
     "leaflet.path.drag": "0.0.6",
     "leaflet.photon": "0.9.1",
     "osmtogeojson": "^3.0.0-beta.3",
-    "simple-statistics": "^7.8.3",
-    "togpx": "^0.5.4",
-    "tokml": "0.4.0"
+    "simple-statistics": "^7.8.3"
   },
   "browserslist": [
     "> 0.5%, last 2 versions, Firefox ESR, not dead, not op_mini all"
