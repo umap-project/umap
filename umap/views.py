@@ -11,7 +11,7 @@ from io import BytesIO
 from pathlib import Path
 from smtplib import SMTPException
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, quote_plus, urlparse
+from urllib.parse import quote_plus, urlparse
 from urllib.request import Request, build_opener
 
 from django.conf import settings
@@ -403,13 +403,14 @@ class AjaxProxy(View):
             ttl = None
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
-            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{quote(url)}"
+            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{quote_plus(url)}"
             if ttl:
                 response["X-Accel-Expires"] = ttl
             return response
 
         # You should not use this in production (use Nginx or so)
         headers = {"User-Agent": "uMapProxy +http://wiki.openstreetmap.org/wiki/UMap"}
+        url = url.replace(" ", "+")
         request = Request(url, headers=headers)
         opener = build_opener()
         try:
