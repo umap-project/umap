@@ -21,6 +21,21 @@ GEOJSON = {
         }
     ],
 }
+GEOJSON2 = {
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Montmorency Falls",
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-71.14, 46.89],
+            },
+        }
+    ],
+}
 CSV = "name,latitude,longitude\nNiagara Falls,43.08,-79.04"
 
 
@@ -43,10 +58,29 @@ def test_map_preview_can_load_remote_geojson(page, live_server, tilelayer):
     expect(markers).to_have_count(1)
 
 
+def test_map_preview_can_load_mutiple_remote_geojson(page, live_server, tilelayer):
+    def handle(route):
+        if "2" in route.request.url:
+            route.fulfill(json=GEOJSON2)
+        else:
+            route.fulfill(json=GEOJSON)
+
+    # Intercept the route to the proxy
+    page.route("*/**/ajax-proxy/**", handle)
+
+    page.goto(
+        (
+            f"{live_server.url}/map/?"
+            "dataUrl=http://some.org/geo.json&dataUrl=http://some.org/geo2.json"
+        )
+    )
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(2)
+
+
 def test_map_preview_can_load_remote_csv(page, live_server, tilelayer):
     def handle(route):
-        csv = """name,latitude,longitude\nNiagara Falls,43.08,-79.04"""
-        route.fulfill(body=csv)
+        route.fulfill(body=CSV)
 
     # Intercept the route to the proxy
     page.route("*/**/ajax-proxy/**", handle)

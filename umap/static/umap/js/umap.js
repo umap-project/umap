@@ -175,14 +175,17 @@ U.Map = L.Map.extend({
       this._default_extent = true
       this.options.name = L._('Untitled map')
       let data = L.Util.queryString('data', null)
-      let dataUrl = L.Util.queryString('dataUrl', null)
+      const url = new URL(window.location.href)
+      const dataUrls = new URLSearchParams(url.search).getAll('dataUrl')
       const dataFormat = L.Util.queryString('dataFormat', 'geojson')
-      if (dataUrl) {
-        dataUrl = decodeURIComponent(dataUrl)
-        dataUrl = this.localizeUrl(dataUrl)
-        dataUrl = this.proxyUrl(dataUrl)
-        const datalayer = this.createDataLayer()
-        datalayer.importFromUrl(dataUrl, dataFormat)
+      if (dataUrls.length) {
+        for (let dataUrl of dataUrls) {
+          dataUrl = decodeURIComponent(dataUrl)
+          dataUrl = this.localizeUrl(dataUrl)
+          dataUrl = this.proxyUrl(dataUrl)
+          const datalayer = this.createDataLayer()
+          datalayer.importFromUrl(dataUrl, dataFormat)
+        }
       } else if (data) {
         data = decodeURIComponent(data)
         const datalayer = this.createDataLayer()
