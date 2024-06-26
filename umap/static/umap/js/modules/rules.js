@@ -74,7 +74,8 @@ class Rule {
     if (vars.length !== 2) return
     this.key = vars[0]
     this.expected = vars[1]
-    if (!Number.isNaN(this.expected)) this.cast = Number.parseFloat
+    // biome-ignore lint/suspicious/noGlobalIsNan: expected might not be a number.
+    if (!isNaN(this.expected)) this.cast = Number.parseFloat
     else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
     this.expected = this.cast(this.expected)
   }
