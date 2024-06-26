@@ -568,11 +568,11 @@ U.DataLayer = L.Evented.extend({
     // Retrocompat
     if (this.options.remoteData?.from) {
       this.options.fromZoom = this.options.remoteData.from
-      this.options.remoteData.from = undefined
+      delete this.options.remoteData.from
     }
     if (this.options.remoteData?.to) {
       this.options.toZoom = this.options.remoteData.to
-      this.options.remoteData.to = undefined
+      delete this.options.remoteData.to
     }
     this.backupOptions()
     this.connectToMap()
@@ -834,7 +834,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   setOptions: function (options) {
-    options.geojson = undefined
+    delete options.geojson
     this.options = U.Utils.CopyJSON(U.DataLayer.prototype.options) // Start from fresh.
     this.updateOptions(options)
   },
@@ -1202,7 +1202,7 @@ U.DataLayer = L.Evented.extend({
   clone: function () {
     const options = U.Utils.CopyJSON(this.options)
     options.name = L._('Clone of {name}', { name: this.options.name })
-    options.id = undefined
+    delete options.id
     const geojson = U.Utils.CopyJSON(this._geojson)
     const datalayer = this.map.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
@@ -1222,8 +1222,8 @@ U.DataLayer = L.Evented.extend({
     this.map.off('zoomend', this.onZoomEnd, this)
     this.off()
     this.clear()
-    this._loaded = undefined
-    this._dataloaded = undefined
+    delete this._loaded
+    delete this._dataloaded
   },
 
   reset: function () {
@@ -1701,7 +1701,7 @@ U.DataLayer = L.Evented.extend({
       if (data.geojson) {
         this.clear()
         this.fromGeoJSON(data.geojson)
-        data.geojson = undefined
+        delete data.geojson
       }
       this._reference_version = response.headers.get('X-Datalayer-Version')
       this.sync.update('_reference_version', this._reference_version)

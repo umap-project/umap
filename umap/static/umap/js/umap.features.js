@@ -312,7 +312,7 @@ U.FeatureMixin = {
     // Retrocompat
     if (this.properties._umap_options.clickable === false) {
       this.properties._umap_options.interactive = false
-      this.properties._umap_options.clickable = undefined
+      delete this.properties._umap_options.clickable
     }
   },
 
@@ -377,7 +377,7 @@ U.FeatureMixin = {
     const properties = L.extend({}, this.properties)
     properties._umap_options = L.extend({}, properties._umap_options)
     if (Object.keys && Object.keys(properties._umap_options).length === 0) {
-      properties._umap_options = undefined // It can make a difference on big data sets
+      delete properties._umap_options // It can make a difference on big data sets
     }
     return properties
   },
@@ -396,7 +396,6 @@ U.FeatureMixin = {
     const geojson = this.parentClass.prototype.toGeoJSON.call(this)
     geojson.properties = this.cloneProperties()
     geojson.id = this.id
-    // biome-ignore lint/performance/noDelete: we do not want the key at all.
     delete geojson.properties._storage_options
     return geojson
   },
@@ -579,8 +578,8 @@ U.FeatureMixin = {
 
   clone: function () {
     const geoJSON = this.toGeoJSON()
-    geoJSON.id = undefined
-    geoJSON.properties.id = undefined
+    delete geoJSON.id
+    delete geoJSON.properties.id
     const layer = this.datalayer.geojsonToFeatures(geoJSON)
     layer.isDirty = true
     layer.edit()
@@ -1100,7 +1099,7 @@ U.Polyline = L.Polyline.extend({
       U.Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
 
-    geojson.id = undefined // delete the copied id, a new one will be generated.
+    delete geojson.id // delete the copied id, a new one will be generated.
 
     const polygon = this.datalayer.geojsonToFeatures(geojson)
     polygon.edit()
@@ -1235,8 +1234,8 @@ U.Polygon = L.Polygon.extend({
 
   toPolyline: function () {
     const geojson = this.toGeoJSON()
-    geojson.id = undefined
-    geojson.properties.id = undefined
+    delete geojson.id
+    delete geojson.properties.id
     geojson.geometry.type = 'LineString'
     geojson.geometry.coordinates = U.Utils.flattenCoordinates(
       geojson.geometry.coordinates

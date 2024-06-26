@@ -1133,7 +1133,7 @@ U.FormBuilder = L.FormBuilder.extend({
         }
       }
       // FormBuilder use this key for the input type itself
-      schema.type = undefined
+      delete schema.type
       this.defaultOptions[key] = schema
     }
   },

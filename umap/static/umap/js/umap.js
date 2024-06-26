@@ -104,7 +104,7 @@ U.Map = L.Map.extend({
     }
     if (this.options.advancedFilterKey) {
       this.options.facetKey = this.options.advancedFilterKey
-      this.options.advancedFilterKey = undefined
+      delete this.options.advancedFilterKey
     }
 
     // Global storage for retrieving datalayers and features
@@ -130,14 +130,14 @@ U.Map = L.Map.extend({
       if (!this.options.onLoadPanel) {
         this.options.onLoadPanel = 'caption'
       }
-      this.options.displayCaptionOnLoad = undefined
+      delete this.options.displayCaptionOnLoad
     }
     if (this.options.displayDataBrowserOnLoad) {
       // Retrocompat
       if (!this.options.onLoadPanel) {
         this.options.onLoadPanel = 'databrowser'
       }
-      this.options.displayDataBrowserOnLoad = undefined
+      delete this.options.displayDataBrowserOnLoad
     }
     if (this.options.datalayersControl === 'expanded') {
       this.options.onLoadPanel = 'datalayers'
@@ -901,7 +901,7 @@ U.Map = L.Map.extend({
     importedData.layers.forEach((geojson) => {
       if (!geojson._umap_options && geojson._storage) {
         geojson._umap_options = geojson._storage
-        geojson._storage = undefined
+        delete geojson._storage
       }
       delete geojson._umap_options?.id // Never trust an id at this stage
       const dataLayer = this.createDataLayer(geojson._umap_options)

@@ -15,6 +15,9 @@
       "style": {
         "useBlockStatements": "off",
         "noShoutyConstants": "warn"
+      },
+      "performance": {
+        "noDelete": "off"
       }
     }
   },

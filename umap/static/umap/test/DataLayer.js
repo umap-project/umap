@@ -316,7 +316,7 @@ describe('U.DataLayer', () => {
       let icon = qs('div.umap-div-icon .icon_container')
       poly.properties.mycolor = 'DarkGoldenRod'
       marker.properties.mycolor = 'DarkRed'
-      marker.properties._umap_options.color = undefined
+      delete marker.properties._umap_options.color
       assert.notOk(qs('path[fill="DarkGoldenRod"]'))
       assert.equal(icon.style.backgroundColor, 'olivedrab')
       datalayer.options.color = '{mycolor}'

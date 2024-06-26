@@ -21,7 +21,6 @@ U.Share = L.Class.extend({
         map.eachFeature((feature) => {
           const row = feature.toGeoJSON().properties
           const center = feature.getCenter()
-          // biome-ignore lint/performance/noDelete: we do not want the key at all.
           delete row._umap_options
           row.Latitude = center.lat
           row.Longitude = center.lng
@@ -225,7 +224,7 @@ U.IframeExporter = L.Evented.extend({
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
     } else {
-      this.queryString.feature = undefined
+      delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
       this.map.eachDataLayer((datalayer) => {
@@ -235,7 +234,7 @@ U.IframeExporter = L.Evented.extend({
       })
       this.queryString.datalayers = datalayers.join(',')
     } else {
-      this.queryString.datalayers = undefined
+      delete this.queryString.datalayers
     }
     const currentView = this.options.currentView ? window.location.hash : ''
     const queryString = L.extend({}, this.queryString, options)
