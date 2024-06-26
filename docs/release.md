@@ -9,6 +9,8 @@
 
 ## How to make a release
 
+1. Make sure JS packages are up to date:
+    - `make installjs vendors``
 1. Run tests:
     - `make test`
 1. I18N
