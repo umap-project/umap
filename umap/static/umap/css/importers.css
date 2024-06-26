@@ -11,6 +11,7 @@
     border: none;
     width: initial;
     display: inline-block;
+    line-height: 1rem;
 }
 .importer h3:before {
     background-image: url(../img/importers/random.svg);
@@ -32,6 +33,7 @@
     width: 100%;
     height: 50px;
     display: block;
+    margin-bottom: var(--gutter);
 }
 .importer.geodatamine h3:before,
 .importers ul .geodatamine:before {
