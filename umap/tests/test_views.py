@@ -122,7 +122,7 @@ def test_valid_proxy_request_with_invalid_ttl(client):
 
 def test_invalid_proxy_url_should_return_400(client):
     url = reverse("ajax-proxy")
-    params = {"url": "http://example.org/a space is invalid"}
+    params = {"url": "http://example.org/a\ncarriage\r\nreturn is invalid"}
     headers = {
         "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
         "HTTP_REFERER": settings.SITE_URL,
@@ -144,7 +144,7 @@ def test_valid_proxy_request_with_x_accel_redirect(client, settings):
     assert "X-Accel-Redirect" in response.headers
     assert (
         response["X-Accel-Redirect"]
-        == "/proxy/http%3A//example.org%3Ffoo%3Dbar%26bar%3Dfoo"
+        == "/proxy/http%3A%2F%2Fexample.org%3Ffoo%3Dbar%26bar%3Dfoo"
     )
     assert "X-Accel-Expires" in response.headers
     assert response["X-Accel-Expires"] == "300"
