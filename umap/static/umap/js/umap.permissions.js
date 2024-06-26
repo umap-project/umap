@@ -116,7 +116,7 @@ U.MapPermissions = L.Class.extend({
         L._('Advanced actions')
       )
       const advancedButtons = L.DomUtil.create('div', 'button-bar', advancedActions)
-      const download = L.DomUtil.createButton(
+      L.DomUtil.createButton(
         'button',
         advancedButtons,
         L._('Attach the map to my account'),
