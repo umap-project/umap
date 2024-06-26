@@ -74,6 +74,10 @@ class Rule {
     if (vars.length !== 2) return
     this.key = vars[0]
     this.expected = vars[1]
+    // Special cases where we want to be lousy when checking isNaN without
+    // coercing to a Number first because we handle multiple types.
+    // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+    // Reference/Global_Objects/Number/isNaN
     // biome-ignore lint/suspicious/noGlobalIsNan: expected might not be a number.
     if (!isNaN(this.expected)) this.cast = Number.parseFloat
     else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
