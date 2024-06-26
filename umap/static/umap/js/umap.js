@@ -1338,8 +1338,9 @@ U.Map = L.Map.extend({
         'options.overlay.url_template',
         {
           handler: 'BlurInput',
+          helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
-          helpText: L._('Background overlay url'),
+          label: L._('Background overlay url'),
           type: 'url',
         },
       ],
