@@ -1,22 +1,22 @@
 U.Share = L.Class.extend({
   EXPORT_TYPES: {
     geojson: {
-      formatter: (map) => JSON.stringify(map.toGeoJSON(), null, 2),
+      formatter: async (map) => JSON.stringify(map.toGeoJSON(), null, 2),
       ext: '.geojson',
       filetype: 'application/json',
     },
     gpx: {
-      formatter: (map) => togpx(map.toGeoJSON()),
+      formatter: async (map) => await map.formatter.toGPX(map.toGeoJSON()),
       ext: '.gpx',
       filetype: 'application/gpx+xml',
     },
     kml: {
-      formatter: (map) => tokml(map.toGeoJSON()),
+      formatter: async (map) => await map.formatter.toKML(map.toGeoJSON()),
       ext: '.kml',
       filetype: 'application/vnd.google-earth.kml+xml',
     },
     csv: {
-      formatter: (map) => {
+      formatter: async (map) => {
         const table = []
         map.eachFeature((feature) => {
           const row = feature.toGeoJSON().properties
@@ -156,17 +156,17 @@ U.Share = L.Class.extend({
     this.map.panel.open({ content: this.container })
   },
 
-  format: function (mode) {
+  format: async function (mode) {
     const type = this.EXPORT_TYPES[mode]
-    const content = type.formatter(this.map)
+    const content = await type.formatter(this.map)
     let name = this.map.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
     const filename = name + type.ext
     return { content, filetype: type.filetype, filename }
   },
 
-  download: function (mode) {
-    const { content, filetype, filename } = this.format(mode)
+  download: async function (mode) {
+    const { content, filetype, filename } = await this.format(mode)
     const blob = new Blob([content], { type: filetype })
     window.URL = window.URL || window.webkitURL
     const el = document.createElement('a')

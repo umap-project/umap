@@ -7,6 +7,7 @@ import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
 import Facets from './facets.js'
+import Formatter from './formatter.js'
 import Help from './help.js'
 import Importer from './importer.js'
 import Orderable from './orderable.js'
@@ -35,6 +36,7 @@ window.U = {
   Dialog,
   EditPanel,
   Facets,
+  Formatter,
   FullPanel,
   Help,
   HTTPError,
