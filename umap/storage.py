@@ -32,7 +32,7 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
                 'import"%(url)s"\n',
             ),
             (
-                r"""(?P<matched>import\(["'](?P<url>.*?)["']\))""",
+                r"""(?P<matched>import\(["'](?P<url>.*?)["']\))\.then""",
                 """import("%(url)s")""",
             ),
         ),
