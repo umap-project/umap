@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Задайте адрес для открытия его в новом окне по клику на полигон.",
     "define": "Задать",
     "Delay between two transitions when in play mode": "Задержка между двумя переходами в режиме проигрывания",
-    "Delete all layers": "Удалить все слои",
     "Delete layer": "Удалить слой",
     "Delete this feature": "Удалить объект",
     "Delete this property on all the features": "Удалить это свойство у всех объектов",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

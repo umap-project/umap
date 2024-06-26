@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Дефинишите везу за отварање у новом прозору на клику полигона.",
     "define": "дефиниши",
     "Delay between two transitions when in play mode": "Одгода између два прелаза у режиму репродукције",
-    "Delete all layers": "Обриши све лејере",
     "Delete layer": "Обриши лејер",
     "Delete this feature": "Обриши елемент",
     "Delete this property on all the features": "Обриши наведени ентитет на свим функцијама",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

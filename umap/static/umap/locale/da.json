@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Definer link der åbnes i et nyt vindue ved klik på polygon.",
     "define": "definer",
     "Delay between two transitions when in play mode": "Forsinkelse mellem to transitioner, når i afspilningstilstand",
-    "Delete all layers": "Slet alle lag",
     "Delete layer": "Slet lag",
     "Delete this feature": "Slet dette objekt",
     "Delete this property on all the features": "Slet denne egenskab på alle objekter",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

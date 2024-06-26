@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Définit un lien à ouvrir dans une nouvelle fenêtre au clic sur le polygone.",
     "define": "définir",
     "Delay between two transitions when in play mode": "Délai entre les transitions en mode lecture",
-    "Delete all layers": "Supprimer tous les calques",
     "Delete layer": "Supprimer le calque",
     "Delete this feature": "Supprimer cet élément",
     "Delete this property on all the features": "Supprimer cette propriété",
@@ -482,5 +481,8 @@
     "Search area": "Chercher un coin",
     "Type area name, or let empty to load data in current map view": "Entrer le nom d'un périmètre géographique, ou laisser vide pour utiliser la vue courante de la carte",
     "Please define an expression for the query first": "Définir une expression pour la requête",
-    "Data successfully imported!": "Les données ont été importées!"
+    "Data successfully imported!": "Les données ont été importées!",
+    "My Dashboard ({username})": "Mon tableau de bord ({username})",
+    "Clear data": "Effacer les données",
+    "Remove layers": "Supprimer les calques"
 }

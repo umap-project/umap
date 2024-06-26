@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Stel outputlink in om een nieuw venster te openen wanneer polygoon wordt aangeklikt",
     "define": "definieer",
     "Delay between two transitions when in play mode": "Pauze tussen twee transities wanneer in afspeel-modus",
-    "Delete all layers": "Verwijder alle lagen",
     "Delete layer": "Verwijder laag",
     "Delete this feature": "Dit object verwijderen",
     "Delete this property on all the features": "Verwijder deze eigenschap bij alle objecten",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

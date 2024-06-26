@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "A sokszögre kattintva új ablakban megnyíló link meghatározása.",
     "define": "meghatározás",
     "Delay between two transitions when in play mode": "Az áttűnések közötti késés lejátszási üzemmódban",
-    "Delete all layers": "Összes réteg törlése",
     "Delete layer": "Réteg törlése",
     "Delete this feature": "Objektum törlése",
     "Delete this property on all the features": "Tulajdonság törlése az összes objektumról",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

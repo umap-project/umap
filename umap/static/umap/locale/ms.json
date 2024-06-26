@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Tetapkan pautan untuk buka dalam tetingkap baharu apabila poligon diklik",
     "define": "takrif",
     "Delay between two transitions when in play mode": "Lengah di antara dua transisi apabila dalam mod main",
-    "Delete all layers": "Padam semua lapisan",
     "Delete layer": "Padam lapisan",
     "Delete this feature": "Padam sifat ini",
     "Delete this property on all the features": "Padam ciri-ciri ini di kesemua sifat-sifat",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

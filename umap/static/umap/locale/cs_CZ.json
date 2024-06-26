@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Definice odkazu, který se otevře v novém okně po kliknutí na polygon.",
     "define": "definovat",
     "Delay between two transitions when in play mode": "Zpoždění mezi dvěma předěly v přehrávacím módu",
-    "Delete all layers": "Vymazat všechny vrstvy",
     "Delete layer": "Vymazat vrstvu",
     "Delete this feature": "Vymazat objekt",
     "Delete this property on all the features": "Smazat tuto vlastnost na všech objektech",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

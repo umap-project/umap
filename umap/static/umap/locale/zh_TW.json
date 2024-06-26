@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "指定點多邊形連結時開新視窗。",
     "define": "定義",
     "Delay between two transitions when in play mode": "播放模式下兩個轉換間會延遲",
-    "Delete all layers": "刪除所有圖層",
     "Delete layer": "刪除圖層",
     "Delete this feature": "刪除此圖徵",
     "Delete this property on all the features": "從所有圖徵中刪除此屬性",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

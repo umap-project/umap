@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Defina un enlace para abrir en un nueva ventana al hacer clic en el polígono.",
     "define": "definir",
     "Delay between two transitions when in play mode": "Retraso entre dos transiciones cuando se está en el modo de reproducción",
-    "Delete all layers": "Borrar todas las capas",
     "Delete layer": "Borrar capa",
     "Delete this feature": "Borrar este elemento",
     "Delete this property on all the features": "Borrar esta propiedad en todos los elementos",
@@ -482,5 +481,8 @@
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
     "Please define an expression for the query first": "Please define an expression for the query first",
-    "Data successfully imported!": "Data successfully imported!"
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }

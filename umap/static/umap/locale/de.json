@@ -102,7 +102,6 @@
     "Define link to open in a new window on polygon click.": "Definiere einen externen Link, der sich beim Klick auf die Fläche in einem neuen Fenster öffnet.",
     "define": "festlegen",
     "Delay between two transitions when in play mode": "Verzögerung zwischen zwei Übergängen im Abspielmodus",
-    "Delete all layers": "Alle Ebenen löschen",
     "Delete layer": "Ebene löschen",
     "Delete this feature": "Dieses Element löschen",
     "Delete this property on all the features": "Dieses Merkmal bei allen Elementen löschen",
@@ -481,5 +480,9 @@
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Data successfully imported!": "Data successfully imported!",
+    "My Dashboard ({username})": "My Dashboard ({username})",
+    "Clear data": "Clear data",
+    "Remove layers": "Remove layers"
 }
