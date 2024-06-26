@@ -36,6 +36,16 @@
     --box-padding: 20px;
     --box-margin: 14px;
     --text-margin: 7px;
+
+    /* z-indexes (leaflet CSS sets the map at 400 by default) */
+    --zindex-alert: 500;
+    --zindex-loader: 490;
+    --zindex-toolbar: 480;
+    --zindex-autocomplete: 470;
+    --zindex-dialog: 460;
+    --zindex-icon-active: 450;
+    --zindex-panels: 440;
+    --zindex-dragover: 410;
 }
 .dark {
     --background-color: var(--color-darkGray);

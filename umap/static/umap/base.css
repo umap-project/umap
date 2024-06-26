@@ -798,7 +798,7 @@ input[type=hidden].blur + [type="button"] {
     background-repeat: no-repeat;
     background-position: center;
     background-color: #323e56;
-    z-index: 401;
+    z-index: var(--zindex-dragover);
     display: block;
     position: absolute;
     width: 100vw;

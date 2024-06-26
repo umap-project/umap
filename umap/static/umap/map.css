@@ -228,7 +228,7 @@
 ul.photon-autocomplete {
     position: absolute;
     background-color: white;
-    z-index: 1000;
+    z-index: var(--zindex-autocomplete);
     display: none;
 }
 .photon-autocomplete li {
@@ -579,7 +579,7 @@ ul.photon-autocomplete {
     line-height: var(--control-size);
     cursor: auto;
     border-bottom: 1px solid #222;
-    z-index: 1000;
+    z-index: var(--zindex-panels);
     opacity: 0.98;
     color: #fff;
     display: flex;
@@ -672,7 +672,7 @@ ul.photon-autocomplete {
     cursor: auto;
     border-top: 1px solid var(--color-lightGray);
     opacity: 0.93;
-    z-index: 1000;
+    z-index: var(--zindex-panels);
 }
 .umap-help {
     font-style: italic;
@@ -1328,7 +1328,7 @@ span.popup-icon {
     width: 2px;
 }
 .umap-icon-active {
-    z-index: 9500!important;
+    z-index: var(--zindex-icon-active)!important;
     opacity: 1.0!important;
 }
 .umap-edit-enabled .readonly {
@@ -1352,15 +1352,14 @@ span.popup-icon {
     -o-animation-delay: .2s;
     animation-delay: .2s;
 }
-.umap-loader
-{
+.umap-loader {
     position: absolute;
     display: none;
     top: 0;
     left: 0;
     right: 0;
     height: 4px;
-    z-index: 10100;
+    z-index: var(--zindex-loader);
     background-color: #79c1c0 !important;
     -webkit-transform: translateX(100%);
     -moz-transform: translateX(100%);
@@ -1522,7 +1521,7 @@ span.popup-icon {
     margin-left: 10px;
 }
 .leaflet-top {
-    z-index: 1001;
+    z-index: calc(var(--zindex-panels) + 1);
 }
 .leaflet-popup-content {
     min-width: 200px;
@@ -1594,7 +1593,7 @@ span.popup-icon {
     text-align: center;
 }
 .leaflet-inplace-toolbar {
-  z-index: 10000!important;
+  z-index: var(--zindex-toolbar)!important;
 }
 .leaflet-inplace-toolbar a {
     background-image: url('./img/16-white.svg');
