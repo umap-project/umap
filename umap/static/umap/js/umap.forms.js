@@ -61,8 +61,8 @@ L.FormBuilder.Element.include({
 
   get: function (own) {
     if (!this.options.inheritable || own) return this.builder.getter(this.field)
-    const path = this.field.split('.'),
-      key = path[path.length - 1]
+    const path = this.field.split('.')
+    const key = path[path.length - 1]
     return this.obj.getOption(key)
   },
 
@@ -514,18 +514,13 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
         this
       )
     }
-    const symbol = L.DomUtil.add(
-        'button',
-        'flat tab-symbols',
-        this.tabs,
-        L._('Symbol')
-      ),
-      char = L.DomUtil.add(
-        'button',
-        'flat tab-chars',
-        this.tabs,
-        L._('Emoji & Character')
-      )
+    const symbol = L.DomUtil.add('button', 'flat tab-symbols', this.tabs, L._('Symbol'))
+    const char = L.DomUtil.add(
+      'button',
+      'flat tab-chars',
+      this.tabs,
+      L._('Emoji & Character')
+    )
     url = L.DomUtil.add('button', 'flat tab-url', this.tabs, L._('URL'))
     L.DomEvent.on(symbol, 'click', L.DomEvent.stop).on(
       symbol,
@@ -571,15 +566,15 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   },
 
   addIconPreview: function (pictogram, parent) {
-    const baseClass = 'umap-pictogram-choice',
-      value = pictogram.src,
-      search = U.Utils.normalize(this.searchInput.value),
-      title = pictogram.attribution
-        ? `${pictogram.name} — © ${pictogram.attribution}`
-        : pictogram.name || pictogram.src
+    const baseClass = 'umap-pictogram-choice'
+    const value = pictogram.src
+    const search = U.Utils.normalize(this.searchInput.value)
+    const title = pictogram.attribution
+      ? `${pictogram.name} — © ${pictogram.attribution}`
+      : pictogram.name || pictogram.src
     if (search && U.Utils.normalize(title).indexOf(search) === -1) return
-    const className = value === this.value() ? `${baseClass} selected` : baseClass,
-      container = L.DomUtil.create('div', className, parent)
+    const className = value === this.value() ? `${baseClass} selected` : baseClass
+    const container = L.DomUtil.create('div', className, parent)
     U.Icon.makeIconElement(value, container)
     container.title = title
     L.DomEvent.on(
@@ -743,9 +738,9 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
     this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
     this.container.appendChild(this.label)
     this.ul = L.DomUtil.create('ul', '', this.container)
-    this.type = this.options.criteria['type']
+    this.type = this.options.criteria.type
 
-    const choices = this.options.criteria['choices']
+    const choices = this.options.criteria.choices
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
   },
@@ -758,7 +753,7 @@ L.FormBuilder.FacetSearchChoices = L.FormBuilder.FacetSearchBase.extend({
 
     input.type = this.type
     input.name = `${this.type}_${this.name}`
-    input.checked = this.get()['choices'].includes(value)
+    input.checked = this.get().choices.includes(value)
     input.dataset.value = value
 
     L.DomEvent.on(input, 'change', (e) => this.sync())
@@ -845,13 +840,13 @@ L.FormBuilder.MinMaxBase = L.FormBuilder.FacetSearchBase.extend({
   isMinModified: function () {
     const default_ = this.minInput.getAttribute('value')
     const current = this.minInput.value
-    return current != default_
+    return current !== default_
   },
 
   isMaxModified: function () {
     const default_ = this.maxInput.getAttribute('value')
     const current = this.maxInput.value
-    return current != default_
+    return current !== default_
   },
 
   toJS: function () {
@@ -879,7 +874,7 @@ L.FormBuilder.FacetSearchDate = L.FormBuilder.MinMaxBase.extend({
 
   prepareForHTML: function (value) {
     // Value must be in local time
-    if (isNaN(value)) return
+    if (Number.isNaN(value)) return
     return this.toLocaleDateTime(value).toISOString().substr(0, 10)
   },
 
@@ -891,7 +886,7 @@ L.FormBuilder.FacetSearchDateTime = L.FormBuilder.FacetSearchDate.extend({
 
   prepareForHTML: function (value) {
     // Value must be in local time
-    if (isNaN(value)) return
+    if (Number.isNaN(value)) return
     return this.toLocaleDateTime(value).toISOString().slice(0, -1)
   },
 })

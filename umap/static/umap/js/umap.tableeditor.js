@@ -15,10 +15,10 @@ U.TableEditor = L.Class.extend({
   },
 
   renderHeader: function (property) {
-    const container = L.DomUtil.create('div', 'tcell', this.header),
-      title = L.DomUtil.add('span', '', container, property),
-      del = L.DomUtil.create('i', 'umap-delete', container),
-      rename = L.DomUtil.create('i', 'umap-edit', container)
+    const container = L.DomUtil.create('div', 'tcell', this.header)
+    const title = L.DomUtil.add('span', '', container, property)
+    const del = L.DomUtil.create('i', 'umap-delete', container)
+    const rename = L.DomUtil.create('i', 'umap-edit', container)
     del.title = L._('Delete this property on all the features')
     rename.title = L._('Rename this property on all the features')
     const doDelete = function () {

@@ -90,7 +90,7 @@ U.FeatureMixin = {
   preInit: () => {},
 
   isReadOnly: function () {
-    return this.datalayer && this.datalayer.isDataReadOnly()
+    return this.datalayer?.isDataReadOnly()
   },
 
   getSlug: function () {
@@ -414,7 +414,7 @@ U.FeatureMixin = {
   },
 
   _onClick: function (e) {
-    if (this.map.measureTools && this.map.measureTools.enabled()) return
+    if (this.map.measureTools?.enabled()) return
     this._popupHandlersAdded = true // Prevent leaflet from managing event
     if (!this.map.editEnabled) {
       this.view(e)
@@ -476,7 +476,7 @@ U.FeatureMixin = {
     let items = ['-']
     if (this.map.editedFeature !== this) {
       items.push({
-        text: L._('Edit this feature') + ' (⇧+Click)',
+        text: `${L._('Edit this feature')} (⇧+Click)`,
         callback: this.edit,
         context: this,
         iconCls: 'umap-edit',
@@ -546,7 +546,7 @@ U.FeatureMixin = {
     }
     keys = keys.split(',')
     for (let i = 0, value; i < keys.length; i++) {
-      value = (this.properties[keys[i]] || '') + ''
+      value = `${this.properties[keys[i]] || ''}`
       if (value.toLowerCase().indexOf(filter) !== -1) return true
     }
     return false
@@ -562,8 +562,8 @@ U.FeatureMixin = {
         case 'date':
         case 'datetime':
         case 'number':
-          if (!isNaN(min) && !isNaN(value) && min > value) return false
-          if (!isNaN(max) && !isNaN(value) && max < value) return false
+          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) return false
+          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) return false
           break
         default:
           value = value || L._('<empty value>')
@@ -659,11 +659,7 @@ U.Marker = L.Marker.extend({
   },
 
   _onMouseOut: function () {
-    if (
-      this.dragging &&
-      this.dragging._draggable &&
-      !this.dragging._draggable._moving
-    ) {
+    if (this.dragging?._draggable && !this.dragging._draggable._moving) {
       // Do not disable if the mouse went out while dragging
       this._disableDragging()
     }
@@ -684,14 +680,14 @@ U.Marker = L.Marker.extend({
 
   _disableDragging: function () {
     if (this.map.editEnabled) {
-      if (this.editor && this.editor.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
+      if (this.editor?.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
       // do not listen to them
       this.disableEdit()
     }
   },
 
   _redraw: function () {
-    if (this.datalayer && this.datalayer.isVisible()) {
+    if (this.datalayer?.isVisible()) {
       this._initIcon()
       this.update()
     }
@@ -706,8 +702,8 @@ U.Marker = L.Marker.extend({
   },
 
   _getTooltipAnchor: function () {
-    const anchor = this.options.icon.options.tooltipAnchor.clone(),
-      direction = this.getOption('labelDirection')
+    const anchor = this.options.icon.options.tooltipAnchor.clone()
+    const direction = this.getOption('labelDirection')
     if (direction === 'left') {
       anchor.x *= -1
     } else if (direction === 'bottom') {
@@ -862,7 +858,7 @@ U.PathMixin = {
   },
 
   _redraw: function () {
-    if (this.datalayer && this.datalayer.isVisible()) {
+    if (this.datalayer?.isVisible()) {
       this.setStyle()
       this.resetTooltip()
     }
@@ -876,14 +872,14 @@ U.PathMixin = {
     // this.map.on('showmeasure', this.showMeasureTooltip, this);
     // this.map.on('hidemeasure', this.removeTooltip, this);
     this.parentClass.prototype.onAdd.call(this, map)
-    if (this.editing && this.editing.enabled()) this.editing.addHooks()
+    if (this.editing?.enabled()) this.editing.addHooks()
     this.resetTooltip()
   },
 
   onRemove: function (map) {
     // this.map.off('showmeasure', this.showMeasureTooltip, this);
     // this.map.off('hidemeasure', this.removeTooltip, this);
-    if (this.editing && this.editing.enabled()) this.editing.removeHooks()
+    if (this.editing?.enabled()) this.editing.removeHooks()
     U.FeatureMixin.onRemove.call(this, map)
   },
 
@@ -905,7 +901,7 @@ U.PathMixin = {
   },
 
   _onMouseOver: function () {
-    if (this.map.measureTools && this.map.measureTools.enabled()) {
+    if (this.map.measureTools?.enabled()) {
       this.map.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this.map.editEnabled && !this.map.editedFeature) {
       this.map.tooltip.open({ content: L._('Click to edit'), anchor: this })
@@ -1151,11 +1147,11 @@ U.Polyline = L.Polyline.extend({
       from.reverse()
       toMerge = [from, to]
     }
-    const a = toMerge[0],
-      b = toMerge[1],
-      p1 = this.map.latLngToContainerPoint(a[a.length - 1]),
-      p2 = this.map.latLngToContainerPoint(b[0]),
-      tolerance = 5 // px on screen
+    const a = toMerge[0]
+    const b = toMerge[1]
+    const p1 = this.map.latLngToContainerPoint(a[a.length - 1])
+    const p2 = this.map.latLngToContainerPoint(b[0])
+    const tolerance = 5 // px on screen
     if (Math.abs(p1.x - p2.x) <= tolerance && Math.abs(p1.y - p2.y) <= tolerance) {
       a.pop()
     }
@@ -1180,8 +1176,8 @@ U.Polyline = L.Polyline.extend({
   },
 
   getVertexActions: function (e) {
-    const actions = U.FeatureMixin.getVertexActions.call(this, e),
-      index = e.vertex.getIndex()
+    const actions = U.FeatureMixin.getVertexActions.call(this, e)
+    const index = e.vertex.getIndex()
     if (index === 0 || index === e.vertex.getLastIndex())
       actions.push(U.ContinueLineAction)
     else actions.push(U.SplitLineAction)
@@ -1223,8 +1219,8 @@ U.Polygon = L.Polygon.extend({
   },
 
   getContextMenuEditItems: function (e) {
-    const items = U.PathMixin.getContextMenuEditItems.call(this, e),
-      shape = this.shapeAt(e.latlng)
+    const items = U.PathMixin.getContextMenuEditItems.call(this, e)
+    const shape = this.shapeAt(e.latlng)
     // No multi and no holes.
     if (shape && !this.isMulti() && (L.LineUtil.isFlat(shape) || shape.length === 1)) {
       items.push({

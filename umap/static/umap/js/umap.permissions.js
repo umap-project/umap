@@ -35,7 +35,7 @@ U.MapPermissions = L.Class.extend({
     return (
       this.map.options.user &&
       this.map.options.permissions.owner &&
-      this.map.options.user.id == this.map.options.permissions.owner.id
+      this.map.options.user.id === this.map.options.permissions.owner.id
     )
   },
 
@@ -151,7 +151,7 @@ U.MapPermissions = L.Class.extend({
     if (this.isOwner() || this.isAnonymousMap())
       formData.append('edit_status', this.options.edit_status)
     if (this.isOwner()) {
-      formData.append('owner', this.options.owner && this.options.owner.id)
+      formData.append('owner', this.options.owner?.id)
       formData.append('share_status', this.options.share_status)
     }
     const [data, response, error] = await this.map.server.post(
@@ -180,7 +180,7 @@ U.MapPermissions = L.Class.extend({
   },
 
   addOwnerLink: function (element, container) {
-    if (this.options.owner && this.options.owner.name && this.options.owner.url) {
+    if (this.options.owner?.name && this.options.owner.url) {
       const ownerContainer = L.DomUtil.add(
         element,
         'umap-map-owner',

@@ -36,7 +36,7 @@ export class SyncEngine {
 
   // This method is called by the transport layer on new messages
   receive({ kind, ...payload }) {
-    if (kind == 'operation') {
+    if (kind === 'operation') {
       const updater = this._getUpdater(payload.subject, payload.metadata)
       updater.applyMessage(payload)
     } else {

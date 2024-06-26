@@ -52,7 +52,7 @@ export class Importer {
     container.innerHTML = TEMPLATE
     const response = await importer.map.request.get(`${this.baseUrl}/themes`)
     const select = container.querySelector('select')
-    if (response && response.ok) {
+    if (response?.ok) {
       const { themes } = await response.json()
       themes.sort((a, b) => Utils.naturalSort(a['name:fr'], b['name:fr']))
       for (const theme of themes) {

@@ -27,8 +27,8 @@ L.Util.copyToClipboard = (textToCopy) => {
 
 L.Util.queryString = (name, fallback) => {
   const decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
-  const qs = window.location.search.slice(1).split('&'),
-    qa = {}
+  const qs = window.location.search.slice(1).split('&')
+  const qa = {}
   for (const i in qs) {
     const key = qs[i].split('=')
     if (!key) continue
@@ -49,12 +49,12 @@ L.Util.setFromQueryString = (options, name) => {
 
 L.Util.setBooleanFromQueryString = (options, name) => {
   const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value == '1' || value == 'true'
+  if (typeof value !== 'undefined') options[name] = value === '1' || value === 'true'
 }
 
 L.Util.setNumberFromQueryString = (options, name) => {
   const value = +L.Util.queryString(name)
-  if (!isNaN(value)) options[name] = value
+  if (!Number.isNaN(value)) options[name] = value
 }
 
 L.Util.setNullableBooleanFromQueryString = (options, name) => {
@@ -192,7 +192,7 @@ L.DomUtil.after = (target, el) => {
 // convert colour in range 0-255 to the modifier used within luminance calculation
 L.DomUtil.colourMod = (colour) => {
   const sRGB = colour / 255
-  let mod = Math.pow((sRGB + 0.055) / 1.055, 2.4)
+  let mod = ((sRGB + 0.055) / 1.055) ** 2.4
   if (sRGB < 0.03928) mod = sRGB / 12.92
   return mod
 }
@@ -251,9 +251,9 @@ L.DomEvent.once = (el, types, fn, context) => {
 
 L.LatLng.prototype.isValid = function () {
   return (
-    isFinite(this.lat) &&
+    Number.isFinite(this.lat) &&
     Math.abs(this.lat) <= 90 &&
-    isFinite(this.lng) &&
+    Number.isFinite(this.lng) &&
     Math.abs(this.lng) <= 180
   )
 }

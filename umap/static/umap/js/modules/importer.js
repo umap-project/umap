@@ -179,12 +179,12 @@ export default class Importer {
       this.format === 'umap' || !this.url
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
-    this.qs('#clear').toggleAttribute('hidden', !Boolean(this.layerId))
+    this.qs('#clear').toggleAttribute('hidden', !this.layerId)
   }
 
   onFileChange(e) {
-    let type = '',
-      newType
+    let type = ''
+    let newType
     for (const file of e.target.files) {
       newType = U.Utils.detectFileType(file)
       if (!type && newType) type = newType

@@ -59,8 +59,8 @@ export default class Orderable {
     const dst = this.findTarget(e.target)
     if (!dst || dst === this.src) return
     this.dst = dst
-    const targetIndex = this.nodeIndex(this.dst),
-      srcIndex = this.nodeIndex(this.src)
+    const targetIndex = this.nodeIndex(this.dst)
+    const srcIndex = this.nodeIndex(this.src)
     if (targetIndex > srcIndex) this.parent.insertBefore(this.dst, this.src)
     else this.parent.insertBefore(this.src, this.dst)
   }

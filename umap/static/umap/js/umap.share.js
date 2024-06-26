@@ -19,11 +19,11 @@ U.Share = L.Class.extend({
       formatter: (map) => {
         const table = []
         map.eachFeature((feature) => {
-          const row = feature.toGeoJSON()['properties'],
-            center = feature.getCenter()
-          delete row['_umap_options']
-          row['Latitude'] = center.lat
-          row['Longitude'] = center.lng
+          const row = feature.toGeoJSON().properties
+          const center = feature.getCenter()
+          delete row._umap_options
+          row.Latitude = center.lat
+          row.Longitude = center.lng
           table.push(row)
         })
         return csv2geojson.dsv.csvFormat(table)

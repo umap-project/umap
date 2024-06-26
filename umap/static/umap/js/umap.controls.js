@@ -434,9 +434,9 @@ U.MoreControls = L.Control.extend({
   },
 
   toggle: function () {
-    const pos = this.getPosition(),
-      corner = this._map._controlCorners[pos],
-      className = 'umap-more-controls'
+    const pos = this.getPosition()
+    const corner = this._map._controlCorners[pos]
+    const className = 'umap-more-controls'
     if (L.DomUtil.hasClass(corner, className)) L.DomUtil.removeClass(corner, className)
     else L.DomUtil.addClass(corner, className)
   },
@@ -454,10 +454,10 @@ U.PermanentCreditsControl = L.Control.extend({
 
   onAdd: function () {
     const paragraphContainer = L.DomUtil.create(
-        'div',
-        'umap-permanent-credits-container'
-      ),
-      creditsParagraph = L.DomUtil.create('p', '', paragraphContainer)
+      'div',
+      'umap-permanent-credits-container'
+    )
+    const creditsParagraph = L.DomUtil.create('p', '', paragraphContainer)
 
     this.paragraphContainer = paragraphContainer
     this.setCredits()
@@ -745,7 +745,7 @@ const ControlsMixin = {
       L.DomUtil.createLink(
         'umap-user',
         rightContainer,
-        L._(`My Dashboard ({username})`, {
+        L._('My Dashboard ({username})', {
           username: this.options.user.name,
         }),
         this.options.user.url
@@ -832,10 +832,10 @@ const ControlsMixin = {
       row.dataset.id = L.stamp(datalayer)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const layer = this.datalayers[src.dataset.id],
-        other = this.datalayers[dst.dataset.id],
-        minIndex = Math.min(layer.getRank(), other.getRank()),
-        maxIndex = Math.max(layer.getRank(), other.getRank())
+      const layer = this.datalayers[src.dataset.id]
+      const other = this.datalayers[dst.dataset.id]
+      const minIndex = Math.min(layer.getRank(), other.getRank())
+      const maxIndex = Math.max(layer.getRank(), other.getRank())
       if (finalIndex === 0) layer.bringToTop()
       else if (finalIndex > initialIndex) layer.insertBefore(other)
       else layer.insertAfter(other)
@@ -948,10 +948,10 @@ U.TileLayerChooser = L.Control.extend({
   },
 
   addTileLayerElement: function (tilelayer, options) {
-    const selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : '',
-      el = L.DomUtil.create('li', selectedClass, this._tilelayers_container),
-      img = L.DomUtil.create('img', '', el),
-      name = L.DomUtil.create('div', '', el)
+    const selectedClass = this.map.hasLayer(tilelayer) ? 'selected' : ''
+    const el = L.DomUtil.create('li', selectedClass, this._tilelayers_container)
+    const img = L.DomUtil.create('img', '', el)
+    const name = L.DomUtil.create('div', '', el)
     img.src = U.Utils.template(tilelayer.options.url_template, this.map.demoTileInfos)
     img.loading = 'lazy'
     name.textContent = tilelayer.options.name
@@ -961,7 +961,7 @@ U.TileLayerChooser = L.Control.extend({
       function () {
         this.map.selectTileLayer(tilelayer)
         this.map._controls.tilelayers.setLayers()
-        if (options && options.callback) options.callback(tilelayer)
+        if (options?.callback) options.callback(tilelayer)
       },
       this
     )
@@ -982,8 +982,8 @@ U.AttributionControl = L.Control.Attribution.extend({
     this._container.innerHTML = ''
     const container = L.DomUtil.create('div', 'attribution-container', this._container)
     container.innerHTML = credits
-    const shortCredit = this._map.getOption('shortCredit'),
-      captionMenus = this._map.getOption('captionMenus')
+    const shortCredit = this._map.getOption('shortCredit')
+    const captionMenus = this._map.getOption('captionMenus')
     if (shortCredit) {
       L.DomUtil.element({
         tagName: 'span',
@@ -1310,7 +1310,7 @@ U.Editable = L.Editable.extend({
   },
 
   drawingTooltip: function (e) {
-    if (e.layer instanceof L.Marker && e.type == 'editable:drawing:start') {
+    if (e.layer instanceof L.Marker && e.type === 'editable:drawing:start') {
       this.map.tooltip.open({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {

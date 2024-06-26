@@ -99,11 +99,7 @@ U.Map = L.Map.extend({
     }
 
     // Retrocompat
-    if (
-      this.options.slideshow &&
-      this.options.slideshow.delay &&
-      this.options.slideshow.active === undefined
-    ) {
+    if (this.options.slideshow?.delay && this.options.slideshow.active === undefined) {
       this.options.slideshow.active = true
     }
     if (this.options.advancedFilterKey) {
@@ -211,8 +207,8 @@ U.Map = L.Map.extend({
   },
 
   initSyncEngine: async function () {
-    if (this.options.websocketEnabled == false) return
-    if (this.options.syncEnabled != true) {
+    if (this.options.websocketEnabled === false) return
+    if (this.options.syncEnabled !== true) {
       this.sync.stop()
     } else {
       const ws_token_uri = this.urls.get('map_websocket_auth_token', {
@@ -414,9 +410,7 @@ U.Map = L.Map.extend({
   },
 
   renderControls: function () {
-    const hasSlideshow = Boolean(
-      this.options.slideshow && this.options.slideshow.active
-    )
+    const hasSlideshow = Boolean(this.options.slideshow?.active)
     const barEnabled = this.options.captionBar || hasSlideshow
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
     document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
@@ -444,7 +438,9 @@ U.Map = L.Map.extend({
         }
       })
     }
-    let name, status, control
+    let name
+    let status
+    let control
     for (let i = 0; i < this.HIDDABLE_CONTROLS.length; i++) {
       name = this.HIDDABLE_CONTROLS[i]
       status = this.getOption(`${name}Control`)
@@ -630,11 +626,7 @@ U.Map = L.Map.extend({
         this.options.tilelayer.attribution = props.attribution
       }
     }
-    if (
-      this.options.tilelayer &&
-      this.options.tilelayer.url_template &&
-      this.options.tilelayer.attribution
-    ) {
+    if (this.options.tilelayer?.url_template && this.options.tilelayer.attribution) {
       this.customTilelayer = this.createTileLayer(this.options.tilelayer)
       this.selectTileLayer(this.customTilelayer)
     } else {
@@ -657,13 +649,13 @@ U.Map = L.Map.extend({
       }
       this.selected_tilelayer = tilelayer
       if (
-        !isNaN(this.selected_tilelayer.options.minZoom) &&
+        !Number.isNaN(this.selected_tilelayer.options.minZoom) &&
         this.getZoom() < this.selected_tilelayer.options.minZoom
       ) {
         this.setZoom(this.selected_tilelayer.options.minZoom)
       }
       if (
-        !isNaN(this.selected_tilelayer.options.maxZoom) &&
+        !Number.isNaN(this.selected_tilelayer.options.maxZoom) &&
         this.getZoom() > this.selected_tilelayer.options.maxZoom
       ) {
         this.setZoom(this.selected_tilelayer.options.maxZoom)
@@ -760,11 +752,16 @@ U.Map = L.Map.extend({
   },
 
   handleLimitBounds: function () {
-    const south = Number.parseFloat(this.options.limitBounds.south),
-      west = Number.parseFloat(this.options.limitBounds.west),
-      north = Number.parseFloat(this.options.limitBounds.north),
-      east = Number.parseFloat(this.options.limitBounds.east)
-    if (!isNaN(south) && !isNaN(west) && !isNaN(north) && !isNaN(east)) {
+    const south = Number.parseFloat(this.options.limitBounds.south)
+    const west = Number.parseFloat(this.options.limitBounds.west)
+    const north = Number.parseFloat(this.options.limitBounds.north)
+    const east = Number.parseFloat(this.options.limitBounds.east)
+    if (
+      !Number.isNaN(south) &&
+      !Number.isNaN(west) &&
+      !Number.isNaN(north) &&
+      !Number.isNaN(east)
+    ) {
       const bounds = L.latLngBounds([
         [south, west],
         [north, east],
@@ -794,7 +791,7 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (options = {}, sync) {
+  createDataLayer: function (options = {}, sync = true) {
     options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
     const datalayer = new U.DataLayer(this, options, sync)
 
@@ -809,7 +806,7 @@ U.Map = L.Map.extend({
     datalayer.edit()
   },
 
-  getDefaultOption: (option) => U.SCHEMA[option] && U.SCHEMA[option].default,
+  getDefaultOption: (option) => U.SCHEMA[option]?.default,
 
   getOption: function (option, feature) {
     if (feature) {
@@ -884,7 +881,7 @@ U.Map = L.Map.extend({
 
   importFromUrl: async function (uri) {
     const response = await this.request.get(uri)
-    if (response && response.ok) {
+    if (response?.ok) {
       this.importRaw(await response.text())
     }
   },
@@ -1135,7 +1132,8 @@ U.Map = L.Map.extend({
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
   defaultEditDataLayer: function () {
-    let datalayer, fallback
+    let datalayer
+    let fallback
     datalayer = this.lastUsedDataLayer
     if (
       datalayer &&
@@ -1161,7 +1159,7 @@ U.Map = L.Map.extend({
   },
 
   getDataLayerByUmapId: function (umap_id) {
-    return this.findDataLayer((d) => d.umap_id == umap_id)
+    return this.findDataLayer((d) => d.umap_id === umap_id)
   },
 
   _editControls: function (container) {
@@ -1343,7 +1341,7 @@ U.Map = L.Map.extend({
           handler: 'BlurInput',
           helpText: `${L._('Supported scheme')}: http://{s}.domain.com/{z}/{x}/{y}.png`,
           placeholder: 'url',
-          helpText: L._('Background overlay url'),
+          label: L._('Background overlay url'),
           type: 'url',
         },
       ],
@@ -1600,11 +1598,11 @@ U.Map = L.Map.extend({
 
   initCaptionBar: function () {
     const container = L.DomUtil.create(
-        'div',
-        'umap-caption-bar',
-        this._controlContainer
-      ),
-      name = L.DomUtil.create('h3', '', container)
+      'div',
+      'umap-caption-bar',
+      this._controlContainer
+    )
+    const name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
     this.permissions.addOwnerLink('span', container)
     if (this.getOption('captionMenus')) {
@@ -1716,7 +1714,7 @@ U.Map = L.Map.extend({
         },
       })
     }
-    if (e && e.relatedTarget) {
+    if (e?.relatedTarget) {
       if (e.relatedTarget.getContextMenuItems) {
         items = items.concat(e.relatedTarget.getContextMenuItems(e))
       }

@@ -69,8 +69,8 @@ U.Slideshow = L.Class.extend({
   timeSpinner: function () {
     const time = Number.parseInt(this.options.delay, 10)
     if (!time) return
-    const css = `rotation ${time / 1000}s infinite linear`,
-      spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
+    const css = `rotation ${time / 1000}s infinite linear`
+    const spinners = document.querySelectorAll('.umap-slideshow-toolbox .play .spinner')
     for (let i = 0; i < spinners.length; i++) {
       spinners[i].style.animation = css
       spinners[i].style['-webkit-animation'] = css
@@ -138,11 +138,11 @@ U.Slideshow = L.Class.extend({
   },
 
   renderToolbox: function (container) {
-    const box = L.DomUtil.create('ul', 'umap-slideshow-toolbox'),
-      play = L.DomUtil.create('li', 'play', box),
-      stop = L.DomUtil.create('li', 'stop', box),
-      prev = L.DomUtil.create('li', 'prev', box),
-      next = L.DomUtil.create('li', 'next', box)
+    const box = L.DomUtil.create('ul', 'umap-slideshow-toolbox')
+    const play = L.DomUtil.create('li', 'play', box)
+    const stop = L.DomUtil.create('li', 'stop', box)
+    const prev = L.DomUtil.create('li', 'prev', box)
+    const next = L.DomUtil.create('li', 'next', box)
     L.DomUtil.create('div', 'spinner', play)
     play.title = L._('Start slideshow')
     stop.title = L._('Stop slideshow')

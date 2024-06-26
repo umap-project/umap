@@ -13,7 +13,7 @@ export default class Facets {
     let selected
 
     names.forEach((name) => {
-      const type = defined[name]['type']
+      const type = defined[name].type
       properties[name] = { type: type }
       selected = this.selected[name] || {}
       selected.type = type
@@ -28,17 +28,23 @@ export default class Facets {
       datalayer.eachFeature((feature) => {
         names.forEach((name) => {
           let value = feature.properties[name]
-          const type = defined[name]['type']
+          const type = defined[name].type
           const parser = this.getParser(type)
           value = parser(value)
           switch (type) {
             case 'date':
             case 'datetime':
             case 'number':
-              if (!isNaN(value)) {
+              if (!Number.isNaN(value)) {
+                // Special cases where we want to be lousy when checking isNaN without
+                // coercing to a Number first because we handle multiple types.
+                // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+                // Reference/Global_Objects/Number/isNaN
+                // biome-ignore lint/suspicious/noGlobalIsNan: see above.
                 if (isNaN(properties[name].min) || properties[name].min > value) {
                   properties[name].min = value
                 }
+                // biome-ignore lint/suspicious/noGlobalIsNan: see above.
                 if (isNaN(properties[name].max) || properties[name].max < value) {
                   properties[name].max = value
                 }
@@ -58,7 +64,7 @@ export default class Facets {
 
   isActive() {
     for (const { type, min, max, choices } of Object.values(this.selected)) {
-      if (min !== undefined || max != undefined || choices?.length) {
+      if (min !== undefined || max !== undefined || choices?.length) {
         return true
       }
     }
@@ -73,7 +79,7 @@ export default class Facets {
     const fields = names.map((name) => {
       const criteria = facetProperties[name]
       let handler = 'FacetSearchChoices'
-      switch (criteria['type']) {
+      switch (criteria.type) {
         case 'number':
           handler = 'FacetSearchNumber'
           break
@@ -84,7 +90,7 @@ export default class Facets {
           handler = 'FacetSearchDateTime'
           break
       }
-      const label = defined[name]['label']
+      const label = defined[name].label
       return [
         `selected.${name}`,
         {

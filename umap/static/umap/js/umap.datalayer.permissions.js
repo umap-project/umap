@@ -26,19 +26,19 @@ U.DataLayerPermissions = L.Class.extend({
 
   edit: function (container) {
     const fields = [
-        [
-          'options.edit_status',
-          {
-            handler: 'IntSelect',
-            label: L._('Who can edit "{layer}"', { layer: this.datalayer.getName() }),
-            selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
-          },
-        ],
+      [
+        'options.edit_status',
+        {
+          handler: 'IntSelect',
+          label: L._('Who can edit "{layer}"', { layer: this.datalayer.getName() }),
+          selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
+        },
       ],
-      builder = new U.FormBuilder(this, fields, {
-        className: 'umap-form datalayer-permissions',
-      }),
-      form = builder.build()
+    ]
+    const builder = new U.FormBuilder(this, fields, {
+      className: 'umap-form datalayer-permissions',
+    })
+    const form = builder.build()
     container.appendChild(form)
   },
 

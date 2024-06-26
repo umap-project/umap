@@ -67,7 +67,7 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
       },
       iconCreateFunction: (cluster) => new U.Icon.Cluster(datalayer, cluster),
     }
-    if (this.datalayer.options.cluster && this.datalayer.options.cluster.radius) {
+    if (this.datalayer.options.cluster?.radius) {
       options.maxClusterRadius = this.datalayer.options.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
@@ -177,7 +177,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
     const values = []
     this.datalayer.eachLayer((layer) => {
       const value = this._getValue(layer)
-      if (!isNaN(value)) values.push(value)
+      if (!Number.isNaN(value)) values.push(value)
     })
     return values
   },
@@ -190,9 +190,9 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    let mode = this.datalayer.options.choropleth.mode,
-      classes = +this.datalayer.options.choropleth.classes || 5,
-      breaks
+    const mode = this.datalayer.options.choropleth.mode
+    let classes = +this.datalayer.options.choropleth.classes || 5
+    let breaks
     classes = Math.min(classes, values.length)
     if (mode === 'manual') {
       const manualBreaks = this.datalayer.options.choropleth.breaks
@@ -200,7 +200,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
         breaks = manualBreaks
           .split(',')
           .map((b) => +b)
-          .filter((b) => !isNaN(b))
+          .filter((b) => !Number.isNaN(b))
       }
     } else if (mode === 'equidistant') {
       breaks = ss.equalIntervalBreaks(values, classes)
@@ -243,7 +243,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
   addLayer: function (layer) {
     // Do not add yet the layer to the map
     // wait for datachanged event, so we want compute breaks once
-    var id = this.getLayerId(layer)
+    const id = this.getLayerId(layer)
     this._layers[id] = layer
     return this
   },
@@ -326,7 +326,9 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
 
   renderLegend: function (container) {
     const parent = L.DomUtil.create('ul', '', container)
-    let li, color, label
+    let li
+    let color
+    let label
 
     this.options.breaks.slice(0, -1).forEach((limit, index) => {
       li = L.DomUtil.create('li', '', parent)
@@ -358,12 +360,9 @@ U.Layer.Heat = L.HeatLayer.extend({
 
   addLayer: function (layer) {
     if (layer instanceof L.Marker) {
-      let latlng = layer.getLatLng(),
-        alt
-      if (
-        this.datalayer.options.heat &&
-        this.datalayer.options.heat.intensityProperty
-      ) {
+      let latlng = layer.getLatLng()
+      let alt
+      if (this.datalayer.options.heat?.intensityProperty) {
         alt = Number.parseFloat(
           layer.properties[this.datalayer.options.heat.intensityProperty || 0]
         )
@@ -430,23 +429,23 @@ U.Layer.Heat = L.HeatLayer.extend({
     if (!this._map) {
       return
     }
-    var data = [],
-      r = this._heat._r,
-      size = this._map.getSize(),
-      bounds = new L.Bounds(L.point([-r, -r]), size.add([r, r])),
-      cellSize = r / 2,
-      grid = [],
-      panePos = this._map._getMapPanePos(),
-      offsetX = panePos.x % cellSize,
-      offsetY = panePos.y % cellSize,
-      i,
-      len,
-      p,
-      cell,
-      x,
-      y,
-      j,
-      len2
+    const data = []
+    const r = this._heat._r
+    const size = this._map.getSize()
+    const bounds = new L.Bounds(L.point([-r, -r]), size.add([r, r]))
+    const cellSize = r / 2
+    const grid = []
+    const panePos = this._map._getMapPanePos()
+    const offsetX = panePos.x % cellSize
+    const offsetY = panePos.y % cellSize
+    let i
+    let len
+    let p
+    let cell
+    let x
+    let y
+    let j
+    let len2
 
     this._max = 1
 
@@ -455,7 +454,7 @@ U.Layer.Heat = L.HeatLayer.extend({
       x = Math.floor((p.x - offsetX) / cellSize) + 2
       y = Math.floor((p.y - offsetY) / cellSize) + 2
 
-      var alt =
+      const alt =
         this._latlngs[i].alt !== undefined
           ? this._latlngs[i].alt
           : this._latlngs[i][2] !== undefined
@@ -567,11 +566,11 @@ U.DataLayer = L.Evented.extend({
       this.options.remoteData = {}
     }
     // Retrocompat
-    if (this.options.remoteData && this.options.remoteData.from) {
+    if (this.options.remoteData?.from) {
       this.options.fromZoom = this.options.remoteData.from
       delete this.options.remoteData.from
     }
-    if (this.options.remoteData && this.options.remoteData.to) {
+    if (this.options.remoteData?.to) {
       this.options.toZoom = this.options.remoteData.to
       delete this.options.remoteData.to
     }
@@ -772,14 +771,14 @@ U.DataLayer = L.Evented.extend({
   },
 
   showAtZoom: function () {
-    const from = Number.parseInt(this.options.fromZoom, 10),
-      to = Number.parseInt(this.options.toZoom, 10),
-      zoom = this.map.getZoom()
-    return !((!isNaN(from) && zoom < from) || (!isNaN(to) && zoom > to))
+    const from = Number.parseInt(this.options.fromZoom, 10)
+    const to = Number.parseInt(this.options.toZoom, 10)
+    const zoom = this.map.getZoom()
+    return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   },
 
   hasDynamicData: function () {
-    return !!(this.options.remoteData && this.options.remoteData.dynamic)
+    return !!this.options.remoteData?.dynamic
   },
 
   fetchRemoteData: async function (force) {
@@ -791,7 +790,7 @@ U.DataLayer = L.Evented.extend({
       url = this.map.proxyUrl(url, this.options.remoteData.ttl)
     }
     const response = await this.map.request.get(url)
-    if (response && response.ok) {
+    if (response?.ok) {
       this.clear()
       this.rawToGeoJSON(
         await response.text(),
@@ -869,11 +868,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   isRemoteLayer: function () {
-    return Boolean(
-      this.options.remoteData &&
-        this.options.remoteData.url &&
-        this.options.remoteData.format
-    )
+    return Boolean(this.options.remoteData?.url && this.options.remoteData.format)
   },
 
   isClustered: function () {
@@ -961,7 +956,7 @@ U.DataLayer = L.Evented.extend({
           // csv2geojson fallback to null geometries when it cannot determine
           // lat or lon columns. This is valid geojson, but unwanted from a user
           // point of view.
-          if (result && result.features.length) {
+          if (result?.features.length) {
             if (result.features[0].geometry === null) {
               err = {
                 type: 'Error',
@@ -982,7 +977,7 @@ U.DataLayer = L.Evented.extend({
             U.Alert.error(message, 10000)
             console.error(err)
           }
-          if (result && result.features.length) {
+          if (result?.features.length) {
             callback(result)
           }
         }
@@ -1017,7 +1012,7 @@ U.DataLayer = L.Evented.extend({
   // GeoJSON features.
   geojsonToFeatures: function (geojson, sync) {
     if (!geojson) return
-    const features = geojson instanceof Array ? geojson : geojson.features
+    const features = Array.isArray(geojson) ? geojson : geojson.features
     let i
     let len
 
@@ -1063,7 +1058,8 @@ U.DataLayer = L.Evented.extend({
   } = {}) {
     if (!geometry) return // null geometry is valid geojson.
     const coords = geometry.coordinates
-    let latlng, latlngs
+    let latlng
+    let latlngs
 
     // Create a default geojson if none is provided
     if (geojson === undefined) geojson = { type: 'Feature', geometry: geometry }
@@ -1162,7 +1158,7 @@ U.DataLayer = L.Evented.extend({
   importFromUrl: async function (uri, type) {
     uri = this.map.localizeUrl(uri)
     const response = await this.map.request.get(uri)
-    if (response && response.ok) {
+    if (response?.ok) {
       this.importRaw(await response.text(), type)
     }
   },
@@ -1208,8 +1204,8 @@ U.DataLayer = L.Evented.extend({
     const options = U.Utils.CopyJSON(this.options)
     options.name = L._('Clone of {name}', { name: this.options.name })
     delete options.id
-    const geojson = U.Utils.CopyJSON(this._geojson),
-      datalayer = this.map.createDataLayer(options)
+    const geojson = U.Utils.CopyJSON(this._geojson)
+    const datalayer = this.map.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
   },
@@ -1258,28 +1254,28 @@ U.DataLayer = L.Evented.extend({
     if (!this.map.editEnabled || !this.isLoaded()) {
       return
     }
-    const container = L.DomUtil.create('div', 'umap-layer-properties-container'),
-      metadataFields = [
-        'options.name',
-        'options.description',
-        ['options.type', { handler: 'LayerTypeChooser', label: L._('Type of layer') }],
-        ['options.displayOnLoad', { label: L._('Display on load'), handler: 'Switch' }],
-        [
-          'options.browsable',
-          {
-            label: L._('Data is browsable'),
-            handler: 'Switch',
-            helpEntries: 'browsable',
-          },
-        ],
-        [
-          'options.inCaption',
-          {
-            label: L._('Show this layer in the caption'),
-            handler: 'Switch',
-          },
-        ],
-      ]
+    const container = L.DomUtil.create('div', 'umap-layer-properties-container')
+    const metadataFields = [
+      'options.name',
+      'options.description',
+      ['options.type', { handler: 'LayerTypeChooser', label: L._('Type of layer') }],
+      ['options.displayOnLoad', { label: L._('Display on load'), handler: 'Switch' }],
+      [
+        'options.browsable',
+        {
+          label: L._('Data is browsable'),
+          handler: 'Switch',
+          helpEntries: 'browsable',
+        },
+      ],
+      [
+        'options.inCaption',
+        {
+          label: L._('Show this layer in the caption'),
+          handler: 'Switch',
+        },
+      ],
+    ]
     L.DomUtil.createTitle(container, L._('Layer properties'), 'icon-layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback: function (e) {
@@ -1470,17 +1466,17 @@ U.DataLayer = L.Evented.extend({
   },
 
   getOption: function (option, feature) {
-    if (this.layer && this.layer.getOption) {
+    if (this.layer?.getOption) {
       const value = this.layer.getOption(option, feature)
       if (typeof value !== 'undefined') return value
     }
     if (typeof this.getOwnOption(option) !== 'undefined') {
       return this.getOwnOption(option)
-    } else if (this.layer && this.layer.defaults && this.layer.defaults[option]) {
-      return this.layer.defaults[option]
-    } else {
-      return this.map.getOption(option, feature)
     }
+    if (this.layer?.defaults?.[option]) {
+      return this.layer.defaults[option]
+    }
+    return this.map.getOption(option, feature)
   },
 
   buildVersionsFieldset: async function (container) {
@@ -1562,7 +1558,7 @@ U.DataLayer = L.Evented.extend({
 
   // Is this layer type browsable in theorie
   isBrowsable: function () {
-    return this.layer && this.layer.browsable
+    return this.layer?.browsable
   },
 
   // Is this layer browsable in theorie
@@ -1749,9 +1745,9 @@ U.DataLayer = L.Evented.extend({
     // By default, it will we use the "name" property, which is also the one used as label in the features list.
     // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
     if (this.map.options.filterKey) return this.map.options.filterKey
-    else if (this.options.labelKey) return this.options.labelKey
-    else if (this.map.options.sortKey) return this.map.options.sortKey
-    else return 'name'
+    if (this.options.labelKey) return this.options.labelKey
+    if (this.map.options.sortKey) return this.map.options.sortKey
+    return 'name'
   },
 })
 
