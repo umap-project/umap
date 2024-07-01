@@ -2,7 +2,7 @@ import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 
-class Rule {
+export class Rule {
   get condition() {
     return this._condition
   }
@@ -12,20 +12,10 @@ class Rule {
     this.parse()
   }
 
-  get isDirty() {
-    return this._isDirty
-  }
-
-  set isDirty(status) {
-    this._isDirty = status
-    if (status) this.map.isDirty = status
-  }
-
-  constructor(map, condition = '', options = {}) {
+  constructor(condition = '') {
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
-    this._isDirty = false
     this.OPERATORS = [
       ['>', this.gt],
       ['<', this.lt],
@@ -34,14 +24,7 @@ class Rule {
       ['!=', this.not_equal],
       ['=', this.equal],
     ]
-    this.map = map
-    this.active = true
-    this.options = options
     this.condition = condition
-  }
-
-  render(fields) {
-    this.map.render(fields)
   }
 
   equal(other) {
@@ -85,8 +68,36 @@ class Rule {
   }
 
   match(props) {
-    if (!this.operator || !this.active) return false
+    if (!this.operator) return false
     return this.operator(this.cast(props[this.key]))
+  }
+}
+
+class ConditionalRule extends Rule {
+  get isDirty() {
+    return this._isDirty
+  }
+
+  set isDirty(status) {
+    this._isDirty = status
+    if (status) this.map.isDirty = status
+  }
+
+  match(props) {
+    if (!this.active) return false
+    return super.match(props)
+  }
+
+  constructor(map, condition = '', options = {}) {
+    super()
+    this._isDirty = false
+    this.map = map
+    this.active = true
+    this.options = options
+  }
+
+  render(fields) {
+    this.map.render(fields)
   }
 
   getMap() {
@@ -170,7 +181,7 @@ class Rule {
   }
 }
 
-export default class Rules {
+export class Rules {
   constructor(map) {
     this.map = map
     this.rules = []
@@ -181,7 +192,7 @@ export default class Rules {
     if (!this.map.options.rules?.length) return
     for (const { condition, options } of this.map.options.rules) {
       if (!condition) continue
-      this.rules.push(new Rule(this.map, condition, options))
+      this.rules.push(new ConditionalRule(this.map, condition, options))
     }
   }
 
@@ -218,7 +229,7 @@ export default class Rules {
   }
 
   addRule() {
-    const rule = new Rule(this.map)
+    const rule = new ConditionalRule(this.map)
     rule.isDirty = true
     this.rules.push(rule)
     rule.edit(map)
