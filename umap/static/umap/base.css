@@ -496,8 +496,10 @@ input.switch:checked ~ label:after {
 }
 .button-bar.by3,
 .button-bar.by5,
+.button-bar.by6,
 .umap-multiplechoice.by3,
-.umap-multiplechoice.by5 {
+.umap-multiplechoice.by5,
+.umap-multiplechoice.by6 {
     grid-template-columns: 1fr 1fr 1fr;
 }
 .button-bar.by4,
