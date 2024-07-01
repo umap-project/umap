@@ -40,6 +40,10 @@ export const SCHEMA = {
     label: translate('Do you want to display caption menus?'),
     default: true,
   },
+  categorized: {
+    type: Object,
+    impacts: ['data'],
+  },
   color: {
     type: String,
     impacts: ['data'],
