@@ -11,7 +11,7 @@ import Help from './help.js'
 import Importer from './importer.js'
 import Orderable from './orderable.js'
 import { HTTPError, NOKError, Request, RequestError, ServerRequest } from './request.js'
-import Rules from './rules.js'
+import { Rule, Rules } from './rules.js'
 import { SCHEMA } from './schema.js'
 import { SyncEngine } from './sync/engine.js'
 import { Dialog, Prompt } from './ui/dialog.js'
@@ -45,6 +45,7 @@ window.U = {
   Prompt,
   Request,
   RequestError,
+  Rule,
   Rules,
   SCHEMA,
   ServerRequest,
