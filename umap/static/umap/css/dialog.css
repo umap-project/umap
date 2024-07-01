@@ -11,6 +11,8 @@
     color: var(--text-color);
     border-radius: 5px;
     overflow-y: auto;
+    height: fit-content;
+    max-height: 90vh;
 }
 .umap-dialog .umap-close-link {
     float: right;

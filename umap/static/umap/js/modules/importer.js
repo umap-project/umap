@@ -2,7 +2,7 @@ import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
-import Dialog from './ui/dialog.js'
+import { Dialog } from './ui/dialog.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `
@@ -53,7 +53,7 @@ export default class Importer {
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.loadImporters()
-    this.dialog = new Dialog(this.map._controlContainer)
+    this.dialog = new Dialog()
   }
 
   loadImporters() {

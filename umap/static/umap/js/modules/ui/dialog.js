@@ -1,11 +1,10 @@
 import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 
-export default class Dialog {
-  constructor(parent) {
-    this.parent = parent
+export class Dialog {
+  constructor() {
     this.className = 'umap-dialog window'
-    this.container = DomUtil.create('dialog', this.className, this.parent)
+    this.container = DomUtil.create('dialog', this.className, document.body)
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
     DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
@@ -48,5 +47,45 @@ export default class Dialog {
     DomEvent.on(closeButton, 'click', this.close, this)
     this.container.appendChild(buttonsContainer)
     this.container.appendChild(content)
+    DomEvent.once(this.container, 'keydown', (e) => {
+      DomEvent.stop(e)
+      if (e.key === 'Escape') this.close()
+    })
+  }
+}
+
+const PROMPT = `
+<form>
+  <h3></h3>
+  <input type="text" name="prompt" />
+  <input type="submit" value="${translate('Ok')}" />
+</form>
+`
+
+export class Prompt extends Dialog {
+  get input() {
+    return this.container.querySelector('input[name="prompt"]')
+  }
+
+  get title() {
+    return this.container.querySelector('h3')
+  }
+
+  get form() {
+    return this.container.querySelector('form')
+  }
+
+  open({ className, title } = {}) {
+    const content = DomUtil.element({ tagName: 'div', safeHTML: PROMPT })
+    super.open({ className, content })
+    this.title.textContent = title
+    const promise = new Promise((resolve, reject) => {
+      DomEvent.on(this.form, 'submit', (e) => {
+        DomEvent.stop(e)
+        resolve(this.input.value)
+        this.close()
+      })
+    })
+    return promise
   }
 }

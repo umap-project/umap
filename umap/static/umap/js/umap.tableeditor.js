@@ -89,6 +89,19 @@ U.TableEditor = L.Class.extend({
     return true
   },
 
+  addProperty: function () {
+    new U.Prompt()
+      .open({
+        className: 'dark',
+        title: L._('Please enter the name of the property'),
+      })
+      .then((newName) => {
+        if (!newName || !this.validateName(newName)) return
+        this.datalayer.indexProperty(newName)
+        this.edit()
+      })
+  },
+
   edit: function () {
     const id = 'tableeditor:edit'
     this.compileProperties()
@@ -102,13 +115,7 @@ U.TableEditor = L.Class.extend({
     )
     const iconElement = L.DomUtil.createIcon(addButton, 'icon-add')
     addButton.insertBefore(iconElement, addButton.firstChild)
-    const addProperty = function () {
-      const newName = prompt(L._('Please enter the name of the property'))
-      if (!newName || !this.validateName(newName)) return
-      this.datalayer.indexProperty(newName)
-      this.edit()
-    }
-    L.DomEvent.on(addButton, 'click', addProperty, this)
+    L.DomEvent.on(addButton, 'click', this.addProperty, this)
     this.datalayer.map.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
