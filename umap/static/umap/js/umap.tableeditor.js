@@ -101,6 +101,34 @@ U.TableEditor = L.Class.extend({
       })
   },
 
+  refine: function () {
+    const promise = new U.Prompt().open({
+      className: 'dark',
+      title: L._('Deleting rows matching condition'),
+    })
+    promise.then((raw) => {
+      if (!raw) return
+      const rule = new U.Rule(raw)
+      const matched = []
+      this.datalayer.eachLayer((feature) => {
+        if (rule.match(feature.properties)) {
+          matched.push(feature)
+        }
+      })
+      if (!matched) {
+        U.Alert.error(L._('Nothing matched'))
+        return
+      }
+      this.datalayer.hide()
+      for (const feature of matched) {
+        feature.del()
+      }
+      this.datalayer.isDirty = true
+      this.datalayer.show()
+      this.edit()
+    })
+  },
+
   edit: function () {
     const id = 'tableeditor:edit'
     this.compileProperties()
@@ -115,10 +143,16 @@ U.TableEditor = L.Class.extend({
     const iconElement = L.DomUtil.createIcon(addButton, 'icon-add')
     addButton.insertBefore(iconElement, addButton.firstChild)
     L.DomEvent.on(addButton, 'click', this.addProperty, this)
+    const refineButton = L.DomUtil.createButton('flat', undefined, L._('Delete rows'))
+    refineButton.insertBefore(
+      L.DomUtil.createIcon(refineButton, 'icon-add'),
+      refineButton.firstChild
+    )
+    L.DomEvent.on(refineButton, 'click', this.refine, this)
     this.datalayer.map.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
-      actions: [addButton],
+      actions: [addButton, refineButton],
     })
   },
 })
