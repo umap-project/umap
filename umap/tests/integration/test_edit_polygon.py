@@ -117,8 +117,8 @@ def test_should_reset_style_on_cancel(live_server, openmap, page, bootstrap):
     expect(page.locator(".leaflet-overlay-pane path[fill='GoldenRod']")).to_have_count(
         1
     )
-    page.once("dialog", lambda dialog: dialog.accept())
     page.get_by_role("button", name="Cancel edits").click()
+    page.locator("dialog").get_by_role("button", name="OK").click()
     expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(1)
 
 

@@ -53,7 +53,7 @@ export default class Importer {
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.loadImporters()
-    this.dialog = new Dialog(this.map._controlContainer)
+    this.dialog = new Dialog()
   }
 
   loadImporters() {
@@ -114,7 +114,7 @@ export default class Importer {
   }
 
   get action() {
-    return this.qs('[name=action]:checked').value
+    return this.qs('[name=action]:checked')?.value
   }
 
   get layerId() {
@@ -234,7 +234,7 @@ export default class Importer {
   }
 
   submit() {
-    let hasErrors = false
+    let hasErrors
     if (this.format === 'umap') {
       hasErrors = !this.full()
     } else if (!this.url) {
@@ -242,7 +242,7 @@ export default class Importer {
     } else if (this.action) {
       hasErrors = !this[this.action]()
     }
-    if (!hasErrors) {
+    if (hasErrors === false) {
       Alert.info(translate('Data successfully imported!'))
     }
   }

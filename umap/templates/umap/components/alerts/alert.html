@@ -5,7 +5,7 @@
 </style>
 
 <template id="umap-alert-template">
-  <div role="dialog" class="dark window">
+  <div role="dialog" class="dark window umap-alert">
     <div>
       <p role="alert"></p>
     </div>
@@ -20,7 +20,7 @@
 <umap-alert></umap-alert>
 
 <template id="umap-alert-creation-template">
-  <div role="dialog" class="dark window">
+  <div role="dialog" class="dark window umap-alert">
     <div>
       <h3 role="alert"></h3>
       {% url "login" as login_url %}
@@ -55,7 +55,7 @@
 <umap-alert-creation></umap-alert-creation>
 
 <template id="umap-alert-conflict-template">
-  <div role="dialog" class="dark window">
+  <div role="dialog" class="dark window umap-alert">
     <div>
       <p role="alert"></p>
       <div id="conflict-wrapper">

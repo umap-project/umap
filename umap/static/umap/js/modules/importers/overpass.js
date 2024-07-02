@@ -11,7 +11,7 @@ const TEMPLATE = `
   </label>
   <label>
     ${translate('Geometry mode')}
-    <select name="out-mode">
+    <select name="out">
       <option value="geom" selected>${translate('Default')}</option>
       <option value="center">${translate('Only geometry centers')}</option>
     </select>
@@ -58,27 +58,28 @@ export class Importer {
     })
     this.map.help.parse(container)
 
-    const confirm = () => {
-      let tags = container.querySelector('[name=tags]').value
-      if (!tags) {
-        Alert.error(translate('Please define an expression for the query first'))
+    const confirm = (form) => {
+      if (!form.tags) {
+        Alert.error(translate('Expression is empty'))
         return
       }
-      const outMode = container.querySelector('[name=out-mode]').value
+      let tags = form.tags
       if (!tags.startsWith('[')) tags = `[${tags}]`
       let area = '{south},{west},{north},{east}'
       if (boundary) area = `area:${boundary}`
-      const query = `[out:json];nwr${tags}(${area});out ${outMode};`
+      const query = `[out:json];nwr${tags}(${area});out ${form.out};`
       importer.url = `${this.baseUrl}?data=${query}`
       if (boundary) importer.layerName = boundaryName
       importer.format = 'osm'
-      importer.dialog.close()
     }
-    L.DomUtil.createButton('', container, translate('Choose this data'), confirm)
 
-    importer.dialog.open({
-      content: container,
-      className: `${this.id} importer dark`,
-    })
+    importer.dialog
+      .open({
+        template: container,
+        className: `${this.id} importer dark`,
+        accept: translate('Choose this data'),
+        cancel: false
+      })
+      .then(confirm)
   }
 }
