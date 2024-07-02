@@ -181,8 +181,8 @@ export default class Dialog {
     return this.open(Object.assign({}, config, { message, template: false }))
   }
 
-  prompt(message, fallback = '', config = {}) {
-    const template = `<input type="text" name="prompt" value="${fallback}">`
+  prompt(message, config = {}) {
+    const template = `<input type="text" name="prompt">`
     return this.open(Object.assign({}, config, { message, template }))
   }
 }

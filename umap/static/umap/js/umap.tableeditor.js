@@ -101,14 +101,29 @@ U.TableEditor = L.Class.extend({
       })
   },
 
-  refine: function () {
-    const promise = new U.Prompt().open({
-      className: 'dark',
-      title: L._('Deleting rows matching condition'),
+  deleteRows: function () {
+    const dialog = this.datalayer.map.dialog
+    const promise = dialog.prompt(L._('Deleting rows matching condition'))
+
+    const autocomplete = new U.AutocompleteDatalist(
+      dialog.dialog.querySelector('[name=prompt]')
+    )
+    autocomplete.suggestions = this.datalayer._propertiesIndex
+    autocomplete.input.addEventListener('input', (event) => {
+      const value = event.target.value
+      if (this.datalayer._propertiesIndex.includes(value)) {
+        autocomplete.suggestions = [`${value}=`, `${value}!=`, `${value}>`, `${value}<`]
+      } else if (value.endsWith('=')) {
+        const key = value.split('!')[0].split('=')[0]
+        autocomplete.suggestions = this.datalayer
+          .sortedValues(key)
+          .map((str) => `${value}${str || ''}`)
+      }
     })
-    promise.then((raw) => {
-      if (!raw) return
-      const rule = new U.Rule(raw)
+
+    promise.then(({ prompt }) => {
+      if (!prompt) return
+      const rule = new U.Rule(prompt)
       const matched = []
       this.datalayer.eachLayer((feature) => {
         if (rule.match(feature.properties)) {
@@ -148,7 +163,7 @@ U.TableEditor = L.Class.extend({
       L.DomUtil.createIcon(refineButton, 'icon-add'),
       refineButton.firstChild
     )
-    L.DomEvent.on(refineButton, 'click', this.refine, this)
+    L.DomEvent.on(refineButton, 'click', this.deleteRows, this)
     this.datalayer.map.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',

@@ -6,6 +6,7 @@ import {
 } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Request, ServerRequest } from './request.js'
+import { escapeHTML, generateId } from './utils.js'
 
 export class BaseAutocomplete {
   constructor(el, options) {
@@ -46,7 +47,7 @@ export class BaseAutocomplete {
       placeholder: this.options.placeholder,
       autocomplete: 'off',
       className: this.options.className,
-      name: this.options.name || 'autocomplete'
+      name: this.options.name || 'autocomplete',
     })
     DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
     DomEvent.on(this.input, 'keyup', this.onKeyUp, this)
@@ -350,3 +351,19 @@ export const MultipleMixin = (Base) =>
 export class AjaxAutocompleteMultiple extends MultipleMixin(BaseServerAjax) {}
 
 export class AjaxAutocomplete extends SingleMixin(BaseServerAjax) {}
+
+export class AutocompleteDatalist {
+  constructor(input) {
+    this.input = input
+    this.datalist = document.createElement('datalist')
+    this.datalist.id = generateId()
+    this.input.setAttribute('list', this.datalist.id)
+    this.input.parentElement.appendChild(this.datalist)
+  }
+
+  set suggestions(values) {
+    this.datalist.innerHTML = values
+      .map((value) => `<option>${escapeHTML(value)}</option>`)
+      .join('')
+  }
+}

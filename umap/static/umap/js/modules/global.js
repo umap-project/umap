@@ -3,7 +3,7 @@ import {
   uMapAlertConflict as AlertConflict,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
-import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
+import { AjaxAutocomplete, AjaxAutocompleteMultiple, AutocompleteDatalist } from './autocomplete.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
 import Facets from './facets.js'
@@ -30,6 +30,7 @@ window.U = {
   AlertConflict,
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
+  AutocompleteDatalist,
   Browser,
   Caption,
   Dialog,
