@@ -30,13 +30,15 @@ export class Importer {
         importer.format = select.options[select.selectedIndex].dataset.format
         importer.layerName = select.options[select.selectedIndex].textContent
       }
-      importer.dialog.close()
     }
-    L.DomUtil.createButton('', container, translate('Choose this dataset'), confirm)
 
-    importer.dialog.open({
-      content: container,
-      className: `${this.id} importer dark`,
-    })
+    importer.dialog
+      .open({
+        template: container,
+        className: `${this.id} importer dark`,
+        accept: translate('Choose this dataset'),
+        cancel: false,
+      })
+      .then(confirm)
   }
 }
