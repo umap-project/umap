@@ -14,7 +14,7 @@ import { HTTPError, NOKError, Request, RequestError, ServerRequest } from './req
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
 import { SyncEngine } from './sync/engine.js'
-import { Dialog, Prompt } from './ui/dialog.js'
+import Dialog from './ui/dialog.js'
 import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
@@ -42,7 +42,6 @@ window.U = {
   NOKError,
   Orderable,
   Panel,
-  Prompt,
   Request,
   RequestError,
   Rules,

@@ -56,6 +56,7 @@ U.Map = L.Map.extend({
     this.urls = new U.URLs(this.options.urls)
 
     this.panel = new U.Panel(this)
+    this.dialog = new U.Dialog({ className: 'dark' })
     this.tooltip = new U.Tooltip(this._controlContainer)
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
@@ -1639,9 +1640,12 @@ U.Map = L.Map.extend({
   },
 
   askForReset: function (e) {
-    if (!confirm(L._('Are you sure you want to cancel your changes?'))) return
-    this.reset()
-    this.disableEdit()
+    this.dialog
+      .confirm(L._('Are you sure you want to cancel your changes?'))
+      .then(() => {
+        this.reset()
+        this.disableEdit()
+      })
   },
 
   startMarker: function () {

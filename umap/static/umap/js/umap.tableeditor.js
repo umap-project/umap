@@ -21,35 +21,8 @@ U.TableEditor = L.Class.extend({
     const rename = L.DomUtil.create('i', 'umap-edit', container)
     del.title = L._('Delete this property on all the features')
     rename.title = L._('Rename this property on all the features')
-    const doDelete = function () {
-      if (
-        confirm(
-          L._('Are you sure you want to delete this property on all the features?')
-        )
-      ) {
-        this.datalayer.eachLayer((feature) => {
-          feature.deleteProperty(property)
-        })
-        this.datalayer.deindexProperty(property)
-        this.resetProperties()
-        this.edit()
-      }
-    }
-    const doRename = function () {
-      const newName = prompt(
-        L._('Please enter the new name of this property'),
-        property
-      )
-      if (!newName || !this.validateName(newName)) return
-      this.datalayer.eachLayer((feature) => {
-        feature.renameProperty(property, newName)
-      })
-      this.datalayer.deindexProperty(property)
-      this.datalayer.indexProperty(newName)
-      this.edit()
-    }
-    L.DomEvent.on(del, 'click', doDelete, this)
-    L.DomEvent.on(rename, 'click', doRename, this)
+    L.DomEvent.on(del, 'click', () => this.deleteProperty(property))
+    L.DomEvent.on(rename, 'click', () => this.renameProperty(property))
   },
 
   renderRow: function (feature) {
@@ -89,15 +62,41 @@ U.TableEditor = L.Class.extend({
     return true
   },
 
-  addProperty: function () {
-    new U.Prompt()
-      .open({
-        className: 'dark',
-        title: L._('Please enter the name of the property'),
+  renameProperty: function (property) {
+    this.datalayer.map.dialog
+      .prompt(L._('Please enter the new name of this property'))
+      .then(({ prompt }) => {
+        if (!prompt || !this.validateName(prompt)) return
+        this.datalayer.eachLayer((feature) => {
+          feature.renameProperty(property, prompt)
+        })
+        this.datalayer.deindexProperty(property)
+        this.datalayer.indexProperty(prompt)
+        this.edit()
       })
-      .then((newName) => {
-        if (!newName || !this.validateName(newName)) return
-        this.datalayer.indexProperty(newName)
+  },
+
+  deleteProperty: function (property) {
+    this.datalayer.map.dialog
+      .confirm(
+        L._('Are you sure you want to delete this property on all the features?')
+      )
+      .then(() => {
+        this.datalayer.eachLayer((feature) => {
+          feature.deleteProperty(property)
+        })
+        this.datalayer.deindexProperty(property)
+        this.resetProperties()
+        this.edit()
+      })
+  },
+
+  addProperty: function () {
+    this.datalayer.map.dialog
+      .prompt(L._('Please enter the name of the property'))
+      .then(({ prompt }) => {
+        if (!prompt || !this.validateName(prompt)) return
+        this.datalayer.indexProperty(prompt)
         this.edit()
       })
   },

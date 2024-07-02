@@ -2,7 +2,7 @@ import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
-import { Dialog } from './ui/dialog.js'
+import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `
@@ -114,7 +114,7 @@ export default class Importer {
   }
 
   get action() {
-    return this.qs('[name=action]:checked').value
+    return this.qs('[name=action]:checked')?.value
   }
 
   get layerId() {
@@ -234,7 +234,7 @@ export default class Importer {
   }
 
   submit() {
-    let hasErrors = false
+    let hasErrors
     if (this.format === 'umap') {
       hasErrors = !this.full()
     } else if (!this.url) {
@@ -242,7 +242,7 @@ export default class Importer {
     } else if (this.action) {
       hasErrors = !this[this.action]()
     }
-    if (!hasErrors) {
+    if (hasErrors === false) {
       Alert.info(translate('Data successfully imported!'))
     }
   }

@@ -194,16 +194,9 @@ U.FeatureMixin = {
   },
 
   getAdvancedEditActions: function (container) {
-    L.DomUtil.createButton(
-      'button umap-delete',
-      container,
-      L._('Delete'),
-      function (e) {
-        L.DomEvent.stop(e)
-        if (this.confirmDelete()) this.map.editPanel.close()
-      },
-      this
-    )
+    L.DomUtil.createButton('button umap-delete', container, L._('Delete'), (e) => {
+      this.confirmDelete().then(() => this.map.editPanel.close())
+    })
   },
 
   appendEditFieldsets: function (container) {
@@ -272,8 +265,11 @@ U.FeatureMixin = {
     this.bindPopup(new Class(this))
   },
 
-  confirmDelete: function () {
-    if (confirm(L._('Are you sure you want to delete the feature?'))) {
+  confirmDelete: async function () {
+    const confirmed = await this.map.dialog.confirm(
+      L._('Are you sure you want to delete the feature?')
+    )
+    if (confirmed) {
       this.del()
       return true
     }

@@ -1,4 +1,4 @@
-[role="dialog"] {
+.umap-alert[role="dialog"] {
     box-sizing: border-box;
     min-height: 46px;
     line-height: 46px;
@@ -20,36 +20,36 @@
     width: max-content;
     z-index: var(--zindex-alert);
 }
-[role="dialog"] > div {
+.umap-alert[role="dialog"] > div {
     margin: 0 auto;
     min-width: 60%;
     background-size: 20px;
     background-position: 0 15px;
     padding-left: 28px;
 }
-[role="dialog"][data-level="info"] > div {
+.umap-alert[role="dialog"][data-level="info"] > div {
     background-image: url('../../../img/alert-icon-info.svg');
     background-repeat: no-repeat;
 }
-[role="dialog"][data-level="success"] > div {
+.umap-alert[role="dialog"][data-level="success"] > div {
     background-image: url('../../../img/alert-icon-success.svg');
     background-repeat: no-repeat;
 }
-[role="dialog"][data-level="error"] > div {
+.umap-alert[role="dialog"][data-level="error"] > div {
     background-image: url('../../../img/alert-icon-error.svg');
     background-repeat: no-repeat;
 }
-[role="dialog"][data-level="error"] {
+.umap-alert[role="dialog"][data-level="error"] {
     background-color: var(--color-darkRed);
 }
-[role="dialog"] a {
+.umap-alert[role="dialog"] a {
     text-decoration: underline;
 }
-[role="dialog"] label {
+.umap-alert[role="dialog"] label {
     font-size: .8rem;
     font-weight: normal;
 }
-[role="dialog"] a[target="_blank"] {
+.umap-alert[role="dialog"] a[target="_blank"] {
     background: url('../../../img/icon-external-link.svg') no-repeat right center;
     padding-right: 14px;
     background-size: 12px;
@@ -127,7 +127,7 @@ h3[role="alert"] + p {
 #link-wrapper {
     margin-bottom: 1rem;
 }
-[role="dialog"] #conflict-wrapper a[target="_blank"] {
+.umap-alert[role="dialog"] #conflict-wrapper a[target="_blank"] {
     background-position-y: 16px;
 }
 

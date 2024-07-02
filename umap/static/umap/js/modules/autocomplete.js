@@ -45,6 +45,7 @@ export class BaseAutocomplete {
       placeholder: this.options.placeholder,
       autocomplete: 'off',
       className: this.options.className,
+      name: this.options.name || 'autocomplete'
     })
     DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
     DomEvent.on(this.input, 'keyup', this.onKeyUp, this)

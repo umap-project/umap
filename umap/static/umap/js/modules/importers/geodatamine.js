@@ -25,7 +25,6 @@ const TEMPLATE = `
   </label>
   <label id="boundary">
   </label>
-  <button class="button">${translate('Choose this data')}</button>
 `
 
 class Autocomplete extends SingleMixin(BaseAjax) {
@@ -66,7 +65,6 @@ export class Importer {
     } else {
       console.error(response)
     }
-    const asPoint = container.querySelector('[name=aspoint]')
     this.autocomplete = new Autocomplete(container.querySelector('#boundary'), {
       placeholder: translate('Search admin boundary'),
       url: `${this.baseUrl}/boundaries/search?text={q}`,
@@ -75,21 +73,23 @@ export class Importer {
         boundaryName = choice.item.label
       },
     })
-    const confirm = () => {
+    const confirm = (form) => {
       if (!boundary || !select.value) {
         Alert.error(translate('Please choose a theme and a boundary first.'))
         return
       }
-      importer.url = `${this.baseUrl}/data/${select.value}/${boundary}?format=geojson&aspoint=${asPoint.checked}`
+      importer.url = `${this.baseUrl}/data/${form.theme}/${boundary}?format=geojson&aspoint=${Boolean(form.aspoint)}`
       importer.format = 'geojson'
       importer.layerName = `${boundaryName} — ${select.options[select.selectedIndex].textContent}`
-      importer.dialog.close()
     }
-    DomEvent.on(container.querySelector('button'), 'click', confirm)
 
-    importer.dialog.open({
-      content: container,
-      className: `${this.id} importer dark`,
-    })
+    importer.dialog
+      .open({
+        template: container,
+        className: `${this.id} importer dark`,
+        accept: translate('Choose this data'),
+        cancel: false,
+      })
+      .then(confirm)
   }
 }

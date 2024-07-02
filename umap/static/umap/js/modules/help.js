@@ -208,7 +208,7 @@ export default class Help {
         })
       }
     }
-    this.dialog.open({ content: container, className: 'dark' })
+    this.dialog.open({ template: container, className: 'dark', cancel: false, accept: false })
   }
 
   button(container, entries, classname) {
@@ -245,7 +245,7 @@ export default class Help {
       DomUtil.add('i', action.options.className, actionContainer)
       DomUtil.add('span', '', actionContainer, action.options.tooltip)
       DomEvent.on(actionContainer, 'click', action.addHooks, action)
-      DomEvent.on(actionContainer, 'click', this.dialog.close, this.map.dialog)
+      DomEvent.on(actionContainer, 'click', this.dialog.close, this.dialog)
     }
     title.textContent = translate('Where do we go from here?')
     for (const id in this.map.helpMenuActions) {

@@ -37,8 +37,10 @@ export class Importer {
     this.autocomplete = new Autocomplete(container, options)
 
     importer.dialog.open({
-      content: container,
+      template: container,
       className: `${this.id} importer dark`,
+      cancel: false,
+      accept: false,
     })
   }
 }

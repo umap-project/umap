@@ -14,7 +14,28 @@
     height: fit-content;
     max-height: 90vh;
 }
-.umap-dialog .umap-close-link {
-    float: right;
-    width: 100px;
+:where([data-component="no-dialog"]:not([hidden])) {
+  display: block;
+  inset-inline-start: 50%;
+  position: fixed;
+  transform: translateX(-50%);
+}
+:where([data-component*="dialog"] menu) {
+  display: flex;
+  gap: calc(var(--gutter) / 2);
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+}
+:where([data-component*="dialog"] [data-ref="fieldset"]) {
+  border: 0;
+  margin: unset;
+  padding: unset;
+}
+/* hack for Firefox */
+@-moz-document url-prefix() {
+  [data-component="no-dialog"]:not([hidden]) {
+    inset-inline-start: 0;
+     transform: none;
+  }
 }
