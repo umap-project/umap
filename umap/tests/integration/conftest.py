@@ -22,7 +22,7 @@ def set_timeout(context):
 
 @pytest.fixture(autouse=True)
 def mock_osm_tiles(page):
-    if not bool(os.environ.get("PLAYWRIGHT_USE_TILES", False)):
+    if not bool(os.environ.get("PWDEBUG", False)):
         page.route("*/**/osmfr/**", lambda route: route.fulfill())
 
 
