@@ -16,9 +16,7 @@
 }
 :where([data-component="no-dialog"]:not([hidden])) {
   display: block;
-  inset-inline-start: 50%;
-  position: fixed;
-  transform: translateX(-50%);
+  position: relative;
 }
 :where([data-component*="dialog"] menu) {
   display: flex;

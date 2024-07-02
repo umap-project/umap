@@ -1,4 +1,3 @@
-import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 
 // From https://css-tricks.com/replace-javascript-dialogs-html-dialog-element/
@@ -55,8 +54,8 @@ export default class Dialog {
         <div data-ref="template"></div>
       </fieldset>
       <menu>
-        <button${this.dialogSupported ? '' : ` type="button"`} class="button" data-ref="cancel" data-close value="cancel"></button>
-        <button${this.dialogSupported ? ' type="submit"' : ` type="button"`} class="button" data-ref="accept" value="accept"></button>
+        <button type="button" data-ref="cancel" data-close value="cancel"></button>
+        <button type="submit" class="button" data-ref="accept" value="accept"></button>
       </menu>
     </form>`
     document.body.appendChild(this.dialog)
@@ -69,21 +68,29 @@ export default class Dialog {
     this.dialog.setAttribute('aria-labelledby', this.elements.message.id)
     this.dialog.addEventListener('click', (event) => {
       if (event.target.closest('[data-close]')) {
-        this.dialog.close('cancel')
+        this.close()
       }
     })
+    if (!this.dialogSupported) {
+      this.elements.form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        this.dialog.returnValue = 'accept'
+        this.close()
+        this.dialog.returnValue = undefined
+      })
+    }
     this.dialog.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        if (!this.dialogSupported) e.preventDefault()
-        console.log('Enter')
-        this.elements.accept.click()
+        if (!this.dialogSupported) {
+          e.preventDefault()
+          this.elements.form.requestSubmit()
+        }
       }
       if (e.key === 'Escape') {
         e.stopPropagation()
-        this.dialog.close('cancel')
+        this.close()
       }
     })
-    this.toggle()
   }
 
   currentZIndex() {
@@ -133,11 +140,16 @@ export default class Dialog {
   }
 
   toggle(open = false) {
-    if (this.dialogSupported && open) this.dialog.show()
-    if (!this.dialogSupported) {
+    if (this.dialogSupported) {
+      if (open) this.dialog.show()
+      else this.dialog.close()
+    } else {
       this.dialog.hidden = !open
       if (this.elements.target && !open) {
         this.elements.target.focus()
+      }
+      if (!open) {
+        this.dialog.dispatchEvent(new CustomEvent('close'))
       }
     }
   }
@@ -146,8 +158,7 @@ export default class Dialog {
     return new Promise((resolve) => {
       this.dialog.addEventListener(
         'close',
-        (status) => {
-          this.toggle()
+        (event) => {
           if (this.dialog.returnValue === 'accept') {
             const value = this.hasFormData
               ? this.collectFormData(new FormData(this.elements.form))

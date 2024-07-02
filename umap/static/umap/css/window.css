@@ -10,7 +10,6 @@
     position: sticky;
     top: 0;
     height: var(--panel-header-height);
-    float: right;
 }
 .window .buttons li {
     cursor: pointer;
