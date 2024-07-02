@@ -38,6 +38,9 @@ export class Importer {
     this.map = map
     this.name = options.name || 'Overpass'
     this.baseUrl = options?.url || 'https://overpass-api.de/api/interpreter'
+    this.searchUrl =
+      options?.searchUrl ||
+      'https://photon.komoot.io/api?q={q}&layer=county&layer=city&layer=state'
     this.id = 'overpass'
   }
 
@@ -47,7 +50,7 @@ export class Importer {
     const container = DomUtil.create('div')
     container.innerHTML = TEMPLATE
     this.autocomplete = new Autocomplete(container.querySelector('#area'), {
-      url: 'https://photon.komoot.io/api?q={q}&osm_tag=place',
+      url: this.searchUrl,
       placeholder: translate(
         'Type area name, or let empty to load data in current map view'
       ),
