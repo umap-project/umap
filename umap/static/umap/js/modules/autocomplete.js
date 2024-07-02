@@ -16,6 +16,7 @@ export class BaseAutocomplete {
       allowFree: true,
       minChar: 2,
       maxResults: 5,
+      throttling: 300,
     }
     this.cache = ''
     this.results = []
@@ -126,7 +127,10 @@ export class BaseAutocomplete {
       'Control',
     ]
     if (!special.includes(e.key)) {
-      this.search()
+      if (this._typing) window.clearTimeout(this._typing)
+      this._typing = window.setTimeout(() => {
+        this.search()
+      }, this.options.throttling)
     }
   }
 
