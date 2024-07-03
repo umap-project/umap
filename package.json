@@ -63,6 +63,7 @@
     "leaflet.photon": "0.9.1",
     "osmtogeojson": "^3.0.0-beta.3",
     "simple-statistics": "^7.8.3",
+    "tabulator-tables": "^6.2.1",
     "togpx": "^0.5.4",
     "tokml": "0.4.0"
   },

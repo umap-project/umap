@@ -16,6 +16,7 @@ import { SCHEMA } from './schema.js'
 import { SyncEngine } from './sync/engine.js'
 import Dialog from './ui/dialog.js'
 import { EditPanel, FullPanel, Panel } from './ui/panel.js'
+import TableEditor from './tableeditor.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
@@ -50,6 +51,7 @@ window.U = {
   SCHEMA,
   ServerRequest,
   SyncEngine,
+  TableEditor,
   Tooltip,
   URLs,
   Utils,

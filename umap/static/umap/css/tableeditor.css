@@ -1,0 +1,20 @@
+.tabulator .tabulator-header {
+  border-bottom-color: var(--color-accent);
+}
+.tabulator-menu .tabulator-menu-item {
+  color: var(--color--accent);
+}
+.tabulator-menu {
+  height: fit-content;
+  /* Workaround height: 0px set in JS  */
+  min-height: 84px;
+}
+.tabulator-row.tabulator-selected {
+  background-color: var(--color-accent);
+}
+.tabulator-row.tabulator-selected:hover {
+  background-color: var(--color-lightCyan);
+}
+.tabulator-row.tabulator-selected .tabulator-cell {
+  color: var(--color-darkBlue);
+}
