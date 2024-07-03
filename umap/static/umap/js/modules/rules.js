@@ -1,5 +1,6 @@
 import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import { AutocompleteDatalist } from './autocomplete.js'
 import * as Utils from './utils.js'
 
 export class Rule {
@@ -89,7 +90,7 @@ class ConditionalRule extends Rule {
   }
 
   constructor(map, condition = '', options = {}) {
-    super()
+    super(condition)
     this._isDirty = false
     this.map = map
     this.active = true
@@ -134,6 +135,18 @@ class ConditionalRule extends Rule {
     const builder = new U.FormBuilder(this, options)
     const defaultShapeProperties = DomUtil.add('div', '', container)
     defaultShapeProperties.appendChild(builder.build())
+    const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
+    const properties = this.map.allProperties()
+    autocomplete.suggestions = properties
+    autocomplete.input.addEventListener('input', (event) => {
+      const value = event.target.value
+      if (properties.includes(value)) {
+        autocomplete.suggestions = [`${value}=`, `${value}!=`, `${value}>`, `${value}<`]
+      } else if (value.endsWith('=')) {
+        const key = value.split('!')[0].split('=')[0]
+        autocomplete.suggestions = this.map.sortedValues(key).map((str) => `${value}${str || ''}`)
+      }
+    })
 
     this.map.editPanel.open({ content: container })
   }

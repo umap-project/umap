@@ -262,6 +262,17 @@ U.Map = L.Map.extend({
     this.onDataLayersChanged()
   },
 
+  allProperties: function () {
+    return [].concat(...this.datalayers_index.map((dl) => dl._propertiesIndex))
+  },
+
+  sortedValues: function (property) {
+    return []
+      .concat(...this.datalayers_index.map((dl) => dl.sortedValues(property)))
+      .filter((val, idx, arr) => arr.indexOf(val) === idx)
+      .sort(U.Utils.naturalSort)
+  },
+
   redrawVisibleDataLayers: function () {
     this.eachVisibleDataLayer((datalayer) => {
       datalayer.redraw()
