@@ -141,6 +141,7 @@ U.TableEditor = L.Class.extend({
       this.datalayer.isDirty = true
       this.datalayer.show()
       this.edit()
+      U.Alert.info(L._('Deleted {count} rows', { count: matched.length }))
     })
   },
 

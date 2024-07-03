@@ -8,7 +8,6 @@ from umap.models import DataLayer
 
 from ..base import DataLayerFactory
 
-
 DATALAYER_DATA = {
     "type": "FeatureCollection",
     "features": [
