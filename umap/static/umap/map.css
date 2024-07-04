@@ -908,64 +908,6 @@ a.umap-control-caption,
     padding-left: 31px;
 }
 
-/* ********************************* */
-/*          Table Editor             */
-/* ********************************* */
-
-.umap-table-editor .table {
-    display: table;
-    width: 100%;
-    white-space: nowrap;
-    table-layout: fixed;
-}
-.umap-table-editor .tbody {
-    display: table-row-group;
-}
-.umap-table-editor .thead,
-.umap-table-editor .trow {
-    display: table-row;
-}
-.umap-table-editor .tcell {
-    display: table-cell;
-    width: 200px;
-}
-.umap-table-editor .thead {
-    text-align: center;
-    height: 48px;
-    line-height: 48px;
-    background-color: #2c3133;
-}
-.umap-table-editor .thead .tcell {
-    border-left: 1px solid #0b0c0c;
-}
-.umap-table-editor .tbody .trow input {
-    margin: 0;
-    border-right: none;
-    display: inline;
-}
-.umap-table-editor .tbody .trow + .trow input {
-    border-top: none;
-}
-.umap-table-editor .thead i {
-    display: none;
-    width: 50%;
-    cursor: pointer;
-    padding: 10px 0;
-    height: 24px;
-    line-height: 24px;
-}
-.umap-table-editor .thead i:before {
-    width: 40px;
-}
-.umap-table-editor .thead .tcell:hover i {
-    display: inline-block;
-}
-.umap-table-editor .thead .tcell i:hover {
-    background-color: #33393b;
-}
-.umap-table-editor .thead .tcell:hover span {
-    display: none;
-}
 
 /* ********************************* */
 /*      Tilelayer switcher           */

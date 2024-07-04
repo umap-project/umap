@@ -1032,7 +1032,7 @@ U.DataLayer = L.Evented.extend({
     this._index.splice(this._index.indexOf(id), 1)
     delete this._layers[id]
     delete this.map.features_index[feature.getSlug()]
-    if (this.hasDataLoaded()) this.fire('datachanged')
+    if (this.hasDataLoaded() && this.isVisible()) this.fire('datachanged')
   },
 
   indexProperties: function (feature) {
@@ -1802,7 +1802,7 @@ U.DataLayer = L.Evented.extend({
   tableEdit: function () {
     if (this.isRemoteLayer() || !this.isVisible()) return
     const editor = new U.TableEditor(this)
-    editor.edit()
+    editor.open()
   },
 
   getFilterKeys: function () {

@@ -27,7 +27,8 @@
 .panel.full.on {
     visibility: visible;
     right: calc(var(--panel-gutter) * 2 + var(--control-size));
-    left: var(--panel-gutter);
+/*    left: var(--panel-gutter);*/
+    left: calc(var(--panel-gutter) * 3 + var(--control-size) + var(--panel-width));
     height: initial;
     max-height: initial;
 }
