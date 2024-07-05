@@ -126,7 +126,77 @@ U.Layer.Cluster = L.MarkerClusterGroup.extend({
   },
 })
 
-U.Layer.Choropleth = L.FeatureGroup.extend({
+// Layer where each feature color is relative to the others,
+// so we need all features before behing able to set one
+// feature layer
+U.RelativeColorLayer = L.FeatureGroup.extend({
+  initialize: function (datalayer) {
+    this.datalayer = datalayer
+    this.colorSchemes = Object.keys(colorbrewer)
+      .filter((k) => k !== 'schemeGroups')
+      .sort()
+    const key = this.getType().toLowerCase()
+    if (!U.Utils.isObject(this.datalayer.options[key])) {
+      this.datalayer.options[key] = {}
+    }
+    L.FeatureGroup.prototype.initialize.call(this, [], this.datalayer.options[key])
+    this.datalayer.onceDataLoaded(() => {
+      this.redraw()
+      this.datalayer.on('datachanged', this.redraw, this)
+    })
+  },
+
+  redraw: function () {
+    this.compute()
+    if (this._map) this.eachLayer(this._map.addLayer, this._map)
+  },
+
+  getOption: function (option, feature) {
+    if (feature && option === feature.staticOptions.mainColor) {
+      return this.getColor(feature)
+    }
+  },
+
+  addLayer: function (layer) {
+    // Do not add yet the layer to the map
+    // wait for datachanged event, so we can compute breaks only once
+    const id = this.getLayerId(layer)
+    this._layers[id] = layer
+    return this
+  },
+
+  onAdd: function (map) {
+    this.compute()
+    L.FeatureGroup.prototype.onAdd.call(this, map)
+  },
+
+  getValues: function () {
+    const values = []
+    this.datalayer.eachLayer((layer) => {
+      const value = this._getValue(layer)
+      if (value !== undefined) values.push(value)
+    })
+    return values
+  },
+
+  renderLegend: function (container) {
+    const parent = L.DomUtil.create('ul', '', container)
+    const items = this.getLegendItems()
+    for (const [color, label] of items) {
+      const li = L.DomUtil.create('li', '', parent)
+      const colorEl = L.DomUtil.create('span', 'datalayer-color', li)
+      colorEl.style.backgroundColor = color
+      const labelEl = L.DomUtil.create('span', '', li)
+      labelEl.textContent = label
+    }
+  },
+
+  getColorSchemes: function (classes) {
+    return this.colorSchemes.filter((scheme) => Boolean(colorbrewer[scheme][classes]))
+  },
+})
+
+U.Layer.Choropleth = U.RelativeColorLayer.extend({
   statics: {
     NAME: L._('Choropleth'),
     TYPE: 'Choropleth',
@@ -147,42 +217,13 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
     manual: L._('Manual'),
   },
 
-  initialize: function (datalayer) {
-    this.datalayer = datalayer
-    if (!U.Utils.isObject(this.datalayer.options.choropleth)) {
-      this.datalayer.options.choropleth = {}
-    }
-    L.FeatureGroup.prototype.initialize.call(
-      this,
-      [],
-      this.datalayer.options.choropleth
-    )
-    this.datalayer.onceDataLoaded(() => {
-      this.redraw()
-      this.datalayer.on('datachanged', this.redraw, this)
-    })
-  },
-
-  redraw: function () {
-    this.computeBreaks()
-    if (this._map) this.eachLayer(this._map.addLayer, this._map)
-  },
-
   _getValue: function (feature) {
     const key = this.datalayer.options.choropleth.property || 'value'
-    return +feature.properties[key] // TODO: should we catch values non castable to int ?
+    const value = +feature.properties[key]
+    if (!Number.isNaN(value)) return value
   },
 
-  getValues: function () {
-    const values = []
-    this.datalayer.eachLayer((layer) => {
-      const value = this._getValue(layer)
-      if (!Number.isNaN(value)) values.push(value)
-    })
-    return values
-  },
-
-  computeBreaks: function () {
+  compute: function () {
     const values = this.getValues()
 
     if (!values.length) {
@@ -224,7 +265,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   getColor: function (feature) {
-    if (!feature) return // FIXME shold not happen
+    if (!feature) return // FIXME should not happen
     const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
     for (let i = 1; i < this.options.breaks.length; i++) {
@@ -232,25 +273,6 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
         return this.options.colors[i - 1]
       }
     }
-  },
-
-  getOption: function (option, feature) {
-    if (feature && option === feature.staticOptions.mainColor) {
-      return this.getColor(feature)
-    }
-  },
-
-  addLayer: function (layer) {
-    // Do not add yet the layer to the map
-    // wait for datachanged event, so we want compute breaks once
-    const id = this.getLayerId(layer)
-    this._layers[id] = layer
-    return this
-  },
-
-  onAdd: function (map) {
-    this.computeBreaks()
-    L.FeatureGroup.prototype.onAdd.call(this, map)
   },
 
   onEdit: function (field, builder) {
@@ -261,7 +283,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
       this.datalayer.options.choropleth.mode = 'manual'
       if (builder) builder.helpers['options.choropleth.mode'].fetch()
     }
-    this.computeBreaks()
+    this.compute()
     // If user changes the mode or the number of classes,
     // then update the breaks input value
     if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
@@ -270,10 +292,6 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
   },
 
   getEditableOptions: function () {
-    const brewerSchemes = Object.keys(colorbrewer)
-      .filter((k) => k !== 'schemeGroups')
-      .sort()
-
     return [
       [
         'options.choropleth.property',
@@ -288,7 +306,7 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
         {
           handler: 'Select',
           label: L._('Choropleth color palette'),
-          selectOptions: brewerSchemes,
+          selectOptions: this.colorSchemes,
         },
       ],
       [
@@ -324,20 +342,137 @@ U.Layer.Choropleth = L.FeatureGroup.extend({
     ]
   },
 
-  renderLegend: function (container) {
-    const parent = L.DomUtil.create('ul', '', container)
-    let li
-    let color
-    let label
+  getLegendItems: function () {
+    return this.options.breaks.slice(0, -1).map((el, index) => {
+      const from = +this.options.breaks[index].toFixed(1)
+      const to = +this.options.breaks[index + 1].toFixed(1)
+      return [this.options.colors[index], `${from} - ${to}`]
+    })
+  },
+})
 
-    this.options.breaks.slice(0, -1).forEach((limit, index) => {
-      li = L.DomUtil.create('li', '', parent)
-      color = L.DomUtil.create('span', 'datalayer-color', li)
-      color.style.backgroundColor = this.options.colors[index]
-      label = L.DomUtil.create('span', '', li)
-      label.textContent = `${+this.options.breaks[index].toFixed(
-        1
-      )} - ${+this.options.breaks[index + 1].toFixed(1)}`
+U.Layer.Categorized = U.RelativeColorLayer.extend({
+  statics: {
+    NAME: L._('Categorized'),
+    TYPE: 'Categorized',
+  },
+  includes: [U.Layer],
+  MODES: {
+    manual: L._('Manual'),
+    alpha: L._('Alphabetical'),
+  },
+  defaults: {
+    color: 'white',
+    fillColor: 'red',
+    fillOpacity: 0.7,
+    weight: 2,
+  },
+
+  _getValue: function (feature) {
+    const key =
+      this.datalayer.options.categorized.property || this.datalayer._propertiesIndex[0]
+    return feature.properties[key]
+  },
+
+  getColor: function (feature) {
+    if (!feature) return // FIXME should not happen
+    const featureValue = this._getValue(feature)
+    for (let i = 0; i < this.options.categories.length; i++) {
+      if (featureValue === this.options.categories[i]) {
+        return this.options.colors[i]
+      }
+    }
+  },
+
+  compute: function () {
+    const values = this.getValues()
+
+    if (!values.length) {
+      this.options.categories = []
+      this.options.colors = []
+      return
+    }
+    const mode = this.datalayer.options.categorized.mode
+    let categories = []
+    if (mode === 'manual') {
+      const manualCategories = this.datalayer.options.categorized.categories
+      if (manualCategories) {
+        categories = manualCategories.split(',')
+      }
+    } else {
+      categories = values
+        .filter((val, idx, arr) => arr.indexOf(val) === idx)
+        .sort(U.Utils.naturalSort)
+    }
+    this.options.categories = categories
+    this.datalayer.options.categorized.categories = this.options.categories.join(',')
+    const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
+    const colorScheme = this.datalayer.options.categorized.brewer
+    this._classes = this.options.categories.length
+    if (colorbrewer[colorScheme]?.[this._classes]) {
+      this.options.colors = colorbrewer[colorScheme][this._classes]
+    } else {
+      this.options.colors = colorbrewer?.Accent[this._classes] ? colorbrewer?.Accent[this._classes] : U.COLORS
+    }
+  },
+
+  getEditableOptions: function () {
+    return [
+      [
+        'options.categorized.property',
+        {
+          handler: 'Select',
+          selectOptions: this.datalayer._propertiesIndex,
+          label: L._('Category property'),
+        },
+      ],
+      [
+        'options.categorized.brewer',
+        {
+          handler: 'Select',
+          label: L._('Color palette'),
+          selectOptions: this.getColorSchemes(this._classes),
+        },
+      ],
+      [
+        'options.categorized.categories',
+        {
+          handler: 'BlurInput',
+          label: L._('Categories'),
+          helpText: L._('Comma separated list of categories.'),
+        },
+      ],
+      [
+        'options.categorized.mode',
+        {
+          handler: 'MultiChoice',
+          default: 'alpha',
+          choices: Object.entries(this.MODES),
+          label: L._('Categories mode'),
+        },
+      ],
+    ]
+  },
+
+  onEdit: function (field, builder) {
+    // Only compute the categories if we're dealing with categorized
+    if (!field.startsWith('options.categorized')) return
+    // If user touches the categories, then force manual mode
+    if (field === 'options.categorized.categories') {
+      this.datalayer.options.categorized.mode = 'manual'
+      if (builder) builder.helpers['options.categorized.mode'].fetch()
+    }
+    this.compute()
+    // If user changes the mode
+    // then update the categories input value
+    if (field === 'options.categorized.mode') {
+      if (builder) builder.helpers['options.categorized.categories'].fetch()
+    }
+  },
+
+  getLegendItems: function () {
+    return this.options.categories.map((limit, index) => {
+      return [this.options.colors[index], this.options.categories[index]]
     })
   },
 })
@@ -614,9 +749,9 @@ U.DataLayer = L.Evented.extend({
             this.resetLayer()
           }
           this.hide()
-          fields.forEach((field) => {
+          for (const field of fields) {
             this.layer.onEdit(field, builder)
-          })
+          }
           this.redraw()
           this.show()
           break
@@ -733,8 +868,8 @@ U.DataLayer = L.Evented.extend({
     this.addData(geojson, sync)
     this._geojson = geojson
     this._dataloaded = true
-    this.fire('dataloaded')
     this.fire('datachanged')
+    this.fire('dataloaded')
   },
 
   fromUmapGeoJSON: async function (geojson) {
