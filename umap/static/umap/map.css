@@ -1436,7 +1436,7 @@ span.popup-icon {
     margin-left: 10px;
 }
 .leaflet-top {
-    z-index: calc(var(--zindex-panels) + 1);
+    z-index: calc(var(--zindex-panels) - 1);
 }
 .leaflet-popup-content {
     min-width: 200px;
