@@ -1,8 +1,40 @@
 import { translate } from '../i18n.js'
 
+const TEMPLATE = `
+  <dialog data-ref="dialog">
+    <form method="dialog" data-ref="form">
+      <ul class="buttons">
+        <li><i class="icon icon-16 icon-close" data-close></i></li>
+      </ul>
+      <h3 data-ref="message" id="${Math.round(Date.now()).toString(36)}"></h3>
+      <fieldset data-ref="fieldset" role="document">
+        <div data-ref="template"></div>
+      </fieldset>
+      <menu>
+        <button type="button" data-ref="cancel" data-close value="cancel"></button>
+        <button type="submit" class="button" data-ref="accept" value="accept"></button>
+      </menu>
+    </form>
+  </dialog>
+`
+
+class WithTemplate {
+  loadTemplate(html) {
+    const template = document.createElement('template')
+    template.innerHTML = html
+    this.element = template.content.firstElementChild
+    this.elements = {}
+    for (const element of this.element.querySelectorAll('[data-ref]')) {
+      this.elements[element.dataset.ref] = element
+    }
+    return this.element
+  }
+}
+
 // From https://css-tricks.com/replace-javascript-dialogs-html-dialog-element/
-export default class Dialog {
+export default class Dialog extends WithTemplate {
   constructor(settings = {}) {
+    super()
     this.settings = Object.assign(
       {
         accept: translate('OK'),
@@ -41,30 +73,12 @@ export default class Dialog {
 
   init() {
     this.dialogSupported = typeof HTMLDialogElement === 'function'
-    this.dialog = document.createElement('dialog')
-    this.dialog.role = 'dialog'
+    this.dialog = this.loadTemplate(TEMPLATE)
     this.dialog.dataset.component = this.dialogSupported ? 'dialog' : 'no-dialog'
-    this.dialog.innerHTML = `
-    <form method="dialog" data-ref="form">
-      <ul class="buttons">
-        <li><i class="icon icon-16 icon-close" data-close></i></li>
-      </ul>
-      <h3 data-ref="message" id="${Math.round(Date.now()).toString(36)}"></h3>
-      <fieldset data-ref="fieldset" role="document">
-        <div data-ref="template"></div>
-      </fieldset>
-      <menu>
-        <button type="button" data-ref="cancel" data-close value="cancel"></button>
-        <button type="submit" class="button" data-ref="accept" value="accept"></button>
-      </menu>
-    </form>`
     document.body.appendChild(this.dialog)
 
-    this.elements = {}
     this.focusable = []
-    this.dialog
-      .querySelectorAll('[data-ref]')
-      .forEach((el) => (this.elements[el.dataset.ref] = el))
+
     this.dialog.setAttribute('aria-labelledby', this.elements.message.id)
     this.dialog.addEventListener('click', (event) => {
       if (event.target.closest('[data-close]')) {
