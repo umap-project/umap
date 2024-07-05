@@ -277,6 +277,7 @@ button.flat,
     width: initial;
     display: initial;
     line-height: inherit;
+    color: var(--text-color);
 }
 button.flat:hover,
 [type="button"].flat:hover,

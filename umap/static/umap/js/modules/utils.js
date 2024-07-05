@@ -378,11 +378,18 @@ export function toggleBadge(element, value) {
   else delete element.dataset.badge
 }
 
+export function loadTemplate(html) {
+  const template = document.createElement('template')
+  template.innerHTML = html
+    .split('\n')
+    .map((line) => line.trim())
+    .join('')
+  return template.content.firstElementChild
+}
+
 export class WithTemplate {
   loadTemplate(html) {
-    const template = document.createElement('template')
-    template.innerHTML = html.split('\n').map((line) => line.trim()).join('')
-    this.element = template.content.firstElementChild
+    this.element = loadTemplate(html)
     this.elements = {}
     for (const element of this.element.querySelectorAll('[data-ref]')) {
       this.elements[element.dataset.ref] = element

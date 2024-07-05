@@ -3,13 +3,13 @@
     padding: 5px 10px;
     width: auto;
     position: absolute;
-    box-shadow: 0 1px 7px #999999;
+    box-shadow: var(--block-shadow);
     display: none;
-    background-color: rgba(40, 40, 40, 0.8);
+    background-color: rgba(40, 40, 40, 0.9);
     color: #eeeeec;
     font-size: 0.8em;
     border-radius: 2px;
-    z-index: calc(var(--zindex-panels) + 1);
+    z-index: var(--zindex-tooltip);
     font-weight: normal;
     max-width: 300px;
 }

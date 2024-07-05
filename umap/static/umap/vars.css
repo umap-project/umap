@@ -44,9 +44,13 @@
     --zindex-toolbar: 480;
     --zindex-autocomplete: 470;
     --zindex-dialog: 460;
+    --zindex-contextmenu: 455;
     --zindex-icon-active: 450;
+    --zindex-tooltip: 445;
     --zindex-panels: 440;
     --zindex-dragover: 410;
+
+    --block-shadow: 0 1px 7px var(--color-mediumGray);
 }
 .dark {
     --background-color: var(--color-darkGray);
