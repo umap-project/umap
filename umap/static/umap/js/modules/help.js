@@ -201,7 +201,7 @@ export default class Help {
     this.map.dialog.open({ content: container, className: 'dark' })
   }
 
-  // Special dynamic case. Do we still think this dialog is usefull ?
+  // Special dynamic case. Do we still think this dialog is useful?
   showGetStarted() {
     const container = DomUtil.add('div')
     DomUtil.createTitle(container, translate('Where do we go from here?'))
