@@ -751,7 +751,7 @@ const ControlsMixin = {
         this.options.user.url
       )
     }
-    this.help.link(rightContainer, 'edit')
+    this.help.getStartedLink(rightContainer)
     const controlEditCancel = L.DomUtil.createButton(
       'leaflet-control-edit-cancel',
       rightContainer,
