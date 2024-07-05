@@ -191,42 +191,43 @@ export default class Help {
   show(entries) {
     const container = DomUtil.add('div')
     DomUtil.createTitle(container, translate('Help'))
-    // Special dynamic case. Do we still think this dialog is usefull ?
-    if (entries === 'edit') {
+    for (const name of entries) {
       DomUtil.element({
         tagName: 'div',
         className: 'umap-help-entry',
         parent: container,
-      }).appendChild(this._buildEditEntry())
-    } else {
-      for (const name of entries) {
-        DomUtil.element({
-          tagName: 'div',
-          className: 'umap-help-entry',
-          parent: container,
-          innerHTML: ENTRIES[name],
-        })
-      }
+        innerHTML: ENTRIES[name],
+      })
     }
     this.dialog.open({ template: container, className: 'dark', cancel: false, accept: false })
   }
 
-  button(container, entries, classname) {
+  // Special dynamic case. Do we still think this dialog is useful?
+  showGetStarted() {
+    const container = DomUtil.add('div')
+    DomUtil.createTitle(container, translate('Where do we go from here?'))
+    DomUtil.element({
+      tagName: 'div',
+      className: 'umap-help-entry',
+      parent: container,
+    }).appendChild(this._buildEditEntry())
+    this.map.dialog.open({ content: container, className: 'dark' })
+  }
+
+  button(container, entries) {
     const button = DomUtil.createButton(
-      classname || 'umap-help-button',
+      'umap-help-button',
       container,
       translate('Help')
     )
-    entries = typeof entries === 'string' ? [entries] : entries
-    DomEvent.on(button, 'click', DomEvent.stop).on(button, 'click', () =>
-      this.show(entries)
-    )
+    button.addEventListener('click', () => this.show(entries))
     return button
   }
 
-  link(container, entries) {
-    const button = this.button(container, entries, 'umap-help-link')
+  getStartedLink(container) {
+    const button = DomUtil.createButton('umap-help-link', container, translate('Help'))
     button.textContent = translate('Help')
+    button.addEventListener('click', () => this.showGetStarted())
     return button
   }
 
@@ -238,7 +239,6 @@ export default class Help {
 
   _buildEditEntry() {
     const container = DomUtil.create('div', '')
-    const title = DomUtil.create('h4', '', container)
     const actionsContainer = DomUtil.create('ul', 'umap-edit-actions', container)
     const addAction = (action) => {
       const actionContainer = DomUtil.add('li', '', actionsContainer)
@@ -247,7 +247,6 @@ export default class Help {
       DomEvent.on(actionContainer, 'click', action.addHooks, action)
       DomEvent.on(actionContainer, 'click', this.dialog.close, this.dialog)
     }
-    title.textContent = translate('Where do we go from here?')
     for (const id in this.map.helpMenuActions) {
       addAction(this.map.helpMenuActions[id])
     }
