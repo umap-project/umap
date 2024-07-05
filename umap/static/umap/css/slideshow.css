@@ -1,0 +1,69 @@
+.umap-slideshow-toolbox {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+}
+.umap-slideshow-enabled .umap-slideshow-toolbox {
+    display: inline-block;
+}
+.umap-slideshow-toolbox li {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 1.5em;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: calc(var(--footer-height) * 2);
+    height: var(--footer-height);
+    line-height: var(--footer-height);
+    vertical-align: middle;
+    text-align: center;
+}
+.umap-slideshow-toolbox li + li {
+    border-left: 1px solid var(--color-light);
+}
+.umap-slideshow-toolbox li:hover {
+    background-color: var(--color-mediumGray);
+}
+.umap-slideshow-active .umap-slideshow-toolbox .play,
+.umap-slideshow-toolbox .play {
+    width: calc(var(--footer-height) * 3);
+    text-align: left;
+    padding-left: 20px;
+}
+.umap-slideshow-toolbox .play:after {
+    content: '⏯︎';
+}
+.umap-slideshow-active .umap-slideshow-toolbox .play:after {
+    content: '⏸︎';
+}
+.umap-slideshow-toolbox .stop:before {
+    content: '⏹';
+}
+.umap-slideshow-toolbox .next:before {
+    content: '⏵︎';
+}
+.umap-slideshow-toolbox .prev:before {
+    content: '⏴︎';
+}
+.umap-slideshow-toolbox .play div {
+    height: 20px;
+    width: 20px;
+    margin: 0px auto;
+    position: relative;
+    top: 5px;
+    border-left: 3px solid rgba(255,255,239,.15);
+    border-right: 3px solid rgba(255,255,255,.15);
+    border-bottom: 3px solid rgba(255,255,255,.15);
+    border-top: 3px solid rgba(255,255,255,.8);
+    border-radius:100%;
+    display: inline-block;
+    visibility: hidden;
+}
+@keyframes rotation {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(359deg);}
+}
+.umap-slideshow-active .umap-slideshow-toolbox .play .spinner {
+    visibility: visible;
+}

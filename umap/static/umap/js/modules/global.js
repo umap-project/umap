@@ -13,6 +13,7 @@ import Orderable from './orderable.js'
 import { HTTPError, NOKError, Request, RequestError, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
+import Slideshow from './slideshow.js'
 import { SyncEngine } from './sync/engine.js'
 import Dialog from './ui/dialog.js'
 import { EditPanel, FullPanel, Panel } from './ui/panel.js'
@@ -47,6 +48,7 @@ window.U = {
   Rules,
   SCHEMA,
   ServerRequest,
+  Slideshow,
   SyncEngine,
   Tooltip,
   URLs,

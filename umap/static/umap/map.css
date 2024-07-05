@@ -677,91 +677,7 @@ ul.photon-autocomplete {
 .umap-help {
     font-style: italic;
 }
-.umap-slideshow-toolbox {
-    position: absolute;
-    right: 0;
-    top: 0;
-    display: none;
-}
-.umap-slideshow-enabled .umap-slideshow-toolbox {
-    display: inline-block;
-}
-.umap-slideshow-toolbox li {
-    display: inline-block;
-    cursor: pointer;
-    font-size: 1.5em;
-    background-color: #464646;
-    color: #fff;
-    width: calc(var(--footer-height) * 2);
-    height: var(--footer-height);
-    line-height: var(--footer-height);
-    vertical-align: middle;
-    text-align: center;
-}
-.umap-slideshow-toolbox li + li {
-    border-left: 1px solid #aaa;
-}
-.umap-slideshow-toolbox li:hover {
-    background-color: #666;
-}
-.umap-slideshow-active .umap-slideshow-toolbox .play,
-.umap-slideshow-toolbox .play {
-    width: calc(var(--footer-height) * 3);
-    text-align: left;
-    padding-left: 20px;
-}
-.umap-slideshow-toolbox .play:after {
-    content: '⏯︎';
-}
-.umap-slideshow-active .umap-slideshow-toolbox .play:after {
-    content: '⏸︎';
-}
-.umap-slideshow-toolbox .stop:before {
-    content: '⏹';
-}
-.umap-slideshow-toolbox .next:before {
-    content: '⏵︎';
-}
-.umap-slideshow-toolbox .prev:before {
-    content: '⏴︎';
-}
-.umap-slideshow-toolbox .play div {
-    height: 20px;
-    width: 20px;
-    margin: 0px auto;
-    position: relative;
-    top: 5px;
-    -webkit-animation: rotation 5s infinite linear;
-    -moz-animation: rotation 5s infinite linear;
-    -o-animation: rotation 5s infinite linear;
-    animation: rotation 5s infinite linear;
-    border-left: 3px solid rgba(255,255,239,.15);
-    border-right: 3px solid rgba(255,255,255,.15);
-    border-bottom: 3px solid rgba(255,255,255,.15);
-    border-top: 3px solid rgba(255,255,255,.8);
-    border-radius:100%;
-    display: inline-block;
-    visibility: hidden;
-}
-@-webkit-keyframes rotation {
-    from {-webkit-transform: rotate(0deg);}
-    to {-webkit-transform: rotate(359deg);}
-}
-@-moz-keyframes rotation {
-    from {-moz-transform: rotate(0deg);}
-    to {-moz-transform: rotate(359deg);}
-}
-@-o-keyframes rotation {
-    from {-o-transform: rotate(0deg);}
-    to {-o-transform: rotate(359deg);}
-}
-@keyframes rotation {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(359deg);}
-}
-.umap-slideshow-active .umap-slideshow-toolbox .play .spinner {
-    visibility: visible;
-}
+
 .umap-datalayer-version {
     padding: 5px 0;
     border-bottom: 1px solid #202425;
@@ -775,7 +691,6 @@ ul.photon-autocomplete {
     background-image: url('./img/16-white.svg');
     margin-right: 10px;
 }
-
 
 .leaflet-toolbar-tip {
     background-color: var(--color-darkGray);
