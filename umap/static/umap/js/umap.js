@@ -29,7 +29,7 @@ L.Map.mergeOptions({
 U.Map = L.Map.extend({
   includes: [ControlsMixin],
 
-  initialize: function (el, geojson) {
+  initialize: async function (el, geojson) {
     this.sync_engine = new U.SyncEngine(this)
     this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
@@ -116,6 +116,8 @@ U.Map = L.Map.extend({
     // Needed for actions labels
     this.help = new U.Help(this)
 
+    this.formatter = new U.Formatter(this)
+
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
@@ -174,23 +176,7 @@ U.Map = L.Map.extend({
       }
       this._default_extent = true
       this.options.name = L._('Untitled map')
-      let data = L.Util.queryString('data', null)
-      const url = new URL(window.location.href)
-      const dataUrls = new URLSearchParams(url.search).getAll('dataUrl')
-      const dataFormat = L.Util.queryString('dataFormat', 'geojson')
-      if (dataUrls.length) {
-        for (let dataUrl of dataUrls) {
-          dataUrl = decodeURIComponent(dataUrl)
-          dataUrl = this.localizeUrl(dataUrl)
-          dataUrl = this.proxyUrl(dataUrl)
-          const datalayer = this.createDataLayer()
-          datalayer.importFromUrl(dataUrl, dataFormat)
-        }
-      } else if (data) {
-        data = decodeURIComponent(data)
-        const datalayer = this.createDataLayer()
-        datalayer.importRaw(data, dataFormat)
-      }
+      await this.loadDataFromQueryString()
     }
 
     this.slideshow = new U.Slideshow(this, this.options.slideshow)
@@ -295,7 +281,27 @@ U.Map = L.Map.extend({
     }
   },
 
-  setViewFromQueryString: function () {
+  loadDataFromQueryString: async function() {
+      let data = L.Util.queryString('data', null)
+      const url = new URL(window.location.href)
+      const dataUrls = new URLSearchParams(url.search).getAll('dataUrl')
+      const dataFormat = L.Util.queryString('dataFormat', 'geojson')
+      if (dataUrls.length) {
+        for (let dataUrl of dataUrls) {
+          dataUrl = decodeURIComponent(dataUrl)
+          dataUrl = this.localizeUrl(dataUrl)
+          dataUrl = this.proxyUrl(dataUrl)
+          const datalayer = this.createDataLayer()
+          await datalayer.importFromUrl(dataUrl, dataFormat)
+        }
+      } else if (data) {
+        data = decodeURIComponent(data)
+        const datalayer = this.createDataLayer()
+        await datalayer.importRaw(data, dataFormat)
+      }
+  },
+
+  setViewFromQueryString: async function () {
     if (this.options.noControl) return
     this.initCaptionBar()
     if (L.Util.queryString('share')) {
