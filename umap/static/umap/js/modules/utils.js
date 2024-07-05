@@ -377,3 +377,16 @@ export function toggleBadge(element, value) {
   if (value) element.dataset.badge = value === true ? ' ' : value
   else delete element.dataset.badge
 }
+
+export class WithTemplate {
+  loadTemplate(html) {
+    const template = document.createElement('template')
+    template.innerHTML = html.split('\n').map((line) => line.trim()).join('')
+    this.element = template.content.firstElementChild
+    this.elements = {}
+    for (const element of this.element.querySelectorAll('[data-ref]')) {
+      this.elements[element.dataset.ref] = element
+    }
+    return this.element
+  }
+}

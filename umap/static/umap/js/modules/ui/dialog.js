@@ -1,4 +1,5 @@
 import { translate } from '../i18n.js'
+import { WithTemplate } from '../utils.js'
 
 const TEMPLATE = `
   <dialog data-ref="dialog">
@@ -17,19 +18,6 @@ const TEMPLATE = `
     </form>
   </dialog>
 `
-
-class WithTemplate {
-  loadTemplate(html) {
-    const template = document.createElement('template')
-    template.innerHTML = html
-    this.element = template.content.firstElementChild
-    this.elements = {}
-    for (const element of this.element.querySelectorAll('[data-ref]')) {
-      this.elements[element.dataset.ref] = element
-    }
-    return this.element
-  }
-}
 
 // From https://css-tricks.com/replace-javascript-dialogs-html-dialog-element/
 export default class Dialog extends WithTemplate {
