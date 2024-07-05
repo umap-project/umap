@@ -1,0 +1,11 @@
+.umap-contextmenu {
+    background-color: var(--background-color);
+    padding: calc(var(--box-padding) / 2) var(--box-padding);
+    position: absolute;
+    z-index: var(--zindex-contextmenu);
+    border-radius: var(--border-radius);
+    box-shadow: var(--block-shadow);
+}
+.umap-contextmenu li + li {
+    margin-top: var(--text-margin);
+}

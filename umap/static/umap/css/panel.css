@@ -27,8 +27,7 @@
 .panel.full.on {
     visibility: visible;
     right: calc(var(--panel-gutter) * 2 + var(--control-size));
-/*    left: var(--panel-gutter);*/
-    left: calc(var(--panel-gutter) * 3 + var(--control-size) + var(--panel-width));
+    left: calc(var(--panel-gutter) * 2 + var(--control-size));
     height: initial;
     max-height: initial;
 }
@@ -78,6 +77,9 @@
     .panel.right.on {
         right: calc(var(--panel-gutter) * 2 + var(--control-size));
         visibility: visible;
+    }
+    .panel-left-on .panel.full {
+        left: calc(var(--panel-gutter) * 3 + var(--control-size) + var(--panel-width));
     }
 }
 @media all and (orientation:portrait) {

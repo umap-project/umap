@@ -9,7 +9,7 @@ export class Panel {
     // This will be set once according to the panel configurated at load
     // or by using panels as popups
     this.mode = null
-    this.classname = 'left'
+    this.className = 'left'
     DomEvent.disableClickPropagation(this.container)
     DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
     DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
@@ -25,9 +25,10 @@ export class Panel {
   }
 
   open({ content, className, actions = [] } = {}) {
-    this.container.className = `with-transition panel window ${this.classname} ${
+    this.container.className = `with-transition panel window ${this.className} ${
       this.mode || ''
     }`
+    document.body.classList.add(`panel-${this.className.split(' ')[0]}-on`)
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'buttons', this.container)
     const body = DomUtil.create('div', 'body', this.container)
@@ -69,6 +70,7 @@ export class Panel {
   }
 
   close() {
+    document.body.classList.remove(`panel-${this.className.split(' ')[0]}-on`)
     if (DomUtil.hasClass(this.container, 'on')) {
       DomUtil.removeClass(this.container, 'on')
       this.map.invalidateSize({ pan: false })
@@ -80,14 +82,14 @@ export class Panel {
 export class EditPanel extends Panel {
   constructor(map) {
     super(map)
-    this.classname = 'right dark'
+    this.className = 'right dark'
   }
 }
 
 export class FullPanel extends Panel {
   constructor(map) {
     super(map)
-    this.classname = 'full dark'
+    this.className = 'full dark'
     this.mode = 'expanded'
   }
 }

@@ -1,8 +1,10 @@
 import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
+import { Positioned } from './base.js'
 
-export default class Tooltip {
+export default class Tooltip extends Positioned {
   constructor(parent) {
+    super()
     this.parent = parent
     this.container = DomUtil.create('div', 'with-transition', this.parent)
     this.container.id = 'umap-tooltip-container'
@@ -13,16 +15,8 @@ export default class Tooltip {
   }
 
   open(opts) {
-    function showIt() {
-      if (opts.anchor && opts.position === 'top') {
-        this.anchorTop(opts.anchor)
-      } else if (opts.anchor && opts.position === 'left') {
-        this.anchorLeft(opts.anchor)
-      } else if (opts.anchor && opts.position === 'bottom') {
-        this.anchorBottom(opts.anchor)
-      } else {
-        this.anchorAbsolute()
-      }
+    const showIt = () => {
+      this.openAt(opts)
       L.DomUtil.addClass(this.parent, 'umap-tooltip')
       this.container.innerHTML = U.Utils.escapeHTML(opts.content)
     }
@@ -39,43 +33,6 @@ export default class Tooltip {
     }
   }
 
-  anchorAbsolute() {
-    this.container.className = ''
-    const left =
-      this.parent.offsetLeft +
-      this.parent.clientWidth / 2 -
-      this.container.clientWidth / 2
-    const top = this.parent.offsetTop + 75
-    this.setPosition({ top: top, left: left })
-  }
-
-  anchorTop(el) {
-    this.container.className = 'tooltip-top'
-    const coords = this.getPosition(el)
-    this.setPosition({
-      left: coords.left - 10,
-      bottom: this.getDocHeight() - coords.top + 11,
-    })
-  }
-
-  anchorBottom(el) {
-    this.container.className = 'tooltip-bottom'
-    const coords = this.getPosition(el)
-    this.setPosition({
-      left: coords.left,
-      top: coords.bottom + 11,
-    })
-  }
-
-  anchorLeft(el) {
-    this.container.className = 'tooltip-left'
-    const coords = this.getPosition(el)
-    this.setPosition({
-      top: coords.top,
-      right: document.documentElement.offsetWidth - coords.left + 11,
-    })
-  }
-
   close(id) {
     // Clear timetout even if a new tooltip has been added
     // in the meantime. Eg. after a mouseout from the anchor.
@@ -85,32 +42,5 @@ export default class Tooltip {
     this.container.innerHTML = ''
     this.setPosition({})
     L.DomUtil.removeClass(this.parent, 'umap-tooltip')
-  }
-
-  getPosition(el) {
-    return el.getBoundingClientRect()
-  }
-
-  setPosition(coords) {
-    if (coords.left) this.container.style.left = `${coords.left}px`
-    else this.container.style.left = 'initial'
-    if (coords.right) this.container.style.right = `${coords.right}px`
-    else this.container.style.right = 'initial'
-    if (coords.top) this.container.style.top = `${coords.top}px`
-    else this.container.style.top = 'initial'
-    if (coords.bottom) this.container.style.bottom = `${coords.bottom}px`
-    else this.container.style.bottom = 'initial'
-  }
-
-  getDocHeight() {
-    const D = document
-    return Math.max(
-      D.body.scrollHeight,
-      D.documentElement.scrollHeight,
-      D.body.offsetHeight,
-      D.documentElement.offsetHeight,
-      D.body.clientHeight,
-      D.documentElement.clientHeight
-    )
   }
 }

@@ -1,61 +1,104 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import ContextMenu from './ui/contextmenu.js'
+import { WithTemplate, loadTemplate } from './utils.js'
 
-export default class TableEditor {
+const TEMPLATE = `
+  <table>
+    <thead>
+      <tr data-ref="header"></tr>
+    </thead>
+    <tbody data-ref="body">
+    </tbody>
+  </table>
+`
+
+export default class TableEditor extends WithTemplate {
   constructor(datalayer) {
+    super()
     this.datalayer = datalayer
-    this.table = DomUtil.create('table')
-    this.thead = DomUtil.create('thead', '', this.table)
-    this.header = DomUtil.create('tr', '', this.thead)
-    this.body = DomUtil.create('tbody', '', this.table)
+    this.map = this.datalayer.map
+    this.contextmenu = new ContextMenu({ className: 'dark' })
+    this.table = this.loadTemplate(TEMPLATE)
     this.resetProperties()
-    this.body.addEventListener('dblclick', (event) => {
+    this.elements.body.addEventListener('dblclick', (event) => {
       if (event.target.closest('[data-property]')) this.editCell(event.target)
     })
-    this.body.addEventListener('click', (event) => this.setFocus(event.target))
-    this.body.addEventListener('keydown', (event) => this.onKeyDown(event))
+    this.elements.body.addEventListener('click', (event) => this.setFocus(event.target))
+    this.elements.body.addEventListener('keydown', (event) => this.onKeyDown(event))
+    this.elements.header.addEventListener('click', (event) => {
+      const property = event.target.dataset.property
+      if (property) this.openHeaderMenu(property)
+    })
+  }
+
+  openHeaderMenu(property) {
+    let filterItem
+    if (this.map.facets.has(property)) {
+      filterItem = {
+        label: translate('Remove filter for this property'),
+        action: () => {
+          this.map.facets.remove(property)
+          this.map.browser.open('filters')
+        },
+      }
+    } else {
+      filterItem = {
+        label: translate('Add filter for this property'),
+        action: () => {
+          this.map.facets.add(property)
+          this.map.browser.open('filters')
+        },
+      }
+    }
+    this.contextmenu.open(
+      [event.clientX, event.clientY],
+      [
+        {
+          label: translate('Delete this property on all the features'),
+          action: () => this.deleteProperty(property),
+        },
+        {
+          label: translate('Rename this property on all the features'),
+          action: () => this.renameProperty(property),
+        },
+        filterItem,
+      ]
+    )
   }
 
   renderHeaders() {
-    this.header.innerHTML = '<th><input type="checkbox" /></th>'
-    for (let i = 0; i < this.properties.length; i++) {
-      this.renderHeader(this.properties[i])
+    this.elements.header.innerHTML = ''
+    const th = loadTemplate('<th><input type="checkbox" /></th>')
+    const checkbox = th.firstChild
+    this.elements.header.appendChild(th)
+    for (const property of this.properties) {
+      this.elements.header.appendChild(
+        loadTemplate(
+          `<th>${property}<button data-property="${property}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
+        )
+      )
     }
-    const checkbox = this.header.querySelector('input[type=checkbox]')
     checkbox.addEventListener('change', (event) => {
       if (checkbox.checked) this.checkAll()
       else this.checkAll(false)
     })
   }
 
-  renderHeader(property) {
-    const container = DomUtil.create('th', '', this.header)
-    const title = DomUtil.add('span', '', container, property)
-    const del = DomUtil.create('i', 'umap-delete', container)
-    const rename = DomUtil.create('i', 'umap-edit', container)
-    del.title = translate('Delete this property on all the features')
-    rename.title = translate('Rename this property on all the features')
-    DomEvent.on(del, 'click', () => this.deleteProperty(property))
-    DomEvent.on(rename, 'click', () => this.renameProperty(property))
-  }
-
   renderBody() {
-    const bounds = this.datalayer.map.getBounds()
-    const inBbox = this.datalayer.map.browser.options.inBbox
+    const bounds = this.map.getBounds()
+    const inBbox = this.map.browser.options.inBbox
     let html = ''
     for (const feature of Object.values(this.datalayer._layers)) {
       if (feature.isFiltered()) continue
       if (inBbox && !feature.isOnScreen(bounds)) continue
-      html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${this.properties.map((prop) => `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`).join('')}</tr>`
+      const tds = this.properties.map(
+        (prop) =>
+          `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`
+      )
+      html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
     }
-    // this.datalayer.eachLayer(this.renderRow, this)
-    // const builder = new U.FormBuilder(feature, this.field_properties, {
-    //   id: `umap-feature-properties_${L.stamp(feature)}`,
-    //   className: 'trow',
-    //   callback: feature.resetTooltip,
-    // })
-    // this.body.appendChild(builder.build())
-    this.body.innerHTML = html
+    this.elements.body.innerHTML = html
   }
 
   compileProperties() {
@@ -87,7 +130,7 @@ export default class TableEditor {
   }
 
   renameProperty(property) {
-    this.datalayer.map.dialog
+    this.map.dialog
       .prompt(translate('Please enter the new name of this property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
@@ -101,7 +144,7 @@ export default class TableEditor {
   }
 
   deleteProperty(property) {
-    this.datalayer.map.dialog
+    this.map.dialog
       .confirm(
         translate('Are you sure you want to delete this property on all the features?')
       )
@@ -116,7 +159,7 @@ export default class TableEditor {
   }
 
   addProperty() {
-    this.datalayer.map.dialog
+    this.map.dialog
       .prompt(translate('Please enter the name of the property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
@@ -129,29 +172,31 @@ export default class TableEditor {
     const id = 'tableeditor:edit'
     this.compileProperties()
     this.renderHeaders()
-    this.body.innerHTML = ''
+    this.elements.body.innerHTML = ''
     this.renderBody()
-    const addButton = DomUtil.createButton(
-      'flat',
-      undefined,
-      translate('Add a new property')
-    )
-    const iconElement = DomUtil.createIcon(addButton, 'icon-add')
-    addButton.insertBefore(iconElement, addButton.firstChild)
-    DomEvent.on(addButton, 'click', this.addProperty, this)
 
-    const template = document.createElement('template')
-    template.innerHTML = `
+    const addButton = loadTemplate(`
+      <button class="flat" type="button" data-ref="add">
+        <i class="icon icon-16 icon-add"></i>${translate('Add a new property')}
+      </button>`)
+    addButton.addEventListener('click', () => this.addProperty())
+
+    const deleteButton = loadTemplate(`
       <button class="flat" type="button" data-ref="delete">
         <i class="icon icon-16 icon-delete"></i>${translate('Delete selected rows')}
-      </button>`
-    const deleteButton = template.content.firstElementChild
+      </button>`)
     deleteButton.addEventListener('click', () => this.deleteRows())
 
-    this.datalayer.map.fullPanel.open({
+    const filterButton = loadTemplate(`
+      <button class="flat" type="button" data-ref="filters">
+        <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
+      </button>`)
+    filterButton.addEventListener('click', () => this.map.browser.open('filters'))
+
+    this.map.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
-      actions: [addButton, deleteButton],
+      actions: [addButton, deleteButton, filterButton],
     })
   }
 
@@ -188,19 +233,21 @@ export default class TableEditor {
   }
 
   checkAll(status = true) {
-    for (const checkbox of this.body.querySelectorAll('input[type=checkbox]')) {
+    for (const checkbox of this.elements.body.querySelectorAll(
+      'input[type=checkbox]'
+    )) {
       checkbox.checked = status
     }
   }
 
   getSelectedRows() {
-    return Array.from(this.body.querySelectorAll('input[type=checkbox]:checked')).map(
-      (checkbox) => checkbox.parentNode.parentNode
-    )
+    return Array.from(
+      this.elements.body.querySelectorAll('input[type=checkbox]:checked')
+    ).map((checkbox) => checkbox.parentNode.parentNode)
   }
 
   getFocus() {
-    return this.body.querySelector(':focus')
+    return this.elements.body.querySelector(':focus')
   }
 
   setFocus(cell) {
@@ -210,7 +257,7 @@ export default class TableEditor {
   deleteRows() {
     const selectedRows = this.getSelectedRows()
     if (!selectedRows.length) return
-    this.datalayer.map.dialog
+    this.map.dialog
       .confirm(
         translate('Found {count} rows. Are you sure you want to delete all?', {
           count: selectedRows.length,
@@ -226,7 +273,8 @@ export default class TableEditor {
         this.datalayer.show()
         this.datalayer.fire('datachanged')
         this.renderBody()
-        this.datalayer.map.browser.resetFilters()
+        this.map.browser.resetFilters()
+        this.map.browser.open('filters')
       })
   }
 }

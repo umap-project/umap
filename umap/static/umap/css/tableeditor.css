@@ -8,6 +8,7 @@
     border-collapse: collapse;
     border-bottom: 1px solid black;
     border-top: 1px solid black;
+    min-width: 100%;
 }
 .umap-table-editor thead {
     text-align: center;
@@ -72,4 +73,15 @@
 }
 .umap-table-editor input {
     border-radius: initial;
+}
+.umap-table-editor th button {
+    transform: rotate(90deg);
+    font-size: 1.25rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 1rem;
+    font-weight: bold;
+}
+.umap-table-editor th button:hover {
+    text-decoration: none;
 }
