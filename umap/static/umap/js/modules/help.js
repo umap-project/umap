@@ -213,25 +213,20 @@ export default class Help {
     this.map.dialog.open({ content: container, className: 'dark' })
   }
 
-  button(container, entries, classname) {
+  button(container, entries) {
     const button = DomUtil.createButton(
-      classname || 'umap-help-button',
+      'umap-help-button',
       container,
       translate('Help')
     )
-    entries = typeof entries === 'string' ? [entries] : entries
-    DomEvent.on(button, 'click', DomEvent.stop).on(button, 'click', () => {
-      this.show(entries)
-    })
+    button.addEventListener('click', () => this.show(entries))
     return button
   }
 
   getStartedLink(container) {
     const button = DomUtil.createButton('umap-help-link', container, translate('Help'))
     button.textContent = translate('Help')
-    DomEvent.on(button, 'click', DomEvent.stop).on(button, 'click', () => {
-      this.showGetStarted()
-    })
+    button.addEventListener('click', () => this.showGetStarted())
     return button
   }
 
