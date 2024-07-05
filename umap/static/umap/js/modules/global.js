@@ -7,13 +7,14 @@ import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
 import Facets from './facets.js'
-import Formatter from './formatter.js'
+import { Formatter } from './formatter.js'
 import Help from './help.js'
 import Importer from './importer.js'
 import Orderable from './orderable.js'
 import { HTTPError, NOKError, Request, RequestError, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
+import Share from './share.js'
 import Slideshow from './slideshow.js'
 import { SyncEngine } from './sync/engine.js'
 import Dialog from './ui/dialog.js'
@@ -50,6 +51,7 @@ window.U = {
   Rules,
   SCHEMA,
   ServerRequest,
+  Share,
   Slideshow,
   SyncEngine,
   Tooltip,

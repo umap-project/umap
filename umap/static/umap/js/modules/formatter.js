@@ -1,7 +1,41 @@
 /* Uses globals for: csv2geojson, osmtogeojson, GeoRSSToGeoJSON (not available as ESM) */
 import { translate } from './i18n.js'
 
-export default class Formatter {
+export const EXPORT_FORMATS = {
+  geojson: {
+    formatter: async (map) => JSON.stringify(map.toGeoJSON(), null, 2),
+    ext: '.geojson',
+    filetype: 'application/json',
+  },
+  gpx: {
+    formatter: async (map) => await map.formatter.toGPX(map.toGeoJSON()),
+    ext: '.gpx',
+    filetype: 'application/gpx+xml',
+  },
+  kml: {
+    formatter: async (map) => await map.formatter.toKML(map.toGeoJSON()),
+    ext: '.kml',
+    filetype: 'application/vnd.google-earth.kml+xml',
+  },
+  csv: {
+    formatter: async (map) => {
+      const table = []
+      map.eachFeature((feature) => {
+        const row = feature.toGeoJSON().properties
+        const center = feature.getCenter()
+        delete row._umap_options
+        row.Latitude = center.lat
+        row.Longitude = center.lng
+        table.push(row)
+      })
+      return csv2geojson.dsv.csvFormat(table)
+    },
+    ext: '.csv',
+    filetype: 'text/csv',
+  },
+}
+
+export class Formatter {
   async fromGPX(str) {
     const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
     return togeojson.gpx(this.toDom(str))

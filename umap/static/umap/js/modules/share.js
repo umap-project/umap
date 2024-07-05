@@ -1,43 +1,11 @@
-U.Share = L.Class.extend({
-  EXPORT_TYPES: {
-    geojson: {
-      formatter: async (map) => JSON.stringify(map.toGeoJSON(), null, 2),
-      ext: '.geojson',
-      filetype: 'application/json',
-    },
-    gpx: {
-      formatter: async (map) => await map.formatter.toGPX(map.toGeoJSON()),
-      ext: '.gpx',
-      filetype: 'application/gpx+xml',
-    },
-    kml: {
-      formatter: async (map) => await map.formatter.toKML(map.toGeoJSON()),
-      ext: '.kml',
-      filetype: 'application/vnd.google-earth.kml+xml',
-    },
-    csv: {
-      formatter: async (map) => {
-        const table = []
-        map.eachFeature((feature) => {
-          const row = feature.toGeoJSON().properties
-          const center = feature.getCenter()
-          delete row._umap_options
-          row.Latitude = center.lat
-          row.Longitude = center.lng
-          table.push(row)
-        })
-        return csv2geojson.dsv.csvFormat(table)
-      },
-      ext: '.csv',
-      filetype: 'text/csv',
-    },
-  },
+import { EXPORT_FORMATS } from './formatter.js'
 
-  initialize: function (map) {
+export default class Share {
+  constructor(map) {
     this.map = map
-  },
+  }
 
-  build: function () {
+  build() {
     this.container = L.DomUtil.create('div', '')
     this.title = L.DomUtil.createTitle(
       this.container,
@@ -63,16 +31,10 @@ U.Share = L.Class.extend({
 
     L.DomUtil.add('h4', '', this.container, L._('Download'))
     L.DomUtil.add('small', 'label', this.container, L._("Only visible layers' data"))
-    for (const key in this.EXPORT_TYPES) {
-      if (this.EXPORT_TYPES.hasOwnProperty(key)) {
-        L.DomUtil.createButton(
-          'download-file',
-          this.container,
-          this.EXPORT_TYPES[key].name || key,
-          () => this.download(key),
-          this
-        )
-      }
+    for (const format of Object.keys(EXPORT_FORMATS)) {
+      L.DomUtil.createButton('download-file', this.container, format, () =>
+        this.download(format)
+      )
     }
     L.DomUtil.create('div', 'vspace', this.container)
     L.DomUtil.add(
@@ -135,7 +97,7 @@ U.Share = L.Class.extend({
     for (let i = 0; i < this.map.HIDDABLE_CONTROLS.length; i++) {
       UIFields.push(`queryString.${this.map.HIDDABLE_CONTROLS[i]}Control`)
     }
-    const iframeExporter = new U.IframeExporter(this.map)
+    const iframeExporter = new IframeExporter(this.map)
     const buildIframeCode = () => {
       iframe.textContent = iframeExporter.build()
       exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
@@ -149,23 +111,23 @@ U.Share = L.Class.extend({
       L._('Embed and link options')
     )
     iframeOptions.appendChild(builder.build())
-  },
+  }
 
-  open: function () {
+  open() {
     if (!this.container) this.build()
     this.map.panel.open({ content: this.container })
-  },
+  }
 
-  format: async function (mode) {
-    const type = this.EXPORT_TYPES[mode]
+  async format(mode) {
+    const type = EXPORT_FORMATS[mode]
     const content = await type.formatter(this.map)
     let name = this.map.options.name || 'data'
     name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
     const filename = name + type.ext
     return { content, filetype: type.filetype, filename }
-  },
+  }
 
-  download: async function (mode) {
+  async download(mode) {
     const { content, filetype, filename } = await this.format(mode)
     const blob = new Blob([content], { type: filetype })
     window.URL = window.URL || window.webkitURL
@@ -176,50 +138,49 @@ U.Share = L.Class.extend({
     document.body.appendChild(el)
     el.click()
     document.body.removeChild(el)
-  },
-})
+  }
+}
 
-U.IframeExporter = L.Evented.extend({
-  options: {
-    includeFullScreenLink: true,
-    currentView: false,
-    keepCurrentDatalayers: false,
-    viewCurrentFeature: false,
-  },
-
-  queryString: {
-    scaleControl: false,
-    miniMap: false,
-    scrollWheelZoom: false,
-    zoomControl: true,
-    editMode: 'disabled',
-    moreControl: true,
-    searchControl: null,
-    tilelayersControl: null,
-    embedControl: null,
-    datalayersControl: true,
-    onLoadPanel: 'none',
-    captionBar: false,
-    captionMenus: true,
-  },
-
-  dimensions: {
-    width: '100%',
-    height: '300px',
-  },
-
-  initialize: function (map) {
+class IframeExporter {
+  constructor(map) {
     this.map = map
     this.baseUrl = U.Utils.getBaseUrl()
+    this.options = {
+      includeFullScreenLink: true,
+      currentView: false,
+      keepCurrentDatalayers: false,
+      viewCurrentFeature: false,
+    }
+
+    this.queryString = {
+      scaleControl: false,
+      miniMap: false,
+      scrollWheelZoom: false,
+      zoomControl: true,
+      editMode: 'disabled',
+      moreControl: true,
+      searchControl: null,
+      tilelayersControl: null,
+      embedControl: null,
+      datalayersControl: true,
+      onLoadPanel: 'none',
+      captionBar: false,
+      captionMenus: true,
+    }
+
+    this.dimensions = {
+      width: '100%',
+      height: '300px',
+    }
     // Use map default, not generic default
     this.queryString.onLoadPanel = this.map.getOption('onLoadPanel')
-  },
+  }
 
-  getMap: function () {
+  getMap() {
     return this.map
-  },
+  }
 
-  buildUrl: function (options) {
+  buildUrl(options) {
     const datalayers = []
     if (this.options.viewCurrentFeature && this.map.currentFeature) {
       this.queryString.feature = this.map.currentFeature.getSlug()
@@ -239,9 +200,9 @@ U.IframeExporter = L.Evented.extend({
     const currentView = this.options.currentView ? window.location.hash : ''
     const queryString = L.extend({}, this.queryString, options)
     return `${this.baseUrl}?${U.Utils.buildQueryString(queryString)}${currentView}`
-  },
+  }
 
-  build: function () {
+  build() {
     const iframeUrl = this.buildUrl()
     let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
@@ -249,5 +210,5 @@ U.IframeExporter = L.Evented.extend({
       code += `<p><a href="${fullUrl}">${L._('See full screen')}</a></p>`
     }
     return code
-  },
-})
+  }
+}
