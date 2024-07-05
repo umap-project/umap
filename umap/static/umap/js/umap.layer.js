@@ -792,7 +792,7 @@ U.DataLayer = L.Evented.extend({
     const response = await this.map.request.get(url)
     if (response?.ok) {
       this.clear()
-      await this.map.formatter
+      this.map.formatter
         .parse(await response.text(), this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson))
     }
@@ -1058,7 +1058,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   importRaw: async function (raw, format) {
-    await this.map.formatter
+    this.map.formatter
       .parse(raw, format)
       .then((geojson) => this.addData(geojson))
       .then(() => this.zoomTo())
