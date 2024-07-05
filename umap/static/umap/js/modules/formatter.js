@@ -3,19 +3,12 @@ import { translate } from './i18n.js'
 
 export default class Formatter {
   async fromGPX(str) {
-    let togeojson
-    await import('../../vendors/togeojson/togeojson.es.js').then((module) => {
-      togeojson = module
-    })
+    const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
     return togeojson.gpx(this.toDom(str))
   }
 
   async fromKML(str) {
-    console.log(str)
-    let togeojson
-    await import('../../vendors/togeojson/togeojson.es.js').then((module) => {
-      togeojson = module
-    })
+    const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
     return togeojson.kml(this.toDom(str), {
       skipNullGeometry: true,
     })
@@ -111,10 +104,7 @@ export default class Formatter {
   }
 
   async toGPX(geojson) {
-    let togpx
-    await import('../../vendors/geojson-to-gpx/index.js').then((module) => {
-      togpx = module
-    })
+    const togpx = await import('../../vendors/geojson-to-gpx/index.js')
     for (const feature of geojson.features) {
       feature.properties.desc = feature.properties.description
     }
@@ -123,10 +113,7 @@ export default class Formatter {
   }
 
   async toKML(geojson) {
-    let tokml
-    await import('../../vendors/tokml/tokml.es.js').then((module) => {
-      tokml = module
-    })
+    const tokml = await import('../../vendors/tokml/tokml.es.js')
     return tokml.toKML(geojson)
   }
 }
