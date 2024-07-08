@@ -54,7 +54,7 @@
     border: 1px solid #222;
 }
 .umap-table-editor td:focus {
-    outline-color: var(--color-accent);
+    outline: 1px solid var(--color-accent);
 }
 .umap-table-editor th, .umap-table-editor td {
   padding: 10px;
