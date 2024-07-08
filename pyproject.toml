@@ -60,7 +60,7 @@ test = [
   "playwright>=1.39",
   "pytest==8.2.2",
   "pytest-django==4.8.0",
-  "pytest-playwright==0.5.0",
+  "pytest-playwright==0.5.1",
   "pytest-xdist>=3.5.0,<4",
 ]
 docker = [
