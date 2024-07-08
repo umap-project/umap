@@ -1,7 +1,7 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import ContextMenu from './ui/contextmenu.js'
-import { WithTemplate, loadTemplate } from './utils.js'
+import { WithTemplate, loadTemplate, downloadBlob } from './utils.js'
 
 const TEMPLATE = `
   <table>
@@ -201,6 +201,13 @@ export default class TableEditor extends WithTemplate {
     filterButton.addEventListener('click', () => this.map.browser.open('filters'))
     actions.push(filterButton)
 
+    const downloadButton = loadTemplate(`
+      <button class="flat" type="button" data-ref="download">
+        <i class="icon icon-16 icon-download"></i>${translate('Download data')}
+      </button>`)
+    downloadButton.addEventListener('click', () => this.exportAsCSV())
+    actions.push(downloadButton)
+
     this.map.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
@@ -295,7 +302,7 @@ export default class TableEditor extends WithTemplate {
   getSelectedRows() {
     return Array.from(
       this.elements.body.querySelectorAll('input[type=checkbox]:checked')
-    ).map((checkbox) => checkbox.parentNode.parentNode)
+    ).map((checkbox) => checkbox.closest('tr'))
   }
 
   getFocus() {
@@ -330,5 +337,33 @@ export default class TableEditor extends WithTemplate {
           this.map.browser.open('filters')
         }
       })
+  }
+
+  _rowToCSV(row) {
+    console.log(row)
+    return row
+      .map((content) => content.replaceAll('"', '""')) // escape double quotes
+      .map((content) => `"${content}"`) // quote it
+      .join(',') // comma-separated
+  }
+
+  exportAsCSV() {
+    const headers = this._rowToCSV(
+      Array.from(this.elements.header.querySelectorAll('th'))
+        .slice(1) // Remove initial select-all checkbox column
+        .map((header) => header.textContent)
+        .map((header) => header.slice(0, -1)) // Remove trailing `…`
+    )
+    const rows = Array.from(this.elements.body.querySelectorAll('tr'))
+      .map((line) =>
+        Array.from(line.querySelectorAll('td')).map((cell) => cell.textContent)
+      )
+      .map(this._rowToCSV)
+    const csv = [headers, ...rows].join('\r\n')
+    downloadBlob(
+      csv,
+      `umap-export-${this.datalayer.umap_id}-${this.map.options.umap_id}.csv`,
+      'text/csv;charset=utf-8;'
+    )
   }
 }

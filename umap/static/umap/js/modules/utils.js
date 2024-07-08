@@ -397,3 +397,12 @@ export class WithTemplate {
     return this.element
   }
 }
+
+export function downloadBlob(content, filename, contentType) {
+  const blob = new Blob([content], { type: contentType })
+  const url = URL.createObjectURL(blob)
+  const tmp = document.createElement('a')
+  tmp.href = url
+  tmp.setAttribute('download', filename)
+  tmp.click()
+}
