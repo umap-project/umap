@@ -226,16 +226,61 @@ export default class TableEditor extends WithTemplate {
     input.focus()
     input.addEventListener('blur', () => {
       cell.innerHTML = feature.properties[property] || ''
+      cell.focus()
     })
   }
 
   onKeyDown(event) {
+    // Only on data <td>, not inputs or anything else
+    if (!event.target.dataset.property) return
     const key = event.key
-    if (key === 'Enter') {
-      const current = this.getFocus()
-      if (current) {
-        this.editCell(current)
-      }
+    const actions = {
+      Enter: () => this.editCurrent(),
+      ArrowRight: () => this.moveRight(),
+      ArrowLeft: () => this.moveLeft(),
+      ArrowUp: () => this.moveUp(),
+      ArrowDown: () => this.moveDown(),
+    }
+    if (key in actions) {
+      actions[key]()
+      event.preventDefault()
+    }
+  }
+
+  editCurrent() {
+    const current = this.getFocus()
+    if (current) {
+      this.editCell(current)
+    }
+  }
+
+  moveRight() {
+    const cell = this.getFocus()
+    if (cell.nextSibling) cell.nextSibling.focus()
+  }
+
+  moveLeft() {
+    const cell = this.getFocus()
+    if (cell.previousSibling) cell.previousSibling.focus()
+  }
+
+  moveDown() {
+    const cell = this.getFocus()
+    const tr = cell.closest('tr')
+    const property = cell.dataset.property
+    const nextTr = tr.nextSibling
+    if (nextTr) {
+      nextTr.querySelector(`td[data-property="${property}"`).focus()
+    }
+  }
+
+  moveUp() {
+    const cell = this.getFocus()
+    const tr = cell.closest('tr')
+    const property = cell.dataset.property
+    const previousTr = tr.previousSibling
+    if (previousTr) {
+      previousTr.querySelector(`td[data-property="${property}"`).focus()
     }
   }
 
