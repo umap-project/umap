@@ -34,7 +34,7 @@ dependencies = [
   "django-probes==1.7.0",
   "Pillow==10.4.0",
   "psycopg==3.2.1",
-  "pydantic==2.8.0",
+  "pydantic==2.8.2",
   "requests==2.32.3",
   "rcssmin==1.1.2",
   "rjsmin==1.2.2",
