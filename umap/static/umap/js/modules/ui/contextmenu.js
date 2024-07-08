@@ -20,7 +20,6 @@ export default class ContextMenu {
         `<li class="${item.className || ''}"><button tabindex="0" class="flat">${item.label}</button></li>`
       )
       li.addEventListener('click', () => {
-        this.close()
         item.action()
       })
       this.container.appendChild(li)
