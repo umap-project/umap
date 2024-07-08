@@ -118,6 +118,10 @@
 .icon-upload {
     background-position: -144px -97px;
 }
+.icon-download {
+    transform: rotate(180deg);
+    background-position: -146px -95px;
+}
 .icon-zoom {
     background-position: -1px -49px;
 }
