@@ -36,7 +36,7 @@ export default class TableEditor extends WithTemplate {
     let filterItem
     if (this.map.facets.has(property)) {
       filterItem = {
-        label: translate('Remove filter for this property'),
+        label: translate('Remove filter for this column'),
         action: () => {
           this.map.facets.remove(property)
           this.map.browser.open('filters')
@@ -44,7 +44,7 @@ export default class TableEditor extends WithTemplate {
       }
     } else {
       filterItem = {
-        label: translate('Add filter for this property'),
+        label: translate('Add filter for this column'),
         action: () => {
           this.map.facets.add(property)
           this.map.browser.open('filters')
@@ -55,11 +55,11 @@ export default class TableEditor extends WithTemplate {
       [event.clientX, event.clientY],
       [
         {
-          label: translate('Delete this property on all the features'),
+          label: translate('Delete this column'),
           action: () => this.deleteProperty(property),
         },
         {
-          label: translate('Rename this property on all the features'),
+          label: translate('Rename this column'),
           action: () => this.renameProperty(property),
         },
         filterItem,
@@ -104,9 +104,6 @@ export default class TableEditor extends WithTemplate {
   compileProperties() {
     this.resetProperties()
     if (this.properties.length === 0) this.properties = ['name']
-    // description is a forced textarea, don't edit it in a text input, or you lose cariage returns
-    if (this.properties.indexOf('description') !== -1)
-      this.properties.splice(this.properties.indexOf('description'), 1)
     this.properties.sort()
     this.field_properties = []
     for (let i = 0; i < this.properties.length; i++) {
@@ -122,8 +119,12 @@ export default class TableEditor extends WithTemplate {
   }
 
   validateName(name) {
-    if (name.includes('.') !== -1) {
+    if (name.includes('.')) {
       U.Alert.error(translate('Invalide property name: {name}', { name: name }))
+      return false
+    }
+    if (this.datalayer._propertiesIndex.includes(name)) {
+      U.Alert.error(translate('This name already exists: {name}', { name: name }))
       return false
     }
     return true
@@ -164,7 +165,7 @@ export default class TableEditor extends WithTemplate {
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
         this.datalayer.indexProperty(prompt)
-        this.edit()
+        this.open()
       })
   }
 
@@ -203,10 +204,10 @@ export default class TableEditor extends WithTemplate {
   editCell(cell) {
     const property = cell.dataset.property
     const field = `properties.${property}`
-    const feature = this.datalayer.getFeatureById(
-      event.target.parentNode.dataset.feature
-    )
-    const builder = new U.FormBuilder(feature, [field], {
+    const tr = event.target.closest('tr')
+    const feature = this.datalayer.getFeatureById(tr.dataset.feature)
+    const handler = property === 'description' ? 'Textarea' : 'Input'
+    const builder = new U.FormBuilder(feature, [[field, { handler: handler }]], {
       id: `umap-feature-properties_${L.stamp(feature)}`,
       className: 'trow',
       callback: feature.resetTooltip,
@@ -226,8 +227,6 @@ export default class TableEditor extends WithTemplate {
       const current = this.getFocus()
       if (current) {
         this.editCell(current)
-        event.preventDefault()
-        event.stopPropagation()
       }
     }
   }
@@ -273,8 +272,10 @@ export default class TableEditor extends WithTemplate {
         this.datalayer.show()
         this.datalayer.fire('datachanged')
         this.renderBody()
-        this.map.browser.resetFilters()
-        this.map.browser.open('filters')
+        if (this.map.browser.isOpen()) {
+          this.map.browser.resetFilters()
+          this.map.browser.open('filters')
+        }
       })
   }
 }
