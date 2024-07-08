@@ -21,9 +21,11 @@ export default class TableEditor extends WithTemplate {
     this.contextmenu = new ContextMenu({ className: 'dark' })
     this.table = this.loadTemplate(TEMPLATE)
     this.resetProperties()
-    this.elements.body.addEventListener('dblclick', (event) => {
-      if (event.target.closest('[data-property]')) this.editCell(event.target)
-    })
+    if (!this.datalayer.isRemoteLayer()) {
+      this.elements.body.addEventListener('dblclick', (event) => {
+        if (event.target.closest('[data-property]')) this.editCell(event.target)
+      })
+    }
     this.elements.body.addEventListener('click', (event) => this.setFocus(event.target))
     this.elements.body.addEventListener('keydown', (event) => this.onKeyDown(event))
     this.elements.header.addEventListener('click', (event) => {
@@ -33,6 +35,7 @@ export default class TableEditor extends WithTemplate {
   }
 
   openHeaderMenu(property) {
+    const actions = []
     let filterItem
     if (this.map.facets.has(property)) {
       filterItem = {
@@ -51,20 +54,18 @@ export default class TableEditor extends WithTemplate {
         },
       }
     }
-    this.contextmenu.open(
-      [event.clientX, event.clientY],
-      [
-        {
-          label: translate('Delete this column'),
-          action: () => this.deleteProperty(property),
-        },
-        {
-          label: translate('Rename this column'),
-          action: () => this.renameProperty(property),
-        },
-        filterItem,
-      ]
-    )
+    actions.push(filterItem)
+    if (!this.datalayer.isRemoteLayer()) {
+      actions.push({
+        label: translate('Rename this column'),
+        action: () => this.renameProperty(property),
+      })
+      actions.push({
+        label: translate('Delete this column'),
+        action: () => this.deleteProperty(property),
+      })
+    }
+    this.contextmenu.open([event.clientX, event.clientY], actions)
   }
 
   renderHeaders() {
@@ -176,32 +177,39 @@ export default class TableEditor extends WithTemplate {
     this.elements.body.innerHTML = ''
     this.renderBody()
 
-    const addButton = loadTemplate(`
-      <button class="flat" type="button" data-ref="add">
-        <i class="icon icon-16 icon-add"></i>${translate('Add a new property')}
-      </button>`)
-    addButton.addEventListener('click', () => this.addProperty())
+    const actions = []
+    if (!this.datalayer.isRemoteLayer()) {
+      const addButton = loadTemplate(`
+        <button class="flat" type="button" data-ref="add">
+          <i class="icon icon-16 icon-add"></i>${translate('Add a new property')}
+        </button>`)
+      addButton.addEventListener('click', () => this.addProperty())
+      actions.push(addButton)
 
-    const deleteButton = loadTemplate(`
-      <button class="flat" type="button" data-ref="delete">
-        <i class="icon icon-16 icon-delete"></i>${translate('Delete selected rows')}
-      </button>`)
-    deleteButton.addEventListener('click', () => this.deleteRows())
+      const deleteButton = loadTemplate(`
+        <button class="flat" type="button" data-ref="delete">
+          <i class="icon icon-16 icon-delete"></i>${translate('Delete selected rows')}
+        </button>`)
+      deleteButton.addEventListener('click', () => this.deleteRows())
+      actions.push(deleteButton)
+    }
 
     const filterButton = loadTemplate(`
       <button class="flat" type="button" data-ref="filters">
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)
     filterButton.addEventListener('click', () => this.map.browser.open('filters'))
+    actions.push(filterButton)
 
     this.map.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
-      actions: [addButton, deleteButton, filterButton],
+      actions: actions,
     })
   }
 
   editCell(cell) {
+    if (this.datalayer.isRemoteLayer()) return
     const property = cell.dataset.property
     const field = `properties.${property}`
     const tr = event.target.closest('tr')
