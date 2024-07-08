@@ -1800,7 +1800,7 @@ U.DataLayer = L.Evented.extend({
   },
 
   tableEdit: function () {
-    if (this.isRemoteLayer() || !this.isVisible()) return
+    if (!this.isVisible()) return
     const editor = new U.TableEditor(this)
     editor.open()
   },

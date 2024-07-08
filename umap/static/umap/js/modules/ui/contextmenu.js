@@ -20,6 +20,7 @@ export default class ContextMenu {
         `<li class="${item.className || ''}"><button tabindex="0" class="flat">${item.label}</button></li>`
       )
       li.addEventListener('click', () => {
+        this.close()
         item.action()
       })
       this.container.appendChild(li)
@@ -37,6 +38,12 @@ export default class ContextMenu {
   }
 
   close() {
-    this.container.parentNode.removeChild(this.container)
+    try {
+      this.container.remove()
+    } catch {
+      // Race condition in Chrome: the focusout close has "half" removed the node
+      // So it's still visible in the DOM, but we calling .remove on it (or parentNode.removeChild)
+      // will crash.
+    }
   }
 }
