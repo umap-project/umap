@@ -1,6 +1,10 @@
 U.FeatureMixin = {
   staticOptions: { mainColor: 'color' },
 
+  getPreviewColor: function () {
+    return this.getDynamicOption(this.staticOptions.mainColor)
+  },
+
   getSyncMetadata: function () {
     return {
       subject: 'feature',
@@ -1201,6 +1205,14 @@ U.Polygon = L.Polygon.extend({
       'properties._umap_options.fillOpacity'
     )
     return options
+  },
+
+  getPreviewColor: function () {
+    // If user set a fillColor, use it, otherwise default to color
+    // which is usually the only one set
+    const color = this.getDynamicOption(this.staticOptions.mainColor)
+    if (color && color !== U.SCHEMA.color.default) return color
+    return this.getDynamicOption('color')
   },
 
   getInteractionOptions: () => {
