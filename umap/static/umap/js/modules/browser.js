@@ -37,7 +37,7 @@ export default class Browser {
       ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
       : null
     title.textContent = feature.getDisplayName() || '—'
-    const bgcolor = feature.getDynamicOption(feature.staticOptions.mainColor)
+    const bgcolor = feature.getPreviewColor()
     colorBox.style.backgroundColor = bgcolor
     if (symbol && symbol !== U.SCHEMA.iconUrl.default) {
       const icon = U.Icon.makeIconElement(symbol, colorBox)
