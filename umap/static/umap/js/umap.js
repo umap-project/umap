@@ -281,24 +281,24 @@ U.Map = L.Map.extend({
     }
   },
 
-  loadDataFromQueryString: async function() {
-      let data = L.Util.queryString('data', null)
-      const url = new URL(window.location.href)
-      const dataUrls = new URLSearchParams(url.search).getAll('dataUrl')
-      const dataFormat = L.Util.queryString('dataFormat', 'geojson')
-      if (dataUrls.length) {
-        for (let dataUrl of dataUrls) {
-          dataUrl = decodeURIComponent(dataUrl)
-          dataUrl = this.localizeUrl(dataUrl)
-          dataUrl = this.proxyUrl(dataUrl)
-          const datalayer = this.createDataLayer()
-          await datalayer.importFromUrl(dataUrl, dataFormat)
-        }
-      } else if (data) {
-        data = decodeURIComponent(data)
+  loadDataFromQueryString: async function () {
+    let data = L.Util.queryString('data', null)
+    const url = new URL(window.location.href)
+    const dataUrls = new URLSearchParams(url.search).getAll('dataUrl')
+    const dataFormat = L.Util.queryString('dataFormat', 'geojson')
+    if (dataUrls.length) {
+      for (let dataUrl of dataUrls) {
+        dataUrl = decodeURIComponent(dataUrl)
+        dataUrl = this.localizeUrl(dataUrl)
+        dataUrl = this.proxyUrl(dataUrl)
         const datalayer = this.createDataLayer()
-        await datalayer.importRaw(data, dataFormat)
+        await datalayer.importFromUrl(dataUrl, dataFormat)
       }
+    } else if (data) {
+      data = decodeURIComponent(data)
+      const datalayer = this.createDataLayer()
+      await datalayer.importRaw(data, dataFormat)
+    }
   },
 
   setViewFromQueryString: async function () {
