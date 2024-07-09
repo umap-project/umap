@@ -1052,6 +1052,13 @@ U.DataLayer = L.Evented.extend({
     if (idx !== -1) this._propertiesIndex.splice(idx, 1)
   },
 
+  sortedValues: function (property) {
+    return Object.values(this._layers)
+      .map((feature) => feature.properties[property])
+      .filter((val, idx, arr) => arr.indexOf(val) === idx)
+      .sort(U.Utils.naturalSort)
+  },
+
   addData: function (geojson, sync) {
     try {
       // Do not fail if remote data is somehow invalid,

@@ -199,3 +199,24 @@ def test_can_deactive_rule_from_list(live_server, page, openmap):
     page.get_by_role("button", name="Show/hide layer").click()
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 2
+
+
+def test_autocomplete_datalist(live_server, page, openmap):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.948/1.670")
+    page.get_by_role("link", name="Map advanced properties").click()
+    page.locator("summary").filter(has_text="Conditional style rules").click()
+    page.get_by_role("button", name="Add rule").click()
+    panel = page.locator(".panel.right.on")
+    datalist = panel.locator(".umap-field-condition datalist option")
+    expect(datalist).to_have_count(5)
+    values = {option.inner_text() for option in datalist.all()}
+    assert values == {"myboolean", "mytype", "mynumber", "mydate", "name"}
+    page.get_by_placeholder("key=value or key!=value").fill("mytype")
+    expect(datalist).to_have_count(4)
+    values = {option.inner_text() for option in datalist.all()}
+    assert values == {"mytype=", "mytype!=", "mytype>", "mytype<"}
+    page.get_by_placeholder("key=value or key!=value").fill("mytype=")
+    expect(datalist).to_have_count(2)
+    values = {option.inner_text() for option in datalist.all()}
+    assert values == {"mytype=even", "mytype=odd"}
