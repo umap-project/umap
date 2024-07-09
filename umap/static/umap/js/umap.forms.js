@@ -456,6 +456,7 @@ L.FormBuilder.BlurInput.include({
     L.FormBuilder.Input.prototype.build.call(this)
     const button = L.DomUtil.create('span', 'button blur-button')
     L.DomUtil.after(this.input, button)
+    L.DomEvent.on(this.input, 'focus', this.fetch, this)
   },
 })
 
@@ -903,8 +904,8 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
   },
 
   fetch: function () {
-    this.backup = this.toHTML()
-    let value = this.backup
+    this.initial = this.toHTML()
+    let value = this.initial
     if (!this.container.querySelector(`input[type="radio"][value="${value}"]`)) {
       value = this.options.default !== undefined ? this.options.default : this.default
     }
