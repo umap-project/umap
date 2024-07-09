@@ -63,7 +63,7 @@
     "leaflet.markercluster": "^1.5.3",
     "leaflet.path.drag": "0.0.6",
     "leaflet.photon": "0.9.1",
-    "osmtogeojson": "^3.0.0-beta.3",
+    "osmtogeojson": "^3.0.0-beta.5",
     "simple-statistics": "^7.8.3"
   },
   "browserslist": [
