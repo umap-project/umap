@@ -755,8 +755,8 @@ U.Marker = L.Marker.extend({
       callback: function () {
         if (!this._latlng.isValid()) {
           U.Alert.error(L._('Invalid latitude or longitude'))
-          builder.resetField('_latlng.lat')
-          builder.resetField('_latlng.lng')
+          builder.restoreField('_latlng.lat')
+          builder.restoreField('_latlng.lng')
         }
         this.zoomTo({ easing: false })
       },
