@@ -1,14 +1,14 @@
 # Articles
 
-## [uMap au cœur de la communication des Chambres d’agriculture](https://umap.openstreetmap.fr/fr/map/valfumier_757298) (2024-07-10)
+## [uMap au cœur de la communication des Chambres d’agriculture](https://umap.dev.incubateur.anct.gouv.fr/blog/umap-au-cur-de-la-communication-des-chambres-dagriculture/) (2024-07-10)
 
 > Un témoignage de Frédéric Guimier, Consultant Communication et projets numériques au sein de la Chambre d’agriculture Pays de la Loire.
 
-[Article complet →](https://pad.numerique.gouv.fr/s/H5CECZiTA#){ .md-button }
+[Article complet →](https://umap.incubateur.anct.gouv.fr/blog/umap-au-cur-de-la-communication-des-chambres-dagriculture/){ .md-button }
 
-## [Recenser les cabanes en pierres sèches : projet culturel & collaboratif](https://umap.openstreetmap.fr/fr/user/BARTHE%20Jean-Louis/) (2024-07-02)
+## [Recenser les cabanes en pierres sèches : projet culturel & collaboratif](https://insidemap.eu/recenser-les-cabanes-en-pierres-seches-projet-culturel-collaboratif/) (2024-07-02)
 
-> Une trouvaille impromptue sur uMap, en balayant les cartes qui s’affichent : un carroyage et des dizaines de points, qui au clic affichent des photographies de constructions en pierres sèches. Il restait à tirer le fil pour comprendre l’ampleur du projet : le recensement des centaines de cabanes, relayé sur des sites Internet et adossée à une base de données, Wikipedra. Merci à Jean Louis Barthe pour cette très belle découverte et ses explications.
+> Une trouvaille impromptue sur uMap, en balayant les cartes qui s’affichent : un carroyage et des dizaines de points, qui au clic affichent des photographies de constructions en pierres sèches. <mark>Il restait à tirer le fil pour comprendre l’ampleur du projet : le recensement des centaines de cabanes</mark>, relayé sur des sites Internet et adossée à une base de données, Wikipedra. Merci à Jean Louis Barthe pour cette très belle découverte et ses explications.
 
 [Article complet →](https://insidemap.eu/recenser-les-cabanes-en-pierres-seches-projet-culturel-collaboratif/){ .md-button }
 
