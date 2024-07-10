@@ -215,10 +215,8 @@ export default class TableEditor extends WithTemplate {
     const tr = event.target.closest('tr')
     const feature = this.datalayer.getFeatureById(tr.dataset.feature)
     const handler = property === 'description' ? 'Textarea' : 'Input'
-    const builder = new U.FormBuilder(feature, [[field, { handler: handler }]], {
+    const builder = new U.FormBuilder(feature, [[field, { handler }]], {
       id: `umap-feature-properties_${L.stamp(feature)}`,
-      className: 'trow',
-      callback: feature.resetTooltip,
     })
     cell.innerHTML = ''
     cell.appendChild(builder.build())
