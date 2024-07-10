@@ -585,3 +585,25 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
     page.get_by_role("button", name="Open browser").click()
     expect(page.locator("h5").get_by_text("Good data")).to_be_visible()
+
+
+def test_import_osm_relation(tilelayer, live_server, page):
+    # Overpass query used for this data:
+    # [out:json][timeout:25];(relation(id:15612202)%20;);out%20geom;
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    paths = page.locator("path")
+    expect(paths).to_have_count(0)
+    expect(layers).to_have_count(0)
+    button = page.get_by_title("Import data")
+    expect(button).to_be_visible()
+    button.click()
+    textarea = page.locator(".umap-upload textarea")
+    file_path = Path(__file__).parent.parent / "fixtures/test_import_osm_relation.json"
+    textarea.fill(file_path.read_text())
+    page.locator('select[name="format"]').select_option("osm")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer and one path has been created
+    expect(layers).to_have_count(1)
+    expect(paths).to_have_count(1)
