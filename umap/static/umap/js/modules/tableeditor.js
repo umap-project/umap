@@ -214,7 +214,7 @@ export default class TableEditor extends WithTemplate {
     const field = `properties.${property}`
     const tr = event.target.closest('tr')
     const feature = this.datalayer.getFeatureById(tr.dataset.feature)
-    const handler = property === 'description' ? 'Textarea' : 'Input'
+    const handler = property === 'description' ? 'Textarea' : 'BlurInput'
     const builder = new U.FormBuilder(feature, [[field, { handler }]], {
       id: `umap-feature-properties_${L.stamp(feature)}`,
     })
@@ -225,6 +225,14 @@ export default class TableEditor extends WithTemplate {
     input.addEventListener('blur', () => {
       cell.innerHTML = feature.properties[property] || ''
       cell.focus()
+    })
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        builder.restoreField(field)
+        cell.innerHTML = feature.properties[property] || ''
+        cell.focus()
+        event.stopPropagation()
+      }
     })
   }
 
