@@ -1,5 +1,17 @@
 # Articles
 
+## [uMap au cœur de la communication des Chambres d’agriculture](https://umap.openstreetmap.fr/fr/map/valfumier_757298) (2024-07-10)
+
+> Un témoignage de Frédéric Guimier, Consultant Communication et projets numériques au sein de la Chambre d’agriculture Pays de la Loire.
+
+[Article complet →](https://pad.numerique.gouv.fr/s/H5CECZiTA#){ .md-button }
+
+## [Recenser les cabanes en pierres sèches : projet culturel & collaboratif](https://umap.openstreetmap.fr/fr/user/BARTHE%20Jean-Louis/) (2024-07-02)
+
+> Une trouvaille impromptue sur uMap, en balayant les cartes qui s’affichent : un carroyage et des dizaines de points, qui au clic affichent des photographies de constructions en pierres sèches. Il restait à tirer le fil pour comprendre l’ampleur du projet : le recensement des centaines de cabanes, relayé sur des sites Internet et adossée à une base de données, Wikipedra. Merci à Jean Louis Barthe pour cette très belle découverte et ses explications.
+
+[Article complet →](https://insidemap.eu/recenser-les-cabanes-en-pierres-seches-projet-culturel-collaboratif/){ .md-button }
+
 ## [Partager l’information & mieux prévenir le risque inondation avec uMap](https://umap.incubateur.anct.gouv.fr/blog/partager-linformation-mieux-prevenir-le-risque-inondation-avec-umap/) (2024-06-10)
 
 > Dans les montagnes des Hautes-Pyrénées, les gaves connaissent régulièrement des crues torrentielles, avec comme conséquence des risques majeurs dans les vallées. <mark>Voici la présentation d’un projet global qui associe communication et analyse technique sur un outil cartographique basé sur uMap.</mark> Le syndicat mixte du Pays de Lourdes et des Vallées des Gaves propose un portail d’information consacré à la mémoire des inondations pour sensibiliser les maires et la population des Vallées des Gaves. Benoît Thouary, chargé d’études au service prévention des inondations, géographe de formation spécialisé en prévention des risques naturels, présente cette approche très complète, adossée à des archives multimédias et à une base de données.
