@@ -107,7 +107,7 @@ export default class Browser {
     this.map.eachBrowsableDataLayer((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
-      if (this.map.fullPanel.isOpen()) datalayer.tableEdit()
+      if (this.map.fullPanel?.isOpen()) datalayer.tableEdit()
     })
     this.toggleBadge()
   }
