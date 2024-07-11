@@ -27,6 +27,13 @@ def mock_osm_tiles(page):
 
 
 @pytest.fixture
+def page(context):
+    page = context.new_page()
+    page.on("console", lambda msg: print(msg.text) if msg.type != "warning" else None)
+    return page
+
+
+@pytest.fixture
 def login(context, settings, live_server):
     def do_login(user):
         # TODO use storage state to do login only once per session
