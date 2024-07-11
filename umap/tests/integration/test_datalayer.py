@@ -1,4 +1,5 @@
 import json
+import re
 
 import pytest
 from django.core.files.base import ContentFile
@@ -41,13 +42,15 @@ def test_should_honour_fromZoom(live_server, map, datalayer, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
-    page.wait_for_timeout(500)
+    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
     page.get_by_label("Zoom out").click()
     expect(markers).to_be_hidden()
     page.get_by_label("Zoom in").click()
+    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
     page.get_by_label("Zoom in").click()
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
     expect(markers).to_be_visible()
 
 
@@ -57,15 +60,17 @@ def test_should_honour_toZoom(live_server, map, datalayer, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
+    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
     page.get_by_label("Zoom out").click()
+    expect(page).to_have_url(re.compile(r".*#5/48\..+/14\..+"))
     expect(markers).to_be_visible()
     page.get_by_label("Zoom in").click()
+    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
     page.get_by_label("Zoom in").click()
-    # FIXME does not work (but works when using PWDEBUG=1), not sure why
-    # may be a race condition related to css transition
-    # expect(markers).to_be_hidden()
+    expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
+    expect(markers).to_be_hidden()
 
 
 def test_should_honour_color_variable(live_server, map, page):
