@@ -9,7 +9,7 @@ site/*
 .pytest_cache/
 node_modules
 umap.conf
-data
+./data
 ./static
 
 ### Python ###
