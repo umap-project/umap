@@ -63,6 +63,22 @@ export class Positioned {
     else this.container.style.bottom = 'initial'
   }
 
+  computePosition([x, y]) {
+    let left
+    let top
+    if (x < window.innerWidth / 2) {
+      left = x
+    } else {
+      left = x - this.container.offsetWidth
+    }
+    if (y < window.innerHeight / 2) {
+      top = y
+    } else {
+      top = y - this.container.offsetHeight
+    }
+    this.setPosition({ left, top })
+  }
+
   getDocHeight() {
     const D = document
     return Math.max(
