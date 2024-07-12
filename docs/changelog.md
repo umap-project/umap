@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.1 - 2024-07-12
+
+### Bug fixes
+* fix a bug where collectstatic was not replacing correctly dynamic imports
+
 ## 2.5.0 - 2024-07-12
 
 ### New features
