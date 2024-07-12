@@ -1159,7 +1159,7 @@ U.FormBuilder = L.FormBuilder.extend({
     }
   },
 
-  finish: function () {
-    this.map.editPanel.close()
+  finish: (event) => {
+    event.helper?.input?.blur()
   },
 })

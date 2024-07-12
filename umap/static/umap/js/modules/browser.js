@@ -107,6 +107,7 @@ export default class Browser {
     this.map.eachBrowsableDataLayer((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
+      if (this.map.fullPanel?.isOpen()) datalayer.tableEdit()
     })
     this.toggleBadge()
   }
@@ -149,7 +150,7 @@ export default class Browser {
     DomEvent.disableClickPropagation(container)
 
     DomUtil.createTitle(container, translate('Data browser'), 'icon-layers')
-    const formContainer = DomUtil.createFieldset(container, L._('Filters'), {
+    this.formContainer = DomUtil.createFieldset(container, L._('Filters'), {
       on: this.mode === 'filters',
       className: 'filters',
       icon: 'icon-filters',
@@ -169,7 +170,7 @@ export default class Browser {
       callback: () => this.onFormChange(),
     })
     let filtersBuilder
-    formContainer.appendChild(builder.build())
+    this.formContainer.appendChild(builder.build())
     DomEvent.on(builder.form, 'reset', () => {
       window.setTimeout(builder.syncAll.bind(builder))
     })
@@ -181,12 +182,11 @@ export default class Browser {
       DomEvent.on(filtersBuilder.form, 'reset', () => {
         window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
       })
-      formContainer.appendChild(filtersBuilder.build())
+      this.formContainer.appendChild(filtersBuilder.build())
     }
-    const reset = DomUtil.createButton('flat', formContainer, '', () => {
-      builder.form.reset()
-      if (filtersBuilder) filtersBuilder.form.reset()
-    })
+    const reset = DomUtil.createButton('flat', this.formContainer, '', () =>
+      this.resetFilters()
+    )
     DomUtil.createIcon(reset, 'icon-restore')
     DomUtil.element({
       tagName: 'span',
@@ -200,6 +200,12 @@ export default class Browser {
     })
 
     this.update()
+  }
+
+  resetFilters() {
+    for (const form of this.formContainer?.querySelectorAll('form') || []) {
+      form.reset()
+    }
   }
 
   static backButton(map) {

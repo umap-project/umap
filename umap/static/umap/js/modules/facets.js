@@ -12,8 +12,8 @@ export default class Facets {
     const properties = {}
     let selected
 
-    names.forEach((name) => {
-      const type = defined[name].type
+    for (const name of names) {
+      const type = defined.get(name).type
       properties[name] = { type: type }
       selected = this.selected[name] || {}
       selected.type = type
@@ -22,13 +22,13 @@ export default class Facets {
         selected.choices = selected.choices || []
       }
       this.selected[name] = selected
-    })
+    }
 
     this.map.eachBrowsableDataLayer((datalayer) => {
       datalayer.eachFeature((feature) => {
-        names.forEach((name) => {
+        for (const name of names) {
           let value = feature.properties[name]
-          const type = defined[name].type
+          const type = defined.get(name).type
           const parser = this.getParser(type)
           value = parser(value)
           switch (type) {
@@ -56,7 +56,7 @@ export default class Facets {
                 properties[name].choices.push(value)
               }
           }
-        })
+        }
       })
     })
     return properties
@@ -73,7 +73,7 @@ export default class Facets {
 
   build() {
     const defined = this.getDefined()
-    const names = Object.keys(defined)
+    const names = [...defined.keys()]
     const facetProperties = this.compute(names, defined)
 
     const fields = names.map((name) => {
@@ -90,7 +90,7 @@ export default class Facets {
           handler = 'FacetSearchDateTime'
           break
       }
-      const label = defined[name].label
+      const label = defined.get(name).label
       return [
         `selected.${name}`,
         {
@@ -107,12 +107,14 @@ export default class Facets {
   getDefined() {
     const defaultType = 'checkbox'
     const allowedTypes = [defaultType, 'radio', 'number', 'date', 'datetime']
+    const defined = new Map()
+    if (!this.map.options.facetKey) return defined
     return (this.map.options.facetKey || '').split(',').reduce((acc, curr) => {
       let [name, label, type] = curr.split('|')
       type = allowedTypes.includes(type) ? type : defaultType
-      acc[name] = { label: label || name, type: type }
+      acc.set(name, { label: label || name, type: type })
       return acc
-    }, {})
+    }, defined)
   }
 
   getParser(type) {
@@ -126,5 +128,33 @@ export default class Facets {
       default:
         return (v) => String(v || '')
     }
+  }
+
+  dumps(parsed) {
+    const dumped = []
+    for (const [property, { label, type }] of parsed) {
+      dumped.push([property, label, type].filter(Boolean).join('|'))
+    }
+    return dumped.join(',')
+  }
+
+  has(property) {
+    return this.getDefined().has(property)
+  }
+
+  add(property, label, type) {
+    const defined = this.getDefined()
+    if (!defined.has(property)) {
+      defined.set(property, { label, type })
+      this.map.options.facetKey = this.dumps(defined)
+      this.map.isDirty = true
+    }
+  }
+
+  remove(property) {
+    const defined = this.getDefined()
+    defined.delete(property)
+    this.map.options.facetKey = this.dumps(defined)
+    this.map.isDirty = true
   }
 }

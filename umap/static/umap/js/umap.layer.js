@@ -412,7 +412,9 @@ U.Layer.Categorized = U.RelativeColorLayer.extend({
     if (colorbrewer[colorScheme]?.[this._classes]) {
       this.options.colors = colorbrewer[colorScheme][this._classes]
     } else {
-      this.options.colors = colorbrewer?.Accent[this._classes] ? colorbrewer?.Accent[this._classes] : U.COLORS
+      this.options.colors = colorbrewer?.Accent[this._classes]
+        ? colorbrewer?.Accent[this._classes]
+        : U.COLORS
     }
   },
 
@@ -1032,7 +1034,7 @@ U.DataLayer = L.Evented.extend({
     this._index.splice(this._index.indexOf(id), 1)
     delete this._layers[id]
     delete this.map.features_index[feature.getSlug()]
-    if (this.hasDataLoaded()) this.fire('datachanged')
+    if (this.hasDataLoaded() && this.isVisible()) this.fire('datachanged')
   },
 
   indexProperties: function (feature) {
@@ -1045,6 +1047,7 @@ U.DataLayer = L.Evented.extend({
     if (name.indexOf('_') === 0) return
     if (L.Util.indexOf(this._propertiesIndex, name) !== -1) return
     this._propertiesIndex.push(name)
+    this._propertiesIndex.sort()
   },
 
   deindexProperty: function (name) {
@@ -1800,9 +1803,9 @@ U.DataLayer = L.Evented.extend({
   },
 
   tableEdit: function () {
-    if (this.isRemoteLayer() || !this.isVisible()) return
+    if (!this.isVisible()) return
     const editor = new U.TableEditor(this)
-    editor.edit()
+    editor.open()
   },
 
   getFilterKeys: function () {

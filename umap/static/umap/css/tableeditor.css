@@ -1,0 +1,69 @@
+.umap-table-editor {
+    width: 100%;
+    overflow-x: auto;
+}
+.umap-table-editor table {
+    white-space: nowrap;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    min-width: 100%;
+}
+.umap-table-editor thead {
+    text-align: center;
+    height: 48px;
+    line-height: 48px;
+    background-color: var(--color-darkGray);
+}
+.umap-table-editor thead tr {
+    border-bottom: 3px solid var(--color-accent);
+}
+.umap-table-editor thead th {
+    border-left: 1px solid black;
+}
+.umap-table-editor .tbody tr input {
+    margin: 0;
+    border-right: none;
+    display: inline;
+}
+.umap-table-editor td {
+    overflow: hidden;
+    border: 1px solid black;
+}
+.umap-table-editor td:focus {
+    outline: 1px solid var(--color-accent);
+}
+.umap-table-editor th, .umap-table-editor td {
+  padding: 10px;
+  vertical-align: top;
+}
+.umap-table-editor tr:nth-child(even) {
+    background-color: var(--color-mediumGray);
+}
+.umap-table-editor tr {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.umap-table-editor .formbox,
+.umap-table-editor input {
+    margin: 0;
+    min-height: initial;
+}
+.umap-table-editor textarea,
+.umap-table-editor input[type=text] {
+    border-radius: initial;
+    width: initial;
+    position: fixed;
+}
+.umap-table-editor th button {
+    transform: rotate(90deg);
+    font-size: 1.25rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 1rem;
+    font-weight: bold;
+}
+.umap-table-editor th button:hover {
+    text-decoration: none;
+}
