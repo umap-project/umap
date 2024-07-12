@@ -93,7 +93,22 @@ def test_cannot_add_existing_property_name(live_server, openmap, datalayer, page
     page.get_by_text("Add a new property").click()
     page.locator("dialog").locator("input").fill("name")
     page.get_by_role("button", name="OK").click()
-    expect(page.get_by_role("dialog")).to_contain_text("This name already exists: name")
+    expect(page.get_by_role("dialog")).to_contain_text(
+        "This name already exists: “name”"
+    )
+    expect(page.locator("table th button[data-property=name]")).to_have_count(1)
+
+
+def test_cannot_add_property_with_a_dot(live_server, openmap, datalayer, page):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("link", name="Manage layers").click()
+    page.locator(".panel").get_by_title("Edit properties in a table").click()
+    page.get_by_text("Add a new property").click()
+    page.locator("dialog").locator("input").fill("foo.bar")
+    page.get_by_role("button", name="OK").click()
+    expect(page.get_by_role("dialog")).to_contain_text(
+        "Name “foo.bar” should not contain a dot."
+    )
     expect(page.locator("table th button[data-property=name]")).to_have_count(1)
 
 
