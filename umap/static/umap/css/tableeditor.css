@@ -14,44 +14,22 @@
     text-align: center;
     height: 48px;
     line-height: 48px;
-    background-color: #2c3133;
+    background-color: var(--color-darkGray);
 }
 .umap-table-editor thead tr {
     border-bottom: 3px solid var(--color-accent);
 }
 .umap-table-editor thead th {
-    border-left: 1px solid #0b0c0c;
+    border-left: 1px solid black;
 }
 .umap-table-editor .tbody tr input {
     margin: 0;
     border-right: none;
     display: inline;
 }
-.umap-table-editor thead i {
-    display: none;
-    width: 50%;
-    cursor: pointer;
-    padding: 10px 0;
-    height: 24px;
-    line-height: 24px;
-}
-.umap-table-editor thead i:before {
-    width: 40px;
-}
-.umap-table-editor thead th:hover i {
-    display: inline-block;
-}
-.umap-table-editor thead th i:hover {
-    background-color: #33393b;
-}
-.umap-table-editor thead th:hover span {
-    display: none;
-}
 .umap-table-editor td {
     overflow: hidden;
-}
-.umap-table-editor td {
-    border: 1px solid #222;
+    border: 1px solid black;
 }
 .umap-table-editor td:focus {
     outline: 1px solid var(--color-accent);
