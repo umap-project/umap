@@ -103,11 +103,11 @@ export default class TableEditor extends WithTemplate {
 
   validateName(name) {
     if (name.includes('.')) {
-      U.Alert.error(translate('Invalide property name: {name}', { name: name }))
+      U.Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
       return false
     }
     if (this.datalayer._propertiesIndex.includes(name)) {
-      U.Alert.error(translate('This name already exists: {name}', { name: name }))
+      U.Alert.error(translate('This name already exists: “{name}”', { name }))
       return false
     }
     return true
