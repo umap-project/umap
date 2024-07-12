@@ -20,7 +20,6 @@ export default class TableEditor extends WithTemplate {
     this.map = this.datalayer.map
     this.contextmenu = new ContextMenu({ className: 'dark' })
     this.table = this.loadTemplate(TEMPLATE)
-    this.resetProperties()
     if (!this.datalayer.isRemoteLayer()) {
       this.elements.body.addEventListener('dblclick', (event) => {
         if (event.target.closest('[data-property]')) this.editCell(event.target)
@@ -73,7 +72,7 @@ export default class TableEditor extends WithTemplate {
     const th = loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const property of this.properties) {
+    for (const property of this.datalayer._propertiesIndex) {
       this.elements.header.appendChild(
         loadTemplate(
           `<th>${property}<button data-property="${property}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
@@ -93,30 +92,13 @@ export default class TableEditor extends WithTemplate {
     for (const feature of Object.values(this.datalayer._layers)) {
       if (feature.isFiltered()) continue
       if (inBbox && !feature.isOnScreen(bounds)) continue
-      const tds = this.properties.map(
+      const tds = this.datalayer._propertiesIndex.map(
         (prop) =>
           `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`
       )
       html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
     }
     this.elements.body.innerHTML = html
-  }
-
-  compileProperties() {
-    this.resetProperties()
-    if (this.properties.length === 0) this.properties = ['name']
-    this.properties.sort()
-    this.field_properties = []
-    for (let i = 0; i < this.properties.length; i++) {
-      this.field_properties.push([
-        `properties.${this.properties[i]}`,
-        { wrapper: 'td' },
-      ])
-    }
-  }
-
-  resetProperties() {
-    this.properties = this.datalayer._propertiesIndex
   }
 
   validateName(name) {
@@ -172,7 +154,6 @@ export default class TableEditor extends WithTemplate {
 
   open() {
     const id = 'tableeditor:edit'
-    this.compileProperties()
     this.renderHeaders()
     this.elements.body.innerHTML = ''
     this.renderBody()

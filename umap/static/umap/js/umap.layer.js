@@ -412,7 +412,9 @@ U.Layer.Categorized = U.RelativeColorLayer.extend({
     if (colorbrewer[colorScheme]?.[this._classes]) {
       this.options.colors = colorbrewer[colorScheme][this._classes]
     } else {
-      this.options.colors = colorbrewer?.Accent[this._classes] ? colorbrewer?.Accent[this._classes] : U.COLORS
+      this.options.colors = colorbrewer?.Accent[this._classes]
+        ? colorbrewer?.Accent[this._classes]
+        : U.COLORS
     }
   },
 
@@ -1045,6 +1047,7 @@ U.DataLayer = L.Evented.extend({
     if (name.indexOf('_') === 0) return
     if (L.Util.indexOf(this._propertiesIndex, name) !== -1) return
     this._propertiesIndex.push(name)
+    this._propertiesIndex.sort()
   },
 
   deindexProperty: function (name) {
