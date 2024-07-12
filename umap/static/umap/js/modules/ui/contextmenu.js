@@ -26,8 +26,7 @@ export default class ContextMenu {
       this.container.appendChild(li)
     }
     document.body.appendChild(this.container)
-    this.container.style.top = `${y}px`
-    this.container.style.left = `${x}px`
+    this.setPosition([x, y], this.container)
     this.container.querySelector('button').focus()
     this.container.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
@@ -35,6 +34,19 @@ export default class ContextMenu {
         this.close()
       }
     })
+  }
+
+  setPosition([x, y], element) {
+    if (x < window.innerWidth / 2) {
+      this.container.style.left = `${x}px`
+    } else {
+      this.container.style.left = `${x - element.offsetWidth}px`
+    }
+    if (y < window.innerHeight / 2) {
+      this.container.style.top = `${y}px`
+    } else {
+      this.container.style.top = `${y - element.offsetHeight}px`
+    }
   }
 
   close() {
