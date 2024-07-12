@@ -187,6 +187,7 @@ U.Map = L.Map.extend({
     }
 
     this.initShortcuts()
+    if (!this.options.noControl) this.initCaptionBar()
     this.onceDataLoaded(this.setViewFromQueryString)
 
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
@@ -303,7 +304,6 @@ U.Map = L.Map.extend({
 
   setViewFromQueryString: async function () {
     if (this.options.noControl) return
-    this.initCaptionBar()
     if (L.Util.queryString('share')) {
       this.share.open()
     } else if (this.options.onLoadPanel === 'databrowser') {
@@ -1469,12 +1469,8 @@ U.Map = L.Map.extend({
         { handler: 'Switch', label: L._('Autostart when map is loaded') },
       ],
     ]
-    const slideshowHandler = function () {
-      this.slideshow.setOptions(this.options.slideshow)
-    }
     const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
-      callback: slideshowHandler,
-      callbackContext: this,
+      callback: () => this.slideshow.setOptions(this.options.slideshow),
     })
     slideshow.appendChild(slideshowBuilder.build())
   },
