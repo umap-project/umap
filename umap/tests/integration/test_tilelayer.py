@@ -122,3 +122,20 @@ def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_text("© OpenStreetMap contributors")).to_be_visible()
     expect(page.get_by_role("link", name="OpenStreetMap")).to_be_visible()
+
+
+def test_map_should_display_a_more_button(map, live_server, tilelayers, page):
+    map.settings["properties"]["tilelayersControl"] = True
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.locator(".leaflet-iconLayers").hover()
+    page.get_by_role("button", name="+").click()
+    panel = page.locator(".panel.left.on")
+    expect(panel).to_be_visible()
+    expect(panel.get_by_text("Forte")).to_be_visible()
+    panel.get_by_text("Forte").click()
+    tiles = page.locator(".leaflet-tile-pane img")
+    url_pattern = re.compile(
+        r"https://[abc]{1}.forte.tiles.quaidorsay.fr/fr/\d+/\d+/\d+.png"
+    )
+    expect(tiles.first).to_have_attribute("src", url_pattern)

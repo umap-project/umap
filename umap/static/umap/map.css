@@ -218,6 +218,24 @@
 .leaflet-iconLayers-layerCell:hover .leaflet-iconLayers-layerTitleContainer {
     height: initial;
 }
+.leaflet-iconLayers-layerCell-plus {
+    width: 80px;
+    height: 80px;
+    background-color: var(--background-color);
+    vertical-align: middle;
+    text-align: center;
+    font-size: 3rem;
+    display: none;
+    line-height: 100%;
+    border-radius: var(--border-radius);
+    margin-bottom: 0;
+}
+.leaflet-iconLayers-layerCell-plus:hover {
+    background-color: var(--color-lightGray);
+}
+.leaflet-iconLayers:hover .leaflet-iconLayers-layerCell-plus {
+    display: block;
+}
 
 
 
