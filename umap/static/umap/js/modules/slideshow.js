@@ -18,13 +18,7 @@ export default class Slideshow extends WithTemplate {
     this.map = map
     this._id = null
     this.CLASSNAME = 'umap-slideshow-active'
-    this.options = Object.assign(
-      {
-        delay: 5000,
-        autoplay: false,
-      },
-      options
-    )
+    this.setOptions(options)
     this._current = null
 
     if (this.options.autoplay) {
@@ -58,6 +52,16 @@ export default class Slideshow extends WithTemplate {
       return this.current
     }
     return this.current.getNext()
+  }
+
+  setOptions(options) {
+    this.options = Object.assign(
+      {
+        delay: 5000,
+        autoplay: false,
+      },
+      options
+    )
   }
 
   defaultDatalayer() {

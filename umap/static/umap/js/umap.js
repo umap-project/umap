@@ -1469,12 +1469,8 @@ U.Map = L.Map.extend({
         { handler: 'Switch', label: L._('Autostart when map is loaded') },
       ],
     ]
-    const slideshowHandler = function () {
-      this.slideshow.setOptions(this.options.slideshow)
-    }
     const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
-      callback: slideshowHandler,
-      callbackContext: this,
+      callback: () => this.slideshow.setOptions(this.options.slideshow),
     })
     slideshow.appendChild(slideshowBuilder.build())
   },
