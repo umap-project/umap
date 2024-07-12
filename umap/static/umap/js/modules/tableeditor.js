@@ -72,7 +72,7 @@ export default class TableEditor extends WithTemplate {
     const th = loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const property of this.datalayer._propertiesIndex) {
+    for (const property of this.properties) {
       this.elements.header.appendChild(
         loadTemplate(
           `<th>${property}<button data-property="${property}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
@@ -92,7 +92,7 @@ export default class TableEditor extends WithTemplate {
     for (const feature of Object.values(this.datalayer._layers)) {
       if (feature.isFiltered()) continue
       if (inBbox && !feature.isOnScreen(bounds)) continue
-      const tds = this.datalayer._propertiesIndex.map(
+      const tds = this.properties.map(
         (prop) =>
           `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`
       )
@@ -101,12 +101,19 @@ export default class TableEditor extends WithTemplate {
     this.elements.body.innerHTML = html
   }
 
+  resetProperties() {
+    this.properties = this.datalayer._propertiesIndex
+    if (this.properties.length === 0) {
+      this.properties = ['name', 'description']
+    }
+  }
+
   validateName(name) {
     if (name.includes('.')) {
       U.Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
       return false
     }
-    if (this.datalayer._propertiesIndex.includes(name)) {
+    if (this.properties.includes(name)) {
       U.Alert.error(translate('This name already exists: “{name}”', { name }))
       return false
     }
@@ -154,6 +161,7 @@ export default class TableEditor extends WithTemplate {
 
   open() {
     const id = 'tableeditor:edit'
+    this.resetProperties()
     this.renderHeaders()
     this.elements.body.innerHTML = ''
     this.renderBody()
