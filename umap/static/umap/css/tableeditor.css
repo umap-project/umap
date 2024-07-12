@@ -13,7 +13,7 @@
 .umap-table-editor thead {
     text-align: center;
     height: 48px;
-    line-height: 48px;
+    line-height: 28px;
     background-color: var(--color-darkGray);
 }
 .umap-table-editor thead tr {
@@ -37,6 +37,9 @@
 .umap-table-editor th, .umap-table-editor td {
   padding: 10px;
   vertical-align: top;
+}
+.umap-table-editor td:has(input) {
+  padding: 0;
 }
 .umap-table-editor tr:nth-child(even) {
     background-color: var(--color-mediumGray);
