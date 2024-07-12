@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.5.0 - 2024-07-12
+
+### New features
+* add new type of layer Categorized by @yohanboniface in #1953
+* add AutocompleteDatalist and use it for conditional rules by @yohanboniface in #1981
+* refactor the table editor including mass actions and filters by @yohanboniface in #1968
+
+### Bug fixes
+* add throttle in autocomplete by @yohanboniface in #1964
+* allow to search a French departement in Overpass importer by @yohanboniface in #1963
+* main help button from edit toolbar was broken by @yohanboniface in #1958
+* make sure panels are above controls by @yohanboniface in #1972
+* BlurInput was not updating the object in some situations by @yohanboniface in #1979
+* use correct color for categorized/choropleth layers in browser by @yohanboniface in #1982
+* import unified relations from OSM data (use latest osmtogeojson) by @yohanboniface in #1980
+
+### Internal changes
+* create a WithTemplate base class by @davidbgk in #1969
+* move slideshow to a module by @yohanboniface in #1971
+* move formatters and share to a module, and use new GPX library by @yohanboniface in #1945
+
 ## 2.4.2 - 2024-06-26
 
 ### New features
