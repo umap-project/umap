@@ -97,9 +97,11 @@ export default class Dialog extends WithTemplate {
 
   currentZIndex() {
     return Math.max(
-      ...Array.from(document.querySelectorAll('dialog')).map(
-        (el) => window.getComputedStyle(el).getPropertyValue('z-index') || 0
-      )
+      ...Array.from(document.querySelectorAll('dialog')).map((el) => {
+        const zIndex = window.getComputedStyle(el).getPropertyValue('z-index')
+        if (zIndex === 'auto') return 0
+        return zIndex || 0
+      })
     )
   }
 
@@ -127,7 +129,9 @@ export default class Dialog extends WithTemplate {
     this.hasFormData = this.elements.fieldset.elements.length > 0
 
     const currentZIndex = this.currentZIndex()
-    if (currentZIndex) this.dialog.style.zIndex = currentZIndex + 1
+    if (currentZIndex) {
+      this.dialog.style.zIndex = currentZIndex + 1
+    }
 
     this.toggle(true)
 
