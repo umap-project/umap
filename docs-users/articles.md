@@ -4,7 +4,7 @@
 
 > The latest 2.4.X release sets the path for two major requested features: real-time collaboration and one-click remote data importers.
 >
-> Additionaly, minor improvements and bugfixes have made the tool more stable and usable.
+> Additionally, minor improvements and bugfixes have made the tool more stable and usable.
 
 [Full article →](https://www.openstreetmap.org/user/David%20Larlet/diary/404654){ .md-button }
 
