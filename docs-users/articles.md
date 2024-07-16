@@ -1,5 +1,13 @@
 # Articles
 
+## [Towards uMap 3 😱](https://www.openstreetmap.org/user/David%20Larlet/diary/404654) (2024-07-16)
+
+> The latest 2.4.X release sets the path for two major requested features: real-time collaboration and one-click remote data importers.
+>
+> Additionaly, minor improvements and bugfixes have made the tool more stable and usable.
+
+[Full article →](https://www.openstreetmap.org/user/David%20Larlet/diary/404654){ .md-button }
+
 
 ## [Adding collaboration on uMap, fourth update](https://blog.notmyidea.org/adding-collaboration-on-umap-fourth-update.html) (2024-06-20)
 

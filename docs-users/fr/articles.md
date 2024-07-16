@@ -1,5 +1,13 @@
 # Articles
 
+## [Vers uMap 3 😱](https://www.openstreetmap.org/user/David%20Larlet/diary/404654#vers-umap-3-) (2024-07-16)
+
+> La dernière version 2.4.X ouvre la voie à deux fonctionnalités majeures demandées : la collaboration en temps réel et les assistants d’import de données à distance en un clic.
+>
+> En outre, des améliorations mineures et des corrections de bogues ont rendu l’outil plus stable et plus utilisable.
+
+[Full article →](https://www.openstreetmap.org/user/David%20Larlet/diary/404654#vers-umap-3-){ .md-button }
+
 ## [uMap au cœur de la communication des Chambres d’agriculture](https://umap.dev.incubateur.anct.gouv.fr/blog/umap-au-cur-de-la-communication-des-chambres-dagriculture/) (2024-07-10)
 
 > Un témoignage de Frédéric Guimier, Consultant Communication et projets numériques au sein de la Chambre d’agriculture Pays de la Loire.
