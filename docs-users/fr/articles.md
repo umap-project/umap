@@ -6,7 +6,7 @@
 >
 > En outre, des améliorations mineures et des corrections de bogues ont rendu l’outil plus stable et plus utilisable.
 
-[Full article →](https://www.openstreetmap.org/user/David%20Larlet/diary/404654#vers-umap-3-){ .md-button }
+[Article complet →](https://www.openstreetmap.org/user/David%20Larlet/diary/404654#vers-umap-3-){ .md-button }
 
 ## [uMap au cœur de la communication des Chambres d’agriculture](https://umap.dev.incubateur.anct.gouv.fr/blog/umap-au-cur-de-la-communication-des-chambres-dagriculture/) (2024-07-10)
 
@@ -25,6 +25,12 @@
 > Dans les montagnes des Hautes-Pyrénées, les gaves connaissent régulièrement des crues torrentielles, avec comme conséquence des risques majeurs dans les vallées. <mark>Voici la présentation d’un projet global qui associe communication et analyse technique sur un outil cartographique basé sur uMap.</mark> Le syndicat mixte du Pays de Lourdes et des Vallées des Gaves propose un portail d’information consacré à la mémoire des inondations pour sensibiliser les maires et la population des Vallées des Gaves. Benoît Thouary, chargé d’études au service prévention des inondations, géographe de formation spécialisé en prévention des risques naturels, présente cette approche très complète, adossée à des archives multimédias et à une base de données.
 
 [Article complet →](https://umap.incubateur.anct.gouv.fr/blog/partager-linformation-mieux-prevenir-le-risque-inondation-avec-umap/){ .md-button }
+
+## [La cartographie numérique pour mieux lire et mieux écrire](https://eduscol.education.fr/4032/la-cartographie-numerique-pour-mieux-lire-et-mieux-ecrire) (2024-06)
+
+> uMap est une plateforme de cartographie libre et gratuite qui fait partie du SILL (Socle Interministériel des Logiciels Libres). Elle propose par défaut uniquement des fonds de cartes récents, accompagnés d’outils de cartographie similaires à ceux d’Édugéo et de Geoportail, avec des fonctionnalités intéressantes de sauvegarde et de partage des cartes. Il est possible d’ajouter des fonds de cartes anciens en suivant la démarche indiquée avec l’exemple de la carte de Metz 1872.
+
+[Article complet →](https://eduscol.education.fr/4032/la-cartographie-numerique-pour-mieux-lire-et-mieux-ecrire){ .md-button }
 
 ## [Carte des arbres remarquables, la suite…](https://insidemap.eu/carte-des-arbres-remarquables-la-suite/) (2024-05-25)
 
