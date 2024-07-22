@@ -220,9 +220,9 @@ L.FormBuilder.Element.include({
     if (this.options.label) {
       this.label = L.DomUtil.create('label', '', this.getLabelParent())
       this.label.textContent = this.label.title = this.options.label
-      if (this.options.helpEntries)
+      if (this.options.helpEntries) {
         this.builder.map.help.button(this.label, this.options.helpEntries)
-      else if (this.options.helpTooltip) {
+      } else if (this.options.helpTooltip) {
         const info = L.DomUtil.create('i', 'info', this.label)
         L.DomEvent.on(
           info,
@@ -1098,6 +1098,13 @@ U.FormBuilder = L.FormBuilder.extend({
     className: 'umap-form',
   },
 
+  customHandlers: {
+    sortKey: 'BlurInput',
+    easing: 'Switch',
+    facetKey: 'BlurInput',
+    slugKey: 'BlurInput',
+  },
+
   computeDefaultOptions: function () {
     for (const [key, schema] of Object.entries(U.SCHEMA)) {
       if (schema.type === Boolean) {
@@ -1134,6 +1141,9 @@ U.FormBuilder = L.FormBuilder.extend({
             schema.handler = 'LicenceChooser'
             break
         }
+      }
+      if (this.customHandlers[key]) {
+        schema.handler = this.customHandlers[key]
       }
       // FormBuilder use this key for the input type itself
       delete schema.type

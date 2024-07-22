@@ -112,6 +112,7 @@ export const SCHEMA = {
     type: Boolean,
     impacts: [],
     default: false,
+    label: translate('Animated transitions'),
   },
   editinosmControl: {
     type: Boolean,
@@ -130,6 +131,9 @@ export const SCHEMA = {
   facetKey: {
     type: String,
     impacts: ['ui'],
+    helpEntries: ['facetKey'],
+    placeholder: translate('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
+    label: translate('Filters keys'),
   },
   fill: {
     type: Boolean,
@@ -160,6 +164,10 @@ export const SCHEMA = {
   filterKey: {
     type: String,
     impacts: [],
+    helpEntries: ['filterKey'],
+    placeholder: translate('Default: name'),
+    label: translate('Search keys'),
+    inheritable: true,
   },
   fromZoom: {
     type: Number,
@@ -437,6 +445,9 @@ export const SCHEMA = {
   slugKey: {
     type: String,
     impacts: [],
+    helpEntries: ['slugKey'],
+    placeholder: translate('Default: name'),
+    label: translate('Feature identifier key'),
   },
   smoothFactor: {
     type: Number,
@@ -452,6 +463,10 @@ export const SCHEMA = {
   sortKey: {
     type: String,
     impacts: ['datalayer-index', 'data'],
+    helpEntries: ['sortKey'],
+    placeholder: translate('Default: name'),
+    label: translate('Sort key'),
+    inheritable: true,
   },
   starControl: {
     type: Boolean,
