@@ -1219,46 +1219,12 @@ U.Map = L.Map.extend({
   _editDefaultProperties: function (container) {
     const optionsFields = [
       'options.zoomTo',
-      ['options.easing', { handler: 'Switch', label: L._('Animated transitions') }],
+      'options.easing',
       'options.labelKey',
-      [
-        'options.sortKey',
-        {
-          handler: 'BlurInput',
-          helpEntries: 'sortKey',
-          placeholder: L._('Default: name'),
-          label: L._('Sort key'),
-          inheritable: true,
-        },
-      ],
-      [
-        'options.filterKey',
-        {
-          handler: 'Input',
-          helpEntries: 'filterKey',
-          placeholder: L._('Default: name'),
-          label: L._('Search keys'),
-          inheritable: true,
-        },
-      ],
-      [
-        'options.facetKey',
-        {
-          handler: 'BlurInput',
-          helpEntries: 'facetKey',
-          placeholder: L._('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
-          label: L._('Filters keys'),
-        },
-      ],
-      [
-        'options.slugKey',
-        {
-          handler: 'BlurInput',
-          helpEntries: 'slugKey',
-          placeholder: L._('Default: name'),
-          label: L._('Feature identifier key'),
-        },
-      ],
+      'options.sortKey',
+      'options.filterKey',
+      'options.facetKey',
+      'options.slugKey',
     ]
 
     builder = new U.FormBuilder(this, optionsFields)
