@@ -46,3 +46,44 @@ With macOS, replace `Ctrl` by `Cmd`.
 * `mycolumn<12.34` → will match features whose column `mycolumn` is lower than `12.34` (as number)
 
 When the condition match, the associated style will be applied to the corresponding feature.
+
+
+## How to use variables ? {: #variables}
+
+In general, using a variable is as simple as `{myvar}`.
+
+It's possible to define another variable as fallback of the first one like this: `{myvar|fallbackvar}`.
+
+To fallback to a string, add it between double quotes: `{myvar|"fallback"}`.
+
+It's possible to combine more variables: `{myvar|othervar|"some string"}`.
+
+It's possible to use a variable inside an URL, for example: `[[https://domain.org/?locale={locale}|Wikipedia]]`.
+
+Or even as source for an image: `{{{myvar}}}` (note the triple `{}`).
+
+### Available variables for features:
+
+Those variables can be used in a feature description, or in popup content templates.
+
+Any property of the feature will be available, plus:
+
+- `{lat}/{lng}` → the feature position (or centroid in case of line or polygon)
+- `{alt}` → the altitude of a marker, if defined in the data
+- `{locale}` → the locale in the form `en` or `en_US` when a variant is used
+- `{lang}` → the lang in the form `en` or `en-us` when a variant is used
+- `{measure}` → the length of a line or the area of a polygon
+- `{rank}` → the rank of the feature in the layer
+- `{layer}` → the name of the feature's layer
+- `{zoom}` → the current map zoom
+
+### Available variables in URL for remote data:
+
+- `{bbox}` → the current bbox of the map in the form `southwest_lng,southwest_lat,northeast_lng,northeast_lat`
+- `{north}/{top}` → the North latitude of the current map view
+- `{south}/{bottom}` → the South latitude of the current map view
+- `{east}/{right}` → the East longitude of the current map view
+- `{west}/{left}` → the West longitude of the current map view
+- `{zoom}` → the current map zoom
+- `{lat}` → the latitude of the current map center
+- `{lng}` → the longitude of the current map center
