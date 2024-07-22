@@ -242,10 +242,12 @@ export function greedyTemplate(str, data, ignore) {
       }
       for (let i = 0; i < vars.length; i++) {
         path = vars[i]
-        if (path.startsWith('"') && path.endsWith('"'))
+        if (path.startsWith('"') && path.endsWith('"')) {
           value = path.substring(1, path.length - 1) // static default value.
-        else value = getValue(data, path.split('.'))
-        if (value !== undefined) break
+        } else {
+          value = getValue(data, path.split('.'))
+        }
+        if (value !== undefined && value !== null) break
       }
       if (value === undefined) {
         if (ignore) value = str

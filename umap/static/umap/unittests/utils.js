@@ -433,6 +433,16 @@ describe('Utils', () => {
         'A phrase with [[https://osm.org|link]] as fallback.'
       )
     })
+
+    it('should not consider null values', () => {
+      assert.equal(
+        Utils.greedyTemplate('A phrase with a {foo|fallback}.', {
+          foo: null,
+          fallback: 'default',
+        }),
+        'A phrase with a default.'
+      )
+    })
   })
 
   describe('#flattenCoordinates()', () => {
