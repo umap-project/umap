@@ -602,6 +602,7 @@ U.FeatureMixin = {
     if (locale) properties.locale = locale
     if (L.lang) properties.lang = L.lang
     properties.rank = this.getRank() + 1
+    properties.layer = this.datalayer.getName()
     if (this._map && this.hasGeom()) {
       center = this.getCenter()
       properties.lat = center.lat

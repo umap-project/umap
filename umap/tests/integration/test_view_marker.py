@@ -79,3 +79,28 @@ def test_should_open_popup_panel_on_click(live_server, map, page, bootstrap):
     # Close popup
     page.locator("#map").click()
     expect(panel).to_be_hidden()
+
+
+def test_extended_properties_in_popup(live_server, map, page, bootstrap):
+    map.settings["properties"]["popupContentTemplate"] = """
+    Rank: {rank}
+    Locale: {locale}
+    Lang: {lang}
+    Lat: {lat}
+    Lon: {lon}
+    Zoom: {zoom}
+    Layer: {layer}
+    """
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".umap-icon-active")).to_be_hidden()
+    page.locator(".leaflet-marker-icon").click()
+    expect(page.locator(".umap-icon-active")).to_be_visible()
+    expect(page.locator(".leaflet-popup-content-wrapper")).to_be_visible()
+    expect(page.get_by_text("Rank: 1")).to_be_visible()
+    expect(page.get_by_text("Locale: en")).to_be_visible()
+    expect(page.get_by_text("Lang: en")).to_be_visible()
+    expect(page.get_by_text("Lat: 48.5529")).to_be_visible()
+    expect(page.get_by_text("Lon: 14.6889")).to_be_visible()
+    expect(page.get_by_text("Zoom: 7")).to_be_visible()
+    expect(page.get_by_text("Layer: test datalayer")).to_be_visible()
