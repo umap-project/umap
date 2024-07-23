@@ -19,7 +19,7 @@ DATALAYER_DATA = {
             },
             "geometry": {
                 "type": "Point",
-                "coordinates": [14.6889, 48.5529],
+                "coordinates": [14.6889, 48.5529, 241],
             },
         },
     ],
@@ -88,6 +88,7 @@ def test_extended_properties_in_popup(live_server, map, page, bootstrap):
     Lang: {lang}
     Lat: {lat}
     Lon: {lon}
+    Alt: {alt}
     Zoom: {zoom}
     Layer: {layer}
     """
@@ -102,5 +103,6 @@ def test_extended_properties_in_popup(live_server, map, page, bootstrap):
     expect(page.get_by_text("Lang: en")).to_be_visible()
     expect(page.get_by_text("Lat: 48.5529")).to_be_visible()
     expect(page.get_by_text("Lon: 14.6889")).to_be_visible()
+    expect(page.get_by_text("Alt: 241")).to_be_visible()
     expect(page.get_by_text("Zoom: 7")).to_be_visible()
     expect(page.get_by_text("Layer: test datalayer")).to_be_visible()

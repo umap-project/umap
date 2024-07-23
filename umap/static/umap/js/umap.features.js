@@ -608,6 +608,7 @@ U.FeatureMixin = {
       properties.lat = center.lat
       properties.lon = center.lng
       properties.lng = center.lng
+      properties.alt = this._latlng?.alt
       if (typeof this.getMeasure !== 'undefined') {
         properties.measure = this.getMeasure()
       }
