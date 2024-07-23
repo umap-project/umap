@@ -318,7 +318,7 @@ export default class TableEditor extends WithTemplate {
           feature.del()
         }
         this.datalayer.show()
-        this.datalayer.fire('datachanged')
+        this.datalayer.dataChanged()
         this.renderBody()
         if (this.map.browser.isOpen()) {
           this.map.browser.resetFilters()

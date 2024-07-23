@@ -1,9 +1,12 @@
 import {
   uMapAlert as Alert,
-  uMapAlertConflict as AlertConflict,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
-import { AjaxAutocomplete, AjaxAutocompleteMultiple, AutocompleteDatalist } from './autocomplete.js'
+import {
+  AjaxAutocomplete,
+  AjaxAutocompleteMultiple,
+  AutocompleteDatalist,
+} from './autocomplete.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
 import Facets from './facets.js'
@@ -23,6 +26,7 @@ import TableEditor from './tableeditor.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
+import { DataLayer, LAYER_TYPES } from './data/layer.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -31,12 +35,12 @@ import * as Utils from './utils.js'
 window.U = {
   Alert,
   AlertCreation,
-  AlertConflict,
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
   AutocompleteDatalist,
   Browser,
   Caption,
+  DataLayer,
   Dialog,
   EditPanel,
   Facets,
@@ -45,6 +49,7 @@ window.U = {
   Help,
   HTTPError,
   Importer,
+  LAYER_TYPES,
   NOKError,
   Orderable,
   Panel,

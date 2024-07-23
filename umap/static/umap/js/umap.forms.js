@@ -342,14 +342,7 @@ L.FormBuilder.TextColorPicker = L.FormBuilder.ColorPicker.extend({
 
 L.FormBuilder.LayerTypeChooser = L.FormBuilder.Select.extend({
   getOptions: () => {
-    const layer_classes = [
-      U.Layer.Default,
-      U.Layer.Cluster,
-      U.Layer.Heat,
-      U.Layer.Choropleth,
-      U.Layer.Categorized,
-    ]
-    return layer_classes.map((class_) => [class_.TYPE, class_.NAME])
+    return U.LAYER_TYPES.map((class_) => [class_.TYPE, class_.NAME])
   },
 })
 
@@ -367,6 +360,7 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     const options = []
     this.builder.map.eachDataLayerReverse((datalayer) => {
+      console.log(datalayer.isLoaded(), datalayer.isDataReadOnly(), datalayer.isBrowsable())
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&
