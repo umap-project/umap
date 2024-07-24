@@ -1,4 +1,3 @@
-// Uses U.Marker, U.Polygon, U.Polyline, U.TableEditor not yet ES modules
 // Uses U.FormBuilder not available as ESM
 
 // FIXME: this module should not depend on Leaflet
@@ -19,6 +18,7 @@ import {
 } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
+import { Point, LineString, Polygon } from './features.js'
 
 export const LAYER_TYPES = [DefaultLayer, Cluster, Heat, Choropleth, Categorized]
 
@@ -32,7 +32,7 @@ export class DataLayer {
     this.map = map
     this.sync = map.sync_engine.proxy(this)
     this._index = Array()
-    this._layers = {}
+    this._features = {}
     this._geojson = null
     this._propertiesIndex = []
     this._loaded = false // Are layer metadata loaded
@@ -188,23 +188,14 @@ export class DataLayer {
     if (visible) this.map.removeLayer(this.layer)
     const Class = LAYER_MAP[this.options.type] || DefaultLayer
     this.layer = new Class(this)
-    this.eachLayer(this.showFeature)
+    this.eachFeature(this.showFeature)
     if (visible) this.show()
     this.propagateRemote()
   }
 
-  eachLayer(method, context) {
-    for (const i in this._layers) {
-      method.call(context || this, this._layers[i])
-    }
-    return this
-  }
-
   eachFeature(method, context) {
-    if (this.isBrowsable()) {
-      for (let i = 0; i < this._index.length; i++) {
-        method.call(context || this, this._layers[this._index[i]])
-      }
+    for (const idx of this._index) {
+      method.call(context || this, this._features[idx])
     }
     return this
   }
@@ -254,7 +245,7 @@ export class DataLayer {
 
   clear() {
     this.layer.clearLayers()
-    this._layers = {}
+    this._features = {}
     this._index = Array()
     if (this._geojson) {
       this.backupData()
@@ -268,13 +259,9 @@ export class DataLayer {
   }
 
   reindex() {
-    const features = []
-    this.eachFeature((feature) => features.push(feature))
+    const features = Object.values(this._features)
     Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
-    this._index = []
-    for (let i = 0; i < features.length; i++) {
-      this._index.push(stamp(features[i]))
-    }
+    this._index = features.map((feature) => stamp(feature))
   }
 
   showAtZoom() {
@@ -371,28 +358,28 @@ export class DataLayer {
 
   showFeature(feature) {
     if (feature.isFiltered()) return
-    this.layer.addLayer(feature)
+    this.layer.addLayer(feature.ui)
   }
 
-  addLayer(feature) {
+  addFeature(feature) {
     const id = stamp(feature)
     feature.connectToDataLayer(this)
     this._index.push(id)
-    this._layers[id] = feature
+    this._features[id] = feature
     this.indexProperties(feature)
     this.map.features_index[feature.getSlug()] = feature
     this.showFeature(feature)
     if (this.hasDataLoaded()) this.dataChanged()
   }
 
-  removeLayer(feature, sync) {
+  removeFeature(feature, sync) {
     const id = stamp(feature)
-    if (sync !== false) feature.sync.delete()
-    this.layer.removeLayer(feature)
+    // if (sync !== false) feature.sync.delete()
+    this.layer.removeLayer(feature.ui)
+    delete this.map.features_index[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
-    delete this._layers[id]
-    delete this.map.features_index[feature.getSlug()]
+    delete this._features[id]
     if (this.hasDataLoaded() && this.isVisible()) this.dataChanged()
   }
 
@@ -416,7 +403,7 @@ export class DataLayer {
   }
 
   sortedValues(property) {
-    return Object.values(this._layers)
+    return Object.values(this._features)
       .map((feature) => feature.properties[property])
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
@@ -454,7 +441,7 @@ export class DataLayer {
 
     const feature = this.geoJSONToLeaflet({ geometry, geojson })
     if (feature) {
-      this.addLayer(feature)
+      this.addFeature(feature)
       if (sync) feature.onCommit()
       return feature
     }
@@ -497,7 +484,8 @@ export class DataLayer {
           feature.setLatLng(latlng)
           return feature
         }
-        return this._pointToLayer(geojson, latlng, id)
+        return new Point(this, geojson)
+      // return this._pointToLayer(geojson, latlng, id)
 
       case 'MultiLineString':
       case 'LineString':
@@ -510,7 +498,8 @@ export class DataLayer {
           feature.setLatLngs(latlngs)
           return feature
         }
-        return this._lineToLayer(geojson, latlngs, id)
+        return new LineString(this, geojson)
+      // return this._lineToLayer(geojson, latlngs, id)
 
       case 'MultiPolygon':
       case 'Polygon':
@@ -519,7 +508,8 @@ export class DataLayer {
           feature.setLatLngs(latlngs)
           return feature
         }
-        return this._polygonToLayer(geojson, latlngs, id)
+        return new Polygon(this, geojson)
+      // return this._polygonToLayer(geojson, latlngs, id)
       case 'GeometryCollection':
         return this.geojsonToFeatures(geometry.geometries)
 
@@ -966,7 +956,7 @@ export class DataLayer {
 
   featuresToGeoJSON() {
     const features = []
-    this.eachLayer((layer) => features.push(layer.toGeoJSON()))
+    this.eachFeature((feature) => features.push(feature.toGeoJSON()))
     return features
   }
 
@@ -1031,19 +1021,21 @@ export class DataLayer {
   getFeatureByIndex(index) {
     if (index === -1) index = this._index.length - 1
     const id = this._index[index]
-    return this._layers[id]
+    return this._features[id]
   }
 
   // TODO Add an index
   // For now, iterate on all the features.
   getFeatureById(id) {
-    return Object.values(this._layers).find((feature) => feature.id === id)
+    return Object.values(this._features).find((feature) => feature.id === id)
   }
 
   getNextFeature(feature) {
     const id = this._index.indexOf(stamp(feature))
     const nextId = this._index[id + 1]
-    return nextId ? this._layers[nextId] : this.getNextBrowsable().getFeatureByIndex(0)
+    return nextId
+      ? this._features[nextId]
+      : this.getNextBrowsable().getFeatureByIndex(0)
   }
 
   getPreviousFeature(feature) {
@@ -1053,7 +1045,7 @@ export class DataLayer {
     const id = this._index.indexOf(stamp(feature))
     const previousId = this._index[id - 1]
     return previousId
-      ? this._layers[previousId]
+      ? this._features[previousId]
       : this.getPreviousBrowsable().getFeatureByIndex(-1)
   }
 

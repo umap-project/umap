@@ -2,11 +2,10 @@ U.Icon = L.DivIcon.extend({
   statics: {
     RECENT: [],
   },
-  initialize: function (map, options) {
-    this.map = map
+  initialize: function (options) {
     const default_options = {
       iconSize: null, // Made in css
-      iconUrl: this.map.getDefaultOption('iconUrl'),
+      iconUrl: U.SCHEMA.iconUrl.default,
       feature: null,
     }
     options = L.Util.extend({}, default_options, options)
@@ -40,13 +39,13 @@ U.Icon = L.DivIcon.extend({
     let color
     if (this.feature) color = this.feature.getDynamicOption('color')
     else if (this.options.color) color = this.options.color
-    else color = this.map.getDefaultOption('color')
+    else color = U.SCHEMA.color.default
     return color
   },
 
   _getOpacity: function () {
     if (this.feature) return this.feature.getOption('iconOpacity')
-    return this.map.getDefaultOption('iconOpacity')
+    return U.SCHEMA.iconOpacity.default
   },
 
   formatUrl: (url, feature) =>
@@ -63,9 +62,9 @@ U.Icon.Default = U.Icon.extend({
     className: 'umap-div-icon',
   },
 
-  initialize: function (map, options) {
+  initialize: function (options) {
     options = L.Util.extend({}, this.default_options, options)
-    U.Icon.prototype.initialize.call(this, map, options)
+    U.Icon.prototype.initialize.call(this, options)
   },
 
   _setIconStyles: function (img, name) {
@@ -92,6 +91,7 @@ U.Icon.Default = U.Icon.extend({
       'icon_container',
       this.elements.main
     )
+    this.elements.main.dataset.feature = this.feature?.id
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
     const src = this._getIconUrl('icon')
     if (src) {
@@ -103,14 +103,14 @@ U.Icon.Default = U.Icon.extend({
 })
 
 U.Icon.Circle = U.Icon.extend({
-  initialize: function (map, options) {
+  initialize: function (options) {
     const default_options = {
       popupAnchor: new L.Point(0, -6),
       tooltipAnchor: new L.Point(6, 0),
       className: 'umap-circle-icon',
     }
     options = L.Util.extend({}, default_options, options)
-    U.Icon.prototype.initialize.call(this, map, options)
+    U.Icon.prototype.initialize.call(this, options)
   },
 
   _setIconStyles: function (img, name) {
@@ -124,6 +124,7 @@ U.Icon.Circle = U.Icon.extend({
     this.elements.main = L.DomUtil.create('div')
     this.elements.main.innerHTML = '&nbsp;'
     this._setIconStyles(this.elements.main, 'icon')
+    this.elements.main.dataset.feature = this.feature?.id
     return this.elements.main
   },
 })
@@ -153,6 +154,7 @@ U.Icon.Ball = U.Icon.Default.extend({
       'icon_container',
       this.elements.main
     )
+    this.elements.main.dataset.feature = this.feature?.id
     this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main

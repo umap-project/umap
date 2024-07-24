@@ -193,7 +193,7 @@ U.Map = L.Map.extend({
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
     this.initContextMenu()
-    this.on('click contextmenu.show', this.closeInplaceToolbar)
+    this.on('click', this.onClick)
   },
 
   initSyncEngine: async function () {
@@ -863,7 +863,7 @@ U.Map = L.Map.extend({
   },
 
   eachFeature: function (callback, context) {
-    this.eachDataLayer((datalayer) => {
+    this.eachBrowsableDataLayer((datalayer) => {
       if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
     })
   },
@@ -1555,6 +1555,7 @@ U.Map = L.Map.extend({
     this.editPanel.close()
     this.fullPanel.close()
     this.sync.stop()
+    this.closeInplaceToolbar()
   },
 
   hasEditMode: function () {
@@ -1830,6 +1831,45 @@ U.Map = L.Map.extend({
       })
     }
     return url
+  },
+
+  getFeatureById: function (id) {
+    let feature
+    for (const datalayer of Object.values(this.datalayers)) {
+      feature = datalayer.getFeatureById(id)
+      if (feature) return feature
+    }
+  },
+
+  onClick: function (event) {
+    const container = event.originalEvent.target.closest('[data-feature]')
+    if (container) {
+      const feature = this.getFeatureById(container.dataset.feature)
+      if (this.measureTools?.enabled()) return
+      this._popupHandlersAdded = true // Prevent leaflet from managing event
+      if (!this.editEnabled) {
+        feature.view(event)
+      } else if (!feature.isReadOnly()) {
+        if (event.originalEvent.shiftKey) {
+          if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+            feature.datalayer.edit(event)
+          } else {
+            if (feature._toggleEditing) feature._toggleEditing(event)
+            else feature.edit(event)
+          }
+        } else {
+          console.log('should show toolbar')
+          new L.Toolbar.Popup(event.latlng, {
+            className: 'leaflet-inplace-toolbar',
+            anchor: feature.getPopupToolbarAnchor(),
+            actions: feature.getInplaceToolbarActions(event),
+          }).addTo(this, feature, event.latlng)
+        }
+      }
+      L.DomEvent.stop(event)
+    } else {
+      this.closeInplaceToolbar()
+    }
   },
 
   closeInplaceToolbar: function () {

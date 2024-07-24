@@ -360,7 +360,6 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     const options = []
     this.builder.map.eachDataLayerReverse((datalayer) => {
-      console.log(datalayer.isLoaded(), datalayer.isDataReadOnly(), datalayer.isBrowsable())
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&

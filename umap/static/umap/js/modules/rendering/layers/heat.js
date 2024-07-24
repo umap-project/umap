@@ -1,5 +1,11 @@
 // Uses global L.HeatLayer, not exposed as ESM
-import { Marker, LatLng, latLngBounds, Bounds, point } from '../../../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  Marker,
+  LatLng,
+  latLngBounds,
+  Bounds,
+  point,
+} from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { LayerMixin } from './base.js'
 import * as Utils from '../../utils.js'
 import { translate } from '../../i18n.js'
@@ -27,7 +33,7 @@ export const Heat = L.HeatLayer.extend({
       let alt
       if (this.datalayer.options.heat?.intensityProperty) {
         alt = Number.parseFloat(
-          layer.properties[this.datalayer.options.heat.intensityProperty || 0]
+          layer.feature.properties[this.datalayer.options.heat.intensityProperty || 0]
         )
         latlng = new LatLng(latlng.lat, latlng.lng, alt)
       }
