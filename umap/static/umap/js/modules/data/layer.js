@@ -41,6 +41,7 @@ export class DataLayer {
     this.parentPane = this.map.getPane('overlayPane')
     this.pane = this.map.createPane(`datalayer${stamp(this)}`, this.parentPane)
     this.pane.dataset.id = stamp(this)
+    // FIXME: should be on layer
     this.renderer = L.svg({ pane: this.pane })
     this.defaultOptions = {
       displayOnLoad: true,
@@ -481,11 +482,10 @@ export class DataLayer {
           break
         }
         if (feature) {
-          feature.setLatLng(latlng)
+          feature.coordinates = latlng
           return feature
         }
         return new Point(this, geojson)
-      // return this._pointToLayer(geojson, latlng, id)
 
       case 'MultiLineString':
       case 'LineString':
@@ -495,21 +495,19 @@ export class DataLayer {
         )
         if (!latlngs.length) break
         if (feature) {
-          feature.setLatLngs(latlngs)
+          feature.coordinates = latlngs
           return feature
         }
         return new LineString(this, geojson)
-      // return this._lineToLayer(geojson, latlngs, id)
 
       case 'MultiPolygon':
       case 'Polygon':
         latlngs = GeoJSON.coordsToLatLngs(coords, geometry.type === 'Polygon' ? 1 : 2)
         if (feature) {
-          feature.setLatLngs(latlngs)
+          feature.coordinates = latlngs
           return feature
         }
         return new Polygon(this, geojson)
-      // return this._polygonToLayer(geojson, latlngs, id)
       case 'GeometryCollection':
         return this.geojsonToFeatures(geometry.geometries)
 
@@ -900,9 +898,9 @@ export class DataLayer {
   getOption(option, feature) {
     if (this.layer?.getOption) {
       const value = this.layer.getOption(option, feature)
-      if (typeof value !== 'undefined') return value
+      if (value !== undefined) return value
     }
-    if (typeof this.getOwnOption(option) !== 'undefined') {
+    if (this.getOwnOption(option) !== undefined) {
       return this.getOwnOption(option)
     }
     if (this.layer?.defaults?.[option]) {
@@ -1179,7 +1177,7 @@ export class DataLayer {
     // By default, it will we use the "name" property, which is also the one used as label in the features list.
     // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
     if (this.map.options.filterKey) return this.map.options.filterKey
-    if (this.options.labelKey) return this.options.labelKey
+    if (this.getOption('labelKey')) return this.getOption('labelKey')
     if (this.map.options.sortKey) return this.map.options.sortKey
     return 'name'
   }

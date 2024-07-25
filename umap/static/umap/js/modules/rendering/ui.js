@@ -1,10 +1,14 @@
+// Goes here all code related to Leaflet, DOM and user interactions.
 import {
   Marker,
   Polyline,
   Polygon,
   DomUtil,
+  LineUtil,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
+import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import * as Utils from '../utils.js'
 
 const FeatureMixin = {
   initialize: function (feature) {
@@ -27,15 +31,88 @@ const FeatureMixin = {
   },
 
   addInteractions: function () {
-    this.on('contextmenu editable:vertex:contextmenu', this.feature._showContextMenu, this.feature)
+    this.on('contextmenu editable:vertex:contextmenu', this._showContextMenu)
   },
 
-  onVertexRawClick: function (e) {
-    new L.Toolbar.Popup(e.latlng, {
-      className: 'leaflet-inplace-toolbar',
-      actions: this.getVertexActions(e),
-    }).addTo(this.map, this, e.latlng, e.vertex)
+  resetTooltip: function () {
+    if (!this.feature.hasGeom()) return
+    const displayName = this.feature.getDisplayName(null)
+    let showLabel = this.feature.getOption('showLabel')
+    const oldLabelHover = this.feature.getOption('labelHover')
+
+    const options = {
+      direction: this.feature.getOption('labelDirection'),
+      interactive: this.feature.getOption('labelInteractive'),
+    }
+
+    if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
+    options.permanent = showLabel === true
+    this.unbindTooltip()
+    if ((showLabel === true || showLabel === null) && displayName) {
+      this.bindTooltip(Utils.escapeHTML(displayName), options)
+    }
   },
+
+  _showContextMenu: function (event) {
+    L.DomEvent.stop(event)
+    const pt = this._map.mouseEventToContainerPoint(event.originalEvent)
+    event.relatedTarget = this
+    this._map.contextmenu.showAt(pt, event)
+  },
+
+  getContextMenuItems: function (event) {
+    const permalink = this.feature.getPermalink()
+    let items = []
+    if (permalink)
+      items.push({
+        text: translate('Permalink'),
+        callback: () => {
+          window.open(permalink)
+        },
+      })
+    if (this._map.editEnabled && !this.feature.isReadOnly()) {
+      items = items.concat(this.getContextMenuEditItems(event))
+    }
+    return items
+  },
+
+  getContextMenuEditItems: function () {
+    let items = ['-']
+    if (this._map.editedFeature !== this) {
+      items.push({
+        text: `${translate('Edit this feature')} (⇧+Click)`,
+        callback: this.feature.edit,
+        context: this.feature,
+        iconCls: 'umap-edit',
+      })
+    }
+    items = items.concat(
+      {
+        text: this._map.help.displayLabel('EDIT_FEATURE_LAYER'),
+        callback: this.feature.datalayer.edit,
+        context: this.feature.datalayer,
+        iconCls: 'umap-edit',
+      },
+      {
+        text: translate('Delete this feature'),
+        callback: this.feature.confirmDelete,
+        context: this.feature,
+        iconCls: 'umap-delete',
+      },
+      {
+        text: translate('Clone this feature'),
+        callback: this.feature.clone,
+        context: this.feature,
+      }
+    )
+    return items
+  },
+
+  onCommit: function () {
+    this.geometryChanged()
+    this.feature.onCommit()
+  },
+
 }
 
 export const LeafletMarker = Marker.extend({
@@ -47,22 +124,17 @@ export const LeafletMarker = Marker.extend({
     this.setIcon(this.getIcon())
   },
 
-  onCommit: function () {
+  geometryChanged: function() {
     this.feature.coordinates = this._latlng
-    this.feature.onCommit()
   },
 
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
-    this.on(
-      'dragend',
-      function (e) {
-        this.isDirty = true
-        this.feature.edit(e)
-        this.feature.sync.update('geometry', this.getGeometry())
-      },
-      this
-    )
+    this.on('dragend', (event) => {
+      this.isDirty = true
+      this.feature.edit(event)
+      this.feature.sync.update('geometry', this.feature.getGeometry())
+    })
     this.on('editable:drawing:commit', this.onCommit)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
@@ -104,7 +176,7 @@ export const LeafletMarker = Marker.extend({
     Marker.prototype._initIcon.call(this)
     // Allow to run code when icon is actually part of the DOM
     this.options.icon.onAdd()
-    // this.resetTooltip()
+    this.resetTooltip()
   },
 
   getIconClass: function () {
@@ -118,7 +190,7 @@ export const LeafletMarker = Marker.extend({
 
   _getTooltipAnchor: function () {
     const anchor = this.options.icon.options.tooltipAnchor.clone()
-    const direction = this.getOption('labelDirection')
+    const direction = this.feature.getOption('labelDirection')
     if (direction === 'left') {
       anchor.x *= -1
     } else if (direction === 'bottom') {
@@ -138,6 +210,14 @@ export const LeafletMarker = Marker.extend({
   getCenter: function () {
     return this._latlng
   },
+
+  highlight: function () {
+    DomUtil.addClass(this.options.icon.elements.main, 'umap-icon-active')
+  },
+
+  resetHighlight: function () {
+    DomUtil.removeClass(this.options.icon.elements.main, 'umap-icon-active')
+  },
 })
 
 const PathMixin = {
@@ -149,9 +229,8 @@ const PathMixin = {
     }
   },
 
-  onCommit: function () {
+  geometryChanged: function () {
     this.feature.coordinates = this._latlngs
-    this.feature.onCommit()
   },
 
   addInteractions: function () {
@@ -172,7 +251,7 @@ const PathMixin = {
   },
 
   _onDrag: function () {
-    this.feature.coordinates = this._latlngs
+    this.geometryChanged()
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
   },
 
@@ -181,7 +260,7 @@ const PathMixin = {
     this.setStyle()
     FeatureMixin.onAdd.call(this, map)
     if (this.editing?.enabled()) this.editing.addHooks()
-    // this.resetTooltip()
+    this.resetTooltip()
     this._path.dataset.feature = this.feature.id
   },
 
@@ -200,16 +279,162 @@ const PathMixin = {
 
   _redraw: function () {
     this.setStyle()
-    // this.resetTooltip()
+    this.resetTooltip()
+  },
+
+  getVertexActions: () => [U.DeleteVertexAction],
+
+  onVertexRawClick: function (event) {
+    new L.Toolbar.Popup(event.latlng, {
+      className: 'leaflet-inplace-toolbar',
+      actions: this.getVertexActions(event),
+    }).addTo(this._map, this, event.latlng, event.vertex)
+  },
+
+  getContextMenuItems: function (event) {
+    let items = FeatureMixin.getContextMenuItems.call(this, event)
+    items.push({
+      text: translate('Display measure'),
+      callback: () => Alert.info(this.feature.getMeasure()),
+    })
+    if (this._map.editEnabled && !this.feature.isReadOnly() && this.feature.isMulti()) {
+      items = items.concat(this.getContextMenuMultiItems(event))
+    }
+    return items
+  },
+
+  getContextMenuMultiItems: function (event) {
+    const items = [
+      '-',
+      {
+        text: translate('Remove shape from the multi'),
+        callback: () => {
+          this.enableEdit().deleteShapeAt(event.latlng)
+        },
+      },
+    ]
+    const shape = this.shapeAt(event.latlng)
+    if (this._latlngs.indexOf(shape) > 0) {
+      items.push({
+        text: translate('Make main shape'),
+        callback: () => {
+          this.enableEdit().deleteShape(shape)
+          this.editor.prependShape(shape)
+        },
+      })
+    }
+    return items
+  },
+
+  getContextMenuEditItems: function (event) {
+    const items = FeatureMixin.getContextMenuEditItems.call(this, event)
+    if (
+      this._map?.editedFeature !== this &&
+      this.feature.isSameClass(this._map.editedFeature)
+    ) {
+      items.push({
+        text: translate('Transfer shape to edited feature'),
+        callback: () => {
+          this.feature.transferShape(event.latlng, this._map.editedFeature)
+        },
+      })
+    }
+    if (this.feature.isMulti()) {
+      items.push({
+        text: translate('Extract shape to separate feature'),
+        callback: () => {
+          this.feature.isolateShape(event.latlng, this._map.editedFeature)
+        },
+      })
+    }
+    return items
   },
 }
 
 export const LeafletPolyline = Polyline.extend({
   parentClass: Polyline,
   includes: [FeatureMixin, PathMixin],
+
+  getVertexActions: function (event) {
+    const actions = PathMixin.getVertexActions.call(this, event)
+    const index = event.vertex.getIndex()
+    if (index === 0 || index === event.vertex.getLastIndex()) {
+      actions.push(U.ContinueLineAction)
+    } else {
+      actions.push(U.SplitLineAction)
+    }
+    return actions
+  },
+
+  getContextMenuEditItems: function (event) {
+    const items = PathMixin.getContextMenuEditItems.call(this, event)
+    const vertexClicked = event.vertex
+    let index
+    if (!this.feature.isMulti()) {
+      items.push({
+        text: translate('Transform to polygon'),
+        callback: this.feature.toPolygon,
+        context: this.feature,
+      })
+    }
+    if (vertexClicked) {
+      index = event.vertex.getIndex()
+      if (index !== 0 && index !== event.vertex.getLastIndex()) {
+        items.push({
+          text: translate('Split line'),
+          callback: event.vertex.split,
+          context: event.vertex,
+        })
+      } else if (index === 0 || index === event.vertex.getLastIndex()) {
+        items.push({
+          text: this._map.help.displayLabel('CONTINUE_LINE'),
+          callback: event.vertex.continue,
+          context: event.vertex.continue,
+        })
+      }
+    }
+    return items
+  },
+
+  getContextMenuMultiItems: function (event) {
+    const items = PathMixin.getContextMenuMultiItems.call(this, event)
+    items.push({
+      text: translate('Merge lines'),
+      callback: this.feature.mergeShapes,
+      context: this.feature,
+    })
+    return items
+  },
 })
 
 export const LeafletPolygon = Polygon.extend({
   parentClass: Polygon,
   includes: [FeatureMixin, PathMixin],
+
+  getContextMenuEditItems: function (event) {
+    const items = PathMixin.getContextMenuEditItems.call(this, event)
+    const shape = this.shapeAt(event.latlng)
+    // No multi and no holes.
+    if (
+      shape &&
+      !this.feature.isMulti() &&
+      (LineUtil.isFlat(shape) || shape.length === 1)
+    ) {
+      items.push({
+        text: translate('Transform to lines'),
+        callback: this.feature.toLineString,
+        context: this.feature,
+      })
+    }
+    items.push({
+      text: translate('Start a hole here'),
+      callback: this.startHole,
+      context: this,
+    })
+    return items
+  },
+
+  startHole: function (event) {
+    this.enableEdit().newHole(event.latlng)
+  },
 })

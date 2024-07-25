@@ -187,7 +187,7 @@ def test_can_transfer_shape_from_simple_polyline(live_server, page, tilelayer):
     map.click(position={"x": 100, "y": 200})
     expect(lines).to_have_count(1)
 
-    # Draw another polygon
+    # Draw another line
     page.get_by_title("Draw a polyline").click()
     map.click(position={"x": 250, "y": 250})
     map.click(position={"x": 200, "y": 250})
@@ -196,7 +196,7 @@ def test_can_transfer_shape_from_simple_polyline(live_server, page, tilelayer):
     map.click(position={"x": 200, "y": 200})
     expect(lines).to_have_count(2)
 
-    # Now that polygon 2 is selected, right click on first one
+    # Now that line 2 is selected, right click on first one
     # and transfer shape
     lines.first.click(position={"x": 10, "y": 1}, button="right")
     page.get_by_role("link", name="Transfer shape to edited feature").click()
@@ -235,18 +235,17 @@ def test_can_transfer_shape_from_multi(live_server, page, tilelayer, settings):
     map.click(position={"x": 300, "y": 300})
     expect(lines).to_have_count(2)
 
-    # Now that polygon 2 is selected, right click on first one
+    # Now that line 2 is selected, right click on first one
     # and transfer shape
     lines.first.click(position={"x": 10, "y": 1}, button="right")
     page.get_by_role("link", name="Transfer shape to edited feature").click()
     expect(lines).to_have_count(2)
     data = save_and_get_json(page)
-    # FIXME this should be a LineString, not MultiLineString
     assert data["features"][0]["geometry"] == {
         "coordinates": [
-            [[-6.569824, 52.49616], [-7.668457, 52.49616], [-7.668457, 53.159947]]
+            [-6.569824, 52.49616], [-7.668457, 52.49616], [-7.668457, 53.159947]
         ],
-        "type": "MultiLineString",
+        "type": "LineString",
     }
     assert data["features"][1]["geometry"] == {
         "coordinates": [

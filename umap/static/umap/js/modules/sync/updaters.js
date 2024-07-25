@@ -79,7 +79,7 @@ export class FeatureUpdater extends BaseUpdater {
       id,
       feature,
     })
-    datalayer.addLayer(feature)
+    datalayer.addFeature(feature)
   }
 
   // Update a property of an object

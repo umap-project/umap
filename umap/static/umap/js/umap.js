@@ -1857,11 +1857,9 @@ U.Map = L.Map.extend({
             if (feature._toggleEditing) feature._toggleEditing(event)
             else feature.edit(event)
           }
-        } else {
-          console.log('should show toolbar')
+        } else if (!this.editTools?.drawing()) {
           new L.Toolbar.Popup(event.latlng, {
             className: 'leaflet-inplace-toolbar',
-            anchor: feature.getPopupToolbarAnchor(),
             actions: feature.getInplaceToolbarActions(event),
           }).addTo(this, feature, event.latlng)
         }

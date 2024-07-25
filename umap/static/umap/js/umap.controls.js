@@ -155,7 +155,6 @@ U.AddPolygonShapeAction = U.AddPolylineShapeAction.extend({
 
 U.BaseFeatureAction = L.ToolbarAction.extend({
   initialize: function (map, feature, latlng) {
-    console.log("Toolbar init", latlng)
     this.map = map
     this.feature = feature
     this.latlng = latlng
@@ -183,8 +182,8 @@ U.CreateHoleAction = U.BaseFeatureAction.extend({
     },
   },
 
-  onClick: function (e) {
-    this.feature.startHole(e)
+  onClick: function (event) {
+    this.feature.ui.startHole(event)
   },
 })
 
@@ -196,11 +195,11 @@ U.ToggleEditAction = U.BaseFeatureAction.extend({
     },
   },
 
-  onClick: function (e) {
+  onClick: function (event) {
     if (this.feature._toggleEditing) {
-      this.feature._toggleEditing(e) // Path
+      this.feature._toggleEditing(event) // Path
     } else {
-      this.feature.edit(e) // Marker
+      this.feature.edit(event) // Marker
     }
   },
 })
@@ -1151,7 +1150,6 @@ U.Editable = L.Editable.extend({
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
-      console.log(event.layer.feature.coordinates, event.layer.feature.hasGeom())
       if (!event.layer.feature.hasGeom()) {
         event.layer.feature.del()
       } else {
@@ -1169,7 +1167,6 @@ U.Editable = L.Editable.extend({
     this.on('editable:editing', (event) => {
       const layer = event.layer
       layer.feature.isDirty = true
-      console.log('editing')
       if (layer instanceof L.Marker) {
         layer.feature.coordinates = layer._latlng
       } else {

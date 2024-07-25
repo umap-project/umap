@@ -23,6 +23,9 @@ class Feature {
     this.properties = { _umap_options: {}, ...(geojson.properties || {}) }
     this.staticOptions = {}
 
+    if (geojson.coordinates) {
+      geojson = { geometry: geojson }
+    }
     if (geojson.geometry) {
       this.populate(geojson)
     }
@@ -66,6 +69,10 @@ class Feature {
 
   get center() {
     return this.ui.getCenter()
+  }
+
+  get bounds() {
+    return this.ui.getBounds()
   }
 
   getClassName() {
@@ -162,7 +169,7 @@ class Feature {
     this.redraw()
   }
 
-  edit(e) {
+  edit(event) {
     if (!this.map.editEnabled || this.isReadOnly()) return
     const container = DomUtil.create('div', 'umap-feature-container')
     DomUtil.createTitle(
@@ -176,7 +183,7 @@ class Feature {
       [['datalayer', { handler: 'DataLayerSwitcher' }]],
       {
         callback() {
-          this.edit(e)
+          this.edit(event)
         }, // removeLayer step will close the edit panel, let's reopen it
       }
     )
@@ -207,11 +214,11 @@ class Feature {
       builder.helpers['properties.name'].input.focus()
     })
     this.map.editedFeature = this
-    if (!this.isOnScreen()) this.zoomTo(e)
+    if (!this.isOnScreen()) this.zoomTo(event)
   }
 
   getAdvancedEditActions(container) {
-    DomUtil.createButton('button umap-delete', container, translate('Delete'), (e) => {
+    DomUtil.createButton('button umap-delete', container, translate('Delete'), () => {
       this.confirmDelete().then(() => this.map.editPanel.close())
     })
   }
@@ -261,7 +268,7 @@ class Feature {
   endEdit() {}
 
   getDisplayName(fallback) {
-    if (fallback === undefined) fallback = this.datalayer.options.name
+    if (fallback === undefined) fallback = this.datalayer.getName()
     const key = this.getOption('labelKey') || 'name'
     // Variables mode.
     if (U.Utils.hasVar(key))
@@ -308,7 +315,8 @@ class Feature {
 
   connectToDataLayer(datalayer) {
     this.datalayer = datalayer
-    // this.options.renderer = this.datalayer.renderer
+    // FIXME should be in layer/ui
+    this.ui.options.renderer = this.datalayer.renderer
   }
 
   disconnectFromDataLayer(datalayer) {
@@ -422,16 +430,12 @@ class Feature {
   }
 
   toGeoJSON() {
-    return {
+    return Utils.CopyJSON({
       type: 'Feature',
       geometry: this.geometry,
       properties: this.cloneProperties(),
       id: this.id,
-    }
-  }
-
-  getPopupToolbarAnchor() {
-    return [0, 0]
+    })
   }
 
   getInplaceToolbarActions() {
@@ -440,73 +444,6 @@ class Feature {
 
   getMap() {
     return this.map
-  }
-
-  getContextMenuItems(e) {
-    const permalink = this.getPermalink()
-    let items = []
-    if (permalink)
-      items.push({
-        text: translate('Permalink'),
-        callback: () => {
-          window.open(permalink)
-        },
-      })
-    if (this.map.editEnabled && !this.isReadOnly()) {
-      items = items.concat(this.getContextMenuEditItems(e))
-    }
-    return items
-  }
-
-  getContextMenuEditItems() {
-    let items = ['-']
-    if (this.map.editedFeature !== this) {
-      items.push({
-        text: `${translate('Edit this feature')} (⇧+Click)`,
-        callback: this.edit,
-        context: this,
-        iconCls: 'umap-edit',
-      })
-    }
-    items = items.concat(
-      {
-        text: this.map.help.displayLabel('EDIT_FEATURE_LAYER'),
-        callback: this.datalayer.edit,
-        context: this.datalayer,
-        iconCls: 'umap-edit',
-      },
-      {
-        text: translate('Delete this feature'),
-        callback: this.confirmDelete,
-        context: this,
-        iconCls: 'umap-delete',
-      },
-      {
-        text: translate('Clone this feature'),
-        callback: this.clone,
-        context: this,
-      }
-    )
-    return items
-  }
-
-  resetTooltip() {
-    if (!this.hasGeom()) return
-    const displayName = this.getDisplayName(null)
-    let showLabel = this.getOption('showLabel')
-    const oldLabelHover = this.getOption('labelHover')
-
-    const options = {
-      direction: this.getOption('labelDirection'),
-      interactive: this.getOption('labelInteractive'),
-    }
-
-    if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
-    options.permanent = showLabel === true
-    this.unbindTooltip()
-    if ((showLabel === true || showLabel === null) && displayName) {
-      this.bindTooltip(Utils.escapeHTML(displayName), options)
-    }
   }
 
   isFiltered() {
@@ -519,7 +456,7 @@ class Feature {
 
   matchFilter(filter, keys) {
     filter = filter.toLowerCase()
-    if (U.Utils.hasVar(keys)) {
+    if (Utils.hasVar(keys)) {
       return this.getDisplayName().toLowerCase().indexOf(filter) !== -1
     }
     keys = keys.split(',')
@@ -552,10 +489,6 @@ class Feature {
     return true
   }
 
-  getVertexActions() {
-    return [U.DeleteVertexAction]
-  }
-
   isMulti() {
     return false
   }
@@ -578,7 +511,7 @@ class Feature {
     if (L.lang) properties.lang = L.lang
     properties.rank = this.getRank() + 1
     properties.layer = this.datalayer.getName()
-    if (this.map && this.hasGeom()) {
+    if (this.ui._map && this.hasGeom()) {
       const center = this.center
       properties.lat = center.lat
       properties.lon = center.lng
@@ -599,13 +532,6 @@ class Feature {
     if (this.datalayer?.isVisible()) {
       this.ui._redraw()
     }
-  }
-
-  _showContextMenu(e) {
-    L.DomEvent.stop(e)
-    const pt = this.map.mouseEventToContainerPoint(e.originalEvent)
-    e.relatedTarget = this
-    this.map.contextmenu.showAt(pt, e)
   }
 }
 
@@ -628,14 +554,6 @@ export class Point extends Feature {
 
   makeUI() {
     return new LeafletMarker(this)
-  }
-
-  highlight() {
-    DomUtil.addClass(this.options.icon.elements.main, 'umap-icon-active')
-  }
-
-  resetHighlight() {
-    DomUtil.removeClass(this.options.icon.elements.main, 'umap-icon-active')
   }
 
   hasGeom() {
@@ -693,10 +611,6 @@ export class Point extends Feature {
     bounds = bounds || this.map.getBounds()
     return bounds.contains(this.coordinates)
   }
-
-  // getPopupToolbarAnchor() {
-  //   return this.options.icon.options.popupAnchor
-  // }
 }
 
 class Path extends Feature {
@@ -704,10 +618,20 @@ class Path extends Feature {
     return !this.isEmpty()
   }
 
+  get coordinates() {
+    return this._toLatlngs(this.geometry)
+  }
+
+  set coordinates(latlngs) {
+    const { coordinates, type } = this._toGeometry(latlngs)
+    this.geometry.coordinates = coordinates
+    this.geometry.type = type
+  }
+
   connectToDataLayer(datalayer) {
     super.connectToDataLayer(datalayer)
     // We keep markers on their own layer on top of the paths.
-    // this.options.pane = this.datalayer.pane
+    this.ui.options.pane = this.datalayer.pane
   }
 
   edit(event) {
@@ -717,17 +641,17 @@ class Path extends Feature {
     }
   }
 
-  _toggleEditing(e) {
+  _toggleEditing(event) {
     if (this.map.editEnabled) {
       if (this.ui.editEnabled()) {
         this.endEdit()
         this.map.editPanel.close()
       } else {
-        this.edit(e)
+        this.edit(event)
       }
     }
     // FIXME: disable when disabling global edit
-    L.DomEvent.stop(e)
+    L.DomEvent.stop(event)
   }
 
   getStyleOptions() {
@@ -772,7 +696,7 @@ class Path extends Feature {
   }
 
   getBestZoom() {
-    return this.getOption('zoomTo') || this.map.getBoundsZoom(this.getBounds(), true)
+    return this.getOption('zoomTo') || this.map.getBoundsZoom(this.bounds, true)
   }
 
   endEdit() {
@@ -781,100 +705,36 @@ class Path extends Feature {
   }
 
   transferShape(at, to) {
-    const shape = this.enableEdit().deleteShapeAt(at)
-    this.disableEdit()
+    const shape = this.ui.enableEdit().deleteShapeAt(at)
+    // FIXME: make Leaflet.Editable send an event instead
+    this.ui.geometryChanged()
+    this.ui.disableEdit()
     if (!shape) return
-    to.enableEdit().appendShape(shape)
-    if (!this._latlngs.length || !this._latlngs[0].length) this.del()
+    to.ui.enableEdit().appendShape(shape)
+    to.ui.geometryChanged()
+    if (this.isEmpty()) this.del()
   }
 
   isolateShape(at) {
     if (!this.isMulti()) return
-    const shape = this.enableEdit().deleteShapeAt(at)
-    this.disableEdit()
+    const shape = this.ui.enableEdit().deleteShapeAt(at)
+    this.ui.disableEdit()
     if (!shape) return
     const properties = this.cloneProperties()
-    const other = new (this instanceof U.Polyline ? U.Polyline : U.Polygon)(
-      this.map,
-      shape,
+    const other = new (this instanceof LineString ? LineString : Polygon)(
+      this.datalayer,
       {
-        geojson: { properties },
+        properties,
+        geometry: this._toGeometry(shape),
       }
     )
-    this.datalayer.addLayer(other)
+    this.datalayer.addFeature(other)
     other.edit()
     return other
   }
 
-  getContextMenuItems(e) {
-    let items = super.getContextMenuItems(e)
-    items.push({
-      text: translate('Display measure'),
-      callback() {
-        U.Alert.info(this.getMeasure())
-      },
-      context: this,
-    })
-    if (this.map.editEnabled && !this.isReadOnly() && this.isMulti()) {
-      items = items.concat(this.getContextMenuMultiItems(e))
-    }
-    return items
-  }
-
-  getContextMenuMultiItems(e) {
-    const items = [
-      '-',
-      {
-        text: translate('Remove shape from the multi'),
-        callback() {
-          this.enableEdit().deleteShapeAt(e.latlng)
-        },
-        context: this,
-      },
-    ]
-    const shape = this.ui.shapeAt(e.latlng)
-    if (this.ui._latlngs.indexOf(shape) > 0) {
-      items.push({
-        text: translate('Make main shape'),
-        callback() {
-          this.enableEdit().deleteShape(shape)
-          this.editor.prependShape(shape)
-        },
-        context: this,
-      })
-    }
-    return items
-  }
-
-  getContextMenuEditItems(e) {
-    const items = super.getContextMenuEditItems(e)
-    if (
-      this.map.editedFeature &&
-      this.isSameClass(this.map.editedFeature) &&
-      this.map.editedFeature !== this
-    ) {
-      items.push({
-        text: translate('Transfer shape to edited feature'),
-        callback() {
-          this.transferShape(e.latlng, this.map.editedFeature)
-        },
-        context: this,
-      })
-    }
-    if (this.isMulti()) {
-      items.push({
-        text: translate('Extract shape to separate feature'),
-        callback() {
-          this.isolateShape(e.latlng, this.map.editedFeature)
-        },
-        context: this,
-      })
-    }
-    return items
-  }
-
-  getInplaceToolbarActions(e) {
-    const items = super.getInplaceToolbarActions(e)
+  getInplaceToolbarActions(event) {
+    const items = super.getInplaceToolbarActions(event)
     if (this.isMulti()) {
       items.push(U.DeleteShapeAction)
       items.push(U.ExtractShapeFromMultiAction)
@@ -884,16 +744,16 @@ class Path extends Feature {
 
   isOnScreen(bounds) {
     bounds = bounds || this.map.getBounds()
-    return bounds.overlaps(this.ui.getBounds())
+    return bounds.overlaps(this.bounds)
   }
 
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
     easing = easing || this.map.getOption('easing')
     if (easing) {
-      this.map.flyToBounds(this.getBounds(), this.getBestZoom())
+      this.map.flyToBounds(this.bounds, this.getBestZoom())
     } else {
-      this.map.fitBounds(this.getBounds(), this.getBestZoom() || this.map.getZoom())
+      this.map.fitBounds(this.bounds, this.getBestZoom() || this.map.getZoom())
     }
     if (callback) callback.call(this)
   }
@@ -910,17 +770,22 @@ export class LineString extends Path {
     }
   }
 
-  get coordinates() {
+  _toLatlngs(geometry) {
     return GeoJSON.coordsToLatLngs(
-      this.geometry.coordinates,
-      this.geometry.type === 'LineString' ? 0 : 1
+      geometry.coordinates,
+      geometry.type === 'LineString' ? 0 : 1
     )
   }
 
-  set coordinates(latlngs) {
-    const multi = !LineUtil.isFlat(latlngs)
-    this.geometry.coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
-    this.geometry.type = multi ? 'MultiLineString' : 'LineString'
+  _toGeometry(latlngs) {
+    let multi = !LineUtil.isFlat(latlngs)
+    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
+    if (coordinates.length === 1 && typeof coordinates[0][0] !== 'number') {
+      coordinates = Utils.flattenCoordinates(coordinates)
+      multi = false
+    }
+    const type = multi ? 'MultiLineString' : 'LineString'
+    return { coordinates, type }
   }
 
   isEmpty() {
@@ -940,51 +805,11 @@ export class LineString extends Path {
     return L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit())
   }
 
-  getContextMenuEditItems(e) {
-    const items = super.getContextMenuEditItems(e)
-    const vertexClicked = e.vertex
-    let index
-    if (!this.isMulti()) {
-      items.push({
-        text: translate('Transform to polygon'),
-        callback: this.toPolygon,
-        context: this,
-      })
-    }
-    if (vertexClicked) {
-      index = e.vertex.getIndex()
-      if (index !== 0 && index !== e.vertex.getLastIndex()) {
-        items.push({
-          text: translate('Split line'),
-          callback: e.vertex.split,
-          context: e.vertex,
-        })
-      } else if (index === 0 || index === e.vertex.getLastIndex()) {
-        items.push({
-          text: this.map.help.displayLabel('CONTINUE_LINE'),
-          callback: e.vertex.continue,
-          context: e.vertex.continue,
-        })
-      }
-    }
-    return items
-  }
-
-  getContextMenuMultiItems(e) {
-    const items = super.getContextMenuMultiItems(e)
-    items.push({
-      text: translate('Merge lines'),
-      callback: this.mergeShapes,
-      context: this,
-    })
-    return items
-  }
-
   toPolygon() {
     const geojson = this.toGeoJSON()
     geojson.geometry.type = 'Polygon'
     geojson.geometry.coordinates = [
-      U.Utils.flattenCoordinates(geojson.geometry.coordinates),
+      Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
 
     delete geojson.id // delete the copied id, a new one will be generated.
@@ -1053,15 +878,6 @@ export class LineString extends Path {
   isMulti() {
     return !LineUtil.isFlat(this.coordinates) && this.coordinates.length > 1
   }
-
-  getVertexActions(e) {
-    const actions = super.getVertexActions(e)
-    const index = e.vertex.getIndex()
-    if (index === 0 || index === e.vertex.getLastIndex())
-      actions.push(U.ContinueLineAction)
-    else actions.push(U.SplitLineAction)
-    return actions
-  }
 }
 
 export class Polygon extends Path {
@@ -1073,22 +889,22 @@ export class Polygon extends Path {
     }
   }
 
-  get coordinates() {
+  _toLatlngs(geometry) {
     return GeoJSON.coordsToLatLngs(
-      this.geometry.coordinates,
-      this.geometry.type === 'Polygon' ? 1 : 2
+      geometry.coordinates,
+      geometry.type === 'Polygon' ? 1 : 2
     )
   }
 
-  set coordinates(latlngs) {
+  _toGeometry(latlngs) {
     const holes = !LineUtil.isFlat(latlngs)
     const multi = holes && !LineUtil.isFlat(latlngs[0])
-    let coords = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
+    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
     if (!holes) {
-      coords = [coords]
+      coordinates = [coordinates]
     }
-    this.geometry.coordinates = coords
-    this.geometry.type = multi ? 'MultiPolygon' : 'Polygon'
+    const type = multi ? 'MultiPolygon' : 'Polygon'
+    return { coordinates, type }
   }
 
   isEmpty() {
@@ -1133,35 +949,12 @@ export class Polygon extends Path {
     return L.GeoUtil.readableArea(area, this.map.measureTools.getMeasureUnit())
   }
 
-  getContextMenuEditItems(e) {
-    const items = super.getContextMenuEditItems(e)
-    const shape = this.ui.shapeAt(e.latlng)
-    // No multi and no holes.
-    if (shape && !this.isMulti() && (LineUtil.isFlat(shape) || shape.length === 1)) {
-      items.push({
-        text: translate('Transform to lines'),
-        callback: this.toPolyline,
-        context: this,
-      })
-    }
-    items.push({
-      text: translate('Start a hole here'),
-      callback: this.startHole,
-      context: this,
-    })
-    return items
-  }
-
-  startHole(event) {
-    this.ui.enableEdit().newHole(event.latlng)
-  }
-
-  toPolyline() {
+  toLineString() {
     const geojson = this.toGeoJSON()
     delete geojson.id
     delete geojson.properties.id
     geojson.geometry.type = 'LineString'
-    geojson.geometry.coordinates = U.Utils.flattenCoordinates(
+    geojson.geometry.coordinates = Utils.flattenCoordinates(
       geojson.geometry.coordinates
     )
     const polyline = this.datalayer.geojsonToFeatures(geojson)
@@ -1171,17 +964,18 @@ export class Polygon extends Path {
 
   getAdvancedEditActions(container) {
     super.getAdvancedEditActions(container)
-    const toPolyline = DomUtil.createButton(
+    const toLineString = DomUtil.createButton(
       'button umap-to-polyline',
       container,
       translate('Transform to lines'),
-      this.toPolyline,
+      this.toLineString,
       this
     )
   }
 
   isMulti() {
     // Change me when Leaflet#3279 is merged.
+    // FIXME use TurfJS
     return (
       !LineUtil.isFlat(this.coordinates) &&
       !LineUtil.isFlat(this.coordinates[0]) &&
@@ -1189,8 +983,8 @@ export class Polygon extends Path {
     )
   }
 
-  getInplaceToolbarActions(e) {
-    const items = super.getInplaceToolbarActions(e)
+  getInplaceToolbarActions(event) {
+    const items = super.getInplaceToolbarActions(event)
     items.push(U.CreateHoleAction)
     return items
   }
