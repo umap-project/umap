@@ -378,12 +378,21 @@ const PathMixin = {
       items.push({
         text: translate('Extract shape to separate feature'),
         callback: () => {
-          this.feature.isolateShape(event.latlng, this._map.editedFeature)
+          this.isolateShape(event.latlng)
         },
       })
     }
     return items
   },
+
+  isolateShape: function(atLatLng) {
+    if (!this.feature.isMulti()) return
+    const shape = this.enableEdit().deleteShapeAt(atLatLng)
+    this.geometryChanged()
+    this.disableEdit()
+    if (!shape) return
+    return this.feature.isolateShape(shape)
+  }
 }
 
 export const LeafletPolyline = Polyline.extend({

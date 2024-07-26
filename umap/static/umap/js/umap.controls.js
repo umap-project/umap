@@ -244,7 +244,7 @@ U.ExtractShapeFromMultiAction = U.BaseFeatureAction.extend({
   },
 
   onClick: function (e) {
-    this.feature.isolateShape(e.latlng)
+    this.feature.ui.isolateShape(e.latlng)
   },
 })
 

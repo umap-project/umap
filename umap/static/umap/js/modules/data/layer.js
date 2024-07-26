@@ -435,12 +435,13 @@ export class DataLayer {
   }
 
   makeFeature(geojson = {}, sync = true, id = null) {
+    // Both Feature and Geometry are valid geojson objects.
     const geometry = geojson.geometry || geojson
     let feature
 
     switch (geometry.type) {
       case 'Point':
-        // FIXME: deal with MutliPoint
+        // FIXME: deal with MultiPoint
         feature = new Point(this, geojson, id)
         break
       case 'MultiLineString':

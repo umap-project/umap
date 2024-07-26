@@ -729,20 +729,11 @@ class Path extends Feature {
     if (this.isEmpty()) this.del()
   }
 
-  isolateShape(at) {
-    if (!this.isMulti()) return
-    const shape = this.ui.enableEdit().deleteShapeAt(at)
-    this.ui.disableEdit()
-    if (!shape) return
+  isolateShape(latlngs) {
     const properties = this.cloneProperties()
-    const other = new (this instanceof LineString ? LineString : Polygon)(
-      this.datalayer,
-      {
-        properties,
-        geometry: this._toGeometry(shape),
-      }
-    )
-    this.datalayer.addFeature(other)
+    const type = this instanceof LineString ? 'LineString' : 'Polygon'
+    const geometry = this._toGeometry(latlngs)
+    const other = this.datalayer.makeFeature({ type, geometry, properties })
     other.edit()
     return other
   }
@@ -912,10 +903,11 @@ export class Polygon extends Path {
 
   _toGeometry(latlngs) {
     const holes = !LineUtil.isFlat(latlngs)
-    const multi = holes && !LineUtil.isFlat(latlngs[0])
+    let multi = holes && !LineUtil.isFlat(latlngs[0])
     let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
-    if (!holes) {
-      coordinates = [coordinates]
+    if (Utils.polygonMustBeFlattened(coordinates)) {
+      coordinates = coordinates[0]
+      multi = false
     }
     const type = multi ? 'MultiPolygon' : 'Polygon'
     return { coordinates, type }

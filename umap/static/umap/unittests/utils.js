@@ -479,6 +479,113 @@ describe('Utils', () => {
     })
   })
 
+  describe('#polygonMustBeFlattened', () => {
+    it('should return false for simple polygon', () => {
+      const coords = [
+        [
+          [100.0, 0.0],
+          [101.0, 0.0],
+          [101.0, 1.0],
+          [100.0, 1.0],
+          [100.0, 0.0],
+        ],
+      ]
+      assert.notOk(Utils.polygonMustBeFlattened(coords))
+    })
+
+    it('should return false for simple polygon with hole', () => {
+      const coords = [
+        [
+          [100.0, 0.0],
+          [101.0, 0.0],
+          [101.0, 1.0],
+          [100.0, 1.0],
+          [100.0, 0.0],
+        ],
+        [
+          [100.8, 0.8],
+          [100.8, 0.2],
+          [100.2, 0.2],
+          [100.2, 0.8],
+          [100.8, 0.8],
+        ],
+      ]
+      assert.notOk(Utils.polygonMustBeFlattened(coords))
+    })
+
+    it('should return false for multipolygon', () => {
+      const coords = [
+        [
+          [
+            [102.0, 2.0],
+            [103.0, 2.0],
+            [103.0, 3.0],
+            [102.0, 3.0],
+            [102.0, 2.0],
+          ],
+        ],
+        [
+          [
+            [100.0, 0.0],
+            [101.0, 0.0],
+            [101.0, 1.0],
+            [100.0, 1.0],
+            [100.0, 0.0],
+          ],
+          [
+            [100.2, 0.2],
+            [100.2, 0.8],
+            [100.8, 0.8],
+            [100.8, 0.2],
+            [100.2, 0.2],
+          ],
+        ],
+      ]
+      assert.notOk(Utils.polygonMustBeFlattened(coords))
+    })
+
+    it('should return true for false multi polygon', () => {
+      const coords = [
+        [
+          [
+            [100.0, 0.0],
+            [101.0, 0.0],
+            [101.0, 1.0],
+            [100.0, 1.0],
+            [100.0, 0.0],
+          ],
+        ],
+      ]
+      assert.ok(Utils.polygonMustBeFlattened(coords))
+    })
+
+    it('should return true for false multi polygon with hole', () => {
+      const coords = [
+        [
+          [
+            [100.0, 0.0],
+            [101.0, 0.0],
+            [101.0, 1.0],
+            [100.0, 1.0],
+            [100.0, 0.0],
+          ],
+          [
+            [100.8, 0.8],
+            [100.8, 0.2],
+            [100.2, 0.2],
+            [100.2, 0.8],
+            [100.8, 0.8],
+          ],
+        ],
+      ]
+      assert.ok(Utils.polygonMustBeFlattened(coords))
+    })
+
+    it('should return false for empty coords', () => {
+      assert.notOk(Utils.polygonMustBeFlattened([]))
+    })
+  })
+
   describe('#usableOption()', () => {
     it('should consider false', () => {
       assert.ok(Utils.usableOption({ key: false }, 'key'))
