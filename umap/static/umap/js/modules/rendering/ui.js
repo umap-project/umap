@@ -205,8 +205,11 @@ export const LeafletMarker = Marker.extend({
   },
 
   _redraw: function () {
-    this._initIcon()
-    this.update()
+    // May no be on the map when in a cluster.
+    if (this._map) {
+      this._initIcon()
+      this.update()
+    }
   },
 
   getCenter: function () {
