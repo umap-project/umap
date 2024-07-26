@@ -586,26 +586,27 @@ export class Point extends Feature {
     return ['properties._umap_options.zoomTo']
   }
 
-  // appendEditFieldsets(container) {
-  //   super.appendEditFieldsets(container)
-  //   const coordinatesOptions = [
-  //     ['_latlng.lat', { handler: 'FloatInput', label: translate('Latitude') }],
-  //     ['_latlng.lng', { handler: 'FloatInput', label: translate('Longitude') }],
-  //   ]
-  //   const builder = new U.FormBuilder(this, coordinatesOptions, {
-  //     callback() {
-  //       if (!this._latlng.isValid()) {
-  //         Alert.error(translate('Invalid latitude or longitude'))
-  //         builder.restoreField('_latlng.lat')
-  //         builder.restoreField('_latlng.lng')
-  //       }
-  //       this.zoomTo({ easing: false })
-  //     },
-  //     callbackContext: this,
-  //   })
-  //   const fieldset = DomUtil.createFieldset(container, translate('Coordinates'))
-  //   fieldset.appendChild(builder.build())
-  // }
+  appendEditFieldsets(container) {
+    super.appendEditFieldsets(container)
+    // FIXME edit feature geometry.coordinates instead
+    // (by learning FormBuilder to deal with array indexes ?)
+    const coordinatesOptions = [
+      ['ui._latlng.lat', { handler: 'FloatInput', label: translate('Latitude') }],
+      ['ui._latlng.lng', { handler: 'FloatInput', label: translate('Longitude') }],
+    ]
+    const builder = new U.FormBuilder(this, coordinatesOptions, {
+      callback: () => {
+        if (!this.ui._latlng.isValid()) {
+          Alert.error(translate('Invalid latitude or longitude'))
+          builder.restoreField('ui._latlng.lat')
+          builder.restoreField('ui._latlng.lng')
+        }
+        this.zoomTo({ easing: false })
+      }
+    })
+    const fieldset = DomUtil.createFieldset(container, translate('Coordinates'))
+    fieldset.appendChild(builder.build())
+  }
 
   zoomTo(event) {
     if (this.datalayer.isClustered() && !this._icon) {
