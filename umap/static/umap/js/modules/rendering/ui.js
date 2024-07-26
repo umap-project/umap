@@ -220,6 +220,11 @@ export const LeafletMarker = Marker.extend({
   resetHighlight: function () {
     DomUtil.removeClass(this.options.icon.elements.main, 'umap-icon-active')
   },
+
+  openPopup: function () {
+    // Always open on marker position (vs click position for paths)
+    this.parentClass.prototype.openPopup.apply(this, this.getCenter())
+  },
 })
 
 const PathMixin = {
