@@ -109,10 +109,9 @@ const FeatureMixin = {
   },
 
   onCommit: function () {
-    this.geometryChanged()
+    this.geometryChanged(false)
     this.feature.onCommit()
   },
-
 }
 
 export const LeafletMarker = Marker.extend({
@@ -124,9 +123,11 @@ export const LeafletMarker = Marker.extend({
     this.setIcon(this.getIcon())
   },
 
-  geometryChanged: function() {
+  geometryChanged: function (sync = true) {
     this.feature.coordinates = this._latlng
-    this.feature.sync.update('geometry', this.feature.geometry)
+    if (sync) {
+      this.feature.sync.update('geometry', this.feature.geometry)
+    }
   },
 
   addInteractions() {
