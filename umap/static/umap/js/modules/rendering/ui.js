@@ -32,6 +32,31 @@ const FeatureMixin = {
 
   addInteractions: function () {
     this.on('contextmenu editable:vertex:contextmenu', this._showContextMenu)
+    this.on('click', this.onClick)
+  },
+
+  onClick: function (event) {
+    if (this._map.measureTools?.enabled()) return
+    this._popupHandlersAdded = true // Prevent leaflet from managing event
+    if (!this._map.editEnabled) {
+      this.feature.view(event)
+    } else if (!this.feature.isReadOnly()) {
+      if (event.originalEvent.shiftKey) {
+        if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+          this.feature.datalayer.edit(event)
+        } else {
+          if (this.feature._toggleEditing) this.feature._toggleEditing(event)
+          else this.feature.edit(event)
+        }
+      } else if (!this._map.editTools?.drawing()) {
+        new L.Toolbar.Popup(event.latlng, {
+          className: 'leaflet-inplace-toolbar',
+          anchor: this.getPopupToolbarAnchor(),
+          actions: this.feature.getInplaceToolbarActions(event),
+        }).addTo(this._map, this.feature, event.latlng)
+      }
+    }
+    L.DomEvent.stop(event)
   },
 
   resetTooltip: function () {
@@ -112,6 +137,8 @@ const FeatureMixin = {
     this.geometryChanged(false)
     this.feature.onCommit()
   },
+
+  getPopupToolbarAnchor: () => [0, 0],
 }
 
 export const LeafletMarker = Marker.extend({
@@ -224,9 +251,8 @@ export const LeafletMarker = Marker.extend({
     DomUtil.removeClass(this.options.icon.elements.main, 'umap-icon-active')
   },
 
-  openPopup: function () {
-    // Always open on marker position (vs click position for paths)
-    this.parentClass.prototype.openPopup.apply(this, this.getCenter())
+  getPopupToolbarAnchor: function () {
+    return this.options.icon.options.popupAnchor
   },
 })
 

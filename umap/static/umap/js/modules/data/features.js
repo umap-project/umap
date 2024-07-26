@@ -602,7 +602,7 @@ export class Point extends Feature {
           builder.restoreField('ui._latlng.lng')
         }
         this.zoomTo({ easing: false })
-      }
+      },
     })
     const fieldset = DomUtil.createFieldset(container, translate('Coordinates'))
     fieldset.appendChild(builder.build())

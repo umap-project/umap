@@ -100,9 +100,4 @@ export const Cluster = L.MarkerClusterGroup.extend({
       this.options.polygonOptions.color = this.datalayer.getColor()
     }
   },
-
-  // listens: function (type, propagate) {
-  //   L.MarkerClusterGroup.prototype.listens.call(this, type, propagate)
-  //   return Evented.prototype.listens.call(this, type, propagate)
-  // },
 })
