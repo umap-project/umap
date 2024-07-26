@@ -1022,7 +1022,7 @@ U.Search = L.PhotonSearch.extend({
     L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
       const datalayer = this.map.defaultEditDataLayer()
-      const layer = datalayer.geojsonToFeatures(feature)
+      const layer = datalayer.makeFeature(feature)
       layer.isDirty = true
       layer.edit()
     })

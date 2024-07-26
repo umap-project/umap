@@ -243,7 +243,9 @@ def test_can_transfer_shape_from_multi(live_server, page, tilelayer, settings):
     data = save_and_get_json(page)
     assert data["features"][0]["geometry"] == {
         "coordinates": [
-            [-6.569824, 52.49616], [-7.668457, 52.49616], [-7.668457, 53.159947]
+            [-6.569824, 52.49616],
+            [-7.668457, 52.49616],
+            [-7.668457, 53.159947],
         ],
         "type": "LineString",
     }

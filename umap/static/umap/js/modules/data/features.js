@@ -75,6 +75,15 @@ class Feature {
     return this.ui.getBounds()
   }
 
+  get geometry() {
+    return this._geometry
+  }
+
+  set geometry(value) {
+    this._geometry = value
+    this.geometryChanged()
+  }
+
   getClassName() {
     return this.staticOptions.className
   }
@@ -110,10 +119,6 @@ class Feature {
       return
     }
     this.sync.upsert(this.toGeoJSON())
-  }
-
-  getGeometry() {
-    return this.toGeoJSON().geometry
   }
 
   isReadOnly() {
@@ -333,7 +338,7 @@ class Feature {
   }
 
   populate(geojson) {
-    this.geometry = geojson.geometry
+    this._geometry = geojson.geometry
     this.properties = Object.fromEntries(
       Object.entries(geojson.properties || {}).map(this.cleanProperty)
     )
@@ -494,13 +499,13 @@ class Feature {
   }
 
   clone() {
-    const geoJSON = this.toGeoJSON()
-    delete geoJSON.id
-    delete geoJSON.properties.id
-    const layer = this.datalayer.geojsonToFeatures(geoJSON)
-    layer.isDirty = true
-    layer.edit()
-    return layer
+    const geojson = this.toGeoJSON()
+    delete geojson.id
+    delete geojson.properties.id
+    const feature = this.datalayer.makeFeature(geojson)
+    feature.isDirty = true
+    feature.edit()
+    return feature
   }
 
   extendedProperties() {
@@ -550,6 +555,10 @@ export class Point extends Feature {
 
   set coordinates(latlng) {
     this.geometry.coordinates = GeoJSON.latLngToCoords(latlng)
+  }
+
+  geometryChanged() {
+    this.ui.setLatLng(this.coordinates)
   }
 
   makeUI() {
@@ -626,6 +635,10 @@ class Path extends Feature {
     const { coordinates, type } = this._toGeometry(latlngs)
     this.geometry.coordinates = coordinates
     this.geometry.type = type
+  }
+
+  geometryChanged() {
+    this.ui.setLatLngs(this.coordinates)
   }
 
   connectToDataLayer(datalayer) {
@@ -814,7 +827,7 @@ export class LineString extends Path {
 
     delete geojson.id // delete the copied id, a new one will be generated.
 
-    const polygon = this.datalayer.geojsonToFeatures(geojson)
+    const polygon = this.datalayer.makeFeature(geojson)
     polygon.edit()
     this.del()
   }
@@ -957,7 +970,7 @@ export class Polygon extends Path {
     geojson.geometry.coordinates = Utils.flattenCoordinates(
       geojson.geometry.coordinates
     )
-    const polyline = this.datalayer.geojsonToFeatures(geojson)
+    const polyline = this.datalayer.makeFeature(geojson)
     polyline.edit()
     this.del()
   }

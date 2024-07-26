@@ -71,15 +71,13 @@ export class FeatureUpdater extends BaseUpdater {
   upsert({ metadata, value }) {
     const { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
-    let feature = this.getFeatureFromMetadata(metadata, value)
+    const feature = this.getFeatureFromMetadata(metadata, value)
 
-    feature = datalayer.geoJSONToLeaflet({
-      geometry: value.geometry,
-      geojson: value,
-      id,
-      feature,
-    })
-    datalayer.addFeature(feature)
+    if (feature) {
+      feature.geometry = value.geometry
+    } else {
+      datalayer.makeFeature(value)
+    }
   }
 
   // Update a property of an object
@@ -90,7 +88,8 @@ export class FeatureUpdater extends BaseUpdater {
     }
     if (key === 'geometry') {
       const datalayer = this.getDataLayerFromID(metadata.layerId)
-      datalayer.geoJSONToLeaflet({ geometry: value, id: metadata.id, feature })
+      const feature = this.getFeatureFromMetadata(metadata, value)
+      feature.geometry = value
     } else {
       this.updateObjectValue(feature, key, value)
       feature.datalayer.indexProperties(feature)

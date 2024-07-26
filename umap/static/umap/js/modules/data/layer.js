@@ -375,7 +375,7 @@ export class DataLayer {
 
   removeFeature(feature, sync) {
     const id = stamp(feature)
-    // if (sync !== false) feature.sync.delete()
+    if (sync !== false) feature.sync.delete()
     this.layer.removeLayer(feature.ui)
     delete this.map.features_index[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
@@ -414,135 +414,56 @@ export class DataLayer {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      this.geojsonToFeatures(geojson, sync)
+      this.makeFeatures(geojson, sync)
     } catch (err) {
       console.log('Error with DataLayer', this.umap_id)
       console.error(err)
     }
   }
 
-  // The choice of the name is not ours, because it is required by Leaflet.
-  // It is misleading, as the returned objects are uMap objects, and not
-  // GeoJSON features.
-  geojsonToFeatures(geojson, sync) {
-    if (!geojson) return
-    const features = Array.isArray(geojson) ? geojson : geojson.features
-    let i
-    let len
-
-    if (features) {
-      Utils.sortFeatures(features, this.map.getOption('sortKey'), L.lang)
-      for (i = 0, len = features.length; i < len; i++) {
-        this.geojsonToFeatures(features[i])
-      }
-      return this // Why returning "this" ?
+  makeFeatures(geojson = {}, sync = true) {
+    if (geojson.type === 'Feature' || geojson.coordinates) {
+      geojson = [geojson]
     }
-
-    const geometry = geojson.type === 'Feature' ? geojson.geometry : geojson
-
-    const feature = this.geoJSONToLeaflet({ geometry, geojson })
-    if (feature) {
-      this.addFeature(feature)
-      if (sync) feature.onCommit()
-      return feature
+    const collection = Array.isArray(geojson)
+      ? geojson
+      : geojson.features || geojson.geometries
+    Utils.sortFeatures(collection, this.map.getOption('sortKey'), L.lang)
+    for (const feature of collection) {
+      this.makeFeature(feature, sync)
     }
   }
 
-  /**
-   * Create or update Leaflet features from GeoJSON geometries.
-   *
-   * If no `feature` is provided, a new feature will be created.
-   * If `feature` is provided, it will be updated with the passed geometry.
-   *
-   * GeoJSON and Leaflet use incompatible formats to encode coordinates.
-   * This method takes care of the convertion.
-   *
-   * @param geometry    GeoJSON geometry field
-   * @param geojson     Enclosing GeoJSON. If none is provided, a new one will
-   *                    be created
-   * @param id          Id of the feature
-   * @param feature     Leaflet feature that should be updated with the new geometry
-   * @returns           Leaflet feature.
-   */
-  geoJSONToLeaflet({ geometry, geojson = null, id = null, feature = null } = {}) {
-    if (!geometry) return // null geometry is valid geojson.
-    const coords = geometry.coordinates
-    let latlng
-    let latlngs
-
-    // Create a default geojson if none is provided
-    if (geojson === undefined) geojson = { type: 'Feature', geometry: geometry }
+  makeFeature(geojson = {}, sync = true, id = null) {
+    const geometry = geojson.geometry || geojson
+    let feature
 
     switch (geometry.type) {
       case 'Point':
-        try {
-          latlng = GeoJSON.coordsToLatLng(coords)
-        } catch (e) {
-          console.error('Invalid latlng object from', coords)
-          break
-        }
-        if (feature) {
-          feature.coordinates = latlng
-          return feature
-        }
-        return new Point(this, geojson)
-
+        // FIXME: deal with MutliPoint
+        feature = new Point(this, geojson, id)
+        break
       case 'MultiLineString':
       case 'LineString':
-        latlngs = GeoJSON.coordsToLatLngs(
-          coords,
-          geometry.type === 'LineString' ? 0 : 1
-        )
-        if (!latlngs.length) break
-        if (feature) {
-          feature.coordinates = latlngs
-          return feature
-        }
-        return new LineString(this, geojson)
-
+        feature = new LineString(this, geojson, id)
+        break
       case 'MultiPolygon':
       case 'Polygon':
-        latlngs = GeoJSON.coordsToLatLngs(coords, geometry.type === 'Polygon' ? 1 : 2)
-        if (feature) {
-          feature.coordinates = latlngs
-          return feature
-        }
-        return new Polygon(this, geojson)
-      case 'GeometryCollection':
-        return this.geojsonToFeatures(geometry.geometries)
-
+        feature = new Polygon(this, geojson, id)
+        break
       default:
+        console.log(geojson)
         Alert.error(
           translate('Skipping unknown geometry.type: {type}', {
             type: geometry.type || 'undefined',
           })
         )
     }
-  }
-
-  _pointToLayer(geojson, latlng, id) {
-    return new U.Marker(this.map, latlng, { geojson: geojson, datalayer: this }, id)
-  }
-
-  _lineToLayer(geojson, latlngs, id) {
-    return new U.Polyline(
-      this.map,
-      latlngs,
-      {
-        geojson: geojson,
-        datalayer: this,
-        color: null,
-      },
-      id
-    )
-  }
-
-  _polygonToLayer(geojson, latlngs, id) {
-    // Ensure no empty hole
-    // for (let i = latlngs.length - 1; i > 0; i--) {
-    //     if (!latlngs.slice()[i].length) latlngs.splice(i, 1);
-    // }
-    return new U.Polygon(this.map, latlngs, { geojson: geojson, datalayer: this }, id)
+    if (feature) {
+      this.addFeature(feature)
+      if (sync) feature.onCommit()
+      return feature
+    }
   }
 
   async importRaw(raw, format) {
@@ -554,7 +475,7 @@ export class DataLayer {
   }
 
   importFromFiles(files, type) {
-    for (let i = 0, f; (f = files[i]); i++) {
+    for (const f of files) {
       this.importFromFile(f, type)
     }
   }

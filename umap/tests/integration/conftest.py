@@ -27,10 +27,24 @@ def mock_osm_tiles(page):
 
 
 @pytest.fixture
-def page(context):
-    page = context.new_page()
-    page.on("console", lambda msg: print(msg.text) if msg.type != "warning" else None)
-    return page
+def new_page(context):
+    def make_page(prefix="console"):
+        page = context.new_page()
+        page.on(
+            "console",
+            lambda msg: print(f"{prefix}: {msg.text}")
+            if msg.type != "warning"
+            else None,
+        )
+        page.on("pageerror", lambda exc: print(f"{prefix} uncaught exception: {exc}"))
+        return page
+
+    yield make_page
+
+
+@pytest.fixture
+def page(new_page):
+    return new_page()
 
 
 @pytest.fixture

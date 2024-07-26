@@ -126,6 +126,7 @@ export const LeafletMarker = Marker.extend({
 
   geometryChanged: function() {
     this.feature.coordinates = this._latlng
+    this.feature.sync.update('geometry', this.feature.geometry)
   },
 
   addInteractions() {
@@ -133,7 +134,7 @@ export const LeafletMarker = Marker.extend({
     this.on('dragend', (event) => {
       this.isDirty = true
       this.feature.edit(event)
-      this.feature.sync.update('geometry', this.feature.getGeometry())
+      this.geometryChanged()
     })
     this.on('editable:drawing:commit', this.onCommit)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
@@ -251,7 +252,6 @@ const PathMixin = {
   },
 
   _onDrag: function () {
-    this.geometryChanged()
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
   },
 

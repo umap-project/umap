@@ -12,7 +12,7 @@ DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_markers(
-    context, live_server, websocket_server, tilelayer
+    new_page, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -20,9 +20,9 @@ def test_websocket_connection_can_sync_markers(
     DataLayerFactory(map=map, data={})
 
     # Create two tabs
-    peerA = context.new_page()
+    peerA = new_page("Page A")
     peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    peerB = context.new_page()
+    peerB = new_page("Page B")
     peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     a_marker_pane = peerA.locator(".leaflet-marker-pane > div")
@@ -60,12 +60,12 @@ def test_websocket_connection_can_sync_markers(
     expect(b_marker_pane).to_have_count(2)
 
     # Drag a marker on peer B and check that it moved on peer A
-    a_first_marker.bounding_box() == b_first_marker.bounding_box()
+    assert a_first_marker.bounding_box() == b_first_marker.bounding_box()
     b_old_bbox = b_first_marker.bounding_box()
     b_first_marker.drag_to(b_map_el, target_position={"x": 250, "y": 250})
 
     assert b_old_bbox is not b_first_marker.bounding_box()
-    a_first_marker.bounding_box() == b_first_marker.bounding_box()
+    assert a_first_marker.bounding_box() == b_first_marker.bounding_box()
 
     # Delete a marker from peer A and check it's been deleted on peer B
     a_first_marker.click(button="right")
