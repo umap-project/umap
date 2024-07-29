@@ -271,7 +271,6 @@ def test_can_extract_shape(live_server, page, tilelayer, settings):
     extract_button.click()
     expect(polygons).to_have_count(2)
     data = save_and_get_json(page)
-    print(data)
     assert len(data["features"]) == 2
     assert data["features"][0]["geometry"]["type"] == "Polygon"
     assert data["features"][1]["geometry"]["type"] == "Polygon"
