@@ -19,6 +19,7 @@ import {
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Point, LineString, Polygon } from './features.js'
+import TableEditor from '../tableeditor.js'
 
 export const LAYER_TYPES = [DefaultLayer, Cluster, Heat, Choropleth, Categorized]
 
@@ -1090,7 +1091,7 @@ export class DataLayer {
 
   tableEdit() {
     if (!this.isVisible()) return
-    const editor = new U.TableEditor(this)
+    const editor = new TableEditor(this)
     editor.open()
   }
 
