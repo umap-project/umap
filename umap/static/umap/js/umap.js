@@ -393,7 +393,7 @@ U.Map = L.Map.extend({
     this._controls.search = new U.SearchControl()
     this._controls.embed = new L.Control.Embed(this)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
-    if (this.options.user) this._controls.star = new U.StarControl(this)
+    if (this.options.user?.id) this._controls.star = new U.StarControl(this)
     this._controls.editinosm = new L.Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -1048,7 +1048,15 @@ U.Map = L.Map.extend({
     if (error) {
       return
     }
-
+    if (data.login_required) {
+      window.onLogin = () => this.saveSelf()
+      window.open(data.login_required)
+      return
+    }
+    if (data.user?.id) {
+      this.options.user = data.user
+      this.renderEditToolbar()
+    }
     if (!this.options.umap_id) {
       this.options.umap_id = data.id
       this.permissions.setOptions(data.permissions)
