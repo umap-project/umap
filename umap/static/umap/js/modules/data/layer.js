@@ -1,4 +1,4 @@
-// Uses U.DataLayerPermissions, U.Marker, U.Polygon, U.Polyline, U.TableEditor not yet ES modules
+// Uses U.Marker, U.Polygon, U.Polyline, U.TableEditor not yet ES modules
 // Uses U.FormBuilder not available as ESM
 
 // FIXME: this module should not depend on Leaflet
@@ -18,6 +18,7 @@ import {
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
+import { DataLayerPermissions } from '../permissions.js'
 
 export const LAYER_TYPES = [DefaultLayer, Cluster, Heat, Choropleth, Categorized]
 
@@ -67,7 +68,7 @@ export class DataLayer {
     }
     this.backupOptions()
     this.connectToMap()
-    this.permissions = new U.DataLayerPermissions(this)
+    this.permissions = new DataLayerPermissions(this)
     if (!this.umap_id) {
       if (this.showAtLoad()) this.show()
       this.isDirty = true
