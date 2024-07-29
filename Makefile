@@ -18,7 +18,7 @@ format: ## Format the code and templates files
 
 .PHONY: lint
 lint: ## Lint the code and template files
-	npx eslint umap/static/umap/
+	npx eslint umap/static/umap/js/
 	djlint umap/templates --lint
 	isort --check --profile black umap/
 	ruff format --check --target-version=py310 umap/
