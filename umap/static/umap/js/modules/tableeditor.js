@@ -89,15 +89,15 @@ export default class TableEditor extends WithTemplate {
     const bounds = this.map.getBounds()
     const inBbox = this.map.browser.options.inBbox
     let html = ''
-    for (const feature of Object.values(this.datalayer._layers)) {
-      if (feature.isFiltered()) continue
-      if (inBbox && !feature.isOnScreen(bounds)) continue
+    this.datalayer.eachFeature((feature) => {
+      if (feature.isFiltered()) return
+      if (inBbox && !feature.isOnScreen(bounds)) return
       const tds = this.properties.map(
         (prop) =>
           `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`
       )
       html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
-    }
+    })
     this.elements.body.innerHTML = html
   }
 
@@ -125,7 +125,7 @@ export default class TableEditor extends WithTemplate {
       .prompt(translate('Please enter the new name of this property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
-        this.datalayer.eachLayer((feature) => {
+        this.datalayer.eachFeature((feature) => {
           feature.renameProperty(property, prompt)
         })
         this.datalayer.deindexProperty(property)
@@ -140,7 +140,7 @@ export default class TableEditor extends WithTemplate {
         translate('Are you sure you want to delete this property on all the features?')
       )
       .then(() => {
-        this.datalayer.eachLayer((feature) => {
+        this.datalayer.eachFeature((feature) => {
           feature.deleteProperty(property)
         })
         this.datalayer.deindexProperty(property)

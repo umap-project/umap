@@ -142,7 +142,7 @@ U.AddPolylineShapeAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.editedFeature.editor.newShape()
+    this.map.editedFeature.ui.editor.newShape()
   },
 })
 
@@ -182,8 +182,8 @@ U.CreateHoleAction = U.BaseFeatureAction.extend({
     },
   },
 
-  onClick: function (e) {
-    this.feature.startHole(e)
+  onClick: function (event) {
+    this.feature.ui.startHole(event)
   },
 })
 
@@ -195,11 +195,11 @@ U.ToggleEditAction = U.BaseFeatureAction.extend({
     },
   },
 
-  onClick: function (e) {
+  onClick: function (event) {
     if (this.feature._toggleEditing) {
-      this.feature._toggleEditing(e) // Path
+      this.feature._toggleEditing(event) // Path
     } else {
-      this.feature.edit(e) // Marker
+      this.feature.edit(event) // Marker
     }
   },
 })
@@ -244,7 +244,7 @@ U.ExtractShapeFromMultiAction = U.BaseFeatureAction.extend({
   },
 
   onClick: function (e) {
-    this.feature.isolateShape(e.latlng)
+    this.feature.ui.isolateShape(e.latlng)
   },
 })
 
@@ -310,7 +310,7 @@ U.DrawToolbar = L.Toolbar.Control.extend({
     }
     if (this.map.options.enablePolylineDraw) {
       this.options.actions.push(U.DrawPolylineAction)
-      if (this.map.editedFeature && this.map.editedFeature instanceof U.Polyline) {
+      if (this.map.editedFeature && this.map.editedFeature instanceof U.LineString) {
         this.options.actions.push(U.AddPolylineShapeAction)
       }
     }
@@ -1022,7 +1022,7 @@ U.Search = L.PhotonSearch.extend({
     L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
       const datalayer = this.map.defaultEditDataLayer()
-      const layer = datalayer.geojsonToFeatures(feature)
+      const layer = datalayer.makeFeature(feature)
       layer.isDirty = true
       layer.edit()
     })
@@ -1145,56 +1145,79 @@ U.Editable = L.Editable.extend({
   initialize: function (map, options) {
     L.Editable.prototype.initialize.call(this, map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
-    this.on('editable:drawing:end', (e) => {
+    this.on('editable:drawing:end', (event) => {
       this.map.tooltip.close()
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
-      if (!e.layer.hasGeom()) e.layer.del()
-      else e.layer.edit()
-    })
-    // Layer for items added by users
-    this.on('editable:drawing:cancel', (e) => {
-      if (e.layer instanceof U.Marker) e.layer.del()
-    })
-    this.on('editable:drawing:commit', function (e) {
-      e.layer.isDirty = true
-      if (this.map.editedFeature !== e.layer) e.layer.edit(e)
-    })
-    this.on('editable:editing', (e) => {
-      const layer = e.layer
-      layer.isDirty = true
-      if (layer._tooltip && layer.isTooltipOpen()) {
-        layer._tooltip.setLatLng(layer.getCenter())
-        layer._tooltip.update()
+      if (!event.layer.feature.hasGeom()) {
+        event.layer.feature.del()
+      } else {
+        event.layer.feature.edit()
       }
     })
-    this.on('editable:vertex:ctrlclick', (e) => {
-      const index = e.vertex.getIndex()
-      if (index === 0 || (index === e.vertex.getLastIndex() && e.vertex.continue))
-        e.vertex.continue()
+    // Layer for items added by users
+    this.on('editable:drawing:cancel', (event) => {
+      if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
     })
-    this.on('editable:vertex:altclick', (e) => {
-      if (e.vertex.editor.vertexCanBeDeleted(e.vertex)) e.vertex.delete()
+    this.on('editable:drawing:commit', function (event) {
+      event.layer.feature.isDirty = true
+      if (this.map.editedFeature !== event.layer) event.layer.feature.edit(event)
+    })
+    this.on('editable:editing', (event) => {
+      const layer = event.layer
+      layer.feature.isDirty = true
+      if (layer instanceof L.Marker) {
+        layer.feature.coordinates = layer._latlng
+      } else {
+        layer.feature.coordinates = layer._latlngs
+      }
+      // if (layer._tooltip && layer.isTooltipOpen()) {
+      //   layer._tooltip.setLatLng(layer.getCenter())
+      //   layer._tooltip.update()
+      // }
+    })
+    this.on('editable:vertex:ctrlclick', (event) => {
+      const index = event.vertex.getIndex()
+      if (
+        index === 0 ||
+        (index === event.vertex.getLastIndex() && event.vertex.continue)
+      )
+        event.vertex.continue()
+    })
+    this.on('editable:vertex:altclick', (event) => {
+      if (event.vertex.editor.vertexCanBeDeleted(event.vertex)) event.vertex.delete()
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
   },
 
   createPolyline: function (latlngs) {
-    return new U.Polyline(this.map, latlngs, this._getDefaultProperties())
+    const datalayer = this.map.defaultEditDataLayer()
+    const point = new U.LineString(datalayer, {
+      geometry: { type: 'LineString', coordinates: [] },
+    })
+    return point.ui
   },
 
   createPolygon: function (latlngs) {
-    return new U.Polygon(this.map, latlngs, this._getDefaultProperties())
+    const datalayer = this.map.defaultEditDataLayer()
+    const point = new U.Polygon(datalayer, {
+      geometry: { type: 'Polygon', coordinates: [] },
+    })
+    return point.ui
   },
 
   createMarker: function (latlng) {
-    return new U.Marker(this.map, latlng, this._getDefaultProperties())
+    const datalayer = this.map.defaultEditDataLayer()
+    const point = new U.Point(datalayer, {
+      geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
+    })
+    return point.ui
   },
 
   _getDefaultProperties: function () {
     const result = {}
-    if (this.map.options.featuresHaveOwner && this.map.options.hasOwnProperty('user')) {
+    if (this.map.options.featuresHaveOwner?.user) {
       result.geojson = { properties: { owner: this.map.options.user.id } }
     }
     return result
@@ -1203,7 +1226,7 @@ U.Editable = L.Editable.extend({
   connectCreatedToMap: function (layer) {
     // Overrided from Leaflet.Editable
     const datalayer = this.map.defaultEditDataLayer()
-    datalayer.addLayer(layer)
+    datalayer.addFeature(layer.feature)
     layer.isDirty = true
     return layer
   },
@@ -1231,7 +1254,7 @@ U.Editable = L.Editable.extend({
       } else {
         const tmpLatLngs = e.layer.editor._drawnLatLngs.slice()
         tmpLatLngs.push(e.latlng)
-        measure = e.layer.getMeasure(tmpLatLngs)
+        measure = e.layer.feature.getMeasure(tmpLatLngs)
 
         if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
           // when drawing second point
@@ -1243,7 +1266,7 @@ U.Editable = L.Editable.extend({
       }
     } else {
       // when moving an existing point
-      measure = e.layer.getMeasure()
+      measure = e.layer.feature.getMeasure()
     }
     if (measure) {
       if (e.layer instanceof L.Polygon) {

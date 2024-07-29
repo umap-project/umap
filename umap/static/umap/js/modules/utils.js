@@ -302,6 +302,10 @@ export function flattenCoordinates(coords) {
   return coords
 }
 
+export function polygonMustBeFlattened(coords) {
+  return coords.length === 1 && typeof coords?.[0]?.[0]?.[0] !== 'number'
+}
+
 export function buildQueryString(params) {
   const query_string = []
   for (const key in params) {

@@ -243,7 +243,8 @@ def test_can_transfer_shape_from_simple_polygon(live_server, page, tilelayer):
     expect(polygons).to_have_count(1)
 
 
-def test_can_extract_shape(live_server, page, tilelayer):
+def test_can_extract_shape(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")
     polygons = page.locator(".leaflet-overlay-pane path")
     expect(polygons).to_have_count(0)
@@ -269,6 +270,58 @@ def test_can_extract_shape(live_server, page, tilelayer):
     polygons.first.click(position={"x": 20, "y": 20}, button="right")
     extract_button.click()
     expect(polygons).to_have_count(2)
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 2
+    assert data["features"][0]["geometry"]["type"] == "Polygon"
+    assert data["features"][1]["geometry"]["type"] == "Polygon"
+    assert data["features"][0]["geometry"]["coordinates"] == [
+        [
+            [
+                -6.569824,
+                53.159947,
+            ],
+            [
+                -6.569824,
+                52.49616,
+            ],
+            [
+                -7.668457,
+                52.49616,
+            ],
+            [
+                -7.668457,
+                53.159947,
+            ],
+            [
+                -6.569824,
+                53.159947,
+            ],
+        ],
+    ]
+    assert data["features"][1]["geometry"]["coordinates"] == [
+        [
+            [
+                -8.76709,
+                54.457267,
+            ],
+            [
+                -8.76709,
+                53.813626,
+            ],
+            [
+                -9.865723,
+                53.813626,
+            ],
+            [
+                -9.865723,
+                54.457267,
+            ],
+            [
+                -8.76709,
+                54.457267,
+            ],
+        ],
+    ]
 
 
 def test_cannot_transfer_shape_to_line(live_server, page, tilelayer):

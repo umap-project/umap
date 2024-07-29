@@ -4,6 +4,7 @@
 import { translate } from '../../i18n.js'
 import { LayerMixin } from './base.js'
 import * as Utils from '../../utils.js'
+import { Evented } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 
 const MarkerCluster = L.MarkerCluster.extend({
   // Custom class so we can call computeTextColor
@@ -48,7 +49,6 @@ export const Cluster = L.MarkerClusterGroup.extend({
     LayerMixin.onAdd.call(this, map)
     return L.MarkerClusterGroup.prototype.onAdd.call(this, map)
   },
-
 
   onRemove: function (map) {
     // In some situation, the onRemove is called before the layer is really

@@ -56,8 +56,8 @@ const RelativeColorLayerMixin = {
 
   getValues: function () {
     const values = []
-    this.datalayer.eachLayer((layer) => {
-      const value = this._getValue(layer)
+    this.datalayer.eachFeature((feature) => {
+      const value = this._getValue(feature)
       if (value !== undefined) values.push(value)
     })
     return values

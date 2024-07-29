@@ -193,7 +193,7 @@ U.Map = L.Map.extend({
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
     this.initContextMenu()
-    this.on('click contextmenu.show', this.closeInplaceToolbar)
+    this.on('click', this.closeInplaceToolbar)
   },
 
   initSyncEngine: async function () {
@@ -863,7 +863,7 @@ U.Map = L.Map.extend({
   },
 
   eachFeature: function (callback, context) {
-    this.eachDataLayer((datalayer) => {
+    this.eachBrowsableDataLayer((datalayer) => {
       if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
     })
   },
@@ -1555,6 +1555,7 @@ U.Map = L.Map.extend({
     this.editPanel.close()
     this.fullPanel.close()
     this.sync.stop()
+    this.closeInplaceToolbar()
   },
 
   hasEditMode: function () {
@@ -1830,6 +1831,14 @@ U.Map = L.Map.extend({
       })
     }
     return url
+  },
+
+  getFeatureById: function (id) {
+    let feature
+    for (const datalayer of Object.values(this.datalayers)) {
+      feature = datalayer.getFeatureById(id)
+      if (feature) return feature
+    }
   },
 
   closeInplaceToolbar: function () {

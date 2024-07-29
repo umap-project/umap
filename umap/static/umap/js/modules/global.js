@@ -28,6 +28,8 @@ import URLs from './urls.js'
 import * as Utils from './utils.js'
 import { DataLayer, LAYER_TYPES } from './data/layer.js'
 import { DataLayerPermissions, MapPermissions } from './permissions.js'
+import { Point, LineString, Polygon } from './data/features.js'
+import { LeafletMarker, LeafletPolyline, LeafletPolygon } from './rendering/ui.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -52,10 +54,16 @@ window.U = {
   HTTPError,
   Importer,
   LAYER_TYPES,
+  LeafletMarker,
+  LeafletPolygon,
+  LeafletPolyline,
+  LineString,
   MapPermissions,
   NOKError,
   Orderable,
   Panel,
+  Point,
+  Polygon,
   Request,
   RequestError,
   Rules,
