@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load i18n static %}
+
 {% block content %}
   <div class="content404">
     <a href="{% url "home" %}"
@@ -9,7 +11,9 @@
         <img alt="0" width="128px" height="128px" src="{% static "umap/img/logo.svg" %}">
         4
       </h1>
-      <h2>Not Found</h2>
+      <h2>
+        Not Found
+      </h2>
     </a>
   </div>
 {% endblock content %}

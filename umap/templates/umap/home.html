@@ -1,5 +1,7 @@
 {% extends "umap/content.html" %}
+
 {% load umap_tags i18n %}
+
 {% block messages %}
   {# We don't want maps in the list to display errors. #}
 {% endblock messages %}
@@ -8,14 +10,22 @@
   {% include "umap/about_summary.html" %}
   {% if showcase_map %}
     <div class="wrapper showcase-map">
-      <h2 class="section">{% blocktrans %}Map of the uMaps{% endblocktrans %}</h2>
-      <div class="row">{% map_fragment showcase_map zoomControl=1 %}</div>
+      <h2 class="section">
+        {% blocktrans %}Map of the uMaps{% endblocktrans %}
+      </h2>
+      <div class="row">
+        {% map_fragment showcase_map zoomControl=1 %}
+      </div>
     </div>
   {% endif %}
   <div class="wrapper">
     {% if maps %}
-      <h2 class="section">{% blocktrans %}Get inspired, browse maps{% endblocktrans %}</h2>
-      <div class="map_list row">{% include "umap/map_list.html" %}</div>
+      <h2 class="section">
+        {% blocktrans %}Get inspired, browse maps{% endblocktrans %}
+      </h2>
+      <div class="map_list row">
+        {% include "umap/map_list.html" %}
+      </div>
     {% endif %}
   </div>
 {% endblock maincontent %}

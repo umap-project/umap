@@ -1,5 +1,8 @@
 {% load i18n %}
-<h3>{% trans "You are logged in. Continuing..." %}</h3>
+
+<h3>
+  {% trans "You are logged in. Continuing..." %}
+</h3>
 <script type="text/javascript">
   function proceed() {
     if (window.opener && window.opener.umap_proceed) {

@@ -1,33 +1,39 @@
 {% load i18n static %}
 
 <style type="text/css">
-  @import "{% static 'umap/js/components/alerts/alert.css' %}";
+    @import "{% static 'umap/js/components/alerts/alert.css' %}";
 </style>
-
 <template id="umap-alert-template">
   <div role="dialog" class="dark window umap-alert">
     <div>
-      <p role="alert"></p>
+      <p role="alert">
+      </p>
     </div>
     <ul class="buttons">
       <li>
-        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+        <button class="icon icon-16 icon-close"
+                aria-label="{% translate "Close" %}"
+                data-close>
+        </button>
       </li>
     </ul>
   </div>
 </template>
-
 <umap-alert></umap-alert>
-
 <template id="umap-alert-creation-template">
   <div role="dialog" class="dark window umap-alert">
     <div>
-      <h3 role="alert"></h3>
+      <h3 role="alert">
+      </h3>
       {% url "login" as login_url %}
-      <p><em>{% blocktranslate %}Pro-tip: to easily find back your maps, <a href="{{ login_url }}" target="_blank">create an account</a> or <a href="{{ login_url }}" target="_blank">log in</a>.{% endblocktranslate %}</em></p>
+      <p>
+        <em>{% blocktranslate %}Pro-tip: to easily find back your maps, <a href="{{ login_url }}" target="_blank">create an account</a> or <a href="{{ login_url }}" target="_blank">log in</a>.{% endblocktranslate %}</em>
+      </p>
       <div id="link-wrapper">
         <form>
-          <label for="url">{% translate "Here is your secret link to edit the map, please keep it safe:" %}</label>
+          <label for="url">
+            {% translate "Here is your secret link to edit the map, please keep it safe:" %}
+          </label>
           <fieldset role="group">
             <input type="url" name="url" id="url">
             <input type="button" value="{% translate "Copy link" %}">
@@ -36,46 +42,61 @@
       </div>
       <div id="form-wrapper" hidden>
         <form>
-          <label for="email">{% translate "Enter your email address to receive the secret link:" %}</label>
+          <label for="email">
+            {% translate "Enter your email address to receive the secret link:" %}
+          </label>
           <fieldset role="group">
-            <input type="email" name="email" id="email" placeholder="{% translate "Email" %}" required>
-            <input type="submit" value="{% translate "Send me the link" %}" class="umap-action">
+            <input type="email"
+                   name="email"
+                   id="email"
+                   placeholder="{% translate "Email" %}"
+                   required>
+            <input type="submit"
+                   value="{% translate "Send me the link" %}"
+                   class="umap-action">
           </fieldset>
         </form>
       </div>
     </div>
     <ul class="buttons">
       <li>
-        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+        <button class="icon icon-16 icon-close"
+                aria-label="{% translate "Close" %}"
+                data-close>
+        </button>
       </li>
     </ul>
   </div>
 </template>
-
 <umap-alert-creation></umap-alert-creation>
-
 <template id="umap-alert-conflict-template">
   <div role="dialog" class="dark window umap-alert">
     <div>
-      <p role="alert"></p>
+      <p role="alert">
+      </p>
       <div id="conflict-wrapper">
         <form>
           <a href="#" onclick="document.url" target="_blank">{% translate "See their edits in another tab" %}</a>
-          <input id="your-changes" type="submit" value="{% translate "Keep your changes and loose theirs" %}">
-          <input id="their-changes" type="submit" value="{% translate "Keep their changes and loose yours" %}">
+          <input id="your-changes"
+                 type="submit"
+                 value="{% translate "Keep your changes and loose theirs" %}">
+          <input id="their-changes"
+                 type="submit"
+                 value="{% translate "Keep their changes and loose yours" %}">
         </form>
       </div>
     </div>
     <ul class="buttons">
       <li>
-        <button class="icon icon-16 icon-close" aria-label="{% translate "Close" %}" data-close></button>
+        <button class="icon icon-16 icon-close"
+                aria-label="{% translate "Close" %}"
+                data-close>
+        </button>
       </li>
     </ul>
   </div>
 </template>
-
 <umap-alert-conflict></umap-alert-conflict>
-
 <script type="module">
   import { register } from '{% static 'umap/js/components/base.js' %}'
   import {

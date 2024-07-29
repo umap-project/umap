@@ -1,5 +1,7 @@
 {% extends "umap/content.html" %}
+
 {% load i18n %}
+
 {% block maincontent %}
   <div class="row">
     <h2 class="section tabs">
@@ -11,7 +13,11 @@
     <div class="row">
       {% if form.non_field_errors %}
         <ul class="form-errors">
-          {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+          {% for error in form.non_field_errors %}
+            <li>
+              {{ error }}
+            </li>
+          {% endfor %}
         </ul>
       {% endif %}
       <form id="user_form" method="post">
@@ -22,13 +28,21 @@
     </div>
     {% if backends.backends|length %}
       <div class="row">
-        <h3>{% trans "Your current providers" %}</h3>
+        <h3>
+          {% trans "Your current providers" %}
+        </h3>
         <ul>
-          {% for name in providers %}<li>{{ name|title }}</li>{% endfor %}
+          {% for name in providers %}
+            <li>
+              {{ name|title }}
+            </li>
+          {% endfor %}
         </ul>
       </div>
       <div class="row">
-        <h3>{% trans "Connect to another provider" %}</h3>
+        <h3>
+          {% trans "Connect to another provider" %}
+        </h3>
         <p>
           {% blocktrans %}It's a good habit to connect your account to more than one provider, in case one provider becomes unavailable, temporarily or even permanently.{% endblocktrans %}
         </p>

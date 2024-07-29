@@ -1,5 +1,7 @@
 {% extends "umap/content.html" %}
+
 {% load i18n %}
+
 {% block head_title %}
   {{ SITE_NAME }} - {% trans "My Dashboard" %}
 {% endblock head_title %}
@@ -17,7 +19,9 @@
       <div class="table-header">
         <form action="{{ request.get_full_path }}" method="get">
           <span>
-            <label class="sr-only" for="q">{% translate "Map’s title" %}</label>
+            <label class="sr-only" for="q">
+              {% translate "Map’s title" %}
+            </label>
             <input id="q"
                    name="q"
                    type="search"

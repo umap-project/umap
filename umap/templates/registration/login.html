@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load umap_tags i18n %}
+
 {% block extra_head %}
   {% umap_css %}
   {{ block.super }}
@@ -13,11 +15,17 @@
       {% include "umap/branding.html" %}
     </header>
     {% if ENABLE_ACCOUNT_LOGIN %}
-      <h2>{% trans "Please log in with your account" %}</h2>
+      <h2>
+        {% trans "Please log in with your account" %}
+      </h2>
       <div>
         {% if form.non_field_errors %}
           <ul class="form-errors">
-            {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>
+                {{ error }}
+              </li>
+            {% endfor %}
           </ul>
         {% endif %}
         <form id="login_form" action="{% url "login" %}" method="post">
@@ -34,7 +42,9 @@
       </div>
     {% endif %}
     {% if backends.backends|length %}
-      <h2>{% trans "Please choose a provider" %}</h2>
+      <h2>
+        {% trans "Please choose a provider" %}
+      </h2>
       <div>
         <ul class="login-grid block-grid">
           {% for name in backends.backends %}

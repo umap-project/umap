@@ -1,5 +1,7 @@
 {% extends "umap/content.html" %}
+
 {% load i18n %}
+
 {% block messages %}
   {# We don't want maps from the results list to display errors in the main page. #}
 {% endblock messages %}
@@ -18,10 +20,14 @@
           </h2>
           {% include "umap/map_list.html" with prefix="search_map" %}
         {% else %}
-          <h2>{% trans "No map found." %}</h2>
+          <h2>
+            {% trans "No map found." %}
+          </h2>
         {% endif %}
       {% else %}
-        <h2>{% trans "Latest created maps" %}</h2>
+        <h2>
+          {% trans "Latest created maps" %}
+        </h2>
         {% include "umap/map_list.html" with prefix="search_map" %}
       {% endif %}
     </div>

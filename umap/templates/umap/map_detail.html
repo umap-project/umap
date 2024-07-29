@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load umap_tags i18n %}
+
 {% block head_title %}
   {{ map.name }} - {{ SITE_NAME }}
 {% endblock head_title %}
@@ -8,12 +10,16 @@
 {% endblock body_class %}
 {% block extra_head %}
   {% if preconnect_domains %}
-    {% for domain in preconnect_domains %}<link rel="preconnect" href="{{ domain }}" />{% endfor %}
+    {% for domain in preconnect_domains %}
+      <link rel="preconnect" href="{{ domain }}" />
+    {% endfor %}
   {% endif %}
   {% umap_css %}
   {{ block.super }}
   {% umap_js locale=locale %}
-  {% if object.share_status != object.PUBLIC %}<meta name="robots" content="noindex">{% endif %}
+  {% if object.share_status != object.PUBLIC %}
+    <meta name="robots" content="noindex">
+  {% endif %}
   <link rel="alternate"
         type="application/json+oembed"
         href="{{ oembed_absolute_uri }}?url={{ quoted_absolute_uri }}&format=json"

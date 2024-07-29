@@ -1,15 +1,30 @@
 {% load umap_tags i18n %}
+
 <div class="table-wrapper">
   <table>
     <thead>
       <tr>
-        <th>{% blocktrans %}Name{% endblocktrans %}</th>
-        <th>{% blocktrans %}Preview{% endblocktrans %}</th>
-        <th>{% blocktrans %}Who can see{% endblocktrans %}</th>
-        <th>{% blocktrans %}Who can edit{% endblocktrans %}</th>
-        <th>{% blocktrans %}Last save{% endblocktrans %}</th>
-        <th>{% blocktrans %}Owner{% endblocktrans %}</th>
-        <th>{% blocktrans %}Actions{% endblocktrans %}</th>
+        <th>
+          {% blocktrans %}Name{% endblocktrans %}
+        </th>
+        <th>
+          {% blocktrans %}Preview{% endblocktrans %}
+        </th>
+        <th>
+          {% blocktrans %}Who can see{% endblocktrans %}
+        </th>
+        <th>
+          {% blocktrans %}Who can edit{% endblocktrans %}
+        </th>
+        <th>
+          {% blocktrans %}Last save{% endblocktrans %}
+        </th>
+        <th>
+          {% blocktrans %}Owner{% endblocktrans %}
+        </th>
+        <th>
+          {% blocktrans %}Actions{% endblocktrans %}
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -29,16 +44,25 @@
               </button>
               <dialog>
                 <form method="dialog">
-                  <div id="{{ unique_id }}_target" class="map_fragment"></div>
+                  <div id="{{ unique_id }}_target" class="map_fragment">
+                  </div>
                   <p class="close-dialog">
-                    <button class="button" type="submit">Close</button>
+                    <button class="button" type="submit">
+                      Close
+                    </button>
                   </p>
                 </form>
               </dialog>
             </td>
-            <td>{{ map_inst.get_share_status_display }}</td>
-            <td>{{ map_inst.get_edit_status_display }}</td>
-            <td>{{ map_inst.modified_at }}</td>
+            <td>
+              {{ map_inst.get_share_status_display }}
+            </td>
+            <td>
+              {{ map_inst.get_edit_status_display }}
+            </td>
+            <td>
+              {{ map_inst.modified_at }}
+            </td>
             <td>
               <a href="{{ map_inst.owner.get_url }}">{{ map_inst.owner }}</a>
             </td>

@@ -98,3 +98,6 @@ max-line-length = 88
 profile="django"
 indent=2
 format_css=true
+blank_line_after_tag="load,extends"
+line_break_after_multiline_tag=true
+

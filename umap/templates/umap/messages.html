@@ -1,7 +1,6 @@
 {% load i18n %}
 
 {% include "umap/components/alerts/alert.html" %}
-
 {% for message in messages %}
   <script type="module" defer>
     U.Alert.success("{{ message }}")
