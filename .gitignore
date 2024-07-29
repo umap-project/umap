@@ -9,8 +9,8 @@ site/*
 .pytest_cache/
 node_modules
 umap.conf
-./data
-./static
+/data
+/static
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
