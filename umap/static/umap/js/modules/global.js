@@ -27,6 +27,7 @@ import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
 import { DataLayer, LAYER_TYPES } from './data/layer.js'
+import { DataLayerPermissions, MapPermissions } from './permissions.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -41,6 +42,7 @@ window.U = {
   Browser,
   Caption,
   DataLayer,
+  DataLayerPermissions,
   Dialog,
   EditPanel,
   Facets,
@@ -50,6 +52,7 @@ window.U = {
   HTTPError,
   Importer,
   LAYER_TYPES,
+  MapPermissions,
   NOKError,
   Orderable,
   Panel,
