@@ -1017,10 +1017,10 @@ a.umap-control-caption,
 .umap-popup-footer li.zoom:before {
     background-position: -5px -101px;
 }
-.umap-popup-footer li.previous:before {
+.umap-popup-footer li[rel="prev"]:before {
     background-position: -28px -77px;
 }
-.umap-popup-footer li.next:before {
+.umap-popup-footer li[rel="next"]:before {
     background-position: -5px -77px;
 }
 .umap-popup a:hover {

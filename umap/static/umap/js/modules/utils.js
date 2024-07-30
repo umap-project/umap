@@ -392,13 +392,20 @@ export function loadTemplate(html) {
   return template.content.firstElementChild
 }
 
+export function loadTemplateWithRefs(html) {
+  const element = loadTemplate(html)
+  const elements = {}
+  for (const node of element.querySelectorAll('[data-ref]')) {
+    elements[node.dataset.ref] = node
+  }
+  return [element, elements]
+}
+
 export class WithTemplate {
   loadTemplate(html) {
-    this.element = loadTemplate(html)
-    this.elements = {}
-    for (const element of this.element.querySelectorAll('[data-ref]')) {
-      this.elements[element.dataset.ref] = element
-    }
+    const [element, elements] = loadTemplateWithRefs(html)
+    this.element = element
+    this.elements = elements
     return this.element
   }
 }

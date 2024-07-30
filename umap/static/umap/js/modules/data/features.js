@@ -10,6 +10,7 @@ import { SCHEMA } from '../schema.js'
 import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { LeafletMarker, LeafletPolyline, LeafletPolygon } from '../rendering/ui.js'
+import loadPopup from '../rendering/popup.js'
 
 class Feature {
   constructor(datalayer, geojson = {}, id = null) {
@@ -291,7 +292,7 @@ class Feature {
 
   getPopupClass() {
     const old = this.getOption('popupTemplate') // Retrocompat.
-    return U.Popup[this.getOption('popupShape') || old] || U.Popup
+    return loadPopup(this.getOption('popupShape') || old)
   }
 
   attachPopup() {
