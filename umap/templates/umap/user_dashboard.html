@@ -59,7 +59,7 @@
           const button = event.target.closest('button')
           button.nextElementSibling.showModal()
           const mapId = button.dataset.mapId
-          if (!document.querySelector(`#${mapId}_target`).hasChildNodes()) {
+          if (!document.querySelector(`#${mapId}_target`).children.length) {
             const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
             const map = new U.Map(`${mapId}_target`, previewSettings)
             CACHE[mapId] = map
