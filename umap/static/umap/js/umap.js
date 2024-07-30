@@ -62,8 +62,10 @@ U.Map = L.Map.extend({
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
     }
-    L.DomEvent.on(document.body, 'dataloading', (e) => this.fire('dataloading', e))
-    L.DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
+    if (!this.options.noControl) {
+      L.DomEvent.on(document.body, 'dataloading', (e) => this.fire('dataloading', e))
+      L.DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
+    }
     this.server = new U.ServerRequest()
     this.request = new U.Request()
 
