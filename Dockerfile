@@ -59,7 +59,7 @@ FROM common
 
 COPY --from=build /srv/umap/docker/ /srv/umap/docker/
 COPY --from=build /venv/ /venv/
-COPY --from=vendors /srv/umap/umap/static/umap/vendors /srv/umap/umap/static/umap/vendors
+COPY --from=vendors /srv/umap/umap/static/umap/vendors /srv/umap/static/umap/vendors
 
 WORKDIR /srv/umap
 
