@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:creativeCommons="http://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:flickr="urn:flickr:user" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:georss="http://www.georss.org/georss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:woe="http://where.yahooapis.com/v1/schema.rng">
+    <channel>
+        <title>Test stream</title>
+        <link>http://www.pouet.fr/link/</link>
+        <description/>
+        <pubDate>Sun, 13 Apr 2014 09:20:36 -0700</pubDate>
+        <lastBuildDate>Sun, 13 Apr 2014 09:20:36 -0700</lastBuildDate>
+        <generator>http://www.pouet.com/</generator>
+        <item>
+            <title>Title 1</title>
+            <link>http://link.com</link>
+            <description>Description 1</description>
+            <pubDate>Sun, 13 Apr 2014 09:20:36 -0700</pubDate>
+            <geo:lat>53.443324</geo:lat>
+            <geo:long>-2.218337</geo:long>
+            <enclosure url="http://farm4.staticflickr.com/3758/13906321891_faa9be0b8e_b.jpg" type="image/jpeg" />
+        </item>
+    </channel>
+</rss>
