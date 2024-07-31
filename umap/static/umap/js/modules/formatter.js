@@ -106,7 +106,7 @@ export class Formatter {
   }
 
   async fromGeoRSS(str) {
-    return GeoRSSToGeoJSON(this.toDom(c))
+    return GeoRSSToGeoJSON(this.toDom(str))
   }
 
   toDom(x) {

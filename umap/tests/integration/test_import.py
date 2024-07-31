@@ -607,3 +607,23 @@ def test_import_osm_relation(tilelayer, live_server, page):
     # A layer and one path has been created
     expect(layers).to_have_count(1)
     expect(paths).to_have_count(1)
+
+
+def test_import_georss_from_textarea(tilelayer, live_server, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(0)
+    expect(layers).to_have_count(0)
+    button = page.get_by_title("Import data")
+    expect(button).to_be_visible()
+    button.click()
+    textarea = page.locator(".umap-upload textarea")
+    path = Path(__file__).parent.parent / "fixtures/test_upload_georss.xml"
+    textarea.fill(path.read_text())
+    page.locator('select[name="format"]').select_option("georss")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer has been created
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
