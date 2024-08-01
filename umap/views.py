@@ -458,12 +458,16 @@ def simple_json_response(**kwargs):
 
 class SessionMixin:
     def get_user_data(self):
+        data = {}
+        if hasattr(self, "object"):
+            data["is_owner"] = self.object.is_owner(self.request.user, self.request)
         if self.request.user.is_anonymous:
-            return {}
+            return data
         return {
             "id": self.request.user.pk,
             "name": str(self.request.user),
             "url": reverse("user_dashboard"),
+            **data,
         }
 
 
