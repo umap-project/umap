@@ -113,8 +113,7 @@ class Feature {
   }
 
   makeUI() {
-    const klass = this.getUIClass()
-    this._ui = new klass(this, this.toLatLngs())
+    this._ui = new this.uiClass(this, this.toLatLngs())
   }
 
   getClassName() {
@@ -568,7 +567,7 @@ class Feature {
 
   redraw() {
     if (this.datalayer?.isVisible()) {
-      if (this.getUIClass() !== this.ui.getClass()) {
+      if (this.uiClass !== this.ui.getClass()) {
         this.datalayer.hideFeature(this)
         this.makeUI()
         this.datalayer.showFeature(this)
@@ -580,6 +579,8 @@ class Feature {
 }
 
 export class Point extends Feature {
+  uiClass = LeafletMarker
+
   constructor(datalayer, geojson, id) {
     super(datalayer, geojson, id)
     this.staticOptions = {
@@ -594,10 +595,6 @@ export class Point extends Feature {
 
   convertLatLngs(latlng) {
     return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
-  }
-
-  getUIClass() {
-    return LeafletMarker
   }
 
   hasGeom() {
@@ -786,6 +783,8 @@ class Path extends Feature {
 }
 
 export class LineString extends Path {
+  uiClass = LeafletPolyline
+
   constructor(datalayer, geojson, id) {
     super(datalayer, geojson, id)
     this.staticOptions = {
@@ -813,10 +812,6 @@ export class LineString extends Path {
 
   isEmpty() {
     return !this.coordinates.length
-  }
-
-  getUIClass() {
-    return LeafletPolyline
   }
 
   isSameClass(other) {
@@ -912,6 +907,11 @@ export class Polygon extends Path {
     }
   }
 
+  get uiClass() {
+    if (this.getOption('mask')) return MaskPolygon
+    return LeafletPolygon
+  }
+
   toLatLngs() {
     return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'Polygon' ? 1 : 2)
   }
@@ -930,11 +930,6 @@ export class Polygon extends Path {
 
   isEmpty() {
     return !this.coordinates.length || !this.coordinates[0].length
-  }
-
-  getUIClass() {
-    if (this.getOption('mask')) return MaskPolygon
-    return LeafletPolygon
   }
 
   isSameClass(other) {
