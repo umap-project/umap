@@ -1167,15 +1167,7 @@ U.Editable = L.Editable.extend({
     this.on('editable:editing', (event) => {
       const layer = event.layer
       layer.feature.isDirty = true
-      if (layer instanceof L.Marker) {
-        layer.feature.coordinates = layer._latlng
-      } else {
-        layer.feature.coordinates = layer._latlngs
-      }
-      // if (layer._tooltip && layer.isTooltipOpen()) {
-      //   layer._tooltip.setLatLng(layer.getCenter())
-      //   layer._tooltip.update()
-      // }
+      layer.feature.fromLatLngs(layer.getLatLngs())
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()

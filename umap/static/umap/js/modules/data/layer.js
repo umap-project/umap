@@ -363,6 +363,10 @@ export class DataLayer {
     this.layer.addLayer(feature.ui)
   }
 
+  hideFeature(feature) {
+    this.layer.removeLayer(feature.ui)
+  }
+
   addFeature(feature) {
     const id = stamp(feature)
     feature.connectToDataLayer(this)
@@ -377,7 +381,7 @@ export class DataLayer {
   removeFeature(feature, sync) {
     const id = stamp(feature)
     if (sync !== false) feature.sync.delete()
-    this.layer.removeLayer(feature.ui)
+    this.hideFeature(feature)
     delete this.map.features_index[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
