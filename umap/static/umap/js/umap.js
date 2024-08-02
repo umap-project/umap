@@ -308,6 +308,13 @@ U.Map = L.Map.extend({
     if (this.options.noControl) return
     if (L.Util.queryString('share')) {
       this.share.open()
+    } else if (L.Util.queryString('download')) {
+      const download_url = this.urls.get('map_download', {
+        map_id: this.options.umap_id,
+      })
+      window.location = download_url
+    } else if (L.Util.queryString('star')) {
+      await this.star()
     } else if (this.options.onLoadPanel === 'databrowser') {
       this.panel.setDefaultMode('expanded')
       this.openBrowser('data')
@@ -332,12 +339,6 @@ U.Map = L.Map.extend({
       const url = new URL(window.location)
       url.searchParams.delete('edit')
       history.pushState({}, '', url)
-    }
-    if (L.Util.queryString('download')) {
-      const download_url = this.urls.get('map_download', {
-        map_id: this.options.umap_id,
-      })
-      window.location = download_url
     }
   },
 
