@@ -121,11 +121,18 @@ dt {
 .col {
     float: left;
 }
+html[dir="rtl"] .col {
+  float: right;
+}
 .right {
     float: right;
 }
 .col + .col {
     padding-left: 20px;
+}
+html[dir="rtl"] .col + .col {
+  padding-right: 20px;
+  padding-left: 0;
 }
 .half {
     width: 50%;
@@ -145,6 +152,10 @@ dt {
 .col + .wide {
     padding-left: inherit;
 }
+html[dir="rtl"] .col + .wide {
+    padding-left: initial;
+    padding-right: inherit;
+}
 .mshow, .tshow {
     display: none;
 }
@@ -152,6 +163,9 @@ dt {
     margin-left: auto;
     margin-right: auto;
     float: none;
+}
+html[dir="rtl"] .center {
+  float: none;
 }
 .grid-container {
     display: grid;
@@ -278,6 +292,11 @@ button.flat,
     display: initial;
     line-height: inherit;
     color: var(--text-color);
+}
+html[dir="rtl"] button.flat,
+html[dir="rtl"] [type="button"].flat,
+html[dir="rtl"] .dark [type="button"].flat {
+  text-align: right;
 }
 button.flat:hover,
 [type="button"].flat:hover,
@@ -430,6 +449,9 @@ input.switch:empty ~ label {
     text-shadow: 0 1px rgba(0, 0, 0, 0.1);
     width: 80px;
 }
+html[dir="rtl"] input.switch:empty ~ label {
+  float: right;
+}
 input.switch:empty ~ label:before,
 input.switch:empty ~ label:after {
     position: absolute;
@@ -445,6 +467,11 @@ input.switch:empty ~ label:after {
     font-weight: bold;
     background-color: #ededed;
 }
+html[dir="rtl"] input.switch:empty ~ label:before,
+html[dir="rtl"] input.switch:empty ~ label:after {
+  right: 0;
+  left: auto;
+}
 .dark input.switch:empty ~ label:before,
 .dark input.switch:empty ~ label:after {
     background-color: #272c2e;
@@ -457,6 +484,10 @@ input.switch:empty ~ label:after {
     text-indent: 3.5em;
     border: 1px solid #374E75;
     font-weight: bold;
+}
+html[dir="rtl"] input.switch:empty ~ label:after {
+    margin-right: 0.1em;
+    margin-left: auto;
 }
 .dark input.switch:empty ~ label:after {
     border: 1px solid #202425;
@@ -475,12 +506,20 @@ input.switch:checked ~ label:before {
     text-align: left;
     font-weight: bold;
 }
+html[dir="rtl"] .dark input.switch:checked ~ label:before,
+html[dir="rtl"] input.switch:checked ~ label:before {
+  text-align: right;
+}
 .dark input.switch:checked ~ label:before {
     border: none;
     background-color: var(--color-accent);
 }
 input.switch:checked ~ label:after {
     margin-left: 3em;
+}
+html[dir="rtl"] input.switch:checked ~ label:after {
+  margin-right: 3em;
+  margin-left: auto;
 }
 .button-bar, .umap-multiplechoice {
     margin-top: 5px;
@@ -558,8 +597,16 @@ input.switch:checked ~ label:after {
     line-height: 18px;
     margin-bottom: 0;
 }
+html[dir="rtl"] .umap-field-iconUrl .action-button,
+html[dir="rtl"] .inheritable .define,
+html[dir="rtl"] .inheritable .undefine {
+    float: left;
+}
 .inheritable .quick-actions {
     float: right;
+}
+html[dir="rtl"] .inheritable .quick-actions {
+  float: left;
 }
 .inheritable .quick-actions .formbox {
     margin-bottom: 0;
@@ -567,6 +614,10 @@ input.switch:checked ~ label:after {
 .inheritable .quick-actions input {
     width: 100px;
     margin-right: 5px;
+}
+html[dir="rtl"] .inheritable .quick-actions input {
+  margin-left: 5px;
+  margin-right: auto;
 }
 .inheritable .define,
 .inheritable.undefined .undefine,
@@ -616,14 +667,26 @@ i.info {
 .umap-to-polygon:before {
     background-position: -80px -48px;
 }
+html[dir="rtl"] .umap-to-polygon:before {
+  background-position: -69px -41px;
+}
 .umap-to-polyline:before {
     background-position: -120px -48px;
+}
+html[dir="rtl"] .umap-to-polyline:before {
+  background-position: -105px -42px;
 }
 .umap-clone:before {
     background-position: -150px -78px;
 }
+html[dir="rtl"] .umap-clone:before {
+  background-position: -139px -78px;
+}
 .umap-delete:before {
     background-position: -32px -8px;
+}
+html[dir="rtl"] .umap-delete:before {
+  background-position: -34px -8px;
 }
 .umap-edit:before {
     background-position: -6px -6px;
@@ -631,8 +694,14 @@ i.info {
 .umap-empty:before {
     background-position: -110px -78px;
 }
+html[dir="rtl"] .umap-empty:before {
+  background-position: -104px -78px;
+}
 .umap-download:before {
     background-position: -77px -78px;
+}
+html[dir="rtl"] .umap-download:before {
+  background-position: -68px -78px;
 }
 .permissions-panel,
 .umap-upload,
@@ -714,6 +783,10 @@ i.info {
     left: 30px;
     position: absolute;
 }
+html[dir="rtl"] .umap-pictogram-choice .leaflet-marker-icon {
+    left: auto;
+    right: 30px;
+}
 .umap-color-picker {
     clear: both;
     margin-bottom: 20px;
@@ -728,6 +801,9 @@ i.info {
     margin: 0;
     cursor: pointer;
     float: left;
+}
+html[dir="rtl"] .umap-color-picker span {
+    float: right;
 }
 input.blur {
     width: calc(100% - 40px);
