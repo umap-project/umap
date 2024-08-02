@@ -5,15 +5,17 @@ import {
   Polygon,
   DomUtil,
   LineUtil,
+  latLng,
+  LatLngBounds,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as Utils from '../utils.js'
 
 const FeatureMixin = {
-  initialize: function (feature) {
+  initialize: function (feature, latlngs) {
     this.feature = feature
-    this.parentClass.prototype.initialize.call(this, this.feature.coordinates)
+    this.parentClass.prototype.initialize.call(this, latlngs)
   },
 
   onAdd: function (map) {
@@ -134,7 +136,7 @@ const FeatureMixin = {
   },
 
   onCommit: function () {
-    this.geometryChanged(false)
+    this.feature.pullGeometry(false)
     this.feature.onCommit()
   },
 
@@ -145,16 +147,20 @@ export const LeafletMarker = Marker.extend({
   parentClass: Marker,
   includes: [FeatureMixin],
 
-  initialize: function (feature) {
-    FeatureMixin.initialize.call(this, feature)
+  initialize: function (feature, latlng) {
+    FeatureMixin.initialize.call(this, feature, latlng)
     this.setIcon(this.getIcon())
   },
 
-  geometryChanged: function (sync = true) {
-    this.feature.coordinates = this._latlng
-    if (sync) {
-      this.feature.sync.update('geometry', this.feature.geometry)
-    }
+  getClass: () => LeafletMarker,
+
+  // Make API consistent with path
+  getLatLngs: function () {
+    return this.getLatLng()
+  },
+
+  setLatLngs: function (latlng) {
+    return this.setLatLng(latlng)
   },
 
   addInteractions() {
@@ -162,7 +168,7 @@ export const LeafletMarker = Marker.extend({
     this.on('dragend', (event) => {
       this.isDirty = true
       this.feature.edit(event)
-      this.geometryChanged()
+      this.feature.pullGeometry()
     })
     this.on('editable:drawing:commit', this.onCommit)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
@@ -263,10 +269,6 @@ const PathMixin = {
     } else if (this._map.editEnabled && !this._map.editedFeature) {
       this._map.tooltip.open({ content: translate('Click to edit'), anchor: this })
     }
-  },
-
-  geometryChanged: function () {
-    this.feature.coordinates = this._latlngs
   },
 
   addInteractions: function () {
@@ -385,19 +387,21 @@ const PathMixin = {
     return items
   },
 
-  isolateShape: function(atLatLng) {
+  isolateShape: function (atLatLng) {
     if (!this.feature.isMulti()) return
     const shape = this.enableEdit().deleteShapeAt(atLatLng)
-    this.geometryChanged()
+    this.feature.pullGeometry()
     this.disableEdit()
     if (!shape) return
     return this.feature.isolateShape(shape)
-  }
+  },
 }
 
 export const LeafletPolyline = Polyline.extend({
   parentClass: Polyline,
   includes: [FeatureMixin, PathMixin],
+
+  getClass: () => LeafletPolyline,
 
   getVertexActions: function (event) {
     const actions = PathMixin.getVertexActions.call(this, event)
@@ -455,6 +459,8 @@ export const LeafletPolygon = Polygon.extend({
   parentClass: Polygon,
   includes: [FeatureMixin, PathMixin],
 
+  getClass: () => LeafletPolygon,
+
   getContextMenuEditItems: function (event) {
     const items = PathMixin.getContextMenuEditItems.call(this, event)
     const shape = this.shapeAt(event.latlng)
@@ -480,5 +486,39 @@ export const LeafletPolygon = Polygon.extend({
 
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
+  },
+})
+const WORLD = [
+  latLng([90, 180]),
+  latLng([90, -180]),
+  latLng([-90, -180]),
+  latLng([-90, 180]),
+]
+
+export const MaskPolygon = LeafletPolygon.extend({
+  getClass: () => MaskPolygon,
+
+  getLatLngs: function () {
+    // Exclude World coordinates.
+    return LeafletPolygon.prototype.getLatLngs.call(this).slice(1)
+  },
+
+  _setLatLngs: function (latlngs) {
+    const newLatLngs = []
+    newLatLngs.push(WORLD)
+
+    if (!this.feature.isMulti()) {
+      latlngs = [latlngs]
+    }
+    for (const ring of latlngs) {
+      newLatLngs.push(ring)
+    }
+    LeafletPolygon.prototype._setLatLngs.call(this, newLatLngs)
+    this._bounds = new LatLngBounds(latlngs)
+  },
+
+  _defaultShape: function () {
+    // Do not compute with world coordinates (eg. for centering the popup).
+    return this._latlngs[1]
   },
 })
