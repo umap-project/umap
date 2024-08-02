@@ -1,0 +1,39 @@
+.leaflet-measure-control {
+    background: none no-repeat scroll center center #F8F8F9;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    box-shadow: none;
+}
+.leaflet-measure-control a {
+    background-position: -1px -81px;
+}
+.leaflet-measure-edge {
+    background: none repeat scroll 0 0 #2F4F4F;
+    border-radius: 6px;
+}
+.leaflet-measure-toggle {
+    display: inline-block;
+    vertical-align: middle;
+}
+.leaflet-measure-control input:checked + label:before {
+    content: '✓';
+    padding-left: -2em;
+}
+.leaflet-measure-control input[type=radio] {
+    display: none;
+}
+.leaflet-measure-control input[type=radio] + label {
+    display: none;
+    line-height: 36px;
+    height: 36px;
+    width: 36px;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.measure-enabled .leaflet-measure-control input[type=radio] + label {
+    display: inline-block;
+}

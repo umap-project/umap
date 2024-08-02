@@ -1,0 +1,46 @@
+.leaflet-control-edit-in-osm-simple,
+.leaflet-control-edit-in-osm {
+    background: none repeat scroll 0 0 #F8F8F9;
+    border: 1px solid #888888;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+.leaflet-control-edit-in-osm .leaflet-control-edit-in-osm-toggle {
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 36px;
+    display: block;
+}
+.leaflet-control-edit-in-osm .leaflet-control-edit-in-osm-toggle {
+    background-image: url("./edit-in-osm.png");
+}
+.leaflet-control-edit-in-osm .osm-editor + .osm-editor {
+    border-left: 1px solid black;
+}
+.leaflet-control-edit-in-osm-simple a.osm-editor,
+.leaflet-control-edit-in-osm a.osm-editor {
+    display: none;
+    height: 36px;
+    min-width: 36px;
+    text-align: center;
+    line-height: 36px;
+    color: #333;
+    padding: 0 5px;
+    text-decoration: none;
+    font-family: sans-serif;
+}
+.leaflet-control-edit-in-osm-simple a.osm-editor,
+.leaflet-control-edit-in-osm:hover a.osm-editor {
+    display: inline-block;
+}
+a.osm-editor:hover {
+    box-shadow: 0 0 2px 0 black inset;
+}
+.leaflet-control-edit-in-osm:hover .leaflet-control-edit-in-osm-toggle {
+    display: none;
+}
+
+.leaflet-control-edit-hidden {
+    display: none;
+}
