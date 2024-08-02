@@ -170,6 +170,17 @@
 .leaflet-control-edit-enable [type="button"]:hover {
     background-color: #4d5759;
 }
+.leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover::before,
+.leaflet-control-edit-enable a:hover::before {
+    content: attr(title);
+    background: #4d5759;
+    position: relative;
+    display: inline-block;
+    margin-left: -222px;
+    min-width: 170px;
+    padding: .4rem;
+    color: white;
+}
 .umap-permanent-credits-container {
     max-width: 20rem;
     margin-left: 5px!important;
