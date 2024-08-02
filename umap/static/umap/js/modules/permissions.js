@@ -34,7 +34,7 @@ export class MapPermissions {
   }
 
   isOwner() {
-    return this.map.options.user?.id === this.map.options.permissions.owner?.id
+    return Boolean(this.map.options.user?.is_owner)
   }
 
   isAnonymousMap() {

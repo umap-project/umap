@@ -1,5 +1,9 @@
+import re
+
 import pytest
 from playwright.sync_api import expect
+
+from umap.models import Map
 
 
 def test_page_title(page, live_server):
@@ -66,3 +70,28 @@ def test_cannot_put_script_tag_in_datalayer_name_or_description(
     expect(page.get_by_text('<script>alert("attack")</script>')).to_be_visible()
     # Description should contain escaped HTML
     expect(page.get_by_text("before after")).to_be_visible()
+
+
+def test_login_from_map_page(live_server, page, tilelayer, settings, user, context):
+    settings.ENABLE_ACCOUNT_LOGIN = True
+    assert Map.objects.count() == 0
+    page.goto(f"{live_server.url}/en/map/new/")
+    with (
+        page.expect_response(re.compile(r".*/map/create/")),
+        context.expect_page() as login_page_info,
+    ):
+        page.get_by_role("button", name="Save").click()
+    assert Map.objects.count() == 0
+    login_page = login_page_info.value
+    expect(login_page).to_have_title("Login")
+    login_page.get_by_placeholder("Username").fill(user.username)
+    login_page.get_by_placeholder("Password").fill("123123")
+    with page.expect_response(re.compile(r".*/map/create/")):
+        login_page.locator('#login_form input[type="submit"]').click()
+    # Login page should be closed
+    page.wait_for_timeout(500)  # Seems needed from time to time…
+    assert len(context.pages) == 1
+    # Save should have proceed
+    assert Map.objects.count() == 1
+    # Use name should now appear on the header toolbar
+    expect(page.get_by_text("My Dashboard (Joe)")).to_be_visible()

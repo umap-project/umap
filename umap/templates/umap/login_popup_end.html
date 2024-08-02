@@ -5,10 +5,13 @@
 </h3>
 <script type="text/javascript">
   function proceed() {
-    if (window.opener && window.opener.umap_proceed) {
-      window.opener.umap_proceed()
+    if (window.opener?.onLogin) {
+      // We are in the normal process login
+      window.opener.onLogin()
+      window.close()
     } else {
-      // Trade off as Twitter does not allow us to access window.opener
+      // we may be in login process that includes a magic link, so user
+      // has opened a new window from this link, and we cannot close it then.
       window.location.href = '{% url "user_dashboard" %}'
     }
   }

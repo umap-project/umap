@@ -456,6 +456,21 @@ def simple_json_response(**kwargs):
 # ############## #
 
 
+class SessionMixin:
+    def get_user_data(self):
+        data = {}
+        if hasattr(self, "object"):
+            data["is_owner"] = self.object.is_owner(self.request.user, self.request)
+        if self.request.user.is_anonymous:
+            return data
+        return {
+            "id": self.request.user.pk,
+            "name": str(self.request.user),
+            "url": reverse("user_dashboard"),
+            **data,
+        }
+
+
 class FormLessEditMixin:
     http_method_names = [
         "post",
@@ -470,7 +485,7 @@ class FormLessEditMixin:
         return self.get_form_class()(**kwargs)
 
 
-class MapDetailMixin:
+class MapDetailMixin(SessionMixin):
     model = Map
     pk_url_kwarg = "map_id"
 
@@ -522,12 +537,7 @@ class MapDetailMixin:
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
 
-        if not user.is_anonymous:
-            properties["user"] = {
-                "id": user.pk,
-                "name": str(user),
-                "url": reverse("user_dashboard"),
-            }
+        properties["user"] = self.get_user_data()
         return properties
 
     def get_context_data(self, **kwargs):
@@ -755,7 +765,7 @@ class MapPreview(MapDetailMixin, TemplateView):
         return properties
 
 
-class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
+class MapCreate(FormLessEditMixin, PermissionsMixin, SessionMixin, CreateView):
     model = Map
     form_class = MapSettingsForm
 
@@ -772,6 +782,7 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, CreateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=permissions,
+            user=self.get_user_data(),
         )
         if not self.request.user.is_authenticated:
             key, value = self.object.signed_cookie_elements

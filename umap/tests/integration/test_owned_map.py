@@ -134,17 +134,9 @@ def test_owner_has_delete_map_button(map, live_server, login):
     advanced.click()
     delete = page.get_by_role("button", name="Delete", exact=True)
     expect(delete).to_be_visible()
-    dialog_shown = False
-
-    def handle_dialog(dialog):
-        dialog.accept()
-        nonlocal dialog_shown
-        dialog_shown = True
-
-    page.on("dialog", handle_dialog)
+    delete.click()
     with page.expect_navigation():
-        delete.click()
-    assert dialog_shown
+        page.get_by_role("button", name="OK").click()
     assert Map.objects.all().count() == 0
 
 
