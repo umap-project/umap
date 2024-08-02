@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 rm -rf umap/static/umap/vendors/
 
-mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/** umap/static/umap/vendors/leaflet/
+mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/leaflet-src.esm.* umap/static/umap/vendors/leaflet/
+mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/*.css umap/static/umap/vendors/leaflet/
+mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/images umap/static/umap/vendors/leaflet/images
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet-editable/src/Leaflet.Editable.js umap/static/umap/vendors/editable/
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet.path.drag/src/Path.Drag.js umap/static/umap/vendors/editable/
 mkdir -p umap/static/umap/vendors/hash/ && cp -r node_modules/leaflet-hash/leaflet-hash.js umap/static/umap/vendors/hash/
