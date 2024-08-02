@@ -154,7 +154,9 @@
     background-image: url('./img/16-white.svg');
     background-position: -52px -49px;
 }
-
+html[dir="rtl"] .leaflet-control-edit-enable [type="button"]:before {
+  background-position: -43px -49px;
+}
 .leaflet-control-edit-enable [type="button"] {
     width: initial;
     padding: 0 20px;
@@ -240,12 +242,20 @@ ul.photon-autocomplete {
     font-size: 1em;
     border-left: 4px solid #efefef;
 }
+html[dir="rtl"] .photon-autocomplete li {
+    border-left: none;
+    border-right: 4px solid #efefef;
+}
 .photon-autocomplete li strong {
     display: block;
 }
 .photon-autocomplete li.on {
     border-left: 4px solid #2980b9;
     cursor: pointer;
+}
+html[dir="rtl"] .photon-autocomplete li.on {
+    border-left: none;
+    border-right: 4px solid #2980b9;
 }
 .photon-autocomplete li.photon-no-result {
     text-align: center;
@@ -261,9 +271,15 @@ ul.photon-autocomplete {
     color: #999;
     border-top: 1px solid #eee;
 }
+html[dir="rtl"] .photon-autocomplete .photon-feedback {
+    text-align: left;
+}
 .search-result-tools {
     float: right;
     display: block;
+}
+html[dir="rtl"] .search-result-tools {
+    float: left;
 }
 
 
@@ -278,6 +294,9 @@ ul.photon-autocomplete {
     text-align: left;
     vertical-align: bottom;
 }
+html[dir="rtl"] .download-file {
+  text-align: right;
+}
 .download-file:before,
 .download-backup:before {
     height: 24px;
@@ -290,8 +309,15 @@ ul.photon-autocomplete {
     vertical-align: bottom;
     display: inline-block;
 }
+html[dir="rtl"] .download-file:before,
+html[dir="rtl"] .download-backup:before {
+  background-position: 2px -145px;
+}
 .download-backup:before {
     background-position: -27px -144px;
+}
+html[dir="rtl"] .download-backup:before {
+    background-position: -22px -144px;
 }
 .leaflet-container .download-backup {
     color: black;
@@ -423,6 +449,10 @@ ul.photon-autocomplete {
     padding-top: 5px;
     border: none !important;
 }
+html[dir="rtl"] .umap-help-button {
+  margin-right: 5px;
+  margin-left: auto;
+}
 .dark .umap-help-button {
     background-image: url('./img/16-white.svg');
  }
@@ -508,6 +538,12 @@ ul.photon-autocomplete {
 .leaflet-container .leaflet-control-edit-save span,
 .leaflet-container .leaflet-control-edit-cancel span {
     margin-left: 10px;
+}
+html[dir="rtl"] .leaflet-container .leaflet-control-edit-disable span,
+html[dir="rtl"] .leaflet-container .leaflet-control-edit-save span,
+html[dir="rtl"] .leaflet-container .leaflet-control-edit-cancel span {
+  margin-right: 10px;
+  margin-left: auto;
 }
 .leaflet-container .leaflet-control-edit-save:before {
     background-position: -148px -2px;
@@ -608,6 +644,9 @@ ul.photon-autocomplete {
     vertical-align: middle;
     text-indent: -9999px;
 }
+html[dir="rtl"] .umap-main-edit-toolbox .logo a {
+  text-indent: +9999px;
+}
 .umap-main-edit-toolbox .map-name {
     display: inline-block;
     overflow: hidden;
@@ -629,6 +668,10 @@ ul.photon-autocomplete {
     width: 1ch;
     display: inline-block;
 }
+html[dir="rtl"] .map-name:after {
+    padding-left: 0;
+    padding-right: 3px;
+}
 .umap-is-dirty .map-name:after {
     content:  '*';
 }
@@ -642,9 +685,17 @@ ul.photon-autocomplete {
 .umap-caption-bar button {
     margin-left: 10px;
 }
+html[dir="rtl"] .umap-caption-bar button {
+  margin-right: 10px;
+  margin-left: auto;
+}
 .umap-caption-bar button + button:before {
     content: '|';
     padding-right: 10px;
+}
+html[dir="rtl"] .umap-caption-bar button + button:before {
+  padding-left: 10px;
+  padding-right: 0;
 }
 .umap-main-edit-toolbox .umap-user {
     color: #fff;
@@ -674,6 +725,9 @@ ul.photon-autocomplete {
     opacity: 0.93;
     z-index: var(--zindex-panels);
 }
+html[dir="rtl"] .umap-caption-bar-enabled .umap-caption-bar {
+  text-align: right;
+}
 .umap-help {
     font-style: italic;
 }
@@ -691,7 +745,10 @@ ul.photon-autocomplete {
     background-image: url('./img/16-white.svg');
     margin-right: 10px;
 }
-
+html[dir="rtl"] .umap-datalayer-version button {
+  margin-left: 10px;
+  margin-right: auto;
+}
 .leaflet-toolbar-tip {
     background-color: var(--color-darkGray);
 }
@@ -746,6 +803,10 @@ ul.photon-autocomplete {
     width: inherit;
     cursor: inherit;
     padding-left: 6px;
+}
+html[dir="rtl"] .umap-browser .feature-title {
+  padding-right: 6px;
+  padding-left: 0;
 }
 .umap-browser .feature-title {
     font-size: 12px;
@@ -821,6 +882,10 @@ a.umap-control-caption,
     line-height: 30px;
     background-color: var(--color-lightGray);
 }
+html[dir="rtl"] .umap-browser h5, .umap-facet-search h5 {
+    padding-left: 0;
+    padding-right: 5px;
+}
 .umap-browser .off h5 {
     color: #b3b3b3;
 }
@@ -830,6 +895,10 @@ a.umap-control-caption,
 }
 .umap-browser h5 span {
     margin-left: 10px;
+}
+html[dir="rtl"] .umap-browser h5 span {
+  margin-right: 10px;
+  margin-left: auto;
 }
 .umap-browser li, .umap-facet-search li {
     padding: 2px 0;
@@ -855,6 +924,10 @@ a.umap-control-caption,
     width: 24px;
     text-align: center;
     margin-left: 5px;
+}
+html[dir="rtl"] .umap-browser .datalayer .feature-color {
+  margin-right: 5px;
+  margin-left: auto;
 }
 .umap-browser.dark .datalayer .feature-color {
     box-shadow: 0 0 2px 0 #999 inset;
@@ -882,6 +955,11 @@ a.umap-control-caption,
     float: right;
     margin-right: 5px;
     background-position: -145px -70px;
+}
+html[dir="rtl"] .umap-browser .datalayer-toggle-list {
+    float: left;
+    margin-left: 5px;
+    margin-right: auto;
 }
 .umap-browser .show-list .datalayer-toggle-list {
     background-position: -145px -45px;
@@ -963,7 +1041,10 @@ a.umap-control-caption,
     background-color: transparent;
     vertical-align: middle;
 }
-
+html[dir="rtl"] .datalayer-color {
+  margin-left: 10px;
+  margin-right: auto;
+}
 .datalayer-legend {
     color: #555;
     padding: 6px 8px;
@@ -1014,14 +1095,24 @@ a.umap-control-caption,
     vertical-align: middle;
     content: " ";
 }
+html[dir="rtl"] .umap-popup-footer li:before {
+    margin-left: auto;
+    margin-right: 5px;
+}
 .umap-popup-footer li.zoom:before {
     background-position: -5px -101px;
 }
 .umap-popup-footer li[rel="prev"]:before {
     background-position: -28px -77px;
 }
+html[dir="rtl"] .umap-popup-footer li[rel="prev"]:before {
+    background-position: -5px -77px;
+}
 .umap-popup-footer li[rel="next"]:before {
     background-position: -5px -77px;
+}
+html[dir="rtl"] .umap-popup-footer li[rel="next"]:before {
+    background-position: -28px -77px;
 }
 .umap-popup a:hover {
     text-decoration: underline;
@@ -1091,6 +1182,10 @@ span.popup-icon {
     width: 0;
     opacity: 0.9;
 }
+html[dir="rtl"] .umap-div-icon .icon_arrow {
+  right: 8px;
+  left: auto;
+}
 .umap-div-icon.umap-icon-active .icon_arrow {
     opacity: 1.0!important;
 }
@@ -1103,6 +1198,10 @@ span.popup-icon {
     position: relative;
     top: -4px;
     width: 0;
+}
+html[dir="rtl"] .umap-drop-icon .icon_arrow {
+  right: 6px;
+  left: auto;
 }
 .umap-drop-icon.umap-icon-active .icon_arrow {
     border-left-width: 12px;
@@ -1183,6 +1282,10 @@ span.popup-icon {
     position: relative;
     top: -1px;
     width: 2px;
+}
+html[dir="rtl"] .umap-ball-icon .icon_arrow {
+  right: 7px;
+  left: auto;
 }
 .umap-icon-active {
     z-index: var(--zindex-icon-active)!important;
@@ -1408,6 +1511,9 @@ span.popup-icon {
 }
 .umap-popup-content th {
     text-align: left;
+}
+html[dir="rtl"] .umap-popup-content th {
+    text-align: right;
 }
 .umap-popup-content td {
     word-break: break-word;
