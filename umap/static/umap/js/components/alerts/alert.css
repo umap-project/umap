@@ -27,17 +27,30 @@
     background-position: 0 15px;
     padding-left: 28px;
 }
+html[dir="rtl"] .umap-alert[role="dialog"] > div {
+  padding-right: 28px;
+  padding-left: 0;
+}
 .umap-alert[role="dialog"][data-level="info"] > div {
     background-image: url('../../../img/alert-icon-info.svg');
     background-repeat: no-repeat;
+}
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="info"] > div {
+  background-position: right;
 }
 .umap-alert[role="dialog"][data-level="success"] > div {
     background-image: url('../../../img/alert-icon-success.svg');
     background-repeat: no-repeat;
 }
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="success"] > div {
+  background-position: right;
+}
 .umap-alert[role="dialog"][data-level="error"] > div {
     background-image: url('../../../img/alert-icon-error.svg');
     background-repeat: no-repeat;
+}
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="error"] > div {
+    background-position: right;
 }
 .umap-alert[role="dialog"][data-level="error"] {
     background-color: var(--color-darkRed);
@@ -53,6 +66,11 @@
     background: url('../../../img/icon-external-link.svg') no-repeat right center;
     padding-right: 14px;
     background-size: 12px;
+}
+html[dir="rtl"] .umap-alert[role="dialog"] a[target="_blank"] {
+    background: url('../../../img/icon-external-link.svg') no-repeat left center;
+    padding-left: 14px;
+    padding-right: 0;
 }
 h3[role="alert"] {
     margin-bottom: 0;
@@ -77,12 +95,31 @@ h3[role="alert"] + p {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-[role="group"] input:not([type="checkbox"], [type="radio"]):not(:first-child),
+html[dir="rtl"] [role="group"] input:not([type="checkbox"],
+html[dir="rtl"] [type="radio"]):not(:last-child),
+html[dir="rtl"] [role="group"] > :not(:last-child) {
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+[role="group"] input:not([type="checkbox"],
+[type="radio"]):not(:first-child),
 [role="group"] > :not(:first-child)  {
   margin-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   width: 45%;
+}
+html[dir="rtl"] [role="group"] input:not([type="checkbox"],
+html[dir="rtl"] [type="radio"]):not(:first-child),
+html[dir="rtl"] [role="group"] > :not(:first-child)  {
+  margin-left: auto;
+  margin-right: 0;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 [role="group"] input[type="submit"] {
     background: var(--color-darkGray);
