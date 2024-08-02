@@ -55,6 +55,10 @@
 	border-radius: 15px;
 	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
+html[dir="rtl"] .marker-cluster div {
+  margin-right: 5px;
+  margin-left: auto;
+}
 .marker-cluster span {
 	line-height: 30px;
 	}
