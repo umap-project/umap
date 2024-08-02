@@ -52,6 +52,10 @@ body.login header {
     width: 92px;
     margin-right: 10px;
 }
+html[dir="rtl"] .login-grid a {
+    margin-right: auto;
+    margin-left: 10px;
+}
 .login-grid .login-github {
     background-image: url("./github.png");
 }
@@ -109,6 +113,10 @@ body.login header {
     color: #323E56;
     padding-right: 5px;
 }
+html[dir="rtl"] .umap-features-list li:before {
+  padding-left: 5px;
+  padding-right: 0;
+}
 .summary {
     background-color: #eee;
 }
@@ -138,6 +146,9 @@ h2.tabs {
     text-align: left;
     padding-top: 28px;
 }
+html[dir="rtl"] h2.tabs {
+    text-align: right;
+}
 h2.tabs a {
     color: var(--color-darkBlue);
     text-decoration: underline;
@@ -146,11 +157,19 @@ h2.tabs a {
     text-underline-offset: 7px;
     margin-right: 2rem;
 }
+html[dir="rtl"] h2.tabs a {
+    margin-right: auto;
+    margin-left: 2rem;
+}
 h2.tabs a:not(.selected) {
     font-weight: normal;
     color: var(--color-darkBlue);
     text-decoration: none;
     margin-right: 0;
+}
+html[dir="rtl"] h2.tabs a:not(.selected) {
+    margin-right: auto;
+    margin-left: 0;
 }
 h2.tabs a:hover {
     text-decoration: underline;
@@ -280,6 +299,10 @@ ul.umap-autocomplete {
 .umap-multiresult li .close {
     float: right;
     cursor: pointer;
+}
+html[dir="rtl"] .umap-singleresult div .close,
+html[dir="rtl"] .umap-multiresult li .close {
+    float: left;
 }
 
 /* **************************** */
@@ -430,6 +453,13 @@ ul.umap-autocomplete {
     text-align: left;
     padding-left: 2px;
 }
+html[dir="rtl"] .table-wrapper table a,
+html[dir="rtl"] .table-wrapper table thead tr th,
+html[dir="rtl"] .table-wrapper table th[scope="row"] {
+    text-align: right;
+    padding-left: 0;
+    padding-right: 2px;
+}
 .table-wrapper table thead tr th {
     line-height: 1.2;
     padding: 10px 5px;
@@ -544,6 +574,10 @@ dialog::backdrop {
     .mwide {
         padding-left: 0!important;
         width: 100%;
+    }
+    html[dir="rtl"] .mwide {
+        padding-left: initial!important;
+        padding-right: 0!important;
     }
     .mwide + .mwide {
         margin-top: 20px;
