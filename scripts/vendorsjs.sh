@@ -10,7 +10,8 @@ mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editi
 mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/edit-in-osm.png umap/static/umap/vendors/editinosm/
 mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap/dist/** umap/static/umap/vendors/minimap/
 mkdir -p umap/static/umap/vendors/loading/ && cp -r node_modules/leaflet-loading/src/Control.Loading.* umap/static/umap/vendors/loading/
-mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/** umap/static/umap/vendors/markercluster/
+mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/leaflet.markercluster.* umap/static/umap/vendors/markercluster/
+mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/MarkerCluster.* umap/static/umap/vendors/markercluster/
 mkdir -p umap/static/umap/vendors/contextmenu/ && cp -r node_modules/leaflet-contextmenu/dist/leaflet.contextmenu.min.* umap/static/umap/vendors/contextmenu/
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/
 mkdir -p umap/static/umap/vendors/fullscreen/ && cp -r node_modules/leaflet-fullscreen/dist/** umap/static/umap/vendors/fullscreen/
