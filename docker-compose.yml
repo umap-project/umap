@@ -6,6 +6,7 @@ services:
     healthcheck:
         test: ["CMD-SHELL", "pg_isready -U postgres"]
         interval: 2s
+    # check https://hub.docker.com/r/postgis/postgis to see available versions
     image: postgis/postgis:14-3.3-alpine
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
@@ -16,18 +17,25 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    image: umap/umap:2.0.2
+    image: umap/umap:latest
     ports:
-      - "${PORT-8000}:8000"
+      # modify the external port (8001, on the left) if desired, but make sure it matches SITE_URL, below
+      - "8001:8000"
     environment:
       - DATABASE_URL=postgis://postgres@db/postgres
       - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
-      - SITE_URL=https://umap.local/
+      - SITE_URL=https://localhost:8001/
       - UMAP_ALLOW_ANONYMOUS=True
       - DEBUG=1
+      - STATIC_ROOT=/srv/umap/static
+      - MEDIA_ROOT=/srv/umap/uploads
     volumes:
-      - data:/srv/umap/uploads
+      - umap_userdata:/srv/umap/uploads
+      # FIX the path on the left, below, to your location
+      # OPTIONAL, you can comment the line below out for default
+      # values to apply
+      - /home/ubuntu/umap.conf:/etc/umap/umap.conf
 
 volumes:
-  data:
+  umap_userdata:
   db:
