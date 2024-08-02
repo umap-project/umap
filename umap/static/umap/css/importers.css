@@ -25,6 +25,10 @@
     background-size: 100%;
     vertical-align: -10px;
 }
+html[dir="rtl"] .importer h3:before {
+    margin-left: 10px;
+    margin-right: auto;
+}
 .importers ul [type=button]:before {
     background-image: url(../img/importers/random.svg);
     background-repeat: no-repeat;
