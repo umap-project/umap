@@ -59,3 +59,4 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
       combine_header_slug: true
+  - pymdownx.snippets
