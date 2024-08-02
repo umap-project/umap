@@ -476,7 +476,7 @@ def test_create_remote_data(page, live_server, tilelayer):
     page.route("*/**/ajax-proxy/**", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("link", name="Import data").click()
     page.get_by_placeholder("Provide an URL here").click()
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
@@ -513,7 +513,7 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("link", name="Import data").click()
     page.get_by_placeholder("Provide an URL here").click()
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
@@ -531,7 +531,7 @@ def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
         "overpass": {"url": "https://my.overpass.io/interpreter"}
     }
     page.goto(f"{live_server.url}/map/new/")
-    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("link", name="Import data").click()
     page.get_by_role("button", name="Overpass").click()
     page.get_by_placeholder("amenity=drinking_water").fill("building")
     page.get_by_role("button", name="Choose this data").click()
@@ -574,7 +574,7 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    page.get_by_role("link", name="Import data (Ctrl+I)").click()
+    page.get_by_role("link", name="Import data").click()
     page.get_by_role("button", name="Datasets").click()
     page.get_by_role("dialog").get_by_role("combobox").select_option(
         "https://remote.org/data.json"
