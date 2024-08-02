@@ -25,6 +25,11 @@ footer a.branding {
     padding-left: 70px;
     display: inline-block;
 }
+html[dir="rtl"] footer a.branding {
+    background-position: right center;
+    padding-right: 70px;
+    padding-left: 0;
+}
 
 footer .i18n_switch {
     display: inline-block;
@@ -55,6 +60,11 @@ footer .i18n_switch {
     display: block;
     font-size: 2.5rem;
 }
+html[dir="rtl"] .umap-nav h1 a {
+  background-position: right center;
+  padding-right: 80px;
+  padding-left: 0;
+}
 .umap-nav ul {
     text-align: center;
     font-weight: bold;
@@ -68,7 +78,11 @@ footer .i18n_switch {
     min-width: 150px;
     margin-left: 1rem;
 }
-
+html[dir="rtl"] .umap-nav .button,
+html[dir="rtl"] .umap-nav .button:hover {
+    margin-right: 1rem;
+    margin-left: auto;
+}
 @media only screen and (min-width: 500px) {
     .umap-nav ul li {
         display: inline-block;
