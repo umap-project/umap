@@ -4,6 +4,10 @@
     top: 0;
     display: none;
 }
+html[dir="rtl"] .umap-slideshow-toolbox {
+  left: 0;
+  right: auto;
+}
 .umap-slideshow-enabled .umap-slideshow-toolbox {
     display: inline-block;
 }
@@ -22,6 +26,10 @@
 .umap-slideshow-toolbox li + li {
     border-left: 1px solid var(--color-light);
 }
+html[dir="rtl"] .umap-slideshow-toolbox li + li {
+    border-right: 1px solid var(--color-light);
+    border-left: none;
+}
 .umap-slideshow-toolbox li:hover {
     background-color: var(--color-mediumGray);
 }
@@ -30,6 +38,12 @@
     width: calc(var(--footer-height) * 3);
     text-align: left;
     padding-left: 20px;
+}
+html[dir="rtl"] .umap-slideshow-active .umap-slideshow-toolbox .play,
+html[dir="rtl"] .umap-slideshow-toolbox .play {
+    text-align: right;
+    padding-right: 20px;
+    padding-left: 0;
 }
 .umap-slideshow-toolbox .play:after {
     content: '⏯︎';
@@ -43,8 +57,14 @@
 .umap-slideshow-toolbox .next:before {
     content: '⏵︎';
 }
+html[dir="rtl"] .umap-slideshow-toolbox .next:before {
+    content: '⏴︎';
+}
 .umap-slideshow-toolbox .prev:before {
     content: '⏴︎';
+}
+html[dir="rtl"] .umap-slideshow-toolbox .prev:before {
+    content: '⏵︎';
 }
 .umap-slideshow-toolbox .play div {
     height: 20px;
