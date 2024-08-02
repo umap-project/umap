@@ -40,7 +40,8 @@ jobs:
           sudo apt update
           sudo apt install libgdal-dev
           python -m pip install --upgrade pip
-          make develop installjs vendors
+          make develop
+          npm install mocha
       - name: run tests
         run: make test
         env:

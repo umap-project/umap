@@ -4,7 +4,6 @@ umap/settings/local/*
 docs/_build
 umap/remote_static
 tmp/*
-umap/static/umap/vendors
 site/*
 .pytest_cache/
 node_modules

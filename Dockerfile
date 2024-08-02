@@ -1,19 +1,5 @@
-FROM node:alpine AS vendors
-
-RUN apk add git
-
-WORKDIR /srv/umap
-
-COPY package.json .
-
-RUN npm install
-
-COPY . .
-
-RUN npm run vendors
-
 # This part installs deps needed at runtime.
-FROM python:3.11-slim as common
+FROM python:3.11-slim AS common
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -28,7 +14,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # This part adds deps needed only at buildtime.
-FROM common as build
+FROM common AS build
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -59,7 +45,6 @@ FROM common
 
 COPY --from=build /srv/umap/docker/ /srv/umap/docker/
 COPY --from=build /venv/ /venv/
-COPY --from=vendors /srv/umap/umap/static/umap/vendors /srv/umap/static/umap/vendors
 
 WORKDIR /srv/umap
 

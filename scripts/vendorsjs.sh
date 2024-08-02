@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 rm -rf umap/static/umap/vendors/
 
-mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/** umap/static/umap/vendors/leaflet/
+mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/leaflet-src.esm.* umap/static/umap/vendors/leaflet/
+mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/*.css umap/static/umap/vendors/leaflet/
+mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/images umap/static/umap/vendors/leaflet/images
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet-editable/src/Leaflet.Editable.js umap/static/umap/vendors/editable/
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet.path.drag/src/Path.Drag.js umap/static/umap/vendors/editable/
 mkdir -p umap/static/umap/vendors/hash/ && cp -r node_modules/leaflet-hash/leaflet-hash.js umap/static/umap/vendors/hash/
@@ -10,11 +12,12 @@ mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editi
 mkdir -p umap/static/umap/vendors/editinosm/ && cp -r node_modules/leaflet-editinosm/edit-in-osm.png umap/static/umap/vendors/editinosm/
 mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap/dist/** umap/static/umap/vendors/minimap/
 mkdir -p umap/static/umap/vendors/loading/ && cp -r node_modules/leaflet-loading/src/Control.Loading.* umap/static/umap/vendors/loading/
-mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/** umap/static/umap/vendors/markercluster/
+mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/leaflet.markercluster.* umap/static/umap/vendors/markercluster/
+mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/MarkerCluster.* umap/static/umap/vendors/markercluster/
 mkdir -p umap/static/umap/vendors/contextmenu/ && cp -r node_modules/leaflet-contextmenu/dist/leaflet.contextmenu.min.* umap/static/umap/vendors/contextmenu/
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/
 mkdir -p umap/static/umap/vendors/fullscreen/ && cp -r node_modules/leaflet-fullscreen/dist/** umap/static/umap/vendors/fullscreen/
-mkdir -p umap/static/umap/vendors/toolbar/ && cp -r node_modules/leaflet-toolbar/dist/** umap/static/umap/vendors/toolbar/
+mkdir -p umap/static/umap/vendors/toolbar/ && cp -r node_modules/leaflet-toolbar/dist/leaflet.toolbar.* umap/static/umap/vendors/toolbar/
 mkdir -p umap/static/umap/vendors/formbuilder/ && cp -r node_modules/leaflet-formbuilder/Leaflet.FormBuilder.js umap/static/umap/vendors/formbuilder/
 mkdir -p umap/static/umap/vendors/measurable/ && cp -r node_modules/leaflet-measurable/Leaflet.Measurable.* umap/static/umap/vendors/measurable/
 mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/leaflet.photon.js umap/static/umap/vendors/photon/
