@@ -95,8 +95,7 @@ h3[role="alert"] + p {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-html[dir="rtl"] [role="group"] input:not([type="checkbox"],
-html[dir="rtl"] [type="radio"]):not(:last-child),
+html[dir="rtl"] [role="group"] input:not([type="checkbox"], [type="radio"]):not(:last-child),
 html[dir="rtl"] [role="group"] > :not(:last-child) {
   border-top-right-radius: inherit;
   border-bottom-right-radius: inherit;
@@ -111,8 +110,7 @@ html[dir="rtl"] [role="group"] > :not(:last-child) {
   border-bottom-left-radius: 0;
   width: 45%;
 }
-html[dir="rtl"] [role="group"] input:not([type="checkbox"],
-html[dir="rtl"] [type="radio"]):not(:first-child),
+html[dir="rtl"] [role="group"] input:not([type="checkbox"], [type="radio"]):not(:first-child),
 html[dir="rtl"] [role="group"] > :not(:first-child)  {
   margin-left: auto;
   margin-right: 0;
