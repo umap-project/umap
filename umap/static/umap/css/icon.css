@@ -61,9 +61,6 @@ html[dir="rtl"] .icon-back {
 .icon-delete {
     background-position: -121px -49px;
 }
-html[dir="rtl"] .icon-delete {
-  background-position: -124px -49px;
-}
 .readonly .icon-delete,
 .off .icon-delete {
     background-position: -121px -122px;
