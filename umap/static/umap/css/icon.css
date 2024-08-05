@@ -14,15 +14,15 @@
     line-height: 24px;
 }
 .icon + span {
-    margin-left: 10px;
+    margin-inline-start: 10px;
 }
 .icon-block {
     display: block;
-    float: left;
-    margin-right: 10px;
+    float: inline-start;
+    margin-inline-end: 10px;
 }
 .icon-block + span {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 .dark .icon-16 {
     background-image: url('../img/16-white.svg');
@@ -30,8 +30,14 @@
 .icon-add {
     background-position: -26px -24px;
 }
+html[dir="rtl"] .icon-add {
+    background-position: -25px -24px;
+}
 .icon-back {
     background-position: -122px -144px;
+}
+html[dir="rtl"] .icon-back {
+  transform: scaleX(-1);
 }
 .icon-caption {
     background-position: -98px -24px;
@@ -42,14 +48,21 @@
 .icon-delete {
     background-position: -121px -49px;
 }
+html[dir="rtl"] .icon-delete {
+  background-position: -124px -49px;
+}
 .readonly .icon-delete,
 .off .icon-delete {
     background-position: -121px -122px;
 }
+html[dir="rtl"] .readonly .icon-delete,
+html[dir="rtl"] .off .icon-delete {
+  background-position: -124px -122px;
+}
 .icon-drag {
     background-position: -72px -73px;
     cursor: move;
-    float: right;
+    float: inline-end;
 }
 .icon-eye {
     background-position: -49px -26px;
@@ -60,11 +73,20 @@
 .icon-edit {
     background-position: -51px -49px;
 }
+html[dir="rtl"] .icon-edit {
+  background-position: -49px -49px;
+}
 .off .icon-edit {
     background-position: -51px -73px;
 }
+html[dir="rtl"] .off .icon-edit {
+  background-position: -49px -73px;
+}
 .icon-filters {
     background-position: -4px -24px;
+}
+html[dir="rtl"] .icon-filters {
+    background-position: -1px -24px;
 }
 .icon-key {
     background-position: -144px -121px;
@@ -99,8 +121,14 @@
 .icon-settings {
     background-position: -23px -97px;
 }
+html[dir="rtl"] .icon-settings {
+  background-position: -27px -97px;
+}
 .icon-share {
     background-position: 0px -120px;
+}
+html[dir="rtl"] .icon-share {
+  background-position: -3px -120px;
 }
 .icon-table {
     background-position: -50px -1px;
