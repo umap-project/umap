@@ -138,7 +138,7 @@
     font-size: 0.8em;
 }
 .umap-control-text [type="button"] {
-    float: right;
+    float: inline-end;
     background-color: #666;
     margin: 0;
     width: 36px;
@@ -154,7 +154,9 @@
     background-image: url('./img/16-white.svg');
     background-position: -52px -49px;
 }
-
+html[dir="rtl"] .leaflet-control-edit-enable [type="button"]:before {
+  background-position: -43px -49px;
+}
 .leaflet-control-edit-enable [type="button"] {
     width: initial;
     padding: 0 20px;
@@ -172,7 +174,7 @@
 }
 .umap-permanent-credits-container {
     max-width: 20rem;
-    margin-left: 5px!important;
+    margin-inline-start: 5px!important;
     margin-bottom: 5px!important;
     padding: 0.5rem;
 }
@@ -199,7 +201,7 @@
 }
 .leaflet-iconLayers-layerTitleContainer {
     display: none;
-    left: 0;
+    inset-inline-start: 0;
     overflow: hidden;
     min-height: 1.5rem;
     height: 1.5rem;
@@ -238,13 +240,13 @@ ul.photon-autocomplete {
     overflow: hidden;
     white-space: nowrap;
     font-size: 1em;
-    border-left: 4px solid #efefef;
+    border-inline-start: 4px solid #efefef;
 }
 .photon-autocomplete li strong {
     display: block;
 }
 .photon-autocomplete li.on {
-    border-left: 4px solid #2980b9;
+    border-inline-start: 4px solid #2980b9;
     cursor: pointer;
 }
 .photon-autocomplete li.photon-no-result {
@@ -255,14 +257,14 @@ ul.photon-autocomplete {
 }
 .photon-autocomplete .photon-feedback {
     display: block;
-    text-align: right;
+    text-align: end;
     font-size: 0.8em;
     padding: 3px;
     color: #999;
     border-top: 1px solid #eee;
 }
 .search-result-tools {
-    float: right;
+    float: inline-end;
     display: block;
 }
 
@@ -275,7 +277,7 @@ ul.photon-autocomplete {
     height: 1.2em;
     min-height: 1.2em;
     padding: 0;
-    text-align: left;
+    text-align: start;
     vertical-align: bottom;
 }
 .download-file:before,
@@ -290,8 +292,15 @@ ul.photon-autocomplete {
     vertical-align: bottom;
     display: inline-block;
 }
+html[dir="rtl"] .download-file:before,
+html[dir="rtl"] .download-backup:before {
+  background-position: 2px -145px;
+}
 .download-backup:before {
     background-position: -27px -144px;
+}
+html[dir="rtl"] .download-backup:before {
+    background-position: -22px -144px;
 }
 .leaflet-container .download-backup {
     color: black;
@@ -412,7 +421,7 @@ ul.photon-autocomplete {
     display: inline-block;
     width: 16px;
     height: 16px;
-    margin-left: 5px;
+    margin-inline-start: 5px;
     background-position: -4px -4px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
@@ -507,7 +516,7 @@ ul.photon-autocomplete {
 .leaflet-container .leaflet-control-edit-disable span,
 .leaflet-container .leaflet-control-edit-save span,
 .leaflet-container .leaflet-control-edit-cancel span {
-    margin-left: 10px;
+    margin-inline-start: 10px;
 }
 .leaflet-container .leaflet-control-edit-save:before {
     background-position: -148px -2px;
@@ -575,7 +584,7 @@ ul.photon-autocomplete {
     height: 46px;
     background-color: var(--color-darkGray);
     padding: 0 10px;
-    text-align: left;
+    text-align: start;
     line-height: var(--control-size);
     cursor: auto;
     border-bottom: 1px solid #222;
@@ -608,13 +617,16 @@ ul.photon-autocomplete {
     vertical-align: middle;
     text-indent: -9999px;
 }
+html[dir="rtl"] .umap-main-edit-toolbox .logo a {
+  text-indent: +9999px;
+}
 .umap-main-edit-toolbox .map-name {
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-weight: bold;
-    text-align: left;
+    text-align: start;
 }
 .umap-main-edit-toolbox .share-status {
     font-size: 1em;
@@ -622,10 +634,9 @@ ul.photon-autocomplete {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .map-name:after {
     content:  '\00a0';
-    padding-left: 3px;
+    padding-inline-start: 3px;
     width: 1ch;
     display: inline-block;
 }
@@ -640,11 +651,11 @@ ul.photon-autocomplete {
     display: inline;
 }
 .umap-caption-bar button {
-    margin-left: 10px;
+    margin-inline-start: 10px;
 }
 .umap-caption-bar button + button:before {
     content: '|';
-    padding-right: 10px;
+    padding-inline-end: 10px;
 }
 .umap-main-edit-toolbox .umap-user {
     color: #fff;
@@ -654,7 +665,7 @@ ul.photon-autocomplete {
 }
 .umap-main-edit-toolbox .umap-user:after {
     content: '|';
-    padding-left: 20px;
+    padding-inline-start: 20px;
     display: inline-block; /* Prevents underline on hover. */
 }
 .umap-caption-bar-enabled .umap-caption-bar {
@@ -667,7 +678,7 @@ ul.photon-autocomplete {
     bottom: 0;
     right: 0;
     padding: var(--gutter);
-    text-align: left;
+    text-align: start;
     line-height: 100%;
     cursor: auto;
     border-top: 1px solid var(--color-lightGray);
@@ -689,7 +700,7 @@ ul.photon-autocomplete {
     background-position: -122px -73px;
     background-repeat: no-repeat;
     background-image: url('./img/16-white.svg');
-    margin-right: 10px;
+    margin-inline-end: 10px;
 }
 
 .leaflet-toolbar-tip {
@@ -745,7 +756,7 @@ ul.photon-autocomplete {
 .umap-browser .feature-title {
     width: inherit;
     cursor: inherit;
-    padding-left: 6px;
+    padding-inline-start: 6px;
 }
 .umap-browser .feature-title {
     font-size: 12px;
@@ -816,7 +827,7 @@ a.umap-control-caption,
 .umap-browser h5, .umap-facet-search h5 {
     margin-bottom: 0;
     overflow: hidden;
-    padding-left: 5px;
+    padding-inline-start: 5px;
     height: 30px;
     line-height: 30px;
     background-color: var(--color-lightGray);
@@ -829,7 +840,7 @@ a.umap-control-caption,
     color: white;
 }
 .umap-browser h5 span {
-    margin-left: 10px;
+    margin-inline-start: 10px;
 }
 .umap-browser li, .umap-facet-search li {
     padding: 2px 0;
@@ -854,7 +865,7 @@ a.umap-control-caption,
     padding: 0;
     width: 24px;
     text-align: center;
-    margin-left: 5px;
+    margin-inline-start: 5px;
 }
 .umap-browser.dark .datalayer .feature-color {
     box-shadow: 0 0 2px 0 #999 inset;
@@ -879,8 +890,8 @@ a.umap-control-caption,
     background-position: -48px -25px;
 }
 .umap-browser .datalayer-toggle-list {
-    float: right;
-    margin-right: 5px;
+    float: inline-end;
+    margin-inline-end: 5px;
     background-position: -145px -70px;
 }
 .umap-browser .show-list .datalayer-toggle-list {
@@ -905,7 +916,7 @@ a.umap-control-caption,
     cursor: pointer;
 }
 .umap-caption .umap-map-owner {
-    padding-left: 31px;
+    padding-inline-start: 31px;
 }
 
 
@@ -932,7 +943,7 @@ a.umap-control-caption,
     height: 56px;
     line-height: 56px;
     opacity: 0.9;
-    padding-left: 10px;
+    padding-inline-start: 10px;
     position: absolute;
     width: 100%;
     text-align: center;
@@ -942,9 +953,9 @@ a.umap-control-caption,
     content: "✓";
     font-size: 1.3em;
     line-height: 56px;
-    padding-right: 7px;
+    padding-inline-end: 7px;
     position: absolute;
-    left: 7px;
+    inset-inline-start: 7px;
 }
 .umap-tilelayer-switcher-container li img {
     display: block;
@@ -958,7 +969,7 @@ a.umap-control-caption,
     display: inline-block;
     width: 16px;
     height: 16px;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     border: 1px solid #000;
     background-color: transparent;
     vertical-align: middle;
@@ -1008,7 +1019,7 @@ a.umap-control-caption,
     display: inline-block;
     width: 16px;
     height: 16px;
-    margin-left: 5px;
+    margin-inline-start: 5px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
     vertical-align: middle;
@@ -1020,8 +1031,14 @@ a.umap-control-caption,
 .umap-popup-footer li[rel="prev"]:before {
     background-position: -28px -77px;
 }
+html[dir="rtl"] .umap-popup-footer li[rel="prev"]:before {
+    background-position: -5px -77px;
+}
 .umap-popup-footer li[rel="next"]:before {
     background-position: -5px -77px;
+}
+html[dir="rtl"] .umap-popup-footer li[rel="next"]:before {
+    background-position: -28px -77px;
 }
 .umap-popup a:hover {
     text-decoration: underline;
@@ -1040,11 +1057,11 @@ a[href^='tel']::before {
   content: '☎︎ ';
 }
 address span {
-    padding-right: 5px;
+    padding-inline-end: 5px;
 }
 .osm-link {
     margin-top: 10px;
-    text-align: right;
+    text-align: end;
     font-style: italic;
 }
 span.popup-icon {
@@ -1071,7 +1088,7 @@ span.popup-icon {
     box-shadow: 7px 10px 10px -1px black;
     height: 36px;
     line-height: 36px;
-    margin-left: -2px;
+    margin-inline-start: -2px;
     margin-top: -4px;
     opacity: 1.0!important;
     width: 36px;
@@ -1086,7 +1103,7 @@ span.popup-icon {
     border-right: 8px solid transparent;
     border-top: 8px solid #2270b5;
     height: 0;
-    left: 8px;
+    inset-inline-start: 8px;
     position: relative;
     width: 0;
     opacity: 0.9;
@@ -1099,7 +1116,7 @@ span.popup-icon {
     border-right: 10px solid transparent;
     border-top: 16px solid #2270B5;
     height: 0;
-    left: 6px;
+    inset-inline-start: 6px;
     position: relative;
     top: -4px;
     width: 0;
@@ -1108,7 +1125,7 @@ span.popup-icon {
     border-left-width: 12px;
     border-right-width: 12px;
     border-top-width: 18px;
-    left: 4px;
+    inset-inline-start: 4px;
     opacity: 1.0!important;
 }
 .umap-drop-icon .icon_container {
@@ -1126,7 +1143,7 @@ span.popup-icon {
     border-radius: 18px 18px 18px 18px;
     height: 36px;
     line-height: 36px;
-    margin-left: -2px;
+    margin-inline-start: -2px;
     margin-top: -6px;
     opacity: 1.0!important;
     width: 36px;
@@ -1144,14 +1161,14 @@ span.popup-icon {
 .umap-circle-icon {
     border: 1px solid white;
     border-radius: 10px 10px 10px 10px;
-    margin-left: -6px;
+    margin-inline-start: -6px;
     margin-top: -6px;
     height: 12px;
     width: 12px;
 }
 .umap-circle-icon.umap-icon-active {
     height: 16px;
-    margin-left: -8px;
+    margin-inline-start: -8px;
     margin-top: -8px;
     opacity: 1.0!important;
     width: 16px;
@@ -1169,7 +1186,7 @@ span.popup-icon {
 .umap-ball-icon.umap-icon-active .icon_container {
     border-radius: 10px 10px 10px 10px;
     box-shadow: 1px 23px 7px -1px black;
-    margin-left: -2px;
+    margin-inline-start: -2px;
     margin-top: -4px;
     height: 20px;
     opacity: 1.0!important;
@@ -1178,7 +1195,7 @@ span.popup-icon {
 .umap-ball-icon .icon_arrow {
     background-color: black;
     height: 16px;
-    left: 7px;
+    inset-inline-start: 7px;
     opacity: 0.9;
     position: relative;
     top: -1px;
@@ -1375,7 +1392,7 @@ span.popup-icon {
     line-height: var(--control-size);
 }
 .leaflet-container .leaflet-control-zoom {
-    margin-left: 10px;
+    margin-inline-start: 10px;
 }
 .leaflet-top {
     z-index: calc(var(--zindex-panels) - 1);
@@ -1407,7 +1424,7 @@ span.popup-icon {
    background-color: #f6f6f6;
 }
 .umap-popup-content th {
-    text-align: left;
+    text-align: start;
 }
 .umap-popup-content td {
     word-break: break-word;
@@ -1492,7 +1509,7 @@ span.popup-icon {
         display: none;
     }
     .umap-main-edit-toolbox .umap-user {
-        margin-right: 10px;
+        margin-inline-end: 10px;
     }
     .umap-main-edit-toolbox .umap-user:after {
         display: none;
@@ -1519,13 +1536,11 @@ span.popup-icon {
 
     .leaflet-control-layers-expanded label {
         display: inline-block;
-        margin-right: 10px;
+        margin-inline-end: 10px;
     }
-
     .leaflet-control-layers-expanded {
-        margin-left: 10px;
+        margin-inline-start: 10px;
     }
-
     .umap-permanent-credits-container {
         max-width: 100%;
     }
