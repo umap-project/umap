@@ -763,6 +763,7 @@ const ControlsMixin = {
 U.TileLayerControl = L.Control.IconLayers.extend({
   initialize: function (map, options) {
     this.map = map
+    this.maxShown = 9
     L.Control.IconLayers.prototype.initialize.call(this, {
       position: 'topleft',
       manageLayers: false,
@@ -794,9 +795,25 @@ U.TileLayerControl = L.Control.IconLayers.extend({
         }
       })
     }
-    const maxShown = 10
-    L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, maxShown))
+    L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, this.maxShown))
     if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
+  },
+
+  _createLayerElements: function () {
+    L.Control.IconLayers.prototype._createLayerElements.call(this)
+    if (Object.keys(this._layers) <= this.maxShown) return
+    const lastRow = this._container.querySelector(
+      '.leaflet-iconLayers-layersRow:last-child'
+    )
+    const button = L.DomUtil.element({
+      tagName: 'button',
+      className: 'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
+      textContent: '+',
+      parent: lastRow,
+    })
+    L.DomEvent.on(button, 'click', () =>
+      this.map._controls.tilelayersChooser.openSwitcher()
+    )
   },
 })
 
@@ -806,7 +823,7 @@ U.TileLayerChooser = L.Control.extend({
     position: 'topleft',
   },
 
-  initialize: function (map, options) {
+  initialize: function (map, options = {}) {
     this.map = map
     L.Control.prototype.initialize.call(this, options)
   },
@@ -824,15 +841,13 @@ U.TileLayerChooser = L.Control.extend({
     return container
   },
 
-  openSwitcher: function (options) {
+  openSwitcher: function (options = {}) {
     const container = L.DomUtil.create('div', 'umap-tilelayer-switcher-container')
     L.DomUtil.createTitle(container, L._('Change tilelayers'), 'icon-tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
-    this.map.editPanel.open({
-      content: container,
-      className: options.className,
-    })
+    const panel = options.edit ? this.map.editPanel : this.map.panel
+    panel.open({ content: container })
   },
 
   buildList: function (options) {

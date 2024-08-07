@@ -843,11 +843,9 @@ U.Map = L.Map.extend({
       this.options.tilelayer = tilelayer.toJSON()
       this.isDirty = true
     }
-    if (this._controls.tilelayersChooser)
-      this._controls.tilelayersChooser.openSwitcher({
-        callback: callback,
-        className: 'dark',
-      })
+    if (this._controls.tilelayersChooser) {
+      this._controls.tilelayersChooser.openSwitcher({ callback, edit: true })
+    }
   },
 
   toGeoJSON: function () {
