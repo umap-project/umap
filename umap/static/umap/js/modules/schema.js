@@ -287,6 +287,11 @@ export const SCHEMA = {
     nullable: true,
     label: translate('Display the measure control'),
   },
+  mask: {
+    type: Boolean,
+    impacts: ['data'],
+    label: translate('Display the polygon inverted'),
+  },
   miniMap: {
     type: Boolean,
     impacts: ['ui'],

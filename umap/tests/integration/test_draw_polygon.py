@@ -420,3 +420,58 @@ def test_can_transform_polygon_to_line(live_server, page, tilelayer, settings):
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"]["type"] == "LineString"
+
+
+def test_can_draw_a_polygon_and_invert_it(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    paths = page.locator(".leaflet-overlay-pane path")
+    expect(paths).to_have_count(0)
+    page.get_by_title("Draw a polygon").click()
+    map = page.locator("#map")
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 100})
+    # Click again to finish
+    map.click(position={"x": 100, "y": 100})
+    expect(paths).to_have_count(1)
+    page.get_by_text("Advanced properties").click()
+    page.get_by_text("Display the polygon inverted").click()
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 1
+    assert data["features"][0]["geometry"]["type"] == "Polygon"
+    assert data["features"][0]["geometry"]["coordinates"] == [
+        [
+            [
+                -7.668457,
+                54.457267,
+            ],
+            [
+                -7.668457,
+                53.159947,
+            ],
+            [
+                -9.865723,
+                53.159947,
+            ],
+            [
+                -9.865723,
+                54.457267,
+            ],
+            [
+                -7.668457,
+                54.457267,
+            ],
+        ],
+    ]
+
+    page.get_by_role("button", name="View").click()
+    popup = page.locator(".leaflet-popup")
+    expect(popup).to_be_hidden()
+    # Now click on the middle of the polygon, it should not show the popup
+    map.click(position={"x": 150, "y": 150})
+    expect(popup).to_be_hidden()
+    # Click elsewhere on the map, it should now show the popup
+    map.click(position={"x": 250, "y": 250})
+    expect(popup).to_be_visible()
