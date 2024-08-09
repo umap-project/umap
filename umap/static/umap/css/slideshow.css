@@ -1,6 +1,6 @@
 .umap-slideshow-toolbox {
     position: absolute;
-    right: 0;
+    inset-inline-end: 0;
     top: 0;
     display: none;
 }
@@ -20,7 +20,7 @@
     text-align: center;
 }
 .umap-slideshow-toolbox li + li {
-    border-left: 1px solid var(--color-light);
+    border-inline-start: 1px solid var(--color-light);
 }
 .umap-slideshow-toolbox li:hover {
     background-color: var(--color-mediumGray);
@@ -28,8 +28,8 @@
 .umap-slideshow-active .umap-slideshow-toolbox .play,
 .umap-slideshow-toolbox .play {
     width: calc(var(--footer-height) * 3);
-    text-align: left;
-    padding-left: 20px;
+    text-align: start;
+    padding-inline-start: 20px;
 }
 .umap-slideshow-toolbox .play:after {
     content: '⏯︎';
@@ -43,8 +43,14 @@
 .umap-slideshow-toolbox .next:before {
     content: '⏵︎';
 }
+html[dir="rtl"] .umap-slideshow-toolbox .next:before {
+    content: '⏴︎';
+}
 .umap-slideshow-toolbox .prev:before {
     content: '⏴︎';
+}
+html[dir="rtl"] .umap-slideshow-toolbox .prev:before {
+    content: '⏵︎';
 }
 .umap-slideshow-toolbox .play div {
     height: 20px;

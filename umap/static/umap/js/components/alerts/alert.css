@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    left: 50%;
+    inset-inline-start: 50%;
     transform: translate(-50%, 0);
     max-width: calc(100% - var(--panel-gutter) * 2);
     width: max-content;
@@ -25,19 +25,28 @@
     min-width: 60%;
     background-size: 20px;
     background-position: 0 15px;
-    padding-left: 28px;
+    padding-inline-start: 28px;
 }
 .umap-alert[role="dialog"][data-level="info"] > div {
     background-image: url('../../../img/alert-icon-info.svg');
     background-repeat: no-repeat;
 }
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="info"] > div {
+  background-position: right;
+}
 .umap-alert[role="dialog"][data-level="success"] > div {
     background-image: url('../../../img/alert-icon-success.svg');
     background-repeat: no-repeat;
 }
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="success"] > div {
+  background-position: right;
+}
 .umap-alert[role="dialog"][data-level="error"] > div {
     background-image: url('../../../img/alert-icon-error.svg');
     background-repeat: no-repeat;
+}
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="error"] > div {
+    background-position: right;
 }
 .umap-alert[role="dialog"][data-level="error"] {
     background-color: var(--color-darkRed);
@@ -51,8 +60,11 @@
 }
 .umap-alert[role="dialog"] a[target="_blank"] {
     background: url('../../../img/icon-external-link.svg') no-repeat right center;
-    padding-right: 14px;
+    padding-inline-end: 14px;
     background-size: 12px;
+}
+html[dir="rtl"] .umap-alert[role="dialog"] a[target="_blank"] {
+    background: url('../../../img/icon-external-link.svg') no-repeat left center;
 }
 h3[role="alert"] {
     margin-bottom: 0;
@@ -74,14 +86,14 @@ h3[role="alert"] + p {
 }
 [role="group"] input:not([type="checkbox"], [type="radio"]):not(:last-child),
 [role="group"] > :not(:last-child) {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
 }
 [role="group"] input:not([type="checkbox"], [type="radio"]):not(:first-child),
 [role="group"] > :not(:first-child)  {
-  margin-left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  margin-inline-start: 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
   width: 45%;
 }
 [role="group"] input[type="submit"] {

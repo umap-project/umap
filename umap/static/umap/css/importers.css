@@ -21,7 +21,7 @@
     width: 36px;
     height: 36px;
     display: inline-block;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     background-size: 100%;
     vertical-align: -10px;
 }
