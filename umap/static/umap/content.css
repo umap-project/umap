@@ -358,6 +358,11 @@ ul.umap-autocomplete {
 .content .icon-delete {
     background-image: url('./img/icon-delete.svg');
 }
+html[dir="rtl"] .content .icon-edit,
+html[dir="rtl"] .content .icon-share,
+html[dir="rtl"] .content .icon-delete {
+  background-position: initial; /* this takes precedence over similar selector in icon.css and fixes position */
+}
 .table-header {
     display: flex;
     justify-content: space-between;
