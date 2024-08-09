@@ -1,3 +1,24 @@
+/* ************* */
+/* temporary fix */
+/* ************* */
+/* https://github.com/umap-project/umap/pull/2046#issuecomment-2278046469 */
+html[dir="rtl"] .leaflet-inplace-toolbar {
+    direction: ltr;
+}
+html[dir="rtl"] .leaflet-inplace-toolbar > * {
+    direction: rtl;
+}
+html[dir="rtl"] .leaflet-tooltip-pane {
+    direction: ltr;
+}
+html[dir="rtl"] .leaflet-tooltip-pane > * {
+    direction: rtl;
+}
+.marker-cluster div { /* fix cluster icon for rtl */
+    margin-left: unset;
+    margin-inline-start: 5px;
+}
+
 /* *********** */
 /* Map details */
 /* *********** */
