@@ -145,6 +145,7 @@ h2.tabs a {
     text-decoration-skip-ink: none;
     text-underline-offset: 7px;
     margin-inline-end: 2rem;
+    display: inline-block;
 }
 h2.tabs a:not(.selected) {
     font-weight: normal;
