@@ -3,6 +3,7 @@ import {
   Marker,
   Polyline,
   Polygon,
+  CircleMarker as BaseCircleMarker,
   DomUtil,
   LineUtil,
   latLng,
@@ -295,8 +296,8 @@ const PathMixin = {
 
   onAdd: function (map) {
     this._container = null
-    this.setStyle()
     FeatureMixin.onAdd.call(this, map)
+    this.setStyle()
     if (this.editing?.enabled()) this.editing.addHooks()
     this.resetTooltip()
     this._path.dataset.feature = this.feature.id
@@ -308,7 +309,7 @@ const PathMixin = {
   },
 
   setStyle: function (options = {}) {
-    for (const option of this.feature.getStyleOptions()) {
+    for (const option of this.getStyleOptions()) {
       options[option] = this.feature.getDynamicOption(option)
     }
     options.pointerEvents = options.interactive ? 'visiblePainted' : 'stroke'
@@ -396,6 +397,19 @@ const PathMixin = {
     if (!shape) return
     return this.feature.isolateShape(shape)
   },
+
+  getStyleOptions: () => [
+    'smoothFactor',
+    'color',
+    'opacity',
+    'stroke',
+    'weight',
+    'fill',
+    'fillColor',
+    'fillOpacity',
+    'dashArray',
+    'interactive',
+  ],
 }
 
 export const LeafletPolyline = Polyline.extend({
@@ -521,5 +535,19 @@ export const MaskPolygon = LeafletPolygon.extend({
   _defaultShape: function () {
     // Do not compute with world coordinates (eg. for centering the popup).
     return this._latlngs[1]
+  },
+})
+
+export const CircleMarker = BaseCircleMarker.extend({
+  parentClass: BaseCircleMarker,
+  includes: [FeatureMixin, PathMixin],
+  getClass: () => CircleMarker,
+  getStyleOptions: function () {
+    const options = PathMixin.getStyleOptions.call(this)
+    options.push('radius')
+    return options
+  },
+  getCenter: function () {
+    return this._latlng
   },
 })

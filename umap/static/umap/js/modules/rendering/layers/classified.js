@@ -2,11 +2,12 @@ import { FeatureGroup, DomUtil } from '../../../../vendors/leaflet/leaflet-src.e
 import { translate } from '../../i18n.js'
 import { LayerMixin } from './base.js'
 import * as Utils from '../../utils.js'
+import { CircleMarker } from '../ui.js'
 
 // Layer where each feature color is relative to the others,
 // so we need all features before behing able to set one
 // feature layer
-const RelativeColorLayerMixin = {
+const ClassifiedMixin = {
   initialize: function (datalayer) {
     this.datalayer = datalayer
     this.colorSchemes = Object.keys(colorbrewer)
@@ -16,9 +17,12 @@ const RelativeColorLayerMixin = {
     if (!Utils.isObject(this.datalayer.options[key])) {
       this.datalayer.options[key] = {}
     }
+    this.ensureOptions(this.datalayer.options[key])
     FeatureGroup.prototype.initialize.call(this, [], this.datalayer.options[key])
     LayerMixin.onInit.call(this, this.datalayer.map)
   },
+
+  ensureOptions: () => {},
 
   dataChanged: function () {
     this.redraw()
@@ -29,9 +33,15 @@ const RelativeColorLayerMixin = {
     if (this._map) this.eachLayer(this._map.addLayer, this._map)
   },
 
+  getStyleProperty: (feature) => {
+    return feature.staticOptions.mainColor
+  },
+
   getOption: function (option, feature) {
-    if (feature && option === feature.staticOptions.mainColor) {
-      return this.getColor(feature)
+    if (!feature) return
+    if (option === this.getStyleProperty(feature)) {
+      const value = this._getOption(feature)
+      return value
     }
   },
 
@@ -85,11 +95,10 @@ export const Choropleth = FeatureGroup.extend({
     NAME: translate('Choropleth'),
     TYPE: 'Choropleth',
   },
-  includes: [LayerMixin, RelativeColorLayerMixin],
+  includes: [LayerMixin, ClassifiedMixin],
   // Have defaults that better suit the choropleth mode.
   defaults: {
     color: 'white',
-    fillColor: 'red',
     fillOpacity: 0.7,
     weight: 2,
   },
@@ -142,13 +151,12 @@ export const Choropleth = FeatureGroup.extend({
     this.datalayer.options.choropleth.breaks = this.options.breaks
       .map((b) => +b.toFixed(2))
       .join(',')
-    const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     let colorScheme = this.datalayer.options.choropleth.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
     this.options.colors = colorbrewer[colorScheme][this.options.breaks.length - 1] || []
   },
 
-  getColor: function (feature) {
+  _getOption: function (feature) {
     if (!feature) return // FIXME should not happen
     const featureValue = this._getValue(feature)
     // Find the bucket/step/limit that this value is less than and give it that color
@@ -235,19 +243,101 @@ export const Choropleth = FeatureGroup.extend({
   },
 })
 
+export const Circles = FeatureGroup.extend({
+  statics: {
+    NAME: translate('Proportional circles'),
+    TYPE: 'Circles',
+  },
+  includes: [LayerMixin, ClassifiedMixin],
+  defaults: {
+    weight: 1,
+    UIClass: CircleMarker,
+  },
+
+  ensureOptions: function (options) {
+    if (!Utils.isObject(this.datalayer.options.circles.radius)) {
+      this.datalayer.options.circles.radius = {}
+    }
+  },
+
+  _getValue: function (feature) {
+    const key = this.datalayer.options.circles.property || 'value'
+    const value = +feature.properties[key]
+    if (!Number.isNaN(value)) return value
+  },
+
+  compute: function () {
+    const values = this.getValues()
+    this.options.minValue = Math.min(...values)
+    this.options.maxValue = Math.max(...values)
+  },
+
+  onEdit: function (field, builder) {
+    this.compute()
+  },
+
+  _getOption: function (feature) {
+    if (!feature) return // FIXME should not happen
+    const current = this._getValue(feature)
+    const minPX = this.datalayer.options.circles.radius?.min || 2
+    const maxPX = this.datalayer.options.circles.radius?.max || 50
+    const valuesRange = this.options.maxValue - this.options.minValue
+    const pxRange = maxPX - minPX
+    const radius = minPX + ((current - this.options.minValue) / valuesRange) * pxRange
+    return radius || minPX
+  },
+
+  getEditableOptions: function () {
+    return [
+      [
+        'options.circles.property',
+        {
+          handler: 'Select',
+          selectOptions: this.datalayer._propertiesIndex,
+          label: translate('Property name to compute circles'),
+        },
+      ],
+      [
+        'options.circles.radius.min',
+        {
+          handler: 'Range',
+          label: translate('Min circle radius'),
+          min: 2,
+          max: 10,
+          step: 1,
+        },
+      ],
+      [
+        'options.circles.radius.max',
+        {
+          handler: 'Range',
+          label: translate('Max circle radius'),
+          min: 12,
+          max: 50,
+          step: 2,
+        },
+      ],
+    ]
+  },
+
+  getStyleProperty: (feature) => {
+    return 'radius'
+  },
+})
+
 export const Categorized = FeatureGroup.extend({
   statics: {
     NAME: translate('Categorized'),
     TYPE: 'Categorized',
   },
-  includes: [LayerMixin, RelativeColorLayerMixin],
+  includes: [LayerMixin, ClassifiedMixin],
   MODES: {
     manual: translate('Manual'),
     alpha: translate('Alphabetical'),
   },
   defaults: {
     color: 'white',
-    fillColor: 'red',
+    // fillColor: 'red',
     fillOpacity: 0.7,
     weight: 2,
   },
@@ -258,7 +348,7 @@ export const Categorized = FeatureGroup.extend({
     return feature.properties[key]
   },
 
-  getColor: function (feature) {
+  _getOption: function (feature) {
     if (!feature) return // FIXME should not happen
     const featureValue = this._getValue(feature)
     for (let i = 0; i < this.options.categories.length; i++) {
@@ -290,7 +380,6 @@ export const Categorized = FeatureGroup.extend({
     }
     this.options.categories = categories
     this.datalayer.options.categorized.categories = this.options.categories.join(',')
-    const fillColor = this.datalayer.getOption('fillColor') || this.defaults.fillColor
     const colorScheme = this.datalayer.options.categorized.brewer
     this._classes = this.options.categories.length
     if (colorbrewer[colorScheme]?.[this._classes]) {

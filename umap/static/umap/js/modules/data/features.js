@@ -118,6 +118,10 @@ class Feature {
     this._ui = new klass(this, this.toLatLngs())
   }
 
+  getUIClass() {
+    return this.getOption('UIClass') || this.getDefaultUIClass()
+  }
+
   getClassName() {
     return this.staticOptions.className
   }
@@ -597,7 +601,7 @@ export class Point extends Feature {
     return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
   }
 
-  getUIClass() {
+  getDefaultUIClass() {
     return LeafletMarker
   }
 
@@ -690,21 +694,6 @@ class Path extends Feature {
     L.DomEvent.stop(event)
   }
 
-  getStyleOptions() {
-    return [
-      'smoothFactor',
-      'color',
-      'opacity',
-      'stroke',
-      'weight',
-      'fill',
-      'fillColor',
-      'fillOpacity',
-      'dashArray',
-      'interactive',
-    ]
-  }
-
   getShapeOptions() {
     return [
       'properties._umap_options.color',
@@ -723,7 +712,7 @@ class Path extends Feature {
 
   getStyle() {
     const options = {}
-    for (const option of this.getStyleOptions()) {
+    for (const option of this.ui.getStyleOptions()) {
       options[option] = this.getDynamicOption(option)
     }
     if (options.interactive) options.pointerEvents = 'visiblePainted'
@@ -816,7 +805,7 @@ export class LineString extends Path {
     return !this.coordinates.length
   }
 
-  getUIClass() {
+  getDefaultUIClass() {
     return LeafletPolyline
   }
 
@@ -933,7 +922,7 @@ export class Polygon extends Path {
     return !this.coordinates.length || !this.coordinates[0].length
   }
 
-  getUIClass() {
+  getDefaultUIClass() {
     if (this.getOption('mask')) return MaskPolygon
     return LeafletPolygon
   }

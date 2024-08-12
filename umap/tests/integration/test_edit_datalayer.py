@@ -107,7 +107,7 @@ def test_can_change_icon_class(live_server, openmap, page):
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-iconClass a.define").click()
-    page.get_by_text("Circle").click()
+    page.get_by_text("Circle", exact=True).click()
     expect(page.locator(".umap-circle-icon")).to_be_visible()
     expect(page.locator(".umap-div-icon")).to_be_hidden()
 
