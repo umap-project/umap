@@ -25,32 +25,32 @@ def test_basic_circles_layer(map, live_server, page):
     assert (
         page.locator("[data-feature=ca676]")
         .get_attribute("d")
-        .endswith("a24,24 0 1,0 -48,0 ")
+        .endswith("a31,31 0 1,0 -62,0 ")
     )
     assert (
         page.locator("[data-feature=cap64]")
         .get_attribute("d")
-        .endswith("a4,4 0 1,0 -8,0 ")
+        .endswith("a10,10 0 1,0 -20,0 ")
     )
     assert (
         page.locator("[data-feature=cap27]")
         .get_attribute("d")
-        .endswith("a3,3 0 1,0 -6,0 ")
+        .endswith("a6,6 0 1,0 -12,0 ")
     )
     assert (
         page.locator("[data-feature=capa8]")
         .get_attribute("d")
-        .endswith("a2,2 0 1,0 -4,0 ")
+        .endswith("a4,4 0 1,0 -8,0 ")
     )
     assert (
         page.locator("[data-feature=capa6]")
         .get_attribute("d")
-        .endswith("a2,2 0 1,0 -4,0 ")
+        .endswith("a3,3 0 1,0 -6,0 ")
     )
     assert (
         page.locator("[data-feature=capa4]")
         .get_attribute("d")
-        .endswith("a2,2 0 1,0 -4,0 ")
+        .endswith("a3,3 0 1,0 -6,0 ")
     )
     assert (
         page.locator("[data-feature=capa3]")

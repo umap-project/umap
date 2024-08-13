@@ -263,7 +263,7 @@ export const Circles = FeatureGroup.extend({
   _getValue: function (feature) {
     const key = this.datalayer.options.circles.property || 'value'
     const value = +feature.properties[key]
-    if (!Number.isNaN(value)) return value
+    if (!Number.isNaN(value)) return Math.sqrt(value)
   },
 
   compute: function () {
