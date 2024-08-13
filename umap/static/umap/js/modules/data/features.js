@@ -9,7 +9,12 @@ import * as Utils from '../utils.js'
 import { SCHEMA } from '../schema.js'
 import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
-import { LeafletMarker, LeafletPolyline, LeafletPolygon } from '../rendering/ui.js'
+import {
+  LeafletMarker,
+  LeafletPolyline,
+  LeafletPolygon,
+  MaskPolygon,
+} from '../rendering/ui.js'
 import loadPopup from '../rendering/popup.js'
 
 class Feature {
@@ -60,7 +65,7 @@ class Feature {
   }
 
   get ui() {
-    if (!this._ui) this._ui = this.makeUI()
+    if (!this._ui) this.makeUI()
     return this._ui
   }
 
@@ -76,13 +81,41 @@ class Feature {
     return this.ui.getBounds()
   }
 
+  get type() {
+    return this.geometry.type
+  }
+
+  get coordinates() {
+    return this.geometry.coordinates
+  }
+
   get geometry() {
     return this._geometry
   }
 
   set geometry(value) {
     this._geometry = value
-    this.geometryChanged()
+    this.pushGeometry()
+  }
+
+  pushGeometry() {
+    this.ui.setLatLngs(this.toLatLngs())
+  }
+
+  pullGeometry(sync = true) {
+    this.fromLatLngs(this.ui.getLatLngs())
+    if (sync) {
+      this.sync.update('geometry', this.geometry)
+    }
+  }
+
+  fromLatLngs(latlngs) {
+    this._geometry = this.convertLatLngs(latlngs)
+  }
+
+  makeUI() {
+    const klass = this.getUIClass()
+    this._ui = new klass(this, this.toLatLngs())
   }
 
   getClassName() {
@@ -536,7 +569,13 @@ class Feature {
 
   redraw() {
     if (this.datalayer?.isVisible()) {
-      this.ui._redraw()
+      if (this.getUIClass() !== this.ui.getClass()) {
+        this.datalayer.hideFeature(this)
+        this.makeUI()
+        this.datalayer.showFeature(this)
+      } else {
+        this.ui._redraw()
+      }
     }
   }
 }
@@ -550,20 +589,16 @@ export class Point extends Feature {
     }
   }
 
-  get coordinates() {
-    return GeoJSON.coordsToLatLng(this.geometry.coordinates)
+  toLatLngs() {
+    return GeoJSON.coordsToLatLng(this.coordinates)
   }
 
-  set coordinates(latlng) {
-    this.geometry.coordinates = GeoJSON.latLngToCoords(latlng)
+  convertLatLngs(latlng) {
+    return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
   }
 
-  geometryChanged() {
-    this.ui.setLatLng(this.coordinates)
-  }
-
-  makeUI() {
-    return new LeafletMarker(this)
+  getUIClass() {
+    return LeafletMarker
   }
 
   hasGeom() {
@@ -620,27 +655,13 @@ export class Point extends Feature {
 
   isOnScreen(bounds) {
     bounds = bounds || this.map.getBounds()
-    return bounds.contains(this.coordinates)
+    return bounds.contains(this.toLatLngs())
   }
 }
 
 class Path extends Feature {
   hasGeom() {
     return !this.isEmpty()
-  }
-
-  get coordinates() {
-    return this._toLatlngs(this.geometry)
-  }
-
-  set coordinates(latlngs) {
-    const { coordinates, type } = this._toGeometry(latlngs)
-    this.geometry.coordinates = coordinates
-    this.geometry.type = type
-  }
-
-  geometryChanged() {
-    this.ui.setLatLngs(this.coordinates)
   }
 
   connectToDataLayer(datalayer) {
@@ -722,18 +743,18 @@ class Path extends Feature {
   transferShape(at, to) {
     const shape = this.ui.enableEdit().deleteShapeAt(at)
     // FIXME: make Leaflet.Editable send an event instead
-    this.ui.geometryChanged()
+    this.pullGeometry()
     this.ui.disableEdit()
     if (!shape) return
     to.ui.enableEdit().appendShape(shape)
-    to.ui.geometryChanged()
+    to.pullGeometry()
     if (this.isEmpty()) this.del()
   }
 
   isolateShape(latlngs) {
     const properties = this.cloneProperties()
     const type = this instanceof LineString ? 'LineString' : 'Polygon'
-    const geometry = this._toGeometry(latlngs)
+    const geometry = this.convertLatLngs(latlngs)
     const other = this.datalayer.makeFeature({ type, geometry, properties })
     other.edit()
     return other
@@ -776,14 +797,11 @@ export class LineString extends Path {
     }
   }
 
-  _toLatlngs(geometry) {
-    return GeoJSON.coordsToLatLngs(
-      geometry.coordinates,
-      geometry.type === 'LineString' ? 0 : 1
-    )
+  toLatLngs(geometry) {
+    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'LineString' ? 0 : 1)
   }
 
-  _toGeometry(latlngs) {
+  convertLatLngs(latlngs) {
     let multi = !LineUtil.isFlat(latlngs)
     let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
     if (coordinates.length === 1 && typeof coordinates[0][0] !== 'number') {
@@ -798,8 +816,8 @@ export class LineString extends Path {
     return !this.coordinates.length
   }
 
-  makeUI() {
-    return new LeafletPolyline(this)
+  getUIClass() {
+    return LeafletPolyline
   }
 
   isSameClass(other) {
@@ -875,7 +893,7 @@ export class LineString extends Path {
     while (latlngs.length > 1) {
       latlngs.splice(0, 2, this._mergeShapes(latlngs[1], latlngs[0]))
     }
-    this.setLatLngs(latlngs[0])
+    this.ui.setLatLngs(latlngs[0])
     if (!this.editEnabled()) this.edit()
     this.editor.reset()
     this.isDirty = true
@@ -895,14 +913,11 @@ export class Polygon extends Path {
     }
   }
 
-  _toLatlngs(geometry) {
-    return GeoJSON.coordsToLatLngs(
-      geometry.coordinates,
-      geometry.type === 'Polygon' ? 1 : 2
-    )
+  toLatLngs() {
+    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'Polygon' ? 1 : 2)
   }
 
-  _toGeometry(latlngs) {
+  convertLatLngs(latlngs) {
     const holes = !LineUtil.isFlat(latlngs)
     let multi = holes && !LineUtil.isFlat(latlngs[0])
     let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
@@ -918,8 +933,9 @@ export class Polygon extends Path {
     return !this.coordinates.length || !this.coordinates[0].length
   }
 
-  makeUI() {
-    return new LeafletPolygon(this)
+  getUIClass() {
+    if (this.getOption('mask')) return MaskPolygon
+    return LeafletPolygon
   }
 
   isSameClass(other) {
@@ -967,6 +983,12 @@ export class Polygon extends Path {
     const polyline = this.datalayer.makeFeature(geojson)
     polyline.edit()
     this.del()
+  }
+
+  getAdvancedOptions() {
+    const actions = super.getAdvancedOptions()
+    actions.push('properties._umap_options.mask')
+    return actions
   }
 
   getAdvancedEditActions(container) {
