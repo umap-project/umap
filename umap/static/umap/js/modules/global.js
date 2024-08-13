@@ -25,6 +25,7 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
+import * as Icon from './rendering/icon.js'
 import { DataLayer, LAYER_TYPES } from './data/layer.js'
 import { DataLayerPermissions, MapPermissions } from './permissions.js'
 import { Point, LineString, Polygon } from './data/features.js'
@@ -51,6 +52,7 @@ window.U = {
   FullPanel,
   Help,
   HTTPError,
+  Icon,
   Importer,
   LAYER_TYPES,
   LeafletMarker,
