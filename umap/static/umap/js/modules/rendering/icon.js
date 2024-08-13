@@ -1,15 +1,36 @@
-U.Icon = L.DivIcon.extend({
-  statics: {
-    RECENT: [],
-  },
+import {
+  DomEvent,
+  DomUtil,
+  DivIcon,
+  Icon,
+} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import * as Utils from '../utils.js'
+import { SCHEMA } from '../schema.js'
+
+export function getClass(name) {
+  switch (name) {
+    case 'Circle':
+      return Circle
+    case 'Ball':
+      return Ball
+    case 'Drop':
+      return Drop
+    default:
+      return DefaultIcon
+  }
+}
+
+export const RECENT = []
+
+const BaseIcon = L.DivIcon.extend({
   initialize: function (options) {
     const default_options = {
       iconSize: null, // Made in css
-      iconUrl: U.SCHEMA.iconUrl.default,
+      iconUrl: SCHEMA.iconUrl.default,
       feature: null,
     }
     options = L.Util.extend({}, default_options, options)
-    L.Icon.prototype.initialize.call(this, options)
+    Icon.prototype.initialize.call(this, options)
     this.feature = this.options.feature
     if (this.feature?.isReadOnly()) {
       this.options.className += ' readonly'
@@ -17,10 +38,10 @@ U.Icon = L.DivIcon.extend({
   },
 
   _setRecent: (url) => {
-    if (U.Utils.hasVar(url)) return
-    if (url === U.SCHEMA.iconUrl.default) return
-    if (U.Icon.RECENT.indexOf(url) === -1) {
-      U.Icon.RECENT.push(url)
+    if (Utils.hasVar(url)) return
+    if (url === SCHEMA.iconUrl.default) return
+    if (RECENT.indexOf(url) === -1) {
+      RECENT.push(url)
     }
   },
 
@@ -32,29 +53,26 @@ U.Icon = L.DivIcon.extend({
     } else {
       url = this.options[`${name}Url`]
     }
-    return this.formatUrl(url, this.feature)
+    return formatUrl(url, this.feature)
   },
 
   _getColor: function () {
     let color
     if (this.feature) color = this.feature.getDynamicOption('color')
     else if (this.options.color) color = this.options.color
-    else color = U.SCHEMA.color.default
+    else color = SCHEMA.color.default
     return color
   },
 
   _getOpacity: function () {
     if (this.feature) return this.feature.getOption('iconOpacity')
-    return U.SCHEMA.iconOpacity.default
+    return SCHEMA.iconOpacity.default
   },
-
-  formatUrl: (url, feature) =>
-    U.Utils.greedyTemplate(url || '', feature ? feature.extendedProperties() : {}),
 
   onAdd: () => {},
 })
 
-U.Icon.Default = U.Icon.extend({
+const DefaultIcon = BaseIcon.extend({
   default_options: {
     iconAnchor: new L.Point(16, 40),
     popupAnchor: new L.Point(0, -40),
@@ -64,11 +82,11 @@ U.Icon.Default = U.Icon.extend({
 
   initialize: function (options) {
     options = L.Util.extend({}, this.default_options, options)
-    U.Icon.prototype.initialize.call(this, options)
+    BaseIcon.prototype.initialize.call(this, options)
   },
 
   _setIconStyles: function (img, name) {
-    U.Icon.prototype._setIconStyles.call(this, img, name)
+    BaseIcon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor()
     const opacity = this._getOpacity()
     this.elements.container.style.backgroundColor = color
@@ -80,29 +98,29 @@ U.Icon.Default = U.Icon.extend({
   onAdd: function () {
     const src = this._getIconUrl('icon')
     const bgcolor = this._getColor()
-    U.Icon.setIconContrast(this.elements.icon, this.elements.container, src, bgcolor)
+    setContrast(this.elements.icon, this.elements.container, src, bgcolor)
   },
 
   createIcon: function () {
     this.elements = {}
-    this.elements.main = L.DomUtil.create('div')
-    this.elements.container = L.DomUtil.create(
+    this.elements.main = DomUtil.create('div')
+    this.elements.container = DomUtil.create(
       'div',
       'icon_container',
       this.elements.main
     )
     this.elements.main.dataset.feature = this.feature?.id
-    this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
+    this.elements.arrow = DomUtil.create('div', 'icon_arrow', this.elements.main)
     const src = this._getIconUrl('icon')
     if (src) {
-      this.elements.icon = U.Icon.makeIconElement(src, this.elements.container)
+      this.elements.icon = makeElement(src, this.elements.container)
     }
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
 })
 
-U.Icon.Circle = U.Icon.extend({
+const Circle = BaseIcon.extend({
   initialize: function (options) {
     const default_options = {
       popupAnchor: new L.Point(0, -6),
@@ -110,18 +128,18 @@ U.Icon.Circle = U.Icon.extend({
       className: 'umap-circle-icon',
     }
     options = L.Util.extend({}, default_options, options)
-    U.Icon.prototype.initialize.call(this, options)
+    BaseIcon.prototype.initialize.call(this, options)
   },
 
   _setIconStyles: function (img, name) {
-    U.Icon.prototype._setIconStyles.call(this, img, name)
+    BaseIcon.prototype._setIconStyles.call(this, img, name)
     this.elements.main.style.backgroundColor = this._getColor()
     this.elements.main.style.opacity = this._getOpacity()
   },
 
   createIcon: function () {
     this.elements = {}
-    this.elements.main = L.DomUtil.create('div')
+    this.elements.main = DomUtil.create('div')
     this.elements.main.innerHTML = '&nbsp;'
     this._setIconStyles(this.elements.main, 'icon')
     this.elements.main.dataset.feature = this.feature?.id
@@ -129,7 +147,7 @@ U.Icon.Circle = U.Icon.extend({
   },
 })
 
-U.Icon.Drop = U.Icon.Default.extend({
+const Drop = DefaultIcon.extend({
   default_options: {
     iconAnchor: new L.Point(16, 42),
     popupAnchor: new L.Point(0, -42),
@@ -138,7 +156,7 @@ U.Icon.Drop = U.Icon.Default.extend({
   },
 })
 
-U.Icon.Ball = U.Icon.Default.extend({
+const Ball = DefaultIcon.extend({
   default_options: {
     iconAnchor: new L.Point(8, 30),
     popupAnchor: new L.Point(0, -28),
@@ -148,20 +166,20 @@ U.Icon.Ball = U.Icon.Default.extend({
 
   createIcon: function () {
     this.elements = {}
-    this.elements.main = L.DomUtil.create('div')
-    this.elements.container = L.DomUtil.create(
+    this.elements.main = DomUtil.create('div')
+    this.elements.container = DomUtil.create(
       'div',
       'icon_container',
       this.elements.main
     )
     this.elements.main.dataset.feature = this.feature?.id
-    this.elements.arrow = L.DomUtil.create('div', 'icon_arrow', this.elements.main)
+    this.elements.arrow = DomUtil.create('div', 'icon_arrow', this.elements.main)
     this._setIconStyles(this.elements.main, 'icon')
     return this.elements.main
   },
 
   _setIconStyles: function (img, name) {
-    U.Icon.prototype._setIconStyles.call(this, img, name)
+    BaseIcon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor('color')
     let background
     if (L.Browser.ielt9) {
@@ -176,7 +194,7 @@ U.Icon.Ball = U.Icon.Default.extend({
   },
 })
 
-U.Icon.Cluster = L.DivIcon.extend({
+export const Cluster = DivIcon.extend({
   options: {
     iconSize: [40, 40],
   },
@@ -187,9 +205,9 @@ U.Icon.Cluster = L.DivIcon.extend({
   },
 
   createIcon: function () {
-    const container = L.DomUtil.create('div', 'leaflet-marker-icon marker-cluster')
-    const div = L.DomUtil.create('div', '', container)
-    const span = L.DomUtil.create('span', '', div)
+    const container = DomUtil.create('div', 'leaflet-marker-icon marker-cluster')
+    const div = DomUtil.create('div', '', container)
+    const span = DomUtil.create('span', '', div)
     const backgroundColor = this.datalayer.getColor()
     span.textContent = this.cluster.getChildCount()
     div.style.backgroundColor = backgroundColor
@@ -202,27 +220,28 @@ U.Icon.Cluster = L.DivIcon.extend({
     if (this.datalayer.options.cluster?.textColor) {
       color = this.datalayer.options.cluster.textColor
     }
-    return color || L.DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
+    return color || DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
   },
 })
 
-U.Icon.isImg = (src) =>
-  U.Utils.isPath(src) || U.Utils.isRemoteUrl(src) || U.Utils.isDataImage(src)
+export function isImg(src) {
+  return Utils.isPath(src) || Utils.isRemoteUrl(src) || Utils.isDataImage(src)
+}
 
-U.Icon.makeIconElement = (src, parent) => {
+export function makeElement(src, parent) {
   let icon
-  if (U.Icon.isImg(src)) {
-    icon = L.DomUtil.create('img')
+  if (isImg(src)) {
+    icon = DomUtil.create('img')
     icon.src = src
   } else {
-    icon = L.DomUtil.create('span')
+    icon = DomUtil.create('span')
     icon.textContent = src
   }
   parent.appendChild(icon)
   return icon
 }
 
-U.Icon.setIconContrast = (icon, parent, src, bgcolor) => {
+export function setContrast(icon, parent, src, bgcolor) {
   /*
    * icon: the element we'll adapt the style, it can be an image or text
    * parent: the element we'll consider to decide whether to adapt the style,
@@ -233,14 +252,10 @@ U.Icon.setIconContrast = (icon, parent, src, bgcolor) => {
    */
   if (!icon) return
 
-  if (L.DomUtil.contrastedColor(parent, bgcolor)) {
+  if (DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
     // only for internal SVG, as invert could do weird things
-    if (
-      U.Utils.isPath(src) &&
-      src.endsWith('.svg') &&
-      src !== U.SCHEMA.iconUrl.default
-    ) {
+    if (Utils.isPath(src) && src.endsWith('.svg') && src !== SCHEMA.iconUrl.default) {
       // Must be called after icon container is added to the DOM
       // An image
       icon.style.filter = 'invert(1)'
@@ -249,4 +264,8 @@ U.Icon.setIconContrast = (icon, parent, src, bgcolor) => {
       icon.style.color = 'white'
     }
   }
+}
+
+export function formatUrl(url, feature) {
+  return Utils.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
 }

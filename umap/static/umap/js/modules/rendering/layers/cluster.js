@@ -1,10 +1,10 @@
 // WARNING must be loaded dynamically, or at least after leaflet.markercluster
 // Uses global L.MarkerCluster and L.MarkerClusterGroup, not exposed as ESM
-// Uses global U.Icon not yet a module
 import { translate } from '../../i18n.js'
 import { LayerMixin } from './base.js'
 import * as Utils from '../../utils.js'
 import { Evented } from '../../../../vendors/leaflet/leaflet-src.esm.js'
+import { Cluster as ClusterIcon } from '../icon.js'
 
 const MarkerCluster = L.MarkerCluster.extend({
   // Custom class so we can call computeTextColor
@@ -34,7 +34,7 @@ export const Cluster = L.MarkerClusterGroup.extend({
       polygonOptions: {
         color: this.datalayer.getColor(),
       },
-      iconCreateFunction: (cluster) => new U.Icon.Cluster(datalayer, cluster),
+      iconCreateFunction: (cluster) => new ClusterIcon(datalayer, cluster),
     }
     if (this.datalayer.options.cluster?.radius) {
       options.maxClusterRadius = this.datalayer.options.cluster.radius

@@ -11,6 +11,7 @@ import {
 import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as Utils from '../utils.js'
+import * as Icon from './icon.js'
 
 const FeatureMixin = {
   initialize: function (feature, latlngs) {
@@ -219,7 +220,7 @@ export const LeafletMarker = Marker.extend({
   },
 
   getIcon: function () {
-    const Class = U.Icon[this.getIconClass()] || U.Icon.Default
+    const Class = Icon.getClass(this.getIconClass())
     return new Class({ feature: this.feature })
   },
 

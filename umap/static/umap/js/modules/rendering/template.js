@@ -1,6 +1,7 @@
 import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate, getLocale } from '../i18n.js'
 import * as Utils from '../utils.js'
+import * as Icon from './icon.js'
 
 export default function loadTemplate(name, feature, container) {
   let klass = PopupTemplate
@@ -160,9 +161,9 @@ class OSM extends TitleMixin(PopupTemplate) {
     const color = feature.getPreviewColor()
     title.style.backgroundColor = color
     const iconUrl = feature.getDynamicOption('iconUrl')
-    const icon = U.Icon.makeIconElement(iconUrl, title)
+    const icon = Icon.makeElement(iconUrl, title)
     DomUtil.addClass(icon, 'icon')
-    U.Icon.setIconContrast(icon, title, iconUrl, color)
+    Icon.setContrast(icon, title, iconUrl, color)
     if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
     DomUtil.add('span', '', title, this.getName(feature))
     const street = props['addr:street']

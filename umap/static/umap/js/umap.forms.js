@@ -550,7 +550,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       // Do not try to render URL with variables
       const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
       L.DomEvent.on(box, 'click', this.onDefine, this)
-      const icon = U.Icon.makeIconElement(this.value(), box)
+      const icon = U.Icon.makeElement(this.value(), box)
     }
     this.button = L.DomUtil.createButton(
       'button action-button',
@@ -571,7 +571,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
     if (search && U.Utils.normalize(title).indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass
     const container = L.DomUtil.create('div', className, parent)
-    U.Icon.makeIconElement(value, container)
+    U.Icon.makeElement(value, container)
     container.title = title
     L.DomEvent.on(
       container,

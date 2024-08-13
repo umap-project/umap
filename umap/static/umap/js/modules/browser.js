@@ -1,5 +1,6 @@
 import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import * as Icon from './rendering/icon.js'
 
 export default class Browser {
   constructor(map) {
@@ -34,14 +35,14 @@ export default class Browser {
     const colorBox = DomUtil.create('i', 'icon icon-16 feature-color', row)
     const title = DomUtil.create('span', 'feature-title', row)
     const symbol = feature._getIconUrl
-      ? U.Icon.prototype.formatUrl(feature._getIconUrl(), feature)
+      ? Icon.formatUrl(feature._getIconUrl(), feature)
       : null
     title.textContent = feature.getDisplayName() || '—'
     const bgcolor = feature.getPreviewColor()
     colorBox.style.backgroundColor = bgcolor
     if (symbol && symbol !== U.SCHEMA.iconUrl.default) {
-      const icon = U.Icon.makeIconElement(symbol, colorBox)
-      U.Icon.setIconContrast(icon, colorBox, symbol, bgcolor)
+      const icon = Icon.makeElement(symbol, colorBox)
+      Icon.setContrast(icon, colorBox, symbol, bgcolor)
     }
     const viewFeature = (e) => {
       feature.zoomTo({ ...e, callback: feature.view })
