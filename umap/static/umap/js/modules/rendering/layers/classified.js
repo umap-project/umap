@@ -263,28 +263,33 @@ export const Circles = FeatureGroup.extend({
   _getValue: function (feature) {
     const key = this.datalayer.options.circles.property || 'value'
     const value = +feature.properties[key]
-    if (!Number.isNaN(value)) return Math.sqrt(value)
+    if (!Number.isNaN(value)) return value
   },
 
   compute: function () {
     const values = this.getValues()
-    this.options.minValue = Math.min(...values)
-    this.options.maxValue = Math.max(...values)
+    this.options.minValue = Math.sqrt(Math.min(...values))
+    this.options.maxValue = Math.sqrt(Math.max(...values))
+    this.options.minPX = this.datalayer.options.circles.radius?.min || 2
+    this.options.maxPX = this.datalayer.options.circles.radius?.max || 50
   },
 
   onEdit: function (field, builder) {
     this.compute()
   },
 
+  _computeRadius: function (value) {
+    const valuesRange = this.options.maxValue - this.options.minValue
+    const pxRange = this.options.maxPX - this.options.minPX
+    const radius =
+      this.options.minPX +
+      ((Math.sqrt(value) - this.options.minValue) / valuesRange) * pxRange
+    return radius || this.options.minPX
+  },
+
   _getOption: function (feature) {
     if (!feature) return // FIXME should not happen
-    const current = this._getValue(feature)
-    const minPX = this.datalayer.options.circles.radius?.min || 2
-    const maxPX = this.datalayer.options.circles.radius?.max || 50
-    const valuesRange = this.options.maxValue - this.options.minValue
-    const pxRange = maxPX - minPX
-    const radius = minPX + ((current - this.options.minValue) / valuesRange) * pxRange
-    return radius || minPX
+    return this._computeRadius(this._getValue(feature))
   },
 
   getEditableOptions: function () {
@@ -322,6 +327,32 @@ export const Circles = FeatureGroup.extend({
 
   getStyleProperty: (feature) => {
     return 'radius'
+  },
+
+  renderLegend: function (container) {
+    const parent = DomUtil.create('ul', 'circles-layer-legend', container)
+    const color = this.datalayer.getOption('color')
+    const values = this.getValues()
+    if (!values.length) return
+    values.sort((a, b) => a - b)
+    const minValue = values[0]
+    const maxValue = values[values.length - 1]
+    const medianValue = values[Math.round(values.length / 2)]
+    const items = [
+      [this.options.minPX, minValue],
+      [this._computeRadius(medianValue), medianValue],
+      [this.options.maxPX, maxValue],
+    ]
+    for (const [size, label] of items) {
+      const li = DomUtil.create('li', '', parent)
+      const circleEl = DomUtil.create('span', 'circle', li)
+      circleEl.style.backgroundColor = color
+      circleEl.style.height = `${size * 2}px`
+      circleEl.style.width = `${size * 2}px`
+      circleEl.style.opacity = this.datalayer.getOption('opacity')
+      const labelEl = DomUtil.create('span', 'label', li)
+      labelEl.textContent = label
+    }
   },
 })
 
