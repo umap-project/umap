@@ -119,7 +119,7 @@ class Feature {
   }
 
   getUIClass() {
-    return this.getOption('UIClass') || this.getDefaultUIClass()
+    return this.getOption('UIClass')
   }
 
   getClassName() {
@@ -560,8 +560,8 @@ class Feature {
       properties.lon = center.lng
       properties.lng = center.lng
       properties.alt = center?.alt
-      if (typeof this.getMeasure !== 'undefined') {
-        properties.measure = this.getMeasure()
+      if (typeof this.ui.getMeasure !== 'undefined') {
+        properties.measure = this.ui.getMeasure()
       }
     }
     return L.extend(properties, this.properties)
@@ -601,8 +601,8 @@ export class Point extends Feature {
     return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
   }
 
-  getDefaultUIClass() {
-    return LeafletMarker
+  getUIClass() {
+    return super.getUIClass() || LeafletMarker
   }
 
   hasGeom() {
@@ -710,16 +710,6 @@ class Path extends Feature {
     ]
   }
 
-  getStyle() {
-    const options = {}
-    for (const option of this.ui.getStyleOptions()) {
-      options[option] = this.getDynamicOption(option)
-    }
-    if (options.interactive) options.pointerEvents = 'visiblePainted'
-    else options.pointerEvents = 'stroke'
-    return options
-  }
-
   getBestZoom() {
     return this.getOption('zoomTo') || this.map.getBoundsZoom(this.bounds, true)
   }
@@ -805,17 +795,12 @@ export class LineString extends Path {
     return !this.coordinates.length
   }
 
-  getDefaultUIClass() {
-    return LeafletPolyline
+  getUIClass() {
+    return super.getUIClass() || LeafletPolyline
   }
 
   isSameClass(other) {
     return other instanceof LineString
-  }
-
-  getMeasure(shape) {
-    const length = L.GeoUtil.lineLength(this.map, shape || this.ui._defaultShape())
-    return L.GeoUtil.readableDistance(length, this.map.measureTools.getMeasureUnit())
   }
 
   toPolygon() {
@@ -922,9 +907,9 @@ export class Polygon extends Path {
     return !this.coordinates.length || !this.coordinates[0].length
   }
 
-  getDefaultUIClass() {
+  getUIClass() {
     if (this.getOption('mask')) return MaskPolygon
-    return LeafletPolygon
+    return super.getUIClass() || LeafletPolygon
   }
 
   isSameClass(other) {
@@ -954,11 +939,6 @@ export class Polygon extends Path {
     const options = super.getInteractionOptions()
     options.push('properties._umap_options.interactive')
     return options
-  }
-
-  getMeasure(shape) {
-    const area = L.GeoUtil.geodesicArea(shape || this.ui._defaultShape())
-    return L.GeoUtil.readableArea(area, this.map.measureTools.getMeasureUnit())
   }
 
   toLineString() {

@@ -1261,7 +1261,7 @@ U.Editable = L.Editable.extend({
       } else {
         const tmpLatLngs = e.layer.editor._drawnLatLngs.slice()
         tmpLatLngs.push(e.latlng)
-        measure = e.layer.feature.getMeasure(tmpLatLngs)
+        measure = e.layer.getMeasure(tmpLatLngs)
 
         if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
           // when drawing second point
@@ -1273,7 +1273,7 @@ U.Editable = L.Editable.extend({
       }
     } else {
       // when moving an existing point
-      measure = e.layer.feature.getMeasure()
+      measure = e.layer.getMeasure()
     }
     if (measure) {
       if (e.layer instanceof L.Polygon) {
