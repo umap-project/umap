@@ -1,20 +1,9 @@
-import json
-import re
-from pathlib import Path
-
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import DataLayer
+from .helpers import save_and_get_json
 
 pytestmark = pytest.mark.django_db
-
-
-def save_and_get_json(page):
-    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
-        page.get_by_role("button", name="Save").click()
-    datalayer = DataLayer.objects.last()
-    return json.loads(Path(datalayer.geojson.path).read_text())
 
 
 def test_draw_polyline(page, live_server, tilelayer):

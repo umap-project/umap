@@ -38,7 +38,16 @@ export const EXPORT_FORMATS = {
 export class Formatter {
   async fromGPX(str) {
     const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
-    return togeojson.gpx(this.toDom(str))
+    const data = togeojson.gpx(this.toDom(str))
+    for (const feature of data.features || []) {
+      feature.properties.description = feature.properties.desc
+      for (const key in feature.properties) {
+        if (key.startsWith('_') || typeof feature.properties[key] === 'object') {
+          delete feature.properties[key]
+        }
+      }
+    }
+    return data
   }
 
   async fromKML(str) {
