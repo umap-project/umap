@@ -9,6 +9,8 @@ from playwright.sync_api import expect
 
 from umap.models import DataLayer
 
+from .helpers import save_and_get_json
+
 pytestmark = pytest.mark.django_db
 
 
@@ -142,7 +144,8 @@ def test_import_kml_from_textarea(tilelayer, live_server, page):
     expect(paths).to_have_count(2)
 
 
-def test_import_gpx_from_textarea(tilelayer, live_server, page):
+def test_import_gpx_from_textarea(tilelayer, live_server, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
@@ -163,6 +166,42 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page):
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(1)
+    data = save_and_get_json(page)
+    assert data["features"][0]["geometry"] == {
+        "coordinates": [
+            [
+                -121.7295456,
+                45.4431641,
+            ],
+            [
+                -121.72908,
+                45.4428615,
+            ],
+            [
+                -121.7279085,
+                45.4425697,
+            ],
+        ],
+        "type": "LineString",
+    }
+    assert data["features"][0]["properties"] == {
+        "description": "Simple description",
+        "desc": "Simple description",
+        "name": "Simple path",
+    }
+    assert data["features"][1]["geometry"] == {
+        "coordinates": [
+            -121.72904,
+            45.44283,
+            1374,
+        ],
+        "type": "Point",
+    }
+    assert data["features"][1]["properties"] == {
+        "description": "Simple description",
+        "desc": "Simple description",
+        "name": "Simple Point",
+    }
 
 
 def test_import_osm_from_textarea(tilelayer, live_server, page):
