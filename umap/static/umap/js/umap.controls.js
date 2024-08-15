@@ -640,7 +640,7 @@ const ControlsMixin = {
       L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
     this.on('postsync', L.bind(update, this))
-    if (this.options.user) {
+    if (this.options.user?.id) {
       L.DomUtil.createLink(
         'umap-user',
         rightContainer,
