@@ -16,7 +16,7 @@ def tilelayers():
     TileLayerFactory(
         rank=1,
         name="OpenStreetMap",
-        url_template="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        url_template="https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     )
     TileLayerFactory(
         rank=2,
