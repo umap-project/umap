@@ -474,7 +474,7 @@ def test_websocket_token_returns_a_valid_token_when_authorized(client, user, map
 
 @pytest.mark.django_db
 def test_websocket_token_is_generated_for_editors(client, user, user2, map):
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.editors.add(user2)
     map.save()
 

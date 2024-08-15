@@ -3,6 +3,7 @@ import json
 
 import factory
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.files.base import ContentFile
 from django.urls import reverse
 
@@ -56,6 +57,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = User
+
+
+class GroupFactory(factory.django.DjangoModelFactory):
+    name = "Awesome Group"
+
+    class Meta:
+        model = Group
 
 
 class MapFactory(factory.django.DjangoModelFactory):

@@ -43,9 +43,27 @@ def test_editors_cannot_edit_if_status_owner(map, user):
     assert not map.can_edit(user)
 
 
-def test_editors_can_edit_if_status_editors(map, user):
-    map.edit_status = map.EDITORS
+def test_editors_can_edit_if_status_collaborators(map, user):
+    map.edit_status = map.COLLABORATORS
     map.editors.add(user)
+    map.save()
+    assert map.can_edit(user)
+
+
+def test_group_members_cannot_edit_if_status_owner(map, user, group):
+    user.groups.add(group)
+    user.save()
+    map.edit_status = map.OWNER
+    map.group = group
+    map.save()
+    assert not map.can_edit(user)
+
+
+def test_group_members_can_edit_if_status_collaborators(map, user, group):
+    user.groups.add(group)
+    user.save()
+    map.edit_status = map.COLLABORATORS
+    map.group = group
     map.save()
     assert map.can_edit(user)
 
@@ -87,6 +105,14 @@ def test_clone_should_keep_editors(map, user):
     assert user in clone.editors.all()
 
 
+def test_clone_should_keep_group(map, user, group):
+    map.group = group
+    map.save()
+    clone = map.clone()
+    assert map.pk != clone.pk
+    assert clone.group == group
+
+
 def test_clone_should_update_owner_if_passed(map, user):
     clone = map.clone(owner=user)
     assert map.pk != clone.pk
@@ -119,9 +145,9 @@ def test_publicmanager_should_get_only_public_maps(map, user, licence):
 def test_can_change_default_edit_status(user, settings):
     map = MapFactory(owner=user)
     assert map.edit_status == Map.OWNER
-    settings.UMAP_DEFAULT_EDIT_STATUS = Map.EDITORS
+    settings.UMAP_DEFAULT_EDIT_STATUS = Map.COLLABORATORS
     map = MapFactory(owner=user)
-    assert map.edit_status == Map.EDITORS
+    assert map.edit_status == Map.COLLABORATORS
 
 
 def test_can_change_default_share_status(user, settings):

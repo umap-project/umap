@@ -101,22 +101,33 @@ def test_should_remove_old_versions_on_save(map, settings):
 
 
 def test_anonymous_cannot_edit_in_editors_mode(datalayer):
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
     assert not datalayer.can_edit()
 
 
 def test_owner_can_edit_in_editors_mode(datalayer, user):
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
     assert datalayer.can_edit(datalayer.map.owner)
 
 
-def test_editor_can_edit_in_editors_mode(datalayer, user):
+def test_editor_can_edit_in_collaborators_mode(datalayer, user):
     map = datalayer.map
     map.editors.add(user)
     map.save()
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.COLLABORATORS
+    datalayer.save()
+    assert datalayer.can_edit(user)
+
+
+def test_group_members_can_edit_in_collaborators_mode(datalayer, user, group):
+    user.groups.add(group)
+    user.save()
+    map = datalayer.map
+    map.group = group
+    map.save()
+    datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
     assert datalayer.can_edit(user)
 
@@ -170,6 +181,20 @@ def test_editors_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer, us
     assert not datalayer.can_edit(user)
 
 
+def test_group_members_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
+    datalayer, user, group
+):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    user.groups.add(group)
+    group.save()
+    map = datalayer.map
+    map.group = group
+    map.edit_status = Map.OWNER
+    map.save()
+    assert not datalayer.can_edit(user)
+
+
 def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
@@ -183,7 +208,7 @@ def test_owner_can_edit_in_inherit_mode_and_map_in_editors_mode(datalayer):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.save()
     assert datalayer.can_edit(map.owner)
 
@@ -193,7 +218,7 @@ def test_editors_can_edit_in_inherit_mode_and_map_in_editors_mode(datalayer, use
     datalayer.save()
     map = datalayer.map
     map.editors.add(user)
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.save()
     assert datalayer.can_edit(user)
 
@@ -202,7 +227,7 @@ def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_editors_mode(datalayer
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.save()
     assert not datalayer.can_edit()
 

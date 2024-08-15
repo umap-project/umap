@@ -81,7 +81,7 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
 
 
 def test_map_update_with_editor(map, live_server, login, user):
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.editors.add(user)
     map.save()
     page = login(user)
@@ -104,7 +104,7 @@ def test_map_update_with_editor(map, live_server, login, user):
 
 
 def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.editors.add(user)
     map.save()
     page = login(user)
@@ -141,7 +141,7 @@ def test_owner_has_delete_map_button(map, live_server, login):
 
 
 def test_editor_do_not_have_delete_map_button(map, live_server, login, user):
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.editors.add(user)
     map.save()
     page = login(user)
@@ -241,3 +241,19 @@ def test_can_delete_datalayer(live_server, map, login, datalayer):
     expect(markers).to_have_count(0)
     # FIXME does not work, resolve to 1 element, even if this command is empty:
     expect(layers).to_have_count(0)
+
+
+def test_can_set_group(map, live_server, login, group):
+    map.owner.groups.add(group)
+    map.owner.save()
+    page = login(map.owner)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    edit_permissions = page.get_by_title("Update permissions and editors")
+    edit_permissions.click()
+    page.locator("select[name=group]").select_option(str(group.pk))
+    save = page.get_by_role("button", name="Save")
+    expect(save).to_be_visible()
+    with page.expect_response(re.compile(r".*/update/permissions/.*")):
+        save.click()
+    modified = Map.objects.get(pk=map.pk)
+    assert modified.group == group

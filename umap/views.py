@@ -459,14 +459,16 @@ def simple_json_response(**kwargs):
 class SessionMixin:
     def get_user_data(self):
         data = {}
+        user = self.request.user
         if hasattr(self, "object"):
-            data["is_owner"] = self.object.is_owner(self.request.user, self.request)
-        if self.request.user.is_anonymous:
+            data["is_owner"] = self.object.is_owner(user, self.request)
+        if user.is_anonymous:
             return data
         return {
-            "id": self.request.user.pk,
+            "id": user.pk,
             "name": str(self.request.user),
             "url": reverse("user_dashboard"),
+            "groups": [group.get_metadata() for group in user.groups.all()],
             **data,
         }
 
@@ -605,6 +607,8 @@ class PermissionsMixin:
                 {"id": editor.pk, "name": str(editor)}
                 for editor in self.object.editors.all()
             ]
+        if self.object.group:
+            permissions["group"] = self.object.group.get_metadata()
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
             permissions["anonymous_edit_url"] = self.object.get_anonymous_edit_url()
         return permissions

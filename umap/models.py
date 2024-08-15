@@ -5,7 +5,7 @@ import time
 import uuid
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.contrib.gis.db import models
 from django.core.files.base import File
 from django.core.signing import Signer
@@ -36,9 +36,19 @@ def get_user_stars_url(self):
     return reverse("user_stars", kwargs={"identifier": identifier})
 
 
+def get_group_url(self):
+    return "TODO"
+
+
+def get_group_metadata(self):
+    return {"id": self.pk, "name": self.name, "url": self.get_url()}
+
+
 User.add_to_class("__str__", display_name)
 User.add_to_class("get_url", get_user_url)
 User.add_to_class("get_stars_url", get_user_stars_url)
+Group.add_to_class("get_url", get_group_url)
+Group.add_to_class("get_metadata", get_group_metadata)
 
 
 def get_default_share_status():
@@ -137,7 +147,7 @@ class Map(NamedModel):
     """
 
     ANONYMOUS = 1
-    EDITORS = 2
+    COLLABORATORS = 2
     OWNER = 3
     PUBLIC = 1
     OPEN = 2
@@ -145,13 +155,13 @@ class Map(NamedModel):
     BLOCKED = 9
     EDIT_STATUS = (
         (ANONYMOUS, _("Everyone")),
-        (EDITORS, _("Editors only")),
+        (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
     )
     SHARE_STATUS = (
         (PUBLIC, _("Everyone (public)")),
         (OPEN, _("Anyone with link")),
-        (PRIVATE, _("Editors only")),
+        (PRIVATE, _("Editors and team only")),
         (BLOCKED, _("Blocked")),
     )
     slug = models.SlugField(db_index=True)
@@ -179,6 +189,13 @@ class Map(NamedModel):
     )
     editors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
+    )
+    group = models.ForeignKey(
+        "auth.Group",
+        blank=True,
+        null=True,
+        verbose_name=_("team"),
+        on_delete=models.SET_NULL,
     )
     edit_status = models.SmallIntegerField(
         choices=EDIT_STATUS,
@@ -281,7 +298,7 @@ class Map(NamedModel):
 
         In owner mode:
             - only owner by default (OWNER)
-            - any editor if mode is EDITORS
+            - any editor or group member if mode is COLLABORATORS
             - anyone otherwise (ANONYMOUS)
         In anonymous owner mode:
             - only owner (has ownership cookie) by default (OWNER)
@@ -297,8 +314,9 @@ class Map(NamedModel):
             can = False
         elif user == self.owner:
             can = True
-        elif self.edit_status == self.EDITORS and user in self.editors.all():
-            can = True
+        elif self.edit_status == self.COLLABORATORS:
+            if user in self.editors.all() or self.group in user.groups.all():
+                can = True
         return can
 
     def can_view(self, request):
@@ -308,12 +326,15 @@ class Map(NamedModel):
             can = True
         elif self.share_status in [self.PUBLIC, self.OPEN]:
             can = True
+        elif request.user is None:
+            can = False
         elif request.user == self.owner:
             can = True
         else:
             can = not (
                 self.share_status == self.PRIVATE
                 and request.user not in self.editors.all()
+                and self.group not in request.user.groups.all()
             )
         return can
 
@@ -383,12 +404,12 @@ class DataLayer(NamedModel):
 
     INHERIT = 0
     ANONYMOUS = 1
-    EDITORS = 2
+    COLLABORATORS = 2
     OWNER = 3
     EDIT_STATUS = (
         (INHERIT, _("Inherit")),
         (ANONYMOUS, _("Everyone")),
-        (EDITORS, _("Editors only")),
+        (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
     )
     uuid = models.UUIDField(
@@ -538,8 +559,9 @@ class DataLayer(NamedModel):
             can = True
         elif user is not None and user == self.map.owner:
             can = True
-        elif self.edit_status == self.EDITORS and user in self.map.editors.all():
-            can = True
+        elif user is not None and self.edit_status == self.COLLABORATORS:
+            if user in self.map.editors.all() or self.map.group in user.groups.all():
+                can = True
         return can
 
 

@@ -9,6 +9,7 @@ from umap.models import Map
 
 from .base import (
     DataLayerFactory,
+    GroupFactory,
     LicenceFactory,
     MapFactory,
     TileLayerFactory,
@@ -27,6 +28,11 @@ def pytest_configure(config):
 def pytest_runtest_teardown():
     shutil.rmtree(TMP_ROOT, ignore_errors=True)
     cache.clear()
+
+
+@pytest.fixture
+def group():
+    return GroupFactory()
 
 
 @pytest.fixture

@@ -36,7 +36,7 @@ class SendLinkForm(forms.Form):
 class UpdateMapPermissionsForm(forms.ModelForm):
     class Meta:
         model = Map
-        fields = ("edit_status", "editors", "share_status", "owner")
+        fields = ("edit_status", "editors", "share_status", "owner", "group")
 
 
 class AnonymousMapPermissionsForm(forms.ModelForm):
