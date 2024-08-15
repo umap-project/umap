@@ -37,7 +37,7 @@ def get_user_stars_url(self):
 
 
 def get_group_url(self):
-    return "TODO"
+    return reverse("group_maps", kwargs={"pk": self.pk})
 
 
 def get_group_metadata(self):
@@ -267,6 +267,9 @@ class Map(NamedModel):
         signature = signer.sign(self.pk)
         path = reverse("map_anonymous_edit_url", kwargs={"signature": signature})
         return settings.SITE_URL + path
+
+    def get_author(self):
+        return self.group or self.owner
 
     def is_owner(self, user=None, request=None):
         if user and self.owner == user:

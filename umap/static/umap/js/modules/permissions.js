@@ -189,23 +189,6 @@ export class MapPermissions {
     })
   }
 
-  addOwnerLink(element, container) {
-    if (this.options.owner?.name && this.options.owner.url) {
-      const ownerContainer = DomUtil.add(
-        element,
-        'umap-map-owner',
-        container,
-        ` ${translate('by')} `
-      )
-      DomUtil.createLink(
-        '',
-        ownerContainer,
-        this.options.owner.name,
-        this.options.owner.url
-      )
-    }
-  }
-
   commit() {
     this.map.options.permissions = Object.assign(
       this.map.options.permissions,

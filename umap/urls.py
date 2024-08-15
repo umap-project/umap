@@ -187,6 +187,7 @@ urlpatterns += i18n_patterns(
     re_path(r"^about/$", views.about, name="about"),
     re_path(r"^user/(?P<identifier>.+)/stars/$", views.user_stars, name="user_stars"),
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
+    path("group/<int:pk>/", views.group_maps, name="group_maps"),
     re_path(r"", include(i18n_urls)),
 )
 urlpatterns += (

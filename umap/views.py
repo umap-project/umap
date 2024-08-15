@@ -18,6 +18,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import logout as do_logout
+from django.contrib.auth.models import Group
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -245,6 +246,24 @@ class UserStars(UserMaps):
 
 
 user_stars = UserStars.as_view()
+
+
+class GroupMaps(PaginatorMixin, DetailView):
+    model = Group
+    list_template_name = "umap/map_list.html"
+    context_object_name = "current_group"
+
+    def get_maps(self):
+        return Map.public.filter(group=self.object).order_by("-modified_at")
+
+    def get_context_data(self, **kwargs):
+        kwargs.update(
+            {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE)}
+        )
+        return super().get_context_data(**kwargs)
+
+
+group_maps = GroupMaps.as_view()
 
 
 class SearchMixin:
@@ -673,6 +692,12 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             map_settings["properties"] = {}
         map_settings["properties"]["name"] = self.object.name
         map_settings["properties"]["permissions"] = self.get_permissions()
+        author = self.object.get_author()
+        if author:
+            map_settings["properties"]["author"] = {
+                "name": str(author),
+                "url": author.get_url(),
+            }
         return map_settings
 
     def is_starred(self):

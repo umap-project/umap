@@ -1582,7 +1582,7 @@ U.Map = L.Map.extend({
     )
     const name = L.DomUtil.create('h3', '', container)
     L.DomEvent.disableClickPropagation(container)
-    this.permissions.addOwnerLink('span', container)
+    this.addAuthorLink('span', container)
     if (this.getOption('captionMenus')) {
       L.DomUtil.createButton(
         'umap-about-link flat',
@@ -1886,5 +1886,22 @@ U.Map = L.Map.extend({
       .concat(...this.datalayers_index.map((dl) => dl.sortedValues(property)))
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(U.Utils.naturalSort)
+  },
+
+  addAuthorLink: function (element, container) {
+    if (this.options.author?.name) {
+      const authorContainer = L.DomUtil.add(
+        element,
+        'umap-map-author',
+        container,
+        ` ${L._('by')} `
+      )
+      L.DomUtil.createLink(
+        '',
+        authorContainer,
+        this.options.author.name,
+        this.options.author.url
+      )
+    }
   },
 })
