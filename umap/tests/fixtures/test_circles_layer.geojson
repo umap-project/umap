@@ -1,0 +1,219 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5869228,
+                    47.1988448
+                ]
+            },
+            "properties": {
+                "@id": "node/8371195387",
+                "access": "private",
+                "amenity": "bicycle_parking",
+                "covered": "yes",
+                "fee": "no",
+                "name": "station with unknown capacity"
+            },
+            "id": "capa0"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5567325,
+                    47.2223201
+                ]
+            },
+            "properties": {
+                "@id": "node/3750335624",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "stands",
+                "capacity": "2",
+                "check_date:capacity": "2021-05-12",
+                "covered": "no",
+                "material": "metal",
+                "name": "tiny station with 2"
+            },
+            "id": "capa2"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5293571,
+                    47.2285598
+                ]
+            },
+            "properties": {
+                "@id": "node/7149702104",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "wall_loops",
+                "covered": "yes",
+                "capacity": "2",
+                "name": "tiny station with 3"
+            },
+            "id": "capa3"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5613176,
+                    47.2223468
+                ]
+            },
+            "properties": {
+                "@id": "node/5206704322",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "stands",
+                "capacity": "4",
+                "name": "small station with 4"
+            },
+            "id": "capa4"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5465724,
+                    47.2074831
+                ]
+            },
+            "properties": {
+                "@id": "node/10539987424",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "stands",
+                "capacity": "6",
+                "covered": "no",
+                "material": "metal",
+                "name": "small station with 6"
+            },
+            "id": "capa6"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5877882,
+                    47.2179441
+                ]
+            },
+            "properties": {
+                "@id": "node/10239046793",
+                "amenity": "bicycle_parking",
+                "capacity": 8
+            },
+            "id": "capa8"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5406938,
+                    47.2312451
+                ]
+            },
+            "properties": {
+                "@id": "node/5176046494",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "rack",
+                "capacity": "27",
+                "name": "middle station with 27"
+            },
+            "id": "cap27"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5344658,
+                    47.1988441
+                ]
+            },
+            "properties": {
+                "@id": "node/4126326089",
+                "access": "private",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "building",
+                "capacity": "64",
+                "covered": "yes",
+                "material": "metal",
+                "name": "middle station with 64"
+            },
+            "id": "cap64"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5433176,
+                    47.2172633
+                ]
+            },
+            "properties": {
+                "@id": "way/1001063092",
+                "access": "yes",
+                "amenity": "bicycle_parking",
+                "architect": "Forma 6;Phytolab",
+                "bicycle_parking": "shed",
+                "building": "roof",
+                "building:architecture": "contemporary",
+                "capacity": "676",
+                "capacity:cargo_bike": "22",
+                "capacity:motorcycle": "33",
+                "covered": "yes",
+                "fee": "no",
+                "name": "big station with 676",
+                "start_date": "2021-11-15",
+                "@geometry": "center"
+            },
+            "id": "ca676"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -1.5291998,
+                    47.259166
+                ]
+            },
+            "properties": {
+                "@id": "node/11141117088",
+                "amenity": "bicycle_parking",
+                "bicycle_parking": "stands",
+                "capacity": "1160",
+                "temporary": "yes",
+                "temporary:date_off": "2023-10-28",
+                "temporary:date_on": "2023-09-08",
+                "name": "huge station with 1160"
+            },
+            "id": "c1160"
+        }
+    ],
+    "_umap_options": {
+        "displayOnLoad": true,
+        "inCaption": true,
+        "browsable": true,
+        "editMode": "advanced",
+        "name": "Calque 1",
+        "remoteData": {},
+        "type": "Circles",
+        "circles": {
+            "radius": {"min": 2, "max": 40},
+            "property": "capacity"
+        }
+    }
+}

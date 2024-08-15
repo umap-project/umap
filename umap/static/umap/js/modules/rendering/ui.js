@@ -3,9 +3,11 @@ import {
   Marker,
   Polyline,
   Polygon,
+  CircleMarker as BaseCircleMarker,
   DomUtil,
   LineUtil,
   latLng,
+  LatLng,
   LatLngBounds,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
@@ -266,7 +268,7 @@ export const LeafletMarker = Marker.extend({
 const PathMixin = {
   _onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
-      this._map.tooltip.open({ content: this.feature.getMeasure(), anchor: this })
+      this._map.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this._map.editEnabled && !this._map.editedFeature) {
       this._map.tooltip.open({ content: translate('Click to edit'), anchor: this })
     }
@@ -295,8 +297,8 @@ const PathMixin = {
 
   onAdd: function (map) {
     this._container = null
-    this.setStyle()
     FeatureMixin.onAdd.call(this, map)
+    this.setStyle()
     if (this.editing?.enabled()) this.editing.addHooks()
     this.resetTooltip()
     this._path.dataset.feature = this.feature.id
@@ -308,7 +310,7 @@ const PathMixin = {
   },
 
   setStyle: function (options = {}) {
-    for (const option of this.feature.getStyleOptions()) {
+    for (const option of this.getStyleOptions()) {
       options[option] = this.feature.getDynamicOption(option)
     }
     options.pointerEvents = options.interactive ? 'visiblePainted' : 'stroke'
@@ -333,7 +335,7 @@ const PathMixin = {
     let items = FeatureMixin.getContextMenuItems.call(this, event)
     items.push({
       text: translate('Display measure'),
-      callback: () => Alert.info(this.feature.getMeasure()),
+      callback: () => Alert.info(this.getMeasure()),
     })
     if (this._map.editEnabled && !this.feature.isReadOnly() && this.feature.isMulti()) {
       items = items.concat(this.getContextMenuMultiItems(event))
@@ -396,6 +398,19 @@ const PathMixin = {
     if (!shape) return
     return this.feature.isolateShape(shape)
   },
+
+  getStyleOptions: () => [
+    'smoothFactor',
+    'color',
+    'opacity',
+    'stroke',
+    'weight',
+    'fill',
+    'fillColor',
+    'fillOpacity',
+    'dashArray',
+    'interactive',
+  ],
 }
 
 export const LeafletPolyline = Polyline.extend({
@@ -454,6 +469,12 @@ export const LeafletPolyline = Polyline.extend({
     })
     return items
   },
+
+  getMeasure: function (shape) {
+    // FIXME: compute from data in feature (with TurfJS)
+    const length = L.GeoUtil.lineLength(this._map, shape || this._defaultShape())
+    return L.GeoUtil.readableDistance(length, this._map.measureTools.getMeasureUnit())
+  },
 })
 
 export const LeafletPolygon = Polygon.extend({
@@ -488,6 +509,11 @@ export const LeafletPolygon = Polygon.extend({
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
   },
+
+  getMeasure: function (shape) {
+    const area = L.GeoUtil.geodesicArea(shape || this._defaultShape())
+    return L.GeoUtil.readableArea(area, this._map.measureTools.getMeasureUnit())
+  },
 })
 const WORLD = [
   latLng([90, 180]),
@@ -521,5 +547,27 @@ export const MaskPolygon = LeafletPolygon.extend({
   _defaultShape: function () {
     // Do not compute with world coordinates (eg. for centering the popup).
     return this._latlngs[1]
+  },
+})
+
+export const CircleMarker = BaseCircleMarker.extend({
+  parentClass: BaseCircleMarker,
+  includes: [FeatureMixin, PathMixin],
+  initialize: function (feature, latlng) {
+    if (Array.isArray(latlng) && !(latlng[0] instanceof Number)) {
+      // Must be a line or polygon
+      const bounds = new LatLngBounds(latlng)
+      latlng = bounds.getCenter()
+    }
+    FeatureMixin.initialize.call(this, feature, latlng)
+  },
+  getClass: () => CircleMarker,
+  getStyleOptions: function () {
+    const options = PathMixin.getStyleOptions.call(this)
+    options.push('radius')
+    return options
+  },
+  getCenter: function () {
+    return this._latlng
   },
 })

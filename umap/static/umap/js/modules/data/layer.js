@@ -11,7 +11,7 @@ import * as Utils from '../utils.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
-import { Categorized, Choropleth } from '../rendering/layers/relative.js'
+import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -21,7 +21,14 @@ import { DataLayerPermissions } from '../permissions.js'
 import { Point, LineString, Polygon } from './features.js'
 import TableEditor from '../tableeditor.js'
 
-export const LAYER_TYPES = [DefaultLayer, Cluster, Heat, Choropleth, Categorized]
+export const LAYER_TYPES = [
+  DefaultLayer,
+  Cluster,
+  Heat,
+  Choropleth,
+  Categorized,
+  Circles,
+]
 
 const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
   acc[klass.TYPE] = klass
@@ -190,6 +197,8 @@ export class DataLayer {
     if (visible) this.map.removeLayer(this.layer)
     const Class = LAYER_MAP[this.options.type] || DefaultLayer
     this.layer = new Class(this)
+    // Rendering layer changed, so let's force reset the feature rendering too.
+    this.eachFeature((feature) => feature.makeUI())
     this.eachFeature(this.showFeature)
     if (visible) this.show()
     this.propagateRemote()

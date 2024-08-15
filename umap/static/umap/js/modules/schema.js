@@ -57,6 +57,10 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  circles: {
+    type: Object,
+    impacts: ['data'],
+  },
   cluster: {
     type: Object,
     impacts: ['data'],

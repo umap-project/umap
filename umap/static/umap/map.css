@@ -994,6 +994,19 @@ a.umap-control-caption,
     padding: 0;
     margin: 0;
 }
+.datalayer-legend .circles-layer-legend {
+    padding: var(--box-padding);
+}
+.circles-layer-legend li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.circles-layer-legend li .circle {
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+}
 
 /* ********************************* */
 /*           Popup                   */
