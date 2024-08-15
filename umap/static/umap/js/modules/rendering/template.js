@@ -137,12 +137,13 @@ class GeoRSSImage extends TitleMixin(PopupTemplate) {
   }
 }
 
-class GeoRSSLink extends TitleMixin(PopupTemplate) {
+class GeoRSSLink extends PopupTemplate {
   renderBody(feature, container) {
-    const title = this.renderTitle(feature, container)
-    return Utils.loadTemplate(
-      `<a href="${feature.properties.link}" target="_blank">${title}</a>`
-    )
+    if (feature.properties.link) {
+      return Utils.loadTemplate(
+        `<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
+      )
+    }
   }
 }
 
