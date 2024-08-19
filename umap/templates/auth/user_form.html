@@ -3,12 +3,7 @@
 {% load i18n %}
 
 {% block maincontent %}
-  <div class="row">
-    <h2 class="section tabs">
-      <a href="{% url "user_dashboard" %}">{% trans "My Maps" %}</a>
-      <a class="selected" href="{% url 'user_profile' %}">{% trans "My Profile" %}</a>
-    </h2>
-  </div>
+  {% include "umap/dashboard_menu.html" with selected="profile" %}
   <div class="wrapper">
     <div class="row">
       {% if form.non_field_errors %}

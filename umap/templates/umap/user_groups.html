@@ -1,0 +1,19 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+  {% include "umap/dashboard_menu.html" with selected="groups" %}
+  <div class="wrapper">
+    <div class="row">
+      <ul>
+        {% for group in groups %}
+          <li>
+            {{ group }} <a href="{% url 'group_update' group.pk %}">({% trans "Edit" %})</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'group_new' %}">{% trans "New team" %}</a>
+    </div>
+  </div>
+{% endblock %}

@@ -61,6 +61,7 @@ from .forms import (
     DataLayerForm,
     DataLayerPermissionsForm,
     FlatErrorList,
+    GroupForm,
     MapSettingsForm,
     SendLinkForm,
     UpdateMapPermissionsForm,
@@ -187,6 +188,63 @@ class About(Home):
 
 
 about = About.as_view()
+
+
+class GroupNew(CreateView):
+    model = Group
+    fields = ["name"]
+    success_url = reverse_lazy("user_groups")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.request.user.groups.add(self.object)
+        self.request.user.save()
+        return response
+
+
+class GroupUpdate(UpdateView):
+    model = Group
+    form_class = GroupForm
+    success_url = reverse_lazy("user_groups")
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["members"] = self.object.user_set.all()
+        return initial
+
+    def form_valid(self, form):
+        for user in form.cleaned_data["members"]:
+            user.groups.add(self.object)
+            user.save()
+        return super().form_valid(form)
+
+
+class GroupDelete(DeleteView):
+    model = Group
+    success_url = reverse_lazy("user_groups")
+
+    def form_valid(self, form):
+        if self.object.user_set.count() > 1:
+            return HttpResponseBadRequest(
+                _("Cannot delete a group with more than one member")
+            )
+        messages.info(
+            self.request,
+            _("Group “%(name)s” has been deleted") % {"name": self.object.name},
+        )
+        return super().form_valid(form)
+
+
+class UserGroups(DetailView):
+    model = User
+    template_name = "umap/user_groups.html"
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({"groups": self.object.groups.all()})
+        return super().get_context_data(**kwargs)
 
 
 class UserProfile(UpdateView):

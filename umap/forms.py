@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.contrib.gis.geos import Point
 from django.forms.utils import ErrorList
 from django.template.defaultfilters import slugify
@@ -110,3 +111,13 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name")
+
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ["name", "members"]
+
+    members = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple
+    )
