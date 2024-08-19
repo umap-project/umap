@@ -16,7 +16,7 @@ def tilelayers():
     TileLayerFactory(
         rank=1,
         name="OpenStreetMap",
-        url_template="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        url_template="https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     )
     TileLayerFactory(
         rank=2,
@@ -76,7 +76,7 @@ def test_map_should_display_first_tilelayer_by_default(
     page.goto(f"{live_server.url}/map/new")
     tiles = page.locator(".leaflet-tile-pane img")
     expect(tiles.first).to_have_attribute(
-        "src", re.compile(r"https://[abc].tile.openstreetmap.org/\d+/\d+/\d+.png")
+        "src", re.compile(r"https://tile.openstreetmap.org/\d+/\d+/\d+.png")
     )
 
 
