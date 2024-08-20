@@ -18,7 +18,7 @@
       <form id="group_form" method="post">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="{% trans 'Save' %}" />
+        <input type="submit" value="{% trans "Save" %}" />
       </form>
       {% if group.user_set.count == 1 %}
         <a href="{% url 'group_delete' group.pk %}">{% trans "Delete this team" %}</a>

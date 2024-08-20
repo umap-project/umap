@@ -1,6 +1,6 @@
 import pytest
-from django.urls import reverse
 from django.contrib.auth.models import Group
+from django.urls import reverse
 
 pytestmark = pytest.mark.django_db
 
