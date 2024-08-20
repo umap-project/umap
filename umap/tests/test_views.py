@@ -289,6 +289,20 @@ def test_user_dashboard_display_user_maps(client, map):
 
 
 @pytest.mark.django_db
+def test_user_dashboard_display_user_group_maps(client, map, group, user):
+    user.groups.add(group)
+    user.save()
+    map.group = group
+    map.save()
+    client.login(username=user.username, password="123123")
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name in body
+    assert map.get_absolute_url() in body
+
+
+@pytest.mark.django_db
 def test_user_dashboard_display_user_maps_distinct(client, map):
     # cf https://github.com/umap-project/umap/issues/1325
     anonymap = MapFactory(name="Map witout owner should not appear")

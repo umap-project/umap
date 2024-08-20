@@ -370,7 +370,12 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
     def get_maps(self):
         qs = self.get_search_queryset() or Map.objects.all()
-        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
+        groups = self.object.groups.all()
+        qs = (
+            qs.filter(owner=self.object)
+            .union(qs.filter(editors=self.object))
+            .union(qs.filter(group__in=groups))
+        )
         return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):

@@ -9,7 +9,7 @@
       <ul>
         {% for group in groups %}
           <li>
-            {{ group }} <a href="{% url 'group_update' group.pk %}">({% trans "Edit" %})</a>
+            <a href="{% url 'group_maps' group.pk %}">{{ group }}</a> <a href="{% url 'group_update' group.pk %}">({% trans "Edit" %})</a>
           </li>
         {% endfor %}
       </ul>
