@@ -102,7 +102,7 @@ i18n_urls += decorated_patterns(
 )
 i18n_urls += decorated_patterns(
     [login_required_if_not_anonymous_allowed, never_cache],
-    re_path(r"^map/create/$", views.MapCreate.as_view(), name="map_create"),
+    path("map/create/", views.MapCreate.as_view(), name="map_create"),
 )
 i18n_urls += decorated_patterns(
     [login_required],
@@ -187,12 +187,10 @@ datalayer_urls = [
 i18n_urls += decorated_patterns([can_edit_map, never_cache], *map_urls)
 i18n_urls += decorated_patterns([never_cache], *datalayer_urls)
 urlpatterns += i18n_patterns(
-    re_path(r"^$", views.home, name="home"),
-    re_path(
-        r"^showcase/$", cache_page(24 * 60 * 60)(views.showcase), name="maps_showcase"
-    ),
-    re_path(r"^search/$", views.search, name="search"),
-    re_path(r"^about/$", views.about, name="about"),
+    path("", views.home, name="home"),
+    path("showcase/", cache_page(24 * 60 * 60)(views.showcase), name="maps_showcase"),
+    path("search/", views.search, name="search"),
+    path("about/", views.about, name="about"),
     re_path(r"^user/(?P<identifier>.+)/stars/$", views.user_stars, name="user_stars"),
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
     path("group/<int:pk>/", views.group_maps, name="group_maps"),
