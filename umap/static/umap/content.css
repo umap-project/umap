@@ -273,9 +273,7 @@ ul.umap-autocomplete {
     border: 1px solid #202425;
     padding: 7px;
     color: #eeeeec;
-}
-.umap-multiresult li + li {
-    margin-top: 7px;
+    margin-bottom: 7px;
 }
 .umap-singleresult div .close,
 .umap-multiresult li .close {

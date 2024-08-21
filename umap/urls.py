@@ -25,6 +25,10 @@ admin.autodiscover()
 urlpatterns = [
     re_path(r"^admin/", admin.site.urls),
     re_path("", include("social_django.urls", namespace="social")),
+    re_path(
+        r"^agnocomplete/",
+        include(("agnocomplete.urls", "agnocomplete"), namespace="agnocomplete"),
+    ),
     re_path(r"^m/(?P<pk>\d+)/$", views.MapShortUrl.as_view(), name="map_short_url"),
     re_path(r"^ajax-proxy/$", cache_page(180)(views.ajax_proxy), name="ajax-proxy"),
     re_path(
@@ -40,7 +44,6 @@ urlpatterns = [
         name="password_change_done",
     ),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
-    re_path(r"^agnocomplete/", include("agnocomplete.urls")),
     re_path(r"^map/oembed/", views.MapOEmbed.as_view(), name="map_oembed"),
     re_path(
         r"^map/(?P<map_id>\d+)/download/",

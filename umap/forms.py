@@ -113,11 +113,25 @@ class UserProfileForm(forms.ModelForm):
         fields = ("username", "first_name", "last_name")
 
 
+class GroupMembersField(forms.ModelMultipleChoiceField):
+    def set_choices(self, choices):
+        iterator = self.iterator(self)
+        # Override queryset so to expose only selected choices:
+        # - we don't want a select with 100000 options
+        # - the select values will be used by the autocomplete widget to display
+        #   already existing members of the group
+        iterator.queryset = choices
+        self.choices = iterator
+
+
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ["name", "members"]
 
-    members = forms.ModelMultipleChoiceField(
-        queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple
-    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["members"].set_choices(self.initial["members"])
+        self.fields["members"].widget.attrs["hidden"] = "hidden"
+
+    members = GroupMembersField(queryset=User.objects.all())

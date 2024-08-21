@@ -9,8 +9,8 @@ import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
 
 export class BaseAutocomplete {
-  constructor(el, options) {
-    this.el = el
+  constructor(parent, options) {
+    this.parent = parent
     this.options = {
       placeholder: translate('Start typing...'),
       emptyMessage: translate('No result'),
@@ -43,7 +43,7 @@ export class BaseAutocomplete {
     this.input = DomUtil.element({
       tagName: 'input',
       type: 'text',
-      parent: this.el,
+      parent: this.parent,
       placeholder: this.options.placeholder,
       autocomplete: 'off',
       className: this.options.className,

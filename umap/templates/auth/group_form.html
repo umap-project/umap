@@ -25,4 +25,34 @@
       {% endif %}
     </div>
   </div>
+  <script type="module" defer>
+    const form = document.querySelector("#group_form")
+    const select = form.querySelector('#id_members')
+    function onSelect({item: {value, label}}) {
+      const option = document.createElement('option')
+      option.value = value
+      option.textContent = label
+      option.selected = "selected"
+      select.appendChild(option)
+    }
+    function onUnselect({item: {value, label}}) {
+      const option = select.querySelector(`[value="${value}"]`)
+      select.removeChild(option)
+    }
+    const options = {
+      className: 'edit-group-members',
+      on_select: onSelect,
+      on_unselect: onUnselect,
+      placeholder: "{% trans "Add user" %}"
+    }
+    const autocomplete = new U.AjaxAutocompleteMultiple(form, options)
+    for (const option of select.options) {
+      autocomplete.displaySelected({
+        item: { value: option.value, label: option.textContent },
+      })
+    }
+    const submit = form.querySelector('input[type="submit"]')
+    // Move it after the autocomplete widget.
+    form.appendChild(submit)
+  </script>
 {% endblock maincontent %}

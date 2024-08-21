@@ -37,7 +37,7 @@ def test_can_create_a_group(client, user):
     assert group in user.groups.all()
 
 
-def test_can_edit_a_group(client, user, group):
+def test_can_edit_a_group_name(client, user, group):
     user.groups.add(group)
     user.save()
     assert Group.objects.count() == 1
@@ -50,6 +50,38 @@ def test_can_edit_a_group(client, user, group):
     modified = Group.objects.first()
     assert modified.name == "my new group"
     assert modified in user.groups.all()
+
+
+def test_can_add_user_to_group(client, user, user2, group):
+    user.groups.add(group)
+    user.save()
+    assert Group.objects.count() == 1
+    url = reverse("group_update", args=(group.pk,))
+    client.login(username=user.username, password="123123")
+    response = client.post(url, {"name": group.name, "members": [user.pk, user2.pk]})
+    assert response.status_code == 302
+    assert response["Location"] == "/en/me/groups"
+    assert Group.objects.count() == 1
+    modified = Group.objects.first()
+    assert user in modified.user_set.all()
+    assert user2 in modified.user_set.all()
+
+
+def test_can_remove_user_from_group(client, user, user2, group):
+    user.groups.add(group)
+    user.save()
+    user2.groups.add(group)
+    user2.save()
+    assert Group.objects.count() == 1
+    url = reverse("group_update", args=(group.pk,))
+    client.login(username=user.username, password="123123")
+    response = client.post(url, {"name": group.name, "members": [user.pk]})
+    assert response.status_code == 302
+    assert response["Location"] == "/en/me/groups"
+    assert Group.objects.count() == 1
+    modified = Group.objects.first()
+    assert user in modified.user_set.all()
+    assert user2 not in modified.user_set.all()
 
 
 def test_cannot_edit_a_group_if_not_member(client, user, user2, group):

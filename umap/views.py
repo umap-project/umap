@@ -213,9 +213,16 @@ class GroupUpdate(UpdateView):
         return initial
 
     def form_valid(self, form):
-        for user in form.cleaned_data["members"]:
-            user.groups.add(self.object)
-            user.save()
+        actual = self.object.user_set.all()
+        wanted = form.cleaned_data["members"]
+        for user in wanted:
+            if user not in actual:
+                user.groups.add(self.object)
+                user.save()
+        for user in actual:
+            if user not in wanted:
+                user.groups.remove(self.object)
+                user.save()
         return super().form_valid(form)
 
 
