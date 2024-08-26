@@ -23,7 +23,6 @@ export const EXPORT_FORMATS = {
       map.eachFeature((feature) => {
         const row = feature.toGeoJSON().properties
         const center = feature.center
-        delete row._umap_options
         row.Latitude = center.lat
         row.Longitude = center.lng
         table.push(row)

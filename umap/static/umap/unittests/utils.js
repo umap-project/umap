@@ -682,7 +682,7 @@ describe('Utils', () => {
   describe('#copyJSON', () => {
     it('should actually copy the JSON', () => {
       const originalJSON = { some: 'json' }
-      const returned = Utils.CopyJSON(originalJSON)
+      const returned = Utils.copyJSON(originalJSON)
 
       // Change the original JSON
       originalJSON.anotherKey = 'value'

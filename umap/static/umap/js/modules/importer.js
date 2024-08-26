@@ -208,7 +208,7 @@ export default class Importer {
         DomUtil.element({
           tagName: 'option',
           parent: layerSelect,
-          textContent: datalayer.options.name,
+          textContent: datalayer.metadata.name,
           value: L.stamp(datalayer),
         })
       }
@@ -275,13 +275,13 @@ export default class Importer {
       return false
     }
     const layer = this.layer
-    layer.options.remoteData = {
+    layer.metadata.remoteData = {
       url: this.url,
       format: this.format,
     }
     if (this.map.options.urls.ajax_proxy) {
-      layer.options.remoteData.proxy = true
-      layer.options.remoteData.ttl = SCHEMA.ttl.default
+      layer.metadata.remoteData.proxy = true
+      layer.metadata.remoteData.ttl = SCHEMA.ttl.default
     }
     layer.fetchRemoteData(true)
   }

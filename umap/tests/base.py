@@ -3,10 +3,10 @@ import json
 
 import factory
 from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.urls import reverse
 
-from umap.forms import DEFAULT_CENTER
 from umap.models import DataLayer, Licence, Map, TileLayer
 
 User = get_user_model()
@@ -20,14 +20,13 @@ DATALAYER_DATA = {
                 "type": "Point",
                 "coordinates": [14.68896484375, 48.55297816440071],
             },
+            "metadata": {"color": "DarkCyan", "iconClass": "Ball"},
             "properties": {
-                "_umap_options": {"color": "DarkCyan", "iconClass": "Ball"},
                 "name": "Here",
                 "description": "Da place anonymous again 755",
             },
         }
     ],
-    "_umap_options": {"displayOnLoad": True, "name": "Donau", "id": 926},
 }
 
 
@@ -61,34 +60,27 @@ class UserFactory(factory.django.DjangoModelFactory):
 class MapFactory(factory.django.DjangoModelFactory):
     name = "test map"
     slug = "test-map"
-    center = DEFAULT_CENTER
-    settings = factory.Dict(
+    center = Point(13.447265624999998, 48.94415123418794)
+    metadata = factory.Dict(
         {
-            "geometry": {
-                "coordinates": [13.447265624999998, 48.94415123418794],
-                "type": "Point",
+            "datalayersControl": True,
+            "description": "Which is just the Danube, at the end",
+            "displayPopupFooter": False,
+            "licence": "",
+            "miniMap": False,
+            "moreControl": True,
+            "name": name,
+            "scaleControl": True,
+            "tilelayer": {
+                "attribution": "\xa9 OSM Contributors",
+                "maxZoom": 18,
+                "minZoom": 0,
+                "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
             },
-            "properties": {
-                "datalayersControl": True,
-                "description": "Which is just the Danube, at the end",
-                "displayPopupFooter": False,
-                "licence": "",
-                "miniMap": False,
-                "moreControl": True,
-                "name": name,
-                "scaleControl": True,
-                "tilelayer": {
-                    "attribution": "\xa9 OSM Contributors",
-                    "maxZoom": 18,
-                    "minZoom": 0,
-                    "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
-                },
-                "tilelayersControl": True,
-                "zoom": 7,
-                "zoomControl": True,
-            },
-            "type": "Feature",
-        }
+            "tilelayersControl": True,
+            "zoom": 7,
+            "zoomControl": True,
+        },
     )
 
     licence = factory.SubFactory(LicenceFactory)
@@ -97,8 +89,8 @@ class MapFactory(factory.django.DjangoModelFactory):
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
         # Make sure there is no persistency
-        kwargs["settings"] = copy.deepcopy(kwargs["settings"])
-        kwargs["settings"]["properties"]["name"] = kwargs["name"]
+        kwargs["metadata"] = copy.deepcopy(kwargs["metadata"])
+        kwargs["metadata"]["name"] = kwargs["name"]
         return kwargs
 
     class Meta:
@@ -110,26 +102,18 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     name = "test datalayer"
     description = "test description"
     display_on_load = True
-    settings = factory.Dict({"displayOnLoad": True, "browsable": True, "name": name})
+    metadata = factory.Dict({"displayOnLoad": True, "browsable": True, "name": name})
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
         if "data" in kwargs:
             data = copy.deepcopy(kwargs.pop("data"))
-            if "settings" not in kwargs:
-                kwargs["settings"] = data.get("_umap_options", {})
         else:
             data = DATALAYER_DATA.copy()
-            data["_umap_options"] = {
-                **DataLayerFactory.settings._defaults,
-                **kwargs["settings"],
-            }
-        data.setdefault("_umap_options", {})
-        kwargs["settings"]["name"] = kwargs["name"]
-        data["_umap_options"]["name"] = kwargs["name"]
+        kwargs["metadata"]["name"] = kwargs["name"]
         data.setdefault("type", "FeatureCollection")
         data.setdefault("features", [])
-        kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")
+        kwargs["data"] = ContentFile(json.dumps(data), "foo.json")
         return kwargs
 
     class Meta:

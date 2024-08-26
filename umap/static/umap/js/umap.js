@@ -29,30 +29,30 @@ L.Map.mergeOptions({
 U.Map = L.Map.extend({
   includes: [ControlsMixin],
 
-  initialize: async function (el, geojson) {
+  initialize: async function (el, metadata) {
     this.sync_engine = new U.SyncEngine(this)
     this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
-    if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
+    if (metadata.locale) L.setLocale(metadata.locale)
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs
-    if (geojson.properties.lang) L.lang = geojson.properties.lang
+    if (metadata.lang) L.lang = metadata.lang
 
-    this.setOptionsFromQueryString(geojson.properties)
+    this.setOptionsFromQueryString(metadata)
     // Prevent default creation of controls
-    const zoomControl = geojson.properties.zoomControl
-    const fullscreenControl = geojson.properties.fullscreenControl
-    geojson.properties.zoomControl = false
-    geojson.properties.fullscreenControl = false
+    const zoomControl = metadata.zoomControl
+    const fullscreenControl = metadata.fullscreenControl
+    metadata.zoomControl = false
+    metadata.fullscreenControl = false
 
-    L.Map.prototype.initialize.call(this, el, geojson.properties)
+    L.Map.prototype.initialize.call(this, el, metadata)
 
-    if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
+    if (metadata.schema) this.overrideSchema(metadata.schema)
 
     // After calling parent initialize, as we are doing initCenter our-selves
-    if (geojson.geometry) this.options.center = this.latLng(geojson.geometry)
+    if (metadata.geometry) this.options.center = this.latLng(metadata.geometry)
     this.urls = new U.URLs(this.options.urls)
 
     this.panel = new U.Panel(this)
@@ -805,7 +805,7 @@ U.Map = L.Map.extend({
     const datalayer = new U.DataLayer(this, options, sync)
 
     if (sync !== false) {
-      datalayer.sync.upsert(datalayer.options)
+      datalayer.sync.upsert(datalayer.metadata)
     }
     return datalayer
   },
@@ -906,15 +906,16 @@ U.Map = L.Map.extend({
     }
 
     if (importedData.geometry) this.options.center = this.latLng(importedData.geometry)
-    importedData.layers.forEach((geojson) => {
-      if (!geojson._umap_options && geojson._storage) {
-        geojson._umap_options = geojson._storage
+    for (const geojson of importedData.layers) {
+      if (!geojson.metadata) {
+        geojson.metadata = geojson._umap_options || geojson._storage
+        delete geojson._umap_options
         delete geojson._storage
       }
-      delete geojson._umap_options?.id // Never trust an id at this stage
-      const dataLayer = this.createDataLayer(geojson._umap_options)
+      delete geojson.metadata?.id // Never trust an id at this stage
+      const dataLayer = this.createDataLayer(geojson.metadata)
       dataLayer.fromUmapGeoJSON(geojson)
-    })
+    }
 
     this.initTileLayers()
     this.renderControls()
@@ -1032,22 +1033,14 @@ U.Map = L.Map.extend({
 
   saveSelf: async function () {
     this.rules.commit()
-    const geojson = {
-      type: 'Feature',
-      geometry: this.geometry(),
-      properties: this.exportOptions(),
-    }
     const formData = new FormData()
     formData.append('name', this.options.name)
     formData.append('center', JSON.stringify(this.geometry()))
-    formData.append('settings', JSON.stringify(geojson))
+    formData.append('zoom', this.getZoom())
+    formData.append('metadata', JSON.stringify(this.exportOptions()))
     const uri = this.urls.get('map_save', { map_id: this.options.umap_id })
     const [data, _, error] = await this.server.post(uri, {}, formData)
-    // FIXME: login_required response will not be an error, so it will not
-    // stop code while it should
-    if (error) {
-      return
-    }
+    if (error) return
     if (data.login_required) {
       window.onLogin = () => this.saveSelf()
       window.open(data.login_required)

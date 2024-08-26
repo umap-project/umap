@@ -60,7 +60,7 @@ from .forms import (
     DataLayerForm,
     DataLayerPermissionsForm,
     FlatErrorList,
-    MapSettingsForm,
+    MapMetadataForm,
     SendLinkForm,
     UpdateMapPermissionsForm,
     UserProfileForm,
@@ -321,9 +321,9 @@ class UserDownload(DetailView, SearchMixin):
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
             for map_ in self.get_maps():
                 umapjson = map_.generate_umapjson(self.request)
-                geojson_file = io.StringIO(json_dumps(umapjson))
+                json_file = io.StringIO(json_dumps(umapjson))
                 file_name = f"umap_backup_{map_.slug}_{map_.pk}.umap"
-                zip_file.writestr(file_name, geojson_file.getvalue())
+                zip_file.writestr(file_name, json_file.getvalue())
 
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
         response["Content-Disposition"] = (
@@ -352,10 +352,9 @@ class MapsShowCase(View):
             description = "{}\n[[{}|{}]]".format(
                 description, m.get_absolute_url(), _("View the map")
             )
-            geometry = m.settings.get("geometry", json.loads(m.center.geojson))
             return {
                 "type": "Feature",
-                "geometry": geometry,
+                "geometry": m.geometry,
                 "properties": {"name": m.name, "description": description},
             }
 
@@ -489,13 +488,13 @@ class MapDetailMixin(SessionMixin):
     model = Map
     pk_url_kwarg = "map_id"
 
-    def set_preconnect(self, properties, context):
+    def set_preconnect(self, metadata, context):
         # Try to extract the tilelayer domain, in order to but a preconnect meta.
-        url_template = properties.get("tilelayer", {}).get("url_template")
+        url_template = metadata.get("tilelayer", {}).get("url_template")
         # Not explicit tilelayer set, take the first of the list, which will be
         # used by frontend too.
         if not url_template:
-            tilelayers = properties.get("tilelayers")
+            tilelayers = metadata.get("tilelayers")
             if tilelayers:
                 url_template = tilelayers[0].get("url_template")
         if url_template:
@@ -504,9 +503,9 @@ class MapDetailMixin(SessionMixin):
             if domain and "{" not in domain:
                 context["preconnect_domains"] = [f"//{domain}"]
 
-    def get_map_properties(self):
+    def get_metadata(self):
         user = self.request.user
-        properties = {
+        metadata = {
             "urls": _urls_for_js(),
             "tilelayers": TileLayer.get_list(),
             "editMode": self.edit_mode,
@@ -522,6 +521,8 @@ class MapDetailMixin(SessionMixin):
             "websocketEnabled": settings.WEBSOCKET_ENABLED,
             "websocketURI": settings.WEBSOCKET_FRONT_URI,
             "importers": settings.UMAP_IMPORTERS,
+            "zoom": self.get_zoom(),
+            "geometry": self.get_geometry(),
         }
         created = bool(getattr(self, "object", None))
         if (created and self.object.owner) or (not created and not user.is_anonymous):
@@ -530,35 +531,31 @@ class MapDetailMixin(SessionMixin):
         else:
             map_statuses = AnonymousMapPermissionsForm.STATUS
             datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
-        properties["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
-        properties["datalayer_edit_statuses"] = [
+        metadata["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
+        metadata["datalayer_edit_statuses"] = [
             (i, str(label)) for i, label in datalayer_statuses
         ]
         if self.get_short_url():
-            properties["shortUrl"] = self.get_short_url()
+            metadata["shortUrl"] = self.get_short_url()
 
-        properties["user"] = self.get_user_data()
-        return properties
+        metadata["user"] = self.get_user_data()
+        return metadata
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        properties = self.get_map_properties()
+        metadata = self.get_metadata()
         if settings.USE_I18N:
             lang = settings.LANGUAGE_CODE
             # Check attr in case the middleware is not active
             if hasattr(self.request, "LANGUAGE_CODE"):
                 lang = self.request.LANGUAGE_CODE
-            properties["lang"] = lang
+            metadata["lang"] = lang
             locale = translation.to_locale(lang)
-            properties["locale"] = locale
+            metadata["locale"] = locale
             context["locale"] = locale
-        geojson = self.get_geojson()
-        if "properties" not in geojson:
-            geojson["properties"] = {}
-        geojson["properties"].update(properties)
-        geojson["properties"]["datalayers"] = self.get_datalayers()
-        context["map_settings"] = json_dumps(geojson, indent=settings.DEBUG)
-        self.set_preconnect(geojson["properties"], context)
+        metadata["datalayers"] = self.get_datalayers()
+        context["map_metadata"] = json_dumps(metadata, indent=settings.DEBUG)
+        self.set_preconnect(metadata, context)
         return context
 
     def get_datalayers(self):
@@ -574,17 +571,23 @@ class MapDetailMixin(SessionMixin):
     def is_starred(self):
         return False
 
-    def get_geojson(self):
+    def get_geometry(self):
         return {
-            "geometry": {
-                "coordinates": [DEFAULT_LONGITUDE, DEFAULT_LATITUDE],
-                "type": "Point",
-            },
-            "properties": {
-                "zoom": getattr(settings, "LEAFLET_ZOOM", 6),
-                "datalayers": [],
-            },
+            "coordinates": [DEFAULT_LONGITUDE, DEFAULT_LATITUDE],
+            "type": "Point",
         }
+
+    def get_zoom(self):
+        return settings.LEAFLET_ZOOM
+
+    # def get_geojson(self):
+    #     return {
+    #         "geometry": ,
+    #         "properties": {
+    #             "zoom": getattr(settings, "LEAFLET_ZOOM", 6),
+    #             "datalayers": [],
+    #         },
+    #     }
 
     def get_short_url(self):
         return None
@@ -637,7 +640,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
 
     def get_datalayers(self):
         return [
-            dl.metadata(self.request.user, self.request)
+            dl.get_metadata(self.request.user, self.request)
             for dl in self.object.datalayer_set.all()
         ]
 
@@ -663,13 +666,19 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             short_url = "%s%s" % (settings.SHORT_SITE_URL, short_path)
         return short_url
 
-    def get_geojson(self):
-        map_settings = self.object.settings
-        if "properties" not in map_settings:
-            map_settings["properties"] = {}
-        map_settings["properties"]["name"] = self.object.name
-        map_settings["properties"]["permissions"] = self.get_permissions()
-        return map_settings
+    def get_geometry(self):
+        return self.object.geometry
+
+    def get_zoom(self):
+        return self.object.zoom or self.object.metadata.get(
+            "zoom", settings.LEAFLET_ZOOM
+        )
+
+    def get_metadata(self):
+        metadata = super().get_metadata()
+        metadata["name"] = self.object.name
+        metadata["permissions"] = self.get_permissions()
+        return {**self.object.metadata, **metadata}
 
     def is_starred(self):
         user = self.request.user
@@ -744,12 +753,12 @@ class MapOEmbed(View):
         return response
 
 
-class MapViewGeoJSON(MapView):
+class MapMetadata(MapView):
     def get_canonical_url(self):
-        return reverse("map_geojson", args=(self.object.pk,))
+        return reverse("map_metadata", args=(self.object.pk,))
 
     def render_to_response(self, context, *args, **kwargs):
-        return HttpResponse(context["map_settings"], content_type="application/json")
+        return HttpResponse(context["map_metadata"], content_type="application/json")
 
 
 class MapNew(MapDetailMixin, TemplateView):
@@ -759,15 +768,15 @@ class MapNew(MapDetailMixin, TemplateView):
 class MapPreview(MapDetailMixin, TemplateView):
     template_name = "umap/map_detail.html"
 
-    def get_map_properties(self):
-        properties = super().get_map_properties()
+    def get_metadata(self):
+        properties = super().get_metadata()
         properties["preview"] = True
         return properties
 
 
 class MapCreate(FormLessEditMixin, PermissionsMixin, SessionMixin, CreateView):
     model = Map
-    form_class = MapSettingsForm
+    form_class = MapMetadataForm
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -821,11 +830,11 @@ def get_websocket_auth_token(request, map_id, map_inst):
 
 class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
     model = Map
-    form_class = MapSettingsForm
+    form_class = MapMetadataForm
     pk_url_kwarg = "map_id"
 
     def form_valid(self, form):
-        self.object.settings = form.cleaned_data["settings"]
+        self.object.metadata = form.cleaned_data["metadata"]
         self.object.save()
         return simple_json_response(
             id=self.object.pk,
@@ -1016,7 +1025,7 @@ class GZipMixin(object):
 
     @property
     def path(self):
-        return Path(self.object.geojson.path)
+        return Path(self.object.data.path)
 
     @property
     def gzip_path(self):
@@ -1092,7 +1101,7 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
         self.object = form.save()
         # Simple response with only metadata (including new id)
         response = simple_json_response(
-            **self.object.metadata(self.request.user, self.request)
+            **self.object.get_metadata(self.request.user, self.request)
         )
         response["X-Datalayer-Version"] = self.version
         return response
@@ -1125,7 +1134,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
             # If the reference document is not found, we can't merge.
             return None
         # New data received in the request.
-        incoming = json.loads(self.request.FILES["geojson"].read())
+        incoming = json.loads(self.request.FILES["data"].read())
 
         # Latest known version of the data.
         with open(self.path) as f:
@@ -1157,7 +1166,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
                 return HttpResponse(status=412)
 
             # Replace the uploaded file by the merged version.
-            self.request.FILES["geojson"].file = BytesIO(
+            self.request.FILES["data"].file = BytesIO(
                 json_dumps(merged).encode("utf-8")
             )
 
@@ -1167,11 +1176,11 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        data = {**self.object.metadata(self.request.user, self.request)}
+        body = {**self.object.get_metadata(self.request.user, self.request)}
         if self.request.session.get("needs_reload"):
-            data["geojson"] = json.loads(self.object.geojson.read().decode())
+            body["data"] = json.loads(self.object.data.read().decode())
             self.request.session["needs_reload"] = False
-        response = simple_json_response(**data)
+        response = simple_json_response(**body)
         response["X-Datalayer-Version"] = self.version
         return response
 

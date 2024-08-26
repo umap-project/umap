@@ -217,8 +217,8 @@ export const Cluster = DivIcon.extend({
   computeTextColor: function (el) {
     let color
     const backgroundColor = this.datalayer.getColor()
-    if (this.datalayer.options.cluster?.textColor) {
-      color = this.datalayer.options.cluster.textColor
+    if (this.datalayer.metadata.cluster?.textColor) {
+      color = this.datalayer.metadata.cluster.textColor
     }
     return color || DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
   },

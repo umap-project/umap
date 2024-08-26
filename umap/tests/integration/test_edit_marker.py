@@ -99,16 +99,15 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
     live_server, openmap, page
 ):
     data = deepcopy(DATALAYER_DATA)
-    data["_umap_options"] = {"color": "DarkCyan"}
-    DataLayerFactory(map=openmap, data=data)
+    DataLayerFactory(map=openmap, data=data, metadata={"color": "DarkCyan"})
     DataLayerFactory(
         map=openmap,
         name="other datalayer",
         data={
             "type": "FeatureCollection",
             "features": [],
-            "_umap_options": {"color": "DarkViolet"},
         },
+        metadata={"color": "DarkViolet"},
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".leaflet-marker-icon .icon_container")

@@ -21,9 +21,9 @@ def post_data():
         "display_on_load": True,
         "settings": '{"displayOnLoad": true, "browsable": true, "name": "name"}',
         "rank": 0,
-        "geojson": SimpleUploadedFile(
+        "data": SimpleUploadedFile(
             "name.json",
-            b'{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-3.1640625,53.014783245859235],[-3.1640625,51.86292391360244],[-0.50537109375,51.385495069223204],[1.16455078125,52.38901106223456],[-0.41748046875,53.91728101547621],[-2.109375,53.85252660044951],[-3.1640625,53.014783245859235]]]},"properties":{"_umap_options":{},"name":"Ho god, sounds like a polygouine"}},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[1.8017578124999998,51.16556659836182],[-0.48339843749999994,49.710272582105695],[-3.1640625,50.0923932109388],[-5.60302734375,51.998410382390325]]},"properties":{"_umap_options":{},"name":"Light line"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[0.63720703125,51.15178610143037]},"properties":{"_umap_options":{},"name":"marker he"}}],"_umap_options":{"displayOnLoad":true,"name":"new name","id":1668,"remoteData":{},"color":"LightSeaGreen","description":"test"}}',
+            b'{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-3.1640625,53.014783245859235],[-3.1640625,51.86292391360244],[-0.50537109375,51.385495069223204],[1.16455078125,52.38901106223456],[-0.41748046875,53.91728101547621],[-2.109375,53.85252660044951],[-3.1640625,53.014783245859235]]]},"properties":{},{"type":"Feature","geometry":{"type":"LineString","coordinates":[[1.8017578124999998,51.16556659836182],[-0.48339843749999994,49.710272582105695],[-3.1640625,50.0923932109388],[-5.60302734375,51.998410382390325]]},"properties":{"name":"Light line"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[0.63720703125,51.15178610143037]},"properties":{"name":"marker he"}}]}',
         ),
     }
 
@@ -38,7 +38,6 @@ def test_get_with_public_mode(client, settings, datalayer, map):
     assert response["Cache-Control"] is not None
     assert "Content-Encoding" not in response
     j = json.loads(response.content.decode())
-    assert "_umap_options" in j
     assert "features" in j
     assert j["type"] == "FeatureCollection"
 
@@ -98,8 +97,8 @@ def test_gzip_should_be_created_if_accepted(client, datalayer, map, post_data):
     url = reverse("datalayer_view", args=(map.pk, datalayer.pk))
     response = client.get(url, headers={"ACCEPT_ENCODING": "gzip"})
     assert response.status_code == 200
-    flat = datalayer.geojson.path
-    gzipped = datalayer.geojson.path + ".gz"
+    flat = datalayer.data.path
+    gzipped = datalayer.data.path + ".gz"
     assert Path(flat).exists()
     assert Path(gzipped).exists()
     assert Path(flat).stat().st_mtime_ns == Path(gzipped).stat().st_mtime_ns
@@ -122,7 +121,7 @@ def test_update(client, datalayer, map, post_data):
     assert "id" in j
     assert str(datalayer.pk) == j["id"]
     assert j["browsable"] is True
-    assert Path(modified_datalayer.geojson.path).exists()
+    assert Path(modified_datalayer.data.path).exists()
 
 
 def test_should_not_be_possible_to_update_with_wrong_map_id_in_url(
@@ -216,13 +215,13 @@ def test_versions_should_return_versions(client, datalayer, map, settings):
     map.share_status = Map.PUBLIC
     map.save()
     root = datalayer.storage_root()
-    datalayer.geojson.storage.save(
+    datalayer.data.storage.save(
         "%s/%s_1440924889.geojson" % (root, datalayer.pk), ContentFile("{}")
     )
-    datalayer.geojson.storage.save(
+    datalayer.data.storage.save(
         "%s/%s_1440923687.geojson" % (root, datalayer.pk), ContentFile("{}")
     )
-    datalayer.geojson.storage.save(
+    datalayer.data.storage.save(
         "%s/%s_1440918637.geojson" % (root, datalayer.pk), ContentFile("{}")
     )
     url = reverse("datalayer_versions", args=(map.pk, datalayer.pk))
@@ -243,18 +242,16 @@ def test_versions_can_return_old_format(client, datalayer, map, settings):
     datalayer.old_id = 123  # old datalayer id (now replaced by uuid)
     datalayer.save()
 
-    datalayer.geojson.storage.save(
+    datalayer.data.storage.save(
         "%s/%s_1440924889.geojson" % (root, datalayer.pk), ContentFile("{}")
     )
-    datalayer.geojson.storage.save(
+    datalayer.data.storage.save(
         "%s/%s_1440923687.geojson" % (root, datalayer.pk), ContentFile("{}")
     )
 
     # store with the id prefix (rather than the uuid)
     old_format_version = "%s_1440918637.geojson" % datalayer.old_id
-    datalayer.geojson.storage.save(
-        ("%s/" % root) + old_format_version, ContentFile("{}")
-    )
+    datalayer.data.storage.save(("%s/" % root) + old_format_version, ContentFile("{}"))
 
     url = reverse("datalayer_versions", args=(map.pk, datalayer.pk))
     versions = json.loads(client.get(url).content.decode())
@@ -276,7 +273,7 @@ def test_version_should_return_one_version_geojson(client, datalayer, map):
     map.save()
     root = datalayer.storage_root()
     name = "%s_1440924889.geojson" % datalayer.pk
-    datalayer.geojson.storage.save("%s/%s" % (root, name), ContentFile("{}"))
+    datalayer.data.storage.save("%s/%s" % (root, name), ContentFile("{}"))
     url = reverse("datalayer_version", args=(map.pk, datalayer.pk, name))
     assert client.get(url).content.decode() == "{}"
 
@@ -286,7 +283,7 @@ def test_version_should_return_403_if_not_allowed(client, datalayer, map):
     map.save()
     root = datalayer.storage_root()
     name = "%s_1440924889.geojson" % datalayer.pk
-    datalayer.geojson.storage.save("%s/%s" % (root, name), ContentFile("{}"))
+    datalayer.data.storage.save("%s/%s" % (root, name), ContentFile("{}"))
     url = reverse("datalayer_version", args=(map.pk, datalayer.pk, name))
     assert client.get(url).status_code == 403
 
@@ -447,27 +444,19 @@ def reference_data():
             {
                 "type": "Feature",
                 "geometry": {"type": "Point", "coordinates": [-1, 2]},
-                "properties": {"_umap_options": {}, "name": "foo"},
+                "properties": {"name": "foo"},
             },
             {
                 "type": "Feature",
                 "geometry": {"type": "LineString", "coordinates": [2, 3]},
-                "properties": {"_umap_options": {}, "name": "bar"},
+                "properties": {"name": "bar"},
             },
             {
                 "type": "Feature",
                 "geometry": {"type": "Point", "coordinates": [3, 4]},
-                "properties": {"_umap_options": {}, "name": "marker"},
+                "properties": {"name": "marker"},
             },
         ],
-        "_umap_options": {
-            "displayOnLoad": True,
-            "name": "new name",
-            "id": 1668,
-            "remoteData": {},
-            "color": "LightSeaGreen",
-            "description": "test",
-        },
     }
 
 
@@ -482,7 +471,7 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
         "name": "name",
         "display_on_load": True,
         "rank": 0,
-        "geojson": SimpleUploadedFile(
+        "data": SimpleUploadedFile(
             "foo.json", json.dumps(reference_data).encode("utf-8")
         ),
     }
@@ -496,12 +485,12 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
     client1_feature = {
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [5, 6]},
-        "properties": {"_umap_options": {}, "name": "marker"},
+        "properties": {"name": "marker"},
     }
     client1_data = deepcopy(reference_data)
     client1_data["features"].append(client1_feature)
 
-    post_data["geojson"] = SimpleUploadedFile(
+    post_data["data"] = SimpleUploadedFile(
         "foo.json",
         json.dumps(client1_data).encode("utf-8"),
     )
@@ -517,12 +506,12 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
     client2_feature = {
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [7, 8]},
-        "properties": {"_umap_options": {}, "name": "marker"},
+        "properties": {"name": "marker"},
     }
     client2_data = deepcopy(reference_data)
     client2_data["features"].append(client2_feature)
 
-    post_data["geojson"] = SimpleUploadedFile(
+    post_data["data"] = SimpleUploadedFile(
         "foo.json",
         json.dumps(client2_data).encode("utf-8"),
     )
@@ -534,7 +523,7 @@ def test_optimistic_merge_both_added(client, datalayer, map, reference_data):
     )
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
-    merged_features = json.load(modified_datalayer.geojson)["features"]
+    merged_features = json.load(modified_datalayer.data)["features"]
 
     for reference_feature in reference_data["features"]:
         assert reference_feature in merged_features
@@ -556,7 +545,7 @@ def test_optimistic_merge_conflicting_change_raises(
         "name": "name",
         "display_on_load": True,
         "rank": 0,
-        "geojson": SimpleUploadedFile(
+        "data": SimpleUploadedFile(
             "foo.json", json.dumps(reference_data).encode("utf-8")
         ),
     }
@@ -571,7 +560,7 @@ def test_optimistic_merge_conflicting_change_raises(
     client1_data = deepcopy(reference_data)
     client1_data["features"][0]["geometry"] = {"type": "Point", "coordinates": [5, 6]}
 
-    post_data["geojson"] = SimpleUploadedFile(
+    post_data["data"] = SimpleUploadedFile(
         "foo.json",
         json.dumps(client1_data).encode("utf-8"),
     )
@@ -587,7 +576,7 @@ def test_optimistic_merge_conflicting_change_raises(
     client2_data = deepcopy(reference_data)
     client2_data["features"][0]["geometry"] = {"type": "Point", "coordinates": [7, 8]}
 
-    post_data["geojson"] = SimpleUploadedFile(
+    post_data["data"] = SimpleUploadedFile(
         "foo.json",
         json.dumps(client2_data).encode("utf-8"),
     )
@@ -601,5 +590,5 @@ def test_optimistic_merge_conflicting_change_raises(
 
     # Check that the server rejected conflicting changes.
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
-    merged_features = json.load(modified_datalayer.geojson)["features"]
+    merged_features = json.load(modified_datalayer.data)["features"]
     assert merged_features == client1_data["features"]

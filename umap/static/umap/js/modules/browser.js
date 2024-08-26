@@ -86,7 +86,7 @@ export default class Browser {
     DomEvent.on(toggle, 'click', toggleList)
     datalayer.renderToolbox(headline)
     const name = DomUtil.create('span', 'datalayer-name', headline)
-    name.textContent = datalayer.options.name
+    name.textContent = datalayer.metadata.name
     DomEvent.on(name, 'click', toggleList)
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))

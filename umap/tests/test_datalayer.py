@@ -28,14 +28,14 @@ def test_upload_to(map, datalayer):
 
 
 def test_save_should_use_pk_as_name(map, datalayer):
-    assert "/{}_".format(datalayer.pk) in datalayer.geojson.name
+    assert "/{}_".format(datalayer.pk) in datalayer.data.name
 
 
 def test_same_geojson_file_name_will_be_suffixed(map, datalayer):
-    before = datalayer.geojson.name
-    datalayer.geojson.save(before, ContentFile("{}"))
-    assert datalayer.geojson.name != before
-    assert "/{}_".format(datalayer.pk) in datalayer.geojson.name
+    before = datalayer.data.name
+    datalayer.data.save(before, ContentFile("{}"))
+    assert datalayer.data.name != before
+    assert "/{}_".format(datalayer.pk) in datalayer.data.name
 
 
 def test_clone_should_return_new_instance(map, datalayer):
@@ -57,38 +57,38 @@ def test_clone_should_update_map_if_passed(datalayer, user, licence):
 def test_clone_should_clone_geojson_too(datalayer):
     clone = datalayer.clone()
     assert datalayer.pk != clone.pk
-    assert clone.geojson is not None
-    assert clone.geojson.path != datalayer.geojson.path
+    assert clone.data is not None
+    assert clone.data.path != datalayer.data.path
 
 
 def test_should_remove_old_versions_on_save(map, settings):
     datalayer = DataLayerFactory(uuid="0f1161c0-c07f-4ba4-86c5-8d8981d8a813", old_id=17)
     settings.UMAP_KEEP_VERSIONS = 3
     root = Path(datalayer.storage_root())
-    before = len(datalayer.geojson.storage.listdir(root)[1])
+    before = len(datalayer.data.storage.listdir(root)[1])
     newer = f"{datalayer.pk}_1440924889.geojson"
     medium = f"{datalayer.pk}_1440923687.geojson"
     older = f"{datalayer.pk}_1440918637.geojson"
     with_old_id = f"{datalayer.old_id}_1440918537.geojson"
     other = "123456_1440918637.geojson"
     for path in [medium, newer, older, with_old_id, other]:
-        datalayer.geojson.storage.save(root / path, ContentFile("{}"))
-        datalayer.geojson.storage.save(root / f"{path}.gz", ContentFile("{}"))
-    assert len(datalayer.geojson.storage.listdir(root)[1]) == 10 + before
-    files = datalayer.geojson.storage.listdir(root)[1]
+        datalayer.data.storage.save(root / path, ContentFile("{}"))
+        datalayer.data.storage.save(root / f"{path}.gz", ContentFile("{}"))
+    assert len(datalayer.data.storage.listdir(root)[1]) == 10 + before
+    files = datalayer.data.storage.listdir(root)[1]
     # Those files should be present before save, which will purge them
     assert older in files
     assert older + ".gz" in files
     assert with_old_id in files
     assert with_old_id + ".gz" in files
     datalayer.save()
-    files = datalayer.geojson.storage.listdir(root)[1]
+    files = datalayer.data.storage.listdir(root)[1]
     # Flat + gz files, but not latest gz, which is created at first datalayer read.
     # older and with_old_id should have been removed
     assert len(files) == 5
     assert newer in files
     assert medium in files
-    assert Path(datalayer.geojson.path).name in files
+    assert Path(datalayer.data.path).name in files
     # File from another datalayer, purge should have impacted it.
     assert other in files
     assert other + ".gz" in files
@@ -97,7 +97,7 @@ def test_should_remove_old_versions_on_save(map, settings):
     assert with_old_id not in files
     assert with_old_id + ".gz" not in files
     names = [v["name"] for v in datalayer.versions]
-    assert names == [Path(datalayer.geojson.name).name, newer, medium]
+    assert names == [Path(datalayer.data.name).name, newer, medium]
 
 
 def test_anonymous_cannot_edit_in_editors_mode(datalayer):

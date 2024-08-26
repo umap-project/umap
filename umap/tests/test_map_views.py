@@ -310,12 +310,14 @@ def test_non_editor_cannot_access_map_if_share_status_private(client, map, user)
     assert response.status_code == 403
 
 
-def test_map_geojson_view(client, map):
-    url = reverse("map_geojson", args=(map.pk,))
+def test_map_metadata_view(client, map):
+    url = reverse("map_metadata", args=(map.pk,))
     response = client.get(url)
     j = json.loads(response.content.decode())
     assert "json" in response["content-type"]
-    assert "type" in j
+    assert "geometry" in j
+    assert "zoom" in j
+    assert "umap_id" in j
 
 
 def test_only_owner_can_delete(client, map, user):
@@ -640,11 +642,7 @@ def test_download(client, map, datalayer):
     j = json.loads(response.content.decode())
     assert j["type"] == "umap"
     assert j["uri"] == f"http://testserver/en/map/test-map_{map.pk}"
-    assert j["geometry"] == {
-        "coordinates": [13.447265624999998, 48.94415123418794],
-        "type": "Point",
-    }
-    assert j["properties"] == {
+    assert j["metadata"] == {
         "datalayersControl": True,
         "description": "Which is just the Danube, at the end",
         "displayPopupFooter": False,
@@ -662,10 +660,14 @@ def test_download(client, map, datalayer):
         "tilelayersControl": True,
         "zoom": 7,
         "zoomControl": True,
+        "geometry": {
+            "coordinates": [13.447265624999998, 48.94415123418794],
+            "type": "Point",
+        },
     }
     assert j["layers"] == [
         {
-            "_umap_options": {
+            "metadata": {
                 "browsable": True,
                 "displayOnLoad": True,
                 "name": "test datalayer",
@@ -676,8 +678,8 @@ def test_download(client, map, datalayer):
                         "coordinates": [14.68896484375, 48.55297816440071],
                         "type": "Point",
                     },
+                    "metadata": {"color": "DarkCyan", "iconClass": "Ball"},
                     "properties": {
-                        "_umap_options": {"color": "DarkCyan", "iconClass": "Ball"},
                         "description": "Da place anonymous again 755",
                         "name": "Here",
                     },
@@ -705,13 +707,12 @@ def test_download_multiple_maps(client, map, datalayer):
         assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
         with f.open(f.infolist()[1]) as umap_file:
             umapjson = json.loads(umap_file.read().decode())
-            assert list(umapjson.keys()) == [
+            assert set(umapjson.keys()) == {
                 "type",
-                "geometry",
-                "properties",
+                "metadata",
                 "uri",
                 "layers",
-            ]
+            }
             assert umapjson["type"] == "umap"
             assert umapjson["uri"] == f"http://testserver/en/map/test-map_{map.id}"
 

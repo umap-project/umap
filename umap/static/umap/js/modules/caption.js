@@ -39,20 +39,20 @@ export default class Caption {
   }
 
   addDataLayer(datalayer, container) {
-    if (!datalayer.options.inCaption) return
+    if (!datalayer.metadata.inCaption) return
     const p = DomUtil.create('p', 'datalayer-legend', container)
     const legend = DomUtil.create('span', '', p)
     const headline = DomUtil.create('strong', '', p)
     datalayer.renderLegend(legend)
-    if (datalayer.options.description) {
+    if (datalayer.metadata.description) {
       DomUtil.element({
         tagName: 'span',
         parent: p,
-        safeHTML: Utils.toHTML(datalayer.options.description),
+        safeHTML: Utils.toHTML(datalayer.metadata.description),
       })
     }
     datalayer.renderToolbox(headline)
-    DomUtil.add('span', '', headline, `${datalayer.options.name} `)
+    DomUtil.add('span', '', headline, `${datalayer.metadata.name} `)
   }
 
   addCredits(container) {

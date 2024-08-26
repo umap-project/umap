@@ -1,6 +1,7 @@
 import platform
 
 import pytest
+from django.contrib.gis.geos import Point
 from playwright.sync_api import expect
 
 from ..base import DataLayerFactory
@@ -37,11 +38,8 @@ DATALAYER_DATA = {
 
 @pytest.fixture
 def bootstrap(map, live_server):
-    map.settings["properties"]["zoom"] = 6
-    map.settings["geometry"] = {
-        "type": "Point",
-        "coordinates": [8.429, 53.239],
-    }
+    map.zoom = 6
+    map.center = Point(8.429, 53.239)
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA)
 
@@ -124,7 +122,7 @@ def test_should_reset_style_on_cancel(live_server, openmap, page, bootstrap):
 
 def test_can_change_datalayer(live_server, openmap, page, bootstrap):
     other = DataLayerFactory(
-        name="Layer 2", map=openmap, settings={"color": "GoldenRod"}
+        name="Layer 2", map=openmap, metadata={"color": "GoldenRod"}
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     expect(page.locator("path[fill='DarkBlue']")).to_have_count(1)

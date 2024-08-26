@@ -1,8 +1,6 @@
-import json
 import re
 
 import pytest
-from django.core.files.base import ContentFile
 from playwright.sync_api import expect
 
 from ..base import DataLayerFactory
@@ -10,17 +8,13 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
-def set_options(datalayer, **options):
-    # For now we need to change both the DB and the FS…
-    datalayer.settings.update(options)
-    data = json.load(datalayer.geojson.file)
-    data["_umap_options"].update(**options)
-    datalayer.geojson = ContentFile(json.dumps(data), "foo.json")
+def set_metadata(datalayer, **options):
+    datalayer.metadata.update(options)
     datalayer.save()
 
 
 def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
-    set_options(datalayer, displayOnLoad=False)
+    set_metadata(datalayer, displayOnLoad=False)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     layers = page.locator(".umap-browser .datalayer")
@@ -37,7 +31,7 @@ def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
 
 
 def test_should_honour_fromZoom(live_server, map, datalayer, page):
-    set_options(datalayer, displayOnLoad=True, fromZoom=6)
+    set_metadata(datalayer, displayOnLoad=True, fromZoom=6)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#5/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
@@ -55,7 +49,7 @@ def test_should_honour_fromZoom(live_server, map, datalayer, page):
 
 
 def test_should_honour_toZoom(live_server, map, datalayer, page):
-    set_options(datalayer, displayOnLoad=True, toZoom=6)
+    set_metadata(datalayer, displayOnLoad=True, toZoom=6)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#7/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
@@ -99,13 +93,15 @@ def test_should_honour_color_variable(live_server, map, page):
                 },
             },
         ],
-        "_umap_options": {
-            "name": "Calque 2",
+    }
+    DataLayerFactory(
+        map=map,
+        data=data,
+        metadata={
             "color": "{mycolor}",
             "fillColor": "{mycolor}",
         },
-    }
-    DataLayerFactory(map=map, data=data)
+    )
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-overlay-pane path[fill='tomato']"))
     markers = page.locator(".leaflet-marker-icon .icon_container")
@@ -113,10 +109,10 @@ def test_should_honour_color_variable(live_server, map, page):
 
 
 def test_datalayers_in_query_string(live_server, datalayer, map, page):
-    map.settings["properties"]["onLoadPanel"] = "datalayers"
+    map.metadata["onLoadPanel"] = "datalayers"
     map.save()
     with_old_id = DataLayerFactory(old_id=134, map=map, name="with old id")
-    set_options(with_old_id, name="with old id")
+    set_metadata(with_old_id, name="with old id")
     visible = page.locator(".umap-browser .datalayer:not(.off) .datalayer-name")
     hidden = page.locator(".umap-browser .datalayer.off .datalayer-name")
     page.goto(f"{live_server.url}{map.get_absolute_url()}")

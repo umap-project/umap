@@ -26,15 +26,14 @@ class Feature {
 
     // DataLayer the feature belongs to
     this.datalayer = datalayer
-    this.properties = { _umap_options: {}, ...(geojson.properties || {}) }
+    this.properties = { ...(geojson.properties || {}) }
+    this.metadata = {}
     this.staticOptions = {}
 
     if (geojson.coordinates) {
       geojson = { geometry: geojson }
     }
-    if (geojson.geometry) {
-      this.populate(geojson)
-    }
+    this.populate(geojson)
 
     if (id) {
       this.id = id
@@ -187,7 +186,7 @@ class Feature {
           window.top.location = outlink
           break
         default:
-          window.open(this.properties._umap_options.outlink)
+          window.open(this.metadata.outlink)
       }
       return
     }
@@ -298,13 +297,13 @@ class Feature {
 
   getInteractionOptions() {
     return [
-      'properties._umap_options.popupShape',
-      'properties._umap_options.popupTemplate',
-      'properties._umap_options.showLabel',
-      'properties._umap_options.labelDirection',
-      'properties._umap_options.labelInteractive',
-      'properties._umap_options.outlink',
-      'properties._umap_options.outlinkTarget',
+      'metadata.popupShape',
+      'metadata.popupTemplate',
+      'metadata.showLabel',
+      'metadata.labelDirection',
+      'metadata.labelInteractive',
+      'metadata.outlink',
+      'metadata.outlinkTarget',
     ]
   }
 
@@ -321,7 +320,7 @@ class Feature {
   }
 
   hasPopupFooter() {
-    if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic) {
+    if (this.datalayer.isRemoteLayer() && this.datalayer.metadata.remoteData.dynamic) {
       return false
     }
     return this.map.getOption('displayPopupFooter')
@@ -375,20 +374,24 @@ class Feature {
     return [key, value]
   }
 
-  populate(geojson) {
+  populate(geojson = {}) {
     this._geometry = geojson.geometry
     this.properties = Object.fromEntries(
       Object.entries(geojson.properties || {}).map(this.cleanProperty)
     )
-    this.properties._umap_options = L.extend(
+    this.metadata = L.extend(
       {},
       this.properties._storage_options,
-      this.properties._umap_options
+      this.properties._umap_options,
+      geojson.metadata
     )
+    // Legacy
+    delete this.properties._umap_options
+    delete this.properties._storage_options
     // Retrocompat
-    if (this.properties._umap_options.clickable === false) {
-      this.properties._umap_options.interactive = false
-      delete this.properties._umap_options.clickable
+    if (this.metadata.clickable === false) {
+      this.metadata.interactive = false
+      delete this.metadata.clickable
     }
   }
 
@@ -408,8 +411,8 @@ class Feature {
     let value = fallback
     if (typeof this.staticOptions[option] !== 'undefined') {
       value = this.staticOptions[option]
-    } else if (U.Utils.usableOption(this.properties._umap_options, option)) {
-      value = this.properties._umap_options[option]
+    } else if (U.Utils.usableOption(this.metadata, option)) {
+      value = this.metadata[option]
     } else if (this.datalayer) {
       value = this.datalayer.getOption(option, this)
     } else {
@@ -451,15 +454,12 @@ class Feature {
     return this.datalayer.getPreviousFeature(this)
   }
 
+  cloneMetadata() {
+    return L.extend({}, this.metadata)
+  }
+
   cloneProperties() {
-    const properties = L.extend({}, this.properties)
-    properties._umap_options = L.extend({}, properties._umap_options)
-    if (Object.keys && Object.keys(properties._umap_options).length === 0) {
-      delete properties._umap_options // It can make a difference on big data sets
-    }
-    // Legacy
-    delete properties._storage_options
-    return properties
+    return L.extend({}, this.properties)
   }
 
   deleteProperty(property) {
@@ -473,10 +473,16 @@ class Feature {
   }
 
   toGeoJSON() {
-    return Utils.CopyJSON({
+    let metadata = this.cloneMetadata()
+    if (!Object.keys(metadata).length) {
+      // Remove empty object from exported json
+      metadata = undefined
+    }
+    return Utils.copyJSON({
       type: 'Feature',
       geometry: this.geometry,
       properties: this.cloneProperties(),
+      metadata: metadata,
       id: this.id,
     })
   }
@@ -615,15 +621,15 @@ export class Point extends Feature {
 
   getShapeOptions() {
     return [
-      'properties._umap_options.color',
-      'properties._umap_options.iconClass',
-      'properties._umap_options.iconUrl',
-      'properties._umap_options.iconOpacity',
+      'metadata.color',
+      'metadata.iconClass',
+      'metadata.iconUrl',
+      'metadata.iconOpacity',
     ]
   }
 
   getAdvancedOptions() {
-    return ['properties._umap_options.zoomTo']
+    return ['metadata.zoomTo']
   }
 
   appendEditFieldsets(container) {
@@ -695,19 +701,11 @@ class Path extends Feature {
   }
 
   getShapeOptions() {
-    return [
-      'properties._umap_options.color',
-      'properties._umap_options.opacity',
-      'properties._umap_options.weight',
-    ]
+    return ['metadata.color', 'metadata.opacity', 'metadata.weight']
   }
 
   getAdvancedOptions() {
-    return [
-      'properties._umap_options.smoothFactor',
-      'properties._umap_options.dashArray',
-      'properties._umap_options.zoomTo',
-    ]
+    return ['metadata.smoothFactor', 'metadata.dashArray', 'metadata.zoomTo']
   }
 
   getBestZoom() {
@@ -732,9 +730,10 @@ class Path extends Feature {
 
   isolateShape(latlngs) {
     const properties = this.cloneProperties()
+    const metadata = this.cloneMetadata()
     const type = this instanceof LineString ? 'LineString' : 'Polygon'
     const geometry = this.convertLatLngs(latlngs)
-    const other = this.datalayer.makeFeature({ type, geometry, properties })
+    const other = this.datalayer.makeFeature({ type, geometry, properties, metadata })
     other.edit()
     return other
   }
@@ -919,10 +918,10 @@ export class Polygon extends Path {
   getShapeOptions() {
     const options = super.getShapeOptions()
     options.push(
-      'properties._umap_options.stroke',
-      'properties._umap_options.fill',
-      'properties._umap_options.fillColor',
-      'properties._umap_options.fillOpacity'
+      'metadata.stroke',
+      'metadata.fill',
+      'metadata.fillColor',
+      'metadata.fillOpacity'
     )
     return options
   }
@@ -937,7 +936,7 @@ export class Polygon extends Path {
 
   getInteractionOptions() {
     const options = super.getInteractionOptions()
-    options.push('properties._umap_options.interactive')
+    options.push('metadata.interactive')
     return options
   }
 
@@ -956,7 +955,7 @@ export class Polygon extends Path {
 
   getAdvancedOptions() {
     const actions = super.getAdvancedOptions()
-    actions.push('properties._umap_options.mask')
+    actions.push('metadata.mask')
     return actions
   }
 

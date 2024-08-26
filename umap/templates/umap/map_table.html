@@ -35,7 +35,7 @@
               <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
             </th>
             <td>
-              {{ map_inst.preview_settings|json_script:unique_id }}
+              {{ map_inst.preview_metadata|json_script:unique_id }}
               <button class="map-icon map-opener"
                       data-map-id="{{ unique_id }}"
                       title="{% translate "Open preview" %}">

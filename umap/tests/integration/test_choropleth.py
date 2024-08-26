@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -9,10 +10,20 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
+METADATA = {
+    "displayOnLoad": True,
+    "browsable": True,
+    "name": "Taux de chômage",
+    "labelKey": "{nom} ({taux})",
+    "type": "Choropleth",
+    "choropleth": {"property": "taux"},
+}
+
+
 def test_basic_choropleth_map_with_default_color(map, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/choropleth_region_chomage.geojson"
     data = json.loads(path.read_text())
-    DataLayerFactory(data=data, map=map)
+    DataLayerFactory(data=data, map=map, metadata=METADATA)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     # Hauts-de-France
     expect(page.locator("path[fill='#08519c']")).to_have_count(1)
@@ -31,8 +42,13 @@ def test_basic_choropleth_map_with_custom_brewer(openmap, live_server, page):
     data = json.loads(path.read_text())
 
     # Change brewer at load
-    data["_umap_options"]["choropleth"]["brewer"] = "Reds"
-    DataLayerFactory(data=data, map=openmap)
+    metadata = deepcopy(METADATA)
+    metadata["choropleth"]["brewer"] = "Reds"
+    DataLayerFactory(
+        data=data,
+        map=openmap,
+        metadata=metadata,
+    )
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     # Hauts-de-France
@@ -70,8 +86,9 @@ def test_basic_choropleth_map_with_custom_classes(openmap, live_server, page):
     data = json.loads(path.read_text())
 
     # Change brewer at load
-    data["_umap_options"]["choropleth"]["classes"] = 6
-    DataLayerFactory(data=data, map=openmap)
+    metadata = deepcopy(METADATA)
+    metadata["choropleth"]["classes"] = 6
+    DataLayerFactory(data=data, map=openmap, metadata=metadata)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
 

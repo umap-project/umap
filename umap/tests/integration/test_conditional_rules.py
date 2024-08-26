@@ -39,9 +39,6 @@ DATALAYER_DATA1 = {
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
     ],
-    "_umap_options": {
-        "name": "Calque 1",
-    },
 }
 
 
@@ -70,14 +67,11 @@ DATALAYER_DATA2 = {
             "geometry": {"type": "Point", "coordinates": [4.372559, 47.945786]},
         },
     ],
-    "_umap_options": {
-        "name": "Calque 2",
-    },
 }
 
 
 def test_simple_equal_rule_at_load(live_server, page, map):
-    map.settings["properties"]["rules"] = [
+    map.metadata["rules"] = [
         {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
     ]
     map.save()
@@ -91,7 +85,7 @@ def test_simple_equal_rule_at_load(live_server, page, map):
 
 
 def test_simple_not_equal_rule_at_load(live_server, page, map):
-    map.settings["properties"]["rules"] = [
+    map.metadata["rules"] = [
         {"condition": "mytype!=even", "options": {"color": "aliceblue"}}
     ]
     map.save()
@@ -105,7 +99,7 @@ def test_simple_not_equal_rule_at_load(live_server, page, map):
 
 
 def test_gt_rule_with_number_at_load(live_server, page, map):
-    map.settings["properties"]["rules"] = [
+    map.metadata["rules"] = [
         {"condition": "mynumber>10", "options": {"color": "aliceblue"}}
     ]
     map.save()
@@ -119,7 +113,7 @@ def test_gt_rule_with_number_at_load(live_server, page, map):
 
 
 def test_lt_rule_with_number_at_load(live_server, page, map):
-    map.settings["properties"]["rules"] = [
+    map.metadata["rules"] = [
         {"condition": "mynumber<14", "options": {"color": "aliceblue"}}
     ]
     map.save()
@@ -133,7 +127,7 @@ def test_lt_rule_with_number_at_load(live_server, page, map):
 
 
 def test_lt_rule_with_float_at_load(live_server, page, map):
-    map.settings["properties"]["rules"] = [
+    map.metadata["rules"] = [
         {"condition": "mynumber<12.3", "options": {"color": "aliceblue"}}
     ]
     map.save()
@@ -147,7 +141,7 @@ def test_lt_rule_with_float_at_load(live_server, page, map):
 
 
 def test_equal_rule_with_boolean_at_load(live_server, page, map):
-    map.settings["properties"]["rules"] = [
+    map.metadata["rules"] = [
         {"condition": "myboolean=true", "options": {"color": "aliceblue"}}
     ]
     map.save()
@@ -179,7 +173,7 @@ def test_can_create_new_rule(live_server, page, openmap):
 
 
 def test_can_deactive_rule_from_list(live_server, page, openmap):
-    openmap.settings["properties"]["rules"] = [
+    openmap.metadata["rules"] = [
         {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
     ]
     openmap.save()

@@ -34,10 +34,10 @@ DATALAYER_DATA = {
         },
         {
             "type": "Feature",
+            "metadata": {
+                "color": "OliveDrab",
+            },
             "properties": {
-                "_umap_options": {
-                    "color": "OliveDrab",
-                },
                 "name": "test",
                 "description": "Some description",
             },
@@ -49,11 +49,11 @@ DATALAYER_DATA = {
         },
         {
             "type": "Feature",
+            "metadata": {
+                "fill": False,
+                "opacity": 0.6,
+            },
             "properties": {
-                "_umap_options": {
-                    "fill": False,
-                    "opacity": 0.6,
-                },
                 "name": "test",
             },
             "id": "YwMTM",
@@ -76,7 +76,7 @@ DATALAYER_DATA = {
 
 @pytest.fixture
 def bootstrap(map, live_server):
-    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.metadata["onLoadPanel"] = "databrowser"
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA)
 
@@ -94,13 +94,9 @@ def test_umap_export(map, live_server, bootstrap, page):
     downloaded = json.loads(path.read_text())
     del downloaded["uri"]  # Port changes at each run
     assert downloaded == {
-        "geometry": {
-            "coordinates": [13.447265624999998, 48.94415123418794],
-            "type": "Point",
-        },
         "layers": [
             {
-                "_umap_options": {
+                "metadata": {
                     "browsable": True,
                     "displayOnLoad": True,
                     "name": "test datalayer",
@@ -131,8 +127,8 @@ def test_umap_export(map, live_server, bootstrap, page):
                             "type": "Point",
                         },
                         "id": "QwNjg",
+                        "metadata": {"color": "OliveDrab"},
                         "properties": {
-                            "_umap_options": {"color": "OliveDrab"},
                             "name": "test",
                             "description": "Some description",
                         },
@@ -152,8 +148,8 @@ def test_umap_export(map, live_server, bootstrap, page):
                             "type": "LineString",
                         },
                         "id": "YwMTM",
+                        "metadata": {"fill": False, "opacity": 0.6},
                         "properties": {
-                            "_umap_options": {"fill": False, "opacity": 0.6},
                             "name": "test",
                         },
                         "type": "Feature",
@@ -162,7 +158,11 @@ def test_umap_export(map, live_server, bootstrap, page):
                 "type": "FeatureCollection",
             }
         ],
-        "properties": {
+        "metadata": {
+            "geometry": {
+                "type": "Point",
+                "coordinates": [13.447265624999998, 48.94415123418794],
+            },
             "datalayersControl": True,
             "description": "Which is just the Danube, at the end",
             "displayPopupFooter": False,
@@ -234,7 +234,7 @@ def test_kml_export(map, live_server, bootstrap, page):
     download.save_as(path)
     assert (
         path.read_text()
-        == """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<Placemark id="gyNzM">\n<name>name poly</name><ExtendedData></ExtendedData>\n  <Polygon>\n<outerBoundaryIs>\n  <LinearRing><coordinates>11.25,53.585984\n10.151367,52.975108\n12.689209,52.167194\n14.084473,53.199452\n12.634277,53.618579\n11.25,53.585984\n11.25,53.585984</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>\n<Placemark id="QwNjg">\n<name>test</name><description>Some description</description><ExtendedData>\n  <Data name="_umap_options"><value>{"color":"OliveDrab"}</value></Data></ExtendedData>\n  <Point><coordinates>-0.274658,52.57635</coordinates></Point></Placemark>\n<Placemark id="YwMTM">\n<name>test</name><ExtendedData>\n  <Data name="_umap_options"><value>{"fill":false,"opacity":0.6}</value></Data></ExtendedData>\n  <LineString><coordinates>-0.571289,54.476422\n0.439453,54.610255\n1.724854,53.448807\n4.163818,53.988395\n5.306396,53.533778\n6.591797,53.709714\n7.042236,53.350551</coordinates></LineString></Placemark></Document></kml>"""
+        == """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<Placemark id="gyNzM">\n<name>name poly</name><ExtendedData></ExtendedData>\n  <Polygon>\n<outerBoundaryIs>\n  <LinearRing><coordinates>11.25,53.585984\n10.151367,52.975108\n12.689209,52.167194\n14.084473,53.199452\n12.634277,53.618579\n11.25,53.585984\n11.25,53.585984</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>\n<Placemark id="QwNjg">\n<name>test</name><description>Some description</description><ExtendedData></ExtendedData>\n  <Point><coordinates>-0.274658,52.57635</coordinates></Point></Placemark>\n<Placemark id="YwMTM">\n<name>test</name><ExtendedData></ExtendedData>\n  <LineString><coordinates>-0.571289,54.476422\n0.439453,54.610255\n1.724854,53.448807\n4.163818,53.988395\n5.306396,53.533778\n6.591797,53.709714\n7.042236,53.350551</coordinates></LineString></Placemark></Document></kml>"""
     )
 
 
@@ -272,8 +272,8 @@ def test_geojson_export(map, live_server, bootstrap, page):
             {
                 "geometry": {"coordinates": [-0.274658, 52.57635], "type": "Point"},
                 "id": "QwNjg",
+                "metadata": {"color": "OliveDrab"},
                 "properties": {
-                    "_umap_options": {"color": "OliveDrab"},
                     "name": "test",
                     "description": "Some description",
                 },
@@ -293,8 +293,8 @@ def test_geojson_export(map, live_server, bootstrap, page):
                     "type": "LineString",
                 },
                 "id": "YwMTM",
+                "metadata": {"fill": False, "opacity": 0.6},
                 "properties": {
-                    "_umap_options": {"fill": False, "opacity": 0.6},
                     "name": "test",
                 },
                 "type": "Feature",
