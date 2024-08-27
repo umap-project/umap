@@ -56,8 +56,6 @@
 .umap-table-editor textarea,
 .umap-table-editor input[type=text] {
     border-radius: initial;
-    width: initial;
-    position: fixed;
 }
 .umap-table-editor th button {
     transform: rotate(90deg);
