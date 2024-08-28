@@ -592,7 +592,6 @@ i.info {
 .with-transition {
     transition: all .7s;
 }
-
 .umap-delete:before, .umap-empty:before, .umap-to-polygon:before,
 .umap-clone:before, .umap-edit:before, .umap-download:before,
 .umap-to-polyline:before {
@@ -614,43 +613,19 @@ i.info {
     vertical-align: middle;
 }
 .umap-to-polygon:before {
-    background-position: -80px -48px;
-}
-html[dir="rtl"] .umap-to-polygon:before {
-  background-position: -69px -41px;
+    background-position: -72px -42px;
 }
 .umap-to-polyline:before {
-    background-position: -110px -42px;
-}
-html[dir="rtl"] .umap-to-polyline:before {
-  background-position: -105px -42px;
+    background-position: -106px -42px;
 }
 .umap-clone:before {
-    background-position: -150px -78px;
-}
-html[dir="rtl"] .umap-clone:before {
-  background-position: -139px -78px;
-}
-.umap-delete:before {
-    background-position: -32px -8px;
-}
-html[dir="rtl"] .umap-delete:before {
-  background-position: -34px -8px;
-}
-.umap-edit:before {
-    background-position: -6px -6px;
+    background-position: -144px -78px;
 }
 .umap-empty:before {
-    background-position: -110px -78px;
-}
-html[dir="rtl"] .umap-empty:before {
-  background-position: -104px -78px;
+    background-position: -108px -78px;
 }
 .umap-download:before {
-    background-position: -77px -78px;
-}
-html[dir="rtl"] .umap-download:before {
-  background-position: -68px -78px;
+    background-position: -72px -78px;
 }
 .permissions-panel,
 .umap-upload,
@@ -781,9 +756,7 @@ input[type=hidden].blur + [type="button"] {
     border-radius: initial;
 }
 .copiable-input button {
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    background-position: -141px -140px;
+    background-position: -46px -92px;
     display: inline;
     padding: 0 10px;
     height: 32px;

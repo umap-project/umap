@@ -40,17 +40,13 @@
 .umap-slideshow-toolbox .stop:before {
     content: '⏹';
 }
+html[dir="rtl"] .umap-slideshow-toolbox .prev:before,
 .umap-slideshow-toolbox .next:before {
     content: '⏵︎';
 }
-html[dir="rtl"] .umap-slideshow-toolbox .next:before {
-    content: '⏴︎';
-}
+html[dir="rtl"] .umap-slideshow-toolbox .next:before,
 .umap-slideshow-toolbox .prev:before {
     content: '⏴︎';
-}
-html[dir="rtl"] .umap-slideshow-toolbox .prev:before {
-    content: '⏵︎';
 }
 .umap-slideshow-toolbox .play div {
     height: 20px;

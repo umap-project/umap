@@ -14,6 +14,14 @@
     width: 24px;
     --tile: -24px;
 }
+.icon-24 {
+    background-image: url('../img/24.svg');
+    --tile: -36px;
+    margin-inline-start: -6px;
+    height: 36px;
+    line-height: 36px;
+    width: 36px;
+}
 .icon + span {
     margin-inline-start: 10px;
 }
@@ -31,11 +39,17 @@ html[dir="rtl"] .icon {
 .dark .icon-16 {
     background-image: url('../img/16-white.svg');
 }
+.dark .icon-24 {
+    background-image: url('../img/24-white.svg');
+}
 .icon-add {
     background-position: var(--tile) var(--tile);
 }
 .icon-back {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 6);
+}
+.icon-backup {
+    background-position: var(--tile) calc(var(--tile) * 6);
 }
 .icon-caption {
     background-position: calc(var(--tile) * 4) var(--tile);
@@ -43,12 +57,18 @@ html[dir="rtl"] .icon {
 .icon-close {
     background-position: var(--tile) 0px;
 }
+.icon-copy {
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 4);
+}
 .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 2);
 }
 .readonly .icon-delete,
 .off .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 5);
+}
+.icon-download {
+    background-position: 0 calc(var(--tile) * 6);
 }
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
@@ -69,6 +89,9 @@ html[dir="rtl"] .icon {
 }
 .icon-filters {
     background-position: 0px var(--tile);
+}
+.icon-forward {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 6);
 }
 .icon-key {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);

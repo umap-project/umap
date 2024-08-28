@@ -171,12 +171,9 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     width: 24px;
     height: 24px;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: -20%;
     background-image: url('./img/16-white.svg');
-    background-position: -52px -49px;
-}
-html[dir="rtl"] .leaflet-control-edit-enable [type="button"]:before {
-  background-position: -43px -49px;
+    background-position: -48px -48px;
 }
 .leaflet-control-edit-enable [type="button"] {
     width: initial;
@@ -313,38 +310,11 @@ ul.photon-autocomplete {
 /* ***************************** */
 /*    Share and download panel   */
 /* ***************************** */
-.download-file {
-    height: 1.2em;
-    min-height: 1.2em;
+.downloads li {
+    height: 1.7em;
     padding: 0;
     text-align: start;
     vertical-align: bottom;
-}
-.download-file:before,
-.download-backup:before {
-    height: 24px;
-    width: 24px;
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    background-size: auto auto;
-    background-position: -4px -145px;
-    content: " ";
-    vertical-align: bottom;
-    display: inline-block;
-}
-html[dir="rtl"] .download-file:before,
-html[dir="rtl"] .download-backup:before {
-  background-position: 2px -145px;
-}
-.download-backup:before {
-    background-position: -27px -144px;
-}
-html[dir="rtl"] .download-backup:before {
-    background-position: -22px -144px;
-}
-.leaflet-container .download-backup {
-    color: black;
-    display: block;
 }
 .vspace {
     height: 32px;
@@ -656,9 +626,6 @@ html[dir="rtl"] .download-backup:before {
     height: 100%;
     vertical-align: middle;
     text-indent: -9999px;
-}
-html[dir="rtl"] .umap-main-edit-toolbox .logo a {
-  text-indent: +9999px;
 }
 .umap-main-edit-toolbox .map-name {
     display: inline-block;
@@ -1053,45 +1020,13 @@ a.umap-control-caption,
     position: relative;
     background-color: rgb(68, 68, 68);
     color: white;
-    display: table;
+    display: flex;
     width: 100%;
     margin-top: auto;
     min-width: 99px;
     border-radius: 2px;
     max-height: 24px;
-}
-.umap-popup-footer li {
-    line-height: 24px;
-    height: 24px;
-    display: table-cell;
-    width: 33.3%;
-    cursor: pointer;
-    text-align: center;
-}
-.umap-popup-footer li:before {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-inline-start: 5px;
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    vertical-align: middle;
-    content: " ";
-}
-.umap-popup-footer li.zoom:before {
-    background-position: -5px -101px;
-}
-.umap-popup-footer li[rel="prev"]:before {
-    background-position: -28px -77px;
-}
-html[dir="rtl"] .umap-popup-footer li[rel="prev"]:before {
-    background-position: -5px -77px;
-}
-.umap-popup-footer li[rel="next"]:before {
-    background-position: -5px -77px;
-}
-html[dir="rtl"] .umap-popup-footer li[rel="next"]:before {
-    background-position: -28px -77px;
+    justify-content: space-around;
 }
 .umap-popup a:hover {
     text-decoration: underline;

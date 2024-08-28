@@ -39,10 +39,19 @@ export default class Share {
       this.container,
       translate("Only visible layers' data")
     )
+    const list = document.createElement('ul')
+    list.classList.add('downloads')
+    this.container.appendChild(list)
     for (const format of Object.keys(EXPORT_FORMATS)) {
-      DomUtil.createButton('download-file', this.container, format, () =>
-        this.download(format)
-      )
+      const button = Utils.loadTemplate(`
+        <li>
+          <button class="flat" type="button">
+            <i class="icon icon-16 icon-download"></i>${format}
+          </button>
+        </li>
+      `)
+      button.addEventListener('click', () => this.download(format))
+      list.appendChild(button)
     }
     DomUtil.create('div', 'vspace', this.container)
     DomUtil.add(
@@ -54,15 +63,16 @@ export default class Share {
     const downloadUrl = Utils.template(this.map.options.urls.map_download, {
       map_id: this.map.options.umap_id,
     })
-    const link = DomUtil.createLink(
-      'download-backup',
-      this.container,
-      translate('full backup'),
-      downloadUrl
-    )
-    let name = this.map.options.name || 'data'
-    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    link.setAttribute('download', `${name}.umap`)
+    const link = Utils.loadTemplate(`
+      <div>
+        <a href="${downloadUrl}">
+          <i class="icon icon-16 icon-backup"></i>${translate('full backup')}
+        </a>
+      </div>
+    `)
+    this.container.appendChild(link)
+    // File will be named by back-office
+    link.setAttribute('download', 'backup.umap')
     DomUtil.create('hr', '', this.container)
 
     const embedTitle = DomUtil.add('h4', '', this.container, translate('Embed the map'))
