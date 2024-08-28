@@ -2,9 +2,8 @@
 .icon {
     background-repeat: no-repeat;
     display: inline-block;
-    padding: 0 10px;
     vertical-align: middle;
-    /* Reste default style, in case we apply this class on a button element  */
+    /* Reset default style, in case we apply this class on a button element  */
     border: none;
     background-color: initial;
 }
@@ -12,9 +11,14 @@
     background-image: url('../img/16.svg');
     height: 24px;
     line-height: 24px;
+    width: 24px;
+    --tile: -24px;
 }
 .icon + span {
     margin-inline-start: 10px;
+}
+html[dir="rtl"] .icon {
+  transform: scaleX(-1);
 }
 .icon-block {
     display: block;
@@ -28,127 +32,99 @@
     background-image: url('../img/16-white.svg');
 }
 .icon-add {
-    background-position: -26px -24px;
-}
-html[dir="rtl"] .icon-add {
-    background-position: -25px -24px;
+    background-position: var(--tile) var(--tile);
 }
 .icon-back {
-    background-position: -122px -144px;
-}
-html[dir="rtl"] .icon-back {
-  transform: scaleX(-1);
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 6);
 }
 .icon-caption {
-    background-position: -98px -24px;
+    background-position: calc(var(--tile) * 4) var(--tile);
 }
 .icon-close {
-    background-position: -26px 0px;
+    background-position: var(--tile) 0px;
 }
 .icon-delete {
-    background-position: -121px -49px;
-}
-html[dir="rtl"] .icon-delete {
-  background-position: -124px -49px;
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 2);
 }
 .readonly .icon-delete,
 .off .icon-delete {
-    background-position: -121px -122px;
-}
-html[dir="rtl"] .readonly .icon-delete,
-html[dir="rtl"] .off .icon-delete {
-  background-position: -124px -122px;
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 5);
 }
 .icon-drag {
-    background-position: -72px -73px;
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
     cursor: move;
     float: inline-end;
 }
 .icon-eye {
-    background-position: -49px -26px;
+    background-position: calc(var(--tile) * 2) var(--tile);
 }
 .off .icon-eye {
-    background-position: -73px -26px;
+    background-position: calc(var(--tile) * 3) var(--tile);
 }
 .icon-edit {
-    background-position: -51px -49px;
-}
-html[dir="rtl"] .icon-edit {
-  background-position: -49px -49px;
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 2);
 }
 .off .icon-edit {
-    background-position: -51px -73px;
-}
-html[dir="rtl"] .off .icon-edit {
-  background-position: -49px -73px;
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 3);
 }
 .icon-filters {
-    background-position: -4px -24px;
-}
-html[dir="rtl"] .icon-filters {
-    background-position: -1px -24px;
+    background-position: 0px var(--tile);
 }
 .icon-key {
-    background-position: -144px -121px;
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);
 }
 .icon-layers {
-    background-position: -96px -120px;
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 5);
 }
 .icon-list {
-    background-position: -28px -99px;
+    background-position: var(--tile) calc(var(--tile) * 4);
 }
 .icon-marker {
-    background-position: -72px -120px;
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 5);
 }
 .icon-polygon {
-    background-position: -24px -119px;
+    background-position: var(--tile) calc(var(--tile) * 5);
 }
 .icon-polyline {
-    background-position: 0 -119px;
+    background-position: 0 calc(var(--tile) * 5);
 }
 .icon-resize {
-    background-position: -74px -144px;
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 6);
 }
 .icon-restore {
-    background-position: -121px -74px;
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 3);
 }
 .expanded .icon-resize {
-    background-position: -50px -144px;
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 6);
 }
 .icon-search {
-    background-position: -27px -120px;
+    background-position: var(--tile) calc(var(--tile) * 5);
 }
 .icon-settings {
-    background-position: -23px -97px;
-}
-html[dir="rtl"] .icon-settings {
-  background-position: -27px -97px;
+    background-position: var(--tile) calc(var(--tile) * 4);
 }
 .icon-share {
-    background-position: 0px -120px;
-}
-html[dir="rtl"] .icon-share {
-  background-position: -3px -120px;
+    background-position: 0px calc(var(--tile) * 5);
 }
 .icon-table {
-    background-position: -50px -1px;
+    background-position: calc(var(--tile) * 2) 0px;
 }
 .readonly .icon-table,
 .off .icon-table {
-    background-position: -74px -1px;
+    background-position: calc(var(--tile) * 3) 0px;
 }
 .remotelayer .icon-table {
     display: none !important;
 }
 .icon-tilelayer {
-    background-position: -98px -141px;
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 6);
 }
 .icon-upload {
-    background-position: -144px -97px;
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 4);
 }
 .icon-zoom {
-    background-position: -1px -49px;
+    background-position: 0px calc(var(--tile) * 2);
 }
 .off .icon-zoom {
-    background-position: -25px -49px;
+    background-position: var(--tile) calc(var(--tile) * 2);
 }
