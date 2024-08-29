@@ -5,7 +5,7 @@
     display: none;
 }
 .umap-slideshow-enabled .umap-slideshow-toolbox {
-    display: inline-block;
+    display: flex;
 }
 .umap-slideshow-toolbox li {
     display: inline-block;
