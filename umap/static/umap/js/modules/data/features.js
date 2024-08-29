@@ -261,9 +261,14 @@ class Feature {
   }
 
   getAdvancedEditActions(container) {
-    DomUtil.createButton('button umap-delete', container, translate('Delete'), () => {
+    const button = Utils.loadTemplate(`
+      <button class="button" type="button">
+        <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
+      </button>`)
+    button.addEventListener('click', () => {
       this.confirmDelete().then(() => this.map.editPanel.close())
     })
+    container.appendChild(button)
   }
 
   appendEditFieldsets(container) {

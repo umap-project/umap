@@ -773,16 +773,16 @@ export class DataLayer {
       translate('Advanced actions')
     )
     const advancedButtons = DomUtil.create('div', 'button-bar half', advancedActions)
-    const deleteLink = DomUtil.createButton(
-      'button delete_datalayer_button umap-delete',
-      advancedButtons,
-      translate('Delete'),
-      function () {
-        this._delete()
-        this.map.editPanel.close()
-      },
-      this
-    )
+    const deleteButton = Utils.loadTemplate(`
+      <button class="button" type="button">
+        <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
+      </button>`)
+    deleteButton.addEventListener('click', () => {
+      this._delete()
+      this.map.editPanel.close()
+    })
+    advancedButtons.appendChild(deleteButton)
+
     if (!this.isRemoteLayer()) {
       const emptyLink = DomUtil.createButton(
         'button umap-empty',

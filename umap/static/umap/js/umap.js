@@ -1459,13 +1459,13 @@ U.Map = L.Map.extend({
     const advancedActions = L.DomUtil.createFieldset(container, L._('Advanced actions'))
     const advancedButtons = L.DomUtil.create('div', 'button-bar half', advancedActions)
     if (this.permissions.isOwner()) {
-      L.DomUtil.createButton(
-        'button umap-delete',
-        advancedButtons,
-        L._('Delete'),
-        this.del,
-        this
-      )
+      const deleteButton = U.Utils.loadTemplate(`
+        <button class="button" type="button">
+          <i class="icon icon-24 icon-delete"></i>${L._('Delete')}
+        </button>`)
+      deleteButton.addEventListener('click', () => this.del())
+      advancedButtons.appendChild(deleteButton)
+
       L.DomUtil.createButton(
         'button umap-empty',
         advancedButtons,
