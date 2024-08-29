@@ -251,7 +251,7 @@ UMAP_MAPS_PER_PAGE = 5
 UMAP_MAPS_PER_SEARCH = 25
 UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
-UMAP_FEEDBACK_LINK = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
+UMAP_HELP_URL = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
 USER_MAPS_URL = "user_maps"
 DATABASES = {"default": env.db(default="postgis://localhost:5432/umap")}
 UMAP_DEFAULT_SHARE_STATUS = None
@@ -259,6 +259,7 @@ UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
 UMAP_HOME_FEED = "latest"
 UMAP_IMPORTERS = {}
+UMAP_HOST_INFOS = {}
 
 UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True

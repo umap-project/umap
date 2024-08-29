@@ -3,15 +3,17 @@ header {
 }
 
 footer {
-    height: 140px;
+    min-height: 140px;
     margin-top: 40px;
-    background-color: #2E3641;
-    text-align: center;
-    line-height: 140px;
-    color: #fff;
+    background-color: var(--color-darkBlue);
+    color: var(--color-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 footer a {
-    color: #fff;
+    color: var(--color-light);
     text-decoration: underline;
 }
 footer a.branding {
@@ -20,8 +22,9 @@ footer a.branding {
     background-repeat: no-repeat;
     background-size: 60px auto;
     font-size: 30px;
+    height: 60px;
+    line-height: 60px;
     font-weight: bold;
-    height: 140px;
     padding-inline-start: 70px;
     display: inline-block;
 }

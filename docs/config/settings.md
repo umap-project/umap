@@ -199,7 +199,7 @@ Possible values:
 Set to True if you want to display a message saying that your instance is not
 ready for production use (no backup, etc.)
 
-#### UMAP_FEEDBACK_LINK
+#### UMAP_HELP_URL
 
 Link to show on the header under the "Feedback and help" label.
 
@@ -210,6 +210,19 @@ Which feed to display on the home page. Three valid values:
 - `"latest"`, which shows the latest maps (default)
 - `"highlighted"`, which shows the maps that have been starred by a staff member
 - `None`, which does not show any map on the home page
+
+#### UMAP_HOST_INFOS
+
+Informations about the entity hosting this uMap instance.
+
+```
+UMAP_HOST_INFOS = {
+    "name": "OpenStreetMap France",
+    "url": "https://openstreetmap.fr",
+    "contact": "blah@openstreetmap.fr"
+}
+```
+
 
 #### UMAP_IMPORTERS
 
