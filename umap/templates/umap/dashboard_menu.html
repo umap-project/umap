@@ -9,7 +9,7 @@
     {% endif %}
     <a {% if selected == "profile" %}class="selected"{% endif %}
        href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
-    <a {% if selected == "groups" %}class="selected"{% endif %}
-       href="{% url 'user_groups' %}">{% trans "My teams" %}</a>
+    <a {% if selected == "teams" %}class="selected"{% endif %}
+       href="{% url 'user_teams' %}">{% trans "My teams" %}</a>
   </h2>
 </div>

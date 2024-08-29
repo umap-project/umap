@@ -243,17 +243,17 @@ def test_can_delete_datalayer(live_server, map, login, datalayer):
     expect(layers).to_have_count(0)
 
 
-def test_can_set_group(map, live_server, login, group):
-    map.owner.groups.add(group)
+def test_can_set_team(map, live_server, login, team):
+    map.owner.teams.add(team)
     map.owner.save()
     page = login(map.owner)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
     edit_permissions = page.get_by_title("Update permissions and editors")
     edit_permissions.click()
-    page.locator("select[name=group]").select_option(str(group.pk))
+    page.locator("select[name=team]").select_option(str(team.pk))
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
     with page.expect_response(re.compile(r".*/update/permissions/.*")):
         save.click()
     modified = Map.objects.get(pk=map.pk)
-    assert modified.group == group
+    assert modified.team == team

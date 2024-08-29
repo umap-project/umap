@@ -289,10 +289,10 @@ def test_user_dashboard_display_user_maps(client, map):
 
 
 @pytest.mark.django_db
-def test_user_dashboard_display_user_group_maps(client, map, group, user):
-    user.groups.add(group)
+def test_user_dashboard_display_user_team_maps(client, map, team, user):
+    user.teams.add(team)
     user.save()
-    map.group = group
+    map.team = team
     map.save()
     client.login(username=user.username, password="123123")
     response = client.get(reverse("user_dashboard"))

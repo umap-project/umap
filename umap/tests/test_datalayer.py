@@ -121,11 +121,11 @@ def test_editor_can_edit_in_collaborators_mode(datalayer, user):
     assert datalayer.can_edit(user)
 
 
-def test_group_members_can_edit_in_collaborators_mode(datalayer, user, group):
-    user.groups.add(group)
+def test_team_members_can_edit_in_collaborators_mode(datalayer, user, team):
+    user.teams.add(team)
     user.save()
     map = datalayer.map
-    map.group = group
+    map.team = team
     map.save()
     datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
@@ -181,15 +181,15 @@ def test_editors_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer, us
     assert not datalayer.can_edit(user)
 
 
-def test_group_members_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
-    datalayer, user, group
+def test_team_members_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
+    datalayer, user, team
 ):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
-    user.groups.add(group)
-    group.save()
+    user.teams.add(team)
+    team.save()
     map = datalayer.map
-    map.group = group
+    map.team = team
     map.edit_status = Map.OWNER
     map.save()
     assert not datalayer.can_edit(user)

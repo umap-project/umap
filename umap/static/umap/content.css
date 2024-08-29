@@ -133,6 +133,8 @@ h2.section {
     text-align: center;
 }
 h2.tabs {
+    display: flex;
+    justify-content: space-around;
     text-transform: uppercase;
     color: var(--color-darkBlue);
     text-align: start;
@@ -144,7 +146,6 @@ h2.tabs a {
     text-decoration-thickness: 3px;
     text-decoration-skip-ink: none;
     text-underline-offset: 7px;
-    margin-inline-end: 2rem;
     display: inline-block;
 }
 h2.tabs a:not(.selected) {

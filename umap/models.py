@@ -5,7 +5,7 @@ import time
 import uuid
 
 from django.conf import settings
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.core.files.base import File
 from django.core.signing import Signer
@@ -36,19 +36,9 @@ def get_user_stars_url(self):
     return reverse("user_stars", kwargs={"identifier": identifier})
 
 
-def get_group_url(self):
-    return reverse("group_maps", kwargs={"pk": self.pk})
-
-
-def get_group_metadata(self):
-    return {"id": self.pk, "name": self.name, "url": self.get_url()}
-
-
 User.add_to_class("__str__", display_name)
 User.add_to_class("get_url", get_user_url)
 User.add_to_class("get_stars_url", get_user_stars_url)
-Group.add_to_class("get_url", get_group_url)
-Group.add_to_class("get_metadata", get_group_metadata)
 
 
 def get_default_share_status():
@@ -57,6 +47,32 @@ def get_default_share_status():
 
 def get_default_edit_status():
     return settings.UMAP_DEFAULT_EDIT_STATUS or Map.OWNER
+
+
+class Team(models.Model):
+    name = models.CharField(
+        max_length=200, verbose_name=_("name"), unique=True, blank=False, null=False
+    )
+    description = models.TextField(blank=True, null=True, verbose_name=_("description"))
+    logo_url = models.URLField(
+        verbose_name=_("Logo URL"),
+        help_text=_("URL to an image."),
+        null=True,
+        blank=True,
+    )
+    users = models.ManyToManyField(User, related_name="teams")
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+    def get_url(self):
+        return reverse("team_maps", kwargs={"pk": self.pk})
+
+    def get_metadata(self):
+        return {"id": self.pk, "name": self.name, "url": self.get_url()}
 
 
 class NamedModel(models.Model):
@@ -190,8 +206,8 @@ class Map(NamedModel):
     editors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
     )
-    group = models.ForeignKey(
-        "auth.Group",
+    team = models.ForeignKey(
+        Team,
         blank=True,
         null=True,
         verbose_name=_("team"),
@@ -269,7 +285,7 @@ class Map(NamedModel):
         return settings.SITE_URL + path
 
     def get_author(self):
-        return self.group or self.owner
+        return self.team or self.owner
 
     def is_owner(self, user=None, request=None):
         if user and self.owner == user:
@@ -301,7 +317,7 @@ class Map(NamedModel):
 
         In owner mode:
             - only owner by default (OWNER)
-            - any editor or group member if mode is COLLABORATORS
+            - any editor or team member if mode is COLLABORATORS
             - anyone otherwise (ANONYMOUS)
         In anonymous owner mode:
             - only owner (has ownership cookie) by default (OWNER)
@@ -318,7 +334,7 @@ class Map(NamedModel):
         elif user == self.owner:
             can = True
         elif self.edit_status == self.COLLABORATORS:
-            if user in self.editors.all() or self.group in user.groups.all():
+            if user in self.editors.all() or self.team in user.teams.all():
                 can = True
         return can
 
@@ -337,7 +353,7 @@ class Map(NamedModel):
             can = not (
                 self.share_status == self.PRIVATE
                 and request.user not in self.editors.all()
-                and self.group not in request.user.groups.all()
+                and self.team not in request.user.teams.all()
             )
         return can
 
@@ -563,7 +579,7 @@ class DataLayer(NamedModel):
         elif user is not None and user == self.map.owner:
             can = True
         elif user is not None and self.edit_status == self.COLLABORATORS:
-            if user in self.map.editors.all() or self.map.group in user.groups.all():
+            if user in self.map.editors.all() or self.map.team in user.teams.all():
                 can = True
         return can
 

@@ -1,12 +1,11 @@
 from functools import wraps
 
 from django.conf import settings
-from django.contrib.auth.models import Group
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
-from .models import Map
+from .models import Map, Team
 from .views import simple_json_response
 
 LOGIN_URL = getattr(settings, "LOGIN_URL", "login")
@@ -63,11 +62,11 @@ def can_view_map(view_func):
     return wrapper
 
 
-def group_members_only(view_func):
+def team_members_only(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        group = get_object_or_404(Group, pk=kwargs["pk"])
-        if group not in request.user.groups.all():
+        team = get_object_or_404(Team, pk=kwargs["pk"])
+        if not request.user.is_authenticated or team not in request.user.teams.all():
             return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
 

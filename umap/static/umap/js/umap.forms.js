@@ -1086,10 +1086,10 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   },
 })
 
-L.FormBuilder.ManageGroup = L.FormBuilder.IntSelect.extend({
+L.FormBuilder.ManageTeam = L.FormBuilder.IntSelect.extend({
   getOptions: function () {
     return [[null, L._('None')]].concat(
-      this.options.groups.map((group) => [group.id, group.name])
+      this.options.teams.map((team) => [team.id, team.name])
     )
   },
   toHTML: function () {
@@ -1097,8 +1097,8 @@ L.FormBuilder.ManageGroup = L.FormBuilder.IntSelect.extend({
   },
   toJS: function () {
     const value = this.value()
-    for (const group of this.options.groups) {
-      if (group.id === value) return group
+    for (const team of this.options.teams) {
+      if (team.id === value) return team
     }
   },
 })

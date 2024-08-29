@@ -3,12 +3,11 @@ import json
 
 import factory
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.core.files.base import ContentFile
 from django.urls import reverse
 
 from umap.forms import DEFAULT_CENTER
-from umap.models import DataLayer, Licence, Map, TileLayer
+from umap.models import DataLayer, Licence, Map, TileLayer, Team
 
 User = get_user_model()
 
@@ -59,11 +58,11 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
 
-class GroupFactory(factory.django.DjangoModelFactory):
-    name = "Awesome Group"
+class TeamFactory(factory.django.DjangoModelFactory):
+    name = "Awesome Team"
 
     class Meta:
-        model = Group
+        model = Team
 
 
 class MapFactory(factory.django.DjangoModelFactory):

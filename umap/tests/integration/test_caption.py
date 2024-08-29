@@ -36,12 +36,12 @@ def test_caption_should_display_owner_as_author(live_server, page, map):
     expect(panel.get_by_text("By Gabriel")).to_be_visible()
 
 
-def test_caption_should_display_group_as_author(live_server, page, map, group):
+def test_caption_should_display_team_as_author(live_server, page, map, team):
     map.settings["properties"]["onLoadPanel"] = "caption"
-    map.group = group
+    map.team = team
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     panel = page.locator(".panel.left.on")
     expect(panel).to_be_visible()
     expect(panel.get_by_text("By Gabriel")).to_be_hidden()
-    expect(panel.get_by_text("By Awesome Group")).to_be_visible()
+    expect(panel.get_by_text("By Awesome Team")).to_be_visible()

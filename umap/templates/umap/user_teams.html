@@ -1,0 +1,19 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+  {% include "umap/dashboard_menu.html" with selected="teams" %}
+  <div class="wrapper">
+    <div class="row">
+      <ul>
+        {% for team in teams %}
+          <li>
+            <a href="{% url 'team_maps' team.pk %}">{{ team }}</a> <a href="{% url 'team_update' team.pk %}">({% trans "Edit" %})</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'team_new' %}">{% trans "New team" %}</a>
+    </div>
+  </div>
+{% endblock maincontent %}

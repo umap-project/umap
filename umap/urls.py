@@ -15,7 +15,7 @@ from . import views
 from .decorators import (
     can_edit_map,
     can_view_map,
-    group_members_only,
+    team_members_only,
     login_required_if_not_anonymous_allowed,
 )
 from .utils import decorated_patterns
@@ -117,13 +117,13 @@ i18n_urls += decorated_patterns(
     path("me", views.user_dashboard, name="user_dashboard"),
     path("me/profile", views.user_profile, name="user_profile"),
     path("me/download", views.user_download, name="user_download"),
-    path("me/groups", views.UserGroups.as_view(), name="user_groups"),
-    path("group/create/", views.GroupNew.as_view(), name="group_new"),
+    path("me/teams", views.UserTeams.as_view(), name="user_teams"),
+    path("team/create/", views.TeamNew.as_view(), name="team_new"),
 )
 i18n_urls += decorated_patterns(
-    [login_required, group_members_only],
-    path("group/<int:pk>/edit/", views.GroupUpdate.as_view(), name="group_update"),
-    path("group/<int:pk>/delete/", views.GroupDelete.as_view(), name="group_delete"),
+    [login_required, team_members_only],
+    path("team/<int:pk>/edit/", views.TeamUpdate.as_view(), name="team_update"),
+    path("team/<int:pk>/delete/", views.TeamDelete.as_view(), name="team_delete"),
 )
 map_urls = [
     re_path(
@@ -196,7 +196,7 @@ urlpatterns += i18n_patterns(
     path("about/", views.about, name="about"),
     re_path(r"^user/(?P<identifier>.+)/stars/$", views.user_stars, name="user_stars"),
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
-    path("group/<int:pk>/", views.group_maps, name="group_maps"),
+    path("team/<int:pk>/", views.TeamMaps.as_view(), name="team_maps"),
     re_path(r"", include(i18n_urls)),
 )
 urlpatterns += (

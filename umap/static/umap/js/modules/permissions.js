@@ -25,7 +25,7 @@ export class MapPermissions {
     this.options = Object.assign(
       {
         owner: null,
-        group: null,
+        team: null,
         editors: [],
         share_status: null,
         edit_status: null,
@@ -97,13 +97,13 @@ export class MapPermissions {
           'options.owner',
           { handler: 'ManageOwner', label: translate("Map's owner") },
         ])
-        if (this.map.options.user?.groups?.length) {
+        if (this.map.options.user?.teams?.length) {
           fields.push([
-            'options.group',
+            'options.team',
             {
-              handler: 'ManageGroup',
+              handler: 'ManageTeam',
               label: translate('Attach map to a team'),
-              groups: this.map.options.user.groups,
+              teams: this.map.options.user.teams,
             },
           ])
         }
@@ -161,7 +161,7 @@ export class MapPermissions {
       formData.append('edit_status', this.options.edit_status)
     if (this.isOwner()) {
       formData.append('owner', this.options.owner?.id)
-      formData.append('group', this.options.group?.id || '')
+      formData.append('team', this.options.team?.id || '')
       formData.append('share_status', this.options.share_status)
     }
     const [data, response, error] = await this.map.server.post(

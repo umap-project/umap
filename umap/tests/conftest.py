@@ -9,7 +9,7 @@ from umap.models import Map
 
 from .base import (
     DataLayerFactory,
-    GroupFactory,
+    TeamFactory,
     LicenceFactory,
     MapFactory,
     TileLayerFactory,
@@ -31,8 +31,8 @@ def pytest_runtest_teardown():
 
 
 @pytest.fixture
-def group():
-    return GroupFactory()
+def team():
+    return TeamFactory()
 
 
 @pytest.fixture

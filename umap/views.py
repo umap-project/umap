@@ -18,7 +18,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import logout as do_logout
-from django.contrib.auth.models import Group
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -61,13 +60,13 @@ from .forms import (
     DataLayerForm,
     DataLayerPermissionsForm,
     FlatErrorList,
-    GroupForm,
+    TeamForm,
     MapSettingsForm,
     SendLinkForm,
     UpdateMapPermissionsForm,
     UserProfileForm,
 )
-from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
+from .models import DataLayer, Licence, Map, Pictogram, Star, Team, TileLayer
 from .utils import (
     ConflictError,
     _urls_for_js,
@@ -190,67 +189,67 @@ class About(Home):
 about = About.as_view()
 
 
-class GroupNew(CreateView):
-    model = Group
-    fields = ["name"]
-    success_url = reverse_lazy("user_groups")
+class TeamNew(CreateView):
+    model = Team
+    fields = ["name", "description", "logo_url"]
+    success_url = reverse_lazy("user_teams")
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        self.request.user.groups.add(self.object)
+        self.request.user.teams.add(self.object)
         self.request.user.save()
         return response
 
 
-class GroupUpdate(UpdateView):
-    model = Group
-    form_class = GroupForm
-    success_url = reverse_lazy("user_groups")
+class TeamUpdate(UpdateView):
+    model = Team
+    form_class = TeamForm
+    success_url = reverse_lazy("user_teams")
 
     def get_initial(self):
         initial = super().get_initial()
-        initial["members"] = self.object.user_set.all()
+        initial["members"] = self.object.users.all()
         return initial
 
     def form_valid(self, form):
-        actual = self.object.user_set.all()
+        actual = self.object.users.all()
         wanted = form.cleaned_data["members"]
         for user in wanted:
             if user not in actual:
-                user.groups.add(self.object)
+                user.teams.add(self.object)
                 user.save()
         for user in actual:
             if user not in wanted:
-                user.groups.remove(self.object)
+                user.teams.remove(self.object)
                 user.save()
         return super().form_valid(form)
 
 
-class GroupDelete(DeleteView):
-    model = Group
-    success_url = reverse_lazy("user_groups")
+class TeamDelete(DeleteView):
+    model = Team
+    success_url = reverse_lazy("user_teams")
 
     def form_valid(self, form):
-        if self.object.user_set.count() > 1:
+        if self.object.users.count() > 1:
             return HttpResponseBadRequest(
-                _("Cannot delete a group with more than one member")
+                _("Cannot delete a team with more than one member")
             )
         messages.info(
             self.request,
-            _("Group “%(name)s” has been deleted") % {"name": self.object.name},
+            _("Team “%(name)s” has been deleted") % {"name": self.object.name},
         )
         return super().form_valid(form)
 
 
-class UserGroups(DetailView):
+class UserTeams(DetailView):
     model = User
-    template_name = "umap/user_groups.html"
+    template_name = "umap/user_teams.html"
 
     def get_object(self):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_context_data(self, **kwargs):
-        kwargs.update({"groups": self.object.groups.all()})
+        kwargs.update({"teams": self.object.teams.all()})
         return super().get_context_data(**kwargs)
 
 
@@ -313,22 +312,19 @@ class UserStars(UserMaps):
 user_stars = UserStars.as_view()
 
 
-class GroupMaps(PaginatorMixin, DetailView):
-    model = Group
+class TeamMaps(PaginatorMixin, DetailView):
+    model = Team
     list_template_name = "umap/map_list.html"
-    context_object_name = "current_group"
+    context_object_name = "current_team"
 
     def get_maps(self):
-        return Map.public.filter(group=self.object).order_by("-modified_at")
+        return Map.public.filter(team=self.object).order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
         kwargs.update(
             {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE)}
         )
         return super().get_context_data(**kwargs)
-
-
-group_maps = GroupMaps.as_view()
 
 
 class SearchMixin:
@@ -377,11 +373,11 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
     def get_maps(self):
         qs = self.get_search_queryset() or Map.objects.all()
-        groups = self.object.groups.all()
+        teams = self.object.teams.all()
         qs = (
             qs.filter(owner=self.object)
             .union(qs.filter(editors=self.object))
-            .union(qs.filter(group__in=groups))
+            .union(qs.filter(team__in=teams))
         )
         return qs.order_by("-modified_at")
 
@@ -557,7 +553,7 @@ class SessionMixin:
             "id": user.pk,
             "name": str(self.request.user),
             "url": reverse("user_dashboard"),
-            "groups": [group.get_metadata() for group in user.groups.all()],
+            "teams": [team.get_metadata() for team in user.teams.all()],
             **data,
         }
 
@@ -696,8 +692,8 @@ class PermissionsMixin:
                 {"id": editor.pk, "name": str(editor)}
                 for editor in self.object.editors.all()
             ]
-        if self.object.group:
-            permissions["group"] = self.object.group.get_metadata()
+        if self.object.team:
+            permissions["team"] = self.object.team.get_metadata()
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
             permissions["anonymous_edit_url"] = self.object.get_anonymous_edit_url()
         return permissions

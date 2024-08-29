@@ -345,7 +345,7 @@ input + .error {
 input[type="file"] + .error {
     margin-top: 0;
 }
-input:invalid {
+input[value]:invalid {
     border-color: red;
     background-color: darkred;
 }
