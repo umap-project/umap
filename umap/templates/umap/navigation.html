@@ -22,7 +22,7 @@
         <a href="{% url "about" %}">{% trans "About" %}</a>
       </li>
       <li>
-        <a href="{{ UMAP_FEEDBACK_LINK }}">{% trans "Help" %}</a>
+        <a href="{{ UMAP_HELP_URL }}">{% trans "Help" %}</a>
       </li>
       {% if user.is_authenticated %}
         {% if user.has_usable_password %}

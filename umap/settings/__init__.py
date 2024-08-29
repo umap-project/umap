@@ -41,5 +41,7 @@ if path:
                         globals()["TEMPLATES"][0]["DIRS"] = [value]
                 elif key == "UMAP_CUSTOM_STATICS":
                     globals()["STATICFILES_DIRS"].insert(0, value)
+                elif key == "UMAP_FEEDBACK_LINK":
+                    globals()["UMAP_HELP_URL"] = value
                 else:
                     globals()[key] = value
