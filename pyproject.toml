@@ -58,7 +58,7 @@ dev = [
 test = [
   "factory-boy==3.3.1",
   "playwright>=1.39",
-  "pytest==8.3.1",
+  "pytest==8.3.2",
   "pytest-django==4.8.0",
   "pytest-playwright==0.5.1",
   "pytest-xdist>=3.5.0,<4",
