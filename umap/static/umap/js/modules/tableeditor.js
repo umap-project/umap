@@ -169,14 +169,14 @@ export default class TableEditor extends WithTemplate {
     const actions = []
     if (!this.datalayer.isRemoteLayer()) {
       const addButton = loadTemplate(`
-        <button class="flat" type="button" data-ref="add">
+        <button class="flat" type="button">
           <i class="icon icon-16 icon-add"></i>${translate('Add a new property')}
         </button>`)
       addButton.addEventListener('click', () => this.addProperty())
       actions.push(addButton)
 
       const deleteButton = loadTemplate(`
-        <button class="flat" type="button" data-ref="delete">
+        <button class="flat" type="button">
           <i class="icon icon-16 icon-delete"></i>${translate('Delete selected rows')}
         </button>`)
       deleteButton.addEventListener('click', () => this.deleteRows())
@@ -184,7 +184,7 @@ export default class TableEditor extends WithTemplate {
     }
 
     const filterButton = loadTemplate(`
-      <button class="flat" type="button" data-ref="filters">
+      <button class="flat" type="button">
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)
     filterButton.addEventListener('click', () => this.map.browser.open('filters'))
