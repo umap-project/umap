@@ -43,10 +43,10 @@ class PopupTemplate {
   renderFooter(feature, container) {
     if (feature.hasPopupFooter()) {
       const template = `
-      <ul class="umap-popup-footer">
-        <li rel="prev" data-ref="previous"></li>
-        <li class="zoom" data-ref="zoom" title="${translate('Zoom to this feature')}"></li>
-        <li rel="next" data-ref="next"></li>
+      <ul class="umap-popup-footer dark">
+        <li rel="prev"><button class="icon icon-16 icon-back" data-ref="previous"></button></li>
+        <li class="zoom" title="${translate('Zoom to this feature')}"><button class="icon icon-16 icon-zoom" data-ref="zoom"></button></li>
+        <li rel="next"><button class="icon icon-16 icon-forward" data-ref="next"></button></li>
       </ul>`
       const [footer, { previous, zoom, next }] = Utils.loadTemplateWithRefs(template)
       const nextFeature = feature.getNext()

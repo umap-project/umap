@@ -128,13 +128,17 @@ L.DomUtil.createIcon = (parent, className, title, size = 16) => {
   })
 }
 
-L.DomUtil.createButtonIcon = (parent, className, title, size = 16) => {
-  return L.DomUtil.element({
+L.DomUtil.createButtonIcon = (parent, className, title, callback, size = 16) => {
+  const el = L.DomUtil.element({
     tagName: 'button',
     parent: parent,
     className: `icon icon-${size} ${className}`,
     title: title || '',
   })
+  if (callback) {
+    L.DomEvent.on(el, 'click', L.DomEvent.stop).on(el, 'click', callback)
+  }
+  return el
 }
 
 L.DomUtil.createTitle = (parent, text, className, tag = 'h3') => {
@@ -151,14 +155,10 @@ L.DomUtil.createCopiableInput = (parent, label, value) => {
   input.type = 'text'
   input.readOnly = true
   input.value = value
-  const button = L.DomUtil.createButton(
-    '',
-    wrapper,
-    '',
-    () => L.Util.copyToClipboard(input.value),
-    this
+  const button = L.DomUtil.createButtonIcon(wrapper, 'icon-copy', L._('copy'), () =>
+    L.Util.copyToClipboard(input.value)
   )
-  button.title = L._('copy')
+  button.type = 'button'
   return input
 }
 

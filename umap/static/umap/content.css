@@ -50,7 +50,7 @@ body.login header {
     background-size: 92px 92px;
     height: 92px;
     width: 92px;
-    margin-right: 10px;
+    margin-inline-end: 10px;
 }
 .login-grid .login-github {
     background-image: url("./github.png");
@@ -107,7 +107,7 @@ body.login header {
 .umap-features-list li:before {
     content: "✔";
     color: #323E56;
-    padding-right: 5px;
+    padding-inline-end: 5px;
 }
 .summary {
     background-color: #eee;
@@ -135,7 +135,7 @@ h2.section {
 h2.tabs {
     text-transform: uppercase;
     color: var(--color-darkBlue);
-    text-align: left;
+    text-align: start;
     padding-top: 28px;
 }
 h2.tabs a {
@@ -144,13 +144,14 @@ h2.tabs a {
     text-decoration-thickness: 3px;
     text-decoration-skip-ink: none;
     text-underline-offset: 7px;
-    margin-right: 2rem;
+    margin-inline-end: 2rem;
+    display: inline-block;
 }
 h2.tabs a:not(.selected) {
     font-weight: normal;
     color: var(--color-darkBlue);
     text-decoration: none;
-    margin-right: 0;
+    margin-inline-end: 0;
 }
 h2.tabs a:hover {
     text-decoration: underline;
@@ -278,7 +279,7 @@ ul.umap-autocomplete {
 }
 .umap-singleresult div .close,
 .umap-multiresult li .close {
-    float: right;
+    float: inline-end;
     cursor: pointer;
 }
 
@@ -358,6 +359,11 @@ ul.umap-autocomplete {
 .content .icon-delete {
     background-image: url('./img/icon-delete.svg');
 }
+html[dir="rtl"] .content .icon-edit,
+html[dir="rtl"] .content .icon-share,
+html[dir="rtl"] .content .icon-delete {
+  background-position: initial; /* this takes precedence over similar selector in icon.css and fixes position */
+}
 .table-header {
     display: flex;
     justify-content: space-between;
@@ -427,8 +433,8 @@ ul.umap-autocomplete {
 .table-wrapper table thead tr th,
 .table-wrapper table th[scope="row"] {
     color: var(--color-darkBlue);
-    text-align: left;
-    padding-left: 2px;
+    text-align: start;
+    padding-inline-start: 2px;
 }
 .table-wrapper table thead tr th {
     line-height: 1.2;
@@ -525,7 +531,7 @@ dialog::backdrop {
     }
     .twide {
         width: 100%;
-        padding-left: 0!important;
+        padding-inline-start: 0!important;
     }
     .tthird {
         width: 33.3333%;
@@ -542,7 +548,7 @@ dialog::backdrop {
 }
 @media only screen and (max-width: 639px) {
     .mwide {
-        padding-left: 0!important;
+        padding-inline-start: 0!important;
         width: 100%;
     }
     .mwide + .mwide {
