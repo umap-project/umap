@@ -1260,7 +1260,11 @@ U.Editable = L.Editable.extend({
         }
       } else {
         const tmpLatLngs = e.layer.editor._drawnLatLngs.slice()
-        tmpLatLngs.push(e.latlng)
+        if (e.layer.editor._drawing === L.Editable.BACKWARD) {
+          tmpLatLngs.unshift(e.latlng)
+        } else {
+          tmpLatLngs.push(e.latlng)
+        }
         measure = e.layer.getMeasure(tmpLatLngs)
 
         if (e.layer.editor._drawnLatLngs.length < e.layer.editor.MIN_VERTEX) {
