@@ -17,7 +17,6 @@
 .icon-24 {
     background-image: url('../img/24.svg');
     --tile: -36px;
-    margin-inline-start: -6px;
     height: 36px;
     line-height: 36px;
     width: 36px;

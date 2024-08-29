@@ -592,7 +592,7 @@ i.info {
 .with-transition {
     transition: all .7s;
 }
-.umap-delete:before, .umap-empty:before, .umap-to-polygon:before,
+.umap-empty:before, .umap-to-polygon:before,
 .umap-clone:before, .umap-edit:before, .umap-download:before,
 .umap-to-polyline:before {
     background-repeat: no-repeat;
@@ -604,7 +604,7 @@ i.info {
     vertical-align: bottom;
     content: " ";
 }
-.dark .umap-delete:before, .dark .umap-empty:before,
+.dark .umap-empty:before,
 .dark .umap-to-polygon:before,
 .dark .umap-clone:before,
 .dark .umap-edit:before, .dark .umap-download:before,
