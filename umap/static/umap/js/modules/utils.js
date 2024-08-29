@@ -386,9 +386,6 @@ export function toggleBadge(element, value) {
 export function loadTemplate(html) {
   const template = document.createElement('template')
   template.innerHTML = html
-    .split('\n')
-    .map((line) => line.trim())
-    .join('')
   return template.content.firstElementChild
 }
 

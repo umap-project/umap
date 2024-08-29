@@ -24,9 +24,9 @@ export default function loadTemplate(name, feature, container) {
 }
 
 class PopupTemplate {
-  renderTitle(feature, container) {}
+  renderTitle(feature) {}
 
-  renderBody(feature, container) {
+  renderBody(feature) {
     const template = feature.getOption('popupContentTemplate')
     const target = feature.getOption('outlinkTarget')
     const properties = feature.extendedProperties()
@@ -40,7 +40,7 @@ class PopupTemplate {
     return Utils.loadTemplate(`<div class="umap-popup-container text">${content}</div>`)
   }
 
-  renderFooter(feature, container) {
+  renderFooter(feature) {
     if (feature.hasPopupFooter()) {
       const template = `
       <ul class="umap-popup-footer dark">
@@ -71,21 +71,22 @@ class PopupTemplate {
         })
       }
       DomEvent.on(zoom, 'click', () => feature.zoomTo())
-      container.appendChild(footer)
+      return footer
     }
   }
 
   render(feature, container) {
-    const title = this.renderTitle(feature, container)
+    const title = this.renderTitle(feature)
     if (title) container.appendChild(title)
-    const body = this.renderBody(feature, container)
+    const body = this.renderBody(feature)
     if (body) DomUtil.add('div', 'umap-popup-content', container, body)
-    this.renderFooter(feature, container)
+    const footer = this.renderFooter(feature)
+    if (footer) container.appendChild(footer)
   }
 }
 export const TitleMixin = (Base) =>
   class extends Base {
-    renderTitle(feature, container) {
+    renderTitle(feature) {
       const title = feature.getDisplayName()
       if (title) {
         return Utils.loadTemplate(`<h3 class="popup-title">${title}</h3>`)
@@ -109,7 +110,7 @@ class Table extends TitleMixin(PopupTemplate) {
     )
   }
 
-  renderBody(feature, container) {
+  renderBody(feature) {
     const table = document.createElement('table')
 
     for (const key in feature.properties) {
@@ -121,7 +122,7 @@ class Table extends TitleMixin(PopupTemplate) {
 }
 
 class GeoRSSImage extends TitleMixin(PopupTemplate) {
-  renderBody(feature, container) {
+  renderBody(feature) {
     const body = DomUtil.create('a')
     body.href = feature.properties.link
     body.target = '_blank'
@@ -138,7 +139,7 @@ class GeoRSSImage extends TitleMixin(PopupTemplate) {
 }
 
 class GeoRSSLink extends PopupTemplate {
-  renderBody(feature, container) {
+  renderBody(feature) {
     if (feature.properties.link) {
       return Utils.loadTemplate(
         `<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
@@ -155,7 +156,7 @@ class OSM extends TitleMixin(PopupTemplate) {
     return props.name
   }
 
-  renderBody(feature, container) {
+  renderBody(feature) {
     const props = feature.properties
     const body = document.createElement('div')
     const title = DomUtil.add('h3', 'popup-title', container)
