@@ -98,16 +98,16 @@
                             50.6269
                         ]
                     },
+                    "metadata": {
+                        "color": "Orange"
+                    },
                     "properties": {
-                        "_umap_options": {
-                            "color": "Orange"
-                        },
                         "name": "Lille",
                         "description": "une ville"
                     }
                 }
             ],
-            "_umap_options": {
+            "metadata": {
                 "displayOnLoad": true,
                 "name": "Cities",
                 "id": 108,
@@ -152,15 +152,15 @@
                             ]
                         ]
                     },
+                    "metadata": {
+                        "weight": "4"
+                    },
                     "properties": {
-                        "_umap_options": {
-                            "weight": "4"
-                        },
                         "name": "tunnel sous la Manche"
                     }
                 }
             ],
-            "_umap_options": {
+            "metadata": {
                 "displayOnLoad": true,
                 "name": "Tunnels",
                 "id": 109,

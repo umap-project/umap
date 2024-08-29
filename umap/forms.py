@@ -55,7 +55,7 @@ class AnonymousMapPermissionsForm(forms.ModelForm):
 class DataLayerForm(forms.ModelForm):
     class Meta:
         model = DataLayer
-        fields = ("geojson", "name", "display_on_load", "rank", "settings")
+        fields = ("data", "name", "display_on_load", "rank", "metadata")
 
 
 class DataLayerPermissionsForm(forms.ModelForm):
@@ -78,9 +78,9 @@ class AnonymousDataLayerPermissionsForm(forms.ModelForm):
         fields = ("edit_status",)
 
 
-class MapSettingsForm(forms.ModelForm):
+class MapMetadataForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(MapSettingsForm, self).__init__(*args, **kwargs)
+        super(MapMetadataForm, self).__init__(*args, **kwargs)
         self.fields["slug"].required = False
         self.fields["center"].widget.map_srid = 4326
 
@@ -102,7 +102,7 @@ class MapSettingsForm(forms.ModelForm):
         return self.cleaned_data["center"]
 
     class Meta:
-        fields = ("settings", "name", "center", "slug")
+        fields = ("metadata", "name", "center", "slug", "zoom")
         model = Map
 
 

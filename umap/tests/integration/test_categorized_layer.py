@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -8,11 +9,24 @@ from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
 
+METADATA = {
+    "displayOnLoad": True,
+    "inCaption": True,
+    "browsable": True,
+    "name": "Grisy-sur-Seine",
+    "id": "769b2bb0-920d-4531-8055-dd198a33456a",
+    "type": "Categorized",
+    "weight": 3,
+    "opacity": 0.9,
+    "categorized": {"property": "highway"},
+    "popupContentTemplate": "# {name}\n{highway}",
+}
+
 
 def test_basic_categorized_map_with_default_color(map, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/categorized_highway.geojson"
     data = json.loads(path.read_text())
-    DataLayerFactory(data=data, map=map)
+    DataLayerFactory(data=data, map=map, metadata=METADATA)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#13/48.4378/3.3043")
     # residential
     expect(page.locator("path[stroke='#7fc97f']")).to_have_count(5)
@@ -33,8 +47,9 @@ def test_basic_categorized_map_with_custom_brewer(openmap, live_server, page):
     data = json.loads(path.read_text())
 
     # Change brewer at load
-    data["_umap_options"]["categorized"]["brewer"] = "Spectral"
-    DataLayerFactory(data=data, map=openmap)
+    metadata = deepcopy(METADATA)
+    metadata["categorized"]["brewer"] = "Spectral"
+    DataLayerFactory(data=data, map=openmap, metadata=metadata)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#13/48.4378/3.3043")
     # residential
@@ -76,11 +91,12 @@ def test_basic_categorized_map_with_custom_categories(openmap, live_server, page
     data = json.loads(path.read_text())
 
     # Change categories at load
-    data["_umap_options"]["categorized"]["categories"] = (
+    metadata = deepcopy(METADATA)
+    metadata["categorized"]["categories"] = (
         "unclassified,track,service,residential,tertiary,secondary"
     )
-    data["_umap_options"]["categorized"]["mode"] = "manual"
-    DataLayerFactory(data=data, map=openmap)
+    metadata["categorized"]["mode"] = "manual"
+    DataLayerFactory(data=data, map=openmap, metadata=metadata)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#13/48.4378/3.3043")
 

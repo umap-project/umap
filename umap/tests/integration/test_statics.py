@@ -28,9 +28,9 @@ def staticfiles(settings):
 def test_javascript_have_been_loaded(
     map, live_server, datalayer, page, settings, staticfiles
 ):
-    datalayer.settings["displayOnLoad"] = False
+    datalayer.metadata["displayOnLoad"] = False
     datalayer.save()
-    map.settings["properties"]["defaultView"] = "latest"
+    map.metadata["defaultView"] = "latest"
     map.save()
     with override("fr"):
         url = f"{live_server.url}{map.get_absolute_url()}"

@@ -9,4 +9,4 @@ def save_and_get_json(page):
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
     datalayer = DataLayer.objects.last()
-    return json.loads(Path(datalayer.geojson.path).read_text())
+    return json.loads(Path(datalayer.data.path).read_text())

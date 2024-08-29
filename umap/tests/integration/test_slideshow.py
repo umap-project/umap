@@ -38,7 +38,7 @@ DATALAYER_DATA = {
 
 
 def test_can_use_slideshow_manually(map, live_server, page):
-    map.settings["properties"]["slideshow"] = {"active": True, "delay": 5000}
+    map.metadata["slideshow"] = {"active": True, "delay": 5000}
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")

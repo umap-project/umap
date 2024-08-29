@@ -33,9 +33,6 @@ DATALAYER_DATA1 = {
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
     ],
-    "_umap_options": {
-        "name": "Calque 1",
-    },
 }
 
 
@@ -63,9 +60,6 @@ DATALAYER_DATA2 = {
             "geometry": {"type": "Point", "coordinates": [4.372559, 47.945786]},
         },
     ],
-    "_umap_options": {
-        "name": "Calque 2",
-    },
 }
 
 
@@ -89,18 +83,17 @@ DATALAYER_DATA3 = {
             },
         },
     ],
-    "_umap_options": {"name": "Calque 2", "browsable": False},
 }
 
 
 def test_simple_facet_search(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mytype|My type,mynumber|My Number|number"
-    map.settings["properties"]["showLabel"] = True
+    map.metadata["onLoadPanel"] = "datafilters"
+    map.metadata["facetKey"] = "mytype|My type,mynumber|My Number|number"
+    map.metadata["showLabel"] = True
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
-    DataLayerFactory(map=map, data=DATALAYER_DATA3)
+    DataLayerFactory(map=map, data=DATALAYER_DATA3, metadata={"browsable": False})
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
     panel = page.locator(".panel.left.on")
     expect(panel).to_have_class(re.compile(".*expanded.*"))
@@ -170,8 +163,8 @@ def test_simple_facet_search(live_server, page, map):
 
 
 def test_date_facet_search(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mydate|Date filter|date"
+    map.metadata["onLoadPanel"] = "datafilters"
+    map.metadata["facetKey"] = "mydate|Date filter|date"
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
@@ -188,8 +181,8 @@ def test_date_facet_search(live_server, page, map):
 
 
 def test_choice_with_empty_value(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mytype|My type"
+    map.metadata["onLoadPanel"] = "datafilters"
+    map.metadata["facetKey"] = "mytype|My type"
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
     data["features"][0]["properties"]["mytype"] = ""
@@ -205,8 +198,8 @@ def test_choice_with_empty_value(live_server, page, map):
 
 
 def test_number_with_zero_value(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mynumber|Filter|number"
+    map.metadata["onLoadPanel"] = "datafilters"
+    map.metadata["facetKey"] = "mynumber|Filter|number"
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
     data["features"][0]["properties"]["mynumber"] = 0
@@ -222,8 +215,8 @@ def test_number_with_zero_value(live_server, page, map):
 
 
 def test_facets_search_are_persistent_when_closing_panel(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mytype|My type,mynumber|My Number|number"
+    map.metadata["onLoadPanel"] = "datafilters"
+    map.metadata["facetKey"] = "mytype|My type,mynumber|My Number|number"
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)

@@ -73,7 +73,7 @@ def test_clone_should_return_new_instance(map, user):
     clone = map.clone()
     assert map.pk != clone.pk
     assert "Clone of " + map.name == clone.name
-    assert map.settings == clone.settings
+    assert map.metadata == clone.metadata
     assert map.center == clone.center
     assert map.zoom == clone.zoom
     assert map.licence == clone.licence
@@ -103,8 +103,8 @@ def test_clone_should_clone_datalayers_and_features_too(map, user, datalayer):
     assert datalayer in map.datalayer_set.all()
     assert other.pk != datalayer.pk
     assert other.name == datalayer.name
-    assert other.geojson is not None
-    assert other.geojson.path != datalayer.geojson.path
+    assert other.data is not None
+    assert other.data.path != datalayer.data.path
 
 
 def test_publicmanager_should_get_only_public_maps(map, user, licence):

@@ -725,9 +725,9 @@ const ControlsMixin = {
       const row = L.DomUtil.create('li', 'orderable', ul)
       L.DomUtil.createIcon(row, 'icon-drag', L._('Drag to reorder'))
       datalayer.renderToolbox(row)
-      const title = L.DomUtil.add('span', '', row, datalayer.options.name)
+      const title = L.DomUtil.add('span', '', row, datalayer.metadata.name)
       row.classList.toggle('off', !datalayer.isVisible())
-      title.textContent = datalayer.options.name
+      title.textContent = datalayer.metadata.name
       row.dataset.id = L.stamp(datalayer)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {

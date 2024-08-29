@@ -190,8 +190,8 @@ class Map(NamedModel):
         default=get_default_share_status,
         verbose_name=_("share status"),
     )
-    settings = models.JSONField(
-        blank=True, null=True, verbose_name=_("settings"), default=dict
+    metadata = models.JSONField(
+        blank=True, null=True, verbose_name=_("metadata"), default=dict
     )
 
     objects = models.Manager()
@@ -200,18 +200,20 @@ class Map(NamedModel):
     @property
     def description(self):
         try:
-            return self.settings["properties"]["description"]
+            return self.metadata["description"]
         except KeyError:
             return ""
 
     @property
-    def preview_settings(self):
+    def geometry(self):
+        return {"type": "Point", "coordinates": [self.center.x, self.center.y]}
+
+    @property
+    def preview_metadata(self):
         layers = self.datalayer_set.all()
-        datalayer_data = [c.metadata() for c in layers]
-        map_settings = self.settings
-        if "properties" not in map_settings:
-            map_settings["properties"] = {}
-        map_settings["properties"].update(
+        datalayer_data = [l.get_metadata() for l in layers]
+        metadata = self.metadata
+        metadata.update(
             {
                 "tilelayers": [TileLayer.get_default().json],
                 "datalayers": datalayer_data,
@@ -224,22 +226,23 @@ class Map(NamedModel):
                 "umap_id": self.pk,
                 "schema": self.extra_schema,
                 "slideshow": {},
+                "geometry": self.geometry,
             }
         )
-        return map_settings
+        return metadata
 
     def generate_umapjson(self, request):
-        umapjson = self.settings
-        umapjson["type"] = "umap"
-        umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
-        datalayers = []
+        umapjson = {
+            "metadata": {"geometry": self.geometry, **self.metadata},
+            "type": "umap",
+            "uri": request.build_absolute_uri(self.get_absolute_url()),
+            "layers": [],
+        }
         for datalayer in self.datalayer_set.all():
-            with open(datalayer.geojson.path, "rb") as f:
+            with open(datalayer.data.path, "rb") as f:
                 layer = json.loads(f.read())
-            if datalayer.settings:
-                layer["_umap_options"] = datalayer.settings
-            datalayers.append(layer)
-        umapjson["layers"] = datalayers
+            layer["metadata"] = datalayer.metadata
+            umapjson["layers"].append(layer)
         return umapjson
 
     def get_absolute_url(self):
@@ -397,15 +400,15 @@ class DataLayer(NamedModel):
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
-    geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
+    data = models.FileField(upload_to=upload_to, blank=True, null=True)
     display_on_load = models.BooleanField(
         default=False,
         verbose_name=_("display on load"),
         help_text=_("Display this layer on load."),
     )
     rank = models.SmallIntegerField(default=0)
-    settings = models.JSONField(
-        blank=True, null=True, verbose_name=_("settings"), default=dict
+    metadata = models.JSONField(
+        blank=True, null=True, verbose_name=_("metadata"), default=dict
     )
     edit_status = models.SmallIntegerField(
         choices=EDIT_STATUS,
@@ -423,10 +426,10 @@ class DataLayer(NamedModel):
         if is_new:
             force_insert, force_update = False, True
             filename = self.upload_to()
-            old_name = self.geojson.name
-            new_name = self.geojson.storage.save(filename, self.geojson)
-            self.geojson.storage.delete(old_name)
-            self.geojson.name = new_name
+            old_name = self.data.name
+            new_name = self.data.storage.save(filename, self.data)
+            self.data.storage.delete(old_name)
+            self.data.name = new_name
             super(DataLayer, self).save(force_insert, force_update, **kwargs)
         self.purge_gzip()
         self.purge_old_versions()
@@ -443,10 +446,10 @@ class DataLayer(NamedModel):
         path.append(str(self.map.pk))
         return os.path.join(*path)
 
-    def metadata(self, user=None, request=None):
+    def get_metadata(self, user=None, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
-        obj = self.settings or {
+        obj = self.metadata or {
             "name": self.name,
             "displayOnLoad": self.display_on_load,
         }
@@ -463,7 +466,7 @@ class DataLayer(NamedModel):
         new.pk = None
         if map_inst:
             new.map = map_inst
-        new.geojson = File(new.geojson.file.file)
+        new.data = File(new.data.file.file)
         new.save()
         return new
 
@@ -478,13 +481,13 @@ class DataLayer(NamedModel):
         return {
             "name": name,
             "at": els[1],
-            "size": self.geojson.storage.size(self.get_version_path(name)),
+            "size": self.data.storage.size(self.get_version_path(name)),
         }
 
     @property
     def versions(self):
         root = self.storage_root()
-        names = self.geojson.storage.listdir(root)[1]
+        names = self.data.storage.listdir(root)[1]
         names = [name for name in names if self.is_valid_version(name)]
         versions = [self.version_metadata(name) for name in names]
         versions.sort(reverse=True, key=operator.itemgetter("at"))
@@ -492,7 +495,7 @@ class DataLayer(NamedModel):
 
     def get_version(self, name):
         path = self.get_version_path(name)
-        with self.geojson.storage.open(path, "r") as f:
+        with self.data.storage.open(path, "r") as f:
             return f.read()
 
     def get_version_path(self, name):
@@ -505,23 +508,23 @@ class DataLayer(NamedModel):
             name = version["name"]
             # Should not be in the list, but ensure to not delete the file
             # currently used in database
-            if self.geojson.name.endswith(name):
+            if self.data.name.endswith(name):
                 continue
             try:
-                self.geojson.storage.delete(os.path.join(root, name))
+                self.data.storage.delete(os.path.join(root, name))
             except FileNotFoundError:
                 pass
 
     def purge_gzip(self):
         root = self.storage_root()
-        names = self.geojson.storage.listdir(root)[1]
+        names = self.data.storage.listdir(root)[1]
         prefixes = [f"{self.pk}_"]
         if self.old_id:
             prefixes.append(f"{self.old_id}_")
         prefixes = tuple(prefixes)
         for name in names:
             if name.startswith(prefixes) and name.endswith(".gz"):
-                self.geojson.storage.delete(os.path.join(root, name))
+                self.data.storage.delete(os.path.join(root, name))
 
     def can_edit(self, user=None, request=None):
         """

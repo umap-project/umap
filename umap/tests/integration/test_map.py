@@ -14,7 +14,7 @@ def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
     expect(meta).to_have_count(1)
     expect(meta).to_have_attribute("href", "//a.tile.openstreetmap.fr")
     # Add custom tilelayer
-    map.settings["properties"]["tilelayer"] = {
+    map.metadata["tilelayer"] = {
         "name": "OSM Piano FR",
         "maxZoom": 20,
         "minZoom": 0,
@@ -25,7 +25,7 @@ def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(meta).to_have_attribute("href", "//a.piano.tiles.quaidorsay.fr")
     # Add custom tilelayer with variable in domain, should create a preconnect
-    map.settings["properties"]["tilelayer"] = {
+    map.metadata["tilelayer"] = {
         "name": "OSM Piano FR",
         "maxZoom": 20,
         "minZoom": 0,
@@ -40,7 +40,7 @@ def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
 def test_default_view_without_datalayer_should_use_default_center(
     map, live_server, datalayer, page
 ):
-    datalayer.settings["displayOnLoad"] = False
+    datalayer.metadata["displayOnLoad"] = False
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
@@ -52,9 +52,9 @@ def test_default_view_without_datalayer_should_use_default_center(
 def test_default_view_latest_without_datalayer_should_use_default_center(
     map, live_server, datalayer, page
 ):
-    datalayer.settings["displayOnLoad"] = False
+    datalayer.metadata["displayOnLoad"] = False
     datalayer.save()
-    map.settings["properties"]["defaultView"] = "latest"
+    map.metadata["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
@@ -66,9 +66,9 @@ def test_default_view_latest_without_datalayer_should_use_default_center(
 def test_default_view_data_without_datalayer_should_use_default_center(
     map, live_server, datalayer, page
 ):
-    datalayer.settings["displayOnLoad"] = False
+    datalayer.metadata["displayOnLoad"] = False
     datalayer.save()
-    map.settings["properties"]["defaultView"] = "data"
+    map.metadata["defaultView"] = "data"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
@@ -78,7 +78,7 @@ def test_default_view_data_without_datalayer_should_use_default_center(
 
 
 def test_default_view_latest_with_marker(map, live_server, datalayer, page):
-    map.settings["properties"]["defaultView"] = "latest"
+    map.metadata["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
@@ -108,7 +108,7 @@ def test_default_view_latest_with_line(map, live_server, page):
         ],
     }
     DataLayerFactory(map=map, data=data)
-    map.settings["properties"]["defaultView"] = "latest"
+    map.metadata["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
@@ -139,7 +139,7 @@ def test_default_view_latest_with_polygon(map, live_server, page):
         ],
     }
     DataLayerFactory(map=map, data=data)
-    map.settings["properties"]["defaultView"] = "latest"
+    map.metadata["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
@@ -152,7 +152,7 @@ def test_default_view_locate(browser, live_server, map):
         geolocation={"longitude": 8.52967, "latitude": 39.16267},
         permissions=["geolocation"],
     )
-    map.settings["properties"]["defaultView"] = "locate"
+    map.metadata["defaultView"] = "locate"
     map.save()
     page = context.new_page()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
@@ -162,7 +162,7 @@ def test_default_view_locate(browser, live_server, map):
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     openmap, live_server, datalayer, page
 ):
-    datalayer.settings["remoteData"] = {
+    datalayer.metadata["remoteData"] = {
         "url": "https://overpass-api.de/api/interpreter?data=[out:xml];node[harbour=yes]({south},{west},{north},{east});out body;",
         "format": "osm",
         "from": "10",
@@ -191,7 +191,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
 def test_minimap_on_load(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-minimap")).to_be_hidden()
-    map.settings["properties"]["miniMap"] = True
+    map.metadata["miniMap"] = True
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-minimap")).to_be_visible()
@@ -200,7 +200,7 @@ def test_minimap_on_load(map, live_server, datalayer, page):
 def test_zoom_control_on_load(map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-zoom")).to_be_visible()
-    map.settings["properties"]["zoomControl"] = False
+    map.metadata["zoomControl"] = False
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.locator(".leaflet-control-zoom")).to_be_hidden()
@@ -209,7 +209,7 @@ def test_zoom_control_on_load(map, live_server, page):
 def test_feature_in_query_string_has_precedence_over_onloadpanel(
     map, live_server, page
 ):
-    map.settings["properties"]["onLoadPanel"] = "caption"
+    map.metadata["onLoadPanel"] = "caption"
     map.name = "This is my map"
     map.save()
     data = {
@@ -224,9 +224,8 @@ def test_feature_in_query_string_has_precedence_over_onloadpanel(
                 },
             }
         ],
-        "_umap_options": {"popupShape": "Panel"},
     }
-    DataLayerFactory(map=map, data=data)
+    DataLayerFactory(map=map, data=data, metadata={"popupShape": "Panel"})
     page.goto(f"{live_server.url}{map.get_absolute_url()}?feature=FooBar")
     expect(page.get_by_role("heading", name="FooBar")).to_be_visible()
     expect(page.get_by_role("heading", name="This is my map")).to_be_hidden()

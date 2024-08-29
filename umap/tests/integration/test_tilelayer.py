@@ -85,8 +85,8 @@ def test_map_should_display_selected_tilelayer(map, live_server, tilelayers, pag
     url_pattern = re.compile(
         r"https://[abc]{1}.piano.tiles.quaidorsay.fr/fr/\d+/\d+/\d+.png"
     )
-    map.settings["properties"]["tilelayer"]["url_template"] = piano.url_template
-    map.settings["properties"]["tilelayersControl"] = True
+    map.metadata["tilelayer"]["url_template"] = piano.url_template
+    map.metadata["tilelayersControl"] = True
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     tiles = page.locator(".leaflet-tile-pane img")
@@ -101,10 +101,10 @@ def test_map_should_display_custom_tilelayer(map, live_server, tilelayers, page)
     url_pattern = re.compile(
         r"https://[abc]{1}.basemaps.cartocdn.com/rastertiles/voyager/\d+/\d+/\d+.png"
     )
-    map.settings["properties"]["tilelayer"]["url_template"] = (
+    map.metadata["tilelayer"]["url_template"] = (
         "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
     )
-    map.settings["properties"]["tilelayersControl"] = True
+    map.metadata["tilelayersControl"] = True
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     tiles = page.locator(".leaflet-tile-pane img")
@@ -115,7 +115,7 @@ def test_map_should_display_custom_tilelayer(map, live_server, tilelayers, page)
 
 
 def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
-    map.settings["properties"]["tilelayer"]["attribution"] = (
+    map.metadata["tilelayer"]["attribution"] = (
         "&copy; [[http://www.openstreetmap.org/copyright|OpenStreetMap]] contributors"
     )
     map.save()
@@ -125,7 +125,7 @@ def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
 
 
 def test_map_should_display_a_more_button(map, live_server, tilelayers, page):
-    map.settings["properties"]["tilelayersControl"] = True
+    map.metadata["tilelayersControl"] = True
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     page.locator(".leaflet-iconLayers").hover()

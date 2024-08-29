@@ -348,7 +348,7 @@ def test_should_remove_dot_in_property_names(live_server, page, settings, tilela
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
     datalayer = DataLayer.objects.last()
-    saved_data = json.loads(Path(datalayer.geojson.path).read_text())
+    saved_data = json.loads(Path(datalayer.data.path).read_text())
     assert saved_data["features"][0]["properties"] == {
         "color": "",
         "name": "Chez Rémy",

@@ -5,9 +5,9 @@ pytestmark = pytest.mark.django_db
 
 
 def test_should_not_render_any_control(live_server, tilelayer, page, map):
-    map.settings["properties"]["onLoadPanel"] = "databrowser"
-    map.settings["properties"]["miniMap"] = True
-    map.settings["properties"]["captionBar"] = True
+    map.metadata["onLoadPanel"] = "databrowser"
+    map.metadata["miniMap"] = True
+    map.metadata["captionBar"] = True
     map.save()
     # Make sure those controls are visible in normal view
     page.goto(f"{live_server.url}{map.get_absolute_url()}")

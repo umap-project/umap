@@ -59,9 +59,6 @@ DATALAYER_DATA = {
             "id": "poin3",
         },
     ],
-    "_umap_options": {
-        "name": "Calque 2",
-    },
 }
 
 
@@ -81,7 +78,7 @@ def test_table_editor(live_server, openmap, datalayer, page):
     with page.expect_response(re.compile(r".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     saved = DataLayer.objects.last()
-    data = json.loads(Path(saved.geojson.path).read_text())
+    data = json.loads(Path(saved.data.path).read_text())
     assert data["features"][0]["properties"]["newprop"] == "newvalue"
     assert "name" not in data["features"][0]["properties"]
 

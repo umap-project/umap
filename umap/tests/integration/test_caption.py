@@ -9,13 +9,13 @@ pytestmark = pytest.mark.django_db
 
 
 def test_caption(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "caption"
+    map.metadata["onLoadPanel"] = "caption"
     map.save()
     basic = DataLayerFactory(map=map, name="Basic layer")
     non_loaded = DataLayerFactory(
-        map=map, name="Non loaded", settings={"displayOnLoad": False}
+        map=map, name="Non loaded", metadata={"displayOnLoad": False}
     )
-    hidden = DataLayerFactory(map=map, name="Hidden", settings={"inCaption": False})
+    hidden = DataLayerFactory(map=map, name="Hidden", metadata={"inCaption": False})
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     panel = page.locator(".panel.left.on")
     expect(panel).to_have_class(re.compile(".*condensed.*"))

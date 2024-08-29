@@ -58,15 +58,15 @@ def test_should_handle_locale_var_in_description(live_server, map, page):
 
 
 def test_should_display_tooltip_with_variable(live_server, map, page, bootstrap):
-    map.settings["properties"]["showLabel"] = True
-    map.settings["properties"]["labelKey"] = "Foo {name}"
+    map.metadata["showLabel"] = True
+    map.metadata["labelKey"] = "Foo {name}"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_text("Foo test marker")).to_be_visible()
 
 
 def test_should_open_popup_panel_on_click(live_server, map, page, bootstrap):
-    map.settings["properties"]["popupShape"] = "Panel"
+    map.metadata["popupShape"] = "Panel"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     panel = page.locator(".panel.left.on")
@@ -82,7 +82,7 @@ def test_should_open_popup_panel_on_click(live_server, map, page, bootstrap):
 
 
 def test_extended_properties_in_popup(live_server, map, page, bootstrap):
-    map.settings["properties"]["popupContentTemplate"] = """
+    map.metadata["popupContentTemplate"] = """
     Rank: {rank}
     Locale: {locale}
     Lang: {lang}

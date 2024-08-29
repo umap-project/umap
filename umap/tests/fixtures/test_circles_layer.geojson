@@ -203,7 +203,7 @@
             "id": "c1160"
         }
     ],
-    "_umap_options": {
+    "metadata": {
         "displayOnLoad": true,
         "inCaption": true,
         "browsable": true,

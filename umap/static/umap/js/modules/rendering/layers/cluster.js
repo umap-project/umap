@@ -27,8 +27,8 @@ export const Cluster = L.MarkerClusterGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    if (!Utils.isObject(this.datalayer.options.cluster)) {
-      this.datalayer.options.cluster = {}
+    if (!Utils.isObject(this.datalayer.metadata.cluster)) {
+      this.datalayer.metadata.cluster = {}
     }
     const options = {
       polygonOptions: {
@@ -36,8 +36,8 @@ export const Cluster = L.MarkerClusterGroup.extend({
       },
       iconCreateFunction: (cluster) => new ClusterIcon(datalayer, cluster),
     }
-    if (this.datalayer.options.cluster?.radius) {
-      options.maxClusterRadius = this.datalayer.options.cluster.radius
+    if (this.datalayer.metadata.cluster?.radius) {
+      options.maxClusterRadius = this.datalayer.metadata.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
     LayerMixin.onInit.call(this, this.datalayer.map)
@@ -73,7 +73,7 @@ export const Cluster = L.MarkerClusterGroup.extend({
 
   getEditableOptions: () => [
     [
-      'options.cluster.radius',
+      'metadata.cluster.radius',
       {
         handler: 'BlurIntInput',
         placeholder: translate('Clustering radius'),
@@ -81,7 +81,7 @@ export const Cluster = L.MarkerClusterGroup.extend({
       },
     ],
     [
-      'options.cluster.textColor',
+      'metadata.cluster.textColor',
       {
         handler: 'TextColorPicker',
         placeholder: translate('Auto'),
@@ -91,7 +91,7 @@ export const Cluster = L.MarkerClusterGroup.extend({
   ],
 
   onEdit: function (field, builder) {
-    if (field === 'options.cluster.radius') {
+    if (field === 'metadata.cluster.radius') {
       // No way to reset radius of an already instanciated MarkerClusterGroup...
       this.datalayer.resetLayer(true)
       return

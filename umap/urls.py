@@ -55,9 +55,9 @@ i18n_urls = [
     ),
     re_path(r"^logout/$", views.logout, name="logout"),
     re_path(
-        r"^map/(?P<map_id>\d+)/geojson/$",
-        views.MapViewGeoJSON.as_view(),
-        name="map_geojson",
+        r"^map/(?P<map_id>\d+)/metadata/$",
+        views.MapMetadata.as_view(),
+        name="map_metadata",
     ),
     re_path(
         r"^map/anonymous-edit/(?P<signature>.+)$",

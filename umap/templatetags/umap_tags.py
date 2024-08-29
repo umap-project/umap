@@ -20,13 +20,13 @@ def umap_js(locale=None):
 
 @register.inclusion_tag("umap/map_fragment.html")
 def map_fragment(map_instance, **kwargs):
-    map_settings = map_instance.preview_settings
-    map_settings["properties"].update(kwargs)
+    map_metadata = map_instance.preview_metadata
+    map_metadata.update(kwargs)
     prefix = kwargs.pop("prefix", None) or "map"
     page = kwargs.pop("page", None) or ""
     unique_id = prefix + str(page) + "_" + str(map_instance.pk)
     return {
-        "map_settings": json_dumps(map_settings),
+        "map_metadata": json_dumps(map_metadata),
         "map": map_instance,
         "unique_id": unique_id,
     }

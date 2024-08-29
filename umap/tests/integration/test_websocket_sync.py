@@ -15,7 +15,7 @@ def test_websocket_connection_can_sync_markers(
     new_page, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
+    map.metadata["syncEnabled"] = True
     map.save()
     DataLayerFactory(map=map, data={})
 
@@ -80,7 +80,7 @@ def test_websocket_connection_can_sync_polygons(
     context, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
+    map.metadata["syncEnabled"] = True
     map.save()
     DataLayerFactory(map=map, data={})
 
@@ -164,7 +164,7 @@ def test_websocket_connection_can_sync_map_properties(
     context, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
+    map.metadata["syncEnabled"] = True
     map.save()
     DataLayerFactory(map=map, data={})
 
@@ -196,7 +196,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
     context, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
+    map.metadata["syncEnabled"] = True
     map.save()
     DataLayerFactory(map=map, data={})
 
@@ -225,7 +225,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
     context, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
+    map.metadata["syncEnabled"] = True
     map.save()
     DataLayerFactory(map=map, data={})
 

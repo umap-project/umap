@@ -55,17 +55,12 @@ DATALAYER_DATA = {
             },
         },
     ],
-    "_umap_options": {
-        "displayOnLoad": True,
-        "browsable": True,
-        "name": "Calque 1",
-    },
 }
 
 
 @pytest.fixture
 def bootstrap(map, live_server):
-    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.metadata["onLoadPanel"] = "databrowser"
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA)
 
@@ -113,7 +108,7 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
 
 def test_filter_uses_layer_setting_if_any(live_server, page, bootstrap, map):
     datalayer = map.datalayer_set.first()
-    datalayer.settings["labelKey"] = "foo"
+    datalayer.metadata["labelKey"] = "foo"
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
@@ -149,11 +144,10 @@ def test_filter_uses_layer_setting_if_any(live_server, page, bootstrap, map):
 
 
 def test_filter_works_with_variable_in_labelKey(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.metadata["onLoadPanel"] = "databrowser"
     map.save()
     data = deepcopy(DATALAYER_DATA)
-    data["_umap_options"]["labelKey"] = "{name} ({bar})"
-    DataLayerFactory(map=map, data=data)
+    DataLayerFactory(map=map, data=data, metadata={"labelKey": "{name} ({bar})"})
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
@@ -277,7 +271,7 @@ def test_data_browser_bbox_filtered_is_clickable(live_server, page, bootstrap, m
 
 def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
     # Include a variable
-    map.settings["properties"]["labelKey"] = "{name} ({foo})"
+    map.metadata["labelKey"] = "{name} ({foo})"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_text("one point in france (point)")).to_be_visible()
@@ -299,7 +293,7 @@ def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
 
 
 def test_should_sort_features_in_natural_order(live_server, map, page):
-    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.metadata["onLoadPanel"] = "databrowser"
     map.save()
     datalayer_data = deepcopy(DATALAYER_DATA)
     datalayer_data["features"][0]["properties"]["name"] = "9. a marker"
@@ -331,8 +325,8 @@ def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootst
 def test_should_show_header_for_display_on_load_false(
     live_server, page, bootstrap, map, datalayer
 ):
-    datalayer.settings["displayOnLoad"] = False
-    datalayer.settings["name"] = "This layer is not loaded"
+    datalayer.metadata["displayOnLoad"] = False
+    datalayer.metadata["name"] = "This layer is not loaded"
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     browser = page.locator(".umap-browser")
@@ -341,8 +335,8 @@ def test_should_show_header_for_display_on_load_false(
 
 
 def test_should_use_color_variable(live_server, map, page):
-    map.settings["properties"]["onLoadPanel"] = "databrowser"
-    map.settings["properties"]["color"] = "{mycolor}"
+    map.metadata["onLoadPanel"] = "databrowser"
+    map.metadata["color"] = "{mycolor}"
     map.save()
     datalayer_data = deepcopy(DATALAYER_DATA)
     datalayer_data["features"][0]["properties"]["mycolor"] = "DarkRed"

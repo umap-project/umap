@@ -21,10 +21,10 @@ DATALAYER_DATA = {
                 "type": "Point",
                 "coordinates": [13.68896484375, 48.55297816440071],
             },
-            "properties": {"_umap_options": {"color": "DarkCyan"}, "name": "Here"},
+            "metadata": {"color": "DarkCyan"},
+            "properties": {"name": "Here"},
         }
     ],
-    "_umap_options": {"displayOnLoad": True, "name": "FooBarFoo"},
 }
 FIXTURES = Path(__file__).parent.parent / "fixtures"
 
@@ -69,7 +69,7 @@ def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
 
 
 def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos):
-    openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    openmap.metadata["iconUrl"] = "/uploads/pictogram/star.svg"
     openmap.save()
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
@@ -108,7 +108,7 @@ def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos)
 
 
 def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
-    openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
+    openmap.metadata["iconUrl"] = "/uploads/pictogram/star.svg"
     openmap.save()
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")

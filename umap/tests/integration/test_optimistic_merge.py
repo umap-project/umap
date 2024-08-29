@@ -43,12 +43,12 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         # Prevent two layers to be saved on the same second, as we compare them based
         # on time in case of conflict. FIXME do not use time for comparison.
         sleep(1)
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    assert DataLayer.objects.get(pk=datalayer.pk).metadata == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
-        "editMode": "advanced",
         "inCaption": True,
+        "remoteData": {},
     }
 
     # Now navigate to this map from another tab
@@ -78,12 +78,12 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         sleep(1)
     # No change after the save
     expect(marker_pane_p2).to_have_count(2)
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    assert DataLayer.objects.get(pk=datalayer.pk).metadata == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
+        "remoteData": {},
     }
 
     # Now create another marker in the first tab
@@ -94,14 +94,12 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         save_p1.click()
     # Should now get the other marker too
     expect(marker_pane_p1).to_have_count(3)
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    assert DataLayer.objects.get(pk=datalayer.pk).metadata == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "permissions": {"edit_status": 1},
+        "remoteData": {},
     }
 
     # And again
@@ -112,14 +110,12 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         save_p1.click()
         sleep(1)
     # Should now get the other marker too
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    assert DataLayer.objects.get(pk=datalayer.pk).metadata == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "permissions": {"edit_status": 1},
+        "remoteData": {},
     }
     expect(marker_pane_p1).to_have_count(4)
 
@@ -132,14 +128,12 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         save_p2.click()
         sleep(1)
     # Should now get the other markers too
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    assert DataLayer.objects.get(pk=datalayer.pk).metadata == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "permissions": {"edit_status": 1},
+        "remoteData": {},
     }
     expect(marker_pane_p2).to_have_count(5)
 
@@ -258,14 +252,12 @@ def test_same_second_edit_doesnt_conflict(context, live_server, tilelayer):
 
     # Should now get the other marker too
     expect(marker_pane_p1).to_have_count(3)
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    assert DataLayer.objects.get(pk=datalayer.pk).metadata == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "permissions": {"edit_status": 1},
+        "remoteData": {},
     }
 
 
@@ -286,11 +278,11 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_two.get_by_role("button", name="Save").click()
     saved = DataLayer.objects.last()
-    data = json.loads(Path(saved.geojson.path).read_text())
+    data = json.loads(Path(saved.data.path).read_text())
     assert data["features"][0]["properties"]["name"] == "new name"
     expect(page_two.get_by_text("Whoops! Other contributor(s) changed")).to_be_visible()
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_two.get_by_text("Keep your changes and loose theirs").click()
     saved = DataLayer.objects.last()
-    data = json.loads(Path(saved.geojson.path).read_text())
+    data = json.loads(Path(saved.data.path).read_text())
     assert data["features"][0]["properties"]["name"] == "custom name"
