@@ -1,5 +1,31 @@
 # Changelog
 
+### 2.6.0b0 - 2024-08-30
+
+### New features
+* add teams by @yohanboniface in #2062
+* add "Proportional Circles" layer type by @yohanboniface in #2053
+* better RTL support by @fim100 in #2078
+* display contact infos in the footer by @yohanboniface in #2080
+* add a "+" button in the tilelayer switcher by @yohanboniface in #1994
+* add {layer} as popup variable (aka extended properties) by @yohanboniface in #2008
+* allow to display a polygon "negative" by @yohanboniface in #2041
+
+### Bug fixes
+* correct Dockerfile statics path by @davidbgk in #2037
+* fix georss import by @yohanboniface in #2035
+* show delete button for owner and anonymous owner by @yohanboniface in #2039
+* deactivate loader on map fragments by @yohanboniface in #2033
+* import GPX desc as description by @yohanboniface in #2059
+* do not append HTML element as title in GeoRSSLink popup by @yohanboniface in #2060
+* catch login_required from map page and add a way to login by @yohanboniface in #2025
+* correctly add drawn latlng when continuing line backward by @yohanboniface in #2077
+* remove position fixed for input and textarea in tableeditor by @yohanboniface in #2076
+
+### Internal changes
+* include vendorized static dependencies by @davidbgk in #2042
+* use preferred tile.openstreetmap.org URL by @Dimitar5555 in #2063
+
 ## 2.5.1 - 2024-07-12
 
 ### Bug fixes
