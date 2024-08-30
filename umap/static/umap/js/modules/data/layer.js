@@ -283,7 +283,7 @@ export class DataLayer {
   }
 
   hasDynamicData() {
-    return !!this.options.remoteData?.dynamic
+    return this.isRemoteLayer() && Boolean(this.options.remoteData?.dynamic)
   }
 
   async fetchRemoteData(force) {
