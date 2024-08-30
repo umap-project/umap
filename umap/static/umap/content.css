@@ -194,26 +194,15 @@ input[type="submit"],
 .button-primary {
     font-weight: bold;
 }
-.wrapper input[type="submit"]:hover {
-    background-color: #35537c;
-}
 .wrapper .neutral, .wrapper input[type="submit"].neutral {
     background-color: var(--button-neutral-background);
     color: var(--button-neutral-color);
-}
-.wrapper.somber {
-    background-color: #2E3641;
-    color: #efefef;
-    padding-top: 20px;
-    margin-top: 20px;
-}
-.wrapper.somber .row {
-    margin-top: 0;
 }
 .wrapper .button,
 .wrapper input {
     height: 56px;
     line-height: 43px;
+    font-weight: bold;
 }
 
 /* **************************** */
