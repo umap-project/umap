@@ -9,9 +9,9 @@ from umap.models import Map
 
 from .base import (
     DataLayerFactory,
-    TeamFactory,
     LicenceFactory,
     MapFactory,
+    TeamFactory,
     TileLayerFactory,
     UserFactory,
 )

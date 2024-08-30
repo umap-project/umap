@@ -15,8 +15,8 @@ from . import views
 from .decorators import (
     can_edit_map,
     can_view_map,
-    team_members_only,
     login_required_if_not_anonymous_allowed,
+    team_members_only,
 )
 from .utils import decorated_patterns
 
