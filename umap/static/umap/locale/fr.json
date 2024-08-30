@@ -297,7 +297,7 @@
     "Quantiles": "Quantiles",
     "Recent": "Récents",
     "Remote data": "Données distantes",
-    "Remove shape from the multi": "Extraire le tracé du groupe",
+    "Remove shape from the multi": "Supprimer ce tracé du groupe",
     "Replace layer content": "Remplacer le contenu du calque",
     "Restore this version": "Restaurer cette version",
     "Save current edits": "Enregistrer les changements courants",
@@ -498,5 +498,11 @@
     "Found {count} rows. Are you sure you want to delete all?": "{count} lignes trouvées. Êtes-vous sûr de vouloir toutes les supprimer ?",
     "Expression is empty": "L'expression est vide",
     "OK": "OK",
-    "Cancel": "Annuler"
+    "Cancel": "Annuler",
+    "Attach map to a team": "Associer la carte à une équipe",
+    "Display the polygon inverted": "Afficher le polygon en négatif",
+    "Proportional circles": "Cercles proportionnels",
+    "Property name to compute circles": "Nom de la propriété pour calculer les cercles",
+    "Min circle radius": "Rayon minimum",
+    "Max circle radius": "Rayon maximum"
 }

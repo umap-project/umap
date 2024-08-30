@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 20:59+0000\n"
+"POT-Creation-Date: 2024-08-30 18:23+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: imni <iriman@chmail.ir>, 2024\n"
 "Language-Team: Persian (Iran) (http://app.transifex.com/openstreetmap/umap/language/fa_IR/)\n"
@@ -30,7 +30,7 @@ msgstr "فقط با پیوند محرمانهٔ ویرایش، ویرایش می
 msgid "Everyone can edit"
 msgstr "همه می‌توانند ویرایش کنند"
 
-#: forms.py:69 models.py:389
+#: forms.py:69 models.py:423
 msgid "Inherit"
 msgstr "ارث‌بردن"
 
@@ -38,242 +38,238 @@ msgstr "ارث‌بردن"
 msgid "Site is readonly for maintenance"
 msgstr "سایت برای امور نگهداری در حالت فقط‌خواندنی قرار دارد"
 
-#: models.py:53
+#: models.py:54 models.py:73
 msgid "name"
 msgstr "نام"
 
-#: models.py:84
-msgid "details"
-msgstr "جزئیات"
-
-#: models.py:85
-msgid "Link to a page where the licence is detailed."
-msgstr "پیوند به صفحه‌ای که شرح مجوز در آن آمده است."
-
-#: models.py:95
-msgid "URL template using OSM tile format"
-msgstr "الگوی نشانی اینترنتی با توجه به قالب کاشی OSM"
-
-#: models.py:101
-msgid "Order of the tilelayers in the edit box"
-msgstr "ترتیب لایه‌های کاشی در جعبهٔ ویرایش"
-
-#: models.py:147 models.py:390
-msgid "Everyone"
-msgstr "همه"
-
-#: models.py:148 models.py:154 models.py:391
-msgid "Editors only"
-msgstr "فقط ویرایشگران"
-
-#: models.py:149 models.py:392
-msgid "Owner only"
-msgstr "فقط مالک"
-
-#: models.py:152
-msgid "Everyone (public)"
-msgstr "همه (عمومی)"
-
-#: models.py:153
-msgid "Anyone with link"
-msgstr "هر کسی با پیوند"
-
-#: models.py:155
-msgid "Blocked"
-msgstr ""
-
-#: models.py:158
-msgid "center"
-msgstr "مرکز"
-
-#: models.py:159
-msgid "zoom"
-msgstr "زوم"
-
-#: models.py:161
-msgid "locate"
-msgstr "مکان‌یابی"
-
-#: models.py:161
-msgid "Locate user on load?"
-msgstr "کاربر هنگام بارشدن مکان‌یابی شود؟"
-
-#: models.py:165
-msgid "Choose the map licence."
-msgstr "مجوز نقشه را انتخاب کنید."
-
-#: models.py:166
-msgid "licence"
-msgstr "مجوز"
-
-#: models.py:177
-msgid "owner"
-msgstr "مالک"
-
-#: models.py:181
-msgid "editors"
-msgstr "ویرایشگران"
-
-#: models.py:186 models.py:413
-msgid "edit status"
-msgstr "ویرایش وضعیت"
-
-#: models.py:191
-msgid "share status"
-msgstr "وضعیت همرسانی"
-
-#: models.py:194 models.py:408
-msgid "settings"
-msgstr "تنظیمات"
-
-#: models.py:330
-msgid "Clone of"
-msgstr "همانندسازی‌شده از"
-
-#: models.py:399
+#: models.py:56 models.py:433
 msgid "description"
 msgstr "توضیحات"
 
-#: models.py:403
+#: models.py:104
+msgid "details"
+msgstr "جزئیات"
+
+#: models.py:105
+msgid "Link to a page where the licence is detailed."
+msgstr "پیوند به صفحه‌ای که شرح مجوز در آن آمده است."
+
+#: models.py:115
+msgid "URL template using OSM tile format"
+msgstr "الگوی نشانی اینترنتی با توجه به قالب کاشی OSM"
+
+#: models.py:121
+msgid "Order of the tilelayers in the edit box"
+msgstr "ترتیب لایه‌های کاشی در جعبهٔ ویرایش"
+
+#: models.py:167 models.py:424
+msgid "Everyone"
+msgstr "همه"
+
+#: models.py:168 models.py:174 models.py:425
+msgid "Editors and team only"
+msgstr ""
+
+#: models.py:169 models.py:426
+msgid "Owner only"
+msgstr "فقط مالک"
+
+#: models.py:172
+msgid "Everyone (public)"
+msgstr "همه (عمومی)"
+
+#: models.py:173
+msgid "Anyone with link"
+msgstr "هر کسی با پیوند"
+
+#: models.py:175
+msgid "Blocked"
+msgstr ""
+
+#: models.py:178
+msgid "center"
+msgstr "مرکز"
+
+#: models.py:179
+msgid "zoom"
+msgstr "زوم"
+
+#: models.py:181
+msgid "locate"
+msgstr "مکان‌یابی"
+
+#: models.py:181
+msgid "Locate user on load?"
+msgstr "کاربر هنگام بارشدن مکان‌یابی شود؟"
+
+#: models.py:185
+msgid "Choose the map licence."
+msgstr "مجوز نقشه را انتخاب کنید."
+
+#: models.py:186
+msgid "licence"
+msgstr "مجوز"
+
+#: models.py:197
+msgid "owner"
+msgstr "مالک"
+
+#: models.py:201
+msgid "editors"
+msgstr "ویرایشگران"
+
+#: models.py:207
+msgid "team"
+msgstr ""
+
+#: models.py:213 models.py:447
+msgid "edit status"
+msgstr "ویرایش وضعیت"
+
+#: models.py:218
+msgid "share status"
+msgstr "وضعیت همرسانی"
+
+#: models.py:221 models.py:442
+msgid "settings"
+msgstr "تنظیمات"
+
+#: models.py:364
+msgid "Clone of"
+msgstr "همانندسازی‌شده از"
+
+#: models.py:437
 msgid "display on load"
 msgstr "نمایش هنگام بارشدن"
 
-#: models.py:404
+#: models.py:438
 msgid "Display this layer on load."
 msgstr "این لایه هنگام بارشدن نمایش داده شود."
 
-#: templates/404.html:6
+#: templates/404.html:8
 msgid "Take me to the home page"
 msgstr "مرا به صفحه اصلی ببر"
 
-#: templates/auth/user_detail.html:5
+#: templates/auth/user_detail.html:8
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "نقشه‌های %(current_user)s را مرور کنید"
 
-#: templates/auth/user_detail.html:12
+#: templates/auth/user_detail.html:17
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s هیچ نقشه‌ای ندارد"
 
-#: templates/auth/user_form.html:6
-msgid "My Maps"
-msgstr "نقشه‌های من"
-
-#: templates/auth/user_form.html:7
-msgid "My Profile"
-msgstr "نمایهٔ من"
-
-#: templates/auth/user_form.html:20
+#: templates/auth/user_form.html:21 templates/umap/team_form.html:21
 msgid "Save"
 msgstr "ذخیره"
 
-#: templates/auth/user_form.html:25
+#: templates/auth/user_form.html:27
 msgid "Your current providers"
 msgstr "خدمات‌دهندگان فعلی شما"
 
-#: templates/auth/user_form.html:31
+#: templates/auth/user_form.html:39
 msgid "Connect to another provider"
 msgstr "اتصال به خدمات‌دهندهٔ دیگر"
 
-#: templates/auth/user_form.html:33
+#: templates/auth/user_form.html:42
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
 msgstr "رویهٔ خوبی است اگر حساب کاربری خود را به بیش از یک خدمات‌دهنده متصل کنید. زیرا ممکن است یکی از خدمات‌دهندگان به‌طور موقت یا دائم از دسترس خارج شود."
 
-#: templates/auth/user_stars.html:5
+#: templates/auth/user_stars.html:8
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
 msgstr "نقشه‌های ستاره‌دار %(current_user)s را مرور کنید"
 
-#: templates/auth/user_stars.html:12
+#: templates/auth/user_stars.html:17
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s هنوز نقشهٔ ستاره‌داری ندارد."
 
-#: templates/base.html:12
+#: templates/base.html:13
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
 msgstr "در uMap می‌توانید با لایه‌های اوپن‌استریت‌مپ خیلی سریع یک نقشه بسازید و در وبسایت خود جاسازی کنید."
 
-#: templates/registration/login.html:16
-msgid "Please log in with your account"
-msgstr "لطفاً با حساب خود وارد شوید"
-
-#: templates/registration/login.html:28
-msgid "Username"
-msgstr "نام کاربری"
-
-#: templates/registration/login.html:31
-msgid "Password"
-msgstr "گذرواژه"
-
-#: templates/registration/login.html:32
+#: templates/registration/login.html:6 templates/registration/login.html:45
 msgid "Login"
 msgstr "ورود"
 
-#: templates/registration/login.html:37
+#: templates/registration/login.html:24
+msgid "Please log in with your account"
+msgstr "لطفاً با حساب خود وارد شوید"
+
+#: templates/registration/login.html:41
+msgid "Username"
+msgstr "نام کاربری"
+
+#: templates/registration/login.html:44
+msgid "Password"
+msgstr "گذرواژه"
+
+#: templates/registration/login.html:51
 msgid "Please choose a provider"
 msgstr "لطفاً یک خدمات‌دهنده را انتخاب کنید"
 
-#: templates/umap/about_summary.html:11
+#: templates/umap/about_summary.html:12
 #, python-format
 msgid ""
 "uMap lets you create maps with <a href=\"%(osm_url)s\" />OpenStreetMap</a> "
 "layers in a minute and embed them in your site."
 msgstr "در uMap می‌توانید با لایه‌های <a href=\"%(osm_url)s\" />اوپن‌استریت‌مپ</a> خیلی سریع یک نقشه بسازید و در وبسایت خود جاسازی کنید."
 
-#: templates/umap/about_summary.html:21
+#: templates/umap/about_summary.html:23
 msgid "Choose the layers of your map"
 msgstr "لایه‌های نقشهٔ خود را انتخاب کنید"
 
-#: templates/umap/about_summary.html:22
+#: templates/umap/about_summary.html:26
 msgid "Add POIs: markers, lines, polygons..."
 msgstr "افزودن POIها: نشانگرها، خطوط، چندضلعی‌ها..."
 
-#: templates/umap/about_summary.html:23
+#: templates/umap/about_summary.html:29
 msgid "Manage POIs colours and icons"
 msgstr "مدیریت رنگ و نماد نقاط توجه"
 
-#: templates/umap/about_summary.html:24
+#: templates/umap/about_summary.html:32
 msgid "Manage map options: display a minimap, locate user on load…"
 msgstr "مدیریت گزینه‌های نقشه: نمایش نقشهٔ کوچک، مکان‌یابی کاربر در هنگام بارشدن نقشه…"
 
-#: templates/umap/about_summary.html:25
+#: templates/umap/about_summary.html:35
 msgid "Batch import geostructured data (geojson, gpx, kml, osm...)"
 msgstr "درون‌برد داده‌های زمین‌مرجع (geojson،‏ gpx،‏ kml،‏ osm و...)"
 
-#: templates/umap/about_summary.html:26
+#: templates/umap/about_summary.html:38
 msgid "Choose the license for your data"
 msgstr "مجوز داده‌های خود را انتخاب کنید"
 
-#: templates/umap/about_summary.html:27
+#: templates/umap/about_summary.html:41
 msgid "Embed and share your map"
 msgstr "نقشهٔ خود را جاسازی و همرسانی کنید"
 
-#: templates/umap/about_summary.html:37
+#: templates/umap/about_summary.html:52
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "و <a href=\"%(repo_url)s\">متن‌باز</a> است!"
 
-#: templates/umap/about_summary.html:48 templates/umap/navigation.html:38
-#: templates/umap/user_dashboard.html:42
+#: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
+#: templates/umap/user_dashboard.html:40
 msgid "Create a map"
 msgstr "ساخت نقشه"
 
-#: templates/umap/about_summary.html:51
+#: templates/umap/about_summary.html:66
 msgid "Play with the demo"
 msgstr "با نسخهٔ نمایشی کار کنید"
 
-#: templates/umap/components/alerts/alert.html:14
-#: templates/umap/components/alerts/alert.html:49
-#: templates/umap/components/alerts/alert.html:71
+#: templates/umap/components/alerts/alert.html:15
+#: templates/umap/components/alerts/alert.html:64
+#: templates/umap/components/alerts/alert.html:92
 msgid "Close"
 msgstr "بستن"
 
-#: templates/umap/components/alerts/alert.html:27
+#: templates/umap/components/alerts/alert.html:30
 #, python-format
 msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
@@ -281,45 +277,45 @@ msgid ""
 "target=\"_blank\">log in</a>."
 msgstr "نکتهٔ طلایی: برای اینکه نقشه‌های خود را به آسانی پیدا کنید، <a href=\"%(login_url)s\" target=\"_blank\">حساب کاربری بسازید</a> یا <a href=\"%(login_url)s\" target=\"_blank\">وارد شوید</a>."
 
-#: templates/umap/components/alerts/alert.html:30
+#: templates/umap/components/alerts/alert.html:35
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "این پیوند محرمانهٔ شما برای ویرایش نقشه است. لطفاً در جای امنی نگهش دارید:"
 
-#: templates/umap/components/alerts/alert.html:33
+#: templates/umap/components/alerts/alert.html:39
 msgid "Copy link"
 msgstr "کپی پیوند"
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:46
 msgid "Enter your email address to receive the secret link:"
 msgstr "رایانامهٔ خود را وارد کنید تا پیوند محرمانه را دریافت کنید:"
 
-#: templates/umap/components/alerts/alert.html:41
+#: templates/umap/components/alerts/alert.html:52
 msgid "Email"
 msgstr "رایانامه"
 
-#: templates/umap/components/alerts/alert.html:42
+#: templates/umap/components/alerts/alert.html:55
 msgid "Send me the link"
 msgstr "پیوند را برایم بفرست"
 
-#: templates/umap/components/alerts/alert.html:63
+#: templates/umap/components/alerts/alert.html:79
 msgid "See their edits in another tab"
 msgstr "ویرایش‌هایشان را در زبانهٔ دیگری ببینید"
 
-#: templates/umap/components/alerts/alert.html:64
+#: templates/umap/components/alerts/alert.html:82
 msgid "Keep your changes and loose theirs"
 msgstr "تغییرات خود را نگه دارید و از آن‌ها را رها کنید"
 
-#: templates/umap/components/alerts/alert.html:65
+#: templates/umap/components/alerts/alert.html:85
 msgid "Keep their changes and loose yours"
 msgstr "تغییرات آن‌ها را نگه دارید و از خودتان را رها کنید"
 
-#: templates/umap/content.html:24
+#: templates/umap/content.html:26
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
 msgstr "این نمونه از uMap فعلاً در حالت فقط‌خواندنی قرار گرفته است. ایجاد/ویرایش مجاز نیست."
 
-#: templates/umap/content.html:32
+#: templates/umap/content.html:34
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -328,279 +324,339 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "این یک نمونهٔ نمایشی است که برای آزمایش و نسخه‌های پیشا-انتشار استفاده می‌شود. اگر به نمونهٔ پایدار نیاز دارید، لطفاً <a href=\"%(stable_url)s\">%(stable_url)s</a> استفاده کنید. همچنین می‌توانید نمونهٔ شخصی خود را میزبانی کنید؛ زیرا <a href=\"%(repo_url)s\">متن‌باز</a> است!"
 
-#: templates/umap/home.html:11
+#: templates/umap/content_footer.html:5
+msgid "An OpenStreetMap project"
+msgstr ""
+
+#: templates/umap/content_footer.html:6
+msgid "version"
+msgstr ""
+
+#: templates/umap/content_footer.html:7
+msgid "Hosted by"
+msgstr ""
+
+#: templates/umap/content_footer.html:8
+msgid "Contact"
+msgstr ""
+
+#: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
+msgid "Help"
+msgstr "راهنما"
+
+#: templates/umap/dashboard_menu.html:6
+#, python-format
+msgid "My Maps (%(count)s)"
+msgstr "نقشه‌های من (%(count)s)"
+
+#: templates/umap/dashboard_menu.html:8
+msgid "My Maps"
+msgstr "نقشه‌های من"
+
+#: templates/umap/dashboard_menu.html:11
+msgid "My profile"
+msgstr "نمایهٔ من"
+
+#: templates/umap/dashboard_menu.html:13
+msgid "My teams"
+msgstr ""
+
+#: templates/umap/home.html:14
 msgid "Map of the uMaps"
 msgstr "نقشهٔ uMapها"
 
-#: templates/umap/home.html:17
+#: templates/umap/home.html:24
 msgid "Get inspired, browse maps"
 msgstr "الهام بگیرید، نقشه‌ها را مرور کنید"
 
-#: templates/umap/login_popup_end.html:2
+#: templates/umap/login_popup_end.html:4
 msgid "You are logged in. Continuing..."
 msgstr "شما وارد شده‌اید. ادامه..."
 
-#: templates/umap/map_list.html:9 views.py:348
+#: templates/umap/map_list.html:10 views.py:433
 msgid "by"
 msgstr "ساختهٔ"
 
-#: templates/umap/map_list.html:17
+#: templates/umap/map_list.html:18
 msgid "More"
 msgstr "بیشتر"
 
-#: templates/umap/map_table.html:6
+#: templates/umap/map_table.html:8 templates/umap/user_teams.html:14
 msgid "Name"
 msgstr "نام"
 
-#: templates/umap/map_table.html:7
+#: templates/umap/map_table.html:11
 msgid "Preview"
 msgstr "پیش‌نمایش"
 
-#: templates/umap/map_table.html:8
+#: templates/umap/map_table.html:14
 msgid "Who can see"
 msgstr "آن‌که می‌تواند ببیند"
 
-#: templates/umap/map_table.html:9
+#: templates/umap/map_table.html:17
 msgid "Who can edit"
 msgstr "آن‌که می‌تواند ویرایش کند"
 
-#: templates/umap/map_table.html:10
+#: templates/umap/map_table.html:20
 msgid "Last save"
 msgstr "آخرین ذخیره‌سازی"
 
-#: templates/umap/map_table.html:11
+#: templates/umap/map_table.html:23
 msgid "Owner"
 msgstr "مالک"
 
-#: templates/umap/map_table.html:12
+#: templates/umap/map_table.html:26 templates/umap/user_teams.html:20
 msgid "Actions"
 msgstr "کنش‌ها"
 
-#: templates/umap/map_table.html:26 templates/umap/map_table.html:28
+#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
 msgid "Open preview"
 msgstr "بازکردن پیش‌نمایش"
 
-#: templates/umap/map_table.html:48 templates/umap/map_table.html:50
+#: templates/umap/map_table.html:72 templates/umap/map_table.html:74
 msgid "Share"
 msgstr "همرسانی"
 
-#: templates/umap/map_table.html:54 templates/umap/map_table.html:56
+#: templates/umap/map_table.html:78 templates/umap/map_table.html:80
+#: templates/umap/user_teams.html:38 templates/umap/user_teams.html:40
 msgid "Edit"
 msgstr "ویرایش"
 
-#: templates/umap/map_table.html:60 templates/umap/map_table.html:62
+#: templates/umap/map_table.html:84 templates/umap/map_table.html:86
 msgid "Download"
 msgstr "بارگیری"
 
-#: templates/umap/map_table.html:66 templates/umap/map_table.html:68
+#: templates/umap/map_table.html:90 templates/umap/map_table.html:92
 msgid "Clone"
 msgstr "همانندسازی"
 
-#: templates/umap/map_table.html:77 templates/umap/map_table.html:79
+#: templates/umap/map_table.html:101 templates/umap/map_table.html:103
 msgid "Delete"
 msgstr "حذف"
 
-#: templates/umap/map_table.html:93
+#: templates/umap/map_table.html:117
 msgid "first"
 msgstr "اول"
 
-#: templates/umap/map_table.html:94
+#: templates/umap/map_table.html:118
 msgid "previous"
 msgstr "قبلی"
 
-#: templates/umap/map_table.html:102
+#: templates/umap/map_table.html:126
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr "صفحهٔ %(maps_number)s از %(num_pages)s"
 
-#: templates/umap/map_table.html:107
+#: templates/umap/map_table.html:131
 msgid "next"
 msgstr "بعدی"
 
-#: templates/umap/map_table.html:108
+#: templates/umap/map_table.html:132
 msgid "last"
 msgstr "آخر"
 
-#: templates/umap/map_table.html:116
+#: templates/umap/map_table.html:140
 #, python-format
 msgid "Lines per page: %(per_page)s"
 msgstr "خطوط در صفحه: %(per_page)s"
 
-#: templates/umap/map_table.html:121
+#: templates/umap/map_table.html:145
 #, python-format
 msgid "%(count)s maps"
 msgstr "%(count)s نقشه"
 
-#: templates/umap/navigation.html:10 templates/umap/user_dashboard.html:4
+#: templates/umap/navigation.html:11 templates/umap/user_dashboard.html:6
 msgid "My Dashboard"
 msgstr "پیشخان من"
 
-#: templates/umap/navigation.html:13
+#: templates/umap/navigation.html:14
 msgid "Starred maps"
 msgstr "نقشه‌های ستاره‌دار"
 
-#: templates/umap/navigation.html:17
+#: templates/umap/navigation.html:18
 msgid "Log in"
 msgstr "ورود"
 
-#: templates/umap/navigation.html:17
+#: templates/umap/navigation.html:18
 msgid "Sign in"
 msgstr "ثبت‌نام"
 
-#: templates/umap/navigation.html:21
+#: templates/umap/navigation.html:22
 msgid "About"
 msgstr "درباره"
 
-#: templates/umap/navigation.html:24
-msgid "Help"
-msgstr "راهنما"
-
-#: templates/umap/navigation.html:29
+#: templates/umap/navigation.html:30
 msgid "Change password"
 msgstr "تغییر گذرواژه"
 
-#: templates/umap/navigation.html:33
+#: templates/umap/navigation.html:34
 msgid "Log out"
 msgstr "خروج"
 
-#: templates/umap/password_change.html:4
+#: templates/umap/password_change.html:7
 msgid "Password change"
 msgstr "تغییر گذرواژه"
 
-#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:10
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "لطفاً برای حفظ امنیت گذرواژهٔ قدیمی خود را وارد کنید و سپس گذرواژهٔ جدید خود را دو بار وارد کنید تا مطمئن شویم آن را درست وارد کرده‌اید."
 
-#: templates/umap/password_change.html:13
+#: templates/umap/password_change.html:17
 msgid "Old password"
 msgstr "گذرواژهٔ قدیمی"
 
-#: templates/umap/password_change.html:18
+#: templates/umap/password_change.html:22
 msgid "New password"
 msgstr "گذرواژهٔ جدید"
 
-#: templates/umap/password_change.html:22
+#: templates/umap/password_change.html:26
 msgid "New password confirmation"
 msgstr "تأیید گذرواژهٔ جدید"
 
-#: templates/umap/password_change.html:23
+#: templates/umap/password_change.html:27
 msgid "Change my password"
 msgstr "گذرواژه‌ام را تغییر بده"
 
-#: templates/umap/password_change_done.html:4
+#: templates/umap/password_change_done.html:7
 msgid "Password change successful"
 msgstr "تغییر گذرواژه موفقیت‌آمیز بود"
 
-#: templates/umap/password_change_done.html:5
+#: templates/umap/password_change_done.html:10
 msgid "Your password was changed."
 msgstr "گذرواژهٔ شما تغییر کرد"
 
-#: templates/umap/search.html:13
+#: templates/umap/search.html:15
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
 msgstr[0] "%(count)s نقشه پیدا شد:"
 msgstr[1] "%(count)s نقشه پیدا شد:"
 
-#: templates/umap/search.html:21
+#: templates/umap/search.html:24
 msgid "No map found."
 msgstr "نقشه‌ای پیدا نشد."
 
-#: templates/umap/search.html:24
+#: templates/umap/search.html:29
 msgid "Latest created maps"
 msgstr "آخرین نقشه‌های ساخته‌شده"
 
-#: templates/umap/search_bar.html:3
+#: templates/umap/search_bar.html:4
 msgid "Search maps"
 msgstr "جستجوی نقشه‌ها"
 
-#: templates/umap/search_bar.html:14
+#: templates/umap/search_bar.html:15
 msgid "Search"
 msgstr "جستجو"
 
-#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:27
+#: templates/umap/team_detail.html:10
+#, python-format
+msgid "Browse %(current_team)s's maps"
+msgstr ""
+
+#: templates/umap/team_detail.html:22
+#, python-format
+msgid "%(current_team)s has no public maps."
+msgstr ""
+
+#: templates/umap/team_form.html:24
+msgid "Delete this team"
+msgstr ""
+
+#: templates/umap/team_form.html:47
+msgid "Add user"
+msgstr ""
+
+#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
 msgstr "جستجو در نقشه‌های من"
 
-#: templates/umap/user_dashboard.html:10
-#, python-format
-msgid "My Maps (%(count)s)"
-msgstr "نقشه‌های من (%(count)s)"
-
-#: templates/umap/user_dashboard.html:12
-msgid "My profile"
-msgstr "نمایهٔ من"
-
-#: templates/umap/user_dashboard.html:20 templates/umap/user_dashboard.html:24
+#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
 msgid "Map’s title"
 msgstr "عنوان نقشه"
 
-#: templates/umap/user_dashboard.html:32
+#: templates/umap/user_dashboard.html:30
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "بارگیری %(count)s نقشه"
 
-#: templates/umap/user_dashboard.html:42
+#: templates/umap/user_dashboard.html:40
 msgid "You have no map yet."
 msgstr "هنوز نقشه‌ای ندارید"
 
-#: views.py:353
+#: templates/umap/user_teams.html:17
+msgid "Users"
+msgstr ""
+
+#: templates/umap/user_teams.html:48
+msgid "New team"
+msgstr ""
+
+#: views.py:235
+msgid "Cannot delete a team with more than one member"
+msgstr ""
+
+#: views.py:239
+#, python-format
+msgid "Team “%(name)s” has been deleted"
+msgstr ""
+
+#: views.py:438
 msgid "View the map"
 msgstr "مشاهدهٔ نقشه"
 
-#: views.py:719
+#: views.py:824
 msgid "See full screen"
 msgstr "تمام‌صفحه ببینید"
 
-#: views.py:847
+#: views.py:953
 msgid "Map editors updated with success!"
 msgstr "ویرایشگران نقشه با موفقیت روزآمد شد!"
 
-#: views.py:883
+#: views.py:989
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "پیوند ویرایش uMap برای نقشهٔ شما: %(map_name)s"
 
-#: views.py:886
+#: views.py:992
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "این پیوند محرمانهٔ ویرایش برای شماست: %(link)s"
 
-#: views.py:893
+#: views.py:999
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده نشد"
 
-#: views.py:896
+#: views.py:1002
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده شد"
 
-#: views.py:907
+#: views.py:1013
 msgid "Only its owner can delete the map."
 msgstr "فقط مالک آن می‌تواند نقشه را حذف کند."
 
-#: views.py:910
+#: views.py:1016
 msgid "Map successfully deleted."
 msgstr "نقشه با موفقیت حذف شد."
 
-#: views.py:936
+#: views.py:1042
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "از نقشهٔ شما همانندسازی شد! اگر می‌خواهید این نقشه را از رایانهٔ دیگری ویرایش کنید، لطفاً از این پیوند استفاده کنید: %(anonymous_url)s"
 
-#: views.py:941
+#: views.py:1047
 msgid "Congratulations, your map has been cloned!"
 msgstr "تبریک، نقشهٔ شما همانندسازی شد!"
 
-#: views.py:1176
+#: views.py:1282
 msgid "Layer successfully deleted."
 msgstr "لایه با موفقیت حذف شد."
 
-#: views.py:1198
+#: views.py:1304
 msgid "Permissions updated with success!"
 msgstr "مجوزها با موفقیت روزآمد شد!"
