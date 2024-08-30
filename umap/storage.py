@@ -8,6 +8,7 @@ from rjsmin import jsmin
 
 class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
     support_js_module_import_aggregation = True
+    max_post_process_passes = 15
 
     # We remove `;` at the end of all regexps to match our biome config.
     _js_module_import_aggregation_patterns = (
