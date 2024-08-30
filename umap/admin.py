@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-from .models import DataLayer, Licence, Map, Pictogram, TileLayer
+from .models import DataLayer, Licence, Map, Pictogram, Team, TileLayer
 
 
 class TileLayerAdmin(admin.ModelAdmin):
@@ -26,8 +26,13 @@ class PictogramAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
 
+class TeamAdmin(admin.ModelAdmin):
+    filter_horizontal = ("users",)
+
+
 admin.site.register(Map, MapAdmin)
 admin.site.register(DataLayer)
 admin.site.register(Pictogram, PictogramAdmin)
 admin.site.register(TileLayer, TileLayerAdmin)
 admin.site.register(Licence)
+admin.site.register(Team, TeamAdmin)
