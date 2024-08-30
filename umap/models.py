@@ -339,7 +339,7 @@ class Map(NamedModel):
             can = True
         elif self.share_status in [self.PUBLIC, self.OPEN]:
             can = True
-        elif request.user is None:
+        elif not request.user.is_authenticated:
             can = False
         elif request.user == self.owner:
             can = True
