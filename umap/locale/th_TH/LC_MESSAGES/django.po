@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Krittin Leewanich, 2023
-# Krittin, 2023
+# Krittin Leewanich, 2023-2024
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 13:53+0000\n"
+"POT-Creation-Date: 2024-06-26 20:59+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Krittin Leewanich, 2023\n"
+"Last-Translator: Krittin Leewanich, 2023-2024\n"
 "Language-Team: Thai (Thailand) (http://app.transifex.com/openstreetmap/umap/language/th_TH/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,115 +27,115 @@ msgstr "แก้ไขได้ ด้วยลิงก์ลับ"
 msgid "Everyone can edit"
 msgstr "ทุนคนแก้ไขได้"
 
-#: forms.py:69 models.py:371
+#: forms.py:69 models.py:389
 msgid "Inherit"
-msgstr ""
+msgstr "สืบทอด"
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "สามารถอ่านไซต์เท่านั้น เนื่องจากมีการซ่อมบำรุง"
 
-#: models.py:50
+#: models.py:53
 msgid "name"
 msgstr "ชื่อ"
 
-#: models.py:81
+#: models.py:84
 msgid "details"
 msgstr "รายละเอียด"
 
-#: models.py:82
+#: models.py:85
 msgid "Link to a page where the licence is detailed."
 msgstr "ลิงก์ไปยังหน้ารายละเอียดใบอนุญาต"
 
-#: models.py:92
+#: models.py:95
 msgid "URL template using OSM tile format"
 msgstr "แม่แบบ URL ที่ใช้ฟอร์แมตไทล์ OSM"
 
-#: models.py:98
+#: models.py:101
 msgid "Order of the tilelayers in the edit box"
 msgstr "ลำดับของเลเยอร์ไทล์ในกล่องแก้ไข"
 
-#: models.py:144 models.py:372
+#: models.py:147 models.py:390
 msgid "Everyone"
 msgstr ""
 
-#: models.py:145 models.py:151 models.py:373
+#: models.py:148 models.py:154 models.py:391
 msgid "Editors only"
 msgstr ""
 
-#: models.py:146 models.py:374
+#: models.py:149 models.py:392
 msgid "Owner only"
 msgstr ""
 
-#: models.py:149
+#: models.py:152
 msgid "Everyone (public)"
 msgstr ""
 
-#: models.py:150
+#: models.py:153
 msgid "Anyone with link"
 msgstr ""
 
-#: models.py:152
+#: models.py:155
 msgid "Blocked"
 msgstr ""
 
-#: models.py:155 models.py:378
-msgid "description"
-msgstr "คำอธิบาย"
-
-#: models.py:156
+#: models.py:158
 msgid "center"
 msgstr "ทำให้อยู่ตรงกลาง"
 
-#: models.py:157
+#: models.py:159
 msgid "zoom"
 msgstr "ซูม"
 
-#: models.py:159
+#: models.py:161
 msgid "locate"
 msgstr "ระบุตำแหน่ง"
 
-#: models.py:159
+#: models.py:161
 msgid "Locate user on load?"
 msgstr "ระบุตำแหน่งผู้ใช้ที่กำลังโหลด?"
 
-#: models.py:163
+#: models.py:165
 msgid "Choose the map licence."
 msgstr "เลือกใบอนุญาติแผนที่"
 
-#: models.py:164
+#: models.py:166
 msgid "licence"
 msgstr "ใบอนุญาติ"
 
-#: models.py:175
+#: models.py:177
 msgid "owner"
 msgstr "เจ้าของ"
 
-#: models.py:179
+#: models.py:181
 msgid "editors"
 msgstr "ผู้แก้ไข"
 
-#: models.py:184 models.py:392
+#: models.py:186 models.py:413
 msgid "edit status"
 msgstr "สถานะการแก้ไข"
 
-#: models.py:189
+#: models.py:191
 msgid "share status"
 msgstr "สถานะการแชร์"
 
-#: models.py:192 models.py:387
+#: models.py:194 models.py:408
 msgid "settings"
 msgstr "การตั้งค่า"
 
-#: models.py:320
+#: models.py:330
 msgid "Clone of"
 msgstr "โคลนของ"
 
-#: models.py:382
+#: models.py:399
+msgid "description"
+msgstr "คำอธิบาย"
+
+#: models.py:403
 msgid "display on load"
 msgstr "แสดงตอนโหลด"
 
-#: models.py:383
+#: models.py:404
 msgid "Display this layer on load."
 msgstr "แสดงเลเยอร์ตอนโหลด"
 
@@ -264,13 +264,59 @@ msgstr "สร้างแผนที่"
 msgid "Play with the demo"
 msgstr "เล่นกับตัวอย่างเดโม่"
 
-#: templates/umap/content.html:22
+#: templates/umap/components/alerts/alert.html:14
+#: templates/umap/components/alerts/alert.html:49
+#: templates/umap/components/alerts/alert.html:71
+msgid "Close"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:27
+#, python-format
+msgid ""
+"Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
+"target=\"_blank\">create an account</a> or <a href=\"%(login_url)s\" "
+"target=\"_blank\">log in</a>."
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:30
+msgid "Here is your secret link to edit the map, please keep it safe:"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:33
+msgid "Copy link"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:39
+msgid "Enter your email address to receive the secret link:"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:41
+msgid "Email"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:42
+msgid "Send me the link"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:63
+msgid "See their edits in another tab"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:64
+msgid "Keep your changes and loose theirs"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:65
+msgid "Keep their changes and loose yours"
+msgstr ""
+
+#: templates/umap/content.html:24
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
 msgstr ""
 
-#: templates/umap/content.html:30
+#: templates/umap/content.html:32
 #, python-format
 msgid ""
 "This is a demo instance, used for tests and pre-rolling releases. If you "
@@ -279,11 +325,11 @@ msgid ""
 "instance, it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "นี่เป็นเพียงตัวอย่างสาธิต ใช้สำหรับการทดสอบและการเผยแพร่ล่วงหน้า  ถ้าต้องการตัวอย่าง\nเสถียร โปรดใช้ <a href=\"%(stable_url)s\">%(stable_url)s</a> คุณยังสามารถโฮสต์ตัวอย่างของคุณได้ เนื่องจากเป็น<a href=\"%(repo_url)s\">โอเพนซอร์ส</a>!"
 
-#: templates/umap/home.html:8
+#: templates/umap/home.html:11
 msgid "Map of the uMaps"
 msgstr "แผนที่จาก uMaps"
 
-#: templates/umap/home.html:14
+#: templates/umap/home.html:17
 msgid "Get inspired, browse maps"
 msgstr "รับแรงบันดาลใจ เรียกดูแผนที่"
 
@@ -291,7 +337,7 @@ msgstr "รับแรงบันดาลใจ เรียกดูแผ�
 msgid "You are logged in. Continuing..."
 msgstr "คุณเข้าสู่ระบบแล้ว กำลังดำเนินการต่อ..."
 
-#: templates/umap/map_list.html:9 views.py:341
+#: templates/umap/map_list.html:9 views.py:348
 msgid "by"
 msgstr "โดย"
 
@@ -327,57 +373,57 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: templates/umap/map_table.html:25 templates/umap/map_table.html:27
+#: templates/umap/map_table.html:26 templates/umap/map_table.html:28
 msgid "Open preview"
 msgstr ""
 
-#: templates/umap/map_table.html:46 templates/umap/map_table.html:48
+#: templates/umap/map_table.html:48 templates/umap/map_table.html:50
 msgid "Share"
 msgstr ""
 
-#: templates/umap/map_table.html:51 templates/umap/map_table.html:53
+#: templates/umap/map_table.html:54 templates/umap/map_table.html:56
 msgid "Edit"
 msgstr ""
 
-#: templates/umap/map_table.html:56 templates/umap/map_table.html:58
+#: templates/umap/map_table.html:60 templates/umap/map_table.html:62
 msgid "Download"
 msgstr ""
 
-#: templates/umap/map_table.html:63 templates/umap/map_table.html:65
+#: templates/umap/map_table.html:66 templates/umap/map_table.html:68
 msgid "Clone"
 msgstr ""
 
-#: templates/umap/map_table.html:73 templates/umap/map_table.html:75
+#: templates/umap/map_table.html:77 templates/umap/map_table.html:79
 msgid "Delete"
 msgstr ""
 
-#: templates/umap/map_table.html:88
+#: templates/umap/map_table.html:93
 msgid "first"
 msgstr ""
 
-#: templates/umap/map_table.html:89
+#: templates/umap/map_table.html:94
 msgid "previous"
 msgstr ""
 
-#: templates/umap/map_table.html:98
+#: templates/umap/map_table.html:102
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
 msgstr ""
 
-#: templates/umap/map_table.html:104
+#: templates/umap/map_table.html:107
 msgid "next"
 msgstr ""
 
-#: templates/umap/map_table.html:105
+#: templates/umap/map_table.html:108
 msgid "last"
 msgstr ""
 
-#: templates/umap/map_table.html:113
+#: templates/umap/map_table.html:116
 #, python-format
 msgid "Lines per page: %(per_page)s"
 msgstr ""
 
-#: templates/umap/map_table.html:118
+#: templates/umap/map_table.html:121
 #, python-format
 msgid "%(count)s maps"
 msgstr ""
@@ -448,17 +494,17 @@ msgstr "เปลี่ยนรหัสผ่านแล้ว"
 msgid "Your password was changed."
 msgstr "รหัสผ่านของคุณนั้นถูกเปลี่ยนแล้ว"
 
-#: templates/umap/search.html:10
+#: templates/umap/search.html:13
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
 msgstr[0] ""
 
-#: templates/umap/search.html:18
+#: templates/umap/search.html:21
 msgid "No map found."
 msgstr ""
 
-#: templates/umap/search.html:21
+#: templates/umap/search.html:24
 msgid "Latest created maps"
 msgstr ""
 
@@ -470,20 +516,20 @@ msgstr "ค้นหาแผนที่"
 msgid "Search"
 msgstr "ค้นหา"
 
-#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:26
+#: templates/umap/user_dashboard.html:7 templates/umap/user_dashboard.html:27
 msgid "Search my maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:11
+#: templates/umap/user_dashboard.html:10
 #, python-format
 msgid "My Maps (%(count)s)"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:13
+#: templates/umap/user_dashboard.html:12
 msgid "My profile"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:21 templates/umap/user_dashboard.html:23
+#: templates/umap/user_dashboard.html:20 templates/umap/user_dashboard.html:24
 msgid "Map’s title"
 msgstr ""
 
@@ -496,52 +542,61 @@ msgstr ""
 msgid "You have no map yet."
 msgstr ""
 
-#: views.py:346
+#: views.py:353
 msgid "View the map"
 msgstr "ดูแผนที่"
 
-#: views.py:704
+#: views.py:719
 msgid "See full screen"
 msgstr ""
 
-#: views.py:803
+#: views.py:847
 msgid "Map editors updated with success!"
 msgstr "ผู้แก้ไขแผนที่อัปเดตสำเร็จแล้ว!"
 
-#: views.py:841
+#: views.py:883
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:844
+#: views.py:886
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:850
+#: views.py:893
+#, python-format
+msgid "Can't send email to %(email)s"
+msgstr ""
+
+#: views.py:896
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:861
+#: views.py:907
 msgid "Only its owner can delete the map."
 msgstr "เฉพาะเจ้าของสามารถลบแผนที่ได้เท่านั้น"
 
-#: views.py:889
+#: views.py:910
+msgid "Map successfully deleted."
+msgstr ""
+
+#: views.py:936
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "แผนที่ของคุณถูกโคลนแล้ว! ถ้าคุณต้องการแก้ไขแผนที่นี้จากอุปกรณ์อื่น โปรดใช้ลิงค์: %(anonymous_url)s"
 
-#: views.py:894
+#: views.py:941
 msgid "Congratulations, your map has been cloned!"
 msgstr "ยินดีด้วย แผนที่ของคุณถูกโคลนแล้ว!"
 
-#: views.py:1130
+#: views.py:1176
 msgid "Layer successfully deleted."
 msgstr "ลบเลเยอร์สำเร็จแล้ว"
 
-#: views.py:1152
+#: views.py:1198
 msgid "Permissions updated with success!"
 msgstr ""
