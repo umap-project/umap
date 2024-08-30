@@ -126,7 +126,7 @@ class TeamMembersField(forms.ModelMultipleChoiceField):
 class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
-        fields = ["name", "description", "logo_url", "members"]
+        fields = ["name", "description", "members"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -32,15 +32,6 @@ class Migration(migrations.Migration):
                     models.TextField(blank=True, null=True, verbose_name="description"),
                 ),
                 (
-                    "logo_url",
-                    models.URLField(
-                        help_text="URL to an image.",
-                        verbose_name="Logo URL",
-                        blank=True,
-                        null=True,
-                    ),
-                ),
-                (
                     "users",
                     models.ManyToManyField(
                         related_name="teams", to=settings.AUTH_USER_MODEL

@@ -54,12 +54,6 @@ class Team(models.Model):
         max_length=200, verbose_name=_("name"), unique=True, blank=False, null=False
     )
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
-    logo_url = models.URLField(
-        verbose_name=_("Logo URL"),
-        help_text=_("URL to an image."),
-        null=True,
-        blank=True,
-    )
     users = models.ManyToManyField(User, related_name="teams")
 
     def __unicode__(self):

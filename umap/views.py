@@ -60,9 +60,9 @@ from .forms import (
     DataLayerForm,
     DataLayerPermissionsForm,
     FlatErrorList,
-    TeamForm,
     MapSettingsForm,
     SendLinkForm,
+    TeamForm,
     UpdateMapPermissionsForm,
     UserProfileForm,
 )
@@ -191,7 +191,7 @@ about = About.as_view()
 
 class TeamNew(CreateView):
     model = Team
-    fields = ["name", "description", "logo_url"]
+    fields = ["name", "description"]
     success_url = reverse_lazy("user_teams")
 
     def form_valid(self, form):
