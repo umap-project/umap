@@ -47,7 +47,7 @@ export const LayerMixin = {
   dataChanged: () => {},
 
   onMoveEnd: function () {
-    if (this.datalayer.isRemoteLayer() && this.datalayer.showAtZoom()) {
+    if (this.datalayer.hasDynamicData() && this.datalayer.showAtZoom()) {
       this.datalayer.fetchRemoteData()
     }
   },
