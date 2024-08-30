@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<div class="row">
+  <h2 class="section tabs">
+    {% if selected == "maps" %}
+      <a class="selected" href="{% url 'user_dashboard' %}">{% blocktranslate with count=maps.paginator.count %}My Maps ({{ count }}){% endblocktranslate %}</a>
+    {% else %}
+      <a href="{% url 'user_dashboard' %}">{% trans "My Maps" %}</a>
+    {% endif %}
+    <a {% if selected == "profile" %}class="selected"{% endif %}
+       href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
+    <a {% if selected == "teams" %}class="selected"{% endif %}
+       href="{% url 'user_teams' %}">{% trans "My teams" %}</a>
+  </h2>
+</div>

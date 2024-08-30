@@ -922,7 +922,7 @@ a.umap-control-caption,
 .datalayer-name {
     cursor: pointer;
 }
-.umap-caption .umap-map-owner {
+.umap-caption .umap-map-author {
     padding-inline-start: 31px;
 }
 

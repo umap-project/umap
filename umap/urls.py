@@ -16,6 +16,7 @@ from .decorators import (
     can_edit_map,
     can_view_map,
     login_required_if_not_anonymous_allowed,
+    team_members_only,
 )
 from .utils import decorated_patterns
 
@@ -24,6 +25,10 @@ admin.autodiscover()
 urlpatterns = [
     re_path(r"^admin/", admin.site.urls),
     re_path("", include("social_django.urls", namespace="social")),
+    re_path(
+        r"^agnocomplete/",
+        include(("agnocomplete.urls", "agnocomplete"), namespace="agnocomplete"),
+    ),
     re_path(r"^m/(?P<pk>\d+)/$", views.MapShortUrl.as_view(), name="map_short_url"),
     re_path(r"^ajax-proxy/$", cache_page(180)(views.ajax_proxy), name="ajax-proxy"),
     re_path(
@@ -39,7 +44,6 @@ urlpatterns = [
         name="password_change_done",
     ),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
-    re_path(r"^agnocomplete/", include("agnocomplete.urls")),
     re_path(r"^map/oembed/", views.MapOEmbed.as_view(), name="map_oembed"),
     re_path(
         r"^map/(?P<map_id>\d+)/download/",
@@ -96,12 +100,12 @@ i18n_urls += decorated_patterns(
 )
 i18n_urls += decorated_patterns(
     [ensure_csrf_cookie],
-    re_path(r"^map/$", views.MapPreview.as_view(), name="map_preview"),
-    re_path(r"^map/new/$", views.MapNew.as_view(), name="map_new"),
+    path("map/", views.MapPreview.as_view(), name="map_preview"),
+    path("map/new/", views.MapNew.as_view(), name="map_new"),
 )
 i18n_urls += decorated_patterns(
     [login_required_if_not_anonymous_allowed, never_cache],
-    re_path(r"^map/create/$", views.MapCreate.as_view(), name="map_create"),
+    path("map/create/", views.MapCreate.as_view(), name="map_create"),
 )
 i18n_urls += decorated_patterns(
     [login_required],
@@ -110,9 +114,16 @@ i18n_urls += decorated_patterns(
         views.ToggleMapStarStatus.as_view(),
         name="map_star",
     ),
-    re_path(r"^me$", views.user_dashboard, name="user_dashboard"),
-    re_path(r"^me/profile$", views.user_profile, name="user_profile"),
-    re_path(r"^me/download$", views.user_download, name="user_download"),
+    path("me", views.user_dashboard, name="user_dashboard"),
+    path("me/profile", views.user_profile, name="user_profile"),
+    path("me/download", views.user_download, name="user_download"),
+    path("me/teams", views.UserTeams.as_view(), name="user_teams"),
+    path("team/create/", views.TeamNew.as_view(), name="team_new"),
+)
+i18n_urls += decorated_patterns(
+    [login_required, team_members_only],
+    path("team/<int:pk>/edit/", views.TeamUpdate.as_view(), name="team_update"),
+    path("team/<int:pk>/delete/", views.TeamDelete.as_view(), name="team_delete"),
 )
 map_urls = [
     re_path(
@@ -179,14 +190,13 @@ datalayer_urls = [
 i18n_urls += decorated_patterns([can_edit_map, never_cache], *map_urls)
 i18n_urls += decorated_patterns([never_cache], *datalayer_urls)
 urlpatterns += i18n_patterns(
-    re_path(r"^$", views.home, name="home"),
-    re_path(
-        r"^showcase/$", cache_page(24 * 60 * 60)(views.showcase), name="maps_showcase"
-    ),
-    re_path(r"^search/$", views.search, name="search"),
-    re_path(r"^about/$", views.about, name="about"),
+    path("", views.home, name="home"),
+    path("showcase/", cache_page(24 * 60 * 60)(views.showcase), name="maps_showcase"),
+    path("search/", views.search, name="search"),
+    path("about/", views.about, name="about"),
     re_path(r"^user/(?P<identifier>.+)/stars/$", views.user_stars, name="user_stars"),
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
+    path("team/<int:pk>/", views.TeamMaps.as_view(), name="team_maps"),
     re_path(r"", include(i18n_urls)),
 )
 urlpatterns += (

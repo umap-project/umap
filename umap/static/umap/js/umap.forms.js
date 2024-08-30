@@ -1086,6 +1086,23 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
   },
 })
 
+L.FormBuilder.ManageTeam = L.FormBuilder.IntSelect.extend({
+  getOptions: function () {
+    return [[null, L._('None')]].concat(
+      this.options.teams.map((team) => [team.id, team.name])
+    )
+  },
+  toHTML: function () {
+    return this.get()?.id
+  },
+  toJS: function () {
+    const value = this.value()
+    for (const team of this.options.teams) {
+      if (team.id === value) return team
+    }
+  },
+})
+
 U.FormBuilder = L.FormBuilder.extend({
   options: {
     className: 'umap-form',

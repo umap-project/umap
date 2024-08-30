@@ -379,7 +379,7 @@ def test_owner_can_edit_in_owner_mode(datalayer, client, map, post_data):
 
 def test_editor_can_edit_in_editors_mode(datalayer, client, map, post_data):
     client.login(username=map.owner.username, password="123123")
-    datalayer.edit_status = DataLayer.EDITORS
+    datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
     url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
     name = "new name"

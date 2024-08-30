@@ -1,0 +1,60 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+  {% include "umap/dashboard_menu.html" with selected="teams" %}
+  <div class="wrapper">
+    <div class="row">
+      {% if form.non_field_errors %}
+        <ul class="form-errors">
+          {% for error in form.non_field_errors %}
+            <li>
+              {{ error }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <form id="team_form" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="{% trans "Save" %}" />
+      </form>
+      {% if team.users.count == 1 %}
+        <a href="{% url 'team_delete' team.pk %}">{% trans "Delete this team" %}</a>
+      {% endif %}
+    </div>
+  </div>
+  <script type="module" defer>
+    const form = document.querySelector("#team_form")
+    const select = form.querySelector('#id_members')
+    if (select) {
+      function onSelect({item: {value, label}}) {
+        const option = document.createElement('option')
+        option.value = value
+        option.textContent = label
+        option.selected = "selected"
+        select.appendChild(option)
+      }
+      function onUnselect({item: {value, label}}) {
+        const option = select.querySelector(`[value="${value}"]`)
+        select.removeChild(option)
+      }
+      const options = {
+        className: 'edit-team-members',
+        on_select: onSelect,
+        on_unselect: onUnselect,
+        placeholder: "{% trans "Add user" %}"
+      }
+      const autocomplete = new U.AjaxAutocompleteMultiple(form, options)
+      for (const option of select.options) {
+        autocomplete.displaySelected({
+          item: { value: option.value, label: option.textContent },
+        })
+      }
+      const submit = form.querySelector('input[type="submit"]')
+      // Move it after the autocomplete widget.
+      form.appendChild(submit)
+    }
+  </script>
+{% endblock maincontent %}

@@ -25,6 +25,7 @@ export class MapPermissions {
     this.options = Object.assign(
       {
         owner: null,
+        team: null,
         editors: [],
         share_status: null,
         edit_status: null,
@@ -96,6 +97,16 @@ export class MapPermissions {
           'options.owner',
           { handler: 'ManageOwner', label: translate("Map's owner") },
         ])
+        if (this.map.options.user?.teams?.length) {
+          fields.push([
+            'options.team',
+            {
+              handler: 'ManageTeam',
+              label: translate('Attach map to a team'),
+              teams: this.map.options.user.teams,
+            },
+          ])
+        }
       }
       fields.push([
         'options.editors',
@@ -150,6 +161,7 @@ export class MapPermissions {
       formData.append('edit_status', this.options.edit_status)
     if (this.isOwner()) {
       formData.append('owner', this.options.owner?.id)
+      formData.append('team', this.options.team?.id || '')
       formData.append('share_status', this.options.share_status)
     }
     const [data, response, error] = await this.map.server.post(
@@ -175,23 +187,6 @@ export class MapPermissions {
     return Utils.template(this.map.options.urls.map_attach_owner, {
       map_id: this.map.options.umap_id,
     })
-  }
-
-  addOwnerLink(element, container) {
-    if (this.options.owner?.name && this.options.owner.url) {
-      const ownerContainer = DomUtil.add(
-        element,
-        'umap-map-owner',
-        container,
-        ` ${translate('by')} `
-      )
-      DomUtil.createLink(
-        '',
-        ownerContainer,
-        this.options.owner.name,
-        this.options.owner.url
-      )
-    }
   }
 
   commit() {

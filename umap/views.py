@@ -62,10 +62,11 @@ from .forms import (
     FlatErrorList,
     MapSettingsForm,
     SendLinkForm,
+    TeamForm,
     UpdateMapPermissionsForm,
     UserProfileForm,
 )
-from .models import DataLayer, Licence, Map, Pictogram, Star, TileLayer
+from .models import DataLayer, Licence, Map, Pictogram, Star, Team, TileLayer
 from .utils import (
     ConflictError,
     _urls_for_js,
@@ -188,6 +189,70 @@ class About(Home):
 about = About.as_view()
 
 
+class TeamNew(CreateView):
+    model = Team
+    fields = ["name", "description"]
+    success_url = reverse_lazy("user_teams")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.request.user.teams.add(self.object)
+        self.request.user.save()
+        return response
+
+
+class TeamUpdate(UpdateView):
+    model = Team
+    form_class = TeamForm
+    success_url = reverse_lazy("user_teams")
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["members"] = self.object.users.all()
+        return initial
+
+    def form_valid(self, form):
+        actual = self.object.users.all()
+        wanted = form.cleaned_data["members"]
+        for user in wanted:
+            if user not in actual:
+                user.teams.add(self.object)
+                user.save()
+        for user in actual:
+            if user not in wanted:
+                user.teams.remove(self.object)
+                user.save()
+        return super().form_valid(form)
+
+
+class TeamDelete(DeleteView):
+    model = Team
+    success_url = reverse_lazy("user_teams")
+
+    def form_valid(self, form):
+        if self.object.users.count() > 1:
+            return HttpResponseBadRequest(
+                _("Cannot delete a team with more than one member")
+            )
+        messages.info(
+            self.request,
+            _("Team “%(name)s” has been deleted") % {"name": self.object.name},
+        )
+        return super().form_valid(form)
+
+
+class UserTeams(DetailView):
+    model = User
+    template_name = "umap/user_teams.html"
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({"teams": self.object.teams.all()})
+        return super().get_context_data(**kwargs)
+
+
 class UserProfile(UpdateView):
     model = User
     form_class = UserProfileForm
@@ -247,6 +312,21 @@ class UserStars(UserMaps):
 user_stars = UserStars.as_view()
 
 
+class TeamMaps(PaginatorMixin, DetailView):
+    model = Team
+    list_template_name = "umap/map_list.html"
+    context_object_name = "current_team"
+
+    def get_maps(self):
+        return Map.public.filter(team=self.object).order_by("-modified_at")
+
+    def get_context_data(self, **kwargs):
+        kwargs.update(
+            {"maps": self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE)}
+        )
+        return super().get_context_data(**kwargs)
+
+
 class SearchMixin:
     def get_search_queryset(self, **kwargs):
         q = self.request.GET.get("q")
@@ -293,7 +373,12 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
     def get_maps(self):
         qs = self.get_search_queryset() or Map.objects.all()
-        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
+        teams = self.object.teams.all()
+        qs = (
+            qs.filter(owner=self.object)
+            .union(qs.filter(editors=self.object))
+            .union(qs.filter(team__in=teams))
+        )
         return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
@@ -459,14 +544,16 @@ def simple_json_response(**kwargs):
 class SessionMixin:
     def get_user_data(self):
         data = {}
+        user = self.request.user
         if hasattr(self, "object"):
-            data["is_owner"] = self.object.is_owner(self.request.user, self.request)
-        if self.request.user.is_anonymous:
+            data["is_owner"] = self.object.is_owner(user, self.request)
+        if user.is_anonymous:
             return data
         return {
-            "id": self.request.user.pk,
+            "id": user.pk,
             "name": str(self.request.user),
             "url": reverse("user_dashboard"),
+            "teams": [team.get_metadata() for team in user.teams.all()],
             **data,
         }
 
@@ -605,6 +692,8 @@ class PermissionsMixin:
                 {"id": editor.pk, "name": str(editor)}
                 for editor in self.object.editors.all()
             ]
+        if self.object.team:
+            permissions["team"] = self.object.team.get_metadata()
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
             permissions["anonymous_edit_url"] = self.object.get_anonymous_edit_url()
         return permissions
@@ -669,6 +758,12 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             map_settings["properties"] = {}
         map_settings["properties"]["name"] = self.object.name
         map_settings["properties"]["permissions"] = self.get_permissions()
+        author = self.object.get_author()
+        if author:
+            map_settings["properties"]["author"] = {
+                "name": str(author),
+                "url": author.get_url(),
+            }
         return map_settings
 
     def is_starred(self):

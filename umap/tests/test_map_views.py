@@ -210,7 +210,7 @@ def test_user_not_allowed_should_not_clone_map(client, map, user, settings):
 
 def test_clone_should_set_cloner_as_owner(client, map, user):
     url = reverse("map_clone", kwargs={"map_id": map.pk})
-    map.edit_status = map.EDITORS
+    map.edit_status = map.COLLABORATORS
     map.editors.add(user)
     map.save()
     client.login(username=user.username, password="123123")
@@ -330,7 +330,7 @@ def test_only_owner_can_delete(client, map, user):
 
 def test_map_editors_do_not_see_owner_change_input(client, map, user):
     map.editors.add(user)
-    map.edit_status = map.EDITORS
+    map.edit_status = map.COLLABORATORS
     map.save()
     url = reverse("map_update_permissions", kwargs={"map_id": map.pk})
     client.login(username=user.username, password="123123")

@@ -5,7 +5,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
-from .models import Map
+from .models import Map, Team
 from .views import simple_json_response
 
 LOGIN_URL = getattr(settings, "LOGIN_URL", "login")
@@ -35,7 +35,7 @@ def can_edit_map(view_func):
         map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
         user = request.user
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
-        if map_inst.edit_status >= map_inst.EDITORS:
+        if map_inst.edit_status >= map_inst.COLLABORATORS:
             can_edit = map_inst.can_edit(user=user, request=request)
             if not can_edit:
                 if map_inst.owner and not user.is_authenticated:
@@ -56,6 +56,17 @@ def can_view_map(view_func):
         map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
         if not map_inst.can_view(request):
+            return HttpResponseForbidden()
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
+
+def team_members_only(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        team = get_object_or_404(Team, pk=kwargs["pk"])
+        if not request.user.is_authenticated or team not in request.user.teams.all():
             return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
 

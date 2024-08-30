@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from django.urls import reverse
 
 from umap.forms import DEFAULT_CENTER
-from umap.models import DataLayer, Licence, Map, TileLayer
+from umap.models import DataLayer, Licence, Map, Team, TileLayer
 
 User = get_user_model()
 
@@ -56,6 +56,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = User
+
+
+class TeamFactory(factory.django.DjangoModelFactory):
+    name = "Awesome Team"
+
+    class Meta:
+        model = Team
 
 
 class MapFactory(factory.django.DjangoModelFactory):

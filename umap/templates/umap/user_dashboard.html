@@ -7,13 +7,7 @@
 {% endblock head_title %}
 {% block maincontent %}
   {% trans "Search my maps" as placeholder %}
-  <div class="row">
-    <h2 class="section tabs">
-      <a class="selected" href="{% url 'user_dashboard' %}">{% blocktranslate with count=maps.paginator.count %}My Maps ({{ count }}){% endblocktranslate %}
-      </a>
-      <a href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
-    </h2>
-  </div>
+  {% include "umap/dashboard_menu.html" with selected="maps" %}
   <div class="wrapper">
     <div class="row">
       <div class="table-header">

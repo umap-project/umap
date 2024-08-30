@@ -289,6 +289,20 @@ def test_user_dashboard_display_user_maps(client, map):
 
 
 @pytest.mark.django_db
+def test_user_dashboard_display_user_team_maps(client, map, team, user):
+    user.teams.add(team)
+    user.save()
+    map.team = team
+    map.save()
+    client.login(username=user.username, password="123123")
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name in body
+    assert map.get_absolute_url() in body
+
+
+@pytest.mark.django_db
 def test_user_dashboard_display_user_maps_distinct(client, map):
     # cf https://github.com/umap-project/umap/issues/1325
     anonymap = MapFactory(name="Map witout owner should not appear")
@@ -474,7 +488,7 @@ def test_websocket_token_returns_a_valid_token_when_authorized(client, user, map
 
 @pytest.mark.django_db
 def test_websocket_token_is_generated_for_editors(client, user, user2, map):
-    map.edit_status = Map.EDITORS
+    map.edit_status = Map.COLLABORATORS
     map.editors.add(user2)
     map.save()
 

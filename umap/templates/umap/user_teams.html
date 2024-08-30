@@ -1,0 +1,51 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+  {% include "umap/dashboard_menu.html" with selected="teams" %}
+  <div class="wrapper">
+    <div class="row">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                {% blocktrans %}Name{% endblocktrans %}
+              </th>
+              <th>
+                {% blocktrans %}Users{% endblocktrans %}
+              </th>
+              <th>
+                {% blocktrans %}Actions{% endblocktrans %}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in teams %}
+              <tr>
+                <th scope="row">
+                  <a href="{% url 'team_maps' team.pk %}">{{ team }}</a>
+                </th>
+                <td>
+                  {% for user in team.users.all %}
+                    {{ user }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  <a href="{% url 'team_update' team.pk %}"
+                     class="icon-link"
+                     title="{% translate "Edit" %}">
+                    <span class="icon-dashboard icon-edit"></span>
+                    <span class="sr-only">{% translate "Edit" %}</span>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <a class="button" href="{% url 'team_new' %}">{% trans "New team" %}</a>
+    </div>
+  </div>
+{% endblock maincontent %}

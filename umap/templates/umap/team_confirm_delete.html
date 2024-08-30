@@ -1,0 +1,19 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+  {% include "umap/dashboard_menu.html" with selected="teams" %}
+  <div class="wrapper">
+    <div class="row">
+      <form method="post">
+        {% csrf_token %}
+        <p>
+          Are you sure you want to delete "{{ object }}"?
+        </p>
+        {{ form }}
+        <input type="submit" value="Confirm">
+      </form>
+    </div>
+  </div>
+{% endblock maincontent %}

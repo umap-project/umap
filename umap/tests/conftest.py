@@ -11,6 +11,7 @@ from .base import (
     DataLayerFactory,
     LicenceFactory,
     MapFactory,
+    TeamFactory,
     TileLayerFactory,
     UserFactory,
 )
@@ -27,6 +28,11 @@ def pytest_configure(config):
 def pytest_runtest_teardown():
     shutil.rmtree(TMP_ROOT, ignore_errors=True)
     cache.clear()
+
+
+@pytest.fixture
+def team():
+    return TeamFactory()
 
 
 @pytest.fixture

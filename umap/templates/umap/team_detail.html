@@ -1,0 +1,27 @@
+{% extends "umap/content.html" %}
+
+{% load i18n %}
+
+{% block maincontent %}
+  <div class="wrapper">
+      <div class="row">
+        <div class="col wide">
+          <h2 class="section">
+            {% blocktrans %}Browse {{ current_team }}'s maps{% endblocktrans %}
+          </h2>
+          {% if current_team.description %}
+            <p>{{ current_team.description }}</p>
+          {% endif %}
+        </div>
+    </div>
+    <div class="map_list row">
+    {% if maps %}
+      {% include "umap/map_list.html" %}
+    {% else %}
+      <div>
+        {% blocktrans %}{{ current_team }} has no public maps.{% endblocktrans %}
+      </div>
+    {% endif %}
+    </div>
+  </div>
+{% endblock maincontent %}
