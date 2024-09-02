@@ -25,10 +25,20 @@ class Autocomplete extends SingleMixin(BaseAjax) {
   }
 
   createResult(item) {
+    const labels = [item.properties.name]
+    if (item.properties.county) {
+      labels.push(item.properties.county)
+    }
+    if (item.properties.state) {
+      labels.push(item.properties.state)
+    }
+    if (item.properties.country) {
+      labels.push(item.properties.country)
+    }
     return super.createResult({
       // Overpass convention to get their id from an osm one.
       value: item.properties.osm_id + 3600000000,
-      label: `${item.properties.name}`,
+      label: labels.join(', '),
     })
   }
 }
