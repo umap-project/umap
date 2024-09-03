@@ -801,7 +801,7 @@ U.TileLayerControl = L.Control.IconLayers.extend({
 
   _createLayerElements: function () {
     L.Control.IconLayers.prototype._createLayerElements.call(this)
-    if (Object.keys(this._layers) <= this.maxShown) return
+    if (Object.keys(this._layers).length <= this.maxShown) return
     const lastRow = this._container.querySelector(
       '.leaflet-iconLayers-layersRow:last-child'
     )
