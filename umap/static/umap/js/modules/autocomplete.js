@@ -306,15 +306,11 @@ export const SingleMixin = (Base) =>
         textContent: '×',
       })
       this.input.style.display = 'none'
-      DomEvent.on(
-        close,
-        'click',
-        function () {
-          this.selectedContainer.innerHTML = ''
-          this.input.style.display = 'block'
-        },
-        this
-      )
+      DomEvent.on(close, 'click', () => {
+        this.selectedContainer.innerHTML = ''
+        this.input.style.display = 'block'
+        this.options.on_unselect(result)
+      })
       this.hide()
     }
   }

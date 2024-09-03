@@ -579,6 +579,66 @@ def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
     )
 
 
+def test_overpass_import_retains_boundary(page, live_server, tilelayer, settings):
+    settings.UMAP_IMPORTERS = {
+        "overpass": {
+            "url": "https://my.overpass.io/interpreter",
+            "searchUrl": "https://foobar.io/api?q={q}",
+        }
+    }
+
+    def handle(route):
+        route.fulfill(
+            json={
+                "features": [
+                    {
+                        "geometry": {
+                            "coordinates": [3.2394035, 48.4149956],
+                            "type": "Point",
+                        },
+                        "type": "Feature",
+                        "properties": {
+                            "osm_type": "R",
+                            "osm_id": 1393025,
+                            "extent": [3.2290211, 48.4268302, 3.2623032, 48.4041636],
+                            "country": "France",
+                            "osm_key": "place",
+                            "countrycode": "FR",
+                            "osm_value": "village",
+                            "postcode": "77480",
+                            "name": "Bray-sur-Seine",
+                            "county": "Seine-et-Marne",
+                            "state": "Île-de-France",
+                            "type": "city",
+                        },
+                    }
+                ],
+                "type": "FeatureCollection",
+            }
+        )
+
+    # Intercept the route
+    page.route(re.compile("https://foobar.io/api.*"), handle)
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Overpass").click()
+    page.get_by_placeholder("amenity=drinking_water").fill("building")
+    page.get_by_placeholder("Type area name, or let empty").click()
+    page.get_by_placeholder("Type area name, or let empty").press_sequentially("bray")
+    page.get_by_text("Bray-sur-Seine, Seine-et-Marne, Île-de-France, France").click()
+    expect(page.locator("#area")).to_contain_text(
+        "Bray-sur-Seine, Seine-et-Marne, Île-de-France, France"
+    )
+    page.get_by_role("button", name="Choose this data").click()
+    expect(page.get_by_placeholder("Provide an URL here")).to_have_value(
+        "https://my.overpass.io/interpreter?data=[out:json];nwr[building](area:3601393025);out geom;"
+    )
+    page.get_by_role("button", name="Overpass").click()
+    expect(page.locator("#area")).to_contain_text(
+        "Bray-sur-Seine, Seine-et-Marne, Île-de-France, France"
+    )
+
+
 def test_import_from_datasets(page, live_server, tilelayer, settings):
     settings.UMAP_IMPORTERS = {
         "datasets": {

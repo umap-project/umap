@@ -52,11 +52,10 @@ export class Importer {
       options?.searchUrl ||
       'https://photon.komoot.io/api?q={q}&layer=county&layer=city&layer=state'
     this.id = 'overpass'
+    this.boundaryChoice = null
   }
 
   async open(importer) {
-    let boundary = null
-    let boundaryName = null
     const container = DomUtil.create('div')
     container.innerHTML = TEMPLATE
     this.autocomplete = new Autocomplete(container.querySelector('#area'), {
@@ -65,10 +64,15 @@ export class Importer {
         'Type area name, or let empty to load data in current map view'
       ),
       on_select: (choice) => {
-        boundary = choice.item.value
-        boundaryName = choice.item.label
+        this.boundaryChoice = choice
+      },
+      on_unselect: (choice) => {
+        this.boundaryChoice = null
       },
     })
+    if (this.boundaryChoice) {
+      this.autocomplete.displaySelected(this.boundaryChoice)
+    }
     this.map.help.parse(container)
 
     const confirm = (form) => {
@@ -79,10 +83,10 @@ export class Importer {
       let tags = form.tags
       if (!tags.startsWith('[')) tags = `[${tags}]`
       let area = '{south},{west},{north},{east}'
-      if (boundary) area = `area:${boundary}`
+      if (this.boundaryChoice) area = `area:${this.boundaryChoice.item.value}`
       const query = `[out:json];nwr${tags}(${area});out ${form.out};`
       importer.url = `${this.baseUrl}?data=${query}`
-      if (boundary) importer.layerName = boundaryName
+      if (this.boundaryChoice) importer.layerName = this.boundaryChoice.item.label
       importer.format = 'osm'
     }
 
@@ -91,7 +95,7 @@ export class Importer {
         template: container,
         className: `${this.id} importer dark`,
         accept: translate('Choose this data'),
-        cancel: false
+        cancel: false,
       })
       .then(confirm)
   }
