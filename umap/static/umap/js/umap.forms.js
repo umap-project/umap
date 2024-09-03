@@ -241,6 +241,16 @@ L.FormBuilder.Element.include({
   },
 })
 
+L.FormBuilder.Input.include({
+  set: function () {
+    // Add throttling
+    if (this._typing) window.clearTimeout(this._typing)
+    this._typing = window.setTimeout(() => {
+      this.builder.setter(this.field, this.toJS())
+    }, 300)
+  },
+})
+
 L.FormBuilder.Select.include({
   clear: function () {
     this.select.value = ''
