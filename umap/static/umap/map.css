@@ -105,12 +105,12 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
 .umap-control-more,
 .umap-control-less {
     background-image: url('./img/24-white.svg');
-    background-position: -72px -474px;
+    background-position: -72px -366px;
     text-indent: -9999px;
     margin-bottom: 0;
 }
 .umap-control-less {
-    background-position: -108px -476px;
+    background-position: -108px -366px;
 }
 .umap-more-controls .display-on-more,
 .umap-more-controls .umap-control-less {
