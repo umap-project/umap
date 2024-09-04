@@ -1,5 +1,20 @@
 # Changelog
 
+### 2.6.0b1 - 2024-09-04
+
+### New features
+* feat: add more context in overpass importer autocomplete results by @yohanboniface in #2087
+* feat: make boundary persistent in overpass importer by @yohanboniface in #2094
+
+### Bug fixes
+* fix: only show + button in tilelayer switcher when more available by @yohanboniface in #2095
+* fix: make sure to compare comparable values in ternary operators by @yohanboniface in #2098
+* fix: register fa-ir in LANG_INFO by @yohanboniface in #2099
+* fix: make sure datalayersControl=expanded does not override onLoadPanel by @yohanboniface in #2101
+* fix: do not fail when trying to edit a circlemarker by @yohanboniface in #2102
+* fix: do not try to display author name/url for anonymous maps by @yohanboniface in #2104
+
+
 ### 2.6.0b0 - 2024-08-30
 
 ### New features
