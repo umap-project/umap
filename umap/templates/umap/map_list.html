@@ -7,7 +7,9 @@
     <div class="legend">
       <a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a>
       {% with author=map_inst.get_author %}
-        <em>{% trans "by" %} <a href="{{ author.get_url }}">{{ author }}</a></em>
+        {% if author %}
+          <em>{% trans "by" %} <a href="{{ author.get_url }}">{{ author }}</a></em>
+        {% endif %}
       {% endwith %}
     </div>
   </div>
