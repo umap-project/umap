@@ -51,6 +51,12 @@ LANG_INFO.update(
             "name": "Malay",
             "name_local": "Bahasa Melayu",
         },
+        "fa-ir": {
+            "bidi": True,
+            "code": "fa-ir",
+            "name": "Persian (Iran)",
+            "name_local": "فارسی",
+        },
     }
 )
 # Local time zone for this installation. Choices can be found here:
