@@ -115,7 +115,6 @@ const locale = {
     "display name": "nom",
     "Display on load": "Afficher au chargement",
     "Display the control to open OpenStreetMap editor": "Afficher le bouton pour ouvrir l'éditeur d'OpenStreetMap",
-    "Display the data layers control": "Afficher le bouton d'accès rapide aux calques de données",
     "Display the embed control": "Afficher le bouton de partage",
     "Display the fullscreen control": "Afficher le bouton de plein écran",
     "Display the locate control": "Afficher le bouton de localisation",
@@ -504,7 +503,8 @@ const locale = {
     "Proportional circles": "Cercles proportionnels",
     "Property name to compute circles": "Nom de la propriété pour calculer les cercles",
     "Min circle radius": "Rayon minimum",
-    "Max circle radius": "Rayon maximum"
+    "Max circle radius": "Rayon maximum",
+    "Display the open browser control": "Afficher le bouton d'ouverture de l'explorateur"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

@@ -115,7 +115,6 @@ const locale = {
     "display name": "mostrar nombre",
     "Display on load": "Mostrar al cargar",
     "Display the control to open OpenStreetMap editor": "Mostrar el control para abrir el editor OpenStreetMap",
-    "Display the data layers control": "Mostrrar el control de la capa de datos",
     "Display the embed control": "Mostrar el control de embebido",
     "Display the fullscreen control": "Mostrar el control de pantalla completa",
     "Display the locate control": "Mostrar el control de ubicación",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

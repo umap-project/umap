@@ -115,7 +115,6 @@ const locale = {
     "display name": "birtingarnafn",
     "Display on load": "Birta við innhleðslu",
     "Display the control to open OpenStreetMap editor": "Birta hnapp til að opna OpenStreetMap-ritill",
-    "Display the data layers control": "Birta hnapp fyrir gagnalög",
     "Display the embed control": "Birta hnapp fyrir ígræðslukóða",
     "Display the fullscreen control": "Birta hnapp fyrir skjáfylli",
     "Display the locate control": "Birta staðsetningarhnapp",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

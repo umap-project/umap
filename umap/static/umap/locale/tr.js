@@ -115,7 +115,6 @@ const locale = {
     "display name": "görünen ad",
     "Display on load": "Yüklerken görüntüle",
     "Display the control to open OpenStreetMap editor": "OpenStreetMap editörünü açmak için denetimi görüntüle",
-    "Display the data layers control": "Veri katmanları denetimini görüntüle",
     "Display the embed control": "Yerleştirme denetim görüntüle",
     "Display the fullscreen control": "Tam ekran denetimini görüntüle",
     "Display the locate control": "Konum denetimini görüntüle",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

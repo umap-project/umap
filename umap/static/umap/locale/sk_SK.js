@@ -115,7 +115,6 @@ const locale = {
     "display name": "zobraziť názov",
     "Display on load": "Zobraziť pri štarte",
     "Display the control to open OpenStreetMap editor": "Zobraziť ovládanie na otvorenie editora OpenStreetMap",
-    "Display the data layers control": "Zobraziť ovládanie údajov vrstiev",
     "Display the embed control": "Zobraziť ovládanie vkladania",
     "Display the fullscreen control": "Zobraziť ovládanie celej obrazovky",
     "Display the locate control": "Zobraziť ovládanie polohy",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

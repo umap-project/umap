@@ -115,7 +115,6 @@
     "display name": "prikazno ime",
     "Display on load": "Prikaži ob nalaganju",
     "Display the control to open OpenStreetMap editor": "Pokaži gumb za odpiranje urejevalnika OpenstreetMap",
-    "Display the data layers control": "Pokaži gumb za nadzor podatkov plasti",
     "Display the embed control": "Pokaži gumb za vstavljanje predmetov",
     "Display the fullscreen control": "Pokaži gumb za preklop v celozaslonski način",
     "Display the locate control": "Pokaži gumb za omogočanje lokacijskih storitev",
@@ -498,5 +497,12 @@
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }

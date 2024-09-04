@@ -115,7 +115,6 @@ const locale = {
     "display name": "display name",
     "Display on load": "Display on load",
     "Display the control to open OpenStreetMap editor": "OpenStreetMap 편집기 열기 버튼 표시",
-    "Display the data layers control": "데이터 레이어 버튼 표시",
     "Display the embed control": "삽입 버튼 표시",
     "Display the fullscreen control": "전체 화면 버튼 표시",
     "Display the locate control": "위치 버튼 표시",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")

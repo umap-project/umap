@@ -115,7 +115,6 @@ const locale = {
     "display name": "nama paparan",
     "Display on load": "Paparkan semasa dimuatkan",
     "Display the control to open OpenStreetMap editor": "Paparkan kawalan untuk buka penyunting OpenStreetMap",
-    "Display the data layers control": "Paparkan kawalan lapisan data",
     "Display the embed control": "Paparkan kawalan benaman",
     "Display the fullscreen control": "Paparkan kawalan skrin penuh",
     "Display the locate control": "Paparkan kawalan kesan kedudukan",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

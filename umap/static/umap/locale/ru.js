@@ -115,7 +115,6 @@ const locale = {
     "display name": "отображаемое название",
     "Display on load": "Показывать при загрузке",
     "Display the control to open OpenStreetMap editor": "Отображать кнопку редактора OpenStreetMap",
-    "Display the data layers control": "Отображать кнопку управления слоями данных",
     "Display the embed control": "Отображать кнопку встраивания",
     "Display the fullscreen control": "Отображать кнопку полноэкранного режима",
     "Display the locate control": "Отображать кнопку определения местоположения",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("ru", locale)
 L.setLocale("ru")

@@ -115,7 +115,6 @@ const locale = {
     "display name": "显示名称",
     "Display on load": "加载时显示",
     "Display the control to open OpenStreetMap editor": "Display the control to open OpenStreetMap editor",
-    "Display the data layers control": "Display the data layers control",
     "Display the embed control": "Display the embed control",
     "Display the fullscreen control": "Display the fullscreen control",
     "Display the locate control": "Display the locate control",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("zh", locale)
 L.setLocale("zh")

@@ -115,7 +115,6 @@ const locale = {
     "display name": "display name",
     "Display on load": "Kuva laadimisel",
     "Display the control to open OpenStreetMap editor": "Kuva OpenStreetMap'i redaktori avamise nupp",
-    "Display the data layers control": "Kuva andmekihtide nupp",
     "Display the embed control": "Kuva jagamise nupp",
     "Display the fullscreen control": "Kuva täisekraani nupp",
     "Display the locate control": "Kuva asukoha määramise nupp",
@@ -498,7 +497,14 @@ const locale = {
     "Found {count} rows. Are you sure you want to delete all?": "Found {count} rows. Are you sure you want to delete all?",
     "Expression is empty": "Expression is empty",
     "OK": "OK",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Attach map to a team": "Attach map to a team",
+    "Display the polygon inverted": "Display the polygon inverted",
+    "Proportional circles": "Proportional circles",
+    "Property name to compute circles": "Property name to compute circles",
+    "Min circle radius": "Min circle radius",
+    "Max circle radius": "Max circle radius",
+    "Display the open browser control": "Display the open browser control"
 }
 L.registerLocale("et", locale)
 L.setLocale("et")
