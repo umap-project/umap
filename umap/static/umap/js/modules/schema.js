@@ -81,7 +81,7 @@ export const SCHEMA = {
     impacts: ['ui'],
     nullable: true,
     handler: 'DataLayersControl',
-    label: translate('Display the data layers control'),
+    label: translate('Display the open browser control'),
     default: true,
   },
   defaultView: {

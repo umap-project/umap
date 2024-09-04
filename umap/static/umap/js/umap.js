@@ -144,7 +144,10 @@ U.Map = L.Map.extend({
       delete this.options.displayDataBrowserOnLoad
     }
     if (this.options.datalayersControl === 'expanded') {
-      this.options.onLoadPanel = 'datalayers'
+      if (!this.options.onLoadPanel) {
+        this.options.onLoadPanel = 'datalayers'
+      }
+      delete this.options.datalayersControl
     }
     if (this.options.onLoadPanel === 'facet') {
       this.options.onLoadPanel = 'datafilters'
@@ -280,7 +283,9 @@ U.Map = L.Map.extend({
     // Specific case for datalayersControl
     // which accepts "expanded" value, on top of true/false/null
     if (L.Util.queryString('datalayersControl') === 'expanded') {
-      options.onLoadPanel = 'datalayers'
+      if (!options.onLoadPanel) {
+        options.onLoadPanel = 'datalayers'
+      }
     }
   },
 
