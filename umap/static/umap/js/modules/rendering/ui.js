@@ -146,9 +146,16 @@ const FeatureMixin = {
   getPopupToolbarAnchor: () => [0, 0],
 }
 
+const PointMixin = {
+  isOnScreen: function (bounds) {
+    bounds = bounds || this._map.getBounds()
+    return bounds.contains(this.getCenter())
+  },
+}
+
 export const LeafletMarker = Marker.extend({
   parentClass: Marker,
-  includes: [FeatureMixin],
+  includes: [FeatureMixin, PointMixin],
 
   initialize: function (feature, latlng) {
     FeatureMixin.initialize.call(this, feature, latlng)
@@ -411,6 +418,11 @@ const PathMixin = {
     'dashArray',
     'interactive',
   ],
+
+  isOnScreen: function (bounds) {
+    bounds = bounds || this._map.getBounds()
+    return bounds.overlaps(this.getBounds())
+  },
 }
 
 export const LeafletPolyline = Polyline.extend({
@@ -552,7 +564,7 @@ export const MaskPolygon = LeafletPolygon.extend({
 
 export const CircleMarker = BaseCircleMarker.extend({
   parentClass: BaseCircleMarker,
-  includes: [FeatureMixin, PathMixin],
+  includes: [FeatureMixin, PathMixin, PointMixin],
   initialize: function (feature, latlng) {
     if (Array.isArray(latlng) && !(latlng[0] instanceof Number)) {
       // Must be a line or polygon
@@ -570,4 +582,8 @@ export const CircleMarker = BaseCircleMarker.extend({
   getCenter: function () {
     return this._latlng
   },
+  // FIXME when Leaflet.Editable knows about CircleMarker
+  editEnabled: () => false,
+  enableEdit: () => {}, // No-op
+  disableEdit: () => {}, // No-op
 })

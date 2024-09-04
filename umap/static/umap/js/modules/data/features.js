@@ -98,6 +98,10 @@ class Feature {
     this.pushGeometry()
   }
 
+  isOnScreen() {
+    return this.ui?.isOnScreen()
+  }
+
   pushGeometry() {
     this.ui.setLatLngs(this.toLatLngs())
   }
@@ -257,7 +261,7 @@ class Feature {
       builder.helpers['properties.name'].input.focus()
     })
     this.map.editedFeature = this
-    if (!this.isOnScreen()) this.zoomTo(event)
+    if (!this.ui.isOnScreen()) this.zoomTo(event)
   }
 
   getAdvancedEditActions(container) {
@@ -661,11 +665,6 @@ export class Point extends Feature {
       super.zoomTo(event)
     }
   }
-
-  isOnScreen(bounds) {
-    bounds = bounds || this.map.getBounds()
-    return bounds.contains(this.toLatLngs())
-  }
 }
 
 class Path extends Feature {
@@ -751,11 +750,6 @@ class Path extends Feature {
       items.push(U.ExtractShapeFromMultiAction)
     }
     return items
-  }
-
-  isOnScreen(bounds) {
-    bounds = bounds || this.map.getBounds()
-    return bounds.overlaps(this.bounds)
   }
 
   zoomTo({ easing, callback }) {
