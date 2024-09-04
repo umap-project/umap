@@ -795,13 +795,14 @@ U.TileLayerControl = L.Control.IconLayers.extend({
         }
       })
     }
+    this._allLayers = layers
     L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, this.maxShown))
     if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
   },
 
   _createLayerElements: function () {
     L.Control.IconLayers.prototype._createLayerElements.call(this)
-    if (Object.keys(this._layers).length <= this.maxShown) return
+    if (Object.keys(this._allLayers).length <= this.maxShown) return
     const lastRow = this._container.querySelector(
       '.leaflet-iconLayers-layersRow:last-child'
     )
