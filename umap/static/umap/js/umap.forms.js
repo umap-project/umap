@@ -902,8 +902,8 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
     if (!this.container.querySelector(`input[type="radio"][value="${value}"]`)) {
       value = this.options.default !== undefined ? this.options.default : this.default
     }
-    const choices = this.getChoices().map(([value, label]) => value)
-    if (choices.includes(value)) {
+    const choices = this.getChoices().map(([value, label]) => `${value}`)
+    if (choices.includes(`${value}`)) {
       this.container.querySelector(`input[type="radio"][value="${value}"]`).checked =
         true
     }
@@ -925,8 +925,8 @@ L.FormBuilder.MultiChoice = L.FormBuilder.Element.extend({
       `${this.className} by${choices.length}`,
       this.parentNode
     )
-    for (let i = 0; i < choices.length; i++) {
-      this.addChoice(choices[i][0], choices[i][1], i)
+    for (const [i, [value, label]] of choices.entries()) {
+      this.addChoice(value, label, i)
     }
     this.fetch()
   },
@@ -958,8 +958,12 @@ L.FormBuilder.TernaryChoices = L.FormBuilder.MultiChoice.extend({
       case false:
         value = false
         break
-      default:
+      case 'null':
+      case null:
         value = null
+        break
+      default:
+        value = undefined
     }
     return value
   },
