@@ -33,6 +33,13 @@ def test_datalayers_control(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?datalayersControl=expanded")
     expect(control).to_be_visible()
     expect(browser).to_be_visible()
+    # Should not override onLoadPanel
+    page.goto(
+        f"{live_server.url}{map.get_absolute_url()}?datalayersControl=expanded&onLoadPanel=caption"
+    )
+    expect(control).to_be_visible()
+    expect(browser).to_be_hidden()
+    expect(page.locator(".umap-caption")).to_be_visible()
 
 
 def test_can_deactivate_wheel_from_query_string(map, live_server, page):

@@ -114,7 +114,7 @@ def test_can_change_icon_class(live_server, openmap, page):
 
 def test_can_change_name(live_server, openmap, page, datalayer):
     page.goto(
-        f"{live_server.url}{openmap.get_absolute_url()}?edit&datalayersControl=expanded"
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
     )
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
@@ -133,7 +133,7 @@ def test_can_change_name(live_server, openmap, page, datalayer):
 
 def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     page.goto(
-        f"{live_server.url}{openmap.get_absolute_url()}?edit&datalayersControl=expanded"
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
     )
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
