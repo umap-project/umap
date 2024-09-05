@@ -69,7 +69,7 @@ def test_websocket_connection_can_sync_markers(
 
     # Delete a marker from peer A and check it's been deleted on peer B
     a_first_marker.click(button="right")
-    peerA.get_by_role("link", name="Delete this feature").click()
+    peerA.get_by_role("button", name="Delete this feature").click()
     peerA.locator("dialog").get_by_role("button", name="OK").click()
     expect(a_marker_pane).to_have_count(1)
     expect(b_marker_pane).to_have_count(1)
@@ -153,7 +153,7 @@ def test_websocket_connection_can_sync_polygons(
 
     # Delete a polygon from peer A and check it's been deleted on peer B
     a_polygon.click(button="right")
-    peerA.get_by_role("link", name="Delete this feature").click()
+    peerA.get_by_role("button", name="Delete this feature").click()
     peerA.locator("dialog").get_by_role("button", name="OK").click()
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
@@ -268,7 +268,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
 
     # Clone on peer B and save
     b_polygon.click(button="right")
-    peerB.get_by_role("link", name="Clone this feature").click()
+    peerB.get_by_role("button", name="Clone this feature").click()
 
     expect(peerB.locator("path")).to_have_count(2)
 
