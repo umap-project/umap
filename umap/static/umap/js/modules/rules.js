@@ -3,6 +3,8 @@ import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 import { AutocompleteDatalist } from './autocomplete.js'
 
+const EMPTY_VALUES = ['', undefined, null]
+
 class Rule {
   get condition() {
     return this._condition
@@ -75,13 +77,22 @@ class Rule {
     if (vars.length !== 2) return
     this.key = vars[0]
     this.expected = vars[1]
+    if (EMPTY_VALUES.includes(this.expected)) {
+      this.cast = (v) => EMPTY_VALUES.includes(v)
+    }
     // Special cases where we want to be lousy when checking isNaN without
     // coercing to a Number first because we handle multiple types.
     // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
     // Reference/Global_Objects/Number/isNaN
     // biome-ignore lint/suspicious/noGlobalIsNan: expected might not be a number.
-    if (!isNaN(this.expected)) this.cast = Number.parseFloat
-    else if (['true', 'false'].includes(this.expected)) this.cast = (v) => !!v
+    else if (!isNaN(this.expected)) {
+      this.cast = Number.parseFloat
+    } else if (['true', 'false'].includes(this.expected)) {
+      this.cast = (v) => {
+        if (`${v}`.toLowerCase() === 'true') return true
+        if (`${v}`.toLowerCase() === 'false') return false
+      }
+    }
     this.expected = this.cast(this.expected)
   }
 
@@ -133,7 +144,9 @@ class Rule {
         autocomplete.suggestions = [`${value}=`, `${value}!=`, `${value}>`, `${value}<`]
       } else if (value.endsWith('=')) {
         const key = value.split('!')[0].split('=')[0]
-        autocomplete.suggestions = this.map.sortedValues(key).map((str) => `${value}${str || ''}`)
+        autocomplete.suggestions = this.map
+          .sortedValues(key)
+          .map((str) => `${value}${str || ''}`)
       }
     })
     this.map.editPanel.open({ content: container })

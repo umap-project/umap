@@ -44,6 +44,10 @@ Sur macOS, utliser `Cmd` à la place de `Ctrl`.
 * `macolonne!=impair` → cible les éléments dont la colonne `macolonne` est absente ou dont la valeur est différente de `impair`
 * `macolonne>12` → cible les éléments dont la colonne `macolonne` est supérieur au nombre `12`
 * `macolonne<12.34` → cible les éléments dont la colonne `macolonne` est inférieure au nombre `12.34`
+* `macolonne=` → cible les éléments dont la colonne `macolonne` est vide
+* `macolonne!=` → cible les éléments dont la colonne `macolonne` n'est pas vide
+* `macolonne=true/false` → cible les éléments dont la colonne `macolonne` est explicitement `true` (ou `false`)
+* `macolonne!=true/false` → cible les éléments dont la colonne `macolonne` est différente de `true` (ou `false`)
 
 Quand la condition est vraie pour un élément donné, le style associé sera appliqué.
 
