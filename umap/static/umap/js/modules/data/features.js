@@ -680,8 +680,8 @@ class Path extends Feature {
 
   edit(event) {
     if (this.map.editEnabled) {
-      if (!this.ui.editEnabled()) this.ui.enableEdit()
       super.edit(event)
+      if (!this.ui.editEnabled()) this.ui.makeGeometryEditable()
     }
   }
 
