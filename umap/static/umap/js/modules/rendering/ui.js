@@ -93,13 +93,21 @@ const FeatureMixin = {
   getContextMenuItems: function (event) {
     const permalink = this.feature.getPermalink()
     let items = []
-    if (permalink)
+    if (permalink) {
       items.push({
         text: translate('Permalink'),
         callback: () => {
           window.open(permalink)
         },
       })
+    }
+    items.push({
+      text: translate('Copy as GeoJSON'),
+      callback: () => {
+        L.Util.copyToClipboard(JSON.stringify(this.feature.toGeoJSON()))
+        this._map.tooltip.open({content: L._('Copied!')})
+      },
+    })
     if (this._map.editEnabled && !this.feature.isReadOnly()) {
       items = items.concat(this.getContextMenuEditItems(event))
     }
