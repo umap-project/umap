@@ -48,6 +48,7 @@
     --zindex-icon-active: 450;
     --zindex-tooltip: 445;
     --zindex-panels: 440;
+    --zindex-controls: 430;
     --zindex-dragover: 410;
 
     --block-shadow: 0 1px 7px var(--color-mediumGray);
