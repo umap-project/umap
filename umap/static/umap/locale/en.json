@@ -504,5 +504,7 @@
     "Property name to compute circles": "Property name to compute circles",
     "Min circle radius": "Min circle radius",
     "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Display the open browser control": "Display the open browser control",
+    "Copy as GeoJSON": "Copy as GeoJSON",
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry"
 }

@@ -105,7 +105,7 @@ const FeatureMixin = {
       text: translate('Copy as GeoJSON'),
       callback: () => {
         L.Util.copyToClipboard(JSON.stringify(this.feature.toGeoJSON()))
-        this._map.tooltip.open({ content: L._('Copied!') })
+        this._map.tooltip.open({ content: L._('✅ Copied!') })
       },
     })
     if (this._map.editEnabled && !this.feature.isReadOnly()) {

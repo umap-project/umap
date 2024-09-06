@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-30 18:23+0000\n"
+"POT-Creation-Date: 2024-09-04 14:02+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2024\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
@@ -65,7 +65,7 @@ msgstr "Mindenki"
 
 #: models.py:168 models.py:174 models.py:425
 msgid "Editors and team only"
-msgstr ""
+msgstr "Csak a szerkesztők és a csoport"
 
 #: models.py:169 models.py:426
 msgid "Owner only"
@@ -117,7 +117,7 @@ msgstr "szerkesztők"
 
 #: models.py:207
 msgid "team"
-msgstr ""
+msgstr "csoport"
 
 #: models.py:213 models.py:447
 msgid "edit status"
@@ -323,19 +323,19 @@ msgstr "Ez egy demonstrációs változat, amelyet tesztelésre és még nem nyil
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "OpenStreetMap projekt"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "verzió"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "Tárhely:"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "Kapcsolat:"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -356,7 +356,7 @@ msgstr "Saját profil"
 
 #: templates/umap/dashboard_menu.html:13
 msgid "My teams"
-msgstr ""
+msgstr "Csoportjaim"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -370,11 +370,11 @@ msgstr "Szerezzen ihletet, böngésszen a térképek között!"
 msgid "You are logged in. Continuing..."
 msgstr "Be van jelentkezve. Továbblépés…"
 
-#: templates/umap/map_list.html:10 views.py:433
+#: templates/umap/map_list.html:11 views.py:433
 msgid "by"
 msgstr "– készítette:"
 
-#: templates/umap/map_list.html:18
+#: templates/umap/map_list.html:20
 msgid "More"
 msgstr "Még több"
 
@@ -550,20 +550,20 @@ msgstr "Keresés"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "%(current_team)s csoport térképeinek böngészése"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s csoportnak nincs nyilvános térképe."
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
-msgstr ""
+msgstr "Csoport törlése"
 
 #: templates/umap/team_form.html:47
 msgid "Add user"
-msgstr ""
+msgstr "Felhasználó hozzáadása"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
@@ -584,20 +584,20 @@ msgstr "Önnek még nincs térképe."
 
 #: templates/umap/user_teams.html:17
 msgid "Users"
-msgstr ""
+msgstr "Felhasználók"
 
 #: templates/umap/user_teams.html:48
 msgid "New team"
-msgstr ""
+msgstr "Új csoport"
 
 #: views.py:235
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Egynél több tagú csoport nem törölhető"
 
 #: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "%(name)s csoport törölve"
 
 #: views.py:438
 msgid "View the map"

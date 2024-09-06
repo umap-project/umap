@@ -504,7 +504,9 @@ const locale = {
     "Property name to compute circles": "Nom de la propriété pour calculer les cercles",
     "Min circle radius": "Rayon minimum",
     "Max circle radius": "Rayon maximum",
-    "Display the open browser control": "Afficher le bouton d'ouverture de l'explorateur"
+    "Display the open browser control": "Afficher le bouton d'ouverture de l'explorateur",
+    "Copy as GeoJSON": "Copier le GeoJSON",
+    "Please zoom in to edit the geometry": "Zoomer pour éditer la géométrie"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")
