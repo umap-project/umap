@@ -288,6 +288,21 @@ const PathMixin = {
     }
   },
 
+  makeGeometryEditable: function () {
+    if (this._map.editedFeature !== this.feature) {
+      this.disableEdit()
+      return
+    }
+    this._map.once('moveend', this.makeGeometryEditable, this)
+    const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
+    if (pointsCount > 100 && this._map.getZoom() < this._map.getMaxZoom()) {
+      this._map.tooltip.open({ content: L._('Please zoom in to edit the geometry') })
+      this.disableEdit()
+    } else {
+      this.enableEdit()
+    }
+  },
+
   addInteractions: function () {
     FeatureMixin.addInteractions.call(this)
     this.on('editable:disable', this.onCommit)
@@ -383,7 +398,7 @@ const PathMixin = {
   getContextMenuEditItems: function (event) {
     const items = FeatureMixin.getContextMenuEditItems.call(this, event)
     if (
-      this._map?.editedFeature !== this &&
+      this._map?.editedFeature !== this.feature &&
       this.feature.isSameClass(this._map.editedFeature)
     ) {
       items.push({
