@@ -105,7 +105,7 @@ const FeatureMixin = {
       text: translate('Copy as GeoJSON'),
       callback: () => {
         L.Util.copyToClipboard(JSON.stringify(this.feature.toGeoJSON()))
-        this._map.tooltip.open({content: L._('Copied!')})
+        this._map.tooltip.open({ content: L._('Copied!') })
       },
     })
     if (this._map.editEnabled && !this.feature.isReadOnly()) {
@@ -156,7 +156,6 @@ const FeatureMixin = {
 
 const PointMixin = {
   isOnScreen: function (bounds) {
-    bounds = bounds || this._map.getBounds()
     return bounds.contains(this.getCenter())
   },
 }
@@ -428,7 +427,6 @@ const PathMixin = {
   ],
 
   isOnScreen: function (bounds) {
-    bounds = bounds || this._map.getBounds()
     return bounds.overlaps(this.getBounds())
   },
 }

@@ -98,8 +98,8 @@ class Feature {
     this.pushGeometry()
   }
 
-  isOnScreen() {
-    return this.ui?.isOnScreen()
+  isOnScreen(bounds) {
+    return this.ui?.isOnScreen(bounds)
   }
 
   pushGeometry() {
@@ -261,7 +261,7 @@ class Feature {
       builder.helpers['properties.name'].input.focus()
     })
     this.map.editedFeature = this
-    if (!this.ui.isOnScreen()) this.zoomTo(event)
+    if (!this.ui.isOnScreen(this.map.getBounds())) this.zoomTo(event)
   }
 
   getAdvancedEditActions(container) {
