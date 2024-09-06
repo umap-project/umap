@@ -1,18 +1,30 @@
 # Changelog
 
+### 2.6.0b2 - 2024-09-06
+
+### New features
+* add a "Copy as GeoJSON" entry in the contextmenu by @yohanboniface in #2108
+* only show visible vertexmarkers and do not show when there are too much  by @yohanboniface in #2107
+* add explicit empty/not empty check in conditional rules by @yohanboniface in #2105
+
+### Bug fixes
+* feature.isOnScreen is now passing the "bounds" argument by @yohanboniface in #2111
+* move bottom controls below panels by @yohanboniface in #2112
+
+
 ### 2.6.0b1 - 2024-09-04
 
 ### New features
-* feat: add more context in overpass importer autocomplete results by @yohanboniface in #2087
-* feat: make boundary persistent in overpass importer by @yohanboniface in #2094
+* add more context in overpass importer autocomplete results by @yohanboniface in #2087
+* make boundary persistent in overpass importer by @yohanboniface in #2094
 
 ### Bug fixes
-* fix: only show + button in tilelayer switcher when more available by @yohanboniface in #2095
-* fix: make sure to compare comparable values in ternary operators by @yohanboniface in #2098
-* fix: register fa-ir in LANG_INFO by @yohanboniface in #2099
-* fix: make sure datalayersControl=expanded does not override onLoadPanel by @yohanboniface in #2101
-* fix: do not fail when trying to edit a circlemarker by @yohanboniface in #2102
-* fix: do not try to display author name/url for anonymous maps by @yohanboniface in #2104
+* only show + button in tilelayer switcher when more available by @yohanboniface in #2095
+* make sure to compare comparable values in ternary operators by @yohanboniface in #2098
+* register fa-ir in LANG_INFO by @yohanboniface in #2099
+* make sure datalayersControl=expanded does not override onLoadPanel by @yohanboniface in #2101
+* do not fail when trying to edit a circlemarker by @yohanboniface in #2102
+* do not try to display author name/url for anonymous maps by @yohanboniface in #2104
 
 
 ### 2.6.0b0 - 2024-08-30
