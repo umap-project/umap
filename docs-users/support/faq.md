@@ -44,6 +44,10 @@ With macOS, replace `Ctrl` by `Cmd`.
 * `mycolumn!=odd` → will match features whose column `mycolumn` is missing or different from `odd`
 * `mycolumn>12` → will match features whose column `mycolumn` is greater than `12` (as number)
 * `mycolumn<12.34` → will match features whose column `mycolumn` is lower than `12.34` (as number)
+* `mycolumn=` → will match features whose column `mycolumn` has no or null value
+* `mycolumn!=` → will match features whose column `mycolumn` has any defined
+* `mycolumn=true/false` → will match features whose column `mycolumn` is explicitely `true` (or `false`)
+* `mycolumn!=true/false` → will match features whose column `mycolumn` is different from `true` (or `false`)
 
 When the condition match, the associated style will be applied to the corresponding feature.
 
