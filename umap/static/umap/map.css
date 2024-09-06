@@ -1382,8 +1382,8 @@ span.popup-icon {
 .leaflet-container .leaflet-control-zoom {
     margin-inline-start: 10px;
 }
-.leaflet-top {
-    z-index: calc(var(--zindex-panels) - 1);
+.leaflet-top, .leaflet-bottom {
+    z-index: var(--zindex-controls);
 }
 .leaflet-popup-content {
     min-width: 200px;
