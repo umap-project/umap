@@ -133,10 +133,12 @@ export class MapPermissions {
         this
       )
     }
-    DomUtil.add('h4', '', container, translate('Datalayers'))
-    this.map.eachDataLayer((datalayer) => {
-      datalayer.permissions.edit(container)
-    })
+    if (this.map.hasLayers()) {
+      DomUtil.add('h4', '', container, translate('Datalayers'))
+      this.map.eachDataLayer((datalayer) => {
+        datalayer.permissions.edit(container)
+      })
+    }
     this.map.editPanel.open({ content: container, className: 'dark' })
   }
 
