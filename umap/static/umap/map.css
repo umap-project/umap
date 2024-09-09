@@ -820,7 +820,6 @@ a.umap-control-caption,
 .umap-browser .off .feature {
     display: none;
 }
-.umap-facet-search .formbox,
 .umap-browser .datalayer {
     margin-bottom: 2px;
     border-radius: 2px;
@@ -831,7 +830,7 @@ a.umap-control-caption,
 .umap-browser.dark .datalayer ul {
     border: 1px solid #232729;
 }
-.umap-browser h5, .umap-facet-search h5 {
+.umap-browser h5 {
     margin-bottom: 0;
     overflow: hidden;
     padding-inline-start: 5px;
@@ -849,7 +848,7 @@ a.umap-control-caption,
 .umap-browser h5 span {
     margin-inline-start: 10px;
 }
-.umap-browser li, .umap-facet-search li {
+.umap-browser li {
     padding: 2px 0;
     white-space: nowrap;
     overflow: hidden;
