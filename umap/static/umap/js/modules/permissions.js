@@ -46,68 +46,21 @@ export class MapPermissions {
     return this.map
   }
 
-  edit() {
-    if (this.map.options.editMode !== 'advanced') return
-    if (!this.map.options.umap_id) {
-      return Alert.info(translate('Please save the map first'))
-    }
-    const container = DomUtil.create('div', 'permissions-panel')
+  _editAnonymous(container) {
     const fields = []
-    DomUtil.createTitle(container, translate('Update permissions'), 'icon-key')
-    if (this.isAnonymousMap()) {
-      if (this.isOwner()) {
-        fields.push([
-          'options.edit_status',
-          {
-            handler: 'IntSelect',
-            label: translate('Who can edit'),
-            selectOptions: this.map.options.edit_statuses,
-          },
-        ])
-      }
-    } else {
-      if (this.isOwner()) {
-        fields.push([
-          'options.edit_status',
-          {
-            handler: 'IntSelect',
-            label: translate('Who can edit'),
-            selectOptions: this.map.options.edit_statuses,
-          },
-        ])
-        fields.push([
-          'options.share_status',
-          {
-            handler: 'IntSelect',
-            label: translate('Who can view'),
-            selectOptions: this.map.options.share_statuses,
-          },
-        ])
-        fields.push([
-          'options.owner',
-          { handler: 'ManageOwner', label: translate("Map's owner") },
-        ])
-        if (this.map.options.user?.teams?.length) {
-          fields.push([
-            'options.team',
-            {
-              handler: 'ManageTeam',
-              label: translate('Attach map to a team'),
-              teams: this.map.options.user.teams,
-            },
-          ])
-        }
-      }
+    if (this.isOwner()) {
       fields.push([
-        'options.editors',
-        { handler: 'ManageEditors', label: translate("Map's editors") },
+        'options.edit_status',
+        {
+          handler: 'IntSelect',
+          label: translate('Who can edit'),
+          selectOptions: this.map.options.edit_statuses,
+        },
       ])
-    }
+      const builder = new U.FormBuilder(this, fields)
+      const form = builder.build()
+      container.appendChild(form)
 
-    const builder = new U.FormBuilder(this, fields)
-    const form = builder.build()
-    container.appendChild(form)
-    if (this.isAnonymousMap()) {
       if (this.options.anonymous_edit_url) {
         DomUtil.createCopiableInput(
           container,
@@ -133,12 +86,89 @@ export class MapPermissions {
         )
       }
     }
+  }
+
+  _editWithOwner(container) {
+    const topFields = []
+    const collaboratorsFields = []
+    const fieldset = Utils.loadTemplate(
+      `<fieldset class="separator"><legend>${translate('Map')}</legend></fieldset>`
+    )
+    container.appendChild(fieldset)
+    if (this.isOwner()) {
+      topFields.push([
+        'options.edit_status',
+        {
+          handler: 'IntSelect',
+          label: translate('Who can edit'),
+          selectOptions: this.map.options.edit_statuses,
+        },
+      ])
+      topFields.push([
+        'options.share_status',
+        {
+          handler: 'IntSelect',
+          label: translate('Who can view'),
+          selectOptions: this.map.options.share_statuses,
+        },
+      ])
+      collaboratorsFields.push([
+        'options.owner',
+        { handler: 'ManageOwner', label: translate("Map's owner") },
+      ])
+      if (this.map.options.user?.teams?.length) {
+        collaboratorsFields.push([
+          'options.team',
+          {
+            handler: 'ManageTeam',
+            label: translate('Attach map to a team'),
+            teams: this.map.options.user.teams,
+          },
+        ])
+      }
+    }
+    collaboratorsFields.push([
+      'options.editors',
+      { handler: 'ManageEditors', label: translate("Map's editors") },
+    ])
+
+    const builder = new U.FormBuilder(this, topFields)
+    const form = builder.build()
+    container.appendChild(form)
+    if (collaboratorsFields.length) {
+      const fieldset = Utils.loadTemplate(
+        `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
+      )
+      container.appendChild(fieldset)
+      const builder = new U.FormBuilder(this, collaboratorsFields)
+      const form = builder.build()
+      container.appendChild(form)
+    }
+  }
+
+  _editDatalayers(container) {
     if (this.map.hasLayers()) {
-      DomUtil.add('h4', '', container, translate('Datalayers'))
+      const fieldset = Utils.loadTemplate(
+        `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
+      )
+      container.appendChild(fieldset)
       this.map.eachDataLayer((datalayer) => {
-        datalayer.permissions.edit(container)
+        datalayer.permissions.edit(fieldset)
       })
     }
+  }
+
+  edit() {
+    if (this.map.options.editMode !== 'advanced') return
+    if (!this.map.options.umap_id) {
+      Alert.info(translate('Please save the map first'))
+      return
+    }
+    const container = DomUtil.create('div', 'permissions-panel')
+    DomUtil.createTitle(container, translate('Update permissions'), 'icon-key')
+    if (this.isAnonymousMap()) this._editAnonymous(container)
+    else this._editWithOwner(container)
+    this._editDatalayers(container)
     this.map.editPanel.open({ content: container, className: 'dark' })
   }
 
@@ -159,8 +189,9 @@ export class MapPermissions {
       for (let i = 0; i < this.options.editors.length; i++)
         formData.append('editors', this.options.editors[i].id)
     }
-    if (this.isOwner() || this.isAnonymousMap())
+    if (this.isOwner() || this.isAnonymousMap()) {
       formData.append('edit_status', this.options.edit_status)
+    }
     if (this.isOwner()) {
       formData.append('owner', this.options.owner?.id)
       formData.append('team', this.options.team?.id || '')
