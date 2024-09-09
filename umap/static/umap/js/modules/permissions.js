@@ -117,7 +117,7 @@ export class MapPermissions {
     const builder = new U.FormBuilder(this, fields)
     const form = builder.build()
     container.appendChild(form)
-    if (this.isAnonymousMap() && this.map.options.user) {
+    if (this.isAnonymousMap() && this.map.options.user?.id) {
       // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
       // Note: real check is made on the back office anyway.
       const advancedActions = DomUtil.createFieldset(
