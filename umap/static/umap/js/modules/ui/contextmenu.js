@@ -43,12 +43,16 @@ export default class ContextMenu extends Positioned {
       this.computePosition([left, top])
     }
     this.container.querySelector('li > *').focus()
-    this.container.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        event.stopPropagation()
-        this.close()
-      }
-    })
+    this.container.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape') {
+          event.stopPropagation()
+          this.close()
+        }
+      },
+      { once: true }
+    )
   }
 
   close() {
