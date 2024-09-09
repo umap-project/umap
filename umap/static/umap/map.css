@@ -592,17 +592,16 @@ ul.photon-autocomplete {
     left: 0;
     right: 0;
     height: 46px;
-    background-color: var(--color-darkGray);
     padding: 0 10px;
     text-align: start;
     line-height: var(--control-size);
     cursor: auto;
     border-bottom: 1px solid #222;
     z-index: var(--zindex-panels);
-    opacity: 0.98;
-    color: #fff;
     display: flex;
     justify-content: space-between;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 .umap-left-edit-toolbox,
 .umap-right-edit-toolbox {
@@ -1498,9 +1497,6 @@ span.popup-icon {
     }
     .umap-main-edit-toolbox .umap-user {
         margin-inline-end: 10px;
-    }
-    .umap-main-edit-toolbox .umap-user:after {
-        display: none;
     }
 }
 @media all and (max-width: 640px) {

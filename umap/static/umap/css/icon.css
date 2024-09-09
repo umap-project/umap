@@ -110,6 +110,9 @@ html[dir="rtl"] .icon {
 .icon-polyline {
     background-position: 0 calc(var(--tile) * 5);
 }
+.icon-profile {
+    background-position: 0 calc(var(--tile) * 4);
+}
 .icon-resize {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 6);
 }
