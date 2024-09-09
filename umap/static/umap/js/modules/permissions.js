@@ -55,23 +55,13 @@ export class MapPermissions {
     const fields = []
     DomUtil.createTitle(container, translate('Update permissions'), 'icon-key')
     if (this.isAnonymousMap()) {
-      if (this.options.anonymous_edit_url) {
-        const helpText = `${translate('Secret edit link:')}<br>${
-          this.options.anonymous_edit_url
-        }`
-        DomUtil.element({
-          tagName: 'p',
-          className: 'help-text',
-          innerHTML: helpText,
-          parent: container,
-        })
+      if (this.isOwner()) {
         fields.push([
           'options.edit_status',
           {
             handler: 'IntSelect',
             label: translate('Who can edit'),
             selectOptions: this.map.options.edit_statuses,
-            helpText: helpText,
           },
         ])
       }
@@ -117,21 +107,31 @@ export class MapPermissions {
     const builder = new U.FormBuilder(this, fields)
     const form = builder.build()
     container.appendChild(form)
-    if (this.isAnonymousMap() && this.map.options.user?.id) {
-      // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
-      // Note: real check is made on the back office anyway.
-      const advancedActions = DomUtil.createFieldset(
-        container,
-        translate('Advanced actions')
-      )
-      const advancedButtons = DomUtil.create('div', 'button-bar', advancedActions)
-      DomUtil.createButton(
-        'button',
-        advancedButtons,
-        translate('Attach the map to my account'),
-        this.attach,
-        this
-      )
+    if (this.isAnonymousMap()) {
+      if (this.options.anonymous_edit_url) {
+        DomUtil.createCopiableInput(
+          container,
+          translate('Secret edit link:'),
+          this.options.anonymous_edit_url
+        )
+      }
+
+      if (this.map.options.user?.id) {
+        // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
+        // Note: real check is made on the back office anyway.
+        const advancedActions = DomUtil.createFieldset(
+          container,
+          translate('Advanced actions')
+        )
+        const advancedButtons = DomUtil.create('div', 'button-bar', advancedActions)
+        DomUtil.createButton(
+          'button',
+          advancedButtons,
+          translate('Attach the map to my account'),
+          this.attach,
+          this
+        )
+      }
     }
     if (this.map.hasLayers()) {
       DomUtil.add('h4', '', container, translate('Datalayers'))
