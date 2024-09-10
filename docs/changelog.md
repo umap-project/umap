@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.2 - 2024-09-10
+
+### Bug fixes
+
+- fix German translation breaking home page in /de/
+
 ## 2.6.1 - 2024-09-10
 
 ### Bug fixes
