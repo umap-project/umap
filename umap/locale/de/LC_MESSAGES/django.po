@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-30 18:23+0000\n"
+"POT-Creation-Date: 2024-09-04 14:02+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: gislars, 2024\n"
 "Language-Team: German (http://app.transifex.com/openstreetmap/umap/language/de/)\n"
@@ -197,7 +197,7 @@ msgstr "%(current_user)s hat keine favorisierten Karten."
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr "Mit uMap kannst du Karten mit <a href=\"%(osm_url)s\" />OpenStreetMap</a>-Ebenen in einer Minute erstellen und in deine Seite einbinden."
+msgstr "Mit uMap kannst du Karten mit OpenStreetMap-Ebenen in einer Minute erstellen und in deine Seite einbinden."
 
 #: templates/registration/login.html:6 templates/registration/login.html:45
 msgid "Login"
@@ -378,11 +378,11 @@ msgstr "Lass dich inspirieren, schau dir diese Karten an."
 msgid "You are logged in. Continuing..."
 msgstr "Du bist eingeloggt. Weiterleitung..."
 
-#: templates/umap/map_list.html:10 views.py:433
+#: templates/umap/map_list.html:11 views.py:433
 msgid "by"
 msgstr "von"
 
-#: templates/umap/map_list.html:18
+#: templates/umap/map_list.html:20
 msgid "More"
 msgstr "Mehr"
 
