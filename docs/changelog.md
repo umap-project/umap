@@ -1,6 +1,6 @@
 # Changelog
 
-### 2.6.0 - 2024-09-10
+## 2.6.0 - 2024-09-10
 
 ### New features
 * add teams by @yohanboniface in #2062
