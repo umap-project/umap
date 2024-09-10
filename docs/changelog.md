@@ -1,33 +1,6 @@
 # Changelog
 
-### 2.6.0b2 - 2024-09-06
-
-### New features
-* add a "Copy as GeoJSON" entry in the contextmenu by @yohanboniface in #2108
-* only show visible vertexmarkers and do not show when there are too much  by @yohanboniface in #2107
-* add explicit empty/not empty check in conditional rules by @yohanboniface in #2105
-
-### Bug fixes
-* feature.isOnScreen is now passing the "bounds" argument by @yohanboniface in #2111
-* move bottom controls below panels by @yohanboniface in #2112
-
-
-### 2.6.0b1 - 2024-09-04
-
-### New features
-* add more context in overpass importer autocomplete results by @yohanboniface in #2087
-* make boundary persistent in overpass importer by @yohanboniface in #2094
-
-### Bug fixes
-* only show + button in tilelayer switcher when more available by @yohanboniface in #2095
-* make sure to compare comparable values in ternary operators by @yohanboniface in #2098
-* register fa-ir in LANG_INFO by @yohanboniface in #2099
-* make sure datalayersControl=expanded does not override onLoadPanel by @yohanboniface in #2101
-* do not fail when trying to edit a circlemarker by @yohanboniface in #2102
-* do not try to display author name/url for anonymous maps by @yohanboniface in #2104
-
-
-### 2.6.0b0 - 2024-08-30
+### 2.6.0 - 2024-09-10
 
 ### New features
 * add teams by @yohanboniface in #2062
@@ -37,8 +10,21 @@
 * add a "+" button in the tilelayer switcher by @yohanboniface in #1994
 * add {layer} as popup variable (aka extended properties) by @yohanboniface in #2008
 * allow to display a polygon "negative" by @yohanboniface in #2041
+* add more context in overpass importer autocomplete results by @yohanboniface in #2087
+* make boundary persistent in overpass importer by @yohanboniface in #2094
+* add a "Copy as GeoJSON" entry in the contextmenu by @yohanboniface in #2108
+* only show visible vertexmarkers and do not show when there are too much  by @yohanboniface in #2107
+* add explicit empty/not empty check in conditional rules by @yohanboniface in #2105
 
 ### Bug fixes
+* feature.isOnScreen is now passing the "bounds" argument by @yohanboniface in #2111
+* move bottom controls below panels by @yohanboniface in #2112
+* only show + button in tilelayer switcher when more available by @yohanboniface in #2095
+* make sure to compare comparable values in ternary operators by @yohanboniface in #2098
+* register fa-ir in LANG_INFO by @yohanboniface in #2099
+* make sure datalayersControl=expanded does not override onLoadPanel by @yohanboniface in #2101
+* do not fail when trying to edit a circlemarker by @yohanboniface in #2102
+* do not try to display author name/url for anonymous maps by @yohanboniface in #2104
 * correct Dockerfile statics path by @davidbgk in #2037
 * fix georss import by @yohanboniface in #2035
 * show delete button for owner and anonymous owner by @yohanboniface in #2039
@@ -52,6 +38,9 @@
 ### Internal changes
 * include vendorized static dependencies by @davidbgk in #2042
 * use preferred tile.openstreetmap.org URL by @Dimitar5555 in #2063
+
+
+Thanks to @fim100 and @Dimitar5555!
 
 ## 2.5.1 - 2024-07-12
 
