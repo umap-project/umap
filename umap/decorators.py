@@ -33,12 +33,11 @@ def can_edit_map(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
-        user = request.user
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
         if map_inst.edit_status >= map_inst.COLLABORATORS:
-            can_edit = map_inst.can_edit(user=user, request=request)
+            can_edit = map_inst.can_edit(request=request)
             if not can_edit:
-                if map_inst.owner and not user.is_authenticated:
+                if map_inst.owner and not request.user.is_authenticated:
                     return simple_json_response(login_required=str(LOGIN_URL))
                 return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)

@@ -546,7 +546,7 @@ class SessionMixin:
         data = {}
         user = self.request.user
         if hasattr(self, "object"):
-            data["is_owner"] = self.object.is_owner(user, self.request)
+            data["is_owner"] = self.object.is_owner(self.request)
         if user.is_anonymous:
             return data
         return {
@@ -725,20 +725,14 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        return [
-            dl.metadata(self.request.user, self.request)
-            for dl in self.object.datalayer_set.all()
-        ]
+        return [dl.metadata(self.request) for dl in self.object.datalayer_set.all()]
 
     @property
     def edit_mode(self):
         edit_mode = "disabled"
-        if self.object.can_edit(self.request.user, self.request):
+        if self.object.can_edit(self.request):
             edit_mode = "advanced"
-        elif any(
-            d.can_edit(self.request.user, self.request)
-            for d in self.object.datalayer_set.all()
-        ):
+        elif any(d.can_edit(self.request) for d in self.object.datalayer_set.all()):
             edit_mode = "simple"
         return edit_mode
 
@@ -901,7 +895,7 @@ def get_websocket_auth_token(request, map_id, map_inst):
     map_object: Map = Map.objects.get(pk=map_id)
 
     permissions = ["edit"]
-    if map_object.is_owner(request.user, request):
+    if map_object.is_owner(request):
         permissions.append("owner")
 
     if request.user.is_authenticated:
@@ -959,7 +953,7 @@ class AttachAnonymousMap(View):
         if (
             self.object.owner
             or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request.user, self.request)
+            or not self.object.can_edit(self.request)
             or not self.request.user.is_authenticated
         ):
             return HttpResponseForbidden()
@@ -976,7 +970,7 @@ class SendEditLink(FormLessEditMixin, FormView):
         if (
             self.object.owner
             or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request.user, self.request)
+            or not self.object.can_edit(self.request)
         ):
             return HttpResponseForbidden()
         form = self.get_form()
@@ -1009,7 +1003,7 @@ class MapDelete(DeleteView):
 
     def form_valid(self, form):
         self.object = self.get_object()
-        if not self.object.can_delete(self.request.user, self.request):
+        if not self.object.can_delete(self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
         self.object.delete()
         home_url = reverse("home")
@@ -1186,9 +1180,7 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
         form.instance.map = self.kwargs["map_inst"]
         self.object = form.save()
         # Simple response with only metadata (including new id)
-        response = simple_json_response(
-            **self.object.metadata(self.request.user, self.request)
-        )
+        response = simple_json_response(**self.object.metadata(self.request))
         response["X-Datalayer-Version"] = self.version
         return response
 
@@ -1242,7 +1234,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         if self.object.map.pk != int(self.kwargs["map_id"]):
             return HttpResponseForbidden()
 
-        if not self.object.can_edit(user=self.request.user, request=self.request):
+        if not self.object.can_edit(request=self.request):
             return HttpResponseForbidden()
 
         reference_version = self.request.headers.get("X-Datalayer-Reference")
@@ -1262,7 +1254,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        data = {**self.object.metadata(self.request.user, self.request)}
+        data = {**self.object.metadata(self.request)}
         if self.request.session.get("needs_reload"):
             data["geojson"] = json.loads(self.object.geojson.read().decode())
             self.request.session["needs_reload"] = False

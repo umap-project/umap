@@ -1,7 +1,7 @@
-import os
 from pathlib import Path
 
 import pytest
+from django.contrib.auth.models import AnonymousUser
 from django.core.files.base import ContentFile
 
 from umap.models import DataLayer, Map
@@ -100,28 +100,33 @@ def test_should_remove_old_versions_on_save(map, settings):
     assert names == [Path(datalayer.geojson.name).name, newer, medium]
 
 
-def test_anonymous_cannot_edit_in_editors_mode(datalayer):
+def test_anonymous_cannot_edit_in_editors_mode(datalayer, fake_request):
     datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
-    assert not datalayer.can_edit()
+    fake_request.user = AnonymousUser()
+    assert not datalayer.can_edit(fake_request)
 
 
-def test_owner_can_edit_in_editors_mode(datalayer, user):
+def test_owner_can_edit_in_editors_mode(datalayer, user, fake_request):
     datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
-    assert datalayer.can_edit(datalayer.map.owner)
+    fake_request.user = datalayer.map.owner
+    assert datalayer.can_edit(fake_request)
 
 
-def test_editor_can_edit_in_collaborators_mode(datalayer, user):
+def test_editor_can_edit_in_collaborators_mode(datalayer, user, fake_request):
     map = datalayer.map
     map.editors.add(user)
     map.save()
     datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
-    assert datalayer.can_edit(user)
+    fake_request.user = user
+    assert datalayer.can_edit(fake_request)
 
 
-def test_team_members_can_edit_in_collaborators_mode(datalayer, user, team):
+def test_team_members_can_edit_in_collaborators_mode(
+    datalayer, user, team, fake_request
+):
     user.teams.add(team)
     user.save()
     map = datalayer.map
@@ -129,60 +134,69 @@ def test_team_members_can_edit_in_collaborators_mode(datalayer, user, team):
     map.save()
     datalayer.edit_status = DataLayer.COLLABORATORS
     datalayer.save()
-    assert datalayer.can_edit(user)
+    fake_request.user = user
+    assert datalayer.can_edit(fake_request)
 
 
-def test_anonymous_can_edit_in_public_mode(datalayer):
+def test_anonymous_can_edit_in_public_mode(datalayer, fake_request):
     datalayer.edit_status = DataLayer.ANONYMOUS
     datalayer.save()
-    assert datalayer.can_edit()
+    fake_request.user = AnonymousUser()
+    assert datalayer.can_edit(fake_request)
 
 
-def test_owner_can_edit_in_public_mode(datalayer, user):
+def test_owner_can_edit_in_public_mode(datalayer, user, fake_request):
     datalayer.edit_status = DataLayer.ANONYMOUS
     datalayer.save()
-    assert datalayer.can_edit(datalayer.map.owner)
+    fake_request.user = datalayer.map.owner
+    assert datalayer.can_edit(fake_request)
 
 
-def test_editor_can_edit_in_public_mode(datalayer, user):
+def test_editor_can_edit_in_public_mode(datalayer, user, fake_request):
     map = datalayer.map
     map.editors.add(user)
     map.save()
     datalayer.edit_status = DataLayer.ANONYMOUS
     datalayer.save()
-    assert datalayer.can_edit(user)
+    fake_request.user = user
+    assert datalayer.can_edit(fake_request)
 
 
-def test_anonymous_cannot_edit_in_anonymous_owner_mode(datalayer):
+def test_anonymous_cannot_edit_in_anonymous_owner_mode(datalayer, fake_request):
     datalayer.edit_status = DataLayer.OWNER
     datalayer.save()
     map = datalayer.map
     map.owner = None
     map.save()
-    assert not datalayer.can_edit()
+    fake_request.user = AnonymousUser()
+    assert not datalayer.can_edit(fake_request)
 
 
-def test_owner_can_edit_in_inherit_mode_and_map_in_owner_mode(datalayer):
+def test_owner_can_edit_in_inherit_mode_and_map_in_owner_mode(datalayer, fake_request):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.edit_status = Map.OWNER
     map.save()
-    assert datalayer.can_edit(map.owner)
+    fake_request.user = map.owner
+    assert datalayer.can_edit(fake_request)
 
 
-def test_editors_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer, user):
+def test_editors_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
+    datalayer, user, fake_request
+):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.editors.add(user)
     map.edit_status = Map.OWNER
     map.save()
-    assert not datalayer.can_edit(user)
+    fake_request.user = user
+    assert not datalayer.can_edit(fake_request)
 
 
 def test_team_members_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
-    datalayer, user, team
+    datalayer, user, team, fake_request
 ):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
@@ -192,50 +206,66 @@ def test_team_members_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
     map.team = team
     map.edit_status = Map.OWNER
     map.save()
-    assert not datalayer.can_edit(user)
+    fake_request.user = user
+    assert not datalayer.can_edit(fake_request)
 
 
-def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_owner_mode(datalayer):
+def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_owner_mode(
+    datalayer, fake_request
+):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.edit_status = Map.OWNER
     map.save()
-    assert not datalayer.can_edit()
+    fake_request.user = AnonymousUser()
+    assert not datalayer.can_edit(fake_request)
 
 
-def test_owner_can_edit_in_inherit_mode_and_map_in_editors_mode(datalayer):
+def test_owner_can_edit_in_inherit_mode_and_map_in_editors_mode(
+    datalayer, fake_request
+):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.edit_status = Map.COLLABORATORS
     map.save()
-    assert datalayer.can_edit(map.owner)
+    fake_request.user = map.owner
+    assert datalayer.can_edit(fake_request)
 
 
-def test_editors_can_edit_in_inherit_mode_and_map_in_editors_mode(datalayer, user):
+def test_editors_can_edit_in_inherit_mode_and_map_in_editors_mode(
+    datalayer, user, fake_request
+):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.editors.add(user)
     map.edit_status = Map.COLLABORATORS
     map.save()
-    assert datalayer.can_edit(user)
+    fake_request.user = user
+    assert datalayer.can_edit(fake_request)
 
 
-def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_editors_mode(datalayer):
+def test_anonymous_cannot_edit_in_inherit_mode_and_map_in_editors_mode(
+    datalayer, fake_request
+):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.edit_status = Map.COLLABORATORS
     map.save()
-    assert not datalayer.can_edit()
+    fake_request.user = AnonymousUser()
+    assert not datalayer.can_edit(fake_request)
 
 
-def test_anonymous_can_edit_in_inherit_mode_and_map_in_public_mode(datalayer):
+def test_anonymous_can_edit_in_inherit_mode_and_map_in_public_mode(
+    datalayer, fake_request
+):
     datalayer.edit_status = DataLayer.INHERIT
     datalayer.save()
     map = datalayer.map
     map.edit_status = Map.ANONYMOUS
     map.save()
-    assert datalayer.can_edit()
+    fake_request.user = AnonymousUser()
+    assert datalayer.can_edit(fake_request)

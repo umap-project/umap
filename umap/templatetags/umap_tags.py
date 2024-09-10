@@ -45,7 +45,7 @@ def tilelayer_preview(tilelayer):
 
 @register.filter
 def can_delete_map(map, request):
-    return map.can_delete(request.user, request)
+    return map.can_delete(request)
 
 
 @register.filter

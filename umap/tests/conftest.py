@@ -90,3 +90,8 @@ def datalayer(map):
 @pytest.fixture
 def tilelayer():
     return TileLayerFactory()
+
+
+@pytest.fixture
+def fake_request(rf):
+    return rf.get("/")

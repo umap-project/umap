@@ -281,8 +281,10 @@ class Map(NamedModel):
     def get_author(self):
         return self.team or self.owner
 
-    def is_owner(self, user=None, request=None):
-        if user and self.owner == user:
+    def is_owner(self, request=None):
+        if not request:
+            return False
+        if request.user and self.owner == request.user:
             return True
         return self.is_anonymous_owner(request)
 
@@ -297,14 +299,16 @@ class Map(NamedModel):
             has_anonymous_cookie = False
         return has_anonymous_cookie
 
-    def can_delete(self, user=None, request=None):
-        if self.owner and user != self.owner:
+    def can_delete(self, request=None):
+        if not request:
+            return False
+        if self.owner and request.user != self.owner:
             return False
         if not self.owner and not self.is_anonymous_owner(request):
             return False
         return True
 
-    def can_edit(self, user=None, request=None):
+    def can_edit(self, request=None):
         """
         Define if a user can edit or not the instance, according to his account
         or the request.
@@ -318,12 +322,18 @@ class Map(NamedModel):
             - anyone otherwise (ANONYMOUS)
         """
         can = False
-        if request and not self.owner:
-            if settings.UMAP_ALLOW_ANONYMOUS and self.is_anonymous_owner(request):
-                can = True
-        if self.edit_status == self.ANONYMOUS:
+        if not request:
+            return False
+        user = request.user
+        if (
+            not self.owner
+            and settings.UMAP_ALLOW_ANONYMOUS
+            and self.is_anonymous_owner(request)
+        ):
             can = True
-        elif user is None:
+        elif self.edit_status == self.ANONYMOUS:
+            can = True
+        elif not user.is_authenticated:
             can = False
         elif user == self.owner:
             can = True
@@ -477,7 +487,7 @@ class DataLayer(NamedModel):
         path.append(str(self.map.pk))
         return os.path.join(*path)
 
-    def metadata(self, user=None, request=None):
+    def metadata(self, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
         obj = self.settings or {
@@ -488,7 +498,7 @@ class DataLayer(NamedModel):
             obj["old_id"] = self.old_id
         obj["id"] = self.pk
         obj["permissions"] = {"edit_status": self.edit_status}
-        obj["editMode"] = "advanced" if self.can_edit(user, request) else "disabled"
+        obj["editMode"] = "advanced" if self.can_edit(request) else "disabled"
         return obj
 
     def clone(self, map_inst=None):
@@ -557,22 +567,25 @@ class DataLayer(NamedModel):
             if name.startswith(prefixes) and name.endswith(".gz"):
                 self.geojson.storage.delete(os.path.join(root, name))
 
-    def can_edit(self, user=None, request=None):
+    def can_edit(self, request=None):
         """
         Define if a user can edit or not the instance, according to his account
         or the request.
         """
         if self.edit_status == self.INHERIT:
-            return self.map.can_edit(user, request)
+            return self.map.can_edit(request)
         can = False
+        if not request:
+            return False
+        user = request.user
         if not self.map.owner:
             if settings.UMAP_ALLOW_ANONYMOUS and self.map.is_anonymous_owner(request):
                 can = True
         if self.edit_status == self.ANONYMOUS:
             can = True
-        elif user is not None and user == self.map.owner:
+        elif user.is_authenticated and user == self.map.owner:
             can = True
-        elif user is not None and self.edit_status == self.COLLABORATORS:
+        elif user.is_authenticated and self.edit_status == self.COLLABORATORS:
             if user in self.map.editors.all() or self.map.team in user.teams.all():
                 can = True
         return can
