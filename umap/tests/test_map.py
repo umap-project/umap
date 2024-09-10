@@ -9,63 +9,69 @@ from .base import MapFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_anonymous_can_edit_if_status_anonymous(map):
-    anonymous = AnonymousUser()
+def test_anonymous_can_edit_if_status_anonymous(map, fake_request):
     map.edit_status = map.ANONYMOUS
     map.save()
-    assert map.can_edit(anonymous)
+    fake_request.user = AnonymousUser()
+    assert map.can_edit(fake_request)
 
 
-def test_anonymous_cannot_edit_if_not_status_anonymous(map):
-    anonymous = AnonymousUser()
+def test_anonymous_cannot_edit_if_not_status_anonymous(map, fake_request):
     map.edit_status = map.OWNER
     map.save()
-    assert not map.can_edit(anonymous)
+    fake_request.user = AnonymousUser()
+    assert not map.can_edit(fake_request)
 
 
-def test_non_editors_can_edit_if_status_anonymous(map, user):
+def test_non_editors_can_edit_if_status_anonymous(map, user, fake_request):
     assert map.owner != user
     map.edit_status = map.ANONYMOUS
     map.save()
-    assert map.can_edit(user)
+    fake_request.user = user
+    assert map.can_edit(fake_request)
 
 
-def test_non_editors_cannot_edit_if_not_status_anonymous(map, user):
+def test_non_editors_cannot_edit_if_not_status_anonymous(map, user, fake_request):
     map.edit_status = map.OWNER
     map.save()
-    assert not map.can_edit(user)
+    fake_request.user = user
+    assert not map.can_edit(fake_request)
 
 
-def test_editors_cannot_edit_if_status_owner(map, user):
+def test_editors_cannot_edit_if_status_owner(map, user, fake_request):
     map.edit_status = map.OWNER
     map.editors.add(user)
     map.save()
-    assert not map.can_edit(user)
+    fake_request.user = user
+    assert not map.can_edit(fake_request)
 
 
-def test_editors_can_edit_if_status_collaborators(map, user):
+def test_editors_can_edit_if_status_collaborators(map, user, fake_request):
     map.edit_status = map.COLLABORATORS
     map.editors.add(user)
     map.save()
-    assert map.can_edit(user)
+    fake_request.user = user
+    assert map.can_edit(fake_request)
 
 
-def test_team_members_cannot_edit_if_status_owner(map, user, team):
+def test_team_members_cannot_edit_if_status_owner(map, user, team, fake_request):
     user.teams.add(team)
     user.save()
     map.edit_status = map.OWNER
     map.team = team
     map.save()
-    assert not map.can_edit(user)
+    fake_request.user = user
+    assert not map.can_edit(fake_request)
 
 
-def test_team_members_can_edit_if_status_collaborators(map, user, team):
+def test_team_members_can_edit_if_status_collaborators(map, user, team, fake_request):
     user.teams.add(team)
     user.save()
     map.edit_status = map.COLLABORATORS
     map.team = team
     map.save()
-    assert map.can_edit(user)
+    fake_request.user = user
+    assert map.can_edit(fake_request)
 
 
 def test_logged_in_user_should_be_allowed_for_anonymous_map_with_anonymous_edit_status(
@@ -77,14 +83,17 @@ def test_logged_in_user_should_be_allowed_for_anonymous_map_with_anonymous_edit_
     url = reverse("map_update", kwargs={"map_id": map.pk})
     request = rf.get(url)
     request.user = user
-    assert map.can_edit(user, request)
+    assert map.can_edit(request)
 
 
-def test_anonymous_user_should_not_be_allowed_for_anonymous_map(map, user, rf):  # noqa
+def test_anonymous_user_should_not_be_allowed_for_anonymous_map(
+    map, user, fake_request
+):
     map.owner = None
     map.edit_status = map.OWNER
     map.save()
-    assert not map.can_edit()
+    fake_request.user = AnonymousUser()
+    assert not map.can_edit(fake_request)
 
 
 def test_clone_should_return_new_instance(map, user):
