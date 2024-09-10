@@ -1115,7 +1115,7 @@ export class DataLayer {
     if (this.map.options.filterKey) return this.map.options.filterKey
     if (this.getOption('labelKey')) return this.getOption('labelKey')
     if (this.map.options.sortKey) return this.map.options.sortKey
-    return 'name'
+    return 'displayName'
   }
 
   renderLegend(container) {
