@@ -508,7 +508,12 @@ class Feature {
 
   matchFilter(filter, keys) {
     filter = filter.toLowerCase()
-    if (Utils.hasVar(keys)) {
+    // When user hasn't touched settings, when a feature has no name
+    // it will use the datalayer's name, so let's make the filtering
+    // consistent.
+    //  Also, if the user has defined a labelKey with vars, let's
+    // compute before filtering
+    if (Utils.hasVar(keys) || keys === 'displayName') {
       return this.getDisplayName().toLowerCase().indexOf(filter) !== -1
     }
     keys = keys.split(',')

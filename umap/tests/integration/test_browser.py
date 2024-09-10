@@ -176,6 +176,26 @@ def test_filter_works_with_variable_in_labelKey(live_server, page, map):
     expect(paths).to_have_count(1)  # Only polygon
 
 
+def test_filter_works_with_missing_name(live_server, page, map):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    data = deepcopy(DATALAYER_DATA)
+    del data["features"][0]["properties"]["name"]
+    DataLayerFactory(map=map, data=data, name="foobar")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator(".leaflet-overlay-pane path")
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    page.locator(".filters summary").click()
+    filter_ = page.locator("input[name='filter']")
+    expect(filter_).to_be_visible()
+    filter_.type("foob")
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(0)
+
+
 def test_data_browser_can_show_only_visible_features(live_server, page, bootstrap, map):
     # Zoom on France
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
