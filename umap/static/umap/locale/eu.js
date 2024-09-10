@@ -498,13 +498,15 @@ const locale = {
     "Expression is empty": "Esamoldea hutsa dago",
     "OK": "Ados",
     "Cancel": "Utzi",
-    "Attach map to a team": "Attach map to a team",
-    "Display the polygon inverted": "Display the polygon inverted",
-    "Proportional circles": "Proportional circles",
+    "Attach map to a team": "Erantsi mapa talde bati",
+    "Display the polygon inverted": "Bistaratu poligonoa alderantziz",
+    "Proportional circles": "Zirkulu proportzionalak",
     "Property name to compute circles": "Property name to compute circles",
-    "Min circle radius": "Min circle radius",
-    "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Min circle radius": "Zirkuluaren gutxieneko erradioa",
+    "Max circle radius": "Zirkuluaren gehieneko erradioa",
+    "Display the open browser control": "Display the open browser control",
+    "Copy as GeoJSON": "Kopiatu GeoJSON gisa",
+    "Please zoom in to edit the geometry": "Mesedez, handitu geometria editatzeko"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

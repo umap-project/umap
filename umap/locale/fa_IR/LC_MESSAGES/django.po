@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-30 18:23+0000\n"
+"POT-Creation-Date: 2024-09-04 14:02+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: imni <iriman@chmail.ir>, 2024\n"
 "Language-Team: Persian (Iran) (http://app.transifex.com/openstreetmap/umap/language/fa_IR/)\n"
@@ -326,19 +326,19 @@ msgstr "این یک نمونهٔ نمایشی است که برای آزمایش 
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "پروژه‌ای با اوپن‌استریت‌مپ"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "نسخه"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "میزبانی‌شده در"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "تماس"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -373,11 +373,11 @@ msgstr "الهام بگیرید، نقشه‌ها را مرور کنید"
 msgid "You are logged in. Continuing..."
 msgstr "شما وارد شده‌اید. ادامه..."
 
-#: templates/umap/map_list.html:10 views.py:433
+#: templates/umap/map_list.html:11 views.py:433
 msgid "by"
 msgstr "ساختهٔ"
 
-#: templates/umap/map_list.html:18
+#: templates/umap/map_list.html:20
 msgid "More"
 msgstr "بیشتر"
 
@@ -553,12 +553,12 @@ msgstr "جستجو"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "مرور نقشه‌های %(current_team)s"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s نقشهٔ عمومی ندارد."
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
