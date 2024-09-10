@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.1 - 2024-09-10
+
+### Bug fixes
+
+- fix `teams.all()` called by mistake on anonymous users
+
 ## 2.6.0 - 2024-09-10
 
 ### New features
