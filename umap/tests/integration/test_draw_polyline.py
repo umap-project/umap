@@ -351,3 +351,44 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
             53.159947,
         ],
     ]
+
+
+def test_can_merge_lines(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+
+    page.get_by_title("Add a line to the current multi").click()
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 200, "y": 200})
+
+    # Glue end nodes
+    map.drag_to(
+        map, source_position={"x": 200, "y": 200}, target_position={"x": 100, "y": 200}
+    )
+
+    # Right click and merge nodes
+    map.click(button="right", position={"x": 100, "y": 200})
+    map.get_by_role("link", name="Merge lines").click()
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 1
+    assert data["features"][0]["geometry"]["type"] == "LineString"
+    assert data["features"][0]["geometry"]["coordinates"] == [
+        [
+            -9.865723,
+            54.457267,
+        ],
+        [
+            -9.865723,
+            53.159947,
+        ],
+        [
+            -7.668457,
+            54.457267,
+        ],
+    ]
