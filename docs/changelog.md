@@ -1,16 +1,22 @@
 # Changelog
 
+## 2.6.3 - 2024-09-11
+
+* delete shape from edit toolbar by @yohanboniface in #2126
+* fix merge lines on vertex click by @yohanboniface in #2128
+* clicking feature in the browser would not open popup in cluster by @yohanboniface in #2129
+
 ## 2.6.2 - 2024-09-10
 
 ### Bug fixes
 
-- fix German translation breaking home page in /de/
+* fix German translation breaking home page in /de/
 
 ## 2.6.1 - 2024-09-10
 
 ### Bug fixes
 
-- fix `teams.all()` called by mistake on anonymous users
+* fix `teams.all()` called by mistake on anonymous users
 
 ## 2.6.0 - 2024-09-10
 
