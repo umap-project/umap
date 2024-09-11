@@ -82,6 +82,10 @@ tx_push:
 	tx push -s
 tx_pull:
 	tx pull
+changelog:
+	$(eval VERSION=$(shell hatch version))
+	@# Bearer token is readonly
+	@printf $(shell curl -sL -X POST -H "Authorization: Bearer ${GITHUB_TOKEN}" https://api.github.com/repos/umap-project/umap/releases/generate-notes  -d '{"target_commitish":"master","previous_tag_name":"", "tag_name": "${VERSION}"}' | jq .body | sed 's/https:\/\/github.com\/umap-project\/umap\/pull\//#/g')
 
 jsdir = umap/static/umap/js/
 filepath = "${jsdir}*.js"
