@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(面積：{measure})",
-    " (length: {measure})": "(長度：{measure})",
+    "(area: {measure})": "(面積：{measure})",
+    "(length: {measure})": "(長度：{measure})",
     "# one hash for main heading": "單個 # 代表主標題",
     "## two hashes for second heading": "兩個 # 代表次標題",
     "### three hashes for third heading": "三個 # 代表第三標題",

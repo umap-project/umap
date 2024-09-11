@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# једна тараба за главни наслов",
     "## two hashes for second heading": "## две тарабе за поднаслов",
     "### three hashes for third heading": "### три тарабе за под-поднаслова",

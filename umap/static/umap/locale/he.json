@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# סולמית אחת לכותרת ראשית",
     "## two hashes for second heading": "## שתי סולמיות לכותרת מסדר שני",
     "### three hashes for third heading": "### שלוש סולמיות לכותרת מסדר שלישי",

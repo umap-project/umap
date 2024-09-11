@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# jedne ljestve za glavni naslov",
     "## two hashes for second heading": "### dva puta ljestve za treću razinu naslova",
     "### three hashes for third heading": "### tri puta ljestve za treću razinu naslova",

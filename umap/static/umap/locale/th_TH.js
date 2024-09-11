@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(พื้นที่: {measure})",
-    " (length: {measure})": "(ความยาว: {measure})",
+    "(area: {measure})": "(พื้นที่: {measure})",
+    "(length: {measure})": "(ความยาว: {measure})",
     "# one hash for main heading": "# แฮชหนึ่งอันสำหรับหัวข้อหลัก",
     "## two hashes for second heading": "## แฮชสองตัวสำหรับหัวข้อที่สอง",
     "### three hashes for third heading": "### แฮช 3 ตัวสำหรับหัวข้อที่สาม",

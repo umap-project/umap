@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# en znak za prvi glavni naslov",
     "## two hashes for second heading": "## dva znaka za drugi naslov",
     "### three hashes for third heading": "### trije znaki za tretji naslov",

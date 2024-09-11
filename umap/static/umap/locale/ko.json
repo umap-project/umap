@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# 주요 단락",
     "## two hashes for second heading": "## 2차 단락",
     "### three hashes for third heading": "### 3차 단락",

@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# አንድ ፓውንድ ምልክት ለዋናው አርእስት",
     "## two hashes for second heading": "## ሁለት ፓውንድ ምልክቶች ለንዑስ አርእስቱ",
     "### three hashes for third heading": "### ሶስት ፓውንድ ምልክቶች ለሶስተኛው ደረጃ አርእስት",

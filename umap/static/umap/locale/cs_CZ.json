@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(plocha: {measure})",
-    " (length: {measure})": "(délka: {measure})",
+    "(area: {measure})": "(plocha: {measure})",
+    "(length: {measure})": "(délka: {measure})",
     "# one hash for main heading": "# jedna mřížka pro hlavní nadpis",
     "## two hashes for second heading": "## dvě mřížky pro nadpis druhé úrovně",
     "### three hashes for third heading": "### podnadpis třetí úrovně",

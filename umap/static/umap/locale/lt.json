@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# viena grotelė pagrindinei antraštei",
     "## two hashes for second heading": "## dvi grotelės antraštei",
     "### three hashes for third heading": "### trys grotelės trečio lygio pastraipai",

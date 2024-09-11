@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(obszar: {measure})",
-    " (length: {measure})": "(długość: {measure})",
+    "(area: {measure})": "(obszar: {measure})",
+    "(length: {measure})": "(długość: {measure})",
     "# one hash for main heading": "# jeden krzyżyk – nagłówek pierwszego poziomu",
     "## two hashes for second heading": "## dwa krzyżyki – nagłówek drugiego poziomu",
     "### three hashes for third heading": "### trzy krzyżyki – nagłówek trzeciego poziomu",

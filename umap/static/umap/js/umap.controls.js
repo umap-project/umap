@@ -1282,9 +1282,9 @@ U.Editable = L.Editable.extend({
     }
     if (measure) {
       if (e.layer instanceof L.Polygon) {
-        content += L._(' (area: {measure})', { measure: measure })
+        content += ` ${L._('(area: {measure})', { measure: measure })}`
       } else if (e.layer instanceof L.Polyline) {
-        content += L._(' (length: {measure})', { measure: measure })
+        content += ` ${L._('(length: {measure})', { measure: measure })}`
       }
     }
     if (content) {

@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(περιοχή: {measure})",
-    " (length: {measure})": "(μήκος: {measure})",
+    "(area: {measure})": "(περιοχή: {measure})",
+    "(length: {measure})": "(μήκος: {measure})",
     "# one hash for main heading": "# ένα hash για επικεφαλίδα πρώτου επιπέδου",
     "## two hashes for second heading": "## δύο  hash για επικεφαλίδα δευτέρου επιπέδου",
     "### three hashes for third heading": "### τρία hash για επικεφαλίδα τρίτου επιπέδου",

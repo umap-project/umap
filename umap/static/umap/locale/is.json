@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# eitt myllumerki fyrir aðalfyrirsögn",
     "## two hashes for second heading": "## tvö myllumerki fyrir aðra fyrirsögn",
     "### three hashes for third heading": "### þrjú myllumerki fyrir þriðju fyrirsögn",

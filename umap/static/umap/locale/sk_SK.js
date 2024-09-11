@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# jedna mriežka pre hlavný nadpis",
     "## two hashes for second heading": "## dve mriežky pre nadpis druhej úrovne",
     "### three hashes for third heading": "## tri mriežky pre nadpis tretej úrovne",

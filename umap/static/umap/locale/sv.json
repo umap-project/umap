@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(längd: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(längd: {measure})",
     "# one hash for main heading": "# en fyrkant för huvudrubrik",
     "## two hashes for second heading": "## två fyrkanter för andra rubrik",
     "### three hashes for third heading": "### tre fyrkanter för tredje rubrik",

@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(oppervlakte: {measure})",
-    " (length: {measure})": "(lengte: {measure})",
+    "(area: {measure})": "(oppervlakte: {measure})",
+    "(length: {measure})": "(lengte: {measure})",
     "# one hash for main heading": "# een hekje voor koptekst 1",
     "## two hashes for second heading": "## twee hekjes voor koptekst 2",
     "### three hashes for third heading": "### drie hekjes voor koptekst 3",

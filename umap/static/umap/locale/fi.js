@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# yksi risuaita tekee päätason otsikon",
     "## two hashes for second heading": "## kaksi risuaitaa tekee kakkostason otsikon",
     "### three hashes for third heading": "### kolme risuaitaa tekee kolmostason otsikon",

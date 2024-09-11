@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# um cardinal para o cabeçalho principal",
     "## two hashes for second heading": "## dois cardinais para o segundo cabeçalho",
     "### three hashes for third heading": "### três cardinais para o terceiro cabeçalho",

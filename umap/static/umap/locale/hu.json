@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(terület: {measure})",
-    " (length: {measure})": "(távolság: {measure})",
+    "(area: {measure})": "(terület: {measure})",
+    "(length: {measure})": "(távolság: {measure})",
     "# one hash for main heading": "# egy számjel: fő címsor",
     "## two hashes for second heading": "## két számjel: második címsor",
     "### three hashes for third heading": "### három számjel: harmadik címsor",

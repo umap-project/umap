@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(kawasan: {measure})",
-    " (length: {measure})": "(panjang: {measure})",
+    "(area: {measure})": "(kawasan: {measure})",
+    "(length: {measure})": "(panjang: {measure})",
     "# one hash for main heading": "# satu tanda pagar untuk tajuk utama",
     "## two hashes for second heading": "## dua tanda pagar untuk tajuk kedua",
     "### three hashes for third heading": "### tiga tanda pagar untuk tajuk ketiga",

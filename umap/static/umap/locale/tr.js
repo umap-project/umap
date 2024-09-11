@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# ana başlık için bir hash",
     "## two hashes for second heading": "# # ana başlık için iki hash",
     "### three hashes for third heading": "### ana başlık için üç hash",

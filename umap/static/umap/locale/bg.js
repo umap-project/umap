@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# един хеш за главната позиция",
     "## two hashes for second heading": "два хеша за втората таблица",
     "### three hashes for third heading": "# # # Три хеша за трета позиция",

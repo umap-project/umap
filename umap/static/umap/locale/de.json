@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(Fläche: {measure})",
-    " (length: {measure})": "(Länge: {measure})",
+    "(area: {measure})": "(Fläche: {measure})",
+    "(length: {measure})": "(Länge: {measure})",
     "# one hash for main heading": "# Eine Raute für große Überschrift",
     "## two hashes for second heading": "## Zwei Rauten für mittlere Überschrift",
     "### three hashes for third heading": "### Drei Rauten für kleine Überschrift",

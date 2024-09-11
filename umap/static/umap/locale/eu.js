@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(luzera: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(luzera: {measure})",
     "# one hash for main heading": "# traola bat goiburu nagusirako",
     "## two hashes for second heading": "## bi traola bigarren goibururako",
     "### three hashes for third heading": "### hiru traola hirugarren goibururako",

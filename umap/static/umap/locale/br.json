@@ -1,6 +1,6 @@
 {
-    " (area: {measure})": "(gorread: {measure})",
-    " (length: {measure})": "(pellder: {measure})",
+    "(area: {measure})": "(gorread: {measure})",
+    "(length: {measure})": "(pellder: {measure})",
     "# one hash for main heading": "# un diezenn evit an titl pennañ",
     "## two hashes for second heading": "## div ziezenn evit an eil titl",
     "### three hashes for third heading": "### teir diezenn evit an trede titl",

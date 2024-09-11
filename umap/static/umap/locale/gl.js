@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# un cancelo para a cabeceira principal",
     "## two hashes for second heading": "## dous cancelos para a cabeceira secundaria",
     "### three hashes for third heading": "### tres cancelos para a cabeceira terciaria",

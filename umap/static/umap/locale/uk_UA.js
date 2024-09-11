@@ -1,6 +1,6 @@
 const locale = {
-    " (area: {measure})": "(area: {measure})",
-    " (length: {measure})": "(length: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# один знак решітки — основний заголовок",
     "## two hashes for second heading": "## два знаки решітки — підзаголовок",
     "### three hashes for third heading": "### три знаки решітки — підзаголовок підзаголовка",
