@@ -439,7 +439,7 @@ class Feature {
 
   zoomTo({ easing, latlng, callback } = {}) {
     if (easing === undefined) easing = this.map.getOption('easing')
-    if (callback) this.map.once('moveend', callback.call(this))
+    if (callback) this.map.once('moveend', callback.bind(this))
     if (easing) {
       this.map.flyTo(this.center, this.getBestZoom())
     } else {
@@ -663,9 +663,9 @@ export class Point extends Feature {
   }
 
   zoomTo(event) {
-    if (this.datalayer.isClustered() && !this._icon) {
+    if (this.datalayer.isClustered() && !this.ui._icon) {
       // callback is mandatory for zoomToShowLayer
-      this.datalayer.layer.zoomToShowLayer(this, event.callback || (() => {}))
+      this.datalayer.layer.zoomToShowLayer(this.ui, event.callback || (() => {}))
     } else {
       super.zoomTo(event)
     }

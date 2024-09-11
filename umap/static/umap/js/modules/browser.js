@@ -45,7 +45,7 @@ export default class Browser {
       Icon.setContrast(icon, colorBox, symbol, bgcolor)
     }
     const viewFeature = (e) => {
-      feature.zoomTo({ ...e, callback: feature.view })
+      feature.zoomTo({ ...e, callback: () => feature.view() })
     }
     DomEvent.on(zoom_to, 'click', viewFeature)
     DomEvent.on(title, 'click', viewFeature)
