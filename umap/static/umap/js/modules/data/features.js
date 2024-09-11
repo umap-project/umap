@@ -866,14 +866,15 @@ export class LineString extends Path {
 
   mergeShapes() {
     if (!this.isMulti()) return
-    const latlngs = this.getLatLngs()
+    const latlngs = this.ui.getLatLngs()
     if (!latlngs.length) return
     while (latlngs.length > 1) {
       latlngs.splice(0, 2, this._mergeShapes(latlngs[1], latlngs[0]))
     }
     this.ui.setLatLngs(latlngs[0])
-    if (!this.editEnabled()) this.edit()
-    this.editor.reset()
+    this.pullGeometry()
+    if (!this.ui.editEnabled()) this.edit()
+    this.ui.editor.reset()
     this.isDirty = true
   }
 
