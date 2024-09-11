@@ -231,7 +231,7 @@ U.DeleteShapeAction = U.BaseFeatureAction.extend({
   },
 
   onClick: function (e) {
-    this.feature.enableEdit().deleteShapeAt(e.latlng)
+    this.feature.ui.enableEdit().deleteShapeAt(e.latlng)
   },
 })
 
