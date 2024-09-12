@@ -867,12 +867,14 @@ a.umap-control-caption,
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
-    background: none;
     display: inline-block;
     padding: 0;
     width: 24px;
     text-align: center;
     margin-inline-start: 5px;
+}
+.umap-browser .marker .feature-color {
+    background: none;
 }
 .umap-browser.dark .datalayer .feature-color {
     box-shadow: 0 0 2px 0 #999 inset;
@@ -883,18 +885,6 @@ a.umap-control-caption,
 .umap-browser .datalayer .feature-color span {
     font-style: normal;
     font-weight: bold;
-}
-.umap-browser .polygon .feature-color,
-.umap-browser .polyline .feature-color {
-    box-shadow: 0 0 2px 0 black inset;
-    background-image: url('./img/24.svg');
-    background-size: 500%;
-}
-.umap-browser .polyline .feature-color {
-    background-position: -72px -23px;
-}
-.umap-browser .polygon .feature-color {
-    background-position: -48px -25px;
 }
 .umap-browser .datalayer-toggle-list {
     float: inline-end;
