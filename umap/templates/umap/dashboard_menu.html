@@ -7,8 +7,10 @@
     {% else %}
       <a href="{% url 'user_dashboard' %}">{% trans "My Maps" %}</a>
     {% endif %}
-    <a {% if selected == "profile" %}class="selected"{% endif %}
-       href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
+    {% if UMAP_ALLOW_EDIT_PROFILE %}
+      <a {% if selected == "profile" %}class="selected"{% endif %}
+         href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
+    {% endif %}
     <a {% if selected == "teams" %}class="selected"{% endif %}
        href="{% url 'user_teams' %}">{% trans "My teams" %}</a>
   </h2>

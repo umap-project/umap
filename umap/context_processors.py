@@ -12,6 +12,7 @@ def settings(request):
         "UMAP_READONLY": djsettings.UMAP_READONLY,
         "UMAP_DEMO_SITE": djsettings.UMAP_DEMO_SITE,
         "UMAP_HOST_INFOS": djsettings.UMAP_HOST_INFOS,
+        "UMAP_ALLOW_EDIT_PROFILE": djsettings.UMAP_ALLOW_EDIT_PROFILE,
     }
 
 

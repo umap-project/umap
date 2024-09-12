@@ -115,11 +115,15 @@ i18n_urls += decorated_patterns(
         name="map_star",
     ),
     path("me", views.user_dashboard, name="user_dashboard"),
-    path("me/profile", views.user_profile, name="user_profile"),
     path("me/download", views.user_download, name="user_download"),
     path("me/teams", views.UserTeams.as_view(), name="user_teams"),
     path("team/create/", views.TeamNew.as_view(), name="team_new"),
 )
+
+if settings.UMAP_ALLOW_EDIT_PROFILE:
+    i18n_urls.append(
+        path("me/profile", login_required(views.user_profile), name="user_profile")
+    )
 i18n_urls += decorated_patterns(
     [login_required, team_members_only],
     path("team/<int:pk>/edit/", views.TeamUpdate.as_view(), name="team_update"),

@@ -240,6 +240,7 @@ USER_URL_FIELD = "username"
 # Miscellaneous project settings
 # =============================================================================
 UMAP_ALLOW_ANONYMOUS = env.bool("UMAP_ALLOW_ANONYMOUS", default=False)
+UMAP_ALLOW_EDIT_PROFILE = env.bool("UMAP_ALLOW_EDIT_PROFILE", default=True)
 
 UMAP_EXTRA_URLS = {
     "routing": "http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}",  # noqa

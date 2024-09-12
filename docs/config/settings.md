@@ -144,6 +144,12 @@ Should uMap allows user without an account to create maps (default is False).
 
 Can be set through env var: `UMAP_ALLOW_ANONYMOUS=1`
 
+#### UMAP_ALLOW_EDIT_PROFILE
+
+Should uMap allows users to edit their profile (default is True).
+
+Can be unset through env var: `UMAP_ALLOW_EDIT_PROFILE=0`
+
 #### UMAP_CUSTOM_TEMPLATES
 To be used when you want to override some HTML templates:
 
