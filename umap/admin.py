@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 
 from django.contrib.auth.admin import UserAdmin as UserAdminBase
 from django.contrib.auth.models import User
@@ -14,9 +15,11 @@ class CSVExportMixin:
 
     @admin.action(description=_("CSV Export"))
     def as_csv(self, request, queryset):
+        modelname = queryset.model.__name__.lower()
+        filename = f"umap_{modelname}_{datetime.now().isoformat()}.csv"
         response = HttpResponse(
             content_type="text/csv",
-            headers={"Content-Disposition": 'attachment; filename="export.csv"'},
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
         )
 
         writer = csv.writer(response)
