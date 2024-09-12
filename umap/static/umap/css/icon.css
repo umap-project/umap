@@ -35,9 +35,11 @@ html[dir="rtl"] .icon {
 .icon-block + span {
     margin-inline-start: 0;
 }
+.icon-16.icon-white,
 .dark .icon-16 {
     background-image: url('../img/16-white.svg');
 }
+.icon-24.icon-white,
 .dark .icon-24 {
     background-image: url('../img/24-white.svg');
 }
@@ -105,10 +107,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 5);
 }
 .icon-polygon {
-    background-position: var(--tile) calc(var(--tile) * 5);
+    background-position: var(--tile) calc(var(--tile) * 3);
 }
 .icon-polyline {
-    background-position: 0 calc(var(--tile) * 5);
+    background-position: 0 calc(var(--tile) * 3);
 }
 .icon-resize {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 6);
