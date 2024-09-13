@@ -724,6 +724,10 @@ U.Map = L.Map.extend({
     }
   },
 
+  hasLayers: function () {
+    return Boolean(this.datalayers_index.length)
+  },
+
   fitDataBounds: function () {
     const bounds = this.getLayersBounds()
     if (!this.hasData() || !bounds.isValid()) return false

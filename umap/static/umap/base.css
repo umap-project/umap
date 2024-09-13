@@ -307,9 +307,6 @@ input + .help-text {
 .formbox.with-switch {
     padding-top: 2px;
 }
-.formbox select {
-    width: calc(100% - 14px);
-}
 fieldset.formbox {
     border: none;
     border-top: 1px solid var(--color-lightGray);
@@ -385,6 +382,10 @@ details summary {
 fieldset legend {
     font-size: .9rem;
     padding: 0 5px;
+}
+fieldset.separator {
+    border: none;
+    border-top: 1px solid var(--color-lightGray);
 }
 
 [data-badge] {
@@ -633,7 +634,6 @@ i.info {
 .umap-datalayer-container,
 .umap-layer-properties-container,
 .umap-browse-data,
-.umap-facet-search,
 .umap-tilelayer-switcher-container {
     padding: 0 10px;
 }

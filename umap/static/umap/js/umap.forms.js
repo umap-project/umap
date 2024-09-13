@@ -1029,6 +1029,7 @@ L.FormBuilder.ManageOwner = L.FormBuilder.Element.extend({
     const options = {
       className: 'edit-owner',
       on_select: L.bind(this.onSelect, this),
+      placeholder: L._("Type new owner's username"),
     }
     this.autocomplete = new U.AjaxAutocomplete(this.parentNode, options)
     const owner = this.toHTML()
@@ -1058,6 +1059,7 @@ L.FormBuilder.ManageEditors = L.FormBuilder.Element.extend({
       className: 'edit-editors',
       on_select: L.bind(this.onSelect, this),
       on_unselect: L.bind(this.onUnselect, this),
+      placeholder: L._("Type editor's username"),
     }
     this.autocomplete = new U.AjaxAutocompleteMultiple(this.parentNode, options)
     this._values = this.toHTML()
