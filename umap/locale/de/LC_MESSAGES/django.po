@@ -7,6 +7,7 @@
 # Christopher <github@1011.link>, 2020
 # Claus Ruedinger <clausruedinger@gmail.com>, 2020
 # Ettore Atalan <atalanttore@googlemail.com>, 2016
+# jakl, 2024
 # hno2 <hno2@gmx.net>, 2013-2014
 # Jannis Leidel <jannis@leidel.info>, 2016
 # gislars, 2024
@@ -19,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-04 14:02+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: gislars, 2024\n"
+"Last-Translator: jakl, 2024\n"
 "Language-Team: German (http://app.transifex.com/openstreetmap/umap/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -73,7 +74,7 @@ msgstr "Jeder"
 
 #: models.py:168 models.py:174 models.py:425
 msgid "Editors and team only"
-msgstr ""
+msgstr "Nur Bearbeiter und Team"
 
 #: models.py:169 models.py:426
 msgid "Owner only"
@@ -125,7 +126,7 @@ msgstr "Bearbeiter"
 
 #: models.py:207
 msgid "team"
-msgstr ""
+msgstr "Team"
 
 #: models.py:213 models.py:447
 msgid "edit status"
@@ -331,19 +332,19 @@ msgstr "Dies ist eine Demo-Instanz, die für Tests und Vorveröffentlichungen ve
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "Ein OpenStreetMap Projekt"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "Version"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "Gehostet von"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -364,7 +365,7 @@ msgstr "Mein Profil"
 
 #: templates/umap/dashboard_menu.html:13
 msgid "My teams"
-msgstr ""
+msgstr "Meine Teams"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -536,8 +537,8 @@ msgstr "Ihr Passwort wurde geändert."
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s Karte gefunden:"
+msgstr[1] "%(count)s Karten gefunden:"
 
 #: templates/umap/search.html:24
 msgid "No map found."
@@ -558,20 +559,20 @@ msgstr "Suchen"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "Schaue dir %(current_team)s's Karten an"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s hat keine öffentlichen Karten.."
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
-msgstr ""
+msgstr "Dieses Team löschen"
 
 #: templates/umap/team_form.html:47
 msgid "Add user"
-msgstr ""
+msgstr "Benutzer hinzufügen"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
@@ -592,20 +593,20 @@ msgstr "Du hast noch keine Karte."
 
 #: templates/umap/user_teams.html:17
 msgid "Users"
-msgstr ""
+msgstr "Benutzer"
 
 #: templates/umap/user_teams.html:48
 msgid "New team"
-msgstr ""
+msgstr "Neues Team"
 
 #: views.py:235
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Teams mit mehr als einem Mitglied können nicht gelöscht werden"
 
 #: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "Team “%(name)s” wurde gelöscht"
 
 #: views.py:438
 msgid "View the map"

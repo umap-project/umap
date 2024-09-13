@@ -1,6 +1,6 @@
 const locale = {
-    "(area: {measure})": "(Fläche: {measure})",
-    "(length: {measure})": "(Länge: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# Eine Raute für große Überschrift",
     "## two hashes for second heading": "## Zwei Rauten für mittlere Überschrift",
     "### three hashes for third heading": "### Drei Rauten für kleine Überschrift",
@@ -498,13 +498,15 @@ const locale = {
     "Expression is empty": "Ausdruck ist leer",
     "OK": "OK",
     "Cancel": "Abbrechen",
-    "Attach map to a team": "Attach map to a team",
-    "Display the polygon inverted": "Display the polygon inverted",
+    "Attach map to a team": "Die Karte einem Team zuordnen",
+    "Display the polygon inverted": "Das Polygon invertiert anzeigen",
     "Proportional circles": "Proportional circles",
     "Property name to compute circles": "Property name to compute circles",
-    "Min circle radius": "Min circle radius",
-    "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Min circle radius": "Minimaler Kreis-Radius",
+    "Max circle radius": "Maximaler Kreis-Radius",
+    "Display the open browser control": "Display the open browser control",
+    "Copy as GeoJSON": "Als GeoJSON kopieren",
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry"
 }
 L.registerLocale("de", locale)
 L.setLocale("de")
