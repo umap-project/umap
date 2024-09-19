@@ -1,41 +1,39 @@
 !!! abstract "Ce que nous allons apprendre"
 
-    - Utiliser un compte pour retrouver ses cartes
-    - Changer la forme, la couleur et le pictogramme d’un marqueur
-    - Créer et modifier une ligne
-    - Contrôler l’affichage des étiquettes
+    - utiliser un compte pour retrouver ses cartes
+    - créer une équipe 
+    - partager une carte avec une équipe
 
 ## Procédons par étapes
 
 Nous avons appris dans
 [le tutoriel précédent](2-first-map.md) comment créer une
-carte anonyme contenant un marqueur. Nous allons à présent créer une
-carte plus complète : la carte de nos vacances au [Camping de la plage
-Goulien](http://www.openstreetmap.org/way/119055693) sur la Presqu’île
-de Crozon en Bretagne.
-
-Au lieu de créer une carte anonyme, nous allons utiliser un compte pour
-créer cette carte.
+carte anonyme contenant un marqueur. Nous allons à présent créer un compte et une équipe. 
+Nota : il n'y a pas de carte anonyme sur [l'instance uMap pour les agents publics ](https://umap.incubateur.anct.gouv.fr/fr/).  
 
 ### 1. Utiliser un compte
 
-**uMap** permet d’associer ses cartes à un compte. Cela présente deux
+**uMap** permet d’associer ses cartes à un compte. Cela présente plusieurs
 avantages importants par rapport à la création de cartes anonymes :
 
 -   les cartes créées avec un compte constituent un catalogue permettant
     d’accéder facilement à ses cartes
 -   on peut modifier chaque carte du catalogue sans avoir besoin de
     conserver un lien d’édition
+-   on peut gérer ses cartes en équipe et afficher le nom de l'équipe comme auteur
+-   pour les agents publics sur uMap ANCT : une fois connecté avec MonComptePro, on peut utiliser d'autres outils en association avec uMap, comme GRIST.
 
-Le logiciel umap ne gère pas directement de comptes utilisateurs : la
-gestion des comptes dépend de la configuration du logiciel. Sur
-<http://umap.openstreetmap.fr>, vous pouvez utiliser un compte que vous
+Le logiciel uMap ne gère pas directement de comptes utilisateurs : la
+gestion des comptes dépend de la configuration du logiciel. 
+
+#### Pour le grand public, les associations… 
+Sur <https://umap.openstreetmap.fr>, vous pouvez utiliser un compte que vous
 avez ouvert sur un site Web au choix : OpenStreetMap, Github,
 ou Bitbucket. Si vous n’avez aucun compte sur ces outils, c’est le
 moment de vous inscrire sur le site www.openstreetmap.org : cliquez
 **Créer un compte** dans le coin supérieur droit et suivez les
 instructions - une adresse mail vous sera demandée ([plus
-d’infos](http://openstreetmap.fr/inscription-openstreetmap)).
+d’infos](https://openstreetmap.fr/inscription-openstreetmap)).
 
 ![umap_header.png](../../static/tutoriels/3-jutilise-un-compte-et-cree-une-belle-carte/umap_header.png)
 
@@ -52,15 +50,53 @@ permettant d’accéder à l’ensemble des cartes créées avec ce compte.
 
 Notez l’URL de la barre d’adresse quand vous consultez votre catalogue
 de cartes : celle-ci contient le nom de votre compte - par exemple
-<http://umap.openstreetmap.fr/fr/user/cartocite/>. Vous pouvez
+<https://umap.openstreetmap.fr/fr/user/cartocite/>. Vous pouvez
 l’utiliser pour accéder à votre catalogue de cartes, même sans être
 connecté à votre compte : vous pouvez diffuser cette URL, les
 récipiendaires ne pourront pas modifier vos cartes.
 
-Toutes les cartes que vous créez en étant connecté à votre compte sont
-ajoutées à votre catalogue.
+#### Pour les agents publics
+1. Se connectez à MonComptePro :
+https://moncomptepro.beta.gouv.fr/
+Toute personne qui travaille pour un service public y a accès.
+2. Créez un compte sur MonComptePro. L'opération prend quelques minutes. 
+3. Sur [le site uMap pour les agents publics ](https://umap.incubateur.anct.gouv.fr/fr/), cliquez sur Me Connecter.
 
-### 2. Créer un joli marqueur
+Le tableau de bord s'ouvre, il  affiche l'ensemble des cartes que vous créez ainsi que les équipes auxquelles vous participez. 
+
+### 2. Créer une équipe 
+#### Pour le grand public, les associations... 
+Une fois connecté sur l'instance uMap d'OSM https://umap.openstreetmap.fr/, cliquer sur "Mon espace", puis "Mes équipes" :
+![Equipe-1](https://github.com/user-attachments/assets/703f0b1f-226c-4ac8-ac53-ed66e5557f13)
+Puis sur "Nouvelle équipe" et renseigner les informations 
+![Equipe-2](https://github.com/user-attachments/assets/1848690a-5978-465b-bb76-a22430c43be7)
+
+Lorsqu'un nouvel utilisateur est associé à une équipe, il voit l'équipe s'afficher sur son tableau de bord, il accède à toutes les cartes qui sont partagées et il peut les modifier.  
+
+#### Pour les agents publics
+La fonctionnalité est disponible sous peu. 
+
+!!!!    note
+        Tous les membres d'une équipe partagent les mêmes droits d'édition sur une carte qui est associée à une équipe. Une équipe peut être supprimée, ou son nom modifié en un simple clic. 
+
+### 3. Partager une carte avec une équipe
+Une fois l'équipe créée, il reste encore à donner les droits de modification d'une carte à ses membres. Pour ce faire : ouvrez la carte, puis sur cliquez sur "Editer" et cliquez en haut de page à droite du titre sur "Visibilité : Définir qui peut voir et modifier la carte". 
+![Equipe-3](https://github.com/user-attachments/assets/70a7dbbb-70ef-49ec-852c-e6aca673ab8c)
+
+-----
+Placer toute la suite sur le tuto suivant "Dessiner des formes et afficher des étiquettes"
+
+!!! abstract "Ce que nous allons apprendre"
+
+    - Changer la forme, la couleur et le pictogramme d’un marqueur
+    - Créer et modifier une ligne
+    - Contrôler l’affichage des étiquettes
+
+Voici comment réaliser une carte contenant de jolis marqueurs et des lignes avec pour exemple la carte de nos vacances au [Camping de la plage
+Goulien](https://www.openstreetmap.org/way/119055693) sur la Presqu’île
+de Crozon en Bretagne.
+
+### 3. Créer un joli marqueur
 
 Commençons par créer une carte : donnons-lui un nom, définissons une
 emprise et ajoutons un marqueur à [l’emplacement du
