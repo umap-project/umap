@@ -655,6 +655,7 @@ export class Point extends Feature {
           builder.restoreField('ui._latlng.lat')
           builder.restoreField('ui._latlng.lng')
         }
+        this.pullGeometry()
         this.zoomTo({ easing: false })
       },
     })
