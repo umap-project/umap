@@ -132,18 +132,6 @@ cette photo. Pour cela nous devons :
 #### Afficher vos photos
 
 Si vous disposez d’un serveur vous pouvez l’utiliser stocker vos photos.
-Si ce n’est pas le cas vous pouvez utiliser un service comme
-**[Framapic](https://framapic.org/)**, un service de stockage libre que
-l’association **[Framasoft](https://framasoft.org/)** met à la
-disposition de tous sans contre-partie. L’opération est très simple :
-
-1.  stockez votre photo sur Framapic par un glisser-déposer depuis votre
-    explorateur de fichier vers le navigateur
-2.  copiez le lien d’affichage de la photo
-3.  collez ce lien entre **double accolades** dans la description de
-    l’infobulle : `{{https://framapic.org/xxx/yyy.jpg}}`
-
-![lienframapic.png](../../static/tutoriels/5-je-cree-des-infobulles-multimedia/lienframapic.png)
 
 #### Modifier la taille d’une image
 
