@@ -11,8 +11,14 @@ lieux (domicile, vacances, travail, etc.). Procédons par étapes.
 
 ### 1. Le mode édition
 
-Rendez-vous sur le site <http://umap.openstreetmap.fr/> et cliquez sur
-le bouton **Créer une carte** suivant :
+#### Pour le grand public, les associations…
+
+Rendez-vous sur l’instance uMap d’OSM <https://umap.openstreetmap.fr/>
+
+#### Pour les agents publics
+
+Rendez-vous sur le site uMap agents publics <https://umap.incubateur.anct.gouv.fr/>
+et connectez-vous en haut à gauche. La connexion utilise MonComptePro.
 
 <shot-scraper
     data-output="static/tutoriels/create-map.png"
@@ -83,6 +89,8 @@ reviendrons.
 Maintenant, sauvegardez la carte avec le bouton **Enregistrer** : un
 texte est affiché en haut de la carte, comme celui ci-dessous :
 
+#### Pour le grand public sur l'instance OSM
+
 <shot-scraper
     data-output="static/tutoriels/create-map-alert.png"
     data-url="https://umap.openstreetmap.fr/fr/map/new/"
@@ -102,6 +110,14 @@ modifier la carte ou saisir votre adresse de courriel pour le recevoir.
 Nous verrons dans [le prochain tutoriel](3-create-account.md)
 comment créer son catalogue de cartes en utilisant un compte, il n’est alors pas
 nécessaire de conserver de lien secret.
+
+#### Pour les agents publics sur l’instance qui leur est dédiée
+
+S’ils ne se sont pas connectés avant de créer leur carte, le message est différent :
+
+![Le lien vers la connexion MonComptePro](../../static/tutoriels/moncomptepro-connexion.png)
+
+Il n’est pas possible d’enregistrer les modifications apportées à une carte anonyme sur cette instance.
 
 ### 3. Ajouter un marqueur
 
@@ -125,7 +141,7 @@ Le curseur prend la forme d’un signe
 le bouton gauche de la souris : un *marqueur bleu* et carré est créé à
 cet endroit et un panneau apparaît à droite.
 
-![umap_marqueur.jpg](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_marqueur.jpg)
+![Un marqueur uMap.](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_marqueur.jpg)
 
 Ce panneau vous permet
 d’associer un nom et une description au marqueur :
@@ -180,12 +196,18 @@ actuels**.
 
 ### 5. Enregistrer la carte
 
-Toute modification de la carte doit être sauvegardée sur le serveur uMap
+Toute modification de la carte doit être sauvegardée
 en cliquant sur le bouton **Enregistrer** en haut à droite. Cette
 opération enregistre toutes les modifications depuis la dernière
 sauvegarde : vous pouvez donc réaliser plusieurs modifications à la
 suite puis les enregistrer. A l’inverse le bouton **Annuler** permet de
 supprimer toutes les modifications depuis la dernière sauvegarde.
+
+!!! note
+    L’enregistrement se fait sur les serveurs d’OpenStreetMap dans le cas
+    d’une utilisation d’uMap OSM ou ceux de l’ANCT si uMap pour
+    les agents publics est utilisé.
+
 
 Après avoir enregistré les modifications, le bouton Annuler est remplacé
 par **Désactiver l’édition**. Cela vous permet de quitter le mode

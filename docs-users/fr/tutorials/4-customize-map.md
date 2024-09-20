@@ -85,8 +85,8 @@ carte peut vous aider à en choisir un plutôt qu’un autre, par exemple :
 
 !!! note
 
-    Tous les fonds de carte utilisés par umap, à
-    l’exception des images aériennes de l’IGN, sont réalisées à partir des
+    Tous les fonds de carte utilisés par uMap, à
+    l’exception des images aériennes de l’IGN, sont réalisés à partir des
     données OpenStreetMap. Ils sont produits par des associations, des
     entreprises ou des bénévoles qui les mettent gracieusement à
     disposition.
@@ -170,9 +170,11 @@ Dans les deux cas un message vous demande de confirmer l’opération.
 
 ## Faisons le point
 
-Ce tutoriel nous mène à la fin du niveau débutant. Vous savez créer,
-modifier et personnaliser une carte. Vous savez styliser vos marqueurs,
-lignes et polygones. Enfin vous savez gérer votre catalogue de cartes.
+Vous savez créer, modifier et personnaliser une carte.
+Vous savez styliser vos marqueurs, lignes et polygones.
+Enfin vous savez gérer votre catalogue de cartes.
+Vous allez découvrir comment importer des données en « un clic »
+issues de l’open data et gagner du temps par rapport au dessin de toutes les formes.
 
 Une fois ces opérations maîtrisées, les tutoriels de niveau
 intermédiaire vous apprendront à structurer vos cartes avec des calques
