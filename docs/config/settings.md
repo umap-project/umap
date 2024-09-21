@@ -282,6 +282,12 @@ How many total maps to return in the search.
 
 How many maps to show in the user "my maps" page.
 
+#### UMAP_PURGATORY_ROOT
+
+Path where files are moved when a datalayer is deleted. They will stay there until
+`umap purge_purgatory` is run. May be useful in case a user deletes by mistake
+a datalayer, or even a map.
+
 #### UMAP_SEARCH_CONFIGURATION
 
 Use it if you take control over the search configuration.

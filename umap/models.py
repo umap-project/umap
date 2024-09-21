@@ -3,6 +3,7 @@ import operator
 import os
 import time
 import uuid
+from pathlib import Path
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -255,6 +256,13 @@ class Map(NamedModel):
         )
         return map_settings
 
+    def delete(self, **kwargs):
+        # Explicitely call datalayers.delete, so we can deal with removing files
+        # (the cascade delete would not call the model delete method)
+        for datalayer in self.datalayer_set.all():
+            datalayer.delete()
+        return super().delete(**kwargs)
+
     def generate_umapjson(self, request):
         umapjson = self.settings
         umapjson["type"] = "umap"
@@ -462,7 +470,9 @@ class DataLayer(NamedModel):
 
     def save(self, force_insert=False, force_update=False, **kwargs):
         is_new = not bool(self.pk)
-        super(DataLayer, self).save(force_insert, force_update, **kwargs)
+        super(DataLayer, self).save(
+            force_insert=force_insert, force_update=force_update, **kwargs
+        )
 
         if is_new:
             force_insert, force_update = False, True
@@ -471,9 +481,24 @@ class DataLayer(NamedModel):
             new_name = self.geojson.storage.save(filename, self.geojson)
             self.geojson.storage.delete(old_name)
             self.geojson.name = new_name
-            super(DataLayer, self).save(force_insert, force_update, **kwargs)
+            super(DataLayer, self).save(
+                force_insert=force_insert, force_update=force_update, **kwargs
+            )
         self.purge_gzip()
         self.purge_old_versions()
+
+    def delete(self, **kwargs):
+        self.purge_gzip()
+        self.to_purgatory()
+        return super().delete(**kwargs)
+
+    def to_purgatory(self):
+        dest = Path(settings.UMAP_PURGATORY_ROOT)
+        dest.mkdir(parents=True, exist_ok=True)
+        src = Path(self.geojson.storage.location) / self.storage_root()
+        for version in self.versions:
+            name = version["name"]
+            (src / name).rename(dest / f"{self.map.pk}_{name}")
 
     def upload_to(self):
         root = self.storage_root()
