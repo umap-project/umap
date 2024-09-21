@@ -10,7 +10,7 @@
 Il est conseillé de vérifier si les données n'existent pas avant de se lancer dans leur dessin. On peut gagner un temps précieux avec l'assistant d'importation intégré dans uMap et conserver une carte qui n'est pas trop lourde au chargement.
 
 Voilà les deux actions à effectuer une fois une carte préexistante, ou une nouvelle carte vierge ouverte : 
-- Cliquez sur l'outil d'import de données puis sélectionnez les données déjà prêtes à l'emploi
+- Cliquez sur l'outil d'import de données dans la barre de droite puis sélectionnez les données déjà prêtes à l'emploi
 - Cliquez sur "Importer" et le cas échéant enjolivez la carte, car des figurés par défaut sont utilisés
 
 uMap permet d'utiliser des données produites par de nombreux services et placées en open data sous différents formats. Nous verrons ultérieurement (niveau intermédiaire) où rechercher ces sources. D'ores et déjà, vous pouvez utiliser l'assistant d'importation pour récupérer en un clic des contours administratifs et des points d'intérêt.
@@ -46,12 +46,12 @@ Cliquez sur l'outil d'importation en bas de la barre de droite, puis descendez j
 2/ Pour que la carte évolue si le contour change, choisir "Associer au calque comme donnée distante"
 
 !!! note : 
-Le code affiché n'est pas le code postal mais le code INSEE de la commune. 
+    Le code affiché n'est pas le code postal mais le code INSEE de la commune. 
 
 Voici le résultat avec la commune d'Arles (la plus vaste de France métropolitaine, un gain certain si on fait l'économie de dessiner son contour !)
 ![](https://storage.gra.cloud.ovh.net/v1/AUTH_0f20d409cb2a4c9786c769e2edec0e06/padnumerique/uploads/a8876278-74e1-4809-88cd-16eb578051a9.png)
 
-Une fois cet import réalisé, tout est réglable : couleur de contour, de fond, affichage oui non d'une étiquette. ***Voir le nouveau tuto (ex 3) 4-Dessiner des formes et afficher des étiquettes + lien hypertexte***
+Une fois cet import réalisé, tout est réglable : couleur de contour, de fond, affichage oui non d'une étiquette. 
 
 ### 2. Importer les contours des départements ou des régions
 Cliquez sur l'outil d'importation en bas de la barre de droite, puis descendez jusqu'au cadre "Assistants d'import". Cliquez sur "Contours nationaux" puis soit départements, soit régions et enfin le type de calque (voir supra l'explication). 
@@ -71,7 +71,8 @@ Voici une réelle économie de temps plutôt que de placer pointeur après point
 Bien entendu, on peut tout à fait combiner les différentes couches d'information et présenter par exemple la carte des Points d'eau potable dans la CA du Grand Avignon, avec les contours des communes qui composent l'EPCI, du département et de la région :
 
 **Points d'eau potable du Grand Avignon**
-<iframe width="100%" height="300px" frameborder="0" allowfullscreen allow="geolocation" src="//umap.openstreetmap.fr/fr/map/points-deau-potable-grand-avignon_1116739?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true"></iframe><p><a href="//umap.openstreetmap.fr/fr/map/points-deau-potable-grand-avignon_1116739?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true">Voir en plein écran</a></p>
+![image](https://github.com/user-attachments/assets/2e7d5301-7d5b-457f-91f0-3ccff248918b)
+[Voir la carte en plein écran](https://umap.openstreetmap.fr/fr/map/points-deau-potable-grand-avignon_1116739?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true#11/43.9889/4.7962)
 
 Il faudra dans ce cas supprimer toutes les informations inutiles dans le tableau de données qui est accessible dans la barre de gauche pour chaque calque. 
 Pour gagner du temps :  sélectionner tous les départements et désélectionner seulement le Vaucluse, puis cliquer sur "Supprimer les lignes sélectionnées". 
