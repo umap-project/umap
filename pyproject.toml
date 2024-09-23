@@ -52,7 +52,7 @@ dev = [
   "mkdocs-material==9.5.36",
   "mkdocs-static-i18n==1.2.3",
   "vermin==1.6.0",
-  "pymdown-extensions==10.9",
+  "pymdown-extensions==10.10.1",
   "isort==5.13.2",
 ]
 test = [
