@@ -67,9 +67,11 @@ récipiendaires ne pourront pas modifier vos cartes.
 3. Sur [le site uMap pour les agents publics](https://umap.incubateur.anct.gouv.fr/fr/),
    cliquez sur `Me Connecter`.
 
-Le tableau de bord s’ouvre, il  affiche l’ensemble des cartes que
+Le tableau de bord s’ouvre, il affiche l’ensemble des cartes que
 vous créez ainsi que les équipes auxquelles vous participez.
 
+!!! note "Pour les agents publics"
+    Associer une carte à une équipe vous permet d’afficher le nom de cette équipe au lieu du vôtre sur une carte (noms de votre commune, de votre service,…). Une équipe peut se composer d’une seule personne.
 
 ### 2. Créer une équipe
 
