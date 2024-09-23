@@ -414,3 +414,65 @@ def test_should_have_edit_buttons_in_edit_mode(live_server, openmap, page, boots
     expect(delete_layer).to_be_visible()
     expect(edit_feature).to_have_count(3)
     expect(delete_feature).to_have_count(3)
+
+
+def test_main_toolbox_toggle_all_layers(live_server, map, page):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "one point"},
+                "geometry": {"type": "Point", "coordinates": [3.33, 46.92]},
+            },
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "one other point"},
+                "geometry": {"type": "Point", "coordinates": [3.34, 46.94]},
+            },
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "another point"},
+                "geometry": {"type": "Point", "coordinates": [3.35, 46.95]},
+            },
+        ],
+        "_umap_options": {"displayOnLoad": False},
+    }
+    DataLayerFactory(map=map, data=data, settings={"displayOnLoad": False})
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#10/46.93/3.33")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(2)
+    # Only one is off
+    expect(page.locator(".datalayer.off")).to_have_count(1)
+
+    # Click on button
+    page.locator(".umap-browser [data-ref=toggle]").click()
+    # Should have hidden the two other layers
+    expect(page.locator(".datalayer.off")).to_have_count(3)
+    expect(markers).to_have_count(0)
+
+    # Click again
+    page.locator(".umap-browser [data-ref=toggle]").click()
+    # Should shown all layers
+    expect(page.locator(".datalayer.off")).to_have_count(0)
+    expect(markers).to_have_count(3)
+
+    # Click again
+    page.locator(".umap-browser [data-ref=toggle]").click()
+    # Should hidden again all layers
+    expect(page.locator(".datalayer.off")).to_have_count(3)
+    expect(markers).to_have_count(0)
