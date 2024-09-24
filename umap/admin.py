@@ -22,10 +22,15 @@ class CSVExportMixin:
             headers={"Content-Disposition": f'attachment; filename="{filename}"'},
         )
 
+        def get_cell(user, field):
+            if hasattr(self, field):
+                return getattr(self, field)(user)
+            return getattr(user, field)
+
         writer = csv.writer(response)
         writer.writerow(self.csv_fields)
         for user in queryset:
-            writer.writerow(getattr(user, field) for field in self.csv_fields)
+            writer.writerow(get_cell(user, field) for field in self.csv_fields)
         return response
 
 
@@ -77,7 +82,13 @@ class UserAdmin(CSVExportMixin, UserAdminBase):
         "last_name",
         "last_login",
         "date_joined",
+        "maps_count",
     ]
+    list_display = list(UserAdminBase.list_display) + ["maps_count"]
+
+    def maps_count(self, obj):
+        # owner maps + maps as editor
+        return obj.owned_maps.count() + obj.map_set.count()
 
 
 admin.site.register(Map, MapAdmin)
