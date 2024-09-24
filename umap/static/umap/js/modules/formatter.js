@@ -1,4 +1,4 @@
-/* Uses globals for: csv2geojson, osmtogeojson, GeoRSSToGeoJSON (not available as ESM) */
+/* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
 
 export const EXPORT_FORMATS = {
@@ -115,7 +115,8 @@ export class Formatter {
   }
 
   async fromGeoRSS(str) {
-    return GeoRSSToGeoJSON(this.toDom(str))
+    const GeoRSSToGeoJSON = await import('../../vendors/georsstogeojson/GeoRSSToGeoJSON.js')
+    return GeoRSSToGeoJSON.parse(this.toDom(str))
   }
 
   toDom(x) {
