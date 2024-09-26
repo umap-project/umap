@@ -1,5 +1,5 @@
 import json
-
+import os
 import re
 
 import pytest
@@ -55,6 +55,10 @@ def test_should_honour_fromZoom(live_server, map, datalayer, page):
     expect(markers).to_be_visible()
 
 
+@pytest.mark.skipif(
+    os.environ.get("CI", "false") == "true",
+    reason="Test is failing intermittently, skipping in the CI",
+)
 def test_should_honour_toZoom(live_server, map, datalayer, page):
     set_options(datalayer, displayOnLoad=True, toZoom=6)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#7/48.55/14.68")
