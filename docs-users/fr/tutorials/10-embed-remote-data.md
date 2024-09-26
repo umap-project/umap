@@ -6,6 +6,7 @@
     - Afficher des données qui évoluent en temps réel
     - Utiliser un portail *open data*
     - Créditer la source des données pour respecter la licence
+    - Cas particulier : Comment afficher des données GRIST dans uMap
 
 ## Procédons par étapes
 
@@ -156,8 +157,9 @@ calque*. Les différents types de calques sont :
     cercle.
 -   **Heatmap** : les données sont représentées sous forme de *carte de
     chaleur*.
--   **Cloroplèthe** : cet affichage est adapté aux polygones, et permet
+-   **Choroplèthe** : cet affichage est adapté aux polygones, et permet
     de graduer leur couleur.
+-   **Cercles proportionnels** : cette représentation est adaptée pour des valeurs quantitatives absolues (qui peuvent s'ajouter). La surface des cercles est  proportionnelle à la quantité. 
 
 Les types *Avec cluster* et *Heatmap* sont plutôt adaptés aux calques
 contenant uniquement des points. Lorsqu’on choisit un de ces modes, un
@@ -398,6 +400,12 @@ D’autres sites mettent à disposition des données via une API, l’enjeu
 est alors de s’approprier la syntaxe des requêtes en lisant la
 documentation et testant les requêtes.
 
+#### Comment afficher données Grist dans uMap 
+Grist est un tableur collaboratif intégré à [La Suite Numérique](https://lasuite.numerique.gouv.fr/services/grist) qui permet de saisir et structurer de la donnée. 
+L'affichage de données Grist dans uMap est réservé à [l'instance uMap pour les agents publics](https://umap.incubateur.anct.gouv.fr/fr/)
+Pour découvrir et utiliser cette fonctionnalité, voici
+    - [un film tutoriel](https://tube.numerique.gouv.fr/w/kya6m1aFtgDcy2LMkgUBya?start=12s)
+    - [un tutoriel dédié](https://uma-zammad.anct.cloud-ed.fr/help/fr-fr/1-afficher-des-donnees-distantes/1-comment-afficher-des-donnees-grist-dans-umap)
 
 ??? info "Licence"
 
