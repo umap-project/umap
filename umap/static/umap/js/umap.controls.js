@@ -1181,9 +1181,9 @@ U.Editable = L.Editable.extend({
       if (this.map.editedFeature !== event.layer) event.layer.feature.edit(event)
     })
     this.on('editable:editing', (event) => {
-      const layer = event.layer
-      layer.feature.isDirty = true
-      layer.feature.fromLatLngs(layer.getLatLngs())
+      const feature = event.layer.feature
+      feature.isDirty = true
+      feature.pullGeometry(false)
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()

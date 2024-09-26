@@ -103,11 +103,11 @@ class Feature {
   }
 
   pushGeometry() {
-    this.ui.setLatLngs(this.toLatLngs())
+    this._setLatLngs(this.toLatLngs())
   }
 
   pullGeometry(sync = true) {
-    this.fromLatLngs(this.ui.getLatLngs())
+    this.fromLatLngs(this._getLatLngs())
     if (sync) {
       this.sync.update('geometry', this.geometry)
     }
@@ -607,6 +607,14 @@ export class Point extends Feature {
     }
   }
 
+  _getLatLngs() {
+    return this.ui.getLatLng()
+  }
+
+  _setLatLngs(latlng) {
+    this.ui.setLatLng(latlng)
+  }
+
   toLatLngs() {
     return GeoJSON.coordsToLatLng(this.coordinates)
   }
@@ -676,6 +684,14 @@ export class Point extends Feature {
 class Path extends Feature {
   hasGeom() {
     return !this.isEmpty()
+  }
+
+  _getLatLngs() {
+    return this.ui.getLatLngs()
+  }
+
+  _setLatLngs(latlngs) {
+    this.ui.setLatLngs(latlngs)
   }
 
   connectToDataLayer(datalayer) {
