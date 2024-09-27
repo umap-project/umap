@@ -6,6 +6,7 @@
     --color-mediumGray: #3e4444;
     --color-darkGray: #323737;
     --color-light: white;
+    --color-dark: black;
     --color-limeGreen: #b9f5d2;
     --color-brightCyan: #46ece6;
     --color-lightCyan: #d4fbf9;
@@ -14,7 +15,7 @@
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);
-    --text-color: black;
+    --text-color: var(--color-dark);
 
     /* Buttons. */
     --button-primary-background: var(--color-waterMint);
