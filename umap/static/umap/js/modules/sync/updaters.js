@@ -42,7 +42,9 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    this.updateObjectValue(this.map, key, value)
+    if (key !== 'numberOfConnectedPeers') {
+      this.updateObjectValue(this.map, key, value)
+    }
     this.map.render([key])
   }
 }

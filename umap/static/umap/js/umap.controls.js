@@ -660,6 +660,33 @@ const ControlsMixin = {
         menu.openBelow(button, actions)
       })
     }
+
+    const connectedPeers = this.sync.getNumberOfConnectedPeers()
+    if (connectedPeers !== 0) {
+      const connectedPeersCount = L.DomUtil.createButton(
+        'leaflet-control-connected-peers',
+        rightContainer,
+        '',
+      )
+      L.DomEvent.on(connectedPeersCount, 'mouseover', () => {
+        this.tooltip.open({
+          content: L._('{connectedPeers} peer(s) currently connected to this map', {
+            connectedPeers: connectedPeers,
+          }),
+          anchor: connectedPeersCount,
+          position: 'bottom',
+          delay: 500,
+          duration: 5000,
+        })
+      })
+
+      const updateConnectedPeersCount = () => {
+        connectedPeersCount.innerHTML =
+          '<span>' + this.sync.getNumberOfConnectedPeers() + '</span>'
+      }
+      updateConnectedPeersCount()
+    }
+
     this.help.getStartedLink(rightContainer)
     const controlEditCancel = L.DomUtil.createButton(
       'leaflet-control-edit-cancel',

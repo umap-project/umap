@@ -224,8 +224,13 @@ U.Map = L.Map.extend({
   },
 
   render: function (fields) {
-    const impacts = U.Utils.getImpactsFromSchema(fields)
 
+    if (fields.includes('numberOfConnectedPeers')) {
+      this.renderEditToolbar()
+      this.propagate()
+    }
+
+    const impacts = U.Utils.getImpactsFromSchema(fields)
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
