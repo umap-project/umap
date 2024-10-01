@@ -716,7 +716,7 @@ export class DataLayer {
     const remoteDataFields = [
       [
         'options.remoteData.url',
-        { handler: 'Url', label: translate('Url'), helpEntries: 'formatURL' },
+        { handler: 'Url', label: translate('Url'), helpEntries: ['formatURL'] },
       ],
       [
         'options.remoteData.format',
@@ -729,7 +729,7 @@ export class DataLayer {
         {
           handler: 'Switch',
           label: translate('Dynamic'),
-          helpEntries: 'dynamicRemoteData',
+          helpEntries: ['dynamicRemoteData'],
         },
       ],
       [
@@ -746,7 +746,7 @@ export class DataLayer {
         {
           handler: 'Switch',
           label: translate('Proxy request'),
-          helpEntries: 'proxyRemoteData',
+          helpEntries: ['proxyRemoteData'],
         },
       ])
       remoteDataFields.push('options.remoteData.ttl')
