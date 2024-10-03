@@ -11,14 +11,14 @@ lieux (domicile, vacances, travail, etc.). Procédons par étapes.
 
 ### 1. Le mode édition
 
-#### Pour le grand public, les associations…
+!!! osm-instance "Pour le grand public, les associations…"
 
-Rendez-vous sur l’instance uMap d’OSM <https://umap.openstreetmap.fr/>
+    Rendez-vous sur l’instance uMap d’OSM <https://umap.openstreetmap.fr/>
 
-#### Pour les agents publics
+!!! french-instance "Pour les agents publics"
 
-Rendez-vous sur le site uMap agents publics <https://umap.incubateur.anct.gouv.fr/>
-et connectez-vous en haut à gauche. La connexion utilise MonComptePro.
+    Rendez-vous sur le site uMap agents publics <https://umap.incubateur.anct.gouv.fr/>
+    et connectez-vous en haut à gauche. La connexion utilise MonComptePro.
 
 <shot-scraper
     data-output="static/tutoriels/create-map.png"

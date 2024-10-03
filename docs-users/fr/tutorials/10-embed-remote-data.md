@@ -7,6 +7,7 @@
     - Utiliser un portail *open data*
     - Créditer la source des données pour respecter la licence
 
+
 ## Procédons par étapes
 
 Jusqu’ici toutes les cartes que nous avons créées montrent des données
@@ -156,8 +157,11 @@ calque*. Les différents types de calques sont :
     cercle.
 -   **Heatmap** : les données sont représentées sous forme de *carte de
     chaleur*.
--   **Cloroplèthe** : cet affichage est adapté aux polygones, et permet
+-   **Choroplèthe** : cet affichage est adapté aux polygones, et permet
     de graduer leur couleur.
+-   **Cercles proportionnels** : cette représentation est adaptée pour
+    des valeurs quantitatives absolues (qui peuvent s’ajouter).
+    La surface des cercles est proportionnelle à la quantité.
 
 Les types *Avec cluster* et *Heatmap* sont plutôt adaptés aux calques
 contenant uniquement des points. Lorsqu’on choisit un de ces modes, un
