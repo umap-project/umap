@@ -368,6 +368,7 @@ def test_anonymous_create(cookieclient, post_data):
     assert (
         created_map.get_anonymous_edit_url() in j["permissions"]["anonymous_edit_url"]
     )
+    assert j["user"]["is_owner"] is True
     assert created_map.name == name
     key, value = created_map.signed_cookie_elements
     assert key in cookieclient.cookies

@@ -1063,10 +1063,8 @@ U.Map = L.Map.extend({
       window.open(data.login_required)
       return
     }
-    if (data.user?.id) {
-      this.options.user = data.user
-      this.renderEditToolbar()
-    }
+    this.options.user = data.user
+    this.renderEditToolbar()
     if (!this.options.umap_id) {
       this.options.umap_id = data.id
       this.permissions.setOptions(data.permissions)
