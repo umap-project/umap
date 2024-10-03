@@ -1185,6 +1185,13 @@ span.popup-icon {
 .umap-edit-enabled .readonly {
     cursor: not-allowed;
 }
+.leaflet-tooltip-medium {
+    font-weight: bold;
+}
+.leaflet-tooltip-big {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
 
 
 /* ********************************* */

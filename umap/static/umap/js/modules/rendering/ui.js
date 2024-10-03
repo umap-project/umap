@@ -69,10 +69,12 @@ const FeatureMixin = {
     const displayName = this.feature.getDisplayName(null)
     let showLabel = this.feature.getOption('showLabel')
     const oldLabelHover = this.feature.getOption('labelHover')
+    const size = this.feature.getOption('labelSize')
 
     const options = {
       direction: this.feature.getOption('labelDirection'),
       interactive: this.feature.getOption('labelInteractive'),
+      className: `leaflet-tooltip-${size}`,
     }
 
     if (oldLabelHover && showLabel) showLabel = null // Retrocompat.

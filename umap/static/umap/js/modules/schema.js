@@ -264,6 +264,18 @@ export const SCHEMA = {
     label: translate('Label key'),
     inheritable: true,
   },
+  labelSize: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Label font size'),
+    inheritable: true,
+    choices: [
+      ['default', translate('Default')],
+      ['medium', translate('Medium')],
+      ['big', translate('Big')],
+    ],
+    default: 'default',
+  },
   licence: {
     type: String,
     impacts: ['ui'],
