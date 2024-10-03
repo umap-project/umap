@@ -222,6 +222,7 @@ U.Map = L.Map.extend({
 
   render: function (fields) {
     const impacts = U.Utils.getImpactsFromSchema(fields)
+    console.log(fields, impacts)
 
     for (const impact of impacts) {
       switch (impact) {

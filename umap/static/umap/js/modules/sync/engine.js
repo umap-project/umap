@@ -101,6 +101,11 @@ export class SyncEngine {
     updater.applyMessage(operation)
   }
 
+  getNumberOfConnectedPeers() {
+    if (this.peers) return this.peers.length
+    return 0
+  }
+
   /**
    * This is called by the transport layer on new messages,
    * and dispatches the different "on*" methods.
@@ -146,7 +151,7 @@ export class SyncEngine {
   onJoinResponse({ uuid, peers }) {
     debug('received join response', { uuid, peers })
     this.uuid = uuid
-    this.peers = peers
+    this.onListPeersResponse({ peers })
 
     // Get one peer at random
     let randomPeer = this._getRandomPeer()
@@ -168,6 +173,7 @@ export class SyncEngine {
   onListPeersResponse({ peers }) {
     debug('received peerinfo', { peers })
     this.peers = peers
+    this.updaters.map.update({ key: 'numberOfConnectedPeers' })
   }
 
   /**

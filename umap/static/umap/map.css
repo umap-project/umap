@@ -500,7 +500,9 @@ ul.photon-autocomplete {
 }
 .leaflet-container .leaflet-control-edit-save,
 .leaflet-container .leaflet-control-edit-cancel,
-.leaflet-container .leaflet-control-edit-disable {
+.leaflet-container .leaflet-control-edit-disable,
+.leaflet-container .leaflet-control-connected-peers
+{
     display: block;
     border: none;
     font-size: 12px;
@@ -510,9 +512,17 @@ ul.photon-autocomplete {
     line-height: 30px;
     padding: 0 20px;
 }
+.leaflet-container .leaflet-control-connected-peers,
+.dark [type="button"].leaflet-control-connected-peers:hover
+{
+    background-color: #dcf7f6;
+    color: black;
+}
+
 .leaflet-container .leaflet-control-edit-disable:before,
 .leaflet-container .leaflet-control-edit-save:before,
-.leaflet-container .leaflet-control-edit-cancel:before {
+.leaflet-container .leaflet-control-edit-cancel:before,
+.leaflet-container .leaflet-control-connected-peers:before {
     display: inline-block;
     width: 19px;
     height: 24px;
@@ -523,9 +533,15 @@ ul.photon-autocomplete {
     content: ' ';
     text-align: center;
 }
+
+.leaflet-container .leaflet-control-connected-peers:before {
+    background-image: url('./img/16.svg');
+}
+
 .leaflet-container .leaflet-control-edit-disable span,
 .leaflet-container .leaflet-control-edit-save span,
-.leaflet-container .leaflet-control-edit-cancel span {
+.leaflet-container .leaflet-control-edit-cancel span,
+.leaflet-container .leaflet-control-connected-peers span{
     margin-inline-start: 10px;
 }
 .leaflet-container .leaflet-control-edit-save:before {
@@ -534,8 +550,12 @@ ul.photon-autocomplete {
 .leaflet-container .leaflet-control-edit-disable:before {
     background-position: -50px -25px;
 }
+.leaflet-container .leaflet-control-connected-peers:before {
+    background-position: -2px -95px;
+}
 .leaflet-container .leaflet-control-edit-cancel,
-.leaflet-container .leaflet-control-edit-disable {
+.leaflet-container .leaflet-control-edit-disable,
+.leaflet-container .leaflet-control-connected-peers{
     border: 0.5px solid rgba(153, 153, 153, 0.40);
 }
 .leaflet-container .leaflet-control-edit-cancel:hover,

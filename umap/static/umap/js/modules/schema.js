@@ -313,6 +313,10 @@ export const SCHEMA = {
     impacts: ['ui', 'data'],
     label: translate('name'),
   },
+  numberOfConnectedPeers: {
+    type: Number,
+    impacts: ['ui'],
+  },
   onLoadPanel: {
     type: String,
     impacts: [], // This is what happens during the map instantiation

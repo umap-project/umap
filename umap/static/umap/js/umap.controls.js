@@ -623,7 +623,7 @@ const ControlsMixin = {
       },
       this
     )
-    const update = () => {
+    const updateMapName = () => {
       const status = this.permissions.getShareStatusDisplay()
       nameButton.textContent = this.getDisplayName()
       // status is not set until map is saved once
@@ -633,13 +633,13 @@ const ControlsMixin = {
         })
       }
     }
-    update()
-    this.once('saved', L.bind(update, this))
+    updateMapName()
+    this.once('saved', L.bind(updateMapName, this))
     if (this.options.editMode === 'advanced') {
       L.DomEvent.on(nameButton, 'click', this.editCaption, this)
       L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
-    this.on('postsync', L.bind(update, this))
+    this.on('postsync', L.bind(updateMapName, this))
     if (this.options.user?.id) {
       L.DomUtil.createLink(
         'umap-user',
@@ -650,6 +650,40 @@ const ControlsMixin = {
         this.options.user.url
       )
     }
+
+    const connectedPeers = this.sync.getNumberOfConnectedPeers()
+    if (connectedPeers !== 0) {
+      const connectedPeersCount = L.DomUtil.createButton(
+        'leaflet-control-connected-peers',
+        rightContainer,
+        '',
+        this.displayConnectedPeers,
+        this
+      )
+      L.DomEvent.on(
+        connectedPeersCount,
+        'mouseover',
+        function () {
+          this.tooltip.open({
+            content: L._('{connectedPeers} peers currently connected to this map', {
+              connectedPeers: connectedPeers,
+            }),
+            anchor: connectedPeersCount,
+            position: 'bottom',
+            delay: 500,
+            duration: 5000,
+          })
+        },
+        this
+      )
+
+      const updateConnectedPeersCount = () => {
+        connectedPeersCount.innerHTML =
+          '<span>' + this.sync.getNumberOfConnectedPeers() + '</span>'
+      }
+      updateConnectedPeersCount()
+    }
+
     this.help.getStartedLink(rightContainer)
     const controlEditCancel = L.DomUtil.createButton(
       'leaflet-control-edit-cancel',
@@ -808,7 +842,8 @@ U.TileLayerControl = L.Control.IconLayers.extend({
     )
     const button = L.DomUtil.element({
       tagName: 'button',
-      className: 'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
+      className:
+        'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
       textContent: '+',
       parent: lastRow,
     })
