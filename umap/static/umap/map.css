@@ -1188,7 +1188,7 @@ span.popup-icon {
 .leaflet-tooltip-medium {
     font-weight: bold;
 }
-.leaflet-tooltip-big {
+.leaflet-tooltip-high {
     font-weight: bold;
     font-size: 1.2rem;
 }

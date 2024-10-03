@@ -250,6 +250,18 @@ export const SCHEMA = {
     ],
     default: 'auto',
   },
+  labelImportance: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Label importance'),
+    inheritable: true,
+    choices: [
+      ['low', translate('Default')],
+      ['medium', translate('Medium')],
+      ['high', translate('High')],
+    ],
+    default: 'low',
+  },
   labelInteractive: {
     type: Boolean,
     impacts: ['data'],
@@ -263,18 +275,6 @@ export const SCHEMA = {
     placeholder: translate('Default: name'),
     label: translate('Label key'),
     inheritable: true,
-  },
-  labelSize: {
-    type: String,
-    impacts: ['data'],
-    label: translate('Label font size'),
-    inheritable: true,
-    choices: [
-      ['default', translate('Default')],
-      ['medium', translate('Medium')],
-      ['big', translate('Big')],
-    ],
-    default: 'default',
   },
   licence: {
     type: String,
