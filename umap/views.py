@@ -910,7 +910,7 @@ def get_websocket_auth_token(request, map_id, map_inst):
     return simple_json_response(token=signed_token)
 
 
-class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
+class MapUpdate(FormLessEditMixin, PermissionsMixin, SessionMixin, UpdateView):
     model = Map
     form_class = MapSettingsForm
     pk_url_kwarg = "map_id"
@@ -922,6 +922,7 @@ class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=self.get_permissions(),
+            user=self.get_user_data(),
         )
 
 
