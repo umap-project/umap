@@ -477,7 +477,6 @@ const locale = {
     "Search area": "Terület keresése",
     "Type area name, or let empty to load data in current map view": "Adja meg a terület nevét vagy hagyja üresen a jelenlegi térképnézet adatainak betöltéséhez",
     "Data successfully imported!": "Adatok sikeresen importálva",
-    "My Dashboard ({username})": "Irányítópult ({username})",
     "Clear data": "Adatok törlése",
     "Remove layers": "Rétegek eltávolítása",
     "Categorized": "Kategóriák szerint",
@@ -505,8 +504,16 @@ const locale = {
     "Min circle radius": "Kör legkisebb sugara",
     "Max circle radius": "Kör legnagyobb sugara",
     "Display the open browser control": "'Böngésző megnyitása' vezérlő megjelenítése",
-    "Copy as GeoJSON": "Copy as GeoJSON",
-    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry"
+    "Copy as GeoJSON": "Másolás GeoJSON-ként",
+    "Please zoom in to edit the geometry": "Az alakzat szerkesztéséhez nagyítson",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

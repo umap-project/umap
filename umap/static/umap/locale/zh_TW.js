@@ -1,6 +1,6 @@
 const locale = {
-    "(area: {measure})": "(面積：{measure})",
-    "(length: {measure})": "(長度：{measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "單個 # 代表主標題",
     "## two hashes for second heading": "兩個 # 代表次標題",
     "### three hashes for third heading": "三個 # 代表第三標題",
@@ -477,7 +477,6 @@ const locale = {
     "Search area": "搜尋區域",
     "Type area name, or let empty to load data in current map view": "輸入區域名稱，或是保持空白載入目前地圖檢視",
     "Data successfully imported!": "成功匯入資料",
-    "My Dashboard ({username})": "我的儀表版 ({username})",
     "Clear data": "清除資料",
     "Remove layers": "移除圖層",
     "Categorized": "分類化",
@@ -504,7 +503,17 @@ const locale = {
     "Property name to compute circles": "Property name to compute circles",
     "Min circle radius": "Min circle radius",
     "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Display the open browser control": "Display the open browser control",
+    "Copy as GeoJSON": "Copy as GeoJSON",
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")

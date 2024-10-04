@@ -7,7 +7,7 @@
 # Jakub A. Tesinsky, 2014
 # Jakub A. Tesinsky, 2014
 # Jiří Podhorecký, 2018-2019
-# Jiří Podhorecký <jirka.p@volny.cz>, 2023
+# Jiří Podhorecký <jirka.p@volny.cz>, 2023-2024
 # Jiří Podhorecký <jirka.p@volny.cz>, 2019
 # Jiří Podhorecký <jirka.p@volny.cz>, 2018
 # Jiří Podhorecký <jirka.p@volny.cz>, 2018
@@ -16,15 +16,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-30 18:23+0000\n"
+"POT-Creation-Date: 2024-10-04 16:35+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Jiří Podhorecký <jirka.p@volny.cz>, 2023\n"
+"Last-Translator: Jiří Podhorecký <jirka.p@volny.cz>, 2023-2024\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/openstreetmap/umap/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: admin.py:16
+msgid "CSV Export"
+msgstr ""
 
 #: forms.py:44 forms.py:70
 msgid "Only editable with secret edit link"
@@ -34,7 +38,7 @@ msgstr "Lze upravovat jen pomocí tajného odkazu"
 msgid "Everyone can edit"
 msgstr "Kdokoli může editovat"
 
-#: forms.py:69 models.py:423
+#: forms.py:69 models.py:441
 msgid "Inherit"
 msgstr "Zdědit"
 
@@ -42,111 +46,111 @@ msgstr "Zdědit"
 msgid "Site is readonly for maintenance"
 msgstr "Stránka je jen ke čtení kvůli údržbě"
 
-#: models.py:54 models.py:73
+#: models.py:55 models.py:74
 msgid "name"
 msgstr "název"
 
-#: models.py:56 models.py:433
+#: models.py:57 models.py:451
 msgid "description"
 msgstr "popis"
 
-#: models.py:104
+#: models.py:105
 msgid "details"
 msgstr "podrobnosti"
 
-#: models.py:105
+#: models.py:106
 msgid "Link to a page where the licence is detailed."
 msgstr "Odkaz na stránku s podrobnějším popisem licence."
 
-#: models.py:115
+#: models.py:116
 msgid "URL template using OSM tile format"
 msgstr "Vzor URL ve formátu pro dlaždice OSM "
 
-#: models.py:121
+#: models.py:122
 msgid "Order of the tilelayers in the edit box"
 msgstr "Pořadí vrstev při editaci"
 
-#: models.py:167 models.py:424
+#: models.py:168 models.py:442
 msgid "Everyone"
 msgstr "Kdokoli"
 
-#: models.py:168 models.py:174 models.py:425
+#: models.py:169 models.py:175 models.py:443
 msgid "Editors and team only"
-msgstr ""
+msgstr "Pouze pro editory a tým"
 
-#: models.py:169 models.py:426
+#: models.py:170 models.py:444
 msgid "Owner only"
 msgstr "Jen vlastník"
 
-#: models.py:172
+#: models.py:173
 msgid "Everyone (public)"
 msgstr "Kdokoli (veřejná)"
 
-#: models.py:173
+#: models.py:174
 msgid "Anyone with link"
 msgstr "Kdokoli kdo má odkaz"
 
-#: models.py:175
+#: models.py:176
 msgid "Blocked"
 msgstr "Blokováno"
 
-#: models.py:178
+#: models.py:179
 msgid "center"
 msgstr "střed"
 
-#: models.py:179
+#: models.py:180
 msgid "zoom"
 msgstr "přiblížení"
 
-#: models.py:181
+#: models.py:182
 msgid "locate"
 msgstr "lokalizuj"
 
-#: models.py:181
+#: models.py:182
 msgid "Locate user on load?"
 msgstr "Najdi poluhu uživatele na startu?"
 
-#: models.py:185
+#: models.py:186
 msgid "Choose the map licence."
 msgstr "Vyberte si licenci mapy."
 
-#: models.py:186
+#: models.py:187
 msgid "licence"
 msgstr "licence"
 
-#: models.py:197
+#: models.py:198
 msgid "owner"
 msgstr "vlastník"
 
-#: models.py:201
+#: models.py:202
 msgid "editors"
 msgstr "přispěvovatelé"
 
-#: models.py:207
+#: models.py:208
 msgid "team"
-msgstr ""
+msgstr "tým"
 
-#: models.py:213 models.py:447
+#: models.py:214 models.py:465
 msgid "edit status"
 msgstr "kdo může provádět úpravy"
 
-#: models.py:218
+#: models.py:219
 msgid "share status"
 msgstr "nastavení sdílení"
 
-#: models.py:221 models.py:442
+#: models.py:222 models.py:460
 msgid "settings"
 msgstr "nastavení"
 
-#: models.py:364
+#: models.py:382
 msgid "Clone of"
 msgstr "Kopie"
 
-#: models.py:437
+#: models.py:455
 msgid "display on load"
 msgstr "zobrazit při startu"
 
-#: models.py:438
+#: models.py:456
 msgid "Display this layer on load."
 msgstr "Zobrazit tuto vrstvu na startu."
 
@@ -271,7 +275,7 @@ msgstr "Vyzkoušejte si to hned"
 #: templates/umap/components/alerts/alert.html:64
 #: templates/umap/components/alerts/alert.html:92
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: templates/umap/components/alerts/alert.html:30
 #, python-format
@@ -279,39 +283,39 @@ msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
 "target=\"_blank\">create an account</a> or <a href=\"%(login_url)s\" "
 "target=\"_blank\">log in</a>."
-msgstr ""
+msgstr "Tip pro uživatele: Chcete-li snadno najít zpět své mapy, <a href=\"%(login_url)s\" target=\"_blank\">vytvořte si účet</a> nebo se <a href=\"%(login_url)s\" target=\"_blank\">přihlaste</a>."
 
 #: templates/umap/components/alerts/alert.html:35
 msgid "Here is your secret link to edit the map, please keep it safe:"
-msgstr ""
+msgstr "Zde je váš tajný odkaz pro úpravu mapy, prosím, mějte ho v bezpečí:"
 
 #: templates/umap/components/alerts/alert.html:39
 msgid "Copy link"
-msgstr ""
+msgstr "Zkopírovat odkaz"
 
 #: templates/umap/components/alerts/alert.html:46
 msgid "Enter your email address to receive the secret link:"
-msgstr ""
+msgstr "Zadejte svou e-mailovou adresu, abyste obdrželi tajný odkaz:"
 
 #: templates/umap/components/alerts/alert.html:52
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: templates/umap/components/alerts/alert.html:55
 msgid "Send me the link"
-msgstr ""
+msgstr "Pošlete mi odkaz"
 
 #: templates/umap/components/alerts/alert.html:79
 msgid "See their edits in another tab"
-msgstr ""
+msgstr "Zobrazit jejich úpravy na jiné kartě"
 
 #: templates/umap/components/alerts/alert.html:82
 msgid "Keep your changes and loose theirs"
-msgstr ""
+msgstr "Ponechte si své změny a opusťte cizí"
 
 #: templates/umap/components/alerts/alert.html:85
 msgid "Keep their changes and loose yours"
-msgstr ""
+msgstr "Ponechte si jejich změny a opusťte své"
 
 #: templates/umap/content.html:26
 msgid ""
@@ -330,19 +334,19 @@ msgstr "Toto je ukázková verze, používaná na testování nových vydání u
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "Projekt OpenStreetMap"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "verze"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "Běží na"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -351,19 +355,19 @@ msgstr "Nápověda"
 #: templates/umap/dashboard_menu.html:6
 #, python-format
 msgid "My Maps (%(count)s)"
-msgstr ""
+msgstr "Moje mapy (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:8
 msgid "My Maps"
-msgstr ""
+msgstr "Moje mapy"
 
-#: templates/umap/dashboard_menu.html:11
+#: templates/umap/dashboard_menu.html:12
 msgid "My profile"
 msgstr "Můj profil"
 
-#: templates/umap/dashboard_menu.html:13
+#: templates/umap/dashboard_menu.html:15
 msgid "My teams"
-msgstr ""
+msgstr "Moje týmy"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -377,11 +381,11 @@ msgstr "Inspirujte se, koukněte na mapy jiných"
 msgid "You are logged in. Continuing..."
 msgstr "Jste přihlášeni. Jedeme dál ..."
 
-#: templates/umap/map_list.html:10 views.py:433
+#: templates/umap/map_list.html:11 views.py:433
 msgid "by"
 msgstr ", autor:"
 
-#: templates/umap/map_list.html:18
+#: templates/umap/map_list.html:20
 msgid "More"
 msgstr "Více"
 
@@ -391,15 +395,15 @@ msgstr "Název"
 
 #: templates/umap/map_table.html:11
 msgid "Preview"
-msgstr ""
+msgstr "Náhled"
 
 #: templates/umap/map_table.html:14
 msgid "Who can see"
-msgstr ""
+msgstr "Kdo může vidět"
 
 #: templates/umap/map_table.html:17
 msgid "Who can edit"
-msgstr ""
+msgstr "Kdo může upravit"
 
 #: templates/umap/map_table.html:20
 msgid "Last save"
@@ -415,7 +419,7 @@ msgstr "Akce"
 
 #: templates/umap/map_table.html:41 templates/umap/map_table.html:43
 msgid "Open preview"
-msgstr ""
+msgstr "Otevřít náhled"
 
 #: templates/umap/map_table.html:72 templates/umap/map_table.html:74
 msgid "Share"
@@ -432,42 +436,42 @@ msgstr "Stažení"
 
 #: templates/umap/map_table.html:90 templates/umap/map_table.html:92
 msgid "Clone"
-msgstr ""
+msgstr "Klonovat"
 
 #: templates/umap/map_table.html:101 templates/umap/map_table.html:103
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: templates/umap/map_table.html:117
 msgid "first"
-msgstr ""
+msgstr "první"
 
 #: templates/umap/map_table.html:118
 msgid "previous"
-msgstr ""
+msgstr "předchozí"
 
 #: templates/umap/map_table.html:126
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
-msgstr ""
+msgstr "Strana %(maps_number)s z %(num_pages)s"
 
 #: templates/umap/map_table.html:131
 msgid "next"
-msgstr ""
+msgstr "další"
 
 #: templates/umap/map_table.html:132
 msgid "last"
-msgstr ""
+msgstr "poslední"
 
 #: templates/umap/map_table.html:140
 #, python-format
 msgid "Lines per page: %(per_page)s"
-msgstr ""
+msgstr "Řádek na stranu: %(per_page)s"
 
 #: templates/umap/map_table.html:145
 #, python-format
 msgid "%(count)s maps"
-msgstr ""
+msgstr "%(count)s map"
 
 #: templates/umap/navigation.html:11 templates/umap/user_dashboard.html:6
 msgid "My Dashboard"
@@ -559,20 +563,20 @@ msgstr "Hledej"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "Prohlížet mapy týmu %(current_team)s"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s nemá veřejné mapy."
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
-msgstr ""
+msgstr "Smazat tento tým"
 
 #: templates/umap/team_form.html:47
 msgid "Add user"
-msgstr ""
+msgstr "Přidat uživatele"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
@@ -580,12 +584,12 @@ msgstr "Prohledávat moje mapy"
 
 #: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
 msgid "Map’s title"
-msgstr ""
+msgstr "Název mapy"
 
 #: templates/umap/user_dashboard.html:30
 #, python-format
 msgid "Download %(count)s maps"
-msgstr ""
+msgstr "Stáhnout %(count)s map"
 
 #: templates/umap/user_dashboard.html:40
 msgid "You have no map yet."
@@ -593,76 +597,76 @@ msgstr "Zatím nemáte žádnou mapu."
 
 #: templates/umap/user_teams.html:17
 msgid "Users"
-msgstr ""
+msgstr "Uživatelé"
 
 #: templates/umap/user_teams.html:48
 msgid "New team"
-msgstr ""
+msgstr "Nový tým"
 
 #: views.py:235
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Nelze smazat tým s více než jedním členem"
 
 #: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "Tým \"%(name)s\" byl smazán"
 
 #: views.py:438
 msgid "View the map"
 msgstr "Prohlídnout si tuto mapu"
 
-#: views.py:824
+#: views.py:818
 msgid "See full screen"
-msgstr ""
+msgstr "Zobrazit celou obrazovku"
 
-#: views.py:953
+#: views.py:950
 msgid "Map editors updated with success!"
 msgstr "Seznam přispěvovatelů byl úspěšně upraven!"
 
-#: views.py:989
+#: views.py:986
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Odkaz na úpravu uMap pro vaši mapu: %(map_name)s"
 
-#: views.py:992
+#: views.py:989
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Zde je váš tajný odkaz na úpravu: %(link)s"
 
-#: views.py:999
+#: views.py:996
 #, python-format
 msgid "Can't send email to %(email)s"
-msgstr ""
+msgstr "Nelze odeslat e-mail na %(email)s"
 
-#: views.py:1002
+#: views.py:999
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail odeslán na %(email)s"
 
-#: views.py:1013
+#: views.py:1010
 msgid "Only its owner can delete the map."
 msgstr "Jen vlastník může vymzat tuto mapu."
 
-#: views.py:1016
+#: views.py:1013
 msgid "Map successfully deleted."
-msgstr ""
+msgstr "Mapa byla úspěšně smazána."
 
-#: views.py:1042
+#: views.py:1039
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Byla vytvořena kopie mapy! Pokud chcete upravovat tuto mapu z jiného počítače, použijte tento odkaz: %(anonymous_url)s"
 
-#: views.py:1047
+#: views.py:1044
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulujeme, byla vytvořena kopie mapy!"
 
-#: views.py:1282
+#: views.py:1277
 msgid "Layer successfully deleted."
 msgstr "Vrstva úspěšně vymazána."
 
-#: views.py:1304
+#: views.py:1299
 msgid "Permissions updated with success!"
 msgstr "Oprávnění úspěšně aktualizována!"

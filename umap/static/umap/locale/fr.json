@@ -1,6 +1,6 @@
 {
-    "(area: {measure})": "(surface : {measure})",
-    "(length: {measure})": "(longueur : {measure})",
+    "(area: {measure})": "(surface: {measure})",
+    "(length: {measure})": "(longueur: {measure})",
     "# one hash for main heading": "# un dièse pour titre 1",
     "## two hashes for second heading": "## deux dièses pour titre 2",
     "### three hashes for third heading": "### trois dièses pour titre 3",
@@ -477,7 +477,6 @@
     "Search area": "Chercher un coin",
     "Type area name, or let empty to load data in current map view": "Entrer le nom d'un périmètre géographique, ou laisser vide pour utiliser la vue courante de la carte",
     "Data successfully imported!": "Les données ont été importées!",
-    "My Dashboard ({username})": "Mon tableau de bord ({username})",
     "Clear data": "Effacer les données",
     "Remove layers": "Supprimer les calques",
     "Categorized": "Par catégories",
@@ -506,5 +505,13 @@
     "Max circle radius": "Rayon maximum",
     "Display the open browser control": "Afficher le bouton d'ouverture de l'explorateur",
     "Copy as GeoJSON": "Copier le GeoJSON",
-    "Please zoom in to edit the geometry": "Zoomer pour éditer la géométrie"
+    "Please zoom in to edit the geometry": "Zoomer pour éditer la géométrie",
+    "New map": "Nouvelle carte",
+    "My maps": "Mes cartes",
+    "My teams": "Mes équipes",
+    "My profile": "Mon profil",
+    "Type new owner's username": "Nom d'utilisateur du nouveau propriétaire",
+    "Type editor's username": "Nom d'utilisateur de l'éditeur",
+    "Map": "Carte",
+    "Manage collaborators": "Gérer les collaborateurs"
 }

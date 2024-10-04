@@ -477,7 +477,6 @@ const locale = {
     "Search area": "Pesquisar área",
     "Type area name, or let empty to load data in current map view": "Introduza o nome da área ou deixe em branco para carregar os dados na vista de mapa atual",
     "Data successfully imported!": "Dados importados com sucesso!",
-    "My Dashboard ({username})": "Meu painel de controlo ({username})",
     "Clear data": "Limpar dados",
     "Remove layers": "Remover camadas",
     "Categorized": "Categorizado",
@@ -498,13 +497,23 @@ const locale = {
     "Expression is empty": "A expressão está vazia",
     "OK": "OK",
     "Cancel": "Cancelar",
-    "Attach map to a team": "Attach map to a team",
-    "Display the polygon inverted": "Display the polygon inverted",
-    "Proportional circles": "Proportional circles",
-    "Property name to compute circles": "Property name to compute circles",
-    "Min circle radius": "Min circle radius",
-    "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Attach map to a team": "Anexar mapa a uma equipa",
+    "Display the polygon inverted": "Mostrar o polígono invertido",
+    "Proportional circles": "Círculos proporcionais",
+    "Property name to compute circles": "Nome da propriedade para calcular os círculos",
+    "Min circle radius": "Raio mínimo do círculo",
+    "Max circle radius": "Raio máximo do círculo",
+    "Display the open browser control": "Mostrar o controlo do navegador aberto",
+    "Copy as GeoJSON": "Copiar como GeoJSON",
+    "Please zoom in to edit the geometry": "Amplie para editar a geometria",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }
 L.registerLocale("pt", locale)
 L.setLocale("pt")

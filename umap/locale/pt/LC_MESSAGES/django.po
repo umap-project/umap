@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-30 18:23+0000\n"
+"POT-Creation-Date: 2024-10-04 16:35+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: lecalam, 2024\n"
 "Language-Team: Portuguese (http://app.transifex.com/openstreetmap/umap/language/pt/)\n"
@@ -20,6 +20,10 @@ msgstr ""
 "Language: pt\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
+#: admin.py:16
+msgid "CSV Export"
+msgstr ""
+
 #: forms.py:44 forms.py:70
 msgid "Only editable with secret edit link"
 msgstr "Unicamente editável através de hiperligação secreta"
@@ -28,7 +32,7 @@ msgstr "Unicamente editável através de hiperligação secreta"
 msgid "Everyone can edit"
 msgstr "Todos podem editar"
 
-#: forms.py:69 models.py:423
+#: forms.py:69 models.py:441
 msgid "Inherit"
 msgstr "Herdado"
 
@@ -36,111 +40,111 @@ msgstr "Herdado"
 msgid "Site is readonly for maintenance"
 msgstr "O site está em modo de leitura para manutenção"
 
-#: models.py:54 models.py:73
+#: models.py:55 models.py:74
 msgid "name"
 msgstr "nome"
 
-#: models.py:56 models.py:433
+#: models.py:57 models.py:451
 msgid "description"
 msgstr "descrição"
 
-#: models.py:104
+#: models.py:105
 msgid "details"
 msgstr "detalhes"
 
-#: models.py:105
+#: models.py:106
 msgid "Link to a page where the licence is detailed."
 msgstr "Hiperligação para uma página detalhando a licença."
 
-#: models.py:115
+#: models.py:116
 msgid "URL template using OSM tile format"
 msgstr "Modelo de URL no formato de mosaicos OSM"
 
-#: models.py:121
+#: models.py:122
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordem das camadas de mosaicos na caixa de edição"
 
-#: models.py:167 models.py:424
+#: models.py:168 models.py:442
 msgid "Everyone"
 msgstr "Todos"
 
-#: models.py:168 models.py:174 models.py:425
+#: models.py:169 models.py:175 models.py:443
 msgid "Editors and team only"
-msgstr ""
+msgstr "Apenas editores e equipa"
 
-#: models.py:169 models.py:426
+#: models.py:170 models.py:444
 msgid "Owner only"
 msgstr "Apenas o proprietário"
 
-#: models.py:172
+#: models.py:173
 msgid "Everyone (public)"
 msgstr "Todos (público)"
 
-#: models.py:173
+#: models.py:174
 msgid "Anyone with link"
 msgstr "Quem tiver a hiperligação"
 
-#: models.py:175
+#: models.py:176
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: models.py:178
+#: models.py:179
 msgid "center"
 msgstr "centro"
 
-#: models.py:179
+#: models.py:180
 msgid "zoom"
 msgstr "zoom"
 
-#: models.py:181
+#: models.py:182
 msgid "locate"
 msgstr "localizar"
 
-#: models.py:181
+#: models.py:182
 msgid "Locate user on load?"
 msgstr "Localizar utilizador no início?"
 
-#: models.py:185
+#: models.py:186
 msgid "Choose the map licence."
 msgstr "Escolha uma licença para o mapa."
 
-#: models.py:186
+#: models.py:187
 msgid "licence"
 msgstr "licença"
 
-#: models.py:197
+#: models.py:198
 msgid "owner"
 msgstr "proprietário"
 
-#: models.py:201
+#: models.py:202
 msgid "editors"
 msgstr "editores"
 
-#: models.py:207
+#: models.py:208
 msgid "team"
-msgstr ""
+msgstr "equipa"
 
-#: models.py:213 models.py:447
+#: models.py:214 models.py:465
 msgid "edit status"
 msgstr "editar estado"
 
-#: models.py:218
+#: models.py:219
 msgid "share status"
 msgstr "partilhar estado"
 
-#: models.py:221 models.py:442
+#: models.py:222 models.py:460
 msgid "settings"
 msgstr "parâmetros"
 
-#: models.py:364
+#: models.py:382
 msgid "Clone of"
 msgstr "Clone de"
 
-#: models.py:437
+#: models.py:455
 msgid "display on load"
 msgstr "mostrar no início"
 
-#: models.py:438
+#: models.py:456
 msgid "Display this layer on load."
 msgstr "Mostrar esta camada ao carregar."
 
@@ -324,19 +328,19 @@ msgstr "Esta é uma versão de demonstração, utilizada para testes e pré-lan�
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "Um projeto OpenStreetMap"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "versão"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "Alojado por"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -351,13 +355,13 @@ msgstr "Meus mapas (%(count)s)"
 msgid "My Maps"
 msgstr "Meus mapas"
 
-#: templates/umap/dashboard_menu.html:11
+#: templates/umap/dashboard_menu.html:12
 msgid "My profile"
 msgstr "Meu perfil"
 
-#: templates/umap/dashboard_menu.html:13
+#: templates/umap/dashboard_menu.html:15
 msgid "My teams"
-msgstr ""
+msgstr "Minhas equipas"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -371,11 +375,11 @@ msgstr "Inspire-se, explore os mapas"
 msgid "You are logged in. Continuing..."
 msgstr "Sucesso na identificação. Continuando..."
 
-#: templates/umap/map_list.html:10 views.py:433
+#: templates/umap/map_list.html:11 views.py:433
 msgid "by"
 msgstr "por"
 
-#: templates/umap/map_list.html:18
+#: templates/umap/map_list.html:20
 msgid "More"
 msgstr "Mais"
 
@@ -552,20 +556,20 @@ msgstr "Procurar"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "Ver mapas de %(current_team)s"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s não tem mapas públicos."
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
-msgstr ""
+msgstr "Eliminar esta equipa"
 
 #: templates/umap/team_form.html:47
 msgid "Add user"
-msgstr ""
+msgstr "Adicionar utilizador"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
@@ -586,76 +590,76 @@ msgstr "Ainda não tem nenhum mapa."
 
 #: templates/umap/user_teams.html:17
 msgid "Users"
-msgstr ""
+msgstr "Utilizadores"
 
 #: templates/umap/user_teams.html:48
 msgid "New team"
-msgstr ""
+msgstr "Nova equipa"
 
 #: views.py:235
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Não é possível eliminar uma equipa com mais de um membro"
 
 #: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "A equipa “%(name)s” foi eliminada"
 
 #: views.py:438
 msgid "View the map"
 msgstr "Ver o mapa"
 
-#: views.py:824
+#: views.py:818
 msgid "See full screen"
 msgstr "Ver em ecrã inteiro"
 
-#: views.py:953
+#: views.py:950
 msgid "Map editors updated with success!"
 msgstr "Os editores do mapa foram atualizados com sucesso!"
 
-#: views.py:989
+#: views.py:986
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "A hiperligação de edição do uMap para o seu mapa: %(map_name)s"
 
-#: views.py:992
+#: views.py:989
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aqui está a hiperligação de edição secreta: %(link)s"
 
-#: views.py:999
+#: views.py:996
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Não é possível enviar o email para %(email)s"
 
-#: views.py:1002
+#: views.py:999
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Email enviado para %(email)s"
 
-#: views.py:1013
+#: views.py:1010
 msgid "Only its owner can delete the map."
 msgstr "Só o proprietário pode eliminar o mapa."
 
-#: views.py:1016
+#: views.py:1013
 msgid "Map successfully deleted."
 msgstr "Mapa eliminado com sucesso."
 
-#: views.py:1042
+#: views.py:1039
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "O seu mapa foi clonado! Se quiser editar este mapa noutro computador, por favor utilize esta hiperligação: %(anonymous_url)s"
 
-#: views.py:1047
+#: views.py:1044
 msgid "Congratulations, your map has been cloned!"
 msgstr "Parabéns, o seu mapa foi clonado!"
 
-#: views.py:1282
+#: views.py:1277
 msgid "Layer successfully deleted."
 msgstr "Camada eliminada com sucesso."
 
-#: views.py:1304
+#: views.py:1299
 msgid "Permissions updated with success!"
 msgstr "Permissões atualizadas com sucesso!"

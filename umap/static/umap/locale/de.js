@@ -477,7 +477,6 @@ const locale = {
     "Search area": "Suchgebiet",
     "Type area name, or let empty to load data in current map view": "Gib den Namen des Gebiets ein, oder lass dieses Feld leer um die Daten in dem aktuellen Kartenausschnitt zu laden",
     "Data successfully imported!": "Daten erfolgreich importiert!",
-    "My Dashboard ({username})": "Mein Dashboard ({username})",
     "Clear data": "Daten Löschen",
     "Remove layers": "Ebene entfernen",
     "Categorized": "Kategorisiert",
@@ -506,7 +505,15 @@ const locale = {
     "Max circle radius": "Maximaler Kreis-Radius",
     "Display the open browser control": "Display the open browser control",
     "Copy as GeoJSON": "Als GeoJSON kopieren",
-    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry"
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }
 L.registerLocale("de", locale)
 L.setLocale("de")

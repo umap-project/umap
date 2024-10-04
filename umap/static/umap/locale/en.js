@@ -477,7 +477,6 @@ const locale = {
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
     "Data successfully imported!": "Data successfully imported!",
-    "My Dashboard ({username})": "My Dashboard ({username})",
     "Clear data": "Clear data",
     "Remove layers": "Remove layers",
     "Categorized": "Categorized",
@@ -506,7 +505,15 @@ const locale = {
     "Max circle radius": "Max circle radius",
     "Display the open browser control": "Display the open browser control",
     "Copy as GeoJSON": "Copy as GeoJSON",
-    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry"
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")

@@ -1,6 +1,6 @@
 {
-    "(area: {measure})": "(مساحت: {measure})",
-    "(length: {measure})": "(طول: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# یک هش برای عنوان اصلی",
     "## two hashes for second heading": "## دو هش برای عنوان دوم",
     "### three hashes for third heading": "### سه هش برای عنوان سوم",
@@ -477,7 +477,6 @@
     "Search area": "محدودهٔ جستجو",
     "Type area name, or let empty to load data in current map view": "نام محدوده را بنویسید، یا خالی بگذارید تا برای نمای فعلی نقشه داده‌ها بار شود",
     "Data successfully imported!": "داده با موفقیت درون‌برد شد!",
-    "My Dashboard ({username})": "پیشخان من ({username})",
     "Clear data": "حذف داده",
     "Remove layers": "حذف لایه‌ها",
     "Categorized": "دسته‌بندی‌شده",
@@ -506,5 +505,13 @@
     "Max circle radius": "بیشتری شعاع دایره",
     "Display the open browser control": "نمایش دکمهٔ بازکردن مرورگر",
     "Copy as GeoJSON": "Copy as GeoJSON",
-    "Please zoom in to edit the geometry": "لطفاً برای ویرایش هندسه زوم کنید"
+    "Please zoom in to edit the geometry": "لطفاً برای ویرایش هندسه زوم کنید",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }

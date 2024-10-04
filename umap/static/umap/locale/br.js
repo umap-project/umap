@@ -1,6 +1,6 @@
 const locale = {
-    "(area: {measure})": "(gorread: {measure})",
-    "(length: {measure})": "(pellder: {measure})",
+    "(area: {measure})": "(area: {measure})",
+    "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# un diezenn evit an titl pennañ",
     "## two hashes for second heading": "## div ziezenn evit an eil titl",
     "### three hashes for third heading": "### teir diezenn evit an trede titl",
@@ -477,7 +477,6 @@ const locale = {
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
     "Data successfully imported!": "Roadennoù enporzhiet gant berzh!",
-    "My Dashboard ({username})": "Ma Zaolenn-vourzh ({username})",
     "Clear data": "Skarzhañ ar roadennoù",
     "Remove layers": "Lemel ar gwiskadoù",
     "Categorized": "Dre rummad",
@@ -504,7 +503,17 @@ const locale = {
     "Property name to compute circles": "Property name to compute circles",
     "Min circle radius": "Min circle radius",
     "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Display the open browser control": "Display the open browser control",
+    "Copy as GeoJSON": "Copy as GeoJSON",
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators"
 }
 L.registerLocale("br", locale)
 L.setLocale("br")
