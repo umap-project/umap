@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.7.0b0 - 2024-10-04
+## 2.7.0b1 - 2024-10-04
 
 ### New features
 * delete datalayer's files on delete by @yohanboniface in #2158
@@ -29,6 +29,9 @@
 * display user maps in admin and add in csv export by @yohanboniface in #2169
 * remove zoom in and out from contextmenu by @yohanboniface in #2195
 
+### Changed templates
+* umap/css.html (removed `umap/vendors/contextmenu/leaflet.contextmenu.min.css`)
+* umap/js.html (removed `umap/vendors/contextmenu/leaflet.contextmenu.min.js`)
 
 ## 2.6.3 - 2024-09-11
 
