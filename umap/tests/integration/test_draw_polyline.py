@@ -378,7 +378,7 @@ def test_can_merge_lines(live_server, page, tilelayer, settings):
 
     # Right click and merge nodes
     map.click(button="right", position={"x": 100, "y": 200})
-    map.get_by_role("link", name="Merge lines").click()
+    page.get_by_role("button", name="Merge lines").click()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"]["type"] == "LineString"
