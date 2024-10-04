@@ -106,27 +106,6 @@ const PointMixin = {
   isOnScreen: function (bounds) {
     return bounds.contains(this.getCenter())
   },
-}
-
-export const LeafletMarker = Marker.extend({
-  parentClass: Marker,
-  includes: [FeatureMixin, PointMixin],
-
-  initialize: function (feature, latlng) {
-    FeatureMixin.initialize.call(this, feature, latlng)
-    this.setIcon(this.getIcon())
-  },
-
-  getClass: () => LeafletMarker,
-
-  // Make API consistent with path
-  getLatLngs: function () {
-    return this.getLatLng()
-  },
-
-  setLatLngs: function (latlng) {
-    return this.setLatLng(latlng)
-  },
 
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
@@ -138,9 +117,6 @@ export const LeafletMarker = Marker.extend({
     this.on('editable:drawing:commit', this.onCommit)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
-    this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
-    this.on('popupopen', this.highlight)
-    this.on('popupclose', this.resetHighlight)
   },
 
   _onMouseOut: function () {
@@ -169,6 +145,29 @@ export const LeafletMarker = Marker.extend({
       // do not listen to them
       this.disableEdit()
     }
+  },
+}
+
+export const LeafletMarker = Marker.extend({
+  parentClass: Marker,
+  includes: [FeatureMixin, PointMixin],
+
+  initialize: function (feature, latlng) {
+    FeatureMixin.initialize.call(this, feature, latlng)
+    this.setIcon(this.getIcon())
+  },
+
+  getClass: () => LeafletMarker,
+
+  setLatLngs: function (latlng) {
+    return this.setLatLng(latlng)
+  },
+
+  addInteractions() {
+    PointMixin.addInteractions.call(this)
+    this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
+    this.on('popupopen', this.highlight)
+    this.on('popupclose', this.resetHighlight)
   },
 
   _initIcon: function () {
@@ -433,8 +432,4 @@ export const CircleMarker = BaseCircleMarker.extend({
   getCenter: function () {
     return this._latlng
   },
-  // FIXME when Leaflet.Editable knows about CircleMarker
-  editEnabled: () => false,
-  enableEdit: () => {}, // No-op
-  disableEdit: () => {}, // No-op
 })

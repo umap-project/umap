@@ -67,3 +67,15 @@ def test_basic_circles_layer(map, live_server, page):
         .get_attribute("d")
         .endswith("a2,2 0 1,0 -4,0 ")
     )
+
+
+def test_can_draw_new_circles(openmap, live_server, page):
+    path = Path(__file__).parent.parent / "fixtures/test_circles_layer.geojson"
+    data = json.loads(path.read_text())
+    DataLayerFactory(data=data, map=openmap)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#12/47.2210/-1.5621")
+    paths = page.locator("path")
+    expect(paths).to_have_count(10)
+    page.get_by_title("Draw a marker").click()
+    page.locator("#map").click(position={"x": 200, "y": 200})
+    expect(paths).to_have_count(11)
