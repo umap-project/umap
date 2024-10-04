@@ -1140,23 +1140,6 @@ L.Control.Loading.include({
   },
 })
 
-/*
- * Make it dynamic
- */
-U.ContextMenu = L.Map.ContextMenu.extend({
-  _createItems: function (e) {
-    this._map.setContextMenuItems(e)
-    L.Map.ContextMenu.prototype._createItems.call(this)
-  },
-
-  _showAtPoint: function (pt, e) {
-    this._items = []
-    this._container.innerHTML = ''
-    this._createItems(e)
-    L.Map.ContextMenu.prototype._showAtPoint.call(this, pt, e)
-  },
-})
-
 U.Editable = L.Editable.extend({
   initialize: function (map, options) {
     L.Editable.prototype.initialize.call(this, map, options)

@@ -18,14 +18,18 @@ export default class ContextMenu extends Positioned {
   open([x, y], items) {
     this.container.innerHTML = ''
     for (const item of items) {
-      const li = loadTemplate(
-        `<li class="${item.className || ''}"><button tabindex="0" class="flat">${item.label}</button></li>`
-      )
-      li.addEventListener('click', () => {
-        this.close()
-        item.action()
-      })
-      this.container.appendChild(li)
+      if (item === '-') {
+        this.container.appendChild(document.createElement('hr'))
+      } else {
+        const li = loadTemplate(
+          `<li class="${item.className || ''}"><button tabindex="0" class="flat">${item.label}</button></li>`
+        )
+        li.addEventListener('click', () => {
+          this.close()
+          item.action()
+        })
+        this.container.appendChild(li)
+      }
     }
     document.body.appendChild(this.container)
     this.computePosition([x, y])

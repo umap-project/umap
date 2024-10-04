@@ -9,3 +9,8 @@
 .umap-contextmenu li + li {
     margin-top: var(--text-margin);
 }
+
+.umap-contextmenu hr {
+    margin-top: var(--text-margin);
+    margin-bottom: var(--text-margin);
+}

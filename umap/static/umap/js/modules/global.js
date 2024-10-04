@@ -9,6 +9,7 @@ import {
 } from './autocomplete.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
+import ContextMenu from './ui/contextmenu.js'
 import Facets from './facets.js'
 import { Formatter } from './formatter.js'
 import Help from './help.js'
@@ -43,6 +44,7 @@ window.U = {
   AutocompleteDatalist,
   Browser,
   Caption,
+  ContextMenu,
   DataLayer,
   DataLayerPermissions,
   Dialog,

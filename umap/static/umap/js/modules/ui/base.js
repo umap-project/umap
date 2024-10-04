@@ -72,9 +72,9 @@ export class Positioned {
       left = x - this.container.offsetWidth
     }
     if (y < window.innerHeight / 2) {
-      top = y
+      top = Math.min(y, window.innerHeight - this.container.offsetHeight)
     } else {
-      top = y - this.container.offsetHeight
+      top = Math.max(0, y - this.container.offsetHeight)
     }
     this.setPosition({ left, top })
   }

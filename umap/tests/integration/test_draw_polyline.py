@@ -157,8 +157,10 @@ def test_can_draw_multi(live_server, page, tilelayer):
     page.keyboard.press("Escape")
     expect(add_shape).to_be_hidden()
     lines.first.click(button="right", position={"x": 10, "y": 1})
-    expect(page.get_by_role("link", name="Transform to polygon")).to_be_hidden()
-    expect(page.get_by_role("link", name="Remove shape from the multi")).to_be_visible()
+    expect(page.get_by_role("button", name="Transform to polygon")).to_be_hidden()
+    expect(
+        page.get_by_role("button", name="Remove shape from the multi")
+    ).to_be_visible()
 
 
 def test_can_transfer_shape_from_simple_polyline(live_server, page, tilelayer):
@@ -188,7 +190,7 @@ def test_can_transfer_shape_from_simple_polyline(live_server, page, tilelayer):
     # Now that line 2 is selected, right click on first one
     # and transfer shape
     lines.first.click(position={"x": 10, "y": 1}, button="right")
-    page.get_by_role("link", name="Transfer shape to edited feature").click()
+    page.get_by_role("button", name="Transfer shape to edited feature").click()
     expect(lines).to_have_count(1)
 
 
@@ -227,7 +229,7 @@ def test_can_transfer_shape_from_multi(live_server, page, tilelayer, settings):
     # Now that line 2 is selected, right click on first one
     # and transfer shape
     lines.first.click(position={"x": 10, "y": 1}, button="right")
-    page.get_by_role("link", name="Transfer shape to edited feature").click()
+    page.get_by_role("button", name="Transfer shape to edited feature").click()
     expect(lines).to_have_count(2)
     data = save_and_get_json(page)
     assert data["features"][0]["geometry"] == {
@@ -259,7 +261,9 @@ def test_can_extract_shape(live_server, page, tilelayer):
     # Click again to finish
     map.click(position={"x": 100, "y": 200})
     expect(lines).to_have_count(1)
-    extract_button = page.get_by_role("link", name="Extract shape to separate feature")
+    extract_button = page.get_by_role(
+        "button", name="Extract shape to separate feature"
+    )
     expect(extract_button).to_be_hidden()
     page.get_by_title("Add a line to the current multi").click()
     map.click(position={"x": 250, "y": 250})
@@ -287,7 +291,7 @@ def test_can_clone_polyline(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 200})
     expect(lines).to_have_count(1)
     lines.first.click(position={"x": 10, "y": 1}, button="right")
-    page.get_by_role("link", name="Clone this feature").click()
+    page.get_by_role("button", name="Clone this feature").click()
     expect(lines).to_have_count(2)
     data = save_and_get_json(page)
     assert len(data["features"]) == 2
@@ -313,7 +317,7 @@ def test_can_transform_polyline_to_polygon(live_server, page, tilelayer, setting
     expect(paths).to_have_count(1)
     expect(polygons).to_have_count(0)
     paths.first.click(position={"x": 10, "y": 1}, button="right")
-    page.get_by_role("link", name="Transform to polygon").click()
+    page.get_by_role("button", name="Transform to polygon").click()
     expect(polygons).to_have_count(1)
     expect(paths).to_have_count(1)
     data = save_and_get_json(page)

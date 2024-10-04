@@ -596,6 +596,55 @@ class Feature {
       }
     }
   }
+
+  getContextMenuItems(event) {
+    const permalink = this.getPermalink()
+    let items = []
+    if (permalink) {
+      items.push({
+        label: translate('Permalink'),
+        action: () => {
+          window.open(permalink)
+        },
+      })
+    }
+    items.push({
+      label: translate('Copy as GeoJSON'),
+      action: () => {
+        L.Util.copyToClipboard(JSON.stringify(this.toGeoJSON()))
+        this.map.tooltip.open({ content: L._('✅ Copied!') })
+      },
+    })
+    if (this.map.editEnabled && !this.isReadOnly()) {
+      items = items.concat(this.getContextMenuEditItems(event))
+    }
+    return items
+  }
+
+  getContextMenuEditItems() {
+    let items = ['-']
+    if (this.map.editedFeature !== this) {
+      items.push({
+        label: `${translate('Edit this feature')} (⇧+Click)`,
+        action: () => this.edit(),
+      })
+    }
+    items = items.concat(
+      {
+        label: this.map.help.displayLabel('EDIT_FEATURE_LAYER'),
+        action: () => this.datalayer.edit(),
+      },
+      {
+        label: translate('Delete this feature'),
+        action: () => this.confirmDelete(),
+      },
+      {
+        label: translate('Clone this feature'),
+        action: () => this.clone(),
+      }
+    )
+    return items
+  }
 }
 
 export class Point extends Feature {
@@ -768,6 +817,62 @@ class Path extends Feature {
     }
     if (callback) callback.call(this)
   }
+
+  getContextMenuItems(event) {
+    const items = super.getContextMenuItems(event)
+    items.push({
+      label: translate('Display measure'),
+      action: () => Alert.info(this.ui.getMeasure()),
+    })
+    if (this.map.editEnabled && !this.isReadOnly() && this.isMulti()) {
+      items.push(...this.getContextMenuMultiItems(event))
+    }
+    return items
+  }
+
+  getContextMenuMultiItems(event) {
+    const items = [
+      '-',
+      {
+        label: translate('Remove shape from the multi'),
+        action: () => {
+          this.ui.enableEdit().deleteShapeAt(event.latlng)
+        },
+      },
+    ]
+    const shape = this.ui.shapeAt(event.latlng)
+    if (this.ui._latlngs.indexOf(shape) > 0) {
+      items.push({
+        label: translate('Make main shape'),
+        action: () => {
+          this.ui.enableEdit().deleteShape(shape)
+          this.ui.editor.prependShape(shape)
+        },
+      })
+    }
+    return items
+  }
+
+  getContextMenuEditItems(event) {
+    const items = super.getContextMenuEditItems(event)
+    if (this.map?.editedFeature !== this && this.isSameClass(this.map.editedFeature)) {
+      items.push({
+        label: translate('Transfer shape to edited feature'),
+        action: () => {
+          this.transferShape(event.latlng, this.map.editedFeature)
+        },
+      })
+    }
+    if (this.isMulti()) {
+      items.push({
+        label: translate('Extract shape to separate feature'),
+        action: () => {
+          this.ui.isolateShape(event.latlng)
+        },
+      })
+    }
+    return items
+  }
 }
 
 export class LineString extends Path {
@@ -882,6 +987,41 @@ export class LineString extends Path {
   isMulti() {
     return !LineUtil.isFlat(this.coordinates) && this.coordinates.length > 1
   }
+
+  getContextMenuEditItems(event) {
+    const items = super.getContextMenuEditItems(event)
+    const vertexClicked = event.vertex
+    if (!this.isMulti()) {
+      items.push({
+        label: translate('Transform to polygon'),
+        action: () => this.toPolygon(),
+      })
+    }
+    if (vertexClicked) {
+      const index = event.vertex.getIndex()
+      if (index !== 0 && index !== event.vertex.getLastIndex()) {
+        items.push({
+          label: translate('Split line'),
+          action: () => event.vertex.split(),
+        })
+      } else if (index === 0 || index === event.vertex.getLastIndex()) {
+        items.push({
+          label: this.map.help.displayLabel('CONTINUE_LINE'),
+          action: () => event.vertex.continue(),
+        })
+      }
+    }
+    return items
+  }
+
+  getContextMenuMultiItems(event) {
+    const items = super.getContextMenuMultiItems(event)
+    items.push({
+      label: translate('Merge lines'),
+      action: () => this.mergeShapes(),
+    })
+    return items
+  }
 }
 
 export class Polygon extends Path {
@@ -990,6 +1130,23 @@ export class Polygon extends Path {
   getInplaceToolbarActions(event) {
     const items = super.getInplaceToolbarActions(event)
     items.push(U.CreateHoleAction)
+    return items
+  }
+
+  getContextMenuEditItems(event) {
+    const items = super.getContextMenuEditItems(event)
+    const shape = this.ui.shapeAt(event.latlng)
+    // No multi and no holes.
+    if (shape && !this.isMulti() && (LineUtil.isFlat(shape) || shape.length === 1)) {
+      items.push({
+        label: translate('Transform to lines'),
+        action: () => this.toLineString(),
+      })
+    }
+    items.push({
+      label: translate('Start a hole here'),
+      action: () => this.ui.startHole(event),
+    })
     return items
   }
 }

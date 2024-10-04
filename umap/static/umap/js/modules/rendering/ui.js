@@ -9,6 +9,7 @@ import {
   latLng,
   LatLng,
   LatLngBounds,
+  DomEvent,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
@@ -36,7 +37,7 @@ const FeatureMixin = {
   },
 
   addInteractions: function () {
-    this.on('contextmenu editable:vertex:contextmenu', this._showContextMenu)
+    this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
   },
 
@@ -61,7 +62,7 @@ const FeatureMixin = {
         }).addTo(this._map, this.feature, event.latlng)
       }
     }
-    L.DomEvent.stop(event)
+    DomEvent.stop(event)
   },
 
   resetTooltip: function () {
@@ -83,67 +84,14 @@ const FeatureMixin = {
     }
   },
 
-  _showContextMenu: function (event) {
-    L.DomEvent.stop(event)
-    const pt = this._map.mouseEventToContainerPoint(event.originalEvent)
-    event.relatedTarget = this
-    this._map.contextmenu.showAt(pt, event)
-  },
-
-  getContextMenuItems: function (event) {
-    const permalink = this.feature.getPermalink()
-    let items = []
-    if (permalink) {
-      items.push({
-        text: translate('Permalink'),
-        callback: () => {
-          window.open(permalink)
-        },
-      })
-    }
-    items.push({
-      text: translate('Copy as GeoJSON'),
-      callback: () => {
-        L.Util.copyToClipboard(JSON.stringify(this.feature.toGeoJSON()))
-        this._map.tooltip.open({ content: L._('✅ Copied!') })
-      },
-    })
-    if (this._map.editEnabled && !this.feature.isReadOnly()) {
-      items = items.concat(this.getContextMenuEditItems(event))
-    }
-    return items
-  },
-
-  getContextMenuEditItems: function () {
-    let items = ['-']
-    if (this._map.editedFeature !== this) {
-      items.push({
-        text: `${translate('Edit this feature')} (⇧+Click)`,
-        callback: this.feature.edit,
-        context: this.feature,
-        iconCls: 'umap-edit',
-      })
-    }
-    items = items.concat(
-      {
-        text: this._map.help.displayLabel('EDIT_FEATURE_LAYER'),
-        callback: this.feature.datalayer.edit,
-        context: this.feature.datalayer,
-        iconCls: 'umap-edit',
-      },
-      {
-        text: translate('Delete this feature'),
-        callback: this.feature.confirmDelete,
-        context: this.feature,
-        iconCls: 'umap-delete',
-      },
-      {
-        text: translate('Clone this feature'),
-        callback: this.feature.clone,
-        context: this.feature,
-      }
+  onContextMenu: function (event) {
+    DomEvent.stop(event)
+    const items = this._map.getContextMenuItems(event)
+    items.push('-', ...this.feature.getContextMenuItems(event))
+    this._map.contextmenu.open(
+      [event.originalEvent.clientX, event.originalEvent.clientY],
+      items
     )
-    return items
   },
 
   onCommit: function () {
@@ -360,65 +308,6 @@ const PathMixin = {
     }).addTo(this._map, this, event.latlng, event.vertex)
   },
 
-  getContextMenuItems: function (event) {
-    let items = FeatureMixin.getContextMenuItems.call(this, event)
-    items.push({
-      text: translate('Display measure'),
-      callback: () => Alert.info(this.getMeasure()),
-    })
-    if (this._map.editEnabled && !this.feature.isReadOnly() && this.feature.isMulti()) {
-      items = items.concat(this.getContextMenuMultiItems(event))
-    }
-    return items
-  },
-
-  getContextMenuMultiItems: function (event) {
-    const items = [
-      '-',
-      {
-        text: translate('Remove shape from the multi'),
-        callback: () => {
-          this.enableEdit().deleteShapeAt(event.latlng)
-        },
-      },
-    ]
-    const shape = this.shapeAt(event.latlng)
-    if (this._latlngs.indexOf(shape) > 0) {
-      items.push({
-        text: translate('Make main shape'),
-        callback: () => {
-          this.enableEdit().deleteShape(shape)
-          this.editor.prependShape(shape)
-        },
-      })
-    }
-    return items
-  },
-
-  getContextMenuEditItems: function (event) {
-    const items = FeatureMixin.getContextMenuEditItems.call(this, event)
-    if (
-      this._map?.editedFeature !== this.feature &&
-      this.feature.isSameClass(this._map.editedFeature)
-    ) {
-      items.push({
-        text: translate('Transfer shape to edited feature'),
-        callback: () => {
-          this.feature.transferShape(event.latlng, this._map.editedFeature)
-        },
-      })
-    }
-    if (this.feature.isMulti()) {
-      items.push({
-        text: translate('Extract shape to separate feature'),
-        callback: () => {
-          this.isolateShape(event.latlng)
-        },
-      })
-    }
-    return items
-  },
-
   isolateShape: function (atLatLng) {
     if (!this.feature.isMulti()) return
     const shape = this.enableEdit().deleteShapeAt(atLatLng)
@@ -463,46 +352,6 @@ export const LeafletPolyline = Polyline.extend({
     return actions
   },
 
-  getContextMenuEditItems: function (event) {
-    const items = PathMixin.getContextMenuEditItems.call(this, event)
-    const vertexClicked = event.vertex
-    let index
-    if (!this.feature.isMulti()) {
-      items.push({
-        text: translate('Transform to polygon'),
-        callback: this.feature.toPolygon,
-        context: this.feature,
-      })
-    }
-    if (vertexClicked) {
-      index = event.vertex.getIndex()
-      if (index !== 0 && index !== event.vertex.getLastIndex()) {
-        items.push({
-          text: translate('Split line'),
-          callback: event.vertex.split,
-          context: event.vertex,
-        })
-      } else if (index === 0 || index === event.vertex.getLastIndex()) {
-        items.push({
-          text: this._map.help.displayLabel('CONTINUE_LINE'),
-          callback: event.vertex.continue,
-          context: event.vertex.continue,
-        })
-      }
-    }
-    return items
-  },
-
-  getContextMenuMultiItems: function (event) {
-    const items = PathMixin.getContextMenuMultiItems.call(this, event)
-    items.push({
-      text: translate('Merge lines'),
-      callback: this.feature.mergeShapes,
-      context: this.feature,
-    })
-    return items
-  },
-
   getMeasure: function (shape) {
     // FIXME: compute from data in feature (with TurfJS)
     const length = L.GeoUtil.lineLength(this._map, shape || this._defaultShape())
@@ -515,29 +364,6 @@ export const LeafletPolygon = Polygon.extend({
   includes: [FeatureMixin, PathMixin],
 
   getClass: () => LeafletPolygon,
-
-  getContextMenuEditItems: function (event) {
-    const items = PathMixin.getContextMenuEditItems.call(this, event)
-    const shape = this.shapeAt(event.latlng)
-    // No multi and no holes.
-    if (
-      shape &&
-      !this.feature.isMulti() &&
-      (LineUtil.isFlat(shape) || shape.length === 1)
-    ) {
-      items.push({
-        text: translate('Transform to lines'),
-        callback: this.feature.toLineString,
-        context: this.feature,
-      })
-    }
-    items.push({
-      text: translate('Start a hole here'),
-      callback: this.startHole,
-      context: this,
-    })
-    return items
-  },
 
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)

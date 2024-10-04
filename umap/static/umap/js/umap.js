@@ -58,6 +58,7 @@ U.Map = L.Map.extend({
     this.panel = new U.Panel(this)
     this.dialog = new U.Dialog({ className: 'dark' })
     this.tooltip = new U.Tooltip(this._controlContainer)
+    this.contextmenu = new U.ContextMenu()
     if (this.hasEditMode()) {
       this.editPanel = new U.EditPanel(this)
       this.fullPanel = new U.FullPanel(this)
@@ -197,8 +198,8 @@ U.Map = L.Map.extend({
 
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
-    this.initContextMenu()
     this.on('click', this.closeInplaceToolbar)
+    this.on('contextmenu', this.onContextMenu)
   },
 
   initSyncEngine: async function () {
@@ -1683,118 +1684,107 @@ U.Map = L.Map.extend({
     this.loader.onAdd(this)
   },
 
-  initContextMenu: function () {
-    this.contextmenu = new U.ContextMenu(this)
-    this.contextmenu.enable()
-  },
-
-  setContextMenuItems: function (e) {
-    let items = []
+  getContextMenuItems: function (event) {
+    const items = []
     if (this._zoom !== this.getMaxZoom()) {
       items.push({
-        text: L._('Zoom in'),
-        callback: function () {
-          this.zoomIn()
-        },
+        label: L._('Zoom in'),
+        action: () => this.zoomIn(),
       })
     }
     if (this._zoom !== this.getMinZoom()) {
       items.push({
-        text: L._('Zoom out'),
-        callback: function () {
-          this.zoomOut()
-        },
+        label: L._('Zoom out'),
+        action: () => this.zoomOut(),
       })
-    }
-    if (e?.relatedTarget) {
-      if (e.relatedTarget.getContextMenuItems) {
-        items = items.concat(e.relatedTarget.getContextMenuItems(e))
-      }
     }
     if (this.hasEditMode()) {
       items.push('-')
       if (this.editEnabled) {
         if (!this.isDirty) {
           items.push({
-            text: this.help.displayLabel('STOP_EDIT'),
-            callback: this.disableEdit,
+            label: this.help.displayLabel('STOP_EDIT'),
+            action: () => this.disableEdit(),
           })
         }
         if (this.options.enableMarkerDraw) {
           items.push({
-            text: this.help.displayLabel('DRAW_MARKER'),
-            callback: this.startMarker,
-            context: this,
+            label: this.help.displayLabel('DRAW_MARKER'),
+            action: () => this.startMarker(event),
           })
         }
         if (this.options.enablePolylineDraw) {
           items.push({
-            text: this.help.displayLabel('DRAW_POLYGON'),
-            callback: this.startPolygon,
-            context: this,
+            label: this.help.displayLabel('DRAW_POLYGON'),
+            action: () => this.startPolygon(event),
           })
         }
         if (this.options.enablePolygonDraw) {
           items.push({
-            text: this.help.displayLabel('DRAW_LINE'),
-            callback: this.startPolyline,
-            context: this,
+            label: this.help.displayLabel('DRAW_LINE'),
+            action: () => this.startPolyline(event),
           })
         }
         items.push('-')
         items.push({
-          text: L._('Help'),
-          callback: function () {
-            this.help.show('edit')
-          },
+          label: L._('Help'),
+          action: () => this.help.show('edit'),
         })
       } else {
         items.push({
-          text: this.help.displayLabel('TOGGLE_EDIT'),
-          callback: this.enableEdit,
+          label: this.help.displayLabel('TOGGLE_EDIT'),
+          action: () => this.enableEdit(),
         })
       }
     }
     items.push(
       '-',
       {
-        text: L._('Open browser'),
-        callback: () => this.openBrowser('layers'),
+        label: L._('Open browser'),
+        action: () => this.openBrowser('layers'),
       },
       {
-        text: L._('Browse data'),
-        callback: () => this.openBrowser('data'),
+        label: L._('Browse data'),
+        action: () => this.openBrowser('data'),
       }
     )
     if (this.options.facetKey) {
       items.push({
-        text: L._('Filter data'),
-        callback: () => this.openBrowser('filters'),
+        label: L._('Filter data'),
+        action: () => this.openBrowser('filters'),
       })
     }
     items.push(
       {
-        text: L._('Open caption'),
-        callback: this.openCaption,
+        label: L._('Open caption'),
+        action: () => this.openCaption(),
       },
       {
-        text: this.help.displayLabel('SEARCH'),
-        callback: this.search,
+        label: this.help.displayLabel('SEARCH'),
+        action: () => this.search(event),
       }
     )
     if (this.options.urls.routing) {
       items.push('-', {
-        text: L._('Directions from here'),
-        callback: this.openExternalRouting,
+        label: L._('Directions from here'),
+        action: () => this.openExternalRouting(event),
       })
     }
     if (this.options.urls.edit_in_osm) {
       items.push('-', {
-        text: L._('Edit in OpenStreetMap'),
-        callback: this.editInOSM,
+        label: L._('Edit in OpenStreetMap'),
+        action: () => this.editInOSM(event),
       })
     }
-    this.options.contextmenuItems = items
+    return items
+  },
+
+  onContextMenu: function (event) {
+    const items = this.getContextMenuItems(event)
+    this.contextmenu.open(
+      [event.originalEvent.clientX, event.originalEvent.clientY],
+      items
+    )
   },
 
   editInOSM: function (e) {
