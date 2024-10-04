@@ -10,6 +10,7 @@ node_modules
 umap.conf
 /data
 /static
+package-lock.json
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
