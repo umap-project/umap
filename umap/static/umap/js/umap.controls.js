@@ -578,11 +578,15 @@ const ControlsMixin = {
   ],
 
   renderEditToolbar: function () {
-    const container = L.DomUtil.create(
-      'div',
-      'umap-main-edit-toolbox with-transition dark',
-      this._controlContainer
-    )
+    const className = 'umap-main-edit-toolbox'
+    const container =
+      document.querySelector(`.${className}`) ||
+      L.DomUtil.create(
+        'div',
+        `${className} with-transition dark`,
+        this._controlContainer
+      )
+    container.innerHTML = ''
     const leftContainer = L.DomUtil.create('div', 'umap-left-edit-toolbox', container)
     const rightContainer = L.DomUtil.create('div', 'umap-right-edit-toolbox', container)
     const logo = L.DomUtil.create('div', 'logo', leftContainer)
@@ -623,23 +627,10 @@ const ControlsMixin = {
       },
       this
     )
-    const update = () => {
-      const status = this.permissions.getShareStatusDisplay()
-      nameButton.textContent = this.getDisplayName()
-      // status is not set until map is saved once
-      if (status) {
-        shareStatusButton.textContent = L._('Visibility: {status}', {
-          status: status,
-        })
-      }
-    }
-    update()
-    this.once('saved', L.bind(update, this))
     if (this.options.editMode === 'advanced') {
       L.DomEvent.on(nameButton, 'click', this.editCaption, this)
       L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
-    this.on('postsync', L.bind(update, this))
     if (this.options.user?.id) {
       L.DomUtil.createLink(
         'umap-user',

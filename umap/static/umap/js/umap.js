@@ -200,6 +200,7 @@ U.Map = L.Map.extend({
     this.backup()
     this.on('click', this.closeInplaceToolbar)
     this.on('contextmenu', this.onContextMenu)
+    this.propagate()
   },
 
   initSyncEngine: async function () {
@@ -231,6 +232,7 @@ U.Map = L.Map.extend({
           this.renderEditToolbar()
           this.renderControls()
           this.browser.redraw()
+          this.propagate()
           break
         case 'data':
           this.redrawVisibleDataLayers()
@@ -1097,6 +1099,7 @@ U.Map = L.Map.extend({
     } else {
       window.location = data.url
     }
+    this.propagate()
     return true
   },
 
@@ -1116,6 +1119,22 @@ U.Map = L.Map.extend({
     this.isDirty = false
     this.renderEditToolbar()
     this.fire('saved')
+  },
+
+  propagate: function () {
+    let els = document.querySelectorAll('.map-name')
+    for (const el of els) {
+      el.textContent = this.getDisplayName()
+    }
+    const status = this.permissions.getShareStatusDisplay()
+    els = document.querySelectorAll('.share-status')
+    for (const el of els) {
+      if (status) {
+        el.textContent = L._('Visibility: {status}', {
+          status: status,
+        })
+      }
+    }
   },
 
   star: async function () {
