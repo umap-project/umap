@@ -1686,20 +1686,7 @@ U.Map = L.Map.extend({
 
   getContextMenuItems: function (event) {
     const items = []
-    if (this._zoom !== this.getMaxZoom()) {
-      items.push({
-        label: L._('Zoom in'),
-        action: () => this.zoomIn(),
-      })
-    }
-    if (this._zoom !== this.getMinZoom()) {
-      items.push({
-        label: L._('Zoom out'),
-        action: () => this.zoomOut(),
-      })
-    }
     if (this.hasEditMode()) {
-      items.push('-')
       if (this.editEnabled) {
         if (!this.isDirty) {
           items.push({
