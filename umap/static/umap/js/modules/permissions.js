@@ -42,10 +42,6 @@ export class MapPermissions {
     return !this.map.options.permissions.owner
   }
 
-  getMap() {
-    return this.map
-  }
-
   _editAnonymous(container) {
     const fields = []
     if (this.isOwner()) {
@@ -257,7 +253,7 @@ export class DataLayerPermissions {
     return this._isDirty
   }
 
-  getMap() {
+  get map() {
     return this.datalayer.map
   }
 
@@ -270,7 +266,7 @@ export class DataLayerPermissions {
           label: translate('Who can edit "{layer}"', {
             layer: this.datalayer.getName(),
           }),
-          selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
+          selectOptions: this.map.options.datalayer_edit_statuses,
         },
       ],
     ]
@@ -282,8 +278,8 @@ export class DataLayerPermissions {
   }
 
   getUrl() {
-    return Utils.template(this.datalayer.map.options.urls.datalayer_permissions, {
-      map_id: this.datalayer.map.options.umap_id,
+    return this.map.urls.get('datalayer_permissions', {
+      map_id: this.map.options.umap_id,
       pk: this.datalayer.umap_id,
     })
   }
@@ -292,7 +288,7 @@ export class DataLayerPermissions {
     if (!this.isDirty) return
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
-    const [data, response, error] = await this.datalayer.map.server.post(
+    const [data, response, error] = await this.map.server.post(
       this.getUrl(),
       {},
       formData
