@@ -5,10 +5,14 @@ export default class URLs {
     this.urls = serverUrls
   }
 
+  has(urlName) {
+    return urlName in this.urls
+  }
+
   get(urlName, params) {
     if (typeof this[urlName] === 'function') return this[urlName](params)
 
-    if (this.urls.hasOwnProperty(urlName)) {
+    if (this.has(urlName)) {
       return template(this.urls[urlName], params)
     }
     throw `Unable to find a URL for route ${urlName}`

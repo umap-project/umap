@@ -655,10 +655,6 @@ const ControlsMixin = {
           action: this.urls.get('map_new'),
         },
         {
-          label: L._('My profile'),
-          action: this.urls.get('user_profile'),
-        },
-        {
           label: L._('My maps'),
           action: this.urls.get('user_dashboard'),
         },
@@ -667,6 +663,12 @@ const ControlsMixin = {
           action: this.urls.get('user_teams'),
         },
       ]
+      if (this.urls.has('user_profile')) {
+        actions.push({
+          label: L._('My profile'),
+          action: this.urls.get('user_profile'),
+        })
+      }
       button.addEventListener('click', () => {
         const x = button.offsetLeft
         const y = button.offsetTop + button.offsetHeight

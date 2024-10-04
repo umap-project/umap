@@ -94,4 +94,4 @@ def test_login_from_map_page(live_server, page, tilelayer, settings, user, conte
     # Save should have proceed
     assert Map.objects.count() == 1
     # Use name should now appear on the header toolbar
-    expect(page.get_by_text("My Dashboard (Joe)")).to_be_visible()
+    expect(page.get_by_role("button", name="Joe")).to_be_visible()
