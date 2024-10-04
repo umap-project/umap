@@ -632,14 +632,39 @@ const ControlsMixin = {
       L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
     }
     if (this.options.user?.id) {
-      L.DomUtil.createLink(
-        'umap-user',
-        rightContainer,
-        L._('My Dashboard ({username})', {
-          username: this.options.user.name,
-        }),
-        this.options.user.url
-      )
+      const button = U.Utils.loadTemplate(`
+        <button class="umap-user flat" type="button">
+          <i class="icon icon-16 icon-profile"></i>
+          <span>${this.options.user.name}</span>
+        </button>
+        `)
+      rightContainer.appendChild(button)
+      const menu = new U.ContextMenu({ className: 'dark', fixed: true })
+      const actions = [
+        {
+          label: L._('New map'),
+          action: this.urls.get('map_new'),
+        },
+        {
+          label: L._('My maps'),
+          action: this.urls.get('user_dashboard'),
+        },
+        {
+          label: L._('My teams'),
+          action: this.urls.get('user_teams'),
+        },
+      ]
+      if (this.urls.has('user_profile')) {
+        actions.push({
+          label: L._('My profile'),
+          action: this.urls.get('user_profile'),
+        })
+      }
+      button.addEventListener('click', () => {
+        const x = button.offsetLeft
+        const y = button.offsetTop + button.offsetHeight
+        menu.open([x, y], actions)
+      })
     }
     this.help.getStartedLink(rightContainer)
     const controlEditCancel = L.DomUtil.createButton(
@@ -799,7 +824,8 @@ U.TileLayerControl = L.Control.IconLayers.extend({
     )
     const button = L.DomUtil.element({
       tagName: 'button',
-      className: 'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
+      className:
+        'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
       textContent: '+',
       parent: lastRow,
     })

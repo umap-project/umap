@@ -15,11 +15,16 @@ export default class ContextMenu extends Positioned {
     })
   }
 
-  open([x, y], items) {
+  open([left, top], items) {
     this.container.innerHTML = ''
     for (const item of items) {
       if (item === '-') {
         this.container.appendChild(document.createElement('hr'))
+      } else if (typeof item.action === 'string') {
+        const li = loadTemplate(
+          `<li class="${item.className || ''}"><a tabindex="0" href="${item.action}">${item.label}</a></li>`
+        )
+        this.container.appendChild(li)
       } else {
         const li = loadTemplate(
           `<li class="${item.className || ''}"><button tabindex="0" class="flat">${item.label}</button></li>`
@@ -32,14 +37,22 @@ export default class ContextMenu extends Positioned {
       }
     }
     document.body.appendChild(this.container)
-    this.computePosition([x, y])
-    this.container.querySelector('button').focus()
-    this.container.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        event.stopPropagation()
-        this.close()
-      }
-    })
+    if (this.options.fixed) {
+      this.setPosition({ left, top })
+    } else {
+      this.computePosition([left, top])
+    }
+    this.container.querySelector('li > *').focus()
+    this.container.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape') {
+          event.stopPropagation()
+          this.close()
+        }
+      },
+      { once: true }
+    )
   }
 
   close() {
