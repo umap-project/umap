@@ -40,7 +40,7 @@ def test_map_name_impacts_ui(live_server, page, tilelayer):
 
     name_input.fill("something else")
 
-    expect(page.get_by_role("button", name="something else").nth(1)).to_be_visible()
+    expect(page.get_by_role("button", name="something else").first).to_be_visible()
 
 
 def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):

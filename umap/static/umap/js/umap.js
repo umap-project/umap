@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
+  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -110,10 +110,9 @@ U.Map = L.Map.extend({
       delete this.options.advancedFilterKey
     }
 
-    // Global storage for retrieving datalayers and features
-    this.datalayers = {}
-    this.datalayers_index = []
-    this.dirty_datalayers = []
+    // Global storage for retrieving datalayers and features.
+    this.datalayers = {} // All datalayers, including deleted.
+    this.datalayers_index = [] // Datalayers actually on the map and ordered.
     this.features_index = {}
 
     // Needed for actions labels
@@ -489,7 +488,7 @@ U.Map = L.Map.extend({
   loadDataLayers: async function () {
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
-    for (const datalayer of Object.values(this.datalayers)) {
+    for (const datalayer of this.datalayers_index) {
       if (datalayer.showAtLoad()) await datalayer.show()
     }
     this.dataloaded = true
@@ -935,6 +934,7 @@ U.Map = L.Map.extend({
       if (mustReindex) datalayer.reindex()
       datalayer.redraw()
     })
+    this.propagate()
     this.fire('postsync')
     this.isDirty = true
   },
@@ -998,12 +998,12 @@ U.Map = L.Map.extend({
     if (this.editTools) this.editTools.stopDrawing()
     this.resetOptions()
     this.datalayers_index = [].concat(this._datalayers_index_bk)
-    this.dirty_datalayers.slice().forEach((datalayer) => {
+    // Iter over all datalayers, including deleted if any.
+    for (const datalayer of Object.values(this.datalayers)) {
       if (datalayer.isDeleted) datalayer.connectToMap()
-      datalayer.reset()
-    })
+      if (datalayer.isDirty) datalayer.reset()
+    }
     this.ensurePanesOrder()
-    this.dirty_datalayers = []
     this.initTileLayers()
     this.isDirty = false
     this.onDataLayersChanged()
@@ -1011,20 +1011,6 @@ U.Map = L.Map.extend({
 
   checkDirty: function () {
     this._container.classList.toggle('umap-is-dirty', this.isDirty)
-  },
-
-  addDirtyDatalayer: function (datalayer) {
-    if (this.dirty_datalayers.indexOf(datalayer) === -1) {
-      this.dirty_datalayers.push(datalayer)
-      this.isDirty = true
-    }
-  },
-
-  removeDirtyDatalayer: function (datalayer) {
-    if (this.dirty_datalayers.indexOf(datalayer) !== -1) {
-      this.dirty_datalayers.splice(this.dirty_datalayers.indexOf(datalayer), 1)
-      this.checkDirty()
-    }
   },
 
   exportOptions: function () {
@@ -1113,8 +1099,9 @@ U.Map = L.Map.extend({
       if (!ok) return
     }
     await this.permissions.save()
-    for (const datalayer of this.dirty_datalayers) {
-      await datalayer.save()
+    // Iter over all datalayers, including deleted.
+    for (const datalayer of Object.values(this.datalayers)) {
+      if (datalayer.isDirty) await datalayer.save()
     }
     this.isDirty = false
     this.renderEditToolbar()
@@ -1859,7 +1846,7 @@ U.Map = L.Map.extend({
 
   getFeatureById: function (id) {
     let feature
-    for (const datalayer of Object.values(this.datalayers)) {
+    for (const datalayer of this.datalayers_index) {
       feature = datalayer.getFeatureById(id)
       if (feature) return feature
     }

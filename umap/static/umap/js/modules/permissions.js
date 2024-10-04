@@ -225,9 +225,11 @@ export class MapPermissions {
   }
 
   getShareStatusDisplay() {
-    return Object.fromEntries(this.map.options.share_statuses)[
-      this.options.share_status
-    ]
+    if (this.map.options.share_statuses) {
+      return Object.fromEntries(this.map.options.share_statuses)[
+        this.options.share_status
+      ]
+    }
   }
 }
 

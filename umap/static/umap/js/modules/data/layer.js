@@ -92,12 +92,12 @@ export class DataLayer {
   set isDirty(status) {
     this._isDirty = status
     if (status) {
-      this.map.addDirtyDatalayer(this)
+      this.map.isDirty = true
       // A layer can be made dirty by indirect action (like dragging layers)
       // we need to have it loaded before saving it.
       if (!this.isLoaded()) this.fetchData()
     } else {
-      this.map.removeDirtyDatalayer(this)
+      this.map.checkDirty()
       this.isDeleted = false
     }
   }
@@ -339,11 +339,11 @@ export class DataLayer {
     const id = stamp(this)
     if (!this.map.datalayers[id]) {
       this.map.datalayers[id] = this
-      if (!this.map.datalayers_index.includes(this)) {
-        this.map.datalayers_index.push(this)
-      }
-      this.map.onDataLayersChanged()
     }
+    if (!this.map.datalayers_index.includes(this)) {
+      this.map.datalayers_index.push(this)
+    }
+    this.map.onDataLayersChanged()
   }
 
   _dataUrl() {
@@ -559,7 +559,6 @@ export class DataLayer {
 
   erase() {
     this.hide()
-    delete this.map.datalayers[stamp(this)]
     this.map.datalayers_index.splice(this.getRank(), 1)
     this.parentPane.removeChild(this.pane)
     this.map.onDataLayersChanged()
@@ -1090,6 +1089,7 @@ export class DataLayer {
     if (this.umap_id) {
       await this.map.server.post(this.getDeleteUrl())
     }
+    delete this.map.datalayers[stamp(this)]
     this.isDirty = false
   }
 
