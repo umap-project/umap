@@ -292,6 +292,10 @@ const PathMixin = {
     }
     options.pointerEvents = options.interactive ? 'visiblePainted' : 'stroke'
     this.parentClass.prototype.setStyle.call(this, options)
+    // TODO remove me when this gets merged and released:
+    // https://github.com/Leaflet/Leaflet/pull/9475
+
+    this._path.classList.toggle('leaflet-interactive', options.interactive)
   },
 
   _redraw: function () {

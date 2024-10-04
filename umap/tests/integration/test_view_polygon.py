@@ -1,4 +1,5 @@
 import re
+from copy import deepcopy
 
 import pytest
 from playwright.sync_api import expect
@@ -33,19 +34,9 @@ DATALAYER_DATA = {
 }
 
 
-@pytest.fixture
-def bootstrap(map, live_server):
-    map.settings["properties"]["zoom"] = 6
-    map.settings["geometry"] = {
-        "type": "Point",
-        "coordinates": [8.429, 53.239],
-    }
-    map.save()
+def test_should_open_popup_on_click(live_server, map, page):
     DataLayerFactory(map=map, data=DATALAYER_DATA)
-
-
-def test_should_open_popup_on_click(live_server, map, page, bootstrap):
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/53.239/8.429")
     polygon = page.locator("path").first
     expect(polygon).to_have_attribute("fill-opacity", "0.3")
     polygon.click()
@@ -57,3 +48,12 @@ def test_should_open_popup_on_click(live_server, map, page, bootstrap):
     # Close popup
     page.locator("#map").click()
     expect(polygon).to_have_attribute("fill-opacity", "0.3")
+
+
+def test_should_not_react_to_click_if_interactive_false(live_server, map, page):
+    data = deepcopy(DATALAYER_DATA)
+    data["features"][0]["properties"]["_umap_options"] = {"interactive": False}
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/53.239/8.429")
+    polygon = page.locator("path").first
+    expect(polygon).to_have_css("pointer-events", "none")
