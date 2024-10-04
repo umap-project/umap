@@ -1,5 +1,35 @@
 # Changelog
 
+## 2.7.0b0 - 2024-10-04
+
+### New features
+* delete datalayer's files on delete by @yohanboniface in #2158
+* very minimal CSV export of users and maps in admin by @yohanboniface in #2131
+* add a setting to prevent users from editing their profile by @davidbgk in #2133
+* allow to search by code INSEE in communes importer by @yohanboniface in #2188
+* add a profile drop-down menu by @yohanboniface in #2194
+
+### Bug fixes
+* icon alignement in browser, and user icon-xxx class by @yohanboniface in #2132
+* editing coordinates manually would not be saved by @yohanboniface in #2147
+* remoteData helpEntries were not on the right format by @yohanboniface in #2183
+* polygon with interactive=false was still interactive by @yohanboniface in #2151
+* allow to draw new proprotional circles and to drag them by @yohanboniface in #2172
+* make sure anonymous is owner at create by @yohanboniface in #2189
+
+### Internal changes
+* get Github release notes from command line by @yohanboniface in #2130
+* rework permissions panel by @yohanboniface in #2121
+* new tutorial and improvements by @C-Sophie by @davidbgk in #2156 #2167
+* use GeoRSStoGeoJSON as ES module by @yohanboniface in #2168
+* add clean_tilelayer management command by @yohanboniface in #1670
+* send remote operations to peers when they join by @almet in #2082
+* spawn the websocket server in the docker image. by @almet in #2175
+* use our own contextmenu by @yohanboniface in #2109
+* display user maps in admin and add in csv export by @yohanboniface in #2169
+* remove zoom in and out from contextmenu by @yohanboniface in #2195
+
+
 ## 2.6.3 - 2024-09-11
 
 * delete shape from edit toolbar by @yohanboniface in #2126
