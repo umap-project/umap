@@ -42,10 +42,6 @@ export class MapPermissions {
     return !this.map.options.permissions.owner
   }
 
-  getMap() {
-    return this.map
-  }
-
   _editAnonymous(container) {
     const fields = []
     if (this.isOwner()) {
@@ -182,7 +178,7 @@ export class MapPermissions {
   }
 
   async save() {
-    if (!this.isDirty) return this.map.continueSaving()
+    if (!this.isDirty) return
     const formData = new FormData()
     if (!this.isAnonymousMap() && this.options.editors) {
       const editors = this.options.editors.map((u) => u.id)
@@ -205,7 +201,6 @@ export class MapPermissions {
     if (!error) {
       this.commit()
       this.isDirty = false
-      this.map.continueSaving()
       this.map.fire('postsync')
     }
   }
@@ -230,9 +225,11 @@ export class MapPermissions {
   }
 
   getShareStatusDisplay() {
-    return Object.fromEntries(this.map.options.share_statuses)[
-      this.options.share_status
-    ]
+    if (this.map.options.share_statuses) {
+      return Object.fromEntries(this.map.options.share_statuses)[
+        this.options.share_status
+      ]
+    }
   }
 }
 
@@ -258,7 +255,7 @@ export class DataLayerPermissions {
     return this._isDirty
   }
 
-  getMap() {
+  get map() {
     return this.datalayer.map
   }
 
@@ -271,7 +268,7 @@ export class DataLayerPermissions {
           label: translate('Who can edit "{layer}"', {
             layer: this.datalayer.getName(),
           }),
-          selectOptions: this.datalayer.map.options.datalayer_edit_statuses,
+          selectOptions: this.map.options.datalayer_edit_statuses,
         },
       ],
     ]
@@ -283,16 +280,17 @@ export class DataLayerPermissions {
   }
 
   getUrl() {
-    return Utils.template(this.datalayer.map.options.urls.datalayer_permissions, {
-      map_id: this.datalayer.map.options.umap_id,
+    return this.map.urls.get('datalayer_permissions', {
+      map_id: this.map.options.umap_id,
       pk: this.datalayer.umap_id,
     })
   }
+
   async save() {
-    if (!this.isDirty) return this.datalayer.map.continueSaving()
+    if (!this.isDirty) return
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
-    const [data, response, error] = await this.datalayer.map.server.post(
+    const [data, response, error] = await this.map.server.post(
       this.getUrl(),
       {},
       formData
@@ -300,7 +298,6 @@ export class DataLayerPermissions {
     if (!error) {
       this.commit()
       this.isDirty = false
-      this.datalayer.map.continueSaving()
     }
   }
 

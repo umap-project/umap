@@ -63,7 +63,6 @@ def test_cancel_deleting_datalayer_should_restore(
     page.locator(".panel.right").get_by_title("Delete layer").click()
     page.get_by_role("button", name="OK").click()
     expect(markers).to_have_count(0)
-    page.get_by_role("button", name="Open browser").click()
     expect(page.get_by_text("test datalayer")).to_be_hidden()
     page.get_by_role("button", name="Cancel edits").click()
     page.locator("dialog").get_by_role("button", name="OK").click()

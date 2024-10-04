@@ -141,10 +141,10 @@ L.DomUtil.createButtonIcon = (parent, className, title, callback, size = 16) => 
   return el
 }
 
-L.DomUtil.createTitle = (parent, text, className, tag = 'h3') => {
+L.DomUtil.createTitle = (parent, text, iconClassName, className = '', tag = 'h3') => {
   const title = L.DomUtil.create(tag, '', parent)
-  if (className) L.DomUtil.createIcon(title, className)
-  L.DomUtil.add('span', '', title, text)
+  if (className) L.DomUtil.createIcon(title, iconClassName)
+  L.DomUtil.add('span', className, title, text)
   return title
 }
 

@@ -156,6 +156,7 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+    expect(page.get_by_label("Secret edit link:")).to_be_visible()
 
 
 def test_alert_message_after_create(

@@ -863,15 +863,17 @@ class MapCreate(FormLessEditMixin, PermissionsMixin, SessionMixin, CreateView):
             form.instance.owner = self.request.user
         self.object = form.save()
         permissions = self.get_permissions()
+        user_data = self.get_user_data()
         # User does not have the cookie yet.
         if not self.object.owner:
             anonymous_url = self.object.get_anonymous_edit_url()
             permissions["anonymous_edit_url"] = anonymous_url
+            user_data["is_owner"] = True
         response = simple_json_response(
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=permissions,
-            user=self.get_user_data(),
+            user=user_data,
         )
         if not self.request.user.is_authenticated:
             key, value = self.object.signed_cookie_elements
@@ -908,7 +910,7 @@ def get_websocket_auth_token(request, map_id, map_inst):
     return simple_json_response(token=signed_token)
 
 
-class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
+class MapUpdate(FormLessEditMixin, PermissionsMixin, SessionMixin, UpdateView):
     model = Map
     form_class = MapSettingsForm
     pk_url_kwarg = "map_id"
@@ -920,6 +922,7 @@ class MapUpdate(FormLessEditMixin, PermissionsMixin, UpdateView):
             id=self.object.pk,
             url=self.object.get_absolute_url(),
             permissions=self.get_permissions(),
+            user=self.get_user_data(),
         )
 
 

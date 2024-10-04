@@ -110,10 +110,9 @@ U.Map = L.Map.extend({
       delete this.options.advancedFilterKey
     }
 
-    // Global storage for retrieving datalayers and features
-    this.datalayers = {}
-    this.datalayers_index = []
-    this.dirty_datalayers = []
+    // Global storage for retrieving datalayers and features.
+    this.datalayers = {} // All datalayers, including deleted.
+    this.datalayers_index = [] // Datalayers actually on the map and ordered.
     this.features_index = {}
 
     // Needed for actions labels
@@ -200,6 +199,7 @@ U.Map = L.Map.extend({
     this.backup()
     this.on('click', this.closeInplaceToolbar)
     this.on('contextmenu', this.onContextMenu)
+    this.propagate()
   },
 
   initSyncEngine: async function () {
@@ -231,6 +231,7 @@ U.Map = L.Map.extend({
           this.renderEditToolbar()
           this.renderControls()
           this.browser.redraw()
+          this.propagate()
           break
         case 'data':
           this.redrawVisibleDataLayers()
@@ -487,7 +488,7 @@ U.Map = L.Map.extend({
   loadDataLayers: async function () {
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
-    for (const datalayer of Object.values(this.datalayers)) {
+    for (const datalayer of this.datalayers_index) {
       if (datalayer.showAtLoad()) await datalayer.show()
     }
     this.dataloaded = true
@@ -933,6 +934,7 @@ U.Map = L.Map.extend({
       if (mustReindex) datalayer.reindex()
       datalayer.redraw()
     })
+    this.propagate()
     this.fire('postsync')
     this.isDirty = true
   },
@@ -996,12 +998,12 @@ U.Map = L.Map.extend({
     if (this.editTools) this.editTools.stopDrawing()
     this.resetOptions()
     this.datalayers_index = [].concat(this._datalayers_index_bk)
-    this.dirty_datalayers.slice().forEach((datalayer) => {
+    // Iter over all datalayers, including deleted if any.
+    for (const datalayer of Object.values(this.datalayers)) {
       if (datalayer.isDeleted) datalayer.connectToMap()
-      datalayer.reset()
-    })
+      if (datalayer.isDirty) datalayer.reset()
+    }
     this.ensurePanesOrder()
-    this.dirty_datalayers = []
     this.initTileLayers()
     this.isDirty = false
     this.onDataLayersChanged()
@@ -1009,25 +1011,6 @@ U.Map = L.Map.extend({
 
   checkDirty: function () {
     this._container.classList.toggle('umap-is-dirty', this.isDirty)
-  },
-
-  addDirtyDatalayer: function (datalayer) {
-    if (this.dirty_datalayers.indexOf(datalayer) === -1) {
-      this.dirty_datalayers.push(datalayer)
-      this.isDirty = true
-    }
-  },
-
-  removeDirtyDatalayer: function (datalayer) {
-    if (this.dirty_datalayers.indexOf(datalayer) !== -1) {
-      this.dirty_datalayers.splice(this.dirty_datalayers.indexOf(datalayer), 1)
-      this.checkDirty()
-    }
-  },
-
-  continueSaving: function () {
-    if (this.dirty_datalayers.length) this.dirty_datalayers[0].save()
-    else this.fire('saved')
   },
 
   exportOptions: function () {
@@ -1059,19 +1042,17 @@ U.Map = L.Map.extend({
       return
     }
     if (data.login_required) {
-      window.onLogin = () => this.saveSelf()
+      window.onLogin = () => this.save()
       window.open(data.login_required)
       return
     }
-    if (data.user?.id) {
-      this.options.user = data.user
-      this.renderEditToolbar()
-    }
+    this.options.user = data.user
+    this.renderEditToolbar()
     if (!this.options.umap_id) {
       this.options.umap_id = data.id
       this.permissions.setOptions(data.permissions)
       this.permissions.commit()
-      if (data?.permissions?.anonymous_edit_url) {
+      if (data.permissions?.anonymous_edit_url) {
         this.once('saved', () => {
           U.AlertCreation.info(
             L._('Your map has been created with an anonymous account!'),
@@ -1104,21 +1085,42 @@ U.Map = L.Map.extend({
     } else {
       window.location = data.url
     }
-    this.permissions.save()
+    this.propagate()
+    return true
   },
 
-  save: function () {
+  save: async function () {
     if (!this.isDirty) return
     if (this._default_extent) this._setCenterAndZoom()
     this.backup()
-    this.once('saved', () => {
-      this.isDirty = false
-    })
     if (this.options.editMode === 'advanced') {
       // Only save the map if the user has the rights to do so.
-      this.saveSelf()
-    } else {
-      this.permissions.save()
+      const ok = await this.saveSelf()
+      if (!ok) return
+    }
+    await this.permissions.save()
+    // Iter over all datalayers, including deleted.
+    for (const datalayer of Object.values(this.datalayers)) {
+      if (datalayer.isDirty) await datalayer.save()
+    }
+    this.isDirty = false
+    this.renderEditToolbar()
+    this.fire('saved')
+  },
+
+  propagate: function () {
+    let els = document.querySelectorAll('.map-name')
+    for (const el of els) {
+      el.textContent = this.getDisplayName()
+    }
+    const status = this.permissions.getShareStatusDisplay()
+    els = document.querySelectorAll('.share-status')
+    for (const el of els) {
+      if (status) {
+        el.textContent = L._('Visibility: {status}', {
+          status: status,
+        })
+      }
     }
   },
 
@@ -1831,7 +1833,7 @@ U.Map = L.Map.extend({
 
   getFeatureById: function (id) {
     let feature
-    for (const datalayer of Object.values(this.datalayers)) {
+    for (const datalayer of this.datalayers_index) {
       feature = datalayer.getFeatureById(id)
       if (feature) return feature
     }

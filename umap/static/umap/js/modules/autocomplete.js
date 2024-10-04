@@ -313,7 +313,7 @@ export const SingleMixin = (Base) =>
       DomEvent.on(close, 'click', () => {
         this.selectedContainer.innerHTML = ''
         this.input.style.display = 'block'
-        this.options.on_unselect(result)
+        this.options.on_unselect?.(result)
       })
       this.hide()
     }
@@ -342,7 +342,7 @@ export const MultipleMixin = (Base) =>
       })
       DomEvent.on(close, 'click', () => {
         this.selectedContainer.removeChild(result_el)
-        this.options.on_unselect(result)
+        this.options.on_unselect?.(result)
       })
       this.hide()
     }
