@@ -1026,7 +1026,7 @@ export class DataLayer {
   }
 
   async save() {
-    if (this.isDeleted) return this.saveDelete()
+    if (this.isDeleted) return await this.saveDelete()
     if (!this.isLoaded()) {
       return
     }
@@ -1091,7 +1091,6 @@ export class DataLayer {
       await this.map.server.post(this.getDeleteUrl())
     }
     this.isDirty = false
-    this.map.continueSaving()
   }
 
   getMap() {

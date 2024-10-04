@@ -1025,11 +1025,6 @@ U.Map = L.Map.extend({
     }
   },
 
-  continueSaving: function () {
-    if (this.dirty_datalayers.length) this.dirty_datalayers[0].save()
-    else this.fire('saved')
-  },
-
   exportOptions: function () {
     const properties = {}
     for (const option of Object.keys(U.SCHEMA)) {
@@ -1059,7 +1054,7 @@ U.Map = L.Map.extend({
       return
     }
     if (data.login_required) {
-      window.onLogin = () => this.saveSelf()
+      window.onLogin = () => this.save()
       window.open(data.login_required)
       return
     }
@@ -1069,7 +1064,7 @@ U.Map = L.Map.extend({
       this.options.umap_id = data.id
       this.permissions.setOptions(data.permissions)
       this.permissions.commit()
-      if (data?.permissions?.anonymous_edit_url) {
+      if (data.permissions?.anonymous_edit_url) {
         this.once('saved', () => {
           U.AlertCreation.info(
             L._('Your map has been created with an anonymous account!'),
@@ -1102,22 +1097,25 @@ U.Map = L.Map.extend({
     } else {
       window.location = data.url
     }
-    this.permissions.save()
+    return true
   },
 
-  save: function () {
+  save: async function () {
     if (!this.isDirty) return
     if (this._default_extent) this._setCenterAndZoom()
     this.backup()
-    this.once('saved', () => {
-      this.isDirty = false
-    })
     if (this.options.editMode === 'advanced') {
       // Only save the map if the user has the rights to do so.
-      this.saveSelf()
-    } else {
-      this.permissions.save()
+      const ok = await this.saveSelf()
+      if (!ok) return
     }
+    await this.permissions.save()
+    for (const datalayer of this.dirty_datalayers) {
+      await datalayer.save()
+    }
+    this.isDirty = false
+    this.renderEditToolbar()
+    this.fire('saved')
   },
 
   star: async function () {

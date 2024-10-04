@@ -182,7 +182,7 @@ export class MapPermissions {
   }
 
   async save() {
-    if (!this.isDirty) return this.map.continueSaving()
+    if (!this.isDirty) return
     const formData = new FormData()
     if (!this.isAnonymousMap() && this.options.editors) {
       const editors = this.options.editors.map((u) => u.id)
@@ -205,7 +205,6 @@ export class MapPermissions {
     if (!error) {
       this.commit()
       this.isDirty = false
-      this.map.continueSaving()
       this.map.fire('postsync')
     }
   }
@@ -288,8 +287,9 @@ export class DataLayerPermissions {
       pk: this.datalayer.umap_id,
     })
   }
+
   async save() {
-    if (!this.isDirty) return this.datalayer.map.continueSaving()
+    if (!this.isDirty) return
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
     const [data, response, error] = await this.datalayer.map.server.post(
@@ -300,7 +300,6 @@ export class DataLayerPermissions {
     if (!error) {
       this.commit()
       this.isDirty = false
-      this.datalayer.map.continueSaving()
     }
   }
 
