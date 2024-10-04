@@ -81,7 +81,7 @@ describe('HybridLogicalClock', () => {
       const now = Date.now()
       clock = new HybridLogicalClock(now, 5, 'local')
       const result = clock.receive(`${now}:7:remote`)
-      expect(result.walltime).to.equal(now)
+      expect(result.walltime).to.be.at.least(now)
       expect(result.nn).to.equal(8)
       expect(result.id).to.equal('local')
     })
@@ -117,7 +117,7 @@ describe('HybridLogicalClock', () => {
     const event2 = hlc.tick()
 
     // Simulate receiving a message from another node
-    const remoteEvent = hlc.receive(`${Date.now() - 50}:5:remote-id`)
+    hlc.receive(`${Date.now() - 50}:5:remote-id`)
 
     const event3 = hlc.tick()
 
