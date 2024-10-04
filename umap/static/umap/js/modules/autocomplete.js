@@ -249,6 +249,10 @@ export class BaseAjax extends BaseAutocomplete {
     }
   }
 
+  buildUrl(value) {
+    return Util.template(this.url, { q: encodeURIComponent(value) })
+  }
+
   async search() {
     let val = this.input.value
     if (val.length < this.options.minChar) {
@@ -258,7 +262,7 @@ export class BaseAjax extends BaseAutocomplete {
     if (val === this.cache) return
     this.cache = val
     val = val.toLowerCase()
-    const url = Util.template(this.url, { q: encodeURIComponent(val) })
+    const url = this.buildUrl(val)
     this.handleResults(await this._search(url))
   }
 
