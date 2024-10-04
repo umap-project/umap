@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
+  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -1658,13 +1658,13 @@ U.Map = L.Map.extend({
   },
 
   clone: async function () {
-    if (
-      confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
-    ) {
-      const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
-      const [data, response, error] = await this.server.post(url)
-      if (data.redirect) window.location = data.redirect
-    }
+    this.dialog
+      .confirm(L._('Are you sure you want to clone this map and all its datalayers?'))
+      .then(async () => {
+        const url = this.urls.get('map_clone', { map_id: this.options.umap_id })
+        const [data, response, error] = await this.server.post(url)
+        if (data.redirect) window.location = data.redirect
+      })
   },
 
   removeDataLayers: function () {

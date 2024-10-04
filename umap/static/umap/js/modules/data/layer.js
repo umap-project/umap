@@ -874,18 +874,21 @@ export class DataLayer {
 
   async restore(version) {
     if (!this.map.editEnabled) return
-    if (!confirm(translate('Are you sure you want to restore this version?'))) return
-    const [geojson, response, error] = await this.map.server.get(
-      this.getVersionUrl(version)
-    )
-    if (!error) {
-      if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
-      if (geojson._umap_options) this.setOptions(geojson._umap_options)
-      this.empty()
-      if (this.isRemoteLayer()) this.fetchRemoteData()
-      else this.addData(geojson)
-      this.isDirty = true
-    }
+    this.map.dialog
+      .confirm(translate('Are you sure you want to restore this version?'))
+      .then(async () => {
+        const [geojson, response, error] = await this.map.server.get(
+          this.getVersionUrl(version)
+        )
+        if (!error) {
+          if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
+          if (geojson._umap_options) this.setOptions(geojson._umap_options)
+          this.empty()
+          if (this.isRemoteLayer()) this.fetchRemoteData()
+          else this.addData(geojson)
+          this.isDirty = true
+        }
+      })
   }
 
   featuresToGeoJSON() {
@@ -1160,8 +1163,11 @@ export class DataLayer {
         'click',
         function () {
           if (!this.isVisible()) return
-          if (!confirm(translate('Are you sure you want to delete this layer?'))) return
-          this._delete()
+          this.map.dialog
+            .confirm(translate('Are you sure you want to delete this layer?'))
+            .then(() => {
+              this._delete()
+            })
         },
         this
       )
