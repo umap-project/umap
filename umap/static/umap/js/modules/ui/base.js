@@ -66,13 +66,13 @@ export class Positioned {
   computePosition([x, y]) {
     let left
     let top
-    if (x < window.offsetWidth / 2) {
+    if (x < window.innerWidth / 2) {
       left = x
     } else {
       left = x - this.container.offsetWidth
     }
-    if (y < window.offsetHeight / 2) {
-      top = Math.min(y, window.offsetHeight - this.container.offsetHeight)
+    if (y < window.innerHeight / 2) {
+      top = Math.min(y, window.innerHeight - this.container.offsetHeight)
     } else {
       top = Math.max(0, y - this.container.offsetHeight)
     }
