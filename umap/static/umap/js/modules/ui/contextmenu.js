@@ -16,8 +16,8 @@ export default class ContextMenu extends Positioned {
   }
 
   open(event, items) {
-    const left = event.pageX
-    const top = event.pageY
+    const left = event.clientX
+    const top = event.clientY
     this.container.innerHTML = ''
     for (const item of items) {
       if (item === '-') {
@@ -38,7 +38,7 @@ export default class ContextMenu extends Positioned {
         this.container.appendChild(li)
       }
     }
-    const parent = document.elementFromPoint(event.clientX, event.clientY).offsetParent
+    const parent = document.elementFromPoint(left, top).offsetParent
     parent.appendChild(this.container)
     if (this.options.fixed) {
       this.setPosition({ left, top })
