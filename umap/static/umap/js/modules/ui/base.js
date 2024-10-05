@@ -63,16 +63,18 @@ export class Positioned {
     else this.container.style.bottom = 'initial'
   }
 
-  computePosition([x, y]) {
+  computePosition([x, y], parent) {
     let left
     let top
-    if (x < window.innerWidth / 2) {
+    x = x - parent.getBoundingClientRect().left
+    y = y - parent.getBoundingClientRect().top
+    if (x < parent.offsetWidth / 2) {
       left = x
     } else {
       left = x - this.container.offsetWidth
     }
-    if (y < window.innerHeight / 2) {
-      top = Math.min(y, window.innerHeight - this.container.offsetHeight)
+    if (y < parent.offsetHeight / 2) {
+      top = Math.min(y, parent.offsetHeight - this.container.offsetHeight)
     } else {
       top = Math.max(0, y - this.container.offsetHeight)
     }

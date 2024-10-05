@@ -36,11 +36,12 @@ export default class ContextMenu extends Positioned {
         this.container.appendChild(li)
       }
     }
-    document.body.appendChild(this.container)
+    const parent = document.elementFromPoint(left, top).closest('.leaflet-container')
+    parent.appendChild(this.container)
     if (this.options.fixed) {
       this.setPosition({ left, top })
     } else {
-      this.computePosition([left, top])
+      this.computePosition([left, top], parent)
     }
     this.container.querySelector('li > *').focus()
     this.container.addEventListener(
