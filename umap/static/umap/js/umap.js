@@ -1773,7 +1773,7 @@ U.Map = L.Map.extend({
   onContextMenu: function (event) {
     const items = this.getContextMenuItems(event)
     this.contextmenu.open(
-      [event.originalEvent.clientX, event.originalEvent.clientY],
+      [event.originalEvent.pageX, event.originalEvent.pageY],
       items
     )
   },

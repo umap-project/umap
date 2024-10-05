@@ -64,7 +64,7 @@ export default class TableEditor extends WithTemplate {
         action: () => this.deleteProperty(property),
       })
     }
-    this.contextmenu.open([event.clientX, event.clientY], actions)
+    this.contextmenu.open([event.pageX, event.pageY], actions)
   }
 
   renderHeaders() {
