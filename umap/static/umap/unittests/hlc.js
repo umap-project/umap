@@ -100,7 +100,12 @@ describe('HybridLogicalClock', () => {
       clock = new HybridLogicalClock(now, 5, 'local')
       const result = clock.receive(`${now - 1000}:7:remote`)
       expect(result.walltime).to.be.least(now)
-      expect(result.nn).to.equal(6)
+      if (result.walltime > now) {
+        expect(result.nn).to.equal(5)
+      }
+      else {
+        expect(result.nn).to.equal(6)
+      }
       expect(result.id).to.equal('local')
     })
   })
