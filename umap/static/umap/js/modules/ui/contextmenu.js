@@ -15,9 +15,14 @@ export default class ContextMenu extends Positioned {
     })
   }
 
+
   open(event, items) {
     const left = event.clientX
     const top = event.clientY
+    this.openAt([left, top], items)
+  }
+
+  openAt([left, top], items) {
     this.container.innerHTML = ''
     for (const item of items) {
       if (item === '-') {
