@@ -88,10 +88,7 @@ const FeatureMixin = {
     DomEvent.stop(event)
     const items = this._map.getContextMenuItems(event)
     items.push('-', ...this.feature.getContextMenuItems(event))
-    this._map.contextmenu.open(
-      [event.originalEvent.pageX, event.originalEvent.pageY],
-      items
-    )
+    this._map.contextmenu.open(event.originalEvent, items)
   },
 
   onCommit: function () {
