@@ -30,8 +30,11 @@
 * remove zoom in and out from contextmenu by @yohanboniface in #2195
 
 ### Changed templates
-* umap/css.html (removed `umap/vendors/contextmenu/leaflet.contextmenu.min.css`)
-* umap/js.html (removed `umap/vendors/contextmenu/leaflet.contextmenu.min.js`)
+* umap/css.html:
+  - removed `umap/vendors/contextmenu/leaflet.contextmenu.min.css`
+  - added `umap/css/contextmenu.css`
+* umap/js.html:
+  - removed `umap/vendors/contextmenu/leaflet.contextmenu.min.js`
 
 ## 2.6.3 - 2024-09-11
 
