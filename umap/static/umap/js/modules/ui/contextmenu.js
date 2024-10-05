@@ -38,7 +38,8 @@ export default class ContextMenu extends Positioned {
         this.container.appendChild(li)
       }
     }
-    document.body.appendChild(this.container)
+    const parent = document.elementFromPoint(event.clientX, event.clientY).offsetParent
+    parent.appendChild(this.container)
     if (this.options.fixed) {
       this.setPosition({ left, top })
     } else {
