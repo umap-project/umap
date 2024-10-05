@@ -1726,8 +1726,10 @@ U.Map = L.Map.extend({
         })
       }
     }
+    if (items.length) {
+      items.push('-')
+    }
     items.push(
-      '-',
       {
         label: L._('Open browser'),
         action: () => this.openBrowser('layers'),
