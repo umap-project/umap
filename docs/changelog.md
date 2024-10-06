@@ -1,6 +1,11 @@
 # Changelog
 
-## 2.7.0b1 - 2024-10-04
+## 2.7.0b2 - 2024-10-06
+
+- remove unused `leaflet.contextmenu.min.css` from `css.html`
+- fix contextmenu positionning when map is not fullscreen
+
+## 2.7.0b0 - 2024-10-04
 
 ### New features
 * delete datalayer's files on delete by @yohanboniface in #2158
