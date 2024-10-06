@@ -663,7 +663,7 @@ const ControlsMixin = {
       button.addEventListener('click', () => {
         const x = button.offsetLeft
         const y = button.offsetTop + button.offsetHeight
-        menu.open([x, y], actions)
+        menu.openAt([x, y], actions)
       })
     }
     this.help.getStartedLink(rightContainer)

@@ -1772,10 +1772,7 @@ U.Map = L.Map.extend({
 
   onContextMenu: function (event) {
     const items = this.getContextMenuItems(event)
-    this.contextmenu.open(
-      [event.originalEvent.clientX, event.originalEvent.clientY],
-      items
-    )
+    this.contextmenu.open(event.originalEvent, items)
   },
 
   editInOSM: function (e) {
