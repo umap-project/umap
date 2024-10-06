@@ -15,7 +15,6 @@ export default class ContextMenu extends Positioned {
     })
   }
 
-
   open(event, items) {
     const left = event.clientX
     const top = event.clientY
@@ -43,7 +42,11 @@ export default class ContextMenu extends Positioned {
         this.container.appendChild(li)
       }
     }
-    const parent = document.elementFromPoint(left, top).offsetParent
+    // When adding contextmenu below the map container, clicking on any link will send the
+    // "focusout" element on link click, preventing to trigger the click action
+    const parent = document
+      .elementFromPoint(left, top)
+      .closest('.leaflet-container').parentNode
     parent.appendChild(this.container)
     if (this.options.fixed) {
       this.setPosition({ left, top })
