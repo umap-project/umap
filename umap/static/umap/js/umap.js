@@ -191,15 +191,17 @@ U.Map = L.Map.extend({
       this.renderEditToolbar()
     }
 
-    this.initShortcuts()
-    if (!this.options.noControl) this.initCaptionBar()
-    this.onceDataLoaded(this.setViewFromQueryString)
+    if (!this.options.noControl) {
+      this.initShortcuts()
+      this.initCaptionBar()
+      this.on('contextmenu', this.onContextMenu)
+      this.onceDataLoaded(this.setViewFromQueryString)
+      this.on('click', this.closeInplaceToolbar)
+      this.propagate()
+    }
 
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
-    this.on('click', this.closeInplaceToolbar)
-    this.on('contextmenu', this.onContextMenu)
-    this.propagate()
   },
 
   initSyncEngine: async function () {
@@ -1752,7 +1754,7 @@ U.Map = L.Map.extend({
       },
       {
         label: this.help.displayLabel('SEARCH'),
-        action: () => this.search(event),
+        action: () => this.search(),
       }
     )
     if (this.options.urls.routing) {
