@@ -2,6 +2,8 @@ import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.
 import { translate } from './i18n.js'
 import * as Icon from './rendering/icon.js'
 import * as Utils from './utils.js'
+import { EXPORT_FORMATS } from './formatter.js'
+import ContextMenu from './ui/contextmenu.js'
 
 export default class Browser {
   constructor(map) {
@@ -228,7 +230,19 @@ export default class Browser {
     container.appendChild(toolbox)
     toggle.addEventListener('click', () => this.toggleLayers())
     fitBounds.addEventListener('click', () => this.map.fitDataBounds())
-    download.addEventListener('click', () => this.map.share.open())
+    download.addEventListener('click', () => this.downloadVisible(download))
+  }
+
+  downloadVisible(element) {
+    const menu = new ContextMenu({ fixed: true })
+    const items = []
+    for (const format of Object.keys(EXPORT_FORMATS)) {
+      items.push({
+        label: format,
+        action: () => this.map.share.download(format),
+      })
+    }
+    menu.openBelow(element, items)
   }
 
   toggleLayers() {
