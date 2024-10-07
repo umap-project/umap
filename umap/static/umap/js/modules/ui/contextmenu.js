@@ -21,6 +21,11 @@ export default class ContextMenu extends Positioned {
     this.openAt([left, top], items)
   }
 
+  openBelow(element, items) {
+    const coords = this.getPosition(element)
+    this.openAt([coords.left, coords.bottom], items)
+  }
+
   openAt([left, top], items) {
     this.container.innerHTML = ''
     for (const item of items) {
