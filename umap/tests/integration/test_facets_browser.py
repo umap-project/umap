@@ -175,7 +175,7 @@ def test_date_facet_search(live_server, page, map):
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(4)
     expect(page.get_by_text("Date Filter")).to_be_visible()
@@ -196,7 +196,7 @@ def test_choice_with_empty_value(live_server, page, map):
     del data["features"][1]["properties"]["mytype"]
     DataLayerFactory(map=map, data=data)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
     expect(page.get_by_text("<empty value>")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(4)
@@ -212,7 +212,7 @@ def test_number_with_zero_value(live_server, page, map):
     data["features"][0]["properties"]["mynumber"] = 0
     DataLayerFactory(map=map, data=data)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
     expect(page.get_by_label("Min")).to_have_value("0")
     expect(page.get_by_label("Max")).to_have_value("14")
     page.get_by_label("Min").fill("1")

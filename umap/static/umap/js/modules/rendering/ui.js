@@ -160,6 +160,12 @@ export const LeafletMarker = Marker.extend({
     return this.setLatLng(latlng)
   },
 
+  getEvents: function () {
+    const events = Marker.prototype.getEvents.call(this)
+    events.moveend = this.onMoveEnd
+    return events
+  },
+
   addInteractions() {
     PointMixin.addInteractions.call(this)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
@@ -167,7 +173,19 @@ export const LeafletMarker = Marker.extend({
     this.on('popupclose', this.resetHighlight)
   },
 
+  onMoveEnd: function () {
+    this._initIcon()
+    this.update()
+  },
+
   _initIcon: function () {
+    if (!this._map.getBounds().contains(this.getCenter())) {
+      if (this._icon) this._removeIcon()
+      if (this._tooltip && this.isTooltipOpen()) {
+        this.unbindTooltip()
+      }
+      return
+    }
     this.options.icon = this.getIcon()
     Marker.prototype._initIcon.call(this)
     // Allow to run code when icon is actually part of the DOM

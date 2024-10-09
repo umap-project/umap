@@ -106,3 +106,66 @@ def test_extended_properties_in_popup(live_server, map, page, bootstrap):
     expect(page.get_by_text("Alt: 241")).to_be_visible()
     expect(page.get_by_text("Zoom: 7")).to_be_visible()
     expect(page.get_by_text("Layer: test datalayer")).to_be_visible()
+
+
+def test_only_visible_markers_are_added_to_dom(live_server, map, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "marker 1",
+                    "description": "added to dom",
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [14.6, 48.5],
+                },
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "marker 2",
+                    "description": "not added to dom at load",
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [12.6, 44.5],
+                },
+            },
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    map.settings["properties"]["showLabel"] = True
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    markers = page.locator(".leaflet-marker-icon")
+    tooltips = page.locator(".leaflet-tooltip")
+    expect(markers).to_have_count(1)
+    expect(tooltips).to_have_count(1)
+
+    # Zoom in/out to show the other marker
+    page.get_by_label("Zoom out").click()
+    expect(markers).to_have_count(2)
+    expect(tooltips).to_have_count(2)
+    page.get_by_label("Zoom in").click()
+    expect(markers).to_have_count(1)
+    expect(tooltips).to_have_count(1)
+
+    # Drag map to show/hide the marker
+    map_el = page.locator("#map")
+    map_el.drag_to(
+        map_el,
+        source_position={"x": 100, "y": 600},
+        target_position={"x": 100, "y": 200},
+    )
+    expect(markers).to_have_count(2)
+    expect(tooltips).to_have_count(2)
+    map_el.drag_to(
+        map_el,
+        source_position={"x": 100, "y": 600},
+        target_position={"x": 100, "y": 200},
+    )
+    expect(markers).to_have_count(1)
+    expect(tooltips).to_have_count(1)

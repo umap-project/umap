@@ -81,7 +81,7 @@ def test_data_browser_should_be_open(live_server, page, bootstrap, map):
 
 
 def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator(".leaflet-overlay-pane path")
@@ -115,7 +115,7 @@ def test_filter_uses_layer_setting_if_any(live_server, page, bootstrap, map):
     datalayer = map.datalayer_set.first()
     datalayer.settings["labelKey"] = "foo"
     datalayer.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator(".leaflet-overlay-pane path")
@@ -154,7 +154,7 @@ def test_filter_works_with_variable_in_labelKey(live_server, page, map):
     data = deepcopy(DATALAYER_DATA)
     data["_umap_options"]["labelKey"] = "{name} ({bar})"
     DataLayerFactory(map=map, data=data)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator(".leaflet-overlay-pane path")
@@ -182,7 +182,7 @@ def test_filter_works_with_missing_name(live_server, page, map):
     data = deepcopy(DATALAYER_DATA)
     del data["features"][0]["properties"]["name"]
     DataLayerFactory(map=map, data=data, name="foobar")
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator(".leaflet-overlay-pane path")
@@ -299,7 +299,7 @@ def test_data_browser_with_variable_in_name(live_server, page, bootstrap, map):
     # Include a variable
     map.settings["properties"]["labelKey"] = "{name} ({foo})"
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_text("one point in france (point)")).to_be_visible()
     expect(page.get_by_text("one line in new zeland (line)")).to_be_visible()
     expect(page.get_by_text("one polygon in greenland (polygon)")).to_be_visible()
@@ -335,7 +335,7 @@ def test_should_sort_features_in_natural_order(live_server, map, page):
 
 
 def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootstrap):
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}#2/19/-2")
     # Enable edit
     page.get_by_role("button", name="Edit").click()
     buttons = page.locator(".umap-browser .datalayer li .icon-delete")
@@ -380,7 +380,7 @@ def test_should_use_color_variable(live_server, map, page):
 
 
 def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, bootstrap):
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     markers = page.locator(".leaflet-marker-icon")
     paths = page.locator(".leaflet-overlay-pane path")
     expect(markers).to_have_count(1)

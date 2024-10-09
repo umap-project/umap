@@ -40,7 +40,7 @@ def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
 
 
 def test_marker_style_should_have_precedence(live_server, openmap, page, bootstrap):
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.5/19")
 
     # Change colour at layer level
     page.get_by_role("link", name="Manage layers").click()
