@@ -407,6 +407,13 @@ export const SCHEMA = {
     ],
     default: 'Default',
   },
+  radius: {
+    type: Number,
+    default: 4,
+    impacts: ['data'],
+    label: translate('Radius in px'),
+    inheritable: true,
+  },
   remoteData: {
     type: Object,
     impacts: ['remote-data'],
