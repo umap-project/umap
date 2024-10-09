@@ -861,3 +861,18 @@ def test_ogp_links(client, map, datalayer):
     assert f'<meta property="og:title" content="{map.name}" />' in content
     assert f'<meta property="og:description" content="{map.description}" />' in content
     assert '<meta property="og:site_name" content="uMap" />' in content
+
+
+def test_non_public_map_should_have_noindex_meta(client, map, datalayer):
+    map.share_status = Map.OPEN
+    map.save()
+    response = client.get(map.get_absolute_url())
+    assert response.status_code == 200
+    assert '<meta name="robots" content="noindex">' in response.content.decode()
+
+
+def test_demo_instance_should_have_noindex(client, map, datalayer, settings):
+    settings.UMAP_DEMO_SITE = True
+    response = client.get(map.get_absolute_url())
+    assert response.status_code == 200
+    assert '<meta name="robots" content="noindex">' in response.content.decode()
