@@ -107,7 +107,7 @@ def test_should_honour_color_variable(live_server, map, page):
         },
     }
     DataLayerFactory(map=map, data=data)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/2.5")
     expect(page.locator(".leaflet-overlay-pane path[fill='tomato']"))
     markers = page.locator(".leaflet-marker-icon .icon_container")
     expect(markers).to_have_css("background-color", "rgb(240, 248, 255)")

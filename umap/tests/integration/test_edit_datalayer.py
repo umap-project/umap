@@ -86,7 +86,6 @@ def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
 
 
 def test_can_change_icon_class(live_server, openmap, page):
-    # Faster than doing a login
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -98,7 +97,7 @@ def test_can_change_icon_class(live_server, openmap, page):
         ],
     }
     DataLayerFactory(map=openmap, data=data)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/45.3/1")
     expect(page.locator(".umap-div-icon")).to_be_visible()
     page.get_by_role("link", name="Manage layers").click()
     expect(page.locator(".umap-circle-icon")).to_be_hidden()
