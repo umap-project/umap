@@ -71,10 +71,6 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     expect(nonloaded).to_have_count(1)
 
 
-@pytest.mark.skipif(
-    os.environ.get("CI", "false") == "true",
-    reason="Test is failing intermittently, skipping in the CI",
-)
 def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/map/new/")
