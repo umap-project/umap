@@ -453,17 +453,13 @@ U.PermanentCreditsControl = L.Control.extend({
   },
 
   onAdd: function () {
-    const paragraphContainer = L.DomUtil.create(
+    this.paragraphContainer = L.DomUtil.create(
       'div',
-      'umap-permanent-credits-container'
+      'umap-permanent-credits-container text'
     )
-    const creditsParagraph = L.DomUtil.create('p', '', paragraphContainer)
-
-    this.paragraphContainer = paragraphContainer
     this.setCredits()
     this.setBackground()
-
-    return paragraphContainer
+    return this.paragraphContainer
   },
 
   setCredits: function () {
