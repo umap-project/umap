@@ -18,7 +18,7 @@
   {{ block.super }}
   {% umap_js locale=locale %}
   {% if UMAP_DEMO_SITE or object.share_status != object.PUBLIC %}
-    <meta name="robots" content="noindex">
+    <meta name="robots" content="noindex,nofollow">
   {% endif %}
   <link rel="alternate"
         type="application/json+oembed"

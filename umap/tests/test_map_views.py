@@ -868,11 +868,15 @@ def test_non_public_map_should_have_noindex_meta(client, map, datalayer):
     map.save()
     response = client.get(map.get_absolute_url())
     assert response.status_code == 200
-    assert '<meta name="robots" content="noindex">' in response.content.decode()
+    assert (
+        '<meta name="robots" content="noindex,nofollow">' in response.content.decode()
+    )
 
 
 def test_demo_instance_should_have_noindex(client, map, datalayer, settings):
     settings.UMAP_DEMO_SITE = True
     response = client.get(map.get_absolute_url())
     assert response.status_code == 200
-    assert '<meta name="robots" content="noindex">' in response.content.decode()
+    assert (
+        '<meta name="robots" content="noindex,nofollow">' in response.content.decode()
+    )
