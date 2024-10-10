@@ -36,6 +36,12 @@ const FeatureMixin = {
     }
   },
 
+  _removeIcon: function () {
+    // It may not be in the DOM, and Leaflet does not deal with this
+    // situation
+    if (this._icon) Marker.prototype._removeIcon.call(this)
+  },
+
   addInteractions: function () {
     this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
