@@ -119,7 +119,6 @@ LANGUAGES = (
 SECRET_KEY = env("SECRET_KEY", default=None)
 
 INSTALLED_APPS = (
-    "daphne",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
