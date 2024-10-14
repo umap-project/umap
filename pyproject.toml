@@ -37,7 +37,7 @@ dependencies = [
   "pydantic==2.9.2",
   "requests==2.32.3",
   "rcssmin==1.1.2",
-  "rjsmin==1.2.2",
+  "rjsmin==1.2.3",
   "social-auth-core==4.5.4",
   "social-auth-app-django==5.4.2",
   "websockets==13.1",
