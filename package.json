@@ -14,8 +14,7 @@
     "fetch-mock": "^9.11.0",
     "happen": "~0.1.3",
     "lebab": "^3.2.1",
-    "mocha": "^10.3.0",
-    "optimist": "~0.4.0",
+    "mocha": "10.7.3",
     "sinon": "^15.1.0",
     "uglify-js": "~3.17.4"
   },
@@ -38,11 +37,11 @@
   "homepage": "http://wiki.openstreetmap.org/wiki/UMap",
   "dependencies": {
     "@dwayneparton/geojson-to-gpx": "^0.2.0",
-    "@placemarkio/tokml": "^0.3.3",
+    "@placemarkio/tokml": "0.3.4",
     "@tmcw/togeojson": "^5.8.0",
-    "colorbrewer": "^1.5.6",
+    "colorbrewer": "1.5.7",
     "csv2geojson": "5.1.2",
-    "dompurify": "^3.0.11",
+    "dompurify": "3.1.7",
     "georsstogeojson": "^0.2.0",
     "jsdom": "^24.0.0",
     "leaflet": "1.9.4",
@@ -58,12 +57,12 @@
     "leaflet-minimap": "^3.6.1",
     "leaflet-toolbar": "umap-project/Leaflet.toolbar",
     "leaflet.heat": "0.2.0",
-    "leaflet.locatecontrol": "^0.79.0",
+    "leaflet.locatecontrol": "0.81.1",
     "leaflet.markercluster": "^1.5.3",
     "leaflet.path.drag": "0.0.6",
     "leaflet.photon": "0.9.1",
     "osmtogeojson": "^3.0.0-beta.5",
-    "simple-statistics": "^7.8.3"
+    "simple-statistics": "7.8.5"
   },
   "browserslist": [
     "> 0.5%, last 2 versions, Firefox ESR, not dead, not op_mini all"
