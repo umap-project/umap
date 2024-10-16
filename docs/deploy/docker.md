@@ -3,7 +3,6 @@
 An official uMap docker image is [available on the docker hub](https://hub.docker.com/r/umap/umap). But, if you prefer to run it with docker compose, here is the configuration file:
 
 ```yaml title="docker-compose.yml"
-version: '3'
 services:
   db:
     # check https://hub.docker.com/r/postgis/postgis to see available versions
