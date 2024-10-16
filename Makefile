@@ -43,8 +43,8 @@ minor: ## Bump the current version to a new minor one
 docker: ## Create a new Docker image and publish it
 	$(eval VERSION=$(shell hatch version))
 	@echo "Version to build: ${VERSION}"
-	docker build -t umap/umap:${VERSION} .
-	docker push umap/umap:${VERSION}
+	docker build -t umap/umap:${VERSION} -t umap/umap:latest .
+	docker push --all-tags umap/umap:${VERSION}
 
 .PHONY: build
 build: ## Build the Python package before release
