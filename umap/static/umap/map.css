@@ -913,6 +913,16 @@ a.umap-control-caption,
 .umap-caption .umap-map-author {
     padding-inline-start: 31px;
 }
+.umap-browser .main-toolbox {
+    padding-left: 4px; /* Align with toolbox below  */
+    border-top: 1px solid var(--color-mediumGray);
+    margin-top: var(--box-margin);
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+.umap-browser .main-toolbox i {
+    cursor: pointer;
+}
 
 
 /* ********************************* */

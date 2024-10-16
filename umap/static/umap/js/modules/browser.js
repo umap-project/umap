@@ -1,6 +1,9 @@
 import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import * as Icon from './rendering/icon.js'
+import * as Utils from './utils.js'
+import { EXPORT_FORMATS } from './formatter.js'
+import ContextMenu from './ui/contextmenu.js'
 
 export default class Browser {
   constructor(map) {
@@ -165,6 +168,7 @@ export default class Browser {
     })
     this.filtersTitle = container.querySelector('summary')
     this.toggleBadge()
+    this.addMainToolbox(container)
     this.dataContainer = DomUtil.create('div', '', container)
 
     let fields = [
@@ -214,6 +218,48 @@ export default class Browser {
     for (const form of this.formContainer?.querySelectorAll('form') || []) {
       form.reset()
     }
+  }
+
+  addMainToolbox(container) {
+    const [toolbox, { toggle, fitBounds, download }] = Utils.loadTemplateWithRefs(`
+      <div class="main-toolbox">
+        <i class="icon icon-16 icon-eye" title="${translate('show/hide all layers')}" data-ref="toggle"></i>
+        <i class="icon icon-16 icon-zoom" title="${translate('zoom to data extent')}" data-ref="fitBounds"></i>
+        <i class="icon icon-16 icon-download" title="${translate('download visible data')}" data-ref="download"></i>
+      </div>
+    `)
+    container.appendChild(toolbox)
+    toggle.addEventListener('click', () => this.toggleLayers())
+    fitBounds.addEventListener('click', () => this.map.fitDataBounds())
+    download.addEventListener('click', () => this.downloadVisible(download))
+  }
+
+  downloadVisible(element) {
+    const menu = new ContextMenu({ fixed: true })
+    const items = []
+    for (const format of Object.keys(EXPORT_FORMATS)) {
+      items.push({
+        label: format,
+        action: () => this.map.share.download(format),
+      })
+    }
+    menu.openBelow(element, items)
+  }
+
+  toggleLayers() {
+    // If at least one layer is shown, hide it
+    // otherwise show all
+    let allHidden = true
+    this.map.eachBrowsableDataLayer((datalayer) => {
+      if (datalayer.isVisible()) allHidden = false
+    })
+    this.map.eachBrowsableDataLayer((datalayer) => {
+      if (allHidden) {
+        datalayer.show()
+      } else {
+        if (datalayer.isVisible()) datalayer.hide()
+      }
+    })
   }
 
   static backButton(map) {
