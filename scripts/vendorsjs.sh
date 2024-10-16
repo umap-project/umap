@@ -30,7 +30,7 @@ mkdir -p umap/static/umap/vendors/georsstogeojson/ && cp -r node_modules/georsst
 mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.min.* umap/static/umap/vendors/locatecontrol/
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs umap/static/umap/vendors/dompurify/purify.es.js
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs.map umap/static/umap/vendors/dompurify/purify.es.mjs.map
-mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
+mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.es.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
 mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-statistics/dist/simple-statistics.min.* umap/static/umap/vendors/simple-statistics/
 mkdir -p umap/static/umap/vendors/iconlayers/ && cp node_modules/leaflet-iconlayers/dist/* umap/static/umap/vendors/iconlayers/
 mkdir -p umap/static/umap/vendors/geojson-to-gpx/ && cp node_modules/@dwayneparton/geojson-to-gpx/dist/index.js umap/static/umap/vendors/geojson-to-gpx/
