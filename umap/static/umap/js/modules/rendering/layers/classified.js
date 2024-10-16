@@ -3,6 +3,7 @@ import { translate } from '../../i18n.js'
 import { LayerMixin } from './base.js'
 import * as Utils from '../../utils.js'
 import { CircleMarker } from '../ui.js'
+import colorbrewer from '../../../../vendors/colorbrewer/colorbrewer.js'
 
 // Layer where each feature color is relative to the others,
 // so we need all features before behing able to set one
