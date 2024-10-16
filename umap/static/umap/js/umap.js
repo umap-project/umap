@@ -1265,6 +1265,7 @@ U.Map = L.Map.extend({
       'options.showLabel',
       'options.labelDirection',
       'options.labelInteractive',
+      'options.labelImportance',
       'options.outlinkTarget',
     ]
     builder = new U.FormBuilder(this, popupFields)

@@ -250,6 +250,18 @@ export const SCHEMA = {
     ],
     default: 'auto',
   },
+  labelImportance: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Label importance'),
+    inheritable: true,
+    choices: [
+      ['low', translate('Default')],
+      ['medium', translate('Medium')],
+      ['high', translate('High')],
+    ],
+    default: 'low',
+  },
   labelInteractive: {
     type: Boolean,
     impacts: ['data'],
