@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.7.0b3  2024-10-16
+
+### New features
+* only add visible markers (and tooltips) to DOM by @yohanboniface in #2204
+* add a global toolbox in browser by @yohanboniface in #2160
+
+### Bug fixes
+* make sure maps of demo instances of uMap are no indexed by @yohanboniface in #2203
+* fix contextmenu positionning when map is not full screen by @yohanboniface in #2198
+* honour carriage returns in permanent credits by @yohanboniface in #2206
+* do not show browser counter when layer is empty or not loaded by @yohanboniface in #2217
+
+### Internal changes
+* deactivate contextmenu and shortcuts in map preview by @yohanboniface in #2199
+* use pytest-rerunfailed by @yohanboniface in #2205
+* simplify contextmenu items by @yohanboniface in #2216
+
+
 ## 2.7.0b2 - 2024-10-06
 
 - remove unused `leaflet.contextmenu.min.css` from `css.html`
