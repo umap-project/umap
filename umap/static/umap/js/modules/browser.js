@@ -98,6 +98,7 @@ export default class Browser {
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
 
     const total = datalayer.count()
+    if (!total) return
     const current = container.querySelectorAll('li').length
     const count = total === current ? total : `${current}/${total}`
     const counter = DomUtil.create('span', 'datalayer-counter', headline)
