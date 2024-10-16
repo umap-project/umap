@@ -1688,7 +1688,7 @@ U.Map = L.Map.extend({
     this.loader.onAdd(this)
   },
 
-  getContextMenuItems: function (event) {
+  getOwnContextMenuItems: function (event) {
     const items = []
     if (this.hasEditMode()) {
       if (this.editEnabled) {
@@ -1757,6 +1757,11 @@ U.Map = L.Map.extend({
         action: () => this.search(),
       }
     )
+    return items
+  },
+
+  getContextMenuItems: function (event) {
+    const items = []
     if (this.options.urls.routing) {
       items.push('-', {
         label: L._('Directions from here'),
@@ -1773,7 +1778,9 @@ U.Map = L.Map.extend({
   },
 
   onContextMenu: function (event) {
-    const items = this.getContextMenuItems(event)
+    const items = this.getOwnContextMenuItems(event).concat(
+      this.getContextMenuItems(event)
+    )
     this.contextmenu.open(event.originalEvent, items)
   },
 

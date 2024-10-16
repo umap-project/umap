@@ -92,8 +92,9 @@ const FeatureMixin = {
 
   onContextMenu: function (event) {
     DomEvent.stop(event)
-    const items = this._map.getContextMenuItems(event)
-    items.push('-', ...this.feature.getContextMenuItems(event))
+    const items = this.feature
+      .getContextMenuItems(event)
+      .concat(this._map.getContextMenuItems(event))
     this._map.contextmenu.open(event.originalEvent, items)
   },
 
