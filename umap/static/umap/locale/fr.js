@@ -513,7 +513,10 @@ const locale = {
     "Type new owner's username": "Nom d'utilisateur du nouveau propriétaire",
     "Type editor's username": "Nom d'utilisateur de l'éditeur",
     "Map": "Carte",
-    "Manage collaborators": "Gérer les collaborateurs"
+    "Manage collaborators": "Gérer les collaborateurs",
+    "show/hide all layers": "montrer/masquer les calques",
+    "zoom to data extent": "zoomer sur les données",
+    "download visible data": "télécharger les données affichées"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

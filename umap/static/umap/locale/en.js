@@ -513,7 +513,10 @@ const locale = {
     "Type new owner's username": "Type new owner's username",
     "Type editor's username": "Type editor's username",
     "Map": "Map",
-    "Manage collaborators": "Manage collaborators"
+    "Manage collaborators": "Manage collaborators",
+    "show/hide all layers": "show/hide all layers",
+    "zoom to data extent": "zoom to data extent",
+    "download visible data": "download visible data"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")
