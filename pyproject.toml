@@ -67,6 +67,10 @@ test = [
 docker = [
   "uwsgi==2.0.27",
 ]
+sync = [
+  "channels==4.1.0",
+  "daphne==4.1.2",
+]
 
 [project.scripts]
 umap = "umap.bin:main"
