@@ -2,7 +2,7 @@ import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import * as Util from '../utils.js'
 
-class Autocomplete extends SingleMixin(BaseAjax) {
+export class AutocompleteCommunes extends SingleMixin(BaseAjax) {
   createResult(item) {
     return super.createResult({
       value: item.code,
@@ -46,7 +46,7 @@ export class Importer {
         importer.dialog.close()
       },
     }
-    this.autocomplete = new Autocomplete(container, options)
+    this.autocomplete = new AutocompleteCommunes(container, options)
 
     importer.dialog.open({
       template: container,

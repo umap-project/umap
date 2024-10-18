@@ -43,6 +43,10 @@
 .importers ul .communesfr:before {
     background-image: url(../img/importers/communesfr.svg);
 }
+.importer.cadastrefr h3:before,
+.importers ul .cadastrefr:before {
+    background-image: url(../img/importers/cadastrefr.svg);
+}
 .importer.overpass h3:before,
 .importers ul .overpass:before {
     background-image: url(../img/importers/overpass.svg);
