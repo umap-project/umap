@@ -142,9 +142,7 @@ export default class Share {
   async format(mode) {
     const type = EXPORT_FORMATS[mode]
     const content = await type.formatter(this.map)
-    let name = this.map.options.name || 'data'
-    name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    const filename = name + type.ext
+    const filename = Utils.slugify(this.map.options.name) + type.ext
     return { content, filetype: type.filetype, filename }
   }
 
