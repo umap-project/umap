@@ -69,6 +69,9 @@ export default class Importer {
         case 'communesfr':
           import('./importers/communesfr.js').then(register)
           break
+        case 'cadastrefr':
+          import('./importers/cadastrefr.js').then(register)
+          break
         case 'overpass':
           import('./importers/overpass.js').then(register)
           break
