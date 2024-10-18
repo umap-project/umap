@@ -802,13 +802,11 @@ export class DataLayer {
       this
     )
     if (this.umap_id) {
-      const download = DomUtil.createLink(
-        'button umap-download',
-        advancedButtons,
-        translate('Download'),
-        this._dataUrl(),
-        '_blank'
-      )
+      const download = Utils.loadTemplate(`
+        <a class="button" href="${this._dataUrl()}" target="_blank">
+          <i class="icon icon-24 icon-download"></i>${translate('Download')}
+        </button>`)
+      advancedButtons.appendChild(download)
     }
     const backButton = DomUtil.createButtonIcon(
       undefined,
