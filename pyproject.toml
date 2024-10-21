@@ -34,13 +34,11 @@ dependencies = [
   "django-probes==1.7.0",
   "Pillow==10.4.0",
   "psycopg==3.2.3",
-  "pydantic==2.9.2",
   "requests==2.32.3",
   "rcssmin==1.1.2",
   "rjsmin==1.2.2",
   "social-auth-core==4.5.4",
   "social-auth-app-django==5.4.2",
-  "websockets==13.1",
 ]
 
 [project.optional-dependencies]
@@ -70,6 +68,8 @@ docker = [
 sync = [
   "channels==4.1.0",
   "daphne==4.1.2",
+  "pydantic==2.9.2",
+  "websockets==13.1",
 ]
 
 [project.scripts]
