@@ -1104,8 +1104,10 @@ U.Map = L.Map.extend({
       if (datalayer.isDirty) await datalayer.save()
     }
     this.isDirty = false
-    this.renderEditToolbar()
-    this.propagate()
+    // Do a blind render for now, as we are not sure what could
+    // have changed, we'll be more subtil when we'll remove the
+    // save action
+    this.render(['name', 'user', 'permissions'])
     this.fire('saved')
   },
 
