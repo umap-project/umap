@@ -1049,7 +1049,6 @@ U.Map = L.Map.extend({
       return
     }
     this.options.user = data.user
-    this.renderEditToolbar()
     if (!this.options.umap_id) {
       this.options.umap_id = data.id
       this.permissions.setOptions(data.permissions)
@@ -1087,7 +1086,6 @@ U.Map = L.Map.extend({
     } else {
       window.location = data.url
     }
-    this.propagate()
     return true
   },
 
@@ -1107,6 +1105,7 @@ U.Map = L.Map.extend({
     }
     this.isDirty = false
     this.renderEditToolbar()
+    this.propagate()
     this.fire('saved')
   },
 
