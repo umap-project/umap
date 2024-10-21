@@ -1049,7 +1049,6 @@ U.Map = L.Map.extend({
       return
     }
     this.options.user = data.user
-    this.renderEditToolbar()
     if (!this.options.umap_id) {
       this.options.umap_id = data.id
       this.permissions.setOptions(data.permissions)
@@ -1087,7 +1086,6 @@ U.Map = L.Map.extend({
     } else {
       window.location = data.url
     }
-    this.propagate()
     return true
   },
 
@@ -1106,7 +1104,10 @@ U.Map = L.Map.extend({
       if (datalayer.isDirty) await datalayer.save()
     }
     this.isDirty = false
-    this.renderEditToolbar()
+    // Do a blind render for now, as we are not sure what could
+    // have changed, we'll be more subtil when we'll remove the
+    // save action
+    this.render(['name', 'user', 'permissions'])
     this.fire('saved')
   },
 
