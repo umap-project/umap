@@ -1,3 +1,5 @@
+import { fieldInSchema } from '../utils.js'
+
 /**
  * Updaters are classes able to convert messages
  * received from other peers (or from the server) to changes on the map.
@@ -42,9 +44,10 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (key !== 'numberOfConnectedPeers') {
+    if (fieldInSchema(key)){
       this.updateObjectValue(this.map, key, value)
     }
+
     this.map.render([key])
   }
 }
@@ -58,7 +61,11 @@ export class DataLayerUpdater extends BaseUpdater {
 
   update({ key, metadata, value }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
-    this.updateObjectValue(datalayer, key, value)
+    if (fieldInSchema(key)) {
+      this.updateObjectValue(datalayer, key, value)
+    } else {
+      console.debug('Not applying update for datalayer because key is not in the schema', key)
+    }
     datalayer.render([key])
   }
 }
