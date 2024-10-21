@@ -55,6 +55,20 @@ export function getImpactsFromSchema(fields, schema) {
 }
 
 /**
+ * Check if a field exists in the schema.
+ *
+ * @param {string} field
+ * @param {object} schema
+ * @returns {boolean}
+ */
+export function fieldInSchema(field, schema) {
+  if (typeof field !== 'string') return false
+  field = field.replace('options.', '').split('.')[0]
+  schema = schema || U.SCHEMA
+  return schema[field] !== undefined
+}
+
+/**
  * Import DOM purify, and initialize it.
  *
  * If the context is a node server, uses jsdom to provide

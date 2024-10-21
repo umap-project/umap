@@ -747,6 +747,30 @@ describe('Utils', () => {
     })
   })
 
+  describe('#fieldInSchema', () => {
+    it('should return true if the field is in the schema', () => {
+      assert.equal(Utils.fieldInSchema('foo', { foo: {} }), true)
+    })
+    it('should return false if the field is not in the schema', () => {
+      assert.equal(Utils.fieldInSchema('foo', { bar: {} }), false)
+    })
+    it('should return false if the schema is not provided', () => {
+      assert.equal(Utils.fieldInSchema('foo', {}), false)
+    })
+    it('should return false if the field is undefined', () => {
+      assert.equal(Utils.fieldInSchema(undefined, {}), false)
+    })
+    // check that options. is removed
+    it('should remove options. from the field', () => {
+      assert.equal(Utils.fieldInSchema('options.foo', { foo: {} }), true)
+    })
+
+    // check that subfields are removed
+    it('should remove subfields from the field', () => {
+      assert.equal(Utils.fieldInSchema('options.foo.bar', { foo: { bar: {} } }), true)
+    })
+  })
+
   describe('#parseNaiveDate', () => {
     it('should parse a date', () => {
       assert.equal(
