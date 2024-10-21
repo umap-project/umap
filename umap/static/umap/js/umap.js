@@ -1594,7 +1594,7 @@ U.Map = L.Map.extend({
       'umap-caption-bar',
       this._controlContainer
     )
-    const name = L.DomUtil.create('h3', '', container)
+    const name = L.DomUtil.create('h3', 'map-name', container)
     L.DomEvent.disableClickPropagation(container)
     this.addAuthorLink('span', container)
     if (this.getOption('captionMenus')) {
@@ -1620,11 +1620,6 @@ U.Map = L.Map.extend({
         )
       }
     }
-    const setName = function () {
-      name.textContent = this.getDisplayName()
-    }
-    L.bind(setName, this)()
-    this.on('postsync', L.bind(setName, this))
     this.onceDatalayersLoaded(function () {
       this.slideshow.renderToolbox(container)
     })
