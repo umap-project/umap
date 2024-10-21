@@ -407,6 +407,10 @@ export class WithTemplate {
   }
 }
 
-export function deepEqual(object1, object2){
+export function deepEqual(object1, object2) {
   return JSON.stringify(object1) === JSON.stringify(object2)
+}
+
+export function slugify(str) {
+  return (str || 'data').replace(/[^a-z0-9]/gi, '_').toLowerCase()
 }
