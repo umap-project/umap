@@ -79,6 +79,8 @@ describe('HybridLogicalClock', () => {
 
     it('should increment nn when local and remote times are equal', () => {
       const now = Date.now()
+      // mock the clock to be the same time
+      sinon.useFakeTimers(now)
       clock = new HybridLogicalClock(now, 5, 'local')
       const result = clock.receive(`${now}:7:remote`)
       expect(result.walltime).to.be.at.least(now)
