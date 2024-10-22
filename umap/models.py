@@ -1,6 +1,7 @@
 import json
 import operator
 import os
+import shutil
 import time
 import uuid
 from pathlib import Path
@@ -498,7 +499,7 @@ class DataLayer(NamedModel):
         src = Path(self.geojson.storage.location) / self.storage_root()
         for version in self.versions:
             name = version["name"]
-            (src / name).rename(dest / f"{self.map.pk}_{name}")
+            shutil.move(src / name, dest / f"{self.map.pk}_{name}")
 
     def upload_to(self):
         root = self.storage_root()
