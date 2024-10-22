@@ -13,6 +13,7 @@ from smtplib import SMTPException
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlparse
 from urllib.request import Request, build_opener
+from uuid import UUID
 
 from django.conf import settings
 from django.contrib import messages
@@ -1181,8 +1182,17 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.map = self.kwargs["map_inst"]
+
+        uuid = self.kwargs["pk"]
+        # Check if UUID already exists
+        if DataLayer.objects.filter(uuid=uuid).exists():
+            return HttpResponseBadRequest("UUID already exists")
+
+        form.instance.uuid = uuid
         self.object = form.save()
-        # Simple response with only metadata (including new id)
+        assert uuid == self.object.uuid
+
+        # Simple response with only metadata
         response = simple_json_response(**self.object.metadata(self.request))
         response["X-Datalayer-Version"] = self.version
         return response

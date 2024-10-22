@@ -36,7 +36,7 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer {
-  constructor(map, data) {
+  constructor(map, data, sync) {
     this.map = map
     this.sync = map.sync_engine.proxy(this)
     this._index = Array()
@@ -78,7 +78,9 @@ export class DataLayer {
     this.backupOptions()
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this)
-    if (!this.umap_id) {
+
+    if (!this.createdOnServer) {
+      // When importing data, show the layer immediately if applicable
       if (this.showAtLoad()) this.show()
       this.isDirty = true
     }
@@ -87,6 +89,11 @@ export class DataLayer {
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.isVisible()) this.propagateShow()
+  }
+
+  get createdOnServer(){
+    console.log("reference version", this._reference_version)
+    return this._reference_version !== undefined
   }
 
   set isDirty(status) {
@@ -119,7 +126,7 @@ export class DataLayer {
     return {
       subject: 'datalayer',
       metadata: {
-        id: this.umap_id || null,
+        id: this.umap_id,
       },
     }
   }
@@ -212,7 +219,7 @@ export class DataLayer {
   }
 
   async fetchData() {
-    if (!this.umap_id) return
+    if (!this.createdOnServer) return
     if (this._loading) return
     this._loading = true
     const [geojson, response, error] = await this.map.server.get(this._dataUrl())
@@ -304,7 +311,7 @@ export class DataLayer {
   }
 
   isLoaded() {
-    return !this.umap_id || this._loaded
+    return !this.createdOnServer || this._loaded
   }
 
   hasDataLoaded() {
@@ -312,8 +319,13 @@ export class DataLayer {
   }
 
   setUmapId(id) {
-    // Datalayer is null when listening creation form
+    // Datalayer ID is null when listening creation form
     if (!this.umap_id && id) this.umap_id = id
+    else {
+      // Generate a random uuid if none is provided
+      this.umap_id = crypto.randomUUID()
+      console.log('Generating random UUID for datalayer', this.umap_id)
+    }
   }
 
   backupOptions() {
@@ -571,7 +583,7 @@ export class DataLayer {
   }
 
   reset() {
-    if (!this.umap_id) this.erase()
+    if (!this.createdOnServer) this.erase()
 
     this.resetOptions()
     this.parentPane.appendChild(this.pane)
@@ -1040,14 +1052,16 @@ export class DataLayer {
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    const saveUrl = this.map.urls.get('datalayer_save', {
+    const saveURL = this.map.urls.get('datalayer_save', {
       map_id: this.map.options.umap_id,
       pk: this.umap_id,
+      created: this.createdOnServer,
     })
+    console.log("saveUrl", saveURL)
     const headers = this._reference_version
       ? { 'X-Datalayer-Reference': this._reference_version }
       : {}
-    await this._trySave(saveUrl, headers, formData)
+    await this._trySave(saveURL, headers, formData)
     this._geojson = geojson
   }
 
@@ -1076,7 +1090,7 @@ export class DataLayer {
       this._reference_version = response.headers.get('X-Datalayer-Version')
       this.sync.update('_reference_version', this._reference_version)
 
-      this.setUmapId(data.id)
+      // this.setUmapId(data.id)
       this.updateOptions(data)
       this.backupOptions()
       this.connectToMap()

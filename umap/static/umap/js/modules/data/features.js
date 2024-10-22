@@ -139,7 +139,7 @@ class Feature {
       subject: 'feature',
       metadata: {
         id: this.id,
-        layerId: this.datalayer?.umap_id || null,
+        layerId: this.datalayer.umap_id,
         featureType: this.getClassName(),
       },
     }
