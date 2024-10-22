@@ -1,5 +1,6 @@
 import copy
 import json
+import uuid
 
 import factory
 from django.contrib.auth import get_user_model
@@ -113,6 +114,7 @@ class MapFactory(factory.django.DjangoModelFactory):
 
 
 class DataLayerFactory(factory.django.DjangoModelFactory):
+    uuid = factory.LazyFunction(lambda: uuid.uuid4())
     map = factory.SubFactory(MapFactory)
     name = "test datalayer"
     description = "test description"

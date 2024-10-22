@@ -155,8 +155,8 @@ map_urls = [
         views.MapClone.as_view(),
         name="map_clone",
     ),
-    re_path(
-        r"^map/(?P<map_id>[\d]+)/datalayer/create/$",
+    path(
+        "map/<int:map_id>/datalayer/create/<uuid:pk>/",
         views.DataLayerCreate.as_view(),
         name="datalayer_create",
     ),

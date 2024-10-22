@@ -61,7 +61,7 @@ export default class Share {
       translate('All data and settings of the map')
     )
     const downloadUrl = this._umap.urls.get('map_download', {
-      map_id: this._umap.properties.umap_id,
+      map_id: this._umap.id,
     })
     const link = Utils.loadTemplate(`
       <div>
@@ -205,8 +205,8 @@ class IframeExporter {
     }
     if (this.options.keepCurrentDatalayers) {
       this._umap.eachDataLayer((datalayer) => {
-        if (datalayer.isVisible() && datalayer.umap_id) {
-          datalayers.push(datalayer.umap_id)
+        if (datalayer.isVisible() && datalayer.createdOnServer) {
+          datalayers.push(datalayer.id)
         }
       })
       this.queryString.datalayers = datalayers.join(',')

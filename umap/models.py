@@ -250,7 +250,7 @@ class Map(NamedModel):
                 "hash": False,
                 "scrollWheelZoom": False,
                 "noControl": True,
-                "umap_id": self.pk,
+                "id": self.pk,
                 "schema": self.extra_schema,
                 "slideshow": {},
             }
@@ -444,9 +444,7 @@ class DataLayer(NamedModel):
         (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
     )
-    uuid = models.UUIDField(
-        unique=True, primary_key=True, default=uuid.uuid4, editable=False
-    )
+    uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
@@ -525,12 +523,13 @@ class DataLayer(NamedModel):
         obj["id"] = self.pk
         obj["permissions"] = {"edit_status": self.edit_status}
         obj["editMode"] = "advanced" if self.can_edit(request) else "disabled"
+        obj["_referenceVersion"] = self.reference_version
         return obj
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
         new._state.adding = True
-        new.pk = None
+        new.pk = uuid.uuid4()
         if map_inst:
             new.map = map_inst
         new.geojson = File(new.geojson.file.file)
@@ -543,11 +542,20 @@ class DataLayer(NamedModel):
             valid_prefixes.append(name.startswith("%s_" % self.old_id))
         return any(valid_prefixes) and name.endswith(".geojson")
 
+    def extract_version_number(self, path):
+        version = path.split(".")[0]
+        if "_" in version:
+            return version.split("_")[-1]
+        return version
+
+    @property
+    def reference_version(self):
+        return self.extract_version_number(self.geojson.path)
+
     def version_metadata(self, name):
-        els = name.split(".")[0].split("_")
         return {
             "name": name,
-            "at": els[1],
+            "at": self.extract_version_number(name),
             "size": self.geojson.storage.size(self.get_version_path(name)),
         }
 

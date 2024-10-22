@@ -43,6 +43,10 @@ export default class Umap extends ServerStored {
     this.init(element, geojson)
   }
 
+  get id() {
+    return this.properties.id
+  }
+
   async init(element, geojson) {
     this.properties = Object.assign(
       {
@@ -166,7 +170,7 @@ export default class Umap extends ServerStored {
     }
 
     // Creation mode
-    if (!this.properties.umap_id) {
+    if (!this.id) {
       if (!this.properties.preview) {
         this.isDirty = true
         this.enableEdit()
@@ -285,7 +289,7 @@ export default class Umap extends ServerStored {
     }
     if (this.searchParams.has('download')) {
       const download_url = this.urls.get('map_download', {
-        map_id: this.properties.umap_id,
+        map_id: this.id,
       })
       window.location = download_url
     }
@@ -563,7 +567,7 @@ export default class Umap extends ServerStored {
   createDataLayer(options = {}, sync = true) {
     options.name =
       options.name || `${translate('Layer')} ${this.datalayersIndex.length + 1}`
-    const datalayer = new DataLayer(this, this._leafletMap, options, sync)
+    const datalayer = new DataLayer(this, this._leafletMap, options)
 
     if (sync !== false) {
       datalayer.sync.upsert(datalayer.options)
@@ -1098,7 +1102,7 @@ export default class Umap extends ServerStored {
     formData.append('name', this.properties.name)
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('settings', JSON.stringify(geojson))
-    const uri = this.urls.get('map_save', { map_id: this.properties.umap_id })
+    const uri = this.urls.get('map_save', { map_id: this.id })
     const [data, _, error] = await this.server.post(uri, {}, formData)
     // FIXME: login_required response will not be an error, so it will not
     // stop code while it should
@@ -1113,8 +1117,8 @@ export default class Umap extends ServerStored {
       return
     }
     this.properties.user = data.user
-    if (!this.properties.umap_id) {
-      this.properties.umap_id = data.id
+    if (!this.id) {
+      this.properties.id = data.id
       this.permissions.setProperties(data.permissions)
       this.permissions.commit()
       if (data.permissions?.anonymous_edit_url) {
@@ -1228,7 +1232,7 @@ export default class Umap extends ServerStored {
       this.sync.stop()
     } else {
       const ws_token_uri = this.urls.get('map_websocket_auth_token', {
-        map_id: this.properties.umap_id,
+        map_id: this.id,
       })
       await this.sync.authenticate(
         ws_token_uri,
@@ -1398,8 +1402,10 @@ export default class Umap extends ServerStored {
     this.editPanel.open({ content: container })
   }
 
-  getDataLayerByUmapId(umap_id) {
-    return this.findDataLayer((d) => d.umap_id === umap_id)
+  getDataLayerByUmapId(id) {
+    const datalayer = this.findDataLayer((d) => d.id === id)
+    if (!datalayer) throw new Error(`Can't find datalayer with id ${id}`)
+    return datalayer
   }
 
   firstVisibleDatalayer() {
@@ -1433,10 +1439,10 @@ export default class Umap extends ServerStored {
   }
 
   async star() {
-    if (!this.properties.umap_id) {
+    if (!this.id) {
       return Alert.error(translate('Please save the map first'))
     }
-    const url = this.urls.get('map_star', { map_id: this.properties.umap_id })
+    const url = this.urls.get('map_star', { map_id: this.id })
     const [data, response, error] = await this.server.post(url)
     if (error) {
       return
@@ -1530,7 +1536,7 @@ export default class Umap extends ServerStored {
     this.dialog
       .confirm(translate('Are you sure you want to delete this map?'))
       .then(async () => {
-        const url = this.urls.get('map_delete', { map_id: this.properties.umap_id })
+        const url = this.urls.get('map_delete', { map_id: this.id })
         const [data, response, error] = await this.server.post(url)
         if (data.redirect) window.location = data.redirect
       })
@@ -1542,7 +1548,7 @@ export default class Umap extends ServerStored {
         translate('Are you sure you want to clone this map and all its datalayers?')
       )
       .then(async () => {
-        const url = this.urls.get('map_clone', { map_id: this.properties.umap_id })
+        const url = this.urls.get('map_clone', { map_id: this.id })
         const [data, response, error] = await this.server.post(url)
         if (data.redirect) window.location = data.redirect
       })
@@ -1552,7 +1558,7 @@ export default class Umap extends ServerStored {
     const sendLink =
       this.properties.urls.map_send_edit_link &&
       this.urls.get('map_send_edit_link', {
-        map_id: this.properties.umap_id,
+        map_id: this.id,
       })
     await this.server.post(sendLink, {}, formData)
   }

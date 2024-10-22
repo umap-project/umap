@@ -149,7 +149,7 @@ export class MapPermissions extends ServerStored {
 
   edit() {
     if (this._umap.properties.editMode !== 'advanced') return
-    if (!this._umap.properties.umap_id) {
+    if (!this._umap.id) {
       Alert.info(translate('Please save the map first'))
       return
     }
@@ -199,13 +199,13 @@ export class MapPermissions extends ServerStored {
 
   getUrl() {
     return this._umap.urls.get('map_update_permissions', {
-      map_id: this._umap.properties.umap_id,
+      map_id: this._umap.id,
     })
   }
 
   getAttachUrl() {
     return this._umap.urls.get('map_attach_owner', {
-      map_id: this._umap.properties.umap_id,
+      map_id: this._umap.id,
     })
   }
 
@@ -262,8 +262,8 @@ export class DataLayerPermissions extends ServerStored {
 
   getUrl() {
     return this._umap.urls.get('datalayer_permissions', {
-      map_id: this._umap.properties.umap_id,
-      pk: this.datalayer.umap_id,
+      map_id: this._umap.id,
+      pk: this.datalayer.id,
     })
   }
 
