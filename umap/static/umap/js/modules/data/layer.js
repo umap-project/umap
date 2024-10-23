@@ -129,6 +129,22 @@ export class DataLayer {
     return this._isDeleted
   }
 
+  /**
+   * When receiving a reference version, discard the future uuid
+   * because the layer is now created on the server.
+   */
+  set _reference_version(version){
+    console.debug("set _reference_version", version)
+    if (version !== undefined) {
+      this.__reference_version = version
+      this._future_uuid = undefined
+    }
+  }
+
+  get _reference_version(){
+    return this.__reference_version
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
@@ -1057,6 +1073,7 @@ export class DataLayer {
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
+    console.log("map_id", this.map.options.umap_id, "pk", this.umap_id || this._future_uuid, "created", this.createdOnServer)
     const saveURL = this.map.urls.get('datalayer_save', {
       map_id: this.map.options.umap_id,
       pk: this.umap_id || this._future_uuid,
@@ -1095,7 +1112,7 @@ export class DataLayer {
       this._reference_version = response.headers.get('X-Datalayer-Version')
       this.sync.update('_reference_version', this._reference_version)
 
-      // this.setUmapId(data.id)
+      this.setUmapId(data.id)
       this.updateOptions(data)
       this.backupOptions()
       this.connectToMap()
