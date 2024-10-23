@@ -817,9 +817,10 @@ U.Map = L.Map.extend({
     return L.Map.prototype.setMaxBounds.call(this, bounds)
   },
 
-  createDataLayer: function (options = {}, sync = true) {
+  createDataLayer: function (options = {}, sync = true, future_uuid = undefined) {
+    console.log("Create Datalayer", options)
     options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
-    const datalayer = new U.DataLayer(this, options, sync)
+    const datalayer = new U.DataLayer(this, options, sync, future_uuid)
 
     if (sync !== false) {
       datalayer.sync.upsert(datalayer.options)
@@ -828,7 +829,7 @@ U.Map = L.Map.extend({
   },
 
   newDataLayer: function () {
-    const datalayer = this.createDataLayer({})
+    const datalayer = this.createDataLayer({}, sync=true)
     datalayer.edit()
   },
 
@@ -1192,7 +1193,10 @@ U.Map = L.Map.extend({
     return this.createDataLayer()
   },
 
-  getDataLayerByUmapId: function (umap_id) {
+  getDataLayerByUmapId: function (umap_id, future_uuid) {
+    if (future_uuid !== undefined) {
+      return this.findDataLayer((d) => d._future_uuid === future_uuid)
+    }
     return this.findDataLayer((d) => d.umap_id === umap_id)
   },
 

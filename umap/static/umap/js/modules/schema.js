@@ -563,4 +563,9 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  
+  _reference_version: {
+    type: Number,
+    impacts: ['data'],
+  },
 }

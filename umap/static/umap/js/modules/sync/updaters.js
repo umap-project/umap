@@ -31,8 +31,8 @@ class BaseUpdater {
     }
   }
 
-  getDataLayerFromID(layerId) {
-    if (layerId) return this.map.getDataLayerByUmapId(layerId)
+  getDataLayerFromID(layerId, future_uuid) {
+    if (layerId) return this.map.getDataLayerByUmapId(layerId, future_uuid) 
     return this.map.defaultEditDataLayer()
   }
 
@@ -53,14 +53,15 @@ export class MapUpdater extends BaseUpdater {
 }
 
 export class DataLayerUpdater extends BaseUpdater {
-  upsert({ value }) {
-    // Inserts does not happen (we use multiple updates instead).
-    this.map.createDataLayer(value, false)
+  upsert({ value, metadata }) {
+    console.log('upsert', value, metadata)
+    // Upsert only happens when a new datalayer is created.
+    this.map.createDataLayer(value, false, metadata.future_uuid)
     this.map.render([])
   }
 
   update({ key, metadata, value }) {
-    const datalayer = this.getDataLayerFromID(metadata.id)
+    const datalayer = this.getDataLayerFromID(metadata.id, metadata.future_uuid)
     if (fieldInSchema(key)) {
       this.updateObjectValue(datalayer, key, value)
     } else {

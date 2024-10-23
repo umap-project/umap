@@ -36,7 +36,7 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer {
-  constructor(map, data, sync) {
+  constructor(map, data, sync, future_uuid) {
     this.map = map
     this.sync = map.sync_engine.proxy(this)
     this._index = Array()
@@ -61,6 +61,13 @@ export class DataLayer {
     this._isDirty = false
     this._isDeleted = false
     this.setUmapId(data.id)
+
+    if (!this.umap_id) {
+      // Generate a random uuid if none is provided
+      this._future_uuid = future_uuid !== undefined ? future_uuid : crypto.randomUUID()
+      console.log('Future UUID for datalayer', this._future_uuid)
+    }
+
     this.setOptions(data)
 
     if (!Utils.isObject(this.options.remoteData)) {
@@ -79,8 +86,9 @@ export class DataLayer {
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this)
 
-    if (!this.createdOnServer) {
-      // When importing data, show the layer immediately if applicable
+    console.debug("createdOnServer", this.createdOnServer)
+    if (!this.umap_id) {
+      console.debug("showAtLoad", this.showAtLoad())
       if (this.showAtLoad()) this.show()
       this.isDirty = true
     }
@@ -92,8 +100,7 @@ export class DataLayer {
   }
 
   get createdOnServer(){
-    console.log("reference version", this._reference_version)
-    return this._reference_version !== undefined
+    return this.umap_id !== undefined
   }
 
   set isDirty(status) {
@@ -127,6 +134,7 @@ export class DataLayer {
       subject: 'datalayer',
       metadata: {
         id: this.umap_id,
+        future_uuid: this._future_uuid,
       },
     }
   }
@@ -219,13 +227,14 @@ export class DataLayer {
   }
 
   async fetchData() {
-    if (!this.createdOnServer) return
+    console.trace("fetchData", this.umap_id)
+    if (!this.umap_id) return
     if (this._loading) return
     this._loading = true
     const [geojson, response, error] = await this.map.server.get(this._dataUrl())
     if (!error) {
       this._reference_version = response.headers.get('X-Datalayer-Version')
-      // FIXME: for now this property is set dynamically from backend
+      // FIXME: for now the _umap_options property is set dynamically from backend
       // And thus it's not in the geojson file in the server
       // So do not let all options to be reset
       // Fix is a proper migration so all datalayers settings are
@@ -311,7 +320,7 @@ export class DataLayer {
   }
 
   isLoaded() {
-    return !this.createdOnServer || this._loaded
+    return !this.umap_id || this._loaded
   }
 
   hasDataLoaded() {
@@ -321,11 +330,6 @@ export class DataLayer {
   setUmapId(id) {
     // Datalayer ID is null when listening creation form
     if (!this.umap_id && id) this.umap_id = id
-    else {
-      // Generate a random uuid if none is provided
-      this.umap_id = crypto.randomUUID()
-      console.log('Generating random UUID for datalayer', this.umap_id)
-    }
   }
 
   backupOptions() {
@@ -909,6 +913,7 @@ export class DataLayer {
 
   async show() {
     this.map.addLayer(this.layer)
+
     if (!this.isLoaded()) await this.fetchData()
     this.propagateShow()
   }
@@ -1054,7 +1059,7 @@ export class DataLayer {
     formData.append('geojson', blob)
     const saveURL = this.map.urls.get('datalayer_save', {
       map_id: this.map.options.umap_id,
-      pk: this.umap_id,
+      pk: this.umap_id || this._future_uuid,
       created: this.createdOnServer,
     })
     console.log("saveUrl", saveURL)
