@@ -5,15 +5,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('umap', '0022_add_team'),
+        ("umap", "0022_add_team"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='datalayer',
-            name='uuid',
-            field=models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, unique=True),
+            model_name="datalayer",
+            name="uuid",
+            field=models.UUIDField(
+                default=uuid.uuid4, primary_key=True, serialize=False, unique=True
+            ),
         ),
     ]
