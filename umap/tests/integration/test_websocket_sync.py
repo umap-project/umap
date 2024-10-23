@@ -267,7 +267,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
     b_polygon = peerB.locator("path")
 
     # Clone on peer B and save
-    b_polygon.click(button="right")
+    b_polygon.click(button="right", delay=200)
     peerB.get_by_role("button", name="Clone this feature").click()
 
     expect(peerB.locator("path")).to_have_count(2)
