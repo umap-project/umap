@@ -115,6 +115,10 @@ export class DataLayer {
     return this._isDeleted
   }
 
+  get cssId() {
+    return `datalayer-${stamp(this)}`
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
@@ -235,6 +239,7 @@ export class DataLayer {
   }
 
   dataChanged() {
+    if (!this.hasDataLoaded()) return
     this.map.onDataLayersChanged()
     this.layer.dataChanged()
   }
@@ -242,8 +247,13 @@ export class DataLayer {
   fromGeoJSON(geojson, sync = true) {
     this.addData(geojson, sync)
     this._geojson = geojson
-    this._dataloaded = true
+    this.onDataLoaded()
     this.dataChanged()
+  }
+
+  onDataLoaded() {
+    this._dataloaded = true
+    this.renderLegend()
   }
 
   async fromUmapGeoJSON(geojson) {
@@ -384,7 +394,7 @@ export class DataLayer {
     this.indexProperties(feature)
     this.map.features_index[feature.getSlug()] = feature
     this.showFeature(feature)
-    if (this.hasDataLoaded()) this.dataChanged()
+    this.dataChanged()
   }
 
   removeFeature(feature, sync) {
@@ -395,7 +405,7 @@ export class DataLayer {
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
     delete this._features[id]
-    if (this.hasDataLoaded() && this.isVisible()) this.dataChanged()
+    if (this.isVisible()) this.dataChanged()
   }
 
   indexProperties(feature) {
@@ -1119,10 +1129,13 @@ export class DataLayer {
     return 'displayName'
   }
 
-  renderLegend(container) {
-    if (this.layer.renderLegend) return this.layer.renderLegend(container)
-    const color = DomUtil.create('span', 'datalayer-color', container)
-    color.style.backgroundColor = this.getColor()
+  renderLegend() {
+    for (const container of document.querySelectorAll(`.${this.cssId} .datalayer-legend`)) {
+      container.innerHTML = ''
+      if (this.layer.renderLegend) return this.layer.renderLegend(container)
+      const color = DomUtil.create('span', 'datalayer-color', container)
+      color.style.backgroundColor = this.getColor()
+    }
   }
 
   renderToolbox(container) {
