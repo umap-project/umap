@@ -563,7 +563,7 @@ U.Map = L.Map.extend({
         if (this.importer.dialog.visible) {
           this.importer.dialog.close()
         } else if (this.editEnabled && this.editTools.drawing()) {
-          this.editTools.stopDrawing()
+          this.editTools.onEscape()
         } else if (this.measureTools.enabled()) {
           this.measureTools.stopDrawing()
         } else if (this.fullPanel?.isOpen()) {
