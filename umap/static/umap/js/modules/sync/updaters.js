@@ -32,7 +32,7 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId, future_uuid) {
-    if (layerId) return this.map.getDataLayerByUmapId(layerId, future_uuid) 
+    if (layerId) return this.map.getDataLayerByUmapId(layerId, future_uuid)
     return this.map.defaultEditDataLayer()
   }
 

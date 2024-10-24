@@ -818,7 +818,7 @@ U.Map = L.Map.extend({
   },
 
   createDataLayer: function (options = {}, sync = true, future_uuid = undefined) {
-    console.log("Create Datalayer", options)
+    console.log('Create Datalayer', options)
     options.name = options.name || `${L._('Layer')} ${this.datalayers_index.length + 1}`
     const datalayer = new U.DataLayer(this, options, sync, future_uuid)
 
@@ -829,7 +829,7 @@ U.Map = L.Map.extend({
   },
 
   newDataLayer: function () {
-    const datalayer = this.createDataLayer({}, sync=true)
+    const datalayer = this.createDataLayer({}, (sync = true))
     datalayer.edit()
   },
 

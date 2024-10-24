@@ -25,7 +25,7 @@ export default class URLs {
   }
 
   // Update the layer if pk is passed, create otherwise.
-  datalayer_save({ map_id, pk, created}, ...options) {
+  datalayer_save({ map_id, pk, created }, ...options) {
     if (created) return this.get('datalayer_update', { map_id, pk }, ...options)
     return this.get('datalayer_create', { map_id, pk }, ...options)
   }
