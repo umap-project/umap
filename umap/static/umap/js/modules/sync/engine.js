@@ -3,6 +3,12 @@ import { HybridLogicalClock } from './hlc.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 
+// Start reconnecting after 2 seconds, then double the delay each time
+// maxing out at 32 seconds.
+const RECONNECT_DELAY = 2000;
+const RECONNECT_DELAY_FACTOR = 2;
+const MAX_RECONNECT_DELAY = 32000;
+
 /**
  * The syncEngine exposes an API to sync messages between peers over the network.
  *
@@ -42,7 +48,7 @@ import { WebSocketTransport } from './websocket.js'
  * ```
  */
 export class SyncEngine {
-  constructor(map) {
+  constructor(map, urls, server) {
     this.updaters = {
       map: new MapUpdater(map),
       feature: new FeatureUpdater(map),
@@ -50,22 +56,52 @@ export class SyncEngine {
     }
     this.transport = undefined
     this._operations = new Operations()
+    this._server = server
+
+    // Store URIs to avoid persisting the map
+    // mainly to ensure separation of concerns.
+    this._websocketTokenURI = urls.get('map_websocket_auth_token', {
+      map_id: map.options.umap_id,
+    })
+    this._websocketURI = map.options.websocketURI
+    this._reconnectTimeout = null;
+    this._reconnectDelay = RECONNECT_DELAY;
   }
 
-  async authenticate(tokenURI, webSocketURI, server) {
-    const [response, _, error] = await server.get(tokenURI)
+  /**
+   * Authenticate with the server and start the transport layer.
+   */
+  async authenticate() {
+    const [response, _, error] = await this._server.get(this._websocketTokenURI)
     if (!error) {
-      this.start(webSocketURI, response.token)
+      this.start(response.token)
     }
   }
 
-  start(webSocketURI, authToken) {
-    this.transport = new WebSocketTransport(webSocketURI, authToken, this)
+  start(authToken) {
+    this.transport = new WebSocketTransport(this._websocketURI, authToken, this)
   }
 
   stop() {
-    if (this.transport) this.transport.close()
+    if (this.transport){
+      this.transport.close()
+    }
     this.transport = undefined
+  }
+
+  onConnection() {
+    this._reconnectTimeout = null;
+    this._reconnectDelay = RECONNECT_DELAY;
+  }
+
+  reconnect() {
+    console.log("reconnecting in ", this._reconnectDelay, " ms")
+    this._reconnectTimeout = setTimeout(() => {
+      if (this._reconnectDelay < MAX_RECONNECT_DELAY) {
+        this._reconnectDelay = this._reconnectDelay * RECONNECT_DELAY_FACTOR
+      }
+      this.authenticate()
+    }, this._reconnectDelay);
   }
 
   upsert(subject, metadata, value) {
@@ -448,3 +484,4 @@ export class Operations {
 function debug(...args) {
   console.debug('SYNC ⇆', ...args)
 }
+
