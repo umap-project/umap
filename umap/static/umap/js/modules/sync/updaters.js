@@ -44,7 +44,7 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (fieldInSchema(key)){
+    if (fieldInSchema(key)) {
       this.updateObjectValue(this.map, key, value)
     }
 
@@ -64,7 +64,10 @@ export class DataLayerUpdater extends BaseUpdater {
     if (fieldInSchema(key)) {
       this.updateObjectValue(datalayer, key, value)
     } else {
-      console.debug('Not applying update for datalayer because key is not in the schema', key)
+      console.debug(
+        'Not applying update for datalayer because key is not in the schema',
+        key
+      )
     }
     datalayer.render([key])
   }

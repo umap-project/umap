@@ -1,7 +1,7 @@
+import * as Utils from '../utils.js'
+import { HybridLogicalClock } from './hlc.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
-import { HybridLogicalClock } from './hlc.js'
-import * as Utils from '../utils.js'
 
 /**
  * The syncEngine exposes an API to sync messages between peers over the network.
@@ -81,7 +81,7 @@ export class SyncEngine {
   }
 
   _send(inputMessage) {
-    let message = this._operations.addLocal(inputMessage)
+    const message = this._operations.addLocal(inputMessage)
 
     if (this.offline) return
     if (this.transport) {
@@ -154,7 +154,7 @@ export class SyncEngine {
     this.onListPeersResponse({ peers })
 
     // Get one peer at random
-    let randomPeer = this._getRandomPeer()
+    const randomPeer = this._getRandomPeer()
 
     if (randomPeer) {
       // Retrieve the operations which happened before join.
@@ -254,7 +254,7 @@ export class SyncEngine {
    * @returns {string|bool} the selected peer uuid, or False if none was found.
    */
   _getRandomPeer() {
-    let otherPeers = this.peers.filter((p) => p !== this.uuid)
+    const otherPeers = this.peers.filter((p) => p !== this.uuid)
     if (otherPeers.length > 0) {
       const random = Math.floor(Math.random() * otherPeers.length)
       return otherPeers[random]
@@ -308,7 +308,7 @@ export class Operations {
    * @returns {*} clock-aware message
    */
   addLocal(inputMessage) {
-    let message = { ...inputMessage, hlc: this._hlc.tick() }
+    const message = { ...inputMessage, hlc: this._hlc.tick() }
     this._operations.push(message)
     return message
   }
@@ -348,7 +348,7 @@ export class Operations {
    */
   storeRemoteOperations(remoteOperations) {
     // get the highest date from the passed operations
-    let greatestHLC = remoteOperations
+    const greatestHLC = remoteOperations
       .map((op) => op.hlc)
       .reduce((max, current) => (current > max ? current : max))
 

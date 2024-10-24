@@ -1,5 +1,5 @@
-import { WithTemplate } from './utils.js'
 import { translate } from './i18n.js'
+import { WithTemplate } from './utils.js'
 
 const TOOLBOX_TEMPLATE = `
   <ul class="umap-slideshow-toolbox dark">

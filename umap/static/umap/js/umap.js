@@ -224,7 +224,6 @@ U.Map = L.Map.extend({
   },
 
   render: function (fields) {
-
     if (fields.includes('numberOfConnectedPeers')) {
       this.renderEditToolbar()
       this.propagate()

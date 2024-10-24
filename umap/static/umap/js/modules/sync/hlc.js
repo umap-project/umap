@@ -30,12 +30,12 @@ export class HybridLogicalClock {
    * @returns object
    */
   parse(raw) {
-    let tokens = raw.split(':')
+    const tokens = raw.split(':')
 
     if (tokens.length !== 3) {
       throw new SyntaxError(`Unable to parse ${raw}`)
     }
-    let [walltime, rawNN, id] = tokens
+    const [walltime, rawNN, id] = tokens
 
     let nn = Number.parseInt(rawNN)
     if (Number.isNaN(nn)) {
@@ -92,7 +92,7 @@ export class HybridLogicalClock {
     if (now > local.walltime && now > remote.walltime) {
       nextValue = { ...local, walltime: now }
     } else if (local.walltime == remote.walltime) {
-      let nn = Math.max(local.nn, remote.nn) + 1
+      const nn = Math.max(local.nn, remote.nn) + 1
       nextValue = { ...local, nn: nn }
     } else if (remote.walltime > local.walltime) {
       nextValue = { ...remote, id: local.id, nn: remote.nn + 1 }

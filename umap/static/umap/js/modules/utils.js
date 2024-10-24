@@ -35,7 +35,7 @@ export function checkId(string) {
  * @returns Array[string]
  */
 export function getImpactsFromSchema(fields, schema) {
-  schema = schema || U.SCHEMA
+  const current_schema = schema || U.SCHEMA
   const impacted = fields
     .map((field) => {
       // remove the option prefix for fields
@@ -46,8 +46,10 @@ export function getImpactsFromSchema(fields, schema) {
     .reduce((acc, field) => {
       // retrieve the "impacts" field from the schema
       // and merge them together using sets
-      const impacts = schema[field]?.impacts || []
-      impacts.forEach((impact) => acc.add(impact))
+      const impacts = current_schema[field]?.impacts || []
+      for (const impact of impacts) {
+        acc.add(impact)
+      }
       return acc
     }, new Set())
 
@@ -62,10 +64,10 @@ export function getImpactsFromSchema(fields, schema) {
  * @returns {boolean}
  */
 export function fieldInSchema(field, schema) {
+  const current_schema = schema || U.SCHEMA
   if (typeof field !== 'string') return false
-  field = field.replace('options.', '').split('.')[0]
-  schema = schema || U.SCHEMA
-  return schema[field] !== undefined
+  const field_name = field.replace('options.', '').split('.')[0]
+  return current_schema[field_name] !== undefined
 }
 
 /**
