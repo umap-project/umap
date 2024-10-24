@@ -129,32 +129,43 @@ def test_can_change_name(live_server, openmap, page, datalayer):
 
 
 def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
+    """
+    Test the creation and editing of a new datalayer.
+
+    This test verifies that:
+    1. A new datalayer can be created and saved.
+    2. The newly created datalayer appears in the UI and is saved in the database.
+    3. Editing the same datalayer updates it instead of creating a new one.
+    4. The UI reflects the changes and the database is updated correctly.
+    5. The 'dirty' state of the map is managed correctly during these operations.
+    """
+
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
     )
     page.get_by_role("link", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.locator('input[name="name"]').click()
-    page.locator('input[name="name"]').fill("my new layer")
-    expect(page.get_by_text("my new layer")).to_be_visible()
+    page.locator('input[name="name"]').fill("Layer A")
+    expect(page.get_by_text("Layer A")).to_be_visible()
     with page.expect_response(re.compile(".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
     assert DataLayer.objects.count() == 2
     saved = DataLayer.objects.last()
-    assert saved.name == "my new layer"
+    assert saved.name == "Layer A"
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
     # Edit again, it should not create a new datalayer
     page.get_by_role("link", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).first.click()
     page.locator('input[name="name"]').click()
-    page.locator('input[name="name"]').fill("my new layer with a new name")
-    expect(page.get_by_text("my new layer with a new name")).to_be_visible()
+    page.locator('input[name="name"]').fill("Layer A with a new name")
+    expect(page.get_by_text("Layer A with a new name")).to_be_visible()
     page.get_by_role("button", name="Save").click()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     assert DataLayer.objects.count() == 2
     saved = DataLayer.objects.last()
-    assert saved.name == "my new layer with a new name"
+    assert saved.name == "Layer A with a new name"
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
 
 

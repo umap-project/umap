@@ -36,7 +36,7 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer {
-  constructor(map, data) {
+  constructor(map, data, sync, future_uuid) {
     this.map = map
     this.sync = map.sync_engine.proxy(this)
     this._index = Array()
@@ -61,6 +61,13 @@ export class DataLayer {
     this._isDirty = false
     this._isDeleted = false
     this.setUmapId(data.id)
+
+    if (!this.umap_id) {
+      // Generate a random uuid if none is provided
+      this._future_uuid = future_uuid !== undefined ? future_uuid : crypto.randomUUID()
+      console.log('Future UUID for datalayer', this._future_uuid)
+    }
+
     this.setOptions(data)
 
     if (!Utils.isObject(this.options.remoteData)) {
@@ -78,7 +85,10 @@ export class DataLayer {
     this.backupOptions()
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this)
+
+    console.debug("createdOnServer", this.createdOnServer)
     if (!this.umap_id) {
+      console.debug("showAtLoad", this.showAtLoad())
       if (this.showAtLoad()) this.show()
       this.isDirty = true
     }
@@ -87,6 +97,10 @@ export class DataLayer {
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.isVisible()) this.propagateShow()
+  }
+
+  get createdOnServer(){
+    return this.umap_id !== undefined
   }
 
   set isDirty(status) {
@@ -115,11 +129,28 @@ export class DataLayer {
     return this._isDeleted
   }
 
+  /**
+   * When receiving a reference version, discard the future uuid
+   * because the layer is now created on the server.
+   */
+  set _reference_version(version){
+    console.debug("set _reference_version", version)
+    if (version !== undefined) {
+      this.__reference_version = version
+      this._future_uuid = undefined
+    }
+  }
+
+  get _reference_version(){
+    return this.__reference_version
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
       metadata: {
-        id: this.umap_id || null,
+        id: this.umap_id,
+        future_uuid: this._future_uuid,
       },
     }
   }
@@ -212,13 +243,14 @@ export class DataLayer {
   }
 
   async fetchData() {
+    console.trace("fetchData", this.umap_id)
     if (!this.umap_id) return
     if (this._loading) return
     this._loading = true
     const [geojson, response, error] = await this.map.server.get(this._dataUrl())
     if (!error) {
       this._reference_version = response.headers.get('X-Datalayer-Version')
-      // FIXME: for now this property is set dynamically from backend
+      // FIXME: for now the _umap_options property is set dynamically from backend
       // And thus it's not in the geojson file in the server
       // So do not let all options to be reset
       // Fix is a proper migration so all datalayers settings are
@@ -312,7 +344,7 @@ export class DataLayer {
   }
 
   setUmapId(id) {
-    // Datalayer is null when listening creation form
+    // Datalayer ID is null when listening creation form
     if (!this.umap_id && id) this.umap_id = id
   }
 
@@ -571,7 +603,7 @@ export class DataLayer {
   }
 
   reset() {
-    if (!this.umap_id) this.erase()
+    if (!this.createdOnServer) this.erase()
 
     this.resetOptions()
     this.parentPane.appendChild(this.pane)
@@ -897,6 +929,7 @@ export class DataLayer {
 
   async show() {
     this.map.addLayer(this.layer)
+
     if (!this.isLoaded()) await this.fetchData()
     this.propagateShow()
   }
@@ -1040,14 +1073,17 @@ export class DataLayer {
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    const saveUrl = this.map.urls.get('datalayer_save', {
+    console.log("map_id", this.map.options.umap_id, "pk", this.umap_id || this._future_uuid, "created", this.createdOnServer)
+    const saveURL = this.map.urls.get('datalayer_save', {
       map_id: this.map.options.umap_id,
-      pk: this.umap_id,
+      pk: this.umap_id || this._future_uuid,
+      created: this.createdOnServer,
     })
+    console.log("saveUrl", saveURL)
     const headers = this._reference_version
       ? { 'X-Datalayer-Reference': this._reference_version }
       : {}
-    await this._trySave(saveUrl, headers, formData)
+    await this._trySave(saveURL, headers, formData)
     this._geojson = geojson
   }
 

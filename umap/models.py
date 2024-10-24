@@ -444,7 +444,7 @@ class DataLayer(NamedModel):
         (OWNER, _("Owner only")),
     )
     uuid = models.UUIDField(
-        unique=True, primary_key=True, default=uuid.uuid4, editable=False
+        unique=True, primary_key=True, default=uuid.uuid4, editable=True
     )
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
