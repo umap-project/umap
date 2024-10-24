@@ -1,29 +1,6 @@
 # Changelog
 
-## 2.7.0b3  2024-10-16
-
-### New features
-* only add visible markers (and tooltips) to DOM by @yohanboniface in #2204
-* add a global toolbox in browser by @yohanboniface in #2160
-
-### Bug fixes
-* make sure maps of demo instances of uMap are no indexed by @yohanboniface in #2203
-* fix contextmenu positionning when map is not full screen by @yohanboniface in #2198
-* honour carriage returns in permanent credits by @yohanboniface in #2206
-* do not show browser counter when layer is empty or not loaded by @yohanboniface in #2217
-
-### Internal changes
-* deactivate contextmenu and shortcuts in map preview by @yohanboniface in #2199
-* use pytest-rerunfailed by @yohanboniface in #2205
-* simplify contextmenu items by @yohanboniface in #2216
-
-
-## 2.7.0b2 - 2024-10-06
-
-- remove unused `leaflet.contextmenu.min.css` from `css.html`
-- fix contextmenu positionning when map is not fullscreen
-
-## 2.7.0b0 - 2024-10-04
+## 2.7.0 - 2024-10-24
 
 ### New features
 * delete datalayer's files on delete by @yohanboniface in #2158
@@ -31,8 +8,20 @@
 * add a setting to prevent users from editing their profile by @davidbgk in #2133
 * allow to search by code INSEE in communes importer by @yohanboniface in #2188
 * add a profile drop-down menu by @yohanboniface in #2194
+* only add visible markers (and tooltips) to DOM by @yohanboniface in #2204
+* add a global toolbox in browser by @yohanboniface in #2160
+* add importer for French cadastre by @yohanboniface in #2223
+* display the number of connected peers in the interface. by @almet in #2177
+* allow to run umap with asgi by @yohanboniface in #2209
 
 ### Bug fixes
+* make sure maps of demo instances of uMap are no indexed by @yohanboniface in #2203
+* fix contextmenu positionning when map is not full screen by @yohanboniface in #2198
+* honour carriage returns in permanent credits by @yohanboniface in #2206
+* do not show browser counter when layer is empty or not loaded by @yohanboniface in #2217
+* fix dispeared icons from panel titles by @yohanboniface in #2222
+* use correct icon for layer download advanced action by @yohanboniface in #2224
+* do not try to create legend for non loaded classified layer by @yohanboniface in #2234
 * icon alignement in browser, and user icon-xxx class by @yohanboniface in #2132
 * editing coordinates manually would not be saved by @yohanboniface in #2147
 * remoteData helpEntries were not on the right format by @yohanboniface in #2183
@@ -41,6 +30,10 @@
 * make sure anonymous is owner at create by @yohanboniface in #2189
 
 ### Internal changes
+* deactivate contextmenu and shortcuts in map preview by @yohanboniface in #2199
+* use pytest-rerunfailed by @yohanboniface in #2205
+* simplify contextmenu items by @yohanboniface in #2216
+* Docker: `version` is obsolete. by @Luen in #2220
 * get Github release notes from command line by @yohanboniface in #2130
 * rework permissions panel by @yohanboniface in #2121
 * new tutorial and improvements by @C-Sophie by @davidbgk in #2156 #2167
@@ -58,6 +51,12 @@
   - added `umap/css/contextmenu.css`
 * umap/js.html:
   - removed `umap/vendors/contextmenu/leaflet.contextmenu.min.js`
+* umap/templates/umap/map_detail.html:
+  - changed robot directive
+* umap/templates/umap/dashboard_menu.html
+  - use of `UMAP_ALLOW_EDIT_PROFILE`
+
+Thanks @Luen for their first contribution!
 
 ## 2.6.3 - 2024-09-11
 
