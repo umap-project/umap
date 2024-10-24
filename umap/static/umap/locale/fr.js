@@ -516,7 +516,8 @@ const locale = {
     "Manage collaborators": "Gérer les collaborateurs",
     "show/hide all layers": "montrer/masquer les calques",
     "zoom to data extent": "zoomer sur les données",
-    "download visible data": "télécharger les données affichées"
+    "download visible data": "télécharger les données affichées",
+    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} personne(s) actuellement connectée(s) à cette carte"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

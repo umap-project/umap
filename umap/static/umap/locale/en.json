@@ -516,5 +516,6 @@
     "Manage collaborators": "Manage collaborators",
     "show/hide all layers": "show/hide all layers",
     "zoom to data extent": "zoom to data extent",
-    "download visible data": "download visible data"
+    "download visible data": "download visible data",
+    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map"
 }

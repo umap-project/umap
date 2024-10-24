@@ -102,7 +102,7 @@
     "Define link to open in a new window on polygon click.": "Define link to open in a new window on polygon click.",
     "define": "definir",
     "Delay between two transitions when in play mode": "Delay between two transitions when in play mode",
-    "Delete layer": "Delete layer",
+    "Delete layer": "Suprimeix la capa",
     "Delete this feature": "Suprimeix aquesta característica",
     "Delete this shape": "Delete this shape",
     "Delete this vertex (Alt+Click)": "Delete this vertex (Alt+Click)",
@@ -456,8 +456,8 @@
     "key=value or key!=value": "key=value or key!=value",
     "Are you sure you want to delete this rule?": "Are you sure you want to delete this rule?",
     "empty rule": "empty rule",
-    "Conditional style rules": "Conditional style rules",
-    "Add rule": "Add rule",
+    "Conditional style rules": "Regles d'estil condicional",
+    "Add rule": "Afegeix una regla",
     "Browser: data": "Navegador: dades",
     "Browser: layers": "Navegador: capes",
     "Browser: filters": "Navegador: filtres",
@@ -513,5 +513,9 @@
     "Type new owner's username": "Type new owner's username",
     "Type editor's username": "Type editor's username",
     "Map": "Map",
-    "Manage collaborators": "Manage collaborators"
+    "Manage collaborators": "Manage collaborators",
+    "show/hide all layers": "show/hide all layers",
+    "zoom to data extent": "zoom to data extent",
+    "download visible data": "download visible data",
+    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map"
 }
