@@ -30,8 +30,6 @@ U.Map = L.Map.extend({
   includes: [ControlsMixin],
 
   initialize: async function (el, geojson) {
-    this.sync_engine = new U.SyncEngine(this)
-    this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
     if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
@@ -69,6 +67,9 @@ U.Map = L.Map.extend({
     }
     this.server = new U.ServerRequest()
     this.request = new U.Request()
+
+    this.sync_engine = new U.SyncEngine(this, this.urls, this.server)
+    this.sync = this.sync_engine.proxy(this)
 
     this.initLoader()
     this.name = this.options.name
@@ -209,10 +210,7 @@ U.Map = L.Map.extend({
     if (this.options.syncEnabled !== true) {
       this.sync.stop()
     } else {
-      const ws_token_uri = this.urls.get('map_websocket_auth_token', {
-        map_id: this.options.umap_id,
-      })
-      await this.sync.authenticate(ws_token_uri, this.options.websocketURI, this.server)
+      await this.sync.authenticate()
     }
   },
 
