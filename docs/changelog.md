@@ -4,6 +4,8 @@
 
 ### New features
 * delete datalayer's files on delete by @yohanboniface in #2158
+  - deleted files will be moved to `UMAP_PURGATORY_ROOT`, so set this setting to
+    somewhere meaningful for your instance (default is `/tmp/umappurgatory`)
 * very minimal CSV export of users and maps in admin by @yohanboniface in #2131
 * add a setting to prevent users from editing their profile by @davidbgk in #2133
 * allow to search by code INSEE in communes importer by @yohanboniface in #2188

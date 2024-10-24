@@ -287,6 +287,8 @@ How many maps to show in the user "my maps" page.
 Path where files are moved when a datalayer is deleted. They will stay there until
 `umap purge_purgatory` is run. May be useful in case a user deletes by mistake
 a datalayer, or even a map.
+Default is `/tmp/umappurgatory/`, so beware that this folder will be deleted on
+each server restart.
 
 #### UMAP_SEARCH_CONFIGURATION
 
