@@ -20,11 +20,11 @@ def test_caption(live_server, page, map):
     panel = page.locator(".panel.left.on")
     expect(panel).to_have_class(re.compile(".*condensed.*"))
     expect(panel.locator(".umap-caption")).to_be_visible()
-    expect(panel.locator(".datalayer-legend").get_by_text(basic.name)).to_be_visible()
+    expect(panel.locator(".caption-item").get_by_text(basic.name)).to_be_visible()
     expect(
-        panel.locator(".datalayer-legend .off").get_by_text(non_loaded.name)
+        panel.locator(".caption-item .off").get_by_text(non_loaded.name)
     ).to_be_visible()
-    expect(panel.locator(".datalayer-legend").get_by_text(hidden.name)).to_be_hidden()
+    expect(panel.locator(".caption-item").get_by_text(hidden.name)).to_be_hidden()
 
 
 def test_caption_should_display_owner_as_author(live_server, page, map):

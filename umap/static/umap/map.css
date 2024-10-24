@@ -1000,18 +1000,18 @@ a.umap-control-caption,
     vertical-align: middle;
 }
 
-.datalayer-legend {
+.caption-item {
     color: #555;
     padding: 6px 8px;
     box-shadow: 0 0 3px rgba(0,0,0,0.2);
     border-radius: 1px;
 }
-.datalayer-legend ul {
+.caption-item ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
-.datalayer-legend .circles-layer-legend {
+.caption-item .circles-layer-legend {
     padding: var(--box-padding);
 }
 .circles-layer-legend li {

@@ -75,6 +75,7 @@ const ClassifiedMixin = {
   },
 
   renderLegend: function (container) {
+    if (!this.datalayer.hasDataLoaded()) return
     const parent = DomUtil.create('ul', '', container)
     const items = this.getLegendItems()
     for (const [color, label] of items) {

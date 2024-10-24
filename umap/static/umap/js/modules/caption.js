@@ -40,15 +40,21 @@ export default class Caption {
     )
     const creditsContainer = DomUtil.create('div', 'credits-container', container)
     this.addCredits(creditsContainer)
-    this.map.panel.open({ content: container })
+    this.map.panel.open({ content: container }).then(() => {
+      // Create the legend when the panel is actually on the DOM
+      this.map.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
+    })
   }
 
   addDataLayer(datalayer, container) {
     if (!datalayer.options.inCaption) return
-    const p = DomUtil.create('p', 'datalayer-legend', container)
-    const legend = DomUtil.create('span', '', p)
+    const p = DomUtil.create(
+      'p',
+      `caption-item ${datalayer.cssId}`,
+      container
+    )
+    const legend = DomUtil.create('span', 'datalayer-legend', p)
     const headline = DomUtil.create('strong', '', p)
-    datalayer.renderLegend(legend)
     if (datalayer.options.description) {
       DomUtil.element({
         tagName: 'span',
