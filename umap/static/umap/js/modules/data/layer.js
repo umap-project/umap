@@ -812,7 +812,7 @@ export class DataLayer {
       this
     )
     if (this.umap_id) {
-      const filename = Utils.slugify(this.options.name)
+      const filename = `${Utils.slugify(this.options.name)}.geojson`
       const download = Utils.loadTemplate(`
         <a class="button" href="${this._dataUrl()}" download="${filename}">
           <i class="icon icon-24 icon-download"></i>${translate('Download')}
