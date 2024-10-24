@@ -666,7 +666,7 @@ const ControlsMixin = {
       const connectedPeersCount = L.DomUtil.createButton(
         'leaflet-control-connected-peers',
         rightContainer,
-        '',
+        ''
       )
       L.DomEvent.on(connectedPeersCount, 'mouseover', () => {
         this.tooltip.open({
@@ -1182,17 +1182,6 @@ U.Editable = L.Editable.extend({
   initialize: function (map, options) {
     L.Editable.prototype.initialize.call(this, map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
-    this.on('editable:drawing:end', (event) => {
-      this.map.tooltip.close()
-      // Leaflet.Editable will delete the drawn shape if invalid
-      // (eg. line has only one drawn point)
-      // So let's check if the layer has no more shape
-      if (!event.layer.feature.hasGeom()) {
-        event.layer.feature.del()
-      } else {
-        event.layer.feature.edit()
-      }
-    })
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
       if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
@@ -1321,5 +1310,20 @@ U.Editable = L.Editable.extend({
     e.layer.onVertexRawClick(e)
     L.DomEvent.stop(e)
     e.cancel()
+  },
+
+  onEscape: function () {
+    this.once('editable:drawing:end', (event) => {
+      this.map.tooltip.close()
+      // Leaflet.Editable will delete the drawn shape if invalid
+      // (eg. line has only one drawn point)
+      // So let's check if the layer has no more shape
+      if (!event.layer.feature.hasGeom()) {
+        event.layer.feature.del()
+      } else {
+        event.layer.feature.edit()
+      }
+    })
+    this.stopDrawing()
   },
 })

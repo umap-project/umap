@@ -25,6 +25,9 @@ export class Panel {
   }
 
   open({ content, className, actions = [] } = {}) {
+    if (this.isOpen()) {
+      this.onClose()
+    }
     this.container.className = `with-transition panel window ${this.className} ${
       this.mode || ''
     }`
@@ -71,10 +74,13 @@ export class Panel {
 
   close() {
     document.body.classList.remove(`panel-${this.className.split(' ')[0]}-on`)
+    this.onClose()
+  }
+
+  onClose() {
     if (DomUtil.hasClass(this.container, 'on')) {
       DomUtil.removeClass(this.container, 'on')
       this.map.invalidateSize({ pan: false })
-      this.map.editedFeature = null
     }
   }
 }
@@ -83,6 +89,11 @@ export class EditPanel extends Panel {
   constructor(map) {
     super(map)
     this.className = 'right dark'
+  }
+
+  onClose() {
+    super.onClose()
+    this.map.editedFeature = null
   }
 }
 
