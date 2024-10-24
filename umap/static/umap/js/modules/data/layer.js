@@ -706,6 +706,7 @@ export class DataLayer {
       'options.showLabel',
       'options.labelDirection',
       'options.labelInteractive',
+      'options.labelImportance',
       'options.outlinkTarget',
       'options.interactive',
     ]
