@@ -32,7 +32,9 @@ const FeatureMixin = {
     if (map.editedFeature === this.feature) {
       this.feature._marked_for_deletion = true
       this.feature.endEdit()
-      map.editPanel.close()
+      if (map.editedFeature === this.feature) {
+        map.editPanel.close()
+      }
     }
   },
 
