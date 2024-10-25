@@ -661,30 +661,43 @@ const ControlsMixin = {
       })
     }
 
-    const connectedPeers = this.sync.getNumberOfConnectedPeers()
-    if (connectedPeers !== 0) {
-      const connectedPeersCount = L.DomUtil.createButton(
-        'leaflet-control-connected-peers',
-        rightContainer,
-        ''
-      )
-      L.DomEvent.on(connectedPeersCount, 'mouseover', () => {
-        this.tooltip.open({
-          content: L._('{connectedPeers} peer(s) currently connected to this map', {
-            connectedPeers: connectedPeers,
-          }),
-          anchor: connectedPeersCount,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      })
+    if (this.options.syncEnabled) {
+      const connectedPeers = this.sync.getNumberOfConnectedPeers()
+      let hoverMessage = ''
 
-      const updateConnectedPeersCount = () => {
-        connectedPeersCount.innerHTML =
-          '<span>' + this.sync.getNumberOfConnectedPeers() + '</span>'
+      if (connectedPeers !== 0 || !this.sync.websocketConnected) {
+        const connectedPeersCount = L.DomUtil.createButton(
+          'leaflet-control-connected-peers',
+          rightContainer,
+          ''
+        )
+        if (this.sync.websocketConnected) {
+          connectedPeersCount.innerHTML =
+            '<span>' + this.sync.getNumberOfConnectedPeers() + '</span>'
+          hoverMessage = L._(
+            '{connectedPeers} peer(s) currently connected to this map',
+            {
+              connectedPeers: connectedPeers,
+            }
+          )
+        } else {
+          connectedPeersCount.innerHTML = '<span>' + L._('Disconnected') + '</span>'
+          connectedPeersCount.classList.add('disconnected')
+          hoverMessage = L._('Reconnecting in {seconds} seconds', {
+            seconds: this.sync._reconnectDelay / 1000,
+          })
+        }
+
+        L.DomEvent.on(connectedPeersCount, 'mouseover', () => {
+          this.tooltip.open({
+            content: hoverMessage,
+            anchor: connectedPeersCount,
+            position: 'bottom',
+            delay: 500,
+            duration: 5000,
+          })
+        })
       }
-      updateConnectedPeersCount()
     }
 
     this.help.getStartedLink(rightContainer)

@@ -518,6 +518,12 @@ ul.photon-autocomplete {
     background-color: var(--color-lightCyan);
     color: var(--color-dark);
 }
+.leaflet-container .leaflet-control-connected-peers.disconnected,
+.leaflet-container .leaflet-control-connected-peers.disconnected:hover
+{
+    background-color: var(--color-red);
+    color: var(--color-darkGray);
+}
 
 .leaflet-container .leaflet-control-edit-disable:before,
 .leaflet-container .leaflet-control-edit-save:before,

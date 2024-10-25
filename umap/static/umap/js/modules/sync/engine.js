@@ -48,7 +48,7 @@ const MAX_RECONNECT_DELAY = 32000;
  * ```
  */
 export class SyncEngine {
-  constructor(map, urls, server) {
+  constructor(map, websocketTokenURI, websocketURI, server) {
     this.updaters = {
       map: new MapUpdater(map),
       feature: new FeatureUpdater(map),
@@ -58,14 +58,12 @@ export class SyncEngine {
     this._operations = new Operations()
     this._server = server
 
-    // Store URIs to avoid persisting the map
-    // mainly to ensure separation of concerns.
-    this._websocketTokenURI = urls.get('map_websocket_auth_token', {
-      map_id: map.options.umap_id,
-    })
-    this._websocketURI = map.options.websocketURI
+    this._websocketTokenURI = websocketTokenURI
+    this._websocketURI = websocketURI
+
     this._reconnectTimeout = null;
     this._reconnectDelay = RECONNECT_DELAY;
+    this.websocketConnected = false;
   }
 
   /**
@@ -92,9 +90,13 @@ export class SyncEngine {
   onConnection() {
     this._reconnectTimeout = null;
     this._reconnectDelay = RECONNECT_DELAY;
+    this.websocketConnected = true;
   }
 
   reconnect() {
+    this.websocketConnected = false;
+    this.updaters.map.update({ key: 'numberOfConnectedPeers' })
+  
     console.log("reconnecting in ", this._reconnectDelay, " ms")
     this._reconnectTimeout = setTimeout(() => {
       if (this._reconnectDelay < MAX_RECONNECT_DELAY) {

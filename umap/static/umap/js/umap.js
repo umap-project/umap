@@ -68,7 +68,14 @@ U.Map = L.Map.extend({
     this.server = new U.ServerRequest()
     this.request = new U.Request()
 
-    this.sync_engine = new U.SyncEngine(this, this.urls, this.server)
+    // Store URIs to avoid persisting the map
+    // mainly to ensure separation of concerns.
+    const websocketTokenURI = this.urls.get('map_websocket_auth_token', {
+      map_id: this.options.umap_id,
+    })
+    const websocketURI = this.options.websocketURI
+
+    this.sync_engine = new U.SyncEngine(this, websocketTokenURI, websocketURI, this.server)
     this.sync = this.sync_engine.proxy(this)
 
     this.initLoader()
@@ -206,7 +213,9 @@ U.Map = L.Map.extend({
   },
 
   initSyncEngine: async function () {
+    // This.options.websocketEnabled is set by the server admin
     if (this.options.websocketEnabled === false) return
+    // This.options.syncEnabled is set by the user in the map settings
     if (this.options.syncEnabled !== true) {
       this.sync.stop()
     } else {
