@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -75,7 +75,12 @@ U.Map = L.Map.extend({
     })
     const websocketURI = this.options.websocketURI
 
-    this.sync_engine = new U.SyncEngine(this, websocketTokenURI, websocketURI, this.server)
+    this.sync_engine = new U.SyncEngine(
+      this,
+      websocketTokenURI,
+      websocketURI,
+      this.server
+    )
     this.sync = this.sync_engine.proxy(this)
 
     this.initLoader()
@@ -231,6 +236,25 @@ U.Map = L.Map.extend({
   },
 
   render: function (fields) {
+    if (this.options.syncEnabled === true) {
+      if (!this.sync.websocketConnected) {
+        const template = `
+        <h3><i class="icon icon-16"></i><span>${L._('Disconnected')}</span></h3>
+        <p>
+        ${L._('This map has enabled real-time synchronization with other users, but you are currently disconnected. It will automatically reconnect when ready.')}
+        </p>
+        `
+        this.dialog.open({
+          template: template,
+          className: 'dark',
+          cancel: false,
+          accept: false,
+        })
+      } else {
+        this.dialog.close()
+      }
+    }
+
     if (fields.includes('numberOfConnectedPeers')) {
       this.renderEditToolbar()
       this.propagate()

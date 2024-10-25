@@ -4,6 +4,7 @@ const PING_INTERVAL = 30000;
 export class WebSocketTransport {
   constructor(webSocketURI, authToken, messagesReceiver) {
     this.receiver = messagesReceiver
+    this.closeRequested = false
 
     this.websocket = new WebSocket(webSocketURI)
 
@@ -14,7 +15,10 @@ export class WebSocketTransport {
     this.websocket.addEventListener('message', this.onMessage.bind(this))
     this.websocket.onclose = () => {
       console.log("websocket closed")
-      this.receiver.reconnect()
+      if (!this.closeRequested) {
+        console.log("Not requested, reconnecting...")
+        this.receiver.reconnect()
+      }
     }
 
     // To ensure the connection is still alive, we send ping and expect pong back.
@@ -49,5 +53,10 @@ export class WebSocketTransport {
     message.kind = kind
     const encoded = JSON.stringify(message)
     this.websocket.send(encoded)
+  }
+
+  close() {
+    this.closeRequested = true
+    this.websocket.close()
   }
 }

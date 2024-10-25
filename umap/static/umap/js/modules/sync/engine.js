@@ -91,6 +91,7 @@ export class SyncEngine {
     this._reconnectTimeout = null;
     this._reconnectDelay = RECONNECT_DELAY;
     this.websocketConnected = true;
+    this.updaters.map.update({ key: 'numberOfConnectedPeers' })
   }
 
   reconnect() {
@@ -102,6 +103,7 @@ export class SyncEngine {
       if (this._reconnectDelay < MAX_RECONNECT_DELAY) {
         this._reconnectDelay = this._reconnectDelay * RECONNECT_DELAY_FACTOR
       }
+      console.log("reconnecting now")
       this.authenticate()
     }, this._reconnectDelay);
   }
