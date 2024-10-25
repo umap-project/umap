@@ -8,6 +8,7 @@ import { WebSocketTransport } from './websocket.js'
 const RECONNECT_DELAY = 2000;
 const RECONNECT_DELAY_FACTOR = 2;
 const MAX_RECONNECT_DELAY = 32000;
+const DEBOUNCE_DELAY = 1000;
 
 /**
  * The syncEngine exposes an API to sync messages between peers over the network.
@@ -64,6 +65,7 @@ export class SyncEngine {
     this._reconnectTimeout = null;
     this._reconnectDelay = RECONNECT_DELAY;
     this.websocketConnected = false;
+    this._send = Utils.debounce(this.__send.bind(this), DEBOUNCE_DELAY)
   }
 
   /**
@@ -121,10 +123,9 @@ export class SyncEngine {
     this._send({ verb: 'delete', subject, metadata, key })
   }
 
-  _send(inputMessage) {
+  __send(inputMessage) {
     const message = this._operations.addLocal(inputMessage)
 
-    if (this.offline) return
     if (this.transport) {
       this.transport.send('OperationMessage', message)
     }
