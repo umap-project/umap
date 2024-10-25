@@ -236,12 +236,14 @@ U.Map = L.Map.extend({
   },
 
   render: function (fields) {
+    console.log("sync.websocketConnected", this.sync.websocketConnected)
+    console.log("options.syncEnabled", this.options.syncEnabled)
     if (this.options.syncEnabled === true) {
-      if (!this.sync.websocketConnected) {
+      if (this.sync.websocketConnected !== true) {
         const template = `
         <h3><i class="icon icon-16"></i><span>${L._('Disconnected')}</span></h3>
         <p>
-        ${L._('This map has enabled real-time synchronization with other users, but you are currently disconnected. It will automatically reconnect when ready.')}
+        ${L._('This map has enabled real-time synchronization with other users, but you are currently disconnected.It will automatically reconnect when ready.')}
         </p>
         `
         this.dialog.open({

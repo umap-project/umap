@@ -1,5 +1,6 @@
 const PONG_TIMEOUT = 5000;
 const PING_INTERVAL = 30000;
+const FIRST_CONNECTION_TIMEOUT = 2000;
 
 export class WebSocketTransport {
   constructor(webSocketURI, authToken, messagesReceiver) {
@@ -20,6 +21,13 @@ export class WebSocketTransport {
         this.receiver.reconnect()
       }
     }
+
+    this.ensureOpen = setInterval(() => {
+      if (this.websocket.readyState !== WebSocket.OPEN) {
+        this.websocket.close()
+        clearInterval(this.ensureOpen)
+      }
+    }, FIRST_CONNECTION_TIMEOUT)
 
     // To ensure the connection is still alive, we send ping and expect pong back.
     // Websocket provides a `ping` method to keep the connection alive, but it's

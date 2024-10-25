@@ -196,4 +196,7 @@ def run(host: str, port: int):
             logging.debug(f"Waiting for connections on {host}:{port}")
             await asyncio.Future()  # run forever
 
-    asyncio.run(_serve())
+    try:
+        asyncio.run(_serve())
+    except KeyboardInterrupt:
+        print("Closing WebSocket server")

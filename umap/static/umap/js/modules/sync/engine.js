@@ -70,6 +70,7 @@ export class SyncEngine {
    * Authenticate with the server and start the transport layer.
    */
   async authenticate() {
+    console.log("authenticating")
     const [response, _, error] = await this._server.get(this._websocketTokenURI)
     if (!error) {
       this.start(response.token)
