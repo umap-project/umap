@@ -430,3 +430,15 @@ export function deepEqual(object1, object2) {
 export function slugify(str) {
   return (str || 'data').replace(/[^a-z0-9]/gi, '_').toLowerCase()
 }
+
+export function debounce(callback, wait) {
+  let timeoutId = null;
+
+  return (...args) => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      callback.apply(null, args);
+    }, wait);
+  };
+}
