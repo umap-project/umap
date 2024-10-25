@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.7.1 - 2024-10-25
+
+### Bug fixes
+* use shutil.move instead of Path.rename to move to purgatory by @yohanboniface in #2236
+* always unset editedFeature on editPanel close by @yohanboniface in #2237
+
 ## 2.7.0 - 2024-10-24
 
 ### New features

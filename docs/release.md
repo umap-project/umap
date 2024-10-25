@@ -27,10 +27,9 @@
 4. `git tag 2.X.Y`
 5. `git push && git push --tag`
 6. Go to [Github release page](https://github.com/umap-project/umap/releases/new) and paste release notes
-7. Commit the changelog `git commit -am "changelog"`
-8. `make build`
-9. `make publish`
-10. `make docker`
+7. `make build`
+8. `make publish`
+9. `make docker`
 
 ### Deploying instances
 
