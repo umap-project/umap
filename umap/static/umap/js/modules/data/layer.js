@@ -20,6 +20,7 @@ import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Point, LineString, Polygon } from './features.js'
 import TableEditor from '../tableeditor.js'
+import { ServerStored } from '../saving.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -35,8 +36,9 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
   return acc
 }, {})
 
-export class DataLayer {
+export class DataLayer extends ServerStored {
   constructor(map, data) {
+    super()
     this.map = map
     this.sync = map.sync_engine.proxy(this)
     this._index = Array()
@@ -58,7 +60,6 @@ export class DataLayer {
       editMode: 'advanced',
     }
 
-    this._isDirty = false
     this._isDeleted = false
     this.setUmapId(data.id)
     this.setOptions(data)
@@ -89,21 +90,14 @@ export class DataLayer {
     if (this.isVisible()) this.propagateShow()
   }
 
-  set isDirty(status) {
-    this._isDirty = status
+  onDirty(status) {
     if (status) {
-      this.map.isDirty = true
       // A layer can be made dirty by indirect action (like dragging layers)
       // we need to have it loaded before saving it.
       if (!this.isLoaded()) this.fetchData()
     } else {
-      this.map.checkDirty()
       this.isDeleted = false
     }
-  }
-
-  get isDirty() {
-    return this._isDirty
   }
 
   set isDeleted(status) {
@@ -582,7 +576,6 @@ export class DataLayer {
 
   reset() {
     if (!this.umap_id) this.erase()
-
     this.resetOptions()
     this.parentPane.appendChild(this.pane)
     if (this._leaflet_events_bk && !this._leaflet_events) {
@@ -1057,8 +1050,9 @@ export class DataLayer {
     const headers = this._reference_version
       ? { 'X-Datalayer-Reference': this._reference_version }
       : {}
-    await this._trySave(saveUrl, headers, formData)
+    const status = await this._trySave(saveUrl, headers, formData)
     this._geojson = geojson
+    return status
   }
 
   async _trySave(url, headers, formData) {
@@ -1071,7 +1065,13 @@ export class DataLayer {
               'This situation is tricky, you have to choose carefully which version is pertinent.'
           ),
           async () => {
+            // Save again this layer
             await this._trySave(url, {}, formData)
+            this.isDirty = false
+
+            // Call the main save, in case something else needs to be saved
+            // as the conflict stopped the saving flow
+            await this.map.saveAll()
           }
         )
       }
@@ -1089,11 +1089,11 @@ export class DataLayer {
       this.setUmapId(data.id)
       this.updateOptions(data)
       this.backupOptions()
+      this.backupData()
       this.connectToMap()
       this._loaded = true
       this.redraw() // Needed for reordering features
-      this.isDirty = false
-      this.permissions.save()
+      return true
     }
   }
 
@@ -1102,7 +1102,7 @@ export class DataLayer {
       await this.map.server.post(this.getDeleteUrl())
     }
     delete this.map.datalayers[stamp(this)]
-    this.isDirty = false
+    return true
   }
 
   getMap() {
@@ -1130,7 +1130,9 @@ export class DataLayer {
   }
 
   renderLegend() {
-    for (const container of document.querySelectorAll(`.${this.cssId} .datalayer-legend`)) {
+    for (const container of document.querySelectorAll(
+      `.${this.cssId} .datalayer-legend`
+    )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
       const color = DomUtil.create('span', 'datalayer-color', container)

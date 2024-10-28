@@ -120,7 +120,7 @@ def test_can_change_name(live_server, openmap, page, datalayer):
     page.locator('input[name="name"]').press("Control+a")
     page.locator('input[name="name"]').fill("new name")
     expect(page.locator(".umap-browser .datalayer")).to_contain_text("new name")
-    expect(page.locator(".umap-is-dirty")).to_be_visible()
+    expect(page.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     saved = DataLayer.objects.last()

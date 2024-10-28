@@ -596,7 +596,7 @@ ul.photon-autocomplete {
 }
 .umap-edit-enabled .leaflet-control-edit-save,
 .umap-edit-enabled .leaflet-control-edit-disable,
-.umap-edit-enabled .umap-is-dirty .leaflet-control-edit-cancel {
+.umap-edit-enabled.umap-is-dirty .leaflet-control-edit-cancel {
     display: inline-block;
 }
 .umap-is-dirty .leaflet-control-edit-disable {
