@@ -158,8 +158,12 @@ U.Map = L.Map.extend({
     try {
       Object.defineProperty(this, 'isDirty', {
         get: () => U.SAVEMANAGER.has(this),
-        set: function (status) {
-          U.SAVEMANAGER.add(this)
+        set: (status) => {
+          if (status) {
+            U.SAVEMANAGER.add(this)
+          } else {
+            U.SAVEMANAGER.remove(this)
+          }
         },
       })
     } catch (e) {

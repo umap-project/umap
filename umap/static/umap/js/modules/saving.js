@@ -1,53 +1,47 @@
-export class SaveManager {
-  constructor() {
-    this._queue = new Set()
-  }
+const _queue = new Set()
 
-  get isDirty() {
-    return Boolean(this._queue.size)
-  }
+export let isDirty = false
 
-  async save() {
-    for (const obj of this._queue) {
-      const ok = await obj.save()
-      if (!ok) break
-      this.delete(obj)
-    }
-  }
-
-  add(obj) {
-    this._queue.add(obj)
-    this.updateDOM()
-  }
-
-  delete(obj) {
-    this._queue.delete(obj)
-    this.updateDOM()
-  }
-
-  has(obj) {
-    return this._queue.has(obj)
-  }
-
-  updateDOM() {
-    document.body.classList.toggle('umap-is-dirty', this._queue.size)
+export async function save() {
+  for (const obj of _queue) {
+    const ok = await obj.save()
+    if (!ok) break
+    remove(obj)
   }
 }
 
-export const SAVEMANAGER = new SaveManager()
+export function add(obj) {
+  _queue.add(obj)
+  _onUpdate()
+}
+
+export function remove(obj) {
+  _queue.delete(obj)
+  _onUpdate()
+}
+
+export function has(obj) {
+  return _queue.has(obj)
+}
+
+function _onUpdate() {
+  console.log(_queue)
+  isDirty = Boolean(_queue.size)
+  document.body.classList.toggle('umap-is-dirty', isDirty)
+}
 
 export class ServerStored {
   set isDirty(status) {
     if (status) {
-      SAVEMANAGER.add(this)
+      add(this)
     } else {
-      SAVEMANAGER.delete(this)
+      remove(this)
     }
     this.onDirty(status)
   }
 
   get isDirty() {
-    return SAVEMANAGER.has(this)
+    return has(this)
   }
 
   onDirty(status) {}
