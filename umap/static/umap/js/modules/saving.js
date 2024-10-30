@@ -17,19 +17,19 @@ export class SaveManager {
 
   add(obj) {
     this._queue.add(obj)
-    this.checkStatus()
+    this.updateDOM()
   }
 
   delete(obj) {
     this._queue.delete(obj)
-    this.checkStatus()
+    this.updateDOM()
   }
 
   has(obj) {
     return this._queue.has(obj)
   }
 
-  checkStatus() {
+  updateDOM() {
     document.body.classList.toggle('umap-is-dirty', this._queue.size)
   }
 }
