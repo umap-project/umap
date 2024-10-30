@@ -276,21 +276,38 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     page_two = context.new_page()
     page_two.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
 
+    # Change name on page one and save
     page_one.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
-    page_one.locator('input[name="name"]').fill("new name")
+    page_one.locator('input[name="name"]').fill("name from page one")
     with page_one.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_one.get_by_role("button", name="Save").click()
 
+    # Change name on page two and save
     page_two.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
-    page_two.locator('input[name="name"]').fill("custom name")
+    page_two.locator('input[name="name"]').fill("name from page two")
+
+    # Map should be in dirty status
+    expect(page_two.get_by_text("Cancel edits")).to_be_visible()
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_two.get_by_role("button", name="Save").click()
+
+    # Make sure data is unchanged on the server
     saved = DataLayer.objects.last()
     data = json.loads(Path(saved.geojson.path).read_text())
-    assert data["features"][0]["properties"]["name"] == "new name"
+    assert data["features"][0]["properties"]["name"] == "name from page one"
+
+    # We should have an alert with some actions
     expect(page_two.get_by_text("Whoops! Other contributor(s) changed")).to_be_visible()
+    # Map should still be in dirty status
+    expect(page_two.get_by_text("Cancel edits")).to_be_visible()
+
+    # Override data from page two
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_two.get_by_text("Keep your changes and loose theirs").click()
+
+    # Make sure server has page two data
     saved = DataLayer.objects.last()
     data = json.loads(Path(saved.geojson.path).read_text())
-    assert data["features"][0]["properties"]["name"] == "custom name"
+    assert data["features"][0]["properties"]["name"] == "name from page two"
+    # Map should not be in dirty status anymore
+    expect(page_two.get_by_text("Cancel edits")).to_be_hidden()

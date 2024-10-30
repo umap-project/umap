@@ -153,13 +153,17 @@ U.Map = L.Map.extend({
       this.options.onLoadPanel = 'datafilters'
     }
 
-    let isDirty = false // self status
+    // TODO: remove me when moved to modules
+    // and inheriting from ServerStored
     try {
       Object.defineProperty(this, 'isDirty', {
-        get: () => isDirty,
-        set: function (status) {
-          isDirty = status
-          this.checkDirty()
+        get: () => U.SAVEMANAGER.has(this),
+        set: (status) => {
+          if (status) {
+            U.SAVEMANAGER.add(this)
+          } else {
+            U.SAVEMANAGER.remove(this)
+          }
         },
       })
     } catch (e) {
@@ -200,7 +204,7 @@ U.Map = L.Map.extend({
       this.propagate()
     }
 
-    window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
+    window.onbeforeunload = () => (this.editEnabled && U.SAVEMANAGER.isDirty) || null
     this.backup()
   },
 
@@ -601,13 +605,13 @@ U.Map = L.Map.extend({
       let used = true
       switch (e.key) {
         case 'e':
-          if (!this.isDirty) this.disableEdit()
+          if (!U.SAVEMANAGER.isDirty) this.disableEdit()
           break
         case 's':
-          if (this.isDirty) this.save()
+          if (U.SAVEMANAGER.isDirty) this.saveAll()
           break
         case 'z':
-          if (this.isDirty) this.askForReset()
+          if (U.SAVEMANAGER.isDirty) this.askForReset()
           break
         case 'm':
           this.editTools.startMarker()
@@ -1015,10 +1019,6 @@ U.Map = L.Map.extend({
     this.onDataLayersChanged()
   },
 
-  checkDirty: function () {
-    this._container.classList.toggle('umap-is-dirty', this.isDirty)
-  },
-
   exportOptions: function () {
     const properties = {}
     for (const option of Object.keys(U.SCHEMA)) {
@@ -1029,7 +1029,7 @@ U.Map = L.Map.extend({
     return properties
   },
 
-  saveSelf: async function () {
+  save: async function () {
     this.rules.commit()
     const geojson = {
       type: 'Feature',
@@ -1048,7 +1048,7 @@ U.Map = L.Map.extend({
       return
     }
     if (data.login_required) {
-      window.onLogin = () => this.save()
+      window.onLogin = () => this.saveAll()
       window.open(data.login_required)
       return
     }
@@ -1093,21 +1093,11 @@ U.Map = L.Map.extend({
     return true
   },
 
-  save: async function () {
-    if (!this.isDirty) return
+  saveAll: async function () {
+    if (!U.SAVEMANAGER.isDirty) return
     if (this._default_extent) this._setCenterAndZoom()
     this.backup()
-    if (this.options.editMode === 'advanced') {
-      // Only save the map if the user has the rights to do so.
-      const ok = await this.saveSelf()
-      if (!ok) return
-    }
-    await this.permissions.save()
-    // Iter over all datalayers, including deleted.
-    for (const datalayer of Object.values(this.datalayers)) {
-      if (datalayer.isDirty) await datalayer.save()
-    }
-    this.isDirty = false
+    await U.SAVEMANAGER.save()
     // Do a blind render for now, as we are not sure what could
     // have changed, we'll be more subtil when we'll remove the
     // save action

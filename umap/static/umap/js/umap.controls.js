@@ -734,7 +734,7 @@ const ControlsMixin = {
       'leaflet-control-edit-save button',
       rightContainer,
       L.DomUtil.add('span', '', null, L._('Save')),
-      this.save,
+      this.saveAll,
       this
     )
     L.DomEvent.on(

@@ -1,24 +1,17 @@
 import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { ServerStored } from './saving.js'
 import * as Utils from './utils.js'
 
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
-export class MapPermissions {
+export class MapPermissions extends ServerStored {
   constructor(map) {
+    super()
     this.setOptions(map.options.permissions)
     this.map = map
     this._isDirty = false
-  }
-
-  set isDirty(status) {
-    this._isDirty = status
-    if (status) this.map.isDirty = status
-  }
-
-  get isDirty() {
-    return this._isDirty
   }
 
   setOptions(options) {
@@ -200,8 +193,8 @@ export class MapPermissions {
     )
     if (!error) {
       this.commit()
-      this.isDirty = false
       this.map.fire('postsync')
+      return true
     }
   }
 
@@ -233,8 +226,9 @@ export class MapPermissions {
   }
 }
 
-export class DataLayerPermissions {
+export class DataLayerPermissions extends ServerStored {
   constructor(datalayer) {
+    super()
     this.options = Object.assign(
       {
         edit_status: null,
@@ -243,16 +237,6 @@ export class DataLayerPermissions {
     )
 
     this.datalayer = datalayer
-    this._isDirty = false
-  }
-
-  set isDirty(status) {
-    this._isDirty = status
-    if (status) this.datalayer.isDirty = status
-  }
-
-  get isDirty() {
-    return this._isDirty
   }
 
   get map() {
@@ -297,12 +281,13 @@ export class DataLayerPermissions {
     )
     if (!error) {
       this.commit()
-      this.isDirty = false
+      return true
     }
   }
 
   commit() {
     this.datalayer.options.permissions = Object.assign(
+      {},
       this.datalayer.options.permissions,
       this.options
     )

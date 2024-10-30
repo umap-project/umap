@@ -31,6 +31,7 @@ import { DataLayer, LAYER_TYPES } from './data/layer.js'
 import { DataLayerPermissions, MapPermissions } from './permissions.js'
 import { Point, LineString, Polygon } from './data/features.js'
 import { LeafletMarker, LeafletPolyline, LeafletPolygon } from './rendering/ui.js'
+import * as SAVEMANAGER from './saving.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
@@ -70,6 +71,7 @@ window.U = {
   Request,
   RequestError,
   Rules,
+  SAVEMANAGER,
   SCHEMA,
   ServerRequest,
   Share,
