@@ -1066,12 +1066,14 @@ export class DataLayer extends ServerStored {
           ),
           async () => {
             // Save again this layer
-            await this._trySave(url, {}, formData)
-            this.isDirty = false
+            const status = await this._trySave(url, {}, formData)
+            if (status) {
+              this.isDirty = false
 
-            // Call the main save, in case something else needs to be saved
-            // as the conflict stopped the saving flow
-            await this.map.saveAll()
+              // Call the main save, in case something else needs to be saved
+              // as the conflict stopped the saving flow
+              await this.map.saveAll()
+            }
           }
         )
       }
