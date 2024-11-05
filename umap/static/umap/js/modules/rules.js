@@ -21,10 +21,10 @@ class Rule {
 
   set isDirty(status) {
     this._isDirty = status
-    if (status) this.map.isDirty = status
+    if (status) this.umap.isDirty = status
   }
 
-  constructor(map, condition = '', options = {}) {
+  constructor(umap, condition = '', options = {}) {
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
@@ -37,14 +37,14 @@ class Rule {
       ['!=', this.not_equal],
       ['=', this.equal],
     ]
-    this.map = map
+    this.umap = umap
     this.active = true
     this.options = options
     this.condition = condition
   }
 
   render(fields) {
-    this.map.render(fields)
+    this.umap.render(fields)
   }
 
   equal(other) {
@@ -102,7 +102,7 @@ class Rule {
   }
 
   getMap() {
-    return this.map
+    return this.umap
   }
 
   getOption(option) {
@@ -136,7 +136,7 @@ class Rule {
     const defaultShapeProperties = DomUtil.add('div', '', container)
     defaultShapeProperties.appendChild(builder.build())
     const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
-    const properties = this.map.allProperties()
+    const properties = this.umap.allProperties()
     autocomplete.suggestions = properties
     autocomplete.input.addEventListener('input', (event) => {
       const value = event.target.value
@@ -144,12 +144,12 @@ class Rule {
         autocomplete.suggestions = [`${value}=`, `${value}!=`, `${value}>`, `${value}<`]
       } else if (value.endsWith('=')) {
         const key = value.split('!')[0].split('=')[0]
-        autocomplete.suggestions = this.map
+        autocomplete.suggestions = this.umap
           .sortedValues(key)
           .map((str) => `${value}${str || ''}`)
       }
     })
-    this.map.editPanel.open({ content: container })
+    this.umap.editPanel.open({ content: container })
   }
 
   renderToolbox(row) {
@@ -176,7 +176,7 @@ class Rule {
       function () {
         if (!confirm(translate('Are you sure you want to delete this rule?'))) return
         this._delete()
-        this.map.editPanel.close()
+        this.umap.editPanel.close()
       },
       this
     )
@@ -186,27 +186,27 @@ class Rule {
     DomEvent.on(toggle, 'click', () => {
       this.active = !this.active
       row.classList.toggle('off', !this.active)
-      this.map.render(['rules'])
+      this.umap.render(['rules'])
     })
   }
 
   _delete() {
-    this.map.rules.rules = this.map.rules.rules.filter((rule) => rule !== this)
+    this.umap.rules.rules = this.umap.rules.rules.filter((rule) => rule !== this)
   }
 }
 
 export default class Rules {
-  constructor(map) {
-    this.map = map
+  constructor(umap) {
+    this.umap = umap
     this.rules = []
     this.loadRules()
   }
 
   loadRules() {
-    if (!this.map.options.rules?.length) return
-    for (const { condition, options } of this.map.options.rules) {
+    if (!this.umap.properties.rules?.length) return
+    for (const { condition, options } of this.umap.properties.rules) {
       if (!condition) continue
-      this.rules.push(new Rule(this.map, condition, options))
+      this.rules.push(new Rule(this.umap, condition, options))
     }
   }
 
@@ -225,7 +225,7 @@ export default class Rules {
     else newIdx = referenceIdx + 1
     this.rules.splice(newIdx, 0, moved)
     moved.isDirty = true
-    this.map.render(['rules'])
+    this.umap.render(['rules'])
   }
 
   edit(container) {
@@ -243,14 +243,14 @@ export default class Rules {
   }
 
   addRule() {
-    const rule = new Rule(this.map)
+    const rule = new Rule(this.umap)
     rule.isDirty = true
     this.rules.push(rule)
     rule.edit(map)
   }
 
   commit() {
-    this.map.options.rules = this.rules.map((rule) => {
+    this.umap.properties.rules = this.rules.map((rule) => {
       return {
         condition: rule.condition,
         options: rule.options,

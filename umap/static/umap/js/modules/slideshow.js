@@ -13,20 +13,20 @@ const TOOLBOX_TEMPLATE = `
 `
 
 export default class Slideshow extends WithTemplate {
-  constructor(map, options) {
+  constructor(umap, options) {
     super()
-    this.map = map
+    this.umap = umap
     this._id = null
     this.CLASSNAME = 'umap-slideshow-active'
     this.setOptions(options)
     this._current = null
 
     if (this.options.autoplay) {
-      this.map.onceDataLoaded(function () {
+      this.umap.onceDataLoaded(function () {
         this.play()
       }, this)
     }
-    this.map.on(
+    this.umap._leafletMap.on(
       'edit:enabled',
       function () {
         this.stop()
@@ -65,7 +65,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   defaultDatalayer() {
-    return this.map.findDataLayer((d) => d.canBrowse())
+    return this.umap.findDataLayer((d) => d.canBrowse())
   }
 
   startSpinner() {
@@ -83,7 +83,7 @@ export default class Slideshow extends WithTemplate {
 
   play() {
     if (this._id) return
-    if (this.map.editEnabled || !this.map.options.slideshow.active) return
+    if (this.umap.editEnabled || !this.umap.options.slideshow.active) return
     L.DomUtil.addClass(document.body, this.CLASSNAME)
     this._id = window.setInterval(L.bind(this.loop, this), this.options.delay)
     this.startSpinner()

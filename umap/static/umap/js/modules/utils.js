@@ -41,7 +41,7 @@ export function getImpactsFromSchema(fields, schema) {
       // remove the option prefix for fields
       // And only keep the first part in case of a subfield
       // (e.g "options.limitBounds.foobar" will just return "limitBounds")
-      return field.replace('options.', '').split('.')[0]
+      return field.replace('options.', '').replace('properties.', '').split('.')[0]
     })
     .reduce((acc, field) => {
       // retrieve the "impacts" field from the schema

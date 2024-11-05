@@ -25,7 +25,6 @@ export function has(obj) {
 }
 
 function _onUpdate() {
-  console.log(_queue)
   isDirty = Boolean(_queue.size)
   document.body.classList.toggle('umap-is-dirty', isDirty)
 }

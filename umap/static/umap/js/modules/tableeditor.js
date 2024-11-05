@@ -17,7 +17,7 @@ export default class TableEditor extends WithTemplate {
   constructor(datalayer) {
     super()
     this.datalayer = datalayer
-    this.map = this.datalayer.map
+    this.umap = this.datalayer.umap
     this.contextmenu = new ContextMenu({ className: 'dark' })
     this.table = this.loadTemplate(TEMPLATE)
     if (!this.datalayer.isRemoteLayer()) {
@@ -36,20 +36,20 @@ export default class TableEditor extends WithTemplate {
   openHeaderMenu(property) {
     const actions = []
     let filterItem
-    if (this.map.facets.has(property)) {
+    if (this.umap.facets.has(property)) {
       filterItem = {
         label: translate('Remove filter for this column'),
         action: () => {
-          this.map.facets.remove(property)
-          this.map.browser.open('filters')
+          this.umap.facets.remove(property)
+          this.umap.browser.open('filters')
         },
       }
     } else {
       filterItem = {
         label: translate('Add filter for this column'),
         action: () => {
-          this.map.facets.add(property)
-          this.map.browser.open('filters')
+          this.umap.facets.add(property)
+          this.umap.browser.open('filters')
         },
       }
     }
@@ -86,8 +86,8 @@ export default class TableEditor extends WithTemplate {
   }
 
   renderBody() {
-    const bounds = this.map.getBounds()
-    const inBbox = this.map.browser.options.inBbox
+    const bounds = this.umap._leafletMap.getBounds()
+    const inBbox = this.umap.browser.options.inBbox
     let html = ''
     this.datalayer.eachFeature((feature) => {
       if (feature.isFiltered()) return
@@ -121,7 +121,7 @@ export default class TableEditor extends WithTemplate {
   }
 
   renameProperty(property) {
-    this.map.dialog
+    this.umap.dialog
       .prompt(translate('Please enter the new name of this property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
@@ -135,7 +135,7 @@ export default class TableEditor extends WithTemplate {
   }
 
   deleteProperty(property) {
-    this.map.dialog
+    this.umap.dialog
       .confirm(
         translate('Are you sure you want to delete this property on all the features?')
       )
@@ -150,7 +150,7 @@ export default class TableEditor extends WithTemplate {
   }
 
   addProperty() {
-    this.map.dialog
+    this.umap.dialog
       .prompt(translate('Please enter the name of the property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
@@ -187,10 +187,10 @@ export default class TableEditor extends WithTemplate {
       <button class="flat" type="button" data-ref="filters">
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)
-    filterButton.addEventListener('click', () => this.map.browser.open('filters'))
+    filterButton.addEventListener('click', () => this.umap.browser.open('filters'))
     actions.push(filterButton)
 
-    this.map.fullPanel.open({
+    this.umap.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
       actions: actions,
@@ -304,7 +304,7 @@ export default class TableEditor extends WithTemplate {
   deleteRows() {
     const selectedRows = this.getSelectedRows()
     if (!selectedRows.length) return
-    this.map.dialog
+    this.umap.dialog
       .confirm(
         translate('Found {count} rows. Are you sure you want to delete all?', {
           count: selectedRows.length,
@@ -320,9 +320,9 @@ export default class TableEditor extends WithTemplate {
         this.datalayer.show()
         this.datalayer.dataChanged()
         this.renderBody()
-        if (this.map.browser.isOpen()) {
-          this.map.browser.resetFilters()
-          this.map.browser.open('filters')
+        if (this.umap.browser.isOpen()) {
+          this.umap.browser.resetFilters()
+          this.umap.browser.open('filters')
         }
       })
   }

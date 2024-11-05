@@ -62,8 +62,8 @@ const Panel = Popup.extend({
   },
 
   onAdd: function (map) {
-    map.panel.setDefaultMode('expanded')
-    map.panel.open({
+    map.umap.panel.setDefaultMode('expanded')
+    map.umap.panel.open({
       content: this._content,
       actions: [Browser.backButton(map)],
     })
@@ -79,7 +79,7 @@ const Panel = Popup.extend({
   },
 
   onRemove: function (map) {
-    map.panel.close()
+    map.umap.panel.close()
 
     // fire events as in base class Popup.js:onRemove
     map.fire('popupclose', { popup: this })

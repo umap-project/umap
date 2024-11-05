@@ -73,7 +73,7 @@ export const Default = FeatureGroup.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     FeatureGroup.prototype.initialize.call(this)
-    LayerMixin.onInit.call(this, this.datalayer.map)
+    LayerMixin.onInit.call(this, this.datalayer.umap._leafletMap)
   },
 
   onAdd: function (map) {

@@ -93,10 +93,10 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
         page.locator('img[src="https://tile.openstreetmap.fr/hot/6/32/21.png"]')
     ).to_be_visible()
     # Should not have imported umap_id, while in the file options
-    assert not page.evaluate("U.MAP.options.umap_id")
+    assert not page.evaluate("U.MAP.properties.umap_id")
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
-    assert page.evaluate("U.MAP.options.umap_id")
+    assert page.evaluate("U.MAP.properties.umap_id")
 
 
 def test_import_geojson_from_textarea(tilelayer, live_server, page):

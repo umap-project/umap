@@ -48,8 +48,8 @@ const TEMPLATE = `
     `
 
 export default class Importer {
-  constructor(map) {
-    this.map = map
+  constructor(umap) {
+    this.umap = umap
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.loadImporters()
@@ -57,9 +57,9 @@ export default class Importer {
   }
 
   loadImporters() {
-    for (const [name, config] of Object.entries(this.map.options.importers || {})) {
+    for (const [name, config] of Object.entries(this.umap.properties.importers || {})) {
       const register = (mod) => {
-        this.IMPORTERS.push(new mod.Importer(this.map, config))
+        this.IMPORTERS.push(new mod.Importer(this.umap, config))
       }
       // We need to have explicit static paths for Django's collectstatic with hashes.
       switch (name) {
@@ -139,8 +139,8 @@ export default class Importer {
 
   get layer() {
     return (
-      this.map.datalayers[this.layerId] ||
-      this.map.createDataLayer({ name: this.layerName })
+      this.umap.datalayers[this.layerId] ||
+      this.umap.createDataLayer({ name: this.layerName })
     )
   }
 
@@ -167,7 +167,7 @@ export default class Importer {
         textContent: type,
       })
     }
-    this.map.help.parse(this.container)
+    this.umap.help.parse(this.container)
     DomEvent.on(this.qs('[name=submit]'), 'click', this.submit, this)
     DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
     for (const element of this.container.querySelectorAll('[onchange]')) {
@@ -206,7 +206,7 @@ export default class Importer {
     this.layerName = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
-    this.map.eachDataLayerReverse((datalayer) => {
+    this.umap.eachDataLayerReverse((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
         DomUtil.element({
           tagName: 'option',
@@ -227,7 +227,7 @@ export default class Importer {
 
   open() {
     if (!this.container) this.build()
-    const onLoad = this.map.editPanel.open({ content: this.container })
+    const onLoad = this.umap.editPanel.open({ content: this.container })
     onLoad.then(() => this.onLoad())
   }
 
@@ -251,16 +251,16 @@ export default class Importer {
   }
 
   full() {
-    this.map.once('postsync', this.map._setDefaultCenter)
+    this.umap._leafletMap.once('postsync', this.umap._leafletMap._setDefaultCenter)
     try {
       if (this.files.length) {
         for (const file of this.files) {
-          this.map.processFileToImport(file, null, 'umap')
+          this.umap.processFileToImport(file, null, 'umap')
         }
       } else if (this.raw) {
-        this.map.importRaw(this.raw)
+        this.umap.importRaw(this.raw)
       } else if (this.url) {
-        this.map.importFromUrl(this.url, this.format)
+        this.umap.importFromUrl(this.url, this.format)
       }
     } catch (e) {
       Alert.error(translate('Invalid umap data'))
@@ -282,7 +282,7 @@ export default class Importer {
       url: this.url,
       format: this.format,
     }
-    if (this.map.options.urls.ajax_proxy) {
+    if (this.umap.properties.urls.ajax_proxy) {
       layer.options.remoteData.proxy = true
       layer.options.remoteData.ttl = SCHEMA.ttl.default
     }
@@ -300,7 +300,7 @@ export default class Importer {
     if (this.clear) layer.empty()
     if (this.files.length) {
       for (const file of this.files) {
-        this.map.processFileToImport(file, layer, this.format)
+        this.umap.processFileToImport(file, layer, this.format)
       }
     } else if (this.raw) {
       layer.importRaw(this.raw, this.format)

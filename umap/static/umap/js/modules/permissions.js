@@ -7,10 +7,10 @@ import * as Utils from './utils.js'
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
 export class MapPermissions extends ServerStored {
-  constructor(map) {
+  constructor(umap) {
     super()
-    this.setOptions(map.options.permissions)
-    this.map = map
+    this.setOptions(umap.properties.permissions)
+    this.umap = umap
     this._isDirty = false
   }
 
@@ -28,11 +28,11 @@ export class MapPermissions extends ServerStored {
   }
 
   isOwner() {
-    return Boolean(this.map.options.user?.is_owner)
+    return Boolean(this.umap.properties.user?.is_owner)
   }
 
   isAnonymousMap() {
-    return !this.map.options.permissions.owner
+    return !this.umap.properties.permissions.owner
   }
 
   _editAnonymous(container) {
@@ -43,7 +43,7 @@ export class MapPermissions extends ServerStored {
         {
           handler: 'IntSelect',
           label: translate('Who can edit'),
-          selectOptions: this.map.options.edit_statuses,
+          selectOptions: this.umap.properties.edit_statuses,
         },
       ])
       const builder = new U.FormBuilder(this, fields)
@@ -58,7 +58,7 @@ export class MapPermissions extends ServerStored {
         )
       }
 
-      if (this.map.options.user?.id) {
+      if (this.umap.properties.user?.id) {
         // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
         // Note: real check is made on the back office anyway.
         const advancedActions = DomUtil.createFieldset(
@@ -90,7 +90,7 @@ export class MapPermissions extends ServerStored {
         {
           handler: 'IntSelect',
           label: translate('Who can edit'),
-          selectOptions: this.map.options.edit_statuses,
+          selectOptions: this.umap.properties.edit_statuses,
         },
       ])
       topFields.push([
@@ -98,20 +98,20 @@ export class MapPermissions extends ServerStored {
         {
           handler: 'IntSelect',
           label: translate('Who can view'),
-          selectOptions: this.map.options.share_statuses,
+          selectOptions: this.umap.properties.share_statuses,
         },
       ])
       collaboratorsFields.push([
         'options.owner',
         { handler: 'ManageOwner', label: translate("Map's owner") },
       ])
-      if (this.map.options.user?.teams?.length) {
+      if (this.umap.properties.user?.teams?.length) {
         collaboratorsFields.push([
           'options.team',
           {
             handler: 'ManageTeam',
             label: translate('Attach map to a team'),
-            teams: this.map.options.user.teams,
+            teams: this.umap.properties.user.teams,
           },
         ])
       }
@@ -136,20 +136,20 @@ export class MapPermissions extends ServerStored {
   }
 
   _editDatalayers(container) {
-    if (this.map.hasLayers()) {
+    if (this.umap.hasLayers()) {
       const fieldset = Utils.loadTemplate(
         `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      this.map.eachDataLayer((datalayer) => {
+      this.umap.eachDataLayer((datalayer) => {
         datalayer.permissions.edit(fieldset)
       })
     }
   }
 
   edit() {
-    if (this.map.options.editMode !== 'advanced') return
-    if (!this.map.options.umap_id) {
+    if (this.umap.properties.editMode !== 'advanced') return
+    if (!this.umap.properties.umap_id) {
       Alert.info(translate('Please save the map first'))
       return
     }
@@ -158,15 +158,15 @@ export class MapPermissions extends ServerStored {
     if (this.isAnonymousMap()) this._editAnonymous(container)
     else this._editWithOwner(container)
     this._editDatalayers(container)
-    this.map.editPanel.open({ content: container, className: 'dark' })
+    this.umap.editPanel.open({ content: container, className: 'dark' })
   }
 
   async attach() {
-    const [data, response, error] = await this.map.server.post(this.getAttachUrl())
+    const [data, response, error] = await this.umap.server.post(this.getAttachUrl())
     if (!error) {
-      this.options.owner = this.map.options.user
+      this.options.owner = this.umap.properties.user
       Alert.success(translate('Map has been attached to your account'))
-      this.map.editPanel.close()
+      this.umap.editPanel.close()
     }
   }
 
@@ -186,40 +186,41 @@ export class MapPermissions extends ServerStored {
       formData.append('team', this.options.team?.id || '')
       formData.append('share_status', this.options.share_status)
     }
-    const [data, response, error] = await this.map.server.post(
+    const [data, response, error] = await this.umap.server.post(
       this.getUrl(),
       {},
       formData
     )
     if (!error) {
       this.commit()
-      this.map.fire('postsync')
+      this.umap._leafletMap.fire('postsync')
       return true
     }
   }
 
   getUrl() {
-    return Utils.template(this.map.options.urls.map_update_permissions, {
-      map_id: this.map.options.umap_id,
+    return this.umap.urls.get('map_update_permissions', {
+      map_id: this.umap.properties.umap_id,
     })
   }
 
   getAttachUrl() {
-    return Utils.template(this.map.options.urls.map_attach_owner, {
-      map_id: this.map.options.umap_id,
+    return this.umap.urls.get('map_attach_owner', {
+      map_id: this.umap.properties.umap_id,
     })
   }
 
   commit() {
-    this.map.options.permissions = Object.assign(
-      this.map.options.permissions,
+    this.umap.properties.permissions = Object.assign(
+      {},
+      this.umap.properties.permissions,
       this.options
     )
   }
 
   getShareStatusDisplay() {
-    if (this.map.options.share_statuses) {
-      return Object.fromEntries(this.map.options.share_statuses)[
+    if (this.umap.properties.share_statuses) {
+      return Object.fromEntries(this.umap.properties.share_statuses)[
         this.options.share_status
       ]
     }
@@ -239,8 +240,8 @@ export class DataLayerPermissions extends ServerStored {
     this.datalayer = datalayer
   }
 
-  get map() {
-    return this.datalayer.map
+  get umap() {
+    return this.datalayer.umap
   }
 
   edit(container) {
@@ -252,7 +253,7 @@ export class DataLayerPermissions extends ServerStored {
           label: translate('Who can edit "{layer}"', {
             layer: this.datalayer.getName(),
           }),
-          selectOptions: this.map.options.datalayer_edit_statuses,
+          selectOptions: this.umap.properties.datalayer_edit_statuses,
         },
       ],
     ]
@@ -264,8 +265,8 @@ export class DataLayerPermissions extends ServerStored {
   }
 
   getUrl() {
-    return this.map.urls.get('datalayer_permissions', {
-      map_id: this.map.options.umap_id,
+    return this.umap.urls.get('datalayer_permissions', {
+      map_id: this.umap.properties.umap_id,
       pk: this.datalayer.umap_id,
     })
   }
@@ -274,7 +275,7 @@ export class DataLayerPermissions extends ServerStored {
     if (!this.isDirty) return
     const formData = new FormData()
     formData.append('edit_status', this.options.edit_status)
-    const [data, response, error] = await this.map.server.post(
+    const [data, response, error] = await this.umap.server.post(
       this.getUrl(),
       {},
       formData

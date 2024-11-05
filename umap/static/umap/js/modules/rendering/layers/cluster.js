@@ -40,7 +40,7 @@ export const Cluster = L.MarkerClusterGroup.extend({
       options.maxClusterRadius = this.datalayer.options.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
-    LayerMixin.onInit.call(this, this.datalayer.map)
+    LayerMixin.onInit.call(this, this.datalayer.umap._leafletMap)
     this._markerCluster = MarkerCluster
     this._layers = []
   },

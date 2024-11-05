@@ -6,9 +6,9 @@ import { EXPORT_FORMATS } from './formatter.js'
 import ContextMenu from './ui/contextmenu.js'
 
 export default class Browser {
-  constructor(map) {
-    this.map = map
-    this.map.on('moveend', this.onMoveEnd, this)
+  constructor(umap) {
+    this.umap = umap
+    this.umap._leafletMap.on('moveend', this.onMoveEnd, this)
     this.options = {
       filter: '',
       inBbox: false,
@@ -82,7 +82,7 @@ export default class Browser {
 
   updateDatalayer(datalayer) {
     // Compute once, but use it for each feature later.
-    this.bounds = this.map.getBounds()
+    this.bounds = this.umap._leafletMap.getBounds()
     const parent = DomUtil.get(this.datalayerId(datalayer))
     // Panel is not open
     if (!parent) return
@@ -115,10 +115,10 @@ export default class Browser {
   }
 
   onFormChange() {
-    this.map.eachBrowsableDataLayer((datalayer) => {
+    this.umap.eachBrowsableDataLayer((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
-      if (this.map.fullPanel?.isOpen()) datalayer.tableEdit()
+      if (this.umap.fullPanel?.isOpen()) datalayer.tableEdit()
     })
     this.toggleBadge()
   }
@@ -132,13 +132,13 @@ export default class Browser {
   }
 
   hasFilters() {
-    return !!this.options.filter || this.map.facets.isActive()
+    return !!this.options.filter || this.umap.facets.isActive()
   }
 
   onMoveEnd() {
     if (!this.isOpen()) return
     const isListDynamic = this.options.inBbox
-    this.map.eachBrowsableDataLayer((datalayer) => {
+    this.umap.eachBrowsableDataLayer((datalayer) => {
       if (!isListDynamic && !datalayer.hasDynamicData()) return
       this.updateDatalayer(datalayer)
     })
@@ -147,7 +147,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    this.map.eachBrowsableDataLayer((datalayer) => {
+    this.umap.eachBrowsableDataLayer((datalayer) => {
       this.addDataLayer(datalayer, this.dataContainer)
     })
   }
@@ -186,9 +186,9 @@ export default class Browser {
     DomEvent.on(builder.form, 'reset', () => {
       window.setTimeout(builder.syncAll.bind(builder))
     })
-    if (this.map.options.facetKey) {
-      fields = this.map.facets.build()
-      filtersBuilder = new L.FormBuilder(this.map.facets, fields, {
+    if (this.umap.properties.facetKey) {
+      fields = this.umap.facets.build()
+      filtersBuilder = new L.FormBuilder(this.umap.facets, fields, {
         callback: () => this.onFormChange(),
       })
       DomEvent.on(filtersBuilder.form, 'reset', () => {
@@ -206,7 +206,7 @@ export default class Browser {
       textContent: translate('Reset all'),
     })
 
-    this.map.panel.open({
+    this.umap.panel.open({
       content: container,
       className: 'umap-browser',
     })
@@ -230,7 +230,7 @@ export default class Browser {
     `)
     container.appendChild(toolbox)
     toggle.addEventListener('click', () => this.toggleLayers())
-    fitBounds.addEventListener('click', () => this.map.fitDataBounds())
+    fitBounds.addEventListener('click', () => this.umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
   }
 
@@ -240,7 +240,7 @@ export default class Browser {
     for (const format of Object.keys(EXPORT_FORMATS)) {
       items.push({
         label: format,
-        action: () => this.map.share.download(format),
+        action: () => this.umap.share.download(format),
       })
     }
     menu.openBelow(element, items)
@@ -250,10 +250,10 @@ export default class Browser {
     // If at least one layer is shown, hide it
     // otherwise show all
     let allHidden = true
-    this.map.eachBrowsableDataLayer((datalayer) => {
+    this.umap.eachBrowsableDataLayer((datalayer) => {
       if (datalayer.isVisible()) allHidden = false
     })
-    this.map.eachBrowsableDataLayer((datalayer) => {
+    this.umap.eachBrowsableDataLayer((datalayer) => {
       if (allHidden) {
         datalayer.show()
       } else {
@@ -271,7 +271,7 @@ export default class Browser {
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(button)
-    DomEvent.on(button, 'click', map.openBrowser, map)
+    DomEvent.on(button, 'click', map.umap.openBrowser, map.umap)
     return button
   }
 }

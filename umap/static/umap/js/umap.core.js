@@ -25,48 +25,6 @@ L.Util.copyToClipboard = (textToCopy) => {
   }
 }
 
-L.Util.queryString = (name, fallback) => {
-  const decode = (s) => decodeURIComponent(s.replace(/\+/g, ' '))
-  const qs = window.location.search.slice(1).split('&')
-  const qa = {}
-  for (const i in qs) {
-    const key = qs[i].split('=')
-    if (!key) continue
-    qa[decode(key[0])] = key[1] ? decode(key[1]) : 1
-  }
-  return qa[name] || fallback
-}
-
-L.Util.booleanFromQueryString = (name) => {
-  const value = L.Util.queryString(name)
-  return value === '1' || value === 'true'
-}
-
-L.Util.setFromQueryString = (options, name) => {
-  const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value
-}
-
-L.Util.setBooleanFromQueryString = (options, name) => {
-  const value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') options[name] = value === '1' || value === 'true'
-}
-
-L.Util.setNumberFromQueryString = (options, name) => {
-  const value = +L.Util.queryString(name)
-  if (!Number.isNaN(value)) options[name] = value
-}
-
-L.Util.setNullableBooleanFromQueryString = (options, name) => {
-  let value = L.Util.queryString(name)
-  if (typeof value !== 'undefined') {
-    if (value === 'null') value = null
-    else if (value === '0' || value === 'false') value = false
-    else value = true
-    options[name] = value
-  }
-}
-
 L.DomUtil.add = (tagName, className, container, content) => {
   const el = L.DomUtil.create(tagName, className, container)
   if (content) {

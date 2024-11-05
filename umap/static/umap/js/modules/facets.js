@@ -3,8 +3,8 @@ import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 
 export default class Facets {
-  constructor(map) {
-    this.map = map
+  constructor(umap) {
+    this.umap = umap
     this.selected = {}
   }
 
@@ -24,7 +24,7 @@ export default class Facets {
       this.selected[name] = selected
     }
 
-    this.map.eachBrowsableDataLayer((datalayer) => {
+    this.umap.eachBrowsableDataLayer((datalayer) => {
       datalayer.eachFeature((feature) => {
         for (const name of names) {
           let value = feature.properties[name]
@@ -108,8 +108,8 @@ export default class Facets {
     const defaultType = 'checkbox'
     const allowedTypes = [defaultType, 'radio', 'number', 'date', 'datetime']
     const defined = new Map()
-    if (!this.map.options.facetKey) return defined
-    return (this.map.options.facetKey || '').split(',').reduce((acc, curr) => {
+    if (!this.umap.properties.facetKey) return defined
+    return (this.umap.properties.facetKey || '').split(',').reduce((acc, curr) => {
       let [name, label, type] = curr.split('|')
       type = allowedTypes.includes(type) ? type : defaultType
       acc.set(name, { label: label || name, type: type })
@@ -146,15 +146,15 @@ export default class Facets {
     const defined = this.getDefined()
     if (!defined.has(property)) {
       defined.set(property, { label, type })
-      this.map.options.facetKey = this.dumps(defined)
-      this.map.isDirty = true
+      this.umap.properties.facetKey = this.dumps(defined)
+      this.umap.isDirty = true
     }
   }
 
   remove(property) {
     const defined = this.getDefined()
     defined.delete(property)
-    this.map.options.facetKey = this.dumps(defined)
-    this.map.isDirty = true
+    this.umap.properties.facetKey = this.dumps(defined)
+    this.umap.isDirty = true
   }
 }
