@@ -1,6 +1,7 @@
 !!! abstract "Ce que nous allons apprendre"
 
     - Importer le contour d’une commune
+    - Importer le cadastre
     - Importer les contours des départements ou des régions
     - Importer un point d’intérêt (bibliothèques, parkings, …) qui est enregistré sur OpenStreetMap
 
@@ -15,12 +16,20 @@ Voilà les deux actions à effectuer une fois une carte préexistante, ou une no
 
 uMap permet d’utiliser des données produites par de nombreux services et placées en open data sous différents formats. Nous verrons ultérieurement (niveau intermédiaire) où rechercher ces sources. D’ores et déjà, vous pouvez utiliser l’assistant d’importation pour récupérer en un clic des contours administratifs et des points d’intérêt.
 
-### Ressources disponibles (20/09/2024)
+### Ressources disponibles (05/11/2024)
 
-Au 20 septembre 2024, les imports suivants sont disponibles :
+Au 5 novembre 2024, les imports suivants sont disponibles :
 
-- contour d’une commune
-- contours des départements et des régions
+- contour d’une commune : limites communales jointives, issues du Référentiel à Grande Échelle (RGE), mises à jour par l'IGN ;
+- cadastre :
+  - Parcelles
+  - Bâtiments
+  - Communes (attention ce périmètre est moins précis, privilégier celui issu du RGE ci-dessus)
+  - Feuilles
+  - Lieux-dits
+  - Préfixes des sections
+  - Subdivisions fiscales. 
+- contours des départements et des régions ;
 - données issues d’OpenStreetMap placées dans [GeoDataMine](https://geodatamine.fr/). Comme son nom l’indique, GeoDataMine est une véritable mine de données très utiles pour les services publics :
     - Aire de jeux
     - Aménagements cyclables
@@ -43,7 +52,7 @@ Au 20 septembre 2024, les imports suivants sont disponibles :
 
 Voici un bref passage en revu des différents imports proposés et pour finir l’import de la localisation des bibliothèques de Clermont- Ferrand :
 
-![Gif animé montrant l’usage de l’assistant d’import](../../static/tutoriels/importer.gif)
+![Import en un clic](https://github.com/user-attachments/assets/f53e52bf-b229-40ac-b76c-526ffa8728d5)
 
 ## 1. Importer le contour d’une commune
 
@@ -58,30 +67,53 @@ Cliquez sur « Communes France » et sélectionnez la commune souhaitée dans 
     Le code affiché n’est pas le code postal mais le code INSEE de la commune.
 
 Voici le résultat avec la commune d’Arles (la plus vaste de France métropolitaine, un gain certain si on fait l’économie de dessiner son contour !)
-![Une carte avec le dessin de la commune d’Arles importée](../../static/tutoriels/importer-arles.png)
+
+![Import en un clic](https://github.com/user-attachments/assets/241f4244-60da-44d2-a8a3-1d57e22860b8)
+
 
 Une fois cet import réalisé, tout est réglable : couleur de contour, de fond, affichage oui non d’une étiquette.
 
-## 2. Importer les contours des départements ou des régions
+## 2. Importer le cadastre 
+
+Cliquez sur l’outil d’importation en bas de la barre de droite, puis descendez jusqu’au cadre « Assistants d’import ».
+
+Cliquez sur « Cadastre », choisir l'objet du cadastre à importer, par défaut, les parcelles sont proposées. Sélectionner une commune, choisir le type de calque et cliquez sur "Importer". 
+
+![cadastre1](https://github.com/user-attachments/assets/d9a407f6-1b70-4738-8fde-2a9c9ced8de3)
+
+Pour régler l'épaisseur du trait et l'opacité du fond, cliquer dans la barre de droite sur "Gérer les calques", puis sur le petit stylo ("Editer") et enfin dans les "propriétés de la forme" :
+
+![cadastre2](https://github.com/user-attachments/assets/99cf8395-a69a-411c-a2b2-4de8c50ec960)
+
+On obtient une couche d'information moins chargée, ce qui permet d'ajouter d'autres données :
+
+![cadastre3](https://github.com/user-attachments/assets/474ca77d-d63d-421a-be60-67aaa334f7d0)
+
+Sur cet exemple, l'identifiant s'affiche au survol d'une parcelle avec la souris. Pour obtenir cet affichage, cliquer sur les "Propriétés avancées" du calque, juste en dessous des "Propriétés de la forme", puis dans "Clé pour le libellé", indiquer id. C'est en effet le nom donné dans le tableau de données à la colonne qui accueille l'identifiant des parcelles. 
+
+!!! note
+    Il est tout à fait possible d'utiliser le cadastre comme fond de carte. Dans ce cas, la méthode est différente, voir la fiche tuto [Où trouver des données](https://discover.umap-project.org/fr/tutorials/4-find-data/)
+
+## 3. Importer les contours des départements ou des régions
 
 Cliquez sur l’outil d’importation en bas de la barre de droite, puis descendez jusqu’au cadre « Assistants d’import ».
 
 Cliquez sur « Contours nationaux » puis soit départements, soit régions et enfin le type de calque (voir supra l’explication). Tous les départements sont importés :
 
-![Une carte avec le dessin de chaque département importé](../../static/tutoriels/importer-departements.png)
+![départements](https://github.com/user-attachments/assets/b4adbb47-ef2d-45e3-baec-c850d8b51d32)
 
-## 3. Importer un point d’intérêt issu de GeoDataMine
+## 4. Importer un point d’intérêt issu de GeoDataMine
 
 Cliquez sur l’outil d’importation en bas de la barre de droite, puis descendez jusqu’au cadre « Assistants d’import ».
 
 Cliquez sur « GeoDataMine (thèmes OSM) » et sélectionnez les informations souhaitées, routes, bâtiments, commerces, services publics, …
-Par exemple, en sélectionnant les points d’eau potable de la CA du Grand Avignon, puis « Copier dans un calque »
+Par exemple, en sélectionnant les points d’eau potable de la CA du Grand Avignon, puis « Copier dans un calque » ou « Associer comme données distantes » (dans ce dernier cas, la carte se mettra automatiquement à jour lorsque le jeu de données changera). 
 
-![Une carte avec les points d’eau potable issus d’OpenStreetMap](../../static/tutoriels/importer-geodatamine.png)
+![Grand Avignon](https://github.com/user-attachments/assets/ab7a697a-9280-4e5f-8825-aaa0e99c036d)
 
 Voici une réelle économie de temps plutôt que de placer pointeur après pointeur tous les points d’eau.
 
-## 4. La carte combinée
+## 5. La carte combinée
 
 Bien entendu, on peut tout à fait combiner les différentes couches d’information et présenter par exemple la carte des Points d’eau potable dans la CA du Grand Avignon, avec les contours des communes qui composent l’EPCI, du département et de la région :
 
@@ -89,7 +121,7 @@ Bien entendu, on peut tout à fait combiner les différentes couches d’informa
 
 ![Une carte combinant plusieurs imports](../../static/tutoriels/importer-multi.png)
 
-[Voir la carte en plein écran](https://umap.openstreetmap.fr/fr/map/points-deau-potable-grand-avignon_1116739?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true#11/43.9889/4.7962){ .md-button }
+[Voir la carte en plein écran](https://umap.incubateur.anct.gouv.fr/fr/map/points-deau-potable-grand-avignon_672)
 
 Il faudra dans ce cas supprimer toutes les informations inutiles dans le tableau de données qui est accessible dans la barre de gauche pour chaque calque.
 
