@@ -15,7 +15,7 @@ lieux (domicile, vacances, travail, etc.). Procédons par étapes.
 Rendez-vous sur l'instance uMap d'OSM <https://umap.openstreetmap.fr/> 
 
 #### Pour les agents publics
-Rendez-vous sur le site uMap agents publics <https://umap.incubateur.anct.gouv.fr/> et connectez-vous en haut à gauche. La connexion utilise MonComptePro
+Rendez-vous sur le site uMap agents publics <https://umap.incubateur.anct.gouv.fr/> et connectez-vous en haut à gauche. La connexion utilise ProConnect
 
 <shot-scraper
     data-output="static/tutoriels/create-map.png"
@@ -109,7 +109,7 @@ nécessaire de conserver de lien secret.
 
 #### Pour les agents publics sur l'instance qui leur est dédiée 
 S'ils ne se sont pas connectés avant de créer leur carte, le message est différent : 
-![image](https://github.com/user-attachments/assets/5c976665-e4cb-4bb5-b8c6-a1195c724176)
+![image](https://github.com/user-attachments/assets/32f4d4a7-6b23-4e5f-b776-40e3c8abf2e5)
 Il n'est pas possible d'enregistrer les modifications apportées à une carte anonyme sur cette instance. 
 
 ### 3. Ajouter un marqueur
