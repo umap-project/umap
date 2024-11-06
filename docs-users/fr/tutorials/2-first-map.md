@@ -18,7 +18,7 @@ lieux (domicile, vacances, travail, etc.). Procédons par étapes.
 !!! french-instance "Pour les agents publics"
 
     Rendez-vous sur le site uMap agents publics <https://umap.incubateur.anct.gouv.fr/>
-    et connectez-vous en haut à gauche. La connexion utilise MonComptePro.
+    et connectez-vous en haut à gauche. La connexion utilise ProConnect.
 
 <shot-scraper
     data-output="static/tutoriels/create-map.png"
@@ -115,7 +115,7 @@ nécessaire de conserver de lien secret.
 
 S’ils ne se sont pas connectés avant de créer leur carte, le message est différent :
 
-![Le lien vers la connexion MonComptePro](../../static/tutoriels/moncomptepro-connexion.png)
+![Le lien vers la connexion MonComptePro](../../static/tutoriels/proconnect-connexion.png)
 
 Il n’est pas possible d’enregistrer les modifications apportées à une carte anonyme sur cette instance.
 
