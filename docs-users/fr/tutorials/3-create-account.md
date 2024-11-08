@@ -62,11 +62,14 @@ récipiendaires ne pourront pas modifier vos cartes.
 
 #### :fontawesome-solid-landmark-flag: Pour les agents publics
 
-1. Se connectez à MonComptePro : <https://moncomptepro.beta.gouv.fr/> <br>
+1. Se connectez à ProConnect : <https://moncomptepro.beta.gouv.fr/> <br>
    Toute personne qui travaille pour un service public y a accès.
-2. Créez un compte sur MonComptePro. L’opération prend quelques minutes.
+2. Créez un compte, l’opération peut prendre quelques minutes.
 3. Sur [le site uMap pour les agents publics](https://umap.incubateur.anct.gouv.fr/fr/),
    cliquez sur `Me Connecter`.
+
+On peut accéder à la page de création de compte ProConnect directement
+depuis [uMap pour les agents publics](https://umap.incubateur.anct.gouv.fr/fr/).
 
 Le tableau de bord s’ouvre, il affiche l’ensemble des cartes que
 vous créez ainsi que les équipes auxquelles vous participez.
