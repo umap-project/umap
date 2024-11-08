@@ -1,7 +1,7 @@
 !!! abstract "Ce que nous allons apprendre"
 
     - Importer le contour d’une commune
-    - Importer le cadastre
+    - Importer le cadastre [sur l'instance uMap pour les agents publics](https://umap.incubateur.anct.gouv.fr/fr/)
     - Importer les contours des départements ou des régions
     - Importer un point d’intérêt (bibliothèques, parkings, …) qui est enregistré sur OpenStreetMap
 
@@ -21,7 +21,7 @@ uMap permet d’utiliser des données produites par de nombreux services et plac
 Au 5 novembre 2024, les imports suivants sont disponibles :
 
 - contour d’une commune : limites communales jointives, issues du Référentiel à Grande Échelle (RGE), mises à jour par l'IGN ;
-- cadastre :
+- cadastre, sur l'instance uMap pour les agents publics :
   - Parcelles
   - Bâtiments
   - Communes (attention ce périmètre est moins précis, privilégier celui issu du RGE ci-dessus)
