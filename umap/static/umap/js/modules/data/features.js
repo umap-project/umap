@@ -312,6 +312,7 @@ class Feature {
       'properties._umap_options.showLabel',
       'properties._umap_options.labelDirection',
       'properties._umap_options.labelInteractive',
+      'properties._umap_options.labelImportance',
       'properties._umap_options.outlink',
       'properties._umap_options.outlinkTarget',
     ]

@@ -699,6 +699,7 @@ export class DataLayer extends ServerStored {
       'options.showLabel',
       'options.labelDirection',
       'options.labelInteractive',
+      'options.labelImportance',
       'options.outlinkTarget',
       'options.interactive',
     ]
