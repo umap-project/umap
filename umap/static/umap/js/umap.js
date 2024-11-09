@@ -13,7 +13,7 @@ L.Map.mergeOptions({
   // we cannot rely on this because of the y is overriden by Leaflet
   // See https://github.com/Leaflet/Leaflet/pull/9201
   // And let's remove this -y when this PR is merged and released.
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
+  demoTileInfos: { 's': 'a', 'z': 9, 'x': 265, 'y': 181, '-y': 181, 'r': '' },
   licences: [],
   licence: '',
   enableMarkerDraw: true,
@@ -30,8 +30,6 @@ U.Map = L.Map.extend({
   includes: [ControlsMixin],
 
   initialize: async function (el, geojson) {
-    this.sync_engine = new U.SyncEngine(this)
-    this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
     if (geojson.properties.locale) L.setLocale(geojson.properties.locale)
@@ -69,6 +67,21 @@ U.Map = L.Map.extend({
     }
     this.server = new U.ServerRequest()
     this.request = new U.Request()
+
+    // Store URIs to avoid persisting the map
+    // mainly to ensure separation of concerns.
+    const websocketTokenURI = this.urls.get('map_websocket_auth_token', {
+      map_id: this.options.umap_id,
+    })
+    const websocketURI = this.options.websocketURI
+
+    this.sync_engine = new U.SyncEngine(
+      this,
+      websocketTokenURI,
+      websocketURI,
+      this.server
+    )
+    this.sync = this.sync_engine.proxy(this)
 
     this.initLoader()
     this.name = this.options.name
@@ -209,14 +222,13 @@ U.Map = L.Map.extend({
   },
 
   initSyncEngine: async function () {
+    // This.options.websocketEnabled is set by the server admin
     if (this.options.websocketEnabled === false) return
+    // This.options.syncEnabled is set by the user in the map settings
     if (this.options.syncEnabled !== true) {
       this.sync.stop()
     } else {
-      const ws_token_uri = this.urls.get('map_websocket_auth_token', {
-        map_id: this.options.umap_id,
-      })
-      await this.sync.authenticate(ws_token_uri, this.options.websocketURI, this.server)
+      await this.sync.authenticate()
     }
   },
 
@@ -228,6 +240,27 @@ U.Map = L.Map.extend({
   },
 
   render: function (fields) {
+    console.log("sync.websocketConnected", this.sync.websocketConnected)
+    console.log("options.syncEnabled", this.options.syncEnabled)
+    if (this.options.syncEnabled === true) {
+      if (this.sync.websocketConnected !== true) {
+        const template = `
+        <h3><i class="icon icon-16"></i><span>${L._('Disconnected')}</span></h3>
+        <p>
+        ${L._('This map has enabled real-time synchronization with other users, but you are currently disconnected.It will automatically reconnect when ready.')}
+        </p>
+        `
+        this.dialog.open({
+          template: template,
+          className: 'dark',
+          cancel: false,
+          accept: false,
+        })
+      } else {
+        this.dialog.close()
+      }
+    }
+
     if (fields.includes('numberOfConnectedPeers')) {
       this.renderEditToolbar()
       this.propagate()
