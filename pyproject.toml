@@ -45,7 +45,7 @@ dependencies = [
 dev = [
   "hatch==1.13.0",
   "ruff==0.7.3",
-  "djlint==1.35.2",
+  "djlint==1.36.1",
   "mkdocs==1.6.1",
   "mkdocs-material==9.5.44",
   "mkdocs-static-i18n==1.2.3",
