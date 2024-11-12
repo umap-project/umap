@@ -306,8 +306,12 @@ const ControlsMixin = {
     })
   },
 
-  initCaptionBar: function () {
-    const container = DomUtil.create('div', 'umap-caption-bar', this._controlContainer)
+  renderCaptionBar: function () {
+    if (this.options.noControl) return
+    const container =
+      this._controlContainer.querySelector('.umap-caption-bar') ||
+      DomUtil.create('div', 'umap-caption-bar', this._controlContainer)
+    container.innerHTML = ''
     const name = DomUtil.create('h3', 'map-name', container)
     DomEvent.disableClickPropagation(container)
     this.umap.addAuthorLink(container)
@@ -316,8 +320,7 @@ const ControlsMixin = {
         'umap-about-link flat',
         container,
         translate('Open caption'),
-        this.umap.openCaption,
-        this
+        () => this.umap.openCaption()
       )
       DomUtil.createButton(
         'umap-open-browser-link flat',
@@ -334,8 +337,8 @@ const ControlsMixin = {
         )
       }
     }
-    this.umap.onceDatalayersLoaded(function () {
-      this.slideshow.renderToolbox(container)
+    this.umap.onceDatalayersLoaded(() => {
+      this.umap.slideshow.renderToolbox(container)
     })
   },
 }
@@ -481,11 +484,18 @@ export const LeafletMap = BaseMap.extend({
     })
   },
 
-  attachToDom: function () {
+  setup: function () {
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
+    this.update()
+  },
+
+  update: function () {
+    this.setOptions(this.umap.properties)
     this.initTileLayers()
+    this.renderCaptionBar()
+    this.renderEditToolbar()
     // Needs tilelayer to exist for minimap
     this.renderControls()
     this.handleLimitBounds()

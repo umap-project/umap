@@ -85,11 +85,16 @@ export default class Umap extends ServerStored {
     if (center) {
       this._leafletMap.options.center = this._leafletMap.latLng(center)
     }
-    this._leafletMap.attachToDom()
+
+    // Needed to render controls
+    this.permissions = new MapPermissions(this)
+    this.urls = new URLs(this.properties.urls)
+    this.slideshow = new Slideshow(this, this.properties.slideshow)
+
+    this._leafletMap.setup()
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
 
-    this.urls = new URLs(this.properties.urls)
 
     this.panel = new Panel(this)
     this.dialog = new Dialog({ className: 'dark' })
@@ -171,15 +176,12 @@ export default class Umap extends ServerStored {
       await this.loadDataFromQueryString()
     }
 
-    this.slideshow = new Slideshow(this, this.properties.slideshow)
-    this.permissions = new MapPermissions(this)
     if (this.hasEditMode()) {
       this._leafletMap.initEditTools()
     }
 
     if (!this.properties.noControl) {
       this.initShortcuts()
-      this._leafletMap.initCaptionBar()
       this._leafletMap.on('contextmenu', this.onContextMenu)
       this.onceDataLoaded(this.setViewFromQueryString)
       this.propagate()
@@ -1253,10 +1255,7 @@ export default class Umap extends ServerStored {
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this._leafletMap.setOptions(this.properties)
-          this._leafletMap.initCaptionBar()
-          this._leafletMap.renderEditToolbar()
-          this._leafletMap.renderControls()
+          this._leafletMap.update()
           this.browser.redraw()
           this.propagate()
           break
@@ -1499,11 +1498,7 @@ export default class Umap extends ServerStored {
       dataLayer.fromUmapGeoJSON(geojson)
     }
 
-    // TODO: refactor with leafletMap init / render
-    this._leafletMap.setOptions(this.properties)
-    this._leafletMap.initTileLayers()
-    this._leafletMap.renderControls()
-    this._leafletMap.handleLimitBounds()
+    this._leafletMap.update()
     this.eachDataLayer((datalayer) => {
       if (mustReindex) datalayer.reindex()
       datalayer.redraw()
