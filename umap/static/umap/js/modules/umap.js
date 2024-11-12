@@ -1245,7 +1245,7 @@ export default class Umap extends ServerStored {
 
   render(fields) {
     if (fields.includes('numberOfConnectedPeers')) {
-      this.renderEditToolbar()
+      this._leafletMap.renderEditToolbar()
       this.propagate()
     }
 

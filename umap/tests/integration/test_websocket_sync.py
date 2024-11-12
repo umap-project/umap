@@ -161,7 +161,7 @@ def test_websocket_connection_can_sync_polygons(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_map_properties(
-    context, live_server, websocket_server, tilelayer
+    new_page, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -169,9 +169,9 @@ def test_websocket_connection_can_sync_map_properties(
     DataLayerFactory(map=map, data={})
 
     # Create two tabs
-    peerA = context.new_page()
+    peerA = new_page()
     peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    peerB = context.new_page()
+    peerB = new_page()
     peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     # Name change is synced

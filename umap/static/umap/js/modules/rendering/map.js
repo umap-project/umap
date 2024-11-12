@@ -252,7 +252,7 @@ const ControlsMixin = {
       })
 
       const updateConnectedPeersCount = () => {
-        connectedPeersCount.innerHTML = this.sync.getNumberOfConnectedPeers()
+        connectedPeersCount.innerHTML = this.umap.sync.getNumberOfConnectedPeers()
       }
       updateConnectedPeersCount()
     }

@@ -83,7 +83,7 @@ export default class Slideshow extends WithTemplate {
 
   play() {
     if (this._id) return
-    if (this.umap.editEnabled || !this.umap.options.slideshow.active) return
+    if (this.umap.editEnabled || !this.umap.properties.slideshow.active) return
     L.DomUtil.addClass(document.body, this.CLASSNAME)
     this._id = window.setInterval(L.bind(this.loop, this), this.options.delay)
     this.startSpinner()

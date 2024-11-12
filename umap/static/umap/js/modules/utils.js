@@ -66,7 +66,10 @@ export function getImpactsFromSchema(fields, schema) {
 export function fieldInSchema(field, schema) {
   const current_schema = schema || U.SCHEMA
   if (typeof field !== 'string') return false
-  const field_name = field.replace('options.', '').split('.')[0]
+  const field_name = field
+    .replace('options.', '')
+    .replace('properties.', '')
+    .split('.')[0]
   return current_schema[field_name] !== undefined
 }
 
