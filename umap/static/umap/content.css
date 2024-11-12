@@ -65,7 +65,9 @@ body.login header {
 .login-grid .login-openstreetmap-oauth2 {
     background-image: url("./openstreetmap.png");
 }
-
+.login-grid .login-keycloak {
+    background-image: url("./keycloak.png");
+}
 
 /* **************************** */
 /*            home              */
