@@ -32,6 +32,7 @@ import {
   uMapAlertCreation as AlertCreation,
   uMapAlert as Alert,
 } from '../components/alerts/alert.js'
+import Orderable from './orderable.js'
 
 export default class Umap extends ServerStored {
   constructor(element, geojson) {
@@ -1382,7 +1383,7 @@ export default class Umap extends ServerStored {
       })
       this.indexDatalayers()
     }
-    const orderable = new U.Orderable(ul, onReorder)
+    const orderable = new Orderable(ul, onReorder)
 
     const bar = DomUtil.create('div', 'button-bar', container)
     DomUtil.createButton(

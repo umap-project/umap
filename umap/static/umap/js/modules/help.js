@@ -1,6 +1,7 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
+import Dialog from './ui/dialog.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {
@@ -166,7 +167,7 @@ const ENTRIES = {
 export default class Help {
   constructor(umap) {
     this.umap = umap
-    this.dialog = new U.Dialog({ className: 'dark', accept: false, cancel: false })
+    this.dialog = new Dialog({ className: 'dark', accept: false, cancel: false })
     this.isMacOS = /mac/i.test(
       // eslint-disable-next-line compat/compat -- Fallback available.
       navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform

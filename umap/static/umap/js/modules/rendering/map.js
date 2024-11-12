@@ -12,6 +12,7 @@ import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
+import ContextMenu from '../ui/contextmenu.js'
 
 // Those options are not saved on the server, so they can live here
 // instead of in umap.properties
@@ -203,7 +204,7 @@ const ControlsMixin = {
         </button>
         `)
       rightContainer.appendChild(button)
-      const menu = new U.ContextMenu({ className: 'dark', fixed: true })
+      const menu = new ContextMenu({ className: 'dark', fixed: true })
       const actions = [
         {
           label: translate('New map'),

@@ -2,6 +2,7 @@ import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 import { AutocompleteDatalist } from './autocomplete.js'
+import Orderable from './orderable.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -236,7 +237,7 @@ export default class Rules {
         rule.renderToolbox(DomUtil.create('li', 'orderable', ul))
       }
 
-      const orderable = new U.Orderable(ul, this.onReorder.bind(this))
+      const orderable = new Orderable(ul, this.onReorder.bind(this))
     }
 
     DomUtil.createButton('umap-add', body, translate('Add rule'), this.addRule, this)
