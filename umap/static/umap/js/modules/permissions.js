@@ -193,7 +193,6 @@ export class MapPermissions extends ServerStored {
     )
     if (!error) {
       this.commit()
-      this.umap._leafletMap.fire('postsync')
       return true
     }
   }

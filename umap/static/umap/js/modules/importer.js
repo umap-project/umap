@@ -251,7 +251,6 @@ export default class Importer {
   }
 
   full() {
-    this.umap._leafletMap.once('postsync', this.umap._leafletMap._setDefaultCenter)
     try {
       if (this.files.length) {
         for (const file of this.files) {

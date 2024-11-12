@@ -1504,7 +1504,7 @@ export default class Umap extends ServerStored {
       datalayer.redraw()
     })
     this.propagate()
-    this._leafletMap.fire('postsync')
+    this._leafletMap._setDefaultCenter()
     this.isDirty = true
   }
 
