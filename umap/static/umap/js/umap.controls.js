@@ -12,8 +12,8 @@ U.BaseAction = L.ToolbarAction.extend({
       tooltip: this.options.tooltip,
     }
     L.ToolbarAction.prototype.initialize.call(this)
-    if (this.options.helpMenu && !this.map.helpMenuActions[this.options.className])
-      this.map.helpMenuActions[this.options.className] = this
+    if (this.options.helpMenu && !U.Help.MENU_ACTIONS[this.options.className])
+      U.Help.MENU_ACTIONS[this.options.className] = this
   },
 })
 
@@ -675,7 +675,10 @@ U.TileLayerChooser = L.Control.extend({
     const el = L.DomUtil.create('li', selectedClass, this._tilelayers_container)
     const img = L.DomUtil.create('img', '', el)
     const name = L.DomUtil.create('div', '', el)
-    img.src = U.Utils.template(tilelayer.options.url_template, this.map.options.demoTileInfos)
+    img.src = U.Utils.template(
+      tilelayer.options.url_template,
+      this.map.options.demoTileInfos
+    )
     img.loading = 'lazy'
     name.textContent = tilelayer.options.name
     L.DomEvent.on(

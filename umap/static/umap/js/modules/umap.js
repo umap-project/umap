@@ -523,7 +523,7 @@ export default class Umap extends ServerStored {
           this._leafletMap.importer.openFiles()
           break
         case 'h':
-          this.help.show('edit')
+          this.help.showGetStarted()
           break
         default:
           used = false
@@ -1203,7 +1203,7 @@ export default class Umap extends ServerStored {
     this.editPanel.close()
     this.fullPanel.close()
     this.sync.stop()
-    this.closeInplaceToolbar()
+    this._leafletMap.closeInplaceToolbar()
   }
 
   askForReset(e) {

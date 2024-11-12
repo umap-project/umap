@@ -36,7 +36,6 @@ const ControlsMixin = {
   ],
 
   initControls: function () {
-    this.helpMenuActions = {}
     this._controls = {}
 
     if (this.umap.hasEditMode() && !this.options.noControl) {
