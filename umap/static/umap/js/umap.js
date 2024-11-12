@@ -212,8 +212,4 @@ U.Map = L.Map.extend({
     }
   },
 
-  search: function () {
-    if (this._controls.search) this._controls.search.open()
-  },
-
 })

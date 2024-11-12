@@ -1,4 +1,4 @@
-import { DomUtil, DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate, setLocale, getLocale } from './i18n.js'
 import * as Utils from './utils.js'
 import { ServerStored } from './saving.js'
@@ -407,6 +407,10 @@ export default class Umap extends ServerStored {
     }
   }
 
+  search() {
+    if (this._leafletMap._controls.search) this._leafletMap._controls.search.open()
+  }
+
   hasEditMode() {
     const editMode = this.properties.editMode
     return editMode === 'simple' || editMode === 'advanced'
@@ -450,8 +454,8 @@ export default class Umap extends ServerStored {
   }
 
   initShortcuts() {
-    const globalShortcuts = function (e) {
-      if (e.key === 'Escape') {
+    const globalShortcuts = (event) => {
+      if (event.key === 'Escape') {
         if (this.importer.dialog.visible) {
           this.importer.dialog.close()
         } else if (this.editEnabled && this._leafletMap.editTools.drawing()) {
@@ -468,10 +472,11 @@ export default class Umap extends ServerStored {
       }
 
       // From now on, only ctrl/meta shortcut
-      if (!(e.ctrlKey || e.metaKey) || e.shiftKey) return
+      if (!(event.ctrlKey || event.metaKey) || event.shiftKey) return
 
-      if (e.key === 'f') {
-        L.DomEvent.stop(e)
+      if (event.key === 'f') {
+        event.stopPropagation()
+        event.preventDefault()
         this.search()
       }
 
@@ -480,9 +485,10 @@ export default class Umap extends ServerStored {
 
       // Edit mode Off
       if (!this.editEnabled) {
-        switch (e.key) {
+        switch (event.key) {
           case 'e':
-            L.DomEvent.stop(e)
+            event.stopPropagation()
+            event.preventDefault()
             this.enableEdit()
             break
         }
@@ -491,7 +497,7 @@ export default class Umap extends ServerStored {
 
       // Edit mode on
       let used = true
-      switch (e.key) {
+      switch (event.key) {
         case 'e':
           if (!SAVEMANAGER.isDirty) this.disableEdit()
           break
@@ -522,9 +528,12 @@ export default class Umap extends ServerStored {
         default:
           used = false
       }
-      if (used) DomEvent.stop(e)
+      if (used) {
+        event.stopPropagation()
+        event.preventDefault()
+      }
     }
-    DomEvent.addListener(document, 'keydown', globalShortcuts, this)
+    document.addEventListener('keydown', globalShortcuts)
   }
 
   async initDataLayers(datalayers) {
