@@ -1,4 +1,9 @@
-import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  DomUtil,
+  Util as LeafletUtil,
+  stamp,
+  latLngBounds,
+} from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate, setLocale, getLocale } from './i18n.js'
 import * as Utils from './utils.js'
 import { ServerStored } from './saving.js'
@@ -929,10 +934,10 @@ export default class Umap extends ServerStored {
       translate('Use current bounds'),
       function () {
         const bounds = this._leafletMap.getBounds()
-        this.properties.limitBounds.south = L.Util.formatNum(bounds.getSouth())
-        this.properties.limitBounds.west = L.Util.formatNum(bounds.getWest())
-        this.properties.limitBounds.north = L.Util.formatNum(bounds.getNorth())
-        this.properties.limitBounds.east = L.Util.formatNum(bounds.getEast())
+        this.properties.limitBounds.south = LeafletUtil.formatNum(bounds.getSouth())
+        this.properties.limitBounds.west = LeafletUtil.formatNum(bounds.getWest())
+        this.properties.limitBounds.north = LeafletUtil.formatNum(bounds.getNorth())
+        this.properties.limitBounds.east = LeafletUtil.formatNum(bounds.getEast())
         boundsBuilder.fetchAll()
 
         this.sync.update(this, 'properties.limitBounds', this.properties.limitBounds)
@@ -1362,7 +1367,7 @@ export default class Umap extends ServerStored {
       const title = DomUtil.add('span', '', row, datalayer.options.name)
       row.classList.toggle('off', !datalayer.isVisible())
       title.textContent = datalayer.options.name
-      row.dataset.id = L.stamp(datalayer)
+      row.dataset.id = stamp(datalayer)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const layer = this.datalayers[src.dataset.id]
@@ -1556,7 +1561,7 @@ export default class Umap extends ServerStored {
   }
 
   getLayersBounds() {
-    const bounds = new L.latLngBounds()
+    const bounds = new latLngBounds()
     this.eachBrowsableDataLayer((d) => {
       if (d.isVisible()) bounds.extend(d.layer.getBounds())
     })
@@ -1600,7 +1605,7 @@ export default class Umap extends ServerStored {
 
   setCenterAndZoom() {
     this._setCenterAndZoom()
-    Alert.success(L._('The zoom and center have been modified.'))
+    Alert.success(translate('The zoom and center have been modified.'))
   }
 
   _setCenterAndZoom() {
