@@ -25,6 +25,16 @@ export function checkId(string) {
   return /^[A-Za-z0-9]{5}$/.test(string)
 }
 
+
+
+function _getPropertyName(field) {
+  const filtered_field = ['options.', 'properties.'].reduce(
+    (acc, prefix) => acc.replace(prefix, ''),
+    field
+  )
+  return filtered_field.split('.')[0]
+}
+
 /**
  * Compute the impacts for a given list of fields.
  *
@@ -41,7 +51,7 @@ export function getImpactsFromSchema(fields, schema) {
       // remove the option prefix for fields
       // And only keep the first part in case of a subfield
       // (e.g "options.limitBounds.foobar" will just return "limitBounds")
-      return field.replace('options.', '').split('.')[0]
+      return _getPropertyName(field)
     })
     .reduce((acc, field) => {
       // retrieve the "impacts" field from the schema
@@ -66,7 +76,7 @@ export function getImpactsFromSchema(fields, schema) {
 export function fieldInSchema(field, schema) {
   const current_schema = schema || U.SCHEMA
   if (typeof field !== 'string') return false
-  const field_name = field.replace('options.', '').split('.')[0]
+  const field_name = _getPropertyName(field)
   return current_schema[field_name] !== undefined
 }
 

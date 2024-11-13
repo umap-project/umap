@@ -1,6 +1,6 @@
 {% extends "umap/content.html" %}
 
-{% load i18n %}
+{% load i18n static %}
 
 {% block head_title %}
   {{ SITE_NAME }} - {% trans "My Dashboard" %}
@@ -45,23 +45,22 @@
 {% endblock maincontent %}
 {% block bottom_js %}
   {{ block.super }}
-  <script type="text/javascript">
-    !(function () {
-      const CACHE = {}
-      for (const mapOpener of document.querySelectorAll("button.map-opener")) {
-        mapOpener.addEventListener('click', (event) => {
-          const button = event.target.closest('button')
-          button.nextElementSibling.showModal()
-          const mapId = button.dataset.mapId
-          if (!document.querySelector(`#${mapId}_target`).children.length) {
-            const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
-            const map = new U.Map(`${mapId}_target`, previewSettings)
-            CACHE[mapId] = map
-          } else {
-            CACHE[mapId].invalidateSize()
-          }
-        })
-      }
-    })()
+  <script type="module">
+    import Umap from '{% static "umap/js/modules/umap.js" %}'
+    const CACHE = {}
+    for (const mapOpener of document.querySelectorAll("button.map-opener")) {
+      mapOpener.addEventListener('click', (event) => {
+        const button = event.target.closest('button')
+        button.nextElementSibling.showModal()
+        const mapId = button.dataset.mapId
+        if (!document.querySelector(`#${mapId}_target`).children.length) {
+          const previewSettings = JSON.parse(document.getElementById(mapId).textContent)
+          const map = new Umap(`${mapId}_target`, previewSettings)
+          CACHE[mapId] = map
+        } else {
+          CACHE[mapId].invalidateSize()
+        }
+      })
+    }
   </script>
 {% endblock bottom_js %}

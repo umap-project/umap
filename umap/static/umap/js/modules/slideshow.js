@@ -13,20 +13,20 @@ const TOOLBOX_TEMPLATE = `
 `
 
 export default class Slideshow extends WithTemplate {
-  constructor(map, options) {
+  constructor(umap, leafletMap, properties) {
     super()
-    this.map = map
+    this._umap = umap
     this._id = null
     this.CLASSNAME = 'umap-slideshow-active'
-    this.setOptions(options)
+    this.setProperties(properties)
     this._current = null
 
-    if (this.options.autoplay) {
-      this.map.onceDataLoaded(function () {
+    if (this.properties.autoplay) {
+      this._umap.onceDataLoaded(function () {
         this.play()
       }, this)
     }
-    this.map.on(
+    leafletMap.on(
       'edit:enabled',
       function () {
         this.stop()
@@ -54,22 +54,22 @@ export default class Slideshow extends WithTemplate {
     return this.current.getNext()
   }
 
-  setOptions(options) {
-    this.options = Object.assign(
+  setProperties(properties) {
+    this.properties = Object.assign(
       {
         delay: 5000,
         autoplay: false,
       },
-      options
+      properties
     )
   }
 
   defaultDatalayer() {
-    return this.map.findDataLayer((d) => d.canBrowse())
+    return this._umap.findDataLayer((d) => d.canBrowse())
   }
 
   startSpinner() {
-    const time = Number.parseInt(this.options.delay, 10)
+    const time = Number.parseInt(this.properties.delay, 10)
     if (!time) return
     const css = `rotation ${time / 1000}s infinite linear`
     const spinner = document.querySelector('.umap-slideshow-toolbox .play .spinner')
@@ -83,9 +83,9 @@ export default class Slideshow extends WithTemplate {
 
   play() {
     if (this._id) return
-    if (this.map.editEnabled || !this.map.options.slideshow.active) return
+    if (this._umap.editEnabled || !this._umap.properties.slideshow.active) return
     L.DomUtil.addClass(document.body, this.CLASSNAME)
-    this._id = window.setInterval(L.bind(this.loop, this), this.options.delay)
+    this._id = window.setInterval(L.bind(this.loop, this), this.properties.delay)
     this.startSpinner()
     this.loop()
   }
@@ -123,7 +123,7 @@ export default class Slideshow extends WithTemplate {
 
   step() {
     if (!this.current) return this.stop()
-    this.current.zoomTo({ easing: this.options.easing })
+    this.current.zoomTo({ easing: this.properties.easing })
     this.current.view()
   }
 

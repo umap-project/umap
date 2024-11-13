@@ -2,7 +2,7 @@ U.BaseAction = L.ToolbarAction.extend({
   initialize: function (map) {
     this.map = map
     if (this.options.label) {
-      this.options.tooltip = this.map.help.displayLabel(
+      this.options.tooltip = this.map._umap.help.displayLabel(
         this.options.label,
         (withKbdTag = false)
       )
@@ -12,8 +12,8 @@ U.BaseAction = L.ToolbarAction.extend({
       tooltip: this.options.tooltip,
     }
     L.ToolbarAction.prototype.initialize.call(this)
-    if (this.options.helpMenu && !this.map.helpMenuActions[this.options.className])
-      this.map.helpMenuActions[this.options.className] = this
+    if (this.options.helpMenu && !U.Help.MENU_ACTIONS[this.options.className])
+      U.Help.MENU_ACTIONS[this.options.className] = this
   },
 })
 
@@ -25,7 +25,7 @@ U.ImportAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.importer.open()
+    this.map._umap.importer.open()
   },
 })
 
@@ -37,7 +37,7 @@ U.EditLayersAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.editDatalayers()
+    this.map._umap.editDatalayers()
   },
 })
 
@@ -49,7 +49,7 @@ U.EditCaptionAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.editCaption()
+    this.map._umap.editCaption()
   },
 })
 
@@ -61,7 +61,7 @@ U.EditPropertiesAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.edit()
+    this.map._umap.edit()
   },
 })
 
@@ -84,7 +84,7 @@ U.UpdateExtentAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.setCenterAndZoom()
+    this.map._umap.setCenterAndZoom()
   },
 })
 
@@ -95,7 +95,7 @@ U.UpdatePermsAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.permissions.edit()
+    this.map._umap.permissions.edit()
   },
 })
 
@@ -107,7 +107,7 @@ U.DrawMarkerAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.startMarker()
+    this.map.editTools.startMarker()
   },
 })
 
@@ -119,7 +119,7 @@ U.DrawPolylineAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.startPolyline()
+    this.map.editTools.startPolyline()
   },
 })
 
@@ -131,7 +131,7 @@ U.DrawPolygonAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.startPolygon()
+    this.map.editTools.startPolygon()
   },
 })
 
@@ -142,7 +142,8 @@ U.AddPolylineShapeAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.editedFeature.ui.editor.newShape()
+    // FIXME: smells bad
+    this.map._umap.editedFeature.ui.editor.newShape()
   },
 })
 
@@ -305,18 +306,24 @@ U.DrawToolbar = L.Toolbar.Control.extend({
 
   appendToContainer: function (container) {
     this.options.actions = []
-    if (this.map.options.enableMarkerDraw) {
+    if (this.map._umap.properties.enableMarkerDraw) {
       this.options.actions.push(U.DrawMarkerAction)
     }
-    if (this.map.options.enablePolylineDraw) {
+    if (this.map._umap.properties.enablePolylineDraw) {
       this.options.actions.push(U.DrawPolylineAction)
-      if (this.map.editedFeature && this.map.editedFeature instanceof U.LineString) {
+      if (
+        this.map._umap.editedFeature &&
+        this.map._umap.editedFeature instanceof U.LineString
+      ) {
         this.options.actions.push(U.AddPolylineShapeAction)
       }
     }
-    if (this.map.options.enablePolygonDraw) {
+    if (this.map._umap.properties.enablePolygonDraw) {
       this.options.actions.push(U.DrawPolygonAction)
-      if (this.map.editedFeature && this.map.editedFeature instanceof U.Polygon) {
+      if (
+        this.map._umap.editedFeature &&
+        this.map._umap.editedFeature instanceof U.Polygon
+      ) {
         this.options.actions.push(U.AddPolygonShapeAction)
       }
     }
@@ -360,14 +367,14 @@ U.DropControl = L.Class.extend({
     L.DomEvent.stop(e)
   },
 
-  drop: function (e) {
+  drop: function (event) {
     this.map.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
     L.DomEvent.stop(e)
-    for (let i = 0, file; (file = e.dataTransfer.files[i]); i++) {
-      this.map.processFileToImport(file)
+    for (const file of event.dataTransfer.files) {
+      this.map._umap.processFileToImport(file)
     }
-    this.map.onceDataLoaded(this.map.fitDataBounds)
+    this.map._umap.onceDataLoaded(this.map._umap.fitDataBounds)
   },
 
   dragleave: function () {
@@ -387,15 +394,15 @@ U.EditControl = L.Control.extend({
       '',
       container,
       L._('Edit'),
-      map.enableEdit,
-      map
+      map._umap.enableEdit,
+      map._umap
     )
     L.DomEvent.on(
       enableEditing,
       'mouseover',
       () => {
-        map.tooltip.open({
-          content: map.help.displayLabel('TOGGLE_EDIT'),
+        map._umap.tooltip.open({
+          content: map._umap.help.displayLabel('TOGGLE_EDIT'),
           anchor: enableEditing,
           position: 'bottom',
           delay: 750,
@@ -476,8 +483,8 @@ U.PermanentCreditsControl = L.Control.extend({
 })
 
 L.Control.Button = L.Control.extend({
-  initialize: function (map, options) {
-    this.map = map
+  initialize: function (umap, options) {
+    this._umap = umap
     L.Control.prototype.initialize.call(this, options)
   },
 
@@ -510,11 +517,11 @@ U.DataLayersControl = L.Control.Button.extend({
   },
 
   afterAdd: function (container) {
-    U.Utils.toggleBadge(container, this.map.browser.hasFilters())
+    U.Utils.toggleBadge(container, this._umap.browser?.hasFilters())
   },
 
   onClick: function () {
-    this.map.openBrowser()
+    this._umap.openBrowser()
   },
 })
 
@@ -526,7 +533,7 @@ U.CaptionControl = L.Control.Button.extend({
   },
 
   onClick: function () {
-    this.map.openCaption()
+    this._umap.openCaption()
   },
 })
 
@@ -537,12 +544,12 @@ U.StarControl = L.Control.Button.extend({
   },
 
   getClassName: function () {
-    const status = this.map.options.starred ? ' starred' : ''
+    const status = this._umap.properties.starred ? ' starred' : ''
     return `leaflet-control-star umap-control${status}`
   },
 
   onClick: function () {
-    this.map.star()
+    this._umap.star()
   },
 })
 
@@ -554,247 +561,9 @@ L.Control.Embed = L.Control.Button.extend({
   },
 
   onClick: function () {
-    this.map.share.open()
+    this._umap.share.open()
   },
 })
-
-const ControlsMixin = {
-  HIDDABLE_CONTROLS: [
-    'zoom',
-    'search',
-    'fullscreen',
-    'embed',
-    'datalayers',
-    'caption',
-    'locate',
-    'measure',
-    'editinosm',
-    'star',
-    'tilelayers',
-  ],
-
-  renderEditToolbar: function () {
-    const className = 'umap-main-edit-toolbox'
-    const container =
-      document.querySelector(`.${className}`) ||
-      L.DomUtil.create(
-        'div',
-        `${className} with-transition dark`,
-        this._controlContainer
-      )
-    container.innerHTML = ''
-    const leftContainer = L.DomUtil.create('div', 'umap-left-edit-toolbox', container)
-    const rightContainer = L.DomUtil.create('div', 'umap-right-edit-toolbox', container)
-    const logo = L.DomUtil.create('div', 'logo', leftContainer)
-    L.DomUtil.createLink('', logo, 'uMap', '/', null, L._('Go to the homepage'))
-    const nameButton = L.DomUtil.createButton('map-name', leftContainer, '')
-    L.DomEvent.on(
-      nameButton,
-      'mouseover',
-      function () {
-        this.tooltip.open({
-          content: L._('Edit the title of the map'),
-          anchor: nameButton,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      },
-      this
-    )
-    const shareStatusButton = L.DomUtil.createButton(
-      'share-status',
-      leftContainer,
-      '',
-      this.permissions.edit,
-      this.permissions
-    )
-    L.DomEvent.on(
-      shareStatusButton,
-      'mouseover',
-      function () {
-        this.tooltip.open({
-          content: L._('Update who can see and edit the map'),
-          anchor: shareStatusButton,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      },
-      this
-    )
-    if (this.options.editMode === 'advanced') {
-      L.DomEvent.on(nameButton, 'click', this.editCaption, this)
-      L.DomEvent.on(shareStatusButton, 'click', this.permissions.edit, this.permissions)
-    }
-    if (this.options.user?.id) {
-      const button = U.Utils.loadTemplate(`
-        <button class="umap-user flat" type="button">
-          <i class="icon icon-16 icon-profile"></i>
-          <span>${this.options.user.name}</span>
-        </button>
-        `)
-      rightContainer.appendChild(button)
-      const menu = new U.ContextMenu({ className: 'dark', fixed: true })
-      const actions = [
-        {
-          label: L._('New map'),
-          action: this.urls.get('map_new'),
-        },
-        {
-          label: L._('My maps'),
-          action: this.urls.get('user_dashboard'),
-        },
-        {
-          label: L._('My teams'),
-          action: this.urls.get('user_teams'),
-        },
-      ]
-      if (this.urls.has('user_profile')) {
-        actions.push({
-          label: L._('My profile'),
-          action: this.urls.get('user_profile'),
-        })
-      }
-      button.addEventListener('click', () => {
-        menu.openBelow(button, actions)
-      })
-    }
-
-    const connectedPeers = this.sync.getNumberOfConnectedPeers()
-    if (connectedPeers !== 0) {
-      const connectedPeersCount = L.DomUtil.createButton(
-        'leaflet-control-connected-peers',
-        rightContainer,
-        ''
-      )
-      L.DomEvent.on(connectedPeersCount, 'mouseover', () => {
-        this.tooltip.open({
-          content: L._('{connectedPeers} peer(s) currently connected to this map', {
-            connectedPeers: connectedPeers,
-          }),
-          anchor: connectedPeersCount,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      })
-
-      const updateConnectedPeersCount = () => {
-        connectedPeersCount.innerHTML =
-          '<span>' + this.sync.getNumberOfConnectedPeers() + '</span>'
-      }
-      updateConnectedPeersCount()
-    }
-
-    this.help.getStartedLink(rightContainer)
-    const controlEditCancel = L.DomUtil.createButton(
-      'leaflet-control-edit-cancel',
-      rightContainer,
-      L.DomUtil.add('span', '', null, L._('Cancel edits')),
-      this.askForReset,
-      this
-    )
-    L.DomEvent.on(
-      controlEditCancel,
-      'mouseover',
-      function () {
-        this.tooltip.open({
-          content: this.help.displayLabel('CANCEL'),
-          anchor: controlEditCancel,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      },
-      this
-    )
-    const controlEditDisable = L.DomUtil.createButton(
-      'leaflet-control-edit-disable',
-      rightContainer,
-      L.DomUtil.add('span', '', null, L._('View')),
-      this.disableEdit,
-      this
-    )
-    L.DomEvent.on(
-      controlEditDisable,
-      'mouseover',
-      function () {
-        this.tooltip.open({
-          content: this.help.displayLabel('PREVIEW'),
-          anchor: controlEditDisable,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      },
-      this
-    )
-    const controlEditSave = L.DomUtil.createButton(
-      'leaflet-control-edit-save button',
-      rightContainer,
-      L.DomUtil.add('span', '', null, L._('Save')),
-      this.saveAll,
-      this
-    )
-    L.DomEvent.on(
-      controlEditSave,
-      'mouseover',
-      function () {
-        this.tooltip.open({
-          content: this.help.displayLabel('SAVE'),
-          anchor: controlEditSave,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      },
-      this
-    )
-  },
-
-  editDatalayers: function () {
-    if (!this.editEnabled) return
-    const container = L.DomUtil.create('div')
-    L.DomUtil.createTitle(container, L._('Manage layers'), 'icon-layers')
-    const ul = L.DomUtil.create('ul', '', container)
-    this.eachDataLayerReverse((datalayer) => {
-      const row = L.DomUtil.create('li', 'orderable', ul)
-      L.DomUtil.createIcon(row, 'icon-drag', L._('Drag to reorder'))
-      datalayer.renderToolbox(row)
-      const title = L.DomUtil.add('span', '', row, datalayer.options.name)
-      row.classList.toggle('off', !datalayer.isVisible())
-      title.textContent = datalayer.options.name
-      row.dataset.id = L.stamp(datalayer)
-    })
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const layer = this.datalayers[src.dataset.id]
-      const other = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(layer.getRank(), other.getRank())
-      const maxIndex = Math.max(layer.getRank(), other.getRank())
-      if (finalIndex === 0) layer.bringToTop()
-      else if (finalIndex > initialIndex) layer.insertBefore(other)
-      else layer.insertAfter(other)
-      this.eachDataLayerReverse((datalayer) => {
-        if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
-          datalayer.isDirty = true
-      })
-      this.indexDatalayers()
-    }
-    const orderable = new U.Orderable(ul, onReorder)
-
-    const bar = L.DomUtil.create('div', 'button-bar', container)
-    L.DomUtil.createButton(
-      'show-on-edit block add-datalayer button',
-      bar,
-      L._('Add a layer'),
-      this.newDataLayer,
-      this
-    )
-
-    this.editPanel.open({ content: container })
-  },
-}
 
 /* Used in view mode to define the current tilelayer */
 U.TileLayerControl = L.Control.IconLayers.extend({
@@ -819,7 +588,7 @@ U.TileLayerControl = L.Control.IconLayers.extend({
           // Fixme when https://github.com/Leaflet/Leaflet/pull/9201 is released
           const icon = U.Utils.template(
             layer.options.url_template,
-            this.map.demoTileInfos
+            this.map.options.demoTileInfos
           )
           layers.push({
             title: layer.options.name,
@@ -885,7 +654,7 @@ U.TileLayerChooser = L.Control.extend({
     L.DomUtil.createTitle(container, L._('Change tilelayers'), 'icon-tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
-    const panel = options.edit ? this.map.editPanel : this.map.panel
+    const panel = options.edit ? this.map._umap.editPanel : this.map._umap.panel
     panel.open({ content: container })
   },
 
@@ -905,7 +674,10 @@ U.TileLayerChooser = L.Control.extend({
     const el = L.DomUtil.create('li', selectedClass, this._tilelayers_container)
     const img = L.DomUtil.create('img', '', el)
     const name = L.DomUtil.create('div', '', el)
-    img.src = U.Utils.template(tilelayer.options.url_template, this.map.demoTileInfos)
+    img.src = U.Utils.template(
+      tilelayer.options.url_template,
+      this.map.options.demoTileInfos
+    )
     img.loading = 'lazy'
     name.textContent = tilelayer.options.name
     L.DomEvent.on(
@@ -935,8 +707,8 @@ U.AttributionControl = L.Control.Attribution.extend({
     this._container.innerHTML = ''
     const container = L.DomUtil.create('div', 'attribution-container', this._container)
     container.innerHTML = credits
-    const shortCredit = this._map.getOption('shortCredit')
-    const captionMenus = this._map.getOption('captionMenus')
+    const shortCredit = this._map._umap.getProperty('shortCredit')
+    const captionMenus = this._map._umap.getProperty('captionMenus')
     if (shortCredit) {
       L.DomUtil.element({
         tagName: 'span',
@@ -947,7 +719,7 @@ U.AttributionControl = L.Control.Attribution.extend({
     if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('Open caption')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
-        .on(link, 'click', this._map.openCaption, this._map)
+        .on(link, 'click', () => this._map._umap.openCaption())
         .on(link, 'dblclick', L.DomEvent.stop)
     }
     if (window.top === window.self && captionMenus) {
@@ -1139,7 +911,7 @@ U.SearchControl = L.Control.extend({
       this.map.fire('dataload', { id: id })
     })
     this.search.resultsContainer = resultsContainer
-    this.map.panel.open({ content: container }).then(input.focus())
+    this.map._umap.panel.open({ content: container }).then(input.focus())
   },
 })
 
@@ -1179,8 +951,9 @@ L.Control.Loading.include({
 })
 
 U.Editable = L.Editable.extend({
-  initialize: function (map, options) {
-    L.Editable.prototype.initialize.call(this, map, options)
+  initialize: function (umap, options) {
+    this._umap = umap
+    L.Editable.prototype.initialize.call(this, umap._leafletMap, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
@@ -1188,7 +961,7 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:drawing:commit', function (event) {
       event.layer.feature.isDirty = true
-      if (this.map.editedFeature !== event.layer) event.layer.feature.edit(event)
+      if (this._umap.editedFeature !== event.layer) event.layer.feature.edit(event)
     })
     this.on('editable:editing', (event) => {
       const feature = event.layer.feature
@@ -1210,24 +983,24 @@ U.Editable = L.Editable.extend({
   },
 
   createPolyline: function (latlngs) {
-    const datalayer = this.map.defaultEditDataLayer()
-    const point = new U.LineString(datalayer, {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const point = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
     return point.ui
   },
 
   createPolygon: function (latlngs) {
-    const datalayer = this.map.defaultEditDataLayer()
-    const point = new U.Polygon(datalayer, {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const point = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
     return point.ui
   },
 
   createMarker: function (latlng) {
-    const datalayer = this.map.defaultEditDataLayer()
-    const point = new U.Point(datalayer, {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const point = new U.Point(this._umap, datalayer, {
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
     return point.ui
@@ -1235,15 +1008,15 @@ U.Editable = L.Editable.extend({
 
   _getDefaultProperties: function () {
     const result = {}
-    if (this.map.options.featuresHaveOwner?.user) {
-      result.geojson = { properties: { owner: this.map.options.user.id } }
+    if (this._umap.properties.featuresHaveOwner?.user) {
+      result.geojson = { properties: { owner: this._umap.properties.user.id } }
     }
     return result
   },
 
   connectCreatedToMap: function (layer) {
     // Overrided from Leaflet.Editable
-    const datalayer = this.map.defaultEditDataLayer()
+    const datalayer = this._umap.defaultEditDataLayer()
     datalayer.addFeature(layer.feature)
     layer.isDirty = true
     return layer
@@ -1251,7 +1024,7 @@ U.Editable = L.Editable.extend({
 
   drawingTooltip: function (e) {
     if (e.layer instanceof L.Marker && e.type === 'editable:drawing:start') {
-      this.map.tooltip.open({ content: L._('Click to add a marker') })
+      this._umap.tooltip.open({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {
       // only continue with Polylines and Polygons
@@ -1298,12 +1071,12 @@ U.Editable = L.Editable.extend({
       }
     }
     if (content) {
-      this.map.tooltip.open({ content: content })
+      this._umap.tooltip.open({ content: content })
     }
   },
 
   closeTooltip: function () {
-    this.map.ui.closeTooltip()
+    this._umap.closeTooltip()
   },
 
   onVertexRawClick: (e) => {
@@ -1314,7 +1087,7 @@ U.Editable = L.Editable.extend({
 
   onEscape: function () {
     this.once('editable:drawing:end', (event) => {
-      this.map.tooltip.close()
+      this._umap.tooltip.close()
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape

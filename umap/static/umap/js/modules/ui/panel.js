@@ -2,9 +2,10 @@ import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 
 export class Panel {
-  constructor(map) {
-    this.parent = map._controlContainer
-    this.map = map
+  constructor(umap, leafletMap) {
+    this.parent = leafletMap._controlContainer
+    this._umap = umap
+    this._leafletMap = leafletMap
     this.container = DomUtil.create('div', '', this.parent)
     // This will be set once according to the panel configurated at load
     // or by using panels as popups
@@ -80,26 +81,26 @@ export class Panel {
   onClose() {
     if (DomUtil.hasClass(this.container, 'on')) {
       DomUtil.removeClass(this.container, 'on')
-      this.map.invalidateSize({ pan: false })
+      this._leafletMap.invalidateSize({ pan: false })
     }
   }
 }
 
 export class EditPanel extends Panel {
-  constructor(map) {
-    super(map)
+  constructor(umap, leafletMap) {
+    super(umap, leafletMap)
     this.className = 'right dark'
   }
 
   onClose() {
     super.onClose()
-    this.map.editedFeature = null
+    this._umap.editedFeature = null
   }
 }
 
 export class FullPanel extends Panel {
-  constructor(map) {
-    super(map)
+  constructor(umap, leafletMap) {
+    super(umap, leafletMap)
     this.className = 'full dark'
     this.mode = 'expanded'
   }

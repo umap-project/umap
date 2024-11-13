@@ -61,15 +61,15 @@ const Panel = Popup.extend({
     zoomAnimation: false,
   },
 
-  onAdd: function (map) {
-    map.panel.setDefaultMode('expanded')
-    map.panel.open({
+  onAdd: function (leafletMap) {
+    leafletMap._umap.panel.setDefaultMode('expanded')
+    leafletMap._umap.panel.open({
       content: this._content,
-      actions: [Browser.backButton(map)],
+      actions: [Browser.backButton(leafletMap._umap)],
     })
 
     // fire events as in base class Popup.js:onAdd
-    map.fire('popupopen', { popup: this })
+    leafletMap.fire('popupopen', { popup: this })
     if (this._source) {
       this._source.fire('popupopen', { popup: this }, true)
       if (!(this._source instanceof Path)) {
@@ -78,11 +78,11 @@ const Panel = Popup.extend({
     }
   },
 
-  onRemove: function (map) {
-    map.panel.close()
+  onRemove: function (leafletMap) {
+    leafletMap._umap.panel.close()
 
     // fire events as in base class Popup.js:onRemove
-    map.fire('popupclose', { popup: this })
+    leafletMap.fire('popupclose', { popup: this })
     if (this._source) {
       this._source.fire('popupclose', { popup: this }, true)
       if (!(this._source instanceof Path)) {

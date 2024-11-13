@@ -6,8 +6,8 @@ import { fieldInSchema } from '../utils.js'
  */
 
 class BaseUpdater {
-  constructor(map) {
-    this.map = map
+  constructor(umap) {
+    this._umap = umap
   }
 
   updateObjectValue(obj, key, value) {
@@ -32,8 +32,8 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId) {
-    if (layerId) return this.map.getDataLayerByUmapId(layerId)
-    return this.map.defaultEditDataLayer()
+    if (layerId) return this._umap.getDataLayerByUmapId(layerId)
+    return this._umap.defaultEditDataLayer()
   }
 
   applyMessage(payload) {
@@ -45,18 +45,18 @@ class BaseUpdater {
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
     if (fieldInSchema(key)) {
-      this.updateObjectValue(this.map, key, value)
+      this.updateObjectValue(this._umap, key, value)
     }
 
-    this.map.render([key])
+    this._umap.render([key])
   }
 }
 
 export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Inserts does not happen (we use multiple updates instead).
-    this.map.createDataLayer(value, false)
-    this.map.render([])
+    this._umap.createDataLayer(value, false)
+    this._umap.render([])
   }
 
   update({ key, metadata, value }) {

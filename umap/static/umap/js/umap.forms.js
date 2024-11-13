@@ -221,21 +221,16 @@ L.FormBuilder.Element.include({
       this.label = L.DomUtil.create('label', '', this.getLabelParent())
       this.label.textContent = this.label.title = this.options.label
       if (this.options.helpEntries) {
-        this.builder.map.help.button(this.label, this.options.helpEntries)
+        this.builder._umap.help.button(this.label, this.options.helpEntries)
       } else if (this.options.helpTooltip) {
         const info = L.DomUtil.create('i', 'info', this.label)
-        L.DomEvent.on(
-          info,
-          'mouseover',
-          function () {
-            this.builder.map.tooltip.open({
-              anchor: info,
-              content: this.options.helpTooltip,
-              position: 'top',
-            })
-          },
-          this
-        )
+        L.DomEvent.on(info, 'mouseover', () => {
+          this.builder._umap.tooltip.open({
+            anchor: info,
+            content: this.options.helpTooltip,
+            position: 'top',
+          })
+        })
       }
     }
   },
@@ -359,7 +354,7 @@ L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
 L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     const options = []
-    this.builder.map.eachDataLayerReverse((datalayer) => {
+    this.builder._umap.eachDataLayerReverse((datalayer) => {
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&
@@ -376,11 +371,11 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   },
 
   toJS: function () {
-    return this.builder.map.datalayers[this.value()]
+    return this.builder._umap.datalayers[this.value()]
   },
 
   set: function () {
-    this.builder.map.lastUsedDataLayer = this.toJS()
+    this.builder._umap.lastUsedDataLayer = this.toJS()
     this.obj.changeDataLayer(this.toJS())
   },
 })
@@ -400,7 +395,7 @@ L.FormBuilder.DataFormat = L.FormBuilder.Select.extend({
 L.FormBuilder.LicenceChooser = L.FormBuilder.Select.extend({
   getOptions: function () {
     const licences = []
-    const licencesList = this.builder.obj.options.licences
+    const licencesList = this.builder.obj.properties.licences
     let licence
     for (const i in licencesList) {
       licence = licencesList[i]
@@ -414,7 +409,7 @@ L.FormBuilder.LicenceChooser = L.FormBuilder.Select.extend({
   },
 
   toJS: function () {
-    return this.builder.obj.options.licences[this.value()]
+    return this.builder.obj.properties.licences[this.value()]
   },
 })
 
@@ -469,8 +464,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   onDefine: async function () {
     this.buttons.innerHTML = ''
     this.footer.innerHTML = ''
-    const [{ pictogram_list }, response, error] = await this.builder.map.server.get(
-      this.builder.map.options.urls.pictogram_list_json
+    const [{ pictogram_list }, response, error] = await this.builder._umap.server.get(
+      this.builder._umap.properties.urls.pictogram_list_json
     )
     if (!error) this.pictogram_list = pictogram_list
     this.buildTabs()
@@ -616,7 +611,7 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
       categories[category].push(props)
     }
     const sorted = Object.entries(categories).toSorted(([a], [b]) =>
-      U.Utils.naturalSort(a, b, L.lang)
+      U.Utils.naturalSort(a, b, U.lang)
     )
     for (const [name, items] of sorted) {
       this.addCategory(items, name)
@@ -1167,8 +1162,8 @@ U.FormBuilder = L.FormBuilder.extend({
     }
   },
 
-  initialize: function (obj, fields, options) {
-    this.map = obj.map || obj.getMap()
+  initialize: function (obj, fields, options = {}) {
+    this._umap = obj._umap || options.umap
     this.computeDefaultOptions()
     L.FormBuilder.prototype.initialize.call(this, obj, fields, options)
     this.on('finish', this.finish)

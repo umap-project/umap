@@ -161,7 +161,7 @@ def test_websocket_connection_can_sync_polygons(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_map_properties(
-    context, live_server, websocket_server, tilelayer
+    new_page, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -169,9 +169,9 @@ def test_websocket_connection_can_sync_map_properties(
     DataLayerFactory(map=map, data={})
 
     # Create two tabs
-    peerA = context.new_page()
+    peerA = new_page()
     peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    peerB = context.new_page()
+    peerB = new_page()
     peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     # Name change is synced
@@ -193,7 +193,7 @@ def test_websocket_connection_can_sync_map_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_datalayer_properties(
-    context, live_server, websocket_server, tilelayer
+    new_page, live_server, websocket_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -201,9 +201,9 @@ def test_websocket_connection_can_sync_datalayer_properties(
     DataLayerFactory(map=map, data={})
 
     # Create two tabs
-    peerA = context.new_page()
+    peerA = new_page()
     peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    peerB = context.new_page()
+    peerB = new_page()
     peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     # Layer addition, name and type are synced
@@ -215,7 +215,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
     peerA.locator("body").press("Escape")
 
     peerB.get_by_role("link", name="Manage layers").click()
-    peerB.get_by_role("button", name="Edit").first.click()
+    peerB.locator(".panel.right").get_by_role("button", name="Edit").first.click()
     expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
     expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
 

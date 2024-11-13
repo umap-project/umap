@@ -20,7 +20,7 @@ const ClassifiedMixin = {
     }
     this.ensureOptions(this.datalayer.options[key])
     FeatureGroup.prototype.initialize.call(this, [], this.datalayer.options[key])
-    LayerMixin.onInit.call(this, this.datalayer.map)
+    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
   },
 
   ensureOptions: () => {},

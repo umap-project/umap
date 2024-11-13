@@ -63,7 +63,11 @@ L.FormBuilder = L.Evented.extend({
     const path = field.split('.')
     let value = this.obj
     for (const sub of path) {
-      value = value[sub]
+      try {
+        value = value[sub]
+      } catch {
+        console.log(field)
+      }
     }
     return value
   },

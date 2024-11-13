@@ -1,5 +1,7 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import * as Utils from './utils.js'
+import Dialog from './ui/dialog.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {
@@ -163,9 +165,9 @@ const ENTRIES = {
 }
 
 export default class Help {
-  constructor(map) {
-    this.map = map
-    this.dialog = new U.Dialog()
+  constructor(umap) {
+    this.umap = umap
+    this.dialog = new Dialog({ className: 'dark', accept: false, cancel: false })
     this.isMacOS = /mac/i.test(
       // eslint-disable-next-line compat/compat -- Fallback available.
       navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform
@@ -199,7 +201,7 @@ export default class Help {
         innerHTML: ENTRIES[name],
       })
     }
-    this.dialog.open({ template: container, className: 'dark', cancel: false, accept: false })
+    this.dialog.open({ template: container })
   }
 
   // Special dynamic case. Do we still think this dialog is useful?
@@ -211,7 +213,7 @@ export default class Help {
       className: 'umap-help-entry',
       parent: container,
     }).appendChild(this._buildEditEntry())
-    this.map.dialog.open({ content: container, className: 'dark' })
+    this.dialog.open({ template: container })
   }
 
   button(container, entries) {
@@ -247,9 +249,11 @@ export default class Help {
       DomEvent.on(actionContainer, 'click', action.addHooks, action)
       DomEvent.on(actionContainer, 'click', this.dialog.close, this.dialog)
     }
-    for (const id in this.map.helpMenuActions) {
-      addAction(this.map.helpMenuActions[id])
+    for (const action of Object.values(Help.MENU_ACTIONS)) {
+      addAction(action)
     }
     return container
   }
 }
+
+Help.MENU_ACTIONS = {}

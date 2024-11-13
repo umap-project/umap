@@ -3,24 +3,24 @@ import { translate } from './i18n.js'
 
 export const EXPORT_FORMATS = {
   geojson: {
-    formatter: async (map) => JSON.stringify(map.toGeoJSON(), null, 2),
+    formatter: async (umap) => JSON.stringify(umap.toGeoJSON(), null, 2),
     ext: '.geojson',
     filetype: 'application/json',
   },
   gpx: {
-    formatter: async (map) => await map.formatter.toGPX(map.toGeoJSON()),
+    formatter: async (umap) => await umap.formatter.toGPX(umap.toGeoJSON()),
     ext: '.gpx',
     filetype: 'application/gpx+xml',
   },
   kml: {
-    formatter: async (map) => await map.formatter.toKML(map.toGeoJSON()),
+    formatter: async (umap) => await umap.formatter.toKML(umap.toGeoJSON()),
     ext: '.kml',
     filetype: 'application/vnd.google-earth.kml+xml',
   },
   csv: {
-    formatter: async (map) => {
+    formatter: async (umap) => {
       const table = []
-      map.eachFeature((feature) => {
+      umap.eachFeature((feature) => {
         const row = feature.toGeoJSON().properties
         const center = feature.center
         delete row._umap_options
