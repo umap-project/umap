@@ -221,21 +221,16 @@ L.FormBuilder.Element.include({
       this.label = L.DomUtil.create('label', '', this.getLabelParent())
       this.label.textContent = this.label.title = this.options.label
       if (this.options.helpEntries) {
-        this.builder.umap.help.button(this.label, this.options.helpEntries)
+        this.builder._umap.help.button(this.label, this.options.helpEntries)
       } else if (this.options.helpTooltip) {
         const info = L.DomUtil.create('i', 'info', this.label)
-        L.DomEvent.on(
-          info,
-          'mouseover',
-          function () {
-            this.builder.umap.tooltip.open({
-              anchor: info,
-              content: this.options.helpTooltip,
-              position: 'top',
-            })
-          },
-          this
-        )
+        L.DomEvent.on(info, 'mouseover', () => {
+          this.builder._umap.tooltip.open({
+            anchor: info,
+            content: this.options.helpTooltip,
+            position: 'top',
+          })
+        })
       }
     }
   },
@@ -359,7 +354,7 @@ L.FormBuilder.SlideshowDelay = L.FormBuilder.IntSelect.extend({
 L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   getOptions: function () {
     const options = []
-    this.builder.umap.eachDataLayerReverse((datalayer) => {
+    this.builder._umap.eachDataLayerReverse((datalayer) => {
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&
@@ -376,11 +371,11 @@ L.FormBuilder.DataLayerSwitcher = L.FormBuilder.Select.extend({
   },
 
   toJS: function () {
-    return this.builder.umap.datalayers[this.value()]
+    return this.builder._umap.datalayers[this.value()]
   },
 
   set: function () {
-    this.builder.umap.lastUsedDataLayer = this.toJS()
+    this.builder._umap.lastUsedDataLayer = this.toJS()
     this.obj.changeDataLayer(this.toJS())
   },
 })
@@ -469,8 +464,8 @@ L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   onDefine: async function () {
     this.buttons.innerHTML = ''
     this.footer.innerHTML = ''
-    const [{ pictogram_list }, response, error] = await this.builder.umap.server.get(
-      this.builder.umap.properties.urls.pictogram_list_json
+    const [{ pictogram_list }, response, error] = await this.builder._umap.server.get(
+      this.builder._umap.properties.urls.pictogram_list_json
     )
     if (!error) this.pictogram_list = pictogram_list
     this.buildTabs()
@@ -1168,7 +1163,7 @@ U.FormBuilder = L.FormBuilder.extend({
   },
 
   initialize: function (obj, fields, options = {}) {
-    this.umap = obj.umap || options.umap
+    this._umap = obj._umap || options.umap
     this.computeDefaultOptions()
     L.FormBuilder.prototype.initialize.call(this, obj, fields, options)
     this.on('finish', this.finish)

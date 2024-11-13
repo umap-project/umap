@@ -39,7 +39,7 @@ const ControlsMixin = {
   initControls: function () {
     this._controls = {}
 
-    if (this.umap.hasEditMode() && !this.options.noControl) {
+    if (this._umap.hasEditMode() && !this.options.noControl) {
       new U.EditControl(this).addTo(this)
 
       new U.DrawToolbar({ map: this }).addTo(this)
@@ -60,8 +60,8 @@ const ControlsMixin = {
       zoomInTitle: translate('Zoom in'),
       zoomOutTitle: translate('Zoom out'),
     })
-    this._controls.datalayers = new U.DataLayersControl(this.umap)
-    this._controls.caption = new U.CaptionControl(this.umap)
+    this._controls.datalayers = new U.DataLayersControl(this._umap)
+    this._controls.caption = new U.CaptionControl(this._umap)
     this._controls.locate = new U.Locate(this, {
       strings: {
         title: translate('Center map on your location'),
@@ -82,9 +82,9 @@ const ControlsMixin = {
       },
     })
     this._controls.search = new U.SearchControl()
-    this._controls.embed = new Control.Embed(this.umap)
+    this._controls.embed = new Control.Embed(this._umap)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
-    if (this.options.user?.id) this._controls.star = new U.StarControl(this.umap)
+    if (this.options.user?.id) this._controls.star = new U.StarControl(this._umap)
     this._controls.editinosm = new Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -99,7 +99,7 @@ const ControlsMixin = {
     this._controls.permanentCredit = new U.PermanentCreditsControl(this)
     if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
     else this.scrollWheelZoom.disable()
-    this.umap.drop = new U.DropControl(this)
+    this._umap.drop = new U.DropControl(this)
     this._controls.tilelayers = new U.TileLayerControl(this)
   },
 
@@ -119,13 +119,13 @@ const ControlsMixin = {
         if (this.selectedTilelayer) {
           this._controls.miniMap = new Control.MiniMap(this.selectedTilelayer, {
             aimingRectOptions: {
-              color: this.umap.getOption('color'),
-              fillColor: this.umap.getOption('fillColor'),
-              stroke: this.umap.getOption('stroke'),
-              fill: this.umap.getOption('fill'),
-              weight: this.umap.getOption('weight'),
-              opacity: this.umap.getOption('opacity'),
-              fillOpacity: this.umap.getOption('fillOpacity'),
+              color: this._umap.getProperty('color'),
+              fillColor: this._umap.getProperty('fillColor'),
+              stroke: this._umap.getProperty('stroke'),
+              fill: this._umap.getProperty('fill'),
+              weight: this._umap.getProperty('weight'),
+              opacity: this._umap.getProperty('opacity'),
+              fillOpacity: this._umap.getProperty('fillOpacity'),
             },
           }).addTo(this)
           this._controls.miniMap._miniMap.invalidateSize()
@@ -133,7 +133,7 @@ const ControlsMixin = {
       })
     }
     for (const name of this.HIDDABLE_CONTROLS) {
-      const status = this.umap.getOption(`${name}Control`)
+      const status = this._umap.getProperty(`${name}Control`)
       if (status === false) continue
       const control = this._controls[name]
       if (!control) continue
@@ -144,10 +144,10 @@ const ControlsMixin = {
         DomUtil.removeClass(control._container, 'display-on-more')
       }
     }
-    if (this.umap.getOption('permanentCredit'))
+    if (this._umap.getProperty('permanentCredit'))
       this._controls.permanentCredit.addTo(this)
-    if (this.umap.getOption('moreControl')) this._controls.more.addTo(this)
-    if (this.umap.getOption('scaleControl')) this._controls.scale.addTo(this)
+    if (this._umap.getProperty('moreControl')) this._controls.more.addTo(this)
+    if (this._umap.getProperty('scaleControl')) this._controls.scale.addTo(this)
     this._controls.tilelayers.setLayers()
   },
 
@@ -163,7 +163,7 @@ const ControlsMixin = {
     DomUtil.createLink('', logo, 'uMap', '/', null, translate('Go to the homepage'))
     const nameButton = DomUtil.createButton('map-name', leftContainer, '')
     DomEvent.on(nameButton, 'mouseover', () => {
-      this.umap.tooltip.open({
+      this._umap.tooltip.open({
         content: translate('Edit the title of the map'),
         anchor: nameButton,
         position: 'bottom',
@@ -175,11 +175,11 @@ const ControlsMixin = {
       'share-status',
       leftContainer,
       '',
-      this.umap.permissions.edit,
-      this.umap.permissions
+      this._umap.permissions.edit,
+      this._umap.permissions
     )
     DomEvent.on(shareStatusButton, 'mouseover', () => {
-      this.umap.tooltip.open({
+      this._umap.tooltip.open({
         content: translate('Update who can see and edit the map'),
         anchor: shareStatusButton,
         position: 'bottom',
@@ -188,12 +188,12 @@ const ControlsMixin = {
       })
     })
     if (this.options.editMode === 'advanced') {
-      DomEvent.on(nameButton, 'click', this.umap.editCaption, this.umap)
+      DomEvent.on(nameButton, 'click', this._umap.editCaption, this._umap)
       DomEvent.on(
         shareStatusButton,
         'click',
-        this.umap.permissions.edit,
-        this.umap.permissions
+        this._umap.permissions.edit,
+        this._umap.permissions
       )
     }
     if (this.options.user?.id) {
@@ -208,21 +208,21 @@ const ControlsMixin = {
       const actions = [
         {
           label: translate('New map'),
-          action: this.umap.urls.get('map_new'),
+          action: this._umap.urls.get('map_new'),
         },
         {
           label: translate('My maps'),
-          action: this.umap.urls.get('user_dashboard'),
+          action: this._umap.urls.get('user_dashboard'),
         },
         {
           label: translate('My teams'),
-          action: this.umap.urls.get('user_teams'),
+          action: this._umap.urls.get('user_teams'),
         },
       ]
-      if (this.umap.urls.has('user_profile')) {
+      if (this._umap.urls.has('user_profile')) {
         actions.push({
           label: translate('My profile'),
-          action: this.umap.urls.get('user_profile'),
+          action: this._umap.urls.get('user_profile'),
         })
       }
       button.addEventListener('click', () => {
@@ -230,7 +230,7 @@ const ControlsMixin = {
       })
     }
 
-    const connectedPeers = this.umap.sync.getNumberOfConnectedPeers()
+    const connectedPeers = this._umap.sync.getNumberOfConnectedPeers()
     if (connectedPeers !== 0) {
       const connectedPeersCount = DomUtil.createButton(
         'leaflet-control-connected-peers',
@@ -238,7 +238,7 @@ const ControlsMixin = {
         ''
       )
       DomEvent.on(connectedPeersCount, 'mouseover', () => {
-        this.umap.tooltip.open({
+        this._umap.tooltip.open({
           content: translate(
             '{connectedPeers} peer(s) currently connected to this map',
             {
@@ -253,21 +253,21 @@ const ControlsMixin = {
       })
 
       const updateConnectedPeersCount = () => {
-        connectedPeersCount.innerHTML = this.umap.sync.getNumberOfConnectedPeers()
+        connectedPeersCount.innerHTML = this._umap.sync.getNumberOfConnectedPeers()
       }
       updateConnectedPeersCount()
     }
 
-    this.umap.help.getStartedLink(rightContainer)
+    this._umap.help.getStartedLink(rightContainer)
     const controlEditCancel = DomUtil.createButton(
       'leaflet-control-edit-cancel',
       rightContainer,
       DomUtil.add('span', '', null, translate('Cancel edits')),
-      () => this.umap.askForReset()
+      () => this._umap.askForReset()
     )
     DomEvent.on(controlEditCancel, 'mouseover', () => {
-      this.umap.tooltip.open({
-        content: this.umap.help.displayLabel('CANCEL'),
+      this._umap.tooltip.open({
+        content: this._umap.help.displayLabel('CANCEL'),
         anchor: controlEditCancel,
         position: 'bottom',
         delay: 500,
@@ -278,12 +278,12 @@ const ControlsMixin = {
       'leaflet-control-edit-disable',
       rightContainer,
       DomUtil.add('span', '', null, translate('View')),
-      this.umap.disableEdit,
-      this.umap
+      this._umap.disableEdit,
+      this._umap
     )
     DomEvent.on(controlEditDisable, 'mouseover', () => {
-      this.umap.tooltip.open({
-        content: this.umap.help.displayLabel('PREVIEW'),
+      this._umap.tooltip.open({
+        content: this._umap.help.displayLabel('PREVIEW'),
         anchor: controlEditDisable,
         position: 'bottom',
         delay: 500,
@@ -294,11 +294,11 @@ const ControlsMixin = {
       'leaflet-control-edit-save button',
       rightContainer,
       DomUtil.add('span', '', null, translate('Save')),
-      () => this.umap.saveAll()
+      () => this._umap.saveAll()
     )
     DomEvent.on(controlEditSave, 'mouseover', () => {
-      this.umap.tooltip.open({
-        content: this.umap.help.displayLabel('SAVE'),
+      this._umap.tooltip.open({
+        content: this._umap.help.displayLabel('SAVE'),
         anchor: controlEditSave,
         position: 'bottom',
         delay: 500,
@@ -315,13 +315,13 @@ const ControlsMixin = {
     container.innerHTML = ''
     const name = DomUtil.create('h3', 'map-name', container)
     DomEvent.disableClickPropagation(container)
-    this.umap.addAuthorLink(container)
-    if (this.umap.getOption('captionMenus')) {
+    this._umap.addAuthorLink(container)
+    if (this._umap.getProperty('captionMenus')) {
       DomUtil.createButton(
         'umap-about-link flat',
         container,
         translate('Open caption'),
-        () => this.umap.openCaption()
+        () => this._umap.openCaption()
       )
       DomUtil.createButton(
         'umap-open-browser-link flat',
@@ -338,8 +338,8 @@ const ControlsMixin = {
         )
       }
     }
-    this.umap.onceDatalayersLoaded(() => {
-      this.umap.slideshow.renderToolbox(container)
+    this._umap.onceDatalayersLoaded(() => {
+      this._umap.slideshow.renderToolbox(container)
     })
   },
 }
@@ -434,7 +434,7 @@ const ManageTilelayerMixin = {
   updateTileLayers: function () {
     const callback = (tilelayer) => {
       this.options.tilelayer = tilelayer.toJSON()
-      this.umap.isDirty = true
+      this._umap.isDirty = true
     }
     if (this._controls.tilelayersChooser) {
       this._controls.tilelayersChooser.openSwitcher({ callback, edit: true })
@@ -442,30 +442,17 @@ const ManageTilelayerMixin = {
   },
 }
 
-const EditMixin = {
-  startMarker: function () {
-    return this.editTools.startMarker()
-  },
-
-  startPolyline: function () {
-    return this.editTools.startPolyline()
-  },
-
-  startPolygon: function () {
-    return this.editTools.startPolygon()
-  },
-
-  initEditTools: function () {
-    this.editTools = new U.Editable(this.umap)
-    this.renderEditToolbar()
-  },
-}
-
 export const LeafletMap = BaseMap.extend({
-  includes: [ControlsMixin, ManageTilelayerMixin, EditMixin],
+  includes: [ControlsMixin, ManageTilelayerMixin],
+
+  // The initialize and the setup method might seem similar, but they
+  // serve two different purposes:
+  // initialize is for Leaflet internal, when we do "new LeafletMap",
+  // while setup is the public API for the LeafletMap to actually
+  // render to the DOM.
   initialize: function (umap, element) {
-    this.umap = umap
-    const options = this.umap.properties
+    this._umap = umap
+    const options = this._umap.properties
 
     BaseMap.prototype.initialize.call(this, element, options)
 
@@ -489,21 +476,17 @@ export const LeafletMap = BaseMap.extend({
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
-    this.update()
+    this.renderUI()
   },
 
-  update: function () {
-    this.setOptions(this.umap.properties)
+  renderUI: function () {
+    setOptions(this, this._umap.properties)
     this.initTileLayers()
     this.renderCaptionBar()
     this.renderEditToolbar()
     // Needs tilelayer to exist for minimap
     this.renderControls()
     this.handleLimitBounds()
-  },
-
-  setOptions: function (options) {
-    setOptions(this, options)
   },
 
   closeInplaceToolbar: function () {
@@ -534,11 +517,11 @@ export const LeafletMap = BaseMap.extend({
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
       this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
-      this.umap.onceDataLoaded(this.umap.fitDataBounds)
+      this._umap.onceDataLoaded(this._umap.fitDataBounds)
     } else if (this.options.defaultView === 'latest') {
-      this.umap.onceDataLoaded(() => {
-        if (!this.umap.hasData()) return
-        const datalayer = this.umap.firstVisibleDatalayer()
+      this._umap.onceDataLoaded(() => {
+        if (!this._umap.hasData()) return
+        const datalayer = this._umap.firstVisibleDatalayer()
         let feature
         if (datalayer) {
           const feature = datalayer.getFeatureByIndex(-1)
@@ -589,5 +572,10 @@ export const LeafletMap = BaseMap.extend({
       return this.off('moveend', this._panInsideMaxBounds)
     }
     return BaseMap.prototype.setMaxBounds.call(this, bounds)
+  },
+
+  initEditTools: function () {
+    this.editTools = new U.Editable(this._umap)
+    this.renderEditToolbar()
   },
 })

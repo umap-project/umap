@@ -2,7 +2,7 @@ U.BaseAction = L.ToolbarAction.extend({
   initialize: function (map) {
     this.map = map
     if (this.options.label) {
-      this.options.tooltip = this.map.umap.help.displayLabel(
+      this.options.tooltip = this.map._umap.help.displayLabel(
         this.options.label,
         (withKbdTag = false)
       )
@@ -25,7 +25,7 @@ U.ImportAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.umap.importer.open()
+    this.map._umap.importer.open()
   },
 })
 
@@ -37,7 +37,7 @@ U.EditLayersAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.umap.editDatalayers()
+    this.map._umap.editDatalayers()
   },
 })
 
@@ -49,7 +49,7 @@ U.EditCaptionAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.umap.editCaption()
+    this.map._umap.editCaption()
   },
 })
 
@@ -61,7 +61,7 @@ U.EditPropertiesAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.umap.edit()
+    this.map._umap.edit()
   },
 })
 
@@ -84,7 +84,7 @@ U.UpdateExtentAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.umap.setCenterAndZoom()
+    this.map._umap.setCenterAndZoom()
   },
 })
 
@@ -95,7 +95,7 @@ U.UpdatePermsAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.umap.permissions.edit()
+    this.map._umap.permissions.edit()
   },
 })
 
@@ -107,7 +107,7 @@ U.DrawMarkerAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.startMarker()
+    this.map.editTools.startMarker()
   },
 })
 
@@ -119,7 +119,7 @@ U.DrawPolylineAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.startPolyline()
+    this.map.editTools.startPolyline()
   },
 })
 
@@ -131,7 +131,7 @@ U.DrawPolygonAction = U.BaseAction.extend({
   },
 
   addHooks: function () {
-    this.map.startPolygon()
+    this.map.editTools.startPolygon()
   },
 })
 
@@ -143,7 +143,7 @@ U.AddPolylineShapeAction = U.BaseAction.extend({
 
   addHooks: function () {
     // FIXME: smells bad
-    this.map.umap.editedFeature.ui.editor.newShape()
+    this.map._umap.editedFeature.ui.editor.newShape()
   },
 })
 
@@ -306,23 +306,23 @@ U.DrawToolbar = L.Toolbar.Control.extend({
 
   appendToContainer: function (container) {
     this.options.actions = []
-    if (this.map.umap.properties.enableMarkerDraw) {
+    if (this.map._umap.properties.enableMarkerDraw) {
       this.options.actions.push(U.DrawMarkerAction)
     }
-    if (this.map.umap.properties.enablePolylineDraw) {
+    if (this.map._umap.properties.enablePolylineDraw) {
       this.options.actions.push(U.DrawPolylineAction)
       if (
-        this.map.umap.editedFeature &&
-        this.map.umap.editedFeature instanceof U.LineString
+        this.map._umap.editedFeature &&
+        this.map._umap.editedFeature instanceof U.LineString
       ) {
         this.options.actions.push(U.AddPolylineShapeAction)
       }
     }
-    if (this.map.umap.properties.enablePolygonDraw) {
+    if (this.map._umap.properties.enablePolygonDraw) {
       this.options.actions.push(U.DrawPolygonAction)
       if (
-        this.map.umap.editedFeature &&
-        this.map.umap.editedFeature instanceof U.Polygon
+        this.map._umap.editedFeature &&
+        this.map._umap.editedFeature instanceof U.Polygon
       ) {
         this.options.actions.push(U.AddPolygonShapeAction)
       }
@@ -372,9 +372,9 @@ U.DropControl = L.Class.extend({
     this.dropzone.classList.remove('umap-dragover')
     L.DomEvent.stop(e)
     for (const file of event.dataTransfer.files) {
-      this.map.umap.processFileToImport(file)
+      this.map._umap.processFileToImport(file)
     }
-    this.map.umap.onceDataLoaded(this.map.umap.fitDataBounds)
+    this.map._umap.onceDataLoaded(this.map._umap.fitDataBounds)
   },
 
   dragleave: function () {
@@ -394,15 +394,15 @@ U.EditControl = L.Control.extend({
       '',
       container,
       L._('Edit'),
-      map.umap.enableEdit,
-      map.umap
+      map._umap.enableEdit,
+      map._umap
     )
     L.DomEvent.on(
       enableEditing,
       'mouseover',
       () => {
-        map.umap.tooltip.open({
-          content: map.umap.help.displayLabel('TOGGLE_EDIT'),
+        map._umap.tooltip.open({
+          content: map._umap.help.displayLabel('TOGGLE_EDIT'),
           anchor: enableEditing,
           position: 'bottom',
           delay: 750,
@@ -484,7 +484,7 @@ U.PermanentCreditsControl = L.Control.extend({
 
 L.Control.Button = L.Control.extend({
   initialize: function (umap, options) {
-    this.umap = umap
+    this._umap = umap
     L.Control.prototype.initialize.call(this, options)
   },
 
@@ -517,11 +517,11 @@ U.DataLayersControl = L.Control.Button.extend({
   },
 
   afterAdd: function (container) {
-    U.Utils.toggleBadge(container, this.umap.browser?.hasFilters())
+    U.Utils.toggleBadge(container, this._umap.browser?.hasFilters())
   },
 
   onClick: function () {
-    this.umap.openBrowser()
+    this._umap.openBrowser()
   },
 })
 
@@ -533,7 +533,7 @@ U.CaptionControl = L.Control.Button.extend({
   },
 
   onClick: function () {
-    this.umap.openCaption()
+    this._umap.openCaption()
   },
 })
 
@@ -544,13 +544,12 @@ U.StarControl = L.Control.Button.extend({
   },
 
   getClassName: function () {
-    const status = this.umap.properties.starred ? ' starred' : ''
+    const status = this._umap.properties.starred ? ' starred' : ''
     return `leaflet-control-star umap-control${status}`
   },
 
   onClick: function () {
-    console.log(this.umap)
-    this.umap.star()
+    this._umap.star()
   },
 })
 
@@ -562,7 +561,7 @@ L.Control.Embed = L.Control.Button.extend({
   },
 
   onClick: function () {
-    this.umap.share.open()
+    this._umap.share.open()
   },
 })
 
@@ -655,7 +654,7 @@ U.TileLayerChooser = L.Control.extend({
     L.DomUtil.createTitle(container, L._('Change tilelayers'), 'icon-tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
-    const panel = options.edit ? this.map.umap.editPanel : this.map.umap.panel
+    const panel = options.edit ? this.map._umap.editPanel : this.map._umap.panel
     panel.open({ content: container })
   },
 
@@ -708,8 +707,8 @@ U.AttributionControl = L.Control.Attribution.extend({
     this._container.innerHTML = ''
     const container = L.DomUtil.create('div', 'attribution-container', this._container)
     container.innerHTML = credits
-    const shortCredit = this._map.umap.getOption('shortCredit')
-    const captionMenus = this._map.umap.getOption('captionMenus')
+    const shortCredit = this._map._umap.getProperty('shortCredit')
+    const captionMenus = this._map._umap.getProperty('captionMenus')
     if (shortCredit) {
       L.DomUtil.element({
         tagName: 'span',
@@ -720,7 +719,7 @@ U.AttributionControl = L.Control.Attribution.extend({
     if (captionMenus) {
       const link = L.DomUtil.add('a', '', container, ` — ${L._('Open caption')}`)
       L.DomEvent.on(link, 'click', L.DomEvent.stop)
-        .on(link, 'click', () => this._map.umap.openCaption())
+        .on(link, 'click', () => this._map._umap.openCaption())
         .on(link, 'dblclick', L.DomEvent.stop)
     }
     if (window.top === window.self && captionMenus) {
@@ -912,7 +911,7 @@ U.SearchControl = L.Control.extend({
       this.map.fire('dataload', { id: id })
     })
     this.search.resultsContainer = resultsContainer
-    this.map.umap.panel.open({ content: container }).then(input.focus())
+    this.map._umap.panel.open({ content: container }).then(input.focus())
   },
 })
 
@@ -953,7 +952,7 @@ L.Control.Loading.include({
 
 U.Editable = L.Editable.extend({
   initialize: function (umap, options) {
-    this.umap = umap
+    this._umap = umap
     L.Editable.prototype.initialize.call(this, umap._leafletMap, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
@@ -962,7 +961,7 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:drawing:commit', function (event) {
       event.layer.feature.isDirty = true
-      if (this.umap.editedFeature !== event.layer) event.layer.feature.edit(event)
+      if (this._umap.editedFeature !== event.layer) event.layer.feature.edit(event)
     })
     this.on('editable:editing', (event) => {
       const feature = event.layer.feature
@@ -984,24 +983,24 @@ U.Editable = L.Editable.extend({
   },
 
   createPolyline: function (latlngs) {
-    const datalayer = this.umap.defaultEditDataLayer()
-    const point = new U.LineString(datalayer, {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const point = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
     return point.ui
   },
 
   createPolygon: function (latlngs) {
-    const datalayer = this.umap.defaultEditDataLayer()
-    const point = new U.Polygon(datalayer, {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const point = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
     return point.ui
   },
 
   createMarker: function (latlng) {
-    const datalayer = this.umap.defaultEditDataLayer()
-    const point = new U.Point(datalayer, {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const point = new U.Point(this._umap, datalayer, {
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
     return point.ui
@@ -1009,15 +1008,15 @@ U.Editable = L.Editable.extend({
 
   _getDefaultProperties: function () {
     const result = {}
-    if (this.umap.properties.featuresHaveOwner?.user) {
-      result.geojson = { properties: { owner: this.umap.properties.user.id } }
+    if (this._umap.properties.featuresHaveOwner?.user) {
+      result.geojson = { properties: { owner: this._umap.properties.user.id } }
     }
     return result
   },
 
   connectCreatedToMap: function (layer) {
     // Overrided from Leaflet.Editable
-    const datalayer = this.umap.defaultEditDataLayer()
+    const datalayer = this._umap.defaultEditDataLayer()
     datalayer.addFeature(layer.feature)
     layer.isDirty = true
     return layer
@@ -1025,7 +1024,7 @@ U.Editable = L.Editable.extend({
 
   drawingTooltip: function (e) {
     if (e.layer instanceof L.Marker && e.type === 'editable:drawing:start') {
-      this.umap.tooltip.open({ content: L._('Click to add a marker') })
+      this._umap.tooltip.open({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {
       // only continue with Polylines and Polygons
@@ -1072,12 +1071,12 @@ U.Editable = L.Editable.extend({
       }
     }
     if (content) {
-      this.umap.tooltip.open({ content: content })
+      this._umap.tooltip.open({ content: content })
     }
   },
 
   closeTooltip: function () {
-    this.umap.closeTooltip()
+    this._umap.closeTooltip()
   },
 
   onVertexRawClick: (e) => {
@@ -1088,7 +1087,7 @@ U.Editable = L.Editable.extend({
 
   onEscape: function () {
     this.once('editable:drawing:end', (event) => {
-      this.umap.tooltip.close()
+      this._umap.tooltip.close()
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape

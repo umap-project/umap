@@ -21,7 +21,7 @@ export const Heat = L.HeatLayer.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.options.heat)
-    LayerMixin.onInit.call(this, this.datalayer.umap._leafletMap)
+    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
     if (!Utils.isObject(this.datalayer.options.heat)) {
       this.datalayer.options.heat = {}
     }

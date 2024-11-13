@@ -63,15 +63,3 @@ When the data layers are initialized, they can have two states:
 To mark what needs to be synced with the server, uMap currently mark objects as "dirty". Something marked as "dirty" has changed on the client, but is not yet saved on the server.
 
 Each map, datalayer and permission objects can be marked as "dirty". When a change is made on an object, it will mark its parent as "dirty" as well, so it can be updated accordingly.
-
-### Saving data to the server with `umap.save()`
-
-Here is what's being done when you call `map.save()`:
-
-1. `map.saveSelf()`, posting `name`, `center` and `settings` to the server, and then
-2. calls `permission.save()`, which will post the permissions to the server, and then call back
-3. `map.continueSaving()`, which will take the first dirtyLayer and call
-4. `datalayer.save()` on it. It does the following:
-	1. Post the data (`name`, `displayOnLoad`, `rank`, `settings`, and `geojson`)
-	2. Calls `permission.save()`, posting `edit_status` to the server, and then calling `map.continue_saving()` and remove the datalayer from `dirtyDatalayers`.
-5. When the `dirtyDatalayers` list is empty, we are done.

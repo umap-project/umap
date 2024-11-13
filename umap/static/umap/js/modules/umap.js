@@ -90,26 +90,25 @@ export default class Umap extends ServerStored {
     // Needed to render controls
     this.permissions = new MapPermissions(this)
     this.urls = new URLs(this.properties.urls)
-    this.slideshow = new Slideshow(this, this.properties.slideshow)
+    this.slideshow = new Slideshow(this, this._leafletMap, this.properties.slideshow)
 
     this._leafletMap.setup()
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
 
-
-    this.panel = new Panel(this)
+    this.panel = new Panel(this, this._leafletMap)
     this.dialog = new Dialog({ className: 'dark' })
     this.tooltip = new Tooltip(this._leafletMap._controlContainer)
     this.contextmenu = new ContextMenu()
     if (this.hasEditMode()) {
-      this.editPanel = new EditPanel(this)
-      this.fullPanel = new FullPanel(this)
+      this.editPanel = new EditPanel(this, this._leafletMap)
+      this.fullPanel = new FullPanel(this, this._leafletMap)
     }
     this.server = new ServerRequest()
     this.request = new Request()
     this.facets = new Facets(this)
-    this.browser = new Browser(this)
-    this.caption = new Caption(this)
+    this.browser = new Browser(this, this._leafletMap)
+    this.caption = new Caption(this, this._leafletMap)
     this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this)
@@ -183,7 +182,7 @@ export default class Umap extends ServerStored {
 
     if (!this.properties.noControl) {
       this.initShortcuts()
-      this._leafletMap.on('contextmenu', this.onContextMenu)
+      this._leafletMap.on('contextmenu', (e) => this.onContextMenu(e))
       this.onceDataLoaded(this.setViewFromQueryString)
       this.propagate()
     }
@@ -201,7 +200,7 @@ export default class Umap extends ServerStored {
       this._editedFeature.endEdit()
     }
     this._editedFeature = feature
-    this._leafletMap.fire('seteditedfeature')
+    this.fire('seteditedfeature')
   }
 
   setPropertiesFromQueryString() {
@@ -227,7 +226,7 @@ export default class Umap extends ServerStored {
     // FIXME retrocompat
     asBoolean('displayDataBrowserOnLoad')
     asBoolean('displayCaptionOnLoad')
-    for (const [key, schema] of Object.entries(U.SCHEMA)) {
+    for (const [key, schema] of Object.entries(SCHEMA)) {
       switch (schema.type) {
         case Boolean:
           if (schema.nullable) asNullableBoolean(key)
@@ -299,7 +298,7 @@ export default class Umap extends ServerStored {
     if (dataUrls.length) {
       for (let dataUrl of dataUrls) {
         dataUrl = decodeURIComponent(dataUrl)
-        dataUrl = this.localizeUrl(dataUrl)
+        dataUrl = this.renderUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
         const datalayer = this.createDataLayer()
         await datalayer.importFromUrl(dataUrl, dataFormat)
@@ -383,7 +382,7 @@ export default class Umap extends ServerStored {
     return items
   }
 
-  getContextMenuItems(event) {
+  getSharedContextMenuItems(event) {
     const items = []
     if (this.properties.urls.routing) {
       items.push('-', {
@@ -402,7 +401,7 @@ export default class Umap extends ServerStored {
 
   onContextMenu(event) {
     const items = this.getOwnContextMenuItems(event).concat(
-      this.getContextMenuItems(event)
+      this.getSharedContextMenuItems(event)
     )
     this.contextmenu.open(event.originalEvent, items)
   }
@@ -424,17 +423,19 @@ export default class Umap extends ServerStored {
     return editMode === 'simple' || editMode === 'advanced'
   }
 
-  getDefaultOption(key) {
-    return SCHEMA[key]?.default
-  }
-
-  getOption(key, feature) {
+  getProperty(key, feature) {
     if (feature) {
       const value = this.rules.getOption(key, feature)
       if (value !== undefined) return value
     }
     if (Utils.usableOption(this.properties, key)) return this.properties[key]
-    return this.getDefaultOption(key)
+    return SCHEMA[key]?.default
+  }
+
+  getOption(key, feature) {
+    // TODO: remove when umap.forms.js is refactored and does not call blindly
+    // obj.getOption anymore
+    return this.getProperty(key, feature)
   }
 
   getGeoContext() {
@@ -457,7 +458,7 @@ export default class Umap extends ServerStored {
     return context
   }
 
-  localizeUrl(url) {
+  renderUrl(url) {
     return Utils.greedyTemplate(url, this.getGeoContext(), true)
   }
 
@@ -551,18 +552,18 @@ export default class Umap extends ServerStored {
       this.createDataLayer(options, false)
     }
     this.datalayersLoaded = true
-    this._leafletMap.fire('datalayersloaded')
+    this.fire('datalayersloaded')
     for (const datalayer of this.datalayersIndex) {
       if (datalayer.showAtLoad()) await datalayer.show()
     }
     this.dataloaded = true
-    this._leafletMap.fire('dataloaded')
+    this.fire('dataloaded')
   }
 
   createDataLayer(options = {}, sync = true) {
     options.name =
       options.name || `${translate('Layer')} ${this.datalayersIndex.length + 1}`
-    const datalayer = new DataLayer(this, options, sync)
+    const datalayer = new DataLayer(this, this._leafletMap, options, sync)
 
     if (sync !== false) {
       datalayer.sync.upsert(datalayer.options)
@@ -578,12 +579,6 @@ export default class Umap extends ServerStored {
   reindexDataLayers() {
     this.eachDataLayer((datalayer) => datalayer.reindex())
     this.onDataLayersChanged()
-  }
-
-  redrawVisibleDataLayers() {
-    this.eachVisibleDataLayer((datalayer) => {
-      datalayer.redraw()
-    })
   }
 
   indexDatalayers() {
@@ -631,7 +626,7 @@ export default class Umap extends ServerStored {
     // have changed, we'll be more subtil when we'll remove the
     // save action
     this.render(['name', 'user', 'permissions'])
-    this._leafletMap.fire('saved')
+    this.fire('saved')
   }
 
   propagate() {
@@ -663,13 +658,13 @@ export default class Umap extends ServerStored {
     this._backupProperties = Object.assign({}, this.properties)
     this._backupProperties.tilelayer = Object.assign({}, this.properties.tilelayer)
     this._backupProperties.limitBounds = Object.assign({}, this.properties.limitBounds)
-    this._backupProperties.permissions = Object.assign({}, this.permissions.options)
+    this._backupProperties.permissions = Object.assign({}, this.permissions.properties)
   }
 
   resetProperties() {
     this.properties = Object.assign({}, this._backupProperties)
     this.properties.tilelayer = Object.assign({}, this._backupProperties.tilelayer)
-    this.permissions.options = Object.assign({}, this._backupProperties.permissions)
+    this.permissions.properties = Object.assign({}, this._backupProperties.permissions)
   }
 
   hasData() {
@@ -994,7 +989,7 @@ export default class Umap extends ServerStored {
       ],
     ]
     const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
-      callback: () => this.slideshow.setOptions(this.properties.slideshow),
+      callback: () => this.slideshow.setProperties(this.properties.slideshow),
       umap: this,
     })
     slideshow.appendChild(slideshowBuilder.build())
@@ -1120,7 +1115,7 @@ export default class Umap extends ServerStored {
     this.properties.user = data.user
     if (!this.properties.umap_id) {
       this.properties.umap_id = data.id
-      this.permissions.setOptions(data.permissions)
+      this.permissions.setProperties(data.permissions)
       this.permissions.commit()
       if (data.permissions?.anonymous_edit_url) {
         this._leafletMap.once('saved', () => {
@@ -1142,7 +1137,7 @@ export default class Umap extends ServerStored {
       if (!this.permissions.isDirty) {
         // Do not override local changes to permissions,
         // but update in case some other editors changed them in the meantime.
-        this.permissions.setOptions(data.permissions)
+        this.permissions.setProperties(data.permissions)
         this.permissions.commit()
       }
       this._leafletMap.once('saved', () => {
@@ -1197,7 +1192,7 @@ export default class Umap extends ServerStored {
     document.body.classList.add('umap-edit-enabled')
     this.editEnabled = true
     this.drop.enable()
-    this._leafletMap.fire('edit:enabled')
+    this.fire('edit:enabled')
     this.initSyncEngine()
   }
 
@@ -1207,11 +1202,15 @@ export default class Umap extends ServerStored {
     document.body.classList.remove('umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
-    this._leafletMap.fire('edit:disabled')
+    this.fire('edit:disabled')
     this.editPanel.close()
     this.fullPanel.close()
     this.sync.stop()
     this._leafletMap.closeInplaceToolbar()
+  }
+
+  fire(name) {
+    this._leafletMap.fire(name)
   }
 
   askForReset(e) {
@@ -1256,12 +1255,14 @@ export default class Umap extends ServerStored {
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this._leafletMap.update()
+          this._leafletMap.renderUI()
           this.browser.redraw()
           this.propagate()
           break
         case 'data':
-          this.redrawVisibleDataLayers()
+          this.eachVisibleDataLayer((datalayer) => {
+            datalayer.redraw()
+          })
           break
         case 'datalayer-index':
           this.reindexDataLayers()
@@ -1460,7 +1461,7 @@ export default class Umap extends ServerStored {
       return
     }
     if (type === 'umap') {
-      this.importFromFile(file, 'umap')
+      this.importUmapFile(file, 'umap')
     } else {
       if (!layer) layer = this.createDataLayer({ name: file.name })
       layer.importFromFile(file, type)
@@ -1479,7 +1480,7 @@ export default class Umap extends ServerStored {
 
     let mustReindex = false
 
-    for (const option of Object.keys(U.SCHEMA)) {
+    for (const option of Object.keys(SCHEMA)) {
       if (typeof importedData.properties[option] !== 'undefined') {
         this.properties[option] = importedData.properties[option]
         if (option === 'sortKey') mustReindex = true
@@ -1499,7 +1500,7 @@ export default class Umap extends ServerStored {
       dataLayer.fromUmapGeoJSON(geojson)
     }
 
-    this._leafletMap.update()
+    this._leafletMap.renderUI()
     this.eachDataLayer((datalayer) => {
       if (mustReindex) datalayer.reindex()
       datalayer.redraw()
@@ -1509,7 +1510,7 @@ export default class Umap extends ServerStored {
     this.isDirty = true
   }
 
-  importFromFile(file) {
+  importUmapFile(file) {
     const reader = new FileReader()
     reader.readAsText(file)
     reader.onload = (e) => {

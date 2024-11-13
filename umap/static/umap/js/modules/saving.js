@@ -10,21 +10,21 @@ export async function save() {
   }
 }
 
-export function add(obj) {
+function add(obj) {
   _queue.add(obj)
-  _onUpdate()
+  onUpdate()
 }
 
-export function remove(obj) {
+function remove(obj) {
   _queue.delete(obj)
-  _onUpdate()
+  onUpdate()
 }
 
-export function has(obj) {
+function has(obj) {
   return _queue.has(obj)
 }
 
-function _onUpdate() {
+function onUpdate() {
   isDirty = Boolean(_queue.size)
   document.body.classList.toggle('umap-is-dirty', isDirty)
 }

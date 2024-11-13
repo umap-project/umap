@@ -18,8 +18,9 @@ import {
 import loadPopup from '../rendering/popup.js'
 
 class Feature {
-  constructor(datalayer, geojson = {}, id = null) {
-    this.sync = datalayer.umap.sync_engine.proxy(this)
+  constructor(umap, datalayer, geojson = {}, id = null) {
+    this._umap = umap
+    this.sync = umap.sync_engine.proxy(this)
     this._marked_for_deletion = false
     this._isDirty = false
     this._ui = null
@@ -67,10 +68,6 @@ class Feature {
   get ui() {
     if (!this._ui) this.makeUI()
     return this._ui
-  }
-
-  get umap() {
-    return this.datalayer?.umap
   }
 
   get center() {
@@ -168,7 +165,7 @@ class Feature {
   }
 
   getSlug() {
-    return this.properties[this.umap.getOption('slugKey') || 'name'] || ''
+    return this.properties[this._umap.getProperty('slugKey') || 'name'] || ''
   }
 
   getPermalink() {
@@ -196,10 +193,10 @@ class Feature {
       return
     }
     // TODO deal with an event instead?
-    if (this.umap.slideshow) {
-      this.umap.slideshow.current = this
+    if (this._umap.slideshow) {
+      this._umap.slideshow.current = this
     }
-    this.umap.currentFeature = this
+    this._umap.currentFeature = this
     this.attachPopup()
     this.ui.openPopup(latlng || this.center)
   }
@@ -209,7 +206,7 @@ class Feature {
       return field.startsWith('properties.')
     })
     if (impactData) {
-      if (this.umap.currentFeature === this) {
+      if (this._umap.currentFeature === this) {
         this.view()
       }
     }
@@ -217,7 +214,7 @@ class Feature {
   }
 
   edit(event) {
-    if (!this.umap.editEnabled || this.isReadOnly()) return
+    if (!this._umap.editEnabled || this.isReadOnly()) return
     const container = DomUtil.create('div', 'umap-feature-container')
     DomUtil.createTitle(
       container,
@@ -256,12 +253,12 @@ class Feature {
       translate('Advanced actions')
     )
     this.getAdvancedEditActions(advancedActions)
-    const onLoad = this.umap.editPanel.open({ content: container })
+    const onLoad = this._umap.editPanel.open({ content: container })
     onLoad.then(() => {
       builder.helpers['properties.name'].input.focus()
     })
-    this.umap.editedFeature = this
-    if (!this.ui.isOnScreen(this.umap._leafletMap.getBounds())) this.zoomTo(event)
+    this._umap.editedFeature = this
+    if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
   }
 
   getAdvancedEditActions(container) {
@@ -270,7 +267,7 @@ class Feature {
         <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
       </button>`)
     button.addEventListener('click', () => {
-      this.confirmDelete().then(() => this.umap.editPanel.close())
+      this.confirmDelete().then(() => this._umap.editPanel.close())
     })
     container.appendChild(button)
   }
@@ -320,20 +317,25 @@ class Feature {
   endEdit() {}
 
   getDisplayName(fallback) {
-    if (fallback === undefined) fallback = this.datalayer.getName()
     const key = this.getOption('labelKey') || 'name'
     // Variables mode.
-    if (U.Utils.hasVar(key))
-      return U.Utils.greedyTemplate(key, this.extendedProperties())
+    if (Utils.hasVar(key)) {
+      return Utils.greedyTemplate(key, this.extendedProperties())
+    }
     // Simple mode.
-    return this.properties[key] || this.properties.title || fallback
+    return (
+      this.properties[key] ||
+      this.properties.title ||
+      fallback ||
+      this.datalayer.getName()
+    )
   }
 
   hasPopupFooter() {
     if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic) {
       return false
     }
-    return this.umap.getOption('displayPopupFooter')
+    return this._umap.getProperty('displayPopupFooter')
   }
 
   getPopupClass() {
@@ -347,7 +349,7 @@ class Feature {
   }
 
   async confirmDelete() {
-    const confirmed = await this.umap.dialog.confirm(
+    const confirmed = await this._umap.dialog.confirm(
       translate('Are you sure you want to delete the feature?')
     )
     if (confirmed) {
@@ -359,7 +361,7 @@ class Feature {
 
   del(sync) {
     this.isDirty = true
-    this.umap._leafletMap.closePopup()
+    this._umap._leafletMap.closePopup()
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -417,34 +419,37 @@ class Feature {
     let value = fallback
     if (typeof this.staticOptions[option] !== 'undefined') {
       value = this.staticOptions[option]
-    } else if (U.Utils.usableOption(this.properties._umap_options, option)) {
+    } else if (Utils.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
       value = this.datalayer.getOption(option, this)
     } else {
-      value = this.umap.getOption(option)
+      value = this._umap.getProperty(option)
     }
     return value
   }
 
-  getDynamicOption(option, fallback) {
-    let value = this.getOption(option, fallback)
+  getDynamicOption(key, fallback) {
+    let value = this.getOption(key, fallback)
     // There is a variable inside.
-    if (U.Utils.hasVar(value)) {
-      value = U.Utils.greedyTemplate(value, this.properties, true)
-      if (U.Utils.hasVar(value)) value = this.umap.getDefaultOption(option)
+    if (Utils.hasVar(value)) {
+      value = Utils.greedyTemplate(value, this.properties, true)
+      if (Utils.hasVar(value)) value = SCHEMA[key]?.default
     }
     return value
   }
 
   zoomTo({ easing, latlng, callback } = {}) {
-    if (easing === undefined) easing = this.umap.getOption('easing')
-    if (callback) this.umap._leafletMap.once('moveend', callback.bind(this))
+    if (easing === undefined) easing = this._umap.getProperty('easing')
+    if (callback) this._umap._leafletMap.once('moveend', callback.bind(this))
     if (easing) {
-      this.umap._leafletMap.flyTo(this.center, this.getBestZoom())
+      this._umap._leafletMap.flyTo(this.center, this.getBestZoom())
     } else {
       latlng = latlng || this.center
-      this.umap._leafletMap.setView(latlng, this.getBestZoom() || this.umap._leafletMap.getZoom())
+      this._umap._leafletMap.setView(
+        latlng,
+        this.getBestZoom() || this._umap._leafletMap.getZoom()
+      )
     }
   }
 
@@ -494,13 +499,9 @@ class Feature {
     return [U.ToggleEditAction, U.DeleteFeatureAction]
   }
 
-  getMap() {
-    return this.map
-  }
-
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
-    const filter = this.umap.browser.options.filter
+    const filter = this._umap.browser.options.filter
     if (filter && !this.matchFilter(filter, filterKeys)) return true
     if (!this.matchFacets()) return true
     return false
@@ -525,10 +526,10 @@ class Feature {
   }
 
   matchFacets() {
-    const selected = this.umap.facets.selected
+    const selected = this._umap.facets.selected
     for (const [name, { type, min, max, choices }] of Object.entries(selected)) {
       let value = this.properties[name]
-      const parser = this.umap.facets.getParser(type)
+      const parser = this._umap.facets.getParser(type)
       value = parser(value)
       switch (type) {
         case 'date':
@@ -562,7 +563,7 @@ class Feature {
 
   extendedProperties() {
     // Include context properties
-    const properties = this.umap.getGeoContext()
+    const properties = this._umap.getGeoContext()
     const locale = L.getLocale()
     if (locale) properties.locale = locale
     if (U.lang) properties.lang = U.lang
@@ -612,10 +613,10 @@ class Feature {
       label: translate('Copy as GeoJSON'),
       action: () => {
         L.Util.copyToClipboard(JSON.stringify(this.toGeoJSON()))
-        this.umap.tooltip.open({ content: L._('✅ Copied!') })
+        this._umap.tooltip.open({ content: L._('✅ Copied!') })
       },
     })
-    if (this.umap.editEnabled && !this.isReadOnly()) {
+    if (this._umap.editEnabled && !this.isReadOnly()) {
       items = items.concat(this.getContextMenuEditItems(event))
     }
     return items
@@ -623,7 +624,7 @@ class Feature {
 
   getContextMenuEditItems() {
     let items = ['-']
-    if (this.umap.editedFeature !== this) {
+    if (this._umap.editedFeature !== this) {
       items.push({
         label: `${translate('Edit this feature')} (⇧+Click)`,
         action: () => this.edit(),
@@ -631,7 +632,7 @@ class Feature {
     }
     items = items.concat(
       {
-        label: this.umap.help.displayLabel('EDIT_FEATURE_LAYER'),
+        label: this._umap.help.displayLabel('EDIT_FEATURE_LAYER'),
         action: () => this.datalayer.edit(),
       },
       {
@@ -648,8 +649,8 @@ class Feature {
 }
 
 export class Point extends Feature {
-  constructor(datalayer, geojson, id) {
-    super(datalayer, geojson, id)
+  constructor(umap, datalayer, geojson, id) {
+    super(umap, datalayer, geojson, id)
     this.staticOptions = {
       mainColor: 'color',
       className: 'marker',
@@ -750,17 +751,17 @@ class Path extends Feature {
   }
 
   edit(event) {
-    if (this.umap.editEnabled) {
+    if (this._umap.editEnabled) {
       super.edit(event)
       if (!this.ui.editEnabled()) this.ui.makeGeometryEditable()
     }
   }
 
   _toggleEditing(event) {
-    if (this.umap.editEnabled) {
+    if (this._umap.editEnabled) {
       if (this.ui.editEnabled()) {
         this.endEdit()
-        this.umap.editPanel.close()
+        this._umap.editPanel.close()
       } else {
         this.edit(event)
       }
@@ -787,7 +788,8 @@ class Path extends Feature {
 
   getBestZoom() {
     return (
-      this.getOption('zoomTo') || this.umap._leafletMap.getBoundsZoom(this.bounds, true)
+      this.getOption('zoomTo') ||
+      this._umap._leafletMap.getBoundsZoom(this.bounds, true)
     )
   }
 
@@ -827,13 +829,13 @@ class Path extends Feature {
 
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
-    easing = easing || this.umap.getOption('easing')
+    easing = easing || this._umap.getProperty('easing')
     if (easing) {
-      this.umap._leafletMap.flyToBounds(this.bounds, this.getBestZoom())
+      this._umap._leafletMap.flyToBounds(this.bounds, this.getBestZoom())
     } else {
-      this.umap._leafletMap.fitBounds(
+      this._umap._leafletMap.fitBounds(
         this.bounds,
-        this.getBestZoom() || this.umap._leafletMap.getZoom()
+        this.getBestZoom() || this._umap._leafletMap.getZoom()
       )
     }
     if (callback) callback.call(this)
@@ -845,7 +847,7 @@ class Path extends Feature {
       label: translate('Display measure'),
       action: () => Alert.info(this.ui.getMeasure()),
     })
-    if (this.umap.editEnabled && !this.isReadOnly() && this.isMulti()) {
+    if (this._umap.editEnabled && !this.isReadOnly() && this.isMulti()) {
       items.push(...this.getContextMenuMultiItems(event))
     }
     return items
@@ -876,11 +878,14 @@ class Path extends Feature {
 
   getContextMenuEditItems(event) {
     const items = super.getContextMenuEditItems(event)
-    if (this.map?.editedFeature !== this && this.isSameClass(this.umap.editedFeature)) {
+    if (
+      this._umap?.editedFeature !== this &&
+      this.isSameClass(this._umap.editedFeature)
+    ) {
       items.push({
         label: translate('Transfer shape to edited feature'),
         action: () => {
-          this.transferShape(event.latlng, this.umap.editedFeature)
+          this.transferShape(event.latlng, this._umap.editedFeature)
         },
       })
     }
@@ -897,8 +902,8 @@ class Path extends Feature {
 }
 
 export class LineString extends Path {
-  constructor(datalayer, geojson, id) {
-    super(datalayer, geojson, id)
+  constructor(umap, datalayer, geojson, id) {
+    super(umap, datalayer, geojson, id)
     this.staticOptions = {
       stroke: true,
       fill: false,
@@ -982,8 +987,8 @@ export class LineString extends Path {
     }
     const a = toMerge[0]
     const b = toMerge[1]
-    const p1 = this.umap._leafletMap.latLngToContainerPoint(a[a.length - 1])
-    const p2 = this.umap._leafletMap.latLngToContainerPoint(b[0])
+    const p1 = this._umap._leafletMap.latLngToContainerPoint(a[a.length - 1])
+    const p2 = this._umap._leafletMap.latLngToContainerPoint(b[0])
     const tolerance = 5 // px on screen
     if (Math.abs(p1.x - p2.x) <= tolerance && Math.abs(p1.y - p2.y) <= tolerance) {
       a.pop()
@@ -1027,7 +1032,7 @@ export class LineString extends Path {
         })
       } else if (index === 0 || index === event.vertex.getLastIndex()) {
         items.push({
-          label: this.umap.help.displayLabel('CONTINUE_LINE'),
+          label: this._umap.help.displayLabel('CONTINUE_LINE'),
           action: () => event.vertex.continue(),
         })
       }
@@ -1046,8 +1051,8 @@ export class LineString extends Path {
 }
 
 export class Polygon extends Path {
-  constructor(datalayer, geojson, id) {
-    super(datalayer, geojson, id)
+  constructor(umap, datalayer, geojson, id) {
+    super(umap, datalayer, geojson, id)
     this.staticOptions = {
       mainColor: 'fillColor',
       className: 'polygon',

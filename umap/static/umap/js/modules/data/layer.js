@@ -21,6 +21,7 @@ import { DataLayerPermissions } from '../permissions.js'
 import { Point, LineString, Polygon } from './features.js'
 import TableEditor from '../tableeditor.js'
 import { ServerStored } from '../saving.js'
+import * as Schema from '../schema.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -37,9 +38,9 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer extends ServerStored {
-  constructor(umap, data) {
+  constructor(umap, leafletMap, data) {
     super()
-    this.umap = umap
+    this._umap = umap
     this.sync = umap.sync_engine.proxy(this)
     this._index = Array()
     this._features = {}
@@ -48,8 +49,9 @@ export class DataLayer extends ServerStored {
     this._loaded = false // Are layer metadata loaded
     this._dataloaded = false // Are layer data loaded
 
-    this.parentPane = this.umap._leafletMap.getPane('overlayPane')
-    this.pane = this.umap._leafletMap.createPane(
+    this._leafletMap = leafletMap
+    this.parentPane = this._leafletMap.getPane('overlayPane')
+    this.pane = this._leafletMap.createPane(
       `datalayer${stamp(this)}`,
       this.parentPane
     )
@@ -81,7 +83,7 @@ export class DataLayer extends ServerStored {
     }
     this.backupOptions()
     this.connectToMap()
-    this.permissions = new DataLayerPermissions(this)
+    this.permissions = new DataLayerPermissions(this._umap, this)
     if (!this.umap_id) {
       if (this.showAtLoad()) this.show()
       this.isDirty = true
@@ -131,7 +133,7 @@ export class DataLayer extends ServerStored {
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this.umap.onDataLayersChanged()
+          this._umap.onDataLayersChanged()
           break
         case 'data':
           if (fields.includes('options.type')) {
@@ -156,8 +158,8 @@ export class DataLayer extends ServerStored {
   }
 
   autoLoaded() {
-    if (!this.umap.datalayersFromQueryString) return this.options.displayOnLoad
-    const datalayerIds = this.umap.datalayersFromQueryString
+    if (!this._umap.datalayersFromQueryString) return this.options.displayOnLoad
+    const datalayerIds = this._umap.datalayersFromQueryString
     let loadMe = datalayerIds.includes(this.umap_id.toString())
     if (this.options.old_id) {
       loadMe = loadMe || datalayerIds.includes(this.options.old_id.toString())
@@ -195,7 +197,7 @@ export class DataLayer extends ServerStored {
     const visible = this.isVisible()
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
-    if (visible) this.umap._leafletMap.removeLayer(this.layer)
+    if (visible) this._leafletMap.removeLayer(this.layer)
     const Class = LAYER_MAP[this.options.type] || DefaultLayer
     this.layer = new Class(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
@@ -216,7 +218,7 @@ export class DataLayer extends ServerStored {
     if (!this.umap_id) return
     if (this._loading) return
     this._loading = true
-    const [geojson, response, error] = await this.umap.server.get(this._dataUrl())
+    const [geojson, response, error] = await this._umap.server.get(this._dataUrl())
     if (!error) {
       this._reference_version = response.headers.get('X-Datalayer-Version')
       // FIXME: for now this property is set dynamically from backend
@@ -237,7 +239,7 @@ export class DataLayer extends ServerStored {
 
   dataChanged() {
     if (!this.hasDataLoaded()) return
-    this.umap.onDataLayersChanged()
+    this._umap.onDataLayersChanged()
     this.layer.dataChanged()
   }
 
@@ -278,14 +280,14 @@ export class DataLayer extends ServerStored {
 
   reindex() {
     const features = Object.values(this._features)
-    Utils.sortFeatures(features, this.umap.getOption('sortKey'), U.lang)
+    Utils.sortFeatures(features, this._umap.getProperty('sortKey'), U.lang)
     this._index = features.map((feature) => stamp(feature))
   }
 
   showAtZoom() {
     const from = Number.parseInt(this.options.fromZoom, 10)
     const to = Number.parseInt(this.options.toZoom, 10)
-    const zoom = this.umap._leafletMap.getZoom()
+    const zoom = this._leafletMap.getZoom()
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   }
 
@@ -297,14 +299,14 @@ export class DataLayer extends ServerStored {
     if (!this.isRemoteLayer()) return
     if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
-    let url = this.umap.localizeUrl(this.options.remoteData.url)
+    let url = this._umap.renderUrl(this.options.remoteData.url)
     if (this.options.remoteData.proxy) {
-      url = this.umap.proxyUrl(url, this.options.remoteData.ttl)
+      url = this._umap.proxyUrl(url, this.options.remoteData.ttl)
     }
-    const response = await this.umap.request.get(url)
+    const response = await this._umap.request.get(url)
     if (response?.ok) {
       this.clear()
-      this.umap.formatter
+      this._umap.formatter
         .parse(await response.text(), this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson))
     }
@@ -344,23 +346,23 @@ export class DataLayer extends ServerStored {
 
   connectToMap() {
     const id = stamp(this)
-    if (!this.umap.datalayers[id]) {
-      this.umap.datalayers[id] = this
+    if (!this._umap.datalayers[id]) {
+      this._umap.datalayers[id] = this
     }
-    if (!this.umap.datalayersIndex.includes(this)) {
-      this.umap.datalayersIndex.push(this)
+    if (!this._umap.datalayersIndex.includes(this)) {
+      this._umap.datalayersIndex.push(this)
     }
-    this.umap.onDataLayersChanged()
+    this._umap.onDataLayersChanged()
   }
 
   _dataUrl() {
-    let url = this.umap.urls.get('datalayer_view', {
+    let url = this._umap.urls.get('datalayer_view', {
       pk: this.umap_id,
-      map_id: this.umap.properties.umap_id,
+      map_id: this._umap.properties.umap_id,
     })
 
     // No browser cache for owners/editors.
-    if (this.umap.hasEditMode()) url = `${url}?${Date.now()}`
+    if (this._umap.hasEditMode()) url = `${url}?${Date.now()}`
     return url
   }
 
@@ -387,7 +389,7 @@ export class DataLayer extends ServerStored {
     this._index.push(id)
     this._features[id] = feature
     this.indexProperties(feature)
-    this.umap.featuresIndex[feature.getSlug()] = feature
+    this._umap.featuresIndex[feature.getSlug()] = feature
     this.showFeature(feature)
     this.dataChanged()
   }
@@ -396,7 +398,7 @@ export class DataLayer extends ServerStored {
     const id = stamp(feature)
     if (sync !== false) feature.sync.delete()
     this.hideFeature(feature)
-    delete this.umap.featuresIndex[feature.getSlug()]
+    delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this._index.splice(this._index.indexOf(id), 1)
     delete this._features[id]
@@ -448,7 +450,7 @@ export class DataLayer extends ServerStored {
       ? geojson
       : geojson.features || geojson.geometries
     if (!collection) return
-    Utils.sortFeatures(collection, this.umap.getOption('sortKey'), U.lang)
+    Utils.sortFeatures(collection, this._umap.getProperty('sortKey'), U.lang)
     for (const feature of collection) {
       this.makeFeature(feature, sync)
     }
@@ -462,15 +464,15 @@ export class DataLayer extends ServerStored {
     switch (geometry.type) {
       case 'Point':
         // FIXME: deal with MultiPoint
-        feature = new Point(this, geojson, id)
+        feature = new Point(this._umap, this, geojson, id)
         break
       case 'MultiLineString':
       case 'LineString':
-        feature = new LineString(this, geojson, id)
+        feature = new LineString(this._umap, this, geojson, id)
         break
       case 'MultiPolygon':
       case 'Polygon':
-        feature = new Polygon(this, geojson, id)
+        feature = new Polygon(this._umap, this, geojson, id)
         break
       default:
         console.log(geojson)
@@ -488,7 +490,7 @@ export class DataLayer extends ServerStored {
   }
 
   async importRaw(raw, format) {
-    this.umap.formatter
+    this._umap.formatter
       .parse(raw, format)
       .then((geojson) => this.addData(geojson))
       .then(() => this.zoomTo())
@@ -509,35 +511,35 @@ export class DataLayer extends ServerStored {
   }
 
   async importFromUrl(uri, type) {
-    uri = this.umap.localizeUrl(uri)
-    const response = await this.umap.request.get(uri)
+    uri = this._umap.renderUrl(uri)
+    const response = await this._umap.request.get(uri)
     if (response?.ok) {
       this.importRaw(await response.text(), type)
     }
   }
 
   getColor() {
-    return this.options.color || this.umap.getOption('color')
+    return this.options.color || this._umap.getProperty('color')
   }
 
   getDeleteUrl() {
-    return this.umap.urls.get('datalayer_delete', {
+    return this._umap.urls.get('datalayer_delete', {
       pk: this.umap_id,
-      map_id: this.umap.properties.umap_id,
+      map_id: this._umap.properties.umap_id,
     })
   }
 
   getVersionsUrl() {
-    return this.umap.urls.get('datalayer_versions', {
+    return this._umap.urls.get('datalayer_versions', {
       pk: this.umap_id,
-      map_id: this.umap.properties.umap_id,
+      map_id: this._umap.properties.umap_id,
     })
   }
 
   getVersionUrl(name) {
-    return this.umap.urls.get('datalayer_version', {
+    return this._umap.urls.get('datalayer_version', {
       pk: this.umap_id,
-      map_id: this.umap.properties.umap_id,
+      map_id: this._umap.properties.umap_id,
       name: name,
     })
   }
@@ -558,17 +560,17 @@ export class DataLayer extends ServerStored {
     options.name = translate('Clone of {name}', { name: this.options.name })
     delete options.id
     const geojson = Utils.CopyJSON(this._geojson)
-    const datalayer = this.umap.createDataLayer(options)
+    const datalayer = this._umap.createDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
   }
 
   erase() {
     this.hide()
-    this.umap.datalayersIndex.splice(this.getRank(), 1)
+    this._umap.datalayersIndex.splice(this.getRank(), 1)
     this.parentPane.removeChild(this.pane)
-    this.umap.onDataLayersChanged()
-    this.layer.onDelete(this.umap._leafletMap)
+    this._umap.onDataLayersChanged()
+    this.layer.onDelete(this._leafletMap)
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
     this.clear()
@@ -599,7 +601,7 @@ export class DataLayer extends ServerStored {
   }
 
   edit() {
-    if (!this.umap.editEnabled || !this.isLoaded()) {
+    if (!this._umap.editEnabled || !this.isLoaded()) {
       return
     }
     const container = DomUtil.create('div', 'umap-layer-properties-container')
@@ -633,7 +635,7 @@ export class DataLayer extends ServerStored {
     DomUtil.createTitle(container, translate('Layer properties'), 'icon-layers')
     let builder = new U.FormBuilder(this, metadataFields, {
       callback(e) {
-        this.umap.onDataLayersChanged()
+        this._umap.onDataLayersChanged()
         if (e.helper.field === 'options.type') {
           this.edit()
         }
@@ -744,7 +746,7 @@ export class DataLayer extends ServerStored {
         },
       ],
     ]
-    if (this.umap.properties.urls.ajax_proxy) {
+    if (this._umap.properties.urls.ajax_proxy) {
       remoteDataFields.push([
         'options.remoteData.proxy',
         {
@@ -770,7 +772,7 @@ export class DataLayer extends ServerStored {
       this
     )
 
-    if (this.umap.properties.urls.datalayer_versions)
+    if (this._umap.properties.urls.datalayer_versions)
       this.buildVersionsFieldset(container)
 
     const advancedActions = DomUtil.createFieldset(
@@ -784,7 +786,7 @@ export class DataLayer extends ServerStored {
       </button>`)
     deleteButton.addEventListener('click', () => {
       this._delete()
-      this.umap.editPanel.close()
+      this._umap.editPanel.close()
     })
     advancedButtons.appendChild(deleteButton)
 
@@ -823,9 +825,9 @@ export class DataLayer extends ServerStored {
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(backButton)
-    DomEvent.on(backButton, 'click', this.umap.editDatalayers, this.umap)
+    DomEvent.on(backButton, 'click', this._umap.editDatalayers, this._umap)
 
-    this.umap.editPanel.open({
+    this._umap.editPanel.open({
       content: container,
       actions: [backButton],
     })
@@ -846,7 +848,7 @@ export class DataLayer extends ServerStored {
     if (this.layer?.defaults?.[option]) {
       return this.layer.defaults[option]
     }
-    return this.umap.getOption(option, feature)
+    return this._umap.getProperty(option, feature)
   }
 
   async buildVersionsFieldset(container) {
@@ -867,7 +869,7 @@ export class DataLayer extends ServerStored {
 
     const versionsContainer = DomUtil.createFieldset(container, translate('Versions'), {
       async callback() {
-        const [{ versions }, response, error] = await this.umap.server.get(
+        const [{ versions }, response, error] = await this._umap.server.get(
           this.getVersionsUrl()
         )
         if (!error) versions.forEach(appendVersion)
@@ -877,11 +879,11 @@ export class DataLayer extends ServerStored {
   }
 
   async restore(version) {
-    if (!this.umap.editEnabled) return
-    this.umap.dialog
+    if (!this._umap.editEnabled) return
+    this._umap.dialog
       .confirm(translate('Are you sure you want to restore this version?'))
       .then(async () => {
-        const [geojson, response, error] = await this.umap.server.get(
+        const [geojson, response, error] = await this._umap.server.get(
           this.getVersionUrl(version)
         )
         if (!error) {
@@ -902,13 +904,13 @@ export class DataLayer extends ServerStored {
   }
 
   async show() {
-    this.umap._leafletMap.addLayer(this.layer)
+    this._leafletMap.addLayer(this.layer)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateShow()
   }
 
   hide() {
-    this.umap._leafletMap.removeLayer(this.layer)
+    this._leafletMap.removeLayer(this.layer)
     this.propagateHide()
   }
 
@@ -925,7 +927,7 @@ export class DataLayer extends ServerStored {
     const bounds = this.layer.getBounds()
     if (bounds.isValid()) {
       const options = { maxZoom: this.getOption('zoomTo') }
-      this.umap._leafletMap.fitBounds(bounds, options)
+      this._leafletMap.fitBounds(bounds, options)
     }
   }
 
@@ -956,7 +958,7 @@ export class DataLayer extends ServerStored {
   }
 
   isVisible() {
-    return Boolean(this.layer && this.umap._leafletMap.hasLayer(this.layer))
+    return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
   }
 
   getFeatureByIndex(index) {
@@ -993,7 +995,7 @@ export class DataLayer extends ServerStored {
   getPreviousBrowsable() {
     let id = this.getRank()
     let next
-    const index = this.umap.datalayersIndex
+    const index = this._umap.datalayersIndex
     while (((id = index[++id] ? id : 0), (next = index[id]))) {
       if (next === this || next.canBrowse()) break
     }
@@ -1003,7 +1005,7 @@ export class DataLayer extends ServerStored {
   getNextBrowsable() {
     let id = this.getRank()
     let prev
-    const index = this.umap.datalayersIndex
+    const index = this._umap.datalayersIndex
     while (((id = index[--id] ? id : index.length - 1), (prev = index[id]))) {
       if (prev === this || prev.canBrowse()) break
     }
@@ -1019,7 +1021,7 @@ export class DataLayer extends ServerStored {
   }
 
   getRank() {
-    return this.umap.datalayersIndex.indexOf(this)
+    return this._umap.datalayersIndex.indexOf(this)
   }
 
   isReadOnly() {
@@ -1046,8 +1048,8 @@ export class DataLayer extends ServerStored {
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    const saveUrl = this.umap.urls.get('datalayer_save', {
-      map_id: this.umap.properties.umap_id,
+    const saveUrl = this._umap.urls.get('datalayer_save', {
+      map_id: this._umap.properties.umap_id,
       pk: this.umap_id,
     })
     const headers = this._reference_version
@@ -1059,7 +1061,7 @@ export class DataLayer extends ServerStored {
   }
 
   async _trySave(url, headers, formData) {
-    const [data, response, error] = await this.umap.server.post(url, headers, formData)
+    const [data, response, error] = await this._umap.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
         AlertConflict.error(
@@ -1075,7 +1077,7 @@ export class DataLayer extends ServerStored {
 
               // Call the main save, in case something else needs to be saved
               // as the conflict stopped the saving flow
-              await this.umap.saveAll()
+              await this._umap.saveAll()
             }
           }
         )
@@ -1104,14 +1106,10 @@ export class DataLayer extends ServerStored {
 
   async saveDelete() {
     if (this.umap_id) {
-      await this.umap.server.post(this.getDeleteUrl())
+      await this._umap.server.post(this.getDeleteUrl())
     }
-    delete this.umap.datalayers[stamp(this)]
+    delete this._umap.datalayers[stamp(this)]
     return true
-  }
-
-  getMap() {
-    return this.map
   }
 
   getName() {
@@ -1120,7 +1118,7 @@ export class DataLayer extends ServerStored {
 
   tableEdit() {
     if (!this.isVisible()) return
-    const editor = new TableEditor(this)
+    const editor = new TableEditor(this._umap, this, this._leafletMap)
     editor.open()
   }
 
@@ -1128,9 +1126,9 @@ export class DataLayer extends ServerStored {
     // This keys will be used to filter feature from the browser text input.
     // By default, it will we use the "name" property, which is also the one used as label in the features list.
     // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
-    if (this.umap.properties.filterKey) return this.umap.properties.filterKey
+    if (this._umap.properties.filterKey) return this._umap.properties.filterKey
     if (this.getOption('labelKey')) return this.getOption('labelKey')
-    if (this.umap.properties.sortKey) return this.umap.properties.sortKey
+    if (this._umap.properties.sortKey) return this._umap.properties.sortKey
     return 'displayName'
   }
 
@@ -1181,7 +1179,7 @@ export class DataLayer extends ServerStored {
         'click',
         function () {
           if (!this.isVisible()) return
-          this.umap.dialog
+          this._umap.dialog
             .confirm(translate('Are you sure you want to delete this layer?'))
             .then(() => {
               this._delete()

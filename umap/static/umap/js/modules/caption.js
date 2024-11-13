@@ -3,8 +3,9 @@ import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 
 export default class Caption {
-  constructor(umap) {
-    this.umap = umap
+  constructor(umap, leafletMap) {
+    this._umap = umap
+    this._leafletMap = leafletMap
   }
 
   isOpen() {
@@ -21,30 +22,30 @@ export default class Caption {
     const hgroup = DomUtil.element({ tagName: 'hgroup', parent: container })
     DomUtil.createTitle(
       hgroup,
-      this.umap.getDisplayName(),
+      this._umap.getDisplayName(),
       'icon-caption icon-block',
       'map-name'
     )
     const title = Utils.loadTemplate('<h4></h4>')
     hgroup.appendChild(title)
-    this.umap.addAuthorLink(title)
-    if (this.umap.properties.description) {
+    this._umap.addAuthorLink(title)
+    if (this._umap.properties.description) {
       const description = DomUtil.element({
         tagName: 'div',
         className: 'umap-map-description text',
-        safeHTML: Utils.toHTML(this.umap.properties.description),
+        safeHTML: Utils.toHTML(this._umap.properties.description),
         parent: container,
       })
     }
     const datalayerContainer = DomUtil.create('div', 'datalayer-container', container)
-    this.umap.eachDataLayerReverse((datalayer) =>
+    this._umap.eachDataLayerReverse((datalayer) =>
       this.addDataLayer(datalayer, datalayerContainer)
     )
     const creditsContainer = DomUtil.create('div', 'credits-container', container)
     this.addCredits(creditsContainer)
-    this.umap.panel.open({ content: container }).then(() => {
+    this._umap.panel.open({ content: container }).then(() => {
       // Create the legend when the panel is actually on the DOM
-      this.umap.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
+      this._umap.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
     })
   }
 
@@ -67,16 +68,16 @@ export default class Caption {
   addCredits(container) {
     const credits = DomUtil.createFieldset(container, translate('Credits'))
     let title = DomUtil.add('h5', '', credits, translate('User content credits'))
-    if (this.umap.properties.shortCredit || this.umap.properties.longCredit) {
+    if (this._umap.properties.shortCredit || this._umap.properties.longCredit) {
       DomUtil.element({
         tagName: 'p',
         parent: credits,
         safeHTML: Utils.toHTML(
-          this.umap.properties.longCredit || this.umap.properties.shortCredit
+          this._umap.properties.longCredit || this._umap.properties.shortCredit
         ),
       })
     }
-    if (this.umap.properties.licence) {
+    if (this._umap.properties.licence) {
       const licence = DomUtil.add(
         'p',
         '',
@@ -86,8 +87,8 @@ export default class Caption {
       DomUtil.createLink(
         '',
         licence,
-        this.umap.properties.licence.name,
-        this.umap.properties.licence.url
+        this._umap.properties.licence.name,
+        this._umap.properties.licence.url
       )
     } else {
       DomUtil.add('p', '', credits, translate('No licence has been set'))
@@ -98,19 +99,19 @@ export default class Caption {
     DomUtil.element({
       tagName: 'strong',
       parent: tilelayerCredit,
-      textContent: `${this.umap._leafletMap.selectedTilelayer.options.name} `,
+      textContent: `${this._leafletMap.selectedTilelayer.options.name} `,
     })
     DomUtil.element({
       tagName: 'span',
       parent: tilelayerCredit,
-      safeHTML: this.umap._leafletMap.selectedTilelayer.getAttribution(),
+      safeHTML: this._leafletMap.selectedTilelayer.getAttribution(),
     })
     const urls = {
       leaflet: 'http://leafletjs.com',
       django: 'https://www.djangoproject.com',
       umap: 'https://umap-project.org/',
       changelog: 'https://docs.umap-project.org/en/master/changelog/',
-      version: this.umap.properties.umap_version,
+      version: this._umap.properties.umap_version,
     }
     const creditHTML = translate(
       `

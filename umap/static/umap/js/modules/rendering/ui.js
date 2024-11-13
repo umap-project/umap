@@ -52,7 +52,7 @@ const FeatureMixin = {
   onClick: function (event) {
     if (this._map.measureTools?.enabled()) return
     this._popupHandlersAdded = true // Prevent leaflet from managing event
-    if (!this._map.umap.editEnabled) {
+    if (!this._map._umap.editEnabled) {
       this.feature.view(event)
     } else if (!this.feature.isReadOnly()) {
       if (event.originalEvent.shiftKey) {
@@ -96,8 +96,8 @@ const FeatureMixin = {
     DomEvent.stop(event)
     const items = this.feature
       .getContextMenuItems(event)
-      .concat(this._map.umap.getContextMenuItems(event))
-    this._map.umap.contextmenu.open(event.originalEvent, items)
+      .concat(this._map._umap.getSharedContextMenuItems(event))
+    this._map._umap.contextmenu.open(event.originalEvent, items)
   },
 
   onCommit: function () {
@@ -134,7 +134,7 @@ const PointMixin = {
 
   _enableDragging: function () {
     // TODO: start dragging after 1 second on mouse down
-    if (this._map.umap.editEnabled) {
+    if (this._map._umap.editEnabled) {
       if (!this.editEnabled()) this.enableEdit()
       // Enabling dragging on the marker override the Draggable._OnDown
       // event, which, as it stopPropagation, refrain the call of
@@ -146,7 +146,7 @@ const PointMixin = {
   },
 
   _disableDragging: function () {
-    if (this._map.umap.editEnabled) {
+    if (this._map._umap.editEnabled) {
       if (this.editor?.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
       // do not listen to them
       this.disableEdit()
@@ -253,21 +253,21 @@ export const LeafletMarker = Marker.extend({
 const PathMixin = {
   _onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
-      this._map.umap.tooltip.open({ content: this.getMeasure(), anchor: this })
-    } else if (this._map.umap.editEnabled && !this._map.umap.editedFeature) {
-      this._map.umap.tooltip.open({ content: translate('Click to edit'), anchor: this })
+      this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
+    } else if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
+      this._map._umap.tooltip.open({ content: translate('Click to edit'), anchor: this })
     }
   },
 
   makeGeometryEditable: function () {
-    if (this._map.umap.editedFeature !== this.feature) {
+    if (this._map._umap.editedFeature !== this.feature) {
       this.disableEdit()
       return
     }
     this._map.once('moveend', this.makeGeometryEditable, this)
     const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
     if (pointsCount > 100 && this._map.getZoom() < this._map.getMaxZoom()) {
-      this._map.umap.tooltip.open({ content: L._('Please zoom in to edit the geometry') })
+      this._map._umap.tooltip.open({ content: L._('Please zoom in to edit the geometry') })
       this.disableEdit()
     } else {
       this.enableEdit()

@@ -5,7 +5,7 @@ import * as Utils from './utils.js'
 
 export default class Share {
   constructor(umap) {
-    this.umap = umap
+    this._umap = umap
   }
 
   build() {
@@ -22,11 +22,11 @@ export default class Share {
       window.location.protocol + Utils.getBaseUrl()
     )
 
-    if (this.umap.properties.shortUrl) {
+    if (this._umap.properties.shortUrl) {
       DomUtil.createCopiableInput(
         this.container,
         translate('Short link'),
-        this.umap.properties.shortUrl
+        this._umap.properties.shortUrl
       )
     }
 
@@ -60,8 +60,8 @@ export default class Share {
       this.container,
       translate('All data and settings of the map')
     )
-    const downloadUrl = this.umap.urls.get('map_download', {
-      map_id: this.umap.properties.umap_id,
+    const downloadUrl = this._umap.urls.get('map_download', {
+      map_id: this._umap.properties.umap_id,
     })
     const link = Utils.loadTemplate(`
       <div>
@@ -116,10 +116,10 @@ export default class Share {
       'queryString.captionMenus',
     ]
     // TODO: move HIDDABLE_CONTROLS to SCHEMA ?
-    for (const name of this.umap._leafletMap.HIDDABLE_CONTROLS) {
+    for (const name of this._umap._leafletMap.HIDDABLE_CONTROLS) {
       UIFields.push(`queryString.${name}Control`)
     }
-    const iframeExporter = new IframeExporter(this.umap)
+    const iframeExporter = new IframeExporter(this._umap)
     const buildIframeCode = () => {
       iframe.textContent = iframeExporter.build()
       exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
@@ -137,13 +137,13 @@ export default class Share {
 
   open() {
     if (!this.container) this.build()
-    this.umap.panel.open({ content: this.container })
+    this._umap.panel.open({ content: this.container })
   }
 
   async format(mode) {
     const type = EXPORT_FORMATS[mode]
-    const content = await type.formatter(this.umap)
-    const filename = Utils.slugify(this.umap.properties.name) + type.ext
+    const content = await type.formatter(this._umap)
+    const filename = Utils.slugify(this._umap.properties.name) + type.ext
     return { content, filetype: type.filetype, filename }
   }
 
@@ -163,7 +163,7 @@ export default class Share {
 
 class IframeExporter {
   constructor(umap) {
-    this.umap = umap
+    this._umap = umap
     this.baseUrl = Utils.getBaseUrl()
     this.options = {
       includeFullScreenLink: true,
@@ -193,18 +193,18 @@ class IframeExporter {
       height: '300px',
     }
     // Use map default, not generic default
-    this.queryString.onLoadPanel = this.umap.getOption('onLoadPanel')
+    this.queryString.onLoadPanel = this._umap.getProperty('onLoadPanel')
   }
 
   buildUrl(options) {
     const datalayers = []
-    if (this.options.viewCurrentFeature && this.umap.currentFeature) {
-      this.queryString.feature = this.umap.currentFeature.getSlug()
+    if (this.options.viewCurrentFeature && this._umap.currentFeature) {
+      this.queryString.feature = this._umap.currentFeature.getSlug()
     } else {
       delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
-      this.umap.eachDataLayer((datalayer) => {
+      this._umap.eachDataLayer((datalayer) => {
         if (datalayer.isVisible() && datalayer.umap_id) {
           datalayers.push(datalayer.umap_id)
         }
