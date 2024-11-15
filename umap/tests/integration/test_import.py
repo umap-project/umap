@@ -494,6 +494,39 @@ def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     expect(page.locator('umap-alert div[data-level="error"]')).to_be_visible()
 
 
+def test_import_csv_with_commas_in_latlon(tilelayer, live_server, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    page.get_by_title("Import data").click()
+    textarea = page.locator(".umap-upload textarea")
+    textarea.fill("lat;lon;foobar\n12,24;48,34;mypoint\n12,23;48,35;mypoint2")
+    page.locator('select[name="format"]').select_option("csv")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(2)
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
+    datalayer = DataLayer.objects.last()
+    saved_data = json.loads(Path(datalayer.geojson.path).read_text())
+    assert saved_data["features"][0]["geometry"] == {
+        "coordinates": [
+            48.35,
+            12.23,
+        ],
+        "type": "Point",
+    }
+    assert saved_data["features"][1]["geometry"] == {
+        "coordinates": [
+            48.34,
+            12.24,
+        ],
+        "type": "Point",
+    }
+
+
 def test_create_remote_data(page, live_server, tilelayer):
     def handle(route):
         route.fulfill(
