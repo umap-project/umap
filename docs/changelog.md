@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.2 - 2024-11-15
+
+### Bug fixes
+* use our fork of csv2geojson to be able to parse lat/lon with commas
+
 ## 2.7.1 - 2024-10-25
 
 ### Bug fixes
