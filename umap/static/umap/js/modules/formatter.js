@@ -81,6 +81,8 @@ export class Formatter {
       {
         delimiter: 'auto',
         includeLatLon: false,
+        sexagesimal: false,
+        parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
       },
       (err, result) => {
         // csv2geojson fallback to null geometries when it cannot determine
@@ -115,7 +117,9 @@ export class Formatter {
   }
 
   async fromGeoRSS(str) {
-    const GeoRSSToGeoJSON = await import('../../vendors/georsstogeojson/GeoRSSToGeoJSON.js')
+    const GeoRSSToGeoJSON = await import(
+      '../../vendors/georsstogeojson/GeoRSSToGeoJSON.js'
+    )
     return GeoRSSToGeoJSON.parse(this.toDom(str))
   }
 
