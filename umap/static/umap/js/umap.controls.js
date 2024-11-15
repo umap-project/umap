@@ -357,20 +357,20 @@ U.DropControl = L.Class.extend({
     L.DomEvent.off(this.dropzone, 'dragleave', this.dragleave, this)
   },
 
-  dragenter: function (e) {
-    L.DomEvent.stop(e)
+  dragenter: function (event) {
+    L.DomEvent.stop(event)
     this.map.scrollWheelZoom.disable()
     this.dropzone.classList.add('umap-dragover')
   },
 
-  dragover: (e) => {
-    L.DomEvent.stop(e)
+  dragover: (event) => {
+    L.DomEvent.stop(event)
   },
 
   drop: function (event) {
     this.map.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
-    L.DomEvent.stop(e)
+    L.DomEvent.stop(event)
     for (const file of event.dataTransfer.files) {
       this.map._umap.processFileToImport(file)
     }
