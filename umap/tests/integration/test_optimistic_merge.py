@@ -49,6 +49,7 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         "name": "test datalayer",
         "editMode": "advanced",
         "inCaption": True,
+        "id": str(datalayer.pk),
     }
 
     # Now navigate to this map from another tab
@@ -78,12 +79,14 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         sleep(1)
     # No change after the save
     expect(marker_pane_p2).to_have_count(2)
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    datalayer_v2 = DataLayer.objects.get(pk=datalayer.pk)
+    assert datalayer_v2.settings == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
         "editMode": "advanced",
+        "id": str(datalayer.pk),
     }
 
     # Now create another marker in the first tab
@@ -94,7 +97,8 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         save_p1.click()
     # Should now get the other marker too
     expect(marker_pane_p1).to_have_count(3)
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    datalayer_v3 = DataLayer.objects.get(pk=datalayer.pk)
+    assert datalayer_v3.settings == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
@@ -112,7 +116,8 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         save_p1.click()
         sleep(1)
     # Should now get the other marker too
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    datalayer_v4 = DataLayer.objects.get(pk=datalayer.pk)
+    assert datalayer_v4.settings == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
@@ -132,7 +137,8 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         save_p2.click()
         sleep(1)
     # Should now get the other markers too
-    assert DataLayer.objects.get(pk=datalayer.pk).settings == {
+    datalayer_v5 = DataLayer.objects.get(pk=datalayer.pk)
+    assert datalayer_v5.settings == {
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",

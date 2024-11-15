@@ -38,7 +38,7 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer extends ServerStored {
-  constructor(umap, leafletMap, data) {
+  constructor(umap, leafletMap, data = {}) {
     super()
     this._umap = umap
     this.sync = umap.sync_engine.proxy(this)
@@ -51,10 +51,7 @@ export class DataLayer extends ServerStored {
 
     this._leafletMap = leafletMap
     this.parentPane = this._leafletMap.getPane('overlayPane')
-    this.pane = this._leafletMap.createPane(
-      `datalayer${stamp(this)}`,
-      this.parentPane
-    )
+    this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
     this.pane.dataset.id = stamp(this)
     // FIXME: should be on layer
     this.renderer = L.svg({ pane: this.pane })
@@ -66,7 +63,11 @@ export class DataLayer extends ServerStored {
     }
 
     this._isDeleted = false
-    this.setUmapId(data.id)
+    this._referenceVersion = data._referenceVersion
+    // Do not save it later.
+    delete data._referenceVersion
+    data.id = data.id || crypto.randomUUID()
+
     this.setOptions(data)
 
     if (!Utils.isObject(this.options.remoteData)) {
@@ -84,7 +85,8 @@ export class DataLayer extends ServerStored {
     this.backupOptions()
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
-    if (!this.umap_id) {
+
+    if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
       this.isDirty = true
     }
@@ -93,6 +95,14 @@ export class DataLayer extends ServerStored {
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
     if (this.isVisible()) this.propagateShow()
+  }
+
+  get id() {
+    return this.options.id
+  }
+
+  get createdOnServer() {
+    return Boolean(this._referenceVersion)
   }
 
   onDirty(status) {
@@ -121,9 +131,7 @@ export class DataLayer extends ServerStored {
   getSyncMetadata() {
     return {
       subject: 'datalayer',
-      metadata: {
-        id: this.umap_id || null,
-      },
+      metadata: { id: this.id },
     }
   }
 
@@ -160,7 +168,7 @@ export class DataLayer extends ServerStored {
   autoLoaded() {
     if (!this._umap.datalayersFromQueryString) return this.options.displayOnLoad
     const datalayerIds = this._umap.datalayersFromQueryString
-    let loadMe = datalayerIds.includes(this.umap_id.toString())
+    let loadMe = datalayerIds.includes(this.id.toString())
     if (this.options.old_id) {
       loadMe = loadMe || datalayerIds.includes(this.options.old_id.toString())
     }
@@ -215,13 +223,13 @@ export class DataLayer extends ServerStored {
   }
 
   async fetchData() {
-    if (!this.umap_id) return
+    if (!this.createdOnServer) return
     if (this._loading) return
     this._loading = true
     const [geojson, response, error] = await this._umap.server.get(this._dataUrl())
     if (!error) {
-      this._reference_version = response.headers.get('X-Datalayer-Version')
-      // FIXME: for now this property is set dynamically from backend
+      this.setReferenceVersion({ response, sync: false })
+      // FIXME: for now the _umap_options property is set dynamically from backend
       // And thus it's not in the geojson file in the server
       // So do not let all options to be reset
       // Fix is a proper migration so all datalayers settings are
@@ -257,6 +265,7 @@ export class DataLayer extends ServerStored {
 
   async fromUmapGeoJSON(geojson) {
     if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
+    geojson._umap_options.id = this.id
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
     if (this.isRemoteLayer()) await this.fetchRemoteData()
     else this.fromGeoJSON(geojson, false)
@@ -313,16 +322,11 @@ export class DataLayer extends ServerStored {
   }
 
   isLoaded() {
-    return !this.umap_id || this._loaded
+    return !this.createdOnServer || this._loaded
   }
 
   hasDataLoaded() {
     return this._dataloaded
-  }
-
-  setUmapId(id) {
-    // Datalayer is null when listening creation form
-    if (!this.umap_id && id) this.umap_id = id
   }
 
   backupOptions() {
@@ -357,8 +361,8 @@ export class DataLayer extends ServerStored {
 
   _dataUrl() {
     let url = this._umap.urls.get('datalayer_view', {
-      pk: this.umap_id,
-      map_id: this._umap.properties.umap_id,
+      pk: this.id,
+      map_id: this._umap.id,
     })
 
     // No browser cache for owners/editors.
@@ -437,7 +441,7 @@ export class DataLayer extends ServerStored {
       // otherwise the layer becomes uneditable.
       this.makeFeatures(geojson, sync)
     } catch (err) {
-      console.log('Error with DataLayer', this.umap_id)
+      console.log('Error with DataLayer', this.id)
       console.error(err)
     }
   }
@@ -524,22 +528,22 @@ export class DataLayer extends ServerStored {
 
   getDeleteUrl() {
     return this._umap.urls.get('datalayer_delete', {
-      pk: this.umap_id,
-      map_id: this._umap.properties.umap_id,
+      pk: this.id,
+      map_id: this._umap.id,
     })
   }
 
   getVersionsUrl() {
     return this._umap.urls.get('datalayer_versions', {
-      pk: this.umap_id,
-      map_id: this._umap.properties.umap_id,
+      pk: this.id,
+      map_id: this._umap.id,
     })
   }
 
   getVersionUrl(name) {
     return this._umap.urls.get('datalayer_version', {
-      pk: this.umap_id,
-      map_id: this._umap.properties.umap_id,
+      pk: this.id,
+      map_id: this._umap.id,
       name: name,
     })
   }
@@ -579,7 +583,8 @@ export class DataLayer extends ServerStored {
   }
 
   reset() {
-    if (!this.umap_id) this.erase()
+    if (!this.createdOnServer) this.erase()
+
     this.resetOptions()
     this.parentPane.appendChild(this.pane)
     if (this._leaflet_events_bk && !this._leaflet_events) {
@@ -809,7 +814,7 @@ export class DataLayer extends ServerStored {
       },
       this
     )
-    if (this.umap_id) {
+    if (this.createdOnServer) {
       const filename = `${Utils.slugify(this.options.name)}.geojson`
       const download = Utils.loadTemplate(`
         <a class="button" href="${this._dataUrl()}" download="${filename}">
@@ -1034,6 +1039,11 @@ export class DataLayer extends ServerStored {
     return this.isReadOnly() || this.isRemoteLayer()
   }
 
+  setReferenceVersion({ response, sync }) {
+    this._referenceVersion = response.headers.get('X-Datalayer-Version')
+    this.sync.update('_referenceVersion', this._referenceVersion)
+  }
+
   async save() {
     if (this.isDeleted) return await this.saveDelete()
     if (!this.isLoaded()) {
@@ -1048,14 +1058,15 @@ export class DataLayer extends ServerStored {
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    const saveUrl = this._umap.urls.get('datalayer_save', {
-      map_id: this._umap.properties.umap_id,
-      pk: this.umap_id,
+    const saveURL = this._umap.urls.get('datalayer_save', {
+      map_id: this._umap.id,
+      pk: this.id,
+      created: this.createdOnServer,
     })
-    const headers = this._reference_version
-      ? { 'X-Datalayer-Reference': this._reference_version }
+    const headers = this._referenceVersion
+      ? { 'X-Datalayer-Reference': this._referenceVersion }
       : {}
-    const status = await this._trySave(saveUrl, headers, formData)
+    const status = await this._trySave(saveURL, headers, formData)
     this._geojson = geojson
     return status
   }
@@ -1090,11 +1101,12 @@ export class DataLayer extends ServerStored {
         this.fromGeoJSON(data.geojson)
         delete data.geojson
       }
-      this._reference_version = response.headers.get('X-Datalayer-Version')
-      this.sync.update('_reference_version', this._reference_version)
-
-      this.setUmapId(data.id)
+      delete data.id
+      delete data._referenceVersion
       this.updateOptions(data)
+
+      this.setReferenceVersion({ response, sync: true })
+
       this.backupOptions()
       this.backupData()
       this.connectToMap()
@@ -1105,7 +1117,7 @@ export class DataLayer extends ServerStored {
   }
 
   async saveDelete() {
-    if (this.umap_id) {
+    if (this.createdOnServer) {
       await this._umap.server.post(this.getDeleteUrl())
     }
     delete this._umap.datalayers[stamp(this)]

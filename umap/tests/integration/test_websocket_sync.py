@@ -3,7 +3,7 @@ import re
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import Map
+from umap.models import DataLayer, Map
 
 from ..base import DataLayerFactory, MapFactory
 
@@ -267,7 +267,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
     b_polygon = peerB.locator("path")
 
     # Clone on peer B and save
-    b_polygon.click(button="right")
+    b_polygon.click(button="right", delay=200)
     peerB.get_by_role("button", name="Clone this feature").click()
 
     expect(peerB.locator("path")).to_have_count(2)
@@ -343,3 +343,75 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
     # Clean up: close edit mode
     peerB.locator("body").press("Escape")
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_should_sync_datalayers(new_page, live_server, websocket_server, tilelayer):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+
+    assert not DataLayer.objects.count()
+
+    # Create two tabs
+    peerA = new_page("Page A")
+    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB = new_page("Page B")
+    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    # Create a new layer from peerA
+    peerA.get_by_role("link", name="Manage layers").click()
+    peerA.get_by_role("button", name="Add a layer").click()
+
+    # Check layer has been sync to peerB
+    peerB.get_by_role("button", name="Open browser").click()
+    expect(peerB.get_by_text("Layer 1")).to_be_visible()
+
+    # Draw a marker in layer 1 from peerA
+    peerA.get_by_role("link", name="Draw a marker (Ctrl+M)").click()
+    peerA.locator("#map").click()
+
+    # Check marker is visible from peerB
+    expect(peerB.locator(".leaflet-marker-icon")).to_be_visible()
+
+    # Save layer to the server
+    with peerA.expect_response(re.compile(".*/datalayer/create/.*")):
+        peerA.get_by_role("button", name="Save").click()
+
+    assert DataLayer.objects.count() == 1
+
+    # Create another layer from peerA and draw a marker on it (without saving to server)
+    peerA.get_by_role("link", name="Manage layers").click()
+    peerA.get_by_role("button", name="Add a layer").click()
+    peerA.get_by_role("link", name="Draw a marker (Ctrl+M)").click()
+    peerA.locator("#map").click()
+
+    # Make sure this new marker is in Layer 2 for peerB
+    expect(peerB.get_by_text("Layer 2")).to_be_visible()
+    peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
+        1
+    ).click()
+    expect(peerB.locator(".leaflet-marker-icon")).to_be_visible()
+
+    # Now draw a marker from peerB
+    peerB.get_by_role("link", name="Draw a marker (Ctrl+M)").click()
+    peerB.locator("#map").click()
+    peerB.locator('input[name="name"]').fill("marker from peerB")
+
+    # Save from peer B
+    with peerB.expect_response(re.compile(".*/datalayer/create/.*")):
+        peerB.get_by_role("button", name="Save").click()
+
+    assert DataLayer.objects.count() == 2
+
+    # Check this new marker is visible from peerA
+    peerA.get_by_role("button", name="Open browser").click()
+    peerA.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
+        1
+    ).click()
+
+    # Now peerA saves the layer 2 to the server
+    with peerA.expect_response(re.compile(".*/datalayer/update/.*")):
+        peerA.get_by_role("button", name="Save").click()
+
+    assert DataLayer.objects.count() == 2

@@ -32,8 +32,7 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId) {
-    if (layerId) return this._umap.getDataLayerByUmapId(layerId)
-    return this._umap.defaultEditDataLayer()
+    return this._umap.getDataLayerByUmapId(layerId)
   }
 
   applyMessage(payload) {
@@ -54,7 +53,7 @@ export class MapUpdater extends BaseUpdater {
 
 export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
-    // Inserts does not happen (we use multiple updates instead).
+    // Upsert only happens when a new datalayer is created.
     this._umap.createDataLayer(value, false)
     this._umap.render([])
   }

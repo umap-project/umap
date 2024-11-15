@@ -598,7 +598,7 @@ class MapDetailMixin(SessionMixin):
             "tilelayers": TileLayer.get_list(),
             "editMode": self.edit_mode,
             "schema": Map.extra_schema,
-            "umap_id": self.get_umap_id(),
+            "id": self.get_id(),
             "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
             "share_statuses": [
@@ -655,7 +655,7 @@ class MapDetailMixin(SessionMixin):
     def edit_mode(self):
         return "advanced"
 
-    def get_umap_id(self):
+    def get_id(self):
         return None
 
     def is_starred(self):
@@ -725,6 +725,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
+        # When initializing datalayers from map, we cannot get the reference version
+        # the normal way, which is from the header X-Reference-Version
         return [dl.metadata(self.request) for dl in self.object.datalayer_set.all()]
 
     @property
@@ -736,7 +738,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
             edit_mode = "simple"
         return edit_mode
 
-    def get_umap_id(self):
+    def get_id(self):
         return self.object.pk
 
     def get_short_url(self):
@@ -1181,9 +1183,19 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.map = self.kwargs["map_inst"]
+
+        uuid = self.kwargs["pk"]
+        # Check if UUID already exists
+        if DataLayer.objects.filter(uuid=uuid).exists():
+            return HttpResponseBadRequest("UUID already exists")
+
+        form.instance.uuid = uuid
         self.object = form.save()
-        # Simple response with only metadata (including new id)
-        response = simple_json_response(**self.object.metadata(self.request))
+        assert uuid == self.object.uuid
+
+        # Simple response with only metadata
+        data = self.object.metadata(self.request)
+        response = simple_json_response(**data)
         response["X-Datalayer-Version"] = self.version
         return response
 

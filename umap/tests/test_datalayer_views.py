@@ -1,6 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
+from uuid import uuid4
 
 import pytest
 from django.core.files.base import ContentFile
@@ -103,6 +104,21 @@ def test_gzip_should_be_created_if_accepted(client, datalayer, map, post_data):
     assert Path(flat).exists()
     assert Path(gzipped).exists()
     assert Path(flat).stat().st_mtime_ns == Path(gzipped).stat().st_mtime_ns
+
+
+def test_create_datalayer(client, map, post_data):
+    uuid = str(uuid4())
+    url = reverse("datalayer_create", args=(map.pk, uuid))
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    new_datalayer = DataLayer.objects.get(pk=uuid)
+    assert new_datalayer.name == "name"
+    assert new_datalayer.rank == 0
+    # Test response is a json
+    data = json.loads(response.content.decode())
+    assert "id" in data
+    assert data["id"] == uuid
 
 
 def test_update(client, datalayer, map, post_data):
