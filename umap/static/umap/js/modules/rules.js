@@ -196,10 +196,10 @@ export default class Rules {
   constructor(umap) {
     this._umap = umap
     this.rules = []
-    this.loadRules()
+    this.load()
   }
 
-  loadRules() {
+  load() {
     if (!this._umap.properties.rules?.length) return
     for (const { condition, options } of this._umap.properties.rules) {
       if (!condition) continue
