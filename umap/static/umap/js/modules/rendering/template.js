@@ -35,6 +35,7 @@ class PopupTemplate {
       feature.properties.description || '',
       properties
     )
+    properties.name = properties.name ?? feature.getDisplayName()
     let content = Utils.greedyTemplate(template, properties)
     content = Utils.toHTML(content, { target: target })
     return Utils.loadTemplate(`<div class="umap-popup-container text">${content}</div>`)
