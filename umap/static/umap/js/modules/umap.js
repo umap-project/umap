@@ -94,7 +94,7 @@ export default class Umap extends ServerStored {
     // Needed to render controls
     this.permissions = new MapPermissions(this)
     this.urls = new URLs(this.properties.urls)
-    this.slideshow = new Slideshow(this, this._leafletMap, this.properties.slideshow)
+    this.slideshow = new Slideshow(this, this._leafletMap)
 
     this._leafletMap.setup()
 
@@ -671,6 +671,17 @@ export default class Umap extends ServerStored {
     this.permissions.properties = Object.assign({}, this._backupProperties.permissions)
   }
 
+  setProperties(newProperties) {
+    for (const key of Object.keys(SCHEMA)) {
+      if (newProperties[key] !== undefined) {
+        this.properties[key] = newProperties[key]
+        if (key === 'rules') this.rules.load()
+        if (key === 'slideshow') this.slideshow.load()
+        // TODO: sync ?
+      }
+    }
+  }
+
   hasData() {
     for (const datalayer of this.datalayersIndex) {
       if (datalayer.hasData()) return true
@@ -993,7 +1004,7 @@ export default class Umap extends ServerStored {
       ],
     ]
     const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
-      callback: () => this.slideshow.setProperties(this.properties.slideshow),
+      callback: () => this.slideshow.load(),
       umap: this,
     })
     slideshow.appendChild(slideshowBuilder.build())
@@ -1483,15 +1494,9 @@ export default class Umap extends ServerStored {
 
   importRaw(rawData) {
     const importedData = JSON.parse(rawData)
+    const mustReindex = 'sortKey' in Object.keys(importedData.properties)
 
-    let mustReindex = false
-
-    for (const option of Object.keys(SCHEMA)) {
-      if (typeof importedData.properties[option] !== 'undefined') {
-        this.properties[option] = importedData.properties[option]
-        if (option === 'sortKey') mustReindex = true
-      }
-    }
+    this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
       this.properties.center = this._leafletMap.latLng(importedData.geometry)

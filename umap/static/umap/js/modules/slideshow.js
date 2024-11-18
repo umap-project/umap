@@ -18,7 +18,7 @@ export default class Slideshow extends WithTemplate {
     this._umap = umap
     this._id = null
     this.CLASSNAME = 'umap-slideshow-active'
-    this.setProperties(properties)
+    this.load()
     this._current = null
 
     if (this.properties.autoplay) {
@@ -54,7 +54,11 @@ export default class Slideshow extends WithTemplate {
     return this.current.getNext()
   }
 
-  setProperties(properties) {
+  load() {
+    this.setProperties(this._umap.properties.slideshow)
+  }
+
+  setProperties(properties = {}) {
     this.properties = Object.assign(
       {
         delay: 5000,
