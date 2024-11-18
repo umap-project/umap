@@ -13,6 +13,7 @@ import { LeafletMap } from './rendering/map.js'
 import URLs from './urls.js'
 import { Panel, EditPanel, FullPanel } from './ui/panel.js'
 import Dialog from './ui/dialog.js'
+import { BottomBar, TopBar } from './ui/bar.js'
 import Tooltip from './ui/tooltip.js'
 import ContextMenu from './ui/contextmenu.js'
 import { Request, ServerRequest } from './request.js'
@@ -102,12 +103,14 @@ export default class Umap extends ServerStored {
 
     this.panel = new Panel(this, this._leafletMap)
     this.dialog = new Dialog({ className: 'dark' })
+    this.topBar = new TopBar(this, this._leafletMap._controlContainer)
+    this.bottomBar = new BottomBar(
+      this,
+      this.slideshow,
+      this._leafletMap._controlContainer
+    )
     this.tooltip = new Tooltip(this._leafletMap._controlContainer)
     this.contextmenu = new ContextMenu()
-    if (this.hasEditMode()) {
-      this.editPanel = new EditPanel(this, this._leafletMap)
-      this.fullPanel = new FullPanel(this, this._leafletMap)
-    }
     this.server = new ServerRequest()
     this.request = new Request()
     this.facets = new Facets(this)
@@ -116,6 +119,13 @@ export default class Umap extends ServerStored {
     this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this)
+
+    if (this.hasEditMode()) {
+      this.editPanel = new EditPanel(this, this._leafletMap)
+      this.fullPanel = new FullPanel(this, this._leafletMap)
+      this._leafletMap.initEditTools()
+      this.topBar.setup()
+    }
 
     this.datalayersFromQueryString = this.searchParams.get('datalayers')
     if (this.datalayersFromQueryString) {
@@ -180,14 +190,11 @@ export default class Umap extends ServerStored {
       await this.loadDataFromQueryString()
     }
 
-    if (this.hasEditMode()) {
-      this._leafletMap.initEditTools()
-    }
-
     if (!this.properties.noControl) {
       this.initShortcuts()
       this._leafletMap.on('contextmenu', (e) => this.onContextMenu(e))
       this.onceDataLoaded(this.setViewFromQueryString)
+      this.bottomBar.setup()
       this.propagate()
     }
 
@@ -633,22 +640,6 @@ export default class Umap extends ServerStored {
     this.fire('saved')
   }
 
-  propagate() {
-    let els = document.querySelectorAll('.map-name')
-    for (const el of els) {
-      el.textContent = this.getDisplayName()
-    }
-    const status = this.permissions.getShareStatusDisplay()
-    els = document.querySelectorAll('.share-status')
-    for (const el of els) {
-      if (status) {
-        el.textContent = translate('Visibility: {status}', {
-          status: status,
-        })
-      }
-    }
-  }
-
   getDisplayName() {
     return this.properties.name || translate('Untitled map')
   }
@@ -1004,7 +995,13 @@ export default class Umap extends ServerStored {
       ],
     ]
     const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
-      callback: () => this.slideshow.load(),
+      callback: () => {
+        this.slideshow.load()
+        // FIXME when we refactor formbuilder: this callback is called in a 'postsync'
+        // event, which comes after the call of `setter` method, which will call the
+        // map.render method, which should do this redraw.
+        this.bottomBar.redraw()
+      },
       umap: this,
     })
     slideshow.appendChild(slideshowBuilder.build())
@@ -1261,10 +1258,8 @@ export default class Umap extends ServerStored {
   }
 
   render(fields) {
-    if (fields.includes('numberOfConnectedPeers')) {
-      this._leafletMap.renderEditToolbar()
-      this.propagate()
-    }
+    const impacted = this.propagate(fields)
+    if (impacted) return // No need to run a wider reflow
 
     const impacts = Utils.getImpactsFromSchema(fields)
     for (const impact of impacts) {
@@ -1272,7 +1267,8 @@ export default class Umap extends ServerStored {
         case 'ui':
           this._leafletMap.renderUI()
           this.browser.redraw()
-          this.propagate()
+          this.topBar.redraw()
+          this.bottomBar.redraw()
           break
         case 'data':
           this.eachVisibleDataLayer((datalayer) => {
@@ -1292,6 +1288,49 @@ export default class Umap extends ServerStored {
           this.initSyncEngine()
       }
     }
+  }
+
+  // This method does a targeted update of the UI,
+  // it whould be merged with `render`` method and the
+  // SCHEMA at some point
+  propagate(fields = []) {
+    const impacts = {
+      'properties.name': () => {
+        Utils.eachElement('.map-name', (el) => {
+          el.textContent = this.getDisplayName()
+        })
+      },
+      user: () => {
+        Utils.eachElement('.umap-user .username', (el) => {
+          if (this.properties.user?.id) {
+            el.textContent = this.properties.user.name
+          }
+        })
+      },
+      'properties.permissions': () => {
+        const status = this.permissions.getShareStatusDisplay()
+        if (status) {
+          Utils.eachElement('.share-status', (el) => {
+            el.textContent = translate('Visibility: {status}', {
+              status: status,
+            })
+          })
+        }
+      },
+      numberOfConnectedPeers: () => {
+        Utils.eachElement('.connected-peers', (el) => {
+          el.textContent = this.sync.getNumberOfConnectedPeers()
+        })
+      },
+    }
+    let impacted = false
+    for (const [field, impact] of Object.entries(impacts)) {
+      if (!fields.length || fields.includes(field)) {
+        impact()
+        impacted = true
+      }
+    }
+    return impacted
   }
 
   // TODO: allow to control the default datalayer

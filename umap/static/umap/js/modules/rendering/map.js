@@ -12,7 +12,6 @@ import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
-import ContextMenu from '../ui/contextmenu.js'
 
 // Those options are not saved on the server, so they can live here
 // instead of in umap.properties
@@ -104,10 +103,6 @@ const ControlsMixin = {
   },
 
   renderControls: function () {
-    const hasSlideshow = Boolean(this.options.slideshow?.active)
-    const barEnabled = this.options.captionBar || hasSlideshow
-    document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
-    document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
     for (const control of Object.values(this._controls)) {
       this.removeControl(control)
     }
@@ -149,198 +144,6 @@ const ControlsMixin = {
     if (this._umap.getProperty('moreControl')) this._controls.more.addTo(this)
     if (this._umap.getProperty('scaleControl')) this._controls.scale.addTo(this)
     this._controls.tilelayers.setLayers()
-  },
-
-  renderEditToolbar: function () {
-    const className = 'umap-main-edit-toolbox'
-    const container =
-      document.querySelector(`.${className}`) ||
-      DomUtil.create('div', `${className} with-transition dark`, this._controlContainer)
-    container.innerHTML = ''
-    const leftContainer = DomUtil.create('div', 'umap-left-edit-toolbox', container)
-    const rightContainer = DomUtil.create('div', 'umap-right-edit-toolbox', container)
-    const logo = DomUtil.create('div', 'logo', leftContainer)
-    DomUtil.createLink('', logo, 'uMap', '/', null, translate('Go to the homepage'))
-    const nameButton = DomUtil.createButton('map-name', leftContainer, '')
-    DomEvent.on(nameButton, 'mouseover', () => {
-      this._umap.tooltip.open({
-        content: translate('Edit the title of the map'),
-        anchor: nameButton,
-        position: 'bottom',
-        delay: 500,
-        duration: 5000,
-      })
-    })
-    const shareStatusButton = DomUtil.createButton(
-      'share-status',
-      leftContainer,
-      '',
-      this._umap.permissions.edit,
-      this._umap.permissions
-    )
-    DomEvent.on(shareStatusButton, 'mouseover', () => {
-      this._umap.tooltip.open({
-        content: translate('Update who can see and edit the map'),
-        anchor: shareStatusButton,
-        position: 'bottom',
-        delay: 500,
-        duration: 5000,
-      })
-    })
-    if (this.options.editMode === 'advanced') {
-      DomEvent.on(nameButton, 'click', this._umap.editCaption, this._umap)
-      DomEvent.on(
-        shareStatusButton,
-        'click',
-        this._umap.permissions.edit,
-        this._umap.permissions
-      )
-    }
-    if (this.options.user?.id) {
-      const button = U.Utils.loadTemplate(`
-        <button class="umap-user flat" type="button">
-          <i class="icon icon-16 icon-profile"></i>
-          <span>${this.options.user.name}</span>
-        </button>
-        `)
-      rightContainer.appendChild(button)
-      const menu = new ContextMenu({ className: 'dark', fixed: true })
-      const actions = [
-        {
-          label: translate('New map'),
-          action: this._umap.urls.get('map_new'),
-        },
-        {
-          label: translate('My maps'),
-          action: this._umap.urls.get('user_dashboard'),
-        },
-        {
-          label: translate('My teams'),
-          action: this._umap.urls.get('user_teams'),
-        },
-      ]
-      if (this._umap.urls.has('user_profile')) {
-        actions.push({
-          label: translate('My profile'),
-          action: this._umap.urls.get('user_profile'),
-        })
-      }
-      button.addEventListener('click', () => {
-        menu.openBelow(button, actions)
-      })
-    }
-
-    const connectedPeers = this._umap.sync.getNumberOfConnectedPeers()
-    if (connectedPeers !== 0) {
-      const connectedPeersCount = DomUtil.createButton(
-        'leaflet-control-connected-peers',
-        rightContainer,
-        ''
-      )
-      DomEvent.on(connectedPeersCount, 'mouseover', () => {
-        this._umap.tooltip.open({
-          content: translate(
-            '{connectedPeers} peer(s) currently connected to this map',
-            {
-              connectedPeers: connectedPeers,
-            }
-          ),
-          anchor: connectedPeersCount,
-          position: 'bottom',
-          delay: 500,
-          duration: 5000,
-        })
-      })
-
-      const updateConnectedPeersCount = () => {
-        connectedPeersCount.innerHTML = this._umap.sync.getNumberOfConnectedPeers()
-      }
-      updateConnectedPeersCount()
-    }
-
-    this._umap.help.getStartedLink(rightContainer)
-    const controlEditCancel = DomUtil.createButton(
-      'leaflet-control-edit-cancel',
-      rightContainer,
-      DomUtil.add('span', '', null, translate('Cancel edits')),
-      () => this._umap.askForReset()
-    )
-    DomEvent.on(controlEditCancel, 'mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('CANCEL'),
-        anchor: controlEditCancel,
-        position: 'bottom',
-        delay: 500,
-        duration: 5000,
-      })
-    })
-    const controlEditDisable = DomUtil.createButton(
-      'leaflet-control-edit-disable',
-      rightContainer,
-      DomUtil.add('span', '', null, translate('View')),
-      this._umap.disableEdit,
-      this._umap
-    )
-    DomEvent.on(controlEditDisable, 'mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('PREVIEW'),
-        anchor: controlEditDisable,
-        position: 'bottom',
-        delay: 500,
-        duration: 5000,
-      })
-    })
-    const controlEditSave = DomUtil.createButton(
-      'leaflet-control-edit-save button',
-      rightContainer,
-      DomUtil.add('span', '', null, translate('Save')),
-      () => this._umap.saveAll()
-    )
-    DomEvent.on(controlEditSave, 'mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('SAVE'),
-        anchor: controlEditSave,
-        position: 'bottom',
-        delay: 500,
-        duration: 5000,
-      })
-    })
-  },
-
-  renderCaptionBar: function () {
-    if (this.options.noControl) return
-    const container =
-      this._controlContainer.querySelector('.umap-caption-bar') ||
-      DomUtil.create('div', 'umap-caption-bar', this._controlContainer)
-    container.innerHTML = ''
-    const name = DomUtil.create('h3', 'map-name', container)
-    DomEvent.disableClickPropagation(container)
-    this._umap.addAuthorLink(container)
-    if (this._umap.getProperty('captionMenus')) {
-      DomUtil.createButton(
-        'umap-about-link flat',
-        container,
-        translate('Open caption'),
-        () => this._umap.openCaption()
-      )
-      DomUtil.createButton(
-        'umap-open-browser-link flat',
-        container,
-        translate('Browse data'),
-        () => this.openBrowser('data')
-      )
-      if (this.options.facetKey) {
-        DomUtil.createButton(
-          'umap-open-filter-link flat',
-          container,
-          translate('Filter data'),
-          () => this.openBrowser('filters')
-        )
-      }
-    }
-    this._umap.onceDatalayersLoaded(() => {
-      this._umap.slideshow.renderToolbox(container)
-    })
   },
 }
 
@@ -482,8 +285,6 @@ export const LeafletMap = BaseMap.extend({
   renderUI: function () {
     setOptions(this, this._umap.properties)
     this.initTileLayers()
-    this.renderCaptionBar()
-    this.renderEditToolbar()
     // Needs tilelayer to exist for minimap
     this.renderControls()
     this.handleLimitBounds()
@@ -576,6 +377,5 @@ export const LeafletMap = BaseMap.extend({
 
   initEditTools: function () {
     this.editTools = new U.Editable(this._umap)
-    this.renderEditToolbar()
   },
 })

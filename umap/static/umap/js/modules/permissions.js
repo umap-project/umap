@@ -27,6 +27,10 @@ export class MapPermissions extends ServerStored {
     )
   }
 
+  render() {
+    this._umap.render(['properties.permissions'])
+  }
+
   isOwner() {
     return Boolean(this._umap.properties.user?.is_owner)
   }

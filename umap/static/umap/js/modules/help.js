@@ -226,13 +226,6 @@ export default class Help {
     return button
   }
 
-  getStartedLink(container) {
-    const button = DomUtil.createButton('umap-help-link', container, translate('Help'))
-    button.textContent = translate('Help')
-    button.addEventListener('click', () => this.showGetStarted())
-    return button
-  }
-
   parse(container) {
     for (const element of container.querySelectorAll('[data-help]')) {
       this.button(element, element.dataset.help.split(','))
