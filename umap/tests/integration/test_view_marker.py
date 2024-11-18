@@ -57,6 +57,18 @@ def test_should_handle_locale_var_in_description(live_server, map, page):
     expect(link).to_have_attribute("href", "https://domain.org/?locale=en")
 
 
+def test_should_use_custom_label_key_in_popup_default_template(live_server, map, page):
+    data = deepcopy(DATALAYER_DATA)
+    data["features"][0]["properties"] = {
+        "libellé": "my custom label",
+    }
+    data["_umap_options"] = {"labelKey": "libellé"}
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.locator(".leaflet-marker-icon").click()
+    expect(page.locator(".umap-popup h4")).to_have_text("my custom label")
+
+
 def test_should_display_tooltip_with_variable(live_server, map, page, bootstrap):
     map.settings["properties"]["showLabel"] = True
     map.settings["properties"]["labelKey"] = "Foo {name}"
