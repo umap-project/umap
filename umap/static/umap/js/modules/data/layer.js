@@ -428,6 +428,10 @@ export class DataLayer extends ServerStored {
     if (idx !== -1) this._propertiesIndex.splice(idx, 1)
   }
 
+  allProperties() {
+    return this._propertiesIndex
+  }
+
   sortedValues(property) {
     return Object.values(this._features)
       .map((feature) => feature.properties[property])
