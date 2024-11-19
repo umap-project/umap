@@ -11,19 +11,26 @@ const TOP_BAR_TEMPLATE = `
         <button class="share-status" type="button" data-ref="share"></button>
     </div>
     <div class="umap-right-edit-toolbox" data-ref="right">
-        <button class="connected-peers" type="button" data-ref="peers"></button>
+        <button class="connected-peers round" type="button" data-ref="peers">
+          <i class="icon icon-16 icon-peers icon-black"></i>
+          <span></span>
+        </button>
         <button class="umap-user flat" type="button" data-ref="user">
           <i class="icon icon-16 icon-profile"></i>
           <span class="username" data-ref="username"></span>
         </button>
         <button class="umap-help-link" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
-        <button class="edit-cancel" type="button" data-ref="cancel">
+        <button class="edit-cancel round" type="button" data-ref="cancel">
+            <i class="icon icon-16 icon-restore"></i>
             <span class="">${translate('Cancel edits')}</span>
         </button>
-        <button class="edit-disable" type="button" data-ref="view">
+        <button class="edit-disable round" type="button" data-ref="view">
+            <i class="icon icon-16 icon-eye"></i>
             <span class="">${translate('View')}</span>
         </button>
-        <button class="edit-save button" type="button" data-ref="save">
+        <button class="edit-save button round" type="button" data-ref="save">
+            <i class="icon icon-16 icon-save"></i>
+            <i class="icon icon-16 icon-save-disabled"></i>
             <span class="">${translate('Save')}</span>
         </button>
     </div>
@@ -89,7 +96,6 @@ export class TopBar extends WithTemplate {
     })
 
     const connectedPeers = this._umap.sync.getNumberOfConnectedPeers()
-    this.elements.peers.dataset.connected = connectedPeers
     this.elements.peers.addEventListener('mouseover', () => {
       if (!connectedPeers) return
       this._umap.tooltip.open({

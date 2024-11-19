@@ -1318,7 +1318,7 @@ export default class Umap extends ServerStored {
         }
       },
       numberOfConnectedPeers: () => {
-        Utils.eachElement('.connected-peers', (el) => {
+        Utils.eachElement('.connected-peers span', (el) => {
           el.textContent = this.sync.getNumberOfConnectedPeers()
         })
       },

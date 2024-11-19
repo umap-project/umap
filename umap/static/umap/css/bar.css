@@ -1,17 +1,16 @@
-.umap-main-edit-toolbox [type="button"] {
+.umap-main-edit-toolbox [type=button] {
     color: #fff;
-    font-size: 1.2em;
+    font-size: 1em;
     border: none;
     background-color: var(--color-darkGray);
     width: auto;
     margin-bottom: 0;
 }
-.umap-main-edit-toolbox [type="button"]:hover {
+.umap-main-edit-toolbox [type=button]:hover {
     text-decoration: underline;
 }
 
-.leaflet-container [type="button"].umap-help-link {
-    font-size: 12px;
+.leaflet-container [type=button].umap-help-link {
     padding-bottom: 3px;
     background-color: inherit;
 }
@@ -22,54 +21,18 @@
 {
     display: block;
     border: none;
-    font-size: 12px;
     border-radius: 20px;
-    color: #f8f8f8;
     height: 32px;
     line-height: 30px;
     padding: 0 20px;
 }
 .leaflet-container .connected-peers,
-.dark [type="button"].connected-peers:hover
+.dark [type=button].connected-peers:hover
 {
     background-color: var(--color-lightCyan);
     color: var(--color-dark);
 }
 
-.leaflet-container .edit-disable:before,
-.leaflet-container .edit-save:before,
-.leaflet-container .edit-cancel:before,
-.leaflet-container .connected-peers:before {
-    display: inline-block;
-    width: 19px;
-    height: 24px;
-    background-position: -50px -122px;
-    background-repeat: no-repeat;
-    background-image: url('../img/16-white.svg');
-    vertical-align: middle;
-    content: ' ';
-    text-align: center;
-}
-
-.leaflet-container .connected-peers:before {
-    background-image: url('../img/16.svg');
-}
-
-.leaflet-container .edit-disable span,
-.leaflet-container .edit-save span,
-.leaflet-container .edit-cancel span,
-.leaflet-container .connected-peers span{
-    margin-inline-start: 10px;
-}
-.leaflet-container .edit-save:before {
-    background-position: -148px -2px;
-}
-.leaflet-container .edit-disable:before {
-    background-position: -50px -25px;
-}
-.leaflet-container .connected-peers:before {
-    background-position: -2px -95px;
-}
 .leaflet-container .edit-cancel,
 .leaflet-container .edit-disable,
 .leaflet-container .connected-peers{
@@ -87,7 +50,10 @@
     border: 0.5px solid rgba(153, 153, 153, 0.40);
     background: rgba(153, 153, 153, 0.10);
 }
-.dark [type="button"].edit-save:hover {
+.leaflet-container .icon-save {
+    display: none;
+}
+.dark button.edit-save:hover {
     background: rgba(153, 153, 153, 0.10);
     text-decoration: none;
 }
@@ -96,12 +62,15 @@
     cursor: pointer;
     border: 0.5px solid rgba(66, 236, 230, 0.40);
     background: rgba(66, 236, 230, 0.10);
-    color: #42ECE6;
+    color: var(--color-brightCyan);
 }
-.umap-is-dirty .edit-save:before {
-    background-position: -148px -26px;
+.umap-is-dirty .icon-save {
+    display: inline-block;
 }
-.umap-is-dirty .dark [type="button"].edit-save:hover {
+.umap-is-dirty .icon-save-disabled {
+    display: none;
+}
+.umap-is-dirty .dark button.edit-save:hover {
     border-color: rgba(66, 236, 230, 0.80);
     background: rgba(66, 236, 230, 0.10);
 }
@@ -123,12 +92,13 @@
     display: none;
 }
 .umap-main-edit-toolbox {
-    top: -46px;
+    /* Show a transition from top to bottom when opening it */
+    top: calc(var(--header-height) * -1);
     position: absolute;
     width: 100%;
     left: 0;
     right: 0;
-    height: 46px;
+    height: var(--header-height);
     padding: 0 10px;
     text-align: start;
     line-height: var(--control-size);
@@ -172,7 +142,6 @@
     text-align: start;
 }
 .umap-main-edit-toolbox .share-status {
-    font-size: 1em;
     font-style: italic;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -200,9 +169,6 @@
     content: '|';
     padding-inline-end: 10px;
 }
-.umap-main-edit-toolbox .umap-user {
-    color: #fff;
-}
 .umap-main-edit-toolbox .umap-user:hover {
     text-decoration: underline;
 }
@@ -211,8 +177,8 @@
     padding-inline-start: 20px;
     display: inline-block; /* Prevents underline on hover. */
 }
-.umap-caption-bar-enabled .umap-caption-bar {
-    display: block;
+.umap-caption-bar {
+    display: none;
     height: var(--footer-height);
     background-color: #fff;
     width: 100%;
@@ -227,6 +193,9 @@
     border-top: 1px solid var(--color-lightGray);
     opacity: 0.93;
     z-index: var(--zindex-panels);
+}
+.umap-caption-bar-enabled .umap-caption-bar {
+    display: block;
 }
 .umap-caption-bar-enabled {
     --current-footer-height: var(--footer-height);
