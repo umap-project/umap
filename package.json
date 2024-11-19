@@ -65,6 +65,6 @@
     "simple-statistics": "7.8.5"
   },
   "browserslist": [
-    "> 0.5%, last 2 versions, Firefox ESR, not dead, not op_mini all"
+    "defaults and fully supports es6-module"
   ]
 }
