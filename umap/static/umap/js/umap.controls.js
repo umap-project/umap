@@ -389,7 +389,7 @@ U.EditControl = L.Control.extend({
   },
 
   onAdd: function (map) {
-    const container = L.DomUtil.create('div', 'leaflet-control-edit-enable')
+    const container = L.DomUtil.create('div', 'edit-enable')
     const enableEditing = L.DomUtil.createButton(
       '',
       container,

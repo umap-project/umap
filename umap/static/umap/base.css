@@ -254,8 +254,8 @@ input[type="submit"] {
 }
 .dark .button,
 .dark [type="button"] {
-    background-color: #2a2e30;
-    color: #eeeeec;
+    background-color: var(--color-darkerGray);
+    color: var(--text-color);
     border: 1px solid #1b1f20;
 }
 .dark .button:hover,
@@ -264,7 +264,7 @@ input[type="submit"] {
     background-color: #2e3436;
 }
 .dark a {
-    color: #eeeeec;
+    color: var(--text-color);
 }
 button.flat,
 [type="button"].flat,

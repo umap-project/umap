@@ -26,13 +26,9 @@ export default class Slideshow extends WithTemplate {
         this.play()
       }, this)
     }
-    leafletMap.on(
-      'edit:enabled',
-      function () {
-        this.stop()
-      },
-      this
-    )
+    leafletMap.on('edit:enabled', () => {
+      this.stop()
+    })
   }
 
   set current(feature) {
@@ -85,9 +81,13 @@ export default class Slideshow extends WithTemplate {
     spinner.style.animation = 'none'
   }
 
+  isEnabled() {
+    return Boolean(this.properties.active)
+  }
+
   play() {
     if (this._id) return
-    if (this._umap.editEnabled || !this._umap.properties.slideshow.active) return
+    if (this._umap.editEnabled || !this.isEnabled()) return
     L.DomUtil.addClass(document.body, this.CLASSNAME)
     this._id = window.setInterval(L.bind(this.loop, this), this.properties.delay)
     this.startSpinner()

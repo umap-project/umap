@@ -25,8 +25,6 @@ export function checkId(string) {
   return /^[A-Za-z0-9]{5}$/.test(string)
 }
 
-
-
 function _getPropertyName(field) {
   const filtered_field = ['options.', 'properties.'].reduce(
     (acc, prefix) => acc.replace(prefix, ''),
@@ -439,4 +437,10 @@ export function deepEqual(object1, object2) {
 
 export function slugify(str) {
   return (str || 'data').replace(/[^a-z0-9]/gi, '_').toLowerCase()
+}
+
+export function eachElement(selector, callback) {
+  for (const el of document.querySelectorAll(selector)) {
+    callback(el)
+  }
 }

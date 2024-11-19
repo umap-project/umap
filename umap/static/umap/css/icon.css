@@ -8,7 +8,6 @@
     background-color: initial;
 }
 .icon-16 {
-    background-image: url('../img/16.svg');
     height: 24px;
     line-height: 24px;
     width: 24px;
@@ -42,6 +41,14 @@ html[dir="rtl"] .icon {
 .icon-24.icon-white,
 .dark .icon-24 {
     background-image: url('../img/24-white.svg');
+}
+.icon-16.icon-black,
+.icon-16 {
+    background-image: url('../img/16.svg');
+}
+.icon-24.icon-black,
+.icon-24 {
+    background-image: url('../img/24.svg');
 }
 .icon-add {
     background-position: var(--tile) var(--tile);
@@ -106,6 +113,9 @@ html[dir="rtl"] .icon {
 .icon-marker {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 5);
 }
+.icon-peers {
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 2);
+}
 .icon-polygon {
     background-position: var(--tile) calc(var(--tile) * 3);
 }
@@ -123,6 +133,13 @@ html[dir="rtl"] .icon {
 }
 .expanded .icon-resize {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 6);
+}
+.icon-save {
+    background-position: calc(var(--tile) * 6) var(--tile);
+}
+/* FIXME move to a 16-disabled.svg sprite ? */
+.icon-save-disabled {
+    background-position: calc(var(--tile) * 6) 0;
 }
 .icon-search {
     background-position: var(--tile) calc(var(--tile) * 5);

@@ -1,0 +1,202 @@
+.umap-main-edit-toolbox [type=button] {
+    color: #fff;
+    font-size: 1em;
+    border: none;
+    background-color: var(--color-darkGray);
+    width: auto;
+    margin-bottom: 0;
+}
+.umap-main-edit-toolbox [type=button]:hover {
+    text-decoration: underline;
+}
+
+.leaflet-container [type=button].umap-help-link {
+    padding-bottom: 3px;
+    background-color: inherit;
+}
+.leaflet-container .edit-save,
+.leaflet-container .edit-cancel,
+.leaflet-container .edit-disable,
+.leaflet-container .connected-peers
+{
+    display: block;
+    border: none;
+    border-radius: 20px;
+    height: 32px;
+    line-height: 30px;
+    padding: 0 20px;
+}
+.leaflet-container .connected-peers,
+.dark [type=button].connected-peers:hover
+{
+    background-color: var(--color-lightCyan);
+    color: var(--color-dark);
+}
+
+.leaflet-container .edit-cancel,
+.leaflet-container .edit-disable,
+.leaflet-container .connected-peers{
+    border: 0.5px solid rgba(153, 153, 153, 0.40);
+}
+.leaflet-container .edit-cancel:hover,
+.leaflet-container .edit-disable:hover {
+    border: 0.5px solid rgba(153, 153, 153, 0.80);
+    text-decoration: none;
+}
+.leaflet-container .edit-save {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-radius: 16px;
+    border: 0.5px solid rgba(153, 153, 153, 0.40);
+    background: rgba(153, 153, 153, 0.10);
+}
+.leaflet-container .icon-save {
+    display: none;
+}
+.dark button.edit-save:hover {
+    background: rgba(153, 153, 153, 0.10);
+    text-decoration: none;
+}
+.umap-is-dirty .edit-save {
+    opacity: 1;
+    cursor: pointer;
+    border: 0.5px solid rgba(66, 236, 230, 0.40);
+    background: rgba(66, 236, 230, 0.10);
+    color: var(--color-brightCyan);
+}
+.umap-is-dirty .icon-save {
+    display: inline-block;
+}
+.umap-is-dirty .icon-save-disabled {
+    display: none;
+}
+.umap-is-dirty .dark button.edit-save:hover {
+    border-color: rgba(66, 236, 230, 0.80);
+    background: rgba(66, 236, 230, 0.10);
+}
+.leaflet-container .edit-save,
+.leaflet-container .edit-cancel,
+.leaflet-container .edit-disable,
+.umap-edit-enabled .edit-enable {
+    display: none;
+}
+.umap-edit-enabled .edit-save,
+.umap-edit-enabled .edit-disable,
+.umap-edit-enabled.umap-is-dirty .edit-cancel {
+    display: inline-block;
+}
+.umap-is-dirty .edit-disable {
+    display: none;
+}
+.umap-caption-bar {
+    display: none;
+}
+.umap-main-edit-toolbox {
+    /* Show a transition from top to bottom when opening it */
+    top: calc(var(--header-height) * -1);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    padding: 0 10px;
+    text-align: start;
+    line-height: var(--control-size);
+    cursor: auto;
+    border-bottom: 1px solid #222;
+    z-index: var(--zindex-panels);
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+.umap-left-edit-toolbox,
+.umap-right-edit-toolbox {
+    display: flex;
+    column-gap: 10px;
+}
+.umap-right-edit-toolbox {
+    align-items: baseline;
+}
+
+.umap-main-edit-toolbox .logo {
+    width: 39px;
+    height: 100%;
+}
+.umap-main-edit-toolbox .logo a {
+    background-image: url('../img/logo_small.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 39px;
+    height: 100%;
+    vertical-align: middle;
+    text-indent: -9999px;
+}
+.umap-main-edit-toolbox .map-name {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    text-align: start;
+}
+.umap-main-edit-toolbox .share-status {
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.map-name:after {
+    content:  '\00a0';
+    padding-inline-start: 3px;
+    width: 1ch;
+    display: inline-block;
+}
+.umap-is-dirty .map-name:after {
+    content:  '*';
+}
+.umap-edit-enabled .umap-main-edit-toolbox {
+    top: 0;
+}
+.umap-caption-bar h3,
+.umap-main-edit-toolbox h3 {
+    display: inline;
+}
+.umap-caption-bar button {
+    margin-inline-start: 10px;
+}
+.umap-caption-bar button + button:before {
+    content: '|';
+    padding-inline-end: 10px;
+}
+.umap-main-edit-toolbox .umap-user:hover {
+    text-decoration: underline;
+}
+.umap-main-edit-toolbox .umap-user:after {
+    content: '|';
+    padding-inline-start: 20px;
+    display: inline-block; /* Prevents underline on hover. */
+}
+.umap-caption-bar {
+    display: none;
+    height: var(--footer-height);
+    background-color: #fff;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: var(--gutter);
+    text-align: start;
+    line-height: 100%;
+    cursor: auto;
+    border-top: 1px solid var(--color-lightGray);
+    opacity: 0.93;
+    z-index: var(--zindex-panels);
+}
+.umap-caption-bar-enabled .umap-caption-bar {
+    display: block;
+}
+.umap-caption-bar-enabled {
+    --current-footer-height: var(--footer-height);
+}
