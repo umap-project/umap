@@ -260,7 +260,12 @@ UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
 UMAP_HELP_URL = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
 USER_MAPS_URL = "user_maps"
-DATABASES = {"default": env.db(default="postgis://localhost:5432/umap")}
+DATABASES = {
+    "default": env.db(
+        default="postgis://localhost:5432/umap",
+        engine="django.contrib.gis.db.backends.postgis",
+    )
+}
 UMAP_DEFAULT_SHARE_STATUS = None
 UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False
