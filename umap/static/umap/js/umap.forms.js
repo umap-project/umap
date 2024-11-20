@@ -405,7 +405,7 @@ L.FormBuilder.LicenceChooser = L.FormBuilder.Select.extend({
   },
 
   toHTML: function () {
-    return this.get().name
+    return this.get()?.name
   },
 
   toJS: function () {
