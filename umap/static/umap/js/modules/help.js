@@ -135,13 +135,13 @@ const ENTRIES = {
       <li>${translate('# one hash for main heading')}</li>
       <li>${translate('## two hashes for second heading')}</li>
       <li>${translate('### three hashes for third heading')}</li>
-      <li>${translate('Simple link: [[http://example.com]]')}</li>
-      <li>${translate('Link with text: [[http://example.com|text of the link]]')}</li>
-      <li>${translate('Image: {{http://image.url.com}}')}</li>
-      <li>${translate('Image with custom width (in px): {{http://image.url.com|width}}')}</li>
-      <li>${translate('Iframe: {{{http://iframe.url.com}}}')}</li>
-      <li>${translate('Iframe with custom height (in px): {{{http://iframe.url.com|height}}}')}</li>
-      <li>${translate('Iframe with custom height and width (in px): {{{http://iframe.url.com|height*width}}}')}</li>
+      <li>${translate('Simple link: [[https://example.com]]')}</li>
+      <li>${translate('Link with text: [[https://example.com|text of the link]]')}</li>
+      <li>${translate('Image: {{https://image.url.com}}')}</li>
+      <li>${translate('Image with custom width (in px): {{https://image.url.com|width}}')}</li>
+      <li>${translate('Iframe: {{{https://iframe.url.com}}}')}</li>
+      <li>${translate('Iframe with custom height (in px): {{{https://iframe.url.com|height}}}')}</li>
+      <li>${translate('Iframe with custom height and width (in px): {{{https://iframe.url.com|height*width}}}')}</li>
       <li>${translate('--- for a horizontal rule')}</li>
     </ul>
   </div>

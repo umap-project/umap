@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-30 18:23+0000\n"
+"POT-Creation-Date: 2024-10-04 16:35+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2024\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
@@ -25,6 +25,10 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: admin.py:16
+msgid "CSV Export"
+msgstr "CSV 匯出"
+
 #: forms.py:44 forms.py:70
 msgid "Only editable with secret edit link"
 msgstr "僅能由私密連結編輯"
@@ -33,7 +37,7 @@ msgstr "僅能由私密連結編輯"
 msgid "Everyone can edit"
 msgstr "所有人皆可編輯"
 
-#: forms.py:69 models.py:423
+#: forms.py:69 models.py:441
 msgid "Inherit"
 msgstr "繼承"
 
@@ -41,111 +45,111 @@ msgstr "繼承"
 msgid "Site is readonly for maintenance"
 msgstr "網站目前因維護中設定為唯讀狀態"
 
-#: models.py:54 models.py:73
+#: models.py:55 models.py:74
 msgid "name"
 msgstr "名稱"
 
-#: models.py:56 models.py:433
+#: models.py:57 models.py:451
 msgid "description"
 msgstr "描述"
 
-#: models.py:104
+#: models.py:105
 msgid "details"
 msgstr "詳情"
 
-#: models.py:105
+#: models.py:106
 msgid "Link to a page where the licence is detailed."
 msgstr "連結至授權條款說明網址"
 
-#: models.py:115
+#: models.py:116
 msgid "URL template using OSM tile format"
 msgstr "URL 樣板，使用 OSM 地圖磚格式"
 
-#: models.py:121
+#: models.py:122
 msgid "Order of the tilelayers in the edit box"
 msgstr "編輯方塊中地圖磚的圖層順序"
 
-#: models.py:167 models.py:424
+#: models.py:168 models.py:442
 msgid "Everyone"
 msgstr "所有人"
 
-#: models.py:168 models.py:174 models.py:425
+#: models.py:169 models.py:175 models.py:443
 msgid "Editors and team only"
-msgstr ""
+msgstr "只有編輯者與團隊"
 
-#: models.py:169 models.py:426
+#: models.py:170 models.py:444
 msgid "Owner only"
 msgstr "只有擁有者"
 
-#: models.py:172
+#: models.py:173
 msgid "Everyone (public)"
 msgstr "所有人 (公開)"
 
-#: models.py:173
+#: models.py:174
 msgid "Anyone with link"
 msgstr "任何有連結的人"
 
-#: models.py:175
+#: models.py:176
 msgid "Blocked"
 msgstr "已經封銷了"
 
-#: models.py:178
+#: models.py:179
 msgid "center"
 msgstr "中心"
 
-#: models.py:179
+#: models.py:180
 msgid "zoom"
 msgstr "縮放"
 
-#: models.py:181
+#: models.py:182
 msgid "locate"
 msgstr "定位"
 
-#: models.py:181
+#: models.py:182
 msgid "Locate user on load?"
 msgstr "載入時使用定位功能？"
 
-#: models.py:185
+#: models.py:186
 msgid "Choose the map licence."
 msgstr "選擇地圖授權"
 
-#: models.py:186
+#: models.py:187
 msgid "licence"
 msgstr "授權"
 
-#: models.py:197
+#: models.py:198
 msgid "owner"
 msgstr "擁有者"
 
-#: models.py:201
+#: models.py:202
 msgid "editors"
 msgstr "編輯者"
 
-#: models.py:207
+#: models.py:208
 msgid "team"
-msgstr ""
+msgstr "團隊"
 
-#: models.py:213 models.py:447
+#: models.py:214 models.py:465
 msgid "edit status"
 msgstr "編輯狀態"
 
-#: models.py:218
+#: models.py:219
 msgid "share status"
 msgstr "分享狀態"
 
-#: models.py:221 models.py:442
+#: models.py:222 models.py:460
 msgid "settings"
 msgstr "設定"
 
-#: models.py:364
+#: models.py:382
 msgid "Clone of"
 msgstr "複製"
 
-#: models.py:437
+#: models.py:455
 msgid "display on load"
 msgstr "載入時顯示"
 
-#: models.py:438
+#: models.py:456
 msgid "Display this layer on load."
 msgstr "載入此圖層時顯示"
 
@@ -329,19 +333,19 @@ msgstr "這是範例服務﹐提供測試與正式版發行前驗證使用。如
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "開放街圖的專案"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "版本"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "由架設"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "聯絡"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -356,13 +360,13 @@ msgstr "我的地圖 (%(count)s)"
 msgid "My Maps"
 msgstr "我的地圖"
 
-#: templates/umap/dashboard_menu.html:11
+#: templates/umap/dashboard_menu.html:12
 msgid "My profile"
 msgstr "我的個人檔案"
 
-#: templates/umap/dashboard_menu.html:13
+#: templates/umap/dashboard_menu.html:15
 msgid "My teams"
-msgstr ""
+msgstr "我的團隊"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -376,11 +380,11 @@ msgstr "找點子，瀏覽其他地圖"
 msgid "You are logged in. Continuing..."
 msgstr "您已登入，繼續中..."
 
-#: templates/umap/map_list.html:10 views.py:433
+#: templates/umap/map_list.html:11 views.py:433
 msgid "by"
 msgstr "由"
 
-#: templates/umap/map_list.html:18
+#: templates/umap/map_list.html:20
 msgid "More"
 msgstr "更多"
 
@@ -555,20 +559,20 @@ msgstr "搜尋"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "瀏覽%(current_team)s的地圖"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s沒有公開地圖"
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
-msgstr ""
+msgstr "刪除這個團隊"
 
 #: templates/umap/team_form.html:47
 msgid "Add user"
-msgstr ""
+msgstr "新增使用者"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
@@ -589,76 +593,76 @@ msgstr "你目前還沒有地圖。"
 
 #: templates/umap/user_teams.html:17
 msgid "Users"
-msgstr ""
+msgstr "使用者"
 
 #: templates/umap/user_teams.html:48
 msgid "New team"
-msgstr ""
+msgstr "新的團隊"
 
 #: views.py:235
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "無法刪除超過一位成員的團隊"
 
 #: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "已經刪除團隊 \"%(name)s\" "
 
 #: views.py:438
 msgid "View the map"
 msgstr "檢視地圖"
 
-#: views.py:824
+#: views.py:818
 msgid "See full screen"
 msgstr "檢視全螢幕"
 
-#: views.py:953
+#: views.py:950
 msgid "Map editors updated with success!"
 msgstr "地圖編輯者更新完成"
 
-#: views.py:989
+#: views.py:986
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "你的地圖 uMap 編輯連結：%(map_name)s"
 
-#: views.py:992
+#: views.py:989
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "這是你的祕密編輯連結：%(link)s"
 
-#: views.py:999
+#: views.py:996
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "無法傳送電子郵件到%(email)s"
 
-#: views.py:1002
+#: views.py:999
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "電子郵件寄至 %(email)s"
 
-#: views.py:1013
+#: views.py:1010
 msgid "Only its owner can delete the map."
 msgstr "只有擁有者可以刪除此地圖"
 
-#: views.py:1016
+#: views.py:1013
 msgid "Map successfully deleted."
 msgstr "成功刪除地圖"
 
-#: views.py:1042
+#: views.py:1039
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "您的地圖已複製完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
 
-#: views.py:1047
+#: views.py:1044
 msgid "Congratulations, your map has been cloned!"
 msgstr "恭喜，您的地圖已被複製！"
 
-#: views.py:1282
+#: views.py:1277
 msgid "Layer successfully deleted."
 msgstr "圖層已刪除"
 
-#: views.py:1304
+#: views.py:1299
 msgid "Permissions updated with success!"
 msgstr "權限更新完成"
