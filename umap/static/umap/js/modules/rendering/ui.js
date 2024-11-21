@@ -75,7 +75,7 @@ const FeatureMixin = {
 
   resetTooltip: function () {
     if (!this.feature.hasGeom()) return
-    const displayName = this.feature.getDisplayName(null)
+    const displayName = this.feature.getDisplayName()
     let showLabel = this.feature.getOption('showLabel')
     const oldLabelHover = this.feature.getOption('labelHover')
 

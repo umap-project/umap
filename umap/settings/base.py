@@ -273,6 +273,7 @@ UMAP_HOME_FEED = "latest"
 UMAP_IMPORTERS = {}
 UMAP_HOST_INFOS = {}
 UMAP_PURGATORY_ROOT = "/tmp/umappurgatory"
+UMAP_LABEL_KEYS = ["name", "title"]
 
 UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True

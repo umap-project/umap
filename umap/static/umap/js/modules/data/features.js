@@ -165,7 +165,9 @@ class Feature {
   }
 
   getSlug() {
-    return this.properties[this._umap.getProperty('slugKey') || 'name'] || ''
+    return (
+      this.properties[this._umap.getProperty('slugKey') || U.DEFAULT_LABEL_KEY] || ''
+    )
   }
 
   getPermalink() {
@@ -235,14 +237,14 @@ class Feature {
 
     const properties = []
     for (const property of this.datalayer._propertiesIndex) {
-      if (['name', 'description'].includes(property)) {
+      if ([U.DEFAULT_LABEL_KEY, 'description'].includes(property)) {
         continue
       }
       properties.push([`properties.${property}`, { label: property }])
     }
     // We always want name and description for now (properties management to come)
     properties.unshift('properties.description')
-    properties.unshift('properties.name')
+    properties.unshift(`properties.${U.DEFAULT_LABEL_KEY}`)
     builder = new U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
     })
@@ -316,19 +318,22 @@ class Feature {
 
   endEdit() {}
 
-  getDisplayName(fallback) {
-    const key = this.getOption('labelKey') || 'name'
+  getDisplayName() {
+    const keys = U.LABEL_KEYS.slice() // Copy.
+    const labelKey = this.getOption('labelKey')
     // Variables mode.
-    if (Utils.hasVar(key)) {
-      return Utils.greedyTemplate(key, this.extendedProperties())
+    if (labelKey) {
+      if (Utils.hasVar(labelKey)) {
+        return Utils.greedyTemplate(labelKey, this.extendedProperties())
+      }
+      keys.unshift(labelKey)
     }
-    // Simple mode.
-    return (
-      this.properties[key] ||
-      this.properties.title ||
-      fallback ||
-      this.datalayer.getName()
-    )
+    for (const key of keys) {
+      const value = this.properties[key]
+      console.log(key, value)
+      if (value) return value
+    }
+    return this.datalayer.getName()
   }
 
   hasPopupFooter() {

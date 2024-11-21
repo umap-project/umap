@@ -71,6 +71,10 @@ export default class Umap extends ServerStored {
     // To be used in javascript APIs
     if (geojson.properties.lang) U.lang = geojson.properties.lang
 
+    // Make it available to utils, without needing a reference to `Umap`.
+    U.LABEL_KEYS = geojson.properties.defaultLabelKeys || []
+    U.DEFAULT_LABEL_KEY = U.LABEL_KEYS[0] || 'name'
+
     this.setPropertiesFromQueryString()
 
     // Needed for actions labels
