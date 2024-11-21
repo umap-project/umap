@@ -18,6 +18,7 @@ nav:
       - Icon packs: config/icons.md
   - Deployment:
       - Docker: deploy/docker.md
+      - Helm: deploy/helm.md
       - Nginx: deploy/nginx.md
   - Changelog: changelog.md
 theme:

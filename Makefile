@@ -49,7 +49,7 @@ docker: ## Create a new Docker image and publish it
 .PHONY: helm
 helm: ## Build the helm chart and publish it
 	$(eval VERSION=$(shell hatch version))
-	$(eval PACKAGE=$(shell helm package --app-version ${VERSION} ./charts/umap | grep "Successfully packaged" | awk '{print $$NF}'))
+	$(eval PACKAGE=$(shell helm package --dependency-update --app-version ${VERSION} ./charts/umap | grep "Successfully packaged" | awk '{print $$NF}'))
 	@echo "Successfully packaged helm chart in: ${PACKAGE}"
 	helm push ${PACKAGE} oci://registry-1.docker.io/umap
 
