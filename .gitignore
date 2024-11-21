@@ -25,3 +25,8 @@ test-results/
 
 ### Transifex ###
 tx
+
+# Helm
+charts/*/charts
+helmfile.yaml
+charts/*/Chart.lock
