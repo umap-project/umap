@@ -46,6 +46,13 @@ docker: ## Create a new Docker image and publish it
 	docker build -t umap/umap:${VERSION} .
 	docker push umap/umap:${VERSION}
 
+.PHONY: helm
+helm: ## Build the helm chart and publish it
+	$(eval VERSION=$(shell hatch version))
+	$(eval PACKAGE=$(shell helm package --app-version ${VERSION} ./charts/umap | grep "Successfully packaged" | awk '{print $$NF}'))
+	@echo "Successfully packaged helm chart in: ${PACKAGE}"
+	helm push ${PACKAGE} oci://registry-1.docker.io/umap
+
 .PHONY: build
 build: ## Build the Python package before release
 	@hatch build --clean
