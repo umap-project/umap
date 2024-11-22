@@ -24,11 +24,11 @@ input:-moz-placeholder, :-moz-placeholder {
 body.login {
     width:  320px;
     margin: auto;
-    text-align: center;
+    background-color: var(--color-lighterGray);
+    color: var(--color-darkerGray);
 }
 body.login header {
     display: flex;
-    justify-content: center;
 }
 .login-grid {
     display: grid;
