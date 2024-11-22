@@ -174,15 +174,15 @@ export function toHTML(r, options) {
 
   // iframe
   r = r.replace(
-    /{{{(h_t_t_ps?[^ |{]*)}}}/g,
+    /{{{(h_t_t_ps?[^|{]*)}}}/g,
     '<div><iframe frameborder="0" src="$1" width="100%" height="300px"></iframe></div>'
   )
   r = r.replace(
-    /{{{(h_t_t_ps?[^ |{]*)\|(\d*)(px)?}}}/g,
+    /{{{(h_t_t_ps?[^|{]*)\|(\d*)(px)?}}}/g,
     '<div><iframe frameborder="0" src="$1" width="100%" height="$2px"></iframe></div>'
   )
   r = r.replace(
-    /{{{(h_t_t_ps?[^ |{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g,
+    /{{{(h_t_t_ps?[^|{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g,
     '<div><iframe frameborder="0" src="$1" width="$4px" height="$2px"></iframe></div>'
   )
 

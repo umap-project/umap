@@ -147,12 +147,21 @@ describe('Utils', () => {
       )
     })
 
-    it('should handle iframe with height with px', () => {
+    it('should handle double iframe', () => {
       assert.equal(
         Utils.toHTML(
           'A double iframe: {{{https://osm.org/pouet}}}{{{https://osm.org/boudin}}}'
         ),
         'A double iframe: <div><iframe height="300px" width="100%" src="https://osm.org/pouet" frameborder="0"></iframe></div><div><iframe height="300px" width="100%" src="https://osm.org/boudin" frameborder="0"></iframe></div>'
+      )
+    })
+
+    it('should handle iframe with query string and space', () => {
+      assert.equal(
+        Utils.toHTML(
+          'An iframe with query string: {{{https://osm.org/pouet.html?name=foobar&description=baz baz}}}'
+        ),
+        'An iframe with query string: <div><iframe height="300px" width="100%" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" frameborder="0"></iframe></div>'
       )
     })
 
@@ -260,6 +269,19 @@ describe('Utils', () => {
           'http://iframeurl.com': 'value',
         }),
         'A phrase with a {{{http://iframeurl.com}}}.'
+      )
+    })
+
+    it('should process variables in http links', () => {
+      assert.equal(
+        Utils.greedyTemplate(
+          'A phrase with a {{{https://osm.org/pouet?name={name}&description={description}}}}.',
+          {
+            name: 'foobar',
+            description: 'bazbaz',
+          }
+        ),
+        'A phrase with a {{{https://osm.org/pouet?name=foobar&description=bazbaz}}}.'
       )
     })
 
