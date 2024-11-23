@@ -1,5 +1,4 @@
 import json
-import os
 import platform
 import re
 from pathlib import Path
@@ -90,7 +89,7 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     expect(page.get_by_text("Cities")).to_be_visible()
     expect(page.locator(".leaflet-control-minimap")).to_be_visible()
     expect(
-        page.locator('img[src="https://tile.openstreetmap.fr/hot/6/32/21.png"]')
+        page.locator('img[src="https://tile.openstreetmap.fr/6/32/21.png"]')
     ).to_be_visible()
     # Should not have imported id, while in the file options
     assert not page.evaluate("U.MAP.properties.id")

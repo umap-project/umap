@@ -25,7 +25,7 @@
         "limitBounds": {},
         "tilelayer": {
             "maxZoom": 20,
-            "url_template": "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+            "url_template": "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
             "minZoom": 0,
             "attribution": "map data © [[https://osm.org/copyright|OpenStreetMap contributors]] under ODbL  - Tiles © HOT",
             "name": "OSM Humanitarian (OSM-FR)"
