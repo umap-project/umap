@@ -58,7 +58,7 @@ test = [
   "playwright>=1.39",
   "pytest==8.3.3",
   "pytest-django==4.9.0",
-  "pytest-playwright==0.5.2",
+  "pytest-playwright==0.6.1",
   "pytest-rerunfailures==14.0",
   "pytest-xdist>=3.5.0,<4",
 ]
