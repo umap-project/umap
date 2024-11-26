@@ -65,6 +65,9 @@ test = [
 docker = [
   "uwsgi==2.0.28",
 ]
+s3 = [
+  "django-storages[s3]==1.14.4",
+]
 sync = [
   "channels==4.2.0",
   "daphne==4.1.2",
