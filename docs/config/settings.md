@@ -89,13 +89,6 @@ Running uMap / Django with a known SECRET_KEY defeats many of Django’s securit
 See [Django documentation for SECRET_KEY](https://docs.djangoproject.com/en/4.2/ref/settings/#secret-key)
 
 
-#### SITE_URL
-
-The final URL of you instance, including the protocol:
-
-`SITE_URL=http://umap.org`
-
-
 #### SHORT_SITE_URL
 
 If you have a short domain for sharing links.
@@ -108,12 +101,25 @@ Eg.: `SHORT_SITE_URL=https://u.umap.org`
 The name of the site, to be used in header and HTML title.
 
 
+#### SITE_URL
+
+The final URL of you instance, including the protocol:
+
+`SITE_URL=http://umap.org`
+
+
 #### STATIC_ROOT
 
 Where uMap should store static files (CSS, JS…), must be consistent with your
 Nginx configuration.
 
 See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#static-root)
+
+
+#### STORAGES
+
+See [storage](storage.md).
+
 
 #### USE_I18N
 

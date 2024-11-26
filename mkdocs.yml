@@ -15,6 +15,7 @@ nav:
   - Configuration:
       - Settings: config/settings.md
       - Customize: config/customize.md
+      - Storage: config/storage.md
       - Icon packs: config/icons.md
   - Deployment:
       - Docker: deploy/docker.md

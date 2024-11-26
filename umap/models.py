@@ -1,17 +1,12 @@
 import json
-import operator
-import os
-import shutil
-import time
 import uuid
-from pathlib import Path
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.core.files.base import File
+from django.core.files.storage import storages
 from django.core.signing import Signer
-from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
@@ -293,7 +288,7 @@ class Map(NamedModel):
         umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
         datalayers = []
         for datalayer in self.datalayer_set.all():
-            with open(datalayer.geojson.path, "rb") as f:
+            with datalayer.geojson.open("rb") as f:
                 layer = json.loads(f.read())
             if datalayer.settings:
                 layer["_umap_options"] = datalayer.settings
@@ -431,7 +426,7 @@ class Pictogram(NamedModel):
 
     attribution = models.CharField(max_length=300)
     category = models.CharField(max_length=300, null=True, blank=True)
-    pictogram = models.FileField(upload_to="pictogram")
+    pictogram = models.FileField(upload_to="pictogram", storage=storages["default"])
 
     @property
     def json(self):
@@ -447,10 +442,7 @@ class Pictogram(NamedModel):
 # Must be out of Datalayer for Django migration to run, because of python 2
 # serialize limitations.
 def upload_to(instance, filename):
-    if instance.pk:
-        return instance.upload_to()
-    name = "%s.geojson" % slugify(instance.name)[:50] or "untitled"
-    return os.path.join(instance.storage_root(), name)
+    return instance.geojson.storage.make_filename(instance)
 
 
 class DataLayer(NamedModel):
@@ -477,7 +469,9 @@ class DataLayer(NamedModel):
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
-    geojson = models.FileField(upload_to=upload_to, blank=True, null=True)
+    geojson = models.FileField(
+        upload_to=upload_to, blank=True, null=True, storage=storages["data"]
+    )
     display_on_load = models.BooleanField(
         default=False,
         verbose_name=_("display on load"),
@@ -496,41 +490,13 @@ class DataLayer(NamedModel):
     class Meta:
         ordering = ("rank",)
 
-    def save(self, force_insert=False, force_update=False, **kwargs):
-        is_new = not bool(self.pk)
-        super(DataLayer, self).save(
-            force_insert=force_insert, force_update=force_update, **kwargs
-        )
-
-        if is_new:
-            force_insert, force_update = False, True
-            filename = self.upload_to()
-            old_name = self.geojson.name
-            new_name = self.geojson.storage.save(filename, self.geojson)
-            self.geojson.storage.delete(old_name)
-            self.geojson.name = new_name
-            super(DataLayer, self).save(
-                force_insert=force_insert, force_update=force_update, **kwargs
-            )
-        self.purge_gzip()
-        self.purge_old_versions(keep=settings.UMAP_KEEP_VERSIONS)
+    def save(self, **kwargs):
+        super(DataLayer, self).save(**kwargs)
+        self.geojson.storage.onDatalayerSave(self)
 
     def delete(self, **kwargs):
-        self.purge_gzip()
-        self.purge_old_versions(keep=None)
+        self.geojson.storage.onDatalayerDelete(self)
         return super().delete(**kwargs)
-
-    def upload_to(self):
-        root = self.storage_root()
-        name = "%s_%s.geojson" % (self.pk, int(time.time() * 1000))
-        return os.path.join(root, name)
-
-    def storage_root(self):
-        path = ["datalayer", str(self.map.pk)[-1]]
-        if len(str(self.map.pk)) > 1:
-            path.append(str(self.map.pk)[-2])
-        path.append(str(self.map.pk))
-        return os.path.join(*path)
 
     def metadata(self, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
@@ -557,72 +523,19 @@ class DataLayer(NamedModel):
         new.save()
         return new
 
-    def is_valid_version(self, name):
-        valid_prefixes = [name.startswith("%s_" % self.pk)]
-        if self.old_id:
-            valid_prefixes.append(name.startswith("%s_" % self.old_id))
-        return any(valid_prefixes) and name.endswith(".geojson")
-
-    def extract_version_number(self, path):
-        version = path.split(".")[0]
-        if "_" in version:
-            return version.split("_")[-1]
-        return version
-
     @property
     def reference_version(self):
-        return self.extract_version_number(self.geojson.path)
-
-    def version_metadata(self, name):
-        return {
-            "name": name,
-            "at": self.extract_version_number(name),
-            "size": self.geojson.storage.size(self.get_version_path(name)),
-        }
+        return self.geojson.storage.get_reference_version(self)
 
     @property
     def versions(self):
-        root = self.storage_root()
-        names = self.geojson.storage.listdir(root)[1]
-        names = [name for name in names if self.is_valid_version(name)]
-        versions = [self.version_metadata(name) for name in names]
-        versions.sort(reverse=True, key=operator.itemgetter("at"))
-        return versions
+        return self.geojson.storage.list_versions(self)
 
-    def get_version(self, name):
-        path = self.get_version_path(name)
-        with self.geojson.storage.open(path, "r") as f:
-            return f.read()
+    def get_version(self, ref):
+        return self.geojson.storage.get_version(ref, self)
 
-    def get_version_path(self, name):
-        return "{root}/{name}".format(root=self.storage_root(), name=name)
-
-    def purge_old_versions(self, keep=None):
-        root = self.storage_root()
-        versions = self.versions
-        if keep is not None:
-            versions = versions[keep:]
-        for version in versions:
-            name = version["name"]
-            # Should not be in the list, but ensure to not delete the file
-            # currently used in database
-            if keep is not None and self.geojson.name.endswith(name):
-                continue
-            try:
-                self.geojson.storage.delete(os.path.join(root, name))
-            except FileNotFoundError:
-                pass
-
-    def purge_gzip(self):
-        root = self.storage_root()
-        names = self.geojson.storage.listdir(root)[1]
-        prefixes = [f"{self.pk}_"]
-        if self.old_id:
-            prefixes.append(f"{self.old_id}_")
-        prefixes = tuple(prefixes)
-        for name in names:
-            if name.startswith(prefixes) and name.endswith(".gz"):
-                self.geojson.storage.delete(os.path.join(root, name))
+    def get_version_path(self, ref):
+        return self.geojson.storage.get_version_path(ref, self)
 
     def can_edit(self, request=None):
         """
