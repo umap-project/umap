@@ -1,5 +1,9 @@
 # Vidéos uMap
 
+## Faire la carte de son marché de Noël
+
+<iframe title="Faire la carte de son marché de Noël" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/7d3a95ad-37dc-4af1-ac15-17992cb95869" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
 ## Atelier « Afficher des donnees Grist dans uMap »
 
 <iframe title="Atelier Afficher des donnees Grist dans uMap" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/517beed6-ed57-430d-ad76-61e0c4784338" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
