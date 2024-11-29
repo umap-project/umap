@@ -255,7 +255,10 @@ const PathMixin = {
     if (this._map.measureTools?.enabled()) {
       this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
-      this._map._umap.tooltip.open({ content: translate('Click to edit'), anchor: this })
+      this._map._umap.tooltip.open({
+        content: translate('Click to edit'),
+        anchor: this,
+      })
     }
   },
 
@@ -267,7 +270,9 @@ const PathMixin = {
     this._map.once('moveend', this.makeGeometryEditable, this)
     const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
     if (pointsCount > 100 && this._map.getZoom() < this._map.getMaxZoom()) {
-      this._map._umap.tooltip.open({ content: L._('Please zoom in to edit the geometry') })
+      this._map._umap.tooltip.open({
+        content: L._('Please zoom in to edit the geometry'),
+      })
       this.disableEdit()
     } else {
       this.enableEdit()
@@ -380,8 +385,19 @@ export const LeafletPolyline = Polyline.extend({
   },
 
   getMeasure: function (shape) {
+    let shapes
+    if (shape) {
+      shapes = [shape]
+    } else if (LineUtil.isFlat(this._latlngs)) {
+      shapes = [this._latlngs]
+    } else {
+      shapes = this._latlngs
+    }
     // FIXME: compute from data in feature (with TurfJS)
-    const length = L.GeoUtil.lineLength(this._map, shape || this._defaultShape())
+    const length = shapes.reduce(
+      (acc, shape) => acc + L.GeoUtil.lineLength(this._map, shape),
+      0
+    )
     return L.GeoUtil.readableDistance(length, this._map.measureTools.getMeasureUnit())
   },
 })
