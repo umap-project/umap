@@ -60,7 +60,7 @@ class PopupTemplate {
           feature: nextFeature.properties.name || translate('next'),
         })
         DomEvent.on(next, 'click', () => {
-          nextFeature.zoomTo({ callback: nextFeature.view })
+          nextFeature.zoomTo({ callback: (event) => nextFeature.view(event) })
         })
       }
       if (previousFeature) {
@@ -68,7 +68,7 @@ class PopupTemplate {
           feature: previousFeature.properties.name || translate('previous'),
         })
         DomEvent.on(previous, 'click', () => {
-          previousFeature.zoomTo({ callback: previousFeature.view })
+          previousFeature.zoomTo({ callback: (event) => previousFeature.view(event) })
         })
       }
       DomEvent.on(zoom, 'click', () => feature.zoomTo())

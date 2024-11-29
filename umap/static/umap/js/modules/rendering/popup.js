@@ -44,7 +44,8 @@ const Popup = BasePopup.extend({
     DomEvent.on(el, 'load', () => {
       this._updateLayout()
       this._updatePosition()
-      this._adjustPan()
+      // Do not call when feature is in cluster.
+      if (this._map) this._adjustPan()
     })
   },
 })
