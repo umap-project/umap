@@ -7,6 +7,7 @@ from pathlib import Path
 from botocore.exceptions import ClientError
 from django.conf import settings
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
+from django.core.files.base import File
 from django.core.files.storage import FileSystemStorage
 from rcssmin import cssmin
 from rjsmin import jsmin
@@ -112,7 +113,10 @@ class UmapS3(S3Storage):
         pass
 
     def onDatalayerDelete(self, instance):
-        pass
+        return self.connection.meta.client.delete_object(
+            Bucket=self.bucket_name,
+            Key=instance.geojson.name,
+        )
 
 
 class UmapFileSystem(FileSystemStorage):
