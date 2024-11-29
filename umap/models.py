@@ -426,7 +426,7 @@ class Pictogram(NamedModel):
 
     attribution = models.CharField(max_length=300)
     category = models.CharField(max_length=300, null=True, blank=True)
-    pictogram = models.FileField(upload_to="pictogram", storage=storages["default"])
+    pictogram = models.FileField(upload_to="pictogram")
 
     @property
     def json(self):
@@ -443,6 +443,10 @@ class Pictogram(NamedModel):
 # serialize limitations.
 def upload_to(instance, filename):
     return instance.geojson.storage.make_filename(instance)
+
+
+def set_storage():
+    return storages["data"]
 
 
 class DataLayer(NamedModel):
@@ -470,7 +474,7 @@ class DataLayer(NamedModel):
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(
-        upload_to=upload_to, blank=True, null=True, storage=storages["data"]
+        upload_to=upload_to, blank=True, null=True, storage=set_storage
     )
     display_on_load = models.BooleanField(
         default=False,
@@ -519,7 +523,7 @@ class DataLayer(NamedModel):
         new.pk = uuid.uuid4()
         if map_inst:
             new.map = map_inst
-        new.geojson = File(new.geojson.file.file)
+        new.geojson = File(new.geojson.file.file, name="tmpname")
         new.save()
         return new
 
