@@ -6,6 +6,7 @@ import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `
+  <div class="umap-upload">
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
     <fieldset class="formbox">
       <legend class="counter">${translate('Choose data')}</legend>
@@ -45,10 +46,12 @@ const TEMPLATE = `
       </label>
     </fieldset>
     <input type="button" class="button" name="submit" value="${translate('Import data')}" />
+  </div>
     `
 
-export default class Importer {
+export default class Importer extends Utils.WithTemplate {
   constructor(umap) {
+    super()
     this._umap = umap
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
@@ -57,7 +60,9 @@ export default class Importer {
   }
 
   loadImporters() {
-    for (const [name, config] of Object.entries(this._umap.properties.importers || {})) {
+    for (const [name, config] of Object.entries(
+      this._umap.properties.importers || {}
+    )) {
       const register = (mod) => {
         this.IMPORTERS.push(new mod.Importer(this._umap, config))
       }
@@ -168,7 +173,7 @@ export default class Importer {
       })
     }
     this._umap.help.parse(this.container)
-    DomEvent.on(this.qs('[name=submit]'), 'click', this.submit, this)
+    this.qs('[name=submit]').addEventListener('click', () => this.submit())
     DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
     for (const element of this.container.querySelectorAll('[onchange]')) {
       DomEvent.on(element, 'change', this.onChange, this)
