@@ -537,10 +537,10 @@ export default class Umap extends ServerStored {
           this._leafletMap.editTools.startPolyline()
           break
         case 'i':
-          this._leafletMap.importer.open()
+          this.importer.open()
           break
         case 'o':
-          this._leafletMap.importer.openFiles()
+          this.importer.openFiles()
           break
         case 'h':
           this.help.showGetStarted()
