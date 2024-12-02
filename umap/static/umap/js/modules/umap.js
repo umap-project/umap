@@ -596,7 +596,7 @@ export default class Umap extends ServerStored {
     const panes = this._leafletMap.getPane('overlayPane')
 
     this.datalayersIndex = []
-    for (const pane of panes) {
+    for (const pane of panes.children) {
       if (!pane.dataset || !pane.dataset.id) continue
       this.datalayersIndex.push(this.datalayers[pane.dataset.id])
     }
