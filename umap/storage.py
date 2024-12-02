@@ -7,7 +7,6 @@ from pathlib import Path
 from botocore.exceptions import ClientError
 from django.conf import settings
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
-from django.core.files.base import File
 from django.core.files.storage import FileSystemStorage
 from rcssmin import cssmin
 from rjsmin import jsmin
@@ -77,7 +76,8 @@ class UmapS3(S3Storage):
         metadata = self.connection.meta.client.head_object(
             Bucket=self.bucket_name, Key=instance.geojson.name
         )
-        return metadata["VersionId"]
+        # Do not fail if bucket does not handle versioning
+        return metadata.get("VersionId", metadata["ETag"])
 
     def make_filename(self, instance):
         return f"{str(instance.pk)}.geojson"
