@@ -157,6 +157,9 @@ dt {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.grid-container.by4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
 .grid-container > * {
     text-align: center;
 }

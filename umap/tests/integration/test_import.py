@@ -607,6 +607,7 @@ def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
     }
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Overpass").click()
     page.get_by_placeholder("amenity=drinking_water").fill("building")
     page.get_by_role("button", name="Choose this data").click()
@@ -657,6 +658,7 @@ def test_overpass_import_retains_boundary(page, live_server, tilelayer, settings
     page.route(re.compile("https://foobar.io/api.*"), handle)
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Overpass").click()
     page.get_by_placeholder("amenity=drinking_water").fill("building")
     page.get_by_placeholder("Type area name, or let empty").click()
@@ -669,6 +671,7 @@ def test_overpass_import_retains_boundary(page, live_server, tilelayer, settings
     expect(page.get_by_placeholder("Provide an URL here")).to_have_value(
         "https://my.overpass.io/interpreter?data=[out:json];nwr[building](area:3601393025);out geom;"
     )
+    page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Overpass").click()
     expect(page.locator("#area")).to_contain_text(
         "Bray-sur-Seine, Seine-et-Marne, Île-de-France, France"
@@ -710,6 +713,7 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Datasets").click()
     page.get_by_role("dialog").get_by_role("combobox").select_option(
         "https://remote.org/data.json"

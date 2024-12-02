@@ -110,6 +110,9 @@ html[dir="rtl"] .icon {
 .icon-list {
     background-position: var(--tile) calc(var(--tile) * 4);
 }
+.icon-magic {
+    background-position: calc(var(--tile) * 7) 0;
+}
 .icon-marker {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 5);
 }

@@ -11,13 +11,9 @@ const TEMPLATE = `
     <fieldset class="formbox">
       <legend class="counter">${translate('Choose data')}</legend>
       <input type="file" multiple autofocus onchange />
-      <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
-      <div class="importers" hidden>
-        <h4>${translate('Import helpers:')}</h4>
-        <ul class="grid-container">
-        </ul>
-      </div>
+      <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
+      <button class="flat importers" hidden data-ref="importersButton"><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</button>
     </fieldset>
     <fieldset class="formbox">
       <legend class="counter" data-help="importFormats">${translate(
@@ -49,6 +45,14 @@ const TEMPLATE = `
   </div>
     `
 
+const GRID_TEMPLATE = `
+  <div>
+    <h3><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</h3>
+    <p>${translate('Import helpers will fill the URL field for you.')}</p>
+    <ul class="grid-container by4" data-ref="grid"></ul>
+  </div>
+`
+
 export default class Importer extends Utils.WithTemplate {
   constructor(umap) {
     super()
@@ -56,7 +60,7 @@ export default class Importer extends Utils.WithTemplate {
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.loadImporters()
-    this.dialog = new Dialog()
+    this.dialog = new Dialog({ className: 'importers dark' })
   }
 
   loadImporters() {
@@ -149,20 +153,26 @@ export default class Importer extends Utils.WithTemplate {
     )
   }
 
+  showImporters() {
+    if (!this.IMPORTERS.length) return
+    const [element, { grid }] = Utils.loadTemplateWithRefs(GRID_TEMPLATE)
+    for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
+      const button = Utils.loadTemplate(
+        `<li><button type="button" class="${plugin.id}">${plugin.name}</button></li>`
+      )
+      button.addEventListener('click', () => plugin.open(this))
+      grid.appendChild(button)
+    }
+    this.dialog.open({ template: element, cancel: false, accept: false })
+  }
+
   build() {
-    this.container = DomUtil.create('div', 'umap-upload')
-    this.container.innerHTML = TEMPLATE
+    this.container = this.loadTemplate(TEMPLATE)
     if (this.IMPORTERS.length) {
-      const parent = this.container.querySelector('.importers ul')
-      for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
-        L.DomUtil.createButton(
-          plugin.id,
-          DomUtil.element({ tagName: 'li', parent }),
-          plugin.name,
-          () => plugin.open(this)
-        )
-      }
-      this.qs('.importers').toggleAttribute('hidden', false)
+      // TODO use this.elements instead of this.qs
+      const button = this.qs('[data-ref=importersButton]')
+      button.addEventListener('click', () => this.showImporters())
+      button.toggleAttribute('hidden', false)
     }
     for (const type of this.TYPES) {
       DomUtil.element({
