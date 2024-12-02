@@ -10,7 +10,7 @@ const TEMPLATE = `
     <fieldset class="formbox">
       <legend class="counter">${translate('Choose data')}</legend>
       <input type="file" multiple autofocus onchange />
-      <input type="url" placeholder="${translate('Provide an URL here')}" onchange />
+      <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
       <div class="importers" hidden>
         <h4>${translate('Import helpers:')}</h4>

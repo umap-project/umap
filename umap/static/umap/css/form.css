@@ -414,7 +414,7 @@ input.switch:checked ~ label:after {
 
 i.info {
     background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
+    background-image: url('../img/16.svg');
     background-position: -170px -50px;
     display: inline-block;
     margin-inline-start: 5px;
@@ -423,7 +423,7 @@ i.info {
     height: 18px;
 }
 .dark i.info {
-    background-image: url('./img/16-white.svg');
+    background-image: url('../img/16-white.svg');
 }
 .with-transition {
     transition: all .7s;
@@ -436,7 +436,7 @@ i.info {
     height: 24px;
     line-height: 24px;
     display: inline-block;
-    background-image: url('./img/24.svg');
+    background-image: url('../img/24.svg');
     vertical-align: bottom;
     content: " ";
 }
@@ -445,7 +445,7 @@ i.info {
 .dark .umap-clone:before,
 .dark .umap-edit:before, .dark .umap-download:before,
 .dark .umap-to-polyline:before {
-    background-image: url('./img/24-white.svg');
+    background-image: url('../img/24-white.svg');
     vertical-align: middle;
 }
 .umap-to-polygon:before {
@@ -598,4 +598,7 @@ input[type=hidden].blur + [type="button"] {
     width: 32px;
     border: 1px solid #202425;
     border-radius: initial;
+}
+input.highlightable:not(:placeholder-shown) {
+    border: 1px solid var(--color-brightCyan);
 }
