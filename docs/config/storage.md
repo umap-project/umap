@@ -58,4 +58,6 @@ STORAGES = {
 }
 ```
 
+In order to store old versions of a layer, the versioning should be activated in the bucket.
+
 See more about the configuration on the [django-storages documentation](https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html).
