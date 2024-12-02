@@ -59,7 +59,7 @@ test = [
   "pytest==8.3.4",
   "pytest-django==4.9.0",
   "pytest-playwright==0.6.2",
-  "pytest-rerunfailures==14.0",
+  "pytest-rerunfailures==15.0",
   "pytest-xdist>=3.5.0,<4",
 ]
 docker = [
