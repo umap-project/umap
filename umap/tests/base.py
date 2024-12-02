@@ -1,5 +1,6 @@
 import copy
 import json
+from pathlib import Path
 
 import factory
 from django.contrib.auth import get_user_model
@@ -40,7 +41,7 @@ class LicenceFactory(factory.django.DjangoModelFactory):
 
 class TileLayerFactory(factory.django.DjangoModelFactory):
     name = "Test zoom layer"
-    url_template = "http://{s}.test.org/{z}/{x}/{y}.png"
+    url_template = "https://{s}.test.org/osmfr/{z}/{x}/{y}.png"
     attribution = "Test layer attribution"
 
     class Meta:
@@ -150,3 +151,8 @@ def login_required(response):
     redirect_url = reverse("login")
     assert j["login_required"] == redirect_url
     return True
+
+
+def mock_tiles(route):
+    path = Path(__file__).parent / "fixtures/empty_tile.png"
+    route.fulfill(path=path)
