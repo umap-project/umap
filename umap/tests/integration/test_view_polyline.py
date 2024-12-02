@@ -49,3 +49,37 @@ def test_should_open_popup_on_click(live_server, map, page, bootstrap):
     # Close popup
     page.locator("#map").click()
     expect(line).to_have_attribute("stroke-opacity", "0.5")
+
+
+def test_can_use_measure_on_name(live_server, map, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "linestring"},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [11.25, 53.585984],
+                        [10.151367, 52.975108],
+                    ],
+                },
+            },
+            {
+                "type": "Feature",
+                "properties": {"name": "multilinestring"},
+                "geometry": {
+                    "type": "MultiLineString",
+                    "coordinates": [[[8, 53], [13, 52]], [[12, 51], [15, 52]]],
+                },
+            },
+        ],
+    }
+    map.settings["properties"]["labelKey"] = "{name} ({measure})"
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/10/50")
+    expect(page.get_by_text("linestring (99.7 km)")).to_be_visible()
+    expect(page.get_by_text("multilinestring (592 km)")).to_be_visible()
