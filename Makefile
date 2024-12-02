@@ -7,7 +7,7 @@ install: ## Install the dependencies
 
 .PHONY: develop
 develop: ## Install the test and dev dependencies
-	python3 -m pip install -e .[test,dev,sync]
+	python3 -m pip install -e .[test,dev,sync,s3]
 	playwright install
 
 .PHONY: format
