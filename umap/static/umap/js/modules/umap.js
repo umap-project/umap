@@ -1425,13 +1425,13 @@ export default class Umap extends ServerStored {
       row.dataset.id = stamp(datalayer)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const layer = this.datalayers[src.dataset.id]
-      const other = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(layer.getRank(), other.getRank())
-      const maxIndex = Math.max(layer.getRank(), other.getRank())
-      if (finalIndex === 0) layer.bringToTop()
-      else if (finalIndex > initialIndex) layer.insertBefore(other)
-      else layer.insertAfter(other)
+      const movedLayer = this.datalayers[src.dataset.id]
+      const targetLayer = this.datalayers[dst.dataset.id]
+      const minIndex = Math.min(movedLayer.getRank(), targetLayer.getRank())
+      const maxIndex = Math.max(movedLayer.getRank(), targetLayer.getRank())
+      if (finalIndex === 0) movedLayer.bringToTop()
+      else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
+      else movedLayer.insertAfter(targetLayer)
       this.eachDataLayerReverse((datalayer) => {
         if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
           datalayer.isDirty = true
