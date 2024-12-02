@@ -6,6 +6,8 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
+from ..base import mock_tiles
+
 
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
@@ -23,7 +25,7 @@ def set_timeout(context):
 @pytest.fixture(autouse=True)
 def mock_osm_tiles(page):
     if not bool(os.environ.get("PWDEBUG", False)):
-        page.route("*/**/osmfr/**", lambda route: route.fulfill())
+        page.route("*/**/osmfr/**", mock_tiles)
 
 
 @pytest.fixture
