@@ -602,3 +602,6 @@ input[type=hidden].blur + [type="button"] {
 input.highlightable:not(:placeholder-shown) {
     border: 1px solid var(--color-brightCyan);
 }
+.umap-upload [type=url] {
+    margin-bottom: 0;
+}
