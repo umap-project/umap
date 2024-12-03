@@ -3,6 +3,7 @@ import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import * as Util from '../utils.js'
 import { AutocompleteCommunes } from './communesfr.js'
 import { translate } from '../i18n.js'
+import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 
 const TEMPLATE = `
   <h3>Cadastre</h3>
