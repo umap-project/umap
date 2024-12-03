@@ -2,6 +2,7 @@ import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import * as Util from '../utils.js'
 import { AutocompleteCommunes } from './communesfr.js'
+import { translate } from '../i18n.js'
 
 const TEMPLATE = `
   <h3>Cadastre</h3>
@@ -56,6 +57,8 @@ export class Importer {
       .open({
         template: container,
         className: `${this.id} importer dark`,
+        cancel: false,
+        accept: translate('Choose this data'),
       })
       .then(confirm)
   }
