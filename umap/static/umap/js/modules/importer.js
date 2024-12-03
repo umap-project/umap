@@ -33,15 +33,15 @@ const TEMPLATE = `
     <fieldset id="import-mode" class="formbox">
       <legend class="counter" data-help="importMode">${translate('Choose import mode')}</legend>
       <label>
-        <input type="radio" name="action" value="copy" />
+        <input type="radio" name="action" value="copy" onchange />
         ${translate('Copy into the layer')}
       </label>
       <label>
-        <input type="radio" name="action" value="link" />
+        <input type="radio" name="action" value="link" onchange />
         ${translate('Link to the layer as remote data')}
       </label>
     </fieldset>
-    <input type="button" class="button" name="submit" value="${translate('Import data')}" />
+    <input type="button" class="button primary" name="submit" value="${translate('Import data')}" disabled />
   </div>
     `
 
@@ -121,6 +121,11 @@ export default class Importer extends Utils.WithTemplate {
     return this.qs('textarea').value
   }
 
+  set raw(value) {
+    this.qs('textarea').value = value
+    this.onChange()
+  }
+
   get clear() {
     return Boolean(this.qs('[name=clear]').checked)
   }
@@ -198,6 +203,7 @@ export default class Importer extends Utils.WithTemplate {
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
     this.qs('#clear').toggleAttribute('hidden', !this.layerId)
+    this.qs('[name=submit').toggleAttribute('disabled', !this.isValid())
   }
 
   onFileChange(e) {
@@ -219,6 +225,7 @@ export default class Importer extends Utils.WithTemplate {
     this.url = null
     this.format = undefined
     this.layerName = null
+    this.raw = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
     this._umap.eachDataLayerReverse((datalayer) => {
@@ -249,6 +256,17 @@ export default class Importer extends Utils.WithTemplate {
   openFiles() {
     this.open()
     this.qs('[type=file]').showPicker()
+  }
+
+  isValid() {
+    if (!this.format) return false
+    const hasFiles = Boolean(this.files.length)
+    const hasRaw = Boolean(this.raw)
+    const hasUrl = Boolean(this.url)
+    const hasAction = Boolean(this.action)
+    if (!hasFiles && !hasRaw && !hasUrl) return false
+    if (this.url) return hasAction
+    return true
   }
 
   submit() {
