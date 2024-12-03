@@ -44,12 +44,12 @@ const ControlsMixin = {
       new U.DrawToolbar({ map: this }).addTo(this)
       const editActions = [
         U.EditCaptionAction,
-        U.EditPropertiesAction,
+        U.ImportAction,
         U.EditLayersAction,
         U.ChangeTileLayerAction,
         U.UpdateExtentAction,
         U.UpdatePermsAction,
-        U.ImportAction,
+        U.EditPropertiesAction,
       ]
       if (this.options.editMode === 'advanced') {
         new U.SettingsToolbar({ actions: editActions }).addTo(this)
