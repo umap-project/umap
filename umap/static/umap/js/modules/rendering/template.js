@@ -150,7 +150,18 @@ class GeoRSSLink extends PopupTemplate {
 }
 
 class OSM extends TitleMixin(PopupTemplate) {
-  renderTitle(feature) {}
+  renderTitle(feature) {
+    const title = DomUtil.add('h3', 'popup-title')
+    const color = feature.getPreviewColor()
+    title.style.backgroundColor = color
+    const iconUrl = feature.getDynamicOption('iconUrl')
+    const icon = Icon.makeElement(iconUrl, title)
+    DomUtil.addClass(icon, 'icon')
+    Icon.setContrast(icon, title, iconUrl, color)
+    if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
+    DomUtil.add('span', '', title, this.getName(feature))
+    return title
+  }
 
   getName(feature) {
     const props = feature.properties
@@ -162,15 +173,6 @@ class OSM extends TitleMixin(PopupTemplate) {
   renderBody(feature) {
     const props = feature.properties
     const body = document.createElement('div')
-    const title = DomUtil.add('h3', 'popup-title', body)
-    const color = feature.getPreviewColor()
-    title.style.backgroundColor = color
-    const iconUrl = feature.getDynamicOption('iconUrl')
-    const icon = Icon.makeElement(iconUrl, title)
-    DomUtil.addClass(icon, 'icon')
-    Icon.setContrast(icon, title, iconUrl, color)
-    if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
-    DomUtil.add('span', '', title, this.getName(feature))
     const street = props['addr:street']
     if (street) {
       const row = DomUtil.add('address', 'address', body)
