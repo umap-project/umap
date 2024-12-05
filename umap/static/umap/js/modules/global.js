@@ -1,5 +1,5 @@
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
-import { AjaxAutocomplete, AjaxAutocompleteMultiple } from './autocomplete.js'
+import { AjaxAutocomplete, AjaxAutocompleteMultiple, AutocompleteDatalist } from './autocomplete.js'
 import Help from './help.js'
 import { ServerRequest } from './request.js'
 import { SCHEMA } from './schema.js'
@@ -17,6 +17,7 @@ window.U = {
   Alert,
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
+  AutocompleteDatalist,
   Help,
   Icon,
   LAYER_TYPES,

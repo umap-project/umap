@@ -684,7 +684,7 @@ export default class Umap extends ServerStored {
   }
 
   allProperties() {
-    return [].concat(...this.datalayersIndex.map((dl) => dl._propertiesIndex))
+    return [].concat(...this.datalayersIndex.map((dl) => dl.allProperties()))
   }
 
   sortedValues(property) {

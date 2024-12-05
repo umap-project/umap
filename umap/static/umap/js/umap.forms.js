@@ -448,6 +448,17 @@ L.FormBuilder.BlurInput.include({
   },
 })
 
+// Adds an autocomplete using all available user defined properties
+L.FormBuilder.PropertyInput = L.FormBuilder.BlurInput.extend({
+  build: function () {
+    L.FormBuilder.BlurInput.prototype.build.call(this)
+    const autocomplete = new U.AutocompleteDatalist(this.input)
+    // Will be used on Umap and DataLayer
+    const properties = this.builder.obj.allProperties()
+    autocomplete.suggestions = properties
+  },
+})
+
 L.FormBuilder.IconUrl = L.FormBuilder.BlurInput.extend({
   type: () => 'hidden',
 
@@ -1110,10 +1121,11 @@ U.FormBuilder = L.FormBuilder.extend({
   },
 
   customHandlers: {
-    sortKey: 'BlurInput',
+    sortKey: 'PropertyInput',
     easing: 'Switch',
-    facetKey: 'BlurInput',
-    slugKey: 'BlurInput',
+    facetKey: 'PropertyInput',
+    slugKey: 'PropertyInput',
+    labelKey: 'PropertyInput',
   },
 
   computeDefaultOptions: function () {
