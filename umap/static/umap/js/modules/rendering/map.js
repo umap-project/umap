@@ -96,8 +96,12 @@ const ControlsMixin = {
     this._controls.more = new U.MoreControls()
     this._controls.scale = L.control.scale()
     this._controls.permanentCredit = new U.PermanentCreditsControl(this)
-    if (this.options.scrollWheelZoom) this.scrollWheelZoom.enable()
-    else this.scrollWheelZoom.disable()
+    if (this.options.scrollWheelZoom){
+      this.scrollWheelZoom.enable()
+    } else {
+      this.scrollWheelZoom.disable()
+      this.options.dragging = !L.Browser.mobile
+    }
     this._umap.drop = new U.DropControl(this)
     this._controls.tilelayers = new U.TileLayerControl(this)
   },
