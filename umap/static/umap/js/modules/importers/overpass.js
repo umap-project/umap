@@ -53,11 +53,15 @@ export class Importer {
       'https://photon.komoot.io/api?q={q}&layer=county&layer=city&layer=state'
     this.id = 'overpass'
     this.boundaryChoice = null
+    this.expression = null
   }
 
   async open(importer) {
     const container = DomUtil.create('div')
     container.innerHTML = TEMPLATE
+    if (this.expression) {
+      container.querySelector('[name=tags]').value = this.expression
+    }
     this.autocomplete = new Autocomplete(container.querySelector('#area'), {
       url: this.searchUrl,
       placeholder: translate(
@@ -80,6 +84,7 @@ export class Importer {
         Alert.error(translate('Expression is empty'))
         return
       }
+      this.expression = form.tags
       let tags = form.tags
       if (!tags.startsWith('[')) tags = `[${tags}]`
       let area = '{south},{west},{north},{east}'
