@@ -207,6 +207,13 @@ class OSM extends TitleMixin(PopupTemplate) {
         Utils.loadTemplate(`<div><a href="mailto:${email}">${email}</a></div>`)
       )
     }
+    if (props.panoramax) {
+      body.appendChild(
+        Utils.loadTemplate(
+          `<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
+        )
+      )
+    }
     const id = props['@id'] || props.id
     if (id) {
       body.appendChild(
