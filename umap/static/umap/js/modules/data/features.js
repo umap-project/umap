@@ -165,7 +165,9 @@ class Feature {
   }
 
   getSlug() {
-    return this.properties[this._umap.getProperty('slugKey') || 'name'] || ''
+    return (
+      this.properties[this._umap.getProperty('slugKey') || U.DEFAULT_LABEL_KEY] || ''
+    )
   }
 
   getPermalink() {
@@ -234,15 +236,23 @@ class Feature {
     container.appendChild(builder.build())
 
     const properties = []
+    let labelKeyFound = undefined
     for (const property of this.datalayer._propertiesIndex) {
-      if (['name', 'description'].includes(property)) {
+      if (!labelKeyFound && U.LABEL_KEYS.includes(property)) {
+        labelKeyFound = property
+        continue
+      }
+      if (property === 'description') {
         continue
       }
       properties.push([`properties.${property}`, { label: property }])
     }
     // We always want name and description for now (properties management to come)
     properties.unshift('properties.description')
-    properties.unshift('properties.name')
+    if (!labelKeyFound) {
+      labelKeyFound = U.DEFAULT_LABEL_KEY
+    }
+    properties.unshift([`properties.${labelKeyFound}`, { label: labelKeyFound }])
     builder = new U.FormBuilder(this, properties, {
       id: 'umap-feature-properties',
     })
@@ -255,7 +265,7 @@ class Feature {
     this.getAdvancedEditActions(advancedActions)
     const onLoad = this._umap.editPanel.open({ content: container })
     onLoad.then(() => {
-      builder.helpers['properties.name'].input.focus()
+      builder.helpers[`properties.${labelKeyFound}`].input.focus()
     })
     this._umap.editedFeature = this
     if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
@@ -316,19 +326,21 @@ class Feature {
 
   endEdit() {}
 
-  getDisplayName(fallback) {
-    const key = this.getOption('labelKey') || 'name'
+  getDisplayName() {
+    const keys = U.LABEL_KEYS.slice() // Copy.
+    const labelKey = this.getOption('labelKey')
     // Variables mode.
-    if (Utils.hasVar(key)) {
-      return Utils.greedyTemplate(key, this.extendedProperties())
+    if (labelKey) {
+      if (Utils.hasVar(labelKey)) {
+        return Utils.greedyTemplate(labelKey, this.extendedProperties())
+      }
+      keys.unshift(labelKey)
     }
-    // Simple mode.
-    return (
-      this.properties[key] ||
-      this.properties.title ||
-      fallback ||
-      this.datalayer.getName()
-    )
+    for (const key of keys) {
+      const value = this.properties[key]
+      if (value) return value
+    }
+    return this.datalayer.getName()
   }
 
   hasPopupFooter() {

@@ -15,7 +15,12 @@ DATALAYER_DATA = {
     "features": [
         {
             "type": "Feature",
-            "properties": {"name": "one point in france", "foo": "point", "bar": "one"},
+            "properties": {
+                "name": "one point in france",
+                "foo": "point",
+                "bar": "one",
+                "label": "this is label one",
+            },
             "geometry": {"type": "Point", "coordinates": [3.339844, 46.920255]},
         },
         {
@@ -24,6 +29,7 @@ DATALAYER_DATA = {
                 "name": "one polygon in greenland",
                 "foo": "polygon",
                 "bar": "two",
+                "label": "this is label two",
             },
             "geometry": {
                 "type": "Polygon",
@@ -44,6 +50,7 @@ DATALAYER_DATA = {
                 "name": "one line in new zeland",
                 "foo": "line",
                 "bar": "three",
+                "label": "this is label three",
             },
             "geometry": {
                 "type": "LineString",
@@ -476,3 +483,11 @@ def test_main_toolbox_toggle_all_layers(live_server, map, page):
     # Should hidden again all layers
     expect(page.locator(".datalayer.off")).to_have_count(3)
     expect(markers).to_have_count(0)
+
+
+def test_honour_the_label_fields_settings(live_server, map, page, bootstrap, settings):
+    settings.UMAP_LABEL_KEYS = ["label", "name"]
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".panel").get_by_text("this is label one")).to_be_visible()
+    expect(page.locator(".panel").get_by_text("this is label two")).to_be_visible()
+    expect(page.locator(".panel").get_by_text("this is label three")).to_be_visible()

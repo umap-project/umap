@@ -609,6 +609,7 @@ class MapDetailMixin(SessionMixin):
             "websocketEnabled": settings.WEBSOCKET_ENABLED,
             "websocketURI": settings.WEBSOCKET_FRONT_URI,
             "importers": settings.UMAP_IMPORTERS,
+            "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
         }
         created = bool(getattr(self, "object", None))
         if (created and self.object.owner) or (not created and not user.is_anonymous):

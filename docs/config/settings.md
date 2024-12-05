@@ -175,11 +175,6 @@ UMAP_EXTRA_URLS = {
 }
 ```
 
-#### UMAP_KEEP_VERSIONS
-
-How many datalayer versions to keep. 10 by default.
-
-
 #### UMAP_DEFAULT_EDIT_STATUS
 
 Define the map default edit status.
@@ -269,6 +264,16 @@ Available importers:
 - `geodatamine`: allow to interact with [GéoDataMine](https://geodatamine.fr/) API
 - `communesfr`: download French communes boundaries, from https://geo.api.gouv.fr/
 - `datasets`: define URLs you want to promote to users, with a `name` and a `format`
+
+#### UMAP_KEEP_VERSIONS
+
+How many datalayer versions to keep. 10 by default.
+
+#### UMAP_LABEL_KEYS
+
+List of properties to consider as "Feature label" (to show in popup or in browser).
+
+    UMAP_LABEL_KEYS = ["name", "title"]
 
 #### UMAP_MAPS_PER_PAGE
 

@@ -289,7 +289,7 @@ export class DataLayer extends ServerStored {
 
   reindex() {
     const features = Object.values(this._features)
-    Utils.sortFeatures(features, this._umap.getProperty('sortKey'), U.lang)
+    this.sortFeatures(features)
     this._index = features.map((feature) => stamp(feature))
   }
 
@@ -450,6 +450,11 @@ export class DataLayer extends ServerStored {
     }
   }
 
+  sortFeatures(collection) {
+    const sortKeys = this._umap.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
+    return Utils.sortFeatures(collection, sortKeys, U.lang)
+  }
+
   makeFeatures(geojson = {}, sync = true) {
     if (geojson.type === 'Feature' || geojson.coordinates) {
       geojson = [geojson]
@@ -458,7 +463,7 @@ export class DataLayer extends ServerStored {
       ? geojson
       : geojson.features || geojson.geometries
     if (!collection) return
-    Utils.sortFeatures(collection, this._umap.getProperty('sortKey'), U.lang)
+    this.sortFeatures(collection)
     for (const feature of collection) {
       this.makeFeature(feature, sync)
     }

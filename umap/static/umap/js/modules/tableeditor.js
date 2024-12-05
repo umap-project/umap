@@ -105,7 +105,7 @@ export default class TableEditor extends WithTemplate {
   resetProperties() {
     this.properties = this.datalayer._propertiesIndex
     if (this.properties.length === 0) {
-      this.properties = ['name', 'description']
+      this.properties = [U.DEFAULT_LABEL_KEY, 'description']
     }
   }
 

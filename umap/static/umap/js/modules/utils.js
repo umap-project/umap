@@ -292,7 +292,7 @@ export function naturalSort(a, b, lang) {
 }
 
 export function sortFeatures(features, sortKey, lang) {
-  const sortKeys = (sortKey || 'name').split(',')
+  const sortKeys = sortKey.split(',')
 
   const sort = (a, b, i) => {
     let sortKey = sortKeys[i]

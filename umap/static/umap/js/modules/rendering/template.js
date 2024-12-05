@@ -115,7 +115,9 @@ class Table extends TitleMixin(PopupTemplate) {
     const table = document.createElement('table')
 
     for (const key in feature.properties) {
-      if (typeof feature.properties[key] === 'object' || key === 'name') continue
+      if (typeof feature.properties[key] === 'object' || U.LABEL_KEYS.includes(key)) {
+        continue
+      }
       table.appendChild(this.makeRow(feature, key))
     }
     return table
