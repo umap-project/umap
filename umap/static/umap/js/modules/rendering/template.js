@@ -150,6 +150,8 @@ class GeoRSSLink extends PopupTemplate {
 }
 
 class OSM extends TitleMixin(PopupTemplate) {
+  renderTitle(feature) {}
+
   getName(feature) {
     const props = feature.properties
     const locale = getLocale()
