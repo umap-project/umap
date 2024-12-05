@@ -78,8 +78,7 @@ input[type="submit"] {
     border-radius: 2px;
     font-weight: normal;
     cursor: pointer;
-    padding: 7px;
-    width: 100%;
+    padding: 7px 14px;
     min-height: 32px;
     line-height: 32px;
     border: none;
@@ -92,6 +91,12 @@ input[type="submit"] {
     color: var(--text-color);
     border: 1px solid #1b1f20;
 }
+.dark .button.primary:not([disabled]),
+.dark [type="button"].primary:not([disabled]) {
+    background-color: var(--color-brightCyan);
+    color: var(--color-dark);
+    border: 1px solid #1b1f20;
+}
 .dark .button:hover,
 .dark [type="button"]:hover,
 .dark input[type="submit"]:hover {
@@ -99,6 +104,11 @@ input[type="submit"] {
 }
 .dark a {
     color: var(--text-color);
+}
+.dark [type="button"][disabled],
+.dark input[type="submit"][disabled] {
+    background-color: var(--color-mediumGray);
+    cursor: not-allowed;
 }
 button.flat,
 [type="button"].flat,
@@ -601,4 +611,7 @@ input[type=hidden].blur + [type="button"] {
 }
 input.highlightable:not(:placeholder-shown) {
     border: 1px solid var(--color-brightCyan);
+}
+.umap-upload [type=url] {
+    margin-bottom: 0;
 }

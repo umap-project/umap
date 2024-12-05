@@ -6,17 +6,14 @@ import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `
+  <div class="umap-upload">
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
     <fieldset class="formbox">
       <legend class="counter">${translate('Choose data')}</legend>
       <input type="file" multiple autofocus onchange />
-      <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
-      <div class="importers" hidden>
-        <h4>${translate('Import helpers:')}</h4>
-        <ul class="grid-container">
-        </ul>
-      </div>
+      <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
+      <button class="flat importers" hidden data-ref="importersButton"><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</button>
     </fieldset>
     <fieldset class="formbox">
       <legend class="counter" data-help="importFormats">${translate(
@@ -36,28 +33,40 @@ const TEMPLATE = `
     <fieldset id="import-mode" class="formbox">
       <legend class="counter" data-help="importMode">${translate('Choose import mode')}</legend>
       <label>
-        <input type="radio" name="action" value="copy" />
+        <input type="radio" name="action" value="copy" checked onchange />
         ${translate('Copy into the layer')}
       </label>
       <label>
-        <input type="radio" name="action" value="link" />
+        <input type="radio" name="action" value="link" onchange />
         ${translate('Link to the layer as remote data')}
       </label>
     </fieldset>
-    <input type="button" class="button" name="submit" value="${translate('Import data')}" />
+    <input type="button" class="button primary" name="submit" value="${translate('Import data')}" disabled />
+  </div>
     `
 
-export default class Importer {
+const GRID_TEMPLATE = `
+  <div>
+    <h3><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</h3>
+    <p>${translate('Import helpers will fill the URL field for you.')}</p>
+    <ul class="grid-container by4" data-ref="grid"></ul>
+  </div>
+`
+
+export default class Importer extends Utils.WithTemplate {
   constructor(umap) {
+    super()
     this._umap = umap
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.loadImporters()
-    this.dialog = new Dialog()
+    this.dialog = new Dialog({ className: 'importers dark' })
   }
 
   loadImporters() {
-    for (const [name, config] of Object.entries(this._umap.properties.importers || {})) {
+    for (const [name, config] of Object.entries(
+      this._umap.properties.importers || {}
+    )) {
       const register = (mod) => {
         this.IMPORTERS.push(new mod.Importer(this._umap, config))
       }
@@ -112,6 +121,11 @@ export default class Importer {
     return this.qs('textarea').value
   }
 
+  set raw(value) {
+    this.qs('textarea').value = value
+    this.onChange()
+  }
+
   get clear() {
     return Boolean(this.qs('[name=clear]').checked)
   }
@@ -144,20 +158,26 @@ export default class Importer {
     )
   }
 
+  showImporters() {
+    if (!this.IMPORTERS.length) return
+    const [element, { grid }] = Utils.loadTemplateWithRefs(GRID_TEMPLATE)
+    for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
+      const button = Utils.loadTemplate(
+        `<li><button type="button" class="${plugin.id}">${plugin.name}</button></li>`
+      )
+      button.addEventListener('click', () => plugin.open(this))
+      grid.appendChild(button)
+    }
+    this.dialog.open({ template: element, cancel: false, accept: false })
+  }
+
   build() {
-    this.container = DomUtil.create('div', 'umap-upload')
-    this.container.innerHTML = TEMPLATE
+    this.container = this.loadTemplate(TEMPLATE)
     if (this.IMPORTERS.length) {
-      const parent = this.container.querySelector('.importers ul')
-      for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
-        L.DomUtil.createButton(
-          plugin.id,
-          DomUtil.element({ tagName: 'li', parent }),
-          plugin.name,
-          () => plugin.open(this)
-        )
-      }
-      this.qs('.importers').toggleAttribute('hidden', false)
+      // TODO use this.elements instead of this.qs
+      const button = this.qs('[data-ref=importersButton]')
+      button.addEventListener('click', () => this.showImporters())
+      button.toggleAttribute('hidden', false)
     }
     for (const type of this.TYPES) {
       DomUtil.element({
@@ -168,7 +188,7 @@ export default class Importer {
       })
     }
     this._umap.help.parse(this.container)
-    DomEvent.on(this.qs('[name=submit]'), 'click', this.submit, this)
+    this.qs('[name=submit]').addEventListener('click', () => this.submit())
     DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
     for (const element of this.container.querySelectorAll('[onchange]')) {
       DomEvent.on(element, 'change', this.onChange, this)
@@ -183,6 +203,7 @@ export default class Importer {
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
     this.qs('#clear').toggleAttribute('hidden', !this.layerId)
+    this.qs('[name=submit').toggleAttribute('disabled', !this.canSubmit())
   }
 
   onFileChange(e) {
@@ -204,6 +225,7 @@ export default class Importer {
     this.url = null
     this.format = undefined
     this.layerName = null
+    this.raw = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
     this._umap.eachDataLayerReverse((datalayer) => {
@@ -234,6 +256,17 @@ export default class Importer {
   openFiles() {
     this.open()
     this.qs('[type=file]').showPicker()
+  }
+
+  canSubmit() {
+    if (!this.format) return false
+    const hasFiles = Boolean(this.files.length)
+    const hasRaw = Boolean(this.raw)
+    const hasUrl = Boolean(this.url)
+    const hasAction = Boolean(this.action)
+    if (!hasFiles && !hasRaw && !hasUrl) return false
+    if (this.url) return hasAction
+    return true
   }
 
   submit() {
