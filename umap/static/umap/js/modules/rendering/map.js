@@ -279,12 +279,12 @@ export const LeafletMap = BaseMap.extend({
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
+    this.initTileLayers()
     this.renderUI()
   },
 
   renderUI: function () {
     setOptions(this, this._umap.properties)
-    this.initTileLayers()
     // Needs tilelayer to exist for minimap
     this.renderControls()
     this.handleLimitBounds()
