@@ -203,7 +203,7 @@ export default class Importer extends Utils.WithTemplate {
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
     this.qs('#clear').toggleAttribute('hidden', !this.layerId)
-    this.qs('[name=submit').toggleAttribute('disabled', !this.isValid())
+    this.qs('[name=submit').toggleAttribute('disabled', !this.canSubmit())
   }
 
   onFileChange(e) {
@@ -258,7 +258,7 @@ export default class Importer extends Utils.WithTemplate {
     this.qs('[type=file]').showPicker()
   }
 
-  isValid() {
+  canSubmit() {
     if (!this.format) return false
     const hasFiles = Boolean(this.files.length)
     const hasRaw = Boolean(this.raw)
