@@ -33,7 +33,7 @@ const TEMPLATE = `
     <fieldset id="import-mode" class="formbox">
       <legend class="counter" data-help="importMode">${translate('Choose import mode')}</legend>
       <label>
-        <input type="radio" name="action" value="copy" onchange />
+        <input type="radio" name="action" value="copy" checked onchange />
         ${translate('Copy into the layer')}
       </label>
       <label>
