@@ -47,7 +47,7 @@ Voici un bref passage en revu des différents imports proposés et pour finir l�
 
 ## 1. Importer le contour d’une commune
 
-Cliquez sur l’outil d’importation en bas de la barre de droite, puis descendez jusqu’au cadre « Assistants d’import ».
+Cliquez sur l’outil d’importation en bas de la barre de droite, puis cliquez sur le lien « Assistants d’import ».
 
 Cliquez sur « Communes France » et sélectionnez la commune souhaitée dans une liste déroulante. Une fois la commune sélectionnée, le format est reconnu automatiquement (geojson) puis le type de calque (cliquer sur « ? » pour savoir quel choix opérer)
 
@@ -64,7 +64,7 @@ Une fois cet import réalisé, tout est réglable : couleur de contour, de fond,
 
 ## 2. Importer les contours des départements ou des régions
 
-Cliquez sur l’outil d’importation en bas de la barre de droite, puis descendez jusqu’au cadre « Assistants d’import ».
+Cliquez sur l’outil d’importation en bas de la barre de droite, puis cliquez sur le lien « Assistants d’import ».
 
 Cliquez sur « Contours nationaux » puis soit départements, soit régions et enfin le type de calque (voir supra l’explication). Tous les départements sont importés :
 
@@ -72,7 +72,7 @@ Cliquez sur « Contours nationaux » puis soit départements, soit régions et
 
 ## 3. Importer un point d’intérêt issu de GeoDataMine
 
-Cliquez sur l’outil d’importation en bas de la barre de droite, puis descendez jusqu’au cadre « Assistants d’import ».
+Cliquez sur l’outil d’importation en bas de la barre de droite, puis cliquez sur le lien « Assistants d’import ».
 
 Cliquez sur « GeoDataMine (thèmes OSM) » et sélectionnez les informations souhaitées, routes, bâtiments, commerces, services publics, …
 Par exemple, en sélectionnant les points d’eau potable de la CA du Grand Avignon, puis « Copier dans un calque »
