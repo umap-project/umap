@@ -162,7 +162,7 @@ class OSM extends TitleMixin(PopupTemplate) {
   renderBody(feature) {
     const props = feature.properties
     const body = document.createElement('div')
-    const title = DomUtil.add('h3', 'popup-title', container)
+    const title = DomUtil.add('h3', 'popup-title', body)
     const color = feature.getPreviewColor()
     title.style.backgroundColor = color
     const iconUrl = feature.getDynamicOption('iconUrl')
