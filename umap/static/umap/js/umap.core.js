@@ -170,22 +170,43 @@ L.DomUtil.contrastWCAG21 = (rgb) => {
   const contrast = (whiteLum + 0.05) / (lum + 0.05)
   return contrast > 3 ? 1 : 0
 }
+L.DomUtil.colorNameToHex = (str) => {
+  const ctx = document.createElement('canvas').getContext('2d')
+  ctx.fillStyle = str
+  return ctx.fillStyle
+}
+L.DomUtil.hexToRGB = (hex) => {
+  return hex
+    .replace(
+      /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+      (m, r, g, b) => `#${r}${r}${g}${g}${b}${b}`
+    )
+    .substring(1)
+    .match(/.{2}/g)
+    .map((x) => Number.parseInt(x, 16))
+}
 
 const _CACHE_CONSTRAST = {}
 L.DomUtil.contrastedColor = (el, bgcolor) => {
   // Return 0 for black and 1 for white
   // bgcolor is a human color, it can be a any keyword (purple…)
   if (typeof _CACHE_CONSTRAST[bgcolor] !== 'undefined') return _CACHE_CONSTRAST[bgcolor]
-  let out = 0
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = L.DomUtil.RGBRegex.exec(rgb)
-  if (!rgb || rgb.length !== 4) return out
-  rgb = [
-    Number.parseInt(rgb[1], 10),
-    Number.parseInt(rgb[2], 10),
-    Number.parseInt(rgb[3], 10),
-  ]
-  out = L.DomUtil.contrastWCAG21(rgb)
+  if (rgb && rgb.length === 4) {
+    rgb = [
+      Number.parseInt(rgb[1], 10),
+      Number.parseInt(rgb[2], 10),
+      Number.parseInt(rgb[3], 10),
+    ]
+  } else {
+    // The element may not yet be added to the DOM, so let's try
+    // another way
+    const hex = L.DomUtil.colorNameToHex(bgcolor)
+    rgb = L.DomUtil.hexToRGB(hex)
+  }
+  if (!rgb) return 1
+  const out = L.DomUtil.contrastWCAG21(rgb)
   if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out
 }

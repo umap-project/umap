@@ -152,6 +152,19 @@ class GeoRSSLink extends PopupTemplate {
 }
 
 class OSM extends TitleMixin(PopupTemplate) {
+  renderTitle(feature) {
+    const title = DomUtil.add('h3', 'popup-title')
+    const color = feature.getPreviewColor()
+    title.style.backgroundColor = color
+    const iconUrl = feature.getDynamicOption('iconUrl')
+    const icon = Icon.makeElement(iconUrl, title)
+    DomUtil.addClass(icon, 'icon')
+    Icon.setContrast(icon, title, iconUrl, color)
+    if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
+    DomUtil.add('span', '', title, this.getName(feature))
+    return title
+  }
+
   getName(feature) {
     const props = feature.properties
     const locale = getLocale()
@@ -162,15 +175,6 @@ class OSM extends TitleMixin(PopupTemplate) {
   renderBody(feature) {
     const props = feature.properties
     const body = document.createElement('div')
-    const title = DomUtil.add('h3', 'popup-title', container)
-    const color = feature.getPreviewColor()
-    title.style.backgroundColor = color
-    const iconUrl = feature.getDynamicOption('iconUrl')
-    const icon = Icon.makeElement(iconUrl, title)
-    DomUtil.addClass(icon, 'icon')
-    Icon.setContrast(icon, title, iconUrl, color)
-    if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
-    DomUtil.add('span', '', title, this.getName(feature))
     const street = props['addr:street']
     if (street) {
       const row = DomUtil.add('address', 'address', body)
@@ -205,6 +209,13 @@ class OSM extends TitleMixin(PopupTemplate) {
     if (email) {
       body.appendChild(
         Utils.loadTemplate(`<div><a href="mailto:${email}">${email}</a></div>`)
+      )
+    }
+    if (props.panoramax) {
+      body.appendChild(
+        Utils.loadTemplate(
+          `<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
+        )
       )
     }
     const id = props['@id'] || props.id
