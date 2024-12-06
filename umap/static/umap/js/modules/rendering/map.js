@@ -285,9 +285,14 @@ export const LeafletMap = BaseMap.extend({
     setOptions(this, this._umap.properties)
     if (this.options.scrollWheelZoom) {
       this.scrollWheelZoom.enable()
+      this.dragging.enable()
     } else {
       this.scrollWheelZoom.disable()
-      this.options.dragging = !L.Browser.mobile
+      // In mobile, do not let the user move the map
+      // when scrolling the main page and touching the
+      // map in an iframe. May be a bit dumb, but let's
+      // try like this for now.
+      if (L.Browser.mobile) this.dragging.disable()
     }
     // Needs tilelayer to exist for minimap
     this.renderControls()
