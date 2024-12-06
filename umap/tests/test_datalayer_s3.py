@@ -80,7 +80,7 @@ def test_update_should_add_version(map, datalayer):
 
 def test_get_version(map, datalayer):
     assert len(datalayer.versions) == 1
-    datalayer.geojson = ContentFile('{"foo": "bar"}', "foo.json")
+    datalayer.geojson = ContentFile(b'{"foo": "bar"}', "foo.json")
     datalayer.save()
     assert len(datalayer.versions) == 2
     latest = datalayer.versions[0]["ref"]

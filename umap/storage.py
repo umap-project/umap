@@ -2,6 +2,7 @@ import operator
 import os
 import shutil
 import time
+from gzip import GzipFile
 from pathlib import Path
 
 from botocore.exceptions import ClientError
@@ -106,7 +107,7 @@ class UmapS3(S3Storage):
             )
         except ClientError:
             raise ValueError(f"Invalid version reference: {ref}")
-        return data["Body"].read()
+        return GzipFile(mode="r", fileobj=data["Body"]).read()
 
     def get_version_path(self, ref, instance):
         return self.url(instance.geojson.name, parameters={"VersionId": ref})
