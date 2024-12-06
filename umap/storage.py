@@ -72,6 +72,8 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
 
 
 class UmapS3(S3Storage):
+    gzip = True
+
     def get_reference_version(self, instance):
         metadata = self.connection.meta.client.head_object(
             Bucket=self.bucket_name, Key=instance.geojson.name
