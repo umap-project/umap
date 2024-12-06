@@ -497,6 +497,8 @@ class DataLayer(NamedModel):
     def save(self, **kwargs):
         super(DataLayer, self).save(**kwargs)
         self.geojson.storage.onDatalayerSave(self)
+        if hasattr(self, "_reference_version"):
+            del self._reference_version
 
     def delete(self, **kwargs):
         self.geojson.storage.onDatalayerDelete(self)
@@ -529,7 +531,9 @@ class DataLayer(NamedModel):
 
     @property
     def reference_version(self):
-        return self.geojson.storage.get_reference_version(self)
+        if not hasattr(self, "_reference_version"):
+            self._reference_version = self.geojson.storage.get_reference_version(self)
+        return self._reference_version
 
     @property
     def versions(self):
