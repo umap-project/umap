@@ -77,6 +77,7 @@ Toute propriété de l'élément sera disponible, ainsi que:
 - `{locale}` → la langue sous la forme `fr` ou `fr_CA` quand une variante est utilisée
 - `{lang}` → la langue sous la forme `fr` ou `fr-ca` quand une variante est utilisée
 - `{measure}` → la longueur d'une ligne ou la surface d'un polygone
+- `{gain}`/`{loss}` → la dénivelée positive/négative d'une ligne (seulement si elle contient les altitudes)
 - `{rank}` → la rang d'un élément dans son calque
 - `{layer}` → le nom du calque de l'élément
 - `{zoom}` → le zoom actuel de la carte

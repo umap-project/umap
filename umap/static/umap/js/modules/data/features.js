@@ -591,7 +591,7 @@ class Feature {
         properties.measure = this.ui.getMeasure()
       }
     }
-    return L.extend(properties, this.properties)
+    return Object.assign(properties, this.properties)
   }
 
   getRank() {
@@ -1059,6 +1059,11 @@ export class LineString extends Path {
       action: () => this.mergeShapes(),
     })
     return items
+  }
+
+  extendedProperties() {
+    const [gain, loss] = this.ui.getElevation()
+    return Object.assign({ gain, loss }, super.extendedProperties())
   }
 }
 
