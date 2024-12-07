@@ -55,7 +55,6 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
     this._umap.createDataLayer(value, false)
-    this._umap.render([])
   }
 
   update({ key, metadata, value }) {

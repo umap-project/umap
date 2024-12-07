@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -25,7 +26,7 @@ def set_timeout(context):
 @pytest.fixture(autouse=True)
 def mock_osm_tiles(page):
     if not bool(os.environ.get("PWDEBUG", False)):
-        page.route("*/**/osmfr/**", mock_tiles)
+        page.route(re.compile(r".*tile\..*"), mock_tiles)
 
 
 @pytest.fixture

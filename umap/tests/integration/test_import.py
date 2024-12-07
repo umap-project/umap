@@ -72,8 +72,6 @@ def test_umap_import_from_file(live_server, tilelayer, page):
 
 
 def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
-    page.route("https://tile.openstreetmap.fr/hot/**", mock_tiles)
-
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_role("button", name="Open browser").click()
