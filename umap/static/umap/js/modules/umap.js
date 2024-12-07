@@ -1261,9 +1261,10 @@ export default class Umap extends ServerStored {
     }
   }
 
-  render(fields) {
-    const impacted = this.propagate(fields)
-    if (impacted) return // No need to run a wider reflow
+  render(fields = []) {
+    // Propagate will remove the fields it has already
+    // processed
+    fields = this.propagate(fields)
 
     const impacts = Utils.getImpactsFromSchema(fields)
     for (const impact of impacts) {
@@ -1327,14 +1328,13 @@ export default class Umap extends ServerStored {
         })
       },
     }
-    let impacted = false
     for (const [field, impact] of Object.entries(impacts)) {
       if (!fields.length || fields.includes(field)) {
         impact()
-        impacted = true
+        fields = fields.filter((item) => item !== field)
       }
     }
-    return impacted
+    return fields
   }
 
   // TODO: allow to control the default datalayer
@@ -1537,7 +1537,6 @@ export default class Umap extends ServerStored {
 
   importRaw(rawData) {
     const importedData = JSON.parse(rawData)
-    const mustReindex = 'sortKey' in Object.keys(importedData.properties)
 
     this.setProperties(importedData.properties)
 
@@ -1554,13 +1553,12 @@ export default class Umap extends ServerStored {
       dataLayer.fromUmapGeoJSON(geojson)
     }
 
-    // Do a whole render
-    this.render(['name', 'tilelayer', 'limitBounds'])
-    this.eachDataLayer((datalayer) => {
-      if (mustReindex) datalayer.reindex()
-      datalayer.redraw()
-    })
-    this.propagate()
+    // For now render->propagate expect a `properties.` prefix.
+    // Remove this when we have refactored schema and render.
+    const fields = Object.keys(importedData.properties).map(
+      (field) => `properties.${field}`
+    )
+    this.render(fields)
     this._leafletMap._setDefaultCenter()
     this.isDirty = true
   }
