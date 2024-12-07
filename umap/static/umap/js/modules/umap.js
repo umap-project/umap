@@ -1554,7 +1554,8 @@ export default class Umap extends ServerStored {
       dataLayer.fromUmapGeoJSON(geojson)
     }
 
-    this._leafletMap.renderUI()
+    // Do a whole render
+    this.render(['name', 'tilelayer', 'limitBounds'])
     this.eachDataLayer((datalayer) => {
       if (mustReindex) datalayer.reindex()
       datalayer.redraw()
