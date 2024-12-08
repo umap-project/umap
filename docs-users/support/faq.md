@@ -77,6 +77,7 @@ Any property of the feature will be available, plus:
 - `{locale}` → the locale in the form `en` or `en_US` when a variant is used
 - `{lang}` → the lang in the form `en` or `en-us` when a variant is used
 - `{measure}` → the length of a line or the area of a polygon
+- `{gain}`/`{loss}` → the elevation gain/loss of a line (only if it contains the altitude information)
 - `{rank}` → the rank of the feature in the layer
 - `{layer}` → the name of the feature's layer
 - `{zoom}` → the current map zoom

@@ -400,6 +400,35 @@ export const LeafletPolyline = Polyline.extend({
     )
     return L.GeoUtil.readableDistance(length, this._map.measureTools.getMeasureUnit())
   },
+
+  getElevation: function () {
+    const lineElevation = (latlngs) => {
+      let gain = 0
+      let loss = 0
+      for (let i = 0, n = latlngs.length - 1; i < n; i++) {
+        const fromAlt = latlngs[i].alt
+        const toAlt = latlngs[i + 1].alt
+        if (fromAlt === undefined || toAlt === undefined) continue
+        if (fromAlt > toAlt) loss += fromAlt - toAlt
+        else gain += toAlt - fromAlt
+      }
+      return [gain, loss]
+    }
+    let shapes
+    if (LineUtil.isFlat(this._latlngs)) {
+      shapes = [this._latlngs]
+    } else {
+      shapes = this._latlngs
+    }
+    let totalGain = 0
+    let totalLoss = 0
+    for (const shape of shapes) {
+      const [gain, loss] = lineElevation(shape)
+      totalGain += gain
+      totalLoss += loss
+    }
+    return [Math.round(totalGain), Math.round(totalLoss)]
+  },
 })
 
 export const LeafletPolygon = Polygon.extend({
