@@ -42,7 +42,7 @@ class LicenceFactory(factory.django.DjangoModelFactory):
 
 class TileLayerFactory(factory.django.DjangoModelFactory):
     name = "Test zoom layer"
-    url_template = "https://{s}.test.org/osmfr/{z}/{x}/{y}.png"
+    url_template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution = "Test layer attribution"
 
     class Meta:
@@ -156,5 +156,6 @@ def login_required(response):
 
 
 def mock_tiles(route):
+    print("Intercepted route", route.request.url)
     path = Path(__file__).parent / "fixtures/empty_tile.png"
     route.fulfill(path=path)
