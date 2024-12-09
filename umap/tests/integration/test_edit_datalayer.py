@@ -221,3 +221,14 @@ def test_deleting_datalayer_should_remove_from_caption(
     page.locator(".panel.right").get_by_title("Delete layer").click()
     page.get_by_role("button", name="OK").click()
     expect(panel.get_by_text("test datalayer")).to_be_hidden()
+
+
+def test_can_edit_datalayer_name_in_list(live_server, openmap, datalayer, page):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_text("test datalayer").click()
+    page.get_by_text("test datalayer").fill("test datalayer foobar")
+    page.get_by_role("button", name="Open browser").click()
+    expect(
+        page.locator(".panel.left").get_by_text("test datalayer foobar")
+    ).to_be_visible()

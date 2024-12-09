@@ -259,6 +259,35 @@ L.FormBuilder.CheckBox.include({
   },
 })
 
+L.FormBuilder.EditableText = L.FormBuilder.Element.extend({
+  build: function () {
+    this.input = L.DomUtil.create('span', this.options.className || '', this.parentNode)
+    this.input.contentEditable = true
+    this.fetch()
+    L.DomEvent.on(this.input, 'input', this.sync, this)
+    L.DomEvent.on(this.input, 'keypress', this.onKeyPress, this)
+  },
+
+  getParentNode: function () {
+    return this.form
+  },
+
+  value: function () {
+    return this.input.textContent
+  },
+
+  fetch: function () {
+    this.input.textContent = this.toHTML()
+  },
+
+  onKeyPress: function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault()
+      this.input.blur()
+    }
+  },
+})
+
 L.FormBuilder.ColorPicker = L.FormBuilder.Input.extend({
   colors: U.COLORS,
   getParentNode: function () {

@@ -1423,9 +1423,14 @@ export default class Umap extends ServerStored {
       const row = DomUtil.create('li', 'orderable', ul)
       DomUtil.createIcon(row, 'icon-drag', translate('Drag to reorder'))
       datalayer.renderToolbox(row)
-      const title = DomUtil.add('span', '', row, datalayer.options.name)
+      const builder = new U.FormBuilder(
+        datalayer,
+        [['options.name', { handler: 'EditableText' }]],
+        { className: 'umap-form-inline' }
+      )
+      const form = builder.build()
+      row.appendChild(form)
       row.classList.toggle('off', !datalayer.isVisible())
-      title.textContent = datalayer.options.name
       row.dataset.id = stamp(datalayer)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
