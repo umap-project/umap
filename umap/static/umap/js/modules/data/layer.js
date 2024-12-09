@@ -626,6 +626,7 @@ export class DataLayer extends ServerStored {
         'options.type',
         { handler: 'LayerTypeChooser', label: translate('Type of layer') },
       ],
+      'options.labelKey',
       [
         'options.displayOnLoad',
         { label: translate('Display on load'), handler: 'Switch' },
@@ -698,7 +699,6 @@ export class DataLayer extends ServerStored {
       'options.zoomTo',
       'options.fromZoom',
       'options.toZoom',
-      'options.labelKey',
     ]
 
     builder = new U.FormBuilder(this, optionsFields, {
