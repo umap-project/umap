@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand
 
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         days = options["days"]
-        since = datetime.now(UTC) - timedelta(days=days)
+        since = datetime.utcnow() - timedelta(days=days)
         print(f"Deleting map in trash since {since}")
         maps = Map.objects.filter(share_status=Map.DELETED, modified_at__lt=since)
         for map in maps:

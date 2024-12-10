@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from unittest import mock
 
 import pytest
@@ -11,13 +11,13 @@ from .base import MapFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_purge_purgatory(user):
+def test_empty_trash(user):
     recent = MapFactory(owner=user)
     recent_deleted = MapFactory(owner=user)
     recent_deleted.move_to_trash()
     recent_deleted.save()
     with mock.patch("django.utils.timezone.now") as mocked:
-        mocked.return_value = datetime.now(UTC) - timedelta(days=8)
+        mocked.return_value = datetime.utcnow() - timedelta(days=8)
         old_deleted = MapFactory(owner=user)
         old_deleted.move_to_trash()
         old_deleted.save()
