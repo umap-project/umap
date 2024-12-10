@@ -513,10 +513,11 @@ class DataLayer(NamedModel):
                 force_insert=force_insert, force_update=force_update, **kwargs
             )
         self.purge_gzip()
-        self.purge_old_versions()
+        self.purge_old_versions(keep=settings.UMAP_KEEP_VERSIONS)
 
     def delete(self, **kwargs):
         self.purge_gzip()
+        self.purge_old_versions(keep=None)
         return super().delete(**kwargs)
 
     def upload_to(self):
@@ -596,14 +597,16 @@ class DataLayer(NamedModel):
     def get_version_path(self, name):
         return "{root}/{name}".format(root=self.storage_root(), name=name)
 
-    def purge_old_versions(self):
+    def purge_old_versions(self, keep=None):
         root = self.storage_root()
-        versions = self.versions[settings.UMAP_KEEP_VERSIONS :]
+        versions = self.versions
+        if keep is not None:
+            versions = versions[keep:]
         for version in versions:
             name = version["name"]
             # Should not be in the list, but ensure to not delete the file
             # currently used in database
-            if self.geojson.name.endswith(name):
+            if keep is not None and self.geojson.name.endswith(name):
                 continue
             try:
                 self.geojson.storage.delete(os.path.join(root, name))
