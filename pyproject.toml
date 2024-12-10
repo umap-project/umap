@@ -69,7 +69,7 @@ sync = [
   "channels==4.2.0",
   "daphne==4.1.2",
   "pydantic==2.10.3",
-  "websockets==13.1",
+  "websockets==14.1",
 ]
 
 [project.scripts]
