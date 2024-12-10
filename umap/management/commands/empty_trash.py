@@ -6,7 +6,7 @@ from umap.models import Map
 
 
 class Command(BaseCommand):
-    help = "Remove maps in trash. Eg.: umap purge_deleted --days 7"
+    help = "Remove maps in trash. Eg.: umap empty_trash --days 7"
 
     def add_arguments(self, parser):
         parser.add_argument(
