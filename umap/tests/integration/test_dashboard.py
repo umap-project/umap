@@ -22,7 +22,7 @@ def test_owner_can_delete_map_after_confirmation(map, live_server, login):
     with page.expect_navigation():
         delete_button.click()
     assert dialog_shown
-    assert Map.objects.all().count() == 0
+    assert Map.objects.get(pk=map.pk).share_status == Map.DELETED
 
 
 def test_dashboard_map_preview(map, live_server, datalayer, login):

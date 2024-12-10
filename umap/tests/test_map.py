@@ -167,3 +167,10 @@ def test_can_change_default_share_status(user, settings):
     map = Map.objects.create(owner=user, center=DEFAULT_CENTER)
     map = MapFactory(owner=user)
     assert map.share_status == Map.PUBLIC
+
+
+def test_move_to_trash(user, map):
+    map.move_to_trash()
+    map.save()
+    reloaded = Map.objects.get(pk=map.pk)
+    assert reloaded.share_status == Map.DELETED

@@ -273,7 +273,6 @@ def test_anonymous_can_edit_in_inherit_mode_and_map_in_public_mode(
 
 
 def test_should_remove_all_versions_on_delete(map, settings):
-    settings.UMAP_PURGATORY_ROOT = tempfile.mkdtemp()
     datalayer = DataLayerFactory(uuid="0f1161c0-c07f-4ba4-86c5-8d8981d8a813", old_id=17)
     root = Path(datalayer.storage_root())
     before = len(datalayer.geojson.storage.listdir(root)[1])
@@ -292,4 +291,3 @@ def test_should_remove_all_versions_on_delete(map, settings):
     datalayer.delete()
     found = datalayer.geojson.storage.listdir(root)[1]
     assert found == [other, f"{other}.gz"]
-    assert len(list(Path(settings.UMAP_PURGATORY_ROOT).iterdir())) == 4 + before

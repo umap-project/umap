@@ -240,7 +240,7 @@ def test_anonymous_owner_can_delete_the_map(anonymap, live_server, owner_session
     owner_session.get_by_role("button", name="Delete").click()
     with owner_session.expect_response(re.compile(r".*/update/delete/.*")):
         owner_session.get_by_role("button", name="OK").click()
-    assert not Map.objects.count()
+    assert Map.objects.get(pk=anonymap.pk).share_status == Map.DELETED
 
 
 def test_non_owner_cannot_see_delete_button(anonymap, live_server, page):

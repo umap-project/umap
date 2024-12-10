@@ -114,8 +114,10 @@ def test_delete(client, map, datalayer):
         url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
     )
     assert response.status_code == 200
-    assert not Map.objects.filter(pk=map.pk).exists()
-    assert not DataLayer.objects.filter(pk=datalayer.pk).exists()
+    assert Map.objects.filter(pk=map.pk).exists()
+    assert DataLayer.objects.filter(pk=datalayer.pk).exists()
+    reloaded = Map.objects.get(pk=map.pk)
+    assert reloaded.share_status == Map.DELETED
     # Check that user has not been impacted
     assert User.objects.filter(pk=map.owner.pk).exists()
     # Test response is a json
@@ -406,7 +408,9 @@ def test_anonymous_delete(cookieclient, anonymap):
         url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
     )
     assert response.status_code == 200
-    assert not Map.objects.filter(pk=anonymap.pk).count()
+    assert Map.objects.filter(pk=anonymap.pk).exists()
+    reloaded = Map.objects.get(pk=anonymap.pk)
+    assert reloaded.share_status == Map.DELETED
     # Test response is a json
     j = json.loads(response.content.decode())
     assert "redirect" in j

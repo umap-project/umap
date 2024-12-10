@@ -1022,7 +1022,7 @@ class MapDelete(DeleteView):
         self.object = self.get_object()
         if not self.object.can_delete(self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
-        self.object.delete()
+        self.object.move_to_trash()
         home_url = reverse("home")
         messages.info(self.request, _("Map successfully deleted."))
         if is_ajax(self.request):

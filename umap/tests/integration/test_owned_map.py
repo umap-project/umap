@@ -141,7 +141,7 @@ def test_owner_has_delete_map_button(map, live_server, login):
     delete.click()
     with page.expect_navigation():
         page.get_by_role("button", name="OK").click()
-    assert Map.objects.all().count() == 0
+    assert Map.objects.get(pk=map.pk).share_status == Map.DELETED
 
 
 def test_editor_do_not_have_delete_map_button(map, live_server, login, user):

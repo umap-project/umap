@@ -276,6 +276,10 @@ class Map(NamedModel):
         )
         return map_settings
 
+    def move_to_trash(self):
+        self.share_status = Map.DELETED
+        self.save()
+
     def delete(self, **kwargs):
         # Explicitely call datalayers.delete, so we can deal with removing files
         # (the cascade delete would not call the model delete method)
@@ -513,16 +517,7 @@ class DataLayer(NamedModel):
 
     def delete(self, **kwargs):
         self.purge_gzip()
-        self.to_purgatory()
         return super().delete(**kwargs)
-
-    def to_purgatory(self):
-        dest = Path(settings.UMAP_PURGATORY_ROOT)
-        dest.mkdir(parents=True, exist_ok=True)
-        src = Path(self.geojson.storage.location) / self.storage_root()
-        for version in self.versions:
-            name = version["name"]
-            shutil.move(src / name, dest / f"{self.map.pk}_{name}")
 
     def upload_to(self):
         root = self.storage_root()
