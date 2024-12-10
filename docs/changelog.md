@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.3 - 2024-12-10
+
+### Bug fixes
+* correctly reset Dialog’s returnValue by @davidbgk in #2356
+
 ## 2.7.2 - 2024-11-15
 
 ### Bug fixes
