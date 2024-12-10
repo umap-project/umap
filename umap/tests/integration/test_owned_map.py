@@ -61,8 +61,12 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
-    select = page.locator(".umap-field-share_status select")
-    expect(select).to_be_visible()
+    expect(page.locator(".umap-field-share_status select")).to_be_visible()
+    options = [
+        int(option.get_attribute("value"))
+        for option in page.locator(".umap-field-share_status select option").all()
+    ]
+    assert options == [Map.DRAFT, Map.PUBLIC, Map.OPEN, Map.PRIVATE]
     # expect(select).to_have_value(Map.PUBLIC)  # Does not work
     owner_field = page.locator(".umap-field-owner")
     expect(owner_field).to_be_visible()
@@ -181,29 +185,31 @@ def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     page.get_by_title("Manage layers").click()
     page.get_by_title("Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
-    save = page.get_by_role("button", name="Save")
-    expect(save).to_be_visible()
+    expect(
+        page.get_by_role("button", name="Visibility: Draft (private)")
+    ).to_be_visible()
+    expect(page.get_by_role("button", name="Save", exact=True)).to_be_hidden()
     with page.expect_response(re.compile(r".*/map/create/")):
-        save.click()
+        page.get_by_role("button", name="Save draft", exact=True).click()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
-    select = page.locator(".umap-field-share_status select")
-    expect(select).to_be_visible()
-    option = page.locator("select[name='share_status'] option:checked")
-    expect(option).to_have_text("Everyone (public)")
-    owner_field = page.locator(".umap-field-owner")
-    expect(owner_field).to_be_visible()
-    editors_field = page.locator(".umap-field-editors input")
-    expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "Layer 1"')
-    expect(datalayer_label).to_be_visible()
+    expect(page.locator(".umap-field-share_status select")).to_be_visible()
+    expect(page.locator("select[name='share_status'] option:checked")).to_have_text(
+        "Draft (private)"
+    )
+    expect(page.locator(".umap-field-owner")).to_be_visible()
+    expect(page.locator(".umap-field-editors input")).to_be_visible()
+    expect(page.get_by_text('Who can edit "Layer 1"')).to_be_visible()
     options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(4)
     option = page.locator(
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
+    page.locator('select[name="share_status"]').select_option("1")
+    expect(page.get_by_role("button", name="Save draft", exact=True)).to_be_hidden()
+    expect(page.get_by_role("button", name="Save", exact=True)).to_be_visible()
 
 
 def test_can_change_owner(map, live_server, login, user):

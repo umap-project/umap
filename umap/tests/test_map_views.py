@@ -42,7 +42,7 @@ def test_create(client, user, post_data):
     assert created_map.center.y == 48.94415123418794
     assert j["permissions"] == {
         "edit_status": 3,
-        "share_status": 1,
+        "share_status": 0,
         "owner": {"id": user.pk, "name": "Joe", "url": "/en/user/Joe/"},
         "editors": [],
     }
@@ -241,42 +241,46 @@ def test_map_creation_should_allow_unicode_names(client, map, post_data):
     assert created_map.slug == "map"
 
 
-def test_anonymous_can_access_map_with_share_status_public(client, map):
+@pytest.mark.parametrize("share_status", [Map.PUBLIC, Map.OPEN])
+def test_anonymous_can_access_map_with_share_status_accessible(
+    client, map, share_status
+):
     url = reverse("map", args=(map.slug, map.pk))
-    map.share_status = map.PUBLIC
+    map.share_status = share_status
     map.save()
     response = client.get(url)
     assert response.status_code == 200
 
 
-def test_anonymous_can_access_map_with_share_status_open(client, map):
+@pytest.mark.parametrize(
+    "share_status", [Map.PRIVATE, Map.DRAFT, Map.BLOCKED, Map.DELETED]
+)
+def test_anonymous_cannot_access_map_with_share_status_restricted(
+    client, map, share_status
+):
     url = reverse("map", args=(map.slug, map.pk))
-    map.share_status = map.OPEN
-    map.save()
-    response = client.get(url)
-    assert response.status_code == 200
-
-
-def test_anonymous_cannot_access_map_with_share_status_private(client, map):
-    url = reverse("map", args=(map.slug, map.pk))
-    map.share_status = map.PRIVATE
+    map.share_status = share_status
     map.save()
     response = client.get(url)
     assert response.status_code == 403
 
 
-def test_owner_can_access_map_with_share_status_private(client, map):
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.DRAFT])
+def test_owner_can_access_map_with_share_status_restricted(client, map, share_status):
     url = reverse("map", args=(map.slug, map.pk))
-    map.share_status = map.PRIVATE
+    map.share_status = share_status
     map.save()
     client.login(username=map.owner.username, password="123123")
     response = client.get(url)
     assert response.status_code == 200
 
 
-def test_editors_can_access_map_with_share_status_private(client, map, user):
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.DRAFT])
+def test_editors_can_access_map_with_share_status_resricted(
+    client, map, user, share_status
+):
     url = reverse("map", args=(map.slug, map.pk))
-    map.share_status = map.PRIVATE
+    map.share_status = share_status
     map.editors.add(user)
     map.save()
     client.login(username=user.username, password="123123")
@@ -284,10 +288,11 @@ def test_editors_can_access_map_with_share_status_private(client, map, user):
     assert response.status_code == 200
 
 
-def test_anonymous_cannot_access_map_with_share_status_blocked(client, map):
+def test_owner_cannot_access_map_with_share_status_deleted(client, map):
     url = reverse("map", args=(map.slug, map.pk))
-    map.share_status = map.BLOCKED
+    map.share_status = map.DELETED
     map.save()
+    client.login(username=map.owner.username, password="123123")
     response = client.get(url)
     assert response.status_code == 403
 
@@ -408,12 +413,30 @@ def test_anonymous_delete(cookieclient, anonymap):
 
 
 @pytest.mark.usefixtures("allow_anonymous")
-def test_no_cookie_cant_delete(client, anonymap):
+def test_no_cookie_cannot_delete(client, anonymap):
     url = reverse("map_delete", args=(anonymap.pk,))
     response = client.post(
         url, headers={"X-Requested-With": "XMLHttpRequest"}, follow=True
     )
     assert response.status_code == 403
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_no_cookie_cannot_view_anonymous_owned_map_in_draft(client, anonymap):
+    anonymap.share_status = Map.DRAFT
+    anonymap.save()
+    url = reverse("map", kwargs={"map_id": anonymap.pk, "slug": anonymap.slug})
+    response = client.get(url)
+    assert response.status_code == 403
+
+
+@pytest.mark.usefixtures("allow_anonymous")
+def test_owner_can_view_anonymous_owned_map_in_draft(cookieclient, anonymap):
+    anonymap.share_status = Map.DRAFT
+    anonymap.save()
+    url = reverse("map", kwargs={"map_id": anonymap.pk, "slug": anonymap.slug})
+    response = cookieclient.get(url)
+    assert response.status_code == 200
 
 
 @pytest.mark.usefixtures("allow_anonymous")
@@ -555,16 +578,6 @@ def test_create_readonly(client, user, post_data, settings):
     response = client.post(url, post_data)
     assert response.status_code == 403
     assert response.content == b"Site is readonly for maintenance"
-
-
-def test_search(client, map):
-    # Very basic search, that do not deal with accent nor case.
-    # See install.md for how to have a smarter dict + index.
-    map.name = "Blé dur"
-    map.save()
-    url = reverse("search")
-    response = client.get(url + "?q=Blé")
-    assert "Blé dur" in response.content.decode()
 
 
 def test_authenticated_user_can_star_map(client, map, user):
@@ -748,7 +761,9 @@ def test_download_multiple_maps_editor(client, map, datalayer):
         assert f.infolist()[1].filename == f"umap_backup_test-map_{map.id}.umap"
 
 
-@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED])
+@pytest.mark.parametrize(
+    "share_status", [Map.PRIVATE, Map.BLOCKED, Map.DRAFT, Map.DELETED]
+)
 def test_download_shared_status_map(client, map, datalayer, share_status):
     map.share_status = share_status
     map.save()
@@ -757,8 +772,9 @@ def test_download_shared_status_map(client, map, datalayer, share_status):
     assert response.status_code == 403
 
 
-def test_download_my_map(client, map, datalayer):
-    map.share_status = Map.PRIVATE
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.DRAFT])
+def test_download_my_map(client, map, datalayer, share_status):
+    map.share_status = share_status
     map.save()
     client.login(username=map.owner.username, password="123123")
     url = reverse("map_download", args=(map.pk,))
@@ -769,7 +785,19 @@ def test_download_my_map(client, map, datalayer):
     assert j["type"] == "umap"
 
 
-@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.BLOCKED, Map.OPEN])
+@pytest.mark.parametrize("share_status", [Map.BLOCKED, Map.DELETED])
+def test_download_my_map_blocked_or_deleted(client, map, datalayer, share_status):
+    map.share_status = share_status
+    map.save()
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("map_download", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "share_status", [Map.PRIVATE, Map.BLOCKED, Map.OPEN, Map.DRAFT]
+)
 def test_oembed_shared_status_map(client, map, datalayer, share_status):
     map.share_status = share_status
     map.save()

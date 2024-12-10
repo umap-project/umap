@@ -102,6 +102,7 @@ class MapFactory(factory.django.DjangoModelFactory):
 
     licence = factory.SubFactory(LicenceFactory)
     owner = factory.SubFactory(UserFactory)
+    share_status = Map.PUBLIC
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):

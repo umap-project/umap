@@ -40,16 +40,12 @@ class UpdateMapPermissionsForm(forms.ModelForm):
 
 
 class AnonymousMapPermissionsForm(forms.ModelForm):
-    STATUS = (
-        (Map.OWNER, _("Only editable with secret edit link")),
-        (Map.ANONYMOUS, _("Everyone can edit")),
-    )
-
-    edit_status = forms.ChoiceField(choices=STATUS)
+    edit_status = forms.ChoiceField(choices=Map.ANONYMOUS_EDIT_STATUS)
+    share_status = forms.ChoiceField(choices=Map.ANONYMOUS_SHARE_STATUS)
 
     class Meta:
         model = Map
-        fields = ("edit_status",)
+        fields = ("edit_status", "share_status")
 
 
 class DataLayerForm(forms.ModelForm):
@@ -65,13 +61,7 @@ class DataLayerPermissionsForm(forms.ModelForm):
 
 
 class AnonymousDataLayerPermissionsForm(forms.ModelForm):
-    STATUS = (
-        (DataLayer.INHERIT, _("Inherit")),
-        (DataLayer.OWNER, _("Only editable with secret edit link")),
-        (DataLayer.ANONYMOUS, _("Everyone can edit")),
-    )
-
-    edit_status = forms.ChoiceField(choices=STATUS)
+    edit_status = forms.ChoiceField(choices=DataLayer.ANONYMOUS_EDIT_STATUS)
 
     class Meta:
         model = DataLayer

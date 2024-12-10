@@ -38,13 +38,22 @@ def get_user_stars_url(self):
     return reverse("user_stars", kwargs={"identifier": identifier})
 
 
+def get_user_metadata(self):
+    return {
+        "id": self.pk,
+        "name": str(self),
+        "url": self.get_url(),
+    }
+
+
 User.add_to_class("__str__", display_name)
 User.add_to_class("get_url", get_user_url)
 User.add_to_class("get_stars_url", get_user_stars_url)
+User.add_to_class("get_metadata", get_user_metadata)
 
 
 def get_default_share_status():
-    return settings.UMAP_DEFAULT_SHARE_STATUS or Map.PUBLIC
+    return settings.UMAP_DEFAULT_SHARE_STATUS or Map.DRAFT
 
 
 def get_default_edit_status():
@@ -161,20 +170,30 @@ class Map(NamedModel):
     ANONYMOUS = 1
     COLLABORATORS = 2
     OWNER = 3
+    DRAFT = 0
     PUBLIC = 1
     OPEN = 2
     PRIVATE = 3
     BLOCKED = 9
+    DELETED = 99
+    ANONYMOUS_EDIT_STATUS = (
+        (OWNER, _("Only editable with secret edit link")),
+        (ANONYMOUS, _("Everyone can edit")),
+    )
     EDIT_STATUS = (
         (ANONYMOUS, _("Everyone")),
         (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
     )
-    SHARE_STATUS = (
+    ANONYMOUS_SHARE_STATUS = (
+        (DRAFT, _("Draft (private)")),
         (PUBLIC, _("Everyone (public)")),
+    )
+    SHARE_STATUS = ANONYMOUS_SHARE_STATUS + (
         (OPEN, _("Anyone with link")),
         (PRIVATE, _("Editors and team only")),
         (BLOCKED, _("Blocked")),
+        (DELETED, _("Deleted")),
     )
     slug = models.SlugField(db_index=True)
     center = models.PointField(geography=True, verbose_name=_("center"))
@@ -352,19 +371,20 @@ class Map(NamedModel):
         return can
 
     def can_view(self, request):
-        if self.share_status == self.BLOCKED:
+        if self.share_status in [Map.BLOCKED, Map.DELETED]:
             can = False
+        elif self.share_status in [Map.PUBLIC, Map.OPEN]:
+            can = True
         elif self.owner is None:
-            can = True
-        elif self.share_status in [self.PUBLIC, self.OPEN]:
-            can = True
+            can = settings.UMAP_ALLOW_ANONYMOUS and self.is_anonymous_owner(request)
         elif not request.user.is_authenticated:
             can = False
         elif request.user == self.owner:
             can = True
         else:
+            restricted = self.share_status in [Map.PRIVATE, Map.DRAFT]
             can = not (
-                self.share_status == self.PRIVATE
+                restricted
                 and request.user not in self.editors.all()
                 and self.team not in request.user.teams.all()
             )
@@ -443,6 +463,11 @@ class DataLayer(NamedModel):
         (ANONYMOUS, _("Everyone")),
         (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
+    )
+    ANONYMOUS_EDIT_STATUS = (
+        (INHERIT, _("Inherit")),
+        (OWNER, _("Only editable with secret edit link")),
+        (ANONYMOUS, _("Everyone can edit")),
     )
     uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)

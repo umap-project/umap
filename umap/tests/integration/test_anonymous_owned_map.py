@@ -76,8 +76,6 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
     edit_permissions = owner_session.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
-    select = owner_session.locator(".umap-field-share_status select")
-    expect(select).to_be_hidden()
     owner_field = owner_session.locator(".umap-field-owner")
     expect(owner_field).to_be_hidden()
     editors_field = owner_session.locator(".umap-field-editors input")
@@ -92,8 +90,15 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session):
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
-    # Those fields should not be present in anonymous maps
-    expect(owner_session.locator(".umap-field-share_status select")).to_be_hidden()
+    expect(owner_session.locator(".umap-field-share_status select")).to_be_visible()
+    options = [
+        int(option.get_attribute("value"))
+        for option in owner_session.locator(
+            ".umap-field-share_status select option"
+        ).all()
+    ]
+    assert options == [Map.DRAFT, Map.PUBLIC]
+    # This field should not be present in anonymous maps
     expect(owner_session.locator(".umap-field-owner")).to_be_hidden()
 
 
@@ -135,15 +140,15 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
     page.get_by_title("Manage layers").click()
     page.get_by_title("Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
-    save = page.get_by_role("button", name="Save")
-    expect(save).to_be_visible()
+    expect(
+        page.get_by_role("button", name="Visibility: Draft (private)")
+    ).to_be_visible()
+    expect(page.get_by_role("button", name="Save", exact=True)).to_be_hidden()
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
-        save.click()
+        page.get_by_role("button", name="Save draft", exact=True).click()
     edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
-    select = page.locator(".umap-field-share_status select")
-    expect(select).to_be_hidden()
     owner_field = page.locator(".umap-field-owner")
     expect(owner_field).to_be_hidden()
     editors_field = page.locator(".umap-field-editors input")
@@ -157,6 +162,9 @@ def test_can_change_perms_after_create(tilelayer, live_server, page):
     )
     expect(option).to_have_text("Inherit")
     expect(page.get_by_label("Secret edit link:")).to_be_visible()
+    page.locator('select[name="share_status"]').select_option("1")
+    expect(page.get_by_role("button", name="Save draft", exact=True)).to_be_hidden()
+    expect(page.get_by_role("button", name="Save", exact=True)).to_be_visible()
 
 
 def test_alert_message_after_create(
