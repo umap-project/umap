@@ -31,8 +31,8 @@ const TOP_BAR_TEMPLATE = `
         <button class="edit-save button round" type="button" data-ref="save">
             <i class="icon icon-16 icon-save"></i>
             <i class="icon icon-16 icon-save-disabled"></i>
-            <span data-ref="saveLabel">${translate('Save')}</span>
-            <span data-ref="saveDraftLabel">${translate('Save draft')}</span>
+            <span hidden data-ref="saveLabel">${translate('Save')}</span>
+            <span hidden data-ref="saveDraftLabel">${translate('Save draft')}</span>
         </button>
     </div>
 </div>`
