@@ -13,14 +13,14 @@ develop: ## Install the test and dev dependencies
 .PHONY: format
 format: ## Format the code and templates files
 	-djlint umap/templates --reformat
-	-isort --profile black umap/
+	-isort umap/
 	-ruff format --target-version=py310 umap/
 
 .PHONY: lint
 lint: ## Lint the code and template files
 	npx eslint umap/static/umap/js/
 	djlint umap/templates --lint
-	isort --check --profile black umap/
+	isort --check umap/
 	ruff format --check --target-version=py310 umap/
 	vermin --no-tips --violations -t=3.10- umap/
 
