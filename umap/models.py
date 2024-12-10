@@ -38,13 +38,22 @@ def get_user_stars_url(self):
     return reverse("user_stars", kwargs={"identifier": identifier})
 
 
+def get_user_metadata(self):
+    return {
+        "id": self.pk,
+        "name": str(self),
+        "url": self.get_url(),
+    }
+
+
 User.add_to_class("__str__", display_name)
 User.add_to_class("get_url", get_user_url)
 User.add_to_class("get_stars_url", get_user_stars_url)
+User.add_to_class("get_metadata", get_user_metadata)
 
 
 def get_default_share_status():
-    return settings.UMAP_DEFAULT_SHARE_STATUS or Map.PUBLIC
+    return settings.UMAP_DEFAULT_SHARE_STATUS or Map.DRAFT
 
 
 def get_default_edit_status():
@@ -161,20 +170,30 @@ class Map(NamedModel):
     ANONYMOUS = 1
     COLLABORATORS = 2
     OWNER = 3
+    DRAFT = 0
     PUBLIC = 1
     OPEN = 2
     PRIVATE = 3
     BLOCKED = 9
+    DELETED = 99
+    ANONYMOUS_EDIT_STATUS = (
+        (OWNER, _("Only editable with secret edit link")),
+        (ANONYMOUS, _("Everyone can edit")),
+    )
     EDIT_STATUS = (
         (ANONYMOUS, _("Everyone")),
         (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
     )
-    SHARE_STATUS = (
+    ANONYMOUS_SHARE_STATUS = (
+        (DRAFT, _("Draft (private)")),
         (PUBLIC, _("Everyone (public)")),
+    )
+    SHARE_STATUS = ANONYMOUS_SHARE_STATUS + (
         (OPEN, _("Anyone with link")),
         (PRIVATE, _("Editors and team only")),
         (BLOCKED, _("Blocked")),
+        (DELETED, _("Deleted")),
     )
     slug = models.SlugField(db_index=True)
     center = models.PointField(geography=True, verbose_name=_("center"))
@@ -256,6 +275,10 @@ class Map(NamedModel):
             }
         )
         return map_settings
+
+    def move_to_trash(self):
+        self.share_status = Map.DELETED
+        self.save()
 
     def delete(self, **kwargs):
         # Explicitely call datalayers.delete, so we can deal with removing files
@@ -352,19 +375,20 @@ class Map(NamedModel):
         return can
 
     def can_view(self, request):
-        if self.share_status == self.BLOCKED:
+        if self.share_status in [Map.BLOCKED, Map.DELETED]:
             can = False
+        elif self.share_status in [Map.PUBLIC, Map.OPEN]:
+            can = True
         elif self.owner is None:
-            can = True
-        elif self.share_status in [self.PUBLIC, self.OPEN]:
-            can = True
+            can = settings.UMAP_ALLOW_ANONYMOUS and self.is_anonymous_owner(request)
         elif not request.user.is_authenticated:
             can = False
         elif request.user == self.owner:
             can = True
         else:
+            restricted = self.share_status in [Map.PRIVATE, Map.DRAFT]
             can = not (
-                self.share_status == self.PRIVATE
+                restricted
                 and request.user not in self.editors.all()
                 and self.team not in request.user.teams.all()
             )
@@ -444,6 +468,11 @@ class DataLayer(NamedModel):
         (COLLABORATORS, _("Editors and team only")),
         (OWNER, _("Owner only")),
     )
+    ANONYMOUS_EDIT_STATUS = (
+        (INHERIT, _("Inherit")),
+        (OWNER, _("Only editable with secret edit link")),
+        (ANONYMOUS, _("Everyone can edit")),
+    )
     uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
@@ -484,20 +513,12 @@ class DataLayer(NamedModel):
                 force_insert=force_insert, force_update=force_update, **kwargs
             )
         self.purge_gzip()
-        self.purge_old_versions()
+        self.purge_old_versions(keep=settings.UMAP_KEEP_VERSIONS)
 
     def delete(self, **kwargs):
         self.purge_gzip()
-        self.to_purgatory()
+        self.purge_old_versions(keep=None)
         return super().delete(**kwargs)
-
-    def to_purgatory(self):
-        dest = Path(settings.UMAP_PURGATORY_ROOT)
-        dest.mkdir(parents=True, exist_ok=True)
-        src = Path(self.geojson.storage.location) / self.storage_root()
-        for version in self.versions:
-            name = version["name"]
-            shutil.move(src / name, dest / f"{self.map.pk}_{name}")
 
     def upload_to(self):
         root = self.storage_root()
@@ -576,14 +597,16 @@ class DataLayer(NamedModel):
     def get_version_path(self, name):
         return "{root}/{name}".format(root=self.storage_root(), name=name)
 
-    def purge_old_versions(self):
+    def purge_old_versions(self, keep=None):
         root = self.storage_root()
-        versions = self.versions[settings.UMAP_KEEP_VERSIONS :]
+        versions = self.versions
+        if keep is not None:
+            versions = versions[keep:]
         for version in versions:
             name = version["name"]
             # Should not be in the list, but ensure to not delete the file
             # currently used in database
-            if self.geojson.name.endswith(name):
+            if keep is not None and self.geojson.name.endswith(name):
                 continue
             try:
                 self.geojson.storage.delete(os.path.join(root, name))

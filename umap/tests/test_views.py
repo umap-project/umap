@@ -289,6 +289,28 @@ def test_user_dashboard_display_user_maps(client, map):
 
 
 @pytest.mark.django_db
+def test_user_dashboard_do_not_display_blocked_user_maps(client, map):
+    map.share_status = Map.BLOCKED
+    map.save()
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+
+
+@pytest.mark.django_db
+def test_user_dashboard_do_not_display_deleted_user_maps(client, map):
+    map.share_status = Map.DELETED
+    map.save()
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(reverse("user_dashboard"))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+
+
+@pytest.mark.django_db
 def test_user_dashboard_display_user_team_maps(client, map, team, user):
     user.teams.add(team)
     user.save()
@@ -497,3 +519,34 @@ def test_websocket_token_is_generated_for_editors(client, user, user2, map):
     resp = client.get(token_url)
     token = resp.json().get("token")
     assert TimestampSigner().unsign_object(token, max_age=30)
+
+
+@pytest.mark.django_db
+def test_search(client, map):
+    # Very basic search, that do not deal with accent nor case.
+    # See install.md for how to have a smarter dict + index.
+    map.name = "Blé dur"
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?q=Blé")
+    assert "Blé dur" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_cannot_search_blocked_map(client, map):
+    map.name = "Blé dur"
+    map.share_status = Map.BLOCKED
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?q=Blé")
+    assert "Blé dur" not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_cannot_search_deleted_map(client, map):
+    map.name = "Blé dur"
+    map.share_status = Map.DELETED
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?q=Blé")
+    assert "Blé dur" not in response.content.decode()

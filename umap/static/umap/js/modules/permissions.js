@@ -50,6 +50,14 @@ export class MapPermissions extends ServerStored {
           selectOptions: this._umap.properties.edit_statuses,
         },
       ])
+      fields.push([
+        'properties.share_status',
+        {
+          handler: 'IntSelect',
+          label: translate('Who can view'),
+          selectOptions: this._umap.properties.share_statuses,
+        },
+      ])
       const builder = new U.FormBuilder(this, fields)
       const form = builder.build()
       container.appendChild(form)
@@ -184,11 +192,11 @@ export class MapPermissions extends ServerStored {
     }
     if (this.isOwner() || this.isAnonymousMap()) {
       formData.append('edit_status', this.properties.edit_status)
+      formData.append('share_status', this.properties.share_status)
     }
     if (this.isOwner()) {
       formData.append('owner', this.properties.owner?.id)
       formData.append('team', this.properties.team?.id || '')
-      formData.append('share_status', this.properties.share_status)
     }
     const [data, response, error] = await this._umap.server.post(
       this.getUrl(),
@@ -227,6 +235,10 @@ export class MapPermissions extends ServerStored {
         this.properties.share_status
       ]
     }
+  }
+
+  isDraft() {
+    return this.properties.share_status === 0
   }
 }
 

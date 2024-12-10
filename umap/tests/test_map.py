@@ -2,6 +2,7 @@ import pytest
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
 
+from umap.forms import DEFAULT_CENTER
 from umap.models import Map
 
 from .base import MapFactory
@@ -160,8 +161,16 @@ def test_can_change_default_edit_status(user, settings):
 
 
 def test_can_change_default_share_status(user, settings):
+    map = Map.objects.create(owner=user, center=DEFAULT_CENTER)
+    assert map.share_status == Map.DRAFT
+    settings.UMAP_DEFAULT_SHARE_STATUS = Map.PUBLIC
+    map = Map.objects.create(owner=user, center=DEFAULT_CENTER)
     map = MapFactory(owner=user)
     assert map.share_status == Map.PUBLIC
-    settings.UMAP_DEFAULT_SHARE_STATUS = Map.PRIVATE
-    map = MapFactory(owner=user)
-    assert map.share_status == Map.PRIVATE
+
+
+def test_move_to_trash(user, map):
+    map.move_to_trash()
+    map.save()
+    reloaded = Map.objects.get(pk=map.pk)
+    assert reloaded.share_status == Map.DELETED

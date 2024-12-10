@@ -373,6 +373,7 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
 
     def get_maps(self):
         qs = self.get_search_queryset() or Map.objects.all()
+        qs = qs.exclude(share_status__in=[Map.DELETED, Map.BLOCKED])
         teams = self.object.teams.all()
         qs = (
             qs.filter(owner=self.object)
@@ -601,9 +602,6 @@ class MapDetailMixin(SessionMixin):
             "id": self.get_id(),
             "starred": self.is_starred(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
-            "share_statuses": [
-                (i, str(label)) for i, label in Map.SHARE_STATUS if i != Map.BLOCKED
-            ],
             "umap_version": VERSION,
             "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
             "websocketEnabled": settings.WEBSOCKET_ENABLED,
@@ -613,14 +611,21 @@ class MapDetailMixin(SessionMixin):
         }
         created = bool(getattr(self, "object", None))
         if (created and self.object.owner) or (not created and not user.is_anonymous):
-            map_statuses = Map.EDIT_STATUS
+            edit_statuses = Map.EDIT_STATUS
             datalayer_statuses = DataLayer.EDIT_STATUS
+            share_statuses = Map.SHARE_STATUS
         else:
-            map_statuses = AnonymousMapPermissionsForm.STATUS
-            datalayer_statuses = AnonymousDataLayerPermissionsForm.STATUS
-        properties["edit_statuses"] = [(i, str(label)) for i, label in map_statuses]
+            edit_statuses = Map.ANONYMOUS_EDIT_STATUS
+            datalayer_statuses = DataLayer.ANONYMOUS_EDIT_STATUS
+            share_statuses = Map.ANONYMOUS_SHARE_STATUS
+        properties["edit_statuses"] = [(i, str(label)) for i, label in edit_statuses]
         properties["datalayer_edit_statuses"] = [
             (i, str(label)) for i, label in datalayer_statuses
+        ]
+        properties["share_statuses"] = [
+            (i, str(label))
+            for i, label in share_statuses
+            if i not in [Map.BLOCKED, Map.DELETED]
         ]
         if self.get_short_url():
             properties["shortUrl"] = self.get_short_url()
@@ -684,14 +689,9 @@ class PermissionsMixin:
         permissions["edit_status"] = self.object.edit_status
         permissions["share_status"] = self.object.share_status
         if self.object.owner:
-            permissions["owner"] = {
-                "id": self.object.owner.pk,
-                "name": str(self.object.owner),
-                "url": self.object.owner.get_url(),
-            }
+            permissions["owner"] = self.object.owner.get_metadata()
             permissions["editors"] = [
-                {"id": editor.pk, "name": str(editor)}
-                for editor in self.object.editors.all()
+                editor.get_metadata() for editor in self.object.editors.all()
             ]
         if self.object.team:
             permissions["team"] = self.object.team.get_metadata()
@@ -846,6 +846,17 @@ class MapViewGeoJSON(MapView):
 
 class MapNew(MapDetailMixin, TemplateView):
     template_name = "umap/map_detail.html"
+
+    def get_map_properties(self):
+        properties = super().get_map_properties()
+        properties["permissions"] = {
+            "edit_status": Map.edit_status.field.default(),
+            "share_status": Map.share_status.field.default(),
+        }
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            properties["permissions"]["owner"] = user.get_metadata()
+        return properties
 
 
 class MapPreview(MapDetailMixin, TemplateView):
@@ -1011,7 +1022,7 @@ class MapDelete(DeleteView):
         self.object = self.get_object()
         if not self.object.can_delete(self.request):
             return HttpResponseForbidden(_("Only its owner can delete the map."))
-        self.object.delete()
+        self.object.move_to_trash()
         home_url = reverse("home")
         messages.info(self.request, _("Map successfully deleted."))
         if is_ajax(self.request):
