@@ -22,10 +22,11 @@ def test_datalayers_should_be_ordered_by_rank(map, datalayer):
     assert list(map.datalayer_set.all()) == [c1, c2, c3, c4, datalayer]
 
 
-def test_upload_to(map, datalayer):
+def test_upload_to(map):
     map.pk = 302
-    datalayer.pk = 17
-    assert datalayer.upload_to().startswith("datalayer/2/0/302/17_")
+    map.save()
+    datalayer = DataLayerFactory(map=map)
+    assert datalayer.geojson.name.startswith(f"datalayer/2/0/302/{datalayer.pk}_")
 
 
 def test_save_should_use_pk_as_name(map, datalayer):
@@ -65,7 +66,7 @@ def test_clone_should_clone_geojson_too(datalayer):
 def test_should_remove_old_versions_on_save(map, settings):
     datalayer = DataLayerFactory(uuid="0f1161c0-c07f-4ba4-86c5-8d8981d8a813", old_id=17)
     settings.UMAP_KEEP_VERSIONS = 3
-    root = Path(datalayer.storage_root())
+    root = Path(datalayer.geojson.storage._base_path(datalayer))
     before = len(datalayer.geojson.storage.listdir(root)[1])
     newer = f"{datalayer.pk}_1440924889.geojson"
     medium = f"{datalayer.pk}_1440923687.geojson"
@@ -274,7 +275,7 @@ def test_anonymous_can_edit_in_inherit_mode_and_map_in_public_mode(
 
 def test_should_remove_all_versions_on_delete(map, settings):
     datalayer = DataLayerFactory(uuid="0f1161c0-c07f-4ba4-86c5-8d8981d8a813", old_id=17)
-    root = Path(datalayer.storage_root())
+    root = Path(datalayer.geojson.storage._base_path(datalayer))
     before = len(datalayer.geojson.storage.listdir(root)[1])
     other = "123456_1440918637.geojson"
     files = [

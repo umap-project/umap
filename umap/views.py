@@ -1,7 +1,6 @@
 import io
 import json
 import mimetypes
-import os
 import re
 import socket
 import zipfile
@@ -1117,35 +1116,8 @@ class MapAnonymousEditUrl(RedirectView):
 # ############## #
 
 
-class GZipMixin(object):
-    EXT = ".gz"
-
-    @property
-    def path(self):
-        return Path(self.object.geojson.path)
-
-    @property
-    def gzip_path(self):
-        return Path(f"{self.path}{self.EXT}")
-
-    def read_version(self, path):
-        # Remove optional .gz, then .geojson, then return the trailing version from path.
-        return str(path.with_suffix("").with_suffix("")).split("_")[-1]
-
-    @property
-    def version(self):
-        # Prior to 1.3.0 we did not set gzip mtime as geojson mtime,
-        # but we switched from If-Match header to If-Unmodified-Since
-        # and when users accepts gzip their last modified value is the gzip
-        # (when umap is served by nginx and X-Accel-Redirect)
-        # one, so we need to compare with that value in that case.
-        # cf https://github.com/umap-project/umap/issues/1212
-        path = (
-            self.gzip_path
-            if self.accepts_gzip and self.gzip_path.exists()
-            else self.path
-        )
-        return self.read_version(path)
+class DataLayerView(BaseDetailView):
+    model = DataLayer
 
     @property
     def accepts_gzip(self):
@@ -1153,43 +1125,80 @@ class GZipMixin(object):
             self.request.META.get("HTTP_ACCEPT_ENCODING", "")
         )
 
+    @property
+    def is_s3(self):
+        return "S3" in settings.STORAGES["data"]["BACKEND"]
 
-class DataLayerView(GZipMixin, BaseDetailView):
-    model = DataLayer
+    @property
+    def filepath(self):
+        return Path(self.object.geojson.path)
+
+    @property
+    def fileurl(self):
+        return self.object.geojson.url
+
+    @property
+    def filedata(self):
+        with self.object.geojson.open("rb") as f:
+            return f.read()
+
+    @property
+    def fileversion(self):
+        return self.object.reference_version
 
     def render_to_response(self, context, **response_kwargs):
         response = None
-        path = self.path
         # Generate gzip if needed
-        if self.accepts_gzip:
-            if not self.gzip_path.exists():
-                gzip_file(path, self.gzip_path)
+        if not self.is_s3 and self.accepts_gzip:
+            gzip_path = Path(f"{self.filepath}.gz")
+            if not gzip_path.exists():
+                gzip_file(self.filepath, gzip_path)
 
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
-            internal_path = str(path).replace(settings.MEDIA_ROOT, "/internal")
+            if self.is_s3:
+                internal_path = f"/s3/{self.fileurl}"
+            else:
+                internal_path = str(self.filepath).replace(
+                    settings.MEDIA_ROOT, "/internal"
+                )
             response[settings.UMAP_XSENDFILE_HEADER] = internal_path
         else:
             # Do not use in production
             # (no gzip/cache-control/If-Modified-Since/If-None-Match)
-            statobj = os.stat(path)
-            with open(path, "rb") as f:
-                # Should not be used in production!
-                response = HttpResponse(f.read(), content_type="application/geo+json")
-            response["X-Datalayer-Version"] = self.version
-            response["Content-Length"] = statobj.st_size
+            data = self.filedata
+            response = HttpResponse(data, content_type="application/geo+json")
+            response["X-Datalayer-Version"] = self.fileversion
         return response
 
 
 class DataLayerVersion(DataLayerView):
     @property
-    def path(self):
-        return Path(settings.MEDIA_ROOT) / self.object.get_version_path(
-            self.kwargs["name"]
-        )
+    def filepath(self):
+        try:
+            return Path(settings.MEDIA_ROOT) / self.object.get_version_path(
+                self.kwargs["ref"]
+            )
+        except ValueError:
+            raise Http404("Invalid version reference")
+
+    @property
+    def fileurl(self):
+        return self.object.get_version_path(self.kwargs["ref"])
+
+    @property
+    def filedata(self):
+        try:
+            return self.object.get_version(self.kwargs["ref"])
+        except ValueError:
+            raise Http404("Invalid version reference.")
+
+    @property
+    def fileversion(self):
+        return self.kwargs["ref"]
 
 
-class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
+class DataLayerCreate(FormLessEditMixin, CreateView):
     model = DataLayer
     form_class = DataLayerForm
 
@@ -1208,16 +1217,16 @@ class DataLayerCreate(FormLessEditMixin, GZipMixin, CreateView):
         # Simple response with only metadata
         data = self.object.metadata(self.request)
         response = simple_json_response(**data)
-        response["X-Datalayer-Version"] = self.version
+        response["X-Datalayer-Version"] = self.object.reference_version
         return response
 
 
-class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
+class DataLayerUpdate(FormLessEditMixin, UpdateView):
     model = DataLayer
     form_class = DataLayerForm
 
     def has_changes_since(self, incoming_version):
-        return incoming_version and self.version != incoming_version
+        return incoming_version and self.object.reference_version != incoming_version
 
     def merge(self, reference_version):
         """
@@ -1229,11 +1238,9 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
 
         # Use the provided info to find the correct version in our storage.
         for version in self.object.versions:
-            name = version["name"]
-            path = Path(settings.MEDIA_ROOT) / self.object.get_version_path(name)
-            if reference_version == self.read_version(path):
-                with open(path) as f:
-                    reference = json.loads(f.read())
+            ref = version["ref"]
+            if reference_version == ref:
+                reference = json.loads(self.object.get_version(ref))
                 break
         else:
             # If the reference document is not found, we can't merge.
@@ -1242,7 +1249,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
         incoming = json.loads(self.request.FILES["geojson"].read())
 
         # Latest known version of the data.
-        with open(self.path) as f:
+        with self.object.geojson.open() as f:
             latest = json.loads(f.read())
 
         try:
@@ -1286,7 +1293,7 @@ class DataLayerUpdate(FormLessEditMixin, GZipMixin, UpdateView):
             data["geojson"] = json.loads(self.object.geojson.read().decode())
             self.request.session["needs_reload"] = False
         response = simple_json_response(**data)
-        response["X-Datalayer-Version"] = self.version
+        response["X-Datalayer-Version"] = self.object.reference_version
         return response
 
 

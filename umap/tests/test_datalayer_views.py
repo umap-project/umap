@@ -231,7 +231,7 @@ def test_optimistic_concurrency_control_with_empty_version(
 def test_versions_should_return_versions(client, datalayer, map, settings):
     map.share_status = Map.PUBLIC
     map.save()
-    root = datalayer.storage_root()
+    root = datalayer.geojson.storage._base_path(datalayer)
     datalayer.geojson.storage.save(
         "%s/%s_1440924889.geojson" % (root, datalayer.pk), ContentFile("{}")
     )
@@ -248,6 +248,7 @@ def test_versions_should_return_versions(client, datalayer, map, settings):
         "name": "%s_1440918637.geojson" % datalayer.pk,
         "size": 2,
         "at": "1440918637",
+        "ref": "1440918637",
     }
     assert version in versions["versions"]
 
@@ -255,7 +256,7 @@ def test_versions_should_return_versions(client, datalayer, map, settings):
 def test_versions_can_return_old_format(client, datalayer, map, settings):
     map.share_status = Map.PUBLIC
     map.save()
-    root = datalayer.storage_root()
+    root = datalayer.geojson.storage._base_path(datalayer)
     datalayer.old_id = 123  # old datalayer id (now replaced by uuid)
     datalayer.save()
 
@@ -279,31 +280,32 @@ def test_versions_can_return_old_format(client, datalayer, map, settings):
         "name": old_format_version,
         "size": 2,
         "at": "1440918637",
+        "ref": "1440918637",
     }
     assert version in versions["versions"]
 
-    client.get(
-        reverse("datalayer_version", args=(map.pk, datalayer.pk, old_format_version))
-    )
+    client.get(reverse("datalayer_version", args=(map.pk, datalayer.pk, "1440918637")))
 
 
 def test_version_should_return_one_version_geojson(client, datalayer, map):
     map.share_status = Map.PUBLIC
     map.save()
-    root = datalayer.storage_root()
+    root = datalayer.geojson.storage._base_path(datalayer)
     name = "%s_1440924889.geojson" % datalayer.pk
     datalayer.geojson.storage.save("%s/%s" % (root, name), ContentFile("{}"))
-    url = reverse("datalayer_version", args=(map.pk, datalayer.pk, name))
-    assert client.get(url).content.decode() == "{}"
+    url = reverse("datalayer_version", args=(map.pk, datalayer.pk, "1440924889"))
+    resp = client.get(url)
+    assert resp.status_code == 200
+    assert resp.content.decode() == "{}"
 
 
 def test_version_should_return_403_if_not_allowed(client, datalayer, map):
     map.share_status = Map.PRIVATE
     map.save()
-    root = datalayer.storage_root()
+    root = datalayer.geojson.storage._base_path(datalayer)
     name = "%s_1440924889.geojson" % datalayer.pk
     datalayer.geojson.storage.save("%s/%s" % (root, name), ContentFile("{}"))
-    url = reverse("datalayer_version", args=(map.pk, datalayer.pk, name))
+    url = reverse("datalayer_version", args=(map.pk, datalayer.pk, "1440924889"))
     assert client.get(url).status_code == 403
 
 
