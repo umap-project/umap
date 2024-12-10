@@ -78,7 +78,6 @@ export default class Dialog extends WithTemplate {
         event.preventDefault()
         this.dialog.returnValue = 'accept'
         this.close()
-        this.dialog.returnValue = undefined
       })
     }
     this.dialog.addEventListener('keydown', (e) => {
@@ -143,6 +142,7 @@ export default class Dialog extends WithTemplate {
 
   close() {
     this.toggle(false)
+    this.dialog.returnValue = undefined
   }
 
   toggle(open = false) {
