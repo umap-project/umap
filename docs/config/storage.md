@@ -10,7 +10,7 @@ This can be configured through the `STORAGES` settings. uMap will use three keys
   but by default uses a custom storage that will add hash to the filenames, to be sure they
   are not kept in any cache after a release
 - `data`, used to store the layers data. This one should follow the uMap needs, and currently
-  uMap provides only two options: `umap.storage.UmapFileSystem` and `umap.storage.UmapS3`
+  uMap provides only two options: `umap.storage.fs.FSDataStorage` and `umap.storage.s3.S3DataStorage`
 
 ## Default settings:
 
@@ -22,10 +22,10 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "data": {
-        "BACKEND": "umap.storage.UmapFileSystem",
+        "BACKEND": "umap.storage.fs.FSDataStorage",
     },
     "staticfiles": {
-        "BACKEND": "umap.storage.UmapManifestStaticFilesStorage",
+        "BACKEND": "umap.storage.staticfiles.UmapManifestStaticFilesStorage",
     },
 }
 ```
@@ -43,7 +43,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "data": {
-        "BACKEND": "umap.storage.UmapS3",
+        "BACKEND": "umap.storage.s3.S3DataStorage",
         "OPTIONS": {
             "access_key": "xxx",
             "secret_key": "yyy",
@@ -53,7 +53,7 @@ STORAGES = {
         },
     },
     "staticfiles": {
-        "BACKEND": "umap.storage.UmapManifestStaticFilesStorage",
+        "BACKEND": "umap.storage.staticfiles.UmapManifestStaticFilesStorage",
     },
 }
 ```

@@ -176,10 +176,10 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "data": {
-        "BACKEND": "umap.storage.UmapFileSystem",
+        "BACKEND": "umap.storage.fs.FSDataStorage",
     },
     "staticfiles": {
-        "BACKEND": "umap.storage.UmapManifestStaticFilesStorage",
+        "BACKEND": "umap.storage.staticfiles.UmapManifestStaticFilesStorage",
     },
 }
 # Add application/json and application/geo+json to default django-storages setting

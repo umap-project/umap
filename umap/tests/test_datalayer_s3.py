@@ -27,7 +27,7 @@ def patch_storage():
 
     DataLayer.geojson.field.storage = storages.create_storage(
         {
-            "BACKEND": "umap.storage.UmapS3",
+            "BACKEND": "umap.storage.s3.S3DataStorage",
             "OPTIONS": {
                 "access_key": "testing",
                 "secret_key": "testing",
