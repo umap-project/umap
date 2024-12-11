@@ -549,11 +549,11 @@ export class DataLayer extends ServerStored {
     })
   }
 
-  getVersionUrl(name) {
+  getVersionUrl(ref) {
     return this._umap.urls.get('datalayer_version', {
       pk: this.id,
       map_id: this._umap.id,
-      name: name,
+      ref: ref,
     })
   }
 
@@ -870,13 +870,7 @@ export class DataLayer extends ServerStored {
       const date = new Date(Number.parseInt(data.at, 10))
       const content = `${date.toLocaleString(U.lang)} (${Number.parseInt(data.size) / 1000}Kb)`
       const el = DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
-      const button = DomUtil.createButton(
-        '',
-        el,
-        '',
-        () => this.restore(data.name),
-        this
-      )
+      const button = DomUtil.createButton('', el, '', () => this.restore(data.ref))
       button.title = translate('Restore this version')
       DomUtil.add('span', '', el, content)
     }

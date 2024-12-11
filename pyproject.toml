@@ -61,9 +61,13 @@ test = [
   "pytest-playwright==0.6.2",
   "pytest-rerunfailures==15.0",
   "pytest-xdist>=3.5.0,<4",
+  "moto[s3]==5.0.21"
 ]
 docker = [
   "uwsgi==2.0.28",
+]
+s3 = [
+  "django-storages[s3]==1.14.4",
 ]
 sync = [
   "channels==4.2.0",

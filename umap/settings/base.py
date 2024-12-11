@@ -175,10 +175,25 @@ STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+    "data": {
+        "BACKEND": "umap.storage.UmapFileSystem",
+    },
     "staticfiles": {
         "BACKEND": "umap.storage.UmapManifestStaticFilesStorage",
     },
 }
+# Add application/json and application/geo+json to default django-storages setting
+# in order to gzip our datalayers geojson files.
+GZIP_CONTENT_TYPES = [
+    "text/css",
+    "text/javascript",
+    "application/javascript",
+    "application/x-javascript",
+    "image/svg+xml",
+    "application/json",
+    "application/geo+json",
+]
+
 
 # =============================================================================
 # Templates

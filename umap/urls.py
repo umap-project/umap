@@ -87,7 +87,7 @@ i18n_urls += decorated_patterns(
         name="datalayer_versions",
     ),
     path(
-        "datalayer/<int:map_id>/<uuid:pk>/<str:name>",
+        "datalayer/<int:map_id>/<uuid:pk>/<str:ref>",
         views.DataLayerVersion.as_view(),
         name="datalayer_version",
     ),
