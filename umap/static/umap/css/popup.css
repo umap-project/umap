@@ -40,6 +40,9 @@ address span {
     text-align: end;
     font-style: italic;
 }
+.wikipedia-link a::before {
+  content: '⇒ ';
+}
 span.popup-icon {
     padding: 5px;
 }
