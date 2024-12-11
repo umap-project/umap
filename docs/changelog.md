@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.0a1 - 2024-12-11
+
+### Internal changes
+
+* make S3 dependencies optional in #2359
+
 ## 2.8.0a0 - 2024-12-11
 
 ### What's Changed
