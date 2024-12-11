@@ -10,6 +10,7 @@ we introduce two new map statuses:
     makes the maps private by default
   - "deleted", which make that now a delete will be a soft delete (and the command `umap empty_trash`
     could be run to do the real delete).
+
 Also pursuing the code cleaning (more modules and spliting uMap core code from Leaflet rendering one).
 
 ### New features
