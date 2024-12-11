@@ -12,6 +12,7 @@
 
 This release is mainly about being able to deploy uMap on helm/k8s, with a S3-compatible storage. Doing so,
 we introduce two new map statuses:
+
   - "draft" (which is now the default, unless you change the UMAP_DEFAULT_SHARE_STATUS setting), which
     makes the maps private by default
   - "deleted", which make that now a delete will be a soft delete (and the command `umap empty_trash`
