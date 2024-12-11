@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from umap.models import DataLayer
-from umap.storage import UmapFileSystem
+from umap.storage.fs import FSDataStorage
 
 
 class Command(BaseCommand):
@@ -11,9 +11,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         assert settings.UMAP_READONLY, "You must run that script with a read-only uMap."
         assert (
-            settings.STORAGES["data"]["BACKEND"] == "umap.storage.UmapS3"
+            settings.STORAGES["data"]["BACKEND"] == "umap.storage.s3.S3DataStorage"
         ), "You must configure your storages to point to S3"
-        fs_storage = UmapFileSystem()
+        fs_storage = FSDataStorage()
         for datalayer in DataLayer.objects.all():
             geojson_fs_path = str(datalayer.geojson)
             try:
