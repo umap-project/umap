@@ -1,0 +1,125 @@
+.umap-popup {
+    display: flex;
+    flex-flow: column nowrap;
+    height:100%;
+}
+
+.umap-popup-footer {
+    position: relative;
+    background-color: rgb(68, 68, 68);
+    color: white;
+    display: flex;
+    width: 100%;
+    margin-top: auto;
+    min-width: 99px;
+    border-radius: 2px;
+    max-height: 24px;
+    justify-content: space-around;
+}
+.umap-popup a:hover {
+    text-decoration: underline;
+}
+.popup-title {
+    display: flex;
+    align-items: center;
+}
+.popup-title .icon {
+    margin: 5px;
+}
+a[href^='mailto']::before {
+  content: '✉︎ ';
+}
+a[href^='tel']::before {
+  content: '☎︎ ';
+}
+address span {
+    padding-inline-end: 5px;
+}
+.osm-link {
+    margin-top: 10px;
+    text-align: end;
+    font-style: italic;
+}
+.wikipedia-link a::before {
+  content: '⇒ ';
+}
+span.popup-icon {
+    padding: 5px;
+}
+.leaflet-popup-content {
+    min-width: 200px;
+    line-height: inherit;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+.leaflet-popup-content-wrapper {
+    border-radius: 4px;
+}
+.umap-popup-content {
+    max-height: 500px;
+    flex-grow: 1;
+    margin-bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.umap-popup-content iframe {
+    min-width: 300px;
+    max-width: 100%;
+}
+.umap-popup-content tr:nth-child(odd) {
+   background-color: #f6f6f6;
+}
+.umap-popup-content th {
+    text-align: start;
+}
+.umap-popup-content td {
+    word-break: break-word;
+}
+.umap-popup-content th,
+.umap-popup-content td {
+    padding: 1px 3px;
+}
+.umap-popup-container {
+    flex-grow: 1;
+    margin-bottom: 10px;
+}
+.umap-popup-container ul {
+    list-style-type: disc;
+}
+.leaflet-control-toolbar,
+.leaflet-bar {
+    box-shadow: none;
+}
+.marker-cluster {
+    background-color: white;
+    width: 40px;
+    height: 40px;
+}
+.leaflet-contextmenu-icon {
+    display: none;
+}
+.umap-popup-large iframe {
+    /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
+    max-width: 100% !important;
+    min-width: 500px;
+}
+.umap-popup-large .umap-popup-content {
+    width: 500px;
+}
+.umap-popup-content img {
+    max-width: 100%;
+}
+.umap-georss-link .popup-title {
+    text-align: center;
+}
+@media all and (max-width: 480px) {
+    .umap-popup-large iframe {
+        min-width: 300px;
+    }
+    .umap-popup-large .umap-popup-content {
+        width: 300px;
+    }
+}

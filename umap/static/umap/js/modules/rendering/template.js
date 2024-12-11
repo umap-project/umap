@@ -175,6 +175,7 @@ class OSM extends TitleMixin(PopupTemplate) {
   renderBody(feature) {
     const props = feature.properties
     const body = document.createElement('div')
+    const locale = getLocale()
     const street = props['addr:street']
     if (street) {
       const row = DomUtil.add('address', 'address', body)
@@ -215,6 +216,14 @@ class OSM extends TitleMixin(PopupTemplate) {
       body.appendChild(
         Utils.loadTemplate(
           `<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
+        )
+      )
+    }
+    const wikipedia = props[`wikipedia:${locale}`] || props.wikipedia
+    if (wikipedia) {
+      body.appendChild(
+        Utils.loadTemplate(
+          `<div class="wikipedia-link"><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}</a></div>`
         )
       )
     }
