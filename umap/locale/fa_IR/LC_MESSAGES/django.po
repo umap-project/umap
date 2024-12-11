@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-04 14:02+0000\n"
+"POT-Creation-Date: 2024-12-11 17:05+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: imni <iriman@chmail.ir>, 2024\n"
 "Language-Team: Persian (Iran) (http://app.transifex.com/openstreetmap/umap/language/fa_IR/)\n"
@@ -22,127 +22,139 @@ msgstr ""
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: forms.py:44 forms.py:70
-msgid "Only editable with secret edit link"
-msgstr "فقط با پیوند محرمانهٔ ویرایش، ویرایش می‌شود"
-
-#: forms.py:45 forms.py:71
-msgid "Everyone can edit"
-msgstr "همه می‌توانند ویرایش کنند"
-
-#: forms.py:69 models.py:423
-msgid "Inherit"
-msgstr "ارث‌بردن"
+#: admin.py:16
+msgid "CSV Export"
+msgstr ""
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr "سایت برای امور نگهداری در حالت فقط‌خواندنی قرار دارد"
 
-#: models.py:54 models.py:73
+#: models.py:60 models.py:79
 msgid "name"
 msgstr "نام"
 
-#: models.py:56 models.py:433
+#: models.py:62 models.py:475
 msgid "description"
 msgstr "توضیحات"
 
-#: models.py:104
+#: models.py:110
 msgid "details"
 msgstr "جزئیات"
 
-#: models.py:105
+#: models.py:111
 msgid "Link to a page where the licence is detailed."
 msgstr "پیوند به صفحه‌ای که شرح مجوز در آن آمده است."
 
-#: models.py:115
+#: models.py:121
 msgid "URL template using OSM tile format"
 msgstr "الگوی نشانی اینترنتی با توجه به قالب کاشی OSM"
 
-#: models.py:121
+#: models.py:127
 msgid "Order of the tilelayers in the edit box"
 msgstr "ترتیب لایه‌های کاشی در جعبهٔ ویرایش"
 
-#: models.py:167 models.py:424
+#: models.py:175 models.py:469
+msgid "Only editable with secret edit link"
+msgstr "فقط با پیوند محرمانهٔ ویرایش، ویرایش می‌شود"
+
+#: models.py:176 models.py:470
+msgid "Everyone can edit"
+msgstr "همه می‌توانند ویرایش کنند"
+
+#: models.py:179 models.py:463
 msgid "Everyone"
 msgstr "همه"
 
-#: models.py:168 models.py:174 models.py:425
+#: models.py:180 models.py:189 models.py:464
 msgid "Editors and team only"
 msgstr ""
 
-#: models.py:169 models.py:426
+#: models.py:181 models.py:465
 msgid "Owner only"
 msgstr "فقط مالک"
 
-#: models.py:172
+#: models.py:184
+msgid "Draft (private)"
+msgstr ""
+
+#: models.py:185
 msgid "Everyone (public)"
 msgstr "همه (عمومی)"
 
-#: models.py:173
+#: models.py:188
 msgid "Anyone with link"
 msgstr "هر کسی با پیوند"
 
-#: models.py:175
+#: models.py:190
 msgid "Blocked"
 msgstr ""
 
-#: models.py:178
+#: models.py:191
+msgid "Deleted"
+msgstr ""
+
+#: models.py:194
 msgid "center"
 msgstr "مرکز"
 
-#: models.py:179
+#: models.py:195
 msgid "zoom"
 msgstr "زوم"
 
-#: models.py:181
+#: models.py:197
 msgid "locate"
 msgstr "مکان‌یابی"
 
-#: models.py:181
+#: models.py:197
 msgid "Locate user on load?"
 msgstr "کاربر هنگام بارشدن مکان‌یابی شود؟"
 
-#: models.py:185
+#: models.py:201
 msgid "Choose the map licence."
 msgstr "مجوز نقشه را انتخاب کنید."
 
-#: models.py:186
+#: models.py:202
 msgid "licence"
 msgstr "مجوز"
 
-#: models.py:197
+#: models.py:213
 msgid "owner"
 msgstr "مالک"
 
-#: models.py:201
+#: models.py:217
 msgid "editors"
 msgstr "ویرایشگران"
 
-#: models.py:207
+#: models.py:223
 msgid "team"
 msgstr ""
 
-#: models.py:213 models.py:447
+#: models.py:229 models.py:491
 msgid "edit status"
 msgstr "ویرایش وضعیت"
 
-#: models.py:218
+#: models.py:234
 msgid "share status"
 msgstr "وضعیت همرسانی"
 
-#: models.py:221 models.py:442
+#: models.py:237 models.py:486
 msgid "settings"
 msgstr "تنظیمات"
 
-#: models.py:364
+#: models.py:402
 msgid "Clone of"
 msgstr "همانندسازی‌شده از"
 
-#: models.py:437
+#: models.py:462 models.py:468
+msgid "Inherit"
+msgstr "ارث‌بردن"
+
+#: models.py:481
 msgid "display on load"
 msgstr "نمایش هنگام بارشدن"
 
-#: models.py:438
+#: models.py:482
 msgid "Display this layer on load."
 msgstr "این لایه هنگام بارشدن نمایش داده شود."
 
@@ -194,25 +206,29 @@ msgid ""
 "them in your site."
 msgstr "در uMap می‌توانید با لایه‌های اوپن‌استریت‌مپ خیلی سریع یک نقشه بسازید و در وبسایت خود جاسازی کنید."
 
-#: templates/registration/login.html:6 templates/registration/login.html:45
+#: templates/registration/login.html:6 templates/registration/login.html:46
 msgid "Login"
 msgstr "ورود"
 
-#: templates/registration/login.html:24
-msgid "Please log in with your account"
-msgstr "لطفاً با حساب خود وارد شوید"
+#: templates/registration/login.html:22
+msgid "To save and easily find your maps, identify yourself."
+msgstr ""
 
-#: templates/registration/login.html:41
+#: templates/registration/login.html:25
+msgid "Please log in with your account:"
+msgstr ""
+
+#: templates/registration/login.html:42
 msgid "Username"
 msgstr "نام کاربری"
 
-#: templates/registration/login.html:44
+#: templates/registration/login.html:45
 msgid "Password"
 msgstr "گذرواژه"
 
-#: templates/registration/login.html:51
-msgid "Please choose a provider"
-msgstr "لطفاً یک خدمات‌دهنده را انتخاب کنید"
+#: templates/registration/login.html:52
+msgid "Please choose a provider:"
+msgstr ""
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -353,11 +369,11 @@ msgstr "نقشه‌های من (%(count)s)"
 msgid "My Maps"
 msgstr "نقشه‌های من"
 
-#: templates/umap/dashboard_menu.html:11
+#: templates/umap/dashboard_menu.html:12
 msgid "My profile"
 msgstr "نمایهٔ من"
 
-#: templates/umap/dashboard_menu.html:13
+#: templates/umap/dashboard_menu.html:15
 msgid "My teams"
 msgstr ""
 
@@ -593,11 +609,11 @@ msgstr ""
 msgid "New team"
 msgstr ""
 
-#: views.py:235
+#: views.py:234
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:239
+#: views.py:238
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
@@ -606,57 +622,57 @@ msgstr ""
 msgid "View the map"
 msgstr "مشاهدهٔ نقشه"
 
-#: views.py:824
+#: views.py:820
 msgid "See full screen"
 msgstr "تمام‌صفحه ببینید"
 
-#: views.py:953
+#: views.py:963
 msgid "Map editors updated with success!"
 msgstr "ویرایشگران نقشه با موفقیت روزآمد شد!"
 
-#: views.py:989
+#: views.py:999
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "پیوند ویرایش uMap برای نقشهٔ شما: %(map_name)s"
 
-#: views.py:992
+#: views.py:1002
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "این پیوند محرمانهٔ ویرایش برای شماست: %(link)s"
 
-#: views.py:999
+#: views.py:1009
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده نشد"
 
-#: views.py:1002
+#: views.py:1012
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده شد"
 
-#: views.py:1013
+#: views.py:1023
 msgid "Only its owner can delete the map."
 msgstr "فقط مالک آن می‌تواند نقشه را حذف کند."
 
-#: views.py:1016
+#: views.py:1026
 msgid "Map successfully deleted."
 msgstr "نقشه با موفقیت حذف شد."
 
-#: views.py:1042
+#: views.py:1052
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "از نقشهٔ شما همانندسازی شد! اگر می‌خواهید این نقشه را از رایانهٔ دیگری ویرایش کنید، لطفاً از این پیوند استفاده کنید: %(anonymous_url)s"
 
-#: views.py:1047
+#: views.py:1057
 msgid "Congratulations, your map has been cloned!"
 msgstr "تبریک، نقشهٔ شما همانندسازی شد!"
 
-#: views.py:1282
+#: views.py:1308
 msgid "Layer successfully deleted."
 msgstr "لایه با موفقیت حذف شد."
 
-#: views.py:1304
+#: views.py:1330
 msgid "Permissions updated with success!"
 msgstr "مجوزها با موفقیت روزآمد شد!"

@@ -445,7 +445,6 @@
     "More info about Overpass syntax": "More info about Overpass syntax",
     "For more complex needs, see": "For more complex needs, see",
     "Choose data": "Choose data",
-    "Import helpers:": "Import helpers:",
     "Choose the format": "Choose the format",
     "Choose the layer": "Choose the layer",
     "Layer name": "Layer name",
@@ -517,5 +516,9 @@
     "show/hide all layers": "show/hide all layers",
     "zoom to data extent": "zoom to data extent",
     "download visible data": "download visible data",
-    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map"
+    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map",
+    "Import helpers": "Import helpers",
+    "Import helpers will fill the URL field for you.": "Import helpers will fill the URL field for you.",
+    "Wikipedia": "Wikipedia",
+    "Save draft": "Save draft"
 }

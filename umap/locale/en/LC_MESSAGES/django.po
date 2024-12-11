@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-04 16:35+0000\n"
+"POT-Creation-Date: 2024-12-11 17:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,127 +21,135 @@ msgstr ""
 msgid "CSV Export"
 msgstr ""
 
-#: forms.py:44 forms.py:70
-msgid "Only editable with secret edit link"
-msgstr ""
-
-#: forms.py:45 forms.py:71
-msgid "Everyone can edit"
-msgstr ""
-
-#: forms.py:69 models.py:441
-msgid "Inherit"
-msgstr ""
-
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
 msgstr ""
 
-#: models.py:55 models.py:74
+#: models.py:60 models.py:79
 msgid "name"
 msgstr ""
 
-#: models.py:57 models.py:451
+#: models.py:62 models.py:475
 msgid "description"
 msgstr ""
 
-#: models.py:105
+#: models.py:110
 msgid "details"
 msgstr ""
 
-#: models.py:106
+#: models.py:111
 msgid "Link to a page where the licence is detailed."
 msgstr ""
 
-#: models.py:116
+#: models.py:121
 msgid "URL template using OSM tile format"
 msgstr ""
 
-#: models.py:122
+#: models.py:127
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:168 models.py:442
+#: models.py:175 models.py:469
+msgid "Only editable with secret edit link"
+msgstr ""
+
+#: models.py:176 models.py:470
+msgid "Everyone can edit"
+msgstr ""
+
+#: models.py:179 models.py:463
 msgid "Everyone"
 msgstr ""
 
-#: models.py:169 models.py:175 models.py:443
+#: models.py:180 models.py:189 models.py:464
 msgid "Editors and team only"
 msgstr ""
 
-#: models.py:170 models.py:444
+#: models.py:181 models.py:465
 msgid "Owner only"
 msgstr ""
 
-#: models.py:173
+#: models.py:184
+msgid "Draft (private)"
+msgstr ""
+
+#: models.py:185
 msgid "Everyone (public)"
 msgstr ""
 
-#: models.py:174
+#: models.py:188
 msgid "Anyone with link"
 msgstr ""
 
-#: models.py:176
+#: models.py:190
 msgid "Blocked"
 msgstr ""
 
-#: models.py:179
+#: models.py:191
+msgid "Deleted"
+msgstr ""
+
+#: models.py:194
 msgid "center"
 msgstr ""
 
-#: models.py:180
+#: models.py:195
 msgid "zoom"
 msgstr ""
 
-#: models.py:182
+#: models.py:197
 msgid "locate"
 msgstr ""
 
-#: models.py:182
+#: models.py:197
 msgid "Locate user on load?"
 msgstr ""
 
-#: models.py:186
+#: models.py:201
 msgid "Choose the map licence."
 msgstr ""
 
-#: models.py:187
+#: models.py:202
 msgid "licence"
 msgstr ""
 
-#: models.py:198
+#: models.py:213
 msgid "owner"
 msgstr ""
 
-#: models.py:202
+#: models.py:217
 msgid "editors"
 msgstr ""
 
-#: models.py:208
+#: models.py:223
 msgid "team"
 msgstr ""
 
-#: models.py:214 models.py:465
+#: models.py:229 models.py:491
 msgid "edit status"
 msgstr ""
 
-#: models.py:219
+#: models.py:234
 msgid "share status"
 msgstr ""
 
-#: models.py:222 models.py:460
+#: models.py:237 models.py:486
 msgid "settings"
 msgstr ""
 
-#: models.py:382
+#: models.py:402
 msgid "Clone of"
 msgstr ""
 
-#: models.py:455
+#: models.py:462 models.py:468
+msgid "Inherit"
+msgstr ""
+
+#: models.py:481
 msgid "display on load"
 msgstr ""
 
-#: models.py:456
+#: models.py:482
 msgid "Display this layer on load."
 msgstr ""
 
@@ -193,24 +201,28 @@ msgid ""
 "them in your site."
 msgstr ""
 
-#: templates/registration/login.html:6 templates/registration/login.html:45
+#: templates/registration/login.html:6 templates/registration/login.html:46
 msgid "Login"
 msgstr ""
 
-#: templates/registration/login.html:24
-msgid "Please log in with your account"
+#: templates/registration/login.html:22
+msgid "To save and easily find your maps, identify yourself."
 msgstr ""
 
-#: templates/registration/login.html:41
+#: templates/registration/login.html:25
+msgid "Please log in with your account:"
+msgstr ""
+
+#: templates/registration/login.html:42
 msgid "Username"
 msgstr ""
 
-#: templates/registration/login.html:44
+#: templates/registration/login.html:45
 msgid "Password"
 msgstr ""
 
-#: templates/registration/login.html:51
-msgid "Please choose a provider"
+#: templates/registration/login.html:52
+msgid "Please choose a provider:"
 msgstr ""
 
 #: templates/umap/about_summary.html:12
@@ -592,11 +604,11 @@ msgstr ""
 msgid "New team"
 msgstr ""
 
-#: views.py:235
+#: views.py:234
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:239
+#: views.py:238
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
@@ -605,57 +617,57 @@ msgstr ""
 msgid "View the map"
 msgstr ""
 
-#: views.py:818
+#: views.py:820
 msgid "See full screen"
 msgstr ""
 
-#: views.py:950
+#: views.py:963
 msgid "Map editors updated with success!"
-msgstr ""
-
-#: views.py:986
-#, python-format
-msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
-
-#: views.py:989
-#, python-format
-msgid "Here is your secret edit link: %(link)s"
-msgstr ""
-
-#: views.py:996
-#, python-format
-msgid "Can't send email to %(email)s"
 msgstr ""
 
 #: views.py:999
 #, python-format
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr ""
+
+#: views.py:1002
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr ""
+
+#: views.py:1009
+#, python-format
+msgid "Can't send email to %(email)s"
+msgstr ""
+
+#: views.py:1012
+#, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1010
+#: views.py:1023
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1013
+#: views.py:1026
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1039
+#: views.py:1052
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1044
+#: views.py:1057
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1277
+#: views.py:1308
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1299
+#: views.py:1330
 msgid "Permissions updated with success!"
 msgstr ""

@@ -445,7 +445,6 @@ const locale = {
     "More info about Overpass syntax": "More info about Overpass syntax",
     "For more complex needs, see": "For more complex needs, see",
     "Choose data": "Choose data",
-    "Import helpers:": "Import helpers:",
     "Choose the format": "Choose the format",
     "Choose the layer": "Choose the layer",
     "Layer name": "Layer name",
@@ -477,7 +476,6 @@ const locale = {
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
     "Data successfully imported!": "Data successfully imported!",
-    "My Dashboard ({username})": "My Dashboard ({username})",
     "Clear data": "Clear data",
     "Remove layers": "Remove layers",
     "Categorized": "Categorized",
@@ -504,7 +502,25 @@ const locale = {
     "Property name to compute circles": "Property name to compute circles",
     "Min circle radius": "Min circle radius",
     "Max circle radius": "Max circle radius",
-    "Display the open browser control": "Display the open browser control"
+    "Display the open browser control": "Display the open browser control",
+    "Copy as GeoJSON": "Copy as GeoJSON",
+    "Please zoom in to edit the geometry": "Please zoom in to edit the geometry",
+    "New map": "New map",
+    "My maps": "My maps",
+    "My teams": "My teams",
+    "My profile": "My profile",
+    "Type new owner's username": "Type new owner's username",
+    "Type editor's username": "Type editor's username",
+    "Map": "Map",
+    "Manage collaborators": "Manage collaborators",
+    "show/hide all layers": "show/hide all layers",
+    "zoom to data extent": "zoom to data extent",
+    "download visible data": "download visible data",
+    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map",
+    "Import helpers": "Import helpers",
+    "Import helpers will fill the URL field for you.": "Import helpers will fill the URL field for you.",
+    "Wikipedia": "Wikipedia",
+    "Save draft": "Save draft"
 }
 L.registerLocale("id", locale)
 L.setLocale("id")
