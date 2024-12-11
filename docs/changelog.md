@@ -1,5 +1,70 @@
 # Changelog
 
+## 2.8.0a0 - 2024-12-11
+
+### What's Changed
+
+This release is mainly about being able to deploy uMap on helm/k8s, with a S3-compatible storage. Doing so,
+we introduce two new map statuses:
+  - "draft" (which is now the default, unless you change the UMAP_DEFAULT_SHARE_STATUS setting), which
+    makes the maps private by default
+  - "deleted", which make that now a delete will be a soft delete (and the command `umap empty_trash`
+    could be run to do the real delete).
+Also pursuing the code cleaning (more modules and spliting uMap core code from Leaflet rendering one).
+
+### New features
+* add umap helm chart for Kubernetes deployment by @NaPs in #2286
+* support storing layer data in S3 like servers by @yohanboniface in #2304
+* introduce Map.share_status=DRAFT and DELETED by @yohanboniface in #2357
+* highlight importer URL field when it is fulfilled by @yohanboniface in #2323
+* swap import and settings buttons in edit toolbar by @yohanboniface in #2329
+* make expression persistent in the overpass importer by @yohanboniface in #2339
+* add basic autocompletion on inputs expecting a field name by @yohanboniface in #2281
+* allow to configure the default label keys per instance by @yohanboniface in #2291
+* display an image from Panoramax in OSM template when tag is defined by @yohanboniface in #2338
+* add a disabled/active mode to the submit button of import panel  by @yohanboniface in #2341
+* open importers in a dialog instead of in the form by @yohanboniface in #2327
+* display wikipedia link in OSM popup template when possible by @yohanboniface in #2358
+* move labelKey field on the top datalayer form by @yohanboniface in #2350
+* add elevation gain and loss in extended properties by @yohanboniface in #2343
+
+### Bug fixes
+* honour custom labelKey in default popup template by @yohanboniface in #2271
+* honour `rules` and `slideshow` when importing a umap file by @yohanboniface in #2270
+* use our fork of csv2geojson to be able to parse lat/lon with commas by @yohanboniface in #2263
+* allow spaces in iframe query strings in HTML formatting by @yohanboniface in #2292
+* do not fail when navigating with popup arrows in cluster mode by @yohanboniface in #2307
+* better login page styles and incentive by @davidbgk in #2293
+* compute length of all shapes for MultiLineString (not only first) by @yohanboniface in #2310
+* avoid map-panning on mobile using two fingers navigation by @fttriquet in #2340
+
+### Internal changes
+* introduce SaveManager class by @yohanboniface in #2240
+* split umap.js in two modules by @yohanboniface in #2257
+* make the client create the DataLayer.id by @yohanboniface in #2259
+* move editToolBar and captionBar to modules by @yohanboniface in #2272
+* update browserslist to be more explicit by @davidbgk in #2277
+* explicitely set postgis as db engine by @yohanboniface in #2285
+* add logo for social_core.backends.keycloak.KeycloakOAuth2 by @tomamplius in #2258
+
+### Changed templates
+* umap/css.html:
+  - added `umap/css/bar.css`
+  - added `umap/css/popup.css`
+* umap/js.html:
+  - added `umap/css/bar.js`
+* umap/templates/registration/login.html
+* umap/templates/umap/map_init.html
+  - changed the way we instanciate `Umap` (instead of `U.Map`)
+* umap/templates/umap/user_dashboard.html
+  - changed the way we instanciate `Umap` (instead of `U.Map`)
+
+### New Contributors
+* @NaPs made their first contribution in #2286
+* @tomamplius made their first contribution in #2258
+* @fttriquet made their first contribution in #2340
+
+
 ## 2.7.1 - 2024-10-25
 
 ### Bug fixes
