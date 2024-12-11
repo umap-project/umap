@@ -39,7 +39,7 @@ WORKDIR /srv/umap
 
 COPY . /srv/umap
 
-RUN /venv/bin/pip install .[docker]
+RUN /venv/bin/pip install .[docker,s3]
 
 FROM common
 
