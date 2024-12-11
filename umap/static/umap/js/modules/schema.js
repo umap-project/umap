@@ -404,6 +404,7 @@ export const SCHEMA = {
       ['GeoRSSImage', translate('GeoRSS (title + image)')],
       ['GeoRSSLink', translate('GeoRSS (only link)')],
       ['OSM', translate('OpenStreetMap')],
+      ['Wikipedia', translate('Wikipedia')],
     ],
     default: 'Default',
   },

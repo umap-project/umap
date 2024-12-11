@@ -27,9 +27,9 @@ const Popup = BasePopup.extend({
     this.setContent(this.container)
   },
 
-  format: function () {
+  format: async function () {
     const name = this.feature.getOption('popupTemplate')
-    this.content = loadTemplate(name, this.feature, this.container)
+    this.content = await loadTemplate(name, this.feature, this.container)
     const elements = this.container.querySelectorAll('img,iframe')
     for (const element of elements) {
       this.onElementLoaded(element)
