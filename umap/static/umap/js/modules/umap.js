@@ -316,12 +316,14 @@ export default class Umap extends ServerStored {
         dataUrl = this.renderUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
         const datalayer = this.createDataLayer()
-        await datalayer.importFromUrl(dataUrl, dataFormat)
+        await datalayer
+          .importFromUrl(dataUrl, dataFormat)
+          .then(() => datalayer.zoomTo())
       }
     } else if (data) {
       data = decodeURIComponent(data)
       const datalayer = this.createDataLayer()
-      await datalayer.importRaw(data, dataFormat)
+      await datalayer.importRaw(data, dataFormat).then(() => datalayer.zoomTo())
     }
   }
 
@@ -1514,7 +1516,7 @@ export default class Umap extends ServerStored {
   processFileToImport(file, layer, type) {
     type = type || Utils.detectFileType(file)
     if (!type) {
-      U.Alert.error(
+      Alert.error(
         translate('Unable to detect format of file {filename}', {
           filename: file.name,
         })

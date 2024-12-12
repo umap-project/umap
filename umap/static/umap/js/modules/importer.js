@@ -1,4 +1,8 @@
-import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  DomEvent,
+  DomUtil,
+  LatLngBounds,
+} from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
@@ -270,16 +274,12 @@ export default class Importer extends Utils.WithTemplate {
   }
 
   submit() {
-    let hasErrors
     if (this.format === 'umap') {
-      hasErrors = !this.full()
+      this.full()
     } else if (!this.url) {
-      hasErrors = !this.copy()
+      this.copy()
     } else if (this.action) {
-      hasErrors = !this[this.action]()
-    }
-    if (hasErrors === false) {
-      Alert.info(translate('Data successfully imported!'))
+      this[this.action]()
     }
   }
 
@@ -294,8 +294,9 @@ export default class Importer extends Utils.WithTemplate {
       } else if (this.url) {
         this._umap.importFromUrl(this.url, this.format)
       }
+      this.onSuccess()
     } catch (e) {
-      Alert.error(translate('Invalid umap data'))
+      this.onError(translate('Invalid umap data'))
       console.error(e)
       return false
     }
@@ -306,7 +307,7 @@ export default class Importer extends Utils.WithTemplate {
       return false
     }
     if (!this.format) {
-      Alert.error(translate('Please choose a format'))
+      this.onError(translate('Please choose a format'))
       return false
     }
     const layer = this.layer
@@ -318,26 +319,63 @@ export default class Importer extends Utils.WithTemplate {
       layer.options.remoteData.proxy = true
       layer.options.remoteData.ttl = SCHEMA.ttl.default
     }
-    layer.fetchRemoteData(true)
+    layer.fetchRemoteData(true).then((features) => {
+      if (features?.length) {
+        layer.zoomTo()
+        this.onSuccess()
+      } else {
+        this.onError()
+      }
+    })
   }
 
-  copy() {
+  async copy() {
     // Format may be guessed from file later.
     // Usefull in case of multiple files with different formats.
     if (!this.format && !this.files.length) {
-      Alert.error(translate('Please choose a format'))
+      this.onError(translate('Please choose a format'))
       return false
     }
+    let promise
     const layer = this.layer
     if (this.clear) layer.empty()
     if (this.files.length) {
-      for (const file of this.files) {
-        this._umap.processFileToImport(file, layer, this.format)
-      }
+      promise = layer.importFromFiles(this.files, this.format)
     } else if (this.raw) {
-      layer.importRaw(this.raw, this.format)
+      promise = layer.importRaw(this.raw, this.format)
     } else if (this.url) {
-      layer.importFromUrl(this.url, this.format)
+      promise = layer.importFromUrl(this.url, this.format)
+    }
+    if (promise) promise.then((data) => this.onCopyFinished(layer, data))
+  }
+
+  onError(message = translate('No data has been found for import')) {
+    Alert.error(message)
+  }
+
+  onSuccess(count) {
+    if (count) {
+      Alert.success(translate(`Successfully imported ${count} feature(s)`))
+    } else {
+      Alert.success(translate('Data successfully imported!'))
+    }
+  }
+
+  onCopyFinished(layer, features) {
+    // undefined features means error, let original error message pop
+    if (!features) return
+    if (!features.length) {
+      this.onError()
+    } else {
+      const bounds = new LatLngBounds()
+      for (const feature of features) {
+        const featureBounds = feature.ui.getBounds
+          ? feature.ui.getBounds()
+          : feature.ui.getCenter()
+        bounds.extend(featureBounds)
+      }
+      this.onSuccess(features.length)
+      layer.zoomTo(bounds)
     }
   }
 }
