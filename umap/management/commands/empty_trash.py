@@ -23,10 +23,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         days = options["days"]
-        since = datetime.utcnow() - timedelta(days=days)
+        since = (datetime.utcnow() - timedelta(days=days)).date()
         print(f"Deleting map in trash since {since}")
         maps = Map.objects.filter(share_status=Map.DELETED, modified_at__lt=since)
         for map in maps:
+            map_id = map.id
+            map_name = map.name
+            trashed_at = map.modified_at.date()
             if not options["dry_run"]:
                 map.delete()
-            print(f"Deleted map {map.name} ({map.id}), trashed on {map.modified_at}")
+            print(f"Deleted map {map_name} ({map_id}), trashed at {trashed_at}")
