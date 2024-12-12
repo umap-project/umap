@@ -116,6 +116,8 @@ UMAP_XSENDFILE_HEADER = 'X-Accel-Redirect'
         internal;
         gzip_vary on;
         gzip_static on;
+        # Next line is very important!
+        add_header X-DataLayer-Version $upstream_http_x_datalayer_version;
         alias /path/to/umap/var/data/;
     }
 ```

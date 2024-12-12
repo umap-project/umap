@@ -1168,7 +1168,7 @@ class DataLayerView(BaseDetailView):
             # (no gzip/cache-control/If-Modified-Since/If-None-Match)
             data = self.filedata
             response = HttpResponse(data, content_type="application/geo+json")
-            response["X-Datalayer-Version"] = self.fileversion
+        response["X-Datalayer-Version"] = self.fileversion
         return response
 
 
