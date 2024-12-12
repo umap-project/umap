@@ -20,6 +20,18 @@ we introduce two new map statuses:
 
 Also pursuing the code cleaning (more modules and spliting uMap core code from Leaflet rendering one).
 
+Finally, this is now the javascript who create the datalayer uuid, and then create it to the back. This
+is for preparing for the synchronisation between clients.
+
+### Breaking change
+
+* if you use `X-Accel-Redirect` with Nginx, you **must** make sure that the `X-DataLayer-Version` header
+  is forwarded to the client. This is the line you usually need to add in your Nginx `/internal/` config:
+
+        add_header X-DataLayer-Version $upstream_http_x_datalayer_version;
+
+  See the [documentation](deploy/nginx.md) for more informations.
+
 ### New features
 * add umap helm chart for Kubernetes deployment by @NaPs in #2286
 * support storing layer data in S3 like servers by @yohanboniface in #2304
@@ -57,15 +69,15 @@ Also pursuing the code cleaning (more modules and spliting uMap core code from L
 
 ### Changed templates
 * umap/css.html:
-  - added `umap/css/bar.css`
-  - added `umap/css/popup.css`
+    * added `umap/css/bar.css`
+    * added `umap/css/popup.css`
 * umap/js.html:
-  - added `umap/css/bar.js`
+    * added `umap/css/bar.js`
 * umap/templates/registration/login.html
 * umap/templates/umap/map_init.html
-  - changed the way we instanciate `Umap` (instead of `U.Map`)
+    * changed the way we instanciate `Umap` (instead of `U.Map`)
 * umap/templates/umap/user_dashboard.html
-  - changed the way we instanciate `Umap` (instead of `U.Map`)
+    * changed the way we instanciate `Umap` (instead of `U.Map`)
 
 ### New Contributors
 * @NaPs made their first contribution in #2286
