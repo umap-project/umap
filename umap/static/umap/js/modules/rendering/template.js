@@ -250,7 +250,7 @@ class Wikipedia extends PopupTemplate {
     if (!wikipedia) return 'No data'
     // Wikipedia value should be in form of "{locale}:{title}", according to https://wiki.openstreetmap.org/wiki/Key:wikipedia
     const [locale, page] = wikipedia.split(':')
-    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=280&prop=extracts|pageimages&titles=${page}`
+    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&prop=extracts|pageimages&titles=${page}`
     const request = new Request()
     const response = await request.get(url)
     if (response?.ok) {
