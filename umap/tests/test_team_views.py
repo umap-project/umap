@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from umap.models import Team
+from umap.models import Map, Team
 
 pytestmark = pytest.mark.django_db
 
@@ -13,6 +13,37 @@ def test_can_see_team_maps(client, map, team):
     response = client.get(url)
     assert response.status_code == 200
     assert map.name in response.content.decode()
+
+
+def test_others_cannot_see_team_private_maps_in_team_page(client, map, team, user):
+    map.team = team
+    map.share_status = Map.PRIVATE
+    map.save()
+    url = reverse("team_maps", args=(team.pk,))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert map.name not in response.content.decode()
+    # User is not in team
+    client.login(username=user.username, password="123123")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert map.name not in response.content.decode()
+
+
+@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.DRAFT])
+def test_members_can_see_private_maps_in_team_page(
+    client, map, team, user, share_status
+):
+    map.team = team
+    map.share_status = share_status
+    map.save()
+    user.teams.add(team)
+    user.save()
+    url = reverse("team_maps", args=(team.pk,))
+    client.login(username=user.username, password="123123")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert map.name not in response.content.decode()
 
 
 def test_user_can_see_their_teams(client, team, user):
