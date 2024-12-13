@@ -40,23 +40,39 @@ Then, change the `STORAGES` settings with something like this:
 ```
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "access_key": "xxx",
+            "secret_key": "yyy",
+            "bucket_name": "umap-pictograms",
+            "endpoint_url": "http://127.0.0.1:9000",
+        },
     },
     "data": {
+        # Whatch out, this is a dedicated uMap class!
         "BACKEND": "umap.storage.s3.S3DataStorage",
         "OPTIONS": {
             "access_key": "xxx",
             "secret_key": "yyy",
-            "bucket_name": "umap",
-            "region_name": "eu",
+            "bucket_name": "umap-data",
             "endpoint_url": "http://127.0.0.1:9000",
         },
     },
     "staticfiles": {
-        "BACKEND": "umap.storage.staticfiles.UmapManifestStaticFilesStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "access_key": "xxx",
+            "secret_key": "yyy",
+            "bucket_name": "umapstatics",
+            "endpoint_url": "http://127.0.0.1:9000",
+        },
     },
 }
 ```
+
+As you can see in this example, both `staticfiles` and `default` use the storage class provided
+by `django-storages` (`storages.backends.s3.S3Storage`), but the `data` one uses a specific class
+(`umap.storage.s3.S3DataStorage`).
 
 In order to store old versions of a layer, the versioning should be activated in the bucket.
 
