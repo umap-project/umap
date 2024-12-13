@@ -643,6 +643,12 @@ export default class Umap extends ServerStored {
     // have changed, we'll be more subtil when we'll remove the
     // save action
     this.render(['name', 'user', 'permissions'])
+    if (!this._leafletMap.listens('saved')) {
+      // When we save only layers, we don't have the map feedback message
+      this._leafletMap.on('saved', () => {
+        Alert.success(translate('Map has been saved!'))
+      })
+    }
     this.fire('saved')
   }
 
