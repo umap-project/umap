@@ -355,7 +355,9 @@ export default class Importer extends Utils.WithTemplate {
 
   onSuccess(count) {
     if (count) {
-      Alert.success(translate(`Successfully imported ${count} feature(s)`))
+      Alert.success(translate('Successfully imported {count} feature(s)'), {
+        count: count,
+      })
     } else {
       Alert.success(translate('Data successfully imported!'))
     }

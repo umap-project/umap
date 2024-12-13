@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:05+0000\n"
+"POT-Creation-Date: 2024-12-13 08:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -617,57 +617,57 @@ msgstr ""
 msgid "View the map"
 msgstr ""
 
-#: views.py:820
+#: views.py:821
 msgid "See full screen"
 msgstr ""
 
-#: views.py:963
+#: views.py:964
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:999
+#: views.py:1000
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1002
+#: views.py:1003
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1009
+#: views.py:1010
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1012
+#: views.py:1013
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1023
+#: views.py:1024
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1026
+#: views.py:1027
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1052
+#: views.py:1053
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1057
+#: views.py:1058
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1308
+#: views.py:1309
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1330
+#: views.py:1331
 msgid "Permissions updated with success!"
 msgstr ""

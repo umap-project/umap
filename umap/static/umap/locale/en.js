@@ -520,7 +520,9 @@ const locale = {
     "Import helpers": "Import helpers",
     "Import helpers will fill the URL field for you.": "Import helpers will fill the URL field for you.",
     "Wikipedia": "Wikipedia",
-    "Save draft": "Save draft"
+    "Save draft": "Save draft",
+    "No data has been found for import": "No data has been found for import",
+    "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")

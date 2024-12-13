@@ -520,7 +520,9 @@ const locale = {
     "Import helpers": "Assistants d'import",
     "Import helpers will fill the URL field for you.": "Les assistants d'import vont renseigner le champ URL pour vous.",
     "Wikipedia": "Wikipedia",
-    "Save draft": "Enregistrer le brouillon"
+    "Save draft": "Enregistrer le brouillon",
+    "No data has been found for import": "Aucunes données à importer",
+    "Successfully imported {count} feature(s)": "{count} élément(s) ajouté(s) à la carte"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")
