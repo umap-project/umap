@@ -22,10 +22,9 @@ const Popup = BasePopup.extend({
   initialize: function (feature) {
     this.feature = feature
     BasePopup.prototype.initialize.call(this, {}, feature.ui)
-    this.getContentFromTemplate()
   },
 
-  getContentFromTemplate: async function () {
+  loadContent: async function () {
     const container = DomUtil.create('div', 'umap-popup')
     const name = this.feature.getOption('popupTemplate')
     this.content = await loadTemplate(name, this.feature, container)
