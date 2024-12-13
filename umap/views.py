@@ -452,27 +452,27 @@ showcase = MapsShowCase.as_view()
 
 
 def validate_url(request):
-    assert request.method == "GET"
+    assert request.method == "GET", "Wrong HTTP method"
     url = request.GET.get("url")
-    assert url
+    assert url, "Missing URL"
     try:
         URLValidator(url)
-    except ValidationError:
-        raise AssertionError()
-    assert "HTTP_REFERER" in request.META
+    except ValidationError as err:
+        raise AssertionError(err)
+    assert "HTTP_REFERER" in request.META, "Missing HTTP_REFERER"
     referer = urlparse(request.META.get("HTTP_REFERER"))
     toproxy = urlparse(url)
     local = urlparse(settings.SITE_URL)
-    assert toproxy.hostname
-    assert referer.hostname == local.hostname
-    assert toproxy.hostname != "localhost"
-    assert toproxy.netloc != local.netloc
+    assert toproxy.hostname, "No hostname"
+    assert referer.hostname == local.hostname, f"{referer.hostname} != {local.hostname}"
+    assert toproxy.hostname != "localhost", "Invalid localhost target"
+    assert toproxy.netloc != local.netloc, "Invalid netloc"
     try:
         # clean this when in python 3.4
         ipaddress = socket.gethostbyname(toproxy.hostname)
-    except:
-        raise AssertionError()
-    assert not PRIVATE_IP.match(ipaddress)
+    except Exception as err:
+        raise AssertionError(err)
+    assert not PRIVATE_IP.match(ipaddress), "Private IP"
     return url
 
 
@@ -480,7 +480,8 @@ class AjaxProxy(View):
     def get(self, *args, **kwargs):
         try:
             url = validate_url(self.request)
-        except AssertionError:
+        except AssertionError as err:
+            print(f"AjaxProxy: {err}")
             return HttpResponseBadRequest()
         try:
             ttl = int(self.request.GET.get("ttl"))
