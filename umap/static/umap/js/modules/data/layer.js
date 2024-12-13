@@ -252,10 +252,11 @@ export class DataLayer extends ServerStored {
   }
 
   fromGeoJSON(geojson, sync = true) {
-    this.addData(geojson, sync)
+    const features = this.addData(geojson, sync)
     this._geojson = geojson
     this.onDataLoaded()
     this.dataChanged()
+    return features
   }
 
   onDataLoaded() {
@@ -315,7 +316,7 @@ export class DataLayer extends ServerStored {
     const response = await this._umap.request.get(url)
     if (response?.ok) {
       this.clear()
-      this._umap.formatter
+      return this._umap.formatter
         .parse(await response.text(), this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson))
     }
@@ -443,10 +444,11 @@ export class DataLayer extends ServerStored {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      this.makeFeatures(geojson, sync)
+      return this.makeFeatures(geojson, sync)
     } catch (err) {
       console.log('Error with DataLayer', this.id)
       console.error(err)
+      return []
     }
   }
 
@@ -463,10 +465,13 @@ export class DataLayer extends ServerStored {
       ? geojson
       : geojson.features || geojson.geometries
     if (!collection) return
+    const features = []
     this.sortFeatures(collection)
-    for (const feature of collection) {
-      this.makeFeature(feature, sync)
+    for (const featureJson of collection) {
+      const feature = this.makeFeature(featureJson, sync)
+      if (feature) features.push(feature)
     }
+    return features
   }
 
   makeFeature(geojson = {}, sync = true, id = null) {
@@ -503,31 +508,47 @@ export class DataLayer extends ServerStored {
   }
 
   async importRaw(raw, format) {
-    this._umap.formatter
+    return this._umap.formatter
       .parse(raw, format)
       .then((geojson) => this.addData(geojson))
-      .then(() => this.zoomTo())
-    this.isDirty = true
+      .then((data) => {
+        if (data?.length) this.isDirty = true
+        return data
+      })
   }
 
-  importFromFiles(files, type) {
-    for (const f of files) {
-      this.importFromFile(f, type)
+  readFile(f) {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsText(f)
+    })
+  }
+
+  async importFromFiles(files, type) {
+    let all = []
+    for (const file of files) {
+      const features = await this.importFromFile(file, type)
+      if (features) {
+        all = all.concat(features)
+      }
     }
+    return new Promise((resolve) => {
+      resolve(all)
+    })
   }
 
-  importFromFile(f, type) {
-    const reader = new FileReader()
+  async importFromFile(file, type) {
     type = type || Utils.detectFileType(f)
-    reader.readAsText(f)
-    reader.onload = (e) => this.importRaw(e.target.result, type)
+    const raw = await this.readFile(file)
+    return this.importRaw(raw, type)
   }
 
   async importFromUrl(uri, type) {
     uri = this._umap.renderUrl(uri)
     const response = await this._umap.request.get(uri)
     if (response?.ok) {
-      this.importRaw(await response.text(), type)
+      return this.importRaw(await response.text(), type)
     }
   }
 
@@ -930,9 +951,9 @@ export class DataLayer extends ServerStored {
     else this.hide()
   }
 
-  zoomTo() {
+  zoomTo(bounds) {
     if (!this.isVisible()) return
-    const bounds = this.layer.getBounds()
+    bounds = bounds || this.layer.getBounds()
     if (bounds.isValid()) {
       const options = { maxZoom: this.getOption('zoomTo') }
       this._leafletMap.fitBounds(bounds, options)
