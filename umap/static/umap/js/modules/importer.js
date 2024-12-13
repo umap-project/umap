@@ -64,7 +64,10 @@ export default class Importer extends Utils.WithTemplate {
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.loadImporters()
-    this.dialog = new Dialog({ className: 'importers dark' })
+    this.dialog = new Dialog({
+      className: 'importers dark',
+      back: () => this.showImporters(),
+    })
   }
 
   loadImporters() {
@@ -172,7 +175,7 @@ export default class Importer extends Utils.WithTemplate {
       button.addEventListener('click', () => plugin.open(this))
       grid.appendChild(button)
     }
-    this.dialog.open({ template: element, cancel: false, accept: false })
+    this.dialog.open({ template: element, cancel: false, accept: false, back: false })
   }
 
   build() {

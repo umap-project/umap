@@ -6,6 +6,7 @@ const TEMPLATE = `
     <form method="dialog" data-ref="form">
       <ul class="buttons">
         <li><i class="icon icon-16 icon-close" data-close></i></li>
+        <li hidden data-ref="back"><i class="icon icon-16 icon-back"></i></li>
       </ul>
       <h3 data-ref="message" id="${Math.round(Date.now()).toString(36)}"></h3>
       <fieldset data-ref="fieldset" role="document">
@@ -122,6 +123,10 @@ export default class Dialog extends WithTemplate {
       this.elements.template.appendChild(dialog.template)
     } else {
       this.elements.template.innerHTML = dialog.template || ''
+    }
+    this.elements.back.hidden = !dialog.back
+    if (dialog.back) {
+      this.elements.back.addEventListener('click', dialog.back)
     }
 
     this.focusable = this.getFocusable()
