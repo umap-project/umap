@@ -243,11 +243,11 @@ class OSM extends PopupTemplate {
   }
 }
 
+const _WIKIPEDIA_CACHE = {}
+
 class Wikipedia extends PopupTemplate {
-  async renderBody(feature) {
-    const body = document.createElement('div')
-    const wikipedia = feature.properties.wikipedia
-    if (!wikipedia) return 'No data'
+  async callWikipedia(wikipedia) {
+    if (wikipedia && _WIKIPEDIA_CACHE[wikipedia]) return _WIKIPEDIA_CACHE[wikipedia]
     // Wikipedia value should be in form of "{locale}:{title}", according to https://wiki.openstreetmap.org/wiki/Key:wikipedia
     const [locale, page] = wikipedia.split(':')
     const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&prop=extracts|pageimages&titles=${page}`
@@ -255,15 +255,29 @@ class Wikipedia extends PopupTemplate {
     const response = await request.get(url)
     if (response?.ok) {
       const data = await response.json()
+      _WIKIPEDIA_CACHE[wikipedia] = data
+      return data
+    }
+  }
+
+  async renderBody(feature) {
+    const body = document.createElement('div')
+    const wikipedia = feature.properties.wikipedia
+    if (!wikipedia) return ''
+    const data = await this.callWikipedia(wikipedia)
+    if (data) {
       const page = Object.values(data.query.pages)[0]
-      const title = page.title
-      const extract = page.extract
-      const thumbnail = page.thumbnail.source
-      body.appendChild(
-        Utils.loadTemplate(
-          `<div><h3>${title}</h3><img src="${thumbnail}" />${extract}</div>`
-        )
+      const title = page.title || feature.getDisplayName()
+      const extract = page.extract || ''
+      const thumbnail = page.thumbnail?.source
+      const [content, { image }] = Utils.loadTemplateWithRefs(
+        `<div><h3>${title}</h3><img data-ref="image" hidden src="" />${extract}</div>`
       )
+      if (thumbnail) {
+        image.src = thumbnail
+        image.hidden = false
+      }
+      body.appendChild(content)
     }
     return body
   }
