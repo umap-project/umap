@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.0a2 - 2024-12-13
+
+## Bug fixes
+* make sure we set X-DataLayer-Version even when using X-Accel-Redirect by @yohanboniface in #2361
+* refactor importer feedback by @yohanboniface in #2363
+
 ## 2.8.0a1 - 2024-12-11
 
 ### Internal changes
