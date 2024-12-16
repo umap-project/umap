@@ -526,15 +526,13 @@ export class DataLayer extends ServerStored {
   }
 
   async importFromFiles(files, type) {
-    let all = []
+    const toLoad = []
     for (const file of files) {
-      const features = await this.importFromFile(file, type)
-      if (features) {
-        all = all.concat(features)
-      }
+      toLoad.push(this.importFromFile(file, type))
     }
+    const features = await Promise.all(toLoad)
     return new Promise((resolve) => {
-      resolve(all)
+      resolve([].concat(...features))
     })
   }
 

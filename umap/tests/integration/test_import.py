@@ -9,7 +9,6 @@ from playwright.sync_api import expect
 
 from umap.models import DataLayer
 
-from ..base import mock_tiles
 from .helpers import save_and_get_json
 
 pytestmark = pytest.mark.django_db
@@ -765,3 +764,23 @@ def test_import_georss_from_textarea(tilelayer, live_server, page):
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
+
+
+def test_import_from_multiple_files(live_server, page, tilelayer):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Import data").click()
+    file_input = page.locator("input[type='file']")
+    with page.expect_file_chooser() as fc_info:
+        file_input.click()
+    file_chooser = fc_info.value
+    FIXTURES = Path(__file__).parent.parent / "fixtures"
+    paths = [
+        FIXTURES / "test_upload_data.json",
+        FIXTURES / "test_upload_simple_marker.json",
+    ]
+    file_chooser.set_files(paths)
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(0)
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # Two in one file, one in the other
+    expect(markers).to_have_count(3)
