@@ -1190,7 +1190,7 @@ export default class Umap extends ServerStored {
   geometry() {
     /* Return a GeoJSON geometry Object */
     const latlng = this._leafletMap.latLng(
-      this._leafletMap.options.center || this._leafletMap.getCenter()
+      this.properties.center || this._leafletMap.getCenter()
     )
     return {
       type: 'Point',
@@ -1668,8 +1668,8 @@ export default class Umap extends ServerStored {
   }
 
   _setCenterAndZoom() {
-    this._leafletMap.options.center = this._leafletMap.getCenter()
-    this._leafletMap.options.zoom = this._leafletMap.getZoom()
+    this.properties.center = this._leafletMap.getCenter()
+    this.properties.zoom = this._leafletMap.getZoom()
     this.isDirty = true
     this._defaultExtent = false
   }
