@@ -683,10 +683,13 @@ U.TileLayerChooser = L.Control.extend({
     L.DomEvent.on(
       el,
       'click',
-      function () {
+      () => {
         this.map.selectTileLayer(tilelayer)
         this.map._controls.tilelayers.setLayers()
-        if (options?.callback) options.callback(tilelayer)
+        if (options?.edit) {
+          this.map._umap.properties.tilelayer = tilelayer.toJSON()
+          this.map._umap.isDirty = true
+        }
       },
       this
     )

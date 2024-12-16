@@ -233,12 +233,8 @@ const ManageTilelayerMixin = {
   },
 
   updateTileLayers: function () {
-    const callback = (tilelayer) => {
-      this.options.tilelayer = tilelayer.toJSON()
-      this._umap.isDirty = true
-    }
     if (this._controls.tilelayersChooser) {
-      this._controls.tilelayersChooser.openSwitcher({ callback, edit: true })
+      this._controls.tilelayersChooser.openSwitcher({ edit: true })
     }
   },
 }
