@@ -1,0 +1,19 @@
+{
+    "crs": null,
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "coordinates": [
+                    -1.09314,
+                    50.791718
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "Portsmouth"
+            }
+        }
+    ]
+}
