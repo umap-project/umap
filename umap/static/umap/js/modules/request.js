@@ -47,8 +47,8 @@ class BaseRequest {
 // In case of error, an alert is sent, but non 20X status are not handled
 // The consumer must check the response status by hand
 export class Request extends BaseRequest {
-  fire(name, params) {
-    document.body.dispatchEvent(new CustomEvent(name, params))
+  fire(name, detail) {
+    document.body.dispatchEvent(new CustomEvent(name, { detail }))
   }
 
   async _fetch(method, uri, headers, data) {

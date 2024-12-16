@@ -263,8 +263,12 @@ export const LeafletMap = BaseMap.extend({
     this.loader.onAdd(this)
 
     if (!this.options.noControl) {
-      DomEvent.on(document.body, 'dataloading', (e) => this.fire('dataloading', e))
-      DomEvent.on(document.body, 'dataload', (e) => this.fire('dataload', e))
+      DomEvent.on(document.body, 'dataloading', (event) =>
+        this.fire('dataloading', event.detail)
+      )
+      DomEvent.on(document.body, 'dataload', (event) =>
+        this.fire('dataload', event.detail)
+      )
       this.on('click', this.closeInplaceToolbar)
     }
 
