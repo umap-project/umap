@@ -570,9 +570,11 @@ export default class Umap extends ServerStored {
     }
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
+    const toLoad = []
     for (const datalayer of this.datalayersIndex) {
-      if (datalayer.showAtLoad()) await datalayer.show()
+      if (datalayer.showAtLoad()) toLoad.push(datalayer.show())
     }
+    await Promise.all(toLoad)
     this.dataloaded = true
     this.fire('dataloaded')
   }
