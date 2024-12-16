@@ -942,11 +942,11 @@ L.Control.Loading.include({
   },
 
   _showIndicator: function () {
-    L.DomUtil.addClass(this._map._container, 'umap-loading')
+    this._map._container.classList.add('umap-loading')
   },
 
   _hideIndicator: function () {
-    L.DomUtil.removeClass(this._map._container, 'umap-loading')
+    this._map._container.classList.remove('umap-loading')
   },
 })
 
