@@ -317,7 +317,11 @@ class TeamMaps(PaginatorMixin, DetailView):
     context_object_name = "current_team"
 
     def get_maps(self):
-        return Map.public.filter(team=self.object).order_by("-modified_at")
+        qs = Map.public
+        user = self.request.user
+        if user.is_authenticated and user in self.object.users.all():
+            qs = Map.objects
+        return qs.filter(team=self.object).order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
         kwargs.update(
