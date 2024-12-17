@@ -1,8 +1,23 @@
 # Changelog
 
+## 2.8.0b0 - 2024-12-17
+
+### New features
+* add a back button to importers dialog by @yohanboniface in #2364
+* load all datalayers in parallel by @yohanboniface in #2370
+* parse files in parallel at import when multiple by @yohanboniface in #2372
+* allow to edit datalayer name in datalayers list by @yohanboniface in #2349
+
+### Bug fixes
+* fix save center and zoom by @yohanboniface in #2371
+* fix tilelayer switch not saved anymore by @yohanboniface in #2367
+* show private/draft maps in team maps for members by @yohanboniface in #2373
+* bring marker to front on highlight by @yohanboniface in #2377
+* do not autoescape static tag by @yohanboniface in #2376
+
 ## 2.8.0a2 - 2024-12-13
 
-## Bug fixes
+### Bug fixes
 * make sure we set X-DataLayer-Version even when using X-Accel-Redirect by @yohanboniface in #2361
 * refactor importer feedback by @yohanboniface in #2363
 
