@@ -271,7 +271,7 @@ class Wikipedia extends PopupTemplate {
       const extract = page.extract || ''
       const thumbnail = page.thumbnail?.source
       const [content, { image }] = Utils.loadTemplateWithRefs(
-        `<div><h3>${title}</h3><img data-ref="image" hidden src="" />${extract}</div>`
+        `<div><h3>${Utils.escapeHTML(title)}</h3><img data-ref="image" hidden src="" />${Utils.escapeHTML(extract)}</div>`
       )
       if (thumbnail) {
         image.src = thumbnail

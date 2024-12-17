@@ -115,6 +115,8 @@ export function escapeHTML(s) {
       'span',
       'dt',
       'dd',
+      'b',
+      'i',
     ],
     ADD_ATTR: [
       'target',
