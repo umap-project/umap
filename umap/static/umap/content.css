@@ -41,6 +41,7 @@ body.login header {
     display: inline-block;
 }
 
+.login-grid span,
 .login-grid a {
     border: 1px solid #e5e5e5;
     padding: 5px;
