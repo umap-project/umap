@@ -21,23 +21,22 @@ export default function loadPopup(name) {
 const Popup = BasePopup.extend({
   initialize: function (feature) {
     this.feature = feature
-    this.container = DomUtil.create('div', 'umap-popup')
-    this.format()
-    BasePopup.prototype.initialize.call(this, {}, feature)
-    this.setContent(this.container)
+    BasePopup.prototype.initialize.call(this, {}, feature.ui)
   },
 
-  format: function () {
+  loadContent: async function () {
+    const container = DomUtil.create('div', 'umap-popup')
     const name = this.feature.getOption('popupTemplate')
-    this.content = loadTemplate(name, this.feature, this.container)
-    const elements = this.container.querySelectorAll('img,iframe')
+    this.content = await loadTemplate(name, this.feature, container)
+    const elements = container.querySelectorAll('img,iframe')
     for (const element of elements) {
       this.onElementLoaded(element)
     }
-    if (!elements.length && this.container.textContent.replace('\n', '') === '') {
-      this.container.innerHTML = ''
-      DomUtil.add('h3', '', this.container, this.feature.getDisplayName())
+    if (!elements.length && container.textContent.replace('\n', '') === '') {
+      container.innerHTML = ''
+      DomUtil.add('h3', '', container, this.feature.getDisplayName())
     }
+    this.setContent(container)
   },
 
   onElementLoaded: function (el) {

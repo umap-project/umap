@@ -2,8 +2,9 @@ import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate, getLocale } from '../i18n.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
+import { Request } from '../request.js'
 
-export default function loadTemplate(name, feature, container) {
+export default async function loadTemplate(name, feature, container) {
   let klass = PopupTemplate
   switch (name) {
     case 'GeoRSSLink':
@@ -18,9 +19,12 @@ export default function loadTemplate(name, feature, container) {
     case 'OSM':
       klass = OSM
       break
+    case 'Wikipedia':
+      klass = Wikipedia
+      break
   }
   const content = new klass()
-  return content.render(feature, container)
+  return await content.render(feature, container)
 }
 
 class PopupTemplate {
@@ -76,10 +80,10 @@ class PopupTemplate {
     }
   }
 
-  render(feature, container) {
+  async render(feature, container) {
     const title = this.renderTitle(feature)
     if (title) container.appendChild(title)
-    const body = this.renderBody(feature)
+    const body = await this.renderBody(feature)
     if (body) DomUtil.add('div', 'umap-popup-content', container, body)
     const footer = this.renderFooter(feature)
     if (footer) container.appendChild(footer)
@@ -111,7 +115,7 @@ class Table extends TitleMixin(PopupTemplate) {
     )
   }
 
-  renderBody(feature) {
+  async renderBody(feature) {
     const table = document.createElement('table')
 
     for (const key in feature.properties) {
@@ -125,7 +129,7 @@ class Table extends TitleMixin(PopupTemplate) {
 }
 
 class GeoRSSImage extends TitleMixin(PopupTemplate) {
-  renderBody(feature) {
+  async renderBody(feature) {
     const body = DomUtil.create('a')
     body.href = feature.properties.link
     body.target = '_blank'
@@ -142,7 +146,7 @@ class GeoRSSImage extends TitleMixin(PopupTemplate) {
 }
 
 class GeoRSSLink extends PopupTemplate {
-  renderBody(feature) {
+  async renderBody(feature) {
     if (feature.properties.link) {
       return Utils.loadTemplate(
         `<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
@@ -151,7 +155,7 @@ class GeoRSSLink extends PopupTemplate {
   }
 }
 
-class OSM extends TitleMixin(PopupTemplate) {
+class OSM extends PopupTemplate {
   renderTitle(feature) {
     const title = DomUtil.add('h3', 'popup-title')
     const color = feature.getPreviewColor()
@@ -172,7 +176,7 @@ class OSM extends TitleMixin(PopupTemplate) {
     return props.name
   }
 
-  renderBody(feature) {
+  async renderBody(feature) {
     const props = feature.properties
     const body = document.createElement('div')
     const locale = getLocale()
@@ -234,6 +238,46 @@ class OSM extends TitleMixin(PopupTemplate) {
           `<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}</a></div>`
         )
       )
+    }
+    return body
+  }
+}
+
+const _WIKIPEDIA_CACHE = {}
+
+class Wikipedia extends PopupTemplate {
+  async callWikipedia(wikipedia) {
+    if (wikipedia && _WIKIPEDIA_CACHE[wikipedia]) return _WIKIPEDIA_CACHE[wikipedia]
+    // Wikipedia value should be in form of "{locale}:{title}", according to https://wiki.openstreetmap.org/wiki/Key:wikipedia
+    const [locale, page] = wikipedia.split(':')
+    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&prop=extracts|pageimages&titles=${page}`
+    const request = new Request()
+    const response = await request.get(url)
+    if (response?.ok) {
+      const data = await response.json()
+      _WIKIPEDIA_CACHE[wikipedia] = data
+      return data
+    }
+  }
+
+  async renderBody(feature) {
+    const body = document.createElement('div')
+    const wikipedia = feature.properties.wikipedia
+    if (!wikipedia) return ''
+    const data = await this.callWikipedia(wikipedia)
+    if (data) {
+      const page = Object.values(data.query.pages)[0]
+      const title = page.title || feature.getDisplayName()
+      const extract = page.extract || ''
+      const thumbnail = page.thumbnail?.source
+      const [content, { image }] = Utils.loadTemplateWithRefs(
+        `<div><h3>${Utils.escapeHTML(title)}</h3><img data-ref="image" hidden src="" />${Utils.escapeHTML(extract)}</div>`
+      )
+      if (thumbnail) {
+        image.src = thumbnail
+        image.hidden = false
+      }
+      body.appendChild(content)
     }
     return body
   }

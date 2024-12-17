@@ -199,8 +199,9 @@ class Feature {
       this._umap.slideshow.current = this
     }
     this._umap.currentFeature = this
-    this.attachPopup()
-    this.ui.openPopup(latlng || this.center)
+    this.attachPopup().then(() => {
+      this.ui.openPopup(latlng || this.center)
+    })
   }
 
   render(fields) {
@@ -355,9 +356,11 @@ class Feature {
     return loadPopup(this.getOption('popupShape') || old)
   }
 
-  attachPopup() {
+  async attachPopup() {
     const Class = this.getPopupClass()
-    this.ui.bindPopup(new Class(this))
+    const popup = new Class(this)
+    this.ui.bindPopup(popup)
+    return popup.loadContent()
   }
 
   async confirmDelete() {
