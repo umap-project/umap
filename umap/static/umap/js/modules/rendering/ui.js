@@ -238,12 +238,14 @@ export const LeafletMarker = Marker.extend({
   },
 
   highlight: function () {
-    DomUtil.addClass(this.options.icon.elements.main, 'umap-icon-active')
+    this.feature.activate()
+    this._redraw()
     this._bringToFront()
   },
 
   resetHighlight: function () {
-    DomUtil.removeClass(this.options.icon.elements.main, 'umap-icon-active')
+    this.feature.deactivate()
+    this._redraw()
     this._resetZIndex()
   },
 

@@ -22,7 +22,7 @@ export function getClass(name) {
 
 export const RECENT = []
 
-const BaseIcon = L.DivIcon.extend({
+const BaseIcon = DivIcon.extend({
   initialize: function (options) {
     const default_options = {
       iconSize: null, // Made in css
@@ -86,6 +86,7 @@ const DefaultIcon = BaseIcon.extend({
   },
 
   _setIconStyles: function (img, name) {
+    if (this.feature.isActive()) this.options.className += ' umap-icon-active'
     BaseIcon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor()
     const opacity = this._getOpacity()
