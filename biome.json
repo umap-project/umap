@@ -1,4 +1,12 @@
 {
+  "files": {
+    "include": [
+      "umap/static/umap/js/**"
+    ],
+    "ignore": [
+      "umap/static/umap/vendors/**"
+    ]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -23,7 +31,7 @@
   },
   "javascript": {
     "formatter": {
-      "arrowParentheses":"always",
+      "arrowParentheses": "always",
       "bracketSameLine": false,
       "bracketSpacing": true,
       "jsxQuoteStyle": "double",
