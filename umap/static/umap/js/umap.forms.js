@@ -1192,6 +1192,21 @@ U.FormBuilder = L.FormBuilder.extend({
     }
   },
 
+  getter: function (field) {
+    const path = field.split('.')
+    let value = this.obj
+    let sub
+    for (sub of path) {
+      try {
+        value = value[sub]
+      } catch {
+        console.log(field)
+      }
+    }
+    if (value === undefined) values = U.SCHEMA[sub]?.default
+    return value
+  },
+
   finish: (event) => {
     event.helper?.input?.blur()
   },
