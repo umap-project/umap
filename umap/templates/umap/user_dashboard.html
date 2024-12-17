@@ -46,7 +46,9 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="module">
+    {% autoescape off %}
     import Umap from '{% static "umap/js/modules/umap.js" %}'
+    {% endautoescape %}
     const CACHE = {}
     for (const mapOpener of document.querySelectorAll("button.map-opener")) {
       mapOpener.addEventListener('click', (event) => {

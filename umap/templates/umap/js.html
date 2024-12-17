@@ -1,5 +1,6 @@
 {% load static %}
 
+{% autoescape off %}
 <script type="module"
         src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
         defer></script>
@@ -42,3 +43,4 @@
 <script src="{% static 'umap/js/umap.forms.js' %}" defer></script>
 <script src="{% static 'umap/js/umap.controls.js' %}" defer></script>
 <script type="module" src="{% static 'umap/js/components/fragment.js' %}" defer></script>
+{% endautoescape %}

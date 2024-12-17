@@ -18,6 +18,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     {# See https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs #}
+    {% autoescape off %}
     <link rel="icon"
           href="{% static 'umap/favicons/favicon.ico' %}"
           sizes="32x32">
@@ -28,6 +29,7 @@
           href="{% static 'umap/favicons/apple-touch-icon.png' %}">
     <!-- 180×180 -->
     <link rel="manifest" href="/manifest.webmanifest">
+    {% endautoescape %}
   </head>
   <body class="{% block body_class %}{% endblock body_class %}">
     {% block header %}

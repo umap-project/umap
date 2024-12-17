@@ -46,6 +46,7 @@ STORAGES = {
             "secret_key": "yyy",
             "bucket_name": "umap-pictograms",
             "endpoint_url": "http://127.0.0.1:9000",
+            "default_acl": "public-read",
         },
     },
     "data": {
@@ -65,6 +66,7 @@ STORAGES = {
             "secret_key": "yyy",
             "bucket_name": "umapstatics",
             "endpoint_url": "http://127.0.0.1:9000",
+            "default_acl": "public-read",
         },
     },
 }

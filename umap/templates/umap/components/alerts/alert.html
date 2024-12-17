@@ -1,8 +1,10 @@
 {% load i18n static %}
 
+{% autoescape off %}
 <style type="text/css">
     @import "{% static 'umap/js/components/alerts/alert.css' %}";
 </style>
+{% endautoescape %}
 <template id="umap-alert-template">
   <div role="dialog" class="dark window umap-alert">
     <div>
@@ -97,6 +99,7 @@
   </div>
 </template>
 <umap-alert-conflict></umap-alert-conflict>
+{% autoescape off %}
 <script type="module">
   import { register } from '{% static 'umap/js/components/base.js' %}'
   import {
@@ -108,3 +111,4 @@
   register(uMapAlertCreation, 'umap-alert-creation')
   register(uMapAlertConflict, 'umap-alert-conflict')
 </script>
+{% endautoescape %}
