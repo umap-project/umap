@@ -924,7 +924,6 @@ a.umap-control-caption,
     width: 2px;
 }
 .umap-icon-active {
-    z-index: var(--zindex-icon-active)!important;
     opacity: 1.0!important;
 }
 .umap-edit-enabled .readonly {
