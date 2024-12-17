@@ -1,5 +1,7 @@
 {% load static %}
 
+{% autoescape off %}
+
 <link rel="stylesheet"
       href="{% static 'umap/vendors/leaflet/leaflet.css' %}" />
 <link rel="stylesheet"
@@ -39,3 +41,4 @@
 <link rel="stylesheet" href="{% static 'umap/css/tableeditor.css' %}" />
 <link rel="stylesheet" href="{% static 'umap/css/bar.css' %}" />
 <link rel="stylesheet" href="{% static 'umap/theme.css' %}" />
+{% endautoescape %}
