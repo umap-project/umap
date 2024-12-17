@@ -218,6 +218,14 @@ export default class Umap extends ServerStored {
     this.fire('seteditedfeature')
   }
 
+  get activeFeature() {
+    return this._activeFeature
+  }
+
+  set activeFeature(feature) {
+    this._activeFeature = feature
+  }
+
   setPropertiesFromQueryString() {
     const asBoolean = (key) => {
       const value = this.searchParams.get(key)

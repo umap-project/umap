@@ -658,6 +658,18 @@ class Feature {
     )
     return items
   }
+
+  isActive() {
+    return this._umap.activeFeature === this
+  }
+
+  activate() {
+    this._umap.activeFeature = this
+  }
+
+  deactivate() {
+    if (this._umap.activeFeature === this) this._umap.activeFeature = undefined
+  }
 }
 
 export class Point extends Feature {
