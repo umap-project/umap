@@ -1,33 +1,6 @@
 # Changelog
 
-## 2.8.0b0 - 2024-12-17
-
-### New features
-* add a back button to importers dialog by @yohanboniface in #2364
-* load all datalayers in parallel by @yohanboniface in #2370
-* parse files in parallel at import when multiple by @yohanboniface in #2372
-* allow to edit datalayer name in datalayers list by @yohanboniface in #2349
-
-### Bug fixes
-* fix save center and zoom by @yohanboniface in #2371
-* fix tilelayer switch not saved anymore by @yohanboniface in #2367
-* show private/draft maps in team maps for members by @yohanboniface in #2373
-* bring marker to front on highlight by @yohanboniface in #2377
-* do not autoescape static tag by @yohanboniface in #2376
-
-## 2.8.0a2 - 2024-12-13
-
-### Bug fixes
-* make sure we set X-DataLayer-Version even when using X-Accel-Redirect by @yohanboniface in #2361
-* refactor importer feedback by @yohanboniface in #2363
-
-## 2.8.0a1 - 2024-12-11
-
-### Internal changes
-
-* make S3 dependencies optional in #2359
-
-## 2.8.0a0 - 2024-12-11
+## 2.8.0 - 2024-12-18
 
 ### What's Changed
 
@@ -41,7 +14,7 @@ we introduce two new map statuses:
 
 Also pursuing the code cleaning (more modules and spliting uMap core code from Leaflet rendering one).
 
-Finally, this is now the javascript who create the datalayer uuid, and then create it to the back. This
+Finally, this is now the javascript who create the datalayer uuid, and then push it to the back. This
 is for preparing for the synchronisation between clients.
 
 ### Breaking change
@@ -68,6 +41,11 @@ is for preparing for the synchronisation between clients.
 * display wikipedia link in OSM popup template when possible by @yohanboniface in #2358
 * move labelKey field on the top datalayer form by @yohanboniface in #2350
 * add elevation gain and loss in extended properties by @yohanboniface in #2343
+* add a back button to importers dialog by @yohanboniface in #2364
+* load all datalayers in parallel by @yohanboniface in #2370
+* parse files in parallel at import when multiple by @yohanboniface in #2372
+* allow to edit datalayer name in datalayers list by @yohanboniface in #2349
+* experimental popup template for wikipedia by @yohanboniface in #2365
 
 ### Bug fixes
 * honour custom labelKey in default popup template by @yohanboniface in #2271
@@ -78,6 +56,12 @@ is for preparing for the synchronisation between clients.
 * better login page styles and incentive by @davidbgk in #2293
 * compute length of all shapes for MultiLineString (not only first) by @yohanboniface in #2310
 * avoid map-panning on mobile using two fingers navigation by @fttriquet in #2340
+* do not try to restore a newly created layer on reset by @yohanboniface in #2381
+* do not unset map dirty status if it has not yet been saved once by @yohanboniface in #2382
+* refactor importer feedback by @yohanboniface in #2363
+* make sure we set X-DataLayer-Version even when using X-Accel-Redirect by @yohanboniface in #2361
+* bring marker to front on highlight by @yohanboniface in #2377
+* show private/draft maps in team maps for members by @yohanboniface in #2373
 
 ### Internal changes
 * introduce SaveManager class by @yohanboniface in #2240
