@@ -1117,8 +1117,8 @@ export default class Umap extends ServerStored {
     }
     this.ensurePanesOrder()
     this._leafletMap.initTileLayers()
-    this.isDirty = false
     this.onDataLayersChanged()
+    this.isDirty = !this.id
   }
 
   async save() {
