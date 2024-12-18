@@ -611,7 +611,10 @@ export class DataLayer extends ServerStored {
   }
 
   reset() {
-    if (!this.createdOnServer) this.erase()
+    if (!this.createdOnServer) {
+      this.erase()
+      return
+    }
 
     this.resetOptions()
     this.parentPane.appendChild(this.pane)
