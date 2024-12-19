@@ -28,8 +28,8 @@
         </h3>
         <ul>
           {% for name in providers %}
-            <li>
-              {{ name|title }}
+            <li class="login-grid">
+              <span class="login-{{ name }}" title="{{ name }}"></span>
             </li>
           {% endfor %}
         </ul>
