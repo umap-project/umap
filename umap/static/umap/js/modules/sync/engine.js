@@ -222,9 +222,13 @@ export class SyncEngine {
    * @param {string} payload.sender the uuid of the requesting peer
    * @param {string} payload.latestKnownHLC the latest known HLC of the requesting peer
    */
-  onListOperationsRequest({ sender, lastKnownHLC }) {
+  onListOperationsRequest({ sender, message }) {
+    debug(
+      `received operations request from peer ${sender} (since ${message.lastKnownHLC})`
+    )
+
     this.sendToPeer(sender, 'ListOperationsResponse', {
-      operations: this._operations.getOperationsSince(lastKnownHLC),
+      operations: this._operations.getOperationsSince(message.lastKnownHLC),
     })
   }
 
@@ -485,5 +489,5 @@ export class Operations {
 }
 
 function debug(...args) {
-  console.debug('SYNC ⇆', ...args)
+  console.debug('SYNC ⇆', ...args.map((x) => JSON.stringify(x)))
 }

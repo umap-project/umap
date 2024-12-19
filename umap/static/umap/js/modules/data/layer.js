@@ -88,7 +88,6 @@ export class DataLayer extends ServerStored {
 
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
-      this.isDirty = true
     }
 
     // Only layers that are displayed on load must be hidden/shown
@@ -151,7 +150,6 @@ export class DataLayer extends ServerStored {
           for (const field of fields) {
             this.layer.onEdit(field, builder)
           }
-          this.redraw()
           this.show()
           break
         case 'remote-data':
@@ -592,7 +590,7 @@ export class DataLayer extends ServerStored {
     options.name = translate('Clone of {name}', { name: this.options.name })
     delete options.id
     const geojson = Utils.CopyJSON(this._geojson)
-    const datalayer = this._umap.createDataLayer(options)
+    const datalayer = this._umap.createDirtyDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
   }
@@ -1066,7 +1064,7 @@ export class DataLayer extends ServerStored {
 
   setReferenceVersion({ response, sync }) {
     this._referenceVersion = response.headers.get('X-Datalayer-Version')
-    this.sync.update('_referenceVersion', this._referenceVersion)
+    if (sync) this.sync.update('_referenceVersion', this._referenceVersion)
   }
 
   async save() {

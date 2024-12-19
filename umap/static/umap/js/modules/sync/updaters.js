@@ -54,7 +54,10 @@ export class MapUpdater extends BaseUpdater {
 export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
-    this._umap.createDataLayer(value, false)
+    const datalayer = this._umap.createDataLayer(value, false)
+    // Prevent the layer to get data from the server, as it will get it
+    // from the sync.
+    datalayer._loaded = true
   }
 
   update({ key, metadata, value }) {

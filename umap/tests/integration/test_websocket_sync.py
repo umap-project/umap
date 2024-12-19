@@ -39,6 +39,9 @@ def test_websocket_connection_can_sync_markers(
     a_map_el.click(position={"x": 220, "y": 220})
     expect(a_marker_pane).to_have_count(1)
     expect(b_marker_pane).to_have_count(1)
+    # Peer B should not be in state dirty
+    expect(peerB.get_by_role("button", name="View")).to_be_visible()
+    expect(peerB.get_by_role("button", name="Cancel edits")).to_be_hidden()
     peerA.locator("body").type("Synced name")
     peerA.locator("body").press("Escape")
 
@@ -415,3 +418,69 @@ def test_should_sync_datalayers(new_page, live_server, websocket_server, tilelay
         peerA.get_by_role("button", name="Save").click()
 
     assert DataLayer.objects.count() == 2
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_create_and_sync_map(
+    new_page, live_server, websocket_server, tilelayer, login, user
+):
+    # Create a syncable map with peerA
+    peerA = login(user, prefix="Page A")
+    peerA.goto(f"{live_server.url}/en/map/new/")
+    with peerA.expect_response(re.compile("./map/create/.*")):
+        peerA.get_by_role("button", name="Save Draft").click()
+    peerA.get_by_role("link", name="Map advanced properties").click()
+    peerA.get_by_text("Real-time collaboration", exact=True).click()
+    peerA.get_by_text("Enable real-time").click()
+    peerA.get_by_role("link", name="Update permissions and editors").click()
+    peerA.locator('select[name="share_status"]').select_option(str(Map.PUBLIC))
+    with peerA.expect_response(re.compile("./update/settings/.*")):
+        peerA.get_by_role("button", name="Save").click()
+    expect(peerA.get_by_role("button", name="Cancel edits")).to_be_hidden()
+    # Quit edit mode
+    peerA.get_by_role("button", name="View").click()
+
+    # Open map and go to edit mode with peer B
+    peerB = new_page("Page B")
+    peerB.goto(peerA.url)
+    peerB.get_by_role("button", name="Edit").click()
+
+    # Create a marker from peerA
+    markersA = peerA.locator(".leaflet-marker-pane > div")
+    markersB = peerB.locator(".leaflet-marker-pane > div")
+    expect(markersA).to_have_count(0)
+    expect(markersB).to_have_count(0)
+
+    # Add a marker from peer A
+    peerA.get_by_role("button", name="Edit").click()
+    peerA.get_by_title("Draw a marker").click()
+    peerA.locator("#map").click(position={"x": 220, "y": 220})
+    expect(markersA).to_have_count(1)
+    expect(markersB).to_have_count(1)
+
+    # Save and quit edit mode again
+    with peerA.expect_response(re.compile("./datalayer/create/.*")):
+        peerA.get_by_role("button", name="Save").click()
+    peerA.get_by_role("button", name="View").click()
+    expect(markersA).to_have_count(1)
+    expect(markersB).to_have_count(1)
+    peerA.wait_for_timeout(500)
+    expect(markersA).to_have_count(1)
+    expect(markersB).to_have_count(1)
+
+    # Peer B should not be in state dirty
+    expect(peerB.get_by_role("button", name="View")).to_be_visible()
+    expect(peerB.get_by_role("button", name="Cancel edits")).to_be_hidden()
+
+    # Add a marker from peer B
+    peerB.get_by_title("Draw a marker").click()
+    peerB.locator("#map").click(position={"x": 200, "y": 200})
+    expect(markersB).to_have_count(2)
+    expect(markersA).to_have_count(1)
+    with peerB.expect_response(re.compile("./datalayer/update/.*")):
+        peerB.get_by_role("button", name="Save").click()
+    expect(markersB).to_have_count(2)
+    expect(markersA).to_have_count(1)
+    peerA.get_by_role("button", name="Edit").click()
+    expect(markersA).to_have_count(2)
+    expect(markersB).to_have_count(2)

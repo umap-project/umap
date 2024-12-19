@@ -324,14 +324,14 @@ export default class Umap extends ServerStored {
         dataUrl = decodeURIComponent(dataUrl)
         dataUrl = this.renderUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
-        const datalayer = this.createDataLayer()
+        const datalayer = this.createDirtyDataLayer()
         await datalayer
           .importFromUrl(dataUrl, dataFormat)
           .then(() => datalayer.zoomTo())
       }
     } else if (data) {
       data = decodeURIComponent(data)
-      const datalayer = this.createDataLayer()
+      const datalayer = this.createDirtyDataLayer()
       await datalayer.importRaw(data, dataFormat).then(() => datalayer.zoomTo())
     }
   }
@@ -599,8 +599,14 @@ export default class Umap extends ServerStored {
     return datalayer
   }
 
+  createDirtyDataLayer(options) {
+    const datalayer = this.createDataLayer(options, true)
+    datalayer.isDirty = true
+    return datalayer
+  }
+
   newDataLayer() {
-    const datalayer = this.createDataLayer({})
+    const datalayer = this.createDirtyDataLayer({})
     datalayer.edit()
   }
 
@@ -1389,7 +1395,7 @@ export default class Umap extends ServerStored {
       fallback.show()
       return fallback
     }
-    return this.createDataLayer()
+    return this.createDirtyDataLayer()
   }
 
   findDataLayer(method, context) {
@@ -1553,7 +1559,7 @@ export default class Umap extends ServerStored {
     if (type === 'umap') {
       this.importUmapFile(file, 'umap')
     } else {
-      if (!layer) layer = this.createDataLayer({ name: file.name })
+      if (!layer) layer = this.createDirtyDataLayer({ name: file.name })
       layer.importFromFile(file, type)
     }
   }
@@ -1579,7 +1585,7 @@ export default class Umap extends ServerStored {
         delete geojson._storage
       }
       delete geojson._umap_options?.id // Never trust an id at this stage
-      const dataLayer = this.createDataLayer(geojson._umap_options)
+      const dataLayer = this.createDirtyDataLayer(geojson._umap_options)
       dataLayer.fromUmapGeoJSON(geojson)
     }
 

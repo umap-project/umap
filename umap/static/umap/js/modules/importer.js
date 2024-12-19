@@ -161,7 +161,7 @@ export default class Importer extends Utils.WithTemplate {
   get layer() {
     return (
       this._umap.datalayers[this.layerId] ||
-      this._umap.createDataLayer({ name: this.layerName })
+      this._umap.createDirtyDataLayer({ name: this.layerName })
     )
   }
 
