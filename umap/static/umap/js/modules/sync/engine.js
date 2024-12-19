@@ -450,5 +450,5 @@ export class Operations {
 }
 
 function debug(...args) {
-  console.debug('SYNC ⇆', ...args)
+  console.debug('SYNC ⇆', ...args.map((x) => JSON.stringify(x)))
 }
