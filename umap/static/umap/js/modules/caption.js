@@ -73,7 +73,7 @@ export default class Caption extends Utils.WithTemplate {
     <p class="caption-item ${datalayer.cssId}">
       <span class="datalayer-legend"></span>
       <strong data-ref="toolbox"></strong>
-      <span data-ref="description"></span>
+      <span class="text" data-ref="description"></span>
     </p>`
     const [element, { toolbox, description }] = Utils.loadTemplateWithRefs(template)
     if (datalayer.options.description) {
