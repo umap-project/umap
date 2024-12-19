@@ -61,8 +61,6 @@ export default class Umap extends ServerStored {
     )
     this.searchParams = new URLSearchParams(window.location.search)
 
-    this.sync_engine = new SyncEngine(this)
-    this.sync = this.sync_engine.proxy(this)
     // Locale name (pt_PT, en_US…)
     // To be used for Django localization
     if (geojson.properties.locale) setLocale(geojson.properties.locale)
@@ -123,6 +121,9 @@ export default class Umap extends ServerStored {
     this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this)
+
+    this.syncEngine = new SyncEngine(this)
+    this.sync = this.syncEngine.proxy(this)
 
     if (this.hasEditMode()) {
       this.editPanel = new EditPanel(this, this._leafletMap)
@@ -1257,18 +1258,13 @@ export default class Umap extends ServerStored {
   }
 
   async initSyncEngine() {
+    // this.properties.websocketEnabled is set by the server admin
     if (this.properties.websocketEnabled === false) return
+    // this.properties.syncEnabled is set by the user in the map settings
     if (this.properties.syncEnabled !== true) {
       this.sync.stop()
     } else {
-      const ws_token_uri = this.urls.get('map_websocket_auth_token', {
-        map_id: this.id,
-      })
-      await this.sync.authenticate(
-        ws_token_uri,
-        this.properties.websocketURI,
-        this.server
-      )
+      await this.sync.authenticate()
     }
   }
 
@@ -1343,7 +1339,12 @@ export default class Umap extends ServerStored {
       },
       numberOfConnectedPeers: () => {
         Utils.eachElement('.connected-peers span', (el) => {
-          el.textContent = this.sync.getNumberOfConnectedPeers()
+          if (this.sync.websocketConnected) {
+            el.textContent = this.sync.getNumberOfConnectedPeers()
+          } else {
+            el.textContent = translate('Disconnected')
+          }
+          el.parentElement.classList.toggle('off', !this.sync.websocketConnected)
         })
       },
       'properties.starred': () => {

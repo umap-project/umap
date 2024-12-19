@@ -32,6 +32,10 @@
     background-color: var(--color-lightCyan);
     color: var(--color-dark);
 }
+.dark .off.connected-peers {
+    background-color: var(--color-lightGray);
+    color: var(--color-darkGray);
+}
 
 .leaflet-container .edit-cancel,
 .leaflet-container .edit-disable,

@@ -8,8 +8,11 @@ import { MapUpdater } from '../js/modules/sync/updaters.js'
 import { SyncEngine, Operations } from '../js/modules/sync/engine.js'
 
 describe('SyncEngine', () => {
+  const websocketTokenURI = 'http://localhost:8000/api/v1/maps/1/websocket_auth_token/'
+  const websocketURI = 'ws://localhost:8000/ws/maps/1/'
+
   it('should initialize methods even before start', () => {
-    const engine = new SyncEngine({})
+    const engine = new SyncEngine({}, websocketTokenURI, websocketURI)
     engine.upsert()
     engine.update()
     engine.delete()
