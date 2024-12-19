@@ -151,7 +151,6 @@ export class DataLayer extends ServerStored {
           for (const field of fields) {
             this.layer.onEdit(field, builder)
           }
-          this.redraw()
           this.show()
           break
         case 'remote-data':
