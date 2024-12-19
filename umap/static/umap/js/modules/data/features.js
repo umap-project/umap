@@ -20,7 +20,7 @@ import loadPopup from '../rendering/popup.js'
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
-    this.sync = umap.sync_engine.proxy(this)
+    this.sync = umap.syncEngine.proxy(this)
     this._marked_for_deletion = false
     this._isDirty = false
     this._ui = null

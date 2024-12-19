@@ -126,6 +126,10 @@ async def join_and_listen(
 
     try:
         async for raw_message in websocket:
+            if raw_message == "ping":
+                await websocket.send("pong")
+                continue
+
             # recompute the peers list at the time of message-sending.
             # as doing so beforehand would miss new connections
             other_peers = connections.get_other_peers(websocket)
@@ -192,4 +196,7 @@ def run(host: str, port: int):
             logging.debug(f"Waiting for connections on {host}:{port}")
             await asyncio.Future()  # run forever
 
-    asyncio.run(_serve())
+    try:
+        asyncio.run(_serve())
+    except KeyboardInterrupt:
+        print("Closing WebSocket server")
