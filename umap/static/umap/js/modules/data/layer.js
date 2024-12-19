@@ -41,7 +41,7 @@ export class DataLayer extends ServerStored {
   constructor(umap, leafletMap, data = {}) {
     super()
     this._umap = umap
-    this.sync = umap.sync_engine.proxy(this)
+    this.sync = umap.syncEngine.proxy(this)
     this._index = Array()
     this._features = {}
     this._geojson = null
