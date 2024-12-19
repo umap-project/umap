@@ -88,7 +88,6 @@ export class DataLayer extends ServerStored {
 
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
-      this.isDirty = true
     }
 
     // Only layers that are displayed on load must be hidden/shown
@@ -591,7 +590,7 @@ export class DataLayer extends ServerStored {
     options.name = translate('Clone of {name}', { name: this.options.name })
     delete options.id
     const geojson = Utils.CopyJSON(this._geojson)
-    const datalayer = this._umap.createDataLayer(options)
+    const datalayer = this._umap.createDirtyDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
   }
