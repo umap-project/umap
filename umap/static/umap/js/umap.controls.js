@@ -541,11 +541,7 @@ U.StarControl = L.Control.Button.extend({
   options: {
     position: 'topleft',
     title: L._('Star this map'),
-  },
-
-  getClassName: function () {
-    const status = this._umap.properties.starred ? ' starred' : ''
-    return `leaflet-control-star umap-control${status}`
+    className: 'leaflet-control-star map-star umap-control',
   },
 
   onClick: function () {

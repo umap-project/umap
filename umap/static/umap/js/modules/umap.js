@@ -1346,6 +1346,11 @@ export default class Umap extends ServerStored {
           el.textContent = this.sync.getNumberOfConnectedPeers()
         })
       },
+      'properties.starred': () => {
+        Utils.eachElement('.map-star', (el) => {
+          el.classList.toggle('starred', this.properties.starred)
+        })
+      },
     }
     for (const [field, impact] of Object.entries(impacts)) {
       if (!fields.length || fields.includes(field)) {
@@ -1531,7 +1536,7 @@ export default class Umap extends ServerStored {
         ? translate('Map has been starred')
         : translate('Map has been unstarred')
     )
-    this.render(['starred'])
+    this.render(['properties.starred'])
   }
 
   processFileToImport(file, layer, type) {
