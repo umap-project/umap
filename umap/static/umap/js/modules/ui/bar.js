@@ -110,7 +110,7 @@ export class TopBar extends WithTemplate {
       })
     })
 
-    this.elements.help.addEventListener('click', () => this._umap.showGetStarted())
+    this.elements.help.addEventListener('click', () => this._umap.help.showGetStarted())
     this.elements.cancel.addEventListener('click', () => this._umap.askForReset())
     this.elements.cancel.addEventListener('mouseover', () => {
       this._umap.tooltip.open({
