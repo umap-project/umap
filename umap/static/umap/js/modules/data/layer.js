@@ -950,9 +950,13 @@ export class DataLayer extends ServerStored {
     else this.hide()
   }
 
-  zoomTo(bounds) {
+  zoomTo() {
     if (!this.isVisible()) return
-    bounds = bounds || this.layer.getBounds()
+    const bounds = this.layer.getBounds()
+    this.zoomToBounds(bounds)
+  }
+
+  zoomToBounds(bounds) {
     if (bounds.isValid()) {
       const options = { maxZoom: this.getOption('zoomTo') }
       this._leafletMap.fitBounds(bounds, options)

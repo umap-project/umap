@@ -382,7 +382,7 @@ export default class Importer extends Utils.WithTemplate {
         bounds.extend(featureBounds)
       }
       this.onSuccess(features.length)
-      layer.zoomTo(bounds)
+      layer.zoomToBounds(bounds)
     }
   }
 }
