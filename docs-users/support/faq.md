@@ -52,7 +52,7 @@ With macOS, replace `Ctrl` by `Cmd`.
 When the condition match, the associated style will be applied to the corresponding feature.
 
 
-## How to use variables ? {: #variables}
+## How to use variables? {: #variables}
 
 In general, using a variable is as simple as `{myvar}`.
 
@@ -92,3 +92,22 @@ Any property of the feature will be available, plus:
 - `{zoom}` → the current map zoom
 - `{lat}` → the latitude of the current map center
 - `{lng}` → the longitude of the current map center
+
+
+## Which statuses can have a map? {: #map-statuses}
+
+### Access statuses
+
+* **Draft (private)**: You are the only one able to see your map.
+* **Everybody (public)**: Everybody can see your map, it is listed on search results and potentially the homepage.
+* **Anyone with link**: The map will be accessible only to people knowing the secret link.
+* **Editors and team only**: Only you and your team will be able to see the map.
+
+Providing a link of a map to unallowed people will display a `403 Forbidden` error.
+
+### Edit statuses
+
+* **Owner only**: only the owner of the map can edit it.
+* **Editors and team only**: the owner, editors and members of the linked team will be able to edit the map.
+* **Only editable with secret edit link**: Only people with a secret link will be able to edit the map.
+* **Everyone**: Everybody can edit the map without even being logged in.
