@@ -7,7 +7,7 @@ export class WebSocketTransport {
     this.receiver = messagesReceiver
     this.closeRequested = false
 
-    this.websocket = new WebSocket(webSocketURI)
+    this.websocket = new WebSocket(`${webSocketURI}?${authToken}`)
 
     this.websocket.onopen = () => {
       this.send('JoinRequest', { token: authToken })
@@ -49,6 +49,7 @@ export class WebSocketTransport {
   }
 
   onMessage(wsMessage) {
+    console.log(wsMessage)
     if (wsMessage.data === 'pong') {
       this.pongReceived = true
     } else {

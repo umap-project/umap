@@ -150,6 +150,7 @@ export class SyncEngine {
    * and dispatches the different "on*" methods.
    */
   receive({ kind, ...payload }) {
+    console.log(kind, payload)
     if (kind === 'OperationMessage') {
       this.onOperationMessage(payload)
     } else if (kind === 'JoinResponse') {

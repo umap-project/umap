@@ -85,7 +85,7 @@ class ServerRequest(BaseModel):
 class Request(RootModel):
     """Any message coming from the websocket should be one of these, and will be rejected otherwise."""
 
-    root: Union[ServerRequest, PeerMessage, OperationMessage] = Field(
+    root: Union[ServerRequest, PeerMessage, OperationMessage, JoinRequest] = Field(
         discriminator="kind"
     )
 
