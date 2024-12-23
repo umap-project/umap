@@ -1,0 +1,11 @@
+{% extends "40x.html" %}
+
+{% load i18n %}
+
+{% block content %}
+  <div class="content-40x">
+      <h1>{{ exception }}</h1>
+      <p>{% blocktrans %}<a href="">Find out here</a> how to manage map permissions.{% endblocktrans %}</p>
+      <p><a href="{% url 'home' %}">{% trans "Go back home" %}</a></p>
+  </div>
+{% endblock %}

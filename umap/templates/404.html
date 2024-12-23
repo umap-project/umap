@@ -1,19 +1,10 @@
-{% extends "base.html" %}
+{% extends "40x.html" %}
 
 {% load i18n static %}
 
 {% block content %}
-  <div class="content404">
-    <a href="{% url "home" %}"
-       title="{% trans "Take me to the home page" %}">
-      <h1>
-        4
-        <img alt="0" width="128px" height="128px" src="{% static "umap/img/logo.svg" %}">
-        4
-      </h1>
-      <h2>
-        Not Found
-      </h2>
-    </a>
+  <div class="content-40x content-404">
+    <h1>404 Not Found</h2>
+    <p><a href="{% url 'home' %}">{% trans "Go back home" %}</a></p>
   </div>
 {% endblock content %}

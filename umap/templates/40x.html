@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% load umap_tags %}
+{% block body_class %}page-40x{% endblock body_class %}
+{% block extra_head %}
+  {% umap_css %}
+  {{ block.super }}
+  {% umap_js %}
+{% endblock extra_head %}
