@@ -6,6 +6,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
+
 from .models import Map, Team
 from .views import simple_json_response
 
