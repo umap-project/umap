@@ -211,7 +211,7 @@ input[type="submit"],
 /*             40x              */
 /* **************************** */
 .content-40x {
-    width: 600px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;
@@ -222,7 +222,6 @@ input[type="submit"],
 .content-40x h1 {
     font-size: 2em;
     margin-bottom: 0;
-    line-height: 0.5em;
     margin-top: 40px;
 }
 .content-404 img {
@@ -233,8 +232,11 @@ input[type="submit"],
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    width: 100vw;
-    height: 90vh;
+    height: 75vh;
+    margin: 1rem;
+}
+.page-40x a {
+    text-decoration: underline;
 }
 
 
