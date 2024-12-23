@@ -371,10 +371,10 @@ U.DropControl = L.Class.extend({
     this.map.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
     L.DomEvent.stop(event)
-    for (const file of event.dataTransfer.files) {
-      this.map._umap.processFileToImport(file)
-    }
-    this.map._umap.onceDataLoaded(this.map._umap.fitDataBounds)
+    const importer = this.map._umap.importer
+    importer.build()
+    importer.files = event.dataTransfer.files
+    importer.submit()
   },
 
   dragleave: function () {

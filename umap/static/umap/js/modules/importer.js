@@ -124,6 +124,11 @@ export default class Importer extends Utils.WithTemplate {
     return this.qs('[type=file]').files
   }
 
+  set files(files) {
+    this.qs('[type=file]').files = files
+    this.onFileChange()
+  }
+
   get raw() {
     return this.qs('textarea').value
   }
@@ -213,11 +218,11 @@ export default class Importer extends Utils.WithTemplate {
     this.qs('[name=submit').toggleAttribute('disabled', !this.canSubmit())
   }
 
-  onFileChange(e) {
+  onFileChange() {
     let type = ''
     let newType
-    for (const file of e.target.files) {
-      newType = U.Utils.detectFileType(file)
+    for (const file of this.files) {
+      newType = Utils.detectFileType(file)
       if (!type && newType) type = newType
       if (type && newType !== type) {
         type = ''
