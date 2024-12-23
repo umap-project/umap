@@ -208,30 +208,35 @@ input[type="submit"],
 }
 
 /* **************************** */
-/*             404              */
+/*             40x              */
 /* **************************** */
-.content404 {
-    width: 400px;
+.content-40x {
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;
-    text-align: center;
 }
-.content404 a {
+.content-40x a {
     color: #3A4259;
 }
-.content404 h1 {
-    font-size: 10em;
+.content-40x h1 {
+    font-size: 2em;
     margin-bottom: 0;
-    line-height: 0.5em;
     margin-top: 40px;
 }
-.content404 h2 {
-    font-size: 4em;
-    margin-top: 0;
-}
-.content404 img {
+.content-404 img {
     width: 32%;
+}
+.page-40x {
+    background-image: url('./img/logo_lightcyan.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: 75vh;
+    margin: 1rem;
+}
+.page-40x a {
+    text-decoration: underline;
 }
 
 

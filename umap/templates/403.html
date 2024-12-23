@@ -1,0 +1,12 @@
+{% extends "40x.html" %}
+
+{% load i18n %}
+
+{% block content %}
+  <div class="content-40x">
+      <h1>{{ exception }}</h1>
+      <p>{% blocktrans %}<a href="https://discover.umap-project.org/support/faq/#map-statuses" target="_blank">Find out here the documentation</a> on how to manage map’s permissions.{% endblocktrans %}</p>
+      <hr>
+      <p><a href="{% url 'home' %}">{% trans "← Go to the homepage" %}</a></p>
+  </div>
+{% endblock content %}

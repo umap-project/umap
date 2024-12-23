@@ -1,9 +1,11 @@
 from functools import wraps
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 
 from .models import Map, Team
 from .views import simple_json_response
@@ -55,7 +57,7 @@ def can_view_map(view_func):
         map_inst = get_object_or_404(Map, pk=kwargs["map_id"])
         kwargs["map_inst"] = map_inst  # Avoid rerequesting the map in the view
         if not map_inst.can_view(request):
-            return HttpResponseForbidden()
+            raise PermissionDenied(_("This map is not publicly available"))
         return view_func(request, *args, **kwargs)
 
     return wrapper
