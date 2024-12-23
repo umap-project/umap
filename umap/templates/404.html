@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="content-40x content-404">
-    <h1>404 Not Found</h2>
-    <p><a href="{% url 'home' %}">{% trans "Go back home" %}</a></p>
+    <h1>{% trans "404 Page Not Found" %}</h1>
+    <p><a href="{% url 'home' %}">{% trans "← Go to the homepage" %}</a></p>
   </div>
 {% endblock content %}
