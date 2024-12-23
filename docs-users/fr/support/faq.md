@@ -92,3 +92,27 @@ Toute propriété de l'élément sera disponible, ainsi que:
 - `{zoom}` → le zoom actuel de la carte
 - `{lat}` → la latitude du centre actuel de la carte
 - `{lng}` → la longitude du centre actuel de la carte
+
+
+## Quels statuts peut avoir une carte ? {: #map-statuses}
+
+### En accès
+
+* **Brouillon (privé)**: Vous seul et votre équipe pouvez accéder à la carte.
+* **Tout le monde (public)**: Tout le monde peut accéder à la carte, qui est visible dans la recherche et la page d’accueil. La carte est indexée dans les moteurs de recherche (Google, etc.).
+* **Quiconque a le lien**: La carte est visible par toutes les personnes qui en ont le lien. Elle n’est pas indexée dans les moteurs de recherche.
+* **Éditeurs et équipe seulement**: Vous seul et votre équipe pouvez accéder à la carte.
+
+Les personnes affichant une carte à laquelle elles n’ont pas accès auront une page d’erreur 403.
+
+### En édition
+
+* **Propriétaire uniquement**: Vous seul pouvez modifier la carte.
+* **Éditeurs et équipe seulement**: Vous seul et votre équipe pouvez modifier la carte.
+* **Tout le monde**: Tout le monde peut modifier la carte, même les comptes anonymes.
+
+Pour les cartes créées sans compte :
+
+* **Modifiable seulement avec le lien d’édition secret**: Seules les personnes avec un lien d’édition pourront modifier la carte.
+
+Ces réglages sont aussi disponibles pour chaque calque.

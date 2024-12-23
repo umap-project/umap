@@ -98,10 +98,10 @@ Any property of the feature will be available, plus:
 
 ### Access statuses
 
-* **Draft (private)**: You are the only one able to see your map.
-* **Everybody (public)**: Everybody can see your map, it is listed on search results and potentially the homepage.
-* **Anyone with link**: The map will be accessible only to people knowing the secret link.
-* **Editors and team only**: Only you and your team will be able to see the map.
+* **Draft (private)**: Only you and your collaborators are able to see the map.
+* **Everybody (public)**: Everybody can see your map, it is listed on search results and potentially the homepage. It is indexed by search engines like Google.
+* **Anyone with link**: The map will be accessible only to people knowing the link. The map is not indexed by search engines.
+* **Editors and team only**: Only you and your collaborators will be able to see the map.
 
 Providing a link of a map to unallowed people will display a `403 Forbidden` error.
 
@@ -109,5 +109,10 @@ Providing a link of a map to unallowed people will display a `403 Forbidden` err
 
 * **Owner only**: only the owner of the map can edit it.
 * **Editors and team only**: the owner, editors and members of the linked team will be able to edit the map.
-* **Only editable with secret edit link**: Only people with a secret link will be able to edit the map.
 * **Everyone**: Everybody can edit the map without even being logged in.
+
+Only for maps created without an account:
+
+* **Only editable with secret edit link**: Only people with a secret link will be able to edit the map.
+
+These settings are also available for each layer.
