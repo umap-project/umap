@@ -12,6 +12,7 @@ import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
+import DropControl from '../drop.js'
 
 // Those options are not saved on the server, so they can live here
 // instead of in umap.properties
@@ -96,7 +97,7 @@ const ControlsMixin = {
     this._controls.more = new U.MoreControls()
     this._controls.scale = L.control.scale()
     this._controls.permanentCredit = new U.PermanentCreditsControl(this)
-    this._umap.drop = new U.DropControl(this)
+    this._umap.drop = new DropControl(this._umap, this, this._container)
     this._controls.tilelayers = new U.TileLayerControl(this)
   },
 

@@ -337,52 +337,6 @@ U.DrawToolbar = L.Toolbar.Control.extend({
   },
 })
 
-U.DropControl = L.Class.extend({
-  initialize: function (map) {
-    this.map = map
-    this.dropzone = map._container
-  },
-
-  enable: function () {
-    L.DomEvent.on(this.dropzone, 'dragenter', this.dragenter, this)
-    L.DomEvent.on(this.dropzone, 'dragover', this.dragover, this)
-    L.DomEvent.on(this.dropzone, 'drop', this.drop, this)
-    L.DomEvent.on(this.dropzone, 'dragleave', this.dragleave, this)
-  },
-
-  disable: function () {
-    L.DomEvent.off(this.dropzone, 'dragenter', this.dragenter, this)
-    L.DomEvent.off(this.dropzone, 'dragover', this.dragover, this)
-    L.DomEvent.off(this.dropzone, 'drop', this.drop, this)
-    L.DomEvent.off(this.dropzone, 'dragleave', this.dragleave, this)
-  },
-
-  dragenter: function (event) {
-    L.DomEvent.stop(event)
-    this.map.scrollWheelZoom.disable()
-    this.dropzone.classList.add('umap-dragover')
-  },
-
-  dragover: (event) => {
-    L.DomEvent.stop(event)
-  },
-
-  drop: function (event) {
-    this.map.scrollWheelZoom.enable()
-    this.dropzone.classList.remove('umap-dragover')
-    L.DomEvent.stop(event)
-    for (const file of event.dataTransfer.files) {
-      this.map._umap.processFileToImport(file)
-    }
-    this.map._umap.onceDataLoaded(this.map._umap.fitDataBounds)
-  },
-
-  dragleave: function () {
-    this.map.scrollWheelZoom.enable()
-    this.dropzone.classList.remove('umap-dragover')
-  },
-})
-
 U.EditControl = L.Control.extend({
   options: {
     position: 'topright',
