@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:05+0000\n"
+"POT-Creation-Date: 2024-12-24 08:39+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Кругликов Илья <ilis@inbox.ru>, 2014,2016\n"
 "Language-Team: Russian (http://app.transifex.com/openstreetmap/umap/language/ru/)\n"
@@ -25,6 +25,10 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
+msgstr ""
+
+#: decorators.py:60
+msgid "This map is not publicly available"
 msgstr ""
 
 #: middleware.py:13
@@ -159,9 +163,20 @@ msgstr "показывать при загрузке"
 msgid "Display this layer on load."
 msgstr "Показать этот слой при загрузке."
 
-#: templates/404.html:8
-msgid "Take me to the home page"
-msgstr "Перейти на заглавную страницу"
+#: templates/403.html:8
+msgid ""
+"<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
+"target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
+" permissions."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:8
+msgid "← Go to the homepage"
+msgstr ""
+
+#: templates/404.html:7
+msgid "404 Page Not Found"
+msgstr ""
 
 #: templates/auth/user_detail.html:8
 #, python-format
@@ -280,13 +295,13 @@ msgstr "Создать карту"
 msgid "Play with the demo"
 msgstr "Пробная карта"
 
-#: templates/umap/components/alerts/alert.html:15
-#: templates/umap/components/alerts/alert.html:64
-#: templates/umap/components/alerts/alert.html:92
+#: templates/umap/components/alerts/alert.html:17
+#: templates/umap/components/alerts/alert.html:66
+#: templates/umap/components/alerts/alert.html:94
 msgid "Close"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:30
+#: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
@@ -294,35 +309,35 @@ msgid ""
 "target=\"_blank\">log in</a>."
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:37
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:41
 msgid "Copy link"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:46
+#: templates/umap/components/alerts/alert.html:48
 msgid "Enter your email address to receive the secret link:"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:52
+#: templates/umap/components/alerts/alert.html:54
 msgid "Email"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:55
+#: templates/umap/components/alerts/alert.html:57
 msgid "Send me the link"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:79
+#: templates/umap/components/alerts/alert.html:81
 msgid "See their edits in another tab"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:82
+#: templates/umap/components/alerts/alert.html:84
 msgid "Keep your changes and loose theirs"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:85
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep their changes and loose yours"
 msgstr ""
 
@@ -390,7 +405,7 @@ msgstr "Смотрите чужие карты и вдохновляйтесь"
 msgid "You are logged in. Continuing..."
 msgstr "Вы вошли. Продолжим..."
 
-#: templates/umap/map_list.html:11 views.py:433
+#: templates/umap/map_list.html:11 views.py:437
 msgid "by"
 msgstr "от"
 
@@ -621,61 +636,61 @@ msgstr ""
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:438
+#: views.py:442
 msgid "View the map"
 msgstr "Посмотреть карту"
 
-#: views.py:820
+#: views.py:825
 msgid "See full screen"
 msgstr ""
 
-#: views.py:963
+#: views.py:968
 msgid "Map editors updated with success!"
 msgstr "Редакторы карты успешно обновлены!"
 
-#: views.py:999
+#: views.py:1004
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1002
+#: views.py:1007
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1009
+#: views.py:1014
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1012
+#: views.py:1017
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1023
+#: views.py:1028
 msgid "Only its owner can delete the map."
 msgstr "Только владелец карты может удалить её."
 
-#: views.py:1026
+#: views.py:1031
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1052
+#: views.py:1057
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Карта была скопирована. Если вы хотите редактировать её на другом компьютере, используйте эту ссылку: %(anonymous_url)s"
 
-#: views.py:1057
+#: views.py:1062
 msgid "Congratulations, your map has been cloned!"
 msgstr "Поздравляем, ваша карта скопирована!"
 
-#: views.py:1308
+#: views.py:1313
 msgid "Layer successfully deleted."
 msgstr "Слой удалён."
 
-#: views.py:1330
+#: views.py:1335
 msgid "Permissions updated with success!"
 msgstr ""

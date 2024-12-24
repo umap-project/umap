@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:05+0000\n"
+"POT-Creation-Date: 2024-12-24 08:39+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: imni <iriman@chmail.ir>, 2024\n"
 "Language-Team: Persian (Iran) (http://app.transifex.com/openstreetmap/umap/language/fa_IR/)\n"
@@ -24,6 +24,10 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
+msgstr ""
+
+#: decorators.py:60
+msgid "This map is not publicly available"
 msgstr ""
 
 #: middleware.py:13
@@ -158,9 +162,20 @@ msgstr "نمایش هنگام بارشدن"
 msgid "Display this layer on load."
 msgstr "این لایه هنگام بارشدن نمایش داده شود."
 
-#: templates/404.html:8
-msgid "Take me to the home page"
-msgstr "مرا به صفحه اصلی ببر"
+#: templates/403.html:8
+msgid ""
+"<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
+"target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
+" permissions."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:8
+msgid "← Go to the homepage"
+msgstr ""
+
+#: templates/404.html:7
+msgid "404 Page Not Found"
+msgstr ""
 
 #: templates/auth/user_detail.html:8
 #, python-format
@@ -279,13 +294,13 @@ msgstr "ساخت نقشه"
 msgid "Play with the demo"
 msgstr "با نسخهٔ نمایشی کار کنید"
 
-#: templates/umap/components/alerts/alert.html:15
-#: templates/umap/components/alerts/alert.html:64
-#: templates/umap/components/alerts/alert.html:92
+#: templates/umap/components/alerts/alert.html:17
+#: templates/umap/components/alerts/alert.html:66
+#: templates/umap/components/alerts/alert.html:94
 msgid "Close"
 msgstr "بستن"
 
-#: templates/umap/components/alerts/alert.html:30
+#: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
@@ -293,35 +308,35 @@ msgid ""
 "target=\"_blank\">log in</a>."
 msgstr "نکتهٔ طلایی: برای اینکه نقشه‌های خود را به آسانی پیدا کنید، <a href=\"%(login_url)s\" target=\"_blank\">حساب کاربری بسازید</a> یا <a href=\"%(login_url)s\" target=\"_blank\">وارد شوید</a>."
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:37
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "این پیوند محرمانهٔ شما برای ویرایش نقشه است. لطفاً در جای امنی نگهش دارید:"
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:41
 msgid "Copy link"
 msgstr "کپی پیوند"
 
-#: templates/umap/components/alerts/alert.html:46
+#: templates/umap/components/alerts/alert.html:48
 msgid "Enter your email address to receive the secret link:"
 msgstr "رایانامهٔ خود را وارد کنید تا پیوند محرمانه را دریافت کنید:"
 
-#: templates/umap/components/alerts/alert.html:52
+#: templates/umap/components/alerts/alert.html:54
 msgid "Email"
 msgstr "رایانامه"
 
-#: templates/umap/components/alerts/alert.html:55
+#: templates/umap/components/alerts/alert.html:57
 msgid "Send me the link"
 msgstr "پیوند را برایم بفرست"
 
-#: templates/umap/components/alerts/alert.html:79
+#: templates/umap/components/alerts/alert.html:81
 msgid "See their edits in another tab"
 msgstr "ویرایش‌هایشان را در زبانهٔ دیگری ببینید"
 
-#: templates/umap/components/alerts/alert.html:82
+#: templates/umap/components/alerts/alert.html:84
 msgid "Keep your changes and loose theirs"
 msgstr "تغییرات خود را نگه دارید و از آن‌ها را رها کنید"
 
-#: templates/umap/components/alerts/alert.html:85
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep their changes and loose yours"
 msgstr "تغییرات آن‌ها را نگه دارید و از خودتان را رها کنید"
 
@@ -389,7 +404,7 @@ msgstr "الهام بگیرید، نقشه‌ها را مرور کنید"
 msgid "You are logged in. Continuing..."
 msgstr "شما وارد شده‌اید. ادامه..."
 
-#: templates/umap/map_list.html:11 views.py:433
+#: templates/umap/map_list.html:11 views.py:437
 msgid "by"
 msgstr "ساختهٔ"
 
@@ -618,61 +633,61 @@ msgstr ""
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:438
+#: views.py:442
 msgid "View the map"
 msgstr "مشاهدهٔ نقشه"
 
-#: views.py:820
+#: views.py:825
 msgid "See full screen"
 msgstr "تمام‌صفحه ببینید"
 
-#: views.py:963
+#: views.py:968
 msgid "Map editors updated with success!"
 msgstr "ویرایشگران نقشه با موفقیت روزآمد شد!"
 
-#: views.py:999
+#: views.py:1004
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "پیوند ویرایش uMap برای نقشهٔ شما: %(map_name)s"
 
-#: views.py:1002
+#: views.py:1007
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "این پیوند محرمانهٔ ویرایش برای شماست: %(link)s"
 
-#: views.py:1009
+#: views.py:1014
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده نشد"
 
-#: views.py:1012
+#: views.py:1017
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده شد"
 
-#: views.py:1023
+#: views.py:1028
 msgid "Only its owner can delete the map."
 msgstr "فقط مالک آن می‌تواند نقشه را حذف کند."
 
-#: views.py:1026
+#: views.py:1031
 msgid "Map successfully deleted."
 msgstr "نقشه با موفقیت حذف شد."
 
-#: views.py:1052
+#: views.py:1057
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "از نقشهٔ شما همانندسازی شد! اگر می‌خواهید این نقشه را از رایانهٔ دیگری ویرایش کنید، لطفاً از این پیوند استفاده کنید: %(anonymous_url)s"
 
-#: views.py:1057
+#: views.py:1062
 msgid "Congratulations, your map has been cloned!"
 msgstr "تبریک، نقشهٔ شما همانندسازی شد!"
 
-#: views.py:1308
+#: views.py:1313
 msgid "Layer successfully deleted."
 msgstr "لایه با موفقیت حذف شد."
 
-#: views.py:1330
+#: views.py:1335
 msgid "Permissions updated with success!"
 msgstr "مجوزها با موفقیت روزآمد شد!"

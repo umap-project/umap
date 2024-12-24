@@ -522,7 +522,8 @@ const locale = {
     "Wikipedia": "Wikipedia",
     "Save draft": "Enregistrer le brouillon",
     "No data has been found for import": "Aucunes données à importer",
-    "Successfully imported {count} feature(s)": "{count} élément(s) ajouté(s) à la carte"
+    "Successfully imported {count} feature(s)": "{count} élément(s) ajouté(s) à la carte",
+    "Disconnected": "Déconnecté"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

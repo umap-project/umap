@@ -522,7 +522,8 @@ const locale = {
     "Wikipedia": "Wikipedia",
     "Save draft": "Save draft",
     "No data has been found for import": "No data has been found for import",
-    "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)"
+    "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
+    "Disconnected": "Disconnected"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:05+0000\n"
+"POT-Creation-Date: 2024-12-24 08:39+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Alexander Gabilondo <alexgabi@disroot.org>, 2024\n"
 "Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
@@ -21,6 +21,10 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
+msgstr "CSV esportazioa"
+
+#: decorators.py:60
+msgid "This map is not publicly available"
 msgstr ""
 
 #: middleware.py:13
@@ -65,7 +69,7 @@ msgstr "Edonork"
 
 #: models.py:180 models.py:189 models.py:464
 msgid "Editors and team only"
-msgstr ""
+msgstr "Editoreak eta taldea soilik"
 
 #: models.py:181 models.py:465
 msgid "Owner only"
@@ -73,7 +77,7 @@ msgstr "Jabea bakarrik"
 
 #: models.py:184
 msgid "Draft (private)"
-msgstr ""
+msgstr "Zirriborroa (pribatua)"
 
 #: models.py:185
 msgid "Everyone (public)"
@@ -89,7 +93,7 @@ msgstr "Blokeatuta"
 
 #: models.py:191
 msgid "Deleted"
-msgstr ""
+msgstr "Ezabatua"
 
 #: models.py:194
 msgid "center"
@@ -125,7 +129,7 @@ msgstr "editoreak"
 
 #: models.py:223
 msgid "team"
-msgstr ""
+msgstr "taldea"
 
 #: models.py:229 models.py:491
 msgid "edit status"
@@ -155,9 +159,20 @@ msgstr "erakutsi kargatzean"
 msgid "Display this layer on load."
 msgstr "Erakutsi geruza hau kargatzean"
 
-#: templates/404.html:8
-msgid "Take me to the home page"
-msgstr "Eraman nazazu hasiera orrialdera"
+#: templates/403.html:8
+msgid ""
+"<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
+"target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
+" permissions."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:8
+msgid "← Go to the homepage"
+msgstr ""
+
+#: templates/404.html:7
+msgid "404 Page Not Found"
+msgstr ""
 
 #: templates/auth/user_detail.html:8
 #, python-format
@@ -209,11 +224,11 @@ msgstr "Sartu"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "Zure mapak gordetzeko eta erraz aurkitzeko, identifikatu zaitez."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr ""
+msgstr "Hasi saioa zure kontuarekin:"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -225,7 +240,7 @@ msgstr "Pasahitza"
 
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
-msgstr ""
+msgstr "Aukeratu hornitzaile bat:"
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -276,13 +291,13 @@ msgstr "Sortu mapa bat"
 msgid "Play with the demo"
 msgstr "Jolastu probatako ingurunean"
 
-#: templates/umap/components/alerts/alert.html:15
-#: templates/umap/components/alerts/alert.html:64
-#: templates/umap/components/alerts/alert.html:92
+#: templates/umap/components/alerts/alert.html:17
+#: templates/umap/components/alerts/alert.html:66
+#: templates/umap/components/alerts/alert.html:94
 msgid "Close"
 msgstr "Itxi"
 
-#: templates/umap/components/alerts/alert.html:30
+#: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
@@ -290,35 +305,35 @@ msgid ""
 "target=\"_blank\">log in</a>."
 msgstr "Aholkua: zure mapak erraz aurkitzeko, <a href=\"%(login_url)s\" target=\"_blank\">kontu bat sortu</a> edo<a href=\"%(login_url)s\" target=\"_blank\">saioa hasi</a>."
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:37
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "Hona hemen mapa editatzeko zure esteka sekretua, gorde ezazu seguru:"
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:41
 msgid "Copy link"
 msgstr "Kopiatu esteka"
 
-#: templates/umap/components/alerts/alert.html:46
+#: templates/umap/components/alerts/alert.html:48
 msgid "Enter your email address to receive the secret link:"
 msgstr "Sartu zure helbide elektronikoa esteka sekretua jasotzeko:"
 
-#: templates/umap/components/alerts/alert.html:52
+#: templates/umap/components/alerts/alert.html:54
 msgid "Email"
 msgstr "Helbide elektronikoa"
 
-#: templates/umap/components/alerts/alert.html:55
+#: templates/umap/components/alerts/alert.html:57
 msgid "Send me the link"
 msgstr "Bidalidazu esteka"
 
-#: templates/umap/components/alerts/alert.html:79
+#: templates/umap/components/alerts/alert.html:81
 msgid "See their edits in another tab"
 msgstr "Ikusi haien aldaketak beste fitxa batean"
 
-#: templates/umap/components/alerts/alert.html:82
+#: templates/umap/components/alerts/alert.html:84
 msgid "Keep your changes and loose theirs"
 msgstr "Mantendu zure aldaketak eta baztertu haienak"
 
-#: templates/umap/components/alerts/alert.html:85
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep their changes and loose yours"
 msgstr "Mantendu haien aldaketak eta baztertu zureak"
 
@@ -339,19 +354,19 @@ msgstr "Hau probatako ingurunea da, testak egin eta argitaratu aurreko bertsioak
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "OpenStreetMap proiektu bat"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "bertsioa"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "Ostalaria"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "Harremanetan jarri"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
@@ -372,7 +387,7 @@ msgstr "Nire profila"
 
 #: templates/umap/dashboard_menu.html:15
 msgid "My teams"
-msgstr ""
+msgstr "Nire taldeak"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -386,7 +401,7 @@ msgstr "Inspira zaitez dauden mapak arakatzen"
 msgid "You are logged in. Continuing..."
 msgstr "Sartu egin zara. Jarraitu..."
 
-#: templates/umap/map_list.html:11 views.py:433
+#: templates/umap/map_list.html:11 views.py:437
 msgid "by"
 msgstr "nork eginda"
 
@@ -566,20 +581,20 @@ msgstr "Bilatu"
 #: templates/umap/team_detail.html:10
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "Arakatu %(current_team)s-ren mapak"
 
 #: templates/umap/team_detail.html:22
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s-k ez dauka mapa publikorik."
 
 #: templates/umap/team_form.html:24
 msgid "Delete this team"
-msgstr ""
+msgstr "Ezabatu talde hau"
 
 #: templates/umap/team_form.html:47
 msgid "Add user"
-msgstr ""
+msgstr "Gehitu erabiltzailea"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
@@ -600,76 +615,76 @@ msgstr "Oraindik ez daukazu maparik."
 
 #: templates/umap/user_teams.html:17
 msgid "Users"
-msgstr ""
+msgstr "Erabiltzaileak"
 
 #: templates/umap/user_teams.html:48
 msgid "New team"
-msgstr ""
+msgstr "Talde berria"
 
 #: views.py:234
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Ezin da ezabatu kide bat baino gehiago dituen talde bat"
 
 #: views.py:238
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "“%(name)s” taldea ezabatu da"
 
-#: views.py:438
+#: views.py:442
 msgid "View the map"
 msgstr "Mapa ikusi"
 
-#: views.py:820
+#: views.py:825
 msgid "See full screen"
 msgstr "Ikusi pantaila osoan"
 
-#: views.py:963
+#: views.py:968
 msgid "Map editors updated with success!"
 msgstr "Maparen editoreak ondo eguneratu dira!"
 
-#: views.py:999
+#: views.py:1004
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Zure mapa editatzeko uMap-en esteka: %(map_name)s"
 
-#: views.py:1002
+#: views.py:1007
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hona hemen zure editatzeko esteka sekretua:: %(link)s"
 
-#: views.py:1009
+#: views.py:1014
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Ezin da posta elektronikorik bidali %(email)s-ri"
 
-#: views.py:1012
+#: views.py:1017
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Posta elektronikoa bidalita %(email)s-ri"
 
-#: views.py:1023
+#: views.py:1028
 msgid "Only its owner can delete the map."
 msgstr "Jabeak bakarrik ezabatu dezake mapa."
 
-#: views.py:1026
+#: views.py:1031
 msgid "Map successfully deleted."
 msgstr "Mapa behar bezala ezabatu da."
 
-#: views.py:1052
+#: views.py:1057
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Zure mapa klonatu egin da! Mapa hau beste nabigatzaile batetik editatzeko erabili esteka hau: %(anonymous_url)s"
 
-#: views.py:1057
+#: views.py:1062
 msgid "Congratulations, your map has been cloned!"
 msgstr "Zorionak, zure mapa ondo klonatu da!"
 
-#: views.py:1308
+#: views.py:1313
 msgid "Layer successfully deleted."
 msgstr "Geruza ondo ezabatu da."
 
-#: views.py:1330
+#: views.py:1335
 msgid "Permissions updated with success!"
 msgstr "Baimenak behar bezala eguneratu dira!"

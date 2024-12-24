@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:05+0000\n"
+"POT-Creation-Date: 2024-12-24 08:39+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>, 2021,2023-2024\n"
 "Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
@@ -25,6 +25,10 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
+msgstr ""
+
+#: decorators.py:60
+msgid "This map is not publicly available"
 msgstr ""
 
 #: middleware.py:13
@@ -159,9 +163,20 @@ msgstr "εμφάνιση κατά τη φόρτωση"
 msgid "Display this layer on load."
 msgstr "Εμφάνιση αυτού του επιπέδου κατά την φόρτωση."
 
-#: templates/404.html:8
-msgid "Take me to the home page"
-msgstr "Επιστροφή στην αρχική σελίδα"
+#: templates/403.html:8
+msgid ""
+"<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
+"target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
+" permissions."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:8
+msgid "← Go to the homepage"
+msgstr ""
+
+#: templates/404.html:7
+msgid "404 Page Not Found"
+msgstr ""
 
 #: templates/auth/user_detail.html:8
 #, python-format
@@ -280,13 +295,13 @@ msgstr "Δημιουργία χάρτη"
 msgid "Play with the demo"
 msgstr "Δοκιμή με την έκδοση επίδειξης"
 
-#: templates/umap/components/alerts/alert.html:15
-#: templates/umap/components/alerts/alert.html:64
-#: templates/umap/components/alerts/alert.html:92
+#: templates/umap/components/alerts/alert.html:17
+#: templates/umap/components/alerts/alert.html:66
+#: templates/umap/components/alerts/alert.html:94
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: templates/umap/components/alerts/alert.html:30
+#: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
@@ -294,35 +309,35 @@ msgid ""
 "target=\"_blank\">log in</a>."
 msgstr "Επισήμανση: για να βρίσκετε εύκολα τους χάρτες σας, <a href=\"%(login_url)s\" target=\"_blank\">δημιουργήστε λογαριασμό</a> ή <a href=\"%(login_url)s\" target=\"_blank\">συνδεθείτε</a>."
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:37
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "Αυτός είναι ο μυστικός σας σύνδεσμος για να επεξεργαστείτε τον χάρτη, διατηρήστε τον ασφαλή:"
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:41
 msgid "Copy link"
 msgstr "Αντιγραφή συνδέσμου"
 
-#: templates/umap/components/alerts/alert.html:46
+#: templates/umap/components/alerts/alert.html:48
 msgid "Enter your email address to receive the secret link:"
 msgstr "Καταχωρίστε το email σας για να λάβετε τον μυστικό σύνδεσμο:"
 
-#: templates/umap/components/alerts/alert.html:52
+#: templates/umap/components/alerts/alert.html:54
 msgid "Email"
 msgstr "Email"
 
-#: templates/umap/components/alerts/alert.html:55
+#: templates/umap/components/alerts/alert.html:57
 msgid "Send me the link"
 msgstr "Στείλε μου τον σύνδεσμο"
 
-#: templates/umap/components/alerts/alert.html:79
+#: templates/umap/components/alerts/alert.html:81
 msgid "See their edits in another tab"
 msgstr "Δείτε τις επεξεργασίες τους σε άλλη καρτέλα"
 
-#: templates/umap/components/alerts/alert.html:82
+#: templates/umap/components/alerts/alert.html:84
 msgid "Keep your changes and loose theirs"
 msgstr "Διατηρήστε τις αλλαγές σας και αγνοήστε τις δικές τους"
 
-#: templates/umap/components/alerts/alert.html:85
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep their changes and loose yours"
 msgstr "Κρατήστε τις αλλαγές τους και αγνοήστε τις δικές σας"
 
@@ -390,7 +405,7 @@ msgstr "Περιηγήσου και αναζήτησε την έμπνευση �
 msgid "You are logged in. Continuing..."
 msgstr "Είστε συνδεδεμένοι. Συνέχεια..."
 
-#: templates/umap/map_list.html:11 views.py:433
+#: templates/umap/map_list.html:11 views.py:437
 msgid "by"
 msgstr "από"
 
@@ -619,61 +634,61 @@ msgstr ""
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:438
+#: views.py:442
 msgid "View the map"
 msgstr "Προβολή του χάρτη"
 
-#: views.py:820
+#: views.py:825
 msgid "See full screen"
 msgstr "Προβολή πλήρους οθόνης"
 
-#: views.py:963
+#: views.py:968
 msgid "Map editors updated with success!"
 msgstr "Η ενημέρωση των συντακτών χάρτη ήταν επιτυχής!"
 
-#: views.py:999
+#: views.py:1004
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Ο uMap σύνδεσμος επεξεργασίας του χάρτη σας: %(map_name)s"
 
-#: views.py:1002
+#: views.py:1007
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Εδώ είναι ο μυστικός σύνδεσμος επεξεργασίας: %(link)s"
 
-#: views.py:1009
+#: views.py:1014
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Αδυναμία αποστολής email στο %(email)s"
 
-#: views.py:1012
+#: views.py:1017
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Μήνυμα email στάλθηκε στο %(email)s"
 
-#: views.py:1023
+#: views.py:1028
 msgid "Only its owner can delete the map."
 msgstr "Μονό ο ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη."
 
-#: views.py:1026
+#: views.py:1031
 msgid "Map successfully deleted."
 msgstr "Ο χάρτης διαγράφηκε με επιτυχία."
 
-#: views.py:1052
+#: views.py:1057
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Ο χάρτης κλωνοποιήθηκε! Αν θέλετε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
-#: views.py:1057
+#: views.py:1062
 msgid "Congratulations, your map has been cloned!"
 msgstr "Συγχαρητήρια ο χάρτης σας κλωνοποιήθηκε!"
 
-#: views.py:1308
+#: views.py:1313
 msgid "Layer successfully deleted."
 msgstr "Το επίπεδο διαγράφηκε με επιτυχία."
 
-#: views.py:1330
+#: views.py:1335
 msgid "Permissions updated with success!"
 msgstr "Τα δικαιώματα ενημερώθηκαν με επιτυχία!"

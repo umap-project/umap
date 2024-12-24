@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:05+0000\n"
+"POT-Creation-Date: 2024-12-24 08:39+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Krittin Leewanich, 2023-2024\n"
 "Language-Team: Thai (Thailand) (http://app.transifex.com/openstreetmap/umap/language/th_TH/)\n"
@@ -22,6 +22,10 @@ msgstr ""
 #: admin.py:16
 msgid "CSV Export"
 msgstr "ส่งออก CSV"
+
+#: decorators.py:60
+msgid "This map is not publicly available"
+msgstr ""
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
@@ -155,9 +159,20 @@ msgstr "แสดงตอนโหลด"
 msgid "Display this layer on load."
 msgstr "แสดงเลเยอร์ตอนโหลด"
 
-#: templates/404.html:8
-msgid "Take me to the home page"
-msgstr "ไปหน้าหลัก"
+#: templates/403.html:8
+msgid ""
+"<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
+"target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
+" permissions."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:8
+msgid "← Go to the homepage"
+msgstr ""
+
+#: templates/404.html:7
+msgid "404 Page Not Found"
+msgstr ""
 
 #: templates/auth/user_detail.html:8
 #, python-format
@@ -276,13 +291,13 @@ msgstr "สร้างแผนที่"
 msgid "Play with the demo"
 msgstr "เล่นกับตัวอย่างเดโม่"
 
-#: templates/umap/components/alerts/alert.html:15
-#: templates/umap/components/alerts/alert.html:64
-#: templates/umap/components/alerts/alert.html:92
+#: templates/umap/components/alerts/alert.html:17
+#: templates/umap/components/alerts/alert.html:66
+#: templates/umap/components/alerts/alert.html:94
 msgid "Close"
 msgstr "ปิด"
 
-#: templates/umap/components/alerts/alert.html:30
+#: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
@@ -290,35 +305,35 @@ msgid ""
 "target=\"_blank\">log in</a>."
 msgstr "เคล็ดลับ: เพื่อที่หากลับมาแผนที่ของคุณได้ง่ายขึ้น <a href=\"%(login_url)s\" target=\"_blank\">สร้างบัญชี</a> หรือ<a href=\"%(login_url)s\" target=\"_blank\">ลงชื่อเข้าใช้</a>"
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:37
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "นี่คือลิงค์ลับสำหรับแก้ไขแผนที่ โปรดเก็บรักษาไว้อย่างปลอดภัย:"
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:41
 msgid "Copy link"
 msgstr "คัดลอกลิงค์"
 
-#: templates/umap/components/alerts/alert.html:46
+#: templates/umap/components/alerts/alert.html:48
 msgid "Enter your email address to receive the secret link:"
 msgstr "กรอกที่อยู่อีเมลของคุณเพื่อรับลิงค์ลับ:"
 
-#: templates/umap/components/alerts/alert.html:52
+#: templates/umap/components/alerts/alert.html:54
 msgid "Email"
 msgstr "อีเมล"
 
-#: templates/umap/components/alerts/alert.html:55
+#: templates/umap/components/alerts/alert.html:57
 msgid "Send me the link"
 msgstr "ส่งลิงค์มาให้ฉัน"
 
-#: templates/umap/components/alerts/alert.html:79
+#: templates/umap/components/alerts/alert.html:81
 msgid "See their edits in another tab"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:82
+#: templates/umap/components/alerts/alert.html:84
 msgid "Keep your changes and loose theirs"
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:85
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep their changes and loose yours"
 msgstr ""
 
@@ -386,7 +401,7 @@ msgstr "รับแรงบันดาลใจ เรียกดูแผ�
 msgid "You are logged in. Continuing..."
 msgstr "คุณเข้าสู่ระบบแล้ว กำลังดำเนินการต่อ..."
 
-#: templates/umap/map_list.html:11 views.py:433
+#: templates/umap/map_list.html:11 views.py:437
 msgid "by"
 msgstr "โดย"
 
@@ -614,61 +629,61 @@ msgstr ""
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:438
+#: views.py:442
 msgid "View the map"
 msgstr "ดูแผนที่"
 
-#: views.py:820
+#: views.py:825
 msgid "See full screen"
 msgstr ""
 
-#: views.py:963
+#: views.py:968
 msgid "Map editors updated with success!"
 msgstr "ผู้แก้ไขแผนที่อัปเดตสำเร็จแล้ว!"
 
-#: views.py:999
+#: views.py:1004
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1002
+#: views.py:1007
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1009
+#: views.py:1014
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1012
+#: views.py:1017
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1023
+#: views.py:1028
 msgid "Only its owner can delete the map."
 msgstr "เฉพาะเจ้าของสามารถลบแผนที่ได้เท่านั้น"
 
-#: views.py:1026
+#: views.py:1031
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1052
+#: views.py:1057
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "แผนที่ของคุณถูกโคลนแล้ว! ถ้าคุณต้องการแก้ไขแผนที่นี้จากอุปกรณ์อื่น โปรดใช้ลิงค์: %(anonymous_url)s"
 
-#: views.py:1057
+#: views.py:1062
 msgid "Congratulations, your map has been cloned!"
 msgstr "ยินดีด้วย แผนที่ของคุณถูกโคลนแล้ว!"
 
-#: views.py:1308
+#: views.py:1313
 msgid "Layer successfully deleted."
 msgstr "ลบเลเยอร์สำเร็จแล้ว"
 
-#: views.py:1330
+#: views.py:1335
 msgid "Permissions updated with success!"
 msgstr ""
