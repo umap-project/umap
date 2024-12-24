@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.8.1 - 2024-12-24
+
+### Bug fixes
+
+* honour carriage returns in layer description (in caption panel) by @yohanboniface in #2386
+* update star icon on star/unstar by @yohanboniface in #2387
+* reconnect websocket on disconnection by @almet in #2389
+* fix duplicated content during sync by @yohanboniface in #2388
+* main help button was broken by @yohanboniface in #2393
+* split zoomTo to accept bounds by @davidbgk in #2394
+* zoom to droped file once loaded by @davidbgk in #2401
+* do not load all datalayers at once by @yohanboniface in #2402
+* add a 403.html template by @yohanboniface in #2396
+
+
 ## 2.8.0 - 2024-12-18
 
 ### What's Changed
