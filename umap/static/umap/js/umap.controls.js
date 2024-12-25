@@ -800,7 +800,7 @@ U.Search = L.PhotonSearch.extend({
     })
     L.DomEvent.on(edit, 'mousedown', (e) => {
       L.DomEvent.stop(e)
-      const datalayer = this.map.defaultEditDataLayer()
+      const datalayer = this.map._umap.defaultEditDataLayer()
       const layer = datalayer.makeFeature(feature)
       layer.isDirty = true
       layer.edit()
