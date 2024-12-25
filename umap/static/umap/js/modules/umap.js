@@ -349,19 +349,19 @@ export default class Umap extends ServerStored {
         if (this.properties.enableMarkerDraw) {
           items.push({
             label: this.help.displayLabel('DRAW_MARKER'),
-            action: () => this._leafletMap.startMarker(event),
+            action: () => this._leafletMap.editTools.startMarker(),
           })
         }
         if (this.properties.enablePolylineDraw) {
           items.push({
             label: this.help.displayLabel('DRAW_POLYGON'),
-            action: () => this._leafletMap.startPolygon(event),
+            action: () => this._leafletMap.editTools.startPolygon(),
           })
         }
         if (this.properties.enablePolygonDraw) {
           items.push({
             label: this.help.displayLabel('DRAW_LINE'),
-            action: () => this._leafletMap.startPolyline(event),
+            action: () => this._leafletMap.editTools.startPolyline(),
           })
         }
         items.push('-')
