@@ -8,6 +8,7 @@ from .websocket_server import (
     Request,
     ValidationError,
     PeerMessage,
+    ListPeersResponse,
 )
 
 
@@ -27,6 +28,10 @@ class TokenMiddleware:
 
 
 class SyncConsumer(AsyncWebsocketConsumer):
+    @property
+    def peers(self):
+        return self.channel_layer.groups[self.map_id].keys()
+
     async def connect(self):
         print("connect")
         self.map_id = self.scope["url_route"]["kwargs"]["map_id"]
@@ -35,17 +40,31 @@ class SyncConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.map_id, self.channel_name)
 
         await self.accept()
+        await self.send_peers_list()
 
     async def disconnect(self, close_code):
         print("disconnect")
         await self.channel_layer.group_discard(self.map_id, self.channel_name)
+        await self.send_peers_list()
 
-    async def broadcast(self, event):
-        print("broadcast", event)
-        await self.send(event["message"])
+    async def send_peers_list(self):
+        message = ListPeersResponse(peers=self.peers)
+        await self.broadcast(message.model_dump_json())
 
-    async def pair_to_pair(self, event):
-        print("pair_to_pair", event)
+    async def broadcast(self, message):
+        print("broadcast", message)
+        await self.channel_layer.group_send(
+            self.map_id, {"message": message, "type": "on_message"}
+        )
+
+    async def send_to(self, channel, message):
+        print("pair to pair", channel, message)
+        await self.channel_layer.send(
+            channel, {"message": message, "type": "on_message"}
+        )
+
+    async def on_message(self, event):
+        # This is what the consummers does for a single channel
         await self.send(event["message"])
 
     async def receive(self, text_data):
@@ -74,27 +93,15 @@ class SyncConsumer(AsyncWebsocketConsumer):
             match incoming.root:
                 # Broadcast all operation messages to connected peers
                 case JoinRequest():
-                    response = JoinResponse(
-                        uuid=self.channel_name,
-                        peers=self.channel_layer.groups[self.map_id].keys(),
-                    )
+                    response = JoinResponse(uuid=self.channel_name, peers=self.peers)
                     await self.send(response.model_dump_json())
                 case OperationMessage():
-                    await self.channel_layer.group_send(
-                        self.map_id,
-                        {"message": text_data, "type": "broadcast"},
-                    )
+                    await self.broadcast(text_data)
 
                 # Send peer messages to the proper peer
                 case PeerMessage():
                     print("Received peermessage", incoming.root)
-                    await self.channel_layer.send(
-                        incoming.root.recipient,
-                        {
-                            "message": text_data,
-                            "type": "pair_to_pair",
-                        },
-                    )
+                    await self.send_to(incoming.root.recipient, text_data)
 
         # Send peer messages to the proper peer
         # case PeerMessage(recipient=_id):
