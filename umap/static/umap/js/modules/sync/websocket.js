@@ -7,7 +7,7 @@ export class WebSocketTransport {
     this.receiver = messagesReceiver
     this.closeRequested = false
 
-    this.websocket = new WebSocket(`${webSocketURI}?${authToken}`)
+    this.websocket = new WebSocket(`${webSocketURI}`)
 
     this.websocket.onopen = () => {
       this.send('JoinRequest', { token: authToken })

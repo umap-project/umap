@@ -17,8 +17,6 @@ urlpatterns = (re_path(r"ws/sync/(?P<map_id>\w+)/$", consumers.SyncConsumer.as_a
 application = ProtocolTypeRouter(
     {
         "http": django_asgi_app,
-        "websocket": consumers.TokenMiddleware(
-            AllowedHostsOriginValidator(URLRouter(urlpatterns))
-        ),
+        "websocket": AllowedHostsOriginValidator(URLRouter(urlpatterns)),
     }
 )

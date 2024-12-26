@@ -31,9 +31,7 @@ class PeerMessage(BaseModel):
 class Request(RootModel):
     """Any message coming from the websocket should be one of these, and will be rejected otherwise."""
 
-    root: Union[PeerMessage, OperationMessage, JoinRequest] = Field(
-        discriminator="kind"
-    )
+    root: Union[PeerMessage, OperationMessage] = Field(discriminator="kind")
 
 
 class JoinResponse(BaseModel):
