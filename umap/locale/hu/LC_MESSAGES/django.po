@@ -21,11 +21,11 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
-msgstr ""
+msgstr "CSV exportálás"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "Ez a térkép nem nyilvános"
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
@@ -77,7 +77,7 @@ msgstr "Csak a tulajdonos"
 
 #: models.py:184
 msgid "Draft (private)"
-msgstr ""
+msgstr "Piszkozat (privát)"
 
 #: models.py:185
 msgid "Everyone (public)"
@@ -93,7 +93,7 @@ msgstr "Blokkolva"
 
 #: models.py:191
 msgid "Deleted"
-msgstr ""
+msgstr "Törölve"
 
 #: models.py:194
 msgid "center"
@@ -164,15 +164,15 @@ msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr "A térképekhez tartozó engedélyek kezeléséről szóló <a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">dokumentációt itt találod</a>."
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "← Ugrás a főoldalra"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 hiba: ez az oldal nem található. Eltévedtél a térképek között"
 
 #: templates/auth/user_detail.html:8
 #, python-format
@@ -224,11 +224,11 @@ msgstr "Belépés"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "Azonosítsd magad, hogy el tudd menteni a térképet, és később könnyen megtaláld."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr ""
+msgstr "Jelentkezz be a fiókoddal:"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -240,7 +240,7 @@ msgstr "Jelszó"
 
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
-msgstr ""
+msgstr "Válassz egy szolgáltatót:"
 
 #: templates/umap/about_summary.html:12
 #, python-format
