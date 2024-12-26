@@ -5,7 +5,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from django.urls import re_path
 
-from . import consumers
+from .sync import consumers
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "umap.settings")
 # Initialize Django ASGI application early to ensure the AppRegistry
