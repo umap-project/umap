@@ -76,7 +76,7 @@ export class SyncEngine {
 
   start(authToken) {
     this.transport = new WebSocketTransport(
-      this._umap.properties.websocketURI,
+      Utils.template(this._umap.properties.websocketURI, { id: this._umap.id }),
       authToken,
       this
     )

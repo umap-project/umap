@@ -4,11 +4,11 @@ from django.core.signing import TimestampSigner
 from .websocket_server import (
     JoinRequest,
     JoinResponse,
+    ListPeersResponse,
     OperationMessage,
+    PeerMessage,
     Request,
     ValidationError,
-    PeerMessage,
-    ListPeersResponse,
 )
 
 
