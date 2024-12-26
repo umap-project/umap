@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.2 - 2024-12-26
+
+### Bug fixes
+* fix create marker from search result by @yohanboniface in #2404
+* fix startMarker/Polyline/Polygon on right click by @yohanboniface in #2403
+
 ## 2.8.1 - 2024-12-24
 
 ### Bug fixes
