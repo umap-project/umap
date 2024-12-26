@@ -285,6 +285,7 @@ export class SyncEngine {
    */
   sendToPeer(recipient, verb, payload) {
     payload.verb = verb
+    console.log('Sending peermessage to', recipient)
     this.transport.send('PeerMessage', {
       sender: this.uuid,
       recipient: recipient,

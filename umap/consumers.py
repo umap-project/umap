@@ -7,6 +7,7 @@ from .websocket_server import (
     OperationMessage,
     Request,
     ValidationError,
+    PeerMessage,
 )
 
 
@@ -40,7 +41,11 @@ class SyncConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.map_id, self.channel_name)
 
     async def broadcast(self, event):
-        print(event)
+        print("broadcast", event)
+        await self.send(event["message"])
+
+    async def pair_to_pair(self, event):
+        print("pair_to_pair", event)
         await self.send(event["message"])
 
     async def receive(self, text_data):
@@ -81,11 +86,15 @@ class SyncConsumer(AsyncWebsocketConsumer):
                     )
 
                 # Send peer messages to the proper peer
-                # case PeerMessage(recipient=_id):
-                #     peer = connections.get(_id)
-                #     if peer:
-                #         await peer.send(raw_message)
-                # websockets.broadcast(other_peers, text_data)
+                case PeerMessage():
+                    print("Received peermessage", incoming.root)
+                    await self.channel_layer.send(
+                        incoming.root.recipient,
+                        {
+                            "message": text_data,
+                            "type": "pair_to_pair",
+                        },
+                    )
 
         # Send peer messages to the proper peer
         # case PeerMessage(recipient=_id):
