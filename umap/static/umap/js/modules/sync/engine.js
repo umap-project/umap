@@ -124,7 +124,7 @@ export class SyncEngine {
 
     if (this.offline) return
     if (this.transport) {
-      this.transport.send('OperationMessage', message)
+      this.transport.send('OperationMessage', { sender: this.uuid, ...message })
     }
   }
 
@@ -177,6 +177,7 @@ export class SyncEngine {
    * @param {Object} payload
    */
   onOperationMessage(payload) {
+    if (payload.sender === this.uuid) return
     this._operations.storeRemoteOperations([payload])
     this._applyOperation(payload)
   }
