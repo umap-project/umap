@@ -1,22 +1,20 @@
 import os
 
-from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.security.websocket import AllowedHostsOriginValidator
-from django.core.asgi import get_asgi_application
-from django.urls import re_path
-
-from .sync import consumers
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "umap.settings")
+
+from django.core.asgi import get_asgi_application
+
+from .sync.app import application as ws_application
+
 # Initialize Django ASGI application early to ensure the AppRegistry
 # is populated before importing code that may import ORM models.
 django_asgi_app = get_asgi_application()
 
-urlpatterns = (re_path(r"ws/sync/(?P<map_id>\w+)/$", consumers.SyncConsumer.as_asgi()),)
 
-application = ProtocolTypeRouter(
-    {
-        "http": django_asgi_app,
-        "websocket": AllowedHostsOriginValidator(URLRouter(urlpatterns)),
-    }
-)
+async def application(scope, receive, send):
+    if scope["type"] == "http":
+        await django_asgi_app(scope, receive, send)
+    elif scope["type"] == "websocket":
+        await ws_application(scope, receive, send)
+    else:
+        raise NotImplementedError(f"Unknown scope type {scope['type']}")
