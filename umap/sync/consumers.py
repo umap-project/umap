@@ -25,8 +25,8 @@ class SyncConsumer(AsyncWebsocketConsumer):
         # Join room group
         await self.channel_layer.group_add(self.map_id, self.channel_name)
 
-        await self.accept()
         self.is_authenticated = False
+        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.map_id, self.channel_name)
@@ -37,7 +37,7 @@ class SyncConsumer(AsyncWebsocketConsumer):
         await self.broadcast(message.model_dump_json())
 
     async def broadcast(self, message):
-        # Send to one all channels
+        # Send to all channels (including sender!)
         await self.channel_layer.group_send(
             self.map_id, {"message": message, "type": "on_message"}
         )

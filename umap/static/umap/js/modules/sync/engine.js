@@ -150,7 +150,6 @@ export class SyncEngine {
    * and dispatches the different "on*" methods.
    */
   receive({ kind, ...payload }) {
-    console.log(kind, payload)
     if (kind === 'OperationMessage') {
       this.onOperationMessage(payload)
     } else if (kind === 'JoinResponse') {
@@ -286,7 +285,6 @@ export class SyncEngine {
    */
   sendToPeer(recipient, verb, payload) {
     payload.verb = verb
-    console.log('Sending peermessage to', recipient)
     this.transport.send('PeerMessage', {
       sender: this.uuid,
       recipient: recipient,
@@ -486,7 +484,7 @@ export class Operations {
     return (
       Utils.deepEqual(local.subject, remote.subject) &&
       Utils.deepEqual(local.metadata, remote.metadata) &&
-      (!shouldCheckKey || (shouldCheckKey && local.key == remote.key))
+      (!shouldCheckKey || (shouldCheckKey && local.key === remote.key))
     )
   }
 }
