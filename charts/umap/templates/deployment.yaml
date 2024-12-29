@@ -80,7 +80,7 @@ spec:
       volumes:
         - name: config
           secret:
-            secretName: {{ .Release.Name }}-config
+            secretName: {{ include "umap.fullname" . }}-config
         - name: statics
           emptyDir: {}
       {{- if .Values.persistence.enabled }}
