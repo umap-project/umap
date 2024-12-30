@@ -1,0 +1,12 @@
+{{ if .Values.umap.templates}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "umap.fullname" . }}-templates
+  labels:
+    {{- include "umap.labels" . | nindent 4 }}
+data:
+{{- range $k, $v := .Values.umap.templates }}
+    {{ $k }}: {{ $v | quote }}
+{{- end }}
+{{end}}

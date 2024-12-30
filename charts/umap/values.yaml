@@ -77,6 +77,17 @@ umap:
     SECRET_KEY: CHANGE_ME
     STATIC_ROOT: /srv/umap/static
     MEDIA_ROOT: /srv/umap/uploads
+  
+  templates: {}
+    # Overwrite templates like footer.html or header.html
+    #  footer.html: |
+    #    <a href="/imprint">Imprint</a>
+    #  header.html: |
+    #    custom Header    
+    #
+    # It is not recommended to overwrite other templates!
+    # list of templates: https://github.com/umap-project/umap/tree/master/umap/templates/umap
+    
   # You can also provide umap.conf content here:
   config: |
     from umap.settings.base import *
