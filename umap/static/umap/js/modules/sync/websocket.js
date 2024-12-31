@@ -5,7 +5,6 @@ const FIRST_CONNECTION_TIMEOUT = 2000
 export class WebSocketTransport {
   constructor(webSocketURI, authToken, messagesReceiver) {
     this.receiver = messagesReceiver
-    this.closeRequested = false
 
     this.websocket = new WebSocket(webSocketURI)
 
@@ -16,7 +15,7 @@ export class WebSocketTransport {
     this.websocket.addEventListener('message', this.onMessage.bind(this))
     this.websocket.onclose = () => {
       console.log('websocket closed')
-      if (!this.closeRequested) {
+      if (!this.receiver.closeRequested) {
         console.log('Not requested, reconnecting...')
         this.receiver.reconnect()
       }
@@ -64,7 +63,7 @@ export class WebSocketTransport {
   }
 
   close() {
-    this.closeRequested = true
+    this.receiver.closeRequested = true
     this.websocket.close()
   }
 }
