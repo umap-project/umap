@@ -145,7 +145,9 @@ export class TopBar extends WithTemplate {
   }
 
   redraw() {
-    this.elements.peers.hidden = !this._umap.getProperty('syncEnabled')
+    const syncEnabled = this._umap.getProperty('syncEnabled')
+    this.elements.peers.hidden = !syncEnabled
+    this.elements.cancel.hidden = syncEnabled
     this.elements.saveLabel.hidden = this._umap.permissions.isDraft()
     this.elements.saveDraftLabel.hidden = !this._umap.permissions.isDraft()
   }

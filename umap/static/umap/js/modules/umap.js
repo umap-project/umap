@@ -1259,6 +1259,7 @@ export default class Umap extends ServerStored {
   }
 
   askForReset(e) {
+    if (this.getProperty('syncEnabled')) return
     this.dialog
       .confirm(translate('Are you sure you want to cancel your changes?'))
       .then(() => {
