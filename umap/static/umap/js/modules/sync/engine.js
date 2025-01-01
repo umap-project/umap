@@ -61,6 +61,7 @@ export class SyncEngine {
     this._reconnectTimeout = null
     this._reconnectDelay = RECONNECT_DELAY
     this.websocketConnected = false
+    this.closeRequested = false
   }
 
   async authenticate() {
