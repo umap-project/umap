@@ -75,6 +75,8 @@ class Peer(models.Model):
             **connection_params,
             autocommit=True,
         )
+
+    async def listen(self):
         asyncio.create_task(self.listen_public())
         asyncio.create_task(self.listen_private())
 
@@ -116,6 +118,7 @@ class Peer(models.Model):
             if "edit" not in permissions:
                 return await self.disconnect()
             await self.asave()
+            await self.listen()
             response = JoinResponse(uuid=str(self.uuid), peers=await self.get_peers())
             await self.send(response.model_dump_json())
             await self.send_peers_list()
