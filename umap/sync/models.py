@@ -115,7 +115,7 @@ class Peer(models.Model):
             user, map_id, permissions = signed.values()
             if "edit" not in permissions:
                 return await self.disconnect()
-            await Peer.asave()
+            await self.asave()
             response = JoinResponse(uuid=str(self.uuid), peers=await self.get_peers())
             await self.send(response.model_dump_json())
             await self.send_peers_list()
