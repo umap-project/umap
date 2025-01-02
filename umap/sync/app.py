@@ -17,7 +17,7 @@ async def application(scope, receive, send):
 
     map_id = kwargs["map_id"]
     room_id = f"room{map_id}"
-    peer = await Peer.objects.acreate(uuid=uuid.uuid4(), name="FooBar", room_id=room_id)
+    peer = Peer(uuid=uuid.uuid4(), name="FooBar", room_id=room_id)
     print(peer)
     peer._send = send
     while True:
