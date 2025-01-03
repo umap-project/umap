@@ -12,7 +12,7 @@ DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_markers(
-    new_page, live_server, channels_live_server, tilelayer
+    new_page, live_server, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -80,7 +80,7 @@ def test_websocket_connection_can_sync_markers(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_polygons(
-    context, live_server, channels_live_server, tilelayer
+    context, live_server, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -164,7 +164,7 @@ def test_websocket_connection_can_sync_polygons(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_map_properties(
-    new_page, live_server, channels_live_server, tilelayer
+    new_page, live_server, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -198,7 +198,7 @@ def test_websocket_connection_can_sync_map_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_datalayer_properties(
-    new_page, live_server, channels_live_server, tilelayer
+    new_page, live_server, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -227,7 +227,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_cloned_polygons(
-    context, live_server, channels_live_server, tilelayer
+    context, live_server, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -290,7 +290,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_late_joining_peer(
-    new_page, live_server, channels_live_server, tilelayer
+    new_page, live_server, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -351,7 +351,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
 
 @pytest.mark.xdist_group(name="websockets")
-def test_should_sync_datalayers(new_page, live_server, channels_live_server, tilelayer):
+def test_should_sync_datalayers(new_page, live_server, asgi_live_server, tilelayer):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
     map.save()
@@ -490,7 +490,7 @@ def test_should_sync_datalayers_delete(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_create_and_sync_map(
-    new_page, live_server, channels_live_server, tilelayer, login, user
+    new_page, live_server, asgi_live_server, tilelayer, login, user
 ):
     # Create a syncable map with peerA
     peerA = login(user, prefix="Page A")
