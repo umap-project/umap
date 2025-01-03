@@ -574,9 +574,12 @@ export class DataLayer extends ServerStored {
     })
   }
 
-  _delete() {
-    this.isDeleted = true
+  del(sync = true) {
     this.erase()
+    if (sync) {
+      this.isDeleted = true
+      this.sync.delete()
+    }
   }
 
   empty() {
@@ -819,7 +822,7 @@ export class DataLayer extends ServerStored {
         <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
       </button>`)
     deleteButton.addEventListener('click', () => {
-      this._delete()
+      this.del()
       this._umap.editPanel.close()
     })
     advancedButtons.appendChild(deleteButton)
@@ -1147,8 +1150,12 @@ export class DataLayer extends ServerStored {
     if (this.createdOnServer) {
       await this._umap.server.post(this.getDeleteUrl())
     }
-    delete this._umap.datalayers[stamp(this)]
+    this.commitDelete()
     return true
+  }
+
+  commitDelete() {
+    delete this._umap.datalayers[stamp(this)]
   }
 
   getName() {
@@ -1221,7 +1228,7 @@ export class DataLayer extends ServerStored {
           this._umap.dialog
             .confirm(translate('Are you sure you want to delete this layer?'))
             .then(() => {
-              this._delete()
+              this.del()
             })
         },
         this
