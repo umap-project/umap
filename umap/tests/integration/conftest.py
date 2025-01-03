@@ -1,12 +1,11 @@
 import os
 import re
-import subprocess
-import time
-from pathlib import Path
 
 import pytest
-from channels.testing import ChannelsLiveServerTestCase
+from daphne.testing import DaphneProcess
 from playwright.sync_api import expect
+
+from umap.asgi import application
 
 from ..base import mock_tiles
 
@@ -68,35 +67,17 @@ def login(new_page, settings, live_server):
     return do_login
 
 
-@pytest.fixture
-def websocket_server():
-    # Find the test-settings, and put them in the current environment
-    settings_path = (Path(__file__).parent.parent / "settings.py").absolute().as_posix()
-    os.environ["UMAP_SETTINGS"] = settings_path
-
-    ds_proc = subprocess.Popen(
-        [
-            "umap",
-            "run_websocket_server",
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    time.sleep(2)
-    # Ensure it started properly before yielding
-    assert not ds_proc.poll(), ds_proc.stdout.read().decode("utf-8")
-    yield ds_proc
-    # Shut it down at the end of the pytest session
-    ds_proc.terminate()
-
-
 @pytest.fixture(scope="function")
-def channels_live_server(request, settings):
-    server = ChannelsLiveServerTestCase()
-    server.serve_static = False
-    server._pre_setup()
-    settings.WEBSOCKET_FRONT_URI = f"{server.live_server_ws_url}/ws/sync/{{id}}/"
+def asgi_live_server(request, settings):
+    request.getfixturevalue("transactional_db")
+    server = DaphneProcess("localhost", lambda: application)
+    server.start()
+    server.ready.wait()
+    port = server.port.value
+    settings.WEBSOCKET_FRONT_URI = f"ws://localhost:{port}/ws/sync/{{id}}/"
+    server.url = f"http://localhost:{port}"
 
     yield server
 
-    server._post_teardown()
+    server.terminate()
+    server.join()
