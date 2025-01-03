@@ -54,6 +54,7 @@ dev = [
   "isort==5.13.2",
 ]
 test = [
+  "daphne==4.1.2",
   "factory-boy==3.3.1",
   "playwright>=1.39",
   "pytest==8.3.4",
@@ -70,10 +71,7 @@ s3 = [
   "django-storages[s3]==1.14.4",
 ]
 sync = [
-  "channels==4.2.0",
-  "daphne==4.1.2",
   "pydantic==2.10.3",
-  "websockets==13.1",
 ]
 
 [project.scripts]

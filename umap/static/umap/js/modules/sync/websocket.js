@@ -21,6 +21,10 @@ export class WebSocketTransport {
       }
     }
 
+    this.websocket.onerror = (error) => {
+      console.log('WS ERROR', error)
+    }
+
     this.ensureOpen = setInterval(() => {
       if (this.websocket.readyState !== WebSocket.OPEN) {
         this.websocket.close()
@@ -34,6 +38,7 @@ export class WebSocketTransport {
     // See https://making.close.com/posts/reliable-websockets/ for more details.
     this.pingInterval = setInterval(() => {
       if (this.websocket.readyState === WebSocket.OPEN) {
+        console.log('sending ping')
         this.websocket.send('ping')
         this.pongReceived = false
         setTimeout(() => {
@@ -63,6 +68,7 @@ export class WebSocketTransport {
   }
 
   close() {
+    console.log('Closing')
     this.receiver.closeRequested = true
     this.websocket.close()
   }

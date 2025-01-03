@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     "django.contrib.gis",
     "django_probes",
     "umap",
+    "umap.sync",
     "social_django",
     # See https://github.com/peopledoc/django-agnocomplete/commit/26eda2dfa4a2f8a805ca2ea19a0c504b9d773a1c
     # Django does not find the app config in the default place, so the app is not loaded
