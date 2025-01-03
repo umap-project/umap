@@ -72,6 +72,14 @@ export class DataLayerUpdater extends BaseUpdater {
     }
     datalayer.render([key])
   }
+
+  delete({ metadata }) {
+    const datalayer = this.getDataLayerFromID(metadata.id)
+    if (datalayer) {
+      datalayer.del(false)
+      datalayer.commitDelete()
+    }
+  }
 }
 
 export class FeatureUpdater extends BaseUpdater {
