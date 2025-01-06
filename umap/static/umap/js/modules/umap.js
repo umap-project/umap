@@ -34,6 +34,7 @@ import {
   uMapAlert as Alert,
 } from '../components/alerts/alert.js'
 import Orderable from './orderable.js'
+import { DataForm } from './form/builder.js'
 
 export default class Umap extends ServerStored {
   constructor(element, geojson) {
@@ -734,7 +735,7 @@ export default class Umap extends ServerStored {
     const metadataFields = ['properties.name', 'properties.description']
 
     DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
-    const builder = new U.FormBuilder(this, metadataFields, {
+    const builder = new DataForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,
     })
@@ -749,7 +750,7 @@ export default class Umap extends ServerStored {
       'properties.permanentCredit',
       'properties.permanentCreditBackground',
     ]
-    const creditsBuilder = new U.FormBuilder(this, creditsFields, { umap: this })
+    const creditsBuilder = new DataForm(this, creditsFields, { umap: this })
     credits.appendChild(creditsBuilder.build())
     this.editPanel.open({ content: container })
   }
@@ -770,7 +771,7 @@ export default class Umap extends ServerStored {
       'properties.captionBar',
       'properties.captionMenus',
     ])
-    const builder = new U.FormBuilder(this, UIFields, { umap: this })
+    const builder = new DataForm(this, UIFields, { umap: this })
     const controlsOptions = DomUtil.createFieldset(
       container,
       translate('User interface options')
@@ -793,7 +794,7 @@ export default class Umap extends ServerStored {
       'properties.dashArray',
     ]
 
-    const builder = new U.FormBuilder(this, shapeOptions, { umap: this })
+    const builder = new DataForm(this, shapeOptions, { umap: this })
     const defaultShapeProperties = DomUtil.createFieldset(
       container,
       translate('Default shape properties')
@@ -812,7 +813,7 @@ export default class Umap extends ServerStored {
       'properties.slugKey',
     ]
 
-    const builder = new U.FormBuilder(this, optionsFields, { umap: this })
+    const builder = new DataForm(this, optionsFields, { umap: this })
     const defaultProperties = DomUtil.createFieldset(
       container,
       translate('Default properties')
@@ -830,7 +831,7 @@ export default class Umap extends ServerStored {
       'properties.labelInteractive',
       'properties.outlinkTarget',
     ]
-    const builder = new U.FormBuilder(this, popupFields, { umap: this })
+    const builder = new DataForm(this, popupFields, { umap: this })
     const popupFieldset = DomUtil.createFieldset(
       container,
       translate('Default interaction options')
@@ -887,7 +888,7 @@ export default class Umap extends ServerStored {
       container,
       translate('Custom background')
     )
-    const builder = new U.FormBuilder(this, tilelayerFields, { umap: this })
+    const builder = new DataForm(this, tilelayerFields, { umap: this })
     customTilelayer.appendChild(builder.build())
   }
 
@@ -935,7 +936,7 @@ export default class Umap extends ServerStored {
       ['properties.overlay.tms', { handler: 'Switch', label: translate('TMS format') }],
     ]
     const overlay = DomUtil.createFieldset(container, translate('Custom overlay'))
-    const builder = new U.FormBuilder(this, overlayFields, { umap: this })
+    const builder = new DataForm(this, overlayFields, { umap: this })
     overlay.appendChild(builder.build())
   }
 
@@ -962,7 +963,7 @@ export default class Umap extends ServerStored {
         { handler: 'BlurFloatInput', placeholder: translate('max East') },
       ],
     ]
-    const boundsBuilder = new U.FormBuilder(this, boundsFields, { umap: this })
+    const boundsBuilder = new DataForm(this, boundsFields, { umap: this })
     limitBounds.appendChild(boundsBuilder.build())
     const boundsButtons = DomUtil.create('div', 'button-bar half', limitBounds)
     DomUtil.createButton(
@@ -1027,7 +1028,7 @@ export default class Umap extends ServerStored {
         { handler: 'Switch', label: translate('Autostart when map is loaded') },
       ],
     ]
-    const slideshowBuilder = new U.FormBuilder(this, slideshowFields, {
+    const slideshowBuilder = new DataForm(this, slideshowFields, {
       callback: () => {
         this.slideshow.load()
         // FIXME when we refactor formbuilder: this callback is called in a 'postsync'
@@ -1042,7 +1043,9 @@ export default class Umap extends ServerStored {
 
   _editSync(container) {
     const sync = DomUtil.createFieldset(container, translate('Real-time collaboration'))
-    const builder = new U.FormBuilder(this, ['properties.syncEnabled'], { umap: this })
+    const builder = new DataForm(this, ['properties.syncEnabled'], {
+      umap: this,
+    })
     sync.appendChild(builder.build())
   }
 
@@ -1459,7 +1462,7 @@ export default class Umap extends ServerStored {
       const row = DomUtil.create('li', 'orderable', ul)
       DomUtil.createIcon(row, 'icon-drag', translate('Drag to reorder'))
       datalayer.renderToolbox(row)
-      const builder = new U.FormBuilder(
+      const builder = new DataForm(
         datalayer,
         [['options.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
