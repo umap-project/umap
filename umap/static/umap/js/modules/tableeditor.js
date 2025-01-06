@@ -2,6 +2,7 @@ import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import ContextMenu from './ui/contextmenu.js'
 import { WithTemplate, loadTemplate } from './utils.js'
+import { MutatingForm } from './form/builder.js'
 
 const TEMPLATE = `
   <table>
@@ -205,7 +206,7 @@ export default class TableEditor extends WithTemplate {
     const tr = event.target.closest('tr')
     const feature = this.datalayer.getFeatureById(tr.dataset.feature)
     const handler = property === 'description' ? 'Textarea' : 'Input'
-    const builder = new U.FormBuilder(feature, [[field, { handler }]], {
+    const builder = new MutatingForm(feature, [[field, { handler }]], {
       id: `umap-feature-properties_${L.stamp(feature)}`,
     })
     cell.innerHTML = ''

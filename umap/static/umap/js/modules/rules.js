@@ -3,6 +3,7 @@ import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 import { AutocompleteDatalist } from './autocomplete.js'
 import Orderable from './orderable.js'
+import { MutatingForm } from './form/builder.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -129,7 +130,7 @@ class Rule {
       'options.dashArray',
     ]
     const container = DomUtil.create('div')
-    const builder = new U.FormBuilder(this, options)
+    const builder = new MutatingForm(this, options)
     const defaultShapeProperties = DomUtil.add('div', '', container)
     defaultShapeProperties.appendChild(builder.build())
     const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)

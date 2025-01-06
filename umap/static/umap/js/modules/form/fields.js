@@ -5,6 +5,8 @@ import {
   AjaxAutocompleteMultiple,
   AutocompleteDatalist,
 } from '../autocomplete.js'
+import { SCHEMA } from '../schema.js'
+import * as Icon from '../rendering/icon.js'
 
 const Fields = {}
 
@@ -35,8 +37,8 @@ class BaseElement {
   getParentNode() {
     const classNames = ['formbox']
     if (this.properties.inheritable) {
-      classNames.push(inheritable)
-      if (this.get(true)) classNames.push('undefined')
+      classNames.push('inheritable')
+      if (this.get(true) === undefined) classNames.push('undefined')
     }
     classNames.push(`umap-field-${this.name}`)
     const [wrapper, { header, define, undefine, quickContainer, container }] =
@@ -55,8 +57,8 @@ class BaseElement {
     this.form.appendChild(this.wrapper)
     if (this.properties.inheritable) {
       define.addEventListener('click', (event) => {
-        e.preventDefault()
-        e.stopPropagation()
+        event.preventDefault()
+        event.stopPropagation()
         this.fetch()
         this.onDefine()
         this.wrapper.classList.remove('undefined')
@@ -80,7 +82,7 @@ class BaseElement {
     if (!this.properties.inheritable || own) return this.builder.getter(this.field)
     const path = this.field.split('.')
     const key = path[path.length - 1]
-    return this.obj.getOption(key)
+    return this.obj.getOption(key) || SCHEMA[key]?.default
   }
 
   toHTML() {
@@ -110,13 +112,16 @@ class BaseElement {
 
   buildLabel() {
     if (this.properties.label) {
-      this.label = L.DomUtil.create('label', '', this.getLabelParent())
-      this.label.textContent = this.label.title = this.properties.label
+      const label = this.properties.label
+      this.label = Utils.loadTemplate(`<label title="${label}">${label}</label>`)
+      const parent = this.getLabelParent()
+      parent.appendChild(this.label)
       if (this.properties.helpEntries) {
         this.builder._umap.help.button(this.label, this.properties.helpEntries)
       } else if (this.properties.helpTooltip) {
-        const info = L.DomUtil.create('i', 'info', this.label)
-        L.DomEvent.on(info, 'mouseover', () => {
+        const info = Utils.loadTemplate('<i class="info"></i>')
+        this.label.appendChild(info)
+        info.addEventListener('mouseover', () => {
           this.builder._umap.tooltip.open({
             anchor: info,
             content: this.properties.helpTooltip,
@@ -129,22 +134,23 @@ class BaseElement {
 
   buildHelpText() {
     if (this.properties.helpText) {
-      const container = L.DomUtil.create('small', 'help-text', this.getHelpTextParent())
-      container.innerHTML = this.properties.helpText
+      const container = Utils.loadTemplate(
+        `<small class="help-text">${Utils.escapeHTML(this.properties.helpText)}</small>`
+      )
+      const parent = this.getHelpTextParent()
+      parent.appendChild(container)
     }
   }
 
   fetch() {}
 
-  finish() {
-    this.fireAndForward('finish')
-  }
+  finish() {}
 
   onPostSync() {
     if (this.properties.callback) {
-      this.properties.callback(this.obj)
+      this.properties.callback(this)
     }
-    this.builder.onPostSync()
+    this.builder.onPostSync(this)
   }
 
   undefine() {
@@ -156,16 +162,15 @@ class BaseElement {
 
 Fields.Textarea = class extends BaseElement {
   build() {
-    this.input = L.DomUtil.create(
-      'textarea',
-      this.properties.className || '',
-      this.parentNode
-    )
-    if (this.properties.placeholder)
+    this.input = Utils.loadTemplate('<textarea></textarea>')
+    if (this.properties.className) this.input.classList.add(this.properties.className)
+    if (this.properties.placeholder) {
       this.input.placeholder = this.properties.placeholder
+    }
+    this.parentNode.appendChild(this.input)
     this.fetch()
-    L.DomEvent.on(this.input, 'input', this.sync, this)
-    L.DomEvent.on(this.input, 'keypress', this.onKeyPress, this)
+    this.input.addEventListener('input', () => this.sync())
+    this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
   }
 
   fetch() {
@@ -180,9 +185,10 @@ Fields.Textarea = class extends BaseElement {
     return this.input.value
   }
 
-  onKeyPress(e) {
-    if (e.key === 'Enter' && (e.shiftKey || e.ctrlKey)) {
-      L.DomEvent.stop(e)
+  onKeyPress(event) {
+    if (event.key === 'Enter' && (event.shiftKey || event.ctrlKey)) {
+      event.stopPropagation()
+      event.preventDefault()
       this.finish()
     }
   }
@@ -190,14 +196,14 @@ Fields.Textarea = class extends BaseElement {
 
 Fields.Input = class extends BaseElement {
   build() {
-    this.input = L.DomUtil.create(
-      'input',
-      this.properties.className || '',
-      this.parentNode
-    )
+    this.input = Utils.loadTemplate('<input />')
+    this.parentNode.appendChild(this.input)
     this.input.type = this.type()
     this.input.name = this.name
     this.input._helper = this
+    if (this.properties.className) {
+      this.input.classList.add(this.properties.className)
+    }
     if (this.properties.placeholder) {
       this.input.placeholder = this.properties.placeholder
     }
@@ -211,8 +217,8 @@ Fields.Input = class extends BaseElement {
       this.input.step = this.properties.step
     }
     this.fetch()
-    L.DomEvent.on(this.input, this.getSyncEvent(), this.sync, this)
-    L.DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
+    this.input.addEventListener(this.getSyncEvent(), () => this.sync())
+    this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
   }
 
   fetch() {
@@ -233,10 +239,12 @@ Fields.Input = class extends BaseElement {
     return this.input.value || undefined
   }
 
-  onKeyDown(e) {
-    if (e.key === 'Enter') {
-      L.DomEvent.stop(e)
+  onKeyDown(event) {
+    if (event.key === 'Enter') {
+      event.stopPropagation()
+      event.preventDefault()
       this.finish()
+      this.input.blur()
     }
   }
 }
@@ -249,8 +257,8 @@ Fields.BlurInput = class extends Fields.Input {
   build() {
     this.properties.className = 'blur'
     super.build()
-    const button = L.DomUtil.create('span', 'button blur-button')
-    L.DomUtil.after(this.input, button)
+    const button = Utils.loadTemplate('<span class="button blur-button"></span>')
+    this.input.parentNode.insertBefore(button, this.input.nextSibling)
     this.input.addEventListener('focus', () => this.fetch())
   }
 
@@ -312,7 +320,11 @@ Fields.CheckBox = class extends BaseElement {
   build() {
     const container = Utils.loadTemplate('<div class="checkbox-wrapper"></div>')
     this.parentNode.appendChild(container)
-    this.input = L.DomUtil.create('input', this.properties.className || '', container)
+    this.input = Utils.loadTemplate('<input />')
+    container.appendChild(this.input)
+    if (this.properties.className) {
+      this.input.classList.add(this.properties.className)
+    }
     this.input.type = 'checkbox'
     this.input.name = this.name
     this.input._helper = this
@@ -340,11 +352,11 @@ Fields.CheckBox = class extends BaseElement {
 
 Fields.Select = class extends BaseElement {
   build() {
-    this.select = L.DomUtil.create('select', '', this.parentNode)
-    this.select.name = this.name
+    this.select = Utils.loadTemplate(`<select name="${this.name}"></select>`)
+    this.parentNode.appendChild(this.select)
     this.validValues = []
     this.buildOptions()
-    L.DomEvent.on(this.select, 'change', this.sync, this)
+    this.select.addEventListener('change', () => this.sync())
   }
 
   getOptions() {
@@ -365,7 +377,8 @@ Fields.Select = class extends BaseElement {
 
   buildOption(value, label) {
     this.validValues.push(value)
-    const option = L.DomUtil.create('option', '', this.select)
+    const option = Utils.loadTemplate('<option></option>')
+    this.select.appendChild(option)
     option.value = value
     option.innerHTML = label
     if (this.toHTML() === value) {
@@ -374,8 +387,9 @@ Fields.Select = class extends BaseElement {
   }
 
   value() {
-    if (this.select[this.select.selectedIndex])
+    if (this.select[this.select.selectedIndex]) {
       return this.select[this.select.selectedIndex].value
+    }
   }
 
   getDefault() {
@@ -431,15 +445,14 @@ Fields.NullableBoolean = class extends Fields.Select {
 
 Fields.EditableText = class extends BaseElement {
   build() {
-    this.input = L.DomUtil.create(
-      'span',
-      this.properties.className || '',
-      this.parentNode
+    this.input = Utils.loadTemplate(
+      `<span class="${this.properties.className || ''}"></span>`
     )
+    this.parentNode.appendChild(this.input)
     this.input.contentEditable = true
     this.fetch()
-    L.DomEvent.on(this.input, 'input', this.sync, this)
-    L.DomEvent.on(this.input, 'keypress', this.onKeyPress, this)
+    this.input.addEventListener('input', () => this.sync())
+    this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
   }
 
   getParentNode() {
@@ -475,21 +488,21 @@ Fields.ColorPicker = class extends Fields.Input {
   build() {
     super.build()
     this.input.placeholder = this.properties.placeholder || translate('Inherit')
-    this.container = L.DomUtil.create(
-      'div',
-      'umap-color-picker',
-      this.extendedContainer
-    )
+    this.container = Utils.loadTemplate('<div class="umap-color-picker"></div>')
+    this.extendedContainer.appendChild(this.container)
     this.container.style.display = 'none'
-    for (const idx in this.colors) {
-      this.addColor(this.colors[idx])
+    for (const color of this.getColors()) {
+      this.addColor(color)
     }
     this.spreadColor()
     this.input.autocomplete = 'off'
-    L.DomEvent.on(this.input, 'focus', this.onFocus, this)
-    L.DomEvent.on(this.input, 'blur', this.onBlur, this)
-    L.DomEvent.on(this.input, 'change', this.sync, this)
-    this.on('define', this.onFocus)
+    this.input.addEventListener('focus', (event) => this.onFocus(event))
+    this.input.addEventListener('blur', (event) => this.onBlur(event))
+    this.input.addEventListener('change', () => this.sync())
+  }
+
+  onDefine() {
+    this.onFocus()
   }
 
   onFocus() {
@@ -516,14 +529,15 @@ Fields.ColorPicker = class extends Fields.Input {
   }
 
   addColor(colorName) {
-    const span = L.DomUtil.create('span', '', this.container)
+    const span = Utils.loadTemplate('<span></span>')
+    this.container.appendChild(span)
     span.style.backgroundColor = span.title = colorName
-    const updateColorInput = function () {
+    const updateColorInput = () => {
       this.input.value = colorName
       this.sync()
       this.container.style.display = 'none'
     }
-    L.DomEvent.on(span, 'mousedown', updateColorInput, this)
+    span.addEventListener('mousedown', updateColorInput)
   }
 }
 
@@ -668,12 +682,20 @@ Fields.IconUrl = class extends Fields.BlurInput {
 
   build() {
     super.build()
-    this.buttons = L.DomUtil.create('div', '', this.parentNode)
-    this.tabs = L.DomUtil.create('div', 'flat-tabs', this.parentNode)
-    this.body = L.DomUtil.create('div', 'umap-pictogram-body', this.parentNode)
-    this.footer = L.DomUtil.create('div', '', this.parentNode)
+    const [container, { buttons, tabs, body, footer }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <div data-ref=buttons></div>
+        <div class="flat-tabs" data-ref=tabs></div>
+        <div class="umap-pictogram-body" data-ref=body></div>
+        <div data-ref=footer></div>
+      </div>
+    `)
+    this.parentNode.appendChild(container)
+    this.buttons = buttons
+    this.tabs = tabs
+    this.body = body
+    this.footer = footer
     this.updatePreview()
-    this.on('define', this.onDefine)
   }
 
   async onDefine() {
@@ -689,72 +711,64 @@ Fields.IconUrl = class extends Fields.BlurInput {
     else if (!value || Utils.isPath(value)) this.showSymbolsTab()
     else if (Utils.isRemoteUrl(value) || Utils.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
-    const closeButton = L.DomUtil.createButton(
-      'button action-button',
-      this.footer,
-      translate('Close'),
-      function (e) {
-        this.body.innerHTML = ''
-        this.tabs.innerHTML = ''
-        this.footer.innerHTML = ''
-        if (this.isDefault()) this.undefine(e)
-        else this.updatePreview()
-      },
-      this
+    const closeButton = Utils.loadTemplate(
+      `<button type="button" class="button action-button">${translate('Close')}</button>`
     )
+    closeButton.addEventListener('click', () => {
+      this.body.innerHTML = ''
+      this.tabs.innerHTML = ''
+      this.footer.innerHTML = ''
+      if (this.isDefault()) this.undefine()
+      else this.updatePreview()
+    })
+    this.footer.appendChild(closeButton)
   }
 
   buildTabs() {
     this.tabs.innerHTML = ''
-    if (U.Icon.RECENT.length) {
-      const recent = L.DomUtil.add(
-        'button',
-        'flat tab-recent',
-        this.tabs,
-        translate('Recent')
-      )
-      L.DomEvent.on(recent, 'click', L.DomEvent.stop).on(
-        recent,
-        'click',
-        this.showRecentTab,
-        this
-      )
+    // Useless div, but loadTemplate needs a root element
+    const [root, { recent, symbols, chars, url }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <button class="flat tab-recent" data-ref=recent>${translate('Recent')}</button>
+        <button class="flat tab-symbols" data-ref=symbols>${translate('Symbol')}</button>
+        <button class="flat tab-chars" data-ref=chars>${translate('Emoji & Character')}</button>
+        <button class="flat tab-url" data-ref=url>${translate('URL')}</button>
+      </div>
+    `)
+    this.tabs.appendChild(root)
+    if (Icon.RECENT.length) {
+      recent.addEventListener('click', (event) => {
+        event.stopPropagation()
+        event.preventDefault()
+        this.showRecentTab()
+      })
+    } else {
+      recent.hidden = true
     }
-    const symbol = L.DomUtil.add(
-      'button',
-      'flat tab-symbols',
-      this.tabs,
-      translate('Symbol')
-    )
-    const char = L.DomUtil.add(
-      'button',
-      'flat tab-chars',
-      this.tabs,
-      translate('Emoji & Character')
-    )
-    url = L.DomUtil.add('button', 'flat tab-url', this.tabs, translate('URL'))
-    L.DomEvent.on(symbol, 'click', L.DomEvent.stop).on(
-      symbol,
-      'click',
-      this.showSymbolsTab,
-      this
-    )
-    L.DomEvent.on(char, 'click', L.DomEvent.stop).on(
-      char,
-      'click',
-      this.showCharsTab,
-      this
-    )
-    L.DomEvent.on(url, 'click', L.DomEvent.stop).on(url, 'click', this.showURLTab, this)
+    symbols.addEventListener('click', (event) => {
+      event.stopPropagation()
+      event.preventDefault()
+      this.showSymbolsTab()
+    })
+    chars.addEventListener('click', (event) => {
+      event.stopPropagation()
+      event.preventDefault()
+      this.showCharsTab()
+    })
+    url.addEventListener('click', (event) => {
+      event.stopPropagation()
+      event.preventDefault()
+      this.showURLTab()
+    })
   }
 
   openTab(name) {
     const els = this.tabs.querySelectorAll('button')
     for (const el of els) {
-      L.DomUtil.removeClass(el, 'on')
+      el.classList.remove('on')
     }
     const el = this.tabs.querySelector(`.tab-${name}`)
-    L.DomUtil.addClass(el, 'on')
+    el.classList.add('on')
     this.body.innerHTML = ''
   }
 
@@ -763,17 +777,17 @@ Fields.IconUrl = class extends Fields.BlurInput {
     if (this.isDefault()) return
     if (!Utils.hasVar(this.value())) {
       // Do not try to render URL with variables
-      const box = L.DomUtil.create('div', 'umap-pictogram-choice', this.buttons)
-      L.DomEvent.on(box, 'click', this.onDefine, this)
-      const icon = U.Icon.makeElement(this.value(), box)
+      const box = Utils.loadTemplate('<div class="umap-pictogram-choice"></div>')
+      this.buttons.appendChild(box)
+      box.addEventListener('click', () => this.onDefine())
+      const icon = Icon.makeElement(this.value(), box)
     }
-    this.button = L.DomUtil.createButton(
-      'button action-button',
-      this.buttons,
-      this.value() ? translate('Change') : translate('Add'),
-      this.onDefine,
-      this
+    const text = this.value() ? translate('Change') : translate('Add')
+    const button = Utils.loadTemplate(
+      `<button type="button" class="button action-button">${text}</button>`
     )
+    button.addEventListener('click', () => this.onDefine())
+    this.buttons.appendChild(button)
   }
 
   addIconPreview(pictogram, parent) {
@@ -785,20 +799,17 @@ Fields.IconUrl = class extends Fields.BlurInput {
       : pictogram.name || pictogram.src
     if (search && Utils.normalize(title).indexOf(search) === -1) return
     const className = value === this.value() ? `${baseClass} selected` : baseClass
-    const container = L.DomUtil.create('div', className, parent)
-    U.Icon.makeElement(value, container)
-    container.title = title
-    L.DomEvent.on(
-      container,
-      'click',
-      function (e) {
-        this.input.value = value
-        this.sync()
-        this.unselectAll(this.grid)
-        L.DomUtil.addClass(container, 'selected')
-      },
-      this
+    const container = Utils.loadTemplate(
+      `<div class="${className}" title="${title}"></div>`
     )
+    parent.appendChild(container)
+    Icon.makeElement(value, container)
+    container.addEventListener('click', () => {
+      this.input.value = value
+      this.sync()
+      this.unselectAll(this.grid)
+      container.classList.add('selected')
+    })
     return true // Icon has been added (not filtered)
   }
 
@@ -811,14 +822,17 @@ Fields.IconUrl = class extends Fields.BlurInput {
   }
 
   addCategory(items, name) {
-    const parent = L.DomUtil.create('div', 'umap-pictogram-category')
-    if (name) L.DomUtil.add('h6', '', parent, name)
-    const grid = L.DomUtil.create('div', 'umap-pictogram-grid', parent)
-    let status = false
+    const [parent, { grid }] = Utils.loadTemplateWithRefs(`
+      <div class="umap-pictogram-category">
+        <h6 hidden=${!name}>${name}</h6>
+        <div class="umap-pictogram-grid" data-ref=grid></div>
+      </div>
+    `)
+    let hasIcons = false
     for (const item of items) {
-      status = this.addIconPreview(item, grid) || status
+      hasIcons = this.addIconPreview(item, grid) || hasIcons
     }
-    if (status) this.grid.appendChild(parent)
+    if (hasIcons) this.grid.appendChild(parent)
   }
 
   buildSymbolsList() {
@@ -847,33 +861,35 @@ Fields.IconUrl = class extends Fields.BlurInput {
   }
 
   isDefault() {
-    return !this.value() || this.value() === U.SCHEMA.iconUrl.default
+    return !this.value() || this.value() === SCHEMA.iconUrl.default
   }
 
   addGrid(onSearch) {
-    this.searchInput = L.DomUtil.create('input', '', this.body)
-    this.searchInput.type = 'search'
-    this.searchInput.placeholder = translate('Search')
-    this.grid = L.DomUtil.create('div', '', this.body)
-    L.DomEvent.on(this.searchInput, 'input', onSearch, this)
+    this.searchInput = Utils.loadTemplate(
+      `<input type="search" placeholder="${translate('Search')}" />`
+    )
+    this.grid = Utils.loadTemplate('<div></div>')
+    this.body.appendChild(this.searchInput)
+    this.body.appendChild(this.grid)
+    this.searchInput.addEventListener('input', onSearch)
   }
 
   showRecentTab() {
-    if (!U.Icon.RECENT.length) return
+    if (!Icon.RECENT.length) return
     this.openTab('recent')
-    this.addGrid(this.buildRecentList)
+    this.addGrid(() => this.buildRecentList())
     this.buildRecentList()
   }
 
   showSymbolsTab() {
     this.openTab('symbols')
-    this.addGrid(this.buildSymbolsList)
+    this.addGrid(() => this.buildSymbolsList())
     this.buildSymbolsList()
   }
 
   showCharsTab() {
     this.openTab('chars')
-    const value = !U.Icon.isImg(this.value()) ? this.value() : null
+    const value = !Icon.isImg(this.value()) ? this.value() : null
     const input = this.buildInput(this.body, value)
     input.placeholder = translate('Type char or paste emoji')
     input.type = 'text'
@@ -891,10 +907,12 @@ Fields.IconUrl = class extends Fields.BlurInput {
   }
 
   buildInput(parent, value) {
-    const input = L.DomUtil.create('input', 'blur', parent)
-    const button = L.DomUtil.create('span', 'button blur-button', parent)
+    const input = Utils.loadTemplate('<input class="blur" />')
+    const button = Utils.loadTemplate('<span class="button blur-button"></span>')
+    parent.appendChild(input)
+    parent.appendChild(button)
     if (value) input.value = value
-    L.DomEvent.on(input, 'blur', () => {
+    input.addEventListener('blur', () => {
       // Do not clear this.input when focus-blur
       // empty input
       if (input.value === value) return
@@ -926,33 +944,34 @@ Fields.Switch = class extends Fields.CheckBox {
 
   build() {
     super.build()
-    console.log(this)
     if (this.properties.inheritable) {
       this.label = Utils.loadTemplate('<label></label>')
     }
     this.input.parentNode.appendChild(this.label)
-    L.DomUtil.addClass(this.input.parentNode, 'with-switch')
+    this.input.parentNode.classList.add('with-switch')
     const id = `${this.builder.properties.id || Date.now()}.${this.name}`
     this.label.setAttribute('for', id)
-    L.DomUtil.addClass(this.input, 'switch')
+    this.input.classList.add('switch')
     this.input.id = id
   }
 }
 
 Fields.FacetSearchBase = class extends BaseElement {
-  buildLabel() {
-    this.label = L.DomUtil.element({
-      tagName: 'legend',
-      textContent: this.properties.label,
-    })
-  }
+  buildLabel() {}
 }
 
 Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   build() {
-    this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
-    this.container.appendChild(this.label)
-    this.ul = L.DomUtil.create('ul', '', this.container)
+    const [container, { ul, label }] = Utils.loadTemplateWithRefs(`
+      <fieldset class="umap-facet">
+        <legend data-ref=label>${Utils.escapeHTML(this.properties.label)}</legend>
+        <ul data-ref=ul></ul>
+      </fieldset>
+      `)
+    this.container = container
+    this.ul = ul
+    this.label = label
+    this.parentNode.appendChild(this.container)
     this.type = this.properties.criteria.type
 
     const choices = this.properties.criteria.choices
@@ -961,17 +980,20 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   }
 
   buildLi(value) {
-    const property_li = L.DomUtil.create('li', '', this.ul)
-    const label = L.DomUtil.create('label', '', property_li)
-    const input = L.DomUtil.create('input', '', label)
-    L.DomUtil.add('span', '', label, value)
-
-    input.type = this.type
-    input.name = `${this.type}_${this.name}`
+    const name = `${this.type}_${this.name}`
+    const [li, { input, label }] = Utils.loadTemplateWithRefs(`
+      <li>
+        <label>
+          <input type="${this.type}" name="${name}" data-ref=input />
+          <span data-ref=label></span>
+        </label>
+      </li>
+    `)
+    label.textContent = value
     input.checked = this.get().choices.includes(value)
     input.dataset.value = value
-
-    L.DomEvent.on(input, 'change', (e) => this.sync())
+    input.addEventListener('change', () => this.sync())
+    this.ul.appendChild(li)
   }
 
   toJS() {
@@ -998,26 +1020,27 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
   }
 
   build() {
-    this.container = L.DomUtil.create('fieldset', 'umap-facet', this.parentNode)
-    this.container.appendChild(this.label)
+    const [minLabel, maxLabel] = this.getLabels()
     const { min, max, type } = this.properties.criteria
     const { min: modifiedMin, max: modifiedMax } = this.get()
 
     const currentMin = modifiedMin !== undefined ? modifiedMin : min
     const currentMax = modifiedMax !== undefined ? modifiedMax : max
     this.type = type
-    this.inputType = this.getInputType(this.type)
-
-    const [minLabel, maxLabel] = this.getLabels()
-
-    this.minLabel = L.DomUtil.create('label', '', this.container)
-    this.minLabel.textContent = minLabel
-
-    this.minInput = L.DomUtil.create('input', '', this.minLabel)
-    this.minInput.type = this.inputType
-    this.minInput.step = 'any'
-    this.minInput.min = this.prepareForHTML(min)
-    this.minInput.max = this.prepareForHTML(max)
+    const inputType = this.getInputType(this.type)
+    const minHTML = this.prepareForHTML(min)
+    const maxHTML = this.prepareForHTML(max)
+    const [container, { minInput, maxInput }] = Utils.loadTemplateWithRefs(`
+      <fieldset class="umap-facet">
+        <legend>${Utils.escapeHTML(this.properties.label)}</legend>
+        <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
+        <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
+      </fieldset>
+    `)
+    this.container = container
+    this.minInput = minInput
+    this.maxInput = maxInput
+    this.parentNode.appendChild(this.container)
     if (min != null) {
       // The value stored using setAttribute is not modified by
       // user input, and will be used as initial value when calling
@@ -1029,14 +1052,6 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
       this.minInput.value = this.prepareForHTML(currentMin)
     }
 
-    this.maxLabel = L.DomUtil.create('label', '', this.container)
-    this.maxLabel.textContent = maxLabel
-
-    this.maxInput = L.DomUtil.create('input', '', this.maxLabel)
-    this.maxInput.type = this.inputType
-    this.maxInput.step = 'any'
-    this.maxInput.min = this.prepareForHTML(min)
-    this.maxInput.max = this.prepareForHTML(max)
     if (max != null) {
       // Cf comment above about setAttribute vs value
       this.maxInput.setAttribute('value', this.prepareForHTML(max))
@@ -1044,8 +1059,8 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
     }
     this.toggleStatus()
 
-    L.DomEvent.on(this.minInput, 'change', () => this.sync())
-    L.DomEvent.on(this.maxInput, 'change', () => this.sync())
+    this.minInput.addEventListener('change', () => this.sync())
+    this.maxInput.addEventListener('change', () => this.sync())
   }
 
   toggleStatus() {
@@ -1126,6 +1141,7 @@ Fields.MultiChoice = class extends BaseElement {
   getDefault() {
     return 'null'
   }
+  // TODO: use public property when it's in our baseline
   getClassName() {
     return 'umap-multiplechoice'
   }
@@ -1160,11 +1176,10 @@ Fields.MultiChoice = class extends BaseElement {
 
   build() {
     const choices = this.getChoices()
-    this.container = L.DomUtil.create(
-      'div',
-      `${this.className} by${choices.length}`,
-      this.parentNode
+    this.container = Utils.loadTemplate(
+      `<div class="${this.getClassName()} by${choices.length}"></div>`
     )
+    this.parentNode.appendChild(this.container)
     for (const [i, [value, label]] of choices.entries()) {
       this.addChoice(value, label, i)
     }
@@ -1172,15 +1187,15 @@ Fields.MultiChoice = class extends BaseElement {
   }
 
   addChoice(value, label, counter) {
-    const input = L.DomUtil.create('input', '', this.container)
-    label = L.DomUtil.add('label', '', this.container, label)
-    input.type = 'radio'
-    input.name = this.name
-    input.value = value
     const id = `${Date.now()}.${this.name}.${counter}`
-    label.setAttribute('for', id)
-    input.id = id
-    L.DomEvent.on(input, 'change', this.sync, this)
+    const input = Utils.loadTemplate(
+      `<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
+    )
+    this.container.appendChild(input)
+    this.container.appendChild(
+      Utils.loadTemplate(`<label for="${id}">${label}</label>`)
+    )
+    input.addEventListener('change', () => this.sync())
   }
 }
 
@@ -1261,13 +1276,10 @@ Fields.Range = class extends Fields.FloatInput {
         digits
       )}"></option>`
     }
-    const datalist = L.DomUtil.element({
-      tagName: 'datalist',
-      parent: this.getHelpTextParent(),
-      className: 'umap-field-datalist',
-      safeHTML: options,
-      id: id,
-    })
+    const parent = this.getHelpTextParent()
+    const datalist = Utils.loadTemplate(
+      `<datalist class="umap-field-datalist" id="${id}">${options}</datalist>`
+    )
     this.input.setAttribute('list', id)
     super.buildHelpText()
   }

@@ -16,6 +16,7 @@ import {
   MaskPolygon,
 } from '../rendering/ui.js'
 import loadPopup from '../rendering/popup.js'
+import { MutatingForm } from '../form/builder.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -225,7 +226,7 @@ class Feature {
       `icon-${this.getClassName()}`
     )
 
-    let builder = new U.FormBuilder(
+    let builder = new MutatingForm(
       this,
       [['datalayer', { handler: 'DataLayerSwitcher' }]],
       {
@@ -254,7 +255,7 @@ class Feature {
       labelKeyFound = U.DEFAULT_LABEL_KEY
     }
     properties.unshift([`properties.${labelKeyFound}`, { label: labelKeyFound }])
-    builder = new U.FormBuilder(this, properties, {
+    builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
     container.appendChild(builder.build())
@@ -285,7 +286,7 @@ class Feature {
 
   appendEditFieldsets(container) {
     const optionsFields = this.getShapeOptions()
-    let builder = new U.FormBuilder(this, optionsFields, {
+    let builder = new MutatingForm(this, optionsFields, {
       id: 'umap-feature-shape-properties',
     })
     const shapeProperties = DomUtil.createFieldset(
@@ -295,7 +296,7 @@ class Feature {
     shapeProperties.appendChild(builder.build())
 
     const advancedOptions = this.getAdvancedOptions()
-    builder = new U.FormBuilder(this, advancedOptions, {
+    builder = new MutatingForm(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
     })
     const advancedProperties = DomUtil.createFieldset(
@@ -305,7 +306,7 @@ class Feature {
     advancedProperties.appendChild(builder.build())
 
     const interactionOptions = this.getInteractionOptions()
-    builder = new U.FormBuilder(this, interactionOptions)
+    builder = new MutatingForm(this, interactionOptions)
     const popupFieldset = DomUtil.createFieldset(
       container,
       translate('Interaction options')
@@ -733,7 +734,7 @@ export class Point extends Feature {
       ['ui._latlng.lat', { handler: 'FloatInput', label: translate('Latitude') }],
       ['ui._latlng.lng', { handler: 'FloatInput', label: translate('Longitude') }],
     ]
-    const builder = new U.FormBuilder(this, coordinatesOptions, {
+    const builder = new MutatingForm(this, coordinatesOptions, {
       callback: () => {
         if (!this.ui._latlng.isValid()) {
           Alert.error(translate('Invalid latitude or longitude'))

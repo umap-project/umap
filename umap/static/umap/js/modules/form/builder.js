@@ -13,7 +13,7 @@ export class Form {
       this.form.id = this.properties.id
     }
     if (this.properties.className) {
-      this.form.classList.add(this.properties.className)
+      this.form.classList.add(...this.properties.className.split(' '))
     }
   }
 
@@ -108,14 +108,16 @@ export class Form {
     }
   }
 
-  onPostSync() {
+  onPostSync(helper) {
     if (this.properties.callback) {
-      this.properties.callback(this.obj)
+      this.properties.callback(helper)
     }
   }
+
+  finish() {}
 }
 
-export class DataForm extends Form {
+export class MutatingForm extends Form {
   constructor(obj, fields, properties) {
     super(obj, fields, properties)
     this._umap = obj._umap || properties.umap
@@ -188,22 +190,7 @@ export class DataForm extends Form {
     }
   }
 
-  getter(field) {
-    const path = field.split('.')
-    let value = this.obj
-    let sub
-    for (sub of path) {
-      try {
-        value = value[sub]
-      } catch {
-        console.log(field)
-      }
-    }
-    if (value === undefined) value = SCHEMA[sub]?.default
-    return value
-  }
-
-  finish(event) {
-    event.helper?.input?.blur()
+  finish(helper) {
+    helper.input?.blur()
   }
 }

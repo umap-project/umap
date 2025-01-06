@@ -60,8 +60,8 @@ def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):
     # Hide them
     page.get_by_text("User interface options").click()
     hide_zoom_controls = (
-        page.locator("div")
-        .filter(has_text=re.compile(r"^Display the zoom control"))
+        page.locator(".panel")
+        .filter(has_text=re.compile("Display the zoom control"))
         .locator("label")
         .nth(2)
     )
