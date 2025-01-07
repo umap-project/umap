@@ -1,3 +1,4 @@
+.umap-form-inline .formbox,
 .umap-form-inline {
     display: inline;
 }
@@ -559,7 +560,6 @@ i.info {
     clear: both;
     margin-bottom: 20px;
     overflow: hidden;
-    display: none;
 }
 .umap-color-picker span {
     width: 20px;

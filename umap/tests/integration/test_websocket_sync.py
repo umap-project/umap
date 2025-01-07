@@ -187,9 +187,11 @@ def test_websocket_connection_can_sync_map_properties(
     # Zoom control is synced
     peerB.get_by_role("link", name="Map advanced properties").click()
     peerB.locator("summary").filter(has_text="User interface options").click()
-    peerB.locator("div").filter(
-        has_text=re.compile(r"^Display the zoom control")
-    ).locator("label").nth(2).click()
+    switch = peerB.locator("div.formbox").filter(
+        has_text=re.compile("Display the zoom control")
+    )
+    expect(switch).to_be_visible()
+    switch.get_by_text("Never").click()
 
     expect(peerA.locator(".leaflet-control-zoom")).to_be_hidden()
 

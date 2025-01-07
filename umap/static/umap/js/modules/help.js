@@ -228,7 +228,9 @@ export default class Help {
 
   parse(container) {
     for (const element of container.querySelectorAll('[data-help]')) {
-      this.button(element, element.dataset.help.split(','))
+      if (element.dataset.help) {
+        this.button(element, element.dataset.help.split(','))
+      }
     }
   }
 

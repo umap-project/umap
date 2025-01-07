@@ -416,9 +416,11 @@ export function loadTemplate(html) {
 }
 
 export function loadTemplateWithRefs(html) {
-  const element = loadTemplate(html)
+  const template = document.createElement('template')
+  template.innerHTML = html
+  const element = template.content.firstElementChild
   const elements = {}
-  for (const node of element.querySelectorAll('[data-ref]')) {
+  for (const node of template.content.querySelectorAll('[data-ref]')) {
     elements[node.dataset.ref] = node
   }
   return [element, elements]

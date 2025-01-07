@@ -655,7 +655,7 @@ export class DataLayer extends ServerStored {
         {
           label: translate('Data is browsable'),
           handler: 'Switch',
-          helpEntries: 'browsable',
+          helpEntries: ['browsable'],
         },
       ],
       [

@@ -1,6 +1,7 @@
 import getClass from './fields.js'
 import * as Utils from '../utils.js'
 import { SCHEMA } from '../schema.js'
+import { translate } from '../i18n.js'
 
 export class Form {
   constructor(obj, fields, properties) {
@@ -35,9 +36,8 @@ export class Form {
   }
 
   buildField(field) {
-    field.buildLabel()
+    field.buildTemplate()
     field.build()
-    field.buildHelpText()
   }
 
   makeField(field) {
@@ -115,6 +115,14 @@ export class Form {
   }
 
   finish() {}
+
+  getTemplate(helper) {
+    return `
+      <div class="formbox" data-ref=container>
+        ${helper.getTemplate()}
+        <small class="help-text" data-ref=helpText></small>
+      </div>`
+  }
 }
 
 export class MutatingForm extends Form {
@@ -188,6 +196,40 @@ export class MutatingForm extends Form {
     if ('sync' in this.obj) {
       this.obj.sync.update(field, value)
     }
+  }
+
+  getTemplate(helper) {
+    let template
+    if (helper.properties.inheritable) {
+      const extraClassName = helper.get(true) === undefined ? ' undefined' : ''
+      template = `
+        <div class="umap-field-${helper.name} formbox inheritable${extraClassName}">
+          <div class="header" data-ref=header>
+            <a href="#" class="button undefine" data-ref=undefine>${translate('clear')}</a>
+            <a href="#" class="button define" data-ref=define>${translate('define')}</a>
+            <span class="quick-actions show-on-defined" data-ref=actions></span>
+            ${helper.getLabelTemplate()}
+          </div>
+          <div class="show-on-defined" data-ref=container>
+            ${helper.getTemplate()}
+            <small class="help-text" data-ref=helpText></small>
+          </div>
+        </div>`
+    } else {
+      template = `
+      <div class="formbox umap-field-${helper.name}" data-ref=container>
+        ${helper.getLabelTemplate()}
+        ${helper.getTemplate()}
+        <small class="help-text" data-ref=helpText></small>
+      </div>`
+    }
+    return template
+  }
+
+  build() {
+    super.build()
+    this._umap.help.parse(this.form)
+    return this.form
   }
 
   finish(helper) {

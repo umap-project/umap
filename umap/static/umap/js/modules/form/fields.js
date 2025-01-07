@@ -25,53 +25,55 @@ class BaseElement {
     this.setProperties(properties)
     this.fieldEls = this.field.split('.')
     this.name = this.builder.getName(field)
-    this.parentNode = this.getParentNode()
+    this.id = `${this.builder.properties.id || Date.now()}.${this.name}`
+  }
+
+  getDefaultProperties() {
+    return {}
   }
 
   setProperties(properties) {
-    this.properties = Object.assign({}, this.properties, properties)
+    this.properties = Object.assign(
+      this.getDefaultProperties(),
+      this.properties,
+      properties
+    )
   }
 
   onDefine() {}
 
-  getParentNode() {
-    const classNames = ['formbox']
-    if (this.properties.inheritable) {
-      classNames.push('inheritable')
-      if (this.get(true) === undefined) classNames.push('undefined')
+  buildTemplate() {
+    const template = this.builder.getTemplate(this)
+    const [root, elements] = Utils.loadTemplateWithRefs(template)
+    this.root = root
+    this.elements = elements
+    this.container = elements.container
+    this.form.appendChild(this.root)
+  }
+
+  getTemplate() {
+    return ''
+  }
+
+  build() {
+    if (this.properties.helpText) {
+      this.elements.helpText.textContent = this.properties.helpText
+    } else {
+      this.elements.helpText.hidden = true
     }
-    classNames.push(`umap-field-${this.name}`)
-    const [wrapper, { header, define, undefine, quickContainer, container }] =
-      Utils.loadTemplateWithRefs(`
-      <div>
-        <div class="header" data-ref=header>
-          <a href="#" class="button undefine" data-ref=undefine>${translate('clear')}</a>
-          <a href="#" class="button define" data-ref=define>${translate('define')}</a>
-          <span class="quick-actions show-on-defined" data-ref=quickContainer></span>
-        </div>
-        <div class="show-on-defined" data-ref=container></div>
-      </div>`)
-    this.wrapper = wrapper
-    this.wrapper.classList.add(...classNames)
-    this.header = header
-    this.form.appendChild(this.wrapper)
-    if (this.properties.inheritable) {
-      define.addEventListener('click', (event) => {
+
+    if (this.elements.define) {
+      this.elements.define.addEventListener('click', (event) => {
         event.preventDefault()
         event.stopPropagation()
         this.fetch()
         this.onDefine()
-        this.wrapper.classList.remove('undefined')
+        this.root.classList.remove('undefined')
       })
-      undefine.addEventListener('click', () => this.undefine())
-    } else {
-      define.hidden = true
-      undefine.hidden = true
     }
-
-    this.quickContainer = quickContainer
-    this.extendedContainer = container
-    return this.extendedContainer
+    if (this.elements.undefine) {
+      this.elements.undefine.addEventListener('click', () => this.undefine())
+    }
   }
 
   clear() {
@@ -102,44 +104,12 @@ class BaseElement {
     this.builder.setter(this.field, this.toJS())
   }
 
-  getLabelParent() {
-    return this.header
-  }
-
-  getHelpTextParent() {
-    return this.parentNode
-  }
-
-  buildLabel() {
-    if (this.properties.label) {
-      const label = this.properties.label
-      this.label = Utils.loadTemplate(`<label title="${label}">${label}</label>`)
-      const parent = this.getLabelParent()
-      parent.appendChild(this.label)
-      if (this.properties.helpEntries) {
-        this.builder._umap.help.button(this.label, this.properties.helpEntries)
-      } else if (this.properties.helpTooltip) {
-        const info = Utils.loadTemplate('<i class="info"></i>')
-        this.label.appendChild(info)
-        info.addEventListener('mouseover', () => {
-          this.builder._umap.tooltip.open({
-            anchor: info,
-            content: this.properties.helpTooltip,
-            position: 'top',
-          })
-        })
-      }
-    }
-  }
-
-  buildHelpText() {
-    if (this.properties.helpText) {
-      const container = Utils.loadTemplate(
-        `<small class="help-text">${Utils.escapeHTML(this.properties.helpText)}</small>`
-      )
-      const parent = this.getHelpTextParent()
-      parent.appendChild(container)
-    }
+  getLabelTemplate() {
+    const label = this.properties.label
+    const help = this.properties.helpEntries?.join() || ''
+    return label
+      ? `<label title="${label}" data-ref=label data-help="${help}">${label}</label>`
+      : ''
   }
 
   fetch() {}
@@ -154,35 +124,35 @@ class BaseElement {
   }
 
   undefine() {
-    this.wrapper.classList.add('undefined')
+    this.root.classList.add('undefined')
     this.clear()
     this.sync()
   }
 }
 
 Fields.Textarea = class extends BaseElement {
+  getTemplate() {
+    return `<textarea placeholder="${this.properties.placeholder || ''}" data-ref=textarea></textarea>`
+  }
+
   build() {
-    this.input = Utils.loadTemplate('<textarea></textarea>')
-    if (this.properties.className) this.input.classList.add(this.properties.className)
-    if (this.properties.placeholder) {
-      this.input.placeholder = this.properties.placeholder
-    }
-    this.parentNode.appendChild(this.input)
+    super.build()
+    this.textarea = this.elements.textarea
     this.fetch()
-    this.input.addEventListener('input', () => this.sync())
-    this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
+    this.textarea.addEventListener('input', () => this.sync())
+    this.textarea.addEventListener('keypress', (event) => this.onKeyPress(event))
   }
 
   fetch() {
     const value = this.toHTML()
     this.initial = value
     if (value) {
-      this.input.value = value
+      this.textarea.value = value
     }
   }
 
   value() {
-    return this.input.value
+    return this.textarea.value
   }
 
   onKeyPress(event) {
@@ -195,17 +165,16 @@ Fields.Textarea = class extends BaseElement {
 }
 
 Fields.Input = class extends BaseElement {
+  getTemplate() {
+    return `<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
+  }
+
   build() {
-    this.input = Utils.loadTemplate('<input />')
-    this.parentNode.appendChild(this.input)
-    this.input.type = this.type()
-    this.input.name = this.name
+    super.build()
+    this.input = this.elements.input
     this.input._helper = this
     if (this.properties.className) {
       this.input.classList.add(this.properties.className)
-    }
-    if (this.properties.placeholder) {
-      this.input.placeholder = this.properties.placeholder
     }
     if (this.properties.min !== undefined) {
       this.input.min = this.properties.min
@@ -254,11 +223,13 @@ Fields.BlurInput = class extends Fields.Input {
     return 'blur'
   }
 
+  getTemplate() {
+    return `${super.getTemplate()}<span class="button blur-button"></span>`
+  }
+
   build() {
     this.properties.className = 'blur'
     super.build()
-    const button = Utils.loadTemplate('<span class="button blur-button"></span>')
-    this.input.parentNode.insertBefore(button, this.input.nextSibling)
     this.input.addEventListener('focus', () => this.fetch())
   }
 
@@ -305,31 +276,29 @@ const FloatMixin = (Base) =>
   }
 
 Fields.FloatInput = class extends FloatMixin(Fields.Input) {
-  // options: {
-  //   step: 'any',
-  // }
+  // TODO use public class properties when in baseline
+  getDefaultProperties() {
+    return { step: 'any' }
+  }
 }
 
 Fields.BlurFloatInput = class extends FloatMixin(Fields.BlurInput) {
-  // options: {
-  //   step: 'any',
-  // },
+  getDefaultProperties() {
+    return { step: 'any' }
+  }
 }
 
 Fields.CheckBox = class extends BaseElement {
+  getTemplate() {
+    return `<input type=checkbox name="${this.name}" data-ref=input />`
+  }
+
   build() {
-    const container = Utils.loadTemplate('<div class="checkbox-wrapper"></div>')
-    this.parentNode.appendChild(container)
-    this.input = Utils.loadTemplate('<input />')
-    container.appendChild(this.input)
-    if (this.properties.className) {
-      this.input.classList.add(this.properties.className)
-    }
-    this.input.type = 'checkbox'
-    this.input.name = this.name
+    this.input = this.elements.input
     this.input._helper = this
     this.fetch()
     this.input.addEventListener('change', () => this.sync())
+    super.build()
   }
 
   fetch() {
@@ -338,7 +307,7 @@ Fields.CheckBox = class extends BaseElement {
   }
 
   value() {
-    return this.wrapper.classList.contains('undefined') ? undefined : this.input.checked
+    return this.root.classList.contains('undefined') ? undefined : this.input.checked
   }
 
   toHTML() {
@@ -351,12 +320,16 @@ Fields.CheckBox = class extends BaseElement {
 }
 
 Fields.Select = class extends BaseElement {
+  getTemplate() {
+    return `<select name="${this.name}" data-ref=select></select>`
+  }
+
   build() {
-    this.select = Utils.loadTemplate(`<select name="${this.name}"></select>`)
-    this.parentNode.appendChild(this.select)
+    this.select = this.elements.select
     this.validValues = []
     this.buildOptions()
     this.select.addEventListener('change', () => this.sync())
+    super.build()
   }
 
   getOptions() {
@@ -380,7 +353,7 @@ Fields.Select = class extends BaseElement {
     const option = Utils.loadTemplate('<option></option>')
     this.select.appendChild(option)
     option.value = value
-    option.innerHTML = label
+    option.textContent = label
     if (this.toHTML() === value) {
       option.selected = 'selected'
     }
@@ -444,19 +417,21 @@ Fields.NullableBoolean = class extends Fields.Select {
 }
 
 Fields.EditableText = class extends BaseElement {
+  getTemplate() {
+    return `<span contentEditable class="${this.properties.className || ''}" data-ref=input></span>`
+  }
+
+  buildTemplate() {
+    // No wrapper at all
+    const template = this.getTemplate()
+    this.input = Utils.loadTemplate(template)
+    this.form.appendChild(this.input)
+  }
+
   build() {
-    this.input = Utils.loadTemplate(
-      `<span class="${this.properties.className || ''}"></span>`
-    )
-    this.parentNode.appendChild(this.input)
-    this.input.contentEditable = true
     this.fetch()
     this.input.addEventListener('input', () => this.sync())
     this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
-  }
-
-  getParentNode() {
-    return this.form
   }
 
   value() {
@@ -480,17 +455,18 @@ Fields.ColorPicker = class extends Fields.Input {
     return Utils.COLORS
   }
 
-  getParentNode() {
-    super.getParentNode()
-    return this.quickContainer
+  getDefaultProperties() {
+    return {
+      placeholder: translate('Inherit'),
+    }
+  }
+
+  getTemplate() {
+    return `${super.getTemplate()}<div class="umap-color-picker" hidden data-ref=colors></div>`
   }
 
   build() {
     super.build()
-    this.input.placeholder = this.properties.placeholder || translate('Inherit')
-    this.container = Utils.loadTemplate('<div class="umap-color-picker"></div>')
-    this.extendedContainer.appendChild(this.container)
-    this.container.style.display = 'none'
     for (const color of this.getColors()) {
       this.addColor(color)
     }
@@ -506,16 +482,21 @@ Fields.ColorPicker = class extends Fields.Input {
   }
 
   onFocus() {
-    this.container.style.display = 'block'
+    this.showPicker()
     this.spreadColor()
   }
 
+  showPicker() {
+    this.elements.colors.hidden = false
+  }
+
+  closePicker() {
+    this.elements.colors.hidden = true
+  }
+
   onBlur() {
-    const closePicker = () => {
-      this.container.style.display = 'none'
-    }
     // We must leave time for the click to be listened.
-    window.setTimeout(closePicker, 100)
+    window.setTimeout(() => this.closePicker(), 100)
   }
 
   sync() {
@@ -530,12 +511,12 @@ Fields.ColorPicker = class extends Fields.Input {
 
   addColor(colorName) {
     const span = Utils.loadTemplate('<span></span>')
-    this.container.appendChild(span)
+    this.elements.colors.appendChild(span)
     span.style.backgroundColor = span.title = colorName
     const updateColorInput = () => {
       this.input.value = colorName
       this.sync()
-      this.container.style.display = 'none'
+      this.closePicker()
     }
     span.addEventListener('mousedown', updateColorInput)
   }
@@ -680,21 +661,25 @@ Fields.IconUrl = class extends Fields.BlurInput {
     return 'hidden'
   }
 
-  build() {
-    super.build()
-    const [container, { buttons, tabs, body, footer }] = Utils.loadTemplateWithRefs(`
+  getTemplate() {
+    return `
       <div>
         <div data-ref=buttons></div>
         <div class="flat-tabs" data-ref=tabs></div>
-        <div class="umap-pictogram-body" data-ref=body></div>
+        <div class="umap-pictogram-body" data-ref=body>
+        ${super.getTemplate()}
+        </div>
         <div data-ref=footer></div>
       </div>
-    `)
-    this.parentNode.appendChild(container)
-    this.buttons = buttons
-    this.tabs = tabs
-    this.body = body
-    this.footer = footer
+    `
+  }
+
+  build() {
+    super.build()
+    this.buttons = this.elements.buttons
+    this.tabs = this.elements.tabs
+    this.body = this.elements.body
+    this.footer = this.elements.footer
     this.updatePreview()
   }
 
@@ -936,23 +921,27 @@ Fields.Url = class extends Fields.Input {
 }
 
 Fields.Switch = class extends Fields.CheckBox {
-  getParentNode() {
-    super.getParentNode()
-    if (this.properties.inheritable) return this.quickContainer
-    return this.extendedContainer
+  getTemplate() {
+    const label = this.properties.label
+    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel>${label}</label>`
   }
 
   build() {
     super.build()
-    if (this.properties.inheritable) {
-      this.label = Utils.loadTemplate('<label></label>')
+    // We have it in our template
+    if (!this.properties.inheritable) {
+      // We already have the label near the switch,
+      // only show the default label in inheritable mode
+      // as the switch itself may be hidden (until "defined")
+      if (this.elements.label) {
+        this.elements.label.hidden = true
+        this.elements.label.innerHTML = ''
+        this.elements.label.title = ''
+      }
     }
-    this.input.parentNode.appendChild(this.label)
-    this.input.parentNode.classList.add('with-switch')
-    const id = `${this.builder.properties.id || Date.now()}.${this.name}`
-    this.label.setAttribute('for', id)
+    this.container.classList.add('with-switch')
     this.input.classList.add('switch')
-    this.input.id = id
+    this.input.id = this.id
   }
 }
 
@@ -961,22 +950,22 @@ Fields.FacetSearchBase = class extends BaseElement {
 }
 
 Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
-  build() {
-    const [container, { ul, label }] = Utils.loadTemplateWithRefs(`
+  getTemplate() {
+    return `
       <fieldset class="umap-facet">
         <legend data-ref=label>${Utils.escapeHTML(this.properties.label)}</legend>
         <ul data-ref=ul></ul>
       </fieldset>
-      `)
-    this.container = container
-    this.ul = ul
-    this.label = label
-    this.parentNode.appendChild(this.container)
+      `
+  }
+
+  build() {
     this.type = this.properties.criteria.type
 
     const choices = this.properties.criteria.choices
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
+    super.build()
   }
 
   buildLi(value) {
@@ -993,13 +982,13 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
     input.checked = this.get().choices.includes(value)
     input.dataset.value = value
     input.addEventListener('change', () => this.sync())
-    this.ul.appendChild(li)
+    this.elements.ul.appendChild(li)
   }
 
   toJS() {
     return {
       type: this.type,
-      choices: [...this.ul.querySelectorAll('input:checked')].map(
+      choices: [...this.elements.ul.querySelectorAll('input:checked')].map(
         (i) => i.dataset.value
       ),
     }
@@ -1019,28 +1008,30 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
     return value.valueOf()
   }
 
-  build() {
+  getTemplate() {
     const [minLabel, maxLabel] = this.getLabels()
     const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get()
-
-    const currentMin = modifiedMin !== undefined ? modifiedMin : min
-    const currentMax = modifiedMax !== undefined ? modifiedMax : max
     this.type = type
     const inputType = this.getInputType(this.type)
     const minHTML = this.prepareForHTML(min)
     const maxHTML = this.prepareForHTML(max)
-    const [container, { minInput, maxInput }] = Utils.loadTemplateWithRefs(`
+    return `
       <fieldset class="umap-facet">
         <legend>${Utils.escapeHTML(this.properties.label)}</legend>
         <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
         <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
       </fieldset>
-    `)
-    this.container = container
-    this.minInput = minInput
-    this.maxInput = maxInput
-    this.parentNode.appendChild(this.container)
+    `
+  }
+
+  build() {
+    this.minInput = this.elements.minInput
+    this.maxInput = this.elements.maxInput
+    const { min, max, type } = this.properties.criteria
+    const { min: modifiedMin, max: modifiedMax } = this.get()
+
+    const currentMin = modifiedMin !== undefined ? modifiedMin : min
+    const currentMax = modifiedMax !== undefined ? modifiedMax : max
     if (min != null) {
       // The value stored using setAttribute is not modified by
       // user input, and will be used as initial value when calling
@@ -1061,6 +1052,7 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
 
     this.minInput.addEventListener('change', () => this.sync())
     this.maxInput.addEventListener('change', () => this.sync())
+    super.build()
   }
 
   toggleStatus() {
@@ -1174,16 +1166,17 @@ Fields.MultiChoice = class extends BaseElement {
     return this.properties.choices || this.choices
   }
 
+  getTemplate() {
+    return `<div class="${this.getClassName()} by${this.getChoices().length}" data-ref=wrapper></div>`
+  }
+
   build() {
     const choices = this.getChoices()
-    this.container = Utils.loadTemplate(
-      `<div class="${this.getClassName()} by${choices.length}"></div>`
-    )
-    this.parentNode.appendChild(this.container)
     for (const [i, [value, label]] of choices.entries()) {
       this.addChoice(value, label, i)
     }
     this.fetch()
+    super.build()
   }
 
   addChoice(value, label, counter) {
@@ -1191,8 +1184,8 @@ Fields.MultiChoice = class extends BaseElement {
     const input = Utils.loadTemplate(
       `<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
     )
-    this.container.appendChild(input)
-    this.container.appendChild(
+    this.elements.wrapper.appendChild(input)
+    this.elements.wrapper.appendChild(
       Utils.loadTemplate(`<label for="${id}">${label}</label>`)
     )
     input.addEventListener('change', () => this.sync())
@@ -1259,10 +1252,11 @@ Fields.Range = class extends Fields.FloatInput {
   }
 
   value() {
-    return this.wrapper.classList.contains('undefined') ? undefined : super.value()
+    return this.root.classList.contains('undefined') ? undefined : super.value()
   }
 
-  buildHelpText() {
+  build() {
+    super.build()
     let options = ''
     const step = this.properties.step || 1
     const digits = step < 1 ? 1 : 0
@@ -1272,16 +1266,14 @@ Fields.Range = class extends Fields.FloatInput {
       i <= this.properties.max;
       i += this.properties.step
     ) {
-      options += `<option value="${i.toFixed(digits)}" label="${i.toFixed(
-        digits
-      )}"></option>`
+      const ii = i.toFixed(digits)
+      options += `<option value="${ii}" label="${ii}"></option>`
     }
-    const parent = this.getHelpTextParent()
     const datalist = Utils.loadTemplate(
       `<datalist class="umap-field-datalist" id="${id}">${options}</datalist>`
     )
+    this.container.appendChild(datalist)
     this.input.setAttribute('list', id)
-    super.buildHelpText()
   }
 }
 
@@ -1292,12 +1284,13 @@ Fields.ManageOwner = class extends BaseElement {
       on_select: L.bind(this.onSelect, this),
       placeholder: translate("Type new owner's username"),
     }
-    this.autocomplete = new AjaxAutocomplete(this.parentNode, options)
+    this.autocomplete = new AjaxAutocomplete(this.container, options)
     const owner = this.toHTML()
-    if (owner)
+    if (owner) {
       this.autocomplete.displaySelected({
         item: { value: owner.id, label: owner.name },
       })
+    }
   }
 
   value() {
@@ -1322,7 +1315,7 @@ Fields.ManageEditors = class extends BaseElement {
       on_unselect: L.bind(this.onUnselect, this),
       placeholder: translate("Type editor's username"),
     }
-    this.autocomplete = new AjaxAutocompleteMultiple(this.parentNode, options)
+    this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
     this._values = this.toHTML()
     if (this._values)
       for (let i = 0; i < this._values.length; i++)
