@@ -57,7 +57,7 @@ def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
     define.click()
     # No picto defined yet, so recent should not be visible
     expect(page.get_by_text("Recent")).to_be_hidden()
-    symbols = page.locator(".umap-pictogram-choice")
+    symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
     search.type("star")
@@ -90,8 +90,8 @@ def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos)
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
-    # Map has an icon defined, so it shold open on Recent tab
-    symbols = page.locator(".umap-pictogram-choice")
+    # Map has an icon defined, so it should open on Recent tab
+    symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(page.get_by_text("Recent")).to_be_visible()
     expect(symbols).to_have_count(1)
     symbol_tab = page.get_by_role("button", name="Symbol")
@@ -128,8 +128,8 @@ def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
-    # Map has an icon defined, so it shold open on Recent tab
-    symbols = page.locator(".umap-pictogram-choice")
+    # Map has an icon defined, so it shuold open on Recent tab
+    symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(page.get_by_text("Recent")).to_be_visible()
     expect(symbols).to_have_count(1)
     symbol_tab = page.get_by_role("button", name="Symbol")
@@ -180,7 +180,7 @@ def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
     expect(modify).to_be_visible()
     modify.click()
     # Should be on Recent tab
-    symbols = page.locator(".umap-pictogram-choice")
+    symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(page.get_by_text("Recent")).to_be_visible()
     expect(symbols).to_have_count(1)
 
@@ -215,10 +215,10 @@ def test_can_use_char_as_picto(openmap, live_server, page, pictos):
     close.click()
     edit_settings.click()
     shape_settings.click()
-    preview = page.locator(".umap-pictogram-choice")
+    preview = page.locator(".header .umap-pictogram-choice")
     expect(preview).to_be_visible()
     preview.click()
     # Should be on URL tab
-    symbols = page.locator(".umap-pictogram-choice")
+    symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(page.get_by_text("Recent")).to_be_visible()
     expect(symbols).to_have_count(1)

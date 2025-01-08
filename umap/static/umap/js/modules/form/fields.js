@@ -664,7 +664,6 @@ Fields.IconUrl = class extends Fields.BlurInput {
   getTemplate() {
     return `
       <div>
-        <div data-ref=buttons></div>
         <div class="flat-tabs" data-ref=tabs></div>
         <div class="umap-pictogram-body" data-ref=body>
         ${super.getTemplate()}
@@ -676,15 +675,18 @@ Fields.IconUrl = class extends Fields.BlurInput {
 
   build() {
     super.build()
-    this.buttons = this.elements.buttons
     this.tabs = this.elements.tabs
     this.body = this.elements.body
     this.footer = this.elements.footer
+    this.button = Utils.loadTemplate(
+      `<button type="button" class="button action-button" hidden>${translate('Change')}</button>`
+    )
+    this.button.addEventListener('click', () => this.onDefine())
+    this.elements.buttons.appendChild(this.button)
     this.updatePreview()
   }
 
   async onDefine() {
-    this.buttons.innerHTML = ''
     this.footer.innerHTML = ''
     const [{ pictogram_list }, response, error] = await this.builder._umap.server.get(
       this.builder._umap.properties.urls.pictogram_list_json
@@ -692,14 +694,14 @@ Fields.IconUrl = class extends Fields.BlurInput {
     if (!error) this.pictogram_list = pictogram_list
     this.buildTabs()
     const value = this.value()
-    if (U.Icon.RECENT.length) this.showRecentTab()
+    if (Icon.RECENT.length) this.showRecentTab()
     else if (!value || Utils.isPath(value)) this.showSymbolsTab()
     else if (Utils.isRemoteUrl(value) || Utils.isDataImage(value)) this.showURLTab()
     else this.showCharsTab()
     const closeButton = Utils.loadTemplate(
       `<button type="button" class="button action-button">${translate('Close')}</button>`
     )
-    closeButton.addEventListener('click', () => {
+    closeButton.addEventListener('click', (event) => {
       this.body.innerHTML = ''
       this.tabs.innerHTML = ''
       this.footer.innerHTML = ''
@@ -758,21 +760,16 @@ Fields.IconUrl = class extends Fields.BlurInput {
   }
 
   updatePreview() {
-    this.buttons.innerHTML = ''
+    this.elements.actions.innerHTML = ''
+    this.button.hidden = !this.value() || this.isDefault()
     if (this.isDefault()) return
     if (!Utils.hasVar(this.value())) {
       // Do not try to render URL with variables
       const box = Utils.loadTemplate('<div class="umap-pictogram-choice"></div>')
-      this.buttons.appendChild(box)
+      this.elements.actions.appendChild(box)
       box.addEventListener('click', () => this.onDefine())
       const icon = Icon.makeElement(this.value(), box)
     }
-    const text = this.value() ? translate('Change') : translate('Add')
-    const button = Utils.loadTemplate(
-      `<button type="button" class="button action-button">${text}</button>`
-    )
-    button.addEventListener('click', () => this.onDefine())
-    this.buttons.appendChild(button)
   }
 
   addIconPreview(pictogram, parent) {
@@ -794,6 +791,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
       this.sync()
       this.unselectAll(this.grid)
       container.classList.add('selected')
+      this.updatePreview()
     })
     return true // Icon has been added (not filtered)
   }

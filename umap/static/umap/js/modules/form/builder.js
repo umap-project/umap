@@ -205,10 +205,12 @@ export class MutatingForm extends Form {
       template = `
         <div class="umap-field-${helper.name} formbox inheritable${extraClassName}">
           <div class="header" data-ref=header>
-            <a href="#" class="button undefine" data-ref=undefine>${translate('clear')}</a>
-            <a href="#" class="button define" data-ref=define>${translate('define')}</a>
-            <span class="quick-actions show-on-defined" data-ref=actions></span>
             ${helper.getLabelTemplate()}
+            <span class="actions show-on-defined" data-ref=actions></span>
+            <span class="buttons" data-ref=buttons>
+              <button type="button" class="button undefine" data-ref=undefine>${translate('clear')}</button>
+              <button type="button" class="button define" data-ref=define>${translate('define')}</button>
+            </span>
           </div>
           <div class="show-on-defined" data-ref=container>
             ${helper.getTemplate()}
