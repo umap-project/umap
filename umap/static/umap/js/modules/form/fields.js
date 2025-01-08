@@ -389,33 +389,6 @@ Fields.IntSelect = class extends Fields.Select {
   }
 }
 
-Fields.NullableBoolean = class extends Fields.Select {
-  getOptions() {
-    return [
-      [undefined, 'inherit'],
-      [true, 'yes'],
-      [false, 'no'],
-    ]
-  }
-
-  toJS() {
-    let value = this.value()
-    switch (value) {
-      case 'true':
-      case true:
-        value = true
-        break
-      case 'false':
-      case false:
-        value = false
-        break
-      default:
-        value = undefined
-    }
-    return value
-  }
-}
-
 Fields.EditableText = class extends BaseElement {
   getTemplate() {
     return `<span contentEditable class="${this.properties.className || ''}" data-ref=input></span>`
