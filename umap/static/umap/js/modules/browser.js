@@ -180,9 +180,8 @@ export default class Browser {
       ],
       ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
-    const builder = new Form(this, fields, {
-      callback: () => this.onFormChange(),
-    })
+    const builder = new Form(this, fields)
+    builder.on('set', () => this.onFormChange())
     let filtersBuilder
     this.formContainer.appendChild(builder.build())
     DomEvent.on(builder.form, 'reset', () => {
@@ -190,9 +189,8 @@ export default class Browser {
     })
     if (this._umap.properties.facetKey) {
       fields = this._umap.facets.build()
-      filtersBuilder = new Form(this._umap.facets, fields, {
-        callback: () => this.onFormChange(),
-      })
+      filtersBuilder = new Form(this._umap.facets, fields)
+      filtersBuilder.on('set', () => this.onFormChange())
       DomEvent.on(filtersBuilder.form, 'reset', () => {
         window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
       })

@@ -449,6 +449,29 @@ export function eachElement(selector, callback) {
   }
 }
 
+export class WithEvents {
+  constructor() {
+    this._callbacks = {}
+  }
+
+  on(eventType, callback) {
+    if (typeof callback !== 'function') return
+    if (this._callbacks[eventType] === undefined) {
+      this._callbacks[eventType] = []
+    }
+
+    this._callbacks[eventType].push(callback)
+  }
+
+  fire(eventType, ...args) {
+    if (this._callbacks[eventType] === undefined) return
+
+    for (const callback of this._callbacks[eventType]) {
+      callback(...args)
+    }
+  }
+}
+
 export const COLORS = [
   'Black',
   'Navy',

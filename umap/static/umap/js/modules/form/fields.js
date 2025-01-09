@@ -97,7 +97,7 @@ class BaseElement {
 
   sync() {
     this.set()
-    this.onPostSync()
+    this.builder.fire('set', this)
   }
 
   set() {
@@ -115,13 +115,6 @@ class BaseElement {
   fetch() {}
 
   finish() {}
-
-  onPostSync() {
-    if (this.properties.callback) {
-      this.properties.callback(this)
-    }
-    this.builder.onPostSync(this)
-  }
 
   undefine() {
     this.root.classList.add('undefined')

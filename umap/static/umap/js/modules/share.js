@@ -126,9 +126,8 @@ export default class Share {
       exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
     }
     buildIframeCode()
-    const builder = new MutatingForm(iframeExporter, UIFields, {
-      callback: buildIframeCode,
-    })
+    const builder = new MutatingForm(iframeExporter, UIFields)
+    builder.on('set', buildIframeCode)
     const iframeOptions = DomUtil.createFieldset(
       this.container,
       translate('Embed and link options')

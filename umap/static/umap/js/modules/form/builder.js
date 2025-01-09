@@ -3,8 +3,9 @@ import * as Utils from '../utils.js'
 import { SCHEMA } from '../schema.js'
 import { translate } from '../i18n.js'
 
-export class Form {
+export class Form extends Utils.WithEvents {
   constructor(obj, fields, properties) {
+    super()
     this.setProperties(properties)
     this.defaultProperties = {}
     this.obj = obj

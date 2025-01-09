@@ -226,15 +226,11 @@ class Feature {
       `icon-${this.getClassName()}`
     )
 
-    let builder = new MutatingForm(
-      this,
-      [['datalayer', { handler: 'DataLayerSwitcher' }]],
-      {
-        callback() {
-          this.edit(event)
-        }, // removeLayer step will close the edit panel, let's reopen it
-      }
-    )
+    let builder = new MutatingForm(this, [
+      ['datalayer', { handler: 'DataLayerSwitcher' }],
+    ])
+    // removeLayer step will close the edit panel, let's reopen it
+    builder.on('set', () => this.edit(event))
     container.appendChild(builder.build())
 
     const properties = []
@@ -734,16 +730,15 @@ export class Point extends Feature {
       ['ui._latlng.lat', { handler: 'FloatInput', label: translate('Latitude') }],
       ['ui._latlng.lng', { handler: 'FloatInput', label: translate('Longitude') }],
     ]
-    const builder = new MutatingForm(this, coordinatesOptions, {
-      callback: () => {
-        if (!this.ui._latlng.isValid()) {
-          Alert.error(translate('Invalid latitude or longitude'))
-          builder.restoreField('ui._latlng.lat')
-          builder.restoreField('ui._latlng.lng')
-        }
-        this.pullGeometry()
-        this.zoomTo({ easing: false })
-      },
+    const builder = new MutatingForm(this, coordinatesOptions)
+    builder.on('set', () => {
+      if (!this.ui._latlng.isValid()) {
+        Alert.error(translate('Invalid latitude or longitude'))
+        builder.restoreField('ui._latlng.lat')
+        builder.restoreField('ui._latlng.lng')
+      }
+      this.pullGeometry()
+      this.zoomTo({ easing: false })
     })
     const fieldset = DomUtil.createFieldset(container, translate('Coordinates'))
     fieldset.appendChild(builder.build())

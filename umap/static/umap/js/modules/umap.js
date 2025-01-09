@@ -1029,13 +1029,6 @@ export default class Umap extends ServerStored {
       ],
     ]
     const slideshowBuilder = new MutatingForm(this, slideshowFields, {
-      callback: () => {
-        this.slideshow.load()
-        // FIXME when we refactor formbuilder: this callback is called in a 'postsync'
-        // event, which comes after the call of `setter` method, which will call the
-        // map.render method, which should do this redraw.
-        this.bottomBar.redraw()
-      },
       umap: this,
     })
     slideshow.appendChild(slideshowBuilder.build())
@@ -1350,6 +1343,10 @@ export default class Umap extends ServerStored {
           })
         }
         this.topBar.redraw()
+      },
+      'properties.slideshow.active': () => {
+        this.slideshow.load()
+        this.bottomBar.redraw()
       },
       numberOfConnectedPeers: () => {
         Utils.eachElement('.connected-peers span', (el) => {
