@@ -280,7 +280,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
     peerB.locator("path").nth(1).drag_to(b_map_el, target_position={"x": 400, "y": 400})
     peerB.locator("path").nth(1).click()
     peerB.locator("summary").filter(has_text="Shape properties").click()
-    peerB.locator(".header > a:nth-child(2)").first.click()
+    peerB.locator(".umap-field-color button.define").first.click()
     peerB.get_by_title("Orchid", exact=True).first.click()
     peerB.locator("#map").press("Escape")
     peerB.get_by_role("button", name="Save").click()
