@@ -1,6 +1,8 @@
 import json
 from copy import deepcopy
+from datetime import datetime, timedelta
 from pathlib import Path
+from unittest import mock
 from uuid import uuid4
 
 import pytest
@@ -621,3 +623,17 @@ def test_optimistic_merge_conflicting_change_raises(
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
     merged_features = json.load(modified_datalayer.geojson)["features"]
     assert merged_features == client1_data["features"]
+
+
+def test_saving_datalayer_should_change_map_last_modified(
+    client, datalayer, map, post_data
+):
+    with mock.patch("django.utils.timezone.now") as mocked:
+        mocked.return_value = datetime.utcnow() - timedelta(days=8)
+        map.save()  # Change last_modified to past
+    old_modified_at = map.modified_at.date()
+    url = reverse("datalayer_update", args=(map.pk, datalayer.pk))
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    assert Map.objects.get(pk=map.pk).modified_at.date() != old_modified_at
