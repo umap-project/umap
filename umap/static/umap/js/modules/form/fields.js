@@ -97,7 +97,7 @@ class BaseElement {
 
   sync() {
     this.set()
-    this.builder.fire('set', this)
+    this.builder.fire('set', { helper: this })
   }
 
   set() {

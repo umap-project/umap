@@ -668,9 +668,9 @@ export class DataLayer extends ServerStored {
     ]
     DomUtil.createTitle(container, translate('Layer properties'), 'icon-layers')
     let builder = new MutatingForm(this, metadataFields)
-    builder.on('set', (helper) => {
+    builder.on('set', ({ detail }) => {
       this._umap.onDataLayersChanged()
-      if (helper.field === 'options.type') {
+      if (detail.helper.field === 'options.type') {
         this.edit()
       }
     })

@@ -451,24 +451,17 @@ export function eachElement(selector, callback) {
 
 export class WithEvents {
   constructor() {
-    this._callbacks = {}
+    this._target = new EventTarget()
   }
 
   on(eventType, callback) {
     if (typeof callback !== 'function') return
-    if (this._callbacks[eventType] === undefined) {
-      this._callbacks[eventType] = []
-    }
-
-    this._callbacks[eventType].push(callback)
+    this._target.addEventListener(eventType, callback)
   }
 
-  fire(eventType, ...args) {
-    if (this._callbacks[eventType] === undefined) return
-
-    for (const callback of this._callbacks[eventType]) {
-      callback(...args)
-    }
+  fire(eventType, detail) {
+    const event = new CustomEvent(eventType, { detail })
+    this._target.dispatchEvent(event)
   }
 }
 
