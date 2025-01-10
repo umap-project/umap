@@ -1293,6 +1293,7 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        self.object.map.save(update_fields=["modified_at"])
         data = {**self.object.metadata(self.request)}
         if self.request.session.get("needs_reload"):
             data["geojson"] = json.loads(self.object.geojson.read().decode())
