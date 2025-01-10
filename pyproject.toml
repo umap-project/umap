@@ -61,7 +61,7 @@ test = [
   "pytest-playwright==0.6.2",
   "pytest-rerunfailures==15.0",
   "pytest-xdist>=3.5.0,<4",
-  "moto[s3]==5.0.25"
+  "moto[s3]==5.0.26"
 ]
 docker = [
   "uwsgi==2.0.28",
