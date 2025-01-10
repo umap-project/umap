@@ -127,6 +127,9 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     def _adjust_kwargs(cls, **kwargs):
         if "data" in kwargs:
             data = copy.deepcopy(kwargs.pop("data"))
+            data.setdefault("_umap_options", {})
+            if "name" in data["_umap_options"] and kwargs["name"] == cls.name:
+                kwargs["name"] = data["_umap_options"]["name"]
             if "settings" not in kwargs:
                 kwargs["settings"] = data.get("_umap_options", {})
         else:
@@ -135,7 +138,6 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
                 **DataLayerFactory.settings._defaults,
                 **kwargs["settings"],
             }
-        data.setdefault("_umap_options", {})
         kwargs["settings"]["name"] = kwargs["name"]
         data["_umap_options"]["name"] = kwargs["name"]
         data.setdefault("type", "FeatureCollection")
