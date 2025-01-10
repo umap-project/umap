@@ -694,8 +694,14 @@ a.umap-control-caption,
 .datalayer-name {
     cursor: pointer;
 }
-.umap-caption .umap-map-author {
-    padding-inline-start: 31px;
+.umap-caption .dates {
+    color: var(--color-mediumGray);
+}
+.umap-caption .header {
+    display: flex;
+}
+.umap-caption .header i.icon {
+    flex-shrink: 0;
 }
 .umap-browser .main-toolbox {
     padding-left: 4px; /* Align with toolbox below  */

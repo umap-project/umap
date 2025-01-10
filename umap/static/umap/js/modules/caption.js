@@ -3,13 +3,14 @@ import * as Utils from './utils.js'
 
 const TEMPLATE = `
 <div class="umap-caption">
-  <hgroup>
-    <h3>
-      <i class="icon icon-16 icon-caption icon-block"></i>
-      <span class="map-name" data-ref="name"></span>
-    </h3>
-    <h4 data-ref="author"></h4>
-  </hgroup>
+  <div class="header">
+    <i class="icon icon-16 icon-caption icon-block"></i>
+    <hgroup>
+      <h3><span class="map-name" data-ref="name"></span></h3>
+      <h4 data-ref="author"></h4>
+      <h5 class="dates" data-ref="dates"></h5>
+    </hgroup>
+  </div>
   <div class="umap-map-description text" data-ref="description"></div>
   <div class="datalayer-container" data-ref="datalayersContainer"></div>
   <div class="credits-container">
@@ -65,6 +66,17 @@ export default class Caption extends Utils.WithTemplate {
       // Create the legend when the panel is actually on the DOM
       this._umap.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
     })
+    if (this._umap.properties.created_at) {
+      const created_at = translate('Created at {date}', {
+        date: new Date(this._umap.properties.created_at).toLocaleDateString(),
+      })
+      const modified_at = translate('Modified at {date}', {
+        date: new Date(this._umap.properties.modified_at).toLocaleDateString(),
+      })
+      this.elements.dates.innerHTML = `${created_at} - ${modified_at}`
+    } else {
+      this.elements.dates.hidden = true
+    }
   }
 
   addDataLayer(datalayer, parent) {
