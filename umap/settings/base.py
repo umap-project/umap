@@ -343,3 +343,4 @@ WEBSOCKET_ENABLED = env.bool("WEBSOCKET_ENABLED", default=False)
 WEBSOCKET_BACK_HOST = env("WEBSOCKET_BACK_HOST", default="localhost")
 WEBSOCKET_BACK_PORT = env.int("WEBSOCKET_BACK_PORT", default=8001)
 WEBSOCKET_FRONT_URI = env("WEBSOCKET_FRONT_URI", default="ws://localhost:8001")
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}

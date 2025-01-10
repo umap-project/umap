@@ -5,6 +5,7 @@ import time
 from pathlib import Path
 
 import pytest
+from channels.testing import ChannelsLiveServerTestCase
 from playwright.sync_api import expect
 
 from ..base import mock_tiles
@@ -87,3 +88,15 @@ def websocket_server():
     yield ds_proc
     # Shut it down at the end of the pytest session
     ds_proc.terminate()
+
+
+@pytest.fixture(scope="function")
+def channels_live_server(request, settings):
+    server = ChannelsLiveServerTestCase()
+    server.serve_static = False
+    server._pre_setup()
+    settings.WEBSOCKET_FRONT_URI = f"{server.live_server_ws_url}/ws/sync/{{id}}/"
+
+    yield server
+
+    server._post_teardown()
