@@ -614,6 +614,13 @@ class MapDetailMixin(SessionMixin):
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
         }
         created = bool(getattr(self, "object", None))
+        if created:
+            properties.update(
+                {
+                    "created_at": self.object.created_at,
+                    "modified_at": self.object.modified_at,
+                }
+            )
         if (created and self.object.owner) or (not created and not user.is_anonymous):
             edit_statuses = Map.EDIT_STATUS
             datalayer_statuses = DataLayer.EDIT_STATUS

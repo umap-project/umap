@@ -25,6 +25,7 @@ def test_caption(live_server, page, map):
         panel.locator(".caption-item .off").get_by_text(non_loaded.name)
     ).to_be_visible()
     expect(panel.locator(".caption-item").get_by_text(hidden.name)).to_be_hidden()
+    expect(panel.get_by_text("Created at")).to_be_visible()
 
 
 def test_caption_should_display_owner_as_author(live_server, page, map):
