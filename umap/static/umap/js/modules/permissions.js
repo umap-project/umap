@@ -3,6 +3,7 @@ import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { ServerStored } from './saving.js'
 import * as Utils from './utils.js'
+import { MutatingForm } from './form/builder.js'
 
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
@@ -58,7 +59,7 @@ export class MapPermissions extends ServerStored {
           selectOptions: this._umap.properties.share_statuses,
         },
       ])
-      const builder = new U.FormBuilder(this, fields)
+      const builder = new MutatingForm(this, fields)
       const form = builder.build()
       container.appendChild(form)
 
@@ -133,7 +134,7 @@ export class MapPermissions extends ServerStored {
       { handler: 'ManageEditors', label: translate("Map's editors") },
     ])
 
-    const builder = new U.FormBuilder(this, topFields)
+    const builder = new MutatingForm(this, topFields)
     const form = builder.build()
     container.appendChild(form)
     if (collaboratorsFields.length) {
@@ -141,7 +142,7 @@ export class MapPermissions extends ServerStored {
         `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      const builder = new U.FormBuilder(this, collaboratorsFields)
+      const builder = new MutatingForm(this, collaboratorsFields)
       const form = builder.build()
       container.appendChild(form)
     }
@@ -269,7 +270,7 @@ export class DataLayerPermissions extends ServerStored {
         },
       ],
     ]
-    const builder = new U.FormBuilder(this, fields, {
+    const builder = new MutatingForm(this, fields, {
       className: 'umap-form datalayer-permissions',
     })
     const form = builder.build()

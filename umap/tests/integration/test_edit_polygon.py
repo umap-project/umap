@@ -101,7 +101,7 @@ def test_can_remove_stroke(live_server, openmap, page, bootstrap):
     page.get_by_role("link", name="Toggle edit mode").click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-stroke .define").first.click()
-    page.locator(".umap-field-stroke label").first.click()
+    page.locator(".umap-field-stroke .show-on-defined label").first.click()
     expect(page.locator(".leaflet-overlay-pane path[stroke='DarkBlue']")).to_have_count(
         0
     )

@@ -2,6 +2,7 @@ import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
+import { MutatingForm } from './form/builder.js'
 
 export default class Share {
   constructor(umap) {
@@ -125,9 +126,8 @@ export default class Share {
       exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
     }
     buildIframeCode()
-    const builder = new U.FormBuilder(iframeExporter, UIFields, {
-      callback: buildIframeCode,
-    })
+    const builder = new MutatingForm(iframeExporter, UIFields)
+    builder.on('set', buildIframeCode)
     const iframeOptions = DomUtil.createFieldset(
       this.container,
       translate('Embed and link options')

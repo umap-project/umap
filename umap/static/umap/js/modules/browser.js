@@ -4,6 +4,7 @@ import * as Icon from './rendering/icon.js'
 import * as Utils from './utils.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import ContextMenu from './ui/contextmenu.js'
+import { Form } from './form/builder.js'
 
 export default class Browser {
   constructor(umap, leafletMap) {
@@ -179,9 +180,8 @@ export default class Browser {
       ],
       ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
-    const builder = new L.FormBuilder(this, fields, {
-      callback: () => this.onFormChange(),
-    })
+    const builder = new Form(this, fields)
+    builder.on('set', () => this.onFormChange())
     let filtersBuilder
     this.formContainer.appendChild(builder.build())
     DomEvent.on(builder.form, 'reset', () => {
@@ -189,9 +189,8 @@ export default class Browser {
     })
     if (this._umap.properties.facetKey) {
       fields = this._umap.facets.build()
-      filtersBuilder = new L.FormBuilder(this._umap.facets, fields, {
-        callback: () => this.onFormChange(),
-      })
+      filtersBuilder = new Form(this._umap.facets, fields)
+      filtersBuilder.on('set', () => this.onFormChange())
       DomEvent.on(filtersBuilder.form, 'reset', () => {
         window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
       })

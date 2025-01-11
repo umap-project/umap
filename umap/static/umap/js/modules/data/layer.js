@@ -1,5 +1,3 @@
-// Uses U.FormBuilder not available as ESM
-
 // FIXME: this module should not depend on Leaflet
 import {
   DomUtil,
@@ -22,6 +20,7 @@ import { Point, LineString, Polygon } from './features.js'
 import TableEditor from '../tableeditor.js'
 import { ServerStored } from '../saving.js'
 import * as Schema from '../schema.js'
+import { MutatingForm } from '../form/builder.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -659,7 +658,7 @@ export class DataLayer extends ServerStored {
         {
           label: translate('Data is browsable'),
           handler: 'Switch',
-          helpEntries: 'browsable',
+          helpEntries: ['browsable'],
         },
       ],
       [
@@ -671,20 +670,19 @@ export class DataLayer extends ServerStored {
       ],
     ]
     DomUtil.createTitle(container, translate('Layer properties'), 'icon-layers')
-    let builder = new U.FormBuilder(this, metadataFields, {
-      callback(e) {
-        this._umap.onDataLayersChanged()
-        if (e.helper.field === 'options.type') {
-          this.edit()
-        }
-      },
+    let builder = new MutatingForm(this, metadataFields)
+    builder.on('set', ({ detail }) => {
+      this._umap.onDataLayersChanged()
+      if (detail.helper.field === 'options.type') {
+        this.edit()
+      }
     })
     container.appendChild(builder.build())
 
     const layerOptions = this.layer.getEditableOptions()
 
     if (layerOptions.length) {
-      builder = new U.FormBuilder(this, layerOptions, {
+      builder = new MutatingForm(this, layerOptions, {
         id: 'datalayer-layer-properties',
       })
       const layerProperties = DomUtil.createFieldset(
@@ -707,7 +705,7 @@ export class DataLayer extends ServerStored {
       'options.fillOpacity',
     ]
 
-    builder = new U.FormBuilder(this, shapeOptions, {
+    builder = new MutatingForm(this, shapeOptions, {
       id: 'datalayer-advanced-properties',
     })
     const shapeProperties = DomUtil.createFieldset(
@@ -724,7 +722,7 @@ export class DataLayer extends ServerStored {
       'options.toZoom',
     ]
 
-    builder = new U.FormBuilder(this, optionsFields, {
+    builder = new MutatingForm(this, optionsFields, {
       id: 'datalayer-advanced-properties',
     })
     const advancedProperties = DomUtil.createFieldset(
@@ -743,7 +741,7 @@ export class DataLayer extends ServerStored {
       'options.outlinkTarget',
       'options.interactive',
     ]
-    builder = new U.FormBuilder(this, popupFields)
+    builder = new MutatingForm(this, popupFields)
     const popupFieldset = DomUtil.createFieldset(
       container,
       translate('Interaction options')
@@ -799,7 +797,7 @@ export class DataLayer extends ServerStored {
       container,
       translate('Remote data')
     )
-    builder = new U.FormBuilder(this, remoteDataFields)
+    builder = new MutatingForm(this, remoteDataFields)
     remoteDataContainer.appendChild(builder.build())
     DomUtil.createButton(
       'button umap-verify',

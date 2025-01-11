@@ -416,9 +416,11 @@ export function loadTemplate(html) {
 }
 
 export function loadTemplateWithRefs(html) {
-  const element = loadTemplate(html)
+  const template = document.createElement('template')
+  template.innerHTML = html
+  const element = template.content.firstElementChild
   const elements = {}
-  for (const node of element.querySelectorAll('[data-ref]')) {
+  for (const node of template.content.querySelectorAll('[data-ref]')) {
     elements[node.dataset.ref] = node
   }
   return [element, elements]
@@ -446,3 +448,169 @@ export function eachElement(selector, callback) {
     callback(el)
   }
 }
+
+export class WithEvents {
+  constructor() {
+    this._target = new EventTarget()
+  }
+
+  on(eventType, callback) {
+    if (typeof callback !== 'function') return
+    this._target.addEventListener(eventType, callback)
+  }
+
+  fire(eventType, detail) {
+    const event = new CustomEvent(eventType, { detail })
+    this._target.dispatchEvent(event)
+  }
+}
+
+export const COLORS = [
+  'Black',
+  'Navy',
+  'DarkBlue',
+  'MediumBlue',
+  'Blue',
+  'DarkGreen',
+  'Green',
+  'Teal',
+  'DarkCyan',
+  'DeepSkyBlue',
+  'DarkTurquoise',
+  'MediumSpringGreen',
+  'Lime',
+  'SpringGreen',
+  'Aqua',
+  'Cyan',
+  'MidnightBlue',
+  'DodgerBlue',
+  'LightSeaGreen',
+  'ForestGreen',
+  'SeaGreen',
+  'DarkSlateGray',
+  'DarkSlateGrey',
+  'LimeGreen',
+  'MediumSeaGreen',
+  'Turquoise',
+  'RoyalBlue',
+  'SteelBlue',
+  'DarkSlateBlue',
+  'MediumTurquoise',
+  'Indigo',
+  'DarkOliveGreen',
+  'CadetBlue',
+  'CornflowerBlue',
+  'MediumAquaMarine',
+  'DimGray',
+  'DimGrey',
+  'SlateBlue',
+  'OliveDrab',
+  'SlateGray',
+  'SlateGrey',
+  'LightSlateGray',
+  'LightSlateGrey',
+  'MediumSlateBlue',
+  'LawnGreen',
+  'Chartreuse',
+  'Aquamarine',
+  'Maroon',
+  'Purple',
+  'Olive',
+  'Gray',
+  'Grey',
+  'SkyBlue',
+  'LightSkyBlue',
+  'BlueViolet',
+  'DarkRed',
+  'DarkMagenta',
+  'SaddleBrown',
+  'DarkSeaGreen',
+  'LightGreen',
+  'MediumPurple',
+  'DarkViolet',
+  'PaleGreen',
+  'DarkOrchid',
+  'YellowGreen',
+  'Sienna',
+  'Brown',
+  'DarkGray',
+  'DarkGrey',
+  'LightBlue',
+  'GreenYellow',
+  'PaleTurquoise',
+  'LightSteelBlue',
+  'PowderBlue',
+  'FireBrick',
+  'DarkGoldenRod',
+  'MediumOrchid',
+  'RosyBrown',
+  'DarkKhaki',
+  'Silver',
+  'MediumVioletRed',
+  'IndianRed',
+  'Peru',
+  'Chocolate',
+  'Tan',
+  'LightGray',
+  'LightGrey',
+  'Thistle',
+  'Orchid',
+  'GoldenRod',
+  'PaleVioletRed',
+  'Crimson',
+  'Gainsboro',
+  'Plum',
+  'BurlyWood',
+  'LightCyan',
+  'Lavender',
+  'DarkSalmon',
+  'Violet',
+  'PaleGoldenRod',
+  'LightCoral',
+  'Khaki',
+  'AliceBlue',
+  'HoneyDew',
+  'Azure',
+  'SandyBrown',
+  'Wheat',
+  'Beige',
+  'WhiteSmoke',
+  'MintCream',
+  'GhostWhite',
+  'Salmon',
+  'AntiqueWhite',
+  'Linen',
+  'LightGoldenRodYellow',
+  'OldLace',
+  'Red',
+  'Fuchsia',
+  'Magenta',
+  'DeepPink',
+  'OrangeRed',
+  'Tomato',
+  'HotPink',
+  'Coral',
+  'DarkOrange',
+  'LightSalmon',
+  'Orange',
+  'LightPink',
+  'Pink',
+  'Gold',
+  'PeachPuff',
+  'NavajoWhite',
+  'Moccasin',
+  'Bisque',
+  'MistyRose',
+  'BlanchedAlmond',
+  'PapayaWhip',
+  'LavenderBlush',
+  'SeaShell',
+  'Cornsilk',
+  'LemonChiffon',
+  'FloralWhite',
+  'Snow',
+  'Yellow',
+  'LightYellow',
+  'Ivory',
+  'White',
+]
