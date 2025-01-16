@@ -76,8 +76,10 @@ export class SyncEngine {
   }
 
   start(authToken) {
+    const path = this._umap.urls.get('ws_sync', { map_id: this._umap.id })
+    const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
     this.transport = new WebSocketTransport(
-      Utils.template(this._umap.properties.websocketURI, { id: this._umap.id }),
+      `${protocol}//${window.location.host}${path}`,
       authToken,
       this
     )

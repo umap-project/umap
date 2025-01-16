@@ -5,7 +5,7 @@ import uuid
 import redis.asyncio as redis
 from django.conf import settings
 from django.core.signing import TimestampSigner
-from django.urls.resolvers import RoutePattern
+from django.urls import path
 from pydantic import ValidationError
 
 from .payloads import (
@@ -17,20 +17,19 @@ from .payloads import (
     Request,
 )
 
-ws_pattern = RoutePattern("/ws/sync/<str:map_id>")
-
 
 async def application(scope, receive, send):
-    matched = ws_pattern.match(scope["path"])
-    print(matched)
-    if not matched:
-        print("Wrong path")
-        return
-    _, _, kwargs = matched
+    path = scope["path"].lstrip("/")
+    for pattern in urlpatterns:
+        if matched := pattern.resolve(path):
+            await matched.func(scope, receive, send, **matched.kwargs)
+            break
+    else:
+        await send({"type": "websocket.close"})
 
-    map_id = kwargs["map_id"]
-    peer = Peer(uuid=uuid.uuid4(), map_id=map_id)
-    print(peer)
+
+async def sync(scope, receive, send, **kwargs):
+    peer = Peer(uuid=uuid.uuid4(), map_id=kwargs["map_id"])
     peer._send = send
     while True:
         event = await receive()
@@ -153,3 +152,6 @@ class Peer:
     async def send(self, text):
         print("SEND", text)
         await self._send({"type": "websocket.send", "text": text})
+
+
+urlpatterns = [path("ws/sync/<str:map_id>", name="ws_sync", view=sync)]
