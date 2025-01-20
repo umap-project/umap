@@ -3,6 +3,7 @@ import re
 
 import pytest
 from daphne.testing import DaphneProcess
+from django.contrib.staticfiles.handlers import ASGIStaticFilesHandler
 from playwright.sync_api import expect
 
 from umap.asgi import application
@@ -68,13 +69,11 @@ def login(new_page, settings, live_server):
 
 
 @pytest.fixture(scope="function")
-def asgi_live_server(request, settings):
-    request.getfixturevalue("transactional_db")
-    server = DaphneProcess("localhost", lambda: application)
+def asgi_live_server(request, live_server):
+    server = DaphneProcess("localhost", lambda: ASGIStaticFilesHandler(application))
     server.start()
     server.ready.wait()
     port = server.port.value
-    settings.WEBSOCKET_FRONT_URI = f"ws://localhost:{port}/ws/sync/{{id}}/"
     server.url = f"http://localhost:{port}"
 
     yield server

@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, RootModel
 class JoinRequest(BaseModel):
     kind: Literal["JoinRequest"] = "JoinRequest"
     token: str
+    peer: str
 
 
 class OperationMessage(BaseModel):
@@ -39,7 +40,7 @@ class JoinResponse(BaseModel):
 
     kind: Literal["JoinResponse"] = "JoinResponse"
     peers: list
-    uuid: str
+    peer: str
 
 
 class ListPeersResponse(BaseModel):

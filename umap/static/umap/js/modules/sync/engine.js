@@ -62,6 +62,7 @@ export class SyncEngine {
     this._reconnectDelay = RECONNECT_DELAY
     this.websocketConnected = false
     this.closeRequested = false
+    this.peerId = Utils.generateId()
   }
 
   async authenticate() {
@@ -76,10 +77,13 @@ export class SyncEngine {
   }
 
   start(authToken) {
+    const path = this._umap.urls.get('ws_sync', { map_id: this._umap.id })
+    const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
     this.transport = new WebSocketTransport(
-      Utils.template(this._umap.properties.websocketURI, { id: this._umap.id }),
+      `${protocol}//${window.location.host}${path}`,
       authToken,
-      this
+      this,
+      this.peerId
     )
   }
 
@@ -125,7 +129,7 @@ export class SyncEngine {
 
     if (this.offline) return
     if (this.transport) {
-      this.transport.send('OperationMessage', { sender: this.uuid, ...message })
+      this.transport.send('OperationMessage', { sender: this.peerId, ...message })
     }
   }
 
@@ -177,7 +181,7 @@ export class SyncEngine {
    * @param {Object} payload
    */
   onOperationMessage(payload) {
-    if (payload.sender === this.uuid) return
+    if (payload.sender === this.peerId) return
     this._operations.storeRemoteOperations([payload])
     this._applyOperation(payload)
   }
@@ -189,9 +193,8 @@ export class SyncEngine {
    * @param {string} payload.uuid The server-assigned uuid for this peer
    * @param {string[]} payload.peers The list of peers uuids
    */
-  onJoinResponse({ uuid, peers }) {
-    debug('received join response', { uuid, peers })
-    this.uuid = uuid
+  onJoinResponse({ peer, peers }) {
+    debug('received join response', { peer, peers })
     this.onListPeersResponse({ peers })
 
     // Get one peer at random
@@ -287,7 +290,7 @@ export class SyncEngine {
   sendToPeer(recipient, verb, payload) {
     payload.verb = verb
     this.transport.send('PeerMessage', {
-      sender: this.uuid,
+      sender: this.peerId,
       recipient: recipient,
       message: payload,
     })
@@ -299,7 +302,7 @@ export class SyncEngine {
    * @returns {string|bool} the selected peer uuid, or False if none was found.
    */
   _getRandomPeer() {
-    const otherPeers = this.peers.filter((p) => p !== this.uuid)
+    const otherPeers = this.peers.filter((p) => p !== this.peerId)
     if (otherPeers.length > 0) {
       const random = Math.floor(Math.random() * otherPeers.length)
       return otherPeers[random]

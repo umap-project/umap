@@ -102,3 +102,6 @@ format_css=true
 blank_line_after_tag="load,extends"
 line_break_after_multiline_tag=true
 
+[lint]
+# Disable autoremove of unused import.
+unfixable = ["F401"]

@@ -1,6 +1,8 @@
 import re
 
 import pytest
+import redis
+from django.conf import settings
 from playwright.sync_api import expect
 
 from umap.models import DataLayer, Map
@@ -9,11 +11,21 @@ from ..base import DataLayerFactory, MapFactory
 
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
+pytestmark = pytest.mark.django_db
+
+
+def setup_function():
+    # Sync client to prevent headache with pytest / pytest-asyncio and async
+    client = redis.from_url(settings.REDIS_URL)
+    # Make sure there are no dead peers in the Redis hash, otherwise asking for
+    # operations from another peer may never be answered
+    # FIXME this should not happen in an ideal world
+    assert client.connection_pool.connection_kwargs["db"] == 15
+    client.flushdb()
+
 
 @pytest.mark.xdist_group(name="websockets")
-def test_websocket_connection_can_sync_markers(
-    new_page, live_server, asgi_live_server, tilelayer
-):
+def test_websocket_connection_can_sync_markers(new_page, asgi_live_server, tilelayer):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
     map.save()
@@ -21,9 +33,9 @@ def test_websocket_connection_can_sync_markers(
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
     peerB = new_page("Page B")
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     a_marker_pane = peerA.locator(".leaflet-marker-pane > div")
     b_marker_pane = peerB.locator(".leaflet-marker-pane > div")
@@ -79,9 +91,7 @@ def test_websocket_connection_can_sync_markers(
 
 
 @pytest.mark.xdist_group(name="websockets")
-def test_websocket_connection_can_sync_polygons(
-    context, live_server, asgi_live_server, tilelayer
-):
+def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilelayer):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
     map.save()
@@ -89,9 +99,9 @@ def test_websocket_connection_can_sync_polygons(
 
     # Create two tabs
     peerA = context.new_page()
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
     peerB = context.new_page()
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     b_map_el = peerB.locator("#map")
 
@@ -164,7 +174,7 @@ def test_websocket_connection_can_sync_polygons(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_map_properties(
-    new_page, live_server, asgi_live_server, tilelayer
+    new_page, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -173,9 +183,9 @@ def test_websocket_connection_can_sync_map_properties(
 
     # Create two tabs
     peerA = new_page()
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
     peerB = new_page()
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Name change is synced
     peerA.get_by_role("link", name="Edit map name and caption").click()
@@ -196,7 +206,7 @@ def test_websocket_connection_can_sync_map_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_datalayer_properties(
-    new_page, live_server, asgi_live_server, tilelayer
+    new_page, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -205,9 +215,9 @@ def test_websocket_connection_can_sync_datalayer_properties(
 
     # Create two tabs
     peerA = new_page()
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
     peerB = new_page()
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Layer addition, name and type are synced
     peerA.get_by_role("link", name="Manage layers").click()
@@ -225,7 +235,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_cloned_polygons(
-    context, live_server, asgi_live_server, tilelayer
+    context, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -234,9 +244,9 @@ def test_websocket_connection_can_sync_cloned_polygons(
 
     # Create two tabs
     peerA = context.new_page()
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
     peerB = context.new_page()
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     b_map_el = peerB.locator("#map")
 
@@ -288,7 +298,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_late_joining_peer(
-    new_page, live_server, asgi_live_server, tilelayer
+    new_page, asgi_live_server, tilelayer
 ):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
@@ -297,7 +307,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
     # Create first peer (A) and have it join immediately
     peerA = new_page("Page A")
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Add a marker from peer A
     a_create_marker = peerA.get_by_title("Draw a marker")
@@ -324,7 +334,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
     # Now create peer B and have it join
     peerB = new_page("Page B")
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Check if peer B has received all the updates
     b_marker_pane = peerB.locator(".leaflet-marker-pane > div")
@@ -349,7 +359,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
 
 @pytest.mark.xdist_group(name="websockets")
-def test_should_sync_datalayers(new_page, live_server, asgi_live_server, tilelayer):
+def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
     map.save()
@@ -358,9 +368,9 @@ def test_should_sync_datalayers(new_page, live_server, asgi_live_server, tilelay
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
     peerB = new_page("Page B")
-    peerB.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Create a new layer from peerA
     peerA.get_by_role("link", name="Manage layers").click()
@@ -421,12 +431,10 @@ def test_should_sync_datalayers(new_page, live_server, asgi_live_server, tilelay
 
 
 @pytest.mark.xdist_group(name="websockets")
-def test_create_and_sync_map(
-    new_page, live_server, asgi_live_server, tilelayer, login, user
-):
+def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user):
     # Create a syncable map with peerA
     peerA = login(user, prefix="Page A")
-    peerA.goto(f"{live_server.url}/en/map/new/")
+    peerA.goto(f"{asgi_live_server.url}/en/map/new/")
     with peerA.expect_response(re.compile("./map/create/.*")):
         peerA.get_by_role("button", name="Save Draft").click()
     peerA.get_by_role("link", name="Map advanced properties").click()
