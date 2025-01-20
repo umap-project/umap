@@ -150,7 +150,11 @@ class Peer:
 
     async def send(self, text):
         print("  FORWARDING TO", self.peer_id, text)
-        await self._send({"type": "websocket.send", "text": text})
+        try:
+            await self._send({"type": "websocket.send", "text": text})
+        except Exception as err:
+            print("Error sending message:", text)
+            print(err)
 
 
 urlpatterns = [path("ws/sync/<str:map_id>", name="ws_sync", view=sync)]
