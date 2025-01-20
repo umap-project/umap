@@ -1,6 +1,8 @@
 import re
 
 import pytest
+import redis
+from django.conf import settings
 from playwright.sync_api import expect
 
 from umap.models import DataLayer, Map
@@ -8,6 +10,18 @@ from umap.models import DataLayer, Map
 from ..base import DataLayerFactory, MapFactory
 
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
+
+pytestmark = pytest.mark.django_db
+
+
+def setup_function():
+    # Sync client to prevent headache with pytest / pytest-asyncio and async
+    client = redis.from_url(settings.REDIS_URL)
+    # Make sure there are no dead peers in the Redis hash, otherwise asking for
+    # operations from another peer may never be answered
+    # FIXME this should not happen in an ideal world
+    assert client.connection_pool.connection_kwargs["db"] == 15
+    client.flushdb()
 
 
 @pytest.mark.xdist_group(name="websockets")
