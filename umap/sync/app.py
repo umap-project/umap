@@ -33,22 +33,16 @@ async def sync(scope, receive, send, **kwargs):
     peer._send = send
     while True:
         event = await receive()
-        print("EVENT", event)
 
         if event["type"] == "websocket.connect":
             try:
-                print("Let's accept")
                 await peer.connect()
-                print("After connect")
                 await send({"type": "websocket.accept"})
-                print("After accept")
             except ValueError:
                 await send({"type": "websocket.close"})
 
         if event["type"] == "websocket.disconnect":
-            print("Closing", event)
             await peer.disconnect()
-            print("Closed")
             break
 
         if event["type"] == "websocket.receive":
@@ -121,7 +115,7 @@ class Peer:
 
     async def receive(self, text_data):
         if not self.is_authenticated:
-            print("AUTHENTICATING", self.uuid)
+            print("AUTHENTICATING", text_data)
             message = JoinRequest.model_validate_json(text_data)
             signed = TimestampSigner().unsign_object(message.token, max_age=30)
             user, room_id, permissions = signed.values()
@@ -155,7 +149,7 @@ class Peer:
                     await self.send_to(incoming.root.recipient, text_data)
 
     async def send(self, text):
-        print("SEND", text)
+        print("  FORWARDING TO", self.peer_id, text)
         await self._send({"type": "websocket.send", "text": text})
 
 
