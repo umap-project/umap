@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import uuid
 
 import redis.asyncio as redis
 from django.conf import settings
@@ -29,7 +28,8 @@ async def application(scope, receive, send):
 
 
 async def sync(scope, receive, send, **kwargs):
-    peer = Peer(uuid=uuid.uuid4(), map_id=kwargs["map_id"])
+    room_id = f"umap:{kwargs['map_id']}"
+    peer = Peer(room_id)
     peer._send = send
     while True:
         event = await receive()
@@ -59,11 +59,9 @@ async def sync(scope, receive, send, **kwargs):
 
 
 class Peer:
-    def __init__(self, uuid, map_id, username=None):
-        self.uuid = uuid
-        self.user_id = f"user:{uuid}"
+    def __init__(self, room_id, username=None):
         self.username = username or ""
-        self.room_id = f"umap:{map_id}"
+        self.room_id = room_id
         self.is_authenticated = False
 
     async def get_peers(self):
@@ -90,17 +88,17 @@ class Peer:
 
     async def listen(self):
         await self.listen_to_channel(self.room_id)
-        await self.listen_to_channel(self.user_id)
+        await self.listen_to_channel(self.peer_id)
 
     async def connect(self):
         self.client = redis.from_url(settings.REDIS_URL)
 
     async def disconnect(self):
-        await self.client.hdel(self.room_id, self.user_id)
+        await self.client.hdel(self.room_id, self.peer_id)
         await self.send_peers_list()
         await self.client.aclose()
         await self.client.publish(self.room_id, "STOP")
-        await self.client.publish(self.user_id, "STOP")
+        await self.client.publish(self.peer_id, "STOP")
 
     async def send_peers_list(self):
         message = ListPeersResponse(peers=await self.get_peers())
@@ -124,9 +122,11 @@ class Peer:
             user, room_id, permissions = signed.values()
             if "edit" not in permissions:
                 return await self.disconnect()
-            await self.client.hset(self.room_id, self.user_id, self.username)
+            self.peer_id = message.peer
+            print("AUTHENTICATED", self.peer_id)
+            await self.client.hset(self.room_id, self.peer_id, self.username)
             await self.listen()
-            response = JoinResponse(uuid=str(self.uuid), peers=await self.get_peers())
+            response = JoinResponse(peer=self.peer_id, peers=await self.get_peers())
             await self.send(response.model_dump_json())
             await self.send_peers_list()
             self.is_authenticated = True

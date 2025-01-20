@@ -3,13 +3,13 @@ const PING_INTERVAL = 30000
 const FIRST_CONNECTION_TIMEOUT = 2000
 
 export class WebSocketTransport {
-  constructor(webSocketURI, authToken, messagesReceiver) {
+  constructor(webSocketURI, authToken, messagesReceiver, peerId) {
     this.receiver = messagesReceiver
 
     this.websocket = new WebSocket(webSocketURI)
 
     this.websocket.onopen = () => {
-      this.send('JoinRequest', { token: authToken })
+      this.send('JoinRequest', { token: authToken, peer: peerId })
       this.receiver.onConnection()
     }
     this.websocket.addEventListener('message', this.onMessage.bind(this))
