@@ -289,5 +289,5 @@ def test_should_remove_all_versions_on_delete(map, settings):
         datalayer.geojson.storage.save(root / f"{path}.gz", ContentFile("{}"))
     assert len(datalayer.geojson.storage.listdir(root)[1]) == 10 + before
     datalayer.delete()
-    found = datalayer.geojson.storage.listdir(root)[1]
-    assert found == [other, f"{other}.gz"]
+    found = set(datalayer.geojson.storage.listdir(root)[1])
+    assert found == {other, f"{other}.gz"}
