@@ -254,6 +254,7 @@ export default class Browser {
       if (datalayer.isVisible()) allHidden = false
     })
     this._umap.eachBrowsableDataLayer((datalayer) => {
+      datalayer._forcedVisibility = true
       if (allHidden) {
         datalayer.show()
       } else {
