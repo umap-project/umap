@@ -541,7 +541,13 @@ export default class Umap extends ServerStored {
           if (SAVEMANAGER.isDirty) this.saveAll()
           break
         case 'z':
-          if (SAVEMANAGER.isDirty) this.askForReset()
+          if (Utils.isWritable(event.target)) {
+            used = false
+            break
+          }
+          if (SAVEMANAGER.isDirty) {
+            this.askForReset()
+          }
           break
         case 'm':
           this._leafletMap.editTools.startMarker()
