@@ -83,7 +83,8 @@ export class SyncEngine {
       `${protocol}//${window.location.host}${path}`,
       authToken,
       this,
-      this.peerId
+      this.peerId,
+      this._umap.properties.user?.name
     )
   }
 
@@ -146,7 +147,7 @@ export class SyncEngine {
   }
 
   getNumberOfConnectedPeers() {
-    if (this.peers) return this.peers.length
+    if (this.peers) return Object.keys(this.peers).length
     return 0
   }
 
@@ -215,7 +216,7 @@ export class SyncEngine {
    * @param {string[]} payload.peers The list of peers uuids
    */
   onListPeersResponse({ peers }) {
-    debug('received peerinfo', { peers })
+    debug('received peerinfo', peers)
     this.peers = peers
     this.updaters.map.update({ key: 'numberOfConnectedPeers' })
   }
@@ -302,7 +303,7 @@ export class SyncEngine {
    * @returns {string|bool} the selected peer uuid, or False if none was found.
    */
   _getRandomPeer() {
-    const otherPeers = this.peers.filter((p) => p !== this.peerId)
+    const otherPeers = Object.keys(this.peers).filter((p) => p !== this.peerId)
     if (otherPeers.length > 0) {
       const random = Math.floor(Math.random() * otherPeers.length)
       return otherPeers[random]

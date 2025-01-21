@@ -28,8 +28,7 @@ async def application(scope, receive, send):
 
 
 async def sync(scope, receive, send, **kwargs):
-    room_id = f"umap:{kwargs['map_id']}"
-    peer = Peer(room_id)
+    peer = Peer(kwargs["map_id"])
     peer._send = send
     while True:
         event = await receive()
@@ -53,16 +52,28 @@ async def sync(scope, receive, send, **kwargs):
 
 
 class Peer:
-    def __init__(self, room_id, username=None):
+    def __init__(self, map_id, username=None):
         self.username = username or ""
-        self.room_id = room_id
+        self.map_id = map_id
         self.is_authenticated = False
         self._subscriptions = []
 
+    @property
+    def room_key(self):
+        return f"umap:{self.map_id}"
+
+    @property
+    def peer_key(self):
+        return f"user:{self.map_id}:{self.peer_id}"
+
     async def get_peers(self):
-        peers = await self.client.hgetall(self.room_id)
-        # Send only ids for now (values are client names).
-        return peers.keys()
+        known = await self.client.hgetall(self.room_key)
+        active = await self.client.pubsub_channels(f"user:{self.map_id}:*")
+        active = [name.split(b":")[-1] for name in active]
+        if self.peer_id.encode() not in active:
+            # Our connection may not yet be active
+            active.append(self.peer_id.encode())
+        return {k: v for k, v in known.items() if k in active}
 
     async def listen_to_channel(self, channel_name):
         async def reader(pubsub):
@@ -85,14 +96,14 @@ class Peer:
             asyncio.create_task(reader(pubsub))
 
     async def listen(self):
-        await self.listen_to_channel(self.room_id)
-        await self.listen_to_channel(self.peer_id)
+        await self.listen_to_channel(self.room_key)
+        await self.listen_to_channel(self.peer_key)
 
     async def connect(self):
         self.client = redis.from_url(settings.REDIS_URL)
 
     async def disconnect(self):
-        await self.client.hdel(self.room_id, self.peer_id)
+        await self.client.hdel(self.room_key, self.peer_id)
         for pubsub in self._subscriptions:
             await pubsub.unsubscribe()
             await pubsub.close()
@@ -106,24 +117,26 @@ class Peer:
     async def broadcast(self, message):
         print("BROADCASTING", message)
         # Send to all channels (including sender!)
-        await self.client.publish(self.room_id, message)
+        await self.client.publish(self.room_key, message)
 
     async def send_to(self, peer_id, message):
         print("SEND TO", peer_id, message)
         # Send to one given channel
-        await self.client.publish(peer_id, message)
+        await self.client.publish(f"user:{self.map_id}:{peer_id}", message)
 
     async def receive(self, text_data):
         if not self.is_authenticated:
             print("AUTHENTICATING", text_data)
             message = JoinRequest.model_validate_json(text_data)
             signed = TimestampSigner().unsign_object(message.token, max_age=30)
-            user, room_id, permissions = signed.values()
+            user, map_id, permissions = signed.values()
+            assert str(map_id) == self.map_id
             if "edit" not in permissions:
                 return await self.disconnect()
             self.peer_id = message.peer
+            self.username = message.username
             print("AUTHENTICATED", self.peer_id)
-            await self.client.hset(self.room_id, self.peer_id, self.username)
+            await self.client.hset(self.room_key, self.peer_id, self.username)
             await self.listen()
             response = JoinResponse(peer=self.peer_id, peers=await self.get_peers())
             await self.send(response.model_dump_json())

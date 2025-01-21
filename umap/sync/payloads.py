@@ -7,6 +7,7 @@ class JoinRequest(BaseModel):
     kind: Literal["JoinRequest"] = "JoinRequest"
     token: str
     peer: str
+    username: Optional[str] = ""
 
 
 class OperationMessage(BaseModel):
@@ -39,10 +40,10 @@ class JoinResponse(BaseModel):
     """Server response containing the list of peers"""
 
     kind: Literal["JoinResponse"] = "JoinResponse"
-    peers: list
+    peers: dict
     peer: str
 
 
 class ListPeersResponse(BaseModel):
     kind: Literal["ListPeersResponse"] = "ListPeersResponse"
-    peers: list
+    peers: dict
