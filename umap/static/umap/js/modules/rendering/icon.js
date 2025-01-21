@@ -70,6 +70,11 @@ const BaseIcon = DivIcon.extend({
   },
 
   onAdd: () => {},
+
+  _setIconStyles: function (img, name) {
+    if (this.feature.isActive()) this.options.className += ' umap-icon-active'
+    DivIcon.prototype._setIconStyles.call(this, img, name)
+  },
 })
 
 const DefaultIcon = BaseIcon.extend({
@@ -86,7 +91,6 @@ const DefaultIcon = BaseIcon.extend({
   },
 
   _setIconStyles: function (img, name) {
-    if (this.feature.isActive()) this.options.className += ' umap-icon-active'
     BaseIcon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor()
     const opacity = this._getOpacity()
