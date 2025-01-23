@@ -1,24 +1,29 @@
-import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 import { Positioned } from './base.js'
+import * as Utils from '../utils.js'
 
 export default class Tooltip extends Positioned {
   constructor(parent) {
     super()
     this.parent = parent
-    this.container = DomUtil.create('div', 'with-transition', this.parent)
-    this.container.id = 'umap-tooltip-container'
+    this.container = Utils.loadTemplate(
+      '<div id="umap-tooltip-container" class="with-transition"></div>'
+    )
+    this.parent.appendChild(this.container)
     DomEvent.disableClickPropagation(this.container)
-    DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
-    DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
-    DomEvent.on(this.container, 'MozMousePixelScroll', DomEvent.stopPropagation)
+    this.container.addEventListener('contextmenu', (event) => event.stopPropagation()) // Do not activate our custom context menu.
+    this.container.addEventListener('wheel', (event) => event.stopPropagation())
+    this.container.addEventListener('MozMousePixelScroll', (event) =>
+      event.stopPropagation()
+    )
   }
 
   open(opts) {
     const showIt = () => {
+      this.container.innerHTML = Utils.escapeHTML(opts.content)
+      this.parent.classList.add('umap-tooltip')
       this.openAt(opts)
-      L.DomUtil.addClass(this.parent, 'umap-tooltip')
-      this.container.innerHTML = U.Utils.escapeHTML(opts.content)
     }
     this.TOOLTIP_ID = window.setTimeout(L.bind(showIt, this), opts.delay || 0)
     const id = this.TOOLTIP_ID
@@ -26,7 +31,7 @@ export default class Tooltip extends Positioned {
       this.close(id)
     }
     if (opts.anchor) {
-      L.DomEvent.once(opts.anchor, 'mouseout', closeIt)
+      opts.anchor.addEventListener('mouseout', closeIt, { once: true })
     }
     if (opts.duration !== Number.POSITIVE_INFINITY) {
       window.setTimeout(closeIt, opts.duration || 3000)
@@ -41,6 +46,6 @@ export default class Tooltip extends Positioned {
     this.container.className = ''
     this.container.innerHTML = ''
     this.setPosition({})
-    L.DomUtil.removeClass(this.parent, 'umap-tooltip')
+    this.parent.classList.remove('umap-tooltip')
   }
 }

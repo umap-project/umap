@@ -33,8 +33,9 @@ export class Positioned {
   anchorBottom(el) {
     this.container.className = 'tooltip-bottom'
     const coords = this.getPosition(el)
+    const selfCoords = this.getPosition(this.container)
     this.setPosition({
-      left: coords.left,
+      left: coords.left + coords.width / 2 - selfCoords.width / 2,
       top: coords.bottom + 11,
     })
   }
