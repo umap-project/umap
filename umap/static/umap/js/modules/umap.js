@@ -1351,7 +1351,7 @@ export default class Umap extends ServerStored {
       numberOfConnectedPeers: () => {
         Utils.eachElement('.connected-peers span', (el) => {
           if (this.sync.websocketConnected) {
-            el.textContent = this.sync.getNumberOfConnectedPeers()
+            el.textContent = Object.keys(this.sync.getPeers()).length
           } else {
             el.textContent = translate('Disconnected')
           }

@@ -21,7 +21,11 @@ export default class Tooltip extends Positioned {
 
   open(opts) {
     const showIt = () => {
-      this.container.innerHTML = Utils.escapeHTML(opts.content)
+      if (opts.content.nodeType === 1) {
+        this.container.appendChild(opts.content)
+      } else {
+        this.container.innerHTML = Utils.escapeHTML(opts.content)
+      }
       this.parent.classList.add('umap-tooltip')
       this.openAt(opts)
     }
