@@ -69,11 +69,19 @@ class Peer:
     async def get_peers(self):
         known = await self.client.hgetall(self.room_key)
         active = await self.client.pubsub_channels(f"user:{self.map_id}:*")
+        if not active:
+            # Poor man way of deleting stale usernames from the store
+            # HEXPIRE command is not in the open source Redis version
+            await self.client.delete(self.room_key)
+            await self.store_username()
         active = [name.split(b":")[-1] for name in active]
         if self.peer_id.encode() not in active:
             # Our connection may not yet be active
             active.append(self.peer_id.encode())
         return {k: v for k, v in known.items() if k in active}
+
+    async def store_username(self):
+        await self.client.hset(self.room_key, self.peer_id, self.username)
 
     async def listen_to_channel(self, channel_name):
         async def reader(pubsub):
@@ -136,7 +144,7 @@ class Peer:
             self.peer_id = message.peer
             self.username = message.username
             print("AUTHENTICATED", self.peer_id)
-            await self.client.hset(self.room_key, self.peer_id, self.username)
+            await self.store_username()
             await self.listen()
             response = JoinResponse(peer=self.peer_id, peers=await self.get_peers())
             await self.send(response.model_dump_json())
