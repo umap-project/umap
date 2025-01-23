@@ -50,6 +50,8 @@ jobs:
           DJANGO_SETTINGS_MODULE: 'umap.tests.settings'
           UMAP_SETTINGS: 'umap/tests/settings.py'
           PLAYWRIGHT_TIMEOUT: '20000'
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
   lint:
     runs-on: ubuntu-latest
     steps:
