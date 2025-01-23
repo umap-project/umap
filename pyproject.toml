@@ -72,6 +72,7 @@ s3 = [
 ]
 sync = [
   "pydantic==2.10.5",
+  "redis==5.2.1",
 ]
 
 [project.scripts]
