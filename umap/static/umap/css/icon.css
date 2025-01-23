@@ -153,6 +153,12 @@ html[dir="rtl"] .icon {
 .icon-share {
     background-position: 0px calc(var(--tile) * 5);
 }
+.icon-star {
+    background-position: var(--tile) calc(var(--tile) * 7);
+}
+.icon-starred {
+    background-position: 0 calc(var(--tile) * 7);
+}
 .icon-table {
     background-position: calc(var(--tile) * 2) 0px;
 }

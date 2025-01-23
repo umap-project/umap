@@ -1360,7 +1360,11 @@ export default class Umap extends ServerStored {
       },
       'properties.starred': () => {
         Utils.eachElement('.map-star', (el) => {
-          el.classList.toggle('starred', this.properties.starred)
+          el.classList.toggle('icon-starred', this.properties.starred)
+          el.classList.toggle('icon-star', !this.properties.starred)
+        })
+        Utils.eachElement('.map-stars', (el) => {
+          el.textContent = this.properties.stars || translate('Star this map')
         })
       },
     }
@@ -1543,6 +1547,7 @@ export default class Umap extends ServerStored {
       return
     }
     this.properties.starred = data.starred
+    this.properties.stars = data.stars
     Alert.success(
       data.starred
         ? translate('Map has been starred')

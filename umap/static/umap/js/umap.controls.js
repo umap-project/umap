@@ -491,18 +491,6 @@ U.CaptionControl = L.Control.Button.extend({
   },
 })
 
-U.StarControl = L.Control.Button.extend({
-  options: {
-    position: 'topleft',
-    title: L._('Star this map'),
-    className: 'leaflet-control-star map-star umap-control',
-  },
-
-  onClick: function () {
-    this._umap.star()
-  },
-})
-
 L.Control.Embed = L.Control.Button.extend({
   options: {
     position: 'topleft',
