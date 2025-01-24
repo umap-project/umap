@@ -88,7 +88,11 @@ const ClassifiedMixin = {
   },
 
   getColorSchemes: function (classes) {
-    return this.colorSchemes.filter((scheme) => Boolean(colorbrewer[scheme][classes]))
+    const found = this.colorSchemes.filter((scheme) =>
+      Boolean(colorbrewer[scheme][classes])
+    )
+    if (found.length) return found
+    return [['', translate('Default')]]
   },
 }
 
