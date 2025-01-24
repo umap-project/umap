@@ -697,6 +697,11 @@ a.umap-control-caption,
 .umap-caption .header i.icon {
     flex-shrink: 0;
 }
+.umap-caption hgroup p,
+.umap-caption hgroup button {
+    margin: 0;
+    padding: 0;
+}
 .umap-browser .main-toolbox {
     padding-left: 4px; /* Align with toolbox below  */
     border-top: 1px solid var(--color-mediumGray);

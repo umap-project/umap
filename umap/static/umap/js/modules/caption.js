@@ -8,9 +8,9 @@ const TEMPLATE = `
     <i class="icon icon-16 icon-caption icon-block"></i>
     <hgroup>
       <h3><span class="map-name" data-ref="name"></span></h3>
-      <h5 class="dates" data-ref="dates"></h5>
-      <h4 data-ref="author"></h4>
-      <h5><i class="icon icon-16 icon-star map-star" data-ref="star"></i><span class="map-stars"></span></h5>
+      <p class="dates" data-ref="dates"></p>
+      <p data-ref="author"></p>
+      <button type="button" data-ref="star"><i class="icon icon-16 icon-star map-star"></i><span class="map-stars"></span></button>
     </hgroup>
   </div>
   <div class="umap-map-description text" data-ref="description"></div>
