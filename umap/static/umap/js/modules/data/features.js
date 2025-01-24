@@ -213,6 +213,7 @@ class Feature {
       if (this._umap.currentFeature === this) {
         this.view()
       }
+      this.datalayer.indexProperties(this)
     }
     this.redraw()
   }
