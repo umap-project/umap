@@ -424,7 +424,7 @@ export const Categorized = FeatureGroup.extend({
     } else {
       this.options.colors = colorbrewer?.Accent[this._classes]
         ? colorbrewer?.Accent[this._classes]
-        : U.COLORS // Fixme: move COLORS to modules/
+        : Utils.COLORS
     }
   },
 
