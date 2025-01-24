@@ -24,6 +24,7 @@ def test_layers_list_is_updated(live_server, tilelayer, page):
     page.get_by_role("button", name="Add a layer").click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("foobar")
+    page.wait_for_timeout(300)  # Time for the input debounce.
     page.get_by_role("link", name=f"Import data ({modifier}+I)").click()
     # Should still work
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")

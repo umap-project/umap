@@ -132,7 +132,10 @@ Fields.Textarea = class extends BaseElement {
     super.build()
     this.textarea = this.elements.textarea
     this.fetch()
-    this.textarea.addEventListener('input', () => this.sync())
+    this.textarea.addEventListener(
+      'input',
+      Utils.debounce(() => this.sync(), 300)
+    )
     this.textarea.addEventListener('keypress', (event) => this.onKeyPress(event))
   }
 
@@ -179,7 +182,7 @@ Fields.Input = class extends BaseElement {
       this.input.step = this.properties.step
     }
     this.fetch()
-    this.input.addEventListener(this.getSyncEvent(), () => this.sync())
+    this.listenForSync()
     this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
   }
 
@@ -189,8 +192,11 @@ Fields.Input = class extends BaseElement {
     this.input.value = value
   }
 
-  getSyncEvent() {
-    return 'input'
+  listenForSync() {
+    this.input.addEventListener(
+      'input',
+      Utils.debounce(() => this.sync(), 300)
+    )
   }
 
   type() {
@@ -212,8 +218,8 @@ Fields.Input = class extends BaseElement {
 }
 
 Fields.BlurInput = class extends Fields.Input {
-  getSyncEvent() {
-    return 'blur'
+  listenForSync() {
+    this.input.addEventListener('blur', () => this.sync())
   }
 
   getTemplate() {
