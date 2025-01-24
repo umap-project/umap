@@ -468,7 +468,7 @@ export const Categorized = FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the categories if we're dealing with categorized
-    if (!field.startsWith('options.categorized')) return
+    if (!field.startsWith('options.categorized') && field !== 'options.type') return
     // If user touches the categories, then force manual mode
     if (field === 'options.categorized.categories') {
       this.datalayer.options.categorized.mode = 'manual'
