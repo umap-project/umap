@@ -236,7 +236,7 @@ class Feature {
 
     const properties = []
     let labelKeyFound = undefined
-    for (const property of this.datalayer._propertiesIndex) {
+    for (const property of this.datalayer.allProperties()) {
       if (!labelKeyFound && U.LABEL_KEYS.includes(property)) {
         labelKeyFound = property
         continue
