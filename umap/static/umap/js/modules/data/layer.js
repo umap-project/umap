@@ -302,6 +302,19 @@ export class DataLayer extends ServerStored {
     return this.isRemoteLayer() && Boolean(this.options.remoteData?.dynamic)
   }
 
+  async getUrl(url) {
+    const response = await this._umap.request.get(url)
+    return new Promise((resolve) => {
+      if (response?.ok) return resolve(response.text())
+      Alert.error(
+        translate('Cannot load remote data for layer "{layer}" with url "{url}"', {
+          layer: this.getName(),
+          url: url,
+        })
+      )
+    })
+  }
+
   async fetchRemoteData(force) {
     if (!this.isRemoteLayer()) return
     if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
@@ -310,13 +323,12 @@ export class DataLayer extends ServerStored {
     if (this.options.remoteData.proxy) {
       url = this._umap.proxyUrl(url, this.options.remoteData.ttl)
     }
-    const response = await this._umap.request.get(url)
-    if (response?.ok) {
+    return await this.getUrl(url).then((raw) => {
       this.clear()
       return this._umap.formatter
-        .parse(await response.text(), this.options.remoteData.format)
+        .parse(raw, this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson))
-    }
+    })
   }
 
   isLoaded() {
@@ -541,10 +553,9 @@ export class DataLayer extends ServerStored {
 
   async importFromUrl(uri, type) {
     uri = this._umap.renderUrl(uri)
-    const response = await this._umap.request.get(uri)
-    if (response?.ok) {
-      return this.importRaw(await response.text(), type)
-    }
+    return await this.getUrl(uri).then((raw) => {
+      return this.importRaw(raw, type)
+    })
   }
 
   getColor() {
