@@ -462,7 +462,7 @@ export class DataLayer extends ServerStored {
   }
 
   sortFeatures(collection) {
-    const sortKeys = this._umap.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
+    const sortKeys = this.getOption('sortKey') || U.DEFAULT_LABEL_KEY
     return Utils.sortFeatures(collection, sortKeys, U.lang)
   }
 
@@ -731,10 +731,16 @@ export class DataLayer extends ServerStored {
       'options.zoomTo',
       'options.fromZoom',
       'options.toZoom',
+      'options.sortKey',
     ]
 
     builder = new MutatingForm(this, optionsFields, {
       id: 'datalayer-advanced-properties',
+    })
+    builder.on('set', ({ detail }) => {
+      if (detail.helper.field === 'options.sortKey') {
+        this.reindex()
+      }
     })
     const advancedProperties = DomUtil.createFieldset(
       container,
