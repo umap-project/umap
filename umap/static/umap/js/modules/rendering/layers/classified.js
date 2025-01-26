@@ -88,7 +88,11 @@ const ClassifiedMixin = {
   },
 
   getColorSchemes: function (classes) {
-    return this.colorSchemes.filter((scheme) => Boolean(colorbrewer[scheme][classes]))
+    const found = this.colorSchemes.filter((scheme) =>
+      Boolean(colorbrewer[scheme][classes])
+    )
+    if (found.length) return found
+    return [['', translate('Default')]]
   },
 }
 
@@ -191,7 +195,7 @@ export const Choropleth = FeatureGroup.extend({
         'options.choropleth.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer._propertiesIndex,
+          selectOptions: this.datalayer.allProperties(),
           label: translate('Choropleth property value'),
         },
       ],
@@ -300,7 +304,7 @@ export const Circles = FeatureGroup.extend({
         'options.circles.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer._propertiesIndex,
+          selectOptions: this.datalayer.allProperties(),
           label: translate('Property name to compute circles'),
         },
       ],
@@ -377,7 +381,7 @@ export const Categorized = FeatureGroup.extend({
 
   _getValue: function (feature) {
     const key =
-      this.datalayer.options.categorized.property || this.datalayer._propertiesIndex[0]
+      this.datalayer.options.categorized.property || this.datalayer.allProperties()[0]
     return feature.properties[key]
   },
 
@@ -420,7 +424,7 @@ export const Categorized = FeatureGroup.extend({
     } else {
       this.options.colors = colorbrewer?.Accent[this._classes]
         ? colorbrewer?.Accent[this._classes]
-        : U.COLORS // Fixme: move COLORS to modules/
+        : Utils.COLORS
     }
   },
 
@@ -430,7 +434,7 @@ export const Categorized = FeatureGroup.extend({
         'options.categorized.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer._propertiesIndex,
+          selectOptions: this.datalayer.allProperties(),
           label: translate('Category property'),
         },
       ],
@@ -464,7 +468,7 @@ export const Categorized = FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the categories if we're dealing with categorized
-    if (!field.startsWith('options.categorized')) return
+    if (!field.startsWith('options.categorized') && field !== 'options.type') return
     // If user touches the categories, then force manual mode
     if (field === 'options.categorized.categories') {
       this.datalayer.options.categorized.mode = 'manual'
