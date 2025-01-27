@@ -44,30 +44,10 @@ body.login header {
 .login-grid span,
 .login-grid a {
     border: 1px solid #e5e5e5;
-    padding: 5px;
     color: #000;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    background-size: 92px 92px;
     height: 92px;
     width: 92px;
     margin-inline-end: 10px;
-}
-.login-grid .login-github {
-    background-image: url("./github.png");
-}
-.login-grid .login-bitbucket {
-    background-image: url("./bitbucket.png");
-}
-.login-grid .login-twitter-oauth2 {
-    background-image: url("./twitter.png");
-}
-.login-grid .login-openstreetmap,
-.login-grid .login-openstreetmap-oauth2 {
-    background-image: url("./openstreetmap.png");
-}
-.login-grid .login-keycloak {
-    background-image: url("./keycloak.png");
 }
 
 /* **************************** */
