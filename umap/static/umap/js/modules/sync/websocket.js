@@ -3,13 +3,13 @@ const PING_INTERVAL = 30000
 const FIRST_CONNECTION_TIMEOUT = 2000
 
 export class WebSocketTransport {
-  constructor(webSocketURI, authToken, messagesReceiver) {
+  constructor(webSocketURI, authToken, messagesReceiver, peerId, username) {
     this.receiver = messagesReceiver
 
     this.websocket = new WebSocket(webSocketURI)
 
     this.websocket.onopen = () => {
-      this.send('JoinRequest', { token: authToken })
+      this.send('JoinRequest', { token: authToken, peer: peerId, username })
       this.receiver.onConnection()
     }
     this.websocket.addEventListener('message', this.onMessage.bind(this))
@@ -19,6 +19,10 @@ export class WebSocketTransport {
         console.log('Not requested, reconnecting...')
         this.receiver.reconnect()
       }
+    }
+
+    this.websocket.onerror = (error) => {
+      console.log('WS ERROR', error)
     }
 
     this.ensureOpen = setInterval(() => {
@@ -34,6 +38,7 @@ export class WebSocketTransport {
     // See https://making.close.com/posts/reliable-websockets/ for more details.
     this.pingInterval = setInterval(() => {
       if (this.websocket.readyState === WebSocket.OPEN) {
+        console.log('sending ping')
         this.websocket.send('ping')
         this.pongReceived = false
         setTimeout(() => {
@@ -63,6 +68,7 @@ export class WebSocketTransport {
   }
 
   close() {
+    console.log('Closing')
     this.receiver.closeRequested = true
     this.websocket.close()
   }

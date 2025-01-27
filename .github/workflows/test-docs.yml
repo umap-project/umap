@@ -20,7 +20,11 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+      redis:
+        image: redis
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 6379:6379
     strategy:
       fail-fast: false
       matrix:
@@ -48,6 +52,8 @@ jobs:
           DJANGO_SETTINGS_MODULE: 'umap.tests.settings'
           UMAP_SETTINGS: 'umap/tests/settings.py'
           PLAYWRIGHT_TIMEOUT: '20000'
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
   lint:
     runs-on: ubuntu-latest
     steps:

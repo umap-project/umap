@@ -54,6 +54,7 @@ dev = [
   "isort==5.13.2",
 ]
 test = [
+  "daphne==4.1.2",
   "factory-boy==3.3.1",
   "playwright>=1.39",
   "pytest==8.3.4",
@@ -70,10 +71,8 @@ s3 = [
   "django-storages[s3]==1.14.4",
 ]
 sync = [
-  "channels==4.2.0",
-  "daphne==4.1.2",
   "pydantic==2.10.5",
-  "websockets==13.1",
+  "redis==5.2.1",
 ]
 
 [project.scripts]
@@ -104,3 +103,6 @@ format_css=true
 blank_line_after_tag="load,extends"
 line_break_after_multiline_tag=true
 
+[lint]
+# Disable autoremove of unused import.
+unfixable = ["F401"]

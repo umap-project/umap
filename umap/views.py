@@ -609,7 +609,6 @@ class MapDetailMixin(SessionMixin):
             "umap_version": VERSION,
             "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
             "websocketEnabled": settings.WEBSOCKET_ENABLED,
-            "websocketURI": settings.WEBSOCKET_FRONT_URI,
             "importers": settings.UMAP_IMPORTERS,
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
         }

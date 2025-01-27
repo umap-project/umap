@@ -7,23 +7,36 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.urls import URLPattern, URLResolver, get_resolver
 
 
-def _urls_for_js(urls=None):
+def _get_url_names(module):
+    def _get_names(resolver):
+        names = []
+        for pattern in resolver.url_patterns:
+            if getattr(pattern, "url_patterns", None):
+                # Do not add "admin" and other third party apps urls.
+                if not pattern.namespace:
+                    names.extend(_get_names(pattern))
+            elif getattr(pattern, "name", None):
+                names.append(pattern.name)
+        return names
+
+    return _get_names(get_resolver(module))
+
+
+def _urls_for_js():
     """
     Return templated URLs prepared for javascript.
     """
-    if urls is None:
-        # prevent circular import
-        from .urls import i18n_urls, urlpatterns
-
-        urls = [
-            url.name for url in urlpatterns + i18n_urls if getattr(url, "name", None)
-        ]
-    urls = dict(zip(urls, [get_uri_template(url) for url in urls]))
+    urls = {}
+    for module in ["umap.urls", "umap.sync.app"]:
+        names = _get_url_names(module)
+        urls.update(
+            dict(zip(names, [get_uri_template(url, module=module) for url in names]))
+        )
     urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
     return urls
 
 
-def get_uri_template(urlname, args=None, prefix=""):
+def get_uri_template(urlname, args=None, prefix="", module=None):
     """
     Utility function to return an URI Template from a named URL in django
     Copied from django-digitalpaper.
@@ -45,7 +58,7 @@ def get_uri_template(urlname, args=None, prefix=""):
         paths = template % dict([p, "{%s}" % p] for p in args)
         return "%s/%s" % (prefix, paths)
 
-    resolver = get_resolver(None)
+    resolver = get_resolver(module)
     parts = urlname.split(":")
     if len(parts) > 1 and parts[0] in resolver.namespace_dict:
         namespace = parts[0]
