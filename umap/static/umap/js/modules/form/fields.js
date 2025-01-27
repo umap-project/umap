@@ -217,7 +217,7 @@ Fields.BlurInput = class extends Fields.Input {
   }
 
   getTemplate() {
-    return `${super.getTemplate()}<span class="button blur-button"></span>`
+    return `<div class="blur-container">${super.getTemplate()}<button type="button">✔</button></div>`
   }
 
   build() {
@@ -856,10 +856,10 @@ Fields.IconUrl = class extends Fields.BlurInput {
   }
 
   buildInput(parent, value) {
-    const input = Utils.loadTemplate('<input class="blur" />')
-    const button = Utils.loadTemplate('<span class="button blur-button"></span>')
-    parent.appendChild(input)
-    parent.appendChild(button)
+    const [element, { input }] = Utils.loadTemplateWithRefs(
+      '<div class="blur-container"><input class="blur" data-ref="input" /><button type="button">✔</button></div>'
+    )
+    parent.appendChild(element)
     if (value) input.value = value
     input.addEventListener('blur', () => {
       // Do not clear this.input when focus-blur

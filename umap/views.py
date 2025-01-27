@@ -605,6 +605,7 @@ class MapDetailMixin(SessionMixin):
             "schema": Map.extra_schema,
             "id": self.get_id(),
             "starred": self.is_starred(),
+            "stars": self.stars(),
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
             "umap_version": VERSION,
             "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
@@ -676,6 +677,9 @@ class MapDetailMixin(SessionMixin):
 
     def is_starred(self):
         return False
+
+    def stars(self):
+        return 0
 
     def get_geojson(self):
         return {
@@ -778,6 +782,9 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         if not user.is_authenticated:
             return False
         return Star.objects.filter(by=user, map=self.object).exists()
+
+    def stars(self):
+        return Star.objects.filter(map=self.object).count()
 
 
 class MapDownload(DetailView):
@@ -1080,7 +1087,9 @@ class ToggleMapStarStatus(View):
         else:
             Star.objects.create(map=map_inst, by=self.request.user)
             status = True
-        return simple_json_response(starred=status)
+        return simple_json_response(
+            starred=status, stars=Star.objects.filter(map=map_inst).count()
+        )
 
 
 class MapShortUrl(RedirectView):

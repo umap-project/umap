@@ -7,8 +7,8 @@ const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
     <div class="umap-left-edit-toolbox" data-ref="left">
         <div class="logo"><a class="" href="/" title="${translate('Go to the homepage')}">uMap</a></div>
-        <button class="map-name" type="button" data-ref="name"></button>
-        <button class="share-status" type="button" data-ref="share"></button>
+        <button class="map-name flat" type="button" data-ref="name"></button>
+        <button class="share-status flat" type="button" data-ref="share"></button>
     </div>
     <div class="umap-right-edit-toolbox" data-ref="right">
         <button class="connected-peers round" type="button" data-ref="peers">
@@ -19,7 +19,7 @@ const TOP_BAR_TEMPLATE = `
           <i class="icon icon-16 icon-profile"></i>
           <span class="username" data-ref="username"></span>
         </button>
-        <button class="umap-help-link" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
+        <button class="umap-help-link flat" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
         <button class="edit-cancel round" type="button" data-ref="cancel">
             <i class="icon icon-16 icon-restore"></i>
             <span class="">${translate('Cancel edits')}</span>

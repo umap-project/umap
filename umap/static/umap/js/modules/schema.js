@@ -478,12 +478,6 @@ export const SCHEMA = {
     label: translate('Sort key'),
     inheritable: true,
   },
-  starControl: {
-    type: Boolean,
-    impacts: ['ui'],
-    nullable: true,
-    label: translate('Display the star map button'),
-  },
   stroke: {
     type: Boolean,
     impacts: ['data'],

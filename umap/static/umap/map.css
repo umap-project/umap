@@ -134,12 +134,6 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     background-position: -72px -144px;
     box-shadow: 0 0 4px 0 black inset;
 }
-.leaflet-control-star [type="button"] {
-    background-position: -144px -144px;
-}
-.leaflet-control-star.starred [type="button"] {
-    background-position: -108px -144px;
-}
 .leaflet-control-search [type="button"] {
     background-position: -36px -108px;
     display: block;
@@ -702,6 +696,10 @@ a.umap-control-caption,
 }
 .umap-caption .header i.icon {
     flex-shrink: 0;
+}
+.umap-caption hgroup p,
+.umap-caption hgroup button {
+    margin: 0;
 }
 .umap-browser .main-toolbox {
     padding-left: 4px; /* Align with toolbox below  */

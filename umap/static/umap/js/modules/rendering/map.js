@@ -32,7 +32,6 @@ const ControlsMixin = {
     'locate',
     'measure',
     'editinosm',
-    'star',
     'tilelayers',
   ],
 
@@ -84,7 +83,6 @@ const ControlsMixin = {
     this._controls.search = new U.SearchControl()
     this._controls.embed = new Control.Embed(this._umap)
     this._controls.tilelayersChooser = new U.TileLayerChooser(this)
-    if (this.options.user?.id) this._controls.star = new U.StarControl(this._umap)
     this._controls.editinosm = new Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {

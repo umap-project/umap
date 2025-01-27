@@ -1,5 +1,6 @@
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 const TEMPLATE = `
 <div class="umap-caption">
@@ -7,8 +8,9 @@ const TEMPLATE = `
     <i class="icon icon-16 icon-caption icon-block"></i>
     <hgroup>
       <h3><span class="map-name" data-ref="name"></span></h3>
-      <h4 data-ref="author"></h4>
-      <h5 class="dates" data-ref="dates"></h5>
+      <p class="dates" data-ref="dates"></p>
+      <p data-ref="author"></p>
+      <p><button type="button" class="round" data-ref="star" title="${translate('Star this map')}"><i class="icon icon-16 icon-star map-star"></i><span class="map-stars"></span></button></p>
     </hgroup>
   </div>
   <div class="umap-map-description text" data-ref="description"></div>
@@ -35,6 +37,14 @@ export default class Caption extends Utils.WithTemplate {
     this._umap = umap
     this._leafletMap = leafletMap
     this.loadTemplate(TEMPLATE)
+    this.elements.star.addEventListener('click', async () => {
+      if (this._umap.properties.user?.id) {
+        await this._umap.star()
+        this.refresh()
+      } else {
+        Alert.error(translate('You must be logged in'))
+      }
+    })
   }
 
   isOpen() {
@@ -62,10 +72,6 @@ export default class Caption extends Utils.WithTemplate {
       this.addDataLayer(datalayer, this.elements.datalayersContainer)
     )
     this.addCredits()
-    this._umap.panel.open({ content: this.element }).then(() => {
-      // Create the legend when the panel is actually on the DOM
-      this._umap.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
-    })
     if (this._umap.properties.created_at) {
       const created_at = translate('Created at {date}', {
         date: new Date(this._umap.properties.created_at).toLocaleDateString(),
@@ -77,6 +83,11 @@ export default class Caption extends Utils.WithTemplate {
     } else {
       this.elements.dates.hidden = true
     }
+    this._umap.panel.open({ content: this.element }).then(() => {
+      // Create the legend when the panel is actually on the DOM
+      this._umap.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
+      this._umap.propagate()
+    })
   }
 
   addDataLayer(datalayer, parent) {
