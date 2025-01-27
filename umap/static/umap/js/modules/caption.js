@@ -10,7 +10,7 @@ const TEMPLATE = `
       <h3><span class="map-name" data-ref="name"></span></h3>
       <p class="dates" data-ref="dates"></p>
       <p data-ref="author"></p>
-      <button type="button" data-ref="star"><i class="icon icon-16 icon-star map-star"></i><span class="map-stars"></span></button>
+      <p><button type="button" class="round" data-ref="star" title="${translate('Star this map')}"><i class="icon icon-16 icon-star map-star"></i><span class="map-stars"></span></button></p>
     </hgroup>
   </div>
   <div class="umap-map-description text" data-ref="description"></div>

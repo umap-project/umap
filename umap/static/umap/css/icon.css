@@ -17,11 +17,11 @@
     background-image: url('../img/24.svg');
     --tile: -36px;
     height: 36px;
-    line-height: 36px;
     width: 36px;
 }
 .icon + span {
-    margin-inline-start: 10px;
+    margin-inline-start: 5px;
+    margin-inline-end: 5px;
 }
 html[dir="rtl"] .icon {
   transform: scaleX(-1);

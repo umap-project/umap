@@ -76,15 +76,14 @@ select[multiple="multiple"] {
 .button,
 [type="button"],
 input[type="submit"] {
-    display: block;
+    display: flex;
+    align-items: center;
     margin-bottom: 14px;
     text-align: center;
     border-radius: 2px;
     font-weight: normal;
     cursor: pointer;
-    padding: 7px 14px;
-    min-height: 32px;
-    line-height: 32px;
+    padding: 3px 12px;
     border: none;
     text-decoration: none;
     background-color: white;
@@ -131,6 +130,11 @@ button.flat:hover,
 [type="button"].flat:hover,
 .dark [type="button"].flat:hover {
     text-decoration: underline;
+}
+.dark button.round,
+button.round {
+    border-radius: 20px;
+    border: 0.5px solid rgba(153, 153, 153, 0.40);
 }
 .help-text, .helptext {
     display: block;
@@ -572,17 +576,11 @@ input.blur {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
 }
-.blur + .button:before,
-.blur + [type="button"]:before {
-    content: '✔';
-}
 .blur + .button,
 .blur + [type="button"] {
     width: 40px;
-    height: 18px;
     display: inline-block;
     vertical-align: middle;
-    line-height: 18px;
     border-start-start-radius: 0;
     border-end-start-radius: 0;
     box-sizing: border-box;
@@ -590,6 +588,10 @@ input.blur {
 input[type=hidden].blur + .button,
 input[type=hidden].blur + [type="button"] {
     display: none;
+}
+.blur-container {
+    display: flex;
+    align-items: stretch;
 }
 .copiable-input {
     display: flex;

@@ -700,7 +700,6 @@ a.umap-control-caption,
 .umap-caption hgroup p,
 .umap-caption hgroup button {
     margin: 0;
-    padding: 0;
 }
 .umap-browser .main-toolbox {
     padding-left: 4px; /* Align with toolbox below  */

@@ -42,7 +42,8 @@
     padding: var(--panel-gutter);
 }
 .panel h3 {
-    line-height: 120%;
+    display: flex;
+    align-items: center;
 }
 .panel .counter::before {
     counter-increment: step;
