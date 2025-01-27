@@ -98,7 +98,12 @@ Eg.: `SHORT_SITE_URL=https://u.umap.org`
 
 #### SITE_NAME
 
-The name of the site, to be used in header and HTML title.
+The name of the site, to be used in header.
+
+
+#### SITE_DESCRIPTION
+
+The description of the site, to be used in HTML title.
 
 
 #### SITE_URL

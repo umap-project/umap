@@ -1,4 +1,9 @@
 {% extends "umap/content.html" %}
+{% load i18n %}
+
+{% block head_title %}
+  {% translate "About" %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
 
 {% block maincontent %}
   {% include "umap/about_summary.html" %}

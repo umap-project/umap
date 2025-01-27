@@ -2,6 +2,10 @@
 
 {% load i18n %}
 
+{% block head_title %}
+  {% blocktranslate %}{{ current_user }}’s starred maps{% endblocktranslate %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
+
 {% block maincontent %}
   <div class="col wide">
     <h2 class="section">

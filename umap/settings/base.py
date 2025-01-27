@@ -267,6 +267,7 @@ UMAP_KEEP_VERSIONS = env.int("UMAP_KEEP_VERSIONS", default=10)
 SITE_URL = env("SITE_URL", default="http://umap.org")
 SHORT_SITE_URL = env("SHORT_SITE_URL", default=None)
 SITE_NAME = "uMap"
+SITE_DESCRIPTION = "Online map creator"
 UMAP_DEMO_SITE = env("UMAP_DEMO_SITE", default=False)
 UMAP_EXCLUDE_DEFAULT_MAPS = False
 UMAP_MAPS_PER_PAGE = 5
