@@ -285,6 +285,7 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     # Change name on page one and save
     page_one.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     page_one.locator('input[name="name"]').fill("name from page one")
+    page_one.wait_for_timeout(300)  # Time for the input debounce.
     with page_one.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_one.get_by_role("button", name="Save").click()
 

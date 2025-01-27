@@ -74,6 +74,7 @@ def test_table_editor(live_server, openmap, datalayer, page):
     page.locator("dialog").get_by_role("button", name="OK").click()
     page.locator("td").nth(2).dblclick()
     page.locator('input[name="newprop"]').fill("newvalue")
+    page.wait_for_timeout(300)  # Time for the input debounce.
     page.keyboard.press("Enter")
     page.locator("thead button[data-property=name]").click()
     page.get_by_role("button", name="Delete this column").click()

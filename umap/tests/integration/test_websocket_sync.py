@@ -56,6 +56,7 @@ def test_websocket_connection_can_sync_markers(new_page, asgi_live_server, tilel
     expect(peerB.get_by_role("button", name="Cancel edits")).to_be_hidden()
     peerA.locator("body").type("Synced name")
     peerA.locator("body").press("Escape")
+    peerA.wait_for_timeout(300)
 
     peerB.locator(".leaflet-marker-icon").first.click()
     peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
@@ -320,6 +321,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
     a_map_el.click(position={"x": 220, "y": 220})
     peerA.locator("body").type("First marker")
     peerA.locator("body").press("Escape")
+    peerA.wait_for_timeout(300)
 
     # Add a polygon from peer A
     create_polygon = peerA.locator(".leaflet-control-toolbar ").get_by_title(

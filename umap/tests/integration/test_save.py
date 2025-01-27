@@ -24,6 +24,7 @@ def test_reseting_map_would_remove_from_save_queue(
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("new datalayer name")
+    page.wait_for_timeout(300)  # Time of the Input debounce
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     assert len(requests) == 1
