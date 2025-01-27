@@ -7,9 +7,7 @@ export default class Tooltip extends Positioned {
   constructor(parent) {
     super()
     this.parent = parent
-    this.container = Utils.loadTemplate(
-      '<div id="umap-tooltip-container" class="with-transition"></div>'
-    )
+    this.container = Utils.loadTemplate('<div class="umap-tooltip-container"></div>')
     this.parent.appendChild(this.container)
     DomEvent.disableClickPropagation(this.container)
     this.container.addEventListener('contextmenu', (event) => event.stopPropagation()) // Do not activate our custom context menu.
@@ -20,6 +18,7 @@ export default class Tooltip extends Positioned {
   }
 
   open(opts) {
+    this.container.classList.toggle('tooltip-accent', Boolean(opts.accent))
     const showIt = () => {
       if (opts.content.nodeType === 1) {
         this.container.appendChild(opts.content)
@@ -47,7 +46,7 @@ export default class Tooltip extends Positioned {
     // in the meantime. Eg. after a mouseout from the anchor.
     window.clearTimeout(id)
     if (id && id !== this.TOOLTIP_ID) return
-    this.container.className = ''
+    this.toggleClassPosition()
     this.container.innerHTML = ''
     this.setPosition({})
     this.parent.classList.remove('umap-tooltip')

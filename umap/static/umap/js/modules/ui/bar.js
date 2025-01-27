@@ -102,6 +102,7 @@ export class TopBar extends WithTemplate {
       if (!Object.keys(connectedPeers).length) return
       const ul = Utils.loadTemplate(
         `<ul>${Object.entries(connectedPeers)
+          .sort((el) => el !== this._umap.user?.name)
           .map(([id, name]) => `<li>${name || translate('Anonymous')}</li>`)
           .join('')}</ul>`
       )
@@ -111,6 +112,7 @@ export class TopBar extends WithTemplate {
         position: 'bottom',
         delay: 500,
         duration: 5000,
+        accent: true,
       })
     })
 

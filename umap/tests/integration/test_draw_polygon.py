@@ -484,12 +484,12 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     page.get_by_role("button", name="Import data", exact=True).click()
     page.locator("path").click()
     page.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
-    expect(page.locator("#umap-tooltip-container")).to_contain_text(
+    expect(page.locator(".umap-tooltip-container")).to_contain_text(
         "Please zoom in to edit the geometry"
     )
     expect(page.locator(".leaflet-vertex-icon")).to_be_hidden()
     page.get_by_label("Zoom in").click()
-    expect(page.locator("#umap-tooltip-container")).to_contain_text(
+    expect(page.locator(".umap-tooltip-container")).to_contain_text(
         "Please zoom in to edit the geometry"
     )
     page.get_by_label("Zoom in").click()
@@ -497,6 +497,6 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     page.get_by_label("Zoom out").click()
     page.wait_for_timeout(500)
     expect(page.locator(".leaflet-vertex-icon")).to_be_hidden()
-    expect(page.locator("#umap-tooltip-container")).to_contain_text(
+    expect(page.locator(".umap-tooltip-container")).to_contain_text(
         "Please zoom in to edit the geometry"
     )

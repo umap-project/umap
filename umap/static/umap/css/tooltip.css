@@ -1,22 +1,25 @@
-#umap-tooltip-container {
-    line-height: 20px;
+.umap-tooltip-container {
     padding: 5px 10px;
     width: auto;
+    min-width: 100px;
+    max-width: 300px;
     position: absolute;
     box-shadow: var(--block-shadow);
     display: none;
-    background-color: rgba(40, 40, 40, 0.9);
     color: #eeeeec;
-    font-size: 0.8em;
     border-radius: 2px;
     z-index: var(--zindex-tooltip);
     font-weight: normal;
-    max-width: 300px;
+    --tooltip-color: var(--color-darkGray);
+    background-color: var(--tooltip-color);
 }
-.umap-tooltip #umap-tooltip-container {
+.tooltip-accent {
+    --tooltip-color: var(--color-lightCyan);
+}
+.umap-tooltip .umap-tooltip-container {
     display: block;
 }
-#umap-tooltip-container.tooltip-top:after {
+.umap-tooltip-container.tooltip-top:after {
     top: 100%;
     left: calc(50% - 11px);
     border: solid transparent;
@@ -25,11 +28,11 @@
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-top-color: rgba(30, 30, 30, 0.8);
+    border-top-color: var(--tooltip-color);
     border-width: 11px;
     margin-left: calc(-50% + 21px);
 }
-#umap-tooltip-container.tooltip-bottom:before {
+.umap-tooltip-container.tooltip-bottom:before {
     top: -22px;
     left: calc(50% - 11px);
     border: solid transparent;
@@ -38,22 +41,13 @@
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-top-color: rgba(30, 30, 30, 0.7);
+    border-top-color: var(--tooltip-color);
     border-width: 11px;
     transform: rotate(180deg);
 }
-#umap-tooltip-container.tooltip.tooltip-left:after {
-    left: 100%;
-    top: 50%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(136, 183, 213, 0);
-    border-left-color: #333;
-    border-width: 11px;
-    margin-top: -10px;
+.tooltip-accent li {
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    padding: var(--small-box-padding);
+    margin-bottom: var(--small-box-padding);
 }
-

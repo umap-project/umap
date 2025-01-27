@@ -2,27 +2,18 @@ export class Positioned {
   openAt({ anchor, position }) {
     if (anchor && position === 'top') {
       this.anchorTop(anchor)
-    } else if (anchor && position === 'left') {
-      this.anchorLeft(anchor)
     } else if (anchor && position === 'bottom') {
       this.anchorBottom(anchor)
-    } else {
-      this.anchorAbsolute()
     }
   }
 
-  anchorAbsolute() {
-    this.container.className = ''
-    const left =
-      this.parent.offsetLeft +
-      this.parent.clientWidth / 2 -
-      this.container.clientWidth / 2
-    const top = this.parent.offsetTop + 75
-    this.setPosition({ top: top, left: left })
+  toggleClassPosition(position) {
+    this.container.classList.toggle('tooltip-bottom', position === 'bottom')
+    this.container.classList.toggle('tooltip-top', position === 'top')
   }
 
   anchorTop(el) {
-    this.container.className = 'tooltip-top'
+    this.toggleClassPosition('top')
     const coords = this.getPosition(el)
     this.setPosition({
       left: coords.left - 10,
@@ -31,21 +22,12 @@ export class Positioned {
   }
 
   anchorBottom(el) {
-    this.container.className = 'tooltip-bottom'
+    this.toggleClassPosition('bottom')
     const coords = this.getPosition(el)
     const selfCoords = this.getPosition(this.container)
     this.setPosition({
       left: coords.left + coords.width / 2 - selfCoords.width / 2,
       top: coords.bottom + 11,
-    })
-  }
-
-  anchorLeft(el) {
-    this.container.className = 'tooltip-left'
-    const coords = this.getPosition(el)
-    this.setPosition({
-      top: coords.top,
-      right: document.documentElement.offsetWidth - coords.left + 11,
     })
   }
 
