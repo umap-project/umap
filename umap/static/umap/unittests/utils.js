@@ -54,6 +54,13 @@ describe('Utils', () => {
       )
     })
 
+    it('should handle links with another url in path', () => {
+      assert.equal(
+        Utils.toHTML('A simple https://osm.org/https://anotherurl.com link'),
+        'A simple <a href="https://osm.org/https://anotherurl.com" target="_blank">https://osm.org/https://anotherurl.com</a> link'
+      )
+    })
+
     it('should handle simple link inside parenthesis', () => {
       assert.equal(
         Utils.toHTML('A simple link (http://osm.org)'),
@@ -169,6 +176,13 @@ describe('Utils', () => {
       assert.equal(
         Utils.toHTML('A phrase with a [[http://iframeurl.com?to=http://another.com]].'),
         'A phrase with a <a href="http://iframeurl.com?to=http://another.com" target="_blank">http://iframeurl.com?to=http://another.com</a>.'
+      )
+    })
+
+    it('http link with http link as in path', () => {
+      assert.equal(
+        Utils.toHTML('A phrase with a [[https://iframeurl.com/https://another.com]].'),
+        'A phrase with a <a href="https://iframeurl.com/https://another.com" target="_blank">https://iframeurl.com/https://another.com</a>.'
       )
     })
 
