@@ -158,11 +158,14 @@ def test_should_not_be_possible_to_update_with_wrong_map_id_in_url(
 
 
 def test_delete(client, datalayer, map):
+    assert map.datalayers.count() == 1
     url = reverse("datalayer_delete", args=(map.pk, datalayer.pk))
     client.login(username=map.owner.username, password="123123")
     response = client.post(url, {}, follow=True)
     assert response.status_code == 200
-    assert not DataLayer.objects.filter(pk=datalayer.pk).count()
+    assert DataLayer.objects.filter(pk=datalayer.pk).count()
+    assert map.datalayers.count() == 0
+    assert DataLayer.objects.get(pk=datalayer.pk).share_status == DataLayer.DELETED
     # Check that map has not been impacted
     assert Map.objects.filter(pk=map.pk).exists()
     # Test response is a json

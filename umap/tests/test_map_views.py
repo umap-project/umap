@@ -810,6 +810,17 @@ def test_oembed_shared_status_map(client, map, datalayer, share_status):
     assert response.status_code == 403
 
 
+def test_download_does_not_include_delete_datalayers(client, map, datalayer):
+    datalayer.share_status = DataLayer.DELETED
+    datalayer.save()
+    url = reverse("map_download", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 200
+    # Test response is a json
+    j = json.loads(response.content.decode())
+    assert j["layers"] == []
+
+
 def test_oembed_no_url_map(client, map, datalayer):
     url = reverse("map_oembed")
     response = client.get(url)

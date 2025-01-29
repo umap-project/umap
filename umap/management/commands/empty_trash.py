@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand
 
-from umap.models import Map
+from umap.models import DataLayer, Map
 
 
 class Command(BaseCommand):
@@ -33,3 +33,14 @@ class Command(BaseCommand):
             if not options["dry_run"]:
                 map.delete()
             print(f"Deleted map {map_name} ({map_id}), trashed at {trashed_at}")
+        print(f"Deleting layers in trash since {since}")
+        layers = DataLayer.objects.filter(
+            share_status=DataLayer.DELETED, modified_at__lt=since
+        )
+        for layer in layers:
+            layer_id = layer.uuid
+            layer_name = layer.name
+            trashed_at = layer.modified_at.date()
+            if not options["dry_run"]:
+                layer.delete()
+            print(f"Deleted layer {layer_name} ({layer_id}), trashed at {trashed_at}")
