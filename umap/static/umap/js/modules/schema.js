@@ -447,6 +447,11 @@ export const SCHEMA = {
     label: translate('Display label'),
     inheritable: true,
     default: false,
+    choices: [
+      [true, translate('always')],
+      [false, translate('never')],
+      ['null', translate('on hover')],
+    ],
   },
   slideshow: {
     type: Object,
