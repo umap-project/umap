@@ -28,6 +28,14 @@ Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 
 Set it to `True` for easier debugging in case of error.
 
+#### DEPRECATED_AUTHENTICATION_PROVIDERS
+
+List of auth providers to deprecate. Defining this will display a message to
+all users using this provider, to encourage them to configure another provider to
+their account.
+
+    DEPRECATED_AUTHENTICATION_PROVIDERS = ["social_core.backends.twitter_oauth2.TwitterOAuth2"]
+
 #### EMAIL_BACKEND
 
 Must be configured if you want uMap to send emails to anonymous users.
