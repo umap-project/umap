@@ -1,0 +1,8 @@
+{% load static %}
+<a href="{% url "social:begin" name %}"
+   class="umap-login-popup"
+   title="{{ name|title }}">
+    {% with "umap/img/providers/"|add:name|add:".png" as path %}
+     <img src="{% static path %}" width="92px" height="92px" alt="{{ name }}" />
+    {% endwith %}
+ </a>

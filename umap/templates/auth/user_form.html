@@ -1,6 +1,6 @@
 {% extends "umap/content.html" %}
 
-{% load i18n %}
+{% load i18n static %}
 
 {% block maincontent %}
   {% include "umap/dashboard_menu.html" with selected="profile" %}
@@ -28,8 +28,10 @@
         </h3>
         <ul>
           {% for name in providers %}
-            <li>
-              {{ name|title }}
+            <li class="login-grid">
+              {% with "umap/img/providers/"|add:name|add:".png" as path %}
+               <img src="{% static path %}" width="92px" height="92px" alt="{{ name }}" />
+              {% endwith %}
             </li>
           {% endfor %}
         </ul>
@@ -46,9 +48,7 @@
             {% for name in backends.backends %}
               {% if name not in providers %}
                 <li>
-                  <a href="{% url "social:begin" name %}"
-                     class="umap-login-popup login-{{ name }}"
-                     title="{{ name|title }}"></a>
+                  {% include "umap/components/provider.html" with name=name %}
                 </li>
               {% endif %}
             {% endfor %}
