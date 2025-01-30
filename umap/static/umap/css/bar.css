@@ -32,6 +32,11 @@
     background-color: var(--color-lightCyan);
     color: var(--color-dark);
 }
+.dark [type=button].connected-peers:hover
+{
+    text-decoration: none;
+    border: 0.5px solid var(--color-brightCyan);
+}
 .dark .off.connected-peers {
     background-color: var(--color-lightGray);
     color: var(--color-darkGray);

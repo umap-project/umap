@@ -7,11 +7,12 @@
     box-shadow: var(--block-shadow);
     display: none;
     color: #eeeeec;
-    border-radius: 2px;
+    border-radius: var(--border-radius);
     z-index: var(--zindex-tooltip);
     font-weight: normal;
     --tooltip-color: var(--color-darkGray);
     background-color: var(--tooltip-color);
+    --arrow-size: 8px;
 }
 .tooltip-accent {
     --tooltip-color: var(--color-lightCyan);
@@ -21,7 +22,7 @@
 }
 .umap-tooltip-container.tooltip-top:after {
     top: 100%;
-    left: calc(50% - 11px);
+    left: calc(50% - var(--arrow-size));
     border: solid transparent;
     content: " ";
     height: 0;
@@ -29,12 +30,12 @@
     position: absolute;
     pointer-events: none;
     border-top-color: var(--tooltip-color);
-    border-width: 11px;
-    margin-left: calc(-50% + 21px);
+    border-width: var(--arrow-size);
+    margin-left: calc(-50% + 2 * var(--arrow-size));
 }
 .umap-tooltip-container.tooltip-bottom:before {
-    top: -22px;
-    left: calc(50% - 11px);
+    top: calc(var(--arrow-size) * -2);
+    left: calc(50% - var(--arrow-size));
     border: solid transparent;
     content: " ";
     height: 0;
@@ -42,12 +43,19 @@
     position: absolute;
     pointer-events: none;
     border-top-color: var(--tooltip-color);
-    border-width: 11px;
+    border-width: var(--arrow-size);
     transform: rotate(180deg);
+}
+.tooltip-accent ul {
+    padding-top: var(--small-box-padding);
+    padding-bottom: var(--small-box-padding);
 }
 .tooltip-accent li {
     background-color: var(--color-light);
     color: var(--color-dark);
     padding: var(--small-box-padding);
     margin-bottom: var(--small-box-padding);
+}
+.tooltip-accent li:last-of-type {
+    margin-bottom: 0;
 }
