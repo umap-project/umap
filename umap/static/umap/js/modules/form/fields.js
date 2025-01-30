@@ -1191,11 +1191,13 @@ Fields.TernaryChoices = class extends Fields.MultiChoice {
 
 Fields.NullableChoices = class extends Fields.TernaryChoices {
   getChoices() {
-    return [
-      [true, translate('always')],
-      [false, translate('never')],
-      ['null', translate('hidden')],
-    ]
+    return (
+      this.properties.choices || [
+        [true, translate('always')],
+        [false, translate('never')],
+        ['null', translate('hidden')],
+      ]
+    )
   }
 }
 
