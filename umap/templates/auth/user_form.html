@@ -30,7 +30,7 @@
           {% for name in providers %}
             <li class="login-grid">
               {% with "umap/img/providers/"|add:name|add:".png" as path %}
-               <img src="{% static path %}" alt="{{ name }}" />
+               <img src="{% static path %}" width="92px" height="92px" alt="{{ name }}" />
               {% endwith %}
             </li>
           {% endfor %}
