@@ -15,7 +15,7 @@ from urllib.request import Request, build_opener
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import BACKEND_SESSION_KEY, get_user_model
 from django.contrib.auth import logout as do_logout
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
@@ -1419,3 +1419,18 @@ class LoginPopupEnd(TemplateView):
     """
 
     template_name = "umap/login_popup_end.html"
+
+    def get(self, *args, **kwargs):
+        backend = self.request.session[BACKEND_SESSION_KEY]
+        if backend in settings.DEPRECATED_AUTHENTICATION_BACKENDS:
+            name = backend.split(".")[-1]
+            messages.error(
+                self.request,
+                _(
+                    "Using “%(name)s” to authenticate is deprecated. "
+                    "Please configure another provider in your profile page."
+                )
+                % {"name": name},
+            )
+            return HttpResponseRedirect(reverse("user_profile"))
+        return super().get(*args, **kwargs)
