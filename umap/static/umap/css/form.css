@@ -83,7 +83,7 @@ input[type="submit"] {
     border-radius: 2px;
     font-weight: normal;
     cursor: pointer;
-    padding: 3px 12px;
+    padding: var(--button-padding);
     border: none;
     text-decoration: none;
     background-color: white;
@@ -342,11 +342,12 @@ input.switch:checked ~ label:after {
     width: 100%
 }
 .button-bar {
-    grid-gap: 7px;
+    grid-gap: var(--gutter);
 }
 .umap-multiplechoice.by2,
 .button-bar.half {
     grid-template-columns: 1fr 1fr;
+    justify-items: center;
 }
 .button-bar.by3,
 .button-bar.by5,
@@ -363,6 +364,7 @@ input.switch:checked ~ label:after {
 .button-bar .button,
 .button-bar [type="button"] {
     display: inline-block;
+    width: 100%;
 }
 .umap-multiplechoice input[type='radio'] {
     display: none;
