@@ -159,16 +159,13 @@ export function toHTML(r, options) {
   r = r.replace(/\*(.*?)\*/g, '<em>$1</em>')
 
   // links
-  r = r.replace(/(\[\[http)/g, '[[h_t_t_p') // Escape for avoiding clash between [[http://xxx]] and http://xxx
-  r = r.replace(/({{http)/g, '{{h_t_t_p')
-  r = r.replace(/(=http)/g, '=h_t_t_p') // http://xxx as query string, see https://github.com/umap-project/umap/issues/607
-  r = r.replace(/(https?:[^ \<)\n]*)/g, `<a target="_${target}" href="$1">$1</a>`)
   r = r.replace(
-    /\[\[(h_t_t_ps?:[^\]|]*?)\]\]/g,
-    `<a target="_${target}" href="$1">$1</a>`
+    /(^|\s|>|\()(https?:[^ \<)\n]*)/g,
+    `$1<a target="_${target}" href="$2">$2</a>`
   )
+  r = r.replace(/\[\[(https?:[^\]|]*?)\]\]/g, `<a target="_${target}" href="$1">$1</a>`)
   r = r.replace(
-    /\[\[(h_t_t_ps?:[^|]*?)\|(.*?)\]\]/g,
+    /\[\[(https?:[^|]*?)\|(.*?)\]\]/g,
     `<a target="_${target}" href="$1">$2</a>`
   )
   r = r.replace(/\[\[([^\]|]*?)\]\]/g, `<a target="_${target}" href="$1">$1</a>`)
@@ -176,15 +173,15 @@ export function toHTML(r, options) {
 
   // iframe
   r = r.replace(
-    /{{{(h_t_t_ps?[^|{]*)}}}/g,
+    /{{{(https?[^|{]*)}}}/g,
     '<div><iframe frameborder="0" src="$1" width="100%" height="300px"></iframe></div>'
   )
   r = r.replace(
-    /{{{(h_t_t_ps?[^|{]*)\|(\d*)(px)?}}}/g,
+    /{{{(https?[^|{]*)\|(\d*)(px)?}}}/g,
     '<div><iframe frameborder="0" src="$1" width="100%" height="$2px"></iframe></div>'
   )
   r = r.replace(
-    /{{{(h_t_t_ps?[^|{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g,
+    /{{{(https?[^|{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g,
     '<div><iframe frameborder="0" src="$1" width="$4px" height="$2px"></iframe></div>'
   )
 
