@@ -145,6 +145,7 @@ h2.tabs a:hover {
 }
 .highlights {
     text-align: center;
+    margin-bottom: calc(var(--box-margin) * 2);
 }
 .highlights img.colophon {
     display: inline-block;
@@ -183,8 +184,6 @@ input[type="submit"],
 }
 .wrapper .button,
 .wrapper input {
-    height: 56px;
-    line-height: 43px;
     font-weight: bold;
 }
 

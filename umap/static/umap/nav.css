@@ -41,7 +41,7 @@ footer .i18n_switch {
     display: flex;
     flex-direction: column;
 }
-.umap-nav a {
+.umap-nav a:not(.button) {
     color: var(--color-darkBlue);
     padding: .4rem;
 }
@@ -51,7 +51,7 @@ footer .i18n_switch {
 .umap-nav h1 {
     margin-bottom: 0;
 }
-.umap-nav h1 a {
+.umap-nav h1 a:not(.button) {
     background-image: url("./img/logo.svg");
     background-position: left center;
     background-repeat: no-repeat;
@@ -74,7 +74,6 @@ html[dir="rtl"] .umap-nav h1 a {
 .umap-nav .button,
 .umap-nav .button:hover {
     text-decoration: none;
-    min-width: 150px;
     margin-inline-start: 1rem;
 }
 

@@ -24,6 +24,7 @@
     --button-primary-color: var(--color-darkBlue);
     --button-neutral-background: var(--color-lightGray);
     --button-neutral-color: var(--color-darkGray);
+    --button-padding: 8px 16px;
 
     /* Sizes and spaces */
     --gutter: 8px;
