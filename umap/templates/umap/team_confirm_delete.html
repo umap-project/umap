@@ -2,6 +2,10 @@
 
 {% load i18n %}
 
+{% block head_title %}
+  {% translate "Team deletion" %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
+
 {% block maincontent %}
   {% include "umap/dashboard_menu.html" with selected="teams" %}
   <div class="wrapper">

@@ -2,6 +2,10 @@
 
 {% load i18n %}
 
+{% block head_title %}
+  {% translate "Explore maps" %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
+
 {% block messages %}
   {# We don't want maps from the results list to display errors in the main page. #}
 {% endblock messages %}

@@ -8,7 +8,7 @@ from umap.models import Map
 
 def test_page_title(page, live_server):
     page.goto(live_server.url)
-    expect(page).to_have_title("uMap")
+    expect(page).to_have_title("uMap - Online map creator")
 
 
 @pytest.mark.parametrize(
@@ -83,7 +83,7 @@ def test_login_from_map_page(live_server, page, tilelayer, settings, user, conte
         page.get_by_role("button", name="Save").click()
     assert Map.objects.count() == 0
     login_page = login_page_info.value
-    expect(login_page).to_have_title("Login")
+    expect(login_page).to_have_title("Login - Online map creator")
     login_page.get_by_placeholder("Username").fill(user.username)
     login_page.get_by_placeholder("Password").fill("123123")
     with page.expect_response(re.compile(r".*/map/create/")):

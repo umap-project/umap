@@ -2,6 +2,10 @@
 
 {% load i18n %}
 
+{% block head_title %}
+  {% blocktranslate %}{{ current_team }}’s maps{% endblocktranslate %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
+
 {% block maincontent %}
   <div class="wrapper">
       <div class="row">

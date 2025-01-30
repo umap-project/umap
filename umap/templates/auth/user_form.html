@@ -2,6 +2,9 @@
 
 {% load i18n static %}
 
+{% block head_title %}
+  {% translate "My Profile" %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
 {% block maincontent %}
   {% include "umap/dashboard_menu.html" with selected="profile" %}
   <div class="wrapper">
