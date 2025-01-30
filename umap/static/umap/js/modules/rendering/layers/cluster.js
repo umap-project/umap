@@ -63,7 +63,17 @@ export const Cluster = L.MarkerClusterGroup.extend({
 
   addLayer: function (layer) {
     this._layers.push(layer)
-    return L.MarkerClusterGroup.prototype.addLayer.call(this, layer)
+    try {
+      return L.MarkerClusterGroup.prototype.addLayer.call(this, layer)
+    } catch (error) {
+      console.debug(error)
+      // Certainly a race condition when loading a clustered layer
+      // while zooming (this for example can happen at load, when the
+      // initial zoom is changed by uMap).
+      // FIXME: remove when this is merged:
+      // https://github.com/Leaflet/Leaflet.markercluster/pull/1048/files
+      return this
+    }
   },
 
   removeLayer: function (layer) {
