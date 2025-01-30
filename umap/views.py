@@ -742,14 +742,14 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
     def get_datalayers(self):
         # When initializing datalayers from map, we cannot get the reference version
         # the normal way, which is from the header X-Reference-Version
-        return [dl.metadata(self.request) for dl in self.object.datalayer_set.all()]
+        return [dl.metadata(self.request) for dl in self.object.datalayers]
 
     @property
     def edit_mode(self):
         edit_mode = "disabled"
         if self.object.can_edit(self.request):
             edit_mode = "advanced"
-        elif any(d.can_edit(self.request) for d in self.object.datalayer_set.all()):
+        elif any(d.can_edit(self.request) for d in self.object.datalayers):
             edit_mode = "simple"
         return edit_mode
 
@@ -1325,7 +1325,7 @@ class DataLayerDelete(DeleteView):
         self.object = self.get_object()
         if self.object.map != self.kwargs["map_inst"]:
             return HttpResponseForbidden()
-        self.object.delete()
+        self.object.move_to_trash()
         return simple_json_response(info=_("Layer successfully deleted."))
 
 

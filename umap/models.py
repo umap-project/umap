@@ -248,8 +248,12 @@ class Map(NamedModel):
             return ""
 
     @property
+    def datalayers(self):
+        return self.datalayer_set.filter(share_status=DataLayer.INHERIT).all()
+
+    @property
     def preview_settings(self):
-        layers = self.datalayer_set.all()
+        layers = self.datalayers
         datalayer_data = [c.metadata() for c in layers]
         map_settings = self.settings
         if "properties" not in map_settings:
@@ -278,6 +282,7 @@ class Map(NamedModel):
     def delete(self, **kwargs):
         # Explicitely call datalayers.delete, so we can deal with removing files
         # (the cascade delete would not call the model delete method)
+        # Use datalayer_set so to get also the deleted ones.
         for datalayer in self.datalayer_set.all():
             datalayer.delete()
         return super().delete(**kwargs)
@@ -287,7 +292,7 @@ class Map(NamedModel):
         umapjson["type"] = "umap"
         umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
         datalayers = []
-        for datalayer in self.datalayer_set.all():
+        for datalayer in self.datalayers:
             with datalayer.geojson.open("rb") as f:
                 layer = json.loads(f.read())
             if datalayer.settings:
@@ -406,7 +411,7 @@ class Map(NamedModel):
         new.save()
         for editor in self.editors.all():
             new.editors.add(editor)
-        for datalayer in self.datalayer_set.all():
+        for datalayer in self.datalayers:
             datalayer.clone(map_inst=new)
         return new
 
@@ -458,6 +463,11 @@ class DataLayer(NamedModel):
     ANONYMOUS = 1
     COLLABORATORS = 2
     OWNER = 3
+    DELETED = 99
+    SHARE_STATUS = (
+        (INHERIT, _("Inherit")),
+        (DELETED, _("Deleted")),
+    )
     EDIT_STATUS = (
         (INHERIT, _("Inherit")),
         (ANONYMOUS, _("Everyone")),
@@ -490,6 +500,12 @@ class DataLayer(NamedModel):
         default=INHERIT,
         verbose_name=_("edit status"),
     )
+    share_status = models.SmallIntegerField(
+        choices=SHARE_STATUS,
+        default=INHERIT,
+        verbose_name=_("share status"),
+    )
+    modified_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ("rank",)
@@ -567,6 +583,10 @@ class DataLayer(NamedModel):
             if user in self.map.editors.all() or self.map.team in user.teams.all():
                 can = True
         return can
+
+    def move_to_trash(self):
+        self.share_status = DataLayer.DELETED
+        self.save()
 
 
 class Star(models.Model):
