@@ -305,7 +305,7 @@ export default class Importer extends Utils.WithTemplate {
       this.onSuccess()
     } catch (e) {
       this.onError(translate('Invalid umap data'))
-      console.error(e)
+      console.debug(e)
       return false
     }
   }

@@ -71,7 +71,6 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     expect(nonloaded).to_have_count(1)
 
 
-@pytest.mark.skip
 def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/map/new/")
@@ -121,6 +120,28 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(2)
     expect(paths).to_have_count(3)
+
+
+def test_import_invalid_data(tilelayer, live_server, page):
+    uncaught_errors = []
+    page.on("pageerror", lambda exc: uncaught_errors.append(exc))
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator("path")
+    expect(markers).to_have_count(0)
+    expect(paths).to_have_count(0)
+    expect(layers).to_have_count(0)
+    button = page.get_by_title("Import data")
+    expect(button).to_be_visible()
+    button.click()
+    textarea = page.locator(".umap-upload textarea")
+    textarea.fill("invalid data")
+    for format in ["geojson", "csv", "gpx", "kml", "georss", "osm", "umap"]:
+        page.locator('select[name="format"]').select_option(format)
+        page.get_by_role("button", name="Import data", exact=True).click()
+        assert not uncaught_errors, f"Error with format {format}"
 
 
 def test_import_kml_from_textarea(tilelayer, live_server, page):

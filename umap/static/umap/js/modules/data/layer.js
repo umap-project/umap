@@ -249,6 +249,7 @@ export class DataLayer extends ServerStored {
   }
 
   fromGeoJSON(geojson, sync = true) {
+    if (!geojson) return []
     const features = this.addData(geojson, sync)
     this._geojson = geojson
     this.onDataLoaded()
@@ -319,7 +320,9 @@ export class DataLayer extends ServerStored {
     if (!this.isRemoteLayer()) return
     if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
     if (!this.isVisible()) return
-    let url = this._umap.renderUrl(this.options.remoteData.url)
+    // Keep non proxied url for later use in Alert.
+    const remoteUrl = this._umap.renderUrl(this.options.remoteData.url)
+    let url = remoteUrl
     if (this.options.remoteData.proxy) {
       url = this._umap.proxyUrl(url, this.options.remoteData.ttl)
     }
@@ -328,6 +331,14 @@ export class DataLayer extends ServerStored {
       return this._umap.formatter
         .parse(raw, this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson))
+        .catch((error) => {
+          Alert.error(
+            translate('Cannot parse remote data for layer "{layer}" with url "{url}"', {
+              layer: this.getName(),
+              url: remoteUrl,
+            })
+          )
+        })
     })
   }
 
@@ -455,7 +466,7 @@ export class DataLayer extends ServerStored {
       // otherwise the layer becomes uneditable.
       return this.makeFeatures(geojson, sync)
     } catch (err) {
-      console.log('Error with DataLayer', this.id)
+      console.debug('Error with DataLayer', this.id)
       console.error(err)
       return []
     }
@@ -502,7 +513,7 @@ export class DataLayer extends ServerStored {
         feature = new Polygon(this._umap, this, geojson, id)
         break
       default:
-        console.log(geojson)
+        console.debug(geojson)
         Alert.error(
           translate('Skipping unknown geometry.type: {type}', {
             type: geometry.type || 'undefined',
@@ -523,6 +534,9 @@ export class DataLayer extends ServerStored {
       .then((data) => {
         if (data?.length) this.isDirty = true
         return data
+      })
+      .catch((error) => {
+        Alert.error(translate('Import failed: invalid data'))
       })
   }
 

@@ -1,5 +1,6 @@
 /* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 export const EXPORT_FORMATS = {
   geojson: {
@@ -58,11 +59,7 @@ export class Formatter {
   }
 
   async fromGeoJSON(str) {
-    try {
-      return JSON.parse(str)
-    } catch (err) {
-      U.Alert.error(`Invalid JSON file: ${err}`)
-    }
+    return JSON.parse(str)
   }
 
   async fromOSM(str) {
@@ -106,8 +103,8 @@ export class Formatter {
               message: err[0].message,
             })
           }
-          U.Alert.error(message, 10000)
-          console.error(err)
+          Alert.error(message, 10000)
+          console.debug(err)
         }
         if (result?.features.length) {
           callback(result)
@@ -127,7 +124,7 @@ export class Formatter {
     const doc = new DOMParser().parseFromString(x, 'text/xml')
     const errorNode = doc.querySelector('parsererror')
     if (errorNode) {
-      U.Alert.error(translate('Cannot parse data'))
+      Alert.error(translate('Cannot parse data'))
     }
     return doc
   }
