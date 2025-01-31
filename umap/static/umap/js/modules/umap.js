@@ -1450,7 +1450,7 @@ export default class Umap extends ServerStored {
 
   removeDataLayers() {
     this.eachDataLayerReverse((datalayer) => {
-      datalayer._delete()
+      datalayer.del()
     })
   }
 
