@@ -1111,7 +1111,7 @@ export default class Umap extends ServerStored {
     this._editOverlay(container)
     this._editBounds(container)
     this._editSlideshow(container)
-    if (this.properties.websocketEnabled) {
+    if (this.properties.websocketEnabled && this.id) {
       this._editSync(container)
     }
     this._advancedActions(container)

@@ -503,9 +503,12 @@ def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user)
     # Create a syncable map with peerA
     peerA = login(user, prefix="Page A")
     peerA.goto(f"{asgi_live_server.url}/en/map/new/")
+    peerA.get_by_role("link", name="Map advanced properties").click()
+    expect(peerA.get_by_text("Real-time collaboration", exact=True)).to_be_hidden()
     with peerA.expect_response(re.compile("./map/create/.*")):
         peerA.get_by_role("button", name="Save Draft").click()
     peerA.get_by_role("link", name="Map advanced properties").click()
+    expect(peerA.get_by_text("Real-time collaboration", exact=True)).to_be_visible()
     peerA.get_by_text("Real-time collaboration", exact=True).click()
     peerA.get_by_text("Enable real-time").click()
     peerA.get_by_role("link", name="Update permissions and editors").click()
