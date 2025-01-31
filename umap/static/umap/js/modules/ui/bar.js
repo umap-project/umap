@@ -2,6 +2,7 @@ import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
 import ContextMenu from './contextmenu.js'
+import * as Utils from '../utils.js'
 
 const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
@@ -96,17 +97,22 @@ export class TopBar extends WithTemplate {
       }
     })
 
-    const connectedPeers = this._umap.sync.getNumberOfConnectedPeers()
     this.elements.peers.addEventListener('mouseover', () => {
-      if (!connectedPeers) return
+      const connectedPeers = this._umap.sync.getPeers()
+      if (!Object.keys(connectedPeers).length) return
+      const ul = Utils.loadTemplate(
+        `<ul>${Object.entries(connectedPeers)
+          .sort((el) => el !== this._umap.user?.name)
+          .map(([id, name]) => `<li>${name || translate('Anonymous')}</li>`)
+          .join('')}</ul>`
+      )
       this._umap.tooltip.open({
-        content: translate('{connectedPeers} peer(s) currently connected to this map', {
-          connectedPeers: connectedPeers,
-        }),
+        content: ul,
         anchor: this.elements.peers,
         position: 'bottom',
         delay: 500,
         duration: 5000,
+        accent: true,
       })
     })
 

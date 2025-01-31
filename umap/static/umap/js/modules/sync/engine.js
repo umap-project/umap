@@ -146,9 +146,8 @@ export class SyncEngine {
     updater.applyMessage(operation)
   }
 
-  getNumberOfConnectedPeers() {
-    if (this.peers) return Object.keys(this.peers).length
-    return 0
+  getPeers() {
+    return this.peers || {}
   }
 
   /**
