@@ -57,8 +57,11 @@ class uMapAlert extends uMapElement {
     this.container.dataset.duration = duration
     this.element.textContent = message
     this.setAttribute('open', 'open')
+    if (this._timeoutId) {
+      clearTimeout(this._timeoutId)
+    }
     if (Number.isFinite(duration)) {
-      setTimeout(() => {
+      this._timeoutId = setTimeout(() => {
         this._hide()
       }, duration)
     }
