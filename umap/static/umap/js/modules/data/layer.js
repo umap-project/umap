@@ -305,14 +305,14 @@ export class DataLayer extends ServerStored {
     return this.isRemoteLayer() && Boolean(this.options.remoteData?.dynamic)
   }
 
-  async getUrl(url) {
+  async getUrl(url, initialUrl) {
     const response = await this._umap.request.get(url)
     return new Promise((resolve) => {
       if (response?.ok) return resolve(response.text())
       Alert.error(
         translate('Cannot load remote data for layer "{layer}" with url "{url}"', {
           layer: this.getName(),
-          url: url,
+          url: initialUrl || url,
         })
       )
     })
@@ -328,7 +328,7 @@ export class DataLayer extends ServerStored {
     if (this.options.remoteData.proxy) {
       url = this._umap.proxyUrl(url, this.options.remoteData.ttl)
     }
-    return await this.getUrl(url).then((raw) => {
+    return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear()
       return this._umap.formatter
         .parse(raw, this.options.remoteData.format)
