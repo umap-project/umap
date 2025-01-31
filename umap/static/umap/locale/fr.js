@@ -19,7 +19,6 @@ const locale = {
     "Add a new property": "Ajouter une propriété",
     "Add a polygon to the current multi": "Ajouter un polygon au groupe courant",
     "Add image URL": "URL d'une image",
-    "Add": "Ajouter",
     "Advanced actions": "Actions avancées",
     "Advanced properties": "Propriétés avancées",
     "All data and settings of the map": "Toutes les données et les propriétés de la carte",
@@ -120,7 +119,6 @@ const locale = {
     "Display the locate control": "Afficher le bouton de localisation",
     "Display the measure control": "Afficher le bouton de mesures",
     "Display the search control": "Afficher le bouton de recherche",
-    "Display the star map button": "Afficher le bouton pour mettre une carte en favori",
     "Display the tile layers control": "Afficher le bouton permettant de changer le fond de carte",
     "Display the zoom control": "Afficher les boutons de zoom",
     "Do you want to display a caption bar?": "Voulez-vous afficher une barre de légende",
@@ -226,7 +224,7 @@ const locale = {
     "Map has been attached to your account": "La  carte est maintenant liée à votre compte",
     "Map has been saved!": "La carte a été sauvegardée !",
     "Map has been starred": "La carte a été ajoutée aux favoris",
-    "Map has been unstarred": "La carte a été supprimée des favoris",
+    "Map has been unstarred": "La carte a été retirée des favoris",
     "Map user content has been published under licence": "Les contenus sur la carte ont été publiés avec la licence",
     "Map's editors": "Éditeurs de la carte",
     "Map's owner": "Propriétaire de la carte",
@@ -516,14 +514,21 @@ const locale = {
     "show/hide all layers": "montrer/masquer les calques",
     "zoom to data extent": "zoomer sur les données",
     "download visible data": "télécharger les données affichées",
-    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} personne(s) actuellement connectée(s) à cette carte",
     "Import helpers": "Assistants d'import",
     "Import helpers will fill the URL field for you.": "Les assistants d'import vont renseigner le champ URL pour vous.",
     "Wikipedia": "Wikipedia",
     "Save draft": "Enregistrer le brouillon",
     "No data has been found for import": "Aucunes données à importer",
     "Successfully imported {count} feature(s)": "{count} élément(s) ajouté(s) à la carte",
-    "Disconnected": "Déconnecté"
+    "Disconnected": "Déconnecté",
+    "You must be logged in": "Authentification requise",
+    "Created at {date}": "Créée le",
+    "Modified at {date}": "Modifiée le",
+    "on hover": "au survol",
+    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Impossible de charger les données du calque \"{layer}\" à partir de l'URL \"{url}\"",
+    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Impossible de lire les données du calque \"{layer}\" à partir de l'URL \"{url}\"",
+    "Import failed: invalid data": "Échec de l'import: les données sont invalides",
+    "Anonymous": "Anonyme"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

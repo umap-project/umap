@@ -19,7 +19,6 @@ const locale = {
     "Add a new property": "Új tulajdonság hozzáadása",
     "Add a polygon to the current multi": "Sokszög hozzáadása a jelenlegi alakzatcsoporthoz",
     "Add image URL": "Kép URL-je",
-    "Add": "Hozzáadás",
     "Advanced actions": "Speciális műveletek",
     "Advanced properties": "Speciális tulajdonságok",
     "All data and settings of the map": "A térkép összes adata és beállítása",
@@ -120,7 +119,6 @@ const locale = {
     "Display the locate control": "Saját pozícióhoz igazítás vezérlő megjelenítése",
     "Display the measure control": "Mérés vezérlő megjelenítése",
     "Display the search control": "Keresés vezérlő megjelenítése",
-    "Display the star map button": "Térképet megcsillagozó gomb megjelenítése",
     "Display the tile layers control": "Mozaikrétegek vezérlő megjelenítése",
     "Display the zoom control": "Nagyítás vezérlő megjelenítése",
     "Do you want to display a caption bar?": "Szeretné megjeleníteni a leírást tartalmazó sávot?",
@@ -516,14 +514,21 @@ const locale = {
     "show/hide all layers": "összes réteg megjelenítése/elrejtése",
     "zoom to data extent": "nagyítás az adatok kiterjedésére",
     "download visible data": "látható adatok letöltése",
-    "{connectedPeers} peer(s) currently connected to this map": "Jelenleg {connectedPeers} társ kapcsolódik ehhez a térképhez",
     "Import helpers": "Importálássegítők",
     "Import helpers will fill the URL field for you.": "Az importálássegítők kitöltik neked az URL-mezőt.",
     "Wikipedia": "Wikipédia",
     "Save draft": "Piszkozat mentése",
     "No data has been found for import": "Nem található adat az importáláshoz",
     "Successfully imported {count} feature(s)": "{count} objektum sikeresen importálva",
-    "Disconnected": "Kapcsolat megszakadt"
+    "Disconnected": "Kapcsolat megszakadt",
+    "You must be logged in": "You must be logged in",
+    "Created at {date}": "Created at {date}",
+    "Modified at {date}": "Modified at {date}",
+    "on hover": "on hover",
+    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
+    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
+    "Import failed: invalid data": "Import failed: invalid data",
+    "Anonymous": "Anonymous"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

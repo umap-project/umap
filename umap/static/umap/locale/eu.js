@@ -19,7 +19,6 @@ const locale = {
     "Add a new property": "Gehitu jabe berri bat",
     "Add a polygon to the current multi": "Gehitu poligono bat uneko multiari",
     "Add image URL": "Gehitu irudiaren URLa",
-    "Add": "Gehitu",
     "Advanced actions": "Ekintza aurreratuak",
     "Advanced properties": "Propietate aurreratuak",
     "All data and settings of the map": "Maparen datu eta ezarpen guztiak",
@@ -120,7 +119,6 @@ const locale = {
     "Display the locate control": "Bistaratu lokalizazio kontrola",
     "Display the measure control": "Bistaratu neurrien kontrola",
     "Display the search control": "Bistaratu bilaketa-kontrola",
-    "Display the star map button": "Bistaratu gogoko mapen botoia",
     "Display the tile layers control": "Bistaratu lauzen geruzaren kontrola",
     "Display the zoom control": "Bistaratu zoom kontrola",
     "Do you want to display a caption bar?": "Epigrafeen barra bistaratu nahi duzu?",
@@ -516,11 +514,21 @@ const locale = {
     "show/hide all layers": "show/hide all layers",
     "zoom to data extent": "zoom to data extent",
     "download visible data": "download visible data",
-    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map",
     "Import helpers": "Import helpers",
     "Import helpers will fill the URL field for you.": "Import helpers will fill the URL field for you.",
     "Wikipedia": "Wikipedia",
-    "Save draft": "Save draft"
+    "Save draft": "Save draft",
+    "No data has been found for import": "No data has been found for import",
+    "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
+    "Disconnected": "Disconnected",
+    "You must be logged in": "You must be logged in",
+    "Created at {date}": "Created at {date}",
+    "Modified at {date}": "Modified at {date}",
+    "on hover": "on hover",
+    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
+    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
+    "Import failed: invalid data": "Import failed: invalid data",
+    "Anonymous": "Anonymous"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

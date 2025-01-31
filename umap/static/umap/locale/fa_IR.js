@@ -19,7 +19,6 @@ const locale = {
     "Add a new property": "افزودن ویژگی جدید",
     "Add a polygon to the current multi": "یک چندضلعی به مولتی فعلی اضافه کنید",
     "Add image URL": "نشانی تصویر را بدهید",
-    "Add": "افزودن",
     "Advanced actions": "کنش‌های پیشرفته",
     "Advanced properties": "ویژگی‌های پیشرفته",
     "All data and settings of the map": "همهٔ داده‌ها و تنظیمات نقشه",
@@ -120,7 +119,6 @@ const locale = {
     "Display the locate control": "نمایش دکمهٔ مکان‌یابی",
     "Display the measure control": "نمایش دکمهٔ اندازه‌گیری",
     "Display the search control": "نمایش دکمهٔ جستجو",
-    "Display the star map button": "نمایش دکمهٔ ستاره‌دارکردن نقشه",
     "Display the tile layers control": "نمایش دکمهٔ لایه‌های کاشی",
     "Display the zoom control": "نمایش دکمهٔ زوم",
     "Do you want to display a caption bar?": "آیا نوار زیرنویس نشان داده شود؟",
@@ -516,11 +514,21 @@ const locale = {
     "show/hide all layers": "show/hide all layers",
     "zoom to data extent": "zoom to data extent",
     "download visible data": "download visible data",
-    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map",
     "Import helpers": "Import helpers",
     "Import helpers will fill the URL field for you.": "Import helpers will fill the URL field for you.",
     "Wikipedia": "Wikipedia",
-    "Save draft": "Save draft"
+    "Save draft": "Save draft",
+    "No data has been found for import": "No data has been found for import",
+    "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
+    "Disconnected": "Disconnected",
+    "You must be logged in": "You must be logged in",
+    "Created at {date}": "Created at {date}",
+    "Modified at {date}": "Modified at {date}",
+    "on hover": "on hover",
+    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
+    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
+    "Import failed: invalid data": "Import failed: invalid data",
+    "Anonymous": "Anonymous"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

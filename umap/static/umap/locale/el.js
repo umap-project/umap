@@ -19,7 +19,6 @@ const locale = {
     "Add a new property": "Προσθήκη νέας ιδιότητας",
     "Add a polygon to the current multi": "Προσθήκη πολυγώνου στο παρόν πολυδεδομένο",
     "Add image URL": "Προσθήκη URL εικόνας",
-    "Add": "Προσθήκη",
     "Advanced actions": "Εξειδικευμένες ενέργειες",
     "Advanced properties": "Εξειδικευμένες ιδιότητες",
     "All data and settings of the map": "Όλα τα δεδομένα και ρυθμίσεις του χάρτη",
@@ -120,7 +119,6 @@ const locale = {
     "Display the locate control": "Εμφάνιση εικονιδίου γεωεντοπισμού",
     "Display the measure control": "Εμφάνιση εικονιδίου μέτρησης",
     "Display the search control": "Εμφάνιση εικονιδίου αναζήτησης",
-    "Display the star map button": "Εμφάνιση του κουμπιού για χάρτη με αστέρι",
     "Display the tile layers control": "Εμφάνιση εικονιδίου αλλαγής υποβάθρων",
     "Display the zoom control": "Εμφάνιση εικονιδίου εστίασης",
     "Do you want to display a caption bar?": "Εμφάνιση λεζάντας",
@@ -516,11 +514,21 @@ const locale = {
     "show/hide all layers": "show/hide all layers",
     "zoom to data extent": "zoom to data extent",
     "download visible data": "download visible data",
-    "{connectedPeers} peer(s) currently connected to this map": "{connectedPeers} peer(s) currently connected to this map",
     "Import helpers": "Import helpers",
     "Import helpers will fill the URL field for you.": "Import helpers will fill the URL field for you.",
     "Wikipedia": "Wikipedia",
-    "Save draft": "Save draft"
+    "Save draft": "Save draft",
+    "No data has been found for import": "No data has been found for import",
+    "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
+    "Disconnected": "Disconnected",
+    "You must be logged in": "You must be logged in",
+    "Created at {date}": "Created at {date}",
+    "Modified at {date}": "Modified at {date}",
+    "on hover": "on hover",
+    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
+    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
+    "Import failed: invalid data": "Import failed: invalid data",
+    "Anonymous": "Anonymous"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")
