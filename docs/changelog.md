@@ -1,5 +1,43 @@
 # Changelog
 
+## 2.9.0b0 - 2025-01-31
+
+### New features
+* display map's "created at" and "modified at" in the caption by @yohanboniface in #2424
+* allow to define sortKey at layer level by @yohanboniface in #2449
+* move star button to caption by @yohanboniface in #2442
+* add a debounce for Input and Textarea fields by @yohanboniface in #2445
+* soft delete datalayers by @yohanboniface in #2459
+* add DEPRECATED_AUTHENTICATION_PROVIDERS setting by @yohanboniface in #2461
+
+### Bug fixes
+* display a more usefull message when error in remote data by @yohanboniface in #2443
+* fix circle icon no longer hihlighted by @yohanboniface in #2440
+* keep layer visibility after clicking on toggle all by @yohanboniface in #2439
+* update map.modified_at when saving a datalayer by @yohanboniface in #2423
+* do not consume ctrl-Z in textarea or input by @yohanboniface in #2441
+* Fix categorized layers colors palette not updating by @yohanboniface in #2447
+* reference secret-env by fullname instead release-name by @swarnat in #2406
+* correctly parse http link including another http link in the path by @yohanboniface in #2460
+* display current configured oauth as icon instead of text by @yohanboniface in #2375
+* better buttons positionning for the homepage by @davidbgk in #2463
+* catch cluster error at zoom in certain situation by @yohanboniface in #2464
+* display a more descriptive alert on invalid geojson error by @yohanboniface in #2466
+* do not try to backup an undefined geojson by @yohanboniface in #2468
+
+### Internal changes
+* deactivate cancel and hide button when sync is active by @yohanboniface in #2413
+* do not try to reconnect after end edit by @yohanboniface in #2412
+* handle sync of datalayer delete by @yohanboniface in #2416
+* internalize FormBuilder by @yohanboniface in #2420
+* POC of using Redis for pubsub by @yohanboniface in #2426
+* include site description within page titles by @davidbgk in #2455
+* Sync show usernames by @yohanboniface in #2444
+* only allow to set a map as sync when it is already saved by @yohanboniface in #2465
+
+### New Contributors
+* @swarnat made their first contribution in #2406
+
 ## 2.8.2 - 2024-12-26
 
 ### Bug fixes
