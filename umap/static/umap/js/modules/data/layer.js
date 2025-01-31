@@ -283,7 +283,9 @@ export class DataLayer extends ServerStored {
   }
 
   backupData() {
-    this._geojson_bk = Utils.CopyJSON(this._geojson)
+    if (this._geojson) {
+      this._geojson_bk = Utils.CopyJSON(this._geojson)
+    }
   }
 
   reindex() {
