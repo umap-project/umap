@@ -55,7 +55,7 @@ dev = [
 ]
 test = [
   "daphne==4.1.2",
-  "factory-boy==3.3.1",
+  "factory-boy==3.3.3",
   "playwright>=1.39",
   "pytest==8.3.4",
   "pytest-django==4.9.0",
