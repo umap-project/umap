@@ -1,5 +1,11 @@
 # Articles
 
+## [Créer des cartes interactives personnalisées : uMap ou Leaflet ?](https://www.d-booker.fr/content/242-creer-des-cartes-interactives-personnalisees-umap-ou-leaflet) (2025-02-01)
+
+> Dans ce guide, nous comparerons deux solutions libres populaires : uMap, une plateforme en ligne intuitive, et Leaflet, une bibliothèque JavaScript puissante.
+
+[Article complet →](https://www.d-booker.fr/content/242-creer-des-cartes-interactives-personnalisees-umap-ou-leaflet){ .md-button }
+
 ## [Vers uMap 3 😱](https://www.openstreetmap.org/user/David%20Larlet/diary/404654#vers-umap-3-) (2024-07-16)
 
 > La dernière version 2.4.X ouvre la voie à deux fonctionnalités majeures demandées : la collaboration en temps réel et les assistants d’import de données à distance en un clic.
