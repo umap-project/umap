@@ -267,6 +267,8 @@ const PathMixin = {
   },
 
   makeGeometryEditable: function () {
+    // Feature has been removed since then?
+    if (!this._map) return
     if (this._map._umap.editedFeature !== this.feature) {
       this.disableEdit()
       return
