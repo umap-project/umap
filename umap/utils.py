@@ -27,7 +27,10 @@ def _urls_for_js():
     Return templated URLs prepared for javascript.
     """
     urls = {}
-    for module in ["umap.urls", "umap.sync.app"]:
+    modules = ["umap.urls"]
+    if settings.WEBSOCKET_ENABLED:
+        modules.append("umap.sync.app")
+    for module in modules:
         names = _get_url_names(module)
         urls.update(
             dict(zip(names, [get_uri_template(url, module=module) for url in names]))
