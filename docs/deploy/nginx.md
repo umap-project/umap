@@ -4,7 +4,7 @@ Here are some configuration files to use umap with nginx and [uWSGI](https://uws
 
 ```nginx title="nginx.conf"
 upstream umap {
-    server unix:///srv/umap/uwsgi.sock;
+    server unix:///srv/umap/umap.sock;
 }
 
 server {
@@ -69,7 +69,7 @@ master = true
 # maximum number of worker processes
 processes = 4
 # the socket (use the full path to be safe)
-socket = /srv/umap/uwsgi.sock
+socket = /srv/umap/umap.sock
 # ... with appropriate permissions - may be needed
 chmod-socket = 666
 stats = /srv/umap/stats.sock
