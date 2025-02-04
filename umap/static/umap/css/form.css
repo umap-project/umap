@@ -87,6 +87,7 @@ input[type="submit"] {
     border: none;
     text-decoration: none;
     background-color: white;
+    justify-content: center;
 }
 .dark .button,
 .dark [type="button"] {
