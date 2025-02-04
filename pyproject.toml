@@ -48,7 +48,7 @@ dev = [
   "djlint==1.36.4",
   "mkdocs==1.6.1",
   "mkdocs-material==9.5.50",
-  "mkdocs-static-i18n==1.2.3",
+  "mkdocs-static-i18n==1.3.0",
   "vermin==1.6.0",
   "pymdown-extensions==10.14.1",
   "isort==5.13.2",
