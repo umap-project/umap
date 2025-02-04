@@ -124,11 +124,11 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
     map.click(position={"x": 100, "y": 100})
     map.click(position={"x": 100, "y": 100})
 
-    # It is created on peerA, but not yet synced
+    # It is created on peerA, and should be on peerB
     expect(a_polygons).to_have_count(1)
-    expect(b_polygons).to_have_count(0)
+    expect(b_polygons).to_have_count(1)
 
-    # Escaping the edition syncs
+    # Escaping the edition should not duplicate
     peerA.keyboard.press("Escape")
     expect(a_polygons).to_have_count(1)
     expect(b_polygons).to_have_count(1)

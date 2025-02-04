@@ -47,6 +47,7 @@ const FeatureMixin = {
   addInteractions: function () {
     this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
+    this.on('editable:edited', this.onCommit)
   },
 
   onClick: function (event) {
@@ -120,7 +121,6 @@ const PointMixin = {
       this.feature.edit(event)
       this.feature.pullGeometry()
     })
-    this.on('editable:drawing:commit', this.onCommit)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
   },
@@ -285,7 +285,6 @@ const PathMixin = {
 
   addInteractions: function () {
     FeatureMixin.addInteractions.call(this)
-    this.on('editable:disable', this.onCommit)
     this.on('mouseover', this._onMouseOver)
     this.on('drag editable:drag', this._onDrag)
     this.on('popupopen', this.highlightPath)
