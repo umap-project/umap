@@ -93,7 +93,7 @@ class Peer:
                 try:
                     message = await pubsub.get_message(ignore_subscribe_messages=True)
                 except Exception as err:
-                    print(err)
+                    logging.debug(err)
                     break
                 if message is not None:
                     await self.send(message["data"].decode())
@@ -123,18 +123,18 @@ class Peer:
         await self.broadcast(message.model_dump_json())
 
     async def broadcast(self, message):
-        print("BROADCASTING", message)
+        logging.debug("BROADCASTING", message)
         # Send to all channels (including sender!)
         await self.client.publish(self.room_key, message)
 
     async def send_to(self, peer_id, message):
-        print("SEND TO", peer_id, message)
+        logging.debug("SEND TO", peer_id, message)
         # Send to one given channel
         await self.client.publish(f"user:{self.map_id}:{peer_id}", message)
 
     async def receive(self, text_data):
         if not self.is_authenticated:
-            print("AUTHENTICATING", text_data)
+            logging.debug("AUTHENTICATING", text_data)
             message = JoinRequest.model_validate_json(text_data)
             signed = TimestampSigner().unsign_object(message.token, max_age=30)
             user, map_id, permissions = signed.values()
@@ -143,7 +143,7 @@ class Peer:
                 return await self.disconnect()
             self.peer_id = message.peer
             self.username = message.username
-            print("AUTHENTICATED", self.peer_id)
+            logging.debug("AUTHENTICATED", self.peer_id)
             await self.store_username()
             await self.listen()
             response = JoinResponse(peer=self.peer_id, peers=await self.get_peers())
@@ -170,12 +170,12 @@ class Peer:
                     await self.send_to(incoming.root.recipient, text_data)
 
     async def send(self, text):
-        print("  FORWARDING TO", self.peer_id, text)
+        logging.debug("  FORWARDING TO", self.peer_id, text)
         try:
             await self._send({"type": "websocket.send", "text": text})
         except Exception as err:
-            print("Error sending message:", text)
-            print(err)
+            logging.debug("Error sending message:", text)
+            logging.debug(err)
 
 
 urlpatterns = [path("ws/sync/<str:map_id>", name="ws_sync", view=sync)]
