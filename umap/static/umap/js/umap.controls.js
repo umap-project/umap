@@ -1029,6 +1029,9 @@ U.Editable = L.Editable.extend({
   onEscape: function () {
     this.once('editable:drawing:end', (event) => {
       this._umap.tooltip.close()
+      // When hitting Escape before adding a marker,
+      // it tries to edit an unconnected marker.
+      if (event?.layer?.feature?.datalayer === null) return
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
