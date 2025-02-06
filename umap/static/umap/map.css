@@ -417,10 +417,10 @@ ul.photon-autocomplete {
     width: 16px;
     height: 16px;
     margin-inline-start: 5px;
-    background-position: -4px -4px;
+    background-position: 2px -4px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
-    background-color: var(--color-darkGray) !important;
+    background-color: transparent !important;
     vertical-align: middle;
     text-indent: -9999px;
     min-height: inherit;

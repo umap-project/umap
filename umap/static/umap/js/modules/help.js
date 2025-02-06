@@ -193,6 +193,14 @@ export default class Help {
   show(entries) {
     const container = DomUtil.add('div')
     DomUtil.createTitle(container, translate('Help'))
+    for (const name of entries) {
+      DomUtil.element({
+        tagName: 'div',
+        className: 'umap-help-entry',
+        parent: container,
+        innerHTML: ENTRIES[name],
+      })
+    }
     this.dialog.open({ template: container })
   }
 

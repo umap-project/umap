@@ -21,6 +21,16 @@ def test_can_edit_name(page, live_server, tilelayer):
     )
 
 
+def test_can_display_help(page, live_server, tilelayer):
+    page.goto(f"{live_server.url}/en/map/new/")
+
+    page.get_by_title("Edit map name and caption").click()
+    help_button = page.locator(".panel .umap-field-description .umap-help-button")
+    expect(help_button).to_be_visible()
+    help_button.click()
+    expect(page.locator("dialog").first).to_contain_text("Text formatting")
+
+
 def test_can_edit_name_on_click_on_toolbar(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
     page.locator(".umap-main-edit-toolbox .map-name").click()
