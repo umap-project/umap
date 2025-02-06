@@ -69,8 +69,17 @@ class PictogramAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
 
-class TeamAdmin(admin.ModelAdmin):
+class TeamAdmin(CSVExportMixin, admin.ModelAdmin):
+    csv_fields = [
+        "pk",
+        "name",
+        "users_count",
+    ]
+    list_display = list(admin.ModelAdmin.list_display) + ["users_count"]
     filter_horizontal = ("users",)
+
+    def users_count(self, obj):
+        return obj.users.count()
 
 
 class UserAdmin(CSVExportMixin, UserAdminBase):
@@ -83,12 +92,16 @@ class UserAdmin(CSVExportMixin, UserAdminBase):
         "last_login",
         "date_joined",
         "maps_count",
+        "user_teams",
     ]
-    list_display = list(UserAdminBase.list_display) + ["maps_count"]
+    list_display = list(UserAdminBase.list_display) + ["maps_count", "user_teams"]
 
     def maps_count(self, obj):
         # owner maps + maps as editor
         return obj.owned_maps.count() + obj.map_set.count()
+
+    def user_teams(self, obj):
+        return " ; ".join(obj.teams.values_list("name", flat=True))
 
 
 admin.site.register(Map, MapAdmin)
