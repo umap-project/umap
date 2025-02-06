@@ -21,6 +21,7 @@ nav:
       - Docker: deploy/docker.md
       - Helm: deploy/helm.md
       - Nginx: deploy/nginx.md
+      - ASGI: deploy/asgi.md
   - Changelog: changelog.md
 theme:
   name: material
