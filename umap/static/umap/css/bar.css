@@ -221,6 +221,13 @@
 }
 .umap-edit-bar button {
     padding: 0;
+    border-radius: 0;
+}
+.umap-edit-bar li:first-of-type button {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+.umap-edit-bar li:last-of-type button {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 .umap-edit-bar hr {
     padding: 0;
