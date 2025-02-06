@@ -17,15 +17,15 @@ pytestmark = pytest.mark.django_db
 def test_layers_list_is_updated(live_server, tilelayer, page):
     page.goto(f"{live_server.url}/map/new/")
     modifier = "Cmd" if platform.system() == "Darwin" else "Ctrl"
-    page.get_by_role("link", name=f"Import data ({modifier}+I)").click()
+    page.get_by_role("button", name=f"Import data ({modifier}+I)").click()
     # Should work
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("foobar")
     page.wait_for_timeout(300)  # Time for the input debounce.
-    page.get_by_role("link", name=f"Import data ({modifier}+I)").click()
+    page.get_by_role("button", name=f"Import data ({modifier}+I)").click()
     # Should still work
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")
     # Now layer should be visible in the options
@@ -571,14 +571,14 @@ def test_create_remote_data(page, live_server, tilelayer):
     page.route("*/**/ajax-proxy/**", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import data").click()
     page.get_by_placeholder("Provide an URL here").click()
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Link to the layer as remote data").click()
     page.get_by_role("button", name="Import data", exact=True).click()
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('.panel input[name="url"]')).to_have_value(
@@ -608,14 +608,14 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import data").click()
     page.get_by_placeholder("Provide an URL here").click()
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Copy into the layer").click()
     page.get_by_role("button", name="Import data", exact=True).click()
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('.panel input[name="url"]')).to_have_value("")
@@ -626,7 +626,7 @@ def test_overpass_import_with_bbox(page, live_server, tilelayer, settings):
         "overpass": {"url": "https://my.overpass.io/interpreter"}
     }
     page.goto(f"{live_server.url}/map/new/")
-    page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import data").click()
     page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Overpass").click()
     page.get_by_placeholder("amenity=drinking_water").fill("building")
@@ -677,7 +677,7 @@ def test_overpass_import_retains_boundary(page, live_server, tilelayer, settings
     # Intercept the route
     page.route(re.compile("https://foobar.io/api.*"), handle)
     page.goto(f"{live_server.url}/map/new/")
-    page.get_by_role("link", name="Import data").click()
+    page.get_by_role("button", name="Import data").click()
     page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Overpass").click()
     page.get_by_placeholder("amenity=drinking_water").fill("building")
@@ -732,7 +732,7 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
-    page.get_by_role("link", name="Import data").click()
+    page.get_by_title("Import data").click()
     page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Datasets").click()
     page.get_by_role("dialog").get_by_role("combobox").select_option(
@@ -740,7 +740,7 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     )
     page.get_by_role("button", name="Choose this dataset").click()
     page.get_by_label("Copy into the layer").check()
-    page.get_by_role("button", name="Import data").click()
+    page.get_by_role("button", name="Import data", exact=True).click()
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
     page.get_by_role("button", name="Open browser").click()
     expect(page.locator("h5").get_by_text("Good data")).to_be_visible()

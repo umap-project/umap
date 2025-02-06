@@ -6,9 +6,7 @@ def test_ids_generation(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a line button on a new map.
-    create_polyline = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline"
-    )
+    create_polyline = page.locator(".umap-edit-bar ").get_by_title("Draw a polyline")
     create_polyline.click()
 
     map = page.locator("#map")
@@ -18,9 +16,7 @@ def test_ids_generation(page, live_server, tilelayer):
     map.click(position={"x": 100, "y": 100})
 
     # Click on the Draw a polygon button on a new map.
-    create_polygon = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
+    create_polygon = page.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_polygon.click()
 
     map = page.locator("#map")

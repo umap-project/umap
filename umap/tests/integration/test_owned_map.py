@@ -239,7 +239,7 @@ def test_can_delete_datalayer(live_server, map, login, datalayer):
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Delete layer").click()
     page.get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r".*/datalayer/delete/.*")):

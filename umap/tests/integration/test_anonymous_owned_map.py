@@ -234,7 +234,7 @@ def test_anonymous_owner_can_delete_the_map(anonymap, live_server, owner_session
     assert Map.objects.count() == 1
     owner_session.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
     owner_session.get_by_role("button", name="Edit").click()
-    owner_session.get_by_role("link", name="Map advanced properties").click()
+    owner_session.get_by_role("button", name="Map advanced properties").click()
     owner_session.get_by_text("Advanced actions").click()
     expect(owner_session.get_by_role("button", name="Delete")).to_be_visible()
     owner_session.get_by_role("button", name="Delete").click()
@@ -248,6 +248,6 @@ def test_non_owner_cannot_see_delete_button(anonymap, live_server, page):
     anonymap.save()
     page.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Map advanced properties").click()
+    page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Advanced actions").click()
     expect(page.get_by_role("button", name="Delete")).to_be_hidden()

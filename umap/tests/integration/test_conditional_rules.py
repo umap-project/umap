@@ -252,7 +252,7 @@ def test_can_create_new_rule(live_server, page, openmap):
     markers = page.locator(".leaflet-marker-icon .icon_container")
     expect(markers).to_have_count(5)
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Map advanced properties").click()
+    page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Conditional style rules").click()
     page.get_by_role("button", name="Add rule").click()
     page.locator("input[name=condition]").click()
@@ -276,7 +276,7 @@ def test_can_deactive_rule_from_list(live_server, page, openmap):
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Map advanced properties").click()
+    page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Conditional style rules").click()
     page.get_by_role("button", name="Show/hide layer").click()
     colors = getColors(markers)
@@ -289,7 +289,7 @@ def test_can_deactive_rule_from_list(live_server, page, openmap):
 def test_autocomplete_datalist(live_server, page, openmap):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.948/1.670")
-    page.get_by_role("link", name="Map advanced properties").click()
+    page.get_by_role("button", name="Map advanced properties").click()
     page.locator("summary").filter(has_text="Conditional style rules").click()
     page.get_by_role("button", name="Add rule").click()
     panel = page.locator(".panel.right.on")

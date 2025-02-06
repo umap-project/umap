@@ -10,9 +10,7 @@ def test_draw_polyline(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a line button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline"
-    )
+    create_line = page.locator(".umap-edit-bar ").get_by_title("Draw a polyline")
     create_line.click()
 
     # Check no line is present by default.
@@ -44,9 +42,7 @@ def test_clicking_esc_should_finish_line(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a line button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline"
-    )
+    create_line = page.locator(".umap-edit-bar ").get_by_title("Draw a polyline")
     create_line.click()
 
     # Check no line is present by default.
@@ -80,9 +76,7 @@ def test_clicking_esc_should_delete_line_if_empty(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a line button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline"
-    )
+    create_line = page.locator(".umap-edit-bar ").get_by_title("Draw a polyline")
     create_line.click()
 
     # Check no line is present by default.
@@ -109,9 +103,7 @@ def test_clicking_esc_should_delete_line_if_invalid(page, live_server, tilelayer
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a line button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polyline"
-    )
+    create_line = page.locator(".umap-edit-bar ").get_by_title("Draw a polyline")
     create_line.click()
 
     # Check no line is present by default.

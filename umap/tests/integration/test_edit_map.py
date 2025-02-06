@@ -182,7 +182,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
 
     # Change the default sortkey to be "key"
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Map advanced properties").click()
+    page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Default properties").click()
 
     # Click "define"

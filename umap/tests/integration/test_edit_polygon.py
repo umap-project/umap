@@ -57,7 +57,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
 
     # Change colour at layer level
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color .define").click()
@@ -75,7 +75,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     )
 
     # Now change again at layer level again, it should not change the marker color
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color input").click()

@@ -67,7 +67,7 @@ DATALAYER_DATA = {
 
 def test_table_editor(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     page.get_by_text("Add a new property").click()
     page.locator("dialog").locator("input").fill("newprop")
@@ -89,7 +89,7 @@ def test_table_editor(live_server, openmap, datalayer, page):
 
 def test_cannot_add_existing_property_name(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     page.get_by_text("Add a new property").click()
     page.locator("dialog").locator("input").fill("name")
@@ -102,7 +102,7 @@ def test_cannot_add_existing_property_name(live_server, openmap, datalayer, page
 
 def test_cannot_add_property_with_a_dot(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     page.get_by_text("Add a new property").click()
     page.locator("dialog").locator("input").fill("foo.bar")
@@ -115,7 +115,7 @@ def test_cannot_add_property_with_a_dot(live_server, openmap, datalayer, page):
 
 def test_rename_property(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("table th button[data-property=name]")).to_have_count(1)
     page.locator("thead button[data-property=name]").click()
@@ -129,7 +129,7 @@ def test_rename_property(live_server, openmap, datalayer, page):
 def test_delete_selected_rows(live_server, openmap, page):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("tbody tr")).to_have_count(4)
     expect(page.locator(".leaflet-marker-icon")).to_have_count(4)
@@ -143,7 +143,7 @@ def test_delete_selected_rows(live_server, openmap, page):
 def test_delete_all_rows(live_server, openmap, page):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("tbody tr")).to_have_count(4)
     expect(page.locator(".leaflet-marker-icon")).to_have_count(4)
@@ -159,7 +159,7 @@ def test_filter_and_delete_rows(live_server, openmap, page):
     panel = page.locator(".panel.left.on")
     table = page.locator(".panel.full table")
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(table.locator("tbody tr")).to_have_count(4)
     expect(page.locator(".leaflet-marker-icon")).to_have_count(4)

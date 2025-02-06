@@ -62,6 +62,9 @@ html[dir="rtl"] .icon {
 .icon-caption {
     background-position: calc(var(--tile) * 4) var(--tile);
 }
+.icon-center {
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 2);
+}
 .icon-close {
     background-position: var(--tile) 0px;
 }
@@ -101,6 +104,9 @@ html[dir="rtl"] .icon {
 .icon-forward {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 6);
 }
+.icon-help {
+    background-position: 0 0;
+}
 .icon-key {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);
 }
@@ -114,16 +120,22 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 7) 0;
 }
 .icon-marker {
-    background-position: calc(var(--tile) * 3) calc(var(--tile) * 5);
+    background-position: calc(var(--tile) * 7) var(--tile);
+}
+.icon-multipolygon {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 5);
+}
+.icon-multiline {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 7);
 }
 .icon-peers {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 2);
 }
 .icon-polygon {
-    background-position: var(--tile) calc(var(--tile) * 3);
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 4);
 }
 .icon-polyline {
-    background-position: 0 calc(var(--tile) * 3);
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 6);
 }
 .icon-profile {
     background-position: 0 calc(var(--tile) * 4);
