@@ -217,7 +217,7 @@ const ManageTilelayerMixin = {
     }
   },
 
-  updateTileLayers: function () {
+  editTileLayers: function () {
     if (this._controls.tilelayersChooser) {
       this._controls.tilelayersChooser.openSwitcher({ edit: true })
     }

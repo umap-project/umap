@@ -10,7 +10,7 @@ import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
 
 const TEMPLATE = `
-  <div class="umap-upload">
+  <div class="umap-import">
     <h3><i class="icon icon-16 icon-upload"></i><span>${translate('Import data')}</span></h3>
     <fieldset class="formbox">
       <legend class="counter">${translate('Choose data')}</legend>
@@ -261,7 +261,10 @@ export default class Importer extends Utils.WithTemplate {
 
   open() {
     if (!this.container) this.build()
-    const onLoad = this._umap.editPanel.open({ content: this.container })
+    const onLoad = this._umap.editPanel.open({
+      content: this.container,
+      highlight: 'import',
+    })
     onLoad.then(() => this.onLoad())
   }
 

@@ -432,12 +432,12 @@ U.TileLayerChooser = L.Control.extend({
   },
 
   openSwitcher: function (options = {}) {
-    const container = L.DomUtil.create('div', 'umap-tilelayer-switcher-container')
+    const container = L.DomUtil.create('div', 'umap-edit-tilelayers')
     L.DomUtil.createTitle(container, L._('Change tilelayers'), 'icon-tilelayer')
     this._tilelayers_container = L.DomUtil.create('ul', '', container)
     this.buildList(options)
     const panel = options.edit ? this.map._umap.editPanel : this.map._umap.panel
-    panel.open({ content: container })
+    panel.open({ content: container, highlight: 'tilelayers' })
   },
 
   buildList: function (options) {

@@ -219,9 +219,9 @@ const EDIT_BAR_TEMPLATE = `
     <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
     <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
     <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>
-    <li data-ref="tiles" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
+    <li data-ref="tilelayers" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
     <li data-ref="center" hidden><button type="button"><i class="icon icon-24 icon-center"></i></button></li>
-    <li data-ref="key" hidden><button type="button" title="${translate('Update permissions and editors')}"><i class="icon icon-24 icon-key"></i></button></li>
+    <li data-ref="permissions" hidden><button type="button" title="${translate('Update permissions and editors')}"><i class="icon icon-24 icon-key"></i></button></li>
     <li data-ref="settings" hidden><button data-getstarted type="button" title="${translate('Map advanced properties')}"><i class="icon icon-24 icon-settings"></i></button></li>
   </ul>
 `
@@ -249,9 +249,9 @@ export class EditBar extends WithTemplate {
     this._onClick('caption', () => this._umap.editCaption())
     this._onClick('import', () => this._umap.importer.open())
     this._onClick('layers', () => this._umap.editDatalayers())
-    this._onClick('tiles', () => this._leafletMap.updateTileLayers())
+    this._onClick('tilelayers', () => this._leafletMap.editTileLayers())
     this._onClick('center', () => this._umap.editCenter())
-    this._onClick('key', () => this._umap.permissions.edit())
+    this._onClick('permissions', () => this._umap.permissions.edit())
     this._onClick('settings', () => this._umap.edit())
     this._addTitle('import', 'IMPORT_PANEL')
     this._addTitle('marker', 'DRAW_MARKER')
@@ -267,9 +267,9 @@ export class EditBar extends WithTemplate {
     this.elements.caption.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.import.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.layers.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.tiles.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.tilelayers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.key.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.permissions.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.settings.hidden = this._umap.properties.editMode !== 'advanced'
   }
 

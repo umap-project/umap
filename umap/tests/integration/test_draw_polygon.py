@@ -471,7 +471,7 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/#15/48.4395/3.3189")
     page.get_by_title("Import data").click()
-    page.locator(".umap-upload textarea").fill(geojson)
+    page.locator(".umap-import textarea").fill(geojson)
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
     page.locator("path").click()

@@ -744,7 +744,7 @@ export default class Umap extends ServerStored {
   editCaption() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div', 'umap-edit-container')
+    const container = DomUtil.create('div')
     const metadataFields = ['properties.name', 'properties.description']
 
     DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
@@ -765,13 +765,13 @@ export default class Umap extends ServerStored {
     ]
     const creditsBuilder = new MutatingForm(this, creditsFields, { umap: this })
     credits.appendChild(creditsBuilder.build())
-    this.editPanel.open({ content: container })
+    this.editPanel.open({ content: container, highlight: 'caption' })
   }
 
   editCenter() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div', 'umap-edit-container')
+    const container = DomUtil.create('div')
     const metadataFields = [
       ['properties.zoom', { handler: 'IntInput', label: translate('Default zoom') }],
       [
@@ -800,7 +800,7 @@ export default class Umap extends ServerStored {
     })
     container.appendChild(form)
     container.appendChild(button)
-    this.editPanel.open({ content: container })
+    this.editPanel.open({ content: container, highlight: 'center' })
   }
 
   _editControls(container) {
@@ -1157,7 +1157,11 @@ export default class Umap extends ServerStored {
     }
     this._advancedActions(container)
 
-    this.editPanel.open({ content: container, className: 'dark' })
+    this.editPanel.open({
+      content: container,
+      className: 'dark',
+      highlight: 'settings',
+    })
   }
 
   reset() {
@@ -1546,7 +1550,7 @@ export default class Umap extends ServerStored {
       this
     )
 
-    this.editPanel.open({ content: container })
+    this.editPanel.open({ content: container, highlight: 'layers' })
   }
 
   getDataLayerByUmapId(id) {

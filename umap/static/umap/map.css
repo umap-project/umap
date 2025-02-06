@@ -688,7 +688,7 @@ a.umap-control-caption,
 /*      Tilelayer switcher           */
 /* ********************************* */
 
-.umap-tilelayer-switcher-container li {
+.umap-edit-tilelayers li {
     border: 1px solid rgb(116, 116, 116);
     border-radius: 4px 4px 4px 4px;
     margin-bottom: 14px;
@@ -700,7 +700,7 @@ a.umap-control-caption,
     margin-left: auto;
     margin-right: auto;
 }
-.umap-tilelayer-switcher-container li div {
+.umap-edit-tilelayers li div {
     background-color: rgb(116, 116, 116);
     bottom: 0;
     color: rgb(247, 246, 241);
@@ -712,8 +712,8 @@ a.umap-control-caption,
     width: 100%;
     text-align: center;
 }
-.umap-tilelayer-switcher-container li:hover div:before,
-.umap-tilelayer-switcher-container .selected div:before {
+.umap-edit-tilelayers li:hover div:before,
+.umap-edit-tilelayers .selected div:before {
     content: "✓";
     font-size: 1.3em;
     line-height: 56px;
@@ -721,7 +721,7 @@ a.umap-control-caption,
     position: absolute;
     inset-inline-start: 7px;
 }
-.umap-tilelayer-switcher-container li img {
+.umap-edit-tilelayers li img {
     display: block;
     max-width: 100%;
 }

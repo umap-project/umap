@@ -4,7 +4,7 @@
     --color-darkBlue: #263B58;
     --color-lighterGray: #f6f6f6;
     --color-lightGray: #ddd;
-    --color-mediumGray: #3e4444;
+    --color-mediumGray: #474e4e;
     --color-darkGray: #323737;
     --color-darkerGray: #2a2e30;
     --color-light: white;
@@ -58,7 +58,7 @@
     --block-shadow: 0 1px 7px var(--color-mediumGray);
 }
 .dark {
-    --background-color: var(--color-darkGray);
+    --background-color: var(--color-mediumGray);
     --text-color: #efefef;
 }
 
