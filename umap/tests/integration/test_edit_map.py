@@ -21,6 +21,16 @@ def test_can_edit_name(page, live_server, tilelayer):
     )
 
 
+def test_can_display_help(page, live_server, tilelayer):
+    page.goto(f"{live_server.url}/en/map/new/")
+
+    page.get_by_title("Edit map name and caption").click()
+    help_button = page.locator(".panel .umap-field-description .umap-help-button")
+    expect(help_button).to_be_visible()
+    help_button.click()
+    expect(page.locator("dialog").first).to_contain_text("Text formatting")
+
+
 def test_can_edit_name_on_click_on_toolbar(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
     page.locator(".umap-main-edit-toolbox .map-name").click()
@@ -182,7 +192,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
 
     # Change the default sortkey to be "key"
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Map advanced properties").click()
+    page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Default properties").click()
 
     # Click "define"

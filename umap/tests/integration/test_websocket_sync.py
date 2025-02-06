@@ -107,9 +107,7 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
     b_map_el = peerB.locator("#map")
 
     # Click on the Draw a polygon button on a new map.
-    create_line = peerA.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
+    create_line = peerA.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_line.click()
 
     a_polygons = peerA.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
@@ -189,14 +187,14 @@ def test_websocket_connection_can_sync_map_properties(
     peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Name change is synced
-    peerA.get_by_role("link", name="Edit map name and caption").click()
+    peerA.get_by_role("button", name="Edit map name and caption").click()
     peerA.locator('input[name="name"]').click()
     peerA.locator('input[name="name"]').fill("it syncs!")
 
     expect(peerB.locator(".map-name").last).to_have_text("it syncs!")
 
     # Zoom control is synced
-    peerB.get_by_role("link", name="Map advanced properties").click()
+    peerB.get_by_role("button", name="Map advanced properties").click()
     peerB.locator("summary").filter(has_text="User interface options").click()
     switch = peerB.locator("div.formbox").filter(
         has_text=re.compile("Display the zoom control")
@@ -223,14 +221,14 @@ def test_websocket_connection_can_sync_datalayer_properties(
     peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Layer addition, name and type are synced
-    peerA.get_by_role("link", name="Manage layers").click()
+    peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
     peerA.locator('input[name="name"]').click()
     peerA.locator('input[name="name"]').fill("synced layer!")
     peerA.get_by_role("combobox").select_option("Choropleth")
     peerA.locator("body").press("Escape")
 
-    peerB.get_by_role("link", name="Manage layers").click()
+    peerB.get_by_role("button", name="Manage layers").click()
     peerB.locator(".panel.right").get_by_role("button", name="Edit").first.click()
     expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
     expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
@@ -254,9 +252,7 @@ def test_websocket_connection_can_sync_cloned_polygons(
     b_map_el = peerB.locator("#map")
 
     # Click on the Draw a polygon button on a new map.
-    create_line = peerA.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
+    create_line = peerA.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_line.click()
 
     a_polygons = peerA.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
@@ -324,9 +320,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
     peerA.wait_for_timeout(300)
 
     # Add a polygon from peer A
-    create_polygon = peerA.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
+    create_polygon = peerA.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_polygon.click()
 
     a_map_el.click(position={"x": 200, "y": 200})
@@ -377,7 +371,7 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     # Create a new layer from peerA
-    peerA.get_by_role("link", name="Manage layers").click()
+    peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
 
     # Check layer has been sync to peerB
@@ -385,7 +379,7 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     expect(peerB.get_by_text("Layer 1")).to_be_visible()
 
     # Draw a marker in layer 1 from peerA
-    peerA.get_by_role("link", name="Draw a marker (Ctrl+M)").click()
+    peerA.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
     peerA.locator("#map").click()
 
     # Check marker is visible from peerB
@@ -398,9 +392,9 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     assert DataLayer.objects.count() == 1
 
     # Create another layer from peerA and draw a marker on it (without saving to server)
-    peerA.get_by_role("link", name="Manage layers").click()
+    peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
-    peerA.get_by_role("link", name="Draw a marker (Ctrl+M)").click()
+    peerA.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
     peerA.locator("#map").click()
 
     # Make sure this new marker is in Layer 2 for peerB
@@ -411,7 +405,7 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     expect(peerB.locator(".leaflet-marker-icon")).to_be_visible()
 
     # Now draw a marker from peerB
-    peerB.get_by_role("link", name="Draw a marker (Ctrl+M)").click()
+    peerB.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
     peerB.locator("#map").click()
     peerB.locator('input[name="name"]').fill("marker from peerB")
 
@@ -503,15 +497,15 @@ def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user)
     # Create a syncable map with peerA
     peerA = login(user, prefix="Page A")
     peerA.goto(f"{asgi_live_server.url}/en/map/new/")
-    peerA.get_by_role("link", name="Map advanced properties").click()
+    peerA.get_by_role("button", name="Map advanced properties").click()
     expect(peerA.get_by_text("Real-time collaboration", exact=True)).to_be_hidden()
     with peerA.expect_response(re.compile("./map/create/.*")):
         peerA.get_by_role("button", name="Save Draft").click()
-    peerA.get_by_role("link", name="Map advanced properties").click()
+    peerA.get_by_role("button", name="Map advanced properties").click()
     expect(peerA.get_by_text("Real-time collaboration", exact=True)).to_be_visible()
     peerA.get_by_text("Real-time collaboration", exact=True).click()
     peerA.get_by_text("Enable real-time").click()
-    peerA.get_by_role("link", name="Update permissions and editors").click()
+    peerA.get_by_role("button", name="Update permissions and editors").click()
     peerA.locator('select[name="share_status"]').select_option(str(Map.PUBLIC))
     with peerA.expect_response(re.compile("./update/settings/.*")):
         peerA.get_by_role("button", name="Save").click()

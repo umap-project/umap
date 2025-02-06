@@ -206,13 +206,23 @@ export default class Help {
 
   // Special dynamic case. Do we still think this dialog is useful?
   showGetStarted() {
-    const container = DomUtil.add('div')
-    DomUtil.createTitle(container, translate('Where do we go from here?'))
-    DomUtil.element({
-      tagName: 'div',
-      className: 'umap-help-entry',
-      parent: container,
-    }).appendChild(this._buildEditEntry())
+    const [container, { ul }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <h3><i class="icon icon-16 icon-help"></i>${translate('Where do we go from here?')}</h3>
+        <ul data-ref=ul class="umap-getstarted"></ul>
+      </div>
+    `)
+    const elements = document.querySelectorAll('[data-getstarted]')
+    for (const el of elements) {
+      const [node, { button }] = Utils.loadTemplateWithRefs(
+        `<li><button data-ref=button type="button" title="${el.title}">${el.innerHTML}${el.title}</button></li>`
+      )
+      ul.appendChild(node)
+      button.addEventListener('click', () => {
+        el.click()
+        this.dialog.close()
+      })
+    }
     this.dialog.open({ template: container })
   }
 
@@ -232,22 +242,6 @@ export default class Help {
         this.button(element, element.dataset.help.split(','))
       }
     }
-  }
-
-  _buildEditEntry() {
-    const container = DomUtil.create('div', '')
-    const actionsContainer = DomUtil.create('ul', 'umap-edit-actions', container)
-    const addAction = (action) => {
-      const actionContainer = DomUtil.add('li', '', actionsContainer)
-      DomUtil.add('i', action.options.className, actionContainer)
-      DomUtil.add('span', '', actionContainer, action.options.tooltip)
-      DomEvent.on(actionContainer, 'click', action.addHooks, action)
-      DomEvent.on(actionContainer, 'click', this.dialog.close, this.dialog)
-    }
-    for (const action of Object.values(Help.MENU_ACTIONS)) {
-      addAction(action)
-    }
-    return container
   }
 }
 

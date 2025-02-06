@@ -25,13 +25,16 @@ export class Panel {
     return this.container.classList.contains('on')
   }
 
-  open({ content, className, actions = [] } = {}) {
+  open({ content, className, highlight, actions = [] } = {}) {
     if (this.isOpen()) {
       this.onClose()
     }
     this.container.className = `with-transition panel window ${this.className} ${
       this.mode || ''
     }`
+    if (highlight) {
+      this.container.dataset.highlight = highlight
+    }
     document.body.classList.add(`panel-${this.className.split(' ')[0]}-on`)
     this.container.innerHTML = ''
     const actionsContainer = DomUtil.create('ul', 'buttons', this.container)
@@ -75,6 +78,7 @@ export class Panel {
 
   close() {
     document.body.classList.remove(`panel-${this.className.split(' ')[0]}-on`)
+    this.container.dataset.highlight = null
     this.onClose()
   }
 

@@ -89,7 +89,6 @@ span.popup-icon {
 .umap-popup-container ul {
     list-style-type: disc;
 }
-.leaflet-control-toolbar,
 .leaflet-bar {
     box-shadow: none;
 }

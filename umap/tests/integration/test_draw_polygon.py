@@ -10,10 +10,8 @@ def test_draw_polygon(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a polygon button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
-    create_line.click()
+    create_path = page.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
+    create_path.click()
 
     # Check no polygon is present by default.
     # We target with the color, because there is also the drawing line guide (dash-array)
@@ -44,10 +42,8 @@ def test_clicking_esc_should_finish_polygon(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a polygon button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
-    create_line.click()
+    create_path = page.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
+    create_path.click()
 
     # Check no polygon is present by default.
     # We target with the color, because there is also the drawing line guide (dash-array)
@@ -80,10 +76,8 @@ def test_clicking_esc_should_delete_polygon_if_empty(page, live_server, tilelaye
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a polygon button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
-    create_line.click()
+    create_path = page.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
+    create_path.click()
 
     # Check no polygon is present by default.
     # We target with the color, because there is also the drawing line guide (dash-array)
@@ -105,10 +99,8 @@ def test_clicking_esc_should_delete_polygon_if_invalid(page, live_server, tilela
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a polygon button on a new map.
-    create_line = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a polygon"
-    )
-    create_line.click()
+    create_path = page.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
+    create_path.click()
 
     # Check no polygon is present by default.
     # We target with the color, because there is also the drawing line guide (dash-array)
@@ -479,7 +471,7 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/#15/48.4395/3.3189")
     page.get_by_title("Import data").click()
-    page.locator(".umap-upload textarea").fill(geojson)
+    page.locator(".umap-import textarea").fill(geojson)
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
     page.locator("path").click()

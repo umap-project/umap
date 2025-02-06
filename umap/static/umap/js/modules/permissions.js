@@ -166,12 +166,16 @@ export class MapPermissions extends ServerStored {
       Alert.info(translate('Please save the map first'))
       return
     }
-    const container = DomUtil.create('div', 'permissions-panel')
+    const container = DomUtil.create('div', 'umap-edit-permissions')
     DomUtil.createTitle(container, translate('Update permissions'), 'icon-key')
     if (this.isAnonymousMap()) this._editAnonymous(container)
     else this._editWithOwner(container)
     this._editDatalayers(container)
-    this._umap.editPanel.open({ content: container, className: 'dark' })
+    this._umap.editPanel.open({
+      content: container,
+      className: 'dark',
+      highlight: 'permissions',
+    })
   }
 
   async attach() {

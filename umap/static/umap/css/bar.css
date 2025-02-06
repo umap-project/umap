@@ -201,3 +201,35 @@
 .umap-caption-bar-enabled {
     --current-footer-height: var(--footer-height);
 }
+.umap-edit-bar {
+    position: absolute;
+    right: var(--panel-gutter);
+    display: none;
+    top: calc(var(--current-header-height) + var(--panel-gutter));
+    flex-direction: column;
+    z-index: var(--zindex-panels);
+    width: var(--control-size);
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+}
+.umap-edit-enabled .umap-edit-bar {
+    display: flex;
+}
+.umap-edit-bar li {
+    width: var(--control-size);
+    height: var(--control-size);
+}
+.umap-edit-bar button {
+    padding: 0;
+    border-radius: 0;
+}
+.umap-edit-bar li:first-of-type button {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+.umap-edit-bar li:last-of-type button {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+.umap-edit-bar hr {
+    padding: 0;
+    margin: 0;
+}

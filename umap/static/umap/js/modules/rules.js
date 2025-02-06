@@ -147,7 +147,7 @@ class Rule {
           .map((str) => `${value}${str || ''}`)
       }
     })
-    this._umap.editPanel.open({ content: container })
+    this._umap.editPanel.open({ content: container, highlight: 'settings' })
   }
 
   renderToolbox(row) {

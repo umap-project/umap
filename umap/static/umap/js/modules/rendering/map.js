@@ -40,20 +40,6 @@ const ControlsMixin = {
 
     if (this._umap.hasEditMode() && !this.options.noControl) {
       new U.EditControl(this).addTo(this)
-
-      new U.DrawToolbar({ map: this }).addTo(this)
-      const editActions = [
-        U.EditCaptionAction,
-        U.ImportAction,
-        U.EditLayersAction,
-        U.ChangeTileLayerAction,
-        U.UpdateExtentAction,
-        U.UpdatePermsAction,
-        U.EditPropertiesAction,
-      ]
-      if (this.options.editMode === 'advanced') {
-        new U.SettingsToolbar({ actions: editActions }).addTo(this)
-      }
     }
     this._controls.zoom = new Control.Zoom({
       zoomInTitle: translate('Zoom in'),
@@ -231,7 +217,7 @@ const ManageTilelayerMixin = {
     }
   },
 
-  updateTileLayers: function () {
+  editTileLayers: function () {
     if (this._controls.tilelayersChooser) {
       this._controls.tilelayersChooser.openSwitcher({ edit: true })
     }

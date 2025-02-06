@@ -897,6 +897,7 @@ export class DataLayer extends ServerStored {
 
     this._umap.editPanel.open({
       content: container,
+      highlight: 'layers',
       actions: [backButton],
     })
   }

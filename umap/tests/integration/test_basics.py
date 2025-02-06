@@ -26,10 +26,7 @@ def test_create_map_with_cursor(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a marker button on a new map.
-    create_marker_link = page.locator(".leaflet-control-toolbar ").get_by_title(
-        "Draw a marker"
-    )
-    expect(create_marker_link).to_have_attribute("href", "#")
+    create_marker_link = page.locator(".umap-edit-bar ").get_by_title("Draw a marker")
     create_marker_link.click()
 
     # Check no marker is present by default.
@@ -56,7 +53,7 @@ def test_cannot_put_script_tag_in_datalayer_name_or_description(
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill('<script>alert("attack")</script>')

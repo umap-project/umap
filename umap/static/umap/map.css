@@ -102,12 +102,12 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
 .umap-control-more,
 .umap-control-less {
     background-image: url('./img/24-white.svg');
-    background-position: -72px -366px;
+    background-position: -72px -402px;
     text-indent: -9999px;
     margin-bottom: 0;
 }
 .umap-control-less {
-    background-position: -108px -366px;
+    background-position: -108px -402px;
 }
 .umap-more-controls .display-on-more,
 .umap-more-controls .umap-control-less {
@@ -177,7 +177,6 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     line-height: var(--control-size);
     display: block;
 }
-.leaflet-control-toolbar .leaflet-toolbar-icon.dark:hover,
 .edit-enable [type="button"]:hover {
     background-color: #4d5759;
 }
@@ -318,7 +317,6 @@ ul.photon-autocomplete {
 .leaflet-editable-drawing {
     cursor: crosshair;
 }
-.leaflet-control-toolbar > li > .leaflet-toolbar-icon,
 .umap-toolbar a,
 .umap-toolbar a:hover {
     height: var(--control-size);
@@ -331,9 +329,6 @@ ul.photon-autocomplete {
     background-repeat: no-repeat;
     background-image: url('./img/24.svg');
     background-size: auto auto;
-}
-.leaflet-control-toolbar li .leaflet-toolbar-icon.dark {
-    background-image: url('./img/24-white.svg');
 }
 .umap-toolbar {
     margin-top: 0;
@@ -381,7 +376,6 @@ ul.photon-autocomplete {
 .umap-toolbar .umap-draw-polygon-multi {
     background-position: 0 -108px;
 }
-.umap-edit-enabled .leaflet-control-toolbar > li > .leaflet-toolbar-icon,
 .umap-edit-enabled .umap-toolbar a {
     display: block;
 }
@@ -423,10 +417,10 @@ ul.photon-autocomplete {
     width: 16px;
     height: 16px;
     margin-inline-start: 5px;
-    background-position: -4px -4px;
+    background-position: 2px -4px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
-    background-color: var(--color-darkGray) !important;
+    background-color: transparent !important;
     vertical-align: middle;
     text-indent: -9999px;
     min-height: inherit;
@@ -441,31 +435,8 @@ ul.photon-autocomplete {
     border-top: 1px solid #aaa;
     padding-top: 10px;
 }
-.umap-edit-actions {
-    padding-top: 5px;
-    clear: both;
-}
-.umap-edit-actions li {
-    height: var(--control-size);
-    line-height: var(--control-size);
-    cursor: pointer;
-    margin-bottom: 5px;
-    border-radius: 2px;
-    border: 1px solid #222;
-}
-.umap-edit-actions li i {
-    background-image: url('./img/24-white.svg');
-    background-repeat: no-repeat;
-    display: table-cell;
-    width: var(--control-size);
-    height: var(--control-size);
-}
-.umap-edit-actions li span {
-    display: table-cell;
-    vertical-align: middle;
-}
-.umap-edit-actions li:hover {
-    background-color: #353c3e;
+.umap-getstarted button {
+    width: 100%;
 }
 .umap-help {
     font-style: italic;
@@ -568,11 +539,11 @@ ul.photon-autocomplete {
 /* ********************************* */
 a.umap-control-browse,
 .umap-control-browse [type="button"] {
-    background-position: -36px -72px;
+    background-position: -144px -180px;
 }
 a.umap-control-caption,
 .umap-control-caption [type="button"] {
-    background-position: -72px -72px;
+    background-position: -144px -36px;
 }
 .leaflet-inplace-toolbar a {
     background-repeat: no-repeat;
@@ -717,7 +688,7 @@ a.umap-control-caption,
 /*      Tilelayer switcher           */
 /* ********************************* */
 
-.umap-tilelayer-switcher-container li {
+.umap-edit-tilelayers li {
     border: 1px solid rgb(116, 116, 116);
     border-radius: 4px 4px 4px 4px;
     margin-bottom: 14px;
@@ -729,7 +700,7 @@ a.umap-control-caption,
     margin-left: auto;
     margin-right: auto;
 }
-.umap-tilelayer-switcher-container li div {
+.umap-edit-tilelayers li div {
     background-color: rgb(116, 116, 116);
     bottom: 0;
     color: rgb(247, 246, 241);
@@ -741,8 +712,8 @@ a.umap-control-caption,
     width: 100%;
     text-align: center;
 }
-.umap-tilelayer-switcher-container li:hover div:before,
-.umap-tilelayer-switcher-container .selected div:before {
+.umap-edit-tilelayers li:hover div:before,
+.umap-edit-tilelayers .selected div:before {
     content: "✓";
     font-size: 1.3em;
     line-height: 56px;
@@ -750,7 +721,7 @@ a.umap-control-caption,
     position: absolute;
     inset-inline-start: 7px;
 }
-.umap-tilelayer-switcher-container li img {
+.umap-edit-tilelayers li img {
     display: block;
     max-width: 100%;
 }

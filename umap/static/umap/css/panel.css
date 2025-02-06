@@ -9,7 +9,7 @@
     background-color: var(--background-color);
     color: var(--text-color);
     cursor: initial;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     border: 1px solid var(--color-lightGray);
     bottom: calc(var(--current-footer-height) + var(--panel-bottom));
     box-sizing: border-box;
@@ -106,4 +106,21 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
+}
+
+:has(.right[data-highlight="caption"]) li[data-ref="caption"] button,
+:has(.right[data-highlight="caption"]) li[data-ref="caption"] button:hover,
+:has(.right[data-highlight="import"]) li[data-ref="import"] button,
+:has(.right[data-highlight="import"]) li[data-ref="import"] button:hover,
+:has(.right[data-highlight="layers"]) li[data-ref="layers"] button,
+:has(.right[data-highlight="layers"]) li[data-ref="layers"] button:hover,
+:has(.right[data-highlight="tilelayers"]) li[data-ref="tilelayers"] button,
+:has(.right[data-highlight="tilelayers"]) li[data-ref="tilelayers"] button:hover,
+:has(.right[data-highlight="center"]) li[data-ref="center"] button,
+:has(.right[data-highlight="center"]) li[data-ref="center"] button:hover,
+:has(.right[data-highlight="permissions"]) li[data-ref="permissions"] button,
+:has(.right[data-highlight="permissions"]) li[data-ref="permissions"] button:hover,
+:has(.right[data-highlight="settings"]) li[data-ref="settings"] button,
+:has(.right[data-highlight="settings"]) li[data-ref="settings"] button:hover {
+    background-color: var(--color-mediumGray);
 }

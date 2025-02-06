@@ -51,8 +51,8 @@ def test_basic_categorized_map_with_custom_brewer(openmap, live_server, page):
     expect(page.locator("path[stroke='#3288bd']")).to_have_count(7)
 
     # Now change brewer from UI
-    page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Edit", exact=True).click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Categorized: settings").click()
     page.locator('select[name="brewer"]').select_option("Paired")
@@ -98,8 +98,8 @@ def test_basic_categorized_map_with_custom_categories(openmap, live_server, page
     expect(page.locator("path[stroke='#f0027f']")).to_have_count(1)
 
     # Now change categories from UI
-    page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Edit", exact=True).click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Categorized: settings").click()
     page.locator('input[name="categories"]').fill(
@@ -121,10 +121,6 @@ def test_basic_categorized_map_with_custom_categories(openmap, live_server, page
     expect(page.locator("path[stroke='#f0027f']")).to_have_count(7)
 
     # Now go back to automatic categories
-    page.get_by_role("button", name="Edit").click()
-    page.get_by_role("link", name="Manage layers").click()
-    page.locator(".panel").get_by_title("Edit", exact=True).click()
-    page.get_by_text("Categorized: settings").click()
     page.get_by_text("Alphabetical").click()
 
     # residential

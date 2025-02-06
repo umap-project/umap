@@ -59,7 +59,7 @@ def test_cancel_deleting_datalayer_should_restore(
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Delete layer").click()
     page.get_by_role("button", name="OK").click()
     expect(markers).to_have_count(0)
@@ -77,7 +77,7 @@ def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(layers).to_have_count(1)
     expect(markers).to_have_count(1)
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Advanced actions").click()
     page.get_by_role("button", name="Clone").click()
@@ -99,7 +99,7 @@ def test_can_change_icon_class(live_server, openmap, page):
     DataLayerFactory(map=openmap, data=data)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/45.3/1")
     expect(page.locator(".umap-div-icon")).to_be_visible()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     expect(page.locator(".umap-circle-icon")).to_be_hidden()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
@@ -113,7 +113,7 @@ def test_can_change_name(live_server, openmap, page, datalayer):
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
     )
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
     page.locator('input[name="name"]').click()
@@ -143,7 +143,7 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
     )
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("Layer A")
@@ -155,7 +155,7 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     assert saved.name == "Layer A"
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
     # Edit again, it should not create a new datalayer
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).first.click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("Layer A with a new name")
@@ -179,7 +179,7 @@ def test_can_restore_version(live_server, openmap, page, datalayer):
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     expect(marker).to_have_class(re.compile(".*umap-div-icon.*"))
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Versions").click()
     page.get_by_role("button", name="Restore this version").last.click()
@@ -201,7 +201,7 @@ def test_deleting_datalayer_should_remove_from_browser_and_layers_list(
     panel = page.locator(".panel.left")
     edit_panel = page.locator(".panel.right")
     page.get_by_title("Open browser").click()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     expect(panel.get_by_text("test datalayer")).to_be_visible()
     expect(edit_panel.get_by_text("test datalayer")).to_be_visible()
     page.locator(".panel.right").get_by_title("Delete layer").click()
@@ -216,7 +216,7 @@ def test_deleting_datalayer_should_remove_from_caption(
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     panel = page.locator(".panel.left")
     page.get_by_role("button", name="About").click()
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     expect(panel.get_by_text("test datalayer")).to_be_visible()
     page.locator(".panel.right").get_by_title("Delete layer").click()
     page.get_by_role("button", name="OK").click()
@@ -225,7 +225,7 @@ def test_deleting_datalayer_should_remove_from_caption(
 
 def test_can_edit_datalayer_name_in_list(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.get_by_role("link", name="Manage layers").click()
+    page.get_by_role("button", name="Manage layers").click()
     page.get_by_text("test datalayer").click()
     page.get_by_text("test datalayer").fill("test datalayer foobar")
     page.get_by_role("button", name="Open browser").click()

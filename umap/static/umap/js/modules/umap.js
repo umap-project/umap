@@ -13,7 +13,7 @@ import { LeafletMap } from './rendering/map.js'
 import URLs from './urls.js'
 import { Panel, EditPanel, FullPanel } from './ui/panel.js'
 import Dialog from './ui/dialog.js'
-import { BottomBar, TopBar } from './ui/bar.js'
+import { BottomBar, TopBar, EditBar } from './ui/bar.js'
 import Tooltip from './ui/tooltip.js'
 import ContextMenu from './ui/contextmenu.js'
 import { Request, ServerRequest } from './request.js'
@@ -92,7 +92,8 @@ export default class Umap extends ServerStored {
       fullscreenControl !== undefined ? fullscreenControl : true
 
     if (center) {
-      this._leafletMap.options.center = this._leafletMap.latLng(center)
+      this._leafletMap.options.center = this.properties.center =
+        this._leafletMap.latLng(center)
     }
 
     // Needed to render controls
@@ -110,6 +111,11 @@ export default class Umap extends ServerStored {
     this.bottomBar = new BottomBar(
       this,
       this.slideshow,
+      this._leafletMap._controlContainer
+    )
+    this.editBar = new EditBar(
+      this,
+      this._leafletMap,
       this._leafletMap._controlContainer
     )
     this.tooltip = new Tooltip(this._leafletMap._controlContainer)
@@ -131,6 +137,7 @@ export default class Umap extends ServerStored {
       this.fullPanel = new FullPanel(this, this._leafletMap)
       this._leafletMap.initEditTools()
       this.topBar.setup()
+      this.editBar.setup()
     }
 
     this.datalayersFromQueryString = this.searchParams.get('datalayers')
@@ -737,7 +744,7 @@ export default class Umap extends ServerStored {
   editCaption() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div', 'umap-edit-container')
+    const container = DomUtil.create('div')
     const metadataFields = ['properties.name', 'properties.description']
 
     DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
@@ -758,7 +765,42 @@ export default class Umap extends ServerStored {
     ]
     const creditsBuilder = new MutatingForm(this, creditsFields, { umap: this })
     credits.appendChild(creditsBuilder.build())
-    this.editPanel.open({ content: container })
+    this.editPanel.open({ content: container, highlight: 'caption' })
+  }
+
+  editCenter() {
+    if (!this.editEnabled) return
+    if (this.properties.editMode !== 'advanced') return
+    const container = DomUtil.create('div')
+    const metadataFields = [
+      ['properties.zoom', { handler: 'IntInput', label: translate('Default zoom') }],
+      [
+        'properties.center.lat',
+        { handler: 'FloatInput', label: translate('Default latitude') },
+      ],
+      [
+        'properties.center.lng',
+        { handler: 'FloatInput', label: translate('Default longitude') },
+      ],
+      'properties.defaultView',
+    ]
+
+    DomUtil.createTitle(container, translate('Edit map default view'), 'icon-zoom')
+    const builder = new MutatingForm(this, metadataFields, {
+      className: 'map-metadata',
+      umap: this,
+    })
+    const form = builder.build()
+    const button = Utils.loadTemplate(
+      `<button type="button">${translate('Use current center and zoom')}</button>`
+    )
+    button.addEventListener('click', () => {
+      this._setCenterAndZoom()
+      builder.fetchAll()
+    })
+    container.appendChild(form)
+    container.appendChild(button)
+    this.editPanel.open({ content: container, highlight: 'center' })
   }
 
   _editControls(container) {
@@ -772,7 +814,6 @@ export default class Umap extends ServerStored {
       'properties.miniMap',
       'properties.scaleControl',
       'properties.onLoadPanel',
-      'properties.defaultView',
       'properties.displayPopupFooter',
       'properties.captionBar',
       'properties.captionMenus',
@@ -1116,7 +1157,11 @@ export default class Umap extends ServerStored {
     }
     this._advancedActions(container)
 
-    this.editPanel.open({ content: container, className: 'dark' })
+    this.editPanel.open({
+      content: container,
+      className: 'dark',
+      highlight: 'settings',
+    })
   }
 
   reset() {
@@ -1236,6 +1281,7 @@ export default class Umap extends ServerStored {
   }
 
   enableEdit() {
+    this.editBar.redraw()
     document.body.classList.add('umap-edit-enabled')
     this.editEnabled = true
     this.drop.enable()
@@ -1504,7 +1550,7 @@ export default class Umap extends ServerStored {
       this
     )
 
-    this.editPanel.open({ content: container })
+    this.editPanel.open({ content: container, highlight: 'layers' })
   }
 
   getDataLayerByUmapId(id) {

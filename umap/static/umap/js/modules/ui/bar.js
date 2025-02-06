@@ -3,6 +3,7 @@ import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
 import ContextMenu from './contextmenu.js'
 import * as Utils from '../utils.js'
+import { Point, LineString, Polygon } from '../data/features.js'
 
 const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
@@ -200,5 +201,88 @@ export class BottomBar extends WithTemplate {
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
     this.elements.filter.hidden = !showMenus || !this._umap.properties.facetKey
+  }
+}
+
+const EDIT_BAR_TEMPLATE = `
+  <ul class="umap-edit-bar dark with-transition">
+    <li data-ref="marker"><button type="button" data-getstarted><i class="icon icon-24 icon-marker"></i></button></li>
+    <li data-ref="polyline"><button type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
+    <li data-ref="multiline" hidden>
+      <button type="button" title="${translate('Add a line to the current multi')}"><i class="icon icon-24 icon-multiline"></i></button>
+    </li>
+    <li data-ref="polygon"><button type="button" data-getstarted><i class="icon icon-24 icon-polygon"></i></button></li>
+    <li data-ref="multipolygon" hidden>
+      <button type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
+    </li>
+    <hr>
+    <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
+    <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
+    <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>
+    <li data-ref="tilelayers" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
+    <li data-ref="center" hidden><button type="button"><i class="icon icon-24 icon-center"></i></button></li>
+    <li data-ref="permissions" hidden><button type="button" title="${translate('Update permissions and editors')}"><i class="icon icon-24 icon-key"></i></button></li>
+    <li data-ref="settings" hidden><button data-getstarted type="button" title="${translate('Map advanced properties')}"><i class="icon icon-24 icon-settings"></i></button></li>
+  </ul>
+`
+
+export class EditBar extends WithTemplate {
+  constructor(umap, leafletMap, parent) {
+    super()
+    this._umap = umap
+    this._leafletMap = leafletMap
+    this.loadTemplate(EDIT_BAR_TEMPLATE)
+    this.parent = parent
+  }
+
+  setup() {
+    this.parent.appendChild(this.element)
+    DomEvent.disableClickPropagation(this.element)
+    this._onClick('marker', () => this._leafletMap.editTools.startMarker())
+    this._onClick('polyline', () => this._leafletMap.editTools.startPolyline())
+    this._onClick('multiline', () => {
+      console.log('click click')
+      this._umap.editedFeature.ui.editor.newShape()
+    })
+    this._onClick('polygon', () => this._leafletMap.editTools.startPolygon())
+    this._onClick('multipolygon', () => this._umap.editedFeature.ui.editor.newShape())
+    this._onClick('caption', () => this._umap.editCaption())
+    this._onClick('import', () => this._umap.importer.open())
+    this._onClick('layers', () => this._umap.editDatalayers())
+    this._onClick('tilelayers', () => this._leafletMap.editTileLayers())
+    this._onClick('center', () => this._umap.editCenter())
+    this._onClick('permissions', () => this._umap.permissions.edit())
+    this._onClick('settings', () => this._umap.edit())
+    this._addTitle('import', 'IMPORT_PANEL')
+    this._addTitle('marker', 'DRAW_MARKER')
+    this._addTitle('polyline', 'DRAW_LINE')
+    this._addTitle('polygon', 'DRAW_POLYGON')
+    this._leafletMap.on('seteditedfeature', () => this.redraw())
+  }
+
+  redraw() {
+    const editedFeature = this._umap.editedFeature
+    this.elements.multiline.hidden = !(editedFeature instanceof LineString)
+    this.elements.multipolygon.hidden = !(editedFeature instanceof Polygon)
+    this.elements.caption.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.import.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.layers.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.tilelayers.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.permissions.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.settings.hidden = this._umap.properties.editMode !== 'advanced'
+  }
+
+  _addTitle(ref, label) {
+    this.elements[ref].querySelector('button').title = this._umap.help.displayLabel(
+      label,
+      false
+    )
+  }
+
+  _onClick(ref, action) {
+    // Put the click on the button, not on the li, but keep the data-ref on the li
+    // so to hide/show it when needed.
+    this.elements[ref].querySelector('button').addEventListener('click', action)
   }
 }

@@ -476,15 +476,6 @@ i.info {
 .umap-download:before {
     background-position: -72px -78px;
 }
-.permissions-panel,
-.umap-upload,
-.umap-share,
-.umap-datalayer-container,
-.umap-layer-properties-container,
-.umap-browse-data,
-.umap-tilelayer-switcher-container {
-    padding: 0 10px;
-}
 .umap-field-datalist {
     display: flex;
     justify-content: space-between;
@@ -615,6 +606,6 @@ input[type=hidden].blur + [type="button"] {
 input.highlightable:not(:placeholder-shown) {
     border: 1px solid var(--color-brightCyan);
 }
-.umap-upload [type=url] {
+.umap-import [type=url] {
     margin-bottom: 0;
 }
