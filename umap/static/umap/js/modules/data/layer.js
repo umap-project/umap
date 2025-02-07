@@ -522,7 +522,7 @@ export class DataLayer extends ServerStored {
           })
         )
     }
-    if (feature) {
+    if (feature && !feature.isEmpty()) {
       this.addFeature(feature)
       if (sync) feature.onCommit()
       return feature

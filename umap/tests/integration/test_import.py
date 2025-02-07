@@ -500,6 +500,70 @@ def test_import_multipolyline(live_server, page, tilelayer):
     expect(paths).to_have_count(1)
 
 
+def test_should_not_import_empty_coordinates(live_server, page, tilelayer):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "An empty polygon"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [],
+                },
+            },
+            {
+                "type": "Feature",
+                "properties": {"name": "An empty linestring"},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [],
+                },
+            },
+            {
+                "type": "Feature",
+                "properties": {"name": "An empty point"},
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [],
+                },
+            },
+            {
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [6.922931671142578, 47.481161607175736],
+                },
+                "type": "Feature",
+                "properties": {"name": "A point"},
+            },
+            {
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [2.4609375, 48.88639177703194],
+                        [2.48291015625, 48.76343113791796],
+                        [2.164306640625, 48.719961222646276],
+                    ],
+                },
+                "type": "Feature",
+                "properties": {
+                    "name": "A linestring",
+                },
+            },
+        ],
+    }
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    page.get_by_title("Import data").click()
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(json.dumps(data))
+    page.locator('select[name="format"]').select_option("geojson")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    page.locator("#map").click(button="right")
+    page.get_by_role("button", name="browse data").click()
+    expect(page.locator("li.feature")).to_have_count(2)
+
+
 def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()

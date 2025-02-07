@@ -564,6 +564,10 @@ class Feature {
     return false
   }
 
+  isEmpty() {
+    return !this.coordinates.length
+  }
+
   clone() {
     const geojson = this.toGeoJSON()
     delete geojson.id
@@ -949,10 +953,6 @@ export class LineString extends Path {
     }
     const type = multi ? 'MultiLineString' : 'LineString'
     return { coordinates, type }
-  }
-
-  isEmpty() {
-    return !this.coordinates.length
   }
 
   getUIClass() {
