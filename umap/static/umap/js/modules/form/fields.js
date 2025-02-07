@@ -1195,7 +1195,7 @@ Fields.NullableChoices = class extends Fields.TernaryChoices {
       this.properties.choices || [
         [true, translate('always')],
         [false, translate('never')],
-        ['null', translate('hidden')],
+        [null, translate('hidden')],
       ]
     )
   }

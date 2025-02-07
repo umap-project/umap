@@ -450,7 +450,7 @@ export const SCHEMA = {
     choices: [
       [true, translate('always')],
       [false, translate('never')],
-      ['null', translate('on hover')],
+      [null, translate('on hover')],
     ],
   },
   slideshow: {
