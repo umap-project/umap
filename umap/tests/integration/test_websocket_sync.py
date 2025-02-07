@@ -421,9 +421,11 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
         1
     ).click()
 
-    # Now peerA saves the layer 2 to the server
-    with peerA.expect_response(re.compile(".*/datalayer/update/.*")):
-        peerA.get_by_role("button", name="Save").click()
+    # Peer A should not be in dirty state
+    expect(peerA.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Peer A should only have two markers
+    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(2)
 
     assert DataLayer.objects.count() == 2
 

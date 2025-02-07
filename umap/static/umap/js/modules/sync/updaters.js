@@ -63,6 +63,7 @@ export class DataLayerUpdater extends BaseUpdater {
   update({ key, metadata, value }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
     if (fieldInSchema(key)) {
+      datalayer._loaded = true
       this.updateObjectValue(datalayer, key, value)
     } else {
       console.debug(
@@ -92,7 +93,7 @@ export class FeatureUpdater extends BaseUpdater {
   upsert({ metadata, value }) {
     const { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
-    const feature = this.getFeatureFromMetadata(metadata, value)
+    const feature = this.getFeatureFromMetadata(metadata)
 
     if (feature) {
       feature.geometry = value.geometry
@@ -109,7 +110,7 @@ export class FeatureUpdater extends BaseUpdater {
       return
     }
     if (key === 'geometry') {
-      const feature = this.getFeatureFromMetadata(metadata, value)
+      const feature = this.getFeatureFromMetadata(metadata)
       feature.geometry = value
     } else {
       this.updateObjectValue(feature, key, value)
