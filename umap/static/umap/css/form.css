@@ -137,6 +137,9 @@ button.round {
     border-radius: 20px;
     border: 0.5px solid rgba(153, 153, 153, 0.40);
 }
+button.round.small {
+    padding: var(--button-padding-small);
+}
 .help-text, .helptext {
     display: block;
     padding: 7px 7px;
