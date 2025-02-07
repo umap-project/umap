@@ -14,6 +14,7 @@ from .payloads import (
     OperationMessage,
     PeerMessage,
     Request,
+    SavedMessage,
 )
 
 
@@ -163,6 +164,10 @@ class Peer:
             match incoming.root:
                 # Broadcast all operation messages to connected peers
                 case OperationMessage():
+                    await self.broadcast(text_data)
+
+                # Broadcast the new map state to connected peers
+                case SavedMessage():
                     await self.broadcast(text_data)
 
                 # Send peer messages to the proper peer

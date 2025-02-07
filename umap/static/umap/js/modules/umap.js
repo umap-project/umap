@@ -684,6 +684,7 @@ export default class Umap extends ServerStored {
         Alert.success(translate('Map has been saved!'))
       })
     }
+    this.sync.saved()
     this.fire('saved')
   }
 

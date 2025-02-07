@@ -30,10 +30,17 @@ class PeerMessage(BaseModel):
     message: dict
 
 
+class SavedMessage(BaseModel):
+    kind: Literal["SavedMessage"] = "SavedMessage"
+    lastKnownHLC: str
+
+
 class Request(RootModel):
     """Any message coming from the websocket should be one of these, and will be rejected otherwise."""
 
-    root: Union[PeerMessage, OperationMessage] = Field(discriminator="kind")
+    root: Union[PeerMessage, OperationMessage, SavedMessage] = Field(
+        discriminator="kind"
+    )
 
 
 class JoinResponse(BaseModel):

@@ -2,6 +2,7 @@ import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
+import * as SaveManager from '../saving.js'
 
 // Start reconnecting after 2 seconds, then double the delay each time
 // maxing out at 32 seconds.
@@ -125,6 +126,13 @@ export class SyncEngine {
     this._send({ verb: 'delete', subject, metadata, key })
   }
 
+  saved() {
+    this.transport.send('SavedMessage', {
+      sender: this.peerId,
+      lastKnownHLC: this._operations.getLastKnownHLC(),
+    })
+  }
+
   _send(inputMessage) {
     const message = this._operations.addLocal(inputMessage)
 
@@ -168,6 +176,8 @@ export class SyncEngine {
       } else if (payload.message.verb === 'ListOperationsResponse') {
         this.onListOperationsResponse(payload)
       }
+    } else if (kind === 'SavedMessage') {
+      this.onSavedMessage(payload)
     } else {
       throw new Error(`Received unknown message from the websocket server: ${kind}`)
     }
@@ -280,6 +290,13 @@ export class SyncEngine {
     // Else: apply
   }
 
+  onSavedMessage({ sender, lastKnownHLC }) {
+    debug(`received saved message from peer ${sender}`, lastKnownHLC)
+    if (lastKnownHLC === this._operations.getLastKnownHLC() && SaveManager.isDirty) {
+      SaveManager.clear()
+    }
+  }
+
   /**
    * Send a message to another peer (via the transport layer)
    *
@@ -350,7 +367,7 @@ export class Operations {
   }
 
   /**
-   * Tick the clock and add store the passed message in the operations list.
+   * Tick the clock and store the passed message in the operations list.
    *
    * @param {*} inputMessage
    * @returns {*} clock-aware message
