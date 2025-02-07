@@ -127,10 +127,13 @@ export class SyncEngine {
   }
 
   saved() {
-    this.transport.send('SavedMessage', {
-      sender: this.peerId,
-      lastKnownHLC: this._operations.getLastKnownHLC(),
-    })
+    if (this.offline) return
+    if (this.transport) {
+      this.transport.send('SavedMessage', {
+        sender: this.peerId,
+        lastKnownHLC: this._operations.getLastKnownHLC(),
+      })
+    }
   }
 
   _send(inputMessage) {
