@@ -1251,6 +1251,7 @@ Fields.Range = class extends Fields.FloatInput {
 
 Fields.ManageOwner = class extends BaseElement {
   build() {
+    super.build()
     const options = {
       className: 'edit-owner',
       on_select: L.bind(this.onSelect, this),
@@ -1281,6 +1282,7 @@ Fields.ManageOwner = class extends BaseElement {
 
 Fields.ManageEditors = class extends BaseElement {
   build() {
+    super.build()
     const options = {
       className: 'edit-editors',
       on_select: L.bind(this.onSelect, this),
