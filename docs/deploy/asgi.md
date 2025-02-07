@@ -22,6 +22,15 @@ location / {
 }
 ```
 
+Also add this mapping for the `$connection_upgrade` variable:
+
+```
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+```
+
 ## Uvicorn
 
 Uvicorn must be installed in the umap virtualenv:
