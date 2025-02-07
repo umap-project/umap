@@ -142,13 +142,14 @@ export class MutatingForm extends Form {
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
     }
-    for (const [key, schema] of Object.entries(SCHEMA)) {
-      if (schema.type === Boolean) {
+    for (const [key, definition] of Object.entries(SCHEMA)) {
+      const schema = Utils.CopyJSON(definition)
+      if (definition.type === Boolean) {
         if (schema.nullable) schema.handler = 'NullableChoices'
         else schema.handler = 'Switch'
-      } else if (schema.type === 'Text') {
+      } else if (definition.type === 'Text') {
         schema.handler = 'Textarea'
-      } else if (schema.type === Number) {
+      } else if (definition.type === Number) {
         if (schema.step) schema.handler = 'Range'
         else schema.handler = 'IntInput'
       } else if (schema.choices) {
