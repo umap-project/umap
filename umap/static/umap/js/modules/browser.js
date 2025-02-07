@@ -46,7 +46,7 @@ export default class Browser {
     const symbol = feature._getIconUrl
       ? Icon.formatUrl(feature._getIconUrl(), feature)
       : null
-    title.textContent = feature.getDisplayName() || '—'
+    title.textContent = title.title = feature.getDisplayName() || '—'
     const bgcolor = feature.getPreviewColor()
     colorBox.style.backgroundColor = bgcolor
     if (symbol && symbol !== U.SCHEMA.iconUrl.default) {
@@ -97,7 +97,7 @@ export default class Browser {
     DomEvent.on(toggle, 'click', toggleList)
     datalayer.renderToolbox(headline)
     const name = DomUtil.create('span', 'datalayer-name', headline)
-    name.textContent = datalayer.options.name
+    name.textContent = name.title = datalayer.options.name
     DomEvent.on(name, 'click', toggleList)
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
