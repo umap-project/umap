@@ -398,7 +398,9 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     peerA.locator("#map").click()
 
     # Make sure this new marker is in Layer 2 for peerB
-    expect(peerB.get_by_text("Layer 2")).to_be_visible()
+    # Show features for this layer in the brower.
+    peerB.get_by_role("heading", name="Layer 2").locator(".datalayer-name").click()
+    expect(peerB.locator("li").filter(has_text="Layer 2")).to_be_visible()
     peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
         1
     ).click()
