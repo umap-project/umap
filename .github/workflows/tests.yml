@@ -1,4 +1,4 @@
-name: Test & Docs
+name: Test
 
 on:
   push:
@@ -69,21 +69,3 @@ jobs:
 
       - name: Run Lint
         run: make lint
-
-      - name: Run Docs
-        run: make docs
-
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python3 -m pip install -r docs/requirements.txt
-
-      - name: Run Docs
-        run: mkdocs build
