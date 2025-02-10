@@ -45,7 +45,6 @@ export class DataLayer extends ServerStored {
     this._features = {}
     this._geojson = null
     this._propertiesIndex = []
-    this._loaded = false // Are layer metadata loaded
     this._dataloaded = false // Are layer data loaded
 
     this._leafletMap = leafletMap
@@ -85,6 +84,7 @@ export class DataLayer extends ServerStored {
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
 
+    this._needsFetch = this.createdOnServer
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
@@ -268,7 +268,7 @@ export class DataLayer extends ServerStored {
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
     if (this.isRemoteLayer()) await this.fetchRemoteData()
     else this.fromGeoJSON(geojson, false)
-    this._loaded = true
+    this._needsFetch = false
   }
 
   clear() {
@@ -345,7 +345,7 @@ export class DataLayer extends ServerStored {
   }
 
   isLoaded() {
-    return !this.createdOnServer || this._loaded
+    return !this._needsFetch
   }
 
   hasDataLoaded() {
@@ -633,7 +633,6 @@ export class DataLayer extends ServerStored {
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
     this.clear()
-    delete this._loaded
     delete this._dataloaded
   }
 
@@ -652,7 +651,6 @@ export class DataLayer extends ServerStored {
     this.hide()
     if (this.isRemoteLayer()) this.fetchRemoteData()
     else if (this._geojson_bk) this.fromGeoJSON(this._geojson_bk)
-    this._loaded = true
     this.show()
     this.isDirty = false
   }
@@ -1108,9 +1106,7 @@ export class DataLayer extends ServerStored {
 
   async save() {
     if (this.isDeleted) return await this.saveDelete()
-    if (!this.isLoaded()) {
-      return
-    }
+    if (!this.isLoaded()) return
     const geojson = this.umapGeoJSON()
     const formData = new FormData()
     formData.append('name', this.options.name)
@@ -1172,7 +1168,7 @@ export class DataLayer extends ServerStored {
       this.backupOptions()
       this.backupData()
       this.connectToMap()
-      this._loaded = true
+      this._needsFetch = false
       this.redraw() // Needed for reordering features
       return true
     }
