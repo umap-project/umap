@@ -45,7 +45,6 @@ export class DataLayer extends ServerStored {
     this._features = {}
     this._geojson = null
     this._propertiesIndex = []
-    this._dataloaded = false // Are layer data loaded
 
     this._leafletMap = leafletMap
     this.parentPane = this._leafletMap.getPane('overlayPane')
@@ -243,7 +242,7 @@ export class DataLayer extends ServerStored {
   }
 
   dataChanged() {
-    if (!this.hasDataLoaded()) return
+    if (!this.isLoaded()) return
     this._umap.onDataLayersChanged()
     this.layer.dataChanged()
   }
@@ -252,13 +251,13 @@ export class DataLayer extends ServerStored {
     if (!geojson) return []
     const features = this.addData(geojson, sync)
     this._geojson = geojson
+    this._needsFetch = false
     this.onDataLoaded()
     this.dataChanged()
     return features
   }
 
   onDataLoaded() {
-    this._dataloaded = true
     this.renderLegend()
   }
 
@@ -268,7 +267,6 @@ export class DataLayer extends ServerStored {
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
     if (this.isRemoteLayer()) await this.fetchRemoteData()
     else this.fromGeoJSON(geojson, false)
-    this._needsFetch = false
   }
 
   clear() {
@@ -320,7 +318,7 @@ export class DataLayer extends ServerStored {
 
   async fetchRemoteData(force) {
     if (!this.isRemoteLayer()) return
-    if (!this.hasDynamicData() && this.hasDataLoaded() && !force) return
+    if (!this.hasDynamicData() && this.isLoaded() && !force) return
     if (!this.isVisible()) return
     // Keep non proxied url for later use in Alert.
     const remoteUrl = this._umap.renderUrl(this.options.remoteData.url)
@@ -346,10 +344,6 @@ export class DataLayer extends ServerStored {
 
   isLoaded() {
     return !this._needsFetch
-  }
-
-  hasDataLoaded() {
-    return this._dataloaded
   }
 
   backupOptions() {
@@ -633,7 +627,6 @@ export class DataLayer extends ServerStored {
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
     this.clear()
-    delete this._dataloaded
   }
 
   reset() {
