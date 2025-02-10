@@ -1161,7 +1161,6 @@ export class DataLayer extends ServerStored {
       this.backupOptions()
       this.backupData()
       this.connectToMap()
-      this._needsFetch = false
       this.redraw() // Needed for reordering features
       return true
     }
