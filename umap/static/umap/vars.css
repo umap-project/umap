@@ -25,6 +25,7 @@
     --button-neutral-background: var(--color-lightGray);
     --button-neutral-color: var(--color-darkGray);
     --button-padding: 8px 16px;
+    --button-padding-small: 2px 8px;
 
     /* Sizes and spaces */
     --gutter: 8px;

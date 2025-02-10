@@ -8,9 +8,9 @@ const TEMPLATE = `
     <i class="icon icon-16 icon-caption icon-block"></i>
     <hgroup>
       <h3><span class="map-name" data-ref="name"></span></h3>
-      <p class="dates" data-ref="dates"></p>
       <p data-ref="author"></p>
-      <p><button type="button" class="round" data-ref="star" title="${translate('Star this map')}"><i class="icon icon-16 icon-star map-star"></i><span class="map-stars"></span></button></p>
+      <p class="dates" data-ref="dates"></p>
+      <p><button type="button" class="round small" data-ref="star" title="${translate('Star this map')}"><i class="icon icon-16 icon-star map-star"></i><span class="map-stars"></span></button></p>
     </hgroup>
   </div>
   <div class="umap-map-description text" data-ref="description"></div>
@@ -73,10 +73,10 @@ export default class Caption extends Utils.WithTemplate {
     )
     this.addCredits()
     if (this._umap.properties.created_at) {
-      const created_at = translate('Created at {date}', {
+      const created_at = translate('created at {date}', {
         date: new Date(this._umap.properties.created_at).toLocaleDateString(),
       })
-      const modified_at = translate('Modified at {date}', {
+      const modified_at = translate('modified at {date}', {
         date: new Date(this._umap.properties.modified_at).toLocaleDateString(),
       })
       this.elements.dates.innerHTML = `${created_at} - ${modified_at}`
