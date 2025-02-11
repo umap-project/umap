@@ -181,3 +181,13 @@ def test_only_visible_markers_are_added_to_dom(live_server, map, page):
     )
     expect(markers).to_have_count(1)
     expect(tooltips).to_have_count(1)
+
+
+def test_should_display_tooltip_on_hover(live_server, map, page, bootstrap):
+    map.settings["properties"]["showLabel"] = None
+    map.settings["properties"]["labelKey"] = "Foo {name}"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.get_by_text("Foo test marker")).to_be_hidden()
+    page.locator(".leaflet-marker-icon").hover()
+    expect(page.get_by_text("Foo test marker")).to_be_visible()
