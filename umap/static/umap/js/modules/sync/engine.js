@@ -75,19 +75,20 @@ export class SyncEngine {
       this.reconnect()
       return
     }
-    this.start(response.token)
+    await this.start(response.token)
   }
 
-  start(authToken) {
+  async start(authToken) {
     const path = this._umap.urls.get('ws_sync', { map_id: this._umap.id })
     const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
-    this.transport = new WebSocketTransport(
+    this.transport = new WebSocketTransport(this)
+    await this.transport.connect(
       `${protocol}//${window.location.host}${path}`,
       authToken,
-      this,
       this.peerId,
       this._umap.properties.user?.name
     )
+    this.onConnection()
   }
 
   stop() {
@@ -108,11 +109,11 @@ export class SyncEngine {
     this.websocketConnected = false
     this.updaters.map.update({ key: 'numberOfConnectedPeers' })
 
-    this._reconnectTimeout = setTimeout(() => {
+    this._reconnectTimeout = setTimeout(async () => {
       if (this._reconnectDelay < MAX_RECONNECT_DELAY) {
         this._reconnectDelay = this._reconnectDelay * RECONNECT_DELAY_FACTOR
       }
-      this.authenticate()
+      await this.authenticate()
     }, this._reconnectDelay)
   }
   upsert(subject, metadata, value) {
