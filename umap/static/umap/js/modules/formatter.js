@@ -103,8 +103,12 @@ export class Formatter {
               message: err[0].message,
             })
           }
-          Alert.error(message, 10000)
-          console.debug(err)
+          if (str.split(/\r\n|\r|\n/).length <= 2) {
+            // Seems like a blank CSV, let's not warn
+            console.debug(err)
+          } else {
+            Alert.error(message, 10000)
+          }
         }
         if (result?.features.length) {
           callback(result)
