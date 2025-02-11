@@ -887,4 +887,9 @@ U.Editable = L.Editable.extend({
     })
     this.stopDrawing()
   },
+
+  createVertexIcon: (options) =>
+    L.Browser.mobile && L.Browser.touch
+      ? L.divIcon({ iconSize: new L.Point(20, 20), ...options })
+      : L.divIcon({ iconSize: new L.Point(12, 12), ...options }),
 })
