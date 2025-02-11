@@ -293,6 +293,11 @@ const PathMixin = {
     this.on('popupclose', this._redraw)
   },
 
+  bindTooltip: function (content, options) {
+    options.sticky = !options.permanent
+    this.parentClass.prototype.bindTooltip.call(this, content, options)
+  },
+
   highlightPath: function () {
     this.parentClass.prototype.setStyle.call(this, {
       fillOpacity: Math.sqrt(this.feature.getDynamicOption('fillOpacity', 1.0)),
