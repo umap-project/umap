@@ -14,6 +14,7 @@ import {
   LeafletPolyline,
   LeafletPolygon,
   MaskPolygon,
+  CircleMarker,
 } from '../rendering/ui.js'
 import loadPopup from '../rendering/popup.js'
 import { MutatingForm } from '../form/builder.js'
@@ -703,6 +704,7 @@ export class Point extends Feature {
   }
 
   getUIClass() {
+    if (this.getOption('iconClass') === 'Circle') return CircleMarker
     return super.getUIClass() || LeafletMarker
   }
 
