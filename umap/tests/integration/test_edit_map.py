@@ -210,3 +210,19 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     assert "Z First" == first_listed_feature.text_content()
     assert "Y Second" == second_listed_feature.text_content()
     assert "X Third" == third_listed_feature.text_content()
+
+
+def test_hover_tooltip_setting_should_be_persistent(live_server, map, page):
+    map.settings["properties"]["showLabel"] = None
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Map advanced properties").click()
+    page.get_by_text("Default interaction options").click()
+    expect(page.get_by_text("on hover")).to_be_visible()
+    expect(page.locator(".umap-field-showLabel")).to_match_aria_snapshot("""
+        - text: Display label
+        - button "clear"
+        - text: always never on hover
+    """)
+    expect(page.locator(".umap-field-showLabel input[value=null]")).to_be_checked()

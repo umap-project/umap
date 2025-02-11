@@ -63,7 +63,7 @@ export class Form extends Utils.WithEvents {
       try {
         value = value[sub]
       } catch {
-        console.log(field)
+        console.debug(field)
       }
     }
     return value
@@ -142,50 +142,50 @@ export class MutatingForm extends Form {
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
     }
-    for (const [key, definition] of Object.entries(SCHEMA)) {
-      const schema = Utils.CopyJSON(definition)
-      if (definition.type === Boolean) {
-        if (schema.nullable) schema.handler = 'NullableChoices'
-        else schema.handler = 'Switch'
-      } else if (definition.type === 'Text') {
-        schema.handler = 'Textarea'
-      } else if (definition.type === Number) {
-        if (schema.step) schema.handler = 'Range'
-        else schema.handler = 'IntInput'
-      } else if (schema.choices) {
-        const text_length = schema.choices.reduce(
+    for (const [key, defaults] of Object.entries(SCHEMA)) {
+      const properties = Object.assign({}, defaults)
+      if (properties.type === Boolean) {
+        if (properties.nullable) properties.handler = 'NullableChoices'
+        else properties.handler = 'Switch'
+      } else if (properties.type === 'Text') {
+        properties.handler = 'Textarea'
+      } else if (properties.type === Number) {
+        if (properties.step) properties.handler = 'Range'
+        else properties.handler = 'IntInput'
+      } else if (properties.choices) {
+        const text_length = properties.choices.reduce(
           (acc, [_, label]) => acc + label.length,
           0
         )
         // Try to be smart and use MultiChoice only
         // for choices where labels are shorts…
         if (text_length < 40) {
-          schema.handler = 'MultiChoice'
+          properties.handler = 'MultiChoice'
         } else {
-          schema.handler = 'Select'
-          schema.selectOptions = schema.choices
+          properties.handler = 'Select'
+          properties.selectOptions = properties.choices
         }
       } else {
         switch (key) {
           case 'color':
           case 'fillColor':
-            schema.handler = 'ColorPicker'
+            properties.handler = 'ColorPicker'
             break
           case 'iconUrl':
-            schema.handler = 'IconUrl'
+            properties.handler = 'IconUrl'
             break
           case 'licence':
-            schema.handler = 'LicenceChooser'
+            properties.handler = 'LicenceChooser'
             break
         }
       }
 
       if (customHandlers[key]) {
-        schema.handler = customHandlers[key]
+        properties.handler = customHandlers[key]
       }
       // Input uses this key for its type attribute
-      delete schema.type
-      this.defaultProperties[key] = schema
+      delete properties.type
+      this.defaultProperties[key] = properties
     }
   }
 
@@ -203,7 +203,7 @@ export class MutatingForm extends Form {
   getTemplate(helper) {
     let template
     if (helper.properties.inheritable) {
-      const extraClassName = helper.get(true) === undefined ? ' undefined' : ''
+      const extraClassName = this.getter(helper.field) === undefined ? ' undefined' : ''
       template = `
         <div class="umap-field-${helper.name} formbox inheritable${extraClassName}">
           <div class="header" data-ref=header>

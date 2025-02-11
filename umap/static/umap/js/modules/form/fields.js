@@ -80,11 +80,13 @@ class BaseElement {
     this.input.value = ''
   }
 
-  get(own) {
-    if (!this.properties.inheritable || own) return this.builder.getter(this.field)
+  get() {
+    if (!this.properties.inheritable) return this.builder.getter(this.field)
     const path = this.field.split('.')
     const key = path[path.length - 1]
-    return this.obj.getOption(key) || SCHEMA[key]?.default
+    const value = this.obj.getOption(key)
+    if (value === undefined) return SCHEMA[key]?.default
+    return value
   }
 
   toHTML() {
@@ -1164,7 +1166,7 @@ Fields.MultiChoice = class extends BaseElement {
 
 Fields.TernaryChoices = class extends Fields.MultiChoice {
   getDefault() {
-    return 'null'
+    return null
   }
 
   toJS() {
