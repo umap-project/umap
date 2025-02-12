@@ -10,7 +10,7 @@ def test_draw_polygon(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a polygon button on a new map.
-    create_path = page.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
+    create_path = page.locator(".umap-edit-bar").get_by_title("Draw a polygon")
     create_path.click()
 
     # Check no polygon is present by default.
@@ -180,7 +180,7 @@ def test_can_draw_hole(page, live_server, tilelayer):
 
     # First vertex of the hole will be created here
     map.click(position={"x": 180, "y": 120})
-    page.get_by_role("link", name="Start a hole here").click()
+    page.get_by_role("button", name="Start a hole here").click()
     map.click(position={"x": 180, "y": 180})
     map.click(position={"x": 120, "y": 180})
     map.click(position={"x": 120, "y": 120})
@@ -475,7 +475,7 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
     page.locator("path").click()
-    page.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".umap-tooltip-container")).to_contain_text(
         "Please zoom in to edit the geometry"
     )

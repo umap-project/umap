@@ -250,7 +250,6 @@ export const LeafletMap = BaseMap.extend({
       DomEvent.on(document.body, 'dataload', (event) =>
         this.fire('dataload', event.detail)
       )
-      this.on('click', this.closeInplaceToolbar)
     }
 
     this.on('baselayerchange', (e) => {
@@ -282,11 +281,6 @@ export const LeafletMap = BaseMap.extend({
     // Needs tilelayer to exist for minimap
     this.renderControls()
     this.handleLimitBounds()
-  },
-
-  closeInplaceToolbar: function () {
-    const toolbar = this._toolbars[L.Toolbar.Popup._toolbar_class_id]
-    if (toolbar) toolbar.remove()
   },
 
   latLng: (a, b, c) => {

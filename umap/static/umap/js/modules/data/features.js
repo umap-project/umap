@@ -270,6 +270,10 @@ class Feature {
     if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
   }
 
+  toggleEditing() {
+    this.edit()
+  }
+
   getAdvancedEditActions(container) {
     const button = Utils.loadTemplate(`
       <button class="button" type="button">
@@ -508,8 +512,19 @@ class Feature {
     })
   }
 
-  getInplaceToolbarActions() {
-    return [U.ToggleEditAction, U.DeleteFeatureAction]
+  getInplaceEditMenu() {
+    return [
+      {
+        action: () => this.toggleEditing(),
+        title: translate('Toggle edit mode (⇧+Click)'),
+        icon: 'icon-edit',
+      },
+      {
+        action: () => this.confirmDelete(),
+        title: translate('Delete this feature'),
+        icon: 'icon-delete',
+      },
+    ]
   }
 
   isFiltered() {
@@ -785,7 +800,7 @@ class Path extends Feature {
     }
   }
 
-  _toggleEditing(event) {
+  toggleEditing(event) {
     if (this._umap.editEnabled) {
       if (this.ui.editEnabled()) {
         this.endEdit()
@@ -795,7 +810,7 @@ class Path extends Feature {
       }
     }
     // FIXME: disable when disabling global edit
-    L.DomEvent.stop(event)
+    // L.DomEvent.stop(event)
   }
 
   getShapeOptions() {
@@ -846,13 +861,31 @@ class Path extends Feature {
     return other
   }
 
-  getInplaceToolbarActions(event) {
-    const items = super.getInplaceToolbarActions(event)
+  getInplaceEditMenu(event) {
+    const items = super.getInplaceEditMenu()
     if (this.isMulti()) {
-      items.push(U.DeleteShapeAction)
-      items.push(U.ExtractShapeFromMultiAction)
+      items.push({
+        action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
+        title: translate('Delete this shape'),
+        icon: 'icon-delete-shape',
+      })
+      items.push({
+        action: () => this.ui.isolateShape(event.latlng),
+        title: translate('Extract shape to separate feature'),
+        icon: 'icon-extract-shape',
+      })
     }
     return items
+  }
+
+  getInplaceEditVertexMenu(event) {
+    return [
+      {
+        action: () => event.vertex.delete(),
+        title: translate('Delete this vertex (Alt+Click)'),
+        icon: 'icon-delete-vertex',
+      },
+    ]
   }
 
   zoomTo({ easing, callback }) {
@@ -1077,6 +1110,25 @@ export class LineString extends Path {
     const [gain, loss] = this.ui.getElevation()
     return Object.assign({ gain, loss }, super.extendedProperties())
   }
+
+  getInplaceEditVertexMenu(event) {
+    const items = super.getInplaceEditVertexMenu(event)
+    const index = event.vertex.getIndex()
+    if (index === 0 || index === event.vertex.getLastIndex()) {
+      items.push({
+        action: () => event.vertex.continue(),
+        title: translate('Continue line'),
+        icon: 'icon-continue-line',
+      })
+    } else {
+      items.push({
+        action: () => event.vertex.split(),
+        title: translate('Split line'),
+        icon: 'icon-split-line',
+      })
+    }
+    return items
+  }
 }
 
 export class Polygon extends Path {
@@ -1182,9 +1234,13 @@ export class Polygon extends Path {
     )
   }
 
-  getInplaceToolbarActions(event) {
-    const items = super.getInplaceToolbarActions(event)
-    items.push(U.CreateHoleAction)
+  getInplaceEditMenu(event) {
+    const items = super.getInplaceEditMenu()
+    items.push({
+      action: () => this.ui.startHole(event),
+      title: translate('Start a hole here'),
+      icon: 'icon-hole',
+    })
     return items
   }
 

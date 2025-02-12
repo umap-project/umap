@@ -68,11 +68,20 @@ html[dir="rtl"] .icon {
 .icon-close {
     background-position: var(--tile) 0px;
 }
+.icon-continue-line {
+    background-position: calc(var(--tile) * 4) 0;
+}
 .icon-copy {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 4);
 }
 .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 2);
+}
+.icon-delete-shape {
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 3);
+}
+.icon-delete-vertex {
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 4);
 }
 .readonly .icon-delete,
 .off .icon-delete {
@@ -98,6 +107,9 @@ html[dir="rtl"] .icon {
 .off .icon-edit {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 3);
 }
+.icon-extract-shape {
+    background-position: calc(var(--tile) * 5) 0;
+}
 .icon-filters {
     background-position: 0px var(--tile);
 }
@@ -106,6 +118,9 @@ html[dir="rtl"] .icon {
 }
 .icon-help {
     background-position: 0 0;
+}
+.icon-hole {
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 4);
 }
 .icon-key {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);
@@ -164,6 +179,9 @@ html[dir="rtl"] .icon {
 }
 .icon-share {
     background-position: 0px calc(var(--tile) * 5);
+}
+.icon-split-line {
+    background-position: calc(var(--tile) * 5) var(--tile);
 }
 .icon-star {
     background-position: var(--tile) calc(var(--tile) * 7);
