@@ -81,10 +81,14 @@ class BaseElement {
   }
 
   get() {
-    if (!this.properties.inheritable) return this.builder.getter(this.field)
+    let value
     const path = this.field.split('.')
     const key = path[path.length - 1]
-    const value = this.obj.getOption(key)
+    if (!this.properties.inheritable) {
+      value = this.builder.getter(this.field)
+    } else {
+      value = this.obj.getOption(key)
+    }
     if (value === undefined) return SCHEMA[key]?.default
     return value
   }
