@@ -72,9 +72,11 @@ export class SyncEngine {
     })
 
     const [response, _, error] = await this._umap.server.get(websocketTokenURI)
-    if (!error) {
-      this.start(response.token)
+    if (error) {
+      this.reconnect()
+      return
     }
+    this.start(response.token)
   }
 
   start(authToken) {
