@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Επαναφορά αυτής της έκδοσης",
     "Save current edits": "Αποθήκευση τρέχουσας επεξεργασίας",
     "Save map": "Αποθήκευση χάρτη",
-    "Save this center and zoom": "Αποθήκευση αυτής της προβολής με το συγκεκριμένο κεντράρισμα και το επίπεδο εστίασης.",
     "Save this location as new feature": "Αποθήκευση αυτής της τοποθεσίας ως νέο στοιχείο",
     "Save": "Αποθήκευση",
     "Saved center and zoom": "Saved center and zoom",
@@ -522,13 +521,18 @@ const locale = {
     "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
     "Disconnected": "Disconnected",
     "You must be logged in": "You must be logged in",
-    "Created at {date}": "Created at {date}",
-    "Modified at {date}": "Modified at {date}",
     "on hover": "on hover",
     "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
     "Import failed: invalid data": "Import failed: invalid data",
-    "Anonymous": "Anonymous"
+    "Anonymous": "Anonymous",
+    "created at {date}": "created at {date}",
+    "modified at {date}": "modified at {date}",
+    "Default zoom": "Default zoom",
+    "Default latitude": "Default latitude",
+    "Default longitude": "Default longitude",
+    "Edit map default view": "Edit map default view",
+    "Use current center and zoom": "Use current center and zoom"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

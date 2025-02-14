@@ -299,7 +299,6 @@
     "Restore this version": "Przywróć tę wersję",
     "Save current edits": "Zapisz obecne edycje",
     "Save map": "Zapisz mapę",
-    "Save this center and zoom": "Zapisz obecną pozycję i przybliżenie",
     "Save this location as new feature": "Zapisz to miejsce jako nowy obiekt",
     "Save": "Zapisz",
     "Saved center and zoom": "Zapisano pozycję i przybliżenie",
@@ -522,11 +521,16 @@
     "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
     "Disconnected": "Disconnected",
     "You must be logged in": "You must be logged in",
-    "Created at {date}": "Created at {date}",
-    "Modified at {date}": "Modified at {date}",
     "on hover": "on hover",
     "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
     "Import failed: invalid data": "Import failed: invalid data",
-    "Anonymous": "Anonymous"
+    "Anonymous": "Anonymous",
+    "created at {date}": "created at {date}",
+    "modified at {date}": "modified at {date}",
+    "Default zoom": "Default zoom",
+    "Default latitude": "Default latitude",
+    "Default longitude": "Default longitude",
+    "Edit map default view": "Edit map default view",
+    "Use current center and zoom": "Use current center and zoom"
 }

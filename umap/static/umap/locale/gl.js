@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Restabelecer esta versión",
     "Save current edits": "Gardar as edicións actuais",
     "Save map": "Gardar o mapa",
-    "Save this center and zoom": "Gardar este centrado e nivel de zoom",
     "Save this location as new feature": "Gardar esta posición coma novo elemento",
     "Save": "Gardar",
     "Saved center and zoom": "Gardar o centrado e nivel de zoom",
@@ -521,14 +520,19 @@ const locale = {
     "No data has been found for import": "Non se atoparon datos para importar",
     "Successfully imported {count} feature(s)": "Importado(s) satisfactoriamente {count} elemento(s)",
     "Disconnected": "Desconectado",
-    "You must be logged in": "You must be logged in",
-    "Created at {date}": "Created at {date}",
-    "Modified at {date}": "Modified at {date}",
-    "on hover": "on hover",
-    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
-    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
-    "Import failed: invalid data": "Import failed: invalid data",
-    "Anonymous": "Anonymous"
+    "You must be logged in": "Debes ter accedido",
+    "on hover": "ó pasar o rato por riba",
+    "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Non é posíbel cargar datos remotos para a capa «{layer}» co url «{url}»",
+    "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Non é posíbel analizar os datos remotos da capa «{layer}» co url «{url}»",
+    "Import failed: invalid data": "Produciuse un fallo na importación: os datos non son válidos",
+    "Anonymous": "Anónimo",
+    "created at {date}": "created at {date}",
+    "modified at {date}": "modified at {date}",
+    "Default zoom": "Default zoom",
+    "Default latitude": "Default latitude",
+    "Default longitude": "Default longitude",
+    "Edit map default view": "Edit map default view",
+    "Use current center and zoom": "Use current center and zoom"
 }
 L.registerLocale("gl", locale)
 L.setLocale("gl")

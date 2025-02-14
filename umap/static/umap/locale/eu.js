@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Berreskuratu bertsio hau",
     "Save current edits": "Gorde uneko aldaketak",
     "Save map": "Gorde mapa",
-    "Save this center and zoom": "Gorde zentro hau eta zoom-maila",
     "Save this location as new feature": "Gorde kokapen hau entitate berri gisa",
     "Save": "Gorde",
     "Saved center and zoom": "Zentroa eta zoom-maila gordeta",
@@ -522,13 +521,18 @@ const locale = {
     "Successfully imported {count} feature(s)": "Successfully imported {count} feature(s)",
     "Disconnected": "Disconnected",
     "You must be logged in": "You must be logged in",
-    "Created at {date}": "Created at {date}",
-    "Modified at {date}": "Modified at {date}",
     "on hover": "on hover",
     "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
     "Import failed: invalid data": "Import failed: invalid data",
-    "Anonymous": "Anonymous"
+    "Anonymous": "Anonymous",
+    "created at {date}": "created at {date}",
+    "modified at {date}": "modified at {date}",
+    "Default zoom": "Default zoom",
+    "Default latitude": "Default latitude",
+    "Default longitude": "Default longitude",
+    "Edit map default view": "Edit map default view",
+    "Use current center and zoom": "Use current center and zoom"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Restaurer cette version",
     "Save current edits": "Enregistrer les changements courants",
     "Save map": "Enregistrer la carte",
-    "Save this center and zoom": "Enregistrer le zoom et le centre actuels",
     "Save this location as new feature": "Enregistrer ce lieu comme élément de la carte",
     "Save": "Enregistrer",
     "Saved center and zoom": "Centre et zoom enregistrés",
@@ -522,13 +521,18 @@ const locale = {
     "Successfully imported {count} feature(s)": "{count} élément(s) ajouté(s) à la carte",
     "Disconnected": "Déconnecté",
     "You must be logged in": "Authentification requise",
-    "Created at {date}": "Créée le {date}",
-    "Modified at {date}": "Modifiée le {date}",
     "on hover": "au survol",
     "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Impossible de charger les données du calque \"{layer}\" à partir de l'URL \"{url}\"",
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Impossible de lire les données du calque \"{layer}\" à partir de l'URL \"{url}\"",
     "Import failed: invalid data": "Échec de l'import: les données sont invalides",
-    "Anonymous": "Anonyme"
+    "Anonymous": "Anonyme",
+    "created at {date}": "créée le {date}",
+    "modified at {date}": "modifiée le {date}",
+    "Default zoom": "Zoom par défaut",
+    "Default latitude": "Latitude par défaut",
+    "Default longitude": "Longitude par défaut",
+    "Edit map default view": "Régler la vue par défaut de la carte",
+    "Use current center and zoom": "Utiliser le centre et le zoom actuels"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

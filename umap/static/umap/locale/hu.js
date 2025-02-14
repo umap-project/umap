@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Ennek a változatnak a visszaállítása",
     "Save current edits": "Jelenlegi szerkesztések mentése",
     "Save map": "Térkép mentése",
-    "Save this center and zoom": "Mentés a jelenlegi középponttal és nagyítással",
     "Save this location as new feature": "E hely mentése új objektumként",
     "Save": "Mentés",
     "Saved center and zoom": "Elmentett középpont és nagyítás",
@@ -522,13 +521,18 @@ const locale = {
     "Successfully imported {count} feature(s)": "{count} objektum sikeresen importálva",
     "Disconnected": "Kapcsolat megszakadt",
     "You must be logged in": "You must be logged in",
-    "Created at {date}": "Created at {date}",
-    "Modified at {date}": "Modified at {date}",
     "on hover": "on hover",
     "Cannot load remote data for layer \"{layer}\" with url \"{url}\"": "Cannot load remote data for layer \"{layer}\" with url \"{url}\"",
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"",
     "Import failed: invalid data": "Import failed: invalid data",
-    "Anonymous": "Anonymous"
+    "Anonymous": "Anonymous",
+    "created at {date}": "created at {date}",
+    "modified at {date}": "modified at {date}",
+    "Default zoom": "Default zoom",
+    "Default latitude": "Default latitude",
+    "Default longitude": "Default longitude",
+    "Edit map default view": "Edit map default view",
+    "Use current center and zoom": "Use current center and zoom"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")
