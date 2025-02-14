@@ -120,6 +120,7 @@ export default class Umap extends ServerStored {
     )
     this.tooltip = new Tooltip(this._leafletMap._controlContainer)
     this.contextmenu = new ContextMenu()
+    this.editContextmenu = new ContextMenu({ className: 'dark', orientation: 'rows' })
     this.server = new ServerRequest()
     this.request = new Request()
     this.facets = new Facets(this)
@@ -1300,7 +1301,6 @@ export default class Umap extends ServerStored {
     this.editPanel.close()
     this.fullPanel.close()
     this.sync.stop()
-    this._leafletMap.closeInplaceToolbar()
   }
 
   fire(name) {

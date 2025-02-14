@@ -329,11 +329,11 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
 
     # Now split the line
     map.click(position={"x": 100, "y": 100})
-    page.get_by_role("link", name="Split line").click()
+    page.get_by_role("button", name="Split line").click()
 
     # Delete part of it
     map.click(position={"x": 125, "y": 100})
-    page.get_by_role("link", name="Delete this shape").click()
+    page.get_by_role("button", name="Delete this shape").click()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"]["type"] == "LineString"

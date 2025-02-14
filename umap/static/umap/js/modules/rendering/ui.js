@@ -64,11 +64,10 @@ const FeatureMixin = {
           else this.feature.edit(event)
         }
       } else if (!this._map.editTools?.drawing()) {
-        new L.Toolbar.Popup(event.latlng, {
-          className: 'leaflet-inplace-toolbar',
-          anchor: this.getPopupToolbarAnchor(),
-          actions: this.feature.getInplaceToolbarActions(event),
-        }).addTo(this._map, this.feature, event.latlng)
+        this._map._umap.editContextmenu.open(
+          event.originalEvent,
+          this.feature.getInplaceEditMenu(event)
+        )
       }
     }
     DomEvent.stop(event)
@@ -105,8 +104,6 @@ const FeatureMixin = {
     this.feature.pullGeometry(false)
     this.feature.onCommit()
   },
-
-  getPopupToolbarAnchor: () => [0, 0],
 }
 
 const PointMixin = {
@@ -248,10 +245,6 @@ export const LeafletMarker = Marker.extend({
     this._redraw()
     this._resetZIndex()
   },
-
-  getPopupToolbarAnchor: function () {
-    return this.options.icon.options.popupAnchor
-  },
 })
 
 const PathMixin = {
@@ -341,13 +334,11 @@ const PathMixin = {
     this.resetTooltip()
   },
 
-  getVertexActions: () => [U.DeleteVertexAction],
-
   onVertexRawClick: function (event) {
-    new L.Toolbar.Popup(event.latlng, {
-      className: 'leaflet-inplace-toolbar',
-      actions: this.getVertexActions(event),
-    }).addTo(this._map, this, event.latlng, event.vertex)
+    this._map._umap.editContextmenu.open(
+      event.originalEvent,
+      this.feature.getInplaceEditVertexMenu(event)
+    )
   },
 
   isolateShape: function (atLatLng) {
@@ -382,17 +373,6 @@ export const LeafletPolyline = Polyline.extend({
   includes: [FeatureMixin, PathMixin],
 
   getClass: () => LeafletPolyline,
-
-  getVertexActions: function (event) {
-    const actions = PathMixin.getVertexActions.call(this, event)
-    const index = event.vertex.getIndex()
-    if (index === 0 || index === event.vertex.getLastIndex()) {
-      actions.push(U.ContinueLineAction)
-    } else {
-      actions.push(U.SplitLineAction)
-    }
-    return actions
-  },
 
   getMeasure: function (shape) {
     let shapes

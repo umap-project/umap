@@ -10,6 +10,9 @@ export default class ContextMenu extends Positioned {
     if (options.className) {
       this.container.classList.add(options.className)
     }
+    if (options.orientation === 'rows') {
+      this.container.classList.add('umap-contextmenu-rows')
+    }
     this.container.addEventListener('focusout', (event) => {
       if (!this.container.contains(event.relatedTarget)) this.close()
     })
@@ -37,10 +40,14 @@ export default class ContextMenu extends Positioned {
         )
         this.container.appendChild(li)
       } else {
+        let content = item.label || ''
+        if (item.icon) {
+          content = `<i class="icon icon-16 ${item.icon}"></i>${content}`
+        }
         const li = loadTemplate(
-          `<li class="${item.className || ''}"><button tabindex="0" class="flat">${item.label}</button></li>`
+          `<li class="${item.className || ''}"><button tabindex="0" class="flat" title="${item.title || ''}">${content}</button></li>`
         )
-        li.addEventListener('click', () => {
+        li.firstChild.addEventListener('click', () => {
           this.close()
           item.action()
         })

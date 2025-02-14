@@ -78,8 +78,8 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
 def test_should_open_an_edit_toolbar_on_click(live_server, openmap, page, bootstrap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click()
-    expect(page.get_by_role("link", name="Toggle edit mode")).to_be_visible()
-    expect(page.get_by_role("link", name="Delete this feature")).to_be_visible()
+    expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
+    expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
 
 
 def test_should_update_open_popup_on_edit(live_server, openmap, page, bootstrap):
@@ -115,6 +115,6 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
     expect(marker).to_have_css("background-color", "rgb(0, 139, 139)")
     # Change datalayer
     marker.click()
-    page.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     page.locator(".umap-field-datalayer select").select_option(label="other datalayer")
     expect(marker).to_have_css("background-color", "rgb(148, 0, 211)")

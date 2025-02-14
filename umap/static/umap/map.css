@@ -478,9 +478,6 @@ ul.photon-autocomplete {
 .layer-edit {
     background-position: -50px -49px;
 }
-.umap-toggle-edit {
-    background-position: -44px -48px;
-}
 .readonly .layer-edit,
 .off .layer-edit {
     background-position: -50px -73px;
@@ -488,28 +485,6 @@ ul.photon-autocomplete {
 .readonly .layer-delete,
 .off .layer-delete {
     background-position: -122px -121px;
-}
-.umap-new-hole {
-    background-position: -71px -94px;
-}
-.umap-delete-one-of-multi {
-    background-position: -97px -70px;
-}
-.umap-delete-all,
-.umap-delete-one-of-one {
-    background-position: -119px -48px;
-}
-.umap-delete-vertex {
-    background-position: -119px -94px;
-}
-.umap-continue-line {
-    background-position: -96px 1px;
-}
-.umap-split-line {
-    background-position: -119px -22px;
-}
-.umap-extract-shape-from-multi{
-    background-position: -119px 2px;
 }
 .umap-browser .feature-title {
     width: inherit;

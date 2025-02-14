@@ -59,7 +59,7 @@ def test_websocket_connection_can_sync_markers(new_page, asgi_live_server, tilel
     peerA.wait_for_timeout(300)
 
     peerB.locator(".leaflet-marker-icon").first.click()
-    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(peerB.locator('input[name="name"]')).to_have_value("Synced name")
 
     a_first_marker = peerA.locator("div:nth-child(4) > div:nth-child(2)").first
@@ -139,7 +139,7 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
     assert b_polygon_bbox_t1 == a_polygon_bbox_t1
 
     b_polygon.click()
-    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
 
     edited_vertex = peerB.locator("div:nth-child(6)").first
     edited_vertex.drag_to(b_map_el, target_position={"x": 233, "y": 126})
@@ -153,7 +153,7 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
 
     # Move the polygon on peer B and check it moved also on peer A
     b_polygon.click()
-    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
 
     b_polygon.drag_to(b_map_el, target_position={"x": 400, "y": 400})
     peerB.keyboard.press("Escape")
@@ -343,7 +343,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
     # Verify marker properties
     peerB.locator(".leaflet-marker-icon").first.click()
-    peerB.get_by_role("link", name="Toggle edit mode (⇧+Click)").click()
+    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(peerB.locator('input[name="name"]')).to_have_value("First marker")
 
     # Verify polygon exists (we've already checked the count)

@@ -1,16 +1,28 @@
 .umap-contextmenu {
     background-color: var(--background-color);
-    padding: calc(var(--box-padding) / 2) var(--box-padding);
+    padding: calc(var(--box-padding) / 2) calc(var(--box-padding) / 2);
     position: fixed;
     z-index: var(--zindex-contextmenu);
     border-radius: var(--border-radius);
     box-shadow: var(--block-shadow);
+    display: flex;
+    flex-direction: column;
 }
-.umap-contextmenu li + li {
+.umap-contextmenu-rows {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+.umap-contextmenu:not(.umap-contextmenu-rows) li + li {
     margin-top: var(--text-margin);
 }
 
 .umap-contextmenu hr {
     margin-top: var(--text-margin);
     margin-bottom: var(--text-margin);
+}
+
+.dark.umap-contextmenu li button .icon:hover {
+    background-color: var(--color-mediumGray);
 }

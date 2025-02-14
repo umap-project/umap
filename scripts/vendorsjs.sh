@@ -16,7 +16,6 @@ mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.m
 mkdir -p umap/static/umap/vendors/markercluster/ && cp -r node_modules/leaflet.markercluster/dist/MarkerCluster.* umap/static/umap/vendors/markercluster/
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/
 mkdir -p umap/static/umap/vendors/fullscreen/ && cp -r node_modules/leaflet-fullscreen/dist/** umap/static/umap/vendors/fullscreen/
-mkdir -p umap/static/umap/vendors/toolbar/ && cp -r node_modules/leaflet-toolbar/dist/leaflet.toolbar.* umap/static/umap/vendors/toolbar/
 mkdir -p umap/static/umap/vendors/measurable/ && cp -r node_modules/leaflet-measurable/Leaflet.Measurable.* umap/static/umap/vendors/measurable/
 mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/leaflet.photon.js umap/static/umap/vendors/photon/
 mkdir -p umap/static/umap/vendors/csv2geojson/ && cp -r node_modules/csv2geojson/csv2geojson.js umap/static/umap/vendors/csv2geojson/
