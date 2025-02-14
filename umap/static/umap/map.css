@@ -379,7 +379,10 @@ ul.photon-autocomplete {
 .umap-edit-enabled .umap-toolbar a {
     display: block;
 }
-
+.leaflet-middle-icon,
+.leaflet-vertex-icon {
+    border-radius: 50%;
+}
 
 /* ********************************* */
 /*   Third party plugin override     */
