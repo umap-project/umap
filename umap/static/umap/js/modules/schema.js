@@ -278,6 +278,7 @@ export const SCHEMA = {
     impacts: ['ui'],
     nullable: true,
     label: translate('Display the locate control'),
+    default: null,
   },
   longCredit: {
     type: 'Text',
@@ -290,6 +291,7 @@ export const SCHEMA = {
     impacts: ['ui'],
     nullable: true,
     label: translate('Display the measure control'),
+    default: null,
   },
   mask: {
     type: Boolean,
@@ -507,6 +509,7 @@ export const SCHEMA = {
     impacts: ['ui'],
     nullable: true,
     label: translate('Display the tile layers control'),
+    default: null,
   },
   toZoom: {
     type: Number,
