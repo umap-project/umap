@@ -8,6 +8,7 @@
 # Eric Armijo, 2023
 # Gonzalo Gabriel Perez <zalitoar@gmail.com>, 2019
 # Ignacio L'Episcopo, 2024
+# Ignacio L'Episcopo, 2024-2025
 # Igor Támara <igor@tamarapatino.org>, 2013
 # 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>, 2014
 # 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>, 2014,2016-2017,2020
@@ -16,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 08:39+0000\n"
+"POT-Creation-Date: 2025-01-31 17:29+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Ignacio L'Episcopo, 2024\n"
+"Last-Translator: Ignacio L'Episcopo, 2024-2025\n"
 "Language-Team: Spanish (http://app.transifex.com/openstreetmap/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +33,7 @@ msgstr "Exportar CSV"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "Este mapa no está disponible públicamente"
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
@@ -42,7 +43,7 @@ msgstr "Sitio en modo solo lectura por mantenimiento"
 msgid "name"
 msgstr "nombre"
 
-#: models.py:62 models.py:475
+#: models.py:62 models.py:485
 msgid "description"
 msgstr "descripción"
 
@@ -62,29 +63,29 @@ msgstr "Plantilla de URL usando el formato de teselas OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Orden de las capas de teselas en el cuadro de edición"
 
-#: models.py:175 models.py:469
+#: models.py:175 models.py:479
 msgid "Only editable with secret edit link"
 msgstr "Solo editable con enlace secreto de edición"
 
-#: models.py:176 models.py:470
+#: models.py:176 models.py:480
 msgid "Everyone can edit"
 msgstr "Todos pueden editar"
 
-#: models.py:179 models.py:463
+#: models.py:179 models.py:473
 msgid "Everyone"
 msgstr "Todos"
 
-#: models.py:180 models.py:189 models.py:464
+#: models.py:180 models.py:189 models.py:474
 msgid "Editors and team only"
 msgstr "Solo editores y equipo"
 
-#: models.py:181 models.py:465
+#: models.py:181 models.py:475
 msgid "Owner only"
 msgstr "Solo el propietario"
 
 #: models.py:184
 msgid "Draft (private)"
-msgstr ""
+msgstr "Borrador (privado)"
 
 #: models.py:185
 msgid "Everyone (public)"
@@ -98,9 +99,9 @@ msgstr "Cualquiera con el enlace"
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: models.py:191
+#: models.py:191 models.py:469
 msgid "Deleted"
-msgstr ""
+msgstr "Eliminado"
 
 #: models.py:194
 msgid "center"
@@ -138,31 +139,31 @@ msgstr "editores"
 msgid "team"
 msgstr "equipo"
 
-#: models.py:229 models.py:491
+#: models.py:229 models.py:501
 msgid "edit status"
 msgstr "estado de edición"
 
-#: models.py:234
+#: models.py:234 models.py:506
 msgid "share status"
 msgstr "estado de compartir"
 
-#: models.py:237 models.py:486
+#: models.py:237 models.py:496
 msgid "settings"
 msgstr "ajustes"
 
-#: models.py:402
+#: models.py:407
 msgid "Clone of"
 msgstr "Clon de"
 
-#: models.py:462 models.py:468
+#: models.py:468 models.py:472 models.py:478
 msgid "Inherit"
 msgstr "Heredar"
 
-#: models.py:481
+#: models.py:491
 msgid "display on load"
 msgstr "mostrar al cargar"
 
-#: models.py:482
+#: models.py:492
 msgid "Display this layer on load."
 msgstr "Mostrar esta capa al cargar."
 
@@ -171,50 +172,64 @@ msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">Consulta aquí la documentación</a> sobre cómo gestionar los permisos del mapa."
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "← Ir a la página principal"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 Página no encontrada"
 
-#: templates/auth/user_detail.html:8
+#: templates/auth/user_detail.html:6
+#, python-format
+msgid "%(current_user)s’s maps"
+msgstr "Mapas de %(current_user)s"
+
+#: templates/auth/user_detail.html:12
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Explorar los mapas de %(current_user)s"
 
-#: templates/auth/user_detail.html:17
+#: templates/auth/user_detail.html:21
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s no tiene mapas."
 
-#: templates/auth/user_form.html:21 templates/umap/team_form.html:21
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr "Mi perfil"
+
+#: templates/auth/user_form.html:24 templates/umap/team_form.html:25
 msgid "Save"
 msgstr "Guardar"
 
-#: templates/auth/user_form.html:27
+#: templates/auth/user_form.html:30
 msgid "Your current providers"
 msgstr "Tus proveedores actuales"
 
-#: templates/auth/user_form.html:39
+#: templates/auth/user_form.html:44
 msgid "Connect to another provider"
 msgstr "Conectar con otro proveedor"
 
-#: templates/auth/user_form.html:42
+#: templates/auth/user_form.html:47
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
 msgstr "Es un buen hábito conectar tu cuenta a más de un proveedor, en caso de que uno no esté disponible, temporal o permanentemente."
 
-#: templates/auth/user_stars.html:8
+#: templates/auth/user_stars.html:6
+#, python-format
+msgid "%(current_user)s’s starred maps"
+msgstr "Mapas destacados de %(current_user)s"
+
+#: templates/auth/user_stars.html:12
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
 msgstr "Explorar los mapas destacados de %(current_user)s"
 
-#: templates/auth/user_stars.html:17
+#: templates/auth/user_stars.html:21
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s no tiene mapas destacados todavía."
@@ -231,11 +246,11 @@ msgstr "Iniciar sesión"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "Para guardar y encontrar fácilmente tus mapas, identifícate."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr ""
+msgstr "Por favor, inicia sesión con tu cuenta:"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -247,7 +262,11 @@ msgstr "Contraseña"
 
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
-msgstr ""
+msgstr "Por favor, elige un proveedor:"
+
+#: templates/umap/about.html:5 templates/umap/navigation.html:22
+msgid "About"
+msgstr "Acerca de"
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -416,7 +435,7 @@ msgstr "por"
 msgid "More"
 msgstr "Más"
 
-#: templates/umap/map_table.html:8 templates/umap/user_teams.html:14
+#: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
 msgstr "Nombre"
 
@@ -440,7 +459,7 @@ msgstr "Último guardado"
 msgid "Owner"
 msgstr "Dueño"
 
-#: templates/umap/map_table.html:26 templates/umap/user_teams.html:20
+#: templates/umap/map_table.html:26 templates/umap/user_teams.html:24
 msgid "Actions"
 msgstr "Acciones"
 
@@ -453,7 +472,7 @@ msgid "Share"
 msgstr "Compartir"
 
 #: templates/umap/map_table.html:78 templates/umap/map_table.html:80
-#: templates/umap/user_teams.html:38 templates/umap/user_teams.html:40
+#: templates/umap/user_teams.html:42 templates/umap/user_teams.html:44
 msgid "Edit"
 msgstr "Editar"
 
@@ -516,10 +535,6 @@ msgstr "Ingresar"
 msgid "Sign in"
 msgstr "Regístrarse"
 
-#: templates/umap/navigation.html:22
-msgid "About"
-msgstr "Acerca de"
-
 #: templates/umap/navigation.html:30
 msgid "Change password"
 msgstr "Cambiar contraseña"
@@ -528,41 +543,47 @@ msgstr "Cambiar contraseña"
 msgid "Log out"
 msgstr "Salir"
 
-#: templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:11
 msgid "Password change"
 msgstr "Contraseña cambiada"
 
-#: templates/umap/password_change.html:10
+#: templates/umap/password_change.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Introduzca su contraseña antigua, por seguridad, y luego introduzca su nueva contraseña dos veces para que podamos verificar si ha escrito correctamente."
 
-#: templates/umap/password_change.html:17
+#: templates/umap/password_change.html:21
 msgid "Old password"
 msgstr "Contraseña antigua"
 
-#: templates/umap/password_change.html:22
+#: templates/umap/password_change.html:26
 msgid "New password"
 msgstr "Nueva contraseña"
 
-#: templates/umap/password_change.html:26
+#: templates/umap/password_change.html:30
 msgid "New password confirmation"
 msgstr "Confirmar nueva contraseña"
 
-#: templates/umap/password_change.html:27
+#: templates/umap/password_change.html:31
 msgid "Change my password"
 msgstr "Cambiar mi contraseña"
 
-#: templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:11
 msgid "Password change successful"
 msgstr "Contraseña cambiada con éxito"
 
-#: templates/umap/password_change_done.html:10
+#: templates/umap/password_change_done.html:14
 msgid "Your password was changed."
 msgstr "Su contraseña fue guardada."
 
-#: templates/umap/search.html:15
+#: templates/umap/search.html:6
+msgid "Explore maps"
+msgstr "Explorar mapas"
+
+#: templates/umap/search.html:19
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
@@ -570,11 +591,11 @@ msgstr[0] "%(count)s mapa encontrado:"
 msgstr[1] "%(count)s mapas encontrados:"
 msgstr[2] "%(count)s mapas encontrados:"
 
-#: templates/umap/search.html:24
+#: templates/umap/search.html:28
 msgid "No map found."
 msgstr "No se ha encontrado ningún mapa."
 
-#: templates/umap/search.html:29
+#: templates/umap/search.html:33
 msgid "Latest created maps"
 msgstr "Últimos mapas creados"
 
@@ -586,21 +607,34 @@ msgstr "Buscar mapas"
 msgid "Search"
 msgstr "Buscar"
 
-#: templates/umap/team_detail.html:10
+#: templates/umap/team_confirm_delete.html:6
+msgid "Team deletion"
+msgstr "Eliminación de equipo"
+
+#: templates/umap/team_detail.html:6
+#, python-format
+msgid "%(current_team)s’s maps"
+msgstr "Mapas de %(current_team)s"
+
+#: templates/umap/team_detail.html:14
 #, python-format
 msgid "Browse %(current_team)s's maps"
 msgstr "Explorar los mapas de %(current_team)s"
 
-#: templates/umap/team_detail.html:22
+#: templates/umap/team_detail.html:26
 #, python-format
 msgid "%(current_team)s has no public maps."
 msgstr "%(current_team)s no tiene mapas públicos."
 
-#: templates/umap/team_form.html:24
+#: templates/umap/team_form.html:6
+msgid "Create or edit a team"
+msgstr "Crear o editar un equipo"
+
+#: templates/umap/team_form.html:28
 msgid "Delete this team"
 msgstr "Eliminar este equipo"
 
-#: templates/umap/team_form.html:47
+#: templates/umap/team_form.html:51
 msgid "Add user"
 msgstr "Añadir usuario"
 
@@ -621,11 +655,15 @@ msgstr "Descargar %(count)s mapas"
 msgid "You have no map yet."
 msgstr "Aún no tiene mapa."
 
-#: templates/umap/user_teams.html:17
+#: templates/umap/user_teams.html:6
+msgid "My Teams"
+msgstr "Mis equipos"
+
+#: templates/umap/user_teams.html:21
 msgid "Users"
 msgstr "Usuarios"
 
-#: templates/umap/user_teams.html:48
+#: templates/umap/user_teams.html:52
 msgid "New team"
 msgstr "Nuevo equipo"
 
@@ -642,57 +680,64 @@ msgstr "El equipo “%(name)s” ha sido eliminado"
 msgid "View the map"
 msgstr "Ver el mapa"
 
-#: views.py:825
+#: views.py:838
 msgid "See full screen"
 msgstr "Ver en pantalla completa"
 
-#: views.py:968
+#: views.py:981
 msgid "Map editors updated with success!"
 msgstr "¡Los editores del mapas han sido actualizados con éxito!"
 
-#: views.py:1004
+#: views.py:1017
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "El enlace de edición de uMap para tu mapa: %(map_name)s"
 
-#: views.py:1007
+#: views.py:1020
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aquí está tu enlace secreto de edición: %(link)s"
 
-#: views.py:1014
+#: views.py:1027
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "No se puede enviar correo electrónico a %(email)s"
 
-#: views.py:1017
+#: views.py:1030
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Correo electrónico enviado a %(email)s"
 
-#: views.py:1028
+#: views.py:1041
 msgid "Only its owner can delete the map."
 msgstr "Sólo el propietario puede borrar el mapa."
 
-#: views.py:1031
+#: views.py:1044
 msgid "Map successfully deleted."
 msgstr "Mapa eliminado correctamente."
 
-#: views.py:1057
+#: views.py:1070
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "¡Tu mapa ha sido clonado! Si quieres editar este mapa desde otro ordenador, usa este enlace: %(anonymous_url)s"
 
-#: views.py:1062
+#: views.py:1075
 msgid "Congratulations, your map has been cloned!"
 msgstr "¡Enhorabuena! ¡Tu mapa ha sido clonado!"
 
-#: views.py:1313
+#: views.py:1329
 msgid "Layer successfully deleted."
 msgstr "Se eliminó la capa con éxito."
 
-#: views.py:1335
+#: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "¡Permisos actualizados con éxito!"
+
+#: views.py:1430
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated. Please configure another "
+"provider in your profile page."
+msgstr "Usar “%(name)s” para autenticar está obsoleto. Configura otro proveedor en la página de tu perfil."

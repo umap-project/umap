@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Supaplex <bejokeup@gmail.com>, 2019,2023-2024
+# Supaplex <bejokeup@gmail.com>, 2019,2023-2025
 # Chia-liang Kao <clkao@clkao.org>, 2014
 # coop.shen <coop.shen@gmail.com>, 2014
 # coop.shen <coop.shen@gmail.com>, 2014
@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 08:39+0000\n"
+"POT-Creation-Date: 2025-01-31 17:29+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2024\n"
+"Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2025\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,7 @@ msgstr "CSV 匯出"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "這份地圖並非公開可及的"
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
@@ -41,7 +41,7 @@ msgstr "網站目前因維護中設定為唯讀狀態"
 msgid "name"
 msgstr "名稱"
 
-#: models.py:62 models.py:475
+#: models.py:62 models.py:485
 msgid "description"
 msgstr "描述"
 
@@ -61,23 +61,23 @@ msgstr "URL 樣板，使用 OSM 地圖磚格式"
 msgid "Order of the tilelayers in the edit box"
 msgstr "編輯方塊中地圖磚的圖層順序"
 
-#: models.py:175 models.py:469
+#: models.py:175 models.py:479
 msgid "Only editable with secret edit link"
 msgstr "僅能由私密連結編輯"
 
-#: models.py:176 models.py:470
+#: models.py:176 models.py:480
 msgid "Everyone can edit"
 msgstr "所有人皆可編輯"
 
-#: models.py:179 models.py:463
+#: models.py:179 models.py:473
 msgid "Everyone"
 msgstr "所有人"
 
-#: models.py:180 models.py:189 models.py:464
+#: models.py:180 models.py:189 models.py:474
 msgid "Editors and team only"
 msgstr "只有編輯者與團隊"
 
-#: models.py:181 models.py:465
+#: models.py:181 models.py:475
 msgid "Owner only"
 msgstr "只有擁有者"
 
@@ -97,7 +97,7 @@ msgstr "任何有連結的人"
 msgid "Blocked"
 msgstr "已經封銷了"
 
-#: models.py:191
+#: models.py:191 models.py:469
 msgid "Deleted"
 msgstr "已刪除"
 
@@ -137,31 +137,31 @@ msgstr "編輯者"
 msgid "team"
 msgstr "團隊"
 
-#: models.py:229 models.py:491
+#: models.py:229 models.py:501
 msgid "edit status"
 msgstr "編輯狀態"
 
-#: models.py:234
+#: models.py:234 models.py:506
 msgid "share status"
 msgstr "分享狀態"
 
-#: models.py:237 models.py:486
+#: models.py:237 models.py:496
 msgid "settings"
 msgstr "設定"
 
-#: models.py:402
+#: models.py:407
 msgid "Clone of"
 msgstr "複製"
 
-#: models.py:462 models.py:468
+#: models.py:468 models.py:472 models.py:478
 msgid "Inherit"
 msgstr "繼承"
 
-#: models.py:481
+#: models.py:491
 msgid "display on load"
 msgstr "載入時顯示"
 
-#: models.py:482
+#: models.py:492
 msgid "Display this layer on load."
 msgstr "載入此圖層時顯示"
 
@@ -170,50 +170,64 @@ msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">在說明文件尋找資訊</a>，要如何管理地圖權限。"
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "← 回到首頁"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 頁面"
 
-#: templates/auth/user_detail.html:8
+#: templates/auth/user_detail.html:6
+#, python-format
+msgid "%(current_user)s’s maps"
+msgstr "%(current_user)s的地圖"
+
+#: templates/auth/user_detail.html:12
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "瀏覽 %(current_user)s 的地圖"
 
-#: templates/auth/user_detail.html:17
+#: templates/auth/user_detail.html:21
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s 沒有任何地圖。"
 
-#: templates/auth/user_form.html:21 templates/umap/team_form.html:21
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr "我的檔案"
+
+#: templates/auth/user_form.html:24 templates/umap/team_form.html:25
 msgid "Save"
 msgstr "儲存"
 
-#: templates/auth/user_form.html:27
+#: templates/auth/user_form.html:30
 msgid "Your current providers"
 msgstr "你目前的供應商"
 
-#: templates/auth/user_form.html:39
+#: templates/auth/user_form.html:44
 msgid "Connect to another provider"
 msgstr "連線到其他供應商"
 
-#: templates/auth/user_form.html:42
+#: templates/auth/user_form.html:47
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
 msgstr "用你的帳號連到多個供應商是好的習慣，因為有時候供應商會出狀況，甚至永久停止運作。"
 
-#: templates/auth/user_stars.html:8
+#: templates/auth/user_stars.html:6
+#, python-format
+msgid "%(current_user)s’s starred maps"
+msgstr "%(current_user)s的打星號地圖"
+
+#: templates/auth/user_stars.html:12
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
 msgstr "瀏覽 %(current_user)s 已打心號的地圖"
 
-#: templates/auth/user_stars.html:17
+#: templates/auth/user_stars.html:21
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s 沒有任何打心號的地圖。"
@@ -247,6 +261,10 @@ msgstr "密碼"
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
 msgstr "請選擇提供商："
+
+#: templates/umap/about.html:5 templates/umap/navigation.html:22
+msgid "About"
+msgstr "關於"
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -415,7 +433,7 @@ msgstr "由"
 msgid "More"
 msgstr "更多"
 
-#: templates/umap/map_table.html:8 templates/umap/user_teams.html:14
+#: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
 msgstr "名稱"
 
@@ -439,7 +457,7 @@ msgstr "最後儲存"
 msgid "Owner"
 msgstr "擁有者"
 
-#: templates/umap/map_table.html:26 templates/umap/user_teams.html:20
+#: templates/umap/map_table.html:26 templates/umap/user_teams.html:24
 msgid "Actions"
 msgstr "動作"
 
@@ -452,7 +470,7 @@ msgid "Share"
 msgstr "分享"
 
 #: templates/umap/map_table.html:78 templates/umap/map_table.html:80
-#: templates/umap/user_teams.html:38 templates/umap/user_teams.html:40
+#: templates/umap/user_teams.html:42 templates/umap/user_teams.html:44
 msgid "Edit"
 msgstr "編輯"
 
@@ -515,10 +533,6 @@ msgstr "登入"
 msgid "Sign in"
 msgstr "註冊"
 
-#: templates/umap/navigation.html:22
-msgid "About"
-msgstr "關於"
-
 #: templates/umap/navigation.html:30
 msgid "Change password"
 msgstr "更改密碼"
@@ -527,51 +541,57 @@ msgstr "更改密碼"
 msgid "Log out"
 msgstr "登出"
 
-#: templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:11
 msgid "Password change"
 msgstr "密碼變更"
 
-#: templates/umap/password_change.html:10
+#: templates/umap/password_change.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "為確保賬戸安全，請先輸入你的舊有密碼。然後輸入新密碼兩次，以便確認新密碼輸入正確。"
 
-#: templates/umap/password_change.html:17
+#: templates/umap/password_change.html:21
 msgid "Old password"
 msgstr "舊密碼"
 
-#: templates/umap/password_change.html:22
+#: templates/umap/password_change.html:26
 msgid "New password"
 msgstr "新密碼"
 
-#: templates/umap/password_change.html:26
+#: templates/umap/password_change.html:30
 msgid "New password confirmation"
 msgstr "再次輸入新密碼"
 
-#: templates/umap/password_change.html:27
+#: templates/umap/password_change.html:31
 msgid "Change my password"
 msgstr "更改我的密碼"
 
-#: templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:11
 msgid "Password change successful"
 msgstr "成功更改密碼"
 
-#: templates/umap/password_change_done.html:10
+#: templates/umap/password_change_done.html:14
 msgid "Your password was changed."
 msgstr "你的密碼已更改。"
 
-#: templates/umap/search.html:15
+#: templates/umap/search.html:6
+msgid "Explore maps"
+msgstr "瀏覽地圖"
+
+#: templates/umap/search.html:19
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
 msgstr[0] "已找到%(count)s份地圖："
 
-#: templates/umap/search.html:24
+#: templates/umap/search.html:28
 msgid "No map found."
 msgstr "找不到地圖。"
 
-#: templates/umap/search.html:29
+#: templates/umap/search.html:33
 msgid "Latest created maps"
 msgstr "最新創建地圖"
 
@@ -583,21 +603,34 @@ msgstr "搜尋地圖"
 msgid "Search"
 msgstr "搜尋"
 
-#: templates/umap/team_detail.html:10
+#: templates/umap/team_confirm_delete.html:6
+msgid "Team deletion"
+msgstr "團隊刪除"
+
+#: templates/umap/team_detail.html:6
+#, python-format
+msgid "%(current_team)s’s maps"
+msgstr "%(current_team)s的地圖"
+
+#: templates/umap/team_detail.html:14
 #, python-format
 msgid "Browse %(current_team)s's maps"
 msgstr "瀏覽%(current_team)s的地圖"
 
-#: templates/umap/team_detail.html:22
+#: templates/umap/team_detail.html:26
 #, python-format
 msgid "%(current_team)s has no public maps."
 msgstr "%(current_team)s沒有公開地圖"
 
-#: templates/umap/team_form.html:24
+#: templates/umap/team_form.html:6
+msgid "Create or edit a team"
+msgstr "創建或是編輯團隊"
+
+#: templates/umap/team_form.html:28
 msgid "Delete this team"
 msgstr "刪除這個團隊"
 
-#: templates/umap/team_form.html:47
+#: templates/umap/team_form.html:51
 msgid "Add user"
 msgstr "新增使用者"
 
@@ -618,11 +651,15 @@ msgstr "下載%(count)s地圖"
 msgid "You have no map yet."
 msgstr "你目前還沒有地圖。"
 
-#: templates/umap/user_teams.html:17
+#: templates/umap/user_teams.html:6
+msgid "My Teams"
+msgstr "我的團隊"
+
+#: templates/umap/user_teams.html:21
 msgid "Users"
 msgstr "使用者"
 
-#: templates/umap/user_teams.html:48
+#: templates/umap/user_teams.html:52
 msgid "New team"
 msgstr "新的團隊"
 
@@ -639,57 +676,64 @@ msgstr "已經刪除團隊 \"%(name)s\" "
 msgid "View the map"
 msgstr "檢視地圖"
 
-#: views.py:825
+#: views.py:838
 msgid "See full screen"
 msgstr "檢視全螢幕"
 
-#: views.py:968
+#: views.py:981
 msgid "Map editors updated with success!"
 msgstr "地圖編輯者更新完成"
 
-#: views.py:1004
+#: views.py:1017
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "你的地圖 uMap 編輯連結：%(map_name)s"
 
-#: views.py:1007
+#: views.py:1020
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "這是你的祕密編輯連結：%(link)s"
 
-#: views.py:1014
+#: views.py:1027
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "無法傳送電子郵件到%(email)s"
 
-#: views.py:1017
+#: views.py:1030
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "電子郵件寄至 %(email)s"
 
-#: views.py:1028
+#: views.py:1041
 msgid "Only its owner can delete the map."
 msgstr "只有擁有者可以刪除此地圖"
 
-#: views.py:1031
+#: views.py:1044
 msgid "Map successfully deleted."
 msgstr "成功刪除地圖"
 
-#: views.py:1057
+#: views.py:1070
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "您的地圖已複製完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
 
-#: views.py:1062
+#: views.py:1075
 msgid "Congratulations, your map has been cloned!"
 msgstr "恭喜，您的地圖已被複製！"
 
-#: views.py:1313
+#: views.py:1329
 msgid "Layer successfully deleted."
 msgstr "圖層已刪除"
 
-#: views.py:1335
+#: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "權限更新完成"
+
+#: views.py:1430
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated. Please configure another "
+"provider in your profile page."
+msgstr "使用\"%(name)s\"來認證已經廢棄了，請在你的個人檔案頁面使用其他供應商來設定認證。"
