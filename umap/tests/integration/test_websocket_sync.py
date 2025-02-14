@@ -398,7 +398,9 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
     peerA.locator("#map").click()
 
     # Make sure this new marker is in Layer 2 for peerB
-    expect(peerB.get_by_text("Layer 2")).to_be_visible()
+    # Show features for this layer in the brower.
+    peerB.get_by_role("heading", name="Layer 2").locator(".datalayer-name").click()
+    expect(peerB.locator("li").filter(has_text="Layer 2")).to_be_visible()
     peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
         1
     ).click()
@@ -421,9 +423,11 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
         1
     ).click()
 
-    # Now peerA saves the layer 2 to the server
-    with peerA.expect_response(re.compile(".*/datalayer/update/.*")):
-        peerA.get_by_role("button", name="Save").click()
+    # Peer A should not be in dirty state
+    expect(peerA.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Peer A should only have two markers
+    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(2)
 
     assert DataLayer.objects.count() == 2
 
@@ -557,3 +561,46 @@ def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user)
     peerA.get_by_role("button", name="Edit").click()
     expect(markersA).to_have_count(2)
     expect(markersB).to_have_count(2)
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_should_sync_saved_status(new_page, asgi_live_server, tilelayer):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+
+    # Create two tabs
+    peerA = new_page("Page A")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+
+    # Create a new marker from peerA
+    peerA.get_by_title("Draw a marker").click()
+    peerA.locator("#map").click(position={"x": 220, "y": 220})
+
+    # Peer A should be in dirty state
+    expect(peerA.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Peer B should not be in dirty state
+    expect(peerB.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Create a new marker from peerB
+    peerB.get_by_title("Draw a marker").click()
+    peerB.locator("#map").click(position={"x": 200, "y": 250})
+
+    # Peer B should be in dirty state
+    expect(peerB.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Peer A should still be in dirty state
+    expect(peerA.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Save layer to the server from peerA
+    with peerA.expect_response(re.compile(".*/datalayer/create/.*")):
+        peerA.get_by_role("button", name="Save").click()
+
+    # Peer B should not be in dirty state
+    expect(peerB.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))
+
+    # Peer A should not be in dirty state
+    expect(peerA.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))

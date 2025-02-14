@@ -523,17 +523,27 @@ class DataLayer(NamedModel):
     def metadata(self, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
-        obj = self.settings or {
-            "name": self.name,
-            "displayOnLoad": self.display_on_load,
-        }
+        metadata = self.settings
+        if not metadata:
+            # Fallback to file for old datalayers.
+            data = json.loads(self.geojson.read().decode())
+            metadata = data.get("_umap_options")
+            if not metadata:
+                metadata = {
+                    "name": self.name,
+                    "displayOnLoad": self.display_on_load,
+                }
+            # Save it to prevent file reading at each map load.
+            self.settings = metadata
+            # Do not update the modified_at.
+            self.save(update_fields=["settings"])
         if self.old_id:
-            obj["old_id"] = self.old_id
-        obj["id"] = self.pk
-        obj["permissions"] = {"edit_status": self.edit_status}
-        obj["editMode"] = "advanced" if self.can_edit(request) else "disabled"
-        obj["_referenceVersion"] = self.reference_version
-        return obj
+            metadata["old_id"] = self.old_id
+        metadata["id"] = self.pk
+        metadata["permissions"] = {"edit_status": self.edit_status}
+        metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
+        metadata["_referenceVersion"] = self.reference_version
+        return metadata
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)

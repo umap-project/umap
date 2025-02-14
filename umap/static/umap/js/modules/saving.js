@@ -10,6 +10,11 @@ export async function save() {
   }
 }
 
+export function clear() {
+  _queue.clear()
+  onUpdate()
+}
+
 function add(obj) {
   _queue.add(obj)
   onUpdate()

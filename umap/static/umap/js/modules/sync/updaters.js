@@ -55,9 +55,6 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
     const datalayer = this._umap.createDataLayer(value, false)
-    // Prevent the layer to get data from the server, as it will get it
-    // from the sync.
-    datalayer._loaded = true
   }
 
   update({ key, metadata, value }) {
@@ -92,7 +89,7 @@ export class FeatureUpdater extends BaseUpdater {
   upsert({ metadata, value }) {
     const { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
-    const feature = this.getFeatureFromMetadata(metadata, value)
+    const feature = this.getFeatureFromMetadata(metadata)
 
     if (feature) {
       feature.geometry = value.geometry
@@ -109,7 +106,7 @@ export class FeatureUpdater extends BaseUpdater {
       return
     }
     if (key === 'geometry') {
-      const feature = this.getFeatureFromMetadata(metadata, value)
+      const feature = this.getFeatureFromMetadata(metadata)
       feature.geometry = value
     } else {
       this.updateObjectValue(feature, key, value)
