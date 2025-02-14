@@ -22,3 +22,7 @@
     margin-top: var(--text-margin);
     margin-bottom: var(--text-margin);
 }
+
+.dark.umap-contextmenu li button .icon:hover {
+    background-color: var(--color-mediumGray);
+}

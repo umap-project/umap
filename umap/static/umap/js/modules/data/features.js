@@ -800,17 +800,15 @@ class Path extends Feature {
     }
   }
 
-  toggleEditing(event) {
+  toggleEditing() {
     if (this._umap.editEnabled) {
       if (this.ui.editEnabled()) {
         this.endEdit()
         this._umap.editPanel.close()
       } else {
-        this.edit(event)
+        this.edit()
       }
     }
-    // FIXME: disable when disabling global edit
-    // L.DomEvent.stop(event)
   }
 
   getShapeOptions() {
