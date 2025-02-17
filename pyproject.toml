@@ -35,7 +35,7 @@ dependencies = [
   "Pillow==11.1.0",
   "psycopg==3.2.4",
   "requests==2.32.3",
-  "rcssmin==1.2.0",
+  "rcssmin==1.2.1",
   "rjsmin==1.2.3",
   "social-auth-core==4.5.4",
   "social-auth-app-django==5.4.2",
