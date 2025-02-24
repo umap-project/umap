@@ -1096,44 +1096,38 @@ export default class Umap extends ServerStored {
       container,
       translate('Advanced actions')
     )
-    const advancedButtons = DomUtil.create('div', 'button-bar half', advancedActions)
-    if (this.permissions.isOwner()) {
-      const deleteButton = Utils.loadTemplate(`
-        <button class="button" type="button">
+    const tpl = `
+    <div class="button-bar half">
+        <button class="button" type="button" data-ref=del hidden>
           <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
-        </button>`)
-      deleteButton.addEventListener('click', () => this.del())
-      advancedButtons.appendChild(deleteButton)
-
-      DomUtil.createButton(
-        'button umap-empty',
-        advancedButtons,
-        translate('Clear data'),
-        this.emptyDataLayers,
-        this
-      )
-      DomUtil.createButton(
-        'button umap-empty',
-        advancedButtons,
-        translate('Remove layers'),
-        this.removeDataLayers,
-        this
-      )
+        </button>
+        <button class="button" type="button" data-ref=clear hidden>
+          <i class="icon icon-24 icon-empty"></i>${translate('Clear data')}
+        </button>
+        <button class="button" type="button" data-ref=empty hidden>
+          <i class="icon icon-24 icon-empty"></i>${translate('Remove layers')}
+        </button>
+        <button class="button" type="button" data-ref=clone>
+          <i class="icon icon-24 icon-clone"></i>${translate('Clone this map')}
+        </button>
+        <button class="button" type="button" data-ref=download>
+          <i class="icon icon-24 icon-download"></i>${translate('Open share & download panel')}
+        </button>
+    </div>
+    `
+    const [bar, { del, clear, empty, clone, download }] =
+      Utils.loadTemplateWithRefs(tpl)
+    advancedActions.appendChild(bar)
+    if (this.permissions.isOwner()) {
+      del.hidden = false
+      del.addEventListener('click', () => this.del())
+      clear.hidden = false
+      clear.addEventListener('click', () => this.emptyDataLayers())
+      empty.hidden = false
+      empty.addEventListener('click', () => this.removeDataLayers())
     }
-    DomUtil.createButton(
-      'button umap-clone',
-      advancedButtons,
-      translate('Clone this map'),
-      this.clone,
-      this
-    )
-    DomUtil.createButton(
-      'button umap-download',
-      advancedButtons,
-      translate('Open share & download panel'),
-      this.share.open,
-      this.share
-    )
+    clone.addEventListener('click', () => this.clone())
+    download.addEventListener('click', () => this.share.open())
   }
 
   edit() {
