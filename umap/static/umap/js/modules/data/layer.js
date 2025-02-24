@@ -838,44 +838,36 @@ export class DataLayer extends ServerStored {
       container,
       translate('Advanced actions')
     )
-    const advancedButtons = DomUtil.create('div', 'button-bar half', advancedActions)
-    const deleteButton = Utils.loadTemplate(`
-      <button class="button" type="button">
+    const filename = `${Utils.slugify(this.options.name)}.geojson`
+    const tpl = `
+    <div class="button-bar half">
+      <button class="button" type="button" data-ref=del>
         <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
-      </button>`)
-    deleteButton.addEventListener('click', () => {
+      </button>
+      <button class="button" type="button" data-ref=empty hidden>
+        <i class="icon icon-24 icon-empty"></i>${translate('Empty')}
+      </button>
+      <button class="button" type="button" data-ref=clone>
+        <i class="icon icon-24 icon-clone"></i>${translate('Clone')}
+      </button>
+      <a class="button" href="${this._dataUrl()}" download="${filename}" data-ref=download hidden>
+        <i class="icon icon-24 icon-download"></i>${translate('Download')}
+      </a>
+    </div>
+    `
+    const [bar, { del, empty, clone, download }] = Utils.loadTemplateWithRefs(tpl)
+    advancedActions.appendChild(bar)
+    del.addEventListener('click', () => {
       this.del()
       this._umap.editPanel.close()
     })
-    advancedButtons.appendChild(deleteButton)
 
     if (!this.isRemoteLayer()) {
-      const emptyLink = DomUtil.createButton(
-        'button umap-empty',
-        advancedButtons,
-        translate('Empty'),
-        this.empty,
-        this
-      )
+      empty.hidden = false
+      empty.addEventListener('click', () => this.empty())
     }
-    const cloneLink = DomUtil.createButton(
-      'button umap-clone',
-      advancedButtons,
-      translate('Clone'),
-      function () {
-        const datalayer = this.clone()
-        datalayer.edit()
-      },
-      this
-    )
-    if (this.createdOnServer) {
-      const filename = `${Utils.slugify(this.options.name)}.geojson`
-      const download = Utils.loadTemplate(`
-        <a class="button" href="${this._dataUrl()}" download="${filename}">
-          <i class="icon icon-24 icon-download"></i>${translate('Download')}
-        </a>`)
-      advancedButtons.appendChild(download)
-    }
+    clone.addEventListener('click', () => this.clone().edit())
+    if (this.createdOnServer) download.hidden = false
     const backButton = DomUtil.createButtonIcon(
       undefined,
       'icon-back',
