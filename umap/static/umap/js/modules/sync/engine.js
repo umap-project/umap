@@ -66,7 +66,12 @@ export class SyncEngine {
     this.peerId = Utils.generateId()
   }
 
+  get isOpen() {
+    return this.transport?.isOpen
+  }
+
   async authenticate() {
+    if (this.isOpen) return
     const websocketTokenURI = this._umap.urls.get('map_websocket_auth_token', {
       map_id: this._umap.id,
     })
@@ -198,6 +203,7 @@ export class SyncEngine {
    */
   onOperationMessage(payload) {
     if (payload.sender === this.peerId) return
+    debug('received operation', payload)
     this._operations.storeRemoteOperations([payload])
     this._applyOperation(payload)
   }
@@ -261,7 +267,7 @@ export class SyncEngine {
    * @param {*} operations The list of (encoded operations)
    */
   onListOperationsResponse({ sender, message }) {
-    debug(`received operations from peer ${sender}`, message.operations)
+    debug(`received operations list from peer ${sender}`, message.operations)
 
     if (message.operations.length === 0) return
 
@@ -502,11 +508,7 @@ export class Operations {
    * @return {bool} true if the two operations share the same context.
    */
   static haveSameContext(local, remote) {
-    const shouldCheckKey =
-      local.hasOwnProperty('key') &&
-      remote.hasOwnProperty('key') &&
-      typeof local.key !== 'undefined' &&
-      typeof remote.key !== 'undefined'
+    const shouldCheckKey = local.key !== undefined && remote.key !== undefined
 
     return (
       Utils.deepEqual(local.subject, remote.subject) &&
