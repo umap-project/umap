@@ -65,6 +65,9 @@ html[dir="rtl"] .icon {
 .icon-center {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 2);
 }
+.icon-clone {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 2);
+}
 .icon-close {
     background-position: var(--tile) 0px;
 }
@@ -94,6 +97,9 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
     cursor: move;
     float: inline-end;
+}
+.icon-empty {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 3);
 }
 .icon-eye {
     background-position: calc(var(--tile) * 2) var(--tile);
