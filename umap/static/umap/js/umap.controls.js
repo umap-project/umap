@@ -699,6 +699,7 @@ U.Editable = L.Editable.extend({
       if (!event.layer.feature.hasGeom()) {
         event.layer.feature.del()
       } else {
+        event.layer.feature.onCommit()
         event.layer.feature.edit()
       }
     })

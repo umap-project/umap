@@ -604,3 +604,25 @@ def test_should_sync_saved_status(new_page, asgi_live_server, tilelayer):
 
     # Peer A should not be in dirty state
     expect(peerA.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_should_sync_line_on_escape(new_page, asgi_live_server, tilelayer):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+
+    # Create two tabs
+    peerA = new_page("Page A")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+
+    # Create a new marker from peerA
+    peerA.get_by_title("Draw a polyline").click()
+    peerA.locator("#map").click(position={"x": 220, "y": 220})
+    peerA.locator("#map").click(position={"x": 200, "y": 200})
+    peerA.locator("body").press("Escape")
+
+    expect(peerA.locator("path")).to_have_count(1)
+    expect(peerB.locator("path")).to_have_count(1)
