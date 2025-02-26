@@ -324,6 +324,24 @@ Fields.CheckBox = class extends BaseElement {
   }
 }
 
+Fields.CheckBoxes = class extends BaseElement {
+  build() {
+    const initial = this.get() || []
+    for (const [value, label] of this.properties.choices) {
+      const tpl = `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
+      const [root, { input }] = Utils.loadTemplateWithRefs(tpl)
+      this.container.appendChild(root)
+      input.checked = initial.includes(value)
+      input.addEventListener('change', () => this.sync())
+    }
+    super.build()
+  }
+
+  value() {
+    return Array.from(this.root.querySelectorAll('input:checked')).map((el) => el.value)
+  }
+}
+
 Fields.Select = class extends BaseElement {
   getTemplate() {
     return `<select name="${this.name}" data-ref=select></select>`
@@ -1296,12 +1314,13 @@ Fields.ManageEditors = class extends BaseElement {
       placeholder: translate("Type editor's username"),
     }
     this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
-    this._values = this.toHTML()
-    if (this._values)
+    this._values = this.toHTML() || []
+    if (this._values) {
       for (let i = 0; i < this._values.length; i++)
         this.autocomplete.displaySelected({
           item: { value: this._values[i].id, label: this._values[i].name },
         })
+    }
   }
 
   value() {

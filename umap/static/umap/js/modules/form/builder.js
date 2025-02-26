@@ -138,6 +138,8 @@ export class MutatingForm extends Form {
       } else if (properties.type === Number) {
         if (properties.step) properties.handler = 'Range'
         else properties.handler = 'IntInput'
+      } else if (properties.type === Array) {
+        properties.handler = 'CheckBoxes'
       } else if (properties.choices) {
         const text_length = properties.choices.reduce(
           (acc, [_, label]) => acc + label.length,
