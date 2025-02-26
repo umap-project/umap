@@ -757,6 +757,12 @@ export default class Umap extends ServerStored {
     const form = builder.build()
     container.appendChild(form)
 
+    const tags = DomUtil.createFieldset(container, translate('Tags'))
+    const tagsFields = ['properties.tags']
+    const tagsBuilder = new MutatingForm(this, tagsFields, {
+      umap: this,
+    })
+    tags.appendChild(tagsBuilder.build())
     const credits = DomUtil.createFieldset(container, translate('Credits'))
     const creditsFields = [
       'properties.licence',
@@ -1185,6 +1191,7 @@ export default class Umap extends ServerStored {
     const formData = new FormData()
     formData.append('name', this.properties.name)
     formData.append('center', JSON.stringify(this.geometry()))
+    formData.append('tags', this.properties.tags || [])
     formData.append('settings', JSON.stringify(geojson))
     const uri = this.urls.get('map_save', { map_id: this.id })
     const [data, _, error] = await this.server.post(uri, {}, formData)
