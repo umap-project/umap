@@ -1174,6 +1174,12 @@ export class DataLayer extends ServerStored {
     return this.options.name || translate('Untitled layer')
   }
 
+  getPermalink() {
+    return `${Utils.getBaseUrl()}?${Utils.buildQueryString({ datalayers: this.id })}${
+      window.location.hash
+    }`
+  }
+
   tableEdit() {
     if (!this.isVisible()) return
     const editor = new TableEditor(this._umap, this, this._leafletMap)
