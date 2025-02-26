@@ -112,11 +112,12 @@ class Peer:
         self.client = redis.from_url(settings.REDIS_URL)
 
     async def disconnect(self):
-        await self.client.hdel(self.room_key, self.peer_id)
-        for pubsub in self._subscriptions:
-            await pubsub.unsubscribe()
-            await pubsub.close()
-        await self.send_peers_list()
+        if self.is_authenticated:
+            await self.client.hdel(self.room_key, self.peer_id)
+            for pubsub in self._subscriptions:
+                await pubsub.unsubscribe()
+                await pubsub.close()
+            await self.send_peers_list()
         await self.client.aclose()
 
     async def send_peers_list(self):
