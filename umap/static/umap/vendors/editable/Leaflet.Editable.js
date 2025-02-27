@@ -1248,6 +1248,7 @@
       // 🍂event editable:vertex:deleted: VertexEvent
       // Fired after a vertex has been deleted by user.
       this.fireAndForward('editable:vertex:deleted', e)
+      this.onEdited()
     },
 
     onVertexMarkerCtrlClick: function (e) {
