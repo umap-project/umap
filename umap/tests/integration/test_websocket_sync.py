@@ -569,6 +569,34 @@ def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user)
 
 
 @pytest.mark.xdist_group(name="websockets")
+def test_saved_datalayer_are_not_duplicated(new_page, asgi_live_server, tilelayer):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+
+    # Create one tab
+    peerA = new_page("Page A")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    # Create a new datalayer
+    peerA.get_by_title("Manage layers").click()
+    peerA.get_by_title("Add a layer").click()
+    peerA.locator("#map").click(position={"x": 220, "y": 220})
+    # Save layer to the server, so now the datalayer exist on the server AND
+    # is still in the live operations of peer A
+    with peerA.expect_response(re.compile(".*/datalayer/create/.*")):
+        peerA.get_by_role("button", name="Save").click()
+
+    # Now load the map from another tab
+    peerB = new_page("Page B")
+    peerB.goto(peerA.url)
+    peerB.get_by_role("button", name="Open browser").click()
+    expect(peerB.get_by_text("Layer 1")).to_be_visible()
+    peerB.get_by_role("button", name="Edit").click()
+    peerA.wait_for_timeout(300)  # Let the synchro roll on.
+    expect(peerB.get_by_text("Layer 1")).to_be_visible()
+
+
+@pytest.mark.xdist_group(name="websockets")
 def test_should_sync_saved_status(new_page, asgi_live_server, tilelayer):
     map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
     map.settings["properties"]["syncEnabled"] = True
