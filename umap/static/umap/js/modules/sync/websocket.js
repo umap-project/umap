@@ -76,4 +76,8 @@ export class WebSocketTransport {
     this.receiver.closeRequested = true
     this.websocket.close()
   }
+
+  get isOpen() {
+    return this.websocket?.readyState === WebSocket.OPEN
+  }
 }

@@ -535,6 +535,11 @@ def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user)
     expect(markersA).to_have_count(1)
     expect(markersB).to_have_count(1)
 
+    # Make sure only one layer has been created on peer B
+    peerB.get_by_role("button", name="Open browser").click()
+    expect(peerB.locator("h5").get_by_text("Layer 1")).to_be_visible()
+    peerB.get_by_role("button", name="Close").click()
+
     # Save and quit edit mode again
     with peerA.expect_response(re.compile("./datalayer/create/.*")):
         peerA.get_by_role("button", name="Save").click()
