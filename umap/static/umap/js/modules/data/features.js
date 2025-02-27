@@ -335,15 +335,15 @@ class Feature {
     // Variables mode.
     if (labelKey) {
       if (Utils.hasVar(labelKey)) {
-        return Utils.greedyTemplate(labelKey, this.extendedProperties())
+        return Utils.greedyTemplate(labelKey, this.extendedProperties()).trim()
       }
       keys.unshift(labelKey)
     }
     for (const key of keys) {
       const value = this.properties[key]
-      if (value) return value
+      if (value) return value.trim()
     }
-    return this.datalayer.getName()
+    return this.datalayer.getName().trim()
   }
 
   hasPopupFooter() {
