@@ -60,8 +60,7 @@ const FeatureMixin = {
         if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
           this.feature.datalayer.edit(event)
         } else {
-          if (this.feature._toggleEditing) this.feature._toggleEditing(event)
-          else this.feature.edit(event)
+          this.feature.toggleEditing(event)
         }
       } else if (!this._map.editTools?.drawing()) {
         this._map._umap.editContextmenu.open(
