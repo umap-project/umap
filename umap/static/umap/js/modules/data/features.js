@@ -640,6 +640,12 @@ class Feature {
           window.open(permalink)
         },
       })
+      items.push({
+        label: translate('Layer permalink'),
+        action: () => {
+          window.open(this.datalayer.getPermalink())
+        },
+      })
     }
     items.push({
       label: translate('Copy as GeoJSON'),
