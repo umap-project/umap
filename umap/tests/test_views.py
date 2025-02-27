@@ -486,3 +486,27 @@ def test_cannot_search_deleted_map(client, map):
     url = reverse("search")
     response = client.get(url + "?q=Blé")
     assert "Blé dur" not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_filter_by_tag(client, map):
+    # Very basic search, that do not deal with accent nor case.
+    # See install.md for how to have a smarter dict + index.
+    map.name = "Blé dur"
+    map.tags = ["bike"]
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?tags=bike")
+    assert "Blé dur" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_can_combine_search_and_filter(client, map):
+    # Very basic search, that do not deal with accent nor case.
+    # See install.md for how to have a smarter dict + index.
+    map.name = "Blé dur"
+    map.tags = ["bike"]
+    map.save()
+    url = reverse("search")
+    response = client.get(url + "?q=dur&tags=bike")
+    assert "Blé dur" in response.content.decode()

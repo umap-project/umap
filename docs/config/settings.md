@@ -323,7 +323,10 @@ CREATE EXTENSION btree_gin;
 ALTER TEXT SEARCH CONFIGURATION umapdict ALTER MAPPING FOR hword, hword_part, word WITH unaccent, simple;
 
 # Now create the index
-CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', COALESCE(name, ''::character varying)::text), share_status);
+CREATE INDEX IF NOT EXISTS search_idx ON umap_map USING GIN(to_tsvector('umapdict', COALESCE(name, ''::character varying)::text), share_status, tags);
+
+# You should also create an index for tag filtering:
+CREATE INDEX IF NOT EXISTS tags_idx ON umap_map USING GIN(share_status, tags);
 ```
 
 Then set:

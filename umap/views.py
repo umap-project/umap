@@ -334,12 +334,18 @@ class TeamMaps(PaginatorMixin, DetailView):
 class SearchMixin:
     def get_search_queryset(self, **kwargs):
         q = self.request.GET.get("q")
+        tags = [t for t in self.request.GET.getlist("tags") if t]
+        qs = Map.objects.all()
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
                 q, config=settings.UMAP_SEARCH_CONFIGURATION, search_type="websearch"
             )
-            return Map.objects.annotate(search=vector).filter(search=query)
+            qs = qs.annotate(search=vector).filter(search=query)
+        if tags:
+            qs = qs.filter(tags__contains=tags)
+        if q or tags:
+            return qs
 
 
 class Search(PaginatorMixin, TemplateView, PublicMapsMixin, SearchMixin):
