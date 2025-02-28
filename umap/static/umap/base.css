@@ -19,7 +19,10 @@ h1, h2, h3, h4, h5, h6, label, hr {
 }
 a {
     text-decoration: none;
-    color: SeaGreen;
+    color: #1F5C39;
+}
+a[href^="http"] {
+    text-decoration: underline;
 }
 button {
     cursor: pointer;
