@@ -274,7 +274,7 @@ UMAP_MAPS_PER_PAGE = 5
 UMAP_MAPS_PER_SEARCH = 25
 UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
-UMAP_HELP_URL = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
+UMAP_HELP_URL = "https://discover.umap-project.org/"
 USER_MAPS_URL = "user_maps"
 DATABASES = {
     "default": env.db(

@@ -21,7 +21,7 @@ a {
     text-decoration: none;
     color: #1F5C39;
 }
-a[href^="http"] {
+a[href^="http"]:not(nav.umap-nav a) {
     text-decoration: underline;
 }
 button {
