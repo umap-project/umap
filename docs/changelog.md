@@ -1,6 +1,9 @@
 # Changelog
 
-## 2.9.0b0 - 2025-01-31
+## 2.9.0 - 2025-03-03
+
+This release is mainly about making the sync feature deployable and more stable (but still
+not yet activated by default).
 
 ### New features
 * display map's "created at" and "modified at" in the caption by @yohanboniface in #2424
@@ -9,6 +12,11 @@
 * add a debounce for Input and Textarea fields by @yohanboniface in #2445
 * soft delete datalayers by @yohanboniface in #2459
 * add DEPRECATED_AUTHENTICATION_PROVIDERS setting by @yohanboniface in #2461
+* expose teams in users’ CSV export by @davidbgk in #2484
+* add title attribute to layers in browser by @yohanboniface in #2489
+* make the tooltip sticky in hover mode for paths by @yohanboniface in #2507
+* make vertex icons bigger (and round) by @yohanboniface in #2506
+* add a quick link to layer's permalink by @yohanboniface in #2529
 
 ### Bug fixes
 * display a more usefull message when error in remote data by @yohanboniface in #2443
@@ -24,6 +32,12 @@
 * catch cluster error at zoom in certain situation by @yohanboniface in #2464
 * display a more descriptive alert on invalid geojson error by @yohanboniface in #2466
 * do not try to backup an undefined geojson by @yohanboniface in #2468
+* do not error when escape during marker creation by @davidbgk in #2483
+* do not import empty features by @yohanboniface in #2485
+* do not display an error for an empty CSV by @yohanboniface in #2505
+* try to reconnect after network error when getting token by @yohanboniface in #2502
+* wait for websocket full connection by @yohanboniface in #2503
+* feature edit status not disabled on hide by @yohanboniface in #2534
 
 ### Internal changes
 * deactivate cancel and hide button when sync is active by @yohanboniface in #2413
@@ -34,9 +48,21 @@
 * include site description within page titles by @davidbgk in #2455
 * Sync show usernames by @yohanboniface in #2444
 * only allow to set a map as sync when it is already saved by @yohanboniface in #2465
+* move DrawToolbar and SettingsToolbar to bar.js module by @yohanboniface in #2482
+* add very minimal documentation for deploying uMap with ASGI by @yohanboniface in #2480
+* use default value from schema for non inheritable fields by @yohanboniface in #2513
+* sync save state by @yohanboniface in #2487
+* use our contexmenu class for inplace toolbar by @yohanboniface in #2510
+* make sure we sync a line when hitting esc while drawing by @yohanboniface in #2526
+* make datalayer upsert idempotent by @yohanboniface in #2528
+
+### Accessibility
+* set an aria-label for unlabelled search input by @davidbgk in #2531
+* switch to better contrasted links by @davidbgk in #2532
 
 ### New Contributors
 * @swarnat made their first contribution in #2406
+
 
 ## 2.8.2 - 2024-12-26
 
