@@ -28,13 +28,13 @@ Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 
 Set it to `True` for easier debugging in case of error.
 
-#### DEPRECATED_AUTHENTICATION_PROVIDERS
+#### DEPRECATED_AUTHENTICATION_BACKENDS
 
-List of auth providers to deprecate. Defining this will display a message to
+List of auth backends to deprecate. Defining this will display a message to
 all users using this provider, to encourage them to configure another provider to
 their account.
 
-    DEPRECATED_AUTHENTICATION_PROVIDERS = ["social_core.backends.twitter_oauth2.TwitterOAuth2"]
+    DEPRECATED_AUTHENTICATION_BACKENDS = ["social_core.backends.twitter_oauth2.TwitterOAuth2"]
 
 #### EMAIL_BACKEND
 
