@@ -3,6 +3,10 @@
 {% include "umap/components/alerts/alert.html" %}
 {% for message in messages %}
   <script type="module" defer>
-    U.Alert.success("{{ message }}")
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      U.Alert.error("{{ message }}")
+    {% else %}
+      U.Alert.success("{{ message }}")
+    {% endif %}
   </script>
 {% endfor %}
