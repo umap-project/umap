@@ -1423,14 +1423,5 @@ class LoginPopupEnd(TemplateView):
     def get(self, *args, **kwargs):
         backend = self.request.session[BACKEND_SESSION_KEY]
         if backend in settings.DEPRECATED_AUTHENTICATION_BACKENDS:
-            name = backend.split(".")[-1]
-            messages.error(
-                self.request,
-                _(
-                    "Using “%(name)s” to authenticate is deprecated. "
-                    "Please configure another provider in your profile page."
-                )
-                % {"name": name},
-            )
             return HttpResponseRedirect(reverse("user_profile"))
         return super().get(*args, **kwargs)

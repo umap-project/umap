@@ -29,9 +29,9 @@
         <h3>
           {% trans "Your current providers" %}
         </h3>
-        <ul>
+        <ul class="login-grid block-grid">
           {% for name in providers %}
-            <li class="login-grid">
+            <li>
               {% with "umap/img/providers/"|add:name|add:".png" as path %}
                <img src="{% static path %}" width="92px" height="92px" alt="{{ name }}" />
               {% endwith %}
