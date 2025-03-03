@@ -3,16 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Dren ar Frankig <hadrienlouque@gmail.com>, 2023-2024
+# Dren ar Frankig <hadrienlouque@gmail.com>, 2023-2025
 # Dren ar Frankig <hadrienlouque@gmail.com>, 2023
 # Dren ar Frankig <hadrienlouque@gmail.com>, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 08:39+0000\n"
+"POT-Creation-Date: 2025-03-03 14:11+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2023-2024\n"
+"Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2023-2025\n"
 "Language-Team: Breton (http://app.transifex.com/openstreetmap/umap/language/br/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "Ezporzhiadur CSV"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "Ar gartenn-mañ n'eo ket publik"
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
@@ -36,7 +36,7 @@ msgstr "Al lec'hienn zo da lenn hepken rak emeur ouzh he c'hempenn"
 msgid "name"
 msgstr "anv"
 
-#: models.py:62 models.py:475
+#: models.py:62 models.py:485
 msgid "description"
 msgstr "deskrivadur"
 
@@ -56,23 +56,23 @@ msgstr "Patrom URL a implij furmad teol OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:175 models.py:469
+#: models.py:175 models.py:479
 msgid "Only editable with secret edit link"
 msgstr "N'haller he c'hemmañ nemet gant ul liamm aozañ kuzh"
 
-#: models.py:176 models.py:470
+#: models.py:176 models.py:480
 msgid "Everyone can edit"
 msgstr "An holl a c'hall kemmañ"
 
-#: models.py:179 models.py:463
+#: models.py:179 models.py:473
 msgid "Everyone"
 msgstr "An holl"
 
-#: models.py:180 models.py:189 models.py:464
+#: models.py:180 models.py:189 models.py:474
 msgid "Editors and team only"
-msgstr ""
+msgstr "An aozerien hag ar skipailh hepken"
 
-#: models.py:181 models.py:465
+#: models.py:181 models.py:475
 msgid "Owner only"
 msgstr "Ar perc'henner hepken"
 
@@ -92,7 +92,7 @@ msgstr "Piv bennak en deus ul liamm"
 msgid "Blocked"
 msgstr "Stanket"
 
-#: models.py:191
+#: models.py:191 models.py:469
 msgid "Deleted"
 msgstr "Dilemel"
 
@@ -132,31 +132,31 @@ msgstr "aozerien"
 msgid "team"
 msgstr "skipailh"
 
-#: models.py:229 models.py:491
+#: models.py:229 models.py:501
 msgid "edit status"
 msgstr "statud aozañ"
 
-#: models.py:234
+#: models.py:234 models.py:506
 msgid "share status"
 msgstr "digor da biv?"
 
-#: models.py:237 models.py:486
+#: models.py:237 models.py:496
 msgid "settings"
 msgstr "arventennoù"
 
-#: models.py:402
+#: models.py:407
 msgid "Clone of"
 msgstr "Eilenn eus"
 
-#: models.py:462 models.py:468
+#: models.py:468 models.py:472 models.py:478
 msgid "Inherit"
 msgstr "Dre ziouer"
 
-#: models.py:481
+#: models.py:491
 msgid "display on load"
 msgstr "diskwel pa vez karget"
 
-#: models.py:482
+#: models.py:492
 msgid "Display this layer on load."
 msgstr "Diskwel ar gwiskad-mañ pa vez karget"
 
@@ -169,46 +169,60 @@ msgstr ""
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "← Distreiñ d'ar bajenn degemer"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 N'eo ket bet kavet ar bajenn"
 
-#: templates/auth/user_detail.html:8
+#: templates/auth/user_detail.html:6
+#, python-format
+msgid "%(current_user)s’s maps"
+msgstr "Kartennoù eus %(current_user)s"
+
+#: templates/auth/user_detail.html:12
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Merdeiñ e kartennoù %(current_user)s"
 
-#: templates/auth/user_detail.html:17
+#: templates/auth/user_detail.html:21
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s n'en/he deus kartenn ebet."
 
-#: templates/auth/user_form.html:21 templates/umap/team_form.html:21
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr "Ma frofil"
+
+#: templates/auth/user_form.html:24 templates/umap/team_form.html:25
 msgid "Save"
 msgstr "Enrollañ"
 
-#: templates/auth/user_form.html:27
+#: templates/auth/user_form.html:30
 msgid "Your current providers"
 msgstr "Ho pourchaserien a-vremañ"
 
-#: templates/auth/user_form.html:39
+#: templates/auth/user_form.html:44
 msgid "Connect to another provider"
 msgstr "Kennaskañ ouzh ur pourchaser all"
 
-#: templates/auth/user_form.html:42
+#: templates/auth/user_form.html:47
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
 msgstr ""
 
-#: templates/auth/user_stars.html:8
+#: templates/auth/user_stars.html:6
+#, python-format
+msgid "%(current_user)s’s starred maps"
+msgstr "Kartennoù muiañ karet eus %(current_user)s"
+
+#: templates/auth/user_stars.html:12
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
 msgstr "Merdeiñ e kartennoù spilhennet %(current_user)s"
 
-#: templates/auth/user_stars.html:17
+#: templates/auth/user_stars.html:21
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s n'en/he deus kartenn spilhennet ebet."
@@ -225,7 +239,7 @@ msgstr "Kevreañ"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "Evit enrollañ ha kavout ho kartennoù en doare aes, kennaskit mar plij."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
@@ -242,6 +256,10 @@ msgstr "Ger-tremen"
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
 msgstr "Dibabit ur pourchaser mar plij:"
+
+#: templates/umap/about.html:5 templates/umap/navigation.html:22
+msgid "About"
+msgstr "Diwar-benn"
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -410,7 +428,7 @@ msgstr "gant"
 msgid "More"
 msgstr "Muioc'h"
 
-#: templates/umap/map_table.html:8 templates/umap/user_teams.html:14
+#: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
 msgstr "Anv"
 
@@ -434,7 +452,7 @@ msgstr "Enrollet da ziwezhañ"
 msgid "Owner"
 msgstr "Perc'henner"
 
-#: templates/umap/map_table.html:26 templates/umap/user_teams.html:20
+#: templates/umap/map_table.html:26 templates/umap/user_teams.html:24
 msgid "Actions"
 msgstr "Oberoù"
 
@@ -447,7 +465,7 @@ msgid "Share"
 msgstr "Rannañ"
 
 #: templates/umap/map_table.html:78 templates/umap/map_table.html:80
-#: templates/umap/user_teams.html:38 templates/umap/user_teams.html:40
+#: templates/umap/user_teams.html:42 templates/umap/user_teams.html:44
 msgid "Edit"
 msgstr "Aozañ"
 
@@ -510,10 +528,6 @@ msgstr "Kevreañ"
 msgid "Sign in"
 msgstr "Krouiñ ur gont"
 
-#: templates/umap/navigation.html:22
-msgid "About"
-msgstr "Diwar-benn"
-
 #: templates/umap/navigation.html:30
 msgid "Change password"
 msgstr "Cheñch ar ger-tremen"
@@ -522,41 +536,47 @@ msgstr "Cheñch ar ger-tremen"
 msgid "Log out"
 msgstr "Digevreañ"
 
-#: templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:11
 msgid "Password change"
 msgstr "Cheñch ar ger-tremen"
 
-#: templates/umap/password_change.html:10
+#: templates/umap/password_change.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Enankit ho ker-tremen kozh ha div wezh ho ker-tremen nevez war-lerc'h mar plij."
 
-#: templates/umap/password_change.html:17
+#: templates/umap/password_change.html:21
 msgid "Old password"
 msgstr "Ger-tremen kozh"
 
-#: templates/umap/password_change.html:22
+#: templates/umap/password_change.html:26
 msgid "New password"
 msgstr "Ger-tremen nevez"
 
-#: templates/umap/password_change.html:26
+#: templates/umap/password_change.html:30
 msgid "New password confirmation"
 msgstr "Kadarnaat ar ger-tremen nevez"
 
-#: templates/umap/password_change.html:27
+#: templates/umap/password_change.html:31
 msgid "Change my password"
 msgstr "Cheñch ar ger-tremen"
 
-#: templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:11
 msgid "Password change successful"
 msgstr "Cheñchet eo bet ar ger-tremen gant berzh"
 
-#: templates/umap/password_change_done.html:10
+#: templates/umap/password_change_done.html:14
 msgid "Your password was changed."
 msgstr "Cheñchet eo bet ho ker-tremen."
 
-#: templates/umap/search.html:15
+#: templates/umap/search.html:6
+msgid "Explore maps"
+msgstr "Ergerzhout ar gartennoù"
+
+#: templates/umap/search.html:19
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
@@ -566,11 +586,11 @@ msgstr[2] "%(count)s c'hartenn kavet :"
 msgstr[3] "%(count)s kartenn kavet :"
 msgstr[4] "%(count)s kartenn kavet :"
 
-#: templates/umap/search.html:24
+#: templates/umap/search.html:28
 msgid "No map found."
 msgstr "Kartenn ebet kavet."
 
-#: templates/umap/search.html:29
+#: templates/umap/search.html:33
 msgid "Latest created maps"
 msgstr "Kartennoù krouet da ziwezhañ"
 
@@ -578,25 +598,38 @@ msgstr "Kartennoù krouet da ziwezhañ"
 msgid "Search maps"
 msgstr "Klask kartennoù"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "Klask"
 
-#: templates/umap/team_detail.html:10
+#: templates/umap/team_confirm_delete.html:6
+msgid "Team deletion"
+msgstr "O tilemel ar gartenn"
+
+#: templates/umap/team_detail.html:6
+#, python-format
+msgid "%(current_team)s’s maps"
+msgstr "Kartennoù eus %(current_team)s"
+
+#: templates/umap/team_detail.html:14
 #, python-format
 msgid "Browse %(current_team)s's maps"
 msgstr "Merdeiñ e kartennoù %(current_team)s"
 
-#: templates/umap/team_detail.html:22
+#: templates/umap/team_detail.html:26
 #, python-format
 msgid "%(current_team)s has no public maps."
 msgstr "%(current_team)s n'en deus kartenn publik ebet."
 
-#: templates/umap/team_form.html:24
+#: templates/umap/team_form.html:6
+msgid "Create or edit a team"
+msgstr "Krouiñ pe kemmañ ur skipailh"
+
+#: templates/umap/team_form.html:28
 msgid "Delete this team"
 msgstr "Dilemel ar skipailh-mañ"
 
-#: templates/umap/team_form.html:47
+#: templates/umap/team_form.html:51
 msgid "Add user"
 msgstr "Ouzhpennañ un implijer"
 
@@ -617,11 +650,15 @@ msgstr "Pellgargañ %(count)s a gartennoù"
 msgid "You have no map yet."
 msgstr "N'ho peus kartenn ebet c'hoazh."
 
-#: templates/umap/user_teams.html:17
+#: templates/umap/user_teams.html:6
+msgid "My Teams"
+msgstr "Ma skipailhoù"
+
+#: templates/umap/user_teams.html:21
 msgid "Users"
 msgstr "Implijerien"
 
-#: templates/umap/user_teams.html:48
+#: templates/umap/user_teams.html:52
 msgid "New team"
 msgstr "Skipailh nevez"
 
@@ -638,57 +675,64 @@ msgstr "Dilamet eo bet ar skipailh “%(name)s”"
 msgid "View the map"
 msgstr "Diskouez ar gartenn"
 
-#: views.py:825
+#: views.py:838
 msgid "See full screen"
 msgstr "Gwelet er mod skramm a-bezh"
 
-#: views.py:968
+#: views.py:981
 msgid "Map editors updated with success!"
 msgstr "Aozerien ar gartenn bet hizivaet gant berzh!"
 
-#: views.py:1004
+#: views.py:1017
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Al liamm uMap evit aozañ ho kartenn: %(map_name)s"
 
-#: views.py:1007
+#: views.py:1020
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Setu ho liamm aozañ kuzh: %(link)s"
 
-#: views.py:1014
+#: views.py:1027
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "N'haller ket kas ur postel da %(email)s"
 
-#: views.py:1017
+#: views.py:1030
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Postel kaset da %(email)s"
 
-#: views.py:1028
+#: views.py:1041
 msgid "Only its owner can delete the map."
 msgstr "N'eus nemet perc'henner ar gartenn a c'hall he dilemel."
 
-#: views.py:1031
+#: views.py:1044
 msgid "Map successfully deleted."
 msgstr "Kartenn dilamet gant berzh."
 
-#: views.py:1057
+#: views.py:1070
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Doublet eo bet ho kartenn! M'ho peus c'hoant d'he c'hemmañ diwar un urzhiataer all, implijit al liamm-mañ: %(anonymous_url)s"
 
-#: views.py:1062
+#: views.py:1075
 msgid "Congratulations, your map has been cloned!"
 msgstr "Doublet eo bet ho kartenn gant berzh!"
 
-#: views.py:1313
+#: views.py:1329
 msgid "Layer successfully deleted."
 msgstr "Gwiskad dilamet gant berzh."
 
-#: views.py:1335
+#: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "Aotreoù hizivaet gant berzh!"
+
+#: views.py:1430
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated. Please configure another "
+"provider in your profile page."
+msgstr ""

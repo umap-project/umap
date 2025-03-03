@@ -526,13 +526,14 @@ const locale = {
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Não é possível processar os dados remotos na camada \"{layer}\" com o URL \"{url}\"",
     "Import failed: invalid data": "A importação falhou: dados inválidos",
     "Anonymous": "Anonymous",
-    "created at {date}": "created at {date}",
-    "modified at {date}": "modified at {date}",
-    "Default zoom": "Default zoom",
-    "Default latitude": "Default latitude",
-    "Default longitude": "Default longitude",
-    "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "created at {date}": "criado em {date}",
+    "modified at {date}": "alterado em {date}",
+    "Default zoom": "Ampliação predefinida",
+    "Default latitude": "Latitude predefinida",
+    "Default longitude": "Longitude predefinida",
+    "Edit map default view": "Editar vista predefinida do mapa",
+    "Use current center and zoom": "Usar o centro e ampliação atuais",
+    "Layer permalink": "Layer permalink"
 }
 L.registerLocale("pt", locale)
 L.setLocale("pt")

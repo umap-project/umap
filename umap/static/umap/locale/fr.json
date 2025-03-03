@@ -532,5 +532,6 @@
     "Default latitude": "Latitude par défaut",
     "Default longitude": "Longitude par défaut",
     "Edit map default view": "Régler la vue par défaut de la carte",
-    "Use current center and zoom": "Utiliser le centre et le zoom actuels"
+    "Use current center and zoom": "Utiliser le centre et le zoom actuels",
+    "Layer permalink": "Permalien du calque"
 }

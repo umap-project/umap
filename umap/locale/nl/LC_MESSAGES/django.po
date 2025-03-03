@@ -6,13 +6,14 @@
 # Cees Geuze <info@cgid.nl>, 2020
 # danieldegroot2 <danieldegroot18@gmail.com>, 2022
 # danieldegroot2 <danieldegroot18@gmail.com>, 2022
+# Gideon van Melle <translations@gvmelle.com>, 2025
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 08:39+0000\n"
+"POT-Creation-Date: 2025-03-03 14:11+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: danieldegroot2 <danieldegroot18@gmail.com>, 2022\n"
+"Last-Translator: Gideon van Melle <translations@gvmelle.com>, 2025\n"
 "Language-Team: Dutch (http://app.transifex.com/openstreetmap/umap/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,11 +23,11 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
-msgstr ""
+msgstr "CSV Export"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "Deze kaart is niet openbaar beschikbaar"
 
 #: middleware.py:13
 msgid "Site is readonly for maintenance"
@@ -36,7 +37,7 @@ msgstr "Site is 'alleen lezen' wegens onderhoud"
 msgid "name"
 msgstr "naam"
 
-#: models.py:62 models.py:475
+#: models.py:62 models.py:485
 msgid "description"
 msgstr "omschrijving"
 
@@ -56,45 +57,45 @@ msgstr "URL-sjabloon met OSM tegel-formaat"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Volgorde van de tegel-lagen in het bewerkingsvak."
 
-#: models.py:175 models.py:469
+#: models.py:175 models.py:479
 msgid "Only editable with secret edit link"
 msgstr "Alleen te bewerken met een geheime link"
 
-#: models.py:176 models.py:470
+#: models.py:176 models.py:480
 msgid "Everyone can edit"
 msgstr "Iedereen kan wijzigingen maken"
 
-#: models.py:179 models.py:463
+#: models.py:179 models.py:473
 msgid "Everyone"
-msgstr ""
+msgstr "Iedereen"
 
-#: models.py:180 models.py:189 models.py:464
+#: models.py:180 models.py:189 models.py:474
 msgid "Editors and team only"
-msgstr ""
+msgstr "Alleen redacteuren en team"
 
-#: models.py:181 models.py:465
+#: models.py:181 models.py:475
 msgid "Owner only"
-msgstr ""
+msgstr "Alleen eigenaar"
 
 #: models.py:184
 msgid "Draft (private)"
-msgstr ""
+msgstr "Ontwerp (privé)"
 
 #: models.py:185
 msgid "Everyone (public)"
-msgstr ""
+msgstr "Iedereen (openbaar)"
 
 #: models.py:188
 msgid "Anyone with link"
-msgstr ""
+msgstr "Iedereen met een link"
 
 #: models.py:190
 msgid "Blocked"
-msgstr ""
+msgstr "geblokkeerd"
 
-#: models.py:191
+#: models.py:191 models.py:469
 msgid "Deleted"
-msgstr ""
+msgstr "Verwijderd"
 
 #: models.py:194
 msgid "center"
@@ -130,33 +131,33 @@ msgstr "editors"
 
 #: models.py:223
 msgid "team"
-msgstr ""
+msgstr "team"
 
-#: models.py:229 models.py:491
+#: models.py:229 models.py:501
 msgid "edit status"
 msgstr "wijzig status"
 
-#: models.py:234
+#: models.py:234 models.py:506
 msgid "share status"
 msgstr "deel status"
 
-#: models.py:237 models.py:486
+#: models.py:237 models.py:496
 msgid "settings"
 msgstr "instellingen"
 
-#: models.py:402
+#: models.py:407
 msgid "Clone of"
 msgstr "Kopie van"
 
-#: models.py:462 models.py:468
+#: models.py:468 models.py:472 models.py:478
 msgid "Inherit"
-msgstr ""
+msgstr "overerven"
 
-#: models.py:481
+#: models.py:491
 msgid "display on load"
 msgstr "toon tijdens laden"
 
-#: models.py:482
+#: models.py:492
 msgid "Display this layer on load."
 msgstr "Toon deze laag tijdens laden."
 
@@ -165,59 +166,73 @@ msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">Ontdek hier de documentatie</a> over het beheren van de machtigingen van Map."
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "← Ga naar de thuispagina"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 Pagina niet gevonden"
 
-#: templates/auth/user_detail.html:8
+#: templates/auth/user_detail.html:6
+#, python-format
+msgid "%(current_user)s’s maps"
+msgstr "%(current_user)s’s kaarten"
+
+#: templates/auth/user_detail.html:12
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Toon %(current_user)s's kaarten"
 
-#: templates/auth/user_detail.html:17
+#: templates/auth/user_detail.html:21
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)sheeft geen kaarten."
 
-#: templates/auth/user_form.html:21 templates/umap/team_form.html:21
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr "Mijn profiel"
+
+#: templates/auth/user_form.html:24 templates/umap/team_form.html:25
 msgid "Save"
-msgstr ""
+msgstr "Opslaan"
 
-#: templates/auth/user_form.html:27
+#: templates/auth/user_form.html:30
 msgid "Your current providers"
-msgstr ""
+msgstr "Je huidige providers"
 
-#: templates/auth/user_form.html:39
+#: templates/auth/user_form.html:44
 msgid "Connect to another provider"
-msgstr ""
+msgstr "Verbinding maken met een andere provider"
 
-#: templates/auth/user_form.html:42
+#: templates/auth/user_form.html:47
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
-msgstr ""
+msgstr "Het is een goede gewoonte om uw account aan meer dan één provider te koppelen, voor het geval een provider tijdelijk of zelfs permanent niet beschikbaar is."
 
-#: templates/auth/user_stars.html:8
+#: templates/auth/user_stars.html:6
+#, python-format
+msgid "%(current_user)s’s starred maps"
+msgstr "%(current_user)s’s Kaarten met ster"
+
+#: templates/auth/user_stars.html:12
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
-msgstr ""
+msgstr "Browse %(current_user)s's Kaarten met ster"
 
-#: templates/auth/user_stars.html:17
+#: templates/auth/user_stars.html:21
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
-msgstr ""
+msgstr "%(current_user)s Heeft nog geen kaarten met ster."
 
 #: templates/base.html:13
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "Met uMap kunt u in één minuut kaarten maken met OpenStreetMap-lagen en deze in uw site insluiten."
 
 #: templates/registration/login.html:6 templates/registration/login.html:46
 msgid "Login"
@@ -225,11 +240,11 @@ msgstr "Inloggen"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "Identificeer uzelf om uw kaarten op te slaan en gemakkelijk terug te vinden."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr ""
+msgstr "Log in met uw account:"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -241,7 +256,11 @@ msgstr "Wachtwoord"
 
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
-msgstr ""
+msgstr "Kies een provider:"
+
+#: templates/umap/about.html:5 templates/umap/navigation.html:22
+msgid "About"
+msgstr "Over"
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -296,7 +315,7 @@ msgstr "Speel met de demo"
 #: templates/umap/components/alerts/alert.html:66
 #: templates/umap/components/alerts/alert.html:94
 msgid "Close"
-msgstr ""
+msgstr "Afsluiten"
 
 #: templates/umap/components/alerts/alert.html:32
 #, python-format
@@ -304,45 +323,45 @@ msgid ""
 "Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
 "target=\"_blank\">create an account</a> or <a href=\"%(login_url)s\" "
 "target=\"_blank\">log in</a>."
-msgstr ""
+msgstr "Pro-tip: om je kaarten gemakkelijk terug te vinden, <a href=\"%(login_url)s\" target=\"_blank\">maak een account aan</a> of <a href=\"%(login_url)s\" target=\"_blank\">log in</a>."
 
 #: templates/umap/components/alerts/alert.html:37
 msgid "Here is your secret link to edit the map, please keep it safe:"
-msgstr ""
+msgstr "Hier is je geheime link om de kaart te bewerken, houd deze alsjeblieft veilig:"
 
 #: templates/umap/components/alerts/alert.html:41
 msgid "Copy link"
-msgstr ""
+msgstr "Kopieer link"
 
 #: templates/umap/components/alerts/alert.html:48
 msgid "Enter your email address to receive the secret link:"
-msgstr ""
+msgstr "Voer je e-mailadres in om de geheime link te ontvangen:"
 
 #: templates/umap/components/alerts/alert.html:54
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: templates/umap/components/alerts/alert.html:57
 msgid "Send me the link"
-msgstr ""
+msgstr "Stuur mij de link"
 
 #: templates/umap/components/alerts/alert.html:81
 msgid "See their edits in another tab"
-msgstr ""
+msgstr "Bekijk hun bewerkingen in een ander tabblad"
 
 #: templates/umap/components/alerts/alert.html:84
 msgid "Keep your changes and loose theirs"
-msgstr ""
+msgstr "Bewaar uw wijzigingen en verlies die van hen"
 
 #: templates/umap/components/alerts/alert.html:87
 msgid "Keep their changes and loose yours"
-msgstr ""
+msgstr "Behoud hun wijzigingen en verlies de jouwe"
 
 #: templates/umap/content.html:26
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "Deze instantie van uMap bevindt zich momenteel in de modus Alleen-lezen, aanmaken/bewerken is niet toegestaan."
 
 #: templates/umap/content.html:34
 #, python-format
@@ -355,40 +374,40 @@ msgstr "Dit is een demo-versie, gebruikt voor tests en pre-rolling releases. Als
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "Een OpenStreetMap-project"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "versie"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "Hosted door"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
-msgstr ""
+msgstr "Hulp"
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format
 msgid "My Maps (%(count)s)"
-msgstr ""
+msgstr "Mijn kaarten (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:8
 msgid "My Maps"
-msgstr ""
+msgstr "Mijn kaarten"
 
 #: templates/umap/dashboard_menu.html:12
 msgid "My profile"
-msgstr ""
+msgstr "Mijn profiel"
 
 #: templates/umap/dashboard_menu.html:15
 msgid "My teams"
-msgstr ""
+msgstr "Mijn teams"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -410,97 +429,97 @@ msgstr "door"
 msgid "More"
 msgstr "Meer"
 
-#: templates/umap/map_table.html:8 templates/umap/user_teams.html:14
+#: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: templates/umap/map_table.html:11
 msgid "Preview"
-msgstr ""
+msgstr "Voorbeeld"
 
 #: templates/umap/map_table.html:14
 msgid "Who can see"
-msgstr ""
+msgstr "Wie kan bekijken"
 
 #: templates/umap/map_table.html:17
 msgid "Who can edit"
-msgstr ""
+msgstr "Wie kan bewerken"
 
 #: templates/umap/map_table.html:20
 msgid "Last save"
-msgstr ""
+msgstr "Laatst opgeslagen"
 
 #: templates/umap/map_table.html:23
 msgid "Owner"
-msgstr ""
+msgstr "Eigenaar"
 
-#: templates/umap/map_table.html:26 templates/umap/user_teams.html:20
+#: templates/umap/map_table.html:26 templates/umap/user_teams.html:24
 msgid "Actions"
-msgstr ""
+msgstr "Acties"
 
 #: templates/umap/map_table.html:41 templates/umap/map_table.html:43
 msgid "Open preview"
-msgstr ""
+msgstr "Open Voorbeeld"
 
 #: templates/umap/map_table.html:72 templates/umap/map_table.html:74
 msgid "Share"
-msgstr ""
+msgstr "Delen"
 
 #: templates/umap/map_table.html:78 templates/umap/map_table.html:80
-#: templates/umap/user_teams.html:38 templates/umap/user_teams.html:40
+#: templates/umap/user_teams.html:42 templates/umap/user_teams.html:44
 msgid "Edit"
-msgstr ""
+msgstr "Bewerken"
 
 #: templates/umap/map_table.html:84 templates/umap/map_table.html:86
 msgid "Download"
-msgstr ""
+msgstr "Downloaden"
 
 #: templates/umap/map_table.html:90 templates/umap/map_table.html:92
 msgid "Clone"
-msgstr ""
+msgstr "Klonen"
 
 #: templates/umap/map_table.html:101 templates/umap/map_table.html:103
 msgid "Delete"
-msgstr ""
+msgstr "Verwijderen"
 
 #: templates/umap/map_table.html:117
 msgid "first"
-msgstr ""
+msgstr "eerste"
 
 #: templates/umap/map_table.html:118
 msgid "previous"
-msgstr ""
+msgstr "vorige"
 
 #: templates/umap/map_table.html:126
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
-msgstr ""
+msgstr "Pagina %(maps_number)s van %(num_pages)s"
 
 #: templates/umap/map_table.html:131
 msgid "next"
-msgstr ""
+msgstr "volgende"
 
 #: templates/umap/map_table.html:132
 msgid "last"
-msgstr ""
+msgstr "laatste"
 
 #: templates/umap/map_table.html:140
 #, python-format
 msgid "Lines per page: %(per_page)s"
-msgstr ""
+msgstr "Regels per pagina: %(per_page)s"
 
 #: templates/umap/map_table.html:145
 #, python-format
 msgid "%(count)s maps"
-msgstr ""
+msgstr "%(count)s kaarten"
 
 #: templates/umap/navigation.html:11 templates/umap/user_dashboard.html:6
 msgid "My Dashboard"
-msgstr ""
+msgstr "Mijn Dashboard"
 
 #: templates/umap/navigation.html:14
 msgid "Starred maps"
-msgstr ""
+msgstr "Kaarten met ster"
 
 #: templates/umap/navigation.html:18
 msgid "Log in"
@@ -510,10 +529,6 @@ msgstr "Inloggen"
 msgid "Sign in"
 msgstr "Aanmelden"
 
-#: templates/umap/navigation.html:22
-msgid "About"
-msgstr "Over"
-
 #: templates/umap/navigation.html:30
 msgid "Change password"
 msgstr "Wijzig wachtwoord"
@@ -522,170 +537,200 @@ msgstr "Wijzig wachtwoord"
 msgid "Log out"
 msgstr "Uitloggen"
 
-#: templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:11
 msgid "Password change"
 msgstr "Wachtwoord wijziging"
 
-#: templates/umap/password_change.html:10
+#: templates/umap/password_change.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Vul uw oude wachtwoord in -om veiligheidsredenen- en vul daarna tweemaal uw nieuwe wachtwoord in, zodat we zeker weten dat u het correct hebt ingevoerd."
 
-#: templates/umap/password_change.html:17
+#: templates/umap/password_change.html:21
 msgid "Old password"
 msgstr "Oude wachtwoord"
 
-#: templates/umap/password_change.html:22
+#: templates/umap/password_change.html:26
 msgid "New password"
 msgstr "Nieuwe wachtwoord"
 
-#: templates/umap/password_change.html:26
+#: templates/umap/password_change.html:30
 msgid "New password confirmation"
 msgstr "Bevestig nieuwe wachtwoord"
 
-#: templates/umap/password_change.html:27
+#: templates/umap/password_change.html:31
 msgid "Change my password"
 msgstr "Wijzig mijn wachtwoord"
 
-#: templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:11
 msgid "Password change successful"
 msgstr "Wachtwoord wijzigen geslaagd"
 
-#: templates/umap/password_change_done.html:10
+#: templates/umap/password_change_done.html:14
 msgid "Your password was changed."
 msgstr "Uw wachtwoord is gewijzigd."
 
-#: templates/umap/search.html:15
+#: templates/umap/search.html:6
+msgid "Explore maps"
+msgstr "Kaarten verkennen"
+
+#: templates/umap/search.html:19
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s kaarten gevonden:"
+msgstr[1] "%(count)s kaarten gevonden:"
 
-#: templates/umap/search.html:24
+#: templates/umap/search.html:28
 msgid "No map found."
-msgstr ""
+msgstr "Geen kaart gevonden."
 
-#: templates/umap/search.html:29
+#: templates/umap/search.html:33
 msgid "Latest created maps"
-msgstr ""
+msgstr "Laatste gemaakte kaarten"
 
 #: templates/umap/search_bar.html:4
 msgid "Search maps"
 msgstr "Zoek kaarten"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "Zoeken"
 
-#: templates/umap/team_detail.html:10
+#: templates/umap/team_confirm_delete.html:6
+msgid "Team deletion"
+msgstr "Team verwijdering"
+
+#: templates/umap/team_detail.html:6
+#, python-format
+msgid "%(current_team)s’s maps"
+msgstr "%(current_team)s’s kaarten"
+
+#: templates/umap/team_detail.html:14
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "Browse %(current_team)s's kaarten"
 
-#: templates/umap/team_detail.html:22
+#: templates/umap/team_detail.html:26
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "%(current_team)s Heeft geen openbare kaarten."
 
-#: templates/umap/team_form.html:24
+#: templates/umap/team_form.html:6
+msgid "Create or edit a team"
+msgstr "Maak of bewerk een team"
+
+#: templates/umap/team_form.html:28
 msgid "Delete this team"
-msgstr ""
+msgstr "Verwijder dit team"
 
-#: templates/umap/team_form.html:47
+#: templates/umap/team_form.html:51
 msgid "Add user"
-msgstr ""
+msgstr "Gebruiker toevoegen"
 
 #: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
 msgid "Search my maps"
-msgstr ""
+msgstr "Doorzoek mijn kaarten"
 
 #: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
 msgid "Map’s title"
-msgstr ""
+msgstr "Titel van de kaart"
 
 #: templates/umap/user_dashboard.html:30
 #, python-format
 msgid "Download %(count)s maps"
-msgstr ""
+msgstr "Download %(count)s kaarten"
 
 #: templates/umap/user_dashboard.html:40
 msgid "You have no map yet."
-msgstr ""
+msgstr "Je hebt nog geen kaart."
 
-#: templates/umap/user_teams.html:17
+#: templates/umap/user_teams.html:6
+msgid "My Teams"
+msgstr "Mijn Teams"
+
+#: templates/umap/user_teams.html:21
 msgid "Users"
-msgstr ""
+msgstr "Gebruikers"
 
-#: templates/umap/user_teams.html:48
+#: templates/umap/user_teams.html:52
 msgid "New team"
-msgstr ""
+msgstr "Nieuw Team"
 
 #: views.py:234
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Kan een team met meer dan één lid niet verwijderen"
 
 #: views.py:238
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "Team “%(name)s” is verwijderd"
 
 #: views.py:442
 msgid "View the map"
 msgstr "Bekijk de kaart"
 
-#: views.py:825
+#: views.py:838
 msgid "See full screen"
-msgstr ""
+msgstr "Volledig scherm weergeven"
 
-#: views.py:968
+#: views.py:981
 msgid "Map editors updated with success!"
 msgstr "Kaarteditors met succes bijgewerkt!"
 
-#: views.py:1004
-#, python-format
-msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
-
-#: views.py:1007
-#, python-format
-msgid "Here is your secret edit link: %(link)s"
-msgstr ""
-
-#: views.py:1014
-#, python-format
-msgid "Can't send email to %(email)s"
-msgstr ""
-
 #: views.py:1017
 #, python-format
-msgid "Email sent to %(email)s"
-msgstr ""
+msgid "The uMap edit link for your map: %(map_name)s"
+msgstr "De uMap-bewerkingslink voor uw kaart: %(map_name)s"
 
-#: views.py:1028
+#: views.py:1020
+#, python-format
+msgid "Here is your secret edit link: %(link)s"
+msgstr "Hier is je geheime bewerkingslink: %(link)s"
+
+#: views.py:1027
+#, python-format
+msgid "Can't send email to %(email)s"
+msgstr "Kan geen e-mail verzenden naar %(email)s"
+
+#: views.py:1030
+#, python-format
+msgid "Email sent to %(email)s"
+msgstr "E-mail verzonden naar %(email)s"
+
+#: views.py:1041
 msgid "Only its owner can delete the map."
 msgstr "Kaart kan alleen door eigenaar worden verwijderd."
 
-#: views.py:1031
+#: views.py:1044
 msgid "Map successfully deleted."
-msgstr ""
+msgstr "Kaart succesvol verwijderd."
 
-#: views.py:1057
+#: views.py:1070
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Uw kaart is gekopieerd! Als u deze kaart wilt wijzigen vanaf een andere computer, gebruik dan deze link: %(anonymous_url)s"
 
-#: views.py:1062
+#: views.py:1075
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gefeliciteerd, uw kaart is gekopieerd!"
 
-#: views.py:1313
+#: views.py:1329
 msgid "Layer successfully deleted."
 msgstr "Laag is verwijderd."
 
-#: views.py:1335
+#: views.py:1351
 msgid "Permissions updated with success!"
-msgstr ""
+msgstr "Machtigingen met succes bijgewerkt!"
+
+#: views.py:1430
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated. Please configure another "
+"provider in your profile page."
+msgstr "Het gebruik van “%(name)s” om te verifiëren is afgeschaft. Configureer een andere provider op je profielpagina."
