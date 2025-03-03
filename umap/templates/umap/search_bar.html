@@ -9,6 +9,7 @@
         <input name="q"
                type="search"
                placeholder="{% firstof placeholder default_placeholder %}"
+               aria-label="{% firstof placeholder default_placeholder %}"
                value="{{ request.GET.q|default:"" }}" />
       </div>
       <div class="col third mwide">
