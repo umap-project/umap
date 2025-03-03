@@ -27,6 +27,10 @@ footer a.branding {
     font-weight: bold;
     padding-inline-start: 70px;
     display: inline-block;
+    text-decoration: none;
+}
+footer a.branding:hover {
+    text-decoration: underline;
 }
 html[dir="rtl"] footer a.branding {
   background-position: right center;

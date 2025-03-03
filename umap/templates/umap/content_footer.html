@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <footer>
-  <a href="https://wiki.openstreetmap.org/wiki/UMap" class="branding">uMap</a>
+  <a href="{% url "home" %}" class="branding">uMap</a>
   <span>{% trans "An OpenStreetMap project" %}
   ({% trans "version" %} <a href="https://docs.umap-project.org/en/stable/changelog/">{{ UMAP_VERSION }}</a>)</span>
   {% if UMAP_HOST_INFOS.url and UMAP_HOST_INFOS.name %}<span>{% trans "Hosted by" %} <a href="{{ UMAP_HOST_INFOS.url }}">{{ UMAP_HOST_INFOS.name }}</a></span>{% endif %}
