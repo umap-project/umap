@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-31 17:29+0000\n"
+"POT-Creation-Date: 2025-03-03 14:11+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2025\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -610,7 +610,7 @@ msgstr "Dernières cartes créées."
 msgid "Search maps"
 msgstr "Chercher des cartes"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "Chercher"
 
@@ -747,4 +747,4 @@ msgstr "Les permissions ont bien été modifiées !"
 msgid ""
 "Using “%(name)s” to authenticate is deprecated. Please configure another "
 "provider in your profile page."
-msgstr "L'utilisation de “%(name)s” pour s'authentifier est déprécié. Veuillez configurer un nouveau fournisseur sur votre page profil."
+msgstr "L’utilisation de “%(name)s” pour s’authentifier est déprécié. Veuillez configurer un nouveau fournisseur sur votre page profil."
