@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 14:11+0000\n"
+"POT-Creation-Date: 2025-03-03 17:36+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Jiří Podhorecký <jirka.p@volny.cz>, 2018-2019,2023-2025\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/openstreetmap/umap/language/cs_CZ/)\n"
@@ -34,9 +34,17 @@ msgstr "CSV Export"
 msgid "This map is not publicly available"
 msgstr "Tato mapa není veřejně dostupná"
 
-#: middleware.py:13
+#: middleware.py:19
 msgid "Site is readonly for maintenance"
 msgstr "Stránka je jen ke čtení kvůli údržbě"
+
+#: middleware.py:34
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated and will be removed soon. "
+"Please configure another provider below before losing access to your account"
+" and maps."
+msgstr ""
 
 #: models.py:60 models.py:79
 msgid "name"
@@ -734,10 +742,3 @@ msgstr "Vrstva úspěšně vymazána."
 #: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "Oprávnění úspěšně aktualizována!"
-
-#: views.py:1430
-#, python-format
-msgid ""
-"Using “%(name)s” to authenticate is deprecated. Please configure another "
-"provider in your profile page."
-msgstr "Použití \"%(name)s\" k ověření je zastaralé. Nakonfigurujte prosím jiného poskytovatele na stránce svého profilu."

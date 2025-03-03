@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 14:11+0000\n"
+"POT-Creation-Date: 2025-03-03 17:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,8 +25,16 @@ msgstr ""
 msgid "This map is not publicly available"
 msgstr ""
 
-#: middleware.py:13
+#: middleware.py:19
 msgid "Site is readonly for maintenance"
+msgstr ""
+
+#: middleware.py:34
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated and will be removed soon. "
+"Please configure another provider below before losing access to your account "
+"and maps."
 msgstr ""
 
 #: models.py:60 models.py:79
@@ -721,11 +729,4 @@ msgstr ""
 
 #: views.py:1351
 msgid "Permissions updated with success!"
-msgstr ""
-
-#: views.py:1430
-#, python-format
-msgid ""
-"Using “%(name)s” to authenticate is deprecated. Please configure another "
-"provider in your profile page."
 msgstr ""

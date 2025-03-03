@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-31 17:29+0000\n"
+"POT-Creation-Date: 2025-03-03 17:36+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: prendi <prendi@openmailbox.org>, 2017\n"
 "Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
@@ -31,9 +31,17 @@ msgstr "Εξαγωγή CSV"
 msgid "This map is not publicly available"
 msgstr "Αυτός ο χάρτης δεν είναι δημοσίως διαθέσιμος"
 
-#: middleware.py:13
+#: middleware.py:19
 msgid "Site is readonly for maintenance"
 msgstr "Λόγω συντήρησης, ο ιστότοπος είναι μόνο για ανάγνωση"
+
+#: middleware.py:34
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated and will be removed soon. "
+"Please configure another provider below before losing access to your account"
+" and maps."
+msgstr ""
 
 #: models.py:60 models.py:79
 msgid "name"
@@ -598,7 +606,7 @@ msgstr "Χάρτες που δημιουργήθηκαν τελευταίοι"
 msgid "Search maps"
 msgstr "Αναζήτηση χαρτών"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "Αναζήτηση"
 
@@ -729,10 +737,3 @@ msgstr "Το επίπεδο διαγράφηκε με επιτυχία."
 #: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "Τα δικαιώματα ενημερώθηκαν με επιτυχία!"
-
-#: views.py:1430
-#, python-format
-msgid ""
-"Using “%(name)s” to authenticate is deprecated. Please configure another "
-"provider in your profile page."
-msgstr "Η χρήση του «%(name)s» για τον έλεγχο ταυτότητας έχει ξεπεραστεί. Παρακαλούμε ρυθμίστε έναν άλλο πάροχο στη σελίδα του προφίλ σας."

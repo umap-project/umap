@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-31 17:29+0000\n"
+"POT-Creation-Date: 2025-03-03 17:36+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: lecalam, 2024-2025\n"
 "Language-Team: Portuguese (http://app.transifex.com/openstreetmap/umap/language/pt/)\n"
@@ -28,9 +28,17 @@ msgstr "Exportação CSV"
 msgid "This map is not publicly available"
 msgstr "Este mapa não está disponível ao público"
 
-#: middleware.py:13
+#: middleware.py:19
 msgid "Site is readonly for maintenance"
 msgstr "O site está em modo de leitura para manutenção"
+
+#: middleware.py:34
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated and will be removed soon. "
+"Please configure another provider below before losing access to your account"
+" and maps."
+msgstr ""
 
 #: models.py:60 models.py:79
 msgid "name"
@@ -596,7 +604,7 @@ msgstr "Últimos mapas criados"
 msgid "Search maps"
 msgstr "Procurar mapas"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "Procurar"
 
@@ -727,10 +735,3 @@ msgstr "Camada eliminada com sucesso."
 #: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "Permissões atualizadas com sucesso!"
-
-#: views.py:1430
-#, python-format
-msgid ""
-"Using “%(name)s” to authenticate is deprecated. Please configure another "
-"provider in your profile page."
-msgstr "A utilização de “%(name)s” para autenticação está desatualizada. Configure outro fornecedor na sua página de perfil."

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-31 17:29+0000\n"
+"POT-Creation-Date: 2025-03-03 17:36+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2025\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
@@ -33,9 +33,17 @@ msgstr "CSV 匯出"
 msgid "This map is not publicly available"
 msgstr "這份地圖並非公開可及的"
 
-#: middleware.py:13
+#: middleware.py:19
 msgid "Site is readonly for maintenance"
 msgstr "網站目前因維護中設定為唯讀狀態"
+
+#: middleware.py:34
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated and will be removed soon. "
+"Please configure another provider below before losing access to your account"
+" and maps."
+msgstr ""
 
 #: models.py:60 models.py:79
 msgid "name"
@@ -599,7 +607,7 @@ msgstr "最新創建地圖"
 msgid "Search maps"
 msgstr "搜尋地圖"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "搜尋"
 
@@ -730,10 +738,3 @@ msgstr "圖層已刪除"
 #: views.py:1351
 msgid "Permissions updated with success!"
 msgstr "權限更新完成"
-
-#: views.py:1430
-#, python-format
-msgid ""
-"Using “%(name)s” to authenticate is deprecated. Please configure another "
-"provider in your profile page."
-msgstr "使用\"%(name)s\"來認證已經廢棄了，請在你的個人檔案頁面使用其他供應商來設定認證。"
