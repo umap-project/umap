@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.9.1 - 2025-03-03
+
+* be more persuasive in deprecating twitter login backend by @yohanboniface in #2538
+
+
 ## 2.9.0 - 2025-03-03
 
 This release is mainly about making the sync feature deployable and more stable (but still
