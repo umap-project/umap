@@ -30,7 +30,6 @@ const FeatureMixin = {
   onRemove: function (map) {
     this.parentClass.prototype.onRemove.call(this, map)
     if (map.editedFeature === this.feature) {
-      this.feature._marked_for_deletion = true
       this.feature.endEdit()
       if (map.editedFeature === this.feature) {
         map.editPanel.close()

@@ -22,7 +22,6 @@ class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
-    this._marked_for_deletion = false
     this._isDirty = false
     this._ui = null
 
@@ -147,17 +146,6 @@ class Feature {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
-
-    // The "endEdit" event is triggered at the end of an edition,
-    // and will trigger the sync.
-    // In the case of a deletion (or a change of layer), we don't want this
-    // event triggered to cause a sync event, as it would reintroduce
-    // deleted features.
-    // The `._marked_for_deletion` private property is here to track this status.
-    if (this._marked_for_deletion === true) {
-      this._marked_for_deletion = false
-      return
-    }
     this.sync.upsert(this.toGeoJSON())
   }
 
