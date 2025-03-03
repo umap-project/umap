@@ -29,11 +29,9 @@ const FeatureMixin = {
 
   onRemove: function (map) {
     this.parentClass.prototype.onRemove.call(this, map)
-    if (map.editedFeature === this.feature) {
+    if (map._umap.editedFeature === this.feature) {
       this.feature.endEdit()
-      if (map.editedFeature === this.feature) {
-        map.editPanel.close()
-      }
+      map._umap.editPanel.close()
     }
   },
 
