@@ -1421,7 +1421,7 @@ class LoginPopupEnd(TemplateView):
     template_name = "umap/login_popup_end.html"
 
     def get(self, *args, **kwargs):
-        backend = self.request.session[BACKEND_SESSION_KEY]
+        backend = self.request.session.get(BACKEND_SESSION_KEY)
         if backend in settings.DEPRECATED_AUTHENTICATION_BACKENDS:
             return HttpResponseRedirect(reverse("user_profile"))
         return super().get(*args, **kwargs)
