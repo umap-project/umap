@@ -4,6 +4,8 @@ export class Positioned {
       this.anchorTop(anchor)
     } else if (anchor && position === 'bottom') {
       this.anchorBottom(anchor)
+    } else {
+      this.anchorAbsolute()
     }
   }
 
@@ -29,6 +31,15 @@ export class Positioned {
       left: coords.left + coords.width / 2 - selfCoords.width / 2,
       top: coords.bottom + 11,
     })
+  }
+
+  anchorAbsolute() {
+    const left =
+      this.parent.offsetLeft +
+      this.parent.clientWidth / 2 -
+      this.container.clientWidth / 2
+    const top = this.parent.offsetTop + 75
+    this.setPosition({ top: top, left: left })
   }
 
   getPosition(el) {
