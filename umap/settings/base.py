@@ -6,6 +6,7 @@ from email.utils import parseaddr
 
 import environ
 from django.conf.locale import LANG_INFO
+from django.utils.translation import gettext_lazy as _
 
 import umap as project_module
 
@@ -290,6 +291,19 @@ UMAP_HOME_FEED = "latest"
 UMAP_IMPORTERS = {}
 UMAP_HOST_INFOS = {}
 UMAP_LABEL_KEYS = ["name", "title"]
+UMAP_TAGS = (
+    ("art", _("Art and Culture")),
+    ("bike", _("Bike")),
+    ("environment", _("Environment")),
+    ("education", _("Education")),
+    ("food", _("Food and Agriculture")),
+    ("history", _("History")),
+    ("public", _("Public sector")),
+    ("sport", _("Sport and Leisure")),
+    ("travel", _("Travel")),
+    ("trekking", _("Trekking")),
+    ("tourism", _("Tourism")),
+)
 
 UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True
