@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.9.2 - 2025-03-04
+
+* measure/drawing tooltip was misplaced by @yohanboniface in #2541
+* be defensive when getting the backend name from the session by @yohanboniface in #2540
+
+
 ## 2.9.1 - 2025-03-03
 
 * be more persuasive in deprecating twitter login backend by @yohanboniface in #2538
