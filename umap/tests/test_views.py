@@ -183,6 +183,7 @@ def test_stats_empty(client):
         "maps_count": 0,
         "users_active_last_week_count": 0,
         "users_count": 0,
+        "active_sessions": 0,
         "version": VERSION,
     }
 
@@ -199,6 +200,7 @@ def test_stats_basic(client, map, datalayer, user2):
         "maps_count": 1,
         "users_active_last_week_count": 1,
         "users_count": 2,
+        "active_sessions": 0,
         "version": VERSION,
     }
 
