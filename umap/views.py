@@ -19,6 +19,7 @@ from django.contrib.auth import BACKEND_SESSION_KEY, get_user_model
 from django.contrib.auth import logout as do_logout
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.contrib.sessions.models import Session
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -1381,6 +1382,9 @@ def stats(request):
             "users_count": User.objects.count(),
             "users_active_last_week_count": User.objects.filter(
                 last_login__gt=last_week
+            ).count(),
+            "active_sessions": Session.objects.filter(
+                expire_date__gt=datetime.utcnow()
             ).count(),
         }
     )
