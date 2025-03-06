@@ -258,6 +258,9 @@ L.PhotonBaseSearch = L.PhotonBase.extend({
         if (feature.properties.city && feature.properties.city !== feature.properties.name) {
             details.push(feature.properties.city);
         }
+        if (feature.properties.state && feature.properties.state !== feature.properties.name) {
+            details.push(feature.properties.state);
+        }
         if (feature.properties.country) details.push(feature.properties.country);
         detailsContainer.innerHTML = details.join(', ');
     },
