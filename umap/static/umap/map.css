@@ -935,6 +935,20 @@ a.umap-control-caption,
   display: block;
 }
 
+/* **** */
+/* Tags */
+/* **** */
+
+.tag-icon {
+    width: 20px;
+    height: 20px;
+    margin-bottom: -4px;
+    margin-right: 3px;
+}
+.dark .tag-icon {
+    filter: invert(1);
+}
+
 /* *************************** */
 /* Overriding leaflet defaults */
 /* *************************** */
