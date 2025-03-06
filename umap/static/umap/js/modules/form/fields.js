@@ -325,11 +325,16 @@ Fields.CheckBox = class extends BaseElement {
 }
 
 Fields.CheckBoxes = class extends BaseElement {
+  getInputTemplate(value, label) {
+    return `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
+  }
+
   build() {
     const initial = this.get() || []
     for (const [value, label] of this.properties.choices) {
-      const tpl = `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
-      const [root, { input }] = Utils.loadTemplateWithRefs(tpl)
+      const [root, { input }] = Utils.loadTemplateWithRefs(
+        this.getInputTemplate(value, label)
+      )
       this.container.appendChild(root)
       input.checked = initial.includes(value)
       input.addEventListener('change', () => this.sync())
@@ -339,6 +344,18 @@ Fields.CheckBoxes = class extends BaseElement {
 
   value() {
     return Array.from(this.root.querySelectorAll('input:checked')).map((el) => el.value)
+  }
+}
+
+Fields.TagsEditor = class extends Fields.CheckBoxes {
+  getInputTemplate(value, label) {
+    const path = SCHEMA.iconUrl.default.replace('marker.svg', `tags/${value}.svg`)
+    return `
+      <label>
+        <input type=checkbox value="${value}" name="${this.name}" data-ref=input />
+          <img class="tag-icon" src="${path}" alt="" /> ${label}
+      </label>
+      `
   }
 }
 
