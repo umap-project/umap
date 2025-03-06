@@ -263,18 +263,26 @@ ul.photon-autocomplete {
 .photon-autocomplete li {
     min-height: 40px;
     line-height: 1em;
-    padding: 5px 10px;
+    padding-inline-start: 10px;
     overflow: hidden;
     white-space: nowrap;
     font-size: 1em;
-    border-inline-start: 4px solid #efefef;
+    border-inline-start: 4px solid var(--color-lightGray);
 }
 .photon-autocomplete li strong {
     display: block;
+    margin-top: 5px;
+}
+.photon-autocomplete button {
+    margin: 0;
+}
+.photon-autocomplete button:hover {
+    background-color: var(--color-brightCyan);
 }
 .photon-autocomplete li.on {
-    border-inline-start: 4px solid #2980b9;
+    border-inline-start: 4px solid var(--color-brightCyan);
     cursor: pointer;
+    background-color: var(--color-lightCyan);
 }
 .photon-autocomplete li.photon-no-result {
     text-align: center;
@@ -292,6 +300,9 @@ ul.photon-autocomplete {
 }
 .search-result-tools {
     float: inline-end;
+    display: none;
+}
+.photon-autocomplete li.on .search-result-tools {
     display: block;
 }
 

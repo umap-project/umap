@@ -430,44 +430,31 @@ U.Search = L.PhotonSearch.extend({
   },
 
   formatResult: function (feature, el) {
-    const tools = L.DomUtil.create('span', 'search-result-tools', el)
-    const zoom = L.DomUtil.createButtonIcon(
-      tools,
-      'icon-zoom',
-      L._('Zoom to this place')
-    )
-    const edit = L.DomUtil.createButtonIcon(
-      tools,
-      'icon-edit',
-      L._('Save this location as new feature')
-    )
-    // We need to use "mousedown" because Leaflet.Photon listen to mousedown
-    // on el.
-    L.DomEvent.on(zoom, 'mousedown', (e) => {
-      L.DomEvent.stop(e)
-      this.zoomToFeature(feature)
-    })
-    L.DomEvent.on(edit, 'mousedown', (e) => {
-      L.DomEvent.stop(e)
+    const [tools, { button }] = U.Utils.loadTemplateWithRefs(`
+      <span class="search-result-tools"><button type="button" title="${L._('Save this location as new feature')}" data-ref=button><i class="icon icon-24 icon-marker"></i></button></span>
+    `)
+    button.addEventListener('mousedown', (event) => {
+      event.stopPropagation()
       const datalayer = this.map._umap.defaultEditDataLayer()
-      const layer = datalayer.makeFeature(feature)
-      layer.isDirty = true
-      layer.edit()
+      const marker = datalayer.makeFeature(feature)
+      marker.isDirty = true
+      marker.edit()
+      this.map._umap.panel.close()
     })
+    el.appendChild(tools)
     this._formatResult(feature, el)
   },
 
-  zoomToFeature: function (feature) {
-    const zoom = Math.max(this.map.getZoom(), 16) // Never unzoom.
-    this.map.setView(
-      [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
-      zoom
-    )
-  },
-
-  onSelected: function (feature) {
-    this.zoomToFeature(feature)
-    this.map.panel.close()
+  setChoice: function (choice) {
+    choice = choice || this.RESULTS[this.CURRENT]
+    if (choice) {
+      const feature = choice.feature
+      const zoom = Math.max(this.map.getZoom(), 14) // Never unzoom.
+      this.map.setView(
+        [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
+        zoom
+      )
+    }
   },
 })
 
