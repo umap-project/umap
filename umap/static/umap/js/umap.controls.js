@@ -468,6 +468,20 @@ U.Search = L.PhotonSearch.extend({
     })
     el.appendChild(tools)
     this._formatResult(feature, el)
+    const path = U.SCHEMA.iconUrl.default.replace('marker.svg', 'target.svg')
+    const icon = L.icon({
+      iconUrl: path,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    })
+    const coords = feature.geometry.coordinates
+    const target = L.marker([coords[1], coords[0]], { icon })
+    el.addEventListener('mouseover', (event) => {
+      target.addTo(this.map)
+    })
+    el.addEventListener('mouseout', (event) => {
+      target.removeFrom(this.map)
+    })
   },
 
   setChoice: function (choice) {
