@@ -292,16 +292,22 @@ UMAP_IMPORTERS = {}
 UMAP_HOST_INFOS = {}
 UMAP_LABEL_KEYS = ["name", "title"]
 UMAP_TAGS = (
-    ("art", _("Art and Culture")),
-    ("bike", _("Bike")),
+    ("arts", _("Art and Culture")),
+    ("cycling", _("Cycling")),
+    ("business", _("Business")),
     ("environment", _("Environment")),
     ("education", _("Education")),
     ("food", _("Food and Agriculture")),
+    ("geopolitics", _("Geopolitics")),
+    ("health", _("Health")),
+    ("hiking", _("Hiking")),
     ("history", _("History")),
     ("public", _("Public sector")),
+    ("science", _("Science")),
+    ("shopping", _("Shopping")),
     ("sport", _("Sport and Leisure")),
     ("travel", _("Travel")),
-    ("trekking", _("Trekking")),
+    ("transports", _("Transports")),
     ("tourism", _("Tourism")),
 )
 
