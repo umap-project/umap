@@ -332,6 +332,7 @@ export class DataLayer extends ServerStored {
         .parse(raw, this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson))
         .catch((error) => {
+          console.debug(error)
           Alert.error(
             translate('Cannot parse remote data for layer "{layer}" with url "{url}"', {
               layer: this.getName(),
@@ -532,6 +533,7 @@ export class DataLayer extends ServerStored {
         return data
       })
       .catch((error) => {
+        console.debug(error)
         Alert.error(translate('Import failed: invalid data'))
       })
   }

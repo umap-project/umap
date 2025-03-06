@@ -303,7 +303,7 @@ ul.photon-autocomplete {
     display: none;
 }
 .photon-autocomplete li.on .search-result-tools {
-    display: block;
+    display: flex;
 }
 
 

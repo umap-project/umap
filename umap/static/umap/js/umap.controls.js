@@ -430,16 +430,41 @@ U.Search = L.PhotonSearch.extend({
   },
 
   formatResult: function (feature, el) {
-    const [tools, { button }] = U.Utils.loadTemplateWithRefs(`
-      <span class="search-result-tools"><button type="button" title="${L._('Save this location as new feature')}" data-ref=button><i class="icon icon-24 icon-marker"></i></button></span>
+    const [tools, { point, geom }] = U.Utils.loadTemplateWithRefs(`
+      <span class="search-result-tools">
+        <button type="button" title="${L._('Save this geometry as a new feature')}" data-ref=geom><i class="icon icon-16 icon-polygon"></i></button>
+        <button type="button" title="${L._('Save this place as a new feature')}" data-ref=point><i class="icon icon-16 icon-marker"></i></button>
+      </span>
     `)
-    button.addEventListener('mousedown', (event) => {
+    geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
+    point.addEventListener('mousedown', (event) => {
       event.stopPropagation()
       const datalayer = this.map._umap.defaultEditDataLayer()
       const marker = datalayer.makeFeature(feature)
       marker.isDirty = true
       marker.edit()
       this.map._umap.panel.close()
+    })
+    geom.addEventListener('mousedown', async (event) => {
+      event.stopPropagation()
+      const osm_id = feature.properties.osm_id
+      const types = {
+        R: 'relation',
+        W: 'way',
+        N: 'node',
+      }
+      const osm_type = types[feature.properties.osm_type]
+      if (!osm_type || !osm_id) return
+      const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+      const response = await this.map._umap.request.get(url)
+      if (response?.ok) {
+        const importer = this.map._umap.importer
+        importer.build()
+        importer.format = 'osm'
+        importer.raw = await response.text()
+        importer.submit()
+        this.map._umap.panel.close()
+      }
     })
     el.appendChild(tools)
     this._formatResult(feature, el)
