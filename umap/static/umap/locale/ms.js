@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Pulihkan versi ini",
     "Save current edits": "Simpan suntingan semasa",
     "Save map": "Simpan peta",
-    "Save this location as new feature": "Simpan kedudukan ini sebagai sifat baharu",
     "Save": "Simpan",
     "Saved center and zoom": "Kedudukan tengah dan zum telah disimpan",
     "Search location": "Kedudukan carian",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Zum ke seterusnya",
     "Zoom to the previous": "Zum ke sebelumnya",
     "Zoom to this feature": "Zum ke sifat ini",
-    "Zoom to this place": "Zum ke tempat ini",
     "{area}&#8239;acres": "{area} ekar",
     "{area}&#8239;ha": "{area} hektar",
     "{area}&#8239;m&sup2;": "{area} meter&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Obnoviť túto verziu",
     "Save current edits": "Uložiť nedávne zmeny",
     "Save map": "Save map",
-    "Save this location as new feature": "Uložiť túto polohu ako nový objekt",
     "Save": "Uložiť",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Vyhľadať polohu",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Priblížiť k ďalšiemu",
     "Zoom to the previous": "Priblížiť k predošlému",
     "Zoom to this feature": "Priblížiť na tento objekt",
-    "Zoom to this place": "Priblížiť na toto miesto",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

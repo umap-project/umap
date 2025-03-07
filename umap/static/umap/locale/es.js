@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Restaurar esta versión",
     "Save current edits": "Guardar las ediciones actuales",
     "Save map": "Guardar mapa",
-    "Save this location as new feature": "Guardar esta ubicación como un nuevo elemento",
     "Save": "Guardar",
     "Saved center and zoom": "Centro y zoom guardados",
     "Search location": "Buscar ubicación",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Zoom al siguiente",
     "Zoom to the previous": "Zoom al anterior",
     "Zoom to this feature": "Zoom a este elemento",
-    "Zoom to this place": "Zoom a este lugar",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -526,13 +524,16 @@ const locale = {
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "No se pueden analizar los datos remotos para la capa \"{layer}\" con la URL \"{url}\"",
     "Import failed: invalid data": "Falló la importación: datos no válidos",
     "Anonymous": "Anónimo",
-    "created at {date}": "created at {date}",
-    "modified at {date}": "modified at {date}",
-    "Default zoom": "Default zoom",
-    "Default latitude": "Default latitude",
-    "Default longitude": "Default longitude",
-    "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "created at {date}": "creado el {date}",
+    "modified at {date}": "modificado el {date}",
+    "Default zoom": "Zoom predeterminado",
+    "Default latitude": "Latitud predeterminada",
+    "Default longitude": "Longitud predeterminada",
+    "Edit map default view": "Editar vista predeterminada del mapa",
+    "Use current center and zoom": "Usar el centro y zoom actuales",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

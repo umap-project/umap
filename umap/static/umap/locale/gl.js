@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Restabelecer esta versión",
     "Save current edits": "Gardar as edicións actuais",
     "Save map": "Gardar o mapa",
-    "Save this location as new feature": "Gardar esta posición coma novo elemento",
     "Save": "Gardar",
     "Saved center and zoom": "Gardar o centrado e nivel de zoom",
     "Search location": "Buscar posición",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Achegar ata o seguinte",
     "Zoom to the previous": "Achegar ata o anterior",
     "Zoom to this feature": "Achegar a este elemento",
-    "Zoom to this place": "Achegar a este lugar",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -526,13 +524,16 @@ const locale = {
     "Cannot parse remote data for layer \"{layer}\" with url \"{url}\"": "Non é posíbel analizar os datos remotos da capa «{layer}» co url «{url}»",
     "Import failed: invalid data": "Produciuse un fallo na importación: os datos non son válidos",
     "Anonymous": "Anónimo",
-    "created at {date}": "created at {date}",
-    "modified at {date}": "modified at {date}",
-    "Default zoom": "Default zoom",
-    "Default latitude": "Default latitude",
-    "Default longitude": "Default longitude",
-    "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "created at {date}": "creado o {data}",
+    "modified at {date}": "modificado o {data}",
+    "Default zoom": "Zoom predeterminado",
+    "Default latitude": "Latitude predeterminada",
+    "Default longitude": "Lonxitude predeterminada",
+    "Edit map default view": "Editar a vista predeterminada do mapa",
+    "Use current center and zoom": "Usar o centrado e o nivel de zoom actual",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("gl", locale)
 L.setLocale("gl")

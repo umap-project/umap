@@ -299,7 +299,6 @@
     "Restore this version": "Diese Version wiederherstellen",
     "Save current edits": "Aktuelle Änderungen speichern",
     "Save map": "Karte speichern",
-    "Save this location as new feature": "Diesen Ort als neues Element speichern",
     "Save": "Speichern",
     "Saved center and zoom": "Mittelpunkt und Zoom gespeichert",
     "Search location": "Ort suchen",
@@ -387,7 +386,6 @@
     "Zoom to the next": "Zum nächsten zoomen",
     "Zoom to the previous": "Zum vorherigen zoomen",
     "Zoom to this feature": "Auf dieses Element zoomen",
-    "Zoom to this place": "Auf diesen Ort zoomen",
     "{area}&#8239;acres": "{area} Hektar",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,5 +530,8 @@
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }

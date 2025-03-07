@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "بازیابی این نسخه",
     "Save current edits": "ویرایش‌های جاری را ذخیره کنید",
     "Save map": "نقشه را ذخیره کنید",
-    "Save this location as new feature": "این مکان را به عنوان عنصر جدید ذخیره کنید",
     "Save": "ذخیره",
     "Saved center and zoom": "مرکزیت و بزرگنمایی ذخیره‌شده",
     "Search location": "جستجوی مکان",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "تمرکز روی بعدی",
     "Zoom to the previous": "تمرکز روی قبلی",
     "Zoom to this feature": "تمرکز روی این عنصر",
-    "Zoom to this place": "تمرکز روی این مکان",
     "{area}&#8239;acres": "{area} هکتار",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

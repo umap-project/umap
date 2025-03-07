@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Endurheimta þessa útgáfu",
     "Save current edits": "Vista fyrirliggjandi breytingar",
     "Save map": "Save map",
-    "Save this location as new feature": "Vista þessa staðsetningu sem nýja fitju",
     "Save": "Vista",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Leita að staðsetningu",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Aðdráttur að næsta",
     "Zoom to the previous": "Aðdráttur á fyrra",
     "Zoom to this feature": "Aðdráttur að þessari fitju",
-    "Zoom to this place": "Aðdráttur á þennan stað",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

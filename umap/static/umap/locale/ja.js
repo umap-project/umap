@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "このバージョンを復元する",
     "Save current edits": "編集内容を保存",
     "Save map": "Save map",
-    "Save this location as new feature": "この場所を新しい地物として保存",
     "Save": "保存",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "地名で検索",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "次にズーム",
     "Zoom to the previous": "前にズーム",
     "Zoom to this feature": "この地物にズーム",
-    "Zoom to this place": "この場所にズーム",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

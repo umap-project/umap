@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Genskab denne version",
     "Save current edits": "Gem nuværende redigeringer",
     "Save map": "Save map",
-    "Save this location as new feature": "Gem denne placering som et nyt objekt",
     "Save": "Gem",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Søg efter placering",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Zoom til næste",
     "Zoom to the previous": "Zoom til forrige",
     "Zoom to this feature": "Zoom til dette objekt",
-    "Zoom to this place": "Zoom til dette sted",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")
