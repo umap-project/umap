@@ -34,7 +34,8 @@ def deprecated_auth_backend(get_response):
                     "Using “%(name)s” to authenticate is deprecated and will be "
                     "removed soon. "
                     "Please configure another provider below before losing access "
-                    "to your account and maps."
+                    "to your account and maps. Then, please logout and login "
+                    "again with the new provider."
                 )
                 % {"name": name},
             )
