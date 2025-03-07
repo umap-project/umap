@@ -302,6 +302,9 @@ ul.photon-autocomplete {
     float: inline-end;
     display: none;
 }
+.search-result-tools button {
+    padding: 8px;
+}
 .umap-edit-enabled .photon-autocomplete li.on .search-result-tools {
     display: flex;
 }
