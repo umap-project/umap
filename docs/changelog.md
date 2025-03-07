@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.9.3 - 2025-03-07
+
+* be explicit in the message that logout is needed after adding a new oauth provider
+
+
 ## 2.9.2 - 2025-03-04
 
 * measure/drawing tooltip was misplaced by @yohanboniface in #2541
