@@ -430,44 +430,70 @@ U.Search = L.PhotonSearch.extend({
   },
 
   formatResult: function (feature, el) {
-    const tools = L.DomUtil.create('span', 'search-result-tools', el)
-    const zoom = L.DomUtil.createButtonIcon(
-      tools,
-      'icon-zoom',
-      L._('Zoom to this place')
-    )
-    const edit = L.DomUtil.createButtonIcon(
-      tools,
-      'icon-edit',
-      L._('Save this location as new feature')
-    )
-    // We need to use "mousedown" because Leaflet.Photon listen to mousedown
-    // on el.
-    L.DomEvent.on(zoom, 'mousedown', (e) => {
-      L.DomEvent.stop(e)
-      this.zoomToFeature(feature)
-    })
-    L.DomEvent.on(edit, 'mousedown', (e) => {
-      L.DomEvent.stop(e)
+    const [tools, { point, geom }] = U.Utils.loadTemplateWithRefs(`
+      <span class="search-result-tools">
+        <button type="button" title="${L._('Save this geometry as a new feature')}" data-ref=geom><i class="icon icon-16 icon-polygon"></i></button>
+        <button type="button" title="${L._('Save this place as a new feature')}" data-ref=point><i class="icon icon-16 icon-marker"></i></button>
+      </span>
+    `)
+    geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
+    point.addEventListener('mousedown', (event) => {
+      event.stopPropagation()
       const datalayer = this.map._umap.defaultEditDataLayer()
-      const layer = datalayer.makeFeature(feature)
-      layer.isDirty = true
-      layer.edit()
+      const marker = datalayer.makeFeature(feature)
+      marker.isDirty = true
+      marker.edit()
+      this.map._umap.panel.close()
     })
+    geom.addEventListener('mousedown', async (event) => {
+      event.stopPropagation()
+      const osm_id = feature.properties.osm_id
+      const types = {
+        R: 'relation',
+        W: 'way',
+        N: 'node',
+      }
+      const osm_type = types[feature.properties.osm_type]
+      if (!osm_type || !osm_id) return
+      const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+      const response = await this.map._umap.request.get(url)
+      if (response?.ok) {
+        const importer = this.map._umap.importer
+        importer.build()
+        importer.format = 'osm'
+        importer.raw = await response.text()
+        importer.submit()
+        this.map._umap.panel.close()
+      }
+    })
+    el.appendChild(tools)
     this._formatResult(feature, el)
+    const path = U.SCHEMA.iconUrl.default.replace('marker.svg', 'target.svg')
+    const icon = L.icon({
+      iconUrl: path,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    })
+    const coords = feature.geometry.coordinates
+    const target = L.marker([coords[1], coords[0]], { icon })
+    el.addEventListener('mouseover', (event) => {
+      target.addTo(this.map)
+    })
+    el.addEventListener('mouseout', (event) => {
+      target.removeFrom(this.map)
+    })
   },
 
-  zoomToFeature: function (feature) {
-    const zoom = Math.max(this.map.getZoom(), 16) // Never unzoom.
-    this.map.setView(
-      [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
-      zoom
-    )
-  },
-
-  onSelected: function (feature) {
-    this.zoomToFeature(feature)
-    this.map.panel.close()
+  setChoice: function (choice) {
+    choice = choice || this.RESULTS[this.CURRENT]
+    if (choice) {
+      const feature = choice.feature
+      const zoom = Math.max(this.map.getZoom(), 14) // Never unzoom.
+      this.map.setView(
+        [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
+        zoom
+      )
+    }
   },
 })
 
