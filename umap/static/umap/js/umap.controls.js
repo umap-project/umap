@@ -454,15 +454,11 @@ U.Search = L.PhotonSearch.extend({
       }
       const osm_type = types[feature.properties.osm_type]
       if (!osm_type || !osm_id) return
-      const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
-      const response = await this.map._umap.request.get(url)
-      if (response?.ok) {
-        const importer = this.map._umap.importer
-        importer.build()
-        importer.format = 'osm'
-        importer.raw = await response.text()
-        importer.submit()
-      }
+      const importer = this.map._umap.importer
+      importer.build()
+      importer.format = 'osm'
+      importer.url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+      importer.submit()
     })
     el.appendChild(tools)
     this._formatResult(feature, el)
