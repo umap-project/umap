@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Ennek a változatnak a visszaállítása",
     "Save current edits": "Jelenlegi szerkesztések mentése",
     "Save map": "Térkép mentése",
-    "Save this location as new feature": "E hely mentése új objektumként",
     "Save": "Mentés",
     "Saved center and zoom": "Elmentett középpont és nagyítás",
     "Search location": "Hely keresése",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Nagyítás a következőre",
     "Zoom to the previous": "Nagyítás az előzőre",
     "Zoom to this feature": "Nagyítás erre az objektumra",
-    "Zoom to this place": "Nagyítás erre a helyre",
     "{area}&#8239;acres": "{area} acre",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

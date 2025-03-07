@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Återställ denna version",
     "Save current edits": "Spara nuvarande ändringar",
     "Save map": "Save map",
-    "Save this location as new feature": "Spara denna plats som nytt kartobjekt",
     "Save": "Spara",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Sök plats",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Panorera till nästa",
     "Zoom to the previous": "Panorera till föregående",
     "Zoom to this feature": "Zooma till detta objekt",
-    "Zoom to this place": "Zooma till denna plats",
     "{area}&#8239;acres": "{area} acre (ung. tunnland)",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

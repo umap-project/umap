@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Keer terug naar deze versie",
     "Save current edits": "Huidige bewerkingen opslaan",
     "Save map": "Kaart opslaan",
-    "Save this location as new feature": "Sla deze locatie op als nieuw object",
     "Save": "Opslaan",
     "Saved center and zoom": "Midden en zoom bewaard",
     "Search location": "Zoek locatie",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Inzoomen op de volgende",
     "Zoom to the previous": "Inzoomen op de vorige",
     "Zoom to this feature": "Op dit object inzoomen",
-    "Zoom to this place": "Inzoomen op deze plaats",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -533,7 +531,9 @@ const locale = {
     "Default longitude": "Standaard lengtegraad",
     "Edit map default view": "Standaardweergave van de kaart bewerken",
     "Use current center and zoom": "Gebruik huidig centrum en zoomniveau",
-    "Layer permalink": "Layer permalink"
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

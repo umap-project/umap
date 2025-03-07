@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "שחזור הגרסה הזו",
     "Save current edits": "לשמור את העריכות הנוכחיות",
     "Save map": "Save map",
-    "Save this location as new feature": "לשמור את המיקום הזה כתכונה חדשה",
     "Save": "לשמור",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "חיפוש מיקום",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "התמקדות על הבא",
     "Zoom to the previous": "התמקדות על הקודם",
     "Zoom to this feature": "התמקדות על תכונה זו",
-    "Zoom to this place": "התמקדות על המקום הזה",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

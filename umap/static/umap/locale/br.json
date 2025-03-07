@@ -299,7 +299,6 @@
     "Restore this version": "Adsevel ar stumm-mañ?",
     "Save current edits": "Enrollañ ar c'hemmoù a-vremañ ",
     "Save map": "Enrollañ ar gartenn",
-    "Save this location as new feature": "Enrollañ al lec'h-mañ evel un elfenn nevez",
     "Save": "Enrollañ",
     "Saved center and zoom": "Kreiz ha zoum enrollet",
     "Search location": "Klask ul lec'h",
@@ -387,7 +386,6 @@
     "Zoom to the next": "War-lerc'h",
     "Zoom to the previous": "Kent",
     "Zoom to this feature": "Zoumañ war an elfenn-mañ",
-    "Zoom to this place": "Zoumañ war al lec'h-mañ",
     "{area}&#8239;acres": "{area} erv",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -533,5 +531,7 @@
     "Default longitude": "Hedred dre ziouer",
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
-    "Layer permalink": "Layer permalink"
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }

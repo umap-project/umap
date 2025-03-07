@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Restore this version",
     "Save current edits": "Save current edits",
     "Save map": "Save map",
-    "Save this location as new feature": "Save this location as new feature",
     "Save": "Save",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Search location",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Zoom to the next",
     "Zoom to the previous": "Zoom to the previous",
     "Zoom to this feature": "Zoom to this feature",
-    "Zoom to this place": "Zoom to this place",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -533,7 +531,9 @@ const locale = {
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
-    "Layer permalink": "Layer permalink"
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")

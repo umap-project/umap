@@ -299,7 +299,6 @@
     "Restore this version": "Palauta tämä versio",
     "Save current edits": "Tallenna tämänhetkiset muokkaukset",
     "Save map": "Save map",
-    "Save this location as new feature": "Save this location as new feature",
     "Save": "Tallenna",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Search location",
@@ -387,7 +386,6 @@
     "Zoom to the next": "Kohdenna seuraavaan",
     "Zoom to the previous": "Kohdenna edelliseen",
     "Zoom to this feature": "Kohdenna tähän piirteeseen",
-    "Zoom to this place": "Kohdenna tähän paikkaan",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,5 +530,8 @@
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }

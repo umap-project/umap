@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexander Gabilondo <alexgabi@disroot.org>, 2024
+# Alexander Gabilondo <alexgabi@disroot.org>, 2024-2025
 # Mikel Larreategi <mlarreategi@codesyntax.com>, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 08:39+0000\n"
+"POT-Creation-Date: 2025-03-07 15:18+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Alexander Gabilondo <alexgabi@disroot.org>, 2024\n"
+"Last-Translator: Alexander Gabilondo <alexgabi@disroot.org>, 2024-2025\n"
 "Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,17 +25,25 @@ msgstr "CSV esportazioa"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "Mapa hau ez dago publikoki erabilgarri"
 
-#: middleware.py:13
+#: middleware.py:19
 msgid "Site is readonly for maintenance"
 msgstr "Webgunea irakurtzeko moduan dago mantentze-lanak direla-eta"
+
+#: middleware.py:34
+#, python-format
+msgid ""
+"Using “%(name)s” to authenticate is deprecated and will be removed soon. "
+"Please configure another provider below before losing access to your account"
+" and maps. Then, please logout and login again with the new provider."
+msgstr ""
 
 #: models.py:60 models.py:79
 msgid "name"
 msgstr "izena"
 
-#: models.py:62 models.py:475
+#: models.py:62 models.py:485
 msgid "description"
 msgstr "deskribapena"
 
@@ -55,23 +63,23 @@ msgstr "URLaren txantiloia OSMren lauzen formatua erabiliz"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Lauzen geruzek edizio kutxan duten ordena"
 
-#: models.py:175 models.py:469
+#: models.py:175 models.py:479
 msgid "Only editable with secret edit link"
 msgstr "Bakarrik esteka sekretuarekin bakarrik editatu daiteke"
 
-#: models.py:176 models.py:470
+#: models.py:176 models.py:480
 msgid "Everyone can edit"
 msgstr "Edonork editatu dezake"
 
-#: models.py:179 models.py:463
+#: models.py:179 models.py:473
 msgid "Everyone"
 msgstr "Edonork"
 
-#: models.py:180 models.py:189 models.py:464
+#: models.py:180 models.py:189 models.py:474
 msgid "Editors and team only"
 msgstr "Editoreak eta taldea soilik"
 
-#: models.py:181 models.py:465
+#: models.py:181 models.py:475
 msgid "Owner only"
 msgstr "Jabea bakarrik"
 
@@ -91,7 +99,7 @@ msgstr "Esteka duen edonork"
 msgid "Blocked"
 msgstr "Blokeatuta"
 
-#: models.py:191
+#: models.py:191 models.py:469
 msgid "Deleted"
 msgstr "Ezabatua"
 
@@ -131,31 +139,31 @@ msgstr "editoreak"
 msgid "team"
 msgstr "taldea"
 
-#: models.py:229 models.py:491
+#: models.py:229 models.py:501
 msgid "edit status"
 msgstr "editatu egoera"
 
-#: models.py:234
+#: models.py:234 models.py:506
 msgid "share status"
 msgstr "partekatu egoera"
 
-#: models.py:237 models.py:486
+#: models.py:237 models.py:496
 msgid "settings"
 msgstr "ezarpenak"
 
-#: models.py:402
+#: models.py:407
 msgid "Clone of"
 msgstr "Beste honen klona"
 
-#: models.py:462 models.py:468
+#: models.py:468 models.py:472 models.py:478
 msgid "Inherit"
 msgstr "Heredatu"
 
-#: models.py:481
+#: models.py:491
 msgid "display on load"
 msgstr "erakutsi kargatzean"
 
-#: models.py:482
+#: models.py:492
 msgid "Display this layer on load."
 msgstr "Erakutsi geruza hau kargatzean"
 
@@ -164,50 +172,64 @@ msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr " <a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">Ikusi hemen</a> maparen baimenak kudeatzeko dokumentazioa."
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "← Joan hasierara"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 Ez da orrialdea aurkitu"
 
-#: templates/auth/user_detail.html:8
+#: templates/auth/user_detail.html:6
+#, python-format
+msgid "%(current_user)s’s maps"
+msgstr "%(current_user)s-ren mapak"
+
+#: templates/auth/user_detail.html:12
 #, python-format
 msgid "Browse %(current_user)s's maps"
 msgstr "Arakatu %(current_user)s erabiltzailearen mapak"
 
-#: templates/auth/user_detail.html:17
+#: templates/auth/user_detail.html:21
 #, python-format
 msgid "%(current_user)s has no maps."
 msgstr "%(current_user)s erabiltzaileak ez du maparik."
 
-#: templates/auth/user_form.html:21 templates/umap/team_form.html:21
+#: templates/auth/user_form.html:6
+msgid "My Profile"
+msgstr "Nire profila"
+
+#: templates/auth/user_form.html:24 templates/umap/team_form.html:25
 msgid "Save"
 msgstr "Gorde"
 
-#: templates/auth/user_form.html:27
+#: templates/auth/user_form.html:30
 msgid "Your current providers"
 msgstr "Zure egungo hornitzaileak"
 
-#: templates/auth/user_form.html:39
+#: templates/auth/user_form.html:44
 msgid "Connect to another provider"
 msgstr "Konektatu beste hornitzaile batekin"
 
-#: templates/auth/user_form.html:42
+#: templates/auth/user_form.html:47
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
 msgstr "Ohitura ona da zure kontua hornitzaile bati baino gehiagori konektatzea, hornitzaileren bat erabilgarri ez badago, aldi baterako edo baita betiko."
 
-#: templates/auth/user_stars.html:8
+#: templates/auth/user_stars.html:6
+#, python-format
+msgid "%(current_user)s’s starred maps"
+msgstr "%(current_user)s-ren mapa izardunak"
+
+#: templates/auth/user_stars.html:12
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
 msgstr "Arakatu %(current_user)s erabiltzailearen gogoko mapak"
 
-#: templates/auth/user_stars.html:17
+#: templates/auth/user_stars.html:21
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s erabiltzaileak ez du gogoko maparik oraindik."
@@ -241,6 +263,10 @@ msgstr "Pasahitza"
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
 msgstr "Aukeratu hornitzaile bat:"
+
+#: templates/umap/about.html:5 templates/umap/navigation.html:22
+msgid "About"
+msgstr "Honi buruz"
 
 #: templates/umap/about_summary.html:12
 #, python-format
@@ -401,7 +427,7 @@ msgstr "Inspira zaitez dauden mapak arakatzen"
 msgid "You are logged in. Continuing..."
 msgstr "Sartu egin zara. Jarraitu..."
 
-#: templates/umap/map_list.html:11 views.py:437
+#: templates/umap/map_list.html:11 views.py:438
 msgid "by"
 msgstr "nork eginda"
 
@@ -409,7 +435,7 @@ msgstr "nork eginda"
 msgid "More"
 msgstr "Gehiago"
 
-#: templates/umap/map_table.html:8 templates/umap/user_teams.html:14
+#: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
 msgstr "Izena"
 
@@ -427,13 +453,13 @@ msgstr "Nork edita dezake"
 
 #: templates/umap/map_table.html:20
 msgid "Last save"
-msgstr "Azken gordetzea"
+msgstr "Gordetako azkena"
 
 #: templates/umap/map_table.html:23
 msgid "Owner"
 msgstr "Jabea"
 
-#: templates/umap/map_table.html:26 templates/umap/user_teams.html:20
+#: templates/umap/map_table.html:26 templates/umap/user_teams.html:24
 msgid "Actions"
 msgstr "Ekintzak"
 
@@ -446,7 +472,7 @@ msgid "Share"
 msgstr "Partekatu"
 
 #: templates/umap/map_table.html:78 templates/umap/map_table.html:80
-#: templates/umap/user_teams.html:38 templates/umap/user_teams.html:40
+#: templates/umap/user_teams.html:42 templates/umap/user_teams.html:44
 msgid "Edit"
 msgstr "Editatu"
 
@@ -509,10 +535,6 @@ msgstr "Sartu"
 msgid "Sign in"
 msgstr "Izena eman"
 
-#: templates/umap/navigation.html:22
-msgid "About"
-msgstr "Honi buruz"
-
 #: templates/umap/navigation.html:30
 msgid "Change password"
 msgstr "Aldatu pasahitza"
@@ -521,52 +543,58 @@ msgstr "Aldatu pasahitza"
 msgid "Log out"
 msgstr "Irten"
 
-#: templates/umap/password_change.html:7
+#: templates/umap/password_change.html:6
+#: templates/umap/password_change.html:11
 msgid "Password change"
 msgstr "Pasahiz aldaketa"
 
-#: templates/umap/password_change.html:10
+#: templates/umap/password_change.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new"
 " password twice so we can verify you typed it in correctly."
 msgstr "Idatzi zure pasahitz zaharra, eta ondoren zure pasahitz berria birritan, horrela ondo sartu duzula egiaztatuko dugu."
 
-#: templates/umap/password_change.html:17
+#: templates/umap/password_change.html:21
 msgid "Old password"
 msgstr "Pasahitz zaharra"
 
-#: templates/umap/password_change.html:22
+#: templates/umap/password_change.html:26
 msgid "New password"
 msgstr "Pasahitz berria"
 
-#: templates/umap/password_change.html:26
+#: templates/umap/password_change.html:30
 msgid "New password confirmation"
 msgstr "Pasahitz berriaren egiaztapena"
 
-#: templates/umap/password_change.html:27
+#: templates/umap/password_change.html:31
 msgid "Change my password"
 msgstr "Aldatu nire pasahitza"
 
-#: templates/umap/password_change_done.html:7
+#: templates/umap/password_change_done.html:6
+#: templates/umap/password_change_done.html:11
 msgid "Password change successful"
 msgstr "Pasahitza ondo aldatu da"
 
-#: templates/umap/password_change_done.html:10
+#: templates/umap/password_change_done.html:14
 msgid "Your password was changed."
 msgstr "Zure pasahitza aldatu egin da"
 
-#: templates/umap/search.html:15
+#: templates/umap/search.html:6
+msgid "Explore maps"
+msgstr "Arakatu mapak"
+
+#: templates/umap/search.html:19
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
 msgstr[0] "mapa %(count)s aurkitu da:"
 msgstr[1] "%(count)s mapa aurkitu dira:"
 
-#: templates/umap/search.html:24
+#: templates/umap/search.html:28
 msgid "No map found."
 msgstr "Ez da maparik aurkitu"
 
-#: templates/umap/search.html:29
+#: templates/umap/search.html:33
 msgid "Latest created maps"
 msgstr "Sortutako azken mapak"
 
@@ -574,25 +602,38 @@ msgstr "Sortutako azken mapak"
 msgid "Search maps"
 msgstr "Bilatu mapak"
 
-#: templates/umap/search_bar.html:15
+#: templates/umap/search_bar.html:16
 msgid "Search"
 msgstr "Bilatu"
 
-#: templates/umap/team_detail.html:10
+#: templates/umap/team_confirm_delete.html:6
+msgid "Team deletion"
+msgstr "Taldea ezabatzea"
+
+#: templates/umap/team_detail.html:6
+#, python-format
+msgid "%(current_team)s’s maps"
+msgstr "%(current_team)s-ren mapak"
+
+#: templates/umap/team_detail.html:14
 #, python-format
 msgid "Browse %(current_team)s's maps"
 msgstr "Arakatu %(current_team)s-ren mapak"
 
-#: templates/umap/team_detail.html:22
+#: templates/umap/team_detail.html:26
 #, python-format
 msgid "%(current_team)s has no public maps."
 msgstr "%(current_team)s-k ez dauka mapa publikorik."
 
-#: templates/umap/team_form.html:24
+#: templates/umap/team_form.html:6
+msgid "Create or edit a team"
+msgstr "Sortu edo editatu talde bat"
+
+#: templates/umap/team_form.html:28
 msgid "Delete this team"
 msgstr "Ezabatu talde hau"
 
-#: templates/umap/team_form.html:47
+#: templates/umap/team_form.html:51
 msgid "Add user"
 msgstr "Gehitu erabiltzailea"
 
@@ -613,78 +654,82 @@ msgstr "Deskargatu  %(count)s mapa"
 msgid "You have no map yet."
 msgstr "Oraindik ez daukazu maparik."
 
-#: templates/umap/user_teams.html:17
+#: templates/umap/user_teams.html:6
+msgid "My Teams"
+msgstr "Nire taldeak"
+
+#: templates/umap/user_teams.html:21
 msgid "Users"
 msgstr "Erabiltzaileak"
 
-#: templates/umap/user_teams.html:48
+#: templates/umap/user_teams.html:52
 msgid "New team"
 msgstr "Talde berria"
 
-#: views.py:234
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "Ezin da ezabatu kide bat baino gehiago dituen talde bat"
 
-#: views.py:238
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "“%(name)s” taldea ezabatu da"
 
-#: views.py:442
+#: views.py:443
 msgid "View the map"
 msgstr "Mapa ikusi"
 
-#: views.py:825
+#: views.py:839
 msgid "See full screen"
 msgstr "Ikusi pantaila osoan"
 
-#: views.py:968
+#: views.py:982
 msgid "Map editors updated with success!"
 msgstr "Maparen editoreak ondo eguneratu dira!"
 
-#: views.py:1004
+#: views.py:1018
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Zure mapa editatzeko uMap-en esteka: %(map_name)s"
 
-#: views.py:1007
+#: views.py:1021
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hona hemen zure editatzeko esteka sekretua:: %(link)s"
 
-#: views.py:1014
+#: views.py:1028
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Ezin da posta elektronikorik bidali %(email)s-ri"
 
-#: views.py:1017
+#: views.py:1031
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Posta elektronikoa bidalita %(email)s-ri"
 
-#: views.py:1028
+#: views.py:1042
 msgid "Only its owner can delete the map."
 msgstr "Jabeak bakarrik ezabatu dezake mapa."
 
-#: views.py:1031
+#: views.py:1045
 msgid "Map successfully deleted."
 msgstr "Mapa behar bezala ezabatu da."
 
-#: views.py:1057
+#: views.py:1071
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Zure mapa klonatu egin da! Mapa hau beste nabigatzaile batetik editatzeko erabili esteka hau: %(anonymous_url)s"
 
-#: views.py:1062
+#: views.py:1076
 msgid "Congratulations, your map has been cloned!"
 msgstr "Zorionak, zure mapa ondo klonatu da!"
 
-#: views.py:1313
+#: views.py:1330
 msgid "Layer successfully deleted."
 msgstr "Geruza ondo ezabatu da."
 
-#: views.py:1335
+#: views.py:1352
 msgid "Permissions updated with success!"
 msgstr "Baimenak behar bezala eguneratu dira!"

@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Επαναφορά αυτής της έκδοσης",
     "Save current edits": "Αποθήκευση τρέχουσας επεξεργασίας",
     "Save map": "Αποθήκευση χάρτη",
-    "Save this location as new feature": "Αποθήκευση αυτής της τοποθεσίας ως νέο στοιχείο",
     "Save": "Αποθήκευση",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Αναζήτηση τοποθεσίας",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Εστίαση στο επόμενο",
     "Zoom to the previous": "Εστίαση στο προηγούμενο",
     "Zoom to this feature": "Εστίαση σε αυτό το στοιχείο",
-    "Zoom to this place": "Εστίαση σε αυτή την τοποθεσία",
     "{area}&#8239;acres": "{area}&#8239;έικρ",
     "{area}&#8239;ha": "{area}&#8239;εκτάρια",
     "{area}&#8239;m&sup2;": "{area}&#8239;μέτρα&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

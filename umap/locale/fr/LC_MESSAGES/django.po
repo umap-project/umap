@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 17:36+0000\n"
+"POT-Creation-Date: 2025-03-07 15:18+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2025\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -51,8 +51,8 @@ msgstr "Le site est en lecture seule pour maintenance."
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
-" and maps."
-msgstr "L’utilisation de “%(name)s” pour s’authentifier est dépréciée et sera bientôt rendue impossible. Veuillez configurer un nouveau fournisseur ci-dessous avant de perdre l’accès à votre compte et à vos cartes."
+" and maps. Then, please logout and login again with the new provider."
+msgstr "L’utilisation de “%(name)s” pour s’authentifier est dépréciée et sera bientôt rendue impossible. Veuillez configurer un nouveau fournisseur ci-dessous avant de perdre l’accès à votre compte et à vos cartes. Puis veuillez vous déconnecter et reconnecter avec le nouveau fournisseur."
 
 #: models.py:60 models.py:79
 msgid "name"
@@ -442,7 +442,7 @@ msgstr "Naviguer dans les cartes"
 msgid "You are logged in. Continuing..."
 msgstr "Vous êtes maintenant identifié. Merci de patienter..."
 
-#: templates/umap/map_list.html:11 views.py:437
+#: templates/umap/map_list.html:11 views.py:438
 msgid "by"
 msgstr "par"
 
@@ -682,70 +682,70 @@ msgstr "Membres"
 msgid "New team"
 msgstr "Nouvelle équipe"
 
-#: views.py:234
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "Impossible de supprimer une équipe ayant plus d'un membre"
 
-#: views.py:238
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "L'équipe «%(name)s» a été supprimée"
 
-#: views.py:442
+#: views.py:443
 msgid "View the map"
 msgstr "Voir la carte"
 
-#: views.py:838
+#: views.py:839
 msgid "See full screen"
 msgstr "Plein écran"
 
-#: views.py:981
+#: views.py:982
 msgid "Map editors updated with success!"
 msgstr "Éditeurs de la carte mis à jour !"
 
-#: views.py:1017
+#: views.py:1018
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Le lien d'édition uMap pour votre carte : %(map_name)s"
 
-#: views.py:1020
+#: views.py:1021
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Voici votre lien d'édition secret : %(link)s"
 
-#: views.py:1027
+#: views.py:1028
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Impossible d'envoyer un courriel vers %(email)s"
 
-#: views.py:1030
+#: views.py:1031
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Courriel envoyé à %(email)s"
 
-#: views.py:1041
+#: views.py:1042
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:1044
+#: views.py:1045
 msgid "Map successfully deleted."
 msgstr "La carte a bien été supprimée."
 
-#: views.py:1070
+#: views.py:1071
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:1075
+#: views.py:1076
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:1329
+#: views.py:1330
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
 
-#: views.py:1351
+#: views.py:1352
 msgid "Permissions updated with success!"
 msgstr "Les permissions ont bien été modifiées !"

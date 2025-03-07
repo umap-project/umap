@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "Restaurar esta versão",
     "Save current edits": "Guardar edições atuais",
     "Save map": "Guardar mapa",
-    "Save this location as new feature": "Guardar esta localização como novo elemento",
     "Save": "Guardar",
     "Saved center and zoom": "Guardar centro e aproximar",
     "Search location": "Procurar localização",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "Aproximar para o seguinte",
     "Zoom to the previous": "Aproximar para o anterior",
     "Zoom to this feature": "Aproximar a este elemento",
-    "Zoom to this place": "Aproximar para este local",
     "{area}&#8239;acres": "{area} hectares",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("pt_PT", locale)
 L.setLocale("pt_PT")

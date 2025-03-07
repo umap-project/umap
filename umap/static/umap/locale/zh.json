@@ -299,7 +299,6 @@
     "Restore this version": "Restore this version",
     "Save current edits": "保存当前编辑内容",
     "Save map": "Save map",
-    "Save this location as new feature": "Save this location as new feature",
     "Save": "保存",
     "Saved center and zoom": "Saved center and zoom",
     "Search location": "Search location",
@@ -387,7 +386,6 @@
     "Zoom to the next": "下一个",
     "Zoom to the previous": "上一个",
     "Zoom to this feature": "缩放到该对象",
-    "Zoom to this place": "Zoom to this place",
     "{area}&#8239;acres": "{area} acres",
     "{area}&#8239;ha": "{area} ha",
     "{area}&#8239;m&sup2;": "{area} m&sup2;",
@@ -532,5 +530,8 @@
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }

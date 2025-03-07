@@ -299,7 +299,6 @@ const locale = {
     "Restore this version": "回復此版本",
     "Save current edits": "儲存近期的變更",
     "Save map": "儲存地圖",
-    "Save this location as new feature": "將地點存為新的圖徵",
     "Save": "儲存",
     "Saved center and zoom": "儲存地圖中心點位置與縮放大小",
     "Search location": "搜尋地點",
@@ -387,7 +386,6 @@ const locale = {
     "Zoom to the next": "切換至下一頁",
     "Zoom to the previous": "切換至前一頁",
     "Zoom to this feature": "縮放至圖徵範圍",
-    "Zoom to this place": "縮放到這個地方",
     "{area}&#8239;acres": "{area} 英畝",
     "{area}&#8239;ha": "{area} 公頃",
     "{area}&#8239;m&sup2;": "{area} 平方公尺",
@@ -532,7 +530,10 @@ const locale = {
     "Default latitude": "Default latitude",
     "Default longitude": "Default longitude",
     "Edit map default view": "Edit map default view",
-    "Use current center and zoom": "Use current center and zoom"
+    "Use current center and zoom": "Use current center and zoom",
+    "Layer permalink": "Layer permalink",
+    "Save this geometry as a new feature": "Save this geometry as a new feature",
+    "Save this place as a new feature": "Save this place as a new feature"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")
