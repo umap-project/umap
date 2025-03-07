@@ -1,3 +1,17 @@
+U.HomeControl = L.Control.extend({
+  options: {
+    position: 'topleft',
+  },
+
+  onAdd: (map) => {
+    const path = map._umap.getStaticPathFor('home.svg')
+    const container = U.Utils.loadTemplate(
+      `<a href="/" class="home-button" title="${L._('Back to home')}"><img src="${path}" alt="${L._('Home logo')}" width="38px" height="38px" /></a>`
+    )
+    return container
+  },
+})
+
 U.EditControl = L.Control.extend({
   options: {
     position: 'topright',
@@ -468,7 +482,7 @@ U.Search = L.PhotonSearch.extend({
     })
     el.appendChild(tools)
     this._formatResult(feature, el)
-    const path = U.SCHEMA.iconUrl.default.replace('marker.svg', 'target.svg')
+    const path = this.map._umap.getStaticPathFor('target.svg')
     const icon = L.icon({
       iconUrl: path,
       iconSize: [24, 24],
