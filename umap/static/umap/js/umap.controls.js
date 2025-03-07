@@ -443,7 +443,6 @@ U.Search = L.PhotonSearch.extend({
       const marker = datalayer.makeFeature(feature)
       marker.isDirty = true
       marker.edit()
-      this.map._umap.panel.close()
     })
     geom.addEventListener('mousedown', async (event) => {
       event.stopPropagation()
@@ -463,7 +462,6 @@ U.Search = L.PhotonSearch.extend({
         importer.format = 'osm'
         importer.raw = await response.text()
         importer.submit()
-        this.map._umap.panel.close()
       }
     })
     el.appendChild(tools)
