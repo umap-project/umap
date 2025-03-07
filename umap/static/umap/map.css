@@ -302,7 +302,7 @@ ul.photon-autocomplete {
     float: inline-end;
     display: none;
 }
-.photon-autocomplete li.on .search-result-tools {
+.umap-edit-enabled .photon-autocomplete li.on .search-result-tools {
     display: flex;
 }
 
