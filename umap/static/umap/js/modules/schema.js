@@ -500,6 +500,9 @@ export const SCHEMA = {
     helpEntries: ['sync'],
     default: false,
   },
+  tags: {
+    type: Array,
+  },
   tilelayer: {
     type: Object,
     impacts: ['background'],
