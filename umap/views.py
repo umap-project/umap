@@ -1372,6 +1372,13 @@ class PictogramJSONList(ListView):
 
 def stats(request):
     last_week = make_aware(datetime.now()) - timedelta(days=7)
+    users = User.objects.values_list("pk", flat=True)
+    owners = set(
+        Map.objects.filter(owner__isnull=False).values_list("owner", flat=True)
+    )
+    editors = set(Map.editors.through.objects.values_list("user_id", flat=True))
+    members = set(Team.users.through.objects.values_list("user_id", flat=True))
+    orphans = set(users) - owners - editors - members
     return simple_json_response(
         **{
             "version": VERSION,
@@ -1386,6 +1393,10 @@ def stats(request):
             "active_sessions": Session.objects.filter(
                 expire_date__gt=datetime.utcnow()
             ).count(),
+            "owners_count": len(owners),
+            "editors_count": len(editors),
+            "members_count": len(members),
+            "orphans_count": len(orphans),
         }
     )
 
