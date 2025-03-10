@@ -68,7 +68,7 @@ docker = [
   "uwsgi==2.0.28",
 ]
 s3 = [
-  "django-storages[s3]==1.14.4",
+  "django-storages[s3]==1.14.5",
 ]
 sync = [
   "pydantic==2.10.6",
