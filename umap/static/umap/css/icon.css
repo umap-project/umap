@@ -143,6 +143,9 @@ html[dir="rtl"] .icon {
 .icon-marker {
     background-position: calc(var(--tile) * 7) var(--tile);
 }
+.icon-marker-plus {
+    background-position: calc(var(--tile) * 8) var(--tile);
+}
 .icon-multipolygon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 5);
 }
@@ -154,6 +157,9 @@ html[dir="rtl"] .icon {
 }
 .icon-polygon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 4);
+}
+.icon-polygon-plus {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 4);
 }
 .icon-polyline {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 6);
