@@ -247,7 +247,16 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
 .leaflet-iconLayers:hover .leaflet-iconLayers-layerCell-plus {
     display: block;
 }
-
+.home-button {
+    cursor: pointer;
+    line-height: 0;
+    border: 1px solid var(--color-darkBlue);
+    border-radius: 50%;
+    background-color: var(--background-color);
+}
+.home-button:hover {
+    background-color: var(--color-lighterGray);
+}
 
 
 

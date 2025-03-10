@@ -101,9 +101,9 @@ export default class Umap extends ServerStored {
     this.urls = new URLs(this.properties.urls)
     this.slideshow = new Slideshow(this, this._leafletMap)
 
-    this._leafletMap.setup()
-
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
+
+    this._leafletMap.setup()
 
     this.panel = new Panel(this, this._leafletMap)
     this.dialog = new Dialog({ className: 'dark' })
@@ -1756,5 +1756,9 @@ export default class Umap extends ServerStored {
     this.properties.zoom = this._leafletMap.getZoom()
     this.isDirty = true
     this._defaultExtent = false
+  }
+
+  getStaticPathFor(name) {
+    return SCHEMA.iconUrl.default.replace('marker.svg', name)
   }
 }
