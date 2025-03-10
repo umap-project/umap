@@ -185,6 +185,10 @@ def test_stats_empty(client):
         "users_count": 0,
         "active_sessions": 0,
         "version": VERSION,
+        "editors_count": 0,
+        "members_count": 0,
+        "orphans_count": 0,
+        "owners_count": 0,
     }
 
 
@@ -202,6 +206,10 @@ def test_stats_basic(client, map, datalayer, user2):
         "users_count": 2,
         "active_sessions": 0,
         "version": VERSION,
+        "editors_count": 0,
+        "members_count": 0,
+        "orphans_count": 1,
+        "owners_count": 1,
     }
 
 
