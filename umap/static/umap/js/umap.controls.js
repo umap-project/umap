@@ -432,8 +432,8 @@ U.Search = L.PhotonSearch.extend({
   formatResult: function (feature, el) {
     const [tools, { point, geom }] = U.Utils.loadTemplateWithRefs(`
       <span class="search-result-tools">
-        <button type="button" title="${L._('Save this geometry as a new feature')}" data-ref=geom><i class="icon icon-16 icon-polygon"></i></button>
-        <button type="button" title="${L._('Save this place as a new feature')}" data-ref=point><i class="icon icon-16 icon-marker"></i></button>
+        <button type="button" title="${L._('Add this geometry to my map')}" data-ref=geom><i class="icon icon-16 icon-polygon-plus"></i></button>
+        <button type="button" title="${L._('Add this place to my map')}" data-ref=point><i class="icon icon-16 icon-marker-plus"></i></button>
       </span>
     `)
     geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
