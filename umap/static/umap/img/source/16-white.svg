@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-<svg width="192" height="192" id="svg2" version="1.1" inkscape:version="1.4 (e7c3feb100, 2024-10-09)" sodipodi:docname="16-white.svg" inkscape:export-filename="16-white.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<svg width="216" height="192" id="svg2" version="1.1" inkscape:version="1.4 (e7c3feb100, 2024-10-09)" sodipodi:docname="16-white.svg" inkscape:export-filename="16-white.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs id="defs4">
     <clipPath id="clip0_241_10857">
       <rect width="18.049999" height="19.01" fill="#ffffff" id="rect586" x="0" y="0" />
@@ -18,8 +18,11 @@
     <clipPath id="clip0_2695_1939">
       <rect width="20" height="20" fill="#ffffff" id="rect1" x="0" y="0" />
     </clipPath>
+    <clipPath id="clip0_3071_861">
+      <rect width="18" height="20" fill="#ffffff" id="rect3" x="0" y="0" />
+    </clipPath>
   </defs>
-  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="2.9474763" inkscape:cx="149.28025" inkscape:cy="54.623002" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="22.311152" inkscape:cx="196.69536" inkscape:cy="36.932203" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
     <inkscape:grid type="xygrid" id="grid3004" empspacing="4" visible="true" enabled="true" snapvisiblegridlinesonly="true" originx="0" originy="0" spacingy="1" spacingx="1" units="px" />
     <inkscape:grid id="grid1" units="px" originx="0" originy="0" spacingx="24" spacingy="24" empcolor="#203fff" empopacity="0.85490196" color="#3f3fff" opacity="0.1254902" empspacing="1" enabled="true" visible="true" />
   </sodipodi:namedview>
@@ -221,5 +224,13 @@
     </g>
     <path style="fill:#efefef;fill-opacity:1;stroke:none;stroke-width:6.97518;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" inkscape:transform-center-x="-0.0010932573" inkscape:transform-center-y="-0.7377641" d="m 7.6698317,998.8588 1.3886278,-5.25497 -4.0584591,-3.24679 h 5.1830926 l 1.819345,-5.49493 1.81469,5.49392 h 5.182872 l -4.06154,3.24965 1.383849,5.25642 -4.324867,-3.01228 z" id="star" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccc" class="sprite" />
     <path style="fill:none;fill-opacity:1;stroke:#efefef;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" inkscape:transform-center-x="-0.0010925804" inkscape:transform-center-y="-0.73776941" d="m 31.669832,998.8588 1.388628,-5.25501 -4.05846,-3.24679 h 5.183093 l 1.819345,-5.49493 1.814694,5.49392 h 5.182868 l -4.06154,3.24964 1.383849,5.25647 -4.324874,-3.01232 z" id="starred" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccc" class="sprite" />
+    <g clip-path="url(#clip0_3071_861)" id="g3" transform="translate(194.88955,910.26491)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="m 1.89466,0.697266 v 2.325584 h 1.10132 l -1.01843,13.95345 h -1.267101 v 2.3256 h 2.368421 v -1.3953 l 9.47373,-1.8605 v 0.9302 h 2.3684 v -2.3255 h -0.9237 l 1.8355,-8.13958 h 1.4448 v -2.32558 h -2.3685 v 0.84883 l -10.64602,-2.86046 v -1.476744 z" stroke="#efefef" stroke-width="1.2" id="path1-9" style="fill:none" />
+      <path d="m 8.59717,6.8457 v 5.8915" stroke="#efefef" stroke-width="1.01333" id="path2-1" />
+      <path d="m 11.5977,9.79102 h -6.00004" stroke="#efefef" stroke-width="1.01333" id="path3-2" />
+    </g>
+    <path d="m 204.41818,838.96218 c -2.97727,0 -5.96591,1.94619 -6.81818,5.85003 0,2.33543 1.70455,7.01777 6.81818,12.46707 5.11362,-5.4608 6.81822,-10.13164 6.81822,-12.46707 -0.8523,-3.89239 -3.8409,-5.85003 -6.81822,-5.85003 z" stroke="#efefef" stroke-width="1.2" id="path1-0" style="fill:none" />
+    <path d="m 204.41812,843.97585 v 6.04463" stroke="#efefef" stroke-width="1.056" id="path2-9" style="fill:none" />
+    <path d="m 207.4181,846.99929 h -5.99998" stroke="#efefef" stroke-width="1.056" id="path3-36" style="fill:none" />
   </g>
 </svg>

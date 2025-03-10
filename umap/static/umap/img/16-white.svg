@@ -1,4 +1,4 @@
-<svg id="svg2" width="192" height="192" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<svg id="svg2" width="216" height="192" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
  <defs id="defs4">
   <clipPath id="clip0_241_10857">
    <rect id="rect586" width="18.05" height="19.01" fill="#fff"/>
@@ -14,6 +14,9 @@
   </mask>
   <clipPath id="clip0_2695_1939">
    <rect id="rect1" width="20" height="20" fill="#fff"/>
+  </clipPath>
+  <clipPath id="clip0_3071_861">
+   <rect id="rect3" width="18" height="20" fill="#fff"/>
   </clipPath>
  </defs>
  <metadata id="metadata7">
@@ -210,5 +213,13 @@
   </g>
   <path id="star" class="sprite" d="m7.6698 998.86 1.3886-5.255-4.0585-3.2468h5.1831l1.8193-5.4949 1.8147 5.4939h5.1829l-4.0615 3.2496 1.3838 5.2564-4.3249-3.0123z" fill="#efefef"/>
   <path id="starred" class="sprite" d="m31.67 998.86 1.3886-5.255-4.0585-3.2468h5.1831l1.8193-5.4949 1.8147 5.4939h5.1829l-4.0615 3.2496 1.3838 5.2565-4.3249-3.0123z" fill="none" stroke="#efefef" stroke-linecap="square" stroke-linejoin="round"/>
+  <g id="g3" transform="translate(194.89 910.26)" clip-path="url(#clip0_3071_861)" stroke="#efefef">
+   <path id="path1-9" d="m1.8947 0.69727v2.3256h1.1013l-1.0184 13.953h-1.2671v2.3256h2.3684v-1.3953l9.4737-1.8605v0.9302h2.3684v-2.3255h-0.9237l1.8355-8.1396h1.4448v-2.3256h-2.3685v0.84883l-10.646-2.8605v-1.4767z" clip-rule="evenodd" fill="none" fill-rule="evenodd" stroke-width="1.2"/>
+   <path id="path2-1" d="m8.5972 6.8457v5.8915" stroke-width="1.0133"/>
+   <path id="path3-2" d="m11.598 9.791h-6" stroke-width="1.0133"/>
+  </g>
+  <path id="path1-0" d="m204.42 838.96c-2.9773 0-5.9659 1.9462-6.8182 5.85 0 2.3354 1.7046 7.0178 6.8182 12.467 5.1136-5.4608 6.8182-10.132 6.8182-12.467-0.8523-3.8924-3.8409-5.85-6.8182-5.85z" fill="none" stroke="#efefef" stroke-width="1.2"/>
+  <path id="path2-9" d="m204.42 843.98v6.0446" fill="none" stroke="#efefef" stroke-width="1.056"/>
+  <path id="path3-36" d="m207.42 847h-6" fill="none" stroke="#efefef" stroke-width="1.056"/>
  </g>
 </svg>

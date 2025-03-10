@@ -277,10 +277,14 @@ ul.photon-autocomplete {
     margin: 0;
 }
 .photon-autocomplete button:hover {
-    background-color: var(--color-brightCyan);
+    background-color: var(--color-darkCyan);
+}
+.photon-autocomplete button:hover i {
+    /* TODO deal with this in icon.css  */
+    background-image: url('./img/16-white.svg');
 }
 .photon-autocomplete li.on {
-    border-inline-start: 4px solid var(--color-brightCyan);
+    border-inline-start: 4px solid var(--color-darkCyan);
     cursor: pointer;
     background-color: var(--color-lightCyan);
 }
