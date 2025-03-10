@@ -91,6 +91,10 @@ const ControlsMixin = {
     }
     if (this.options.noControl) return
 
+    // Do not display in an iframe.
+    if (window.self === window.top) {
+      this._controls.home = new U.HomeControl().addTo(this)
+    }
     this._controls.attribution = new U.AttributionControl().addTo(this)
     if (this.options.miniMap) {
       this.whenReady(function () {
