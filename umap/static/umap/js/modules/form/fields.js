@@ -324,6 +324,41 @@ Fields.CheckBox = class extends BaseElement {
   }
 }
 
+Fields.CheckBoxes = class extends BaseElement {
+  getInputTemplate(value, label) {
+    return `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
+  }
+
+  build() {
+    const initial = this.get() || []
+    for (const [value, label] of this.properties.choices) {
+      const [root, { input }] = Utils.loadTemplateWithRefs(
+        this.getInputTemplate(value, label)
+      )
+      this.container.appendChild(root)
+      input.checked = initial.includes(value)
+      input.addEventListener('change', () => this.sync())
+    }
+    super.build()
+  }
+
+  value() {
+    return Array.from(this.root.querySelectorAll('input:checked')).map((el) => el.value)
+  }
+}
+
+Fields.TagsEditor = class extends Fields.CheckBoxes {
+  getInputTemplate(value, label) {
+    const path = SCHEMA.iconUrl.default.replace('marker.svg', `tags/${value}.svg`)
+    return `
+      <label>
+        <input type=checkbox value="${value}" name="${this.name}" data-ref=input />
+          <img class="tag-icon" src="${path}" alt="" /> ${label}
+      </label>
+      `
+  }
+}
+
 Fields.Select = class extends BaseElement {
   getTemplate() {
     return `<select name="${this.name}" data-ref=select></select>`
@@ -1296,12 +1331,13 @@ Fields.ManageEditors = class extends BaseElement {
       placeholder: translate("Type editor's username"),
     }
     this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
-    this._values = this.toHTML()
-    if (this._values)
+    this._values = this.toHTML() || []
+    if (this._values) {
       for (let i = 0; i < this._values.length; i++)
         this.autocomplete.displaySelected({
           item: { value: this._values[i].id, label: this._values[i].name },
         })
+    }
   }
 
   value() {
