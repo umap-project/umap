@@ -1,0 +1,122 @@
+{
+  "type": "umap",
+  "uri": "https://umap.incubateur.anct.gouv.fr/fr/map/aires-de-covoiturage-du-departement-de-la-nievre_42",
+  "properties": {
+    "easing": false,
+    "embedControl": true,
+    "fullscreenControl": true,
+    "searchControl": true,
+    "datalayersControl": true,
+    "zoomControl": true,
+    "permanentCreditBackground": true,
+    "sortKey": "com_lieu",
+    "slideshow": {},
+    "captionMenus": true,
+    "captionBar": false,
+    "limitBounds": {},
+    "overlay": {},
+    "tilelayer": {
+      "tms": false,
+      "name": "OpenStreetMap",
+      "maxZoom": 19,
+      "minZoom": 0,
+      "attribution": "map data © [[http://osm.org/copyright|OpenStreetMap contributors]] under ODbL",
+      "url_template": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    },
+    "licence": "",
+    "description": "",
+    "name": "Aires de covoiturage du département de la Nièvre",
+    "defaultView": "data",
+    "onLoadPanel": "none",
+    "displayPopupFooter": false,
+    "miniMap": false,
+    "moreControl": true,
+    "scaleControl": true,
+    "scrollWheelZoom": true,
+    "zoom": 9
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      3.4552001953125004,
+      47.12527904224337
+    ]
+  },
+  "layers": [
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "id_lieu": "58004-C-001",
+            "id_local": "",
+            "nom_lieu": "Maison du Bazois",
+            "ad_lieu": "Bois de Seigne",
+            "com_lieu": "ALLUY",
+            "insee": "58004",
+            "type": "Parking",
+            "date_maj": "29/08/2019",
+            "ouvert": "true",
+            "source": "225800010",
+            "nbre_pl": "4",
+            "nbre_pmr": "",
+            "duree": "",
+            "horaires": "",
+            "proprio": "",
+            "lumiere": "",
+            "comm": ""
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              3.634832,
+              47.043123
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id_lieu": "58012-C-001",
+            "id_local": "",
+            "nom_lieu": "Mairie",
+            "ad_lieu": "28 route de Saint-Amand",
+            "com_lieu": "ARQUIAN",
+            "insee": "58012",
+            "type": "Auto-stop",
+            "date_maj": "19/05/2021",
+            "ouvert": "true",
+            "source": "810157982",
+            "nbre_pl": "",
+            "nbre_pmr": "",
+            "duree": "",
+            "horaires": "",
+            "proprio": "",
+            "lumiere": "true",
+            "comm": ""
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              2.99163,
+              47.5407
+            ]
+          }
+        }
+      ],
+      "_umap_options": {
+        "displayOnLoad": true,
+        "browsable": false,
+        "editMode": "disabled",
+        "remoteData": {},
+        "popupContentTemplate": "# {nom_lieu}\nAdresse : {ad_lieu} {com_lieu}\nType : {type}\nNombre de places : {nbre_pl}\n",
+        "color": "SpringGreen",
+        "iconUrl": "/uploads/pictogram/car-24.png",
+        "labelKey": "com_lieu",
+        "id": 73,
+        "name": "Liste des aires de covoiturage"
+      }
+    }
+  ]
+}

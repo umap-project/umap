@@ -870,3 +870,20 @@ def test_import_from_multiple_files(live_server, page, tilelayer):
     page.get_by_role("button", name="Import data", exact=True).click()
     # Two in one file, one in the other
     expect(markers).to_have_count(3)
+
+
+def test_umap_import_with_iconurl(live_server, tilelayer, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Import data").click()
+    file_input = page.locator("input[type='file']")
+    with page.expect_file_chooser() as fc_info:
+        file_input.click()
+    file_chooser = fc_info.value
+    path = Path(__file__).parent.parent / "fixtures/test_upload_data_with_iconurl.umap"
+    file_chooser.set_files(path)
+    page.get_by_role("button", name="Import data", exact=True).click()
+    expect(
+        page.locator(
+            'img[src="https://umap.incubateur.anct.gouv.fr/uploads/pictogram/car-24.png"]'
+        )
+    ).to_have_count(2)
