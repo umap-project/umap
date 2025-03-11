@@ -329,7 +329,7 @@ class Feature {
     }
     for (const key of keys) {
       const value = this.properties[key]
-      if (value) return value.trim()
+      if (value) return String(value).trim()
     }
     return this.datalayer.getName().trim()
   }
