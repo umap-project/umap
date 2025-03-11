@@ -94,6 +94,9 @@ export default class Importer extends Utils.WithTemplate {
         case 'datasets':
           import('./importers/datasets.js').then(register)
           break
+        case 'banfr':
+          import('./importers/banfr.js').then(register)
+          break
       }
     }
   }

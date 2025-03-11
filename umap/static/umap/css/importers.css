@@ -55,3 +55,10 @@
 .importers ul .datasets:before {
     background-image: url(../img/importers/datasets.svg);
 }
+.importer.banfr h3:before,
+.importers ul .banfr:before {
+    background-image: url(../img/importers/banfr.svg);
+}
+.importer table {
+    width: calc(var(--dialog-width) - 2 * var(--box-margin));
+}

@@ -2,7 +2,7 @@
     z-index: var(--zindex-dialog);
     margin: auto;
     margin-top: 100px;
-    width: 40vw;
+    width: var(--dialog-width);
     max-width: 100vw;
     max-height: 50vh;
     padding: 20px;

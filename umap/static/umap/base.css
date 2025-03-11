@@ -202,3 +202,15 @@ dt {
     height: 100vh;
     opacity: 0.5;
 }
+.table-scrollable {
+    background-image: linear-gradient(to right, var(--background-color), var(--background-color)),
+                      linear-gradient(to right, var(--background-color), var(--background-color)),
+                      linear-gradient(to right, rgba(0, 0, 20, .50), rgba(255, 255, 255, 0)),
+                      linear-gradient(to left, rgba(0, 0, 20, .50), rgba(255, 255, 255, 0));
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+    display: block;
+    overflow-x: auto;
+}
