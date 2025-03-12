@@ -302,6 +302,10 @@ U.TileLayerChooser = L.Control.extend({
         if (options?.edit) {
           this.map._umap.properties.tilelayer = tilelayer.toJSON()
           this.map._umap.isDirty = true
+          this.map._umap.sync.update(
+            'properties.tilelayer',
+            this.map._umap.properties.tilelayer
+          )
         }
       },
       this
