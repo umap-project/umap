@@ -144,11 +144,10 @@ export class DataLayer extends ServerStored {
           if (fields.includes('options.type')) {
             this.resetLayer()
           }
-          this.hide()
           for (const field of fields) {
             this.layer.onEdit(field, builder)
           }
-          this.show()
+          this.redraw()
           break
         case 'remote-data':
           this.fetchRemoteData()
@@ -652,8 +651,7 @@ export class DataLayer extends ServerStored {
 
   redraw() {
     if (!this.isVisible()) return
-    this.hide()
-    this.show()
+    this.eachFeature((feature) => feature.redraw())
   }
 
   edit() {
