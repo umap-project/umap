@@ -47,6 +47,7 @@ export class MapUpdater extends BaseUpdater {
       this.updateObjectValue(this._umap, key, value)
     }
 
+    this._umap.onPropertiesUpdated([key])
     this._umap.render([key])
   }
 }

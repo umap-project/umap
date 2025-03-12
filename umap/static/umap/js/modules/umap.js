@@ -1329,6 +1329,10 @@ export default class Umap extends ServerStored {
     }
   }
 
+  onPropertiesUpdated(fields = []) {
+    this._leafletMap.pullProperties()
+  }
+
   render(fields = []) {
     // Propagate will remove the fields it has already
     // processed

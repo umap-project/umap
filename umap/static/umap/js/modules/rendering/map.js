@@ -269,8 +269,12 @@ export const LeafletMap = BaseMap.extend({
     this.renderUI()
   },
 
-  renderUI: function () {
+  pullProperties() {
     setOptions(this, this._umap.properties)
+  },
+
+  renderUI: function () {
+    this.pullProperties()
     if (this.options.scrollWheelZoom) {
       this.scrollWheelZoom.enable()
       this.dragging.enable()
