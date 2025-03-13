@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
@@ -229,3 +230,38 @@ def test_can_undo_redo_marker_create(live_server, page, tilelayer):
 
     page.locator(".edit-redo").click()
     expect(marker).to_have_count(1)
+
+
+def test_undo_redo_import(live_server, page, tilelayer):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open Browser").click()
+
+    page.get_by_title("Import data").click()
+    file_input = page.locator("input[type='file']")
+    with page.expect_file_chooser() as fc_info:
+        file_input.click()
+    file_chooser = fc_info.value
+    path = Path(__file__).parent.parent / "fixtures/test_upload_data.json"
+    file_chooser.set_files(path)
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # Close the import panel
+    page.keyboard.press("Escape")
+
+    layers = page.locator(".umap-browser .datalayer")
+    expect(layers).to_have_count(1)
+
+    features_count = page.locator(".umap-browser .datalayer-counter")
+    expect(features_count).to_have_text("(5)")
+
+    page.locator(".edit-undo").click()
+    expect(features_count).to_be_hidden()
+    expect(layers).to_have_count(1)
+
+    page.locator(".edit-undo").click()
+    expect(layers).to_have_count(0)
+
+    page.locator(".edit-redo").click()
+    expect(layers).to_have_count(1)
+
+    page.locator(".edit-redo").click()
+    expect(features_count).to_have_text("(5)")
