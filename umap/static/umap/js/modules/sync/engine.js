@@ -1,6 +1,7 @@
 import * as SaveManager from '../saving.js'
 import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
+import { UndoManager } from './undo.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 
@@ -64,6 +65,7 @@ export class SyncEngine {
     this.websocketConnected = false
     this.closeRequested = false
     this.peerId = Utils.generateId()
+    this._undoManager = new UndoManager(this.updaters, this)
   }
 
   get isOpen() {
@@ -122,16 +124,38 @@ export class SyncEngine {
       await this.authenticate()
     }, this._reconnectDelay)
   }
-  upsert(subject, metadata, value) {
+  upsert(subject, metadata, value, oldValue) {
+    this._undoManager.add({
+      verb: 'upsert',
+      subject,
+      metadata,
+      oldValue: oldValue,
+      newValue: value,
+    })
     this._send({ verb: 'upsert', subject, metadata, value })
   }
 
-  update(subject, metadata, key, value) {
+  update(subject, metadata, key, value, oldValue) {
+    this._undoManager.add({
+      verb: 'update',
+      subject,
+      metadata,
+      key,
+      oldValue: oldValue,
+      newValue: value,
+    })
     this._send({ verb: 'update', subject, metadata, key, value })
   }
 
-  delete(subject, metadata, key) {
-    this._send({ verb: 'delete', subject, metadata, key })
+  delete(subject, metadata, oldValue) {
+    console.log('oldValue', oldValue)
+    this._undoManager.add({
+      verb: 'delete',
+      subject,
+      metadata,
+      oldValue: oldValue,
+    })
+    this._send({ verb: 'delete', subject, metadata })
   }
 
   saved() {

@@ -417,7 +417,11 @@ export class DataLayer extends ServerStored {
 
   removeFeature(feature, sync) {
     const id = stamp(feature)
-    if (sync !== false) feature.sync.delete()
+    if (sync !== false) {
+      const oldValue = feature.toGeoJSON()
+      console.log('oldValue in removeFeature', oldValue)
+      feature.sync.delete(oldValue)
+    }
     this.hideFeature(feature)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
@@ -596,10 +600,11 @@ export class DataLayer extends ServerStored {
   }
 
   del(sync = true) {
+    const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     this.erase()
     if (sync) {
       this.isDeleted = true
-      this.sync.delete()
+      this.sync.delete(oldValue)
     }
   }
 

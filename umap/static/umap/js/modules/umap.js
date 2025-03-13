@@ -608,6 +608,7 @@ export default class Umap extends ServerStored {
   }
 
   createDataLayer(options = {}, sync = true) {
+    console.log('createDatalayer', options)
     options.name =
       options.name || `${translate('Layer')} ${this.datalayersIndex.length + 1}`
     const datalayer = new DataLayer(this, this._leafletMap, options)
@@ -1776,5 +1777,13 @@ export default class Umap extends ServerStored {
 
   getStaticPathFor(name) {
     return SCHEMA.iconUrl.default.replace('marker.svg', name)
+  }
+
+  undo() {
+    this.sync._undoManager.undo()
+  }
+
+  redo() {
+    this.sync._undoManager.redo()
   }
 }

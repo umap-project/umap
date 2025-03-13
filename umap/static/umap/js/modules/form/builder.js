@@ -190,13 +190,14 @@ export class MutatingForm extends Form {
   }
 
   setter(field, value) {
+    const oldValue = this.getter(field)
     super.setter(field, value)
     this.obj.isDirty = true
     if ('render' in this.obj) {
       this.obj.render([field], this)
     }
     if ('sync' in this.obj) {
-      this.obj.sync.update(field, value)
+      this.obj.sync.update(field, value, oldValue)
     }
   }
 
