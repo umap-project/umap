@@ -1634,7 +1634,16 @@ export default class Umap extends ServerStored {
 
   importRaw(rawData) {
     const importedData = JSON.parse(rawData)
-
+    let remoteOrigin = ''
+    if (importedData.uri) {
+      const uri = new URL(importedData.uri)
+      if (uri.origin !== window.location.origin) {
+        remoteOrigin = uri.origin
+      }
+    }
+    if (importedData.properties?.iconUrl?.startsWith('/')) {
+      importedData.properties.iconUrl = remoteOrigin + importedData.properties.iconUrl
+    }
     this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
@@ -1646,6 +1655,9 @@ export default class Umap extends ServerStored {
         delete geojson._storage
       }
       delete geojson._umap_options?.id // Never trust an id at this stage
+      if (geojson._umap_options?.iconUrl?.startsWith('/')) {
+        geojson._umap_options.iconUrl = remoteOrigin + geojson._umap_options.iconUrl
+      }
       const dataLayer = this.createDirtyDataLayer(geojson._umap_options)
       dataLayer.fromUmapGeoJSON(geojson)
     }
