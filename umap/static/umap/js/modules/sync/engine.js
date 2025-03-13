@@ -124,38 +124,83 @@ export class SyncEngine {
       await this.authenticate()
     }, this._reconnectDelay)
   }
-  upsert(subject, metadata, value, oldValue) {
+
+  startBatch() {
+    this._batch = []
+  }
+
+  commitBatch() {
+    if (!this._batch.length) {
+      this._batch = null
+      return
+    }
     this._undoManager.add({
+      verb: 'batch',
+      operations: this._batch,
+    })
+    const syncOperations = this._batch.map((operation) =>
+      this.convertToSyncOperation(operation)
+    )
+    this._send({ verb: 'batch', operations: syncOperations, subject: 'batch' })
+    this._batch = null
+  }
+
+  convertToSyncOperation(undoOperation) {
+    const syncOperation = { ...undoOperation, value: undoOperation.newValue }
+    delete syncOperation.oldValue
+    delete syncOperation.newValue
+    return syncOperation
+  }
+
+  upsert(subject, metadata, value, oldValue) {
+    const undoOperation = {
       verb: 'upsert',
       subject,
       metadata,
-      oldValue: oldValue,
       newValue: value,
-    })
-    this._send({ verb: 'upsert', subject, metadata, value })
+      oldValue: oldValue,
+    }
+    if (this._batch) {
+      this._batch.push(undoOperation)
+      return
+    }
+    this._undoManager.add(undoOperation)
+    const syncOperation = this.convertToSyncOperation(undoOperation)
+    this._send(syncOperation)
   }
 
   update(subject, metadata, key, value, oldValue) {
-    this._undoManager.add({
+    const undoOperation = {
       verb: 'update',
       subject,
       metadata,
       key,
       oldValue: oldValue,
       newValue: value,
-    })
-    this._send({ verb: 'update', subject, metadata, key, value })
+    }
+    if (this._batch) {
+      this._batch.push(undoOperation)
+      return
+    }
+    this._undoManager.add(undoOperation)
+    const syncOperation = this.convertToSyncOperation(undoOperation)
+    this._send(syncOperation)
   }
 
   delete(subject, metadata, oldValue) {
-    console.log('oldValue', oldValue)
-    this._undoManager.add({
+    const undoOperation = {
       verb: 'delete',
       subject,
       metadata,
       oldValue: oldValue,
-    })
-    this._send({ verb: 'delete', subject, metadata })
+    }
+    if (this._batch) {
+      this._batch.push(undoOperation)
+      return
+    }
+    this._undoManager.add(undoOperation)
+    const syncOperation = this.convertToSyncOperation(undoOperation)
+    this._send(syncOperation)
   }
 
   saved() {
@@ -185,6 +230,10 @@ export class SyncEngine {
   }
 
   _applyOperation(operation) {
+    if (operation.verb === 'batch') {
+      operation.operations.map((op) => this._applyOperation(op))
+      return
+    }
     const updater = this._getUpdater(operation.subject, operation.metadata)
     updater.applyMessage(operation)
   }

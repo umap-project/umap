@@ -464,7 +464,10 @@ export class DataLayer extends ServerStored {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      return this.makeFeatures(geojson, sync)
+      this.sync.startBatch()
+      const features = this.makeFeatures(geojson, sync)
+      this.sync.commitBatch()
+      return features
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
       console.error(err)
@@ -522,7 +525,7 @@ export class DataLayer extends ServerStored {
     }
     if (feature && !feature.isEmpty()) {
       this.addFeature(feature)
-      if (sync) feature.onCommit()
+      if (sync) feature.sync.upsert(feature.toGeoJSON(), null)
       return feature
     }
   }
