@@ -257,6 +257,9 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
 .home-button:hover {
     background-color: var(--color-lighterGray);
 }
+.umap-edit-enabled .home-button {
+    display: none;
+}
 
 
 
