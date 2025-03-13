@@ -1003,7 +1003,7 @@ a.umap-control-caption,
     .umap-main-edit-toolbox .umap-user span,
     .leaflet-container .leaflet-control-edit-save span,
     .leaflet-container .leaflet-control-edit-disable span,
-    .leaflet-container .leaflet-control-edit-cancel span {
+    .leaflet-container .edit-cancel span {
         display: none;
     }
     .umap-main-edit-toolbox .umap-help-button {

@@ -297,6 +297,7 @@ U.TileLayerChooser = L.Control.extend({
       el,
       'click',
       () => {
+        const oldTileLayer = this.map._umap.properties.tilelayer
         this.map.selectTileLayer(tilelayer)
         this.map._controls.tilelayers.setLayers()
         if (options?.edit) {
@@ -304,7 +305,8 @@ U.TileLayerChooser = L.Control.extend({
           this.map._umap.isDirty = true
           this.map._umap.sync.update(
             'properties.tilelayer',
-            this.map._umap.properties.tilelayer
+            this.map._umap.properties.tilelayer,
+            oldTileLayer
           )
         }
       },
@@ -606,7 +608,7 @@ U.Editable = L.Editable.extend({
     this.on('editable:editing', (event) => {
       const feature = event.layer.feature
       feature.isDirty = true
-      feature.pullGeometry(false)
+      // feature.pullGeometry(false)
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()
@@ -624,18 +626,18 @@ U.Editable = L.Editable.extend({
 
   createPolyline: function (latlngs) {
     const datalayer = this._umap.defaultEditDataLayer()
-    const point = new U.LineString(this._umap, datalayer, {
+    const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
-    return point.ui
+    return line.ui
   },
 
   createPolygon: function (latlngs) {
     const datalayer = this._umap.defaultEditDataLayer()
-    const point = new U.Polygon(this._umap, datalayer, {
+    const poly = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
-    return point.ui
+    return poly.ui
   },
 
   createMarker: function (latlng) {
@@ -643,6 +645,7 @@ U.Editable = L.Editable.extend({
     const point = new U.Point(this._umap, datalayer, {
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
+    point._just_married = true
     return point.ui
   },
 
