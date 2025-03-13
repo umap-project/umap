@@ -91,6 +91,7 @@ class Feature {
   }
 
   set geometry(value) {
+    this._geometry_bk = Utils.CopyJSON(this._geometry)
     this._geometry = value
     this.pushGeometry()
   }
@@ -104,13 +105,17 @@ class Feature {
   }
 
   pullGeometry(sync = true) {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
     this.fromLatLngs(this._getLatLngs())
     if (sync) {
-      this.sync.update('geometry', this.geometry)
+      console.log('sync geometry')
+      this.sync.update('geometry', this.geometry, oldGeometry)
     }
   }
 
   fromLatLngs(latlngs) {
+    console.log('fromLatLngs', latlngs)
+    this._geometry_bk = Utils.CopyJSON(this._geometry)
     this._geometry = this.convertLatLngs(latlngs)
   }
 
@@ -145,8 +150,15 @@ class Feature {
   onCommit() {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
+    const oldGeoJSON = this._just_married ? null : Utils.CopyJSON(this.toGeoJSON())
+    this.pullGeometry(false)
     if (this.datalayer?.isRemoteLayer()) return
-    this.sync.upsert(this.toGeoJSON())
+    if (this._just_married) {
+      this.sync.upsert(this.toGeoJSON(), null)
+      this._just_married = false
+    } else {
+      this.sync.update('geometry', this.geometry, this._geometry_bk)
+    }
   }
 
   isReadOnly() {

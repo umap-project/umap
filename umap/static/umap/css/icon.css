@@ -167,11 +167,15 @@ html[dir="rtl"] .icon {
 .icon-profile {
     background-position: 0 calc(var(--tile) * 4);
 }
+.icon-redo {
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 7);
+}
 .icon-resize {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 6);
 }
+.icon-undo,
 .icon-restore {
-    background-position: calc(var(--tile) * 5) calc(var(--tile) * 3);
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 7);
 }
 .expanded .icon-resize {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 6);
