@@ -2,6 +2,7 @@
 set -eo pipefail
 
 source /venv/bin/activate
+service redis-server start
 
 # collect static files
 umap collectstatic --noinput
@@ -9,5 +10,5 @@ umap collectstatic --noinput
 umap wait_for_database
 # then migrate the database
 umap migrate
-# run uWSGI
-exec uwsgi --ini docker/uwsgi.ini
+# run the server
+exec uvicorn --proxy-headers --no-access-log umap.asgi:application
