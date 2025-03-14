@@ -805,7 +805,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
       categories[category] = categories[category] || []
       categories[category].push(props)
     }
-    const sorted = Object.entries(categories).toSorted(([a], [b]) =>
+    const sorted = Object.entries(categories).sort(([a], [b]) =>
       Utils.naturalSort(a, b, U.lang)
     )
     for (const [name, items] of sorted) {

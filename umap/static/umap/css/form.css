@@ -487,14 +487,11 @@ i.info {
     padding: 0 5px;
 }
 .flat-tabs {
-    display: none;
+    display: flex;
     justify-content: space-around;
     font-size: 1.2em;
     margin-bottom: 20px;
     border-bottom: 1px solid #bebebe;
-}
-.flat-tabs:has(.flat) {
-    display: flex;
 }
 .flat-tabs button {
     padding: 10px;
