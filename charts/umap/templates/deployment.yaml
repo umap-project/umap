@@ -13,6 +13,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/secret-config.yaml") . | sha256sum }}
+        checksum/templates: {{ include (print $.Template.BasePath "/configmap-templates.yaml") . | sha256sum }}
         checksum/env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -77,6 +78,14 @@ spec:
             - name: data
               mountPath: /srv/umap/uploads/
           {{- end }}
+          {{- if .Values.umap.templates}}
+          {{- range $k, $v := .Values.umap.templates }}
+            - name: templates
+              mountPath: /venv/lib/python3.11/site-packages/umap/templates/umap/{{- $k }}
+              subPath: {{ $k }}
+          {{- end }}
+          {{- end }}
+
       volumes:
         - name: config
           secret:
@@ -88,6 +97,12 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "umap.pvcName" . }}
       {{- end }}
+      {{- if .Values.umap.templates}}
+        - name: templates
+          configMap:
+            name: {{ include "umap.fullname" . }}-templates        
+      {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
