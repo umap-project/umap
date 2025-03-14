@@ -553,9 +553,7 @@ export default class Umap extends ServerStored {
             used = false
             break
           }
-          if (SAVEMANAGER.isDirty) {
-            this.askForReset()
-          }
+          this.sync._undoManager.undo()
           break
         case 'm':
           this._leafletMap.editTools.startMarker()
@@ -1161,21 +1159,6 @@ export default class Umap extends ServerStored {
     })
   }
 
-  reset() {
-    if (this._leafletMap.editTools) this._leafletMap.editTools.stopDrawing()
-    this.resetProperties()
-    this.datalayersIndex = [].concat(this._datalayersIndex_bk)
-    // Iter over all datalayers, including deleted if any.
-    for (const datalayer of Object.values(this.datalayers)) {
-      if (datalayer.isDeleted) datalayer.connectToMap()
-      if (datalayer.isDirty) datalayer.reset()
-    }
-    this.ensurePanesOrder()
-    this._leafletMap.initTileLayers()
-    this.onDataLayersChanged()
-    this.isDirty = !this.id
-  }
-
   async save() {
     this.rules.commit()
     const geojson = {
@@ -1300,16 +1283,6 @@ export default class Umap extends ServerStored {
 
   fire(name) {
     this._leafletMap.fire(name)
-  }
-
-  askForReset(e) {
-    if (this.getProperty('syncEnabled')) return
-    this.dialog
-      .confirm(translate('Are you sure you want to cancel your changes?'))
-      .then(() => {
-        this.reset()
-        this.disableEdit()
-      })
   }
 
   async initSyncEngine() {

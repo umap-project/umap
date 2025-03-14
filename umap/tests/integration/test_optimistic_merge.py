@@ -294,7 +294,7 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     page_two.locator('input[name="name"]').fill("name from page two")
 
     # Map should be in dirty status
-    expect(page_two.get_by_text("Cancel edits")).to_be_visible()
+    expect(page_two.get_by_text("Undo")).to_be_visible()
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_two.get_by_role("button", name="Save").click()
 
@@ -306,7 +306,7 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     # We should have an alert with some actions
     expect(page_two.get_by_text("Whoops! Other contributor(s) changed")).to_be_visible()
     # Map should still be in dirty status
-    expect(page_two.get_by_text("Cancel edits")).to_be_visible()
+    expect(page_two.get_by_text("Undo")).to_be_visible()
 
     # Override data from page two
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
@@ -317,4 +317,4 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     data = json.loads(Path(saved.geojson.path).read_text())
     assert data["features"][0]["properties"]["name"] == "name from page two"
     # Map should not be in dirty status anymore
-    expect(page_two.get_by_text("Cancel edits")).to_be_hidden()
+    expect(page_two.get_by_text("Undo")).to_be_hidden()
