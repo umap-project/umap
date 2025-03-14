@@ -629,6 +629,7 @@ U.Editable = L.Editable.extend({
     const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
+    line._just_married = true
     return line.ui
   },
 
@@ -637,6 +638,7 @@ U.Editable = L.Editable.extend({
     const poly = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
+    poly._just_married = true
     return poly.ui
   },
 
@@ -737,6 +739,8 @@ U.Editable = L.Editable.extend({
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
+      event.layer.feature.pullGeometry(false)
+      console.log('onEscape', event.layer.feature.hasGeom())
       if (!event.layer.feature.hasGeom()) {
         event.layer.feature.del()
       } else {
