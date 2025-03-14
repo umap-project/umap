@@ -31,8 +31,8 @@ class BaseUpdater {
     }
   }
 
-  getDataLayerFromID(layerId) {
-    return this._umap.getDataLayerByUmapId(layerId)
+  getDataLayerFromMetadata({ id }) {
+    return this._umap.getDataLayerByUmapId(id)
   }
 
   applyMessage(payload) {
@@ -51,6 +51,10 @@ export class MapUpdater extends BaseUpdater {
     this._umap.onPropertiesUpdated([key])
     this._umap.render([key])
   }
+
+  getSaveTarget(metadata) {
+    return this._umap
+  }
 }
 
 export class DataLayerUpdater extends BaseUpdater {
@@ -60,7 +64,7 @@ export class DataLayerUpdater extends BaseUpdater {
       console.log(
         'found datalayer with id',
         value.id,
-        this.getDataLayerFromID(value.id)
+        this.getDataLayerFromMetadata(value)
       )
     } catch {
       console.log('we are the fucking catch', value)
@@ -72,7 +76,7 @@ export class DataLayerUpdater extends BaseUpdater {
   }
 
   update({ key, metadata, value }) {
-    const datalayer = this.getDataLayerFromID(metadata.id)
+    const datalayer = this.getDataLayerFromMetadata(metadata)
     if (fieldInSchema(key)) {
       this.updateObjectValue(datalayer, key, value)
     } else {
@@ -85,17 +89,21 @@ export class DataLayerUpdater extends BaseUpdater {
   }
 
   delete({ metadata }) {
-    const datalayer = this.getDataLayerFromID(metadata.id)
+    const datalayer = this.getDataLayerFromMetadata(metadata)
     if (datalayer) {
       datalayer.del(false)
       datalayer.commitDelete()
     }
   }
+
+  getSaveTarget(metadata) {
+    return this.getDataLayerFromMetadata(metadata)
+  }
 }
 
 export class FeatureUpdater extends BaseUpdater {
   getFeatureFromMetadata({ id, layerId }) {
-    const datalayer = this.getDataLayerFromID(layerId)
+    const datalayer = this.getDataLayerFromMetadata({ id: layerId })
     return datalayer.getFeatureById(id)
   }
 
@@ -103,7 +111,7 @@ export class FeatureUpdater extends BaseUpdater {
   upsert({ metadata, value }) {
     console.log('updater.upsert for', metadata, value)
     const { id, layerId } = metadata
-    const datalayer = this.getDataLayerFromID(layerId)
+    const datalayer = this.getDataLayerFromMetadata({ id: layerId })
     const feature = this.getFeatureFromMetadata(metadata)
     console.log('feature', feature)
 
@@ -138,5 +146,9 @@ export class FeatureUpdater extends BaseUpdater {
     // and the wole feature getting deleted
     const feature = this.getFeatureFromMetadata(metadata)
     if (feature) feature.del(false)
+  }
+
+  getSaveTarget({ layerId }) {
+    return this.getDataLayerFromMetadata({ id: layerId })
   }
 }
