@@ -2,6 +2,7 @@ import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
+import { UndoManager } from './undo.js'
 import * as SaveManager from '../saving.js'
 
 // Start reconnecting after 2 seconds, then double the delay each time
@@ -64,6 +65,7 @@ export class SyncEngine {
     this.websocketConnected = false
     this.closeRequested = false
     this.peerId = Utils.generateId()
+    this._undoManager = new UndoManager(this.updaters, this)
   }
 
   get isOpen() {
@@ -122,16 +124,83 @@ export class SyncEngine {
       await this.authenticate()
     }, this._reconnectDelay)
   }
-  upsert(subject, metadata, value) {
-    this._send({ verb: 'upsert', subject, metadata, value })
+
+  startBatch() {
+    this._batch = []
   }
 
-  update(subject, metadata, key, value) {
-    this._send({ verb: 'update', subject, metadata, key, value })
+  commitBatch() {
+    if (!this._batch.length) {
+      this._batch = null
+      return
+    }
+    this._undoManager.add({
+      verb: 'batch',
+      operations: this._batch,
+    })
+    const syncOperations = this._batch.map((operation) =>
+      this.convertToSyncOperation(operation)
+    )
+    this._send({ verb: 'batch', operations: syncOperations, subject: 'batch' })
+    this._batch = null
   }
 
-  delete(subject, metadata, key) {
-    this._send({ verb: 'delete', subject, metadata, key })
+  convertToSyncOperation(undoOperation) {
+    const syncOperation = { ...undoOperation, value: undoOperation.newValue }
+    delete syncOperation.oldValue
+    delete syncOperation.newValue
+    return syncOperation
+  }
+
+  upsert(subject, metadata, value, oldValue) {
+    const undoOperation = {
+      verb: 'upsert',
+      subject,
+      metadata,
+      newValue: value,
+      oldValue: oldValue,
+    }
+    if (this._batch) {
+      this._batch.push(undoOperation)
+      return
+    }
+    this._undoManager.add(undoOperation)
+    const syncOperation = this.convertToSyncOperation(undoOperation)
+    this._send(syncOperation)
+  }
+
+  update(subject, metadata, key, value, oldValue) {
+    const undoOperation = {
+      verb: 'update',
+      subject,
+      metadata,
+      key,
+      oldValue: oldValue,
+      newValue: value,
+    }
+    if (this._batch) {
+      this._batch.push(undoOperation)
+      return
+    }
+    this._undoManager.add(undoOperation)
+    const syncOperation = this.convertToSyncOperation(undoOperation)
+    this._send(syncOperation)
+  }
+
+  delete(subject, metadata, oldValue) {
+    const undoOperation = {
+      verb: 'delete',
+      subject,
+      metadata,
+      oldValue: oldValue,
+    }
+    if (this._batch) {
+      this._batch.push(undoOperation)
+      return
+    }
+    this._undoManager.add(undoOperation)
+    const syncOperation = this.convertToSyncOperation(undoOperation)
+    this._send(syncOperation)
   }
 
   saved() {
@@ -161,6 +230,10 @@ export class SyncEngine {
   }
 
   _applyOperation(operation) {
+    if (operation.verb === 'batch') {
+      operation.operations.map((op) => this._applyOperation(op))
+      return
+    }
     const updater = this._getUpdater(operation.subject, operation.metadata)
     updater.applyMessage(operation)
   }

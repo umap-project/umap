@@ -43,6 +43,7 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
+    console.log('updating', key, value)
     if (fieldInSchema(key)) {
       this.updateObjectValue(this._umap, key, value)
     }
@@ -56,9 +57,17 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
     try {
-      this.getDataLayerFromID(value.id)
+      console.log(
+        'found datalayer with id',
+        value.id,
+        this.getDataLayerFromID(value.id)
+      )
     } catch {
-      this._umap.createDataLayer(value, false)
+      console.log('we are the fucking catch', value)
+      const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
+      if (value.features) {
+        datalayer.addData(value)
+      }
     }
   }
 
@@ -92,11 +101,14 @@ export class FeatureUpdater extends BaseUpdater {
 
   // Create or update an object at a specific position
   upsert({ metadata, value }) {
+    console.log('updater.upsert for', metadata, value)
     const { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
     const feature = this.getFeatureFromMetadata(metadata)
+    console.log('feature', feature)
 
     if (feature) {
+      console.log('changing feature geometry')
       feature.geometry = value.geometry
     } else {
       datalayer.makeFeature(value, false)

@@ -417,7 +417,11 @@ export class DataLayer extends ServerStored {
 
   removeFeature(feature, sync) {
     const id = stamp(feature)
-    if (sync !== false) feature.sync.delete()
+    if (sync !== false) {
+      const oldValue = feature.toGeoJSON()
+      console.log('oldValue in removeFeature', oldValue)
+      feature.sync.delete(oldValue)
+    }
     this.hideFeature(feature)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
@@ -460,7 +464,10 @@ export class DataLayer extends ServerStored {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      return this.makeFeatures(geojson, sync)
+      this.sync.startBatch()
+      const features = this.makeFeatures(geojson, sync)
+      this.sync.commitBatch()
+      return features
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
       console.error(err)
@@ -518,7 +525,7 @@ export class DataLayer extends ServerStored {
     }
     if (feature && !feature.isEmpty()) {
       this.addFeature(feature)
-      if (sync) feature.onCommit()
+      if (sync) feature.sync.upsert(feature.toGeoJSON(), null)
       return feature
     }
   }
@@ -596,10 +603,11 @@ export class DataLayer extends ServerStored {
   }
 
   del(sync = true) {
+    const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     this.erase()
     if (sync) {
       this.isDeleted = true
-      this.sync.delete()
+      this.sync.delete(oldValue)
     }
   }
 
