@@ -166,7 +166,8 @@
 .umap-caption-bar button {
     margin-inline-start: 10px;
 }
-.umap-caption-bar button + button:before {
+.umap-caption-bar > button + select:before,
+.umap-caption-bar > button + button:before {
     content: '|';
     padding-inline-end: 10px;
 }
@@ -196,7 +197,14 @@
     z-index: var(--zindex-panels);
 }
 .umap-caption-bar-enabled .umap-caption-bar {
-    display: block;
+    display: flex;
+    align-items: baseline;
+}
+.umap-caption-bar select {
+    margin-top: 0;
+    line-height: initial;
+    height: initial;
+    width: auto;
 }
 .umap-caption-bar-enabled {
     --current-footer-height: var(--footer-height);
