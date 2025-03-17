@@ -176,7 +176,7 @@ export default class Importer extends Utils.WithTemplate {
   showImporters() {
     if (!this.IMPORTERS.length) return
     const [element, { grid }] = Utils.loadTemplateWithRefs(GRID_TEMPLATE)
-    for (const plugin of this.IMPORTERS.sort((a, b) => (a.id > b.id ? 1 : -1))) {
+    for (const plugin of this.IMPORTERS.sort((a, b) => (a.name > b.name ? 1 : -1))) {
       const button = Utils.loadTemplate(
         `<li><button type="button" class="${plugin.id}">${plugin.name}</button></li>`
       )
