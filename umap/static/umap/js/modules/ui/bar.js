@@ -211,6 +211,7 @@ export class BottomBar extends WithTemplate {
     this.elements.filter.hidden = !showMenus || !this._umap.properties.facetKey
     this.elements.layers.innerHTML = ''
     this._umap.eachDataLayer((datalayer) => {
+      if (!datalayer.options.inCaption) return
       this.elements.layers.appendChild(
         Utils.loadTemplate(
           `<option value="${datalayer.id}">${datalayer.getName()}</option>`
