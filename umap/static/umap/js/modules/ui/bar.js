@@ -194,11 +194,7 @@ export class BottomBar extends WithTemplate {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
       this._umap.eachDataLayer((datalayer) => {
-        if (datalayer.id === selected) {
-          datalayer.show()
-        } else {
-          datalayer.hide()
-        }
+        datalayer.toggle(datalayer.id === selected)
       })
     })
     this.redraw()
