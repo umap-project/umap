@@ -167,6 +167,7 @@ const BOTTOM_BAR_TEMPLATE = `
     <button class="umap-about-link flat" type="button" title="${translate('Open caption')}" data-ref="caption">${translate('Open caption')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Browse data')}" data-ref="browse">${translate('Browse data')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Filter data')}" data-ref="filter">${translate('Filter data')}</button>
+    <select data-ref=layers></select>
   </div>
 `
 
@@ -189,6 +190,17 @@ export class BottomBar extends WithTemplate {
       this._umap.openBrowser('filters')
     )
     this._slideshow.renderToolbox(this.element)
+    this.elements.layers.addEventListener('change', () => {
+      const select = this.elements.layers
+      const selected = select.options[select.selectedIndex].value
+      this._umap.eachDataLayer((datalayer) => {
+        if (datalayer.id === selected) {
+          datalayer.show()
+        } else {
+          datalayer.hide()
+        }
+      })
+    })
     this.redraw()
   }
 
@@ -201,6 +213,14 @@ export class BottomBar extends WithTemplate {
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
     this.elements.filter.hidden = !showMenus || !this._umap.properties.facetKey
+    this.elements.layers.innerHTML = ''
+    this._umap.eachDataLayer((datalayer) => {
+      this.elements.layers.appendChild(
+        Utils.loadTemplate(
+          `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+        )
+      )
+    })
   }
 }
 
