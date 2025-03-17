@@ -966,11 +966,11 @@ export class DataLayer extends ServerStored {
     this.propagateHide()
   }
 
-  toggle() {
+  toggle(status) {
     // From now on, do not try to how/hidedataChanged
     // automatically this layer.
     this._forcedVisibility = true
-    if (!this.isVisible()) this.show()
+    if (!this.isVisible() || status) this.show()
     else this.hide()
   }
 
@@ -1258,7 +1258,7 @@ export class DataLayer extends ServerStored {
         this
       )
     }
-    DomEvent.on(toggle, 'click', this.toggle, this)
+    DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)
     container.classList.add(this.getHidableClass())
     container.classList.toggle('off', !this.isVisible())
