@@ -18,6 +18,7 @@ export default class Slideshow extends WithTemplate {
     this._umap = umap
     this._id = null
     this.CLASSNAME = 'umap-slideshow-active'
+    this._umap.properties.slideshow ??= {}
     this.load()
     this._current = null
 
