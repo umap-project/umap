@@ -14,6 +14,9 @@
     height: fit-content;
     max-height: 90vh;
 }
+.umap-dialog ul + h4 {
+  margin-top: var(--box-margin);
+}
 :where([data-component="no-dialog"]:not([hidden])) {
   display: block;
   position: relative;

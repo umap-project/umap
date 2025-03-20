@@ -135,14 +135,23 @@ const ENTRIES = {
       <li>${translate('# one hash for main heading')}</li>
       <li>${translate('## two hashes for second heading')}</li>
       <li>${translate('### three hashes for third heading')}</li>
+      <li>${translate('--- for a horizontal rule')}</li>
+    </ul>
+    <h4>${translate('Links')}</h4>
+    <ul>
       <li>${translate('Simple link: [[https://example.com]]')}</li>
       <li>${translate('Link with text: [[https://example.com|text of the link]]')}</li>
+    </ul>
+    <h4>${translate('Images')}</h4>
+    <ul>
       <li>${translate('Image: {{https://image.url.com}}')}</li>
       <li>${translate('Image with custom width (in px): {{https://image.url.com|width}}')}</li>
+    </ul>
+    <h4>${translate('Iframes')}</h4>
+    <ul>
       <li>${translate('Iframe: {{{https://iframe.url.com}}}')}</li>
       <li>${translate('Iframe with custom height (in px): {{{https://iframe.url.com|height}}}')}</li>
       <li>${translate('Iframe with custom height and width (in px): {{{https://iframe.url.com|height*width}}}')}</li>
-      <li>${translate('--- for a horizontal rule')}</li>
     </ul>
   </div>
   `,
