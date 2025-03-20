@@ -51,6 +51,10 @@ export class MapUpdater extends BaseUpdater {
     this._umap.onPropertiesUpdated([key])
     this._umap.render([key])
   }
+
+  getStoredObject() {
+    return this._umap
+  }
 }
 
 export class DataLayerUpdater extends BaseUpdater {
@@ -91,6 +95,10 @@ export class DataLayerUpdater extends BaseUpdater {
       datalayer.commitDelete()
     }
   }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.id)
+  }
 }
 
 export class FeatureUpdater extends BaseUpdater {
@@ -101,14 +109,11 @@ export class FeatureUpdater extends BaseUpdater {
 
   // Create or update an object at a specific position
   upsert({ metadata, value }) {
-    console.log('updater.upsert for', metadata, value)
     const { id, layerId } = metadata
     const datalayer = this.getDataLayerFromID(layerId)
     const feature = this.getFeatureFromMetadata(metadata)
-    console.log('feature', feature)
 
     if (feature) {
-      console.log('changing feature geometry')
       feature.geometry = value.geometry
     } else {
       datalayer.makeFeature(value, false)
@@ -138,5 +143,9 @@ export class FeatureUpdater extends BaseUpdater {
     // and the wole feature getting deleted
     const feature = this.getFeatureFromMetadata(metadata)
     if (feature) feature.del(false)
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.layerId)
   }
 }

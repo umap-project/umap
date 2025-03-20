@@ -670,10 +670,10 @@ export default class Umap extends ServerStored {
   }
 
   async saveAll() {
-    if (!SAVEMANAGER.isDirty) return
+    // if (!SAVEMANAGER.isDirty) return
     if (this._defaultExtent) this._setCenterAndZoom()
     this.backup()
-    await SAVEMANAGER.save()
+    await this.sync.save()
     // Do a blind render for now, as we are not sure what could
     // have changed, we'll be more subtil when we'll remove the
     // save action
@@ -684,7 +684,6 @@ export default class Umap extends ServerStored {
         Alert.success(translate('Map has been saved!'))
       })
     }
-    this.sync.saved()
     this.fire('saved')
   }
 

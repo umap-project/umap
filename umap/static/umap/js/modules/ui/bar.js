@@ -30,7 +30,7 @@ const TOP_BAR_TEMPLATE = `
             <i class="icon icon-16 icon-redo"></i>
             <span class="">${translate('Redo')}</span>
         </button>
-        <button class="edit-disable round" type="button" data-ref="view">
+        <button class="edit-disable round disabled-on-dirty" type="button" data-ref="view">
             <i class="icon icon-16 icon-eye"></i>
             <span class="">${translate('View')}</span>
         </button>
@@ -159,7 +159,7 @@ export class TopBar extends WithTemplate {
   redraw() {
     const syncEnabled = this._umap.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
-    // this.elements.cancel.hidden = syncEnabled
+    this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
     this.elements.saveLabel.hidden = this._umap.permissions.isDraft()
     this.elements.saveDraftLabel.hidden = !this._umap.permissions.isDraft()
   }

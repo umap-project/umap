@@ -138,69 +138,90 @@ export class SyncEngine {
       verb: 'batch',
       operations: this._batch,
     })
-    const syncOperations = this._batch.map((operation) =>
-      this.convertToSyncOperation(operation)
-    )
-    this._send({ verb: 'batch', operations: syncOperations, subject: 'batch' })
+    const operations = this._batch.map((stage) => stage.operation)
+    this._send({ verb: 'batch', operations: operations, subject: 'batch' })
     this._batch = null
   }
 
-  convertToSyncOperation(undoOperation) {
-    const syncOperation = { ...undoOperation, value: undoOperation.newValue }
-    delete syncOperation.oldValue
-    delete syncOperation.newValue
-    return syncOperation
-  }
-
   upsert(subject, metadata, value, oldValue) {
-    const undoOperation = {
+    const operation = {
       verb: 'upsert',
       subject,
       metadata,
+      value,
+    }
+    const stage = {
+      operation,
       newValue: value,
       oldValue: oldValue,
     }
     if (this._batch) {
-      this._batch.push(undoOperation)
+      this._batch.push(stage)
       return
     }
-    this._undoManager.add(undoOperation)
-    const syncOperation = this.convertToSyncOperation(undoOperation)
-    this._send(syncOperation)
+    this._undoManager.add(stage)
+    this._send(operation)
   }
 
   update(subject, metadata, key, value, oldValue) {
-    const undoOperation = {
+    const operation = {
       verb: 'update',
       subject,
       metadata,
       key,
+      value,
+    }
+    const stage = {
+      operation,
       oldValue: oldValue,
       newValue: value,
     }
     if (this._batch) {
-      this._batch.push(undoOperation)
+      this._batch.push(stage)
       return
     }
-    this._undoManager.add(undoOperation)
-    const syncOperation = this.convertToSyncOperation(undoOperation)
-    this._send(syncOperation)
+    this._undoManager.add(stage)
+    this._send(operation)
   }
 
   delete(subject, metadata, oldValue) {
-    const undoOperation = {
+    const operation = {
       verb: 'delete',
       subject,
       metadata,
+    }
+    const stage = {
+      operation,
       oldValue: oldValue,
     }
     if (this._batch) {
-      this._batch.push(undoOperation)
+      this._batch.push(stage)
       return
     }
-    this._undoManager.add(undoOperation)
-    const syncOperation = this.convertToSyncOperation(undoOperation)
-    this._send(syncOperation)
+    this._undoManager.add(stage)
+    this._send(operation)
+  }
+
+  async save() {
+    const needSave = new Map()
+    for (const operation of this._operations.sorted()) {
+      if (operation.dirty) {
+        const updater = this._getUpdater(operation.subject)
+        const obj = updater.getStoredObject(operation.metadata)
+        if (!needSave.has(obj)) {
+          needSave.set(obj, [])
+        }
+        needSave.get(obj).push(operation)
+      }
+    }
+    for (const [obj, operations] of needSave.entries()) {
+      await obj.save()
+      for (const operation of operations) {
+        operation.dirty = false
+      }
+    }
+    this.saved()
+    this._undoManager.toggleState()
   }
 
   saved() {
@@ -213,8 +234,8 @@ export class SyncEngine {
     }
   }
 
-  _send(inputMessage) {
-    const message = this._operations.addLocal(inputMessage)
+  _send(operation) {
+    const message = this._operations.addLocal(operation)
 
     if (this.offline) return
     if (this.transport) {
@@ -377,9 +398,7 @@ export class SyncEngine {
 
   onSavedMessage({ sender, lastKnownHLC }) {
     debug(`received saved message from peer ${sender}`, lastKnownHLC)
-    if (lastKnownHLC === this._operations.getLastKnownHLC() && SaveManager.isDirty) {
-      SaveManager.clear()
-    }
+    this._operations.saved(lastKnownHLC)
   }
 
   /**
@@ -451,16 +470,22 @@ export class Operations {
     this._operations = new Array()
   }
 
+  saved(hlc) {
+    for (const operation of this.getOperationsSince(hlc)) {
+      operation.dirty = false
+    }
+  }
+
   /**
    * Tick the clock and store the passed message in the operations list.
    *
    * @param {*} inputMessage
    * @returns {*} clock-aware message
    */
-  addLocal(inputMessage) {
-    const message = { ...inputMessage, hlc: this._hlc.tick() }
-    this._operations.push(message)
-    return message
+  addLocal(operation) {
+    operation.hlc = this._hlc.tick()
+    this._operations.push(operation)
+    return operation
   }
 
   /**
