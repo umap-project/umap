@@ -19,7 +19,7 @@
 .leaflet-container .edit-disable,
 .leaflet-container .connected-peers
 {
-    display: block;
+    display: inline-block;
     height: 32px;
     line-height: 30px;
     padding: 0 20px;
@@ -78,20 +78,12 @@
     background: rgba(66, 236, 230, 0.10);
 }
 .leaflet-container .edit-save,
-.leaflet-container .edit-undo,
-.leaflet-container .edit-redo,
-.leaflet-container .edit-disable,
 .umap-edit-enabled .edit-enable {
     display: none;
 }
 .umap-edit-enabled .edit-save,
-.umap-edit-enabled .edit-disable,
-.umap-edit-enabled.umap-is-dirty .edit-undo,
-.umap-edit-enabled.umap-is-dirty .edit-redo {
+.umap-edit-enabled .edit-disable {
     display: inline-block;
-}
-.umap-is-dirty .edit-disable {
-    display: none;
 }
 .umap-caption-bar {
     display: none;

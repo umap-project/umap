@@ -31,7 +31,7 @@ function has(obj) {
 
 function onUpdate() {
   isDirty = Boolean(_queue.size)
-  document.body.classList.toggle('umap-is-dirty', isDirty)
+  // document.body.classList.toggle('umap-is-dirty', isDirty)
 }
 
 export class ServerStored {
