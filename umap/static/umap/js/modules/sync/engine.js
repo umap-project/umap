@@ -399,6 +399,7 @@ export class SyncEngine {
   onSavedMessage({ sender, lastKnownHLC }) {
     debug(`received saved message from peer ${sender}`, lastKnownHLC)
     this._operations.saved(lastKnownHLC)
+    this._undoManager.toggleState()
   }
 
   /**
@@ -471,7 +472,7 @@ export class Operations {
   }
 
   saved(hlc) {
-    for (const operation of this.getOperationsSince(hlc)) {
+    for (const operation of this.getOperationsBefore(hlc)) {
       operation.dirty = false
     }
   }
@@ -541,6 +542,11 @@ export class Operations {
     const start = this._operations.findIndex((op) => op.hlc === hlc)
     this._operations.slice(start)
     return this._operations.filter((op) => op.hlc > hlc)
+  }
+
+  getOperationsBefore(hlc) {
+    if (!hlc) return this._operations
+    return this._operations.filter((op) => op.hlc <= hlc)
   }
 
   /**
