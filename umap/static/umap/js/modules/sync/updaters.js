@@ -64,7 +64,9 @@ export class DataLayerUpdater extends BaseUpdater {
     } catch {
       const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
       if (value.features) {
-        datalayer.addData(value, true, false)
+        // FIXME: this will create new stages in the undoStack, thus this will empty
+        // the redoStack
+        datalayer.addData(value)
       }
     }
   }
