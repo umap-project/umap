@@ -458,13 +458,13 @@ export class DataLayer extends ServerStored {
       .sort(Utils.naturalSort)
   }
 
-  addData(geojson, sync, batch = true) {
+  addData(geojson, sync) {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      if (batch) this.sync.startBatch()
+      this.sync.startBatch()
       const features = this.makeFeatures(geojson, sync)
-      if (batch) this.sync.commitBatch()
+      this.sync.commitBatch()
       return features
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
