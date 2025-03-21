@@ -192,7 +192,6 @@ export class MutatingForm extends Form {
   setter(field, value) {
     const oldValue = this.getter(field)
     super.setter(field, value)
-    this.obj.isDirty = true
     if ('render' in this.obj) {
       this.obj.render([field], this)
     }
