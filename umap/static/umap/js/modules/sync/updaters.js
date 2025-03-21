@@ -146,9 +146,9 @@ export class FeatureUpdater extends BaseUpdater {
 
 export class MapPermissionsUpdater extends BaseUpdater {
   update({ key, value }) {
-    this.updateObjectValue(this._umap.permissions, key, value)
-    // if (fieldInSchema(key)) {
-    // }
+    if (fieldInSchema(key)) {
+      this.updateObjectValue(this._umap.permissions, key, value)
+    }
   }
 
   getStoredObject(metadata) {
@@ -158,9 +158,9 @@ export class MapPermissionsUpdater extends BaseUpdater {
 
 export class DataLayerPermissionsUpdater extends BaseUpdater {
   update({ key, value, metadata }) {
-    this.updateObjectValue(this.getDataLayerFromID(metadata.id), key, value)
-    // if (fieldInSchema(key)) {
-    // }
+    if (fieldInSchema(key)) {
+      this.updateObjectValue(this.getDataLayerFromID(metadata.id), key, value)
+    }
   }
 
   getStoredObject(metadata) {
