@@ -1,4 +1,4 @@
-from typing import Literal, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field, RootModel
 
@@ -14,10 +14,11 @@ class OperationMessage(BaseModel):
     """Message sent from one peer to all the others"""
 
     kind: Literal["OperationMessage"] = "OperationMessage"
-    verb: Literal["upsert", "update", "delete"]
+    verb: Literal["upsert", "update", "delete", "batch"]
     subject: Literal["map", "datalayer", "feature"]
     metadata: Optional[dict] = None
     key: Optional[str] = None
+    operations: Optional[List] = None
 
 
 class PeerMessage(BaseModel):

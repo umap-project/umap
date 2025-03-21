@@ -50,6 +50,10 @@ export class MapUpdater extends BaseUpdater {
     this._umap.onPropertiesUpdated([key])
     this._umap.render([key])
   }
+
+  getStoredObject() {
+    return this._umap
+  }
 }
 
 export class DataLayerUpdater extends BaseUpdater {
@@ -58,7 +62,12 @@ export class DataLayerUpdater extends BaseUpdater {
     try {
       this.getDataLayerFromID(value.id)
     } catch {
-      this._umap.createDataLayer(value, false)
+      const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
+      if (value.features) {
+        // FIXME: this will create new stages in the undoStack, thus this will empty
+        // the redoStack
+        datalayer.addData(value)
+      }
     }
   }
 
@@ -81,6 +90,10 @@ export class DataLayerUpdater extends BaseUpdater {
       datalayer.del(false)
       datalayer.commitDelete()
     }
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.id)
   }
 }
 
@@ -126,5 +139,33 @@ export class FeatureUpdater extends BaseUpdater {
     // and the wole feature getting deleted
     const feature = this.getFeatureFromMetadata(metadata)
     if (feature) feature.del(false)
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.layerId)
+  }
+}
+
+export class MapPermissionsUpdater extends BaseUpdater {
+  update({ key, value }) {
+    if (fieldInSchema(key)) {
+      this.updateObjectValue(this._umap.permissions, key, value)
+    }
+  }
+
+  getStoredObject(metadata) {
+    return this._umap.permissions
+  }
+}
+
+export class DataLayerPermissionsUpdater extends BaseUpdater {
+  update({ key, value, metadata }) {
+    if (fieldInSchema(key)) {
+      this.updateObjectValue(this.getDataLayerFromID(metadata.id), key, value)
+    }
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.id).permissions
   }
 }

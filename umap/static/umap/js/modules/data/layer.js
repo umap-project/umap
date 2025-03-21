@@ -49,7 +49,6 @@ export class DataLayer extends ServerStored {
     this._leafletMap = leafletMap
     this.parentPane = this._leafletMap.getPane('overlayPane')
     this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    this.pane.dataset.id = stamp(this)
     // FIXME: should be on layer
     this.renderer = L.svg({ pane: this.pane })
     this.defaultOptions = {
@@ -66,6 +65,7 @@ export class DataLayer extends ServerStored {
     data.id = data.id || crypto.randomUUID()
 
     this.setOptions(data)
+    this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
@@ -366,9 +366,8 @@ export class DataLayer extends ServerStored {
   }
 
   connectToMap() {
-    const id = stamp(this)
-    if (!this._umap.datalayers[id]) {
-      this._umap.datalayers[id] = this
+    if (!this._umap.datalayers[this.id]) {
+      this._umap.datalayers[this.id] = this
     }
     if (!this._umap.datalayersIndex.includes(this)) {
       this._umap.datalayersIndex.push(this)
@@ -417,7 +416,10 @@ export class DataLayer extends ServerStored {
 
   removeFeature(feature, sync) {
     const id = stamp(feature)
-    if (sync !== false) feature.sync.delete()
+    if (sync !== false) {
+      const oldValue = feature.toGeoJSON()
+      feature.sync.delete(oldValue)
+    }
     this.hideFeature(feature)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
@@ -460,7 +462,10 @@ export class DataLayer extends ServerStored {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      return this.makeFeatures(geojson, sync)
+      this.sync.startBatch()
+      const features = this.makeFeatures(geojson, sync)
+      this.sync.commitBatch()
+      return features
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
       console.error(err)
@@ -518,7 +523,7 @@ export class DataLayer extends ServerStored {
     }
     if (feature && !feature.isEmpty()) {
       this.addFeature(feature)
-      if (sync) feature.onCommit()
+      if (sync) feature.sync.upsert(feature.toGeoJSON(), null)
       return feature
     }
   }
@@ -596,10 +601,11 @@ export class DataLayer extends ServerStored {
   }
 
   del(sync = true) {
+    const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     this.erase()
     if (sync) {
       this.isDeleted = true
-      this.sync.delete()
+      this.sync.delete(oldValue)
     }
   }
 
@@ -1086,7 +1092,11 @@ export class DataLayer extends ServerStored {
 
   setReferenceVersion({ response, sync }) {
     this._referenceVersion = response.headers.get('X-Datalayer-Version')
-    if (sync) this.sync.update('_referenceVersion', this._referenceVersion)
+    if (sync) {
+      this.sync.update('_referenceVersion', this._referenceVersion, null, {
+        undo: false,
+      })
+    }
   }
 
   async save() {
@@ -1167,7 +1177,7 @@ export class DataLayer extends ServerStored {
   }
 
   commitDelete() {
-    delete this._umap.datalayers[stamp(this)]
+    delete this._umap.datalayers[this.id]
   }
 
   getName() {

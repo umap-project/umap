@@ -44,6 +44,10 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  center: {
+    type: Object,
+    impacts: [], // default center, doesn't need any update of the map
+  },
   color: {
     type: String,
     impacts: ['data'],
@@ -118,12 +122,18 @@ export const SCHEMA = {
     default: false,
     label: translate('Animated transitions'),
   },
+  edit_status: {
+    type: Number,
+  },
   editinosmControl: {
     type: Boolean,
     impacts: ['ui'],
     nullable: true,
     label: translate('Display the control to open OpenStreetMap editor'),
     default: null,
+  },
+  editors: {
+    type: Array,
   },
   embedControl: {
     type: Boolean,
@@ -362,6 +372,9 @@ export const SCHEMA = {
     type: Object,
     impacts: ['background'],
   },
+  owner: {
+    type: Object,
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
@@ -436,6 +449,9 @@ export const SCHEMA = {
     label: translate('Display the search control'),
     default: true,
   },
+  share_status: {
+    type: Number,
+  },
   shortCredit: {
     type: String,
     impacts: ['ui'],
@@ -499,6 +515,9 @@ export const SCHEMA = {
     label: translate('Enable real-time collaboration'),
     helpEntries: ['sync'],
     default: false,
+  },
+  team: {
+    type: Object,
   },
   tilelayer: {
     type: Object,
@@ -566,7 +585,6 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
-
   _referenceVersion: {
     type: Number,
     impacts: ['data'],

@@ -22,15 +22,19 @@ const TOP_BAR_TEMPLATE = `
           <span class="username" data-ref="username"></span>
         </button>
         <button class="umap-help-link flat" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
-        <button class="edit-cancel round" type="button" data-ref="cancel">
-            <i class="icon icon-16 icon-restore"></i>
-            <span class="">${translate('Cancel edits')}</span>
+        <button class="edit-undo round" type="button" data-ref="undo" disabled>
+            <i class="icon icon-16 icon-undo"></i>
+            <span class="">${translate('Undo')}</span>
         </button>
-        <button class="edit-disable round" type="button" data-ref="view">
+        <button class="edit-redo round" type="button" data-ref="redo" disabled>
+            <i class="icon icon-16 icon-redo"></i>
+            <span class="">${translate('Redo')}</span>
+        </button>
+        <button class="edit-disable round disabled-on-dirty" type="button" data-ref="view">
             <i class="icon icon-16 icon-eye"></i>
             <span class="">${translate('View')}</span>
         </button>
-        <button class="edit-save button round" type="button" data-ref="save">
+        <button class="edit-save button round enabled-on-dirty" type="button" data-ref="save">
             <i class="icon icon-16 icon-save"></i>
             <i class="icon icon-16 icon-save-disabled"></i>
             <span hidden data-ref="saveLabel">${translate('Save')}</span>
@@ -118,11 +122,12 @@ export class TopBar extends WithTemplate {
     })
 
     this.elements.help.addEventListener('click', () => this._umap.help.showGetStarted())
-    this.elements.cancel.addEventListener('click', () => this._umap.askForReset())
-    this.elements.cancel.addEventListener('mouseover', () => {
+    this.elements.redo.addEventListener('click', () => this._umap.redo())
+    this.elements.undo.addEventListener('click', () => this._umap.undo())
+    this.elements.undo.addEventListener('mouseover', () => {
       this._umap.tooltip.open({
         content: this._umap.help.displayLabel('CANCEL'),
-        anchor: this.elements.cancel,
+        anchor: this.elements.undo,
         position: 'bottom',
         delay: 500,
         duration: 5000,
@@ -154,7 +159,7 @@ export class TopBar extends WithTemplate {
   redraw() {
     const syncEnabled = this._umap.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
-    this.elements.cancel.hidden = syncEnabled
+    this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
     this.elements.saveLabel.hidden = this._umap.permissions.isDraft()
     this.elements.saveDraftLabel.hidden = !this._umap.permissions.isDraft()
   }
@@ -240,10 +245,7 @@ export class EditBar extends WithTemplate {
     DomEvent.disableClickPropagation(this.element)
     this._onClick('marker', () => this._leafletMap.editTools.startMarker())
     this._onClick('polyline', () => this._leafletMap.editTools.startPolyline())
-    this._onClick('multiline', () => {
-      console.log('click click')
-      this._umap.editedFeature.ui.editor.newShape()
-    })
+    this._onClick('multiline', () => this._umap.editedFeature.ui.editor.newShape())
     this._onClick('polygon', () => this._leafletMap.editTools.startPolygon())
     this._onClick('multipolygon', () => this._umap.editedFeature.ui.editor.newShape())
     this._onClick('caption', () => this._umap.editCaption())

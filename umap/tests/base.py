@@ -41,7 +41,7 @@ class LicenceFactory(factory.django.DjangoModelFactory):
 
 
 class TileLayerFactory(factory.django.DjangoModelFactory):
-    name = "Test zoom layer"
+    name = "Test tilelayer"
     url_template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution = "Test layer attribution"
 

@@ -13,6 +13,7 @@ export class MapPermissions extends ServerStored {
     this.setProperties(umap.properties.permissions)
     this._umap = umap
     this._isDirty = false
+    this.sync = umap.syncEngine.proxy(this)
   }
 
   setProperties(properties) {
@@ -26,6 +27,13 @@ export class MapPermissions extends ServerStored {
       },
       properties
     )
+  }
+
+  getSyncMetadata() {
+    return {
+      subject: 'mappermissions',
+      metadata: {},
+    }
   }
 
   render() {
@@ -259,6 +267,14 @@ export class DataLayerPermissions extends ServerStored {
     )
 
     this.datalayer = datalayer
+    this.sync = umap.syncEngine.proxy(this)
+  }
+
+  getSyncMetadata() {
+    return {
+      subject: 'datalayerpermissions',
+      metadata: { id: this.datalayer.id },
+    }
   }
 
   edit(container) {
