@@ -49,7 +49,6 @@ export class DataLayer extends ServerStored {
     this._leafletMap = leafletMap
     this.parentPane = this._leafletMap.getPane('overlayPane')
     this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    this.pane.dataset.id = stamp(this)
     // FIXME: should be on layer
     this.renderer = L.svg({ pane: this.pane })
     this.defaultOptions = {
@@ -66,6 +65,7 @@ export class DataLayer extends ServerStored {
     data.id = data.id || crypto.randomUUID()
 
     this.setOptions(data)
+    this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
@@ -366,9 +366,8 @@ export class DataLayer extends ServerStored {
   }
 
   connectToMap() {
-    const id = stamp(this)
-    if (!this._umap.datalayers[id]) {
-      this._umap.datalayers[id] = this
+    if (!this._umap.datalayers[this.id]) {
+      this._umap.datalayers[this.id] = this
     }
     if (!this._umap.datalayersIndex.includes(this)) {
       this._umap.datalayersIndex.push(this)
@@ -419,7 +418,6 @@ export class DataLayer extends ServerStored {
     const id = stamp(feature)
     if (sync !== false) {
       const oldValue = feature.toGeoJSON()
-      console.log('oldValue in removeFeature', oldValue)
       feature.sync.delete(oldValue)
     }
     this.hideFeature(feature)
@@ -460,13 +458,13 @@ export class DataLayer extends ServerStored {
       .sort(Utils.naturalSort)
   }
 
-  addData(geojson, sync) {
+  addData(geojson, sync, batch = true) {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      this.sync.startBatch()
+      if (batch) this.sync.startBatch()
       const features = this.makeFeatures(geojson, sync)
-      this.sync.commitBatch()
+      if (batch) this.sync.commitBatch()
       return features
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
@@ -1187,7 +1185,7 @@ export class DataLayer extends ServerStored {
   }
 
   commitDelete() {
-    delete this._umap.datalayers[stamp(this)]
+    delete this._umap.datalayers[this.id]
   }
 
   getName() {

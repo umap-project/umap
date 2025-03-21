@@ -2,7 +2,13 @@ import * as SaveManager from '../saving.js'
 import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { UndoManager } from './undo.js'
-import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
+import {
+  DataLayerUpdater,
+  FeatureUpdater,
+  MapUpdater,
+  MapPermissionsUpdater,
+  DataLayerPermissionsUpdater,
+} from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 
 // Start reconnecting after 2 seconds, then double the delay each time
@@ -56,6 +62,8 @@ export class SyncEngine {
       map: new MapUpdater(umap),
       feature: new FeatureUpdater(umap),
       datalayer: new DataLayerUpdater(umap),
+      mappermissions: new MapPermissionsUpdater(umap),
+      datalayerpermissions: new DataLayerPermissionsUpdater(umap),
     }
     this.transport = undefined
     this._operations = new Operations()
@@ -129,17 +137,15 @@ export class SyncEngine {
     this._batch = []
   }
 
-  commitBatch() {
+  commitBatch(subject, metadata) {
     if (!this._batch.length) {
       this._batch = null
       return
     }
-    this._undoManager.add({
-      verb: 'batch',
-      operations: this._batch,
-    })
     const operations = this._batch.map((stage) => stage.operation)
-    this._send({ verb: 'batch', operations: operations, subject: 'batch' })
+    const operation = { verb: 'batch', operations, subject, metadata }
+    this._undoManager.add({ operation, stages: this._batch })
+    this._send(operation)
     this._batch = null
   }
 
@@ -204,6 +210,10 @@ export class SyncEngine {
 
   async save() {
     const needSave = new Map()
+    if (!this._umap.id) {
+      // There is no operation for fist map save
+      needSave.set(this._umap, [])
+    }
     for (const operation of this._operations.sorted()) {
       if (operation.dirty) {
         const updater = this._getUpdater(operation.subject)
@@ -215,7 +225,8 @@ export class SyncEngine {
       }
     }
     for (const [obj, operations] of needSave.entries()) {
-      await obj.save()
+      const ok = await obj.save()
+      if (!ok) break
       for (const operation of operations) {
         operation.dirty = false
       }
@@ -243,7 +254,11 @@ export class SyncEngine {
     }
   }
 
-  _getUpdater(subject, metadata) {
+  _getUpdater(subject, metadata, sync) {
+    // For now, prevent permissions to be synced, for security reasons
+    if (sync && (subject === 'mappermissions' || subject === 'datalayerpermissions')) {
+      return
+    }
     if (Object.keys(this.updaters).includes(subject)) {
       return this.updaters[subject]
     }
@@ -256,6 +271,10 @@ export class SyncEngine {
       return
     }
     const updater = this._getUpdater(operation.subject, operation.metadata)
+    if (!updater) {
+      debug('No updater for', operation)
+      return
+    }
     updater.applyMessage(operation)
   }
 
@@ -449,7 +468,7 @@ export class SyncEngine {
     const handler = {
       get(target, prop) {
         // Only proxy these methods
-        if (['upsert', 'update', 'delete'].includes(prop)) {
+        if (['upsert', 'update', 'delete', 'commitBatch'].includes(prop)) {
           const { subject, metadata } = object.getSyncMetadata()
           // Reflect.get is calling the original method.
           // .bind is adding the parameters automatically

@@ -34,7 +34,7 @@ const TOP_BAR_TEMPLATE = `
             <i class="icon icon-16 icon-eye"></i>
             <span class="">${translate('View')}</span>
         </button>
-        <button class="edit-save button round" type="button" data-ref="save">
+        <button class="edit-save button round enabled-on-dirty" type="button" data-ref="save">
             <i class="icon icon-16 icon-save"></i>
             <i class="icon icon-16 icon-save-disabled"></i>
             <span hidden data-ref="saveLabel">${translate('Save')}</span>
@@ -275,10 +275,7 @@ export class EditBar extends WithTemplate {
     DomEvent.disableClickPropagation(this.element)
     this._onClick('marker', () => this._leafletMap.editTools.startMarker())
     this._onClick('polyline', () => this._leafletMap.editTools.startPolyline())
-    this._onClick('multiline', () => {
-      console.log('click click')
-      this._umap.editedFeature.ui.editor.newShape()
-    })
+    this._onClick('multiline', () => this._umap.editedFeature.ui.editor.newShape())
     this._onClick('polygon', () => this._leafletMap.editTools.startPolygon())
     this._onClick('multipolygon', () => this._umap.editedFeature.ui.editor.newShape())
     this._onClick('caption', () => this._umap.editCaption())

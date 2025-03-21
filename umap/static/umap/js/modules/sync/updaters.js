@@ -43,7 +43,6 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    console.log('updating', key, value)
     if (fieldInSchema(key)) {
       this.updateObjectValue(this._umap, key, value)
     }
@@ -61,16 +60,11 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
     try {
-      console.log(
-        'found datalayer with id',
-        value.id,
-        this.getDataLayerFromID(value.id)
-      )
+      this.getDataLayerFromID(value.id)
     } catch {
-      console.log('we are the fucking catch', value)
       const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
       if (value.features) {
-        datalayer.addData(value)
+        datalayer.addData(value, true, false)
       }
     }
   }
@@ -147,5 +141,29 @@ export class FeatureUpdater extends BaseUpdater {
 
   getStoredObject(metadata) {
     return this.getDataLayerFromID(metadata.layerId)
+  }
+}
+
+export class MapPermissionsUpdater extends BaseUpdater {
+  update({ key, value }) {
+    this.updateObjectValue(this._umap.permissions, key, value)
+    // if (fieldInSchema(key)) {
+    // }
+  }
+
+  getStoredObject(metadata) {
+    return this._umap.permissions
+  }
+}
+
+export class DataLayerPermissionsUpdater extends BaseUpdater {
+  update({ key, value, metadata }) {
+    this.updateObjectValue(this.getDataLayerFromID(metadata.id), key, value)
+    // if (fieldInSchema(key)) {
+    // }
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.id).permissions
   }
 }

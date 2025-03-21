@@ -96,6 +96,10 @@ export default class Umap extends ServerStored {
         this._leafletMap.latLng(center)
     }
 
+    // Needed for permissions
+    this.syncEngine = new SyncEngine(this)
+    this.sync = this.syncEngine.proxy(this)
+
     // Needed to render controls
     this.permissions = new MapPermissions(this)
     this.urls = new URLs(this.properties.urls)
@@ -129,9 +133,6 @@ export default class Umap extends ServerStored {
     this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this)
-
-    this.syncEngine = new SyncEngine(this)
-    this.sync = this.syncEngine.proxy(this)
 
     if (this.hasEditMode()) {
       this.editPanel = new EditPanel(this, this._leafletMap)
@@ -606,7 +607,6 @@ export default class Umap extends ServerStored {
   }
 
   createDataLayer(options = {}, sync = true) {
-    console.log('createDatalayer', options)
     options.name =
       options.name || `${translate('Layer')} ${this.datalayersIndex.length + 1}`
     const datalayer = new DataLayer(this, this._leafletMap, options)
@@ -1269,7 +1269,7 @@ export default class Umap extends ServerStored {
   }
 
   disableEdit() {
-    if (this.isDirty) return
+    // if (this.isDirty) return
     this.drop.disable()
     document.body.classList.remove('umap-edit-enabled')
     this.editedFeature = null
@@ -1297,7 +1297,6 @@ export default class Umap extends ServerStored {
 
   getSyncMetadata() {
     return {
-      engine: this.sync,
       subject: 'map',
     }
   }
@@ -1495,7 +1494,7 @@ export default class Umap extends ServerStored {
       const form = builder.build()
       row.appendChild(form)
       row.classList.toggle('off', !datalayer.isVisible())
-      row.dataset.id = stamp(datalayer)
+      row.dataset.id = datalayer.id
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const movedLayer = this.datalayers[src.dataset.id]
@@ -1526,7 +1525,7 @@ export default class Umap extends ServerStored {
   }
 
   getDataLayerByUmapId(id) {
-    const datalayer = this.findDataLayer((d) => d.id === id)
+    const datalayer = this.datalayers[id]
     if (!datalayer) throw new Error(`Can't find datalayer with id ${id}`)
     return datalayer
   }
