@@ -90,8 +90,8 @@ def test_can_undo_redo_layer_color_change(
 ):
     page.goto(f"{live_server.url}{map_with_polygon.get_absolute_url()}?edit")
 
-    expect(page.locator(".edit-undo")).to_be_hidden()
-    expect(page.locator(".edit-redo")).to_be_hidden()
+    expect(page.locator(".edit-undo")).to_be_disabled()
+    expect(page.locator(".edit-redo")).to_be_disabled()
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()

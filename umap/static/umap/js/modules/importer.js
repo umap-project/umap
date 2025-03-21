@@ -249,7 +249,7 @@ export default class Importer extends Utils.WithTemplate {
           tagName: 'option',
           parent: layerSelect,
           textContent: datalayer.options.name,
-          value: L.stamp(datalayer),
+          value: datalayer.id,
         })
       }
     })

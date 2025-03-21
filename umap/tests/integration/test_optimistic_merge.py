@@ -292,9 +292,10 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     # Change name on page two and save
     page_two.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     page_two.locator('input[name="name"]').fill("name from page two")
+    page_two.wait_for_timeout(300)  # Time for the input debounce.
 
     # Map should be in dirty status
-    expect(page_two.get_by_text("Undo")).to_be_visible()
+    expect(page_two.get_by_text("Save", exact=True)).to_be_enabled()
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_two.get_by_role("button", name="Save").click()
 
@@ -306,7 +307,7 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     # We should have an alert with some actions
     expect(page_two.get_by_text("Whoops! Other contributor(s) changed")).to_be_visible()
     # Map should still be in dirty status
-    expect(page_two.get_by_text("Undo")).to_be_visible()
+    expect(page_two.get_by_text("Save", exact=True)).to_be_enabled()
 
     # Override data from page two
     with page_two.expect_response(re.compile(r".*/datalayer/update/.*")):
@@ -317,4 +318,4 @@ def test_should_display_alert_on_conflict(context, live_server, datalayer, openm
     data = json.loads(Path(saved.geojson.path).read_text())
     assert data["features"][0]["properties"]["name"] == "name from page two"
     # Map should not be in dirty status anymore
-    expect(page_two.get_by_text("Undo")).to_be_hidden()
+    expect(page_two.get_by_text("Save", exact=True)).to_be_disabled()

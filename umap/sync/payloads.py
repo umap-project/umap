@@ -15,7 +15,7 @@ class OperationMessage(BaseModel):
 
     kind: Literal["OperationMessage"] = "OperationMessage"
     verb: Literal["upsert", "update", "delete", "batch"]
-    subject: Literal["map", "datalayer", "feature", "batch"]
+    subject: Literal["map", "datalayer", "feature"]
     metadata: Optional[dict] = None
     key: Optional[str] = None
     operations: Optional[List] = None

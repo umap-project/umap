@@ -108,13 +108,11 @@ class Feature {
     const oldGeometry = Utils.CopyJSON(this._geometry)
     this.fromLatLngs(this._getLatLngs())
     if (sync) {
-      console.log('sync geometry')
       this.sync.update('geometry', this.geometry, oldGeometry)
     }
   }
 
   fromLatLngs(latlngs) {
-    console.log('fromLatLngs', latlngs)
     this._geometry_bk = Utils.CopyJSON(this._geometry)
     this._geometry = this.convertLatLngs(latlngs)
   }

@@ -541,14 +541,14 @@ Fields.DataLayerSwitcher = class extends Fields.Select {
         !datalayer.isDataReadOnly() &&
         datalayer.isBrowsable()
       ) {
-        options.push([L.stamp(datalayer), datalayer.getName()])
+        options.push([datalayer.id, datalayer.getName()])
       }
     })
     return options
   }
 
   toHTML() {
-    return L.stamp(this.obj.datalayer)
+    return this.obj.datalayer.id
   }
 
   toJS() {

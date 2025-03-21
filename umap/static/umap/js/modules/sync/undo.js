@@ -19,6 +19,9 @@ export class UndoManager {
     for (const button of document.querySelectorAll('.disabled-on-dirty')) {
       button.disabled = dirty
     }
+    for (const button of document.querySelectorAll('.enabled-on-dirty')) {
+      button.disabled = !dirty
+    }
   }
 
   isDirty() {
@@ -33,7 +36,7 @@ export class UndoManager {
 
   add(stage) {
     // FIXME make it more generic
-    if (stage.operation.key !== '_referenceVersion') {
+    if (!stage.operation || stage.operation.key !== '_referenceVersion') {
       stage.operation.dirty = true
       this._redoStack = []
       this._undoStack.push(stage)
@@ -54,8 +57,8 @@ export class UndoManager {
     if (!stage) return
     stage.operation.dirty = !stage.operation.dirty
     if (stage.operation.verb === 'batch') {
-      for (const op of stage.operations) {
-        this.applyOperation(this.copyOperation(op, redo))
+      for (const st of stage.stages) {
+        this.applyOperation(this.copyOperation(st, redo))
       }
     } else {
       this.applyOperation(this.copyOperation(stage, redo))

@@ -740,7 +740,6 @@ U.Editable = L.Editable.extend({
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
       event.layer.feature.pullGeometry(false)
-      console.log('onEscape', event.layer.feature.hasGeom())
       if (!event.layer.feature.hasGeom()) {
         event.layer.feature.del()
       } else {
