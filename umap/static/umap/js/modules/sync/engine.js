@@ -169,7 +169,7 @@ export class SyncEngine {
     this._send(operation)
   }
 
-  update(subject, metadata, key, value, oldValue) {
+  update(subject, metadata, key, value, oldValue, { undo } = { undo: true }) {
     const operation = {
       verb: 'update',
       subject,
@@ -186,7 +186,7 @@ export class SyncEngine {
       this._batch.push(stage)
       return
     }
-    this._undoManager.add(stage)
+    if (undo) this._undoManager.add(stage)
     this._send(operation)
   }
 
@@ -211,7 +211,7 @@ export class SyncEngine {
   async save() {
     const needSave = new Map()
     if (!this._umap.id) {
-      // There is no operation for fist map save
+      // There is no operation for first map save
       needSave.set(this._umap, [])
     }
     for (const operation of this._operations.sorted()) {

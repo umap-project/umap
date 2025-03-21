@@ -1104,7 +1104,11 @@ export class DataLayer extends ServerStored {
 
   setReferenceVersion({ response, sync }) {
     this._referenceVersion = response.headers.get('X-Datalayer-Version')
-    if (sync) this.sync.update('_referenceVersion', this._referenceVersion)
+    if (sync) {
+      this.sync.update('_referenceVersion', this._referenceVersion, null, {
+        undo: false,
+      })
+    }
   }
 
   async save() {

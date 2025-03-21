@@ -35,13 +35,10 @@ export class UndoManager {
   }
 
   add(stage) {
-    // FIXME make it more generic
-    if (!stage.operation || stage.operation.key !== '_referenceVersion') {
-      stage.operation.dirty = true
-      this._redoStack = []
-      this._undoStack.push(stage)
-      this.toggleState()
-    }
+    stage.operation.dirty = true
+    this._redoStack = []
+    this._undoStack.push(stage)
+    this.toggleState()
   }
 
   copyOperation(stage, redo) {
