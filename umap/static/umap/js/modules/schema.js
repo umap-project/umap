@@ -44,6 +44,10 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  center: {
+    type: Object,
+    impacts: [], // default center, doesn't need any update of the map
+  },
   color: {
     type: String,
     impacts: ['data'],
