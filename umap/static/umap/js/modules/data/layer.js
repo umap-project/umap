@@ -36,9 +36,8 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
   return acc
 }, {})
 
-export class DataLayer extends ServerStored {
+export class DataLayer {
   constructor(umap, leafletMap, data = {}) {
-    super()
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
     this._index = Array()
@@ -114,7 +113,6 @@ export class DataLayer extends ServerStored {
 
   set isDeleted(status) {
     this._isDeleted = status
-    if (status) this.isDirty = status
   }
 
   get isDeleted() {
@@ -530,10 +528,6 @@ export class DataLayer extends ServerStored {
     return this._umap.formatter
       .parse(raw, format)
       .then((geojson) => this.addData(geojson))
-      .then((data) => {
-        if (data?.length) this.isDirty = true
-        return data
-      })
       .catch((error) => {
         console.debug(error)
         Alert.error(translate('Import failed: invalid data'))
@@ -610,7 +604,6 @@ export class DataLayer extends ServerStored {
   empty() {
     if (this.isRemoteLayer()) return
     this.clear()
-    this.isDirty = true
   }
 
   clone() {
@@ -632,25 +625,6 @@ export class DataLayer extends ServerStored {
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
     this.clear()
-  }
-
-  reset() {
-    if (!this.createdOnServer) {
-      this.erase()
-      return
-    }
-
-    this.resetOptions()
-    this.parentPane.appendChild(this.pane)
-    if (this._leaflet_events_bk && !this._leaflet_events) {
-      this._leaflet_events = this._leaflet_events_bk
-    }
-    this.clear()
-    this.hide()
-    if (this.isRemoteLayer()) this.fetchRemoteData()
-    else if (this._geojson_bk) this.fromGeoJSON(this._geojson_bk)
-    this.show()
-    this.isDirty = false
   }
 
   redraw() {
@@ -948,7 +922,6 @@ export class DataLayer extends ServerStored {
           this.empty()
           if (this.isRemoteLayer()) this.fetchRemoteData()
           else this.addData(geojson)
-          this.isDirty = true
         }
       })
   }
@@ -1135,6 +1108,10 @@ export class DataLayer extends ServerStored {
   }
 
   async _trySave(url, headers, formData) {
+    if (this._forceSave) {
+      headers = {}
+      this._forceSave = false
+    }
     const [data, response, error] = await this._umap.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
@@ -1144,15 +1121,8 @@ export class DataLayer extends ServerStored {
               'This situation is tricky, you have to choose carefully which version is pertinent.'
           ),
           async () => {
-            // Save again this layer
-            const status = await this._trySave(url, {}, formData)
-            if (status) {
-              this.isDirty = false
-
-              // Call the main save, in case something else needs to be saved
-              // as the conflict stopped the saving flow
-              await this._umap.saveAll()
-            }
+            this._forceSave = true
+            await this._umap.saveAll()
           }
         )
       }
