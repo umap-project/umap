@@ -162,6 +162,7 @@ export class TopBar extends WithTemplate {
     this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
     this.elements.saveLabel.hidden = this._umap.permissions.isDraft()
     this.elements.saveDraftLabel.hidden = !this._umap.permissions.isDraft()
+    this._umap.sync._undoManager.toggleState()
   }
 }
 

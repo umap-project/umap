@@ -73,7 +73,7 @@ export class SyncEngine {
     this.websocketConnected = false
     this.closeRequested = false
     this.peerId = Utils.generateId()
-    this._undoManager = new UndoManager(this.updaters, this)
+    this._undoManager = new UndoManager(umap, this.updaters, this)
   }
 
   get isOpen() {
