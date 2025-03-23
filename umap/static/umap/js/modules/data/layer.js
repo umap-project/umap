@@ -269,13 +269,11 @@ export class DataLayer extends ServerStored {
   }
 
   clear() {
-    this.layer.clearLayers()
-    this._features = {}
-    this._index = Array()
-    if (this._geojson) {
-      this.backupData()
-      this._geojson = null
+    this.sync.startBatch()
+    for (const feature of Object.values(this._features)) {
+      feature.del()
     }
+    this.sync.commitBatch()
     this.dataChanged()
   }
 

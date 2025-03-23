@@ -43,7 +43,11 @@ export class UndoManager {
 
   copyOperation(stage, redo) {
     const operation = Utils.CopyJSON(stage.operation)
-    operation.value = redo ? stage.newValue : stage.oldValue
+    const value = redo ? stage.newValue : stage.oldValue
+    operation.value = value
+    if (['delete', 'upsert'].includes(operation.verb)) {
+      operation.verb = value === null || value === undefined ? 'delete' : 'upsert'
+    }
     return operation
   }
 
@@ -73,18 +77,15 @@ export class UndoManager {
     switch (operation.verb) {
       case 'update':
         updater.update(operation)
-        this._syncEngine._send(operation)
         break
       case 'delete':
+        updater.delete(operation)
+        break
       case 'upsert':
-        if (operation.value === null || operation.value === undefined) {
-          updater.delete(operation)
-        } else {
-          updater.upsert(operation)
-        }
-        this._syncEngine._send(operation)
+        updater.upsert(operation)
         break
     }
+    this._syncEngine._send(operation)
   }
 
   _getUpdater(subject, metadata) {
