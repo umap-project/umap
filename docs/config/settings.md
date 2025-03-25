@@ -354,52 +354,7 @@ Otherwise, use any valid [python-social-auth configuration](https://python-socia
 
 #### WEBSOCKET_ENABLED
 
-A WebSocket server is packaged with uMap, and can be turned-on to activate
-"real-time collaboration". In practice, in order to enable it, a few settings
-are exposed.
+Setting `WEBSOCKET_ENABLED` to `True` will allow users to enable real-time collaboration.
+A switch will be available for them in the "advanced properties" of the map.
 
-Setting `WEBSOCKET_ENABLED` to `True` will **not** enable real-time
-collaboration on all the maps served by the server. Instead, a switch will be
-available in the "advanced properties" of the map.
-
-The websocket server can be started with the following command:
-
-```bash
-umap run_websocket_server
-```
-
-And can take optional settings `--host` and `--port` (default values are defined in
-the settings).
-
-Configuration example:
-
-```python
-WEBSOCKET_ENABLED = True
-WEBSOCKET_BACK_HOST = "localhost"
-WEBSOCKET_BACK_PORT = 8002
-WEBSOCKET_FRONT_URI = "ws://localhost:8002"
-```
-
-These settings can also be set with the (same names) environment variables.
-
-#### WEBSOCKET_BACK_HOST
-#### WEBSOCKET_BACK_PORT
-
-The internal host and port the websocket server will connect to.
-
-#### WEBSOCKET_FRONT_URI
-
-The connection string that will be used by the client to connect to the
-websocket server. In practice, as it's useful to put the WebSocket server behind
-TLS encryption, the values defined by `WEBSOCKET_FRONT_URI` are different than
-the values defined by `WEBSOCKET_BACK_PORT` and `WEBSOCKET_BACK_HOST`.
-
-This value is comprised of three parts:
-
-```
-protocol://host:port
-```
-
-- `protocol`: can either be `ws` for plain unencrypted WebSockets, or `wss` when using TLS encryption.
-- `host`: is the address where the connection will be sent. It should be public facing.
-- `port`: is the port that is open on the host.
+See [the documentation about ASGI deployment](../deploy/asgi.md) for more information.
