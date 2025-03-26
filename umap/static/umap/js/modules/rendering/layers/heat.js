@@ -1,14 +1,14 @@
 // Uses global L.HeatLayer, not exposed as ESM
 import {
-  Marker,
-  LatLng,
-  latLngBounds,
   Bounds,
+  LatLng,
+  Marker,
+  latLngBounds,
   point,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
-import { LayerMixin } from './base.js'
-import * as Utils from '../../utils.js'
 import { translate } from '../../i18n.js'
+import * as Utils from '../../utils.js'
+import { LayerMixin } from './base.js'
 
 export const Heat = L.HeatLayer.extend({
   statics: {

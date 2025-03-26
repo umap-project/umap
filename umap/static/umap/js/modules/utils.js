@@ -368,10 +368,13 @@ export function isDataImage(value) {
  *                     characters and no diacritics.
  */
 export function normalize(s) {
-  return (s || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  return (
+    (s || '')
+      .toLowerCase()
+      .normalize('NFD')
+      // biome-ignore lint/suspicious/noMisleadingCharacterClass: <explanation>
+      .replace(/[\u0300-\u036f]/g, '')
+  )
 }
 
 // Vendorized from leaflet.utils

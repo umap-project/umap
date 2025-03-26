@@ -1,7 +1,7 @@
-import getClass from './fields.js'
-import * as Utils from '../utils.js'
-import { SCHEMA } from '../schema.js'
 import { translate } from '../i18n.js'
+import { SCHEMA } from '../schema.js'
+import * as Utils from '../utils.js'
+import getClass from './fields.js'
 
 export class Form extends Utils.WithEvents {
   constructor(obj, fields, properties) {

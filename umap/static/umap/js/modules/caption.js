@@ -1,6 +1,6 @@
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 const TEMPLATE = `
 <div class="umap-caption">

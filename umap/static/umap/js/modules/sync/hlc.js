@@ -91,7 +91,7 @@ export class HybridLogicalClock {
 
     if (now > local.walltime && now > remote.walltime) {
       nextValue = { ...local, walltime: now }
-    } else if (local.walltime == remote.walltime) {
+    } else if (local.walltime === remote.walltime) {
       const nn = Math.max(local.nn, remote.nn) + 1
       nextValue = { ...local, nn: nn }
     } else if (remote.walltime > local.walltime) {

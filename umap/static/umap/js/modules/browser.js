@@ -1,10 +1,10 @@
 import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { Form } from './form/builder.js'
+import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import * as Icon from './rendering/icon.js'
-import * as Utils from './utils.js'
-import { EXPORT_FORMATS } from './formatter.js'
 import ContextMenu from './ui/contextmenu.js'
-import { Form } from './form/builder.js'
+import * as Utils from './utils.js'
 
 export default class Browser {
   constructor(umap, leafletMap) {

@@ -1,18 +1,18 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
-  Marker,
-  Polyline,
-  Polygon,
   CircleMarker as BaseCircleMarker,
+  DomEvent,
   DomUtil,
-  LineUtil,
-  latLng,
   LatLng,
   LatLngBounds,
-  DomEvent,
+  LineUtil,
+  Marker,
+  Polygon,
+  Polyline,
+  latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
 

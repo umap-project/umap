@@ -1,40 +1,40 @@
 import {
   DomUtil,
   Util as LeafletUtil,
-  stamp,
   latLngBounds,
+  stamp,
 } from '../../vendors/leaflet/leaflet-src.esm.js'
-import { translate, setLocale, getLocale } from './i18n.js'
-import * as Utils from './utils.js'
-import { ServerStored } from './saving.js'
-import * as SAVEMANAGER from './saving.js'
-import { SyncEngine } from './sync/engine.js'
-import { LeafletMap } from './rendering/map.js'
-import URLs from './urls.js'
-import { Panel, EditPanel, FullPanel } from './ui/panel.js'
-import Dialog from './ui/dialog.js'
-import { BottomBar, TopBar, EditBar } from './ui/bar.js'
-import Tooltip from './ui/tooltip.js'
-import ContextMenu from './ui/contextmenu.js'
-import { Request, ServerRequest } from './request.js'
-import Help from './help.js'
-import { Formatter } from './formatter.js'
-import Slideshow from './slideshow.js'
-import { MapPermissions } from './permissions.js'
-import { SCHEMA } from './schema.js'
-import { DataLayer } from './data/layer.js'
-import Facets from './facets.js'
+import {
+  uMapAlert as Alert,
+  uMapAlertCreation as AlertCreation,
+} from '../components/alerts/alert.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
-import Importer from './importer.js'
-import Rules from './rules.js'
-import Share from './share.js'
-import {
-  uMapAlertCreation as AlertCreation,
-  uMapAlert as Alert,
-} from '../components/alerts/alert.js'
-import Orderable from './orderable.js'
+import { DataLayer } from './data/layer.js'
+import Facets from './facets.js'
 import { MutatingForm } from './form/builder.js'
+import { Formatter } from './formatter.js'
+import Help from './help.js'
+import { getLocale, setLocale, translate } from './i18n.js'
+import Importer from './importer.js'
+import Orderable from './orderable.js'
+import { MapPermissions } from './permissions.js'
+import { LeafletMap } from './rendering/map.js'
+import { Request, ServerRequest } from './request.js'
+import Rules from './rules.js'
+import { ServerStored } from './saving.js'
+import * as SAVEMANAGER from './saving.js'
+import { SCHEMA } from './schema.js'
+import Share from './share.js'
+import Slideshow from './slideshow.js'
+import { SyncEngine } from './sync/engine.js'
+import { BottomBar, EditBar, TopBar } from './ui/bar.js'
+import ContextMenu from './ui/contextmenu.js'
+import Dialog from './ui/dialog.js'
+import { EditPanel, FullPanel, Panel } from './ui/panel.js'
+import Tooltip from './ui/tooltip.js'
+import URLs from './urls.js'
+import * as Utils from './utils.js'
 
 export default class Umap extends ServerStored {
   constructor(element, geojson) {
