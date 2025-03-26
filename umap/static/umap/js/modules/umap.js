@@ -1162,7 +1162,6 @@ export default class Umap {
   }
 
   async save() {
-    this.rules.commit()
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
@@ -1323,6 +1322,9 @@ export default class Umap {
           this.bottomBar.redraw()
           break
         case 'data':
+          if (fields.includes('properties.rules')) {
+            this.rules.load()
+          }
           this.eachVisibleDataLayer((datalayer) => {
             datalayer.redraw()
           })

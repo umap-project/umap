@@ -1,4 +1,4 @@
-import { fieldInSchema } from '../utils.js'
+import * as Utils from '../utils.js'
 
 /**
  * Updaters are classes able to convert messages
@@ -8,27 +8,6 @@ import { fieldInSchema } from '../utils.js'
 class BaseUpdater {
   constructor(umap) {
     this._umap = umap
-  }
-
-  updateObjectValue(obj, key, value) {
-    const parts = key.split('.')
-    const lastKey = parts.pop()
-
-    // Reduce the current list of attributes,
-    // to find the object to set the property onto
-    const objectToSet = parts.reduce((currentObj, part) => {
-      if (currentObj !== undefined && part in currentObj) return currentObj[part]
-    }, obj)
-
-    // In case the given path doesn't exist, stop here
-    if (objectToSet === undefined) return
-
-    // Set the value (or delete it)
-    if (typeof value === 'undefined') {
-      delete objectToSet[lastKey]
-    } else {
-      objectToSet[lastKey] = value
-    }
   }
 
   getDataLayerFromID(layerId) {
@@ -43,8 +22,8 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (fieldInSchema(key)) {
-      this.updateObjectValue(this._umap, key, value)
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(this._umap, key, value)
     }
 
     this._umap.onPropertiesUpdated([key])
@@ -73,8 +52,8 @@ export class DataLayerUpdater extends BaseUpdater {
 
   update({ key, metadata, value }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
-    if (fieldInSchema(key)) {
-      this.updateObjectValue(datalayer, key, value)
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(datalayer, key, value)
     } else {
       console.debug(
         'Not applying update for datalayer because key is not in the schema',
@@ -127,7 +106,7 @@ export class FeatureUpdater extends BaseUpdater {
       const feature = this.getFeatureFromMetadata(metadata)
       feature.geometry = value
     } else {
-      this.updateObjectValue(feature, key, value)
+      Utils.setObjectValue(feature, key, value)
       feature.datalayer.indexProperties(feature)
     }
 
@@ -148,8 +127,8 @@ export class FeatureUpdater extends BaseUpdater {
 
 export class MapPermissionsUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (fieldInSchema(key)) {
-      this.updateObjectValue(this._umap.permissions, key, value)
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(this._umap.permissions, key, value)
     }
   }
 
@@ -160,8 +139,8 @@ export class MapPermissionsUpdater extends BaseUpdater {
 
 export class DataLayerPermissionsUpdater extends BaseUpdater {
   update({ key, value, metadata }) {
-    if (fieldInSchema(key)) {
-      this.updateObjectValue(this.getDataLayerFromID(metadata.id), key, value)
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(this.getDataLayerFromID(metadata.id), key, value)
     }
   }
 

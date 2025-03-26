@@ -70,21 +70,7 @@ export class Form extends Utils.WithEvents {
   }
 
   setter(field, value) {
-    const path = field.split('.')
-    let obj = this.obj
-    let what
-    for (let i = 0, l = path.length; i < l; i++) {
-      what = path[i]
-      if (what === path[l - 1]) {
-        if (typeof value === 'undefined') {
-          delete obj[what]
-        } else {
-          obj[what] = value
-        }
-      } else {
-        obj = obj[what]
-      }
-    }
+    Utils.setObjectValue(this.obj, field, value)
   }
 
   restoreField(field) {
@@ -191,7 +177,11 @@ export class MutatingForm extends Form {
 
   setter(field, value) {
     const oldValue = this.getter(field)
-    super.setter(field, value)
+    if ('setter' in this.obj) {
+      this.obj.setter(field, value)
+    } else {
+      super.setter(field, value)
+    }
     if ('render' in this.obj) {
       this.obj.render([field], this)
     }
