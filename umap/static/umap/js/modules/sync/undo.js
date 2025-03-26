@@ -11,6 +11,8 @@ export class UndoManager {
   }
 
   toggleState() {
+    // document is undefined during unittests
+    if (typeof document === 'undefined') return
     const undoButton = document.querySelector('.edit-undo')
     const redoButton = document.querySelector('.edit-redo')
     if (undoButton) undoButton.disabled = !this._undoStack.length
