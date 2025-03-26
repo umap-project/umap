@@ -831,8 +831,9 @@ export class DataLayer extends ServerStored {
       this
     )
 
-    if (this._umap.properties.urls.datalayer_versions)
+    if (this._umap.properties.urls.datalayer_versions) {
       this.buildVersionsFieldset(container)
+    }
 
     const advancedActions = DomUtil.createFieldset(
       container,
@@ -907,10 +908,15 @@ export class DataLayer extends ServerStored {
     const appendVersion = (data) => {
       const date = new Date(Number.parseInt(data.at, 10))
       const content = `${date.toLocaleString(U.lang)} (${Number.parseInt(data.size) / 1000}Kb)`
-      const el = DomUtil.create('div', 'umap-datalayer-version', versionsContainer)
-      const button = DomUtil.createButton('', el, '', () => this.restore(data.ref))
-      button.title = translate('Restore this version')
-      DomUtil.add('span', '', el, content)
+      const [el, { button }] = Utils.loadTemplateWithRefs(
+        `<div class="umap-datalayer-version">
+          <button type="button" title="${translate('Restore this version')}" data-ref=button>
+            <i class="icon icon-16 icon-restore"></i> ${content}
+          </button>
+        </div>`
+      )
+      versionsContainer.appendChild(el)
+      button.addEventListener('click', () => this.restore(data.ref))
     }
 
     const versionsContainer = DomUtil.createFieldset(container, translate('Versions'), {

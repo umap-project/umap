@@ -475,22 +475,6 @@ ul.photon-autocomplete {
     font-style: italic;
 }
 
-
-
-.umap-datalayer-version {
-    padding: 5px 0;
-    border-bottom: 1px solid #202425;
-}
-.umap-datalayer-version button {
-    display: inline-block;
-    width: 24px;
-    min-height: 24px;
-    background-position: -122px -73px;
-    background-repeat: no-repeat;
-    background-image: url('./img/16-white.svg');
-    margin-inline-end: 10px;
-}
-
 .leaflet-toolbar-tip {
     background-color: var(--color-darkGray);
 }
