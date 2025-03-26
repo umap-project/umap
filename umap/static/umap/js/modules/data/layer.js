@@ -918,7 +918,11 @@ export class DataLayer {
         )
         if (!error) {
           if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
-          if (geojson._umap_options) this.setOptions(geojson._umap_options)
+          if (geojson._umap_options) {
+            const oldOptions = Utils.CopyJSON(this.options)
+            this.setOptions(geojson._umap_options)
+            this.sync.update('options', this.options, oldOptions)
+          }
           this.empty()
           if (this.isRemoteLayer()) this.fetchRemoteData()
           else this.addData(geojson)
