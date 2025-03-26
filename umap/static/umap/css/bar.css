@@ -163,12 +163,13 @@
 .umap-main-edit-toolbox h3 {
     display: inline;
 }
-.umap-caption-bar button {
-    margin-inline-start: 10px;
+.umap-caption-bar .umap-map-author {
+    margin-inline-end: 10px;
 }
-.umap-caption-bar > button + select:before,
+.umap-caption-bar > button + button:after,
 .umap-caption-bar > button + button:before {
     content: '|';
+    padding-inline-start: 10px;
     padding-inline-end: 10px;
 }
 .umap-main-edit-toolbox .umap-user:hover {
