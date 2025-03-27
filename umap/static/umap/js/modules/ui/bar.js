@@ -210,14 +210,19 @@ export class BottomBar extends WithTemplate {
     this.elements.browse.hidden = !showMenus
     this.elements.filter.hidden = !showMenus || !this._umap.properties.facetKey
     this.elements.layers.innerHTML = ''
-    this._umap.eachDataLayer((datalayer) => {
-      if (!datalayer.options.inCaption) return
-      this.elements.layers.appendChild(
-        Utils.loadTemplate(
-          `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+    const datalayers = this._umap.datalayersIndex.filter((d) => d.options.inCaption)
+    if (datalayers.length < 2) {
+      this.elements.layers.hidden = true
+    } else {
+      this.elements.layers.hidden = false
+      for (const datalayer of datalayers) {
+        this.elements.layers.appendChild(
+          Utils.loadTemplate(
+            `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+          )
         )
-      )
-    })
+      }
+    }
   }
 }
 
