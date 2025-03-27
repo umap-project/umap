@@ -86,8 +86,8 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     expect(page.locator(".umap-main-edit-toolbox .map-name")).to_have_text(
         "Imported map"
     )
-    expect(page.get_by_text("Tunnels")).to_be_visible()
-    expect(page.get_by_text("Cities")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("Tunnels")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("Cities")).to_be_visible()
     expect(page.locator(".leaflet-control-minimap")).to_be_visible()
     expect(
         page.locator('img[src="https://tile.openstreetmap.fr/hot/6/32/21.png"]')
