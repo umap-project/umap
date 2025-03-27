@@ -45,6 +45,7 @@
     --box-margin: 14px;
     --text-margin: 7px;
     --dialog-width: 40vw;
+    --map-fragment-height: 210px;
 
     /* z-indexes (leaflet CSS sets the map at 400 by default) */
     --zindex-alert: 500;

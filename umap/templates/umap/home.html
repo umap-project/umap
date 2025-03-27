@@ -20,11 +20,13 @@
   {% endif %}
   <div class="wrapper">
     {% if maps %}
-      <h2 class="section">
-        {% blocktrans %}Get inspired, browse maps{% endblocktrans %}
-      </h2>
-      <div class="map_list row">
-        {% include "umap/map_list.html" %}
+      <div class="row">
+        <h2 class="section">
+          {% blocktrans %}Get inspired, browse maps{% endblocktrans %}
+        </h2>
+        <div class="grid-container">
+          {% include "umap/map_list.html" %}
+        </div>
       </div>
     {% endif %}
   </div>

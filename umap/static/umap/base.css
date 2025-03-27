@@ -84,6 +84,11 @@ hgroup {
 hgroup > :not(:first-child):last-child {
     font-weight: normal;
 }
+hgroup p,
+hgroup button {
+    margin: 0;
+}
+
 
 /*
 * List
@@ -158,10 +163,23 @@ dt {
 }
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    --grid-layout-gap: calc(var(--gutter) * 2);
+    --grid-column-count: 3;
+    --grid-item--min-width: 300px;
+
+    /**
+    * Calculated values.
+    */
+    --gap-count: calc(var(--grid-column-count) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+    --grid-item--max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
+
+    grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr));
+    grid-gap: var(--grid-layout-gap);
 }
 .grid-container.by4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    --grid-column-count: 4;
+    --grid-item--min-width: 60px;
 }
 .grid-container > * {
     text-align: center;
