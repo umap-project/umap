@@ -43,22 +43,27 @@
   <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', event => {
       const server = new U.ServerRequest()
-      const getMore = async function (e) {
-        L.DomEvent.stop(e)
-        const [{html}, response, error] = await server.get(this.href)
+      const getMore = async function (link) {
+        const container = link.parentNode
+        container.removeChild(link)
+        const [{html}, response, error] = await server.get(link.href)
         if (!error) {
-          const container = this.parentNode
-          container.innerHTML = html
-          const more = document.querySelector('.more_button')
-          if (more) {
-            L.DomEvent.on(more, 'click', getMore, more)
-          }
+          const template = document.createElement('template')
+          template.innerHTML = html
+          container.appendChild(template.content)
+          listenForMore()
         }
       }
-      const more = document.querySelector('.more_button')
-      if (more) {
-        L.DomEvent.on(more, 'click', getMore, more)
+      const listenForMore = () => {
+        const more = document.querySelector('.more_button')
+        if (more) {
+          L.DomEvent.on(more, 'click', (e) => {
+            L.DomEvent.stop(e)
+            getMore(more)
+          })
+        }
       }
+      listenForMore()
     })
   </script>
 {% endblock bottom_js %}

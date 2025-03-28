@@ -56,9 +56,9 @@ body.login header {
 .map_fragment {
     width: 100%;
 }
-.map_list .map_fragment,
+.map_fragment,
 .demo_map .map_fragment {
-    height: 210px;
+    height: var(--map-fragment-height);
 }
 .map_list .legend {
     padding-top: 7px;
@@ -163,6 +163,9 @@ h2.tabs a:hover {
 .demo-instance-warning a {
     color: #efefef;
     text-decoration: underline;
+}
+.more_button {
+    min-height: var(--map-fragment-height);
 }
 
 
