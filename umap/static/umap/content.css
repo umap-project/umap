@@ -16,6 +16,10 @@ input::-webkit-input-placeholder, ::-webkit-input-placeholder {
 input:-moz-placeholder, :-moz-placeholder {
    color: #a5a5a5;
 }
+.search-form {
+    display: flex;
+    align-items: baseline;
+}
 
 
 /* **************** */

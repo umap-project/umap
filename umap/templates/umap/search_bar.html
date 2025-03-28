@@ -4,7 +4,7 @@
 {% trans "Search maps" as default_placeholder %}
 <div class="wrapper search_wrapper">
   <div class="row">
-    <form action="{% firstof action search_url %}" method="get">
+    <form class="search-form" action="{% firstof action search_url %}" method="get">
       <div class="col half mwide">
         <input name="q"
                type="search"
