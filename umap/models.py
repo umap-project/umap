@@ -526,7 +526,10 @@ class DataLayer(NamedModel):
         metadata = self.settings
         if not metadata:
             # Fallback to file for old datalayers.
-            data = json.loads(self.geojson.read().decode())
+            try:
+                data = json.loads(self.geojson.read().decode())
+            except FileNotFoundError:
+                data = {}
             metadata = data.get("_umap_options")
             if not metadata:
                 metadata = {
