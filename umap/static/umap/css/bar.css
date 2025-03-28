@@ -111,8 +111,6 @@
 .umap-right-edit-toolbox {
     display: flex;
     column-gap: 10px;
-}
-.umap-right-edit-toolbox {
     align-items: center;
 }
 

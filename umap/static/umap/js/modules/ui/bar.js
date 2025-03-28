@@ -11,6 +11,14 @@ const TOP_BAR_TEMPLATE = `
         <div class="logo"><a class="" href="/" title="${translate('Go to the homepage')}">uMap</a></div>
         <button class="map-name flat" type="button" data-ref="name"></button>
         <button class="share-status flat" type="button" data-ref="share"></button>
+        <button class="edit-undo round" type="button" data-ref="undo" disabled>
+            <i class="icon icon-16 icon-undo"></i>
+            <span class="">${translate('Undo')}</span>
+        </button>
+        <button class="edit-redo round" type="button" data-ref="redo" disabled>
+            <i class="icon icon-16 icon-redo"></i>
+            <span class="">${translate('Redo')}</span>
+        </button>
     </div>
     <div class="umap-right-edit-toolbox" data-ref="right">
         <button class="connected-peers round" type="button" data-ref="peers">
@@ -22,14 +30,6 @@ const TOP_BAR_TEMPLATE = `
           <span class="username" data-ref="username"></span>
         </button>
         <button class="umap-help-link flat" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
-        <button class="edit-undo round" type="button" data-ref="undo" disabled>
-            <i class="icon icon-16 icon-undo"></i>
-            <span class="">${translate('Undo')}</span>
-        </button>
-        <button class="edit-redo round" type="button" data-ref="redo" disabled>
-            <i class="icon icon-16 icon-redo"></i>
-            <span class="">${translate('Redo')}</span>
-        </button>
         <button class="edit-disable round disabled-on-dirty" type="button" data-ref="view">
             <i class="icon icon-16 icon-eye"></i>
             <span class="">${translate('View')}</span>
