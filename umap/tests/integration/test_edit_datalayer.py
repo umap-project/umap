@@ -182,7 +182,7 @@ def test_can_restore_version(live_server, openmap, page, datalayer):
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Versions").click()
-    page.get_by_role("button", name="Restore this version").last.click()
+    page.get_by_title("Restore this version").last.click()
     page.get_by_role("button", name="OK").click()
     expect(marker).to_have_class(re.compile(".*umap-ball-icon.*"))
 

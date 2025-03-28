@@ -477,23 +477,23 @@ def test_should_sync_datalayers_delete(new_page, asgi_live_server, tilelayer):
     peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
 
     peerA.get_by_role("button", name="Open browser").click()
-    expect(peerA.get_by_text("datalayer 1")).to_be_visible()
-    expect(peerA.get_by_text("datalayer 2")).to_be_visible()
+    expect(peerA.locator(".panel").get_by_text("datalayer 1")).to_be_visible()
+    expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_visible()
     peerB.get_by_role("button", name="Open browser").click()
-    expect(peerB.get_by_text("datalayer 1")).to_be_visible()
-    expect(peerB.get_by_text("datalayer 2")).to_be_visible()
+    expect(peerB.locator(".panel").get_by_text("datalayer 1")).to_be_visible()
+    expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_visible()
 
     # Delete "datalayer 2" in peerA
     peerA.locator(".datalayer").get_by_role("button", name="Delete layer").first.click()
     peerA.get_by_role("button", name="OK").click()
-    expect(peerA.get_by_text("datalayer 2")).to_be_hidden()
-    expect(peerB.get_by_text("datalayer 2")).to_be_hidden()
+    expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
+    expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
 
     # Save delete to the server
     with peerA.expect_response(re.compile(".*/datalayer/delete/.*")):
         peerA.get_by_role("button", name="Save").click()
-    expect(peerA.get_by_text("datalayer 2")).to_be_hidden()
-    expect(peerB.get_by_text("datalayer 2")).to_be_hidden()
+    expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
+    expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
 
 
 @pytest.mark.xdist_group(name="websockets")
