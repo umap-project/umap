@@ -129,17 +129,20 @@
     text-indent: -9999px;
 }
 .umap-main-edit-toolbox .map-name {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     font-weight: bold;
     text-align: start;
 }
+.truncate {
+    display: inline-flex;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.umap-main-edit-toolbox .username {
+    max-width: 100px;
+}
 .umap-main-edit-toolbox .share-status {
     font-style: italic;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 .map-name:after {
     content:  '\00a0';
@@ -235,4 +238,15 @@
 .umap-edit-bar hr {
     padding: 0;
     margin: 0;
+}
+@media all and (max-width: 980px) {
+    .umap-main-edit-toolbox button span {
+        display: none;
+    }
+}
+@media all and (max-width: 770px) {
+    .umap-main-edit-toolbox .umap-help-link,
+    .umap-main-edit-toolbox .share-status {
+        display: none !important;
+    }
 }

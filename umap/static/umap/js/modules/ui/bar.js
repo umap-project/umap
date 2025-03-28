@@ -9,15 +9,15 @@ const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
     <div class="umap-left-edit-toolbox" data-ref="left">
         <div class="logo"><a class="" href="/" title="${translate('Go to the homepage')}">uMap</a></div>
-        <button class="map-name flat" type="button" data-ref="name"></button>
-        <button class="share-status flat" type="button" data-ref="share"></button>
+        <button class="map-name flat truncate" type="button" data-ref="name"></button>
+        <button class="share-status flat truncate" type="button" data-ref="share"></button>
         <button class="edit-undo round" type="button" data-ref="undo" disabled>
             <i class="icon icon-16 icon-undo"></i>
-            <span class="">${translate('Undo')}</span>
+            <span>${translate('Undo')}</span>
         </button>
         <button class="edit-redo round" type="button" data-ref="redo" disabled>
             <i class="icon icon-16 icon-redo"></i>
-            <span class="">${translate('Redo')}</span>
+            <span>${translate('Redo')}</span>
         </button>
     </div>
     <div class="umap-right-edit-toolbox" data-ref="right">
@@ -27,12 +27,12 @@ const TOP_BAR_TEMPLATE = `
         </button>
         <button class="umap-user flat" type="button" data-ref="user">
           <i class="icon icon-16 icon-profile"></i>
-          <span class="username" data-ref="username"></span>
+          <span class="username truncate" data-ref="username"></span>
         </button>
         <button class="umap-help-link flat" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
         <button class="edit-disable round disabled-on-dirty" type="button" data-ref="view">
             <i class="icon icon-16 icon-eye"></i>
-            <span class="">${translate('View')}</span>
+            <span>${translate('View')}</span>
         </button>
         <button class="edit-save button round enabled-on-dirty" type="button" data-ref="save">
             <i class="icon icon-16 icon-save"></i>
