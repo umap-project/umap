@@ -206,6 +206,7 @@
     line-height: initial;
     height: initial;
     width: auto;
+    padding: 0 var(--text-margin);
 }
 .umap-caption-bar-enabled {
     --current-footer-height: var(--footer-height);
