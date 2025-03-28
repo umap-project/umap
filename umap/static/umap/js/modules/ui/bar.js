@@ -193,6 +193,7 @@ export class BottomBar extends WithTemplate {
     this.elements.layers.addEventListener('change', () => {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
+      if (!selected) return
       this._umap.eachDataLayer((datalayer) => {
         datalayer.toggle(datalayer.id === selected)
       })
@@ -209,16 +210,23 @@ export class BottomBar extends WithTemplate {
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
     this.elements.filter.hidden = !showMenus || !this._umap.properties.facetKey
+    this.buildDataLayerSwitcher()
+  }
+
+  buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
     const datalayers = this._umap.datalayersIndex.filter((d) => d.options.inCaption)
     if (datalayers.length < 2) {
       this.elements.layers.hidden = true
     } else {
+      this.elements.layers.appendChild(Utils.loadTemplate(`<option value=""></option>`))
       this.elements.layers.hidden = false
+      const visible = datalayers.filter((datalayer) => datalayer.isVisible())
       for (const datalayer of datalayers) {
+        const selected = visible.length === 1 && datalayer.isVisible() ? 'selected' : ''
         this.elements.layers.appendChild(
           Utils.loadTemplate(
-            `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+            `<option value="${datalayer.id}" ${selected}>${datalayer.getName()}</option>`
           )
         )
       }
