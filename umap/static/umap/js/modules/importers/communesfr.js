@@ -15,7 +15,7 @@ export class AutocompleteCommunes extends SingleMixin(BaseAjax) {
     let options = { q: encodeURIComponent(value) }
     const re = /^(0[1-9]|[1-9][ABab\d])\d{3}$/gm
     if (re.test(value)) {
-      url = "https://geo.api.gouv.fr/communes?code={code}&limit=5"
+      url = 'https://geo.api.gouv.fr/communes?code={code}&limit=5'
       options = { code: encodeURIComponent(value) }
     }
     return Util.template(url, options)

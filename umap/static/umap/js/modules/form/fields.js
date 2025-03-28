@@ -1,12 +1,12 @@
-import * as Utils from '../utils.js'
-import { translate } from '../i18n.js'
 import {
   AjaxAutocomplete,
   AjaxAutocompleteMultiple,
   AutocompleteDatalist,
 } from '../autocomplete.js'
-import { SCHEMA } from '../schema.js'
+import { translate } from '../i18n.js'
 import * as Icon from '../rendering/icon.js'
+import { SCHEMA } from '../schema.js'
+import * as Utils from '../utils.js'
 
 const Fields = {}
 
@@ -254,8 +254,8 @@ Fields.BlurInput = class extends Fields.Input {
 const IntegerMixin = (Base) =>
   class extends Base {
     value() {
-      return !isNaN(this.input.value) && this.input.value !== ''
-        ? parseInt(this.input.value, 10)
+      return !Number.isNaN(this.input.value) && this.input.value !== ''
+        ? Number.parseInt(this.input.value, 10)
         : undefined
     }
 
@@ -270,8 +270,8 @@ Fields.BlurIntInput = class extends IntegerMixin(Fields.BlurInput) {}
 const FloatMixin = (Base) =>
   class extends Base {
     value() {
-      return !isNaN(this.input.value) && this.input.value !== ''
-        ? parseFloat(this.input.value)
+      return !Number.isNaN(this.input.value) && this.input.value !== ''
+        ? Number.parseFloat(this.input.value)
         : undefined
     }
 
@@ -390,7 +390,7 @@ Fields.Select = class extends BaseElement {
 
 Fields.IntSelect = class extends Fields.Select {
   value() {
-    return parseInt(super.value(), 10)
+    return Number.parseInt(super.value(), 10)
   }
 }
 

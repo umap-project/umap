@@ -1,9 +1,9 @@
 import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from './i18n.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { MutatingForm } from './form/builder.js'
+import { translate } from './i18n.js'
 import { ServerStored } from './saving.js'
 import * as Utils from './utils.js'
-import { MutatingForm } from './form/builder.js'
 
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.

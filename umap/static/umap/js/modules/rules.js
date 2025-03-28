@@ -1,9 +1,9 @@
 import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from './i18n.js'
-import * as Utils from './utils.js'
 import { AutocompleteDatalist } from './autocomplete.js'
-import Orderable from './orderable.js'
 import { MutatingForm } from './form/builder.js'
+import { translate } from './i18n.js'
+import Orderable from './orderable.js'
+import * as Utils from './utils.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 

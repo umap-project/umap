@@ -1,22 +1,22 @@
 import {
-  DomUtil,
   DomEvent,
-  stamp,
+  DomUtil,
   GeoJSON,
   LineUtil,
+  stamp,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import * as Utils from '../utils.js'
-import { SCHEMA } from '../schema.js'
-import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { MutatingForm } from '../form/builder.js'
+import { translate } from '../i18n.js'
+import loadPopup from '../rendering/popup.js'
 import {
   LeafletMarker,
-  LeafletPolyline,
   LeafletPolygon,
+  LeafletPolyline,
   MaskPolygon,
 } from '../rendering/ui.js'
-import loadPopup from '../rendering/popup.js'
-import { MutatingForm } from '../form/builder.js'
+import { SCHEMA } from '../schema.js'
+import * as Utils from '../utils.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {

@@ -1,8 +1,8 @@
-import { DomUtil, DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate, getLocale } from '../i18n.js'
+import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { getLocale, translate } from '../i18n.js'
+import { Request } from '../request.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
-import { Request } from '../request.js'
 
 export default async function loadTemplate(name, feature, container) {
   let klass = PopupTemplate

@@ -1,11 +1,11 @@
 import {
+  DivIcon,
   DomEvent,
   DomUtil,
-  DivIcon,
   Icon,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import * as Utils from '../utils.js'
 import { SCHEMA } from '../schema.js'
+import * as Utils from '../utils.js'
 
 export function getClass(name) {
   switch (name) {

@@ -4,14 +4,14 @@ import {
   AjaxAutocompleteMultiple,
   AutocompleteDatalist,
 } from './autocomplete.js'
+import { LineString, Point, Polygon } from './data/features.js'
+import { LAYER_TYPES } from './data/layer.js'
 import Help from './help.js'
+import * as Icon from './rendering/icon.js'
+import { LeafletMarker, LeafletPolygon, LeafletPolyline } from './rendering/ui.js'
 import { ServerRequest } from './request.js'
 import { SCHEMA } from './schema.js'
 import * as Utils from './utils.js'
-import * as Icon from './rendering/icon.js'
-import { LAYER_TYPES } from './data/layer.js'
-import { Point, LineString, Polygon } from './data/features.js'
-import { LeafletMarker, LeafletPolyline, LeafletPolygon } from './rendering/ui.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.

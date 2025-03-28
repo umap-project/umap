@@ -1,26 +1,26 @@
 // FIXME: this module should not depend on Leaflet
 import {
-  DomUtil,
   DomEvent,
-  stamp,
+  DomUtil,
   GeoJSON,
+  stamp,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import * as Utils from '../utils.js'
-import { Default as DefaultLayer } from '../rendering/layers/base.js'
-import { Cluster } from '../rendering/layers/cluster.js'
-import { Heat } from '../rendering/layers/heat.js'
-import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
+import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
-import { Point, LineString, Polygon } from './features.js'
-import TableEditor from '../tableeditor.js'
+import { Default as DefaultLayer } from '../rendering/layers/base.js'
+import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
+import { Cluster } from '../rendering/layers/cluster.js'
+import { Heat } from '../rendering/layers/heat.js'
 import { ServerStored } from '../saving.js'
 import * as Schema from '../schema.js'
-import { MutatingForm } from '../form/builder.js'
+import TableEditor from '../tableeditor.js'
+import * as Utils from '../utils.js'
+import { LineString, Point, Polygon } from './features.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,

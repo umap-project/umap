@@ -1,7 +1,7 @@
 import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
-import { Positioned } from './base.js'
 import * as Utils from '../utils.js'
+import { Positioned } from './base.js'
 
 export default class Tooltip extends Positioned {
   constructor(parent) {

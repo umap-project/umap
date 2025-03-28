@@ -1,11 +1,11 @@
 import {
+  Popup as BasePopup,
   DomEvent,
   DomUtil,
   Path,
-  Popup as BasePopup,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import loadTemplate from './template.js'
 import Browser from '../browser.js'
+import loadTemplate from './template.js'
 
 export default function loadPopup(name) {
   switch (name) {

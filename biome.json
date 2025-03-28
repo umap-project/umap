@@ -1,11 +1,7 @@
 {
   "files": {
-    "include": [
-      "umap/static/umap/js/**"
-    ],
-    "ignore": [
-      "umap/static/umap/vendors/**"
-    ]
+    "include": ["umap/static/umap/js/**"],
+    "ignore": ["umap/static/umap/vendors/**"]
   },
   "formatter": {
     "enabled": true,
@@ -22,7 +18,11 @@
     "rules": {
       "style": {
         "useBlockStatements": "off",
-        "noShoutyConstants": "warn"
+        "noShoutyConstants": "warn",
+        "noParameterAssign": "off"
+      },
+      "complexity": {
+        "noForEach": "off"
       },
       "performance": {
         "noDelete": "off"

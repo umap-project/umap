@@ -1,18 +1,18 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
   Map as BaseMap,
-  DomUtil,
-  DomEvent,
-  latLngBounds,
-  latLng,
   Control,
+  DomEvent,
+  DomUtil,
+  latLng,
+  latLngBounds,
   setOptions,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import DropControl from '../drop.js'
+import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
-import DropControl from '../drop.js'
 
 // Those options are not saved on the server, so they can live here
 // instead of in umap.properties

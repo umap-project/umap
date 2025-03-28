@@ -1,8 +1,8 @@
+import * as SaveManager from '../saving.js'
 import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
-import * as SaveManager from '../saving.js'
 
 // Start reconnecting after 2 seconds, then double the delay each time
 // maxing out at 32 seconds.

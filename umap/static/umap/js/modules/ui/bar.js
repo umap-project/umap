@@ -1,9 +1,9 @@
 import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { LineString, Point, Polygon } from '../data/features.js'
 import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
-import ContextMenu from './contextmenu.js'
 import * as Utils from '../utils.js'
-import { Point, LineString, Polygon } from '../data/features.js'
+import ContextMenu from './contextmenu.js'
 
 const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">

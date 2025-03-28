@@ -1,10 +1,10 @@
+import { Evented } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 // WARNING must be loaded dynamically, or at least after leaflet.markercluster
 // Uses global L.MarkerCluster and L.MarkerClusterGroup, not exposed as ESM
 import { translate } from '../../i18n.js'
-import { LayerMixin } from './base.js'
 import * as Utils from '../../utils.js'
-import { Evented } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { Cluster as ClusterIcon } from '../icon.js'
+import { LayerMixin } from './base.js'
 
 const MarkerCluster = L.MarkerCluster.extend({
   // Custom class so we can call computeTextColor

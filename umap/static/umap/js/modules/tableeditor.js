@@ -1,8 +1,8 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import ContextMenu from './ui/contextmenu.js'
 import { WithTemplate, loadTemplate } from './utils.js'
-import { MutatingForm } from './form/builder.js'
 
 const TEMPLATE = `
   <table>

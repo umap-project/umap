@@ -1,6 +1,6 @@
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
 /* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
 
 export const EXPORT_FORMATS = {
   geojson: {

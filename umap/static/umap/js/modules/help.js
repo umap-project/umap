@@ -1,7 +1,7 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
-import * as Utils from './utils.js'
 import Dialog from './ui/dialog.js'
+import * as Utils from './utils.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {

@@ -1,8 +1,8 @@
 import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
-import { MutatingForm } from './form/builder.js'
 
 export default class Share {
   constructor(umap) {
