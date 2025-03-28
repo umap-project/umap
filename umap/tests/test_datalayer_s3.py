@@ -103,6 +103,7 @@ def test_get_version(map, datalayer):
                     ],
                     "type": "Point",
                 },
+                "id": "ExNTQ",
                 "properties": {
                     "_umap_options": {
                         "color": "DarkCyan",

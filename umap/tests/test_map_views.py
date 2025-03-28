@@ -694,6 +694,7 @@ def test_download(client, map, datalayer):
                         "coordinates": [14.68896484375, 48.55297816440071],
                         "type": "Point",
                     },
+                    "id": "ExNTQ",
                     "properties": {
                         "_umap_options": {"color": "DarkCyan", "iconClass": "Ball"},
                         "description": "Da place anonymous again 755",

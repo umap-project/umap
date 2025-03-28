@@ -261,6 +261,9 @@ def test_can_create_new_rule(live_server, page, openmap):
     page.get_by_title("AliceBlue").first.click()
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
+    page.get_by_role("button", name="Undo").click()
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 0
 
 
 def test_can_deactive_rule_from_list(live_server, page, openmap):

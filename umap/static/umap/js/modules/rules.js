@@ -17,20 +17,10 @@ class Rule {
     this.parse()
   }
 
-  get isDirty() {
-    return this._isDirty
-  }
-
-  set isDirty(status) {
-    this._isDirty = status
-    if (status) this._umap.isDirty = status
-  }
-
   constructor(umap, condition = '', options = {}) {
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
-    this._isDirty = false
     this.OPERATORS = [
       ['>', this.gt],
       ['<', this.lt],
@@ -190,17 +180,25 @@ class Rule {
 
   _delete() {
     this._umap.rules.rules = this._umap.rules.rules.filter((rule) => rule !== this)
+    this._umap.rules.commit()
+  }
+
+  setter(key, value) {
+    const oldRules = Utils.CopyJSON(this._umap.properties.rules || {})
+    Utils.setObjectValue(this, key, value)
+    this._umap.rules.commit()
+    this._umap.sync.update('properties.rules', this._umap.properties.rules, oldRules)
   }
 }
 
 export default class Rules {
   constructor(umap) {
     this._umap = umap
-    this.rules = []
     this.load()
   }
 
   load() {
+    this.rules = []
     if (!this._umap.properties.rules?.length) return
     for (const { condition, options } of this._umap.properties.rules) {
       if (!condition) continue
@@ -222,8 +220,8 @@ export default class Rules {
     else if (finalIndex > initialIndex) newIdx = referenceIdx
     else newIdx = referenceIdx + 1
     this.rules.splice(newIdx, 0, moved)
-    moved.isDirty = true
     this._umap.render(['rules'])
+    this.commit()
   }
 
   edit(container) {
@@ -242,7 +240,6 @@ export default class Rules {
 
   addRule() {
     const rule = new Rule(this._umap)
-    rule.isDirty = true
     this.rules.push(rule)
     rule.edit(map)
   }

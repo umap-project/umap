@@ -2,17 +2,15 @@ import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
-import { ServerStored } from './saving.js'
 import * as Utils from './utils.js'
 
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
-export class MapPermissions extends ServerStored {
+export class MapPermissions {
   constructor(umap) {
-    super()
     this.setProperties(umap.properties.permissions)
     this._umap = umap
-    this._isDirty = false
+    this.sync = umap.syncEngine.proxy(this)
   }
 
   setProperties(properties) {
@@ -26,6 +24,13 @@ export class MapPermissions extends ServerStored {
       },
       properties
     )
+  }
+
+  getSyncMetadata() {
+    return {
+      subject: 'mappermissions',
+      metadata: {},
+    }
   }
 
   render() {
@@ -188,7 +193,6 @@ export class MapPermissions extends ServerStored {
   }
 
   async save() {
-    if (!this.isDirty) return
     const formData = new FormData()
     if (!this.isAnonymousMap() && this.properties.editors) {
       const editors = this.properties.editors.map((u) => u.id)
@@ -247,9 +251,8 @@ export class MapPermissions extends ServerStored {
   }
 }
 
-export class DataLayerPermissions extends ServerStored {
+export class DataLayerPermissions {
   constructor(umap, datalayer) {
-    super()
     this._umap = umap
     this.properties = Object.assign(
       {
@@ -259,6 +262,14 @@ export class DataLayerPermissions extends ServerStored {
     )
 
     this.datalayer = datalayer
+    this.sync = umap.syncEngine.proxy(this)
+  }
+
+  getSyncMetadata() {
+    return {
+      subject: 'datalayerpermissions',
+      metadata: { id: this.datalayer.id },
+    }
   }
 
   edit(container) {
@@ -289,7 +300,6 @@ export class DataLayerPermissions extends ServerStored {
   }
 
   async save() {
-    if (!this.isDirty) return
     const formData = new FormData()
     formData.append('edit_status', this.properties.edit_status)
     const [data, response, error] = await this._umap.server.post(

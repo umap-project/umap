@@ -97,7 +97,6 @@ const FeatureMixin = {
   },
 
   onCommit: function () {
-    this.feature.pullGeometry(false)
     this.feature.onCommit()
   },
 }
@@ -112,7 +111,7 @@ const PointMixin = {
     this.on('dragend', (event) => {
       this.isDirty = true
       this.feature.edit(event)
-      this.feature.pullGeometry(false)
+      // this.feature.pullGeometry(false)
     })
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
@@ -303,13 +302,13 @@ const PathMixin = {
     this._container = null
     FeatureMixin.onAdd.call(this, map)
     this.setStyle()
-    if (this.editing?.enabled()) this.editing.addHooks()
+    if (this.editor?.enabled()) this.editor.addHooks()
     this.resetTooltip()
     this._path.dataset.feature = this.feature.id
   },
 
   onRemove: function (map) {
-    if (this.editing?.enabled()) this.editing.removeHooks()
+    if (this.editor?.enabled()) this.editor.removeHooks()
     FeatureMixin.onRemove.call(this, map)
   },
 
@@ -361,6 +360,13 @@ const PathMixin = {
 
   isOnScreen: function (bounds) {
     return bounds.overlaps(this.getBounds())
+  },
+
+  _setLatLngs: function (latlngs) {
+    this.parentClass.prototype._setLatLngs.call(this, latlngs)
+    if (this.editor?.enabled()) {
+      this.editor.reset()
+    }
   },
 }
 

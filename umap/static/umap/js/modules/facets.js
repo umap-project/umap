@@ -135,7 +135,13 @@ export default class Facets {
     for (const [property, { label, type }] of parsed) {
       dumped.push([property, label, type].filter(Boolean).join('|'))
     }
-    return dumped.join(',')
+    const oldValue = this._umap.properties.facetKey
+    this._umap.properties.facetKey = dumped.join(',')
+    this._umap.sync.update(
+      'properties.facetKey',
+      this._umap.properties.facetKey,
+      oldValue
+    )
   }
 
   has(property) {
@@ -146,15 +152,13 @@ export default class Facets {
     const defined = this.getDefined()
     if (!defined.has(property)) {
       defined.set(property, { label, type })
-      this._umap.properties.facetKey = this.dumps(defined)
-      this._umap.isDirty = true
+      this.dumps(defined)
     }
   }
 
   remove(property) {
     const defined = this.getDefined()
     defined.delete(property)
-    this._umap.properties.facetKey = this.dumps(defined)
-    this._umap.isDirty = true
+    this.dumps(defined)
   }
 }

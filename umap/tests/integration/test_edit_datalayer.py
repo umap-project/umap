@@ -64,8 +64,7 @@ def test_cancel_deleting_datalayer_should_restore(
     page.get_by_role("button", name="OK").click()
     expect(markers).to_have_count(0)
     expect(page.get_by_text("test datalayer")).to_be_hidden()
-    page.get_by_role("button", name="Cancel edits").click()
-    page.locator("dialog").get_by_role("button", name="OK").click()
+    page.get_by_role("button", name="Undo").click()
     expect(markers).to_have_count(1)
     expect(page.locator(".umap-browser").get_by_text("test datalayer")).to_be_visible()
 
@@ -160,7 +159,6 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("Layer A with a new name")
     expect(page.get_by_text("Layer A with a new name")).to_be_visible()
-    page.get_by_role("button", name="Save").click()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     assert DataLayer.objects.count() == 2

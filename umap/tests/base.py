@@ -18,6 +18,7 @@ DATALAYER_DATA = {
     "features": [
         {
             "type": "Feature",
+            "id": "ExNTQ",
             "geometry": {
                 "type": "Point",
                 "coordinates": [14.68896484375, 48.55297816440071],
@@ -41,7 +42,7 @@ class LicenceFactory(factory.django.DjangoModelFactory):
 
 
 class TileLayerFactory(factory.django.DjangoModelFactory):
-    name = "Test zoom layer"
+    name = "Test tilelayer"
     url_template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution = "Test layer attribution"
 
