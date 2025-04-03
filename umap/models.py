@@ -423,7 +423,7 @@ class Map(NamedModel):
             "iconUrl": {
                 "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
             },
-            "tags": {"choices": settings.UMAP_TAGS},
+            "tags": {"choices": sorted(settings.UMAP_TAGS, key=lambda i: i[0])},
         }
 
 
