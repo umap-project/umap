@@ -22,8 +22,6 @@ import { MapPermissions } from './permissions.js'
 import { LeafletMap } from './rendering/map.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
-import { ServerStored } from './saving.js'
-import * as SAVEMANAGER from './saving.js'
 import { SCHEMA } from './schema.js'
 import Share from './share.js'
 import Slideshow from './slideshow.js'
@@ -36,9 +34,8 @@ import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
 
-export default class Umap extends ServerStored {
+export default class Umap {
   constructor(element, geojson) {
-    super()
     // We need to call async function in the init process,
     // the init itself does not need to be awaited, but some calls
     // in the process must be blocker
@@ -96,6 +93,10 @@ export default class Umap extends ServerStored {
         this._leafletMap.latLng(center)
     }
 
+    // Needed for permissions
+    this.syncEngine = new SyncEngine(this)
+    this.sync = this.syncEngine.proxy(this)
+
     // Needed to render controls
     this.permissions = new MapPermissions(this)
     this.urls = new URLs(this.properties.urls)
@@ -129,9 +130,6 @@ export default class Umap extends ServerStored {
     this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this)
-
-    this.syncEngine = new SyncEngine(this)
-    this.sync = this.syncEngine.proxy(this)
 
     if (this.hasEditMode()) {
       this.editPanel = new EditPanel(this, this._leafletMap)
@@ -196,7 +194,6 @@ export default class Umap extends ServerStored {
     // Creation mode
     if (!this.id) {
       if (!this.properties.preview) {
-        this.isDirty = true
         this.enableEdit()
       }
       this._defaultExtent = true
@@ -212,8 +209,12 @@ export default class Umap extends ServerStored {
       this.propagate()
     }
 
-    window.onbeforeunload = () => (this.editEnabled && SAVEMANAGER.isDirty) || null
+    window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
     this.backup()
+  }
+
+  get isDirty() {
+    return this.sync._undoManager.isDirty()
   }
 
   get editedFeature() {
@@ -349,7 +350,7 @@ export default class Umap extends ServerStored {
     const items = []
     if (this.hasEditMode()) {
       if (this.editEnabled) {
-        if (!SAVEMANAGER.isDirty) {
+        if (!this.isDirty) {
           items.push({
             label: this.help.displayLabel('STOP_EDIT'),
             action: () => this.disableEdit(),
@@ -543,19 +544,17 @@ export default class Umap extends ServerStored {
       let used = true
       switch (event.key) {
         case 'e':
-          if (!SAVEMANAGER.isDirty) this.disableEdit()
+          if (!this.isDirty) this.disableEdit()
           break
         case 's':
-          if (SAVEMANAGER.isDirty) this.saveAll()
+          if (this.isDirty) this.saveAll()
           break
         case 'z':
           if (Utils.isWritable(event.target)) {
             used = false
             break
           }
-          if (SAVEMANAGER.isDirty) {
-            this.askForReset()
-          }
+          this.sync._undoManager.undo()
           break
         case 'm':
           this._leafletMap.editTools.startMarker()
@@ -671,10 +670,10 @@ export default class Umap extends ServerStored {
   }
 
   async saveAll() {
-    if (!SAVEMANAGER.isDirty) return
+    if (!this.isDirty) return
     if (this._defaultExtent) this._setCenterAndZoom()
     this.backup()
-    await SAVEMANAGER.save()
+    await this.sync.save()
     // Do a blind render for now, as we are not sure what could
     // have changed, we'll be more subtil when we'll remove the
     // save action
@@ -685,7 +684,6 @@ export default class Umap extends ServerStored {
         Alert.success(translate('Map has been saved!'))
       })
     }
-    this.sync.saved()
     this.fire('saved')
   }
 
@@ -1019,35 +1017,36 @@ export default class Umap extends ServerStored {
       'button',
       boundsButtons,
       translate('Use current bounds'),
-      function () {
+      () => {
         const bounds = this._leafletMap.getBounds()
+        const oldLimitBounds = { ...this.properties.limitBounds }
         this.properties.limitBounds.south = LeafletUtil.formatNum(bounds.getSouth())
         this.properties.limitBounds.west = LeafletUtil.formatNum(bounds.getWest())
         this.properties.limitBounds.north = LeafletUtil.formatNum(bounds.getNorth())
         this.properties.limitBounds.east = LeafletUtil.formatNum(bounds.getEast())
         boundsBuilder.fetchAll()
-
-        this.sync.update(this, 'properties.limitBounds', this.properties.limitBounds)
-        this.isDirty = true
+        this.sync.update(
+          'properties.limitBounds',
+          this.properties.limitBounds,
+          oldLimitBounds
+        )
         this._leafletMap.handleLimitBounds()
-      },
-      this
+      }
     )
-    DomUtil.createButton(
-      'button',
-      boundsButtons,
-      translate('Empty'),
-      function () {
-        this.properties.limitBounds.south = null
-        this.properties.limitBounds.west = null
-        this.properties.limitBounds.north = null
-        this.properties.limitBounds.east = null
-        boundsBuilder.fetchAll()
-        this.isDirty = true
-        this._leafletMap.handleLimitBounds()
-      },
-      this
-    )
+    DomUtil.createButton('button', boundsButtons, translate('Empty'), () => {
+      const oldLimitBounds = { ...this.properties.limitBounds }
+      this.properties.limitBounds.south = null
+      this.properties.limitBounds.west = null
+      this.properties.limitBounds.north = null
+      this.properties.limitBounds.east = null
+      boundsBuilder.fetchAll()
+      this._leafletMap.handleLimitBounds()
+      this.sync.update(
+        'properties.limitBounds',
+        this.properties.limitBounds,
+        oldLimitBounds
+      )
+    })
   }
 
   _editSlideshow(container) {
@@ -1160,23 +1159,7 @@ export default class Umap extends ServerStored {
     })
   }
 
-  reset() {
-    if (this._leafletMap.editTools) this._leafletMap.editTools.stopDrawing()
-    this.resetProperties()
-    this.datalayersIndex = [].concat(this._datalayersIndex_bk)
-    // Iter over all datalayers, including deleted if any.
-    for (const datalayer of Object.values(this.datalayers)) {
-      if (datalayer.isDeleted) datalayer.connectToMap()
-      if (datalayer.isDirty) datalayer.reset()
-    }
-    this.ensurePanesOrder()
-    this._leafletMap.initTileLayers()
-    this.onDataLayersChanged()
-    this.isDirty = !this.id
-  }
-
   async save() {
-    this.rules.commit()
     const geojson = {
       type: 'Feature',
       geometry: this.geometry(),
@@ -1301,16 +1284,6 @@ export default class Umap extends ServerStored {
     this._leafletMap.fire(name)
   }
 
-  askForReset(e) {
-    if (this.getProperty('syncEnabled')) return
-    this.dialog
-      .confirm(translate('Are you sure you want to cancel your changes?'))
-      .then(() => {
-        this.reset()
-        this.disableEdit()
-      })
-  }
-
   async initSyncEngine() {
     // this.properties.websocketEnabled is set by the server admin
     if (this.properties.websocketEnabled === false) return
@@ -1324,7 +1297,6 @@ export default class Umap extends ServerStored {
 
   getSyncMetadata() {
     return {
-      engine: this.sync,
       subject: 'map',
     }
   }
@@ -1348,6 +1320,9 @@ export default class Umap extends ServerStored {
           this.bottomBar.redraw()
           break
         case 'data':
+          if (fields.includes('properties.rules')) {
+            this.rules.load()
+          }
           this.eachVisibleDataLayer((datalayer) => {
             datalayer.redraw()
           })
@@ -1522,7 +1497,7 @@ export default class Umap extends ServerStored {
       const form = builder.build()
       row.appendChild(form)
       row.classList.toggle('off', !datalayer.isVisible())
-      row.dataset.id = stamp(datalayer)
+      row.dataset.id = datalayer.id
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const movedLayer = this.datalayers[src.dataset.id]
@@ -1553,7 +1528,7 @@ export default class Umap extends ServerStored {
   }
 
   getDataLayerByUmapId(id) {
-    const datalayer = this.findDataLayer((d) => d.id === id)
+    const datalayer = this.datalayers[id]
     if (!datalayer) throw new Error(`Can't find datalayer with id ${id}`)
     return datalayer
   }
@@ -1669,7 +1644,6 @@ export default class Umap extends ServerStored {
     )
     this.render(fields)
     this._leafletMap._setDefaultCenter()
-    this.isDirty = true
   }
 
   importUmapFile(file) {
@@ -1768,13 +1742,26 @@ export default class Umap extends ServerStored {
   }
 
   _setCenterAndZoom() {
+    const oldCenter = { ...this.properties.center }
+    const oldZoom = this.properties.zoom
     this.properties.center = this._leafletMap.getCenter()
     this.properties.zoom = this._leafletMap.getZoom()
-    this.isDirty = true
     this._defaultExtent = false
+    this.sync.startBatch()
+    this.sync.update('properties.center', this.properties.center, oldCenter)
+    this.sync.update('properties.zoom', this.properties.zoom, oldZoom)
+    this.sync.commitBatch()
   }
 
   getStaticPathFor(name) {
     return SCHEMA.iconUrl.default.replace('marker.svg', name)
+  }
+
+  undo() {
+    this.sync._undoManager.undo()
+  }
+
+  redo() {
+    this.sync._undoManager.redo()
   }
 }

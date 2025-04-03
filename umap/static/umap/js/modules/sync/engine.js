@@ -1,7 +1,13 @@
-import * as SaveManager from '../saving.js'
 import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
-import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
+import { UndoManager } from './undo.js'
+import {
+  DataLayerUpdater,
+  FeatureUpdater,
+  MapUpdater,
+  MapPermissionsUpdater,
+  DataLayerPermissionsUpdater,
+} from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 
 // Start reconnecting after 2 seconds, then double the delay each time
@@ -55,6 +61,8 @@ export class SyncEngine {
       map: new MapUpdater(umap),
       feature: new FeatureUpdater(umap),
       datalayer: new DataLayerUpdater(umap),
+      mappermissions: new MapPermissionsUpdater(umap),
+      datalayerpermissions: new DataLayerPermissionsUpdater(umap),
     }
     this.transport = undefined
     this._operations = new Operations()
@@ -64,6 +72,7 @@ export class SyncEngine {
     this.websocketConnected = false
     this.closeRequested = false
     this.peerId = Utils.generateId()
+    this._undoManager = new UndoManager(umap, this.updaters, this)
   }
 
   get isOpen() {
@@ -122,16 +131,107 @@ export class SyncEngine {
       await this.authenticate()
     }, this._reconnectDelay)
   }
-  upsert(subject, metadata, value) {
-    this._send({ verb: 'upsert', subject, metadata, value })
+
+  startBatch() {
+    this._batch = []
   }
 
-  update(subject, metadata, key, value) {
-    this._send({ verb: 'update', subject, metadata, key, value })
+  commitBatch(subject, metadata) {
+    if (!this._batch.length) {
+      this._batch = null
+      return
+    }
+    const operations = this._batch.map((stage) => stage.operation)
+    const operation = { verb: 'batch', operations, subject, metadata }
+    this._undoManager.add({ operation, stages: this._batch })
+    this._send(operation)
+    this._batch = null
   }
 
-  delete(subject, metadata, key) {
-    this._send({ verb: 'delete', subject, metadata, key })
+  upsert(subject, metadata, value, oldValue) {
+    const operation = {
+      verb: 'upsert',
+      subject,
+      metadata,
+      value,
+    }
+    const stage = {
+      operation,
+      newValue: value,
+      oldValue: oldValue,
+    }
+    if (this._batch) {
+      this._batch.push(stage)
+      return
+    }
+    this._undoManager.add(stage)
+    this._send(operation)
+  }
+
+  update(subject, metadata, key, value, oldValue, { undo } = { undo: true }) {
+    const operation = {
+      verb: 'update',
+      subject,
+      metadata,
+      key,
+      value,
+    }
+    const stage = {
+      operation,
+      oldValue: oldValue,
+      newValue: value,
+    }
+    if (this._batch) {
+      this._batch.push(stage)
+      return
+    }
+    if (undo) this._undoManager.add(stage)
+    this._send(operation)
+  }
+
+  delete(subject, metadata, oldValue) {
+    const operation = {
+      verb: 'delete',
+      subject,
+      metadata,
+    }
+    const stage = {
+      operation,
+      oldValue: oldValue,
+    }
+    if (this._batch) {
+      this._batch.push(stage)
+      return
+    }
+    this._undoManager.add(stage)
+    this._send(operation)
+  }
+
+  async save() {
+    const needSave = new Map()
+    if (!this._umap.id) {
+      // There is no operation for first map save
+      needSave.set(this._umap, [])
+    }
+    for (const operation of this._operations.sorted()) {
+      if (operation.dirty) {
+        const updater = this._getUpdater(operation.subject)
+        const obj = updater.getStoredObject(operation.metadata)
+        if (!needSave.has(obj)) {
+          needSave.set(obj, [])
+        }
+        needSave.get(obj).push(operation)
+      }
+    }
+    for (const [obj, operations] of needSave.entries()) {
+      const ok = await obj.save()
+      if (!ok) break
+      for (const operation of operations) {
+        operation.dirty = false
+      }
+    }
+    this.saved()
+    this._undoManager.toggleState()
   }
 
   saved() {
@@ -144,8 +244,8 @@ export class SyncEngine {
     }
   }
 
-  _send(inputMessage) {
-    const message = this._operations.addLocal(inputMessage)
+  _send(operation) {
+    const message = this._operations.addLocal(operation)
 
     if (this.offline) return
     if (this.transport) {
@@ -153,7 +253,11 @@ export class SyncEngine {
     }
   }
 
-  _getUpdater(subject, metadata) {
+  _getUpdater(subject, metadata, sync) {
+    // For now, prevent permissions to be synced, for security reasons
+    if (sync && (subject === 'mappermissions' || subject === 'datalayerpermissions')) {
+      return
+    }
     if (Object.keys(this.updaters).includes(subject)) {
       return this.updaters[subject]
     }
@@ -161,7 +265,15 @@ export class SyncEngine {
   }
 
   _applyOperation(operation) {
+    if (operation.verb === 'batch') {
+      operation.operations.map((op) => this._applyOperation(op))
+      return
+    }
     const updater = this._getUpdater(operation.subject, operation.metadata)
+    if (!updater) {
+      debug('No updater for', operation)
+      return
+    }
     updater.applyMessage(operation)
   }
 
@@ -304,9 +416,8 @@ export class SyncEngine {
 
   onSavedMessage({ sender, lastKnownHLC }) {
     debug(`received saved message from peer ${sender}`, lastKnownHLC)
-    if (lastKnownHLC === this._operations.getLastKnownHLC() && SaveManager.isDirty) {
-      SaveManager.clear()
-    }
+    this._operations.saved(lastKnownHLC)
+    this._undoManager.toggleState()
   }
 
   /**
@@ -356,7 +467,7 @@ export class SyncEngine {
     const handler = {
       get(target, prop) {
         // Only proxy these methods
-        if (['upsert', 'update', 'delete'].includes(prop)) {
+        if (['upsert', 'update', 'delete', 'commitBatch'].includes(prop)) {
           const { subject, metadata } = object.getSyncMetadata()
           // Reflect.get is calling the original method.
           // .bind is adding the parameters automatically
@@ -378,16 +489,22 @@ export class Operations {
     this._operations = new Array()
   }
 
+  saved(hlc) {
+    for (const operation of this.getOperationsBefore(hlc)) {
+      operation.dirty = false
+    }
+  }
+
   /**
    * Tick the clock and store the passed message in the operations list.
    *
    * @param {*} inputMessage
    * @returns {*} clock-aware message
    */
-  addLocal(inputMessage) {
-    const message = { ...inputMessage, hlc: this._hlc.tick() }
-    this._operations.push(message)
-    return message
+  addLocal(operation) {
+    operation.hlc = this._hlc.tick()
+    this._operations.push(operation)
+    return operation
   }
 
   /**
@@ -443,6 +560,11 @@ export class Operations {
     const start = this._operations.findIndex((op) => op.hlc === hlc)
     this._operations.slice(start)
     return this._operations.filter((op) => op.hlc > hlc)
+  }
+
+  getOperationsBefore(hlc) {
+    if (!hlc) return this._operations
+    return this._operations.filter((op) => op.hlc <= hlc)
   }
 
   /**

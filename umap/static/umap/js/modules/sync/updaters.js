@@ -1,4 +1,4 @@
-import { fieldInSchema } from '../utils.js'
+import * as Utils from '../utils.js'
 
 /**
  * Updaters are classes able to convert messages
@@ -8,27 +8,6 @@ import { fieldInSchema } from '../utils.js'
 class BaseUpdater {
   constructor(umap) {
     this._umap = umap
-  }
-
-  updateObjectValue(obj, key, value) {
-    const parts = key.split('.')
-    const lastKey = parts.pop()
-
-    // Reduce the current list of attributes,
-    // to find the object to set the property onto
-    const objectToSet = parts.reduce((currentObj, part) => {
-      if (currentObj !== undefined && part in currentObj) return currentObj[part]
-    }, obj)
-
-    // In case the given path doesn't exist, stop here
-    if (objectToSet === undefined) return
-
-    // Set the value (or delete it)
-    if (typeof value === 'undefined') {
-      delete objectToSet[lastKey]
-    } else {
-      objectToSet[lastKey] = value
-    }
   }
 
   getDataLayerFromID(layerId) {
@@ -43,12 +22,16 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (fieldInSchema(key)) {
-      this.updateObjectValue(this._umap, key, value)
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(this._umap, key, value)
     }
 
     this._umap.onPropertiesUpdated([key])
     this._umap.render([key])
+  }
+
+  getStoredObject() {
+    return this._umap
   }
 }
 
@@ -58,14 +41,21 @@ export class DataLayerUpdater extends BaseUpdater {
     try {
       this.getDataLayerFromID(value.id)
     } catch {
-      this._umap.createDataLayer(value, false)
+      const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
+      if (value.features) {
+        // FIXME: this will create new stages in the undoStack, thus this will empty
+        // the redoStack
+        datalayer.addData(value)
+      }
     }
   }
 
   update({ key, metadata, value }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
-    if (fieldInSchema(key)) {
-      this.updateObjectValue(datalayer, key, value)
+    if (key === 'options') {
+      datalayer.setOptions(value)
+    } else if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(datalayer, key, value)
     } else {
       console.debug(
         'Not applying update for datalayer because key is not in the schema',
@@ -81,6 +71,10 @@ export class DataLayerUpdater extends BaseUpdater {
       datalayer.del(false)
       datalayer.commitDelete()
     }
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.id)
   }
 }
 
@@ -114,7 +108,7 @@ export class FeatureUpdater extends BaseUpdater {
       const feature = this.getFeatureFromMetadata(metadata)
       feature.geometry = value
     } else {
-      this.updateObjectValue(feature, key, value)
+      Utils.setObjectValue(feature, key, value)
       feature.datalayer.indexProperties(feature)
     }
 
@@ -126,5 +120,33 @@ export class FeatureUpdater extends BaseUpdater {
     // and the wole feature getting deleted
     const feature = this.getFeatureFromMetadata(metadata)
     if (feature) feature.del(false)
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.layerId)
+  }
+}
+
+export class MapPermissionsUpdater extends BaseUpdater {
+  update({ key, value }) {
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(this._umap.permissions, key, value)
+    }
+  }
+
+  getStoredObject(metadata) {
+    return this._umap.permissions
+  }
+}
+
+export class DataLayerPermissionsUpdater extends BaseUpdater {
+  update({ key, value, metadata }) {
+    if (Utils.fieldInSchema(key)) {
+      Utils.setObjectValue(this.getDataLayerFromID(metadata.id), key, value)
+    }
+  }
+
+  getStoredObject(metadata) {
+    return this.getDataLayerFromID(metadata.id).permissions
   }
 }

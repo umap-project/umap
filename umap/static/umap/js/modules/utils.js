@@ -484,6 +484,27 @@ export const debounce = (callback, wait) => {
   }
 }
 
+export function setObjectValue(obj, key, value) {
+  const parts = key.split('.')
+  const lastKey = parts.pop()
+
+  // Reduce the current list of attributes,
+  // to find the object to set the property onto
+  const objectToSet = parts.reduce((currentObj, part) => {
+    if (currentObj !== undefined && part in currentObj) return currentObj[part]
+  }, obj)
+
+  // In case the given path doesn't exist, stop here
+  if (objectToSet === undefined) return
+
+  // Set the value (or delete it)
+  if (typeof value === 'undefined') {
+    delete objectToSet[lastKey]
+  } else {
+    objectToSet[lastKey] = value
+  }
+}
+
 export const COLORS = [
   'Black',
   'Navy',

@@ -16,7 +16,6 @@ import { Default as DefaultLayer } from '../rendering/layers/base.js'
 import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
-import { ServerStored } from '../saving.js'
 import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
@@ -36,9 +35,8 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
   return acc
 }, {})
 
-export class DataLayer extends ServerStored {
+export class DataLayer {
   constructor(umap, leafletMap, data = {}) {
-    super()
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
     this._index = Array()
@@ -49,7 +47,6 @@ export class DataLayer extends ServerStored {
     this._leafletMap = leafletMap
     this.parentPane = this._leafletMap.getPane('overlayPane')
     this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    this.pane.dataset.id = stamp(this)
     // FIXME: should be on layer
     this.renderer = L.svg({ pane: this.pane })
     this.defaultOptions = {
@@ -66,6 +63,7 @@ export class DataLayer extends ServerStored {
     data.id = data.id || crypto.randomUUID()
 
     this.setOptions(data)
+    this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
@@ -114,7 +112,6 @@ export class DataLayer extends ServerStored {
 
   set isDeleted(status) {
     this._isDeleted = status
-    if (status) this.isDirty = status
   }
 
   get isDeleted() {
@@ -269,13 +266,11 @@ export class DataLayer extends ServerStored {
   }
 
   clear() {
-    this.layer.clearLayers()
-    this._features = {}
-    this._index = Array()
-    if (this._geojson) {
-      this.backupData()
-      this._geojson = null
+    this.sync.startBatch()
+    for (const feature of Object.values(this._features)) {
+      feature.del()
     }
+    this.sync.commitBatch()
     this.dataChanged()
   }
 
@@ -366,9 +361,8 @@ export class DataLayer extends ServerStored {
   }
 
   connectToMap() {
-    const id = stamp(this)
-    if (!this._umap.datalayers[id]) {
-      this._umap.datalayers[id] = this
+    if (!this._umap.datalayers[this.id]) {
+      this._umap.datalayers[this.id] = this
     }
     if (!this._umap.datalayersIndex.includes(this)) {
       this._umap.datalayersIndex.push(this)
@@ -417,7 +411,10 @@ export class DataLayer extends ServerStored {
 
   removeFeature(feature, sync) {
     const id = stamp(feature)
-    if (sync !== false) feature.sync.delete()
+    if (sync !== false) {
+      const oldValue = feature.toGeoJSON()
+      feature.sync.delete(oldValue)
+    }
     this.hideFeature(feature)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
@@ -460,7 +457,10 @@ export class DataLayer extends ServerStored {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      return this.makeFeatures(geojson, sync)
+      this.sync.startBatch()
+      const features = this.makeFeatures(geojson, sync)
+      this.sync.commitBatch()
+      return features
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
       console.error(err)
@@ -518,7 +518,7 @@ export class DataLayer extends ServerStored {
     }
     if (feature && !feature.isEmpty()) {
       this.addFeature(feature)
-      if (sync) feature.onCommit()
+      if (sync) feature.sync.upsert(feature.toGeoJSON(), null)
       return feature
     }
   }
@@ -527,10 +527,6 @@ export class DataLayer extends ServerStored {
     return this._umap.formatter
       .parse(raw, format)
       .then((geojson) => this.addData(geojson))
-      .then((data) => {
-        if (data?.length) this.isDirty = true
-        return data
-      })
       .catch((error) => {
         console.debug(error)
         Alert.error(translate('Import failed: invalid data'))
@@ -596,17 +592,17 @@ export class DataLayer extends ServerStored {
   }
 
   del(sync = true) {
+    const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     this.erase()
     if (sync) {
       this.isDeleted = true
-      this.sync.delete()
+      this.sync.delete(oldValue)
     }
   }
 
   empty() {
     if (this.isRemoteLayer()) return
     this.clear()
-    this.isDirty = true
   }
 
   clone() {
@@ -628,25 +624,6 @@ export class DataLayer extends ServerStored {
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
     this.clear()
-  }
-
-  reset() {
-    if (!this.createdOnServer) {
-      this.erase()
-      return
-    }
-
-    this.resetOptions()
-    this.parentPane.appendChild(this.pane)
-    if (this._leaflet_events_bk && !this._leaflet_events) {
-      this._leaflet_events = this._leaflet_events_bk
-    }
-    this.clear()
-    this.hide()
-    if (this.isRemoteLayer()) this.fetchRemoteData()
-    else if (this._geojson_bk) this.fromGeoJSON(this._geojson_bk)
-    this.show()
-    this.isDirty = false
   }
 
   redraw() {
@@ -940,11 +917,14 @@ export class DataLayer extends ServerStored {
         )
         if (!error) {
           if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
-          if (geojson._umap_options) this.setOptions(geojson._umap_options)
+          if (geojson._umap_options) {
+            const oldOptions = Utils.CopyJSON(this.options)
+            this.setOptions(geojson._umap_options)
+            this.sync.update('options', this.options, oldOptions)
+          }
           this.empty()
           if (this.isRemoteLayer()) this.fetchRemoteData()
           else this.addData(geojson)
-          this.isDirty = true
         }
       })
   }
@@ -1098,7 +1078,11 @@ export class DataLayer extends ServerStored {
 
   setReferenceVersion({ response, sync }) {
     this._referenceVersion = response.headers.get('X-Datalayer-Version')
-    if (sync) this.sync.update('_referenceVersion', this._referenceVersion)
+    if (sync) {
+      this.sync.update('_referenceVersion', this._referenceVersion, null, {
+        undo: false,
+      })
+    }
   }
 
   async save() {
@@ -1127,6 +1111,10 @@ export class DataLayer extends ServerStored {
   }
 
   async _trySave(url, headers, formData) {
+    if (this._forceSave) {
+      headers = {}
+      this._forceSave = false
+    }
     const [data, response, error] = await this._umap.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
@@ -1136,15 +1124,8 @@ export class DataLayer extends ServerStored {
               'This situation is tricky, you have to choose carefully which version is pertinent.'
           ),
           async () => {
-            // Save again this layer
-            const status = await this._trySave(url, {}, formData)
-            if (status) {
-              this.isDirty = false
-
-              // Call the main save, in case something else needs to be saved
-              // as the conflict stopped the saving flow
-              await this._umap.saveAll()
-            }
+            this._forceSave = true
+            await this._umap.saveAll()
           }
         )
       }
@@ -1179,7 +1160,7 @@ export class DataLayer extends ServerStored {
   }
 
   commitDelete() {
-    delete this._umap.datalayers[stamp(this)]
+    delete this._umap.datalayers[this.id]
   }
 
   getName() {

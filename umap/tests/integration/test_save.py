@@ -16,17 +16,15 @@ def test_reseting_map_would_remove_from_save_queue(
     page.on("request", register_request)
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("new name")
-    page.get_by_role("button", name="Cancel edits").click()
-    page.get_by_role("button", name="OK").click()
+    page.get_by_role("button", name="Undo").click()
     page.wait_for_timeout(500)
-    page.get_by_role("button", name="Edit").click()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("new datalayer name")
     page.wait_for_timeout(300)  # Time of the Input debounce
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
-        page.get_by_role("button", name="Save").click()
+        page.get_by_role("button", name="Save", exact=True).click()
     assert len(requests) == 1
     assert requests == [
         (

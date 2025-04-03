@@ -14,11 +14,12 @@
     background-color: inherit;
 }
 .leaflet-container .edit-save,
-.leaflet-container .edit-cancel,
+.leaflet-container .edit-undo,
+.leaflet-container .edit-redo,
 .leaflet-container .edit-disable,
 .leaflet-container .connected-peers
 {
-    display: block;
+    display: inline-block;
     height: 32px;
     line-height: 30px;
     padding: 0 20px;
@@ -39,7 +40,8 @@
     color: var(--color-darkGray);
 }
 
-.leaflet-container .edit-cancel:hover,
+.leaflet-container .edit-undo:hover,
+.leaflet-container .edit-redo:hover,
 .leaflet-container .edit-disable:hover {
     border: 0.5px solid rgba(153, 153, 153, 0.80);
     text-decoration: none;
@@ -76,18 +78,12 @@
     background: rgba(66, 236, 230, 0.10);
 }
 .leaflet-container .edit-save,
-.leaflet-container .edit-cancel,
-.leaflet-container .edit-disable,
 .umap-edit-enabled .edit-enable {
     display: none;
 }
 .umap-edit-enabled .edit-save,
-.umap-edit-enabled .edit-disable,
-.umap-edit-enabled.umap-is-dirty .edit-cancel {
+.umap-edit-enabled .edit-disable {
     display: inline-block;
-}
-.umap-is-dirty .edit-disable {
-    display: none;
 }
 .umap-caption-bar {
     display: none;
@@ -115,8 +111,6 @@
 .umap-right-edit-toolbox {
     display: flex;
     column-gap: 10px;
-}
-.umap-right-edit-toolbox {
     align-items: center;
 }
 
@@ -135,17 +129,20 @@
     text-indent: -9999px;
 }
 .umap-main-edit-toolbox .map-name {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     font-weight: bold;
     text-align: start;
 }
+.truncate {
+    display: inline-flex;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.umap-main-edit-toolbox .username {
+    max-width: 100px;
+}
 .umap-main-edit-toolbox .share-status {
     font-style: italic;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 .map-name:after {
     content:  '\00a0';
@@ -241,4 +238,15 @@
 .umap-edit-bar hr {
     padding: 0;
     margin: 0;
+}
+@media all and (max-width: 980px) {
+    .umap-main-edit-toolbox button span {
+        display: none;
+    }
+}
+@media all and (max-width: 770px) {
+    .umap-main-edit-toolbox .umap-help-link,
+    .umap-main-edit-toolbox .share-status {
+        display: none !important;
+    }
 }

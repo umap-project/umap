@@ -659,3 +659,73 @@ def test_should_sync_line_on_escape(new_page, asgi_live_server, tilelayer):
 
     expect(peerA.locator("path")).to_have_count(1)
     expect(peerB.locator("path")).to_have_count(1)
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_should_sync_datalayer_clear(
+    new_page, asgi_live_server, tilelayer, map, datalayer
+):
+    map.settings["properties"]["syncEnabled"] = True
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+
+    # Create two tabs
+    peerA = new_page("Page A")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(1)
+    expect(peerB.locator(".leaflet-marker-icon")).to_have_count(1)
+
+    # Clear layer in peer A
+    peerA.get_by_role("button", name="Manage layers").click()
+    peerA.get_by_role("button", name="Edit", exact=True).click()
+    peerA.locator("summary").filter(has_text="Advanced actions").click()
+    peerA.get_by_role("button", name="Empty").click()
+    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(0)
+    expect(peerB.locator(".leaflet-marker-icon")).to_have_count(0)
+
+    # Undo in peer A
+    peerA.get_by_role("button", name="Undo").click()
+    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(1)
+    expect(peerB.locator(".leaflet-marker-icon")).to_have_count(1)
+
+
+@pytest.mark.xdist_group(name="websockets")
+def test_should_save_remote_dirty_datalayers(new_page, asgi_live_server, tilelayer):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+
+    assert not DataLayer.objects.count()
+
+    # Create two tabs
+    peerA = new_page("Page A")
+    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+
+    # Create a new layer from peerA
+    peerA.get_by_role("button", name="Manage layers").click()
+    peerA.get_by_role("button", name="Add a layer").click()
+
+    # Create a new layer from peerB
+    peerB.get_by_role("button", name="Manage layers").click()
+    peerB.get_by_role("button", name="Add a layer").click()
+
+    # Save from peerA to the server
+    counter = 0
+
+    def on_response(response):
+        nonlocal counter
+        if "/datalayer/create/" in response.url:
+            counter += 1
+        # Wait for the two datalayer saves
+        if counter == 2:
+            return True
+        return False
+
+    with peerA.expect_response(on_response):
+        peerA.get_by_role("button", name="Save").click()
+
+    assert DataLayer.objects.count() == 2

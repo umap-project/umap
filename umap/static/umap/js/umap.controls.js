@@ -297,6 +297,7 @@ U.TileLayerChooser = L.Control.extend({
       el,
       'click',
       () => {
+        const oldTileLayer = this.map._umap.properties.tilelayer
         this.map.selectTileLayer(tilelayer)
         this.map._controls.tilelayers.setLayers()
         if (options?.edit) {
@@ -304,7 +305,8 @@ U.TileLayerChooser = L.Control.extend({
           this.map._umap.isDirty = true
           this.map._umap.sync.update(
             'properties.tilelayer',
-            this.map._umap.properties.tilelayer
+            this.map._umap.properties.tilelayer,
+            oldTileLayer
           )
         }
       },
@@ -606,7 +608,7 @@ U.Editable = L.Editable.extend({
     this.on('editable:editing', (event) => {
       const feature = event.layer.feature
       feature.isDirty = true
-      feature.pullGeometry(false)
+      // feature.pullGeometry(false)
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()
@@ -624,18 +626,20 @@ U.Editable = L.Editable.extend({
 
   createPolyline: function (latlngs) {
     const datalayer = this._umap.defaultEditDataLayer()
-    const point = new U.LineString(this._umap, datalayer, {
+    const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
-    return point.ui
+    line._just_married = true
+    return line.ui
   },
 
   createPolygon: function (latlngs) {
     const datalayer = this._umap.defaultEditDataLayer()
-    const point = new U.Polygon(this._umap, datalayer, {
+    const poly = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
-    return point.ui
+    poly._just_married = true
+    return poly.ui
   },
 
   createMarker: function (latlng) {
@@ -643,6 +647,7 @@ U.Editable = L.Editable.extend({
     const point = new U.Point(this._umap, datalayer, {
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
+    point._just_married = true
     return point.ui
   },
 
@@ -734,6 +739,7 @@ U.Editable = L.Editable.extend({
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
+      event.layer.feature.pullGeometry(false)
       if (!event.layer.feature.hasGeom()) {
         event.layer.feature.del()
       } else {

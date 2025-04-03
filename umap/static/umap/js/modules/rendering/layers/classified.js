@@ -117,7 +117,7 @@ export const Choropleth = FeatureGroup.extend({
   },
 
   _getValue: function (feature) {
-    const key = this.datalayer.options.choropleth.property || 'value'
+    const key = this.datalayer.options.choropleth?.property || 'value'
     const value = +feature.properties[key]
     if (!Number.isNaN(value)) return value
   },
@@ -130,12 +130,12 @@ export const Choropleth = FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    const mode = this.datalayer.options.choropleth.mode
-    let classes = +this.datalayer.options.choropleth.classes || 5
+    const mode = this.datalayer.options.choropleth?.mode
+    let classes = +this.datalayer.options.choropleth?.classes || 5
     let breaks
     classes = Math.min(classes, values.length)
     if (mode === 'manual') {
-      const manualBreaks = this.datalayer.options.choropleth.breaks
+      const manualBreaks = this.datalayer.options.choropleth?.breaks
       if (manualBreaks) {
         breaks = manualBreaks
           .split(',')
