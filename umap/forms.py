@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import Point
 from django.forms.utils import ErrorList
 from django.template.defaultfilters import slugify
-from django.utils.translation import gettext_lazy as _
 
 from .models import DataLayer, Map, Team
 
@@ -92,7 +91,7 @@ class MapSettingsForm(forms.ModelForm):
         return self.cleaned_data["center"]
 
     class Meta:
-        fields = ("settings", "name", "center", "slug")
+        fields = ("settings", "name", "center", "slug", "tags")
         model = Map
 
 

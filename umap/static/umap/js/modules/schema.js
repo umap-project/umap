@@ -516,6 +516,9 @@ export const SCHEMA = {
     helpEntries: ['sync'],
     default: false,
   },
+  tags: {
+    type: Array,
+  },
   team: {
     type: Object,
   },

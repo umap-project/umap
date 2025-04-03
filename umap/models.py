@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
+from django.contrib.postgres.fields import ArrayField
 from django.core.files.base import File
 from django.core.files.storage import storages
 from django.core.signing import Signer
@@ -236,6 +237,7 @@ class Map(NamedModel):
     settings = models.JSONField(
         blank=True, null=True, verbose_name=_("settings"), default=dict
     )
+    tags = ArrayField(models.CharField(max_length=200), blank=True, default=list)
 
     objects = models.Manager()
     public = PublicManager()
@@ -415,12 +417,17 @@ class Map(NamedModel):
             datalayer.clone(map_inst=new)
         return new
 
+    def get_tags_display(self):
+        labels = dict(settings.UMAP_TAGS)
+        return [(t, labels.get(t, t)) for t in self.tags]
+
     @classproperty
     def extra_schema(self):
         return {
             "iconUrl": {
                 "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
-            }
+            },
+            "tags": {"choices": sorted(settings.UMAP_TAGS, key=lambda i: i[0])},
         }
 
 

@@ -226,3 +226,18 @@ def test_hover_tooltip_setting_should_be_persistent(live_server, map, page):
         - text: always never on hover
     """)
     expect(page.locator(".umap-field-showLabel input[value=null]")).to_be_checked()
+
+
+def test_can_edit_map_tags(live_server, map, page):
+    map.settings["properties"]["tags"] = ["arts"]
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Edit map name and caption").click()
+    page.get_by_text("Tags").click()
+    expect(page.get_by_label("Art and Culture")).to_be_checked()
+    page.get_by_label("Cycling").check()
+    with page.expect_response(re.compile("./update/settings/.*")):
+        page.get_by_role("button", name="Save").click()
+    saved = Map.objects.get(pk=map.pk)
+    assert saved.tags == ["arts", "cycling"]

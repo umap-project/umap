@@ -4,17 +4,19 @@
 {% trans "Search maps" as default_placeholder %}
 <div class="wrapper search_wrapper">
   <div class="row">
-    <form action="{% firstof action search_url %}" method="get">
-      <div class="col two-third mwide">
-        <input name="q"
-               type="search"
-               placeholder="{% firstof placeholder default_placeholder %}"
-               aria-label="{% firstof placeholder default_placeholder %}"
-               value="{{ request.GET.q|default:"" }}" />
-      </div>
-      <div class="col third mwide">
-        <input type="submit" value="{% trans "Search" %}" class="neutral" />
-      </div>
+    <form class="search-form flex-break" action="{% firstof action search_url %}" method="get">
+      <input name="q"
+             type="search"
+             placeholder="{% firstof placeholder default_placeholder %}"
+             aria-label="{% firstof placeholder default_placeholder %}"
+             value="{{ request.GET.q|default:"" }}" />
+      <select name="tags">
+        <option value="">{% trans "Any category" %}</option>
+        {% for value, label in UMAP_TAGS %}
+        <option value="{{ value }}" {% if request.GET.tags == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="{% trans "Search" %}" class="neutral" />
     </form>
   </div>
 </div>
