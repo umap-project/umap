@@ -1,10 +1,9 @@
 # This part installs deps needed at runtime.
-FROM python:3.11-slim AS common
+FROM python:3.11-slim AS runtime
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         tini \
-        uwsgi \
         sqlite3 \
         libpq-dev \
         gdal-bin \
@@ -14,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # This part adds deps needed only at buildtime.
-FROM common AS build
+FROM runtime AS build
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -39,9 +38,9 @@ WORKDIR /srv/umap
 
 COPY . /srv/umap
 
-RUN /venv/bin/pip install .[docker,s3]
+RUN /venv/bin/pip install .[docker,s3,sync]
 
-FROM common
+FROM runtime
 
 COPY --from=build /srv/umap/docker/ /srv/umap/docker/
 COPY --from=build /venv/ /venv/

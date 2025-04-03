@@ -14,7 +14,7 @@ services:
 
   app:
     # Check https://hub.docker.com/r/umap/umap/tags to find the latest version
-    image: umap/umap:2.0.2
+    image: umap/umap:2.9.3
     ports:
       # modify the external port (8001, on the left) if desired, but make sure it matches SITE_URL, below
       - "8001:8000"
@@ -47,4 +47,46 @@ $ python3 -c 'import secrets; print(secrets.token_hex(100))'
 User accounts can be managed via the Django admin page ({SITE_URL}/admin). The required superuser must be created on the container command line with this command:
 ```bash
 umap createsuperuser
+```
+
+## Developping with Docker
+
+If you want to develop with podman or docker, here are commands that might be useful, given that you have a postgreSQL server running locally and that your settings are located at `umap.conf`:
+
+You can build the docker image with:
+
+```bash
+podman build -t umap .
+```
+
+And run it with:
+
+```bash
+podman run -v ./umap.conf:/tmp/umap.conf -e UMAP_SETTINGS=/tmp/umap.conf -it --network host umap  
+```
+
+## Real time collaboration
+
+To enable real time collaboration when using Docker, a Redis service must be added. Something like this in `docker-compose.py` world:
+
+```yaml title="docker-compose.yml"
+services
+  redis:
+    image: redis:latest
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+…
+    command: ["redis-server"]
+…
+  app:
+    depends_on:
+…
+      redis:
+        condition: service_healthy
+…
+    environment:
+      - WEBSOCKET_ENABLED=1
+      - REDIS_URL=redis://redis:6379
+…
+
 ```

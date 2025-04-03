@@ -9,5 +9,5 @@ umap collectstatic --noinput
 umap wait_for_database
 # then migrate the database
 umap migrate
-# run uWSGI
-exec uwsgi --ini docker/uwsgi.ini
+# run the server
+exec uvicorn --proxy-headers --no-access-log --host 0.0.0.0 umap.asgi:application

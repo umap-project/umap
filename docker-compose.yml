@@ -1,5 +1,15 @@
 services:
 
+  # Usefull only to use the real time collaboration
+  redis:
+    image: redis:latest
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    command: ["redis-server"]
+
   db:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -14,7 +24,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    image: umap/umap:2.0.2
+      redis:
+        condition: service_healthy
+    image: umap/umap:2.9.3
     ports:
       - "${PORT-8000}:8000"
     environment:
@@ -23,6 +35,8 @@ services:
       - SITE_URL=https://umap.local/
       - UMAP_ALLOW_ANONYMOUS=True
       - DEBUG=1
+      - WEBSOCKET_ENABLED=1
+      - REDIS_URL=redis://redis:6379
     volumes:
       - data:/srv/umap/uploads
 
