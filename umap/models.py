@@ -417,6 +417,10 @@ class Map(NamedModel):
             datalayer.clone(map_inst=new)
         return new
 
+    def get_tags_display(self):
+        labels = dict(settings.UMAP_TAGS)
+        return [(t, labels.get(t, t)) for t in self.tags]
+
     @classproperty
     def extra_schema(self):
         return {

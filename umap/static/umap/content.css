@@ -171,7 +171,17 @@ h2.tabs a:hover {
 .more_button {
     min-height: var(--map-fragment-height);
 }
-
+.tag-list {
+    margin-top: var(--text-margin);
+    margin-bottom: var(--text-margin);
+}
+.tag-list li {
+    border: 1px solid var(--color-darkCyan);
+    border-radius: 3vmin;
+    display: inline-block;
+    padding: var(--button-padding-small);
+    white-space: nowrap;
+}
 
 /* **************************** */
 /*            colors            */
