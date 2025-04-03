@@ -1,22 +1,25 @@
 {% load umap_tags i18n %}
 
 {% for map_inst in maps %}
-  <div>
+  <div class="card">
     {% map_fragment map_inst prefix=prefix page=request.GET.p %}
     <hgroup>
-      {% if map_inst.tags %}
-        <ul class="tag-list">
-          {% for tag, label in map_inst.get_tags_display %}
-            <li><a href="{% url 'search' %}?tags={{ tag }}">{{ label }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-      <h3><a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a></h3>
-      {% with author=map_inst.get_author %}
-        {% if author %}
-          <p>{% trans "by" %} <a href="{{ author.get_url }}">{{ author }}</a></p>
+      <div>
+        {% if map_inst.tags %}
+          <ul class="tag-list">
+            {% for tag, label in map_inst.get_tags_display %}
+              <li><a href="{% url 'search' %}?tags={{ tag }}">{{ label }}</a></li>
+            {% endfor %}
+          </ul>
         {% endif %}
-      {% endwith %}
+        <h3><a href="{{ map_inst.get_absolute_url }}">{{ map_inst.name }}</a></h3>
+        {% with author=map_inst.get_author %}
+          {% if author %}
+            <p>{% trans "by" %} <a href="{{ author.get_url }}">{{ author }}</a></p>
+          {% endif %}
+        {% endwith %}
+      </div>
+      <a class="button" href="{{ map_inst.get_absolute_url }}">{% translate "See the map" %}</a>
     </hgroup>
   </div>
 {% endfor %}
