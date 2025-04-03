@@ -19,6 +19,18 @@ input:-moz-placeholder, :-moz-placeholder {
 .search-form {
     display: flex;
     align-items: baseline;
+    gap: calc(var(--gutter) / 2);
+    max-width: 800px;
+    margin: 0 auto;
+}
+.search-form select {
+    max-width: 200px;
+}
+.search-form input[type=submit] {
+    min-width: 200px;
+}
+.flex-break {
+    justify-content: center;
 }
 
 
@@ -555,4 +567,9 @@ dialog::backdrop {
     .mhide {
         display: none;
     }
+    .flex-break {
+        flex-direction: column;
+        align-items: center;
+    }
+
 }
