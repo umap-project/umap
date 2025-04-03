@@ -186,13 +186,25 @@ h2.tabs a:hover {
 .tag-list {
     margin-top: var(--text-margin);
     margin-bottom: var(--text-margin);
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--gutter) / 2 );
+    justify-content: center;
 }
 .tag-list li {
-    border: 1px solid var(--color-darkCyan);
+    border: 1px solid var(--color-darkBlue);
     border-radius: 3vmin;
     display: inline-block;
     padding: var(--button-padding-small);
+}
+.tag-list li a {
+    color: var(--color-darkBlue);
+    max-width: 125px;
+    display: inline-block;
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
 
 /* **************************** */
