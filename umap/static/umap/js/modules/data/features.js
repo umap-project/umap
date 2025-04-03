@@ -14,6 +14,7 @@ import {
   LeafletPolygon,
   LeafletPolyline,
   MaskPolygon,
+  CircleMarker,
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
@@ -722,6 +723,7 @@ export class Point extends Feature {
   }
 
   getUIClass() {
+    if (this.getOption('iconClass') === 'Circle') return CircleMarker
     return super.getUIClass() || LeafletMarker
   }
 
