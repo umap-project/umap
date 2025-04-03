@@ -6,7 +6,6 @@ RUN apt-get update && \
         tini \
         sqlite3 \
         libpq-dev \
-        redis-server \
         gdal-bin \
         && \
     apt-get autoremove -y && \

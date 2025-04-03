@@ -2,7 +2,6 @@
 set -eo pipefail
 
 source /venv/bin/activate
-service redis-server start
 
 # collect static files
 umap collectstatic --noinput
@@ -11,4 +10,4 @@ umap wait_for_database
 # then migrate the database
 umap migrate
 # run the server
-exec uvicorn --proxy-headers --no-access-log umap.asgi:application
+exec uvicorn --proxy-headers --no-access-log --host 0.0.0.0 umap.asgi:application
