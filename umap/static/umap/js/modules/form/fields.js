@@ -347,18 +347,6 @@ Fields.CheckBoxes = class extends BaseElement {
   }
 }
 
-Fields.TagsEditor = class extends Fields.CheckBoxes {
-  getInputTemplate(value, label) {
-    const path = SCHEMA.iconUrl.default.replace('marker.svg', `tags/${value}.svg`)
-    return `
-      <label>
-        <input type=checkbox value="${value}" name="${this.name}" data-ref=input />
-          <img class="tag-icon" src="${path}" alt="" /> ${label}
-      </label>
-      `
-  }
-}
-
 Fields.Select = class extends BaseElement {
   getTemplate() {
     return `<select name="${this.name}" data-ref=select></select>`

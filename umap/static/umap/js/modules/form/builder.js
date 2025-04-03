@@ -127,7 +127,6 @@ export class MutatingForm extends Form {
       facetKey: 'PropertyInput',
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
-      tags: 'TagsEditor',
     }
     for (const [key, defaults] of Object.entries(SCHEMA)) {
       const properties = Object.assign({}, defaults)
