@@ -126,8 +126,17 @@ export class TopBar extends WithTemplate {
     this.elements.undo.addEventListener('click', () => this._umap.undo())
     this.elements.undo.addEventListener('mouseover', () => {
       this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('CANCEL'),
+        content: this._umap.help.displayLabel('UNDO'),
         anchor: this.elements.undo,
+        position: 'bottom',
+        delay: 500,
+        duration: 5000,
+      })
+    })
+    this.elements.redo.addEventListener('mouseover', () => {
+      this._umap.tooltip.open({
+        content: this._umap.help.displayLabel('REDO'),
+        anchor: this.elements.redo,
         position: 'bottom',
         delay: 500,
         duration: 5000,

@@ -499,90 +499,88 @@ export default class Umap {
   }
 
   initShortcuts() {
-    const globalShortcuts = (event) => {
-      if (event.key === 'Escape') {
-        if (this.importer.dialog.visible) {
-          this.importer.dialog.close()
-        } else if (this.editEnabled && this._leafletMap.editTools.drawing()) {
-          this._leafletMap.editTools.onEscape()
-        } else if (this._leafletMap.measureTools.enabled()) {
-          this._leafletMap.measureTools.stopDrawing()
-        } else if (this.fullPanel?.isOpen()) {
-          this.fullPanel?.close()
-        } else if (this.editPanel?.isOpen()) {
-          this.editPanel?.close()
-        } else if (this.panel.isOpen()) {
-          this.panel.close()
-        }
-      }
-
-      // From now on, only ctrl/meta shortcut
-      if (!(event.ctrlKey || event.metaKey) || event.shiftKey) return
-
-      if (event.key === 'f') {
-        event.stopPropagation()
-        event.preventDefault()
-        this.search()
-      }
-
-      /* Edit mode only shortcuts */
-      if (!this.hasEditMode()) return
-
-      // Edit mode Off
-      if (!this.editEnabled) {
-        switch (event.key) {
-          case 'e':
-            event.stopPropagation()
-            event.preventDefault()
-            this.enableEdit()
-            break
-        }
-        return
-      }
-
-      // Edit mode on
-      let used = true
-      switch (event.key) {
-        case 'e':
-          if (!this.isDirty) this.disableEdit()
-          break
-        case 's':
-          if (this.isDirty) this.saveAll()
-          break
-        case 'z':
-          if (Utils.isWritable(event.target)) {
-            used = false
-            break
+    const shortcuts = {
+      Escape: {
+        do: () => {
+          if (this.importer.dialog.visible) {
+            this.importer.dialog.close()
+          } else if (this.editEnabled && this._leafletMap.editTools.drawing()) {
+            this._leafletMap.editTools.onEscape()
+          } else if (this._leafletMap.measureTools.enabled()) {
+            this._leafletMap.measureTools.stopDrawing()
+          } else if (this.fullPanel?.isOpen()) {
+            this.fullPanel?.close()
+          } else if (this.editPanel?.isOpen()) {
+            this.editPanel?.close()
+          } else if (this.panel.isOpen()) {
+            this.panel.close()
           }
-          this.sync._undoManager.undo()
-          break
-        case 'm':
-          this._leafletMap.editTools.startMarker()
-          break
-        case 'p':
-          this._leafletMap.editTools.startPolygon()
-          break
-        case 'l':
-          this._leafletMap.editTools.startPolyline()
-          break
-        case 'i':
-          this.importer.open()
-          break
-        case 'o':
-          this.importer.openFiles()
-          break
-        case 'h':
-          this.help.showGetStarted()
-          break
-        default:
-          used = false
-      }
-      if (used) {
+        },
+      },
+      'Ctrl+f': {
+        do: () => {
+          this.search()
+        },
+      },
+      'Ctrl+e': {
+        if: () => this.hasEditMode(),
+        do: () => {
+          console.log('doing')
+          if (!this.editEnabled) this.enableEdit()
+          else if (!this.isDirty) this.disableEdit()
+        },
+      },
+      'Ctrl+s': {
+        if: () => this.editEnabled && this.isDirty,
+        do: () => this.saveAll(),
+      },
+      'Ctrl+z': {
+        if: () => this.editEnabled && !Utils.isWritable(event.target),
+        do: () => this.sync._undoManager.undo(),
+      },
+      'Ctrl+Shift+Z': {
+        if: () => this.editEnabled && !Utils.isWritable(event.target),
+        do: () => this.sync._undoManager.redo(),
+      },
+      'Ctrl+m': {
+        if: () => this.editEnabled,
+        do: () => this._leafletMap.editTools.startMarker(),
+      },
+      'Ctrl+p': {
+        if: () => this.editEnabled,
+        do: () => this._leafletMap.editTools.startPolygon(),
+      },
+      'Ctrl+l': {
+        if: () => this.editEnabled,
+        do: () => this._leafletMap.editTools.startPolyline(),
+      },
+      'Ctrl+i': {
+        if: () => this.editEnabled,
+        do: () => this.importer.open(),
+      },
+      'Ctrl+o': {
+        if: () => this.editEnabled,
+        do: () => this.importer.openFiles(),
+      },
+      'Ctrl+h': {
+        if: () => this.editEnabled,
+        do: () => this.help.showGetStarted(),
+      },
+    }
+    const onKeyDown = (event) => {
+      const shiftKey = event.shiftKey ? 'Shift+' : ''
+      const altKey = event.altKey ? 'Alt+' : ''
+      const ctrlKey = event.ctrlKey || event.metaKey ? 'Ctrl+' : ''
+      const combination = `${ctrlKey}${shiftKey}${altKey}${event.key}`
+
+      const shortcut = shortcuts[combination]
+      if (shortcut && (!shortcut.if || shortcut.if())) {
+        shortcut.do()
         event.stopPropagation()
         event.preventDefault()
       }
     }
-    document.addEventListener('keydown', globalShortcuts)
+    document.addEventListener('keydown', onKeyDown)
   }
 
   async initDataLayers(datalayers) {
