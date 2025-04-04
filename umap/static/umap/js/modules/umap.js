@@ -1742,20 +1742,22 @@ export default class Umap {
   }
 
   setCenterAndZoom() {
-    this._setCenterAndZoom()
+    this._setCenterAndZoom(true)
     Alert.success(translate('The zoom and center have been modified.'))
   }
 
-  _setCenterAndZoom() {
+  _setCenterAndZoom(manual) {
     const oldCenter = { ...this.properties.center }
     const oldZoom = this.properties.zoom
     this.properties.center = this._leafletMap.getCenter()
     this.properties.zoom = this._leafletMap.getZoom()
     this._defaultExtent = false
-    this.sync.startBatch()
-    this.sync.update('properties.center', this.properties.center, oldCenter)
-    this.sync.update('properties.zoom', this.properties.zoom, oldZoom)
-    this.sync.commitBatch()
+    if (manual) {
+      this.sync.startBatch()
+      this.sync.update('properties.center', this.properties.center, oldCenter)
+      this.sync.update('properties.zoom', this.properties.zoom, oldZoom)
+      this.sync.commitBatch()
+    }
   }
 
   getStaticPathFor(name) {
