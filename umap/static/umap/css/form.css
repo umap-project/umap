@@ -528,6 +528,7 @@ i.info {
     display: inline-block;
     color: black;
     font-weight: bold;
+    overflow: hidden;
 }
 .umap-pictogram-choice img {
     vertical-align: middle;

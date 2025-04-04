@@ -892,7 +892,21 @@ a.umap-control-caption,
 .umap-edit-enabled .readonly {
     cursor: not-allowed;
 }
-
+.leaflet-container .umap-raw-icon img {
+    max-height: 48px !important;
+    max-width: 48px !important;
+}
+.umap-raw-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    overflow: hidden;
+}
+.umap-raw-icon.umap-icon-active {
+    box-shadow: var(--block-shadow);
+}
 
 /* ********************************* */
 /*         Ajax loader               */

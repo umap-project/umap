@@ -214,6 +214,7 @@ export const SCHEMA = {
       ['Circle', translate('Circle')],
       ['Drop', translate('Drop')],
       ['Ball', translate('Ball')],
+      ['Raw', translate('None')],
     ],
     default: 'Default',
   },
