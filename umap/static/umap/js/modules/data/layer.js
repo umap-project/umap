@@ -81,7 +81,7 @@ export class DataLayer {
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
 
-    this._needsFetch = this.createdOnServer
+    this._needsFetch = this.createdOnServer || this.isRemoteLayer()
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
@@ -261,8 +261,11 @@ export class DataLayer {
     if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
     geojson._umap_options.id = this.id
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
-    if (this.isRemoteLayer()) await this.fetchRemoteData()
-    else this.fromGeoJSON(geojson, false)
+    if (this.isRemoteLayer()) {
+      await this.fetchRemoteData()
+    } else {
+      this.fromGeoJSON(geojson, false)
+    }
   }
 
   clear() {

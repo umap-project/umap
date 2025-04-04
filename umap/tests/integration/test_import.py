@@ -650,6 +650,46 @@ def test_create_remote_data(page, live_server, tilelayer):
     )
 
 
+def test_create_remote_data_from_umap_backup(page, live_server, tilelayer):
+    def handle(route):
+        route.fulfill(
+            json={
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [4.3375, 51.2707],
+                        },
+                    }
+                ],
+            }
+        )
+
+    page.route("https://remote.org/data.json", handle)
+    page.goto(f"{live_server.url}/map/new/")
+    expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
+    page.get_by_title("Import data").click()
+    file_input = page.locator("input[type='file']")
+    with page.expect_file_chooser() as fc_info:
+        file_input.click()
+    file_chooser = fc_info.value
+    path = Path(__file__).parent.parent / "fixtures/remote_data.umap"
+    file_chooser.set_files(path)
+    page.get_by_role("button", name="Import data", exact=True).click()
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    expect(layers).to_have_count(1)
+    expect(page.locator(".leaflet-marker-icon")).to_be_visible()
+    page.get_by_role("button", name="Edit", exact=True).click()
+    page.locator("summary").filter(has_text="Remote data").click()
+    expect(page.locator('.panel input[name="url"]')).to_have_value(
+        "https://remote.org/data.json"
+    )
+
+
 def test_import_geojson_from_url(page, live_server, tilelayer):
     def handle(route):
         route.fulfill(
