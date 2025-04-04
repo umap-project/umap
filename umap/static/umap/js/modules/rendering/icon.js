@@ -15,6 +15,8 @@ export function getClass(name) {
       return Ball
     case 'Drop':
       return Drop
+    case 'Raw':
+      return Raw
     default:
       return DefaultIcon
   }
@@ -150,6 +152,17 @@ const Circle = BaseIcon.extend({
     this.elements.main.dataset.feature = this.feature?.id
     return this.elements.main
   },
+})
+
+const Raw = DefaultIcon.extend({
+  default_options: {
+    iconSize: new L.Point(48, 48),
+    popupAnchor: new L.Point(0, 0),
+    tooltipAnchor: new L.Point(0, 0),
+    className: 'umap-raw-icon',
+  },
+
+  _getColor: () => 'transparent',
 })
 
 const Drop = DefaultIcon.extend({
