@@ -298,6 +298,7 @@ class Map(NamedModel):
             with datalayer.geojson.open("rb") as f:
                 layer = json.loads(f.read())
             if datalayer.settings:
+                datalayer.settings.pop("id", None)
                 layer["_umap_options"] = datalayer.settings
             datalayers.append(layer)
         umapjson["layers"] = datalayers
