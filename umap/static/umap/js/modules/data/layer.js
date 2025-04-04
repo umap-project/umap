@@ -327,7 +327,7 @@ export class DataLayer {
       this.clear()
       return this._umap.formatter
         .parse(raw, this.options.remoteData.format)
-        .then((geojson) => this.fromGeoJSON(geojson))
+        .then((geojson) => this.fromGeoJSON(geojson, false))
         .catch((error) => {
           console.debug(error)
           Alert.error(
@@ -460,10 +460,7 @@ export class DataLayer {
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      this.sync.startBatch()
-      const features = this.makeFeatures(geojson, sync)
-      this.sync.commitBatch()
-      return features
+      return this.makeFeatures(geojson, sync)
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
       console.error(err)
@@ -529,7 +526,11 @@ export class DataLayer {
   async importRaw(raw, format) {
     return this._umap.formatter
       .parse(raw, format)
-      .then((geojson) => this.addData(geojson))
+      .then((geojson) => {
+        this.sync.startBatch()
+        this.addData(geojson)
+        this.sync.commitBatch()
+      })
       .catch((error) => {
         console.debug(error)
         Alert.error(translate('Import failed: invalid data'))
@@ -926,8 +927,13 @@ export class DataLayer {
             this.sync.update('options', this.options, oldOptions)
           }
           this.empty()
-          if (this.isRemoteLayer()) this.fetchRemoteData()
-          else this.addData(geojson)
+          if (this.isRemoteLayer()) {
+            this.fetchRemoteData()
+          } else {
+            this.sync.startBatch()
+            this.addData(geojson)
+            this.sync.commitBatch()
+          }
         }
       })
   }
