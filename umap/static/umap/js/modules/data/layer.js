@@ -528,8 +528,9 @@ export class DataLayer {
       .parse(raw, format)
       .then((geojson) => {
         this.sync.startBatch()
-        this.addData(geojson)
+        const data = this.addData(geojson)
         this.sync.commitBatch()
+        return data
       })
       .catch((error) => {
         console.debug(error)
