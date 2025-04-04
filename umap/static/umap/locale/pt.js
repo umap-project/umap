@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Permitir zoom com roda do rato?",
     "always": "sempre",
     "Animated transitions": "Transições animadas",
-    "Are you sure you want to cancel your changes?": "Tem a certeza que quer cancelar as suas alterações?",
     "Are you sure you want to clone this map and all its datalayers?": "Tem a certeza que quer clonar este mapa, incluindo todas as camadas de dados?",
     "Are you sure you want to delete the feature?": "Tem a certeza que quer eliminar o elemento?",
     "Are you sure you want to delete this layer?": "Tem a certeza que quer eliminar esta camada?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Explorar dados",
     "by": "por",
     "Cache proxied request": "Pedido cache com proxy",
-    "Cancel edits": "Cancelar edições",
     "Caption": "Legenda",
     "Center map on your location": "Centrar mapa na sua localização",
     "Change map background": "Mudar fundo do mapa",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Editar vista predefinida do mapa",
     "Use current center and zoom": "Usar o centro e ampliação atuais",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("pt", locale)
 L.setLocale("pt")

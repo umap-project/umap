@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "マウスホイールでのスクロールを許可？",
     "always": "常時",
     "Animated transitions": "Animated transitions",
-    "Are you sure you want to cancel your changes?": "本当に編集内容を破棄しますか？",
     "Are you sure you want to clone this map and all its datalayers?": "すべてのデータレイヤを含むマップ全体を複製してよいですか？",
     "Are you sure you want to delete the feature?": "地物を削除してよいですか？",
     "Are you sure you want to delete this layer?": "本当にこのレイヤを削除してよいですか？",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "データ内容表示",
     "by": "by",
     "Cache proxied request": "Cache proxied request",
-    "Cancel edits": "編集を破棄",
     "Caption": "表題",
     "Center map on your location": "閲覧者の位置をマップの中心に設定",
     "Change map background": "背景地図を変更",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

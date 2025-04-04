@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Luba hiirerullikuga suurendamine?",
     "always": "alati",
     "Animated transitions": "Animated transitions",
-    "Are you sure you want to cancel your changes?": "Oled sa kindel, et soovid muudatustest loobuda?",
     "Are you sure you want to clone this map and all its datalayers?": "Oled sa kindel, et soovid kopeerida seda kaarti ja kõiki selle andmekihte?",
     "Are you sure you want to delete the feature?": "Oled sa kindel, et soovid seda elementi kustutada?",
     "Are you sure you want to delete this layer?": "Oled sa kindel, et soovid seda kihti kustutada?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Andmete sirvimine",
     "by": "autorilt",
     "Cache proxied request": "Cache proxied request",
-    "Cancel edits": "Loobu muudatustest",
     "Caption": "Legend",
     "Center map on your location": "Sea oma asukoht keskpunktiks",
     "Change map background": "Vaheta kaardi taust",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("et", locale)
 L.setLocale("et")

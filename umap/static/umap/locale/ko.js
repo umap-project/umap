@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "마우스 휠로 확대/축소할 수 있도록 하시겠습니까?",
     "always": "항상",
     "Animated transitions": "Animated transitions",
-    "Are you sure you want to cancel your changes?": "정말 변경한 것들을 저장하지 않으시겠습니까?",
     "Are you sure you want to clone this map and all its datalayers?": "정말 이 지도와 모든 데이터 레이어를 복제하시겠습니까?",
     "Are you sure you want to delete the feature?": "정말 이 지물을 삭제하시겠습니까?",
     "Are you sure you want to delete this layer?": "정말 이 레이어를 삭제하시겠습니까?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "데이터 검색",
     "by": "by",
     "Cache proxied request": "Cache proxied request",
-    "Cancel edits": "편집 내역 취소",
     "Caption": "캡션",
     "Center map on your location": "지도에서 나의 위치를 가운데로 놓기",
     "Change map background": "배경 지도 변경",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")

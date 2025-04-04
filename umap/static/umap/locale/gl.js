@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Permitir o zoom coa roda do rato?",
     "always": "sempre",
     "Animated transitions": "Transicións animadas",
-    "Are you sure you want to cancel your changes?": "Confirmas que queres desbotar os teus cambios?",
     "Are you sure you want to clone this map and all its datalayers?": "Confirmas que queres clonar este mapa e todas as súas capas de datos?",
     "Are you sure you want to delete the feature?": "Confirmas que queres eliminar este elemento?",
     "Are you sure you want to delete this layer?": "Confirmas que queres eliminar esta capa?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Navegar polos datos",
     "by": "por",
     "Cache proxied request": "Solicitude de proxy da memoria tobo",
-    "Cancel edits": "Desbotar as edicións",
     "Caption": "Lenda",
     "Center map on your location": "Centrar o mapa na túa posición",
     "Change map background": "Cambiar o mapa do fondo",
@@ -531,9 +529,20 @@ const locale = {
     "Default longitude": "Lonxitude predeterminada",
     "Edit map default view": "Editar a vista predeterminada do mapa",
     "Use current center and zoom": "Usar o centrado e o nivel de zoom actual",
-    "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Layer permalink": "Ligazón permanente de capa",
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("gl", locale)
 L.setLocale("gl")

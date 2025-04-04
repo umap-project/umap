@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Tillåt zoom med musens rullhjul?",
     "always": "alltid",
     "Animated transitions": "Animerade övergångar",
-    "Are you sure you want to cancel your changes?": "Är du säker på att du vill avbryta dina ändringar?",
     "Are you sure you want to clone this map and all its datalayers?": "Är du säker på att du vill skapa en kopia av kartan och alla datalager?",
     "Are you sure you want to delete the feature?": "Är du säker på att du vill radera objektet?",
     "Are you sure you want to delete this layer?": "Är du säker på att du vill radera lagret?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Bläddra i datat",
     "by": "av",
     "Cache proxied request": "Cachelagra proxyförfrågan",
-    "Cancel edits": "Avbryt ändringar",
     "Caption": "Sidfotsfält",
     "Center map on your location": "Centrera kartan till din plats",
     "Change map background": "Ändra kartbakgrund",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

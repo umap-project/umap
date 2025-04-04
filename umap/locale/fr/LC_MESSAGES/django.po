@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 15:18+0000\n"
+"POT-Creation-Date: 2025-04-04 16:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2025\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -54,133 +54,201 @@ msgid ""
 " and maps. Then, please logout and login again with the new provider."
 msgstr "L’utilisation de “%(name)s” pour s’authentifier est dépréciée et sera bientôt rendue impossible. Veuillez configurer un nouveau fournisseur ci-dessous avant de perdre l’accès à votre compte et à vos cartes. Puis veuillez vous déconnecter et reconnecter avec le nouveau fournisseur."
 
-#: models.py:60 models.py:79
+#: models.py:61 models.py:80
 msgid "name"
 msgstr "nom"
 
-#: models.py:62 models.py:485
+#: models.py:63 models.py:493
 msgid "description"
 msgstr "description"
 
-#: models.py:110
+#: models.py:111
 msgid "details"
 msgstr "détails"
 
-#: models.py:111
+#: models.py:112
 msgid "Link to a page where the licence is detailed."
 msgstr "Lien vers une page détaillant la licence."
 
-#: models.py:121
+#: models.py:122
 msgid "URL template using OSM tile format"
 msgstr "Modèle d'URL au format des tuiles OSM"
 
-#: models.py:127
+#: models.py:128
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordre des calques de tuiles dans le panneau de modification"
 
-#: models.py:175 models.py:479
+#: models.py:176 models.py:487
 msgid "Only editable with secret edit link"
 msgstr "Modifiable seulement avec le lien de modification secret"
 
-#: models.py:176 models.py:480
+#: models.py:177 models.py:488
 msgid "Everyone can edit"
 msgstr "Tout le monde peut modifier"
 
-#: models.py:179 models.py:473
+#: models.py:180 models.py:481
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: models.py:180 models.py:189 models.py:474
+#: models.py:181 models.py:190 models.py:482
 msgid "Editors and team only"
 msgstr "Éditeurs et équipe seulement"
 
-#: models.py:181 models.py:475
+#: models.py:182 models.py:483
 msgid "Owner only"
 msgstr "Propriétaire uniquement"
 
-#: models.py:184
+#: models.py:185
 msgid "Draft (private)"
 msgstr "Brouillon (privé)"
 
-#: models.py:185
+#: models.py:186
 msgid "Everyone (public)"
 msgstr "Tout le monde (public)"
 
-#: models.py:188
+#: models.py:189
 msgid "Anyone with link"
 msgstr "Quiconque a le lien"
 
-#: models.py:190
+#: models.py:191
 msgid "Blocked"
 msgstr "Bloquée"
 
-#: models.py:191 models.py:469
+#: models.py:192 models.py:477
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models.py:194
+#: models.py:195
 msgid "center"
 msgstr "centre"
 
-#: models.py:195
+#: models.py:196
 msgid "zoom"
 msgstr "zoom"
 
-#: models.py:197
+#: models.py:198
 msgid "locate"
 msgstr "géolocaliser"
 
-#: models.py:197
+#: models.py:198
 msgid "Locate user on load?"
 msgstr "Géolocaliser l'utilisateur au chargement ?"
 
-#: models.py:201
+#: models.py:202
 msgid "Choose the map licence."
 msgstr "Choisir une licence pour la carte"
 
-#: models.py:202
+#: models.py:203
 msgid "licence"
 msgstr "licence"
 
-#: models.py:213
+#: models.py:214
 msgid "owner"
 msgstr "créateur"
 
-#: models.py:217
+#: models.py:218
 msgid "editors"
 msgstr "éditeurs"
 
-#: models.py:223
+#: models.py:224
 msgid "team"
 msgstr "équipe"
 
-#: models.py:229 models.py:501
+#: models.py:230 models.py:509
 msgid "edit status"
 msgstr "statut de modification"
 
-#: models.py:234 models.py:506
+#: models.py:235 models.py:514
 msgid "share status"
 msgstr "qui a accès"
 
-#: models.py:237 models.py:496
+#: models.py:238 models.py:504
 msgid "settings"
 msgstr "réglages"
 
-#: models.py:407
+#: models.py:410
 msgid "Clone of"
 msgstr "Clone de"
 
-#: models.py:468 models.py:472 models.py:478
+#: models.py:476 models.py:480 models.py:486
 msgid "Inherit"
 msgstr "Par défaut"
 
-#: models.py:491
+#: models.py:499
 msgid "display on load"
 msgstr "afficher au chargement."
 
-#: models.py:492
+#: models.py:500
 msgid "Display this layer on load."
 msgstr "Afficher ce calque au chargement."
+
+#: settings/base.py:295
+msgid "Art and Culture"
+msgstr "Art et culture"
+
+#: settings/base.py:296
+msgid "Cycling"
+msgstr "Vélo"
+
+#: settings/base.py:297
+msgid "Business"
+msgstr "Économie"
+
+#: settings/base.py:298
+msgid "Environment"
+msgstr "Environnement"
+
+#: settings/base.py:299
+msgid "Education"
+msgstr "Éducation"
+
+#: settings/base.py:300
+msgid "Food and Agriculture"
+msgstr "Nourriture et agriculture"
+
+#: settings/base.py:301
+msgid "Geopolitics"
+msgstr "Géopolitique"
+
+#: settings/base.py:302
+msgid "Health"
+msgstr "Santé"
+
+#: settings/base.py:303
+msgid "Hiking"
+msgstr "Rando"
+
+#: settings/base.py:304
+msgid "History"
+msgstr "Histoire"
+
+#: settings/base.py:305
+msgid "Public sector"
+msgstr "Secteur public"
+
+#: settings/base.py:306
+msgid "Science"
+msgstr "Science"
+
+#: settings/base.py:307
+msgid "Shopping"
+msgstr "Commerces"
+
+#: settings/base.py:308
+msgid "Sport and Leisure"
+msgstr "Sport et loisirs"
+
+#: settings/base.py:309
+msgid "Travel"
+msgstr "Voyage"
+
+#: settings/base.py:310
+msgid "Transports"
+msgstr "Transports"
+
+#: settings/base.py:311
+msgid "Tourism"
+msgstr "Tourisme"
 
 #: templates/403.html:8
 msgid ""
@@ -434,7 +502,7 @@ msgstr "Mes équipes"
 msgid "Map of the uMaps"
 msgstr "La carte des uMaps"
 
-#: templates/umap/home.html:24
+#: templates/umap/home.html:25
 msgid "Get inspired, browse maps"
 msgstr "Naviguer dans les cartes"
 
@@ -442,11 +510,15 @@ msgstr "Naviguer dans les cartes"
 msgid "You are logged in. Continuing..."
 msgstr "Vous êtes maintenant identifié. Merci de patienter..."
 
-#: templates/umap/map_list.html:11 views.py:438
+#: templates/umap/map_list.html:18 views.py:444
 msgid "by"
 msgstr "par"
 
-#: templates/umap/map_list.html:20
+#: templates/umap/map_list.html:22
+msgid "See the map"
+msgstr "Voir la carte"
+
+#: templates/umap/map_list.html:28
 msgid "More"
 msgstr "Plus"
 
@@ -606,11 +678,11 @@ msgstr[0] "%(count)s carte trouvée:"
 msgstr[1] "%(count)s cartes trouvées:"
 msgstr[2] "%(count)s cartes trouvées :"
 
-#: templates/umap/search.html:28
+#: templates/umap/search.html:30
 msgid "No map found."
 msgstr "Aucune carte trouvée."
 
-#: templates/umap/search.html:33
+#: templates/umap/search.html:35
 msgid "Latest created maps"
 msgstr "Dernières cartes créées."
 
@@ -618,7 +690,11 @@ msgstr "Dernières cartes créées."
 msgid "Search maps"
 msgstr "Chercher des cartes"
 
-#: templates/umap/search_bar.html:16
+#: templates/umap/search_bar.html:14
+msgid "Any category"
+msgstr "Toutes catégories"
+
+#: templates/umap/search_bar.html:19
 msgid "Search"
 msgstr "Chercher"
 
@@ -691,61 +767,61 @@ msgstr "Impossible de supprimer une équipe ayant plus d'un membre"
 msgid "Team “%(name)s” has been deleted"
 msgstr "L'équipe «%(name)s» a été supprimée"
 
-#: views.py:443
+#: views.py:449
 msgid "View the map"
 msgstr "Voir la carte"
 
-#: views.py:839
+#: views.py:845
 msgid "See full screen"
 msgstr "Plein écran"
 
-#: views.py:982
+#: views.py:988
 msgid "Map editors updated with success!"
 msgstr "Éditeurs de la carte mis à jour !"
 
-#: views.py:1018
+#: views.py:1024
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Le lien d'édition uMap pour votre carte : %(map_name)s"
 
-#: views.py:1021
+#: views.py:1027
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Voici votre lien d'édition secret : %(link)s"
 
-#: views.py:1028
+#: views.py:1034
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Impossible d'envoyer un courriel vers %(email)s"
 
-#: views.py:1031
+#: views.py:1037
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Courriel envoyé à %(email)s"
 
-#: views.py:1042
+#: views.py:1048
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:1045
+#: views.py:1051
 msgid "Map successfully deleted."
 msgstr "La carte a bien été supprimée."
 
-#: views.py:1071
+#: views.py:1077
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:1076
+#: views.py:1082
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:1330
+#: views.py:1336
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
 
-#: views.py:1352
+#: views.py:1358
 msgid "Permissions updated with success!"
 msgstr "Les permissions ont bien été modifiées !"

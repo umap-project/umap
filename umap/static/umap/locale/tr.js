@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Kaydırma tekerleği yakınlaştırmasına izin verilsin mi?",
     "always": "her zaman",
     "Animated transitions": "Animated transitions",
-    "Are you sure you want to cancel your changes?": "Değişikliklerinizi iptal etmek istediğinizden emin misiniz?",
     "Are you sure you want to clone this map and all its datalayers?": "Bu haritayı ve tüm veri katmanlarını klonlamak istediğinizden emin misiniz?",
     "Are you sure you want to delete the feature?": "Bu nesneyi silmek istediğinizden emin misiniz?",
     "Are you sure you want to delete this layer?": "Bu katmanı silmek istediğinizden emin misiniz?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Verilere göz at",
     "by": "tarafından",
     "Cache proxied request": "Önbellek proxy isteği",
-    "Cancel edits": "Düzenlemeleri iptal et",
     "Caption": "Başlık",
     "Center map on your location": "Bulunduğunuz yere göre haritayı ortala",
     "Change map background": "Harita arkaplanını değiştir",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

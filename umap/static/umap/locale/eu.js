@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Saguaren errobera erabiliz zoom egitea baimendu?",
     "always": "beti",
     "Animated transitions": "Trantsizio animatuak",
-    "Are you sure you want to cancel your changes?": "Ziur aldaketak bertan behera utzi nahi dituzula?",
     "Are you sure you want to clone this map and all its datalayers?": "Ziur mapa hau eta bere datu-geruza guztiak klonatu nahi dituzula?",
     "Are you sure you want to delete the feature?": "Ziur entitatea ezabatu nahi duzula?",
     "Are you sure you want to delete this layer?": "Ziur geruza hau ezabatu nahi duzula?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Arakatu datuak",
     "by": "egilea",
     "Cache proxied request": "Cache proxy eskaera",
-    "Cancel edits": "Utzi aldaketak",
     "Caption": "Testua",
     "Center map on your location": "Zentratu mapa zure kokapenean",
     "Change map background": "Aldatu maparen atzeko planoa",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Mapa editatzeko lehenetsitako ikuspegia",
     "Use current center and zoom": "Erabili uneko erdigunea eta zooma",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

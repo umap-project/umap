@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Povoliť približovanie kolieskom myši?",
     "always": "vždy",
     "Animated transitions": "Animated transitions",
-    "Are you sure you want to cancel your changes?": "Ste si istí že chcete zrušiť vaše úpravy?",
     "Are you sure you want to clone this map and all its datalayers?": "Určite chcete vytvoriť kópiu celej tejto mapy a všetkých jej vrstiev?",
     "Are you sure you want to delete the feature?": "Určite chcete vymazať tento objekt?",
     "Are you sure you want to delete this layer?": "Určite chcete vymazať túto vrstvu?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Prezerať údaje",
     "by": "od",
     "Cache proxied request": "Cache proxied request",
-    "Cancel edits": "Zrušiť zmeny",
     "Caption": "Nadpis",
     "Center map on your location": "Vycentrovať mapu na vašu polohu",
     "Change map background": "Zmeniť pozadie mapy",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

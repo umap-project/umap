@@ -27,7 +27,6 @@ const locale = {
     "Allow scroll wheel zoom?": "Разрешить изменение масштаба колесом мыши?",
     "always": "всегда",
     "Animated transitions": "Animated transitions",
-    "Are you sure you want to cancel your changes?": "Вы уверены, что хотите отменить сделанные изменения?",
     "Are you sure you want to clone this map and all its datalayers?": "Вы уверены, что хотите скопировать эту карту и все её слои данных?",
     "Are you sure you want to delete the feature?": "Вы уверены, что хотите удалить объект?",
     "Are you sure you want to delete this layer?": "Вы уверены что хотите удалить этот слой?",
@@ -46,7 +45,6 @@ const locale = {
     "Browse data": "Просмотр данных",
     "by": "от",
     "Cache proxied request": "Кэшированный прокси-запрос",
-    "Cancel edits": "Отменить правки",
     "Caption": "Заголовок",
     "Center map on your location": "Переместить карту в ваше местоположение",
     "Change map background": "Изменить подложку карты",
@@ -532,8 +530,19 @@ const locale = {
     "Edit map default view": "Edit map default view",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
-    "Save this geometry as a new feature": "Save this geometry as a new feature",
-    "Save this place as a new feature": "Save this place as a new feature"
+    "Back to home": "Back to home",
+    "Home logo": "Home logo",
+    "Add this geometry to my map": "Add this geometry to my map",
+    "Add this place to my map": "Add this place to my map",
+    "Cancel last edit": "Cancel last edit",
+    "Redo last edit": "Redo last edit",
+    "Links": "Links",
+    "Images": "Images",
+    "Iframes": "Iframes",
+    "Tags": "Tags",
+    "Geocode": "Geocode",
+    "Undo": "Undo",
+    "Redo": "Redo"
 }
 L.registerLocale("ru", locale)
 L.setLocale("ru")
