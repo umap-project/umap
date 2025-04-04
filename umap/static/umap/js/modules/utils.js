@@ -117,6 +117,7 @@ export function escapeHTML(s) {
       'dd',
       'b',
       'i',
+      'kbd',
     ],
     ADD_ATTR: [
       'target',

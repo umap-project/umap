@@ -36,9 +36,13 @@ const SHORTCUTS = {
     shortcut: 'Modifier+F',
     label: translate('Search location'),
   },
-  CANCEL: {
+  UNDO: {
     shortcut: 'Modifier+Z',
-    label: translate('Cancel edits'),
+    label: translate('Cancel last edit'),
+  },
+  REDO: {
+    shortcut: 'Modifier+Shift+Z',
+    label: translate('Redo last edit'),
   },
   PREVIEW: {
     shortcut: 'Modifier+E',
