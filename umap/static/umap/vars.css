@@ -12,13 +12,14 @@
     --color-limeGreen: #b9f5d2;
     --color-brightCyan: #46ece6;
     --color-lightCyan: #d4fbf9;
-    --color-darkCyan: #43a39f;
+    --color-darkCyan: #009099;
     --color-red: #c60f13;
     --color-darkRed: #5b2a2a;
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);
     --text-color: var(--color-dark);
+    --link-color: var(--color-darkCyan);
 
     /* Buttons. */
     --button-primary-background: var(--color-waterMint);

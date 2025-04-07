@@ -186,6 +186,8 @@ h2.tabs a:hover {
     white-space: nowrap;
     text-overflow: ellipsis;
     vertical-align: middle;
+    font-size: small;
+    padding: 0 3px;
 }
 .card {
     border: 1px solid var(--color-lightGray);

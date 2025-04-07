@@ -19,7 +19,11 @@ h1, h2, h3, h4, h5, h6, label, hr {
 }
 a {
     text-decoration: none;
-    color: #1F5C39;
+    color: var(--link-color);
+}
+a.main {
+    font-weight: bold;
+    text-decoration: underline;
 }
 a[href^="http"]:not(nav.umap-nav a) {
     text-decoration: underline;
@@ -80,9 +84,6 @@ hgroup > * {
 }
 hgroup {
     margin-bottom: var(--box-margin);
-}
-hgroup > :not(:first-child):last-child {
-    font-weight: normal;
 }
 hgroup p,
 hgroup button {
