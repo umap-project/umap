@@ -68,7 +68,7 @@ docker = [
   "uvicorn==0.34.0",
 ]
 s3 = [
-  "django-storages[s3]==1.14.5",
+  "django-storages[s3]==1.14.6",
 ]
 sync = [
   "pydantic==2.11.1",
