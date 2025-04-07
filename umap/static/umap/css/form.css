@@ -7,16 +7,15 @@ input[type="datetime-local"], input[type="email"], input[type="number"],
 input[type="search"], input[type="tel"], input[type="time"], input[type="file"],
 input[type="url"], textarea {
     background-color: white;
-    border: 1px solid #CCCCCC;
-    border-radius: 2px 2px 2px 2px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
-    color: rgba(0, 0, 0, 0.75);
+    border: 2px solid var(--color-darkBlue);
+    color: var(--text-color);
     display: block;
     font-family: inherit;
     margin: 0;
-    margin-bottom: var(--box-margin);
-    padding: 7px;
+    padding: .5rem 1rem;
     width: 100%;
+    line-height: inherit;
+    min-height: 40px;
 }
 input[type="range"] {
     margin-top: 10px;
@@ -47,10 +46,14 @@ input[type=checkbox]:checked:after {
     content: '✓';
     color: var(--color-darkGray);
 }
-
 input[data-modified=true] {
     background-color: var(--color-lightCyan);
     border: 1px solid var(--color-darkGray);
+}
+input + select,
+select + input,
+input + input {
+    border-left: none;
 }
 textarea {
     height: inherit;
@@ -59,13 +62,18 @@ textarea {
     min-height: 6rlh;
 }
 select {
-    border: 1px solid #222;
+    border: 2px solid var(--color-darkBlue);
     width: 100%;
     padding: var(--button-padding);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 40px;
 }
 .dark select {
-    color: #efefef;
-    background-color: #393F3F;
+    color: var(--text-color);
+    background-color: var(--color-darkGray);
+    border-color: var(--color-dark);
+    border-width: 1px;
 }
 select[multiple="multiple"] {
     height: auto;
@@ -75,22 +83,25 @@ select[multiple="multiple"] {
 input[type="submit"] {
     display: flex;
     align-items: center;
-    margin-bottom: 14px;
     text-align: center;
-    border-radius: 2px;
-    font-weight: normal;
     cursor: pointer;
     padding: var(--button-padding);
     border: none;
     text-decoration: none;
-    background-color: white;
     justify-content: center;
+    background-color: var(--color-darkBlue);
+    color: white;
+    font-weight: normal;
+    min-height: 40px;
 }
 .dark .button,
 .dark [type="button"] {
     background-color: var(--color-darkerGray);
     color: var(--text-color);
     border: 1px solid #1b1f20;
+}
+.button.primary {
+    font-weight: bold;
 }
 .dark .button.primary:not([disabled]),
 .dark [type="button"].primary:not([disabled]) {
@@ -160,6 +171,14 @@ input + .help-text {
 .formbox.with-switch {
     padding-top: 2px;
 }
+.with-switch {
+    overflow: hidden;
+}
+.formbox select,
+.formbox textarea,
+.formbox input {
+    margin-bottom: var(--text-margin);
+}
 fieldset.formbox {
     border: none;
     border-top: 1px solid var(--color-lightGray);
@@ -200,8 +219,9 @@ input[value]:invalid {
     background-color: darkred;
 }
 .dark input, .dark textarea {
-    background-color: #232729;
-    border-color: #1b1f20;
+    background-color: var(--color-darkerGray);
+    border-color: var(--color-dark);
+    border-width: 1px;
     color: #efefef;
 }
 details {
@@ -277,9 +297,6 @@ input.switch:empty ~ label {
     text-indent: 6em;
     margin: 0.2em 0;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     text-shadow: 0 1px rgba(0, 0, 0, 0.1);
     width: 80px;
@@ -567,6 +584,7 @@ input.blur {
     vertical-align: middle;
     border-start-end-radius: 0;
     border-end-end-radius: 0;
+    margin-bottom: 0;
 }
 .blur + .button,
 .blur + [type="button"] {

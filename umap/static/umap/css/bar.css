@@ -4,6 +4,7 @@
     background-color: var(--color-darkGray);
     width: auto;
     margin-bottom: 0;
+    min-height: initial;
 }
 .umap-main-edit-toolbox [type=button]:hover {
     text-decoration: underline;
