@@ -1237,23 +1237,14 @@ export class DataLayer {
       translate('Delete layer')
     )
     if (this.isReadOnly()) {
-      DomUtil.addClass(container, 'readonly')
+      container.classList.add('readonly')
     } else {
-      DomEvent.on(edit, 'click', this.edit, this)
-      DomEvent.on(table, 'click', this.tableEdit, this)
-      DomEvent.on(
-        remove,
-        'click',
-        function () {
-          if (!this.isVisible()) return
-          this._umap.dialog
-            .confirm(translate('Are you sure you want to delete this layer?'))
-            .then(() => {
-              this.del()
-            })
-        },
-        this
-      )
+      edit.addEventListener('click', () => this.edit())
+      table.addEventListener('click', () => this.tableEdit())
+      remove.addEventListener('click', () => {
+        if (!this.isVisible()) return
+        this.del()
+      })
     }
     DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)

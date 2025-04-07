@@ -61,7 +61,6 @@ def test_cancel_deleting_datalayer_should_restore(
     expect(markers).to_have_count(1)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Delete layer").click()
-    page.get_by_role("button", name="OK").click()
     expect(markers).to_have_count(0)
     expect(page.get_by_text("test datalayer")).to_be_hidden()
     page.get_by_role("button", name="Undo").click()
@@ -203,7 +202,6 @@ def test_deleting_datalayer_should_remove_from_browser_and_layers_list(
     expect(panel.get_by_text("test datalayer")).to_be_visible()
     expect(edit_panel.get_by_text("test datalayer")).to_be_visible()
     page.locator(".panel.right").get_by_title("Delete layer").click()
-    page.get_by_role("button", name="OK").click()
     expect(panel.get_by_text("test datalayer")).to_be_hidden()
     expect(edit_panel.get_by_text("test datalayer")).to_be_hidden()
 
@@ -217,7 +215,6 @@ def test_deleting_datalayer_should_remove_from_caption(
     page.get_by_role("button", name="Manage layers").click()
     expect(panel.get_by_text("test datalayer")).to_be_visible()
     page.locator(".panel.right").get_by_title("Delete layer").click()
-    page.get_by_role("button", name="OK").click()
     expect(panel.get_by_text("test datalayer")).to_be_hidden()
 
 

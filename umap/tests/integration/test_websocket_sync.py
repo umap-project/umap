@@ -485,7 +485,6 @@ def test_should_sync_datalayers_delete(new_page, asgi_live_server, tilelayer):
 
     # Delete "datalayer 2" in peerA
     peerA.locator(".datalayer").get_by_role("button", name="Delete layer").first.click()
-    peerA.get_by_role("button", name="OK").click()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
 
