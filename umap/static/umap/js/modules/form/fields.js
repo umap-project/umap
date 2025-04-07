@@ -152,7 +152,9 @@ Fields.Textarea = class extends BaseElement {
       this.textarea.value = value
     }
   }
-
+  clear() {
+    this.textarea.value = ''
+  }
   value() {
     return this.textarea.value
   }
