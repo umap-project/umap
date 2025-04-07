@@ -26,7 +26,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    image: umap/umap:2.9.3
+    image: umap/umap:3.0.0
     ports:
       - "${PORT-8000}:8000"
     environment:

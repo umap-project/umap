@@ -1,5 +1,68 @@
 # Changelog
 
+## 3.0.0 - 2025-04-07
+
+This is the first release to officially support colaborative real-time map editing.
+It introduces ASGI deployement, to support websockets, and adds Redis in the stack.
+But it's still possible to continue deploying in WSGI for now, and Redis is only
+mandatory when using the real-time feature.
+
+How to use the real-time editing feature in your instance:
+  - you need to deploy with ASGI, see https://docs.umap-project.org/en/stable/deploy/asgi/
+  - you need to set `REALTIME_ENABLED=True` in your settings
+
+Other notable changes:
+  - a first version of a real undo/redo
+  - map categories; those are defined through the `UMAP_TAGS` settings
+
+Note: you may want to update your search index to include the category search,
+see https://docs.umap-project.org/en/stable/config/settings/#umap_search_configuration
+
+### New features
+* add collaborative real-time map editing
+* add atomic undo redo by @yohanboniface in #2570
+* expose active sessions in stats endpoint by @yohanboniface in #2544
+* add more users counts in /stats/ by @yohanboniface in #2555
+* add new "Back to home" icon by @yohanboniface in #2551
+* add experimental BAN importer by @yohanboniface in #2565
+* add titles in the text formatting dialog by @yohanboniface in #2584
+* layers selector in bottom bar by @yohanboniface in #2579
+* display maps list as a grid now by @yohanboniface in #2590
+* add Map.tags and allow to edit from client by @yohanboniface in #2530
+* add minimal "raw" icon shape by @yohanboniface in #2597
+
+### Bug fixes
+* cast value to string before calling trim by @yohanboniface in #2567
+* import iconUrl as absolute when possible by @yohanboniface in #2563
+* iconUrl field was broken on older browsers by @yohanboniface in #2575
+* do not fail when trying to read metadata of a missing geojson by @yohanboniface in #2592
+* remote data loading on import from umap backup by @davidbgk in #2598
+* do not export layer ids in umap backup by @davidbgk in #2600
+* use the multichoices for ttl in remote data form by @davidbgk in #2599
+
+### Internal changes
+* refactor search UX by @yohanboniface in #2545
+* new icon, colors and title for search buttons by @yohanboniface in #2556
+* use real redraw for datalayer, instead of hide/show by @yohanboniface in #2568
+* order importers by name instead of id by @yohanboniface in #2578
+* update the Dockerfile to expose websockets by @almet in #2576
+* remove confirm delete for features and datalayers by @yohanboniface in #2603
+
+### Accessibility
+* a11y: turn embeded maps into inert elements by @davidbgk in #2533
+
+### Changed templates
+  - auth/user_detail.html
+  - auth/user_stars.html
+  - umap/content.html
+  - umap/home.html
+  - umap/map_fragment.html
+  - umap/map_list.html
+  - umap/search.html
+  - umap/search_bar.html
+  - umap/team_detail.html
+
+
 ## 2.9.3 - 2025-03-07
 
 * be explicit in the message that logout is needed after adding a new oauth provider
