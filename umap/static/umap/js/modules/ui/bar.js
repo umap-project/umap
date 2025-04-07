@@ -11,13 +11,11 @@ const TOP_BAR_TEMPLATE = `
         <div class="logo"><a class="" href="/" title="${translate('Go to the homepage')}">uMap</a></div>
         <button class="map-name flat truncate" type="button" data-ref="name"></button>
         <button class="share-status flat truncate" type="button" data-ref="share"></button>
-        <button class="edit-undo round" type="button" data-ref="undo" disabled>
+        <button class="edit-undo round flat" type="button" data-ref="undo" disabled>
             <i class="icon icon-16 icon-undo"></i>
-            <span>${translate('Undo')}</span>
         </button>
-        <button class="edit-redo round" type="button" data-ref="redo" disabled>
+        <button class="edit-redo round flat" type="button" data-ref="redo" disabled>
             <i class="icon icon-16 icon-redo"></i>
-            <span>${translate('Redo')}</span>
         </button>
     </div>
     <div class="umap-right-edit-toolbox" data-ref="right">

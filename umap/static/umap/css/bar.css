@@ -13,9 +13,14 @@
     padding: 0 var(--text-margin);
     background-color: inherit;
 }
+.leaflet-container .edit-undo {
+    margin-left: var(--box-margin);
+}
+.leaflet-container .edit-undo[disabled],
+.leaflet-container .edit-redo[disabled] {
+    filter: invert(.5);
+}
 .leaflet-container .edit-save,
-.leaflet-container .edit-undo,
-.leaflet-container .edit-redo,
 .leaflet-container .edit-disable,
 .leaflet-container .connected-peers
 {
@@ -40,8 +45,6 @@
     color: var(--color-darkGray);
 }
 
-.leaflet-container .edit-undo:hover,
-.leaflet-container .edit-redo:hover,
 .leaflet-container .edit-disable:hover {
     border: 0.5px solid rgba(153, 153, 153, 0.80);
     text-decoration: none;

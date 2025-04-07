@@ -686,7 +686,7 @@ def test_should_sync_datalayer_clear(
     expect(peerB.locator(".leaflet-marker-icon")).to_have_count(0)
 
     # Undo in peer A
-    peerA.get_by_role("button", name="Undo").click()
+    peerA.locator(".edit-undo").click()
     expect(peerA.locator(".leaflet-marker-icon")).to_have_count(1)
     expect(peerB.locator(".leaflet-marker-icon")).to_have_count(1)
 
