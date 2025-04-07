@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1 - 2025-04-07
+
+* fix showLabel wrongly using MultiChoices by @yohanboniface in #2609
+
+
 ## 3.0.0 - 2025-04-07
 
 This is the first release to officially support colaborative real-time map editing.
