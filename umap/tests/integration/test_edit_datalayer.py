@@ -64,7 +64,7 @@ def test_cancel_deleting_datalayer_should_restore(
     page.get_by_role("button", name="OK").click()
     expect(markers).to_have_count(0)
     expect(page.get_by_text("test datalayer")).to_be_hidden()
-    page.get_by_role("button", name="Undo").click()
+    page.locator(".edit-undo").click()
     expect(markers).to_have_count(1)
     expect(page.locator(".umap-browser").get_by_text("test datalayer")).to_be_visible()
 
