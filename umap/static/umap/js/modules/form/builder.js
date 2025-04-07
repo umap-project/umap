@@ -132,6 +132,9 @@ export class MutatingForm extends Form {
       const properties = Object.assign({}, defaults)
       if (properties.type === Array) {
         properties.handler = 'CheckBoxes'
+      } else if (properties.type === Boolean) {
+        if (properties.nullable) properties.handler = 'NullableChoices'
+        else properties.handler = 'Switch'
       } else if (properties.choices) {
         const text_length = properties.choices.reduce(
           (acc, [_, label]) => acc + label.length,
@@ -145,9 +148,6 @@ export class MutatingForm extends Form {
           properties.handler = 'Select'
           properties.selectOptions = properties.choices
         }
-      } else if (properties.type === Boolean) {
-        if (properties.nullable) properties.handler = 'NullableChoices'
-        else properties.handler = 'Switch'
       } else if (properties.type === 'Text') {
         properties.handler = 'Textarea'
       } else if (properties.type === Number) {
