@@ -1,6 +1,5 @@
 :root {
     /* Colors. */
-    --color-waterMint: #B9F5D2;
     --color-darkBlue: #263B58;
     --color-lighterGray: #f6f6f6;
     --color-lightGray: #ddd;
@@ -21,7 +20,7 @@
     --text-color: var(--color-dark);
 
     /* Buttons. */
-    --button-primary-background: var(--color-waterMint);
+    --button-primary-background: var(--color-limeGreen);
     --button-primary-color: var(--color-darkBlue);
     --button-neutral-background: var(--color-lightGray);
     --button-neutral-color: var(--color-darkGray);

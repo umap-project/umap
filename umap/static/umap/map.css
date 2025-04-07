@@ -37,7 +37,6 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     background-color: var(--color-lightGray);
 }
 
-
 /* *********** */
 /* Structure   */
 /* *********** */
@@ -94,6 +93,8 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     background-image: url('./img/24.svg');
     text-indent: -9999px;
     margin-bottom: 0;
+    background-color: white;
+    min-height: initial;
 }
 .leaflet-control.display-on-more,
 .umap-control-less {
@@ -449,7 +450,7 @@ ul.photon-autocomplete {
     display: inline-block;
     width: 16px;
     height: 16px;
-    margin-inline-start: 5px;
+    margin-inline-start: 2px;
     background-position: 2px -4px;
     background-repeat: no-repeat;
     background-image: url('./img/16.svg');
@@ -470,6 +471,7 @@ ul.photon-autocomplete {
 }
 .umap-getstarted button {
     width: 100%;
+    margin-bottom: var(--text-margin);
 }
 .umap-help {
     font-style: italic;
@@ -659,6 +661,10 @@ a.umap-control-caption,
 }
 .umap-caption .header i.icon {
     flex-shrink: 0;
+}
+.umap-caption button {
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 .umap-browser .main-toolbox {
     padding-left: 4px; /* Align with toolbox below  */

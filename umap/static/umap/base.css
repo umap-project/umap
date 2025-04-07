@@ -3,9 +3,7 @@
 */
 body, div, ul, ol, li, a, section, nav,
 h1, h2, h3, h4, h5, h6, label,
-hr, input, textarea {
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
+hr, input, textarea, select {
     box-sizing: border-box;
     margin: 0;
     padding: 0;

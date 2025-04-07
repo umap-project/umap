@@ -19,7 +19,6 @@ input:-moz-placeholder, :-moz-placeholder {
 .search-form {
     display: flex;
     align-items: baseline;
-    gap: calc(var(--gutter) / 2);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -213,7 +212,6 @@ h2.tabs a:hover {
 /*            colors            */
 /* **************************** */
 
-input[type="submit"],
 .button {
     background-color: var(--button-primary-background);
     color: var(--button-primary-color);
@@ -405,21 +403,8 @@ html[dir="rtl"] .content .icon-delete {
         align-items: center;
     }
 }
-.table-header form input {
-    border: 2px solid var(--color-darkBlue);
-    border-radius: 0;
-    padding: .5rem 1rem;
-    margin-bottom: 0;
-    line-height: inherit;
-    height: 40px;
-}
 .table-header form input[type="search"] {
     width: 30ch;
-}
-.table-header form input[type="submit"] {
-    background-color: var(--color-darkBlue);
-    color: white;
-    font-weight: bold;
 }
 
 .table-header .button-download {
