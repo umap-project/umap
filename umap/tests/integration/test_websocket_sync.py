@@ -86,7 +86,6 @@ def test_websocket_connection_can_sync_markers(new_page, asgi_live_server, tilel
     # Delete a marker from peer A and check it's been deleted on peer B
     a_first_marker.click(button="right")
     peerA.get_by_role("button", name="Delete this feature").click()
-    peerA.locator("dialog").get_by_role("button", name="OK").click()
     expect(a_marker_pane).to_have_count(1)
     expect(b_marker_pane).to_have_count(1)
 
@@ -166,7 +165,6 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
     # Delete a polygon from peer A and check it's been deleted on peer B
     a_polygon.click(button="right")
     peerA.get_by_role("button", name="Delete this feature").click()
-    peerA.locator("dialog").get_by_role("button", name="OK").click()
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
 
@@ -485,7 +483,6 @@ def test_should_sync_datalayers_delete(new_page, asgi_live_server, tilelayer):
 
     # Delete "datalayer 2" in peerA
     peerA.locator(".datalayer").get_by_role("button", name="Delete layer").first.click()
-    peerA.get_by_role("button", name="OK").click()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
 

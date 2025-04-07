@@ -241,7 +241,6 @@ def test_can_delete_datalayer(live_server, map, login, datalayer):
     expect(markers).to_have_count(1)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Delete layer").click()
-    page.get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r".*/datalayer/delete/.*")):
         page.get_by_role("button", name="Save").click()
     expect(markers).to_have_count(0)

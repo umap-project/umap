@@ -278,7 +278,8 @@ class Feature {
         <i class="icon icon-24 icon-delete"></i>${translate('Delete')}
       </button>`)
     button.addEventListener('click', () => {
-      this.confirmDelete().then(() => this._umap.editPanel.close())
+      this.del()
+      this._umap.editPanel.close()
     })
     container.appendChild(button)
   }
@@ -361,17 +362,6 @@ class Feature {
     const popup = new Class(this)
     this.ui.bindPopup(popup)
     return popup.loadContent()
-  }
-
-  async confirmDelete() {
-    const confirmed = await this._umap.dialog.confirm(
-      translate('Are you sure you want to delete the feature?')
-    )
-    if (confirmed) {
-      this.del()
-      return true
-    }
-    return false
   }
 
   del(sync) {
@@ -518,7 +508,7 @@ class Feature {
         icon: 'icon-edit',
       },
       {
-        action: () => this.confirmDelete(),
+        action: () => this.del(),
         title: translate('Delete this feature'),
         icon: 'icon-delete',
       },
@@ -673,7 +663,7 @@ class Feature {
       },
       {
         label: translate('Delete this feature'),
-        action: () => this.confirmDelete(),
+        action: () => this.del(),
       },
       {
         label: translate('Clone this feature'),
