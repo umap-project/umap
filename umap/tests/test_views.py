@@ -510,3 +510,18 @@ def test_can_combine_search_and_filter(client, map):
     url = reverse("search")
     response = client.get(url + "?q=dur&tags=bike")
     assert "Blé dur" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_can_find_small_usernames(client):
+    UserFactory(username="Joe")
+    UserFactory(username="JoeJoe")
+    url = "/agnocomplete/AutocompleteUser/"
+    response = client.get(url + "?q=joe")
+    data = json.loads(response.content)["data"]
+    assert len(data) == 1
+    assert data[0]["label"] == "Joe"
+    response = client.get(url + "?q=joej")
+    data = json.loads(response.content)["data"]
+    assert len(data) == 1
+    assert data[0]["label"] == "JoeJoe"
