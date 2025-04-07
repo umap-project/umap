@@ -28,8 +28,6 @@
     "always": "всегда",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Вы уверены, что хотите скопировать эту карту и все её слои данных?",
-    "Are you sure you want to delete the feature?": "Вы уверены, что хотите удалить объект?",
-    "Are you sure you want to delete this layer?": "Вы уверены что хотите удалить этот слой?",
     "Are you sure you want to delete this map?": "Вы уверены, что хотите удалить карту?",
     "Are you sure you want to delete this property on all the features?": "Вы уверены, что хотите удалить это свойство у всех объектов?",
     "Are you sure you want to restore this version?": "Вы уверены, что хотите восстановить эту версию?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

@@ -28,8 +28,6 @@
     "always": "alltaf",
     "Animated transitions": "Millifærslur með hreyfingu",
     "Are you sure you want to clone this map and all its datalayers?": "Ertu viss um að þú viljir klóna þetta kort og allar gagnaþekjur þess?",
-    "Are you sure you want to delete the feature?": "Ertu viss um að þú viljir eyða fitjunni?",
-    "Are you sure you want to delete this layer?": "Ertu viss um að þú viljir eyða þessari þekju?",
     "Are you sure you want to delete this map?": "Ertu viss um að þú viljir eyða þessu korti?",
     "Are you sure you want to delete this property on all the features?": "Ertu viss um að þú viljir eyða þessu eigindi á öllum fitjum?",
     "Are you sure you want to restore this version?": "Ertu viss um að vilja endurheimta þessa útgáfu?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

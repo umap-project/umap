@@ -28,8 +28,6 @@
     "always": "zawsze",
     "Animated transitions": "Animowane przejścia",
     "Are you sure you want to clone this map and all its datalayers?": "Na pewno chcesz sklonować tę mapę razem z jej warstwami?",
-    "Are you sure you want to delete the feature?": "Na pewno chcesz usunąć ten obiekt?",
-    "Are you sure you want to delete this layer?": "Na pewno chcesz usunąć tę warstwę?",
     "Are you sure you want to delete this map?": "Na pewno chcesz usunąć tą mapę?",
     "Are you sure you want to delete this property on all the features?": "Na pewno chcesz usunąć tę właściwość we wszystkich obiektach?",
     "Are you sure you want to restore this version?": "Na pewno chcesz przywrócić tę wersję?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

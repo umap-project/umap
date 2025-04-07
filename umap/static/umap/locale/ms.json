@@ -28,8 +28,6 @@
     "always": "sentiasa",
     "Animated transitions": "Transisi beranimasi",
     "Are you sure you want to clone this map and all its datalayers?": "Adakah anda ingin klon peta ini serta semua lapisan datanya?",
-    "Are you sure you want to delete the feature?": "Adakah anda ingin memadamkan sifat-sifat dipilih?",
-    "Are you sure you want to delete this layer?": "Adakah anda ingin memadamkan lapisan ini?",
     "Are you sure you want to delete this map?": "Adakah anda ingin memadamkan peta ini?",
     "Are you sure you want to delete this property on all the features?": "Adakah anda ingin memadamkan ciri-ciri ini di kesemua sifat-sifat?",
     "Are you sure you want to restore this version?": "Adakah anda ingin memulihkan versi ini?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

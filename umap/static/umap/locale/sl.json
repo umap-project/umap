@@ -28,8 +28,6 @@
     "always": "vedno",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Ali ste prepričani, da želite klonirati ta zemljevid in vse njegove podatkovne plasti?",
-    "Are you sure you want to delete the feature?": "Ali ste prepričani, da želite izbrisati to možnost?",
-    "Are you sure you want to delete this layer?": "Ali ste prepričani, da želite izbrisati to plast?",
     "Are you sure you want to delete this map?": "Ali ste prepričani, da želite izbrisati ta zemljevid?",
     "Are you sure you want to delete this property on all the features?": "Ali res želite izbrisati to lastnost pri vseh vstavljenih predmetih?",
     "Are you sure you want to restore this version?": "Ali res želite obnoviti to različico?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

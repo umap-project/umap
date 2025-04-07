@@ -28,8 +28,6 @@ const locale = {
     "always": "always",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "እርግጠኛ ነዎት ይህንን ካርታ እና ሁሉንም የመረጃ ገጾች ማባዛት ይፈልጋሉ?",
-    "Are you sure you want to delete the feature?": "እርግጠኛ ነዎት ይህንን ተግባሩን መሰረዝ ይፈልጋሉ?",
-    "Are you sure you want to delete this layer?": "Are you sure you want to delete this layer?",
     "Are you sure you want to delete this map?": "እርግጠኛ ነዎት ይህንን ካርታ መሰረዝ ይፈልጋሉ?",
     "Are you sure you want to delete this property on all the features?": "እርግጠኛ ነህ ይህንንባህርይ ከሁሉም ፊቸሮች ላይ መሰረዝ ትችላለህ",
     "Are you sure you want to restore this version?": "እርግጠኛ ነዎት ወደዚህኛው እትም መመለስ ይልጋሉ?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("am_ET", locale)
 L.setLocale("am_ET")

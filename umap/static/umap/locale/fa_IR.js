@@ -28,8 +28,6 @@ const locale = {
     "always": "همیشه",
     "Animated transitions": "گذارهای پویانما",
     "Are you sure you want to clone this map and all its datalayers?": "آیا از این نقشه و همهٔ لایه‌های دادهٔ آن همانند می‌سازید؟",
-    "Are you sure you want to delete the feature?": "آیا این عنصر را حذف می‌کنید؟",
-    "Are you sure you want to delete this layer?": "آیا این لایه را حذف می‌کنید؟",
     "Are you sure you want to delete this map?": "آیا این نقشه را حذف می‌کنید؟",
     "Are you sure you want to delete this property on all the features?": "آیا این ویژگی را از همهٔ عناصر حذف می‌کنید؟",
     "Are you sure you want to restore this version?": "آیا این نسخه را بازیابی می‌کنید؟",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

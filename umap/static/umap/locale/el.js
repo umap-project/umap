@@ -28,8 +28,6 @@ const locale = {
     "always": "πάντα",
     "Animated transitions": "Κινούμενες μεταβάσεις",
     "Are you sure you want to clone this map and all its datalayers?": "Θέλετε σίγουρα να κλωνοποιηθεί αυτός ο χάρτης και όλα τα επίπεδα δεδομένων του;",
-    "Are you sure you want to delete the feature?": "Θέλετε σίγουρα να διαγραφεί αυτό το στοιχείο;",
-    "Are you sure you want to delete this layer?": "Θέλετε σίγουρα να διαγραφεί αυτό το στρώμα;",
     "Are you sure you want to delete this map?": "Θέλετε σίγουρα να διαγραφεί αυτός ο χάρτης;",
     "Are you sure you want to delete this property on all the features?": "Θέλετε σίγουρα να διαγραφεί αυτή η ιδιότητα από όλα τα στοιχεία;",
     "Are you sure you want to restore this version?": "Θέλετε σίγουρα να γίνει επαναφορά αυτής της έκδοσης;",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

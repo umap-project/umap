@@ -28,8 +28,6 @@ const locale = {
     "always": "beti",
     "Animated transitions": "Trantsizio animatuak",
     "Are you sure you want to clone this map and all its datalayers?": "Ziur mapa hau eta bere datu-geruza guztiak klonatu nahi dituzula?",
-    "Are you sure you want to delete the feature?": "Ziur entitatea ezabatu nahi duzula?",
-    "Are you sure you want to delete this layer?": "Ziur geruza hau ezabatu nahi duzula?",
     "Are you sure you want to delete this map?": "Ziur mapa hau ezabatu nahi duzula?",
     "Are you sure you want to delete this property on all the features?": "Ziur propietate hau entitate guztietan ezabatu nahi duzula?",
     "Are you sure you want to restore this version?": "Ziur bertsio hau leheneratu nahi duzula?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

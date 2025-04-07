@@ -28,8 +28,6 @@
     "always": "always",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Bạn có chắc muốn sao chép bản đồ này và các layer dữ liệu đi kèm với nó?",
-    "Are you sure you want to delete the feature?": "Bạn có chắc muốn xóa đối tượng này?",
-    "Are you sure you want to delete this layer?": "Are you sure you want to delete this layer?",
     "Are you sure you want to delete this map?": "Bạn có chắc muốn xóa bản đồ này?",
     "Are you sure you want to delete this property on all the features?": "Are you sure you want to delete this property on all the features?",
     "Are you sure you want to restore this version?": "Are you sure you want to restore this version?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

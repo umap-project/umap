@@ -28,8 +28,6 @@ const locale = {
     "always": "завжди",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Ви впевнені, що бажаєте скопіювати цю мапу з її усіма даними",
-    "Are you sure you want to delete the feature?": "Ви впевнені, що хочете вилучити об’єкт?",
-    "Are you sure you want to delete this layer?": "Ви впевнені, що хочете вилучити цей шар?",
     "Are you sure you want to delete this map?": "Ви впевнені, що хочете вилучити мапу?",
     "Are you sure you want to delete this property on all the features?": "Ви впевнені, що хочете вилучити цей параметр у всіх об’єктів?",
     "Are you sure you want to restore this version?": "Ви впевнені, що хочете відновити цю версію?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

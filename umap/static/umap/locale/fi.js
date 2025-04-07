@@ -28,8 +28,6 @@ const locale = {
     "always": "aina",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Oletko varma että haluat kloonata tämän kartan ja kaikki sen data-kerrokset?",
-    "Are you sure you want to delete the feature?": "Oletko varma että haluat poistaa piirteen?",
-    "Are you sure you want to delete this layer?": "Are you sure you want to delete this layer?",
     "Are you sure you want to delete this map?": "Oletko ihan täysin varma, että haluat poistaa tämän kartan? Poistettua karttaa ei voi palauttaa.",
     "Are you sure you want to delete this property on all the features?": "Oletko varma että haluat poistaa tämän ominaisuuden kaikista piirteistä?",
     "Are you sure you want to restore this version?": "Oletko varma että haluat palauttaa tämän version?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("fi", locale)
 L.setLocale("fi")

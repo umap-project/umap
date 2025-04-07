@@ -28,8 +28,6 @@ const locale = {
     "always": "經常",
     "Animated transitions": "動畫轉換",
     "Are you sure you want to clone this map and all its datalayers?": "您確定要複製此地圖及所有資料圖層？",
-    "Are you sure you want to delete the feature?": "您確定要刪除該圖徵？",
-    "Are you sure you want to delete this layer?": "你確定要刪除這個圖層嗎？",
     "Are you sure you want to delete this map?": "您確定要刪除此地圖？",
     "Are you sure you want to delete this property on all the features?": "您確定要刪除所有圖徵中的此項屬性？",
     "Are you sure you want to restore this version?": "您確定要回復此一版本嗎？",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")

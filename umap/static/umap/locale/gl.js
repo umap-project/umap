@@ -28,8 +28,6 @@ const locale = {
     "always": "sempre",
     "Animated transitions": "Transicións animadas",
     "Are you sure you want to clone this map and all its datalayers?": "Confirmas que queres clonar este mapa e todas as súas capas de datos?",
-    "Are you sure you want to delete the feature?": "Confirmas que queres eliminar este elemento?",
-    "Are you sure you want to delete this layer?": "Confirmas que queres eliminar esta capa?",
     "Are you sure you want to delete this map?": "Confirmas que queres eliminar este mapa?",
     "Are you sure you want to delete this property on all the features?": "Confirmas que queres eliminar esta propiedade en todos os elementos?",
     "Are you sure you want to restore this version?": "Confirmas que queres restabelecer esta versión?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("gl", locale)
 L.setLocale("gl")

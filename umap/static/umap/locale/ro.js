@@ -28,8 +28,6 @@ const locale = {
     "always": "mereu",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Are you sure you want to clone this map and all its datalayers?",
-    "Are you sure you want to delete the feature?": "Are you sure you want to delete the feature?",
-    "Are you sure you want to delete this layer?": "Are you sure you want to delete this layer?",
     "Are you sure you want to delete this map?": "Are you sure you want to delete this map?",
     "Are you sure you want to delete this property on all the features?": "Are you sure you want to delete this property on all the features?",
     "Are you sure you want to restore this version?": "Are you sure you want to restore this version?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("ro", locale)
 L.setLocale("ro")

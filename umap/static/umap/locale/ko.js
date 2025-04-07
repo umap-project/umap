@@ -28,8 +28,6 @@ const locale = {
     "always": "항상",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "정말 이 지도와 모든 데이터 레이어를 복제하시겠습니까?",
-    "Are you sure you want to delete the feature?": "정말 이 지물을 삭제하시겠습니까?",
-    "Are you sure you want to delete this layer?": "정말 이 레이어를 삭제하시겠습니까?",
     "Are you sure you want to delete this map?": "정말 이 지도를 삭제하시겠습니까?",
     "Are you sure you want to delete this property on all the features?": "정말 이 속성을 모든 지물에서 삭제하시겠습니까?",
     "Are you sure you want to restore this version?": "정말 이 버전을 복원하시겠습니까?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")

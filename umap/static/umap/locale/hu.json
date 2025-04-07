@@ -28,8 +28,6 @@
     "always": "mindig",
     "Animated transitions": "Animált áttűnések",
     "Are you sure you want to clone this map and all its datalayers?": "Biztosan klónozza a térképet és az összes adatrétegét?",
-    "Are you sure you want to delete the feature?": "Biztosan törölni szeretné ezt az objektumot?",
-    "Are you sure you want to delete this layer?": "Biztosan törölni szeretné ezt a réteget?",
     "Are you sure you want to delete this map?": "Biztosan törölni szeretné ezt a térképet?",
     "Are you sure you want to delete this property on all the features?": "Biztosan törölni szeretné ezt a tulajdonságot az összes objektumról?",
     "Are you sure you want to restore this version?": "Biztosan ezt a változatot akarja helyreállítani?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

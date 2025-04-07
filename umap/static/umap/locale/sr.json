@@ -28,8 +28,6 @@
     "always": "увек",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Да ли сте сигурни да желите да умножите мапу и све податке на њој?",
-    "Are you sure you want to delete the feature?": "Да ли сте сигурни да желите да обришете елемент?",
-    "Are you sure you want to delete this layer?": "Да ли сте сигурни да желите да обришете лејер?",
     "Are you sure you want to delete this map?": "Да ли сте сигурни да желите да обришете мапу?",
     "Are you sure you want to delete this property on all the features?": "Јесте ли сигурни да желите да избришете овај ентитет на свим функцијама?",
     "Are you sure you want to restore this version?": "Јесте ли сигурни да желите да вратите ову верзију?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

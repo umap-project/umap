@@ -28,8 +28,6 @@ const locale = {
     "always": "always",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Ar tikrai norite nukopijuoti šį žemėlapį ir visus jo duomenų sluoksnius?",
-    "Are you sure you want to delete the feature?": "Ar tikrai norite ištrinti šį objektą?",
-    "Are you sure you want to delete this layer?": "Are you sure you want to delete this layer?",
     "Are you sure you want to delete this map?": "Ar Jūs tikrai norite ištrinti šį žemėlapį?",
     "Are you sure you want to delete this property on all the features?": "Ar tikrai norite pašalinti šią savybę visiem objektams?",
     "Are you sure you want to restore this version?": "Are you sure you want to restore this version?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("lt", locale)
 L.setLocale("lt")

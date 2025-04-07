@@ -28,8 +28,6 @@
     "always": "bepred",
     "Animated transitions": "Tremenoù buhezek",
     "Are you sure you want to clone this map and all its datalayers?": "Ha sur oc'h e faot deoc'h doublañ ar gartenn-mañ hag hec'h holl wiskadoù roadennoù?",
-    "Are you sure you want to delete the feature?": "Ha sur oc'h e faot deoc'h dilemel an elfenn-mañ?",
-    "Are you sure you want to delete this layer?": "Ha sur oc'h e faot deoc'h dilemel ar gwiskad-mañ?",
     "Are you sure you want to delete this map?": "Ha sur oc'h e faot deoc'h dilemel ar gartenn-mañ?",
     "Are you sure you want to delete this property on all the features?": "Ha sur oc'h a faot deoc'h lemel ar perzh-mañ diwar an holl elfennoù?",
     "Are you sure you want to restore this version?": "Ha sur oc'h e faot deoc'h adsevel ar stumm-mañ?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

@@ -28,8 +28,6 @@
     "always": "her zaman",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Bu haritayı ve tüm veri katmanlarını klonlamak istediğinizden emin misiniz?",
-    "Are you sure you want to delete the feature?": "Bu nesneyi silmek istediğinizden emin misiniz?",
-    "Are you sure you want to delete this layer?": "Bu katmanı silmek istediğinizden emin misiniz?",
     "Are you sure you want to delete this map?": "Bu haritayı silmek istediğinizden emin misiniz?",
     "Are you sure you want to delete this property on all the features?": "Bu özelliği tüm nesnelerde silmek istediğinizden emin misiniz?",
     "Are you sure you want to restore this version?": "Bu sürümü geri yüklemek istediğinizden emin misiniz?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

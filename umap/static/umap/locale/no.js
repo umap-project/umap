@@ -28,8 +28,6 @@ const locale = {
     "always": "alltid",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "Er du sikker på at du vil klone dette kartet og alle tilhørende datalag?",
-    "Are you sure you want to delete the feature?": "Er du sikker på at du vil slette dette objektet?",
-    "Are you sure you want to delete this layer?": "Er du sikker på at du vil slette dette laget?",
     "Are you sure you want to delete this map?": "Er du sikker på at du vil slette dette kartet?",
     "Are you sure you want to delete this property on all the features?": "Er du sikker på at du vil slette denne egenskapen fra alle objektene?",
     "Are you sure you want to restore this version?": "Er du sikker på at du vil gjenopprette denne versjonen?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("no", locale)
 L.setLocale("no")

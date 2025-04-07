@@ -28,8 +28,6 @@
     "always": "immer",
     "Animated transitions": "Animierte Übergänge",
     "Are you sure you want to clone this map and all its datalayers?": "Möchtest du die Karte und ihre Datenebenen wirklich duplizieren?",
-    "Are you sure you want to delete the feature?": "Möchtest du dieses Element wirklich löschen?",
-    "Are you sure you want to delete this layer?": "Bist du sicher, dass du diese Ebene löschen willst?",
     "Are you sure you want to delete this map?": "Willst du diese Karte wirklich löschen?",
     "Are you sure you want to delete this property on all the features?": "Bist du sicher, dass du dieses Merkmal bei allen Elementen löschen willst?",
     "Are you sure you want to restore this version?": "Bist du sicher, dass du diese Version wiederherstellen willst?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

@@ -28,8 +28,6 @@ const locale = {
     "always": "常時",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "すべてのデータレイヤを含むマップ全体を複製してよいですか？",
-    "Are you sure you want to delete the feature?": "地物を削除してよいですか？",
-    "Are you sure you want to delete this layer?": "本当にこのレイヤを削除してよいですか？",
     "Are you sure you want to delete this map?": "本当にこのマップを削除してよいですか？",
     "Are you sure you want to delete this property on all the features?": "すべての地物からこのプロパティを削除します。よろしいですか？",
     "Are you sure you want to restore this version?": "本当にこのバージョンを復元してよいですか？",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

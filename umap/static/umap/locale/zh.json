@@ -28,8 +28,6 @@
     "always": "always",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "是否确定复制这个地图及其所有数据图层?",
-    "Are you sure you want to delete the feature?": "是否确定删除该要素？",
-    "Are you sure you want to delete this layer?": "Are you sure you want to delete this layer?",
     "Are you sure you want to delete this map?": "是否确定删除地图？",
     "Are you sure you want to delete this property on all the features?": "是否确定删除全部要素的该属性？",
     "Are you sure you want to restore this version?": "Are you sure you want to restore this version?",
@@ -540,7 +538,5 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }

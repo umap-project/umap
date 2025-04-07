@@ -28,8 +28,6 @@ const locale = {
     "always": "תמיד",
     "Animated transitions": "Animated transitions",
     "Are you sure you want to clone this map and all its datalayers?": "לשכפל את המפה הזאת ואת כל שכבות הנתונים שלה?",
-    "Are you sure you want to delete the feature?": "למחוק את התכונה הזו?",
-    "Are you sure you want to delete this layer?": "למחוק את השכבה הזו?",
     "Are you sure you want to delete this map?": "למחוק את המפה הזו?",
     "Are you sure you want to delete this property on all the features?": "למחוק את המאפיין הזה מכל התכונות?",
     "Are you sure you want to restore this version?": "לשחזר את הגרסה הזו?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

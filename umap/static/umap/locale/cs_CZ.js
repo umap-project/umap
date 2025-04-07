@@ -28,8 +28,6 @@ const locale = {
     "always": "vždy",
     "Animated transitions": "Animované přechody",
     "Are you sure you want to clone this map and all its datalayers?": "Určitě chcete vytvořit kopii celé této mapy a všech jejich vrstev?",
-    "Are you sure you want to delete the feature?": "Určitě chcete vymazat tento objekt?",
-    "Are you sure you want to delete this layer?": "Jste si jisti, že chcete smazat tuto vrstvu?",
     "Are you sure you want to delete this map?": "Jste si jisti, že chcete vymazat tuto celou mapu?",
     "Are you sure you want to delete this property on all the features?": "Určitě chcete smazat tuto vlastnost na všech objektech?",
     "Are you sure you want to restore this version?": "Opravdu si přejete obnovit tuto verzi?",
@@ -540,9 +538,7 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode",
-    "Undo": "Undo",
-    "Redo": "Redo"
+    "Geocode": "Geocode"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")
