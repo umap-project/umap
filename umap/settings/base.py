@@ -360,10 +360,8 @@ LOGGING = {
     },
 }
 
-# WebSocket configuration
+# Real-time editing configuration
 
-WEBSOCKET_ENABLED = env.bool("WEBSOCKET_ENABLED", default=False)
-WEBSOCKET_BACK_HOST = env("WEBSOCKET_BACK_HOST", default="localhost")
-WEBSOCKET_BACK_PORT = env.int("WEBSOCKET_BACK_PORT", default=8001)
+REALTIME_ENABLED = env.bool("REALTIME_ENABLED", default=False)
 
 REDIS_URL = env("REDIS_URL", default="redis://localhost:6379")

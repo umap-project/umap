@@ -85,7 +85,7 @@ services
         condition: service_healthy
 …
     environment:
-      - WEBSOCKET_ENABLED=1
+      - REALTIME_ENABLED=1
       - REDIS_URL=redis://redis:6379
 …
 

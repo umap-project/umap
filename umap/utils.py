@@ -28,7 +28,7 @@ def _urls_for_js():
     """
     urls = {}
     modules = ["umap.urls"]
-    if settings.WEBSOCKET_ENABLED:
+    if settings.REALTIME_ENABLED:
         modules.append("umap.sync.app")
     for module in modules:
         names = _get_url_names(module)

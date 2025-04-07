@@ -616,7 +616,7 @@ class MapDetailMixin(SessionMixin):
             "licences": dict((l.name, l.json) for l in Licence.objects.all()),
             "umap_version": VERSION,
             "featuresHaveOwner": settings.UMAP_DEFAULT_FEATURES_HAVE_OWNERS,
-            "websocketEnabled": settings.WEBSOCKET_ENABLED,
+            "websocketEnabled": settings.REALTIME_ENABLED,
             "importers": settings.UMAP_IMPORTERS,
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
         }

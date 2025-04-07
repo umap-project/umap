@@ -88,6 +88,13 @@ Nginx configuration.
 
 See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#media-root)
 
+#### REALTIME_ENABLED
+
+Setting `REALTIME_ENABLED` to `True` will allow users to enable real-time collaboration.
+A switch will be available for them in the "advanced properties" of the map.
+
+See [the documentation about ASGI deployment](../deploy/asgi.md) for more information.
+
 #### SECRET_KEY
 
 Must be defined to something unique and secret.
@@ -119,6 +126,13 @@ The description of the site, to be used in HTML title.
 The final URL of you instance, including the protocol:
 
 `SITE_URL=http://umap.org`
+
+
+#### SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY, SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET
+
+If you use OpenStreetMap as OAuth 2 provider, you can use those settings.
+
+Otherwise, use any valid [python-social-auth configuration](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html).
 
 
 #### STATIC_ROOT
@@ -348,16 +362,3 @@ Should uMap gzip datalayers geojson.
 Can be set to `X-Accel-Redirect` to enable the [NGINX X-Accel](https://www.nginx.com/resources/wiki/start/topics/examples/xsendfile/) feature.
 
 See the NGINX documentation in addition.
-
-#### SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY, SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET
-
-If you use OpenStreetMap as OAuth 2 provider, you can use those settings.
-
-Otherwise, use any valid [python-social-auth configuration](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html).
-
-#### WEBSOCKET_ENABLED
-
-Setting `WEBSOCKET_ENABLED` to `True` will allow users to enable real-time collaboration.
-A switch will be available for them in the "advanced properties" of the map.
-
-See [the documentation about ASGI deployment](../deploy/asgi.md) for more information.

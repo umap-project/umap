@@ -35,7 +35,7 @@ services:
       - SITE_URL=https://umap.local/
       - UMAP_ALLOW_ANONYMOUS=True
       - DEBUG=1
-      - WEBSOCKET_ENABLED=1
+      - REALTIME_ENABLED=1
       - REDIS_URL=redis://redis:6379
     volumes:
       - data:/srv/umap/uploads
