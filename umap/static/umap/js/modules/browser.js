@@ -61,7 +61,7 @@ export default class Browser {
     DomEvent.on(zoom_to, 'click', viewFeature)
     DomEvent.on(title, 'click', viewFeature)
     DomEvent.on(edit, 'click', feature.edit, feature)
-    DomEvent.on(del, 'click', feature.confirmDelete, feature)
+    DomEvent.on(del, 'click', feature.del, feature)
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(row)

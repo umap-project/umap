@@ -348,7 +348,6 @@ def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootst
     buttons = page.locator(".umap-browser .datalayer li .icon-delete")
     expect(buttons).to_have_count(3)
     buttons.first.click()
-    page.locator("dialog").get_by_role("button", name="OK").click()
     expect(buttons).to_have_count(2)
     page.get_by_role("button", name="Undo").click()
     expect(buttons).to_have_count(3)
