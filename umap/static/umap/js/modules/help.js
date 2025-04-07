@@ -196,7 +196,7 @@ export default class Help {
         .split('+')
         .map((el) => `<kbd>${el}</kbd>`)
         .join('+')
-      label += ` ${shortcut}`
+      label += ` <span class="nobr">${shortcut}</span>`
     } else {
       label += ` (${shortcut})`
     }

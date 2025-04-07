@@ -126,6 +126,7 @@ export function escapeHTML(s) {
       'frameborder',
       'scrolling',
       'controls',
+      'class',
     ],
     ALLOWED_ATTR: ['href', 'src', 'width', 'height', 'style', 'dir', 'title', 'type'],
     // Added: `geo:` URL scheme as defined in RFC5870:
