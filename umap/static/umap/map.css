@@ -321,6 +321,7 @@ ul.photon-autocomplete {
 }
 .search-result-tools button {
     padding: 8px;
+    background-color: var(--background-color);
 }
 .umap-edit-enabled .photon-autocomplete li.on .search-result-tools {
     display: flex;
