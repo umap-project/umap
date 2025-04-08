@@ -113,8 +113,12 @@ L.DomUtil.createCopiableInput = (parent, label, value) => {
   input.type = 'text'
   input.readOnly = true
   input.value = value
-  const button = L.DomUtil.createButtonIcon(wrapper, 'icon-copy', L._('copy'), () =>
-    L.Util.copyToClipboard(input.value)
+  const button = L.DomUtil.createButtonIcon(
+    wrapper,
+    'icon-copy',
+    L._('copy'),
+    () => L.Util.copyToClipboard(input.value),
+    24
   )
   button.type = 'button'
   return input

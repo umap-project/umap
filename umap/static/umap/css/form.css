@@ -14,7 +14,6 @@ input[type="url"], textarea {
     margin: 0;
     padding: .5rem 1rem;
     width: 100%;
-    line-height: inherit;
     min-height: 40px;
 }
 input[type="range"] {
@@ -611,13 +610,11 @@ input[type=hidden].blur + [type="button"] {
     border-radius: initial;
 }
 .copiable-input button {
-    background-position: -46px -92px;
-    display: inline;
-    padding: 0 10px;
-    height: 32px;
-    width: 32px;
-    border: 1px solid #202425;
-    border-radius: initial;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 2px solid var(--color-darkBlue);
+    border-left: none;
+    width: 40px;
 }
 input.highlightable:not(:placeholder-shown) {
     border: 1px solid var(--color-brightCyan);

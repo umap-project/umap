@@ -75,7 +75,7 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 4) 0;
 }
 .icon-copy {
-    background-position: calc(var(--tile) * 2) calc(var(--tile) * 4);
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 7);
 }
 .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 2);
