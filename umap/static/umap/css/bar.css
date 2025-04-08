@@ -206,6 +206,7 @@
     margin-top: 0;
     line-height: initial;
     height: initial;
+    min-height: initial;
     width: auto;
     padding: 0 var(--text-margin);
 }
