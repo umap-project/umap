@@ -283,6 +283,8 @@ export function greedyTemplate(str, data, ignore) {
 }
 
 export function naturalSort(a, b, lang) {
+  a ??= ''
+  b ??= ''
   return a
     .toString()
     .toLowerCase()
