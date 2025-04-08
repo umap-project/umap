@@ -118,7 +118,7 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     display: none;
 }
 .leaflet-control-embed [type="button"] {
-    background-position: -72px -108px;
+    background-position: 0 -180px;
 }
 .leaflet-control-tilelayers [type="button"] {
     background-position: -72px 0;
