@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.2 - 2025-04-08
+
+* fix copiable input CSS by @yohanboniface in #2616
+* fix categorized layer crashing with null value by @yohanboniface in #2621
+* properly call endEdit for markers by @yohanboniface in #2617
+* fix result tools buttons background color by @yohanboniface in #2620
+* fix min-height of select in caption bar by @yohanboniface in #2622
+* give priority to small usernames on autocomplete by @yohanboniface in #2604
+
 ## 3.0.1 - 2025-04-07
 
 * fix showLabel wrongly using MultiChoices by @yohanboniface in #2609
