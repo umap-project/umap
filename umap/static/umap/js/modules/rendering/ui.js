@@ -111,7 +111,6 @@ const PointMixin = {
     this.on('dragend', (event) => {
       this.isDirty = true
       this.feature.edit(event)
-      // this.feature.pullGeometry(false)
     })
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
