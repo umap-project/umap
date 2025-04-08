@@ -249,7 +249,6 @@ export default class Umap {
       at = new Date(at)
     }
     if (!this._modifiedAt || at > this._modifiedAt) {
-      console.log('set modifiedAt to', at)
       this._modifiedAt = at
     }
   }
