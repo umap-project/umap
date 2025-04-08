@@ -525,7 +525,6 @@ export default class Umap {
       'Ctrl+e': {
         if: () => this.hasEditMode(),
         do: () => {
-          console.log('doing')
           if (!this.editEnabled) this.enableEdit()
           else if (!this.isDirty) this.disableEdit()
         },

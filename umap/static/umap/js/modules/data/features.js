@@ -218,6 +218,7 @@ class Feature {
 
   edit(event) {
     if (!this._umap.editEnabled || this.isReadOnly()) return
+    if (this._umap.editedFeature === this) return
     const container = DomUtil.create('div', 'umap-feature-container')
     DomUtil.createTitle(
       container,
@@ -326,7 +327,9 @@ class Feature {
     ]
   }
 
-  endEdit() {}
+  endEdit() {
+    this.ui.disableEdit()
+  }
 
   getDisplayName() {
     const keys = U.LABEL_KEYS.slice() // Copy.
@@ -826,11 +829,6 @@ class Path extends Feature {
       this.getOption('zoomTo') ||
       this._umap._leafletMap.getBoundsZoom(this.bounds, true)
     )
-  }
-
-  endEdit() {
-    this.ui.disableEdit()
-    super.endEdit()
   }
 
   transferShape(at, to) {
