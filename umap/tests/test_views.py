@@ -516,10 +516,13 @@ def test_can_combine_search_and_filter(client, map):
 def test_can_find_small_usernames(client):
     UserFactory(username="Joe")
     UserFactory(username="JoeJoe")
+    UserFactory(username="Joe3")
+    UserFactory(username="Joe57")
+    UserFactory(username="JoeBar")
     url = "/agnocomplete/AutocompleteUser/"
     response = client.get(url + "?q=joe")
     data = json.loads(response.content)["data"]
-    assert len(data) == 1
+    assert len(data) == 5
     assert data[0]["label"] == "Joe"
     response = client.get(url + "?q=joej")
     data = json.loads(response.content)["data"]
