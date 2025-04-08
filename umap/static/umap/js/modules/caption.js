@@ -74,10 +74,10 @@ export default class Caption extends Utils.WithTemplate {
     this.addCredits()
     if (this._umap.properties.created_at) {
       const created_at = translate('created at {date}', {
-        date: new Date(this._umap.properties.created_at).toLocaleDateString(),
+        date: this._umap.createdAt.toLocaleDateString(),
       })
       const modified_at = translate('modified at {date}', {
-        date: new Date(this._umap.properties.modified_at).toLocaleDateString(),
+        date: this._umap.modifiedAt.toLocaleDateString(),
       })
       this.elements.dates.innerHTML = `${created_at} - ${modified_at}`
     } else {

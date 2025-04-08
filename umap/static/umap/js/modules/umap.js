@@ -57,6 +57,8 @@ export default class Umap {
       },
       geojson.properties
     )
+    this.createdAt = new Date(this.properties.created_at)
+    this.modifiedAt = this.properties.modified_at
     this.searchParams = new URLSearchParams(window.location.search)
 
     // Locale name (pt_PT, en_US…)
@@ -235,6 +237,21 @@ export default class Umap {
 
   set activeFeature(feature) {
     this._activeFeature = feature
+  }
+
+  get modifiedAt() {
+    return this._modifiedAt
+  }
+
+  set modifiedAt(at) {
+    if (!at) return
+    if (typeof at === 'string') {
+      at = new Date(at)
+    }
+    if (!this._modifiedAt || at > this._modifiedAt) {
+      console.log('set modifiedAt to', at)
+      this._modifiedAt = at
+    }
   }
 
   setPropertiesFromQueryString() {
