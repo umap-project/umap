@@ -22,7 +22,7 @@ const TEMPLATE = `
     </select>
     <label>
       <input type="checkbox" name="aspoint" />
-      ${translate('Symplify all geometries to points')}
+      ${translate('Simplify all geometries to points')}
     </label>
     <label id="boundary">
     </label>

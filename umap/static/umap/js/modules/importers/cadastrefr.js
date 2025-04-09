@@ -21,7 +21,7 @@ const TEMPLATE = `
     </select>
     <label id="boundary">
     </label>
-    </div>
+  </div>
 `
 
 export class Importer {
