@@ -629,7 +629,7 @@ U.Editable = L.Editable.extend({
     const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
-    line._just_married = true
+    line._needs_upsert = true
     return line.ui
   },
 
@@ -638,7 +638,7 @@ U.Editable = L.Editable.extend({
     const poly = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
-    poly._just_married = true
+    poly._needs_upsert = true
     return poly.ui
   },
 
@@ -647,7 +647,7 @@ U.Editable = L.Editable.extend({
     const point = new U.Point(this._umap, datalayer, {
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
-    point._just_married = true
+    point._needs_upsert = true
     return point.ui
   },
 

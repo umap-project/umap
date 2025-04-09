@@ -146,14 +146,13 @@ class Feature {
   }
 
   onCommit() {
+    this.pullGeometry(false)
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
-    const oldGeoJSON = this._just_married ? null : Utils.CopyJSON(this.toGeoJSON())
-    this.pullGeometry(false)
     if (this.datalayer?.isRemoteLayer()) return
-    if (this._just_married) {
+    if (this._needs_upsert) {
       this.sync.upsert(this.toGeoJSON(), null)
-      this._just_married = false
+      this._needs_upsert = false
     } else {
       this.sync.update('geometry', this.geometry, this._geometry_bk)
     }
