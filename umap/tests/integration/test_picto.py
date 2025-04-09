@@ -32,9 +32,15 @@ FIXTURES = Path(__file__).parent.parent / "fixtures"
 @pytest.fixture
 def pictos():
     path = FIXTURES / "star.svg"
-    Pictogram(name="star", pictogram=ContentFile(path.read_text(), path.name)).save()
+    Pictogram(
+        name="star", pictogram=ContentFile(path.read_text(), path.name), category="cat1"
+    ).save()
     path = FIXTURES / "circle.svg"
-    Pictogram(name="circle", pictogram=ContentFile(path.read_text(), path.name)).save()
+    Pictogram(
+        name="circle",
+        pictogram=ContentFile(path.read_text(), path.name),
+        category="cat2",
+    ).save()
 
 
 def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
@@ -57,6 +63,8 @@ def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
     define.click()
     # No picto defined yet, so recent should not be visible
     expect(page.get_by_text("Recent")).to_be_hidden()
+    expect(page.get_by_text("cat1")).to_be_visible()
+    expect(page.get_by_text("cat2")).to_be_visible()
     symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(symbols).to_have_count(2)
     search = page.locator(".umap-pictogram-body input")
