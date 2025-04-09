@@ -16,15 +16,17 @@ const BOUNDARY_TYPES = {
 const TEMPLATE = `
   <h3>GeoDataMine</h3>
   <p>${translate('GeoDataMine: thematic data from OpenStreetMap')}.</p>
-  <select name="theme">
-    <option value="">${translate('Choose a theme')}</option>
-  </select>
-  <label>
-    <input type="checkbox" name="aspoint" />
-    ${translate('Symplify all geometries to points')}
-  </label>
-  <label id="boundary">
-  </label>
+  <div class="formbox">
+    <select name="theme">
+      <option value="">${translate('Choose a theme')}</option>
+    </select>
+    <label>
+      <input type="checkbox" name="aspoint" />
+      ${translate('Simplify all geometries to points')}
+    </label>
+    <label id="boundary">
+    </label>
+  </div>
 `
 
 class Autocomplete extends SingleMixin(BaseAjax) {

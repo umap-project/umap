@@ -8,18 +8,20 @@ import { AutocompleteCommunes } from './communesfr.js'
 const TEMPLATE = `
   <h3>Cadastre</h3>
   <p>Importer les données cadastrales d’une commune française.</p>
-  <select name="theme">
-    <option value="batiments">Bâtiments</option>
-    <option value="communes">Communes</option>
-    <option value="feuilles">Feuilles</option>
-    <option value="lieux_dits">Lieux dits</option>
-    <option value="parcelles" selected>Parcelles</option>
-    <option value="prefixes_sections">Préfixes sections</option>
-    <option value="sections">Sections</option>
-    <option value="subdivisions_fiscales">Subdivisions fiscales</option>
-  </select>
-  <label id="boundary">
-  </label>
+  <div class="formbox">
+    <select name="theme">
+      <option value="batiments">Bâtiments</option>
+      <option value="communes">Communes</option>
+      <option value="feuilles">Feuilles</option>
+      <option value="lieux_dits">Lieux dits</option>
+      <option value="parcelles" selected>Parcelles</option>
+      <option value="prefixes_sections">Préfixes sections</option>
+      <option value="sections">Sections</option>
+      <option value="subdivisions_fiscales">Subdivisions fiscales</option>
+    </select>
+    <label id="boundary">
+    </label>
+  </div>
 `
 
 export class Importer {
