@@ -808,9 +808,10 @@ Fields.IconUrl = class extends Fields.BlurInput {
   }
 
   addCategory(items, name) {
+    const hidden = name ? '' : ' hidden'
     const [parent, { grid }] = Utils.loadTemplateWithRefs(`
       <div class="umap-pictogram-category">
-        <h6 hidden=${!name}>${name}</h6>
+        <h6${hidden}>${name}</h6>
         <div class="umap-pictogram-grid" data-ref=grid></div>
       </div>
     `)
