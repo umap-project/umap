@@ -325,6 +325,7 @@ ul.photon-autocomplete {
 }
 .umap-edit-enabled .photon-autocomplete li.on .search-result-tools {
     display: flex;
+    position: relative;
 }
 
 
