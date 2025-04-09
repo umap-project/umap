@@ -220,6 +220,7 @@ export class DataLayer {
     this._loading = true
     const [geojson, response, error] = await this._umap.server.get(this._dataUrl())
     if (!error) {
+      this._umap.modifiedAt = response.headers.get('last-modified')
       this.setReferenceVersion({ response, sync: false })
       // FIXME: for now the _umap_options property is set dynamically from backend
       // And thus it's not in the geojson file in the server
@@ -303,7 +304,10 @@ export class DataLayer {
   async getUrl(url, initialUrl) {
     const response = await this._umap.request.get(url)
     return new Promise((resolve) => {
-      if (response?.ok) return resolve(response.text())
+      if (response?.ok) {
+        this._umap.modifiedAt = response.headers.get('last-modified')
+        return resolve(response.text())
+      }
       Alert.error(
         translate('Cannot load remote data for layer "{layer}" with url "{url}"', {
           layer: this.getName(),
