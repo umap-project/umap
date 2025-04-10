@@ -925,7 +925,8 @@ Fields.Url = class extends Fields.Input {
 Fields.Switch = class extends Fields.CheckBox {
   getTemplate() {
     const label = this.properties.label
-    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel>${label}</label>`
+    const help = this.properties.helpEntries?.join() || ''
+    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
   build() {
