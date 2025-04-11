@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.0.3 - 2025-04-11
+
+* do not try to remove a feature not yet added by @yohanboniface in #2637
+* document that nginx needs to be added in Docker stack to serve statics by @yohanboniface in #2636
+* display back help button in switch fields by @yohanboniface in #2634
+* use Last-Modified header from remote data when available by @yohanboniface in #2624
+* fix text overflow on search results by @yohanboniface in #2628
+* redirect to user dashboard after map delete by @yohanboniface in #2626
+* add missing margin-bottom in importers by @yohanboniface in #2627
+* fix pictogram categories always hidden by @yohanboniface in #2630
+* display search category on list page by @davidbgk in #2635
+* allow to hide the layer switcher from bottom bar by @davidbgk in #2639
+* hidden download button in browser when embedControl=false by @yohanboniface in #2640
+* allow to hide the back to home button by @davidbgk in #2638
+
+
 ## 3.0.2 - 2025-04-08
 
 * fix copiable input CSS by @yohanboniface in #2616
