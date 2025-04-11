@@ -167,7 +167,7 @@
 .umap-caption-bar .umap-map-author {
     margin-inline-end: 10px;
 }
-.umap-caption-bar > button + button:after,
+.umap-caption-bar:has(select:not([hidden])) > button + button:after,
 .umap-caption-bar > button + button:before {
     content: '|';
     padding-inline-start: 10px;

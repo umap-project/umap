@@ -180,7 +180,7 @@ const BOTTOM_BAR_TEMPLATE = `
     <button class="umap-about-link flat" type="button" title="${translate('Open caption')}" data-ref="caption">${translate('Open caption')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Browse data')}" data-ref="browse">${translate('Browse data')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Filter data')}" data-ref="filter">${translate('Filter data')}</button>
-    <select data-ref=layers></select>
+    <select data-ref="layers"></select>
   </div>
 `
 
@@ -233,7 +233,7 @@ export class BottomBar extends WithTemplate {
       this.elements.layers.hidden = true
     } else {
       this.elements.layers.appendChild(Utils.loadTemplate(`<option value=""></option>`))
-      this.elements.layers.hidden = false
+      this.elements.layers.hidden = !this._umap.getProperty('layerSwitcher')
       const visible = datalayers.filter((datalayer) => datalayer.isVisible())
       for (const datalayer of datalayers) {
         const selected = visible.length === 1 && datalayer.isVisible() ? 'selected' : ''
