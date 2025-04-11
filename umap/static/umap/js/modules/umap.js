@@ -836,6 +836,7 @@ export default class Umap {
       'properties.displayPopupFooter',
       'properties.captionBar',
       'properties.captionMenus',
+      'properties.layerSwitcher',
     ])
     const builder = new MutatingForm(this, UIFields, { umap: this })
     const controlsOptions = DomUtil.createFieldset(

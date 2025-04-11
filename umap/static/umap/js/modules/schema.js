@@ -275,6 +275,12 @@ export const SCHEMA = {
     label: translate('Label key'),
     inheritable: true,
   },
+  layerSwitcher: {
+    type: Boolean,
+    impacts: ['ui'],
+    label: translate('Do you want to display layer switcher in caption bar?'),
+    default: true,
+  },
   licence: {
     type: String,
     impacts: ['ui'],
