@@ -164,8 +164,8 @@ LOGIN_REDIRECT_URL = "login_popup_end"
 STATIC_URL = "/static/"
 MEDIA_URL = "/uploads/"
 
-STATIC_ROOT = os.path.join("static")
-MEDIA_ROOT = os.path.join("uploads")
+STATIC_ROOT = env("STATIC_ROOT", default=os.path.join("static"))
+MEDIA_ROOT = env("MEDIA_ROOT", default=os.path.join("uploads"))
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
