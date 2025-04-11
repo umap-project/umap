@@ -32,7 +32,16 @@
         {% endif %}
       {% else %}
         <h2>
-          {% trans "Latest created maps" %}
+          {% if request.GET.tags %}
+            {% trans "Latest created maps in category" %}
+            {% for value, label in UMAP_TAGS %}
+              {% if request.GET.tags == value %}
+                <mark>{{ label }}</mark>:
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% trans "Latest created maps" %}
+          {% endif %}
         </h2>
         <div class="grid-container">
           {% include "umap/map_list.html" with prefix="search_map" %}

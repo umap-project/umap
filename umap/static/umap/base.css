@@ -235,3 +235,7 @@ dt {
     display: block;
     overflow-x: auto;
 }
+mark {
+    background-color: var(--color-lightCyan);
+    padding: 0 var(--small-box-padding);
+}
