@@ -457,7 +457,6 @@ const locale = {
     "Choose this dataset": "انتخاب این مجموعه‌داده",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine:داده‌های موضوعی از اوپن‌استریت‌مپ",
     "Choose a theme": "یک موضوع انتخاب کنید",
-    "Symplify all geometries to points": "همهٔ هندسه‌ها به نقطه ساده شوند",
     "Choose this data": "انتخاب این داده",
     "Search admin boundary": "جستجوی تقسیمات (admin boundary)",
     "Please choose a theme and a boundary first.": "لطفاً ابتدا یک موضوع و یک تقسیمات انتخاب کنید.",
@@ -538,7 +537,10 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

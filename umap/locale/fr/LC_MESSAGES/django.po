@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-04 16:49+0000\n"
+"POT-Creation-Date: 2025-04-11 15:30+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2025\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -682,7 +682,11 @@ msgstr[2] "%(count)s cartes trouvées :"
 msgid "No map found."
 msgstr "Aucune carte trouvée."
 
-#: templates/umap/search.html:35
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr "Dernières cartes créées dans la catégorie"
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr "Dernières cartes créées."
 
@@ -803,25 +807,25 @@ msgstr "Courriel envoyé à %(email)s"
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:1051
+#: views.py:1054
 msgid "Map successfully deleted."
 msgstr "La carte a bien été supprimée."
 
-#: views.py:1077
+#: views.py:1080
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:1082
+#: views.py:1085
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:1336
+#: views.py:1339
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
 
-#: views.py:1358
+#: views.py:1361
 msgid "Permissions updated with success!"
 msgstr "Les permissions ont bien été modifiées !"

@@ -457,7 +457,6 @@ const locale = {
     "Choose this dataset": "Aukeratu datu-multzo hau",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: OpenStreetMap-eko datu tematikoak",
     "Choose a theme": "Aukeratu gai bat",
-    "Symplify all geometries to points": "Sinplifikatu geometria guztiak puntutan",
     "Choose this data": "Aukeratu datu hauek",
     "Search admin boundary": "Bilatu muga administratiboa",
     "Please choose a theme and a boundary first.": "Aukeratu gai bat eta muga bat.",
@@ -538,7 +537,10 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

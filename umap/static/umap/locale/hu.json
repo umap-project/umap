@@ -457,7 +457,6 @@
     "Choose this dataset": "Ezen adatkészlet kiválasztása",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: tematikus adatok az OpenStreetMap-ről",
     "Choose a theme": "Téma kiválasztása",
-    "Symplify all geometries to points": "Az összes alakzat egyszerűsítése pontokká",
     "Choose this data": "Ezen adatok kiválasztása",
     "Search admin boundary": "Közigazgatási határ keresése",
     "Please choose a theme and a boundary first.": "Először válasszon ki egy témát és egy határt.",
@@ -538,5 +537,8 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }

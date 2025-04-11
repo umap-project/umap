@@ -457,7 +457,6 @@
     "Choose this dataset": "選擇這個資料集",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine：從開放街圖來的主題資料",
     "Choose a theme": "選擇主題",
-    "Symplify all geometries to points": "簡化所有地理範圍的節點",
     "Choose this data": "選擇這個資料",
     "Search admin boundary": "搜尋行政邊界",
     "Please choose a theme and a boundary first.": "請先選擇主題與邊界。",
@@ -538,5 +537,8 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }

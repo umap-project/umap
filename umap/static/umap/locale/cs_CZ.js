@@ -457,7 +457,6 @@ const locale = {
     "Choose this dataset": "Vyberte tuto datovou sadu",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: tematická data z OpenStreetMap",
     "Choose a theme": "Vyberte si téma",
-    "Symplify all geometries to points": "Zjednodušte všechny geometrie na body",
     "Choose this data": "Zvolte tato data",
     "Search admin boundary": "Hledat hranici správce",
     "Please choose a theme and a boundary first.": "Nejprve si vyberte téma a hranice.",
@@ -538,7 +537,10 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

@@ -457,7 +457,6 @@
     "Choose this dataset": "Elegir este conjunto de datos",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: datos temáticos de OpenStreetMap",
     "Choose a theme": "Elegir un tema",
-    "Symplify all geometries to points": "Simplificar todas las geometrías a puntos",
     "Choose this data": "Elegir estos datos",
     "Search admin boundary": "Buscar límite administrativo",
     "Please choose a theme and a boundary first.": "Primero elige un tema y un límite.",
@@ -538,5 +537,8 @@
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }

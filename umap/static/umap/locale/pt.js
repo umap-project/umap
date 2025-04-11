@@ -457,7 +457,6 @@ const locale = {
     "Choose this dataset": "Escolher este conjunto de dados",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: dados temáticos do OpenStreetMap",
     "Choose a theme": "Escolher um tema",
-    "Symplify all geometries to points": "Simplificar todas as geometrias para pontos",
     "Choose this data": "Selecionar estes dados",
     "Search admin boundary": "Pesquisar limite administrativo",
     "Please choose a theme and a boundary first.": "Escolha primeiro um tema e um limite.",
@@ -538,7 +537,10 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }
 L.registerLocale("pt", locale)
 L.setLocale("pt")

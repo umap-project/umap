@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-04 16:49+0000\n"
+"POT-Creation-Date: 2025-04-11 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -663,7 +663,11 @@ msgstr[1] ""
 msgid "No map found."
 msgstr ""
 
-#: templates/umap/search.html:35
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr ""
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr ""
 
@@ -784,25 +788,25 @@ msgstr ""
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1051
+#: views.py:1054
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1077
+#: views.py:1080
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1082
+#: views.py:1085
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1336
+#: views.py:1339
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1358
+#: views.py:1361
 msgid "Permissions updated with success!"
 msgstr ""
