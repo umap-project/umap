@@ -232,6 +232,7 @@ export default class Browser {
     toggle.addEventListener('click', () => this.toggleLayers())
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
+    download.hidden = this._umap.getProperty('embedControl') === false
   }
 
   downloadVisible(element) {
