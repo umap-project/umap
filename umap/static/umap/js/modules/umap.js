@@ -106,6 +106,11 @@ export default class Umap {
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
 
+    // Do not display in an iframe.
+    if (window.self !== window.top) {
+      geojson.properties.homeControl = false
+    }
+
     this._leafletMap.setup()
 
     this.panel = new Panel(this, this._leafletMap)
@@ -828,6 +833,7 @@ export default class Umap {
       UIFields.push(`properties.${name}Control`)
     }
     UIFields = UIFields.concat([
+      'properties.homeControl',
       'properties.moreControl',
       'properties.scrollWheelZoom',
       'properties.miniMap',

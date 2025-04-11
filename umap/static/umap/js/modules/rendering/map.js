@@ -23,6 +23,7 @@ BaseMap.mergeOptions({
 
 const ControlsMixin = {
   HIDDABLE_CONTROLS: [
+    'home',
     'zoom',
     'search',
     'fullscreen',
@@ -41,6 +42,7 @@ const ControlsMixin = {
     if (this._umap.hasEditMode() && !this.options.noControl) {
       new U.EditControl(this).addTo(this)
     }
+    this._controls.home = new U.HomeControl(this._umap)
     this._controls.zoom = new Control.Zoom({
       zoomInTitle: translate('Zoom in'),
       zoomOutTitle: translate('Zoom out'),
@@ -91,10 +93,6 @@ const ControlsMixin = {
     }
     if (this.options.noControl) return
 
-    // Do not display in an iframe.
-    if (window.self === window.top) {
-      this._controls.home = new U.HomeControl().addTo(this)
-    }
     this._controls.attribution = new U.AttributionControl().addTo(this)
     if (this.options.miniMap) {
       this.whenReady(function () {

@@ -69,13 +69,7 @@ def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):
 
     # Hide them
     page.get_by_text("User interface options").click()
-    hide_zoom_controls = (
-        page.locator(".panel")
-        .filter(has_text=re.compile("Display the zoom control"))
-        .locator("label")
-        .nth(2)
-    )
-    hide_zoom_controls.click()
+    page.locator(".panel .umap-field-zoomControl").get_by_text("never").click()
 
     expect(zoom_in).to_be_hidden()
     expect(zoom_out).to_be_hidden()

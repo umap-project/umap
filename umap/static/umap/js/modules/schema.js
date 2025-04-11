@@ -204,6 +204,12 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  homeControl: {
+    type: Boolean,
+    impacts: ['ui'],
+    label: translate('Display the back to home icon'),
+    default: true,
+  },
   iconClass: {
     type: String,
     impacts: ['data'],
