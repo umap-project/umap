@@ -418,6 +418,10 @@ export class DataLayer {
 
   removeFeature(feature, sync) {
     const id = stamp(feature)
+    // This feature was not yet added, may be after
+    // hitting Escape while drawing a new line or
+    // polygon, not yet valid (not enough points)
+    if (!this._index.includes(id)) return
     if (sync !== false) {
       const oldValue = feature.toGeoJSON()
       feature.sync.delete(oldValue)
