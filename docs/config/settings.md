@@ -95,6 +95,12 @@ A switch will be available for them in the "advanced properties" of the map.
 
 See [the documentation about ASGI deployment](../deploy/asgi.md) for more information.
 
+#### REDIS_URL
+
+Connection URL to the Redis server. Only need for the real-time editing.
+
+Default: `redis://localhost:6379`
+
 #### SECRET_KEY
 
 Must be defined to something unique and secret.

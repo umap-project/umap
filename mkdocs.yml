@@ -18,10 +18,12 @@ nav:
       - Storage: config/storage.md
       - Icon packs: config/icons.md
   - Deployment:
+      - Overview: deploy/overview.md
       - Docker: deploy/docker.md
       - Helm: deploy/helm.md
       - Nginx: deploy/nginx.md
       - ASGI: deploy/asgi.md
+      - WSGI: deploy/wsgi.md
   - Changelog: changelog.md
 theme:
   name: material

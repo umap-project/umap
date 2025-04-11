@@ -32,6 +32,13 @@ Other notable changes:
 Note: you may want to update your search index to include the category search,
 see https://docs.umap-project.org/en/stable/config/settings/#umap_search_configuration
 
+
+### Breaking change
+
+* The Docker image will not serve assets and data files anymore, an Nginx container must
+  be configured. See [docker-compose.yml](https://github.com/umap-project/umap/blob/master/docker-compose.yml)
+  for an example.
+
 ### New features
 * add collaborative real-time map editing
 * add atomic undo redo by @yohanboniface in #2570

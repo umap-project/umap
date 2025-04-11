@@ -26,10 +26,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    image: umap/umap:3.0.0
-    ports:
-      - "${PORT-8000}:8000"
+    image: umap/umap:3.0.2
     environment:
+      - STATIC_ROOT=/srv/umap/static
+      - MEDIA_ROOT=/srv/umap/uploads
       - DATABASE_URL=postgis://postgres@db/postgres
       - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
       - SITE_URL=https://umap.local/
@@ -39,7 +39,20 @@ services:
       - REDIS_URL=redis://redis:6379
     volumes:
       - data:/srv/umap/uploads
+      - static:/srv/umap/static
+
+  proxy:
+    image: nginx:latest
+    ports:
+      - "8000:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - static:/static:ro
+      - data:/data:ro
+    depends_on:
+      - app
 
 volumes:
   data:
+  static:
   db:
