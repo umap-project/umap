@@ -833,7 +833,6 @@ export default class Umap {
       UIFields.push(`properties.${name}Control`)
     }
     UIFields = UIFields.concat([
-      'properties.homeControl',
       'properties.moreControl',
       'properties.scrollWheelZoom',
       'properties.miniMap',
