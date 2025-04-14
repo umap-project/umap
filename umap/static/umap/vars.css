@@ -6,12 +6,15 @@
     --color-mediumGray: #3e4444;
     --color-darkGray: #323737;
     --color-darkerGray: #2a2e30;
+    --color-veryDarkGray: #1e2121;
     --color-light: white;
     --color-dark: black;
     --color-limeGreen: #b9f5d2;
+    --color-verySoftCyan: #a1eeeb;
     --color-brightCyan: #46ece6;
     --color-lightCyan: #d4fbf9;
     --color-darkCyan: #009099;
+    --color-veryDarkCyan: #046460;
     --color-red: #c60f13;
     --color-darkRed: #5b2a2a;
 
@@ -64,6 +67,7 @@
 .dark {
     --background-color: var(--color-darkGray);
     --text-color: #efefef;
+    --color-verySoftCyan: #8cdcd9;
 }
 
 @media only screen and (max-width:770px) {

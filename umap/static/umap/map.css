@@ -990,9 +990,9 @@ a.umap-control-caption,
     height: var(--control-size);
     line-height: var(--control-size);
 }
-/* Links are blue by default  */
+/* Links are dark cyan by default  */
 .leaflet-container a {
-    color: #0078a8;
+    color: var(--color-veryDarkCyan);
 }
 /* But not in controls  */
 .leaflet-bar a {
