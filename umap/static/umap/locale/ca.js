@@ -457,7 +457,6 @@ const locale = {
     "Choose this dataset": "Choose this dataset",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: thematic data from OpenStreetMap",
     "Choose a theme": "Choose a theme",
-    "Symplify all geometries to points": "Symplify all geometries to points",
     "Choose this data": "Choose this data",
     "Search admin boundary": "Search admin boundary",
     "Please choose a theme and a boundary first.": "Please choose a theme and a boundary first.",
@@ -522,10 +521,10 @@ const locale = {
     "Anonymous": "Anonymous",
     "created at {date}": "created at {date}",
     "modified at {date}": "modified at {date}",
-    "Default zoom": "Default zoom",
-    "Default latitude": "Default latitude",
-    "Default longitude": "Default longitude",
-    "Edit map default view": "Edit map default view",
+    "Default zoom": "Zoom predeterminat",
+    "Default latitude": "Latitud predeterminada",
+    "Default longitude": "Longitud predeterminada",
+    "Edit map default view": "Edita la visualització predeterminada del mapa",
     "Use current center and zoom": "Use current center and zoom",
     "Layer permalink": "Layer permalink",
     "Back to home": "Back to home",
@@ -538,7 +537,10 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points"
 }
 L.registerLocale("ca", locale)
 L.setLocale("ca")
