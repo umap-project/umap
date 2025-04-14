@@ -108,7 +108,7 @@ export default class Umap {
 
     // Do not display in an iframe.
     if (window.self !== window.top) {
-      geojson.properties.homeControl = false
+      this.properties.homeControl = false
     }
 
     this._leafletMap.setup()
