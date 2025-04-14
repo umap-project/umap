@@ -6,7 +6,7 @@ input[type="text"], input[type="password"], input[type="date"],
 input[type="datetime-local"], input[type="email"], input[type="number"],
 input[type="search"], input[type="tel"], input[type="time"], input[type="file"],
 input[type="url"], textarea {
-    background-color: white;
+    background-color: var(--color-light);
     border: 2px solid var(--color-darkBlue);
     color: var(--text-color);
     display: block;
@@ -47,7 +47,7 @@ input[type=checkbox]:checked:after {
 }
 input[data-modified=true] {
     background-color: var(--color-lightCyan);
-    border: 1px solid var(--color-darkGray);
+    border: 1px solid var(--color-veryDarkGray);
 }
 input + select,
 select + input,
@@ -71,7 +71,7 @@ select {
 .dark select {
     color: var(--text-color);
     background-color: var(--color-darkGray);
-    border-color: var(--color-dark);
+    border-color: var(--color-veryDarkGray);
     border-width: 1px;
 }
 select[multiple="multiple"] {
@@ -89,7 +89,7 @@ input[type="submit"] {
     text-decoration: none;
     justify-content: center;
     background-color: var(--color-darkBlue);
-    color: white;
+    color: var(--color-light);
     font-weight: normal;
     min-height: 40px;
 }
@@ -97,21 +97,21 @@ input[type="submit"] {
 .dark [type="button"] {
     background-color: var(--color-darkerGray);
     color: var(--text-color);
-    border: 1px solid #1b1f20;
+    border: 1px solid var(--color-veryDarkGray);
 }
 .button.primary {
     font-weight: bold;
 }
 .dark .button.primary:not([disabled]),
 .dark [type="button"].primary:not([disabled]) {
-    background-color: var(--color-brightCyan);
+    background-color: var(--color-verySoftCyan);
     color: var(--color-dark);
-    border: 1px solid #1b1f20;
+    border: 1px solid var(--color-veryDarkGray);
 }
 .dark .button:hover,
 .dark [type="button"]:hover,
 .dark input[type="submit"]:hover {
-    background-color: #2e3436;
+    background-color: var(--color-darkerGray);
 }
 .dark a {
     color: var(--text-color);
@@ -151,14 +151,14 @@ button.round.small {
     display: block;
     padding: 7px 7px;
     margin-bottom: 14px;
-    background: #393F3F;
+    background: var(--color-mediumGray);
     color: var(--color-lightGray);
     font-size: 10px;
     border-radius: 0 2px;
 }
 .content .helptext {
-    background-color: #eee;
-    color: #000;
+    background-color: var(--color-lightGray);
+    color: var(--color-dark);
 }
 input + .help-text {
     margin-top: -14px;
@@ -205,8 +205,8 @@ input + .error {
     margin-top: -14px;
     margin-bottom: 14px;
     background: var(--color-lightGray);
-    color: #fff;
-    background-color: #cc0000;
+    color: var(--color-light);
+    background-color: var(--color-red);
     font-size: 11px;
     border-radius: 0 2px;
 }
@@ -214,14 +214,14 @@ input[type="file"] + .error {
     margin-top: 0;
 }
 input[value]:invalid {
-    border-color: red;
-    background-color: darkred;
+    border-color: var(--color-red);
+    background-color: var(--color-darkRed);
 }
 .dark input, .dark textarea {
     background-color: var(--color-darkerGray);
-    border-color: var(--color-dark);
+    border-color: var(--color-veryDarkGray);
     border-width: 1px;
-    color: #efefef;
+    color: var(--color-lightGray);
 }
 details {
     margin-bottom: 5px;
@@ -229,7 +229,7 @@ details {
     border-start-end-radius: 4px;
 }
 .dark details {
-    border: 1px solid #222;
+    border: 1px solid var(--color-veryDarkGray);
 }
 details fieldset {
     overflow: hidden;
@@ -245,8 +245,8 @@ details summary {
     padding: 0 5px;
 }
 .dark details summary {
-    background-color: #232729;
-    color: #fff;
+    background-color: var(--color-darkerGray);
+    color: var(--color-light);
 }
 .dark details fieldset {
     border: 1px solid var(--color-darkGray);
@@ -311,33 +311,34 @@ input.switch:empty ~ label:after {
     width: 6em;
     -webkit-transition: all 100ms ease-in;
     transition: all 100ms ease-in;
-    color: #c9c9c7;
+    color: var(--color-mediumGray);
     font-weight: bold;
-    background-color: #ededed;
+    background-color: var(--color-lighterGray);
 }
 .dark input.switch:empty ~ label:before,
 .dark input.switch:empty ~ label:after {
-    background-color: #272c2e;
+    background-color: var(--color-darkerGray);
 }
 input.switch:empty ~ label:after {
     width: 3em;
     margin-inline-start: 0.1em;
-    background-color: #ededed;
+    background-color: var(--color-lightGray);
     content: "OFF";
     text-indent: 3.5em;
-    border: 1px solid #374E75;
+    border: 1px solid var(--color-darkerGray);
     font-weight: bold;
 }
 .dark input.switch:empty ~ label:after {
-    border: 1px solid #202425;
-    background-color: #2c3233;
+    border: 1px solid var(--color-veryDarkGray);
+    background-color: var(--color-darkerGray);
+    color: var(--color-lightGray);
 }
 input.switch:checked:empty ~ label:after {
     content: ' ';
 }
 .dark input.switch:checked ~ label:before,
 input.switch:checked ~ label:before {
-    background-color: var(--color-lightCyan);
+    background-color: var(--color-verySoftCyan);
     border: 1px solid var(--color-lightGray);
     color: var(--color-darkGray);
     content: "ON";
@@ -347,7 +348,7 @@ input.switch:checked ~ label:before {
 }
 .dark input.switch:checked ~ label:before {
     border: none;
-    background-color: var(--color-accent);
+    background-color: var(--color-verySoftCyan);
 }
 input.switch:checked ~ label:after {
     margin-inline-start: 3em;
@@ -387,9 +388,9 @@ input.switch:checked ~ label:after {
     display: none;
 }
 .umap-multiplechoice label {
-    border: 1px solid #374E75;
+    border: 1px solid var(--color-veryDarkGray);
     cursor: pointer;
-    background-color: #c9c9c7;
+    background-color: var(--color-lightGray);
     min-height: 30px;
     line-height: 30px;
     text-align: center;
@@ -397,12 +398,11 @@ input.switch:checked ~ label:after {
     display: inline-block;
 }
 .dark .umap-multiplechoice label {
-    border: 1px solid black;
-    background-color: #2c3233;
+    border: 1px solid var(--color-veryDarkGray);
+    background-color: var(--color-darkGray);
 }
 .umap-multiplechoice input[type='radio']:checked + label {
-    background-color: var(--color-accent);
-    box-shadow: inset 0 0 6px 0px #2c3233;
+    background-color: var(--color-verySoftCyan);
     color: var(--color-darkGray);
 }
 .inheritable .header .buttons {
@@ -420,7 +420,7 @@ input.switch:checked ~ label:after {
     width: initial;
 }
 .inheritable + .inheritable {
-    border-top: 1px solid #222;
+    border-top: 1px solid var(--color-darkerGray);
     padding-top: 5px;
     margin-top: 5px;
 }
@@ -504,7 +504,7 @@ i.info {
     justify-content: space-around;
     font-size: 1.2em;
     margin-bottom: 20px;
-    border-bottom: 1px solid #bebebe;
+    border-bottom: 1px solid var(--color-lighterGray);
 }
 .flat-tabs button {
     padding: 10px;
@@ -515,14 +515,14 @@ i.info {
 .flat-tabs button:hover,
 .flat-tabs .on {
     font-weight: bold;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--color-mediumGray);
 }
 .dark .flat-tabs button {
-    color: #fff;
+    color: var(--color-light);
 }
 .dark .flat-tabs button:hover,
 .dark .flat-tabs .on {
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid var(--color-light);
 }
 .umap-pictogram-category h6 {
     font-size: 1.3em;
@@ -538,11 +538,11 @@ i.info {
     height: 30px;
     line-height: 30px;
     cursor: pointer;
-    background-color: #999;
+    background-color: var(--color-lightGray);
     text-align: center;
     margin-bottom: 5px;
     display: inline-block;
-    color: black;
+    color: var(--color-dark);
     font-weight: bold;
     overflow: hidden;
 }
@@ -552,10 +552,10 @@ i.info {
 }
 .umap-pictogram-choice:hover,
 .umap-color-picker span:hover {
-    background-color: #bebebe;
+    background-color: var(--color-lighterGray);
 }
 .umap-pictogram-choice.selected {
-    box-shadow: inset 0 0 0 1px #e9e9e9;
+    box-shadow: inset 0 0 0 1px var(--color-lighterGray);
 }
 
 .umap-pictogram-choice .leaflet-marker-icon {
