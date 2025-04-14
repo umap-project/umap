@@ -205,6 +205,7 @@ urlpatterns += i18n_patterns(
 )
 urlpatterns += (
     path("stats/", cache_page(60 * 60)(views.stats), name="stats"),
+    path("design_system/", views.design_system, name="design_system"),
     path(
         "favicon.ico",
         cache_control(max_age=60 * 60 * 24, immutable=True, public=True)(

@@ -1,0 +1,140 @@
+{% extends "umap/content.html" %}
+
+{% load umap_tags i18n %}
+
+{% block messages %}
+  {# We don't want to display errors (yet?). #}
+{% endblock messages %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <style type="text/css">
+    h3, h4 {
+      margin-top: 2rem;
+    }
+    .colors-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .colors-container * {
+      width: 20%;
+      margin: 1rem;
+      border-style: solid;
+      border-width: 2rem 1px 1px 1px;
+      padding: 4px;
+    }
+
+    .panel {
+      position: initial;
+      padding: 0 1rem 1rem;
+    }
+  </style>
+{% endblock extra_head %}
+
+{% block maincontent %}
+  <div class="wrapper">
+    <h2 class="section">uMap Design System</h2>
+    <div class="row">
+      <h3>Forms</h3>
+      <h4>Copiable link</h4>
+      <div class="copiable-input">
+        <label>Lien vers la carte<input type="text" readonly value="http://example.org"></label><button class="icon icon-24 icon-copy" title="copier" type="button"></button>
+      </div>
+      <h4>Toggle</h4>
+      <div class="formbox">
+        <input type="checkbox" class="switch" id="inBbox"><label for="inBbox">Lister seulement les éléments visibles</label>
+      </div>
+      <h4>Multiple choice</h4>
+      <div class="formbox">
+        <label title="Afficher les boutons de zoom">Afficher les boutons de zoom</label>
+        <div class="umap-multiplechoice by3">
+          <input type="radio" name="zoomControl" id="zoomControl.0" value="true" checked><label for="zoomControl.0">toujours</label>
+          <input type="radio" name="zoomControl" id="zoomControl.1" value="false"><label for="zoomControl.1">jamais</label>
+          <input type="radio" name="zoomControl" id="zoomControl.2" value="null"><label for="zoomControl.2">caché</label>
+        </div>
+      </div>
+      <h4>Select</h4>
+      <div class="formbox">
+        <label>Voulez-vous afficher un panneau latéral au chargement ?</label>
+        <select name="onLoadPanel">
+          <option value="none">Aucun</option>
+          <option value="caption">Légende</option>
+          <option value="databrowser">Explorateur : données</option>
+        </select>
+      </div>
+      <h4>You want it darker…</h4>
+      <div class="panel dark full on">
+        <h3><i class="icon icon-16 icon-settings" title=""></i><span>Titre avec icône</span></h3>
+
+        <details open="">
+          <summary><span>Options d'interface</span></summary>
+          <fieldset>
+            <form>
+              <div class="formbox">
+                <input type="checkbox" name="homeControl" data-ref="input" class="switch" id="homeControl">
+                <label title="Afficher le bouton de retour à l'accueil" for="homeControl">Afficher le bouton de retour à l'accueil</label>
+              </div>
+              <div class="formbox">
+                <label title="Afficher les boutons de zoom">Afficher les boutons de zoom</label>
+                <div class="umap-multiplechoice by3" data-ref="wrapper">
+                  <input type="radio" name="zoomControl" id="zoomControl.0" value="true"><label for="zoomControl.0">toujours</label>
+                  <input type="radio" name="zoomControl" id="zoomControl.1" value="false" checked><label for="zoomControl.1">jamais</label>
+                  <input type="radio" name="zoomControl" id="zoomControl.2" value="null"><label for="zoomControl.2">caché</label>
+                </div>
+              </div>
+              <div class="formbox">
+                <label title="Voulez-vous afficher un panneau latéral au chargement ?">Voulez-vous afficher un panneau latéral au chargement ?</label>
+                <select name="onLoadPanel">
+                  <option value="none">Aucun</option>
+                  <option value="caption">Légende</option>
+                  <option value="databrowser">Explorateur : données</option>
+                </select>
+              </div>
+            </form>
+          </fieldset>
+        </details>
+        <details open="">
+          <summary><span>Actions avancées</span></summary>
+          <fieldset>
+            <div class="button-bar half">
+              <button class="button" type="button">
+                <i class="icon icon-24 icon-delete"></i>Supprimer
+              </button>
+              <button class="button" type="button">
+                <i class="icon icon-24 icon-empty"></i>Effacer les données
+              </button>
+              <button class="button" type="button">
+                <i class="icon icon-24 icon-empty"></i>Supprimer les calques
+              </button>
+              <button class="button" type="button">
+                <i class="icon icon-24 icon-clone"></i>Cloner cette carte
+              </button>
+              <button class="button" type="button">
+                <i class="icon icon-24 icon-download"></i>Ouvrir le panneau de partage
+              </button>
+            </div>
+          </fieldset>
+        </details>
+      </div>
+      <h3>Colors</h3>
+      <div class="grid-container row colors-container"></div>
+    </div>
+  </div>
+{% endblock maincontent %}
+{% block bottom_js %}
+  {{ block.super }}
+  <script type="text/javascript">
+    const colorsContainer = document.querySelector('.colors-container')
+    const styles = getComputedStyle(document.querySelector('html'))
+    let html = ""
+    for (const style of styles) {
+      if (style.startsWith("--") && style.includes("color")) {
+        const value = styles.getPropertyValue(style)
+        html += `<div style="border-color: ${value};">${style}</div>`
+      }
+    }
+    const template = document.createElement('template')
+    template.innerHTML = html
+    colorsContainer.appendChild(template.content)
+  </script>
+{% endblock bottom_js %}
