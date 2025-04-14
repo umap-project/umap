@@ -66,7 +66,11 @@ spec:
           {{- end }}
           envFrom:
           - secretRef:
+              {{- if .Values.umap.envFromSecret }}
+              name: {{ .Values.umap.envFromSecret }}
+              {{- else }}
               name: {{ include "umap.fullname" . }}-env
+              {{- end }}
           volumeMounts:
             - name: config
               mountPath: /etc/umap/
@@ -80,7 +84,11 @@ spec:
       volumes:
         - name: config
           secret:
+            {{- if .Values.umap.configFromSecret }}
+            secretName: {{ .Values.umap.configFromSecret }}
+            {{- else }}
             secretName: {{ include "umap.fullname" . }}-config
+            {{- end }}
         - name: statics
           emptyDir: {}
       {{- if .Values.persistence.enabled }}

@@ -77,11 +77,18 @@ umap:
     SECRET_KEY: CHANGE_ME
     STATIC_ROOT: /srv/umap/static
     MEDIA_ROOT: /srv/umap/uploads
+  # Configure environment variables using an existing secret in the same namespace.
+  # In this case the values above are not used
+  envFromSecret: null
+
   # You can also provide umap.conf content here:
   config: |
     from umap.settings.base import *
 
     # See: https://github.com/umap-project/umap/blob/master/umap/settings/local.py.sample
+  # Configure config file using an existing secret in the same namespace.
+  # In this case the values above are not used
+  configFromSecret: null
 
 persistence:
   enabled: true
