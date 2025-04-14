@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.4 - 2025-04-14
+
+* do not show "back to home" button in iframes by @yohanboniface in #2644
+* remove "hide home button" shown twice in map settings by @yohanboniface in #2645
+* adapt Helm chart to match La Suite's expectations by @ohemelaar in #2646
+* update colors by @yohanboniface in #2647
+
+
 ## 3.0.3 - 2025-04-11
 
 * do not try to remove a feature not yet added by @yohanboniface in #2637
