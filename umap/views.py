@@ -1410,6 +1410,13 @@ def stats(request):
     )
 
 
+class DesignSystem(TemplateView):
+    template_name = "umap/design_system.html"
+
+
+design_system = DesignSystem.as_view()
+
+
 @require_GET
 @cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # One day.
 def webmanifest(request):
