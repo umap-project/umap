@@ -19,6 +19,7 @@ env = environ.Env()
 
 INTERNAL_IPS = env.list("INTERNAL_IPS", default=["127.0.0.1"])
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 ADMINS = tuple(parseaddr(email) for email in env.list("ADMINS", default=[]))
 ASGI_APPLICATION = "umap.asgi.application"
 
