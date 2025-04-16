@@ -38,7 +38,7 @@
   "dependencies": {
     "@dwayneparton/geojson-to-gpx": "^0.2.0",
     "@placemarkio/tokml": "0.3.4",
-    "@tmcw/togeojson": "^5.8.0",
+    "@tmcw/togeojson": "^7.1.0",
     "colorbrewer": "1.5.7",
     "csv2geojson": "github:umap-project/csv2geojson#patched",
     "dompurify": "3.2.4",

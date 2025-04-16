@@ -12,7 +12,7 @@ function $ns(element, tagName, ns) {
  */
 function nodeVal(node) {
     node?.normalize();
-    return (node && node.textContent) || "";
+    return node?.textContent || "";
 }
 /**
  * Get one Y child of X, if any, otherwise null
@@ -42,16 +42,16 @@ function val1(node, tagName, callback) {
     return {};
 }
 function $num(node, tagName, callback) {
-    const val = parseFloat(nodeVal(get1(node, tagName)));
-    if (isNaN(val))
+    const val = Number.parseFloat(nodeVal(get1(node, tagName)));
+    if (Number.isNaN(val))
         return undefined;
     if (val && callback)
         return callback(val) || {};
     return {};
 }
 function num1(node, tagName, callback) {
-    const val = parseFloat(nodeVal(get1(node, tagName)));
-    if (isNaN(val))
+    const val = Number.parseFloat(nodeVal(get1(node, tagName)));
+    if (Number.isNaN(val))
         return undefined;
     if (callback)
         callback(val);
@@ -68,20 +68,6 @@ function getMulti(node, propertyNames) {
 }
 function isElement(node) {
     return node?.nodeType === 1;
-}
-
-function getLineStyle(node) {
-    return get(node, "line", (lineStyle) => {
-        const val = Object.assign({}, val1(lineStyle, "color", (color) => {
-            return { stroke: `#${color}` };
-        }), $num(lineStyle, "opacity", (opacity) => {
-            return { "stroke-opacity": opacity };
-        }), $num(lineStyle, "width", (width) => {
-            // GPX width is in mm, convert to px with 96 px per inch
-            return { "stroke-width": (width * 96) / 25.4 };
-        }));
-        return val;
-    });
 }
 
 function getExtensions(node) {
@@ -108,16 +94,16 @@ function abbreviateName(name) {
     return ["heart", "gpxtpx:hr", "hr"].includes(name) ? "heart" : name;
 }
 function parseNumeric(val) {
-    const num = parseFloat(val);
-    return isNaN(num) ? val : num;
+    const num = Number.parseFloat(val);
+    return Number.isNaN(num) ? val : num;
 }
 
 function coordPair$1(node) {
     const ll = [
-        parseFloat(node.getAttribute("lon") || ""),
-        parseFloat(node.getAttribute("lat") || ""),
+        Number.parseFloat(node.getAttribute("lon") || ""),
+        Number.parseFloat(node.getAttribute("lat") || ""),
     ];
-    if (isNaN(ll[0]) || isNaN(ll[1])) {
+    if (Number.isNaN(ll[0]) || Number.isNaN(ll[1])) {
         return null;
     }
     num1(node, "ele", (val) => {
@@ -131,7 +117,21 @@ function coordPair$1(node) {
     };
 }
 
-function extractProperties(node) {
+function getLineStyle(node) {
+    return get(node, "line", (lineStyle) => {
+        const val = Object.assign({}, val1(lineStyle, "color", (color) => {
+            return { stroke: `#${color}` };
+        }), $num(lineStyle, "opacity", (opacity) => {
+            return { "stroke-opacity": opacity };
+        }), $num(lineStyle, "width", (width) => {
+            // GPX width is in mm, convert to px with 96 px per inch
+            return { "stroke-width": (width * 96) / 25.4 };
+        }));
+        return val;
+    });
+}
+
+function extractProperties(ns, node) {
     const properties = getMulti(node, [
         "name",
         "cmt",
@@ -140,10 +140,9 @@ function extractProperties(node) {
         "time",
         "keywords",
     ]);
-    const extensions = Array.from(node.getElementsByTagNameNS("http://www.garmin.com/xmlschemas/GpxExtensions/v3", "*"));
-    for (const child of extensions) {
-        if (child.parentNode?.parentNode === node) {
-            properties[child.tagName.replace(":", "_")] = nodeVal(child);
+    for (const [n, url] of ns) {
+        for (const child of Array.from(node.getElementsByTagNameNS(url, "*"))) {
+            properties[child.tagName.replace(":", "_")] = nodeVal(child)?.trim();
         }
     }
     const links = $(node, "link");
@@ -170,7 +169,7 @@ function getPoints$1(node, pointname) {
         if (c.time)
             times.push(c.time);
         for (const [name, val] of c.extendedValues) {
-            const plural = name === "heart" ? name : name.replace("gpxtpx:", "") + "s";
+            const plural = name === "heart" ? name : `${name.replace("gpxtpx:", "")}s`;
             if (!extendedValues[plural]) {
                 extendedValues[plural] = Array(pts.length).fill(null);
             }
@@ -189,20 +188,20 @@ function getPoints$1(node, pointname) {
  * Extract a LineString geometry from a rte
  * element.
  */
-function getRoute(node) {
+function getRoute(ns, node) {
     const line = getPoints$1(node, "rtept");
     if (!line)
         return;
     return {
         type: "Feature",
-        properties: Object.assign({ _gpxType: "rte" }, extractProperties(node), getLineStyle(get1(node, "extensions"))),
+        properties: Object.assign({ _gpxType: "rte" }, extractProperties(ns, node), getLineStyle(get1(node, "extensions"))),
         geometry: {
             type: "LineString",
             coordinates: line.line,
         },
     };
 }
-function getTrack(node) {
+function getTrack(ns, node) {
     const segments = $(node, "trkseg");
     const track = [];
     const times = [];
@@ -211,14 +210,14 @@ function getTrack(node) {
         const line = getPoints$1(segment, "trkpt");
         if (line) {
             extractedLines.push(line);
-            if (line.times && line.times.length)
+            if (line.times?.length)
                 times.push(line.times);
         }
     }
     if (extractedLines.length === 0)
         return null;
     const multi = extractedLines.length > 1;
-    const properties = Object.assign({ _gpxType: "trk" }, extractProperties(node), getLineStyle(get1(node, "extensions")), times.length
+    const properties = Object.assign({ _gpxType: "trk" }, extractProperties(ns, node), getLineStyle(get1(node, "extensions")), times.length
         ? {
             coordinateProperties: {
                 times: multi ? times : times[0],
@@ -263,8 +262,8 @@ function getTrack(node) {
  * Extract a point, if possible, from a given node,
  * which is usually a wpt or trkpt
  */
-function getPoint(node) {
-    const properties = Object.assign(extractProperties(node), getMulti(node, ["sym"]));
+function getPoint(ns, node) {
+    const properties = Object.assign(extractProperties(ns, node), getMulti(node, ["sym"]));
     const pair = coordPair$1(node);
     if (!pair)
         return null;
@@ -283,18 +282,31 @@ function getPoint(node) {
  * that yields output feature by feature.
  */
 function* gpxGen(node) {
-    for (const track of $(node, "trk")) {
-        const feature = getTrack(track);
+    const n = node;
+    const GPXX = "gpxx";
+    const GPXX_URI = "http://www.garmin.com/xmlschemas/GpxExtensions/v3";
+    // Namespaces
+    const ns = [[GPXX, GPXX_URI]];
+    const attrs = n.getElementsByTagName("gpx")[0]?.attributes;
+    if (attrs) {
+        for (const attr of Array.from(attrs)) {
+            if (attr.name?.startsWith("xmlns:") && attr.value !== GPXX_URI) {
+                ns.push([attr.name, attr.value]);
+            }
+        }
+    }
+    for (const track of $(n, "trk")) {
+        const feature = getTrack(ns, track);
         if (feature)
             yield feature;
     }
-    for (const route of $(node, "rte")) {
-        const feature = getRoute(route);
+    for (const route of $(n, "rte")) {
+        const feature = getRoute(ns, route);
         if (feature)
             yield feature;
     }
-    for (const waypoint of $(node, "wpt")) {
-        const point = getPoint(waypoint);
+    for (const waypoint of $(n, "wpt")) {
+        const point = getPoint(ns, waypoint);
         if (point)
             yield point;
     }
@@ -346,8 +358,8 @@ function getProperties(node, attributeNames) {
                 elem = elements[0];
             }
         }
-        const val = parseFloat(nodeVal(elem));
-        if (!isNaN(val)) {
+        const val = Number.parseFloat(nodeVal(elem));
+        if (!Number.isNaN(val)) {
             properties.push([alias, val]);
         }
     }
@@ -356,23 +368,23 @@ function getProperties(node, attributeNames) {
 function coordPair(node) {
     const ll = [num1(node, "LongitudeDegrees"), num1(node, "LatitudeDegrees")];
     if (ll[0] === undefined ||
-        isNaN(ll[0]) ||
+        Number.isNaN(ll[0]) ||
         ll[1] === undefined ||
-        isNaN(ll[1])) {
+        Number.isNaN(ll[1])) {
         return null;
     }
     const heartRate = get1(node, "HeartRateBpm");
     const time = nodeVal(get1(node, "Time"));
     get1(node, "AltitudeMeters", (alt) => {
-        const a = parseFloat(nodeVal(alt));
-        if (!isNaN(a)) {
+        const a = Number.parseFloat(nodeVal(alt));
+        if (!Number.isNaN(a)) {
             ll.push(a);
         }
     });
     return {
         coordinates: ll,
         time: time || null,
-        heartRate: heartRate ? parseFloat(nodeVal(heartRate)) : null,
+        heartRate: heartRate ? Number.parseFloat(nodeVal(heartRate)) : null,
         extensions: getProperties(node, TRACKPOINT_ATTRIBUTES),
     };
 }
@@ -504,17 +516,18 @@ function tcx(node) {
 
 function fixColor(v, prefix) {
     const properties = {};
-    const colorProp = prefix == "stroke" || prefix === "fill" ? prefix : prefix + "-color";
+    const colorProp = prefix === "stroke" || prefix === "fill" ? prefix : `${prefix}-color`;
     if (v[0] === "#") {
         v = v.substring(1);
     }
     if (v.length === 6 || v.length === 3) {
-        properties[colorProp] = "#" + v;
+        properties[colorProp] = `#${v}`;
     }
     else if (v.length === 8) {
-        properties[prefix + "-opacity"] = parseInt(v.substring(0, 2), 16) / 255;
+        properties[`${prefix}-opacity`] =
+            Number.parseInt(v.substring(0, 2), 16) / 255;
         properties[colorProp] =
-            "#" + v.substring(6, 8) + v.substring(4, 6) + v.substring(2, 4);
+            `#${v.substring(6, 8)}${v.substring(4, 6)}${v.substring(2, 4)}`;
     }
     return properties;
 }
@@ -540,11 +553,11 @@ function extractIconHref(node) {
 function extractIcon(node) {
     return get(node, "IconStyle", (iconStyle) => {
         return Object.assign(getColor(iconStyle, "icon"), numericProperty(iconStyle, "scale", "icon-scale"), numericProperty(iconStyle, "heading", "icon-heading"), get(iconStyle, "hotSpot", (hotspot) => {
-            const left = parseFloat(hotspot.getAttribute("x") || "");
-            const top = parseFloat(hotspot.getAttribute("y") || "");
+            const left = Number.parseFloat(hotspot.getAttribute("x") || "");
+            const top = Number.parseFloat(hotspot.getAttribute("y") || "");
             const xunits = hotspot.getAttribute("xunits") || "";
             const yunits = hotspot.getAttribute("yunits") || "";
-            if (!isNaN(left) && !isNaN(top))
+            if (!Number.isNaN(left) && !Number.isNaN(top))
                 return {
                     "icon-offset": [left, top],
                     "icon-offset-units": [xunits, yunits],
@@ -578,71 +591,6 @@ function extractStyle(node) {
     return Object.assign({}, extractPoly(node), extractLine(node), extractLabel(node), extractIcon(node));
 }
 
-const toNumber = (x) => Number(x);
-const typeConverters = {
-    string: (x) => x,
-    int: toNumber,
-    uint: toNumber,
-    short: toNumber,
-    ushort: toNumber,
-    float: toNumber,
-    double: toNumber,
-    bool: (x) => Boolean(x),
-};
-function extractExtendedData(node, schema) {
-    return get(node, "ExtendedData", (extendedData, properties) => {
-        for (const data of $(extendedData, "Data")) {
-            properties[data.getAttribute("name") || ""] = nodeVal(get1(data, "value"));
-        }
-        for (const simpleData of $(extendedData, "SimpleData")) {
-            const name = simpleData.getAttribute("name") || "";
-            const typeConverter = schema[name] || typeConverters.string;
-            properties[name] = typeConverter(nodeVal(simpleData));
-        }
-        return properties;
-    });
-}
-function getMaybeHTMLDescription(node) {
-    const descriptionNode = get1(node, "description");
-    for (const c of Array.from(descriptionNode?.childNodes || [])) {
-        if (c.nodeType === 4) {
-            return {
-                description: {
-                    "@type": "html",
-                    value: nodeVal(c),
-                },
-            };
-        }
-    }
-    return {};
-}
-function extractTimeSpan(node) {
-    return get(node, "TimeSpan", (timeSpan) => {
-        return {
-            timespan: {
-                begin: nodeVal(get1(timeSpan, "begin")),
-                end: nodeVal(get1(timeSpan, "end")),
-            },
-        };
-    });
-}
-function extractTimeStamp(node) {
-    return get(node, "TimeStamp", (timeStamp) => {
-        return { timestamp: nodeVal(get1(timeStamp, "when")) };
-    });
-}
-function extractCascadedStyle(node, styleMap) {
-    return val1(node, "styleUrl", (styleUrl) => {
-        styleUrl = normalizeId(styleUrl);
-        if (styleMap[styleUrl]) {
-            return Object.assign({ styleUrl }, styleMap[styleUrl]);
-        }
-        // For backward-compatibility. Should we still include
-        // styleUrl even if it's not resolved?
-        return { styleUrl };
-    });
-}
-
 const removeSpace = /\s*/g;
 const trimSpace = /^\s*|\s*$/g;
 const splitSpace = /\s+/;
@@ -653,8 +601,8 @@ function coord1(value) {
     return value
         .replace(removeSpace, "")
         .split(",")
-        .map(parseFloat)
-        .filter((num) => !isNaN(num))
+        .map(Number.parseFloat)
+        .filter((num) => !Number.isNaN(num))
         .slice(0, 3);
 }
 /**
@@ -675,7 +623,7 @@ function gxCoords(node) {
         elems = $ns(node, "coord", "*");
     }
     const coordinates = elems.map((elem) => {
-        return nodeVal(elem).split(" ").map(parseFloat);
+        return nodeVal(elem).split(" ").map(Number.parseFloat);
     });
     if (coordinates.length === 0) {
         return null;
@@ -785,47 +733,92 @@ function getGeometry(node) {
     };
 }
 
-function geometryListToGeometry(geometries) {
-    return geometries.length === 0
-        ? null
-        : geometries.length === 1
-            ? geometries[0]
-            : {
-                type: "GeometryCollection",
-                geometries,
-            };
+const toNumber = (x) => Number(x);
+const typeConverters = {
+    string: (x) => x,
+    int: toNumber,
+    uint: toNumber,
+    short: toNumber,
+    ushort: toNumber,
+    float: toNumber,
+    double: toNumber,
+    bool: (x) => Boolean(x),
+};
+function extractExtendedData(node, schema) {
+    return get(node, "ExtendedData", (extendedData, properties) => {
+        for (const data of $(extendedData, "Data")) {
+            properties[data.getAttribute("name") || ""] = nodeVal(get1(data, "value"));
+        }
+        for (const simpleData of $(extendedData, "SimpleData")) {
+            const name = simpleData.getAttribute("name") || "";
+            const typeConverter = schema[name] || typeConverters.string;
+            properties[name] = typeConverter(nodeVal(simpleData));
+        }
+        return properties;
+    });
 }
-function getPlacemark(node, styleMap, schema, options) {
-    const { coordTimes, geometries } = getGeometry(node);
-    const geometry = geometryListToGeometry(geometries);
-    if (!geometry && options.skipNullGeometry) {
-        return null;
-    }
-    const feature = {
-        type: "Feature",
-        geometry,
-        properties: Object.assign(getMulti(node, [
-            "name",
-            "address",
-            "visibility",
-            "open",
-            "phoneNumber",
-            "description",
-        ]), getMaybeHTMLDescription(node), extractCascadedStyle(node, styleMap), extractStyle(node), extractExtendedData(node, schema), extractTimeSpan(node), extractTimeStamp(node), coordTimes.length
-            ? {
-                coordinateProperties: {
-                    times: coordTimes.length === 1 ? coordTimes[0] : coordTimes,
+function getMaybeHTMLDescription(node) {
+    const descriptionNode = get1(node, "description");
+    for (const c of Array.from(descriptionNode?.childNodes || [])) {
+        if (c.nodeType === 4) {
+            return {
+                description: {
+                    "@type": "html",
+                    value: nodeVal(c),
                 },
-            }
-            : {}),
-    };
-    if (feature.properties?.visibility !== undefined) {
-        feature.properties.visibility = feature.properties.visibility !== "0";
+            };
+        }
     }
-    const id = node.getAttribute("id");
-    if (id !== null && id !== "")
-        feature.id = id;
-    return feature;
+    return {};
+}
+function extractTimeSpan(node) {
+    return get(node, "TimeSpan", (timeSpan) => {
+        return {
+            timespan: {
+                begin: nodeVal(get1(timeSpan, "begin")),
+                end: nodeVal(get1(timeSpan, "end")),
+            },
+        };
+    });
+}
+function extractTimeStamp(node) {
+    return get(node, "TimeStamp", (timeStamp) => {
+        return { timestamp: nodeVal(get1(timeStamp, "when")) };
+    });
+}
+function extractCascadedStyle(node, styleMap) {
+    return val1(node, "styleUrl", (styleUrl) => {
+        styleUrl = normalizeId(styleUrl);
+        if (styleMap[styleUrl]) {
+            return Object.assign({ styleUrl }, styleMap[styleUrl]);
+        }
+        // For backward-compatibility. Should we still include
+        // styleUrl even if it's not resolved?
+        return { styleUrl };
+    });
+}
+var AltitudeMode;
+(function (AltitudeMode) {
+    AltitudeMode["ABSOLUTE"] = "absolute";
+    AltitudeMode["RELATIVE_TO_GROUND"] = "relativeToGround";
+    AltitudeMode["CLAMP_TO_GROUND"] = "clampToGround";
+    AltitudeMode["CLAMP_TO_SEAFLOOR"] = "clampToSeaFloor";
+    AltitudeMode["RELATIVE_TO_SEAFLOOR"] = "relativeToSeaFloor";
+})(AltitudeMode || (AltitudeMode = {}));
+function processAltitudeMode(mode) {
+    switch (mode?.textContent) {
+        case AltitudeMode.ABSOLUTE:
+            return AltitudeMode.ABSOLUTE;
+        case AltitudeMode.CLAMP_TO_GROUND:
+            return AltitudeMode.CLAMP_TO_GROUND;
+        case AltitudeMode.CLAMP_TO_SEAFLOOR:
+            return AltitudeMode.CLAMP_TO_SEAFLOOR;
+        case AltitudeMode.RELATIVE_TO_GROUND:
+            return AltitudeMode.RELATIVE_TO_GROUND;
+        case AltitudeMode.RELATIVE_TO_SEAFLOOR:
+            return AltitudeMode.RELATIVE_TO_SEAFLOOR;
+    }
+    return null;
 }
 
 function getGroundOverlayBox(node) {
@@ -848,7 +841,7 @@ function rotateBox(bbox, coordinates, rotation) {
         coordinates[0].map((coordinate) => {
             const dy = coordinate[1] - center[1];
             const dx = coordinate[0] - center[0];
-            const distance = Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
+            const distance = Math.sqrt(dy ** 2 + dx ** 2);
             const angle = Math.atan2(dy, dx) + rotation * DEGREES_TO_RADIANS;
             return [
                 center[0] + Math.cos(angle) * distance,
@@ -872,10 +865,10 @@ function getLatLonBox(node) {
             const bbox = [west, south, east, north];
             let coordinates = [
                 [
-                    [west, north],
-                    [east, north],
-                    [east, south],
-                    [west, south],
+                    [west, north], // top left
+                    [east, north], // top right
+                    [east, south], // top right
+                    [west, south], // bottom left
                     [west, north], // top left (again)
                 ],
             ];
@@ -928,6 +921,178 @@ function getGroundOverlay(node, styleMap, schema, options) {
     return feature;
 }
 
+function getNetworkLinkRegion(node) {
+    const region = get1(node, "Region");
+    if (region) {
+        return {
+            coordinateBox: getLatLonAltBox(region),
+            lod: getLod(node),
+        };
+    }
+    return null;
+}
+function getLod(node) {
+    const lod = get1(node, "Lod");
+    if (lod) {
+        return [
+            num1(lod, "minLodPixels") ?? -1,
+            num1(lod, "maxLodPixels") ?? -1,
+            num1(lod, "minFadeExtent") ?? null,
+            num1(lod, "maxFadeExtent") ?? null,
+        ];
+    }
+    return null;
+}
+function getLatLonAltBox(node) {
+    const latLonAltBox = get1(node, "LatLonAltBox");
+    if (latLonAltBox) {
+        const north = num1(latLonAltBox, "north");
+        const west = num1(latLonAltBox, "west");
+        const east = num1(latLonAltBox, "east");
+        const south = num1(latLonAltBox, "south");
+        const altitudeMode = processAltitudeMode(get1(latLonAltBox, "altitudeMode") ||
+            get1(latLonAltBox, "gx:altitudeMode"));
+        if (altitudeMode) {
+            console.debug("Encountered an unsupported feature of KML for togeojson: please contact developers for support of altitude mode.");
+        }
+        if (typeof north === "number" &&
+            typeof south === "number" &&
+            typeof west === "number" &&
+            typeof east === "number") {
+            const bbox = [west, south, east, north];
+            const coordinates = [
+                [
+                    [west, north], // top left
+                    [east, north], // top right
+                    [east, south], // top right
+                    [west, south], // bottom left
+                    [west, north], // top left (again)
+                ],
+            ];
+            return {
+                bbox,
+                geometry: {
+                    type: "Polygon",
+                    coordinates,
+                },
+            };
+        }
+    }
+    return null;
+}
+function getLinkObject(node) {
+    /*
+      <Link id="ID">
+        <!-- specific to Link -->
+        <href>...</href>                      <!-- string -->
+        <refreshMode>onChange</refreshMode>
+          <!-- refreshModeEnum: onChange, onInterval, or onExpire -->
+        <refreshInterval>4</refreshInterval>  <!-- float -->
+        <viewRefreshMode>never</viewRefreshMode>
+          <!-- viewRefreshModeEnum: never, onStop, onRequest, onRegion -->
+        <viewRefreshTime>4</viewRefreshTime>  <!-- float -->
+        <viewBoundScale>1</viewBoundScale>    <!-- float -->
+        <viewFormat>BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth]</viewFormat>
+                                              <!-- string -->
+        <httpQuery>...</httpQuery>            <!-- string -->
+      </Link>
+    */
+    const linkObj = get1(node, "Link");
+    if (linkObj) {
+        return getMulti(linkObj, [
+            "href",
+            "refreshMode",
+            "refreshInterval",
+            "viewRefreshMode",
+            "viewRefreshTime",
+            "viewBoundScale",
+            "viewFormat",
+            "httpQuery",
+        ]);
+    }
+    return {};
+}
+function getNetworkLink(node, styleMap, schema, options) {
+    const box = getNetworkLinkRegion(node);
+    const geometry = box?.coordinateBox?.geometry || null;
+    if (!geometry && options.skipNullGeometry) {
+        return null;
+    }
+    const feature = {
+        type: "Feature",
+        geometry,
+        properties: Object.assign(
+        /**
+         * Related to
+         * https://gist.github.com/tmcw/037a1cb6660d74a392e9da7446540f46
+         */
+        { "@geometry-type": "networklink" }, getMulti(node, [
+            "name",
+            "address",
+            "visibility",
+            "open",
+            "phoneNumber",
+            "styleUrl",
+            "refreshVisibility",
+            "flyToView",
+            "description",
+        ]), getMaybeHTMLDescription(node), extractCascadedStyle(node, styleMap), extractStyle(node), extractIconHref(node), extractExtendedData(node, schema), extractTimeSpan(node), extractTimeStamp(node), getLinkObject(node), box?.lod ? { lod: box.lod } : {}),
+    };
+    if (box?.coordinateBox?.bbox) {
+        feature.bbox = box.coordinateBox.bbox;
+    }
+    if (feature.properties?.visibility !== undefined) {
+        feature.properties.visibility = feature.properties.visibility !== "0";
+    }
+    const id = node.getAttribute("id");
+    if (id !== null && id !== "")
+        feature.id = id;
+    return feature;
+}
+
+function geometryListToGeometry(geometries) {
+    return geometries.length === 0
+        ? null
+        : geometries.length === 1
+            ? geometries[0]
+            : {
+                type: "GeometryCollection",
+                geometries,
+            };
+}
+function getPlacemark(node, styleMap, schema, options) {
+    const { coordTimes, geometries } = getGeometry(node);
+    const geometry = geometryListToGeometry(geometries);
+    if (!geometry && options.skipNullGeometry) {
+        return null;
+    }
+    const feature = {
+        type: "Feature",
+        geometry,
+        properties: Object.assign(getMulti(node, [
+            "name",
+            "address",
+            "visibility",
+            "open",
+            "phoneNumber",
+            "description",
+        ]), getMaybeHTMLDescription(node), extractCascadedStyle(node, styleMap), extractStyle(node), extractExtendedData(node, schema), extractTimeSpan(node), extractTimeStamp(node), coordTimes.length
+            ? {
+                coordinateProperties: {
+                    times: coordTimes.length === 1 ? coordTimes[0] : coordTimes,
+                },
+            }
+            : {}),
+    };
+    if (feature.properties?.visibility !== undefined) {
+        feature.properties.visibility = feature.properties.visibility !== "0";
+    }
+    const id = node.getAttribute("id");
+    if (id !== null && id !== "")
+        feature.id = id;
+    return feature;
+}
+
 function getStyleId(style) {
     let id = style.getAttribute("id");
     const parentNode = style.parentNode;
@@ -958,8 +1123,7 @@ function buildSchema(node) {
     const schema = {};
     for (const field of $(node, "SimpleField")) {
         schema[field.getAttribute("name") || ""] =
-            typeConverters[field.getAttribute("type") || ""] ||
-                typeConverters["string"];
+            typeConverters[field.getAttribute("type") || ""] || typeConverters.string;
     }
     return schema;
 }
@@ -1028,8 +1192,9 @@ function getFolder(node) {
 function kmlWithFolders(node, options = {
     skipNullGeometry: false,
 }) {
-    const styleMap = buildStyleMap(node);
-    const schema = buildSchema(node);
+    const n = node;
+    const styleMap = buildStyleMap(n);
+    const schema = buildSchema(n);
     const tree = { type: "root", children: [] };
     function traverse(node, pointer, options) {
         if (isElement(node)) {
@@ -1054,6 +1219,13 @@ function kmlWithFolders(node, options = {
                     pointer = folder;
                     break;
                 }
+                case "NetworkLink": {
+                    const networkLink = getNetworkLink(node, styleMap, schema, options);
+                    if (networkLink) {
+                        pointer.children.push(networkLink);
+                    }
+                    break;
+                }
             }
         }
         if (node.childNodes) {
@@ -1062,7 +1234,7 @@ function kmlWithFolders(node, options = {
             }
         }
     }
-    traverse(node, tree, options);
+    traverse(n, tree, options);
     return tree;
 }
 /**
@@ -1073,14 +1245,15 @@ function kmlWithFolders(node, options = {
 function* kmlGen(node, options = {
     skipNullGeometry: false,
 }) {
-    const styleMap = buildStyleMap(node);
-    const schema = buildSchema(node);
-    for (const placemark of $(node, "Placemark")) {
+    const n = node;
+    const styleMap = buildStyleMap(n);
+    const schema = buildSchema(n);
+    for (const placemark of $(n, "Placemark")) {
         const feature = getPlacemark(placemark, styleMap, schema, options);
         if (feature)
             yield feature;
     }
-    for (const groundOverlay of $(node, "GroundOverlay")) {
+    for (const groundOverlay of $(n, "GroundOverlay")) {
         const feature = getGroundOverlay(groundOverlay, styleMap, schema, options);
         if (feature)
             yield feature;
