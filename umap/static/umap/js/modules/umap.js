@@ -747,7 +747,11 @@ export default class Umap {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
     const container = DomUtil.create('div')
-    const metadataFields = ['properties.name', 'properties.description']
+    const metadataFields = [
+      'properties.name',
+      'properties.description',
+      'properties.is_template',
+    ]
 
     DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
     const builder = new MutatingForm(this, metadataFields, {
@@ -1176,6 +1180,7 @@ export default class Umap {
     }
     const formData = new FormData()
     formData.append('name', this.properties.name)
+    formData.append('is_template', Boolean(this.properties.is_template))
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('tags', this.properties.tags || [])
     formData.append('settings', JSON.stringify(geojson))
