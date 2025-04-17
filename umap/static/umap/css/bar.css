@@ -1,6 +1,6 @@
 .umap-main-edit-toolbox [type=button] {
     color: #fff;
-    font-size: 1em;
+    font-size: 0.8rem;
     background-color: var(--color-darkGray);
     width: auto;
     margin-bottom: 0;
