@@ -73,6 +73,11 @@ i18n_urls = [
         views.PictogramJSONList.as_view(),
         name="pictogram_list_json",
     ),
+    re_path(
+        r"^templates/json/$",
+        views.TemplateList.as_view(),
+        name="template_list",
+    ),
 ]
 i18n_urls += decorated_patterns(
     [can_view_map, cache_control(must_revalidate=True)],
