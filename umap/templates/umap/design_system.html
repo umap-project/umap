@@ -9,9 +9,19 @@
 {% block extra_head %}
   {{ block.super }}
   <style type="text/css">
-    h3, h4 {
+    /* Styles for the design system. */
+    .wrapper .row > h3,
+    .wrapper .row > h4 {
       margin-top: 2rem;
+      border-bottom: 1px solid black;
+      clear: both;
     }
+    .ds-wrapper {
+      margin: 1rem 0;
+      min-height: 3rem;
+    }
+
+    /* Styles for generated color boxes. */
     .colors-container {
       display: flex;
       flex-wrap: wrap;
@@ -24,9 +34,21 @@
       padding: 4px;
     }
 
+    /* Styles to reset particular elements (absolute positions for instance). */
     .panel {
       position: initial;
       padding: 0 1rem 1rem;
+    }
+    .umap-main-edit-toolbox {
+      position: initial;
+    }
+    .umap-dialog fieldset {
+      border: 0;
+      margin: unset;
+      padding: unset;
+    }
+    .wrapper .dark input {
+      font-weight: normal;
     }
   </style>
 {% endblock extra_head %}
@@ -35,7 +57,129 @@
   <div class="wrapper">
     <h2 class="section">uMap Design System</h2>
     <div class="row">
+      <h3>Navigation</h3>
+      <h4>Header</h4>
+      <nav class="umap-nav">
+        <section>
+          <h1>
+            <a href="">uMap</a>
+          </h1>
+        </section>
+        <section>
+          <ul>
+            <li>
+              <a href="" class="login">Connexion / Créer un compte</a>
+            </li>
+            <li>
+              <a href="">À propos</a>
+            </li>
+            <li>
+              <a href="https://discover.umap-project.org/">Aide</a>
+            </li>
+            <li>
+              <a href="" class="button button-primary">Créer une carte</a>
+            </li>
+          </ul>
+        </section>
+      </nav>
+      <h4>Header map</h4>
+      <div class="map_detail umap-caption-bar-enabled umap-edit-enabled leaflet-container">
+        <div class="umap-main-edit-toolbox with-transition dark">
+          <div class="umap-left-edit-toolbox" data-ref="left">
+              <div class="logo"><a href="" title="Retour à la page d'accueil">uMap</a></div>
+              <button class="map-name flat truncate" type="button" data-ref="name">Carte sans nom</button>
+              <button class="share-status flat truncate" type="button" data-ref="share">Visibilité : Tout le monde (public)</button>
+              <button class="edit-undo round flat" type="button" data-ref="undo" disabled="">
+                  <i class="icon icon-16 icon-undo"></i>
+              </button>
+              <button class="edit-redo round flat" type="button" data-ref="redo" disabled="">
+                  <i class="icon icon-16 icon-redo"></i>
+              </button>
+          </div>
+          <div class="umap-right-edit-toolbox" data-ref="right">
+              <button class="connected-peers round off" type="button" data-ref="peers">
+                <i class="icon icon-16 icon-peers icon-black"></i>
+                <span>Déconnecté</span>
+              </button>
+              <button class="umap-user flat" type="button" data-ref="user">
+                <i class="icon icon-16 icon-profile"></i>
+                <span class="username truncate" data-ref="username">David Larlet</span>
+              </button>
+              <button class="umap-help-link flat" type="button" title="Aide" data-ref="help">Aide</button>
+              <button class="edit-disable round disabled-on-dirty" type="button" data-ref="view">
+                  <i class="icon icon-16 icon-eye"></i>
+                  <span>Aperçu</span>
+              </button>
+              <button class="edit-save button round enabled-on-dirty" type="button" data-ref="save" disabled="">
+                  <i class="icon icon-16 icon-save-disabled"></i>
+                  <span data-ref="saveLabel">Enregistrer</span>
+              </button>
+          </div>
+        </div>
+      </div>
+      <h4>Card</h4>
+      <div class="grid-container">
+        <div class="card">
+          {# djlint:off #}
+          <umap-fragment data-settings="{&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [2, 51]}, &quot;properties&quot;: {&quot;name&quot;: &quot;Une carte pour Aur\u00e9lie avec des tags&quot;, &quot;tags&quot;: [&quot;numerique&quot;, &quot;urbanisme&quot;], &quot;zoom&quot;: 6, &quot;center&quot;: {&quot;lat&quot;: 51, &quot;lng&quot;: 2}, &quot;slideshow&quot;: {}, &quot;limitBounds&quot;: {}, &quot;zoomControl&quot;: true, &quot;fullscreenControl&quot;: true, &quot;tilelayers&quot;: [{&quot;id&quot;: 1, &quot;name&quot;: &quot;Positron&quot;, &quot;url_template&quot;: &quot;https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png&quot;, &quot;minZoom&quot;: 0, &quot;maxZoom&quot;: 18, &quot;attribution&quot;: &quot;&amp;copy; [[http://www.openstreetmap.org/copyright|OpenStreetMap]] contributors, &amp;copy; [[https://carto.com/attributions|CARTO]]&quot;, &quot;rank&quot;: null, &quot;tms&quot;: false}], &quot;datalayers&quot;: [], &quot;urls&quot;: {&quot;map_short_url&quot;: &quot;/m/{pk}/&quot;, &quot;ajax-proxy&quot;: &quot;/ajax-proxy/&quot;, &quot;password_change&quot;: &quot;/change-password/&quot;, &quot;password_change_done&quot;: &quot;/change-password-done/&quot;, &quot;set_language&quot;: &quot;/i18n/setlang/&quot;, &quot;map_oembed&quot;: &quot;/map/oembed/&quot;, &quot;map_download&quot;: &quot;/map/{map_id}/download/&quot;, &quot;home&quot;: &quot;/fr/&quot;, &quot;maps_showcase&quot;: &quot;/fr/showcase/&quot;, &quot;search&quot;: &quot;https://photon.komoot.io/api/?&quot;, &quot;about&quot;: &quot;/fr/about/&quot;, &quot;user_stars&quot;: &quot;/fr/user/{identifier}/stars/&quot;, &quot;user_maps&quot;: &quot;/fr/user/{identifier}/&quot;, &quot;team_maps&quot;: &quot;/fr/team/{pk}/&quot;, &quot;login&quot;: &quot;/fr/login/&quot;, &quot;login_popup_end&quot;: &quot;/fr/login/popup/end/&quot;, &quot;logout&quot;: &quot;/fr/logout/&quot;, &quot;map_geojson&quot;: &quot;/fr/map/{map_id}/geojson/&quot;, &quot;map_anonymous_edit_url&quot;: &quot;/fr/map/anonymous-edit/{signature}&quot;, &quot;pictogram_list_json&quot;: &quot;/fr/pictogram/json/&quot;, &quot;datalayer_view&quot;: &quot;/fr/datalayer/{map_id}/{pk}/&quot;, &quot;datalayer_versions&quot;: &quot;/fr/datalayer/{map_id}/{pk}/versions/&quot;, &quot;datalayer_version&quot;: &quot;/fr/datalayer/{map_id}/{pk}/{ref}&quot;, &quot;map&quot;: &quot;/fr/map/{slug}_{map_id}&quot;, &quot;map_preview&quot;: &quot;/fr/map/&quot;, &quot;map_new&quot;: &quot;/fr/map/new/&quot;, &quot;map_create&quot;: &quot;/fr/map/create/&quot;, &quot;map_star&quot;: &quot;/fr/map/{map_id}/star/&quot;, &quot;user_dashboard&quot;: &quot;/fr/me&quot;, &quot;user_download&quot;: &quot;/fr/me/download&quot;, &quot;user_teams&quot;: &quot;/fr/me/teams&quot;, &quot;team_new&quot;: &quot;/fr/team/create/&quot;, &quot;user_profile&quot;: &quot;/fr/me/profile&quot;, &quot;team_update&quot;: &quot;/fr/team/{pk}/edit/&quot;, &quot;team_delete&quot;: &quot;/fr/team/{pk}/delete/&quot;, &quot;map_update&quot;: &quot;/fr/map/{map_id}/update/settings/&quot;, &quot;map_update_permissions&quot;: &quot;/fr/map/{map_id}/update/permissions/&quot;, &quot;map_attach_owner&quot;: &quot;/fr/map/{map_id}/update/owner/&quot;, &quot;map_delete&quot;: &quot;/fr/map/{map_id}/update/delete/&quot;, &quot;map_clone&quot;: &quot;/fr/map/{map_id}/update/clone/&quot;, &quot;datalayer_create&quot;: &quot;/fr/map/{map_id}/datalayer/create/{pk}/&quot;, &quot;datalayer_delete&quot;: &quot;/fr/map/{map_id}/datalayer/delete/{pk}/&quot;, &quot;datalayer_permissions&quot;: &quot;/fr/map/{map_id}/datalayer/permissions/{pk}/&quot;, &quot;map_websocket_auth_token&quot;: &quot;/fr/map/{map_id}/ws-token/&quot;, &quot;map_send_edit_link&quot;: &quot;/fr/map/{map_id}/send-edit-link/&quot;, &quot;datalayer_update&quot;: &quot;/fr/map/{map_id}/datalayer/update/{pk}/&quot;, &quot;stats&quot;: &quot;/stats/&quot;, &quot;design_system&quot;: &quot;/design_system/&quot;, &quot;routing&quot;: &quot;http://www.openstreetmap.org/directions?engine=osrm_car&amp;route={lat},{lng}&amp;locale={locale}#map={zoom}/{lat}/{lng}&quot;, &quot;ajax_proxy&quot;: &quot;/ajax-proxy/?url={url}&amp;ttl={ttl}&quot;, &quot;edit_in_osm&quot;: &quot;https://www.openstreetmap.org/edit#map={zoom}/{lat}/{lng}&quot;}, &quot;STATIC_URL&quot;: &quot;/static/&quot;, &quot;editMode&quot;: &quot;disabled&quot;, &quot;hash&quot;: false, &quot;scrollWheelZoom&quot;: false, &quot;noControl&quot;: true, &quot;id&quot;: 13, &quot;schema&quot;: {&quot;iconUrl&quot;: {&quot;default&quot;: &quot;/static/umap/img/marker.svg&quot;}, &quot;tags&quot;: {&quot;choices&quot;: [[&quot;culture&quot;, &quot;Culture et patrimoine&quot;], [&quot;ecologie&quot;, &quot;Transition \u00e9cologique&quot;], [&quot;economie&quot;, &quot;D\u00e9veloppement \u00e9conomique, artisanat et commerce&quot;], [&quot;education&quot;, &quot;Education et jeunesse&quot;], [&quot;habitat&quot;, &quot;Habitat&quot;], [&quot;numerique&quot;, &quot;Num\u00e9rique et innovation&quot;], [&quot;sante&quot;, &quot;Acc\u00e8s aux soins et sant\u00e9&quot;], [&quot;securite&quot;, &quot;Tranquillit\u00e9 publique&quot;], [&quot;services&quot;, &quot;Acc\u00e8s aux services&quot;], [&quot;social&quot;, &quot;Lien social et concertation&quot;], [&quot;sports&quot;, &quot;Sports et loisirs&quot;], [&quot;tourisme&quot;, &quot;Tourisme&quot;], [&quot;transports&quot;, &quot;Transports et mobilit\u00e9s&quot;], [&quot;urbanisme&quot;, &quot;Cadre de vie et am\u00e9nagement urbain&quot;]]}}, &quot;prefix&quot;: &quot;&quot;, &quot;page&quot;: &quot;&quot;}}" inert="">
+            <div id="map_13" class="map_fragment leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0">
+            <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="https://cartodb-basemaps-c.global.ssl.fastly.net/light_all/6/32/21.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(82px, -4px, 0px); opacity: 1;"><img alt="" src="https://cartodb-basemaps-b.global.ssl.fastly.net/light_all/6/31/21.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-174px, -4px, 0px); opacity: 1;"><img alt="" src="https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/6/33/21.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(338px, -4px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-overlay-pane"></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-marker-pane"></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(8283.02px, 5484.99px, 0px) scale(32);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"></div><div class="umap-loader"></div><div></div><div class="umap-tooltip-container"></div></div></div>
+          </umap-fragment>
+          {# djlint:on #}
+          <hgroup>
+            <div>
+              <ul class="tag-list">
+                <li><a href="">Numérique et innovation</a></li>
+                <li><a href="">Cadre de vie et aménagement urbain</a></li>
+              </ul>
+              <h3>Une carte en exemple avec des tags et un titre sur plusieurs lignes</h3>
+              <p>par <a href="">David L.</a></p>
+            </div>
+            <a class="main" href="">Voir la carte</a>
+          </hgroup>
+        </div>
+      </div>
+      <h4>Footer</h4>
+      <footer>
+        <a href="" class="branding">uMap</a>
+        <span>Un projet OpenStreetMap
+        (version <a href="https://docs.umap-project.org/en/stable/changelog/">3.0.4</a>)</span>
+        <a href="https://discover.umap-project.org/">Aide</a>
+        <form class="i18n_switch">
+          <select name="language">
+            <option value="am-et">
+              አማርኛ (am-et)
+            </option>
+            <option value="ar">
+              العربيّة (ar)
+            </option>
+          </select>
+        </form>
+      </footer>
       <h3>Forms</h3>
+      <h4>Buttons</h4>
+      <a href="" class="button button-primary">Créer une carte</a>
+      <div class="ds-wrapper">
+        <div class="edit-enable leaflet-control"><button type="button" title="Éditer">Éditer</button></div>
+      </div>
+      <div class="ds-wrapper dark">
+        <input type="button" class="button primary" name="submit" value="Importer des données">
+      </div>
+      <div class="ds-wrapper dark">
+        <input type="button" class="button primary" name="submit" value="Importer des données" disabled="">
+      </div>
+      <h4>Search form</h4>
+      <div class="row">
+        <form class="search-form flex-break">
+          <input name="q" type="search" placeholder="Chercher des cartes" aria-label="Chercher des cartes" value="">
+          <select name="tags">
+            <option value="">Toutes catégories</option>
+            <option value="services">Accès aux services</option>
+            <option value="numerique">Numérique et innovation</option>
+          </select>
+          <input type="submit" value="Chercher">
+        </form>
+      </div>
       <h4>Copiable link</h4>
       <div class="copiable-input">
         <label>Lien vers la carte<input type="text" readonly value="http://example.org"></label><button class="icon icon-24 icon-copy" title="copier" type="button"></button>
@@ -62,10 +206,10 @@
           <option value="databrowser">Explorateur : données</option>
         </select>
       </div>
-      <h4>You want it darker…</h4>
+      <h3>You want it darker…</h3>
+      <h4>Panel</h4>
       <div class="panel dark full on">
         <h3><i class="icon icon-16 icon-settings" title=""></i><span>Titre avec icône</span></h3>
-
         <details open="">
           <summary><span>Options d'interface</span></summary>
           <fieldset>
@@ -115,6 +259,77 @@
             </div>
           </fieldset>
         </details>
+        <details open="">
+          <summary><span>Propriétés par défaut</span></summary>
+          <fieldset>
+            <form>
+              <div class="umap-field-zoomTo formbox inheritable">
+                <div class="header" data-ref="header">
+                  <label title="Niveau de zoom par défaut" data-ref="label" data-help="zoomTo">Niveau de zoom par défaut<button class="umap-help-button" type="button" title="Aide">Aide</button></label>
+                  <span class="actions show-on-defined" data-ref="actions"></span>
+                  <span class="buttons" data-ref="buttons">
+                    <button type="button" class="button undefine" data-ref="undefine">effacer</button>
+                    <button type="button" class="button define" data-ref="define">définir</button>
+                  </span>
+                </div>
+                <div class="show-on-defined" data-ref="container">
+                  <input type="number" name="zoomTo" placeholder="Hériter" data-ref="input">
+                  <small class="help-text" data-ref="helpText" hidden=""></small>
+                </div>
+              </div>
+              <div class="formbox umap-field-easing with-switch" data-ref="container">
+                <label title="" data-ref="label" data-help="" hidden=""></label>
+                <input type="checkbox" name="easing" data-ref="input" class="switch" id="1744915095061.easing"><label title="Transitions animées" for="1744915095061.easing" data-ref="customLabel" data-help="">Transitions animées</label>
+                <small class="help-text" data-ref="helpText" hidden=""></small>
+              </div>
+              <div class="umap-field-labelKey formbox inheritable">
+                <div class="header" data-ref="header">
+                  <label title="Clé pour le libellé" data-ref="label" data-help="labelKey">Clé pour le libellé<button class="umap-help-button" type="button" title="Aide">Aide</button></label>
+                  <span class="actions show-on-defined" data-ref="actions"></span>
+                  <span class="buttons" data-ref="buttons">
+                    <button type="button" class="button undefine" data-ref="undefine">effacer</button>
+                    <button type="button" class="button define" data-ref="define">définir</button>
+                  </span>
+                </div>
+                <div class="show-on-defined" data-ref="container">
+                  <div class="blur-container">
+                    <input type="text" name="labelKey" placeholder="Par défaut : name" data-ref="input" class="blur" list="cyNDY"><button type="button">✔</button><datalist id="cyNDY"></datalist>
+                  </div>
+                  <small class="help-text" data-ref="helpText" hidden=""></small>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+        </details>
+      </div>
+      <h4>Importers</h4>
+      <div class="umap-dialog window importers dark">
+        <form>
+          <ul class="buttons">
+            <li><i class="icon icon-16 icon-close" data-close=""></i></li>
+            <li hidden="" data-ref="back"><i class="icon icon-16 icon-back"></i></li>
+          </ul>
+          <h3 data-ref="message" id="m9low1eq" hidden=""></h3>
+          <fieldset data-ref="fieldset" role="document">
+            <div data-ref="template">
+              <div>
+                <h3><i class="icon icon-16 icon-magic"></i>Assistants d'import</h3>
+                <p>Les assistants d'import vont renseigner le champ URL pour vous.</p>
+                <ul class="grid-container by4" data-ref="grid">
+                  <li><button type="button" class="cadastrefr">Cadastre France</button></li>
+                  <li><button type="button" class="communesfr">Communes France</button></li>
+                  <li><button type="button" class="datasets">Contours nationaux</button></li>
+                  <li><button type="button" class="geodatamine">GéoDataMine (thèmes OSM)</button></li>
+                  <li><button type="button" class="overpass">Overpass</button></li>
+                </ul>
+              </div>
+            </div>
+          </fieldset>
+          <menu>
+            <button type="button" data-ref="cancel" data-close="" value="cancel" hidden="">false</button>
+            <button type="submit" class="button" data-ref="accept" value="accept" hidden="">false</button>
+          </menu>
+        </form>
       </div>
       <h3>Colors</h3>
       <div class="grid-container row colors-container"></div>
@@ -130,7 +345,7 @@
     for (const style of styles) {
       if (style.startsWith("--") && style.includes("color")) {
         const value = styles.getPropertyValue(style)
-        html += `<div style="border-color: ${value};">${style}</div>`
+        html += `<div style="border-color: ${value};">${style} (${value})</div>`
       }
     }
     const template = document.createElement('template')
