@@ -298,7 +298,7 @@ class Map(NamedModel):
     def generate_umapjson(self, request, include_data=True):
         umapjson = self.settings
         umapjson["type"] = "umap"
-        umapjson["properties"]["is_template"] = False
+        umapjson["properties"].pop("is_template", None)
         umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
         datalayers = []
         for datalayer in self.datalayers:
