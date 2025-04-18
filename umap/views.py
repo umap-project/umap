@@ -402,9 +402,9 @@ class UserDownload(DetailView, SearchMixin):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = Map.private.for_user(self.object)
-        qs = qs.filter(id__in=self.request.GET.getlist("map_id"))
-        return qs.order_by("-modified_at")
+        qs = Map.private.filter(id__in=self.request.GET.getlist("map_id"))
+        qsu = qs.for_user(self.object)
+        return qsu.order_by("-modified_at")
 
     def render_to_response(self, context, *args, **kwargs):
         zip_buffer = io.BytesIO()
