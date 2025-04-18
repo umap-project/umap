@@ -4,26 +4,22 @@ import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
-const BOUNDARY_TYPES = {
-  admin_6: 'département',
-  admin_7: 'pays (loi Voynet)',
-  admin_8: 'commune',
-  admin_9: 'quartier, hameau, arrondissement',
-  political: 'canton',
-  local_authority: 'EPCI',
-}
-
 const TEMPLATE = `
-  <h3>${translate('Load template')}</h3>
-  <p>${translate('GeoDataMine: thematic data from OpenStreetMap')}.</p>
-  <div class="formbox">
-    <select name="theme">
-      <option value="">${translate('Choose a template')}</option>
-    </select>
-    <label>
-      <input type="checkbox" name="include_data" />
-      ${translate('Include template data, if any')}
-    </label>
+  <div>
+    <h3>${translate('Load map template')}</h3>
+    <p>${translate('Use a template to initialize your map')}.</p>
+    <div class="formbox">
+      <div class="flat-tabs" data-ref="tabs">
+        <button type="button" class="flat" data-value="mine" data-ref="mine">${translate('My templates')}</button>
+        <button type="button" class="flat" data-value="staff">${translate('Staff templates')}</button>
+        <button type="button" class="flat" data-value="community">${translate('Community templates')}</button>
+      </div>
+      <div data-ref="body" class="body"></div>
+      <label>
+        <input type="checkbox" name="include_data" />
+        ${translate('Include template data, if any')}
+      </label>
+    </div>
   </div>
 `
 
@@ -35,28 +31,50 @@ export class Importer {
   }
 
   async open(importer) {
-    const container = DomUtil.create('div')
-    container.innerHTML = TEMPLATE
-    const select = container.querySelector('select')
+    const [root, { tabs, include_data, body, mine }] =
+      Utils.loadTemplateWithRefs(TEMPLATE)
     const uri = this.umap.urls.get('template_list')
-    const [data, response, error] = await this.umap.server.get(uri)
-    if (!error) {
-      for (const template of data.templates) {
-        DomUtil.element({
-          tagName: 'option',
-          value: template.id,
-          textContent: template.name,
-          parent: select,
-        })
+    const userIsAuth = Boolean(this.umap.properties.user?.id)
+    const defaultTab = userIsAuth ? 'mine' : 'staff'
+    mine.hidden = !userIsAuth
+
+    const loadTemplates = async (source) => {
+      const [data, response, error] = await this.umap.server.get(
+        `${uri}?source=${source}`
+      )
+      if (!error) {
+        body.innerHTML = ''
+        for (const template of data.templates) {
+          const item = Utils.loadTemplate(
+            `<dl>
+              <dt><label><input type="radio" value="${template.id}" name="template" />${template.name}</label></dt>
+              <dd>${template.description}</dd>
+            </dl>`
+          )
+          body.appendChild(item)
+        }
+        tabs.querySelectorAll('button').forEach((el) => el.classList.remove('on'))
+        tabs.querySelector(`[data-value="${source}"]`).classList.add('on')
+      } else {
+        console.error(response)
       }
-    } else {
-      console.error(response)
     }
+    loadTemplates(defaultTab)
+    tabs
+      .querySelectorAll('button')
+      .forEach((el) =>
+        el.addEventListener('click', () => loadTemplates(el.dataset.value))
+      )
     const confirm = (form) => {
+      console.log(form)
+      if (!form.template) {
+        Alert.error(translate('You must select a template.'))
+        return false
+      }
       let url = this.umap.urls.get('map_download', {
-        map_id: select.options[select.selectedIndex].value,
+        map_id: form.template,
       })
-      if (!container.querySelector('[name=include_data]').checked) {
+      if (!form.include_data) {
         url = `${url}?include_data=0`
       }
       importer.url = url
@@ -67,7 +85,7 @@ export class Importer {
 
     importer.dialog
       .open({
-        template: container,
+        template: root,
         className: `${this.id} importer dark`,
         accept: translate('Use this template'),
         cancel: false,
