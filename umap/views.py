@@ -138,9 +138,7 @@ class PublicMapsMixin(object):
         return maps
 
     def get_highlighted_maps(self):
-        staff = User.objects.filter(is_staff=True)
-        stars = Star.objects.filter(by__in=staff).values("map")
-        qs = Map.public.filter(pk__in=stars)
+        qs = Map.public.starred_by_staff()
         maps = qs.order_by("-modified_at")
         return maps
 
@@ -1459,9 +1457,14 @@ class TemplateList(ListView):
     model = Map
 
     def render_to_response(self, context, **response_kwargs):
-        if self.request.user.is_authenticated:
+        source = self.request.GET.get("source")
+        if source == "mine":
             qs = Map.private.filter(is_template=True).for_user(self.request.user)
-        else:
+        elif source == "community":
             qs = Map.public.filter(is_template=True)
-        templates = [{"id": m.id, "name": m.name} for m in qs]
+        elif source == "staff":
+            qs = Map.public.starred_by_staff().filter(is_template=True)
+        templates = [
+            {"id": m.id, "name": m.name, "description": m.description} for m in qs
+        ]
         return simple_json_response(templates=templates)

@@ -9,6 +9,13 @@ class PublicManager(models.Manager):
             .filter(share_status=self.model.PUBLIC)
         )
 
+    def starred_by_staff(self):
+        from .models import Star, User
+
+        staff = User.objects.filter(is_staff=True)
+        stars = Star.objects.filter(by__in=staff).values("map")
+        return self.get_queryset().filter(pk__in=stars)
+
 
 class PrivateQuerySet(models.QuerySet):
     def for_user(self, user):
