@@ -435,6 +435,63 @@ def test_import_geometry_collection(live_server, page, tilelayer):
     expect(paths).to_have_count(2)
 
 
+def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
+    data = {
+        "type": "Feature",
+        "properties": {"name": "foobar"},
+        "geometry": {
+            "type": "GeometryCollection",
+            "geometries": [
+                {"type": "Point", "coordinates": [-80.6608, 35.0493]},
+                {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [-80.6645, 35.0449],
+                            [-80.6634, 35.0460],
+                            [-80.6625, 35.0455],
+                            [-80.6638, 35.0442],
+                            [-80.6645, 35.0449],
+                        ]
+                    ],
+                },
+                {
+                    "type": "LineString",
+                    "coordinates": [
+                        [-80.66237, 35.05950],
+                        [-80.66269, 35.05926],
+                        [-80.66284, 35.05893],
+                        [-80.66308, 35.05833],
+                        [-80.66385, 35.04387],
+                        [-80.66303, 35.04371],
+                    ],
+                },
+            ],
+        },
+    }
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator("path")
+    expect(markers).to_have_count(0)
+    expect(paths).to_have_count(0)
+    expect(layers).to_have_count(0)
+    button = page.get_by_title("Import data")
+    expect(button).to_be_visible()
+    button.click()
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(json.dumps(data))
+    page.locator('select[name="format"]').select_option("geojson")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer has been created
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(2)
+    # Geometries are treated as separate features.
+    expect(page.get_by_text("foobar")).to_have_count(3)
+
+
 def test_import_multipolygon(live_server, page, tilelayer):
     data = {
         "type": "Feature",

@@ -492,8 +492,19 @@ export class DataLayer {
     const features = []
     this.sortFeatures(collection)
     for (const featureJson of collection) {
-      const feature = this.makeFeature(featureJson, sync)
-      if (feature) features.push(feature)
+      if (featureJson.geometry?.type === 'GeometryCollection') {
+        for (const geometry of featureJson.geometry.geometries) {
+          const feature = this.makeFeature({
+            type: 'Feature',
+            geometry,
+            properties: featureJson.properties,
+          })
+          if (feature) features.push(feature)
+        }
+      } else {
+        const feature = this.makeFeature(featureJson, sync)
+        if (feature) features.push(feature)
+      }
     }
     return features
   }
