@@ -1465,6 +1465,12 @@ class TemplateList(ListView):
         elif source == "staff":
             qs = Map.public.starred_by_staff().filter(is_template=True)
         templates = [
-            {"id": m.id, "name": m.name, "description": m.description} for m in qs
+            {
+                "id": m.id,
+                "name": m.name,
+                "description": m.description,
+                "url": m.get_absolute_url(),
+            }
+            for m in qs
         ]
         return simple_json_response(templates=templates)
