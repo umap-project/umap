@@ -48,7 +48,7 @@ export class Importer {
           const item = Utils.loadTemplate(
             `<dl>
               <dt><label><input type="radio" value="${template.id}" name="template" />${template.name}</label></dt>
-              <dd>${template.description}</dd>
+              <dd>${template.description}&nbsp;<a href="${template.url}" target="_blank">${translate('Open')}</a></dd>
             </dl>`
           )
           body.appendChild(item)
