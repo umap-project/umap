@@ -1,5 +1,5 @@
 # Force rtfd to use a recent version of mkdocs
 mkdocs==1.6.1
 pymdown-extensions==10.14.3
-mkdocs-material==9.6.11
+mkdocs-material==9.6.12
 mkdocs-static-i18n==1.3.0
