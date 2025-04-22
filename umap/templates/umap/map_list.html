@@ -12,14 +12,14 @@
             {% endfor %}
           </ul>
         {% endif %}
-        <h3>{{ map_inst.name }}</h3>
+        <h3>{% if map_inst.is_template %}<mark class="template-map">[{% trans "template" %}]</mark>{% endif %} {{ map_inst.name }}</h3>
         {% with author=map_inst.get_author %}
           {% if author %}
             <p>{% trans "by" %} <a href="{{ author.get_url }}">{{ author }}</a></p>
           {% endif %}
         {% endwith %}
       </div>
-      <a class="main" href="{{ map_inst.get_absolute_url }}">{% translate "See the map" %}</a>
+      <a class="main" href="{{ map_inst.get_absolute_url }}">{% if map_inst.is_template %}{% translate "See the template" %}{% else %}{% translate "See the map" %}{% endif %}</a>
     </hgroup>
   </div>
 {% endfor %}
