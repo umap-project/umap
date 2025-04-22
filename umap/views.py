@@ -1471,6 +1471,6 @@ class TemplateList(ListView):
                 "description": m.description,
                 "url": m.get_absolute_url(),
             }
-            for m in qs
+            for m in qs.order_by("-modified_at")
         ]
         return simple_json_response(templates=templates)
