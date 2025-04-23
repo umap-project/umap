@@ -1181,7 +1181,7 @@ export default class Umap {
     }
     this._advancedActions(container)
 
-    this.editPanel.open({
+    return this.editPanel.open({
       content: container,
       className: 'dark',
       highlight: 'settings',
