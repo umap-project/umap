@@ -65,18 +65,6 @@ L.DomUtil.createButton = (className, container, content, callback, context) => {
   return el
 }
 
-L.DomUtil.createLink = (className, container, content, url, target, title) => {
-  const el = L.DomUtil.add('a', className, container, content)
-  el.href = url
-  if (target) {
-    el.target = target
-  }
-  if (title) {
-    el.title = title
-  }
-  return el
-}
-
 L.DomUtil.createIcon = (parent, className, title, size = 16) => {
   return L.DomUtil.element({
     tagName: 'i',
