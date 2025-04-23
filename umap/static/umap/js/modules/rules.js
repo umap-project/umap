@@ -194,6 +194,7 @@ export default class Rules {
   }
 
   onReorder(src, dst, initialIndex, finalIndex) {
+    const oldRules = Utils.CopyJSON(this._umap.properties.rules || {})
     const moved = this.rules.find((rule) => stamp(rule) === +src.dataset.id)
     const reference = this.rules.find((rule) => stamp(rule) === +dst.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
@@ -209,6 +210,7 @@ export default class Rules {
     this.rules.splice(newIdx, 0, moved)
     this._umap.render(['rules'])
     this.commit()
+    this._umap.sync.update('properties.rules', this._umap.properties.rules, oldRules)
   }
 
   edit(container) {
