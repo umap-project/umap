@@ -7,6 +7,7 @@ import {
 import { translate } from './i18n.js'
 import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
+import * as Utils from './utils.js'
 
 export class BaseAutocomplete {
   constructor(parent, options) {
@@ -291,10 +292,9 @@ class BaseServerAjax extends BaseAjax {
 export const SingleMixin = (Base) =>
   class extends Base {
     initSelectedContainer() {
-      return DomUtil.after(
-        this.input,
-        DomUtil.element({ tagName: 'div', className: 'umap-singleresult' })
-      )
+      const el = Utils.loadTemplate('<div class="umap-singleresult"></div>')
+      this.input.parentNode.insertBefore(el, this.input.nextSibling)
+      return el
     }
 
     displaySelected(result) {
@@ -322,10 +322,9 @@ export const SingleMixin = (Base) =>
 export const MultipleMixin = (Base) =>
   class extends Base {
     initSelectedContainer() {
-      return DomUtil.after(
-        this.input,
-        DomUtil.element({ tagName: 'ul', className: 'umap-multiresult' })
-      )
+      const el = Utils.loadTemplate('<ul class="umap-multiresult"></ul>')
+      this.input.parentNode.insertBefore(el, this.input.nextSibling)
+      return el
     }
 
     displaySelected(result) {

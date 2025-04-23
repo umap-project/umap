@@ -65,18 +65,6 @@ L.DomUtil.createButton = (className, container, content, callback, context) => {
   return el
 }
 
-L.DomUtil.createLink = (className, container, content, url, target, title) => {
-  const el = L.DomUtil.add('a', className, container, content)
-  el.href = url
-  if (target) {
-    el.target = target
-  }
-  if (title) {
-    el.title = title
-  }
-  return el
-}
-
 L.DomUtil.createIcon = (parent, className, title, size = 16) => {
   return L.DomUtil.element({
     tagName: 'i',
@@ -137,16 +125,6 @@ L.DomUtil.element = ({ tagName, parent, ...attrs }) => {
   if (typeof parent !== 'undefined') {
     parent.appendChild(el)
   }
-  return el
-}
-
-L.DomUtil.before = (target, el) => {
-  target.parentNode.insertBefore(el, target)
-  return el
-}
-
-L.DomUtil.after = (target, el) => {
-  target.parentNode.insertBefore(el, target.nextSibling)
   return el
 }
 
@@ -214,24 +192,6 @@ L.DomUtil.contrastedColor = (el, bgcolor) => {
   if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out
 }
-L.DomEvent.once = (el, types, fn, context) => {
-  // cf https://github.com/Leaflet/Leaflet/pull/3528#issuecomment-134551575
-
-  if (typeof types === 'object') {
-    for (const type in types) {
-      L.DomEvent.once(el, type, types[type], fn)
-    }
-    return L.DomEvent
-  }
-
-  const handler = L.bind(() => {
-    L.DomEvent.off(el, types, fn, context).off(el, types, handler, context)
-  }, L.DomEvent)
-
-  // add a listener that's executed once and removed after that
-  return L.DomEvent.on(el, types, fn, context).on(el, types, handler, context)
-}
-
 L.LatLng.prototype.isValid = function () {
   return (
     Number.isFinite(this.lat) &&
