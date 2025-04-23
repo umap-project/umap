@@ -128,16 +128,6 @@ L.DomUtil.element = ({ tagName, parent, ...attrs }) => {
   return el
 }
 
-L.DomUtil.before = (target, el) => {
-  target.parentNode.insertBefore(el, target)
-  return el
-}
-
-L.DomUtil.after = (target, el) => {
-  target.parentNode.insertBefore(el, target.nextSibling)
-  return el
-}
-
 // From https://gist.github.com/Accudio/b9cb16e0e3df858cef0d31e38f1fe46f
 // convert colour in range 0-255 to the modifier used within luminance calculation
 L.DomUtil.colourMod = (colour) => {
