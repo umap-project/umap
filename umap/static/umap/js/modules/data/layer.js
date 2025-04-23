@@ -656,7 +656,7 @@ export class DataLayer {
   }
 
   edit() {
-    if (!this._umap.editEnabled || !this.isLoaded()) {
+    if (!this._umap.editEnabled) {
       return
     }
     const container = DomUtil.create('div', 'umap-layer-properties-container')
@@ -1116,7 +1116,7 @@ export class DataLayer {
 
   async save() {
     if (this.isDeleted) return await this.saveDelete()
-    if (!this.isLoaded()) return
+    if (!this.isRemoteLayer() && !this.isLoaded()) return
     const geojson = this.umapGeoJSON()
     const formData = new FormData()
     formData.append('name', this.options.name)
