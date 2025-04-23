@@ -1,4 +1,4 @@
-import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { AutocompleteDatalist } from './autocomplete.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
@@ -119,10 +119,9 @@ class Rule {
       'options.smoothFactor',
       'options.dashArray',
     ]
-    const container = DomUtil.create('div')
     const builder = new MutatingForm(this, options)
-    const defaultShapeProperties = DomUtil.add('div', '', container)
-    defaultShapeProperties.appendChild(builder.build())
+    const container = document.createElement('div')
+    container.appendChild(builder.build())
     const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
     const properties = this._umap.allProperties()
     autocomplete.suggestions = properties
@@ -140,40 +139,28 @@ class Rule {
     this._umap.editPanel.open({ content: container, highlight: 'settings' })
   }
 
-  renderToolbox(row) {
-    row.classList.toggle('off', !this.active)
-    const toggle = DomUtil.createButtonIcon(
-      row,
-      'icon-eye',
-      translate('Show/hide layer')
-    )
-    const edit = DomUtil.createButtonIcon(
-      row,
-      'icon-edit show-on-edit',
-      translate('Edit')
-    )
-    const remove = DomUtil.createButtonIcon(
-      row,
-      'icon-delete show-on-edit',
-      translate('Delete layer')
-    )
-    DomEvent.on(edit, 'click', this.edit, this)
-    DomEvent.on(
-      remove,
-      'click',
-      function () {
-        if (!confirm(translate('Are you sure you want to delete this rule?'))) return
-        this._delete()
-        this._umap.editPanel.close()
-      },
-      this
-    )
-    DomUtil.add('span', '', row, this.condition || translate('empty rule'))
-    DomUtil.createIcon(row, 'icon-drag', translate('Drag to reorder'))
-    row.dataset.id = stamp(this)
-    DomEvent.on(toggle, 'click', () => {
+  renderToolbox(ul) {
+    const template = `
+      <li data-id="${stamp(this)}" class="orderable">
+        <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
+        <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
+        <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
+        <span>${this.condition || translate('empty rule')}</span>
+        <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+      </li>
+    `
+    const [li, { toggle, edit, remove }] = Utils.loadTemplateWithRefs(template)
+    ul.appendChild(li)
+    li.classList.toggle('off', !this.active)
+    edit.addEventListener('click', () => this.edit())
+    remove.addEventListener('click', () => {
+      if (!confirm(translate('Are you sure you want to delete this rule?'))) return
+      this._delete()
+      this._umap.editPanel.close()
+    })
+    toggle.addEventListener('click', () => {
       this.active = !this.active
-      row.classList.toggle('off', !this.active)
+      li.classList.toggle('off', !this.active)
       this._umap.render(['rules'])
     })
   }
@@ -207,8 +194,8 @@ export default class Rules {
   }
 
   onReorder(src, dst, initialIndex, finalIndex) {
-    const moved = this.rules.find((rule) => stamp(rule) === src.dataset.id)
-    const reference = this.rules.find((rule) => stamp(rule) === dst.dataset.id)
+    const moved = this.rules.find((rule) => stamp(rule) === +src.dataset.id)
+    const reference = this.rules.find((rule) => stamp(rule) === +dst.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
     let referenceIdx = this.rules.indexOf(reference)
     const minIndex = Math.min(movedIdx, referenceIdx)
@@ -225,17 +212,22 @@ export default class Rules {
   }
 
   edit(container) {
-    const body = DomUtil.createFieldset(container, translate('Conditional style rules'))
+    const template = `
+      <details>
+        <summary>${translate('Conditional style rules')}</summary>
+        <fieldset><ul data-ref=ul></ul></fieldset>
+        <button class="umap-add" type="button" data-ref=add>${translate('Add rule')}</button>
+      </details>
+    `
+    const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
     if (this.rules.length) {
-      const ul = DomUtil.create('ul', '', body)
       for (const rule of this.rules) {
-        rule.renderToolbox(DomUtil.create('li', 'orderable', ul))
+        rule.renderToolbox(ul)
       }
-
       const orderable = new Orderable(ul, this.onReorder.bind(this))
     }
-
-    DomUtil.createButton('umap-add', body, translate('Add rule'), this.addRule, this)
+    add.addEventListener('click', () => this.addRule())
+    container.appendChild(body)
   }
 
   addRule() {

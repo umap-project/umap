@@ -281,10 +281,10 @@ def test_can_deactive_rule_from_list(live_server, page, openmap):
     page.get_by_role("button", name="Edit").click()
     page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Conditional style rules").click()
-    page.get_by_role("button", name="Show/hide layer").click()
+    page.get_by_role("button", name="Toggle rule").click()
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 0
-    page.get_by_role("button", name="Show/hide layer").click()
+    page.get_by_role("button", name="Toggle rule").click()
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
 
