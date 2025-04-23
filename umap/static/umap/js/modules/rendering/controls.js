@@ -99,7 +99,10 @@ const BaseButton = Control.extend({
       </div>
     `
     const [container, { button }] = Utils.loadTemplateWithRefs(template)
-    button.addEventListener('click', () => this.onClick())
+    button.addEventListener('click', (event) => {
+      event.stopPropagation()
+      this.onClick()
+    })
     button.addEventListener('dblclick', (event) => {
       event.stopPropagation()
     })

@@ -5,6 +5,7 @@ import { translate } from './i18n.js'
 import * as Icon from './rendering/icon.js'
 import ContextMenu from './ui/contextmenu.js'
 import * as Utils from './utils.js'
+import { SCHEMA } from './schema.js'
 
 export default class Browser {
   constructor(umap, leafletMap) {
@@ -21,35 +22,24 @@ export default class Browser {
   addFeature(feature, parent) {
     if (feature.isFiltered()) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
-    const row = DomUtil.create('li', `${feature.getClassName()} feature`)
-    const zoom_to = DomUtil.createButtonIcon(
-      row,
-      'icon-zoom',
-      translate('Bring feature to center')
-    )
-    const edit = DomUtil.createButtonIcon(
-      row,
-      'show-on-edit icon-edit',
-      translate('Edit this feature')
-    )
-    const del = DomUtil.createButtonIcon(
-      row,
-      'show-on-edit icon-delete',
-      translate('Delete this feature')
-    )
-    const colorBox = DomUtil.create(
-      'i',
-      `icon icon-16 icon-${feature.getClassName()} feature-color`,
-      row
-    )
-    const title = DomUtil.create('span', 'feature-title', row)
+    const template = `
+      <li class="feature ${feature.getClassName()}">
+        <button class="icon icon-16 icon-zoom" title="${translate('Bring feature to center')}" data-ref=zoom></button>
+        <button class="icon icon-16 show-on-edit icon-edit" title="${translate('Edit this feature')}" data-ref=edit></button>
+        <button class="icon icon-16 show-on-edit icon-delete" title="${translate('Delete this feature')}" data-ref=remove></button>
+        <i class="icon icon-16 icon-${feature.getClassName()} feature-color" data-ref=colorBox></i>
+        <span class="feature-title" data-ref=label></span>
+      </li>
+    `
+    const [row, { zoom, edit, remove, colorBox, label }] =
+      Utils.loadTemplateWithRefs(template)
+    label.textContent = label.title = feature.getDisplayName() || '—'
     const symbol = feature._getIconUrl
       ? Icon.formatUrl(feature._getIconUrl(), feature)
       : null
-    title.textContent = title.title = feature.getDisplayName() || '—'
     const bgcolor = feature.getPreviewColor()
     colorBox.style.backgroundColor = bgcolor
-    if (symbol && symbol !== U.SCHEMA.iconUrl.default) {
+    if (symbol && symbol !== SCHEMA.iconUrl.default) {
       const icon = Icon.makeElement(symbol, colorBox)
       Icon.setContrast(icon, colorBox, symbol, bgcolor)
     } else if (DomUtil.contrastedColor(colorBox, bgcolor)) {
@@ -58,10 +48,10 @@ export default class Browser {
     const viewFeature = (e) => {
       feature.zoomTo({ ...e, callback: () => feature.view() })
     }
-    DomEvent.on(zoom_to, 'click', viewFeature)
-    DomEvent.on(title, 'click', viewFeature)
-    DomEvent.on(edit, 'click', feature.edit, feature)
-    DomEvent.on(del, 'click', feature.del, feature)
+    zoom.addEventListener('click', viewFeature)
+    label.addEventListener('click', viewFeature)
+    edit.addEventListener('click', () => feature.edit())
+    remove.addEventListener('click', () => feature.del())
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(row)
@@ -75,45 +65,51 @@ export default class Browser {
   addDataLayer(datalayer, parent) {
     let className = `datalayer ${datalayer.getHidableClass()}`
     if (this.mode !== 'layers') className += ' show-list'
-    const container = DomUtil.create('div', className, parent)
-    const headline = DomUtil.create('h5', '', container)
-    container.id = this.datalayerId(datalayer)
-    const ul = DomUtil.create('ul', '', container)
+    const [container, { headline, toolbox, toggle, label }] =
+      Utils.loadTemplateWithRefs(`
+      <div class="${className}" id="${this.datalayerId(datalayer)}">
+        <h5 data-ref=headline>
+          <i class="icon icon-16 datalayer-toggle-list" data-ref=toggle></i>
+          <span data-ref=toolbox></span>
+          <span class="datalayer-name" data-id="${datalayer.id}" data-ref=label></span>
+          <span class="datalayer-counter"></span>
+        </h5>
+        <ul></ul>
+      </div>
+    `)
+    datalayer.renderToolbox(toolbox)
+    parent.appendChild(container)
+    const toggleList = () => parent.classList.toggle('show-list')
+    toggle.addEventListener('click', toggleList)
+    label.addEventListener('click', toggleList)
     this.updateDatalayer(datalayer)
   }
 
   updateDatalayer(datalayer) {
     // Compute once, but use it for each feature later.
     this.bounds = this._leafletMap.getBounds()
-    const parent = DomUtil.get(this.datalayerId(datalayer))
+    const id = this.datalayerId(datalayer)
+    const parent = document.getElementById(id)
     // Panel is not open
     if (!parent) return
     parent.classList.toggle('off', !datalayer.isVisible())
+    const label = parent.querySelector('.datalayer-name')
     const container = parent.querySelector('ul')
-    const headline = parent.querySelector('h5')
-    const toggleList = () => parent.classList.toggle('show-list')
-    headline.innerHTML = ''
-    const toggle = DomUtil.create('i', 'icon icon-16 datalayer-toggle-list', headline)
-    DomEvent.on(toggle, 'click', toggleList)
-    datalayer.renderToolbox(headline)
-    const name = DomUtil.create('span', 'datalayer-name', headline)
-    name.textContent = name.title = datalayer.options.name
-    DomEvent.on(name, 'click', toggleList)
     container.innerHTML = ''
     datalayer.eachFeature((feature) => this.addFeature(feature, container))
-
+    datalayer.propagate(['properties.name'])
     const total = datalayer.count()
     if (!total) return
     const current = container.querySelectorAll('li').length
     const count = total === current ? total : `${current}/${total}`
-    const counter = DomUtil.create('span', 'datalayer-counter', headline)
+    const counter = parent.querySelector('.datalayer-counter')
     counter.textContent = `(${count})`
     counter.title = translate(`Features in this layer: ${count}`)
   }
 
   toggleBadge() {
-    U.Utils.toggleBadge(this.filtersTitle, this.hasFilters())
-    U.Utils.toggleBadge('.umap-control-browse', this.hasFilters())
+    Utils.toggleBadge(this.filtersTitle, this.hasFilters())
+    Utils.toggleBadge('.umap-control-browse', this.hasFilters())
   }
 
   onFormChange() {
@@ -157,21 +153,51 @@ export default class Browser {
   open(mode) {
     // Force only if mode is known, otherwise keep current mode.
     if (mode) this.mode = mode
-    const container = DomUtil.create('div')
+    const template = `
+      <div>
+        <h3><i class="icon icon-16 icon-layers"></i>${translate('Data browser')}</h3>
+        <details class="filters" data-ref="details">
+          <summary data-ref=filtersTitle><i class="icon icon-16 icon-filters"></i>${translate('Filters')}</summary>
+          <fieldset>
+            <div data-ref=formContainer>
+            </div>
+            <button class="flat" type="button" data-ref=reset><i class="icon icon-16 icon-restore" title=""></i>${translate('Reset all')}</button>
+          </fieldset>
+        </details>
+        <div class="main-toolbox">
+          <i class="icon icon-16 icon-eye" title="${translate('show/hide all layers')}" data-ref="toggle"></i>
+          <i class="icon icon-16 icon-zoom" title="${translate('zoom to data extent')}" data-ref="fitBounds"></i>
+          <i class="icon icon-16 icon-download" title="${translate('download visible data')}" data-ref="download"></i>
+        </div>
+        <div data-ref=dataContainer></div>
+      </div>
+    `
+    const [
+      container,
+      {
+        details,
+        filtersTitle,
+        toggle,
+        fitBounds,
+        download,
+        dataContainer,
+        formContainer,
+        reset,
+      },
+    ] = Utils.loadTemplateWithRefs(template)
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
+    details.open = this.mode === 'filters'
+    toggle.addEventListener('click', () => this.toggleLayers())
+    fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
+    download.addEventListener('click', () => this.downloadVisible(download))
+    download.hidden = this._umap.getProperty('embedControl') === false
 
-    DomUtil.createTitle(container, translate('Data browser'), 'icon-layers')
-    this.formContainer = DomUtil.createFieldset(container, L._('Filters'), {
-      on: this.mode === 'filters',
-      className: 'filters',
-      icon: 'icon-filters',
-    })
-    this.filtersTitle = container.querySelector('summary')
+    this.filtersTitle = filtersTitle
+    this.dataContainer = dataContainer
+    this.formContainer = formContainer
     this.toggleBadge()
-    this.addMainToolbox(container)
-    this.dataContainer = DomUtil.create('div', '', container)
 
     let fields = [
       [
@@ -184,27 +210,19 @@ export default class Browser {
     builder.on('set', () => this.onFormChange())
     let filtersBuilder
     this.formContainer.appendChild(builder.build())
-    DomEvent.on(builder.form, 'reset', () => {
+    builder.form.addEventListener('reset', () => {
       window.setTimeout(builder.syncAll.bind(builder))
     })
     if (this._umap.properties.facetKey) {
       fields = this._umap.facets.build()
       filtersBuilder = new Form(this._umap.facets, fields)
       filtersBuilder.on('set', () => this.onFormChange())
-      DomEvent.on(filtersBuilder.form, 'reset', () => {
+      filtersBuilder.form.addEventListener('reset', () => {
         window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
       })
       this.formContainer.appendChild(filtersBuilder.build())
     }
-    const reset = DomUtil.createButton('flat', this.formContainer, '', () =>
-      this.resetFilters()
-    )
-    DomUtil.createIcon(reset, 'icon-restore')
-    DomUtil.element({
-      tagName: 'span',
-      parent: reset,
-      textContent: translate('Reset all'),
-    })
+    reset.addEventListener('click', () => this.resetFilters())
 
     this._umap.panel.open({
       content: container,
@@ -218,21 +236,6 @@ export default class Browser {
     for (const form of this.formContainer?.querySelectorAll('form') || []) {
       form.reset()
     }
-  }
-
-  addMainToolbox(container) {
-    const [toolbox, { toggle, fitBounds, download }] = Utils.loadTemplateWithRefs(`
-      <div class="main-toolbox">
-        <i class="icon icon-16 icon-eye" title="${translate('show/hide all layers')}" data-ref="toggle"></i>
-        <i class="icon icon-16 icon-zoom" title="${translate('zoom to data extent')}" data-ref="fitBounds"></i>
-        <i class="icon icon-16 icon-download" title="${translate('download visible data')}" data-ref="download"></i>
-      </div>
-    `)
-    container.appendChild(toolbox)
-    toggle.addEventListener('click', () => this.toggleLayers())
-    fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
-    download.addEventListener('click', () => this.downloadVisible(download))
-    download.hidden = this._umap.getProperty('embedControl') === false
   }
 
   downloadVisible(element) {
@@ -265,15 +268,13 @@ export default class Browser {
   }
 
   static backButton(umap) {
-    const button = DomUtil.createButtonIcon(
-      DomUtil.create('li', '', undefined),
-      'icon-back',
-      translate('Back to browser')
+    const button = Utils.loadTemplate(
+      `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
     )
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(button)
-    DomEvent.on(button, 'click', () => umap.openBrowser())
+    button.addEventListener('click', () => umap.openBrowser())
     return button
   }
 }

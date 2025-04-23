@@ -180,9 +180,9 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
     second_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(1)
     third_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(2)
-    assert "X Third" == first_listed_feature.text_content()
-    assert "Y Second" == second_listed_feature.text_content()
-    assert "Z First" == third_listed_feature.text_content()
+    assert "X Third" == first_listed_feature.text_content().strip()
+    assert "Y Second" == second_listed_feature.text_content().strip()
+    assert "Z First" == third_listed_feature.text_content().strip()
 
     # Change the default sortkey to be "key"
     page.get_by_role("button", name="Edit").click()
@@ -201,9 +201,9 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
     second_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(1)
     third_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(2)
-    assert "Z First" == first_listed_feature.text_content()
-    assert "Y Second" == second_listed_feature.text_content()
-    assert "X Third" == third_listed_feature.text_content()
+    assert "Z First" == first_listed_feature.text_content().strip()
+    assert "Y Second" == second_listed_feature.text_content().strip()
+    assert "X Third" == third_listed_feature.text_content().strip()
 
 
 def test_hover_tooltip_setting_should_be_persistent(live_server, map, page):

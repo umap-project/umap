@@ -130,6 +130,10 @@ export class DataLayer {
   }
 
   render(fields, builder) {
+    // Propagate will remove the fields it has already
+    // processed
+    fields = this.propagate(fields)
+
     const impacts = Utils.getImpactsFromSchema(fields)
 
     for (const impact of impacts) {
@@ -151,6 +155,29 @@ export class DataLayer {
           break
       }
     }
+  }
+
+  // This method does a targeted update of the UI,
+  // it whould be merged with `render`` method and the
+  // SCHEMA at some point
+  propagate(fields = []) {
+    const impacts = {
+      'properties.name': () => {
+        Utils.eachElement('.datalayer-name', (el) => {
+          if (el.dataset.id === this.id) {
+            el.textContent = this.getName()
+            el.title = this.getName()
+          }
+        })
+      },
+    }
+    for (const [field, impact] of Object.entries(impacts)) {
+      if (!fields.length || fields.includes(field)) {
+        impact()
+        fields = fields.filter((item) => item !== field)
+      }
+    }
+    return fields
   }
 
   showAtLoad() {

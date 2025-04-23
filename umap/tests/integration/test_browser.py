@@ -465,19 +465,19 @@ def test_main_toolbox_toggle_all_layers(live_server, map, page):
     expect(page.locator(".datalayer.off")).to_have_count(1)
 
     # Click on button
-    page.locator(".umap-browser [data-ref=toggle]").click()
+    page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should have hidden the two other layers
     expect(page.locator(".datalayer.off")).to_have_count(3)
     expect(markers).to_have_count(0)
 
     # Click again
-    page.locator(".umap-browser [data-ref=toggle]").click()
+    page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should shown all layers
     expect(page.locator(".datalayer.off")).to_have_count(0)
     expect(markers).to_have_count(3)
 
     # Click again
-    page.locator(".umap-browser [data-ref=toggle]").click()
+    page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should hidden again all layers
     expect(page.locator(".datalayer.off")).to_have_count(3)
     expect(markers).to_have_count(0)
