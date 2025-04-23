@@ -824,7 +824,7 @@ export default class Umap {
       `<button type="button">${translate('Use current center and zoom')}</button>`
     )
     button.addEventListener('click', () => {
-      this._setCenterAndZoom()
+      this.setCenterAndZoom()
       builder.fetchAll()
     })
     container.appendChild(form)
