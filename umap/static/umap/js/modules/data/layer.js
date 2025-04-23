@@ -1146,6 +1146,9 @@ export class DataLayer {
             await this._umap.saveAll()
           }
         )
+      } else {
+        console.debug(error)
+        Alert.error(translate('Cannot save layer, please try again in a few minutes.'))
       }
     } else {
       // Response contains geojson only if save has conflicted and conflicts have
