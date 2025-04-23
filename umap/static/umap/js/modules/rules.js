@@ -136,7 +136,21 @@ class Rule {
           .map((str) => `${value}${str || ''}`)
       }
     })
-    this._umap.editPanel.open({ content: container, highlight: 'settings' })
+    const backButton = Utils.loadTemplate(`
+      <button class="flat" type="button" data-ref="add">
+        <i class="icon icon-16 icon-back" title="${translate('Back to list')}"></i>
+      </button>`)
+    backButton.addEventListener('click', () =>
+      this._umap.edit().then(() => {
+        this._umap.editPanel.container.querySelector('details#rules').open = true
+      })
+    )
+
+    this._umap.editPanel.open({
+      content: container,
+      highlight: 'settings',
+      actions: [backButton],
+    })
   }
 
   renderToolbox(ul) {
@@ -213,10 +227,12 @@ export default class Rules {
 
   edit(container) {
     const template = `
-      <details>
+      <details id="rules">
         <summary>${translate('Conditional style rules')}</summary>
-        <fieldset><ul data-ref=ul></ul></fieldset>
-        <button class="umap-add" type="button" data-ref=add>${translate('Add rule')}</button>
+        <fieldset>
+          <ul data-ref=ul></ul>
+          <button class="umap-add" type="button" data-ref=add>${translate('Add rule')}</button>
+        </fieldset>
       </details>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
