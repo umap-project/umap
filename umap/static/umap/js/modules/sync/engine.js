@@ -225,13 +225,14 @@ export class SyncEngine {
     }
     for (const [obj, operations] of needSave.entries()) {
       const ok = await obj.save()
-      if (!ok) break
+      if (!ok) return false
       for (const operation of operations) {
         operation.dirty = false
       }
     }
     this.saved()
     this._undoManager.toggleState()
+    return true
   }
 
   saved() {
