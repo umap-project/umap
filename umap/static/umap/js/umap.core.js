@@ -192,24 +192,6 @@ L.DomUtil.contrastedColor = (el, bgcolor) => {
   if (bgcolor) _CACHE_CONSTRAST[bgcolor] = out
   return out
 }
-L.DomEvent.once = (el, types, fn, context) => {
-  // cf https://github.com/Leaflet/Leaflet/pull/3528#issuecomment-134551575
-
-  if (typeof types === 'object') {
-    for (const type in types) {
-      L.DomEvent.once(el, type, types[type], fn)
-    }
-    return L.DomEvent
-  }
-
-  const handler = L.bind(() => {
-    L.DomEvent.off(el, types, fn, context).off(el, types, handler, context)
-  }, L.DomEvent)
-
-  // add a listener that's executed once and removed after that
-  return L.DomEvent.on(el, types, fn, context).on(el, types, handler, context)
-}
-
 L.LatLng.prototype.isValid = function () {
   return (
     Number.isFinite(this.lat) &&
