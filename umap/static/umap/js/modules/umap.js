@@ -1512,12 +1512,17 @@ export default class Umap {
 
   editDatalayers() {
     if (!this.editEnabled) return
-    const container = DomUtil.create('div')
-    DomUtil.createTitle(container, translate('Manage layers'), 'icon-layers')
-    const ul = DomUtil.create('ul', '', container)
+    const template = `
+      <div>
+        <h3><i class="icon icon-16 icon-layers"></i>${translate('Manage layers')}</h3>
+        <ul data-ref=ul></ul>
+      </div>
+    `
+    const [container, { ul }] = Utils.loadTemplateWithRefs(template)
     this.eachDataLayerReverse((datalayer) => {
-      const row = DomUtil.create('li', 'orderable', ul)
-      DomUtil.createIcon(row, 'icon-drag', translate('Drag to reorder'))
+      const row = Utils.loadTemplate(
+        `<li class="orderable"><i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i></li>`
+      )
       datalayer.renderToolbox(row)
       const builder = new MutatingForm(
         datalayer,
@@ -1528,6 +1533,7 @@ export default class Umap {
       row.appendChild(form)
       row.classList.toggle('off', !datalayer.isVisible())
       row.dataset.id = datalayer.id
+      ul.appendChild(row)
     })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const movedLayer = this.datalayers[src.dataset.id]
