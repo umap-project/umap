@@ -695,7 +695,8 @@ export default class Umap {
     if (!this.isDirty) return
     if (this._defaultExtent) this._setCenterAndZoom()
     this.backup()
-    await this.sync.save()
+    const status = await this.sync.save()
+    if (!status) return
     // Do a blind render for now, as we are not sure what could
     // have changed, we'll be more subtil when we'll remove the
     // save action
