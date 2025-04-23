@@ -11,6 +11,17 @@ import {
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import DropControl from '../drop.js'
 import { translate } from '../i18n.js'
+import {
+  AttributionControl,
+  CaptionControl,
+  DataLayersControl,
+  EmbedControl,
+  EditControl,
+  HomeControl,
+  MoreControl,
+  PermanentCreditsControl,
+  TileLayerChooser,
+} from './controls.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
 
@@ -40,15 +51,15 @@ const ControlsMixin = {
     this._controls = {}
 
     if (this._umap.hasEditMode() && !this.options.noControl) {
-      new U.EditControl(this).addTo(this)
+      new EditControl(this).addTo(this)
     }
-    this._controls.home = new U.HomeControl(this._umap)
+    this._controls.home = new HomeControl(this._umap)
     this._controls.zoom = new Control.Zoom({
       zoomInTitle: translate('Zoom in'),
       zoomOutTitle: translate('Zoom out'),
     })
-    this._controls.datalayers = new U.DataLayersControl(this._umap)
-    this._controls.caption = new U.CaptionControl(this._umap)
+    this._controls.datalayers = new DataLayersControl(this._umap)
+    this._controls.caption = new CaptionControl(this._umap)
     this._controls.locate = new U.Locate(this, {
       strings: {
         title: translate('Center map on your location'),
@@ -69,8 +80,8 @@ const ControlsMixin = {
       },
     })
     this._controls.search = new U.SearchControl()
-    this._controls.embed = new Control.Embed(this._umap)
-    this._controls.tilelayersChooser = new U.TileLayerChooser(this)
+    this._controls.embed = new EmbedControl(this._umap)
+    this._controls.tilelayersChooser = new TileLayerChooser(this._umap)
     this._controls.editinosm = new Control.EditInOSM({
       position: 'topleft',
       widgetOptions: {
@@ -80,9 +91,9 @@ const ControlsMixin = {
       },
     })
     this._controls.measure = new L.MeasureControl().initHandler(this)
-    this._controls.more = new U.MoreControls()
+    this._controls.more = new MoreControl()
     this._controls.scale = L.control.scale()
-    this._controls.permanentCredit = new U.PermanentCreditsControl(this)
+    this._controls.permanentCredit = new PermanentCreditsControl(this)
     this._umap.drop = new DropControl(this._umap, this, this._container)
     this._controls.tilelayers = new U.TileLayerControl(this)
   },
@@ -93,7 +104,7 @@ const ControlsMixin = {
     }
     if (this.options.noControl) return
 
-    this._controls.attribution = new U.AttributionControl().addTo(this)
+    this._controls.attribution = new AttributionControl().addTo(this)
     if (this.options.miniMap) {
       this.whenReady(function () {
         if (this.selectedTilelayer) {

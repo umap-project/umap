@@ -96,26 +96,19 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     background-color: white;
     min-height: initial;
 }
-.leaflet-control.display-on-more,
-.umap-control-less {
+.leaflet-control.display-on-more {
     display: none;
 }
-.umap-control-more,
-.umap-control-less {
+.umap-control-more {
     background-image: url('./img/24-white.svg');
     background-position: -72px -402px;
-    text-indent: -9999px;
     margin-bottom: 0;
 }
-.umap-control-less {
+.umap-more-controls .umap-control-more {
     background-position: -108px -402px;
 }
-.umap-more-controls .display-on-more,
-.umap-more-controls .umap-control-less {
+.umap-more-controls .display-on-more {
     display: block;
-}
-.umap-more-controls .umap-control-more {
-    display: none;
 }
 .leaflet-control-embed [type="button"] {
     background-position: 0 -180px;

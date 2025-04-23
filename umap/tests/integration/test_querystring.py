@@ -63,5 +63,5 @@ def test_zoom_control(map, live_server, datalayer, page):
     expect(control).to_be_visible()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?zoomControl=null")
     expect(control).to_be_hidden()
-    page.get_by_title("More controls").click()
+    page.locator(".umap-control-more").click()
     expect(control).to_be_visible()

@@ -59,3 +59,16 @@
 .tooltip-accent li:last-of-type {
     margin-bottom: 0;
 }
+
+.umap-tooltip-container.tooltip-right:before {
+    right: 100%;
+    top: calc(50% - var(--arrow-size));
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: var(--tooltip-color);
+    border-width: var(--arrow-size);
+}

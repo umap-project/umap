@@ -4,6 +4,8 @@ export class Positioned {
       this.anchorTop(anchor)
     } else if (anchor && position === 'bottom') {
       this.anchorBottom(anchor)
+    } else if (anchor && position === 'right') {
+      this.anchorRight(anchor)
     } else {
       this.anchorAbsolute()
     }
@@ -12,6 +14,7 @@ export class Positioned {
   toggleClassPosition(position) {
     this.container.classList.toggle('tooltip-bottom', position === 'bottom')
     this.container.classList.toggle('tooltip-top', position === 'top')
+    this.container.classList.toggle('tooltip-right', position === 'right')
   }
 
   anchorTop(el) {
@@ -30,6 +33,16 @@ export class Positioned {
     this.setPosition({
       left: coords.left + coords.width / 2 - selfCoords.width / 2,
       top: coords.bottom + 11,
+    })
+  }
+
+  anchorRight(el) {
+    this.toggleClassPosition('right')
+    const coords = this.getPosition(el)
+    console.log(coords)
+    this.setPosition({
+      left: coords.right + 11,
+      top: coords.top,
     })
   }
 

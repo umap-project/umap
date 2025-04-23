@@ -107,7 +107,7 @@ export default class Umap {
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
 
     // Do not display in an iframe.
-    if (window.self !== window.top) {
+    if (this.isEmbed) {
       this.properties.homeControl = false
     }
 
@@ -256,6 +256,10 @@ export default class Umap {
     if (!this._modifiedAt || at > this._modifiedAt) {
       this._modifiedAt = at
     }
+  }
+
+  get isEmbed() {
+    return window.self !== window.top
   }
 
   setPropertiesFromQueryString() {
