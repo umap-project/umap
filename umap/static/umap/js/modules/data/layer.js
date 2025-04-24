@@ -295,6 +295,7 @@ export class DataLayer {
   }
 
   clear() {
+    // TODO do not startBatch for remoteData layer
     this.sync.startBatch()
     for (const feature of Object.values(this._features)) {
       feature.del()
@@ -637,11 +638,19 @@ export class DataLayer {
 
   del(sync = true) {
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
-    this.erase()
+    // TODO merge datalayer del and features del in same
+    // batch
+    this.clear()
     if (sync) {
       this.isDeleted = true
       this.sync.delete(oldValue)
     }
+    this.hide()
+    this.parentPane.removeChild(this.pane)
+    this._umap.onDataLayersChanged()
+    this.layer.onDelete(this._leafletMap)
+    this.propagateDelete()
+    this._leaflet_events_bk = this._leaflet_events
   }
 
   empty() {
@@ -657,16 +666,6 @@ export class DataLayer {
     const datalayer = this._umap.createDirtyDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
-  }
-
-  erase() {
-    this.hide()
-    this.parentPane.removeChild(this.pane)
-    this._umap.onDataLayersChanged()
-    this.layer.onDelete(this._leafletMap)
-    this.propagateDelete()
-    this._leaflet_events_bk = this._leaflet_events
-    this.clear()
   }
 
   redraw() {
@@ -1121,6 +1120,12 @@ export class DataLayer {
     }
   }
 
+  prepareOptions() {
+    const options = Utils.CopyJSON(this.options)
+    delete options.permissions
+    return JSON.stringify(options)
+  }
+
   async save() {
     if (this.isDeleted) return await this.saveDelete()
     if (!this.isRemoteLayer() && !this.isLoaded()) return
@@ -1129,7 +1134,7 @@ export class DataLayer {
     formData.append('name', this.options.name)
     formData.append('display_on_load', !!this.options.displayOnLoad)
     formData.append('rank', this.options.rank)
-    formData.append('settings', JSON.stringify(this.options))
+    formData.append('settings', this.prepareOptions())
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
