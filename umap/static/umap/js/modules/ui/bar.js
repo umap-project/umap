@@ -207,7 +207,7 @@ export class BottomBar extends WithTemplate {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
       if (!selected) return
-      this._umap.eachDataLayer((datalayer) => {
+      this._umap.datalayers.active().map((datalayer) => {
         datalayer.toggle(datalayer.id === selected)
       })
     })
@@ -228,7 +228,7 @@ export class BottomBar extends WithTemplate {
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const datalayers = this._umap.datalayersIndex.filter((d) => d.options.inCaption)
+    const datalayers = this._umap.datalayers.filter((d) => d.options.inCaption)
     if (datalayers.length < 2) {
       this.elements.layers.hidden = true
     } else {

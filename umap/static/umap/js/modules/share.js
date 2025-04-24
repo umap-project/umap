@@ -204,8 +204,8 @@ class IframeExporter {
       delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
-      this._umap.eachDataLayer((datalayer) => {
-        if (datalayer.isVisible() && datalayer.createdOnServer) {
+      this._umap.datalayers.visible().map((datalayer) => {
+        if (datalayer.createdOnServer) {
           datalayers.push(datalayer.id)
         }
       })

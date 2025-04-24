@@ -551,6 +551,7 @@ class DataLayer(NamedModel):
         if self.old_id:
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
+        metadata["rank"] = self.rank
         metadata["permissions"] = {"edit_status": self.edit_status}
         metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
         metadata["_referenceVersion"] = self.reference_version

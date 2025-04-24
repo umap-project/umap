@@ -68,9 +68,11 @@ export default class Caption extends Utils.WithTemplate {
       this.elements.description.hidden = true
     }
     this.elements.datalayersContainer.innerHTML = ''
-    this._umap.eachDataLayerReverse((datalayer) =>
-      this.addDataLayer(datalayer, this.elements.datalayersContainer)
-    )
+    this._umap.datalayers
+      .reverse()
+      .map((datalayer) =>
+        this.addDataLayer(datalayer, this.elements.datalayersContainer)
+      )
     this.addCredits()
     if (this._umap.properties.created_at) {
       const created_at = translate('created at {date}', {
@@ -85,7 +87,7 @@ export default class Caption extends Utils.WithTemplate {
     }
     this._umap.panel.open({ content: this.element }).then(() => {
       // Create the legend when the panel is actually on the DOM
-      this._umap.eachDataLayerReverse((datalayer) => datalayer.renderLegend())
+      this._umap.datalayers.reverse().map((datalayer) => datalayer.renderLegend())
       this._umap.propagate()
     })
   }

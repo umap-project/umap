@@ -327,7 +327,7 @@ export const LeafletMap = BaseMap.extend({
     } else if (this.options.defaultView === 'latest') {
       this._umap.onceDataLoaded(() => {
         if (!this._umap.hasData()) return
-        const datalayer = this._umap.firstVisibleDatalayer()
+        const datalayer = this._umap.datalayers.visible()[0]
         let feature
         if (datalayer) {
           const feature = datalayer.getFeatureByIndex(-1)
