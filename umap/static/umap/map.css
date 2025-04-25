@@ -561,13 +561,13 @@ a.umap-control-caption,
 .umap-browser.dark .datalayer ul {
     border: 1px solid #232729;
 }
-.umap-browser summary {
+.umap-browser .datalayer summary {
     margin-bottom: 0;
     overflow: hidden;
     padding-inline-start: 5px;
     height: 30px;
-    line-height: 30px;
     background-color: var(--color-lightGray);
+    font-weight: bold;
 }
 .umap-browser .off summary {
     color: #b3b3b3;
