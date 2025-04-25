@@ -125,6 +125,20 @@ export class DataLayer {
     return `datalayer-${stamp(this)}`
   }
 
+  get rank() {
+    // Make sure we always have a valid rank. Undefined rank may happen
+    // after importing an old umap backup, and not touching the layers
+    // after that.
+    if (this.options.rank === undefined) {
+      this.options.rank = this.getDOMOrder()
+    }
+    return this.options.rank
+  }
+
+  set rank(value) {
+    this.options.rank = value
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
@@ -1132,7 +1146,7 @@ export class DataLayer {
     const formData = new FormData()
     formData.append('name', this.options.name)
     formData.append('display_on_load', !!this.options.displayOnLoad)
-    formData.append('rank', this.options.rank)
+    formData.append('rank', this.rank)
     formData.append('settings', this.prepareOptions())
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })

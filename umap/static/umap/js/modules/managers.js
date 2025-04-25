@@ -5,7 +5,7 @@ export class DataLayerManager extends Object {
   active() {
     return Object.values(this)
       .filter((datalayer) => !datalayer.isDeleted)
-      .sort((a, b) => a.options.rank > b.options.rank)
+      .sort((a, b) => a.rank > b.rank)
   }
   reverse() {
     return this.active().reverse()
