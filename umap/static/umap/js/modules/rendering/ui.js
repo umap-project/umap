@@ -109,7 +109,6 @@ const PointMixin = {
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
     this.on('dragend', (event) => {
-      this.isDirty = true
       this.feature.edit(event)
     })
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)

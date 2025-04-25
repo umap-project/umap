@@ -159,7 +159,6 @@ U.Search = L.PhotonSearch.extend({
       event.stopPropagation()
       const datalayer = this.map._umap.defaultEditDataLayer()
       const marker = datalayer.makeFeature(feature)
-      marker.isDirty = true
       marker.edit()
     })
     geom.addEventListener('mousedown', async (event) => {
@@ -300,13 +299,7 @@ U.Editable = L.Editable.extend({
       if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
     })
     this.on('editable:drawing:commit', function (event) {
-      event.layer.feature.isDirty = true
       if (this._umap.editedFeature !== event.layer) event.layer.feature.edit(event)
-    })
-    this.on('editable:editing', (event) => {
-      const feature = event.layer.feature
-      feature.isDirty = true
-      // feature.pullGeometry(false)
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()
@@ -361,7 +354,6 @@ U.Editable = L.Editable.extend({
     // Overrided from Leaflet.Editable
     const datalayer = this._umap.defaultEditDataLayer()
     datalayer.addFeature(layer.feature)
-    layer.isDirty = true
     return layer
   },
 

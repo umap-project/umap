@@ -294,16 +294,6 @@ export class DataLayer {
     }
   }
 
-  clear() {
-    // TODO do not startBatch for remoteData layer
-    this.sync.startBatch()
-    for (const feature of Object.values(this._features)) {
-      feature.del()
-    }
-    this.sync.commitBatch()
-    this.dataChanged()
-  }
-
   backupData() {
     if (this._geojson) {
       this._geojson_bk = Utils.CopyJSON(this._geojson)
@@ -354,7 +344,7 @@ export class DataLayer {
       url = this._umap.proxyUrl(url, this.options.remoteData.ttl)
     }
     return await this.getUrl(url, remoteUrl).then((raw) => {
-      this.clear()
+      this.clear(false)
       return this._umap.formatter
         .parse(raw, this.options.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson, false))
@@ -655,7 +645,16 @@ export class DataLayer {
 
   empty() {
     if (this.isRemoteLayer()) return
+    this.sync.startBatch()
     this.clear()
+    this.sync.commitBatch()
+  }
+
+  clear(sync = true) {
+    for (const feature of Object.values(this._features)) {
+      feature.del(sync)
+    }
+    this.dataChanged()
   }
 
   clone() {
@@ -1177,7 +1176,7 @@ export class DataLayer {
       // Response contains geojson only if save has conflicted and conflicts have
       // been resolved. So we need to reload to get extra data (added by someone else)
       if (data.geojson) {
-        this.clear()
+        this.clear(false)
         this.fromGeoJSON(data.geojson)
         delete data.geojson
       }
