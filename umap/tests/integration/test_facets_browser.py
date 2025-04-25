@@ -243,7 +243,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
 
     # Now let's filter
     odd.click()
-    expect(page.locator("summary")).to_have_attribute("data-badge", " ")
+    expect(page.locator(".filters summary")).to_have_attribute("data-badge", " ")
     expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
     expect(markers).to_have_count(2)
     expect(panel.get_by_text("Point 2")).to_be_hidden()
@@ -264,7 +264,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     expect(panel.get_by_text("Point 3")).to_be_visible()
 
     # Close panel
-    expect(panel.locator("summary")).to_have_attribute("data-badge", " ")
+    expect(panel.locator(".filters summary")).to_have_attribute("data-badge", " ")
     expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
     panel.get_by_role("button", name="Close").click()
     page.get_by_role("button", name="Open browser").click()

@@ -397,7 +397,7 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer):
 
     # Make sure this new marker is in Layer 2 for peerB
     # Show features for this layer in the brower.
-    peerB.get_by_role("heading", name="Layer 2").locator(".datalayer-name").click()
+    peerB.locator("summary").filter(has_text="Layer 2").click()
     expect(peerB.locator("li").filter(has_text="Layer 2")).to_be_visible()
     peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
         1
@@ -534,7 +534,7 @@ def test_create_and_sync_map(new_page, asgi_live_server, tilelayer, login, user)
 
     # Make sure only one layer has been created on peer B
     peerB.get_by_role("button", name="Open browser").click()
-    expect(peerB.locator("h5").get_by_text("Layer 1")).to_be_visible()
+    expect(peerB.locator("summary").get_by_text("Layer 1")).to_be_visible()
     peerB.get_by_role("button", name="Close").click()
 
     # Save and quit edit mode again
