@@ -640,7 +640,6 @@ export default class Umap {
 
   createDirtyDataLayer(options) {
     const datalayer = this.createDataLayer(options, true)
-    datalayer.isDirty = true
     return datalayer
   }
 
@@ -1218,12 +1217,8 @@ export default class Umap {
         })
       }
     } else {
-      if (!this.permissions.isDirty) {
-        // Do not override local changes to permissions,
-        // but update in case some other editors changed them in the meantime.
-        this.permissions.setProperties(data.permissions)
-        this.permissions.commit()
-      }
+      this.permissions.setProperties(data.permissions)
+      this.permissions.commit()
       this._leafletMap.once('saved', () => {
         Alert.success(data.info || translate('Map has been saved!'))
       })
