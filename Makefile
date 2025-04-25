@@ -65,7 +65,7 @@ publish: ## Publish the Python package to Pypi
 test: testpy testjs
 
 testpy:
-	pytest -vv umap/tests/ --dist=loadgroup --reruns 1
+	pytest -vv umap/tests/ --dist=loadgroup --reruns 1 --maxfail 10
 
 test-integration:
 	pytest -xv umap/tests/integration/ --dist=loadgroup
