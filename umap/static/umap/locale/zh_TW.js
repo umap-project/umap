@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "快取代理請求",
     "Caption": "標題",
     "Center map on your location": "將您的位置設為地圖中心",
-    "Change map background": "更改地圖背景",
     "Change tilelayers": "改變地圖磚圖層",
     "Change": "變動",
     "Choose the data format": "選擇資料格式",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Geocode",
     "Display the back to home icon": "Display the back to home icon",
     "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
-    "Simplify all geometries to points": "Simplify all geometries to points"
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")

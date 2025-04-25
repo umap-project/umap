@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Cache proxied request",
     "Caption": "Напомена",
     "Center map on your location": "Центрирај мапу на основу локације",
-    "Change map background": "Промени позадину карте",
     "Change tilelayers": "Промени наслов лејера",
     "Change": "Change",
     "Choose the data format": "Одабери формат датума",
@@ -457,7 +456,6 @@ const locale = {
     "Choose this dataset": "Choose this dataset",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: thematic data from OpenStreetMap",
     "Choose a theme": "Choose a theme",
-    "Symplify all geometries to points": "Symplify all geometries to points",
     "Choose this data": "Choose this data",
     "Search admin boundary": "Search admin boundary",
     "Please choose a theme and a boundary first.": "Please choose a theme and a boundary first.",
@@ -538,7 +536,14 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("sr", locale)
 L.setLocale("sr")

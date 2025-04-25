@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Požadavek na zástupnou mezipaměť",
     "Caption": "Popisek",
     "Center map on your location": "Přemístit se na mapě na vaši polohu",
-    "Change map background": "Změnit pozadí mapy",
     "Change tilelayers": "Změnit pozadí mapy",
     "Change": "Změnit",
     "Choose the data format": "Vyberte formát dat",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Geocode",
     "Display the back to home icon": "Display the back to home icon",
     "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
-    "Simplify all geometries to points": "Simplify all geometries to points"
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

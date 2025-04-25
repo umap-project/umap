@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Cacher la requête avec proxy",
     "Caption": "Légende",
     "Center map on your location": "Centrer la carte sur votre position",
-    "Change map background": "Changer le fond de carte",
     "Change tilelayers": "Changer le fond de carte",
     "Change": "Modifier",
     "Choose the data format": "Choisir le format des données",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Géocoder",
     "Display the back to home icon": "Afficher le bouton de retour à l'accueil",
     "Do you want to display layer switcher in caption bar?": "Afficher un sélecteur de calques dans la barre de légende ?",
-    "Simplify all geometries to points": "Simplifier les géométries en points"
+    "Simplify all geometries to points": "Simplifier les géométries en points",
+    "Back to list": "Retour à la liste",
+    "Toggle rule": "Permuter la règle",
+    "Delete rule": "Supprimer la règle",
+    "Cannot save layer, please try again in a few minutes.": "Impossible d'enregistrer le calque, veuillez réessayer dans quelques minutes."
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

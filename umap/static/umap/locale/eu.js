@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Cache proxy eskaera",
     "Caption": "Testua",
     "Center map on your location": "Zentratu mapa zure kokapenean",
-    "Change map background": "Aldatu maparen atzeko planoa",
     "Change tilelayers": "Aldatu lauzen geruza",
     "Change": "Aldatu",
     "Choose the data format": "Aukeratu data-formatua",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Geocode",
     "Display the back to home icon": "Display the back to home icon",
     "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
-    "Simplify all geometries to points": "Simplify all geometries to points"
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

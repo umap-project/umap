@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "حفظ موقت درخواست پراکسی‌شده",
     "Caption": "درباره",
     "Center map on your location": "تنظیم مرکز نقشه روی موقعیت شما",
-    "Change map background": "تغییر پس‌زمینهٔ نقشه",
     "Change tilelayers": "لایهٔ کاشی را تغییر دهید",
     "Change": "تغییر",
     "Choose the data format": "قالب داده را انتخاب کنید",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Geocode",
     "Display the back to home icon": "Display the back to home icon",
     "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
-    "Simplify all geometries to points": "Simplify all geometries to points"
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

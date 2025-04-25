@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Almacenar en caché la solicitud de proxy",
     "Caption": "Leyenda",
     "Center map on your location": "Centrar el mapa en tu ubicación",
-    "Change map background": "Cambiar el fondo del mapa",
     "Change tilelayers": "Cambiar capas de teselas",
     "Change": "Cambiar",
     "Choose the data format": "Elegir el formato de datos",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Geocodificar",
     "Display the back to home icon": "Mostrar el ícono de volver al inicio",
     "Do you want to display layer switcher in caption bar?": "¿Quieres mostrar el selector de capas en la barra de título?",
-    "Simplify all geometries to points": "Simplificar todas las geometrías a puntos"
+    "Simplify all geometries to points": "Simplificar todas las geometrías a puntos",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

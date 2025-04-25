@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Cache proxied request",
     "Caption": "Hoofding",
     "Center map on your location": "Centreer kaart op je locatie",
-    "Change map background": "Verander kaartachtergrond",
     "Change tilelayers": "Andere kaartachtergrond instellen",
     "Change": "Veranderen",
     "Choose the data format": "Gegevensformaat selecteren",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Geocode",
     "Display the back to home icon": "Het pictogram Terug naar huis weergeven",
     "Do you want to display layer switcher in caption bar?": "Wilt u de laagwisselaar weergeven in de ondertitelingsbalk?",
-    "Simplify all geometries to points": "Vereenvoudig alle geometrieën tot punten"
+    "Simplify all geometries to points": "Vereenvoudig alle geometrieën tot punten",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

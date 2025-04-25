@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Αίτημα μεσολάβησης προσωρινής μνήμης",
     "Caption": "Λεζάντα",
     "Center map on your location": "Κεντράρισμα του χάρτη στην τοποθεσία σας",
-    "Change map background": "Αλλαγή υποβάθρου του χάρτη",
     "Change tilelayers": "Αλλαγή χαρτογραφικού υπόβαθρου",
     "Change": "Αλλαγή",
     "Choose the data format": "Επιλογή μορφοποίησης δεδομένων",
@@ -540,7 +539,11 @@ const locale = {
     "Geocode": "Γεωκωδικοποίηση",
     "Display the back to home icon": "Εμφάνιση του εικονιδίου επιστροφής στην αρχική σελίδα",
     "Do you want to display layer switcher in caption bar?": "Θέλετε να εμφανίσετε τον διακόπτη επιπέδων στη γραμμή λεζάντας;",
-    "Simplify all geometries to points": "Απλοποίηση όλων των γεωμετριών σε σημεία"
+    "Simplify all geometries to points": "Απλοποίηση όλων των γεωμετριών σε σημεία",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

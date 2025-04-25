@@ -45,7 +45,6 @@
     "Cache proxied request": "Proxycache-Anfrage",
     "Caption": "Überschrift",
     "Center map on your location": "Die Karte auf deinen Standort ausrichten",
-    "Change map background": "Hintergrundkarte ändern",
     "Change tilelayers": "Kachelebenen ändern",
     "Change": "Ändern",
     "Choose the data format": "Wähle das Datenformat",
@@ -540,5 +539,9 @@
     "Geocode": "Geocode",
     "Display the back to home icon": "Display the back to home icon",
     "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
-    "Simplify all geometries to points": "Simplify all geometries to points"
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }

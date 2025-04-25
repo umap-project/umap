@@ -45,7 +45,6 @@ const locale = {
     "Cache proxied request": "Cache proxied request",
     "Caption": "캡션",
     "Center map on your location": "지도에서 나의 위치를 가운데로 놓기",
-    "Change map background": "배경 지도 변경",
     "Change tilelayers": "타일 레이어 변경",
     "Change": "Change",
     "Choose the data format": "데이터 포맷 선택",
@@ -457,7 +456,6 @@ const locale = {
     "Choose this dataset": "Choose this dataset",
     "GeoDataMine: thematic data from OpenStreetMap": "GeoDataMine: thematic data from OpenStreetMap",
     "Choose a theme": "Choose a theme",
-    "Symplify all geometries to points": "Symplify all geometries to points",
     "Choose this data": "Choose this data",
     "Search admin boundary": "Search admin boundary",
     "Please choose a theme and a boundary first.": "Please choose a theme and a boundary first.",
@@ -538,7 +536,14 @@ const locale = {
     "Images": "Images",
     "Iframes": "Iframes",
     "Tags": "Tags",
-    "Geocode": "Geocode"
+    "Geocode": "Geocode",
+    "Display the back to home icon": "Display the back to home icon",
+    "Do you want to display layer switcher in caption bar?": "Do you want to display layer switcher in caption bar?",
+    "Simplify all geometries to points": "Simplify all geometries to points",
+    "Back to list": "Back to list",
+    "Toggle rule": "Toggle rule",
+    "Delete rule": "Delete rule",
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")
