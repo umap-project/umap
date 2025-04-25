@@ -207,22 +207,35 @@ export class SyncEngine {
     this._send(operation)
   }
 
-  async save() {
-    const needSave = new Map()
+  _getDirtyObjects() {
+    const dirty = new Map()
     if (!this._umap.id) {
       // There is no operation for first map save
-      needSave.set(this._umap, [])
+      dirty.set(this._umap, [])
+    }
+    const addDirtyObject = (operation) => {
+      const updater = this._getUpdater(operation.subject)
+      const obj = updater.getStoredObject(operation.metadata)
+      if (!dirty.has(obj)) {
+        dirty.set(obj, [])
+      }
+      dirty.get(obj).push(operation)
     }
     for (const operation of this._operations.sorted()) {
       if (operation.dirty) {
-        const updater = this._getUpdater(operation.subject)
-        const obj = updater.getStoredObject(operation.metadata)
-        if (!needSave.has(obj)) {
-          needSave.set(obj, [])
+        addDirtyObject(operation)
+        if (operation.verb === 'batch') {
+          for (const op of operation.operations) {
+            addDirtyObject(op)
+          }
         }
-        needSave.get(obj).push(operation)
       }
     }
+    return dirty
+  }
+
+  async save() {
+    const needSave = this._getDirtyObjects()
     for (const [obj, operations] of needSave.entries()) {
       const ok = await obj.save()
       if (!ok) return false

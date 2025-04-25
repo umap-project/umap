@@ -159,7 +159,7 @@ export class MapPermissions {
         `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      this._umap.eachDataLayer((datalayer) => {
+      this._umap.datalayers.active().map((datalayer) => {
         datalayer.permissions.edit(fieldset)
       })
     }

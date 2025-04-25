@@ -131,8 +131,8 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
             data.setdefault("_umap_options", {})
             if "name" in data["_umap_options"] and kwargs["name"] == cls.name:
                 kwargs["name"] = data["_umap_options"]["name"]
-            if "settings" not in kwargs:
-                kwargs["settings"] = data.get("_umap_options", {})
+            kwargs.setdefault("settings", {})
+            kwargs["settings"].update(data.get("_umap_options", {}))
         else:
             data = DATALAYER_DATA.copy()
             data["_umap_options"] = {

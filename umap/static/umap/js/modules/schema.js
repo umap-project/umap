@@ -10,7 +10,7 @@ import { translate } from './i18n.js'
  * - `type`:        The type of the data
  * - `impacts`:     A list of impacts than happen when this property is updated, among
  *                  'ui', 'data', 'limit-bounds', 'datalayer-index', 'remote-data',
- *                  'background' 'sync'.
+ *                  'background', 'sync', 'datalayer-rank'.
  *
  * - Extra keys are being passed to the FormBuilder automatically.
  */
@@ -435,6 +435,10 @@ export const SCHEMA = {
       ['Wikipedia', translate('Wikipedia')],
     ],
     default: 'Default',
+  },
+  rank: {
+    type: Number,
+    impacts: ['datalayer-rank'],
   },
   remoteData: {
     type: Object,

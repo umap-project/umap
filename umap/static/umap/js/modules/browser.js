@@ -113,7 +113,7 @@ export default class Browser {
   }
 
   onFormChange() {
-    this._umap.eachBrowsableDataLayer((datalayer) => {
+    this._umap.datalayers.browsable().map((datalayer) => {
       datalayer.resetLayer(true)
       this.updateDatalayer(datalayer)
       if (this._umap.fullPanel?.isOpen()) datalayer.tableEdit()
@@ -136,7 +136,7 @@ export default class Browser {
   onMoveEnd() {
     if (!this.isOpen()) return
     const isListDynamic = this.options.inBbox
-    this._umap.eachBrowsableDataLayer((datalayer) => {
+    this._umap.datalayers.browsable().map((datalayer) => {
       if (!isListDynamic && !datalayer.hasDynamicData()) return
       this.updateDatalayer(datalayer)
     })
@@ -145,7 +145,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    this._umap.eachBrowsableDataLayer((datalayer) => {
+    this._umap.datalayers.browsable().map((datalayer) => {
       this.addDataLayer(datalayer, this.dataContainer)
     })
   }
@@ -254,10 +254,10 @@ export default class Browser {
     // If at least one layer is shown, hide it
     // otherwise show all
     let allHidden = true
-    this._umap.eachBrowsableDataLayer((datalayer) => {
+    this._umap.datalayers.browsable().map((datalayer) => {
       if (datalayer.isVisible()) allHidden = false
     })
-    this._umap.eachBrowsableDataLayer((datalayer) => {
+    this._umap.datalayers.browsable().map((datalayer) => {
       datalayer._forcedVisibility = true
       if (allHidden) {
         datalayer.show()

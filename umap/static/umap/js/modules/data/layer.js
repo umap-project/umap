@@ -64,6 +64,9 @@ export class DataLayer {
 
     this.setOptions(data)
     this.pane.dataset.id = this.id
+    if (this.options.rank === undefined) {
+      this.options.rank = this._umap.datalayers.count()
+    }
 
     if (!Utils.isObject(this.options.remoteData)) {
       this.options.remoteData = {}
@@ -152,6 +155,9 @@ export class DataLayer {
           break
         case 'remote-data':
           this.fetchRemoteData()
+          break
+        case 'datalayer-rank':
+          this._umap.reorderDataLayers()
           break
       }
     }
@@ -249,16 +255,9 @@ export class DataLayer {
     if (!error) {
       this._umap.modifiedAt = response.headers.get('last-modified')
       this.setReferenceVersion({ response, sync: false })
-      // FIXME: for now the _umap_options property is set dynamically from backend
-      // And thus it's not in the geojson file in the server
-      // So do not let all options to be reset
-      // Fix is a proper migration so all datalayers settings are
-      // in DB, and we remove it from geojson flat files.
-      if (geojson._umap_options) {
-        geojson._umap_options.editMode = this.options.editMode
-      }
+      delete geojson._umap_options
       // In case of maps pre 1.0 still around
-      if (geojson._storage) geojson._storage.editMode = this.options.editMode
+      delete geojson._storage
       await this.fromUmapGeoJSON(geojson)
       this.backupOptions()
       this._loading = false
@@ -287,7 +286,6 @@ export class DataLayer {
 
   async fromUmapGeoJSON(geojson) {
     if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
-    geojson._umap_options.id = this.id
     if (geojson._umap_options) this.setOptions(geojson._umap_options)
     if (this.isRemoteLayer()) {
       await this.fetchRemoteData()
@@ -297,6 +295,7 @@ export class DataLayer {
   }
 
   clear() {
+    // TODO do not startBatch for remoteData layer
     this.sync.startBatch()
     for (const feature of Object.values(this._features)) {
       feature.del()
@@ -395,12 +394,7 @@ export class DataLayer {
   }
 
   connectToMap() {
-    if (!this._umap.datalayers[this.id]) {
-      this._umap.datalayers[this.id] = this
-    }
-    if (!this._umap.datalayersIndex.includes(this)) {
-      this._umap.datalayersIndex.push(this)
-    }
+    this._umap.datalayers.add(this)
     this._umap.onDataLayersChanged()
   }
 
@@ -644,11 +638,19 @@ export class DataLayer {
 
   del(sync = true) {
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
-    this.erase()
+    // TODO merge datalayer del and features del in same
+    // batch
+    this.clear()
     if (sync) {
       this.isDeleted = true
       this.sync.delete(oldValue)
     }
+    this.hide()
+    this.parentPane.removeChild(this.pane)
+    this._umap.onDataLayersChanged()
+    this.layer.onDelete(this._leafletMap)
+    this.propagateDelete()
+    this._leaflet_events_bk = this._leaflet_events
   }
 
   empty() {
@@ -664,17 +666,6 @@ export class DataLayer {
     const datalayer = this._umap.createDirtyDataLayer(options)
     datalayer.fromGeoJSON(geojson)
     return datalayer
-  }
-
-  erase() {
-    this.hide()
-    this._umap.datalayersIndex.splice(this.getRank(), 1)
-    this.parentPane.removeChild(this.pane)
-    this._umap.onDataLayersChanged()
-    this.layer.onDelete(this._leafletMap)
-    this.propagateDelete()
-    this._leaflet_events_bk = this._leaflet_events
-    this.clear()
   }
 
   redraw() {
@@ -1091,23 +1082,11 @@ export class DataLayer {
   }
 
   getPreviousBrowsable() {
-    let id = this.getRank()
-    let next
-    const index = this._umap.datalayersIndex
-    while (((id = index[++id] ? id : 0), (next = index[id]))) {
-      if (next === this || next.canBrowse()) break
-    }
-    return next
+    return this._umap.datalayers.prev(this)
   }
 
   getNextBrowsable() {
-    let id = this.getRank()
-    let prev
-    const index = this._umap.datalayersIndex
-    while (((id = index[--id] ? id : index.length - 1), (prev = index[id]))) {
-      if (prev === this || prev.canBrowse()) break
-    }
-    return prev
+    return this._umap.datalayers.next(this)
   }
 
   umapGeoJSON() {
@@ -1118,8 +1097,8 @@ export class DataLayer {
     }
   }
 
-  getRank() {
-    return this._umap.datalayersIndex.indexOf(this)
+  getDOMOrder() {
+    return Array.from(this.parentPane.children).indexOf(this.pane)
   }
 
   isReadOnly() {
@@ -1141,6 +1120,12 @@ export class DataLayer {
     }
   }
 
+  prepareOptions() {
+    const options = Utils.CopyJSON(this.options)
+    delete options.permissions
+    return JSON.stringify(options)
+  }
+
   async save() {
     if (this.isDeleted) return await this.saveDelete()
     if (!this.isRemoteLayer() && !this.isLoaded()) return
@@ -1148,8 +1133,8 @@ export class DataLayer {
     const formData = new FormData()
     formData.append('name', this.options.name)
     formData.append('display_on_load', !!this.options.displayOnLoad)
-    formData.append('rank', this.getRank())
-    formData.append('settings', JSON.stringify(this.options))
+    formData.append('rank', this.options.rank)
+    formData.append('settings', this.prepareOptions())
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)

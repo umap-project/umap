@@ -243,7 +243,7 @@ export default class Importer extends Utils.WithTemplate {
     this.raw = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
-    this._umap.eachDataLayerReverse((datalayer) => {
+    this._umap.datalayers.reverse().map((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
         DomUtil.element({
           tagName: 'option',

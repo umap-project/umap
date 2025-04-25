@@ -33,6 +33,7 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
+import { DataLayerManager } from './managers.js'
 
 export default class Umap {
   constructor(element, geojson) {
@@ -166,8 +167,7 @@ export default class Umap {
     }
 
     // Global storage for retrieving datalayers and features.
-    this.datalayers = {} // All datalayers, including deleted.
-    this.datalayersIndex = [] // Datalayers actually on the map and ordered.
+    this.datalayers = new DataLayerManager()
     this.featuresIndex = {}
 
     this.formatter = new Formatter(this)
@@ -217,7 +217,6 @@ export default class Umap {
     }
 
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
-    this.backup()
   }
 
   get isDirty() {
@@ -616,7 +615,7 @@ export default class Umap {
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
     const toLoad = []
-    for (const datalayer of this.datalayersIndex) {
+    for (const datalayer of this.datalayers.active()) {
       if (datalayer.showAtLoad()) toLoad.push(() => datalayer.show())
     }
     while (toLoad.length) {
@@ -630,7 +629,7 @@ export default class Umap {
 
   createDataLayer(options = {}, sync = true) {
     options.name =
-      options.name || `${translate('Layer')} ${this.datalayersIndex.length + 1}`
+      options.name || `${translate('Layer')} ${this.datalayers.count() + 1}`
     const datalayer = new DataLayer(this, this._leafletMap, options)
 
     if (sync !== false) {
@@ -651,19 +650,21 @@ export default class Umap {
   }
 
   reindexDataLayers() {
-    this.eachDataLayer((datalayer) => datalayer.reindex())
+    this.datalayers.active().map((datalayer) => datalayer.reindex())
     this.onDataLayersChanged()
   }
 
-  indexDatalayers() {
-    const panes = this._leafletMap.getPane('overlayPane')
-
-    this.datalayersIndex = []
-    for (const pane of panes.children) {
-      if (!pane.dataset || !pane.dataset.id) continue
-      this.datalayersIndex.push(this.datalayers[pane.dataset.id])
+  reorderDataLayers() {
+    const parent = this._leafletMap.getPane('overlayPane')
+    const datalayers = Object.values(this.datalayers)
+      .filter((datalayer) => !datalayer._isDeleted)
+      .sort(
+        (datalayer1, datalayer2) => datalayer1.options.rank > datalayer2.options.rank
+      )
+    for (const datalayer of datalayers) {
+      const child = parent.querySelector(`[data-id="${datalayer.id}"]`)
+      parent.appendChild(child)
     }
-    this.onDataLayersChanged()
   }
 
   onceDatalayersLoaded(callback, context) {
@@ -694,7 +695,6 @@ export default class Umap {
   async saveAll() {
     if (!this.isDirty) return
     if (this._defaultExtent) this._setCenterAndZoom()
-    this.backup()
     const status = await this.sync.save()
     if (!status) return
     // Do a blind render for now, as we are not sure what could
@@ -714,24 +714,6 @@ export default class Umap {
     return this.properties.name || translate('Untitled map')
   }
 
-  backup() {
-    this.backupProperties()
-    this._datalayersIndex_bk = [].concat(this.datalayersIndex)
-  }
-
-  backupProperties() {
-    this._backupProperties = Object.assign({}, this.properties)
-    this._backupProperties.tilelayer = Object.assign({}, this.properties.tilelayer)
-    this._backupProperties.limitBounds = Object.assign({}, this.properties.limitBounds)
-    this._backupProperties.permissions = Object.assign({}, this.permissions.properties)
-  }
-
-  resetProperties() {
-    this.properties = Object.assign({}, this._backupProperties)
-    this.properties.tilelayer = Object.assign({}, this._backupProperties.tilelayer)
-    this.permissions.properties = Object.assign({}, this._backupProperties.permissions)
-  }
-
   setProperties(newProperties) {
     for (const key of Object.keys(SCHEMA)) {
       if (newProperties[key] !== undefined) {
@@ -744,24 +726,24 @@ export default class Umap {
   }
 
   hasData() {
-    for (const datalayer of this.datalayersIndex) {
+    for (const datalayer of this.datalayers.active()) {
       if (datalayer.hasData()) return true
     }
   }
 
   hasLayers() {
-    return Boolean(this.datalayersIndex.length)
+    return Boolean(this.datalayers.count())
   }
 
   allProperties() {
-    return [].concat(...this.datalayersIndex.map((dl) => dl.allProperties()))
+    return [].concat(...this.datalayers.active().map((dl) => dl.allProperties()))
   }
 
   sortedValues(property) {
     return []
-      .concat(...this.datalayersIndex.map((dl) => dl.sortedValues(property)))
+      .concat(...this.datalayers.active().map((dl) => dl.sortedValues(property)))
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
-      .sort(U.Utils.naturalSort)
+      .sort(Utils.naturalSort)
   }
 
   editCaption() {
@@ -1278,7 +1260,7 @@ export default class Umap {
 
   toGeoJSON() {
     let features = []
-    this.eachDataLayer((datalayer) => {
+    this.datalayers.active().map((datalayer) => {
       if (datalayer.isVisible()) {
         features = features.concat(datalayer.featuresToGeoJSON())
       }
@@ -1354,12 +1336,19 @@ export default class Umap {
           if (fields.includes('properties.rules')) {
             this.rules.load()
           }
-          this.eachVisibleDataLayer((datalayer) => {
+          this.datalayers.visible().map((datalayer) => {
             datalayer.redraw()
           })
           break
         case 'datalayer-index':
           this.reindexDataLayers()
+          break
+        case 'datalayer-rank':
+          // When drag'n'dropping datalayers,
+          // this get called once per datalayers.
+          // (and same for undo/redo of the action)
+          // TODO: call only once
+          this.reorderDataLayers()
           break
         case 'background':
           this._leafletMap.initTileLayers()
@@ -1449,7 +1438,7 @@ export default class Umap {
     ) {
       return datalayer
     }
-    datalayer = this.findDataLayer((datalayer) => {
+    datalayer = this.datalayers.find((datalayer) => {
       if (!datalayer.isDataReadOnly() && datalayer.isBrowsable()) {
         fallback = datalayer
         if (datalayer.isVisible()) return true
@@ -1464,49 +1453,20 @@ export default class Umap {
     return this.createDirtyDataLayer()
   }
 
-  findDataLayer(method, context) {
-    for (let i = this.datalayersIndex.length - 1; i >= 0; i--) {
-      if (method.call(context, this.datalayersIndex[i])) {
-        return this.datalayersIndex[i]
-      }
-    }
-  }
-
-  eachDataLayer(method, context) {
-    for (let i = 0; i < this.datalayersIndex.length; i++) {
-      method.call(context, this.datalayersIndex[i])
-    }
-  }
-
-  eachDataLayerReverse(method, context, filter) {
-    for (let i = this.datalayersIndex.length - 1; i >= 0; i--) {
-      if (filter && !filter.call(context, this.datalayersIndex[i])) continue
-      method.call(context, this.datalayersIndex[i])
-    }
-  }
-
-  eachBrowsableDataLayer(method, context) {
-    this.eachDataLayerReverse(method, context, (d) => d.allowBrowse())
-  }
-
-  eachVisibleDataLayer(method, context) {
-    this.eachDataLayerReverse(method, context, (d) => d.isVisible())
-  }
-
-  eachFeature(callback, context) {
-    this.eachBrowsableDataLayer((datalayer) => {
-      if (datalayer.isVisible()) datalayer.eachFeature(callback, context)
+  eachFeature(callback) {
+    this.datalayers.browsable().map((datalayer) => {
+      if (datalayer.isVisible()) datalayer.eachFeature(callback)
     })
   }
 
   removeDataLayers() {
-    this.eachDataLayerReverse((datalayer) => {
+    this.datalayers.active().map((datalayer) => {
       datalayer.del()
     })
   }
 
   emptyDataLayers() {
-    this.eachDataLayerReverse((datalayer) => {
+    this.datalayers.active().map((datalayer) => {
       datalayer.empty()
     })
   }
@@ -1520,7 +1480,7 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    this.eachDataLayerReverse((datalayer) => {
+    this.datalayers.reverse().map((datalayer) => {
       const row = Utils.loadTemplate(
         `<li class="orderable"><i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i></li>`
       )
@@ -1539,16 +1499,22 @@ export default class Umap {
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const movedLayer = this.datalayers[src.dataset.id]
       const targetLayer = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(movedLayer.getRank(), targetLayer.getRank())
-      const maxIndex = Math.max(movedLayer.getRank(), targetLayer.getRank())
+      const minIndex = Math.min(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
+      const maxIndex = Math.max(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
       if (finalIndex === 0) movedLayer.bringToTop()
       else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
       else movedLayer.insertAfter(targetLayer)
-      this.eachDataLayerReverse((datalayer) => {
-        if (datalayer.getRank() >= minIndex && datalayer.getRank() <= maxIndex)
-          datalayer.isDirty = true
+      this.sync.startBatch()
+      this.datalayers.reverse().map((datalayer) => {
+        const rank = datalayer.getDOMOrder()
+        if (rank >= minIndex && rank <= maxIndex) {
+          const oldRank = datalayer.options.rank
+          datalayer.options.rank = rank
+          datalayer.sync.update('options.rank', rank, oldRank)
+        }
       })
-      this.indexDatalayers()
+      this.sync.commitBatch()
+      this.onDataLayersChanged()
     }
     const orderable = new Orderable(ul, onReorder)
 
@@ -1568,18 +1534,6 @@ export default class Umap {
     const datalayer = this.datalayers[id]
     if (!datalayer) throw new Error(`Can't find datalayer with id ${id}`)
     return datalayer
-  }
-
-  firstVisibleDatalayer() {
-    return this.findDataLayer((datalayer) => {
-      if (datalayer.isVisible()) return true
-    })
-  }
-
-  ensurePanesOrder() {
-    this.eachDataLayer((datalayer) => {
-      datalayer.bringToTop()
-    })
   }
 
   openBrowser(mode) {
@@ -1732,7 +1686,7 @@ export default class Umap {
 
   getLayersBounds() {
     const bounds = new latLngBounds()
-    this.eachBrowsableDataLayer((d) => {
+    this.datalayers.browsable().map((d) => {
       if (d.isVisible()) bounds.extend(d.layer.getBounds())
     })
     return bounds

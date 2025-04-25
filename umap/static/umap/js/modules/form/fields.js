@@ -560,7 +560,7 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 Fields.DataLayerSwitcher = class extends Fields.Select {
   getOptions() {
     const options = []
-    this.builder._umap.eachDataLayerReverse((datalayer) => {
+    this.builder._umap.datalayers.reverse().map((datalayer) => {
       if (
         datalayer.isLoaded() &&
         !datalayer.isDataReadOnly() &&
