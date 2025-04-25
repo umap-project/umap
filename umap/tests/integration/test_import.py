@@ -904,7 +904,7 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     page.get_by_role("button", name="Import data", exact=True).click()
     expect(page.locator(".leaflet-marker-icon")).to_be_visible()
     page.get_by_role("button", name="Open browser").click()
-    expect(page.locator("h5").get_by_text("Good data")).to_be_visible()
+    expect(page.locator("summary").get_by_text("Good data")).to_be_visible()
 
 
 def test_import_osm_relation(tilelayer, live_server, page):

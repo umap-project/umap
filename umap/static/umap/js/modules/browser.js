@@ -63,25 +63,19 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, parent) {
-    let className = `datalayer ${datalayer.getHidableClass()}`
-    if (this.mode !== 'layers') className += ' show-list'
-    const [container, { headline, toolbox, toggle, label }] =
-      Utils.loadTemplateWithRefs(`
-      <div class="${className}" id="${this.datalayerId(datalayer)}">
-        <h5 data-ref=headline>
-          <i class="icon icon-16 datalayer-toggle-list" data-ref=toggle></i>
+    const open = this.mode !== 'layers' ? ' open' : ''
+    const [container, { headline, toolbox, label }] = Utils.loadTemplateWithRefs(`
+      <details class="datalayer ${datalayer.getHidableClass()}" id="${this.datalayerId(datalayer)}"${open}>
+        <summary data-ref=headline>
           <span data-ref=toolbox></span>
           <span class="datalayer-name" data-id="${datalayer.id}" data-ref=label></span>
           <span class="datalayer-counter"></span>
-        </h5>
+        </summary>
         <ul></ul>
-      </div>
+      </details>
     `)
     datalayer.renderToolbox(toolbox)
     parent.appendChild(container)
-    const toggleList = () => parent.classList.toggle('show-list')
-    toggle.addEventListener('click', toggleList)
-    label.addEventListener('click', toggleList)
     this.updateDatalayer(datalayer)
   }
 

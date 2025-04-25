@@ -547,12 +547,6 @@ a.umap-control-caption,
 .umap-browser .datalayer i {
     cursor: pointer;
 }
-.umap-browser .datalayer ul {
-    display: none;
-}
-.umap-browser .show-list ul {
-    display: block;
-}
 
 .umap-browser .off .feature {
     display: none;
@@ -567,7 +561,7 @@ a.umap-control-caption,
 .umap-browser.dark .datalayer ul {
     border: 1px solid #232729;
 }
-.umap-browser h5 {
+.umap-browser summary {
     margin-bottom: 0;
     overflow: hidden;
     padding-inline-start: 5px;
@@ -575,16 +569,10 @@ a.umap-control-caption,
     line-height: 30px;
     background-color: var(--color-lightGray);
 }
-.umap-browser .off h5 {
+.umap-browser .off summary {
     color: #b3b3b3;
 }
-.umap-browser.dark h5 {
-    background-color: #232729;
-    color: white;
-}
-.umap-browser h5 span {
-    margin-inline-start: 10px;
-}
+
 .umap-browser li {
     padding: 2px 0;
     white-space: nowrap;
@@ -627,9 +615,6 @@ a.umap-control-caption,
     margin-inline-end: 5px;
     background-position: -145px -70px;
 }
-.umap-browser .show-list .datalayer-toggle-list {
-    background-position: -145px -45px;
-}
 .umap-browser .filters summary {
     background: none;
     border: 1px solid var(--color-lightGray);
@@ -662,7 +647,7 @@ a.umap-control-caption,
     color: var(--text-color);
 }
 .umap-browser .main-toolbox {
-    padding-left: 4px; /* Align with toolbox below  */
+    padding-left: 1.3rem; /* Align with toolbox below  */
     border-top: 1px solid var(--color-mediumGray);
     margin-top: var(--box-margin);
     padding-top: 3px;

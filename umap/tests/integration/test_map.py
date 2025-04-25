@@ -1,4 +1,3 @@
-import os
 import re
 
 import pytest
@@ -46,7 +45,7 @@ def test_default_view_without_datalayer_should_use_default_center(
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
     expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
 
@@ -60,7 +59,7 @@ def test_default_view_latest_without_datalayer_should_use_default_center(
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
     expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
 
@@ -74,7 +73,7 @@ def test_default_view_data_without_datalayer_should_use_default_center(
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
     expect(page).to_have_url(re.compile(r".*#7/48\..+/13\..+"))
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
 
@@ -84,7 +83,7 @@ def test_default_view_latest_with_marker(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     # Hash is defined, so map is initialized
     expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
     expect(page.locator(".leaflet-popup")).to_be_visible()
 
@@ -113,7 +112,7 @@ def test_default_view_latest_with_line(map, live_server, page):
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
 
@@ -144,7 +143,7 @@ def test_default_view_latest_with_polygon(map, live_server, page):
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
 
@@ -173,7 +172,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     toggle = page.get_by_role("button", name="Open browser")
     expect(toggle).to_be_visible()
     toggle.click()
-    layers = page.locator(".umap-browser .datalayer h5")
+    layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
     map_el = page.locator("#map")
     add_marker = page.get_by_title("Draw a marker")
