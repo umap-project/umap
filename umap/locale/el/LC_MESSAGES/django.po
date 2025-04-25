@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 17:36+0000\n"
+"POT-Creation-Date: 2025-04-11 15:30+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: prendi <prendi@openmailbox.org>, 2017\n"
 "Language-Team: Greek (http://app.transifex.com/openstreetmap/umap/language/el/)\n"
@@ -40,136 +40,204 @@ msgstr "Λόγω συντήρησης, ο ιστότοπος είναι μόνο
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
-" and maps."
-msgstr ""
+" and maps. Then, please logout and login again with the new provider."
+msgstr "Η χρήση του «%(name)s» για τον έλεγχο ταυτότητας έχει ξεπεραστεί και θα καταργηθεί σύντομα. Παρακαλούμε ρυθμίστε έναν άλλο πάροχο παρακάτω πριν χάσετε την πρόσβαση στο λογαριασμό και τους χάρτες σας. Στη συνέχεια, παρακαλούμε αποσυνδεθείτε και συνδεθείτε ξανά με τον νέο πάροχο."
 
-#: models.py:60 models.py:79
+#: models.py:61 models.py:80
 msgid "name"
 msgstr "όνομα"
 
-#: models.py:62 models.py:485
+#: models.py:63 models.py:493
 msgid "description"
 msgstr "περιγραφή"
 
-#: models.py:110
+#: models.py:111
 msgid "details"
 msgstr "λεπτομέρειες"
 
-#: models.py:111
+#: models.py:112
 msgid "Link to a page where the licence is detailed."
 msgstr "Σύνδεσμος σελίδας αναλυτικής Άδειας Χρήσης."
 
-#: models.py:121
+#: models.py:122
 msgid "URL template using OSM tile format"
 msgstr "Πρότυπο URL που χρησιμοποιεί μορφοποίηση πλακιδίων OSM"
 
-#: models.py:127
+#: models.py:128
 msgid "Order of the tilelayers in the edit box"
 msgstr "Σειρά των υπόβαθρων στο πλαίσιο επεξεργασίας"
 
-#: models.py:175 models.py:479
+#: models.py:176 models.py:487
 msgid "Only editable with secret edit link"
 msgstr "Επεξεργάσιμο μόνο με μυστικό σύνδεσμο"
 
-#: models.py:176 models.py:480
+#: models.py:177 models.py:488
 msgid "Everyone can edit"
 msgstr "Όλοι μπορούν να επεξεργαστούν"
 
-#: models.py:179 models.py:473
+#: models.py:180 models.py:481
 msgid "Everyone"
 msgstr "Οποιοσδήποτε"
 
-#: models.py:180 models.py:189 models.py:474
+#: models.py:181 models.py:190 models.py:482
 msgid "Editors and team only"
 msgstr "Μόνο συντάκτες και ομάδα"
 
-#: models.py:181 models.py:475
+#: models.py:182 models.py:483
 msgid "Owner only"
 msgstr "Μόνο ο κάτοχος"
 
-#: models.py:184
+#: models.py:185
 msgid "Draft (private)"
 msgstr "Πρόχειρο (ιδιωτικό)"
 
-#: models.py:185
+#: models.py:186
 msgid "Everyone (public)"
 msgstr "Όλοι (δημόσιος)"
 
-#: models.py:188
+#: models.py:189
 msgid "Anyone with link"
 msgstr "Οποιοδήποτε με τον σύνδεσμο"
 
-#: models.py:190
+#: models.py:191
 msgid "Blocked"
 msgstr "Αποκλεισμένος"
 
-#: models.py:191 models.py:469
+#: models.py:192 models.py:477
 msgid "Deleted"
 msgstr "Διαγράφηκε"
 
-#: models.py:194
+#: models.py:195
 msgid "center"
 msgstr "κέντρο"
 
-#: models.py:195
+#: models.py:196
 msgid "zoom"
 msgstr "εστίαση"
 
-#: models.py:197
+#: models.py:198
 msgid "locate"
 msgstr "εντοπισμός θέσης"
 
-#: models.py:197
+#: models.py:198
 msgid "Locate user on load?"
 msgstr "Εντοπισμός θέσης χρήστη κατά την φόρτωση;"
 
-#: models.py:201
+#: models.py:202
 msgid "Choose the map licence."
 msgstr "Επιλογή άδειας χρήσης του χάρτη."
 
-#: models.py:202
+#: models.py:203
 msgid "licence"
 msgstr "άδεια"
 
-#: models.py:213
+#: models.py:214
 msgid "owner"
 msgstr "ιδιοκτήτης"
 
-#: models.py:217
+#: models.py:218
 msgid "editors"
 msgstr "συντάκτες"
 
-#: models.py:223
+#: models.py:224
 msgid "team"
 msgstr "ομάδα"
 
-#: models.py:229 models.py:501
+#: models.py:230 models.py:509
 msgid "edit status"
 msgstr "κατάσταση επεξεργασίας"
 
-#: models.py:234 models.py:506
+#: models.py:235 models.py:514
 msgid "share status"
 msgstr "κατάσταση διαμοιρασμού"
 
-#: models.py:237 models.py:496
+#: models.py:238 models.py:504
 msgid "settings"
 msgstr "ρυθμίσεις"
 
-#: models.py:407
+#: models.py:410
 msgid "Clone of"
 msgstr "Κλώνος του"
 
-#: models.py:468 models.py:472 models.py:478
+#: models.py:476 models.py:480 models.py:486
 msgid "Inherit"
 msgstr "Κληρονόμοι"
 
-#: models.py:491
+#: models.py:499
 msgid "display on load"
 msgstr "εμφάνιση κατά τη φόρτωση"
 
-#: models.py:492
+#: models.py:500
 msgid "Display this layer on load."
 msgstr "Εμφάνιση αυτού του επιπέδου κατά την φόρτωση."
+
+#: settings/base.py:295
+msgid "Art and Culture"
+msgstr "Τέχνες και Πολιτισμός"
+
+#: settings/base.py:296
+msgid "Cycling"
+msgstr "Ποδηλασία"
+
+#: settings/base.py:297
+msgid "Business"
+msgstr "Επιχειρήσεις"
+
+#: settings/base.py:298
+msgid "Environment"
+msgstr "Περιβάλλον"
+
+#: settings/base.py:299
+msgid "Education"
+msgstr "Εκπαίδευση"
+
+#: settings/base.py:300
+msgid "Food and Agriculture"
+msgstr "Διατροφή και Γεωργία"
+
+#: settings/base.py:301
+msgid "Geopolitics"
+msgstr "Γεωπολιτική"
+
+#: settings/base.py:302
+msgid "Health"
+msgstr "Υγεία"
+
+#: settings/base.py:303
+msgid "Hiking"
+msgstr "Πεζοπορία-Ορειβασία"
+
+#: settings/base.py:304
+msgid "History"
+msgstr "Ιστορία"
+
+#: settings/base.py:305
+msgid "Public sector"
+msgstr "Δημόσιος τομέας"
+
+#: settings/base.py:306
+msgid "Science"
+msgstr "Επιστήμες"
+
+#: settings/base.py:307
+msgid "Shopping"
+msgstr "Ψώνια"
+
+#: settings/base.py:308
+msgid "Sport and Leisure"
+msgstr "Αθλητισμός και ελεύθερος χρόνος"
+
+#: settings/base.py:309
+msgid "Travel"
+msgstr "Ταξίδια"
+
+#: settings/base.py:310
+msgid "Transports"
+msgstr "Μεταφορές"
+
+#: settings/base.py:311
+msgid "Tourism"
+msgstr "Τουρισμός"
 
 #: templates/403.html:8
 msgid ""
@@ -423,7 +491,7 @@ msgstr "Οι ομάδες μου"
 msgid "Map of the uMaps"
 msgstr "Χάρτης των uMaps"
 
-#: templates/umap/home.html:24
+#: templates/umap/home.html:25
 msgid "Get inspired, browse maps"
 msgstr "Περιηγήσου και αναζήτησε την έμπνευση στους χάρτες!"
 
@@ -431,11 +499,15 @@ msgstr "Περιηγήσου και αναζήτησε την έμπνευση �
 msgid "You are logged in. Continuing..."
 msgstr "Είστε συνδεδεμένοι. Συνέχεια..."
 
-#: templates/umap/map_list.html:11 views.py:437
+#: templates/umap/map_list.html:18 views.py:444
 msgid "by"
 msgstr "από"
 
-#: templates/umap/map_list.html:20
+#: templates/umap/map_list.html:22
+msgid "See the map"
+msgstr "Δες τον χάρτη"
+
+#: templates/umap/map_list.html:28
 msgid "More"
 msgstr "Περισσότερα"
 
@@ -594,11 +666,15 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] "%(count)s χάρτης βρέθηκε:"
 msgstr[1] "%(count)s χάρτες βρέθηκαν:"
 
-#: templates/umap/search.html:28
+#: templates/umap/search.html:30
 msgid "No map found."
 msgstr "Δεν βρέθηκε κανένας χάρτης."
 
-#: templates/umap/search.html:33
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr "Τελευταία δημιουργημένοι χάρτες στην κατηγορία"
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr "Χάρτες που δημιουργήθηκαν τελευταίοι"
 
@@ -606,7 +682,11 @@ msgstr "Χάρτες που δημιουργήθηκαν τελευταίοι"
 msgid "Search maps"
 msgstr "Αναζήτηση χαρτών"
 
-#: templates/umap/search_bar.html:16
+#: templates/umap/search_bar.html:14
+msgid "Any category"
+msgstr "Οποιαδήποτε κατηγορία"
+
+#: templates/umap/search_bar.html:19
 msgid "Search"
 msgstr "Αναζήτηση"
 
@@ -670,70 +750,70 @@ msgstr "Χρήστες"
 msgid "New team"
 msgstr "Νέα ομάδα"
 
-#: views.py:234
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "Δεν είναι δυνατή η διαγραφή μιας ομάδας που έχει περισσότερα από ένα μέλη"
 
-#: views.py:238
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "Η ομάδα «%(name)s» έχει διαγραφεί."
 
-#: views.py:442
+#: views.py:449
 msgid "View the map"
 msgstr "Προβολή του χάρτη"
 
-#: views.py:838
+#: views.py:845
 msgid "See full screen"
 msgstr "Προβολή πλήρους οθόνης"
 
-#: views.py:981
+#: views.py:988
 msgid "Map editors updated with success!"
 msgstr "Η ενημέρωση των συντακτών χάρτη ήταν επιτυχής!"
 
-#: views.py:1017
+#: views.py:1024
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Ο uMap σύνδεσμος επεξεργασίας του χάρτη σας: %(map_name)s"
 
-#: views.py:1020
+#: views.py:1027
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Εδώ είναι ο μυστικός σύνδεσμος επεξεργασίας: %(link)s"
 
-#: views.py:1027
+#: views.py:1034
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Αδυναμία αποστολής email στο %(email)s"
 
-#: views.py:1030
+#: views.py:1037
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Μήνυμα email στάλθηκε στο %(email)s"
 
-#: views.py:1041
+#: views.py:1048
 msgid "Only its owner can delete the map."
 msgstr "Μονό ο ιδιοκτήτης μπορεί να διαγράψει αυτό τον χάρτη."
 
-#: views.py:1044
+#: views.py:1054
 msgid "Map successfully deleted."
 msgstr "Ο χάρτης διαγράφηκε με επιτυχία."
 
-#: views.py:1070
+#: views.py:1080
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Ο χάρτης κλωνοποιήθηκε! Αν θέλετε να τον επεξεργαστείτε από κάποιον άλλο υπολογιστή, παρακαλώ χρησιμοποιήστε αυτόν τον σύνδεσμο: %(anonymous_url)s"
 
-#: views.py:1075
+#: views.py:1085
 msgid "Congratulations, your map has been cloned!"
 msgstr "Συγχαρητήρια ο χάρτης σας κλωνοποιήθηκε!"
 
-#: views.py:1329
+#: views.py:1339
 msgid "Layer successfully deleted."
 msgstr "Το επίπεδο διαγράφηκε με επιτυχία."
 
-#: views.py:1351
+#: views.py:1361
 msgid "Permissions updated with success!"
 msgstr "Τα δικαιώματα ενημερώθηκαν με επιτυχία!"

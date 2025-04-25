@@ -670,7 +670,7 @@ msgstr "Geen kaart gevonden."
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "Laatst gemaakte kaarten in categorie"
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
