@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.0.5 - 2025-04-25
+
+* allow to save a remote data with unloaded data by @yohanboniface in #2657
+* allow to save/undo/sync drag'n'drop of datalayers by @yohanboniface in #2677
+* setting center and zoom manually should set dirty status by @yohanboniface in #2676
+* fix error when saving and deleting heatmap layer by @yohanboniface in #2681
+* make rules reordering syncable, savable and undoable by @yohanboniface in #2672
+* loading remote data should not make the map dirty  by @yohanboniface in #2679
+* implement a design system for UI consistency by @davidbgk in #2654
+* pass CSRF_TRUSTED_ORIGINS env to settings by @lippoliv in #2656
+* do not display "saved" message if some request failed by @yohanboniface in #2669
+* show an error message if saving layer failed by @yohanboniface in #2670
+* naive support for GeometryCollection as Feature geometry by @yohanboniface in #2658
+* add a back button in rules form by @yohanboniface in #2673
+
+## New Contributors
+* @lippoliv made their first contribution in #2656
+
 ## 3.0.4 - 2025-04-14
 
 * do not show "back to home" button in iframes by @yohanboniface in #2644
