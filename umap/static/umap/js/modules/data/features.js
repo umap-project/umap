@@ -614,7 +614,7 @@ class Feature {
         this.datalayer.hideFeature(this)
         this.makeUI()
         this.datalayer.showFeature(this)
-      } else {
+      } else if (this.datalayer?.isBrowsable()) {
         this.ui._redraw()
       }
     }

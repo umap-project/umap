@@ -41,6 +41,11 @@ export const Heat = L.HeatLayer.extend({
     }
   },
 
+  removeLayer: (layer) => {
+    // No op, there is no "removeLatLng" in Leaflet.heat
+    // but this method is expected by DataLayer
+  },
+
   onAdd: function (map) {
     LayerMixin.onAdd.call(this, map)
     return L.HeatLayer.prototype.onAdd.call(this, map)
