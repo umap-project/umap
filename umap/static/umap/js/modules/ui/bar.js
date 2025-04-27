@@ -37,6 +37,7 @@ const TOP_BAR_TEMPLATE = `
             <i class="icon icon-16 icon-save-disabled"></i>
             <span hidden data-ref="saveLabel">${translate('Save')}</span>
             <span hidden data-ref="saveDraftLabel">${translate('Save draft')}</span>
+            <span hidden data-ref="saveTemplateLabel">${translate('Save template')}</span>
         </button>
     </div>
 </div>`
@@ -167,8 +168,11 @@ export class TopBar extends WithTemplate {
     const syncEnabled = this._umap.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
     this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
-    this.elements.saveLabel.hidden = this._umap.permissions.isDraft()
-    this.elements.saveDraftLabel.hidden = !this._umap.permissions.isDraft()
+    const isDraft = this._umap.permissions.isDraft()
+    const isTemplate = this._umap.getProperty('is_template')
+    this.elements.saveLabel.hidden = isDraft || isTemplate
+    this.elements.saveDraftLabel.hidden = !isDraft || isTemplate
+    this.elements.saveTemplateLabel.hidden = !isTemplate
     this._umap.sync._undoManager.toggleState()
   }
 }
