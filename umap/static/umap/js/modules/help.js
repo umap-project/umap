@@ -175,6 +175,10 @@ const ENTRIES = {
     <div>${translate('For more complex needs, see')} <a href="https://overpass-turbo.eu/">https://overpass-turbo.eu/</a></div>
   </div>
   `,
+
+  sync: translate(
+    'Activate collaborative live editing on this map. Other users must reload the map after changing this setting.'
+  ),
 }
 
 export default class Help {
