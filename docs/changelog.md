@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.6 - 2025-05-14
+
+* Better way of escaping map settings by @yohanboniface and @davidbgk in #2705
+
 ## 3.0.5 - 2025-04-25
 
 * allow to save a remote data with unloaded data by @yohanboniface in #2657
