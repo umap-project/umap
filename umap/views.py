@@ -668,7 +668,7 @@ class MapDetailMixin(SessionMixin):
             geojson["properties"] = {}
         geojson["properties"].update(properties)
         geojson["properties"]["datalayers"] = self.get_datalayers()
-        context["map_settings"] = json_dumps(geojson, indent=settings.DEBUG)
+        context["map_settings"] = json_dumps(geojson, indent=settings.DEBUG or None)
         self.set_preconnect(geojson["properties"], context)
         return context
 

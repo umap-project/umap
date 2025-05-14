@@ -61,11 +61,19 @@ def test_cannot_put_script_tag_in_datalayer_name_or_description(
     page.locator(".umap-field-description textarea").fill(
         '<p>before <script>alert("attack")</script> after</p>'
     )
-    page.get_by_role("button", name="Save").click()
+    page.wait_for_timeout(300)  # Wait for debounce
+    with page.expect_response(re.compile(".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
     page.get_by_role("button", name="About").click()
     # Title should contain raw HTML (we are using textContent)
     expect(page.get_by_text('<script>alert("attack")</script>')).to_be_visible()
     # Description should contain escaped HTML
+    expect(page.get_by_text("before after")).to_be_visible()
+
+    # Reload the map
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
+    page.get_by_role("button", name="About").click()
+    expect(page.get_by_text('<script>alert("attack")</script>')).to_be_visible()
     expect(page.get_by_text("before after")).to_be_visible()
 
 
