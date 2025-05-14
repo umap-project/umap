@@ -4,10 +4,12 @@
 <div id="map">
 </div>
 <!-- djlint:off -->
+<script id="map-settings" data-settings="{{ map_settings|escape }}"></script>
 <script defer type="module">
     {% autoescape off %}
     import Umap from '{% static "umap/js/modules/umap.js" %}'
     {% endautoescape %}
-    U.MAP = new Umap("map", {{ map_settings|notag|safe }})
+    U.SETTINGS = JSON.parse(document.getElementById('map-settings').dataset.settings)
+    U.MAP = new Umap("map", U.SETTINGS)
 </script>
 <!-- djlint:on -->
