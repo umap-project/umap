@@ -17,6 +17,7 @@ nav:
       - Customize: config/customize.md
       - Storage: config/storage.md
       - Icon packs: config/icons.md
+      - Importers: config/importers.md
   - Deployment:
       - Overview: deploy/overview.md
       - Docker: deploy/docker.md

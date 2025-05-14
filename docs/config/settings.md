@@ -297,12 +297,7 @@ UMAP_IMPORTERS = {
 
 ```
 
-Available importers:
-
-- `overpass`: very lite form to build a URL retrieving data from Overpass API.
-- `geodatamine`: allow to interact with [GéoDataMine](https://geodatamine.fr/) API
-- `communesfr`: download French communes boundaries, from https://geo.api.gouv.fr/
-- `datasets`: define URLs you want to promote to users, with a `name` and a `format`
+See [Importers](./importers.md) for more details on the available importers.
 
 #### UMAP_KEEP_VERSIONS
 
