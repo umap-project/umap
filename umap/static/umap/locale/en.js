@@ -543,7 +543,8 @@ const locale = {
     "Back to list": "Back to list",
     "Toggle rule": "Toggle rule",
     "Delete rule": "Delete rule",
-    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes."
+    "Cannot save layer, please try again in a few minutes.": "Cannot save layer, please try again in a few minutes.",
+    "Activate collaborative live editing on this map. Other users must reload the map after changing this setting.": "Activate collaborative live editing on this map. Other users must reload the map after changing this setting."
 }
 L.registerLocale("en", locale)
 L.setLocale("en")
