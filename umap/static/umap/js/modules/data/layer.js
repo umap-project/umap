@@ -804,6 +804,19 @@ export class DataLayer {
     )
     popupFieldset.appendChild(builder.build())
 
+    const textPathFields = [
+      'options.textPath',
+      'options.textPathColor',
+      'options.textPathRepeat',
+      'options.textPathRotate',
+      'options.textPathSize',
+      'options.textPathOffset',
+      'options.textPathPosition',
+    ]
+    builder = new MutatingForm(this, textPathFields)
+    const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
+    fieldset.appendChild(builder.build())
+
     // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
     // but apparently it's needed.
     if (!Utils.isObject(this.options.remoteData)) {
