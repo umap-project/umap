@@ -51,7 +51,6 @@ export const SCHEMA = {
   color: {
     type: String,
     impacts: ['data'],
-    handler: 'ColorPicker',
     label: translate('color'),
     helpEntries: ['colorValue'],
     inheritable: true,
@@ -84,7 +83,6 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
     nullable: true,
-    handler: 'DataLayersControl',
     label: translate('Display the open browser control'),
     default: true,
   },
@@ -160,7 +158,6 @@ export const SCHEMA = {
   fillColor: {
     type: String,
     impacts: ['data'],
-    handler: 'ColorPicker',
     label: translate('fill color'),
     helpEntries: ['fillColor'],
     inheritable: true,
@@ -237,7 +234,6 @@ export const SCHEMA = {
   iconUrl: {
     type: String,
     impacts: ['data'],
-    handler: 'IconUrl',
     label: translate('Icon symbol'),
     inheritable: true,
   },

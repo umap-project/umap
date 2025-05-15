@@ -127,6 +127,12 @@ export class MutatingForm extends Form {
       facetKey: 'PropertyInput',
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
+      color: 'ColorPicker',
+      fillColor: 'ColorPicker',
+      textPathColor: 'ColorPicker',
+      iconUrl: 'IconUrl',
+      licence: 'LicenceChooser',
+      datalayersControl: 'DataLayersControl',
     }
     for (const [key, defaults] of Object.entries(SCHEMA)) {
       const properties = Object.assign({}, defaults)
@@ -153,21 +159,7 @@ export class MutatingForm extends Form {
       } else if (properties.type === Number) {
         if (properties.step) properties.handler = 'Range'
         else properties.handler = 'IntInput'
-      } else {
-        switch (key) {
-          case 'color':
-          case 'fillColor':
-            properties.handler = 'ColorPicker'
-            break
-          case 'iconUrl':
-            properties.handler = 'IconUrl'
-            break
-          case 'licence':
-            properties.handler = 'LicenceChooser'
-            break
-        }
       }
-
       if (customHandlers[key]) {
         properties.handler = customHandlers[key]
       }
