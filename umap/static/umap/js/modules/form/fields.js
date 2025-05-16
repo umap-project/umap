@@ -725,7 +725,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
         <button class="flat tab-url" data-ref=url>${translate('URL')}</button>
       </div>
     `)
-    this.tabs.appendChild(root)
+    ;[recent, symbols, chars, url].forEach((node) => this.tabs.appendChild(node))
     if (Icon.RECENT.length) {
       recent.addEventListener('click', (event) => {
         event.stopPropagation()

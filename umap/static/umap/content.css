@@ -165,7 +165,6 @@ h2.tabs a:hover {
     min-height: var(--map-fragment-height);
 }
 .tag-list {
-    margin-top: var(--text-margin);
     margin-bottom: var(--text-margin);
     display: flex;
     flex-wrap: wrap;
@@ -205,6 +204,7 @@ h2.tabs a:hover {
     margin-bottom: 0;
     flex-grow: 1;
     gap: var(--gutter);
+    margin-top: var(--text-margin);
 }
 .card h3 {
     margin-bottom: 0;

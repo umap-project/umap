@@ -42,6 +42,38 @@ export const EditControl = Control.extend({
   },
 })
 
+export const LoadTemplateControl = Control.extend({
+  options: {
+    position: 'topright',
+  },
+
+  onAdd: (map) => {
+    const template = `
+      <div class="load-template dark">
+        <button type="button" data-ref="button"><i class="icon icon-24 icon-template"></i>${translate('Reuse this template')}</button>
+      </div>
+    `
+    const [container, { button }] = Utils.loadTemplateWithRefs(template)
+    button.addEventListener('click', () => {
+      const downloadUrl = map._umap.urls.get('map_download', {
+        map_id: map._umap.id,
+      })
+      const targetUrl = `${map._umap.urls.get('map_new')}?templateUrl=${downloadUrl}`
+      window.open(targetUrl)
+    })
+    button.addEventListener('mouseover', () => {
+      map._umap.tooltip.open({
+        content: translate('Create a new map using this template'),
+        anchor: button,
+        position: 'bottom',
+        delay: 750,
+        duration: 5000,
+      })
+    })
+    return container
+  },
+})
+
 export const MoreControl = Control.extend({
   options: {
     position: 'topleft',
