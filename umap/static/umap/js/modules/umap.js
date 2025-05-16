@@ -205,6 +205,7 @@ export default class Umap {
       }
       this._defaultExtent = true
       this.properties.name = translate('Untitled map')
+      await this.loadTemplateFromQueryString()
       await this.loadDataFromQueryString()
     }
 
@@ -346,6 +347,16 @@ export default class Umap {
         map_id: this.id,
       })
       window.location = download_url
+    }
+  }
+
+  async loadTemplateFromQueryString() {
+    const templateUrl = this.searchParams.get('templateUrl')
+    if (templateUrl) {
+      this.importer.build()
+      this.importer.url = templateUrl
+      this.importer.format = 'umap'
+      this.importer.submit()
     }
   }
 
