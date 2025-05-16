@@ -272,6 +272,8 @@ class Feature {
     container.appendChild(button)
   }
 
+  addExtraEditFieldset() {}
+
   appendEditFieldsets(container) {
     const optionsFields = this.getShapeOptions()
     let builder = new MutatingForm(this, optionsFields, {
@@ -282,6 +284,8 @@ class Feature {
       translate('Shape properties')
     )
     shapeProperties.appendChild(builder.build())
+
+    this.addExtraEditFieldset(container)
 
     const advancedOptions = this.getAdvancedOptions()
     builder = new MutatingForm(this, advancedOptions, {
@@ -1099,6 +1103,23 @@ export class LineString extends Path {
       })
     }
     return items
+  }
+
+  addExtraEditFieldset(container) {
+    const options = [
+      'properties._umap_options.textPath',
+      'properties._umap_options.textPathColor',
+      'properties._umap_options.textPathRepeat',
+      'properties._umap_options.textPathRotate',
+      'properties._umap_options.textPathSize',
+      'properties._umap_options.textPathOffset',
+      'properties._umap_options.textPathPosition',
+    ]
+    const builder = new MutatingForm(this, options, {
+      id: 'umap-feature-line-decoration',
+    })
+    const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
+    fieldset.appendChild(builder.build())
   }
 }
 

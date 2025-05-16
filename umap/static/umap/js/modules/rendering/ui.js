@@ -372,6 +372,29 @@ export const LeafletPolyline = Polyline.extend({
   parentClass: Polyline,
   includes: [FeatureMixin, PathMixin],
 
+  setStyle: function (options) {
+    PathMixin.setStyle.call(this, options)
+    this.setText(null) // Reset.
+    const textPath = this.feature.getDynamicOption('textPath')
+    if (textPath) {
+      const color =
+        this.feature.getOption('textPathColor') ||
+        this.feature.getDynamicOption('color')
+      const textPathOptions = {
+        repeat: this.feature.getOption('textPathRepeat'),
+        offset: this.feature.getOption('textPathOffset') || undefined,
+        position: this.feature.getOption('textPathPosition'),
+        attributes: {
+          fill: color,
+          opacity: this.feature.getDynamicOption('opacity'),
+          rotate: this.feature.getOption('textPathRotate'),
+          'font-size': this.feature.getOption('textPathSize'),
+        },
+      }
+      this.setText(textPath, textPathOptions)
+    }
+  },
+
   getClass: () => LeafletPolyline,
 
   getMeasure: function (shape) {
