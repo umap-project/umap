@@ -178,7 +178,7 @@ class Map(NamedModel):
     )
     EDIT_STATUS = (
         (ANONYMOUS, _("Everyone")),
-        (COLLABORATORS, _("Editors and team only")),
+        (COLLABORATORS, _("Editors and teams only")),
         (OWNER, _("Owner only")),
     )
     ANONYMOUS_SHARE_STATUS = (
@@ -187,7 +187,7 @@ class Map(NamedModel):
     )
     SHARE_STATUS = ANONYMOUS_SHARE_STATUS + (
         (OPEN, _("Anyone with link")),
-        (PRIVATE, _("Editors and team only")),
+        (PRIVATE, _("Editors and teams only")),
         (BLOCKED, _("Blocked")),
         (DELETED, _("Deleted")),
     )
@@ -217,13 +217,10 @@ class Map(NamedModel):
     editors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
     )
-    team = models.ForeignKey(
-        Team,
-        blank=True,
-        null=True,
-        verbose_name=_("team"),
-        on_delete=models.SET_NULL,
+    teams = models.ManyToManyField(
+        Team, blank=True, verbose_name=_("teams")
     )
+    
     edit_status = models.SmallIntegerField(
         choices=EDIT_STATUS,
         default=get_default_edit_status,
@@ -314,7 +311,10 @@ class Map(NamedModel):
         return settings.SITE_URL + path
 
     def get_author(self):
-        return self.team or self.owner
+        # check if te
+        if not self.teams.all():
+            return self.owner
+        return self.teams.all()[0]
 
     def is_owner(self, request=None):
         if not request:
@@ -373,7 +373,7 @@ class Map(NamedModel):
         elif user == self.owner:
             can = True
         elif self.edit_status == self.COLLABORATORS:
-            if user in self.editors.all() or self.team in user.teams.all():
+            if user in self.editors.all() or any(e in self.teams.all() for e in user.teams.all()):
                 can = True
         return can
 
@@ -393,7 +393,7 @@ class Map(NamedModel):
             can = not (
                 restricted
                 and request.user not in self.editors.all()
-                and self.team not in request.user.teams.all()
+                and not any(e in self.teams.all() for e in request.user.teams.all())
             )
         return can
 
@@ -471,6 +471,7 @@ class DataLayer(NamedModel):
     ANONYMOUS = 1
     COLLABORATORS = 2
     OWNER = 3
+    USERSANDTEAMS = 4
     DELETED = 99
     SHARE_STATUS = (
         (INHERIT, _("Inherit")),
@@ -479,7 +480,8 @@ class DataLayer(NamedModel):
     EDIT_STATUS = (
         (INHERIT, _("Inherit")),
         (ANONYMOUS, _("Everyone")),
-        (COLLABORATORS, _("Editors and team only")),
+        (COLLABORATORS, _("Editors and teams only")),
+        (USERSANDTEAMS, _("Selected Users, Teams and Owner")),
         (OWNER, _("Owner only")),
     )
     ANONYMOUS_EDIT_STATUS = (
@@ -490,6 +492,12 @@ class DataLayer(NamedModel):
     uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    editors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
+    )
+    teams = models.ManyToManyField(
+        Team, blank=True, verbose_name=_("teams")
+    )
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(
         upload_to=upload_to, blank=True, null=True, storage=set_storage
@@ -552,10 +560,28 @@ class DataLayer(NamedModel):
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
         metadata["rank"] = self.rank
-        metadata["permissions"] = {"edit_status": self.edit_status}
-        metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
+        
+        metadata["permissions"] = self.buildPermissions()
         metadata["_referenceVersion"] = self.reference_version
         return metadata
+
+    def buildPermissions(self):
+        permissions = {"edit_status": self.edit_status}
+        permissions["editors"] = [
+            {
+                "id": user.id,
+                "name": user.get_username(),
+                "url": user.get_url(),
+            }
+            for user in self.editors.all()
+        ]
+        permissions["teams"] = [
+            {
+                team.get_metadata()
+            }
+            for team in self.teams.all()
+        ]
+        return permissions
 
     def clone(self, map_inst=None):
         new = self.__class__.objects.get(pk=self.pk)
@@ -602,8 +628,12 @@ class DataLayer(NamedModel):
         elif user.is_authenticated and user == self.map.owner:
             can = True
         elif user.is_authenticated and self.edit_status == self.COLLABORATORS:
-            if user in self.map.editors.all() or self.map.team in user.teams.all():
+            if user in self.map.editors.all() or any(e in self.map.teams.all() for e in user.teams.all()):
                 can = True
+        elif user.is_authenticated and self.edit_status == self.USERSANDTEAMS:
+            if user in self.editors.all() or any(e in self.map.teams.all() for e in user.teams.all()):
+                can = True
+
         return can
 
     def move_to_trash(self):

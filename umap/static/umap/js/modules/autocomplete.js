@@ -277,7 +277,11 @@ export class BaseAjax extends BaseAutocomplete {
 
 class BaseServerAjax extends BaseAjax {
   setUrl() {
-    this.url = '/agnocomplete/AutocompleteUser/?q={q}'
+    if (this.options?.className === 'edit-teams') {
+      this.url = '/agnocomplete/AutocompleteTeam/?q={q}';
+    } else {
+      this.url = '/agnocomplete/AutocompleteUser/?q={q}';
+    }
   }
 
   initRequest() {

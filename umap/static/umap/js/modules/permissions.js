@@ -17,7 +17,7 @@ export class MapPermissions {
     this.properties = Object.assign(
       {
         owner: null,
-        team: null,
+        teams:[],
         editors: [],
         share_status: null,
         edit_status: null,
@@ -123,20 +123,15 @@ export class MapPermissions {
         'properties.owner',
         { handler: 'ManageOwner', label: translate("Map's owner") },
       ])
-      if (this._umap.properties.user?.teams?.length) {
-        collaboratorsFields.push([
-          'properties.team',
-          {
-            handler: 'ManageTeam',
-            label: translate('Attach map to a team'),
-            teams: this._umap.properties.user.teams,
-          },
-        ])
-      }
+      
     }
     collaboratorsFields.push([
       'properties.editors',
       { handler: 'ManageEditors', label: translate("Map's editors") },
+    ])
+    collaboratorsFields.push([
+      'properties.teams',
+      { handler: 'ManageTeams', label: translate("Attach map to teams") },
     ])
 
     const builder = new MutatingForm(this, topFields)
@@ -199,13 +194,17 @@ export class MapPermissions {
       for (let i = 0; i < this.properties.editors.length; i++)
         formData.append('editors', this.properties.editors[i].id)
     }
+    if (!this.isAnonymousMap() && this.properties.teams) {
+      const editors = this.properties.teams.map((t) => t.id)
+      for (let i = 0; i < this.properties.teams.length; i++)
+        formData.append('teams', this.properties.teams[i].id)
+    }
     if (this.isOwner() || this.isAnonymousMap()) {
       formData.append('edit_status', this.properties.edit_status)
       formData.append('share_status', this.properties.share_status)
     }
     if (this.isOwner()) {
       formData.append('owner', this.properties.owner?.id)
-      formData.append('team', this.properties.team?.id || '')
     }
     const [data, response, error] = await this._umap.server.post(
       this.getUrl(),
@@ -254,25 +253,34 @@ export class MapPermissions {
 export class DataLayerPermissions {
   constructor(umap, datalayer) {
     this._umap = umap
-    this.properties = Object.assign(
-      {
-        edit_status: null,
-      },
-      datalayer.options.permissions
-    )
+    this.setPermissions(datalayer.options.permissions)
 
     this.datalayer = datalayer
     this.sync = umap.syncEngine.proxy(this)
   }
-
+  setPermissions(permissions) {
+    this.properties = Object.assign(
+      {
+        editors: [],
+        edit_status: null,
+      },
+      permissions
+    )
+  }
   getSyncMetadata() {
     return {
       subject: 'datalayerpermissions',
       metadata: { id: this.datalayer.id },
     }
   }
-
+  isAnonymousMap() {
+    return !this._umap.properties.permissions.owner
+  }
   edit(container) {
+    const fieldset = Utils.loadTemplate(
+      `<fieldset class="separator"><legend>${translate('"{layer}" permissions',{layer:this.datalayer.getName()})}</legend></fieldset>`
+    )
+    container.appendChild(fieldset)
     const fields = [
       [
         'properties.edit_status',
@@ -285,10 +293,19 @@ export class DataLayerPermissions {
         },
       ],
     ]
+    fields.push([
+      'properties.editors',
+      { handler: 'ManageEditors', label: translate("Layers's editors") },
+    ])
+    fields.push([
+      'properties.teams',
+      { handler: 'ManageTeams', label: translate("Layers's teams") },
+    ])
     const builder = new MutatingForm(this, fields, {
       className: 'umap-form datalayer-permissions',
     })
     const form = builder.build()
+    
     container.appendChild(form)
   }
 
@@ -302,6 +319,11 @@ export class DataLayerPermissions {
   async save() {
     const formData = new FormData()
     formData.append('edit_status', this.properties.edit_status)
+    if (!this.isAnonymousMap() && this.properties.editors) {
+      const editors = this.properties.editors.map((u) => u.id)
+      for (let i = 0; i < this.properties.editors.length; i++)
+        formData.append('editors', this.properties.editors[i].id)
+    }
     const [data, response, error] = await this._umap.server.post(
       this.getUrl(),
       {},

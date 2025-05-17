@@ -1116,6 +1116,7 @@ export class DataLayer {
 
   isReadOnly() {
     // isReadOnly must return true if unset
+    
     return this.options.editMode === 'disabled'
   }
 
