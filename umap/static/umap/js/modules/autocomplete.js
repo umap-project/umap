@@ -208,23 +208,11 @@ export class BaseAutocomplete {
   }
 
   getLeft(el) {
-    let tmp = el.offsetLeft
-    el = el.offsetParent
-    while (el) {
-      tmp += el.offsetLeft
-      el = el.offsetParent
-    }
-    return tmp
+    return el.getBoundingClientRect().left
   }
 
   getTop(el) {
-    let tmp = el.offsetTop
-    el = el.offsetParent
-    while (el) {
-      tmp += el.offsetTop
-      el = el.offsetParent
-    }
-    return tmp
+    return el.getBoundingClientRect().top
   }
 }
 
