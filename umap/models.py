@@ -577,7 +577,9 @@ class DataLayer(NamedModel):
         ]
         permissions["teams"] = [
             {
-                team.get_metadata()
+                "id": team.id,
+                "name": str(team),
+                "url": team.get_url(),
             }
             for team in self.teams.all()
         ]

@@ -324,6 +324,11 @@ export class DataLayerPermissions {
       for (let i = 0; i < this.properties.editors.length; i++)
         formData.append('editors', this.properties.editors[i].id)
     }
+    if (!this.isAnonymousMap() && this.properties.teams) {
+      const editors = this.properties.teams.map((t) => t.id)
+      for (let i = 0; i < this.properties.teams.length; i++)
+        formData.append('teams', this.properties.teams[i].id)
+    }
     const [data, response, error] = await this._umap.server.post(
       this.getUrl(),
       {},

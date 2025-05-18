@@ -56,7 +56,7 @@ class DataLayerForm(forms.ModelForm):
 class DataLayerPermissionsForm(forms.ModelForm):
     class Meta:
         model = DataLayer
-        fields = ("edit_status","editors")
+        fields = ("edit_status","editors", "teams")
 
 
 class AnonymousDataLayerPermissionsForm(forms.ModelForm):
