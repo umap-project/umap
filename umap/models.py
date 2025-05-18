@@ -560,7 +560,7 @@ class DataLayer(NamedModel):
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
         metadata["rank"] = self.rank
-        
+        metadata["editMode"] = "simple" if self.can_edit(request) else "disabled"
         metadata["permissions"] = self.buildPermissions()
         metadata["_referenceVersion"] = self.reference_version
         return metadata
@@ -608,7 +608,7 @@ class DataLayer(NamedModel):
 
     def get_version_path(self, ref):
         return self.geojson.storage.get_version_path(ref, self)
-
+    
     def can_edit(self, request=None):
         """
         Define if a user can edit or not the instance, according to his account
