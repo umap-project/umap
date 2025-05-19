@@ -767,6 +767,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         if "properties" not in map_settings:
             map_settings["properties"] = {}
         map_settings["properties"]["name"] = self.object.name
+        map_settings["properties"]["is_template"] = self.object.is_template
         map_settings["properties"]["permissions"] = self.get_permissions()
         author = self.object.get_author()
         if author:

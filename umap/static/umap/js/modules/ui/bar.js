@@ -266,7 +266,7 @@ const EDIT_BAR_TEMPLATE = `
     <hr>
     <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
     <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
-    <li data-ref="templates" hidden><button type="button"><i class="icon icon-24 icon-template"></i></button></li>
+    <li data-ref="templates" hidden><button type="button" title="${translate('Load template')}"><i class="icon icon-24 icon-template"></i></button></li>
     <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>
     <li data-ref="tilelayers" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
     <li data-ref="center" hidden><button type="button"><i class="icon icon-24 icon-center"></i></button></li>
