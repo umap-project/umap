@@ -35,7 +35,7 @@ class SendLinkForm(forms.Form):
 class UpdateMapPermissionsForm(forms.ModelForm):
     class Meta:
         model = Map
-        fields = ("edit_status", "editors", "share_status", "owner", "team")
+        fields = ("edit_status", "editors", "share_status", "owner", "teams")
 
 
 class AnonymousMapPermissionsForm(forms.ModelForm):
@@ -56,7 +56,7 @@ class DataLayerForm(forms.ModelForm):
 class DataLayerPermissionsForm(forms.ModelForm):
     class Meta:
         model = DataLayer
-        fields = ("edit_status",)
+        fields = ("edit_status","editors", "teams")
 
 
 class AnonymousDataLayerPermissionsForm(forms.ModelForm):

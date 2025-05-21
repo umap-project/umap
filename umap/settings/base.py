@@ -254,6 +254,8 @@ USER_DISPLAY_NAME = "{username}"
 USER_AUTOCOMPLETE_FIELDS = ["^username"]
 USER_URL_FIELD = "username"
 
+TEAM_AUTOCOMPLETE_FIELDS = ['^name']
+
 # =============================================================================
 # Miscellaneous project settings
 # =============================================================================

@@ -1353,22 +1353,44 @@ Fields.ManageEditors = class extends BaseElement {
     }
   }
 }
-
-Fields.ManageTeam = class extends Fields.IntSelect {
-  getOptions() {
-    return [[null, translate('None')]].concat(
-      this.properties.teams.map((team) => [team.id, team.name])
-    )
+Fields.ManageTeams = class extends BaseElement {
+  build() {
+    super.build()
+    const options = {
+      className: 'edit-teams',
+      on_select: L.bind(this.onSelect, this),
+      on_unselect: L.bind(this.onUnselect, this),
+      placeholder: translate("Type team name"),
+    }
+    this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
+    this._values = this.toHTML() || []
+    if (this._values) {
+      for (let i = 0; i < this._values.length; i++)
+        this.autocomplete.displaySelected({
+          item: { value: this._values[i].id, label: this._values[i].name },
+        })
+    }
   }
 
-  toHTML() {
-    return this.get()?.id
+  value() {
+    return this._values
   }
 
-  toJS() {
-    const value = this.value()
-    for (const team of this.properties.teams) {
-      if (team.id === value) return team
+  onSelect(choice) {
+    this._values.push({
+      id: choice.item.value,
+      name: choice.item.label,
+      url: choice.item.url,
+    })
+    this.set()
+  }
+
+  onUnselect(choice) {
+    const index = this._values.findIndex((item) => item.id === choice.item.value)
+    if (index !== -1) {
+      this._values.splice(index, 1)
+      this.set()
     }
   }
 }
+
