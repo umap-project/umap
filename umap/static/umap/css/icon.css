@@ -113,6 +113,9 @@ html[dir="rtl"] .icon {
 .off .icon-edit {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 3);
 }
+.icon-external-link {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 7);
+}
 .icon-extract-shape {
     background-position: calc(var(--tile) * 5) 0;
 }
@@ -214,6 +217,9 @@ html[dir="rtl"] .icon {
 }
 .remotelayer .icon-table {
     display: none !important;
+}
+.icon-template {
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 7);
 }
 .icon-tilelayer {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 6);

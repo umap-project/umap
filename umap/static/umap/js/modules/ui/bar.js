@@ -4,6 +4,7 @@ import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
 import * as Utils from '../utils.js'
 import ContextMenu from './contextmenu.js'
+import TemplateImporter from '../templates.js'
 
 const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
@@ -37,6 +38,7 @@ const TOP_BAR_TEMPLATE = `
             <i class="icon icon-16 icon-save-disabled"></i>
             <span hidden data-ref="saveLabel">${translate('Save')}</span>
             <span hidden data-ref="saveDraftLabel">${translate('Save draft')}</span>
+            <span hidden data-ref="saveTemplateLabel">${translate('Save template')}</span>
         </button>
     </div>
 </div>`
@@ -167,8 +169,11 @@ export class TopBar extends WithTemplate {
     const syncEnabled = this._umap.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
     this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
-    this.elements.saveLabel.hidden = this._umap.permissions.isDraft()
-    this.elements.saveDraftLabel.hidden = !this._umap.permissions.isDraft()
+    const isDraft = this._umap.permissions.isDraft()
+    const isTemplate = this._umap.getProperty('is_template')
+    this.elements.saveLabel.hidden = isDraft || isTemplate
+    this.elements.saveDraftLabel.hidden = !isDraft || isTemplate
+    this.elements.saveTemplateLabel.hidden = !isTemplate
     this._umap.sync._undoManager.toggleState()
   }
 }
@@ -261,6 +266,7 @@ const EDIT_BAR_TEMPLATE = `
     <hr>
     <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
     <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
+    <li data-ref="templates" hidden><button type="button" title="${translate('Load template')}"><i class="icon icon-24 icon-template"></i></button></li>
     <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>
     <li data-ref="tilelayers" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
     <li data-ref="center" hidden><button type="button"><i class="icon icon-24 icon-center"></i></button></li>
@@ -272,6 +278,7 @@ const EDIT_BAR_TEMPLATE = `
 export class EditBar extends WithTemplate {
   constructor(umap, leafletMap, parent) {
     super()
+    this.templateIimporter = new TemplateImporter(umap)
     this._umap = umap
     this._leafletMap = leafletMap
     this.loadTemplate(EDIT_BAR_TEMPLATE)
@@ -288,6 +295,7 @@ export class EditBar extends WithTemplate {
     this._onClick('multipolygon', () => this._umap.editedFeature.ui.editor.newShape())
     this._onClick('caption', () => this._umap.editCaption())
     this._onClick('import', () => this._umap.importer.open())
+    this._onClick('templates', () => this.templateIimporter.open())
     this._onClick('layers', () => this._umap.editDatalayers())
     this._onClick('tilelayers', () => this._leafletMap.editTileLayers())
     this._onClick('center', () => this._umap.editCenter())
@@ -306,6 +314,8 @@ export class EditBar extends WithTemplate {
     this.elements.multipolygon.hidden = !(editedFeature instanceof Polygon)
     this.elements.caption.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.import.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.templates.hidden =
+      this._umap.properties.editMode !== 'advanced' && !this._umap.datalayers.count()
     this.elements.layers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.tilelayers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'

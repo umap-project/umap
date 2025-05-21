@@ -138,9 +138,7 @@ class PublicMapsMixin(object):
         return maps
 
     def get_highlighted_maps(self):
-        staff = User.objects.filter(is_staff=True)
-        stars = Star.objects.filter(by__in=staff).values("map")
-        qs = Map.public.filter(pk__in=stars)
+        qs = Map.public.starred_by_staff()
         maps = qs.order_by("-modified_at")
         return maps
 
@@ -332,10 +330,10 @@ class TeamMaps(PaginatorMixin, DetailView):
 
 
 class SearchMixin:
-    def get_search_queryset(self, **kwargs):
+    def get_search_queryset(self, qs=None, **kwargs):
         q = self.request.GET.get("q")
         tags = [t for t in self.request.GET.getlist("tags") if t]
-        qs = Map.objects.all()
+        qs = qs or Map.public.all()
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
@@ -382,14 +380,8 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = self.get_search_queryset() or Map.objects.all()
-        qs = qs.exclude(share_status__in=[Map.DELETED, Map.BLOCKED])
-        teams = self.object.teams.all()
-        qs = (
-            qs.filter(owner=self.object)
-            .union(qs.filter(editors=self.object))
-            .union(qs.filter(team__in=teams))
-        )
+        qs = Map.private.for_user(self.object)
+        qs = self.get_search_queryset(qs) or qs
         return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
@@ -408,9 +400,9 @@ class UserDownload(DetailView, SearchMixin):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = Map.objects.filter(id__in=self.request.GET.getlist("map_id"))
-        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
-        return qs.order_by("-modified_at")
+        qs = Map.private.filter(id__in=self.request.GET.getlist("map_id"))
+        qsu = qs.for_user(self.object)
+        return qsu.order_by("-modified_at")
 
     def render_to_response(self, context, *args, **kwargs):
         zip_buffer = io.BytesIO()
@@ -775,6 +767,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         if "properties" not in map_settings:
             map_settings["properties"] = {}
         map_settings["properties"]["name"] = self.object.name
+        map_settings["properties"]["is_template"] = self.object.is_template
         map_settings["properties"]["permissions"] = self.get_permissions()
         author = self.object.get_author()
         if author:
@@ -802,7 +795,10 @@ class MapDownload(DetailView):
         return reverse("map_download", args=(self.object.pk,))
 
     def render_to_response(self, context, *args, **kwargs):
-        umapjson = self.object.generate_umapjson(self.request)
+        include_data = self.request.GET.get("include_data") != "0"
+        umapjson = self.object.generate_umapjson(
+            self.request, include_data=include_data
+        )
         response = simple_json_response(**umapjson)
         response["Content-Disposition"] = (
             f'attachment; filename="umap_backup_{self.object.slug}.umap"'
@@ -1456,3 +1452,26 @@ class LoginPopupEnd(TemplateView):
         if backend in settings.DEPRECATED_AUTHENTICATION_BACKENDS:
             return HttpResponseRedirect(reverse("user_profile"))
         return super().get(*args, **kwargs)
+
+
+class TemplateList(ListView):
+    model = Map
+
+    def render_to_response(self, context, **response_kwargs):
+        source = self.request.GET.get("source")
+        if source == "mine":
+            qs = Map.private.filter(is_template=True).for_user(self.request.user)
+        elif source == "community":
+            qs = Map.public.filter(is_template=True)
+        elif source == "staff":
+            qs = Map.public.starred_by_staff().filter(is_template=True)
+        templates = [
+            {
+                "id": m.id,
+                "name": m.name,
+                "description": m.description,
+                "url": m.get_absolute_url(),
+            }
+            for m in qs.order_by("-modified_at")
+        ]
+        return simple_json_response(templates=templates)

@@ -253,6 +253,12 @@ export const SCHEMA = {
     inheritable: true,
     default: true,
   },
+  is_template: {
+    type: Boolean,
+    impacts: ['ui'],
+    label: translate('This map is a template'),
+    default: false,
+  },
   labelDirection: {
     type: String,
     impacts: ['data'],

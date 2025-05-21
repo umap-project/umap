@@ -4,7 +4,7 @@
     margin-top: 100px;
     width: var(--dialog-width);
     max-width: 100vw;
-    max-height: 50vh;
+    max-height: 80vh;
     padding: 20px;
     border: 1px solid #222;
     background-color: var(--background-color);
@@ -12,10 +12,13 @@
     border-radius: 5px;
     overflow-y: auto;
     height: fit-content;
-    max-height: 90vh;
 }
 .umap-dialog ul + h4 {
   margin-top: var(--box-margin);
+}
+.umap-dialog .body {
+  max-height: 50vh;
+  overflow-y: auto;
 }
 :where([data-component="no-dialog"]:not([hidden])) {
   display: block;

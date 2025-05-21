@@ -120,6 +120,8 @@
 :has(.right[data-highlight="center"]) li[data-ref="center"] button:hover,
 :has(.right[data-highlight="permissions"]) li[data-ref="permissions"] button,
 :has(.right[data-highlight="permissions"]) li[data-ref="permissions"] button:hover,
+:has(.right[data-highlight="templates"]) li[data-ref="templates"] button,
+:has(.right[data-highlight="templates"]) li[data-ref="templates"] button:hover,
 :has(.right[data-highlight="settings"]) li[data-ref="settings"] button,
 :has(.right[data-highlight="settings"]) li[data-ref="settings"] button:hover {
     background-color: var(--color-mediumGray);

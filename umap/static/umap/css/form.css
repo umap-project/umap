@@ -114,7 +114,7 @@ input[type="submit"] {
     background-color: var(--color-darkerGray);
 }
 .dark a {
-    color: var(--text-color);
+    color: var(--color-verySoftCyan) !important;
 }
 .dark [type="button"][disabled],
 .dark input[type="submit"][disabled] {
@@ -506,23 +506,29 @@ i.info {
     margin-bottom: 20px;
     border-bottom: 1px solid var(--color-lighterGray);
 }
-.flat-tabs button {
+.flat-tabs button.flat {
     padding: 10px;
     text-decoration: none;
     cursor: pointer;
-    border-bottom: 1px solid transparent;
-}
-.flat-tabs button:hover,
-.flat-tabs .on {
+    border-bottom: 2px solid transparent;
     font-weight: bold;
-    border-bottom: 1px solid var(--color-mediumGray);
 }
-.dark .flat-tabs button {
+.flat-tabs button.flat:hover,
+.flat-tabs .flat.on {
+    color: var(--color-verySoftCyan);
+    border-bottom: 2px solid var(--color-verySoftCyan);
+}
+.dark .flat-tabs button.flat:hover {
+    text-decoration: none;
+}
+.dark .flat-tabs button.flat {
+    border-bottom: 2px solid transparent;
     color: var(--color-light);
 }
-.dark .flat-tabs button:hover,
-.dark .flat-tabs .on {
-    border-bottom: 1px solid var(--color-light);
+.dark .flat-tabs button.flat:hover,
+.dark .flat-tabs .flat.on {
+    color: var(--color-verySoftCyan);
+    border-bottom: 2px solid var(--color-verySoftCyan);
 }
 .umap-pictogram-category h6 {
     font-size: 1.3em;

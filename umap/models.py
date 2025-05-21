@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
-from .managers import PublicManager
+from .managers import PrivateManager, PublicManager
 from .utils import _urls_for_js
 
 
@@ -238,9 +238,15 @@ class Map(NamedModel):
         blank=True, null=True, verbose_name=_("settings"), default=dict
     )
     tags = ArrayField(models.CharField(max_length=200), blank=True, default=list)
+    is_template = models.BooleanField(
+        default=False,
+        verbose_name=_("save as template"),
+        help_text=_("This map is a template map."),
+    )
 
     objects = models.Manager()
     public = PublicManager()
+    private = PrivateManager()
 
     @property
     def description(self):
@@ -289,14 +295,17 @@ class Map(NamedModel):
             datalayer.delete()
         return super().delete(**kwargs)
 
-    def generate_umapjson(self, request):
+    def generate_umapjson(self, request, include_data=True):
         umapjson = self.settings
         umapjson["type"] = "umap"
+        umapjson["properties"].pop("is_template", None)
         umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
         datalayers = []
         for datalayer in self.datalayers:
-            with datalayer.geojson.open("rb") as f:
-                layer = json.loads(f.read())
+            layer = {}
+            if include_data:
+                with datalayer.geojson.open("rb") as f:
+                    layer = json.loads(f.read())
             if datalayer.settings:
                 datalayer.settings.pop("id", None)
                 layer["_umap_options"] = datalayer.settings

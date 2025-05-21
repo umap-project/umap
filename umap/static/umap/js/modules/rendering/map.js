@@ -21,6 +21,7 @@ import {
   MoreControl,
   PermanentCreditsControl,
   TileLayerChooser,
+  LoadTemplateControl,
 } from './controls.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
@@ -49,6 +50,10 @@ const ControlsMixin = {
 
   initControls: function () {
     this._controls = {}
+
+    if (this._umap.properties.is_template && !this.options.noControl) {
+      new LoadTemplateControl(this).addTo(this)
+    }
 
     if (this._umap.hasEditMode() && !this.options.noControl) {
       new EditControl(this).addTo(this)

@@ -528,3 +528,62 @@ def test_can_find_small_usernames(client):
     data = json.loads(response.content)["data"]
     assert len(data) == 1
     assert data[0]["label"] == "JoeJoe"
+
+
+@pytest.mark.django_db
+def test_templates_list(client, user, user2):
+    public = MapFactory(
+        owner=user,
+        name="A public template",
+        share_status=Map.PUBLIC,
+        is_template=True,
+    )
+    link_only = MapFactory(
+        owner=user,
+        name="A link-only template",
+        share_status=Map.OPEN,
+        is_template=True,
+    )
+    private = MapFactory(
+        owner=user,
+        name="A link-only template",
+        share_status=Map.PRIVATE,
+        is_template=True,
+    )
+    someone_else = MapFactory(
+        owner=user2,
+        name="A public template from someone else",
+        share_status=Map.PUBLIC,
+        is_template=True,
+    )
+    staff = UserFactory(username="Staff", is_staff=True)
+    Star.objects.create(by=staff, map=someone_else)
+    client.login(username=user.username, password="123123")
+    url = reverse("template_list")
+
+    # Ask for mine
+    response = client.get(f"{url}?source=mine")
+    templates = json.loads(response.content)["templates"]
+    ids = [t["id"] for t in templates]
+    assert public.pk in ids
+    assert link_only.pk in ids
+    assert private.pk in ids
+    assert someone_else.pk not in ids
+
+    # Ask for staff ones
+    response = client.get(f"{url}?source=staff")
+    templates = json.loads(response.content)["templates"]
+    ids = [t["id"] for t in templates]
+    assert public.pk not in ids
+    assert link_only.pk not in ids
+    assert private.pk not in ids
+    assert someone_else.pk in ids
+
+    # Ask for community ones
+    response = client.get(f"{url}?source=community")
+    templates = json.loads(response.content)["templates"]
+    ids = [t["id"] for t in templates]
+    assert public.pk in ids
+    assert link_only.pk not in ids
+    assert private.pk not in ids
+    assert someone_else.pk in ids
