@@ -1,5 +1,9 @@
 # Vidéos uMap
 
+## uMap-Visio-Ouverte de jeudi 13 mars 2025
+
+<iframe title="uMap-Visio-Ouverte de jeudi 13 mars 2025" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/9WaG6B8KpbZwhD4gLiPCFL" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
 ## Faire la carte de son marché de Noël
 
 <iframe title="Faire la carte de son marché de Noël" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/7d3a95ad-37dc-4af1-ac15-17992cb95869" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
