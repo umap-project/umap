@@ -1,6 +1,7 @@
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 /* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
+import '../../vendors/gdal/gdal3.js'
 
 export const EXPORT_FORMATS = {
   geojson: {
@@ -37,9 +38,46 @@ export const EXPORT_FORMATS = {
 }
 
 export class Formatter {
-  async fromGPX(str) {
-    const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
-    const data = togeojson.gpx(this.toDom(str))
+  async initGdal() {
+    if (!this.Gdal) {
+      const startTime = performance.now()
+      this.Gdal = await initGdalJs({
+        path: '/static/umap/vendors/gdal/',
+        useWorker: true,
+      })
+      const endTime = performance.now()
+      console.log(`Loaded Gdal in ${endTime - startTime} milliseconds`)
+    }
+    return this.Gdal
+  }
+
+  async import(str, driver, filename, parameters = {}) {
+    await this.initGdal()
+    const { datasets, errors } = await this.Gdal.open(
+      new File([str], filename),
+      parameters.open
+    )
+    console.log(datasets)
+    const info = await this.Gdal.getInfo(datasets[0])
+    console.log(info)
+    const imported = await this.Gdal.ogr2ogr(datasets[0], [
+      '-if',
+      driver,
+      '-f',
+      'JSONFG',
+      '-t_srs',
+      'EPSG:4326',
+      '-skipfailures',
+      ...(parameters.import || []),
+    ])
+
+    const startTime = performance.now()
+    const data = JSON.parse(
+      new TextDecoder().decode(await this.Gdal.getFileBytes(imported.local))
+    )
+    const endTime = performance.now()
+    console.log(`Loaded data in ${endTime - startTime} milliseconds`)
+    console.log(data)
     for (const feature of data.features || []) {
       feature.properties.description = feature.properties.desc
       for (const key in feature.properties) {
@@ -48,14 +86,20 @@ export class Formatter {
         }
       }
     }
+    this.Gdal.close(datasets[0])
     return data
   }
 
-  async fromKML(str) {
-    const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
-    return togeojson.kml(this.toDom(str), {
-      skipNullGeometry: true,
+  async fromGPX(str) {
+    return await this.import(str, 'GPX', 'file.gpx', {
+      open: ['ELE_AS_25D=YES'],
+      // Exclude track_points and route_points
+      import: ['waypoints', 'routes', 'tracks'],
     })
+  }
+
+  async fromKML(str) {
+    return await this.import(str, 'KML', 'file.kml')
   }
 
   async fromGeoJSON(str) {
@@ -63,65 +107,22 @@ export class Formatter {
   }
 
   async fromOSM(str) {
-    let src
-    try {
-      src = JSON.parse(str)
-    } catch (e) {
-      src = this.toDom(str)
-    }
-    return osmtogeojson(src, { flatProperties: true })
+    return await this.import(str, 'OSM', 'file.osm')
   }
 
-  fromCSV(str, callback) {
-    csv2geojson.csv2geojson(
-      str,
-      {
-        delimiter: 'auto',
-        includeLatLon: false,
-        sexagesimal: false,
-        parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
-      },
-      (err, result) => {
-        // csv2geojson fallback to null geometries when it cannot determine
-        // lat or lon columns. This is valid geojson, but unwanted from a user
-        // point of view.
-        if (result?.features.length) {
-          if (result.features[0].geometry === null) {
-            err = {
-              type: 'Error',
-              message: translate('Cannot determine latitude and longitude columns.'),
-            }
-          }
-        }
-        if (err) {
-          let message
-          if (err.type === 'Error') {
-            message = err.message
-          } else {
-            message = translate('{count} errors during import: {message}', {
-              count: err.length,
-              message: err[0].message,
-            })
-          }
-          if (str.split(/\r\n|\r|\n/).length <= 2) {
-            // Seems like a blank CSV, let's not warn
-            console.debug(err)
-          } else {
-            Alert.error(message, 10000)
-          }
-        }
-        if (result?.features.length) {
-          callback(result)
-        }
-      }
-    )
+  async fromCSV(str, callback) {
+    return await this.import(str, 'CSV', 'file.csv', {
+      open: [
+        'X_POSSIBLE_NAMES=lon*,lng,x',
+        'Y_POSSIBLE_NAMES=lat*,y',
+        'KEEP_GEOM_COLUMNS=NO',
+      ],
+      import: ['-s_srs', 'EPSG:4326'],
+    })
   }
 
   async fromGeoRSS(str) {
-    const GeoRSSToGeoJSON = await import(
-      '../../vendors/georsstogeojson/GeoRSSToGeoJSON.js'
-    )
-    return GeoRSSToGeoJSON.parse(this.toDom(str))
+    return await this.import(str, 'GeoRSS', 'file.rss')
   }
 
   toDom(x) {
@@ -136,9 +137,7 @@ export class Formatter {
   async parse(str, format) {
     switch (format) {
       case 'csv':
-        return new Promise((resolve, reject) => {
-          return this.fromCSV(str, (data) => resolve(data))
-        })
+        return await this.fromCSV(str)
       case 'gpx':
         return await this.fromGPX(str)
       case 'kml':

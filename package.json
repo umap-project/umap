@@ -42,6 +42,7 @@
     "colorbrewer": "1.5.7",
     "csv2geojson": "github:umap-project/csv2geojson#patched",
     "dompurify": "3.2.4",
+    "gdal3.js": "^2.8.1",
     "georsstogeojson": "^0.2.0",
     "jsdom": "^24.0.0",
     "leaflet": "1.9.4",

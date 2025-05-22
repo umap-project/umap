@@ -320,6 +320,7 @@ class Feature {
 
   getDisplayName() {
     const keys = U.LABEL_KEYS.slice() // Copy.
+    console.log(keys)
     const labelKey = this.getOption('labelKey')
     // Variables mode.
     if (labelKey) {

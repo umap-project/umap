@@ -193,19 +193,21 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page, settings):
     assert data["features"][0]["geometry"] == {
         "coordinates": [
             [
-                -121.7295456,
-                45.4431641,
-            ],
-            [
-                -121.72908,
-                45.4428615,
-            ],
-            [
-                -121.7279085,
-                45.4425697,
-            ],
+                [
+                    -121.7295456,
+                    45.4431641,
+                ],
+                [
+                    -121.72908,
+                    45.4428615,
+                ],
+                [
+                    -121.7279085,
+                    45.4425697,
+                ],
+            ]
         ],
-        "type": "LineString",
+        "type": "MultiLineString",
     }
     assert data["features"][0]["properties"] == {
         "description": "Simple description",
