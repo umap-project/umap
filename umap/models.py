@@ -279,6 +279,7 @@ class Map(NamedModel):
                 "id": self.pk,
                 "schema": self.extra_schema,
                 "slideshow": {},
+                "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
             }
         )
         return map_settings
