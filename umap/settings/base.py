@@ -278,6 +278,28 @@ UMAP_MAPS_PER_SEARCH = 25
 UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
 UMAP_HELP_URL = "https://discover.umap-project.org/"
+UMAP_HELP_LINKS = [
+    {
+        "label": _("uMap user documentation"),
+        "url": "https://discover.umap-project.org/",
+        "lang": "en/fr",
+    },
+    {
+        "label": _("Video tutorials"),
+        "url": "https://discover.umap-project.org/videos/",
+        "lang": "en/fr",
+    },
+    {
+        "label": _("OpenStreetMap.org forum"),
+        "url": "https://community.openstreetmap.org/tag/umap",
+        "lang": "en/de",
+    },
+    {
+        "label": _("OpenStreetMap France forum"),
+        "url": "https://forum.openstreetmap.fr/c/utiliser/umap/29",
+        "lang": "fr",
+    },
+]
 USER_MAPS_URL = "user_maps"
 DATABASES = {
     "default": env.db(

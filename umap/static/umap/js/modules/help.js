@@ -223,10 +223,12 @@ export default class Help {
 
   // Special dynamic case. Do we still think this dialog is useful?
   showGetStarted() {
-    const [container, { ul }] = Utils.loadTemplateWithRefs(`
+    const [container, { getstarted, links }] = Utils.loadTemplateWithRefs(`
       <div>
         <h3><i class="icon icon-16 icon-help"></i>${translate('Where do we go from here?')}</h3>
-        <ul data-ref=ul class="umap-getstarted"></ul>
+        <ul data-ref=getstarted class="umap-getstarted"></ul>
+        <h4>${translate('More help resources')}</h4>
+        <ul data-ref=links class="umap-help-links"></ul>
       </div>
     `)
     const elements = document.querySelectorAll('[data-getstarted]')
@@ -234,11 +236,17 @@ export default class Help {
       const [node, { button }] = Utils.loadTemplateWithRefs(
         `<li><button data-ref=button type="button" title="${el.title}">${el.innerHTML}${el.title}</button></li>`
       )
-      ul.appendChild(node)
+      getstarted.appendChild(node)
       button.addEventListener('click', () => {
         el.click()
         this.dialog.close()
       })
+    }
+    for (const info of this.umap.properties.help_links) {
+      const [node, { button }] = Utils.loadTemplateWithRefs(
+        `<li><a href="${info.url}" target="_blank">${info.label} (${info.lang})</a><i class="icon icon-16 icon-external-link"></i></li>`
+      )
+      links.appendChild(node)
     }
     this.dialog.open({ template: container })
   }

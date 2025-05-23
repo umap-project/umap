@@ -612,6 +612,7 @@ class MapDetailMixin(SessionMixin):
             "websocketEnabled": settings.REALTIME_ENABLED,
             "importers": settings.UMAP_IMPORTERS,
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
+            "help_links": settings.UMAP_HELP_LINKS,
         }
         created = bool(getattr(self, "object", None))
         if created:

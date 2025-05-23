@@ -468,6 +468,9 @@ ul.photon-autocomplete {
     width: 100%;
     margin-bottom: var(--text-margin);
 }
+.umap-help-links li {
+    margin-bottom: var(--text-margin);
+}
 .umap-help {
     font-style: italic;
 }
