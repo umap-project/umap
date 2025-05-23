@@ -80,3 +80,13 @@ def test_user_dashboard_display_user_maps_distinct(client, map):
     body = response.content.decode()
     assert body.count(f'<a href="/en/map/test-map_{map.pk}">test map</a>') == 1
     assert body.count(anonymap.name) == 0
+
+
+def test_user_dashboard_search(client, map):
+    new_map = MapFactory(name="A map about bicycle", owner=map.owner)
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(f"{reverse('user_dashboard')}?q=bicycle")
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+    assert new_map.name in body
