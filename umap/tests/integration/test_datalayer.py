@@ -54,22 +54,29 @@ def test_should_honour_fromZoom(live_server, map, datalayer, page):
     expect(markers).to_be_visible()
 
 
-def test_should_honour_toZoom(live_server, map, datalayer, page):
+def test_should_honour_toZoom(live_server, map, datalayer, page, new_page):
     set_options(datalayer, displayOnLoad=True, toZoom=6)
+    # Loading at zoom 7 should not show the marker
     page.goto(f"{live_server.url}{map.get_absolute_url()}#7/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
-    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
+
+    # Loading at zoom 6 should show the marker
+    page2 = new_page()
+    markers = page2.locator(".leaflet-marker-icon")
+    page2.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
+    expect(page2).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
-    page.get_by_label("Zoom out").click()
-    expect(page).to_have_url(re.compile(r".*#5/48\..+/14\..+"))
+
+    # Now try to unzoom/rezoom and check that markers show/hide accordingly.
+    page2.get_by_label("Zoom out").click()
+    expect(page2).to_have_url(re.compile(r".*#5/48\..+/14\..+"))
     expect(markers).to_be_visible()
-    page.get_by_label("Zoom in").click()
-    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
+    page2.get_by_label("Zoom in").click()
+    expect(page2).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
-    page.get_by_label("Zoom in").click()
-    expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
+    page2.get_by_label("Zoom in").click()
+    expect(page2).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
     expect(markers).to_be_hidden()
 
 
