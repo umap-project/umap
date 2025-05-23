@@ -206,7 +206,7 @@ See [customization](customize.md) for details.
 #### UMAP_EXTRA_URLS
 
 By default:
-```
+```python title="local_settings.py"
 UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',
     'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}',
@@ -243,6 +243,37 @@ ready for production use (no backup, etc.)
 
 Link to show on the header under the "Feedback and help" label.
 
+
+#### UMAP_HELP_LINKS
+
+List of external resources to display in the help dialog.
+
+```python title="local_settings.py"
+UMAP_HELP_LINKS = [
+    {
+        "label": "uMap user documentation",
+        "url": "https://discover.umap-project.org/",
+        "lang": "en/fr",
+    },
+    {
+        "label": "Video tutorials",
+        "url": "https://discover.umap-project.org/videos/",
+        "lang": "en/fr",
+    },
+    {
+        "label": "OpenStreetMap.org forum",
+        "url": "https://community.openstreetmap.org/tag/umap",
+        "lang": "en/de",
+    },
+    {
+        "label": "OpenStreetMap France forum",
+        "url": "https://forum.openstreetmap.fr/c/utiliser/umap/29",
+        "lang": "fr",
+    },
+]
+```
+
+
 #### UMAP_HOME_FEED
 
 Which feed to display on the home page. Three valid values:
@@ -255,7 +286,7 @@ Which feed to display on the home page. Three valid values:
 
 Informations about the entity hosting this uMap instance.
 
-```
+```python title="local_settings.py"
 UMAP_HOST_INFOS = {
     "name": "OpenStreetMap France",
     "url": "https://openstreetmap.fr",
@@ -274,7 +305,7 @@ Only the key is mandatory to activate an importer (eg. `{"overpass": {}}`).
 
 Example:
 
-```
+```python title="local_settings.py"
 UMAP_IMPORTERS = {
     "geodatamine": {"name": "my custom name"},
     "overpass": {"url": "https://overpass-api.de/api/interpreter"},
