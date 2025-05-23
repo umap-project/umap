@@ -81,7 +81,7 @@ export default class TemplateImporter {
       let url = this.umap.urls.get('map_download', {
         map_id: templateId,
       })
-      if (!form.include_data) {
+      if (!form.include_data.checked) {
         url = `${url}?include_data=0`
       }
       this.umap.importer.build()
