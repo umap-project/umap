@@ -1269,7 +1269,7 @@ Fields.Range = class extends Fields.FloatInput {
     for (
       let i = this.properties.min;
       i <= this.properties.max;
-      i += this.properties.step
+      i += (this.properties.max - this.properties.min) / 10
     ) {
       const ii = i.toFixed(digits)
       options += `<option value="${ii}" label="${ii}"></option>`

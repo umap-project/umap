@@ -51,7 +51,6 @@ export const SCHEMA = {
   color: {
     type: String,
     impacts: ['data'],
-    handler: 'ColorPicker',
     label: translate('color'),
     helpEntries: ['colorValue'],
     inheritable: true,
@@ -84,7 +83,6 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
     nullable: true,
-    handler: 'DataLayersControl',
     label: translate('Display the open browser control'),
     default: true,
   },
@@ -160,7 +158,6 @@ export const SCHEMA = {
   fillColor: {
     type: String,
     impacts: ['data'],
-    handler: 'ColorPicker',
     label: translate('fill color'),
     helpEntries: ['fillColor'],
     inheritable: true,
@@ -237,7 +234,6 @@ export const SCHEMA = {
   iconUrl: {
     type: String,
     impacts: ['data'],
-    handler: 'IconUrl',
     label: translate('Icon symbol'),
     inheritable: true,
   },
@@ -544,6 +540,60 @@ export const SCHEMA = {
   },
   team: {
     type: Object,
+  },
+  textPath: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Add text along path'),
+  },
+  textPathColor: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Text color'),
+  },
+  textPathOffset: {
+    type: Number,
+    label: translate('Text offset'),
+    impacts: ['data'],
+    default: 1,
+    min: -20,
+    max: 20,
+    step: 1,
+  },
+  textPathPosition: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Text position'),
+    default: 'center',
+    choices: [
+      ['start', translate('start')],
+      ['center', translate('center')],
+      ['end', translate('end')],
+    ],
+  },
+  textPathRepeat: {
+    type: Boolean,
+    label: translate('Text repeat'),
+    impacts: ['data'],
+    default: true,
+  },
+  textPathRotate: {
+    type: Number,
+    label: translate('Text rotate'),
+    impacts: ['data'],
+    default: 0,
+    min: 0,
+    max: 360,
+    step: 1,
+  },
+  textPathSize: {
+    type: Number,
+    label: translate('Text size'),
+    impacts: ['data'],
+    default: 20,
+    min: 10,
+    max: 30,
+    step: 1,
   },
   tilelayer: {
     type: Object,
