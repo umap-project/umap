@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-25 15:38+0000\n"
+"POT-Creation-Date: 2025-05-23 15:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "name"
 msgstr ""
 
-#: models.py:63 models.py:493
+#: models.py:63 models.py:503
 msgid "description"
 msgstr ""
 
@@ -61,23 +61,23 @@ msgstr ""
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:176 models.py:487
+#: models.py:176 models.py:497
 msgid "Only editable with secret edit link"
 msgstr ""
 
-#: models.py:177 models.py:488
+#: models.py:177 models.py:498
 msgid "Everyone can edit"
 msgstr ""
 
-#: models.py:180 models.py:481
+#: models.py:180 models.py:491
 msgid "Everyone"
 msgstr ""
 
-#: models.py:181 models.py:190 models.py:482
+#: models.py:181 models.py:190 models.py:492
 msgid "Editors and team only"
 msgstr ""
 
-#: models.py:182 models.py:483
+#: models.py:182 models.py:493
 msgid "Owner only"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:192 models.py:477
+#: models.py:192 models.py:487
 msgid "Deleted"
 msgstr ""
 
@@ -137,99 +137,123 @@ msgstr ""
 msgid "team"
 msgstr ""
 
-#: models.py:230 models.py:509
+#: models.py:230 models.py:519
 msgid "edit status"
 msgstr ""
 
-#: models.py:235 models.py:514
+#: models.py:235 models.py:524
 msgid "share status"
 msgstr ""
 
-#: models.py:238 models.py:504
+#: models.py:238 models.py:514
 msgid "settings"
 msgstr ""
 
-#: models.py:410
+#: models.py:243
+msgid "save as template"
+msgstr ""
+
+#: models.py:244
+msgid "This map is a template map."
+msgstr ""
+
+#: models.py:420
 msgid "Clone of"
 msgstr ""
 
-#: models.py:476 models.py:480 models.py:486
+#: models.py:486 models.py:490 models.py:496
 msgid "Inherit"
 msgstr ""
 
-#: models.py:499
+#: models.py:509
 msgid "display on load"
 msgstr ""
 
-#: models.py:500
+#: models.py:510
 msgid "Display this layer on load."
 msgstr ""
 
-#: settings/base.py:296
-msgid "Art and Culture"
+#: settings/base.py:283
+msgid "uMap user documentation"
 msgstr ""
 
-#: settings/base.py:297
-msgid "Cycling"
+#: settings/base.py:288
+msgid "Video tutorials"
+msgstr ""
+
+#: settings/base.py:293
+msgid "OpenStreetMap.org forum"
 msgstr ""
 
 #: settings/base.py:298
+msgid "OpenStreetMap France forum"
+msgstr ""
+
+#: settings/base.py:318
+msgid "Art and Culture"
+msgstr ""
+
+#: settings/base.py:319
+msgid "Cycling"
+msgstr ""
+
+#: settings/base.py:320
 msgid "Business"
 msgstr ""
 
-#: settings/base.py:299
+#: settings/base.py:321
 msgid "Environment"
 msgstr ""
 
-#: settings/base.py:300
+#: settings/base.py:322
 msgid "Education"
 msgstr ""
 
-#: settings/base.py:301
+#: settings/base.py:323
 msgid "Food and Agriculture"
 msgstr ""
 
-#: settings/base.py:302
+#: settings/base.py:324
 msgid "Geopolitics"
 msgstr ""
 
-#: settings/base.py:303
+#: settings/base.py:325
 msgid "Health"
 msgstr ""
 
-#: settings/base.py:304
+#: settings/base.py:326
 msgid "Hiking"
 msgstr ""
 
-#: settings/base.py:305
+#: settings/base.py:327
 msgid "History"
 msgstr ""
 
-#: settings/base.py:306
+#: settings/base.py:328
 msgid "Public sector"
 msgstr ""
 
-#: settings/base.py:307
+#: settings/base.py:329
 msgid "Science"
 msgstr ""
 
-#: settings/base.py:308
+#: settings/base.py:330
 msgid "Shopping"
 msgstr ""
 
-#: settings/base.py:309
+#: settings/base.py:331
 msgid "Sport and Leisure"
 msgstr ""
 
-#: settings/base.py:310
+#: settings/base.py:332
 msgid "Travel"
 msgstr ""
 
-#: settings/base.py:311
+#: settings/base.py:333
 msgid "Transports"
 msgstr ""
 
-#: settings/base.py:312
+#: settings/base.py:334
 msgid "Tourism"
 msgstr ""
 
@@ -493,8 +517,16 @@ msgstr ""
 msgid "You are logged in. Continuing..."
 msgstr ""
 
-#: templates/umap/map_list.html:18 views.py:444
+#: templates/umap/map_list.html:15
+msgid "template"
+msgstr ""
+
+#: templates/umap/map_list.html:18 views.py:437
 msgid "by"
+msgstr ""
+
+#: templates/umap/map_list.html:22
+msgid "See the template"
 msgstr ""
 
 #: templates/umap/map_list.html:22
@@ -743,70 +775,70 @@ msgstr ""
 msgid "New team"
 msgstr ""
 
-#: views.py:235
+#: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:239
+#: views.py:237
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:449
+#: views.py:442
 msgid "View the map"
 msgstr ""
 
-#: views.py:845
+#: views.py:843
 msgid "See full screen"
 msgstr ""
 
-#: views.py:988
+#: views.py:986
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:1024
+#: views.py:1022
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1027
+#: views.py:1025
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1034
+#: views.py:1032
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1037
+#: views.py:1035
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1048
+#: views.py:1046
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1054
+#: views.py:1052
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1080
+#: views.py:1078
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1085
+#: views.py:1083
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1339
+#: views.py:1337
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1361
+#: views.py:1359
 msgid "Permissions updated with success!"
 msgstr ""

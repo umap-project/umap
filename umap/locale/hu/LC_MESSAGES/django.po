@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-04 16:49+0000\n"
+"POT-Creation-Date: 2025-05-23 15:24+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2025\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
@@ -43,7 +43,7 @@ msgstr "A „%(name)s” használata a hitelesítéshez elavult, és hamarosan e
 msgid "name"
 msgstr "név"
 
-#: models.py:63 models.py:493
+#: models.py:63 models.py:503
 msgid "description"
 msgstr "leírás"
 
@@ -63,23 +63,23 @@ msgstr "OSM-csempeformátumot használó URL-sablon"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Csemperétegek sorrendje a szerkesztődobozban"
 
-#: models.py:176 models.py:487
+#: models.py:176 models.py:497
 msgid "Only editable with secret edit link"
 msgstr "Kizárólag titkos szerkesztési linkkel szerkeszthető"
 
-#: models.py:177 models.py:488
+#: models.py:177 models.py:498
 msgid "Everyone can edit"
 msgstr "Bárki szerkesztheti"
 
-#: models.py:180 models.py:481
+#: models.py:180 models.py:491
 msgid "Everyone"
 msgstr "Mindenki"
 
-#: models.py:181 models.py:190 models.py:482
+#: models.py:181 models.py:190 models.py:492
 msgid "Editors and team only"
 msgstr "Csak a szerkesztők és a csoport"
 
-#: models.py:182 models.py:483
+#: models.py:182 models.py:493
 msgid "Owner only"
 msgstr "Csak a tulajdonos"
 
@@ -99,7 +99,7 @@ msgstr "A link birtokában bárki"
 msgid "Blocked"
 msgstr "Blokkolva"
 
-#: models.py:192 models.py:477
+#: models.py:192 models.py:487
 msgid "Deleted"
 msgstr "Törölve"
 
@@ -139,101 +139,125 @@ msgstr "szerkesztők"
 msgid "team"
 msgstr "csoport"
 
-#: models.py:230 models.py:509
+#: models.py:230 models.py:519
 msgid "edit status"
 msgstr "szerkeszthetőség"
 
-#: models.py:235 models.py:514
+#: models.py:235 models.py:524
 msgid "share status"
 msgstr "megoszthatóság"
 
-#: models.py:238 models.py:504
+#: models.py:238 models.py:514
 msgid "settings"
 msgstr "beállítások"
 
-#: models.py:410
+#: models.py:243
+msgid "save as template"
+msgstr ""
+
+#: models.py:244
+msgid "This map is a template map."
+msgstr ""
+
+#: models.py:420
 msgid "Clone of"
 msgstr "Másolat erről: "
 
-#: models.py:476 models.py:480 models.py:486
+#: models.py:486 models.py:490 models.py:496
 msgid "Inherit"
 msgstr "Öröklés"
 
-#: models.py:499
+#: models.py:509
 msgid "display on load"
 msgstr "megjelenítés betöltéskor"
 
-#: models.py:500
+#: models.py:510
 msgid "Display this layer on load."
 msgstr "Réteg megjelenítése betöltéskor"
 
-#: settings/base.py:295
-msgid "Art and Culture"
+#: settings/base.py:283
+msgid "uMap user documentation"
 msgstr ""
 
-#: settings/base.py:296
-msgid "Cycling"
+#: settings/base.py:288
+msgid "Video tutorials"
 msgstr ""
 
-#: settings/base.py:297
-msgid "Business"
+#: settings/base.py:293
+msgid "OpenStreetMap.org forum"
 msgstr ""
 
 #: settings/base.py:298
+msgid "OpenStreetMap France forum"
+msgstr ""
+
+#: settings/base.py:318
+msgid "Art and Culture"
+msgstr "Művészet és kultúra"
+
+#: settings/base.py:319
+msgid "Cycling"
+msgstr "Kerékpározás"
+
+#: settings/base.py:320
+msgid "Business"
+msgstr "Üzlet"
+
+#: settings/base.py:321
 msgid "Environment"
-msgstr ""
+msgstr "Környezet"
 
-#: settings/base.py:299
+#: settings/base.py:322
 msgid "Education"
-msgstr ""
+msgstr "Oktatás"
 
-#: settings/base.py:300
+#: settings/base.py:323
 msgid "Food and Agriculture"
-msgstr ""
+msgstr "Élelmiszeripar és mezőgazdaság"
 
-#: settings/base.py:301
+#: settings/base.py:324
 msgid "Geopolitics"
-msgstr ""
+msgstr "Geopolitika"
 
-#: settings/base.py:302
+#: settings/base.py:325
 msgid "Health"
-msgstr ""
+msgstr "Egészségügy"
 
-#: settings/base.py:303
+#: settings/base.py:326
 msgid "Hiking"
-msgstr ""
+msgstr "Túrázás"
 
-#: settings/base.py:304
+#: settings/base.py:327
 msgid "History"
-msgstr ""
+msgstr "Történelem"
 
-#: settings/base.py:305
+#: settings/base.py:328
 msgid "Public sector"
-msgstr ""
+msgstr "Közigazgatás"
 
-#: settings/base.py:306
+#: settings/base.py:329
 msgid "Science"
-msgstr ""
+msgstr "Tudomány"
 
-#: settings/base.py:307
+#: settings/base.py:330
 msgid "Shopping"
-msgstr ""
+msgstr "Vásárlás"
 
-#: settings/base.py:308
+#: settings/base.py:331
 msgid "Sport and Leisure"
-msgstr ""
+msgstr "Sport és szabadidő"
 
-#: settings/base.py:309
+#: settings/base.py:332
 msgid "Travel"
-msgstr ""
+msgstr "Utazás"
 
-#: settings/base.py:310
+#: settings/base.py:333
 msgid "Transports"
-msgstr ""
+msgstr "Közlekedés"
 
-#: settings/base.py:311
+#: settings/base.py:334
 msgid "Tourism"
-msgstr ""
+msgstr "Turizmus"
 
 #: templates/403.html:8
 msgid ""
@@ -495,13 +519,21 @@ msgstr "Szerezzen ihletet, böngésszen a térképek között!"
 msgid "You are logged in. Continuing..."
 msgstr "Be van jelentkezve. Továbblépés…"
 
-#: templates/umap/map_list.html:18 views.py:444
+#: templates/umap/map_list.html:15
+msgid "template"
+msgstr ""
+
+#: templates/umap/map_list.html:18 views.py:437
 msgid "by"
 msgstr "– készítette:"
 
 #: templates/umap/map_list.html:22
-msgid "See the map"
+msgid "See the template"
 msgstr ""
+
+#: templates/umap/map_list.html:22
+msgid "See the map"
+msgstr "Térkép megtekintése"
 
 #: templates/umap/map_list.html:28
 msgid "More"
@@ -666,7 +698,11 @@ msgstr[1] "%(count)s térképet találtunk:"
 msgid "No map found."
 msgstr "Nem található ilyen térkép."
 
-#: templates/umap/search.html:35
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr "Legutóbb létrehozott térképek ebben a kategóriában"
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr "Legutóbb létrehozott térképek"
 
@@ -676,7 +712,7 @@ msgstr "Térképek keresése"
 
 #: templates/umap/search_bar.html:14
 msgid "Any category"
-msgstr ""
+msgstr "Bármely kategória"
 
 #: templates/umap/search_bar.html:19
 msgid "Search"
@@ -742,70 +778,70 @@ msgstr "Felhasználók"
 msgid "New team"
 msgstr "Új csoport"
 
-#: views.py:235
+#: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Egynél több tagú csoport nem törölhető"
 
-#: views.py:239
+#: views.py:237
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "%(name)s csoport törölve"
 
-#: views.py:449
+#: views.py:442
 msgid "View the map"
 msgstr "Térkép megtekintése"
 
-#: views.py:845
+#: views.py:843
 msgid "See full screen"
 msgstr "Teljes képernyős nézet megtekintése"
 
-#: views.py:988
+#: views.py:986
 msgid "Map editors updated with success!"
 msgstr "A térképszerkesztők sikeresen frissültek."
 
-#: views.py:1024
+#: views.py:1022
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "A térképéhez tartozó uMap szerkesztési link: %(map_name)s"
 
-#: views.py:1027
+#: views.py:1025
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Az Ön titkos szerkesztési linkje: %(link)s"
 
-#: views.py:1034
+#: views.py:1032
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Nem sikerül e-mailt küldeni ide: %(email)s"
 
-#: views.py:1037
+#: views.py:1035
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail elküldve ide: %(email)s"
 
-#: views.py:1048
+#: views.py:1046
 msgid "Only its owner can delete the map."
 msgstr "A térképet csak a tulajdonosa törölheti."
 
-#: views.py:1051
+#: views.py:1052
 msgid "Map successfully deleted."
 msgstr "Térkép sikeresen törölve."
 
-#: views.py:1077
+#: views.py:1078
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Elkészült a térképe másolata. Ha egy másik számítógépről szeretné szerkeszteni, ezt a linket használja: %(anonymous_url)s"
 
-#: views.py:1082
+#: views.py:1083
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulálunk, elkészült a térképe másolata!"
 
-#: views.py:1336
+#: views.py:1337
 msgid "Layer successfully deleted."
 msgstr "A réteg sikeresen törlődött."
 
-#: views.py:1358
+#: views.py:1359
 msgid "Permissions updated with success!"
 msgstr "Az engedélyek sikeresen frissültek!"
