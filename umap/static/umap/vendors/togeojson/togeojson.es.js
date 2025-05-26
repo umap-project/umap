@@ -1258,6 +1258,11 @@ function* kmlGen(node, options = {
         if (feature)
             yield feature;
     }
+    for (const networkLink of $(n, "NetworkLink")) {
+        const feature = getNetworkLink(networkLink, styleMap, schema, options);
+        if (feature)
+            yield feature;
+    }
 }
 /**
  * Convert a KML document to GeoJSON. The first argument, `doc`, must be a KML

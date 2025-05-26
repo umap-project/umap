@@ -267,6 +267,7 @@ const PathMixin = {
       })
       this.disableEdit()
     } else {
+      this.transform = true
       this.enableEdit()
     }
   },
@@ -424,16 +425,22 @@ export const LeafletPolyline = Polyline.extend({
 export const LeafletPolygon = Polygon.extend({
   parentClass: Polygon,
   includes: [FeatureMixin, PathMixin],
+  transform: true,
 
   getClass: () => LeafletPolygon,
 
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
   },
-
+  
   getMeasure: function (shape) {
     const area = L.GeoUtil.geodesicArea(shape || this._defaultShape())
     return L.GeoUtil.readableArea(area, this._map.measureTools.getMeasureUnit())
+  },
+  startMyTransform: function () {
+    this.enableEdit()
+    console.log('enableTransform' in this);
+    this.transform.enable()
   },
 })
 const WORLD = [
