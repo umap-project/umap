@@ -17,7 +17,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/secret-config.yaml") . | sha256sum }}
-        checksum/env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
+        checksum/env: {{ .Values.umap.environment | toYaml | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -58,23 +58,24 @@ spec:
               port: asgi
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.cnpg.enabled }}
           env:
+          - name: UMAP_SETTINGS
+            value: /etc/umap/umap.conf
+          {{- if .Values.cnpg.enabled }}
           - name: DATABASE_URL
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-cnpg-app
                 key: uri
-          - name: UMAP_SETTINGS
-            value: /etc/umap/umap.conf
           {{- end }}
+          {{- with .Values.umap.environment }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+          {{- if .Values.umap.envFromSecret }}
           envFrom:
           - secretRef:
-              {{- if .Values.umap.envFromSecret }}
               name: {{ .Values.umap.envFromSecret }}
-              {{- else }}
-              name: {{ include "umap.fullname" . }}-env
-              {{- end }}
+          {{- end }}
           volumeMounts:
             - name: config
               mountPath: /etc/umap/

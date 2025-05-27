@@ -79,11 +79,13 @@ umap:
   # Set environment variables supported by umap here
   # see: https://docs.umap-project.org/en/stable/config/settings/
   environment:
-    SECRET_KEY: CHANGE_ME
-    STATIC_ROOT: /srv/umap/static
-    MEDIA_ROOT: /srv/umap/uploads
+    - name: SECRET_KEY
+      value: CHANGE_ME
+    - name: STATIC_ROOT
+      value: /srv/umap/static
+    - name: MEDIA_ROOT
+      value: /srv/umap/uploads
   # Configure environment variables using an existing secret in the same namespace.
-  # In this case the values above are not used
   envFromSecret: null
 
   # You can also provide umap.conf content here:
