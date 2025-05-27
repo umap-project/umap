@@ -96,7 +96,7 @@ export default class TableEditor extends WithTemplate {
       if (inBbox && !feature.isOnScreen(bounds)) return
       const tds = this.properties.map(
         (prop) =>
-          `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`
+          `<td tabindex="0" data-property="${prop}">${feature.properties[prop] ?? ''}</td>`
       )
       html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
     })
