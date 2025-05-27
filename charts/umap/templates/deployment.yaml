@@ -41,21 +41,21 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: asgi
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           startupProbe:
             httpGet:
               path: /stats
-              port: http
+              port: asgi
           livenessProbe:
             httpGet:
               path: /stats
-              port: http
+              port: asgi
           readinessProbe:
             httpGet:
               path: /stats
-              port: http
+              port: asgi
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.cnpg.enabled }}
@@ -85,6 +85,40 @@ spec:
             - name: data
               mountPath: /srv/umap/uploads/
           {{- end }}
+        - name: {{ .Chart.Name }}-nginx
+          securityContext:
+            {{- toYaml .Values.nginx.securityContext | nindent 12 }}
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginx.service.port }}
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.nginx.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-nginx
+              mountPath: /etc/nginx/nginx.conf
+              readOnly: true
+              subPath: nginx.conf
+            - name: statics
+              mountPath: /static
+          {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: /data
+          {{- end }}
       volumes:
         - name: config
           secret:
@@ -93,6 +127,9 @@ spec:
             {{- else }}
             secretName: {{ include "umap.fullname" . }}-config
             {{- end }}
+        - name: config-nginx
+          configMap:
+            name: {{ include "umap.fullname" . }}-nginx-config
         - name: statics
           emptyDir: {}
       {{- if .Values.persistence.enabled }}

@@ -24,8 +24,8 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "umap.fullname" $ }}
+                name: {{ include "umap.fullname" $ }}-nginx
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ $.Values.nginx.service.port }}
     {{- end }}
 {{- end }}
