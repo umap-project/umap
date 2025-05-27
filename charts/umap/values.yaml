@@ -143,7 +143,7 @@ persistence:
 # Alternatively, you can disable CNPG and provide your own
 # Postgis database by setting the `umap.environment.DATABASE_URL`
 cnpg:
-  enabled: true
+  enabled: false
   replicaCount: 2
   image:
     repository: ghcr.io/cloudnative-pg/postgis
