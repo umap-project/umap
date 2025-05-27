@@ -308,3 +308,37 @@ def test_autocomplete_datalist(live_server, page, openmap):
     expect(datalist).to_have_count(2)
     values = {option.inner_text() for option in datalist.all()}
     assert values == {"mytype=even", "mytype=odd"}
+
+
+def test_can_combine_rules(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "mytype=odd", "options": {"color": "aliceblue"}},
+        {"condition": "mynumber>10", "options": {"iconClass": "Drop"}},
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    drops = page.locator(".umap-drop-icon .icon_container")
+    expect(markers).to_have_count(5)
+    expect(drops).to_have_count(2)
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 3
+    colors = getColors(drops)
+    assert colors.count("rgb(240, 248, 255)") == 2
+
+
+def test_first_matching_rule_wins_on_given_property(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "mytype=odd", "options": {"color": "aliceblue"}},
+        {"condition": "mytype!=even", "options": {"color": "darkred"}},
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    expect(markers).to_have_count(5)
+    colors = getColors(markers)
+    assert colors.count("rgb(240, 248, 255)") == 3
