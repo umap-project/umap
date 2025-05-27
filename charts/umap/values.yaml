@@ -104,6 +104,11 @@ nginx:
     # Overrides the image tag
     tag: 1.27-alpine
 
+  # nginx config file content to override the one provided by the chart
+  # in this case remember to configure the listening port accordingly to nginx.service.port
+  # and the proxy pass to localhost:<service.port>
+  config: null
+ 
   securityContext:
     capabilities:
       drop:

@@ -6,11 +6,12 @@ metadata:
     {{- include "umap.labels" . | nindent 4 }}
 data:
   nginx.conf: |-
+    {{- if .Values.nginx.config -}}
+    {{ .Values.nginx.config | nindent 4 }}
+    {{ else }}
     events {
         worker_connections  1024;  # Adjust this to your needs
     }
-
-
 
     http {
         proxy_cache_path /tmp/nginx_ajax_proxy_cache levels=1:2 keys_zone=ajax_proxy:10m inactive=60m;
@@ -117,3 +118,4 @@ data:
             }
         }
     }
+    {{ end }}
