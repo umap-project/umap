@@ -2,7 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# must be 1 if using persistent volumes
 replicaCount: 1
+
+# strategy.type must be Recreate if using persistent volumes
+strategy:
+  type: Recreate
 
 image:
   repository: umap/umap
