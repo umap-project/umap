@@ -27,8 +27,8 @@ export const Cluster = L.MarkerClusterGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    if (!Utils.isObject(this.datalayer.options.cluster)) {
-      this.datalayer.options.cluster = {}
+    if (!Utils.isObject(this.datalayer.properties.cluster)) {
+      this.datalayer.properties.cluster = {}
     }
     const options = {
       polygonOptions: {
@@ -36,8 +36,8 @@ export const Cluster = L.MarkerClusterGroup.extend({
       },
       iconCreateFunction: (cluster) => new ClusterIcon(datalayer, cluster),
     }
-    if (this.datalayer.options.cluster?.radius) {
-      options.maxClusterRadius = this.datalayer.options.cluster.radius
+    if (this.datalayer.properties.cluster?.radius) {
+      options.maxClusterRadius = this.datalayer.properties.cluster.radius
     }
     L.MarkerClusterGroup.prototype.initialize.call(this, options)
     LayerMixin.onInit.call(this, this.datalayer._leafletMap)
@@ -81,9 +81,9 @@ export const Cluster = L.MarkerClusterGroup.extend({
     return L.MarkerClusterGroup.prototype.removeLayer.call(this, layer)
   },
 
-  getEditableOptions: () => [
+  getEditableProperties: () => [
     [
-      'options.cluster.radius',
+      'properties.cluster.radius',
       {
         handler: 'BlurIntInput',
         placeholder: translate('Clustering radius'),
@@ -91,7 +91,7 @@ export const Cluster = L.MarkerClusterGroup.extend({
       },
     ],
     [
-      'options.cluster.textColor',
+      'properties.cluster.textColor',
       {
         handler: 'TextColorPicker',
         placeholder: translate('Auto'),
@@ -101,12 +101,12 @@ export const Cluster = L.MarkerClusterGroup.extend({
   ],
 
   onEdit: function (field, builder) {
-    if (field === 'options.cluster.radius') {
+    if (field === 'properties.cluster.radius') {
       // No way to reset radius of an already instanciated MarkerClusterGroup...
       this.datalayer.resetLayer(true)
       return
     }
-    if (field === 'options.color') {
+    if (field === 'properties.color') {
       this.options.polygonOptions.color = this.datalayer.getColor()
     }
   },

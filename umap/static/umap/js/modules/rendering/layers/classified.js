@@ -15,11 +15,11 @@ const ClassifiedMixin = {
       .filter((k) => k !== 'schemeGroups')
       .sort()
     const key = this.getType().toLowerCase()
-    if (!Utils.isObject(this.datalayer.options[key])) {
-      this.datalayer.options[key] = {}
+    if (!Utils.isObject(this.datalayer.properties[key])) {
+      this.datalayer.properties[key] = {}
     }
-    this.ensureOptions(this.datalayer.options[key])
-    FeatureGroup.prototype.initialize.call(this, [], this.datalayer.options[key])
+    this.ensureOptions(this.datalayer.properties[key])
+    FeatureGroup.prototype.initialize.call(this, [], this.datalayer.properties[key])
     LayerMixin.onInit.call(this, this.datalayer._leafletMap)
   },
 
@@ -117,7 +117,7 @@ export const Choropleth = FeatureGroup.extend({
   },
 
   _getValue: function (feature) {
-    const key = this.datalayer.options.choropleth?.property || 'value'
+    const key = this.datalayer.properties.choropleth?.property || 'value'
     const value = +feature.properties[key]
     if (!Number.isNaN(value)) return value
   },
@@ -130,12 +130,12 @@ export const Choropleth = FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    const mode = this.datalayer.options.choropleth?.mode
-    let classes = +this.datalayer.options.choropleth?.classes || 5
+    const mode = this.datalayer.properties.choropleth?.mode
+    let classes = +this.datalayer.properties.choropleth?.classes || 5
     let breaks
     classes = Math.min(classes, values.length)
     if (mode === 'manual') {
-      const manualBreaks = this.datalayer.options.choropleth?.breaks
+      const manualBreaks = this.datalayer.properties.choropleth?.breaks
       if (manualBreaks) {
         breaks = manualBreaks
           .split(',')
@@ -154,10 +154,10 @@ export const Choropleth = FeatureGroup.extend({
       breaks.push(ss.max(values)) // Needed for computing the legend
     }
     this.options.breaks = breaks || []
-    this.datalayer.options.choropleth.breaks = this.options.breaks
+    this.datalayer.properties.choropleth.breaks = this.options.breaks
       .map((b) => +b.toFixed(2))
       .join(',')
-    let colorScheme = this.datalayer.options.choropleth.brewer
+    let colorScheme = this.datalayer.properties.choropleth.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
     this.options.colors = colorbrewer[colorScheme][this.options.breaks.length - 1] || []
   },
@@ -175,24 +175,27 @@ export const Choropleth = FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the breaks if we're dealing with choropleth
-    if (!field.startsWith('options.choropleth')) return
+    if (!field.startsWith('properties.choropleth')) return
     // If user touches the breaks, then force manual mode
-    if (field === 'options.choropleth.breaks') {
-      this.datalayer.options.choropleth.mode = 'manual'
-      if (builder) builder.helpers['options.choropleth.mode'].fetch()
+    if (field === 'properties.choropleth.breaks') {
+      this.datalayer.properties.choropleth.mode = 'manual'
+      if (builder) builder.helpers['properties.choropleth.mode'].fetch()
     }
     this.compute()
     // If user changes the mode or the number of classes,
     // then update the breaks input value
-    if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
-      if (builder) builder.helpers['options.choropleth.breaks'].fetch()
+    if (
+      field === 'properties.choropleth.mode' ||
+      field === 'properties.choropleth.classes'
+    ) {
+      if (builder) builder.helpers['properties.choropleth.breaks'].fetch()
     }
   },
 
-  getEditableOptions: function () {
+  getEditableProperties: function () {
     return [
       [
-        'options.choropleth.property',
+        'properties.choropleth.property',
         {
           handler: 'Select',
           selectOptions: this.datalayer.allProperties(),
@@ -200,7 +203,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.brewer',
+        'properties.choropleth.brewer',
         {
           handler: 'Select',
           label: translate('Choropleth color palette'),
@@ -208,7 +211,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.classes',
+        'properties.choropleth.classes',
         {
           handler: 'Range',
           min: 3,
@@ -219,7 +222,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.breaks',
+        'properties.choropleth.breaks',
         {
           handler: 'BlurInput',
           label: translate('Choropleth breakpoints'),
@@ -229,7 +232,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.mode',
+        'properties.choropleth.mode',
         {
           handler: 'MultiChoice',
           default: 'kmeans',
@@ -261,13 +264,13 @@ export const Circles = FeatureGroup.extend({
   },
 
   ensureOptions: function (options) {
-    if (!Utils.isObject(this.datalayer.options.circles.radius)) {
-      this.datalayer.options.circles.radius = {}
+    if (!Utils.isObject(this.datalayer.properties.circles.radius)) {
+      this.datalayer.properties.circles.radius = {}
     }
   },
 
   _getValue: function (feature) {
-    const key = this.datalayer.options.circles.property || 'value'
+    const key = this.datalayer.properties.circles.property || 'value'
     const value = +feature.properties[key]
     if (!Number.isNaN(value)) return value
   },
@@ -276,8 +279,8 @@ export const Circles = FeatureGroup.extend({
     const values = this.getValues()
     this.options.minValue = Math.sqrt(Math.min(...values))
     this.options.maxValue = Math.sqrt(Math.max(...values))
-    this.options.minPX = this.datalayer.options.circles.radius?.min || 2
-    this.options.maxPX = this.datalayer.options.circles.radius?.max || 50
+    this.options.minPX = this.datalayer.properties.circles.radius?.min || 2
+    this.options.maxPX = this.datalayer.properties.circles.radius?.max || 50
   },
 
   onEdit: function (field, builder) {
@@ -298,10 +301,10 @@ export const Circles = FeatureGroup.extend({
     return this._computeRadius(this._getValue(feature))
   },
 
-  getEditableOptions: function () {
+  getEditableProperties: function () {
     return [
       [
-        'options.circles.property',
+        'properties.circles.property',
         {
           handler: 'Select',
           selectOptions: this.datalayer.allProperties(),
@@ -309,7 +312,7 @@ export const Circles = FeatureGroup.extend({
         },
       ],
       [
-        'options.circles.radius.min',
+        'properties.circles.radius.min',
         {
           handler: 'Range',
           label: translate('Min circle radius'),
@@ -319,7 +322,7 @@ export const Circles = FeatureGroup.extend({
         },
       ],
       [
-        'options.circles.radius.max',
+        'properties.circles.radius.max',
         {
           handler: 'Range',
           label: translate('Max circle radius'),
@@ -381,7 +384,8 @@ export const Categorized = FeatureGroup.extend({
 
   _getValue: function (feature) {
     const key =
-      this.datalayer.options.categorized.property || this.datalayer.allProperties()[0]
+      this.datalayer.properties.categorized.property ||
+      this.datalayer.allProperties()[0]
     return feature.properties[key]
   },
 
@@ -403,10 +407,10 @@ export const Categorized = FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    const mode = this.datalayer.options.categorized.mode
+    const mode = this.datalayer.properties.categorized.mode
     let categories = []
     if (mode === 'manual') {
-      const manualCategories = this.datalayer.options.categorized.categories
+      const manualCategories = this.datalayer.properties.categorized.categories
       if (manualCategories) {
         categories = manualCategories.split(',')
       }
@@ -416,8 +420,8 @@ export const Categorized = FeatureGroup.extend({
         .sort(Utils.naturalSort)
     }
     this.options.categories = categories
-    this.datalayer.options.categorized.categories = this.options.categories.join(',')
-    const colorScheme = this.datalayer.options.categorized.brewer
+    this.datalayer.properties.categorized.categories = this.options.categories.join(',')
+    const colorScheme = this.datalayer.properties.categorized.brewer
     this._classes = this.options.categories.length
     if (colorbrewer[colorScheme]?.[this._classes]) {
       this.options.colors = colorbrewer[colorScheme][this._classes]
@@ -428,10 +432,10 @@ export const Categorized = FeatureGroup.extend({
     }
   },
 
-  getEditableOptions: function () {
+  getEditableProperties: function () {
     return [
       [
-        'options.categorized.property',
+        'properties.categorized.property',
         {
           handler: 'Select',
           selectOptions: this.datalayer.allProperties(),
@@ -439,7 +443,7 @@ export const Categorized = FeatureGroup.extend({
         },
       ],
       [
-        'options.categorized.brewer',
+        'properties.categorized.brewer',
         {
           handler: 'Select',
           label: translate('Color palette'),
@@ -447,7 +451,7 @@ export const Categorized = FeatureGroup.extend({
         },
       ],
       [
-        'options.categorized.categories',
+        'properties.categorized.categories',
         {
           handler: 'BlurInput',
           label: translate('Categories'),
@@ -455,7 +459,7 @@ export const Categorized = FeatureGroup.extend({
         },
       ],
       [
-        'options.categorized.mode',
+        'properties.categorized.mode',
         {
           handler: 'MultiChoice',
           default: 'alpha',
@@ -468,17 +472,19 @@ export const Categorized = FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the categories if we're dealing with categorized
-    if (!field.startsWith('options.categorized') && field !== 'options.type') return
+    if (!field.startsWith('properties.categorized') && field !== 'properties.type') {
+      return
+    }
     // If user touches the categories, then force manual mode
-    if (field === 'options.categorized.categories') {
-      this.datalayer.options.categorized.mode = 'manual'
-      if (builder) builder.helpers['options.categorized.mode'].fetch()
+    if (field === 'properties.categorized.categories') {
+      this.datalayer.properties.categorized.mode = 'manual'
+      if (builder) builder.helpers['properties.categorized.mode'].fetch()
     }
     this.compute()
     // If user changes the mode
     // then update the categories input value
-    if (field === 'options.categorized.mode') {
-      if (builder) builder.helpers['options.categorized.categories'].fetch()
+    if (field === 'properties.categorized.mode') {
+      if (builder) builder.helpers['properties.categorized.categories'].fetch()
     }
   },
 

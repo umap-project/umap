@@ -340,7 +340,10 @@ class Feature {
   }
 
   hasPopupFooter() {
-    if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic) {
+    if (
+      this.datalayer.isRemoteLayer() &&
+      this.datalayer.properties.remoteData.dynamic
+    ) {
       return false
     }
     return this._umap.getProperty('displayPopupFooter')

@@ -20,10 +20,10 @@ export const Heat = L.HeatLayer.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.options.heat)
+    L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.properties.heat)
     LayerMixin.onInit.call(this, this.datalayer._leafletMap)
-    if (!Utils.isObject(this.datalayer.options.heat)) {
-      this.datalayer.options.heat = {}
+    if (!Utils.isObject(this.datalayer.properties.heat)) {
+      this.datalayer.properties.heat = {}
     }
   },
 
@@ -31,9 +31,11 @@ export const Heat = L.HeatLayer.extend({
     if (layer instanceof Marker) {
       let latlng = layer.getLatLng()
       let alt
-      if (this.datalayer.options.heat?.intensityProperty) {
+      if (this.datalayer.properties.heat?.intensityProperty) {
         alt = Number.parseFloat(
-          layer.feature.properties[this.datalayer.options.heat.intensityProperty || 0]
+          layer.feature.properties[
+            this.datalayer.properties.heat.intensityProperty || 0
+          ]
         )
         latlng = new LatLng(latlng.lat, latlng.lng, alt)
       }
@@ -66,9 +68,9 @@ export const Heat = L.HeatLayer.extend({
     return latLngBounds(this._latlngs)
   },
 
-  getEditableOptions: () => [
+  getEditableProperties: () => [
     [
-      'options.heat.radius',
+      'properties.heat.radius',
       {
         handler: 'Range',
         min: 10,
@@ -79,7 +81,7 @@ export const Heat = L.HeatLayer.extend({
       },
     ],
     [
-      'options.heat.intensityProperty',
+      'properties.heat.intensityProperty',
       {
         handler: 'BlurInput',
         placeholder: translate('Heatmap intensity property'),
@@ -89,12 +91,12 @@ export const Heat = L.HeatLayer.extend({
   ],
 
   onEdit: function (field, builder) {
-    if (field === 'options.heat.intensityProperty') {
+    if (field === 'properties.heat.intensityProperty') {
       this.datalayer.resetLayer(true) // We need to repopulate the latlngs
       return
     }
-    if (field === 'options.heat.radius') {
-      this.options.radius = this.datalayer.options.heat.radius
+    if (field === 'properties.heat.radius') {
+      this.options.radius = this.datalayer.properties.heat.radius
     }
     this._updateOptions()
   },
