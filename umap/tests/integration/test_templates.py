@@ -26,4 +26,18 @@ def test_load_template_from_panel(map, datalayer, page, live_server):
     page.get_by_label("My Great Template").check()
     page.get_by_label("Include template data, if any").check()
     page.get_by_role("button", name="Load this template").click()
+    expect(page.get_by_text("My Great Template")).to_be_visible()
     expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+
+
+def test_load_template_without_data(map, datalayer, page, live_server):
+    map.name = "My Great Template"
+    map.is_template = True
+    map.save()
+    page.goto(f"{live_server.url}/en/map/new")
+    page.get_by_title("Load template").click()
+    page.get_by_role("button", name="From community").click()
+    page.get_by_label("My Great Template").check()
+    page.get_by_role("button", name="Load this template").click()
+    expect(page.get_by_text("My Great Template")).to_be_visible()
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
