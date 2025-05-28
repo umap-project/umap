@@ -267,7 +267,6 @@ export default class Rules {
     for (const rule of this.rules) {
       if (rule.match(feature.properties)) {
         if (Utils.usableOption(rule.options, option)) return rule.options[option]
-        break
       }
     }
   }

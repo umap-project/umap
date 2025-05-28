@@ -49,7 +49,19 @@ With macOS, replace `Ctrl` by `Cmd`.
 * `mycolumn=true/false` → will match features whose column `mycolumn` is explicitely `true` (or `false`)
 * `mycolumn!=true/false` → will match features whose column `mycolumn` is different from `true` (or `false`)
 
-When the condition match, the associated style will be applied to the corresponding feature.
+When the condition matches, the associated style will be applied to the corresponding feature. When multiple rules
+define the same property, the first matching rule wins.
+
+For example, let's imagine those rules defined in that order:
+- `population>10000` then apply `color=red`
+- `population>1000` then apply `color=orange`
+- `unemployment<10` then apply `pictogram=default`
+- `unemployment>10` then apply `pictogram=warning`
+
+Now:
+- for a feature with `population=1300` and `unemployment=8`, the `color` will be `orange` and `pictogram` will be `default`
+- for a feature with `population=1300` and `unemployment=12`, the `color` will be `orange` and `pictogram` will be `warning`
+- for a feature with `population=20000` and `unemployment=15`, the `color` will be `red` and `pictogram` will be `warning`
 
 
 ## How to use variables? {: #variables}
