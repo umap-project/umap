@@ -133,7 +133,7 @@ class Rule {
         const key = value.split('!')[0].split('=')[0]
         autocomplete.suggestions = this._umap
           .sortedValues(key)
-          .map((str) => `${value}${str || ''}`)
+          .map((str) => `${value}${str ?? ''}`)
       }
     })
     const backButton = Utils.loadTemplate(`
