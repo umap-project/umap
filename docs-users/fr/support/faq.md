@@ -49,7 +49,19 @@ Sur macOS, utliser `Cmd` à la place de `Ctrl`.
 * `macolonne=true/false` → cible les éléments dont la colonne `macolonne` est explicitement `true` (ou `false`)
 * `macolonne!=true/false` → cible les éléments dont la colonne `macolonne` est différente de `true` (ou `false`)
 
-Quand la condition est vraie pour un élément donné, le style associé sera appliqué.
+Quand la condition est vraie pour un élément donné, le style associé sera appliqué. Si plusieurs règles définissent
+la même propriété, la première règle qui est vraie l'emporte.
+
+Par exemple, imaginons des règles définies dans cet ordre:
+- `population>10000` alors appliquer `couleur=rouge`
+- `population>1000` alors appliquer `couleur=orange`
+- `chomage<10` alors appliquer `image=par-défaut`
+- `chomage>10` alors appliquer `image=attention`
+
+Dans cet exemple:
+- pour un élément ayant `population=1300` et `chomage=8`, la `couleur` sera `orange` et `image` sera `par-défaut`
+- pour un élément ayant `population=1300` et `chomage=12`, la `couleur` sera `orange` et `image` sera `attention`
+- pour un élément ayant `population=20000` et `chomage=15`, la `couleur` sera `rouge` et `image` sera `attention`
 
 
 ## Comment utiliser les variables ? {: #variables}
