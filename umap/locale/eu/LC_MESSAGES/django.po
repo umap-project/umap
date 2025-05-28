@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Alexander Gabilondo <alexgabi@disroot.org>, 2024-2025
+# Dren ar Frankig <hadrienlouque@gmail.com>, 2025
 # Mikel Larreategi <mlarreategi@codesyntax.com>, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 15:18+0000\n"
+"POT-Creation-Date: 2025-05-23 15:24+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Alexander Gabilondo <alexgabi@disroot.org>, 2024-2025\n"
+"Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2025\n"
 "Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,133 +40,225 @@ msgid ""
 " and maps. Then, please logout and login again with the new provider."
 msgstr ""
 
-#: models.py:60 models.py:79
+#: models.py:61 models.py:80
 msgid "name"
 msgstr "izena"
 
-#: models.py:62 models.py:485
+#: models.py:63 models.py:503
 msgid "description"
 msgstr "deskribapena"
 
-#: models.py:110
+#: models.py:111
 msgid "details"
 msgstr "xehetasunak"
 
-#: models.py:111
+#: models.py:112
 msgid "Link to a page where the licence is detailed."
 msgstr "Estekatu lizentzia zehazten den orrialde batera."
 
-#: models.py:121
+#: models.py:122
 msgid "URL template using OSM tile format"
 msgstr "URLaren txantiloia OSMren lauzen formatua erabiliz"
 
-#: models.py:127
+#: models.py:128
 msgid "Order of the tilelayers in the edit box"
 msgstr "Lauzen geruzek edizio kutxan duten ordena"
 
-#: models.py:175 models.py:479
+#: models.py:176 models.py:497
 msgid "Only editable with secret edit link"
 msgstr "Bakarrik esteka sekretuarekin bakarrik editatu daiteke"
 
-#: models.py:176 models.py:480
+#: models.py:177 models.py:498
 msgid "Everyone can edit"
 msgstr "Edonork editatu dezake"
 
-#: models.py:179 models.py:473
+#: models.py:180 models.py:491
 msgid "Everyone"
 msgstr "Edonork"
 
-#: models.py:180 models.py:189 models.py:474
+#: models.py:181 models.py:190 models.py:492
 msgid "Editors and team only"
 msgstr "Editoreak eta taldea soilik"
 
-#: models.py:181 models.py:475
+#: models.py:182 models.py:493
 msgid "Owner only"
 msgstr "Jabea bakarrik"
 
-#: models.py:184
+#: models.py:185
 msgid "Draft (private)"
 msgstr "Zirriborroa (pribatua)"
 
-#: models.py:185
+#: models.py:186
 msgid "Everyone (public)"
 msgstr "Edonork (publikoa)"
 
-#: models.py:188
+#: models.py:189
 msgid "Anyone with link"
 msgstr "Esteka duen edonork"
 
-#: models.py:190
+#: models.py:191
 msgid "Blocked"
 msgstr "Blokeatuta"
 
-#: models.py:191 models.py:469
+#: models.py:192 models.py:487
 msgid "Deleted"
 msgstr "Ezabatua"
 
-#: models.py:194
+#: models.py:195
 msgid "center"
 msgstr "erdiko puntua"
 
-#: models.py:195
+#: models.py:196
 msgid "zoom"
 msgstr "zooma"
 
-#: models.py:197
+#: models.py:198
 msgid "locate"
 msgstr "kokatu"
 
-#: models.py:197
+#: models.py:198
 msgid "Locate user on load?"
 msgstr "Kokatu erabiltzailea mapa kargatzen denean?"
 
-#: models.py:201
+#: models.py:202
 msgid "Choose the map licence."
 msgstr "Aukeratu maparen lizentzia."
 
-#: models.py:202
+#: models.py:203
 msgid "licence"
 msgstr "lizentzia"
 
-#: models.py:213
+#: models.py:214
 msgid "owner"
 msgstr "jabea"
 
-#: models.py:217
+#: models.py:218
 msgid "editors"
 msgstr "editoreak"
 
-#: models.py:223
+#: models.py:224
 msgid "team"
 msgstr "taldea"
 
-#: models.py:229 models.py:501
+#: models.py:230 models.py:519
 msgid "edit status"
 msgstr "editatu egoera"
 
-#: models.py:234 models.py:506
+#: models.py:235 models.py:524
 msgid "share status"
 msgstr "partekatu egoera"
 
-#: models.py:237 models.py:496
+#: models.py:238 models.py:514
 msgid "settings"
 msgstr "ezarpenak"
 
-#: models.py:407
+#: models.py:243
+msgid "save as template"
+msgstr ""
+
+#: models.py:244
+msgid "This map is a template map."
+msgstr ""
+
+#: models.py:420
 msgid "Clone of"
 msgstr "Beste honen klona"
 
-#: models.py:468 models.py:472 models.py:478
+#: models.py:486 models.py:490 models.py:496
 msgid "Inherit"
 msgstr "Heredatu"
 
-#: models.py:491
+#: models.py:509
 msgid "display on load"
 msgstr "erakutsi kargatzean"
 
-#: models.py:492
+#: models.py:510
 msgid "Display this layer on load."
 msgstr "Erakutsi geruza hau kargatzean"
+
+#: settings/base.py:283
+msgid "uMap user documentation"
+msgstr ""
+
+#: settings/base.py:288
+msgid "Video tutorials"
+msgstr ""
+
+#: settings/base.py:293
+msgid "OpenStreetMap.org forum"
+msgstr ""
+
+#: settings/base.py:298
+msgid "OpenStreetMap France forum"
+msgstr ""
+
+#: settings/base.py:318
+msgid "Art and Culture"
+msgstr ""
+
+#: settings/base.py:319
+msgid "Cycling"
+msgstr ""
+
+#: settings/base.py:320
+msgid "Business"
+msgstr ""
+
+#: settings/base.py:321
+msgid "Environment"
+msgstr ""
+
+#: settings/base.py:322
+msgid "Education"
+msgstr ""
+
+#: settings/base.py:323
+msgid "Food and Agriculture"
+msgstr ""
+
+#: settings/base.py:324
+msgid "Geopolitics"
+msgstr ""
+
+#: settings/base.py:325
+msgid "Health"
+msgstr ""
+
+#: settings/base.py:326
+msgid "Hiking"
+msgstr ""
+
+#: settings/base.py:327
+msgid "History"
+msgstr ""
+
+#: settings/base.py:328
+msgid "Public sector"
+msgstr ""
+
+#: settings/base.py:329
+msgid "Science"
+msgstr ""
+
+#: settings/base.py:330
+msgid "Shopping"
+msgstr ""
+
+#: settings/base.py:331
+msgid "Sport and Leisure"
+msgstr ""
+
+#: settings/base.py:332
+msgid "Travel"
+msgstr ""
+
+#: settings/base.py:333
+msgid "Transports"
+msgstr ""
+
+#: settings/base.py:334
+msgid "Tourism"
+msgstr ""
 
 #: templates/403.html:8
 msgid ""
@@ -419,7 +512,7 @@ msgstr "Nire taldeak"
 msgid "Map of the uMaps"
 msgstr "uMap-en mapa"
 
-#: templates/umap/home.html:24
+#: templates/umap/home.html:25
 msgid "Get inspired, browse maps"
 msgstr "Inspira zaitez dauden mapak arakatzen"
 
@@ -427,11 +520,23 @@ msgstr "Inspira zaitez dauden mapak arakatzen"
 msgid "You are logged in. Continuing..."
 msgstr "Sartu egin zara. Jarraitu..."
 
-#: templates/umap/map_list.html:11 views.py:438
+#: templates/umap/map_list.html:15
+msgid "template"
+msgstr ""
+
+#: templates/umap/map_list.html:18 views.py:437
 msgid "by"
 msgstr "nork eginda"
 
-#: templates/umap/map_list.html:20
+#: templates/umap/map_list.html:22
+msgid "See the template"
+msgstr ""
+
+#: templates/umap/map_list.html:22
+msgid "See the map"
+msgstr ""
+
+#: templates/umap/map_list.html:28
 msgid "More"
 msgstr "Gehiago"
 
@@ -590,11 +695,15 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] "mapa %(count)s aurkitu da:"
 msgstr[1] "%(count)s mapa aurkitu dira:"
 
-#: templates/umap/search.html:28
+#: templates/umap/search.html:30
 msgid "No map found."
 msgstr "Ez da maparik aurkitu"
 
-#: templates/umap/search.html:33
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr ""
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr "Sortutako azken mapak"
 
@@ -602,7 +711,11 @@ msgstr "Sortutako azken mapak"
 msgid "Search maps"
 msgstr "Bilatu mapak"
 
-#: templates/umap/search_bar.html:16
+#: templates/umap/search_bar.html:14
+msgid "Any category"
+msgstr ""
+
+#: templates/umap/search_bar.html:19
 msgid "Search"
 msgstr "Bilatu"
 
@@ -666,70 +779,70 @@ msgstr "Erabiltzaileak"
 msgid "New team"
 msgstr "Talde berria"
 
-#: views.py:235
+#: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Ezin da ezabatu kide bat baino gehiago dituen talde bat"
 
-#: views.py:239
+#: views.py:237
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "“%(name)s” taldea ezabatu da"
 
-#: views.py:443
+#: views.py:442
 msgid "View the map"
 msgstr "Mapa ikusi"
 
-#: views.py:839
+#: views.py:843
 msgid "See full screen"
 msgstr "Ikusi pantaila osoan"
 
-#: views.py:982
+#: views.py:986
 msgid "Map editors updated with success!"
 msgstr "Maparen editoreak ondo eguneratu dira!"
 
-#: views.py:1018
+#: views.py:1022
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Zure mapa editatzeko uMap-en esteka: %(map_name)s"
 
-#: views.py:1021
+#: views.py:1025
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hona hemen zure editatzeko esteka sekretua:: %(link)s"
 
-#: views.py:1028
+#: views.py:1032
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Ezin da posta elektronikorik bidali %(email)s-ri"
 
-#: views.py:1031
+#: views.py:1035
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Posta elektronikoa bidalita %(email)s-ri"
 
-#: views.py:1042
+#: views.py:1046
 msgid "Only its owner can delete the map."
 msgstr "Jabeak bakarrik ezabatu dezake mapa."
 
-#: views.py:1045
+#: views.py:1052
 msgid "Map successfully deleted."
 msgstr "Mapa behar bezala ezabatu da."
 
-#: views.py:1071
+#: views.py:1078
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Zure mapa klonatu egin da! Mapa hau beste nabigatzaile batetik editatzeko erabili esteka hau: %(anonymous_url)s"
 
-#: views.py:1076
+#: views.py:1083
 msgid "Congratulations, your map has been cloned!"
 msgstr "Zorionak, zure mapa ondo klonatu da!"
 
-#: views.py:1330
+#: views.py:1337
 msgid "Layer successfully deleted."
 msgstr "Geruza ondo ezabatu da."
 
-#: views.py:1352
+#: views.py:1359
 msgid "Permissions updated with success!"
 msgstr "Baimenak behar bezala eguneratu dira!"

@@ -154,11 +154,11 @@ msgstr "arventennoù"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "enrollañ evel ur patrom"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "Ar gartenn-mañ zo ur gartenn patrom"
 
 #: models.py:420
 msgid "Clone of"
@@ -178,19 +178,19 @@ msgstr "Diskwel ar gwiskad-mañ pa vez karget"
 
 #: settings/base.py:283
 msgid "uMap user documentation"
-msgstr ""
+msgstr "Teuliadur an implijer uMap"
 
 #: settings/base.py:288
 msgid "Video tutorials"
-msgstr ""
+msgstr "Tutorieloù video"
 
 #: settings/base.py:293
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "Forom OpenStreetMap.org"
 
 #: settings/base.py:298
 msgid "OpenStreetMap France forum"
-msgstr ""
+msgstr "Forom OpenStreetMap Frañs"
 
 #: settings/base.py:318
 msgid "Art and Culture"
@@ -522,7 +522,7 @@ msgstr "Kevreet oc'h. Gortozit ur pennadig..."
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "patrom"
 
 #: templates/umap/map_list.html:18 views.py:437
 msgid "by"
@@ -530,7 +530,7 @@ msgstr "gant"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "Gwelet ar patrom"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"

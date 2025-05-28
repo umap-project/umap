@@ -68,7 +68,7 @@ msgstr "Rækkefølge af flise-lag i redigeringsboksen"
 
 #: models.py:176 models.py:497
 msgid "Only editable with secret edit link"
-msgstr "Er kun redigerbart med et hemmeligt link"
+msgstr "Er kun redigerbart med et hemmeligt redigeringslink"
 
 #: models.py:177 models.py:498
 msgid "Everyone can edit"
@@ -108,7 +108,7 @@ msgstr "Slettet"
 
 #: models.py:195
 msgid "center"
-msgstr "center"
+msgstr "centrer"
 
 #: models.py:196
 msgid "zoom"
@@ -156,11 +156,11 @@ msgstr "indstillinger"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "gem som skabelon"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "Dette kort er et skabelonkort."
 
 #: models.py:420
 msgid "Clone of"
@@ -180,19 +180,19 @@ msgstr "Vis dette lag ved indlæsning."
 
 #: settings/base.py:283
 msgid "uMap user documentation"
-msgstr ""
+msgstr "uMap-brugerdokumentation"
 
 #: settings/base.py:288
 msgid "Video tutorials"
-msgstr ""
+msgstr "Video-vejledninger"
 
 #: settings/base.py:293
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "OpenStreetMap.org-forum"
 
 #: settings/base.py:298
 msgid "OpenStreetMap France forum"
-msgstr ""
+msgstr "Fransk OpenStreetMap-forum"
 
 #: settings/base.py:318
 msgid "Art and Culture"
@@ -524,7 +524,7 @@ msgstr "Du er logget ind. Fortsætter..."
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "skabelon"
 
 #: templates/umap/map_list.html:18 views.py:437
 msgid "by"
@@ -532,7 +532,7 @@ msgstr "af"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "Se skabelonen"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
@@ -540,7 +540,7 @@ msgstr "Se kortet"
 
 #: templates/umap/map_list.html:28
 msgid "More"
-msgstr "Mere"
+msgstr "Flere"
 
 #: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
