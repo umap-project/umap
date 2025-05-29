@@ -97,6 +97,9 @@ export default class Importer extends Utils.WithTemplate {
         case 'banfr':
           import('./importers/banfr.js').then(register)
           break
+        case 'opendata':
+          import('./importers/opendata.js').then(register)
+          break
       }
     }
   }

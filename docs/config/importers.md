@@ -66,6 +66,32 @@ UMAP_IMPORTERS = {
 }
 ```
 
+## OpenDataSoft
+
+Importer allowing to interact with an OpenDataSoft instance API.
+By default, all instances are in France, but this can be overriden from settings.
+
+### Configuration
+- `name`: the name of the importer in the list (default: `OpenDataSoft`)
+- `choices`: the available instances
+
+Example:
+```python
+UMAP_IMPORTERS = {
+    "opendatasoft": {
+        "choices": [
+            { name: 'Aix-Marseille Métropole', url: 'https://data.ampmetropole.fr' },
+            { name: 'Région Centre-Val de Loire', url: 'https://data.centrevaldeloire.fr' },
+            { name: 'Toulouse Métropole', url: 'https://data.toulouse-metropole.fr' },
+            { name: 'Ville de Clermont-Ferrand', url: 'https://opendata.clermont-ferrand.fr' },
+            { name: 'Métropole de Dijon', url: 'https://data.metropole-dijon.fr' },
+            { name: 'Région Île-de-France', url: 'https://data.iledefrance.fr' },
+            { name: 'Bordeaux Métropole', url: 'https://opendata.bordeaux-metropole.fr' },
+        ]
+    }
+}
+```
+
 ## GéoDatamine (fr)
 
 Importer based on https://geodatamine.fr/.
