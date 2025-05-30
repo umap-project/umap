@@ -151,29 +151,6 @@ html[dir="rtl"] .leaflet-tooltip-pane > * {
     min-height: 23px;
     height: 23px;
 }
-.edit-enable [type="button"]:before {
-    content: ' ';
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    vertical-align: -20%;
-    background-image: url('./img/16-white.svg');
-    background-position: -48px -48px;
-}
-.edit-enable [type="button"] {
-    width: initial;
-    padding: 0 20px;
-    background-color: #353c3e;
-    color: #fff;
-    background-image: none;
-    border-radius: 20px;
-    height: var(--control-size);
-    line-height: var(--control-size);
-    display: block;
-}
-.edit-enable [type="button"]:hover {
-    background-color: #4d5759;
-}
 .umap-permanent-credits-container {
     max-width: 20rem;
     margin-inline-start: 5px!important;

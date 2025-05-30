@@ -111,7 +111,7 @@ input[type="submit"] {
 .dark .button:hover,
 .dark [type="button"]:hover,
 .dark input[type="submit"]:hover {
-    background-color: var(--color-darkerGray);
+    background-color: var(--color-mediumGray);
 }
 .dark a {
     color: var(--color-verySoftCyan) !important;
