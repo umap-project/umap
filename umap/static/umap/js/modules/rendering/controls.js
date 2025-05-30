@@ -49,7 +49,7 @@ export const LoadTemplateControl = Control.extend({
 
   onAdd: (map) => {
     const template = `
-      <div class="load-template dark">
+      <div class="load-template dark hide-on-edit">
         <button type="button" data-ref="button" class="round"><i class="icon icon-16 icon-template"></i>&nbsp;${translate('Reuse this template')}</button>
       </div>
     `
