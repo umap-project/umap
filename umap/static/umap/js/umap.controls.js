@@ -96,7 +96,7 @@ U.Locate = L.Control.Locate.extend({
 })
 
 U.Search = L.PhotonSearch.extend({
-  initialize: function (map, input, options) {
+  initialize: function (map, input, layer, options) {
     this.options.placeholder = L._('Type a place name or coordinates')
     this.options.location_bias_scale = 0.5
     L.PhotonSearch.prototype.initialize.call(this, map, input, options)
@@ -107,6 +107,7 @@ U.Search = L.PhotonSearch.extend({
         this.handleResultsWithReverse(geojson)
       },
     })
+    this.layer = layer
   },
 
   handleResultsWithReverse: function (geojson) {
@@ -123,6 +124,7 @@ U.Search = L.PhotonSearch.extend({
   },
 
   search: function () {
+    this.layer.clearLayers()
     const pattern = /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
     if (pattern.test(this.input.value)) {
       this.hide()
@@ -188,10 +190,10 @@ U.Search = L.PhotonSearch.extend({
     const coords = feature.geometry.coordinates
     const target = L.marker([coords[1], coords[0]], { icon })
     el.addEventListener('mouseover', (event) => {
-      target.addTo(this.map)
+      target.addTo(this.layer)
     })
     el.addEventListener('mouseout', (event) => {
-      target.removeFrom(this.map)
+      target.removeFrom(this.layer)
     })
   },
 
@@ -227,7 +229,12 @@ U.SearchControl = L.Control.extend({
       },
       this
     )
+    this.layer = L.layerGroup().addTo(map)
     return container
+  },
+
+  onRemove: function () {
+    this.layer.remove()
   },
 
   open: function () {
@@ -241,7 +248,7 @@ U.SearchControl = L.Control.extend({
     L.DomUtil.createTitle(container, L._('Search location'), 'icon-search')
     const input = L.DomUtil.create('input', 'photon-input', container)
     const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
-    this.search = new U.Search(this.map, input, options)
+    this.search = new U.Search(this.map, input, this.layer, options)
     const id = Math.random()
     this.search.on('ajax:send', () => {
       this.map.fire('dataloading', { id: id })
