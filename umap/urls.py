@@ -122,6 +122,7 @@ i18n_urls += decorated_patterns(
     path("me", views.user_dashboard, name="user_dashboard"),
     path("me/download", views.user_download, name="user_download"),
     path("me/teams", views.UserTeams.as_view(), name="user_teams"),
+    path("me/templates", views.UserTemplates.as_view(), name="user_templates"),
     path("team/create/", views.TeamNew.as_view(), name="team_new"),
 )
 

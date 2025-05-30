@@ -3,12 +3,12 @@
 {% load i18n static %}
 
 {% block head_title %}
-  {% translate "My Dashboard" %} - {{ SITE_DESCRIPTION }}
+  {% translate "My Templates" %} - {{ SITE_DESCRIPTION }}
 {% endblock head_title %}
 
 {% block maincontent %}
-  {% trans "Search my maps" as search_message %}
-  {% with selected="maps" %}
+  {% trans "Search my templates" as search_message %}
+  {% with selected="templates" %}
     {{ block.super }}
   {% endwith %}
 {% endblock maincontent %}
