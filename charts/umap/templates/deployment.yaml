@@ -6,6 +6,10 @@ metadata:
     {{- include "umap.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- with .Values.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "umap.selectorLabels" . | nindent 6 }}
@@ -13,7 +17,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/secret-config.yaml") . | sha256sum }}
-        checksum/env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
+        checksum/env: {{ .Values.umap.environment | toYaml | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -37,40 +41,41 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: asgi
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           startupProbe:
             httpGet:
               path: /stats
-              port: http
+              port: asgi
           livenessProbe:
             httpGet:
               path: /stats
-              port: http
+              port: asgi
           readinessProbe:
             httpGet:
               path: /stats
-              port: http
+              port: asgi
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.cnpg.enabled }}
           env:
+          - name: UMAP_SETTINGS
+            value: /etc/umap/umap.conf
+          {{- if .Values.cnpg.enabled }}
           - name: DATABASE_URL
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-cnpg-app
                 key: uri
-          - name: UMAP_SETTINGS
-            value: /etc/umap/umap.conf
           {{- end }}
+          {{- with .Values.umap.environment }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+          {{- if .Values.umap.envFromSecret }}
           envFrom:
           - secretRef:
-              {{- if .Values.umap.envFromSecret }}
               name: {{ .Values.umap.envFromSecret }}
-              {{- else }}
-              name: {{ include "umap.fullname" . }}-env
-              {{- end }}
+          {{- end }}
           volumeMounts:
             - name: config
               mountPath: /etc/umap/
@@ -81,6 +86,40 @@ spec:
             - name: data
               mountPath: /srv/umap/uploads/
           {{- end }}
+        - name: {{ .Chart.Name }}-nginx
+          securityContext:
+            {{- toYaml .Values.nginx.securityContext | nindent 12 }}
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginx.service.port }}
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.nginx.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-nginx
+              mountPath: /etc/nginx/nginx.conf
+              readOnly: true
+              subPath: nginx.conf
+            - name: statics
+              mountPath: /static
+          {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: /data
+          {{- end }}
       volumes:
         - name: config
           secret:
@@ -89,6 +128,9 @@ spec:
             {{- else }}
             secretName: {{ include "umap.fullname" . }}-config
             {{- end }}
+        - name: config-nginx
+          configMap:
+            name: {{ include "umap.fullname" . }}-nginx-config
         - name: statics
           emptyDir: {}
       {{- if .Values.persistence.enabled }}

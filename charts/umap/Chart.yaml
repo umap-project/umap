@@ -4,9 +4,9 @@ description: A Helm chart to deploy umap on Kubernetes
 
 type: application
 
-version: 0.1.0
+version: 1.0.0
 
-appVersion: "2.7.2"
+appVersion: "3.0.0"
 
 dependencies:
   - name: cnpg-cluster
