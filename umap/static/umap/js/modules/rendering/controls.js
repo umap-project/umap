@@ -23,8 +23,8 @@ export const EditControl = Control.extend({
 
   onAdd: (map) => {
     const template = `
-      <div class="edit-enable">
-        <button type="button" data-ref="button">${translate('Edit')}</button>
+      <div class="edit-enable dark">
+        <button type="button" data-ref="button" class="round"><i class="icon icon-16 icon-edit"></i> ${translate('Edit')}</button>
       </div>
     `
     const [container, { button }] = Utils.loadTemplateWithRefs(template)
@@ -50,7 +50,7 @@ export const LoadTemplateControl = Control.extend({
   onAdd: (map) => {
     const template = `
       <div class="load-template dark">
-        <button type="button" data-ref="button"><i class="icon icon-24 icon-template"></i>${translate('Reuse this template')}</button>
+        <button type="button" data-ref="button" class="round"><i class="icon icon-16 icon-template"></i>&nbsp;${translate('Reuse this template')}</button>
       </div>
     `
     const [container, { button }] = Utils.loadTemplateWithRefs(template)
