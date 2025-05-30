@@ -248,7 +248,7 @@ export default class Importer extends Utils.WithTemplate {
         DomUtil.element({
           tagName: 'option',
           parent: layerSelect,
-          textContent: datalayer.options.name,
+          textContent: datalayer.getName(),
           value: datalayer.id,
         })
       }
@@ -325,13 +325,13 @@ export default class Importer extends Utils.WithTemplate {
       return false
     }
     const layer = this.layer
-    layer.options.remoteData = {
+    layer.properties.remoteData = {
       url: this.url,
       format: this.format,
     }
     if (this._umap.properties.urls.ajax_proxy) {
-      layer.options.remoteData.proxy = true
-      layer.options.remoteData.ttl = SCHEMA.ttl.default
+      layer.properties.remoteData.proxy = true
+      layer.properties.remoteData.ttl = SCHEMA.ttl.default
     }
     layer.fetchRemoteData(true).then((features) => {
       if (features?.length) {

@@ -93,7 +93,7 @@ export default class Caption extends Utils.WithTemplate {
   }
 
   addDataLayer(datalayer, parent) {
-    if (!datalayer.options.inCaption) return
+    if (!datalayer.properties.inCaption) return
     const template = `
     <p class="caption-item ${datalayer.cssId}">
       <span class="datalayer-legend"></span>
@@ -101,8 +101,8 @@ export default class Caption extends Utils.WithTemplate {
       <span class="text" data-ref="description"></span>
     </p>`
     const [element, { toolbox, description }] = Utils.loadTemplateWithRefs(template)
-    if (datalayer.options.description) {
-      description.innerHTML = Utils.toHTML(datalayer.options.description)
+    if (datalayer.properties.description) {
+      description.innerHTML = Utils.toHTML(datalayer.properties.description)
     } else {
       description.hidden = true
     }
@@ -110,7 +110,7 @@ export default class Caption extends Utils.WithTemplate {
     parent.appendChild(element)
     // Use textContent for security
     const name = Utils.loadTemplate('<span></span>')
-    name.textContent = datalayer.options.name
+    name.textContent = datalayer.getName()
     toolbox.appendChild(name)
   }
 

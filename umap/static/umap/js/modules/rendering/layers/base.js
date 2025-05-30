@@ -35,7 +35,7 @@ export const LayerMixin = {
     return this._layers
   },
 
-  getEditableOptions: () => [],
+  getEditableProperties: () => [],
 
   onEdit: () => {},
 

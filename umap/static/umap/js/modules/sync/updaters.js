@@ -52,8 +52,8 @@ export class DataLayerUpdater extends BaseUpdater {
 
   update({ key, metadata, value }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
-    if (key === 'options') {
-      datalayer.setOptions(value)
+    if (key === 'properties') {
+      datalayer.setProperties(value)
     } else if (Utils.fieldInSchema(key)) {
       Utils.setObjectValue(datalayer, key, value)
     } else {

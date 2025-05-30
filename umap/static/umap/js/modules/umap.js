@@ -638,20 +638,20 @@ export default class Umap {
     this.fire('dataloaded')
   }
 
-  createDataLayer(options = {}, sync = true) {
-    options.name =
-      options.name || `${translate('Layer')} ${this.datalayers.count() + 1}`
-    const datalayer = new DataLayer(this, this._leafletMap, options)
+  createDataLayer(properties = {}, sync = true) {
+    properties.name =
+      properties.name || `${translate('Layer')} ${this.datalayers.count() + 1}`
+    const datalayer = new DataLayer(this, this._leafletMap, properties)
 
     if (sync !== false) {
-      datalayer.sync.upsert(datalayer.options)
+      datalayer.sync.upsert(datalayer.properties)
     }
     return datalayer
   }
 
-  createDirtyDataLayer(options) {
-    const datalayer = this.createDataLayer(options, true)
-    return datalayer
+  // TODO: remove me in favor of createDataLayer
+  createDirtyDataLayer(properties) {
+    return this.createDataLayer(properties, true)
   }
 
   newDataLayer() {
@@ -1496,7 +1496,7 @@ export default class Umap {
       datalayer.renderToolbox(row)
       const builder = new MutatingForm(
         datalayer,
-        [['options.name', { handler: 'EditableText' }]],
+        [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
       const form = builder.build()

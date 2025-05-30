@@ -233,7 +233,7 @@ export class BottomBar extends WithTemplate {
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const datalayers = this._umap.datalayers.filter((d) => d.options.inCaption)
+    const datalayers = this._umap.datalayers.filter((d) => d.properties.inCaption)
     if (datalayers.length < 2) {
       this.elements.layers.hidden = true
     } else {
