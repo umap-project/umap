@@ -463,9 +463,29 @@ export class DataLayer {
     }
   }
 
+  checkIndexForProperty(name) {
+    for (const feature of Object.values(this._features)) {
+      if (name in feature.properties) {
+        this.indexProperty(name)
+        return
+      }
+    }
+    this.deindexProperty(name)
+  }
+
   deindexProperty(name) {
     const idx = this._propertiesIndex.indexOf(name)
     if (idx !== -1) this._propertiesIndex.splice(idx, 1)
+  }
+
+  renameProperty(oldName, newName) {
+    this.sync.startBatch()
+    this.eachFeature((feature) => {
+      feature.renameProperty(oldName, newName)
+    })
+    this.sync.commitBatch()
+    this.deindexProperty(oldName)
+    this.indexProperty(newName)
   }
 
   allProperties() {

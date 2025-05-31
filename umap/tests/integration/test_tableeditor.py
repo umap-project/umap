@@ -113,17 +113,30 @@ def test_cannot_add_property_with_a_dot(live_server, openmap, datalayer, page):
     expect(page.locator("table th button[data-property=name]")).to_have_count(1)
 
 
-def test_rename_property(live_server, openmap, datalayer, page):
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+def test_rename_property(live_server, openmap, page):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
-    expect(page.locator("table th button[data-property=name]")).to_have_count(1)
-    page.locator("thead button[data-property=name]").click()
+    expect(page.locator("table th button[data-property=mytype]")).to_have_count(1)
+    page.locator("thead button[data-property=mytype]").click()
     page.get_by_text("Rename this column").click()
-    page.locator("dialog").locator("input").fill("newname")
+    page.locator("dialog").locator("input").fill("mynewtype")
     page.get_by_role("button", name="OK").click()
-    expect(page.locator("table th button[data-property=newname]")).to_have_count(1)
-    expect(page.locator("table th button[data-property=name]")).to_have_count(0)
+    expect(page.locator("table th button[data-property=mynewtype]")).to_have_count(1)
+    expect(page.locator("table th button[data-property=mytype]")).to_have_count(0)
+
+    page.locator(".panel.full").get_by_role("button", name="Close").click()
+    page.locator(".leaflet-marker-icon").first.click()
+    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    expect(page.locator(".panel.right .umap-field-mynewtype")).to_be_visible()
+    expect(page.locator(".panel.right .umap-field-mytype")).to_be_hidden()
+    page.locator(".edit-undo").click()
+    page.locator(".panel.right").get_by_role("button", name="Close").click()
+    page.locator(".leaflet-marker-icon").first.click()
+    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    expect(page.locator(".panel.right .umap-field-mynewtype")).to_be_hidden()
+    expect(page.locator(".panel.right .umap-field-mytype")).to_be_visible()
 
 
 def test_delete_selected_rows(live_server, openmap, page):

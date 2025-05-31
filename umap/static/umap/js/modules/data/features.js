@@ -480,8 +480,11 @@ class Feature {
   }
 
   renameProperty(from, to) {
+    const oldValue = this.properties[from]
     this.properties[to] = this.properties[from]
     this.deleteProperty(from)
+    this.sync.update(`properties.${from}`, undefined, oldValue)
+    this.sync.update(`properties.${to}`, oldValue, undefined)
   }
 
   toGeoJSON() {
