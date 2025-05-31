@@ -488,6 +488,15 @@ export class DataLayer {
     this.indexProperty(newName)
   }
 
+  deleteProperty(property) {
+    this.sync.startBatch()
+    this.eachFeature((feature) => {
+      feature.deleteProperty(property)
+    })
+    this.sync.commitBatch()
+    this.deindexProperty(property)
+  }
+
   allProperties() {
     return this._propertiesIndex
   }

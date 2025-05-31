@@ -138,10 +138,7 @@ export default class TableEditor extends WithTemplate {
         translate('Are you sure you want to delete this property on all the features?')
       )
       .then(() => {
-        this.datalayer.eachFeature((feature) => {
-          feature.deleteProperty(property)
-        })
-        this.datalayer.deindexProperty(property)
+        this.datalayer.deleteProperty(property)
         this.resetProperties()
         this.open()
       })
