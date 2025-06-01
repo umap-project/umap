@@ -16,9 +16,15 @@ class FSDataStorage(FileSystemStorage):
         name = "%s_%s.geojson" % (instance.pk, int(time.time() * 1000))
         return root / name
 
-    def list_versions(self, instance):
+    def _get_names(self, instance):
         root = self._base_path(instance)
-        names = self.listdir(root)[1]
+        try:
+            return self.listdir(root)[1]
+        except FileNotFoundError:
+            return []
+
+    def list_versions(self, instance):
+        names = self._get_names(instance)
         names = [name for name in names if self._is_valid_version(name, instance)]
         versions = [self._version_metadata(name, instance) for name in names]
         versions.sort(reverse=True, key=operator.itemgetter("at"))
@@ -91,7 +97,7 @@ class FSDataStorage(FileSystemStorage):
 
     def _purge_gzip(self, instance):
         root = self._base_path(instance)
-        names = self.listdir(root)[1]
+        names = self._get_names(instance)
         prefixes = [f"{instance.pk}_"]
         if instance.old_id:
             prefixes.append(f"{instance.old_id}_")
