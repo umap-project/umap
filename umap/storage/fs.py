@@ -44,12 +44,12 @@ class FSDataStorage(FileSystemStorage):
         return fullpath
 
     def onDatalayerSave(self, instance):
-        self._purge_gzip(instance)
-        self._purge_old_versions(instance, keep=settings.UMAP_KEEP_VERSIONS)
+        self.purge_gzip(instance)
+        self.purge_old_versions(instance, keep=settings.UMAP_KEEP_VERSIONS)
 
     def onDatalayerDelete(self, instance):
-        self._purge_gzip(instance)
-        self._purge_old_versions(instance, keep=None)
+        self.purge_gzip(instance)
+        self.purge_old_versions(instance, keep=None)
 
     def _extract_version_ref(self, path):
         version = path.split(".")[0]
@@ -79,11 +79,12 @@ class FSDataStorage(FileSystemStorage):
             "size": self.size(self._base_path(instance) / name),
         }
 
-    def _purge_old_versions(self, instance, keep=None):
+    def purge_old_versions(self, instance, keep=None):
         root = self._base_path(instance)
         versions = self.list_versions(instance)
         if keep is not None:
             versions = versions[keep:]
+        deleted = 0
         for version in versions:
             name = version["name"]
             # Should not be in the list, but ensure to not delete the file
@@ -94,8 +95,11 @@ class FSDataStorage(FileSystemStorage):
                 self.delete(root / name)
             except FileNotFoundError:
                 pass
+            else:
+                deleted += 1
+        return deleted
 
-    def _purge_gzip(self, instance):
+    def purge_gzip(self, instance):
         root = self._base_path(instance)
         names = self._get_names(instance)
         prefixes = [f"{instance.pk}_"]
