@@ -43,6 +43,7 @@ class Command(BaseCommand):
             filters = {"modified_at__lt": since}
         datalayers = DataLayer.objects.filter(**filters)
         print(f"Selected {len(datalayers)} datalayers")
+        total_deleted = 0
         for layer in datalayers:
             layer_id = layer.uuid
             layer_name = layer.name
@@ -51,6 +52,11 @@ class Command(BaseCommand):
             if not options["dry_run"]:
                 deleted = layer.geojson.storage.purge_old_versions(layer, keep=1)
                 layer.geojson.storage.purge_gzip(layer)
+                total_deleted += deleted
             print(
                 f"Deleted {deleted} old versions of `{layer_name}` ({layer_id}), unmodified since {last_modified}"
             )
+        if not options["dry_run"]:
+            print(f"Successfully deleted {total_deleted} geojson files.")
+        else:
+            print(f"The command would delete {total_deleted} geojson files.")
