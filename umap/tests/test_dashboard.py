@@ -90,3 +90,12 @@ def test_user_dashboard_search(client, map):
     body = response.content.decode()
     assert map.name not in body
     assert new_map.name in body
+
+
+def test_user_dashboard_search_empty(client, map):
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(f"{reverse('user_dashboard')}?q=car")
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+    assert "No map found." in body

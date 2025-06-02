@@ -1,0 +1,36 @@
+<div class="wrapper">
+  <div class="row">
+    <div class="table-header">
+      <form action="{{ request.get_full_path }}" method="get">
+        <span>
+          <label class="sr-only" for="q">
+            {{ label_title }}
+          </label>
+          <input id="q"
+                 name="q"
+                 type="search"
+                 placeholder="{{ label_title }}"
+                 value="{{ request.GET.q|default:"" }}" />
+        </span>
+        <input type="submit" value="{{ submit_label }}" />
+      </form>
+      {% if maps.object_list|length > 1 %}
+        <a href="{% url 'user_download' %}?{% spaceless %} {% for map_inst in maps %}map_id={{ map_inst.pk }}{% if not forloop.last %}&{% endif %}{% endfor %} {% endspaceless %}"
+           class="button button-download">
+          {{ download_label }}
+        </a>
+      {% endif %}
+    </div>
+    {% if maps %}
+      {% include "umap/map_table.html" %}
+    {% else %}
+      <div>
+        {% if request.GET.q or request.GET.tags %}
+          {{ empty_search_label }}
+        {% else %}
+          {{ empty_label }} <a href="{% url 'map_new' %}">{{ create_label }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>

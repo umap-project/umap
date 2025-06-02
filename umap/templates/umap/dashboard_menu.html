@@ -7,6 +7,11 @@
     {% else %}
       <a href="{% url 'user_dashboard' %}">{% trans "My Maps" %}</a>
     {% endif %}
+    {% if selected == "templates" %}
+      <a class="selected" href="{% url 'user_templates' %}">{% blocktranslate with count=maps.paginator.count %}My Templates ({{ count }}){% endblocktranslate %}</a>
+    {% else %}
+      <a href="{% url 'user_templates' %}">{% trans "My Templates" %}</a>
+    {% endif %}
     {% if UMAP_ALLOW_EDIT_PROFILE %}
       <a {% if selected == "profile" %}class="selected"{% endif %}
          href="{% url 'user_profile' %}">{% trans "My profile" %}</a>
