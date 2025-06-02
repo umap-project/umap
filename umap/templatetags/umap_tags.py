@@ -44,6 +44,11 @@ def tilelayer_preview(tilelayer):
 
 
 @register.filter
+def dumps(dict_):
+    return json_dumps(dict_)
+
+
+@register.filter
 def can_delete_map(map, request):
     return map.can_delete(request)
 
