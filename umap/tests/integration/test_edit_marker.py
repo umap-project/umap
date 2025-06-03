@@ -118,3 +118,14 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     page.locator(".umap-field-datalayer select").select_option(label="other datalayer")
     expect(marker).to_have_css("background-color", "rgb(148, 0, 211)")
+
+
+def test_add_property_from_feature_properties_panel(
+    live_server, openmap, page, datalayer
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page.get_by_role("button", name="Add a new property").click()
+    page.locator('input[name="prompt"]').fill("newprop")
+    page.get_by_role("button", name="OK").click()
+    expect(page.locator(".panel.right").get_by_text("newprop")).to_be_visible()
