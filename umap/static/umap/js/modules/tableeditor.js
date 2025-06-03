@@ -110,23 +110,11 @@ export default class TableEditor extends WithTemplate {
     }
   }
 
-  validateName(name) {
-    if (name.includes('.')) {
-      U.Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
-      return false
-    }
-    if (this.properties.includes(name)) {
-      U.Alert.error(translate('This name already exists: “{name}”', { name }))
-      return false
-    }
-    return true
-  }
-
   renameProperty(property) {
     this._umap.dialog
       .prompt(translate('Please enter the new name of this property'))
       .then(({ prompt }) => {
-        if (!prompt || !this.validateName(prompt)) return
+        if (!prompt || !this.datalayer.validateName(prompt)) return
         this.datalayer.renameProperty(property, prompt)
         this.open()
       })
@@ -145,13 +133,9 @@ export default class TableEditor extends WithTemplate {
   }
 
   addProperty() {
-    this._umap.dialog
-      .prompt(translate('Please enter the name of the property'))
-      .then(({ prompt }) => {
-        if (!prompt || !this.validateName(prompt)) return
-        this.datalayer.indexProperty(prompt)
-        this.open()
-      })
+    this.datalayer.addProperty().then(() => {
+      this.open()
+    })
   }
 
   open() {
