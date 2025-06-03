@@ -8,23 +8,24 @@ from umap.models import DataLayer
 
 
 class Command(BaseCommand):
-    help = "Delete versions from datalayers which last modified date is x days ago. Eg.: umap prune_old_versions --days 30"
+    help = "Delete versions from datalayers which last modified date is x days ago. Eg.: umap purge_old_versions --days-ago 30"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--days",
-            help="Number of days to consider datalayers for versions removal",
+            "--days-ago",
+            help="Select datalayers which where last modified that many days ago",
             default=360,
+            type=int,
+        )
+        parser.add_argument(
+            "--days-to-select",
+            help="How many days before `days-ago` to consider",
+            default=1,
             type=int,
         )
         parser.add_argument(
             "--dry-run",
             help="Pretend to delete but just report",
-            action="store_true",
-        )
-        parser.add_argument(
-            "--initial",
-            help="To be added at first run: also select older layers",
             action="store_true",
         )
 
@@ -35,12 +36,12 @@ class Command(BaseCommand):
                 "For S3 storage, use lifecycle rule in the bucket."
             )
             sys.exit(msg)
-        days = options["days"]
-        since = (datetime.utcnow() - timedelta(days=days)).date()
-        print(f"Deleting versions for datalayer unmodified since {since}")
-        filters = {"modified_at__date": since}
-        if options["initial"]:
-            filters = {"modified_at__lt": since}
+        end = (datetime.utcnow() - timedelta(days=options["days_ago"] - 1)).date()
+        print(f"Deleting versions for datalayer unmodified since {end}")
+        filters = {"modified_at__lt": end}
+        if options["days_to_select"]:
+            start = end - timedelta(days=options["days_to_select"])
+            filters = {"modified_at__date__range": [start, end]}
         datalayers = DataLayer.objects.filter(**filters)
         print(f"Selected {len(datalayers)} datalayers")
         total_deleted = 0
