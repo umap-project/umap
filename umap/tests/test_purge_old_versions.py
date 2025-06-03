@@ -57,19 +57,19 @@ def test_purge_old_versions(map):
     # old layer 2 geojson + 1 gzip
     # older layer 2 geojson + 1 gzip
     assert len(old_layer.geojson.storage.listdir(root)[1]) == 7
-    call_command("purge_old_versions", "--days=7", "--dry-run")
+    call_command("purge_old_versions", "--days-ago=7", "--dry-run")
     assert len(recent_layer.versions) == 1
     assert len(old_layer.versions) == 2
     assert len(older_layer.versions) == 2
     assert len(other_layer.versions) == 2
     assert len(old_layer.geojson.storage.listdir(root)[1]) == 7
-    call_command("purge_old_versions", "--days=9")
+    call_command("purge_old_versions", "--days-ago=9")
     assert len(recent_layer.versions) == 1
     assert len(old_layer.versions) == 2
     assert len(older_layer.versions) == 2
     assert len(other_layer.versions) == 2
     assert len(old_layer.geojson.storage.listdir(root)[1]) == 7
-    call_command("purge_old_versions", "--days=7")
+    call_command("purge_old_versions", "--days-ago=7")
     assert len(recent_layer.versions) == 1
     assert len(old_layer.versions) == 1
     assert len(older_layer.versions) == 2
@@ -79,7 +79,7 @@ def test_purge_old_versions(map):
     # old layer 1 geojson
     # older layer 2 geojson + 1 gz
     assert len(old_layer.geojson.storage.listdir(root)[1]) == 5
-    call_command("purge_old_versions", "--days=7", "--initial")
+    call_command("purge_old_versions", "--days-ago=7", "--days-to-select=0")
     assert len(recent_layer.versions) == 1
     assert len(old_layer.versions) == 1
     assert len(older_layer.versions) == 1
