@@ -6,7 +6,7 @@ const TEMPLATE = `
   <div>
     <form data-ref="form">
       <h3><i class="icon icon-24 icon-template"></i>${translate('Load map template')}</h3>
-      <p>${translate('Use a template to initialize your map')}.</p>
+      <p>${translate('Loading a template will apply predefined styles and settings to your map')}.</p>
       <div class="formbox">
         <div class="flat-tabs" data-ref="tabs">
           <button type="button" class="flat" data-value="mine" data-ref="mine">${translate('My templates')}</button>
@@ -14,11 +14,10 @@ const TEMPLATE = `
           <button type="button" class="flat" data-value="community">${translate('From community')}</button>
         </div>
         <div data-ref="body" class="body"></div>
-        <label>
-          <input type="checkbox" name="include_data" />
-          ${translate('Include template data, if any')}
-        </label>
-        <button type="button" class="primary" data-ref="confirm" disabled>${translate('Load this template')}</button>
+        <div class="button-bar half">
+          <button type="button" class="primary" data-ref="confirm" disabled>${translate('Load template')}</button>
+          <button type="button" data-ref="confirmData" disabled>${translate('Load template with data')}</button>
+        </div>
       </div>
     </form>
   </div>
@@ -30,7 +29,7 @@ export default class TemplateImporter {
   }
 
   async open() {
-    const [root, { tabs, form, include_data, body, mine, confirm }] =
+    const [root, { tabs, form, body, mine, confirm, confirmData }] =
       Utils.loadTemplateWithRefs(TEMPLATE)
     const uri = this.umap.urls.get('template_list')
     const userIsAuth = Boolean(this.umap.properties.user?.id)
@@ -43,14 +42,35 @@ export default class TemplateImporter {
       )
       if (!error) {
         body.innerHTML = ''
+        if (!data.templates.length) {
+          let message
+          switch (source) {
+            case 'mine':
+              message = translate(
+                'You have no registered template yet. You can add one by creating a new map and flagging it as "template".'
+              )
+              break
+            case 'staff':
+              message = translate(
+                'There is no recommended template yet. Recommended templates are the ones starred by uMap administrators.'
+              )
+              break
+            case 'community':
+              message = translate('There is no public template yet.')
+              break
+          }
+          body.textContent = message
+        }
         for (const template of data.templates) {
           const item = Utils.loadTemplate(
             `<dl>
-              <dt><label><input type="radio" value="${template.id}" name="template" />${template.name}</label></dt>
-              <dd>
-                ${Utils.toHTML(template.description)}
-                <a href="${template.url}" target="_blank">${translate('Open')}<i class="icon icon-16 icon-external-link"></i></a>
-              </dd>
+              <dt>
+                <label>
+                  <input type="radio" value="${template.id}" name="template" />${template.name}
+                  <a href="${template.url}" target="_blank"><nobr>${translate('Explore')}<i class="icon icon-16 icon-external-link"></i></nobr></a>
+                </label>
+              </dt>
+              <dd class="text">${Utils.toHTML(template.description)}</dd>
             </dl>`
           )
           body.appendChild(item)
@@ -70,9 +90,10 @@ export default class TemplateImporter {
     form.addEventListener('change', () => {
       if (form.template.value) {
         confirm.disabled = false
+        confirmData.disabled = false
       }
     })
-    const onConfirm = () => {
+    const onConfirm = (includeData) => {
       const templateId = form.template.value
       if (!templateId) {
         Alert.error(translate('You must select a template.'))
@@ -81,7 +102,7 @@ export default class TemplateImporter {
       let url = this.umap.urls.get('map_download', {
         map_id: templateId,
       })
-      if (!form.include_data.checked) {
+      if (!includeData) {
         url = `${url}?include_data=0`
       }
       this.umap.importer.build()
@@ -90,7 +111,8 @@ export default class TemplateImporter {
       this.umap.importer.submit()
       this.umap.editPanel.close()
     }
-    confirm.addEventListener('click', onConfirm)
+    confirm.addEventListener('click', () => onConfirm(false))
+    confirmData.addEventListener('click', () => onConfirm(true))
 
     this.umap.editPanel.open({
       content: root,
