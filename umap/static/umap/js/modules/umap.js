@@ -504,8 +504,7 @@ export default class Umap {
   }
 
   getOption(key, feature) {
-    // TODO: remove when umap.forms.js is refactored and does not call blindly
-    // obj.getOption anymore
+    // TODO: remove when field.js does not call blindly obj.getOption anymore
     return this.getProperty(key, feature)
   }
 

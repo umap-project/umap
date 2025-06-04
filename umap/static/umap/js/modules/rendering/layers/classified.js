@@ -340,7 +340,7 @@ export const Circles = FeatureGroup.extend({
 
   renderLegend: function (container) {
     const parent = DomUtil.create('ul', 'circles-layer-legend', container)
-    const color = this.datalayer.getOption('color')
+    const color = this.datalayer.getProperty('color')
     const values = this.getValues()
     if (!values.length) return
     values.sort((a, b) => a - b)
@@ -358,7 +358,7 @@ export const Circles = FeatureGroup.extend({
       circleEl.style.backgroundColor = color
       circleEl.style.height = `${size * 2}px`
       circleEl.style.width = `${size * 2}px`
-      circleEl.style.opacity = this.datalayer.getOption('opacity')
+      circleEl.style.opacity = this.datalayer.getProperty('opacity')
       const labelEl = DomUtil.create('span', 'label', li)
       labelEl.textContent = label
     }
