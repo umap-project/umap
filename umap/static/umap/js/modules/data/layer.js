@@ -20,6 +20,7 @@ import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
+import Rules from '../rules.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -82,6 +83,7 @@ export class DataLayer {
     }
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
+    this.rules = new Rules(umap, this)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
     if (!this.createdOnServer) {
@@ -865,6 +867,7 @@ export class DataLayer {
       () => this.fetchRemoteData(true),
       this
     )
+    this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {
       this.buildVersionsFieldset(container)
@@ -928,6 +931,10 @@ export class DataLayer {
   getProperty(key, feature) {
     if (this.layer?.getOption) {
       const value = this.layer.getOption(key, feature)
+      if (value !== undefined) return value
+    }
+    if (feature) {
+      const value = this.rules.getOption(key, feature)
       if (value !== undefined) return value
     }
     if (this.getOwnProperty(key) !== undefined) {

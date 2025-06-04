@@ -137,7 +137,7 @@ export default class Umap {
     this.caption = new Caption(this, this._leafletMap)
     this.importer = new Importer(this)
     this.share = new Share(this)
-    this.rules = new Rules(this)
+    this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
       this.editPanel = new EditPanel(this, this._leafletMap)
