@@ -380,8 +380,10 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = Map.private.all()
-        qs = self.get_search_queryset(qs) or qs
+        qs = Map.private.filter(is_template=False)
+        search_qs = self.get_search_queryset(qs)
+        if search_qs is not None:
+            qs = search_qs
         qs = qs.for_user(self.object)
         return qs.order_by("-modified_at")
 
@@ -391,7 +393,26 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return super().get_context_data(**kwargs)
 
 
-user_dashboard = UserDashboard.as_view()
+class UserTemplates(PaginatorMixin, DetailView, SearchMixin):
+    model = User
+    template_name = "umap/user_templates.html"
+    list_template_name = "umap/map_table.html"
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_maps(self):
+        qs = Map.private.filter(is_template=True)
+        search_qs = self.get_search_queryset(qs)
+        if search_qs is not None:
+            qs = search_qs
+        qs = qs.for_user(self.object)
+        return qs.order_by("-modified_at")
+
+    def get_context_data(self, **kwargs):
+        page = self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)
+        kwargs.update({"q": self.request.GET.get("q"), "maps": page})
+        return super().get_context_data(**kwargs)
 
 
 class UserDownload(DetailView, SearchMixin):
