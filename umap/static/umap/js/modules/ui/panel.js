@@ -57,7 +57,7 @@ export class Panel {
     if (className) DomUtil.addClass(body, className)
     const promise = new Promise((resolve, reject) => {
       DomUtil.addClass(this.container, 'on')
-      resolve()
+      resolve(this)
     })
     DomEvent.on(closeButton, 'click', this.close, this)
     DomEvent.on(resizeButton, 'click', this.resize, this)

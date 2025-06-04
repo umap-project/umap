@@ -137,7 +137,7 @@ export default class Umap {
     this.caption = new Caption(this, this._leafletMap)
     this.importer = new Importer(this)
     this.share = new Share(this)
-    this.rules = new Rules(this)
+    this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
       this.editPanel = new EditPanel(this, this._leafletMap)
@@ -504,8 +504,7 @@ export default class Umap {
   }
 
   getOption(key, feature) {
-    // TODO: remove when umap.forms.js is refactored and does not call blindly
-    // obj.getOption anymore
+    // TODO: remove when field.js does not call blindly obj.getOption anymore
     return this.getProperty(key, feature)
   }
 

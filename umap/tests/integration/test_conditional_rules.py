@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 from playwright.sync_api import expect
 
@@ -342,3 +344,24 @@ def test_first_matching_rule_wins_on_given_property(live_server, page, map):
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
+
+
+def test_rules_from_datalayer(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {"condition": "mytype=odd", "options": {"color": "darkred"}}
+    ]
+    map.save()
+    data = deepcopy(DATALAYER_DATA1)
+    data["_umap_options"]["rules"] = [
+        {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
+    ]
+    DataLayerFactory(map=map, data=data)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    markers = page.locator(".leaflet-marker-icon .icon_container")
+    expect(markers).to_have_count(5)
+    colors = getColors(markers)
+    # Alice Blue should only affect layer 1
+    assert colors.count("rgb(240, 248, 255)") == 1
+    # Dark Red as for map global rules
+    assert colors.count("rgb(139, 0, 0)") == 2
