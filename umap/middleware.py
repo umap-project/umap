@@ -15,7 +15,7 @@ def readonly_middleware(get_response):
         raise MiddlewareNotUsed
 
     def middleware(request):
-        if request.method not in ["GET", "OPTIONS"]:
+        if request.method not in ["GET", "OPTIONS", "HEAD"]:
             return HttpResponseForbidden(_("Site is readonly for maintenance"))
 
         return get_response(request)
