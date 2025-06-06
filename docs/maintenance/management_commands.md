@@ -81,3 +81,18 @@ exactly 360 days ago.
 * `--dry-run`: only print candidate datalayers without any effective deletion.
 * `--days-ago`: select datalayers which where last modified that many days ago (default: 360).
 * `--days-to-select`: how many days before `days-ago` to consider, use `0` to put not limit (default: 1).
+
+## `switch_user`
+
+Command to use when some user created a new account and wants to retrieve maps from an old account.
+The command will replace old user by new:
+- as map owner
+- as map editors
+- as team member
+
+Eg.: `umap switch_user oldUserName newUserName --delete-user`
+
+### Options
+
+* `--dry-run`: only print candidate datalayers without any effective deletion.
+* `--delete-user`: if true, delete old user at the end of the process.

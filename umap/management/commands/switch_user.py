@@ -4,7 +4,7 @@ from umap.models import Map, User
 
 
 class Command(BaseCommand):
-    help = "Replace a user by another as owner or editor or team member."
+    help = "Replace a user by another as owner or editor or team member. Eg. umap switch_user oldUserName newUserName"
 
     def add_arguments(self, parser):
         parser.add_argument("old", help="Old username.")
