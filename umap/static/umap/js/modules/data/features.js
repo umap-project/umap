@@ -205,7 +205,7 @@ class Feature {
 
   edit(event) {
     if (!this._umap.editEnabled || this.isReadOnly()) return
-    if (this._umap.editedFeature === this) return
+    if (this._umap.editedFeature === this && !event.force) return
     const container = DomUtil.create('div', 'umap-feature-container')
     DomUtil.createTitle(
       container,
@@ -241,7 +241,15 @@ class Feature {
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
-    container.appendChild(builder.build())
+    const form = builder.build()
+    container.appendChild(form)
+    const button = Utils.loadTemplate(
+      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new property')}</button>`
+    )
+    button.addEventListener('click', () => {
+      this.datalayer.addProperty().then(() => this.edit({ force: true }))
+    })
+    form.appendChild(button)
     this.appendEditFieldsets(container)
     const advancedActions = DomUtil.createFieldset(
       container,

@@ -499,6 +499,33 @@ export class DataLayer {
     this.deindexProperty(property)
   }
 
+  addProperty() {
+    let resolve = undefined
+    const promise = new Promise((r) => {
+      resolve = r
+    })
+    this._umap.dialog
+      .prompt(translate('Please enter the name of the property'))
+      .then(({ prompt }) => {
+        if (!prompt || !this.validateName(prompt)) return
+        this.indexProperty(prompt)
+        resolve()
+      })
+    return promise
+  }
+
+  validateName(name) {
+    if (name.includes('.')) {
+      Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
+      return false
+    }
+    if (this.allProperties().includes(name)) {
+      Alert.error(translate('This name already exists: “{name}”', { name }))
+      return false
+    }
+    return true
+  }
+
   allProperties() {
     return this._propertiesIndex
   }
