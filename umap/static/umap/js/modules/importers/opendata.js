@@ -9,13 +9,13 @@ const PORTALS = [
     platform: 'opendatasoft',
   },
   {
-    name: 'Région Centre-Val de Loire',
-    url: 'https://data.centrevaldeloire.fr',
+    name: 'Bordeaux Métropole',
+    url: 'https://opendata.bordeaux-metropole.fr',
     platform: 'opendatasoft',
   },
   {
-    name: 'Toulouse Métropole',
-    url: 'https://data.toulouse-metropole.fr',
+    name: 'Région Centre-Val de Loire',
+    url: 'https://data.centrevaldeloire.fr',
     platform: 'opendatasoft',
   },
   {
@@ -34,8 +34,8 @@ const PORTALS = [
     platform: 'opendatasoft',
   },
   {
-    name: 'Bordeaux Métropole',
-    url: 'https://opendata.bordeaux-metropole.fr',
+    name: 'Toulouse Métropole',
+    url: 'https://data.toulouse-metropole.fr',
     platform: 'opendatasoft',
   },
 ]
