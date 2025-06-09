@@ -189,6 +189,9 @@ def test_stats_empty(client):
         "members_count": 0,
         "orphans_count": 0,
         "owners_count": 0,
+        "anonymous_allowed": False,
+        "realtime_enabled": True,
+        "importers": [],
     }
 
 
@@ -210,6 +213,9 @@ def test_stats_basic(client, map, datalayer, user2):
         "members_count": 0,
         "orphans_count": 1,
         "owners_count": 1,
+        "anonymous_allowed": False,
+        "realtime_enabled": True,
+        "importers": [],
     }
 
 
