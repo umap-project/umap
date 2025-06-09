@@ -110,4 +110,11 @@ export const Cluster = L.MarkerClusterGroup.extend({
       this.options.polygonOptions.color = this.datalayer.getColor()
     }
   },
+
+  _moveChild: (layer, from, to) => {
+    // Extend parent method, so to remove remove/addLayer,
+    // to let our own dragend event listener be called
+    // cf https://github.com/umap-project/umap/issues/2749
+    layer._latlng = to
+  },
 })
