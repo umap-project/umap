@@ -1,5 +1,41 @@
 # Changelog
 
+## dev
+
+This version main improvement is the introduction of map templates, which
+allow to start new maps with prefilled style and optionally data.
+
+There is also a new importer for open data portals (for now only dealing
+with OpenDataSoft portals). And for the more adventurous, a new
+experimental line decoration feature.
+
+### New features
+* introduce map templates by @yohanboniface and @davidbgk in #2660
+* add minimal Open Data portals importer by @yohanboniface in #2733
+* add experimental line decoration support by @yohanboniface in #2706
+* make conditional rules non exclusive by @yohanboniface in #2731
+* allow conditional rules on datalayer by @yohanboniface in #2750
+* allow to add a new property from feature edit panel by @yohanboniface in #2747
+* add switch_user management command by @yohanboniface in #2754
+* add management command to purge old versions by @yohanboniface in #2740
+* add external resources links in help dialog by @yohanboniface in #2720
+
+### Bug fixes
+* fix label not shown on map preview by @yohanboniface in #2714
+* fix map search in dashboard by @yohanboniface in #2718
+* display "false" value in the table editor by @yohanboniface in #2729
+* do not exclude "false" from autocomplete in rule value by @yohanboniface in #2730
+* clear results markers on new search by @yohanboniface in #2734
+* do not crash when deleting a map if file is missing by @yohanboniface in #2739
+* fix dragged marker not savable when in cluster layer by @yohanboniface in #2757
+* allow to undo/redo renaming or deleting a property by @yohanboniface in #2738
+
+### Internal Changes
+* Helm chart refactoring by @ohemelaar in #2728
+* also accept HEAD request when in READONLY by @yohanboniface in #2752
+* allow to migrate pictograms to S3 in migrate_to_S3 command by @yohanboniface in #2753
+* add realtime, anonymous status and importers in /stats by @yohanboniface in #2756
+
 ## 3.0.6 - 2025-05-14
 
 * Better way of escaping map settings by @yohanboniface and @davidbgk in #2705
