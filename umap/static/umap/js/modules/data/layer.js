@@ -20,6 +20,7 @@ import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
+import Rules from '../rules.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -82,6 +83,7 @@ export class DataLayer {
     }
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
+    this.rules = new Rules(umap, this)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
     if (!this.createdOnServer) {
@@ -521,7 +523,7 @@ export class DataLayer {
   }
 
   sortFeatures(collection) {
-    const sortKeys = this.getOption('sortKey') || U.DEFAULT_LABEL_KEY
+    const sortKeys = this.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
     return Utils.sortFeatures(collection, sortKeys, U.lang)
   }
 
@@ -894,6 +896,7 @@ export class DataLayer {
       () => this.fetchRemoteData(true),
       this
     )
+    this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {
       this.buildVersionsFieldset(container)
@@ -950,22 +953,31 @@ export class DataLayer {
     })
   }
 
-  getOwnOption(option) {
+  getOwnProperty(option) {
     if (Utils.usableOption(this.properties, option)) return this.properties[option]
   }
 
-  getOption(option, feature) {
+  getProperty(key, feature) {
     if (this.layer?.getOption) {
-      const value = this.layer.getOption(option, feature)
+      const value = this.layer.getOption(key, feature)
       if (value !== undefined) return value
     }
-    if (this.getOwnOption(option) !== undefined) {
-      return this.getOwnOption(option)
+    if (feature) {
+      const value = this.rules.getOption(key, feature)
+      if (value !== undefined) return value
     }
-    if (this.layer?.defaults?.[option]) {
-      return this.layer.defaults[option]
+    if (this.getOwnProperty(key) !== undefined) {
+      return this.getOwnProperty(key)
     }
-    return this._umap.getProperty(option, feature)
+    if (this.layer?.defaults?.[key]) {
+      return this.layer.defaults[key]
+    }
+    return this._umap.getProperty(key, feature)
+  }
+
+  getOption(key, feature) {
+    // TODO: remove when field.js does not call blindly obj.getOption anymore
+    return this.getProperty(key, feature)
   }
 
   async buildVersionsFieldset(container) {
@@ -1060,7 +1072,7 @@ export class DataLayer {
 
   zoomToBounds(bounds) {
     if (bounds.isValid()) {
-      const options = { maxZoom: this.getOption('zoomTo') }
+      const options = { maxZoom: this.getProperty('zoomTo') }
       this._leafletMap.fitBounds(bounds, options)
     }
   }
@@ -1272,7 +1284,7 @@ export class DataLayer {
     // By default, it will we use the "name" property, which is also the one used as label in the features list.
     // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
     if (this._umap.properties.filterKey) return this._umap.properties.filterKey
-    if (this.getOption('labelKey')) return this.getOption('labelKey')
+    if (this.getProperty('labelKey')) return this.getProperty('labelKey')
     if (this._umap.properties.sortKey) return this._umap.properties.sortKey
     return 'displayName'
   }

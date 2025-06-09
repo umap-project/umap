@@ -421,7 +421,7 @@ class Feature {
     } else if (Utils.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
-      value = this.datalayer.getOption(option, this)
+      value = this.datalayer.getProperty(option, this)
     } else {
       value = this._umap.getProperty(option)
     }
