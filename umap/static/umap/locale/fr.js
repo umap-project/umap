@@ -558,19 +558,25 @@ const locale = {
     "Text rotate": "Pivoter le texte",
     "Text size": "Taille du texte",
     "Load map template": "Charger un modèle de carte",
-    "Use a template to initialize your map": "Utiliser un modèle pour initialiser cette carte",
     "My templates": "Mes modèles",
     "From staff": "Recommandés",
     "From community": "Communautaires",
-    "Include template data, if any": "Inclure les données, le cas échéant",
-    "Load this template": "Charger ce modèle",
-    "Open": "Ouvert",
     "You must select a template.": "Vous devez sélectionner un modèle.",
     "Line decoration": "Décoration de la ligne",
     "Reuse this template": "Réutiliser ce modèle",
     "Create a new map using this template": "Créer une carte à partir de ce modèle",
     "Save template": "Enregistrer le modèle",
-    "Load template": "Charger le modèle"
+    "Load template": "Charger le modèle",
+    "Loading a template will apply predefined styles and settings to your map": "Charger un modèle appliquera des styles et des paramètres à la carte",
+    "Load template with data": "Charger avec les données",
+    "You have no registered template yet. You can add one by creating a new map and flagging it as \"template\".": "Vous n'avez pas encore de modèle. Vous pouvez en ajouter un en créant une carte et la marquant comme modèle.",
+    "There is no recommended template yet. Recommended templates are the ones starred by uMap administrators.": "Aucun modèle recommandé. Les modèles recommandés sont ceux mis en favoris par les administrateurs de ce serveur uMap.",
+    "There is no public template yet.": "Aucun modèle public.",
+    "Explore": "Explorer",
+    "Import data from public open data portals": "Importer des données depuis des portails open data",
+    "Choose a portal": "Choisir un portail",
+    "Limit results to current map view": "Limiter les résultats à la vue courante",
+    "Please choose an instance first.": "Merci de choisir un portail."
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

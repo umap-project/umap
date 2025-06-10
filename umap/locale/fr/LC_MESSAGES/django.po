@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 15:24+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2025\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -416,7 +416,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Et c'est <a href=\"%(repo_url)s\">open source</a> !"
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr "Créer une carte"
 
@@ -514,11 +514,20 @@ msgstr "Mes cartes (%(count)s)"
 msgid "My Maps"
 msgstr "Mes cartes"
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr "Mes modèles (%(count)s)"
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr "Mes modèles"
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr "Mon profil"
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr "Mes équipes"
 
@@ -538,7 +547,7 @@ msgstr "Vous êtes maintenant identifié. Merci de patienter..."
 msgid "template"
 msgstr "modèle"
 
-#: templates/umap/map_list.html:18 views.py:437
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr "par"
 
@@ -582,7 +591,7 @@ msgstr "Propriétaire"
 msgid "Actions"
 msgstr "Actions"
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr "Ouvrir l'aperçu"
 
@@ -710,7 +719,7 @@ msgstr[0] "%(count)s carte trouvée:"
 msgstr[1] "%(count)s cartes trouvées:"
 msgstr[2] "%(count)s cartes trouvées :"
 
-#: templates/umap/search.html:30
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr "Aucune carte trouvée."
 
@@ -765,20 +774,20 @@ msgstr "Supprimer cette équipe"
 msgid "Add user"
 msgstr "Ajouter un membre"
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr "Chercher dans mes cartes"
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
-msgstr "Titre de la carte"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
+msgstr "Nom de la carte"
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "Télécharger %(count)s cartes"
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr "Vous n'avez pas encore de carte."
 
@@ -794,6 +803,31 @@ msgstr "Membres"
 msgid "New team"
 msgstr "Nouvelle équipe"
 
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr "Chercher dans mes modèles"
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr "Nom du modèle"
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr "Télécharger %(count)s modèles"
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr "Aucun modèle."
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr "Créer un modèle"
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr "Aucun modèle trouvé."
+
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Impossible de supprimer une équipe ayant plus d'un membre"
@@ -803,61 +837,61 @@ msgstr "Impossible de supprimer une équipe ayant plus d'un membre"
 msgid "Team “%(name)s” has been deleted"
 msgstr "L'équipe «%(name)s» a été supprimée"
 
-#: views.py:442
+#: views.py:463
 msgid "View the map"
 msgstr "Voir la carte"
 
-#: views.py:843
+#: views.py:864
 msgid "See full screen"
 msgstr "Plein écran"
 
-#: views.py:986
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr "Éditeurs de la carte mis à jour !"
 
-#: views.py:1022
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Le lien d'édition uMap pour votre carte : %(map_name)s"
 
-#: views.py:1025
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Voici votre lien d'édition secret : %(link)s"
 
-#: views.py:1032
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Impossible d'envoyer un courriel vers %(email)s"
 
-#: views.py:1035
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Courriel envoyé à %(email)s"
 
-#: views.py:1046
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr "Seul le créateur de la carte peut la supprimer."
 
-#: views.py:1052
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr "La carte a bien été supprimée."
 
-#: views.py:1078
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Votre carte a été dupliquée ! Si vous souhaitez la modifier depuis un autre ordinateur, veuillez utiliser ce lien : %(anonymous_url)s"
 
-#: views.py:1083
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr "Votre carte a été dupliquée !"
 
-#: views.py:1337
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr "Calque supprimé."
 
-#: views.py:1359
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr "Les permissions ont bien été modifiées !"

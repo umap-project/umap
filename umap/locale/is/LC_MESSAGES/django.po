@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-04 16:49+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>, 2020\n"
 "Language-Team: Icelandic (http://app.transifex.com/openstreetmap/umap/language/is/)\n"
@@ -42,7 +42,7 @@ msgstr "Notkun á “%(name)s” til auðkenningar er úreld aðferð sem verðu
 msgid "name"
 msgstr "nafn"
 
-#: models.py:63 models.py:493
+#: models.py:63 models.py:503
 msgid "description"
 msgstr "lýsing"
 
@@ -62,23 +62,23 @@ msgstr "URL-sniðmát sem notar OSM-kortatíglasnið"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Röð kortatíglalaga í breytingareitnum"
 
-#: models.py:176 models.py:487
+#: models.py:176 models.py:497
 msgid "Only editable with secret edit link"
 msgstr "Aðeins breytanlegt með leynilegum breytingatengli"
 
-#: models.py:177 models.py:488
+#: models.py:177 models.py:498
 msgid "Everyone can edit"
 msgstr "Allir geta breytt"
 
-#: models.py:180 models.py:481
+#: models.py:180 models.py:491
 msgid "Everyone"
 msgstr "Allir"
 
-#: models.py:181 models.py:190 models.py:482
+#: models.py:181 models.py:190 models.py:492
 msgid "Editors and team only"
 msgstr "Einungis ritstjórar og teymið"
 
-#: models.py:182 models.py:483
+#: models.py:182 models.py:493
 msgid "Owner only"
 msgstr "Aðeins eigandi"
 
@@ -98,7 +98,7 @@ msgstr "Hver sá sem er með tengil"
 msgid "Blocked"
 msgstr "Útilokað"
 
-#: models.py:192 models.py:477
+#: models.py:192 models.py:487
 msgid "Deleted"
 msgstr "Eytt"
 
@@ -138,99 +138,123 @@ msgstr "ritstjórar"
 msgid "team"
 msgstr "teymi"
 
-#: models.py:230 models.py:509
+#: models.py:230 models.py:519
 msgid "edit status"
 msgstr "staða vinnslu"
 
-#: models.py:235 models.py:514
+#: models.py:235 models.py:524
 msgid "share status"
 msgstr "staða deilingar"
 
-#: models.py:238 models.py:504
+#: models.py:238 models.py:514
 msgid "settings"
 msgstr "stillingar"
 
-#: models.py:410
+#: models.py:243
+msgid "save as template"
+msgstr ""
+
+#: models.py:244
+msgid "This map is a template map."
+msgstr ""
+
+#: models.py:420
 msgid "Clone of"
 msgstr "Klón af"
 
-#: models.py:476 models.py:480 models.py:486
+#: models.py:486 models.py:490 models.py:496
 msgid "Inherit"
 msgstr "Erfa"
 
-#: models.py:499
+#: models.py:509
 msgid "display on load"
 msgstr "birta við innhleðslu"
 
-#: models.py:500
+#: models.py:510
 msgid "Display this layer on load."
 msgstr "Birta þetta lag við innhleðslu."
 
-#: settings/base.py:295
-msgid "Art and Culture"
+#: settings/base.py:283
+msgid "uMap user documentation"
 msgstr ""
 
-#: settings/base.py:296
-msgid "Cycling"
+#: settings/base.py:288
+msgid "Video tutorials"
 msgstr ""
 
-#: settings/base.py:297
-msgid "Business"
+#: settings/base.py:293
+msgid "OpenStreetMap.org forum"
 msgstr ""
 
 #: settings/base.py:298
+msgid "OpenStreetMap France forum"
+msgstr ""
+
+#: settings/base.py:318
+msgid "Art and Culture"
+msgstr ""
+
+#: settings/base.py:319
+msgid "Cycling"
+msgstr ""
+
+#: settings/base.py:320
+msgid "Business"
+msgstr ""
+
+#: settings/base.py:321
 msgid "Environment"
 msgstr ""
 
-#: settings/base.py:299
+#: settings/base.py:322
 msgid "Education"
 msgstr ""
 
-#: settings/base.py:300
+#: settings/base.py:323
 msgid "Food and Agriculture"
 msgstr ""
 
-#: settings/base.py:301
+#: settings/base.py:324
 msgid "Geopolitics"
 msgstr ""
 
-#: settings/base.py:302
+#: settings/base.py:325
 msgid "Health"
 msgstr ""
 
-#: settings/base.py:303
+#: settings/base.py:326
 msgid "Hiking"
 msgstr ""
 
-#: settings/base.py:304
+#: settings/base.py:327
 msgid "History"
 msgstr ""
 
-#: settings/base.py:305
+#: settings/base.py:328
 msgid "Public sector"
 msgstr ""
 
-#: settings/base.py:306
+#: settings/base.py:329
 msgid "Science"
 msgstr ""
 
-#: settings/base.py:307
+#: settings/base.py:330
 msgid "Shopping"
 msgstr ""
 
-#: settings/base.py:308
+#: settings/base.py:331
 msgid "Sport and Leisure"
 msgstr ""
 
-#: settings/base.py:309
+#: settings/base.py:332
 msgid "Travel"
 msgstr ""
 
-#: settings/base.py:310
+#: settings/base.py:333
 msgid "Transports"
 msgstr ""
 
-#: settings/base.py:311
+#: settings/base.py:334
 msgid "Tourism"
 msgstr ""
 
@@ -376,7 +400,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "And it's <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr "Útbúðu landakort"
 
@@ -474,11 +498,20 @@ msgstr "Kortin mín (%(count)s)"
 msgid "My Maps"
 msgstr "Kortin mín"
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr "Sniðið mitt"
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr "Teymin mín"
 
@@ -494,9 +527,17 @@ msgstr "Fáðu hugmyndir, skoðaðu önnur landakort"
 msgid "You are logged in. Continuing..."
 msgstr "Þú ert skráð/ur inn. Held áfram..."
 
-#: templates/umap/map_list.html:18 views.py:444
+#: templates/umap/map_list.html:15
+msgid "template"
+msgstr ""
+
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr "eftir"
+
+#: templates/umap/map_list.html:22
+msgid "See the template"
+msgstr ""
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
@@ -534,7 +575,7 @@ msgstr "Eigandi"
 msgid "Actions"
 msgstr "Aðgerðir"
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr "Opna forskoðun"
 
@@ -661,11 +702,15 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] "%(count)s kort fannst:"
 msgstr[1] "%(count)s kort fundust:"
 
-#: templates/umap/search.html:30
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr "Engin kort fundust."
 
-#: templates/umap/search.html:35
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr ""
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr "Síðast útbúnu kortin"
 
@@ -712,20 +757,20 @@ msgstr "Eyða þessu teymi"
 msgid "Add user"
 msgstr "Bæta við notanda"
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr "Leita í landakortunum mínum"
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
-msgstr "Titill landakortsins"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
+msgstr ""
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "Sækja %(count)s landakort"
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr "Þú ert ekki með nein kort ennþá."
 
@@ -741,70 +786,95 @@ msgstr "Notendur"
 msgid "New team"
 msgstr "Nýtt teymi"
 
-#: views.py:235
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr ""
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr ""
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr ""
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr ""
+
+#: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Get ekki eytt teymi með fleiri en einum meðlim"
 
-#: views.py:239
+#: views.py:237
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "Teyminu “%(name)s” hefur verið eytt"
 
-#: views.py:449
+#: views.py:463
 msgid "View the map"
 msgstr "Skoða kortið"
 
-#: views.py:845
+#: views.py:864
 msgid "See full screen"
 msgstr "Fylla skjáinn"
 
-#: views.py:988
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr "Tókst að uppfæra vinnslu korta!"
 
-#: views.py:1024
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "uMap-breytingatengillinn fyrir landakortið þitt: %(map_name)s"
 
-#: views.py:1027
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hér er leynilegi breytingatengillinn þinn: %(link)s"
 
-#: views.py:1034
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Tekst ekki að senda tölvupóst á %(email)s"
 
-#: views.py:1037
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Tölvupóstur var sendur á %(email)s"
 
-#: views.py:1048
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr "Aðeins eigandinn getur eytt landakortinu."
 
-#: views.py:1051
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr "Tókst að eyða korti."
 
-#: views.py:1077
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Það tókst að klóna landakortið þitt! Ef þú ætlar að breyta þessu landakorti úr annarri tölvu, ættirðu að nota þennan tengil: %(anonymous_url)s"
 
-#: views.py:1082
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr "Til hamingju, það tókst að klóna landakortið þitt!"
 
-#: views.py:1336
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr "Tókst að eyða lagi."
 
-#: views.py:1358
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr "Tókst að uppfæra heimildir!"

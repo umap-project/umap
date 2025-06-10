@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 15:24+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2025\n"
 "Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
@@ -402,7 +402,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Eta <a href=\"%(repo_url)s\">software librea</a> da!"
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr "Sortu mapa bat"
 
@@ -500,11 +500,20 @@ msgstr "Nire mapak (%(count)s)"
 msgid "My Maps"
 msgstr "Nire mapak"
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr "Nire profila"
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr "Nire taldeak"
 
@@ -524,7 +533,7 @@ msgstr "Sartu egin zara. Jarraitu..."
 msgid "template"
 msgstr ""
 
-#: templates/umap/map_list.html:18 views.py:437
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr "nork eginda"
 
@@ -568,7 +577,7 @@ msgstr "Jabea"
 msgid "Actions"
 msgstr "Ekintzak"
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr "Ireki aurrebista"
 
@@ -695,7 +704,7 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] "mapa %(count)s aurkitu da:"
 msgstr[1] "%(count)s mapa aurkitu dira:"
 
-#: templates/umap/search.html:30
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr "Ez da maparik aurkitu"
 
@@ -750,20 +759,20 @@ msgstr "Ezabatu talde hau"
 msgid "Add user"
 msgstr "Gehitu erabiltzailea"
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr "Bilatu mapen arabera"
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
-msgstr "Maparen izenburua"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
+msgstr ""
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "Deskargatu  %(count)s mapa"
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr "Oraindik ez daukazu maparik."
 
@@ -779,6 +788,31 @@ msgstr "Erabiltzaileak"
 msgid "New team"
 msgstr "Talde berria"
 
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr ""
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr ""
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr ""
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr ""
+
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Ezin da ezabatu kide bat baino gehiago dituen talde bat"
@@ -788,61 +822,61 @@ msgstr "Ezin da ezabatu kide bat baino gehiago dituen talde bat"
 msgid "Team “%(name)s” has been deleted"
 msgstr "“%(name)s” taldea ezabatu da"
 
-#: views.py:442
+#: views.py:463
 msgid "View the map"
 msgstr "Mapa ikusi"
 
-#: views.py:843
+#: views.py:864
 msgid "See full screen"
 msgstr "Ikusi pantaila osoan"
 
-#: views.py:986
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr "Maparen editoreak ondo eguneratu dira!"
 
-#: views.py:1022
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Zure mapa editatzeko uMap-en esteka: %(map_name)s"
 
-#: views.py:1025
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hona hemen zure editatzeko esteka sekretua:: %(link)s"
 
-#: views.py:1032
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Ezin da posta elektronikorik bidali %(email)s-ri"
 
-#: views.py:1035
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Posta elektronikoa bidalita %(email)s-ri"
 
-#: views.py:1046
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr "Jabeak bakarrik ezabatu dezake mapa."
 
-#: views.py:1052
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr "Mapa behar bezala ezabatu da."
 
-#: views.py:1078
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Zure mapa klonatu egin da! Mapa hau beste nabigatzaile batetik editatzeko erabili esteka hau: %(anonymous_url)s"
 
-#: views.py:1083
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr "Zorionak, zure mapa ondo klonatu da!"
 
-#: views.py:1337
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr "Geruza ondo ezabatu da."
 
-#: views.py:1359
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr "Baimenak behar bezala eguneratu dira!"

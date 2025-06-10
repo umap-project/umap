@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 15:24+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -399,7 +399,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr ""
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr ""
 
@@ -497,11 +497,20 @@ msgstr ""
 msgid "My Maps"
 msgstr ""
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr ""
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr ""
 
@@ -521,7 +530,7 @@ msgstr ""
 msgid "template"
 msgstr ""
 
-#: templates/umap/map_list.html:18 views.py:437
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr ""
 
@@ -565,7 +574,7 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr ""
 
@@ -691,7 +700,7 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/umap/search.html:30
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr ""
 
@@ -746,20 +755,20 @@ msgstr ""
 msgid "Add user"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr ""
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr ""
 
@@ -775,6 +784,31 @@ msgstr ""
 msgid "New team"
 msgstr ""
 
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr ""
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr ""
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr ""
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr ""
+
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr ""
@@ -784,61 +818,61 @@ msgstr ""
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:442
+#: views.py:463
 msgid "View the map"
 msgstr ""
 
-#: views.py:843
+#: views.py:864
 msgid "See full screen"
 msgstr ""
 
-#: views.py:986
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:1022
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1025
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1032
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1035
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1046
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1052
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1078
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1083
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1337
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1359
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr ""

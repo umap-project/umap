@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 15:24+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Joost Schouppe <joost.schouppe@gmail.com>, 2025\n"
 "Language-Team: Dutch (http://app.transifex.com/openstreetmap/umap/language/nl/)\n"
@@ -404,7 +404,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "En het is <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr "Maak een kaart"
 
@@ -502,11 +502,20 @@ msgstr "Mijn kaarten (%(count)s)"
 msgid "My Maps"
 msgstr "Mijn kaarten"
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr "Mijn profiel"
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr "Mijn teams"
 
@@ -526,7 +535,7 @@ msgstr "U bent ingelogd. Ga verder..."
 msgid "template"
 msgstr "sjabloon"
 
-#: templates/umap/map_list.html:18 views.py:437
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr "door"
 
@@ -570,7 +579,7 @@ msgstr "Eigenaar"
 msgid "Actions"
 msgstr "Acties"
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr "Open Voorbeeld"
 
@@ -697,7 +706,7 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] "%(count)s kaarten gevonden:"
 msgstr[1] "%(count)s kaarten gevonden:"
 
-#: templates/umap/search.html:30
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr "Geen kaart gevonden."
 
@@ -752,20 +761,20 @@ msgstr "Verwijder dit team"
 msgid "Add user"
 msgstr "Gebruiker toevoegen"
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr "Doorzoek mijn kaarten"
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
-msgstr "Titel van de kaart"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
+msgstr ""
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "Download %(count)s kaarten"
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr "Je hebt nog geen kaart."
 
@@ -781,6 +790,31 @@ msgstr "Gebruikers"
 msgid "New team"
 msgstr "Nieuw Team"
 
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr ""
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr ""
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr ""
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr ""
+
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Kan een team met meer dan één lid niet verwijderen"
@@ -790,61 +824,61 @@ msgstr "Kan een team met meer dan één lid niet verwijderen"
 msgid "Team “%(name)s” has been deleted"
 msgstr "Team “%(name)s” is verwijderd"
 
-#: views.py:442
+#: views.py:463
 msgid "View the map"
 msgstr "Bekijk de kaart"
 
-#: views.py:843
+#: views.py:864
 msgid "See full screen"
 msgstr "Volledig scherm weergeven"
 
-#: views.py:986
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr "Kaarteditors met succes bijgewerkt!"
 
-#: views.py:1022
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "De uMap-bewerkingslink voor uw kaart: %(map_name)s"
 
-#: views.py:1025
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hier is je geheime bewerkingslink: %(link)s"
 
-#: views.py:1032
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Kan geen e-mail verzenden naar %(email)s"
 
-#: views.py:1035
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail verzonden naar %(email)s"
 
-#: views.py:1046
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr "Kaart kan alleen door eigenaar worden verwijderd."
 
-#: views.py:1052
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr "Kaart succesvol verwijderd."
 
-#: views.py:1078
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Uw kaart is gekopieerd! Als u deze kaart wilt wijzigen vanaf een andere computer, gebruik dan deze link: %(anonymous_url)s"
 
-#: views.py:1083
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gefeliciteerd, uw kaart is gekopieerd!"
 
-#: views.py:1337
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr "Laag is verwijderd."
 
-#: views.py:1359
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr "Machtigingen met succes bijgewerkt!"

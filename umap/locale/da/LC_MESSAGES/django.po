@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 15:24+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: ERYpTION, 2025\n"
 "Language-Team: Danish (http://app.transifex.com/openstreetmap/umap/language/da/)\n"
@@ -404,7 +404,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Og det er <a href=\"%(repo_url)s\">open source</a>!"
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr "Lav et kort"
 
@@ -502,11 +502,20 @@ msgstr "Mine kort (%(count)s)"
 msgid "My Maps"
 msgstr "Mine kort"
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr "Min profil"
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr "Mine teams"
 
@@ -526,7 +535,7 @@ msgstr "Du er logget ind. Fortsætter..."
 msgid "template"
 msgstr "skabelon"
 
-#: templates/umap/map_list.html:18 views.py:437
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr "af"
 
@@ -570,7 +579,7 @@ msgstr "Ejer"
 msgid "Actions"
 msgstr "Handlinger"
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr "Åbn forhåndsvisning"
 
@@ -697,7 +706,7 @@ msgid_plural "%(count)s maps found:"
 msgstr[0] "%(count)s kort fundet:"
 msgstr[1] "%(count)s kort fundet:"
 
-#: templates/umap/search.html:30
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr "Ingen kort fundet."
 
@@ -752,20 +761,20 @@ msgstr "Slet dette team"
 msgid "Add user"
 msgstr "Tilføj bruger"
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr "Søg mine kort"
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
-msgstr "Kortets titel"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
+msgstr ""
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "Download %(count)s kort"
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr "Du har ingen kort endnu."
 
@@ -781,6 +790,31 @@ msgstr "Brugere"
 msgid "New team"
 msgstr "Nyt team"
 
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr ""
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr ""
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr ""
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr ""
+
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Kan ikke slette et hold med mere end ét medlem"
@@ -790,61 +824,61 @@ msgstr "Kan ikke slette et hold med mere end ét medlem"
 msgid "Team “%(name)s” has been deleted"
 msgstr "Teamet “%(name)s” er blevet slettet"
 
-#: views.py:442
+#: views.py:463
 msgid "View the map"
 msgstr "Vis kortet"
 
-#: views.py:843
+#: views.py:864
 msgid "See full screen"
 msgstr "Se i fuldskærm"
 
-#: views.py:986
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr "Kortredaktører blev opdateret!"
 
-#: views.py:1022
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "uMap-redigeringslinket for dit kort: %(map_name)s"
 
-#: views.py:1025
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Her er dit hemmelige redigeringslink: %(link)s"
 
-#: views.py:1032
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Kan ikke sende e-mail til %(email)s"
 
-#: views.py:1035
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail sendt til %(email)s"
 
-#: views.py:1046
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr "Kun ejeren kan slette kortet."
 
-#: views.py:1052
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr "Kort slettet."
 
-#: views.py:1078
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Dit kort er klonet! Hvis du ønsker at redigere kortet fra en anden computer, så brug følgende link: %(anonymous_url)s"
 
-#: views.py:1083
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr "Tillykke, dit kort er klonet!"
 
-#: views.py:1337
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr "Lag blev slettet."
 
-#: views.py:1359
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr "Tilladelser opdateret!"

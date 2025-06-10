@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 17:36+0000\n"
+"POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: lecalam, 2024-2025\n"
 "Language-Team: Portuguese (http://app.transifex.com/openstreetmap/umap/language/pt/)\n"
@@ -37,136 +37,228 @@ msgstr "O site está em modo de leitura para manutenção"
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
-" and maps."
+" and maps. Then, please logout and login again with the new provider."
 msgstr ""
 
-#: models.py:60 models.py:79
+#: models.py:61 models.py:80
 msgid "name"
 msgstr "nome"
 
-#: models.py:62 models.py:485
+#: models.py:63 models.py:503
 msgid "description"
 msgstr "descrição"
 
-#: models.py:110
+#: models.py:111
 msgid "details"
 msgstr "detalhes"
 
-#: models.py:111
+#: models.py:112
 msgid "Link to a page where the licence is detailed."
 msgstr "Hiperligação para uma página detalhando a licença."
 
-#: models.py:121
+#: models.py:122
 msgid "URL template using OSM tile format"
 msgstr "Modelo de URL no formato de mosaicos OSM"
 
-#: models.py:127
+#: models.py:128
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordem das camadas de mosaicos na caixa de edição"
 
-#: models.py:175 models.py:479
+#: models.py:176 models.py:497
 msgid "Only editable with secret edit link"
 msgstr "Unicamente editável através de hiperligação secreta"
 
-#: models.py:176 models.py:480
+#: models.py:177 models.py:498
 msgid "Everyone can edit"
 msgstr "Todos podem editar"
 
-#: models.py:179 models.py:473
+#: models.py:180 models.py:491
 msgid "Everyone"
 msgstr "Todos"
 
-#: models.py:180 models.py:189 models.py:474
+#: models.py:181 models.py:190 models.py:492
 msgid "Editors and team only"
 msgstr "Apenas editores e equipa"
 
-#: models.py:181 models.py:475
+#: models.py:182 models.py:493
 msgid "Owner only"
 msgstr "Apenas o proprietário"
 
-#: models.py:184
+#: models.py:185
 msgid "Draft (private)"
 msgstr "Rascunho (privado)"
 
-#: models.py:185
+#: models.py:186
 msgid "Everyone (public)"
 msgstr "Todos (público)"
 
-#: models.py:188
+#: models.py:189
 msgid "Anyone with link"
 msgstr "Quem tiver a hiperligação"
 
-#: models.py:190
+#: models.py:191
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: models.py:191 models.py:469
+#: models.py:192 models.py:487
 msgid "Deleted"
 msgstr "Eliminado"
 
-#: models.py:194
+#: models.py:195
 msgid "center"
 msgstr "centro"
 
-#: models.py:195
+#: models.py:196
 msgid "zoom"
 msgstr "zoom"
 
-#: models.py:197
+#: models.py:198
 msgid "locate"
 msgstr "localizar"
 
-#: models.py:197
+#: models.py:198
 msgid "Locate user on load?"
 msgstr "Localizar utilizador no início?"
 
-#: models.py:201
+#: models.py:202
 msgid "Choose the map licence."
 msgstr "Escolha uma licença para o mapa."
 
-#: models.py:202
+#: models.py:203
 msgid "licence"
 msgstr "licença"
 
-#: models.py:213
+#: models.py:214
 msgid "owner"
 msgstr "proprietário"
 
-#: models.py:217
+#: models.py:218
 msgid "editors"
 msgstr "editores"
 
-#: models.py:223
+#: models.py:224
 msgid "team"
 msgstr "equipa"
 
-#: models.py:229 models.py:501
+#: models.py:230 models.py:519
 msgid "edit status"
 msgstr "editar estado"
 
-#: models.py:234 models.py:506
+#: models.py:235 models.py:524
 msgid "share status"
 msgstr "partilhar estado"
 
-#: models.py:237 models.py:496
+#: models.py:238 models.py:514
 msgid "settings"
 msgstr "parâmetros"
 
-#: models.py:407
+#: models.py:243
+msgid "save as template"
+msgstr ""
+
+#: models.py:244
+msgid "This map is a template map."
+msgstr ""
+
+#: models.py:420
 msgid "Clone of"
 msgstr "Clone de"
 
-#: models.py:468 models.py:472 models.py:478
+#: models.py:486 models.py:490 models.py:496
 msgid "Inherit"
 msgstr "Herdado"
 
-#: models.py:491
+#: models.py:509
 msgid "display on load"
 msgstr "mostrar no início"
 
-#: models.py:492
+#: models.py:510
 msgid "Display this layer on load."
 msgstr "Mostrar esta camada ao carregar."
+
+#: settings/base.py:283
+msgid "uMap user documentation"
+msgstr ""
+
+#: settings/base.py:288
+msgid "Video tutorials"
+msgstr ""
+
+#: settings/base.py:293
+msgid "OpenStreetMap.org forum"
+msgstr ""
+
+#: settings/base.py:298
+msgid "OpenStreetMap France forum"
+msgstr ""
+
+#: settings/base.py:318
+msgid "Art and Culture"
+msgstr ""
+
+#: settings/base.py:319
+msgid "Cycling"
+msgstr ""
+
+#: settings/base.py:320
+msgid "Business"
+msgstr ""
+
+#: settings/base.py:321
+msgid "Environment"
+msgstr ""
+
+#: settings/base.py:322
+msgid "Education"
+msgstr ""
+
+#: settings/base.py:323
+msgid "Food and Agriculture"
+msgstr ""
+
+#: settings/base.py:324
+msgid "Geopolitics"
+msgstr ""
+
+#: settings/base.py:325
+msgid "Health"
+msgstr ""
+
+#: settings/base.py:326
+msgid "Hiking"
+msgstr ""
+
+#: settings/base.py:327
+msgid "History"
+msgstr ""
+
+#: settings/base.py:328
+msgid "Public sector"
+msgstr ""
+
+#: settings/base.py:329
+msgid "Science"
+msgstr ""
+
+#: settings/base.py:330
+msgid "Shopping"
+msgstr ""
+
+#: settings/base.py:331
+msgid "Sport and Leisure"
+msgstr ""
+
+#: settings/base.py:332
+msgid "Travel"
+msgstr ""
+
+#: settings/base.py:333
+msgid "Transports"
+msgstr ""
+
+#: settings/base.py:334
+msgid "Tourism"
+msgstr ""
 
 #: templates/403.html:8
 msgid ""
@@ -310,7 +402,7 @@ msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "E está disponível em <a href=\"%(repo_url)s\">código aberto</a>!"
 
 #: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:16
 msgid "Create a map"
 msgstr "Criar um mapa"
 
@@ -408,11 +500,20 @@ msgstr "Meus mapas (%(count)s)"
 msgid "My Maps"
 msgstr "Meus mapas"
 
-#: templates/umap/dashboard_menu.html:12
+#: templates/umap/dashboard_menu.html:11
+#, python-format
+msgid "My Templates (%(count)s)"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
+msgid "My Templates"
+msgstr ""
+
+#: templates/umap/dashboard_menu.html:17
 msgid "My profile"
 msgstr "Meu perfil"
 
-#: templates/umap/dashboard_menu.html:15
+#: templates/umap/dashboard_menu.html:20
 msgid "My teams"
 msgstr "Minhas equipas"
 
@@ -420,7 +521,7 @@ msgstr "Minhas equipas"
 msgid "Map of the uMaps"
 msgstr "Mapa dos uMaps"
 
-#: templates/umap/home.html:24
+#: templates/umap/home.html:25
 msgid "Get inspired, browse maps"
 msgstr "Inspire-se, explore os mapas"
 
@@ -428,11 +529,23 @@ msgstr "Inspire-se, explore os mapas"
 msgid "You are logged in. Continuing..."
 msgstr "Sucesso na identificação. Continuando..."
 
-#: templates/umap/map_list.html:11 views.py:437
+#: templates/umap/map_list.html:15
+msgid "template"
+msgstr ""
+
+#: templates/umap/map_list.html:18 views.py:458
 msgid "by"
 msgstr "por"
 
-#: templates/umap/map_list.html:20
+#: templates/umap/map_list.html:22
+msgid "See the template"
+msgstr ""
+
+#: templates/umap/map_list.html:22
+msgid "See the map"
+msgstr ""
+
+#: templates/umap/map_list.html:28
 msgid "More"
 msgstr "Mais"
 
@@ -464,7 +577,7 @@ msgstr "Proprietário"
 msgid "Actions"
 msgstr "Ações"
 
-#: templates/umap/map_table.html:41 templates/umap/map_table.html:43
+#: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
 msgstr "Abrir pré-visualização"
 
@@ -592,11 +705,15 @@ msgstr[0] "%(count)s mapa encontrado:"
 msgstr[1] "%(count)s mapas encontrados:"
 msgstr[2] "%(count)s mapas encontrados:"
 
-#: templates/umap/search.html:28
+#: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
 msgstr "Não foi encontrado nenhum mapa."
 
-#: templates/umap/search.html:33
+#: templates/umap/search.html:36
+msgid "Latest created maps in category"
+msgstr ""
+
+#: templates/umap/search.html:43
 msgid "Latest created maps"
 msgstr "Últimos mapas criados"
 
@@ -604,7 +721,11 @@ msgstr "Últimos mapas criados"
 msgid "Search maps"
 msgstr "Procurar mapas"
 
-#: templates/umap/search_bar.html:16
+#: templates/umap/search_bar.html:14
+msgid "Any category"
+msgstr ""
+
+#: templates/umap/search_bar.html:19
 msgid "Search"
 msgstr "Procurar"
 
@@ -639,20 +760,20 @@ msgstr "Eliminar esta equipa"
 msgid "Add user"
 msgstr "Adicionar utilizador"
 
-#: templates/umap/user_dashboard.html:9 templates/umap/user_dashboard.html:25
+#: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
 msgstr "Procurar os meus mapas"
 
-#: templates/umap/user_dashboard.html:17 templates/umap/user_dashboard.html:22
-msgid "Map’s title"
-msgstr "Título do mapa"
+#: templates/umap/user_dashboard.html:11
+msgid "Map’s name"
+msgstr ""
 
-#: templates/umap/user_dashboard.html:30
+#: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
 msgstr "Descarregar %(count)s mapas"
 
-#: templates/umap/user_dashboard.html:40
+#: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
 msgstr "Ainda não tem nenhum mapa."
 
@@ -668,70 +789,95 @@ msgstr "Utilizadores"
 msgid "New team"
 msgstr "Nova equipa"
 
-#: views.py:234
+#: templates/umap/user_templates.html:10
+msgid "Search my templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:11
+msgid "Template’s name"
+msgstr ""
+
+#: templates/umap/user_templates.html:12
+#, python-format
+msgid "Download %(count)s templates"
+msgstr ""
+
+#: templates/umap/user_templates.html:15
+msgid "You have no template yet."
+msgstr ""
+
+#: templates/umap/user_templates.html:16
+msgid "Create a template"
+msgstr ""
+
+#: templates/umap/user_templates.html:17
+msgid "No template found."
+msgstr ""
+
+#: views.py:233
 msgid "Cannot delete a team with more than one member"
 msgstr "Não é possível eliminar uma equipa com mais de um membro"
 
-#: views.py:238
+#: views.py:237
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "A equipa “%(name)s” foi eliminada"
 
-#: views.py:442
+#: views.py:463
 msgid "View the map"
 msgstr "Ver o mapa"
 
-#: views.py:838
+#: views.py:864
 msgid "See full screen"
 msgstr "Ver em ecrã inteiro"
 
-#: views.py:981
+#: views.py:1007
 msgid "Map editors updated with success!"
 msgstr "Os editores do mapa foram atualizados com sucesso!"
 
-#: views.py:1017
+#: views.py:1043
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "A hiperligação de edição do uMap para o seu mapa: %(map_name)s"
 
-#: views.py:1020
+#: views.py:1046
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aqui está a hiperligação de edição secreta: %(link)s"
 
-#: views.py:1027
+#: views.py:1053
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Não é possível enviar o email para %(email)s"
 
-#: views.py:1030
+#: views.py:1056
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Email enviado para %(email)s"
 
-#: views.py:1041
+#: views.py:1067
 msgid "Only its owner can delete the map."
 msgstr "Só o proprietário pode eliminar o mapa."
 
-#: views.py:1044
+#: views.py:1073
 msgid "Map successfully deleted."
 msgstr "Mapa eliminado com sucesso."
 
-#: views.py:1070
+#: views.py:1099
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "O seu mapa foi clonado! Se quiser editar este mapa noutro computador, por favor utilize esta hiperligação: %(anonymous_url)s"
 
-#: views.py:1075
+#: views.py:1104
 msgid "Congratulations, your map has been cloned!"
 msgstr "Parabéns, o seu mapa foi clonado!"
 
-#: views.py:1329
+#: views.py:1358
 msgid "Layer successfully deleted."
 msgstr "Camada eliminada com sucesso."
 
-#: views.py:1351
+#: views.py:1380
 msgid "Permissions updated with success!"
 msgstr "Permissões atualizadas com sucesso!"

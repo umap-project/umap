@@ -558,19 +558,25 @@ const locale = {
     "Text rotate": "Text rotate",
     "Text size": "Text size",
     "Load map template": "Load map template",
-    "Use a template to initialize your map": "Use a template to initialize your map",
     "My templates": "My templates",
     "From staff": "From staff",
     "From community": "From community",
-    "Include template data, if any": "Include template data, if any",
-    "Load this template": "Load this template",
-    "Open": "Open",
     "You must select a template.": "You must select a template.",
     "Line decoration": "Line decoration",
     "Reuse this template": "Reuse this template",
     "Create a new map using this template": "Create a new map using this template",
     "Save template": "Save template",
-    "Load template": "Load template"
+    "Load template": "Load template",
+    "Loading a template will apply predefined styles and settings to your map": "Loading a template will apply predefined styles and settings to your map",
+    "Load template with data": "Load template with data",
+    "You have no registered template yet. You can add one by creating a new map and flagging it as \"template\".": "You have no registered template yet. You can add one by creating a new map and flagging it as \"template\".",
+    "There is no recommended template yet. Recommended templates are the ones starred by uMap administrators.": "There is no recommended template yet. Recommended templates are the ones starred by uMap administrators.",
+    "There is no public template yet.": "There is no public template yet.",
+    "Explore": "Explore",
+    "Import data from public open data portals": "Import data from public open data portals",
+    "Choose a portal": "Choose a portal",
+    "Limit results to current map view": "Limit results to current map view",
+    "Please choose an instance first.": "Please choose an instance first."
 }
 L.registerLocale("en", locale)
 L.setLocale("en")
