@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.2 - 2025-06-11
+
+* do not try to evaluate queryset until it's fully constructed by @yohanboniface in #2764
+
 ## 3.1.1 - 2025-06-11
 
 * revert social-auth-core and deprecate bitbucket login
