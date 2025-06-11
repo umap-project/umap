@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-10 09:19+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Dren ar Frankig <hadrienlouque@gmail.com>, 2025\n"
+"Last-Translator: Alexander Gabilondo <alexgabi@disroot.org>, 2024-2025\n"
 "Language-Team: Basque (http://app.transifex.com/openstreetmap/umap/language/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,7 @@ msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
 " and maps. Then, please logout and login again with the new provider."
-msgstr ""
+msgstr "Autentifikatzeko \"%(name)s\" erabiltzea zaharkituta dago eta laster kenduko da. Mesedez, konfiguratu behean beste hornitzaile bat zure kontua eta mapetan sarbidea galdu aurretik. Ondoren, saioa amaitu eta berriro hasi hornitzaile berriarekin."
 
 #: models.py:61 models.py:80
 msgid "name"
@@ -154,11 +154,11 @@ msgstr "ezarpenak"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "gorde txantiloi gisa"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "Mapa hau mapa-txantiloia da."
 
 #: models.py:420
 msgid "Clone of"
@@ -178,87 +178,87 @@ msgstr "Erakutsi geruza hau kargatzean"
 
 #: settings/base.py:283
 msgid "uMap user documentation"
-msgstr ""
+msgstr "uMap erabiltzailearen dokumentazioa"
 
 #: settings/base.py:288
 msgid "Video tutorials"
-msgstr ""
+msgstr "Bideo-tutorialak"
 
 #: settings/base.py:293
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "OpenStreetMap.org foroa"
 
 #: settings/base.py:298
 msgid "OpenStreetMap France forum"
-msgstr ""
+msgstr "Frantziako OpenStreetMap foroa"
 
 #: settings/base.py:318
 msgid "Art and Culture"
-msgstr ""
+msgstr "Arte eta kultura"
 
 #: settings/base.py:319
 msgid "Cycling"
-msgstr ""
+msgstr "Txirrindularitza"
 
 #: settings/base.py:320
 msgid "Business"
-msgstr ""
+msgstr "Negozioak"
 
 #: settings/base.py:321
 msgid "Environment"
-msgstr ""
+msgstr "Ingurugiroa"
 
 #: settings/base.py:322
 msgid "Education"
-msgstr ""
+msgstr "Hezkuntza"
 
 #: settings/base.py:323
 msgid "Food and Agriculture"
-msgstr ""
+msgstr "Elikadura eta nekazaritza"
 
 #: settings/base.py:324
 msgid "Geopolitics"
-msgstr ""
+msgstr "Geopolitika"
 
 #: settings/base.py:325
 msgid "Health"
-msgstr ""
+msgstr "Osasuna"
 
 #: settings/base.py:326
 msgid "Hiking"
-msgstr ""
+msgstr "Txangozaletasuna"
 
 #: settings/base.py:327
 msgid "History"
-msgstr ""
+msgstr "Historia"
 
 #: settings/base.py:328
 msgid "Public sector"
-msgstr ""
+msgstr "Sektore publikoa"
 
 #: settings/base.py:329
 msgid "Science"
-msgstr ""
+msgstr "Zientzia"
 
 #: settings/base.py:330
 msgid "Shopping"
-msgstr ""
+msgstr "Erosketak"
 
 #: settings/base.py:331
 msgid "Sport and Leisure"
-msgstr ""
+msgstr "Kirola eta aisia"
 
 #: settings/base.py:332
 msgid "Travel"
-msgstr ""
+msgstr "Bidaiak"
 
 #: settings/base.py:333
 msgid "Transports"
-msgstr ""
+msgstr "Garraioa"
 
 #: settings/base.py:334
 msgid "Tourism"
-msgstr ""
+msgstr "Turismoa"
 
 #: templates/403.html:8
 msgid ""
@@ -503,11 +503,11 @@ msgstr "Nire mapak"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "Nire txantiloiak (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Nire txantiloiak"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -531,7 +531,7 @@ msgstr "Sartu egin zara. Jarraitu..."
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "txantiloia"
 
 #: templates/umap/map_list.html:18 views.py:458
 msgid "by"
@@ -539,11 +539,11 @@ msgstr "nork eginda"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "Ikusi txantiloia"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
-msgstr ""
+msgstr "Ikusi mapa"
 
 #: templates/umap/map_list.html:28
 msgid "More"
@@ -710,7 +710,7 @@ msgstr "Ez da maparik aurkitu"
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "Kategorian sortutako azken mapak"
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
@@ -722,7 +722,7 @@ msgstr "Bilatu mapak"
 
 #: templates/umap/search_bar.html:14
 msgid "Any category"
-msgstr ""
+msgstr "Edozein kategoria"
 
 #: templates/umap/search_bar.html:19
 msgid "Search"
@@ -765,7 +765,7 @@ msgstr "Bilatu mapen arabera"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Maparen izena"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -790,28 +790,28 @@ msgstr "Talde berria"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Bilatu nire txantiloiak"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Txantiloiaren izena"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Deskargatu %(count)s txantiloi"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Oraindik ez duzu txantiloirik."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Sortu txantiloi bat"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Ez da txantiloirik aurkitu."
 
 #: views.py:233
 msgid "Cannot delete a team with more than one member"

@@ -387,7 +387,7 @@
     "{area}&#8239;mi&sup2;": "{area} mi&sup2;",
     "{area}&#8239;yd&sup2;": "{area} yd&sup2;",
     "{count} errors during import: {message}": "{count} errori durante l'importazione: {message}",
-    "{delay} seconds": "{ritardo} secondi",
+    "{delay} seconds": "{delay} secondi",
     "{distance}&#8239;km": "{distance} km",
     "{distance}&#8239;m": "{distance} m",
     "{distance}&#8239;miles": "{distance} miglia",

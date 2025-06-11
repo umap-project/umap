@@ -56,7 +56,7 @@ msgstr "detaljer"
 
 #: models.py:112
 msgid "Link to a page where the licence is detailed."
-msgstr "Link til en side hvor der er flere oplysninger om licensen."
+msgstr "Link til en side, hvor licensen er beskrevet."
 
 #: models.py:122
 msgid "URL template using OSM tile format"
@@ -192,7 +192,7 @@ msgstr "OpenStreetMap.org-forum"
 
 #: settings/base.py:298
 msgid "OpenStreetMap France forum"
-msgstr "Fransk OpenStreetMap-forum"
+msgstr "OpenStreetMap's franske forum"
 
 #: settings/base.py:318
 msgid "Art and Culture"
@@ -271,7 +271,7 @@ msgstr "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" 
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr "← Gå til hjemmesiden"
+msgstr "← Gå til startsiden"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
@@ -337,7 +337,7 @@ msgstr "Med uMap kan du oprette kort med OpenStreetMap-lag på få minutter og i
 
 #: templates/registration/login.html:6 templates/registration/login.html:46
 msgid "Login"
-msgstr "Log ind"
+msgstr "Login"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
@@ -505,11 +505,11 @@ msgstr "Mine kort"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "Mine skabeloner (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Mine skabeloner"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -767,7 +767,7 @@ msgstr "Søg mine kort"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Kortets navn"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -792,28 +792,28 @@ msgstr "Nyt team"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Søg mine skabeloner"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Skabelonens navn"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Download %(count)s skabeloner"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Du har ingen skabelon endnu."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Opret en skabelon"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Ingen skabelon fundet."
 
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
@@ -869,11 +869,11 @@ msgstr "Kort slettet."
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
-msgstr "Dit kort er klonet! Hvis du ønsker at redigere kortet fra en anden computer, så brug følgende link: %(anonymous_url)s"
+msgstr "Dit kort er blevet klonet! Hvis du ønsker at redigere kortet fra en anden computer, så brug følgende link: %(anonymous_url)s"
 
 #: views.py:1104
 msgid "Congratulations, your map has been cloned!"
-msgstr "Tillykke, dit kort er klonet!"
+msgstr "Tillykke, dit kort er blevet klonet!"
 
 #: views.py:1358
 msgid "Layer successfully deleted."

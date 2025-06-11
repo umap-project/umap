@@ -510,11 +510,11 @@ msgstr "Mis mapas"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "Mis plantillas (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Mis plantillas"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -773,7 +773,7 @@ msgstr "Buscar en mis mapas"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Nombre del mapa"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -798,28 +798,28 @@ msgstr "Nuevo equipo"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Buscar mis plantillas"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Nombre de la plantilla"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Descargar %(count)s plantillas"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Aún no tienes plantillas."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Crear una plantilla"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "No se encontró ninguna plantilla."
 
 #: views.py:233
 msgid "Cannot delete a team with more than one member"
