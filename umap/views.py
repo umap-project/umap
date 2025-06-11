@@ -330,10 +330,9 @@ class TeamMaps(PaginatorMixin, DetailView):
 
 
 class SearchMixin:
-    def get_search_queryset(self, qs=None, **kwargs):
+    def get_search_queryset(self, qs, **kwargs):
         q = self.request.GET.get("q")
         tags = [t for t in self.request.GET.getlist("tags") if t]
-        qs = qs or Map.public.all()
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
@@ -351,7 +350,7 @@ class Search(PaginatorMixin, TemplateView, PublicMapsMixin, SearchMixin):
     list_template_name = "umap/map_list.html"
 
     def get_context_data(self, **kwargs):
-        qs = self.get_search_queryset()
+        qs = self.get_search_queryset(Map.public.all())
         qs_count = 0
         results = []
         if qs is not None:
