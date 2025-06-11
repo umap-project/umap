@@ -181,6 +181,7 @@ def test_stats_empty(client):
     assert json.loads(response.content.decode()) == {
         "maps_active_last_week_count": 0,
         "maps_count": 0,
+        "teams_count": 0,
         "users_active_last_week_count": 0,
         "users_count": 0,
         "active_sessions": 0,
@@ -205,6 +206,7 @@ def test_stats_basic(client, map, datalayer, user2):
     assert json.loads(response.content.decode()) == {
         "maps_active_last_week_count": 1,
         "maps_count": 1,
+        "teams_count": 0,
         "users_active_last_week_count": 1,
         "users_count": 2,
         "active_sessions": 0,
