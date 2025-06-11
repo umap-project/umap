@@ -1,6 +1,6 @@
 # Changelog
 
-## dev
+## 3.1.0 - 2025-06-11
 
 This version main improvement is the introduction of map templates, which
 allow to start new maps with prefilled style and optionally data.
@@ -35,6 +35,16 @@ experimental line decoration feature.
 * also accept HEAD request when in READONLY by @yohanboniface in #2752
 * allow to migrate pictograms to S3 in migrate_to_S3 command by @yohanboniface in #2753
 * add realtime, anonymous status and importers in /stats by @yohanboniface in #2756
+
+### Changed templates
+- umap/dashboard_menu.html
+- umap/design_system.html
+- umap/js.html
+- umap/map_list.html
+- umap/map_table.html
+- umap/user_dashboard.html
+- umap/user_map_table.html
+- umap/user_templates.html
 
 ## 3.0.6 - 2025-05-14
 
