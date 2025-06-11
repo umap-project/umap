@@ -1413,6 +1413,7 @@ def stats(request):
             "realtime_enabled": settings.REALTIME_ENABLED,
             "anonymous_allowed": settings.UMAP_ALLOW_ANONYMOUS,
             "importers": list(settings.UMAP_IMPORTERS.keys()),
+            "teams_count": Team.objects.count(),
             "maps_count": Map.objects.count(),
             "maps_active_last_week_count": Map.objects.filter(
                 modified_at__gt=last_week
