@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.1 - 2025-06-11
+
+* revert social-auth-core and deprecate bitbucket login
+
 ## 3.1.0 - 2025-06-11
 
 This version main improvement is the introduction of map templates, which
