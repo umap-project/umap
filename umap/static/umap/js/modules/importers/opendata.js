@@ -38,6 +38,11 @@ const PORTALS = [
     url: 'https://data.toulouse-metropole.fr',
     platform: 'opendatasoft',
   },
+  {
+    name: 'Tours Métropole Val de Loire',
+    url: 'https://data.tours-metropole.fr/',
+    platform: 'opendatasoft',
+  },
 ]
 
 const TEMPLATE = `
