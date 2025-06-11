@@ -26,6 +26,7 @@ from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
 from django.core.validators import URLValidator, ValidationError
+from django.db.models import QuerySet
 from django.http import (
     Http404,
     HttpResponse,
@@ -330,10 +331,9 @@ class TeamMaps(PaginatorMixin, DetailView):
 
 
 class SearchMixin:
-    def get_search_queryset(self, qs=None, **kwargs):
+    def get_search_queryset(self, qs, **kwargs):
         q = self.request.GET.get("q")
         tags = [t for t in self.request.GET.getlist("tags") if t]
-        qs = qs or Map.public.all()
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
@@ -351,10 +351,10 @@ class Search(PaginatorMixin, TemplateView, PublicMapsMixin, SearchMixin):
     list_template_name = "umap/map_list.html"
 
     def get_context_data(self, **kwargs):
-        qs = self.get_search_queryset()
+        qs = self.get_search_queryset(Map.public.all())
         qs_count = 0
         results = []
-        if qs is not None:
+        if isinstance(qs, QuerySet):
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             qs_count = qs.count()
             results = self.paginate(qs)
@@ -382,7 +382,7 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
     def get_maps(self):
         qs = Map.private.filter(is_template=False)
         search_qs = self.get_search_queryset(qs)
-        if search_qs is not None:
+        if isinstance(search_qs, QuerySet):
             qs = search_qs
         qs = qs.for_user(self.object)
         return qs.order_by("-modified_at")
@@ -404,7 +404,7 @@ class UserTemplates(PaginatorMixin, DetailView, SearchMixin):
     def get_maps(self):
         qs = Map.private.filter(is_template=True)
         search_qs = self.get_search_queryset(qs)
-        if search_qs is not None:
+        if isinstance(search_qs, QuerySet):
             qs = search_qs
         qs = qs.for_user(self.object)
         return qs.order_by("-modified_at")
