@@ -1488,10 +1488,10 @@ class TemplateList(ListView):
         source = self.request.GET.get("source")
         if source == "mine":
             qs = Map.private.filter(is_template=True).for_user(self.request.user)
-        elif source == "community":
-            qs = Map.public.filter(is_template=True)
         elif source == "staff":
             qs = Map.public.starred_by_staff().filter(is_template=True)
+        else:
+            qs = Map.public.filter(is_template=True)
         templates = [
             {
                 "id": m.id,
