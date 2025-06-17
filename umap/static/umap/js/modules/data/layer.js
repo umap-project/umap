@@ -21,6 +21,7 @@ import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
+import Orderable from '../orderable.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -427,7 +428,6 @@ export class DataLayer {
     feature.connectToDataLayer(this)
     this._index.push(id)
     this._features[id] = feature
-    this.indexProperties(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
     this.showFeature(feature)
     this.dataChanged()
@@ -451,52 +451,63 @@ export class DataLayer {
     if (this.isVisible()) this.dataChanged()
   }
 
-  indexProperties(feature) {
-    for (const i in feature.properties)
-      if (typeof feature.properties[i] !== 'object') this.indexProperty(i)
-  }
-
-  indexProperty(name) {
-    if (!name) return
-    if (name.indexOf('_') === 0) return
-    if (!this._propertiesIndex.includes(name)) {
-      this._propertiesIndex.push(name)
-      this._propertiesIndex.sort()
-    }
-  }
-
-  checkIndexForProperty(name) {
-    for (const feature of Object.values(this._features)) {
-      if (name in feature.properties) {
-        this.indexProperty(name)
-        return
+  guessFields(feature) {
+    console.log(feature.properties)
+    if (!this.properties.fields) this.properties.fields = []
+    for (const key in feature.properties) {
+      if (typeof feature.properties[key] !== 'object') {
+        if (key.indexOf('_') === 0) continue
+        this.properties.fields.push({ key, type: 'String' })
       }
     }
-    this.deindexProperty(name)
   }
 
-  deindexProperty(name) {
-    const idx = this._propertiesIndex.indexOf(name)
-    if (idx !== -1) this._propertiesIndex.splice(idx, 1)
+  async confirmDeleteProperty(property) {
+    return this._umap.dialog
+      .confirm(
+        translate('Are you sure you want to delete this property on all the features?')
+      )
+      .then(() => {
+        this.deleteProperty(property)
+      })
+  }
+
+  async askForRenameProperty(property) {
+    return this._umap.dialog
+      .prompt(translate('Please enter the new name of this property'))
+      .then(({ prompt }) => {
+        if (!prompt || !this.validateName(prompt)) return
+        this.renameProperty(property, prompt)
+      })
   }
 
   renameProperty(oldName, newName) {
     this.sync.startBatch()
+    const oldFields = Utils.CopyJSON(this.properties.fields)
+    for (const field of this.properties.fields) {
+      if (field.key === oldName) {
+        field.key = newName
+        break
+      }
+    }
+    this.sync.update('properties.fields', this.properties.fields, oldFields)
     this.eachFeature((feature) => {
       feature.renameProperty(oldName, newName)
     })
     this.sync.commitBatch()
-    this.deindexProperty(oldName)
-    this.indexProperty(newName)
   }
 
   deleteProperty(property) {
     this.sync.startBatch()
+    const oldFields = Utils.CopyJSON(this.properties.fields)
+    this.properties.fields = this.properties.fields.filter(
+      (field) => field.key !== property
+    )
+    this.sync.update('properties.fields', this.properties.fields, oldFields)
     this.eachFeature((feature) => {
       feature.deleteProperty(property)
     })
     this.sync.commitBatch()
-    this.deindexProperty(property)
   }
 
   addProperty() {
@@ -872,6 +883,41 @@ export class DataLayer {
     fieldset.appendChild(builder.build())
   }
 
+  _editFields(container) {
+    const ul = Utils.loadTemplate('<ul></ul>')
+    for (const field of this.properties.fields) {
+      const [row, { rename, del }] = Utils.loadTemplateWithRefs(
+        `<li class="orderable" data-key="${field.key}">
+          ${field.key}
+          <i class="icon icon-16 icon-edit" title="${translate('Rename this field')}" data-ref=rename></i>
+          <i class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></i>
+          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+        </li>`
+      )
+      ul.appendChild(row)
+      rename.addEventListener('click', () => {
+        this.askForRenameProperty(field.key)
+      })
+      del.addEventListener('click', () => {
+        this.confirmDeleteProperty(field.key)
+      })
+    }
+    const onReorder = (src, dst, initialIndex, finalIndex) => {
+      const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
+        (el) => el.dataset.key
+      )
+      const oldFields = Utils.CopyJSON(this.properties.fields)
+      this.properties.fields.sort(
+        (fieldA, fieldB) =>
+          orderedKeys.indexOf(fieldA.key) > orderedKeys.indexOf(fieldB.key)
+      )
+      this.sync.update('properties.fields', this.properties.fields, oldFields)
+    }
+    const orderable = new Orderable(ul, onReorder)
+    const fieldset = DomUtil.createFieldset(container, translate('Manage Fields'))
+    fieldset.appendChild(ul)
+  }
+
   _editRemoteDataProperties(container) {
     // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
     // but apparently it's needed.
@@ -982,6 +1028,7 @@ export class DataLayer {
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
     this._editRemoteDataProperties(container)
+    this._editFields(container)
     this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {

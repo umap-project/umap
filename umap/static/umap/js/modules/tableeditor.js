@@ -74,10 +74,10 @@ export default class TableEditor extends WithTemplate {
     const th = loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const property of this.properties) {
+    for (const field of this.datalayer.properties.fields) {
       this.elements.header.appendChild(
         loadTemplate(
-          `<th>${property}<button data-property="${property}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
+          `<th>${field.key}<button data-property="${field.key}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
         )
       )
     }
@@ -94,9 +94,9 @@ export default class TableEditor extends WithTemplate {
     this.datalayer.eachFeature((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
-      const tds = this.properties.map(
-        (prop) =>
-          `<td tabindex="0" data-property="${prop}">${feature.properties[prop] ?? ''}</td>`
+      const tds = this.datalayer.properties.fields.map(
+        (field) =>
+          `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
       )
       html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
     })
@@ -104,32 +104,17 @@ export default class TableEditor extends WithTemplate {
   }
 
   resetProperties() {
-    this.properties = this.datalayer.allProperties()
-    if (this.properties.length === 0) {
-      this.properties = [U.DEFAULT_LABEL_KEY, 'description']
-    }
+    // if (this.properties.length === 0) {
+    //   this.properties = [U.DEFAULT_LABEL_KEY, 'description']
+    // }
   }
 
   renameProperty(property) {
-    this._umap.dialog
-      .prompt(translate('Please enter the new name of this property'))
-      .then(({ prompt }) => {
-        if (!prompt || !this.datalayer.validateName(prompt)) return
-        this.datalayer.renameProperty(property, prompt)
-        this.open()
-      })
+    this.datalayer.askForRenameProperty(property).then(() => this.open())
   }
 
   deleteProperty(property) {
-    this._umap.dialog
-      .confirm(
-        translate('Are you sure you want to delete this property on all the features?')
-      )
-      .then(() => {
-        this.datalayer.deleteProperty(property)
-        this.resetProperties()
-        this.open()
-      })
+    this.datalayer.confirmDeleteProperty(property).then(() => this.open())
   }
 
   addProperty() {
@@ -140,7 +125,6 @@ export default class TableEditor extends WithTemplate {
 
   open() {
     const id = 'tableeditor:edit'
-    this.resetProperties()
     this.renderHeaders()
     this.elements.body.innerHTML = ''
     this.renderBody()
