@@ -734,11 +734,7 @@ export class DataLayer {
     this.eachFeature((feature) => feature.redraw())
   }
 
-  edit() {
-    if (!this._umap.editEnabled) {
-      return
-    }
-    const container = DomUtil.create('div', 'umap-layer-properties-container')
+  _editMetadata(container) {
     const metadataFields = [
       'properties.name',
       'properties.description',
@@ -768,7 +764,7 @@ export class DataLayer {
       ],
     ]
     DomUtil.createTitle(container, translate('Layer properties'), 'icon-layers')
-    let builder = new MutatingForm(this, metadataFields)
+    const builder = new MutatingForm(this, metadataFields)
     builder.on('set', ({ detail }) => {
       this._umap.onDataLayersChanged()
       if (detail.helper.field === 'properties.type') {
@@ -776,11 +772,13 @@ export class DataLayer {
       }
     })
     container.appendChild(builder.build())
+  }
 
+  _editLayerProperties(container) {
     const layerFields = this.layer.getEditableProperties()
 
     if (layerFields.length) {
-      builder = new MutatingForm(this, layerFields, {
+      const builder = new MutatingForm(this, layerFields, {
         id: 'datalayer-layer-properties',
       })
       const layerProperties = DomUtil.createFieldset(
@@ -789,8 +787,10 @@ export class DataLayer {
       )
       layerProperties.appendChild(builder.build())
     }
+  }
 
-    const shapeFields = [
+  _editShapeProperties(container) {
+    const fields = [
       'properties.color',
       'properties.iconClass',
       'properties.iconUrl',
@@ -803,7 +803,7 @@ export class DataLayer {
       'properties.fillOpacity',
     ]
 
-    builder = new MutatingForm(this, shapeFields, {
+    const builder = new MutatingForm(this, fields, {
       id: 'datalayer-advanced-properties',
     })
     const shapeFieldset = DomUtil.createFieldset(
@@ -811,8 +811,10 @@ export class DataLayer {
       translate('Shape properties')
     )
     shapeFieldset.appendChild(builder.build())
+  }
 
-    const advancedFields = [
+  _editAdvancedProperties(container) {
+    const fields = [
       'properties.smoothFactor',
       'properties.dashArray',
       'properties.zoomTo',
@@ -821,7 +823,7 @@ export class DataLayer {
       'properties.sortKey',
     ]
 
-    builder = new MutatingForm(this, advancedFields, {
+    const builder = new MutatingForm(this, fields, {
       id: 'datalayer-advanced-properties',
     })
     builder.on('set', ({ detail }) => {
@@ -834,8 +836,10 @@ export class DataLayer {
       translate('Advanced properties')
     )
     advancedFieldset.appendChild(builder.build())
+  }
 
-    const popupFields = [
+  _editInteractionProperties(container) {
+    const fields = [
       'properties.popupShape',
       'properties.popupTemplate',
       'properties.popupContentTemplate',
@@ -845,14 +849,16 @@ export class DataLayer {
       'properties.outlinkTarget',
       'properties.interactive',
     ]
-    builder = new MutatingForm(this, popupFields)
+    const builder = new MutatingForm(this, fields)
     const popupFieldset = DomUtil.createFieldset(
       container,
       translate('Interaction options')
     )
     popupFieldset.appendChild(builder.build())
+  }
 
-    const textPathFields = [
+  _editTextPathProperties(container) {
+    const fields = [
       'properties.textPath',
       'properties.textPathColor',
       'properties.textPathRepeat',
@@ -861,17 +867,19 @@ export class DataLayer {
       'properties.textPathOffset',
       'properties.textPathPosition',
     ]
-    builder = new MutatingForm(this, textPathFields)
+    const builder = new MutatingForm(this, fields)
     const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
+  }
 
+  _editRemoteDataProperties(container) {
     // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
     // but apparently it's needed.
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
     }
 
-    const remoteDataFields = [
+    const fields = [
       [
         'properties.remoteData.url',
         { handler: 'Url', label: translate('Url'), helpEntries: ['formatURL'] },
@@ -899,7 +907,7 @@ export class DataLayer {
       ],
     ]
     if (this._umap.properties.urls.ajax_proxy) {
-      remoteDataFields.push([
+      fields.push([
         'properties.remoteData.proxy',
         {
           handler: 'Switch',
@@ -907,14 +915,14 @@ export class DataLayer {
           helpEntries: ['proxyRemoteData'],
         },
       ])
-      remoteDataFields.push('properties.remoteData.ttl')
+      fields.push('properties.remoteData.ttl')
     }
 
     const remoteDataContainer = DomUtil.createFieldset(
       container,
       translate('Remote data')
     )
-    builder = new MutatingForm(this, remoteDataFields)
+    const builder = new MutatingForm(this, fields)
     remoteDataContainer.appendChild(builder.build())
     DomUtil.createButton(
       'button umap-verify',
@@ -923,12 +931,9 @@ export class DataLayer {
       () => this.fetchRemoteData(true),
       this
     )
-    this.rules.edit(container)
+  }
 
-    if (this._umap.properties.urls.datalayer_versions) {
-      this.buildVersionsFieldset(container)
-    }
-
+  _buildAdvancedActions(container) {
     const advancedActions = DomUtil.createFieldset(
       container,
       translate('Advanced actions')
@@ -963,6 +968,28 @@ export class DataLayer {
     }
     clone.addEventListener('click', () => this.clone().edit())
     if (this.createdOnServer) download.hidden = false
+  }
+
+  edit() {
+    if (!this._umap.editEnabled) {
+      return
+    }
+    const container = DomUtil.create('div', 'umap-layer-properties-container')
+    this._editMetadata(container)
+    this._editLayerProperties(container)
+    this._editShapeProperties(container)
+    this._editAdvancedProperties(container)
+    this._editInteractionProperties(container)
+    this._editTextPathProperties(container)
+    this._editRemoteDataProperties(container)
+    this.rules.edit(container)
+
+    if (this._umap.properties.urls.datalayer_versions) {
+      this.buildVersionsFieldset(container)
+    }
+
+    this._buildAdvancedActions(container)
+
     const backButton = DomUtil.createButtonIcon(
       undefined,
       'icon-back',
