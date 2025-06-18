@@ -69,6 +69,8 @@ def test_table_editor(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
+    page.locator("td[data-property=description]").dblclick()
+    page.locator('textarea[name="description"]').fill("nice new description")
     page.get_by_text("Add a new property").click()
     page.locator("dialog").locator("input").fill("newprop")
     page.locator("dialog").get_by_role("button", name="OK").click()
@@ -83,6 +85,7 @@ def test_table_editor(live_server, openmap, datalayer, page):
         page.get_by_role("button", name="Save").click()
     saved = DataLayer.objects.last()
     data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"]["description"] == "nice new description"
     assert data["features"][0]["properties"]["newprop"] == "newvalue"
     assert "name" not in data["features"][0]["properties"]
 
