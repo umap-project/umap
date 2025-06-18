@@ -905,10 +905,10 @@ export class DataLayer {
     for (const field of this.fields) {
       const [row, { rename, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${field.key}">
-          ${field.key}
-          <i class="icon icon-16 icon-edit" title="${translate('Rename this field')}" data-ref=rename></i>
-          <i class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></i>
+          <button class="icon icon-16 icon-edit" title="${translate('Rename this field')}" data-ref=rename></button>
+          <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
           <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          ${field.key}
         </li>`
       )
       ul.appendChild(row)
