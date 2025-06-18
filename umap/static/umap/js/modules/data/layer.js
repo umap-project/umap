@@ -901,7 +901,16 @@ export class DataLayer {
   }
 
   _editFields(container) {
-    const ul = Utils.loadTemplate('<ul></ul>')
+    const template = `
+      <details id="fields">
+        <summary>${translate('Manage Fields')}</summary>
+        <fieldset>
+          <ul data-ref=ul></ul>
+        </fieldset>
+      </details>
+    `
+    const [fieldset, { ul }] = Utils.loadTemplateWithRefs(template)
+    container.appendChild(fieldset)
     for (const field of this.fields) {
       const [row, { rename, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${field.key}">
@@ -913,10 +922,18 @@ export class DataLayer {
       )
       ul.appendChild(row)
       rename.addEventListener('click', () => {
-        this.askForRenameProperty(field.key)
+        this.askForRenameProperty(field.key).then(() => {
+          this.edit().then((panel) => {
+            panel.scrollTo('details#fields')
+          })
+        })
       })
       del.addEventListener('click', () => {
-        this.confirmDeleteProperty(field.key)
+        this.confirmDeleteProperty(field.key).then(() => {
+          this.edit().then((panel) => {
+            panel.scrollTo('details#fields')
+          })
+        })
       })
     }
     const onReorder = (src, dst, initialIndex, finalIndex) => {
@@ -931,8 +948,6 @@ export class DataLayer {
       this.sync.update('properties.fields', this.properties.fields, oldFields)
     }
     const orderable = new Orderable(ul, onReorder)
-    const fieldset = DomUtil.createFieldset(container, translate('Manage Fields'))
-    fieldset.appendChild(ul)
   }
 
   _editRemoteDataProperties(container) {
@@ -1066,7 +1081,7 @@ export class DataLayer {
     DomEvent.disableClickPropagation(backButton)
     DomEvent.on(backButton, 'click', this._umap.editDatalayers, this._umap)
 
-    this._umap.editPanel.open({
+    return this._umap.editPanel.open({
       content: container,
       highlight: 'layers',
       actions: [backButton],

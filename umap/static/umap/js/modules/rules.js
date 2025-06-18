@@ -143,7 +143,7 @@ class Rule {
       </button>`)
     backButton.addEventListener('click', () =>
       this.parent.edit().then((panel) => {
-        panel.container.querySelector('details#rules').open = true
+        panel.scrollTo('details#rules')
       })
     )
 
