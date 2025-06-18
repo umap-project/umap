@@ -202,14 +202,8 @@ class Feature {
     this.redraw()
   }
 
-  // Fields are user defined properties
-
   get fields() {
-    if (!this.datalayer.properties.fields && !this._umap.properties.fields) {
-      // This should only be done once for datalayers created
-      // before field management introduction.
-      this.datalayer.guessFields(this)
-    }
+    // Fields are user defined properties
     const fields = [
       ...(this.datalayer.properties.fields || []),
       ...(this._umap.properties.fields || []),
@@ -240,7 +234,6 @@ class Feature {
       fields = [{ key: 'name' }, { key: 'description' }]
     }
     for (const field of fields) {
-      console.log(field)
       let handler = 'Input'
       if (field.key === 'description') {
         handler = 'Textarea'

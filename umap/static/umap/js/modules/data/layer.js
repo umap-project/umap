@@ -427,8 +427,11 @@ export class DataLayer {
     const id = stamp(feature)
     feature.connectToDataLayer(this)
     this._index.push(id)
+    // TODO FeaturesManager
     this._features[id] = feature
     this._umap.featuresIndex[feature.getSlug()] = feature
+    // TODO: quid for remote data ?
+    this.addFields(feature)
     this.showFeature(feature)
     this.dataChanged()
   }
@@ -451,12 +454,13 @@ export class DataLayer {
     if (this.isVisible()) this.dataChanged()
   }
 
-  guessFields(feature) {
-    console.log(feature.properties)
+  addFields(feature) {
     if (!this.properties.fields) this.properties.fields = []
+    const keys = this.properties.fields.map((field) => field.key)
     for (const key in feature.properties) {
       if (typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
+        if (keys.includes(key)) continue
         this.properties.fields.push({ key, type: 'String' })
       }
     }

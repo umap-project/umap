@@ -103,12 +103,6 @@ export default class TableEditor extends WithTemplate {
     this.elements.body.innerHTML = html
   }
 
-  resetProperties() {
-    // if (this.properties.length === 0) {
-    //   this.properties = [U.DEFAULT_LABEL_KEY, 'description']
-    // }
-  }
-
   renameProperty(property) {
     this.datalayer.askForRenameProperty(property).then(() => this.open())
   }
@@ -118,9 +112,7 @@ export default class TableEditor extends WithTemplate {
   }
 
   addProperty() {
-    this.datalayer.addProperty().then(() => {
-      this.open()
-    })
+    this.datalayer.addProperty().then(() => this.open())
   }
 
   open() {
