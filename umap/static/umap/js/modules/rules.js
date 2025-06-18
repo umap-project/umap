@@ -124,7 +124,7 @@ class Rule {
     const container = document.createElement('div')
     container.appendChild(builder.build())
     const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
-    const properties = this.parent.allProperties()
+    const properties = this.parent.fieldKeys
     autocomplete.suggestions = properties
     autocomplete.input.addEventListener('input', (event) => {
       const value = event.target.value

@@ -267,6 +267,12 @@ export default class Umap {
     return this.properties.fields
   }
 
+  get fieldKeys() {
+    return this.fields
+      .map((field) => field.key)
+      .concat(...this.datalayers.active().map((dl) => dl.fieldKeys))
+  }
+
   setPropertiesFromQueryString() {
     const asBoolean = (key) => {
       const value = this.searchParams.get(key)
@@ -745,10 +751,6 @@ export default class Umap {
 
   hasLayers() {
     return Boolean(this.datalayers.count())
-  }
-
-  allProperties() {
-    return [].concat(...this.datalayers.active().map((dl) => dl.allProperties()))
   }
 
   sortedValues(property) {

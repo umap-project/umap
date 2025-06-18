@@ -152,6 +152,14 @@ export class DataLayer {
     return this.properties.fields
   }
 
+  set fields(fields) {
+    this.properties.fields = fields
+  }
+
+  get fieldKeys() {
+    return this.fields.map((field) => field.key)
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
@@ -498,14 +506,14 @@ export class DataLayer {
 
   renameProperty(oldName, newName) {
     this.sync.startBatch()
-    const oldFields = Utils.CopyJSON(this.properties.fields)
-    for (const field of this.properties.fields) {
+    const oldFields = Utils.CopyJSON(this.fields)
+    for (const field of this.fields) {
       if (field.key === oldName) {
         field.key = newName
         break
       }
     }
-    this.sync.update('properties.fields', this.properties.fields, oldFields)
+    this.sync.update('properties.fields', this.fields, oldFields)
     this.eachFeature((feature) => {
       feature.renameProperty(oldName, newName)
     })
@@ -514,11 +522,9 @@ export class DataLayer {
 
   deleteProperty(property) {
     this.sync.startBatch()
-    const oldFields = Utils.CopyJSON(this.properties.fields)
-    this.properties.fields = this.properties.fields.filter(
-      (field) => field.key !== property
-    )
-    this.sync.update('properties.fields', this.properties.fields, oldFields)
+    const oldFields = Utils.CopyJSON(this.fields)
+    this.fields = this.fields.filter((field) => field.key !== property)
+    this.sync.update('properties.fields', this.fields, oldFields)
     this.eachFeature((feature) => {
       feature.deleteProperty(property)
     })
@@ -534,7 +540,7 @@ export class DataLayer {
       .prompt(translate('Please enter the name of the property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
-        this.indexProperty(prompt)
+        this.properties.fields.push({ key: prompt, type: 'String' })
         resolve()
       })
     return promise
@@ -545,15 +551,11 @@ export class DataLayer {
       Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
       return false
     }
-    if (this.allProperties().includes(name)) {
+    if (this.fieldKeys.includes(name)) {
       Alert.error(translate('This name already exists: “{name}”', { name }))
       return false
     }
     return true
-  }
-
-  allProperties() {
-    return this._propertiesIndex
   }
 
   sortedValues(property) {
@@ -900,7 +902,7 @@ export class DataLayer {
 
   _editFields(container) {
     const ul = Utils.loadTemplate('<ul></ul>')
-    for (const field of this.properties.fields) {
+    for (const field of this.fields) {
       const [row, { rename, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${field.key}">
           ${field.key}
