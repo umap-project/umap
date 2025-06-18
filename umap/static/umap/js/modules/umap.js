@@ -262,6 +262,11 @@ export default class Umap {
     return window.self !== window.top
   }
 
+  get fields() {
+    if (!this.properties.fields) this.properties.fields = []
+    return this.properties.fields
+  }
+
   setPropertiesFromQueryString() {
     const asBoolean = (key) => {
       const value = this.searchParams.get(key)

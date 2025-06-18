@@ -74,7 +74,7 @@ export default class TableEditor extends WithTemplate {
     const th = loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const field of this.datalayer.properties.fields) {
+    for (const field of this.datalayer.fields) {
       this.elements.header.appendChild(
         loadTemplate(
           `<th>${field.key}<button data-property="${field.key}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
@@ -94,7 +94,7 @@ export default class TableEditor extends WithTemplate {
     this.datalayer.eachFeature((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
-      const tds = this.datalayer.properties.fields.map(
+      const tds = this.datalayer.fields.map(
         (field) =>
           `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
       )

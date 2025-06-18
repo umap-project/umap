@@ -84,6 +84,11 @@ class Feature {
     this.pushGeometry()
   }
 
+  get fields() {
+    // Fields are user defined properties
+    return [...this.datalayer.fields, ...this._umap.fields]
+  }
+
   isOnScreen(bounds) {
     return this.ui?.isOnScreen(bounds)
   }
@@ -202,15 +207,6 @@ class Feature {
     this.redraw()
   }
 
-  get fields() {
-    // Fields are user defined properties
-    const fields = [
-      ...(this.datalayer.properties.fields || []),
-      ...(this._umap.properties.fields || []),
-    ]
-    return fields
-  }
-
   edit(event) {
     if (!this._umap.editEnabled || this.isReadOnly()) return
     if (this._umap.editedFeature === this && !event.force) return
@@ -229,13 +225,9 @@ class Feature {
     container.appendChild(builder.build())
 
     const properties = []
-    let fields = this.fields
-    if (!fields.length) {
-      fields = [{ key: 'name' }, { key: 'description' }]
-    }
-    for (const field of fields) {
+    for (const field of this.fields) {
       let handler = 'Input'
-      if (field.key === 'description') {
+      if (field.key === 'description' || field.type === 'Text') {
         handler = 'Textarea'
       }
       properties.push([`properties.${field.key}`, { label: field.key, handler }])

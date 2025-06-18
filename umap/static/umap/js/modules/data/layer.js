@@ -141,6 +141,17 @@ export class DataLayer {
     this.properties.rank = value
   }
 
+  get fields() {
+    if (!this.properties.fields) this.properties.fields = []
+    if (!this.properties.fields.length && !this._umap.fields.length) {
+      this.properties.fields = [
+        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
+        { key: 'description', type: 'Text' },
+      ]
+    }
+    return this.properties.fields
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
