@@ -125,7 +125,7 @@ export default class TableEditor extends WithTemplate {
     if (!this.datalayer.isRemoteLayer()) {
       const addButton = loadTemplate(`
         <button class="flat" type="button" data-ref="add">
-          <i class="icon icon-16 icon-add"></i>${translate('Add a new property')}
+          <i class="icon icon-16 icon-add"></i>${translate('Add a new field')}
         </button>`)
       addButton.addEventListener('click', () => this.addProperty())
       actions.push(addButton)

@@ -488,7 +488,7 @@ export class DataLayer {
   async confirmDeleteProperty(property) {
     return this._umap.dialog
       .confirm(
-        translate('Are you sure you want to delete this property on all the features?')
+        translate('Are you sure you want to delete this field on all the features?')
       )
       .then(() => {
         this.deleteProperty(property)
@@ -497,7 +497,7 @@ export class DataLayer {
 
   async askForRenameProperty(property) {
     return this._umap.dialog
-      .prompt(translate('Please enter the new name of this property'))
+      .prompt(translate('Please enter the new name of this field'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
         this.renameProperty(property, prompt)

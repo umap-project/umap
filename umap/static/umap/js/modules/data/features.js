@@ -238,7 +238,7 @@ class Feature {
     const form = builder.build()
     container.appendChild(form)
     const button = Utils.loadTemplate(
-      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new property')}</button>`
+      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
     )
     button.addEventListener('click', () => {
       this.datalayer.addProperty().then(() => this.edit({ force: true }))

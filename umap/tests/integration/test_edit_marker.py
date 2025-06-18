@@ -125,7 +125,7 @@ def test_add_property_from_feature_properties_panel(
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
-    page.get_by_role("button", name="Add a new property").click()
+    page.get_by_role("button", name="Add a new field").click()
     page.locator('input[name="prompt"]').fill("newprop")
     page.get_by_role("button", name="OK").click()
     expect(page.locator(".panel.right").get_by_text("newprop")).to_be_visible()
